@@ -1,0 +1,13 @@
+/* Feuille de style 'print' destinée à l'impression des pages du site */
+
+.elgg-page-topbar, .elgg-page-header, .elgg-page-footer { display:none; }
+#page_container:before { content:"Merci d’économiser de l’encre et du papier : n’imprimez ce message que si c’est vraiment nécessaire"; display:block; border-bottom:1px solid grey; font-style:italic; }
+/*
+#page_container:after { content:'Page imprimée depuis Départements en réseaux.fr'; display:block; border-top:1px solid grey; font-style:italic; }
+*/
+#page_container { width:95%; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+#page_container .elgg-inner { width:100%; }
+#page_container .elgg-main { border:2px inset #999; }
+html *, body * { min-height:0 !important; }
+
+

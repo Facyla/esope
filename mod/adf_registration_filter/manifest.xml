@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>ADF - Filtre d'inscription</name>
+	<author>Facyla ~ Items International 2011</author>
+	<version>0.2.1</version>
+	<blurb>ADF - Filtrage des inscriptions</blurb>
+	<description>Plateforme ADF-Essonne - Filtrage des adresses autorisées à créer un compte.</description>
+	<website>http://www.items.fr/</website>
+	<copyright>(C) Facyla ~ Items International 2011</copyright>
+	<license>GNU Public License version 2</license>
+
+	<requires>
+		<type>elgg_version</type>
+		<version>2009030802</version>
+	</requires>
+
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.1</version>
+	</requires>
+
+	<category>admin</category>
+	<category>registration</category>
+	<category>filter</category>
+	
+	<!--
+	<activate_on_install>true</activate_on_install>
+	//-->
+
+
+</plugin_manifest>
+
+
+<!--
+adf_banniere-8.jpg
+
+0.2.1 : ajustement du filtrage du username : rempalcement des '@' par des '_' mais on garde les '.' (le tiret n'étant pas un caractère valide)
+
+0.2 : suppression du username (généré à partir de l'adresse mail d'inscription)
+
+0.1 : première version opérationnelle
+
+//-->
+

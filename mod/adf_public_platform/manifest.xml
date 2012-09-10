@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>ADF - Thème et configuration</name>
+	<author>Facyla ~ Items International 2011</author>
+	<version>0.1</version>
+	<blurb>Configuration plateforme et thème ADF</blurb>
+	<description>Adaptations spécifiques pour les besoins ADF-Essonne - Plateforme collaborative des Départements.</description>
+	<website>http://www.items.fr/</website>
+	<copyright>(C) Facyla ~ Items International 2012</copyright>
+	<license>GNU Public License version 2</license>
+
+	<requires>
+		<type>elgg_version</type>
+		<version>2009030802</version>
+	</requires>
+
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.0.1</version>
+	</requires>
+
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/plugin_ss1.png</path>
+	</screenshot>
+
+	<category>admin</category>
+	<category>theme</category>
+	<category>other</category>
+	
+<!---
+	<on_enable>setup_function</on_enable>
+	<on_disable>teardown_function</on_disable>
+	<admin_interface>simple</admin_interface>
+
+	<requires>
+		<type>php_ini</type>
+		<name>short_open_tag</name>
+		<value>off</value>
+	</requires>
+
+	<requires>
+		<type>plugin</type>
+		<name>profile</name>
+		<version>1.0</version>
+	</requires>
+	
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>blog</plugin>
+	</requires>
+
+	<provides>
+		<type>plugin</type>
+		<name>profile_api</name>
+		<version>1.3</version>
+	</provides>
+//-->
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
