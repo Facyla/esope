@@ -10,13 +10,12 @@
 */
 
 if ($vars['pagetype']) {
-  //$vars['pagetype'] = str_replace('-', '_', $vars['pagetype']);
-
+  
   //$cmspages = get_entities_from_metadata('pagetype', $vars['pagetype'], "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
   $options = array(
       'metadata_names' => 'pagetype', 'metadata_values' => $vars['pagetype'],
       'types' => 'object', 'subtypes' => 'cmspage',
-      'owner_guid' => 1, 'site_guid' => 1,
+      'owner_guid' => 0, 'site_guid' => 0,
       'limit' => 1, 'offset' => 0, 'order_by' => '', 
       'count' => false,
     );

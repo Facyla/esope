@@ -15,7 +15,7 @@ if ($vars['pagetype']) {
   $options = array(
       'metadata_names' => array('pagetype'), 'metadata_values' => array($vars['pagetype']),
       'types' => 'object', 'subtypes' => 'cmspage',
-      'owner_guid' => 1, 'site_guid' => 1,
+      'owner_guid' => 0, 'site_guid' => 0,
       'limit' => 1, 'offset' => 0, 'order_by' => '', 
       'count' => false,
     );
@@ -42,16 +42,15 @@ if ($vars['pagetype']) {
       forward();
     }
     
-    elgg_set_context(elgg_echo('item:object:cmspages') . '&nbsp;: ' . $title);
+    set_context(elgg_echo('item:object:cmspages') . '&nbsp;: ' . $title);
     
     // Users who can edit this should get a direct edit link
-    if ( elgg_is_logged_in() && (in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) || elgg_is_admin_logged_in() || (is_plugin_enabled('multisite') && (elgg_is_admin_logged_in() || is_community_creator())) ) {
+    if ( isloggedin() && (in_array($_SESSION['guid'], explode(',', get_plugin_setting('editors', 'cmspages')))) || isadminloggedin() || (is_plugin_enabled('multisite') && (isadminloggedin() || is_community_creator())) ) {
       $content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'pg/cmspages/index.php?pagetype=' . $vars['pagetype'] . '"><kbd>[&nbsp;Modifier&nbsp;]</kbd></a></p></small>';
     }
 
     // Display through the correct canvas area
     $content = elgg_view('page/elements/wrapper', array('body' => $content));
-    //echo elgg_view_layout("one_column", elgg_view_title($title) . $content);
-    echo elgg_view_layout("one_column", array('title' => $title, 'content' => $content));
+    echo elgg_view_layout("one_column", elgg_view_title($title) . $content);
   }
 }

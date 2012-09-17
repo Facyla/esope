@@ -13,7 +13,6 @@
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 $pagetype = elgg_get_friendly_title($vars['pagetype']); // CMS Page type - used instead of GUIDs to select cmspage entities
-//$pagetype = str_replace('-', '_', $pagetype);
 $url = $vars['url'] . "pg/cmspages/index.php?pagetype=$pagetype"; // Set the base url
 $new_page = true;
 
@@ -88,9 +87,7 @@ if ($new_page) {
       <li style="float:right;" class="delete">
       <?php
       $delete_form_body = '<input type="hidden" name="cmspage_guid" value="' . $cmspage_guid . '" /><input type="submit" name="delete" value="' . elgg_echo('cmspages:delete') . '" onclick="javascript:return confirm(\'' . elgg_echo('cmspages:deletewarning') . '\');" style="height:24px; border-bottom:0;" />';
-      //echo '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body)) . '</div>';
-      $delete_form_body .= elgg_view('input/securitytoken');
-      echo '<div style="float:right;" id="delete_group_option"><form method="post" action="' . $vars['url'] . 'action/cmspages/delete">' . $delete_form_body . '</form></div>';
+      echo '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body)) . '</div>';
       ?>
     <?php } ?>
     </li>

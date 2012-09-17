@@ -32,6 +32,9 @@ function adf_platform_init() {
   elgg_extend_view('css/ie', 'adf_platform/css/ie');
   elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
   
+  // Accessibilité
+  elgg_extend_view('css','accessibility/css');
+  
   elgg_register_js('jquery', '/mod/adf_public_platform/views/default/adf_platform/js/jquery-1.7.2.min.php', 'head');
   elgg_register_js('adf_platform.fonction', 'mod/adf_public_platform/views/default/adf_platform/js/fonction.php', 'head');
   elgg_load_js('adf_platform.fonction');
@@ -58,9 +61,19 @@ function adf_platform_init() {
   // Pour faire apparaître le menu dans le menu "apparence" - mais @todo intégrer dans un form
   //elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
   
-  // Remplacement page d'accueil par tableau de bord personnel
+  // Remplacement page d'accueil
   if (elgg_is_logged_in()) {
-    elgg_register_plugin_hook_handler('index','system','adf_platform_index');
+    // Remplacement page d'accueil par tableau de bord personnel
+    // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
+    $replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
+    if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
+  /*
+  } else {
+    // Remplacement page d'accueil publique
+    // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
+    $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+    if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
+  */
   }
   
   // MODIFICATION DES MENUS STANDARDS
@@ -90,7 +103,7 @@ function adf_platform_init() {
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');
-	// Pour permettre à tout éditeur valable de la page d'y ajouter une sous-page'
+	// Pour permettre à tout éditeur valable de la page d'y ajouter une sous-page
 	elgg_unregister_page_handler('pages', 'pages_page_handler');
 	elgg_register_page_handler('pages', 'adf_platform_pages_page_handler');
 	// Pour modifier la page d'arrivée par défaut en popular
@@ -100,39 +113,6 @@ function adf_platform_init() {
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
-	
-  /*
-	elgg_register_event_handler('upgrade', 'upgrade', 'adf_platform_run_upgrades');
-
-	// add to the main css
-	elgg_extend_view('css/elgg', 'adf_platform/css');
-function search_page_handler($page) {
-
-	// if there is no q set, we're being called from a legacy installation
-	// it expects a search by tags.
-	// actually it doesn't, but maybe it should.
-	// maintain backward compatibility
-	if(!get_input('q', get_input('tag', NULL))) {
-		set_input('q', $page[0]);
-		//set_input('search_type', 'tags');
-	}
-
-	$base_dir = elgg_get_plugins_path() . 'search/pages/search';
-
-	include_once("$base_dir/index.php");
-	return true;
-}
-	// register the adf_platform's JavaScript
-	$adf_platform_js = elgg_get_simplecache_url('js', 'adf_platform/save_draft');
-	elgg_register_js('elgg.adf_platform', $adf_platform_js);
-
-	// routing of urls
-	elgg_register_page_handler('adf_platform', 'adf_platform_page_handler');
-
-	// override the default url to view a adf_platform object
-	elgg_register_entity_url_handler('object', 'adf_platform', 'adf_platform_url_handler');
-	*/
-	
 	
 	// Modification des titres des widgets
 	elgg_unregister_widget_type('blog');
@@ -150,9 +130,18 @@ function search_page_handler($page) {
 	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
 	elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
 	
-	
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
+	
+  // register the color picker's JavaScript
+	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
+	elgg_register_simplecache_view('js/input/color_picker');
+	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
+	
+	// register the color picker's CSS
+	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
+	elgg_register_simplecache_view('css/input/color_picker');
+	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
 	
 }
 
@@ -174,9 +163,7 @@ function search_page_handler($page) {
  */
 function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 	$var = $result;
-
 	elgg_load_library('htmlawed');
-
 	$htmlawed_config = array(
 		  // seems to handle about everything we need.
 		  // /!\ Liste blanche des balises autorisées
@@ -186,26 +173,19 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 		  'deny_attribute' => 'on*',
 		  // Filtrage suppélementaires des attributs autorisés (cf. start de htmLawed)
 		  'hook_tag' => 'htmlawed_tag_post_processor',
-		
 		  'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
 		  // apparent this doesn't work.
 		  // 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
 	  );
-	
 	// add nofollow to all links on output
-	if (!elgg_in_context('input')) {
-		$htmlawed_config['anti_link_spam'] = array('/./', '');
-	}
-	
+	if (!elgg_in_context('input')) { $htmlawed_config['anti_link_spam'] = array('/./', ''); }
 	$htmlawed_config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $htmlawed_config);
-	
 	if (!is_array($var)) {
 		$result = htmLawed($var, $htmlawed_config);
 	} else {
 		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
 		$result = $var;
 	}
-
 	return $result;
 }
 
@@ -274,10 +254,10 @@ function adf_platform_pages_page_handler($page) {
 	return true;
 }
 
-
+// Permet l'accès à diverses pages en mode "walled garden"
 function adf_public_platform_public_pages($hook, $type, $return_value, $params) {
   // Get and prepare valid domain config array from plugin settings
-  $publicpages = get_plugin_setting('publicpages', 'adf_public_platform');
+  $publicpages = elgg_get_plugin_setting('publicpages', 'adf_public_platform');
   $publicpages = preg_replace('/\r\n|\r/', "\n", $publicpages);
   // Add csv support - cut also on ";" and ","
   $publicpages = str_replace(array(' ', '<p>', '</p>'), '', $publicpages); // Delete all white spaces
@@ -504,26 +484,58 @@ function adf_platform_pagesetup(){
 	// @todo : Insert Home at first, replace 1st entry with page owner, rename owner tool using context
 	if (elgg_get_viewtype() == 'default') {
 	  global $CONFIG;
+	  $context = elgg_get_context();
 	  if (is_array($CONFIG->breadcrumbs)) {
-  	  // Remove "Tool home" entry
-  	  unset ($CONFIG->breadcrumbs[0]);
-  	  // Rename "Owner tool" to the tool name
+  	  
+	    /*
+	    // Pour intervenir sur le dernier élément du fil d'Ariane
+  	  $last = sizeof($CONFIG->breadcrumbs) - 1;
+  	  error_log("LAST : $last" . print_r($CONFIG->breadcrumbs[$last], true));
+  	  if ($CONFIG->breadcrumbs[$last]['title'] == elgg_echo('groups')) $CONFIG->breadcrumbs[$last]['title'] = $CONFIG->breadcrumbs[$last]['title'];
+	    */
+  	  
+  	  // Remove "Tool home" entry - except for groups (all groups link)
+  	  if (!in_array($context, array('groups', 'profile'))) {
+    	  unset ($CONFIG->breadcrumbs[0]);
+  	  }
+  	  
+  	  // Rename "Owner tool" to the tool name (except for groups - keep group title)
   	  //$CONFIG->breadcrumbs[1]['title'] = elgg_echo(elgg_get_context()) . ' ' . $CONFIG->breadcrumbs[1]['title'];
-  	  $CONFIG->breadcrumbs[1]['title'] = elgg_echo(elgg_get_context());
-	    // Insert page owner only if it's a user or group (not a site..)
+	    if (!in_array($context, array('groups', 'profile'))) $CONFIG->breadcrumbs[1]['title'] = elgg_echo($context);
+	    
+	    // Insert page owner only if it's a user or group (not a site..), and it's not set by the context
 	    $page_owner = elgg_get_page_owner_entity();
 	    if ($page_owner instanceof ElggGroup) {
-      	array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . $page_owner->name) );
+      	if (!elgg_in_context('groups')) {
+        	$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
+      	  array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
+      	  array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
+      	}
 	    } else if ($page_owner instanceof ElggUser) {
       	array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
+      	array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members') );
 	    }
+	    
 	    // Insert home link in all cases
-    	array_unshift($CONFIG->breadcrumbs, array('title' => $CONFIG->sitename, 'link' => $CONFIG->url));
+    	array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url));
+    	
 	  } else {
-	    $CONFIG->breadcrumbs = array(
-	        array('title' => $CONFIG->sitename, 'link' => $CONFIG->url), 
-	        array('title' => elgg_echo(elgg_get_context()), 'link' => $CONFIG->url . elgg_get_context())
-	      );
+	    //$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $CONFIG->url);
+	    $CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url);
+	    
+	    // Corrections selon le contexte
+      if (elgg_in_context('profile')) {
+        // Annuaire => Nom du membre
+        $page_owner = elgg_get_page_owner_entity();
+        $CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members');
+      	$CONFIG->breadcrumbs[] = array('title' => $page_owner->name);
+      } else if (elgg_in_context('members')) {
+        // Membres => Annuaire
+        $CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'));
+      } else {
+        // Par défaut : contexte
+        $CONFIG->breadcrumbs[] = array('title' => elgg_echo(elgg_get_context()), 'link' => $CONFIG->url . $context);
+      }
 	  }
 	}
 	
@@ -546,82 +558,32 @@ function adf_platform_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 
 // Remplace l'index par un tableau de bord légèrement modifié
 function adf_platform_index() {
-  global $CONFIG;
-  
-	// Ensure that only logged-in users can see this page
-	gatekeeper();
-
-	// Set context and title
-	elgg_set_context('dashboard');
-	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-	$title = elgg_echo('dashboard');
-	
-	// Define static elements in top of widgets - or use a modified widgets view directly
-	$static .= '<h2 class="invisible">Tableau de bord personnalisable</h2><hr />';
-	
-  if (elgg_is_logged_in()) {
-    $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
-  	if (empty($intro)) { $intro = 'Bienvenue sur votre plateforme collaborative.<br />Vous allez pouvoir partager vos projets et échanger vos expériences avec votre communauté. Administrateurs du site, pensez à éditer ce message !'; }
-	  $firststeps_page = get_entity(182);
-// @DEBUG : Affiché 1ère fois seulement // prev_last_login
-/*
-$intro .= "test : ";
-$intro .= "test : " . $_SESSION['user']->last_login;
-$intro .= "test : " . $_SESSION['user']->prev_last_login;
-*/
-	  if (($_SESSION['user']->last_login >= 0) && ($_SESSION['user']->prev_last_login >= 0)) {
-	    $first_time = '<script type="text/javascript">
-	    $(document).ready(function() {
-  	    $(\'#firsteps_toggle\').hide();
-	    })
-	    </script>';
-	  }
- 	  $firststeps = '<div class="firststeps"><a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle();">Premiers pas (cliquer pour afficher / masquer)</a>'
- 	  . '<div id="firsteps_toggle" style=" border:2px solid grey; background:#DEDEDE; padding:10px;">'
-	  . $firststeps_page->description
- 	  . '</div>' 
-	  . '</div>';
-	  $firststeps .= $first_time;
-    
-	  $static = '<header><div class="intro">' . $firststeps . $intro . '</div></header>';
-  }
-  
-	// wrap intro message in a div
-	//$intro_message = elgg_view('dashboard/blurb');
-	$params = array(
-		'content' => $intro_message,
-		'num_columns' => 3,
-		'show_access' => false,
-	);
-	$widgets = elgg_view_layout('widgets', $params);
-	
-	//$body = elgg_view_layout('one_column', array('content' => $static . '<div class="clearfloat"></div>' . $widgets));
-	$body = $static . '<div class="clearfloat"></div>' . $widgets;
-
-	echo elgg_view_page($title, $body);
+  /* Pour remplacer par une page spécifique
+  $replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
+  if ($replace_home != 'yes') {
+    $homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
+    if ($homepage_test) {
+      fclose($$homepage_test);
+      forward($CONFIG->url . $replace_home);
+    }
+  } else {}
+  */
+	include(dirname(__FILE__) . '/pages/adf_platform/homepage.php');
 	return true;
 }
-
-
-function adf_public_platform_group_join($event, $object_type, $relationship) {
-  if (elgg_is_logged_in()) {
-    if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
-      add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
-    }
+// Remplace la page d'accueil publique par une page spécifique : le mieux reste de retravailler le layout "default" ou "walled_garden"
+/*
+function adf_platform_public_index() {
+  global $CONFIG;
+  $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+  $homepage_test = @fopen($CONFIG->url . $replace_public_home, 'r'); 
+  if ($homepage_test) {
+    fclose($homepage_test);
+    include($CONFIG->url . $replace_public_home);
   }
   return true;
 }
-function adf_public_platform_group_leave($event, $object_type, $relationship) {
-	global $NOTIFICATION_HANDLERS;
-  if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
-  	// loop through all notification types
-	  foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-		  remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-	  }
-  }
-  return true;
-}
-
+*/
 
 
 /*
@@ -636,40 +598,33 @@ function adf_platform_login_handler($event, $object_type, $object) {
     $_SESSION['referer'] = "";
     forward($referer);
   }
-  // Sinon, pour aller sur la page d'accueil à la connexion
-  $loginredirect = '';
+  // Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
+  $loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
   // On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
   if (empty($loginredirect)) { forward($CONFIG->url); } else { forward($CONFIG->url . $loginredirect); }
 }
-/*
-*/
 
 
 
-/**
- * Dispatches adf_platform pages.
- * URLs take the form of
- *
- * Title is ignored
- *
- * @todo no archives for all adf_platforms or friends
- *
- * @param array $page
- * @return NULL
- */
-/*
-function adf_platform_page_handler($page) {
-	$page_type = $page[0];
-	switch ($page_type) {
-		default:
-			$title = elgg_echo('adf_platform:title');
-			$params = array();
-			break;
-	}
-	$params['sidebar'] .= elgg_view('adf_platform/sidebar', array('page' => $page_type));
-	$body = elgg_view_layout('content', $params);
-
-	echo elgg_view_page($params['title'], $body);
+// Ajoute les notifications lorsqu'on rejoint un groupe
+function adf_public_platform_group_join($event, $object_type, $relationship) {
+  if (elgg_is_logged_in()) {
+    if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
+      add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+    }
+  }
+  return true;
 }
-*/
+// Retire les notifications lorsqu'on quitte un groupe
+function adf_public_platform_group_leave($event, $object_type, $relationship) {
+	global $NOTIFICATION_HANDLERS;
+  if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
+  	// loop through all notification types
+	  foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+		  remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+	  }
+  }
+  return true;
+}
+
 

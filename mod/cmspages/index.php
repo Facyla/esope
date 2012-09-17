@@ -16,16 +16,15 @@ gatekeeper();
 // Facyla : this tool is rather for local admins and webmasters than main admins, so use custom access rights : OK if custom rights match, or use default behaviour
 if (in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) {
 } else {
-  admin_gatekeeper();
+  if (elgg_is_active_plugin('multisite')) { multisite_admin_gatekeeper(); } else { admin_gatekeeper(); }
 }
 
 
 $pagetype = elgg_get_friendly_title(get_input('pagetype')); // the pagetype e.g about, terms, etc. - default to "mainpage"
 
 // Build the page content
-//$title = elgg_echo('cmspages');
-//elgg_set_page_owner_guid($_SESSION['guid']); // Set admin user for owner block
-elgg_set_page_owner_guid(1);
+$title = elgg_echo('cmspages');
+elgg_set_page_owner_guid($_SESSION['guid']); // Set admin user for owner block
 $menu = elgg_view('cmspages/menu', array('pagetype' => $pagetype));
 $edit = elgg_view('cmspages/forms/edit', array('pagetype' => $pagetype));
 //$body = elgg_view('page/elements/wrapper', array('body' => $menu . $edit));

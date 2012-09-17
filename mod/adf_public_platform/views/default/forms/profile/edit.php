@@ -18,7 +18,7 @@
 	// id profile_edit_form
 	?>	
 	<div>
-		<label><?php echo elgg_echo('user:name:label'); ?></label>
+		<label for="name"><?php echo elgg_echo('user:name:label'); ?></label>
 		<?php echo elgg_view('input/text', array('name' => 'name', 'value' => $vars['entity']->name)); ?>
 	</div>
 	<?php 
@@ -83,8 +83,8 @@
 				<?php
 				 
 				echo "<div>";
-				echo "<label>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
-				echo elgg_view("input/pulldown", array("name" => "custom_profile_type",
+				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
+				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
 														"id" => "custom_profile_type",
 														"options_values" => $pulldown_options,
 														"onchange" => "changeProfileType();",
@@ -128,7 +128,7 @@
 						"type" => "object",
 						"subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 						"limit" => false,
-						"owner_guid" => $cat->getOwner(),
+						"owner_guid" => $cat->getOwnerGUID(),
 						"site_guid" => $cat->site_guid,
 						"relationship" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_CATEGORY_RELATIONSHIP,
 						"relationship_guid" => $cat_guid,
@@ -190,7 +190,7 @@
 					$field_result = "<div>";
 				}	
 				
-				$field_result .= "<label>" . $title;
+				$field_result .= "<label for=\"" . $metadata_name . "\">" . $title;
 				$field_result .= " &nbsp; " . elgg_view('input/access', array('name' => 'accesslevel[' . $metadata_name . ']', 'value' => $access_id)); 
 				$field_result .= "</label>";
 				
@@ -234,7 +234,7 @@
 	if($simple_access_control == "yes"){ 
 		?>
 		<div>
-			<label><?php echo elgg_echo("profile_manager:simple_access_control"); ?></label>
+			<label for="simple_access_control"><?php echo elgg_echo("profile_manager:simple_access_control"); ?></label>
 			<?php echo elgg_view('input/access',array('name' => 'simple_access_control', 'value' => $access_id, 'class' => 'simple_access_control', 'js' => 'onchange="set_access_control(this.value)"')); ?>
 		</div>
 		<?php 

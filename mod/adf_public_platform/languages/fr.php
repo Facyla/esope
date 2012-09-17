@@ -23,31 +23,47 @@ $fr = array(
 	'adf_platform:footer:default' => $footer_default,
 	'adf_platform:home:displaystats' => "Afficher les statistiques en page d'accueil",
 	'adf_platform:css' => "Ajoutez ici vos styles CSS personnalisés",
-	'adf_platform:css:default' => "Les CSS ajoutés ici surchargent la feuille de style principale (sans la remplacer)",
+	'adf_platform:css:help' => "Les CSS ajoutés ici surchargent la feuille de style (sans la remplacer), et viennent se charger après tous les autres modules. Ajoutez ici vos styles personnalisés",
+	'adf_platform:css:default' => "/* Pour modifier le bandeau */\nheader {  }\n\n/* Les liens */\na, a:visited {  }\na:hover, a:active, a:focus {  }\n\n/* Les titres */\nh1, h2, h3, h4, h5 {  }\n/* etc. */\n",
 	'adf_platform:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",
 	'adf_platform:title:color' => "Couleur des titres",
+	'adf_platform:text:color' => "Couleur du texte",
 	'adf_platform:link:color' => "Couleur des liens",
-	'adf_platform:color1:color' => "Couleur configurable 1",
-	'adf_platform:color2:color' => "Couleur configurable 2",
-	'adf_platform:color3:color' => "Couleur configurable 3",
-	'adf_platform:color4:color' => "Couleur configurable 4",
-	'adf_platform:color5:color' => "Couleur configurable 5",
-	'adf_platform:color6:color' => "Couleur configurable 6",
-	'adf_platform:color7:color' => "Couleur configurable 7",
-	'adf_platform:color8:color' => "Couleur configurable 8",
+	'adf_platform:link:hovercolor' => "Couleur des liens au survol (et inversions de couleurs)",
+	'adf_platform:color1:color' => "Haut du dégradé header",
+	'adf_platform:color2:color' => "Haut du dégradé widgets/modules",
+	'adf_platform:color3:color' => "Bas du dégradé widgets/modules",
+	'adf_platform:color4:color' => "Bas du dégradé header",
+	'adf_platform:color5:color' => "Haut du dégradé des boutons",
+	'adf_platform:color6:color' => "Bas du dégradé des boutons",
+	'adf_platform:color7:color' => "Haut du dégradé des boutons (hover)",
+	'adf_platform:color8:color' => "Bas du dégradé des boutons (hover)",
 	'adf_platform:color9:color' => "Couleur configurable 9",
+	'adf_platform:color10:color' => "Couleur configurable 10",
+	'adf_platform:color11:color' => "Couleur configurable 11",
+	'adf_platform:color12:color' => "Couleur configurable 12",
 	'widgets:dashboard:add' => "Personnaliser ma page d'accueil'",
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
-	'adf_platform:settings:publicpages' => "Pages publiques",
-	'adf_platform:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
-	'adf_platform:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/3819/mentions-lgales",
+	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
+	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/3819/mentions-lgales",
 	
 	
 	// Behaviour settings
 	'adf_platform:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",
-	'adf_platform:login:redirect' => "URL de redirection après connexion",
+	'adf_platform:settings:redirect' => "URL (relative) de redirection après connexion",
+	'adf_platform:settings:replace_public_home' => "URL (relative) pour remplacer la page d'accueil publique (par défaut&nbsp;: laisser vide)",
+	'adf_platform:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
+	'adf_platform:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
+	'adf_platform:settings:firststeps:help' => "Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
+	'adf_platform:settings:footer' => "Contenu du pied de page",
+	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (85px de haut)",
+	'adf_platform:settings:headerimg:help' => "Indiquez l'URL (relative) de l'image qui sera positionnée au centre du bandeau, sous le menu supérieur, et répétée si nécessaire horizontalement (motif). Utilisez une image de 85px de haut, et suffisamment large pour éviter d'être répétée sur un grand écran (2000px minimum). Pour des dimensions différentes, ajoutez dans les ci-dessous (en modifiant la hauteur) : <em>header { height:115px; }</em>",
+	'adf_platform:settings:backgroundimg' => "Motif de fond",
+	'adf_platform:settings:backgroundimg:help' => "Indiquez l'URL (relative) de l'image qui sera répétée horizontalement et verticalement",
+	'adf_platform:settings:backgroundcolor' => "Couleur de fond",
+	'adf_platform:settings:backgroundcolor:help' => "",
 	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
 	
@@ -101,6 +117,57 @@ $fr = array(
 	'adf_platform:widget:group:title' => 'Mes Groupes',
 	'adf_platform:widget:page:title' => 'Mes Wikis',
 	
+	'accessibility:sidebar:title' => "Outils",
+	//'breadcrumb' => "Fil d'Ariane",
+	'breadcrumbs' => "Revenir à ",
+	// Demandes en attente
+	'decline' => "Décliner",
+	'refuse' => "Refuser",
+	/* Pagination */
+	'previouspage' => "Page précédente",
+	'nextpage' => "Page suivante",
+	/* Recherche de membres */
+	'searchbytag' => "Recherche par mot-clef",
+	'searchbyname' => "Recherche par nom",
+	// Actions génériques à "typer"
+	'delete:message' => "Supprimer le(s) message(s)",
+	'markread:message' => "Marquer le(s) message(s)  comme lu(s)",
+	'toggle:messages' => "inverser la sélection des messages",
+	'messages:send' => "Envoyer le message",
+	'save:newgroup' => "Créer le groupe !",
+	'save:group' => "Enregistrer les modifications du groupe",
+	'upload:avatar' => "Charger la photo",
+	'save:settings' => "Enregistrer la configuration",
+	'save:usersettings' => "Enregistrer mes paramètres",
+	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
+	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
+	'save:widgetsettings' => "Enregistrer les réglages du module",
+	// Notifications
+	'link:userprofile' => "Page de profil de %s",
+	
+	// Params widgets
+	'onlineusers:numbertodisplay' => "Nombre maximum de membres connectés à afficher",
+	'newusers:numbertodisplay' => "Nombre maximum de nouveaux membres à afficher",
+	'brainstorm:numbertodisplay' => "Nombre maximum d'idées à afficher",
+	'river:numbertodisplay' => "Nombre maximum d'activités à afficher",
+	'group:widget:num_display' => "Nombre maximum de groupes à afficher",
+	
+	'more:friends' => "Plus de contacts", 
+	
+	// New group
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:secretariat@departementsenreseaux.fr&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	
+	// 
+	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
+	'accessibility:requestnewpassword' => "Demander la réinitialisation du mot de passe",
+	'accessibility:revert' => "Supprimer",
+	
+	
+	'adf_platform:homepage' => "Accueil",
+	'announcements' => "Annonces",
+	'event_calendar' => "Agenda",
+	
+	'adf_platform:access:public' => "Public (accessible hors connexion)",
 	//'' => "",
 	
 	

@@ -9,6 +9,10 @@
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
 $color1 = $css['color1'];
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 
 /* ***************************************

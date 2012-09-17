@@ -1,3 +1,102 @@
+Version 1.8.8
+(July 11, 2012 from https://github.com/Elgg/Elgg/tree/1.8)
+
+ Contributing Developers:
+  * Cash Costello
+  * Miguel Rodriguez
+  * Sem
+
+ Enhancements:
+  * Added a delete button on river items for admins
+
+ Bugfixes:
+  * Fixed the significant bug with htmlawed plugin that caused duplicate tags
+
+
+Version 1.8.7
+(July 10, 2012 from https://github.com/Elgg/Elgg/tree/1.8)
+
+ Contributing Developers:
+  * Cash Costello
+  * Evan Winslow
+  * Ismayil Khayredinov
+  * Jeroen Dalsem
+  * Jerome Bakker
+  * Matt Beckett
+  * Miguel Rodriguez
+  * Paweł Sroka
+  * Sem
+  * Steve Clay
+
+ Enhancements:
+  * Better support for search engine friendly URLs
+  * Upgraded htmlawed (XSS filtering)
+  * Internationalization support for TinyMCE
+  * Public access not available for walled gardens
+  * Better forwarding and messages when they cannot view content because logged out
+
+ Bugfixes:
+  * Fatal errors due to type hints downgraded to warnings
+  * Group discussion reply notifications work again
+  * Sending user to inbox when deleting a message
+  * Fixed location profile information when it is an array
+  * Over 30 other bug fixes.
+
+
+Version 1.8.6
+(June 18, 2012 from https://github.com/Elgg/Elgg/tree/1.8)
+
+ Contributing Developers:
+  * Cash Costello
+  * Evan Winslow
+  * Ismayil Khayredinov
+  * Jeff Tilson
+  * Jerome Bakker
+  * Paweł Sroka
+  * Sem
+  * Steve Clay
+
+ Enhancements:
+  * New ajax spinner
+  * Detecting docx, xlsx, and pptx files in file plugin
+  * Showing ajax spinner when uploading file with embed plugin
+
+ Bugfixes:
+  * Fixed some language caching issues.
+  * Users can add sub-pages to another user's page in a group.
+  * Over 30 other bug fixes.
+
+
+Version 1.8.5
+(May 17, 2012 from https://github.com/Elgg/Elgg/tree/1.8)
+ 
+ Contributing Developers:
+  * Brett Profitt
+  * Evan Winslow
+  * Sem
+  * Steve Clay
+  * Jeroen Dalsem
+  * Jerome Bakker
+
+ Security Enhancements:
+  * Fixed possible XSS vulnerability if using a crafted URL.
+  * Fixed exploit to bypass new user validation if using a crafted form.
+  * Fixed incorrect caching of access lists that could allow plugins
+    to show private entities to non-admin and non-owning users. (Non-exploitable)
+
+ Bugfixes:
+  * Twitter API: New users are forwarded to the correct page after creating 
+                 an account with Twitter.
+  * Files: PDF files are downloaded as "inline" to display in the browser.
+  * Fixed possible duplication errors when writing metadata with multiple values.
+  * Fixed possible upgrade issue if using a plugin uses the system_log hooks.
+  * Fixed problems when enabling more than 50 metadata or annotations.
+
+ API:
+  * River entries' timestamps use elgg_view_friendly_time() and can be 
+     overridden with the friendly time output view.
+
+
 Version 1.8.4
 (April 24, 2012 from https://github.com/Elgg/Elgg/tree/1.8)
 

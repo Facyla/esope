@@ -63,6 +63,8 @@ header("Content-type: text/html; charset=UTF-8");
 
 <!-- END -->
 
+<!-- JS deferred scripts -->
+<?php echo elgg_view('page/elements/foot'); ?>
 
 </body>
 </html>

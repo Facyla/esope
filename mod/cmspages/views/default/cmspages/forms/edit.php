@@ -11,16 +11,13 @@
 */
 
 $pagetype = elgg_get_friendly_title($vars['pagetype']); //get the page type - used as a user-friendly guid
-//$pagetype = str_replace('_', '-', $pagetype);
-//$pagetype = str_replace('-', '_', $pagetype);
 
 // empty pagetype or very short pagetypes are not allowed - we don't need the form in these cases
 if (empty($pagetype)) {} 
 else if (strlen($pagetype) < 3) { register_error(elgg_echo('cmspages:unsettooshort')); } 
 else {
   //$cmspages = get_entities_from_metadata('pagetype', $pagetype, "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
-  //$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false );
-  $options = array('metadata_name_value_pairs' => array('name' => 'pagetype', 'value' => $pagetype, 'operand' => '='), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => 'time_updated desc', 'count' => false );
+  $options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false );
   $cmspages = elgg_get_entities_from_metadata($options);
 
   if ($cmspages) {

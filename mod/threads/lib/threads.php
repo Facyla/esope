@@ -1,6 +1,6 @@
 <?php
 
-function threads_top(int $entity_guid){
+function threads_top($entity_guid){
 	$entity = get_entity($entity_guid);
 	if(!$entity) {
 		return false;

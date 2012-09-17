@@ -5,17 +5,20 @@
  * @package Elgg.Core
  * @subpackage UI
  */
- 
-/*Colour 7f8343 belongs to EasyTheme. */ 
-/*Colour <?php echo $linkcolor; ?> belongs to EasyTheme. */
-/* To change colours - do a "search and replace" */ 
 
-// Couleur des titres
-$titlecolor = elgg_get_plugin_setting('titlecolor', 'adf_public_platform');
-// Couleur des liens
-$linkcolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
+$css = elgg_extract('theme-config-css', $vars);
+$titlecolor = $css['titlecolor'];
+$textcolor = $css['textcolor'];
+$linkcolor = $css['linkcolor'];
+$backgroundcolor = $css['backgroundcolor'];
+$backgroundimg = $css['backgroundimg'];
+$linkhovercolor = $css['linkhovercolor'];
 $urlfonts = $vars['url'] . 'mod/adf_public_platform/fonts/';
 $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 
 /* ***************************************
@@ -68,7 +71,7 @@ $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
 
 /**** Change font and colour here ***********/
 html {
-	background: #efeeea url("<?php echo $urlicon; ?>motif_fond.jpg") left top repeat scroll !important;
+	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
 	font-family: Arial, Verdana;
 }
 body {
@@ -78,12 +81,11 @@ body {
 	font-family:  Verdana, "Lucida Grande", Arial, Tahoma, sans-serif;
   color:#221907;
 */
-	background: #efeeea url("<?php echo $urlicon; ?>motif_fond.jpg") left top repeat scroll !important;
+	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
 	position: relative;
 	border-top: 5px solid #333333;
 }
 
-/********* Change link text color here ***********/
 a {
 	text-decoration: none;
 	color: <?php echo $linkcolor; ?>;
@@ -93,7 +95,7 @@ a:hover,
 a:focus,
 a:active,
 a.selected { <?php //@todo remove .selected ?>
-	color: #333;
+	color: <?php echo $linkhovercolor; ?>;
 	/* text-decoration: underline; */
 }
 a:hover, 
@@ -102,7 +104,7 @@ a:active { text-decoration: underline; }
 
 p {
 	margin-bottom: 15px;
-	color: #333;
+	color: <?php echo $textcolor; ?>;
 }
 /*
 p, ul li { font-size: 0.85em; }
@@ -146,7 +148,6 @@ blockquote {
 	padding:3px 15px;
 	margin:0px 0 15px 0;
 	border:none;
-	
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -239,7 +240,6 @@ header h1 span {
   font-weight: bold;
   padding: 2px 7px;
 }
-
 
 .elgg-widget-more {
   line-height:32px; color:<?php echo $linkcolor; ?>;

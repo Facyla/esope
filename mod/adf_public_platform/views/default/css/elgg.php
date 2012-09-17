@@ -21,27 +21,61 @@ if ($old_css_view != elgg_get_config('viewpath')) {
 }
 
 // Configurable elements : pass theme as $vars['theme-config-css']
-// Couleur de fond du footer configurable
-$footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
+// Image de fond du header
+$headerimg = elgg_get_plugin_setting('headerimg', 'adf_public_platform');
+if (!empty($headerimg)) $headerimg = $vars['url'] . $headerimg;
+$backgroundcolor = elgg_get_plugin_setting('backgroundcolor', 'adf_public_platform');
+$backgroundimg = elgg_get_plugin_setting('backgroundimg', 'adf_public_platform');
+if (!empty($backgroundimg)) $backgroundimg = $vars['url'] . $backgroundimg;
 // Couleur des titres
 $titlecolor = elgg_get_plugin_setting('titlecolor', 'adf_public_platform');
+$textcolor = elgg_get_plugin_setting('textcolor', 'adf_public_platform');
 // Couleur des liens
 $linkcolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
-// Couleur 1
+$linkhovercolor = elgg_get_plugin_setting('linkhovercolor', 'adf_public_platform');
+// Couleur 1 : Haut dégradé header
 $color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
-// Couleur 2
+// Couleur 4 : Bas dégradé header
+$color4 = elgg_get_plugin_setting('color4', 'adf_public_platform');
+// Couleur 2 : Haut dégradé widgets/modules
 $color2 = elgg_get_plugin_setting('color2', 'adf_public_platform');
-// Couleur 3
+// Couleur 3 : Bas dégradé widgets/modules
 $color3 = elgg_get_plugin_setting('color3', 'adf_public_platform');
+// Couleur 5-8 : Dégradés des boutons + dégradé hover
+$color5 = elgg_get_plugin_setting('color5', 'adf_public_platform');
+$color6 = elgg_get_plugin_setting('color6', 'adf_public_platform');
+$color7 = elgg_get_plugin_setting('color7', 'adf_public_platform');
+$color8 = elgg_get_plugin_setting('color8', 'adf_public_platform');
+// Divers tons de gris par défaut et éléments de l'interface
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
+// Couleur de fond du footer configurable
+$footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
 
 $vars['theme-config-css'] = array(
   'urlicon' => $vars['url'] . 'mod/adf_public_platform/img/theme/',
-  'footercolor' => $footercolor,
+  'headerimg' => $headerimg,
+  'backgroundcolor' => $backgroundcolor,
+  'backgroundimg' => $backgroundimg,
   'titlecolor' => $titlecolor,
   'linkcolor' => $linkcolor,
+  'linkhovercolor' => $linkhovercolor,
+  'textcolor' => $textcolor,
   'color1' => $color1,
   'color2' => $color2,
   'color3' => $color3,
+  'color4' => $color4,
+  'color5' => $color5,
+  'color6' => $color6,
+  'color7' => $color7,
+  'color8' => $color8,
+  'color9' => $color9,
+  'color10' => $color10,
+  'color11' => $color11,
+  'color12' => $color12,
+  'footercolor' => $footercolor,
 );
 /* Use in subsequent CSS views like this :
   // Get all needed vars

@@ -12,11 +12,18 @@
 
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
+$headerimg = $css['headerimg'];
 $urlicon = $css['urlicon'];
 $linkcolor = $css['linkcolor'];
+$linkhovercolor = $css['linkhovercolor'];
 $color1 = $css['color1'];
 $color2 = $css['color2'];
 $color3 = $css['color3'];
+$color4 = $css['color4'];
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 
 /* ***************************************
@@ -167,18 +174,18 @@ $color3 = $css['color3'];
 
 /* Theme ADF : bandeau */
 header {
-	background-image: url("<?php echo $urlicon; ?>departements.png"), linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $linkcolor; ?> 75%);
-	background-image: url("<?php echo $urlicon; ?>departements.png"), -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $linkcolor; ?> 75%);
-	background-image: url("<?php echo $urlicon; ?>departements.png"), -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $linkcolor; ?> 75%);
-	background-image: url("<?php echo $urlicon; ?>departements.png"), -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $linkcolor; ?> 75%);
-	background-image: url("<?php echo $urlicon; ?>departements.png"), -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $linkcolor; ?> 75%);
-	background-image: url("<?php echo $urlicon; ?>departements.png"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $linkcolor; ?>));
+	background-image: url("<?php echo $headerimg; ?>"), linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: url("<?php echo $headerimg; ?>"), -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: url("<?php echo $headerimg; ?>"), -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: url("<?php echo $headerimg; ?>"), -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: url("<?php echo $headerimg; ?>"), -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: url("<?php echo $headerimg; ?>"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $color4; ?>));
 	background-position: left 30px, left top;
 	background-repeat: repeat-x, repeat;
-	background-color: <?php echo $color1; ?>;
+	background-color: <?php echo $color4; ?>;
 	color: #fff;
 	height: 115px;
-	border-top: 2px solid <?php echo $color2; ?>;
+	border-top: 2px solid <?php echo $color1; ?>;
 }
 
 

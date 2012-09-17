@@ -59,7 +59,7 @@ function cmspages_page_handler($page) {
   } else {
     if (@include($CONFIG->pluginspath . "cmspages/index.php")) return true;
   }
-  return true;
+  return false;
 }
 
 /* Page setup. Adds admin controls */
@@ -73,7 +73,6 @@ function cmspages_pagesetup() {
     ) {
     $item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/'); elgg_register_menu_item('topbar', $item);
   }
-  return true;
 }
 
 /* Permissions for the cmspages context */

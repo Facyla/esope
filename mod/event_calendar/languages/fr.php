@@ -243,5 +243,7 @@ Vous pouvez gérer les demandes liées à cet événement via la page : %s',
   'river:create:object:event_calendar' => '%s a annoncé l\'événement %s',
   'river:comment:object:event_calendar' => '%s a commenté l\'événement %s',
   
+  'event_calendar:view' => "Agenda",
+  
 );
 add_translation("fr", $language);

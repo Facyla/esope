@@ -43,5 +43,5 @@ if ($exbloglayout && elgg_is_active_plugin('externalblog') && ($layout = elgg_ge
 
 
 // Display page
-echo elgg_view_page($title, $body);
+elgg_view_page($title, $body);
 

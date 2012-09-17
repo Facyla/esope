@@ -26,7 +26,6 @@ elgg_make_sticky_form('cmspages');
 $contents = get_input('cmspage_content', '', false); // We do *not want to filter HTML
 $cmspage_title = get_input('cmspage_title');
 $pagetype = elgg_get_friendly_title(get_input('pagetype')); // Needs to be URL-friendly
-//$pagetype = str_replace('-', '_', $pagetype);
 
 // Empty or very short pagetypes are not allowed
 if (empty($pagetype) || strlen($pagetype) < 3 ) {
@@ -57,7 +56,7 @@ if (strlen($pagetype)>0) {
   //$cmspages = get_entities_from_metadata('pagetype', $pagetype, "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
   $options = array(
       'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage',
-      'owner_guid' => 1, 'site_guid' => 1, 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false,
+      'owner_guid' => 0, 'site_guid' => 0, 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false,
     );
   $cmspages = elgg_get_entities_from_metadata($options);
   $cmspage = $cmspages[0];

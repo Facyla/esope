@@ -20,6 +20,7 @@ if (empty($category)) {
   $title = elgg_echo('adf_platform:categories:all', array($category));
   elgg_push_breadcrumb(elgg_echo('adf_platform:categories:all'));
 } else {
+  elgg_push_breadcrumb(elgg_echo('adf_platform:categories:all'));
   elgg_push_breadcrumb(elgg_echo($category));
   $title = elgg_echo('categories:results', array($category));
 }

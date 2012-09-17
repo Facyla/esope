@@ -11,9 +11,14 @@ $css = elgg_extract('theme-config-css', $vars);
 $urlicon = $css['urlicon'];
 $titlecolor = $css['titlecolor'];
 $linkcolor = $css['linkcolor'];
+$linkhovercolor = $css['linkhovercolor'];
 $color1 = $css['color1'];
 $color2 = $css['color2'];
 $color3 = $css['color3'];
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 
 /* ***************************************
@@ -35,10 +40,9 @@ $color3 = $css['color3'];
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	
 	padding: 2px 6px;
-	color: #002e6e;
-	border: 1px solid #002e6e;
+	color: <?php echo $linkcolor; ?>;
+	border: 1px solid <?php echo $linkcolor; ?>;
 	font-size: 0.85em;
 }
 .elgg-pagination a:hover,
@@ -128,7 +132,7 @@ $color3 = $css['color3'];
 .elgg-breadcrumbs > li > a:hover,
 .elgg-breadcrumbs > li > a:focus,
 .elgg-breadcrumbs > li > a:active {
-	color: <?php echo $titlecolor; ?>;
+	color: <?php echo $linkhovercolor; ?>;
 	text-decoration: underline;
 }
 
@@ -308,7 +312,7 @@ $color3 = $css['color3'];
 .elgg-menu-site-more > li > a:hover, 
 .elgg-menu-site-more > li > a:focus, 
 .elgg-menu-site-more > li > a:active {
-	background: <?php echo $titlecolor; ?>;
+	background: <?php echo $linkhovercolor; ?>;
 	color: white;
 }
 
@@ -585,7 +589,7 @@ header nav ul li a:active { color: #ddd; }
 .elgg-menu-page .elgg-state-selected a:hover, 
 .elgg-menu-page .elgg-state-selected a:focus, 
 .elgg-menu-page .elgg-state-selected a:active {
-	background-color:#002E6E;
+	background-color:<?php echo $linkcolor; ?>;
 	color: #FFF !important;
 	text-decoration: none;
 }
@@ -593,11 +597,11 @@ header nav ul li a:active { color: #ddd; }
 
 /****** Change colour for 'ALL Groups' link in sidebar *********/
 .elgg-menu-page li.elgg-state-selected > a {
-	/* background-color: <?php echo $titlecolor; ?>; */
+	/* background-color: <?php echo $linkhovercolor; ?>; */
 	color: #FFF;
 }
  .elgg-menu-page li.elgg-state-selected {
- background-color:#002E6E;
+ background-color:<?php echo $linkcolor; ?>;
 }
 .elgg-menu-page .elgg-child-menu {
 	display: none;
@@ -735,35 +739,35 @@ header nav ul li a:active { color: #ddd; }
 .elgg-menu-owner-block li a:hover,
 .elgg-menu-owner-block li a:focus,
 .elgg-menu-owner-block li a:active {
-	background-color: <?php echo $titlecolor; ?>;
+	background-color: <?php echo $linkcolor; ?>;
 	color: white;
 	text-decoration: none;
 }
 .elgg-menu-owner-block li.elgg-state-selected > a {
-	background-color: #002E6E;
+	background-color: <?php echo $linkcolor; ?>;
 	color: white;
 	background-position: 9px -19px;
 }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-event-calendar a { padding-left:32px; background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-event-calendar a:hover, .elgg-menu-item-event-calendar a:focus, .elgg-menu-item-event-calendar a:active { background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-event-calendar a:hover, .elgg-menu-item-event-calendar a:focus, .elgg-menu-item-event-calendar a:active { background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-announcements a { padding-left:32px; background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-announcements a:hover, .elgg-menu-item-announcements a:focus, .elgg-menu-item-announcements a:active { background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px -19px #0A2C83; color: #fff; }
+.elgg-menu-item-announcements a:hover, .elgg-menu-item-announcements a:focus, .elgg-menu-item-announcements a:active { background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
 .elgg-menu-item-blog a { padding-left:32px; background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-file a { padding-left:32px; background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-owner-block .elgg-menu-item-discussion a { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-owner-block .elgg-menu-item-discussion a:hover, .elgg-menu-owner-block .elgg-menu-item-discussion a:focus, .elgg-menu-owner-block .elgg-menu-item-discussion a:active { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-owner-block .elgg-menu-item-discussion a:hover, .elgg-menu-owner-block .elgg-menu-item-discussion a:focus, .elgg-menu-owner-block .elgg-menu-item-discussion a:active { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-brainstorm a { padding-left:32px; background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-brainstorm a:hover, .elgg-menu-item-brainstorm a:focus, .elgg-menu-item-brainstorm a:active { background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-brainstorm a:hover, .elgg-menu-item-brainstorm a:focus, .elgg-menu-item-brainstorm a:active { background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-bookmarks a { padding-left:32px; background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-bookmarks a:hover, .elgg-menu-item-bookmarks a:focus, .elgg-menu-item-bookmarks a:active { background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-bookmarks a:hover, .elgg-menu-item-bookmarks a:focus, .elgg-menu-item-bookmarks a:active { background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 .elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px #0A2C83 !important; }
+.elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 
 
 /* ***************************************

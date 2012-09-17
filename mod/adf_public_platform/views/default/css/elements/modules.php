@@ -5,6 +5,14 @@ global $CONFIG;
 $css = elgg_extract('theme-config-css', $vars);
 $urlicon = $css['urlicon'];
 $linkcolor = $css['linkcolor'];
+$linkhovercolor = $css['linkhovercolor'];
+$color1 = $css['color1'];
+$color2 = $css['color2'];
+$color3 = $css['color3'];
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 /* ***************************************
 	Modules
@@ -57,13 +65,13 @@ $linkcolor = $css['linkcolor'];
 	min-width:200px;
 }
 .elgg-module-info > .elgg-head {
-	background-image: linear-gradient(top, #F75C5C 45%, #c61b15 55%);
-	background-image: -o-linear-gradient(top, #F75C5C 45%, #c61b15 55%);
-	background-image: -moz-linear-gradient(top, #F75C5C 45%, #c61b15 55%);
-	background-image: -webkit-linear-gradient(top, #F75C5C 45%, #c61b15 55%);
-	background-image: -ms-linear-gradient(top, #F75C5C 45%, #c61b15 55%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, #F75C5C), color-stop(0.55, #c61b15));
-	background-color: #c61b15;
+	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
+	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
+	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
+	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.65, <?php echo $color3; ?>));
+	background-color: <?php echo $color3; ?>;
 	border-radius: 10px 10px 0 0;
 	-moz-border-radius: 10px 10px 0 0;
 	-webkit-border-radius: 10px 10px 0 0;
@@ -111,7 +119,7 @@ $linkcolor = $css['linkcolor'];
 	margin-bottom: 5px;
 }
 .elgg-module-popup > .elgg-head * {
-	color: #0A2C83;
+	color: <?php echo $titlecolor; ?>;
 }
 
 /* Dropdown */
@@ -141,7 +149,7 @@ $linkcolor = $css['linkcolor'];
 
 /* Featured */
 .elgg-module-featured {
-	border: 1px solid #0A2C83;
+	border: 1px solid <?php echo $titlecolor; ?>;
 	
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -149,7 +157,7 @@ $linkcolor = $css['linkcolor'];
 }
 .elgg-module-featured > .elgg-head {
 	padding: 5px;
-	background-color: #0A2C83;
+	background-color: <?php echo $titlecolor; ?>;
 }
 .elgg-module-featured > .elgg-head * {
 	color: white;
@@ -325,8 +333,7 @@ section div.module footer a:active { text-decoration: none; }
 	margin: 0 0 0 -3px;
 	padding: 2px 0 0 35px;
 	background: transparent url("<?php echo $urlicon; ?>puce-evenement.png") left top no-repeat scroll;
-position:relative;
-left:-21px;
+	position:relative; left:-21px;
 }
 .elgg-module-group-event-calendar p.date, 
 .elgg-widget-instance-event_calendar p.date {
@@ -334,7 +341,6 @@ left:-21px;
 	color: <?php echo $linkcolor; ?>;
 	float: left;
 	clear: left;
-	color: #002E6E;
 	font-size: 0.85em;
 	margin: 5px 10px 0 10px;
 	padding: 3px;

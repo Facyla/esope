@@ -56,6 +56,7 @@ $english = array(
 	'DatabaseException:DBSetupIssues' => "There were a number of issues: ",
 	'DatabaseException:ScriptNotFound' => "Elgg couldn't find the requested database script at %s.",
 	'DatabaseException:InvalidQuery' => "Invalid query",
+	'DatabaseException:InvalidDBLink' => "Connection to database was lost.",
 
 	'IOException:FailedToLoadGUID' => "Failed to load new %s from GUID:%d",
 	'InvalidParameterException:NonElggObject' => "Passing a non-ElggObject to an ElggObject constructor!",
@@ -75,10 +76,10 @@ $english = array(
 	'ElggPlugin:MissingID' => 'Missing plugin ID (guid %s)',
 	'ElggPlugin:NoPluginPackagePackage' => 'Missing ElggPluginPackage for plugin ID %s (guid %s)',
 
-	'ElggPluginPackage:InvalidPlugin:MissingFile' => 'Missing file %s in package',
-	'ElggPluginPackage:InvalidPlugin:InvalidDependency' => 'Invalid dependency type "%s"',
-	'ElggPluginPackage:InvalidPlugin:InvalidProvides' => 'Invalid provides type "%s"',
-	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'Invalid %s dependency "%s" in plugin %s.  Plugins cannot conflict with or require something they provide!',
+	'ElggPluginPackage:InvalidPlugin:MissingFile' => 'The required file "%s" is missing.',
+	'ElggPluginPackage:InvalidPlugin:InvalidDependency' => 'Its manifest contains an invalid dependency type "%s".',
+	'ElggPluginPackage:InvalidPlugin:InvalidProvides' => 'Its manifest contains an invalid provides type "%s".',
+	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'There is an invalid %s dependency "%s" in plugin %s.  Plugins cannot conflict with or require something they provide!',
 
 	'ElggPlugin:Exception:CannotIncludeFile' => 'Cannot include %s for plugin %s (guid: %s) at %s.',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'Cannot open views dir for plugin %s (guid: %s) at %s.',
@@ -229,17 +230,12 @@ $english = array(
 	'LoginException:AccountLocked' => 'Your account has been locked for too many log in failures.',
 	'LoginException:ChangePasswordFailure' => 'Failed current password check.',
 
-	'memcache:notinstalled' => 'PHP memcache module not installed, you must install php5-memcache',
-	'memcache:noservers' => 'No memcache servers defined, please populate the $CONFIG->memcache_servers variable',
-	'memcache:versiontoolow' => 'Memcache needs at least version %s to run, you are running %s',
-	'memcache:noaddserver' => 'Multiple server support disabled, you may need to upgrade your PECL memcache library',
-
 	'deprecatedfunction' => 'Warning: This code uses the deprecated function \'%s\' and is not compatible with this version of Elgg',
 
 	'pageownerunavailable' => 'Warning: The page owner %d is not accessible!',
 	'viewfailure' => 'There was an internal failure in the view %s',
 	'changebookmark' => 'Please change your bookmark for this page',
-	'noaccess' => 'This content has been removed, is invalid, or you do not have permission to view it.',
+	'noaccess' => 'You need to login to view this content or the content has been removed or you do not have permission to view it.',
 	'error:missing_data' => 'There was some data missing in your request',
 
 	'error:default' => 'Oops...something went wrong.',
@@ -367,7 +363,7 @@ $english = array(
 	'avatar:preview' => 'Preview',
 	'avatar:upload' => 'Upload a new avatar',
 	'avatar:current' => 'Current avatar',
-	'avatar:revert' => 'Revert your avatar to the default icon',
+	'avatar:remove' => 'Remove your avatar and set the default icon',
 	'avatar:crop:title' => 'Avatar cropping tool',
 	'avatar:upload:instructions' => "Your avatar is displayed throughout the site. You can change it as often as you'd like. (File formats accepted: GIF, JPG or PNG)",
 	'avatar:create:instructions' => 'Click and drag a square below to match how you want your avatar cropped. A preview will appear in the box on the right. When you are happy with the preview, click \'Create your avatar\'. This cropped version will be used throughout the site as your avatar.',
@@ -376,8 +372,8 @@ $english = array(
 	'avatar:resize:fail' => 'Resize of the avatar failed',
 	'avatar:crop:success' => 'Cropping the avatar succeeded',
 	'avatar:crop:fail' => 'Avatar cropping failed',
-	'avatar:revert:success' => 'Reverting the avatar succeeded',
-	'avatar:revert:fail' => 'Avatar revert failed',
+	'avatar:remove:success' => 'Removing the avatar succeeded',
+	'avatar:remove:fail' => 'Avatar remove failed',
 
 	'profile:edit' => 'Edit profile',
 	'profile:aboutme' => "About me",
@@ -412,6 +408,8 @@ $english = array(
 	'profile:explainchangefields' => "You can replace the existing profile fields with your own using the form below. \n\n Give the new profile field a label, for example, 'Favorite team', then select the field type (eg. text, url, tags), and click the 'Add' button. To re-order the fields drag on the handle next to the field label. To edit a field label - click on the label's text to make it editable. \n\n At any time you can revert back to the default profile set up, but you will lose any information already entered into custom fields on profile pages.",
 	'profile:editdefault:success' => 'New profile field added',
 	'profile:editdefault:fail' => 'Default profile could not be saved',
+	'profile:field_too_long' => 'Cannot save your profile information because the "%s" section is too long.',
+	'profile:noaccess' => "You do not have permission to edit this profile.",
 
 
 /**
@@ -439,6 +437,8 @@ $english = array(
 	'river:ingroup' => 'in the group %s',
 	'river:none' => 'No activity',
 	'river:update' => 'Update for %s',
+	'river:delete:success' => 'River item has been deleted',
+	'river:delete:fail' => 'River item could not be deleted',
 
 	'river:widget:title' => "Activity",
 	'river:widget:description' => "Display latest activity",
@@ -450,7 +450,7 @@ $english = array(
  * Notifications
  */
 	'notifications:usersettings' => "Notification settings",
-	'notifications:methods' => "Please specify which methods you want to permit.",
+	'notifications:methods' => "Select your notification methods.",
 	'notification:method:email' => 'Email',
 
 	'notifications:usersettings:save:ok' => "Your notification settings were successfully saved.",
@@ -503,6 +503,7 @@ $english = array(
 	'registration:notemail' => 'The email address you provided does not appear to be a valid email address.',
 	'registration:userexists' => 'That username already exists',
 	'registration:usernametooshort' => 'Your username must be a minimum of %u characters long.',
+	'registration:usernametoolong' => 'Your username is too long. It can have a maximum of %u characters.',
 	'registration:passwordtooshort' => 'The password must be a minimum of %u characters long.',
 	'registration:dupeemail' => 'This email address has already been registered.',
 	'registration:invalidchars' => 'Sorry, your username contains the character %s which is invalid. The following characters are invalid: %s',
@@ -667,7 +668,7 @@ $english = array(
 /**
  * Plugins
  */
-	'plugins:disabled' => 'Plugins are being loaded because a file named "disabled" is in the mod directory.',
+	'plugins:disabled' => 'Plugins are not being loaded because a file named "disabled" is in the mod directory.',
 	'plugins:settings:save:ok' => "Settings for the %s plugin were saved successfully.",
 	'plugins:settings:save:fail' => "There was a problem saving settings for the %s plugin.",
 	'plugins:usersettings:save:ok' => "User settings for the %s plugin were saved successfully.",
@@ -694,7 +695,8 @@ $english = array(
 
 	'admin:plugins:warning:elgg_version_unknown' => 'This plugin uses a legacy manifest file and does not specify a compatible Elgg version. It probably will not work!',
 	'admin:plugins:warning:unmet_dependencies' => 'This plugin has unmet dependencies and cannot be activated. Check dependencies under more info.',
-	'admin:plugins:warning:invalid' => '%s is not a valid Elgg plugin.  Check <a href="http://docs.elgg.org/Invalid_Plugin">the Elgg documentation</a> for troubleshooting tips.',
+	'admin:plugins:warning:invalid' => 'This plugin is invalid: %s',
+	'admin:plugins:warning:invalid:check_docs' => 'Check <a href="http://docs.elgg.org/Invalid_Plugin">the Elgg documentation</a> for troubleshooting tips.',
 	'admin:plugins:cannot_activate' => 'cannot activate',
 
 	'admin:plugins:set_priority:yes' => "Reordered %s.",
@@ -741,6 +743,9 @@ $english = array(
 	'admin:server:label:mem_avail' => 'Memory available',
 	'admin:server:label:mem_used' => 'Memory used',
 	'admin:server:error_log' => "Web server's error log",
+	'admin:server:label:post_max_size' => 'POST maximum size',
+	'admin:server:label:upload_max_filesize' => 'Upload maximum size',
+	'admin:server:warning:post_max_too_small' => '(Note: post_max_size must be larger than this value to support uploads of this size)',
 
 	'admin:user:label:search' => "Find users:",
 	'admin:user:label:searchbutton' => "Search",
@@ -808,7 +813,7 @@ $english = array(
  */
 	'river:all' => 'All Site Activity',
 	'river:mine' => 'My Activity',
-	'river:friends' => 'Friends Activty',
+	'river:friends' => 'Friends Activity',
 	'river:select' => 'Show %s',
 	'river:comments:more' => '+%u more',
 	'river:generic_comment' => 'commented on %s %s',
@@ -861,6 +866,7 @@ $english = array(
 	'new' => 'New',
 	'add' => 'Add',
 	'create' => 'Create',
+	'remove' => 'Remove',
 	'revert' => 'Revert',
 
 	'site' => 'Site',
@@ -871,6 +877,7 @@ $english = array(
 	'down' => 'Down',
 	'top' => 'Top',
 	'bottom' => 'Bottom',
+	'back' => 'Back',
 
 	'invite' => "Invite",
 
@@ -934,6 +941,7 @@ $english = array(
  */
 
 	'deleteconfirm' => "Are you sure you want to delete this item?",
+	'deleteconfirm:plural' => "Are you sure you want to delete these items?",
 	'fileexists' => "A file has already been uploaded. To replace it, select it below:",
 
 /**
@@ -1071,7 +1079,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'email:settings' => "Email settings",
 	'email:address:label' => "Your email address",
 
-	'email:save:success' => "New email address saved. Verification is requested.",
+	'email:save:success' => "New email address saved.",
 	'email:save:fail' => "Your new email address could not be saved.",
 
 	'friend:newfriend:subject' => "%s has made you a friend!",
@@ -1171,6 +1179,7 @@ You cannot reply to this email.",
 	'actiongatekeeper:tokeninvalid' => "We encountered an error (token mismatch). This probably means that the page you were using expired.",
 	'actiongatekeeper:timeerror' => 'The page you were using has expired. Please refresh and try again.',
 	'actiongatekeeper:pluginprevents' => 'A extension has prevented this form from being submitted.',
+	'actiongatekeeper:uploadexceeded' => 'The size of file(s) uploaded exceeded the limit set by your site administrator',
 
 
 /**

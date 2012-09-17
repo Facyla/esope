@@ -7,7 +7,6 @@ Disallow: /languages/
 Disallow: /engine/
 Disallow: /views/
 Disallow: /vendors/
-Disallow: /pages/
 Disallow: /js/
 Disallow: /install/
 Disallow: /documentation/

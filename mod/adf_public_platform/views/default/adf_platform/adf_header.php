@@ -64,7 +64,7 @@ if (elgg_is_logged_in()) {
           //'<span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>';
           ?></a></h1>
           <?php if (elgg_is_logged_in()) { ?>
-            <span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></span>
+            <a href="<?php echo $url . 'profile/' . $ownusername; ?>"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?> (profil)</span></a>
             <nav>
               <ul>
                 <li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><?php echo elgg_echo('messages'); ?></a></li>
@@ -72,12 +72,12 @@ if (elgg_is_logged_in()) {
                 <li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a></li>
                 <?php echo $friendrequests; ?>
                 <li><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
-                <li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
                     <!--
+                <li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
                     <li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
                     <li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
-                    //-->
                 </li>
+                    //-->
                 <?php if (elgg_is_admin_logged_in()) { ?>
                   <li><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
                 <?php } ?>

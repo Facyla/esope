@@ -26,6 +26,7 @@ $title = elgg_echo('announcements:owner', array($page_owner->name));
 $body = elgg_view_layout('content', array(
 	'title' => $title,
 	'content' => $content,
+	'filter' => '', // Removes filter menu (nonsense for announcements)
 ));
 
 echo elgg_view_page($title, $body);

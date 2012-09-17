@@ -20,12 +20,16 @@ define('UPGRADING', 'upgrading');
 require_once(dirname(__FILE__) . "/engine/start.php");
 
 if (get_input('upgrade') == 'upgrade') {
-	// disable the core system log for upgrades to avoid exceptions when the schema changes.
+	// disable the system log for upgrades to avoid exceptions when the schema changes.
+	elgg_unregister_event_handler('log', 'systemlog', 'system_log_default_logger');
 	elgg_unregister_event_handler('all', 'all', 'system_log_listener');
 	
 	if (elgg_get_unprocessed_upgrades()) {
 		version_upgrade();
 	}
+
+	// turn off time limit so plugins that have upgrade scripts aren't interrupted
+	set_time_limit(0);
 	elgg_trigger_event('upgrade', 'system', null);
 	elgg_invalidate_simplecache();
 	elgg_reset_system_cache();

@@ -244,7 +244,7 @@ $french = array(
  * User details
  */
 
-	'name' => "Prénom + nom",
+	'name' => "Prénom + Nom",
 	'email' => "Adresse e-mail",
 	'username' => "Identifiant de connexion",
 //	'loginusername' => "Identifiant de connexion ou e-mail",
@@ -257,10 +257,10 @@ $french = array(
  * Access
  */
 
-	'PRIVATE' => "Privé",
-	'LOGGED_IN' => "Utilisateurs connectés",
+	'PRIVATE' => "Privé / brouillon",
+	'LOGGED_IN' => "Membres du site",
 	'PUBLIC' => "Public",
-	'access:friends:label' => "Mes Contacts",
+	'access:friends:label' => "Contacts seulement",
 	'access' => "Accès",
 
 /**

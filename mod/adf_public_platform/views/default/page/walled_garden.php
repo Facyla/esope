@@ -5,6 +5,8 @@
  * Used for the walled garden index page
  */
 
+global $CONFIG;
+
 $site = elgg_get_site_entity();
 $title = $site->name;
 
@@ -85,7 +87,11 @@ header("Content-type: text/html; charset=UTF-8");
 
 <header>
   <div class="interne">
-    <h1><a href="<?php echo $url; ?>" title="Aller sur la page d'accueil'"><span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span></a></h1>
+    <?php
+    $headertitle = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+    if (empty($headertitle)) '<h1 class="invisible">' . $CONFIG->site->name . '</h1>';
+    else echo '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+    ?>
   </div>
 </header>
 
@@ -100,8 +106,7 @@ header("Content-type: text/html; charset=UTF-8");
   <div id="adf-public-col1">
     <?php
     $intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
-    if (empty($intro)) { $intro = "Bloc d'introduction non configuré. Veuillez y insérer le texte de votre choix dans la configuration du thème."; }
-    echo $intro . '<div class="clearfloat"></div>';
+    if (!empty($intro)) echo $intro . '<div class="clearfloat"></div>';
     
     echo '<div id="adf-loginbox">';
     echo '<h2>Connexion</h2>';

@@ -31,8 +31,12 @@ $vars = array_merge($defaults, $vars);
 
 // Facyla : no public access at all for the moment
 $limit_cases = array('access_id', 'write_access_id', 'vis'); // vis = visibilité des groupes
+/*
 if (isset($vars['options_values'][2]) && in_array($vars['name'], $limit_cases)) { unset($vars['options_values'][2]); }
 if (($vars['value'] == 2) && in_array($vars['name'], $limit_cases)) { $vars['value'] = 1; } // Si Public => Membres connectés
+*/
+// Même en Walled Garden, on veut pouvoir autoriser quelques pages publiques
+if (!isset($vars['options_values'][2]) && in_array($vars['name'], $limit_cases)) { $vars['options_values'][2] = elgg_echo('adf_platform:access:public'); }
 
 // Facyla : Default access to group only when no other value than default specified
 //if ($vars['value'] == ACCESS_DEFAULT) {

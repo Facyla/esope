@@ -13,6 +13,15 @@
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
 $linkcolor = $css['linkcolor'];
+$linkhovercolor = $css['linkhovercolor'];
+$color5 = $css['color5']; // #014FBC
+$color6 = $css['color6']; // #033074
+$color7 = $css['color7']; // #FF0000
+$color8 = $css['color8']; // #990000
+$color9 = $css['color9']; // #CCCCCC
+$color10 = $css['color10']; // #999999
+$color11 = $css['color11']; // #333333
+$color12 = $css['color12']; // #DEDEDE
 ?>
 /* **************************
 	BUTTONS
@@ -62,12 +71,12 @@ a.elgg-button {
 	text-shadow: 1px 1px 1px #333;
 	/* margin-top: 10px; */
 	padding: 5px 9px 6px;
-	background-image: linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -o-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -moz-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -webkit-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -ms-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #014FBC), color-stop(0.8, #033074));
+	background-image: linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -o-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -moz-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -ms-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, <?php echo $color5; ?>), color-stop(0.8, <?php echo $color6; ?>));
 }
 .elgg-item .elgg-button-action {
   margin:0 6px 4px 0;
@@ -90,12 +99,12 @@ a.elgg-button {
 	background: #7f8343 url(<?php echo elgg_get_site_url(); ?>_graphics/button_graduation.png) repeat-x left 10px;
 */
 	background: #333;
-	background-image: linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -o-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -moz-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -webkit-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -ms-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #FF0000), color-stop(0.8, #990000));
+	background-image: linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -o-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -moz-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -ms-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, <?php echo $color7; ?>), color-stop(0.8, <?php echo $color8; ?>));
 }
 
 .elgg-button-action.elgg-state-disabled, .elgg-menu .elgg-button-action.elgg-state-disabled,
@@ -320,21 +329,21 @@ border:1px solid #ccc;
 .elgg-menu-entity .elgg-menu-item-edit a {
   color: #fff;
   padding: 3px 6px;
-	background-image: linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -o-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -moz-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -webkit-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -ms-linear-gradient(top, #014FBC 35%, #033074 80%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #014FBC), color-stop(0.8, #033074));
+	background-image: linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -o-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -moz-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -ms-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, <?php echo $color5; ?>), color-stop(0.8, <?php echo $color6; ?>));
 }
 .elgg-menu-entity .elgg-menu-item-edit a:hover, .elgg-menu-entity .elgg-menu-item-edit a:focus, .elgg-menu-entity .elgg-menu-item-edit a:active {
   color:white;
-	background-image: linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -o-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -moz-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -webkit-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -ms-linear-gradient(top, #FF0000 35%, #990000 80%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #FF0000), color-stop(0.8, #990000));
+	background-image: linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -o-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -moz-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -ms-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, <?php echo $color7; ?>), color-stop(0.8, <?php echo $color8; ?>));
 }
 
 
