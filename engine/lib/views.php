@@ -103,7 +103,10 @@ function elgg_get_viewtype() {
 
 	$viewtype = get_input('view', NULL);
 	if ($viewtype) {
-		return $viewtype;
+		// only word characters allowed.
+		if (!preg_match('[\W]', $viewtype)) {
+			return $viewtype;
+		}
 	}
 
 	if (isset($CONFIG->view) && !empty($CONFIG->view)) {
@@ -300,7 +303,7 @@ function elgg_set_view_location($view, $location, $viewtype = '') {
 /**
  * Returns whether the specified view exists
  *
- * @note If $recurse is strue, also checks if a view exists only as an extension.
+ * @note If $recurse is true, also checks if a view exists only as an extension.
  *
  * @param string $view     The view name
  * @param string $viewtype If set, forces the viewtype
@@ -400,7 +403,7 @@ function elgg_view($view, $vars = array(), $bypass = false, $debug = false, $vie
 	$view_orig = $view;
 
 	// Trigger the pagesetup event
-	if (!isset($CONFIG->pagesetupdone)) {
+	if (!isset($CONFIG->pagesetupdone) && $CONFIG->boot_complete) {
 		$CONFIG->pagesetupdone = true;
 		elgg_trigger_event('pagesetup', 'system');
 	}
@@ -1221,12 +1224,12 @@ function elgg_view_image_block($image, $body, $vars = array()) {
  * @param string $type  The type of module (main, info, popup, aside, etc.)
  * @param string $title A title to put in the header
  * @param string $body  Content of the module
- * @param string $vars  Additional parameters for the module
+ * @param array  $vars  Additional parameters for the module
  *
  * @return string
  * @since 1.8.0
  */
-function elgg_view_module($type, $title, $body, $vars = array()) {
+function elgg_view_module($type, $title, $body, array $vars = array()) {
 
 	$vars['class'] = elgg_extract('class', $vars, '') . " elgg-module-$type";
 	$vars['title'] = $title;

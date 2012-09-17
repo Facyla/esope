@@ -319,10 +319,24 @@ class ElggPluginManifest {
 	 * @return array
 	 */
 	public function getCategories() {
+		$bundled_plugins = array('blog', 'bookmarks', 'categories',
+			'custom_index', 'dashboard', 'developers', 'diagnostics',
+			'embed', 'externalpages', 'file', 'garbagecollector',
+			'groups', 'htmlawed', 'invitefriends', 'likes',
+			'logbrowser', 'logrotate', 'members', 'messageboard',
+			'messages', 'notifications', 'oauth_api', 'pages', 'profile',
+			'reportedcontent', 'search', 'tagcloud', 'thewire', 'tinymce',
+			'twitter', 'twitter_api', 'uservalidationbyemail', 'zaudio',
+		);
+
 		$cats = $this->parser->getAttribute('category');
 
 		if (!$cats) {
 			$cats = array();
+		}
+
+		if (in_array('bundled', $cats) && !in_array($this->getPluginID(), $bundled_plugins)) {
+			unset($cats[array_search('bundled', $cats)]);
 		}
 
 		return $cats;
@@ -442,7 +456,7 @@ class ElggPluginManifest {
 	 * Normalizes a dependency array using the defined structs.
 	 * Can be used with either requires or suggests.
 	 *
-	 * @param array $dep An dependency array.
+	 * @param array $dep A dependency array.
 	 * @return array The normalized deps array.
 	 */
 	private function normalizeDep($dep) {
@@ -486,8 +500,10 @@ class ElggPluginManifest {
 							break;
 					}
 				}
-
 				break;
+			default:
+				// unrecognized so we just return the raw dependency
+				return $dep;
 		}
 
 		$normalized_dep = $this->buildStruct($struct, $dep);

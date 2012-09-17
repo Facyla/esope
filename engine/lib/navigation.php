@@ -230,7 +230,7 @@ function elgg_pop_breadcrumb() {
 	global $CONFIG;
 
 	if (is_array($CONFIG->breadcrumbs)) {
-		array_pop($CONFIG->breadcrumbs);
+		return array_pop($CONFIG->breadcrumbs);
 	}
 
 	return FALSE;
@@ -334,6 +334,19 @@ function elgg_river_menu_setup($hook, $type, $return, $params) {
 				);
 				$return[] = ElggMenuItem::factory($options);
 			}
+		}
+		
+		if (elgg_is_admin_logged_in()) {
+			$options = array(
+				'name' => 'delete',
+				'href' => "action/river/delete?id=$item->id",
+				'text' => elgg_view_icon('delete'),
+				'title' => elgg_echo('delete'),
+				'confirm' => elgg_echo('deleteconfirm'),
+				'is_action' => true,
+				'priority' => 200,
+			);
+			$return[] = ElggMenuItem::factory($options);
 		}
 	}
 

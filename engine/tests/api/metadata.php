@@ -28,6 +28,9 @@ class ElggCoreMetadataAPITest extends ElggCoreUnitTest {
 
 	public function testGetMetastringById() {
 		foreach (array('metaUnitTest', 'metaunittest', 'METAUNITTEST') as $string) {
+			// since there is no guarantee that metastrings are garbage collected
+			// between unit test runs, we delete before testing
+			$this->delete_metastrings($string);
 			$this->create_metastring($string);
 		}
 
@@ -43,9 +46,6 @@ class ElggCoreMetadataAPITest extends ElggCoreUnitTest {
 		{
 			$this->assertTrue(in_array($string, $this->metastrings));
 		}
-
-		// clean up
-		$this->delete_metastrings();
 	}
 
 	public function testElggGetEntitiesFromMetadata() {
@@ -77,7 +77,6 @@ class ElggCoreMetadataAPITest extends ElggCoreUnitTest {
 
 		// clean up
 		$this->object->delete();
-		$this->delete_metastrings();
 	}
 
 	public function testElggGetMetadataCount() {
@@ -124,20 +123,94 @@ class ElggCoreMetadataAPITest extends ElggCoreUnitTest {
 		$e->delete();
 	}
 
+	// Make sure metadata with multiple values is correctly deleted when re-written
+	// by another user
+	// http://trac.elgg.org/ticket/2776
+	public function test_elgg_metadata_multiple_values() {
+		$u1 = new ElggUser();
+		$u1->username = rand();
+		$u1->save();
+
+		$u2 = new ElggUser();
+		$u2->username = rand();
+		$u2->save();
+
+		$obj = new ElggObject();
+		$obj->owner_guid = $u1->guid;
+		$obj->container_guid = $u1->guid;
+		$obj->access_id = ACCESS_PUBLIC;
+		$obj->save();
+
+		$md_values = array(
+			'one',
+			'two',
+			'three'
+		);
+
+		// need to fake different logins.
+		// good times without mocking.
+		$original_user = elgg_get_logged_in_user_entity();
+		$_SESSION['user'] = $u1;
+		
+		elgg_set_ignore_access(false);
+
+		// add metadata as one user
+		$obj->test = $md_values;
+
+		// check only these md exists
+		$db_prefix = elgg_get_config('dbprefix');
+		$q = "SELECT * FROM {$db_prefix}metadata WHERE entity_guid = $obj->guid";
+		$data = get_data($q);
+
+		$this->assertEqual(count($md_values), count($data));
+		foreach ($data as $md_row) {
+			$md = elgg_get_metadata_from_id($md_row->id);
+			$this->assertTrue(in_array($md->value, $md_values));
+			$this->assertEqual('test', $md->name);
+		}
+
+		// add md w/ same name as a different user
+		$_SESSION['user'] = $u2;
+		$md_values2 = array(
+			'four',
+			'five',
+			'six',
+			'seven'
+		);
+
+		$obj->test = $md_values2;
+
+		$q = "SELECT * FROM {$db_prefix}metadata WHERE entity_guid = $obj->guid";
+		$data = get_data($q);
+
+		$this->assertEqual(count($md_values2), count($data));
+		foreach ($data as $md_row) {
+			$md = elgg_get_metadata_from_id($md_row->id);
+			$this->assertTrue(in_array($md->value, $md_values2));
+			$this->assertEqual('test', $md->name);
+		}
+
+		$_SESSION['user'] = $original_user;
+
+		$obj->delete();
+		$u1->delete();
+		$u2->delete();
+	}
+
+	protected function delete_metastrings($string) {
+		global $CONFIG, $METASTRINGS_CACHE, $METASTRINGS_DEADNAME_CACHE;
+		$METASTRINGS_CACHE = $METASTRINGS_DEADNAME_CACHE = array();
+
+		$string = sanitise_string($string);
+		mysql_query("DELETE FROM {$CONFIG->dbprefix}metastrings WHERE string = BINARY '$string'");
+	}
 
 	protected function create_metastring($string) {
 		global $CONFIG, $METASTRINGS_CACHE, $METASTRINGS_DEADNAME_CACHE;
 		$METASTRINGS_CACHE = $METASTRINGS_DEADNAME_CACHE = array();
 
+		$string = sanitise_string($string);
 		mysql_query("INSERT INTO {$CONFIG->dbprefix}metastrings (string) VALUES ('$string')");
 		$this->metastrings[$string] = mysql_insert_id();
-	}
-
-	protected function delete_metastrings() {
-		global $CONFIG, $METASTRINGS_CACHE, $METASTRINGS_DEADNAME_CACHE;
-		$METASTRINGS_CACHE = $METASTRINGS_DEADNAME_CACHE = array();
-
-		$strings = implode(', ', $this->metastrings);
-		mysql_query("DELETE FROM {$CONFIG->dbprefix}metastrings WHERE id IN ($strings)");
 	}
 }

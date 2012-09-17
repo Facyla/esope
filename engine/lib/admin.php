@@ -244,6 +244,7 @@ function admin_init() {
 	elgg_register_action('profile/fields/delete', '', 'admin');
 	elgg_register_action('profile/fields/reorder', '', 'admin');
 
+	elgg_register_simplecache_view('css/admin');
 	elgg_register_simplecache_view('js/admin');
 	$url = elgg_get_simplecache_url('js', 'admin');
 	elgg_register_js('elgg.admin', $url);
@@ -571,7 +572,7 @@ function admin_markdown_page_handler($pages) {
 	if (!$plugin) {
 		$error = elgg_echo('admin:plugins:markdown:unknown_plugin');
 		$body = elgg_view_layout('admin', array('content' => $error, 'title' => $error));
-		echo elgg_view_page($title, $body, 'admin');
+		echo elgg_view_page($error, $body, 'admin');
 		return true;
 	}
 
