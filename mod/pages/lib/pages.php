@@ -65,11 +65,11 @@ function pages_prepare_parent_breadcrumbs($page) {
 }
 
 /**
- * Register the navigation menu
+ * Produce the navigation tree
  * 
  * @param ElggEntity $container Container entity for the pages
  */
-function pages_register_navigation_tree($container) {
+function pages_get_navigation_tree($container) {
 	if (!$container) {
 		return;
 	}
@@ -81,12 +81,21 @@ function pages_register_navigation_tree($container) {
 		'limit' => 0,
 	));
 
+	if (!$top_pages) {
+		return;
+	}
+	
+	$tree = array();
+	$depths = array();
+
 	foreach ($top_pages as $page) {
-		elgg_register_menu_item('pages_nav', array(
-			'name' => $page->getGUID(),
-			'text' => $page->title,
-			'href' => $page->getURL(),
-		));
+		$tree[] = array(
+			'guid' => $page->getGUID(),
+			'title' => $page->title,
+			'url' => $page->getURL(),
+			'depth' => 0,
+		);
+		$depths[$page->guid] = 0;
 
 		$stack = array();
 		array_push($stack, $page);
@@ -99,16 +108,40 @@ function pages_register_navigation_tree($container) {
 				'metadata_value' => $parent->getGUID(),
 				'limit' => 0,
 			));
-			
-			foreach ($children as $child) {
-				elgg_register_menu_item('pages_nav', array(
-					'name' => $child->getGUID(),
-					'text' => $child->title,
-					'href' => $child->getURL(),
-					'parent_name' => $parent->getGUID(),
-				));
-				array_push($stack, $child);
+
+			if ($children) {
+				foreach ($children as $child) {
+					$tree[] = array(
+						'guid' => $child->getGUID(),
+						'title' => $child->title,
+						'url' => $child->getURL(),
+						'parent_guid' => $parent->getGUID(),
+						'depth' => $depths[$parent->guid] + 1,
+					);
+					$depths[$child->guid] = $depths[$parent->guid] + 1;
+					array_push($stack, $child);
+				}
 			}
+		}
+	}
+	return $tree;
+}
+
+/**
+ * Register the navigation menu
+ * 
+ * @param ElggEntity $container Container entity for the pages
+ */
+function pages_register_navigation_tree($container) {
+	$pages = pages_get_navigation_tree($container);
+	if ($pages) {
+		foreach ($pages as $page) {
+			elgg_register_menu_item('pages_nav', array(
+				'name' => $page['guid'],
+				'text' => $page['title'],
+				'href' => $page['url'],
+				'parent_name' => $page['parent_guid'],
+			));
 		}
 	}
 }

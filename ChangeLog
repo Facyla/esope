@@ -1,3 +1,1427 @@
+2013-03-12  cash <cash.costello@gmail.com>
+
+  	* CHANGES.txt: final update on changes file before release
+
+  	* mod/groups/actions/groups/edit.php: Refs #4953 sanitize group name when
+  updating collection name
+
+  	* mod/groups/views/default/forms/groups/edit.php: Fixes #5226 passing
+  options through egefr
+
+  	* mod/groups/actions/groups/edit.php: Fixes #5224 transfering container and
+  metadata ownership
+
+  	* mod/groups/actions/groups/edit.php: Fixes #4953 added where clause to only
+  change the correct acl
+
+2013-03-10  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/metadata.php: Fixes #5214: Successfully invalidates metadata
+  cache in some corner cases
+
+2013-03-10  cash <cash.costello@gmail.com>
+
+  	* js/lib/ui.river.js, .../theme_preview/components/image_block.php,
+  .../default/theme_preview/components/list.php,
+  .../default/theme_preview/components/messages.php,
+  .../default/theme_preview/components/table.php,
+  .../views/default/theme_preview/icons/avatars.php,
+  .../views/default/theme_preview/icons/sprites.php,
+  .../default/theme_preview/modules/modules.php,
+  .../theme_preview/navigation/breadcrumbs.php,
+  .../default/theme_preview/navigation/default.php,
+  .../default/theme_preview/navigation/extras.php,
+  .../default/theme_preview/navigation/filter.php,
+  .../theme_preview/navigation/horizontal.php,
+  .../theme_preview/navigation/owner_block.php,
+  .../default/theme_preview/navigation/page.php,
+  .../theme_preview/navigation/pagination.php,
+  .../default/theme_preview/navigation/site.php,
+  .../default/theme_preview/navigation/tabs.php,
+  .../default/theme_preview/typography/headings.php,
+  .../default/theme_preview/typography/misc.php,
+  .../default/theme_preview/typography/paragraph.php: fixing line endings
+
+2013-03-10  Cash Costello <cash.costello@gmail.com>
+
+  	* mod/profile/views/default/profile/details.php: validate url on profile
+  display
+
+2013-02-19  Steve Clay <steve@mrclay.org>
+
+  	* actions/profile/edit.php: Auto-prepend "http://" to URL profile fields
+  without it
+
+2013-03-10  Cash Costello <cash.costello@gmail.com>
+
+  	* CHANGES.txt: updated most of the major changes for 1.8.14
+
+  	* CHANGES.txt, engine/lib/web_services.php: fallback to json in web services
+
+  	* engine/lib/relationships.php: Fixes #4823 returning ElggRelationship from
+  check_entity_relationship() rather than stdClass object
+
+  	* engine/lib/actions.php: require token for login
+
+2013-03-08  cash <cash.costello@gmail.com>
+
+  	* views/default/icon/default.php: IE7 does not like empty img width/height
+
+  	* views/default/css/admin.php, views/default/css/elements/forms.php: Fixes
+  #4464 adds hover for selecting with arrow keys
+
+2013-03-06  cash <cash.costello@gmail.com>
+
+  	* mod/groups/views/default/groups/css.php,
+  .../views/default/groups/profile/summary.php, views/default/icon/default.php:
+  Fixes #5058 not forcing a size on an image
+
+  	* engine/lib/annotations.php, engine/lib/metadata.php,
+  engine/lib/metastrings.php: Fixes #4393 working around the overloaded 'count'
+  parameter
+
+  	* engine/tests/api/entity_getter_functions.php: added a unit test for
+  checking counting entities from egefac
+
+  	* ....8.13-update_user_location-8999eb8bf1bdd9a3.php, version.php: Fixes
+  #4566 upgrades location metadata on users
+
+  	* engine/lib/upgrade.php: Fixes #5202 defining the global $CONFIG in
+  upgrade_code()
+
+2013-03-04  hellekin <hellekin@cepheide.org>
+
+  	* actions/register.php: Actually delete user when registration fails
+
+2013-03-06  Cash Costello <cash.costello@gmail.com>
+
+  	* htaccess_dist: Refs #3601 improves documentation of htaccess file
+
+  	* install/ElggInstaller.php, install/languages/en.php: Fixes #4994
+  validating db table prefix
+
+2013-03-05  cash <cash.costello@gmail.com>
+
+  	* js/lib/security.js: fixed token refresh interval - introduced during
+  development for this release
+
+2013-03-05  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/lib/metadata.php, views/default/output/tag.php,
+  views/default/output/tagcloud.php, views/default/output/tags.php: Fixes #5165
+  handling html tags passed as tags
+
+  	* mod/blog/lib/blog.php: don't allow comments on draft blog posts
+
+  	* mod/blog/actions/blog/save.php, mod/blog/start.php: made the event more
+  general for future support of objects with draft/publish status
+
+2013-02-27  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/groups/views/default/forms/groups/edit.php: Fixes #4977. Switched to
+  ElggBatch for group ownership transfer.
+
+  	* engine/lib/entities.php, engine/tests/api/entity_getter_functions.php:
+  Fixes #5066. Empty subtypes are handled the same way for both 'subtype' and
+  'subtypes'
+
+  	* mod/embed/views/default/js/embed/embed.php: Fixes #5114. IE 7 and 8
+  forward to the embed items list after an upload.
+
+  	* engine/lib/elgglib.php: Fixes #5162. Not encoding URL in
+  elgg_http_remove_url_query_element().
+
+2013-02-26  Paweł Sroka <srokap@gmail.com>
+
+  	* mod/groups/lib/groups.php: Fixes #5142 - Displays correct group visibility
+  access on group edit page
+
+2013-02-23  cash <cash.costello@gmail.com>
+
+  	* engine/lib/actions.php, js/lib/security.js, languages/en.php: Fixes #4997
+  stop requesting a token after a failed request
+
+  	* engine/handlers/cache_handler.php: Fixes #4883 do not regenerate cache
+  when someone requests a non cached view
+
+  	* engine/lib/languages.php, js/lib/languages.js: Fixes #4971 serving
+  languages from ajax page handler rather than simplecache (which cannot handle
+  languages)
+
+2013-02-23  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/lib/cache.php, engine/lib/languages.php: Fixes #4840 reload
+  translations now pulls languages from cache when system cache is on
+
+  	* mod/blog/actions/blog/save.php, mod/blog/start.php: Fixes #4802
+  notifications sent when status is newly set to published
+
+  	* mod/blog/actions/blog/save.php, mod/blog/lib/blog.php, mod/blog/start.php:
+  Fixes #5012 drafts are private now
+
+  	* pages/settings/account.php, pages/settings/statistics.php,
+  pages/settings/tools.php: Fixes #5126 forwards on attempts to access someone
+  else's settings page
+
+2013-02-22  Aday Talavera <aday.talavera@gmail.com>
+
+  	* mod/groups/start.php: Fixes #5119: Pending membership request shows wrong
+  count
+
+2013-02-21  Brett Profitt <brett.profitt@gmail.com>
+
+  	* views/default/input/pulldown.php: Showing 2 levels of stack tracing for
+  input/pulldown so you know where it's coming from.
+
+2013-02-21  Cash Costello <cash.costello@gmail.com>
+
+  	* mod/groups/actions/groups/edit.php: Fixes #4953 updates group access list
+  when name changed
+
+2013-02-20  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/lib/user_settings.php: Refs #5051. Checking for user before
+  creating settings menu.
+
+2013-02-20  Sem <sembrestels@riseup.net>
+
+  	* mod/groups/views/default/groups/css.php: Fixes #5106. Do not make big
+  group description images.
+
+2013-02-19  iionly <iionly@gmx.de>
+
+  	* mod/tinymce/vendor/tinymce/changelog.txt,
+  mod/tinymce/vendor/tinymce/examples/full.html,
+  .../vendor/tinymce/examples/lists/media_list.js,
+  .../vendor/tinymce/jscripts/tiny_mce/langs/en.js,
+  .../jscripts/tiny_mce/plugins/advimage/js/image.js,
+  .../tiny_mce/plugins/advlink/js/advlink.js,
+  .../tiny_mce/plugins/autolink/editor_plugin.js,
+  .../tiny_mce/plugins/autolink/editor_plugin_src.js,
+  .../tiny_mce/plugins/autoresize/editor_plugin.js,
+  .../plugins/autoresize/editor_plugin_src.js,
+  .../tiny_mce/plugins/autosave/editor_plugin.js,
+  .../tiny_mce/plugins/autosave/editor_plugin_src.js,
+  .../jscripts/tiny_mce/plugins/autosave/langs/en.js,
+  .../tiny_mce/plugins/contextmenu/editor_plugin.js,
+  .../plugins/contextmenu/editor_plugin_src.js,
+  .../plugins/directionality/editor_plugin.js,
+  .../plugins/directionality/editor_plugin_src.js,
+  .../tiny_mce/plugins/emotions/emotions.htm,
+  .../tiny_mce/plugins/fullscreen/editor_plugin.js,
+  .../plugins/fullscreen/editor_plugin_src.js,
+  .../tiny_mce/plugins/legacyoutput/editor_plugin.js,
+  .../plugins/legacyoutput/editor_plugin_src.js,
+  .../tiny_mce/plugins/lists/editor_plugin.js,
+  .../tiny_mce/plugins/lists/editor_plugin_src.js,
+  .../tiny_mce/plugins/media/editor_plugin.js,
+  .../tiny_mce/plugins/media/editor_plugin_src.js,
+  .../jscripts/tiny_mce/plugins/media/js/media.js,
+  .../tiny_mce/plugins/noneditable/editor_plugin.js,
+  .../plugins/noneditable/editor_plugin_src.js,
+  .../tiny_mce/plugins/paste/editor_plugin.js,
+  .../tiny_mce/plugins/paste/editor_plugin_src.js,
+  .../plugins/searchreplace/searchreplace.htm,
+  .../tiny_mce/plugins/spellchecker/editor_plugin.js,
+  .../plugins/spellchecker/editor_plugin_src.js,
+  .../jscripts/tiny_mce/plugins/style/css/props.css,
+  .../tiny_mce/plugins/style/editor_plugin.js,
+  .../tiny_mce/plugins/style/editor_plugin_src.js,
+  .../jscripts/tiny_mce/plugins/style/js/props.js,
+  .../tiny_mce/plugins/style/langs/en_dlg.js,
+  .../jscripts/tiny_mce/plugins/style/props.htm,
+  .../jscripts/tiny_mce/plugins/style/readme.txt,
+  .../tiny_mce/plugins/tabfocus/editor_plugin.js,
+  .../tiny_mce/plugins/tabfocus/editor_plugin_src.js,
+  .../tiny_mce/plugins/table/editor_plugin.js,
+  .../tiny_mce/plugins/table/editor_plugin_src.js,
+  .../jscripts/tiny_mce/plugins/table/js/cell.js,
+  .../jscripts/tiny_mce/plugins/table/js/row.js,
+  .../jscripts/tiny_mce/plugins/table/js/table.js,
+  .../jscripts/tiny_mce/plugins/table/row.htm,
+  .../plugins/visualblocks/css/visualblocks.css,
+  .../tiny_mce/plugins/visualblocks/editor_plugin.js,
+  .../plugins/visualblocks/editor_plugin_src.js,
+  .../tiny_mce/plugins/wordcount/editor_plugin.js,
+  .../plugins/wordcount/editor_plugin_src.js,
+  .../tiny_mce/themes/advanced/color_picker.htm,
+  .../tiny_mce/themes/advanced/editor_template.js,
+  .../themes/advanced/editor_template_src.js,
+  .../tiny_mce/themes/advanced/img/icons.gif,
+  .../jscripts/tiny_mce/themes/advanced/js/anchor.js,
+  .../tiny_mce/themes/advanced/js/color_picker.js,
+  .../jscripts/tiny_mce/themes/advanced/js/image.js,
+  .../jscripts/tiny_mce/themes/advanced/js/link.js,
+  .../tiny_mce/themes/advanced/js/source_editor.js,
+  .../tiny_mce/themes/advanced/langs/en_dlg.js,
+  .../themes/advanced/skins/default/dialog.css,
+  .../tiny_mce/themes/advanced/skins/default/ui.css,
+  .../themes/advanced/skins/highcontrast/dialog.css,
+  .../themes/advanced/skins/highcontrast/ui.css,
+  .../tiny_mce/themes/advanced/skins/o2k7/dialog.css,
+  .../tiny_mce/themes/advanced/skins/o2k7/ui.css,
+  .../tiny_mce/themes/advanced/source_editor.htm,
+  .../vendor/tinymce/jscripts/tiny_mce/tiny_mce.js,
+  .../tinymce/jscripts/tiny_mce/tiny_mce_popup.js,
+  .../tinymce/jscripts/tiny_mce/tiny_mce_src.js: Tinymce plugin: update to
+  version 3.5.8 of Tinymce editor
+
+2013-02-18  cash <cash.costello@gmail.com>
+
+  	* views/default/css/ie7.php: Fixes #5056 fixes tag wrapping on IE7
+
+  	* views/default/css/ie7.php: Fixes #5057 sets width for IE7
+
+  	* engine/lib/notification.php: Closes #5053 decodes html entities for email
+  subjects
+
+  	* .../views/default/groups/sidebar/my_status.php: Fixes #5068 removed
+  invalid menu item creation
+
+2013-02-12  Matt Beckett <beck24@gmail.com>
+
+  	* engine/lib/pageowner.php: fixes #5067 - elgg_get_page_owner_guid() can
+  bypass all access for the rest of the pageload
+
+2013-02-09  cash <cash.costello@gmail.com>
+
+  	* engine/classes/ElggBatch.php, engine/classes/ElggPriorityList.php: cleaned
+  up some coding standard issues
+
+  	* engine/classes/ElggMenuBuilder.php: updated todo comment on
+  compareByWeight
+
+2013-02-04  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggDiskFilestore.php, engine/classes/ElggFile.php,
+  engine/classes/ElggGroup.php, engine/classes/ElggMenuBuilder.php,
+  engine/classes/ElggPlugin.php, engine/lib/annotations.php,
+  engine/lib/calendar.php, engine/lib/database.php, engine/lib/entities.php,
+  engine/lib/input.php, engine/lib/metastrings.php,
+  engine/lib/notification.php, engine/lib/plugins.php,
+  engine/lib/system_log.php: Lots of new @todos :(
+
+  	* engine/lib/metastrings.php: Remove unnecessary get_data() callback
+
+  	* engine/lib/users.php: Normalized escaping, escape $user->location just in
+  case
+
+2013-02-09  cash <cash.costello@gmail.com>
+
+  	* engine/lib/users.php: removed unnecessary @var since we have instanceof
+  test
+
+2013-02-04  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/users.php: Check for ElggUser in functions that pass in user's
+  GUID
+
+2013-02-09  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/classes/ElggExtender.php, engine/lib/annotations.php: Fixes #5052
+  using name for annotations and using correct class for export
+
+2013-02-04  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggEntity.php, engine/classes/ElggFile.php,
+  engine/classes/ElggMenuBuilder.php, engine/lib/annotations.php,
+  engine/lib/cron.php, engine/lib/database.php, engine/lib/elgglib.php,
+  engine/lib/export.php, engine/lib/filestore.php, engine/lib/input.php,
+  engine/lib/languages.php, engine/lib/metastrings.php,
+  engine/lib/navigation.php, engine/lib/notification.php,
+  engine/lib/output.php, engine/lib/plugins.php, engine/lib/relationships.php,
+  engine/lib/river.php, engine/lib/sessions.php, engine/lib/sites.php,
+  engine/lib/upgrade.php, engine/lib/users.php: remove unused code: vars,
+  foreach keys, etc
+
+  	* engine/classes/ElggAttributeLoader.php, engine/lib/annotations.php,
+  engine/lib/entities.php, engine/lib/notification.php, engine/lib/objects.php,
+  engine/lib/plugins.php, engine/lib/users.php: simplify flow, style
+
+  	* engine/classes/ElggAutoP.php, engine/classes/ElggData.php,
+  engine/classes/ElggDiskFilestore.php, engine/classes/ElggFile.php,
+  engine/classes/ElggGroup.php, engine/classes/ElggMenuBuilder.php,
+  engine/classes/ElggRelationship.php, engine/lib/admin.php,
+  engine/lib/annotations.php, engine/lib/cache.php,
+  engine/lib/configuration.php, engine/lib/cron.php, engine/lib/elgglib.php,
+  engine/lib/export.php, engine/lib/location.php, engine/lib/plugins.php,
+  engine/lib/relationships.php, engine/lib/river.php, engine/lib/sessions.php,
+  engine/lib/sites.php, engine/lib/statistics.php, engine/lib/system_log.php,
+  engine/lib/tags.php, engine/lib/upgrades/create_upgrade.php,
+  engine/lib/user_settings.php, engine/lib/users.php, engine/lib/views.php:
+  Small changes to remove static analysis noise and simplify flow
+
+  	* engine/classes/ElggAnnotation.php, engine/classes/ElggAutoP.php,
+  engine/classes/ElggData.php, engine/classes/ElggDiskFilestore.php,
+  engine/classes/ElggEntity.php, engine/classes/ElggFile.php,
+  engine/classes/ElggFileCache.php, engine/classes/ElggGroup.php,
+  engine/classes/ElggMemcache.php, engine/classes/ElggMenuBuilder.php,
+  engine/classes/ElggMetadata.php, engine/classes/ElggPlugin.php,
+  engine/classes/ElggPluginPackage.php, engine/classes/ElggRelationship.php,
+  engine/classes/ElggWidget.php, engine/classes/ElggXMLElement.php,
+  engine/classes/ODDMetaData.php, engine/classes/ODDRelationship.php,
+  engine/lib/access.php, engine/lib/admin.php, engine/lib/annotations.php,
+  engine/lib/cache.php, engine/lib/configuration.php, engine/lib/cron.php,
+  engine/lib/database.php, engine/lib/elgglib.php, engine/lib/entities.php,
+  engine/lib/export.php, engine/lib/extender.php, engine/lib/filestore.php,
+  engine/lib/input.php, engine/lib/languages.php, engine/lib/mb_wrapper.php,
+  engine/lib/metadata.php, engine/lib/metastrings.php,
+  engine/lib/navigation.php, engine/lib/notification.php,
+  engine/lib/objects.php, engine/lib/output.php, engine/lib/pageowner.php,
+  engine/lib/plugins.php, engine/lib/relationships.php, engine/lib/river.php,
+  engine/lib/sites.php, engine/lib/system_log.php, engine/lib/tags.php,
+  engine/lib/upgrade.php, engine/lib/users.php, engine/lib/views.php,
+  engine/lib/widgets.php, engine/lib/xml.php: Doc fixes and inline type hints
+  for variables (big static analysis cleanup)
+
+2013-02-02  Steve Clay <steve@mrclay.org>
+
+  	* mod/messages/start.php: Handle logged out case, simplify logic
+
+2013-02-02  Ed Lyons <ejlyons@ix.netcom.com>
+
+  	* mod/messages/start.php: Update mod/messages/start.php  We had an Elgg user
+  named Chris Read with username 'read'. Once he registered, people's messages
+  stopped working because hitting a message in your inbox was a url like:
+  [site_name]/messages/read/459 - and the message code, supporting the old URL
+  format, looked up the parameter right after messages and did a lookup on that
+  word. So, since it got a user, redirected to his inbox. Yipes! So I put in
+  some code checking that the parameter really is your username, so it would
+  work for Chris, but not for anyone else. It works fine now.
+
+2012-12-14  German Bortoli <germanazo@gmail.com>
+
+  	* mod/tinymce/views/default/js/tinymce.php: Add a lightobx alike instead use
+  popups.  Add a lightobx alike instead use popups while using the TinyMCE
+  controls, for example, when you try to insert an image, watch the HTML
+  content, etc.
+
+2013-02-01  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/classes/ElggSite.php: Fixes #5022 not setting forward on ajax calls
+  for walled garden
+
+2013-01-30  Luciano Lima <lucianomlima@ymail.com>
+
+  	* engine/lib/web_services.php: Set the error code when user authentication
+  fail 
+
+2013-01-30  Cash Costello <cash.costello@gmail.com>
+
+  	* CHANGES.txt: updated the changes file based on development so far
+
+2013-01-29  Luciano Lima <lucianomlima@ymail.com>
+
+  	* engine/lib/web_services.php: Check if the  is a valid viewtype 
+
+2013-01-26  cash <cash.costello@gmail.com>
+
+  	* CHANGES.txt, version.php: updated version for 1.8.13 release
+
+2012-08-28  Juho Jaakkola <juho.jaakkola@mediamaisteri.com>
+
+  	* _graphics/walled_garden/one_column_bottom.png,
+  _graphics/walled_garden/one_column_top.png,
+  _graphics/walled_garden/two_column_bottom.png,
+  _graphics/walled_garden/two_column_top.png: Fixes #4636: Transparent corners
+  for walled garden backgrounds.
+
+2013-01-26  cash <cash.costello@gmail.com>
+
+  	* mod/groups/views/default/groups/css.php,
+  views/default/css/elements/layout.php,
+  views/default/css/elements/modules.php,
+  views/default/css/elements/typography.php: fixed some formatting issues in
+  CSS files
+
+  	* js/lib/languages.js, views/default/js/elgg.php: Fixes #4956 language unit
+  tests pass again
+
+2013-01-26  Cash Costello <cash.costello@gmail.com>
+
+  	* languages/en.php, views/default/annotation/generic_comment.php: fixed
+  comment language for brief display of comments - made it easier to translate
+  - taken from PR 438
+
+  	* CHANGES.txt, languages/en.php: Defines river:comment:object:default -
+  taken from PR 438
+
+2013-01-25  cash <cash.costello@gmail.com>
+
+  	* engine/lib/output.php: Fixes #4972 decode special chars before encoding
+  for friendly titles
+
+  	* engine/classes/ElggPlugin.php: Fixes #4987 removed unnecessary code
+
+  	* languages/en.php: adds missing language string
+
+  	* engine/lib/upgrades/2011010101.php: Fixes #5002 unlocking the upgrade
+  before forwarding to upgrade script
+
+  	* mod/groups/lib/groups.php: Fixes #5005 correct pagination for my groups
+
+  	* engine/lib/private_settings.php: Fixes #4992 - saving temporary private
+  settings works now
+
+2013-01-23  Cash Costello <cash.costello@gmail.com>
+
+  	* mod/blog/start.php, mod/bookmarks/start.php, mod/file/start.php: better
+  solution for 1.7 file compatibility than pull request 471
+
+2013-01-22  cash <cash.costello@gmail.com>
+
+  	* .../views/default/groups/profile/summary.php: addresses pull request 472 -
+  group not having an owner is a serious problem - try exception approach -
+  maybe we need a mechanism for displaying an error page besides exceptions
+
+2013-01-20  Cash Costello <cash.costello@gmail.com>
+
+  	* CHANGES.txt, engine/classes/ElggSite.php: Fixes #4991 CLI allowed when
+  walled garden is turned on
+
+2013-01-19  Cash Costello <cash.costello@gmail.com>
+
+  	* languages/en.php: standardise on American spelling of licence
+
+  	* README.txt: updated copyright date
+
+  	* mod/notifications/actions/groupsave.php: Fixes #4983 added default
+  paramter to get_input() to avoid warning
+
+  	* CHANGES.txt, languages/en.php,
+  views/default/admin/appearance/profile_fields.php,
+  views/default/forms/profile/fields/reset.php: Fixes #4982 adds confirm dialog
+  to profile field reset
+
+  	* mod/file/views/default/object/file.php: Fixes #4990 removes extra title
+  for full file view
+
+2013-01-18  Steve Clay <steve@mrclay.org>
+
+  	* .../views/default/widgets/twitter/content.php,
+  mod/twitter/views/default/widgets/twitter/edit.php: Style fixes to match 1.8
+  widgets
+
+2013-01-17  Paweł Sroka <srokap@gmail.com>
+
+  	* engine/lib/configuration.php: Fixes #3123 - Correct name length control in
+  datalist_get and set_config
+
+2013-01-17  Steve Clay <steve@mrclay.org>
+
+  	* mod/twitter/languages/en.php,
+  .../views/default/widgets/twitter/content.php,
+  mod/twitter/views/default/widgets/twitter/edit.php: Corrects encoding and
+  other small tweaks in Twitter widget
+
+2012-12-22  Per Jensen <admin@perjensen-online.dk>
+
+  	* views/default/css/elements/typography.php: Prevent distortion of image
+
+  	* mod/groups/views/default/groups/css.php: Prevent distortion of group icon
+
+2013-01-04  Brett Profitt <brett.profitt@gmail.com>
+
+  	* CHANGES.txt, version.php: Version bump. Updated changes.
+
+  	* mod/developers/languages/en.php, mod/developers/start.php,
+  mod/developers/views/default/developers/css.php,
+  .../views/default/forms/developers/settings.php,
+  .../views/default/page/theme_preview.php,
+  .../views/default/theme_preview/components.php,
+  .../views/default/theme_preview/general.php,
+  .../views/default/theme_preview/miscellaneous.php,
+  .../theme_preview/miscellaneous/lightbox.php,
+  .../default/theme_preview/miscellaneous/popup.php,
+  .../theme_preview/miscellaneous/site_menu.php,
+  .../miscellaneous/system_messages.php,
+  .../default/theme_preview/miscellaneous/toggle.php,
+  .../miscellaneous/user_hover_menu.php,
+  .../views/default/theme_preview/modules.php: Refs #3617. Added misc section
+  for developer's theme preview.
+
+  	* views/default/js/lightbox.php: Added better explaination for the lightbox.
+
+2013-01-02  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/search/search_hooks.php, mod/search/start.php: Fixes #2212. Added
+  profile fields to the user search.
+
+2012-12-31  Paweł Sroka <srokap@gmail.com>
+
+  	* mod/search/pages/search/index.php, mod/search/search_hooks.php: Fixes
+  #2554 - Adds search support for sorting and order
+
+2012-12-28  Paweł Sroka <srokap@gmail.com>
+
+  	* engine/lib/admin.php: fixes: invalid link in admin footer
+
+2012-12-27  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/thewire/start.php, .../upgrades/2012122701-fix_entity_class.php: Fixes
+  #4882. Added upgrade for The Wire to register thewire objects as ElggWire
+  class.
+
+  	* mod/groups/languages/en.php, mod/groups/lib/groups.php,
+  mod/groups/views/default/groups/css.php,
+  .../views/default/groups/sidebar/my_status.php: Fixes #1747. Added "My
+  status" sidebar menu for groups.
+
+2012-12-22  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/classes/ElggObject.php: Fixes #4856 removed incorrect argument to
+  create_object_entity()
+
+2012-12-20  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/twitter_api/views/default/twitter_api/js.php: Not using short open
+  tag.
+
+2012-12-19  Brett Profitt <brett.profitt@gmail.com>
+
+  	* views/default/river/elements/image.php: Refs #3907. Changed river icons to
+  tiny size if used within a widget.
+
+  	* mod/groups/languages/en.php, mod/groups/start.php: Refs #4633. Added join
+  request count to page menu item.
+
+  	* mod/groups/languages/en.php, mod/groups/start.php: Fixes #4633. Added the
+  invitation count for group invitations page menu item.
+
+  	* engine/lib/views.php: Refs #4789. Removing the container check for river
+  items.
+
+2012-12-18  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/classes/ElggStaticVariableCache.php, engine/lib/access.php,
+  engine/tests/api/access_collections.php: Fixes #3940. Cleaned up caching for
+  access functions. Access caches are now cleared on ignore access change.
+
+2012-12-17  Brett Profitt <brett.profitt@gmail.com>
+
+  	* js/lib/elgglib.js, js/lib/ui.js: Fixes #4963, refs #4847. Error messages
+  don't automatically fade.
+
+  	* engine/lib/annotations.php: Fixes #4709. Removed documentation for unused
+  annotation_id(s) in egef_annotations().
+
+  	* engine/lib/pageowner.php: Fixes #4720. Disabling access while finding /
+  fetching page owners so group gatekeepers work.
+
+  	* mod/twitter_api/lib/twitter_api.php: Refs #4764. Also checking
+  $_SESSION['last_forward_from'] for twitter forwarding.
+
+2012-12-16  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/classes/ElggMenuBuilder.php, engine/classes/ElggMenuItem.php: Fixes
+  #4962. Using get/setData() methods to store menu item original_order.
+
+  	* engine/lib/upgrade.php, languages/en.php, upgrade.php,
+  views/default/widgets/control_panel/content.php: Refs #4643. Cleanup for the
+  upgrade lock.
+
+  	* views/installation/install/js_rewrite_check.php: Refs #4491. Missed JS
+  rewrite check view.
+
+  	* mod/pages/actions/pages/edit.php,
+  mod/pages/views/default/forms/pages/edit.php,
+  mod/pages/views/default/input/parent.php,
+  mod/pages/views/default/pages/input/parent.php: Refs #1334. Move the page
+  parent input to pages/input/parent.
+
+2012-12-15  Brett Profitt <brett.profitt@gmail.com>
+
+  	* install/ElggInstaller.php: Fixes #4698. Catching and displaying exceptions
+  during initial admin user creation.
+
+  	* install/ElggRewriteTester.php, install/js/install.js,
+  install/languages/en.php, views/installation/install/pages/requirements.php:
+  Fixes #4491. Automatic fallback to JS to test rewrite rules during
+  installation.
+
+2012-12-14  Paweł Sroka <srokap@gmail.com>
+
+  	* htaccess_dist: Fixes #4961 - Addc "last rule" tag to mod_rewrite rules in
+  htaccess_dist
+
+2012-12-13  Sem <sembrestels@riseup.net>
+
+  	* .../views/default/groups/profile/summary.php: Checking if we have an owner
+  before using it.
+
+2012-12-10  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/classes/ElggAutoP.php, engine/classes/ElggAutop.php,
+  engine/lib/output.php, engine/tests/api/output.php: Fixes #1479. Added
+  ElggAutoP. Removing [\n\r] from test strings before compare to deal with
+  differing whitespace between tags among PHP versions.
+
+2012-12-08  cash <cash.costello@gmail.com>
+
+  	* engine/lib/elgglib.php: Refs #4869 fixed formatting
+
+  	* engine/lib/group.php, engine/lib/objects.php, engine/lib/sites.php,
+  engine/lib/users.php: Fixes #4806 make the create_<subtype>_entity()
+  functions private
+
+  	* engine/lib/elgglib.php: Fixes #4948, #4686 checking that event/hook exists
+  before trying to unregister
+
+2012-12-07  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/classes/ElggPluginManifestParser.php: Fixed invalid type hint for
+  ElggPluginManifestParser.
+
+2012-12-05  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/classes/ElggPluginManifest.php, engine/classes/ElggXMLElement.php,
+  engine/classes/XmlElement.php, engine/lib/xml.php: Renamed XmlElement changes
+  to ElggXMLElement. Fixed plugin manifest parsing.
+
+2012-07-30  Srokap <srokap@gmail.com>
+
+  	* engine/classes/XmlElement.php, engine/lib/xml.php: Fixes 3468 - replaces
+  xml_to_object function with MIT licensed implementation.
+
+2012-12-05  Steve Clay <steve@mrclay.org>
+
+  	* CHANGES.txt, version.php: Prep for 1.8.11 release. version/CHANGES updates
+
+  	* mod/groups/views/default/forms/groups/edit.php: Fixes fatal error in
+  groups/add page.
+
+2012-12-05  Sem <sembrestels@riseup.net>
+
+  	* mod/search/start.php: Avoid some warnings and a division by 0.
+
+2012-12-04  Brett Profitt <brett.profitt@gmail.com>
+
+  	* CHANGES.txt, version.php: Bumped version to 1.8.10. Updated changes. Refs
+  #4947.
+
+2012-12-04  Krzysztof Różalski <cristo.rabani@gmail.com>
+
+  	* views/default/core/settings/statistics/online.php: Fixes #4946 - In
+  views/default/core/settings/statistics/online.php there's get_system_log call
+  but system_log call can be supressed by unregistering default handler. Better
+  to use last_login attribute.
+
+2012-12-01  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggVolatileMetadataCache.php,
+  mod/profile/views/default/profile/details.php: Make metadata prefetch respect
+  access
+
+2012-11-29  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/views.php: views boot: clearer organization
+
+  	* engine/lib/views.php: elgg_view: cut 2 function calls in usual case,
+  consolidated argument checking at top
+
+  	* engine/lib/views.php: Views code/docs cleanup, remove unneeded vars/code
+
+  	* engine/lib/views.php: Don't need htmlawed for ?view, prevent "Array" from
+  being used as view type
+
+2012-11-28  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/entities.php: Fixes #4937: Metadata cache is purged when entity
+  cache item removed
+
+  	* engine/lib/entities.php: Subtype functions cleanup
+
+2012-11-04  Paweł Sroka <srokap@gmail.com>
+
+  	* engine/lib/entities.php: Added caching of all subtypes with single query
+
+2012-11-27  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/configuration.php: elgg_get_config: Don't generate NOTICE if
+  $value not set
+
+2012-11-04  Paweł Sroka <srokap@gmail.com>
+
+  	* engine/lib/configuration.php: Don't hit DB on elgg_get_config after
+  putting all configuration into local object
+
+2012-11-28  Krzysztof Różalski <cristo.rabani@gmail.com>
+
+  	* engine/lib/admin.php, languages/en.php,
+  views/default/admin/users/admins.php: Fixes #4935 - Adds admin listing in
+  admin panel
+
+2012-11-26  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggPlugin.php, engine/lib/plugins.php: Refs #4933: cache
+  in plugin constructor, remove $CONFIG
+
+  	* views/default/js/admin.php, views/default/js/elgg.php,
+  views/default/js/initialize_elgg.php, views/default/js/lightbox.php,
+  views/default/js/walled_garden.php: JS views: enable syntax highlighting and
+  add missing semicolons
+
+  	* engine/classes/ElggAttributeLoader.php, engine/classes/ElggGroup.php,
+  engine/classes/ElggObject.php, engine/classes/ElggPlugin.php,
+  engine/classes/ElggSite.php, engine/classes/ElggUser.php,
+  engine/classes/IncompleteEntityException.php, engine/lib/entities.php,
+  engine/lib/plugins.php: Fixes #4929: Optimize elgg_get_entities and add
+  attribute loader
+
+2012-11-26  Paweł Sroka <srokap@gmail.com>
+
+  	* js/lib/ui.js, js/tests/ElggLibTest.js, views/default/js/walled_garden.php:
+  Fixes #4927 - Removes obsolete commas in JS code for IE7 compatibility
+
+  	* engine/lib/plugins.php: Fixes #4933 - Adds plugin_id to GUID lookup map
+
+2012-11-26  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/river.php: river prefetch: Don't call elgg_get_entities if no
+  GUIDs to fetch
+
+  	* engine/lib/entities.php: Fixes #4932: Allow plugins to be saved in entity
+  cache
+
+2012-11-25  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/river.php: check entity cache first, and remove limit (from
+  Paweł Sroka's branch)
+
+2012-11-21  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/river.php: Fixes #4926: prefetches entities to be displayed in
+  river
+
+2012-11-18  Steve Clay <steve@mrclay.org>
+
+  	* mod/groups/actions/groups/edit.php: Group edit action refactoring
+
+2012-07-17  Sem <sembrestels@riseup.net>
+
+  	* mod/groups/actions/groups/edit.php: Refs #1854. Removing old owner icons
+  when changing the owner and changing the icon at the same time.
+
+  	* mod/groups/languages/en.php,
+  mod/groups/views/default/forms/groups/edit.php,
+  mod/groups/views/default/groups/js.php: Refs #1854. Using text to warn of the
+  handover, instead the toggle with javascript.
+
+2012-07-08  Sem <sembrestels@riseup.net>
+
+  	* mod/groups/actions/groups/edit.php, mod/groups/languages/en.php,
+  mod/groups/views/default/forms/groups/edit.php,
+  mod/groups/views/default/groups/js.php: Fixes #1854. Group owners can
+  delegate the ownership to another group member.
+
+2012-10-29  Steve Clay <steve@mrclay.org>
+
+  	* engine/handlers/cache_handler.php, engine/lib/elgglib.php,
+  mod/file/thumbnail.php, mod/groups/icon.php, mod/profile/icondirect.php,
+  pages/avatar/view.php: Fixes #4895: Output valid ETag and Expires headers
+
+2012-10-31  Lars Hærvig <lars@laptus.dk>
+
+  	* .../default/river/object/messageboard/create.php: Limit messageboard posts
+  to excerpts in activity stream
+
+2012-11-15  Steve Clay <steve@mrclay.org>
+
+  	* mod/blog/lib/blog.php: Blog lib cleanup, logic simplification, remove
+  notices & unused code
+
+  	* mod/blog/lib/blog.php: Blog forwarder cleanup & viewtype propagation
+
+2012-11-07  Matt Beckett <beck24@gmail.com>
+
+  	* mod/groups/views/rss/groups/profile/layout.php: Fixes #4896: Limit group
+  profile RSS to seachable object types
+
+2012-11-14  Steve Clay <steve@mrclay.org>
+
+  	* engine/tests/api/metadata.php: Prevent false testElggDeleteMetadata()
+  failures
+
+  	* engine/lib/access.php, engine/lib/elgglib.php, engine/lib/entities.php,
+  engine/lib/extender.php, engine/lib/pagehandler.php, engine/lib/views.php,
+  engine/lib/web_services.php: Style cleanup
+
+2012-09-17  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggPAM.php, engine/lib/elgglib.php,
+  engine/lib/entities.php, engine/lib/extender.php,
+  engine/lib/notification.php, engine/lib/pagehandler.php, engine/lib/pam.php,
+  engine/lib/relationships.php, engine/lib/views.php,
+  engine/lib/web_services.php: Fixes #4861: allow lazy-loading for static
+  method callbacks, allow more callables
+
+2012-11-14  Steve Clay <steve@mrclay.org>
+
+  	* mod/uservalidationbyemail/start.php: Style cleanup
+
+2012-11-08  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* languages/en.php: Added missing language key for LoginException:Unknown
+
+2012-11-15  Sem <sembrestels@riseup.net>
+
+  	* mod/blog/lib/blog.php: Refs #4904. Checking if page has segments before
+  using them.
+
+2012-11-14  Steve Clay <steve@mrclay.org>
+
+  	* mod/messages/start.php: messages_send() better var names and fixed
+  notification if sender not current user
+
+2012-11-14  RiverVanRain <river.vanrain@gmail.com>
+
+  	* mod/twitter_api/vendors/twitteroauth/OAuth.php,
+  .../vendors/twitteroauth/twitterOAuth.php: Fixes #4916: Twitter API request
+  token
+
+  	* .../views/default/widgets/twitter/content.php: Fixes #4890: Correct URL
+  for requesting a timeline
+
+2012-11-12  German Bortoli <germanazo@gmail.com>
+
+  	* mod/blog/views/default/forms/blog/save.php: Removed unnecessary disabled
+  class from blog delete button
+
+2012-11-11  Steve Clay <steve@mrclay.org>
+
+  	* CHANGES.txt, CONTRIBUTORS.txt, version.php: Prepare for 1.8.9 release
+
+2012-11-11  Evan Winslow <evan@elgg.org>
+
+  	* mod/messages/pages/messages/read.php: Fixes typo in messages permissions
+  check
+
+2012-11-10  Sem <sembrestels@riseup.net>
+
+  	* actions/register.php: Fixes #4911. Cleaning register form after last
+  check.
+
+2012-11-08  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* mod/uservalidationbyemail/start.php: fixes missing error message on manual
+  login of an unvalidated user
+
+2012-10-11  Steve Clay <steve@mrclay.org>
+
+  	* actions/profile/edit.php, engine/lib/output.php,
+  engine/lib/upgrades/2010052601.php,
+  mod/blog/views/default/forms/blog/save.php,
+  mod/groups/actions/groups/edit.php, views/default/output/email.php: Better
+  HTML decoding and output/email encoding
+
+2012-11-06  Sem <sembrestels@riseup.net>
+
+  	* mod/blog/lib/blog.php, mod/blog/start.php: Refs #4904. Forwarding pre and
+  post-1.7.5 blog urls.
+
+2012-11-05  Sem <sembrestels@riseup.net>
+
+  	* mod/blog/lib/blog.php: Fixes #4904. Elgg 1.7 group blog RSS links forward
+  correctly now.
+
+2012-11-04  Paweł Sroka <srokap@gmail.com>
+
+  	* engine/classes/ElggAutop.php, engine/lib/output.php,
+  engine/tests/api/output.php,
+  .../test_files/output/autop/block-a.exp.norun.html,
+  .../test_files/output/autop/block-a.in.norun.html,
+  .../tests/test_files/output/autop/domdoc_exp.html,
+  .../tests/test_files/output/autop/domdoc_in.html,
+  .../test_files/output/autop/typical-post.exp.html,
+  .../test_files/output/autop/typical-post.in.html,
+  .../test_files/output/autop/wp-welcome.exp.html,
+  .../test_files/output/autop/wp-welcome.in.html,
+  .../test_files/output/autop/wpautop-fails.exp.html,
+  .../test_files/output/autop/wpautop-fails.in.html,
+  .../test_files/output/autop/wysiwyg-test.exp.html,
+  .../test_files/output/autop/wysiwyg-test.in.html,
+  mod/groups/views/rss/object/groupforumtopic.php,
+  mod/search/views/default/search/no_results.php,
+  mod/thewire/views/rss/object/thewire.php,
+  .../forms/uservalidationbyemail/bulk_action.php,
+  views/default/forms/profile/fields/add.php,
+  views/default/forms/user/passwordreset.php,
+  views/default/output/longtext.php, views/default/page/elements/messages.php,
+  views/installation/install/pages/admin.php,
+  views/installation/install/pages/complete.php,
+  views/installation/install/pages/database.php,
+  views/installation/install/pages/requirements.php,
+  views/installation/install/pages/settings.php,
+  views/installation/install/pages/welcome.php,
+  views/installation/page/elements/messages.php,
+  views/opendd/messages/exceptions/exception.php, views/rss/group/default.php,
+  views/rss/object/default.php, views/rss/user/default.php,
+  views/xml/messages/exceptions/exception.php: Fixes #1479 - Replaces WP autop
+  with implementation from Steve Clay.
+
+2012-10-29  Evan Winslow <evan@elgg.org>
+
+  	* mod/blog/views/default/forms/blog/save.php: Fixes inconsistent blog markup
+
+2012-10-25  Srokap <srokap@gmail.com>
+
+  	* engine/classes/ElggDiskFilestore.php: File access control omits now access
+  to owner control.
+
+2012-10-22  Brett Profitt <brett.profitt@gmail.com>
+
+  	* .../object/plugin/elements/dependencies.php: Fixes #3465. Unmet
+  suggestions are marked as warnings instead of errors in plugins.
+
+2012-10-22  Matt Beckett <beck24@gmail.com>
+
+  	* mod/messages/pages/messages/read.php: adds parentheses to clarify
+  comparison logic
+
+2012-10-19  Brett Profitt <brett.profitt@gmail.com>
+
+  	* engine/lib/output.php, js/lib/elgglib.js: Added special checks for mailto:
+  in elgg_normalize_url() and elgg.normalize_url().
+
+  	* engine/classes/ElggObject.php: Correctly passing guid instead of object in
+  container permissions check.
+
+2012-10-12  Steve Clay <steve@mrclay.org>
+
+  	* install/ElggInstaller.php, install/cli/sample_installer.php: CLI
+  installer: manual enable/auto disable, checking for empty config values
+
+2012-09-09  Steve Clay <steve@mrclay.org>
+
+  	* mod/blog/actions/blog/auto_save_revision.php,
+  mod/blog/actions/blog/save.php, mod/bookmarks/actions/bookmarks/save.php,
+  mod/file/actions/file/upload.php, mod/groups/actions/discussion/save.php,
+  mod/groups/actions/groups/edit.php, mod/pages/actions/pages/edit.php: Fixes
+  #4593: All titles are HTML-escaped plain text
+
+2012-10-10  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* mod/search/views/default/search/search_box.php: use display_query instead
+  of value for search input value
+
+2012-10-04  Matt Beckett <beck24@gmail.com>
+
+  	* mod/messages/pages/messages/read.php: only present a reply button when the
+  message can be replied to
+
+2012-10-04  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* engine/lib/views.php: saving an unnessesary database call to check for
+  icon_sizes
+
+2012-10-04  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* views/default/page/default.php: use correct language in html lang
+  attribute
+
+2012-10-03  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/entities.php: Fixes #3018: Checks DB for access before using
+  memcache-stored entity (suggested by Jerôme Bakker)
+
+2012-10-03  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* mod/messages/start.php: fixed: wrong if statement in messages_send
+
+  	* engine/lib/deprecated-1.8.php, engine/lib/notification.php,
+  mod/groups/start.php, mod/notifications/actions/groupsave.php,
+  mod/notifications/groups.php, mod/notifications/index.php,
+  .../forms/notificationsettings/groupsave.php,
+  .../notifications/subscriptions/forminternals.php: better usage of 'limit' in
+  cases where this is irrelevant
+
+  	* engine/lib/deprecated-1.8.php, engine/lib/relationships.php,
+  mod/categories/pages/categories/listing.php: correct singual usage of type in
+  elgg_get_entities_* functions - found more bad usage
+
+  	* engine/lib/deprecated-1.8.php, engine/lib/sites.php, engine/lib/users.php,
+  engine/tests/api/entity_getter_functions.php,
+  mod/categories/pages/categories/listing.php, mod/file/pages/file/owner.php,
+  mod/file/pages/file/search.php, mod/file/pages/file/world.php,
+  mod/pages/pages/pages/owner.php, mod/pages/pages/pages/world.php,
+  .../admin/administer_utilities/reportedcontent.php,
+  .../default/widgets/reportedcontent/content.php,
+  .../views/default/thewire/profile_status.php: correct singual usage of
+  subtype in elgg_get_entities_* functions
+
+2012-10-03  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* mod/messages/pages/messages/inbox.php,
+  mod/messages/pages/messages/sent.php: check for correct page_owner to prevent
+  unwanted access to the page
+
+  	* mod/messages/pages/messages/read.php: fixed incomplete forward url
+
+2012-10-03  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* engine/lib/deprecated-1.8.php, engine/lib/group.php,
+  engine/lib/notification.php, engine/lib/objects.php, engine/lib/sites.php,
+  engine/lib/users.php, engine/tests/api/entity_getter_functions.php,
+  mod/custom_index/index.php, mod/file/pages/file/owner.php,
+  mod/file/pages/file/search.php, mod/file/pages/file/world.php,
+  mod/groups/lib/groups.php, mod/groups/start.php,
+  .../views/default/groups/sidebar/featured.php,
+  .../views/default/groups/sidebar/members.php,
+  mod/notifications/actions/groupsave.php, mod/notifications/groups.php,
+  mod/notifications/index.php, .../forms/notificationsettings/groupsave.php,
+  .../notifications/subscriptions/forminternals.php,
+  mod/pages/pages/pages/owner.php, mod/pages/pages/pages/world.php,
+  .../admin/administer_utilities/reportedcontent.php,
+  .../default/widgets/reportedcontent/content.php,
+  .../views/default/thewire/profile_status.php: correct singual usage of type
+  in elgg_get_entities_* functions
+
+2012-10-03  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* mod/search/views/default/search/search_box.php: show search query in input
+  field
+
+2012-09-28  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* mod/messages/start.php: fixed: wrong link in message notification
+
+  	* .../core/settings/statistics/numentities.php,
+  views/default/core/settings/statistics/online.php: fixed: fetching wrong
+  stats data for users
+
+  	* engine/lib/elgglib.php: fixed: shortcoming in Elgg's custom PHP error
+  handler
+
+  	* engine/lib/sites.php: fixed: elgg_get_site_entity now works as documented
+
+2012-07-03  Srokap <srokap@gmail.com>
+
+  	* engine/classes/ElggMenuBuilder.php, engine/classes/ElggMenuItem.php: Fixes
+  #3035 - menu items appearing in reverse registration order
+
+2012-09-13  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* actions/profile/edit.php, views/default/forms/profile/edit.php: fixes not
+  showing and deleting all metadata values for array type metadata fields #4858
+
+  	* actions/profile/edit.php: fixes saving of empty values on profile metadata
+  #4858
+
+2012-09-07  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggGroupItemVisibility.php: Remove unneeded code
+
+  	* engine/classes/ElggGroupItemVisibility.php, engine/lib/group.php: Better
+  logic for when to forward to login
+
+  	* engine/classes/ElggGroupItemVisibility.php, engine/lib/group.php,
+  engine/lib/views.php, views/default/page/components/list.php: Fixes #4789:
+  group_gatekeeper() and river hide closed/invisible group content more
+  reliably
+
+2012-09-05  Sem <sembrestels@riseup.net>
+
+  	* actions/admin/site/unlock_upgrade.php, engine/lib/upgrade.php,
+  upgrade.php: Moved upgrade lock/unlock functions to upgrade.php lib.
+
+2012-06-01  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggEntity.php, engine/classes/ElggMetadata.php,
+  engine/classes/ElggPlugin.php, engine/classes/ElggVolatileMetadataCache.php,
+  engine/lib/entities.php, engine/lib/metadata.php,
+  engine/tests/api/metadata_cache.php: Fixes #4290: adds volatile metadata
+  cache, unit tests, and pre-loading for fetched entities
+
+2012-08-27  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/groups/lib/groups.php, mod/groups/views/default/forms/groups/edit.php,
+  mod/groups/views/default/groups/edit.php: Refs #4381. Cleanup for group
+  sticky forms. Moved logic out of view into groups_prepare_form_vars(). Made
+  group tool options sticky.
+
+2012-08-26  Matt Beckett <beck24@gmail.com>
+
+  	* mod/groups/start.php: forward 1.7 group profile urls to correct
+  destination in 1.8
+
+2012-08-25  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/elgglib.php: Fixed @return doc on elgg_extract
+
+2012-08-22  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/entities.php: Refactored for clarity
+
+2012-08-20  Matt Beckett <beck24@gmail.com>
+
+  	* mod/embed/start.php: fixes #4818 - generates unique rel attribute to
+  prevent gallery navigation on embed lightbox content
+
+2012-08-10  Sem <sembrestels@riseup.net>
+
+  	* js/lib/ui.js: Fixes #4037. Internationalize datepicker.
+
+  	* vendors/jquery/i18n/jquery-ui-i18n.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-af.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ar-DZ.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ar.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-az.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-bg.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-bs.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ca.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-cs.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-cy-GB.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-da.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-de.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-el.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-en-AU.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-en-GB.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-en-NZ.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-eo.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-es.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-et.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-eu.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-fa.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-fi.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-fo.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-fr-CH.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-fr.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-gl.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-he.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-hi.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-hr.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-hu.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-hy.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-id.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-is.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-it.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ja.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ka.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-kk.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-km.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ko.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-lb.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-lt.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-lv.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-mk.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ml.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ms.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-nl-BE.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-nl.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-no.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-pl.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-pt-BR.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-pt.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-rm.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ro.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ru.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sk.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sl.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sq.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sr-SR.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sr.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-sv.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-ta.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-th.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-tj.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-tr.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-uk.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-vi.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-zh-CN.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-zh-HK.js,
+  vendors/jquery/i18n/jquery.ui.datepicker-zh-TW.js: Added jQuery-ui i18n
+  files.
+
+2012-08-07  Matt Beckett <beck24@gmail.com>
+
+  	* engine/lib/upgrades/2010121602.php: fixes river upgrade for comments
+
+2012-08-06  Sem <sembrestels@riseup.net>
+
+  	* mod/blog/actions/blog/save.php: Fixes #4792. Now blog author is who
+  appears in the river.
+
+  	* views/default/page/elements/head.php: Fixes #4786. Adds a CDATA structure
+  in the script tag in the head.
+
+2012-08-05  Steve Clay <steve@mrclay.org>
+
+  	* actions/login.php, engine/classes/ElggSession.php,
+  mod/twitter_api/lib/twitter_api.php, mod/twitter_api/start.php,
+  mod/twitter_api/views/default/twitter_api/css.php,
+  mod/twitter_api/views/default/twitter_api/js.php,
+  .../views/default/twitter_api/login.php: Fixes #4764: Twitter login supports
+  persistent and referrer forwarding
+
+2012-08-05  Sem <sembrestels@riseup.net>
+
+  	* views/default/input/longtext.php, views/default/input/plaintext.php: Fixes
+  #4772. "cols" and "rows" attributes requiried in textareas.
+
+  	* mod/pages/views/default/pages/icon.php: Fixes #4773. Added alt attribute
+  in page icons.
+
+2012-08-02  Steve Clay <steve@mrclay.org>
+
+  	* actions/plugins/usersettings/save.php: Fixed doc for
+  plugins/usersettings/save action
+
+  	* actions/plugins/settings/save.php: Fixed doc for plugins/settings/save
+  action
+
+2012-07-31  Sem <sembrestels@riseup.net>
+
+  	* engine/lib/navigation.php: Fixes #4774. Added tokens insted is_action
+  param in delete river menu item.
+
+2012-07-29  Sem <sembrestels@riseup.net>
+
+  	* views/default/css/admin.php: Refs #4008. Modified CSS selector to be more
+  specific.
+
+2012-07-28  Sem <sembrestels@riseup.net>
+
+  	* views/default/js/languages.php: Fixes #4740. Added language fallback in
+  javascript.
+
+  	* mod/thewire/views/default/js/thewire.php,
+  mod/thewire/views/default/thewire/css.php: Fixes #3294. Erased php code in
+  thewire javascript file and moved character couner warning text style to css
+  file.
+
+2012-07-26  Sem <sembrestels@riseup.net>
+
+  	* views/default/input/text.php: Fixes #4765. Removed space in input/text
+  view.
+
+2012-07-24  Evan Winslow <evan@elgg.org>
+
+  	* .../views/default/theme_preview/grid.php: Better grid preview
+
+2012-07-21  Evan Winslow <evan@elgg.org>
+
+  	* mod/likes/actions/likes/delete.php, mod/likes/languages/en.php,
+  mod/likes/views/default/annotation/likes.php: Fixes #4750: Supporting both id
+  and guid arguments for likes/delete
+
+2012-07-17  Matt Beckett <beck24@gmail.com>
+
+  	* engine/lib/navigation.php: switched to matching by link name - same
+  results, simpler code
+
+  	* mod/embed/views/default/js/embed/embed.php: Fixes #4725 - no longer
+  removes file upload form outside of embed lightbox, no longer hangs on
+  throbber when the form returns an error.
+
+2012-07-16  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/lib/entities.php: Fixes #4621 adds warning to remove_subtype()
+
+  	* mod/blog/manifest.xml, mod/bookmarks/manifest.xml,
+  mod/categories/manifest.xml, mod/custom_index/manifest.xml,
+  mod/dashboard/manifest.xml, mod/developers/manifest.xml,
+  mod/diagnostics/manifest.xml, mod/embed/manifest.xml,
+  mod/externalpages/manifest.xml, mod/file/manifest.xml,
+  mod/garbagecollector/manifest.xml, mod/groups/manifest.xml,
+  mod/htmlawed/manifest.xml, mod/invitefriends/manifest.xml,
+  mod/likes/manifest.xml, mod/logbrowser/manifest.xml,
+  mod/logrotate/manifest.xml, mod/members/manifest.xml,
+  mod/messageboard/manifest.xml, mod/messages/manifest.xml,
+  mod/notifications/manifest.xml, mod/oauth_api/manifest.xml,
+  mod/pages/manifest.xml, mod/profile/manifest.xml,
+  mod/reportedcontent/manifest.xml, mod/search/manifest.xml,
+  mod/tagcloud/manifest.xml, mod/thewire/manifest.xml,
+  mod/tinymce/manifest.xml, mod/twitter/manifest.xml,
+  mod/twitter_api/manifest.xml, mod/uservalidationbyemail/manifest.xml,
+  mod/zaudio/manifest.xml: don't want to go overboard in asking for donations
+
+2012-07-17  Sem <sembrestels@riseup.net>
+
+  	* actions/admin/site/unlock_upgrade.php, engine/lib/admin.php,
+  languages/en.php, upgrade.php,
+  views/default/widgets/control_panel/content.php: Refs #4643. Added unlock
+  upgrade action.
+
+2012-07-16  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/classes/ElggPluginManifest.php, engine/tests/api/plugins.php,
+  views/default/object/plugin/full.php: added URL to the other new method names
+
+2012-07-15  Matt Beckett <beck24@gmail.com>
+
+  	* engine/lib/navigation.php: persist 'selected' state of site menu
+
+2012-07-14  Cash Costello <cash.costello@gmail.com>
+
+  	* actions/widgets/add.php, js/lib/ui.widgets.js,
+  views/default/page/layouts/widgets.php,
+  views/default/page/layouts/widgets/add_panel.php: Fixes #4661 not showing
+  access on widgets loaded through ajax if the layout does not show access
+
+  	* actions/admin/site/update_advanced.php,
+  views/default/forms/admin/site/update_advanced.php: Fixes #3817 cleans up
+  advanced settings form
+
+  	* engine/start.php: Fixes #4705 validate view type
+
+  	* engine/lib/languages.php: Refs #4004 decided to downgrage missing language
+  keys to NOTICE for all languages. The plugin categories were causing problems
+  at the WARNING level. This will be more useful when we move db queries off
+  NOTICE
+
+2012-07-14  Sem <sembrestels@riseup.net>
+
+  	* mod/pages/views/default/forms/pages/edit.php: Refs #1334. Readded hidden
+  input in edit page form, only on page creation.
+
+  	* mod/pages/actions/pages/edit.php,
+  mod/pages/views/default/forms/pages/edit.php: Refs #1334. Prevent cycles in
+  the pages tree.
+
+2012-07-14  Cash Costello <cash.costello@gmail.com>
+
+  	* views/default/css/admin.php: added .elgg-text-help to admin theme
+
+  	* mod/blog/lib/blog.php, mod/blog/views/default/js/blog/save_draft.php,
+  views/default/page/elements/comments.php: Fixes #4691 not passing name to the
+  form since not valid
+
+2012-07-14  Matt Beckett <beck24@gmail.com>
+
+  	* mod/categories/views/default/input/categories.php: Fixes #3240 - makes
+  categories sticky
+
+2012-07-13  Sem <sembrestels@riseup.net>
+
+  	* engine/lib/languages.php: Refs #4004. Used $CONFIG->translations instead
+  of elgg_echo()
+
+  	* mod/bookmarks/start.php, mod/groups/start.php, mod/profile/start.php:
+  Fixes #4687. Handle URLs on plugins that include only handler name.
+
+  	* mod/pages/actions/pages/edit.php, mod/pages/languages/en.php,
+  mod/pages/lib/pages.php, mod/pages/start.php,
+  mod/pages/views/default/forms/pages/edit.php,
+  mod/pages/views/default/input/parent.php: Fixes #1334. Added dropdown to
+  change the parent of a page.
+
+  	* engine/lib/languages.php: Refs #4004. Downgraded to notice and warning. It
+  also returns the complete language name.
+
+  	* engine/classes/ElggPluginManifest.php, engine/tests/api/plugins.php,
+  views/default/object/plugin/full.php: Refs #3646. "getRepositoryURL" is more
+  descriptive than "getRepository".
+
+2012-07-12  Cash Costello <cash.costello@gmail.com>
+
+  	* engine/lib/actions.php: Fixes #4702 better actions logic
+
+2012-07-11  Sem <sembrestels@riseup.net>
+
+  	* mod/groups/actions/groups/edit.php,
+  mod/groups/views/default/forms/groups/edit.php: Fixes #4381. Group edit form
+  made sticky.
+
 2012-07-11  Cash Costello <cash.costello@gmail.com>
 
   	* CHANGES.txt, version.php: Updated for the 1.8.8 release
@@ -25,11 +1449,51 @@
 
   	* version.php: 1.8.7 version for tagging
 
+2012-07-09  Sem <sembrestels@riseup.net>
+
+  	* upgrade.php: Fixes #4643. Locks the upgrade process while it is running.
+
 2012-07-08  Cash Costello <cash.costello@gmail.com>
 
   	* mod/groups/lib/discussion.php: 40 discussion topics was too many
 
+2012-07-08  Sem <sembrestels@riseup.net>
+
+  	* mod/groups/actions/groups/edit.php, mod/groups/languages/en.php,
+  mod/groups/lib/groups.php, .../views/default/plugins/groups/settings.php:
+  Fixes #1792. Added pluggin setting in groups to set who can create groups,
+  logged in users or only admins.
+
+  	* engine/lib/languages.php: Fixes #4004. elgg_logging when a language key is
+  missing.
+
+  	* documentation/info/manifest.xml, engine/classes/ElggPluginManifest.php,
+  engine/classes/ElggPluginManifestParser18.php, engine/tests/api/plugins.php,
+  engine/tests/test_files/plugin_18/manifest.xml, languages/en.php,
+  mod/blog/manifest.xml, mod/bookmarks/manifest.xml,
+  mod/categories/manifest.xml, mod/custom_index/manifest.xml,
+  mod/dashboard/manifest.xml, mod/developers/manifest.xml,
+  mod/diagnostics/manifest.xml, mod/embed/manifest.xml,
+  mod/externalpages/manifest.xml, mod/file/manifest.xml,
+  mod/garbagecollector/manifest.xml, mod/groups/manifest.xml,
+  mod/htmlawed/manifest.xml, mod/invitefriends/manifest.xml,
+  mod/likes/manifest.xml, mod/logbrowser/manifest.xml,
+  mod/logrotate/manifest.xml, mod/members/manifest.xml,
+  mod/messageboard/manifest.xml, mod/messages/manifest.xml,
+  mod/notifications/manifest.xml, mod/oauth_api/manifest.xml,
+  mod/pages/manifest.xml, mod/profile/manifest.xml,
+  mod/reportedcontent/manifest.xml, mod/search/manifest.xml,
+  mod/tagcloud/manifest.xml, mod/thewire/manifest.xml,
+  mod/tinymce/manifest.xml, mod/twitter/manifest.xml,
+  mod/twitter_api/manifest.xml, mod/uservalidationbyemail/manifest.xml,
+  mod/zaudio/manifest.xml, views/default/css/admin.php,
+  views/default/object/plugin/full.php: Fixes #3646. Added suport for
+  Repository, Bugtracker and Donations in manifest.
+
 2012-07-07  Sem <sembrestels@riseup.net>
+
+  	* views/default/css/admin.php: Fixes #4008. Sets a vertical align for admin
+  icons consistent with the text, and set it as before (baseline) for heads.
 
   	* actions/river/delete.php, engine/lib/navigation.php, engine/lib/river.php,
   languages/en.php: Fixes #4631. Admins are now able to delete river items.
@@ -463,6 +1927,11 @@
   	* engine/lib/filestore.php: Fixes #4577: Transparency converted to white
   instead of black
 
+2012-06-13  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/entities.php: Added entity caching to elgg_get_entities with
+  workaround for recursive delete problem (#4568)
+
 2012-06-12  Cash Costello <cash.costello@gmail.com>
 
   	* mod/thewire/pages/thewire/view.php, mod/thewire/start.php: Fixes #4567
@@ -526,10 +1995,19 @@
   as the site default language. This patch uses the site's configure default
   language as the default one.
 
+2012-05-29  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/entities.php: small fixes
+
 2012-05-16  Jeff Tilson <jtilson@thinkglobalschool.com>
 
   	* engine/lib/admin.php: Call elgg_register_simplecache_view('css/admin') to
   register admin css with simplecache
+
+2012-05-24  Evan Winslow <evan@elgg.org>
+
+  	* engine/lib/entities.php: Fixes #4543: Cache entities fetched with
+  get_entity and elgg_get_entities
 
 2012-05-18  Steve Clay <steve@mrclay.org>
 

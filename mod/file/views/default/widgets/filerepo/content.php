@@ -11,7 +11,6 @@ $num = $vars['entity']->num_display;
 $options = array(
 	'type' => 'object',
 	'subtype' => 'file',
-	//'owner_guid' => $vars['entity']->owner_guid,
 	'container_guid' => $vars['entity']->owner_guid,
 	'limit' => $num,
 	'full_view' => FALSE,

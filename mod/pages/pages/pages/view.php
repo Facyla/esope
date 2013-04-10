@@ -8,7 +8,9 @@
 $page_guid = get_input('guid');
 $page = get_entity($page_guid);
 if (!$page) {
-	forward();
+	register_error(elgg_echo('noaccess'));
+	$_SESSION['last_forward_from'] = current_page_url();
+	forward('');
 }
 
 elgg_set_page_owner_guid($page->getContainerGUID());
@@ -32,7 +34,8 @@ elgg_push_breadcrumb($title);
 $content = elgg_view_entity($page, array('full_view' => true));
 $content .= elgg_view_comments($page);
 
-if (elgg_get_logged_in_user_guid() == $page->getOwnerGuid()) {
+// can add subpage if can edit this page and write to container (such as a group)
+if ($page->canEdit() && $container->canWriteToContainer(0, 'object', 'page')) {
 	$url = "pages/add/$page->guid";
 	elgg_register_menu_item('title', array(
 			'name' => 'subpage',

@@ -36,10 +36,10 @@ elgg.tinymce.init = function() {
 
 	tinyMCE.init({
 		mode : "specific_textareas",
-		language : "fr",
 		editor_selector : "elgg-input-longtext",
 		theme : "advanced",
-		plugins : "lists,spellchecker,autosave,fullscreen,paste",
+		language : "<?php echo tinymce_get_site_language(); ?>",
+		plugins : "lists,spellchecker,autosave,fullscreen,paste,inlinepopups",
 		relative_urls : false,
 		remove_script_host : false,
 		document_base_url : elgg.config.wwwroot,

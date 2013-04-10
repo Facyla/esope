@@ -28,7 +28,6 @@ $author_text = elgg_echo('byline', array($owner_link));
 
 $file_icon = elgg_view_entity_icon($file, 'small');
 
-$tags = elgg_view('output/tags', array('tags' => $file->tags));
 $date = elgg_view_friendly_time($file->time_created);
 
 $comments_count = $file->countComments();
@@ -69,9 +68,9 @@ if ($full && !elgg_in_context('gallery')) {
 
 	$params = array(
 		'entity' => $file,
+		'title' => false,
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
-		'tags' => $tags,
 	);
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
@@ -81,7 +80,6 @@ if ($full && !elgg_in_context('gallery')) {
 
 	echo elgg_view('object/elements/full', array(
 		'entity' => $file,
-		'title' => false,
 		'icon' => $file_icon,
 		'summary' => $summary,
 		'body' => $body,
@@ -100,7 +98,6 @@ if ($full && !elgg_in_context('gallery')) {
 		'entity' => $file,
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
-		'tags' => $tags,
 		'content' => $excerpt,
 	);
 	$params = $params + $vars;

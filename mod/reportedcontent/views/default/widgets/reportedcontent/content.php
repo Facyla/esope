@@ -4,9 +4,10 @@
  */
 
 $list = elgg_list_entities(array(
-	'types' => 'object',
-	'subtypes' => 'reported_content',
+	'type' => 'object',
+	'subtype' => 'reported_content',
 	'limit' => $vars['entity']->num_display,
+	'pagination' => false,
 ));
 if (!$list) {
 	$list = '<p class="mtm">' . elgg_echo('reportedcontent:none') . '</p>';

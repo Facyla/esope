@@ -624,6 +624,10 @@ a.elgg-button {
 	text-decoration: none;
 	color: #4690D6;
 }
+.ui-autocomplete a.ui-state-hover {
+	background-color: #eee;
+	display: block;
+}
 
 /* ***************************************
 	USER PICKER
@@ -1238,6 +1242,10 @@ a.elgg-widget-collapsed:before {
 	height: 16px;
 	display: inline-block;
 	margin: 0 2px;
+	vertical-align: text-bottom;
+}
+.elgg-module .elgg-head .elgg-icon {
+	vertical-align: baseline;
 }
 .elgg-icon-delete:hover,
 .elgg-icon-delete-alt:hover {
@@ -1460,7 +1468,8 @@ a.elgg-widget-collapsed:before {
 	padding: 5px 10px;
 	margin: 4px 0;
 }
-ul.elgg-plugin-categories, ul.elgg-plugin-categories > li {
+ul.elgg-plugin-categories, ul.elgg-plugin-categories > li,
+ul.elgg-plugin-resources, ul.elgg-plugin-resources > li {
 	display: inline;
 }
 .elgg-plugin-category-bundled {
@@ -1508,6 +1517,12 @@ ul.elgg-plugin-categories, ul.elgg-plugin-categories > li {
 	line-height: 1.2em;
 	font-style: italic;
 	margin-bottom: 5px;
+}
+
+.elgg-text-help {
+	display: block;
+	font-size: 85%;
+	font-style: italic;
 }
 
 .elgg-longtext-control {

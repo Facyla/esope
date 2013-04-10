@@ -6,7 +6,7 @@
  */
 
 // Get variables
-$title = get_input("title");
+$title = htmlspecialchars(get_input('title', '', false), ENT_QUOTES, 'UTF-8');
 $desc = get_input("description");
 $access_id = (int) get_input("access_id");
 $container_guid = (int) get_input('container_guid', 0);
@@ -44,7 +44,7 @@ if ($new_file) {
 
 	// if no title on new upload, grab filename
 	if (empty($title)) {
-		$title = $_FILES['upload']['name'];
+		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
 	}
 
 } else {
@@ -94,8 +94,31 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
 	}
 
-	$mime_type = $file->detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
 	$file->setFilename($prefix . $filestorename);
+	$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+
+	// hack for Microsoft zipped formats
+	$info = pathinfo($_FILES['upload']['name']);
+	$office_formats = array('docx', 'xlsx', 'pptx');
+	if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+		switch ($info['extension']) {
+			case 'docx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+				break;
+			case 'xlsx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+				break;
+			case 'pptx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+				break;
+		}
+	}
+
+	// check for bad ppt detection
+	if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+		$mime_type = "application/vnd.ms-powerpoint";
+	}
+
 	$file->setMimeType($mime_type);
 	$file->originalfilename = $_FILES['upload']['name'];
 	$file->simpletype = file_get_simple_type($mime_type);

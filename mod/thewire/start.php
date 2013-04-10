@@ -37,7 +37,7 @@ function thewire_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'thewire_setup_entity_menu_items');
 	
 	// Extend system CSS with our own styles, which are defined in the thewire/css view
-	elgg_extend_view('css', 'thewire/css');
+	elgg_extend_view('css/elgg', 'thewire/css');
 
 	//extend views
 	elgg_extend_view('activity/thewire', 'thewire/activity_view');
@@ -67,6 +67,8 @@ function thewire_init() {
 	elgg_register_action("thewire/delete", "$action_base/delete.php");
 
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'thewire_test');
+
+	elgg_register_event_handler('upgrade', 'system', 'thewire_run_upgrades');
 }
 
 /**
@@ -77,7 +79,8 @@ function thewire_init() {
  * thewire/owner/<username>     View this user's wire posts
  * thewire/following/<username> View the posts of those this user follows
  * thewire/reply/<guid>         Reply to a post
- * thewire/view/<guid>          View a conversation thread
+ * thewire/view/<guid>          View a post
+ * thewire/thread/<id>          View a conversation thread
  * thewire/tag/<tag>            View wire posts tagged with <tag>
  *
  * @param array $page From the page_handler function
@@ -102,6 +105,13 @@ function thewire_page_handler($page) {
 
 		case "owner":
 			include "$base_dir/owner.php";
+			break;
+
+		case "view":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/view.php";
 			break;
 
 		case "thread":
@@ -453,4 +463,13 @@ function thewire_test($hook, $type, $value, $params) {
 	global $CONFIG;
 	$value[] = $CONFIG->pluginspath . 'thewire/tests/regex.php';
 	return $value;
+}
+
+function thewire_run_upgrades() {
+	$path = dirname(__FILE__) . '/upgrades/';
+	$files = elgg_get_upgrade_files($path);
+	
+	foreach ($files as $file) {
+		include $path . $file;
+	}
 }

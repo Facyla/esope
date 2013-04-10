@@ -26,8 +26,8 @@ Version History
 0.8 (1.8) (2011.09.25-27):
 	- CMS pages ported to 1.8
 
-------- (now we'll tell (Elgg version)) -------
------ CHANGE VERSIONNING FOR 1.8 VERSION ------
+=== (now we'll tell: Elgg version) ===
+= CHANGE VERSIONNING FOR 1.8 VERSION =
 
 0.7.3 (2011.09.25):
 	- typo bug + info for using page as a view

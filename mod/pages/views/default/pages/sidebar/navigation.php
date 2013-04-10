@@ -5,6 +5,11 @@
  * @uses $vars['page'] Page object if manually setting selected item
  */
 
+// add the jquery treeview files for navigation
+elgg_load_js('jquery-treeview');
+elgg_load_css('jquery-treeview');
+
+
 $selected_page = elgg_extract('page', $vars, false);
 if ($selected_page) {
 	$url = $selected_page->getURL();
@@ -19,7 +24,7 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('pages:none') . '</p>';
 }
 
-echo elgg_view_module('aside', $title, $content, array('id' => 'pages-navigation'));
+echo elgg_view_module('aside', $title, $content);
 
 ?><?php //@todo JS 1.8: no ?>
 <script type="text/javascript">
@@ -51,4 +56,3 @@ if ($selected_page) {
 });
 
 </script>
-

@@ -20,11 +20,7 @@ function embed_init() {
 	// Page handler for the modal media embed
 	elgg_register_page_handler('embed', 'embed_page_handler');
 	
-	//elgg_register_js('elgg.embed', 'js/embed/embed.js', 'footer');
-	// Facyla : le chargement dynamique ne suffit pas - de plus le simplecache se justifie ici
-	elgg_register_js('elgg.embed', elgg_get_simplecache_url('js', 'embed/embed'));
-	elgg_register_simplecache_view('js/embed/embed');
-
+	elgg_register_js('elgg.embed', 'js/embed/embed.js', 'footer');
 }
 
 /**
@@ -45,14 +41,13 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 	$url = 'embed';
 	if (elgg_get_page_owner_guid()) {
 		$url = 'embed?container_guid=' . elgg_get_page_owner_guid();
-		//$url .= '&internalname=' . $vars['id']; // Facyla
 	}
 	
 	$items[] = ElggMenuItem::factory(array(
 		'name' => 'embed',
 		'href' => $url,
 		'text' => elgg_echo('embed:media'),
-		'rel' => 'lightbox',
+		'rel' => "embed-lightbox-{$vars['id']}",
 		'link_class' => "elgg-longtext-control elgg-lightbox embed-control embed-control-{$vars['id']}",
 		'priority' => 10,
 	));
@@ -103,8 +98,7 @@ function embed_page_handler($page) {
 		elgg_set_page_owner_guid($container_guid);
 	}
 
-  // Cf. modifs dans le init : on a besoin d'avoir chargé les JS avant
-  echo elgg_view('embed/layout');
+	echo elgg_view('embed/layout');
 
 	// exit because this is in a modal display.
 	exit;
@@ -157,4 +151,3 @@ function embed_get_list_options($options = array()) {
 
 	return $options;
 }
-
