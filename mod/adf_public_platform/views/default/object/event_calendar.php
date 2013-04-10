@@ -63,7 +63,7 @@ if ($full) {
 	$month = date('n', $event->start_date);
 	$month_translate = array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
 	//monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
-	$month = $month_translate[$month];
+	$month = $month_translate[(int)$month-1];
 	$day = date('d', $event->start_date);
 	$year = date('Y', $event->start_date);
 	$icon = '<p class="date">' . $month . ' <span>' . $day . '</span> ' . $year . '</p>';
