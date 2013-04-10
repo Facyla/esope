@@ -2,7 +2,7 @@
 /**
 * Profile Manager
 * 
-* Overrules group edit form to support options (radio, pulldown, multiselect)
+* Overrules group edit form to support options (radio, dropdown, multiselect)
 * 
 * @package profile_manager
 * @author ColdTrick IT Solutions
@@ -87,11 +87,22 @@ if(count($group_fields["fields"]) > 0){
 		}
 		
 		echo $line_break;
+		
+		if($valtype == "dropdown"){
+			// add div around dropdown to let it act as a block level element
+			echo "<div>";
+		}
+		
 		echo elgg_view("input/{$valtype}", array(
 			'name' => $metadata_name,
 			'value' => $value,
 			'options' => $options
 		));
+		
+		if($valtype == "dropdown"){
+			echo "</div>";
+		}
+		
 		echo '</div>';
 	}
 }

@@ -26,10 +26,14 @@
 	 * @return unknown_type
 	 */
 	function profile_manager_init(){
+		// register libraries
+		elgg_register_js("jquery.ui.multiselect", elgg_get_site_url() . "mod/profile_manager/vendors/jquery_ui_multiselect/jquery.multiselect.js");
 		
 		// Extend CSS
 		elgg_extend_view("css/admin", "profile_manager/css/global");
 		elgg_extend_view("css/admin", "profile_manager/css/admin");
+		elgg_extend_view("css/admin", "profile_manager/css/multiselect");
+		elgg_extend_view("css/elgg", "profile_manager/css/multiselect");
 		elgg_extend_view("css/elgg", "profile_manager/css/global");
 		elgg_extend_view("css/elgg", "profile_manager/css/site");
 		
@@ -50,6 +54,8 @@
 			elgg_register_widget_type("profile_completeness", elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
 		}
 		
+		elgg_register_widget_type("register", elgg_echo("widgets:register:title"), elgg_echo("widgets:register:description"), "index");
+		
 		// free_text on register form
 		elgg_extend_view("register/extend_side", "profile_manager/register/free_text");
 		
@@ -62,14 +68,25 @@
 			elgg_extend_view("register/extend", "profile_manager/register/fields");
 		}
 		
+		// login history
+		elgg_extend_view('core/settings/statistics', 'profile_manager/account/login_history');
+		
+		// hook for extending menus
+		elgg_register_plugin_hook_handler('register', 'menu:entity', 'profile_manager_register_entity_menu', 600);
+		
+		elgg_register_plugin_hook_handler('permissions_check:annotate', 'site', 'profile_manager_permissions_check_annotate');
+		
 		// enable username change
-		$enable_username_change = elgg_get_plugin_setting("enable_username_change", "profile_manager");
-		if($enable_username_change == "yes" || ($enable_username_change == "admin" && elgg_is_admin_logged_in())){
-			elgg_extend_view("forms/account/settings", "profile_manager/account/username", 50); // positioned at the beginning of the options
-			
-			// register hook for saving the new username
-			elgg_register_plugin_hook_handler('usersettings:save', 'user', 'profile_manager_username_change_hook');
-		}
+		elgg_extend_view("forms/account/settings", "profile_manager/account/username", 50); // positioned at the beginning of the options
+
+		// register hook for saving the new username
+		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'profile_manager_username_change_hook');
+		
+		// site join event handler
+		elgg_register_event_handler("create", "member_of_site", "profile_manager_create_member_of_site");
+		
+		// always cleanup
+		elgg_register_event_handler("delete", "member_of_site", "profile_manager_delete_member_of_site");
 		
 		// Run once function to configure this plugin
 		run_function_once('profile_manager_run_once', 1287964800); // 2010-10-25
@@ -121,6 +138,9 @@
 			elgg_load_js('lightbox');
 			elgg_load_css('lightbox');
 			
+			elgg_register_admin_menu_item('administer', 'export', 'users');
+			elgg_register_admin_menu_item('administer', 'inactive', 'users');
+			
 			if(elgg_is_active_plugin("groups")){
 				elgg_register_admin_menu_item('configure', 'group_fields', 'appearance');
 			}
@@ -166,4 +186,8 @@
 	elgg_register_action("profile_manager/profile_types/delete", dirname(__FILE__) . "/actions/profile_types/delete.php", "admin");
 
 	elgg_register_action("profile_manager/user_summary_control/save", dirname(__FILE__) . "/actions/user_summary_control/save.php", "admin");
+
+	elgg_register_action("profile_manager/users/export_inactive", dirname(__FILE__) . "/actions/users/export_inactive.php", "admin");
+
+	elgg_register_action("profile_manager/register/validate", dirname(__FILE__) . "/actions/register/validate.php", "public");
 	

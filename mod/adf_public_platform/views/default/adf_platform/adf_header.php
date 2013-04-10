@@ -24,7 +24,7 @@ if (elgg_is_logged_in()) {
   if (elgg_is_active_plugin('categories')) {
     $categories = '';
     $themes = $site->categories;
-    foreach ($themes as $theme) {
+    if ($themes) foreach ($themes as $theme) {
       $categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
     }
   }

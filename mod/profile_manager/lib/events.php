@@ -146,7 +146,52 @@
 			elgg_set_ignore_access($ia);
 		}
 		
-		if($profile_icon = $_FILES["profile_icon"]){
+		if(isset($_FILES["profile_icon"])){
 			add_profile_icon($object);
 		}
+		
+		if($terms = elgg_get_plugin_setting("registration_terms", "profile_manager")){
+			$object->setPrivateSetting("general_terms_accepted", time());
+		}
+		
+		elgg_clear_sticky_form('profile_manager_register');
 	}	
+	
+	/**
+	 * Adds a river event when a user joins the site
+	 * 
+	 * @param unknown_type $event
+	 * @param unknown_type $object_type
+	 * @param unknown_type $object
+	 */
+	function profile_manager_create_member_of_site($event, $object_type, $object){
+		$enable_river_event = elgg_get_plugin_setting("enable_site_join_river_event", "profile_manager");
+		if($enable_river_event !== "no"){
+			
+			$user_guid = $object->guid_one;
+			$site_guid = $object->guid_two;
+			
+			// clear current river events
+			elgg_delete_river(array("view" => 'river/relationship/member_of_site/create', "subject_guid" => $user_guid, "object_guid" => $site_guid));
+			
+			// add new join river event
+			add_to_river('river/relationship/member_of_site/create', 'join', $user_guid, $site_guid);
+		}
+	}
+
+	/**
+	 * Remove river join event on site leave
+	 * 
+	 * @param unknown_type $event
+	 * @param unknown_type $object_type
+	 * @param unknown_type $object
+	 */
+	function profile_manager_delete_member_of_site($event, $object_type, $object){
+		// remove previous join events
+		$user_guid = $object->guid_one;
+		$site_guid = $object->guid_two;
+		
+		// clear current river events
+		elgg_delete_river(array("view" => 'river/relationship/member_of_site/create', "subject_guid" => $user_guid, "object_guid" => $site_guid));
+	}
+	

@@ -11,10 +11,7 @@
 	*/
 
 	$english = array(
-	
-		// Generic action words 
-		'add' => "Add",
-		
+					
 		// entity names
 		'item:object:custom_profile_field' => 'Custom Profile Field',
 		'item:object:custom_profile_field_category' => 'Custom Profile Field Category',
@@ -27,6 +24,12 @@
 		'admin:appearance:group_fields' => "Edit Group Fields",
 		'admin:appearance:export_fields' => "Export Profile Data",
 		'admin:appearance:user_summary_control' => "User Summary Control",
+
+		'admin:groups' => "Groups",
+		'admin:groups:export' => "Export groups",
+		
+		'admin:users:export' => "Export users",
+		'admin:users:inactive' => "List inactive users",
 	
 		// plugin settings
 		'profile_manager:settings:registration' => 'Registration',
@@ -35,8 +38,9 @@
 		'profile_manager:settings:other' => 'Other',
 	
 		'profile_manager:settings:profile_icon_on_register' => 'Add mandatory profile icon input field on register form',
-		'profile_manager:settings:simple_access_control' => 'Show just one access control pulldown on edit profile form',
+		'profile_manager:settings:simple_access_control' => 'Show just one access control dropdown on edit profile form',
 		'profile_manager:settings:default_profile_type' => "Default profile type on registration form",
+		'profile_manager:settings:hide_profile_type_default' => "Hide the 'Default' profile type on registration form",
 	
 		'profile_manager:settings:hide_non_editables' => 'Hide the non editable fields from the Edit Profile form',
 	
@@ -62,6 +66,7 @@
 		'profile_manager:settings:enable_profile_completeness_widget' => "Enable the profile completeness widget",
 		'profile_manager:settings:enable_username_change' => "Allow users to change their username in settings",
 		'profile_manager:settings:enable_username_change:option:admin' => "Admin only",
+		'profile_manager:settings:enable_site_join_river_event' => "Add a river event when people join this site",
 		
 		'profile_manager:settings:registration:terms' => "To show an 'Accept terms' field on the registration page, please fill in the URL to the terms below",
 		'profile_manager:settings:registration:extra_fields' => "Where to show extra profile fields",
@@ -80,7 +85,7 @@
 		'profile_manager:admin:field_type' => "Field Type",
 		'profile_manager:admin:options:datepicker' => 'Datepicker',
 		'profile_manager:admin:options:pm_datepicker' => 'Datepicker (Profile Manager Style)',
-		'profile_manager:admin:options:pulldown' => 'Pulldown',
+		'profile_manager:admin:options:dropdown' => 'Dropdown',
 		'profile_manager:admin:options:radio' => 'Radio',
 		'profile_manager:admin:options:multiselect' => 'MultiSelect',
 		'profile_manager:admin:options:file' => 'File',
@@ -151,12 +156,17 @@
 		'profile_manager:user_summary_control:options:spacers:new_line' => "New line",
 		'profile_manager:user_summary_control:options:spacers:space' => "Space",
 		'profile_manager:user_summary_control:options:spacers:dash' => "-",
+		
+		// profile manager inactive users
+		'profile_manager:admin:users:inactive:last_login' => "Last login before",
+		'profile_manager:admin:users:inactive:list' => "Inactive users",
+		'profile_manager:admin:users:inactive:never' => "Never",
+		'profile_manager:admin:users:inactive:download' => "Download",
 	
 		// admin actions
 		'profile_manager:actions:title' => 'Actions',
 	
 		// Reset
-		'profile_manager:actions:reset' => 'Reset',
 		'profile_manager:actions:reset:description' => 'Removes all custom profile fields',
 		'profile_manager:actions:reset:confirm' => 'Are you sure you wish to reset all profile fields?',
 		'profile_manager:actions:reset:error:unknown' => 'Unknown error occurred while resetting all profile fields',
@@ -257,7 +267,7 @@
 			If you leave the label empty, you can internationalize the profile field label (<i>profile:[name]</i>).<br /><br />
 			Use the hint field to supply on input forms (register and profile/group edit) a hoverable icon with a field description.
 			If you leave the hint empty, you can internationalize the hint (<i>profile:hint:[name]</i>).<br /><br />
-			Options are only mandatory for fieldtypes <i>Pulldown, Radio and MultiSelect</i>.
+			Options are only mandatory for fieldtypes <i>Dropdown, Radio and MultiSelect</i>.
 		",
 		'profile_manager:tooltips:profile_field_additional' => "
 			<b>Show on register</b><br />
@@ -319,6 +329,10 @@
 		'widgets:profile_completeness:description' => 'Show the profile completeness',
 		'widgets:profile_completeness:view:tips' => 'Tip! Update your %s to improve the Profile Completeness.',
 		'widgets:profile_completeness:view:complete' => 'Congratulations! Your profile is 100% complete!',
+		
+		'widgets:register:title' => "Register",
+		'widgets:register:description' => "Show a register box",
+		'widgets:register:loggedout' => "You need to be logged out to use this widget",
 	
 		// datepicker		
 		'profile_manager:datepicker:trigger' => 'Select a date',
@@ -351,6 +365,7 @@
 	
 		// register pre check
 		'profile_manager:register_pre_check:missing' => 'The next field must be filled: %s',
+		'profile_manager:register_pre_check:terms' => 'You need to accept the terms to complete the registration',
 		'profile_manager:register_pre_check:profile_icon:error' => 'Error uploading your profile icon (probably related to the file size)',
 		'profile_manager:register_pre_check:profile_icon:nosupportedimage' => 'Uploaded profile icon is not the right type (jpg, gif, png)',
 	
@@ -362,7 +377,16 @@
 		// change username form
 		'profile_manager:account:username:button' => "Click to change your username",
 		'profile_manager:account:username:info' => "Change your username. An icon will tell you if the username entered is valid and available.",
-
+		
+		// river events
+		'river:join:site:default' => '%s joined the site',
+	
+		// login history
+		'profile_manager:account:login_history' => "Login History",
+		'profile_manager:account:login_history:date' => "Date",
+		'profile_manager:account:login_history:ip' => "IP Address",
+		
+	
 	);
 	
 	add_translation("en", $english);

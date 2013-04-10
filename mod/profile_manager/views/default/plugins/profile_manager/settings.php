@@ -98,6 +98,14 @@
 			<?php echo elgg_view("input/dropdown", array("name" => "params[default_profile_type]", "options_values" => $profile_types, "value" => $vars['entity']->default_profile_type)); ?>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<?php echo elgg_echo('profile_manager:settings:hide_profile_type_default'); ?>
+		</td>
+		<td>
+			<?php echo elgg_view("input/dropdown", array("name" => "params[hide_profile_type_default]", "options_values" => $noyes_options, "value" => $vars['entity']->hide_profile_type_default)); ?>
+		</td>
+	</tr>
 	<?php } ?>
 	<tr>
 		<td colspan="2">
@@ -231,6 +239,14 @@
 		</td>
 		<td>
 			<?php echo elgg_view("input/dropdown", array("name" => "params[enable_username_change]", "options_values" => $enable_username_change_options, "value" => $vars['entity']->enable_username_change)); ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php echo elgg_echo('profile_manager:settings:enable_site_join_river_event'); ?>
+		</td>
+		<td>
+			<?php echo elgg_view("input/dropdown", array("name" => "params[enable_site_join_river_event]", "options_values" => $yesno_options, "value" => $vars['entity']->enable_site_join_river_event)); ?>
 		</td>
 	</tr>
 </table>

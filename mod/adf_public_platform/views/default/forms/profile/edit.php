@@ -10,11 +10,9 @@
 	* @link http://www.coldtrick.com/
 	* 
 	* @uses $vars['entity'] The user entity
-	* @uses $vars['profile'] Profile items from $CONFIG->profile, defined in profile/start.php for now 
+	* @uses $vars['profile'] Profile items from get_config('profile_fields'), defined in profile/start.php for now 
 	*/
 	
-	global $CONFIG;
-
 	// id profile_edit_form
 	?>	
 	<div>
@@ -28,8 +26,6 @@
 	$categorized_fields = profile_manager_get_categorized_fields($vars['entity'], true);
 	$cats = $categorized_fields['categories'];
 	$fields = $categorized_fields['fields'];
-	
-	$user_metadata = profile_manager_get_user_profile_data($vars['entity']);
 	
 	$edit_profile_mode = elgg_get_plugin_setting("edit_profile_mode", "profile_manager");
 	$simple_access_control = elgg_get_plugin_setting("simple_access_control","profile_manager");
@@ -51,23 +47,23 @@
 				"type" => "object",
 				"subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"limit" => false,
-				"owner_guid" => $CONFIG->site_guid
+				"owner_guid" => elgg_get_site_entity()->getGUID()
 			); 
 			
 			if($types = elgg_get_entities($options)){
 				
-				$pulldown_options = array();
-				$pulldown_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
+				$dropdown_options = array();
+				$dropdown_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
 				
 				foreach($types as $type){
 					
-					$pulldown_options[$type->getGUID()] = $type->getTitle();
+					$dropdown_options[$type->getGUID()] = $type->getTitle();
 					
 					// preparing descriptions of profile types
 					$description = $type->getDescription();
 					
 					if(!empty($description)){
-						$types_description .= "<div id='custom_profile_type_description_" . $type->getGUID() . "' class='custom_profile_type_description'>";
+						$types_description = "<div id='custom_profile_type_description_" . $type->getGUID() . "' class='custom_profile_type_description'>";
 						$types_description .= "<h3 class='settings'>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:description") . "</h3>";
 						$types_description .= $description;
 						$types_description .= "</div>";
@@ -77,7 +73,7 @@
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
-						changeProfileType();
+						elgg.profile_manager.change_profile_type();
 					});
 				</script>
 				<?php
@@ -86,19 +82,19 @@
 				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
 				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
 														"id" => "custom_profile_type",
-														"options_values" => $pulldown_options,
-														"onchange" => "changeProfileType();",
-														"value" => profile_manager_get_user_profile_data_value($user_metadata, "custom_profile_type")));
+														"options_values" => $dropdown_options,
+														"onchange" => "elgg.profile_manager.change_profile_type();",
+														"value" => $vars['entity']->custom_profile_type));
 				echo elgg_view('input/hidden', array('name' => 'accesslevel[custom_profile_type]', 'value' => ACCESS_PUBLIC)); 
 				echo "</div>";
 				
 				echo $types_description;
 			}
 		} else {
-			$profile_type = profile_manager_get_user_profile_data_value($user_metadata, "custom_profile_type");
+			$profile_type = $vars['entity']->custom_profile_type;
 			
 			if(!empty($profile_type)){
-				echo elgg_view("input/hidden", array("name" => custom_profile_type, "value" => $profile_type));
+				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
@@ -120,7 +116,7 @@
 			} else {
 				$title = $cat->getTitle();
 			}
-			
+		
 			$class = "";
 			if(!empty($cat_guid) && ($cat instanceof ProfileManagerCustomFieldCategory)){
 				
@@ -145,17 +141,20 @@
 					}
 				}
 			}
-			
+		
 			$tabs[] = array(
 				'title' => $title,
 				'url' => "#" . $cat_guid,
+				'id' => $cat_guid,
 				'class' => $class
 			);
 			
 			$tab_content .= "<div id='profile_manager_profile_edit_tab_content_" . $cat_guid . "' class='profile_manager_profile_edit_tab_content'>\n";
-			
-			$list_content .= "<div class='" . $class . "'>";
-			$list_content .= "<h3 class='settings'>" . $title . "</h3>";
+				
+			$list_content .= "<div id='" . $cat_guid . "' class='" . $class . "'>";
+			if(count($cats) > 1){
+				$list_content .= "<h3 class='settings'>" . $title . "</h3>";
+			}
 			$list_content .= "<fieldset>";
 			
 			// display each field for currect category
@@ -176,9 +175,17 @@
 				$title = $field->getTitle();
 								
 				// get value
-				if(array_key_exists($metadata_name, $user_metadata)){
-					$value = $user_metadata[$metadata_name]->value;
-					$access_id = $user_metadata[$metadata_name]->access_id;
+				$metadata = elgg_get_metadata(array(
+					'guid' => $vars['entity']->guid,
+					'metadata_name' => $metadata_name,
+					'limit' => false
+				));
+				
+				if($metadata){
+					$metadata = $metadata[0];
+					
+					$value = $vars['entity']->$metadata_name;
+					$access_id = $metadata->access_id;
 				} else {
 					$value = '';
 					$access_id = get_default_access($vars["entity"]);
@@ -190,13 +197,16 @@
 					$field_result = "<div>";
 				}	
 				
-				$field_result .= "<label for=\"" . $metadata_name . "\">" . $title;
-				$field_result .= " &nbsp; " . elgg_view('input/access', array('name' => 'accesslevel[' . $metadata_name . ']', 'value' => $access_id)); 
-				$field_result .= "</label>";
+				$field_result .= "<label for=\"text_more_info_" . $metadata_name . "\">" . $title . "</label>";
 				
 				if($hint = $field->getHint()){ 
 					$field_result .= "<span class='custom_fields_more_info' id='more_info_". $metadata_name . "'></span>";		
 					$field_result .= "<span class='custom_fields_more_info_text' id='text_more_info_" . $metadata_name . "'>" . $hint . "</span>";
+				}
+				
+				if($valtype == "dropdown"){
+					// add div around dropdown to let it act as a block level element
+					$field_result .= "<div>";
 				}
 				
 				$field_result .= elgg_view("input/" . $valtype, array(
@@ -205,6 +215,11 @@
 																'options' => $options
 																));
 				
+				if($valtype == "dropdown"){
+					$field_result .= "</div>";
+				}
+				
+				$field_result .= elgg_view('input/access', array('name' => 'accesslevel[' . $metadata_name . ']', 'value' => $access_id)); 
 				$field_result .= "</div>";
 				
 				$tab_content .= $field_result;

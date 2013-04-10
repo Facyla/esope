@@ -5,7 +5,7 @@
  */
 
 	$user = elgg_get_page_owner_entity();
-	
+	$about = "";
 	if ($user->isBanned()) {
 		$about .= "<p class='profile-banned-user'>";
 		$about .= elgg_echo('banned');
@@ -34,6 +34,8 @@
 	$categorized_fields = profile_manager_get_categorized_fields($user);
 	$cats = $categorized_fields['categories'];
 	$fields = $categorized_fields['fields'];
+	
+	$details_result = "";
 	
 	if($show_profile_type_on_profile != "no"){
 		if($profile_type_guid = $user->custom_profile_type){
@@ -105,13 +107,19 @@
 					// adjust output type
 					if($field->output_as_tags == "yes"){
 						$output_type = "tags";
-						$value = string_to_tag_array($value);
+						if(!is_array($value)){
+							$value = string_to_tag_array($value);
+						}
 					} else {
 						$output_type = $field->metadata_type;
 					}
 					
 					if($field->metadata_type == "url"){
 						$target = "_blank";
+						// validate urls
+						if (!preg_match('~^https?\://~i', $value)) {
+							$value = "http://$value";
+						}
 					} else {
 						$target = null;
 					}

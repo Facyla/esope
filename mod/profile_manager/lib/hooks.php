@@ -11,14 +11,34 @@
 	function profile_manager_profile_override($hook_name, $entity_type, $return_value, $parameters){
 		
 		// Get all the custom profile fields
-		$options = array(
-				"type" => "object",
-				"subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_SUBTYPE,
-				"limit" => false,
-				"owner_guid" => elgg_get_site_entity()->getGUID()
-			);
+		
+		// get from cache
+		$site_guid = elgg_get_config("site_guid");
+		
+		$entities = elgg_load_system_cache("profile_manager_profile_fields_" . $site_guid);
+		if($entities === null){
+			$options = array(
+					"type" => "object",
+					"subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_SUBTYPE,
+					"limit" => false,
+					"owner_guid" => elgg_get_config("site_guid")
+				);
+			$entities = elgg_get_entities($options);
+			elgg_save_system_cache("profile_manager_profile_fields_" . $site_guid, serialize($entities));
+		} else {
+			$entities = unserialize($entities);
+		}
 
-		if($entities = elgg_get_entities($options)){
+		if($entities){
+			
+			$guids = array();
+			
+			foreach($entities as $entity){
+				$guids[] = $entity->getGUID();
+			}
+			
+			elgg_get_metadata_cache()->populateFromEntities($guids);
+			
 			$result = array();
 			$translations = array();
 			$context = elgg_get_context();
@@ -59,22 +79,37 @@
 	function profile_manager_group_override($hook_name, $entity_type, $return_value, $parameters){
 		$result = $return_value;
 		
-		// Get all custom group fields
-		$options = array(
-				"type" => "object",
-				"subtype" => CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE,
-				"limit" => false,
-				"owner_guid" => elgg_get_site_entity()->getGUID()
+		// get from cache
+		$site_guid = elgg_get_config("site_guid");
+		$entities = elgg_load_system_cache("profile_manager_group_fields_" . $site_guid);
+		if($entities === null){
+			$options = array(
+					"type" => "object",
+					"subtype" => CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE,
+					"limit" => false,
+					"owner_guid" => elgg_get_config("site_guid")
 			);
+			$entities = elgg_get_entities($options);
+			elgg_save_system_cache("profile_manager_group_fields_" . $site_guid, serialize($entities));
+		} else {
+			$entities = unserialize($entities);
+		}
 		
-		$group_fields = elgg_get_entities($options);
-		
-		if($group_fields){
+		if($entities){
+			
+			$guids = array();
+				
+			foreach($entities as $entity){
+				$guids[] = $entity->getGUID();
+			}
+				
+			elgg_get_metadata_cache()->populateFromEntities($guids);
+			
 			$result = array();
 			$ordered = array();
 			
 			// Order the group fields and filter some types out
-			foreach($group_fields as $group_field){
+			foreach($entities as $group_field){
 				if($group_field->admin_only != "yes" || elgg_is_admin_logged_in()){
 					$ordered[$group_field->order] = $group_field;
 				}				
@@ -127,7 +162,9 @@
 						
 						"username" => "text",
 						"email" => "text",
-						"language" => "text"						
+						"language" => "text",						
+						"icontime" => "text",
+						"code" => "text"			
 					);
 				
 				foreach($system_fields as $metadata_name => $metadata_type){
@@ -176,6 +213,9 @@
 		// validate mandatory profile fields
 		$profile_icon = elgg_get_plugin_setting("profile_icon_on_register", "profile_manager");
 		
+		// general terms
+		$terms = elgg_get_plugin_setting("registration_terms", "profile_manager");
+		
 		// new
 		$profile_type_guid = get_input("custom_profile_fields_custom_profile_type", false);
 		$fields = profile_manager_get_categorized_fields($user, true, true, true, $profile_type_guid);
@@ -185,14 +225,14 @@
 			foreach($fields["categories"] as $cat_guid => $cat){
 				$cat_fields = $fields["fields"][$cat_guid]; 
 				foreach($cat_fields as $field){
-					if($field->show_on_register == "yes" && $field->admin_only != "yes" && $field->mandatory == "yes"){
+					if($field->show_on_register == "yes" && $field->mandatory == "yes"){
 						$required_fields[] = $field;
 					}
 				}
 			}
 		}
 		
-		if($required_fields || $profile_icon == "yes"){
+		if($terms || $required_fields || $profile_icon == "yes"){
 		    
 		    $custom_profile_fields = array();
 		    
@@ -232,6 +272,14 @@
 		    		forward(REFERER);
 		    	}
 		    }
+		    
+		    if($terms){
+		    	$terms_accepted = get_input("accept_terms");
+		    	if($terms_accepted !== "yes"){
+		    		register_error(elgg_echo("profile_manager:register_pre_check:terms"));
+		    		forward(REFERER);
+		    	}
+		    }
 		}
 	}
 
@@ -247,16 +295,20 @@
 		$user_guid = (int) get_input('guid');
 		$new_username = get_input('username');
 		
-		if(!empty($user_guid) && !empty($new_username)){
-			if(profile_manager_validate_username($new_username)){
-				if($user = get_user($user_guid)){
-					if($user->canEdit()){
-						if($user->username !== $new_username){
-							$user->username = $new_username;
-							if($user->save()){
-								elgg_register_plugin_hook_handler("forward", "system", "profile_manager_username_change_forward_hook");
-								
-								system_message(elgg_echo('profile_manager:action:username:change:succes'));
+		$enable_username_change = elgg_get_plugin_setting("enable_username_change", "profile_manager");
+		if($enable_username_change == "yes" || ($enable_username_change == "admin" && elgg_is_admin_logged_in())){
+		
+			if(!empty($user_guid) && !empty($new_username)){
+				if(profile_manager_validate_username($new_username)){
+					if($user = get_user($user_guid)){
+						if($user->canEdit()){
+							if($user->username !== $new_username){
+								$user->username = $new_username;
+								if($user->save()){
+									elgg_register_plugin_hook_handler("forward", "system", "profile_manager_username_change_forward_hook");
+									
+									system_message(elgg_echo('profile_manager:action:username:change:succes'));
+								}
 							}
 						}
 					}
@@ -291,17 +343,30 @@
 	 */
 	function profile_manager_register_entity_menu($hook_name, $entity_type, $return_value, $params){
 		
-		if(!elgg_in_context("widgets") && elgg_instanceof($params['entity'], 'user')){
-			if(elgg_get_plugin_setting("user_summary_control", "profile_manager") == "yes"){
-				// cleanup existing menu items (location is added in core/lib/users.php)
-				if(!empty($return_value)){
-					foreach($return_value as $key => $menu_item){
-						if($menu_item->getName() == "location"){
-							unset($return_value[$key]);
+		// cleanup existing menu items (location is added in core/lib/users.php)
+		if(!empty($return_value)){
+			foreach($return_value as $key => $menu_item){
+				if($menu_item->getName() == "location"){
+					// add the new and improved version that supports 'old' location as tags field
+					if ($location = $params["entity"]->location) {
+						if(is_array($location)){
+							$location = implode(",", $location);
 						}
+						$options = array(
+									'name' => 'location',
+									'text' => "<span>$location</span>",
+									'href' => false,
+									'priority' => 150,
+						);
+						$location_menu = ElggMenuItem::factory($options);
+						$return_value[$key] = $location_menu;
 					}
 				}
-				
+			}
+		}
+		
+		if(!elgg_in_context("widgets") && elgg_instanceof($params['entity'], 'user')){
+			if(elgg_get_plugin_setting("user_summary_control", "profile_manager") == "yes"){
 				// add optional custom profile field data
 				$current_config = elgg_get_plugin_setting("user_summary_config", "profile_manager");
 				if(!empty($current_config)){
@@ -358,8 +423,24 @@
 						}
 					}
 				}
-				
-				return $return_value;
 			}
 		}
+		
+		return $return_value;
+	}
+	
+	/**
+	*
+	* Used to prevent likes on site objects
+	* @param unknown_type $hook_name
+	* @param unknown_type $entity_type
+	* @param unknown_type $return_value
+	* @param unknown_type $parameters
+	*/
+	function profile_manager_permissions_check_annotate($hook_name, $entity_type, $return_value, $params){
+		$return = $return_value;
+		if(is_array($params) && (elgg_extract("annotation_name", $params) == "likes")){
+			$return = false;
+		}
+		return $return;
 	}
