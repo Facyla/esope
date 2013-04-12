@@ -65,7 +65,13 @@ $css = elgg_get_loaded_css();
 	<!--[if lt IE 9]>
 		<script type="text/javascript" src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/views/default/adf_platform/js/html5-ie.php"></script>
 	<![endif]-->
-			
+	
+	<?php
+	$config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
+	// CSS complémentaire configurable
+	if (!empty($config_css)) { echo '<style>' . $config_css . '</style>'; }
+	?>
+	
 	<?php echo $feedref; ?>
 
 <?php foreach ($js as $script) { ?>

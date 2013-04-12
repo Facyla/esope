@@ -88,7 +88,7 @@ $vars['theme-config-css'] = array(
   $color3 = $css['color3'];
 */
 // Additional config CSS
-$config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
+//$config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 
 
 /*******************************************************************************
@@ -138,7 +138,7 @@ echo elgg_view('css/elements/helpers', $vars);
 echo elgg_view('css', $vars);
 
 
-// CSS complémentaire configurable
-if (!empty($config_css)) { echo $config_css; }
+// CSS complémentaire configurable => directement chargé dans le page/elements/head
+//if (!empty($config_css)) { echo $config_css; }
 
 

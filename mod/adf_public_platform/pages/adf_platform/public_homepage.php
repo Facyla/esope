@@ -72,67 +72,77 @@ if ($displaystats == "yes") {
 }
 
 
+$content = '<div id="adf-homepage" class="interne">';
 
-// Construction de la page proprement dite
-header("Content-type: text/html; charset=UTF-8");
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<head>
-  <?php echo elgg_view('page/elements/head', $vars); ?>
-  <?php echo '<script type="text/javascript">' . elgg_view('js/walled_garden') . '</script>'; ?>
-</head>
+/*
+texte d'accueil (idem celui en mode intranet)
+liste des groupes publics (icône + titre) - aléatoire parmi les groupes en Une
+fil d'activité global
 
-<body>
+bloc agenda
+bloc de connexion
+bloc d'inscription
+*/
 
-<header>
-  <div class="interne">
-    <?php
-    $headertitle = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
-    if (empty($headertitle)) echo '<h1 class="invisible">' . $CONFIG->site->name . '</h1>';
-    else echo '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
-    ?>
-  </div>
-</header>
-
-<div class="elgg-page-messages">
-  <?php echo elgg_view('page/elements/messages', array('object' => $vars['sysmessages'])); ?>
-</div>
-
-<div class="clearfloat"></div>
-
-<div id="adf-homepage" class="interne">
+$content .= '<div style="width:400px; float:left; margin-left:40px;">';
+  $intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
+  if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
   
-  <div id="adf-public-col1">
-    <?php
-    $intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
-    if (!empty($intro)) echo $intro . '<div class="clearfloat"></div>';
-    
-    echo '<div id="adf-loginbox">';
-    echo '<h2>Connexion</h2>';
-    // Connexion + mot de passe perdu
-	  echo elgg_view_form('login');
-	  echo $lostpassword_form;
-	  echo '<div class="clearfloat"></div>';
-    echo '</div>';
-    ?>
-  </div>
-
-  <div id="adf-public-col2">
-    <?php
-    // Création nouveau compte
-    if (elgg_get_config('allow_registration')) { echo $register_form; }
-    ?>
-  </div>
+  // Evenements proches
+  if (elgg_is_active_plugin('event_calendar')) {
+    require_once($CONFIG->pluginspath . "event_calendar/models/model.php");
+    $content .= '<h2>Agenda</h2>';
+    $start_date = date('Y-m-d');
+    $start_ts = strtotime($start_date);
+    $end_ts = $start_ts + 50000000;
+	  $events_count = event_calendar_get_events_between($start_ts,$end_ts,true,3,0);
+	  $events = event_calendar_get_events_between($start_ts,$end_ts,false,3,0);
+	  if ($events) $content .= elgg_view_entity_list($events, $events_count, 0, 3, false, false);
+	  else $content .= '<p>Aucun événement public pour le moment.<br />Connectez-vous pour accéder aux événements réservés aux membres.</p>';
+  }
   
-  <div class="clearfloat"></div>
-  <br />
-  <?php echo $stats; ?>
+  // Liste des groupes avec icônes
+  $content .= '<div class="clearfloat"></div><br />';
+  $content .= '<div>';
+    $content .= '<h2>Les Groupes</h2>';
+    $groups = elgg_get_entities(array('types' => 'group', 'limit' => 9999, 'reverse_order_by' => false));
+    //shuffle($groups);
+    //$content .= elgg_view_entity_list($groups, '', 0, 99, false, false, false);
+    foreach ($groups as $group) {
+      if ($group->featured_group == 'yes') {
+        $content .= '<a href="' . $group->getURL() . '">';
+        $content .= '<div style="float:left; clear:left; padding-bottom:16px; width:100%;">';
+        $content .= '<img src="' . $group->getIconURL('medium') . '" style="float:left; margin:0 6px 4px 0;"/>';
+        $content .= '<h3>' . $group->name . '</h3>';
+        $content .= '<p style="font-size:11px;">' . $group->briefdescription . '</p>';
+        $content .= '</div>';
+        $content .= '</a>';
+      }
+    }
+  $content .= '</div>';
+  
+$content .= '</div>';
 
-</div>
+$content .= '<div style="width:460px; float:right; margin-right:40px;">';
+  $content .= '<div style="border:1px solid #CCCCCC; padding:10px 20px; margin-top:30px; background:#F6F6F6;">';
+  $content .= '<h2>Connexion</h2>';
+  // Connexion + mot de passe perdu
+  $content .= elgg_view_form('login');
+  $content .= $lostpassword_form;
+  $content .= '<div class="clearfloat"></div>';
+  $content .= '</div>';
+  // Création nouveau compte
+  if (elgg_get_config('allow_registration')) { $content .= $register_form; }
+  $content .= '</div>';
+  $content .= '<div class="clearfloat"></div><br />';
+$content .= '</div>';
 
-<?php echo elgg_view('page/elements/footer'); ?>
+$content .= $stats;
 
-</body>
-</html>
+//$body = elgg_view_layout('content', array('content' => $content, 'sidebar' => '', ));
+$body = $content;
+
+
+// Affichage
+echo elgg_view_page($title, $body);
 

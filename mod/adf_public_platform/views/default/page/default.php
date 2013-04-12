@@ -46,8 +46,9 @@ header("Content-type: text/html; charset=UTF-8");
       <?php echo elgg_view('adf_platform/adf_header'); ?>
       
       <section>
-        <div class="interne">
+        <div class="interne interne-content">
           <?php echo elgg_view('page/elements/body', $vars); ?>
+          <div class="clearfloat"></div>
         </div>
       </section>
       

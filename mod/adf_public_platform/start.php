@@ -67,13 +67,14 @@ function adf_platform_init() {
     // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
     $replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
     if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
-  /*
   } else {
+    /*
     // Remplacement page d'accueil publique
     // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
     $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
     if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
-  */
+    */
+    elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
   }
   
   // MODIFICATION DES MENUS STANDARDS
@@ -572,17 +573,20 @@ function adf_platform_index() {
 	return true;
 }
 // Remplace la page d'accueil publique par une page spécifique : le mieux reste de retravailler le layout "default" ou "walled_garden"
-/*
 function adf_platform_public_index() {
   global $CONFIG;
+  /*
   $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
   $homepage_test = @fopen($CONFIG->url . $replace_public_home, 'r'); 
   if ($homepage_test) {
     fclose($homepage_test);
     include($CONFIG->url . $replace_public_home);
   }
+  */
+	include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
   return true;
 }
+/*
 */
 
 

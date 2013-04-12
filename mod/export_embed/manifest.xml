@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest>
+  <field key="author" value="Facyla" />
+  <field key="version" value="0.3 (1.8)" />
+  <field key="description" value="Export embed code" />
+  <field key="website" value="http://id.facyla.net/" />
+  <field key="copyright" value="(C) Facyla 2012" />
+  <field key="licence" value="GNU Public License version 2" />
+  <field key="elgg_version" value="2009030702" />
+</plugin_manifest>
+
+<!-- 
+======================
+INSTALLATION
+======================
+- Place in mod directory
+- Enable plugin
+
+
+======================
+Version History
+======================
+
+
+0.3 (2013.04.12) :
+ 	- add widget "import" widget (iframe)
+ 	- add various widgets types
+
+0.2.1 (2012.12.03) :
+ 	- add elgg headers for JS & style
+ 	- bypass access to load group (grou only, doesn't ignore content access !)
+
+0.2 (2012.11.30) :
+ 	- structure to allow embedding public widgets
+
+0.1 (2012.11.29), as part of cmspages
+ 	- original version by Facyla
+  - added proof-of-concept of producing an embeddable content out of an intranet ; currently with a hard-coded group activity widget => make this configurable, and maybe an independant plugin (make_embed) ?
+-->
+
+
+

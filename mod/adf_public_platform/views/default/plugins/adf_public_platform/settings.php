@@ -233,7 +233,7 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 
 <p><label><?php echo elgg_echo('adf_platform:css'); ?></label><br />
   <?php echo elgg_echo('adf_platform:css:help'); ?>
-  <?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css )); ?>
+  <?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
 </p>
 <br />
 
