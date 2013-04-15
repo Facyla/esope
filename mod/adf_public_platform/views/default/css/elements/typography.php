@@ -57,7 +57,7 @@ $color12 = $css['color12']; // #DEDEDE
 	font-style: normal;
 }
 @font-face {
-	font-family: 'itc-gothic';
+	font-family: 'itc-gothic', Arial;
 	src: url('<?php echo $urlfonts; ?>ITC_Avant_Garde_Gothic_Std_1/ITCAvantGardeStd-MdCn.otf');	
 	src: url('<?php echo $urlfonts; ?>ITC_Avant_Garde_Gothic_Std_1/ITCAvantGardeStd-MdCn.eot');
 	src: url('<?php echo $urlfonts; ?>ITC_Avant_Garde_Gothic_Std_1/ITCAvantGardeStd-MdCn.eot?#iefix') format('embedded-opentype'),
