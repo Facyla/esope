@@ -56,7 +56,7 @@ function theme_inria_index(){
   
 	$thewire = '<h3>Micromessages</h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 	elgg_push_context('widgets');
-	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 2, 'pagination' => false));
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 4, 'pagination' => false));
 	elgg_pop_context('widgets');
 	
 	 // Tableau de bord
@@ -69,11 +69,9 @@ function theme_inria_index(){
 	 $body = '<header><div class="intro">' . $firststeps . $intro . '</div></header>' 
 	  . '<div class="clearfloat"></div>
 	  
-	  <div style="width:18%;margin-right:2%;float:left;">' . elgg_view('theme_inria/sidebar_groups') . '</div>
+	  <div style="width:20%; margin-right:2%; float:left;">' . elgg_view('theme_inria/sidebar_groups') . '<div class="clearfloat"></div><br />' . elgg_view('theme_inria/users/online') . '<div class="clearfloat"></div><br />' . elgg_view('theme_inria/users/newest') . '</div>
 	  
-	  <div style="width:60%;float:left;">' . $thewire . '</div>
-	  
-	  <div style="width:18%;margin-left:2%;float:left;"> ' . elgg_view('theme_inria/users/online') . elgg_view('theme_inria/users/newest') . '</div>
+	  <div style="width:76%; float:right;">' . $thewire . '</div>
 	  
 	  <div class="clearfloat"></div><br />' . $widget_body;
   

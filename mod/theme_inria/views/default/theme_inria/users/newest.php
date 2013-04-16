@@ -1,4 +1,4 @@
-<?php $newest_members = elgg_get_entities(array('types' => 'user', 'limit' => 18));
+<?php $newest_members = elgg_get_entities(array('types' => 'user', 'limit' => 24));
 ?>
 
 <div class="sidebarBox">

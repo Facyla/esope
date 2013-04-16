@@ -1,4 +1,4 @@
-<?php $newest_members = find_active_users(1800, 8, 0);
+<?php $newest_members = find_active_users(1800, 18, 0);
 ?>
 
 <div class="sidebarBox">
