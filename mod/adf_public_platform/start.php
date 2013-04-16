@@ -74,7 +74,7 @@ function adf_platform_init() {
     $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
     if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
     */
-    elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
+    if (!$CONFIG->walled_garden) elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
   }
   
   // MODIFICATION DES MENUS STANDARDS
