@@ -1,0 +1,19 @@
+= Version History =
+2.0.1 (2012-03-02):
+
+- changed: time logging based on CRON starttime instead of running time
+
+2.0 (2011-12-06):
+
+- added: admin widget
+- changed: made plugin Elgg 1.8 compatible
+- changed: moved changelog to CHANGES.txt
+- fixed: some language inconsistencies
+
+1.0.1 (2011-05-30):
+
+- changed: registering of cron hooks
+
+1.0:
+
+- initial version
