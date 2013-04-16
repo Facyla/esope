@@ -140,7 +140,11 @@ function groups_handle_owned_page() {
  * List groups the user is memober of
  */
 function groups_handle_mine_page() {
-
+  $username = get_input('username', false);
+  $user = get_user_by_username($username);
+  if (!$user) forward();
+  elgg_set_page_owner_guid($user->guid);
+  
 	$page_owner = elgg_get_page_owner_entity();
 
 	if ($page_owner->guid == elgg_get_logged_in_user_guid()) {
