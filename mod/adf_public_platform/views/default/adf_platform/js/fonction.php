@@ -99,3 +99,6 @@ function menu(leMenu) {
 		}
 	});
 }
+$("#transverse nav").hide(); // Plus rapide
+
+
