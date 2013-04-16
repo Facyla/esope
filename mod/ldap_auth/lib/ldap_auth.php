@@ -133,7 +133,7 @@ function ldap_auth_create_profile($username)
 
 function ldap_auth_check_profile(ElggUser $user)
 {
-	if(!user && $user instanceof ElggUser) return false;
+	if(!$user && $user instanceof ElggUser) return false;
 	// require settings.php
 	$mail = new LdapServer(ldap_auth_settings_mail());
 	$info = new LdapServer(ldap_auth_settings_info());

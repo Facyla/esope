@@ -34,14 +34,15 @@ function ldap_auth_init()
  * @param string $object_type must be user
  * @param ElggUser $user
  * @return boolean
+ * Note : always return true because we want to try updating data, but not block login process
  */
 function ldap_auth_handler_update($event, $object_type, $user){
 	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
 		elgg_load_library("elgg:ldap_auth");
-		return ldap_auth_check_profile($user);
-	}else{
-		return true;
+		$return = ldap_auth_check_profile($user);
+		error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}
+	return true;
 }
 /**
  * Hook into the PAM system which accepts a username and password and attempts to authenticate
