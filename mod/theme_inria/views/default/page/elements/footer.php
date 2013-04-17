@@ -25,7 +25,7 @@ $footer = elgg_get_plugin_setting('footer', 'adf_public_platform');
 
 <div id="bande"></div>
 <div class="interne credits">
-	<p>Conception & réalisation : Facyla ~ <a href="http://www.items.fr/" target="_blank" title="Items International (nouvelle fenêtre)">Items International</a> </p>
+	<p>Conception & réalisation : Florian DANIEL ~ <a href="http://www.items.fr/" target="_blank" title="Items International (nouvelle fenêtre)">Items International</a> </p>
 	<p class="right">Plateforme construite avec le framework opensource Elgg 1.8</p>
 </div>
 

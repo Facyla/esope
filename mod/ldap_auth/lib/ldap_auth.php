@@ -25,7 +25,7 @@ function ldap_auth_login($username, $password)
 			{
 				return login($user);
 			}
-			if ($user = ldap_auth_create_profile($username))
+			if ($user = ldap_auth_create_profile($username, $password))
 			{
 				return login($user);
 			}
@@ -108,10 +108,10 @@ function ldap_auth_update_status(ElggUser $user){
  *
  * @return ElggUser|false Depending on success
  */
-function ldap_auth_create_profile($username)
+function ldap_auth_create_profile($username, $password)
 {
 	//the local password can't be use because ldap auth is call before any other authentifaction method 
-	if ($user_guid = register_user($username, "123456", "ldap name", "faux@archi.fr"))
+	if ($user_guid = register_user($username, $password, $username, "no-reply@inria.fr"))
 	{
 		$user = get_user($user_guid);
 		//update profile with ldap infos
