@@ -9,10 +9,11 @@ if ($groups) {
   elgg_push_context('widgets');
   $body = '';
   foreach ($groups as $group) {
-    $body .= elgg_view_entity_icon($group, 'small');
+    //$body .= elgg_view_entity_icon($group, 'small');
+    $body .= '<a href="' . $group->getURL() . '" style="margin:1px;"><img src="' . $group->getIconURL('small') . '" /></a>';
   }
   elgg_pop_context();
 
-  echo '<h3><a href="' . $vars['url'] . 'groups/all">' . elgg_echo("inria:groups:featured") . '</a></h3>' . $body;
+  echo '<div id="sidebar-featured-groups"><h3><a href="' . $vars['url'] . 'groups/all">' . elgg_echo("inria:groups:featured") . '</a></h3>' . $body . '</div>';
 }
 
