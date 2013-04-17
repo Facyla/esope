@@ -6,16 +6,13 @@
   ));
 
 if ($groups) {
+  elgg_push_context('widgets');
+  $body = '';
+  foreach ($groups as $group) {
+    $body .= elgg_view_entity_icon($group, 'small');
+  }
+  elgg_pop_context();
 
-elgg_push_context('widgets');
-$body = '';
-foreach ($groups as $group) {
-  $body .= elgg_view_entity_icon($group, 'small');
+  echo '<h3><a href="' . $vars['url'] . 'groups/all">' . elgg_echo("inria:groups:featured") . '</a></h3>' . $body;
 }
-elgg_pop_context();
-
-echo '<h3><a href="' . $vars['url'] . 'groups/all" >' . elgg_echo("inria:groups:featured") . '</a></h3>' . $body;
-}
-
-
 
