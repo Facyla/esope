@@ -112,7 +112,7 @@ if (elgg_is_logged_in()) {
                 </li>
                 <li class="mygroups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a>
                   <ul>
-                    <li><a href="<?php echo $vars['url']; ?>groups/new/"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
+                    <li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
                     <?php echo $groups; ?>
                   </ul>
                 </li>
