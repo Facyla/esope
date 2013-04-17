@@ -2,7 +2,7 @@
 $language = array (
   'friend_request:menu' => 'Demandes de contacts',
   'friend_request:title' => 'Demande de contact de %s',
-  'friend_request:newfriend:body' => '%s aimerait être votre contact, mais attend que vous approuviez sa demande... Merci de vous connectez et confirmer ou non cette demande !
+  'friend_request:newfriend:body' => '%s aimerait être votre contact, mais attend que vous approuviez sa demande... Merci de vous connecter et confirmer ou non cette demande.
 
 Vous pouvez voir les demandes de contact en attente en suivant ce lien (vous devez vous connecter sur le réseau avant de cliquer sur le lien, sinon vous serez redirigé sur la page de connexion) :
 %s
