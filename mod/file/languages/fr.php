@@ -15,7 +15,7 @@ $french = array(
 	'file:yours' => "Vos fichiers",
 	'file:yours:friends' => "Les fichiers de vos contacts",
 	'file:user' => "Fichiers de %s",
-	'file:friends' => "Fichiers des contacts de %s",
+	'file:friends' => "Fichiers des contacts",
 	'file:all' => "Tous les fichiers du site",
 	'file:edit' => "Editer le fichier",
 	'file:more' => "Plus de fichiers",
@@ -28,8 +28,8 @@ $french = array(
 	'file:via' => "via les fichiers",
 	'file:upload' => "Envoyer un fichier",
 	'file:replace' => "Remplacer le contenu du fichier (laisser vide pour ne rien changer)",
-	'file:list:title' => "XXXXnew on 1.8XXXX%s's %s %sXXXXgoogle:de %s %s %s",
-	'file:title:friends' => "Contacts '",
+	'file:list:title' => "%s %s de %s",
+	'file:title:friends' => "des contacts",
 
 	'file:add' => "Envoyer un fichier",
 
@@ -105,6 +105,17 @@ $french = array(
 		'file:noaccess' => "Vous n'avez pas la permission de modifier ce fichier",
 		'file:cannotload' => "Erreur de chargement du fichier",
 		'file:nofile' => "Vous devez choisir un fichier",
+		
+		'file:list:list' => "Afficher sous forme de liste",
+		'file:list:gallery' => "Afficher sous forme de galerie",
+		'file:notification' => "%s a chargé un nouveau fichier :
+
+%s
+%s
+
+Afficher et commenter le nouveau fichier :
+%s",
+
 );
 
 add_translation("fr", $french);

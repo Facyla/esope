@@ -29,19 +29,19 @@ $french = array(
 	/**
 	 * The wire river
 	 */
-	'thewire:river:create' => "posté sur le fil.",
+	'thewire:river:create' => "publié sur le Fil.",
 
 	/**
 	 * Wire widget
 	 */
-	'thewire:widget:desc' => "Affichez vos derniers messages du fil",
+	'thewire:widget:desc' => "Affichez vos derniers messages du Fil",
 	'thewire:num' => "Nombre de publications à afficher",
-	'thewire:moreposts' => "Plus de messages du fil",
+	'thewire:moreposts' => "Plus de messages du Fil",
 
 	/**
 	 * Status messages
 	 */
-	'thewire:posted' => "Votre message a bien été posté sur le fil.",
+	'thewire:posted' => "Votre message a bien été publié sur le Fil.",
 	'thewire:deleted' => "Votre message a bien été supprimé du Fil.",
 	'thewire:blank' => "Désolé, vous devez d'abord écrire un message avant de l'envoyer.",
 	'thewire:notfound' => "Désolé, le message spécifié n'a pu être trouvé.",
@@ -52,8 +52,12 @@ $french = array(
 	 */
 	'thewire:notify:subject' => "Nouveau message sur le Fil",
 	'thewire:notify:reply' => "%s a répondu à %s sur le Fil :",
-	'thewire:notify:post' => "%s posté sur le Fil:",
-
+	'thewire:notify:post' => "%s publié sur le Fil :",
+	
+	'thewire:by' => "Messages sur le Fil de %s",
+	'river:create:object:thewire' => "%s a publié sur %s",
+	'thewire:wire' => "le Fil",
+	
 );
 
 add_translation("fr", $french);

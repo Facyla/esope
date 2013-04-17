@@ -46,6 +46,9 @@ $french = array(
 
 	'reportedcontent:failed' => "Désolé, la tentative de signaler ce contenu a échoué.",
 	'reportedcontent:notarchived' => "Il a été impossible d'archiver ce signalement",
+	
+	'admin:administer_utilities:reportedcontent' => "Publications signalées",
+	
 );
 
 add_translation("fr", $french);

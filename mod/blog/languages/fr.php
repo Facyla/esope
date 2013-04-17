@@ -66,6 +66,17 @@ $french = array(
 	'blog:moreblogs' => "Plus d'articles du blog",
 	'blog:numbertodisplay' => "Nombre d'articles du blog à afficher",
 	'blog:noblogs' => "Aucun blog",
+	
+	'blog:notification' => "	%s a écrit un nouvel article de blog.
+
+%s
+
+%s
+
+Afficher et commenter le nouvel article :
+
+%s",
+	
 );
 
 add_translation("fr", $french);

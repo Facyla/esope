@@ -15,7 +15,7 @@ $language = array (
   'groups:leave' => 'Me désinscrire',
   'groups:invite' => 'Inviter',
   'groups:nofriends' => 'Vous n\'avez plus de contact à inviter à ce groupe.',
-  'groups:search:title' => 'Recherche de groupes qui contiennent le mot-clef \'%s\'',
+  'groups:search:title' => 'Groupes « %s »',
   'groups:search_in_group' => 'Rechercher dans ce groupe',
   'groups:acl' => 'Groupe : %s',
   'groups:notification' => '%s a créé un nouveau sujet de discussion dans %s :
@@ -56,13 +56,13 @@ Afficher cette discussion ou y répondre :
   'grouppost:nopost' => 'Pas de contenu',
   'groups:deletewarning' => 'Etes-vous sûr de vouloir supprimer ce groupe ? Cette action est irréversible et cela supprimera tous les contenus du groupe !',
   'groups' => 'Groupes',
-  'groups:owned' => 'Groupes dont je suis responsable',
+  'groups:owned' => 'Groupes dont je suis propriétaire',
   'groups:user' => 'Les groupes de %s',
   'groups:all' => 'Tous les groupes',
   'groups:add' => 'Créer un groupe',
   'groups:edit' => 'Modifier le groupe',
   'groups:delete' => 'Supprimer le groupe',
-  'groups:membershiprequests' => 'Gérer les demandes d \'adhésion au groupe',
+  'groups:membershiprequests' => "Gérer les demandes d'adhésion au groupe",
   'groups:invitations' => 'Invitations à rejoindre un groupe',
   'groups:icon' => 'Image du profil du groupe',
   'groups:name' => 'Nom du groupe',
@@ -73,7 +73,7 @@ Afficher cette discussion ou y répondre :
   'groups:members:title' => 'Les membres de %s',
   'groups:membership' => 'Type d\'adhésion au groupe',
   'groups:access' => 'Permissions d\'accès',
-  'groups:owner' => 'responsable',
+  'groups:owner' => 'propriétaire',
   'groups:widget:num_display' => 'Nombre de groupes à afficher',
   'groups:widgets:description' => 'Afficher les groupes dont vous êtes membre dans votre profil',
   'groups:noaccess' => 'Vous n\'avez pas accès au groupe',
@@ -210,5 +210,25 @@ ou cliquez directement sur le lien ci-dessous pour confirmer son adhésion :
   'groups:joinrequestkilled' => 'La demande d\'adhésion a été supprimée.',
   'groups:ecml:discussion' => 'Discussions de groupe',
   'groups:ecml:groupprofile' => 'Les profils de groupe',
+  
+  'groups:owned:user' => "Groupes dont %s est propriétaire",
+  'groups:membershiprequests:pending' => "Gérer les demandes d'inscriptions (%s)",
+  'groups:invitations:pending' => "Invitations en attente (%s)",
+  'groups:my_status' => "Mon statut",
+  'groups:my_status:group_owner' => "Vous êtes le propriétaire de ce groupe",
+  'groups:my_status:group_member' => "Vous êtes membre du groupe",
+  'groups:subscribed' => "Notifications activées",
+  'groups:unsubscribed' => "Notifications désactivées",
+  'groups:owner:warning' => "Attention ! Si vous changez cette valeur, vous ne serez plus propriétaire de ce groupe.",
+  'groups:cantcreate' => "Vous ne pouvez créer de groupe. Seul un administrateur est autorisé à le faire.",
+  'discussion:notification:topic:subject' => "Nouveau sujet de discussion",
+  'discussion:notification:reply:body' => "%s a répondu au sujet de discussion %s dans le groupe %s:
+
+%s
+
+Afficher et répondre au sujet de discussion :
+%s",
+  'groups:whocancreate' => "Qui peut créer un nouveau groupe ?",
+  
 );
 add_translation("fr", $language);

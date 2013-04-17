@@ -23,6 +23,9 @@ $french = array(
 		
 	'logrotate:logdeleted' => "Fichier journal supprimé (fichier log)",
 	'logrotate:lognotdeleted' => "Erreur de suppression du journal (fichier log)",
+	
+	'logrotate:delete' => "Supprimer les tables de logs archivées plus anciennes que",
+	
 );
 
 add_translation("fr", $french);

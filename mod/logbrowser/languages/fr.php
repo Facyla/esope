@@ -22,6 +22,11 @@ $french = array(
 	'logbrowser:object' => "Type de l'objet",
 	'logbrowser:object:guid' => "Aide à propos des Objets",
 	'logbrowser:action' => "Action",
+	
+	'admin:administer_utilities:logbrowser' => "Visualiseur de journal",
+	'logbrowser:ip_address' => "Adresse IP",
+	'logbrowser:no_result' => "Aucun résultat",
+	
 );
 
 add_translation("fr", $french);

@@ -102,7 +102,7 @@ if (elgg_is_logged_in()) {
                 <li class="home"><a href="<?php echo $url; ?>activity" <?php if (full_url() == $url . 'activity') { echo 'class="active elgg-state-selected"'; } ?> >Activité</a>
                 </li>
                 
-                <li class="thematiques"><a href="<?php echo $url . 'groups/all'; ?>" <?php if (full_url() == $url . 'groups/all') { echo 'class="active elgg-state-selected"'; } ?> >Parcourir</a>
+                <li class="groups"><a href="<?php echo $url . 'groups/all'; ?>" <?php if (full_url() == $url . 'groups/all') { echo 'class="active elgg-state-selected"'; } ?> >Parcourir</a>
                   <ul>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Libre+expression">Libre expression</a></li>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Missions+et+projets">Missions et projets</a></li>
@@ -110,7 +110,7 @@ if (elgg_is_logged_in()) {
                     <li><a href="<?php echo $url; ?>groups/search?tag=Institutionnel">Institutionnel</a></li>
                   </ul>
                 </li>
-                <li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a>
+                <li class="mygroups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a>
                   <ul>
                     <li><a href="<?php echo $vars['url']; ?>groups/new/"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
                     <?php echo $groups; ?>

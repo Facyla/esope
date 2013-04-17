@@ -29,16 +29,15 @@ $french = array(
 %2$s apprécie votre publication "%3$s" sur %4$s
 
 Retrouvez votre publication via :
-
 %5$s
 
 ou consultez le profil de  %2$s\'s via :
-
 %6$s
 
 Merci,
 %4$s
 ',
+  'likes:delete:confirm' => "Etes-vous sûr(e) de vouloir annuler votre appréciation ?",
 
 );
 	

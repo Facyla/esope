@@ -15,6 +15,10 @@ $french = array(
 	// messages
 	'embed:no_upload_content' => "Aucun fichier téléchargé !",
 	'embed:no_section_content' => "Aucun élément trouvé.",
+	
+	'embed:no_sections' => "Aucun plugin d'embed trouvé. Veuillez contacter votre administrateur du site pour activer un plugin supportant l'embed de contenus.",
+	
+	
 );
 
 add_translation("fr", $french);

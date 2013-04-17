@@ -112,6 +112,15 @@ $french = array(
 	/* Notifications */
 	'pages:new' => "Nouvelle page wiki",
 	
+	'pages:notification' => "%s a créé une nouvelle page :
+
+%s
+%s
+
+Afficher et commenter la nouvelle page :
+%s",
+	'pages:parent_guid' => "Page parente",
+	
 );
 
 add_translation("fr", $french);

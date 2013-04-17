@@ -78,6 +78,17 @@ $french = array(
 
 	'bookmarks:save:failed' => "Votre page n'a pu être correctement mise en lien web. Vérifiez que le titre et le lien sont corrects et réessayez.",
 	'bookmarks:delete:failed' => "Votre lien web n'a pu être supprimé. Merci de réessayer.",
+	
+	'bookmarks:notification' => "%s a ajouté un nouveau lien web :
+
+%s - %s
+
+%s
+
+Afficher et commenter le nouveau lien web :
+%s",
+  'bookmarks:save:invalid' => "L'adresse de ce lien web est invalide et n'a pas pu être sauvegardée.",
+	
 );
 
 add_translation("fr", $french);
