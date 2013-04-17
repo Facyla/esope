@@ -1,5 +1,5 @@
 <?php
-if (!include_once dirname(dirname(__FILE__)) . '/settings.php') register_error("LDAP : missing settings.php file in plugin folder - Il manque le fichier de configuration settings.php dans le dossier du plugin.");
+if (!require_once dirname(dirname(__FILE__)) . '/settings.php') register_error("LDAP : missing settings.php file in plugin folder - Il manque le fichier de configuration settings.php dans le dossier du plugin.");
 
 /**
  * ldap_auth helper functions
