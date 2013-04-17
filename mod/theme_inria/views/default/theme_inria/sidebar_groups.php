@@ -14,7 +14,7 @@ foreach ($groups as $group) {
 }
 elgg_pop_context();
 
-echo '<h3><a href="' . $vars['url'] . 'groups/all" >' . elgg_echo("groups:featured") . '</a></h3>' . $body;
+echo '<h3><a href="' . $vars['url'] . 'groups/all" >' . elgg_echo("inria:groups:featured") . '</a></h3>' . $body;
 }
 
 

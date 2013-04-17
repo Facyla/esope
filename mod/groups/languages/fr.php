@@ -136,7 +136,7 @@ Afficher cette discussion ou y répondre :
   'groups:addtopic' => 'Ajouter un sujet',
   'groups:forumlatest' => 'Dernière discussion',
   'groups:latestdiscussion' => 'Dernières discussions des forums',
-  'groups:newest' => 'Date de création"',
+  'groups:newest' => 'Date de création',
   'groups:popular' => 'Nombre des membres',
   'groupspost:success' => 'Votre réponse a bien été publiée',
   'groups:alldiscussion' => 'Dernière discussion',
