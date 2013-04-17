@@ -81,9 +81,13 @@ function theme_inria_index(){
 	  
 	  <div class="clearfloat"></div><br />' . $widget_body;
   
+	// Supprime le lien "main" (inexistant) de l'accueil
+	elgg_pop_breadcrumb();
+	elgg_push_breadcrumb('index');
+	
   $params = array( 'content' => $body, 'sidebar' => "");
 	$body = elgg_view_layout('one_column', $params);
-
+	
 	echo elgg_view_page($title, $body);
 
 	return true;
