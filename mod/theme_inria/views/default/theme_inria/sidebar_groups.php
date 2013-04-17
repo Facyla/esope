@@ -2,7 +2,7 @@
     'metadata_name' => 'featured_group',
     'metadata_value' => 'yes',
     'types' => 'group',
-    'limit' => 10,
+    'limit' => 12,
   ));
 
 if ($groups) {
@@ -10,7 +10,7 @@ if ($groups) {
   $body = '';
   foreach ($groups as $group) {
     //$body .= elgg_view_entity_icon($group, 'small');
-    $body .= '<a href="' . $group->getURL() . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
+    $body .= '<a href="' . $group->getURL() . '" title="' . $group->title . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
   }
   elgg_pop_context();
 

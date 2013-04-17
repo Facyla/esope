@@ -9,18 +9,14 @@ if ($guid > 0) {
 }
 ?>
 <script type="text/javascript">
-	<?php
-	if ($guid > 0) {
-	  ?>
-    var name = "<?php echo ($user->name); ?>";
+	<?php if ($guid > 0) { ?>
+    var name = "<?php echo ($user->username); ?>";
     var profilePic = '';    
     // strip tags
     name = name.replace(/(<([^>]+)>)/ig,"");
     profilePic = '<?php echo $profilePic; ?>';
     $("#name-area").html("<?php echo elgg_echo('group_chat:youare'); ?><span>" + name + "</span>");
-    <?php
-  }
-  ?>
+    <?php } ?>
   
   $(document).ready(function() {
     getStateOfChat();
@@ -57,7 +53,7 @@ if ($guid > 0) {
 <div id="page-wrap">
   <div id="chat-wrap">
     <div class="clear" id="groupTitleChat">
-      <div class="floatLeft"><?php echo ucfirst($vars['entity']->name); ?> Chat</div>
+      <div class="floatLeft"><?php echo ucfirst($vars['entity']->username); ?> Chat</div>
       <div class="floatRight">
         <div class="floatLeft padRht10 cursor miniMize">[-]</div>
         <div class="floatLeft padRht10 cursor maxMize">[+]</div>

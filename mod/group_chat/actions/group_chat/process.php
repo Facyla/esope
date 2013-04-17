@@ -103,7 +103,7 @@ switch($function) {
         $message = "<li class='chatTxt' id='chat' onmouseover='chatCall(this);'><div class='chatTime'>"
           //.date('h:i a')
           .date('H:i') // 24 hours format
-          ."</div><div class='clear padTop5'><div style='float:left'><a href='".$profileUrl."'><img src='".$profilePic."' title='title' width='25' height='25' /></a></div><div class='floatLeft txtDiv'><a href='".$profileUrl."'><strong>".ucfirst($nickname).":</strong></a>&nbsp;<span style='color:#666666'>".$messageStr."</span></div></div><div class='clear'></div></li>";
+          ."</div><div class='clear padTop5'><div style='float:left'><a href='".$profileUrl."'><img src='".$profilePic."' title='title' width='25' height='25' /></a></div><div class='floatLeft txtDiv'><a href='".$profileUrl."'><strong>".htmlentities(ucfirst($nickname)).":</strong></a>&nbsp;<span style='color:#666666'>".$messageStr."</span></div></div><div class='clear'></div></li>";
         fwrite(fopen($filePath, 'a'), $message. "\n");
       }
     }

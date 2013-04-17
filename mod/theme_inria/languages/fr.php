@@ -122,6 +122,7 @@ $french = array (
 	'main' => "Tableau de bord personnel",
 	'group_profile' => "Accueil du groupe",
 	'inria:groups:featured' => "Groupes à la Une",
+	'inria:members:newest' => "Derniers inscrits",
 	
 );
 
