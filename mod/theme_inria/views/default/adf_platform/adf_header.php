@@ -81,7 +81,7 @@ if (elgg_is_logged_in()) {
                 <?php if (elgg_is_admin_logged_in()) { ?>
                   <li><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
                 <?php } ?>
-                <li><a href="<?php echo $url . 'pg/groups/8551/premiers-pas'; ?>"><?php echo elgg_echo('adf_platform:help'); ?></a></li>
+                <li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><?php echo elgg_echo('adf_platform:help'); ?></a></li>
                 <li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
               </ul>
             </nav>
@@ -96,16 +96,12 @@ if (elgg_is_logged_in()) {
           <div class="interne">
             <nav>
               <ul>
-                <li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a>
-                  <ul>
-                    <li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
-                    <li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
-                  </ul>
+                <li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url . 'activity') { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a></li>
+                
+                <li class="home"><a href="<?php echo $url; ?>activity" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Activité</a>
                 </li>
                 
-                <?php /* activity : Fil d'activité du site */ ?>
-                
-                <li class="thematiques"><a href="javascript:void(0);">Parcourir</a>
+                <li class="thematiques"><a href="<?php echo $url . 'groups/all'; ?>">Parcourir</a>
                   <ul>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Libre+expression">Libre expression</a></li>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Missions+et+projets">Missions et projets</a></li>
@@ -115,8 +111,7 @@ if (elgg_is_logged_in()) {
                 </li>
                 <li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('inria:mygroups'); ?></a>
                   <ul>
-                    <li><a href="<?php echo $vars['url']; ?>pg/groups/new/"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
-                    <li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
+                    <li><a href="<?php echo $vars['url']; ?>groups/new/"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
                     <?php echo $groups; ?>
                   </ul>
                 </li>
@@ -138,7 +133,7 @@ if (elgg_is_logged_in()) {
                <!--
                <li class="inria_action"><a href="javascript:void(0);"><?php echo elgg_echo('theme_inria:topbar:action'); ?></a>
  <ul>
-                    <li><a href="<?php echo $vars['url']; ?>pg/thewire/all"><?php echo elgg_echo('theme_inria:topbar:thewire'); ?></a></li>
+                    <li><a href="<?php echo $vars['url']; ?>thewire/all"><?php echo elgg_echo('theme_inria:topbar:thewire'); ?></a></li>
                     <li><a href="<?php echo $vars['url']; ?>invite"><?php echo elgg_echo("theme_inria:topbar:invite"); ?></a></li>
                 </ul>
                //-->
