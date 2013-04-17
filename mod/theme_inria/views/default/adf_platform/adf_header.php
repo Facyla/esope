@@ -86,7 +86,8 @@ if (elgg_is_logged_in()) {
               </ul>
             </nav>
           <?php } else {
-            echo '<nav><ul><li><a href="' . $url . '">' . elgg_echo('adf_platform:loginregister') . '</a></li></ul></nav>';
+            // Bouton de connexion partout sauf sur la home
+            if (full_url() != $url) echo '<nav><ul><li><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul></nav>';
           } ?>
         </div>
       </header>
@@ -96,12 +97,12 @@ if (elgg_is_logged_in()) {
           <div class="interne">
             <nav>
               <ul>
-                <li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url . 'activity') { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a></li>
+                <li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a></li>
                 
-                <li class="home"><a href="<?php echo $url; ?>activity" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Activité</a>
+                <li class="home"><a href="<?php echo $url; ?>activity" <?php if (full_url() == $url . 'activity') { echo 'class="active elgg-state-selected"'; } ?> >Activité</a>
                 </li>
                 
-                <li class="thematiques"><a href="<?php echo $url . 'groups/all'; ?>">Parcourir</a>
+                <li class="thematiques"><a href="<?php echo $url . 'groups/all'; ?>" <?php if (full_url() == $url . 'groups/all') { echo 'class="active elgg-state-selected"'; } ?> >Parcourir</a>
                   <ul>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Libre+expression">Libre expression</a></li>
                     <li><a href="<?php echo $url; ?>groups/search?tag=Missions+et+projets">Missions et projets</a></li>
@@ -109,7 +110,7 @@ if (elgg_is_logged_in()) {
                     <li><a href="<?php echo $url; ?>groups/search?tag=Institutionnel">Institutionnel</a></li>
                   </ul>
                 </li>
-                <li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('inria:mygroups'); ?></a>
+                <li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a>
                   <ul>
                     <li><a href="<?php echo $vars['url']; ?>groups/new/"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
                     <?php echo $groups; ?>
