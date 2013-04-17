@@ -24,7 +24,9 @@ if (isset($vars['entity'])) {
 }
 
 if (!isset($vars['entity'])) {
-  echo '<p>' . elgg_echo('groups:newgroup:disclaimer') . '</p>';
+  $disclaimer = elgg_get_plugin_setting('groups_disclaimer', 'adf_public_platform');
+  if (empty($displaimer)) $dislaimer = '<p>' . elgg_echo('groups:newgroup:disclaimer') . '</p>';
+  echo $disclaimer;
 }
 ?>
 

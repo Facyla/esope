@@ -64,6 +64,7 @@ $fr = array(
 	'adf_platform:settings:backgroundimg:help' => "Indiquez l'URL (relative) de l'image qui sera répétée horizontalement et verticalement",
 	'adf_platform:settings:backgroundcolor' => "Couleur de fond",
 	'adf_platform:settings:backgroundcolor:help' => "",
+	'adf_platform:settings:groups_disclaimer' => "Configuration du message à l'attention du futur responsable lors de la création d'un nouveau groupe. Pour que le message soit vide, laisser un espace seulement dans le champ.",
 	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
 	

@@ -158,6 +158,10 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
   <?php echo $url . elgg_view('input/text', array( 'name' => 'params[backgroundimg]', 'value' => $vars['entity']->backgroundimg, 'js' => 'style="width:50%;"' )); ?>
 </p><br />
 
+<p><label><?php echo elgg_echo('adf_platform:settings:groups_disclaimer'); ?></label>
+  <?php echo elgg_view('input/longtext', array( 'name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer )); ?>
+</p><br />
+
 <p><label><?php echo elgg_echo('adf_platform:settings:footer'); ?></label>
   <?php echo elgg_view('input/longtext', array( 'name' => 'params[footer]', 'value' => $vars['entity']->footer )); ?>
 </p><br />

@@ -123,8 +123,6 @@ $french = array (
 	'group_profile' => "Accueil du groupe",
 	'inria:groups:featured' => "Groupes à la Une",
 	
-	
-	
 );
 
 add_translation("fr",$french);
