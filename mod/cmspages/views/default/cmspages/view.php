@@ -15,7 +15,7 @@ if ($vars['pagetype']) {
   $options = array(
       'metadata_names' => 'pagetype', 'metadata_values' => $vars['pagetype'],
       'types' => 'object', 'subtypes' => 'cmspage',
-      'owner_guid' => 0, 'site_guid' => 0,
+      //'owner_guid' => 0, 'site_guid' => 0,
       'limit' => 1, 'offset' => 0, 'order_by' => '', 
       'count' => false,
     );

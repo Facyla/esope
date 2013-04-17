@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.8 (1.8)" />
+  <field key="version" value="0.8.0.1 (1.8)" />
   <field key="description" value="Static page, and reusable views editor (CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
   <field key="copyright" value="(C) Facyla 2011" />
@@ -23,11 +23,16 @@ INSTALLATION
 Version History
 ======================
 
+0.8.0.1 : 20130225 - some corrections on this older version
+  - cmspages URL + read page
+  - save action (no doubles)
+  - editors menu
+
 0.8 (1.8) (2011.09.25-27):
 	- CMS pages ported to 1.8
 
-=== (now we'll tell: Elgg version) ===
-= CHANGE VERSIONNING FOR 1.8 VERSION =
+==== (now we'll tell (Elgg version)) ====
+=== CHANGE VERSIONNING FOR 1.8 VERSION ===
 
 0.7.3 (2011.09.25):
 	- typo bug + info for using page as a view

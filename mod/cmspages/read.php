@@ -28,7 +28,7 @@ if($pagetype) {
   forward();
 }
 
-
+/*
 // Si externalblog est activé et qu'on a paramétré la prise en compte des layouts choisis, on applique ce layout
 // @todo : On anticipe sur la possibilité de choisir divers blocs et le layout via les pages CMS...?
 $exbloglayout = elgg_get_plugin_setting('layout', 'cmspages');
@@ -40,8 +40,9 @@ if ($exbloglayout && elgg_is_active_plugin('externalblog') && ($layout = elgg_ge
   $content = '<div style="padding:5px 20px; margin:0; border:0;">' . $body . '</div>';
   $body = externalblog_layout_switch($content, array('title' => $title));
 }
+*/
 
 
 // Display page
-elgg_view_page($title, $body);
+echo elgg_view_page($title, $body);
 

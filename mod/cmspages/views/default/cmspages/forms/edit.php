@@ -36,7 +36,7 @@ else {
   // Set the required form variables
   $pagetype_input = elgg_echo('cmspages:pagetype') . ' <input type="text" value="'.$pagetype.'" disabled="disabled" style="width:300px;" /></label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype));
   if ($cmspage instanceof ElggObject) {
-    $cmspage_url = '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '</a>';
+    $cmspage_url = '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'cmspages/read/' . $pagetype . '</a>';
     $cmspage_view = elgg_echo('cmspages:cmspage_view') . ' elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))';
   }
   $title_input = elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"'));

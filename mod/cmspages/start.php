@@ -69,7 +69,7 @@ function cmspages_pagesetup() {
   // and also a custom editor list
   if ( (elgg_in_context('admin') || elgg_is_admin_logged_in())
     || (elgg_in_context('localmultisite')) 
-    || ((elgg_in_context('cmspages_admin')) && in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))))
+    || ((elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))))
     ) {
     $item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/'); elgg_register_menu_item('topbar', $item);
   }
