@@ -17,6 +17,11 @@ function theme_inria_init(){
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
 		elgg_register_plugin_hook_handler('index','system','theme_inria_index');
+	} else {
+	  if (!$CONFIG->walled_garden) {
+	    elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
+	    elgg_register_plugin_hook_handler('index','system','theme_inria_public_index');
+	  }
 	}
 }
 
@@ -81,6 +86,12 @@ function theme_inria_index(){
 	echo elgg_view_page($title, $body);
 
 	return true;
+}
+
+function theme_inria_public_index() {
+  global $CONFIG;
+	include(dirname(__FILE__) . '/pages/theme_inria/public_homepage.php');
+  return true;
 }
 
 
