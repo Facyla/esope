@@ -74,178 +74,181 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 	    <a href="http://www.departement.org/" target="_blank"><img src="' . $url . 'mod/adf_public_platform/img/theme/logo-adf.png" alt="Assemblée des Départements de France" /></a>';
 }
 
+
+/*
+// Tests avec tabs : non finalisés // en fait c'est mieux avec des onglets en accordéon..
+$class = "adf-settings";
+$tabs[] = array('title' => "Config générale", 'url' => "#general", 'id' => "adf-settings-general", 'class' => $class);
+$tabs[] = array('title' => "Interface", 'url' => "#interface", 'id' => "adf-settings-interface", 'class' => $class);
+$tab_content = '<div id="adf-settings-general" class="adf-settings">Config générale</div>
+<div id="adf-settings-interface" class="adf-settings">Config interface</div>';
+echo '<div id="adf-settings-tabs">
+	<?php echo elgg_view('navigation/tabs', array('tabs' => $tabs)); ?>
+</div>
+<div id="adf-settings-wrapper">
+	<?php echo $tab_content; ?>
+</div>';
+*/
+
 ?>
+<script type="text/javascript">
+  $(function() {
+    $('#adf-settings-accordion').accordion({
+	    header: 'h3',
+	    autoHeight: false
+    });
+  });
+</script>
 
+<div id="adf-settings-accordion">
+  <p><?php echo elgg_echo('adf_platform:homeintro'); ?></p>
+  
+  <h3>PAGE D'ACCUEIL PUBLIQUE</h3>
+  <div>
+    <p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
+      <?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro )); ?>
+    </p><br />
+    <p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->displaystats )); ?>
+    </p>
+  </div>
+  
+  
+  <h3>PAGE D'ACCUEIL CONNECTEE</h3>
+  <div>
+    <p><label><?php echo elgg_echo('adf_platform:settings:replace_home'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[replace_home]', 'options_values' => array( '' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->replace_home )); ?>
+    </p><br />
+    <?php if ($vars['entity']->replace_home == 'yes') { ?>
+      <p><label><?php echo elgg_echo('adf_platform:settings:firststeps'); ?></label><br />
+        <?php echo elgg_echo('adf_platform:settings:firststeps:help'); ?>
+        <?php echo elgg_view('input/text', array( 'name' => 'params[firststeps_guid]', 'value' => $vars['entity']->firststeps_guid )); ?>
+      </p><br />
+      <p><label><?php echo elgg_echo('adf_platform:dashboardheader'); ?></label>
+        <?php echo elgg_view('input/longtext', array( 'name' => 'params[dashboardheader]', 'value' => $vars['entity']->dashboardheader )); ?>
+      </p><br />
+    <?php } ?>
+    <p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
+      <?php echo $url . elgg_view('input/text', array( 'name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"' )); ?>
+    </p>
+  </div>
+  
+  
+  <h3>ELEMENTS DE L'INTERFACE</h3>
+  <div>
+    <br />
+    <img src="<?php echo $url . $vars['entity']->faviconurl; ?>" style="float:right; max-height:64px; max-width:64px; background:black;" />
+    <p><label><?php echo elgg_echo('adf_platform:faviconurl'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:faviconurl:help'); ?><br />
+      <?php echo $url . elgg_view('input/text', array( 'name' => 'params[faviconurl]', 'value' => $vars['entity']->faviconurl, 'js' => 'style="width:50%;"' )); ?>
+    </p><br />
 
-<?php /* Unused since new theme w/ Urbilog
-<p>
-  <label><?php echo elgg_echo('adf_platform:header:content'); ?>
-  <?php echo elgg_view('input/longtext', array( 'name' => 'params[header]', 'value' => $vars['entity']->header )); ?>
-  </label>
-</p><br />
-<p>
-  <label><?php echo elgg_echo('adf_platform:header:background'); ?>
-  <?php echo elgg_view('input/text', array( 'name' => 'params[headbackground]', 'value' => $vars['entity']->headbackground )); ?>
-  </label>
-</p><br />
-<p>
-  <label><?php echo elgg_echo('adf_platform:header:height'); ?>
-  <?php echo elgg_view('input/text', array( 'name' => 'params[headheight]', 'value' => $vars['entity']->headheight )); ?>
-  </label>
-</p><br />
-<p>
-  <label><?php echo elgg_echo('adf_platform:footer:color'); ?>
-  <?php echo elgg_view('input/text', array( 'name' => 'params[footercolor]', 'value' => $vars['entity']->footercolor )); ?>
-  </label>
-</p><br />
-<p>
-  <label><?php echo elgg_echo('adf_platform:footer:content'); ?>
-  <?php echo elgg_view('input/longtext', array( 'name' => 'params[footer]', 'value' => $vars['entity']->footer )); ?>
-  </label>
-</p><br />
-*/ ?>
+    <p><label><?php echo elgg_echo('adf_platform:headertitle'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:headertitle:help'); ?>
+      <?php echo elgg_view('input/text', array( 'name' => 'params[headertitle]', 'value' => $vars['entity']->headertitle )); ?>
+    </p><br />
 
-<br />
+    <img src="<?php echo $url . $vars['entity']->headerimg; ?>" style="float:right; max-height:50px; max-width:600px; background:black;" />
+    <p><label><?php echo elgg_echo('adf_platform:settings:headerimg'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:settings:headerimg:help'); ?><br />
+      <?php echo $url . elgg_view('input/text', array( 'name' => 'params[headerimg]', 'value' => $vars['entity']->headerimg, 'js' => 'style="width:50%;"' )); ?>
+    </p><br />
 
-<h3>PAGE D'ACCUEIL PUBLIQUE</h3>
-<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
-  <?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro )); ?>
-</p><br />
-<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
-  <?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->displaystats )); ?>
-</p><br />
+    <p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label> 
+      <?php echo elgg_view('input/color', array( 'name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor, 'js' => 'style="width:12ex;"' )); ?>
+    </p><br />
+    
+    <img src="<?php echo $url . $vars['entity']->backgroundimg; ?>" style="float:right; max-height:100px; max-width:200px; background:black;" />
+    <p><label><?php echo elgg_echo('adf_platform:settings:backgroundimg'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:settings:backgroundimg:help'); ?><br />
+      <?php echo $url . elgg_view('input/text', array( 'name' => 'params[backgroundimg]', 'value' => $vars['entity']->backgroundimg, 'js' => 'style="width:50%;"' )); ?>
+    </p><br />
 
+    <p><label><?php echo elgg_echo('adf_platform:settings:groups_disclaimer'); ?></label>
+      <?php echo elgg_view('input/longtext', array( 'name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer )); ?>
+    </p><br />
 
-<hr />
-<h3>PAGE D'ACCUEIL CONNECTEE</h3>
-<p><label><?php echo elgg_echo('adf_platform:settings:replace_home'); ?></label>
-  <?php echo elgg_view('input/dropdown', array( 'name' => 'params[replace_home]', 'options_values' => array( '' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->replace_home )); ?>
-</p><br />
-<?php if ($vars['entity']->replace_home == 'yes') { ?>
-  <p><label><?php echo elgg_echo('adf_platform:settings:firststeps'); ?></label><br />
-    <?php echo elgg_echo('adf_platform:settings:firststeps:help'); ?>
-    <?php echo elgg_view('input/text', array( 'name' => 'params[firststeps_guid]', 'value' => $vars['entity']->firststeps_guid )); ?>
-  </p><br />
-  <p><label><?php echo elgg_echo('adf_platform:dashboardheader'); ?></label>
-    <?php echo elgg_view('input/longtext', array( 'name' => 'params[dashboardheader]', 'value' => $vars['entity']->dashboardheader )); ?>
-  </p><br />
-<?php } ?>
-<p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"' )); ?>
-</p><br />
+    <p><label><?php echo elgg_echo('adf_platform:settings:footer'); ?></label>
+      <?php echo elgg_view('input/longtext', array( 'name' => 'params[footer]', 'value' => $vars['entity']->footer )); ?>
+    </p><br />
 
+    <p><label><?php echo elgg_echo('adf_platform:settings:publicpages'); ?></label><br />
+	    <?php echo elgg_echo('adf_platform:settings:publicpages:help'); ?>
+      <?php // un nom de pages par ligne demandé (plus clair), mais on acceptera aussi séparé par virgules et point-virgule en pratique
+      echo elgg_view('input/plaintext', array( 'name' => 'params[publicpages]', 'value' => $vars['entity']->publicpages ));
+      ?>
+    </p>
+  </div>
+  
+  
+  <h3>COULEURS & STYLE</h3>
+  <div>
+    <p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:text:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[textcolor]', 'value' => $vars['entity']->textcolor )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:link:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[linkcolor]', 'value' => $vars['entity']->linkcolor )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:link:hovercolor'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[linkhovercolor]', 'value' => $vars['entity']->linkhovercolor )); ?>
+    </p>
 
-<hr />
-<h3>ELEMENTS DE L'INTERFACE</h3>
-<br />
+    <h4>Dégradé du header et du pied de page</h4>
+    <p><label><?php echo elgg_echo('adf_platform:color1:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color1]', 'value' => $vars['entity']->color1 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color4:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color4]', 'value' => $vars['entity']->color4 )); ?>
+    </p>
 
-<img src="<?php echo $url . $vars['entity']->faviconurl; ?>" style="float:right; max-height:64px; max-width:64px; background:black;" />
-<p><label><?php echo elgg_echo('adf_platform:faviconurl'); ?></label><br />
-  <?php echo elgg_echo('adf_platform:faviconurl:help'); ?><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[faviconurl]', 'value' => $vars['entity']->faviconurl, 'js' => 'style="width:50%;"' )); ?>
-</p><br />
+    <h4>Dégradé des widgets et modules des groupes</h4>
+    <p><label><?php echo elgg_echo('adf_platform:color2:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color2]', 'value' => $vars['entity']->color2 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color3:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color3]', 'value' => $vars['entity']->color3 )); ?>
+    </p>
 
-<p><label><?php echo elgg_echo('adf_platform:headertitle'); ?></label><br />
-  <?php echo elgg_echo('adf_platform:headertitle:help'); ?>
-  <?php echo elgg_view('input/text', array( 'name' => 'params[headertitle]', 'value' => $vars['entity']->headertitle )); ?>
-</p><br />
+    <h4>Dégradé des boutons (normal puis :hover)</h4>
+    <p><label><?php echo elgg_echo('adf_platform:color5:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color5]', 'value' => $vars['entity']->color5 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color6:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color6]', 'value' => $vars['entity']->color6 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color7:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color7]', 'value' => $vars['entity']->color7 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color8:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color8]', 'value' => $vars['entity']->color8 )); ?>
+    </p>
 
-<img src="<?php echo $url . $vars['entity']->headerimg; ?>" style="float:right; max-height:50px; max-width:600px; background:black;" />
-<p><label><?php echo elgg_echo('adf_platform:settings:headerimg'); ?></label><br />
-  <?php echo elgg_echo('adf_platform:settings:headerimg:help'); ?><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[headerimg]', 'value' => $vars['entity']->headerimg, 'js' => 'style="width:50%;"' )); ?>
-</p><br />
+    <!--
+    <p><label><?php echo elgg_echo('adf_platform:color9:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color9]', 'value' => $vars['entity']->color9 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color10:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color10]', 'value' => $vars['entity']->color10 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color11:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color11]', 'value' => $vars['entity']->color11 )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:color12:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color12]', 'value' => $vars['entity']->color12 )); ?>
+    </p>
+    //-->
 
-<p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label><br />
-  <?php echo elgg_view('input/color', array( 'name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor )); ?>
-</p><br />
-<img src="<?php echo $url . $vars['entity']->backgroundimg; ?>" style="float:right; max-height:100px; max-width:200px; background:black;" />
-<p><label><?php echo elgg_echo('adf_platform:settings:backgroundimg'); ?></label><br />
-  <?php echo elgg_echo('adf_platform:settings:backgroundimg:help'); ?><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[backgroundimg]', 'value' => $vars['entity']->backgroundimg, 'js' => 'style="width:50%;"' )); ?>
-</p><br />
-
-<p><label><?php echo elgg_echo('adf_platform:settings:groups_disclaimer'); ?></label>
-  <?php echo elgg_view('input/longtext', array( 'name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer )); ?>
-</p><br />
-
-<p><label><?php echo elgg_echo('adf_platform:settings:footer'); ?></label>
-  <?php echo elgg_view('input/longtext', array( 'name' => 'params[footer]', 'value' => $vars['entity']->footer )); ?>
-</p><br />
-
-<p><label><?php echo elgg_echo('adf_platform:settings:publicpages'); ?></label><br />
-	<?php echo elgg_echo('adf_platform:settings:publicpages:help'); ?>
-  <?php // un nom de pages par ligne demandé (plus clair), mais on acceptera aussi séparé par virgules et point-virgule en pratique
-  echo elgg_view('input/plaintext', array( 'name' => 'params[publicpages]', 'value' => $vars['entity']->publicpages ));
-  ?>
-</p><br />
-
-
-<hr />
-<h3>COULEURS & STYLE</h3>
-<br />
-<p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:text:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[textcolor]', 'value' => $vars['entity']->textcolor )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:link:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[linkcolor]', 'value' => $vars['entity']->linkcolor )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:link:hovercolor'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[linkhovercolor]', 'value' => $vars['entity']->linkhovercolor )); ?>
-</p>
-
-<h4>Dégradé du header et du pied de page</h4>
-<p><label><?php echo elgg_echo('adf_platform:color1:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color1]', 'value' => $vars['entity']->color1 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color4:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color4]', 'value' => $vars['entity']->color4 )); ?>
-</p>
-
-<h4>Dégradé des widgets et modules des groupes</h4>
-<p><label><?php echo elgg_echo('adf_platform:color2:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color2]', 'value' => $vars['entity']->color2 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color3:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color3]', 'value' => $vars['entity']->color3 )); ?>
-</p>
-
-<h4>Dégradé des boutons (normal puis :hover)</h4>
-<p><label><?php echo elgg_echo('adf_platform:color5:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color5]', 'value' => $vars['entity']->color5 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color6:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color6]', 'value' => $vars['entity']->color6 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color7:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color7]', 'value' => $vars['entity']->color7 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color8:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color8]', 'value' => $vars['entity']->color8 )); ?>
-</p>
-
-<!--
-<p><label><?php echo elgg_echo('adf_platform:color9:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color9]', 'value' => $vars['entity']->color9 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color10:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color10]', 'value' => $vars['entity']->color10 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color11:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color11]', 'value' => $vars['entity']->color11 )); ?>
-</p>
-<p><label><?php echo elgg_echo('adf_platform:color12:color'); ?></label>
-  <?php echo elgg_view('input/color', array( 'name' => 'params[color12]', 'value' => $vars['entity']->color12 )); ?>
-</p>
-//-->
-
-<p><label><?php echo elgg_echo('adf_platform:css'); ?></label><br />
-  <?php echo elgg_echo('adf_platform:css:help'); ?>
-  <?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
-</p>
-<br />
-
+    <p><label><?php echo elgg_echo('adf_platform:css'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:css:help'); ?>
+      <?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
+    </p>
+  </div>
+  
+  <br />
+  <br />
+  
+</div>
 

@@ -43,10 +43,11 @@ $css = elgg_get_loaded_css();
 	<link rel="apple-touch-icon" href="<?php echo $vars['url']; ?>iphone_touch.png" />
 	<!-- END IPhone meta //-->
 	
-<?php foreach ($css as $link) { ?>
-	<link rel="stylesheet" href="<?php echo $link; ?>" type="text/css" />
-<?php } ?>
+  <?php foreach ($css as $link) { ?>
+	  <link rel="stylesheet" href="<?php echo $link; ?>" type="text/css" />
+  <?php } ?>
 	<link rel="stylesheet" href="<?php echo $CONFIG->url; ?>mod/adf_public_platform/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="<?php echo $CONFIG->url; ?>mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" />
 	
 <?php
 	$ie_url = elgg_get_simplecache_url('css', 'ie');

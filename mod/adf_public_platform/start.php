@@ -29,6 +29,7 @@ function adf_platform_init() {
   elgg_extend_view('css/admin', 'adf_platform/admin_css'); // Remplace la CSS ???
   // Nouveau thème : 
   elgg_extend_view('css/elgg', 'adf_platform/css/style');
+  elgg_extend_view('css/elgg', 'css/jquery-ui-1.10.2');
   elgg_extend_view('css/ie', 'adf_platform/css/ie');
   elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
   elgg_extend_view('groups/sidebar/members','theme_items/online_groupmembers');

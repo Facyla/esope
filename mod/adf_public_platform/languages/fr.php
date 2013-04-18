@@ -11,6 +11,7 @@ $fr = array(
 	'admin:appearance:adf_theme' => "Configuration du thème",
 	
 	// Layout settings
+	'adf_platform:settings:help' => "Les différentes rubriques de configuration vous permettent de configurer de nombreux éléments du thème (éléments graphiques, d'interface, couleurs, feuilles de styles, etc.), ainsi que certains comportements du site.",
 	'adf_platform:settings:layout' => "Pour retrouver la configuration initiale, remplacez le contenu par \"RAZ\" (en mode HTML).",
 	'adf_platform:faviconurl' => "URL de la favicon",
 	'adf_platform:faviconurl:help' => "Indiquez le chemin de l'icône du site : il s'agit généralement d'un fichier favicon.ico ou .png ou .gif, de format carré et de 64px maxi.",
