@@ -54,7 +54,7 @@ $french = array(
 
   'feedback:list:mood' => 'Humeur',
   'feedback:list:about' => 'A propos de',
-  'feedback:list:page' => 'Envoyer le feedback',
+  'feedback:list:page' => 'URL du feedback',
   'feedback:list:from' => 'De',
   'feedback:list:nofeedback' => 'Aucun feedback à ce jour.',
 
@@ -74,7 +74,17 @@ $french = array(
   'feedback:close:error' => "Impossible de fermer ce feedback",
   'feedback:settings:memberview' => "Les membres du site peuvent-ils consulter les feedbacks ?",
   'feedback:settings:comment' => "Est-il possible de commenter et de répondre aux feedbacks ?",
-  'feedback:settings:feedbackgroup' => "Associer un groupe aux feedbacks ?",
+  'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
+  'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
+  'feedback:enablefeedback' => "Activer le feedback dans ce groupe",
+  'feedback:group' => "Feedbacks",
+  'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer ?",
+  'feedback:page:unknown' => "URL inconnue",
+  'feedback:status:open' => "Feedbacks ouverts",
+  'feedback:status:closed' => "Feedbacks ouverts",
+  'feedback:about' => "de type",
+  'feedback:about:question' => "Question",
+  
   
 );
 

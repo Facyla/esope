@@ -811,7 +811,8 @@ header nav ul li a:active { color: #ddd; }
 	margin-bottom: 15px;
 }
 
-.elgg-sidebar #site-categories h2 {
+.elgg-sidebar #site-categories h2,
+.elgg-sidebar #feedbacks h2 {
     background: none repeat scroll 0 0 #333333;
     border-radius: 3px 3px 0 0;
     clear: both;

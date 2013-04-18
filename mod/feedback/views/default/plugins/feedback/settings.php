@@ -2,6 +2,7 @@
 $yesno_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
 
 $feedbackgroup_opt[] = elgg_echo('option:no');
+$feedbackgroup_opt['grouptool'] = elgg_echo('feedback:option:grouptool');
 $groups_count = elgg_get_entities(array('type' => 'group', 'count' => true));
 $groups = elgg_get_entities(array('type' => 'group', 'limit' => $groups_count));
 foreach ($groups as $ent) { $feedbackgroup_opt[$ent->guid] = $ent->name; }
