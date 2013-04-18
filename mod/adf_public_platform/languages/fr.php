@@ -12,6 +12,8 @@ $fr = array(
 	
 	// Layout settings
 	'adf_platform:settings:layout' => "Pour retrouver la configuration initiale, remplacez le contenu par \"RAZ\" (en mode HTML).",
+	'adf_platform:faviconurl' => "URL de la favicon",
+	'adf_platform:faviconurl:help' => "Indiquez le chemin de l'icône du site : il s'agit généralement d'un fichier favicon.ico ou .png ou .gif, de format carré et de 64px maxi.",
 	'adf_platform:headertitle' => "Titre du site (cliquable, dans le bandeau)",
 	'adf_platform:headertitle:help' => "Pour agrandir certains caractères, encadrez-les de balises, et utilisez la classe 'minuscule' pour changer la casse&nbsp;: &lt;span&gt;T&lt;/span&gt;itre.&lt;span class=\"minuscule\"&gt;fr&lt;/span&gt;",
 	'adf_platform:header:content' => "Contenu de l'entête (code HTML libre). Pour retrouver la configuration initiale avec une image de logo configurable, remplacez le contenu par \"RAZ\" (en mode HTML).",

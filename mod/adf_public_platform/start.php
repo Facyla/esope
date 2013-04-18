@@ -31,7 +31,8 @@ function adf_platform_init() {
   elgg_extend_view('css/elgg', 'adf_platform/css/style');
   elgg_extend_view('css/ie', 'adf_platform/css/ie');
   elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
-  
+  elgg_extend_view('groups/sidebar/members','theme_items/online_groupmembers');
+	
   // Accessibilité
   elgg_extend_view('css','accessibility/css');
   
@@ -130,6 +131,9 @@ function adf_platform_init() {
 	elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
 	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
 	elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	
+	// Nouveaux widgets
+	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
 	
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');

@@ -11,7 +11,7 @@ $french = array(
 	'html_email_handler:settings:notifications:subtext' => "Ceci va envoyer tous les mails sortant au format HTML",
 	
 	'html_email_handler:settings:sendmail_options' => "Paramètres additionnels pour sendmail (optionnel)",
-	'html_email_handler:settings:sendmail_options:description' => "Vous pouvez configurer ici des paramètres additionnels lorsque vous utilisez sendmail, par exemple -f%s (pour mieux éviter que les mails soient marqués comme spam)",
+	'html_email_handler:settings:sendmail_options:description' => "Vous pouvez configurer ici des paramètres additionnels lorsque vous utilisez sendmail, par exemple -f %s (pour mieux éviter que les mails soient marqués comme spam)",
 	
 	// notification body
 	'html_email_handler:notification:footer:settings' => "Configurez vos notifications %sen cliquant sur ce lien%s",

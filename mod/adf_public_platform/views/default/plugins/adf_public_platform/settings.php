@@ -138,6 +138,13 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 <hr />
 <h3>ELEMENTS DE L'INTERFACE</h3>
 <br />
+
+<img src="<?php echo $url . $vars['entity']->faviconurl; ?>" style="float:right; max-height:64px; max-width:64px; background:black;" />
+<p><label><?php echo elgg_echo('adf_platform:faviconurl'); ?></label><br />
+  <?php echo elgg_echo('adf_platform:faviconurl:help'); ?><br />
+  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[faviconurl]', 'value' => $vars['entity']->faviconurl, 'js' => 'style="width:50%;"' )); ?>
+</p><br />
+
 <p><label><?php echo elgg_echo('adf_platform:headertitle'); ?></label><br />
   <?php echo elgg_echo('adf_platform:headertitle:help'); ?>
   <?php echo elgg_view('input/text', array( 'name' => 'params[headertitle]', 'value' => $vars['entity']->headertitle )); ?>
