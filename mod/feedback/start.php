@@ -58,6 +58,9 @@ function feedback_init() {
     // page handler
     register_page_handler('feedback','feedback_page_handler');
     
+    // menu des groupes
+    elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
+    
     // Register actions
     elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
     elgg_register_action("feedback/close", elgg_get_plugins_path() . 'feedback/actions/close.php', 'admin');
@@ -82,21 +85,25 @@ function feedback_page_handler($page) {
 }
 
 
-function feedback_pagesetup() {
-  global $CONFIG;
-  $feedbackgroup = elgg_get_plugin_setting('feedbackgroup', 'feedback');
-  $page_owner = elgg_get_page_owner_entity();
-  // Only add feedback to a group if it is allowed
-  if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
-    if ( $page_owner instanceof ElggGroup && (get_context() == 'groups') && (($page_owner->guid == $feedbackgroup) || (($feedbackgroup == 'grouptool') && ($page_owner->feedback_enable == 'yes'))) ) {
-      add_submenu_item(sprintf(elgg_echo("feedback:group"),$page_owner->name), $CONFIG->wwwroot . "feedback");
-      extend_view('groups/profileitems','feedback/listing', 600);
-    }
-  }
+function feedback_owner_block_menu($hook, $type, $return, $params) {
+	if (elgg_instanceof($params['entity'], 'group')) {
+	  $feedbackgroup = elgg_get_plugin_setting('feedbackgroup', 'feedback');
+    // Only add feedback to a group if it is allowed
+    if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
+      if (($params['entity']->guid == $feedbackgroup) || (($feedbackgroup == 'grouptool') && ($params['entity']->feedback_enable == 'yes')) ) {
+        //add_submenu_item(sprintf(elgg_echo("feedback:group"),$params['entity']->name), $CONFIG->wwwroot . "feedback");
+			  $url = "feedback/group/{$params['entity']->guid}";
+			  $item = new ElggMenuItem('feedback', elgg_echo('feedback:group'), $url);
+			  $return[] = $item;
+        //elgg_extend_view('groups/profile/summary','feedback/grouplisting', 900);
+      }
+	  }
+	}
+
+	return $return;
 }
 
 
 elgg_register_event_handler('init', 'system', 'feedback_init');
-elgg_register_event_handler('pagesetup', 'system', 'feedback_pagesetup');
 
 
