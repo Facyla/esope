@@ -25,7 +25,7 @@ $guid = (int) get_input('guid');
 $feedback = get_entity($guid);
 if ( $feedback->getSubtype() == "feedback" && $feedback->canEdit() ) {
   // Set this feedback as answered / closed
-  $feedback->state = "closed";
+  $feedback->status = "closed";
   // Success message
   system_message(elgg_echo("feedback:close:success"));
 } else register_error(elgg_echo("feedback:close:error"));

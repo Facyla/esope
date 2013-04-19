@@ -24,11 +24,12 @@ $french = array(
   'feedback:widget:description' => 'Afficher les feedbacks des membres du site.',
   'feedback:numbertodisplay' => 'Nombre de feedbacks à afficher',
 
-  'feedback:message' => "Vous avez une remarque à faire sur cette page ? Vous voulez nous proposer de nouvelles idées ou signaler un bug ? Nous serions ravis d'avoir votre avis.<br /><strong>Attention, ceci n'est pas un outil de discussion : pour cela utilisez les commentaires !</strong>",
+  'feedback:message' => "Vous avez une remarque à faire, de nouvelles idées à proposer ou un bug à signaler ? Nous serions ravis d'avoir votre retour.",
+  'feedback:message:adminonly' => "<p><strong>Attention, ceci n'est pas un outil de discussion : pour cela utilisez les commentaires !</strong></p>",
 
   'feedback:default:id' => 'Nom et/ou Email',
   'feedback:default:txt' => 'Dites-nous ce que vous en pensez !',
-  'feedback:default:txt:err' => 'Aucun message de feedback.\nNous apprécions vos suggestions et critiques.\nVeuillez saisir votre message et clqiuer sur Envoyer.',
+  'feedback:default:txt:err' => 'Aucun message de feedback.\nNous apprécions vos suggestions et critiques.\nVeuillez saisir votre message et cliquer sur Envoyer.',
 
   'feedback:captcha:blank' => 'Captcha non renseigné !',
 
@@ -80,10 +81,15 @@ $french = array(
   'feedback:group' => "Feedbacks",
   'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer ?",
   'feedback:page:unknown' => "URL inconnue",
+  'feedback:list:status:open' => "Ouvert",
+  'feedback:list:status:closed' => "Fermé",
   'feedback:status:open' => "Feedbacks ouverts",
-  'feedback:status:closed' => "Feedbacks ouverts",
+  'feedback:status:closed' => "Feedbacks fermés",
   'feedback:about' => "de type",
   'feedback:about:question' => "Question",
+  'feedback:access:admin' => "Administrateur seulement",
+  'feedback:access:sitemembers' => "Membres du site",
+  'feedback:access:group' => "Membres du groupe",
   
   
 );

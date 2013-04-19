@@ -36,23 +36,23 @@ function feedback_init() {
         'admin'
       );
     
+    // Give access to feedbacks in groups
+    $feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+    if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && isloggedin()) {
+      gatekeeper();
+      group_gatekeeper();
+      // Add group menu option if no feedback group specified (default = disabled)
+      if ($feedbackgroup == 'grouptool') { add_group_tool_option('feedback', elgg_echo('feedback:enablefeedback'), false); }
+      elgg_extend_view('groups/profile/summary','feedback/grouplisting', 900);
+    }
+    
     // Allow members to read feedbacks
     $memberview = elgg_get_plugin_setting("memberview", "feedback");
     
     // Allow comments on feedbacks
     $comment = elgg_get_plugin_setting("comment", "feedback");
     
-    // Give access to feedbacks in groups
-    $feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
-    //if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && isloggedin() && (elgg_in_context('groups') || elgg_in_context('feedback'))) {
-    if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && isloggedin()) {
-      gatekeeper();
-      group_gatekeeper();
-      // Add group menu option if no feedback group specified (default = disabled)
-      if ($feedbackgroup == 'grouptool') { add_group_tool_option('feedback', elgg_echo('feedback:enablefeedback'), false); }
-    }
-    
-    // Register entity type (eligible content for search)
+    // Register entity type (makes feedbacks eligible for search)
     register_entity_type('object','feedback');
 
     // page handler
@@ -95,11 +95,9 @@ function feedback_owner_block_menu($hook, $type, $return, $params) {
 			  $url = "feedback/group/{$params['entity']->guid}";
 			  $item = new ElggMenuItem('feedback', elgg_echo('feedback:group'), $url);
 			  $return[] = $item;
-        //elgg_extend_view('groups/profile/summary','feedback/grouplisting', 900);
       }
 	  }
 	}
-
 	return $return;
 }
 

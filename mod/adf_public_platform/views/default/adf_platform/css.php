@@ -515,4 +515,8 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; background:white; }
 .elgg-state-success { background-color: #00FF00; }
 
+/* Navigation archives des blogs */
+.blog-archives li { clear: left; font-weight: bold; padding: 0 0 4px 0; }
+.pages-nav li { clear: left; }
+
 
