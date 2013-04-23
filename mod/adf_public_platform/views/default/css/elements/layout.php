@@ -15,6 +15,7 @@ $css = elgg_extract('theme-config-css', $vars);
 $headerimg = $css['headerimg'];
 $urlicon = $css['urlicon'];
 $linkcolor = $css['linkcolor'];
+$textcolor = $css['textcolor'];
 $linkhovercolor = $css['linkhovercolor'];
 $color1 = $css['color1'];
 $color2 = $css['color2'];
@@ -187,6 +188,8 @@ header {
 	height: 115px;
 	border-top: 2px solid <?php echo $color1; ?>;
 }
+/* Couleur texte normal pour les header dans le contenu de la page */
+section header, header .intro { color: <?php echo $textcolor; ?>; }
 
 
 
