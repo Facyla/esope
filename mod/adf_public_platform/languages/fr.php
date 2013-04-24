@@ -174,6 +174,16 @@ $fr = array(
 	'event_calendar' => "Agenda",
 	
 	'adf_platform:access:public' => "Public (accessible hors connexion)",
+	
+	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
+	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
+	'event_calendar:num_display' => "Nombre d'événements à afficher",
+	'messages:widget:title' => "Messages non lus",
+	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
+	'messages:num_display' => "Nombre de messages à afficher",
+	
 	//'' => "",
 	
 	

@@ -48,8 +48,10 @@ function adf_platform_init() {
   
   // REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
   // Pour changer la manière de filtrer les tags
-	elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
-	elgg_register_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags', 1);
+  if (elgg_is_active_plugin('htmlawed')) {
+	  elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
+	  elgg_register_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags', 1);
+  }
   if (elgg_is_active_plugin('threads')) {
     // Pour n'afficher "Répondre" que pour les objets (et non tous types d'entités)
     elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'threads_topic_menu_setup');
@@ -71,7 +73,7 @@ function adf_platform_init() {
     if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
   } else {
     /*
-    // Remplacement page d'accueil publique
+    // Remplacement page d'accueil publique - ssi si pas en mode walled_garden
     // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
     $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
     if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
@@ -118,23 +120,45 @@ function adf_platform_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
 	// Modification des titres des widgets
-	elgg_unregister_widget_type('blog');
-	elgg_unregister_widget_type('bookmarks');
-	elgg_unregister_widget_type('brainstorm');
-	elgg_unregister_widget_type('event_calendar');
-	elgg_unregister_widget_type('filerepo');
-	elgg_unregister_widget_type('groups');
-	elgg_unregister_widget_type('pages');
-	elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
-	elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
-	elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
-	elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
-	elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
-	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
-	elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	if (elgg_is_active_plugin('blog')) {
+	  elgg_unregister_widget_type('blog');
+	  elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
+	}
+	if (elgg_is_active_plugin('bookmarks')) {
+	  elgg_unregister_widget_type('bookmarks');
+	  elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
+	}
+	if (elgg_is_active_plugin('brainstorm')) {
+  	elgg_unregister_widget_type('brainstorm');
+  	elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
+	}
+	if (elgg_is_active_plugin('event_calendar')) {
+  	elgg_unregister_widget_type('event_calendar');
+  	elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
+	}
+	if (elgg_is_active_plugin('file')) {
+  	elgg_unregister_widget_type('filerepo');
+	  elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
+	}
+	if (elgg_is_active_plugin('groups')) {
+  	elgg_unregister_widget_type('groups');
+  	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
+	}
+	if (elgg_is_active_plugin('pages')) {
+  	elgg_unregister_widget_type('pages');
+	  elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	}
+	if (elgg_is_active_plugin('profile_manager')) {
+  	if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {
+    	elgg_unregister_widget_type('profile_completeness');
+  	  elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
+  	}
+	}
 	
 	// Nouveaux widgets
-	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+	if (elgg_is_active_plugin('messages')) {
+  	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+	}
 	
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
@@ -634,6 +658,54 @@ function adf_public_platform_group_leave($event, $object_type, $relationship) {
 	  }
   }
   return true;
+}
+
+if (!function_exists('messages_get_unread')) {
+  /**
+   * Returns the unread messages in a user's inbox
+   *
+   * @param int $user_guid GUID of user whose inbox we're counting (0 for logged in user)
+   * @param int $limit Number of unread messages to return (default = 10)
+   *
+   * @return array
+   */
+  function messages_get_unread($user_guid = 0, $limit = 10) {
+    if (!$user_guid) {
+      $user_guid = elgg_get_logged_in_user_guid();
+    }
+	  $db_prefix = elgg_get_config('dbprefix');
+
+	  // denormalize the md to speed things up.
+	  // seriously, 10 joins if you don't.
+	  $strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
+	  $map = array();
+	  foreach ($strings as $string) {
+		  $id = get_metastring_id($string);
+		  $map[$string] = $id;
+	  }
+
+	  $options = array(
+  //		'metadata_name_value_pairs' => array(
+  //			'toId' => elgg_get_logged_in_user_guid(),
+  //			'readYet' => 0,
+  //			'msg' => 1
+  //		),
+		  'joins' => array(
+			  "JOIN {$db_prefix}metadata msg_toId on e.guid = msg_toId.entity_guid",
+			  "JOIN {$db_prefix}metadata msg_readYet on e.guid = msg_readYet.entity_guid",
+			  "JOIN {$db_prefix}metadata msg_msg on e.guid = msg_msg.entity_guid",
+		  ),
+		  'wheres' => array(
+			  "msg_toId.name_id='{$map['toId']}' AND msg_toId.value_id='{$map[$user_guid]}'",
+			  "msg_readYet.name_id='{$map['readYet']}' AND msg_readYet.value_id='{$map[0]}'",
+			  "msg_msg.name_id='{$map['msg']}' AND msg_msg.value_id='{$map[1]}'",
+		  ),
+		  'owner_guid' => $user_guid,
+		  'limit' => $limit,
+	  );
+
+	  return elgg_get_entities_from_metadata($options);
+  }
 }
 
 

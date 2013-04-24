@@ -1,30 +1,33 @@
 <?php
-// Full url
-$widget_url = elgg_view('input/text',  array('name' => 'params[url]', 'value' => $vars['entity']->url));
+$embedtype_opt = array(
+    'site_activity' => elgg_echo('export_embed:type:site_activity'), 
+    'friends_activity' => elgg_echo('export_embed:type:friends_activity'), 
+    'my_activity' => elgg_echo('export_embed:type:my_activity'), 
+    'group_activity' => elgg_echo('export_embed:type:group_activity'), 
+    'groups_list' => elgg_echo('export_embed:type:groups_list'), 
+    'agenda' => elgg_echo('export_embed:type:agenda'),
+  );
 
+
+// Full url
+$embedurl = '<p><label>' . elgg_echo('export_embed:widget:embedurl') . elgg_view('input/text',  array('name' => 'params[embedurl]', 'value' => $vars['entity']->embedurl)) . '</label><br />' . elgg_echo('export_embed:widget:embedurl:help') . '</p>';
 // Or finer config
-$site_url = elgg_view('input/text',  array('name' => 'params[site_url]', 'value' => $vars['entity']->site_url));
-$widget_type = elgg_view('input/dropdown',  array('name' => 'params[widget_type]', 'value' => $vars['entity']->widget_type, 'option_values' => array('site_activity' => 'Activité du site', 'groups_list' => 'Liste des groupes publics', 'group_activity' => "activité d'un groupe", 'agenda' => 'Agenda', )));
-// @TODO : ajouter le choix du groupe ?
-?>
-<div>
-  Pour afficher des informations de ce site sur un aurte site, veuillez utiliser les adresses suivantes :
-  <ul>
-    <li><strong><?php echo $CONFIG->url; ?>embed/?embed=site_activity</strong> pour l'activité générale du site</li>
-    <li><strong><?php echo $CONFIG->url; ?>embed/?embed=groups_list</strong> pour la liste des groupes</li>
-    <li><strong><?php echo $CONFIG->url; ?>embed/?embed=agenda</strong> pour l'agenda</li>
-    <li><strong><?php echo $CONFIG->url; ?>embed/?embed=group_activity&guid=XXXXX</strong> pour l'activité d'un groupe en particulier. Attention : remplacer XXXXX par le numéro du groupe à afficher, que vous trouverez dans l'adresse de la page d'accueil du groupe : <em>groups/profile/<strong>XXXXX</strong>/nom-du-groupe</em></li>
-  </ul>
-  <br />
-  <br />
-  Pour utiliser ce widget, vous devez coller ci-dessous l'adresse d'un widget exportable depuis un autre site. Celle-ci ressemble à <em><?php echo $CONFIG->url; ?>embed/?embed=</em><strong>group_activity</strong><span style="color:blue">&guid=112</span> où :
-  <ul>
-    <li><em><?php echo $CONFIG->url; ?>embed/?embed=</em> est l'adresse du site depuis lequel vous voulez récupérer des informations</li>
-    <li><strong>group_activity</strong> permet de choisir le type d'informations à récupérer ; au choix : site_activity, groups_list, agenda, et group_activity (+ paramètres)</li>
-    <li><span style="color:blue">&guid=112</span> permet de configurer certains widgets (group_activity)</li>
-  </ul>
-  <br />
-  <label>Adresse du widget 
-  <?php echo $widget_url; ?>
-  </label>
-</div>
+$site_url = '<p><label>' . elgg_echo('export_embed:widget:site_url') . elgg_view('input/text',  array('name' => 'params[site_url]', 'value' => $vars['entity']->site_url)) . '</label><br />' . elgg_echo('export_embed:widget:site_url:help') . '</p>';
+$embedtype = '<p><label>' . elgg_echo('export_embed:widget:embedtype') . elgg_view('input/dropdown',  array('name' => 'params[embedtype]', 'value' => $vars['entity']->embedtype, 'options_values' => $embedtype_opt)) . '</label><br />' . elgg_echo('export_embed:widget:embedtype:help') . '</p>';
+
+// Additional parameters
+$limit = '<p><label>' . elgg_echo('export_embed:widget:limit') . elgg_view('input/text',  array('name' => 'params[limit]', 'value' => $vars['entity']->limit)) . '</label><br />' . elgg_echo('export_embed:widget:limit:help') . '</p>';
+$offset = '<p><label>' . elgg_echo('export_embed:widget:offset') . elgg_view('input/text',  array('name' => 'params[offset]', 'value' => $vars['entity']->offset)) . '</label><br />' . elgg_echo('export_embed:widget:offset:help') . '</p>';
+$group_guid = '<p><label>' . elgg_echo('export_embed:widget:group_guid') . elgg_view('input/text',  array('name' => 'params[group_guid]', 'value' => $vars['entity']->group_guid)) . '</label><br />' . elgg_echo('export_embed:widget:group_guid:help') . '</p>';
+$user_guid = '<p><label>' . elgg_echo('export_embed:widget:user_guid') . elgg_view('input/text',  array('name' => 'params[user_guid]', 'value' => $vars['entity']->user_guid)) . '</label><br />' . elgg_echo('export_embed:widget:user_guid:help') . '</p>';
+
+$params = '<p><label>' . elgg_echo('export_embed:widget:params') . elgg_view('input/text',  array('name' => 'params[params]', 'value' => $vars['entity']->params)) . '</label><br />' . elgg_echo('export_embed:widget:params:help') . '</p>';
+
+
+// Display settings
+echo $embedurl;
+
+echo $site_url . $embedtype . $params;
+
+echo $limit . $offset . $group_guid . $user_guid;
+

@@ -25,27 +25,28 @@ function export_embed_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'export_embed_public_pages');
 	
 	// Widget : view an external Elgg widget
-	elgg_register_widget_type('export_embed', "Widget autre site Elgg", "Permet d'afficher sur ce site des informations issues d'un autre site Elgg.");
+	elgg_register_widget_type('export_embed', "Widget autre site Elgg", "Permet d'afficher sur ce site des informations issues d'un autre site Elgg.", 'all', true);
 	
 }
 
-
+/* Handles export embed URLs
+ * 
+ * All URLs should respect this logic : 
+ * ELGG_SITE_URL/embed/$embedtype/?param1=value1&...
+ * 
+ */
 function export_embed_page_handler($page) {
   global $CONFIG;
-  switch ($page[0]) {
-    //case "read":
-    //set_input('pagetype',$page[1]);
-    default:
-      if (@include(dirname(__FILE__) . "/external_embed.php")) return true;
-  }
-  return true;
+  if (isset($page[0])) set_input('embedtype', $page[0]);
+  include(dirname(__FILE__) . "/external_embed.php");
+  return false;
 }
 
 
 // Permet l'accès aux pages des blogs en mode "walled garden"
 function export_embed_public_pages($hook, $type, $return_value, $params) {
   global $CONFIG;
-  $return_value[] = 'embed'; // URL pour les embed externes
+  $return_value[] = 'embed/.*'; // URL pour les embed externes
   //$ignore_access = elgg_get_ignore_access();
   //elgg_set_ignore_access(true);
 
