@@ -81,8 +81,15 @@ if (elgg_is_logged_in()) {
                 <?php if (elgg_is_admin_logged_in()) { ?>
                   <li><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
                 <?php } ?>
-                <li><a href="<?php echo $url . 'pages/view/182/premiers-pas'; ?>"><?php echo elgg_echo('adf_platform:help'); ?></a></li>
+                
+                <?php
+                $helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
+                if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
+                ?>
+                <li><a href="<?php echo $url . $helplink; ?>"><?php echo elgg_echo('adf_platform:help'); ?></a></li>
+                
                 <li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+                
               </ul>
             </nav>
           <?php } else {
@@ -105,6 +112,7 @@ if (elgg_is_logged_in()) {
                 
                 <?php /* activity : Fil d'activité du site */ ?>
                 
+                <?php if (elgg_is_active_plugin('groups')) { ?>
                 <li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?></a>
                   <ul>
                     <li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
@@ -112,6 +120,8 @@ if (elgg_is_logged_in()) {
                   </ul>
                 </li>
                 <?php echo $invites; ?>
+                <?php } ?>
+                
                 <?php if (elgg_is_active_plugin('categories')) { ?>
                 <li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?></a>
                   <ul>
@@ -121,18 +131,24 @@ if (elgg_is_logged_in()) {
                 </li>
                 <?php } ?>
                 
+                <?php if (elgg_is_active_plugin('members')) { ?>
                 <li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('adf_platform:directory'); ?></a></li>
+                <?php } ?>
                 
+                <?php if (elgg_is_active_plugin('event_calendar')) { ?>
                 <li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?></a></li>
+                <?php } ?>
                 
               </ul>
             </nav>
+            <?php if (elgg_is_active_plugin('search')) { ?>
             <form action="<?php echo $url . 'search'; ?>" method="post">
               <?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
               <label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
               <input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
               <input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
             </form>
+            <?php } ?>
           </div>
         </div>
       <?php } ?>

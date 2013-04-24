@@ -153,7 +153,12 @@ echo '<div id="adf-settings-tabs">
       <?php echo elgg_echo('adf_platform:settings:headerimg:help'); ?><br />
       <?php echo $url . elgg_view('input/text', array( 'name' => 'params[headerimg]', 'value' => $vars['entity']->headerimg, 'js' => 'style="width:50%;"' )); ?>
     </p><br />
-
+    
+    <p><label><?php echo elgg_echo('adf_platform:settings:helplink'); ?></label><br />
+      <?php echo elgg_echo('adf_platform:settings:helplink:help'); ?>
+      <?php echo $url . elgg_view('input/text', array( 'name' => 'params[helplink]', 'value' => $vars['entity']->helplink, 'js' => 'style="width:50%;"' )); ?>
+    </p><br />
+    
     <p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label> 
       <?php echo elgg_view('input/color', array( 'name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor, 'js' => 'style="width:12ex;"' )); ?>
     </p><br />
