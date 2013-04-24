@@ -155,7 +155,7 @@ echo '<div id="adf-settings-tabs">
     </p><br />
     
     <p><label><?php echo elgg_echo('adf_platform:settings:helplink'); ?></label><br />
-      <?php echo elgg_echo('adf_platform:settings:helplink:help'); ?>
+      <?php echo elgg_echo('adf_platform:settings:helplink:help'); ?><br />
       <?php echo $url . elgg_view('input/text', array( 'name' => 'params[helplink]', 'value' => $vars['entity']->helplink, 'js' => 'style="width:50%;"' )); ?>
     </p><br />
     
