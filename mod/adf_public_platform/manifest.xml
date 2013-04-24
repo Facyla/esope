@@ -20,32 +20,49 @@
 	
 	<activate_on_install>true</activate_on_install>
 	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+
 	<conflicts>
 		<type>plugin</type>
 		<name>custom_index</name>
 	</conflicts>
 	
 	<requires>
-		<type>elgg_release</type>
-		<version>1.8</version>
-	</requires>
-
-	<requires>
 		<type>plugin</type>
 		<name>members</name>
 	</requires>
-	<suggests>
-		<type>plugin</type>
-		<name>friend_request</name>
-	</suggests>
 	<requires>
 		<type>plugin</type>
 		<name>profile</name>
 	</requires>
 	<requires>
 		<type>plugin</type>
-		<name>profile_manager</name>
+		<name>messages</name>
 	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>notifications</name>
+	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>tinymce</name>
+	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>htmlawed</name>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>profile_manager</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>friend_request</name>
+	</suggests>
 	<suggests>
 		<type>plugin</type>
 		<name>invitefriends</name>
@@ -59,27 +76,19 @@
 		<name>uservalidationbyemail</name>
 	</suggests>
 	
-	<requires>
+	<suggests>
 		<type>plugin</type>
 		<name>groups</name>
-	</requires>
-	<requires>
+	</suggests>
+	<suggests>
 		<type>plugin</type>
 		<name>group_operators</name>
-	</requires>
+	</suggests>
 	
-	<requires>
-		<type>plugin</type>
-		<name>messages</name>
-	</requires>
-	<requires>
-		<type>plugin</type>
-		<name>notifications</name>
-	</requires>
-	<requires>
+	<suggests>
 		<type>plugin</type>
 		<name>search</name>
-	</requires>
+	</suggests>
 	<suggests>
 		<type>plugin</type>
 		<name>threads</name>
@@ -88,19 +97,11 @@
 		<type>plugin</type>
 		<name>autocomplete</name>
 	</suggests>
-	<requires>
-		<type>plugin</type>
-		<name>tinymce</name>
-	</requires>
-	<requires>
-		<type>plugin</type>
-		<name>htmlawed</name>
-	</requires>
 	
-	<requires>
+	<suggests>
 		<type>plugin</type>
 		<name>file</name>
-	</requires>
+	</suggests>
 	<suggests>
 		<type>plugin</type>
 		<name>embed</name>
