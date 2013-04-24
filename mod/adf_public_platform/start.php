@@ -148,6 +148,12 @@ function adf_platform_init() {
   	elgg_unregister_widget_type('pages');
 	  elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
 	}
+	if (elgg_is_active_plugin('profile_manager')) {
+  	if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {
+    	elgg_unregister_widget_type('profile_completeness');
+  	  elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
+  	}
+	}
 	
 	// Nouveaux widgets
 	if (elgg_is_active_plugin('messages')) {
