@@ -27,11 +27,7 @@ $params = '<p><label>' . elgg_echo('export_embed:widget:params') . elgg_view('in
 // Display settings
 echo $embedurl;
 
-echo 'Ou :';
-
 echo $site_url . $embedtype . $params;
-
-echo 'Paramètres additionnels (facultatif)';
 
 echo $limit . $offset . $group_guid . $user_guid;
 
