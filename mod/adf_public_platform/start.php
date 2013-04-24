@@ -48,8 +48,10 @@ function adf_platform_init() {
   
   // REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
   // Pour changer la manière de filtrer les tags
-	elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
-	elgg_register_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags', 1);
+  if (elgg_is_active_plugin('htmlawed')) {
+	  elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
+	  elgg_register_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags', 1);
+  }
   if (elgg_is_active_plugin('threads')) {
     // Pour n'afficher "Répondre" que pour les objets (et non tous types d'entités)
     elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'threads_topic_menu_setup');
@@ -71,7 +73,7 @@ function adf_platform_init() {
     if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
   } else {
     /*
-    // Remplacement page d'accueil publique
+    // Remplacement page d'accueil publique - ssi si pas en mode walled_garden
     // PARAM : Désactivé si vide, activé avec paramètre de config si non vide
     $replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
     if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
@@ -118,23 +120,39 @@ function adf_platform_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
 	// Modification des titres des widgets
-	elgg_unregister_widget_type('blog');
-	elgg_unregister_widget_type('bookmarks');
-	elgg_unregister_widget_type('brainstorm');
-	elgg_unregister_widget_type('event_calendar');
-	elgg_unregister_widget_type('filerepo');
-	elgg_unregister_widget_type('groups');
-	elgg_unregister_widget_type('pages');
-	elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
-	elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
-	elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
-	elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
-	elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
-	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
-	elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	if (elgg_is_active_plugin('blog')) {
+	  elgg_unregister_widget_type('blog');
+	  elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
+	}
+	if (elgg_is_active_plugin('bookmarks')) {
+	  elgg_unregister_widget_type('bookmarks');
+	  elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
+	}
+	if (elgg_is_active_plugin('brainstorm')) {
+  	elgg_unregister_widget_type('brainstorm');
+  	elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
+	}
+	if (elgg_is_active_plugin('event_calendar')) {
+  	elgg_unregister_widget_type('event_calendar');
+  	elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
+	}
+	if (elgg_is_active_plugin('file')) {
+  	elgg_unregister_widget_type('filerepo');
+	  elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
+	}
+	if (elgg_is_active_plugin('groups')) {
+  	elgg_unregister_widget_type('groups');
+  	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
+	}
+	if (elgg_is_active_plugin('pages')) {
+  	elgg_unregister_widget_type('pages');
+	  elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	}
 	
 	// Nouveaux widgets
-	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+	if (elgg_is_active_plugin('messages')) {
+  	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+	}
 	
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
