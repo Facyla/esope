@@ -60,16 +60,16 @@ $fr = array(
 	'adf_platform:settings:replace_public_home' => "URL (relative) pour remplacer la page d'accueil publique (par défaut&nbsp;: laisser vide)",
 	'adf_platform:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
 	'adf_platform:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
-	'adf_platform:settings:firststeps:help' => "Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
+	'adf_platform:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
 	'adf_platform:settings:footer' => "Contenu du pied de page",
-	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (85px de haut)",
+	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (85px de haut par défaut)",
 	'adf_platform:settings:headerimg:help' => "Indiquez l'URL (relative) de l'image qui sera positionnée au centre du bandeau, sous le menu supérieur, et répétée si nécessaire horizontalement (motif). Utilisez une image de 85px de haut, et suffisamment large pour éviter d'être répétée sur un grand écran (2000px minimum). Pour des dimensions différentes, ajoutez dans les ci-dessous (en modifiant la hauteur) : <em>header { height:115px; }</em>",
 	'adf_platform:settings:helplink' => "Page d'aide",
 	'adf_platform:settings:helplink:help' => "Indiquez l'adresse de la page d'aide du site, correspondant au lien \"Aide\" du menu supérieur. Cette adresse doit être relative à celle du site (pas de lien externe).",
 	'adf_platform:settings:backgroundimg' => "Motif de fond",
 	'adf_platform:settings:backgroundimg:help' => "Indiquez l'URL (relative) de l'image qui sera répétée horizontalement et verticalement",
 	'adf_platform:settings:backgroundcolor' => "Couleur de fond",
-	'adf_platform:settings:backgroundcolor:help' => "",
+	'adf_platform:settings:backgroundcolor:help' => "La couleur de fond est utilisée si aucune image de fond n'est définie, ou le temps que cette image de fond soit chargée.",
 	'adf_platform:settings:groups_disclaimer' => "Configuration du message à l'attention du futur responsable lors de la création d'un nouveau groupe. Pour que le message soit vide, laisser un espace seulement dans le champ.",
 	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
@@ -94,13 +94,13 @@ $fr = array(
 	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
 	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
 	'object:announcement:save:success' => "Annonce enregistrée",
-	'item:object:category' => "Catégories utilisées",
+	'item:object:category' => "Thématiques utilisées",
 	'item:object:topicreply' => "Réponse dans un forum",
 	
 	// Traductions du thème et autres personnalisations
 	'adf_platform:groupinvite' => "invitation à rejoindre un groupe à examiner",
  	'adf_platform:groupinvites' => "invitations à rejoindre un groupe à examiner",
-	'adf_platform:friendinvite' => "demandes de contact à examiner",
+	'adf_platform:friendinvite' => "demande de contact à examiner",
 	'adf_platform:friendinvites' => "demandes de contact à examiner",
 	'adf_platform:gotohomepage' => "Aller sur la page d'accueil",
 	'adf_platform:usersettings' => "Mes paramètres",
@@ -162,7 +162,9 @@ $fr = array(
 	'more:friends' => "Plus de contacts", 
 	
 	// New group
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:secretariat@departementsenreseaux.fr&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	// @TODO : Ce texte devrait être adapté à votre site !
+	// use $CONFIG->url for site install URL, $CONFIG->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->email . "&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
 	
 	// 
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",

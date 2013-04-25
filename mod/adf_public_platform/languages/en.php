@@ -11,7 +11,7 @@ $en = array(
 	'admin:appearance:adf_theme' => "Theme configuration",
 	
 	// Layout settings
-	'adf_platform:settings:help' => "The various configuration panels let you configure numerous elements of your site: graphical elements, interface, couleurs, stylesheets, etc., and also some behaviours.",
+	'adf_platform:settings:help' => "The configuration panels let you configure numerous elements of your site: graphical elements, interface, couleurs, stylesheets, etc., and also some behaviours.",
 	'adf_platform:settings:layout' => "To reset to initial configuration, replace content by \"RAZ\" (in HTML mode).",
 	'adf_platform:faviconurl' => "Favicon URL",
 	'adf_platform:faviconurl:help' => "Relative URL of website favicon (PNG or ICO image, usually 64x64 pixels).",
@@ -55,118 +55,120 @@ $en = array(
 	
 	
 	// Behaviour settings
-	'adf_platform:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",
-	'adf_platform:settings:redirect' => "URL (relative) de redirection après connexion",
-	'adf_platform:settings:replace_public_home' => "URL (relative) pour remplacer la page d'accueil publique (par défaut&nbsp;: laisser vide)",
-	'adf_platform:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
-	'adf_platform:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
-	'adf_platform:settings:firststeps:help' => "Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
-	'adf_platform:settings:footer' => "Contenu du pied de page",
-	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (85px de haut)",
-	'adf_platform:settings:headerimg:help' => "Indiquez l'URL (relative) de l'image qui sera positionnée au centre du bandeau, sous le menu supérieur, et répétée si nécessaire horizontalement (motif). Utilisez une image de 85px de haut, et suffisamment large pour éviter d'être répétée sur un grand écran (2000px minimum). Pour des dimensions différentes, ajoutez dans les ci-dessous (en modifiant la hauteur) : <em>header { height:115px; }</em>",
-	'adf_platform:settings:helplink' => "Page d'aide",
-	'adf_platform:settings:helplink:help' => "Indiquez l'adresse de la page d'aide du site, correspondant au lien \"Aide\" du menu supérieur. Cette adresse doit être relative à celle du site (pas de lien externe).",
-	'adf_platform:settings:backgroundimg' => "Motif de fond",
-	'adf_platform:settings:backgroundimg:help' => "Indiquez l'URL (relative) de l'image qui sera répétée horizontalement et verticalement",
-	'adf_platform:settings:backgroundcolor' => "Couleur de fond",
-	'adf_platform:settings:backgroundcolor:help' => "",
-	'adf_platform:settings:groups_disclaimer' => "Configuration du message à l'attention du futur responsable lors de la création d'un nouveau groupe. Pour que le message soit vide, laisser un espace seulement dans le champ.",
+	'adf_platform:index:url' => "Index page file URL (must be includable)",
+	'adf_platform:settings:redirect' => "Relative redirect URL after login",
+	'adf_platform:settings:replace_public_home' => "Relative URL to replace public homepage (default: leave empty)",
+	'adf_platform:settings:replace_home' => "Replace default homepage by a user dashboard",
+	'adf_platform:settings:firststeps' => "Firsts steps page GUID",
+	'adf_platform:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
+	'adf_platform:settings:footer' => "Footer content",
+	'adf_platform:settings:headerimg' => "Header image (default: 85px height)",
+	'adf_platform:settings:headerimg:help' => "Set relative URL of an image which will be positionned at the center of the header, right under the top level menu, and will be repeated horizontally if needed. Please use a 85px height image, large enough to avoid repetition on large screens (2000px minimum advised). For other dimensions, please add corresponding CSS declarations in the custom CSS below (change height according to your needs) : <em>header { height:115px; }</em>",
+	'adf_platform:settings:helplink' => "Help page",
+	'adf_platform:settings:helplink:help' => "Relative URL of main help page. This will be used for the \"Help\" link in top level menu. Relative URL only, no external link.",
+	'adf_platform:settings:backgroundimg' => "Background image",
+	'adf_platform:settings:backgroundimg:help' => "Relative URL of background image, which will be repeated vertically and horizontally.",
+	'adf_platform:settings:backgroundcolor' => "Background color",
+	'adf_platform:settings:backgroundcolor:help' => "Background color is useful if you don't set any background image, or while background image loads.",
+	'adf_platform:settings:groups_disclaimer' => "Set the disclaimer message for future group owners, while they create a new group. Leave empty for an empty message.",
 	
-	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
+	'river:select:all:nofilter' => "All (no activity filter)",
 	
 	
-	// AJOUTS EN SURCHARGE DES PLUGINS
-	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
-  'river:comment:object:announcement' => "%s a commenté %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
+	// Overrides plugins translations
+	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
+  'river:comment:object:announcement' => "%s has commented %s",
+  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
 	
-	'widget:toggle' => "Montrer/masquer le module %s",
-	'widget:editmodule' => "Configurer le module %s",
+	'widget:toggle' => "Show/hide %s module",
+	'widget:editmodule' => "Configure %s module",
 	
-	// Annonces : manque des clefs de trad
-	'announcements:summary' => "Titre de l'annonce",
-	'announcements:body' => "Texte de l'annonce",
-	'announcements:post' => "Publier l'annonce",
-	'announcements:edit' => "Modifier l'annonce",
-	'announcements:delete:nopermission' => "Impossible de supprimer l'annonce : vous n'avez pas les permissions suffisantes",
-	'announcements:delete:failure' => "Impossible de supprimer l'annonce.",
-	'announcements:delete:sucess' => "Annonce publiée",
-	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
-	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
-	'object:announcement:save:success' => "Annonce enregistrée",
-	'item:object:category' => "Catégories utilisées",
-	'item:object:topicreply' => "Réponse dans un forum",
+	// Announcements: missing translation keys
+	'announcements:summary' => "Announcement title",
+	'announcements:body' => "Announcement text",
+	'announcements:post' => "Publish announcement",
+	'announcements:edit' => "Edit announcement",
+	'announcements:delete:nopermission' => "Cannot delete announcement: you don't have the proper permissions to do that.",
+	'announcements:delete:failure' => "Cannot delete announcement.",
+	'announcements:delete:sucess' => "Announcement published",
+	'object:announcement:save:permissiondenied' => "Cannot save announcement: you don't have the proper permissions to do that.",
+	'object:announcement:save:descriptionrequired' => "Cannot save announcement: announcement text cannot be empty.",
+	'object:announcement:save:success' => "Announcement saved",
+	'item:object:category' => "Used categories",
+	'item:object:topicreply' => "Forum reply",
 	
-	// Traductions du thème et autres personnalisations
-	'adf_platform:groupinvite' => "invitation à rejoindre un groupe à examiner",
- 	'adf_platform:groupinvites' => "invitations à rejoindre un groupe à examiner",
-	'adf_platform:friendinvite' => "demandes de contact à examiner",
-	'adf_platform:friendinvites' => "demandes de contact à examiner",
-	'adf_platform:gotohomepage' => "Aller sur la page d'accueil",
-	'adf_platform:usersettings' => "Mes paramètres",
-	'adf_platform:myprofile' => "Mon profil",
-	'adf_platform:help' => "Aide",
-	'adf_platform:loginregister' => "Connexion / inscription",
-	'adf_platform:joinagroup' => "Rejoindre un groupe",
-	'adf_platform:categories' => "Thématiques",
-	'adf_platform:directory' => "Annuaire",
-	'adf_platform:event_calendar' => "Agenda",
-	'adf_platform:search' => "Rechercher",
-	'adf_platform:groupicon' => "icône du groupe",
-	'adf_platform:categories:all' => "Actualité des thématiques",
+	// Theme translation & other customizations
+	'adf_platform:groupinvite' => "pending group invite request",
+ 	'adf_platform:groupinvites' => "pending groups invites requests",
+	'adf_platform:friendinvite' => "pending friendship request",
+	'adf_platform:friendinvites' => "pending friendship requests",
+	'adf_platform:gotohomepage' => "Go to home page",
+	'adf_platform:usersettings' => "My Settings",
+	'adf_platform:myprofile' => "My Profile",
+	'adf_platform:help' => "Help",
+	'adf_platform:loginregister' => "Login / register",
+	'adf_platform:joinagroup' => "Join a group",
+	'adf_platform:categories' => "Categories",
+	'adf_platform:directory' => "Directory",
+	'adf_platform:event_calendar' => "Calendar",
+	'adf_platform:search' => "Search",
+	'adf_platform:groupicon' => "group icon",
+	'adf_platform:categories:all' => "Categories news",
 	
 	// Widgets
-	'adf_platform:widget:bookmark:title' => 'Mes Liens web',
-	'adf_platform:widget:brainstorm:title' => 'Mes Idées',
-	'adf_platform:widget:blog:title' => 'Mes Articles de blog',
-	'adf_platform:widget:event_calendar:title' => 'Mon Agenda',
-	'adf_platform:widget:file:title' => 'Mes Fichiers',
-	'adf_platform:widget:group:title' => 'Mes Groupes',
-	'adf_platform:widget:page:title' => 'Mes Wikis',
+	'adf_platform:widget:bookmark:title' => 'My Bookmarks',
+	'adf_platform:widget:brainstorm:title' => 'My Brainstorm ideas',
+	'adf_platform:widget:blog:title' => 'My Blog articles',
+	'adf_platform:widget:event_calendar:title' => 'My calendar',
+	'adf_platform:widget:file:title' => 'My Files',
+	'adf_platform:widget:group:title' => 'My Groups',
+	'adf_platform:widget:page:title' => 'My Pages',
 	
-	'accessibility:sidebar:title' => "Outils",
+	'accessibility:sidebar:title' => "Tools",
 	//'breadcrumb' => "Fil d'Ariane",
-	'breadcrumbs' => "Revenir à ",
-	// Demandes en attente
-	'decline' => "Décliner",
-	'refuse' => "Refuser",
+	'breadcrumbs' => "Back to ",
+	// Pending requests
+	'decline' => "Decline",
+	'refuse' => "Refuse",
 	/* Pagination */
-	'previouspage' => "Page précédente",
-	'nextpage' => "Page suivante",
-	/* Recherche de membres */
-	'searchbytag' => "Recherche par mot-clef",
-	'searchbyname' => "Recherche par nom",
-	// Actions génériques à "typer"
-	'delete:message' => "Supprimer le(s) message(s)",
-	'markread:message' => "Marquer le(s) message(s)  comme lu(s)",
-	'toggle:messages' => "inverser la sélection des messages",
-	'messages:send' => "Envoyer le message",
-	'save:newgroup' => "Créer le groupe !",
-	'save:group' => "Enregistrer les modifications du groupe",
-	'upload:avatar' => "Charger la photo",
-	'save:settings' => "Enregistrer la configuration",
-	'save:usersettings' => "Enregistrer mes paramètres",
-	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
-	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
-	'save:widgetsettings' => "Enregistrer les réglages du module",
+	'previouspage' => "Previous page",
+	'nextpage' => "Next page",
+	/* Members search */
+	'searchbytag' => "Tag search",
+	'searchbyname' => "Name search",
+	// Generic actions
+	'delete:message' => "Delete selected message(s)",
+	'markread:message' => "Mark selected message(s) as read",
+	'toggle:messages' => "toggle messages selection",
+	'messages:send' => "Send message",
+	'save:newgroup' => "Create the group!",
+	'save:group' => "Save group changes",
+	'upload:avatar' => "Load image",
+	'save:settings' => "Save the configuration",
+	'save:usersettings' => "Save my settings",
+	'save:usernotifications' => "Save my notification settings for members",
+	'save:groupnotifications' => "Save my notification settings for groups",
+	'save:widgetsettings' => "Save widget settings",
 	// Notifications
-	'link:userprofile' => "Page de profil de %s",
+	'link:userprofile' => "%s's profile page",
 	
-	// Params widgets
-	'onlineusers:numbertodisplay' => "Nombre maximum de membres connectés à afficher",
-	'newusers:numbertodisplay' => "Nombre maximum de nouveaux membres à afficher",
-	'brainstorm:numbertodisplay' => "Nombre maximum d'idées à afficher",
-	'river:numbertodisplay' => "Nombre maximum d'activités à afficher",
-	'group:widget:num_display' => "Nombre maximum de groupes à afficher",
+	// Widgets settings
+	'onlineusers:numbertodisplay' => "Max amount of connected members to display",
+	'newusers:numbertodisplay' => "Max amount of new members to display",
+	'brainstorm:numbertodisplay' => "Max amount of new ideas to display",
+	'river:numbertodisplay' => "Max amount of activities to display",
+	'group:widget:num_display' => "Max amount of groups to display",
 	
-	'more:friends' => "Plus de contacts", 
+	'more:friends' => "More friends", 
 	
 	// New group
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:secretariat@departementsenreseaux.fr&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	// @TODO This text should definitely be adapted to your own install - HTML can be used here ; 
+	// use $CONFIG->url for site install URL, $CONFIG->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Group creation rules:</strong> <em>Please refer to General User Conditions.</em></blockquote>",
 	
 	// 
-	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
-	'accessibility:requestnewpassword' => "Demander la réinitialisation du mot de passe",
+	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> All fields are required",
+	'accessibility:requestnewpassword' => "Ask for a new password",
 	'accessibility:revert' => "Delete",
 	
 	
@@ -184,8 +186,6 @@ $en = array(
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
-	
-	//'' => "",
 	
 	
 );
