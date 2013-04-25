@@ -1,11 +1,11 @@
 <?php
 $english = array(
-
   'cmspages' => "Static pages (CMS)",
   'item:object:cmspages' => 'Static pages',
   
   'cmspages:pagetype' => "Page URL name",
-  'cmspages:cmspage_url' => "Published page URL :",
+  'cmspages:cmspage_url' => "Published page URL:",
+  'cmspages:cmspage_view' => "Display view:",
   'cmspages:pageselect' => "Choose which page to edit",
   
   'cmspages:new' => "OK",
