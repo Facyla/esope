@@ -1,6 +1,7 @@
 <?php
 $english = array(
   'cmspages' => "Static pages (CMS)",
+  'item:object:cmspage' => 'Static page',
   'item:object:cmspages' => 'Static pages',
   
   'cmspages:pagetype' => "Page URL name",
