@@ -55,8 +55,10 @@ if (empty($vars['entity']->color9)) { $vars['entity']->color9 = '#CCCCCC'; }
 if (empty($vars['entity']->color10)) { $vars['entity']->color10 = '#999999'; }
 if (empty($vars['entity']->color11)) { $vars['entity']->color11 = '#333333'; }
 if (empty($vars['entity']->color12)) { $vars['entity']->color12 = '#DEDEDE'; }
+// Sub-menu
+if (empty($vars['entity']->color13)) { $vars['entity']->color13 = '#CCCCCC'; }
 
-#CCCCCC
+
 // Footer background color
 //if (empty($vars['entity']->footercolor)) { $vars['entity']->footercolor = '#555555'; }
 // Additionnal CSS content - loaded at the end
@@ -245,6 +247,9 @@ echo '<div id="adf-settings-tabs">
       <?php echo elgg_view('input/color', array( 'name' => 'params[color12]', 'value' => $vars['entity']->color12 )); ?>
     </p>
     //-->
+    <p><label><?php echo elgg_echo('adf_platform:color13:color'); ?></label>
+      <?php echo elgg_view('input/color', array( 'name' => 'params[color13]', 'value' => $vars['entity']->color13 )); ?>
+    </p>
 
     <p><label><?php echo elgg_echo('adf_platform:css'); ?></label><br />
       <?php echo elgg_echo('adf_platform:css:help'); ?>

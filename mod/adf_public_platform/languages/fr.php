@@ -3,7 +3,7 @@
  * French strings
  */
 
-$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
+$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
 $fr = array(
 	
@@ -19,7 +19,7 @@ $fr = array(
 	'adf_platform:headertitle:help' => "Pour agrandir certains caractères, encadrez-les de balises, et utilisez la classe 'minuscule' pour changer la casse&nbsp;: &lt;span&gt;T&lt;/span&gt;itre.&lt;span class=\"minuscule\"&gt;fr&lt;/span&gt;",
 	'adf_platform:header:content' => "Contenu de l'entête (code HTML libre). Pour retrouver la configuration initiale avec une image de logo configurable, remplacez le contenu par \"RAZ\" (en mode HTML).",
 	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $vars['url'] . '/mod/adf_public_platform/img/logo.gif" alt="Logo du site"  /></a></div>',
-	'adf_platform:header:height' => "Hauteur de l'entête du menu (identique à celle de l'image de fond utilisée)",
+	'adf_platform:header:height' => "Hauteur de l'entête du menu (identique à celle de l'image de fond utilisée - ou inférieure)",
 	'adf_platform:header:background' => "URL de l'image de fond de l'entête (apparaît également sous le menu)",
 	'adf_platform:footer:color' => "Couleur de fond du footer",
 	'adf_platform:footer:content' => "Contenu du footer",
@@ -47,10 +47,11 @@ $fr = array(
 	'adf_platform:color10:color' => "Couleur configurable 10",
 	'adf_platform:color11:color' => "Couleur configurable 11",
 	'adf_platform:color12:color' => "Couleur configurable 12",
-	'widgets:dashboard:add' => "Personnaliser ma page d'accueil'",
+	'adf_platform:color13:color' => "Couleur de fond du sous-menu déroulant",
+	'widgets:dashboard:add' => "Personnaliser ma page d'accueil",
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
 	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
-	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/3819/mentions-lgales",
+	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/1234/mentions-legales",
 	
 	
 	// Behaviour settings

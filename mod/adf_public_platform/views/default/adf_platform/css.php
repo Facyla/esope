@@ -66,6 +66,8 @@ $color9 = elgg_get_plugin_setting('color9', 'adf_public_platform'); // #CCCCCC
 $color10 = elgg_get_plugin_setting('color10', 'adf_public_platform'); // #999999
 $color11 = elgg_get_plugin_setting('color11', 'adf_public_platform'); // #333333
 $color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
+// Couleur de fond du sous-menu
+$color13 = elgg_get_plugin_setting('color13', 'adf_public_platform'); // #DEDEDE
 
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform'); // 

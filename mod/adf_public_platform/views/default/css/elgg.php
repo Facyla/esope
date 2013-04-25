@@ -51,6 +51,8 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+// Couleur de fond du sous-menu déroulant
+$color13 = elgg_get_plugin_setting('color13', 'adf_public_platform');
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
 
@@ -75,6 +77,7 @@ $vars['theme-config-css'] = array(
   'color10' => $color10,
   'color11' => $color11,
   'color12' => $color12,
+  'color13' => $color13,
   'footercolor' => $footercolor,
 );
 /* Use in subsequent CSS views like this :
