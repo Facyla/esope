@@ -644,7 +644,7 @@ $french = array(
 
 	'admin:plugins:warning:elgg_version_unknown' => "Ce plugin utilise un ancien fichier manifest.xml et ne précise pas si cette version est compatible avec l'Elgg actuel. Il ne fonctionnera probablement pas !",
 	'admin:plugins:warning:unmet_dependencies' => "Ce plugin ne retrouve pas certaines dépendances et ne peut être activé. Vérifiez les dépendances pour plus d'infos.",
-	'admin:plugins:warning:invalid' => "%s n'est pas un plugin valide d'Elgg. Vérifiez <a href='http://docs.elgg.org/Invalid_Plugin'>la documentation d'Elgg</a> les conseils de dépannage.",
+	'admin:plugins:warning:invalid' => "%s n'est pas un plugin d'Elgg valide. Vérifiez les conseils de dépannage dans <a href=\"http://docs.elgg.org/Invalid_Plugin\">documentation d'Elgg</a>.",
 	'admin:plugins:cannot_activate' => "Activation impossible",
 
 	'admin:plugins:set_priority:yes' => "%s Réordonné",
@@ -802,8 +802,8 @@ $french = array(
 
 	'up' => "Monter",
 	'down' => "Descendre",
-	'top' => "Au-dessus",
-	'bottom' => "Au-dessous",
+	'top' => "Tout en haut",
+	'bottom' => "Tout en bas",
 
 	'invite' => "Inviter",
 
@@ -971,19 +971,12 @@ Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de ch
 	'upgrade:db' => "Votre base de données a été mise à jour.",
 	'upgrade:core' => "Votre installation de Elgg a été mise à jour",
 	'upgrade:unable_to_upgrade' => "Impossible de mettre à jour.",
-	'upgrade:unable_to_upgrade_info' =>
-		'This installation cannot be upgraded because legacy views
-		were detected in the Elgg core views directory. These views have been deprecated and need to be
-		removed for Elgg to function correctly. If you have not made changes to Elgg core, you can
-		simply delete the views directory and replace it with the one from the latest
-		package of Elgg downloaded from <a href="http://elgg.org">elgg.org</a>.<br /><br />
+	'upgrade:unable_to_upgrade_info' => "Cette installation ne peut pas être mise à jour car des vues personnalisées ont été détectées dans le dossier des vues du core d'Elgg. Ces vues ont été dépréciées et doivent être retirées pour qu'Elgg fonctionne correctement. Si vous n'avez fait aucune modification du core d'Elgg, vous pouvez simplement supprimer le dossier  des vues du core et le remplacer par celui de la dernière version d'Elgg téélchargeable à partir de <a href=\"http://elgg.org\">elgg.org</a>.<br /><br />
 
-		If you need detailed instructions, please visit the <a href="http://docs.elgg.org/wiki/Upgrading_Elgg">
-		Upgrading Elgg documentation</a>.  If you require assistance, please post to the
-		<a href="http://community.elgg.org/pg/groups/discussion/">Community Support Forums</a>.',
+		Pour des instructions détaillées, veuillez vous reporter à la <a href=\"http://docs.elgg.org/wiki/Upgrading_Elgg\">documentation sur la mise à jour d'Elgg</a>.  Si vous avez besoin d'aide, veuillez écrire dans les <a href=\"http://community.elgg.org/pg/groups/discussion/\">Forums d'aide de la communauté Elgg</a>.",
 
-	'update:twitter_api:deactivated' => "Twitter API (précédemment Twitter Service) a été désactivé lors de la mise à niveau. S'il vous plaît activer manuellement si nécessaire.",
-	'update:oauth_api:deactivated' => "OAuth API (précédemment OAuth Lib) a été désactivé lors de la mise à niveau. S'il vous plaît activer manuellement si nécessaire.",
+	'update:twitter_api:deactivated' => "Twitter API (précédemment Twitter Service) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
+	'update:oauth_api:deactivated' => "OAuth API (précédemment OAuth Lib) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
 
 	'deprecated:function' => "%s() a été déclaré obsolète par %s()",
 
@@ -1042,7 +1035,7 @@ Si c'est bien vous qui avez demandé ce changement, veuillez cliquer sur le lien
 /**
  * XML-RPC
  */
-	'xmlrpc:noinputdata'	=>	"Input data missing",
+	'xmlrpc:noinputdata'	=>	"Données d'entrée manquantes",
 
 /**
  * Comments
@@ -1060,7 +1053,7 @@ Si c'est bien vous qui avez demandé ce changement, veuillez cliquer sur le lien
 	'generic_comment:deleted' => "Votre commentaire a bien été supprimé.",
 	'generic_comment:blank' => "Désolé, vous devez remplir votre commentaire avant de pouvoir l'enregistrer.",
 	'generic_comment:notfound' => "Désolé, l'élément recherché n'a pas été trouvé.",
-	'generic_comment:notdeleted' => "Désolé, le commentaire n'a pu être supprimé.",
+	'generic_comment:notdeleted' => "Désolé, le commentaire n'a pas pu être supprimé.",
 	'generic_comment:failure' => "Une erreur est survenue lors de l'ajout de votre commentaire. Veillez réessayer.",
 	'generic_comment:none' => "Pas de commentaire",
 
@@ -1072,11 +1065,9 @@ Si c'est bien vous qui avez demandé ce changement, veuillez cliquer sur le lien
 
 
 Pour répondre ou voir le contenu de référence, suivez le lien :
-
 %s
 
 Pour voir le profil de %s, suivez ce lien :
-
 %s
 
 Ne répondez pas à cet email.",
@@ -1104,7 +1095,7 @@ Ne répondez pas à cet email.",
 /**
  * Word blacklists
  */
-	'word:blacklist' => "and, the, then, but, she, his, her, him, one, not, also, about, now, hence, however, still, likewise, otherwise, therefore, conversely, rather, consequently, furthermore, nevertheless, instead, meanwhile, accordingly, this, seems, what, whom, whose, whoever, whomever",
+	'word:blacklist' => "alors, au, aucuns, aussi, autre, avant, avec, avoir, bon, car, ce, cela, ces, ceux, chaque, ci, comme, comment, dans, des, du, dedans, dehors, depuis, deux, devrait, doit, donc, dos, droite, début, elle, elles, en, encore, essai, est, et, eu, fait, faites, fois, font, force, haut, hors, ici, il, ils, je, juste, la, le, les, leur, là, ma, maintenant, mais, mes, mine, moins, mon, mot, même, ni, nommés, notre, nous, nouveaux, ou, où, par, parce, parole, pas, personnes, peut, peu, pièce, plupart, pour, pourquoi, quand, que, quel, quelle, quelles, quels, qui, sa, sans, ses, seulement, si, sien, son, sont, sous, soyez, sujet, sur, ta, tandis, tellement, tels, tes, ton, tous, tout, trop, très, tu, valeur, voie, voient, vont, votre, vous, vu, ça, étaient, état, étions, été, être",
 
 /**
  * Tag labels
@@ -1266,6 +1257,117 @@ Ne répondez pas à cet email.",
 	"za" => "Zhuang",
 	"zh" => "Chinois",
 	"zu" => "Zoulou",
+	
+	
+	// Additions between 1.8.8 (or 1.8.01 ?) and 1.8.14 - Facyla
+  'access:help' => "Niveau d'accès",
+  'access:limited:label' => "Limité",
+  'actiongatekeeper:uploadexceeded' => "La taille du (ou des) fichier(s) envoyé(s) dépasse la limite fixée par l'administrateur du site.",
+  'add' => "Ajouter",
+  'admin:administer_utilities' => "Utilitaires",
+  'admin:cache:flushed' => "Les caches du site ont été vidés",
+  'admin:cache:flush' => "Vider les caches",
+  'admin:configuration:dataroot:relative_path' => "Impossible de définir &quot;%s&quot; comme dossier de données (dataroot) car ce n'est pas un chemin absolu.",
+  'admin:develop_utilities' => "Utilitaires",
+  'admin:plugins:activate' => "Activer",
+  'admin:plugins:activate:no_with_msg' => "Impossible d'activer %s. Erreur : %s",
+  'admin:plugins:category:active' => "Plugins actifs",
+  'admin:plugins:category:api' => "Service/API",
+  'admin:plugins:category:communication' => "Communication",
+  'admin:plugins:category:enhancement' => "Améliorations",
+  'admin:plugins:category:inactive' => "Plugins désactivés",
+  'admin:plugins:category:multimedia' => "Multimédia",
+  'admin:plugins:category:nonbundled' => "Non-empaquetés (non-bundled)",
+  'admin:plugins:category:security' => "Sécurité et spam",
+  'admin:plugins:category:social' => "Social",
+  'admin:plugins:category:theme' => "Thèmes",
+  'admin:plugins:category:utility' => "Utilitaires",
+  'admin:plugins:category:widget' => "Widgets",
+  'admin:plugins:deactivate' => "Désactiver",
+  'admin:plugins:deactivate:no_with_msg' => "Impossible de désactiver %s. Erreur : %s",
+  'admin:plugins:label:bugtracker' => "Signaler un problème",
+  'admin:plugins:label:donate' => "Soutenir (donation)",
+  'admin:plugins:label:repository' => "Code",
+  'admin:plugins:set_priority:no_with_msg' => "Impossible de réordonner %s. Erreur : %s",
+  'admin:plugins:sort:alpha' => "Alphabétique",
+  'admin:plugins:sort:date' => "Les plus récents",
+  'admin:plugins:sort:priority' => "Priorité",
+  'admin:plugins:warning:invalid:check_docs' => "Vérifiez &lt;a href=&quot;http://docs.elgg.org/Invalid_Plugin&quot;&gt;la documentation Elgg&lt;/a&gt; pour des astuces de résolution de problèmes.",
+  'admin:plugins:warning:unmet_dependencies_active' => "Ce plugin est activé mais a des dépendances non satisfaites. Vous pouvez rencontrer des problèmes. Consultez &quot;plus d'informations&quot; ci-dessous pour des informations détaillées.",
+  'admin:server:error_log' => "Journal d'erreurs du serveur web",
+  'admin:server:label:log_location' => "Emplacement du journal",
+  'admin:server:label:mem_avail' => "Mémoire disponible",
+  'admin:server:label:mem_used' => "Mémoire utilisée",
+  'admin:server:label:php_ini' => "Emplacement du fichier PHP.ini",
+  'admin:server:label:php_log' => "Journal PHP",
+  'admin:server:label:php' => "PHP",
+  'admin:server:label:php_version' => "Version de PHP",
+  'admin:server:label:post_max_size' => "Taille maximale des requêtes POST",
+  'admin:server:label:server' => "Serveur",
+  'admin:server:label:upload_max_filesize' => "Taille maximale des fichiers envoyés",
+  'admin:server:label:web_server' => "Serveur web",
+  'admin:server:warning:post_max_too_small' => "(Note: post_max_size doit être supérieur à cette valeur pour permettre des envois de cette taille - pensez aux entêtes des requêtes)",
+  'admin:statistics:label:admins' => "Administrateurs",
+  'admin:statistics:server' => "Informations du serveur",
+  'admin:users:admins' => "Administrateurs",
+  'admin:widget:control_panel' => "Tableau de bord d'administration",
+  'admin:widget:control_panel:help' => "Fournit un accès rapide aux fonctionnalités de contrôle les plus communes",
+  'avatar:remove:fail' => "Echec de la suppression de l'image de profil",
+  'avatar:remove' => "Supprimer votre image de profil et rétablir l'icône de profil par défaut",
+  'avatar:remove:success' => "Suppression de l'image de profil réussie",
+  'back' => "Retour",
+  'create' => "Créer",
+  'filter' => "Filtrer",
+  'DatabaseException:InvalidDBLink' => "La connexion à la base de données a été perdue.",
+  'deleteconfirm:plural' => "Etes-vous sûr(e) de vouloir supprimer ces éléments ?",
+  'ElggPlugin:InvalidAndDeactivated' => "%s est un polugin invalide et a été désactivé.",
+  'error:404' => "Désolé, la page demandée n'a pas été trouvée.",
+  'error:default' => "Aïe... quelque chose n'a pas fonctionné.",
+  'error:missing_data' => "Données manquantes dans votre requête",
+  'exception:contact_admin' => "Une erreur irrécupérable s'est produite et a été enregistrée dans le journal. Contactez l'administrateur du site avec les informations suivantes : ",
+  'friends:collection:edit_failed' => "Impossible d'enregistrer la collection.",
+  'friends:collections:edited' => "Collection enregistrée",
+  'generic_comment:title' => "Commentaire de %s",
+  'generic_comment:on' => "%s sur %s",
+  'installation:systemcache:description' => "Le cache système diminue le temps de chargement d'Elgg en mettant en cache des données dans des fichiers.",
+  'installation:systemcache:label' => "Utiliser le cache système (recommandé)",
+  'InvalidParameterException:LibraryNotFound' => "Impossible de charger la bibliohtèque %s à partir de %s",
+  'item:object:admin_notice' => "Information pour l'administrateur",
+  'LoginException:ChangePasswordFailure' => "Echec de la vérification du mot de passe actuel.",
+  'LoginException:Unknown' => "Impossible de vous identifier sur le site suite à une erreur inconnue.",
+  'menu:page:header:default' => "Autre",
+  'new' => "Nouveau",
+  'none' => "aucun",
+  'noaccess' => "Vous devez vous connecter pour accéder à cette publication, ou celle-ci a été supprimée, ou vous n'avez pas le droit d'y accéder.",
+  'profile:noaccess' => "Vous n'avez pas la permission de modifier ce profil.",
+  'off' => "Désactivé",
+  'on' => "Activé",
+  'PluginException:NullInstantiated' => "La classe ElggPlugin n'a pas pu être instanciée. Vous devez passer un GUID, un ID de plugin, ou un chemin complet.",
+  'plugins:disabled' => "Les plugins n'ont pas été chargés car un fichier nommé &quot;disabled&quot; est présent dans le répertoire mod/ du serveur.",
+  'preview' => "Prévisualiser",
+  'profile:field:date' => "Date",
+  'profile:field:email' => "Adresse de courriel",
+  'profile:field:location' => "Adresse ou localisation",
+  'profile:field:longtext' => "Zone de texte étendue",
+  'profile:field:tags' => "Mots-clefs",
+  'profile:field:text' => "Texte court",
+  'profile:field_too_long' => "Impossible d'enregistrer vos informations de profil car la section &quot;%s&quot; est trop longue.",
+  'profile:field:url' => "Adresse web (URL)",
+  'profile:resetdefault:confirm' => "Etes-vous sûr(e) de vouloir supprimer vos champs de profil personnalisés ?",
+  'register:fields' => "Tous les champs sont requis",
+  'registration:usernametoolong' => "Votre nom d'utilisateur est trop long. Il doit être d'une longuaeur maximale de %u caractères.",
+  'remove' => "Retirer",
+  'revert' => "Rétablir",
+  'river:comment:object:default' => "%s a commenté %s",
+  'river:delete:fail' => "L'élément de la rivière n'a pas pu être supprimé",
+  'river:delete:success' => "L'élément de la rivière a été supprimé",
+  'SecurityException:ForwardFailedToRedirect' => "La redirection n'a pas pu être effectuée car les headers ont déjà été envoyés. Suspension de l'exécution pour des raisons de sécurité. Consultez la documentation d'Elgg sur <a href=\"http://docs.elgg.org/\">http://docs.elgg.org/</a> pour plus d'informations.",
+  'settings:edit' => "Modifier les paramètres",
+  'sort' => "Trier",
+  'upgrade:locked' => "Impossible de mettre à jour. Une autre mise à jour est en cours. Pour supprimer le verrou d'installation, veuillez vous rendre dans la section Administration du site.",
+  'upgrade:unlock:confirm' => "La base de données est verrouillé pour une autre mise à jour. Lancer des mises à jour concurrentes est dangereux. Vous ne devriez poursuivre que si vous savez qu'il n'y a pas d'autre mise à jour en cours d'exécution. Déverrouiller ?",
+  'upgrade:unlock' => "Débloquer le verrou de mise à jour",
+  'upgrade:unlock:success' => "Verrou de mise à jour débloqué. Vous pouvez procéder à la mise à jour.",
 	
 );
 
