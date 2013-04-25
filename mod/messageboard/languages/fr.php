@@ -66,9 +66,10 @@ Vous ne pouvez pas répondre à cet email.",
 	'messageboard:blank' => "Désolé, vous devez écrire quelque chose dans le corps du message avant de pouvoir l'enregistrer.",
 	'messageboard:notfound' => "Désolé, l'élément spécifié n'a pu être trouvé.",
 	'messageboard:notdeleted' => "Désolé, le message n'a pu être supprimé.",
-	'messageboard:somethingwentwrong' => "Quelque chose a tourné court lors de l'enregistrement de votre message, veuillez vérifier que vous avez bien écrit un message.",
+	'messageboard:somethingwentwrong' => "Une erreur s'est produite lors de l'enregistrement de votre message, veuillez vérifier que vous avez bien écrit un message.",
 
 	'messageboard:failure' => "Une erreur imprévue s'est produite lors de l'ajout de votre message. Veuillez réeessayer.",
+	'river:messageboard:user:default' => "%s a écrit sur le Mur de %s",
 
 );
 

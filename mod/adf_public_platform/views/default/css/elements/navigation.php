@@ -19,6 +19,7 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+$color13 = $css['color13']; // Couleur de fond du sous-menu déroulant
 ?>
 
 /* ***************************************
@@ -461,7 +462,7 @@ header nav ul li a:active { color: #ddd; }
 }
 #transverse nav ul li ul li {
 	clear: left;
-	background: #ccc;
+	background: <?php echo $color13; ?>;
 	width: 200px;
 	float: left;
 }

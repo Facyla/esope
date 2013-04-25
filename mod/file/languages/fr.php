@@ -27,6 +27,7 @@ $french = array(
 	'file:user:gallery'=> "Voir la galerie de %s",
 	'file:via' => "via les fichiers",
 	'file:upload' => "Envoyer un fichier",
+	'file:newupload' => "Un nouveau fichier a été envoyé",
 	'file:replace' => "Remplacer le contenu du fichier (laisser vide pour ne rien changer)",
 	'file:list:title' => "%s %s de %s",
 	'file:title:friends' => "des contacts",
