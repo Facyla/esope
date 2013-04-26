@@ -13,6 +13,9 @@
 
 $url = $vars['url'];
 
+$yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
+$no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
+
 // SET DEFAULT VALUES
 
 /* Unused since new theme w/ Urbilog
@@ -111,7 +114,7 @@ echo '<div id="adf-settings-tabs">
       <?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro )); ?>
     </p><br />
     <p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
-      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->displaystats )); ?>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?>
     </p>
   </div>
   
@@ -130,11 +133,17 @@ echo '<div id="adf-settings-tabs">
         <?php echo elgg_view('input/longtext', array( 'name' => 'params[dashboardheader]', 'value' => $vars['entity']->dashboardheader )); ?>
       </p><br />
     <?php } ?>
+  </div>
+  
+  <h3>COMPORTEMENTS ET REGLAGES</h3>
+  <div>
     <p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
       <?php echo $url . elgg_view('input/text', array( 'name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"' )); ?>
     </p>
+    <p><label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles )); ?>
+    </p>
   </div>
-  
   
   <h3>ELEMENTS DE L'INTERFACE</h3>
   <div>

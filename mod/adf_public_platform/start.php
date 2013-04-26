@@ -173,6 +173,12 @@ function adf_platform_init() {
 	elgg_register_simplecache_view('css/input/color_picker');
 	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
 	
+	// Verrouillage de certaines pages à haut niveau (via le page_handler) 
+	// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
+	elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
+	// @TODO : compléter par un blocage direct au niveau de l'entité elle-même (non bloquant mais avec ocntenu vide à la place)
+	
+	
 }
 
 
@@ -706,6 +712,54 @@ if (!function_exists('messages_get_unread')) {
 
 	  return elgg_get_entities_from_metadata($options);
   }
+}
+
+
+/* Filtrage via le page_handler
+ * 
+ * Principes de conception : 
+ * - ne filtre que si on l'a explicitement demandé quelque part (pas de modification du comportement par défaut
+ * 
+*/
+function adf_platform_route($hook_name, $entity_type, $return_value, $parameters) {
+  global $CONFIG;
+  $home = $CONFIG->url;
+  
+  // Page handler et segments de l'URL
+  // Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
+  $handler = $return_value['handler'];
+  $segments = $return_value['segments'];
+  //echo print_r($segments, true); // debug
+  //register_error($handler . ' => ' . print_r($segments, true));
+  //error_log('DEBUG externalmembers ROUTE : ' . $handler . ' => ' . print_r($segments, true));
+  
+  // Il n'y a verrouillage du profil que si cette option est explicitement activée (pour ne pas modifier le comportement par défaut)
+  $public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+  if (($public_profiles == 'yes') && !elgg_is_logged_in()) {
+    if ($handler == 'profile') {
+      $username = $segments[0];
+      if ($user = get_user_by_username($username)) {
+        // Le profil n'est accessible que si l'user en a décidé ainsi, sinon => forward
+        if ($user->ispublic != 'yes') {
+          register_error("Profil inexistant ou non public.");
+          forward($home);
+        } else {
+          //system_messages("Profil visible de l'extérieur.");
+        }
+      }
+    }
+  }
+  
+  //  @todo : Pour tous les autres cas => déterminer le handler et ajuster le comportement
+  //register_error("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+  error_log("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+  
+  /* Valeurs de retour :
+   * return false; // Interrompt la gestion des handlers
+   * return $parameters; // Laisse le fonctionnement habituel se poursuivre
+  */
+  // Par défaut on ne fait rien du tout
+	return $parameters;
 }
 
 
