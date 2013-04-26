@@ -3,19 +3,17 @@ $language = array (
   'messages:unreadcount' => '%s non lu',
   'messages:sent' => 'Messages envoyés',
   'messages:toggle' => 'Inverser la sélection',
-  'messages:email:body' => 'Vous avez un nouveau message de %s :
+  'messages:email:body' => '%s vous a envoyé un message privé :
 
-
-	%s
-
+%s
 
 Pour voir vos messages, cliquez sur :
 %s
 
-Pour envoyer un message, cliquez sur :
+Pour écrire un message à %s, cliquez sur :
 %s
 
-Vous ne pouvez pas répondre à cet email.',
+Vous devez vous connecter pour répondre à cet email.',
   'messages:notfound' => 'Désolé, ce message n\'a pas pu être trouvé.',
   'messages:notdeleted' => 'Désolé, ce message n\'a pas pu être effacé.',
   'messages:user:nonexist' => 'Le destinataire n\'a pas pu être trouvé dans la base de données des membres.',
