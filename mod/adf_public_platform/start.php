@@ -173,10 +173,19 @@ function adf_platform_init() {
 	elgg_register_simplecache_view('css/input/color_picker');
 	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
 	
-	// Verrouillage de certaines pages à haut niveau (via le page_handler) 
-	// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
-	elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
-	// @TODO : compléter par un blocage direct au niveau de l'entité elle-même (non bloquant mais avec ocntenu vide à la place)
+	// Profil non public par défaut, si réglage activé
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+	if ($public_profiles == 'yes') {
+		// Verrouillage de certaines pages à haut niveau (via le page_handler) 
+		// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
+		elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
+		// Réglage pour l'utilisateur
+		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 600); // En haut des réglages
+		// Hook pour modifier le nouveau réglage ajouté aux paramètres personnels
+		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'adf_platform_public_profile_hook');
+		// @TODO : compléter par un blocage direct au niveau de l'entité elle-même pour les listings et autres photos 
+		// (non bloquant mais avec contenu vide à la place)
+	}
 	
 	
 }
@@ -724,7 +733,7 @@ if (!function_exists('messages_get_unread')) {
 function adf_platform_route($hook_name, $entity_type, $return_value, $parameters) {
   global $CONFIG;
   $home = $CONFIG->url;
-  
+
   // Page handler et segments de l'URL
   // Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
   $handler = $return_value['handler'];
@@ -733,26 +742,28 @@ function adf_platform_route($hook_name, $entity_type, $return_value, $parameters
   //register_error($handler . ' => ' . print_r($segments, true));
   //error_log('DEBUG externalmembers ROUTE : ' . $handler . ' => ' . print_r($segments, true));
   
-  // Il n'y a verrouillage du profil que si cette option est explicitement activée (pour ne pas modifier le comportement par défaut)
-  $public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
-  if (($public_profiles == 'yes') && !elgg_is_logged_in()) {
-    if ($handler == 'profile') {
-      $username = $segments[0];
-      if ($user = get_user_by_username($username)) {
-        // Le profil n'est accessible que si l'user en a décidé ainsi, sinon => forward
-        if ($user->ispublic != 'yes') {
-          register_error("Profil inexistant ou non public.");
-          forward($home);
-        } else {
-          //system_messages("Profil visible de l'extérieur.");
-        }
-      }
-    }
+  if (!elgg_is_logged_in()) {
+		// Il n'y a verrouillage du profil que si cette option est explicitement activée (pour ne pas modifier le comportement par défaut)
+		$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+		if ($public_profiles == 'yes') {
+		  if ($handler == 'profile') {
+		    $username = $segments[0];
+		    if ($user = get_user_by_username($username)) {
+		      // Le profil n'est accessible que si l'user en a décidé ainsi, sinon => forward
+		      if ($user->public_profile != 'yes') {
+		        register_error("Profil inexistant ou non public.");
+		        forward($home);
+		      } else {
+		        //system_messages("Profil visible de l'extérieur.");
+		      }
+		    }
+		  }
+		}
   }
   
   //  @todo : Pour tous les autres cas => déterminer le handler et ajuster le comportement
   //register_error("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
-  error_log("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+  //error_log("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
   
   /* Valeurs de retour :
    * return false; // Interrompt la gestion des handlers
@@ -760,6 +771,34 @@ function adf_platform_route($hook_name, $entity_type, $return_value, $parameters
   */
   // Par défaut on ne fait rien du tout
 	return $parameters;
+}
+
+function adf_platform_public_profile_hook($hook_name, $entity_type, $return_value, $parameters){
+	$user_guid = (int) get_input('guid');
+	$public_profile = get_input('public_profile');
+	// On ne modifie que si le réglage global est actif
+	// Attention : modifier l'access_id de l'user directement est une *fausse bonne idée* : ça pose de nombreux problème pour s'identifier, etc.
+	// Si différent de 2 on ne s'identifie plus...
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+	if ($public_profiles == 'yes') {
+		if (!empty($user_guid) && !empty($public_profile)) {
+			if ($user = get_user($user_guid)) {
+				if ($user->canEdit()) {
+					$user->public_profile = $public_profile;
+					if ($user->save()) {
+						system_message(elgg_echo('adf_platform:action:public_profile:saved'));
+						if ($public_profile == 'yes') {
+							system_message(elgg_echo('adf_platform:usersettings:public_profile:public'));
+						} else {
+							system_message(elgg_echo('adf_platform:usersettings:public_profile:private'));
+						}
+					} else {
+						register_error(elgg_echo('adf_platform:action:public_profile:error'));
+					}
+				}
+			}
+		}
+	}
 }
 
 

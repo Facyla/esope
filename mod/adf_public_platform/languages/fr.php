@@ -52,6 +52,15 @@ $fr = array(
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
 	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
 	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/1234/mentions-legales",
+	'adf_platform:home:public_profiles' => "Profil public",
+	'adf_platform:home:public_profiles:help' => "Ce réglage permet de donner la possibilité aux membres du site de choisir de rendre leur profil accessible depuis internet, sans compte sur le site. Par défaut leur profil sera réservé aux membres, jusqu'à-ce qu'ils choisissent de le rendre public. Si ce réglage est désactivé, les profils sont publics.<br />A noter : en mode \"intranet\", aucune page n'est visible de l'extérieur, y compris les pages de profil, et ce réglage n'a aucun effet.",
+	'adf_platform:usersettings:public_profiles:title' => "Choisir la visibilité de mon profil",
+	'adf_platform:usersettings:public_profile' => "Rendre mon profil public",
+	'adf_platform:usersettings:public_profile:help' => "Par défaut votre profil n'est visible que des membres du site, afin de ne pas exposer votre profil publiquement sans votre accord volontaire. Ce réglage vous permet de le rendre accessible de l'extérieur.<br />Veuillez noter que tous vos autres réglages de visibilité des champs et des widgets qui composent votre page du profil restent valables : par exemple si vous avez choisi que votre numéro de téléphone ou la liste de contacts sont réservés à vos contacts, rendre votre profil public ne modifiera pas ce réglage, et cette information restera réservée à vos contacts.<br />Il est conseillé de rendre votre profil public si vous souhaitez présenter vos compétences ou partager certaines informations choisies sur internet.",
+	'adf_platform:action:public_profile:error' => "Une erreur s'est lors de la modification de vos paramètres.",
+	'adf_platform:action:public_profile:saved' => "La visibilité de votre profil a bien été modifiée.",
+	'adf_platform:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
+	'adf_platform:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
 	
 	
 	// Behaviour settings
