@@ -38,7 +38,7 @@ function feedback_init() {
     
     // Give access to feedbacks in groups
     $feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
-    if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && isloggedin()) {
+    if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && elgg_is_logged_in()) {
       gatekeeper();
       group_gatekeeper();
       // Add group menu option if no feedback group specified (default = disabled)
@@ -53,10 +53,10 @@ function feedback_init() {
     $comment = elgg_get_plugin_setting("comment", "feedback");
     
     // Register entity type (makes feedbacks eligible for search)
-    register_entity_type('object','feedback');
+    elgg_register_entity_type('object','feedback');
 
     // page handler
-    register_page_handler('feedback','feedback_page_handler');
+    elgg_register_page_handler('feedback','feedback_page_handler');
     
     // menu des groupes
     elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
