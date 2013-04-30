@@ -60,7 +60,7 @@ foreach ($all_feedback as $ent) {
 }
 
 $displayed_feedbacks = array_slice($feedbacks, $offset, $limit);
-$content .= elgg_view_entity_list($displayed_feedbacks, count($feedbacks), $offset, $limit, false, false, true);
+$content .= elgg_view_entity_list($displayed_feedbacks, array('offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
 $content .= '<div class="clearfloat"></div>';
 
 echo $content;
