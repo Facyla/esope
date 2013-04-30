@@ -406,21 +406,16 @@ function adf_platform_threads_topic_menu_setup($hook, $type, $return, $params){
 	// Facyla : on limite ça aux objets : n'a pas de sens pour groupes et membres
 	if(elgg_instanceof($entity, 'object') 
 	  && ($group && $group->canWriteToContainer() || elgg_is_admin_logged_in()) 
+	  && $topic 
 	  && $topic->status != 'closed'
-	  ){
+	  ) {
 		$url = elgg_http_add_url_query_elements($topic->getURL(), array(
 			'box' => 'reply',
 			'guid' => $entity->guid,
 		));
 		//$url .= '#elgg_add_comment_' . $entity->guid;
 
-		$options = array(
-			'name' => 'reply',
-			'href' => $url,
-			'text' => elgg_echo('reply'),
-			'text_encode' => false,
-			'priority' => 200
-		);
+		$options = array('name' => 'reply', 'href' => $url, 'text' => elgg_echo('reply'),'text_encode' => false, 'priority' => 200);
 		$return[] = ElggMenuItem::factory($options);
 	}
 	return $return;

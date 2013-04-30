@@ -23,19 +23,22 @@ $poster_link = elgg_view('output/url', array(
 	'href' => $poster->getURL(),
 	'text' => $poster->name,
 ));
-$poster_text = elgg_echo('groups:started', array($poster->name));
+$poster_text = elgg_echo('groups:started', array($poster_link));
 
 $tags = elgg_view('output/tags', array('tags' => $topic->tags));
 $date = elgg_view_friendly_time($topic->time_created);
 
 $replies_link = '';
-$replies_text = '';
 $num_replies = threads_get_all_replies_count($topic->guid);
 if ($num_replies != 0) {
-	$last_reply = $topic->getEntitiesFromRelationship('top', true, 1);
-	$poster = $last_reply[0]->getOwnerEntity();
-	$reply_time = elgg_view_friendly_time($last_reply[0]->time_created);
-	$reply_text = elgg_echo('groups:updated', array($poster->name, $reply_time));
+	$last_reply = threads_get_last_topic_reply($topic->guid);
+	$last_poster = $last_reply->getOwnerEntity();
+	$last_poster_link = elgg_view('output/url', array(
+		'href' => $last_poster->getURL(),
+		'text' => $last_poster->name,
+	));
+	$reply_time = elgg_view_friendly_time($last_reply->time_created);
+	$reply_text = elgg_echo('groups:updated', array($last_poster_link, $reply_time));
 	
 	$replies_link = elgg_view('output/url', array(
 		'href' => $topic->getURL() . '#group-replies',
@@ -73,9 +76,10 @@ if ($full) {
 	$body = elgg_view('output/longtext', array('value' => $topic->description));
 
 	echo <<<HTML
-$header
-$info
-$body
+<div class="elgg-content">
+	$info
+	$body
+</div>
 HTML;
 
 } else {
@@ -95,18 +99,19 @@ HTML;
 	echo elgg_view_image_block($poster_icon, $list_body);
 }
 
-if ($topic->canAnnotate()) {
-	$form = elgg_view_form('discussion/reply/save', array(), array_merge(array(
-			'entity' => $topic,
-			'reply' => true
-		), $vars)
-	);
-	$hidden = "hidden";
-	
+if ($full && $topic->canAnnotate()) {
 	if(get_input('box') == "reply" && get_input('guid') == $topic->guid){
-		$hidden = "";
+		$form = elgg_view_form('discussion/reply/save', array(), array_merge(array(
+				'entity' => $topic,
+				'reply' => true,
+			), $vars)
+		);
+		echo "<div class=\"$hidden mvl replies\" id=\"reply-topicreply-$topic->guid\">$form</div>";
+	} elseif($topic->status != 'closed') {
+		echo elgg_view('output/url', array(
+			'text' => elgg_echo('reply'),
+			'href' => current_page_url() . "?box=reply&guid=$topic->guid",
+			'class' => 'elgg-button elgg-button-submit mtm',
+		));
 	}
-
-	echo "<div class=\"$hidden mbm replies\" id=\"reply-topicreply-$topic->guid\">$form</div>";
 }
-
