@@ -17,14 +17,15 @@ function prevent_notifications_init() {
 }
 
 function prevent_notifications_object_notifications_disable($hook, $entity_type, $returnvalue, $params) {
-  $send_notification = get_input('send_notification', true);
+  $send_notification = get_input('send_notification', 'yes');
+error_log("PREVENT NOTIF : block ? => $send_notification");
   if ($send_notification == 'no') {
+error_log("PREVENT NOTIF : bloquée...");
     // Don't notify
     return true;
-  } else {
-    // Don't change behaviour
-    return $returnvalue;
   }
+  // Don't change default behaviour
+  return $returnvalue;
 }
 
 

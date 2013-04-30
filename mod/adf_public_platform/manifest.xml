@@ -89,10 +89,13 @@
 		<type>plugin</type>
 		<name>search</name>
 	</suggests>
-	<suggests>
+	
+	<!-- Plugin à débugguer : ne permet pas de répondre dans un groupe //-->
+	<conflicts>
 		<type>plugin</type>
 		<name>threads</name>
-	</suggests>
+	</conflicts>
+	
 	<suggests>
 		<type>plugin</type>
 		<name>autocomplete</name>
