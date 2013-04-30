@@ -10,4 +10,3 @@ if (!$q) return;
 
 echo autocomplete_members_complete($q);
 
-?>
