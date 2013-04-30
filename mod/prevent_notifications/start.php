@@ -13,7 +13,7 @@ elgg_register_event_handler('init', 'system', 'prevent_notifications_init'); // 
 function prevent_notifications_init() {
   global $CONFIG;
   // Hook pour bloquer les notifications si on a demandé à les désactiver
-  elgg_register_plugin_hook_handler('object:notifications', 'all', 'prevent_notifications_object_notifications_disable', 0);
+  elgg_register_plugin_hook_handler('object:notifications', 'all', 'prevent_notifications_object_notifications_disable', 1000);
 }
 
 function prevent_notifications_object_notifications_disable($hook, $entity_type, $returnvalue, $params) {
