@@ -158,9 +158,7 @@ function adf_platform_init() {
 	  if ($widget_file != 'no') elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
 	}
 	
-	if (elgg_is_active_plugin('friends')) {
-  	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
-	}
+	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 	
 	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
 	

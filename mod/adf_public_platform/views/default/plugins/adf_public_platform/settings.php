@@ -165,9 +165,7 @@ $(function() {
 		if (elgg_is_active_plugin('pages')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:pages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages )) . '</p>';
 		}
-		if (elgg_is_active_plugin('friends')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends )) . '</p>';
-		}
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends )) . '</p>';
 		if (elgg_is_active_plugin('messages')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages )) . '</p>';
 		}
