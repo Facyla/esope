@@ -128,7 +128,12 @@ function adf_platform_init() {
 	$widget_file = elgg_get_plugin_setting('widget_file', 'adf_public_platform');
 	$widget_groups = elgg_get_plugin_setting('widget_groups', 'adf_public_platform');
 	$widget_pages = elgg_get_plugin_setting('widget_pages', 'adf_public_platform');
-  elgg_unregister_widget_type('blog');
+	$widget_friends = elgg_get_plugin_setting('widget_friends', 'adf_public_platform');
+	$widget_group_activity = elgg_get_plugin_setting('widget_group_activity', 'adf_public_platform');
+	$widget_messages = elgg_get_plugin_setting('widget_messages', 'adf_public_platform');
+	$widget_river_widget = elgg_get_plugin_setting('widget_river_widget', 'adf_public_platform');
+	
+	elgg_unregister_widget_type('blog');
 	if (elgg_is_active_plugin('blog')) {
 	  if ($widget_blog != 'no') elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
 	}
@@ -148,8 +153,14 @@ function adf_platform_init() {
 	if (elgg_is_active_plugin('file')) {
 	  if ($widget_file != 'no') elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
 	}
+	if (elgg_is_active_plugin('friends')) {
+  	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
+	}
+	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
+	
 	elgg_unregister_widget_type('groups');
 	if (elgg_is_active_plugin('groups')) {
+  	if ($widget_group_activity == 'no') elgg_unregister_widget_type('group_activity');
   	if ($widget_groups != 'no') elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
 	}
 	elgg_unregister_widget_type('pages');
@@ -165,8 +176,11 @@ function adf_platform_init() {
 	
 	// Nouveaux widgets
 	if (elgg_is_active_plugin('messages')) {
-  	elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+  	if ($widget_pages != 'no') elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
 	}
+	
+	// Widgets non modifiés mais désactivables
+	
 	
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
