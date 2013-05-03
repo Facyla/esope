@@ -170,6 +170,19 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages )) . '</p>';
 		}
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget )) . '</p>';
+		if (elgg_is_active_plugin('twitter')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter )) . '</p>';
+		}
+		if (elgg_is_active_plugin('tagcloud')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud )) . '</p>';
+		}
+		if (elgg_is_active_plugin('videos')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:videos') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_videos]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_videos )) . '</p>';
+		}
+		if (elgg_is_active_plugin('profile_manager')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:profile_completeness') . '</label> ' . elgg_echo('adf_platform:settings:widget:profile_completeness:help') . '</p>';
+		}
+		
 		?>
 	</div>
 

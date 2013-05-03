@@ -132,6 +132,9 @@ function adf_platform_init() {
 	$widget_group_activity = elgg_get_plugin_setting('widget_group_activity', 'adf_public_platform');
 	$widget_messages = elgg_get_plugin_setting('widget_messages', 'adf_public_platform');
 	$widget_river_widget = elgg_get_plugin_setting('widget_river_widget', 'adf_public_platform');
+	$widget_twitter = elgg_get_plugin_setting('widget_twitter', 'adf_public_platform');
+	$widget_tagcloud = elgg_get_plugin_setting('widget_tagcloud', 'adf_public_platform');
+	$widget_videos = elgg_get_plugin_setting('widget_videos', 'adf_public_platform');
 	
 	elgg_unregister_widget_type('blog');
 	if (elgg_is_active_plugin('blog')) {
@@ -161,6 +164,18 @@ function adf_platform_init() {
 	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 	
 	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
+	
+	if (elgg_is_active_plugin('twitter')) {
+  	if ($widget_twitter == 'no') elgg_unregister_widget_type('twitter');
+	}
+	
+	if (elgg_is_active_plugin('tagcloud')) {
+  	if ($widget_tagcloud == 'no') elgg_unregister_widget_type('tagcloud');
+	}
+	
+	if (elgg_is_active_plugin('videos')) {
+  	if ($widget_videos == 'no') elgg_unregister_widget_type('videos');
+	}
 	
 	elgg_unregister_widget_type('a_users_groups');
 	if (elgg_is_active_plugin('groups')) {

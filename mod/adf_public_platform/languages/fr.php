@@ -207,6 +207,11 @@ $fr = array(
 	'adf_platform:settings:widget:group_activity' => "Activer le widget Activité du groupe",
 	'adf_platform:settings:widget:messages' => "Activer le widget Messages non lus",
 	'adf_platform:settings:widget:river_widget' => "Activer le widget Activité globale du site",
+	'adf_platform:settings:widget:twitter' => "Activer le widget Twitter",
+	'adf_platform:settings:widget:tagcloud' => "Activer le widget Nuage de tags",
+	'adf_platform:settings:widget:videos' => "Activer le widget Vidéos",
+	'adf_platform:settings:widget:profile_completeness' => "Activer le widget Complétion du profil",
+	'adf_platform:settings:widget:profile_completeness:help' => "Ce widget peut être activé/désactivé via la configuration du plugin Profile Manager",
 	
 	//'' => "",
 	
