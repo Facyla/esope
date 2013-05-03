@@ -7,19 +7,19 @@
 		require_once(dirname(__FILE__)."/models/model.php");
 		
 		// Register a function that provides some default override actions
-		register_plugin_hook('actionlist', 'captcha', 'vazco_text_captcha_actionlist_hook');
+		elgg_register_plugin_hook_handler('actionlist', 'captcha', 'vazco_text_captcha_actionlist_hook');
 		
 		// Register actions to intercept
 		$actions = array();
-		$actions = trigger_plugin_hook('actionlist', 'captcha', null, $actions);
+		$actions = elgg_trigger_plugin_hook('actionlist', 'captcha', null, $actions);
 
 		if (($actions) && (is_array($actions)))
 		{
 			foreach ($actions as $action)
-				register_plugin_hook("action", $action, "vazco_text_captcha_verify_action_hook",999);
+				elgg_register_plugin_hook_handler("action", $action, "vazco_text_captcha_verify_action_hook",999);
 		}
 		
-		register_elgg_event_handler('create', 'user', 'vazco_text_captcha_mark_register');
+		elgg_register_event_handler('create', 'user', 'vazco_text_captcha_mark_register');
 	}
 	
 	function vazco_text_captcha_mark_register($event, $object_type, $object)
@@ -119,5 +119,5 @@
 		return $returnvalue;
 	}
 	
-	register_elgg_event_handler('init','system','vazco_text_captcha_init');
+	elgg_register_event_handler('init','system','vazco_text_captcha_init');
 ?>

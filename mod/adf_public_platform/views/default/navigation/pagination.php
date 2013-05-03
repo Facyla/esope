@@ -116,7 +116,15 @@ foreach ($pages->items as $page) {
 	} else {
 		$page_offset = (($page - 1) * $limit);
 		$url = elgg_http_add_url_query_elements($base_url, array($offset_key => $page_offset));
-		echo "<li><a title=\"" . elgg_echo('page') . " $page\" href=\"$url\">$page</a></li>";
+		$link = elgg_view('output/url', array(
+			'href' => $url,
+			'text' => $page,
+			'title' => elgg_echo('page') . ' ' . $page,
+			'is_trusted' => true,
+		));
+		//echo "<li><a title=\"" . elgg_echo('page') . " $page\" href=\"$url\">$page</a></li>";
+		echo "<li>$link</li>";
+		
 	}
 }
 

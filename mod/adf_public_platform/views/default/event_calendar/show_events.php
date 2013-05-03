@@ -20,6 +20,7 @@ $prev_start_date = ($start_date[0]-1) .'-'. (string)$start_date[1] .'-'. (string
 $prev_startdate = (string)$start_date[2] .'/'. (string)$start_date[1] .'/'. ($start_date[0]-1);
 $next_start_date = ($start_date[0]+1) .'-'. (string)$start_date[1] .'-'. (string)$start_date[2];
 $next_startdate = (string)$start_date[2] .'/'. (string)$start_date[1] .'/'. ($start_date[0]+1);
+if (substr($page_url[0], -1) != '/') $page_url[0] .= '/';
 $calendar_nav = '<a href="' . $page_url[0] . $prev_start_date . $page_url[1] . '">&laquo;&nbsp;A partir du '.$prev_startdate.'</a>';
 $calendar_nav .= '<a href="' . $page_url[0] . $next_start_date . $page_url[1] . '" style="float:right;">A partir du '.$next_startdate.'&nbsp;&raquo;</a>';
 $calendar_nav = '<div class="calendar-navigation">' . $calendar_nav . '</div>';
@@ -53,15 +54,18 @@ if ($listing_format == 'paged' || $listing_format == 'full') {
 	// Choix car ce plugin est susceptible d'être mis à jour régulièrement
   //elgg_extend_view('page/elements/sidebar', 'event_calendar/calendar', 600);
 } else {
+  elgg_extend_view('page/elements/sidebar', 'event_calendar/calendar', 600);
   ?>
   <div style="width:100%">
     <?php echo $calendar_nav; ?>
-    <div id="event_list" style="float:left;">
+    <div id="event_list" style="">
       <?php echo $event_list; ?>
     </div>
+    <?php /* Replaced by extending sidebar with agenda
     <div style="float:right;">
       <?php echo elgg_view('event_calendar/calendar',$vars); ?>
     </div>
+    */ ?>
   </div>
   <?php
 }

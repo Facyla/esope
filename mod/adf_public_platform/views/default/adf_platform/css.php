@@ -406,7 +406,8 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 /* Contenu des modules */
 section div.module header ul { float: right; margin: 8px 10px 0 0; }
-section div.module header ul li a { float: left; margin-left: 6px; margin:0; }
+/* Boutons des widgets */
+section div.module header ul li a { float: left; margin-left: 6px; margin:0; right: auto; }
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
@@ -520,5 +521,9 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Navigation archives des blogs */
 .blog-archives li { clear: left; font-weight: bold; padding: 0 0 4px 0; }
 .pages-nav li { clear: left; }
+
+
+/* Agenda à côté et non sous la liste d'événements */
+#event_list, #event_list table { width: 100%; }
 
 

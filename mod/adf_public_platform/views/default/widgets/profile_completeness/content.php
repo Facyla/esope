@@ -16,10 +16,11 @@
 			$field = $missing_fields[$rand_key];
 			
 			$tips = elgg_echo("widgets:profile_completeness:view:tips", array("<b>" . $field->getTitle() . "</b>"));
-			$tips .= '<br /><a class="elgg-button elgg-button-action" "href="' . $vars['url'] . 'profile/' . $owner->username . '/edit">' . elgg_echo('profile:edit') . '</a>';
 		} else {
 			$tips = elgg_echo("widgets:profile_completeness:view:complete");
 		}
+		// Edit link is for everyone, anytime
+		$tips .= '<br /><a class="elgg-button elgg-button-action" href="' . $vars['url'] . 'profile/' . $owner->username . '/edit">' . elgg_echo('profile:edit') . '</a>';
 	} else {
 		if($owner->profile_completeness_percentage){
 			$percentage_complete = $owner->profile_completeness_percentage;
