@@ -197,6 +197,7 @@ $fr = array(
 	'messages:num_display' => "Nombre de messages à afficher",
 	
 	'adf_platform:settings:widget:blog' => "Activer le widget Blog",
+	'adf_platform:settings:widget:bookmarks' => "Activer le widget Liens web",
 	'adf_platform:settings:widget:brainstorm' => "Activer le widget Boîte à idées",
 	'adf_platform:settings:widget:event_calendar' => "Activer le widget Agenda",
 	'adf_platform:settings:widget:file' => "Activer le widget Fichiers",
