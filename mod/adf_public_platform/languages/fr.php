@@ -206,7 +206,7 @@ $fr = array(
 	'adf_platform:settings:widget:friends' => "Activer le widget Contacts",
 	'adf_platform:settings:widget:group_activity' => "Activer le widget Activité du groupe",
 	'adf_platform:settings:widget:messages' => "Activer le widget Messages non lus",
-	'adf_platform:settings:widget:river_activity' => "Activer le widget Activité globale du site",
+	'adf_platform:settings:widget:river_widget' => "Activer le widget Activité globale du site",
 	
 	//'' => "",
 	

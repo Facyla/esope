@@ -131,7 +131,7 @@ function adf_platform_init() {
 	$widget_friends = elgg_get_plugin_setting('widget_friends', 'adf_public_platform');
 	$widget_group_activity = elgg_get_plugin_setting('widget_group_activity', 'adf_public_platform');
 	$widget_messages = elgg_get_plugin_setting('widget_messages', 'adf_public_platform');
-	$widget_river_activity = elgg_get_plugin_setting('widget_river_activity', 'adf_public_platform');
+	$widget_river_widget = elgg_get_plugin_setting('widget_river_widget', 'adf_public_platform');
 	
 	elgg_unregister_widget_type('blog');
 	if (elgg_is_active_plugin('blog')) {
@@ -162,9 +162,9 @@ function adf_platform_init() {
   	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 	}
 	
-	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_activity');
+	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
 	
-	elgg_unregister_widget_type('groups');
+	elgg_unregister_widget_type('a_users_groups');
 	if (elgg_is_active_plugin('groups')) {
   	if ($widget_group_activity == 'no') elgg_unregister_widget_type('group_activity');
   	if ($widget_groups != 'no') elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));

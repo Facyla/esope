@@ -171,7 +171,7 @@ $(function() {
 		if (elgg_is_active_plugin('messages')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages )) . '</p>';
 		}
-		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:river_activity') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_river_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_activity )) . '</p>';
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget )) . '</p>';
 		?>
 	</div>
 
