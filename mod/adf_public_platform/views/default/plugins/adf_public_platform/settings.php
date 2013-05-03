@@ -144,40 +144,40 @@ $(function() {
 		<h4>WIDGETS</h4>
 		<?php
 		if (elgg_is_active_plugin('blog')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:blog') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_blog]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_blog )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:blog') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_blog]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_blog )) . '</p>';
 		}
 		if (elgg_is_active_plugin('bookmarks')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:bookmarks') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_bookmarks]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_bookmarks )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:bookmarks') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_bookmarks]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_bookmarks )) . '</p>';
 		}
 		if (elgg_is_active_plugin('brainstorm')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:brainstorm') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_brainstorm]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_brainstorm )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:brainstorm') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_brainstorm]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_brainstorm )) . '</p>';
 		}
 		if (elgg_is_active_plugin('event_calendar')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:event_calendar') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_event_calendar]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_event_calendar )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:event_calendar') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_event_calendar]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_event_calendar )) . '</p>';
 		}
 		if (elgg_is_active_plugin('file')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file )) . '</p>';
 		}
 		if (elgg_is_active_plugin('groups')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups )) . '</p>';
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity )) . '</p>';
 		}
 		if (elgg_is_active_plugin('pages')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:pages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:pages') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages )) . '</p>';
 		}
-		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends )) . '</p>';
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends )) . '</p>';
 		if (elgg_is_active_plugin('messages')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages )) . '</p>';
 		}
-		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget )) . '</p>';
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget )) . '</p>';
 		if (elgg_is_active_plugin('twitter')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter )) . '</p>';
 		}
 		if (elgg_is_active_plugin('tagcloud')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud )) . '</p>';
 		}
 		if (elgg_is_active_plugin('videos')) {
-			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:videos') . '</label>' . elgg_view('input/dropdown', array( 'name' => 'params[widget_videos]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_videos )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:videos') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_videos]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_videos )) . '</p>';
 		}
 		if (elgg_is_active_plugin('profile_manager')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:widget:profile_completeness') . '</label> ' . elgg_echo('adf_platform:settings:widget:profile_completeness:help') . '</p>';
