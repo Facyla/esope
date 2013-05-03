@@ -203,6 +203,10 @@ $fr = array(
 	'adf_platform:settings:widget:file' => "Activer le widget Fichiers",
 	'adf_platform:settings:widget:groups' => "Activer le widget Groupes",
 	'adf_platform:settings:widget:pages' => "Activer le widget Pages wiki",
+	'adf_platform:settings:widget:friends' => "Activer le widget Contacts",
+	'adf_platform:settings:widget:group_activity' => "Activer le widget Activité du groupe",
+	'adf_platform:settings:widget:messages' => "Activer le widget Messages non lus",
+	'adf_platform:settings:widget:river_activity' => "Activer le widget Activité globale du site",
 	
 	//'' => "",
 	
