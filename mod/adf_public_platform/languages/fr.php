@@ -196,6 +196,13 @@ $fr = array(
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
 	
+	'adf_platform:settings:widget:blog' => "Activer le widget Blog",
+	'adf_platform:settings:widget:brainstorm' => "Activer le widget Boîte à idées",
+	'adf_platform:settings:widget:event_calendar' => "Activer le widget Agenda",
+	'adf_platform:settings:widget:file' => "Activer le widget Fichiers",
+	'adf_platform:settings:widget:groups' => "Activer le widget Groupes",
+	'adf_platform:settings:widget:pages' => "Activer le widget Pages wiki",
+	
 	//'' => "",
 	
 	

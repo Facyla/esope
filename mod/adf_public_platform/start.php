@@ -120,33 +120,41 @@ function adf_platform_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
 	// Modification des titres des widgets
+	// Activation des plugins
+	$widget_blog = elgg_get_plugin_setting('widget_blog', 'adf_public_platform');
+	$widget_bookmarks = elgg_get_plugin_setting('widget_bookmarks', 'adf_public_platform');
+	$widget_brainstorm = elgg_get_plugin_setting('widget_brainstorm', 'adf_public_platform');
+	$widget_event_calendar = elgg_get_plugin_setting('widget_event_calendar', 'adf_public_platform');
+	$widget_file = elgg_get_plugin_setting('widget_file', 'adf_public_platform');
+	$widget_groups = elgg_get_plugin_setting('widget_groups', 'adf_public_platform');
+	$widget_pages = elgg_get_plugin_setting('widget_pages', 'adf_public_platform');
 	if (elgg_is_active_plugin('blog')) {
 	  elgg_unregister_widget_type('blog');
-	  elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
+	  if ($widget_blog != 'no') elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
 	}
 	if (elgg_is_active_plugin('bookmarks')) {
 	  elgg_unregister_widget_type('bookmarks');
-	  elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
+	  if ($widget_bookmarks != 'no') elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
 	}
 	if (elgg_is_active_plugin('brainstorm')) {
   	elgg_unregister_widget_type('brainstorm');
-  	elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
+  	if ($widget_brainstorm != 'no') elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
 	}
 	if (elgg_is_active_plugin('event_calendar')) {
   	elgg_unregister_widget_type('event_calendar');
-  	elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
+  	if ($widget_event_calendar != 'no') elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
 	}
 	if (elgg_is_active_plugin('file')) {
   	elgg_unregister_widget_type('filerepo');
-	  elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
+	  if ($widget_file != 'no') elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
 	}
 	if (elgg_is_active_plugin('groups')) {
   	elgg_unregister_widget_type('groups');
-  	elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
+  	if ($widget_groups != 'no') elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
 	}
 	if (elgg_is_active_plugin('pages')) {
   	elgg_unregister_widget_type('pages');
-	  elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
+	  if ($widget_pages != 'no') elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
 	}
 	if (elgg_is_active_plugin('profile_manager')) {
   	if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {

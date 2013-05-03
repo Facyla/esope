@@ -143,6 +143,29 @@ echo '<div id="adf-settings-tabs">
     <p><label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?></label>
       <?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles )); ?>
     </p>
+    <br />
+    <h4>WIDGETS</h4>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:blog'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_blog]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_blog )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:bookmarks'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_bookmarks]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_bookmarks )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:brainstorm'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_brainstorm]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_brainstorm )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:event_calendar'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_event_calendar]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_event_calendar )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:file'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:groups'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups )); ?>
+    </p>
+    <p><label><?php echo elgg_echo('adf_platform:settings:widget:pages'); ?></label>
+      <?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages )); ?>
+    </p>
   </div>
   
   <h3>ELEMENTS DE L'INTERFACE</h3>
