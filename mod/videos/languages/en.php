@@ -87,6 +87,8 @@ $english = array(
 	  'embedvideo:novideo' => 'No video',
 	  'embedvideo:unrecognized' => 'Unrecognised video',
 	  'embedvideo:parseerror' => 'Error processing the video',
+	  'videos:register_objects' => "Activate video objects (if not, video links will be still converted to embedded video player)",
+
 );
 
 add_translation('en', $english);

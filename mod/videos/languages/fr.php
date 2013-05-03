@@ -87,6 +87,8 @@ $french = array(
 	  'embedvideo:novideo' => "Pas de vidéo",
 	  'embedvideo:unrecognized' => "Vidéo non reconnue",
 	  'embedvideo:parseerror' => "Erreur lors du traitement de la vidéo",
+	  'videos:register_objects' => "Activer les objets Vidéos (si non, les liens vidéos dans les autres publications seront convertis en lecteurs embarqués)",
+	  
 );
 
 add_translation('fr', $french);

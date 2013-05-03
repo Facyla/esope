@@ -26,27 +26,34 @@ function videos_init() {
 	elgg_register_library('elgg:videos:embed', elgg_get_plugins_path() . 'videos/lib/embed_video.php');
 	elgg_register_library('elgg:youtube_api', elgg_get_plugins_path() . 'videos/lib/youtube_functions.php');
 	$action_path = "$root/actions/videos";
-	elgg_register_action('videos/save', "$action_path/save.php");
-	elgg_register_action('videos/delete', "$action_path/delete.php");
-	elgg_register_menu_item('site', array(
-		'name' => 'videos',
-		'text' => elgg_echo('videos'),
-		'href' => 'videos/all'
-	));
-	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'videos_owner_block_menu');
-	elgg_register_page_handler('videos', 'videos_page_handler');
-	elgg_extend_view('css/elgg', 'videos/css');
-	elgg_register_widget_type('videos', elgg_echo('videos'), elgg_echo('videos:widget:description'));
-	register_notification_object('object', 'videos', elgg_echo('videos:new'));
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'videos_notify_message');
-	elgg_register_entity_url_handler('object', 'videos', 'video_url');
-	elgg_register_entity_type('object', 'videos');
-	add_group_tool_option('videos', elgg_echo('videos:enablevideos'), true);
-	elgg_extend_view('groups/tool_latest', 'videos/group_module');
+	
+	
+	$register_objects = elgg_get_plugin_setting('register_objects', 'videos');
+	if ($register_objects != 'no') {
+		elgg_register_action('videos/save', "$action_path/save.php");
+		elgg_register_action('videos/delete', "$action_path/delete.php");
+		elgg_register_menu_item('site', array(
+			'name' => 'videos',
+			'text' => elgg_echo('videos'),
+			'href' => 'videos/all'
+		));
+		elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'videos_owner_block_menu');
+		elgg_register_page_handler('videos', 'videos_page_handler');
+		elgg_extend_view('css/elgg', 'videos/css');
+		elgg_register_widget_type('videos', elgg_echo('videos'), elgg_echo('videos:widget:description'));
+		register_notification_object('object', 'videos', elgg_echo('videos:new'));
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'videos_notify_message');
+		elgg_register_entity_url_handler('object', 'videos', 'video_url');
+		elgg_register_entity_type('object', 'videos');
+		add_group_tool_option('videos', elgg_echo('videos:enablevideos'), true);
+		elgg_extend_view('groups/tool_latest', 'videos/group_module');
+	}
+	
 	$views = array('output/longtext','output/plaintext');
 	foreach($views as $view){
 		elgg_register_plugin_hook_handler("view", $view, "videos_view_filter", 500);
-	}	
+	}
+	
 }
 /**
  * Process the Elgg views for a matching video URL
