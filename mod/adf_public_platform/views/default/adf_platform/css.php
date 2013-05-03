@@ -379,8 +379,6 @@ section div.module header h2 {
   float: left;
   font-family: gill-sans;
   font-size: 1.25em;
-  margin: 7px 0px 0 15px;
-  max-width:204px;
   text-transform: uppercase;
   font-weight: normal;
 }

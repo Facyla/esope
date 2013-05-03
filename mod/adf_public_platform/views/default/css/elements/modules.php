@@ -428,3 +428,67 @@ section div.module footer a:active { text-decoration: none; }
 section .elgg-layout-one-column div.module { background:none; padding:0; margin-left:10px; border:1px solid #CCC; }
 section .elgg-layout-one-column div.module footer { background: none; height:0; border:0; margin:0; padding:0; }
 
+
+/* Icônes pour les widgets */
+section div.module header h2 { padding: 5px 0 0 30px; margin:0 0 0 4px; max-width: 190px; min-height:24px; }
+
+section div.elgg-widget-instance-a_user_groups header h2 {
+	background: url("<?php echo $urlicon; ?>a_user_groups-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-activity header h2 {
+	background: url("<?php echo $urlicon; ?>activity-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-announcements header h2 {
+	background: url("<?php echo $urlicon; ?>announcements-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-blog header h2 {
+	background: url("<?php echo $urlicon; ?>blog-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-bookmarks header h2 {
+	background: url("<?php echo $urlicon; ?>bookmarks-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-brainstorm header h2 {
+	background: url("<?php echo $urlicon; ?>brainstorm-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-discussion header h2 {
+	background: url("<?php echo $urlicon; ?>discussion-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-event_calendar header h2 {
+	background: url("<?php echo $urlicon; ?>event_calendar-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-export_embed header h2 {
+	background: url("<?php echo $urlicon; ?>export_embed-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-filerepo header h2 {
+	background: url("<?php echo $urlicon; ?>file-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-friends header h2 {
+	background: url("<?php echo $urlicon; ?>friends-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-group_activity header h2 {
+	background: url("<?php echo $urlicon; ?>group_activity-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-messages header h2 {
+	background: url("<?php echo $urlicon; ?>messages-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-pages header h2 {
+	background: url("<?php echo $urlicon; ?>pages-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-profile_completeness header h2 {
+	background: url("<?php echo $urlicon; ?>profile_completeness-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-river_widget header h2 {
+	background: url("<?php echo $urlicon; ?>river_widget-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-tagcloud header h2 {
+	background: url("<?php echo $urlicon; ?>tagcloud-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-thewire header h2 {
+	background: url("<?php echo $urlicon; ?>thewire-widget.png") no-repeat scroll 0 2px transparent;
+}
+section div.elgg-widget-instance-twitter header h2 {
+	background: url("<?php echo $urlicon; ?>twitter-widget.png") no-repeat scroll 0 2px transparent;
+}
+
+
+
