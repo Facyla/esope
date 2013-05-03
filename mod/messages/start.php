@@ -51,6 +51,9 @@ function messages_init() {
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'messages_notification_msg');
 	register_notification_object('object', 'messages', elgg_echo('messages:new'));
 
+	// delete messages sent by a user when user is deleted
+	elgg_register_event_handler('delete', 'user', 'messages_purge');
+
 	// ecml
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'messages_ecml_views_hook');
 
@@ -80,7 +83,6 @@ function messages_page_handler($page) {
 		$_SESSION['last_forward_from'] = current_page_url();
 		forward('');
 	}
-	if (elgg_is_logged_in()) elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 
 	elgg_load_library('elgg:messages');
 
@@ -426,6 +428,39 @@ function messages_user_hover_menu($hook, $type, $return, $params) {
 	return $return;
 }
 
+/**
+ * Delete messages from a user who is being deleted
+ *
+ * @param string   $event Event name
+ * @param string   $type  Event type
+ * @param ElggUser $user  User being deleted
+ */
+function messages_purge($event, $type, $user) {
+
+	if (!$user->getGUID()) {
+		return;
+	}
+
+	// make sure we delete them all
+	$entity_disable_override = access_get_show_hidden_status();
+	access_show_hidden_entities(true);
+	$ia = elgg_set_ignore_access(true);
+
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'messages',
+		'metadata_name' => 'fromId',
+		'metadata_value' => $user->getGUID(),
+		'limit' => 0,
+	);
+	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options);
+	foreach ($batch as $e) {
+		$e->delete();
+	}
+
+	elgg_set_ignore_access($ia);
+	access_show_hidden_entities($entity_disable_override);
+}
 
 /**
  * Register messages with ECML.
