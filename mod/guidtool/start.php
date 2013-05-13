@@ -58,36 +58,33 @@ function guidtool_page_handler($page)
 {
   global $CONFIG;
   
-  if (isset($page[0]))
-  {
-    switch ($page[0])
-    {
+  if (isset($page[0])) {
+    switch ($page[0]) {
       case 'view' :
         if ((isset($page[1]) && (!empty($page[1])))) {
-          add_submenu_item('GUID:'.$page[1], $CONFIG->url . "pg/guidtool/view/{$page[1]}/");
-          add_submenu_item(elgg_echo('guidbrowser:export'), $CONFIG->url . "pg/guidtool/export/{$page[1]}/");
+          //add_submenu_item('GUID:'.$page[1], $CONFIG->url . "pg/guidtool/view/{$page[1]}/");
+          //add_submenu_item(elgg_echo('guidbrowser:export'), $CONFIG->url . "pg/guidtool/export/{$page[1]}/");
+          elgg_register_menu_item('page', array('name' => 'guidtool:view', 'href' => $CONFIG->url . "pg/guidtool/view/{$page[1]}/", 'text' => 'GUID:'.$page[1]));
+          elgg_register_menu_item('page', array('name' => 'guidtool:export', 'href' => $CONFIG->url . "pg/guidtool/export/{$page[1]}/", 'text' => elgg_echo('guidbrowser:export')));
         }
         
       case 'export':
-        
         if ((isset($page[1]) && (!empty($page[1])))) {
-          
           set_input('entity_guid', $page[1]);
-          if ($page[0] == 'view')
+          if ($page[0] == 'view') {
             include($CONFIG->pluginspath . "guidtool/view.php");
-          else
-          {
+          } else {
             if ((isset($page[2]) && (!empty($page[2])))) {
               set_input('format', $page[2]); 
               include($CONFIG->pluginspath . "guidtool/export.php");
             } else {
               set_input('forward_url', $CONFIG->url . "pg/guidtool/export/$page[1]/"); 
               include($CONFIG->pluginspath . "guidtool/format_picker.php");
-            } 	
+            }
           }
-        }
-        else include($CONFIG->pluginspath . "guidtool/index.php"); 
-      break;
+        } else include($CONFIG->pluginspath . "guidtool/index.php"); 
+      	break;
+      
       case 'import' :
         if ((isset($page[1]) && (!empty($page[1])))) {
           set_input('format', $page[1]);
@@ -96,13 +93,12 @@ function guidtool_page_handler($page)
           set_input('forward_url', $CONFIG->url . "pg/guidtool/import/");  
           include($CONFIG->pluginspath . "guidtool/format_picker.php");
         } 
-      break;
+      	break;
+      
       default:
         include($CONFIG->pluginspath . "guidtool/index.php"); 
     }
-  }
-  else
-    include($CONFIG->pluginspath . "guidtool/index.php");
+  } else include($CONFIG->pluginspath . "guidtool/index.php");
   return true;
 }
 
@@ -110,14 +106,12 @@ function guidtool_page_handler($page)
  * Get a list of import actions
  *
  */
-function guidtool_get_import_actions()
-{
+function guidtool_get_import_actions() {
   global $CONFIG;
   
   $return = array();
   
-  foreach ($CONFIG->actions as $action => $handler)
-  {
+  foreach ($CONFIG->actions as $action => $handler) {
     if (strpos($action, "import/")===0)
       $return[] = substr($action, 7);
   }
