@@ -546,15 +546,17 @@ function adf_platform_pagesetup(){
   	
   	// Report content link
 		elgg_unregister_menu_item('footer', 'report_this');
-  	// Extend extras instead of footer with report content link
-		$href = "javascript:elgg.forward('reportedcontent/add'";
-		$href .= "+'?address='+encodeURIComponent(location.href)";
-		$href .= "+'&title='+encodeURIComponent(document.title));";
-		elgg_register_menu_item('extras', array(
-			  'name' => 'report_this', 'href' => $href, 'rel' => 'nofollow',
-			  'title' => elgg_echo('reportedcontent:this:tooltip'),
-			  'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">Signaler cette page</span></span>', 
-		  ));
+  	if (elgg_is_active_plugin('reportedcontent')) {
+			// Extend extras instead of footer with report content link
+			$href = "javascript:elgg.forward('reportedcontent/add'";
+			$href .= "+'?address='+encodeURIComponent(location.href)";
+			$href .= "+'&title='+encodeURIComponent(document.title));";
+			elgg_register_menu_item('extras', array(
+					'name' => 'report_this', 'href' => $href, 'rel' => 'nofollow',
+					'title' => elgg_echo('reportedcontent:this:tooltip'),
+					'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">Signaler cette page</span></span>', 
+				));
+  	}
 	}
 	
 	// Rewrite breadcrumbs : use a more user-friendly logic
