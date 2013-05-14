@@ -6,4 +6,7 @@
 /* Pour la config du plugin de thème */
 .ui-icon.ui-icon-triangle-1-e, .ui-icon.ui-icon-triangle-1-s { float: left; margin-right: 4px; }
 
+/* Champs longtext avec éditeur désactivé par défaut */
+textarea, .elgg-input-rawtext { width:100%; }
+
 
