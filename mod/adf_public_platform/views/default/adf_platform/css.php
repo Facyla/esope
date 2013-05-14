@@ -524,4 +524,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
 
+/* Formulaires : boutons radios verticaux */
+.elgg-vertical label { float: left; clear: left; }
+
 
