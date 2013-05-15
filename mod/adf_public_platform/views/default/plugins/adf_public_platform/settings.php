@@ -108,7 +108,7 @@ $(function() {
 	<h3>PAGE D'ACCUEIL PUBLIQUE</h3>
 	<div>
 		<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
-		  <?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro )); ?>
+		  <?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro, 'class' => 'elgg-input-rawtext' )); ?>
 		</p><br />
 		<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
 		  <?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?>

@@ -527,4 +527,6 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Formulaires : boutons radios verticaux */
 .elgg-vertical label { float: left; clear: left; }
 
+/* Champs longtext avec éditeur désactivé par défaut */
+textarea, .elgg-input-rawtext { width:100%; }
 
