@@ -530,3 +530,8 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
 
+/* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
+#profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }
+#profile_completeness_progress { width: 200px; line-height: 18px; position: absolute; border: 1px solid black; text-align: center; font-weight: bold; }
+
+
