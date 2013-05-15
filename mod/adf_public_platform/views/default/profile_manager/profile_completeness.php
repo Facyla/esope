@@ -30,7 +30,6 @@ if($owner->getGUID() === elgg_get_logged_in_user_guid()){
 	}
 }
 ?>
-<div class="clearfloat"></div>
 <div id="profile_completeness_container">
 	<div id="profile_completeness_progress">
 		<?php echo $percentage_complete; ?>%
