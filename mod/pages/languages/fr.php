@@ -18,7 +18,7 @@ $french = array(
 	'pages:add' => "Ajouter une page au wiki",
 
 	'pages:group' => "Wiki",
-	'groups:enablepages' => "Activer le wiki (pages colaboratives) du groupe",
+	'groups:enablepages' => "Activer le wiki (pages collaboratives) du groupe",
 
 	'pages:edit' => "Editer cette page",
 	'pages:delete' => "Effacer cette page",
