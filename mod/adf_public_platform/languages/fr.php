@@ -127,7 +127,7 @@ $fr = array(
 	// Widgets
 	'adf_platform:widget:bookmark:title' => 'Mes Liens web',
 	'adf_platform:widget:brainstorm:title' => 'Mes Idées',
-	'adf_platform:widget:blog:title' => 'Mes Articles de blog',
+	'adf_platform:widget:blog:title' => 'Mes Articles',
 	'adf_platform:widget:event_calendar:title' => 'Mon Agenda',
 	'adf_platform:widget:file:title' => 'Mes Fichiers',
 	'adf_platform:widget:group:title' => 'Mes Groupes',

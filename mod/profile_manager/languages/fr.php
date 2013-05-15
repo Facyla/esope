@@ -159,7 +159,7 @@ Affiche une liste de tous les types de profils configurés.<br><br>
 Cliquez sur l\'icône d\'édition pour modifier le type de profil.',
   'profile_manager:tooltips:actions' => '<b>Actions</b><br>
 Divers types d\'actions liées à ces champs de profil.',
-  'widgets:profile_completeness:title' => 'Votre Profil',
+  'widgets:profile_completeness:title' => 'Mon Profil',
   'widgets:profile_completeness:description' => 'Montrer le niveau de complétion de votre profil',
   'widgets:profile_completeness:view:tips' => 'Astuce ! Renseignez "%s" pour améliorer votre profil',
   'widgets:profile_completeness:view:complete' => 'Bravo ! Votre profil est entièrement renseigné ! Pensez à le mettre à jour en fonction de l\'évolution de vos projets.',
