@@ -13,11 +13,12 @@
 require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 
 /* Le principe est de donner accès à un contenu de manière à pouvoir l'embarquer sous forme d'iframe
- * Si le contenu est public, on doit puvoir a minima bypasser le wlledgarden
+ * Si le contenu est public, on doit pouvoir a minima bypasser le walledgarden
  * Si le contenu est privé, on devrait pouvoir y accéder 
-  - via un clef d'accès exlusive (clef générée à partir du guid, de la clef privée du site, et autre à voir - éléments stables en tous cas)
-  - via mot de passe
-  - en l'absence de mot de passe ou de clef (ou si vide) => vide ou invite de connexion ou invite à saisir le mot de passe selon les cas
+  - en l'absence de mot de passe ou de clef (ou si vide) => via une invite de connexion (lien)
+  - @TODO : ou formulaire de connexion avec login et mot de passe selon les cas
+  - @TODO : via un clef d'accès exlusive (clef générée à partir du guid, de la clef privée du site, et autre à voir - éléments stables en tous cas)
+  - @TODO : via mot de passe
 */
 
 global $CONFIG;
@@ -31,8 +32,10 @@ $group_guid = get_input('group_guid', false);
 $user_guid = get_input('user_guid', false);
 $limit = get_input('limit', 5); if ($limit > 100) $limit = 100;
 $offset = get_input('offset', 0);
-$params = get_input('params', 0);
+// Non utilisés pour le moment
+$params = get_input('params', false);
 $key = get_input('key', false);
+$code = get_input('code', false);
 
 $body = '';
 $style = '';
@@ -148,6 +151,13 @@ error_log('EXT EMBED');
         Pour afficher les widgets de ce site sur un autre site, veuillez utiliser les informations suivantes&nbsp;:
         <ul>
           <li>Adresse du site&nbsp;: <strong>" . $CONFIG->url . "</strong></li>
+          <li>Puis choisir le type d'information à afficher via le sélecteur.</li>
+          <li>Pour afficher l'activité d'un groupe en particulier, vous devez indiquer le GUID de ce groupe : il s'agit du nombre que vous trouverez dans l'adresse de la page d'accueil du groupe : <em>groups/profile/<strong>GUID</strong>/nom-du-groupe</em></li>
+        </ul>
+      </p>";
+    /*
+        <ul>
+          <li>Adresse du site&nbsp;: <strong>" . $CONFIG->url . "</strong></li>
           <li>Types de widgets&nbsp;:
             <ul>
             </ul>
@@ -159,7 +169,8 @@ error_log('EXT EMBED');
           <li><strong>groups_list</strong> pour la liste des groupes du site</li>
           <li><strong>agenda</strong> pour l'agenda du site</li>
         </ul>
-      </p>";
+
+    */
 }
 
 
@@ -197,3 +208,4 @@ header('Content-Type: text/html; charset=utf-8');
   </div>
 </body>
 </html>
+<?php exit(); ?>

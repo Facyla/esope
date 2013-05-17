@@ -5,7 +5,7 @@
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
-$fr = array(
+$en = array(
 	
 	'export_embed' => "Embeddable Widgets",
 	'export_embed:help' => "These widgets allow to access remote data from other Elgg sites. They are useful to embed Elgg content into a news agregator or custom dashboard.<br />They are accessible via a genric or custom URL, and can also be embedded on your desk, or in a website.",
@@ -42,5 +42,5 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);
+add_translation('en', $en);
 
