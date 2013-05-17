@@ -42,15 +42,15 @@ if ($vars['pagetype']) {
       forward();
     }
     
-    set_context(elgg_echo('item:object:cmspages') . '&nbsp;: ' . $title);
+    elgg_set_context(elgg_echo('item:object:cmspages') . '&nbsp;: ' . $title);
     
     // Users who can edit this should get a direct edit link
-    if ( isloggedin() && (in_array($_SESSION['guid'], explode(',', get_plugin_setting('editors', 'cmspages')))) || isadminloggedin() || (is_plugin_enabled('multisite') && (isadminloggedin() || is_community_creator())) ) {
+    if ( elgg_is_logged_in() && (in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) || elgg_is_admin_logged_in() || (elgg_is_active_plugin('multisite') && (elgg_is_admin_logged_in())) ) {
       $content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'pg/cmspages/index.php?pagetype=' . $vars['pagetype'] . '"><kbd>[&nbsp;Modifier&nbsp;]</kbd></a></p></small>';
     }
 
     // Display through the correct canvas area
     $content = elgg_view('page/elements/wrapper', array('body' => $content));
-    echo elgg_view_layout("one_column", elgg_view_title($title) . $content);
+    echo elgg_view_layout("one_column", array('title' => $title, 'content' => $content));
   }
 }
