@@ -55,6 +55,7 @@ $info .= "<strong>".elgg_echo('feedback:list:from').": </strong>" . $vars['entit
 $info .= '<br /><blockquote>' . nl2br($vars['entity']->txt) . '</blockquote>';
 
 $comment = elgg_get_plugin_setting("comment", "feedback");
+if (elgg_in_context('admin')) $full = false;
 if ($comment == 'yes') {
   if (!$full) {
     $num_comments_feedback = $vars['entity']->countComments();
