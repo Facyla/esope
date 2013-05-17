@@ -50,7 +50,7 @@ if ($vars['pagetype']) {
     }
 
     // Display through the correct canvas area
-    $content = elgg_view('page/elements/wrapper', array('body' => $content));
+    //$content = elgg_view('page/elements/wrapper', array('body' => $content));
     echo elgg_view_layout("one_column", array('title' => $title, 'content' => $content));
   }
 }
