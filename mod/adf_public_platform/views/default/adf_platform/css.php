@@ -524,9 +524,17 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
 
-/* Formulaires : boutons radios verticaux */
+/* Formulaires : boutons radios verticaux, mais sans casser les groupes (mal construits avec les labels..) */
+/* Pas génial, ça casse beaucoup de choses.. mieux vaut corriger ponctuellement le rendu lorsqu'on veut avoir un radio par ligne.
 .elgg-vertical label { float: left; clear: left; }
+.elgg-form-groups-edit .elgg-vertical label { float: none; clear: none; }
+*/
 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
+
+/* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
+#profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }
+#profile_completeness_progress { width: 200px; line-height: 18px; position: absolute; border: 1px solid black; text-align: center; font-weight: bold; }
+
 

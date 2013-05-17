@@ -1,6 +1,8 @@
 <?php
 $language = array (
-  'groups:yours' => 'Mes groupes',
+  'groups' => 'Groupes',
+  'group_profile' => 'Profil du groupe',
+  'groups:yours' => 'Mes groupes (membre)',
   'groups:username' => 'Nom court du groupe (qui s\'affichera dans l\'URL : en caractères alphanumériques seulement)',
   'groups:interests' => 'Mots-clefs',
   'groups:members:more' => 'Lister tous les membres',
@@ -22,7 +24,6 @@ $language = array (
 
 %s
 %s
-
 
 
 Afficher cette discussion ou y répondre :
@@ -55,15 +56,14 @@ Afficher cette discussion ou y répondre :
   'groups:forumtopic:edited' => 'Sujet du forum modifié.',
   'grouppost:nopost' => 'Pas de contenu',
   'groups:deletewarning' => 'Etes-vous sûr de vouloir supprimer ce groupe ? Cette action est irréversible et cela supprimera tous les contenus du groupe !',
-  'groups' => 'Groupes',
-  'groups:owned' => 'Groupes dont je suis propriétaire',
+  'groups:owned' => 'Mes Groupes (propriétaire)',
   'groups:user' => 'Les groupes de %s',
   'groups:all' => 'Tous les groupes',
   'groups:add' => 'Créer un groupe',
   'groups:edit' => 'Modifier le groupe',
   'groups:delete' => 'Supprimer le groupe',
   'groups:membershiprequests' => "Gérer les demandes d'adhésion au groupe",
-  'groups:invitations' => 'Invitations à rejoindre un groupe',
+  'groups:invitations' => 'Invitations aux groupes',
   'groups:icon' => 'Image du profil du groupe',
   'groups:name' => 'Nom du groupe',
   'groups:description' => 'Description',
@@ -167,7 +167,7 @@ Afficher cette discussion ou y répondre :
   'groups:updated' => 'Dernière réponse par %s %s',
   'groups:started' => 'Démarré par %s',
   'groups:joinrequest:remove:check' => 'Etes-vous sûr de vouloir supprimer cette demande d\'adhésion ?',
-  'groups:invite:remove:check' => 'Etes-vous sûr de vouloir supprimer cette invitation?',
+  'groups:invite:remove:check' => 'Etes-vous sûr de vouloir supprimer cette invitation ?',
   'groups:invite:body' => 'Bonjour %s,
 
 %s vous a invité à rejoindre le groupe \'%s\', cliquez sur le lien ci-dessous pour confirmer votre participation :
