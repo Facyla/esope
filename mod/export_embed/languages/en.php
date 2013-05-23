@@ -1,6 +1,6 @@
 <?php
 /**
- * French strings
+ * English strings
  */
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';

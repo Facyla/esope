@@ -1,15 +1,16 @@
 <?php
-/**
- * Elgg LDAP authentication
- * 
- * @package ElggLDAPAuth
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @author Misja Hoebe <misja@elgg.com>
- * @copyright Curverider Ltd 2008
- * @link http://elgg.com
- */
 
-$fr = array(
+    /**
+	 * Elgg LDAP authentication
+	 * 
+	 * @package ElggLDAPAuth
+	 * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+	 * @author Misja Hoebe <misja@elgg.com>
+	 * @copyright Curverider Ltd 2008
+	 * @link http://elgg.com
+	 */
+
+$en = array(
     'ldap_auth:settings:label:host' => "Host settings",
     'ldap_auth:settings:label:connection_search' => "LDAP settings",
     'ldap_auth:settings:label:hostname' => "Hostname",
@@ -37,8 +38,8 @@ $fr = array(
     'ldap_auth:no_account' => "Your credentials are valid, but no account was found - please contact the system administrator",
     'ldap_auth:no_register' => 'An account could not get created for you - please contact the system administrator.',
 	'ldap_auth:invalid:password' => 'LDAP : votre mot de passe est incorrect',
-	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (attention à la casse)',
+	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (Attention à la casse)',
 );
 
-add_translation('fr', $fr);
+add_translation('en', $en);
 
