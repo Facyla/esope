@@ -117,7 +117,7 @@ function ldap_auth_update_status(ElggUser $user){
 function ldap_auth_create_profile($username, $password) {
 	// Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
 	$new_username = $username;
-	while (strlen($new_username) <= 6) { $new_username .= '0'; }
+	while (strlen($new_username) < 4) { $new_username .= '0'; }
 	//the local password can't be use because ldap auth is call before any other authentifaction method 
 	if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 		$user = get_user($user_guid);
