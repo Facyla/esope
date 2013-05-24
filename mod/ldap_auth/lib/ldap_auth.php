@@ -119,7 +119,7 @@ function ldap_auth_create_profile($username, $password) {
 	$new_username = $username;
 	while (strlen($new_username) <= 6) { $new_username .= '0'; }
 	//the local password can't be use because ldap auth is call before any other authentifaction method 
-	if ($user_guid = register_user($new_username, $password, $username, "no-reply@inria.fr")) {
+	if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 		$user = get_user($user_guid);
 		//update profile with ldap infos
 		$user->ldap_username = $username;
