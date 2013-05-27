@@ -123,6 +123,7 @@ $french = array (
 	'group_profile' => "Accueil du groupe",
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
+	'loginusername' => "Login LDAP",
 	
 );
 
