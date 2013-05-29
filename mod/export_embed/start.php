@@ -19,7 +19,8 @@ function export_embed_init() {
   //elgg_extend_view('css','export_embed/css');
   
   // Register a page handler, so we can have nice URLs
-  elgg_register_page_handler('embed','export_embed_page_handler');
+  elgg_register_page_handler('export_embed','export_embed_page_handler');
+  // Attention : we can't use 'embed' because it breaks embedding files into text areas...
   
 	// PUBLIC PAGES - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'export_embed_public_pages');
@@ -46,7 +47,7 @@ function export_embed_page_handler($page) {
 // Permet l'accès aux pages des blogs en mode "walled garden"
 function export_embed_public_pages($hook, $type, $return_value, $params) {
   global $CONFIG;
-  $return_value[] = 'embed/.*'; // URL pour les embed externes
+  $return_value[] = 'export_embed/.*'; // URL pour les embed externes
   //$ignore_access = elgg_get_ignore_access();
   //elgg_set_ignore_access(true);
 

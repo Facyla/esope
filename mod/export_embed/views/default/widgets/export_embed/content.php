@@ -18,7 +18,7 @@ if (!empty($embedurl)) {
 	
 } else if (!empty($site_url)) {
 	// Soit on a configuré l'URL du site => ajout du type de widget et OK
-	$embedurl .= $site_url . 'embed/';
+	$embedurl .= $site_url . 'export_embed/';
 	if (!empty($embedtype)) $embedurl .= $embedtype;
 	
 } else {
