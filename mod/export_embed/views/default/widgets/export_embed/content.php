@@ -39,7 +39,7 @@ if (!empty($customparams)) $embedurl .= '&' . $customparams;
 
 //echo $embedurl; // URl complète du widget externe
 if (empty($embedurl)) {
-	$embedurl = $vars['url'] . 'embed'; // En local => Aide du widget
+	$embedurl = $vars['url'] . 'export_embed'; // En local => Aide du widget
 	echo '<iframe src="' . html_entity_decode($embedurl) . '" style="height:360px; overflow-y:auto; width:288px;">Chargement en cours</iframe>';
 } else {
 	echo '<iframe src="' . html_entity_decode($embedurl) . '" style="height:600px; overflow-y:auto; width:288px;">Chargement en cours</iframe>';
