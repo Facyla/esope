@@ -18,7 +18,7 @@ if (!empty($embedurl)) {
 	
 } else if (!empty($site_url)) {
 	// Soit on a configuré l'URL du site => ajout du type de widget et OK
-	$embedurl .= $site_url . 'embed/';
+	$embedurl .= $site_url . 'export_embed/';
 	if (!empty($embedtype)) $embedurl .= $embedtype;
 	
 } else {
@@ -39,7 +39,7 @@ if (!empty($customparams)) $embedurl .= '&' . $customparams;
 
 //echo $embedurl; // URl complète du widget externe
 if (empty($embedurl)) {
-	$embedurl = $vars['url'] . 'embed'; // En local => Aide du widget
+	$embedurl = $vars['url'] . 'export_embed'; // En local => Aide du widget
 	echo '<iframe src="' . html_entity_decode($embedurl) . '" style="height:360px; overflow-y:auto; width:288px;">Chargement en cours</iframe>';
 } else {
 	echo '<iframe src="' . html_entity_decode($embedurl) . '" style="height:600px; overflow-y:auto; width:288px;">Chargement en cours</iframe>';

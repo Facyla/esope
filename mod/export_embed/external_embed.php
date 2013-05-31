@@ -162,7 +162,7 @@ error_log('EXT EMBED');
             <ul>
             </ul>
           </li>
-          >> <strong>" . $CONFIG->url . "embed/site_activity</strong> pour l'activité générale du site</li>
+          >> <strong>" . $CONFIG->url . "export_embed/site_activity</strong> pour l'activité générale du site</li>
           <li><strong>friends_activity</strong> pour l'activité de vos contacts</li>
           <li><strong>my_activity</strong> pour votre activité</li>
           <li><strong>group_activity&group_guid=<em>XXXXX</em></strong> pour l'activité d'un groupe en particulier : remplacer <strong><em>XXXXX</em></strong> par le numéro du groupe à afficher, que vous trouverez dans l'adresse de la page d'accueil du groupe : <em>groups/profile/<strong>XXXXX</strong>/nom-du-groupe</em></li>
