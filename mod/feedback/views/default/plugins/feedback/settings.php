@@ -10,7 +10,7 @@ foreach ($groups as $ent) { $feedbackgroup_opt[$ent->guid] = $ent->name; }
 
 
 // Publicly available?
-echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/pulldown', array('internalname' => 'params[publicAvailable_feedback]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->publicAvailable_feedback)) . '</label></p>';
+echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/dropdown', array('name' => 'params[publicAvailable_feedback]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->publicAvailable_feedback)) . '</label></p>';
 ?>
 
 <p>
@@ -41,12 +41,12 @@ echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/pul
 
 <?php
 // Can members read feedbacks ?
-echo '<p><label>' . elgg_echo("feedback:settings:memberview") . elgg_view('input/pulldown', array('internalname' => 'params[memberview]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->memberview)) . '</label></p>';
+echo '<p><label>' . elgg_echo("feedback:settings:memberview") . elgg_view('input/dropdown', array('name' => 'params[memberview]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->memberview)) . '</label></p>';
 
 // Are comments allowed on feedbacks ?
-echo '<p><label>' . elgg_echo("feedback:settings:comment") . elgg_view('input/pulldown', array('internalname' => 'params[comment]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->comment)) . '</label></p>';
+echo '<p><label>' . elgg_echo("feedback:settings:comment") . elgg_view('input/dropdown', array('name' => 'params[comment]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->comment)) . '</label></p>';
 
 // Associate a group to feedbacks ?
-echo '<p><label>' . elgg_echo("feedback:settings:feedbackgroup") . elgg_view('input/pulldown', array('internalname' => 'params[feedbackgroup]', 'options_values' => $feedbackgroup_opt, 'value' => $vars['entity']->feedbackgroup)) . '</label></p>';
+echo '<p><label>' . elgg_echo("feedback:settings:feedbackgroup") . elgg_view('input/dropdown', array('name' => 'params[feedbackgroup]', 'options_values' => $feedbackgroup_opt, 'value' => $vars['entity']->feedbackgroup)) . '</label></p>';
 
 

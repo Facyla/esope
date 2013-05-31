@@ -30,7 +30,6 @@ $feedback_open = 0; $feedback_closed = 0;
 $feedback_content = 0; $feedback_bug = 0; $feedback_suggestion = 0; $feedback_question = 0;
 $feedback_feedback = 0; // Non défini
 
-// @todo : en faire une vue pour faciliter la lecture et l'insertion de listes filtrées dans d'autres endroits..
 foreach ($all_feedback as $ent) {
   // Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
   //if (!empty($ent->state)) { $ent->status = $ent->state; $ent->state = null; }
