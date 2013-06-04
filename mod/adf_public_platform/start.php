@@ -533,6 +533,7 @@ function adf_platform_pagesetup(){
 	if (elgg_is_logged_in()) {
   	
 		// Remove unwanted personnal tools : keep only files (embed), bookmarks, and ideas
+		// @TODO : doesn't work that way...
 		if (elgg_instanceof(elgg_get_page_owner_entity(), 'ElggUser')) {
 		  elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'file_owner_block_menu');
 		  elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'blog_owner_block_menu');
