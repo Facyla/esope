@@ -37,7 +37,7 @@ if (isset($vars['id'])) {
 }
 
 if (isset($vars['title'])) {
-	$title = strip_tags($vars['title']);
+	$title = $vars['title'];
 	unset($vars['title']);
 }
 
@@ -77,7 +77,7 @@ if ($options && count($options) > 0) {
 			$label = $option;
 		}
 
-		echo "<label><input title=\"$title $label\" type=\"radio\" $attributes />$label</label>";
+		echo "<label><input title=\"" . strip_tags("$title $label") . "\" type=\"radio\" $attributes />$label</label>";
 	}
 	echo '</div>';
 }
