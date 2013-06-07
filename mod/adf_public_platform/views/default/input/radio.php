@@ -37,7 +37,7 @@ if (isset($vars['id'])) {
 }
 
 if (isset($vars['title'])) {
-	$title = $vars['title'];
+	$title = strip_tags($vars['title']);
 	unset($vars['title']);
 }
 
