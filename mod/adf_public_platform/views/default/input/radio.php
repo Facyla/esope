@@ -77,7 +77,7 @@ if ($options && count($options) > 0) {
 			$label = $option;
 		}
 
-		echo "<label><input title=\"$title $label\" type=\"radio\" $attributes />$label</label>";
+		echo "<label><input title=\"" . strip_tags("$title $label") . "\" type=\"radio\" $attributes />$label</label>";
 	}
 	echo '</div>';
 }
