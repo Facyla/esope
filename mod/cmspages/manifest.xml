@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.8.0.1 (1.8)" />
+  <field key="version" value="0.8.0.2 (1.8)" />
   <field key="description" value="Static page, and reusable views editor (CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
   <field key="copyright" value="(C) Facyla 2011" />
@@ -22,6 +22,8 @@ INSTALLATION
 ======================
 Version History
 ======================
+
+0.8.0.2 : 20130618 - add some wrapper divs for better page rendering
 
 0.8.0.1 : 20130225 - some corrections on this older version
   - cmspages URL + read page
