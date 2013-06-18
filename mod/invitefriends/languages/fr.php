@@ -12,8 +12,7 @@ $french = array(
 	
 	'invitefriends:registration_disabled' => "L'enregistrement des nouveaux utilisateurs a été désactivé sur ce site, vous ne pouvez pas inviter de nouveaux utilisateurs.",
 	
-	'invitefriends:introduction' => "Pour inviter d'autres personnes à vous rejoindre sur ce réseau, entrez leurs adresses mail ci-dessous (une par ligne).
-	Attention : l'inscription est réservée aux Départements, veillez à utiliser les adresses professionnelles (se terminant en @departement.org, @cgXX.fr ou @DEPARTEMENT.fr).",
+	'invitefriends:introduction' => "Pour inviter d'autres personnes à vous rejoindre sur ce réseau, entrez leurs adresses mail ci-dessous (une par ligne).",
 	'invitefriends:message' => "Personnalisez le message qu'ils vont recevoir avec votre invitation :",
 	'invitefriends:subject' => "Invitation à rejoindre %s",
 

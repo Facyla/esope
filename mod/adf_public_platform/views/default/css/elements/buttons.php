@@ -60,6 +60,7 @@ a.elgg-button {
 	border: 1px solid #000;
 	background: #cd9928 url(<?php echo elgg_get_site_url(); ?>_graphics/button_graduation.png) repeat-x left 10px;
 */
+	background: <?php echo $color6; ?>;
 	border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -67,7 +68,6 @@ a.elgg-button {
 	border: 0 none;
 	box-shadox: none;
 	color: #fff;
-	background: #666;
 	text-shadow: 1px 1px 1px #333;
 	/* margin-top: 10px; */
 	padding: 5px 9px 6px;
@@ -98,7 +98,7 @@ a.elgg-button {
 /*
 	background: #7f8343 url(<?php echo elgg_get_site_url(); ?>_graphics/button_graduation.png) repeat-x left 10px;
 */
-	background: #333;
+	background: <?php echo $color5; ?>;
 	background-image: linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
 	background-image: -o-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);
 	background-image: -moz-linear-gradient(top, <?php echo $color7; ?> 35%, <?php echo $color8; ?> 80%);

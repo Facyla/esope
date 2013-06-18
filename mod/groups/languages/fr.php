@@ -45,7 +45,7 @@ Afficher cette discussion ou y répondre :
   'groups:removed' => '%s a bien été retiré du groupe',
   'groups:addedtogroup' => 'Le membre a bien été ajouté au groupe',
   'groups:joinrequestnotmade' => 'La demande d\'adhésion n\'a pas pu être faite',
-  'groups:joinrequestmade' => 'La demande d\'adhésion s\'est bien déroulée',
+  'groups:joinrequestmade' => 'La demande d\'adhésion s\'est bien déroulée. L\'un des responsables du groupe va accepter ou refuser votre demande.',
   'groups:joined' => 'Vous avez bien rejoint le groupe !',
   'groups:left' => 'Vous avez bien quitté le groupe.',
   'groups:nowidgets' => 'Aucun module n\'a été défini pour ce groupe.',
