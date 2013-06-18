@@ -27,8 +27,8 @@ if ($vars['pagetype']) {
 		$title = $cmspage->pagetitle;
 		
 		if($cmspage) {
-			$content = $cmspage->description 
-				. elgg_view('output/tags', array('tags' => $cmspage->tags));
+			$content = '<div class="elgg-output">' . $cmspage->description . '</div>';
+			$content .= elgg_view('output/tags', array('tags' => $cmspage->tags));
 		/*
 			$content .= $cmspage->guid; // who cares ?
 			$content .= $cmspage->access_id;
@@ -50,7 +50,7 @@ if ($vars['pagetype']) {
 		}
 		
 		// Add a specific divs & markers for styles (lists' CSS)
-		$content = '<div id="cmspages" class="elgg-layout"><div class="elgg-main elgg-body elgg-output">' . $content . '</div></div>';
+		$content = '<div id="cmspages" class="elgg-layout"><div class="elgg-main elgg-body">' . $content . '</div></div>';
 		
 		// Display through the correct canvas area
 		//$content = elgg_view('page/elements/wrapper', array('body' => $content));
