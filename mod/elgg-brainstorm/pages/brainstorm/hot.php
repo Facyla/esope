@@ -6,12 +6,22 @@
  */
 $page_owner = elgg_get_page_owner_entity();
 
-elgg_push_breadcrumb(elgg_echo('brainstorm'));
+elgg_push_breadcrumb($page_owner->name);
+elgg_push_breadcrumb(elgg_echo('brainstorm:filter:hot'));
+
+if ($page_owner->canEdit() || elgg_is_admin_logged_in()) {
+	elgg_register_menu_item('title', array(
+		'name' => 'settings',
+		'href' => "brainstorm/group/$page_owner->guid/settings",
+		'text' => elgg_echo('brainstorm:group_settings'),
+		'link_class' => 'elgg-button elgg-button-action edit-button gwfb group_admin_only',
+	));
+}
 
 $offset = (int)get_input('offset', 0);
 $order_by = get_input('order', 'desc');
 
-$time = time()- (7 * 24 * 60 * 60);
+$time = time()- (14 * 24 * 60 * 60);
 $content = elgg_list_entities_from_annotation_calculation(array(
 	'type' => 'object',
 	'subtype' => 'idea',

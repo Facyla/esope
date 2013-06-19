@@ -8,6 +8,39 @@
 $max = (int) $vars['entity']->max_display;
 $type = $vars['entity']->type_display;
 
+$user_guid = elgg_get_logged_in_user_guid();
+
+$groups = get_users_membership($user_guid);
+
+$userVotes = array();
+foreach($groups as $group) {
+	$userVote = elgg_get_annotations(array(
+		'type' => 'object',
+		'subtype' => 'idea',
+		'container_guid' => $group->getGUID(),
+		'annotation_owner_guids' => $user_guid,
+		'annotation_names' => 'point',
+		'annotation_calculation' => 'sum',
+		'limit' => 0
+	));
+	$userVotes[] = 10 - $userVote;
+}
+array_multisort($userVotes, SORT_DESC,
+			$groups);
+
+$content = '<ul class="elgg-list">';
+foreach($groups as $key => $group) {
+	$group_link = elgg_view('output/url', array(
+		'href' => elgg_get_site_url() . 'brainstorm/group/' . $group->getGUID() . '/all',
+		'text' => $group->name,
+	));
+	$class = $userVotes[$key] == 0 ? 'points float-alt zero' : 'points float-alt';
+	$content .= '<li class="elgg-item">' . $group_link . '<span class="' . $class . '">' . $userVotes[$key] . '</span></li>';
+}
+$content .= '</ul>';
+
+
+/*
 if ( $type == 'top' ) {
 	$content = elgg_list_entities_from_annotation_calculation(array(
 		'type' => 'object',
@@ -33,17 +66,10 @@ if ( $type == 'top' ) {
 		'list_class' => 'sidebar-idea-list',
 		'item_class' => 'elgg-item-idea pts pbs'
 	));
-}
+}*/
 
 echo $content;
 
-if ($content) {
-	$url = "brainstorm/owner/" . elgg_get_page_owner_entity()->username;
-	$more_link = elgg_view('output/url', array(
-		'href' => $url,
-		'text' => elgg_echo('brainstorm:more'),
-	));
-	echo "<span class=\"elgg-widget-more\">$more_link</span>";
-} else {
+if (!$content) {
 	echo elgg_echo('brainstorm:none');
 }

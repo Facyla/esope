@@ -1,6 +1,6 @@
 <?php
 /**
- * New idea river entry
+ * Update idea river entry
  *
  * @package Brainstorm
  */

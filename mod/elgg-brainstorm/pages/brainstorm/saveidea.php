@@ -7,12 +7,18 @@
  * input search come from search.php
  */
 
-$title = elgg_echo('brainstorm:idea:add');
-elgg_push_breadcrumb($title);
+elgg_push_breadcrumb(elgg_echo('brainstorm:idea:add'));
+
+if ($idea && !$idea->canWritetoContainer()) {
+	register_error(elgg_echo('brainstorm:idea:save:failed'));
+	forward(REFERRER);
+}
 
 $vars = brainstorm_prepare_form_vars();
 
 $content = elgg_view_form('brainstorm/saveidea', array(), $vars);
+
+$title = elgg_echo('brainstorm:idea:add');
 
 $body = elgg_view_layout('content', array(
 	'filter' => '',

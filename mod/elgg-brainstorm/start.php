@@ -1,10 +1,10 @@
 <?php
 /**
- *	ELGG-Brainstorm PLUGIN
+ *	Elgg-brainstorm plugin
  *	@package Brainstorm
  *	@author Emmanuel Salomon @ManUtopiK
- *	@license GNU General Public License (GPL) version 2
- *	@copyright 
+ *	@license Dual licensed under the MIT and GNU Affero General Public License, version 3 or late
+ *	@copyright (c) Emmanuel Salomon 2012
  *	@link http://
  **/
 
@@ -21,6 +21,7 @@ function brainstorm_init() {
 	elgg_register_action('brainstorm/editidea', "$action_base/editidea.php");
 	elgg_register_action("brainstorm/rateidea", "$action_base/rateidea.php");
 	elgg_register_action('brainstorm/delete', "$action_base/deleteidea.php");
+	elgg_register_action('brainstorm/settings', "$action_base/settings.php");
 
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'brainstorm_owner_block_menu');
 
@@ -30,8 +31,18 @@ function brainstorm_init() {
 	elgg_extend_view('css/elgg', 'brainstorm/css');
 	elgg_extend_view('js/elgg', 'brainstorm/js');
 	
-	// Register widget
-	elgg_register_widget_type('brainstorm', elgg_echo('brainstorm:widget:title'), elgg_echo('brainstorm:widget:description'));
+	// Register widgets
+	elgg_register_widget_type(
+			'brainstorm',
+			elgg_echo('brainstorm:widget:title'),
+			elgg_echo('brainstorm:widget:description')
+	);
+	elgg_register_widget_type(
+			'points_left',
+			elgg_echo('brainstorm:widget:points_left:title'),
+			elgg_echo('brainstorm:widget:points_left:description'),
+			'dashboard'
+	);
 
 	// Register granular notification for this type
 	register_notification_object('object', 'brainstorm', elgg_echo('brainstorm:new'));
@@ -46,7 +57,7 @@ function brainstorm_init() {
 	elgg_register_entity_type('object', 'idea');
 
 	// Groups
-	add_group_tool_option('brainstorm', elgg_echo('brainstorm:enablebrainstorm'), false);
+	add_group_tool_option('brainstorm', elgg_echo('brainstorm:enablebrainstorm'), true);
 	elgg_extend_view('groups/tool_latest', 'brainstorm/group_module');
 }
 
@@ -58,66 +69,57 @@ function brainstorm_init() {
 function brainstorm_page_handler($page) {
 	elgg_load_library('brainstorm:utilities');
 
+	elgg_push_breadcrumb(elgg_echo('brainstorm'), 'brainstorm/all');
+
 	$pages = dirname(__FILE__) . '/pages/brainstorm';
 
 	switch ($page[0]) {
-	
 		case "read":
 		case "view":
 			set_input('guid', $page[1]);
 			include "$pages/view.php";
 			break;
-
 		case "add":
 			gatekeeper();
 			include "$pages/saveidea.php";
 			break;
-		
 		case "edit":
 			gatekeeper();
 			set_input('guid', $page[1]);
 			include "$pages/editidea.php";
 			break;
-		
 		case "all":
 			include "$pages/all.php";
 			break;
-
 		case "owner":
 			include "$pages/owner.php";
 			break;
-		
 		case "friends":
 			include "$pages/friends.php";
 			break;
-			
 		case 'group':
-			$page_owner = elgg_get_page_owner_entity();
-			elgg_push_breadcrumb($page_owner->name, 'groups/profile/' . $page_owner->guid . '/' . $page_owner->name );
 			group_gatekeeper();
 			switch ($page[2]) {
 				default:
 				case "all":
 				case "top":
-				include "$pages/top.php";
-				break;
-				
+					include "$pages/top.php";
+					break;
 				case "hot":
-				include "$pages/hot.php";
-				break;
-				
+					include "$pages/hot.php";
+					break;
 				case "new":
-				include "$pages/new.php";
-				break;
-				
+					include "$pages/new.php";
+					break;
 				case "accepted":
-				include "$pages/accepted.php";
-				break;
-				
+					include "$pages/accepted.php";
+					break;
 				case "completed":
-				include "$pages/completed.php";
-				break;
-				
+					include "$pages/completed.php";
+					break;
+				case "settings":
+					include "$pages/settings.php";
+					break;
 			}
 			break;
 			

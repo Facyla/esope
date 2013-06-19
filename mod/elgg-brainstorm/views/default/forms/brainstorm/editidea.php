@@ -15,14 +15,13 @@ $status = elgg_extract('status', $vars, 'open');
 $status_info = elgg_extract('status_info', $vars, '');
 $container_guid = elgg_extract('container_guid', $vars);
 $guid = elgg_extract('guid', $vars, null);
-$user = elgg_get_logged_in_user_guid();
 ?>
 
 <div>
 	<label><?php echo elgg_echo('title'); ?></label><br />
 	<?php
 	if (elgg_is_admin_logged_in()) {
-		echo $title;//elgg_view('input/text', array('name' => 'title', 'value' => $title)); 
+		echo $title;
 	} else {
 		echo $title;
 	}
@@ -34,9 +33,9 @@ $user = elgg_get_logged_in_user_guid();
 </div>
 <?php
 	$group = get_entity($container_guid);
-	if ( $group->getOwnerGUID() == $user ) {
+	if ($group->canEdit()) {
 	$status_label = array(elgg_echo('brainstorm:open') => 'open',
-						elgg_echo('brainstorm:under review') => 'under review',
+						elgg_echo('brainstorm:under_review') => 'under_review',
 						elgg_echo('brainstorm:planned') => 'planned',
 						elgg_echo('brainstorm:started') => 'started',
 						elgg_echo('brainstorm:completed') => 'completed',
@@ -45,9 +44,16 @@ $user = elgg_get_logged_in_user_guid();
 	?>
 		<div>
 			<label><?php echo elgg_echo('brainstorm:status'); ?></label><br />
-			<?php echo elgg_view('input/radio', array('name' => 'status', 'value' => $status, 'options' => $status_label, 'class' => 'mbl mts', 'align' => 'horizontal')); ?>
+			<?php echo elgg_view('input/radio', array(
+					'name' => 'status',
+					'value' => $status,
+					'options' => $status_label,
+					'class' => 'mbl mts',
+					'item_class' => 'status',
+					'align' => 'horizontal'
+				)); ?>
 		</div>
-		
+
 		<div>
 			<label><?php echo elgg_echo('brainstorm:status_info'); ?></label>
 			<?php echo elgg_view('input/longtext', array('name' => 'status_info', 'value' => $status_info)); ?>
@@ -60,25 +66,27 @@ $user = elgg_get_logged_in_user_guid();
 	<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
 </div>
 <?php
-$categories = elgg_view('input/categories', $vars);
-if ($categories) {
-	echo $categories;
-}
+	$categories = elgg_view('input/categories', $vars);
+	if ($categories) {
+		echo $categories;
+	}
+
+	echo elgg_view("input/checkbox", array(
+		'name' => 'minorchange'
+	));
+	echo elgg_echo('brainstorm:minorchange');
 ?>
-<div>
-	<label><?php echo elgg_echo('access'); ?></label><br />
-	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?>
-</div>
-<div class="elgg-foot">
+
+<div class="elgg-foot mtl">
 	<?php
-	
+
 	echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
-	
+
 	if ($guid) {
 		echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
 	}
-	
+
 	echo elgg_view('input/submit', array('value' => elgg_echo("save")));
-	
+
 	?>
 </div>
