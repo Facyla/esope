@@ -40,7 +40,7 @@ else {
     $cmspage_view = elgg_echo('cmspages:cmspage_view') . ' elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))';
   }
   $title_input = elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"'));
-  $description_input = elgg_echo('description') . "<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description));
+  $description_input = elgg_echo('description') . "<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
   $tag_input = elgg_echo('tags') . " " . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'js' => ' style="width:500px;"'));
   //$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid)); // We don't really care (not used)
   $access_input = elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access, 'options' => array(
