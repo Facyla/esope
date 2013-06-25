@@ -202,4 +202,61 @@ function adf_platform_categories_page_handler() {
 }
 
 
+function adf_platform_file_page_handler($page) {
+
+	if (!isset($page[0])) {
+		$page[0] = 'all';
+	}
+
+	$file_dir = elgg_get_plugins_path() . 'file/pages/file';
+	$custom_file_dir = elgg_get_plugins_path() . 'adf_public_platform/pages/file';
+
+	$page_type = $page[0];
+	switch ($page_type) {
+		case 'owner':
+			file_register_toggle();
+			include "$custom_file_dir/owner.php";
+			break;
+		case 'friends':
+			file_register_toggle();
+			include "$file_dir/friends.php";
+			break;
+		case 'read': // Elgg 1.7 compatibility
+			register_error(elgg_echo("changebookmark"));
+			forward("file/view/{$page[1]}");
+			break;
+		case 'view':
+			set_input('guid', $page[1]);
+			include "$file_dir/view.php";
+			break;
+		case 'add':
+			include "$file_dir/upload.php";
+			break;
+		case 'edit':
+			set_input('guid', $page[1]);
+			include "$file_dir/edit.php";
+			break;
+		case 'search':
+			file_register_toggle();
+			include "$file_dir/search.php";
+			break;
+		case 'group':
+			file_register_toggle();
+			include "$file_dir/owner.php";
+			break;
+		case 'all':
+			file_register_toggle();
+			include "$file_dir/world.php";
+			break;
+		case 'download':
+			set_input('guid', $page[1]);
+			include "$file_dir/download.php";
+			break;
+		default:
+			return false;
+	}
+	return true;
+}
+
+
 
