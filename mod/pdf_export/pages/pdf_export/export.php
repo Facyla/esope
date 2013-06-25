@@ -63,7 +63,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
 			if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
 		} else {
-			$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a>';
+			$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a> ';
 			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
 			if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
 		}
