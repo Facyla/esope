@@ -72,7 +72,7 @@ function blog_get_page_content_list($container_guid = NULL, $use_owner = false) 
 		// access check for closed groups
 		group_gatekeeper();
 
-		if ($use_owner) $options['container_guid'] = $container_guid;
+		if ($use_owner) $options['owner_guid'] = $container_guid;
 		else $options['container_guid'] = $container_guid;
 		$container = get_entity($container_guid);
 		if (!$container) {
