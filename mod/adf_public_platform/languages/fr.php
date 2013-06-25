@@ -83,7 +83,7 @@ $fr = array(
 	'adf_platform:settings:blog_user_listall' => "Lister de tous les articles de blog (personnels + groupes)",
 	'adf_platform:settings:bookmarks_user_listall' => "Listing de tous les liens web (personnels + groupes)",
 	'adf_platform:settings:brainstorm_user_listall' => "Listing de toutes les idées (personnelles + groupes)",
-	'adf_platform:settings:files_user_listall' => "Listing de tous les fichiers (personnels + groupes)",
+	'adf_platform:settings:file_user_listall' => "Listing de tous les fichiers (personnels + groupes)",
 	'adf_platform:settings:pages_user_listall' => "Listing de toutes les pages wiki (personnelles + groupes)",
 	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
