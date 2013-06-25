@@ -65,7 +65,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 		if (!empty($object->tags)) $intro .= 'Tags : ' . elgg_view('output/tags', array('tags' => $object->tags)) . '<br />';
 		// HTML content
 		$html .= elgg_view_title($pdf_title);
-		$html .= elgg_view('output/longtext', array('content' => $object->description));
+		$html .= elgg_view('output/longtext', array('value' => $object->description));
 		
 	} else if ($object instanceof ElggUser) {
 		$error = true;
