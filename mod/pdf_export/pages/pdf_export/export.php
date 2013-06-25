@@ -14,6 +14,12 @@ $date_format = 'd/m/Y';
 $gen_date_format = 'd/m/Y à H:i';
 
 // Get input data
+// Si une URL de récupération des données HTML est fournie, on l'utilise
+$export_html = get_input('export_html', false);
+if (!empty($export_html)) {
+	$html = file_get_contents($export_html);
+}
+// Sinon on prend les autres modes de récupération de données
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 $generator = get_input('generator', 'mpdf');

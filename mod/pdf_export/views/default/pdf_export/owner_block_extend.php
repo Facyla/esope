@@ -4,7 +4,7 @@ if ( $vars['full']
   && ($vars['entity'] instanceof ElggObject)
   ) {
   global $CONFIG;
-  $download_pdf_url = $CONFIG->url . 'pg/pdfexport/pdf/' . $vars['entity']->guid;
+  $download_pdf_url = $CONFIG->url . 'pdfexport/pdf/' . $vars['entity']->guid;
   
   //echo '<div class="clearfloat"></div>';
   //  rel="facebox" // pas top quand ça plante
