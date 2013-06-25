@@ -114,6 +114,9 @@ function adf_platform_init() {
 	// Pour modifier la page d'arrivée par défaut en popular
 	elgg_unregister_page_handler('members', 'members_page_handler');
 	elgg_register_page_handler('members', 'adf_platform_members_page_handler');
+	// Pour pouvoir lister tous les articles d'un membre (option du thème désactivée par défaut)
+	elgg_unregister_page_handler('members', 'blog_page_handler');
+	elgg_register_page_handler('members', 'adf_platform_blog_page_handler');
 	
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
@@ -339,6 +342,72 @@ function adf_platform_pages_page_handler($page) {
 	}
 	return true;
 }
+
+function adf_platform_blog_page_handler($page) {
+	elgg_load_library('elgg:blog');
+	// forward to correct URL for blog pages pre-1.8
+	blog_url_forwarder($page);
+	// push all blogs breadcrumb
+	elgg_push_breadcrumb(elgg_echo('blog:blogs'), "blog/all");
+
+	if (!isset($page[0])) { $page[0] = 'all'; }
+	$page_type = $page[0];
+	switch ($page_type) {
+		case 'owner':
+			$user = get_user_by_username($page[1]);
+			$use_owner = elgg_get_plugin_setting('blog_owner_user', 'adf_public_platform');
+			if ($use_owner && elgg_instanceof($user, 'user')) $params = blog_get_page_content_list($user->guid, true);
+			else $params = blog_get_page_content_list($user->guid);
+			break;
+		case 'friends':
+			$user = get_user_by_username($page[1]);
+			$params = blog_get_page_content_friends($user->guid);
+			break;
+		case 'archive':
+			$user = get_user_by_username($page[1]);
+			$params = blog_get_page_content_archive($user->guid, $page[2], $page[3]);
+			break;
+		case 'view':
+			$params = blog_get_page_content_read($page[1]);
+			break;
+		case 'read': // Elgg 1.7 compatibility
+			register_error(elgg_echo("changebookmark"));
+			forward("blog/view/{$page[1]}");
+			break;
+		case 'add':
+			gatekeeper();
+			$params = blog_get_page_content_edit($page_type, $page[1]);
+			break;
+		case 'edit':
+			gatekeeper();
+			$params = blog_get_page_content_edit($page_type, $page[1], $page[2]);
+			break;
+		case 'group':
+			if ($page[2] == 'all') {
+				$params = blog_get_page_content_list($page[1]);
+			} else {
+				$params = blog_get_page_content_archive($page[1], $page[3], $page[4]);
+			}
+			break;
+		case 'all':
+			$params = blog_get_page_content_list();
+			break;
+		default:
+			return false;
+	}
+
+	if (isset($params['sidebar'])) {
+		$params['sidebar'] .= elgg_view('blog/sidebar', array('page' => $page_type));
+	} else {
+		$params['sidebar'] = elgg_view('blog/sidebar', array('page' => $page_type));
+	}
+
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($params['title'], $body);
+	return true;
+}
+
 
 // Permet l'accès à diverses pages en mode "walled garden"
 function adf_public_platform_public_pages($hook, $type, $return_value, $params) {
