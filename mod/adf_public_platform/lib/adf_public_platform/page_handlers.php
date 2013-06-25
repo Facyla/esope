@@ -259,4 +259,78 @@ function adf_platform_file_page_handler($page) {
 }
 
 
+function adf_platform_bookmarks_page_handler($page) {
+	elgg_load_library('elgg:bookmarks');
+	if (!isset($page[0])) { $page[0] = 'all'; }
+	elgg_push_breadcrumb(elgg_echo('bookmarks'), 'bookmarks/all');
+
+	// old group usernames
+	if (substr_count($page[0], 'group:')) {
+		preg_match('/group\:([0-9]+)/i', $page[0], $matches);
+		$guid = $matches[1];
+		if ($entity = get_entity($guid)) {
+			bookmarks_url_forwarder($page);
+		}
+	}
+
+	// user usernames
+	$user = get_user_by_username($page[0]);
+	if ($user) {
+		bookmarks_url_forwarder($page);
+	}
+
+	$pages = dirname(__FILE__) . '/pages/bookmarks';
+	$custom_pages = elgg_get_plugins_path() . 'adf_public_platform/pages/bookmarks';
+
+	switch ($page[0]) {
+		case "all":
+			include "$pages/all.php";
+			break;
+
+		case "owner":
+			include "$custom_pages/owner.php";
+			break;
+
+		case "friends":
+			include "$pages/friends.php";
+			break;
+
+		case "view":
+			set_input('guid', $page[1]);
+			include "$pages/view.php";
+			break;
+		case 'read': // Elgg 1.7 compatibility
+			register_error(elgg_echo("changebookmark"));
+			forward("bookmarks/view/{$page[1]}");
+			break;
+
+		case "add":
+			gatekeeper();
+			include "$pages/add.php";
+			break;
+
+		case "edit":
+			gatekeeper();
+			set_input('guid', $page[1]);
+			include "$pages/edit.php";
+			break;
+
+		case 'group':
+			group_gatekeeper();
+			include "$pages/owner.php";
+			break;
+
+		case "bookmarklet":
+			set_input('container_guid', $page[1]);
+			include "$pages/bookmarklet.php";
+			break;
+
+		default:
+			return false;
+	}
+
+	elgg_pop_context();
+	return true;
+}
+
 

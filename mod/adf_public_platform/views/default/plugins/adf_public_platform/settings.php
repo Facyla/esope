@@ -148,10 +148,10 @@ $(function() {
 		if (elgg_is_active_plugin('blog')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:blog_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[blog_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->blog_user_listall )) . '</p>';
 		}
-		/*
 		if (elgg_is_active_plugin('bookmarks')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:bookmarks_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[bookmarks_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->bookmarks_user_listall )) . '</p>';
 		}
+		/*
 		if (elgg_is_active_plugin('brainstorm')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:brainstorm_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[brainstorm_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->brainstorm_user_listall )) . '</p>';
 		}
@@ -159,11 +159,9 @@ $(function() {
 		if (elgg_is_active_plugin('file')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:file_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[file_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->file_user_listall )) . '</p>';
 		}
-		/*
 		if (elgg_is_active_plugin('pages')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall )) . '</p>';
 		}
-		*/
 		?>
 		
 		<br />

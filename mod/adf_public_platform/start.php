@@ -124,6 +124,9 @@ function adf_platform_init() {
 	elgg_unregister_page_handler('blog', 'blog_page_handler');
 	elgg_register_page_handler('blog', 'adf_platform_blog_page_handler');
 	elgg_register_library('elgg:blog', elgg_get_plugins_path() . 'adf_public_platform/lib/blog.php');
+	// Pour pouvoir lister tous les bookmarks d'un membre (option du thème désactivée par défaut)
+	elgg_unregister_page_handler('bookmarks', 'bookmarks_page_handler');
+	elgg_register_page_handler('bookmarks', 'adf_platform_bookmarks_page_handler');
 	// Pour pouvoir lister tous les fichiers d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('file', 'file_page_handler');
 	elgg_register_page_handler('file', 'adf_platform_file_page_handler');

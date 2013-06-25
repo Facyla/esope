@@ -19,12 +19,16 @@ elgg_push_breadcrumb($owner->name);
 
 elgg_register_title_button();
 
-$content = elgg_list_entities(array(
+$options = array(
 	'types' => 'object',
 	'subtypes' => 'page_top',
-	'container_guid' => elgg_get_page_owner_guid(),
 	'full_view' => false,
-));
+);
+$use_owner = elgg_get_plugin_setting('pages_user_listall', 'adf_public_platform');
+if (($use_owner == 'yes') && elgg_instanceof(elgg_get_page_owner_entity(), 'user')) $options['owner_guid'] = elgg_get_page_owner_guid();
+else $options['container_guid'] = elgg_get_page_owner_guid();
+
+$content = elgg_list_entities($options);
 if (!$content) {
 	$content = '<p>' . elgg_echo('pages:none') . '</p>';
 }
