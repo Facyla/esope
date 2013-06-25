@@ -115,8 +115,8 @@ function adf_platform_init() {
 	elgg_unregister_page_handler('members', 'members_page_handler');
 	elgg_register_page_handler('members', 'adf_platform_members_page_handler');
 	// Pour pouvoir lister tous les articles d'un membre (option du thème désactivée par défaut)
-	elgg_unregister_page_handler('members', 'blog_page_handler');
-	elgg_register_page_handler('members', 'adf_platform_blog_page_handler');
+	elgg_unregister_page_handler('blog', 'blog_page_handler');
+	elgg_register_page_handler('blog', 'adf_platform_blog_page_handler');
 	
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
