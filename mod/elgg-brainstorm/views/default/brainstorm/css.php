@@ -12,10 +12,11 @@
 	background-position: 0 -8px;
 }
 .brainstorm-highlight {
-	background-color: yellow;
+	background: yellow;
 }
-#brainstorm-textarea.loading {
-	background: url('<?php echo elgg_get_site_url(); ?>/mod/elgg-brainstorm/graphics/ajax-loader.gif') no-repeat scroll 99% 6px transparent;
+#brainstorm-characters-remaining.loading {
+	background: url('<?php echo elgg_get_site_url(); ?>/mod/elgg-brainstorm/graphics/ajax-loader.gif') no-repeat scroll 0 6px transparent;
+	padding-left: 20px;
 }
 #brainstorm-search-response > span {
 	margin-right: 5px;
@@ -30,8 +31,6 @@
  * Object idea
  */
 .elgg-item-idea {
-	float: left;
-	width: 100%;
 	min-height: 80px;
 }
 .elgg-body > .elgg-item-idea {
@@ -43,15 +42,24 @@
 }
 .idea-content {
 	margin-left: 60px;
+	position: relative;
+}
+.idea-content .elgg-menu-entity {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.idea-content .elgg-image-block {
+	float: left;
 }
 .idea-points {
-	font-size: 1.6em;
+	font-size: 2em;
 	font-weight: bold;
 	text-align: center;
 	border: 1px solid #DEDEDE;
 	border-radius: 5px;
 	width: 50px;
-	padding: 10px 0;
+	padding: 12px 0;
 }
 .idea-points .elgg-ajax-loader {
 	background-size: 24px 24px;
@@ -67,50 +75,66 @@
 	font-size: 14px;
 	font-weight: bold;
 	padding: 2px 0;
-    text-align: center;
-    background-color: #DEDEDE;
-    display: block;
+	text-align: center;
+	background: #DEDEDE;
+	display: block;
 }
 .idea-rate-button:hover {
-	background-color: #CCC;
+	background: #CCC;
 	text-decoration: none;
+}
+div.idea-rate-button {
+	cursor: default;
+}
+div.idea-rate-button:hover {
+	background: #EEE;
 }
 .idea-value-0 {
 	display: none;
 }
 .idea-value-1 {
-	background-color: #FFC773;
+	background: #FFC773;
 }
 .idea-value-2 {
-	background-color: #FFB240;
+	background: #FFB240;
 }
 .idea-value-3 {
-	background-color: #FF9900;
+	background: #FF9900;
 }
 .idea-status {
-	background-color: #EEE;
+	background: #EEE;
+	clear: both;
 }
-.tag {
+.status {
 	border-radius: 8px;
 	color: black;
 	font-size: 11px;
 	font-weight: normal;
-	padding: 2px 6px;
+	padding: 1px 8px;
 }
-.tag.planned {
-	background-color: #FFED00;
+.elgg-river-message .status {
+	border-radius: 5px;
+	font-size: 9px;
+	padding: 0 5px 1px;
 }
-.tag.under {
-	background-color: #BBB;
+.status.open {
+	border: 1px solid #DDD;
+	background: white;
 }
-.tag.started {
-	background-color: #89C23C;
+.status.planned {
+	background: #FFED00;
 }
-.tag.completed {
-	background-color: #4690D6;
+.status.under_review {
+	background: #BBB;
 }
-.tag.declined {
-	background-color: red;
+.status.started {
+	background: #89C23C;
+}
+.status.completed {
+	background: #4690D6;
+}
+.status.declined {
+	background: red;
 }
 
 /*
@@ -128,7 +152,7 @@
 	height: 0;
 	position: absolute;
 	width: 0;
-    top: 6px;
+	top: 6px;
 }
 .brainstorm-vote-popup .blanc {
 	border-color: transparent white;
@@ -151,11 +175,11 @@
 	box-shadow: none;
 }
 .brainstorm-vote-popup .elgg-button:hover {
-	background-color: #4690D6;
+	background: #4690D6;
 	border-color: #4690D6;
 }
 .brainstorm-vote-popup .elgg-button.checked {
-	background-color: #0054A7;
+	background: #0054A7;
 	border-color: #0054A7;
 	color: white;
 	cursor: default;
@@ -165,7 +189,7 @@
  * Sidebar
  */
 #votesLeft {
-	background-color: #FF9900;
+	background: #FF9900;
 	color: white;
 	font-size: 1.4em;
 	font-weight: bold;
@@ -173,7 +197,7 @@
 	padding-bottom:5px;
 }
 #votesLeft.zero {
-	background-color: #999;
+	background: #999;
 }
 #votesLeft strong {
 	font-size: 2em;
@@ -196,7 +220,7 @@
 .sidebar-idea-list .elgg-item-idea > div.planned {
 	border-bottom: 4px solid #FFED00;
 }
-.sidebar-idea-list .elgg-item-idea > div.under {
+.sidebar-idea-list .elgg-item-idea > div.under_review {
 	border-bottom: 4px solid #BBB;
 }
 .sidebar-idea-list .elgg-item-idea > div.started {
@@ -208,14 +232,34 @@
 .sidebar-idea-list .elgg-item-idea > div.declined {
 	border-bottom: 4px solid red;
 }
+
 /*
- * Add form saveidea
+ * Add form editidea
  */
- 
-.elgg-form-brainstorm-saveidea .elgg-horizontal {
-	display: block;
+.elgg-form-brainstorm-editidea .elgg-horizontal li {
+	display: inline-block;
+	margin-right: 5px;
+	padding: 3px 10px;
 }
-.elgg-form-brainstorm-saveidea .elgg-horizontal li {
-	display: inline;
-	padding-right: 10px;
+
+/*
+ * Group Module
+ */
+.module-idea-list > li {
+	min-height: 48px;
+}
+.module-idea-list .idea-points {
+	padding: 8px 0px 9px;
+}
+
+/*
+ * Widgets
+ */
+.elgg-widget-content .points {
+	font-weight: bold;
+	color: #FF9900;
+	font-size: 1.1em;
+}
+.elgg-widget-content .points.zero {
+	color: #999;
 }

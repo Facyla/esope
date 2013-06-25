@@ -7,6 +7,7 @@
 
 $full = elgg_extract('full_view', $vars, FALSE);
 $idea = elgg_extract('entity', $vars, FALSE);
+$show_group = elgg_extract('show_group', $vars, FALSE);
 
 if (!$idea) {
 	return;
@@ -25,7 +26,7 @@ $params = array(
 	'href' => $idea->getURL(),
 );
 $title_link = elgg_view('output/url', $params);
-	
+
 $owner_link = elgg_view('output/url', array(
 	'href' => "brainstorm/owner/$owner->username",
 	'text' => $owner->name,
@@ -34,6 +35,17 @@ $author_text = elgg_echo('byline', array($owner_link));
 
 $tags = elgg_view('output/tags', array('tags' => $idea->tags));
 $date = elgg_view_friendly_time($idea->time_created);
+
+if ($show_group && elgg_instanceof($container, 'group')) {
+	$group_link = elgg_view('output/url', array(
+		'href' => $container->getURL(),
+		'text' => $container->name,
+		'is_trusted' => true,
+	));
+	$group_text = elgg_echo('groups:ingroup') . ' ' . $group_link;
+} else {
+	$group_text = '';
+}
 
 $comments_count = $idea->countComments();
 //only display if there are commments
@@ -54,7 +66,7 @@ $metadata = elgg_view_menu('entity', array(
 	'class' => 'elgg-menu-hz',
 ));
 
-$subtitle = "$author_text $date $categories $comments_link";
+$subtitle = "$author_text $group_text $date $categories $comments_link";
 
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) {
@@ -99,11 +111,11 @@ $voteString = $userVote;
 if ( $userVote == '' || $userVote == '0' ) $voteString = $userVote = 'vote';
 if ( $userVoteLeft <= 0 && $userVote == 'vote' ) $userVote = '0';
 
-if ( !$container->isMember($user) ) {
+if ( !$container->canWriteToContainer($user) ) {
 	$vote = "<div class='idea-points mbs'>$sum</div>";
 } elseif ( $idea->status == 'completed' || $idea->status == 'declined' ) {
 	$vote = "<div class='idea-points mbs'>$sum</div>" .
-	"<a class='idea-rate-button idea-status'>$voteString</a>";
+	"<div class='idea-rate-button idea-status'>$voteString</div>";
 } else {
 	$vote = "<div class='idea-points mbs'>$sum</div>" .
 		"<a class='idea-rate-button idea-value-$userVote' rel='popup' href='#vote-popup-{$idea->guid}'>$voteString</a>" .
@@ -116,24 +128,22 @@ if ( !$container->isMember($user) ) {
 $status = $idea->status;
 
 if ($full == 'full' && !elgg_in_context('gallery')) {
-	$header = elgg_view_title($idea->title);
 
-	$idea_info = elgg_view_image_block($owner_icon, $list_body);
+	$idea_info = elgg_view_image_block($owner_icon, $list_body, array('class' => 'mbs'));
 
-	if ( $status != 'open') {
-		$status_info = "<div class='idea-status-info'>" . $idea->status_info . '</div>';
-		$idea_status = "<div class='idea-status pam'><strong>" . elgg_echo('brainstorm:state') . "</strong><span class='tag mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>$status_info</div>";
+	if ($idea->status_info || $status == 'completed' || $status == 'declined') {
+		$status_info = "<div class='mts'>" . elgg_view('output/longtext', array('value' => $idea->status_info)) . '</div>';
+		$idea_status = "<div class='idea-status pam mtl'><strong>" . elgg_echo('brainstorm:state') . "</strong><span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>$status_info</div>";
 	}
 
 	echo <<<HTML
 <div id="elgg-object-{$idea->guid}" class="elgg-item-idea">
-	<div class="idea-left-column mts">$vote</div>
+	<div class="idea-left-column">$vote</div>
 	<div class="idea-content">
-		$header
 		$idea_info
 		$description
-		$idea_status
 	</div>
+	$idea_status
 </div>
 HTML;
 
@@ -145,12 +155,12 @@ HTML;
 HTML;
 
 } elseif ($full == 'no_vote') {
-	$content = elgg_get_excerpt($idea->description, '300');
-	
+	$content = elgg_get_excerpt($idea->description);
+
 	if ( $status != 'open') {
-		$idea_status = "<span class='tag mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
 	}
-	
+
 	echo <<<HTML
 <div class="idea-left-column mts mbs"><div class="idea-points mbs">$sum</div></div>
 <div class="idea-content mts">
@@ -158,6 +168,21 @@ HTML;
 	<div class="elgg-subtext">$subtitle</div>
 	<div class="elgg-content">$content</div>
 	$idea_status
+</div>
+HTML;
+} elseif ($full == 'module') {
+	$content = elgg_get_excerpt($idea->description);
+
+	if ( $status != 'open') {
+		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+	}
+
+	echo <<<HTML
+<div class="idea-left-column mts mbs"><div class="idea-points mbs">$sum</div></div>
+<div class="idea-content mts">
+	<h3>$title_link $idea_status</h3>
+	<div class="elgg-subtext">$subtitle</div>
+	<div class="elgg-content">$content</div>
 </div>
 HTML;
 } elseif (elgg_in_context('gallery')) {
@@ -170,13 +195,13 @@ HTML;
 } else {
 	// brief view
 	if ( $full != 'searched') {
-		$content = elgg_get_excerpt($idea->description, '300');
+		$content = elgg_get_excerpt($idea->description);
 	} else {
 		$content = $idea->description;
 	}
 
 	if ( $status != 'open') {
-		$idea_status = "<span class='tag mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
 	}
 
 

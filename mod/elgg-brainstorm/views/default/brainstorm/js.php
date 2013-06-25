@@ -3,106 +3,123 @@
 elgg.provide('elgg.brainstorm');
 
 elgg.brainstorm.init = function() {
+	var timeout;
 
-	$("#brainstorm-textarea").live('keydown', function(e) {
-		if ( $(this).val().length > 139 && e.keyCode != 8 ) return false;
+	$("#brainstorm-textarea").keypress(function(e) {
+		if ( $(this).val().length > 140 && e.which != 8 || e.which == 13) return false;
 		elgg.brainstorm.textCounter(this, $("#brainstorm-characters-remaining span"), 140);
-	}).live('keyup', function() {
-		if ( $(this).val().length > 139 && e.keyCode != 8 ) return false;
-		elgg.brainstorm.textCounter(this, $("#brainstorm-characters-remaining span"), 140);
-		
 		var search_input = $(this).val();
 		var search_container = $('#brainstorm-search-response');
 
-		if ( search_input.length > 3 ) {
-			$.ajax({
-				type: "GET",
-				url: elgg.config.wwwroot + 'mod/elgg-brainstorm/views/default/brainstorm/search.php',
-				data: 'group=' + elgg.get_page_owner_guid() + '&keyword=' + search_input,
-				beforeSend:  function() {
-					$('#brainstorm-textarea').addClass('loading');
-				},
-				success: function(response) {
-					$('.elgg-menu-filter-default, .brainstorm-list').hide();
-					if ( search_container.is(':hidden') ) {
-						search_container.css('opacity', 0).html(response).fadeTo('slow', 1);
-					} else {
-						search_container.html(response);
-					}
-					if ($('#brainstorm-textarea').hasClass("loading")) {
-						$('#brainstorm-textarea').removeClass("loading");
-					}
+		if (search_input.length > 3) {
+			if (timeout) {
+				clearTimeout(timeout);
+				timeout = null;
+			}
+
+			timeout = setTimeout(function() {
+				search_input = $("#brainstorm-textarea").val();
+				if (search_input.length > 3) { // @todo check why need to do it again ?
+					$.ajax({
+						type: "GET",
+						url: elgg.config.wwwroot + 'mod/elgg-brainstorm/views/default/brainstorm/search.php',
+						data: 'group=' + elgg.get_page_owner_guid() + '&keyword=' + $("#brainstorm-textarea").val() + '&point=' + $('#votesLeft strong').text(),
+						beforeSend:  function() {
+							$('#brainstorm-characters-remaining').addClass('loading');
+						},
+						success: function(response) {
+							clearTimeout(timeout);
+							$('.elgg-page .elgg-menu-filter-default, .brainstorm-list').hide();
+							if ( search_container.is(':hidden') ) {
+								search_container.css('opacity', 0).html(response).fadeTo('slow', 1);
+							} else {
+								search_container.html(response);
+							}
+							$('#brainstorm-characters-remaining').removeClass("loading");
+							rateButton();
+							$('body').click('click', function() {$('.brainstorm-vote-popup').fadeOut();});
+						}
+					});
 				}
-			});
+			}, 500);
 		} else if ( $('.brainstorm-list').css('opacity') != '1' || $('.brainstorm-list').is(":hidden") ) {
 			search_container.hide().html('');
-			$('.elgg-menu-filter-default, .brainstorm-list').css('opacity', 0).fadeTo('slow', 1);
+			$('.elgg-page .elgg-menu-filter-default, .brainstorm-list').css('opacity', 0).fadeTo('slow', 1);
 		}
-		return false;		
 	});
 
+	var rateButton = function() {
+		$('.idea-rate-button').click(function() {
+			$('.brainstorm-vote-popup').fadeOut(); // hide all other popup
 
-	$('.idea-rate-button').click(function() {
-		$('.brainstorm-vote-popup').fadeOut(); // hide all other popup
+			var ideaClass = $(this).attr('class');
+			var points = ideaClass.substr(ideaClass.length - 1);
+			if ( points == 'e' ) points = '0';
+			var popup = $('#vote-popup-' + $(this).parents('.elgg-item-idea').attr('id').split('-')[2] );
 
-		var ideaClass = $(this).attr('class');
-		var points = ideaClass.substr(ideaClass.length - 1);
-		if ( points == 'e' ) points = '0';	
-		var popup = $('#vote-popup-' + $(this).parents('.elgg-item-idea').attr('id').split('-')[2] );
-		
-		popup.find('.elgg-button').removeClass('checked hidden');
-		popup.find('.elgg-button[value='+points+']').addClass('checked');
-		if ( points == '0' ) popup.find('.elgg-button:first').addClass('hidden');
-		var UserVoteLeft = $('#votesLeft strong').html();
-		if ( UserVoteLeft == '2' && points == '0' || UserVoteLeft == '1' && points <= '1' || UserVoteLeft == '0' && points <= '2' ) popup.find('.elgg-button:last').addClass('hidden');
-		if ( UserVoteLeft == '1' && points == '0' || UserVoteLeft == '0' && points <= '1' ) popup.find('.elgg-button[value=2]').addClass('hidden');
-		if ( UserVoteLeft == '0' && points == '0' ) popup.find('.elgg-button[value=1]').addClass('hidden');
+			popup.find('.elgg-button').removeClass('checked hidden');
+			popup.find('.elgg-button[value='+points+']').addClass('checked');
+			if ( points == '0' ) popup.find('.elgg-button:first').addClass('hidden');
+			var UserVoteLeft = $('#votesLeft strong').text();
+			if ( UserVoteLeft == '2' && points == '0' || UserVoteLeft == '1' && points <= '1' || UserVoteLeft <= '0' && points <= '2' ) popup.find('.elgg-button:last').addClass('hidden');
+			if ( UserVoteLeft == '1' && points == '0' || UserVoteLeft <= '0' && points <= '1' ) popup.find('.elgg-button[value=2]').addClass('hidden');
+			if ( UserVoteLeft == '0' && points <= '0' ) popup.find('.elgg-button[value=1]').addClass('hidden');
 
-		$('.idea-rate-button').not(this).removeClass('elgg-state-active');
-	});
-	
-	$('.elgg-form-brainstorm-vote-popup .elgg-button').click(function() {
+			$('.idea-rate-button').not(this).removeClass('elgg-state-active');
+		});
+	}
+	rateButton();
+
+	$('.elgg-form-brainstorm-vote-popup .elgg-button').live('click', function() {
 		if ($.data(this, 'clicked') || $(this).hasClass('checked')) // Prevent double-click
 			return false;
 		else {
 			$.data(this, 'clicked', true);
-			var thisVote = this;
-			var value = $(this).val();
-			var idea = $(this).parents('.brainstorm-vote-popup').attr('id').split('-')[2];
-			var ideaURL = $('#elgg-object-' + idea + ' .idea-content h3 a').attr('href');
-			var ideaTitle = $('#elgg-object-' + idea + ' .idea-content h3 a').html();
-			if ( ideaTitle == null ) ideaTitle = $('#elgg-object-' + idea + ' .idea-content h2').html();
-			
+			var thisVote = this,
+				value = $(this).val(),
+				idea = $(this).parents('.brainstorm-vote-popup').attr('id').split('-')[2],
+				ideaURL = $('#elgg-object-' + idea + ' .idea-content h3 a').attr('href'),
+				ideaTitle = $('#elgg-object-' + idea + ' .idea-content h3 a').html();
+			if ( ideaTitle == null ) ideaTitle = $('.elgg-body h2').html();
+
+			var old_points = $('#elgg-object-' + idea + ' .idea-points').text();
 			$('#elgg-object-' + idea + ' .idea-points').html('<div class="elgg-ajax-loader"></div>');
-			
-			var dataString = $(this).parents('form').serialize() + '&idea=' + idea + '&value=' + value + '&page_owner=' + elgg.get_page_owner_guid();
+
 			elgg.action('brainstorm/rateidea', {
-				data: dataString,
+				data: $(this).parents('form').serialize() + '&idea=' + idea + '&value=' + value + '&page_owner=' + elgg.get_page_owner_guid(),
 				success: function(json) {
 					$('.brainstorm-vote-popup').fadeOut();
-					
-					if ( !json.output.errorRate ) {			
+
+					if ( !json.output.errorRate ) {
+						var ideaRateButton = $('#elgg-object-' + idea + ' .idea-rate-button'),
+							sidebarIdea = $('.sidebar-idea-list #elgg-object-' + idea);
+
 						$('#elgg-object-' + idea + ' .idea-points').html(json.output.sum);
-						
+
 						if ( value == '0' ) {
-							$('#elgg-object-' + idea + ' .idea-rate-button').html('vote');
-							$('.sidebar-idea-list #elgg-object-' + idea).fadeOut().remove()
+							ideaRateButton.html('vote');
+							sidebarIdea.fadeOut().remove()
 						} else {
-							$('#elgg-object-' + idea + ' .idea-rate-button').html(value);
-							if ( !$('.sidebar-idea-list #elgg-object-' + idea).length ) {
-								var liStart = '<li class="elgg-item elgg-item-idea" id="elgg-object-'+idea+'">';
-								h3 = '<h3><a href="'+ideaURL+'">'+ideaTitle+'</a></h3>';
-								$('.sidebar-idea-list').prepend(liStart + '<div></div>' + h3 + '</li>');
+							ideaRateButton.html(value);
+							if ( !sidebarIdea.length ) {
+								$('.sidebar-idea-list').prepend(
+									$('<li>', {id: 'elgg-object-'+idea, 'class': 'elgg-item elgg-item-idea'}).append(
+										$('<div>', {'class': 'mrs idea-value-'+value}).html(value),
+										$('<h3>').append($('<a>', {href: ideaURL}).html(ideaTitle))
+									)
+								);
+							} else {
+								sidebarIdea.children('div').html(value)
+									.attr('class', function(){return $(this)[0].className.replace(/idea-value-.* \b/g, 'idea-value-'+value+' ')});
 							}
-							$('.sidebar-idea-list #elgg-object-' + idea + ' > div').html(value).removeClass().addClass('mrs idea-value-'+value);							
 						}
-						
+
 						if ( !json.output.userVoteLeft == '0' && value == '0' ) {
-							$('#elgg-object-' + idea + ' .idea-rate-button').removeClass().addClass('idea-rate-button idea-value-vote');
+							ideaRateButton.removeClass().addClass('idea-rate-button idea-value-vote');
 						} else {
-							$('#elgg-object-' + idea + ' .idea-rate-button').removeClass().addClass('idea-rate-button idea-value-'+value);
+							ideaRateButton.removeClass().addClass('idea-rate-button idea-value-'+value);
 						}
-						
+
 						if ( json.output.userVoteLeft == '0' ) {
 							$('.idea-value-vote').removeClass('idea-value-vote').addClass('idea-value-0');
 							var VoteString = "<strong>0</strong> " + elgg.echo('brainstorm:novoteleft');
@@ -115,16 +132,21 @@ elgg.brainstorm.init = function() {
 						}
 						$('#votesLeft').removeClass('zero').html(VoteString);
 						if ( json.output.userVoteLeft == '0' ) $('#votesLeft').addClass('zero');
+					} else {
+						$('#elgg-object-' + idea + ' .idea-points').html(old_points);
 					}
-					
+
 					$.data(thisVote, 'clicked', false);
 				},
-				error: function(){ elgg.system_message(elgg.echo('brainstorm:idea:rate:error:ajax')); }
+				error: function(){
+					elgg.system_message(elgg.echo('brainstorm:idea:rate:error:ajax'));
+					$('#elgg-object-' + idea + ' .idea-points').html(old_points);
+				}
 			});
 		}
-		
+
 	});
-	
+
 };
 elgg.register_hook_handler('init', 'system', elgg.brainstorm.init);
 
@@ -159,7 +181,7 @@ elgg.ui.votePopup = function(hook, type, params, options) {
 		options.offset = '13 0';
 		return options;
 	}
-	return null;
+	return options;
 };
 elgg.register_hook_handler('getOptions', 'ui.popup', elgg.ui.votePopup);
 

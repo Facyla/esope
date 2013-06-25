@@ -12,7 +12,6 @@ if ($group->brainstorm_enable == "no") {
 }
 
 elgg_push_context('widgets');
-elgg_pop_context();
 
 $content = elgg_list_entities_from_annotation_calculation(array(
 	'type' => 'object',
@@ -26,6 +25,7 @@ $content = elgg_list_entities_from_annotation_calculation(array(
 	'limit' => 6,
 	'pagination' => false
 ));
+elgg_pop_context();
 
 if (!$content) {
 	$content = '<p>' . elgg_echo('brainstorm:none') . '</p>';
@@ -42,7 +42,7 @@ $new_link = elgg_view('output/url', array(
 ));
 
 echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('brainstorm:group'),
+	'title' => elgg_echo('brainstorm:group:idea'),
 	'content' => $content,
 	'all_link' => $all_link,
 	'add_link' => $new_link,
