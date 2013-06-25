@@ -1,0 +1,1074 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<title>HTML 2 (F)PDF Project</title>
+ 
+<style>
+.warn
+{
+margin: 3 3 3 3;
+display:block;
+border:thin solid gray;
+background:yellow;
+color:red;
+font-weight:bold;
+text-indent: 10px;
+}
+.botao
+{
+padding: 1 1 1 1;
+text-decoration: none;
+border:thin solid gray;
+background: #bbb;
+color: #00f;
+font-weight:bold;
+}
+.botao:hover
+{
+border:thin solid gray;
+background: #eee;
+font-weight:bold;
+color: #000;
+}
+</style>
+</head>
+<body>
+<code>
+
+<h2 align="center">MANUAL</h2>
+<p>
+There are 3 classes in this project alongside an auxiliar script file.<br>
+The classes are: FPDF, HTML2FPDF, PDF(site version).<br>
+The auxiliar script is: htmltoolkit.php.
+</p>
+<p>
+The html2fpdf_site.php class (PDF) extends the html2fpdf.php class (HTML2FPDF) that extends the fpdf.php class (FPDF).
+</p>
+<h3 align="center">
+FPDF Class
+</h3>
+Check the <a class="botao" href="http://www.fpdf.org/" target="_blank">site</a> of this class for more info. <br>
+<div class="warn">
+Attention! My project uses a modified FPDF class
+</div>
+<h3 align="center">
+HTML2FPDF Class
+</h3>
+<p>
+On top of the attributes and methods of the FPDF class, this class also has:
+</p>
+
+<b>CLASSNAME:</b> HTML2FPDF<br>
+<b>EXTENDS:</b> FPDF<br>
+<table border="1" width="100%">
+<tbody><tr>
+<th colspan="2" bgcolor="#6191ff">
+CONSTANTS
+</th>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">define('HTML2FPDF_VERSION','3.0(beta)');</font>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">define('RELATIVE_PATH','');</font>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">define('FPDF_FONTPATH','font/');</font>
+</td>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+IMPORTS
+</th>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">require_once(RELATIVE_PATH.'fpdf.php');</font>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">require_once(RELATIVE_PATH.'htmltoolkit.php');</font>
+</td>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+ATTRIBUTES
+</th>
+</tr>
+<tr>
+<td align="center" bgcolor="#bbbbbb" width="10%">
+TYPE
+</td>
+<td align="center" bgcolor="#bbbbbb" width="90%">
+NAME
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $HREF;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(float)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $pgwidth;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $fontlist;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $issetfont;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $issetcolor;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $titulo;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(float)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $oldx;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(float)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $oldy;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $B;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $U;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $I;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $tablestart;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $tdbegin;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $table;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $cell;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $col;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $row;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divbegin;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(char)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divalign;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(float)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divwidth;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(float)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divheight;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divbgcolor;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divcolor;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divborder;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $divrevert;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listlvl;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listnum;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listtype;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listoccur;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listlist;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $listitem;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $buffer_on;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $pbegin;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $pjustfinished;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $blockjustfinished;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $SUP;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $SUB;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $toupper;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $tolower;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $dash_on;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $dotted_on;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $strike;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $CSS;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $cssbegin;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $backupcss;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $textbuffer;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $currentstyle;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $currentfont;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $colorarray;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $bgcolorarray;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $internallink;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $enabledtags;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(int)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $lineheight;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $basepath;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $outlineparam;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $outline_on;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(string)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $specialcontent;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(array)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $selectoption;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $usecss;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $usepre;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $usetableheader;</font>
+</td>
+</tr>
+<tr>
+<td align="center">
+<font size="2"><i>(bool)</i></font>
+</td>
+<td>
+<font size="2"><b>var</b> $shownoimg;</font>
+</td>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+METHODS
+</th>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> HTML2FPDF($orientation='P',$unit='mm',$format='A4')</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>An object (a class instance)</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Constructor</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> setBasePath($str)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Inform the script where the html file is (full path - e.g. http:</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> ShowNOIMG_GIF($opt=true)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Enable/Disable Displaying the no_img.gif when an image is not found. No-Parameter: Enable</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> UseCSS($opt=true)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Enable/Disable CSS recognition. No-Parameter: Enable</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> UseTableHeader($opt=true)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Enable/Disable Table Header to appear every new page. No-Parameter: Enable</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> UsePRE($opt=true)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Enable/Disable pre tag recognition. No-Parameter: Enable</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> Header($content='')</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> The header is printed in every page.</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> Footer()</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> The footer is printed in every page!</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> WriteHTML($html)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> HTML parser</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> OpenTag($tag,$attr)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> CloseTag($tag)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> printlistbuffer()</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Prints all list-related buffered info</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> printbuffer($arrayaux,$outofblock=false,$is_table=false)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>headache</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Prepares buffered text to be printed with FlowingBlock()</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> Reset()</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Resets several class attributes</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> ReadMetaTags($html)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Pass meta tag info to PDF file properties</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> ReadCSS($html)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>string</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> CSS parser</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> readInlineCSS($html)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>array</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Reads inline CSS and returns an array of properties</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> setCSS($arrayaux)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Change some class attributes according to CSS properties</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> SetStyle($tag,$enable)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Enables/Disables B,I,U styles</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> DisableTags($str='')</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Disable some tags using ',' as separator. Enable all tags calling this function without parameters.</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableColumnWidth(&amp;$table)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableWidth(&amp;$table)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Calculates the Table Width</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableHeight(&amp;$table)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Calculates the Table Height</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableGetWidth(&amp;$table, $i,$j)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>array(x,w)</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableGetHeight(&amp;$table, $i,$j)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>array(y,h)</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableRect($x, $y, $w, $h, $type=1)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> _tableWrite(&amp;$table)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Main table function</font>
+</td>
+</tr>
+</tbody></table>
+<h3 align="center">
+PDF Class
+</h3>
+<p>
+On top of the attributes and methods of the HTML2FPDF class, this class also has:
+</p>
+
+<b>CLASSNAME:</b> PDF<br>
+<b>EXTENDS:</b> HTML2FPDF<br>
+<table border="1" width="100%">
+<tbody><tr>
+<th colspan="2" bgcolor="#6191ff">
+CONSTANTS
+</th>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">define('RELATIVE_PATH','');</font>
+</td>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+IMPORTS
+</th>
+</tr>
+<tr>
+<td colspan="2">
+<font size="2">require_once(RELATIVE_PATH.'html2fpdf.php');</font>
+</td>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+ATTRIBUTES
+</th>
+</tr>
+<tr>
+<th colspan="2" bgcolor="#6191ff">
+METHODS
+</th>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> PDF()</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>A class instance</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Constructor</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> InitLogo($src)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Insert Image Logo on 1st page</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> PutTitle($titulo)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Insert Title on 1st page</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> PutAuthor($autor)</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Insert Author on 1st page</font>
+</td>
+</tr>
+<tr>
+<td colspan="2" bgcolor="#33ff99">
+<font size="2"><b>function</b> Footer()</font>
+</td>
+</tr>
+<tr>
+<td width="30%">
+<font size="2"><b>Return:</b> <i>void</i></font>
+</td>
+<td width="70%">
+<font size="2"><b>OBS:</b> Insert footer on every page</font>
+</td>
+</tr>
+</tbody></table>
+</code>
+
+
+</body></html>
