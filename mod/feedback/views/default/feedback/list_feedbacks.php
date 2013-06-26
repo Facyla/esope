@@ -17,7 +17,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
   if ($group = get_entity($feedbackgroup)) {
     elgg_set_page_owner_guid($feedbackgroup);
     $base_url .= 'group/' . $feedbackgroup;
-    $limit = get_input('limit', 3);
+    if (!elgg_in_context('feedback')) $limit = get_input('limit', 3);
   } else elgg_set_page_owner_guid($CONFIG->site->guid);
 }
 
