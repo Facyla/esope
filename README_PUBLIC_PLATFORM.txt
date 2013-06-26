@@ -104,3 +104,11 @@ INSTALLATION & CONFIGURATION :
 
 
 
+#============================================================#
+LISTE DETAILLE DES PLUGINS ET DE LEUR UTILITE
+
+- plugin, version et/ou date, description détaillée
+
+- @TODO
+
+
