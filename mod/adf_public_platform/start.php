@@ -12,7 +12,6 @@ elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); //
 
 // Activation des notifications par mail lors de l'entrée dans un groupe
 elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
-
 // Suppression des notifications lorsqu'on quitte le groupe
 elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
 
@@ -23,10 +22,6 @@ elgg_register_event_handler('delete','member','adf_public_platform_group_leave',
 function adf_platform_init() {
   
   global $CONFIG;
-  
-  // Include other functions (lightens this file)
-  require_once(dirname(__FILE__) . '/lib/adf_public_platform/page_handlers.php');
-  require_once(dirname(__FILE__) . '/lib/adf_public_platform/hooks.php');
   
   // CSS et JS
   elgg_extend_view('css/elgg', 'adf_platform/css');
@@ -247,6 +242,10 @@ function adf_platform_init() {
 	
 }
 
+
+// Include hooks & page_handlers functions (lightens this file)
+require_once(dirname(__FILE__) . '/lib/adf_public_platform/page_handlers.php');
+require_once(dirname(__FILE__) . '/lib/adf_public_platform/hooks.php');
 
 
 
