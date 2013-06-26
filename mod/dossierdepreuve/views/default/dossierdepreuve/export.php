@@ -142,6 +142,9 @@ if (empty($export_type)) {
 		echo '</form><br />';
 		*/
 		// @TODO : formulaire d'envoi au générateur de PDF (passer une varaible 'html')
+	} else {
+		register_error("Export impossible : plugin d'export PDF non activé !");
+		echo '<p>Export impossible : plugin d\'export PDF non activé !</p>';
 	}
 	
 	?>
