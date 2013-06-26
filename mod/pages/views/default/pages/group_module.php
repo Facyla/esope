@@ -8,7 +8,7 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->pages_enable != "yes") {
+if ($group->pages_enable == "no") {
 	return true;
 }
 
