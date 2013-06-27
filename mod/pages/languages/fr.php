@@ -121,6 +121,14 @@ Afficher et commenter la nouvelle page :
 %s",
 	'pages:parent_guid' => "Page parente",
 	
+	// Added in 1.8.16
+	'pages:current_revision' => "Version actuelle",
+	'pages:revert' => "Revenir à cette version",
+	'pages:revision:delete:success' => "La version de la page a bien été supprimée.",
+	'pages:revision:delete:failure' => "la version de la page n'a pas pu être supprimée.",
+	'pages:revision:not_found' => "Impossible de trouver cette version de la page.",
+	
+	
 );
 
 add_translation("fr", $french);

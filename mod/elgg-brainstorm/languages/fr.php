@@ -21,21 +21,22 @@ $french = array(
 	'river:update:object:idea' => "%s a modifié l'idée %s",
 
 
-	'brainstorm' => "Remue-méninges",
+	'brainstorm' => "Boîte à idées",
+	'brainstorm:settings' => "Réglages Boîte à idées",
 	'brainstorm:add' => "Ajouter une idée",
-	'brainstorm:edit' => "Éditer une ideé",
+	'brainstorm:edit' => "Éditer une idée",
 	'brainstorm:new' => "Une nouvelle idée",
 
 	'brainstorm:all' => "Toutes les idées",
 	'brainstorm:owner' => "Idées de %s",
 	'brainstorm:friends' => "Idées des contacts",
-	'brainstorm:idea:edit' => "Éditer cette ideé",
+	'brainstorm:idea:edit' => "Éditer cette idée",
 	'brainstorm:idea:add' => "Ajouter cette idée",
 
-	'brainstorm:group:settings:title' => "Options du remue-méninges du groupe %s",
-	'brainstorm:group_settings' => "Options du remue-méninges",
-	'brainstorm:enablebrainstorm' => "Active le remue-méninges",
-	'brainstorm:group' => 'Remue-méninges du groupe',
+	'brainstorm:group:settings:title' => "Options de la boîte à idées du groupe %s",
+	'brainstorm:group_settings' => "Options de la boîte à idées",
+	'brainstorm:enablebrainstorm' => "Active la Boîte à idées",
+	'brainstorm:group' => 'Boîte à idées',
 	'brainstorm:group:idea' => 'Idées du groupe',
 	'brainstorm:same_group' => "Dans le même groupe :",
 	'brainstorm:view:all' => "Voir tout",
@@ -88,7 +89,7 @@ $french = array(
 	'brainstorm:numbertodisplay' => "Nombre d'idées à afficher ",
 	'brainstorm:typetodisplay' => "Afficher par ",
 	'brainstorm:widget:points_left:title' => "Votes restants",
-	'brainstorm:widget:points_left:description' => "Affiche vos votes restants dans les remue-méninges des groupes dont vous êtes membre.",
+	'brainstorm:widget:points_left:description' => "Affiche vos votes restants dans les Boîte à idées des groupes dont vous êtes membre.",
 
 	/**
 	 * Status messages
@@ -119,7 +120,7 @@ $french = array(
 	 * Notify messages
 	 */
 	'brainstorm:notify:subject' => "Une idée à laquelle vous avez voté est %s.",
-	'brainstorm:notify:body' => "L'idée <a href=\"%s\">%s</a> est %s.<br><br>Vous avez récupéré les points que vous aviez mis à cette idée.<br><br><a href=\"%s\">Aller dans le remue-méniges du groupe %s</a>",
+	'brainstorm:notify:body' => "L'idée <a href=\"%s\">%s</a> est %s.<br><br>Vous avez récupéré les points que vous aviez mis à cette idée.<br><br><a href=\"%s\">Aller dans la boîte à idées du groupe %s</a>",
 
 );
 
