@@ -17,7 +17,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
   if ($group = get_entity($feedbackgroup)) {
     elgg_set_page_owner_guid($feedbackgroup);
     $base_url .= 'group/' . $feedbackgroup;
-    $limit = get_input('limit', 3);
+    if (!elgg_in_context('feedback')) $limit = get_input('limit', 3);
   } else elgg_set_page_owner_guid($CONFIG->site->guid);
 }
 
@@ -57,9 +57,11 @@ foreach ($all_feedback as $ent) {
   if ( (!isset($ent->status) || !$status_filter || ($ent->status == $status_filter)) 
     && (!isset($ent->about) || !$about_filter || ($ent->about == $about_filter)) ) { $feedbacks[] = $ent; }
 }
+$feedbacks_count = count($feedbacks);
 
+// Paginate feedbacks
 $displayed_feedbacks = array_slice($feedbacks, $offset, $limit);
-$content .= elgg_view_entity_list($displayed_feedbacks, array('count' => $all_feedback_count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+$content .= elgg_view_entity_list($displayed_feedbacks, array('count' => $feedbacks_count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
 $content .= '<div class="clearfloat"></div>';
 
 echo $content;

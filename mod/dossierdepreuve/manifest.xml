@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Dossier de preuve</name>
+	<author>Florian DANIEL</author>
+	<version>0.3</version>
+	<blurb>Dossier de preuve et de suivi B2i Adultes</blurb>
+	<description>Ce plugin permet de gérer un dossier de preuve B2i Adultes (il a été conçu pour ce référentiel), ou d'autres types de référentiels organisés sous forme de compétences regroupées par domaines. Il permet de collecter des éléments de preuve, de structurer un dossier de suivi et d'évaluation, et fournit divers outils pour gérer candidats, formateurs, groupes de formation, et s'auto-évaluer. Il ne s'agit pas d'un outil de certification.</description>
+	<website>http://competencesnumeriques.formavia.fr/</website>
+	<copyright>(C) FormaVia 2013</copyright>
+	<license>GNU Public License version 2</license>
+
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+
+	<requires>
+		<type>plugin</type>
+		<name>theme_compnum</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>pdf_export</name>
+	</requires>
+	
+	<category>learning</category>
+	<category>teaching</category>
+	<category>evaluation</category>
+	<category>B2i Adultes</category>
+	<category>other</category>
+	
+<!---
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/plugin_ss1.png</path>
+	</screenshot>
+
+	<on_enable>setup_function</on_enable>
+	<on_disable>teardown_function</on_disable>
+	<admin_interface>simple</admin_interface>
+
+	<requires>
+		<type>php_ini</type>
+		<name>short_open_tag</name>
+		<value>off</value>
+	</requires>
+
+	<requires>
+		<type>plugin</type>
+		<name>profile</name>
+		<version>1.0</version>
+	</requires>
+	
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>blog</plugin>
+	</requires>
+
+	<provides>
+		<type>plugin</type>
+		<name>profile_api</name>
+		<version>1.3</version>
+	</provides>
+//-->
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
+
+<!--
+0.3 : 20130627 - First integration into Departements en réseaux
+	- Test d'autopositionnement
+	- Suivi des dossiers
+	- gestion de droits, autorisations par profils (learner/tutor/habilitator/organisation + admin)
+	- gestion des groupes des candidats (+ autres profils pour les admins)
+	- inscription des nouveaux comptes
+	- widgets : perso et de suivi plus global (à améliorer)
+	- configuration du référentiel : structure, définition, éléments d'évaluation, de validation, conseils/aide, et questions associées
+	- formulaires modifiés pour les fichiers et blogs (intègrent le référentiel pour associer les compétences aux publications)
+	- export HTML et PDF du dossier complet (suivi + éléments de preuve blogs et fichiers)
+
+0.2 : 20130613 - First functional version
+	- Objet dossierdepreuve
+	- Vues, actions, formulaires et droits associés
+	- fonctions de gestions des accès, de facilitations
+	- vues de facilitation
+	- ...
+
+0.1 : 20130504 Initial version
+
+//-->
+

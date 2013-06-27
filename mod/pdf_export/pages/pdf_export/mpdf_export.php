@@ -13,6 +13,11 @@ if (empty($filename)) { $filename = date('YmdHis', time()) . 'pdf'; }
 //==============================================================
 //==============================================================
 //==============================================================
+// Note : change default temp folder
+/*
+define("_MPDF_TEMP_PATH", elgg_get_data_path() . 'pdf_export_mpdf_tmp/');
+define("_MPDF_TTFONTDATAPATH", elgg_get_data_path() . 'pdf_export_mpdf_ttfontdata/');
+*/
 include($CONFIG->pluginspath .  'pdf_export/assets/mpdf/mpdf.php');
 
 // Basic doc : mPDF( Charset, Format (A4), Default font size (0), Default font (''), Margin left, Margin right, Margin top, Margin bottom, Margin header (9), Margin footer (9),Orientation(P/L) )

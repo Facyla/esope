@@ -14,6 +14,12 @@ $date_format = 'd/m/Y';
 $gen_date_format = 'd/m/Y à H:i';
 
 // Get input data
+// Si une URL de récupération des données HTML est fournie, on l'utilise
+$export_html = get_input('export_html', false);
+if (!empty($export_html)) {
+	$html = file_get_contents($export_html);
+}
+// Sinon on prend les autres modes de récupération de données
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 $generator = get_input('generator', 'mpdf');
@@ -46,7 +52,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 	else $pdf_tags = 'FormaVia';
 	*/
 	// Nom du fichier exporté (unique et daté)
-	$pdf_filename = $guid . '_' . friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
+	$pdf_filename = $guid . '_' . elgg_get_friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
 	
 	// Page content : intro + html
 	if ($object instanceof ElggObject) {
@@ -57,7 +63,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
 			if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
 		} else {
-			$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a>';
+			$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a> ';
 			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
 			if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
 		}
@@ -101,7 +107,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 		$intro = "Page générée à partir d'un texte non issu de ce site";
 		$pdf_title = get_input('title');
 		// Nom du fichier exporté (daté)
-		$pdf_filename = date('YmdHis', time()) . '_' . friendly_title($pdf_title) . '.pdf';
+		$pdf_filename = date('YmdHis', time()) . '_' . elgg_get_friendly_title($pdf_title) . '.pdf';
 	} else if ($generator != 'tcpdf') {
 		$error = true;
 		$body .= elgg_echo('pdfexport:error:guid');

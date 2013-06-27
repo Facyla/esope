@@ -52,7 +52,7 @@ function pages_init() {
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'page_notify_message');
 
 	// add to groups
-	add_group_tool_option('pages', elgg_echo('groups:enablepages'), false);
+	add_group_tool_option('pages', elgg_echo('groups:enablepages'), true);
 	elgg_extend_view('groups/tool_latest', 'pages/group_module');
 
 	//add a widget
@@ -212,7 +212,7 @@ function pages_owner_block_menu($hook, $type, $return, $params) {
 		$item = new ElggMenuItem('pages', elgg_echo('pages'), $url);
 		$return[] = $item;
 	} else {
-		if ($params['entity']->pages_enable == "yes") {
+		if ($params['entity']->pages_enable != "no") {
 			$url = "pages/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('pages', elgg_echo('pages:group'), $url);
 			$return[] = $item;

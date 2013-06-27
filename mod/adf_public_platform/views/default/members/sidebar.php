@@ -3,6 +3,7 @@
  * Members sidebar
  */
 
+/* That one give bad results => let's prefere a regular search for users
 // Tag search
 $params = array(
 	'method' => 'get',
@@ -13,7 +14,19 @@ $params = array(
 $body = elgg_view_form('members/tag_search', $params);
 
 echo elgg_view_module('aside', '', $body);
+*/
 
+// regular search, with user results only
+$params = array(
+	'method' => 'get',
+	'action' => elgg_get_site_url() . 'search',
+	'disable_security' => true,
+);
+$body = elgg_view_form('members/regular_search', $params);
+echo elgg_view_module('aside', '', $body);
+
+// Name search gives better results than regular search for some names
+// It performs also username search, not only name
 // name search
 $params = array(
 	'method' => 'get',
@@ -23,3 +36,4 @@ $params = array(
 $body = elgg_view_form('members/name_search', $params);
 
 echo elgg_view_module('aside', '', $body);
+

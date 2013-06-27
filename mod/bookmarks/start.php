@@ -66,7 +66,7 @@ function bookmarks_init() {
 	elgg_register_entity_type('object', 'bookmarks');
 
 	// Groups
-	add_group_tool_option('bookmarks', elgg_echo('bookmarks:enablebookmarks'), false);
+	add_group_tool_option('bookmarks', elgg_echo('bookmarks:enablebookmarks'), true);
 	elgg_extend_view('groups/tool_latest', 'bookmarks/group_module');
 }
 
@@ -231,7 +231,7 @@ function bookmarks_owner_block_menu($hook, $type, $return, $params) {
 		$item = new ElggMenuItem('bookmarks', elgg_echo('bookmarks'), $url);
 		$return[] = $item;
 	} else {
-		if ($params['entity']->bookmarks_enable == 'yes') {
+		if ($params['entity']->bookmarks_enable != 'no') {
 			$url = "bookmarks/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('bookmarks', elgg_echo('bookmarks:group'), $url);
 			$return[] = $item;

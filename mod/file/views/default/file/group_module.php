@@ -5,7 +5,7 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->file_enable != "yes") {
+if ($group->file_enable == "no") {
 	return true;
 }
 

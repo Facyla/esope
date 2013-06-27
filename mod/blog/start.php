@@ -56,7 +56,7 @@ function blog_init() {
 	elgg_register_entity_type('object', 'blog');
 
 	// Add group option
-	add_group_tool_option('blog', elgg_echo('blog:enableblog'), false);
+	add_group_tool_option('blog', elgg_echo('blog:enableblog'), true);
 	elgg_extend_view('groups/tool_latest', 'blog/group_module');
 
 	// add a blog widget
@@ -190,7 +190,7 @@ function blog_owner_block_menu($hook, $type, $return, $params) {
 		$item = new ElggMenuItem('blog', elgg_echo('blog'), $url);
 		$return[] = $item;
 	} else {
-		if ($params['entity']->blog_enable == "yes") {
+		if ($params['entity']->blog_enable != "no") {
 			$url = "blog/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('blog', elgg_echo('blog:group'), $url);
 			$return[] = $item;
