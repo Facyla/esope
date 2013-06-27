@@ -417,6 +417,9 @@ $french = array(
 	'river:ingroup' => "dans le groupe %s",
 	'river:none' => "Aucune activité",
 	'river:update' => 'Mise à jour pour %s',
+	'river:create:object:default' => "%s a publié %s",
+	'river:comment:object:default' => "%s a commenté %s",
+	'river:commented:object:default' => "la publication",
 
 	'river:widget:title' => "Actualités du site",
 	'river:widget:description' => "Afficher l'activité la plus récente",
