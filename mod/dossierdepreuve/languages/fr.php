@@ -22,8 +22,8 @@ $french = array(
 	// Infos sur le référentiel
 	'dossierdepreuve:referentiel:info' => "Ce référentiel comporte %s compétences réparties en %s domaines.<br />",
 	'dossierdepreuve:referentiel:infotype' => "Vous avez choisi le questionnaire &laquo;&nbsp;%s&nbsp;&raquo;.<br />",
-	'dossierdepreuve:domainselection' => "Choix des domaines.",
-	'dossierdepreuve:domainselection:help' => "Le test de positionnement peut être passé en entier, ou domaine par domaine. Pour ne renseigner qu'un domaine, cliquez sur \"Commencer le test\", puis choisissez l'onglet correspondant.<br />Pour vous tester sur tous les domaines, répondez aux questions de chacun des onglets.",
+	'dossierdepreuve:domaineselection' => "Choix des domaines.",
+	'dossierdepreuve:domaineselection:help' => "Le test de positionnement peut être passé en entier, ou domaine par domaine. Pour ne renseigner qu'un domaine, cliquez sur \"Commencer le test\", puis choisissez l'onglet correspondant.<br />Pour vous tester sur tous les domaines, répondez aux questions de chacun des onglets.",
 	'dossierdepreuve:referentiel:infoselection' => "Ce questionnaire porte sur %s domaines&nbsp;: ",
 	// Seuils
 	'dossierdepreuve:settings:thresholds' => "Seuils",
@@ -149,7 +149,7 @@ $french = array(
 	'dossierdepreuve:auto_type:googleform' => "Questionnaire Google (positionnement sans rapport d'évaluation)",
 	'dossierdepreuve:auto_type:googleform:clickopen' => "Cliquez ici pour ouvrir le questionnaire Google dans une nouvelle fenêtre",
 	'dossierdepreuve:auto_type:googleform:help' => "Ce questionnaire ne vous permet pas de sauvegarder vos résultats ni de mettre à jour votre dossier de suivi, mais peut être utilisé indépendament pour vous donner quelques pistes en fonction de vos réponses.",
-	'dossierdepreuve:auto:myowneval' => '<strong>=> Mon positionnement&nbsp;: &laquo;&nbsp;Je sais...</strong>',
+	'dossierdepreuve:auto:myowneval' => '<strong>=> Mon positionnement </strong>',
 	'dossierdepreuve:auto:questionlabel' => "<strong>Question n°%s&nbsp;: </strong> %s<br />",
 	'dossierdepreuve:report:questionlabel' => "<strong> - Question n°%s&nbsp;:</strong> %s<br />",
 	'dossierdepreuve:report:noeval' => "<strong>Question n°%s&nbsp;:</strong> (pas de positionnement)<br />",

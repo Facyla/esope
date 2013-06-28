@@ -366,7 +366,7 @@ $(function() {
 			$domaine_report .= '<p>';
 			// @TODO : comptage du total des questions à revoir !!
 			//$domaine_report .= "Vous avez répondu à $answered_q_domaine sur les $total_q_domaine questions pour ce domaine (" . round(100*$answered_q_domaine/$total_q_domaine) . "%), soit un score moyen de $score_domaine%.<br />";
-			$domaine_report .= elgg_echo('dossierdepreuve:report:answered', array($answered_q_domaine);
+			$domaine_report .= elgg_echo('dossierdepreuve:report:answered', array($answered_q_domaine));
 			$domaine_report .= elgg_echo('dossierdepreuve:report:domainaverage', array($score_domaine));
 			$domaine_report .= elgg_echo('dossierdepreuve:report:domaincompvalidation', array($validated_per_domaine, $count_competence_domaine));
 			/*
@@ -696,7 +696,7 @@ $(function() {
 		
 		// SELECTION DES DOMAINES A EVALUER
 		case 'selection':
-			$questionnaire .= elgg_echo('dossierdepreuve:domainselection');
+			$questionnaire .= elgg_echo('dossierdepreuve:domaineselection');
 			/*
 			echo '<p><label for="dossierdepreuve_selection">' . elgg_echo('dossierdepreuve:selection') . '</label> &nbsp; ' . elgg_echo('dossierdepreuve:selection:help') . elgg_view('input/checkboxes', array('name' => 'selection', 'id' => 'dossierdepreuve_selection', 'options' => $selection_opt)) . '</p>';
 			*/
