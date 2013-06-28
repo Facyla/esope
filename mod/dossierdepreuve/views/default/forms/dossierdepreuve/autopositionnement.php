@@ -587,10 +587,10 @@ $(function() {
 						if (isset($visualhelp_competence[($i-1)])) $q_help = $visualhelp_competence[($i-1)];
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
-						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q));
+						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
-						$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval') . ' ' . elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal'));
+						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:myowneval') . ' ' . elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal')) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
