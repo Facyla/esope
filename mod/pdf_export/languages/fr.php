@@ -17,6 +17,8 @@ $french = array(
   'pdfexport:error:user' => "Export des membres du site impossible.",
   'pdfexport:error:group' => "Export des groupes impossible.",
   'pdfexport:error:site' => "Export des espaces impossible.",
+  'pdf_export:validsubtypes' => "Types de publications (subtypes) pour lesquelles un export PDF est disponible. Effacer pour récupérer la liste par défaut.",
+  'pdf_export:validsubtypes:default' => "Liste par défaut : %s",
   
 );
 

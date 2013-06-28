@@ -14,15 +14,25 @@
 		<version>1.8.14</version>
 	</requires>
 
-	<requires>
+	<suggests>
 		<type>plugin</type>
 		<name>theme_compnum</name>
-	</requires>
+	</suggests>
 	
-	<requires>
+	<suggests>
+		<type>plugin</type>
+		<name>blog</name>
+	</suggests>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>file</name>
+	</suggests>
+	
+	<suggests>
 		<type>plugin</type>
 		<name>pdf_export</name>
-	</requires>
+	</suggests>
 	
 	<category>learning</category>
 	<category>teaching</category>
