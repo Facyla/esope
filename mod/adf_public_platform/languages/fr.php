@@ -179,6 +179,10 @@ $fr = array(
 	// @TODO : Ce texte devrait être adapté à votre site !
 	// use $CONFIG->url for site install URL, $CONFIG->email for site email
 	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->email . "&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	'groups:search:regular' => "Recherche de groupe",
+	'groups:regularsearch' => "Nom ou mot-clef",
+	'search:group:go' => "Rechercher un groupe",
+	'members:search' => "Rechercher un membre",
 	
 	// 
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
