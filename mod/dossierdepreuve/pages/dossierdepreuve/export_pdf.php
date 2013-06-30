@@ -70,7 +70,7 @@ $pdf_author .= ' - ' . $container->name;
 $pdf_author .= ' - ' . $owner->name;
 
 // Nom du fichier exporté (unique et daté)
-$pdf_filename = $guid . '_' . elgg_view_friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
+$pdf_filename = $guid . '_' . elgg_get_friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
 
 
 // Différent si dans groupe ou à titre personnel (portfolio)
