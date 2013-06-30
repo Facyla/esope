@@ -70,7 +70,8 @@ $french = array(
 	'dossierdepreuve:msg:restoredata' => "Données à utiliser pour restaurer votre autopositionnement sur le site, ou mettre à jour votre dossier de preuve avec ces informations :",
 	'dossierdepreuve:msg:thanks' => "Merci d'avoir utilisé l'outil de positionnement de Compétence Numériques !<br />Vous pouvez le recommander en envoyant ce lien aux personnes que cela pourrait intéresser :",
 	'dossierdepreuve:msg:success' => "Un mail de synthèse a bien été envoyé à %s",
-	'dossierdepreuve:msg:error' => "Adresse email invalide : le rapport n'a pas pu être envoyé à %s !",
+	'dossierdepreuve:msg:error' => "Une erreur est survenue : le rapport n'a pas pu être envoyé à %s !",
+	'dossierdepreuve:msg:invalidmail' => "Adresse email invalide : %s",
 	
 	
 	
@@ -140,7 +141,7 @@ $french = array(
 	'dossierdepreuve:auto:new' => "Test d'auto-positionnement",
 	'dossierdepreuve:auto:description' => "Bonjour,<br />Vous pouvez utiliser ce test d'auto-positionnement afin de savoir où vous en êtes par rapport au B2i Adultes. Ce test vous permet, en répondant à quelques questions, d'identifier vos compétences et vos axes d'amélioration. En fonction de vos réponses, des conseils et des activités vous seront proposés.",
 	'dossierdepreuve:auto:contact_email' => "Votre adresse email",
-	'dossierdepreuve:auto:contact_email:help' => "Facultatif, uniquement si vous souhaitez recevoir vos résultats par mail.",
+	'dossierdepreuve:auto:contact_email:help' => "Facultatif, uniquement si vous souhaitez recevoir vos résultats par mail.<br /><em>Note&nbsp;: vous pouvez envoyer les résultats à plusieurs adresses email, en les séparant par des ';')</em>",
 	'dossierdepreuve:auto_type' => "Choix du test d'autopositionnement",
 	'dossierdepreuve:auto_type:help' => "Vous voulez savoir où vous en êtes en quelques clics, ou vous positionner précisément ? Choisissez le test le plus utile dans votre cas !",
 	'dossierdepreuve:auto_type:full' => "Autopositionnement complet (fiable, 15 à 30 minutes)",

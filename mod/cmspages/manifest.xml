@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.9.5 (1.8)" />
+  <field key="version" value="0.9.6 (1.8)" />
   <field key="description" value="Static and dynamic pages and reusable views, templates and modules editor for use in interface-building and pages management (flexible CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
   <field key="copyright" value="(C) Facyla 2011-2012" />

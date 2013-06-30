@@ -666,12 +666,21 @@ $(function() {
 				$msg_content .= '<hr /><p>' . elgg_echo('dossierdepreuve:msg:restoredata') . '<hr />' . serialize($history_data) . '<hr />';
 				$msg_content .= '<p>' . elgg_echo('dossierdepreuve:msg:thanks') . ' ' . $CONFIG->url . '</p>';
 				$msg_params = null;
-				$emails = explode(',', $email);
+				$emails = str_replace(' ', '', $email);
+				$emails = str_replace(array(',', '|', "\n", "\r"), ';', $emails);
+				$emails = explode(';', $emails);
 				if (!is_array($emails)) $emails[] = $email;
+				error_log(print_r($emails, true));
 				foreach ($emails as $mail) {
-					if (elgg_send_email($msg_from, $mail, $msg_subject, $msg_content, $msg_params)) {
-						system_message(elgg_echo('dossierdepreuve:msg:sucess', array($mail)));
-					} else register_error(elgg_echo('dossierdepreuve:msg:invalidmail', array($mail)));
+					$mail = trim($mail);
+					if (!empty($mail)) {
+						error_log("Mail : $mail");
+						if (is_email_address($mail)) {
+							if (elgg_send_email($msg_from, $mail, $msg_subject, $msg_content, $msg_params)) {
+								system_message(elgg_echo('dossierdepreuve:msg:sucess', array($mail)));
+							} else register_error(elgg_echo('dossierdepreuve:msg:error', array($mail)));
+						} else register_error(elgg_echo('dossierdepreuve:msg:invalidmail', array($mail)));
+					}
 				}
 			}
 			// Update dossierdepreuve
@@ -838,6 +847,7 @@ $(function() {
 	// FORM DE REINITIALISATION : retour au début
 	echo '<form enctype="multipart/form-data" method="post" style="float:right;">
 		<input type="hidden" name="step" value="clearall" />
+		<br />
 		<p>' . elgg_view('input/submit', array('value' => elgg_echo('dossierdepreuve:auto:clearandrestart'), 'class' => 'elgg-button-delete elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:auto:clear:confirm'))) . '</a></p>
 		</form>';
 	/*
