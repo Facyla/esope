@@ -307,6 +307,7 @@ $(function() {
 		$validated_total = 0;
 		
 		// Pour chacun des domaines
+		$history_count = count($history);
 		foreach ($history as $j => $domaine) {
 			$domaine_report = '';
 			$total_q_domaine = 0;
@@ -402,7 +403,9 @@ $(function() {
 		// @TODO : comptage du total des questions à revoir !!
 		//$questionnaire_report .= "Vous avez répondu à $answered_q des $total_q questions de ce test d'autopositionnement (" . round(100*$answered_q/$total_q) . "%).<br />";
 		$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalanswered', array($answered_q));
-		$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalaverage', array(count($history), $total_domaines, round($score_total/count($history))));
+		if ($history_count > 0) {
+			$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalaverage', array($history_count, $total_domaines, round($score_total/$history_count)));
+		}
 		$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalvalidation', array($validated_total, $total_domaines));
 		$questionnaire_report .= "</p>";
 		$questionnaire_report .= '<br />';

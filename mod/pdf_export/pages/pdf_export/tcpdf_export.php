@@ -81,7 +81,7 @@ if ($guid && ($object = get_entity($guid)) ) {
   else if (!empty($object->tags)) $pdf_tags = 'FormaVia, ' . $object->tags;
   else $pdf_tags = 'FormaVia';
   
-  $pdf_filename = $guid . '_' . friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
+  $pdf_filename = $guid . '_' . elgg_get_friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
   
   $intro .= '<a href="' . $object->getURL() . '">' . $object->getURL() . '</a><br />';
   

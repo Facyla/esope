@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.8.0.2 (1.8)" />
-  <field key="description" value="Static page, and reusable views editor (CMS tool for Elgg)" />
+  <field key="version" value="0.9.5 (1.8)" />
+  <field key="description" value="Static and dynamic pages and reusable views, templates and modules editor for use in interface-building and pages management (flexible CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
-  <field key="copyright" value="(C) Facyla 2011" />
+  <field key="copyright" value="(C) Facyla 2011-2012" />
   <field key="licence" value="GNU Public License version 2" />
   <field key="elgg_version" value="2009030702" />
 </plugin_manifest>
@@ -16,25 +16,74 @@ INSTALLATION
 - Place in mod directory
 - Enable plugin
 - Go to admin pages
-- Check left menu entry and enjoy (inline help)
+- Check Cmspages in admin menu entry and enjoy (inline help)
+
+======================
+NOTES
+======================
+- Admins can allow non-admin users to use that tool (see plugin settings)
+- CMS Pages can be used to generate static pages :
+  * interface pages with formatted text & images : eg. about, credits, contacts, etc.
+  * unfiltered HTML pages to embed multimedia content such as videos, iframes, Twitter widget, etc.
+- CMS Pages can also be used to generate dynamic views, which can be used to build a configurable interface :
+  * login page information, footer links, header image and text...
+  * configurable zones inserted in layout, eg. introduction in group presentation
+- CMS Pages supports templating :
+  * views can be called recursively from other CMS Pages using {{pagetype}} calls
+  * acts as a template & content furnisher for externalblogs
+- CMS Pages supports configurable modules :
+  * blocks can be generated using custom parameters :
+  * available modules = generate group, user, object lists, search results, view a specific entity, etc.
+- CMS Pages is aware of context : display can be filtered depending of context (useful to hide a sidebar or specific modules when used in template mode)
+- one can also specify if a given cmspage can be rendered in a page, as a view, or both (blocks templating or out-of-context rendering)
+- In walled-garden, public CMS Pages are made publicly available (if not wanted : change access rights)
 
 
 ======================
 Version History
 ======================
 
-0.8.0.2 : 20130618 - add some wrapper divs for better page rendering
 
-0.8.0.1 : 20130225 - some corrections on this older version
-  - cmspages URL + read page
-  - save action (no doubles)
-  - editors menu
+0.9.6 (2013.06.30)
+  - Auto-update for new pagetype names (replace _ by -)
+  - Translations prepared for next release @TODO
+  - Add link to pages edition from cmspages settings
+
+0.9.5 (2013.03.02)
+  - per-page css support
+
+0.9.4 (2013.02.21)
+  - little template debug : filter context should "return" instead of breaking display
+
+
+0.9.3 (2012.11.30)
+  - removed previous POC and make it an independent plugin (export_embed)
+  - added public pages support (public cmspages which allow fullview rendering only)
+  - fully rewritten menu (doesn't use tabs anymore + more infos in cmspage select)
+  - added some documentation above..
+
+0.9.2 (2012.11.29)
+  - added proof-of-concept of producing an embeddable content out of an intranet ; currently with a hard-coded group activity widget => make this configurable, and maybe an independant plugin (make_embed) ?
+
+0.9.1 (2012.11.19)
+  - added a "template" content type : allows to embed other pages (recursively - this may cause problems if not carefully handled)
+  - choose between content types : HTML, template, module
+  - some JS in the form to select used fields
+  - allowed contexts filter implemented
+  - display filter implemented : page only, view only, both, or use a specific layout (only if page rendering)
+  - in read mode : custom breadcrumb & context
+
+0.9 (1.8) (2012.11.13):
+	- CMS pages adaptation to a flexible cms tool, together with new, non-multisite externalblog plugin
+	  * use as a configurable module : listing, search, custom content (default), custom view
+	  * display only in custom contexts
+	  * use templates ?
 
 0.8 (1.8) (2011.09.25-27):
 	- CMS pages ported to 1.8
 
-==== (now we'll tell (Elgg version)) ====
-=== CHANGE VERSIONNING FOR 1.8 VERSION ===
+== Since now, we'll tell (Elgg version)) ==
+=== CHANGE VERSIONNING FOR 1.8 VERSIONS ===
 
 0.7.3 (2011.09.25):
 	- typo bug + info for using page as a view

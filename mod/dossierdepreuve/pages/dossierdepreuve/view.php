@@ -25,10 +25,10 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	// Set the page owner
 	$page_owner = elgg_get_page_owner_entity();
 	if ($page_owner === false || is_null($page_owner)) {
-	  set_page_owner(1);
+	  elgg_set_page_owner(1);
 		$container_guid = $dossierdepreuve->container_guid;
 		if (!empty($container_guid)) {
-			if ($page_owner = get_entity($container_guid)) { set_page_owner($container_guid); }
+			if ($page_owner = get_entity($container_guid)) { elgg_set_page_owner($container_guid); }
 		}
 	}
 	

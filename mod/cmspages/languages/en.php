@@ -1,17 +1,17 @@
 <?php
 $english = array(
+
   'cmspages' => "Static pages (CMS)",
-  'item:object:cmspage' => 'Static page',
   'item:object:cmspages' => 'Static pages',
   
   'cmspages:pagetype' => "Page URL name",
-  'cmspages:cmspage_url' => "Published page URL:",
-  'cmspages:cmspage_view' => "Display view:",
+  'cmspages:cmspage_url' => "Published page URL :",
   'cmspages:pageselect' => "Choose which page to edit",
   
   'cmspages:new' => "OK",
   'cmspages:newpage' => "Create page \"%s\"",
   'cmspages:createmenu' => "Create a new page",
+  'cmspages:addnewpage' => "+ New page",
   'cmspages:newtitle' => "Click to choose page title",
   'cmspages:settitle' => "Click to edit title",
   'cmspages:create' => "Create page !",

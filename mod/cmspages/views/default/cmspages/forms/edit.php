@@ -5,7 +5,7 @@
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Facyla
- * @copyright Facyla 2010
+ * @copyright Facyla 2010-2013
  * @link http://id.facyla.net/
  *
 */
@@ -31,52 +31,108 @@ else {
     $container_guid = $cmspage->container_guid;
     $parent_guid = $cmspage->parent_guid;
     $sibling_guid = $cmspage->sibling_guid;
+    // This if for a closer integration with externalblog, as a generic edition tool
+    $content_type = $cmspage->content_type; // Default : use editor, rawhtml = no wysiwyg, module (php ?)
+    $contexts = $cmspage->contexts; // Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou all)
+    $module = $cmspage->module; // Load other content : entity listing / search results / view
+    $module_config = $cmspage->module_config; // Load other content : parameters
+    if (!empty($module) && empty($module_config)) {
+      $module_change = explode('?', $module);
+      $module = $module_change[0];
+      $module_config = $module_change[1];
+    }
+    $display = $cmspage->display; // Can it be displayed in its own page ? ('no' => no, empty or not set => default layout, other value => use custom layout $value)
+    $css = $cmspage->css;
   } else { $access = (defined("ACCESS_DEFAULT")) ? ACCESS_DEFAULT : ACCESS_PUBLIC; }
-
-  // Set the required form variables
-  $pagetype_input = elgg_echo('cmspages:pagetype') . ' <input type="text" value="'.$pagetype.'" disabled="disabled" style="width:300px;" /></label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype));
+  
+  
+  // COMPOSITION DU FORMULAIRE
+  $form_body = '';
+  // Nom de la page : non éditable (= identifiant de la page)
+  $form_body .= '<label>' . elgg_echo('cmspages:pagetype') . ' <input type="text" value="'.$pagetype.'" disabled="disabled" style="width:300px;" /></label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype)) . '</label>';
+  // Informations utiles : URL de la page + vue à utiliser pour charger la page
   if ($cmspage instanceof ElggObject) {
-    $cmspage_url = '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'cmspages/read/' . $pagetype . '</a>';
-    $cmspage_view = elgg_echo('cmspages:cmspage_view') . ' elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))';
+    $form_body .= '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '</a><br />';
+    $form_body .= elgg_echo('cmspages:cmspage_view') . ' elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))<br /><br />';
   }
-  $title_input = elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"'));
-  $description_input = elgg_echo('description') . "<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
-  $tag_input = elgg_echo('tags') . " " . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'js' => ' style="width:500px;"'));
-  //$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid)); // We don't really care (not used)
-  $access_input = elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access, 'options' => array(
+  
+  // Type de contenu : HTML ou module => définit les champs affichés
+  // This if for a closer integration with externalblog, as a generic edition tool
+  $content_type_opts = array('' => "HTML (avec éditeur de texte)", 'rawhtml' => "HTML (ne pas charger l'éditeur)", 'module' => "Module configurable", 'template' => "Template (agencement de pages et modules CMS)");
+  //$content_type_input = "Type de contenu : par défaut = HTML avec éditeur, rawhtml = HTML sans éditeur<br />" . elgg_view('input/text', array('name' => 'content_type', 'value' => $content_type)) . '<br />';
+  // elgg_view('input/dropdown', array('name' => 'content_type', 'value' => $content_type, 'options_values' => $content_type_opts)) . '</label><br /><br />';
+  $form_body .= "<label>Type de contenu&nbsp; ";
+  $form_body .= '<select onchange="javascript:$(\'.toggle_detail\').hide(); $(\'.toggle_detail.field_\'+this.value).show();" name="content_type">';
+  foreach ($content_type_opts as $val => $text) {
+    if ($val == $content_type) $form_body .= '<option value="' . $val . '" selected="selected">' . $text . '</option>';
+    else $form_body .= '<option value="' . $val . '">' . $text . '</option>';
+  }
+  $form_body .= '</select></label><br /><br />';
+  
+  // Titre de la page
+  $form_body .= '<label>' . elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"')) . '</label><br /><br />';
+  
+  // Blocs conditionnels : masqué si module, affiché si HTML ou template
+  if ($content_type == 'module') $hideifmodule = 'style="display:none;" '; else $hideifmodule = '';
+  if ($content_type != 'module') $hideifnotmodule = 'style="display:none;" '; else $hideifnotmodule = '';
+  
+  $form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
+    // Contenu de la page
+    if (in_array($content_type, array('rawhtml', 'template'))) $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+    else $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+    // We don't really care (not used)
+    //$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid));
+    // Tags
+    $form_body .= '<br /><label>' . elgg_echo('tags') . " " . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'js' => ' style="width:500px;"')) . '</label><br /><br />';
+    // Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
+  $form_body .= '</div>';
+  
+  $form_body .= "<label>CSS personnalisées pour cette page, ce module ou ce bloc<br/>" . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label><div class="clearfloat"></div>';
+  
+  // Bloc conditionnel : masqué si pas un module
+  $form_body .= '<div ' . $hideifnotmodule . 'class="toggle_detail field_module">';
+    // Load other content as a configurable module
+    $module_opts = array('' => 'Aucun (bloc vide)', 'title' => 'Titre', 'listing' => 'Liste d\'entités', 'search' => 'Résultats de recherche', 'entity' => 'Entité', 'view' => 'Vue configurable');
+    $form_body .= "<label>Module&nbsp; " . elgg_view('input/dropdown', array('name' => 'module', 'value' => $module, 'options_values' => $module_opts)) . '</label><br /><br />';
+    // Config du module
+    $form_body .= "<label>Configuration du module (param=value&amp;param2=value2...)<br />" . elgg_view('input/text', array('name' => 'module_config', 'value' => $module_config)) . '</label><br />';
+  $form_body .= '</div>';
+  
+  // Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou all)
+  $form_body .= "<label>Filtre des contextes autorisés (liste, ou rien)&nbsp;: " . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts, 'js' => ' style="width:400px;"')) . '</label><br /><br />';
+  
+  // Affichage autonome et Layout personnalisé
+  $form_body .= "<label>Affichage autonome :</label>vide = oui (par défaut), 'no' pour non (élément d'interface seulement), 'noview' exclusif (page seulement, pas élément d'interface), nom du layout pour utiliser un layout spécifique&nbsp;: " . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . '<br /><br />';
+  // $display_opts = array('' => "Oui (par défaut)", 'no' => "Non (seulement comme vue)", 'noview' => "Page seulement (pas comme vue)");
+  // elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => $display_opts));
+  
+  // Bloc conditionnel : masqué si module, affiché si HTML ou template
+  $form_body .= "<em>Note : These are for future developments</em>";
+  $form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
+    $form_body .= '<div style="float:left; width:32%; margin-right:2%;">';
+    $form_body .= "<label>GUID du container " . elgg_view('input/text', array('name' => 'container_guid', 'value' => $container_guid, 'js' => ' style="width:10ex;"')) . '</label><br /><br />';
+    $form_body .= '</div><div style="float:left; width:32%; margin-right:2%;">';
+    $form_body .= "<label>GUID du parent " . elgg_view('input/text', array('name' => 'parent_guid', 'value' => $parent_guid, 'js' => ' style="width:10ex;"')) . '</label><br /><br />';
+    $form_body .= '</div><div style="float:right; width:32%;">';
+    $form_body .= "<label>GUID du frère " . elgg_view('input/text', array('name' => 'sibling_guid', 'value' => $sibling_guid, 'js' => ' style="width:10ex;"')) . '</label><br />';
+    $form_body .= '</div>';
+  $form_body .= '</div>';
+  $form_body .= '<div class="clearfloat"></div>';
+  
+  // Accès à la page ou du module
+  $form_body .= '<label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access, 'options' => array(
         ACCESS_PUBLIC => elgg_echo('PUBLIC'), 
         ACCESS_LOGGED_IN => elgg_echo('LOGGED_IN'), 
         ACCESS_PRIVATE => elgg_echo('PRIVATE'))
-    ));
+    )) . '</label><br /><br />';
   // ACCESS_DEFAULT => elgg_echo('default_access:label') //("accès par défaut")
+  
+  
+  // Bouton d'envoi
+  if ($cmspage instanceof ElggObject) $form_body .= elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:save')));
+  else $form_body .= elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:create')));
 
-  // These are for future developments
-  $container_input = elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
-  $parent_input = elgg_view('input/hidden', array('name' => 'parent_guid', 'value' => $parent_guid));
-  $sibling_input = elgg_view('input/hidden', array('name' => 'sibling_guid', 'value' => $sibling_guid));
-
-  if ($cmspage instanceof ElggObject) $submit_input = elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:save')));
-  else $submit_input = elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:create')));
-
-
-  // Build the form
-  $form_body = <<<EOT
-    <label>$pagetype_input</label>$cmspage_url<br />$cmspage_view<br /><br />
-    <label>$title_input</label><br /><br />
-    <label>$description_input</label><div class="clearfloat"></div>
-    <br />
-    <label>$tag_input</label><br /><br />
-    <label>$access_input</label><br />
-    $container_input
-    $parent_input
-    $sibling_input
-    $cmspage_input
-    <br />
-    $submit_input
-EOT;
-
-  // Display the form
+  // Display the form - Affichage du formulaire
   echo elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/edit", 'body' => $form_body));
-
 }
 
