@@ -9,6 +9,7 @@ $css = get_input('css', false);
 $embed = get_input('embed', false);
 $filename = get_input('filename', date('YmdHis', time()) . 'pdf');
 if (empty($filename)) { $filename = date('YmdHis', time()) . 'pdf'; }
+$debug = get_input('debug', false);
 
 //==============================================================
 //==============================================================
@@ -36,6 +37,15 @@ else if ($css_url) $stylesheet = file_get_contents($css_url);
 $mpdf->WriteHTML($stylesheet,1);	// The parameter 1 tells that this is css/style only and no body/html/text
 
 $mpdf->WriteHTML($html);
+
+if ($debug) {
+	echo '<h2>FILENAME</h2>' . nl2br(htmlentities($pdf_filename)) . '<hr />';
+	echo '<h2>INTRO</h2>' . nl2br(htmlentities($intro)) . '<hr />';
+	echo '<h2>CSS</h2>' . nl2br(htmlentities($css)) . '<hr />';
+	echo '<h2>HTML</h2>' . nl2br(htmlentities($html)) . '<hr />';
+	echo '<h2>Object</h2>' . nl2br(htmlentities(print_r($mpdf, true))) . '<hr />';
+	exit;
+}
 
 // $filename, $dest (true/false) = exporter fichier ou embed
 if ($embed) $mpdf->Output('', ''); // Il ne faut PAS de nom de fichier si on embedde dans la page
