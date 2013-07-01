@@ -11,6 +11,7 @@ $german = array(
   'cmspages:new' => "OK",
   'cmspages:newpage' => "Neue Seite erstellen: \"%s\"",
   'cmspages:createmenu' => "Neue Seite erstellen",
+  'cmspages:addnewpage' => "+ Neue Seite",
   'cmspages:newtitle' => "Klicken, um den Seitentitel auszuw&auml;hlen",
   'cmspages:settitle' => "Klicken, um den Seitentitel zu &auml;ndern",
   'cmspages:create' => "Seite erstellen !",

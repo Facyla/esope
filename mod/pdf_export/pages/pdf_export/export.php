@@ -12,6 +12,7 @@ $error = false;
 $separator = '<hr /><br /><br />';
 $date_format = 'd/m/Y';
 $gen_date_format = 'd/m/Y à H:i';
+$debug = get_input('debug', false);
 
 // Get input data
 // Si une URL de récupération des données HTML est fournie, on l'utilise
@@ -112,6 +113,14 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 		$error = true;
 		$body .= elgg_echo('pdfexport:error:guid');
 	}
+}
+
+if ($debug) {
+	echo '<h2>FILENAME</h2>' . nl2br(htmlentities($pdf_filename)) . '<hr />';
+	echo '<h2>INTRO</h2>' . nl2br(htmlentities($intro)) . '<hr />';
+	echo '<h2>CSS</h2>' . nl2br(htmlentities($css)) . '<hr />';
+	echo '<h2>HTML</h2>' . nl2br(htmlentities($html)) . '<hr />';
+	exit;
 }
 
 if (!$error) {

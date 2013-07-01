@@ -10,7 +10,7 @@
 	 */
 
 	admin_gatekeeper();
-	set_context('admin');
+	elgg_set_context('admin');
 	
 	$entity_guid = get_input('entity_guid');
 	

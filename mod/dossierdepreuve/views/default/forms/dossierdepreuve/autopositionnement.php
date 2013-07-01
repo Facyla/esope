@@ -307,6 +307,7 @@ $(function() {
 		$validated_total = 0;
 		
 		// Pour chacun des domaines
+		$history_count = count($history);
 		foreach ($history as $j => $domaine) {
 			$domaine_report = '';
 			$total_q_domaine = 0;
@@ -329,27 +330,27 @@ $(function() {
 					$total_q_domaine++; // Nb de questions répondues
 					if (strlen($q) > 0) {
 						$answered_q_domaine++;
-						$domaine_report .= " - Question n°$i&nbsp;: $q%<br />";
+						$domaine_report .= elgg_echo('dossierdepreuve:report:questionlabel', array($i, $q));
 						$score_competence += $q;
 					} else {
 						// Note : pas de positionnement = note de 0 (on ne compte les non-réponses que pour info)
-						$domaine_report .= " - Question n°$i&nbsp;: (pas de positionnement)<br />";
+						$domaine_report .= elgg_echo('dossierdepreuve:report:noeval', array($i));
 					}
 				}
 				
 				// $i étant positionné au dernier numéro de question, on peut faire simple : total/$i = moyenne du score sur la compétence
 				$score_competence = round($score_competence/$i);
-				$domaine_report .= "Positionnement sur cette compétence : " . $score_competence . ' ';
+				$domaine_report .= elgg_echo('dossierdepreuve:report:compeval', array($score_competence));
 				$score_domaine += $score_competence;
 				// Validation de la compétence : >= 50%
 				if ($score_competence >= $threshold_validation) { $validated_competence += 1; }
 				// Evaluation sur cette compétence
 				if ($score_competence < $threshold_low) {
-					$domaine_report .= '<span style="color:darkred;">Non acquis</span>';
+					$domaine_report .= elgg_echo('dossierdepreuve:report:comp:nonacquis');
 				} else  if ($score_competence >= $threshold_high) {
-					$domaine_report .= '<span style="font-weight:bold; color:darkgreen;">Acquis</span>';
+					$domaine_report .= elgg_echo('dossierdepreuve:report:comp:acquis');
 				} else {
-					$domaine_report .= '<span style="color:darkorange;">En cours d\'acquisition</span>';
+					$domaine_report .= elgg_echo('dossierdepreuve:report:comp:encours');
 				}
 				$domaine_report .= '</p>';
 				$validated_per_domaine += $validated_competence;
@@ -366,8 +367,9 @@ $(function() {
 			$domaine_report .= '<p>';
 			// @TODO : comptage du total des questions à revoir !!
 			//$domaine_report .= "Vous avez répondu à $answered_q_domaine sur les $total_q_domaine questions pour ce domaine (" . round(100*$answered_q_domaine/$total_q_domaine) . "%), soit un score moyen de $score_domaine%.<br />";
-			$domaine_report .= "Vous avez répondu à $answered_q_domaine questions pour ce domaine, soit un score moyen sur le domaine de $score_domaine%.<br />";
-			$domaine_report .= "<strong>Vous pouvez actuellement valider $validated_per_domaine des $count_competence_domaine compétences de ce domaine.</strong>";
+			$domaine_report .= elgg_echo('dossierdepreuve:report:answered', array($answered_q_domaine));
+			$domaine_report .= elgg_echo('dossierdepreuve:report:domainaverage', array($score_domaine));
+			$domaine_report .= elgg_echo('dossierdepreuve:report:domaincompvalidation', array($validated_per_domaine, $count_competence_domaine));
 			/*
 			if ($validated_per_domaine > 1) $domaine_report .= "Vous pouvez potentiellement valider $validated_per_domaine compétence(s) de ce domaine.<br />";
 			else if ($validated_per_domaine == 1) $domaine_report .= "Vous pouvez potentiellement valider $validated_per_domaine compétence de ce domaine.<br />";
@@ -379,17 +381,17 @@ $(function() {
 			$answered_q += $answered_q_domaine;
 			$validated_total += $validated_domaine;
 			// Titre réponses domaine
-			$questionnaire_report .= "<h4>Positionnement pour le domaine $j&nbsp;: ";
-			$questionnaire_report .= "$validated_per_domaine/$count_competence_domaine ";
+			$questionnaire_report .= '<h4>' . elgg_echo('dossierdepreuve:report:domainpos', array($j));
+			$questionnaire_report .= $validated_per_domaine . '/' . $count_competence_domaine . ' ';
 			//if ($validated_domaine > 0) $questionnaire_report .= '<span style="font-weight:bold; color:darkgreen;">validé</span>';
 			//else $questionnaire_report .= '<span style="color:darkred;">non validé</span>';
 			//if ($score_domaine < $threshold_low) {
 			if ($score_domaine == 0) {
-				$questionnaire_report .= '<span style="color:darkred;">Non acquis</span>';
+				$questionnaire_report .= elgg_echo('dossierdepreuve:report:comp:nonacquis');
 			} else if ($score_domaine >= $threshold_high) {
-				$questionnaire_report .= '<span style="font-weight:bold; color:darkgreen;">Acquis</span>';
+				$questionnaire_report .= elgg_echo('dossierdepreuve:report:comp:acquis');
 			} else {
-				$questionnaire_report .= '<span style="color:darkorange;">En cours d\'acquisition</span>';
+				$questionnaire_report .= elgg_echo('dossierdepreuve:report:comp:encours');
 			}
 			$questionnaire_report .= "</h4>";
 			$questionnaire_report .= "<div>" . $domaine_report . "</div>";
@@ -400,9 +402,11 @@ $(function() {
 		$questionnaire_report .= "<p>";
 		// @TODO : comptage du total des questions à revoir !!
 		//$questionnaire_report .= "Vous avez répondu à $answered_q des $total_q questions de ce test d'autopositionnement (" . round(100*$answered_q/$total_q) . "%).<br />";
-		$questionnaire_report .= "Vous avez répondu à $answered_q des questions de ce test d'autopositionnement.<br />";
-		$questionnaire_report .= "Votre positionnement moyen sur " . count($history) . " des $total_domaines domaines est de " . round($score_total/count($history)) . "%<br />";
-		$questionnaire_report .= "<strong>D'après ce test, vous pouvez actuellement valider $validated_total des $total_domaines domaines du référentiel.</strong><br />";
+		$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalanswered', array($answered_q));
+		if ($history_count > 0) {
+			$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalaverage', array($history_count, $total_domaines, round($score_total/$history_count)));
+		}
+		$questionnaire_report .= elgg_echo('dossierdepreuve:report:totalvalidation', array($validated_total, $total_domaines));
 		$questionnaire_report .= "</p>";
 		$questionnaire_report .= '<br />';
 		
@@ -457,9 +461,9 @@ $(function() {
 	
 	// Infos toujours affichées (si disponibles)
 	if (!empty($auto_type) && ($step != 'googleform')) {
-		$questionnaire_info .= "Ce référentiel comporte $total_competences compétences réparties en $total_domaines domaines.<br />";
-		$questionnaire_info .= 'Vous avez choisi le questionnaire &laquo;&nbsp;' . elgg_echo('dossierdepreuve:auto_type:'.$auto_type) . '&nbsp;&raquo;.<br />'; // ', qui comporte $total_questions questions.<br />';
-		if (!empty($limited)) $questionnaire_info .= "Ce questionnaire porte sur $total_domaines_selection domaines&nbsp;: " . implode(', ', $selection) . ".<br />";
+		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:info', array($total_competences, $total_domaines));
+		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infotype', array(elgg_echo('dossierdepreuve:auto_type:'.$auto_type)));
+		if (!empty($limited)) $questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infoselection', array($total_domaines_selection)) . implode(', ', $selection) . ".<br />";
 		
 		// Barre d'avancement dans les étapes du test
 		if (in_array($step, array('quest', 'endofquest'))) {
@@ -498,19 +502,19 @@ $(function() {
 					} else {
 						$questionnaire_step .= '<a rel="nofollow" href="#' . $k . '"">' . elgg_echo('dossierdepreuve:referentiel:' . $k) . '</a>';
 					}
-				} else $questionnaire_step .= 'Résultats';
+				} else $questionnaire_step .= elgg_echo('dossierdepreuve:results');
 				$questionnaire_step .= '</div>';
 			}
 		}
 	}
-	if (!empty($email)) { $questionnaire_info .= "Email pour l'envoi du questionnaire : $email<br />"; }
+	if (!empty($email)) { $questionnaire_info .= elgg_echo('dossierdepreuve:report:email', array($email)); }
 	
 	
 	// Define sumit button (make it reusable)
 	if (empty($step) || in_array($step, array('start', 'selection'))) {
 		$submit_button = '<p>' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:start"))) . '</p>';
 	} else if ($step == 'quest') {
-		$submit_button = '<p>' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => "Etes-vous sûr de vouloir terminer le questionnaire et afficher les résultats ? Vous ne pourrez plus revenir en arrière.")) . '</p>';
+		$submit_button = '<p>' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend'))) . '</p>';
 	} else if ($step == 'endofquest') {
 		$submit_button = '<p>' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:sendupdate"))) . '</p>';
 	} else if ($step == 'final') {
@@ -548,11 +552,11 @@ $(function() {
 				$domaine_nav = '';
 				// Flèche précédente : ssi domaine > 1 et domaine < total
 				if ($domaine > 1) {
-					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-prev" style="float:left;" href="#' . ($domaine - 1) . '" title="Domaine de compétences précédent"><img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-gauche.png" alt="Domaine précédent : domaine ' . ($domaine - 1) . '" /> Domaine précédent</a>';
+					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-prev" style="float:left;" href="#' . ($domaine - 1) . '" title="' . elgg_echo('dossierdepreuve:auto:previousdomaintitle') . '"><img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-gauche.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine - 1))) . '" /> ' . elgg_echo('dossierdepreuve:auto:previousdomain') . '</a>';
 				}
 				// Flèche suivante : ssi domaine < total
 				if ($domaine < $total_domaines) {
-					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-next" style="float:right;"  href="#' . ($domaine + 1) . '" title="Domaine de compétences suivant">Domaine suivant <img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-droite.png" alt="Domaine suivant : domaine ' . ($domaine + 1) . '" /></a>';
+					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-next" style="float:right;"  href="#' . ($domaine + 1) . '" title="' . elgg_echo('dossierdepreuve:auto:nextdomaintitle') . '">' . elgg_echo('dossierdepreuve:auto:nextdomain') . ' <img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-droite.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine + 1))) . '" /></a>';
 				} else {
 					$domaine_nav_end = '<span style="float:right; line-height: 48px;">' . $submit_button . '</span>';
 				}
@@ -586,10 +590,10 @@ $(function() {
 						if (isset($visualhelp_competence[($i-1)])) $q_help = $visualhelp_competence[($i-1)];
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
-						$tabcontent .= '<strong>Question n°'.$i.'&nbsp;: </strong> ' . $q . '<br />';
+						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
-						$tabcontent .= '<strong>=> Mon positionnement&nbsp;: &laquo;&nbsp;Je sais...</strong> ' . elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal'));
+						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:myowneval') . ' ' . elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal')) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
@@ -603,8 +607,8 @@ $(function() {
 				$tabcontent .= '<br />';
 			}
 			
-			$questionnaire_email .= "<h3>Envoi des résultats par email</h3>";
-			$questionnaire_email .= "<p>Vous pouvez choisir de recevoir ces résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous.</p>";
+			$questionnaire_email .= '<h3>' . elgg_echo('dossierdepreuve:results:sendbymail') . '</h3>';
+			$questionnaire_email .= '<p>' . elgg_echo('dossierdepreuve:results:sendbymail:description') . '</p>';
 			// Saisie de l'EMail
 			$questionnaire_email .= '<p><label for="dossierdepreuve_contact_email">' . elgg_echo('dossierdepreuve:auto:contact_email') . '</label> &nbsp; ' . elgg_echo('dossierdepreuve:auto:contact_email:help') . elgg_view('input/text', array('name' => 'contact_email', 'id' => 'dossierdepreuve_contact_email', 'value' => $email)) . '</p>';
 			
@@ -616,16 +620,16 @@ $(function() {
 		// FIN DE QUESTIONNAIRE : choix envoi email et/ou maj du dossier de preuve ssi connecté
 		case 'endofquest':
 			// Pour choix de l'envoi de l'email et/ou alimentation du dossier de suivi avec les infos
-			$questionnaire .= "<p><strong>Ce questionnaire d'autopositionnement est maintenant terminé.</strong></p>";
+			$questionnaire .= '<p><strong>' . elgg_echo('dossierdepreuve:results:done') . '</strong></p>';
 			// Les résultats du test d'autopositionnement
 			if (in_array($step, array('endofquest', 'final'))) {
-				$questionnaire .= '<h3>Résultats du test du positionnement</h3>';
+				$questionnaire .= '<h3>' . elgg_echo('dossierdepreuve:results:title') . '</h3>';
 				$questionnaire .= '<div id="questionnaire-report-accordion">' . $questionnaire_report . '</div>';
 			}
-			$questionnaire .= "<h3>Envoi des résultats par email";
-			if (elgg_is_logged_in()) $questionnaire .= " et mise à jour de mon dossier de suivi";
-			$questionnaire .= "</h3>";
-			$questionnaire .= "<p>Vous pouvez choisir de recevoir ces résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous.</p>";
+			$questionnaire .= '<h3>' . elgg_echo('dossierdepreuve:results:sendbymail');
+			if (elgg_is_logged_in()) $questionnaire .= elgg_echo('dossierdepreuve:results:updatedata');
+			$questionnaire .= '</h3>';
+			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:results:sendbymail:help') . '</p>';
 			// Saisie de l'EMail
 			$questionnaire .= '<p><label for="dossierdepreuve_contact_email">' . elgg_echo('dossierdepreuve:auto:contact_email') . '</label> &nbsp; ' . elgg_echo('dossierdepreuve:auto:contact_email:help') . elgg_view('input/text', array('name' => 'contact_email', 'id' => 'dossierdepreuve_contact_email', 'value' => $email)) . '</p>';
 			/*
@@ -642,7 +646,7 @@ $(function() {
 				// (par défaut ou si le guid fourni est invalide on récupère le dossier en cours)1
 				$edit_url = $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid;
 				$autopositionnement_data = urlencode(serialize($_SESSION['dossierdepreuve']->history_data['history']));
-				$questionnaire .= 'Pour mettre à jour votre dossier de suivi, veuillez cliquer sur ce lien : <a target="_blank" class="elgg-button elgg-button-action" href="' . $edit_url . '?update_autopositionnement=true&autopositionnement_data=' . $autopositionnement_data . '">Mettre à jour mon dossier de suivi avec ces informations (nouvelle fenêtre)</a>';
+				$questionnaire .= elgg_echo('dossierdepreuve:results:updatedatatitle') . ' <a target="_blank" class="elgg-button elgg-button-action" href="' . $edit_url . '?update_autopositionnement=true&autopositionnement_data=' . $autopositionnement_data . '">' . elgg_echo('dossierdepreuve:results:updatedatalink:newwindow') . '</a>';
 				$questionnaire .= '<div class="clearfloat"></div><br />';
 			}
 			$step = 'final'; // Set next step = finalise
@@ -655,16 +659,29 @@ $(function() {
 			if ($email) {
 				// @TODO : améliorable
 				$msg_from = $CONFIG->sitename . ' <' . $CONFIG->email . '>';
-				$msg_subject = 'Autopositionnement B2i Adultes';
+				$msg_subject = elgg_echo('dossierdepreuve:msg:subject');
 				$msg_content = '';
-				$msg_content .= "<p>Vous venez de terminer votre questionnaire d'autopositionnement de la plateforme des Compétences Numériques.<br />Comme vous l'avez demandé, voici les résultats de votre test. Ceux-ci ne sont pas conservés sur la plateforme et restent anonymes.<br />Si vous le souhaitez, vous pouvez utiliser ou transmettre à votre formateur le code présent en fin de mail pour reprendre votre questionnaire dans l'état où vous l'aviez laissé.</p>";
+				$msg_content .= '<p>' . elgg_echo('dossierdepreuve:msg:message') . '</p>';
 				$msg_content .= $questionnaire_report;
-				$msg_content .= "<hr /><p>Données à utiliser pour restaurer votre autopositionnement sur le site, ou mettre à jour votre dossier de preuve avec ces informations :<hr />" . serialize($history_data) . '<hr />';
-				$msg_content .= "<p>Merci d'avoir utilisé l'outil de positionnement de Compétence Numériques !<br />Vous pouvez le recommander en envoyant ce lien aux personnes que cela pourrait intéresser : " . $CONFIG->url . "</p>";
+				$msg_content .= '<hr /><p>' . elgg_echo('dossierdepreuve:msg:restoredata') . '<hr />' . serialize($history_data) . '<hr />';
+				$msg_content .= '<p>' . elgg_echo('dossierdepreuve:msg:thanks') . ' ' . $CONFIG->url . '</p>';
 				$msg_params = null;
-				if (elgg_send_email($msg_from, $email, $msg_subject, $msg_content, $msg_params)) {
-					system_message("Un mail de synthèse a été envoyé à $email.");
-				} else register_error("Adresse email invalide : le rapport n'a pas pu être envoyé !");
+				$emails = str_replace(' ', '', $email);
+				$emails = str_replace(array(',', '|', "\n", "\r"), ';', $emails);
+				$emails = explode(';', $emails);
+				if (!is_array($emails)) $emails[] = $email;
+				error_log(print_r($emails, true));
+				foreach ($emails as $mail) {
+					$mail = trim($mail);
+					if (!empty($mail)) {
+						error_log("Mail : $mail");
+						if (is_email_address($mail)) {
+							if (elgg_send_email($msg_from, $mail, $msg_subject, $msg_content, $msg_params)) {
+								system_message(elgg_echo('dossierdepreuve:msg:sucess', array($mail)));
+							} else register_error(elgg_echo('dossierdepreuve:msg:error', array($mail)));
+						} else register_error(elgg_echo('dossierdepreuve:msg:invalidmail', array($mail)));
+					}
+				}
 			}
 			// Update dossierdepreuve
 			if ($update_dossier) {
@@ -683,7 +700,7 @@ $(function() {
 				// (par défaut ou si le guid fourni est invalide on récupère le dossier en cours)
 				$edit_url = $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid;
 				$autopositionnement_data = urlencode(serialize($_SESSION['dossierdepreuve']->history_data['history']));
-				$questionnaire .= 'Pour mettre à jour votre dossier de suivi, veuillez cliquer sur ce lien : <a href="' . $edit_url . '?update_autopositionnement=true&autopositionnement_data=' . $autopositionnement_data . '" class="elgg-button elgg-button-action">Mettre à jour mon dossier de suivi avec ces informations</a>';
+				$questionnaire .= elgg_echo('dossierdepreuve:results:updatedatatitle') . ' <a href="' . $edit_url . '?update_autopositionnement=true&autopositionnement_data=' . $autopositionnement_data . '" class="elgg-button elgg-button-action">' . elgg_echo('dossierdepreuve:results:updatedatalink') . '</a>';
 				$questionnaire .= '<div class="clearfloat"></div><br />';
 			}
 			$step = 'clearall'; // Set next step = erase session data and go to start
@@ -691,7 +708,7 @@ $(function() {
 		
 		// SELECTION DES DOMAINES A EVALUER
 		case 'selection':
-			$questionnaire .= "Choix des domaines.";
+			$questionnaire .= elgg_echo('dossierdepreuve:domaineselection');
 			/*
 			echo '<p><label for="dossierdepreuve_selection">' . elgg_echo('dossierdepreuve:selection') . '</label> &nbsp; ' . elgg_echo('dossierdepreuve:selection:help') . elgg_view('input/checkboxes', array('name' => 'selection', 'id' => 'dossierdepreuve_selection', 'options' => $selection_opt)) . '</p>';
 			*/
@@ -705,7 +722,7 @@ $(function() {
 			$_SESSION['dossierdepreuve']->history_data = null;
 			set_input('history_data', null);
 			$step = 'start'; // Set next step = go to start
-			$questionnaire .= "<p>Données du questionnaire effacées.</p>";
+			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:auto:datacleared') . '</p>';
 			break;
 			
 		// FORMULAIRE DE RESTAURATION
@@ -753,7 +770,7 @@ $(function() {
 			// Public mode : we can't save data nor update dossierdepreuve object
 			if (!elgg_is_logged_in()) $questionnaire_info .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
 			// Choix du questionnaire
-			$questionnaire .= '<p>Le test de positionnement peut être passé en entier, ou domaine par domaine. Pour ne renseigner qu\'un domaine, cliquez sur "Commencer le test", puis choisissez l\'onglet correspondant.<br />Pour vous tester sur tous les domaines, répondez aux questions de chacun des onglets.' . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
+			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
 			//$questionnaire .= '<p><label for="dossierdepreuve_auto_type">' . elgg_echo('dossierdepreuve:auto_type') . '</label> &nbsp; ' . elgg_view('input/radio', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'options' => $auto_type_opt, 'value' => $auto_type)) . '</p>';
 			$questionnaire_help .= elgg_echo('dossierdepreuve:auto_type:help');
 			// Note : step will be determined through this question
@@ -830,7 +847,8 @@ $(function() {
 	// FORM DE REINITIALISATION : retour au début
 	echo '<form enctype="multipart/form-data" method="post" style="float:right;">
 		<input type="hidden" name="step" value="clearall" />
-		<p>' . elgg_view('input/submit', array('value' => elgg_echo('dossierdepreuve:auto:clearandrestart'), 'class' => 'elgg-button-delete elgg-requires-confirmation', 'rel' => "Etes-vous sûr de vouloir recommencer ? Toutes vos réponses seront perdues.")) . '</a></p>
+		<br />
+		<p>' . elgg_view('input/submit', array('value' => elgg_echo('dossierdepreuve:auto:clearandrestart'), 'class' => 'elgg-button-delete elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:auto:clear:confirm'))) . '</a></p>
 		</form>';
 	/*
 	if (elgg_is_admin_logged_in()) {

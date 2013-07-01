@@ -10,86 +10,99 @@
 * 
 */
 
-$limit = get_input('limit', 100);
-$offset = get_input('offset', 0);
 $pagetype = elgg_get_friendly_title($vars['pagetype']); // CMS Page type - used instead of GUIDs to select cmspage entities
-$url = $vars['url'] . "pg/cmspages/index.php?pagetype=$pagetype"; // Set the base url
+$url = $vars['url'] . "pg/cmspages/?pagetype=$pagetype"; // Set the base url
 $new_page = true;
 
 // Empty pagetype or very short pagetypes are not allowed
 $tooshort = (strlen($pagetype)<3) ? true : false;
 
-//$cmspages_count = get_entities("object", "cmspage", 0, "time_created asc", $limit, $offset, true, 0); // 1.6
-//$cmspages = get_entities("object", "cmspage", 0, "time_created asc", $limit, $offset, false, 0); // 1.6
-//$params = array('types' => 'object', 'subtypes' => 'cmspage', 'owner_guids' => 0, 'limit' => $limit, 'offset' => $offset, 'order_by' => 'time_created asc', );
-$params = array('types' => 'object', 'subtypes' => 'cmspage', 'limit' => $limit, 'offset' => $offset, 'order_by' => 'time_created asc');
+// Get cmspages
+$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true);
+$cmspages_count = elgg_get_entities($params);
+$params['limit'] = $cmspages_count;
+$params['count'] = false;
 $cmspages = elgg_get_entities($params);
-$cmspages_count = sizeof($cmspages);
 
-// Construit le menu, et détermine au passage si la page existe ou non
-foreach ($cmspages as $cmspage) {
-  //$cmspage->delete(); // DEBUG/TEST : uncomment and run cmspages menu once to clean delete all cmspages (appears on page reload) - don't forget to comment again !
-  
-  if ($cmspage->pagetype != $pagetype) {
-    $page_options .= (strlen($cmspage->pagetitle) > 0) ? '<option value="' . $cmspage->pagetype . '">' . $cmspage->pagetitle . ' (' . $cmspage->pagetype . ')</option>' : '<option value="' . $cmspage->pagetype . '">' . $cmspage->pagetype . '</option>';
-  } else {
-    // Si la page demandée existe, la sélectionne (+ marqueur pas nouvelle page)
-    $new_page = false; // La page existe bien..
-    $cmspage_title = (strlen($cmspage->pagetitle) > 0) ? $cmspage->pagetitle.' (' .$pagetype.')' : $pagetype;
-    $page_options .= '<option value="' . $pagetype . '" selected="selected">&nbsp;&gt;&gt;&nbsp;' . $cmspage_title . '&nbsp;&lt;&lt;&nbsp;</option>';
-  }
+// Build select menu - Construit le menu, et détermine au passage si la page existe ou non
+foreach ($cmspages as $ent) {
+	
+	// Correct old URL pagetypes
+	if (strpos($ent->pagetype, '_')) {
+		$reload_marker = true;
+		$ent->pagetype = str_replace('_', '-', $ent->pagetype);
+	}
+	if ($reload_marker) { register_error(elgg_echo('cmspages:error:updatedpagetypes')); }
+	//$ent->delete(); // DEBUG/TEST : uncomment and run cmspages menu once to clean delete all cmspages (appears on page reload) - don't forget to comment again !
+	
+	// Useful infos
+	if (empty($ent->pagetitle)) $cmspage_details = ''; else $cmspage_details =	$ent->pagetitle . ', ';
+	$cmspage_details .= $ent->content_type . ', access = ' . $ent->access_id;
+	if (!empty($ent->display)) $cmspage_details .= ', display = ' . $ent->display;
+	$page_options .= '<option value="' . $ent->pagetype . '"';
+	
+	if ($ent->pagetype != $pagetype) {
+		$page_options .= '>' . $ent->pagetype . ' (' . $cmspage_details . ')';
+	} else {
+		// Current cmspage - Sélectionne la page demandée (+ marqueur pas nouvelle page)
+		$new_page = false; // La page existe bien..
+		$cmspage_title = $pagetype . ' (' . $cmspage_details . ')'; // Use var because it's reused
+		$page_options .= ' selected="selected">&nbsp;&gt;&gt;&nbsp;' . $cmspage_title . '&nbsp;&lt;&lt;&nbsp;';
+	}
+	$page_options .= '</option>';
 }
 // Si la page n'existe pas encore, ajoute l'entrée dans le menu
 if ($new_page) {
-  $cmspage_title = ($tooshort) ? elgg_echo('cmspages:createmenu', array($pagetype)) : elgg_echo('cmspages:newpage', array($pagetype));
-  $page_options .= '<option value="' . $pagetype . '" selected="selected">&nbsp;&gt;&gt;&nbsp;' . $cmspage_title . '&nbsp;&lt;&lt;&nbsp;</option>';
+	$cmspage_title = ($tooshort) ? elgg_echo('cmspages:createmenu', array($pagetype)) : elgg_echo('cmspages:newpage', array($pagetype));
+	$page_options .= '<option value="' . $pagetype . '" selected="selected">&nbsp;&gt;&gt;&nbsp;' . $cmspage_title . '&nbsp;&lt;&lt;&nbsp;</option>';
 }
 ?>
 
+<div style="border:1px dashed #DEDEDE; padding:6px 12px;">
+	<form name="cmspage_switcher">
+		<?php echo elgg_echo('cmspages:pageselect'); ?> 
+		<select name="pagetype"	onChange="javascript:document.cmspage_switcher.submit();">
+			<option value="" disabled="disabled"><?php echo elgg_echo('cmspages:pageselect'); ?></option>
+			<?php echo $page_options; ?>
+		</select>
+		<?php echo elgg_echo('cmspages:pagescreated', array($cmspages_count)); ?><br />
+	</form><br />
 
-<form name="cmspage_switcher">
-  <select name="pagetype"  onChange="javascript:document.cmspage_switcher.submit();">
-    <option value="" disabled="disabled"><?php echo elgg_echo('cmspages:pageselect'); ?></option>
-    <?php echo $page_options; ?>
-  </select>
-  <?php echo elgg_echo('cmspages:pagescreated', array($cmspages_count)); ?>
-   &nbsp; &nbsp; <a href="javascript:void(0);" class="inline_toggler" onclick="$('#cmspages_instructions').toggle();"><?php echo elgg_echo('cmspages:showinstructions'); ?></a>
-  <div id="cmspages_instructions" style="display:none;"><?php echo elgg_echo('cmspages:instructions'); ?></div>
-</form><br />
-
-<div class="elgg-tabs elgg-htabs">
-  <ul>
-    <?php if ($tooshort) { ?>
-      <li class="selected"><form name="new_cmspage">
-    <?php } else { ?>
-      <li class="selected"><a href="<?php echo $url; ?>"><?php echo $cmspage_title; ?></a></li>
-      <li><form name="new_cmspage">
-    <?php } ?>
-      <?php
-      $title_value = ($tooshort) ? $pagetype : " + "; $tab_w = "5ex;";
-      if (empty($title_value)) $title_value = elgg_echo('cmspages:settitle');
-      $tab_w = strlen($title_value); $tab_nw = ($tab_w < 40) ? 40 : $tab_w;
-      ?>
-      <input type="text" style="border:0; width:<?php echo $tab_w; ?>ex;" name="pagetype" value="<?php echo $title_value; ?>" onclick="if (this.value=='<?php echo $title_value; ?>') { this.value=''; this.style.width='40ex' }" title="<?php echo elgg_echo('cmspages:newtitle'); ?>" />
-      <noscript><input type="submit" style="border:0; margin:0; padding:1px 1px 3px 1px; font-size:10px; background: #0000FF;" value="<?php echo elgg_echo('cmspages:new'); ?>" /> &nbsp; </noscript>
-    </form></li>
-    
-    <?php if (!$new_page) {
-      //$this_pages = get_entities_from_metadata('pagetype', $pagetype, "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
-      $options = array( 'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false );
-      $this_pages = elgg_get_entities_from_metadata($options);
-      
-      if ($this_pages) {
-        $this_page = $this_pages[0];
-        $cmspage_guid = $this_page->guid;
-      }
-    ?>
-      <li style="float:right;" class="delete">
-      <?php
-      $delete_form_body = '<input type="hidden" name="cmspage_guid" value="' . $cmspage_guid . '" /><input type="submit" name="delete" value="' . elgg_echo('cmspages:delete') . '" onclick="javascript:return confirm(\'' . elgg_echo('cmspages:deletewarning') . '\');" style="height:24px; border-bottom:0;" />';
-      echo '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body)) . '</div>';
-      ?>
-    <?php } ?>
-    </li>
-  </ul>
+	<form name="new_cmspage">
+		<?php
+		$title_value = ($tooshort) ? $pagetype : ' ' . elgg_echo('cmspages:addnewpage') . ' ';
+		$tab_w = 5;
+		if (empty($title_value)) $title_value = elgg_echo('cmspages:settitle');
+		$tab_w = strlen($title_value); $tab_nw = ($tab_w < 40) ? 40 : $tab_w;
+		?>
+		<input type="text" style="border:1px solid #DEDEDE; width:<?php echo $tab_w; ?>ex;" name="pagetype" value="<?php echo $title_value; ?>" onclick="if (this.value=='<?php echo $title_value; ?>') { this.value=''; this.style.width='50ex' }" title="<?php echo elgg_echo('cmspages:newtitle'); ?>" />
+		<noscript><input type="submit" style="border:0; margin:0; padding:1px 1px 3px 1px; font-size:10px; background: #0000FF;" value="<?php echo elgg_echo('cmspages:new'); ?>" /> &nbsp; </noscript>
+	</form><br />
+	
+	<blockquote style="padding:6px 12px;">
+		<a href="javascript:void(0);" class="inline_toggler" onclick="$('#cmspages_instructions').toggle();">&raquo;&nbsp;<?php echo elgg_echo('cmspages:showinstructions'); ?></a>
+		<div id="cmspages_instructions" style="display:none;"><?php echo elgg_echo('cmspages:instructions'); ?></div>
+	</blockquote>
+	
 </div>
+<br />
+
+
+<?php
+// Edit currently selected cms page
+if (!$tooshort) {
+	// If page exists, link to delete - Si page existante, lien pour suppression
+	if (!$new_page) {
+		$options = array( 'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false );
+		$this_pages = elgg_get_entities_from_metadata($options);
+		// Get selected page GUID
+		if ($this_pages) { $this_page = $this_pages[0]; $cmspage_guid = $this_page->guid; }
+		echo '<span style="float:right; font-weight:bold; color:red;" class="delete">';
+		$delete_form_body = '<input type="hidden" name="cmspage_guid" value="' . $cmspage_guid . '" /><input type="submit" name="delete" value="' . elgg_echo('cmspages:delete') . '" onclick="javascript:return confirm(\'' . elgg_echo('cmspages:deletewarning') . '\');" style="border:0; font-weight:bold; color:red;" class="elgg-button delete" />';
+		echo '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body, 'js' => ' style="background:transparent;"')) . '</div>';
+		echo '</span>';
+	}
+	echo '<h3><a href="' . $url . '">' . $cmspage_title . '</a></h3>';
+}
+?>
+

@@ -9,7 +9,7 @@ function adf_registration_filter($email = null) {
   if (strlen($email_a[1]) < 4) return false;
   
   // Get and prepare valid domain config array from plugin settings
-  $whitelist = get_plugin_setting('whitelist', 'adf_registration_filter');
+  $whitelist = elgg_get_plugin_setting('whitelist', 'adf_registration_filter');
   $whitelist = preg_replace('/\r\n|\r/', "\n", $whitelist);
   // Add csv support - cut also on ";" and ","
   $whitelist = str_replace(array(' ', '<p>', '</p>'), '', $whitelist); // Delete all white spaces
