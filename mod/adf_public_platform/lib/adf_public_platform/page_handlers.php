@@ -197,7 +197,7 @@ function adf_platform_groups_page_handler($page) {
 }
 
 function adf_platform_categories_page_handler() {
-	include(dirname(__FILE__) . "/pages/categories/listing.php");
+	include elgg_get_plugins_path() . 'adf_public_platform/pages/categories/listing.php';
 	return true;
 }
 
