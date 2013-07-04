@@ -1,0 +1,8 @@
+Create users from CSV
+=====================
+
+Original project by Jaakko Naakka (http://community.elgg.org/pg/plugins/release/165550/developer/naakka/upload-users)
+
+This is an upgraded and slightly modified version of upload_users plugin by Jaakko Naakka from Mediamaisteri Group.
+
+This plugin allows you to import CSV files and create new users with any metadata specified in your CSV.
