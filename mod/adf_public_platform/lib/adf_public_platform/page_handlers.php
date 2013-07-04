@@ -279,7 +279,7 @@ function adf_platform_bookmarks_page_handler($page) {
 		bookmarks_url_forwarder($page);
 	}
 
-	$pages = dirname(__FILE__) . '/pages/bookmarks';
+	$pages = elgg_get_plugins_path() . 'bookmarks/pages/bookmarks';
 	$custom_pages = elgg_get_plugins_path() . 'adf_public_platform/pages/bookmarks';
 
 	switch ($page[0]) {
