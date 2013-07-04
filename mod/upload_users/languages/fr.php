@@ -21,7 +21,7 @@ $fr = array(
 	'upload_users:no' => "Non",
 
 	'upload_users:create_users' => "Créer des comptes utilisateurs",
-	'upload_users:success' => "Le compte utilisateur a bien été créé succesfully",
+	'upload_users:success' => "Le compte utilisateur a bien été créé",
 	'upload_users:statusok' => "Ce compte peut être créé",
 	'upload_users:creation_report' => "Comptes utilisateurs créés",
 	'upload_users:process_report' => "Prévisualisation des comptes à créer",
@@ -31,7 +31,7 @@ $fr = array(
 
 	'upload_users:submit' => "Envoyer",
 
-	'upload_users:upload_help' => "<p>Choisissez un fichier CSV et envoyez-le pour créer de nouveaux comptes utilisateurs. </p><p>La première ligne de ce fichier doit correspondre aux informations sur el contenu des colonnes. Les champs obligatoires sont : username, name, email (les intitulés doivent être ceux des noms internes de ces données dans Elgg - en anglais). Si le champ 'password' n'est pas défini, un mot de passe aléatoire sera généré. Si vous le souhaitez, vous pouvez envoyer automatiquement les informations de leur compte à chacun des nouveaux utilisateurs. </p><p>Vous pouvez ajouter autant de champs supplémentaires que vous le souhaitez. Tous ces cautres champs seront ajoutés aux informations du profil des membres. Si le délimiteur de votre fichier CSV est autre chose qu'une virgule ',', vous pouvez utiliser une virgule pour séparer les éléments d'une liste de tags</p><p>Voici un exemple de fichier CSV (attention, dans cet exemple la création du 1er compte ne fonctionnera pas car le mot de passe demandé est trop court ! minimum 6 caractères habituellement) :</p>",
+	'upload_users:upload_help' => "<p>Choisissez un fichier CSV et envoyez-le pour créer de nouveaux comptes utilisateurs. </p><p>La première ligne de ce fichier doit correspondre aux informations sur le contenu des colonnes. Les champs obligatoires sont : username, name, email (les intitulés doivent être ceux des noms internes de ces données dans Elgg - en anglais). Si le champ 'password' n'est pas défini, un mot de passe aléatoire sera généré. Si vous le souhaitez, vous pouvez envoyer automatiquement les informations de leur compte à chacun des nouveaux utilisateurs (conseillé). </p><p>Vous pouvez ajouter autant de champs supplémentaires que vous le souhaitez. Tous ces autres champs seront ajoutés aux informations du profil des membres. Si le délimiteur de votre fichier CSV est autre chose qu'une virgule ',' (conseillé), vous pouvez utiliser une virgule pour séparer les éléments d'une liste de tags</p><p>Voici un exemple de fichier CSV (attention, dans cet exemple la création du 1er compte ne fonctionnera pas car le mot de passe demandé est trop court ! minimum 6 caractères habituellement) :</p>",
 
 	/*
 	 * Error messages
