@@ -535,6 +535,59 @@ $(function() {
 			// Pour les questions elle-mêmes : autres switchs selon les types de questionnaires ?
 			// Note : liste par domaine.. histoire de pas tout avoir d'un coup
 			
+			$tabcontent .= '<style>
+				/* Validation question */
+				.dossierdepreuve-question { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok16-green.png\') left top no-repeat; padding: 0 0 0 22px; }
+				.dossierdepreuve-question.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-no16-cross.png\') left top no-repeat; }
+				
+				/* Validation compétence */
+				.dossierdepreuve-competence { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok24-green.png\') left top no-repeat; padding: 4px 0 0 28px; }
+				.dossierdepreuve-competence.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-no24-cross.png\') left top no-repeat; }
+				
+				/* Validation domaine */
+				.dossierdepreuve-domaine { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok32-green.png\') left top no-repeat; padding: 0px 0 0 36px; width:32px; }
+				.dossierdepreuve-domaine.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-no32-cross.png\') left top no-repeat; }
+				</style>';
+			$tabcontent .= '<script language="javascript">
+				function validate_radio(radio, domaine, competence, question){
+					var id = \'#radio-\' + domaine + \'-\' + competence + \'-\' + question;
+					// Si un choix fait, on marque comme renseigné, et on vérifie pour la compétence
+					if (radio.checked){
+						$(id).removeClass("nodata");
+						validate_competence(domaine, competence);
+					}
+				}
+				function validate_competence(domaine, competence){
+					var id = \'.competence-\' + domaine + \'-\' + competence;
+					// Pour chaque question de la compétence D-C, on vérifie la présence de .nodata
+					// Si aucun présent, on enlève la classe nodata
+					var valid = true;
+					$(\'.radio-\' + domaine + \'-\' + competence).each(function() {
+						if ($(this).hasClass(\'nodata\')){ valid = false; }
+					});
+					// Si tout est OK, on marque la compétence comme renseignée, 
+					// et on vérifie pour le domaine
+					if (valid) {
+						$(id).removeClass("nodata");
+						validate_domaine(domaine);
+					}
+				}
+				function validate_domaine(domaine){
+					var id = \'.domaine-\' + domaine;
+					// Pour chaque compétence du domaine D, on vérifie la présence de .nodata
+					// Si aucun présent, on enlève la classe nodata
+					var valid = true;
+					$(\'.radio-\' + domaine).each(function() {
+						if ($(this).hasClass(\'nodata\')){ valid = false; }
+					});
+					// Si tout est OK, on marque le domaine comme renseigné
+					if (valid) {
+						$(id).removeClass("nodata");
+					}
+				}
+				</script>';
+			
+			
 			// Parcours du référentiel : pour chaque domaine
 			foreach ($referentiel as $domaine => $competences) {
 				//if ($current_domaine != $domaine) continue;
@@ -547,20 +600,22 @@ $(function() {
 				}
 				$domaine_basename = 'dossierdepreuve:referentiel:' . $domaine;
 				// Nom du domaine
+				//$tabcontent .= '<div class="dossierdepreuve-domaine nodata" id="domaine-' . $domaine . '">';
 				
 				// Flèches de navigation dans les domaines (= changement d'onglet en pratique)
 				$domaine_nav = '';
 				// Flèche précédente : ssi domaine > 1 et domaine < total
 				if ($domaine > 1) {
-					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-prev" style="float:left;" href="#' . ($domaine - 1) . '" title="' . elgg_echo('dossierdepreuve:auto:previousdomaintitle') . '"><img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-gauche.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine - 1))) . '" /> ' . elgg_echo('dossierdepreuve:auto:previousdomain') . '</a>';
+					$domaine_nav .= '<a rel="nofollow" class="dossierdepreuve-domaine-prev" style="float:left;" href="#' . ($domaine - 1) . '" title="' . elgg_echo('dossierdepreuve:auto:previousdomaintitle') . '"><img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-gauche.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine - 1))) . '" /> ' . elgg_echo('dossierdepreuve:auto:previousdomain') . '</a>';
 				}
 				// Flèche suivante : ssi domaine < total
 				if ($domaine < $total_domaines) {
-					$domaine_nav .= '<a rel="nofollow" class=dossierdepreuve-domaine-next" style="float:right;"  href="#' . ($domaine + 1) . '" title="' . elgg_echo('dossierdepreuve:auto:nextdomaintitle') . '">' . elgg_echo('dossierdepreuve:auto:nextdomain') . ' <img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-droite.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine + 1))) . '" /></a>';
+					$domaine_nav .= '<a rel="nofollow" class="dossierdepreuve-domaine-next" style="float:right;"  href="#' . ($domaine + 1) . '" title="' . elgg_echo('dossierdepreuve:auto:nextdomaintitle') . '">' . elgg_echo('dossierdepreuve:auto:nextdomain') . ' <img src="' . $vars['url'] . 'mod/dossierdepreuve/graphics/fleche-droite.png" alt="' . elgg_echo('dossierdepreuve:auto:previousdomainnum', array(($domaine + 1))) . '" /></a>';
 				} else {
 					$domaine_nav_end = '<span style="float:right; line-height: 48px;">' . $submit_button . '</span>';
 				}
-				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px;">' . elgg_echo($domaine_basename) . '</h4>';
+				$completed_domain = '<span class="dossierdepreuve-domaine nodata domaine-' . $domaine . '"></span>';
+				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename) . '</h4>';
 				// Ajout navigation par domaine en haut de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav . '<div class="clearfloat"></div></div>';
 				
@@ -570,6 +625,7 @@ $(function() {
 					$basename = $type_referentiel . ':' . $domaine . ':' . $competence . ':';
 					$property_basename = str_replace(':', '_', $basename);
 					// Nom et description de la compétence
+					$tabcontent .= '<div class="dossierdepreuve-competence nodata ' . "radio-$domaine" . ' competence-' . $domaine . '-' . $competence . '">';
 					$tabcontent .= '<a href="#" title="' . str_replace(array('<br />', '<br>', '\n'), ' &nbsp; ', elgg_echo($competence_basename . ':aide')) . '"><strong>' . elgg_echo($competence_basename) . '&nbsp;:</strong> ';
 					$tabcontent .= elgg_echo($competence_basename . ':description') . '</a><br /><br />';
 					// Récupération des questions de positionnement pour chaque compétence ("Je sais...")
@@ -590,27 +646,35 @@ $(function() {
 						if (isset($visualhelp_competence[($i-1)])) $q_help = $visualhelp_competence[($i-1)];
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
-						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
+						$tabcontent .= '<p>';
+						$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
-						$tabcontent .= '<p>' . elgg_echo('dossierdepreuve:auto:myowneval') . ' ' . elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal')) . '</p>';
+						//$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval');
+						$tabcontent .= '</span> ';
+						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"')) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
 						$i++;
 					}
+					$tabcontent .= '</div>';
 					$tabcontent .= '<br />';
 				}
 				// Ajout navigation par domaine en bas de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav_end . $domaine_nav . '<div class="clearfloat"></div></div>';
 				$tabcontent .= '</div>';
+				//$tabcontent .= '</div>'; // Fin marqueur validation
 				$tabcontent .= '<br />';
 			}
 			
+			/* Mail pour envoi : mieux vaut le mettre à un seul endroit !
 			$questionnaire_email .= '<h3>' . elgg_echo('dossierdepreuve:results:sendbymail') . '</h3>';
 			$questionnaire_email .= '<p>' . elgg_echo('dossierdepreuve:results:sendbymail:description') . '</p>';
 			// Saisie de l'EMail
 			$questionnaire_email .= '<p><label for="dossierdepreuve_contact_email">' . elgg_echo('dossierdepreuve:auto:contact_email') . '</label> &nbsp; ' . elgg_echo('dossierdepreuve:auto:contact_email:help') . elgg_view('input/text', array('name' => 'contact_email', 'id' => 'dossierdepreuve_contact_email', 'value' => $email)) . '</p>';
+			*/
 			
 			// Note : step remain the same until we determine it's done (not here)
 			// Système avec onglets : on va directement à la fin du questionnaire
@@ -845,11 +909,13 @@ $(function() {
 	}
 	
 	// FORM DE REINITIALISATION : retour au début
-	echo '<form enctype="multipart/form-data" method="post" style="float:right;">
-		<input type="hidden" name="step" value="clearall" />
-		<br />
-		<p>' . elgg_view('input/submit', array('value' => elgg_echo('dossierdepreuve:auto:clearandrestart'), 'class' => 'elgg-button-delete elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:auto:clear:confirm'))) . '</a></p>
-		</form>';
+	if (empty($step) || ($step != 'clearall') || ($step != 'start')) {
+		echo '<form enctype="multipart/form-data" method="post" style="float:right;">
+			<input type="hidden" name="step" value="clearall" />
+			<br />
+			<p>' . elgg_view('input/submit', array('value' => elgg_echo('dossierdepreuve:auto:clearandrestart'), 'class' => 'elgg-button-delete elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:auto:clear:confirm'))) . '</a></p>
+			</form>';
+	}
 	/*
 	if (elgg_is_admin_logged_in()) {
 		//if (elgg_is_logged_in()) $print_data = print_r($_SESSION['user']->history_data, true); else 
