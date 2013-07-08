@@ -129,6 +129,8 @@ section div.intro { font-family:Arial; font-size: 1.25em; }
   -webkit-box-shadow: 1px 1px 2px #333333;
   -o-box-shadow: 1px 1px 2px #333333;
 }
+.elgg-form.thewire-form { background: transparent; }
+.home-static { background:white; 3px 3px 5px 0px #666 padding: 0.2% 0.4%; }
 
 
 /* Sidebar */

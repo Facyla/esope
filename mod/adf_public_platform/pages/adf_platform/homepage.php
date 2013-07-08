@@ -47,22 +47,74 @@ if (empty($intro)) { $intro = 'Bienvenue sur votre plateforme collaborative.<br 
 //$body = elgg_view_layout('one_column', array('content' => $static . '<div class="clearfloat"></div>' . $widgets));
 $body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div></header>';
 
+
+// BLOCS CONFIGURABLES
+$thewire = ''; $left_side = ''; $right_side = '';
 // The Wire
 $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
-if ($index_wire == 'yes') {
+if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 	elgg_push_context('widgets');
-	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 4, 'pagination' => false));
 	elgg_pop_context('widgets');
-	$body .= '<div class="clearfloat"></div>' . $thewire;
 }
+// Groupes en Une et connectés
+$index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
+if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
+	$left_side .= elgg_view('adf_platform/sidebar_groups');
+}
+// Membres connectés et nouveaux inscrits
+$index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
+if (elgg_is_active_plugin('members') && ($index_members == 'yes')) {
+	if (!empty($left_side)) $left_side .= '<div class="clearfloat"></div><br />';
+	$left_side .= elgg_view('adf_platform/users/online') . '<div class="clearfloat"></div><br />' . elgg_view('adf_platform/users/newest');
+}
+// Eléments du groupe d'accueil (à partir du GUID de ce groupe)
+$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
+if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid))) {
+	$right_side .= '<h3><a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:1px 6px 3px 0; float:left;" />' . $homegroup->name . '</a></h3>';
+	/* Forum..  bof car pas forcément activé..
+	$right_side .= elgg_list_entities(array(
+			'type' => 'object', 'subtype' => 'groupforumtopic',
+			'order_by' => 'e.last_action desc', 'limit' => 6, 'full_view' => false,
+		));
+	*/
+	// Activité du groupe
+	elgg_push_context('widgets');
+	$db_prefix = elgg_get_config('dbprefix');
+	$right_side .= elgg_list_river(array(
+			'limit' => 3, 'pagination' => false,
+			'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
+			'wheres' => array("(e1.container_guid = $homegroup->guid)"),
+		));
+	elgg_pop_context();
+}
+
+// Composition de la ligne
+$static = '';
+if ($thewire && $left_side && $right_side) {
+	$static .= '<div class="home-static" style="width:16%; float:left; margin-right:2%;">' . $left_side . '</div>';
+	$static .= '<div class="home-static" style="width:42%; float:left;">' . $thewire . '</div>';
+	$static .= '<div class="home-static" style="width:34%; float:right;">' . $right_side . '</div>';
+} else if ($thewire && $left_side) {
+	$static .= '<div class="home-static" style="width:20%; float:left;">' . $left_side . '</div>';
+	$static .= '<div class="home-static" style="width:74%; float:right;">' . $thewire . '</div>';
+} else if ($thewire && $right_side) {
+	$static .= '<div class="home-static" style="width:52%; float:left;">' . $thewire . '</div>';
+	$static .= '<div class="home-static" style="width:44%; float:right;">' . $right_side . '</div>';
+} else if ($left_side && $right_side) {
+	$static .= '<div class="home-static" style="width:28%; float:left;">' . $left_side . '</div>';
+	$static .= '<div class="home-static" style="width:68%; float:right;">' . $right_side . '</div>';
+} else {
+	$static .=  $left_side . $thewire . $right_side;
+}
+if (!empty($static)) $body .= '<div class="clearfloat"></div>' . $static;
 
 // Widgets + wrap intro message in a div
 $params = array(
-	'content' => '', // Texte en intro des widgets (avant les 3 colonnes)
-	'num_columns' => 3,
-	'show_access' => false,
-);
+		'content' => '', // Texte en intro des widgets (avant les 3 colonnes)
+		'num_columns' => 3, 'show_access' => false,
+	);
 $widgets = elgg_view_layout('widgets', $params);
 $body .= '<div class="clearfloat"></div>' . $widgets;
 
