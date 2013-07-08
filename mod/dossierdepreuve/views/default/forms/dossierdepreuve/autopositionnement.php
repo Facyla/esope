@@ -909,7 +909,7 @@ $(function() {
 	}
 	
 	// FORM DE REINITIALISATION : retour au début
-	if (empty($step) || ($step != 'clearall') || ($step != 'start')) {
+	if (empty($step) || ( ($step != 'clearall') && ($step != 'start') ) ) {
 		echo '<form enctype="multipart/form-data" method="post" style="float:right;">
 			<input type="hidden" name="step" value="clearall" />
 			<br />
