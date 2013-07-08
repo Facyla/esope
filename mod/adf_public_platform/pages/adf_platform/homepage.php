@@ -55,7 +55,7 @@ $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 	elgg_push_context('widgets');
-	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 4, 'pagination' => false));
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 	elgg_pop_context('widgets');
 }
 // Groupes en Une et connectés
