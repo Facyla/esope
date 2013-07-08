@@ -148,6 +148,7 @@ $fr = array(
 	'adf_platform:css:help' => "Les CSS ajoutés ici surchargent la feuille de style (sans la remplacer), et viennent se charger après tous les autres modules. Ajoutez ici vos styles personnalisés",
 	'adf_platform:css:default' => "/* Pour modifier le bandeau */\nheader {  }\n\n/* Les liens */\na, a:visited {  }\na:hover, a:active, a:focus {  }\n\n/* Les titres */\nh1, h2, h3, h4, h5 {  }\n/* etc. */\n",
 	'adf_platform:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
+	'adf_platform:index_wire' => "Ajouter Le Fil sur l'accueil (seulement en mode tableau de bord).",
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",
 	'adf_platform:title:color' => "Couleur des titres",

@@ -42,6 +42,21 @@ if ($firststeps_page instanceof ElggObject) {
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
 if (empty($intro)) { $intro = 'Bienvenue sur votre plateforme collaborative.<br />Administrateurs du site, pensez à éditer ce message !'; }
 
+
+// Composition de la page
+//$body = elgg_view_layout('one_column', array('content' => $static . '<div class="clearfloat"></div>' . $widgets));
+$body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div></header>';
+
+// The Wire
+$index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
+if ($index_wire == 'yes') {
+	$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+	elgg_push_context('widgets');
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+	elgg_pop_context('widgets');
+	$body .= '<div class="clearfloat"></div>' . $thewire;
+}
+
 // Widgets + wrap intro message in a div
 $params = array(
 	'content' => '', // Texte en intro des widgets (avant les 3 colonnes)
@@ -49,13 +64,8 @@ $params = array(
 	'show_access' => false,
 );
 $widgets = elgg_view_layout('widgets', $params);
+$body .= '<div class="clearfloat"></div>' . $widgets;
 
-
-// Composition de la page
-//$body = elgg_view_layout('one_column', array('content' => $static . '<div class="clearfloat"></div>' . $widgets));
-$body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div></header>' 
-  . '<div class="clearfloat"></div>' 
-  . $widgets;
 
 // Affichage
 echo elgg_view_page($title, $body);

@@ -129,6 +129,11 @@ $(function() {
 		  <p><label><?php echo elgg_echo('adf_platform:dashboardheader'); ?></label>
 		    <?php echo elgg_view('input/longtext', array( 'name' => 'params[dashboardheader]', 'value' => $vars['entity']->dashboardheader )); ?>
 		  </p><br />
+		  <?php if (elgg_is_active_plugin('thewire')) { ?>
+				<p><label><?php echo elgg_echo('adf_platform:index_wire'); ?></label>
+				  <?php echo elgg_view('input/dropdown', array( 'name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->index_wire )); ?>
+				</p><br />
+		  <?php } ?>
 		<?php } ?>
 	</div>
 
