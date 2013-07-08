@@ -26,14 +26,17 @@ $body = elgg_view_form('members/regular_search', $params);
 echo elgg_view_module('aside', '', $body);
 
 // Name search gives better results than regular search for some names
-// It performs also username search, not only name
-// name search
-$params = array(
-	'method' => 'get',
-	'action' => elgg_get_site_url() . 'members/search/name',
-	'disable_security' => true,
-);
-$body = elgg_view_form('members/name_search', $params);
+$members_onesearch = elgg_get_plugin_setting('members_onesearch', 'adf_public_platform');
+if ($members_onesearch != 'yes') {
+	// It performs also username search, not only name
+	// name search
+	$params = array(
+		'method' => 'get',
+		'action' => elgg_get_site_url() . 'members/search/name',
+		'disable_security' => true,
+	);
+	$body = elgg_view_form('members/name_search', $params);
+}
 
 echo elgg_view_module('aside', '', $body);
 
