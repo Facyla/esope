@@ -9,11 +9,11 @@ $group = $vars['entity'];
 $owner = $group->getOwnerEntity();
 $forward_url = $group->getURL();
 $invite_anyone = elgg_get_plugin_setting('invite_anyone', 'adf_public_platform');
-if ($invite_anyone == 'yes') {
+if ($invite_anyone != 'yes') {
+	$friends = elgg_get_logged_in_user_entity()->getFriends('', 0);
+} else {
 	// Dans ce cas on invite non des contacts mais qui on veut
 	$friends = elgg_get_entities(array('type' => 'user', 'limit' => false));
-} else {
-	$friends = elgg_get_logged_in_user_entity()->getFriends('', 0);
 }
 
 if ($friends) {

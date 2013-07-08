@@ -36,7 +36,12 @@ if ($members_onesearch != 'yes') {
 		'disable_security' => true,
 	);
 	$body = elgg_view_form('members/name_search', $params);
+	echo elgg_view_module('aside', '', $body);
 }
 
-echo elgg_view_module('aside', '', $body);
+$members_online = elgg_get_plugin_setting('members_online', 'adf_public_platform');
+if ($members_online == 'yes') {
+	$body = elgg_view('adf_platform/users/online');
+	echo elgg_view_module('aside', '', $body);
+}
 

@@ -165,6 +165,34 @@ $(function() {
 		?>
 		
 		<br />
+		<h4>FILTRES</h4>
+		<?php
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:friends') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_friends )) . '</p>';
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:mine') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_mine )) . '</p>';
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:all') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_all )) . '</p>';
+		?>
+		
+		<br />
+		<h4>INVITATIONS DANS LES GROUPES</h4>
+		<?php
+		if (elgg_is_active_plugin('groups')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone )) . '</p>';
+		}
+		?>
+		
+		<br />
+		<h4>PAGE DE RECHERCHE DE MEMBRES</h4>
+		<?php
+		if (elgg_is_active_plugin('members')) {
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:online') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online )) . '</p>';
+		}
+		?>
+		
+	</div>
+	
+	<h3>WIDGETS</h3>
+	<div>
 		<h4>WIDGETS</h4>
 		<?php
 		if (elgg_is_active_plugin('blog')) {
