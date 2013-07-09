@@ -49,6 +49,7 @@ $body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div
 
 
 // BLOCS CONFIGURABLES
+$left_side = ''; $thewire = ''; $right_side = '';
 // BLOC GAUCHE
 // Eléments du groupe d'accueil (à partir du GUID de ce groupe)
 $homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
@@ -58,7 +59,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 	$left_side .= 'En direct de ';
 	$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
 	/* Forum..  bof car pas forcément activé..
-	$right_side .= elgg_list_entities(array(
+	$left_side .= elgg_list_entities(array(
 			'type' => 'object', 'subtype' => 'groupforumtopic',
 			'order_by' => 'e.last_action desc', 'limit' => 6, 'full_view' => false,
 		));
@@ -74,7 +75,6 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 	elgg_pop_context();
 }
 // BLOC CENTRAL
-$thewire = ''; $left_side = ''; $right_side = '';
 // The Wire
 $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
@@ -94,7 +94,7 @@ if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
 $index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
 if (elgg_is_active_plugin('members') && ($index_members == 'yes')) {
 	if (!empty($right_side)) $right_side .= '<br />';
-	$left_side .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div><br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
+	$right_side .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div><br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
 }
 
 // Composition de la ligne
