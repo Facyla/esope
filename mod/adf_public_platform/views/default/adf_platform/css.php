@@ -145,6 +145,14 @@ section div.intro { font-family:Arial; font-size: 1.25em; }
   float: left;
   width: 211px;
 }
+.elgg-menu-groups-my-status li a {
+	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
+	width:211px; margin:0; padding:4px 10px;
+}
+.elgg-menu-groups-my-status li a:hover {
+	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
+	width:211px; margin:0; padding:4px 10px;
+}
 .elgg-sidebar ul.elgg-menu-page li h3 {
   background: #333333;
   border-radius: 3px 3px 0 0;
@@ -261,8 +269,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-page .elgg-menu-item-groups-member a:hover, .elgg-menu-page .elgg-menu-item-groups-member a:focus, .elgg-menu-page .elgg-menu-item-groups-member a:active, .elgg-menu-page .elgg-menu-item-groups-member.elgg-state-selected > a,
 .elgg-menu-page .elgg-menu-item-groups-owned a:hover, .elgg-menu-page .elgg-menu-item-groups-owned a:focus, .elgg-menu-page .elgg-menu-item-groups-owned a:active, .elgg-menu-page .elgg-menu-item-groups-owned.elgg-state-selected > a, 
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:hover, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:focus, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:active, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites.elgg-state-selected > a, 
-.elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:hover, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:focus, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:active, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status.elgg-state-selected > a, 
-.elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:hover, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:focus, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:active, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status.elgg-state-selected > a, 
+.elgg-sidebar .elgg-menu-groups-my-status li a:hover, .elgg-sidebar .elgg-menu-groups-my-status li a:focus, .elgg-sidebar .elgg-menu-groups-my-status li a:active, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-state-selected > a, 
 .elgg-menu-owner-block-categories li a:hover, .elgg-menu-owner-block-categories li a:focus, .elgg-menu-owner-block-categories li a:active, .elgg-menu-owner-block-categories li.elgg-state-selected > a 
 {
   color:#333333 !important; background:#CCCCCC !important; border-radius:none; 
