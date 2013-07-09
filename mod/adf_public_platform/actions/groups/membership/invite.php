@@ -15,9 +15,11 @@ $group_guid = get_input('group_guid');
 $group = get_entity($group_guid);
 
 // Permet d'inviter qui l'on veut - si réglage activé
+/*
 $bypass_friends = false;
 $invite_anyone = elgg_get_plugin_setting('invite_anyone', 'adf_public_platform');
 if ($invite_anyone == 'yes') { $bypass_friends = true; }
+*/
 
 if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdit()) {
 	foreach ($user_guids as $guid) {
@@ -31,7 +33,7 @@ if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdi
 			continue;
 		}
 
-		if ($bypass_friends || check_entity_relationship($user->guid, 'member', $group->guid)) {
+		if (check_entity_relationship($user->guid, 'member', $group->guid)) {
 			// @todo add error message
 			continue;
 		}
