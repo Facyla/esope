@@ -419,6 +419,21 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	if (empty($loginredirect)) { forward($CONFIG->url); } else { forward($CONFIG->url . $loginredirect); }
 }
 
+/*
+ * Performs some actions after registration
+*/
+function adf_platform_register_handler($event, $object_type, $object) {
+	global $CONFIG;
+	// Groupe principal (à partir du GUID de ce groupe)
+	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
+	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'adf_public_platform');
+	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
+		$user = elgg_get_logged_in_user_entity();
+		// Si pas déjà fait, on l'inscrit
+		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
+	}
+}
+
 
 
 // Ajoute les notifications lorsqu'on rejoint un groupe
