@@ -135,12 +135,12 @@ section div.intro { font-family:Arial; font-size: 1.25em; }
 
 /* Sidebar */
 .elgg-sidebar { width: 211px; float: right; }
-.elgg-sidebar ul.elgg-menu-page {
+.elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status {
   background: #fff;
   float: left;
   width: 211px;
 }
-.elgg-sidebar ul.elgg-menu-page > li {
+.elgg-sidebar ul.elgg-menu-page > li, , elgg-sidebar ul.elgg-menu-groups-my-status > li {
   border-bottom: 1px solid #CCCCCC;
   float: left;
   width: 211px;
@@ -157,7 +157,7 @@ section div.intro { font-family:Arial; font-size: 1.25em; }
   padding: 4px 10px;
   text-transform: uppercase;
 }
-.elgg-sidebar .elgg-menu-page li:first-child, .elgg-sidebar .elgg-menu-page li:last-child { border-bottom: 0 none; }
+.elgg-sidebar .elgg-menu-page li:first-child, .elgg-sidebar .elgg-menu-page li:last-child, .elgg-sidebar .elgg-menu-groups-my-status li:first-child, .elgg-sidebar .elgg-menu-groups-my-status li:last-child { border-bottom: 0 none; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a { color: #333333; font-weight: normal; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a span {
   color: #002e6f;
@@ -261,9 +261,11 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-page .elgg-menu-item-groups-member a:hover, .elgg-menu-page .elgg-menu-item-groups-member a:focus, .elgg-menu-page .elgg-menu-item-groups-member a:active, .elgg-menu-page .elgg-menu-item-groups-member.elgg-state-selected > a,
 .elgg-menu-page .elgg-menu-item-groups-owned a:hover, .elgg-menu-page .elgg-menu-item-groups-owned a:focus, .elgg-menu-page .elgg-menu-item-groups-owned a:active, .elgg-menu-page .elgg-menu-item-groups-owned.elgg-state-selected > a, 
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:hover, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:focus, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a:active, .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites.elgg-state-selected > a, 
+.elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:hover, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:focus, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status a:active, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-membership-status.elgg-state-selected > a, 
+.elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:hover, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:focus, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status a:active, .elgg-sidebar .elgg-menu-groups-my-status li.elgg-menu-item-subscription-status.elgg-state-selected > a, 
 .elgg-menu-owner-block-categories li a:hover, .elgg-menu-owner-block-categories li a:focus, .elgg-menu-owner-block-categories li a:active, .elgg-menu-owner-block-categories li.elgg-state-selected > a 
 {
-  color:#333333 !important; background:#CCCCCC !important;
+  color:#333333 !important; background:#CCCCCC !important; border-radius:none; 
 }
 
 /* Menus différenciés : navigation complémentaire */

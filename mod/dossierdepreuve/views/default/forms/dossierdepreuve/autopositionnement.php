@@ -145,13 +145,22 @@ foreach ($referentiel as $domaine => $competences) {
 }
 */
 
-// Scripts pour les blocs pliant an accordéon
+// Scripts pour les blocs pliant en accordéon
 ?>
 <script type="text/javascript">
 $(function() {
 	$('#questionnaire-report-accordion').accordion({ header:'h4', autoHeight:false, collapsible:true, active:false });
 	$('#questionnaire-restore-data').accordion({ header:'h3', autoHeight:false, collapsible:true, active:false });
 });
+<?php
+/*
+if ($referentiel) {
+	foreach ($referentiel as $domaine => $competences) {
+		"$('#autopositionnement_quest_tab_content_" . $domaine . "').accordion({ header:'h3', autoHeight:false, collapsible:true, active:false });";
+	}
+}
+*/
+?>
 </script>
 <style>
 .ui-widget { font-size:1em; }
