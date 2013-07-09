@@ -94,6 +94,8 @@ function adf_platform_init() {
 	// Redirection après login
 	elgg_register_event_handler('login','user','adf_platform_login_handler');
 	
+	// Actions après inscription
+	elgg_register_event_handler('login','user','adf_platform_register_handler');
 	
 	// PAGE HANDLERS : MODIFICATION DE PAGES DE LISTING (NON GÉRABLES PAR DES VUES)
 	// Related functions are in lib/adf_public/platform/page_handlers.php

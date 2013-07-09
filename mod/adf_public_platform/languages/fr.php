@@ -151,7 +151,9 @@ $fr = array(
 	'adf_platform:index_wire' => "Ajouter Le Fil sur l'accueil.",
 	'adf_platform:index_groups' => "Afficher les groupes à la Une",
 	'adf_platform:index_members' => "Afficher les membres connectés et derniers inscrits",
-	'adf_platform:homegroup_guid' => "Afficher les actualités du groupe principal / d'aide : indiquer le GUID",
+	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
+	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
+	'adf_platform:homegroup_autojoin' => "Inscrire auotmatiquement les nouveaux membres dans ce groupe ?",
 	
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",

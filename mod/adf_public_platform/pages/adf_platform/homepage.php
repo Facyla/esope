@@ -4,9 +4,12 @@ global $CONFIG;
 // Ensure that only logged-in users can see this page
 gatekeeper();
 
+$user_guid = elgg_get_logged_in_user_guid();
+$user = elgg_get_logged_in_user_entity();
+
 // Set context and title
 elgg_set_context('dashboard');
-elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+elgg_set_page_owner_guid($user_guid);
 //$title = elgg_echo('dashboard');
 $title = 'Tableau de bord personnalisable';
 
@@ -53,26 +56,35 @@ $left_side = ''; $thewire = ''; $right_side = '';
 // BLOC GAUCHE
 // Eléments du groupe d'accueil (à partir du GUID de ce groupe)
 $homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
+$homegroup_index = elgg_get_plugin_setting('homegroup_index', 'adf_public_platform');
+$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'adf_public_platform');
 if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid))) {
-	$left_side .= '<h3>';
-	//$left_side .= 'Activité récente dans ';
-	$left_side .= 'En direct de ';
-	$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
-	/* Forum..  bof car pas forcément activé..
-	$left_side .= elgg_list_entities(array(
-			'type' => 'object', 'subtype' => 'groupforumtopic',
-			'order_by' => 'e.last_action desc', 'limit' => 6, 'full_view' => false,
-		));
-	*/
-	// Activité du groupe
-	elgg_push_context('widgets');
-	$db_prefix = elgg_get_config('dbprefix');
-	$left_side .= elgg_list_river(array(
-			'limit' => 3, 'pagination' => false,
-			'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
-			'wheres' => array("(e1.container_guid = $homegroup->guid)"),
-		));
-	elgg_pop_context();
+	// Inscription forcée si demandé
+	if ($homegroup_autojoin == 'force') {
+		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
+	}
+	//Affichage actus du groupe si demandé
+	if ($homegroup_index == 'yes') {
+		$left_side .= '<h3>';
+		//$left_side .= 'Activité récente dans ';
+		$left_side .= 'En direct de ';
+		$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
+		/* Forum..  bof car pas forcément activé..
+		$left_side .= elgg_list_entities(array(
+				'type' => 'object', 'subtype' => 'groupforumtopic',
+				'order_by' => 'e.last_action desc', 'limit' => 6, 'full_view' => false,
+			));
+		*/
+		// Activité du groupe
+		elgg_push_context('widgets');
+		$db_prefix = elgg_get_config('dbprefix');
+		$left_side .= elgg_list_river(array(
+				'limit' => 3, 'pagination' => false,
+				'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
+				'wheres' => array("(e1.container_guid = $homegroup->guid)"),
+			));
+		elgg_pop_context();
+	}
 }
 // BLOC CENTRAL
 // The Wire

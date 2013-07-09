@@ -156,6 +156,12 @@ $(function() {
 				echo '<p><label>' . elgg_echo('adf_platform:homegroup_guid') . '</label>';
 					echo elgg_view('input/groups_select', array( 'name' => 'params[homegroup_guid]', 'value' => $vars['entity']->homegroup_guid, 'empty_value' => true));
 				echo '</p><br />';
+				echo '<p><label>' . elgg_echo('adf_platform:homegroup_autojoin') . '</label>';
+					echo elgg_view('input/dropdown', array( 'name' => 'params[homegroup_autojoin]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->homegroup_autojoin));
+				echo '</p><br />';
+				echo '<p><label>' . elgg_echo('adf_platform:homegroup_index') . '</label>';
+					echo elgg_view('input/dropdown', array( 'name' => 'params[homegroup_index]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->homegroup_index));
+				echo '</p><br />';
 			}
 			
 		} ?>
