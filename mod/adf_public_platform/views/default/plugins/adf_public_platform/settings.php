@@ -15,6 +15,8 @@ $url = $vars['url'];
 
 $yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
+$no_yes_force_opt = $no_yes_opt;
+$no_yes_force_opt['force'] = elgg_echo('option:force');
 
 // SET DEFAULT VALUES
 

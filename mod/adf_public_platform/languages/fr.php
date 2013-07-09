@@ -81,6 +81,7 @@ $fr = array(
 	'save:newgroup' => "Créer le groupe !",
 	'save:group' => "Enregistrer les modifications du groupe",
 	'upload:avatar' => "Charger la photo",
+	'option:force' => "Oui (forcé)",
 	'save:settings' => "Enregistrer la configuration",
 	'save:usersettings' => "Enregistrer mes paramètres",
 	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
