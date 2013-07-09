@@ -49,30 +49,14 @@ $body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div
 
 
 // BLOCS CONFIGURABLES
-$thewire = ''; $left_side = ''; $right_side = '';
-// The Wire
-$index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
-if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
-	$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
-	elgg_push_context('widgets');
-	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
-	elgg_pop_context('widgets');
-}
-// Groupes en Une et connectés
-$index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
-if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
-	$left_side .= elgg_view('adf_platform/sidebar_groups');
-}
-// Membres connectés et nouveaux inscrits
-$index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
-if (elgg_is_active_plugin('members') && ($index_members == 'yes')) {
-	if (!empty($left_side)) $left_side .= '<div class="clearfloat"></div><br />';
-	$left_side .= elgg_view('adf_platform/users/online') . '<div class="clearfloat"></div><br />' . elgg_view('adf_platform/users/newest');
-}
+// BLOC GAUCHE
 // Eléments du groupe d'accueil (à partir du GUID de ce groupe)
 $homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
 if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid))) {
-	$right_side .= '<h3>Activité récente dans <a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
+	$left_side .= '<h3>';
+	//$left_side .= 'Activité récente dans ';
+	$left_side .= 'En direct de ';
+	$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
 	/* Forum..  bof car pas forcément activé..
 	$right_side .= elgg_list_entities(array(
 			'type' => 'object', 'subtype' => 'groupforumtopic',
@@ -82,29 +66,52 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 	// Activité du groupe
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
-	$right_side .= elgg_list_river(array(
+	$left_side .= elgg_list_river(array(
 			'limit' => 3, 'pagination' => false,
 			'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
 			'wheres' => array("(e1.container_guid = $homegroup->guid)"),
 		));
 	elgg_pop_context();
 }
+// BLOC CENTRAL
+$thewire = ''; $left_side = ''; $right_side = '';
+// The Wire
+$index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
+if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
+	$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">Publier sur le Fil &#x25BC;</a><a href="' . $CONFIG->url . 'thewire/all">Le Fil de ' . $CONFIG->sitename . '</a></h3>';
+	$thewire .= '<div id="thewire_homeform" style="display:none;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener') . '</div>';
+	elgg_push_context('widgets');
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+	elgg_pop_context('widgets');
+}
+// BLOC DROITE
+// Groupes en Une et connectés
+$index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
+if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
+	$right_side .= '<div class="home-static">' . elgg_view('adf_platform/sidebar_groups') . '</div>';
+}
+// Membres connectés et nouveaux inscrits
+$index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
+if (elgg_is_active_plugin('members') && ($index_members == 'yes')) {
+	if (!empty($right_side)) $right_side .= '<br />';
+	$left_side .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div><br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
+}
 
 // Composition de la ligne
 $static = '';
 if ($thewire && $left_side && $right_side) {
-	$static .= '<div class="home-static" style="width:16%; float:left; margin-right:2%;">' . $left_side . '</div>';
-	$static .= '<div class="home-static" style="width:42%; float:left;">' . $thewire . '</div>';
-	$static .= '<div class="home-static" style="width:34%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static" style="width:32%; float:left; margin-right:3%;">' . $left_side . '</div>';
+	$static .= '<div class="home-static" style="width:40%; float:left;">' . $thewire . '</div>';
+	$static .= '<div style="width:20%; float:right;">' . $right_side . '</div>';
 } else if ($thewire && $left_side) {
-	$static .= '<div class="home-static" style="width:20%; float:left;">' . $left_side . '</div>';
-	$static .= '<div class="home-static" style="width:74%; float:right;">' . $thewire . '</div>';
+	$static .= '<div class="home-static" style="width:32%; float:left;">' . $left_side . '</div>';
+	$static .= '<div class="home-static" style="width:64%; float:right;">' . $thewire . '</div>';
 } else if ($thewire && $right_side) {
-	$static .= '<div class="home-static" style="width:64%; float:left;">' . $thewire . '</div>';
-	$static .= '<div class="home-static" style="width:32%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static" style="width:70%; float:left;">' . $thewire . '</div>';
+	$static .= '<div style="width:24%; float:right;">' . $right_side . '</div>';
 } else if ($left_side && $right_side) {
-	$static .= '<div class="home-static" style="width:28%; float:left;">' . $left_side . '</div>';
-	$static .= '<div class="home-static" style="width:68%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static" style="width:68%; float:left;">' . $left_side . '</div>';
+	$static .= '<div style="width:28%; float:right;">' . $right_side . '</div>';
 } else {
 	$static .=  $left_side . $thewire . $right_side;
 }
