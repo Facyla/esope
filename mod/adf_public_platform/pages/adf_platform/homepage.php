@@ -89,8 +89,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 //Affichage actus du site si demandé
 $homesite_index = elgg_get_plugin_setting('homesite_index', 'adf_public_platform');
 if ($homesite_index == 'yes') {
-	$left_side .= '<h3>';
-	$left_side .= '<a href="' . $CONFIG->url . 'activity">Activité récente</a>';
+	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">Activité récente</a></h3>';
 	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
