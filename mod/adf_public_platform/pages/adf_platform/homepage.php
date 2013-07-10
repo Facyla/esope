@@ -11,7 +11,7 @@ $user = elgg_get_logged_in_user_entity();
 elgg_set_context('dashboard');
 elgg_set_page_owner_guid($user_guid);
 //$title = elgg_echo('dashboard');
-$title = 'Tableau de bord personnalisable';
+$title = 'Mon Accueil personnalisable';
 
 // Titre de la page
 $static = '<h2 class="invisible">' . $title . '</h2>';
@@ -85,6 +85,17 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 			));
 		elgg_pop_context();
 	}
+}
+//Affichage actus du site si demandé
+$homesite_index = elgg_get_plugin_setting('homesite_index', 'adf_public_platform');
+if ($homesite_index == 'yes') {
+	$left_side .= '<h3>';
+	$left_side .= '<a href="' . $CONFIG->url . 'activity">Activité récente</a>';
+	// Activité du site
+	elgg_push_context('widgets');
+	$db_prefix = elgg_get_config('dbprefix');
+	$left_side .= elgg_list_river(array('limit' => 3, 'pagination' => false));
+	elgg_pop_context();
 }
 // BLOC CENTRAL
 // The Wire

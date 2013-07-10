@@ -164,6 +164,9 @@ $(function() {
 				echo '<p><label>' . elgg_echo('adf_platform:homegroup_index') . '</label>';
 					echo elgg_view('input/dropdown', array( 'name' => 'params[homegroup_index]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->homegroup_index));
 				echo '</p><br />';
+				echo '<p><label>' . elgg_echo('adf_platform:homesite_index') . '</label>';
+					echo elgg_view('input/dropdown', array( 'name' => 'params[homesite_index]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->homesite_index));
+				echo '</p><br />';
 			}
 			
 		} ?>

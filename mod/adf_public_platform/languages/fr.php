@@ -154,6 +154,7 @@ $fr = array(
 	'adf_platform:index_members' => "Afficher les membres connectés et derniers inscrits",
 	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
 	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
+	'adf_platform:homesite_index' => "Afficher les actualités du site ?",
 	'adf_platform:homegroup_autojoin' => "Inscrire automatiquement les nouveaux membres dans ce groupe ? (si forcé, réinscrit les membres désinscrits)",
 	
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
