@@ -48,7 +48,7 @@ Mot de passe : celui que vous avez indiqué lors de l'inscription
 	'uservalidationbyadmin:registerok' => "Vous recevrez un mail de confirmation dès que l'administrateur aura confirmé votre demande de création de compte",
 	'uservalidationbyadmin:login:fail' => "Votre compte n'est pas validé, c'est pourquoi vous n'avez pas pu vous identifier. Vous devez attendre qu'un administrateur valide votre compte.",
 
-	'uservalidationbyadmin:admin:no_unvalidated_users' => 'No unvalidated users.',
+	'uservalidationbyadmin:admin:no_unvalidated_users' => 'Aucun compte en attente de validation.',
 
 	'uservalidationbyadmin:admin:unvalidated' => 'Non validé',
 	'uservalidationbyadmin:admin:user_created' => "Demande d'inscription faite %s",
