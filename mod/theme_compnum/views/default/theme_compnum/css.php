@@ -2,6 +2,8 @@
 $font_base = $CONFIG->url . '/mod/theme_compnum/fonts/';
 ?>
 
+/* TYPOS de la plateforme */
+
 @font-face {
 	font-family: "Lato"; src: url('<?php echo $font_base; ?>Lato/Lato-Regular.ttf');
 }
@@ -42,5 +44,17 @@ $font_base = $CONFIG->url . '/mod/theme_compnum/fonts/';
 	font-family: "LatoBlack"; src: url('<?php echo $font_base; ?>Lato/Lato-BlackItalic.ttf');
 	font-style:italic;
 }
+
+
+
+/* Bandeau déconnecté */
+header.notloggedin { background: #523866; border-top: 0; height: 48px; }
+header.notloggedin h1 { margin-top: 0; font-size: 16px; font-family:Lato; font-weight:bold; }
+header.notloggedin h1 a:hover { text-decoration:none; }
+header.notloggedin .header-subtitle { font-size: 13.5px; margin-top:0; font-family:LatoLight; }
+
+/* Bandeau connecté */
+
+
 
 

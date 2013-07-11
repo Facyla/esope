@@ -102,7 +102,7 @@ if (elgg_is_logged_in()) {
 }
 ?>
 
-			<header>
+			<header class="<?php if (elgg_is_logged_in()) { echo 'loggedin'; } else { echo 'notloggedin'; } ?>">
 				<div class="interne">
 					<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><?php
 					echo elgg_get_plugin_setting('headertitle', 'adf_public_platform');
