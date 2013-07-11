@@ -9,7 +9,7 @@
 $fr = array(
 	'admin:users:unvalidated' => 'Non validés',
 	
-	'email:validate:subject' => "%s demande la validation de son compte pour %s!",
+	'email:validate:subject' => "%s demande la validation de son compte pour %s !",
 	'email:validate:body' => "Bonjour %s,
 
 Un membre nommé %s vous demande la validation de son compte. 
@@ -31,12 +31,12 @@ Si vous ne pouvez pas cliquer sur le lien, veuillez le copier-coller dans votre 
 	'user:validate:subject' => "Bonjour %s ! Votre compte est activé",
 	'user:validate:body' => "Bonjour %s,
 
-This is to notify that your account at %s is activated by the admin. 
+Votre compte sur %s a été activé par l'administrateur. 
 
-You can now login to the site with:
+Vous pouvez vous connecter dès maintenant avec les accès suivants :
 
-Username : %s
-Password : the one you provided while registration
+Indeitifiant de connexion : %s
+Mot de passe : celui que vous avez indiqué lors de l'inscription
 
 %s
 %s
@@ -51,17 +51,17 @@ Password : the one you provided while registration
 	'uservalidationbyadmin:admin:no_unvalidated_users' => 'No unvalidated users.',
 
 	'uservalidationbyadmin:admin:unvalidated' => 'Non validé',
-	'uservalidationbyadmin:admin:user_created' => '%s a été inscrit',
+	'uservalidationbyadmin:admin:user_created' => "Demande d'inscription faite %s",
 	'uservalidationbyadmin:admin:resend_validation' => 'Renvoyer la validation validation',
-	'uservalidationbyadmin:admin:validate' => 'Valider',
-	'uservalidationbyadmin:admin:delete' => 'Supprimer',
+	'uservalidationbyadmin:admin:validate' => ' Valider ',
+	'uservalidationbyadmin:admin:delete' => ' Supprimer ',
 	'uservalidationbyadmin:confirm_validate_user' => 'Valider %s ?',
-	'uservalidationbyadmin:confirm_resend_validation' => 'Resend validation email to %s?',
+	'uservalidationbyadmin:confirm_resend_validation' => 'Renvoyer un mail de validation à %s ?',
 	'uservalidationbyadmin:confirm_delete' => 'Supprimer %s ?',
 	'uservalidationbyadmin:confirm_validate_checked' => 'Valider les comptes utilisateurs sélectionnés ?',
 	'uservalidationbyadmin:confirm_resend_validation_checked' => 'Renovyer une validation aux comptes utilisateurs sélectionnés ?',
 	'uservalidationbyadmin:confirm_delete_checked' => 'Supprimer les comptes utilisateurs sélectionnés ?',
-	'uservalidationbyadmin:check_all' => 'Tous',
+	'uservalidationbyadmin:check_all' => 'Tout sélectionner',
 
 	'uservalidationbyadmin:errors:unknown_users' => 'Comptes utilisateurs inconnus',
 	'uservalidationbyadmin:errors:could_not_validate_user' => 'Impossible de valider ce compte utilisateur.',
