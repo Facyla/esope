@@ -344,7 +344,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 
 #adf-homepage ul { list-style-type: square; }
 #adf-homepage ul li { margin-bottom:8px; }
-
+#adf-homepage .elgg-form-register fieldset > div, #adf-homepage .elgg-form-register .mandatory { clear: both; }
 
 
 
