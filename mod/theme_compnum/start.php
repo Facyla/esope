@@ -20,6 +20,8 @@ elgg_register_event_handler("pagesetup", "system", "theme_compnum_pagesetup"); /
  */
 function theme_compnum_init() {
 	
+	elgg_extend_view('css', 'theme_compnum/css');
+	
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
