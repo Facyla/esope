@@ -111,4 +111,7 @@ LISTE DETAILLE DES PLUGINS ET DE LEUR UTILITE
 
 - @TODO
 
+- File Tools (26/6/2013) : outils avancés de gestion des fichiers. Envoi multiple, décompression ZIP pour envois groupés, et structuration en dossiers.
+
+
 

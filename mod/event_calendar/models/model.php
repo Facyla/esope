@@ -900,6 +900,7 @@ function event_calender_get_gmt_from_server_time($server_time) {
 }
 
 function event_calendar_activated_for_group($group) {
+	// Facyla : patch suggested for quick workaround for group page_handler : refused yet
 	if (!elgg_instanceof($group, 'group')) $group = get_entity($group);
 	$group_calendar = elgg_get_plugin_setting('group_calendar', 'event_calendar');
 	$group_default = elgg_get_plugin_setting('group_default', 'event_calendar');

@@ -12,6 +12,7 @@
 
 $listing_format = $vars['listing_format'];
 
+/* Ajout liens de navigationtion horizontaux d'année en année (plus besoin avec nouvelle version de l'agenda)
 $page_url = full_url();
 $page_url = explode($vars['start_date'], $page_url);
 $start_date = $vars['start_date'];
@@ -24,6 +25,7 @@ if (substr($page_url[0], -1) != '/') $page_url[0] .= '/';
 $calendar_nav = '<a href="' . $page_url[0] . $prev_start_date . $page_url[1] . '">&laquo;&nbsp;A partir du '.$prev_startdate.'</a>';
 $calendar_nav .= '<a href="' . $page_url[0] . $next_start_date . $page_url[1] . '" style="float:right;">A partir du '.$next_startdate.'&nbsp;&raquo;</a>';
 $calendar_nav = '<div class="calendar-navigation">' . $calendar_nav . '</div>';
+*/
 
 if ($vars['events']) {
 	if ($listing_format == 'agenda') {

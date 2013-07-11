@@ -94,6 +94,16 @@ function adf_platform_init() {
 	// Redirection après login
 	elgg_register_event_handler('login','user','adf_platform_login_handler');
 	
+	// Actions après inscription
+	elgg_register_event_handler('login','user','adf_platform_register_handler');
+	
+	// Modificaiton de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
+	/* Inutile, sauf si on veut mettre de smessages plus explicites
+	if (elgg_is_active_plugin('groups')) {
+		elgg_unregister_action('groups/invite');
+		elgg_register_action("groups/invite", elgg_get_plugins_path() . 'adf_public_platform/actions/groups/membership/invite.php');
+	}
+	*/
 	
 	// PAGE HANDLERS : MODIFICATION DE PAGES DE LISTING (NON GÉRABLES PAR DES VUES)
 	// Related functions are in lib/adf_public/platform/page_handlers.php
@@ -415,6 +425,21 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
 	if (empty($loginredirect)) { forward($CONFIG->url); } else { forward($CONFIG->url . $loginredirect); }
+}
+
+/*
+ * Performs some actions after registration
+*/
+function adf_platform_register_handler($event, $object_type, $object) {
+	global $CONFIG;
+	// Groupe principal (à partir du GUID de ce groupe)
+	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
+	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'adf_public_platform');
+	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
+		$user = elgg_get_logged_in_user_entity();
+		// Si pas déjà fait, on l'inscrit
+		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
+	}
 }
 
 

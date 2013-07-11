@@ -10,6 +10,126 @@ $fr = array(
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
 	
+	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
+  'river:comment:object:announcement' => "%s a commenté %s",
+  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
+	
+	'widget:toggle' => "Montrer/masquer le module %s",
+	'widget:editmodule' => "Configurer le module %s",
+	
+	// Annonces : manque des clefs de trad
+	'announcements:summary' => "Titre de l'annonce",
+	'announcements:body' => "Texte de l'annonce",
+	'announcements:post' => "Publier l'annonce",
+	'announcements:edit' => "Modifier l'annonce",
+	'announcements:delete:nopermission' => "Impossible de supprimer l'annonce : vous n'avez pas les permissions suffisantes",
+	'announcements:delete:failure' => "Impossible de supprimer l'annonce.",
+	'announcements:delete:sucess' => "Annonce publiée",
+	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
+	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
+	'object:announcement:save:success' => "Annonce enregistrée",
+	'item:object:category' => "Thématiques utilisées",
+	'item:object:topicreply' => "Réponse dans un forum",
+	
+	// Traductions du thème et autres personnalisations
+	'adf_platform:groupinvite' => "invitation à rejoindre un groupe à examiner",
+ 	'adf_platform:groupinvites' => "invitations à rejoindre un groupe à examiner",
+	'adf_platform:friendinvite' => "demande de contact à examiner",
+	'adf_platform:friendinvites' => "demandes de contact à examiner",
+	'adf_platform:gotohomepage' => "Aller sur la page d'accueil",
+	'adf_platform:usersettings' => "Mes paramètres",
+	'adf_platform:myprofile' => "Mon profil",
+	'adf_platform:help' => "Aide",
+	'adf_platform:loginregister' => "Connexion / inscription",
+	'adf_platform:joinagroup' => "Rejoindre un groupe",
+	'adf_platform:categories' => "Thématiques",
+	'adf_platform:directory' => "Annuaire",
+	'adf_platform:event_calendar' => "Agenda",
+	'adf_platform:search' => "Rechercher",
+	'adf_platform:groupicon' => "icône du groupe",
+	'adf_platform:categories:all' => "Actualité des thématiques",
+	'adf_platform:members:online' => "Membres connectés",
+	'adf_platform:members:newest' => "Derniers inscrits",
+	'adf_platform:groups:featured' => "Groupes à la Une",
+	
+	// Widgets
+	'adf_platform:widget:bookmark:title' => 'Mes Liens web',
+	'adf_platform:widget:brainstorm:title' => 'Mes Idées',
+	'adf_platform:widget:blog:title' => 'Mes Articles',
+	'adf_platform:widget:event_calendar:title' => 'Mon Agenda',
+	'adf_platform:widget:file:title' => 'Mes Fichiers',
+	'adf_platform:widget:group:title' => 'Mes Groupes',
+	'adf_platform:widget:page:title' => 'Mes Wikis',
+	
+	'accessibility:sidebar:title' => "Outils",
+	//'breadcrumb' => "Fil d'Ariane",
+	'breadcrumbs' => "Revenir à ",
+	// Demandes en attente
+	'decline' => "Décliner",
+	'refuse' => "Refuser",
+	/* Pagination */
+	'previouspage' => "Page précédente",
+	'nextpage' => "Page suivante",
+	/* Recherche de membres */
+	'searchbytag' => "Recherche par mot-clef",
+	'searchbyname' => "Recherche par nom",
+	// Actions génériques à "typer"
+	'delete:message' => "Supprimer le(s) message(s)",
+	'markread:message' => "Marquer le(s) message(s)  comme lu(s)",
+	'toggle:messages' => "inverser la sélection des messages",
+	'messages:send' => "Envoyer le message",
+	'save:newgroup' => "Créer le groupe !",
+	'save:group' => "Enregistrer les modifications du groupe",
+	'upload:avatar' => "Charger la photo",
+	'option:force' => "Oui (forcé)",
+	'save:settings' => "Enregistrer la configuration",
+	'save:usersettings' => "Enregistrer mes paramètres",
+	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
+	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
+	'save:widgetsettings' => "Enregistrer les réglages du module",
+	// Notifications
+	'link:userprofile' => "Page de profil de %s",
+	
+	// Params widgets
+	'onlineusers:numbertodisplay' => "Nombre maximum de membres connectés à afficher",
+	'newusers:numbertodisplay' => "Nombre maximum de nouveaux membres à afficher",
+	'brainstorm:numbertodisplay' => "Nombre maximum d'idées à afficher",
+	'river:numbertodisplay' => "Nombre maximum d'activités à afficher",
+	'group:widget:num_display' => "Nombre maximum de groupes à afficher",
+	
+	'more:friends' => "Plus de contacts", 
+	
+	// New group
+	// @TODO : Ce texte devrait être adapté à votre site !
+	// use $CONFIG->url for site install URL, $CONFIG->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->email . "&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	'groups:search:regular' => "Recherche de groupe",
+	'groups:regularsearch' => "Nom ou mot-clef",
+	'search:group:go' => "Rechercher un groupe",
+	'members:search' => "Rechercher un membre",
+	
+	// 
+	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
+	'accessibility:requestnewpassword' => "Demander la réinitialisation du mot de passe",
+	'accessibility:revert' => "Supprimer",
+	
+	
+	'adf_platform:homepage' => "Accueil",
+	'announcements' => "Annonces",
+	'event_calendar' => "Agenda",
+	
+	'adf_platform:access:public' => "Public (accessible hors connexion)",
+	
+	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
+	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
+	'event_calendar:num_display' => "Nombre d'événements à afficher",
+	'messages:widget:title' => "Messages non lus",
+	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
+	'messages:num_display' => "Nombre de messages à afficher",
+	
+	
 	// Layout settings
 	'adf_platform:settings:help' => "Les différentes rubriques de configuration vous permettent de configurer de nombreux éléments du thème (éléments graphiques, d'interface, couleurs, feuilles de styles, etc.), ainsi que certains comportements du site.",
 	'adf_platform:settings:layout' => "Pour retrouver la configuration initiale, remplacez le contenu par \"RAZ\" (en mode HTML).",
@@ -29,6 +149,14 @@ $fr = array(
 	'adf_platform:css:help' => "Les CSS ajoutés ici surchargent la feuille de style (sans la remplacer), et viennent se charger après tous les autres modules. Ajoutez ici vos styles personnalisés",
 	'adf_platform:css:default' => "/* Pour modifier le bandeau */\nheader {  }\n\n/* Les liens */\na, a:visited {  }\na:hover, a:active, a:focus {  }\n\n/* Les titres */\nh1, h2, h3, h4, h5 {  }\n/* etc. */\n",
 	'adf_platform:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
+	'adf_platform:index_wire' => "Ajouter Le Fil sur l'accueil.",
+	'adf_platform:index_groups' => "Afficher les groupes à la Une",
+	'adf_platform:index_members' => "Afficher les membres connectés et derniers inscrits",
+	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
+	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
+	'adf_platform:homesite_index' => "Afficher les actualités du site ?",
+	'adf_platform:homegroup_autojoin' => "Inscrire automatiquement les nouveaux membres dans ce groupe ? (si forcé, réinscrit les membres désinscrits)",
+	
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",
 	'adf_platform:title:color' => "Couleur des titres",
@@ -89,122 +217,6 @@ $fr = array(
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
 	
 	
-	// AJOUTS EN SURCHARGE DES PLUGINS
-	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
-  'river:comment:object:announcement' => "%s a commenté %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
-	
-	'widget:toggle' => "Montrer/masquer le module %s",
-	'widget:editmodule' => "Configurer le module %s",
-	
-	// Annonces : manque des clefs de trad
-	'announcements:summary' => "Titre de l'annonce",
-	'announcements:body' => "Texte de l'annonce",
-	'announcements:post' => "Publier l'annonce",
-	'announcements:edit' => "Modifier l'annonce",
-	'announcements:delete:nopermission' => "Impossible de supprimer l'annonce : vous n'avez pas les permissions suffisantes",
-	'announcements:delete:failure' => "Impossible de supprimer l'annonce.",
-	'announcements:delete:sucess' => "Annonce publiée",
-	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
-	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
-	'object:announcement:save:success' => "Annonce enregistrée",
-	'item:object:category' => "Thématiques utilisées",
-	'item:object:topicreply' => "Réponse dans un forum",
-	
-	// Traductions du thème et autres personnalisations
-	'adf_platform:groupinvite' => "invitation à rejoindre un groupe à examiner",
- 	'adf_platform:groupinvites' => "invitations à rejoindre un groupe à examiner",
-	'adf_platform:friendinvite' => "demande de contact à examiner",
-	'adf_platform:friendinvites' => "demandes de contact à examiner",
-	'adf_platform:gotohomepage' => "Aller sur la page d'accueil",
-	'adf_platform:usersettings' => "Mes paramètres",
-	'adf_platform:myprofile' => "Mon profil",
-	'adf_platform:help' => "Aide",
-	'adf_platform:loginregister' => "Connexion / inscription",
-	'adf_platform:joinagroup' => "Rejoindre un groupe",
-	'adf_platform:categories' => "Thématiques",
-	'adf_platform:directory' => "Annuaire",
-	'adf_platform:event_calendar' => "Agenda",
-	'adf_platform:search' => "Rechercher",
-	'adf_platform:groupicon' => "icône du groupe",
-	'adf_platform:categories:all' => "Actualité des thématiques",
-	
-	// Widgets
-	'adf_platform:widget:bookmark:title' => 'Mes Liens web',
-	'adf_platform:widget:brainstorm:title' => 'Mes Idées',
-	'adf_platform:widget:blog:title' => 'Mes Articles',
-	'adf_platform:widget:event_calendar:title' => 'Mon Agenda',
-	'adf_platform:widget:file:title' => 'Mes Fichiers',
-	'adf_platform:widget:group:title' => 'Mes Groupes',
-	'adf_platform:widget:page:title' => 'Mes Wikis',
-	
-	'accessibility:sidebar:title' => "Outils",
-	//'breadcrumb' => "Fil d'Ariane",
-	'breadcrumbs' => "Revenir à ",
-	// Demandes en attente
-	'decline' => "Décliner",
-	'refuse' => "Refuser",
-	/* Pagination */
-	'previouspage' => "Page précédente",
-	'nextpage' => "Page suivante",
-	/* Recherche de membres */
-	'searchbytag' => "Recherche par mot-clef",
-	'searchbyname' => "Recherche par nom",
-	// Actions génériques à "typer"
-	'delete:message' => "Supprimer le(s) message(s)",
-	'markread:message' => "Marquer le(s) message(s)  comme lu(s)",
-	'toggle:messages' => "inverser la sélection des messages",
-	'messages:send' => "Envoyer le message",
-	'save:newgroup' => "Créer le groupe !",
-	'save:group' => "Enregistrer les modifications du groupe",
-	'upload:avatar' => "Charger la photo",
-	'save:settings' => "Enregistrer la configuration",
-	'save:usersettings' => "Enregistrer mes paramètres",
-	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
-	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
-	'save:widgetsettings' => "Enregistrer les réglages du module",
-	// Notifications
-	'link:userprofile' => "Page de profil de %s",
-	
-	// Params widgets
-	'onlineusers:numbertodisplay' => "Nombre maximum de membres connectés à afficher",
-	'newusers:numbertodisplay' => "Nombre maximum de nouveaux membres à afficher",
-	'brainstorm:numbertodisplay' => "Nombre maximum d'idées à afficher",
-	'river:numbertodisplay' => "Nombre maximum d'activités à afficher",
-	'group:widget:num_display' => "Nombre maximum de groupes à afficher",
-	
-	'more:friends' => "Plus de contacts", 
-	
-	// New group
-	// @TODO : Ce texte devrait être adapté à votre site !
-	// use $CONFIG->url for site install URL, $CONFIG->email for site email
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->email . "&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
-	'groups:search:regular' => "Recherche de groupe",
-	'groups:regularsearch' => "Nom ou mot-clef",
-	'search:group:go' => "Rechercher un groupe",
-	'members:search' => "Rechercher un membre",
-	
-	// 
-	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
-	'accessibility:requestnewpassword' => "Demander la réinitialisation du mot de passe",
-	'accessibility:revert' => "Supprimer",
-	
-	
-	'adf_platform:homepage' => "Accueil",
-	'announcements' => "Annonces",
-	'event_calendar' => "Agenda",
-	
-	'adf_platform:access:public' => "Public (accessible hors connexion)",
-	
-	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
-	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
-	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
-	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
-	'event_calendar:num_display' => "Nombre d'événements à afficher",
-	'messages:widget:title' => "Messages non lus",
-	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
-	'messages:num_display' => "Nombre de messages à afficher",
-	
 	'adf_platform:settings:widget:blog' => "Activer le widget Blog",
 	'adf_platform:settings:widget:bookmarks' => "Activer le widget Liens web",
 	'adf_platform:settings:widget:brainstorm' => "Activer le widget Boîte à idées",
@@ -221,6 +233,13 @@ $fr = array(
 	'adf_platform:settings:widget:videos' => "Activer le widget Vidéos",
 	'adf_platform:settings:widget:profile_completeness' => "Activer le widget Complétion du profil",
 	'adf_platform:settings:widget:profile_completeness:help' => "Ce widget peut être activé/désactivé via la configuration du plugin Profile Manager",
+	
+	'adf_platform:settings:filters:friends' => "Supprimer l'onglet \"Contacts\" dans les listes de publications personnelles ? (par défaut : Non)",
+	'adf_platform:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
+	'adf_platform:settings:filters:all' => "Supprimer l'onglet \"Tous\" dans les listes de publications personnelles ? (par défaut : Non)",
+	'adf_platform:settings:groups:inviteanyone' => "Permettre d'inviter tout membre dans les groupes ? (par défaut : non = contacts seulement)",
+	'adf_platform:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
+	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	
 	//'' => "",
 	
