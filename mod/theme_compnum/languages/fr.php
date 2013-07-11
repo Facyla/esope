@@ -11,6 +11,7 @@ $french = array (
 	'members:label:formateur' => "Formateurs",
 	'members:label:candidat' => "Candidats",
 	
+	'theme_compnum:login' => "Connectez-vous",
 	'theme_compnum:friends' => "Contacts",
 	'theme_compnum:usersettings' => "Paramètres",
 	'theme_compnum:group' => "Groupes",
