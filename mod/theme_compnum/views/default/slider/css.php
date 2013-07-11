@@ -13,7 +13,14 @@ include($include_url . 'css/animate.css');
 ?>
 
 <?php
-//include($include_url . 'css/anythingslider.css');
+/* Note : pb avec les URL relatives des images : reprendre ici la bonne CSS et corriger les liens
+include($include_url . 'css/anythingslider.css');
+include($include_url . 'css/metallic.css');
+include($include_url . 'css/minimalist-round.css');
+include($include_url . 'css/minimalist-square.css');
+include($include_url . 'css/cs-portfolio.css');
+include($include_url . 'css/construction.css');
+*/
 ?>
 /*
 	AnythingSlider v1.8+ Default theme
@@ -27,8 +34,8 @@ include($include_url . 'css/animate.css');
  *****************************/
 /* change the ID & dimensions to match your slider */
 #slider {
-	width: 700px;
-	height: 390px;
+	width: 980px;
+	height: 310px;
 	list-style: none;
 	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
 	overflow-y: auto;
@@ -313,9 +320,13 @@ include($include_url . 'css/animate.css');
 //include($include_url . 'css/theme-metallic.css');
 ?>
 /*
-	AnythingSlider v1.8+ Metallic theme
-	By Rob Garrison
-*/
+	AnythingSlider v1.8+ cs-portfolio theme
+	By Curtis Scott (http://www.curtisscott.com/portfolio.html)
+***
+Note: the nav-cs-portfolio.png used for navigation and slideshow buttons uses a semi-transparent png,
+through which the background color is seen... so colors set will turn out darker than normal
+***/
+
 /*****************************
   SET DEFAULT DIMENSIONS HERE
  *****************************/
@@ -336,206 +347,165 @@ include($include_url . 'css/animate.css');
  Default state (no keyboard focus)
  ==================================*/
 /* Overall Wrapper */
-.anythingSlider-metallic {
-	margin: 0 auto;
-	/* 23px right & left padding for the navigation arrows */
-	padding: 0 23px;
+.anythingSlider-cs-portfolio {
+	margin: 0 auto 50px auto; /* added 50px to bottom to accomodate controls */
+	padding: 0;
 }
+
 /* slider window - top & bottom borders, default state */
-.anythingSlider-metallic .anythingWindow {
-	border-top: 3px solid #333;
-	border-bottom: 3px solid #333;
+.anythingSlider-cs-portfolio .anythingWindow {
+	border: 0;
 }
 /* Navigation buttons + start/stop button, default state */
-.anythingSlider-metallic .anythingControls a {
-	background: transparent url(<?php echo $vendor_url; ?>images/arrows-metallic.png) -68px -40px repeat-x;
+.anythingSlider-cs-portfolio .anythingControls a {
+	background: #fff url(<?php echo $vendor_url; ?>images/cs-portfolio.png) right -20px no-repeat;
 	color: #000;
-	border: #000 1px solid;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 /* Navigation current button, default state */
-.anythingSlider-metallic .anythingControls a.cur,
-.anythingSlider-metallic .anythingControls a:hover {
-	background-position: -70px -137px;
-	background-color: #888;
+.anythingSlider-cs-portfolio .anythingControls a.cur,
+.anythingSlider-cs-portfolio .anythingControls a:hover {
+	background-color: #0d5c9f;
 	color: #000;
 }
 
 /* start-stop button, stopped, default state */
-.anythingSlider-metallic .anythingControls a.start-stop {
-	background: #040;
+.anythingSlider-cs-portfolio .anythingControls a.start-stop {
+	background-color: #080;
+	background-position: right top;
 	color: #ddd;
-	/* top shadow */
-	-moz-box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
-	-webkit-box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
-	box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.5);
+}
+/* start-stop button, default hovered text color (when visible) */
+.anythingSlider-cs-portfolio .anythingControls a.start-stop:hover,
+.anythingSlider-cs-portfolio .anythingControls a.start-stop.hover {
+	background-color: #0f0;
+	color: #fff;
 }
 /* start-stop button, playing, default state */
-.anythingSlider-metallic .anythingControls a.start-stop.playing {
+.anythingSlider-cs-portfolio .anythingControls a.start-stop.playing {
 	background-color: #800;
 }
-
-/* start-stop button, default hovered text color (when visible) */
-/* hide nav/start-stop background image shadow on hover - makes the button appear to come forward */
-.anythingSlider-metallic .anythingControls a.start-stop:hover,
-.anythingSlider-metallic .anythingControls a.start-stop.hover,
-.anythingSlider-metallic .anythingControls a.start-stop .anythingControls ul a:hover {
-	color: #fff;
-	/* clear top shadow */
-	-moz-box-shadow: inset 0 0 0 #000000;
-	-webkit-box-shadow: inset 0 0 0 #000000;
-	box-shadow: inset 0 0 0 #000000;
-}
-
-/*
- =================================
- Active State (has keyboard focus)
- =================================
-*/
-/* slider window - top & bottom borders, active state */
-.anythingSlider-metallic.activeSlider .anythingWindow {
-	border-color: #0355a3;
-}
-
-/* Navigation buttons, active state */
-.anythingSlider-metallic.activeSlider .anythingControls a {
-	background-color: transparent;
-}
-/* Navigation current button, active state */
-.anythingSlider-metallic.activeSlider .anythingControls a.cur,
-.anythingSlider-metallic.activeSlider .anythingControls a:hover {
-	background-position: -76px -57px;
-	background-color: #ccc;
-}
-
-/* start-stop button, stopped, active state */
-.anythingSlider-metallic.activeSlider .anythingControls a.start-stop {
-	background: #080;
-	color: #fff;
-}
-/* start-stop button, playing, active state */
-.anythingSlider-metallic.activeSlider .anythingControls a.start-stop.playing {
-	color: #fff;
-	background: #d00;
-}
-/* start-stop button, active slider hovered text color (when visible) */
-.anythingSlider-metallic.activeSlider .start-stop:hover,
-.anythingSlider-metallic.activeSlider .start-stop.hover {
-	color: #fff;
+.anythingSlider-cs-portfolio .anythingControls a.start-stop.playing:hover {
+	background-color: #f00;
 }
 
 /************************
   NAVIGATION POSITIONING
  ************************/
 /* Navigation Arrows */
-.anythingSlider-metallic .arrow {
-	top: 50%;
-	position: absolute;
+.anythingSlider-cs-portfolio .arrow {
 	display: block;
+	position: absolute;
+	bottom: -38px;
 	z-index: 100;
 }
-
-.anythingSlider-metallic .arrow a {
+.anythingSlider-cs-portfolio .arrow a {
 	display: block;
-	width: 45px;
-	height: 95px;
-	margin: -47.5px 0 0 0; /* half height of image */
+	width: 26px;
+	height: 27px;
 	text-align: center;
 	outline: 0;
-	background: url(<?php echo $vendor_url; ?>images/arrows-metallic.png) no-repeat;
+	background: url(<?php echo $vendor_url; ?>images/cs-portfolio.png) no-repeat;
 }
 
 /* back arrow */
-.anythingSlider-metallic .back { left: 0; }
-.anythingSlider-metallic .back a { background-position: left bottom; }
-.anythingSlider-metallic .back a:hover,
-.anythingSlider-metallic .back a.hover { background-position: left top; }
+.anythingSlider-cs-portfolio .back { left: 20px; }
+.anythingSlider-cs-portfolio .back a { background-position: left top; }
+.anythingSlider-cs-portfolio .back a:hover,
+.anythingSlider-cs-portfolio .back a.hover { background-position: left -27px; }
+
 /* forward arrow */
-.anythingSlider-metallic .forward { right: 0; }
-.anythingSlider-metallic .forward a { background-position: right bottom; }
-.anythingSlider-metallic .forward a:hover,
-.anythingSlider-metallic .forward a.hover { background-position: right top; }
+.anythingSlider-cs-portfolio .forward { right: 20px; }
+.anythingSlider-cs-portfolio .forward a { background-position: -24px top; }
+.anythingSlider-cs-portfolio .forward a:hover,
+.anythingSlider-cs-portfolio .forward a.hover { background-position: -24px -27px; }
 
 /* Navigation Links */
-.anythingSlider-metallic .anythingControls {
-	height: 15px; /* limit height, needed for IE9 of all things */
-	outline: 0;
-	display: none;
-	float: right;
-	position: absolute;
-	bottom: 5px;
-	right: 20px;
-	margin: 0 45px;
+.anythingSlider-cs-portfolio .anythingControls {
+	position: relative;
+	background: url(<?php echo $vendor_url; ?>images/cs-portfolio.png) repeat-x bottom center;
+	height: 49px;
+	margin: 0 auto;
+	padding-left: 75px;
+	text-align: center;
+}
+.anythingSlider-cs-portfolio .anythingControls ul {
+	margin: 0;
+	padding: 0;
 	z-index: 100;
-	opacity: 0.90;
-	filter: alpha(opacity=90);
 }
-
-.anythingSlider-metallic .anythingControls ul {
+.anythingSlider-cs-portfolio .anythingControls ul.thumbNav {
+	padding-top: 18px;
+}
+.anythingSlider-cs-portfolio .anythingControls ul li {
 	margin: 0;
 	padding: 0;
-	float: left;
+	display: inline;
 }
-.anythingSlider-metallic .anythingControls ul li {
-	list-style: none;
+.anythingSlider-cs-portfolio .anythingControls ul a {
+	font: 11px/18px Georgia, Serif;
+	width: 17px;
+	height: 17px;
+	margin: 0 5px 0 0;
+	padding: 0;
 	float: left;
-	margin: 0;
-	padding: 0;
-}
-.anythingSlider-metallic .anythingControls ul a {
-	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin: 3px;
-	padding: 0;
 	text-decoration: none;
 	text-align: center;
 	outline: 0;
-}
-
-.anythingSlider-metallic .anythingControls span {
-	display: block;
-	visibility: hidden;
+	border: 0;
 }
 
 /* navigationSize window */
-.anythingSlider-metallic .anythingControls .anythingNavWindow {
+.anythingSlider-cs-portfolio .anythingControls .anythingNavWindow {
+	margin: 0 5px 0 0;
 	overflow: hidden;
 	float: left;
 }
-/* navigationSize nav arrow positioning */
-.anythingSlider-metallic .anythingControls li.prev a span,
-.anythingSlider-metallic .anythingControls li.next a span {
-	visibility: visible;
-	position: relative;
-	top: -6px; /* bring navigationSize text arrows into view */
-	color: #fff;
+.anythingSlider-cs-portfolio .anythingControls li.next a,
+.anythingSlider-cs-portfolio .anythingControls li.prev a {
+	margin: 19px 5px 0 5px;
+	width: 16px;
+	height: 15px;
+	background: url(<?php echo $vendor_url; ?>images/cs-portfolio.png) -25px -54px no-repeat;
+}
+.anythingSlider-cs-portfolio .anythingControls li.prev a {
+	background-position: -9px -54px;
+}
+.anythingSlider-cs-portfolio .anythingControls li.next a:hover {
+	background-position: -56px -54px;
+}
+.anythingSlider-cs-portfolio .anythingControls li.prev a:hover {
+	background-position: -41px -54px;
 }
 
 /* Autoplay Start/Stop button */
-.anythingSlider-metallic .anythingControls .start-stop {
-	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin: 3px;
+.anythingSlider-cs-portfolio .anythingControls .start-stop {
+	right: 60px;
+	top: 15px;
+	margin: 0;
 	padding: 0;
+	position: absolute;
 	text-align: center;
-	text-decoration: none;
+	width: 20px;
+	height: 20px;
 	z-index: 100;
-	outline: 0;
+	border: 0;
 }
 
 /***********************
 IE8 AND OLDER STYLING
 ***********************/
+
 /* Navigation Arrows */
-.as-oldie .anythingSlider-metallic .arrow {
-	top: 40%;
+.as-oldie .anythingSlider-cs-portfolio .anythingControls a span {
+	line-height: 1px; /* needed for IE7 */
 }
-.as-oldie .anythingSlider-metallic .arrow a {
-	margin: 0;
+
+/* IE7 png fix*/
+.as-oldie .anythingSlider-cs-portfolio .arrow a,
+.as-oldie .anythingSlider-cs-portfolio .anythingControls,
+.as-oldie .anythingSlider-cs-portfolio .anythingControls a {
+	_background:none;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo $vendor_url; ?>images/cs-portfolio.png',sizingMethod='crop');
 }
 
 /***********************
@@ -567,8 +537,9 @@ IE8 AND OLDER STYLING
 }
 
 /* Navigation arrow text; indent moved to span inside "a", for IE7;
-	apparently, a negative text-indent on an "a" link moves the link as well as the text */
-.anythingSlider .arrow span {
+  apparently, a negative text-indent on an "a" link moves the link as well as the text */
+.anythingSlider .arrow span,
+.anythingSlider .anythingControls span {
 	display: block;
 	visibility: hidden;
 }
@@ -589,7 +560,6 @@ IE8 AND OLDER STYLING
 .anythingSlider .vertical .panel {
 	float: none;
 }
-
 /* fade mode */
 .anythingSlider .fade .panel {
 	float: none;
@@ -616,6 +586,7 @@ IE8 AND OLDER STYLING
 .anythingSlider.rtl .start-stop { /* float: right; */ } /* move start/stop button - in case you want to switch sides */
 
 /* probably not necessary, but added just in case */
+.anythingSlider,
 .anythingSlider .anythingWindow,
 .anythingSlider .anythingControls ul a,
 .anythingSlider .arrow a,
@@ -625,5 +596,4 @@ IE8 AND OLDER STYLING
 	-moz-transition-duration: 0;
 	-webkit-transition-duration: 0;
 }
-
 

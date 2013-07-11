@@ -136,7 +136,7 @@ $('#slider').anythingSlider({
 $(function(){
 	$('#slider<?php echo $anythingSliderUniqueID; ?>').anythingSlider({
 		<?php echo $sliderparams; ?>
-		theme : 'metallic',
+		theme : 'cs-portfolio', // minimalist-round, minimalist-square, cs-portfolio, construction, metallic, default
 		autoPlay : true,
 		mode : 'f',   // fade mode
 	});
