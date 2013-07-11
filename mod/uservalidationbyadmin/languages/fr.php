@@ -35,7 +35,7 @@ Votre compte sur %s a été activé par l'administrateur.
 
 Vous pouvez vous connecter dès maintenant avec les accès suivants :
 
-Indeitifiant de connexion : %s
+Identifiant de connexion : %s
 Mot de passe : celui que vous avez indiqué lors de l'inscription
 
 %s
