@@ -142,7 +142,7 @@ if (elgg_is_logged_in()) {
 					<?php } else {
 						// Bouton de connexion partout sauf sur la home - en fait si : page différente
 						//if (full_url() != $url) 
-						echo '<nav><ul><li><a href="' . $url . 'login">' . elgg_echo('login') . '</a></li></ul></nav>';
+						echo '<nav><ul><li><a href="' . $url . 'login">' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
 					} ?>
 				</div>
 			</header>
