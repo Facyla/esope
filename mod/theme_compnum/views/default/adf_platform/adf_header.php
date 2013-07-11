@@ -140,8 +140,9 @@ if (elgg_is_logged_in()) {
 							</ul>
 						</nav>
 					<?php } else {
-						// Bouton de connexion partout sauf sur la home
-						if (full_url() != $url) echo '<nav><ul><li><a href="' . $url . '">' . elgg_echo('login') . '</a></li></ul></nav>';
+						// Bouton de connexion partout sauf sur la home - en fait si : page différente
+						//if (full_url() != $url) 
+						echo '<nav><ul><li><a href="' . $url . 'login">' . elgg_echo('login') . '</a></li></ul></nav>';
 					} ?>
 				</div>
 			</header>
