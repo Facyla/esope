@@ -52,6 +52,7 @@ header.notloggedin { background: #523866; border-top: 0; height: 48px; }
 header.notloggedin h1 { margin-top: 0; font-size: 16px; font-family:Lato; font-weight:bold; }
 header.notloggedin h1 a:hover { text-decoration:none; }
 header.notloggedin .header-subtitle { font-size: 13.5px; margin-top:0; font-family:LatoLight; }
+header.notloggedin nav { top:0; }
 header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod/theme_compnum/graphics/coche.png") no-repeat scroll left top transparent; padding-left:36px; display:block; height:47px; line-height:44px; font-size:17px; text-transform:lowercase; margin-top:0; padding-left:50px; }
 
 #adf-homepage #home_intro p { color:#777; font-family:Lato; font-size:18px; padding: 8px 30px 20px 20px; width:580px; text-align:justify; }

@@ -38,7 +38,7 @@ if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><
 	<div id="theme-compnum-footer" class="interne">
 		<?php
 		if (!empty($side_content)) {
-			echo '<div id="footer-contacts">' . $side_content . '<br /></div>';
+			echo '<div id="footer-contacts">' . $side_content . '<div class="clearfloat"></div><br /></div>';
 		}
 		echo $footer;
 		?>
@@ -46,8 +46,10 @@ if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><
 	</div>
 </footer>
 
+<!--
 <div class="interne credits">
 	<p>Conception & réalisation : Facyla ~ <a href="http://www.items.fr/" target="_blank" title="Items International (nouvelle fenêtre)">Items International</a></p>
 	<p class="right">Plateforme construite avec le framework opensource Elgg 1.8</p>
 </div>
+//-->
 
