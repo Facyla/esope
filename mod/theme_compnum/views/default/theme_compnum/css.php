@@ -54,8 +54,8 @@ header.notloggedin h1 a:hover { text-decoration:none; }
 header.notloggedin .header-subtitle { font-size: 13.5px; margin-top:0; font-family:LatoLight; }
 header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod/theme_compnum/graphics/coche.png") no-repeat scroll left top transparent; padding-left:36px; display:block; height:47px; line-height:44px; font-size:17px; text-transform:lowercase; margin-top:0; padding-left:50px; }
 
-#home_intro p { color: #777; font-family: Lato; font-size: 20px; padding: 0 30px 20px 20px; width: 580px; text-align: justify; }
-#adf-homepage a, #adf-homepage a:hover, #adf-homepage a:active, #adf-homepage a:focus { color:#777 !important; background: whitesmoke; border-radius: 5px; width: 230px; float: left; box-shadow: 0 2px 3px; height: 30px; font-family: Lato; font-size: 18px; font-weight: normal; margin: 0 20px; padding: 8px 12px; }
+#adf-homepage #home_intro p { color:#777; font-family:Lato; font-size:18px; padding: 8px 30px 20px 20px; width:580px; text-align:justify; }
+#adf-homepage a, #adf-homepage a:hover, #adf-homepage a:active, #adf-homepage a:focus { color:#777 !important; background: whitesmoke; border-radius: 5px; width: 230px; float: left; box-shadow: 0 2px 3px; font-family: Lato; font-size: 18px; text-shadow:none; margin: 0 20px; padding: 8px 12px; }
 
 
 
