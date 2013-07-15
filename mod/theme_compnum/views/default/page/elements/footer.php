@@ -24,7 +24,7 @@ $slideshare = elgg_get_plugin_setting('slideshare', 'adf_public_platform');
 
 // Construction contenu
 $side_content = '';
-if (!empty($email)) $side_content .= 'CONTACT&nbsp;: <a href="' . $email . '">' . $email . '</a><br />';
+if (!empty($email)) $side_content .= '<p>CONTACT&nbsp;: <a href="' . $email . '">' . $email . '</a></p><br />';
 if (!empty($slideshare)) $side_content .= '<a href="' . $slideshare . '" class="contact-slideshare"><img src="' . $imgurl . 'slideshare-16.png" alt="Slideshare" /></a> &nbsp; ';
 if (!empty($dailymotion)) $side_content .= '<a href="' . $dailymotion . '" class="contact-dailymotion"><img src="' . $imgurl . 'dailymotion-16.png" alt="Dailymotion" /></a> &nbsp; ';
 if (!empty($twitter)) $side_content .= '<a href="' . $twitter . '" class="contact-twitter"><img src="' . $imgurl . 'twitter-16.png" alt="Twitter" /></a> &nbsp; ';
@@ -42,6 +42,7 @@ if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><
 		}
 		echo $footer;
 		?>
+		<div class="clearfloat"></div>
 	</div>
 </footer>
 
