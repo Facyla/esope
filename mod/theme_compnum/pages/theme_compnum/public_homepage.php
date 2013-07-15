@@ -26,8 +26,8 @@ $content = '';
 $content .= '<style>
 body > section { padding-top:0; }
 .home-slider p { margin-bottom: 15px; color: white; font-family: Lato; font-size: 27px; text-transform: uppercase; font-weight: bold; }
-.home-slider a { color: rgb(175,175,0175); background: #efefef; text-shadow: -1px 1px 0px #666;
-font-size: 20px !important; font-family: Lato; padding: 15px 32px; border-radius: 24px; border: 1px solid black; box-shadow: 0 0 12px 0px #fff; text-decoration: none; text-transform: uppercase; font-weight: normal !important; }
+.home-slider a { color: rgb(175,175,0175); background: #efefef; text-shadow: -1px 1px 0px #888;
+font-size: 20px !important; font-family:Lato; padding: 15px 32px; border-radius: 24px; border: 2px solid #696; box-shadow: 0 0 12px 0px #fff; text-decoration: none; text-transform: uppercase; font-weight: normal !important; }
 .home-slider img { float:right; width:350px; margin-right:40px; }
 </style>';
 $content .= '<div style="background: #92b025; width:100%;">';
