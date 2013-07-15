@@ -65,9 +65,10 @@ header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod
 
 /* Footer */
 footer { height:auto !important; background:#92B025 !important; }
+#theme-compnum-footer { margin-top:12px; }
 footer * { font-family:Lato; color:white; font-size:16px; font-weight:bold; }
 footer a:hover, footer a:active, footer a:focus { color:white; }
-#footer-contacts { float:right; width:250px; margin: 12px 20px; padding: 8px 12px; background:#92B025; box-shadow: 0 1px 3px 2px #669966; }
+#footer-contacts { float:right; width:250px; margin: 0 0 12px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
 #footer-contacts a img { float:left; margin: 0px 2px; }
 
 
