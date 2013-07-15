@@ -62,3 +62,8 @@ header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod
 
 /* Bandeau connecté */
 
+
+/* Footer */
+footer * { font-family:Lato; }
+
+
