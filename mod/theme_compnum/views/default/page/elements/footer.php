@@ -9,7 +9,7 @@
  */
 
 $url = $vars['url'];
-$imgurl = $vars['url'] . 'mod/adf_public_platform/img/theme/';
+$imgurl = $vars['url'] . 'mod/adf_public_platform/img/social-icons/';
 
 echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 
@@ -24,13 +24,13 @@ $slideshare = elgg_get_plugin_setting('slideshare', 'adf_public_platform');
 
 // Construction contenu
 $side_content = '';
-if (!empty($email)) $side_content .= 'CONTACT&nbsp;: ' . $email . '<br />';
-if (!empty($slideshare)) $side_content .= '<a href="' . $slideshare . '" class="contact-slideshare">Slideshare</a> &nbsp; ';
-if (!empty($dailymotion)) $side_content .= '<a href="' . $dailymotion . '" class="contact-dailymotion">Dailymotion</a> &nbsp; ';
-if (!empty($twitter)) $side_content .= '<a href="' . $twitter . '" class="contact-twitter">Twitter</a> &nbsp; ';
-if (!empty($facebook)) $side_content .= '<a href="' . $facebook . '" class="contact-facebook">Facebook</a> &nbsp; ';
-//if (!empty($flickr)) $side_content .= '<a href="' . $flickr . '" class="contact-flickr">FlickR</a> &nbsp; ';
-if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss">RSS</a> &nbsp; ';
+if (!empty($email)) $side_content .= 'CONTACT&nbsp;: <a href="' . $email . '">' . $email . '</a><br />';
+if (!empty($slideshare)) $side_content .= '<a href="' . $slideshare . '" class="contact-slideshare"><img src="' . $url . 'slideshare-16.png" alt="Slideshare" /></a> &nbsp; ';
+if (!empty($dailymotion)) $side_content .= '<a href="' . $dailymotion . '" class="contact-dailymotion"><img src="' . $url . 'dailymotion-16.png" alt="Dailymotion" /></a> &nbsp; ';
+if (!empty($twitter)) $side_content .= '<a href="' . $twitter . '" class="contact-twitter"><img src="' . $url . 'twitter-16.png" alt="Twitter" /></a> &nbsp; ';
+if (!empty($facebook)) $side_content .= '<a href="' . $facebook . '" class="contact-facebook"><img src="' . $url . 'facebook-16.png" alt="Facebook" /></a> &nbsp; ';
+//if (!empty($flickr)) $side_content .= '<a href="' . $flickr . '" class="contact-flickr"><img src="' . $url . 'flickr-16.png" alt="FlickR" /></a> &nbsp; ';
+if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><img src="' . $url . 'rss-16.png" alt="RSS" /></a> &nbsp; ';
 ?>
 
 
