@@ -265,6 +265,8 @@ $fr = array(
 	'adf_platform:settings:contact:pinterest:help' => "",
 	'adf_platform:settings:contact:tumblr' => "URL de la page/compte Tumblr",
 	'adf_platform:settings:contact:tumblr:help' => "",
+	'adf_platform:settings:contact:slideshare' => "URL de la page/compte Slideshare",
+	'adf_platform:settings:contact:slideshare:help' => "",
 	//'' => "",
 	
 	
