@@ -340,47 +340,47 @@ $(function() {
 			<?php echo elgg_echo('adf_platform:settings:contactemail:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[contactemail]', 'value' => $vars['entity']->contactemail, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:rss'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:rss'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:rss:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[rss]', 'value' => $vars['entity']->rss, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:twitter'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:twitter'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:twitter:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[twitter]', 'value' => $vars['entity']->twitter, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:facebook'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:facebook'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:facebook:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[facebook]', 'value' => $vars['entity']->facebook, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:googleplus'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:googleplus'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:googleplus:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[googleplus]', 'value' => $vars['entity']->googleplus, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:linkedin'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:linkedin'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:linkedin:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[linkedin]', 'value' => $vars['entity']->linkedin, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:netvibes'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:netvibes'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:netvibes:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[netvibes]', 'value' => $vars['entity']->netvibes, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:flickr'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:flickr'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:flickr:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[flickr]', 'value' => $vars['entity']->flickr, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:youtube'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:youtube'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:youtube:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[youtube]', 'value' => $vars['entity']->youtube, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:dailymotion'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:dailymotion'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:dailymotion:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[dailymotion]', 'value' => $vars['entity']->dailymotion, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:pinterest'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:pinterest'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:pinterest:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[pinterest]', 'value' => $vars['entity']->pinterest, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:tumblr'); ?></label><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:tumblr'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:netvibes:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[tumblr]', 'value' => $vars['entity']->tumblr, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
