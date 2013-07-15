@@ -46,6 +46,8 @@ $font_base = $CONFIG->url . '/mod/theme_compnum/fonts/';
 }
 
 
+/* Bandeau (commun) */
+header * { font-family:Lato; }
 
 /* Bandeau déconnecté */
 header.notloggedin { background: #523866; border-top: 0; height: 48px; }
@@ -58,6 +60,7 @@ header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod
 #adf-homepage #home_intro p { color:#777; font-family:Lato; font-size:18px; padding: 8px 30px 20px 20px; width:580px; text-align:justify; }
 #adf-homepage a, #adf-homepage a:hover, #adf-homepage a:active, #adf-homepage a:focus { color:#777 !important; background: whitesmoke; border-radius: 5px; width: 230px; float: left; box-shadow: 0 2px 3px; font-family: Lato; font-size: 18px; text-shadow:none; margin: 0 20px; padding: 8px 12px; }
 
+.anythingslider { box-shadow: 0px 0px 1px 2px #696; }
 .anythingSlider-cs-portfolio .anythingControls a.cur, .anythingSlider-cs-portfolio .anythingControls a:hover { background-color: #92b025; }
 
 
@@ -65,7 +68,7 @@ header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod
 
 
 /* Footer */
-footer { height:auto !important; background:#92B025 !important; }
+footer { height:auto !important; background:#92B025 !important; box-shadow: 0px -2px 1px 0 #696; }
 #theme-compnum-footer { margin-top:12px; }
 footer * { font-family:Lato; color:white; font-size:16px; font-weight:bold; }
 footer a:hover, footer a:active, footer a:focus { color:white; }
