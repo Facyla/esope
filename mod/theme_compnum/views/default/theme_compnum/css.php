@@ -64,6 +64,8 @@ header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod
 
 
 /* Footer */
+footer { height:auto; }
 footer * { font-family:Lato; color:white; font-size:16px; font-weight:bold; }
+footer a:hover, footer a:active, footer a:focus { color:white; }
 
 

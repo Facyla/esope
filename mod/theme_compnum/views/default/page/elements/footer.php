@@ -35,10 +35,10 @@ if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><
 
 
 <footer style="background:#92B025;">
-	<div id="theme-compnum-footer">
+	<div id="theme-compnum-footer" class="interne">
 		<?php
 		if (!empty($side_content)) {
-			echo '<div style="float:right; width:280px; margin: 12px 20px; padding: 8px 12px; background:#92B025; box-shadow: 0 1px 3px 2px #669966;">' . $side_content . '</div>';
+			echo '<div style="float:right; width:250px; margin: 12px 20px; padding: 8px 12px; background:#92B025; box-shadow: 0 1px 3px 2px #669966;">' . $side_content . '</div>';
 		}
 		echo $footer;
 		?>
