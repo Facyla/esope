@@ -25,20 +25,20 @@ $slideshare = elgg_get_plugin_setting('slideshare', 'adf_public_platform');
 // Construction contenu
 $side_content = '';
 if (!empty($email)) $side_content .= '<p>CONTACT&nbsp;: <a href="' . $email . '">' . $email . '</a></p><br />';
-if (!empty($slideshare)) $side_content .= '<a href="' . $slideshare . '" class="contact-slideshare"><img src="' . $imgurl . 'slideshare-16.png" alt="Slideshare" /></a> &nbsp; ';
-if (!empty($dailymotion)) $side_content .= '<a href="' . $dailymotion . '" class="contact-dailymotion"><img src="' . $imgurl . 'dailymotion-16.png" alt="Dailymotion" /></a> &nbsp; ';
-if (!empty($twitter)) $side_content .= '<a href="' . $twitter . '" class="contact-twitter"><img src="' . $imgurl . 'twitter-16.png" alt="Twitter" /></a> &nbsp; ';
-if (!empty($facebook)) $side_content .= '<a href="' . $facebook . '" class="contact-facebook"><img src="' . $imgurl . 'facebook-16.png" alt="Facebook" /></a> &nbsp; ';
-//if (!empty($flickr)) $side_content .= '<a href="' . $flickr . '" class="contact-flickr"><img src="' . $imgurl . 'flickr-16.png" alt="FlickR" /></a> &nbsp; ';
-if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><img src="' . $imgurl . 'rss-16.png" alt="RSS" /></a> &nbsp; ';
+if (!empty($slideshare)) $side_content .= '<a href="' . $slideshare . '" class="contact-slideshare"><img src="' . $imgurl . 'slideshare-32.png" alt="Slideshare" /></a> &nbsp; ';
+if (!empty($dailymotion)) $side_content .= '<a href="' . $dailymotion . '" class="contact-dailymotion"><img src="' . $imgurl . 'dailymotion-32.png" alt="Dailymotion" /></a> &nbsp; ';
+if (!empty($twitter)) $side_content .= '<a href="' . $twitter . '" class="contact-twitter"><img src="' . $imgurl . 'twitter-32.png" alt="Twitter" /></a> &nbsp; ';
+if (!empty($facebook)) $side_content .= '<a href="' . $facebook . '" class="contact-facebook"><img src="' . $imgurl . 'facebook-32.png" alt="Facebook" /></a> &nbsp; ';
+//if (!empty($flickr)) $side_content .= '<a href="' . $flickr . '" class="contact-flickr"><img src="' . $imgurl . 'flickr-32.png" alt="FlickR" /></a> &nbsp; ';
+if (!empty($rss)) $side_content .= '<a href="' . $rss . '" class="contact-rss"><img src="' . $imgurl . 'rss-32.png" alt="RSS" /></a> &nbsp; ';
 ?>
 
 
-<footer style="background:#92B025;">
+<footer>
 	<div id="theme-compnum-footer" class="interne">
 		<?php
 		if (!empty($side_content)) {
-			echo '<div style="float:right; width:250px; margin: 12px 20px; padding: 8px 12px; background:#92B025; box-shadow: 0 1px 3px 2px #669966;">' . $side_content . '</div>';
+			echo '<div id="footer-contacts">' . $side_content . '</div>';
 		}
 		echo $footer;
 		?>
