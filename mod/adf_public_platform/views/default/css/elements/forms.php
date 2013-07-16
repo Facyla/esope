@@ -201,10 +201,10 @@ input.button {
 }
 form input#adf-search-input {
 	border: 0 none;
-	border-radius: 10px 0 0 10px;
-	-moz-border-radius: 10px 0 0 10px;
-	-webkit-border-radius: 10px 0 0 10px;
-	-o-border-radius: 10px 0 0 10px;
+	border-radius: 8px 0 0 8px;
+	-moz-border-radius: 8px 0 0 8px;
+	-webkit-border-radius: 8px 0 0 8px;
+	-o-border-radius: 8px 0 0 8px;
 	height: 27px;
 	padding: 2px 7px;
 	width: 210px;
