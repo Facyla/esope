@@ -78,9 +78,10 @@ font-size: 20px !important; font-family:Lato; padding: 15px 32px; border-radius:
 /* Bandeau connecté */
 header.loggedin { background:#523866; border-top:0; height:76px; }
 header.loggedin h1 { font-family:Lato; font-size: 22px; text-transform:none; }
+header.loggedin h1 a:hover { text-decoration:none; }
 header.loggedin .header-subtitle { margin-top: 0px; font-family: LatoLight; font-size: 13.5px; }
-header.loggedin nav ul li a { font-size: 13px; line-height: 13px; padding-top: 0px !important; }
-#adf-profil { font-size: 14px; }
+header.loggedin nav ul li a { font-size: 12px; line-height: 12px; padding-top: 0px !important; }
+#adf-profil { font-size: 12px; }
 #theme_compnum-search { margin-top: -16px; }
 form input#adf-search-submit-button { background:#888; border: 1px solid #888; padding: 5px 7px 6px 8px; }
 form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:<?php echo $color1; ?>; border: 1px solid <?php echo $color1; ?>; padding: 5px 7px 6px 8px; }
@@ -89,10 +90,11 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 /* Footer */
 footer { height:auto !important; background: #7FB622 !important; box-shadow: 0px -2px 1px 0 #696; }
 #theme-compnum-footer { margin-top:12px; }
-footer * { font-family:LatoLight; color:#fafafa; font-size:16px; font-weight:bold; }
+footer * { font-family:Lato; color:#fafafa; font-size:16px; font-weight:bold; }
 footer a:hover, footer a:active, footer a:focus { color:white; }
-#footer-contacts { float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
-#footer-contacts a img { float:left; margin: 0px 2px; }
+#footer-contacts { font-family:LatoLight; float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
+#footer-contacts a img { float:left; margin: 0px 2px; opacity:0.8; }
+#footer-contacts a img:hover { opacity:1; }
 
 /* Modules - widgets */
 section div.module header { min-height:30px; }
