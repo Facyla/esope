@@ -48,6 +48,9 @@ $color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
 
 
 /* Général */
+html { font-family:Lato; }
+.home_static_widget { border: 0; box-shadow: 2px 2px 5px 0 #999; }
+
 .elgg-main { box-shadow: 2px 2px 5px 0px #888; }
 form.elgg-form { background: transparent; }
 
@@ -92,7 +95,8 @@ footer { height:auto !important; background: #7FB622 !important; box-shadow: 0px
 #theme-compnum-footer { margin-top:12px; }
 footer * { font-family:Lato; color:#fafafa; font-size:16px; font-weight:bold; }
 footer a:hover, footer a:active, footer a:focus { color:white; }
-#footer-contacts { font-family:LatoLight; float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
+#footer-contacts { float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
+#footer-contacts * { font-family:LatoLight; }
 #footer-contacts a img { float:left; margin: 0px 2px; opacity:0.8; }
 #footer-contacts a img:hover { opacity:1; }
 
@@ -101,4 +105,10 @@ section div.module header { min-height:30px; }
 section div.module header h2 { font-family: Lato; text-transform: none; }
 section div.module header ul { margin: 4px 6px 0 0; }
 section div.module header ul li a { margin: 0 0 0 6px; }
+
+
+/* Boutons */
+.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color: #666; text-shadow: 0px 1px 1px #fff; }
+.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { text-shadow: 1px 1px 1px #666; }
+
 
