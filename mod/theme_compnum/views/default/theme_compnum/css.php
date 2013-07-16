@@ -117,6 +117,11 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 .elgg-module-info > .elgg-body { padding: 0 0 0; }
 .groups-widget-viewall { margin: 6px 4px 0 0; }
 
+.elgg-owner-block { box-shadow: 0 0 3px #666; }
+.elgg-sidebar .elgg-module-aside { margin-top:20px; }
+.elgg-menu-groups-my-status li a { width: 191px; }
+.elgg-menu-groups-my-status li a:hover { width: 191px; background-color: #608000; }
+
 
 /* Boutons */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color: #666; text-shadow: 0px 1px 1px #fff; }
