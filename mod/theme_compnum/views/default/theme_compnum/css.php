@@ -108,10 +108,20 @@ section div.module header h2 { font-family: Lato; text-transform: none; }
 section div.module header ul { margin: 4px 6px 0 0; }
 section div.module header ul li a { margin: 0 0 0 6px; }
 
+.groups-profile-icon img { width: 120px; float: left; margin-right:12px; }
+.groups-stats { margin-top:0; padding-top:2px; }
+.groups-profile > .elgg-image { margin-right:12px; width:260px; float:left; }
+
+.elgg-module-info > .elgg-head { padding: 0 5px 2px; }
+.elgg-module-info > .elgg-head h3 { font-family: Lato; margin-top:2px; }
+.elgg-module-info > .elgg-body { padding: 0 0 0; }
+.groups-widget-viewall { margin: 6px 4px 0 0; }
+
 
 /* Boutons */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color: #666; text-shadow: 0px 1px 1px #fff; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { text-shadow: 1px 1px 1px #666; }
+.elgg-menu-entity .elgg-menu-item-edit a { color: #777; }
 
 /* Profil */
 #profile-owner-block { background-color: transparent !important; }
