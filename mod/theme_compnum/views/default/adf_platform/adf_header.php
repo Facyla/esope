@@ -145,6 +145,16 @@ if (elgg_is_logged_in()) {
 						echo '<nav><ul><li><a href="' . $url . 'login">' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
 					} ?>
 				</div>
+				
+				<?php if (elgg_is_logged_in() && !$display_menu) { ?>
+					<form id="theme_compnum-search" action="<?php echo $url . 'search'; ?>" method="post">
+						<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+						<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
+						<input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
+						<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
+					</form>
+				<?php } ?>
+				
 			</header>
 			
 			<?php if (elgg_is_logged_in() && $display_menu) { ?>

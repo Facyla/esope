@@ -381,8 +381,12 @@ $(function() {
 			<?php echo elgg_view('input/text', array( 'name' => 'params[pinterest]', 'value' => $vars['entity']->pinterest, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
 		<p><label><?php echo elgg_echo('adf_platform:settings:tumblr'); ?></label><br />
-			<?php echo elgg_echo('adf_platform:settings:netvibes:help'); ?><br />
+			<?php echo elgg_echo('adf_platform:settings:tumblr:help'); ?><br />
 			<?php echo elgg_view('input/text', array( 'name' => 'params[tumblr]', 'value' => $vars['entity']->tumblr, 'js' => 'style="width:50%;"' )); ?>
+		</p><br />
+		<p><label><?php echo elgg_echo('adf_platform:settings:slideshare'); ?></label><br />
+			<?php echo elgg_echo('adf_platform:settings:slideshare:help'); ?><br />
+			<?php echo elgg_view('input/text', array( 'name' => 'params[slideshare]', 'value' => $vars['entity']->slideshare, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
 	</div>
 
