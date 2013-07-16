@@ -58,10 +58,16 @@ header.notloggedin nav { top:0; }
 header.notloggedin nav ul li a { background: url("<?php echo $CONFIG->url; ?>mod/theme_compnum/graphics/coche.png") no-repeat scroll left top transparent; padding-left:36px; display:block; height:47px; line-height:44px; font-size:17px; text-transform:lowercase; margin-top:0; padding-left:50px; }
 
 #adf-homepage #home_intro p { color:#777; font-family:Lato; font-size:18px; padding: 8px 30px 20px 20px; width:580px; text-align:justify; }
-#adf-homepage a, #adf-homepage a:hover, #adf-homepage a:active, #adf-homepage a:focus { color:#777 !important; background: whitesmoke; border-radius: 5px; width: 230px; float: left; box-shadow: 0 2px 3px; font-family: Lato; font-size: 18px; text-shadow:none; margin: 0 20px; padding: 8px 12px; }
+#adf-homepage a { color:#777 !important; background: whitesmoke; border-radius: 5px; width: 230px; float: left; box-shadow: 0 2px 3px; font-family: Lato; font-size: 18px; text-shadow:none; margin: 0 20px; padding: 8px 12px; }
+#adf-homepage a:hover, #adf-homepage a:active, #adf-homepage a:focus { color:#555 !important; background: #fafafa; }
 
 .anythingslider { box-shadow: 0px 0px 1px 2px #696; }
 .anythingSlider-cs-portfolio .anythingControls a.cur, .anythingSlider-cs-portfolio .anythingControls a:hover { background-color: #92b025; }
+.home-slider p { margin-bottom: 15px; color: white; font-family: Lato; font-size: 27px; text-transform: uppercase; font-weight: bold; }
+.home-slider a { color:#888; background:#efefef; text-shadow: -1px 1px 0px #666;
+font-size: 20px !important; font-family:Lato; padding: 15px 32px; border-radius: 24px; border: 2px solid #696; box-shadow: 0 0 12px 0px #fff; text-decoration: none; text-transform: uppercase; font-weight: normal !important; }
+.home-slider img { float:right; width:350px; margin-right:40px; }
+.textSlide a:hover, .textSlide a:active, .textSlide a:focus { background: #fafafa; color:#777; }
 
 
 /* Bandeau connecté */
