@@ -8,12 +8,12 @@ if (($profiletype == 'organisation') || elgg_is_admin_logged_in()) {
 }
 
 // Titre du bloc
-echo "<h3>Groupes de formation</h3>";
+echo "<h3>Vos groupes</h3>";
 
 //echo '<a href="' . $vars['url'] . 'dossierdepreuve/inscription?profiletype=evaluator" class="elgg-button elgg-button-action">Inviter des formateurs</a><br /><br />';
 
 if (in_array($profiletype, array('tutor', 'evaluator')) || elgg_is_admin_logged_in()) {
-	echo '<a href="' . $vars['url'] . 'groups/all" class="elgg-button elgg-button-action">Rejoindre un groupe de formation</a><br />';
+	echo '<a href="' . $vars['url'] . 'groups/all" class="elgg-button elgg-button-action">Rejoindre un groupe</a><br />';
 }
 
 

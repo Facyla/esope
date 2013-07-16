@@ -5,10 +5,10 @@ if ($filter_group_guid && ($filter_group = get_entity($filter_group_guid))) {}
 
 if (!elgg_in_context('widgets')) {
 	// Nouveaux comptes
-	echo '<a href="' . $vars['url'] . 'dossierdepreuve/inscription?profiletype=learner" class="elgg-button elgg-button-action" style="float:right;" title="Créer de nouveaux comptes pour des candidats">Créer</a>';
+	echo '<a href="' . $vars['url'] . 'dossierdepreuve/inscription?profiletype=learner" class="elgg-button elgg-button-action" style="float:right;" title="Créer de nouveaux comptes pour des candidats">Inscrire</a>';
 
 	// Titre du bloc
-	echo "<h3>Candidats</h3>";
+	echo "<h3>Mes candidats</h3>";
 
 	// Gestion des groupes des candidats
 	echo '<a href="' . $vars['url'] . 'dossierdepreuve/gestion" class="elgg-button elgg-button-action" title="Permet de rattacher à des groupes de formation les candidats qui n\'en ont pas encore.">Gérer les groupes de rattachement</a><br /><br />';

@@ -6,10 +6,10 @@ $num = 48;
 // get the correct size
 $size = $vars['entity']->icon_size;
 
-echo '<a href="' . $vars['url'] . 'dossierdepreuve/inscription?profiletype=evaluator" class="elgg-button elgg-button-action" title="Créer des comptes formateurs ou formateurs-habilitateurs" style="float:right;">Créer</a>';
+echo '<a href="' . $vars['url'] . 'dossierdepreuve/inscription?profiletype=evaluator" class="elgg-button elgg-button-action" title="Créer des comptes formateurs ou formateurs-habilitateurs" style="float:right;">Inscrire</a>';
 
 // Titre du bloc
-echo "<h3>Formateurs/habilitateurs</h3>";
+echo "<h3>Mes formateurs</h3>";
 
 /*
 <li><a href="' . $url . 'dossierdepreuve/inscription'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:register'); ?></a></li>
@@ -17,7 +17,7 @@ echo "<h3>Formateurs/habilitateurs</h3>";
 <li><a href="<?php echo $url . 'dossierdepreuve/all'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:all'); ?></a></li>
 */
 
-echo '<a href="' . $vars['url'] . 'members/formateur" class="elgg-button elgg-button-action">Rattacher des formateurs (contacts)</a><br /><br />';
+echo '<a href="' . $vars['url'] . 'members/formateur" class="elgg-button elgg-button-action">Identifier mes formateurs (contacts)</a><br /><br />';
 echo '<div class="clearfloat"></div>';
 
 

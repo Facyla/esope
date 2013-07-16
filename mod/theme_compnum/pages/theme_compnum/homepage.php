@@ -34,7 +34,7 @@ if ($profile_type_guid = $user->custom_profile_type) {
 
 $content .= '<style>
 #home_static { clear:both; }
-.home_static_widget { float:left; width:300px; height:200px; border:1px solid #608000; overflow:hidden; overflow-y:auto; box-shadow: 3px 3px 3px 0 #608000; margin: 4px 6px 8px 6px; }
+.home_static_widget {  }
 </style>';
 $content .= '<div id="home_static">';
 

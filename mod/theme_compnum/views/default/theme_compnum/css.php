@@ -49,7 +49,7 @@ $color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
 
 /* Général */
 html { font-family:Lato; }
-.home_static_widget { border: 0; box-shadow: 2px 2px 5px 0 #999; }
+.home_static_widget { float:left; width:300px; height:200px; overflow:hidden; overflow-y:auto; margin: 4px 6px 8px 6px; border: 0; box-shadow: 2px 2px 5px 0 #999; }
 
 .elgg-main { box-shadow: 2px 2px 5px 0px #888; }
 form.elgg-form { background: transparent; }
