@@ -49,6 +49,8 @@ $color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
 
 /* Général */
 html { font-family:Lato; }
+
+#home_static { clear:both; }
 .home_static_widget { float:left; width:300px; height:200px; overflow:hidden; overflow-y:auto; margin: 4px 6px 8px 6px; border: 0; box-shadow: 2px 2px 5px 0 #999; }
 
 .elgg-main { box-shadow: 2px 2px 5px 0px #888; }
@@ -112,10 +114,10 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { text-shadow: 1px 1px 1px #666; }
 
 /* Profil */
-#profile-owner-block { background-color: #fff; }
+#profile-owner-block { background-color: transparent !important; }
 #profile-owner-block a.elgg-button-action { width: 200px; text-align: center; margin: 4px auto; }
-#profile_completeness_container { background:#fff; }
-#profile-details .odd, #profile-details .even { background-color: #fff; margin: 3px 0 4px; font-size: 14px; }
+#profile_completeness_container { background: transparent !important; }
+#profile-details .odd, #profile-details .even { background-color: transparent !important; margin: 3px 0 4px; font-size: 14px; }
 
 
 

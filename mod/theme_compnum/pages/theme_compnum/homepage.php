@@ -32,10 +32,6 @@ if ($profile_type_guid = $user->custom_profile_type) {
 }
 */
 
-$content .= '<style>
-#home_static { clear:both; }
-.home_static_widget {  }
-</style>';
 $content .= '<div id="home_static">';
 
 // Tous les blocs utilisables
