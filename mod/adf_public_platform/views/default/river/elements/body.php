@@ -49,16 +49,18 @@ if ($responses) {
 // Toutes ces infos habituellement affichées sont regroupées sous forme de bloc dépliable
 if (elgg_in_context('widgets')) {
   $plus_content = $message . $attachments . $responses;
-  if (!empty($plus_content)) {
+  $plus_textcontent = strip_tags($plus_content);
+  if (!empty($plus_textcontent)) {
     $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
-    $message = '<a class="ouvrir" href="#" title="Plus d\'informations sur ' . get_entity($item->object_guid)->title . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="Dérouler" /></a><div class="plus">' . $plus_content . '</div>';
+    $message = '<a class="ouvrir" href="javascript:void(0);" title="Plus d\'informations sur ' . get_entity($item->object_guid)->title . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="Dérouler" /></a><div class="plus">' . $plus_content . '</div>';
   }
 } else {
   $message = $message . $attachments;
   $plus_content = $responses;
-  if (!empty($plus_content)) {
+  $plus_textcontent = strip_tags($plus_content);
+  if (!empty($plus_textcontent)) {
     $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
-    $message .= '<a class="ouvrir" href="#" title="Plus d\'informations sur ' . get_entity($item->object_guid)->title . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="Dérouler" /></a><div class="plus">' . $plus_content . '</div>';
+    $message .= '<a class="ouvrir" href="javascript:void(0);" title="Plus d\'informations sur ' . get_entity($item->object_guid)->title . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="Dérouler" /></a><div class="plus">' . $plus_content . '</div>';
   }
 }
 
