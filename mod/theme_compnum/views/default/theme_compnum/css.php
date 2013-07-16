@@ -119,7 +119,7 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 
 .elgg-owner-block { box-shadow: 0 0 3px #666; }
 .elgg-sidebar .elgg-module-aside { margin-top:20px; }
-.elgg-menu-groups-my-status li a { width: 191px; }
+.elgg-menu-groups-my-status li a { width: 191px !important; }
 .elgg-menu-groups-my-status li a:hover { width: 191px !important; background-color: <?php echo $color1; ?> !important; }
 
 
