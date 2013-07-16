@@ -6,7 +6,7 @@ if (!empty($user->learner_group_b2i)) {
 	if ($learner_group = get_entity($user->learner_group_b2i)) {
 		// @TODO : Ici on vérifie qu'il en est bien membre.
 		// @TODO : Si le groupe a changé, on quitte le premier et on rejoint le nouveau
-		echo '<h3><a href="' . $learner_group->getURL() . '">' . $learner_group->name . '</a></h3><br />';
+		echo '<h3><a href="' . $learner_group->getURL() . '">' . $learner_group->name . '</a></h3>';
 		elgg_push_context('widgets');
 		$mygroup_activity = elgg_list_river(array(
 				'limit' => 5, 'pagination' => false,
