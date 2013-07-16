@@ -7,18 +7,18 @@ $(document).ready(function() {
 	//menu("header nav"); // Pour le menu supérieur, si utilisé
 
 	//recherche
-	var valueSearch = $("#transverse form input#adf-search-input").attr("value");
-	$("#transverse form input#adf-search-input").focus(function() {
+	var valueSearch = $("form input#adf-search-input").attr("value");
+	$("form input#adf-search-input").focus(function() {
 		if (($(this).attr("value") != "") || ($(this).attr("value") == valueSearch)) {
 		  $(this).attr("value", "");
 		}
 	});
-	$("#transverse form input#adf-search-input").click(function() {
+	$("form input#adf-search-input").click(function() {
 		if (($(this).attr("value") != "") || ($(this).attr("value") == valueSearch)) {
 		  $(this).attr("value", "");
 		}
 	});
-	$("#transverse form input#adf-search-input").blur(function() {
+	$("form input#adf-search-input").blur(function() {
 		if ($(this).attr("value") == "") { $(this).attr("value", valueSearch); }
 	});
 	
