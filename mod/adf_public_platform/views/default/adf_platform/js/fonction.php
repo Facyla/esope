@@ -1,6 +1,7 @@
 <?php
 $urlicon = '/mod/adf_public_platform/img/theme/';
 ?>
+
 $(document).ready(function() {
 	menu("#transverse nav");
 	//menu("header nav"); // Pour le menu supérieur, si utilisé
