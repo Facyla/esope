@@ -10,6 +10,12 @@ if (!empty($vars['invitations']) && is_array($vars['invitations'])) {
 	echo '<ul class="elgg-list">';
 	foreach ($vars['invitations'] as $group) {
 		if ($group instanceof ElggGroup) {
+			// Facyla : removes invite if user is already a member
+			if ($group->isMember($user)) {
+				remove_entity_relationship($group->guid, 'invited', $user->guid);
+				continue;
+			}
+			
 			$icon = elgg_view_entity_icon($group, 'tiny', array('use_hover' => 'true'));
 
 			$group_title = elgg_view('output/url', array(
