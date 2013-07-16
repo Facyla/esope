@@ -78,7 +78,7 @@ font-size: 20px !important; font-family:Lato; padding: 15px 32px; border-radius:
 header.loggedin { background:#523866; border-top:0; height:80px; }
 header.loggedin h1 { font-family:Lato; font-size: 22px; text-transform:none; }
 header.loggedin .header-subtitle { margin-top: 0px; font-family: LatoLight; font-size: 13.5px; }
-header.loggedin nav ul li a { font-size: 14px; line-height: 14px; padding-top: 0px !important; }
+header.loggedin nav ul li a { font-size: 13px; line-height: 13px; padding-top: 0px !important; }
 #adf-profil { font-size: 14px; }
 
 /* Footer */

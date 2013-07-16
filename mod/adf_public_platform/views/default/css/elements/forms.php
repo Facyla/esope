@@ -184,8 +184,8 @@ input.button {
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #014FBC), color-stop(0.8, #033074));
 }
 
-/* formulaire de recherche principale */
-#transverse form {
+/* Formulaire de recherche principale */
+#transverse form, header form {
 	float: right;
 	border: 2px solid <?php echo $color1; ?>;
 	border-radius: 10px;
@@ -199,7 +199,7 @@ input.button {
 	height: 27px;
 	margin-top: 6px;
 }
-#transverse form input#adf-search-input {
+form input#adf-search-input {
 	border: 0 none;
 	border-radius: 10px 0 0 10px;
 	-moz-border-radius: 10px 0 0 10px;
@@ -212,11 +212,11 @@ input.button {
 	color: #999;
 	font-size: 0.8em;
 }
-#transverse form input#adf-search-input:active, 
-#transverse form input#adf-search-input:focus {
+form input#adf-search-input:active, 
+form input#adf-search-input:focus {
   color:#333;
 }
-#transverse form input#adf-search-submit-button {
+form input#adf-search-submit-button {
 	background: #ccc;
 	border-radius: 0 7px 7px 0;
 	-moz-border-radius: 0 7px 7px 0;
@@ -226,9 +226,9 @@ input.button {
 	padding: 5px 7px 5px 8px;
 	width:auto;
 }
-#transverse form input#adf-search-submit-button:hover, 
-#transverse form input#adf-search-submit-button:active, 
-#transverse form input#adf-search-submit-button:focus {
+form input#adf-search-submit-button:hover, 
+form input#adf-search-submit-button:active, 
+form input#adf-search-submit-button:focus {
   background-color: #999;
   border:1px solid #999;
 }
