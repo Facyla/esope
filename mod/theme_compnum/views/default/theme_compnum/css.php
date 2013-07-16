@@ -111,4 +111,11 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color: #666; text-shadow: 0px 1px 1px #fff; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { text-shadow: 1px 1px 1px #666; }
 
+/* Profil */
+#profile-owner-block { background-color: #fff; }
+#profile-owner-block a.elgg-button-action { width: 200px; text-align: center; margin: 4px auto; }
+#profile_completeness_container { background:#fff; }
+#profile-details .odd, #profile-details .even { background-color: #fff; margin: 3px 0 4px; font-size: 14px; }
+
+
 
