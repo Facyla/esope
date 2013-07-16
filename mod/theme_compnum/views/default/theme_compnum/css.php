@@ -1,6 +1,7 @@
 <?php global $CONFIG;
 $font_base = $CONFIG->url . '/mod/theme_compnum/fonts/';
 $color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
+$linkcolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
 ?>
 
 /* TYPOS de la plateforme */
@@ -120,7 +121,7 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 .elgg-owner-block { box-shadow: 0 0 3px #666; }
 .elgg-sidebar .elgg-module-aside { margin-top:20px; }
 .elgg-menu-groups-my-status li a { width: 191px !important; }
-.elgg-menu-groups-my-status li a:hover { width: 191px !important; background-color: <?php echo $color1; ?> !important; }
+.elgg-menu-groups-my-status li a:hover { width: 191px !important; background-color: <?php echo $linkcolor; ?> !important; }
 
 
 /* Boutons */
