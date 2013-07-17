@@ -450,6 +450,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 a.ouvrir { float: right; padding: 0 4px 0 0; clear:both; }
 /* Infos dépliables */
 section div.module div.plus { clear:both; padding-top:2px; }
+.elgg-item .plus { clear:both; }
 
 section article.fichier div.activites ul li a { float: left; font-size: 0.9em; font-weight: bold; width: 245px; }
 section article.fichier div.activites ul li span { color: #666; float: left; font-size: 0.75em; font-style: italic; margin-top: 2px; width: 245px; margin-bottom: 5px; }
