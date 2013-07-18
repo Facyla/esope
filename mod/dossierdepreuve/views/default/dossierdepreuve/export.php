@@ -172,9 +172,11 @@ if (empty($export_type)) {
 	/* Fields styles */
 	.learner, .tutor, .evaluator { display: block; float: left; width: 100%; padding: 1px 2px; }
 	.learner select, .learner input,  .tutor select, .tutor input, .evaluator select, .evaluator input { float:right; padding:0; }
+	/* Pas pour l'export
 	.learner, .learner * { background-color: rgba(0,255,0, 0.1); }
 	.tutor, .tutor * { background-color: rgba(0,0,255, 0.1); }
 	.evaluator, .evaluator * { background-color: rgba(255,0,0, 0.1); }
+	*/
 	/*
 	#dossierdepreuve_edit div.learner { background-color: rgba(0,255,0, 0.2); }
 	#dossierdepreuve_edit div.tutor { background-color: rgba(0,0,255, 0.2); }
@@ -247,7 +249,7 @@ if (empty($export_type)) {
 				echo '<br />';
 				
 				echo '<strong>' . elgg_echo('dossierdepreuve:referentiel:legende') . '</strong><br />';
-				echo '<p>' . elgg_echo('dossierdepreuve:referentiel:legende:description') . '</p>';
+				//echo '<p>' . elgg_echo('dossierdepreuve:referentiel:legende:description') . '</p>';
 	
 				// Affichage du référentiel
 				// Domaine par domaine
@@ -286,16 +288,23 @@ if (empty($export_type)) {
 						
 						// On affiche toutes les infos
 						// @TODO : à voir, on va certainement filtrer pour ne garder que les infos évaluatives
-						echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}];
-						if (isset($dossierdepreuve->{$meta_basename . 'value_learner'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')';
-						echo '</div>';
-						echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}];
-						if (isset($dossierdepreuve->{$meta_basename . 'value_tutor'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')';
-						echo '</div>';
-						echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}];
-						if (isset($dossierdepreuve->{$meta_basename . 'value_evaluator'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')';
-						echo '</div>';
-						
+						echo '<table style="width:100%;"><tr>';
+							echo '<td>';
+								echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_learner'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')';
+								echo '</div>';
+							echo '</td>';
+							echo '<td>';
+								echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_tutor'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')';
+								echo '</div>';
+							echo '</td>';
+							echo '<td>';
+								echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_evaluator'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')';
+								echo '</div>';
+							echo '</td>';
+						echo '</tr></table>';
 						echo '<div class="clearfloat"></div>';
 						echo '<br />';
 					}
