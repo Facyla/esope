@@ -67,7 +67,7 @@ switch($member_type) {
 	case 'other_administrative':
 	default:
 		if (elgg_is_admin_logged_in()) {
-			$content .= '<p><a href="javascript:void(0);" class="inline_toggler" onclick="$(\'#static-blocks-toggler\').toggle();">Afficher tous les blocs statiques</a></p>';
+			$content .= '<p><a href="javascript:void(0);" class="elgg-button elgg-button-action" onclick="$(\'#static-blocks-toggler\').toggle();">Afficher tous les blocs statiques</a></p>';
 			$content .= '<div id="static-blocks-toggler" style="display:none;">';
 			$content .= '<p>Organisation</p>';
 			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_groups . '</div></div>';

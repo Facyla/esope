@@ -72,7 +72,10 @@ foreach ($user_blogs as $ent) {
 //$user_blogs_list = elgg_list_entities(array('type' => 'object', 'subtype' => 'blog', 'owner_guid' => $owner_guid, 'limit' => $user_blogs_count, 'full_view' => true));
 
 // FICHIERS @TODO : classer par mois ?
+elgg_set_context('widgets'); // Retire la barre d'outils (pas de metadata avec les widgets)
 foreach ($user_files as $ent) {
+	$user_files_list .= elgg_view_entity($ent, array('full_view' => true));
+	/*
 	$mime = $ent->mimetype;
 	$base_type = substr($mime, 0, strpos($mime,'/'));
 	$user_files_list .= '<a name="#proof-' . $ent->guid . '"><h3>' . $ent->title . '</h3></a>';
@@ -88,8 +91,10 @@ foreach ($user_files as $ent) {
 	} else if (elgg_view_exists("file/specialcontent/$base_type/default")) {
 		$user_files_list .= elgg_view("file/specialcontent/$base_type/default", $vars);
 	}
+	*/
 	$user_files_list .= '<div class="clearfloat"></div><br /><hr />';
 }
+elgg_pop_context();
 //$user_files_list = elgg_list_entities(array('type' => 'object', 'subtype' => 'file', 'owner_guid' => $owner_guid, 'limit' => $user_files_count, 'full_view' => true));
 
 
@@ -101,12 +106,13 @@ $status_values =  array(
   );
 $autopositionnement_values = array(
 		'' => elgg_echo ('dossierdepreuve:autopositionnement:'),
+		'' => elgg_echo ('dossierdepreuve:autopositionnement:nodata'),
 		'100' => elgg_echo ('dossierdepreuve:autopositionnement:100'),
 		'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
 		'0' => elgg_echo ('dossierdepreuve:autopositionnement:0'),
 	);
 $competence_values =  array(
-	  '' => elgg_echo ('dossierdepreuve:choose'),
+	  '' => elgg_echo ('dossierdepreuve:nodata'),
 	  '100' => elgg_echo ('dossierdepreuve:competence:100'),
 	  '50' => elgg_echo ('dossierdepreuve:competence:50'),
 	  '0' => elgg_echo ('dossierdepreuve:competence:0'),
@@ -280,10 +286,16 @@ if (empty($export_type)) {
 						
 						// On affiche toutes les infos
 						// @TODO : à voir, on va certainement filtrer pour ne garder que les infos évaluatives
-						echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')</div>';
-						echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')</div>';
-						echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')</div>';
-			
+						echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}];
+						if (isset($dossierdepreuve->{$meta_basename . 'value_learner'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')';
+						echo '</div>';
+						echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}];
+						if (isset($dossierdepreuve->{$meta_basename . 'value_tutor'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')';
+						echo '</div>';
+						echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}];
+						if (isset($dossierdepreuve->{$meta_basename . 'value_evaluator'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')';
+						echo '</div>';
+						
 						echo '<div class="clearfloat"></div>';
 						echo '<br />';
 					}

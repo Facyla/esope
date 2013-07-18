@@ -307,7 +307,9 @@ $french = array(
 	
 	// Niveaux de compétence
 	'dossierdepreuve:choose' => "(choisir)",
+	'dossierdepreuve:nodata' => "(non renseigné)",
 	'dossierdepreuve:autopositionnement:' => "(choisir une réponse)",
+	'dossierdepreuve:autopositionnement:nodata' => "(non renseigné)",
 	'dossierdepreuve:autopositionnement:100' => "Oui parfaitement",
 	'dossierdepreuve:autopositionnement:50' => "Oui mais avec difficulté",
 	'dossierdepreuve:autopositionnement:0' => "Non mais j’aimerais apprendre",
