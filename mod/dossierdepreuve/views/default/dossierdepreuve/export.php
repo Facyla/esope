@@ -67,7 +67,11 @@ foreach ($user_blogs as $ent) {
 	if ($ent->tags) $user_blogs_list .= 'Tags : ' . elgg_view('output/tags', array('tags' => $ent->tags));
 	if ($ent->referentiel_tags) $user_blogs_list .= 'Compétences associées : ' . elgg_view('output/tags', array('tags' => $ent->referentiel_tags));
 	$user_blogs_list .= elgg_view('output/longtext', array('value' => $ent->description));
-	$user_blogs_list .= '<div class="clearfloat"></div><br /><hr />';
+	// Autres infos utiles : lien et niveau d'accès
+	$user_files_list .= '<div class="clearfloat"></div><br />';
+	$user_files_list .= '<br />URL&nbsp;: <a href="' . $ent->getURL() . '">' . $ent->getURL() . '</a>';
+	$user_files_list .= '<br />Droits d\'accès&nbsp;: ' . elgg_view('output/access', array('entity' => $ent));
+	$user_files_list .= '<hr />';
 }
 //$user_blogs_list = elgg_list_entities(array('type' => 'object', 'subtype' => 'blog', 'owner_guid' => $owner_guid, 'limit' => $user_blogs_count, 'full_view' => true));
 
@@ -94,7 +98,7 @@ foreach ($user_files as $ent) {
 	*/
 	// Autres infos utiles : lien et niveau d'accès
 	$user_files_list .= '<div class="clearfloat"></div><br />';
-	$user_files_list .= '<br />URL&nbsp;: ' . $ent->getURL();
+	$user_files_list .= '<br />URL&nbsp;: <a href="' . $ent->getURL() . '">' . $ent->getURL() . '</a>';
 	$user_files_list .= '<br />Droits d\'accès&nbsp;: ' . elgg_view('output/access', array('entity' => $ent));
 	$user_files_list .= '<hr />';
 }
