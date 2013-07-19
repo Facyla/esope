@@ -105,6 +105,7 @@ $french = array(
 	// Actions
 	'dossierdepreuve:new' => "Créer un nouveau dossier pour %s",
 	'dossierdepreuve:edit' => "Mise à jour du dossier de %s",
+	'dossierdepreuve:update' => "Mettre à jour le dossier",
 	'dossierdepreuve:save' => "Enregistrer",
 	'dossierdepreuve:start' => "Commencer le test",
 	'dossierdepreuve:next' => "Enregistrer mes réponses et afficher les résultats",
