@@ -17,6 +17,7 @@ if (!dossierdepreuve_dossier_gatekeeper($dossierdepreuve->guid, false)) { return
 
 // Generic data for both resume and full view
 $title = $dossierdepreuve->title;
+if (empty($title)) { $title = '(dossier de preuve sans titre)'; }
 $dossierdepreuve_guid = $dossierdepreuve->guid;
 $container_guid = $dossierdepreuve->container_guid;
 $owner_guid = $dossierdepreuve->owner_guid;
@@ -57,7 +58,6 @@ if (elgg_get_context() == "search") {
 	// Vue galerie : on verra plus tard si c'est utile...
 	// if (get_input('search_viewtype') == "gallery") {} else {}
 	
-	if (empty($title)) { $title = '(dossier de preuve sans titre)'; }
 	$icon = '<a href="' . $dossierdepreuve->getURL() . '"><img src="' . $image . '" style="float:right; max-width:120px; max-height:80px;" /></a>';
 	
 	$info = '<span style="float:right; max-width:300px; margin:0 0 2px 12px; font-size:10px; font-style:italic; font-weight:bold;">' . $status . '</span>';

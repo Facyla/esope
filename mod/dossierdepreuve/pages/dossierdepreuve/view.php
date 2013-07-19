@@ -33,6 +33,7 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	}
 	
 	$title = $entity->title;
+	if (empty($title)) { $title = '(dossier de preuve sans titre)'; }
 	$content .= elgg_view("object/dossierdepreuve", array('entity' => $dossierdepreuve, 'full_view' => true));
 	
 	// SIDEBAR
