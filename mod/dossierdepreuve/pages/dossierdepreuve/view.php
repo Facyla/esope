@@ -15,7 +15,7 @@ $content = '';
 $sidebar = '';
 
 // @TODO : virer le flux RSS
-
+global $autofeed; $autofeed = false;
 
 // Tout le monde a accès à ce stade : on affichera des choses différentes selon les profils dans la vue
 

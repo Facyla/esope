@@ -126,7 +126,8 @@ if (elgg_get_context() == "search") {
 					echo '<div class="clearfloat"></div>';
 				}
 				echo '<h3>Suivi du dossier (positionnement, évaluations et référentiel de compétences)</h3>';
-				echo $picto . '<div class="clearfloat"></div>';
+				echo $picto;
+				//echo '<div class="clearfloat"></div>';
 				echo elgg_echo('dossierdepreuve:picto:description');
 				echo '<div class="clearfloat"></div><br />';
 				
