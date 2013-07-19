@@ -56,6 +56,10 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	$sidebar .= '</div></div>';
 	
 }
+
+$autofeed = false;
 $body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+
+$autofeed = false;
 echo elgg_view_page($title, $body);
 
