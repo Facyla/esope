@@ -57,8 +57,8 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	
 }
 
+$autofeed = false; // Suppression RSS
 $body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 
-$autofeed = false;
 echo elgg_view_page($title, $body);
 
