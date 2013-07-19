@@ -14,8 +14,8 @@ dossierdepreuve_gatekeeper();
 $content = '';
 $sidebar = '';
 
-// @TODO : virer le flux RSS
-global $autofeed; $autofeed = false;
+// Suppression du flux RSS : à faire après tout affichage d'annotation
+global $autofeed;
 
 // Tout le monde a accès à ce stade : on affichera des choses différentes selon les profils dans la vue
 
@@ -57,7 +57,6 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	
 }
 
-$autofeed = false;
 $body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 
 $autofeed = false;
