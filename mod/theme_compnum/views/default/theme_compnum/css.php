@@ -127,6 +127,8 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 /* Boutons */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color: #666; text-shadow: 0px 1px 1px #fff; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { text-shadow: 1px 1px 1px #666; }
+.elgg-button-delete { border:0; border-radius: 8px; }
+.elgg-button-delete:hover, .elgg-button-delete:focus, .elgg-button-delete:active { background: #FF3333; color: #FFFFFF; }
 .elgg-menu-entity .elgg-menu-item-edit a { color: #777; }
 
 /* Profil */
