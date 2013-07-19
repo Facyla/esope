@@ -10,6 +10,7 @@ $french = array(
 	'dossierdepreuve' => "Dossier de preuve",
 	'item:object:dossierdepreuve' => "Dossier de preuve",
 	'dossierdepreuve:gestion' => "Gestion des groupes de formation",
+	'dossierdepreuve:picto:description' => "Cette image représente l'avancement du dossier de suivi :<ul><li>la première ligne correspond à l'auto-évaluation faite par le candidat, au fur et à mesure de son avancement</li><li>la 2e ligne représente l'évaluation par le formateur ; elle peut être faite ponctuellement, ou au fur et à mesure de l'avancement. Cette ligne peut ne pas être renseignée lorsque le formateur est habilité : dans ce cas il ne renseigne que la 3e ligne.</li><li>la 3e ligne représente l'évaluation faite par le formateur habilité ; elle intervient normalement en fin de parcours, lorsque le formateur a jugé que le dossier peut être présenté pour la certification</li><li>Une case rouge indique l'absence d'évaluation, ou une évaluation \"non acquis\"</li><li>Une case verte indique une compétence acquise.</li><li>Une case de couleur intermédiaire indique une compétence en cours d'acquisition.</li></ul>",
 	
 	// Settings
 	'dossierdepreuve:settings' => "Paramétrages du dossier de preuve",

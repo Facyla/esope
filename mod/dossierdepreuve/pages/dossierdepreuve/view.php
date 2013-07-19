@@ -36,21 +36,24 @@ if ($dossierdepreuve = get_entity($dossierdepreuve)) {
 	$content .= elgg_view("object/dossierdepreuve", array('entity' => $dossierdepreuve, 'full_view' => true));
 	
 	// SIDEBAR
-	$sidebar .= '<a href="' . $CONFIG->url . 'dossierdepreuve/autopositionnement" class="elgg-button elgg-button-action">Tester mon niveau</a><br /><br />';
+	$sidebar .= '<div class="elgg-module elgg-owner-block"><div class="elgg-menu">';
+	
+	$sidebar .= '<ul class="elgg-menu elgg-menu-page elgg-menu-page-default">';
+	$sidebar .= '<li><a href="' . $CONFIG->url . 'dossierdepreuve/autopositionnement">Tester mon niveau</a></li>';
 	if ($dossierdepreuve->canEdit()) {
-		//$sidebar .= elgg_view('dossierdepreuve/sidebar', array('tags' => $tagstring));
-		$sidebar .= '<a href="' . $CONFIG->url . 'blog/add/' . $page_owner->guid . '" class="elgg-button elgg-button-action">Créer un nouvel article</a><br /><br />';
-		$sidebar .= '<a href="' . $CONFIG->url . 'file/add/' . $page_owner->guid . '" class="elgg-button elgg-button-action">Ajouter un nouveau fichier</a><br /><br />';
-		$sidebar .= '<a href="' . $CONFIG->url . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">Mettre à jour mon dossier</a><br /><br />';
-		$sidebar .= '<a href="' . $CONFIG->url . 'dossierdepreuve/export/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">Exporter mon dossier en HTML/PDF</a><br /><br />';
+		$sidebar .= '<li><a href="' . $CONFIG->url . 'blog/add/' . $page_owner->guid . '">Créer un nouvel article</a></li>';
+		$sidebar .= '<li><a href="' . $CONFIG->url . 'file/add/' . $page_owner->guid . '">Ajouter un nouveau fichier</a></li>';
+		$sidebar .= '<li><a href="' . $CONFIG->url . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '">Mettre à jour mon dossier</a></li>';
+		$sidebar .= '<li><a href="' . $CONFIG->url . 'dossierdepreuve/export/' . $dossierdepreuve->guid . '">Exporter mon dossier en HTML/PDF</a></li>';
 		/*
-		$edit_links .= elgg_view('output/confirmlink',array(
+		$sidebar .= '<li>' . elgg_view('output/confirmlink',array(
 				'href' => $vars['url'] . "action/dossierdepreuve/delete?dossierdepreuve=" . $dossierdepreuve->getGUID(),
 				'text' => elgg_echo("delete"), 'confirm' => elgg_echo("dossierdepreuve:delete:confirm"),
-				'class' => 'elgg-button elgg-button-action',
-			));
+			)) . '</li>';
 		*/
 	}
+	$sidebar .= '</ul>';
+	$sidebar .= '</div></div>';
 	
 }
 $body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
