@@ -149,6 +149,7 @@ $profiletypes = array('learner', 'tutor', 'evaluator');
 elgg_make_sticky_form('dossierdepreuve');
 
 
+if (empty($title)) $title = "Dossier de " . $dossier_owner->name;
 $dossierdepreuve->title = $title;
 $dossierdepreuve->description = $description;
 $dossierdepreuve->status = $status;

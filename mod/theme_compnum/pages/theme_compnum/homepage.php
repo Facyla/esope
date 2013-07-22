@@ -66,17 +66,28 @@ switch($member_type) {
 		break;
 	case 'other_administrative':
 	default:
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_help . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_mygroup . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_dossier . '</div></div>';
-		
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_groups . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_tutors . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_learners . '</div></div>';
-		
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_profile . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_blog . '</div></div>';
-		$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_evaluations . '</div></div>';
+		if (elgg_is_admin_logged_in()) {
+			$content .= '<p><a href="javascript:void(0);" class="elgg-button elgg-button-action" onclick="$(\'#static-blocks-toggler\').toggle();">Afficher tous les blocs statiques</a></p>';
+			$content .= '<div id="static-blocks-toggler" style="display:none;">';
+			$content .= '<p>Organisation</p>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_groups . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_tutors . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_learners . '</div></div>';
+			$content .= '<p>Formateurs et habilitateurs</p>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_groups . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_learners . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_evaluations . '</div></div>';
+			$content .= '<p>Candidats</p>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_help . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_mygroup . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_dossier . '</div></div>';
+			$content .= '<p>Non utilisés</p>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_profile . '</div></div>';
+			$content .= '<div class="home_static_widget"><div class="elgg-widget-content">' . $static_widget_blog . '</div></div>';
+			$content .= '</div>';
+		} else {
+			$content .= '<p>Aucun type de profil spécifique renseigné - si vous êtes candidat, formateur, ou une organisation, merci de contacter un administrateur ou votre référent !</p>';
+		}
 		break;
 }
 $content .= '<div class="clearfloat"></div>';

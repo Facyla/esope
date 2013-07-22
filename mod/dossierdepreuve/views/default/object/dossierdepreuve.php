@@ -17,6 +17,7 @@ if (!dossierdepreuve_dossier_gatekeeper($dossierdepreuve->guid, false)) { return
 
 // Generic data for both resume and full view
 $title = $dossierdepreuve->title;
+if (empty($title)) { $title = '(dossier de preuve sans titre)'; }
 $dossierdepreuve_guid = $dossierdepreuve->guid;
 $container_guid = $dossierdepreuve->container_guid;
 $owner_guid = $dossierdepreuve->owner_guid;
@@ -33,7 +34,7 @@ $user_files_count = elgg_get_entities(array('type' => 'object', 'subtype' => 'fi
 
 if ($dossierdepreuve->canEdit()) {
 	$edit_links = '<div class="dossierdepreuve_controls">';
-	$edit_links .= '<a href="' . $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('update') . '</a>&nbsp; ';
+	$edit_links .= '<a href="' . $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('dossierdepreuve:update') . '</a>&nbsp; ';
 	if (elgg_is_admin_logged_in()) {
 	$edit_links .= elgg_view('output/confirmlink',array(
 			'href' => $vars['url'] . "action/dossierdepreuve/delete?dossierdepreuve=" . $dossierdepreuve->getGUID(),
@@ -56,19 +57,23 @@ if (elgg_get_context() == "search") {
 	// VERSION ABRÉGÉE POUR LISTING DE RECHERCHE
 	// Vue galerie : on verra plus tard si c'est utile...
 	// if (get_input('search_viewtype') == "gallery") {} else {}
+	
 	$icon = '<a href="' . $dossierdepreuve->getURL() . '"><img src="' . $image . '" style="float:right; max-width:120px; max-height:80px;" /></a>';
+	
 	$info = '<span style="float:right; max-width:300px; margin:0 0 2px 12px; font-size:10px; font-style:italic; font-weight:bold;">' . $status . '</span>';
-	$info .= '<span style="clear:right; float:right; margin-left:12px;">' . $picto . '</span>';
+	$info .= '<span style="clear:right; float:right; margin-left:12px;font-weight:bold;"><br />Dossier de suivi<br />' . $picto . '</span>';
+	
 	$info .= '<h3><a href="' . $dossierdepreuve->getURL() . '">' . $title . '</a></h3>';
 	$info .= "<p class=\"owner_timestamp\" style=\"font-size:11px;\">";
 	//$info .= "Dossier de preuve de <a href=\"{$vars['url']}pg/dossierdepreuve/{$owner->username}\">{$owner->name}</a>";
-	$info .= "Dossier de preuve de <a href=\"{$owner->getURL()}\">{$owner->name}</a>";
-	$info .= ", créé {$time_created} <small>(dernière mise à jour {$time_updated})</small>";
+	$info .= "Dossier de suivi de <a href=\"{$owner->getURL()}\">{$owner->name}</a>";
+	$info .= ", créé {$time_created}";
+	if ($time_created != $time_updated) { $info .= " <small>(mis à jour {$time_updated})</small>"; }
 	$numcomments = $dossierdepreuve->countComments();
 	if ($numcomments) $info .= ", <a href=\"{$dossierdepreuve->getURL()}\">" . sprintf(elgg_echo("comments")) . " (" . $numcomments . ")</a>";
 	$info .= '</p>';
 	$info .= '<p>';
-	$info .= "Dossier de preuve&nbsp;: ";
+	$info .= "Eléments du dossier de preuve&nbsp;: ";
 	$info .= '<a href="' . $vars['url'] . 'blog/owner/' . $owner_username . '">' . $user_blogs_count . ' article(s) de blog</a>, ';
 	$info .= '<a href="' . $vars['url'] . 'file/owner/' . $owner_username . '">' . $user_files_count . ' image(s) et fichier(s)</a>';
 	$info .= '</p>';
@@ -102,7 +107,11 @@ if (elgg_get_context() == "search") {
 					<?php echo $status; ?><br />
 				</div>
 				<div class="clearfloat"></div>
-				<?php echo '<p class="owner_timestamp" style="font-size:11px;">Dossier de preuve de <a href="' . $owner->getURL() . '">' . $owner->name . '</a>, créé ' . $time_created . ' <small>(dernière mise à jour ' . $time_updated . ')</small>'; ?>
+				<?php
+				echo '<p class="owner_timestamp" style="font-size:11px;">Dossier de preuve de <a href="' . $owner->getURL() . '">' . $owner->name . '</a>, créé ' . $time_created;
+				if ($time_created != $time_updated) { echo " <small>(mis à jour {$time_updated})</small>"; }
+				echo '</p>';
+				?>
 			</div>
 			
 			<div class="dossierdepreuve_maincontent">
@@ -111,7 +120,6 @@ if (elgg_get_context() == "search") {
 				</div>
 				<div class="clearfloat"></div><br />
 				
-				<?php echo '<h3><a href="' . $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">Mettre à jour &laquo;&nbsp;' . $title . '&nbsp;&raquo;</a></h3>'; ?>
 				<?php
 				if ($description) {
 					echo '<div class="description">' . parse_urls($description) . '</div><br />';
@@ -119,6 +127,11 @@ if (elgg_get_context() == "search") {
 				}
 				echo '<h3>Suivi du dossier (positionnement, évaluations et référentiel de compétences)</h3>';
 				echo $picto;
+				//echo '<div class="clearfloat"></div>';
+				echo elgg_echo('dossierdepreuve:picto:description');
+				echo '<div class="clearfloat"></div><br />';
+				
+				echo '<h3><a href="' . $vars['url'] . 'dossierdepreuve/edit/' . $dossierdepreuve->guid . '" class="elgg-button elgg-button-action">Mettre à jour &laquo;&nbsp;' . $title . '&nbsp;&raquo;</a></h3>';
 				echo '<div class="clearfloat"></div>';
 				echo '<br /><br />';
 				

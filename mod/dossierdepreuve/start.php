@@ -19,13 +19,16 @@ elgg_register_action("dossierdepreuve/inscription", $action_path . "inscriptions
 
 
 /**
- * Init adf_dossierdepreuve plugin.
+ * Init dossierdepreuve plugin.
  */
 function dossierdepreuve_init() {
 	global $CONFIG;
 	
 	elgg_extend_view('css', 'dossierdepreuve/css');
 	elgg_extend_view("js/elgg", "dossierdepreuve/js");
+	
+	// Register entity_type (for search)
+	elgg_register_entity_type('object', 'dossierdepreuve');
 	
 	// Register a page handler
 	elgg_register_page_handler('dossierdepreuve','dossierdepreuve_page_handler');

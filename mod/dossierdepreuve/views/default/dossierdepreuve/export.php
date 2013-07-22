@@ -67,12 +67,19 @@ foreach ($user_blogs as $ent) {
 	if ($ent->tags) $user_blogs_list .= 'Tags : ' . elgg_view('output/tags', array('tags' => $ent->tags));
 	if ($ent->referentiel_tags) $user_blogs_list .= 'Compétences associées : ' . elgg_view('output/tags', array('tags' => $ent->referentiel_tags));
 	$user_blogs_list .= elgg_view('output/longtext', array('value' => $ent->description));
-	$user_blogs_list .= '<div class="clearfloat"></div><br /><hr />';
+	// Autres infos utiles : lien et niveau d'accès
+	$user_files_list .= '<div class="clearfloat"></div><br />';
+	$user_files_list .= '<br />URL&nbsp;: <a href="' . $ent->getURL() . '">' . $ent->getURL() . '</a>';
+	$user_files_list .= '<br />Droits d\'accès&nbsp;: ' . elgg_view('output/access', array('entity' => $ent));
+	$user_files_list .= '<hr />';
 }
 //$user_blogs_list = elgg_list_entities(array('type' => 'object', 'subtype' => 'blog', 'owner_guid' => $owner_guid, 'limit' => $user_blogs_count, 'full_view' => true));
 
 // FICHIERS @TODO : classer par mois ?
+elgg_set_context('widgets'); // Retire la barre d'outils (pas de metadata avec les widgets)
 foreach ($user_files as $ent) {
+	$user_files_list .= elgg_view_entity($ent, array('full_view' => true));
+	/*
 	$mime = $ent->mimetype;
 	$base_type = substr($mime, 0, strpos($mime,'/'));
 	$user_files_list .= '<a name="#proof-' . $ent->guid . '"><h3>' . $ent->title . '</h3></a>';
@@ -88,8 +95,14 @@ foreach ($user_files as $ent) {
 	} else if (elgg_view_exists("file/specialcontent/$base_type/default")) {
 		$user_files_list .= elgg_view("file/specialcontent/$base_type/default", $vars);
 	}
-	$user_files_list .= '<div class="clearfloat"></div><br /><hr />';
+	*/
+	// Autres infos utiles : lien et niveau d'accès
+	$user_files_list .= '<div class="clearfloat"></div><br />';
+	$user_files_list .= '<br />URL&nbsp;: <a href="' . $ent->getURL() . '">' . $ent->getURL() . '</a>';
+	$user_files_list .= '<br />Droits d\'accès&nbsp;: ' . elgg_view('output/access', array('entity' => $ent));
+	$user_files_list .= '<hr />';
 }
+elgg_pop_context();
 //$user_files_list = elgg_list_entities(array('type' => 'object', 'subtype' => 'file', 'owner_guid' => $owner_guid, 'limit' => $user_files_count, 'full_view' => true));
 
 
@@ -101,12 +114,13 @@ $status_values =  array(
   );
 $autopositionnement_values = array(
 		'' => elgg_echo ('dossierdepreuve:autopositionnement:'),
+		'' => elgg_echo ('dossierdepreuve:autopositionnement:nodata'),
 		'100' => elgg_echo ('dossierdepreuve:autopositionnement:100'),
 		'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
 		'0' => elgg_echo ('dossierdepreuve:autopositionnement:0'),
 	);
 $competence_values =  array(
-	  '' => elgg_echo ('dossierdepreuve:choose'),
+	  '' => elgg_echo ('dossierdepreuve:nodata'),
 	  '100' => elgg_echo ('dossierdepreuve:competence:100'),
 	  '50' => elgg_echo ('dossierdepreuve:competence:50'),
 	  '0' => elgg_echo ('dossierdepreuve:competence:0'),
@@ -166,9 +180,11 @@ if (empty($export_type)) {
 	/* Fields styles */
 	.learner, .tutor, .evaluator { display: block; float: left; width: 100%; padding: 1px 2px; }
 	.learner select, .learner input,  .tutor select, .tutor input, .evaluator select, .evaluator input { float:right; padding:0; }
+	/* Pas pour l'export
 	.learner, .learner * { background-color: rgba(0,255,0, 0.1); }
 	.tutor, .tutor * { background-color: rgba(0,0,255, 0.1); }
 	.evaluator, .evaluator * { background-color: rgba(255,0,0, 0.1); }
+	*/
 	/*
 	#dossierdepreuve_edit div.learner { background-color: rgba(0,255,0, 0.2); }
 	#dossierdepreuve_edit div.tutor { background-color: rgba(0,0,255, 0.2); }
@@ -199,9 +215,9 @@ if (empty($export_type)) {
 				
 				<div class="dossierdepreuve-infobox">
 					<?php
-					echo '<p><strong>' . elgg_echo('dossierdepreuve:title') . '&nbsp;:</strong> ' . $title . '</p>';
-					
 					echo '<p>Dossier de preuve de <a href="' . $owner->getURL() . '">' . $owner->name . '</a>, créé ' . $time_created . ' (dernière mise à jour ' . $time_updated . ')</p>';
+					
+					echo '<p><strong>' . elgg_echo('dossierdepreuve:title') . '&nbsp;:</strong> ' . $title . '</p>';
 					
 					echo '<p><strong>' . elgg_echo('dossierdepreuve:status') . '&nbsp;:</strong> ' . $status_values[$status] . '</p>';
 
@@ -216,7 +232,7 @@ if (empty($export_type)) {
 					*/
 					echo '<p><strong>Identifiant unique du dossier sur ' . $CONFIG->url . '&nbsp;:</strong> ' . $dossierdepreuve->guid . '</p>';
 					echo '<p><strong>Propriétaire du dossier&nbsp;:</strong> ' . $owner->name . '</p>';
-					echo '<p><strong>Emplacement du dossier&nbsp;:</strong> ' . $container->name . '</p>';
+					//echo '<p><strong>Emplacement du dossier&nbsp;:</strong> ' . $container->name . '</p>';
 					if ($tags) { echo '<p><strong>Tags&nbsp;:</strong> ' . elgg_view('output/tags',array('value' => $tags)) . '</p>'; }
 					?>
 				</div>
@@ -225,15 +241,14 @@ if (empty($export_type)) {
 			</div>
 			
 			<div class="clearfloat"></div><br />
-		
+			
+			
 			<div class="dossierdepreuve-maincontent">
-				
 				<?php
 				if ($description) {
 					echo '<div class="description"><p><strong>' . elgg_echo('dossierdepreuve:description') . '&nbsp;:</strong> ' . elgg_view('output/longtext', array('value' => $description)) . '</p></div>';
 					echo '<div class="clearfloat"></div><br /><br />';
 				}
-				
 				
 				echo '<h3>' . elgg_echo('dossierdepreuve:referentiel:b2i:title') . '</h3>';
 				echo $picto;
@@ -252,7 +267,7 @@ if (empty($export_type)) {
 					foreach ($competences as $competence) {
 						echo '<h5>' . elgg_echo('dossierdepreuve:referentiel:' . $domaine . ':' . $competence) . ' : <em>' . elgg_echo('dossierdepreuve:referentiel:' . $domaine . ':' . $competence . ':description') . '</em></h5>';
 						$meta_basename = $typedossier . '_' . $domaine . '_' . $competence . '_';
-						echo '<p><em>Contenu de la compétence&nbsp;: ' . str_replace('<br />', "\n", elgg_echo('dossierdepreuve:referentiel:' . $domaine . ':' . $competence . ':aide')) . '<em></p>';
+						//echo '<p><em>Contenu de la compétence&nbsp;: ' . str_replace('<br />', "\n", elgg_echo('dossierdepreuve:referentiel:' . $domaine . ':' . $competence . ':aide')) . '<em></p>';
 						
 						// Eléments de preuve : manuels + ceux cochés via les articles
 						// On a besoin du titre et des références de chacun: cf. listés ensuite en entier
@@ -274,23 +289,41 @@ if (empty($export_type)) {
 							}
 						}
 						
+						// Eléments de preuve et évaluations
 						echo '<div class="learner">';
 						echo '<strong>Eléments de preuve :</strong> &nbsp; ' . $proofs_auto_elements . elgg_view('output/longtext', array('value' =>  $dossierdepreuve->{$meta_basename . 'proof'}));
 						echo '</div>';
 						
 						// On affiche toutes les infos
 						// @TODO : à voir, on va certainement filtrer pour ne garder que les infos évaluatives
-						echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')</div>';
-						echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')</div>';
-						echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}] . ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')</div>';
-			
+						echo '<table style="width:100%; clear:both;"><tr>';
+							echo '<td>';
+								echo '<div class="learner" title="Auto-positionnement du candidat"><strong>Auto-positionnement&nbsp;:</strong> ' . $autopositionnement_values[$dossierdepreuve->{$meta_basename . 'value_learner'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_learner'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_learner'} . ')';
+								echo '</div>';
+							echo '</td>';
+							echo '<td>';
+								echo '<div class="tutor" title="Suivi par le formateur"><strong>Suivi&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_tutor'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_tutor'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_tutor'} . ')';
+								echo '</div>';
+							echo '</td>';
+							echo '<td>';
+								echo '<div class="evaluator" title="Evaluation par l\'habilitateur"><strong>Evaluation&nbsp;:</strong> ' . $competence_values[$dossierdepreuve->{$meta_basename . 'value_evaluator'}];
+								if (isset($dossierdepreuve->{$meta_basename . 'value_evaluator'})) echo ' (' . $dossierdepreuve->{$meta_basename . 'value_evaluator'} . ')';
+								echo '</div>';
+							echo '</td>';
+						echo '</tr></table>';
 						echo '<div class="clearfloat"></div>';
 						echo '<br />';
 					}
 				}
 				
 				
-				echo '<h2>Eléments de preuve</h2><br />';
+				// Liste des éléments de preuve
+				echo '<div class="clearfloat"></div><br /><br />';
+				echo '<h2>Eléments de preuve</h2>';
+				echo '<p>' . $user_blogs_count . ' article(s), ' . $user_files_count . ' image(s) et fichier(s)</p>';
+				echo '<br />';
 				// Articles de blog
 				//echo '<h3><a href="' . $vars['url'] . 'blog/owner/' . $owner_username . '">Article(s) de blog (' . $user_blogs_count . ')</a></h3>';
 				if ($user_blogs_list) echo '<ul>' . $user_blogs_list . '</ul>';
