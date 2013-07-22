@@ -98,7 +98,7 @@ footer { height:auto !important; background: #7FB622 !important; box-shadow: 0px
 #theme-compnum-footer { margin-top:12px; }
 footer * { font-family:Lato; color:#fafafa; font-size:14px; font-weight:bold; }
 footer a:hover, footer a:active, footer a:focus { color:white; }
-#footer-contacts { float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#92B025; box-shadow: 0 1px 3px 1px #669966; }
+#footer-contacts { float:right; width:250px; margin: 12px 0 16px 30px; padding: 4px 10px; background:#7FB622; /* ou background:#92B025; box-shadow: 0 1px 3px 1px #669966;*/ box-shadow: 0 1px 3px 1px #666; }
 #footer-contacts * { font-family:LatoLight; }
 #footer-contacts a img { float:left; margin: 0px 2px; opacity:0.8; }
 #footer-contacts a img:hover { opacity:1; }
