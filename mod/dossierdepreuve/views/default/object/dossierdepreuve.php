@@ -114,7 +114,7 @@ if (elgg_get_context() == "search") {
 				?>
 			</div>
 			
-			<div class="dossierdepreuve_maincontent">
+			<div class="dossierdepreuve_maincontent elgg-output">
 				<div class="dossierdepreuve-infobox">
 					<?php if ($tags) { echo '<p>' . elgg_view('output/tags',array('value' => $tags)) . '</p>'; } ?>
 				</div>

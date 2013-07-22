@@ -43,6 +43,7 @@ else {
     }
     $display = $cmspage->display; // Can it be displayed in its own page ? ('no' => no, empty or not set => default layout, other value => use custom layout $value)
     $css = $cmspage->css;
+    $js = $cmspage->js;
   } else { $access = (defined("ACCESS_DEFAULT")) ? ACCESS_DEFAULT : ACCESS_PUBLIC; }
   
   
@@ -88,6 +89,8 @@ else {
   $form_body .= '</div>';
   
   $form_body .= "<label>CSS personnalisées pour cette page, ce module ou ce bloc<br/>" . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label><div class="clearfloat"></div>';
+  
+  $form_body .= "<label>JS personnalisées pour cette page, ce module ou ce bloc<br/>" . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label><div class="clearfloat"></div>';
   
   // Bloc conditionnel : masqué si pas un module
   $form_body .= '<div ' . $hideifnotmodule . 'class="toggle_detail field_module">';

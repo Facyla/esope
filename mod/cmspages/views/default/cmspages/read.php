@@ -74,7 +74,10 @@ if ($vars['pagetype']) {
 			case 'rawhtml':
 			default:
 				$content .= elgg_view('output/tags', array('tags' => $cmspage->tags));
-				$content .= $cmspage->description;
+				//$content .= $cmspage->description;
+				// we need elgg-output class for lists, also added a custom class for finer output control
+				// Can't use output/longtext view because of filtering
+				$content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '</div>';
 				// Set container as page_owner - useful mainly when displayed as a full page
 				if (!empty($cmspage->container_guid)) elgg_set_page_owner_guid($cmspage->container_guid);
 				// Use parent entity as hierarchical navigation link
