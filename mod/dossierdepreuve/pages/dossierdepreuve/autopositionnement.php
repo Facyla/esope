@@ -33,7 +33,8 @@ $page_owner = elgg_get_page_owner_entity(); // Get the page owner : logged in us
 $content = '';
 
 // Render the dossierdepreuve autopositionnement form page
-$pagetitle = elgg_echo("dossierdepreuve:auto:new");
+//$pagetitle = elgg_echo("dossierdepreuve:auto:new");
+$pagetitle = elgg_echo("dossierdepreuve:auto:title");
 $title = elgg_view_title($pagetitle);
 $content .= '<div id="autopositionnement">' . elgg_view("forms/dossierdepreuve/autopositionnement", array()) . '</div>';
 

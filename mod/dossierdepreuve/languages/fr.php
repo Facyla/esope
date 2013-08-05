@@ -5,6 +5,8 @@
  * @link http://id.facyla.net/
  */
 
+$url = elgg_get_site_url();
+
 $french = array(
 
 	'dossierdepreuve' => "Dossier de preuve",
@@ -21,10 +23,11 @@ $french = array(
 	'dossierdepreuve:settings:referentiel:domaines' => "Liste des domaines",
 	'dossierdepreuve:settings:referentiel:competences' => "Liste des compétences",
 	// Infos sur le référentiel
-	'dossierdepreuve:referentiel:info' => "Le référentiel comporte %s compétences réparties en %s domaines.<br />",
-	'dossierdepreuve:referentiel:infotype' => "Vous avez choisi le questionnaire &laquo;&nbsp;%s&nbsp;&raquo;.<br />Veuillez répondre aux questions, domaine par domaine. Vous pouvez répondre dans l'ordre ou dans le désordre et revenir modifier vos réponses autant que vous le souhaitez. Une fois que vous avez terminé, cliquez sur le bouton \"Enregistrer mes réponses et afficher les résultats\" tout en bas du questionnaire.<br />Si vous souhaitez un positionnement complet, vous devez répondre à toutes les questions, mais vous pouvez aussi ne répondre que sur un domaine, ou l'une des compétences, et dans ce cas vous aurez une évaluation partielle à partir de vos réponses.",
+	'dossierdepreuve:referentiel:info' => "Le référentiel comporte %s compétences réparties en %s domaines.<br /><br />",
+	'dossierdepreuve:referentiel:infotype' => "Si vous souhaitez un positionnement complet, vous devez répondre à toutes les questions de tous les domaines.<br />Vous pouvez répondre dans l'ordre de votre choix, et modifier vos réponses autant que vous le souhaitez.<br />Quand vous avez terminé, cliquez sur le bouton \"Enregistrer mes réponses et afficher les résultats\" tout en bas du questionnaire.<br /><br />Vous pouvez aussi avoir une auto-évaluation partielle, en ne répondant qu'aux questions correspondant aux compétences et aux domaines de votre choix.",
+	// Vous avez choisi le questionnaire &laquo;&nbsp;%s&nbsp;&raquo;.<br />
 	'dossierdepreuve:domaineselection' => "Choix des domaines.",
-	'dossierdepreuve:domaineselection:help' => "Le test de positionnement peut être passé en entier, ou domaine par domaine. Pour ne renseigner qu'un domaine, cliquez sur \"Commencer le test\", puis choisissez l'onglet correspondant.<br />Pour vous tester sur tous les domaines, répondez aux questions de chacun des onglets.",
+	'dossierdepreuve:domaineselection:help' => "Le test de positionnement peut être passé en entier, en répondant à l'ensemble des questions.<br />Pour ne passer qu'une partie du test, rien de plus simple : renseignez seulement les domaines ou les compétences sur lesquelles vous souhaitez vous positionner !<br />Pour commencer, cliquez sur \"Commencer le test\" ci-dessous.",
 	'dossierdepreuve:referentiel:infoselection' => "Ce questionnaire porte sur %s domaines&nbsp;: ",
 	// Seuils
 	'dossierdepreuve:settings:thresholds' => "Seuils",
@@ -38,16 +41,18 @@ $french = array(
 	// Report strings
 	'dossierdepreuve:results' => 'Résultats',
 	'dossierdepreuve:results:title' => "Résultats du test du positionnement",
-	'dossierdepreuve:results:sendbymail' => 'Envoi des résultats par email',
-	'dossierdepreuve:results:sendbymail:help' => "Vous pouvez choisir de recevoir ces résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous.",
-	'dossierdepreuve:results:updatedata' => " et mise à jour de mon dossier de suivi",
-	'dossierdepreuve:results:updatedatatitle' => "Pour mettre à jour votre dossier de suivi, veuillez cliquer sur ce lien&nbsp;:",
+	'dossierdepreuve:results:sendbymail' => 'Recevoir mes résultats par email',
+	'dossierdepreuve:results:sendbymail:help' => "Vous pouvez choisir de recevoir vos résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous, puis de cliquer sur le lien \"Terminer (et recevoir mes résultats par email)\".",
+	'dossierdepreuve:results:updatedata' => "Mise à jour de mon dossier de suivi",
+	'dossierdepreuve:results:updatedatatitle' => "Pour mettre à jour votre dossier de suivi, cliquez sur le lien ci-dessous. Seules les résultats indiqués ci-dessus seront mis à jour.",
 	'dossierdepreuve:results:updatedatalink' => "Mettre à jour mon dossier de suivi avec ces informations",
+	'dossierdepreuve:results:updatedata:confirm' => "Attention : êtes-vous sûr de vouloir mettre à jour votre dossier de suivi avec les informations ci-dessus ? Vous ne pourrez pas annuler ette action.",
+	'dossierdepreuve:results:updatedata:help' => "Si vous souhaitez aussi recevoir les résultations par mail, veuillez commerncer par mettre à jour votre dossier de preuve !",
 	'dossierdepreuve:results:updatedatalink:newwindow' => "Mettre à jour mon dossier de suivi avec ces informations (nouvelle fenêtre)",
 	'dossierdepreuve:results:sendbymail:description' => "Vous pouvez choisir de recevoir ces résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous.",
 	'dossierdepreuve:results:done' => "Ce questionnaire d'autopositionnement est maintenant terminé.",
 	'dossierdepreuve:report:email' => "Email pour l'envoi du questionnaire : %s<br />",
-	'dossierdepreuve:report:confirmsend' => "Etes-vous sûr de vouloir terminer le questionnaire et afficher les résultats ? Vous ne pourrez plus revenir en arrière.",
+	'dossierdepreuve:report:confirmsend' => "Etes-vous sûr de vouloir terminer le questionnaire et afficher vos résultats ? Vous ne pourrez plus revenir en arrière.",
 	'dossierdepreuve:auto:datacleared' => "Données du questionnaire effacées.",
 	'dossierdepreuve:auto:previousdomain' => "Domaine précédent",
 	'dossierdepreuve:auto:previousdomainnum' => "Domaine précédent : domaine %s",
@@ -59,12 +64,14 @@ $french = array(
 	'dossierdepreuve:report:comp:acquis' => '<span style="font-weight:bold; color:darkgreen;">Acquis</span>',
 	'dossierdepreuve:report:comp:encours' => '<span style="color:darkorange;">En cours d\'acquisition</span>',
 	'dossierdepreuve:report:answered' => "Vous avez répondu à %s questions pour ce domaine",
-	'dossierdepreuve:report:domainaverage' => ", soit un score moyen sur le domaine de %s%.<br />",
+	'dossierdepreuve:report:domainaverage' => ", soit un score moyen sur le domaine de %s%.",
 	'dossierdepreuve:report:domaincompvalidation' => "<strong>Vous pouvez actuellement valider %s des %s compétences de ce domaine.</strong>",
 	'dossierdepreuve:report:domainpos' => "Positionnement pour le domaine %s&nbsp;: ",
-	'dossierdepreuve:report:totalanswered' => "Vous avez répondu à %s des questions de ce test d'autopositionnement.<br />",
+	'dossierdepreuve:report:totalanswered' => "Vous avez répondu à %s des %s questions de ce test d'autopositionnement.<br />",
 	'dossierdepreuve:report:totalaverage' => "Votre positionnement moyen sur %s des %s domaines est de %s%<br />",
-	'dossierdepreuve:report:totalvalidation' => "<strong>D'après ce test, vous pouvez actuellement valider %s des %s domaines du référentiel.</strong><br />",
+	'dossierdepreuve:report:totalvalidation' => "<strong>D'après vos réponses, vous pouvez actuellement valider %s des %s domaines du référentiel (%s des %s compétences).</strong><br />",
+	'dossierdepreuve:report:totalvalidation:partial' => "<strong>D'après vos réponses, vous pouvez actuellement valider %s des %s domaines du référentiel (%s des %s compétences). Ce résultat est toutefois incomplet et n'utilise que vos réponses.</strong><br />",
+	'dossierdepreuve:report:totalvalidation:toopartial' => "<strong>Vous pouvez actuellement valider %s compétences (sur %s), mais avez répondu à trop peu de questions pour un résultat fiable sur l'ensemble du référentiel.</strong><br />",
 	// Mails & messages
 	'dossierdepreuve:msg:subject' => "Autopositionnement B2i Adultes",
 	'dossierdepreuve:msg:message' => "Vous venez de terminer votre questionnaire d'autopositionnement de la plateforme des Compétences Numériques.<br />Comme vous l'avez demandé, voici les résultats de votre test. Ceux-ci ne sont pas conservés sur la plateforme et restent anonymes.<br />Si vous le souhaitez, vous pouvez utiliser ou transmettre à votre formateur le code présent en fin de mail pour reprendre votre questionnaire dans l'état où vous l'aviez laissé.",
@@ -110,7 +117,8 @@ $french = array(
 	'dossierdepreuve:save' => "Enregistrer",
 	'dossierdepreuve:start' => "Commencer le test",
 	'dossierdepreuve:next' => "Enregistrer mes réponses et afficher les résultats",
-	'dossierdepreuve:sendupdate' => "Questionnaire terminé : envoi par email et/ou mise à jour de mon positionnement",
+	'dossierdepreuve:sendupdate' => "Terminer (et recevoir mes résultats par email)",
+	'dossierdepreuve:sendonly' => "Terminer (et recevoir mes résultats par email)",
 	'dossierdepreuve:finish' => "Envoyer les résultats par email",
 	'dossierdepreuve:restore' => "Restaurer le positionnement",
 	'dossierdepreuve:saved' => "Mise à jour du dossier enregistrée",
@@ -138,14 +146,15 @@ $french = array(
 	
 	// Test d'auto-positionnement : éléments du formulaire
 	'dossierdepreuve:auto:title' => "Auto-test de positionnement B2i Adultes",
-	'dossierdepreuve:auto:public:disclaimer' => "Ce test de positionnement continue à évoluer grâce à vos retours ! Nous vous remercions de bien vouloir faire part de vos remarques, suggestions, corrections à contact@formavia.fr !",
-	'dossierdepreuve:auto:warning' => "Attention : vous n'êtes pas identifié sur le site. Les résultats de votre test ne pourront pas être enregistrés. Si vous souhaitez mettre à jour votre dossier de preuve avec ce test, merci de vous connecter au préalable, ou de conserver le  \"code de sauvegarde\" situé en bas de page<br />Si vous faites partie d'une formation vous devriez demander la création de votre compte auprès de votre structure. Sinon vous pouvez utiliser ce test librement, et pourrez demander à recevoir vos résultats par mail.",
+	'dossierdepreuve:auto:public:disclaimer' => "Ce test de positionnement s'améliore grâce à vos retours ! N'hésitez pas à faire part de vos remarques, suggestions, corrections à <a href=\"mailto:contact@formavia.fr\">contact@formavia.fr</a> !",
+	'dossierdepreuve:auto:warning' => "Vous n'êtes pas identifié sur le site&nbsp;: les résultats de votre test ne pourront pas être enregistrés.<br /><br />Si vous disposez d'un compte, merci de <a href=\"" . $url . "login\">vous connecter</a>.<br /><br />Sinon vous pouvez utiliser ce test librement, et recevoir vos résultats par mail.",
 	'dossierdepreuve:auto:new' => "Test d'auto-positionnement",
-	'dossierdepreuve:auto:description' => "Bonjour,<br />Vous pouvez utiliser ce test d'auto-positionnement afin de savoir où vous en êtes par rapport au B2i Adultes. Ce test vous permet, en répondant à quelques questions, d'identifier vos compétences et vos axes d'amélioration. En fonction de vos réponses, des conseils et des activités vous seront proposés.",
+	'dossierdepreuve:auto:description' => "Ce test vous permet de savoir où vous en êtes par rapport au B2i Adultes. En répondant à quelques questions, il vous permettra de connaître les compétences que vous pouvez valider et d'identifier vos axes d'amélioration.",
 	'dossierdepreuve:auto:contact_email' => "Votre adresse email",
 	'dossierdepreuve:auto:contact_email:help' => "Facultatif, uniquement si vous souhaitez recevoir vos résultats par mail.<br /><em>Note&nbsp;: vous pouvez envoyer les résultats à plusieurs adresses email, en les séparant par des ';')</em>",
 	'dossierdepreuve:auto_type' => "Choix du test d'autopositionnement",
-	'dossierdepreuve:auto_type:help' => "Vous voulez savoir où vous en êtes en quelques clics, ou vous positionner précisément ? Choisissez le test le plus utile dans votre cas !",
+	'dossierdepreuve:auto_type:help' => "", 
+	// "Vous voulez savoir où vous en êtes en quelques clics, ou vous positionner précisément ? Choisissez le test le plus utile dans votre cas !",
 	'dossierdepreuve:auto_type:full' => "Autopositionnement complet (fiable, 15 à 30 minutes)",
 	'dossierdepreuve:auto_type:random' => "Autopositionnement rapide (approximatif, 1 question au hasard par compétence)",
 	'dossierdepreuve:auto_type:limited' => "Autopositionnement limité (choix des domaines à autoévaluer)",
