@@ -19,7 +19,12 @@
 	echo elgg_view('input/password', array('name' => 'password', 'id' => 'login_password'));
 	
 	echo '<div class="clearfloat"></div>';
-	echo '<a href="javascript:void(0);" onclick="$(\'#adf-lostpassword\').toggle(); $(\'#lostpassword_username\').val($(\'#login_username\').val());" class="adf-lostpassword-link">' . elgg_echo('user:password:lost') . '</a>';
+	// Toogler may only exist on homepage (this view is in a form, so can't insert a toggler here)
+	if (full_url() == elgg_get_site_url()) {
+		echo '<a href="javascript:void(0);" onclick="$(\'#adf-lostpassword\').toggle(); $(\'#lostpassword_username\').val($(\'#login_username\').val());" class="adf-lostpassword-toggle">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
+	} else {
+		echo '<a href="' . elgg_get_site_url() . 'forgotpassword" class="adf-lostpassword">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
+	}
 	?>
 </div>
 
