@@ -22,4 +22,7 @@ $inactivecolor = '#CCC';
 #autopositionnement_quest_tabs div a { color:white; }
 #autopositionnement_quest_tab_content_wrapper { border:3px solid <?php echo $activecolor ?>; padding:3px 6px; }
 
+.dossierdepreuve-submit { text-align:center; }
+.dossierdepreuve-submit input { font-size:20px; }
+
 
