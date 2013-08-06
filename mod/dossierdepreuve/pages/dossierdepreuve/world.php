@@ -35,11 +35,10 @@ $content = '';
 $sidebar = elgg_view('dossierdepreuve/search', array('search' => str_replace(',', '', $tagstring)));
 // Menu latéral pour les dossiers
 $sidebar .= '<div class="elgg-module elgg-owner-block"><div class="elgg-menu">';
-
 $sidebar .= '<ul class="elgg-menu elgg-menu-page elgg-menu-page-default">';
 $sidebar .= '<li><a href="' . $CONFIG->url . 'dossierdepreuve/autopositionnement">Tester mon niveau</a></li>';
 $sidebar .= '</ul>';
-$sidebar .= '</div>';
+$sidebar .= '</div></div>';
 
 
 
