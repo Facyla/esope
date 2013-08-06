@@ -62,7 +62,7 @@ header * { font-family:Lato; }
 
 /* Bandeau déconnecté */
 header.notloggedin { background: #523866; border-top: 0; height: 48px; }
-header.notloggedin h1 { margin-top: 0; font-size: 16px; font-family:Lato; font-weight:bold; }
+header.notloggedin h1 { margin-top: 0; font-size: 18px; font-family:Lato; font-weight:bold; }
 header.notloggedin h1 a:hover { text-decoration:none; }
 header.notloggedin .header-subtitle { font-size: 13.5px; margin-top:0; font-family:LatoLight; }
 header.notloggedin nav { top:0; }
