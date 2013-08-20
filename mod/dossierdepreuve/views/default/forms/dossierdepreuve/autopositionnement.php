@@ -873,11 +873,11 @@ if ($referentiel) {
 		default:
 			$questionnaire_info .= '<br /><p>' . elgg_echo('dossierdepreuve:auto:description') . '</p>';
 			// Global info about questionnaire
-			$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p>' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
+			$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p style="padding:0 8px;">' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
 			// Public mode : we can't save data nor update dossierdepreuve object
 			if (!elgg_is_logged_in()) {
-				//$questionnaire_info .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
-				system_messages(elgg_echo('dossierdepreuve:auto:warning'), 'notice');
+				$questionnaire_info .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
+				//system_messages(elgg_echo('dossierdepreuve:auto:warning'), 'notice');
 			}
 			// Choix du questionnaire
 			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
