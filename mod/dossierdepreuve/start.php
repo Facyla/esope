@@ -412,7 +412,7 @@ function dossierdepreuve_list_members_by_profiletype($profiletype = 'learner', $
 /* Returns all group learners as an array of $guid => $user */
 function dossierdepreuve_get_group_profiletype($group = false, $profiletype = 'learner') {
 	if (!elgg_instanceof($group, 'group')) return false;
-	$returnvalue = false;
+	$returnvalue = array();
 	$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
 	// Membres du groupe, et filtrage des apprenants
 	//$group_members_count = get_group_members($group->guid, 10, 0, 0, true);
@@ -422,6 +422,7 @@ function dossierdepreuve_get_group_profiletype($group = false, $profiletype = 'l
 	if ($group_members) foreach ($group_members as $ent) {
 		$profile_type = dossierdepreuve_get_user_profile_type($ent);
 		if ($profile_type == $profiletype) { $returnvalue[$ent->guid] = $ent; }
+		if ($profile_type == 'tutor') register_error("Tuteur");
 	}
 	elgg_set_ignore_access($ignore_access);
 	return $returnvalue;
@@ -434,12 +435,10 @@ function dossierdepreuve_get_group_learners($group = false) {
 
 /* Returns all group tutors as an array of $guid => $user */
 function dossierdepreuve_get_group_tutors($group = false) {
-	$return = false;
-	$tutors = dossierdepreuve_get_group_profiletype($group, 'evaluator');
-	$evaluators = dossierdepreuve_get_group_profiletype($group, 'tutor');
-	if ($tutors && $evaluators) $return = array_merge($tutors, $evaluators);
-	else if ($tutors) $return = $tutors;
-	else if ($evaluators) $return = $evaluators;
+	$return = array();
+	$tutors = dossierdepreuve_get_group_profiletype($group, 'tutor');
+	$evaluators = dossierdepreuve_get_group_profiletype($group, 'evaluator');
+	$return = array_merge($tutors, $evaluators);
 	return $return;
 }
 
