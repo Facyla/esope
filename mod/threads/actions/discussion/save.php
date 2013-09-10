@@ -4,7 +4,7 @@
  */
 
 // Get variables
-$title = htmlspecialchars(get_input('title', '', false), ENT_QUOTES, 'UTF-8');
+$title = get_input("title");
 $desc = get_input("description");
 $status = get_input("status");
 $access_id = (int) get_input("access_id");
@@ -22,7 +22,7 @@ if (!$title || !$desc) {
 }
 
 $container = get_entity($container_guid);
-if (!$container || !$container->canWriteToContainer(0, 'object', 'groupforumtopic')) {
+if (!$container || !$container->canWriteToContainer()) {
 	register_error(elgg_echo('discussion:error:permissions'));
 	forward(REFERER);
 }
@@ -54,7 +54,7 @@ elgg_clear_sticky_form('topic');
 
 
 // handle results differently for new topics and topic edits
-if ($new_topic) {
+if ($guid > 0) {
 	system_message(elgg_echo('discussion:topic:created'));
 	add_to_river('river/object/groupforumtopic/create', 'create', elgg_get_logged_in_user_guid(), $topic_guid);
 } else {

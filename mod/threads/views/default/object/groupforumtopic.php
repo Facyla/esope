@@ -107,11 +107,5 @@ if ($full && $topic->canAnnotate()) {
 			), $vars)
 		);
 		echo "<div class=\"$hidden mvl replies\" id=\"reply-topicreply-$topic->guid\">$form</div>";
-	} elseif($topic->status != 'closed') {
-		echo elgg_view('output/url', array(
-			'text' => elgg_echo('reply'),
-			'href' => current_page_url() . "?box=reply&guid=$topic->guid",
-			'class' => 'elgg-button elgg-button-submit mtm',
-		));
 	}
 }

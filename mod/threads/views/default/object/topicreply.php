@@ -3,10 +3,7 @@
  * Embeds an edit link for the annotation
  */
 
-elgg_load_library("elgg:threads");
-
 $entity = elgg_extract('entity', $vars);
-$topic = threads_top($entity->guid);
 
 $owner = get_entity($entity->owner_guid);
 if (!$entity || !$owner) {
@@ -40,17 +37,18 @@ HTML;
 
 echo elgg_view_image_block($icon, $body);
 
-if (get_input('guid') == $entity->guid && get_input('box')) {
+if (get_input('guid') == $entity->guid) {
 
 	$box = false;
 	
 	if ($entity->canEdit() && get_input('box') == "edit") {
 		$box = 'edit';
-	} elseif ($entity->canAnnotate() && get_input('box') == "reply") {
+	}
+	if ($entity->canAnnotate() && get_input('box') == "reply") {
 		$box = 'reply';
 	}
 	
-	if ($box) {
+	if ($box) {	
 		$form = elgg_view_form('discussion/reply/save', array(), array_merge(array(
 					'entity' => $entity,
 					'reply' => $box == 'reply',
@@ -58,12 +56,6 @@ if (get_input('guid') == $entity->guid && get_input('box')) {
 			);
 		echo "<div class=\"mvl replies\" id=\"$box-topicreply-$entity->guid\">$form</div>";
 	}
-} elseif ($entity->canAnnotate() && $topic->status != 'closed') {
-	echo elgg_view('output/url', array(
-		'text' => elgg_echo('reply'),
-		'href' => current_page_url() . "?box=reply&guid=$entity->guid",
-		'class' => 'elgg-button elgg-button-submit mtm',
-	));
 }
 
 echo $replies;
