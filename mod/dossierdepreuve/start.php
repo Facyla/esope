@@ -422,7 +422,6 @@ function dossierdepreuve_get_group_profiletype($group = false, $profiletype = 'l
 	if ($group_members) foreach ($group_members as $ent) {
 		$profile_type = dossierdepreuve_get_user_profile_type($ent);
 		if ($profile_type == $profiletype) { $returnvalue[$ent->guid] = $ent; }
-		if ($profile_type == 'tutor') register_error("Tuteur");
 	}
 	elgg_set_ignore_access($ignore_access);
 	return $returnvalue;
