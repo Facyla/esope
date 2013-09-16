@@ -45,6 +45,7 @@ function dossierdepreuve_init() {
 	
 	// Ajout sélection des compétences du référentiel
 	elgg_register_action('blog/save', elgg_get_plugins_path() . 'dossierdepreuve/actions/blog/save.php');
+	elgg_register_action('blog/auto_save_revision', elgg_get_plugins_path() . 'dossierdepreuve/actions/blog/auto_save_revision.php');
 	elgg_register_action('file/upload', elgg_get_plugins_path() . 'dossierdepreuve/actions/file/upload.php');
 	
 	// Widgets
