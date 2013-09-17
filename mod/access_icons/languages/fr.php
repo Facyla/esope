@@ -3,7 +3,7 @@ $french = array (
 	
 	
 	// Droits d'accès
-	'access_icons:details' => " - Cliquer pour en savoir plus sur tous les droits d'accès disponibles."
+	'access_icons:details' => " - Cliquer pour en savoir plus sur tous les droits d'accès disponibles.",
 	
 	// Default access level (-1)
 	'access_icons:default:details' => "Les droits d'accès par défaut du site (ou de votre compte utilisateur le cas échéant) s'appliquent à ce contenu.",
