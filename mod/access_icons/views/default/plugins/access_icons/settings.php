@@ -1,22 +1,22 @@
 <?php
 /**
- * ADF_platform plugin settings
- * Params :
- * - contenu de la bannière (HTML insérable)
- * - hauteur de la bannière
- * - image de fond du header
- * - hauteur du header
- * - contenu du footer (HTML insérable)
- * - éléments de la page d'accueil : afficher les stats
+ * Access_icons plugin settings
  *
 */
 
-$url = $vars['url'];
-
+if ($vars['entity']->helptext == "RAZ") { $vars['entity']->helptext = elgg_echo('access_icons:settings:helptext:default'); }
 ?>
+
 <p><label><?php echo elgg_echo('access_icons:settings:helpurl'); ?></label><br />
 	<?php echo elgg_echo('access_icons:settings:helpurl:help'); ?><br />
 	<?php echo $url . elgg_view('input/text', array( 'name' => 'params[helpurl]', 'value' => $vars['entity']->helpurl, 'js' => 'style="width:50%;"' )); ?>
 </p><br />
+
+<?php /* @TODO : doesn't work as expected yet
+<p><label><?php echo elgg_echo('access_icons:settings:helptext'); ?></label><br />
+	<?php echo elgg_echo('access_icons:settings:helptext:help'); ?><br />
+	<?php echo $url . elgg_view('input/plaintext', array( 'name' => 'params[helptext]', 'value' => $vars['entity']->helptext)); ?>
+</p><br />
+*/ ?>
 
 
