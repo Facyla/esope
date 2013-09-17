@@ -4,7 +4,9 @@ $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 ?>
 
 /* Listing des groupes : groupes ouverts et fermés (membership) */
+/*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }
+*/
 .elgg-menu-item-membership.membership-group-open {background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat 50% 50%; }
 .elgg-menu-item-membership.membership-group-closed {background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat 50% 50%; }
 
