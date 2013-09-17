@@ -46,7 +46,8 @@ Version History
 
 0.9.7 (2013.09.18)
   - Allow embedding cmspage content only (same as view, but through an read URL).
-  - Usage : add ?embed=true (or any value for param "embed")
+  - Usage for "soft" embed (HTML only, no style): add ?embed=true (or any value for param "embed"). This is convenient for lightbox/popup use.
+  - Usage for external embed : add ?embed=full to use in an external site, where the CSS are not available (will embed Elgg's CSS together)
 
 0.9.6 (2013.06.30)
   - Auto-update for new pagetype names (replace _ by -)

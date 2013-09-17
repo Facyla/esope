@@ -40,7 +40,7 @@ if($pagetype) {
 		</head>
 		<body>
 			<div style="padding:0 4px;">
-				<?php echo $body; ?>
+				<?php echo elgg_view('cmspages/view', array('pagetype' => $pagetype)); ?>
 			</div>
 		</body>
 		</html>
