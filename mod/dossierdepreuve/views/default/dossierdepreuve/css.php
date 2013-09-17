@@ -1,5 +1,6 @@
 <?php
-$urlicon = elgg_get_plugins_path() . 'dossierdepreuve/graphics/';
+global $CONFIG;
+$urlicon = $CONFIG->url . 'mod/dossierdepreuve/graphics/';
 $activecolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
 $defaultcolor = elgg_get_plugin_setting('linkhovercolor', 'adf_public_platform');
 $inactivecolor = '#CCC';
