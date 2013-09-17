@@ -15,6 +15,7 @@ if (!$container_guid) {
 	$container_guid = elgg_get_logged_in_user_guid();
 }
 $guid = elgg_extract('guid', $vars, null);
+$referentiel_tags = elgg_extract('referentiel_tags', $vars, null);
 
 if ($guid) {
 	$file_label = elgg_echo("file:replace");
@@ -48,7 +49,8 @@ if ($categories) {
 	echo $categories;
 }
 
-echo elgg_view('input/referentiel', array('entity' => $vars['entity']));
+// Pour récupérer sticky forms
+echo elgg_view('input/referentiel', array('referentiel_tags' => $referentiel_tags));
 
 ?>
 <div>
