@@ -26,8 +26,8 @@ $inactivecolor = '#CCC';
 .dossierdepreuve-submit { text-align:center; }
 .dossierdepreuve-submit input { font-size:20px; }
 
-/* Folder - on utilise l'icône "folder" classique */
-.elgg-menu-item-folder a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-folder a:hover, .elgg-menu-item-folder a:focus, .elgg-menu-item-folder a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $activecolor; ?> !important; }
+/* Icône dossierdepreuve - on utilise l'icône "folder" classique */
+.elgg-menu-item-dossierdepreuve a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
+.elgg-menu-item-dossierdepreuve a:hover, .elgg-menu-item-dossierdepreuve a:focus, .elgg-menu-item-dossierdepreuve a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $activecolor; ?> !important; }
 
 
