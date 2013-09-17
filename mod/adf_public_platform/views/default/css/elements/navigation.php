@@ -763,6 +763,9 @@ header nav ul li a:active { color: #ddd; }
 /* Blog */
 .elgg-menu-item-blog a { padding-left:32px; background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Feedback */
+.elgg-menu-item-feedback a { padding-left:32px; background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px 5px #FFFFFF; }
+.elgg-menu-item-feedback a:hover, .elgg-menu-item-feedback a:focus, .elgg-menu-item-feedback a:active { background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
 /* File */
 .elgg-menu-item-file a { padding-left:32px; background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
