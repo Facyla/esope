@@ -23,6 +23,7 @@ How to edit an existing page :
 CMS Pages use 2 views, so that their content can be embedded into a theme and make it customizable
   - cmspages/read is used for fullview cmpages rendering, and may render more content (title, etc.)
   - cmspages/view view should return only cmspage description (other elements should be hidden), and is designed for inclusion into other views
+Note : the cmspage "read" page also allows the content to be embedded elsewhere, through a "embed" param : add ?embed=true to use. The embedded content is actually the same as when using "view" mode.
 
 How to insert a CMS Page into interface ?
 - add following code where you want to insert the page content : elgg_view('cmspages/view', array('pagetype' => $pagetype));

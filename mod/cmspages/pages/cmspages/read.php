@@ -16,8 +16,14 @@ define('cmspage', true);
 //gatekeeper();
 
 $pagetype = get_input('pagetype');
+$embed = get_input('embed', false);
 
 if($pagetype) {
+  if ($embed) {
+		header('Content-Type: text/html; charset=utf-8');
+		echo elgg_view('cmspages/view', array('pagetype' => $pagetype));
+		exit;
+		}
   // cmspages/view view should return description only (and other elements should be hidden), as it's designed for inclusion into other views
   // cmspages/read may render more content
   $body = elgg_view('cmspages/read', array('pagetype' => $pagetype));

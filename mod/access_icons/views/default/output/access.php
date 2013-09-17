@@ -80,18 +80,19 @@ if (isset($vars['entity']) && elgg_instanceof($vars['entity'])) {
 			}
 	}
 	
-
 	$help_text = $help_details . elgg_echo('access_icons:details');
 	
-	// Add an information page
-	elgg_load_js('lightbox');
-	elgg_load_css('lightbox');
-	$access_content = "http://competencesnumeriques.formavia.fr/cmspages/read/aide-presentation-plateforme";
-	$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox'));
-	//$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'title' => $help_details, 'href' => $access_content, 'class' => 'elgg-lightbox'));
-	// Pour lightbox avec texte court dedans
-	//$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => "#elgg-lightbox-test", 'class' => 'elgg-lightbox'));
-	//echo '<div class="hidden">' . elgg_view_module('aside', 'Lightbox Test', "Contenu de test", array('id' => 'elgg-lightbox-test')) . '</div>';
+	// Add an information page - only if that page is configured, otherwise we keep the basic text without link
+	$access_content = elgg_get_plugin_setting('helpurl', 'access_icons');
+	if ($access_content) {
+		elgg_load_js('lightbox');
+		elgg_load_css('lightbox');
+		$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox'));
+		//$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'title' => $help_details, 'href' => $access_content, 'class' => 'elgg-lightbox'));
+		// Pour lightbox avec texte court dedans
+		//$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => "#elgg-lightbox-test", 'class' => 'elgg-lightbox'));
+		//echo '<div class="hidden">' . elgg_view_module('aside', 'Lightbox Test', "Contenu de test", array('id' => 'elgg-lightbox-test')) . '</div>';
+	}
 
 	echo "<span title=\"$help_text\" class=\"$access_class\">$access_id_string</span>";
 }

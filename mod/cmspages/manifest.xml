@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.9.6 (1.8)" />
+  <field key="version" value="0.9.7 (1.8)" />
   <field key="description" value="Static and dynamic pages and reusable views, templates and modules editor for use in interface-building and pages management (flexible CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
-  <field key="copyright" value="(C) Facyla 2011-2012" />
+  <field key="copyright" value="(C) Facyla 2011-2013" />
   <field key="licence" value="GNU Public License version 2" />
   <field key="elgg_version" value="2009030702" />
 </plugin_manifest>
@@ -43,6 +43,10 @@ NOTES
 Version History
 ======================
 
+
+0.9.7 (2013.09.18)
+  - Allow embedding cmspage content only (same as view, but through an read URL).
+  - Usage : add ?embed=true (or any value for param "embed")
 
 0.9.6 (2013.06.30)
   - Auto-update for new pagetype names (replace _ by -)
