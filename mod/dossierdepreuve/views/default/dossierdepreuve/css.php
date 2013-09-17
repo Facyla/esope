@@ -1,5 +1,5 @@
 <?php
-$urlicon = elgg_get_plugin_setting('urlicon', 'adf_public_platform');
+$urlicon = elgg_get_plugins_path() . 'dossierdepreuve/graphics/';
 $activecolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
 $defaultcolor = elgg_get_plugin_setting('linkhovercolor', 'adf_public_platform');
 $inactivecolor = '#CCC';
@@ -26,8 +26,8 @@ $inactivecolor = '#CCC';
 .dossierdepreuve-submit { text-align:center; }
 .dossierdepreuve-submit input { font-size:20px; }
 
-/* Icône dossierdepreuve - on utilise l'icône "folder" classique */
-.elgg-menu-item-dossierdepreuve a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-dossierdepreuve a:hover, .elgg-menu-item-dossierdepreuve a:focus, .elgg-menu-item-dossierdepreuve a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $activecolor; ?> !important; }
+/* Icône dossierdepreuve */
+.elgg-menu-item-dossierdepreuve a { padding-left:32px; background: url("<?php echo $urlicon; ?>dossierdepreuve.png") no-repeat scroll 9px 5px #FFFFFF; }
+.elgg-menu-item-dossierdepreuve a:hover, .elgg-menu-item-dossierdepreuve a:focus, .elgg-menu-item-dossierdepreuve a:active { background: url("<?php echo $urlicon; ?>dossierdepreuve.png") no-repeat scroll 9px -19px <?php echo $activecolor; ?> !important; }
 
 
