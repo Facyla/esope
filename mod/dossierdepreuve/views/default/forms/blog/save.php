@@ -106,7 +106,8 @@ $access_input = elgg_view('input/access', array(
 
 $categories_input = elgg_view('input/categories', $vars);
 
-$b2iadultes_input = elgg_view('input/referentiel', array('entity' => $blog));
+// Note : on utilise $vars[...] parce que ça permet de récupérer la valeur via sticky forms..
+$b2iadultes_input = elgg_view('input/referentiel', array('referentiel_tags' => $vars['referentiel_tags']));
 
 // hidden inputs
 $container_guid_input = elgg_view('input/hidden', array('name' => 'container_guid', 'value' => elgg_get_page_owner_guid()));
