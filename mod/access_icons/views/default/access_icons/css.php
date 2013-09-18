@@ -7,8 +7,13 @@ $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 /*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }
 */
-.elgg-menu-item-membership.membership-group-open {background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat 50% 50%; }
-.elgg-menu-item-membership.membership-group-closed {background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat 50% 50%; }
+.membership-group-open { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
+.membership-group-closed { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
+
+/* Groupes ouverts et fermés (liste des contenus) */
+.elgg-access-group-open { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
+.elgg-access-group-closed { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
+.shared_collection {  }
 
 
 /* Niveaux d'accès :
@@ -37,11 +42,5 @@ $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 .elgg-access.elgg-access-private { padding-left:18px; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-private.png) no-repeat top left; }
 /* Brouillon : idem privé car le contenu est forcément privé */
 .elgg-menu-item-published-status { padding-left:18px; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-private.png) no-repeat top left; }
-
-
-/* Groupes ouverts et fermés (liste des contenus) */
-.elgg-access-group-open {}
-.elgg-access-group-closed {}
-.shared_collection {}
 
 
