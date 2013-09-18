@@ -795,6 +795,9 @@ background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px -19px
 .elgg-menu-item-subscription-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px 5px #FFFFFF !important; }
 .elgg-menu-item-subscription-status a:hover { background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 
+/* Group listing menu */
+.elgg-menu-item-members { background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
+
 
 /* ***************************************
 	LONGTEXT
