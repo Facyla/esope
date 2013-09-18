@@ -272,6 +272,8 @@ $fr = array(
 	'adf_platform:settings:tumblr:help' => "",
 	'adf_platform:settings:slideshare' => "URL de la page/compte Slideshare",
 	'adf_platform:settings:slideshare:help' => "",
+	
+	
 	//'' => "",
 	
 	

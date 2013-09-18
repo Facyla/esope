@@ -751,24 +751,52 @@ header nav ul li a:active { color: #ddd; }
 }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
+/* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Event calendar */
 .elgg-menu-item-event-calendar a { padding-left:32px; background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-event-calendar a:hover, .elgg-menu-item-event-calendar a:focus, .elgg-menu-item-event-calendar a:active { background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Announcements */
 .elgg-menu-item-announcements a { padding-left:32px; background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-announcements a:hover, .elgg-menu-item-announcements a:focus, .elgg-menu-item-announcements a:active { background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
+/* Blog */
 .elgg-menu-item-blog a { padding-left:32px; background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Feedback */
+.elgg-menu-item-feedback a { padding-left:32px; background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px 5px #FFFFFF; }
+.elgg-menu-item-feedback a:hover, .elgg-menu-item-feedback a:focus, .elgg-menu-item-feedback a:active { background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
+/* File */
 .elgg-menu-item-file a { padding-left:32px; background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Folder */
+.elgg-menu-item-folder a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
+.elgg-menu-item-folder a:hover, .elgg-menu-item-folder a:focus, .elgg-menu-item-folder a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Forum - discussion */
 .elgg-menu-owner-block .elgg-menu-item-discussion a { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-owner-block .elgg-menu-item-discussion a:hover, .elgg-menu-owner-block .elgg-menu-item-discussion a:focus, .elgg-menu-owner-block .elgg-menu-item-discussion a:active { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Brainstorm */
 .elgg-menu-item-brainstorm a { padding-left:32px; background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-brainstorm a:hover, .elgg-menu-item-brainstorm a:focus, .elgg-menu-item-brainstorm a:active { background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Bookmarks */
 .elgg-menu-item-bookmarks a { padding-left:32px; background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-bookmarks a:hover, .elgg-menu-item-bookmarks a:focus, .elgg-menu-item-bookmarks a:active { background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+/* Pages */
 .elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+
+/* More group tools and info icons */
+/* Group membership */
+.elgg-menu-item-membership-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px 5px #FFFFFF !important; }
+.elgg-menu-item-membership-status a:hover, .elgg-menu-item-membership-status a:focus, .elgg-menu-item-membership-status a:active {
+background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important;
+}
+/* Group notifications */
+.elgg-menu-item-subscription-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px 5px #FFFFFF !important; }
+.elgg-menu-item-subscription-status a:hover { background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
+
+/* Group listing menu */
+.elgg-menu-item-members { background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
 
 
 /* ***************************************

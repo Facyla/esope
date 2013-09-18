@@ -82,6 +82,44 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 }
 
 
+
+// Restauration d'une sauvegarde précédente :
+if (!empty($vars['entity']->import_settings)) {
+	$import_settings = $vars['entity']->import_settings;
+	echo "<h3>Restauration des paramètres</h3>";
+	$import_settings = html_entity_decode($import_settings, ENT_QUOTES, 'UTF-8');
+	$import_settings = mb_decode_numericentity($import_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+	//$import_settings = convert_uudecode($import_settings);
+	if ($import_settings = unserialize($import_settings)) {
+		echo "Lecture des données de restauration...OK<br />";
+		// Pas besoin de tout supprimer : on peut se contenter de mettre à jour ce qui est spéifié, et uniquement ça (évite de virer de nouveaux champs par exemple)
+		//$vars['entity']->unsetAllSettings();
+		//echo "Suppression anciens paramètres...OK<br />";
+		$restore_count = 0;
+		$restore_same = 0;
+		$restore_updated = 0;
+		foreach ($import_settings as $name => $value) {
+			$restore_count++;
+			if ($name == 'import_settings') continue;
+			$old = htmlentities($vars['entity']->$name, ENT_QUOTES, 'UTF-8');
+			$new = htmlentities($value, ENT_QUOTES, 'UTF-8');
+			if ($old == $new) {
+				//echo "<strong>$name : <strong>non modifié</strong> => $new";
+				$restore_same++;
+			} else {
+				echo "<strong>$name : Restauration des paramètres fournis</strong><br />$old &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; $new<hr />";
+				$vars['entity']->setSetting($name, $value);
+				$restore_updated++;
+			}
+		}
+		$vars['entity']->import_settings = null;
+		$restore_report = "Restauration de vos paramètres terminée !  $restore_count paramètres lus, et $restore_updated modifiés ($restore_same identiques).<br />";
+		system_message($restore_report);
+	} else register_error("Erreur lors de la restauration des paramètres : données invalides.");
+}
+
+
+
 /*
 // Tests avec tabs : non finalisés // en fait c'est mieux avec des onglets en accordéon..
 $class = "adf-settings";
@@ -459,9 +497,40 @@ $(function() {
 			<?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
 		</p>
 	</div>
+	
+	
+	<h3>SAUVEGARDE ET RESTAURATION</h3>
+	<div>
+		<p>Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.</p>
 
+		<h4>Import / restauration</h4>
+		<p>Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.
+		<?php
+		// Saisie des données à restaurer
+		echo elgg_view('input/plaintext', array( 'name' => 'params[import_settings]', 'value' => $vars['entity']->import_settings));
+		?>
+
+		<h4>Export / sauvegarde</h4>
+		<p>Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.</p>
+		<?php
+		$plugin_settings = $vars['entity']->getAllSettings();
+		$plugin_settings = serialize($plugin_settings);
+		$plugin_settings = mb_encode_numericentity($plugin_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+		$plugin_settings = htmlentities($plugin_settings, ENT_QUOTES, 'UTF-8');
+		echo '<textarea readonly="readonly" onclick="this.select()">' . $plugin_settings . '</textarea>';
+		?>
+	</div>
 	<br />
 	<br />
 	
 </div>
+
+<?php
+/* Tests : Pour une réduction des données de sauvegarde, une forme de compression ?
+echo "Données de sauvegarde : " . strlen($plugin_settings) . '<br />';
+$compressed_settings = str_replace(';&amp;#', '.', $plugin_settings);
+echo "Données compressées : " . strlen($compressed_settings) . '<br />';
+*/
+
+
 

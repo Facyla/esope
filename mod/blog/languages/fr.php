@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog English language file.
+ * Blog French language file.
  *
  */
 

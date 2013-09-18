@@ -74,7 +74,7 @@ if (elgg_is_logged_in()) {
                 <?php if ($messages) { echo $messages; } ?>
                 <li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a></li>
                 <?php echo $friendrequests; ?>
-                <li><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
+                <li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
                     <!--
                 <li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
                     <li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
@@ -82,16 +82,16 @@ if (elgg_is_logged_in()) {
                 </li>
                     //-->
                 <?php if (elgg_is_admin_logged_in()) { ?>
-                  <li><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
+                  <li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
                 <?php } ?>
                 
                 <?php
                 $helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
-                if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
+                //if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
+                if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '">' . elgg_echo('adf_platform:help') . '</a></li>';
                 ?>
-                <li><a href="<?php echo $url . $helplink; ?>"><?php echo elgg_echo('adf_platform:help'); ?></a></li>
                 
-                <li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+                <li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
                 
               </ul>
             </nav>

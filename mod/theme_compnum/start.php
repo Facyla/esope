@@ -1,15 +1,9 @@
 <?php
 /**
- * group_chats
+ * theme_compnum
  *
- * @package group_chat
+ * @package theme_compnum
  *
- * @todo
- * - Either drop support for "publish date" or duplicate more entity getter
- * functions to work with a non-standard time_created.
- * - Pingbacks
- * - Notifications
- * - River entry for posts saved as drafts and later published
  */
 
 elgg_register_event_handler('init', 'system', 'theme_compnum_init');
@@ -44,6 +38,12 @@ function theme_compnum_init() {
 	// Supprime le lien vers les wikis perso de l'owner_block
 	elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'pages_owner_block_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_compnum_pages_owner_block_menu');
+	// Supprime le lien vers les blogs perso de l'owner_block
+	elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'blog_owner_block_menu');
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_compnum_blog_owner_block_menu');
+	// Supprime le lien vers les fichiers perso de l'owner_block
+	elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'file_owner_block_menu');
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_compnum_file_owner_block_menu');
 	
 	// Réécriture du page_handler des wikis : permet de supprimer les filtres
 	elgg_register_page_handler('pages', 'theme_compnum_pages_page_handler');
@@ -202,6 +202,27 @@ function theme_compnum_pages_owner_block_menu($hook, $type, $return, $params) {
 	}
 	return $return;
 }
+function theme_compnum_blog_owner_block_menu($hook, $type, $return, $params) {
+	if (elgg_instanceof($params['entity'], 'group')) {
+		if ($params['entity']->blog_enable == "yes") {
+			$url = "blog/group/{$params['entity']->guid}/all";
+			$item = new ElggMenuItem('blog', elgg_echo('blog:group'), $url);
+			$return[] = $item;
+		}
+	}
+	return $return;
+}
+function theme_compnum_file_owner_block_menu($hook, $type, $return, $params) {
+	if (elgg_instanceof($params['entity'], 'group')) {
+		if ($params['entity']->file_enable == "yes") {
+			$url = "file/group/{$params['entity']->guid}/all";
+			$item = new ElggMenuItem('file', elgg_echo('file:group'), $url);
+			$return[] = $item;
+		}
+	}
+	return $return;
+}
+
 
 function theme_compnum_index() {
 	global $CONFIG;

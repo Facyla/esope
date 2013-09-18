@@ -32,6 +32,8 @@ $referentiel = array(
 
 if (isset($vars['entity']) && $vars['entity'] instanceof ElggEntity) {
 	$selected_tags = $vars['entity']->referentiel_tags;
+} else {
+	$selected_tags = $vars['referentiel_tags'];
 }
 
 

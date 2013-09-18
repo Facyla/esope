@@ -139,4 +139,23 @@ section div.module header ul li a { margin: 0 0 0 6px; }
 #profile-details .odd, #profile-details .even { background-color: transparent !important; margin: 3px 0 4px; font-size: 14px; }
 
 
+/* CSS additionnelles du thème */
+header h1 { margin-top:26px; }
+header .header-subtitle { float: left; clear: left; margin-top: 10px; }
+.elgg-button-action.home-button { text-align: center; padding: 12px 5px; width: 550px; margin: 0 20px; }
+
+
+/* Bandeau déconnecté */
+header.notloggedin { background: #523866; border-top: 0; height: 48px; }
+header.notloggedin h1 { margin-top: 0; font-size: 16px; font-family:Lato; font-weight:bold; }
+header.notloggedin h1 a:hover { text-decoration:none; }
+header.notloggedin .header-subtitle { font-size: 13.5px; margin-top:0; font-family:LatoLight; }
+
+/* Modules - widgets */
+section div.module header { min-height:30px; }
+section div.module header h2 { font-family: Lato; text-transform: none; }
+section div.module header ul { margin: 4px 6px 0 0; }
+section div.module header ul li a { margin: 0 0 0 6px; }
+
+#adf-homepage #home_intro p { padding: 8px 20px 10px 0px; }
 
