@@ -23,8 +23,9 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 
 
 
-$all_feedback_count = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
-$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count));
+//$all_feedback_count = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
+//$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count));
+$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
 $feedbacks = array();
 $feedback_open = 0; $feedback_closed = 0;
 $feedback_content = 0; $feedback_bug = 0; $feedback_suggestion = 0; $feedback_question = 0;
