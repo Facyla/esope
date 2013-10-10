@@ -79,9 +79,9 @@ $autopositionnement_opt = array(
 //. '<span class="elgg-icon elgg-icon-star-alt"></span>';
 */
 $autopositionnement_radio = array(
-		'<span class="elgg-icon elgg-icon-star-empty"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
-		'<span class="elgg-icon elgg-icon-star"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
-		'<span class="elgg-icon elgg-icon-star-alt"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
+		'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
+		'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
 	);
 $update_dossier_opt = array(
 		'yes' => elgg_echo ('dossierdepreuve:update_dossier:yes'),
