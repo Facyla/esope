@@ -20,6 +20,13 @@ global $CONFIG;
 
 if (elgg_is_logged_in()) {
 	elgg_set_page_owner_guid($_SESSION['guid']);
+	// User connecté = celui dont le dossier est mis à jour
+	$owner_guid = elgg_get_logged_in_user_guid();
+	$dossierdepreuve = dossierdepreuve_get_user_dossier($owner_guid);
+	if ($dossierdepreuve) {
+		$typedossier = $dossierdepreuve->typedossier;
+		if (empty($typedossier)) $typedossier = 'b2iadultes';
+	}
 	/*
 	// Selon les types de profil
 	if (elgg_is_admin_logged_in()) {
@@ -229,6 +236,14 @@ if ($referentiel) {
 	// RECUPERATION DES DONNÉES STOCKEES EN SESSION
 	//if (elgg_is_logged_in()) $history_data = $_SESSION['user']->history_data; else 
 	$history_data = $_SESSION['dossierdepreuve']->history_data;
+	if (elgg_is_logged_in()) {
+		if (!$history_data['history']) {
+			//register_error("Pas de données dans l'historique. Récupération à partir du dossier de preuve.");
+		} else {
+			//system_message("Vos réponses précédentes ont été récupérées. Vous pouvez reprendre vos réponses, et terminer le questionnaire pour les enregistrer.");
+		}
+		//$history_data = $_SESSION['user']->history_data; else 
+	}
 	//echo "DONNEES DE SESSION : " . print_r($history_data, true) . '<hr />'; // debug
 	// Historique des Q/R
 	$history = $history_data['history'];
@@ -487,7 +502,8 @@ if ($referentiel) {
 	// Traitement des données précédentes : réponse ou indications, et stockage des données en session pour plus tard
 	// Préparation question suivante
 	
-	// Le formulaire proprement dit
+	
+	// QUESTIONNAIRE : Le formulaire proprement dit
 	//echo '<form action="' . $vars['url'] . 'action/' . $action . '" enctype="multipart/form-data" method="post">';
 	echo '<form action="" enctype="multipart/form-data" method="post">';
 	echo elgg_view('input/securitytoken');
@@ -549,11 +565,11 @@ if ($referentiel) {
 	if (!empty($email)) { $questionnaire_info .= elgg_echo('dossierdepreuve:report:email', array($email)); }
 	
 	
-	// Define sumit button (make it reusable)
+	// Define submit button (make it reusable)
 	if (empty($step) || in_array($step, array('start', 'selection'))) {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:start")));
 	} else if ($step == 'quest') {
-		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend')));
+		$submit_button = elgg_echo('dossierdepreuve:next:details') . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend')));
 	} else if ($step == 'endofquest') {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:sendonly")));
 	} else if ($step == 'final') {
@@ -628,6 +644,7 @@ if ($referentiel) {
 				</script>';
 			
 			
+			// GÉNÉRATION DE LA LISTE DE QUESTIONS
 			// Parcours du référentiel : pour chaque domaine
 			foreach ($referentiel as $domaine => $competences) {
 				//if ($current_domaine != $domaine) continue;
@@ -688,13 +705,31 @@ if ($referentiel) {
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
 						$tabcontent .= '<p>';
-						$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+						// Restauration des données en session si c'est le cas
+						if (isset($history[$domaine][$competence][$i])) {
+							$history_value = $history[$domaine][$competence][$i];
+						} else {
+							$history_value = false;
+						}
+						/* Récupération des données de positionnement
+						if (!$history_value) {
+							// Attention : pas possible car c'est par compétence et non par question !!!
+							if (elgg_is_logged_in() && $dossierdepreuve) {
+								$history_value = $dossierdepreuve->{$typedossier . '_' . $domaine . '_' . $competence . '_' . 'value_learner'
+							}
+						}
+						*/
+						if ($history_value) {
+							$tabcontent .= '<span class="dossierdepreuve-question ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+						} else {
+							$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+						}
 						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
 						//$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval');
 						$tabcontent .= '</span> ';
-						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"')) . '</p>';
+						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value)) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
@@ -784,7 +819,7 @@ if ($referentiel) {
 						error_log("Mail : $mail");
 						if (is_email_address($mail)) {
 							if (elgg_send_email($msg_from, $mail, $msg_subject, $msg_content, $msg_params)) {
-								system_message(elgg_echo('dossierdepreuve:msg:sucess', array($mail)));
+								system_message(elgg_echo('dossierdepreuve:msg:success', array($mail)));
 							} else register_error(elgg_echo('dossierdepreuve:msg:error', array($mail)));
 						} else register_error(elgg_echo('dossierdepreuve:msg:invalidmail', array($mail)));
 					}

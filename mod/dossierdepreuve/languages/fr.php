@@ -51,8 +51,8 @@ $french = array(
 	'dossierdepreuve:results:updatedatalink:newwindow' => "Mettre à jour mon dossier de suivi avec ces informations (nouvelle fenêtre)",
 	'dossierdepreuve:results:sendbymail:description' => "Vous pouvez choisir de recevoir ces résultats par email&nbsp;: pour cela merci d'indiquer votre adresse email ci-dessous.",
 	'dossierdepreuve:results:done' => "Ce questionnaire d'autopositionnement est maintenant terminé.",
-	'dossierdepreuve:report:email' => "Email pour l'envoi du questionnaire : %s<br />",
-	'dossierdepreuve:report:confirmsend' => "Etes-vous sûr de vouloir terminer le questionnaire et afficher vos résultats ? Vous ne pourrez plus revenir en arrière.",
+	'dossierdepreuve:report:email' => "Email utilisé pour l'envoi des résultats du questionnaire : %s<br />",
+	'dossierdepreuve:report:confirmsend' => "Etes-vous sûr de vouloir terminer le questionnaire et afficher vos résultats ? Vous ne pourrez plus revenir en arrière : si vous voulez continuer à répondre pour d'autres domaines, veuillez Annuler puis utiliser les flèches ou les onglets. Si vous avez terminé, vosu pouvez confirmer.",
 	'dossierdepreuve:auto:datacleared' => "Données du questionnaire effacées.",
 	'dossierdepreuve:auto:previousdomain' => "Domaine précédent",
 	'dossierdepreuve:auto:previousdomainnum' => "Domaine précédent : domaine %s",
@@ -80,6 +80,9 @@ $french = array(
 	'dossierdepreuve:msg:success' => "Un mail de synthèse a bien été envoyé à %s",
 	'dossierdepreuve:msg:error' => "Une erreur est survenue : le rapport n'a pas pu être envoyé à %s !",
 	'dossierdepreuve:msg:invalidmail' => "Adresse email invalide : %s",
+	'dossierdepreuve:dossierfound' => "Le bon dossier de preuve a pu être retrouvé automatiquement.",
+	'dossierdepreuve:invalid' => "Le dossier spécifié est invalide.",
+	'dossierdepreuve:nowriteaccess' => "Vous n'avez pas accès en écriture à ce dossier de preuve. Pour avoir accès en écriture, vous devez être soit le candidat qui a créé le dossier, soit un formateur de son groupe de formation.",
 	
 	
 	
@@ -117,6 +120,7 @@ $french = array(
 	'dossierdepreuve:save' => "Enregistrer",
 	'dossierdepreuve:start' => "Commencer le test",
 	'dossierdepreuve:next' => "Enregistrer mes réponses et afficher les résultats",
+	'dossierdepreuve:next:details' => "Pour passer d'un domaine à l'autre, utilisez les flèches ou les onglets en haut de page. Lorsque vous avez terminé, vous pouvez cliquer sur le bouton ci-dessous pour afficher vos résultats. Vous pourrez alors choisir de les recevoir par email.",
 	'dossierdepreuve:sendupdate' => "Terminer (et recevoir mes résultats par email)",
 	'dossierdepreuve:sendonly' => "Terminer (et recevoir mes résultats par email)",
 	'dossierdepreuve:finish' => "Envoyer les résultats par email",
