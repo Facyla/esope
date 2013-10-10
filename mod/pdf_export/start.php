@@ -41,7 +41,7 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'object')) {
 		// Settings
 		$validsubtypes = elgg_get_plugin_setting('validsubtypes', 'pdf_export');
-		if (empty($validsubtypes)) $validsubtypes = 'page, page_top, blog, groupforumtopic, bookmarks, file';
+		if (empty($validsubtypes)) $validsubtypes = 'page, page_top, blog, groupforumtopic, bookmarks';
 		$validsubtypes = str_replace(' ', '', $validsubtypes); // No white space ! (we want clean array values)
 		$validsubtypes = explode(',', $validsubtypes);
 		// Only add menu to valid chosen object subtypes
