@@ -1,5 +1,6 @@
 > ESOPE pour Environnement Social Opensource Public Elgg (english: Elgg Social Opensource Public Environment), est le nouveau nom du projet initié sous le nom de "Departements en réseaux"
 
+> La distribution est désormais hébergée sur Github : https://github.com/Facyla/esope
 
 
 # Présentation historique de Départements en réseaux
