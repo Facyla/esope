@@ -685,7 +685,15 @@ if ($referentiel) {
 					// Nom et description de la compétence
 					$tabcontent .= '<div class="dossierdepreuve-competence nodata ' . "radio-$domaine" . ' competence-' . $domaine . '-' . $competence . '">';
 					$tabcontent .= '<a href="#" title="' . str_replace(array('<br />', '<br>', '\n'), ' &nbsp; ', elgg_echo($competence_basename . ':aide')) . '"><strong>' . elgg_echo($competence_basename) . '&nbsp;:</strong> ';
-					$tabcontent .= elgg_echo($competence_basename . ':description') . '</a><br /><br />';
+					$tabcontent .= elgg_echo($competence_basename . ':description') . '</a>';
+					// Niveau global actuel sur la compétence
+					if (elgg_is_logged_in() && $dossierdepreuve) {
+						if ($dossierdepreuve_value = $dossierdepreuve->{$typedossier . '_' . $domaine . '_' . $competence . '_' . 'value_learner') {
+							$current_value = '<br /><em>' . elgg_echo('dossierdepreuve:currentautopositionnement') . elgg_echo('dossierdepreuve:autopositionnement:' . $dossierdepreuve_value) . '</em>';
+							$tabcontent .= $current_value;
+						}
+					}
+					$tabcontent .= '<br /><br />';
 					// Récupération des questions de positionnement pour chaque compétence (savoirs => "Je sais...")
 					//$elements = elgg_get_plugin_setting($basename . 'elements', 'dossierdepreuve');
 					$savoirs = elgg_get_plugin_setting($property_basename . 'savoirs', 'dossierdepreuve');
