@@ -18,7 +18,7 @@ $editor_guid = elgg_get_logged_in_user_guid();
 if ($dossierdepreuve_guid) {
 	// Si le GUID est invalide, on prévient
 	if (!($dossierdepreuve = get_entity($dossierdepreuve_guid))) {
-		register_error('Le dossier spécifié est invalide.');
+		register_error(elgg_echo('dossierdepreuve:invalid'));
 		// On oublie le GUID pour pouvoir tenter de récupérer le dossier du membre connecté
 		$dossierdepreuve_guid = false;
 	}
@@ -27,7 +27,7 @@ if ($dossierdepreuve_guid) {
 // Si on n'a pas de GUID ou si le GUID passé est invalide, on récupère le dossier du membre demandé
 if (!$dossierdepreuve_guid) {
 	$dossierdepreuve = dossierdepreuve_get_user_dossier($owner_guid);
-	if ($dossierdepreuve) { system_message('Le bon dossier de preuve a pu être retrouvé automatiquement.'); }
+	if ($dossierdepreuve) { system_message(elgg_echo('dossierdepreuve:dossierfound')); }
 }
 
 // Si on a un dossier, il faut vérifier qu'on peut l'éditer..
@@ -60,7 +60,7 @@ if (elgg_instanceof($dossierdepreuve, 'object', 'dossierdepreuve')) {
 		$content = elgg_view("forms/dossierdepreuve/edit",array('entity' => $dossierdepreuve));
 		$pagetitle = elgg_echo("dossierdepreuve:edit");
 	} else {
-		$content = "Vous n'avez pas accès en écriture à ce dossier de preuve.";
+		$content = elgg_echo('dossierdepreuve:nowriteaccess');
 		$pagetitle = elgg_echo("dossierdepreuve:canedit");
 	}
 

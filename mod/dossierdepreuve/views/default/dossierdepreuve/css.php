@@ -18,11 +18,25 @@ $inactivecolor = '#CCC';
 
 /* Autopositionnement */
 #autopositionnement_quest_tabs { width:100%; margin:2px auto 0 auto; padding:0; }
-#autopositionnement_quest_tabs div { float:left; padding:6px 0; text-align:center; font-weight:bold; text-shadow:1px 1px 1px #000; color:#FFF; background:<?php echo $defaultcolor ?>; }
-#autopositionnement_quest_tabs div.elgg-state-selected { background:<?php echo $activecolor ?>; }
-#autopositionnement_quest_tabs div.inactive { background:<?php echo $inactivecolor ?>; }
-#autopositionnement_quest_tabs div a { color:white; }
+#autopositionnement_quest_tabs div { float:left; padding:0; text-align:center; font-weight:bold; text-shadow:1px 1px 1px #000; color:#FFF; background:<?php echo $defaultcolor ?>; }
+#autopositionnement_quest_tabs div.elgg-state-selected, #autopositionnement_quest_tabs div:hover, #autopositionnement_quest_tabs div:focus, #autopositionnement_quest_tabs div:focus { background:<?php echo $activecolor ?>; }
+#autopositionnement_quest_tabs div.inactive { background:<?php echo $inactivecolor ?>; padding: 6px 0; }
+#autopositionnement_quest_tabs div a { color:white; padding-top:6px; padding-bottom:6px; display:block; }
+#autopositionnement_quest_tabs div a:hover, #autopositionnement_quest_tabs div a:active, #autopositionnement_quest_tabs div a:focus { text-decoration:none; }
 #autopositionnement_quest_tab_content_wrapper { border:3px solid <?php echo $activecolor ?>; padding:3px 6px; }
+
+/* Styles des boutons radio, si on veut... */
+/*
+input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_ko_16nb.png); }
+input[type="checkbox"].question-0:checked, input[type="radio"].question-0:checked { content: url(<?php echo $urlicon; ?>smiley_ko_16.png); }
+input[type="checkbox"].question-50, input[type="radio"].question-50 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_medium_16nb.png); }
+input[type="checkbox"].question-50:checked, input[type="radio"].question-50:checked { content: url(<?php echo $urlicon; ?>smiley_medium_16.png); }
+input[type="checkbox"].question-100, input[type="radio"].question-100 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_ok_16nb.png); }
+input[type="checkbox"].question-100:checked, input[type="radio"].question-100:checked { content: url(<?php echo $urlicon; ?>smiley_ok_16.png); }
+*/
+.autopositionnement-question-0 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_ko_16.png); }
+.autopositionnement-question-50 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_medium_16.png); }
+.autopositionnement-question-100 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_ok_16.png); }
 
 .dossierdepreuve-submit { text-align:center; }
 .dossierdepreuve-submit input { font-size:20px; }
