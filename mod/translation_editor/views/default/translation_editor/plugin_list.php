@@ -7,7 +7,7 @@
 		$exists = 0; 
 		$custom = 0;
 		
-		$list .= "<table id='translation_editor_plugin_list' class='elgg-table' title='" . elgg_echo("translation_editor:plugin_list:title") . "'>";
+		$list = "<table id='translation_editor_plugin_list' class='elgg-table' title='" . elgg_echo("translation_editor:plugin_list:title") . "'>";
 		$list .= "<tr>";
 		$list .= "<th class='first_col'>" . elgg_echo("translation_editor:plugin_list:plugin") . "</th>";
 		$list .= "<th>" . elgg_echo("translation_editor:plugin_list:total") . "</th>";
@@ -53,13 +53,14 @@
 			$list .= "<td" . $complete_class . ">" . $percentage . "%</td>";
 			
 			if($plugin_stats["custom"] > 0){
-				$merge_url = elgg_add_action_tokens_to_url($vars["url"] . "action/translation_editor/merge?current_language=" . $current_language . "&plugin=" . $plugin_name);
+				$merge_url = $vars["url"] . "action/translation_editor/merge?current_language=" . $current_language . "&plugin=" . $plugin_name;
 				
 				$list .= "<td>";
-				$list .= "<span class='translation_editor_plugin_list_merge' title='" . elgg_echo("translation_editor:plugin_list:merge") . "' onclick='document.location.href=\"" . $merge_url . "\"'></span>";
+				$list .= elgg_view("output/url", array("href" => $merge_url, "is_action" => true, "title" => elgg_echo("translation_editor:plugin_list:merge"), "text" => elgg_view_icon("download")));
 				if(elgg_is_admin_logged_in()){
-					$delete_url = elgg_add_action_tokens_to_url($vars["url"] . "action/translation_editor/delete?current_language=" . $current_language . "&plugin=" . $plugin_name);
-					$list .= "<span class='translation_editor_plugin_list_delete' title='" . elgg_echo("translation_editor:plugin_list:delete") . "' onclick='translation_editor_delete_custom(\"" . $delete_url . "\");'></span>";
+					$delete_url = $vars["url"] . "action/translation_editor/delete?current_language=" . $current_language . "&plugin=" . $plugin_name;
+					
+					$list .= elgg_view("output/confirmlink", array("href" => $delete_url, "title" => elgg_echo("delete"), "text" => elgg_view_icon("delete-alt")));
 				}
 				$list .= "</td>";
 			} else {

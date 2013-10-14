@@ -6,7 +6,6 @@
 
 	// Build elements
 	$title_text = elgg_echo("translation_editor:menu:title");
-	$title = elgg_view_title($title_text);
 	
 	elgg_push_breadcrumb($title_text, "translation_editor");
 	
@@ -23,10 +22,7 @@
 	
 	$languages = array_keys($CONFIG->translations);
 	
-	$disabled_languages = elgg_get_plugin_setting(TRANSLATION_EDITOR_DISABLED_LANGUAGE, "translation_editor");
-	if(!empty($disabled_languages)){
-		$disabled_languages = explode(",", $disabled_languages);
-	} else {
+	if(!($disabled_languages = translation_editor_get_disabled_languages())){
 		$disabled_languages = array();
 	}
 	
@@ -36,7 +32,7 @@
 		$site_language = "en";
 	}
 	
-	$body .= elgg_view("translation_editor/language_selector", array("current_language" => $current_language, "plugin" => $plugin, "languages" => $languages, "disabled_languages" => $disabled_languages, "site_language" => $site_language));
+	$body = elgg_view("translation_editor/language_selector", array("current_language" => $current_language, "plugin" => $plugin, "languages" => $languages, "disabled_languages" => $disabled_languages, "site_language" => $site_language));
 	
 	if(empty($plugin)){
 		// show plugin list
@@ -60,7 +56,8 @@
 	
 	// Build page
 	$page_data = elgg_view_layout('one_column', array(
-		'content' => "<div class='elgg-head'>" . $title . "</div>" . $body
+		'title' => $title_text,
+		'content' => $body
 	));
 
 	echo elgg_view_page($title_text, $page_data);

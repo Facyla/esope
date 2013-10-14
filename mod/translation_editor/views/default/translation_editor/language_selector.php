@@ -12,7 +12,7 @@
 		$list .= "<th class='translation_editor_flag'>&nbsp;</th>";
 		$list .= "<th>" . elgg_echo("translation_editor:language") . "</th>";
 		if(elgg_is_admin_logged_in()){
-			$list .= "<th class='translation_editor_enable'>" . elgg_echo("translation_editor:disabled") . "</th>";
+			$list .= "<th class='translation_editor_enable'>" . elgg_echo("disable") . "</th>";
 		}
 		$list .= "</tr>";
 		
@@ -40,7 +40,7 @@
 					$list .= "<a href='" . $url . "'>" . elgg_echo($language) . " (" . $completeness . "%)</a>";
 					
 					if(elgg_is_admin_logged_in() && $completeness == 0){
-						$list .= elgg_view("output/confirmlink", array("href" => $vars["url"] . "action/translation_editor/delete_language?language=" . $language, "class" => "translation_editor_delete_language", "confirm" => elgg_echo("translation_editor:language_selector:remove_language:confirm")));
+						$list .= elgg_view("output/confirmlink", array("href" => $vars["url"] . "action/translation_editor/delete_language?language=" . $language, "confirm" => elgg_echo("translation_editor:language_selector:remove_language:confirm"), "text" => elgg_view_icon("delete-alt")));
 					}
 				} else {
 					$list .= "<a href='" . $url . "'>" . elgg_echo($language) . "</a>";

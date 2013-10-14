@@ -3,6 +3,8 @@
 	define("TRANSLATION_EDITOR_DISABLED_LANGUAGE", "disabled_languages");
 
 	require_once(dirname(__FILE__) . "/lib/functions.php");
+	require_once(dirname(__FILE__) . "/lib/hooks.php");
+	require_once(dirname(__FILE__) . "/lib/events.php");
 	
 	function translation_editor_init(){
 		global $CONFIG;
@@ -19,10 +21,7 @@
 		}
 		
 		if (elgg_is_admin_logged_in()){
-			// Extend context menu with admin links
-   			elgg_extend_view('profile/menu/adminlinks','translation_editor/adminlinks');
-
-   			// add to admin menu
+			// add to admin menu
    			elgg_register_menu_item('page', array(
 				'name' => "translation_editor",
 				'href' => "translation_editor",
@@ -60,6 +59,7 @@
 				}
 				break;
 		}
+		
 		return true;
 	}
 	
@@ -84,8 +84,21 @@
 			translation_editor_unregister_translations(); 
 		}
 		
-		// add custom translations
-		translation_editor_load_translations(); 
+		// load custom translations
+		$user_language = get_current_language();
+		$elgg_default_language = "en";
+		
+		$load_languages = array($user_language, $elgg_default_language);
+		$load_languages = array_unique($load_languages);
+		
+		$disabled_languages = translation_editor_get_disabled_languages();
+		
+		foreach($load_languages as $language){
+			if(empty($disabled_languages) || !in_array($language, $disabled_languages)){
+				// add custom translations
+				translation_editor_load_translations($language);
+			}
+		}
 	}
 	
 	function translation_editor_version_053(){
@@ -96,31 +109,19 @@
 		}
 	}
 	
-	function translation_editor_user_hover_menu($hook, $type, $return, $params) {
-		$user = $params['entity'];
-	
-		if (elgg_is_admin_logged_in() && !($user->isAdmin())){
-			// TODO: replace with a single toggle editor action?
-			if(translation_editor_is_translation_editor($user->getGUID())){
-				$url = "action/translation_editor/unmake_translation_editor?user=" . $user->getGUID();
-				$title = elgg_echo("translation_editor:action:unmake_translation_editor");	
-			} else {
-				$url = "action/translation_editor/make_translation_editor?user=" . $user->getGUID();
-				$title = elgg_echo("translation_editor:action:make_translation_editor");
-			}
-			
-			$item = new ElggMenuItem('translation_editor', $title, $url);
-			$item->setSection('admin');
-			$item->setConfirmText(elgg_echo("question:areyousure"));
-			$return[] = $item;
-		
-			return $return;
-		}
-	}
-	
 	// Plugin init
 	elgg_register_event_handler('plugins_boot', 'system', 'translation_editor_plugins_boot_event', 50); // before normal execution to prevent conflicts with plugins like language_selector
 	elgg_register_event_handler('init', 'system', 'translation_editor_init');
+	
+	// register hooks
+	elgg_register_plugin_hook_handler("action", "admin/plugins/activate", "translation_editor_actions_hook");
+	elgg_register_plugin_hook_handler("action", "admin/plugins/deactivate", "translation_editor_actions_hook");
+	elgg_register_plugin_hook_handler("action", "admin/plugins/activate_all", "translation_editor_actions_hook");
+	elgg_register_plugin_hook_handler("action", "admin/plugins/deactivate_all", "translation_editor_actions_hook");
+	elgg_register_plugin_hook_handler("action", "admin/plugins/set_priority", "translation_editor_actions_hook");
+	
+	// register events
+	elgg_register_event_handler("upgrade", "system", "translation_editor_upgrade_event");
 	
 	// Register actions
 	elgg_register_action("translation_editor/translate", dirname(__FILE__) . "/actions/translate.php");

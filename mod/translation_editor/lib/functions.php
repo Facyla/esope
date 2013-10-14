@@ -37,7 +37,11 @@
 				
 				$key_count = count($plugin_keys);
 				
-				$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				if(array_key_exists($current_language, $backup_full)){
+					$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				} else {
+					$exists_count = 0;
+				}
 				
 				if($custom_content = translation_editor_read_translation($current_language, "core")){
 					$custom_count = count($custom_content);
@@ -63,7 +67,11 @@
 				
 				$key_count = count($plugin_keys);
 				
-				$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				if(array_key_exists($current_language, $backup_full)){
+					$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				} else {
+					$exists_count = 0;
+				}
 				
 				if($custom_content = translation_editor_read_translation($current_language, "custom_keys")){
 					$custom_count = count($custom_content);
@@ -98,7 +106,11 @@
 					
 					$key_count = count($plugin_keys);
 					
-					$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+					if(array_key_exists($current_language, $backup_full)){
+						$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+					} else {
+						$exists_count = 0;
+					}
 					
 					if($custom_content = translation_editor_read_translation($current_language, $title)){
 						$custom_count = count($custom_content);
@@ -168,7 +180,11 @@
 				
 				$key_count = count($plugin_keys);
 				
-				$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				if(array_key_exists($current_language, $backup_full)){
+					$exists_count = $key_count - count(array_diff_key($plugin_keys, $backup_full[$current_language]));
+				} else {
+					$exists_count = 0;
+				}
 				
 				if($custom_content = translation_editor_read_translation($current_language, $plugin)){
 					$custom = $custom_content;
@@ -347,6 +363,8 @@
 			
 			if(file_exists($filename)){
 				$result = unlink($filename);
+			} else {
+				$result = true;
 			}
 		}
 		
@@ -374,14 +392,39 @@
 	}
 	
 	function translation_editor_is_translation_editor($user_guid = 0){
+		static $editors_cache;
+		
 		$result = false;
 		
 		if(empty($user_guid)){
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		
-		if($user = get_user($user_guid)){
-			if(($user->translation_editor == true) || ($user->isAdmin())){
+		if(!empty($user_guid)){
+			// preload all editors
+			if(!isset($editors_cache)){
+				$editors_cache = array();
+				
+				$translation_editor_id = add_metastring("translation_editor");
+				$true_id = add_metastring(true);
+				
+				$options = array(
+					"type" => "user",
+					"limit" => false,
+					"joins" => array("JOIN " . elgg_get_config("dbprefix") . "metadata md ON e.guid = md.entity_guid"),
+					"wheres" => array("(md.name_id = " . $translation_editor_id ." AND md.value_id = " . $true_id . ")"),
+					"callback" => "translation_editor_guid_only"
+				);
+				
+				if($guids = elgg_get_entities($options)){
+					$editors_cache = $guids;
+				}
+			}
+		
+			// is the user an editor or an admin
+			if(in_array($user_guid, $editors_cache)){
+				$result = true;
+			} elseif(($user = get_user($user_guid)) && $user->isAdmin()){
 				$result = true;
 			}
 		}
@@ -394,11 +437,14 @@
 		
 		$result = false;
 		
-		if($disabled_languages = elgg_get_plugin_setting("disabled_languages", "translation_editor")){
-			$disabled_languages = explode(",", $disabled_languages);
-
+		if($disabled_languages = translation_editor_get_disabled_languages()){
+			$system_cache = elgg_get_system_cache();
+			
 			foreach($CONFIG->translations as $key => $dummy){
 				if(in_array($key, $disabled_languages)){
+					if($system_cache) {
+						$system_cache->delete($key . ".lang");
+					}
 					unset($CONFIG->translations[$key]);
 				}
 			}
@@ -481,6 +527,10 @@
 			}
 		}
 		
+		if($result){
+			elgg_trigger_event("language:merge", "translation_editor", $language);
+		}
+		
 		// reset language cache on all sites
 		if($update){
 			$ts = time();
@@ -490,4 +540,48 @@
 		}
 		
 		return $result;
+	}
+
+	/**
+	 *  parses a string meant for printf and returns an array of found parameters
+	 *  
+	 *  @param string $string
+	 *  @return array
+	 */
+	function translation_editor_get_string_parameters($string, $count = true) {
+		$valid = '/%[-+]?(?:[ 0]|\'.)?a?\d*(?:\.\d*)?[%bcdeEufFgGosxX]/';
+		
+		$result = array();
+		
+		if(!empty($string)){
+			if(!$string = preg_replace('/^[^%]*/', '', $string)){
+				// no results
+			} elseif(preg_match_all($valid, $string, $matches)) {
+				$result = $matches[0];
+			}
+		}
+		
+		if($count){
+			$result = count($result);
+		}
+		
+		return $result;
+	}
+	
+	function translation_editor_get_disabled_languages(){
+		static $result;
+	
+		if(!isset($result)){
+			$result = false;
+			
+			if($disabled_languages = elgg_get_plugin_setting(TRANSLATION_EDITOR_DISABLED_LANGUAGE, "translation_editor")){
+				$result = string_to_tag_array($disabled_languages);
+			}
+		}
+	
+		return $result;
+	}
+	
+	function translation_editor_guid_only($row){
+		return (int) $row->guid;
 	}

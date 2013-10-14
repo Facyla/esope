@@ -1,20 +1,43 @@
-= Translation Editor =
+=  Version history =
+1.3 (2013-04-05):
 
-Manage translations
+- added: german translation (thanks to Originalhardy http://community.elgg.org/pg/profile/Originalhardy)
+- changed: internal function for better performance
+- changed: code cleanup and PHP warning fixes
+- changed: README.txt to README.md for GitHub
+- fixed: incorrect result in function
+- removed: some legacy code
 
-== Contents ==
+1.2.1 (2012-03-02):
 
-1. Features
-2. Version History
+- fixed: CSS issue on plugin edit
+- fixed: custom translations not loaded in some cases
+- fixed: language selection (on settings) sometimes displays to many languages
+- fixed: not using an available function
+- fixed: using define in stead of string
+- fixed: issue where disabled languages could not be removed
+- changed: layout to be consistent with Elgg design
+- removed: some icons where replaced by Elgg default icons
 
-== 1. Features ==
-- Edit translations
-- Assign multiple translators
-- Add custom languages
-- Add custom keys
-- Caching of language files
+1.2 (2011-12-06):
 
-== 2. Version History ==
+- added: French translation for version 1.1, thanks to Jean-Baptiste Duclos (http://community.elgg.org/pg/profile/Duclos) 
+- fixed: a deadloop problem with detecting vsprintf aguments is some cases
+
+1.1 (2011-11-28):
+
+- added: event trigger on merge of a translation "language:merge" => "translation_editor"
+- fixed: page_handler issue with Elgg 1.8.1
+
+1.0 (2011-11-14):
+
+- added: check on missing params in sprintf strings
+- fixed: removing of custom translations failed due to missing JS function
+- fixed: depricated notice in add language form
+- fixed: translations reload on plugin enable/disable
+- fixed: translations reload when running upgrade.php
+- changed: links to merge and delete custom translation
+
 1.0 beta (2011-10-05):
 
 - added: shortcut link from translation search results to related plugins
