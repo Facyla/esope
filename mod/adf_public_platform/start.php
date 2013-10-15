@@ -429,7 +429,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	$back_to_last = $_SESSION['last_forward_from'];
 	if(!empty($back_to_last)) {
 		register_error("Redirection vers $back_to_last");
-		$_SESSION['last_forward_from'] = '';
+		//$_SESSION['last_forward_from'] = '';
 		forward($back_to_last);
 		//header("Location: {$location}");
 		//exit;
@@ -437,11 +437,13 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (empty($loginredirect)) { forward(); } else { forward($CONFIG->url . $loginredirect); }
+	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
+	forward();
 }
 
 function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
 	global $CONFIG;
+	register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 	// Si jamais la valeur de retour n'est pas définie, on le fait
 	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
 	return $CONFIG->url . 'login';
