@@ -1,4 +1,5 @@
-> ESOPE pour Environnement Social Opensource Public Elgg (english: Elgg Social Opensource Public Environment), est le nouveau nom du projet initié sous le nom de "Departements en réseaux"
+> ESOPE pour Environnement Social Opensource Public Elgg, est le nouveau nom du projet initié sous le nom de "Departements en réseaux"
+> In english: Elgg Social Opensource Public Environment)
 
 > La distribution est désormais hébergée sur Github : https://github.com/Facyla/esope
 
@@ -13,12 +14,23 @@ Crédits
 
 
 # Contenu de la plateforme
+* Elgg core, et plugins associés
+* Traduction intégrale FR (et bien sûr EN)
+* Plusieurs plugins communautaires (testés pour leur intégration, et parfois améliorés)
+* Un plugin qui sert de pivot à cette distribution : adf_public_platform ("Acc'Essonne")
+* Plusieurs thèmes et développements pour des usages spécifiques
 
-## Elgg core, et plugins associés
-
-## Traduction intégrale FR (et bien sûr EN)
-
-## Plugins communautaires : brainstorm, event_calendar, friend_requests, group_operators, guidtool, login_as, profile_manager, threads
+## Plugins communautaires
+* brainstorm (Manutopik)
+* profile_manager (ColdTrick)
+* event_calendar (Kevin Jardine)
+* friend_requests
+* group_operators
+* guidtool
+* login_as
+* profile_manager
+* threads
+* & much more
 
 ## Développements spécifiques à cette distribution
 * Acc'Essonne : thème accessible et configurable - le coeur de cette distribution
@@ -31,8 +43,8 @@ Crédits
 	* accès externes limités à certaines ressources, pour permettre des accès limités à des collaborateurs externes
 
 
-# Conception et maintenance de la distribution
-* Florian DANIEL aka Facyla
+# Conception et maintenance
+* Florian DANIEL - Facyla
 
 
 # Contributeurs
