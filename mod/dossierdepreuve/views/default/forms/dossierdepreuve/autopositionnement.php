@@ -688,9 +688,8 @@ if ($referentiel) {
 					$tabcontent .= elgg_echo($competence_basename . ':description') . '</a>';
 					// Niveau global actuel sur la compétence
 					if (elgg_is_logged_in() && $dossierdepreuve) {
-						if ($dossierdepreuve_value = $dossierdepreuve->{$typedossier . '_' . $domaine . '_' . $competence . '_' . 'value_learner') {
-							$current_value = '<br /><em>' . elgg_echo('dossierdepreuve:currentautopositionnement') . elgg_echo('dossierdepreuve:autopositionnement:' . $dossierdepreuve_value) . '</em>';
-							$tabcontent .= $current_value;
+						if ($dossierdepreuve_value = $dossierdepreuve->{$typedossier . '_' . $domaine . '_' . $competence . '_' . 'value_learner'}) {
+							$tabcontent .=  '<br /><em>' . elgg_echo('dossierdepreuve:currentautopositionnement') . elgg_echo('dossierdepreuve:autopositionnement:' . $dossierdepreuve_value) . '</em>';
 						}
 					}
 					$tabcontent .= '<br /><br />';
