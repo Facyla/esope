@@ -428,7 +428,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	// Si on vient d'une page particulière, retour à cette page
 	$back_to_last = $_SESSION['last_forward_from'];
 	if(!empty($back_to_last)) {
-		register_error("Redirection vers $back_to_last");
+		//register_error("Redirection vers $back_to_last");
 		//$_SESSION['last_forward_from'] = '';
 		forward($back_to_last);
 		//header("Location: {$location}");
@@ -443,7 +443,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 
 function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
 	global $CONFIG;
-	register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
+	//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 	// Si jamais la valeur de retour n'est pas définie, on le fait
 	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
 	if (!elgg_is_logged_in()) return $CONFIG->url . 'login';
