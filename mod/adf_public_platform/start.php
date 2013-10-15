@@ -92,7 +92,7 @@ function adf_platform_init() {
 	//elgg_register_page_handler('dashboard', 'adf_platform_dashboard_page_handler');
 	
 	// Redirection après login
-	elgg_register_event_handler('login','user','adf_platform_login_handler');
+	elgg_register_event_handler('login','user','adf_platform_login_handler', 1);
 	
 	// Actions après inscription
 	elgg_register_event_handler('login','user','adf_platform_register_handler');
@@ -427,6 +427,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	global $CONFIG;
 	// Si on vient d'une page particulière, retour à cette page
 	$back_to_last = $_SESSION['last_forward_from'];
+	register_error("Redirection vers $back_to_last");
 	if(!empty($back_to_last)) {
 		$_SESSION['last_forward_from'] = '';
 		forward($back_to_last);
