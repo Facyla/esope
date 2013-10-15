@@ -429,11 +429,10 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	$back_to_last = $_SESSION['last_forward_from'];
 	if(!empty($back_to_last)) {
 		register_error("Redirection vers $back_to_last");
-		//$_SESSION['last_forward_from'] = '';
-		define("REFERER", $back_to_last);
-		forward($back_to_last);
-		//header("Location: {$location}");
-		//exit;
+		$_SESSION['last_forward_from'] = '';
+		//forward($back_to_last);
+		header("Location: {$location}");
+		exit;
 	}
 	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
