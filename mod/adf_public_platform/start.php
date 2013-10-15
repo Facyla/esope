@@ -255,6 +255,10 @@ function adf_platform_init() {
 		// (non bloquant mais avec contenu vide à la place)
 	}
 	
+	// Ssi déconnecté, hook pour les redirections pour renvoyer sur le login
+	if (!elgg_is_logged_in()) {
+		elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_public_forward_login_hook');
+	}
 	
 }
 
@@ -423,7 +427,6 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	global $CONFIG;
 	// Si on vient d'une page particulière, retour à cette page
 	$back_to_last = $_SESSION['last_forward_from'];
-	register_error("Last : $back_to_last   // Referrer : " . REFERER);
 	if(!empty($back_to_last)) {
 		$_SESSION['last_forward_from'] = '';
 		forward($back_to_last);
@@ -432,6 +435,13 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
 	if (empty($loginredirect)) { forward(); } else { forward($CONFIG->url . $loginredirect); }
+}
+
+function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
+	global $CONFIG;
+	// Si jamais la valeur de retour n'est pas définie, on le fait
+	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
+	return $CONFIG->url . 'login';
 }
 
 /*
