@@ -446,7 +446,8 @@ function adf_platform_public_forward_login_hook($hook_name, $entity_type, $retur
 	register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 	// Si jamais la valeur de retour n'est pas définie, on le fait
 	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-	return $CONFIG->url . 'login';
+	//return $CONFIG->url . 'login';
+	return null;
 }
 
 /*
