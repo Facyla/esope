@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 > ESOPE pour Environnement Social Opensource Public Elgg, est le nouveau nom du projet initié sous le nom de "Departements en réseaux"
 > In english: Elgg Social Opensource Public Environment)
 
@@ -58,28 +57,3 @@ Crédits
 * Cartier International
 
 
-=======
-Translation Editor
-==================
-Manage translations
-
-Contents
---------
-1. Features
-2. Special thanks
-
-1. Features
------------
-- Edit translations
-- Assign multiple translators
-- Add custom languages
-- Add custom keys
-- Caching of language files
-
-2. Special thanks
------------------
-Special thanks goes out to to following people:
-
-Jean-Baptiste Duclos (http://community.elgg.org/pg/profile/Duclos) 
-For providing a French translation of version 1.1
->>>>>>> ea6f4128fce83460d451e0bf3584ea3021992bce
