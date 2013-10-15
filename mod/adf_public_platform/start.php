@@ -429,7 +429,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	$back_to_last = $_SESSION['last_forward_from'];
 	if(!empty($back_to_last)) {
 		register_error("Redirection vers $back_to_last");
-		$_SESSION['last_forward_from'] = '';
+		//$_SESSION['last_forward_from'] = '';
 		define("REFERER", $back_to_last);
 		forward($back_to_last);
 		//header("Location: {$location}");
