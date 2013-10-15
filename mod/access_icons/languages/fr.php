@@ -7,9 +7,12 @@ $french = array (
 	
 	// Settings
 	'access_icons:settings:helpurl' => "URL de la page d'aide sur les accès",
-	'access_icons:settings:helpurl:help' => "Indiquez l'URL complète de la page qui détaille les divers types d'accès disponibles pour ce site. Cette page sera affichée dans une \"lightbox\" (boîte affichée dans la page), aussi il est préférable qu'elle puisse être affichée sans l'interface du site.<br />Vous pouvez ne rien indiquer pour ne pas afficher de lien du tout sur les niveaux d'accès, ou utiliser le texte configurable ci-dessous à la place.",
+	'access_icons:settings:helpurl:help' => "Indiquez l'URL complète de la page qui détaille les divers types d'accès disponibles pour ce site. Cette page sera affichée dans une \"lightbox\" (boîte affichée dans la page), aussi il est préférable qu'elle puisse être affichée sans l'interface du site (utilisation de cmspages conseillée).<br />Vous pouvez ne rien indiquer pour ne pas afficher de lien du tout sur les niveaux d'accès.",
 	'access_icons:settings:helptext' => "Texte de la page d'aide sur les accès",
 	'access_icons:settings:helptext:help' => "Plutôt qu'un lien vers une page, vous pouvez configurer ici directement le texte qui apparaîtra pour expliquer les divers types d'accès disponibles pour ce site. Les informations saisies ici seront affichées dans une \"lightbox\" (boîte affichée dans la page). Vous pouvez utiliser tout type de formatage HTML. Laissez le champ vide pour ne rien afficher du tout (pas de lien), ou écrivez \"RAZ\" pour charger les valeurs par défaut.",
+	
+	'access_icons:settings:helptext:details' => "Pour créer votre page d'explications, il est recommandé d'utilisé le plugin cmpspages, qui vous permet de créer une page qui peut être affichée sans l'interface du site, en ajoutant ?embed=true. Pour créer cette page, cliquez sur <a href=\"" . $CONFIG->url . "cmspages/?pagetype=help-access\" target=\"_new\">, puis utilisez <strong>" . $CONFIG->url . "cmspages/?pagetype=<i>help-access</i>?embed=true</strong> dans le champ ci-dessus.<br />Note : vous pouvez remplacer <i>help-access</i> par l'élément d'URL de votre choix.<br /><br />Voici ci-dessous un exemple de texte à copier-coller dans cette page, libre à vous de l'adapter à votre convenance.";
+	
 	'access_icons:settings:helptext:default' => "<p>Il est essentiel de d&eacute;finir correctement les droits d'acc&egrave;s lorsque vous faites de nouvelles publications, afin de garantir que les informations que vous publi&eacute;es sont partag&eacute;es avec les bonnes personnes.</p>
 <p>Seules les personnes avec lesquelles vous partagez vos publications y auront acc&egrave;s. Les autres ne sauront pas que vous avez publi&eacute; quelque chose.</p>
 <p>Ainsi, si vous cr&eacute;ez un article en mode \"Priv&eacute;\", personne ne pourra le lire. Inversement, pour qu'une image puisse &ecirc;tre ins&eacute;r&eacute;e dans un article qui sera visible hors connexion, elle doit &ecirc;etre publi&eacute;e en mode \"Public\".</p>
@@ -45,11 +48,22 @@ $french = array (
 <td><span class=\"elgg-access elgg-access-private\">Priv&eacute; / Brouillon</span></td>
 <td>&nbsp;La publication n'est visible que par <strong>vous</strong>.</td>
 </tr>
+<tr>
+<td><span class=\"elgg-access elgg-access-private\">Priv&eacute; / Brouillon</span></td>
+<td>&nbsp;La publication n'est visible que par <strong>vous</strong>.</td>
+</tr>
+<td><span class=\"elgg-access elgg-access-default\">Par d&eacute;faut</span></td>
+<td>&nbsp;Il ne s'agit pas d'un niveau d'acc&egrave;s au sens propre, mais du <strong>niveau d'acc&egrave;s d&eacute;fini par d&eacute;faut</strong> pour toutes les nouvelles publications. C'est le niveau d'acc&egrave;s qui s'applique pour toute nouvelle publication.</td>
+</tr>
+<tr>
+<td><span class=\"elgg-access elgg-access-limited\">Limit&eacute;</span></td>
+<td>&nbsp;Cas particulier : lorsque le site est en mode \"intranet\", le niveau d'acc&egrave;s \"Public\" est remplac&eacute; par \"Limit&eacute;\" : seuls les utilisateurs connect&eacute;s y ont acc&egrave;s. En pratique, ce niveau est &eacute;quivalent &agrave; \"Membres du site\".</td>
+</tr>
 </tbody>
 </table>",
 	
 	// Droits d'accès
-	'access_icons:details' => " - Cliquer pour en savoir plus sur tous les droits d'accès disponibles.",
+	'access_icons:details' => " - Cliquez pour en savoir plus sur tous les droits d'accès disponibles.",
 	
 	// Default access level (-1)
 	'access_icons:default:details' => "Les droits d'accès par défaut du site (ou de votre compte utilisateur le cas échéant) s'appliquent à ce contenu.",
