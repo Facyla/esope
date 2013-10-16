@@ -70,7 +70,7 @@ $css = elgg_get_loaded_css();
 	<?php
 	$config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	// CSS complémentaire configurable
-	if (!empty($config_css)) { echo '<style>' . $config_css . '</style>'; }
+	if (!empty($config_css)) { echo '<style>' . html_entity_decode($config_css) . '</style>'; }
 	?>
 	
 	<?php echo $feedref; ?>
