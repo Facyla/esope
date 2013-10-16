@@ -13,7 +13,7 @@
     <category>theme</category>
     <category>functional adaptations</category>
    
-    <activate_on_install>true</activate_on_install>
+    <activate_on_install>false</activate_on_install>
    
     <requires>
         <type>elgg_release</type>

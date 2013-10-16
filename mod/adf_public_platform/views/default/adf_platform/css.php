@@ -552,3 +552,11 @@ textarea, .elgg-input-rawtext { width:100%; }
 #profile_completeness_progress { width: 200px; line-height: 18px; position: absolute; border: 1px solid black; text-align: center; font-weight: bold; }
 
 
+/* Agencement fluide des blocs dans les groupes */
+.elgg-gallery-fluid > li { float: right; }
+#groups-tools > li.odd { float: left; }
+#groups-tools > li { margin-bottom: 20px; min-height: 100px; width: 50%; min-width: 300px; display:inline-block; }
+
+#groups-tools > li:nth-child(2n+1) { margin-right: 0; margin-left: 0; }
+#groups-tools > li:nth-child(2n) { margin-right: 0; margin-left: 0; }
+

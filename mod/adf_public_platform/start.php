@@ -92,7 +92,7 @@ function adf_platform_init() {
 	//elgg_register_page_handler('dashboard', 'adf_platform_dashboard_page_handler');
 	
 	// Redirection après login
-	elgg_register_event_handler('login','user','adf_platform_login_handler');
+	elgg_register_event_handler('login','user','adf_platform_login_handler', 1);
 	
 	// Actions après inscription
 	elgg_register_event_handler('login','user','adf_platform_register_handler');
@@ -255,6 +255,10 @@ function adf_platform_init() {
 		// (non bloquant mais avec contenu vide à la place)
 	}
 	
+	// Ssi déconnecté, hook pour les redirections pour renvoyer sur le login
+	if (!elgg_is_logged_in()) {
+		elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_public_forward_login_hook');
+	}
 	
 }
 
@@ -422,15 +426,25 @@ function adf_platform_public_index() {
 function adf_platform_login_handler($event, $object_type, $object) {
 	global $CONFIG;
 	// Si on vient d'une page particulière, retour à cette page
-	if(!empty($_SESSION['referer'])) {
-		$referer = $_SESSION['referer'];
-		$_SESSION['referer'] = "";
-		forward($referer);
+	$back_to_last = $_SESSION['last_forward_from'];
+	if(!empty($back_to_last)) {
+		//register_error("Redirection vers $back_to_last");
+		forward($back_to_last);
 	}
 	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (empty($loginredirect)) { forward($CONFIG->url); } else { forward($CONFIG->url . $loginredirect); }
+	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
+	forward();
+}
+
+function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
+	global $CONFIG;
+	//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
+	// Si jamais la valeur de retour n'est pas définie, on le fait
+	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
+	if (!elgg_is_logged_in()) return $CONFIG->url . 'login';
+	return null;
 }
 
 /*
