@@ -3,6 +3,10 @@ global $CONFIG;
 $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 ?>
 
+.elgg-access a { display: inline-block; margin-left: -18px; padding-left: 18px; min-height: 10px; text-decoration:none; }
+.elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
+.elgg-list-access { float:right; font-size:10px; }
+
 /* Listing des groupes : groupes ouverts et fermés (membership) */
 /*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }

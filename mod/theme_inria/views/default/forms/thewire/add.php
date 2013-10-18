@@ -32,6 +32,8 @@ echo '<div style="width:14%; float:right;">';
 	<?php
 
 	if ($post) {
+		//echo '<div>' . elgg_echo('theme_inria:thewire:access') . elgg_view('output/access', array('entity' => $post)) . '</div>';
+		echo '<div>' . elgg_view('output/access', array('entity' => $post)) . '</div>';
 		echo elgg_view('input/hidden', array(
 			'name' => 'parent_guid',
 			'value' => $post->guid,
