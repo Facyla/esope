@@ -5,7 +5,7 @@ $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 
 .elgg-access a { display: inline-block; margin-left: -18px; padding-left: 18px; min-height: 10px; text-decoration:none; }
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
-.elgg-list-access { float:right; font-size:10px; }
+.elgg-list-access { float:right; font-size:10px; margin-left: 15px; margin-top: 6px; }
 
 /* Listing des groupes : groupes ouverts et fermés (membership) */
 /*
