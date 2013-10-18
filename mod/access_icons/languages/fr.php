@@ -56,7 +56,7 @@ $french = array (
 <td>&nbsp;Il ne s'agit pas d'un niveau d'acc&egrave;s au sens propre, mais du <strong>niveau d'acc&egrave;s d&eacute;fini par d&eacute;faut</strong> pour toutes les nouvelles publications. C'est le niveau d'acc&egrave;s qui s'applique pour toute nouvelle publication.</td>
 </tr>
 <tr>
-<td><span class=\"elgg-access elgg-access-limited\">Limit&eacute;</span></td>
+<td><span class=\"elgg-access elgg-access-public elgg-access-limited\">Limit&eacute;</span></td>
 <td>&nbsp;Cas particulier : lorsque le site est en mode \"intranet\", le niveau d'acc&egrave;s \"Public\" est remplac&eacute; par \"Limit&eacute;\" : seuls les utilisateurs connect&eacute;s y ont acc&egrave;s. En pratique, ce niveau est &eacute;quivalent &agrave; \"Membres du site\".</td>
 </tr>
 </tbody>
