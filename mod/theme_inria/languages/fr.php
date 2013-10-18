@@ -114,6 +114,8 @@ $french = array (
 	'adf_platform:directory' => 'Membres',
 	
 	'inria:mygroups' => "Mes groupes",
+	'theme_inria:thewire:charleft' => "maxi",
+	'theme_inria:thewire:access' => "Accès : ",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",
