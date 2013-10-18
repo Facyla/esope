@@ -32,7 +32,7 @@ if ($firststeps_page instanceof ElggObject) {
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
 
 
-$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('theme_inria/thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 4, 'pagination' => false));
 elgg_pop_context('widgets');
