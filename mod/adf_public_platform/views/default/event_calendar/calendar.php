@@ -1,4 +1,7 @@
 <?php
+$event_calendar_vars = get_input('event_calendar_vars', false);
+if ($event_calendar_vars) { $vars = array_merge($vars, $event_calendar_vars); }
+
 if ($vars['mode']) {
 	$mode = $vars['mode'];
 } else {
