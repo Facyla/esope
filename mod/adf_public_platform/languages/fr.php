@@ -274,8 +274,28 @@ $fr = array(
 	'adf_platform:settings:slideshare:help' => "",
 	
 	
-	//'' => "",
 	
+	// DATES
+	'date:format' => 'D d F Y',
+	'date:day:0' => 'Dimanche',
+	'date:day:1' => 'Lundi',
+	'date:day:2' => 'Mardi',
+	'date:day:3' => 'Mercredi',
+	'date:day:4' => 'Jeudi',
+	'date:day:5' => 'Vendredi',
+	'date:day:6' => 'Samedi',
+	'date:month:1' => 'Janvier',
+	'date:month:2' => 'Février',
+	'date:month:3' => 'Mars',
+	'date:month:4' => 'Avril',
+	'date:month:5' => 'Mai',
+	'date:month:6' => 'Juin',
+	'date:month:7' => 'Juillet',
+	'date:month:8' => 'Août',
+	'date:month:9' => 'Septembre',
+	'date:month:10' => 'Octobre',
+	'date:month:11' => 'Novembre',
+	'date:month:12' => 'Décembre',
 	
 );
 
