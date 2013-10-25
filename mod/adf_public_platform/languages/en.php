@@ -295,6 +295,17 @@ $en = array(
 	'date:month:11' => 'November',
 	'date:month:12' => 'December',
 	
+	'adf_platform:dashboard:title' => "My custom homepage",
+	'adf_platform:welcome:msg' => "Welcome on your social platform.<br />Site adminis, please edit this message through the theme configuration !",
+	'adf_platform:firststeps:linktitle' => "First steps (click to show/hide)",
+	'adf_platform:site:activity' => "Recent activity",
+	'adf_platform:thewire:togglelink' => "Publish on &#x25BC;'s wire",
+	'adf_platform:homewire:title' => "%s's wire'",
+	'adf_platform:thewire:charleft' => "left",
+	'adf_platform:thewire:access' => "Access : ",
+	'adf_platform:homewire:msg' => "Would you share an idea or info ?",
+	'members:search' => "Members search",
+	
 );
 
 add_translation('en', $en);

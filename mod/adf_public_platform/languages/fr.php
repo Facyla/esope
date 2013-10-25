@@ -298,6 +298,18 @@ $fr = array(
 	'date:month:11' => 'Novembre',
 	'date:month:12' => 'Décembre',
 	
+	'adf_platform:dashboard:title' => "Mon Accueil personnalisable",
+	'adf_platform:welcome:msg' => "Bienvenue sur votre plateforme collaborative.<br />Administrateurs du site, pensez à éditer ce message !",
+	'adf_platform:firststeps:linktitle' => "Premiers pas (cliquer pour afficher / masquer)",
+	'adf_platform:site:activity' => "Activité récente",
+	'adf_platform:thewire:togglelink' => "Publier sur le Fil &#x25BC;",
+	'adf_platform:homewire:title' => "Le Fil de %s",
+	'adf_platform:thewire:charleft' => "max",
+	'adf_platform:thewire:access' => "Accès : ",
+	'adf_platform:homewire:msg' => "Un message ou une info à partager ?",
+	'members:search' => "Recherche de membres",
+
+	
 );
 
 add_translation('fr', $fr);

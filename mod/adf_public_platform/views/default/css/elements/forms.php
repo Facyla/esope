@@ -97,8 +97,8 @@ select {
 form.elgg-form {
 	background: #f6f6f6;
 	float: left;
-	padding: 8px 12px;
-	width: 92%;
+	padding: 1% 2%;
+	width: 94%;
 }
 form.elgg-form-groups-find {
 	margin: 10px 0 20px;
