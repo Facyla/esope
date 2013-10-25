@@ -10,6 +10,7 @@ $fr = array(
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
 	
+	// Overrides plugins translations
 	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
   'river:comment:object:announcement' => "%s a commenté %s",
   'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
@@ -17,7 +18,7 @@ $fr = array(
 	'widget:toggle' => "Montrer/masquer le module %s",
 	'widget:editmodule' => "Configurer le module %s",
 	
-	// Annonces : manque des clefs de trad
+	// Announcements: missing translation keys - Annonces : manque des clefs de trad
 	'announcements:summary' => "Titre de l'annonce",
 	'announcements:body' => "Texte de l'annonce",
 	'announcements:post' => "Publier l'annonce",
@@ -31,6 +32,7 @@ $fr = array(
 	'item:object:category' => "Thématiques utilisées",
 	'item:object:topicreply' => "Réponse dans un forum",
 	
+	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
 	'adf_platform:groupinvite' => "invitation à rejoindre un groupe à examiner",
  	'adf_platform:groupinvites' => "invitations à rejoindre un groupe à examiner",
@@ -189,7 +191,7 @@ $fr = array(
 	'adf_platform:action:public_profile:saved' => "La visibilité de votre profil a bien été modifiée.",
 	'adf_platform:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
 	'adf_platform:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
-	
+		
 	
 	// Behaviour settings
 	'adf_platform:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",
@@ -216,7 +218,7 @@ $fr = array(
 	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
 	
-	
+	// Widget settings
 	'adf_platform:settings:widget:blog' => "Activer le widget Blog",
 	'adf_platform:settings:widget:bookmarks' => "Activer le widget Liens web",
 	'adf_platform:settings:widget:brainstorm' => "Activer le widget Boîte à idées",
@@ -273,8 +275,7 @@ $fr = array(
 	'adf_platform:settings:slideshare' => "URL de la page/compte Slideshare",
 	'adf_platform:settings:slideshare:help' => "",
 	
-	
-	
+
 	// DATES
 	'date:format' => 'D d F Y',
 	'date:day:0' => 'Dimanche',
