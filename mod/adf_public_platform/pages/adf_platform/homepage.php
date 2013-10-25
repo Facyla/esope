@@ -11,7 +11,7 @@ $user = elgg_get_logged_in_user_entity();
 elgg_set_context('dashboard');
 elgg_set_page_owner_guid($user_guid);
 //$title = elgg_echo('dashboard');
-$title = 'Mon Accueil personnalisable';
+$title = elgg_echo('adf_platform:dashboard:title');
 
 // Titre de la page
 $static = '<h2 class="invisible">' . $title . '</h2>';
@@ -21,7 +21,7 @@ $firststeps_guid = elgg_get_plugin_setting('firststeps_guid', 'adf_public_platfo
 $firststeps_page = get_entity($firststeps_guid);
 if ($firststeps_page instanceof ElggObject) {
   $firststeps = '<div class="firststeps">
-      <a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">Premiers pas (cliquer pour afficher / masquer)
+      <a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">' . elgg_echo('adf_platform:firststeps:linktitle') . '
         <span id="firststeps_show" style="float:right;">&#x25BC;</span>
         <span id="firststeps_hide" style="float:right; display:none;">&#x25B2;</span>
       </a>'
@@ -43,7 +43,7 @@ if ($firststeps_page instanceof ElggObject) {
 
 // Texte intro configurable
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
-if (empty($intro)) { $intro = 'Bienvenue sur votre plateforme collaborative.<br />Administrateurs du site, pensez à éditer ce message !'; }
+if (empty($intro)) { $intro = elgg_echo('adf_platform:welcome:msg'); }
 
 
 // Composition de la page
@@ -89,7 +89,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 //Affichage actus du site si demandé
 $homesite_index = elgg_get_plugin_setting('homesite_index', 'adf_public_platform');
 if ($homesite_index == 'yes') {
-	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">Activité récente</a></h3>';
+	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
 	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
@@ -100,8 +100,10 @@ if ($homesite_index == 'yes') {
 // The Wire
 $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
-	$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">Publier sur le Fil &#x25BC;</a><a href="' . $CONFIG->url . 'thewire/all">Le Fil de ' . $CONFIG->sitename . '</a></h3>';
-	$thewire .= '<div id="thewire_homeform" style="display:none;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener') . '</div>';
+	// Show/hide version
+	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('adf_platform:thewire:togglelink') . '</a><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
+	$thewire .= '<h3><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
+	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
 	elgg_push_context('widgets');
 	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 	elgg_pop_context('widgets');

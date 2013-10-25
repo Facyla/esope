@@ -560,6 +560,7 @@ textarea, .elgg-input-rawtext { width:100%; }
 #groups-tools > li:nth-child(2n+1) { margin-right: 0; margin-left: 0; }
 #groups-tools > li:nth-child(2n) { margin-right: 0; margin-left: 0; }
 
+<<<<<<< HEAD
 /* Menu fixé en haut lors du scrolling */
 .floating { position: fixed !important; z-index: 101; }
 header .floating { background:black; width:100%; top:0; height:30px; overflow:hidden; z-index:102; }
@@ -586,4 +587,10 @@ section div.module footer { background-size: 100%; }
 @media (max-width:980px) {
 	.interne { max-width:98%; }
 }
+=======
+
+/* Generic useful classes */
+.no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
+
+>>>>>>> bc83403516a187cb9f8136faacdc6adbf649a070
 
