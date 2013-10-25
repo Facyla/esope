@@ -560,3 +560,30 @@ textarea, .elgg-input-rawtext { width:100%; }
 #groups-tools > li:nth-child(2n+1) { margin-right: 0; margin-left: 0; }
 #groups-tools > li:nth-child(2n) { margin-right: 0; margin-left: 0; }
 
+/* Menu fixé en haut lors du scrolling */
+.floating { position: fixed !important; z-index: 101; }
+header .floating { background:black; width:100%; top:0; height:30px; overflow:hidden; z-index:102; }
+#transverse.floating { top: 30px; }
+
+
+/* Prémices de responsive design */
+/* Pour la fluidité en général */
+.elgg-page-default { min-width:200px; max-width:100%; }
+/* Menus */
+#transverse nav ul { width:auto; }
+/* Largeur de page standard */
+.interne {min-width:200px; width:auto; max-width:80%; }
+/* Quand on utilise les widgets */
+.elgg-widgets { min-width:200px; }
+section div.module { width: 94%; padding: 3%; background-size:100%; }
+section div.module, section div.module div.activites { min-width:180px; width:auto; }
+section div.module footer { background-size: 100%; }
+
+@media (max-width:1225px) {
+	.interne { max-width:980px; }
+}
+
+@media (max-width:980px) {
+	.interne { max-width:98%; }
+}
+
