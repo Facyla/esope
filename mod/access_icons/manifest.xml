@@ -19,6 +19,8 @@
 <!--
 
 0.1 : 20130917 Initial version
+	- add access icons on entities and groupes
+	- rewrites group listing menu to add proper classes for access styling
 
 //-->
 
