@@ -38,7 +38,10 @@ $color12 = $css['color12']; // #DEDEDE
 .elgg-page-default .elgg-page-header > .elgg-inner {
 	width: 990px;
 	margin: 0 auto;
-	height: 437px;  
+	/*
+	height: 437px;
+	*/
+	height: auto;
 	
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {

@@ -110,12 +110,12 @@
 .site-sendieDiv { border-top:1px solid #CCCCCC; position:absolute; width:99%; bottom:2px; }
 #sitechat-compose { width:85%; }
 #sitechat-helpers { float:right; width:15%; text-align:right; }
-#sitechat-page-wrap #sendie { width:10%; }
+#sitechat-page-wrap #sendie { width:100%; }
 #sitechat-page-wrap #smileyGroup { clear:both; width:100%; position:relative; }
 #sitechat-page-wrap #chat-area  { height: auto; position: fixed; top: 0; bottom: 80px; left: 0; right: 0; }
 
 /* Site chat button */
-#groupchat-sitelink { position: fixed; right: 0; top: 10px; background: white; border: 1px solid black;
-border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px; height:14px; box-shadow:0 0 3px 0 white; overflow:hidden; vertical-align: top; }
+#groupchat-sitelink { position:fixed; right:0; top: 3px; background:white; border: 1px solid black;
+border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px; height:14px; box-shadow:0 0 3px 0 white; overflow:hidden; vertical-align: top; z-index:111; }
 #groupchat-sitelink:hover, #groupchat-sitelink:focus, #groupchat-sitelink:active { width:auto; }
 
