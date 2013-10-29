@@ -8,10 +8,9 @@
 $logged_in_user = elgg_get_logged_in_user_entity();
 
 $user_guids = get_input('user_guid');
-if (!is_array($user_guids)) {
-	$user_guids = array($user_guids);
-}
+if (!is_array($user_guids)) { $user_guids = array($user_guids); }
 $group_guid = get_input('group_guid');
+$register = get_input('group_register', false);
 $group = get_entity($group_guid);
 
 // Permet d'inviter qui l'on veut - si réglage activé
@@ -24,10 +23,13 @@ if ($invite_anyone == 'yes') { $bypass_friends = true; }
 if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdit()) {
 	foreach ($user_guids as $guid) {
 		$user = get_user($guid);
-		if (!$user) {
-			continue;
+		if (!$user) { continue; }
+		
+		// On permet de forcer l'inscription si demandé
+		if ($register) {
+			if (!$group->isMember($user)) { $group->join($user); }
 		}
-
+		
 		if (check_entity_relationship($group->guid, 'invited', $user->guid)) {
 			register_error(elgg_echo("groups:useralreadyinvited"));
 			continue;
