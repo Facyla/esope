@@ -449,7 +449,7 @@ header nav ul li a:active { color: #ddd; }
 	text-decoration: none;
 }
 #transverse nav ul li ul {
-	background-color: #ccc;
+	background: <?php echo $color13; ?>;
 	position: absolute;
 	top: 40px; /* au lieu de 44px */
 	left: -1px;
