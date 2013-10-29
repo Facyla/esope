@@ -26,8 +26,11 @@ $english = array(
 	'theme_inria:topbar:new_group' => "Create&nbsp;a&nbsp;group",
 	'theme_inria:topbar:invite' => 'Invite',
 
-	'theme_inria:topbar:collaborative' => "Collaborate",
+	'theme_inria:topbar:collaborative' => "My tools",
+	'theme_inria:inria_tool' => "Choose which tools to display",
 	'theme_inria:topbar:forge' => "Gforge",
+	'theme_inria:topbar:etherpad' => "Etherpad",
+	'theme_inria:topbar:doodle' => "Doodle",
 	'theme_inria:topbar:notepad' => "Notepad",
 	'theme_inria:topbar:framadate' => "Framadate",
 	'theme_inria:topbar:webinar' => "Webinar",
@@ -41,7 +44,8 @@ $english = array(
 	'theme_inria:topbar:mailer' => "Zimbra",
 	'theme_inria:topbar:hollydays' => "Casa",
 	'theme_inria:topbar:mission' => "IziGFD",
-	'theme_inria:topbar:tickets' => "Tickets&nbsp;SUPPORT",
+	'theme_inria:topbar:mission2' => "Oreli",
+	'theme_inria:topbar:tickets' => "SUPPORT&nbsp;Tickets",
 
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",
@@ -53,7 +57,7 @@ $english = array(
 	'theme_inria:membershipreq:reject' => 'Decline',
 	'theme_inria:membershipreq:delete' => 'Delete',
 
-	'theme_inria:membershiprej:default_subject' => 'Your memebership request is rejected',
+	'theme_inria:membershiprej:default_subject' => 'Your membership request is rejected',
 	'theme_inria:membershiprej:default_message' => 'Sorry, your membership request %s is not accepted by %s.',
 	'theme_inria:membershiprej:send' => 'Send',
 	'theme_inria:membershiprej:cancel' => 'Cancel',
@@ -81,21 +85,21 @@ $english = array(
 	'groups:tabs:presentation' => 'Presentations',
 	'groups:tabs:photos' => 'Photos',
 
-	'blog:none' => 'Actually there is no news for this group',
+	'blog:none' => 'No news yet in this group',
 	'blog:addpost' => "Add news",
 	'blog:editpost' => "Edit these news",
 	'blog:delpost' => "Delete these news",
 
-	'bookmarks:none' => 'Actually there is no bookrmarks for this group',
+	'bookmarks:none' => 'No bookmarks yet in this group',
 	'bookmarks:edit' => 'Edit this bookmark',
 	'bookmarks:delete' => 'Delete this bookmark',
 	'bookmarks:add' => 'Share new bookrmark',
 
 	'pages:new' => 'Add new page',
-	'pages:none' => 'Actually there is no pages for this group',
+	'pages:none' => 'No page yet in this group',
 
 	'groups:deltopic' => 'Delete the topic',
-	'groups:tabs:river' => 'The 6 lastest activities',
+	'groups:tabs:river' => 'Latest activities',
 	'groups:lastactivity' => 'Last activity %s',
 	'groups:admin' => 'Admin: ',
 	'groups:publications' => 'Publications',
@@ -108,8 +112,24 @@ $english = array(
 
 	'entities:owner' => 'by %s',
 	'entities:footer:time' => 'Last update %s',
-	'theme_inria:thewire:charleft' => "maxi",
 
+	'adf_platform:directory' => 'Members',
+	
+	'inria:mygroups' => "My groups",
+	'theme_inria:thewire:charleft' => "left",
+
+	'theme_inria:thewire:access' => "Accès : ",
+	
+	// Traductions
+	'theme_inria:login' => "Log in",
+	'members:online' => "Online members",
+	'members:newest' => "New members",
+	'main' => "Your Dashboard",
+	'group_profile' => "Groupe homepage",
+	'inria:groups:featured' => "Featured groups",
+	'inria:members:newest' => "New members",
+	'loginusername' => "LDAP login",
+	
 );
 
 add_translation("en",$english);

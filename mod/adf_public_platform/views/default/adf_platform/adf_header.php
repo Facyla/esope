@@ -35,7 +35,7 @@ if (elgg_is_logged_in()) {
 				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $group->name . '</a></li>';
 			// Si on liste les sous-groupes, on le fait ici si demandé
 			if (elgg_is_active_plugin('au_subgroups') && $display_subgroups) {
-				$groups .= adf_platform_list_groups_submenu($group);
+				$groups .= adf_platform_list_groups_submenu($group, 1, true, $own);
 			}
 		}
 	// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente

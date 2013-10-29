@@ -548,12 +548,16 @@ if (!function_exists('messages_get_unread')) {
 
 
 if (elgg_is_active_plugin('au_subgroups')) {
-	function adf_platform_list_groups_submenu($group, $level = 1) {
+	function adf_platform_list_groups_submenu($group, $level = 1, $member_only = false, $user = null) {
+		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
 		$children = au_subgroups_get_subgroups($group, 0);
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
+			if ($member_only) {
+				if (!$child->isMember($user)) { continue; }
+			}
 			$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $child->name . '</a></li>';
 			$menuitem .= adf_platform_list_groups_submenu($child, $level + 1);
 		}
