@@ -469,14 +469,34 @@ header nav ul li a:active { color: #ddd; }
 #transverse nav ul li ul li a {
 	float: left;
 	width: 181px;
-	padding: 3px 10px;
+	padding: 2px 10px;
 	font-size: 0.9em;
 	border-bottom: 1px solid #fff;
 }
 
-#transverse nav ul li.groups ul { width: 302px; }
-#transverse nav ul li.groups ul li { width: 300px; }
-#transverse nav ul li.groups ul li a { width: 281px; }
+#transverse nav ul li.groups ul { width: 402px; }
+#transverse nav ul li.groups ul li { width: 400px; }
+#transverse nav ul li.groups ul li a { width: 381px; }
+#transverse nav ul li.groups ul li.subgroup { margin-left: 6px; width: 294px; }
+#transverse nav ul li.groups ul li.subgroup-2 { margin-left: 12px; width: 288px; }
+#transverse nav ul li.groups ul li.subgroup-3 { margin-left: 18px; width: 282px; }
+#transverse nav ul li.groups ul li.subgroup-4 { margin-left: 24px; width: 276px; }
+#transverse nav ul li.groups ul li.subgroup-5 { margin-left: 30px; width: 270px; }
+#transverse nav ul li.groups ul li.subgroup-6 { margin-left: 36px; width: 264px; }
+#transverse nav ul li.groups ul li.subgroup-7 { margin-left: 42px; width: 258px; }
+#transverse nav ul li.groups ul li.subgroup-8 { margin-left: 48px; width: 252px; }
+#transverse nav ul li.groups ul li.subgroup-9 { margin-left: 54px; width: 246px; }
+#transverse nav ul li.groups ul li.subgroup-10 { margin-left: 60px; width: 240px; }
+#transverse nav ul li.groups ul li.subgroup a { width: 375px; }
+#transverse nav ul li.groups ul li.subgroup-2 a { width: 369px; }
+#transverse nav ul li.groups ul li.subgroup-3 a { width: 363px; }
+#transverse nav ul li.groups ul li.subgroup-4 a { width: 357px; }
+#transverse nav ul li.groups ul li.subgroup-5 a { width: 351px; }
+#transverse nav ul li.groups ul li.subgroup-6 a { width: 345px; }
+#transverse nav ul li.groups ul li.subgroup-7 a { width: 339px; }
+#transverse nav ul li.groups ul li.subgroup-8 a { width: 333px; }
+#transverse nav ul li.groups ul li.subgroup-9 a { width: 327px; }
+#transverse nav ul li.groups ul li.subgroup-10 a { width: 321px; }
 
 #transverse nav ul li.thematiques ul { width: 372px; }
 #transverse nav ul li.thematiques ul li { width: 370px; }
