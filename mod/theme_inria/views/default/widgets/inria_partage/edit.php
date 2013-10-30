@@ -7,7 +7,19 @@
 
 $widget_id = $vars['entity']->guid;
 
+$login = elgg_view('input/text', array('name' => 'params[login]', 'value' => $vars['entity']->login));
+$password = elgg_view('input/text', array('name' => 'params[password]', 'value' => $vars['entity']->password));
 
+?>
+<p>
+	<label for="login_<?php echo $widget_id; ?>">Login: <?php echo $login; ?></label>
+</p>
+
+<p>
+	<label for="password_<?php echo $widget_id; ?>">Password: <?php echo $password; ?></label>
+</p>
+
+<?php
 // set default value
 /*
 if (!isset($vars['entity']->pages_num)) {
@@ -28,4 +40,6 @@ $dropdown = elgg_view('input/dropdown', $params);
 	<?php echo $dropdown; ?>
 </div>
 */
+?>
+<p>Réglages pour Partage</p>
 
