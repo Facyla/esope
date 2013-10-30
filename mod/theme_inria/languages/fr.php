@@ -1,5 +1,4 @@
 <?php
-
 /**
 * Elgg custom index plugin language pack
 * 
@@ -14,7 +13,7 @@ $french = array (
 	'theme_inria:topbar:profil' => "Mon profil",
 
 
-	
+	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
 	'theme_inria:topbar:groups' => "Les&nbsp;groupes",
@@ -28,9 +27,12 @@ $french = array (
 	'theme_inria:topbar:invite' => 'Inviter',
 
 	'theme_inria:topbar:collaborative' => "Mes outils",
+	'theme_inria:inria_tool' => "Choisir l'outil à afficher",
 	'theme_inria:topbar:forge' => "Gforge",
 	'theme_inria:topbar:etherpad' => "Etherpad",
 	'theme_inria:topbar:doodle' => "Doodle",
+	'theme_inria:topbar:notepad' => "Notepad",
+	'theme_inria:topbar:framadate' => "Framadate",
 	'theme_inria:topbar:webinar' => "Webinar",
 	'theme_inria:topbar:ftp' => "Transfert",
 	'theme_inria:topbar:share' => "Partage",
@@ -97,7 +99,7 @@ $french = array (
 	'pages:none' => 'Aucune page pour le moment',
 	
 	'groups:deltopic' => 'Supprimer la discussion',
-	'groups:tabs:river' => 'Les 6 dernières activités',
+	'groups:tabs:river' => 'Les dernières activités',
 	'groups:lastactivity' => 'Dernière activité %s',
 	'groups:admin' => 'Admin: ',
 	'groups:publications' => 'Publications',

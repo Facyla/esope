@@ -430,8 +430,8 @@ section div.elgg-widget-instance-group_activity div.elgg-body.activites,
 section div.elgg-widget-instance-group_activity div.elgg-body.activites .elgg-widget-content { padding:0; }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
   padding:0 14px; 
-  background:#c61b15;
-  margin-top:-8px;
+  background:<?php echo $color3; ?>;
+  /* margin-top:-8px; */
 }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
   color:white;display:block;

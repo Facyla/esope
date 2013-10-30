@@ -9,6 +9,8 @@ $group = $vars['entity'];
 $owner = $group->getOwnerEntity();
 $forward_url = $group->getURL();
 $invite_anyone = elgg_get_plugin_setting('invite_anyone', 'adf_public_platform');
+$allowregister = elgg_get_plugin_setting('allowregister', 'adf_public_platform');
+
 if ($invite_anyone != 'yes') {
 	$friends = elgg_get_logged_in_user_entity()->getFriends('', 0);
 } else {
@@ -18,6 +20,10 @@ if ($invite_anyone != 'yes') {
 
 if ($friends) {
 	echo elgg_view('input/friendspicker', array('entities' => $friends, 'name' => 'user_guid', 'highlight' => 'all'));
+	if ($allowregister == 'yes') {
+		echo ' <p><label>' . elgg_echo('adf_platform:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array('name' => 'group_register', 'options_values' => array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ))) . '</p>';
+	}
+	
 	echo '<div class="elgg-foot">';
 	echo elgg_view('input/hidden', array('name' => 'forward_url', 'value' => $forward_url));
 	echo elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $group->guid));

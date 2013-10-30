@@ -108,13 +108,13 @@ function adf_platform_init() {
 	// Actions après inscription
 	elgg_register_event_handler('login','user','adf_platform_register_handler');
 	
-	// Modificaiton de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
-	/* Inutile, sauf si on veut mettre de smessages plus explicites
+	// Modification de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
+	/* Permet notamment de forcer l'inscription
+	*/
 	if (elgg_is_active_plugin('groups')) {
 		elgg_unregister_action('groups/invite');
 		elgg_register_action("groups/invite", elgg_get_plugins_path() . 'adf_public_platform/actions/groups/membership/invite.php');
 	}
-	*/
 	
 	// PAGE HANDLERS : MODIFICATION DE PAGES DE LISTING (NON GÉRABLES PAR DES VUES)
 	// Related functions are in lib/adf_public/platform/page_handlers.php
@@ -547,4 +547,21 @@ if (!function_exists('messages_get_unread')) {
 }
 
 
+if (elgg_is_active_plugin('au_subgroups')) {
+	function adf_platform_list_groups_submenu($group, $level = 1, $member_only = false, $user = null) {
+		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
+		$menuitem = '';
+		$class = "subgroup subgroup-$level";
+		$children = au_subgroups_get_subgroups($group, 0);
+		if (!$children) { return ''; }
+		foreach ($children as $child) {
+			if ($member_only) {
+				if (!$child->isMember($user)) { continue; }
+			}
+			$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $child->name . '</a></li>';
+			$menuitem .= adf_platform_list_groups_submenu($child, $level + 1);
+		}
+		return $menuitem;
+	}
+}
 

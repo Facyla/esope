@@ -245,6 +245,8 @@ $fr = array(
 	'adf_platform:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'adf_platform:settings:filters:all' => "Supprimer l'onglet \"Tous\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'adf_platform:settings:groups:inviteanyone' => "Permettre d'inviter tout membre dans les groupes ? (par défaut : non = contacts seulement)",
+	'adf_platform:groups:allowregister' => "Inscrire dans le groupe",
+	'adf_platform:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'adf_platform:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	

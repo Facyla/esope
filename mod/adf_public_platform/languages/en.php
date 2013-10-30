@@ -242,6 +242,8 @@ $en = array(
 	'adf_platform:settings:filters:mine' => "Remove \"Mine\" tab in listings ? (default : No)",
 	'adf_platform:settings:filters:all' => "Remove \"All\" tab in listings ? (default : No)",
 	'adf_platform:settings:groups:inviteanyone' => "Allow to invite any member in groups ? (default : No = contacts only)",
+	'adf_platform:groups:allowregister' => "Register in the group",
+	'adf_platform:settings:groups:allowregister' => "Allows group admins to register members in the group, instead of only inviting them.",
 	'adf_platform:settings:members:onesearch' => "Keep only general member search ? (default : No)",
 	'adf_platform:settings:members:online' => "Display online members on sidebar (default : no)",
 	
