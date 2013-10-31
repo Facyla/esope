@@ -577,8 +577,8 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
-.elgg-sidebar { width: 25%; min-width: 211px; }
-.elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 717px; }
+.elgg-sidebar { width: 24%; min-width: 211px; margin-right:1%; }
+.elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: auto; padding:2%; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
 /* Menus */
 #transverse nav ul { width:auto; }
