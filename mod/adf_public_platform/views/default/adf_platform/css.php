@@ -565,7 +565,9 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 
 
-/* Prémices de responsive design */
+
+
+/* SECTION RESPONSIVE DESIGN */
 
 /* Menu fixé en haut lors du scrolling */
 .floating { position: fixed !important; z-index: 101; }
@@ -575,8 +577,9 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
-.elgg-sidebar { min-width: 211px; width: 26%; }
-.elgg-layout-one-sidebar .elgg-main { max-width: 70%; min-width: 717px; }
+.elgg-sidebar { width: 25%; min-width: 211px; }
+.elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 717px; }
+.elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
 /* Menus */
 #transverse nav ul { width:auto; }
 /* Largeur de page standard */
@@ -594,5 +597,8 @@ section div.module footer { background-size: 100%; }
 
 @media (max-width:980px) {
 	.interne { max-width:98%; }
+	.elgg-page-default { min-width:200px; max-width:100%; }
+	.elgg-sidebar { min-width: 50px; width: 26%; margin:0 0 0 0; }
+	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }
 }
 
