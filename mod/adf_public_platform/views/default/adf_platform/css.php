@@ -575,6 +575,8 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
+.elgg-sidebar { min-width: 211px; width: 26%; }
+.elgg-layout-one-sidebar .elgg-main { max-width: 70%; min-width: 717px; }
 /* Menus */
 #transverse nav ul { width:auto; }
 /* Largeur de page standard */
