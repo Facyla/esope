@@ -563,7 +563,9 @@ textarea, .elgg-input-rawtext { width:100%; }
 /* Generic useful classes */
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
-
+/* Interface admin */
+#adf_public_platform-settings .miniColors-trigger { float: right; height: 3ex; width: 3ex; }
+#adf_public_platform-settings input { max-width:40%; }
 
 
 
