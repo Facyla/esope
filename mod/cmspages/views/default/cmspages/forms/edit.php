@@ -74,7 +74,7 @@ else {
 	if ($content_type == 'template') $form_body .= "<p>Utilisation des templates :<ul>
 		<li>{{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype'</li>
 		<li>{{%CONTENT%}} : insère le contenu chargé par un outil tiers (blogs externes typiquement)</li>
-		</ul></p>';
+		</ul></p>";
 	
 	// Titre de la page
 	$form_body .= '<label>' . elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"')) . '</label><br /><br />';
