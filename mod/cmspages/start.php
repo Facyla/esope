@@ -189,8 +189,12 @@ function cmspages_compose_module($module_name, $module_config = false) {
 }
 
 /* Utilisation d'un template : remplacement (non récursif ?) des blocs par les pages correspondantes
- * {pagetype} => HTML ou template ou module
+ * {{pagetype}} => HTML ou template ou module
  * si on utilise un autre template, rendre les boucles impossibles (l'appelant ne peut être appelé)
+ * @TODO : permettre plus de champs de base, genre :
+ 		- {{pagetype}} : pages CMS
+ 		- {{%VARS%}} : infos issues d'Elgg, listings configurables, etc.
+ 		- {{[[shortcode]]}} : shortcodes
 */
 function cmspages_render_template($template, $body = null) {
 	$temp1 = explode('}}', $template);
