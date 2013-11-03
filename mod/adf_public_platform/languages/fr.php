@@ -9,6 +9,31 @@ $fr = array(
 	
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
+	'admin:appearance:main_theme_config' => "Configuration du thème",
+	'adf_platform:configredirect' => "La configuration du thème est gérée via Paramètres > AccEssonne ~ Thème accessible",
+	'adf_platform:config:interface' => "ELEMENTS DE L'INTERFACE",
+	'adf_platform:config:publichomepage' => "PAGE D'ACCUEIL PUBLIQUE",
+	'adf_platform:config:loggedhomepage' => "PAGE D'ACCUEIL CONNECTEE",
+	'adf_platform:config:behaviour' => "COMPORTEMENTS ET REGLAGES",
+	'adf_platform:config:toolslistings' => "PAGES DE LISTING DES OUTILS",
+	'adf_platform:config:toolslistings:details' => "Ce réglage permet de modifier le comportement par défaut des pages de listing des blogs, fichiers, etc. Par défaut seuls les publications <em>personnelles</em> du membre sont listées (pas celles dans ses groupes). Vous pouvez choisir ici de les lister toutes.",
+	'adf_platform:config:filters' => "FILTRES",
+	'adf_platform:config:widgets' => "CHOIX DES WIDGETS",
+	'adf_platform:config:groupinvites' => "INVITATIONS DANS LES GROUPES",
+	'adf_platform:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
+	'adf_platform:config:contacts' => "CONTACTS ET COORDONNEES",
+	'adf_platform:config:contacts:details' => "Note : ces coordonnées ne sont pas utilisées par tous les thèmes (actuellement : seulement compétences numériques)",
+	'adf_platform:config:styles' => "COULEURS & STYLE",
+	'adf_platform:config:styles:headerfooter' => "Dégradé du header et du pied de page",
+	'adf_platform:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
+	'adf_platform:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
+	'adf_platform:config:saverestore' => "SAUVEGARDE ET RESTAURATION - <i>BETA</i>",
+	'adf_platform:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.",
+	'adf_platform:config:import' => "Import / restauration",
+	'adf_platform:config:import:details' => "Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.",
+	'adf_platform:config:export' => "Export / sauvegarde",
+	'adf_platform:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
+	
 	
 	// Overrides plugins translations
 	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
@@ -197,6 +222,11 @@ $fr = array(
 	'adf_platform:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",
 	'adf_platform:settings:redirect' => "URL (relative) de redirection après connexion",
 	'adf_platform:settings:replace_public_home' => "URL (relative) pour remplacer la page d'accueil publique (par défaut&nbsp;: laisser vide)",
+	'adf_platform:settings:replace_public_homepage' => "Remplacer la page d'accueil publique ? (note : seulement si le walled garden est désactivé !)",
+	'adf_platform:replacehome:no' => "Non",
+	'adf_platform:replacehome:default' => "Oui : utiliser la page par défaut du thème (configurable)",
+	'adf_platform:replacehome:cmspages' => "Oui : utiliser une page CMS (homepage-public)",
+	'adf_platform:homepage:cmspages:editlink' => "Editer la page d'accueil du site (nouvelle fenêtre)",
 	'adf_platform:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
 	'adf_platform:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
 	'adf_platform:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",

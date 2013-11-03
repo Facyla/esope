@@ -563,9 +563,7 @@ textarea, .elgg-input-rawtext { width:100%; }
 /* Generic useful classes */
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
-/* Interface admin */
-#adf_public_platform-settings .miniColors-trigger { float: right; height: 3ex; width: 3ex; }
-#adf_public_platform-settings input { max-width:40%; }
+
 
 
 
@@ -603,4 +601,14 @@ section div.module footer { background-size: 100%; }
 	.elgg-sidebar { min-width: 50px; width: 26%; margin:0 0 0 0; }
 	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }
 }
+
+/*
+@media (max-width:600px) {
+	.elgg-page-default { min-width:200px; max-width:100%; }
+	.elgg-sidebar { width: 100%; margin:0 0 0 0; }
+	.elgg-sidebar { height: 70px; overflow: hidden; border-bottom: 3px solid black; }
+	.elgg-layout-one-sidebar .elgg-main { width: 100%; padding:1%; }
+	#groups-tools > li { width:100%; }
+}
+*/
 

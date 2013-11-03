@@ -114,6 +114,7 @@ function access_icons_entity_menu_setup($hook, $type, $return, $params) {
 	
 	$handler = elgg_extract('handler', $params, false);
 	if ($handler == 'groups') { return $return; }
+	//if (($handler == 'groups') || elgg_instance_of($entity, 'group')) { return $return; }
 	
 	// access info
 	$access_info = elgg_view('output/access', array('entity' => $entity, 'hide_text' => true));

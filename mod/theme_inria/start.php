@@ -1,7 +1,7 @@
 <?php
 
 // Initialise log browser
-register_elgg_event_handler('init','system','theme_inria_init');
+elgg_register_event_handler('init','system','theme_inria_init');
 
 /* Initialise the theme */
 function theme_inria_init(){

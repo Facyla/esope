@@ -89,7 +89,12 @@ function adf_platform_init() {
 		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
 		if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
 		*/
-		if (!$CONFIG->walled_garden) elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
+		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+		if (!$CONFIG->walled_garden) {
+			if ($replace_public_home != 'no') {
+				elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
+			}
+		}
 	}
 	
 	// MODIFICATION DES MENUS STANDARDS
@@ -314,6 +319,15 @@ function adf_platform_pagesetup(){
 					'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">Signaler cette page</span></span>', 
 				));
 		}
+		
+		// Admin menus
+		if(elgg_in_context("admin") && elgg_is_admin_logged_in()){
+			// Remove menu builder (unused)
+			elgg_unregister_menu_item("page", "appearance:menu_items");
+			// Add to Admin > appearance menu
+			elgg_register_admin_menu_item('configure', 'main_theme_config', 'appearance');
+		}
+		
 	}
 	
 	// Rewrite breadcrumbs : use a more user-friendly logic
@@ -425,7 +439,15 @@ function adf_platform_public_index() {
 		include($CONFIG->url . $replace_public_home);
 	}
 	*/
-	include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+	switch($replace_public_home) {
+		case 'cmspages':
+			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+			break;
+		case 'default':
+		default:
+			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+	}
 	return true;
 }
 
