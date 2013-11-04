@@ -339,6 +339,13 @@ $en = array(
 	'adf_platform:homewire:msg' => "Would you share an idea or info ?",
 	'members:search' => "Members search",
 	
+	'grouptype:default' => "Default",
+	'grouptype:thematic' => "Thematics",
+	'grouptype:project' => "Projects",
+	'grouptype:industry' => "Industry",
+	'grouptype:year' => "Year",
+	'grouptype:publication' => "Publication",
+	
 );
 
 add_translation('en', $en);

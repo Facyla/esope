@@ -563,7 +563,8 @@ textarea, .elgg-input-rawtext { width:100%; }
 /* Generic useful classes */
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
-
+/* Accordion styles */
+.ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 
 
 

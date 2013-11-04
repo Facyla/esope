@@ -587,3 +587,21 @@ if (elgg_is_active_plugin('au_subgroups')) {
 	}
 }
 
+
+/* Sort groups by grouptype
+ * @return Array ($grouptype => array($groups))
+ * Note : 'default' grouptype == empty grouptype (don't use as a grouptype value if empty field allowed))
+ */
+function adf_platform_sort_groups_by_grouptype($groups) {
+	$sorted = array('default' => array());
+	foreach ($groups as $group) {
+		if (!empty($group->grouptype)) {
+			$sorted[$group->grouptype][] = $group;
+		} else {
+			$sorted['default'][] = $group;
+		}
+	}
+	return $sorted;
+}
+
+

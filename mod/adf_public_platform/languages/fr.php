@@ -341,7 +341,13 @@ $fr = array(
 	'adf_platform:thewire:access' => "Accès : ",
 	'adf_platform:homewire:msg' => "Un message ou une info à partager ?",
 	'members:search' => "Recherche de membres",
-
+	
+	'grouptype:default' => "Générique",
+	'grouptype:thematic' => "Thématiques",
+	'grouptype:project' => "Projets",
+	'grouptype:industry' => "Secteur",
+	'grouptype:year' => "Année",
+	'grouptype:publication' => "Publication",
 	
 );
 
