@@ -89,7 +89,7 @@ function adf_platform_init() {
 		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
 		if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
 		*/
-		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+		$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
 		if (!$CONFIG->walled_garden) {
 			if ($replace_public_home != 'no') {
 				elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');

@@ -11,7 +11,7 @@
 */
 
 $pagetype = elgg_get_friendly_title($vars['pagetype']); // CMS Page type - used instead of GUIDs to select cmspage entities
-$url = $vars['url'] . "pg/cmspages/?pagetype=$pagetype"; // Set the base url
+$url = $vars['url'] . "cmspages/?pagetype=$pagetype"; // Set the base url
 $new_page = true;
 
 // Empty pagetype or very short pagetypes are not allowed

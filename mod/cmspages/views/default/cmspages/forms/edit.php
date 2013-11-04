@@ -53,7 +53,7 @@ else {
 	$form_body .= '<label>' . elgg_echo('cmspages:pagetype') . ' <input type="text" value="'.$pagetype.'" disabled="disabled" style="width:300px;" /></label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype)) . '</label>';
 	// Informations utiles : URL de la page + vue à utiliser pour charger la page
 	if ($cmspage instanceof ElggObject) {
-		$form_body .= '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'pg/cmspages/read/' . $pagetype . '</a><br />';
+		$form_body .= '<br />' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'cmspages/read/' . $pagetype . '</a><br />';
 		$form_body .= elgg_echo('cmspages:cmspage_view') . ' elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))<br /><br />';
 	}
 	
@@ -71,10 +71,12 @@ else {
 	$form_body .= '</select></label><br /><br />';
 	
 	// More infos on chosen content type
-	if ($content_type == 'template') $form_body .= "<p>Utilisation des templates :<ul>
+	if ($content_type == 'template') {
+	$form_body .= "<p>Utilisation des templates :<ul>
 		<li>{{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype'</li>
 		<li>{{%CONTENT%}} : insère le contenu chargé par un outil tiers (blogs externes typiquement)</li>
 		</ul></p>";
+	}
 	
 	// Titre de la page
 	$form_body .= '<label>' . elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"')) . '</label><br /><br />';
@@ -87,6 +89,7 @@ else {
 		// Contenu de la page
 		if (in_array($content_type, array('rawhtml', 'template'))) $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
 		else $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+		if ($content_type == 'template') { $form_body .= "Templates utilisés :<br />" . cmspages_list_subtemplates($cmspage->description); }
 		// We don't really care (not used)
 		//$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid));
 		// Tags

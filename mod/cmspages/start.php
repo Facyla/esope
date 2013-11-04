@@ -209,6 +209,29 @@ function cmspages_render_template($template, $body = null) {
 	return $rendered_template;
 }
 
+/* Recherche des templates dans une page */
+function cmspages_list_subtemplates($content, $recursive = true) {
+	global $CONFIG;
+	$return = '';
+	$motif = "#(?<=\{{)(.*?)(?=\}})#";
+	preg_match_all($motif, $content, $templates);
+	foreach ($templates[0] as $template) {
+		$return .= '<li>';
+		$return .= '<a href="' . $CONFIG . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+		if ($recursive) {
+				$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
+				$cmspages = elgg_get_entities_from_metadata($options);
+				if ($cmspages) {
+					$cmspage = $cmspages[0];
+					$return .= cmspages_list_subtemplates($cmspage->description, $recursive);
+				}
+		}
+		$return .= '</li>';
+	}
+	if (!empty($return)) $return = '<ul>' . $return . '</ul>';
+	return $return;
+}
+
 // Permet l'accès aux pages des blogs en mode "walled garden"
 // Allows public visibility of public cmspages which allow fullview page rendering
 function cmspages_public_pages($hook, $type, $return_value, $params) {

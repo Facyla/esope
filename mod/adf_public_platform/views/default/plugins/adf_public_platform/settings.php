@@ -166,16 +166,19 @@ $(function() {
 		<p><label><?php echo elgg_echo('adf_platform:settings:replace_public_homepage'); ?></label>
 			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[replace_public_homepage]', 'options_values' => $replace_public_homepage_opt, 'value' => $vars['entity']->replace_public_homepage )); ?>
 		</p>
-		<?php if (empty($vars['entity']->replace_public_homepage) || ($vars['entity']->replace_public_homepage == 'default')) { ?>
-		<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
-			<?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro, 'class' => 'elgg-input-rawtext' )); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
-			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?>
-		</p>
 		<?php
+		// Note : les réglages s'appliquent sur la page d'accueil par défaut en mode walled garden, qui peut être gérée par cmspages
+		if (empty($vars['entity']->replace_public_homepage) || ($vars['entity']->replace_public_homepage == 'default')) { ?>
+			<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
+				<?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro, 'class' => 'elgg-input-rawtext' )); ?>
+			</p><br />
+			<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
+				<?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?>
+			</p>
+			<?php
 		} else if ($vars['entity']->replace_public_homepage == 'cmspages') {
-			echo '<a href="' . $CONFIG->url . 'cmspages/?pagetype=homepage-content" target="_new">' . elgg_echo('adf_platform:homepage:cmspages:editlink') . '</a>';
+			if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('adf_platform:cmspages:notactivated')); }
+			echo '<a href="' . $CONFIG->url . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('adf_platform:homepage:cmspages:editlink') . '</a>';
 		}
 		?>
 	</div>

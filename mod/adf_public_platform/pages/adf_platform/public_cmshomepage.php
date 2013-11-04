@@ -16,6 +16,8 @@ global $CONFIG;
 
 $pagetype = 'homepage-public';
 
+if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('adf_platform:cmspages:notactivated')); }
+
 // Return full embed, for external use (we need CSS as well then)
 // Display page
 // Send page headers : tell at least it's UTF-8

@@ -102,11 +102,13 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 			// seems to handle about everything we need.
 			// /!\ Liste blanche des balises autorisées
 			//'elements' => 'iframe,embed,object,param,video,script,style',
-			'safe' => false, // true est un peu radical, à moins de lister toutes les balises autorisées ci-dessus
+			'safe' => false, // true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
 			// Attributs interdits
 			'deny_attribute' => 'on*',
-			// Filtrage suppélementaires des attributs autorisés (cf. start de htmLawed)
-			'hook_tag' => 'htmlawed_tag_post_processor',
+			// Filtrage supplémentaires des attributs autorisés (cf. start de htmLawed) : 
+			// bloque tous les styles non explicitement autorisé
+			//'hook_tag' => 'htmlawed_tag_post_processor',
+			
 			'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
 			// apparent this doesn't work.
 			// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
