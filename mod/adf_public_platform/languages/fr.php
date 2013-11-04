@@ -342,12 +342,12 @@ $fr = array(
 	'adf_platform:homewire:msg' => "Un message ou une info à partager ?",
 	'members:search' => "Recherche de membres",
 	
-	'grouptype:default' => "Générique",
+	'grouptype:default' => "Génériques",
 	'grouptype:thematic' => "Thématiques",
 	'grouptype:project' => "Projets",
-	'grouptype:industry' => "Secteur",
-	'grouptype:year' => "Année",
-	'grouptype:publication' => "Publication",
+	'grouptype:industry' => "Secteurs",
+	'grouptype:year' => "Années",
+	'grouptype:publication' => "Publications",
 	
 );
 

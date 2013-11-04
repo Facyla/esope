@@ -131,7 +131,13 @@ function adf_platform_init() {
 	// Pour modifier la page de listing des groupes
 	elgg_unregister_page_handler('groups', 'groups_page_handler');
 	elgg_register_page_handler('groups', 'adf_platform_groups_page_handler');
+	// Add own library (different function names)
 	elgg_register_library('elgg:adf_platform:groups', elgg_get_plugins_path() . 'adf_public_platform/lib/groups.php');
+	if (elgg_is_active_plugin('au_subgroups')) {
+		// route some urls that go through 'groups' handler
+		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
+		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
+	}
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');

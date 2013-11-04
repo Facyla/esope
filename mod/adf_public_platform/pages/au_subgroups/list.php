@@ -1,28 +1,17 @@
 <?php
-/**
- * Group blog module
- */
 
-$group = elgg_get_page_owner_entity();
+$page_owner = elgg_get_page_owner_entity();
+$title = elgg_echo('au_subgroups:subgroups');
+elgg_set_context('au_subgroups');
 
-if ($group->subgroups_enable == "no") {
-	return true;
-}
+// set up breadcrumb navigation
+au_subgroups_parent_breadcrumbs($page_owner);
+elgg_push_breadcrumb($page_owner->name, $page_owner->getURL());
+elgg_push_breadcrumb(elgg_echo('au_subgroups:subgroups'));
 
-$all_link = '';
-
-// Anyone should view all subgroups, if allowed - not only group admins
-//if ($group->canEdit()) {
-	$all_link = elgg_view('output/url', array(
-		'href' => "groups/subgroups/list/{$group->guid}",
-		'text' => elgg_echo('link:view:all'),
-		'is_trusted' => true,
-	));
-//}
-
+//$content = au_subgroups_list_subgroups($page_owner, 10, true);
 // List subgroups : filtering by grouptype added
 elgg_push_context('widgets');
-//$content = au_subgroups_list_subgroups($group, 10);
 $content = '';
 $options = array(
 		'types' => array('group'), 'limit' => $limit, 'full_view' => false, 'limit' => false, 
@@ -38,14 +27,14 @@ if ($subgroups) {
 		$display_accordion = true;
 		$content .= '<script type="text/javascript">';
 		$content .= "$(function() {
-			$('#subgroups-{$group->guid}-accordion').accordion({ header: 'h4', autoHeight: false });
+			$('#subgroups-{$group->guid}-accordion').accordion({ header: 'h3', autoHeight: false });
 		});";
 		$content .= '</script>';
 	}
 	$content .= '<div id="subgroups-' . $group->guid . '-accordion">';
 	foreach ($subgroups as $grouptype => $groups) {
 		if ($display_accordion) {
-			$content .= '<h4>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h4>';
+			$content .= '<h3>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h3>';
 		}
 		$content .= elgg_view_entity_list($groups, array('full_view' => false));
 	}
@@ -56,20 +45,10 @@ if ($subgroups) {
 	$content = '<p>' . elgg_echo('au_subgroups:nogroups') . '</p>';
 }
 
-if ($group->canEdit()) {
-	$new_link = elgg_view('output/url', array(
-		'href' => "groups/subgroups/add/$group->guid",
-		'text' => elgg_echo('au_subgroups:add:subgroup'),
-		'is_trusted' => true,
-	));
-}
-else {
-	$new_link = '';
-}
-
-echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('au_subgroups'),
-	'content' => $content,
-	'all_link' => $all_link,
-	'add_link' => $new_link,
+$body = elgg_view_layout('content', array(
+    'title' => $title,
+    'content' => $content,
+    'filter' => false
 ));
+
+echo elgg_view_page($title, $body);
