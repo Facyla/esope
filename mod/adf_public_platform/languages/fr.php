@@ -347,6 +347,8 @@ $fr = array(
 	'grouptype:project' => "Projets",
 	'grouptype:industry' => "Secteurs",
 	'grouptype:year' => "Années",
+	'grouptype:edition' => "Editorial",
+	'grouptype:region' => "Géographique",
 	'grouptype:publication' => "Publications",
 	
 );

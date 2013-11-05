@@ -33,7 +33,7 @@ if ($subgroups) {
 	}
 	$content .= '<div id="subgroups-' . $group->guid . '-accordion">';
 	foreach ($subgroups as $grouptype => $groups) {
-		if ($display_accordion) {
+		if ($display_accordion && (count($groups) > 0)) {
 			$content .= '<h3>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h3>';
 		}
 		$content .= elgg_view_entity_list($groups, array('full_view' => false));

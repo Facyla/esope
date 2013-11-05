@@ -344,6 +344,8 @@ $en = array(
 	'grouptype:project' => "Projects",
 	'grouptype:industry' => "Industry",
 	'grouptype:year' => "Year",
+	'grouptype:edition' => "Edition",
+	'grouptype:region' => "Region",
 	'grouptype:publication' => "Publication",
 	
 );
