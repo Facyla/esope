@@ -114,6 +114,9 @@ implements CAS_Request_MultiRequestInterface
         foreach ($this->_requests as $i => $request) {
             $handle = $request->_initAndConfigure();
             curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+            // Facyla Patch : required patch to correct OpenSSL bug if version < 0.9.8
+            // see http://stackoverflow.com/questions/8619706/running-curl-with-openssl-0-9-8-against-openssl-1-0-0-server-causes-handshake-er
+            curl_setopt($handle, CURLOPT_SSLVERSION,3);
             $handles[$i] = $handle;
             curl_multi_add_handle($multiHandle, $handle);
         }

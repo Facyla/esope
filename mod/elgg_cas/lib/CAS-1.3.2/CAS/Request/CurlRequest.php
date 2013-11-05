@@ -164,8 +164,9 @@ implements CAS_Request_RequestInterface
             curl_setopt($ch, CURLOPT_POSTFIELDS, $this->postBody);
         }
         
-        // Facyla Patch : if version < 0.9.8>
-        curl_setopt($ch, CURLOPT_SSLVERSION,3)
+        // Facyla Patch : required patch to correct OpenSSL bug if version < 0.9.8
+        // see http://stackoverflow.com/questions/8619706/running-curl-with-openssl-0-9-8-against-openssl-1-0-0-server-causes-handshake-er
+        curl_setopt($ch, CURLOPT_SSLVERSION,3);
         
         return $ch;
     }
