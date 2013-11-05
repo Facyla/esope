@@ -5,6 +5,11 @@ $content = '';
 // Uncomment to enable debugging
 phpCAS::setDebug();
 
+if (!$cas_host || !$cas_port || !$cas_context) {
+	register_error('Missing plugin parameters');
+	exit;
+}
+
 // Initialize phpCAS
 global $cas_client_loaded;
 if (!$cas_client_loaded) phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);

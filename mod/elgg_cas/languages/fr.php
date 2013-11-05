@@ -17,9 +17,10 @@ $fr = array(
 	'elgg_cas:cas_host' => "URL de l'hôte CAS, par ex: cas.example.com",
 	'elgg_cas:cas_context' => "CAS context, par ex: /cas",
 	'elgg_cas:cas_port' => "Port, par ex: 443",
-	'elgg_cas:ca_cert_path' => "Chemin du certificat PEM sur le serveur, par ex: /path/to/cachain.pem",
+	'elgg_cas:ca_cert_path' => "(facultatif) Chemin du certificat PEM sur le serveur, par ex: /path/to/cachain.pem",
 	
 	// Errors
+	'elgg_cas:missingparams' => "Paramètres du plugin CAS manquants. Veuillez les renseigner pour utiliser CAS.",
 	'elgg_cas:user:banned' => "Compte désactivé",
 	'elgg_cas:user:notexist' => "Ce compte n'existe pas encore. Pour le créer, veuillez vous connecter une première fois avec votre compte LDAP. Une fois votre compte créé, vous pourrez vous connecter via CAS.",
 	'elgg_cas:loginfailed' => "Echec de la connexion",

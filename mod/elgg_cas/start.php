@@ -53,6 +53,8 @@ function elgg_cas_autologin() {
 				system_message(elgg_echo('elgg_cas:casdetected'));
 				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 			}
+		} else {
+			register_error('elgg_cas:missingparams');
 		}
 	}
 }

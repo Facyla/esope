@@ -23,7 +23,7 @@
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
 
 // Default required settings
-if (empty($vars['entity']->cas_port)) $vars['entity']->cas_host = 443;
+if (empty($vars['entity']->cas_port)) $vars['entity']->cas_port = 443;
 if (empty($vars['entity']->cas_context)) $vars['entity']->cas_context = '/cas';
 ?>
 <p>
