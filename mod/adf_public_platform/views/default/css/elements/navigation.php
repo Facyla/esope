@@ -20,6 +20,12 @@ $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
 $color13 = $css['color13']; // Couleur de fond du sous-menu déroulant
+$font1 = $css['font1'];
+$font2 = $css['font2'];
+$font3 = $css['font3'];
+$font4 = $css['font4'];
+$font5 = $css['font5'];
+$font6 = $css['font6'];
 ?>
 
 /* ***************************************
@@ -421,7 +427,7 @@ header nav ul li a:active { color: #ddd; }
 }
 #transverse nav {
 	float: left;
-	font-family: itc-gothic;
+	font-family: <?php echo $font3; ?>;
 	font-size: 1.25em;
 }
 #transverse nav ul { width: 650px; }

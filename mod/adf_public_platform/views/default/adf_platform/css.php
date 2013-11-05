@@ -70,7 +70,15 @@ $color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
 $color13 = elgg_get_plugin_setting('color13', 'adf_public_platform'); // #DEDEDE
 
 // Couleur de fond du footer configurable
-$footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform'); // 
+$footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
+
+$css = elgg_extract('theme-config-css', $vars);
+$font1 = $css['font1'];
+$font2 = $css['font2'];
+$font3 = $css['font3'];
+$font4 = $css['font4'];
+$font5 = $css['font5'];
+$font6 = $css['font6'];
 ?>
 
 
@@ -101,7 +109,7 @@ header, #transverse, section, footer, #bande { width: 100%; float: left; }
 /* Styles des modules page d'accueil et profil */
 section { padding-top: 25px; }
 section header { background: none; border-top: 0 none; height: auto; }
-section div.intro { font-family:Arial; font-size: 1.25em; }
+section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 
 #transverse nav ul li.group-invites, 
 .interne nav ul li.invites { margin:-6px 0 0 4px; }
@@ -170,7 +178,7 @@ section div.intro { font-family:Arial; font-size: 1.25em; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a span {
   color: #002e6f;
   float: left;
-  font-family: gill-sans-bold;
+  font-family: <?php echo $font2; ?>;
   font-size: 1.7em;
   font-weight: bold;
   line-height: 0.7em;
@@ -390,7 +398,7 @@ section div.module header {
 section div.module header h2 {
   color: #fff;
   float: left;
-  font-family: gill-sans;
+  font-family: <?php echo $font1; ?>;
   font-size: 1.25em;
   text-transform: uppercase;
   font-weight: normal;
@@ -435,7 +443,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
   color:white;display:block;
-  font-family: 'gill-sans';
+  font-family: <?php echo $font1; ?>;
   font-size:14px;
 }
 .widget-group-content { padding: 0 10px 10px 10px; }
@@ -518,7 +526,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 #user-avatar-cropper { float: left; }
 
 
-.firststeps { background:white; padding:4px 8px; margin-bottom:30px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; font-family:Arial; }
+.firststeps { background:white; padding:4px 8px; margin-bottom:30px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; font-family:<?php echo $font4; ?>; }
 
 
 
