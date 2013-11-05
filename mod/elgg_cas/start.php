@@ -8,7 +8,6 @@
  */
 
 elgg_register_event_handler('init', 'system', 'elgg_cas_init'); // Init
-elgg_register_event_handler("plugins_boot", "system", "elgg_cas_autologin"); // Autologin attempt
 
 /**
  * CAS Authentication init
@@ -32,29 +31,30 @@ function elgg_cas_init() {
 	// Redirection pour déconnexion CAS après la fin du logout
 	elgg_register_event_handler('logout','user','elgg_cas_logout_handler', 1);
 	
+	// Autologin attempt
+	$autologin = elgg_get_plugin_setting('autologin', 'elgg_cas', false);
+	if ($autologin && !elgg_is_logged_in()) {
+		elgg_register_event_handler("pagesetup", "system", "elgg_cas_autologin");
+	}
+	
 }
 
 
 function elgg_cas_autologin() {
 	global $CONFIG;
 	// CAS autologin
-	$autologin = elgg_get_plugin_setting('autologin', 'elgg_cas', false);
-	if ($autologin && !elgg_is_logged_in()) {
-		require_once elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php';
-		require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-		if ($cas_host && $cas_port && $cas_context) {
-			phpCAS::setDebug();
-			phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-			global $cas_client_loaded;
-			$cas_client_loaded = true;
-			phpCAS::setNoCasServerValidation();
-			if (phpCAS::checkAuthentication()) {
-				//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
-				system_message(elgg_echo('elgg_cas:casdetected'));
-				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
-			}
-		} else {
-			register_error(elgg_echo('elgg_cas:missingparams'));
+	elgg_load_library('elgg:elgg_cas');
+	require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+	if ($cas_host && $cas_port && $cas_context) {
+		phpCAS::setDebug();
+		phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+		global $cas_client_loaded;
+		$cas_client_loaded = true;
+		phpCAS::setNoCasServerValidation();
+		if (phpCAS::checkAuthentication()) {
+			//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
+			system_message(elgg_echo('elgg_cas:casdetected'));
+			include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 		}
 	}
 }
