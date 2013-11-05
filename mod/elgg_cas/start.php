@@ -20,7 +20,7 @@ function elgg_cas_init() {
 	elgg_extend_view('css/elgg', 'elgg_cas/css');
 	
 	// Extend login form
-	elgg_extend_view('forms/account/login', 'elgg_cas/login_extend');
+	elgg_extend_view('forms/login', 'elgg_cas/login_extend');
 	
 	// Add CAS library
 	elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php');
@@ -73,7 +73,7 @@ function elgg_cas_autologin() {
 	// CAS autologin
 	elgg_load_library('elgg:elgg_cas');
 	require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-	if ($cas_host && $cas_port && $cas_context) {
+	if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
 		phpCAS::setDebug();
 		phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 		global $cas_client_loaded;
