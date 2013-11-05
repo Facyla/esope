@@ -2,30 +2,34 @@
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
-// Uncomment to enable debugging
-phpCAS::setDebug();
+global $cas_client_loaded;
 
+elgg_load_library('elgg:elgg_cas');
+//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
+$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
+$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
+$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas');
+
+
+
+// Use CAS functions only if we have enough parameters
+//if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {}
 
 // Initialize phpCAS
-global $cas_client_loaded;
-if (!$cas_client_loaded) phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-
-// For production use set the CA certificate that is the issuer of the cert
-// on the CAS server and uncomment the line below
-// phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-
-// For quick testing you can disable SSL validation of the CAS server.
-// THIS SETTING IS NOT RECOMMENDED FOR PRODUCTION.
-// VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL!
-//if (!empty($cas_server_ca_cert_path) && (phpCAS::setCasServerCACert($cas_server_ca_cert_path))) {} else 
-//phpCAS::setNoCasServerValidation();
-
-
-// Le plus flexible : activé si configuré seulement (attention ! une mauvaise config peut bloquer l'utilisation...)
-if (!empty($cas_server_ca_cert_path)) {
-	phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-} else {
-	phpCAS::setNoCasServerValidation();
+if (!$cas_client_loaded) {
+	// Uncomment to enable debugging
+	phpCAS::setDebug();
+	phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+	$cas_client_loaded = true;
+	// For production use set the CA certificate that is the issuer of the cert
+	// For quick testing you can disable SSL validation of the CAS server.
+	// Certificat : le plus flexible = activé ssi configuré seulement
+	if (!empty($cas_server_ca_cert_path)) {
+		phpCAS::setCasServerCACert($cas_server_ca_cert_path);
+	} else {
+		phpCAS::setNoCasServerValidation();
+	}
 }
 
 
@@ -86,16 +90,10 @@ if (elgg_instanceof($user, 'user')) {
 			forward();
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
-			$content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-			echo elgg_view_page($title, $content);
-		} else { register_error('elgg_cas:loginfailed'); }
-	} else {
-		register_error(elgg_echo('elgg_cas:user:banned'));
-		echo elgg_echo('elgg_cas:user:banned');
-	}
-} else {
-	register_error(elgg_echo('elgg_cas:user:notexist'));
-	echo elgg_echo('elgg_cas:user:notexist');
-}
+		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
+	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
+} else { $content .= elgg_echo('elgg_cas:user:notexist'); }
 
+$content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
+echo elgg_view_page($title, $content);
 
