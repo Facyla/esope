@@ -163,7 +163,10 @@ implements CAS_Request_RequestInterface
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $this->postBody);
         }
-
+        
+        // Facyla Patch : if version < 0.9.8>
+        curl_setopt($ch, CURLOPT_SSLVERSION,3)
+        
         return $ch;
     }
 

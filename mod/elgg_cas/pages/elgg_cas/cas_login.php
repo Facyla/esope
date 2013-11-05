@@ -61,6 +61,8 @@ if (elgg_is_logged_in()) {
 
 
 // force CAS authentication
+// Note : will fail with OpenSSL v0.9.8
+// patch ? curl_setopt($ch, CURLOPT_SSLVERSION,3); before calling curl ?
 phpCAS::forceAuthentication();
 
 // at this step, the user has been authenticated by the CAS server
