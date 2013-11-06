@@ -102,11 +102,13 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 			// seems to handle about everything we need.
 			// /!\ Liste blanche des balises autorisées
 			//'elements' => 'iframe,embed,object,param,video,script,style',
-			'safe' => false, // true est un peu radical, à moins de lister toutes les balises autorisées ci-dessus
+			'safe' => false, // true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
 			// Attributs interdits
 			'deny_attribute' => 'on*',
-			// Filtrage suppélementaires des attributs autorisés (cf. start de htmLawed)
-			'hook_tag' => 'htmlawed_tag_post_processor',
+			// Filtrage supplémentaires des attributs autorisés (cf. start de htmLawed) : 
+			// bloque tous les styles non explicitement autorisé
+			//'hook_tag' => 'htmlawed_tag_post_processor',
+			
 			'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
 			// apparent this doesn't work.
 			// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
@@ -238,5 +240,63 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	return $return;
 }
 
+
+if (elgg_is_active_plugin('au_subgroups')) {
+		/**
+	 * re/routes some urls that go through the groups handler
+	 */
+	function adf_platform_subgroups_groups_router($hook, $type, $return, $params) {
+		au_subgroups_breadcrumb_override($return);
+		
+		// subgroup options
+		if ($return['segments'][0] == 'subgroups') {
+			elgg_load_library('elgg:groups');
+			$group = get_entity($return['segments'][2]);
+			if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
+				return $return;
+			}
+	
+			elgg_set_context('groups');
+			elgg_set_page_owner_guid($group->guid);
+			
+			switch ($return['segments'][1]) {
+				case 'add':
+					set_input('au_subgroup', true);
+					set_input('au_subgroup_parent_guid', $group->guid);
+					if (include(elgg_get_plugins_path() . 'au_subgroups/pages/add.php')) {
+						return true;
+					}
+					break;
+					
+				case 'delete':
+					if (include(elgg_get_plugins_path() . 'au_subgroups/pages/delete.php')) {
+						return true;
+					}
+					break;
+		
+			case 'list':
+			if (include(elgg_get_plugins_path() . 'adf_public_platform/pages/au_subgroups/list.php')) {
+				return true;
+			}
+			break;
+			}
+		}
+		
+		// need to redo closed/open tabs provided by group_tools - if it's installed
+		if ($return['segments'][0] == 'all' && elgg_is_active_plugin('group_tools')) {
+			$filter = get_input('filter', false);
+			
+			if(empty($filter) && ($default_filter = elgg_get_plugin_setting("group_listing", "group_tools"))){
+				$filter = $default_filter;
+				set_input("filter", $default_filter);
+			}
+			
+			if(in_array($filter, array("open", "closed", "alpha"))){
+				au_subgroups_handle_openclosed_tabs();
+				return true;
+			}
+		}
+	}
+}
 
 

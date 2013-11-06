@@ -13,6 +13,12 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+$font1 = $css['font1'];
+$font2 = $css['font2'];
+$font3 = $css['font3'];
+$font4 = $css['font4'];
+$font5 = $css['font5'];
+$font6 = $css['font6'];
 ?>
 /* ***************************************
 	Modules
@@ -83,7 +89,7 @@ $color12 = $css['color12']; // #DEDEDE
 .elgg-module-info > .elgg-head h3 {
 	color: #fff;
 	float: left;
-	font-family: gill-sans;
+	font-family: <?php echo $font1; ?>;
 	font-size: 0.9em;
 	margin: 7px 0 0 15px;
 	text-transform: uppercase;
@@ -288,7 +294,7 @@ a.elgg-widget-edit-button {
 }
 
 section div.module div.activites .elgg-widget-content .widget-title-details {
-  font-family: gill-sans;
+  font-family: <?php echo $font1; ?>;
   font-size: 1.10em;
   text-transform: uppercase;
   font-weight: normal;
@@ -308,7 +314,7 @@ section div.module footer {
 section div.module footer a {
 	font-size: 24px;
 	color: <?php echo $linkcolor; ?>;
-	font-family: gill-sans-bold;
+	font-family: <?php echo $font2; ?>;
 	text-shadow: 0 2px 2px #999;
 	padding: 0 10px;
 }

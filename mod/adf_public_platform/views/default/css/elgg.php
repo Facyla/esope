@@ -55,6 +55,23 @@ $color12 = $css['color12']; // #DEDEDE
 $color13 = elgg_get_plugin_setting('color13', 'adf_public_platform');
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
+$font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
+$font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
+$font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
+$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
+$font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
+// @TODO : Force set fonts, for the moment
+/*
+$font1 = 'gill-sans';
+$font2 = 'gill-sans-bold, Arial, sans-serif';
+$font3 = 'itc-gothic';
+*/
+$font1 = 'Lato, sans-serif';
+$font2 = 'Lato-bold, sans-serif';
+$font3 = 'Puritan, sans-serif';
+$font4 = 'Puritan, Arial, sans-serif';
+$font5 = 'Monaco, "Courier New", Courier, monospace';
+$font6 = 'Georgia, times, serif';
 
 $vars['theme-config-css'] = array(
   'urlicon' => $vars['url'] . 'mod/adf_public_platform/img/theme/',
@@ -79,6 +96,12 @@ $vars['theme-config-css'] = array(
   'color12' => $color12,
   'color13' => $color13,
   'footercolor' => $footercolor,
+  'font1' => $font1,
+  'font2' => $font2,
+  'font3' => $font3,
+  'font4' => $font4,
+  'font5' => $font5,
+  'font6' => $font6,
 );
 /* Use in subsequent CSS views like this :
   // Get all needed vars

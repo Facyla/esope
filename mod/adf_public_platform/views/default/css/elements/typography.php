@@ -19,6 +19,12 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+$font1 = $css['font1'];
+$font2 = $css['font2'];
+$font3 = $css['font3'];
+$font4 = $css['font4'];
+$font5 = $css['font5'];
+$font6 = $css['font6'];
 ?>
 
 /* ***************************************
@@ -34,6 +40,20 @@ $color12 = $css['color12']; // #DEDEDE
 	padding: 0;
 }
 
+/* TODO : Replace by free, open fonts
+ * Gill Sans => Puritan ou Lato (Book 400) ou Cabin
+ * ITC Avant Garde Gothic Std => Tex Gyre Adventor ou Raleway (plus large) ou Didact Gothic
+	
+	font-family: 'Lato', sans-serif;
+	font-family: 'Puritan', sans-serif;
+	font-family: 'Didact Gothic', sans-serif;
+ */
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+@import url(http://fonts.googleapis.com/css?family=Puritan:400,700,400italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,latin-ext);
+
+
+/*
 @font-face {
 	font-family: 'gill-sans';
 	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.otf');	
@@ -47,7 +67,7 @@ $color12 = $css['color12']; // #DEDEDE
 }
 @font-face {
 	font-family: 'gill-sans-bold';
-	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans-Bold.otf');	
+	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans-Bold.otf');
 	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans-Bold.eot');
 	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans-Bold.eot?#iefix') format('embedded-opentype'),
 		 url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans-Bold.woff') format('woff'),
@@ -67,18 +87,39 @@ $color12 = $css['color12']; // #DEDEDE
 	font-weight: normal;
 	font-style: normal;
 }
+*/
+
+/* Remplacement par des polices libres similaires */
+@font-face {
+	font-family: 'puritan';
+	src: url('<?php echo $urlfonts; ?>/Puritan/Puritan-Regular.otf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'puritan-bold';
+	src: url('<?php echo $urlfonts; ?>/Puritan/Puritan-Bold.otf');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'texgyreadventor';
+	src: url('<?php echo $urlfonts; ?>/TexGyreAdventor/texgyreadventor-regular.otf');
+	font-weight: normal;
+	font-style: normal;
+}
 
 
 /**** Change font and colour here ***********/
 html {
 	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
-	font-family: Arial, Verdana;
+	font-family: <?php echo $font4; ?>;
 }
 body {
 	font-size: 90%;
 /* Supprimé du thème ADF - ou à forcer avec d'autres valeurs
 	line-height: 1.4em;
-	font-family:  Verdana, "Lucida Grande", Arial, Tahoma, sans-serif;
+	font-family:  <?php echo $font4; ?>;
   color:#221907;
 */
 	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
@@ -115,7 +156,7 @@ p:last-child {
 }
 
 pre, code {
-	font-family: Monaco, "Courier New", Courier, monospace;
+	font-family: <?php echo $font5; ?>;
 	font-size: 12px;
 	
 	background:#EBF5FF;
@@ -140,7 +181,7 @@ code {
 }
 
 .elgg-monospace {
-	font-family: Monaco, "Courier New", Courier, monospace;
+	font-family: <?php echo $font5; ?>;
 }
 
 blockquote {
@@ -176,13 +217,13 @@ h6 { font-size: 0.9em; margin-bottom:1px; }
 	line-height: 1.4em;
 	color: white;
 	font-style: italic;
-	font-family: Georgia, times, serif;
+	font-family: <?php echo $font6; ?>;
 	text-shadow: 1px 2px 4px #333333;
 	text-decoration: none;
 }
 
 header h1 {
-	font-family: gill-sans-bold, Arial;
+	font-family: <?php echo $font2; ?>;
 	text-transform: uppercase;
 	float: left;
 	margin-top: 40px;
@@ -250,7 +291,7 @@ header h1 span {
 }
 .elgg-widget-more:before {
     content: "+ ";
-    font-family: gill-sans-bold;
+    font-family: <?php echo $font2; ?>;
     font-size: 24px;
     font-weight: bold;
     margin-left: 9px;

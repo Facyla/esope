@@ -89,7 +89,12 @@ function adf_platform_init() {
 		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
 		if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
 		*/
-		if (!$CONFIG->walled_garden) elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
+		$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
+		if (!$CONFIG->walled_garden) {
+			if ($replace_public_home != 'no') {
+				elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
+			}
+		}
 	}
 	
 	// MODIFICATION DES MENUS STANDARDS
@@ -126,7 +131,13 @@ function adf_platform_init() {
 	// Pour modifier la page de listing des groupes
 	elgg_unregister_page_handler('groups', 'groups_page_handler');
 	elgg_register_page_handler('groups', 'adf_platform_groups_page_handler');
+	// Add own library (different function names)
 	elgg_register_library('elgg:adf_platform:groups', elgg_get_plugins_path() . 'adf_public_platform/lib/groups.php');
+	if (elgg_is_active_plugin('au_subgroups')) {
+		// route some urls that go through 'groups' handler
+		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
+		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
+	}
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');
@@ -314,6 +325,15 @@ function adf_platform_pagesetup(){
 					'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">Signaler cette page</span></span>', 
 				));
 		}
+		
+		// Admin menus
+		if(elgg_in_context("admin") && elgg_is_admin_logged_in()){
+			// Remove menu builder (unused)
+			elgg_unregister_menu_item("page", "appearance:menu_items");
+			// Add to Admin > appearance menu
+			elgg_register_admin_menu_item('configure', 'main_theme_config', 'appearance');
+		}
+		
 	}
 	
 	// Rewrite breadcrumbs : use a more user-friendly logic
@@ -425,7 +445,15 @@ function adf_platform_public_index() {
 		include($CONFIG->url . $replace_public_home);
 	}
 	*/
-	include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+	switch($replace_public_home) {
+		case 'cmspages':
+			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+			break;
+		case 'default':
+		default:
+			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
+	}
 	return true;
 }
 
@@ -564,4 +592,22 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		return $menuitem;
 	}
 }
+
+
+/* Sort groups by grouptype
+ * @return Array ($grouptype => array($groups))
+ * Note : 'default' grouptype == empty grouptype (don't use as a grouptype value if empty field allowed))
+ */
+function adf_platform_sort_groups_by_grouptype($groups) {
+	$sorted = array('default' => array());
+	foreach ($groups as $group) {
+		if (!empty($group->grouptype)) {
+			$sorted[$group->grouptype][] = $group;
+		} else {
+			$sorted['default'][] = $group;
+		}
+	}
+	return $sorted;
+}
+
 
