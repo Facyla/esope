@@ -62,7 +62,8 @@ if (elgg_is_logged_in()) {
 
 // force CAS authentication
 // Note : will fail with OpenSSL v0.9.8
-// patch ? curl_setopt($ch, CURLOPT_SSLVERSION,3); before calling curl ?
+// Patch : must be applied in Request/CurlRequest and CurlMultiRequest :
+// => add curl_setopt($ch, CURLOPT_SSLVERSION,3); before calling curl
 phpCAS::forceAuthentication();
 
 // at this step, the user has been authenticated by the CAS server
@@ -89,7 +90,7 @@ if (elgg_instanceof($user, 'user')) {
 		$user->is_cas_logged = true;
 		system_message(elgg_echo('elgg_cas:login:success'));
 		if (login($user)) {
-			forward();
+			forward('');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
