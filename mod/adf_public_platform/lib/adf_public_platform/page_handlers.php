@@ -333,4 +333,66 @@ function adf_platform_bookmarks_page_handler($page) {
 	return true;
 }
 
+/**
+ * Profile page handler
+ *
+ * @param array $page Array of URL segments passed by the page handling mechanism
+ * @return bool
+ */
+function adf_platform_profile_page_handler($page) {
+	
+	// Add some custom settings
+	$remove_profile_widgets = elgg_get_plugin_setting('remove_profile_widgets', 'adf_public_platform');
+	$add_profile_activity = elgg_get_plugin_setting('add_profile_activity', 'adf_public_platform');
+	$custom_profile_layout = elgg_get_plugin_setting('custom_profile_layout', 'adf_public_platform');
+	
+	if (isset($page[0])) {
+		$username = $page[0];
+		$user = get_user_by_username($username);
+		elgg_set_page_owner_guid($user->guid);
+	} elseif (elgg_is_logged_in()) {
+		forward(elgg_get_logged_in_user_entity()->getURL());
+	}
+
+	// short circuit if invalid or banned username
+	if (!$user || ($user->isBanned() && !elgg_is_admin_logged_in())) {
+		register_error(elgg_echo('profile:notfound'));
+		forward();
+	}
+
+	$action = NULL;
+	if (isset($page[1])) { $action = $page[1]; }
+
+	if ($action == 'edit') {
+		// use the core profile edit page
+		$base_dir = elgg_get_root_path();
+		require "{$base_dir}pages/profile/edit.php";
+		return true;
+	}
+
+	// main profile page
+	
+	// Theme settings : Custom profile layout ? (default: no)
+	if ($custom_profile_layout == 'yes') {
+		$content = elgg_view('adf_platform/profile/wrapper');
+	} else {
+		$content = elgg_view('profile/wrapper');
+	}
+	// Theme settings : Remove widgets ? (default: no)
+	if ($remove_profile_widgets != 'yes') {
+		$params = array('content' => $content, 'num_columns' => 3);
+		$content = elgg_view_layout('widgets', $params);
+	}
+	// Theme settings : Add activity feed ? (default: no)
+	if ($add_profile_activity == 'yes') {
+		$db_prefix = elgg_get_config('dbprefix');
+		$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 20, 'pagination' => true));
+		$content .= '<div class="profile-activity-river">' . $activity . '</div>';
+	}
+	
+	$body = elgg_view_layout('one_column', array('content' => $content));
+	echo elgg_view_page($user->name, $body);
+	return true;
+}
+
 

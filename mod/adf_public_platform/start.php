@@ -157,7 +157,9 @@ function adf_platform_init() {
 	// Pour pouvoir lister tous les fichiers d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('file', 'file_page_handler');
 	elgg_register_page_handler('file', 'adf_platform_file_page_handler');
-	
+	// Pour pouvoir modifier la page utilisateurs
+	elgg_unregister_page_handler('profile', 'profile_page_handler');
+	elgg_register_page_handler('profile', 'adf_platform_profile_page_handler');
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');

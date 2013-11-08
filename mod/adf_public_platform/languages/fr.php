@@ -207,7 +207,7 @@ $fr = array(
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
 	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
 	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/1234/mentions-legales",
-	'adf_platform:home:public_profiles' => "Profil public",
+	'adf_platform:home:public_profiles' => "Profil public au choix du membre ? Non = public ; Oui = opt-in (non-public par défaut)",
 	'adf_platform:home:public_profiles:help' => "Ce réglage permet de donner la possibilité aux membres du site de choisir de rendre leur profil accessible depuis internet, sans compte sur le site. Par défaut leur profil sera réservé aux membres, jusqu'à-ce qu'ils choisissent de le rendre public. Si ce réglage est désactivé, les profils sont publics.<br />A noter : en mode \"intranet\", aucune page n'est visible de l'extérieur, y compris les pages de profil, et ce réglage n'a aucun effet.",
 	'adf_platform:usersettings:public_profiles:title' => "Choisir la visibilité de mon profil",
 	'adf_platform:usersettings:public_profile' => "Rendre mon profil public",
@@ -246,8 +246,12 @@ $fr = array(
 	'adf_platform:settings:brainstorm_user_listall' => "Listing de toutes les idées (personnelles + groupes)",
 	'adf_platform:settings:file_user_listall' => "Listing de tous les fichiers (personnels + groupes)",
 	'adf_platform:settings:pages_user_listall' => "Listing de toutes les pages wiki (personnelles + groupes)",
-	
 	'river:select:all:nofilter' => "Tout (aucun filtre de l'activité)",
+	'adf_platform:profile:settings' => "Page de profil des membres",
+	'adf_platform:profile:add_profile_activity' => "Ajouter le flux d'activité",
+	'adf_platform:profile:remove_profile_widgets' => "Supprimer les widgets du profil",
+	'adf_platform:profile:custom_profile_layout' => "Utiliser un layout personnalisé",
+	
 	
 	// Widget settings
 	'adf_platform:settings:widget:blog' => "Activer le widget Blog",
