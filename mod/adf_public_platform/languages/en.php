@@ -204,7 +204,7 @@ $en = array(
 	'widgets:profile:add' => "Add widgets to my homepage",
 	'adf_platform:settings:publicpages' => "Public pages (viewable by non-loggedin visitors)",
 	'adf_platform:settings:publicpages:help' => "\"Public pages\" are viewable by anyone, without logging to the site. They are usually legal notices, and other important public pages of your website.<br />Add the relative URL of the pages, one per line, without the domaine name (or subdirectory), and without any initial slash ('/'), e.g.: pages/view/1234/legal-notice",
-	'adf_platform:home:public_profiles' => "Public profile",
+	'adf_platform:home:public_profiles' => "Opt-in only public profile ? No = public ; Yes = per-user choice (default is not public)",
 	'adf_platform:home:public_profiles:help' => "This settings lets site members decide whether they want to make their profil visible from the internet, without logging into the site. By default, their profile will be restricted to site mùembers, until they explicitely set their profile as public. If this setting is disabled, profiles will be public.<br />Note : in \"intranet\" mode, no page is visible from the internet, including profile pages, so this setting has no effect.",
 	'adf_platform:usersettings:public_profiles:title' => "Choose my profile visibility",
 	'adf_platform:usersettings:public_profile' => "Set my profile as public",
@@ -243,8 +243,12 @@ $en = array(
 	'adf_platform:settings:brainstorm_user_listall' => "List all ideas (personal + groups)",
 	'adf_platform:settings:file_user_listall' => "List all files (personal + groups)",
 	'adf_platform:settings:pages_user_listall' => "List all pages (personal + groups)",
-	
 	'river:select:all:nofilter' => "All (no activity filter)",
+	'adf_platform:profile:settings' => "Members profile page",
+	'adf_platform:profile:add_profile_activity' => "Add activity feed",
+	'adf_platform:profile:remove_profile_widgets' => "Disable profile widgets",
+	'adf_platform:profile:custom_profile_layout' => "Use a custom layout",
+	
 	
 	// Widget settings
 	'adf_platform:settings:widget:blog' => "Allow widget : Blog",

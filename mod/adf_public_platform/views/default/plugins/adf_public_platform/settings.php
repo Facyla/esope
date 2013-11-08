@@ -300,6 +300,17 @@ $(function() {
 			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles )); ?>
 		</p>
 		
+		<h4><?php echo elgg_echo('adf_platform:profile:settings'); ?></h4>
+		<p><label><?php echo elgg_echo('adf_platform:profile:add_profile_activity'); ?></label>
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->add_profile_activity )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:profile:remove_profile_widgets'); ?></label>
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_profile_widgets )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:profile:custom_profile_layout'); ?></label>
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->custom_profile_layout )); ?>
+		</p>
+		
 		<br />
 		<h4><?php echo elgg_echo('adf_platform:config:toolslistings'); ?></h4>
 		<p><?php echo elgg_echo('adf_platform:config:toolslistings:details'); ?></p>
