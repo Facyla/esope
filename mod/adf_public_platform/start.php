@@ -613,3 +613,60 @@ function adf_platform_sort_groups_by_grouptype($groups) {
 }
 
 
+/* Renders a page content into a suitable page for iframe or lightbox use
+ * $content = HTML content
+ * $title = title override
+ * $embed_mode = 
+ 		- iframe (use elgg headers), 
+ 		- inner (no header), 
+ 		- regular = elgg regular way
+ * $headers = extend header (CSS, JS, META, etc.)
+ */
+function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'iframe', $headers) {
+	global $CONFIG;
+	$lang = $CONFIG->language;
+
+	// Set default title
+	if (empty($title)) $title = $CONFIG->sitename . ' (';
+	$vars['title'] = $title;
+	
+	switch ($embed_mode) {
+		
+		// Return a regular elgg page view - used for dynamic page return switching
+		case 'elgg':
+			echo elgg_view_page($title, $content);
+			break;
+			
+		// Return embed for use in Elgg inner-page container (lightbox, AJAX-fetched, etc.)
+		case 'inner':
+			header('Content-Type: text/html; charset=utf-8');
+			echo $content;
+			break;
+			
+		// Return embed for use in an iframe, widget, embed in external site
+		case 'iframe':
+		default:
+			header('Content-Type: text/html; charset=utf-8');
+			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '" lang="' . $lang . '">
+			' . "<head>
+				<title>$title</title>
+				" . elgg_view('page/elements/head', $vars) . "
+				" . $headers . "
+				<style>
+				html { background:#FFFFFF; }
+				body { border-top: 0; padding: 2px 4px; }
+				</style>
+			</head>
+			<body>
+				" . $content . "
+			</body>
+			</html>";
+			break;
+	}
+	
+	// Stop doing anything after rendering
+	exit;
+}
+
+
