@@ -1,10 +1,14 @@
 What are Static pages ?
-- have a specific URL (ex. mainpage)
+- custom pages, similar to Wordpress pages
 - are editable by any admin user (localadmin also in multisite context)
+- have a specific URL (ex. mainpage)
 - can then be linked from site menu..
 - don't trigger any notification
 - changes take effect immediately, but there's no history : care not to empty field before saving (empty fields are allowed)
 - access level can be set for each page
+- can be used as templates
+- have relations between pages
+- can be embedded (iframe or lightbox use)
 
 
 Instructions

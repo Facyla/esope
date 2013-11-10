@@ -189,21 +189,60 @@ function cmspages_compose_module($module_name, $module_config = false) {
 }
 
 /* Utilisation d'un template : remplacement (non récursif ?) des blocs par les pages correspondantes
+ * $template : texte ou code HTML à utiliser comme template
+ * $content : éléments de contenu ou variables - array($varname => $value)
  * {{pagetype}} => HTML ou template ou module
  * si on utilise un autre template, rendre les boucles impossibles (l'appelant ne peut être appelé)
  * @TODO : permettre plus de champs de base, genre :
  		- {{pagetype}} : pages CMS
+ 		- {{:view}} : vue d'Elgg
+ 		- {{:view|param=value}} : vue d'Elgg + paramètres
  		- {{%VARS%}} : infos issues d'Elgg, listings configurables, etc.
- 		- {{[[shortcode]]}} : shortcodes
+ 		- {{[shortcode]}} : shortcodes
 */
 function cmspages_render_template($template, $body = null) {
+	// Compatibilité : accepte une simple valeur au lieu d'un array()
+	if (!empty($content) && !is_array($content)) $content = array('content' => $content);
 	$temp1 = explode('}}', $template);
 	foreach ($temp1 as $temp) {
 		$temp2 = explode('{{', $temp);
-		$rendered_template .= $temp2[0]; // Toujours du texte
-		if (isset($temp2[1]) && !empty($temp2[1])) {
-			if ($temp2[1] == '%CONTENT%') $rendered_template .= $body;
-			else $rendered_template .= elgg_view('cmspages/view', array('pagetype'=>$temp2[1]));
+		$rendered_template .= $temp2[0]; // Ajout du texte (partie avant le template)
+		// Remplacement du template par le contenu correspondant
+		$marker = $temp2[1];
+		if (isset($marker) && !empty($marker)) {
+			$first_letter = substr($marker, 0, 1);
+			switch ($first_letter) {
+				// Vars replacement
+				case '%':
+					$marker = lowercase(substr($marker, 1, -1));
+					$rendered_template .= $content[$marker];
+					break;
+				
+				// Elgg view replacement
+				case ':':
+					$view_param = explode('|', substr($marker, 1));
+					$view_vars = array();
+					foreach($view_param as $key => $param) {
+						if ($key == 0) $marker = strtolower($view_param[0]);
+						else {
+							$param = explode('=', $param);
+							$view_vars[$param[0]] = $param[1];
+						}
+					}
+					$rendered_template .= elgg_view($marker, $view_vars);
+					break;
+				
+				// Shortcode replacement
+				case '[':
+					$marker = strtolower(substr($marker, 1, -1));
+					$rendered_template .= "[$marker]";
+					//if (elgg_is_active_plugin('shortcodes')) {} else {}
+					break;
+				
+				// Cmspages recursive inclusion
+				default:
+					$rendered_template .= elgg_view('cmspages/view', array('pagetype'=>$marker));
+			}
 		}
 	}
 	return $rendered_template;
