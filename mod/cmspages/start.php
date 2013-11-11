@@ -235,8 +235,10 @@ function cmspages_render_template($template, $body = null) {
 				// Shortcode replacement
 				case '[':
 					$marker = strtolower(substr($marker, 1, -1));
-					$rendered_template .= "[$marker]";
-					//if (elgg_is_active_plugin('shortcodes')) {} else {}
+					$shortcode_content = "[$marker]";
+					if (function_exists('elgg_do_shortcode')) {
+						$rendered_template .= elgg_do_shortcode($shortcode_content);
+					}
 					break;
 				
 				// Cmspages recursive inclusion
