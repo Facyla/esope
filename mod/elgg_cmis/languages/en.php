@@ -17,13 +17,19 @@ $en = array(
 	
 	'elgg_cmis:document' => "Document",
 	'elgg_cmis:folder' => "Folder",
-	'elgg_cmis:foldertype:cmis:folder' => 'Folder',
-	'elgg_cmis:foldertype:F:st:site' => 'Site',
+	'elgg_cmis:foldertype:cmis:folder' => '<i class="fa fa-folder fa-fw"></i>&nbsp;Folder',
+	'elgg_cmis:foldertype:F:st:site' => '<i class="fa fa-sitemap fa-fw"></i>&nbsp;Site',
 	'elgg_cmis:unknowtype' => "Unknown Object Type",
-	'elgg_cmis:action:view' => "View",
-	'elgg_cmis:action:edit' => "Edit",
-	'elgg_cmis:action:page' => "View page",
-	'elgg_cmis:action:download' => "Download",
+	/*
+	'elgg_cmis:action:view' => '<i class="fa fa-desktop"></i>&nbsp;View',
+	'elgg_cmis:action:edit' => '<i class="fa fa-pencil"></i>&nbsp;Edit',
+	'elgg_cmis:action:page' => '<i class="fa fa-external-link"></i>&nbsp;View page',
+	'elgg_cmis:action:download' => '<i class="fa fa-download"></i>&nbsp;Download',
+	*/
+	'elgg_cmis:action:view' => '<i class="fa fa-desktop fa-fw"></i>&nbsp;View',
+	'elgg_cmis:action:edit' => '<i class="fa fa-pencil fa-fw"></i>&nbsp;Edit',
+	'elgg_cmis:action:page' => '<i class="fa fa-external-link fa-fw"></i>&nbsp;View page',
+	'elgg_cmis:action:download' => '<i class="fa fa-download fa-fw"></i>&nbsp;Download',
 	
 	'elgg_cmis:loading' => "Loading...",
 	

@@ -17,13 +17,19 @@ $fr = array(
 	
 	'elgg_cmis:document' => "Document",
 	'elgg_cmis:folder' => "Dossier",
-	'elgg_cmis:foldertype:cmis:folder' => 'Dossier',
-	'elgg_cmis:foldertype:F:st:site' => 'Site',
-	'elgg_cmis:unknowtype' => "Objet de type inconnu", // Unknown Object Type
+	'elgg_cmis:foldertype:cmis:folder' => '<i class="fa fa-folder fa-fw"></i>&nbsp;Dossier',
+	'elgg_cmis:foldertype:F:st:site' => '<i class="fa fa-sitemap fa-fw"></i>&nbsp;Site',
+	'elgg_cmis:unknowtype' => '<i class="fa fa-question fa-fw"></i>&nbsp;Objet de type inconnu', // Unknown Object Type
+	/*
 	'elgg_cmis:action:view' => "Afficher",
 	'elgg_cmis:action:edit' => "Modifier",
 	'elgg_cmis:action:page' => "Voir la page",
 	'elgg_cmis:action:download' => "Télécharger",
+	*/
+	'elgg_cmis:action:view' => '<i class="fa fa-desktop fa-fw"></i>&nbsp;Afficher',
+	'elgg_cmis:action:edit' => '<i class="fa fa-pencil fa-fw"></i>&nbsp;Modifier',
+	'elgg_cmis:action:page' => '<i class="fa fa-external-link fa-fw"></i>&nbsp;Voir la page',
+	'elgg_cmis:action:download' => '<i class="fa fa-download fa-fw"></i>&nbsp;Télécharger',
 	
 	'elgg_cmis:loading' => "Chargement en cours",
 	
