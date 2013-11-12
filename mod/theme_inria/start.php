@@ -6,7 +6,7 @@ elgg_register_event_handler('init','system','theme_inria_init');
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
-
+	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	elgg_unregister_widget_type('thewire');
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
@@ -19,10 +19,10 @@ function theme_inria_init(){
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
 		elgg_register_plugin_hook_handler('index','system','theme_inria_index');
 	} else {
-	  if (!$CONFIG->walled_garden) {
-	    elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
-	    elgg_register_plugin_hook_handler('index','system','theme_inria_public_index');
-	  }
+		if (!$CONFIG->walled_garden) {
+			elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
+			elgg_register_plugin_hook_handler('index','system','theme_inria_public_index');
+		}
 	}
 	
 	// Ajout niveau d'accès sur TheWire
@@ -31,19 +31,52 @@ function theme_inria_init(){
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
 	
+	// Update meta fields (Inria/external, active/closed)
+	if (elgg_is_active_plugin('ldap_auth')) {
+		elgg_register_event_handler('login','user', 'inria_update_user_status', 600);
+	}
+	
 }
 
-// f(n) theme inria index
+// Theme inria index
 function theme_inria_index(){
-  global $CONFIG;
+	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_inria/loggedin_homepage.php');
 	return true;
 }
 
 function theme_inria_public_index() {
-  global $CONFIG;
+	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_inria/public_homepage.php');
-  return true;
+	return true;
+}
+
+
+
+/* Met à jour les infos des membres
+ * Existe dans le LDAP : compte Inria
+ * Pas dans le LDAP : compte externe
+ * Inactif ou période expirée : marque comme archivé
+ */
+function inria_update_user_status($user = false) {
+	if (!elgg_instanceof($user, 'user')) return false;
+	if (ldap_user_exists($user->username)) {
+		if ($user->membertype != 'inria') $user->membertype = 'inria';
+		if (ldap_auth_is_closed($user->username)) {
+			//$user->banned = 'yes'; // Don't ban automatically, refusing access on various criteria is enough
+			if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
+		} else {
+			if ($user->memberstatus != 'active') $user->memberstatus = 'active';
+		}
+	} else {
+		if ($user->membertype != 'external') $user->membertype = 'external';
+		// External access has some restrictions : if account was not used for more than 1 year => disable
+		if ( (time() - $user->last_action) > 31622400) {
+			if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
+		}
+	}
+	//return $user->save();
+	return true;
 }
 
 

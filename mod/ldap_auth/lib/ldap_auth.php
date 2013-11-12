@@ -121,32 +121,6 @@ function ldap_user_exists($username) {
 	return false;
 }
 
-/* Met à jour les infos des membres : 
- * Existe dans le LDAP : compte Inria
- * Pas dans le LDAP : compte externe
- * Inactif ou période expirée : marque comme archivé
- */
-function ldap_auth_update_status($user = false){
-	if (!elgg_instanceof($user, 'user')) return false;
-	if (ldap_user_exists($user->username)) {
-		if ($user->membertype != 'inria') $user->membertype = 'inria';
-		if (ldap_auth_is_closed($user->username)) {
-			//$user->banned = 'yes'; // Don't ban automatically, refusing access on various criteria is enough
-			if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
-		} else {
-			if ($user->memberstatus != 'active') $user->memberstatus = 'active';
-		}
-	} else {
-		if ($user->membertype != 'external') $user->membertype = 'external';
-		// External access has some restrictions : if account was not used for more than 1 year => disable
-		if ( (time() - $user->last_action) > 31622400) {
-			if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
-		}
-	}
-	//return $user->save();
-	return true;
-}
-
 
 /**
  * Create user by username
