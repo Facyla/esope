@@ -670,7 +670,6 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 }
 
 
-
 /* Returns a multi-level HTML list from an $content[] = array($path => $content)
  * $path is structured like /path/to/folder
  * $content is what will be returned in the list element
@@ -688,6 +687,108 @@ function elgg_make_list_from_path($content = array()) {
 		$prev_level = $curr_level;
 	}
 	return $return;
+}
+
+
+// Fonctions liées à Profile_manager
+if (elgg_is_active_plugin('profile_manager')) {
+	
+	/* Renvoie une autorisation d'accéder ou non
+	 * Peut s'appuyer sur une autorisation explicite, ou une interdiction
+	 * L'interdiction prend le dessus sur l'autorisation
+	 * forward par défaut, return true/false possible
+	 * admin bypass
+	 */
+	function esope_profile_type_gatekeeper($allowed = array(), $forbidden= array(), $user = false, $forward = true, $admin_bypass = true) {
+		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		$profile_type = esope_get_user_profile_type($user);
+		if ($admin_bypass && $user->isAdmin()) return true;
+		if (!is_array($allowed)) $allowed = array($allowed);
+		if (!is_array($forbidden)) $forbidden = array($forbidden);
+		if (in_array($profile_type, $allowed) && !in_array($profile_type, $forbidden)) return true;
+		register_error(elgg_echo('noaccess'));
+		if ($forward) forward();
+		return false;
+	}
+	
+	/* Renvoie le nom du profil en clair, ou false si aucun trouvé/valide */
+	function esope_get_user_profile_type($user = false) {
+		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		$profile_type = false;
+		// Type de profil
+		if ($profile_type_guid = $user->custom_profile_type) {
+			if (($custom_profile_type = get_entity($profile_type_guid)) && ($custom_profile_type instanceof ProfileManagerCustomProfileType)) {
+				$profile_type = $custom_profile_type->metadata_name;
+			}
+		}
+		return $profile_type;
+	}
+	
+	/* Returns guid for a specific profile type (false if not found) */
+	function esope_get_profiletype_guid($profiletype) {
+		$profile_types = esope_get_profiletypes();
+		if ($profile_types) foreach ($profile_types as $guid => $name) {
+			if ($name == $profiletype) { return $guid; }
+		}
+		return false;
+	}
+
+	/* Returns all profile types as $profiletype_guid => $profiletype_name */
+	function esope_get_profiletypes() {
+		$profile_types_options = array(
+				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
+				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
+			);
+		if ($custom_profile_types = elgg_get_entities($profile_types_options)) {
+			foreach($custom_profile_types as $type) {
+				$profiletypes[$type->guid] = $type->metadata_name;
+			}
+		}
+		return $profiletypes;
+	}
+	
+	/* Returns all members of a specific profile_type */
+	function esope_get_members_by_profiletype($profiletype = '', $options = null) {
+		$returnvalue = false;
+		$profiletype_guid = esope_get_profiletype_guid($profiletype);
+		if ($profiletype_guid) {
+			$options['type'] = 'user';
+			$options['limit'] = false;
+			if (!empty($profiletype)) {
+				$options['metadata_names'] = 'custom_profile_type';
+				$options['metadata_values'] = $profiletype_guid;
+				$options['inverse_relationship'] = true;
+			}
+			$returnvalue = elgg_get_entities_from_metadata($options);
+		}
+		return $returnvalue;
+	}
+	
+	/* Returns all members who do have NO profile type */
+	function esope_get_members_without_profiletype($options = null) {
+		$returnvalue = array();
+		$members = elgg_get_entities(array('type' => 'user', 'limit' => false));
+		foreach ($members as $ent) {
+			if (empty($ent->custom_profile_type)) $returnvalue[$ent->guid] = $ent;
+		}
+		return $returnvalue;
+	}
+	
+	/* Returns a list of members of a specific profile_type */
+	function esope_list_members_by_profiletype($profiletype = '', $options = null) {
+		$returnvalue = false;
+		$profiletype_guid = esope_get_profiletype_guid($profiletype);
+		if ($profiletype_guid) {
+			$options['type'] = 'user';
+			if (!empty($profiletype)) {
+				$options['metadata_name_value_pairs'] = array('name' =>'custom_profile_type', 'value' => $profiletype_guid);
+				$options['inverse_relationship'] = true;
+			}
+			$returnvalue = elgg_list_entities_from_metadata($options);
+		}
+		return $returnvalue;
+	}
+	
 }
 
 

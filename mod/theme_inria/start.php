@@ -59,9 +59,7 @@ function theme_inria_public_index() {
  * Inactif ou période expirée : marque comme archivé
  */
 function inria_update_user_status($event, $object_type, $user) {
-	system_message("Hook login");
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
-		system_message("Informations du compte mises à jour");
 		elgg_load_library("elgg:ldap_auth");
 		if (ldap_user_exists($user->username)) {
 			if ($user->membertype != 'inria') $user->membertype = 'inria';
@@ -80,7 +78,6 @@ function inria_update_user_status($event, $object_type, $user) {
 				if ($user->memberstatus != 'active') $user->memberstatus = 'active';
 			}
 		}
-		//return $user->save();
 	}
 	return true;
 }
