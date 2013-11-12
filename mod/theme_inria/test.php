@@ -12,6 +12,6 @@ echo "Avant-dernière action : " . elgg_view_friendly_time($user->prev_last_acti
 echo "Dernier login : " . elgg_view_friendly_time($user->last_login) . '<hr />';
 echo "Avant-dernier login : " . elgg_view_friendly_time($user->prev_last_login) . '<hr />';
 
-echo "Type de compte : " . elgg_view_friendly_time($user->membertype) . '<hr />';
-echo "Statut du compte : " . elgg_view_friendly_time($user->membertype) . '<hr />';
+echo "Type de compte : " . $user->membertype . '<hr />';
+echo "Statut du compte : " . $user->memberstatus . '<hr />';
 
