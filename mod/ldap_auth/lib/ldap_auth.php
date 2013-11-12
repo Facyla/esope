@@ -88,11 +88,14 @@ function ldap_auth_is_banned($username) {
 	if ($auth->bind()) {
 		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
 		if ($result && $result[0]['inriaentrystatus'][0] == 'closed') {
-			throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
+			return true;
+			// No need to throw exception on a simple test - we need it for other tests
+			//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
 		} else {
 			return false;
 		}
 	}
+	// Error or not found
 	return true;
 }
 

@@ -675,10 +675,10 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
  * $path is structured like /path/to/folder
  * $content is what will be returned in the list element
  */
-function elgg_make_list_from_path($content) {
+function elgg_make_list_from_path($content = array()) {
 	$return = '';
 	$prev_level = 0;
-	foreach ($content as $path => $display) {
+	if (is_array($content)) foreach ($content as $path => $display) {
 		$path = explode('/', $path);
 		$curr_level = count($path);
 		if ($curr_level > $prev_level) $return .= '<ul>';
