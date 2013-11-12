@@ -155,7 +155,7 @@ function ldap_auth_check_profile(ElggUser $user) {
 		if ($ldap_mail && count($ldap_mail) == 1) {
 			$ldap_infos = $info->search('mail=' . $ldap_mail[0]['inriaMail'][0], array_keys(ldap_auth_settings_info_fields()));
 			// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
-			if ($ldap_infos && count($ldap_infos) > 1) { $ldap_infos = end($ldap_infos); }
+			if ($ldap_infos && count($ldap_infos) > 1) { $ldap_infos = array(end($ldap_infos)); }
 			if ($ldap_infos && count($ldap_infos) == 1) {
 				return ldap_auth_update_profile($user, $ldap_infos, $ldap_mail, ldap_auth_settings_info_fields());
 			} else {
