@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+    <name>CMIS</name>
+    <author>Florian Daniel ~ 2013</author>
+    <version>0.2</version>
+    <blurb>CMIS plugin</blurb>
+    <description>Interfaçage CMIS. ATTENTION : version alpha. Please read manifest comments for more info.</description>
+    <website>https://partage.inria.fr/</website>
+    <copyright>Facyla</copyright>
+    <license>GNU Public License version 2</license>
+   
+    <category>admin</category>
+    <category>file</category>
+    <category>authentication</category>
+   
+    <activate_on_install>false</activate_on_install>
+   
+    <requires>
+        <type>elgg_release</type>
+        <version>1.8</version>
+    </requires>
+   
+    <suggests>
+        <type>plugin</type>
+        <name>adf_public_platform</name>
+    </suggests>
+   
+</plugin_manifest>
+
+<!--
+WARNING : this is an alpha version, designed for Inria Partage Alfresco install. This plugin will probably not work on other CMIS repositories. Plugin content and structure will change in a close future. If you plan to use and develop on this base, please contact the author to synchronize evolutions...
+
+0.2 : widgets are functionnal
+
+0.1 : 20130101 - initial version
+//-->
+
