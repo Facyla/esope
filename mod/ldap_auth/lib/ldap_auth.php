@@ -97,7 +97,7 @@ function ldap_auth_is_closed($username) {
 			return false;
 		}
 	}
-	// Error or not found : it's not explicitely banned
+	// Error or not found : same as closed (not a valid ldap login)
 	return true;
 }
 
@@ -117,16 +117,17 @@ function ldap_user_exists($username) {
 		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
 		if ($result) { return true; }
 	}
-	// Error or not found : assume it doesn't exist
+	// Error or not found : same as doesn't exist
 	return false;
 }
 
-/* Vérifie les accès des membres : 
+/* Met à jour les infos des membres : 
  * Existe dans le LDAP : compte Inria
  * Pas dans le LDAP : compte externe
- * Bannit dans ELgg les users bannis du LDAP - Pose la question des accès externes
+ * Inactif ou période expirée : marque comme archivé
  */
-function ldap_auth_update_status(ElggUser $user){
+function ldap_auth_update_status($user = false){
+	if (!elgg_instanceof($user, 'user')) return false;
 	if (ldap_user_exists($user->username)) {
 		if ($user->membertype != 'inria') $user->membertype = 'inria';
 		if (ldap_auth_is_closed($user->username)) {
@@ -138,7 +139,7 @@ function ldap_auth_update_status(ElggUser $user){
 	} else {
 		if ($user->membertype != 'external') $user->membertype = 'external';
 		// External access has some restrictions : if account was not used for more than 1 year => disable
-		if ((time() - $user->prev_last_action > 31622400) {
+		if ( (time() - $user->last_action) > 31622400) {
 			if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
 		}
 	}
