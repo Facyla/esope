@@ -31,9 +31,9 @@ function theme_inria_init(){
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
 	
-	// Update meta fields (Inria/external, active/closed)
+	// Update meta fields (inria/external, active/closed)
 	if (elgg_is_active_plugin('ldap_auth')) {
-		elgg_register_event_handler('login','user', 'inria_update_user_status', 600);
+		elgg_register_event_handler('login','user', 'inria_update_user_status');
 	}
 	
 }
@@ -59,7 +59,7 @@ function theme_inria_public_index() {
  * Inactif ou période expirée : marque comme archivé
  */
 function inria_update_user_status($event, $object_type, $user) {
-	if( $event == 'login' && $object_type == 'user' && $user && elgg_instanceof($user, 'user')) {
+	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
 		elgg_load_library("elgg:ldap_auth");
 		if (ldap_user_exists($user->username)) {
 			if ($user->membertype != 'inria') $user->membertype = 'inria';
