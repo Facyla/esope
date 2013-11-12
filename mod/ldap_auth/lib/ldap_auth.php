@@ -150,13 +150,16 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ( $info->bind() && $auth->bind() && $mail->bind()){
 		$ldap_mail = $mail->search('inriaLogin=' .  $user->username, array('inriaMail'));
-			
+		
+		// There should be only 1 email <=> 1 username, but don't update in doubt
 		if ($ldap_mail && count($ldap_mail) == 1) {
 			$ldap_infos = $info->search('mail=' . $ldap_mail[0]['inriaMail'][0], array_keys(ldap_auth_settings_info_fields()));
+			// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
+			if ($ldap_infos && count($ldap_infos) > 1) { $ldap_infos = end($ldap_infos); }
 			if ($ldap_infos && count($ldap_infos) == 1) {
 				return ldap_auth_update_profile($user, $ldap_infos, $ldap_mail, ldap_auth_settings_info_fields());
 			} else {
-				//we use auth as alternative info source 
+				//we still can use auth as alternative info source - less infos
 				$ldap_infos = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
 				$ldap_infos = ldap_auth_clean_group_name($ldap_infos);
 				if ($ldap_infos && count($ldap_infos) == 1) {

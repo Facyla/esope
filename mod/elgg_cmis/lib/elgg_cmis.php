@@ -51,13 +51,7 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 		
 	}
 	
-	ksort($site_data);
-	ksort($folder_data);
 	$return .= elgg_make_list_from_path($folder_data);
-	/*
-	$return .= '<hr />' . implode('<br />', $site_data);
-	$return .= '<hr />' . implode('<br />', $folder_data);
-	*/
 	return $return;
 }
 
