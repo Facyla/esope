@@ -43,7 +43,8 @@ function ldap_auth_init() {
 function ldap_auth_handler_update($event, $object_type, $user){
 	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
 		elgg_load_library("elgg:ldap_auth");
-		// UPdate metadata fields
+		error_log("Login hook");
+		// Update metadata fields
 		$return = ldap_update_user_status($user);
 		error_log("Profile updated");
 		// Update LDAP fields
@@ -125,7 +126,7 @@ function ldap_update_user_status($user) {
 		}
 		//return $user->save();
 	}
-	return true;
+	//return true;
 }
 
 
