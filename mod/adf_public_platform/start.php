@@ -670,3 +670,25 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 }
 
 
+
+/* Returns a multi-level HTML list from an $content[] = array($path => $content)
+ * $path is structured like /path/to/folder
+ * $content is what will be returned in the list element
+ */
+function elgg_make_list_from_path($content) {
+	$return = '';
+	$prev_level = 0;
+	foreach ($content as $path => $display) {
+		$path = explode('/', $path);
+		$curr_level = count($path);
+		if ($curr_level > $prev_level) $return .= '<ul>';
+		else if ($curr_level < $prev_level) $return .= '</ul>';
+		//$return .= '<li>' . end($path) . ' : ' . $display . '</li>';
+		$return .= '<li>' . $display . '</li>';
+		$prev_level = $curr_level;
+	}
+	return $return;
+}
+
+
+
