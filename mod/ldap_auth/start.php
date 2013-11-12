@@ -43,8 +43,6 @@ function ldap_auth_init() {
 function ldap_auth_handler_update($event, $object_type, $user){
 	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
 		elgg_load_library("elgg:ldap_auth");
-		// Update metadata fields
-		$return = ldap_update_user_status($user);
 		// Update LDAP fields
 		$return = ldap_auth_check_profile($user);
 		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
@@ -90,38 +88,6 @@ function ldap_auth_handler_authenticate(array $credentials = array()) {
 	// Perform the authentication
 	elgg_load_library("elgg:ldap_auth");
 	return ldap_auth_login($username, $password);
-}
-
-
-
-/* Met à jour les infos des membres
- * Existe dans le LDAP : compte Inria
- * Pas dans le LDAP : compte externe
- * Inactif ou période expirée : marque comme archivé
- */
-function ldap_update_user_status($user) {
-	if (elgg_instanceof($user, 'user')) {
-		elgg_load_library("elgg:ldap_auth");
-		if (ldap_user_exists($user->username)) {
-			if ($user->membertype != 'internal') $user->membertype = 'internal';
-			if (ldap_auth_is_closed($user->username)) {
-				//$user->banned = 'yes'; // Don't ban automatically, refusing access on various criteria is enough
-				if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
-			} else {
-				if ($user->memberstatus != 'active') $user->memberstatus = 'active';
-			}
-		} else {
-			if ($user->membertype != 'external') $user->membertype = 'external';
-			// External access has some restrictions : if account was not used for more than 1 year => disable
-			if ( (time() - $user->last_action) > 31622400) {
-				if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
-			} else {
-				if ($user->memberstatus != 'active') $user->memberstatus = 'active';
-			}
-		}
-		//return $user->save();
-	}
-	return true;
 }
 
 
