@@ -43,13 +43,10 @@ function ldap_auth_init() {
 function ldap_auth_handler_update($event, $object_type, $user){
 	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
 		elgg_load_library("elgg:ldap_auth");
-		error_log("Login hook");
 		// Update metadata fields
 		$return = ldap_update_user_status($user);
-		error_log("Profile updated");
 		// Update LDAP fields
 		$return = ldap_auth_check_profile($user);
-		error_log("LDAP fields updated");
 		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}
 	return true;
@@ -103,9 +100,7 @@ function ldap_auth_handler_authenticate(array $credentials = array()) {
  * Inactif ou période expirée : marque comme archivé
  */
 function ldap_update_user_status($user) {
-	system_message("Hook login");
 	if (elgg_instanceof($user, 'user')) {
-		system_message("Informations du compte mises à jour");
 		elgg_load_library("elgg:ldap_auth");
 		if (ldap_user_exists($user->username)) {
 			if ($user->membertype != 'internal') $user->membertype = 'internal';
@@ -126,7 +121,7 @@ function ldap_update_user_status($user) {
 		}
 		//return $user->save();
 	}
-	//return true;
+	return true;
 }
 
 

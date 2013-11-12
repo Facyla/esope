@@ -107,8 +107,8 @@ function adf_platform_init() {
 	
 	//elgg_register_page_handler('dashboard', 'adf_platform_dashboard_page_handler');
 	
-	// Redirection après login
-	elgg_register_event_handler('login','user','adf_platform_login_handler', 900);
+	// Redirection après login - load at last
+	elgg_register_event_handler('login','user','adf_platform_login_handler', 999);
 	
 	// Actions après inscription
 	elgg_register_event_handler('login','user','adf_platform_register_handler');
