@@ -33,8 +33,10 @@ $en = array(
 	'elgg_cmis:widget:cmis_mine:details' => "My files on Partage",
 	'elgg_cmis:widget:cmis_folder' => "CMIS : Folder",
 	'elgg_cmis:widget:cmis_folder:details' => "A folder's content on Partage",
-	'elgg_cmis:widget:cmis_search' => "CMIS : Search",
+	'elgg_cmis:widget:cmis_search' => "CMIS : Title search",
 	'elgg_cmis:widget:cmis_search:details' => "Search results on Partage",
+	'elgg_cmis:widget:cmis_insearch' => "CMIS : Fulltext search",
+	'elgg_cmis:widget:cmis_insearch:details' => "Fulltext search results on Partage",
 	
 );
 

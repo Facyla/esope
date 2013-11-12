@@ -33,8 +33,10 @@ $fr = array(
 	'elgg_cmis:widget:cmis_mine:details' => "La liste de mes fichiers sur Partage",
 	'elgg_cmis:widget:cmis_folder' => "CMIS : Dossier",
 	'elgg_cmis:widget:cmis_folder:details' => "Le contenu d'un dossier sur Partage",
-	'elgg_cmis:widget:cmis_search' => "CMIS : Recherche",
+	'elgg_cmis:widget:cmis_search' => "CMIS : Recherche par titre",
 	'elgg_cmis:widget:cmis_search:details' => "Liste des résultats d'une recherche sur Partage",
+	'elgg_cmis:widget:cmis_insearch' => "CMIS : Recherche plein texte",
+	'elgg_cmis:widget:cmis_insearch:details' => "Liste des résultats d'une recherche plein texte sur Partage",
 	
 );
 

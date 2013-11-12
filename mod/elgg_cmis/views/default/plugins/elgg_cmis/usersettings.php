@@ -7,7 +7,8 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 
 //$user_cmis_url = $vars['entity']->getUserSetting("elgg_cmis_user_cmis_url", elgg_get_page_owner_guid());
 $cmis_login = $vars['entity']->getUserSetting("cmis_login", elgg_get_page_owner_guid());
-$cmis_password = $vars['entity']->getUserSetting("cmis_password", elgg_get_page_owner_guid());
+// Note : paswword should not be displayed
+//$cmis_password = $vars['entity']->getUserSetting("cmis_password", elgg_get_page_owner_guid());
 
 ?>
 <p>
@@ -23,7 +24,7 @@ $cmis_password = $vars['entity']->getUserSetting("cmis_password", elgg_get_page_
 		<input type="text" name="params[cmis_login]" value="<?php echo $cmis_login; ?>" /><br/>
 		
 		<label for="params[elgg_cmis:cmis_password]"><?php echo elgg_echo('elgg_cmis:cmis_password');?></label><br/>
-		<input type="text" name="params[cmis_password]" value="<?php echo $cmis_password; ?>" /><br/>
+		<input type="password" name="params[cmis_password]" value="" /><br/>
 		
 	</fieldset>
 </p>
