@@ -31,7 +31,7 @@ function ldap_auth_login($username, $password) {
 	register_error("DEBUG LDAP ldap_auth_login : $username : $pwd  2= $pwd2  3= $pwd3  4= $pw4"); // @TODO
 	*/
 	
-	if ( !ldap_auth_is_banned($username) ) {
+	if ( !ldap_auth_is_closed($username) ) {
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
 				return login($user);
@@ -65,10 +65,12 @@ function ldap_auth_is_valid($username, $password) {
 			if ($auth->bind($rdn[0], $password)) {
 				return true;
 			} else {
-				throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
+				return false;
+				//throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
 			}
 		} else {
-			throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+			return false;
+			//throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
 		}
 	}
 	return false;
@@ -83,7 +85,7 @@ function ldap_auth_is_valid($username, $password) {
  * @throws LoginException
  * @access private
  */
-function ldap_auth_is_banned($username) {
+function ldap_auth_is_closed($username) {
 	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ($auth->bind()) {
 		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
@@ -95,18 +97,49 @@ function ldap_auth_is_banned($username) {
 			return false;
 		}
 	}
-	// Error or not found
+	// Error or not found : it's not explicitely banned
 	return true;
 }
 
-/* Bannit dans ELgg les users bannis du LDAP - Pose la question des accès externes */
+
+/**
+ * Check if LDAP account exists
+ *
+ * @param string $username the LDAP login.
+  * 
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function ldap_user_exists($username) {
+	$auth = new LdapServer(ldap_auth_settings_auth());
+	if ($auth->bind()) {
+		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
+		if ($result) { return true; }
+	}
+	// Error or not found : assume it doesn't exist
+	return false;
+}
+
+/* Vérifie les accès des membres : 
+ * Existe dans le LDAP : compte Inria
+ * Pas dans le LDAP : compte externe
+ * Bannit dans ELgg les users bannis du LDAP - Pose la question des accès externes
+ */
 function ldap_auth_update_status(ElggUser $user){
-	if (ldap_auth_is_banned($user->username)) {
-		$user->banned = 'yes';
+	if (ldap_user_exists($user->username)) {
+		$user->type = 'inria';
+		if (ldap_auth_is_closed($user->username)) {
+			//$user->banned = 'yes'; // Don't ban automatically, refusing access on various criteria is enough
+			$user->status = 'closed';
+		}
 		return $user->save();
 	} else {
-		return true;
+		$user->type = 'external';
+		// External access has some restrictions : if account was not used for more than 1 year => disable
+		if ((time() - $user->prev_last_action > 31622400) { $user->status = 'closed'; }
 	}
+	return true;
 }
 
 
