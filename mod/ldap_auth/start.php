@@ -45,7 +45,7 @@ function ldap_auth_handler_update($event, $object_type, $user){
 		elgg_load_library("elgg:ldap_auth");
 		// Update LDAP fields
 		$return = ldap_auth_check_profile($user);
-		error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
+		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}
 	return true;
 }
