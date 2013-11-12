@@ -59,6 +59,7 @@ function theme_inria_public_index() {
  * Inactif ou période expirée : marque comme archivé
  */
 function inria_update_user_status($event, $object_type, $user) {
+	system_message("Hook login");
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
 		system_message("Informations du compte mises à jour");
 		elgg_load_library("elgg:ldap_auth");
