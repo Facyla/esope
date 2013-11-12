@@ -33,7 +33,7 @@ function theme_inria_init(){
 	
 	// Update meta fields (inria/external, active/closed)
 	if (elgg_is_active_plugin('ldap_auth')) {
-		elgg_register_event_handler('login','user', 'inria_update_user_status');
+		elgg_register_event_handler('login','user', 'inria_update_user_status', 900);
 	}
 	
 }
