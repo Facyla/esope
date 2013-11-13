@@ -97,3 +97,4 @@ function announcements_owner_block_menu($hook, $type, $items, $params) {
 }
 
 elgg_register_event_handler('init', 'system', 'announcements_init');
+

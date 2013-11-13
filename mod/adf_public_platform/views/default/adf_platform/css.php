@@ -579,11 +579,15 @@ textarea, .elgg-input-rawtext { width:100%; }
 i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 
 /* Effets de survol */
-.elgg-module-widget, .elgg-module-group, .elgg-item { opacity: 0.9; }
+/*
+.elgg-module-widget, .elgg-module-group { opacity: 0.8; }
 .elgg-module-widget:hover, .elgg-module-widget:active, .elgg-module-widget:focus, 
-.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus, 
+.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus { opacity: 1; }
+*/
+.elgg-item { opacity: 0.75; }
+.elgg-item .elgg-item { opacity: 1; } /* Don't double the effect */
 .elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
-
+.elgg-list-river > li:hover { background-color: #F9F9F9; }
 
 
 /* SECTION RESPONSIVE DESIGN */

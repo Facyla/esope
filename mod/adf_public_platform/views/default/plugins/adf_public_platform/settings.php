@@ -22,6 +22,7 @@ $replace_public_homepage_opt = array( 'default' => elgg_echo('adf_platform:repla
 $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
 $registered_objects = get_registered_entity_types('object');
+$group_defaultaccess_opt = array('default' => elgg_echo('adf_platform:groupdefaultaccess:default'), 'groupvis' => elgg_echo('adf_platform:groupdefaultaccess:groupvis'), 'group' => elgg_echo('adf_platform:groupdefaultaccess:group'), 'members' => elgg_echo('adf_platform:groupdefaultaccess:members'), 'public' => elgg_echo('adf_platform:groupdefaultaccess:public'));
 
 
 // SET DEFAULT VALUES
@@ -89,6 +90,9 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 			</ul>
 			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';
 }
+
+if (empty($vars['entity']->opengroups_defaultaccess)) { $vars['entity']->opengroups_defaultaccess = 'groupvis'; }
+if (empty($vars['entity']->closedgroups_defaultaccess)) { $vars['entity']->closedgroups_defaultaccess = 'group'; }
 
 
 // CORRECT BAD-FORMATTED VALUES
@@ -350,13 +354,6 @@ $(function() {
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:friends') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_friends )) . '</p>';
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:mine') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_mine )) . '</p>';
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:all') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_all )) . '</p>';
-		
-		// Suppression des menus de l'utilisateur
-		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';
-		// Suppression des outils personnels (lien de création) de l'utilisateur
-		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusertools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools )) . '<em>' . implode(',', $registered_objects) . '</em></p>';
-		// Note : la suppression de filtres dans les listings est un réglage général à part, 
-		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
 		?>
 		
 		<br />
@@ -365,6 +362,8 @@ $(function() {
 		if (elgg_is_active_plugin('groups')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess )) . '</p>';
 		}
 		?>
 		<br />
@@ -575,6 +574,26 @@ $(function() {
 			<?php echo elgg_echo('adf_platform:css:help'); ?>
 			<?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
 		</p>
+	</div>
+
+
+	<h3>EXPERT</h3>
+	<div>
+		<?php
+		// Suppression des menus de l'utilisateur
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';
+		
+		// Suppression des outils personnels (lien de création) de l'utilisateur
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusertools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools )) . '<em>' . implode(',', $registered_objects) . '</em></p>';
+		// Note : la suppression de filtres dans les listings est un réglage général à part, 
+		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+		
+		// Suppression des niveaux d'accès pour les membres
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:user_exclude_access') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[user_exclude_access]', 'value' => $vars['entity']->user_exclude_access )) . '</p>';
+		
+		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:admin_exclude_access') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[admin_exclude_access]', 'value' => $vars['entity']->admin_exclude_access )) . '</p>';
+		?>
 	</div>
 
 
