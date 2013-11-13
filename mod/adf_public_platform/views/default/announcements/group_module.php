@@ -43,7 +43,7 @@ if ($group->canEdit()) {
 		'title' => elgg_echo('announcements:group') . ', ' . elgg_echo('announcement:write'),
 	));
 	//$content .= "<span class='elgg-widget-more'>$new_link</span>";
-}
+} else $new_link = '';
 
 
 echo elgg_view('groups/profile/module', array(
