@@ -43,6 +43,7 @@ $fr = array(
 	
 	// Widgets
 	'elgg_cmis:author' => "Identifiant de l'auteur",
+	'elgg_cmis:widget:folder ' => "URL ou ID du dossier",
 	'elgg_cmis:widget:search ' => "Titre à rechercher",
 	'elgg_cmis:widget:insearch ' => "Texte à rechercher",
 	'elgg_cmis:widget:cmis' => "CMIS",

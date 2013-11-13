@@ -25,6 +25,7 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 				$mimetype = $obj->properties['cmis:contentStreamMimeType'];
 				$return .= elgg_echo('elgg_cmis:icon:document') . $obj->properties['cmis:name'] . ' &nbsp; ';
 				$fileID = str_replace('workspace://', '', $obj->properties['alfcmis:nodeRef']);
+				// echo elgg_view('output/url', array('text' => 'Open lighbox', 'href' => $url, 'class' => 'elgg-lightbox'));
 				foreach ($action_type as $action => $action_path) {
 					$action_url = $file_baseurl . $action_path . $fileID;
 					if ($action == 'download') $action_url .= '?a=true';
@@ -41,7 +42,7 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 				if (in_array($folder_type, array('cmis:folder', 'F:st:site'))) {
 					$path = $obj->properties['cmis:path'];
 					$name = $obj->properties['cmis:name'];
-					$folder_data[$path] = elgg_echo('elgg_cmis:iconfoldertype:' . $folder_type) . $name . ' &nbsp; <a href="' . $open_basepath . $path . '" target="_new" title="' . elgg_echo('elgg_cmis:action:openfolder') . '">' . elgg_echo('elgg_cmis:icon:openfolder') . '</a>';
+					$folder_data[$path] = elgg_echo('elgg_cmis:icon:foldertype:' . $folder_type) . $name . ' &nbsp; <a href="' . $open_basepath . $path . '" target="_new" title="' . elgg_echo('elgg_cmis:action:openfolder') . '">' . elgg_echo('elgg_cmis:icon:openfolder') . '</a>';
 				} else continue;
 				if ($debug) $return .= print_r($obj);
 				break;

@@ -10,6 +10,7 @@
  * - éléments de la page d'accueil : afficher les stats
  *
 */
+global $CONFIG;
 
 $url = $vars['url'];
 
@@ -20,6 +21,8 @@ $no_yes_force_opt['force'] = elgg_echo('option:force');
 $replace_public_homepage_opt = array( 'default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
 $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
+$registered_objects = get_registered_entity_types('object');
+
 
 // SET DEFAULT VALUES
 
@@ -86,6 +89,11 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 			</ul>
 			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';
 }
+
+
+// CORRECT BAD-FORMATTED VALUES
+// Remove spaces
+if (!empty($vars['entity']->remove_user_tools) && (strpos($vars['entity']->remove_user_tools, ' ') != false)) $vars['entity']->remove_user_tools = str_replace(' ', '', $vars['entity']->remove_user_tools);
 
 
 
@@ -342,6 +350,13 @@ $(function() {
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:friends') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_friends )) . '</p>';
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:mine') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_mine )) . '</p>';
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:filters:all') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_all )) . '</p>';
+		
+		// Suppression des menus de l'utilisateur
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';
+		// Suppression des outils personnels (lien de création) de l'utilisateur
+		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusertools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools )) . '<em>' . implode(',', $registered_objects) . '</em></p>';
+		// Note : la suppression de filtres dans les listings est un réglage général à part, 
+		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
 		?>
 		
 		<br />

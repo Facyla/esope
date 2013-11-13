@@ -430,6 +430,7 @@ section div.module header ul li a { float: left; margin-left: 6px; margin:0; rig
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
+section div.module div.activites ul li { padding-bottom: 1px; }
 section div.module div.activites ul li img { margin: 0 5px 0 7px; }
 section div.module div.activites ul li div span { color: #666; font-style: italic; }
 
@@ -574,6 +575,15 @@ textarea, .elgg-input-rawtext { width:100%; }
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 
+/* Semantic UI adjustments */
+i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
+
+/* Effets de survol */
+.elgg-module-widget, .elgg-module-group, .elgg-item { opacity: 0.9; }
+.elgg-module-widget:hover, .elgg-module-widget:active, .elgg-module-widget:focus, 
+.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus, 
+.elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
+
 
 
 /* SECTION RESPONSIVE DESIGN */
@@ -596,7 +606,8 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 /* Quand on utilise les widgets */
 .elgg-widgets { min-width:200px; }
 section div.module { width: 94%; padding: 3%; background-size:100%; }
-section div.module, section div.module div.activites { min-width:180px; width:auto; }
+section div.module { min-width:180px; }
+section div.module div.activites { width:auto; }
 section div.module footer { background-size: 100%; }
 
 

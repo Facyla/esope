@@ -24,7 +24,7 @@ if (elgg_is_logged_in() && $context) {
 	$disable_friends = elgg_get_plugin_setting('disable_friends', 'adf_public_platform');
 	$disable_mine = elgg_get_plugin_setting('disable_mine', 'adf_public_platform');
 	$disable_all = elgg_get_plugin_setting('disable_all', 'adf_public_platform');
-
+	
 	// generate a list of default tabs
 	if ($disable_all != 'yes') {
 		$tabs['all'] = array(

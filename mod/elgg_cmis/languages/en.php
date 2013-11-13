@@ -42,6 +42,7 @@ $en = array(
 	
 	// Widgets
 	'elgg_cmis:author' => "Author login",
+	'elgg_cmis:widget:folder ' => "Folder URL or ID",
 	'elgg_cmis:widget:search ' => "Search title",
 	'elgg_cmis:widget:insearch ' => "Search text",
 	'elgg_cmis:widget:cmis' => "CMIS",

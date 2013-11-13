@@ -27,7 +27,11 @@ $cmis_filter_value = get_input('filter_value', ''); //
 $embed_mode = get_input('embed', 'elgg');
 $repo_debug = get_input('debug', false);
 
+$recursive = get_input('recursive', 'false');
 
+// Lightbox support
+//elgg_load_js('lightbox');
+//elgg_load_css('lightbox');
 
 
 if ($repo_debug) $content .= "URL : $repo_url<br />Identifiant : $repo_username<br />Mot de passe : $repo_password<br />";
@@ -141,10 +145,13 @@ Folder predicate is supported by two predicate functions IN_FOLDER and IN_TREE()
 SELECT cmis:name FROM cmis:document WHERE IN_FOLDER('folder id')
 SELECT cmis:name FROM cmis:folder F WHERE IN_TREE(F, 'folder id')
 								*/
-								// SELECT cmis:name from cmis:document where in_tree('workspace://SpacesStore/d854c521-1115-4c4e-859c-e5fd72b157c5')
-								//$filter_query = "where in_tree('workspace://SpacesStore/$cmis_filter_value'"; // pour chercher un dossier
-								$filter_query = "where in_folder('workspace://SpacesStore/$cmis_filter_value')"; // Docs du dossier
-								//$filter_query = "where in_tree('workspace://SpacesStore/$cmis_filter_value')"; // Docs ds ts les sous-dossiers
+								if ($recursive == 'true') {
+									// Docs dans tous les sous-dossiers
+									$filter_query = "where in_tree('workspace://SpacesStore/$cmis_filter_value')";
+								} else {
+									// Docs du dossier
+									$filter_query = "where in_folder('workspace://SpacesStore/$cmis_filter_value')";
+								}
 								break;
 							default:
 								$content .= "Filtre invalide<br />";

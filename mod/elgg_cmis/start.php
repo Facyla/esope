@@ -18,6 +18,9 @@ function elgg_cmis_init(){
 	elgg_register_js('elgg_cmis:dialog', '/mod/elgg_cmis/vendors/cmis/soap/include/dialog.js', 'head');
 	elgg_load_js('elgg_cmis:dialog');
 	
+	//elgg_load_js('lightbox');
+	//elgg_load_css('lightbox');
+
 	// Custom CMIS functions
 	elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis.php');
 	

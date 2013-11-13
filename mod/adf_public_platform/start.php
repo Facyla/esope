@@ -301,15 +301,18 @@ function adf_platform_pagesetup(){
 	*/
 	if (elgg_is_logged_in()) {
 		
-		// Remove unwanted personnal tools : keep only files (embed), bookmarks, and ideas
-		// @TODO : doesn't work that way...
-		if (elgg_instanceof(elgg_get_page_owner_entity(), 'ElggUser')) {
-			elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'file_owner_block_menu');
-			elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'blog_owner_block_menu');
-			elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'bookmarks_owner_block_menu');
-			elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'brainstorm_owner_block_menu');
-			elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'pages_owner_block_menu');
+		// ESOPE : remove personnal tools from user tools (removes creation button)
+		$remove_user_tools = elgg_get_plugin_setting('remove_user_tools', 'adf_public_platform');
+		if ($remove_user_tools) {
+			/* Note : removing personnal tools means remove the add button, not the filter
+			global $CONFIG;
+			print_r($CONFIG->menus['title']);
+			*/
+			$remove_user_tools = explode(',', $remove_user_tools);
+			$context = elgg_get_context();
+			if (in_array($context, $remove_user_tools)) elgg_unregister_menu_item('title', 'add');
 		}
+		
 		
 		// Retire les demandes de contact des messages
 		if (elgg_get_context() == "messages") { elgg_unregister_menu_item("page", "friend_request"); }
