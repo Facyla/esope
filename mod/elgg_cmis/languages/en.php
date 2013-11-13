@@ -15,24 +15,35 @@ $en = array(
 	'elgg_cmis:cmis_password' => "CMIS password",
 	'elgg_cmis:debugmode' => "Debug mode",
 	
+	// Object types
 	'elgg_cmis:document' => "Document",
 	'elgg_cmis:folder' => "Folder",
-	'elgg_cmis:foldertype:cmis:folder' => '<i class="fa fa-folder fa-fw"></i>&nbsp;Folder',
-	'elgg_cmis:foldertype:F:st:site' => '<i class="fa fa-sitemap fa-fw"></i>&nbsp;Site',
+	'elgg_cmis:foldertype:cmis:folder' => 'Folder',
+	'elgg_cmis:foldertype:F:st:site' => 'Site',
 	'elgg_cmis:unknowtype' => "Unknown Object Type",
-	/*
-	'elgg_cmis:action:view' => '<i class="fa fa-desktop"></i>&nbsp;View',
-	'elgg_cmis:action:edit' => '<i class="fa fa-pencil"></i>&nbsp;Edit',
-	'elgg_cmis:action:page' => '<i class="fa fa-external-link"></i>&nbsp;View page',
-	'elgg_cmis:action:download' => '<i class="fa fa-download"></i>&nbsp;Download',
-	*/
-	'elgg_cmis:action:view' => '<i class="fa fa-desktop fa-fw"></i>&nbsp;View',
-	'elgg_cmis:action:edit' => '<i class="fa fa-pencil fa-fw"></i>&nbsp;Edit',
-	'elgg_cmis:action:page' => '<i class="fa fa-external-link fa-fw"></i>&nbsp;View page',
-	'elgg_cmis:action:download' => '<i class="fa fa-download fa-fw"></i>&nbsp;Download',
+	'elgg_cmis:icon:document' => '<i class="file icon"></i>',
+	'elgg_cmis:icon:folder' => '<i class="folder icon"></i>',
+	'elgg_cmis:icon:foldertype:cmis:folder' => '<i class="folder icon"></i>',
+	'elgg_cmis:icon:foldertype:F:st:site' => '<i class="sitemap icon"></i>',
+	'elgg_cmis:icon:unknowtype' => '<i class="sitemap icon"></i>',
+	// Actions
+	'elgg_cmis:action:openfolder' => 'Open folder',
+	'elgg_cmis:action:view' => 'View',
+	'elgg_cmis:action:edit' => 'Edit',
+	'elgg_cmis:action:page' => 'View page',
+	'elgg_cmis:action:download' => 'Download',
+	'elgg_cmis:icon:openfolder' => '<i class="folder open icon"></i>',
+	'elgg_cmis:icon:download' => '<i class="download disk icon"></i>',
+	'elgg_cmis:icon:view' => '<i class="external url icon"></i>',
+	'elgg_cmis:icon:page' => '<i class="desktop icon"></i>',
+	'elgg_cmis:icon:edit' => '<i class="pencil icon"></i>',
 	
 	'elgg_cmis:loading' => "Loading...",
 	
+	// Widgets
+	'elgg_cmis:author' => "Author login",
+	'elgg_cmis:widget:search ' => "Search title",
+	'elgg_cmis:widget:insearch ' => "Search text",
 	'elgg_cmis:widget:cmis' => "CMIS",
 	'elgg_cmis:widget:cmis:details' => "Generic CMIS widget (custom queries",
 	'elgg_cmis:widget:cmis_mine' => "CMIS : My Files",

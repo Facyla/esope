@@ -15,24 +15,36 @@ $fr = array(
 	'elgg_cmis:cmis_password' => "Mot de passe",
 	'elgg_cmis:debugmode' => "Activer le mode debug",
 	
+	// Object types
 	'elgg_cmis:document' => "Document",
 	'elgg_cmis:folder' => "Dossier",
-	'elgg_cmis:foldertype:cmis:folder' => '<i class="fa fa-folder fa-fw"></i>&nbsp;Dossier',
-	'elgg_cmis:foldertype:F:st:site' => '<i class="fa fa-sitemap fa-fw"></i>&nbsp;Site',
-	'elgg_cmis:unknowtype' => '<i class="fa fa-question fa-fw"></i>&nbsp;Objet de type inconnu', // Unknown Object Type
-	/*
+	'elgg_cmis:foldertype:cmis:folder' => 'Dossier',
+	'elgg_cmis:foldertype:F:st:site' => 'Site',
+	'elgg_cmis:unknowtype' => 'Objet de type inconnu', // Unknown Object Type
+	'elgg_cmis:icon:document' => '<i class="file icon"></i>',
+	'elgg_cmis:icon:folder' => '<i class="folder icon"></i>',
+	'elgg_cmis:icon:foldertype:cmis:folder' => '<i class="folder icon"></i>',
+	'elgg_cmis:icon:foldertype:F:st:site' => '<i class="sitemap icon"></i>',
+	'elgg_cmis:icon:unknowtype' => '<i class="sitemap icon"></i>',
+	
+	// Actions
+	'elgg_cmis:action:openfolder' => "Ouvrir le dossier",
 	'elgg_cmis:action:view' => "Afficher",
 	'elgg_cmis:action:edit' => "Modifier",
 	'elgg_cmis:action:page' => "Voir la page",
 	'elgg_cmis:action:download' => "Télécharger",
-	*/
-	'elgg_cmis:action:view' => '<i class="fa fa-desktop fa-fw"></i>&nbsp;Afficher',
-	'elgg_cmis:action:edit' => '<i class="fa fa-pencil fa-fw"></i>&nbsp;Modifier',
-	'elgg_cmis:action:page' => '<i class="fa fa-external-link fa-fw"></i>&nbsp;Voir la page',
-	'elgg_cmis:action:download' => '<i class="fa fa-download fa-fw"></i>&nbsp;Télécharger',
+	'elgg_cmis:icon:openfolder' => '<i class="folder open icon"></i>',
+	'elgg_cmis:icon:download' => '<i class="download disk icon"></i>',
+	'elgg_cmis:icon:view' => '<i class="external url icon"></i>',
+	'elgg_cmis:icon:page' => '<i class="desktop icon"></i>',
+	'elgg_cmis:icon:edit' => '<i class="pencil icon"></i>',
 	
 	'elgg_cmis:loading' => "Chargement en cours",
 	
+	// Widgets
+	'elgg_cmis:author' => "Identifiant de l'auteur",
+	'elgg_cmis:widget:search ' => "Titre à rechercher",
+	'elgg_cmis:widget:insearch ' => "Texte à rechercher",
 	'elgg_cmis:widget:cmis' => "CMIS",
 	'elgg_cmis:widget:cmis:details' => "Widget CMIS générique (multicritères)",
 	'elgg_cmis:widget:cmis_mine' => "CMIS : Mes fichiers",
