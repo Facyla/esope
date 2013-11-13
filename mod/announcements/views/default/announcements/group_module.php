@@ -34,7 +34,8 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('announcements:none') . '</p>';
 }
 
-if ($group->canWriteToContainer(0, 'object', 'announcement')) {
+//if ($group->canWriteToContainer(0, 'object', 'announcement')) {
+if ($group->canEdit()) {
 	$new_link = elgg_view('output/url', array(
 		'href' => "/announcements/add/$group->guid",
 		'text' => elgg_echo('announcement:write'),
