@@ -596,6 +596,30 @@ if (elgg_is_active_plugin('au_subgroups')) {
 }
 
 
+/* Returns groups that are wether owned (created) or operated by the user
+ * $user_guid default to logged in user
+ * $mode accepts : all (owned+operated), owned, operated
+ * Note : only 'all' mode returns an indexed array !
+ */
+function esope_get_owned_groups($user_guid = false, $mode = 'all') {
+	if (!$user_guid) $user_guid = elgg_get_logged_in_user_guid();
+	if ($mode != 'operated') $owned = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user_guid, 'limit' => false));
+	if ($mode == 'owned') return $owned;
+	if (elgg_is_active_plugin('group_operators')) {
+		$operated = elgg_get_entities_from_relationship(array('types'=>'group', 'limit'=>false, 'relationship_guid'=> $user_guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
+		if ($mode == 'operated') return $operated;
+		// Ajout avec possibilité de dédoublonnage par la clef
+		foreach ($owned as $ent) {
+			$groups[$ent->guid] = $ent;
+		}
+		// Puis ajout dédoublonné des groupes supplémentaires
+		foreach ($operated as $ent) {
+			if (!isset($groups[$ent->guid])) $groups[$ent->guid] = $ent;
+		}
+	} else $groups = $owned;
+	return $groups;
+}
+
 /* Sort groups by grouptype
  * @return Array ($grouptype => array($groups))
  * Note : 'default' grouptype == empty grouptype (don't use as a grouptype value if empty field allowed))

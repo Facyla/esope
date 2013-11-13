@@ -18,6 +18,8 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
 $replace_public_homepage_opt = array( 'default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
+$groups_discussion_opt = $yes_no_opt;
+$groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
 
 // SET DEFAULT VALUES
 
@@ -82,7 +84,7 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 				<li><a href="#">Accessibilité</a></li>
 				<li><a href="#">Contact</a></li>
 			</ul>
-			<a href="#" target="_blank"><img src="' . $url . 'mod/adf_public_platform/img/theme/logo.png" alt="Logo" /></a>';
+			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';
 }
 
 
@@ -348,6 +350,20 @@ $(function() {
 		if (elgg_is_active_plugin('groups')) {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister )) . '</p>';
+		}
+		?>
+		<br />
+		<h4><?php echo elgg_echo('adf_platform:config:grouptabs'); ?></h4>
+		<?php
+		if (elgg_is_active_plugin('groups')) {
+			// Default to alpha sort
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:alpha') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_alpha )) . '</p>';
+			// Allow to remove newest
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:newest') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_newest )) . '</p>';
+			// Allow to remove popular
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular )) . '</p>';
+			// Allow to remove discussion OR add it at page bottom
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion )) . '</p>';
 		}
 		?>
 		

@@ -159,7 +159,8 @@ function adf_platform_groups_page_handler($page) {
 			groups_search_page();
 			break;
 		case 'owner':
-			groups_handle_owned_page();
+			//groups_handle_owned_page();
+			adf_platform_groups_handle_owned_page();
 			break;
 		case 'member':
 			set_input('username', $page[1]);

@@ -8,18 +8,11 @@ $event_id = $vars['event']->guid;
 $event_container = $vars['event']->container_guid;
 
 // get the list of all groups:
-
 if (elgg_is_admin_logged_in()) {
-	$groups = elgg_get_entities(array(
-		'type' => 'group',
-		'limit' => 5000,
-	));
+	$groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
 } else {
-	$groups = elgg_get_entities(array(
-		'type' => 'group',
-		'owner_guid' => elgg_get_logged_in_user_guid(),
-		'limit' => 5000,
-	));
+	// This returns groups that user has admin rights on, owned or operators
+	$groups = esope_get_owned_groups($user_guid, 'all');
 }
 
 // split the group list into two lists
