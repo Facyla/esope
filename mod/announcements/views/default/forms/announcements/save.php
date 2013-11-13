@@ -1,8 +1,6 @@
 <?php
 
 $announcement = $vars['entity'];
-$group = elgg_get_page_owner_entity();
-if (!$group->canEdit()) { forward(REFERER); }
 
 ?>
 

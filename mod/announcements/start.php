@@ -16,11 +16,11 @@ function announcements_init() {
 	register_notification_object('object', 'announcement', elgg_echo('announcement:new'));
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'announcements_notify_message');
 	
-	// add blog link to
+	// add announcement link to
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'announcements_owner_block_menu');
 
 	// Register for search.
-	elgg_register_entity_type('object', 'blog');
+	elgg_register_entity_type('object', 'announcement');
 
 	// Add group option
 	add_group_tool_option('announcements', elgg_echo('announcements:enableannouncements'), true);
@@ -44,7 +44,7 @@ function announcements_url_handler($announcement) {
  */
 function announcements_page_handler($page) {
 
-	// push all blogs breadcrumb
+	// push all announcements breadcrumb
 	elgg_push_breadcrumb(elgg_echo('announcements:announcements'), "announcements/all");
 
 	$page_type = $page[0];
