@@ -327,7 +327,8 @@ function adf_platform_pagesetup(){
 			$remove_collections = elgg_get_plugin_setting('remove_collections', 'adf_public_platform');
 			if ($remove_collections == 'yes') elgg_unregister_menu_item("page", "friends:view:collections");
 			// Supprime les Contacts de
-			elgg_unregister_menu_item("page", "friendsof");
+			elgg_unregister_menu_item("page", "friends:of");
+			elgg_unregister_page_handler("friendsof");
 			
 			// Ajoute lien vers l'annuaire
 			elgg_register_menu_item("page", array(
