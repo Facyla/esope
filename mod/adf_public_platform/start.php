@@ -160,6 +160,10 @@ function adf_platform_init() {
 	// Pour pouvoir modifier la page utilisateurs
 	elgg_unregister_page_handler('profile', 'profile_page_handler');
 	elgg_register_page_handler('profile', 'adf_platform_profile_page_handler');
+	// Pour les messages
+	elgg_unregister_page_handler('messages', 'messages_page_handler');
+	elgg_register_page_handler('messages', 'adf_platform_messages_page_handler');
+	
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
@@ -294,28 +298,59 @@ require_once(dirname(__FILE__) . '/lib/adf_public_platform/hooks.php');
 
 
 function adf_platform_pagesetup(){
-	/*
+	$context = elgg_get_context();
+	
 	if (elgg_is_logged_in()) {
-		elgg_unregister_menu_item('topbar', 'elgg_logo');
-	}
-	*/
-	if (elgg_is_logged_in()) {
+		$own = elgg_get_logged_in_user_entity();
 		
-		// ESOPE : remove personnal tools from user tools (removes creation button)
+		// ESOPE : remove personnal tools from user tools (removes creation button) - only if owner if a user !! (otherwise we would remove group tools...)
 		$remove_user_tools = elgg_get_plugin_setting('remove_user_tools', 'adf_public_platform');
-		if ($remove_user_tools) {
+		if ($remove_user_tools && elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
 			/* Note : removing personnal tools means remove the add button, not the filter
 			global $CONFIG;
 			print_r($CONFIG->menus['title']);
 			*/
 			$remove_user_tools = explode(',', $remove_user_tools);
-			$context = elgg_get_context();
 			if (in_array($context, $remove_user_tools)) elgg_unregister_menu_item('title', 'add');
 		}
 		
+		// Helps finding quickly the good name for existing menus...
+		//global $CONFIG; echo print_r($CONFIG->menus['page']); // debug
 		
 		// Retire les demandes de contact des messages
-		if (elgg_get_context() == "messages") { elgg_unregister_menu_item("page", "friend_request"); }
+		if ($context == "messages") { elgg_unregister_menu_item("page", "friend_request"); }
+		
+		// Fusionne les menus contacts et annuaire (+ les autres menus liés)
+		if (in_array($context, array('friends', 'members', 'friendsof', 'friend_request', 'collections'))) {
+			
+			// Supprime les collections, si demandé
+			$remove_collections = elgg_get_plugin_setting('remove_collections', 'adf_public_platform');
+			if ($remove_collections == 'yes') elgg_unregister_menu_item("page", "friends:view:collections");
+			
+			// Ajoute lien vers l'annuaire
+			elgg_register_menu_item("page", array(
+					'name' => 'members', 'href' => $CONFIG->url . 'members', 
+					'text' => elgg_echo('adf_platform:directory'), 
+					"section" => "directory",
+				));
+			
+			// Ajoute lien vers les contacts
+			elgg_register_menu_item("page", array(
+					'name' => 'friends', 'href' => $CONFIG->url . 'friends/' . $own->username, 
+					'text' => elgg_echo('friends'), 
+					'contexts' => array('members'), 
+				));
+				
+			// Ajoute lien vers les invitations
+			if (elgg_is_active_plugin('invitefriends')) {
+				$params = array(
+					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => $CONFIG->url . 'invite',
+					'contexts' => array('members'), // Uniquement members pour ne pas overrider le comportement normal
+				);
+				elgg_register_menu_item('page', $params);
+			}
+		}
+		
 		
 		// Report content link
 		elgg_unregister_menu_item('footer', 'report_this');

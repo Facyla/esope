@@ -499,9 +499,19 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-output ul { color: #333333; }
 .elgg-river > li:last-child { border-bottom: 0 none; }
 
-
+/* Messages are now conversations, let's style this a little */
 .message.unread a { color: <?php echo $linkcolor; ?>; font-weight:bold; }
-
+.messages-owner { width: 26%; margin-right: 2%; }
+.messages-subject { width: 55%; margin-right: 2%; }
+.messages-timestamp { width: 8%; margin-right: 2%; }
+.messages-delete { width: 5%; }
+.elgg-item.selected-message { opacity:1; }
+.message-item-toggle { text-align: center; padding: 4px; display: block; background: #eee; }
+.elgg-item-message .message-content { width: 96%; padding: 0 0.5%; display:none; padding-bottom: 16px; padding-top: 4px; }
+.elgg-item-message .message-content.selected-message { display:block; }
+.message-sent .message-content { opacity: 1; }
+.message-inbox .message-content {  }
+.message-sent .message-content { margin-left:3%; background: #EEE; }
 
 
 /* Mes paramètres */

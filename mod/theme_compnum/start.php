@@ -161,6 +161,7 @@ function theme_compnum_pagesetup() {
 	}
 	
 	// Retire les demandes de contact des messages
+	// Modifie les menus des contacts et annuaire
 		//if ((elgg_get_context() == "friends") || (elgg_get_context() == "members")) {
 		if (elgg_get_context() == "friends") {
 			elgg_register_menu_item("page", array(
