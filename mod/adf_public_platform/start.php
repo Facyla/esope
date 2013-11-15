@@ -36,7 +36,7 @@ function adf_platform_init() {
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
 	
-	// jQuery
+	// Replace jQuery
 	elgg_register_js('jquery', '/mod/adf_public_platform/views/default/adf_platform/js/jquery-1.7.2.min.php', 'head');
 	
 	// Theme-specific JS (accessible menu)
@@ -52,7 +52,7 @@ function adf_platform_init() {
 	elgg_load_js('floatable.elements');
 	
 	// Webdesign : Smooth scrolling : smooth transition for inline (anchors) links
-	elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth.scrolling.js', 'head');
+	elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
 	elgg_load_js('smooth.scrolling');
 	
 	
@@ -260,13 +260,13 @@ function adf_platform_init() {
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
 	
 	// register the color picker's JavaScript
-	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
 	elgg_register_simplecache_view('js/input/color_picker');
+	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
 	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
 	
 	// register the color picker's CSS
-	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
 	elgg_register_simplecache_view('css/input/color_picker');
+	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
 	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
 	
 	// Profil non public par défaut, si réglage activé

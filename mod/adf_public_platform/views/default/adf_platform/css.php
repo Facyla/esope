@@ -599,6 +599,9 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 .elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
 .elgg-list-river > li:hover { background-color: #F9F9F9; }
 
+/* Autocomplete content : le menu n'est pas utile */
+.elgg-autocomplete-item .elgg-menu { max-width: 40%; display:none; }
+
 
 /* SECTION RESPONSIVE DESIGN */
 

@@ -5,6 +5,7 @@ $urlicon = $url . 'mod/adf_public_platform/img/theme/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
+$prev_q = get_input('q', '');
 
 if (elgg_is_logged_in()) {
 	$own = $_SESSION['user'];
@@ -34,7 +35,7 @@ if (elgg_is_logged_in()) {
 			$groups .= '<li><a href="' . $group->getURL() . '">' 
 				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $group->name . '</a></li>';
 			// Si on liste les sous-groupes, on le fait ici si demandé
-			if (elgg_is_active_plugin('au_subgroups') && $display_subgroups) {
+			if (elgg_is_active_plugin('au_subgroups') && ($display_subgroups == 'yes')) {
 				$groups .= adf_platform_list_groups_submenu($group, 1, true, $own);
 			}
 		}
@@ -169,9 +170,9 @@ if (elgg_is_logged_in()) {
 						
 						<?php if (elgg_is_active_plugin('search')) { ?>
 							<form action="<?php echo $url . 'search'; ?>" method="post">
-								<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 								<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
-								<input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
+								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
 								<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 							</form>
 						<?php } ?>

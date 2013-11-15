@@ -73,6 +73,7 @@ foreach ($messages as $timestamp => $ent) {
 		$toggle = '';
 	} else {
 		$toggle = '<a href="javascript:void(0);" onClick="$(\'#elgg-message-'.$ent->guid.'\').toggle(); $(this).hide();" class="message-item-toggle"><p>' . elgg_view_friendly_time($timestamp) . '</p></a>';
+		$selected = '';
 	}
 	$content .= '<li id="elgg-object-'.$ent->guid.'" class="elgg-item elgg-item-message '.$class.$selected.'">' . $toggle;
 	$content .= '<div id="elgg-message-'.$ent->guid.'" class="message-content '.$selected.'">';

@@ -93,6 +93,7 @@ $en = array(
 	'adf_platform:directory' => "Directory",
 	'adf_platform:event_calendar' => "Calendar",
 	'adf_platform:search' => "Search",
+	'adf_platform:search:defaulttext' => "Search all content...",
 	'adf_platform:groupicon' => "group icon",
 	'adf_platform:categories:all' => "Categories news",
 	'adf_platform:members:online' => "Online members",

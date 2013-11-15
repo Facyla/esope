@@ -91,6 +91,7 @@ $fr = array(
 	'adf_platform:directory' => "Annuaire",
 	'adf_platform:event_calendar' => "Agenda",
 	'adf_platform:search' => "Rechercher",
+	'adf_platform:search:defaulttext' => "Trouvez dans le site...",
 	'adf_platform:groupicon' => "icône du groupe",
 	'adf_platform:categories:all' => "Actualité des thématiques",
 	'adf_platform:members:online' => "Membres connectés",

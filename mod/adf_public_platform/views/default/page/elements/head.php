@@ -53,19 +53,16 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	}
 	echo '<link rel="stylesheet" href="' . $theme_url . 'print.css" type="text/css" media="print" />';
 	echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" />';
-	if ($config_awesomefont == 'yes') {
-		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />';
-	}
-	if ($config_semanticui == 'yes') {
-		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />';
-		echo '<script src="' . $theme_url . 'vendors/semantic-ui/packaged/javascript/semantic.js"></script>';
-	}
 	
 	$ie_url = elgg_get_simplecache_url('css', 'ie');
+	$ie7_url = elgg_get_simplecache_url('css', 'ie7');
 	$ie6_url = elgg_get_simplecache_url('css', 'ie6');
 	?>
-	<!--[if gt IE 6]>
+	<!--[if gt IE 7]>
 		<link rel="stylesheet" type="text/css" href="<?php echo $ie_url; ?>" />
+	<![endif]-->
+	<!--[if IE 7]>
+		<link rel="stylesheet" type="text/css" href="<?php echo $ie7_url; ?>" />
 	<![endif]-->
 	<!--[if IE 6]>
 		<link rel="stylesheet" type="text/css" href="<?php echo $ie6_url; ?>" />
@@ -84,11 +81,20 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 		echo '<style>' . html_entity_decode($config_css) . '</style>';
 	}
 	
+	// JS et extensions supplémentaires (à charger après jQuery !)
 	foreach ($js as $script) {
-		echo '<script type="text/javascript" src="' . $script . '"></script>';
+		echo '<script type="text/javascript" src="' . $script . '"></script>' . "\n";
 	}
 	
 	echo '<script type="text/javascript">' . elgg_view('js/initialize_elgg') . '</script>';
+	
+	if ($config_awesomefont == 'yes') {
+		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />';
+	}
+	if ($config_semanticui == 'yes') {
+		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />';
+		echo '<script src="' . $theme_url . 'vendors/semantic-ui/packaged/javascript/semantic.js"></script>';
+	}
 	
 	echo $feedref;
 	
