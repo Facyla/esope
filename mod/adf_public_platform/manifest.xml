@@ -30,6 +30,11 @@
 		<name>custom_index</name>
 	</conflicts>
 	
+	<conflicts>
+		<type>plugin</type>
+		<name>autocomplete</name>
+	</conflicts>
+	
 	<requires>
 		<type>plugin</type>
 		<name>members</name>
@@ -95,11 +100,6 @@
 		<type>plugin</type>
 		<name>threads</name>
 	</conflicts>
-	
-	<suggests>
-		<type>plugin</type>
-		<name>autocomplete</name>
-	</suggests>
 	
 	<suggests>
 		<type>plugin</type>
