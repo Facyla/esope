@@ -25,6 +25,7 @@ function ldap_auth_init() {
 	// Register the authentication handler
 	register_pam_handler('ldap_auth_handler_authenticate', 'sufficient', 'user');
 	
+	// Update infos from LDAP
 	elgg_register_event_handler('login','user', 'ldap_auth_handler_update');
 	
 }
@@ -42,8 +43,9 @@ function ldap_auth_init() {
 function ldap_auth_handler_update($event, $object_type, $user){
 	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
 		elgg_load_library("elgg:ldap_auth");
+		// Update LDAP fields
 		$return = ldap_auth_check_profile($user);
-		error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
+		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}
 	return true;
 }

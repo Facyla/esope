@@ -15,6 +15,7 @@ define('cmspage', true);
 global $CONFIG;
 
 $pagetype = 'homepage-public';
+$lang = $CONFIG->language;
 
 if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('adf_platform:cmspages:notactivated')); }
 
@@ -26,7 +27,7 @@ $vars['title'] = $title;
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">
 <head>
 	<title><?php echo $title; ?></title>
 	<?php

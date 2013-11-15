@@ -31,7 +31,7 @@ function ldap_auth_login($username, $password) {
 	register_error("DEBUG LDAP ldap_auth_login : $username : $pwd  2= $pwd2  3= $pwd3  4= $pw4"); // @TODO
 	*/
 	
-	if ( !ldap_auth_is_banned($username) ) {
+	if ( !ldap_auth_is_closed($username) ) {
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
 				return login($user);
@@ -65,10 +65,12 @@ function ldap_auth_is_valid($username, $password) {
 			if ($auth->bind($rdn[0], $password)) {
 				return true;
 			} else {
-				throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
+				return false;
+				//throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
 			}
 		} else {
-			throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+			return false;
+			//throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
 		}
 	}
 	return false;
@@ -83,27 +85,40 @@ function ldap_auth_is_valid($username, $password) {
  * @throws LoginException
  * @access private
  */
-function ldap_auth_is_banned($username) {
+function ldap_auth_is_closed($username) {
 	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ($auth->bind()) {
 		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
 		if ($result && $result[0]['inriaentrystatus'][0] == 'closed') {
-			throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
+			return true;
+			// No need to throw exception on a simple test - we need it for other tests
+			//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
 		} else {
 			return false;
 		}
 	}
+	// Error or not found : same as closed (not a valid ldap login)
 	return true;
 }
 
-/* Bannit dans ELgg les users bannis du LDAP - Pose la question des accès externes */
-function ldap_auth_update_status(ElggUser $user){
-	if (ldap_auth_is_banned($user->username)) {
-		$user->banned = 'yes';
-		return $user->save();
-	} else {
-		return true;
+
+/**
+ * Check if LDAP account exists
+ *
+ * @param string $username the LDAP login.
+  * 
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function ldap_user_exists($username) {
+	$auth = new LdapServer(ldap_auth_settings_auth());
+	if ($auth->bind()) {
+		$result = $auth->search('inriaLogin=' . $username, array('inriaentrystatus'));
+		if ($result) { return true; }
 	}
+	// Error or not found : same as doesn't exist
+	return false;
 }
 
 
@@ -150,13 +165,16 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ( $info->bind() && $auth->bind() && $mail->bind()){
 		$ldap_mail = $mail->search('inriaLogin=' .  $user->username, array('inriaMail'));
-			
+		
+		// There should be only 1 email <=> 1 username, but don't update in doubt
 		if ($ldap_mail && count($ldap_mail) == 1) {
 			$ldap_infos = $info->search('mail=' . $ldap_mail[0]['inriaMail'][0], array_keys(ldap_auth_settings_info_fields()));
+			// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
+			if ($ldap_infos && count($ldap_infos) > 1) { $ldap_infos = array(end($ldap_infos)); }
 			if ($ldap_infos && count($ldap_infos) == 1) {
 				return ldap_auth_update_profile($user, $ldap_infos, $ldap_mail, ldap_auth_settings_info_fields());
 			} else {
-				//we use auth as alternative info source 
+				//we still can use auth as alternative info source - less infos
 				$ldap_infos = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
 				$ldap_infos = ldap_auth_clean_group_name($ldap_infos);
 				if ($ldap_infos && count($ldap_infos) == 1) {

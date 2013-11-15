@@ -14,15 +14,22 @@
 // backward compatability support for plugins that are not using the new approach
 // of routing through admin. See reportedcontent plugin for a simple example.
 if (elgg_get_context() == 'admin') {
-  elgg_deprecated_notice("admin plugins should route through 'admin'.", 1.8);
-  elgg_admin_add_plugin_settings_menu();
-  elgg_unregister_css('elgg');
-  echo elgg_view('page/admin', $vars);
-  return true;
+	if (get_input('handler') != 'admin') {
+		elgg_deprecated_notice("admin plugins should route through 'admin'.", 1.8);
+	}
+	elgg_admin_add_plugin_settings_menu();
+	elgg_unregister_css('elgg');
+	echo elgg_view('page/admin', $vars);
+	return true;
 }
 
+$lang = get_current_language();
 
-$lang = $CONFIG->language;
+// render content before head so that JavaScript and CSS can be loaded. See #4032
+$messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
+$header = elgg_view('adf_platform/adf_header', $vars);
+$body = elgg_view('page/elements/body', $vars);
+$footer = elgg_view('page/elements/footer', $vars);
 
 // Set the content type
 header("Content-type: text/html; charset=UTF-8");
@@ -31,43 +38,44 @@ header("Content-type: text/html; charset=UTF-8");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">
 <head>
-<?php echo elgg_view('page/elements/head', $vars); ?>
+	<?php echo elgg_view('page/elements/head', $vars); ?>
 </head>
+
 <body>
 <div class="elgg-page elgg-page-default">
-  <div class="elgg-page-messages">
-    <?php echo elgg_view('page/elements/messages', array('object' => $vars['sysmessages'])); ?>
-  </div>
-  
-  <!-- Theme Content -->
+	<div class="elgg-page-messages">
+		<?php echo $messages; ?>
+	</div>
+	
+	<!-- Theme Content -->
 <?php /*
-  <div id="page_container"> 
-    <div id="wrapper_header">
+	<div id="page_container"> 
+		<div id="wrapper_header">
 */ ?>
-
-      <?php echo elgg_view('adf_platform/adf_header'); ?>
-      
-      <section>
-        <div class="interne interne-content">
-          <?php echo elgg_view('page/elements/body', $vars); ?>
-          <div class="clearfloat"></div>
-        </div>
-      </section>
-      
-      <?php echo elgg_view('page/elements/footer', $vars); ?>
-      
+	
+		<?php echo $header; ?>
+		
+		<section>
+			<div class="interne interne-content">
+				<?php echo $body; ?>
+				<div class="clearfloat"></div>
+			</div>
+		</section>
+		
+		<?php echo $footer; ?>
+			
 <?php /*
-    </div><!-- wrapper_header //-->
-  </div><!-- page_container //-->
+		</div><!-- wrapper_header //-->
+	</div><!-- page_container //-->
 */ ?>
-  <!-- Theme Content -->
-  
+	<!-- Theme Content -->
+	
 </div>
-
-<!-- END -->
-
-<!-- JS deferred scripts -->
-<?php echo elgg_view('page/elements/foot'); ?>
-
+	
+	<!-- END -->
+	
+	<!-- JS deferred scripts -->
+	<?php echo elgg_view('page/elements/foot'); ?>
+	
 </body>
 </html>

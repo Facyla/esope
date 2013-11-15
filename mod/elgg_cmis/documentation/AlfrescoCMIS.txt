@@ -1,0 +1,4 @@
+Documentation sur : 
+	http://docs.alfresco.com/4.2/topic/com.alfresco.enterprise.doc/pra/1/topics/pra-welcome.html
+	http://wiki.alfresco.com/wiki/CMIS
+	

@@ -430,6 +430,7 @@ section div.module header ul li a { float: left; margin-left: 6px; margin:0; rig
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
+section div.module div.activites ul li { padding-bottom: 1px; }
 section div.module div.activites ul li img { margin: 0 5px 0 7px; }
 section div.module div.activites ul li div span { color: #666; font-style: italic; }
 
@@ -498,9 +499,19 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-output ul { color: #333333; }
 .elgg-river > li:last-child { border-bottom: 0 none; }
 
-
+/* Messages are now conversations, let's style this a little */
 .message.unread a { color: <?php echo $linkcolor; ?>; font-weight:bold; }
-
+.messages-owner { width: 26%; margin-right: 2%; }
+.messages-subject { width: 55%; margin-right: 2%; }
+.messages-timestamp { width: 8%; margin-right: 2%; }
+.messages-delete { width: 5%; }
+.elgg-item.selected-message { opacity:1; }
+.message-item-toggle { text-align: center; padding: 4px; display: block; background: #eee; }
+.elgg-item-message .message-content { width: 96%; padding: 0 0.5%; display:none; padding-bottom: 16px; padding-top: 4px; }
+.elgg-item-message .message-content.selected-message { display:block; }
+.message-sent .message-content { opacity: 1; }
+.message-inbox .message-content {  }
+.message-sent .message-content { margin-left:3%; background: #EEE; }
 
 
 /* Mes paramètres */
@@ -574,6 +585,22 @@ textarea, .elgg-input-rawtext { width:100%; }
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 
+/* Semantic UI adjustments */
+i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
+
+/* Effets de survol */
+/*
+.elgg-module-widget, .elgg-module-group { opacity: 0.8; }
+.elgg-module-widget:hover, .elgg-module-widget:active, .elgg-module-widget:focus, 
+.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus { opacity: 1; }
+*/
+.elgg-item { opacity: 0.75; }
+.elgg-item .elgg-item { opacity: 1; } /* Don't double the effect */
+.elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
+.elgg-list-river > li:hover { background-color: #F9F9F9; }
+
+/* Autocomplete content : le menu n'est pas utile */
+.elgg-autocomplete-item .elgg-menu { max-width: 40%; display:none; }
 
 
 /* SECTION RESPONSIVE DESIGN */
@@ -596,7 +623,8 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 /* Quand on utilise les widgets */
 .elgg-widgets { min-width:200px; }
 section div.module { width: 94%; padding: 3%; background-size:100%; }
-section div.module, section div.module div.activites { min-width:180px; width:auto; }
+section div.module { min-width:180px; }
+section div.module div.activites { width:auto; }
 section div.module footer { background-size: 100%; }
 
 

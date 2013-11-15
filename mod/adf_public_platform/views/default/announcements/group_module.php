@@ -35,14 +35,15 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('announcements:none') . '</p>';
 }
 
-if ($group->canWriteToContainer(0, 'object', 'announcement')) {
+//if ($group->canWriteToContainer(0, 'object', 'announcement')) {
+if ($group->canEdit()) {
 	$new_link = elgg_view('output/url', array(
 		'href' => "/announcements/add/$group->guid",
 		'text' => elgg_echo('announcement:write'),
 		'title' => elgg_echo('announcements:group') . ', ' . elgg_echo('announcement:write'),
 	));
 	//$content .= "<span class='elgg-widget-more'>$new_link</span>";
-}
+} else $new_link = '';
 
 
 echo elgg_view('groups/profile/module', array(

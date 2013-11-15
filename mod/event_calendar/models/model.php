@@ -479,8 +479,8 @@ function event_calendar_get_entities_from_metadata_between($meta_start_name, $me
 				$entities = event_calendar_get_entities_from_metadata_between_related($meta_start_name, $meta_end_name,
 				$meta_start_value, $meta_end_value, $entity_type,
 				$entity_subtype, $owner_guid, $container_guid,
-				$limit = 10, $offset = 0, $order_by = "", $site_guid = 0,
-				$filter = false, $count = false, $region='-',$entities);
+				0, 0, "", 0,
+				false, false, '-',$entities);
 			}
 		}
 		return $entities;
@@ -518,10 +518,10 @@ $filter = false, $count = false, $region='-',$main_events) {
 		}
 	}
 	// get all the events (across all containers) that meet the criteria
-	$all_events = event_calendar_get_entities_from_metadata_between($meta_start_name, $meta_end_name,
+	// Facyla : patched (not corrected in latest version as of November 2013) : changed to version 2 of the function
+	$all_events = event_calendar_get_entities_from_metadata_between2($meta_start_name, $meta_end_name,
 	$meta_start_value, $meta_end_value, $entity_type, $entity_subtype, $owner_guid,
 	0, $limit, $offset, $order_by, $site_guid, $filter, $count, $region);
-
 	if ($all_events) {
 		foreach($all_events as $event) {
 			if (array_key_exists($event->guid,$related_list)
@@ -690,8 +690,24 @@ $count = false, $region='-', $meta_max = '', $annotation_name = '')
 	$query .= ' AND ' . get_access_sql_suffix("m2"); // Add access controls
 
 	if (!$count) {
-		$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
-		return get_data($query, "entity_row_to_elggstar");
+		//$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
+		//return get_data($query, "entity_row_to_elggstar");
+		// Facyla : patched using new model lib : https://github.com/kevinjardine/Elgg-Event-Calendar/blob/full/models/model.php
+		$query .= " order by $order_by";
+		if ($limit) {
+			$query .= " limit $offset, $limit"; // Add order and limit
+		}
+		$entities = get_data($query, "entity_row_to_elggstar");
+		if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
+			if (get_entity($container_guid) instanceOf ElggGroup) {
+				$entities = event_calendar_get_entities_from_metadata_between_related($meta_start_name, $meta_end_name,
+				$meta_start_value, $meta_end_value, $entity_type,
+				$entity_subtype, $owner_guid, $container_guid,
+				false, 0, "", 0,
+				false, false, '-',$entities);
+			}
+		}
+		return $entities;
 	} else {
 		if ($row = get_data_row($query))
 		return $row->total;

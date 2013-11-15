@@ -141,10 +141,17 @@ if ($thewire && $left_side && $right_side) {
 }
 if (!empty($static)) $body .= '<div class="clearfloat"></div>' . $static;
 
-// Widgets + wrap intro message in a div
+/* Widgets + wrap intro message in a div
+ * @uses $vars['content']          Optional display box at the top of layout
+ * @uses $vars['num_columns']      Number of widget columns for this layout (3)
+ * @uses $vars['show_add_widgets'] Display the add widgets button and panel (true)
+ * @uses $vars['exact_match']      Widgets must match the current context (false)
+ * @uses $vars['show_access']      Show the access control (true)
+ */
 $params = array(
 		'content' => '', // Texte en intro des widgets (avant les 3 colonnes)
-		'num_columns' => 3, 'show_access' => false,
+		'num_columns' => 3, 
+		'show_access' => false, 
 	);
 $widgets = elgg_view_layout('widgets', $params);
 $body .= '<div class="clearfloat"></div>' . $widgets;

@@ -159,7 +159,8 @@ function adf_platform_groups_page_handler($page) {
 			groups_search_page();
 			break;
 		case 'owner':
-			groups_handle_owned_page();
+			//groups_handle_owned_page();
+			adf_platform_groups_handle_owned_page();
 			break;
 		case 'member':
 			set_input('username', $page[1]);
@@ -395,4 +396,53 @@ function adf_platform_profile_page_handler($page) {
 	return true;
 }
 
+
+function adf_platform_messages_page_handler($page) {
+	$current_user = elgg_get_logged_in_user_entity();
+	if (!$current_user) {
+		register_error(elgg_echo('noaccess'));
+		$_SESSION['last_forward_from'] = current_page_url();
+		forward('');
+	}
+
+	elgg_load_library('elgg:messages');
+
+	elgg_push_breadcrumb(elgg_echo('messages'), 'messages/inbox/' . $current_user->username);
+
+	if (!isset($page[0])) { $page[0] = 'inbox'; }
+
+	// Support the old inbox url /messages/<username>, but only if it matches the logged in user.
+	// Otherwise having a username like "read" on the system could confuse this function.
+	if ($current_user->username === $page[0]) {
+		$page[1] = $page[0];
+		$page[0] = 'inbox';
+	}
+
+	if (!isset($page[1])) { $page[1] = $current_user->username; }
+
+	$base_dir = elgg_get_plugins_path() . 'messages/pages/messages';
+	$custom_dir = elgg_get_plugins_path() . 'adf_public_platform/pages/messages';
+
+	switch ($page[0]) {
+		case 'inbox':
+			set_input('username', $page[1]);
+			include("$base_dir/inbox.php");
+			break;
+		case 'sent':
+			set_input('username', $page[1]);
+			include("$base_dir/sent.php");
+			break;
+		case 'read':
+			set_input('guid', $page[1]);
+			include("$custom_dir/read.php");
+			break;
+		case 'compose':
+		case 'add':
+			include("$base_dir/send.php");
+			break;
+		default:
+			return false;
+	}
+	return true;
+}
 

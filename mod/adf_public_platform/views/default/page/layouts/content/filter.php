@@ -20,11 +20,11 @@ if (elgg_is_logged_in() && $context) {
 	$username = elgg_get_logged_in_user_entity()->username;
 	$filter_context = elgg_extract('filter_context', $vars, 'all');
 	
-	// Add choice to disable some filter
+	// ESOPE : Add choice to disable some filter
 	$disable_friends = elgg_get_plugin_setting('disable_friends', 'adf_public_platform');
 	$disable_mine = elgg_get_plugin_setting('disable_mine', 'adf_public_platform');
 	$disable_all = elgg_get_plugin_setting('disable_all', 'adf_public_platform');
-
+	
 	// generate a list of default tabs
 	if ($disable_all != 'yes') {
 		$tabs['all'] = array(
@@ -54,7 +54,6 @@ if (elgg_is_logged_in() && $context) {
 	
 	foreach ($tabs as $name => $tab) {
 		$tab['name'] = $name;
-		
 		elgg_register_menu_item('filter', $tab);
 	}
 

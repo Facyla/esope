@@ -135,10 +135,10 @@ $('#slider').anythingSlider({
 // *************
 $(function(){
 	$('#slider<?php echo $anythingSliderUniqueID; ?>').anythingSlider({
-		<?php echo $sliderparams; ?>
 		theme : 'metallic',
 		autoPlay : true,
 		mode : 'f',   // fade mode
+		<?php echo $sliderparams; ?>
 	});
 });
 </script>

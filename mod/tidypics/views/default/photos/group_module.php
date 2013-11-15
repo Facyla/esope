@@ -1,6 +1,6 @@
 <?php
 /**
- * Group blog module
+ * Group album module
  */
 
 $group = $vars['entity'];

@@ -32,7 +32,8 @@ if ($album) {
 $owner = elgg_get_page_owner_entity();
 
 // set up breadcrumbs
-elgg_push_breadcrumb(elgg_echo('photos'), 'photos/all');
+elgg_push_breadcrumb(elgg_echo('photos'), 'photos/siteimagesall');
+elgg_push_breadcrumb(elgg_echo('tidypics:albums'), 'photos/all');
 if (elgg_instanceof($owner, 'group')) {
 	elgg_push_breadcrumb($owner->name, "photos/group/$owner->guid/all");
 } else {
@@ -40,6 +41,18 @@ if (elgg_instanceof($owner, 'group')) {
 }
 elgg_push_breadcrumb($album->getTitle(), $album->getURL());
 elgg_push_breadcrumb($photo->getTitle());
+
+if (elgg_is_logged_in()) {
+        if (elgg_instanceof($owner, 'group')) {
+                $logged_in_guid = $owner->guid;
+        } else {
+                $logged_in_guid = elgg_get_logged_in_user_guid();
+        }
+        elgg_register_menu_item('title', array('name' => 'addphotos',
+                                               'href' => "ajax/view/photos/selectalbum/?owner_guid=" . $logged_in_guid,
+                                               'text' => elgg_echo("photos:addphotos"),
+                                               'link_class' => 'elgg-button elgg-button-action elgg-lightbox'));
+}
 
 if (elgg_get_plugin_setting('download_link', 'tidypics')) {
 	// add download button to title menu
@@ -58,7 +71,7 @@ $body = elgg_view_layout('content', array(
 	'content' => $content,
 	'title' => $photo->getTitle(),
 	'sidebar' => elgg_view('photos/sidebar', array(
-		'page' => 'view',
+		'page' => 'tp_view',
 		'image' => $photo,
 	)),
 ));
