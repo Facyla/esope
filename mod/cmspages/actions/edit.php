@@ -44,6 +44,7 @@ $contexts = get_input('contexts');
 $module = get_input('module');
 $module_config = get_input('module_config');
 $display = get_input('display');
+$template = get_input('template');
 $page_css = get_input('page_css');
 $page_js = get_input('page_js');
 
@@ -61,6 +62,7 @@ $_SESSION['cmspage_contexts'] = $contexts;
 $_SESSION['cmspage_module'] = $module;
 $_SESSION['cmspage_module_config'] = $module_config;
 $_SESSION['cmspage_display'] = $display;
+$_SESSION['cmspage_template'] = $template;
 $_SESSION['cmspage_page_css'] = $page_css;
 $_SESSION['cmspage_page_js'] = $page_js;
 
@@ -106,6 +108,7 @@ $tagarray = string_to_tag_array($tags); // Convert string of tags into a preform
 $cmspage->tags = $tagarray;
 $cmspage->contexts = $contexts;
 $cmspage->display = $display;
+$cmspage->template = $template;
 $cmspage->css = $page_css;
 $cmspage->js = $page_js;
 // @todo unused yet
@@ -122,7 +125,7 @@ if ($cmspage->save()) {
   else add_to_river('river/cmspages/update','update',$_SESSION['user']->guid, $cmspages->guid); // add to river - not really useful here, but who knows..
   */
   elgg_clear_sticky_form('cmspages'); // Remove the cache
-  unset($_SESSION['cmspage_content']); unset($_SESSION['cmspage_title']); unset($_SESSION['cmspage_pagetype']); unset($_SESSION['cmspage_tags']); unset($_SESSION['cmspage_access']); unset($_SESSION['cmspage_container_guid']); unset($_SESSION['cmspage_$parent_guid']); unset($_SESSION['cmspage_sibling_guid']); unset($_SESSION['cmspage_content_type']); unset($_SESSION['cmspage_contexts']); unset($_SESSION['cmspage_module']); unset($_SESSION['cmspage_module_config']); unset($_SESSION['cmspage_display']); unset($_SESSION['cmspage_page_css']); unset($_SESSION['cmspage_page_js']);
+  unset($_SESSION['cmspage_content']); unset($_SESSION['cmspage_title']); unset($_SESSION['cmspage_pagetype']); unset($_SESSION['cmspage_tags']); unset($_SESSION['cmspage_access']); unset($_SESSION['cmspage_container_guid']); unset($_SESSION['cmspage_$parent_guid']); unset($_SESSION['cmspage_sibling_guid']); unset($_SESSION['cmspage_content_type']); unset($_SESSION['cmspage_contexts']); unset($_SESSION['cmspage_module']); unset($_SESSION['cmspage_module_config']); unset($_SESSION['cmspage_display']); unset($_SESSION['cmspage_template']); unset($_SESSION['cmspage_page_css']); unset($_SESSION['cmspage_page_js']);
 } else {
   register_error(elgg_echo("cmspages:error") . elgg_get_logged_in_user_guid() . '=> ' . elgg_get_plugin_setting('editors', 'cmspages'));
   

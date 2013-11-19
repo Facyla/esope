@@ -200,7 +200,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  		- {{%VARS%}} : infos issues d'Elgg, listings configurables, etc.
  		- {{[shortcode]}} : shortcodes
 */
-function cmspages_render_template($template, $body = null) {
+function cmspages_render_template($template, $content = null) {
 	// Compatibilité : accepte une simple valeur au lieu d'un array()
 	if (!empty($content) && !is_array($content)) $content = array('content' => $content);
 	$temp1 = explode('}}', $template);
@@ -214,7 +214,7 @@ function cmspages_render_template($template, $body = null) {
 			switch ($first_letter) {
 				// Vars replacement
 				case '%':
-					$marker = lowercase(substr($marker, 1, -1));
+					$marker = strtolower(substr($marker, 1, -1));
 					$rendered_template .= $content[$marker];
 					break;
 				
