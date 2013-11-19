@@ -29,7 +29,7 @@ $title = elgg_echo('cmspages');
 //elgg_set_page_owner_guid($_SESSION['guid']); // Set admin user for owner block
 elgg_set_page_owner_guid($CONFIG->site->guid);
 $menu = elgg_view('cmspages/menu', array('pagetype' => $pagetype));
-$edit = elgg_view('cmspages/forms/edit', array('pagetype' => $pagetype));
+$edit = elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype));
 //$body = elgg_view('page/elements/wrapper', array('body' => $menu . $edit));
 $body = $menu . $edit;
 

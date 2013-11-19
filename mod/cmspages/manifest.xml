@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
   <field key="author" value="Facyla" />
-  <field key="version" value="0.9.7 (1.8)" />
+  <field key="version" value="0.9.8 (1.8)" />
   <field key="description" value="Static and dynamic pages and reusable views, templates and modules editor for use in interface-building and pages management (flexible CMS tool for Elgg)" />
   <field key="website" value="http://id.facyla.net/" />
   <field key="copyright" value="(C) Facyla 2011-2013" />
@@ -43,6 +43,11 @@ NOTES
 Version History
 ======================
 
+
+0.9.8 (2013.11.19)
+  - list used templates for a given cmspage
+  - templates can also add the visual editor (disabled by default)
+  - Allow to define a custom template per cmspages display (using a custom cmspages template). Templates themselves can't use it. Its purpose is to use cmspages in custom layouts, with sidebar, widgets, etc.
 
 0.9.7 (2013.09.18)
   - Allow embedding cmspage content only (same as view, but through an read URL).

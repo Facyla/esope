@@ -26,9 +26,10 @@ echo '<p><label style="clear:left;">' . elgg_echo('cmspages:settings:editors') .
 echo elgg_view('input/text', array('name' => 'params[editors]', 'value' => $vars['entity']->editors)) . '<br />';
 echo elgg_echo('cmspages:settings:editors:help') . '<br /><strong>Liste des membres :</strong>';
 $users_count = elgg_get_entities(array('types' => 'user', 'count' => true));
-$users = elgg_get_entities(array('types' => 'user', 'limit' => $users_count));
+$users = elgg_get_entities(array('types' => 'user', 'limit' => 100));
 foreach ($users as $ent) {
   echo $ent->name . ' (' . $ent->guid . '), ';
 }
+if ($users_count > 100) echo '...';
 echo '</p>';
 

@@ -26,9 +26,7 @@ $content .= $cmspage->display; // Allow to use own page (not concerned in a view
 if ($vars['pagetype']) {
 	$options = array(
 			'metadata_names' => array('pagetype'), 'metadata_values' => array($vars['pagetype']),
-			'types' => 'object', 'subtypes' => 'cmspage',
-			//'owner_guid' => 0, 'site_guid' => 0,
-			'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false,
+			'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1
 		);
 	$cmspages = elgg_get_entities_from_metadata($options);
 	if ($cmspages) { $cmspage = $cmspages[0]; }
@@ -94,6 +92,17 @@ if ($vars['pagetype']) {
 		
 		// Ajout des feuilles de style personnalisées
 		$content .= "\n<style>" . $cmspage->css . "</style>\n";
+		
+		// TEMPLATE - Do we use a custom cmspages template ? : not for templates (recursive risks)
+		// If yes, we'll fetch the rendered content into the template cmspage before sending it to the display rendering
+		if ($cmspage->content_type != 'template') {
+			if (!empty($cmspage->template)) {
+				$template_options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($cmspage->template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
+				$tempaltes = elgg_get_entities_from_metadata($options);
+				if ($templates) { $template = $templates[0]; }
+				$content = elgg_view('cmspages/view', array('pagetype' => $cmspage->template, 'body' => $content));
+			}
+		}
 		
 	} else {
 		register_error(elgg_echo('cmspages:notset'));

@@ -42,6 +42,7 @@ else {
 			$module_config = $module_change[1];
 		}
 		$display = $cmspage->display; // Can it be displayed in its own page ? ('no' => no, empty or not set => default layout, other value => use custom layout $value)
+		$template = $cmspage->template; // This page will use the custom cmspage template
 		$css = $cmspage->css;
 		$js = $cmspage->js;
 	} else { $access = (defined("ACCESS_DEFAULT")) ? ACCESS_DEFAULT : ACCESS_PUBLIC; }
@@ -87,8 +88,13 @@ else {
 	
 	$form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
 		// Contenu de la page
-		if (in_array($content_type, array('rawhtml', 'template'))) $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
-		else $form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+		if (in_array($content_type, array('rawhtml'))) {
+			$form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+		} else if ($content_type == 'template') {
+			$form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext')) . '</label><div class="clearfloat"></div>';
+		} else {
+			$form_body .= "<label>Contenu de la page ou du bloc<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description)) . '</label><div class="clearfloat"></div>';
+		}
 		if ($content_type == 'template') { $form_body .= "Templates utilisés :<br />" . cmspages_list_subtemplates($cmspage->description); }
 		// We don't really care (not used)
 		//$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid));
@@ -114,9 +120,12 @@ else {
 	$form_body .= "<label>Filtre des contextes autorisés (liste, ou rien)&nbsp;: " . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts, 'js' => ' style="width:400px;"')) . '</label><br /><br />';
 	
 	// Affichage autonome et Layout personnalisé
-	$form_body .= "<label>Affichage autonome :</label>vide = oui (par défaut), 'no' pour non (élément d'interface seulement), 'noview' exclusif (page seulement, pas élément d'interface), nom du layout pour utiliser un layout spécifique&nbsp;: " . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . '<br /><br />';
+	$form_body .= "<label>Affichage autonome :</label> " . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . "<br />vide = oui (par défaut), 'no' pour non (élément d'interface seulement), 'noview' exclusif (page seulement, pas élément d'interface), nom du layout pour utiliser un layout Elgg spécifique.<br /><br />";
 	// $display_opts = array('' => "Oui (par défaut)", 'no' => "Non (seulement comme vue)", 'noview' => "Page seulement (pas comme vue)");
 	// elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => $display_opts));
+	
+	// Use custom template for rendering
+	$form_body .= "<label>Utiliser un template :</label> " . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'js' => ' style="width:200px;"')) . '<br />Vide = non (par défaut), ou nom du template cmspages pour utiliser un template spécifique.<br /><br />';
 	
 	// Bloc conditionnel : masqué si module, affiché si HTML ou template
 	$form_body .= "<em>Note : These are for future developments</em>";
