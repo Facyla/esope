@@ -167,7 +167,7 @@ echo '<div id="adf-settings-tabs">
 ?>
 <script type="text/javascript">
 $(function() {
-	$('#adf-settings-accordion').accordion({ header: 'h3', autoHeight: false });
+	$('#adf-settings-accordion').accordion({ header: 'h3', autoHeight: false, heightStyle: 'content' });
 });
 </script>
 
@@ -508,7 +508,7 @@ $(function() {
 	<div>
 		
 		<?php
-		echo ' <p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui )) . '</p>';
+		echo ' <p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui )) . '</p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a produciton site.</p>';
 		echo ' <p><label>Awesome Font</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[awesomefont]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->awesomefont )) . '</p>';
 		?>
 		
