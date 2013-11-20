@@ -45,21 +45,16 @@ function adf_platform_init() {
 	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	
 	// Theme-specific JS (accessible menu)
-	//elgg_register_js('adf_platform.fonction', 'mod/adf_public_platform/views/default/adf_platform/js/fonction.php', 'head');
-	elgg_extend_view('js', 'adf_platform/js/fonction');
-	//elgg_load_js('adf_platform.fonction');
+	elgg_register_js('adf_platform.fonction', 'mod/adf_public_platform/views/default/adf_platform/js/fonction.php', 'head');
 	
 	// Passe le datepicker en français
 	elgg_register_js('jquery.datepicker.fr', 'mod/adf_public_platform/vendors/ui.datepicker-fr.js', 'head');
-	//elgg_load_js('jquery.datepicker.fr');
 	
 	// Webdesign : Floatable elements (.is-floatable, .floating)
 	elgg_register_js('floatable.elements', 'mod/adf_public_platform/vendors/floatable-elements.js', 'footer');
-	//elgg_load_js('floatable.elements');
 	
 	// Webdesign : Smooth scrolling : smooth transition for inline (anchors) links
-	//elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
-	//elgg_load_js('smooth.scrolling');
+	elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
 	
 	
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
