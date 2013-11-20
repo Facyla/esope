@@ -41,7 +41,7 @@ function adf_platform_init() {
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	
-	// Replace jQuery UI
+	// Add / Replace jQuery UI
 	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	
 	// Theme-specific JS (accessible menu)
@@ -57,8 +57,9 @@ function adf_platform_init() {
 	elgg_load_js('floatable.elements');
 	
 	// Webdesign : Smooth scrolling : smooth transition for inline (anchors) links
-	elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
-	elgg_load_js('smooth.scrolling');
+	//=> pose pb avec jQuery
+	//elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
+	//elgg_load_js('smooth.scrolling');
 	
 	
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
