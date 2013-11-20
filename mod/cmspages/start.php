@@ -138,12 +138,20 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$subtype = $module_config['subtype'];
 			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
 			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
+			$owner_guids = $module_config['owner_guids'];
+			$container_guids = $module_config['container_guids'];
+			// We need arrays as params
 			$type = explode(',', $type);
 			$subtype = explode(',', $subtype);
+			$owner_guids = explode(',', $owner_guids);
+			$container_guids = explode(',', $container_guids);
 			if ($subtype == 'all') $subtype = get_registered_entity_types($type);
 			if (!$subtype) $subtype = '';
 			//$ents = elgg_get_entities(array('type_subtype_pairs' => array($type => $subtype), 'limit' => $limit, 'order_by' => $sort));
-			$ents = elgg_get_entities(array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort));
+			$params = array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort);
+			if (!empty($owner_guids)) $params['owner_guids'] = $owner_guids;
+			if (!empty($container_guids)) $params['container_guids'] = $container_guids;
+			$ents = elgg_get_entities($params);
 			// Rendu
 			if (in_array($module_config['type'], array('group', 'user'))) foreach ($ents as $ent ) $return = '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
 			else if (is_array($ents)) foreach ($ents as $ent ) $return = '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
