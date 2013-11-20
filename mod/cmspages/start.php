@@ -157,14 +157,14 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$ents = elgg_get_entities($params);
 			// Rendu
 			if (in_array($module_config['type'], array('group', 'user'))) {
-				if ($full_view = 'yes') {
-					foreach ($ents as $ent ) $return .= elgg_view_entity($ent->guid, array('full_view' => true));
+				if ($full_view == 'yes') {
+					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => true));
 				} else {
 					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
 				}
 			} else if (is_array($ents)) {
-				if ($full_view = 'yes') {
-					foreach ($ents as $ent ) $return .= elgg_view_entity($ent->guid, array('full_view' => true));
+				if ($full_view == 'yes') {
+					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => true));
 				} else {
 					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
 				}
