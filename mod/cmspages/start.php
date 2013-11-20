@@ -135,6 +135,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			
 		case 'listing':
 			// Affichage d'un listing d'entités
+			$full_view = $module_config['full_view'];
 			$type = $module_config['type'];
 			$subtype = $module_config['subtype'];
 			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
@@ -156,9 +157,17 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$ents = elgg_get_entities($params);
 			// Rendu
 			if (in_array($module_config['type'], array('group', 'user'))) {
-			foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
+				if ($full_view = 'yes') {
+					foreach ($ents as $ent ) $return .= elgg_view_entity($ent->guid, array('full_view' => true));
+				} else {
+					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
+				}
 			} else if (is_array($ents)) {
-				foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
+				if ($full_view = 'yes') {
+					foreach ($ents as $ent ) $return .= elgg_view_entity($ent->guid, array('full_view' => true));
+				} else {
+					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
+				}
 			}
 			break;
 			
