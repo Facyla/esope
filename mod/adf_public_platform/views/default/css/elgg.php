@@ -47,31 +47,34 @@ $color6 = elgg_get_plugin_setting('color6', 'adf_public_platform');
 $color7 = elgg_get_plugin_setting('color7', 'adf_public_platform');
 $color8 = elgg_get_plugin_setting('color8', 'adf_public_platform');
 // Divers tons de gris par défaut et éléments de l'interface
-$color9 = $css['color9']; // #CCCCCC
-$color10 = $css['color10']; // #999999
-$color11 = $css['color11']; // #333333
-$color12 = $css['color12']; // #DEDEDE
+$color9 = elgg_get_plugin_setting('color9', 'adf_public_platform'); // #CCCCCC
+$color10 = elgg_get_plugin_setting('color10', 'adf_public_platform'); // #999999
+$color11 = elgg_get_plugin_setting('color11', 'adf_public_platform'); // #333333
+$color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
 // Couleur de fond du sous-menu déroulant
 $color13 = elgg_get_plugin_setting('color13', 'adf_public_platform');
+// Module title
+$color14 = elgg_get_plugin_setting('color14', 'adf_public_platform');
+// Button title
+$color15 = elgg_get_plugin_setting('color15', 'adf_public_platform');
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
+// Fonts
 $font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
 $font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
 $font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
 $font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
 $font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
+$font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 // @TODO : Force set fonts, for the moment
 /*
-$font1 = 'gill-sans';
-$font2 = 'gill-sans-bold, Arial, sans-serif';
-$font3 = 'itc-gothic';
-*/
 $font1 = 'Lato, sans-serif';
 $font2 = 'Lato-bold, sans-serif';
 $font3 = 'Puritan, sans-serif';
 $font4 = 'Puritan, Arial, sans-serif';
 $font5 = 'Monaco, "Courier New", Courier, monospace';
 $font6 = 'Georgia, times, serif';
+*/
 
 $vars['theme-config-css'] = array(
   'urlicon' => $vars['url'] . 'mod/adf_public_platform/img/theme/',
@@ -95,6 +98,8 @@ $vars['theme-config-css'] = array(
   'color11' => $color11,
   'color12' => $color12,
   'color13' => $color13,
+  'color14' => $color14,
+  'color15' => $color15,
   'footercolor' => $footercolor,
   'font1' => $font1,
   'font2' => $font2,

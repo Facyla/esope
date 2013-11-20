@@ -61,13 +61,15 @@ $color6 = elgg_get_plugin_setting('color6', 'adf_public_platform'); // #033074
 $color7 = elgg_get_plugin_setting('color7', 'adf_public_platform'); // #FF0000
 $color8 = elgg_get_plugin_setting('color8', 'adf_public_platform'); // #990000
 
-// Encore non utilisé : éléments bas niveaux de l'interface : fonds et bordures (les gris clairs et foncés)
+// Non configurable : éléments bas niveaux de l'interface : fonds et bordures (les gris clairs et foncés)
 $color9 = elgg_get_plugin_setting('color9', 'adf_public_platform'); // #CCCCCC
 $color10 = elgg_get_plugin_setting('color10', 'adf_public_platform'); // #999999
 $color11 = elgg_get_plugin_setting('color11', 'adf_public_platform'); // #333333
 $color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
 // Couleur de fond du sous-menu
 $color13 = elgg_get_plugin_setting('color13', 'adf_public_platform'); // #DEDEDE
+$color14 = elgg_get_plugin_setting('color14', 'adf_public_platform'); // Titre modules
+$color15 = elgg_get_plugin_setting('color15', 'adf_public_platform'); // Titre boutons
 
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
@@ -396,7 +398,7 @@ section div.module header {
   min-height: 35px;
 }
 section div.module header h2 {
-  color: #fff;
+  color: <?php echo $color14; ?>;
   float: left;
   font-family: <?php echo $font1; ?>;
   font-size: 1.25em;

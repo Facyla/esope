@@ -48,6 +48,8 @@ if (strlen($vars['entity']->displaystats) == 0) { $vars['entity']->displaystats 
 if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
 if (empty($vars['entity']->backgroundcolor)) { $vars['entity']->backgroundcolor = '#efeeea'; }
 if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
+
+// STYLES : see css/elgg view for style load & use
 // Set default colors - theme ADF
 // Titles
 if (empty($vars['entity']->titlecolor)) { $vars['entity']->titlecolor = '#0A2C83'; }
@@ -55,9 +57,10 @@ if (empty($vars['entity']->textcolor)) { $vars['entity']->textcolor = '#333333';
 // Links
 if (empty($vars['entity']->linkcolor)) { $vars['entity']->linkcolor = '#002E6E'; }
 if (empty($vars['entity']->linkhovercolor)) { $vars['entity']->linkhovercolor = '#0A2C83'; }
-// Other colors
+// Header-footer color + various other use (menu + input borders and focus...)
 if (empty($vars['entity']->color1)) { $vars['entity']->color1 = '#0050BF'; }
 if (empty($vars['entity']->color4)) { $vars['entity']->color4 = '#002E6E'; }
+// Widget + Group modules
 if (empty($vars['entity']->color2)) { $vars['entity']->color2 = '#F75C5C'; }
 if (empty($vars['entity']->color3)) { $vars['entity']->color3 = '#C61B15'; }
 // Buttons
@@ -65,14 +68,24 @@ if (empty($vars['entity']->color5)) { $vars['entity']->color5 = '#014FBC'; }
 if (empty($vars['entity']->color6)) { $vars['entity']->color6 = '#033074'; }
 if (empty($vars['entity']->color7)) { $vars['entity']->color7 = '#FF0000'; }
 if (empty($vars['entity']->color8)) { $vars['entity']->color8 = '#990000'; }
-// Divers Gris
+// Module title
+if (empty($vars['entity']->color14)) { $vars['entity']->color14 = '#FFFFFF'; }
+// Button title
+if (empty($vars['entity']->color15)) { $vars['entity']->color15 = '#FFFFFF'; }
+// Divers Gris - utilisés dans interface essentiellement (mieux vaut ne pas modifier)
 if (empty($vars['entity']->color9)) { $vars['entity']->color9 = '#CCCCCC'; }
 if (empty($vars['entity']->color10)) { $vars['entity']->color10 = '#999999'; }
 if (empty($vars['entity']->color11)) { $vars['entity']->color11 = '#333333'; }
 if (empty($vars['entity']->color12)) { $vars['entity']->color12 = '#DEDEDE'; }
 // Sub-menu
 if (empty($vars['entity']->color13)) { $vars['entity']->color13 = '#CCCCCC'; }
-
+// Fonts
+if (empty($vars['entity']->font1)) { $vars['entity']->font1 = 'Lato, sans-serif'; }
+if (empty($vars['entity']->font2)) { $vars['entity']->font2 = 'Lato-bold, sans-serif'; }
+if (empty($vars['entity']->font3)) { $vars['entity']->font3 = 'Puritan, sans-serif'; }
+if (empty($vars['entity']->font4)) { $vars['entity']->font4 = 'Puritan, Arial, sans-serif'; }
+if (empty($vars['entity']->font5)) { $vars['entity']->font5 = 'Monaco, "Courier New", Courier, monospace'; }
+if (empty($vars['entity']->font6)) { $vars['entity']->font6 = 'Georgia, times, serif'; }
 
 // Footer background color
 //if (empty($vars['entity']->footercolor)) { $vars['entity']->footercolor = '#555555'; }
@@ -540,6 +553,9 @@ $(function() {
 		<p><label><?php echo elgg_echo('adf_platform:color3:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[color3]', 'value' => $vars['entity']->color3 )); ?>
 		</p>
+		<p><label><?php echo elgg_echo('adf_platform:color14:color'); ?></label>
+			<?php echo elgg_view('input/color', array( 'name' => 'params[color14]', 'value' => $vars['entity']->color14 )); ?>
+		</p>
 
 		<h4><?php echo elgg_echo('adf_platform:config:styles:buttons'); ?></h4>
 		<p><label><?php echo elgg_echo('adf_platform:color5:color'); ?></label>
@@ -553,6 +569,9 @@ $(function() {
 		</p>
 		<p><label><?php echo elgg_echo('adf_platform:color8:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[color8]', 'value' => $vars['entity']->color8 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:color15:color'); ?></label>
+			<?php echo elgg_view('input/color', array( 'name' => 'params[color15]', 'value' => $vars['entity']->color15 )); ?>
 		</p>
 
 		<!--
