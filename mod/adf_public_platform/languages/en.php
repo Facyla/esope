@@ -7,6 +7,11 @@ $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><
 
 $en = array(
 	
+	'option:notify:email' => "Enable email (default)",
+	'option:notify:site' => "Enable site (messages)",
+	'option:notify:all' => "Enable all methods",
+	'option:notify:no' => "Disable all methods",
+		
 	//Theme settings
 	'admin:appearance:adf_theme' => "Theme configuration",
 	'admin:appearance:main_theme_config' => "Theme configuration",
@@ -31,6 +36,7 @@ $en = array(
 	'adf_platform:groupdefaultaccess:groupvis' => "Same as group visibility",
 	'adf_platform:groupdefaultaccess:members' => "Site members",
 	'adf_platform:groupdefaultaccess:public' => "Public",
+	'adf_platform:settings:groupjoin_enablenotif' => "Enable notification when a user joins a group",
 	'adf_platform:config:grouptabs' => "GROUP TABS",
 	'adf_platform:settings:groups:alpha' => "Use alphabetic tab",
 	'adf_platform:settings:groups:newest' => "Use newest members tab",

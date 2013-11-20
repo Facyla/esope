@@ -10,7 +10,7 @@ elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
 elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); // Menu
 
-// Activation des notifications par mail lors de l'entrée dans un groupe
+// Gestion des notifications par mail lors de l'entrée dans un groupe
 elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
 // Suppression des notifications lorsqu'on quitte le groupe
 elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
@@ -556,7 +556,28 @@ function adf_platform_register_handler($event, $object_type, $object) {
 function adf_public_platform_group_join($event, $object_type, $relationship) {
 	if (elgg_is_logged_in()) {
 		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
-			add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+			global $NOTIFICATION_HANDLERS;
+			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'adf_public_platform');
+			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
+				switch($groupjoin_enablenotif) {
+					case 'site':
+						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
+						break;
+					case 'all':
+						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+						}
+						break;
+					case 'email':
+					default:
+						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+				}
+			} else if ($groupjoin_enablenotif == 'no') {
+				// loop through all notification types
+				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+				}
+			}
 		}
 	}
 	return true;

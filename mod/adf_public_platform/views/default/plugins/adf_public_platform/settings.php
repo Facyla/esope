@@ -23,6 +23,12 @@ $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
 $registered_objects = get_registered_entity_types('object');
 $group_defaultaccess_opt = array('default' => elgg_echo('adf_platform:groupdefaultaccess:default'), 'groupvis' => elgg_echo('adf_platform:groupdefaultaccess:groupvis'), 'group' => elgg_echo('adf_platform:groupdefaultaccess:group'), 'members' => elgg_echo('adf_platform:groupdefaultaccess:members'), 'public' => elgg_echo('adf_platform:groupdefaultaccess:public'));
+$group_groupjoin_enablenotif_opt = array(
+		'email' => elgg_echo('option:notify:email'),
+		'site' => elgg_echo('option:notify:site'),
+		'all' => elgg_echo('option:notify:all'),
+		'no' => elgg_echo('option:notify:no'),
+	);
 
 
 // SET DEFAULT VALUES
@@ -245,6 +251,9 @@ $(function() {
 				echo '<p><label>' . elgg_echo('adf_platform:index_members') . '</label>';
 					echo elgg_view('input/dropdown', array( 'name' => 'params[index_members]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->index_members));
 				echo '</p><br />';
+				echo '<p><label>' . elgg_echo('adf_platform:index_recent_members') . '</label>';
+					echo elgg_view('input/dropdown', array( 'name' => 'params[index_recent_members]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->index_recent_members));
+				echo '</p><br />';
 			}
 			// Colonne droite
 			if (elgg_is_active_plugin('groups')) {
@@ -377,6 +386,7 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $vars['entity']->groupjoin_enablenotif )) . '</p>';
 		}
 		?>
 		<br />
