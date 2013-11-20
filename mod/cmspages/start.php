@@ -126,6 +126,7 @@ function cmspages_extract_module_config($module_name = '', $module_config) {
 
 // Affiche le contenu d'un module paramétré
 function cmspages_compose_module($module_name, $module_config = false) {
+	$return = '';
 	// Attention : toute entité non affichable renvoie sur la home
 	switch($module_name) {
 		case 'title':
@@ -141,25 +142,29 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
 			// We need arrays as params
-			$type = explode(',', $type);
-			$subtype = explode(',', $subtype);
-			$owner_guids = explode(',', $owner_guids);
-			$container_guids = explode(',', $container_guids);
+			//$type = explode(',', $type);
+			//$subtype = explode(',', $subtype);
+			//$owner_guids = explode(',', $owner_guids);
+			//$container_guids = explode(',', $container_guids);
 			if ($subtype == 'all') $subtype = get_registered_entity_types($type);
 			if (!$subtype) $subtype = '';
 			//$ents = elgg_get_entities(array('type_subtype_pairs' => array($type => $subtype), 'limit' => $limit, 'order_by' => $sort));
 			$params = array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort);
-			if (!empty($owner_guids)) $params['owner_guids'] = $owner_guids;
-			if (!empty($container_guids)) $params['container_guids'] = $container_guids;
+			if (sizeof($owner_guids) > 0) $params['owner_guids'] = $owner_guids;
+			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
+			// Get the entities
 			$ents = elgg_get_entities($params);
 			// Rendu
-			if (in_array($module_config['type'], array('group', 'user'))) foreach ($ents as $ent ) $return = '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
-			else if (is_array($ents)) foreach ($ents as $ent ) $return = '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
+			if (in_array($module_config['type'], array('group', 'user'))) {
+			foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
+			} else if (is_array($ents)) {
+				foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
+			}
 			break;
 			
 		case 'search':
 			// Affichage des résultats d'une rechrche (par type d'entité)
-			$return = '<h3>' . elgg_echo('cmspages:searchresults') . '</h3>';
+			$return .= '<h3>' . elgg_echo('cmspages:searchresults') . '</h3>';
 			// @todo : améliorer la recherche, mais sans tout réécrire..
 			switch($module_config['type']) {
 				case 'object': $ents = search_for_object($module_config['criteria']); break;
@@ -174,13 +179,13 @@ function cmspages_compose_module($module_name, $module_config = false) {
 		case 'entity':
 			// Affichage d'une entité : celle-ci doit exister
 			// champs ou template au choix ? autres paramètres ?
-			$return = '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
+			$return .= '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
 			if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) $return .= $ent->guid . ' : ' . $ent->title . $ent->name . '<br />' . $ent->description;
 			break;
 			
 		case 'view':
 			// Affichage d'une vue configurée : la vue doit exister, paramètres au choix
-			$return = '<h3>' . elgg_echo('cmspages:configuredview') . '</h3>';
+			$return .= '<h3>' . elgg_echo('cmspages:configuredview') . '</h3>';
 			$view_name = $module_config['view'];
 			if (elgg_view_exists($view_name)) {
 				unset($module_config['view']);
@@ -190,7 +195,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			
 		default:
 			// Pour le développement
-			$return = '<h3>' . elgg_echo('cmspages:module', array($module_name)) . '</h3>' . print_r($module_config, true) . "<br />";
+			$return .= '<h3>' . elgg_echo('cmspages:module', array($module_name)) . '</h3>' . print_r($module_config, true) . "<br />";
 			break;
 	}
 	return $return;

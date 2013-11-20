@@ -112,6 +112,8 @@ else {
 		// Load other content as a configurable module
 		$module_opts = array('' => 'Aucun (bloc vide)', 'title' => 'Titre', 'listing' => 'Liste d\'entités', 'search' => 'Résultats de recherche', 'entity' => 'Entité', 'view' => 'Vue configurable');
 		$form_body .= "<label>Module&nbsp; " . elgg_view('input/dropdown', array('name' => 'module', 'value' => $module, 'options_values' => $module_opts)) . '</label><br /><br />';
+		// Infos
+		$form_body .= "<p>Notes : pour un titre, préciser le text. Pour un listing, préciser type, subtype, et optionnellement owner_guids, container_guids, limit et sort. Pour une recherche : type et criteria. Pour une entité, le guid.</p>";
 		// Config du module
 		$form_body .= "<label>Configuration du module (param=value&amp;param2=value2...)<br />" . elgg_view('input/text', array('name' => 'module_config', 'value' => $module_config)) . '</label><br />';
 	$form_body .= '</div>';
