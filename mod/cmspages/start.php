@@ -155,20 +155,27 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
 			// Get the entities
 			$ents = elgg_get_entities($params);
-			// Rendu
+			
+			// Rendu groupe et membre
 			if (in_array($module_config['type'], array('group', 'user'))) {
 				if ($full_view == 'yes') {
 					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => true));
 				} else {
 					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
 				}
+			
 			} else if (is_array($ents)) {
 				if ($full_view == 'yes') {
+					elgg_push_context('widgets');
 					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => true));
+					elgg_pop_context('widgets');
+				} else if ($full_view == 'titlecontent') {
+					foreach ($ents as $ent ) $return .= '<h3>' . $ent->title . '</h3>' . $ent->description;
 				} else {
 					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->title . '</a><br />';
 				}
 			}
+			
 			break;
 			
 		case 'search':
