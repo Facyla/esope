@@ -408,7 +408,17 @@ $(function() {
 		<h4><?php echo elgg_echo('adf_platform:config:memberssearch'); ?></h4>
 		<?php
 		if (elgg_is_active_plugin('members')) {
+			// Allow to add alpha sort
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:alpha') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_alpha )) . '</p>';
+			// Allow to remove newest
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:newest') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_newest )) . '</p>';
+			// Allow to remove popular
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular )) . '</p>';
+			// Allow to remove online
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab )) . '</p>';
+			// Replace search by main search (more efficient)
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch )) . '</p>';
+			// Add online members
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:online') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online )) . '</p>';
 		}
 		

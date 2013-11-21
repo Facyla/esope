@@ -785,6 +785,21 @@ function elgg_make_list_from_path($content = array()) {
 // Fonctions liées à Profile_manager
 if (elgg_is_active_plugin('profile_manager')) {
 	
+	// Add new input types
+	$group_options = array("output_as_tags" => true, "admin_only" => true);
+	// Select with multiple option (displayed as a block, not a dropdown)
+	// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
+	// Group profile types selector (do smthg with selected members profile types)
+	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('custom_fields:group_profiletypes'), $group_options);
+	// Color picker
+	add_custom_field_type("custom_group_field_types", 'color', elgg_echo('custom_fields:color'), $group_options);
+	// Group selector (scope=all|member)
+	add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('custom_fields:groups_select'), $group_options);
+	// Members select (friends picker) - scope=all|friends|groupmembers
+	add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('custom_fields:members_select'), $group_options);
+	// Percentage - interval=10
+	add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('custom_fields:percentage'), $group_options);
+	
 	/* Renvoie une autorisation d'accéder ou non
 	 * Peut s'appuyer sur une autorisation explicite, ou une interdiction
 	 * L'interdiction prend le dessus sur l'autorisation

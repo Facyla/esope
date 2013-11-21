@@ -558,6 +558,9 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
+.elgg-image .date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
+.elgg-image .date span { font-size: 2em; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 4px 0; }
+
 
 /* Formulaires : boutons radios verticaux, mais sans casser les groupes (mal construits avec les labels..) */
 /* Pas génial, ça casse beaucoup de choses.. mieux vaut corriger ponctuellement le rendu lorsqu'on veut avoir un radio par ligne.
