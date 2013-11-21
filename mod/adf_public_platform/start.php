@@ -38,9 +38,6 @@ function adf_platform_init() {
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
 	
-	// Fusion des statistiques
-	elgg_extend_view('core/settings/account','core/settings/statistics');
-	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	
