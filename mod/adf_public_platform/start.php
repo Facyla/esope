@@ -49,6 +49,9 @@ function adf_platform_init() {
 	// Webdesign : Floatable elements (.is-floatable, .floating)
 	elgg_register_js('floatable.elements', 'mod/adf_public_platform/vendors/floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
+	// Ajout un member picker avec sélection unique pour les messages
+	// @TODO : not functional yet
+	//elgg_register_js('elgg.messagesuserpicker', 'mod/adf_public_platform/vendors/ui.messagesuserpicker.js', 'head');
 	
 	// register the color picker's JavaScript
 	elgg_register_simplecache_view('js/input/color_picker');

@@ -11,6 +11,7 @@ $en = array(
 	'option:notify:site' => "Enable site (messages)",
 	'option:notify:all' => "Enable all methods",
 	'option:notify:no' => "Disable all methods",
+	'option:empty' => "",
 		
 	//Theme settings
 	'admin:appearance:adf_theme' => "Theme configuration",
@@ -205,7 +206,8 @@ $en = array(
 	'adf_platform:dashboardheader' => "Custom introduction text before the user dashboard.",
 	'adf_platform:index_wire' => "Add The Wire on homepage.",
 	'adf_platform:index_groups' => "Display featured groups",
-	'adf_platform:index_members' => "Display online and newly registered members",
+	'adf_platform:index_members' => "Display online members",
+	'adf_platform:index_recent_members' => "Display newly registered members",
 	'adf_platform:homegroup_guid' => "Choose main group / help group",
 	'adf_platform:homegroup_index' => "Display latest group activity ?",
 	'adf_platform:homesite_index' => "DIsplay latest site activity ?",

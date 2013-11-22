@@ -11,6 +11,7 @@ $fr = array(
 	'option:notify:site' => "Activer par le site (messages)",
 	'option:notify:all' => "Activer toutes les méthodes",
 	'option:notify:no' => "Désactiver toutes les méthodes",
+	'option:empty' => "",
 	
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
@@ -208,7 +209,8 @@ $fr = array(
 	'adf_platform:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
 	'adf_platform:index_wire' => "Ajouter Le Fil sur l'accueil.",
 	'adf_platform:index_groups' => "Afficher les groupes à la Une",
-	'adf_platform:index_members' => "Afficher les membres connectés et derniers inscrits",
+	'adf_platform:index_members' => "Afficher les membres connectés",
+	'adf_platform:index_recent_members' => "Afficher les derniers inscrits",
 	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
 	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
 	'adf_platform:homesite_index' => "Afficher les actualités du site ?",

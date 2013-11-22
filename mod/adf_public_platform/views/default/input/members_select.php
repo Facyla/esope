@@ -4,6 +4,7 @@
 $content ='';
 $user	= elgg_get_logged_in_user_entity();
 $scope = $vars["scope"]; // default = all, friends, groupmembers
+$noself = $vars["noself"]; // Remove self : default false
 $group = $vars["entity"];
 
 //if (!($vars["entity"] instanceof ElggGroup)) { $scope = 'all'; }
@@ -26,8 +27,7 @@ switch($scope) {
 		break;
 	case 'all':
 	default:
-		$members_count = elgg_get_entities(array('types' => 'user', 'limit' => 10, 'count' => true));
-		$members = elgg_get_entities(array('types' => 'user', 'limit' => $members_count));
+		$members = elgg_get_entities(array('types' => 'user', 'limit' => 0));
 }
 
 
@@ -44,7 +44,7 @@ if ($vars["empty_value"] || !isset($vars["empty_value"])) {
 	$content .= "<option value=''>" . elgg_echo("option:empty") . "</option>\n";
 }
 // Add self option
-$content .= "<option value='" . $user->guid . "'>" . elgg_echo("members_select:myself") . " (" . $user->name .")" . "</option>\n";
+if (!$noself) $content .= "<option value='" . $user->guid . "'>" . elgg_echo("members_select:myself") . " (" . $user->name .")" . "</option>\n";
 // Add groupowner option
 if ($vars["entity"] instanceof ElggGroup) {
 	$content .= "<optgroup label='" .elgg_echo("groups:owner"). "'>\n";
