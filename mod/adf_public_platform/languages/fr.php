@@ -400,7 +400,7 @@ $fr = array(
 	
 	/* ESOPE search */
 	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
-	'adf_platform:settings:members:onlinetab' => "Onglet de recherche multicritère",
+	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'members:label:search' => "Recherche",
 	'esope:search:title' => "Recherche avancée",
 	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",

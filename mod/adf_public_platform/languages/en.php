@@ -397,7 +397,7 @@ $en = array(
 	
 	/* ESOPE search */
 	'adf_platform:grouptools:priority' => "Group tools priority",
-	'adf_platform:settings:members:onlinetab' => "Multi-criteria search tab",
+	'adf_platform:settings:members:searchtab' => "Multi-criteria search tab",
 	'members:label:search' => "Search",
 	'esope:search:title' => "Advanced search",
 	'esope:search:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced search",
