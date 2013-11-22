@@ -416,6 +416,8 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular )) . '</p>';
 			// Allow to remove online
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab )) . '</p>';
+			// Allow to add a new tab search
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab )) . '</p>';
 			// Replace search by main search (more efficient)
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch )) . '</p>';
 			// Add online members
@@ -545,6 +547,29 @@ $(function() {
 		echo ' <p><label>Awesome Font</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[awesomefont]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->awesomefont )) . '</p>';
 		?>
 		
+		<?php echo '<h4>' . elgg_echo('adf_platform:fonts') . '</h4>'; ?>
+		<?php echo '<p><em>' . elgg_echo('adf_platform:fonts:details') . '</em></p>'; ?>
+		<p><label><?php echo elgg_echo('adf_platform:font1'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font1]', 'value' => $vars['entity']->font1 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font2'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font2]', 'value' => $vars['entity']->font2 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font3'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font3]', 'value' => $vars['entity']->font3 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font4'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font4]', 'value' => $vars['entity']->font4 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font5'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font5]', 'value' => $vars['entity']->font5 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font6'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font6]', 'value' => $vars['entity']->font6 )); ?>
+		</p>
+		
+		<?php echo '<h4>' . elgg_echo('adf_platform:colors') . '</h4>'; ?>
+		<?php echo '<p><em>' . elgg_echo('adf_platform:colors:details') . '</em></p>'; ?>
 		<p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor )); ?>
 		</p>
@@ -622,6 +647,10 @@ $(function() {
 	<h3>EXPERT</h3>
 	<div>
 		<?php
+		// Advanced search tool (alpha version, structure changes may happen)
+		$esope_search_url = $CONFIG->url . 'esearch';
+		echo ' <p><label>' . elgg_echo('esope:search:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_search_fields]', 'value' => $vars['entity']->metadata_search_fields)) . '<a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
+		
 		// Suppression des menus de l'utilisateur
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';
 		

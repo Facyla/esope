@@ -216,6 +216,16 @@ $fr = array(
 	
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",
+	'adf_platform:fonts' => "Polices de caractères",
+	'adf_platform:fonts:details' => "Ajoutez de nouvelles polices sur le serveur, ou via les règles CSS @import dans le bloc de règles CSS ci-dessous, puis utilisez-les sur les différents éléments du site via les réglages suivants.",
+	'adf_platform:font1' => "Font 1 : Variante de Font 2, utilisée pour les titres de sections",
+	'adf_platform:font2' => "Font 2 : La plupart des titres, entêtes des modules et widgets",
+	'adf_platform:font3' => "Font 3 : Menu de navigation principal",
+	'adf_platform:font4' => "Font 4 : Police par défaut, tous les textes",
+	'adf_platform:font5' => "Font 5 : code, adresses.. Privilégiez une police à chasse fixe (monospace)",
+	'adf_platform:font6' => "Font 6 : Non utilisée...",
+	'adf_platform:colors' => "Couleurs",
+	'adf_platform:colors:details' => "Vous pouvez modifier les principales couleurs de l'interface via ces réglages. Pour des ajustements plus fins, utilisez la feuille de style CSS personnalisée ci-dessous.",
 	'adf_platform:title:color' => "Couleur des titres",
 	'adf_platform:text:color' => "Couleur du texte",
 	'adf_platform:link:color' => "Couleur des liens",
@@ -387,6 +397,22 @@ $fr = array(
 	'grouptype:edition' => "Editorial",
 	'grouptype:region' => "Géographique",
 	'grouptype:publication' => "Publications",
+	
+	/* ESOPE search */
+	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
+	'adf_platform:settings:members:onlinetab' => "Onglet de recherche multicritère",
+	'members:label:search' => "Recherche",
+	'esope:search:title' => "Recherche avancée",
+	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
+	'esope:search:details' => "Utiliser plusieurs critières pour affiner votre recherche",
+	'esope:fulltextsearch' => "Recherche libre",
+	'esope:search:type' => "Type de recherche",
+	'esope:search:subtype' => "Type de publication",
+	'esope:search:profile_type' => "Type de profil",
+	'esope:search:nbresults' => '<strong>%s résultats</strong><br />',
+	'object' => "Publication",
+	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
+	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
 	
 );
 

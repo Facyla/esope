@@ -3,8 +3,9 @@
  * Members index
  *
  */
-$num_members = get_number_users();
+global $CONFIG;
 
+$num_members = get_number_users();
 $title = elgg_echo('members');
 
 $options = array('type' => 'user', 'full_view' => false);
@@ -24,9 +25,19 @@ switch ($vars['page']) {
 	case 'alpha':
 		// Alphabetic sort
 		$db_prefix = elgg_get_config('dbprefix');
+		$firstletter = get_input('letter', false);
 		$options['joins'] = array("JOIN {$db_prefix}users_entity ue USING(guid)");
 		$options['order_by'] = 'ue.name ASC';
-		$content = elgg_list_entities($options);
+		$options['wheres'] = "UPPER(ue.name) LIKE UPPER('$firstletter%')";
+		$content = '<div class="esope-alpha-char">';
+		$chararray = elgg_echo('friendspicker:chararray');
+		while (!empty($chararray)) {
+			$char = substr($chararray, 0, 1);
+			$content .= '<a href="' . $CONFIG->url . 'members/alpha/?letter=' . $char . '">' . $char . '</a> ';
+			$chararray = substr($chararray, 1);
+		}
+		$content .= '</div>';
+		$content .= elgg_list_entities($options);
 		break;
 	
 	case 'newest':

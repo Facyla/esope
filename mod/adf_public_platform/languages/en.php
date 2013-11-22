@@ -213,6 +213,16 @@ $en = array(
 	
 	'adf_platform:homeintro' => "Introduction block on public homepage (above register/login forms).",
 	'adf_platform:settings:colors' => "Theme colors",
+	'adf_platform:fonts' => "Fonts",
+	'adf_platform:fonts:details' => "Add fonts directly on the server or using the css @import rules in the style area below, then apply your fonts to the various parts of the theme",
+	'adf_platform:font1' => "Font 1 : Variant of Font 2, used for section titles",
+	'adf_platform:font2' => "Font 2 : Most titles, modules and widgets headers",
+	'adf_platform:font3' => "Font 3 : Main navigation menu",
+	'adf_platform:font4' => "Font 4 : Default font, main text",
+	'adf_platform:font5' => "Font 5 : code, addresses.. (use a monospace font)",
+	'adf_platform:font6' => "Font 6 : not used yet...",
+	'adf_platform:colors' => "Colors",
+	'adf_platform:colors:details' => "You can modify the main colors here. For fine-tuning, use the CSS styles area below.",
 	'adf_platform:title:color' => "Title color",
 	'adf_platform:text:color' => "Text color",
 	'adf_platform:link:color' => "Link color",
@@ -384,6 +394,23 @@ $en = array(
 	'grouptype:edition' => "Edition",
 	'grouptype:region' => "Region",
 	'grouptype:publication' => "Publication",
+	
+	/* ESOPE search */
+	'adf_platform:grouptools:priority' => "Group tools priority",
+	'adf_platform:settings:members:onlinetab' => "Multi-criteria search tab",
+	'members:label:search' => "Search",
+	'esope:search:title' => "Advanced search",
+	'esope:search:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced search",
+	'esope:search:details' => "Use multiple criteria to find what you're looking for",
+	'esope:fulltextsearch' => "Fulltext search",
+	'esope:search:type' => "Search type",
+	'esope:search:subtype' => "Object subtype",
+	'esope:search:profile_type' => "Profile type",
+	'esope:search:nbresults' => '<strong>%s results</strong><br />',
+	'object' => "Publication",
+	'esope:search:morethanmax' => "Too much results, please set more filter.",
+	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
+	
 	
 );
 

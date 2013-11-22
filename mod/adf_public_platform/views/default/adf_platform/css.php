@@ -558,7 +558,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
-.elgg-image .date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
+.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
 .elgg-image .date span { font-size: 2em; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 4px 0; }
 
 
@@ -606,6 +606,10 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 
 /* Autocomplete content : le menu n'est pas utile */
 .elgg-autocomplete-item .elgg-menu { max-width: 40%; display:none; }
+
+/* Members alpha sort and search */
+.esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
+
 
 
 /* SECTION RESPONSIVE DESIGN */
