@@ -221,6 +221,7 @@ footer ul { margin: auto; width: 500px; font-size: 0.75em; }
 footer ul li {
   float: left; padding-left: 13px; margin: 26px 7px 10px 0;
   background: transparent url("<?php echo $urlicon; ?>puce-footer.png") left 7px no-repeat scroll;
+  color: #fff; font-size:12px;
 }
 footer ul li:first-child { background: none; }
 footer ul li a { color: #fff; font-size:12px; }
