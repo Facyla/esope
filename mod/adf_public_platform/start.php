@@ -860,7 +860,7 @@ function esope_esearch_page_handler($page) {
 function esope_esearch($params = array()) {
 	global $CONFIG;
 	$max_results = 500;
-	$debug = false;
+	$debug = true;
 	$q = sanitize_string(get_input("q"));
 	$type = sanitize_string(get_input("entity_type"));
 	$subtype = sanitize_string(get_input("entity_subtype"));
@@ -970,6 +970,7 @@ function esope_esearch($params = array()) {
 	}
 	
 	if (empty($return)) $return = elgg_echo('esope:search:noresult');
+	
 	return $return;
 }
 
