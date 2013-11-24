@@ -62,7 +62,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 }
 
 $profiletypes_opt = esope_get_profiletypes(); // $guid => $title
-$profiletypes_opt[] = '';
+$profiletypes_opt[0] = '';
 $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep the keys here !
 
 
