@@ -22,63 +22,43 @@ $font4 = $css['font4'];
 $font5 = $css['font5'];
 $font6 = $css['font6'];
 ?>
+
 /* ***************************************
 	Modules
 *************************************** */
 
-.elgg-module {
-	overflow: hidden;
-	margin-bottom: 20px;
-}
+.elgg-module { overflow: hidden; margin-bottom: 20px; }
 
 /* Aside */
 .elgg-module-aside .elgg-head {
 	/* border-bottom: 1px solid #CCC; */
-	
 	margin-bottom: 5px;
 	padding-bottom: 5px;
 }
 
 #pages-navigation .elgg-body {
-  background: none repeat scroll 0 0 #FFFFFF;
-  font-size: 0.8em;
-  padding: 5px 10px 0 5px;
+	background: none repeat scroll 0 0 #FFFFFF;
+	font-size: 0.8em;
+	padding: 5px 10px 0 5px;
 }
-#pages-navigation .elgg-body ul li a {
-  padding-left: 5px;
-}
+#pages-navigation .elgg-body ul li a { padding-left: 5px; }
 
 
 
 /* Info */
 .elgg-module-info > .elgg-head {
 	background: #e4e4e4;
-	padding: 0 5px 7px;
+	padding: 1px 3px 0px;
 	margin-bottom: 10px;
-	
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-}
-.elgg-module-info > .elgg-head * {
-	color: #333;
-}
-.elgg-module-info {
-	/* background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent; */
-	border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-o-border-radius: 10px 10px 0 0;
-	padding: 0 14px;
-	min-width:200px;
-}
-.elgg-module-info > .elgg-head {
-	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
-	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
-	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
-	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
-	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 65%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.65, <?php echo $color3; ?>));
+	background-image: linear-gradient(top, <?php echo $color2; ?> 0%, <?php echo $color3; ?> 100%);
+	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 0%, <?php echo $color3; ?> 100%);
+	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 0%, <?php echo $color3; ?> 100%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 0%, <?php echo $color3; ?> 100%);
+	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 0%, <?php echo $color3; ?> 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, <?php echo $color2; ?>), color-stop(1, <?php echo $color3; ?>));
 	background-color: <?php echo $color3; ?>;
 	border-radius: 10px 10px 0 0;
 	-moz-border-radius: 10px 10px 0 0;
@@ -88,22 +68,36 @@ $font6 = $css['font6'];
 	min-height: 25px;
 	margin-bottom:0;
 }
+.elgg-module-info > .elgg-head * { color: #333; }
+.elgg-module-info {
+	/* background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent; */
+	border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	-webkit-border-radius: 10px 10px 0 0;
+	-o-border-radius: 10px 10px 0 0;
+	padding: 0 14px;
+	min-width:200px;
+}
 .elgg-module-info > .elgg-head h3 {
 	color: <?php echo $color14; ?>;
+	/*
 	float: left;
+	font-size: 1.25em;
+	*/
+	margin: 7px 0 0 5px;
 	font-family: <?php echo $font1; ?>;
-	font-size: 0.9em;
-	margin: 7px 0 0 15px;
+	font-size: 1.1em;
 	text-transform: uppercase;
 	font-weight: normal;
+	padding: 4px 0 5px 30px;
 }
 .elgg-module-info > .elgg-body {
-  padding:7px 10px 0;
+	padding:7px 10px 0;
 	/* background: white url("<?php echo $urlicon; ?>bottom-module.png") 50% bottom no-repeat scroll; */
 	background:white; /* Pour masquer ombrage si largeur supérieure */
-  border-bottom: 1px solid #CCCCCC;
-  border-left: 1px solid #CCCCCC;
-  border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
 }
 
 
@@ -123,12 +117,8 @@ $font6 = $css['font6'];
 	-moz-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
-.elgg-module-popup > .elgg-head {
-	margin-bottom: 5px;
-}
-.elgg-module-popup > .elgg-head * {
-	color: <?php echo $titlecolor; ?>;
-}
+.elgg-module-popup > .elgg-head { margin-bottom: 5px; }
+.elgg-module-popup > .elgg-head * { color: <?php echo $titlecolor; ?>; }
 
 /* Dropdown */
 .elgg-module-dropdown {
@@ -158,7 +148,6 @@ $font6 = $css['font6'];
 /* Featured */
 .elgg-module-featured {
 	border: 1px solid <?php echo $titlecolor; ?>;
-	
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
@@ -167,12 +156,9 @@ $font6 = $css['font6'];
 	padding: 5px;
 	background-color: <?php echo $titlecolor; ?>;
 }
-.elgg-module-featured > .elgg-head * {
-	color: white;
-}
-.elgg-module-featured > .elgg-body {
-	padding: 10px;
-}
+.elgg-module-featured > .elgg-head * { color: white; }
+.elgg-module-featured > .elgg-body { padding: 10px; }
+
 
 /* ***************************************
 	Widgets
@@ -296,13 +282,14 @@ a.elgg-widget-edit-button {
 }
 
 section div.module div.activites .elgg-widget-content .widget-title-details {
-  font-family: <?php echo $font1; ?>;
-  font-size: 1.10em;
-  text-transform: uppercase;
-  font-weight: normal;
+	font-family: <?php echo $font1; ?>;
+	font-size: 1.10em;
+	text-transform: uppercase;
+	font-weight: normal;
 }
 section div.module div.activites ul li { padding-left: 0; }
 section div.module div.activites ul li div.elgg-image a img { margin-left: 0; }
+
 
 /* Pied des widgets */
 section div.module footer {
@@ -382,25 +369,10 @@ section div.module footer a:active { text-decoration: none; }
 }
 
 
-
-.elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.9em; }
-
-.groups-widget-viewall {
-  margin:10px 6px 0 0;
-}
-.elgg-module span.groups-widget-viewall a {
- color: <?php echo $color14; ?>;
- font-size: 1em;
-}
-
 /* Icônes dans les entêtes des modules des groupes */
 .elgg-module-group .elgg-head h3 {
-  background-position: left 0px;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  min-height: 27px;
-  padding-left: 36px;
-  margin: 7px 0 0 5px;
+	background-position: left 0px; background-color: transparent; background-repeat: no-repeat;
+	min-height: 20px; padding-left: 36px; margin: 5px 0 3px 5px;
 }
 .elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>activity-module.png"); }
 .elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>event_calendar-module.png"); }
@@ -414,23 +386,14 @@ section div.module footer a:active { text-decoration: none; }
 
 
 /* à vérifier pour effets sur diverses pages */
-.elgg-module-info > .elgg-body {
-	padding: 7px 0 0;
-}
-.elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary {
-	float: left;
-	width: 200px;
-}
-.elgg-module-info .elgg-image-block .elgg-body a.ouvrir {
-	clear: none;
-	padding: 20px 10px;
-}
-.elgg-module-info .elgg-river {
-	border-top: 0 none;
-}
-.elgg-module-info > .elgg-head h3 {
-	font-size: 1.25em;
-}
+.elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.9em; }
+.groups-widget-viewall { margin:10px 6px 0 0; }
+.elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 1em; }
+.elgg-module-info > .elgg-body { padding: 7px 0 0; }
+.elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
+.elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }
+.elgg-module-info .elgg-river { border-top: 0 none; }
+
 
 /* Modules similaires à ceux des groupes sur la page de profil (pas d'ombre et pas de rivets en fin de bloc) */
 section .elgg-layout-one-column div.module { background:none; padding:0; margin-left:10px; border:1px solid #CCC; }
@@ -438,7 +401,9 @@ section .elgg-layout-one-column div.module footer { background: none; height:0; 
 
 
 /* Icônes pour les widgets */
-section div.module header h2 { padding: 5px 0 0 30px; margin:0 0 0 4px; max-width: 190px; min-height:24px; }
+section div.module header h2 {
+	padding: 5px 0 5px 30px; margin:0 0 0 4px; max-width: 190px; min-height:24px;
+}
 
 section div.elgg-widget-instance-a_users_groups header h2 {
 	background: url("<?php echo $urlicon; ?>a_users_groups-widget.png") no-repeat scroll 0 2px transparent;

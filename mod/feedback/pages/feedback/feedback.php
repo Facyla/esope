@@ -4,6 +4,8 @@ gatekeeper();
 
 $base_url = $CONFIG->url . 'feedback/';
 
+elgg_set_context('feedback');
+elgg_push_breadcrumb('feedback', $CONFIG->url . 'feedback');
 
 $content = elgg_view('feedback/list_feedbacks', array());
 
