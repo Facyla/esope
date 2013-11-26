@@ -23,20 +23,21 @@
 global $CONFIG;
 action_gatekeeper();
 
-// // check if captcha functions are loaded (only necessary when logged out)
-// if (!elgg_is_logged_in()) {
-//	 if ( function_exists ( "captcha_verify_captcha" ) ) {
-//		 // captcha verification
-//		 $token = get_input('captcha_token');
-//		 $input = get_input('captcha_input');
-//		 if ( !$token || !captcha_verify_captcha($input, $token) ) {
-//			 echo "<div id=\"feedbackError\">".elgg_echo('captcha:captchafail')."</div>";
-//			 exit();
-//		 }
-//	 }
-// }
+// check if captcha functions are loaded (only necessary when logged out)
+if (!elgg_is_logged_in()) {
+	if ( function_exists ( "captcha_verify_captcha" ) ) {
+		// captcha verification
+		$token = get_input('captcha_token');
+		$input = get_input('captcha_input');
+		if ( !$token || !captcha_verify_captcha($input, $token) ) {
+			echo "<div id=\"feedbackError\">".elgg_echo('captcha:captchafail')."</div>";
+			exit();
+		}
+	}
+}
 
 
+// Required for public feedback
 $ia = elgg_set_ignore_access(true);
 
 // Initialise a new ElggObject

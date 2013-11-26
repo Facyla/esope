@@ -69,7 +69,7 @@ if ($comment == 'yes') {
 		$num_comments_feedback = $vars['entity']->countComments();
 		$info .= '<div class="clearfloat"></div>';
 		$info .= '<a href="' . $vars['entity']->getURL() . '">Afficher la discusion en pleine page</a>';
-		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_'.$vars['entity']->getGUID().'\').toggle()" style="float:right;">'.$num_comments_feedback.' commentaire(s) - &raquo;&nbsp;Répondre</a>';
+		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_'.$vars['entity']->getGUID().'\').toggle()" style="float:right;">'.$num_comments_feedback.' commentaire(s) &nbsp; &raquo;&nbsp;Répondre</a>';
 	}
 	$info .= '<div id="feedback_' . $vars['entity']->guid . '"';
 	if (!$full) $info .= ' style="display:none;"';
