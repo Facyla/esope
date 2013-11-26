@@ -21,11 +21,11 @@ $fr = array(
 	'elgg_cmis:foldertype:cmis:folder' => 'Dossier',
 	'elgg_cmis:foldertype:F:st:site' => 'Site',
 	'elgg_cmis:unknowtype' => 'Objet de type inconnu', // Unknown Object Type
-	'elgg_cmis:icon:document' => '<i class="file icon"></i>',
-	'elgg_cmis:icon:folder' => '<i class="folder icon"></i>',
-	'elgg_cmis:icon:foldertype:cmis:folder' => '<i class="folder icon"></i>',
-	'elgg_cmis:icon:foldertype:F:st:site' => '<i class="sitemap icon"></i>',
-	'elgg_cmis:icon:unknowtype' => '<i class="sitemap icon"></i>',
+	'elgg_cmis:icon:document' => '<i class="file icon fa fa-file"></i>',
+	'elgg_cmis:icon:folder' => '<i class="folder icon fa fa-folder"></i>',
+	'elgg_cmis:icon:foldertype:cmis:folder' => '<i class="folder icon fa-folder"></i>',
+	'elgg_cmis:icon:foldertype:F:st:site' => '<i class="sitemap icon fa fa-sitemap"></i>',
+	'elgg_cmis:icon:unknowtype' => '<i class="sitemap icon fa fa-sitemap"></i>',
 	
 	// Actions
 	'elgg_cmis:action:openfolder' => "Ouvrir le dossier",
@@ -33,11 +33,11 @@ $fr = array(
 	'elgg_cmis:action:edit' => "Modifier",
 	'elgg_cmis:action:page' => "Voir la page",
 	'elgg_cmis:action:download' => "Télécharger",
-	'elgg_cmis:icon:openfolder' => '<i class="folder open icon"></i>',
-	'elgg_cmis:icon:download' => '<i class="download disk icon"></i>',
-	'elgg_cmis:icon:view' => '<i class="external url icon"></i>',
-	'elgg_cmis:icon:page' => '<i class="desktop icon"></i>',
-	'elgg_cmis:icon:edit' => '<i class="pencil icon"></i>',
+	'elgg_cmis:icon:openfolder' => '<i class="folder open icon fa fa-folder-open"></i>',
+	'elgg_cmis:icon:download' => '<i class="download disk icon fa fa-download"></i>',
+	'elgg_cmis:icon:view' => '<i class="external url icon fa fa-external-link"></i>',
+	'elgg_cmis:icon:page' => '<i class="desktop icon fa fa-desktop"></i>',
+	'elgg_cmis:icon:edit' => '<i class="pencil icon fa fa-pencil"></i>',
 	
 	'elgg_cmis:loading' => "Chargement en cours",
 	

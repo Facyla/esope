@@ -975,4 +975,20 @@ function esope_esearch($params = array()) {
 }
 
 
+// Adaptation du code dispo sur OpenClassrooms
+// Fonction de cryptage réversible : on utilise la même fonction pour coder/décode
+// Idéalement la longueur de $key >= $text
+function esope_vernam_crypt($text, $key){
+	$keyl = strlen($key);
+	$textl = strlen($text);
+	if ($keyl < $textl){
+		$key = str_pad($key, $textl, $key, STR_PAD_RIGHT);
+	} elseif ($keyl > $textl){
+		$diff = $keyl - $textl;
+		$key = substr($key, 0, -$diff);
+	}
+	return $text ^ $key;
+}
+
+
 

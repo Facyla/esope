@@ -15,6 +15,7 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 			'text/html',
 		);
 	$return = '';
+	$return .= "<style>.fa { margin: 0.1em 0.3em; }</style>";
 	
 	if ($objs) foreach ($objs->objectList as $obj) {
 		

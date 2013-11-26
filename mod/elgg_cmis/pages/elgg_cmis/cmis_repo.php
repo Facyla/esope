@@ -2,7 +2,8 @@
 $title = elgg_echo('elgg_cmis:title');
 $content = '';
 
-$user_guid = elgg_get_logged_in_user_guid();
+$own_guid = elgg_get_logged_in_user_guid();
+$own = elgg_get_logged_in_user_entity();
 
 require_once elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/lib/cmis_repository_wrapper.php';
 //elgg_load_library('elgg:elgg_cmis_repo_wrapper');
@@ -12,9 +13,10 @@ $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
 $atom_url = elgg_get_plugin_setting('cmis_atom_url', 'elgg_cmis');
 $repo_url = $cmis_url . $atom_url;
 $cmis_service_url = $cmis_url . 'service/cmis/index.html';
-//$repo_url = elgg_get_plugin_setting('user_cmis_url', $user_guid, 'elgg_cmis'); // Custom repo
-$repo_username = elgg_get_plugin_user_setting('cmis_login', $user_guid, 'elgg_cmis');
-$repo_password = elgg_get_plugin_user_setting('cmis_password', $user_guid, 'elgg_cmis');
+//$repo_url = elgg_get_plugin_setting('user_cmis_url', $own_guid, 'elgg_cmis'); // Custom repo
+$repo_username = elgg_get_plugin_user_setting('cmis_login', $own_guid, 'elgg_cmis');
+$repo_password = elgg_get_plugin_user_setting('cmis_password', $own_guid, 'elgg_cmis');
+$repo_password = esope_vernam_crypt($repo_password, $own->guid . $own->salt);
 $repo_debug = elgg_get_plugin_setting('debugmode', 'elgg_cmis', 'no');
 if ($repo_debug == 'yes') $repo_debug = true; else $repo_debug = false;
 
