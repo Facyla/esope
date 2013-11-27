@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Elgg event_calendar object view
  * 
@@ -10,6 +9,9 @@
  * @link http://radagast.biz/
  * 
  */
+
+// Avoids undefined function errors when from outside event_calendar
+elgg_load_library('elgg:event_calendar');
 
 $event = $vars['entity'];
 $full = elgg_extract('full_view', $vars, FALSE);

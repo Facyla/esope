@@ -2,14 +2,19 @@
 
 function adf_platform_members_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'members/pages/members';
-	if (!isset($page[0])) { $page[0] = 'online'; }
+	$alt_base = elgg_get_plugins_path() . 'adf_public_platform/pages/members';
+	$members_alpha = elgg_get_plugin_setting('members_alpha', 'adf_public_platform');
+	if (!isset($page[0])) {
+		if ($members_alpha == 'yes') $page[0] = 'alpha';
+		else $page[0] = 'online';
+	}
 	$vars = array();
 	$vars['page'] = $page[0];
 	if ($page[0] == 'search') {
 		$vars['search_type'] = $page[1];
-		require_once "$base/search.php";
+		require_once "$alt_base/search.php";
 	} else {
-		require_once "$base/index.php";
+		require_once "$alt_base/index.php";
 	}
 	return true;
 }

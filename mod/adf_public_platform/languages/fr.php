@@ -7,6 +7,12 @@ $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><
 
 $fr = array(
 	
+	'option:notify:email' => "Activer par email (par défaut)",
+	'option:notify:site' => "Activer par le site (messages)",
+	'option:notify:all' => "Activer toutes les méthodes",
+	'option:notify:no' => "Désactiver toutes les méthodes",
+	'option:empty' => "",
+	
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
 	'admin:appearance:main_theme_config' => "Configuration du thème",
@@ -31,6 +37,7 @@ $fr = array(
 	'adf_platform:groupdefaultaccess:groupvis' => "Idem que celui du groupe",
 	'adf_platform:groupdefaultaccess:members' => "Membres du site",
 	'adf_platform:groupdefaultaccess:public' => "Public",
+	'adf_platform:settings:groupjoin_enablenotif' => "Activer les notifications lorsqu'un membre rejoint un groupe",
 	'adf_platform:config:grouptabs' => "ONGLETS DES GROUPES",
 	'adf_platform:settings:groups:alpha' => "Onglet tri alphabétique",
 	'adf_platform:settings:groups:newest' => "Onglet liste par date",
@@ -39,6 +46,11 @@ $fr = array(
 	'adf_platform:settings:groups:discussion:always' => "Toujours affiché (après la liste des groupes)",
 	'groups:alpha' => "Alphabétique",
 	'adf_platform:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
+	'adf_platform:settings:members:alpha' => "Onglet tri alphabétique",
+	'adf_platform:settings:members:newest' => "Onglet liste par date",
+	'adf_platform:settings:members:popular' => "Onglet liste par contacts",
+	'adf_platform:settings:members:onlinetab' => "Onglet liste en ligne",
+	'members:label:alpha' => "Alphabétique",
 	'adf_platform:config:contacts' => "CONTACTS ET COORDONNEES",
 	'adf_platform:config:contacts:details' => "Note : ces coordonnées ne sont pas utilisées par tous les thèmes (actuellement : seulement compétences numériques)",
 	'adf_platform:config:styles' => "COULEURS & STYLE",
@@ -197,7 +209,8 @@ $fr = array(
 	'adf_platform:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
 	'adf_platform:index_wire' => "Ajouter Le Fil sur l'accueil.",
 	'adf_platform:index_groups' => "Afficher les groupes à la Une",
-	'adf_platform:index_members' => "Afficher les membres connectés et derniers inscrits",
+	'adf_platform:index_members' => "Afficher les membres connectés",
+	'adf_platform:index_recent_members' => "Afficher les derniers inscrits",
 	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
 	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
 	'adf_platform:homesite_index' => "Afficher les actualités du site ?",
@@ -205,6 +218,16 @@ $fr = array(
 	
 	'adf_platform:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'adf_platform:settings:colors' => "Couleurs du thème",
+	'adf_platform:fonts' => "Polices de caractères",
+	'adf_platform:fonts:details' => "Ajoutez de nouvelles polices sur le serveur, ou via les règles CSS @import dans le bloc de règles CSS ci-dessous, puis utilisez-les sur les différents éléments du site via les réglages suivants.",
+	'adf_platform:font1' => "Font 1 : Variante de Font 2, utilisée pour les titres de sections",
+	'adf_platform:font2' => "Font 2 : La plupart des titres, entêtes des modules et widgets",
+	'adf_platform:font3' => "Font 3 : Menu de navigation principal",
+	'adf_platform:font4' => "Font 4 : Police par défaut, tous les textes",
+	'adf_platform:font5' => "Font 5 : code, adresses.. Privilégiez une police à chasse fixe (monospace)",
+	'adf_platform:font6' => "Font 6 : Non utilisée...",
+	'adf_platform:colors' => "Couleurs",
+	'adf_platform:colors:details' => "Vous pouvez modifier les principales couleurs de l'interface via ces réglages. Pour des ajustements plus fins, utilisez la feuille de style CSS personnalisée ci-dessous.",
 	'adf_platform:title:color' => "Couleur des titres",
 	'adf_platform:text:color' => "Couleur du texte",
 	'adf_platform:link:color' => "Couleur des liens",
@@ -222,6 +245,9 @@ $fr = array(
 	'adf_platform:color11:color' => "Couleur configurable 11",
 	'adf_platform:color12:color' => "Couleur configurable 12",
 	'adf_platform:color13:color' => "Couleur de fond du sous-menu déroulant",
+	'adf_platform:color14:color' => "Titre des modules",
+	'adf_platform:color15:color' => "Titre des boutons",
+	'adf_platform:settings:remove_collections' => "Désactiver les collections de contacts",
 	'widgets:dashboard:add' => "Personnaliser ma page d'accueil",
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
 	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
@@ -373,6 +399,22 @@ $fr = array(
 	'grouptype:edition' => "Editorial",
 	'grouptype:region' => "Géographique",
 	'grouptype:publication' => "Publications",
+	
+	/* ESOPE search */
+	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
+	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
+	'members:label:search' => "Recherche",
+	'esope:search:title' => "Recherche avancée",
+	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
+	'esope:search:details' => "Utiliser plusieurs critières pour affiner votre recherche",
+	'esope:fulltextsearch' => "Recherche libre",
+	'esope:search:type' => "Type de recherche",
+	'esope:search:subtype' => "Type de publication",
+	'esope:search:profile_type' => "Type de profil",
+	'esope:search:nbresults' => '<strong>%s résultats</strong><br />',
+	'object' => "Publication",
+	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
+	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
 	
 );
 

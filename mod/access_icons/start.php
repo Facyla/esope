@@ -145,6 +145,7 @@ function access_icons_river_menu_setup($hook, $type, $return, $params) {
 	if ($item->type != 'object') { return $return; }
 	
 	$entity = $item->getObjectEntity();
+	//$subtype = $item->getSubtype();
 	
 	// Access info
 	$access_info = elgg_view('output/access', array('entity' => $entity, 'hide_text' => true));

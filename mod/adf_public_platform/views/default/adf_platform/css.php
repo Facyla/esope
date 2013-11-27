@@ -61,13 +61,15 @@ $color6 = elgg_get_plugin_setting('color6', 'adf_public_platform'); // #033074
 $color7 = elgg_get_plugin_setting('color7', 'adf_public_platform'); // #FF0000
 $color8 = elgg_get_plugin_setting('color8', 'adf_public_platform'); // #990000
 
-// Encore non utilisé : éléments bas niveaux de l'interface : fonds et bordures (les gris clairs et foncés)
+// Non configurable : éléments bas niveaux de l'interface : fonds et bordures (les gris clairs et foncés)
 $color9 = elgg_get_plugin_setting('color9', 'adf_public_platform'); // #CCCCCC
 $color10 = elgg_get_plugin_setting('color10', 'adf_public_platform'); // #999999
 $color11 = elgg_get_plugin_setting('color11', 'adf_public_platform'); // #333333
 $color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
 // Couleur de fond du sous-menu
 $color13 = elgg_get_plugin_setting('color13', 'adf_public_platform'); // #DEDEDE
+$color14 = elgg_get_plugin_setting('color14', 'adf_public_platform'); // Titre modules
+$color15 = elgg_get_plugin_setting('color15', 'adf_public_platform'); // Titre boutons
 
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
@@ -122,20 +124,20 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 .interne nav ul li.invites a:hover,
 .interne nav ul li.invites a:focus,
 .interne nav ul li.invites a:active {
-  float: right;
-  background: #CD190A;
-  color: #fff;
-  font-size:12px;
-  font-weight: bold;
-  padding: 2px 5px 2px 6px;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -o-border-radius: 4px;
-  box-shadow: 1px 1px 2px #333333;
-  -moz-box-shadow: 1px 1px 2px #333333;
-  -webkit-box-shadow: 1px 1px 2px #333333;
-  -o-box-shadow: 1px 1px 2px #333333;
+	float: right;
+	background: #CD190A;
+	color: #fff;
+	font-size:12px;
+	font-weight: bold;
+	padding: 2px 5px 2px 6px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	box-shadow: 1px 1px 2px #333333;
+	-moz-box-shadow: 1px 1px 2px #333333;
+	-webkit-box-shadow: 1px 1px 2px #333333;
+	-o-box-shadow: 1px 1px 2px #333333;
 }
 .elgg-form.thewire-form { background: transparent; }
 .home-static { background:white; box-shadow:3px 3px 5px 0px #666; padding: 0.2% 0.4%; }
@@ -144,14 +146,14 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 /* Sidebar */
 .elgg-sidebar { width: 211px; float: right; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status {
-  background: #fff;
-  float: left;
-  width: 211px;
+	background: #fff;
+	float: left;
+	width: 211px;
 }
 .elgg-sidebar ul.elgg-menu-page > li, , elgg-sidebar ul.elgg-menu-groups-my-status > li {
-  border-bottom: 1px solid #CCCCCC;
-  float: left;
-  width: 211px;
+	border-bottom: 1px solid #CCCCCC;
+	float: left;
+	width: 211px;
 }
 .elgg-menu-groups-my-status li a {
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
@@ -162,63 +164,64 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 	width:211px; margin:0; padding:4px 10px;
 }
 .elgg-sidebar ul.elgg-menu-page li h3 {
-  background: #333333;
-  border-radius: 3px 3px 0 0;
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
-  -o-border-radius: 3px 3px 0 0;
-  color: #fff;
-  font-weight: normal;
-  margin: 0;
-  padding: 4px 10px;
-  text-transform: uppercase;
+	background: #333333;
+	border-radius: 3px 3px 0 0;
+	-moz-border-radius: 3px 3px 0 0;
+	-webkit-border-radius: 3px 3px 0 0;
+	-o-border-radius: 3px 3px 0 0;
+	color: #fff;
+	font-weight: normal;
+	margin: 0;
+	padding: 4px 10px;
+	text-transform: uppercase;
 }
 .elgg-sidebar .elgg-menu-page li:first-child, .elgg-sidebar .elgg-menu-page li:last-child, .elgg-sidebar .elgg-menu-groups-my-status li:first-child, .elgg-sidebar .elgg-menu-groups-my-status li:last-child { border-bottom: 0 none; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a { color: #333333; font-weight: normal; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a span {
-  color: #002e6f;
-  float: left;
-  font-family: <?php echo $font2; ?>;
-  font-size: 1.7em;
-  font-weight: bold;
-  line-height: 0.7em;
-  margin-right: 5px;
-  text-shadow: 0 2px 2px #999999;
+	color: #002e6f;
+	float: left;
+	font-family: <?php echo $font2; ?>;
+	font-size: 1.7em;
+	font-weight: bold;
+	line-height: 0.7em;
+	margin-right: 5px;
+	text-shadow: 0 2px 2px #999999;
 }
 .elgg-sidebar .elgg-module-aside h3 { color: #333333; font-size: 0.9em; margin: 0; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
-  float: left;
-  margin-right: 5px;
-  height: 25px;
-  width: 25px;
+	float: left;
+	margin-right: 5px;
+	height: 25px;
+	width: 25px;
 }
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
-  float: left;
-  font-size: 0.75em;
+	float: left;
+	font-size: 0.75em;
 }
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:hover, 
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:focus, 
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:active {
-  color: #333333;
+	color: #333333;
 }
 
 /* Pied de page - HTML spécifique */
 footer {
-  background-image: linear-gradient(bottom, #333333 30%, #666666 80%);
-  background-image: -o-linear-gradient(bottom, #333333 30%, #666666 80%);
-  background-image: -moz-linear-gradient(bottom, #333333 30%, #666666 80%);
-  background-image: -webkit-linear-gradient(bottom, #333333 30%, #666666 80%);
-  background-image: -ms-linear-gradient(bottom, #333333 30%, #666666 80%);
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.30, #333333), color-stop(0.80, #666666));
-  background-color: #333333;
-  height: 66px;
-  margin-top: 25px;
+	background-image: linear-gradient(bottom, #333333 30%, #666666 80%);
+	background-image: -o-linear-gradient(bottom, #333333 30%, #666666 80%);
+	background-image: -moz-linear-gradient(bottom, #333333 30%, #666666 80%);
+	background-image: -webkit-linear-gradient(bottom, #333333 30%, #666666 80%);
+	background-image: -ms-linear-gradient(bottom, #333333 30%, #666666 80%);
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.30, #333333), color-stop(0.80, #666666));
+	background-color: #333333;
+	height: 66px;
+	margin-top: 25px;
 }
 footer ul { margin: auto; width: 500px; font-size: 0.75em; }
 footer ul li {
-  float: left; padding-left: 13px; margin: 26px 7px 10px 0;
-  background: transparent url("<?php echo $urlicon; ?>puce-footer.png") left 7px no-repeat scroll;
+	float: left; padding-left: 13px; margin: 26px 7px 10px 0;
+	background: transparent url("<?php echo $urlicon; ?>puce-footer.png") left 7px no-repeat scroll;
+	color: #fff; font-size:12px;
 }
 footer ul li:first-child { background: none; }
 footer ul li a { color: #fff; font-size:12px; }
@@ -227,15 +230,15 @@ footer img { float: right; }
 
 /* Bande inférieure du pied de page - HTML spécifique */
 #bande {
-  background-image: linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-  background-image: -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-  background-image: -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-  background-image: -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-  background-image: -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0.25, <?php echo $color1; ?>),color-stop(0.75, <?php echo $color4; ?>));
-  background-color: <?php echo $color4; ?>;
-  border-top: 2px solid <?php echo $color1; ?>;
-  height: 10px;
+	background-image: linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0.25, <?php echo $color1; ?>),color-stop(0.75, <?php echo $color4; ?>));
+	background-color: <?php echo $color4; ?>;
+	border-top: 2px solid <?php echo $color1; ?>;
+	height: 10px;
 }
 div.credits { font-size: 0.85em; }
 div.credits p { float: left; color: #333333; margin: 4px 0 5px; }
@@ -245,8 +248,8 @@ div.credits a { color: #333333; text-decoration:underline; }
 
 /* BLOC DU CONTENU PRINCIPAL - MAIN CONTENT */
 #page_container {
-  width:990px; margin:0px auto; background:#fff; min-height: 100%;
-  -moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
+	width:990px; margin:0px auto; background:#fff; min-height: 100%;
+	-moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
 }
 
 
@@ -270,7 +273,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-page .elgg-menu-item-groups-owned a, 
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a, 
 .elgg-menu-page .elgg-menu-owner-block-categories li a {
-  font-weight:bold !important; font-size:14px; color:#333333;
+	font-weight:bold !important; font-size:14px; color:#333333;
 }
 
 .elgg-menu-page .elgg-menu-item-groups-all a:hover, .elgg-menu-page .elgg-menu-item-groups-all a:focus, .elgg-menu-page .elgg-menu-item-groups-all a:active, .elgg-menu-page .elgg-menu-item-groups-all.elgg-state-selected > a,
@@ -282,7 +285,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 */
 .elgg-menu-owner-block-categories li a:hover, .elgg-menu-owner-block-categories li a:focus, .elgg-menu-owner-block-categories li a:active, .elgg-menu-owner-block-categories li.elgg-state-selected > a 
 {
-  color:#333333 !important; background:#CCCCCC !important; border-radius:none; 
+	color:#333333 !important; background:#CCCCCC !important; border-radius:none; 
 }
 
 /* Menus différenciés : navigation complémentaire */
@@ -294,10 +297,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-page .elgg-state-selected a:hover, 
 .elgg-menu-page .elgg-state-selected a:focus, 
 .elgg-menu-page .elgg-state-selected a:active {
-  text-decoration: none;
-  background-color:<?php echo $linkcolor; ?>;
-  color: #FFF !important;
-  text-decoration: none;
+	text-decoration: none;
+	background-color:<?php echo $linkcolor; ?>;
+	color: #FFF !important;
+	text-decoration: none;
 }
 
 .elgg-sidebar ul.elgg-menu-page > li { border-bottom:1px solid #CCCCCC !important; }
@@ -306,10 +309,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 
 .calendar-navigation { margin:0 0 16px 0; }
 .calendar-navigation a {
-  -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
-  padding: 2px 6px; border: 1px solid <?php echo $linkcolor; ?>;
-  color: <?php echo $linkcolor; ?>;
-  font-size: 0.85em;
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+	padding: 2px 6px; border: 1px solid <?php echo $linkcolor; ?>;
+	color: <?php echo $linkcolor; ?>;
+	font-size: 0.85em;
 }
 
 
@@ -370,38 +373,38 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-module-widget:active { background-color: transparent; }
 /* Widgets - à corriger pour utiliser les classes du framework Elgg */
 section div.module {
-  background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent;
-  width: 300px; /* Imposé par l'image de fond, mais bloque les mises en page fluides */
-  float: left;
-  margin: 20px -1px 0;
-  border-radius: 10px 10px 0 0;
-  -moz-border-radius: 10px 10px 0 0;
-  -webkit-border-radius: 10px 10px 0 0;
-  -o-border-radius: 10px 10px 0 0;
-  padding: 0 14px;
+	background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent;
+	width: 300px; /* Imposé par l'image de fond, mais bloque les mises en page fluides */
+	float: left;
+	margin: 20px -1px 0;
+	border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	-webkit-border-radius: 10px 10px 0 0;
+	-o-border-radius: 10px 10px 0 0;
+	padding: 0 14px;
 }
 section div.module header {
-  background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-  background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-  background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-  background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-  background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.55, <?php echo $color3; ?>));
-  background-color: <?php echo $color3; ?>;
-  border-radius: 10px 10px 0 0;
-  -moz-border-radius: 10px 10px 0 0;
-  -webkit-border-radius: 10px 10px 0 0;
-  -o-border-radius: 10px 10px 0 0;
-  border-top: 0 none;
-  min-height: 35px;
+	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.55, <?php echo $color3; ?>));
+	background-color: <?php echo $color3; ?>;
+	border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	-webkit-border-radius: 10px 10px 0 0;
+	-o-border-radius: 10px 10px 0 0;
+	border-top: 0 none;
+min-height: 33px;
 }
 section div.module header h2 {
-  color: #fff;
-  float: left;
-  font-family: <?php echo $font1; ?>;
-  font-size: 1.25em;
-  text-transform: uppercase;
-  font-weight: normal;
+	color: <?php echo $color14; ?>;
+	float: left;
+	font-family: <?php echo $font1; ?>;
+	font-size: 1.25em;
+	text-transform: uppercase;
+	font-weight: normal;
 }
 /* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
 a.elgg-widget-collapse-button,
@@ -411,7 +414,7 @@ a.elgg-widget-collapse-button:active,
 a.elgg-widget-collapsed:hover,
 a.elgg-widget-collapsed:focus,
 a.elgg-widget-collapsed:active {
-  color: transparent;
+	color: transparent;
 }
 a.elgg-widget-collapse-button:before { content: ""; }
 a.elgg-widget-collapsed:before { content: ""; }
@@ -438,14 +441,14 @@ section div.module div.activites ul li div span { color: #666; font-style: itali
 section div.elgg-widget-instance-group_activity div.elgg-body.activites, 
 section div.elgg-widget-instance-group_activity div.elgg-body.activites .elgg-widget-content { padding:0; }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-  padding:0 14px; 
-  background:<?php echo $color3; ?>;
-  /* margin-top:-8px; */
+	padding:0 14px; 
+	background:<?php echo $color3; ?>;
+	/* margin-top:-8px; */
 }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-  color:white;display:block;
-  font-family: <?php echo $font1; ?>;
-  font-size:14px;
+	color:white;display:block;
+	font-family: <?php echo $font1; ?>;
+	font-size:14px;
 }
 .widget-group-content { padding: 0 10px 10px 10px; }
 
@@ -477,8 +480,8 @@ ul.elgg-list li.elgg-item div.elgg-body div.entity_title a:active { color: #3333
 
 
 div.entetes-tri ul {
-  float: left; width: 717px; margin: 10px 0; padding: 5px 0;
-  background: #f6f6f6; color: #000; font-size: 0.75em; text-align: center;
+	float: left; width: 717px; margin: 10px 0; padding: 5px 0;
+	background: #f6f6f6; color: #000; font-size: 0.75em; text-align: center;
 }
 div.entetes-tri ul li { float: left; margin-left: 10px; }
 div.entetes-tri ul li a { color: #000; }
@@ -510,7 +513,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-item-message .message-content { width: 96%; padding: 0 0.5%; display:none; padding-bottom: 16px; padding-top: 4px; }
 .elgg-item-message .message-content.selected-message { display:block; }
 .message-sent .message-content { opacity: 1; }
-.message-inbox .message-content {  }
+.message-inbox .message-content {	}
 .message-sent .message-content { margin-left:3%; background: #EEE; }
 
 
@@ -556,6 +559,9 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
+.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
+.elgg-image .date span { font-size: 2em; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 4px 0; }
+
 
 /* Formulaires : boutons radios verticaux, mais sans casser les groupes (mal construits avec les labels..) */
 /* Pas génial, ça casse beaucoup de choses.. mieux vaut corriger ponctuellement le rendu lorsqu'on veut avoir un radio par ligne.
@@ -584,6 +590,8 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
+#custom_fields_userdetails .ui-accordion-header { padding: 0.3em 0 0.3em 1.8em; }
+#custom_fields_userdetails .ui-accordion-header .ui-icon { margin-top:0.5em; top:0; }
 
 /* Semantic UI adjustments */
 i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
@@ -601,6 +609,10 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 
 /* Autocomplete content : le menu n'est pas utile */
 .elgg-autocomplete-item .elgg-menu { max-width: 40%; display:none; }
+
+/* Members alpha sort and search */
+.esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
+
 
 
 /* SECTION RESPONSIVE DESIGN */

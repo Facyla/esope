@@ -4,16 +4,16 @@
  *
  * @package Elgg
  *
- * @uses $vars['items']       Array of ElggEntity or ElggAnnotation objects
- * @uses $vars['offset']      Index of the first list item in complete list
- * @uses $vars['limit']       Number of items per page
- * @uses $vars['count']       Number of items in the complete list
- * @uses $vars['base_url']    Base URL of list (optional)
- * @uses $vars['pagination']  Show pagination? (default: true)
- * @uses $vars['position']    Position of the pagination: before, after, or both
- * @uses $vars['full_view']   Show the full view of the items (default: false)
- * @uses $vars['list_class']  Additional CSS class for the <ul> element
- * @uses $vars['item_class']  Additional CSS class for the <li> elements
+ * @uses $vars['items']			 Array of ElggEntity or ElggAnnotation objects
+ * @uses $vars['offset']			Index of the first list item in complete list
+ * @uses $vars['limit']			 Number of items per page
+ * @uses $vars['count']			 Number of items in the complete list
+ * @uses $vars['base_url']		Base URL of list (optional)
+ * @uses $vars['pagination']	Show pagination? (default: true)
+ * @uses $vars['position']		Position of the pagination: before, after, or both
+ * @uses $vars['full_view']	 Show the full view of the items (default: false)
+ * @uses $vars['list_class']	Additional CSS class for the <ul> element
+ * @uses $vars['item_class']	Additional CSS class for the <li> elements
  */
 
 $items = $vars['items'];
@@ -63,19 +63,20 @@ if (is_array($items) && count($items) > 0) {
 		*/
 		$item_html = elgg_view_list_item($item, $vars);
 		if (!empty($item_html)) {
-		  //$html .= "<li id=\"$id\" class=\"$item_class\">" . $item_html . '</li>';
-		  $html .= "<li id=\"$id\" class=\"$item_class\">";
-		  if (elgg_instanceof($item, 'object') && elgg_view_exists('output/access')) {
-				// Note : si on ajoute les accès comme ça, on peut avoir des doublons si on le fait également via un menu : 
-				// il faut choisir entre les deux approches. Celle-ci est plus générique (le menu est parfois supprimé)
+			//$html .= "<li id=\"$id\" class=\"$item_class\">" . $item_html . '</li>';
+			$html .= "<li id=\"$id\" class=\"$item_class\">";
+			if (elgg_instanceof($item, 'object') && elgg_view_exists('output/access')) {
+				// Note : si on ajoute les accès comme ça, on peut avoir des doublons 
+				// si on le fait également via un menu : il faut choisir entre les deux 
+				// approches. Celle-ci est plus générique (le menu est parfois supprimé)
 				$html .= '<span class="elgg-list-access">' . elgg_view('output/access', array('entity' => $item, 'hide_text' => true)) . '</span>';
-		  }
-		  $html .= $item_html;
-		  $html .= '</li>';
-	  } else {
-		  // If it is empty, there is a good reason not to display it.. can be a widget or something else..
-		  //$html .= "<li id=\"$id\" class=\"$item_class\">" . print_r($item, true) . '</li>';
-	  }
+			}
+			$html .= $item_html;
+			$html .= '</li>';
+		} else {
+			// If it is empty, there is a good reason not to display it.. can be a widget or something else..
+			//$html .= "<li id=\"$id\" class=\"$item_class\">" . print_r($item, true) . '</li>';
+		}
 	}
 	$html .= '</ul>';
 }

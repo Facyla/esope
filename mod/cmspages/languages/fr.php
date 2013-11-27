@@ -1,7 +1,8 @@
 <?php
 $fr = array(
 	'cmspages' => "Pages statiques (CMS)",
-	'item:object:cmspage' => 'Pages statiques',
+	'item:object:cmspage' => 'Page statique',
+	'item:object:cmspages' => 'Pages statiques',
 	
 	'cmspages:pagetype' => "Nom de la page (pour l'URL)",
 	'cmspages:cmspage_url' => "URL de la page publiée :",

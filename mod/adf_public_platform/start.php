@@ -10,7 +10,7 @@ elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
 elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); // Menu
 
-// Activation des notifications par mail lors de l'entrée dans un groupe
+// Gestion des notifications par mail lors de l'entrée dans un groupe
 elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
 // Suppression des notifications lorsqu'on quitte le groupe
 elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
@@ -20,40 +20,52 @@ elgg_register_event_handler('delete','member','adf_public_platform_group_leave',
  * Init adf_platform plugin.
  */
 function adf_platform_init() {
-	
 	global $CONFIG;
 	
-	// CSS et JS
-	elgg_extend_view('css/elgg', 'adf_platform/css');
-	elgg_extend_view('css/admin', 'adf_platform/admin_css'); // Remplace la CSS ???
-	// Nouveau thème : 
-	elgg_extend_view('css/elgg', 'adf_platform/css/style');
-	elgg_extend_view('css/elgg', 'css/jquery-ui-1.10.2');
-	elgg_extend_view('css/ie', 'adf_platform/css/ie');
-	elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
+	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','theme_items/online_groupmembers');
 	
+	
+	// CSS & JS SCRIPTS
+	elgg_extend_view('css/elgg', 'adf_platform/css');
+	elgg_extend_view('css/admin', 'adf_platform/admin_css');
+	// Nouveau thème : 
+	elgg_extend_view('css/elgg', 'css/jquery-ui-1.10.2');
+	elgg_extend_view('css/elgg', 'adf_platform/css/style');
+	elgg_extend_view('css/ie', 'adf_platform/css/ie');
+	elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	
-	// Replace jQuery
-	elgg_register_js('jquery', '/mod/adf_public_platform/views/default/adf_platform/js/jquery-1.7.2.min.php', 'head');
-	
+	// Replace jQuery lib
+	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
+	// Add / Replace jQuery UI
+	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	// Theme-specific JS (accessible menu)
 	elgg_register_js('adf_platform.fonction', 'mod/adf_public_platform/views/default/adf_platform/js/fonction.php', 'head');
 	elgg_load_js('adf_platform.fonction');
-	
 	// Passe le datepicker en français
-	elgg_register_js('jquery.datepicker.fr', 'mod/adf_public_platform/views/default/js/ui.datepicker-fr.php', 'head');
+	elgg_register_js('jquery.datepicker.fr', 'mod/adf_public_platform/vendors/ui.datepicker-fr.js', 'head');
 	elgg_load_js('jquery.datepicker.fr');
-	
 	// Webdesign : Floatable elements (.is-floatable, .floating)
 	elgg_register_js('floatable.elements', 'mod/adf_public_platform/vendors/floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
+	// Ajout un member picker avec sélection unique pour les messages
+	// @TODO : not functional yet
+	//elgg_register_js('elgg.messagesuserpicker', 'mod/adf_public_platform/vendors/ui.messagesuserpicker.js', 'head');
 	
-	// Webdesign : Smooth scrolling : smooth transition for inline (anchors) links
-	elgg_register_js('smooth.scrolling', 'mod/adf_public_platform/vendors/smooth-scrolling.js', 'head');
-	elgg_load_js('smooth.scrolling');
+	// register the color picker's JavaScript
+	elgg_register_simplecache_view('js/input/color_picker');
+	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
+	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
+	
+	// register the color picker's CSS
+	elgg_register_simplecache_view('css/input/color_picker');
+	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
+	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
+	
+	
+	// Pour faire apparaître le menu dans le menu "apparence" - mais @todo intégrer dans un form
+	//elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
 	
 	
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
@@ -73,9 +85,6 @@ function adf_platform_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'elgg_river_menu_setup');
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
-	// Pour faire apparaître le menu dans le menu "apparence" - mais @todo intégrer dans un form
-	//elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
-	
 	// Remplacement page d'accueil
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
@@ -83,12 +92,8 @@ function adf_platform_init() {
 		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
 		if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
 	} else {
-		/*
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
 		// PARAM : Désactivé si vide, activé avec paramètre de config si non vide
-		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-		if (!empty($replace_public_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
-		*/
 		$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
 		if (!$CONFIG->walled_garden) {
 			if ($replace_public_home != 'no') {
@@ -97,32 +102,59 @@ function adf_platform_init() {
 		}
 	}
 	
-	// MODIFICATION DES MENUS STANDARDS
+	// Modification des menus standards
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
 	// Modification des menus des groupes
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'adf_platform_owner_block_menu', 1000);
+	// Modification de la page de listing des sous-groupes
+	if (elgg_is_active_plugin('au_subgroups')) {
+		// route some urls that go through 'groups' handler
+		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
+		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
+	}
+	
+	// Public pages - les pages auxquelles on peut accéder hors connexion
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
+	
+	// Modification du Fil d'Ariane
+	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
+	
+	// Profil non public par défaut, si réglage activé
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+	if ($public_profiles == 'yes') {
+		// Verrouillage de certaines pages à haut niveau (via le page_handler) 
+		// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
+		elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
+		// Réglage pour l'utilisateur
+		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 600); // En haut des réglages
+		// Hook pour modifier le nouveau réglage ajouté aux paramètres personnels
+		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'adf_platform_public_profile_hook');
+		// @TODO : compléter par un blocage direct au niveau de l'entité elle-même pour les listings et autres photos 
+		// (non bloquant mais avec contenu vide à la place)
+	}
+	
+	// Ssi déconnecté, hook pour les redirections pour renvoyer sur le login
+	if (!elgg_is_logged_in()) {
+		elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_public_forward_login_hook');
+	}
 	
 	
-	//elgg_register_page_handler('dashboard', 'adf_platform_dashboard_page_handler');
-	
-	// Redirection après login - load at last
-	elgg_register_event_handler('login','user','adf_platform_login_handler', 999);
-	
-	// Actions après inscription
-	elgg_register_event_handler('login','user','adf_platform_register_handler');
-	
+	// NEW & REWRITTEN ACTIONS
 	// Modification de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
-	/* Permet notamment de forcer l'inscription
-	*/
+	// Permet notamment de forcer l'inscription
 	if (elgg_is_active_plugin('groups')) {
 		elgg_unregister_action('groups/invite');
 		elgg_register_action("groups/invite", elgg_get_plugins_path() . 'adf_public_platform/actions/groups/membership/invite.php');
 	}
-	
-	// PAGE HANDLERS : MODIFICATION DE PAGES DE LISTING (NON GÉRABLES PAR DES VUES)
-	// Related functions are in lib/adf_public/platform/page_handlers.php
+	// ESOPE search endpoint
+	elgg_register_action("esope/esearch", elgg_get_plugins_path() . 'adf_public_platform/actions/esope/esearch.php');
+		
+		
+	// NEW & REWRITTEN PAGE HANDLERS
+	// Note : modification de pages de listing (non gérables par des vues)
+	// @dev : Related functions are in lib/adf_public/platform/page_handlers.php
 	if (elgg_is_active_plugin('categories')) {
 		// Pour ajouter la liste des catégories en sidebar
 		elgg_unregister_page_handler('categories', 'categories_page_handler');
@@ -133,11 +165,6 @@ function adf_platform_init() {
 	elgg_register_page_handler('groups', 'adf_platform_groups_page_handler');
 	// Add own library (different function names)
 	elgg_register_library('elgg:adf_platform:groups', elgg_get_plugins_path() . 'adf_public_platform/lib/groups.php');
-	if (elgg_is_active_plugin('au_subgroups')) {
-		// route some urls that go through 'groups' handler
-		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
-		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
-	}
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');
@@ -163,130 +190,23 @@ function adf_platform_init() {
 	// Pour les messages
 	elgg_unregister_page_handler('messages', 'messages_page_handler');
 	elgg_register_page_handler('messages', 'adf_platform_messages_page_handler');
+	// Esope custom search - @TODO currently alpha version
+	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
 	
 	
-	// Public pages - les pages auxquelles on peut accéder hors connexion
-	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
+	// MODIFICATION DES WIDGETS : (DES)ACTIVATION ET TITRES
+	require_once(dirname(__FILE__) . '/lib/adf_public_platform/widgets.php');
 	
-	// Modification des titres des widgets
-	// Activation des plugins
-	$widget_blog = elgg_get_plugin_setting('widget_blog', 'adf_public_platform');
-	$widget_bookmarks = elgg_get_plugin_setting('widget_bookmarks', 'adf_public_platform');
-	$widget_brainstorm = elgg_get_plugin_setting('widget_brainstorm', 'adf_public_platform');
-	$widget_event_calendar = elgg_get_plugin_setting('widget_event_calendar', 'adf_public_platform');
-	$widget_file = elgg_get_plugin_setting('widget_file', 'adf_public_platform');
-	$widget_groups = elgg_get_plugin_setting('widget_groups', 'adf_public_platform');
-	$widget_pages = elgg_get_plugin_setting('widget_pages', 'adf_public_platform');
-	$widget_friends = elgg_get_plugin_setting('widget_friends', 'adf_public_platform');
-	$widget_group_activity = elgg_get_plugin_setting('widget_group_activity', 'adf_public_platform');
-	$widget_messages = elgg_get_plugin_setting('widget_messages', 'adf_public_platform');
-	$widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
-	$widget_river_widget = elgg_get_plugin_setting('widget_river_widget', 'adf_public_platform');
-	$widget_twitter = elgg_get_plugin_setting('widget_twitter', 'adf_public_platform');
-	$widget_tagcloud = elgg_get_plugin_setting('widget_tagcloud', 'adf_public_platform');
-	$widget_videos = elgg_get_plugin_setting('widget_videos', 'adf_public_platform');
-	$widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
 	
-	elgg_unregister_widget_type('blog');
-	if (elgg_is_active_plugin('blog')) {
-		if ($widget_blog != 'no') elgg_register_widget_type('blog', elgg_echo('adf_platform:widget:blog:title'), elgg_echo('blog:widget:description'));
+	// Group tools priority - see credits in group_tools_priority/settings view
+	$views = elgg_get_config('views');
+	$tools = $views->extensions['groups/tool_latest'];
+	foreach ($tools as $old_priority => $view) {
+		elgg_unextend_view('groups/tool_latest', $view);
+		$priority = ($new_priority = elgg_get_plugin_setting("tools:$view", 'groups')) ? $new_priority : $old_priority;
+		elgg_extend_view('groups/tool_latest', $view, $priority);
 	}
-	
-	elgg_unregister_widget_type('bookmarks');
-	if (elgg_is_active_plugin('bookmarks')) {
-		if ($widget_bookmarks != 'no') elgg_register_widget_type('bookmarks', elgg_echo('adf_platform:widget:bookmark:title'), elgg_echo('bookmarks:widget:description'));
-	}
-	
-	elgg_unregister_widget_type('brainstorm');
-	if (elgg_is_active_plugin('brainstorm')) {
-		if ($widget_brainstorm != 'no') elgg_register_widget_type('brainstorm', elgg_echo('adf_platform:widget:brainstorm:title'), elgg_echo('brainstorm:widget:description'));
-	}
-	
-	elgg_unregister_widget_type('event_calendar');
-	if (elgg_is_active_plugin('event_calendar')) {
-		if ($widget_event_calendar != 'no') elgg_register_widget_type('event_calendar',elgg_echo("adf_platform:widget:event_calendar:title"),elgg_echo('event_calendar:widget:description'));
-	}
-	
-	elgg_unregister_widget_type('filerepo');
-	if (elgg_is_active_plugin('file')) {
-		if ($widget_file != 'no') elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
-	}
-	
-	if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
-	
-	if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
-	
-	if (elgg_is_active_plugin('twitter')) {
-		if ($widget_twitter == 'no') elgg_unregister_widget_type('twitter');
-	}
-	
-	if (elgg_is_active_plugin('tagcloud')) {
-		if ($widget_tagcloud == 'no') elgg_unregister_widget_type('tagcloud');
-	}
-	
-	if (elgg_is_active_plugin('videos')) {
-		if ($widget_videos == 'no') elgg_unregister_widget_type('videos');
-	}
-	
-	elgg_unregister_widget_type('a_users_groups');
-	if (elgg_is_active_plugin('groups')) {
-		if ($widget_group_activity == 'no') elgg_unregister_widget_type('group_activity');
-		if ($widget_groups != 'no') elgg_register_widget_type('a_users_groups', elgg_echo('adf_platform:widget:group:title'), elgg_echo('groups:widgets:description'));
-	}
-	
-	elgg_unregister_widget_type('pages');
-	if (elgg_is_active_plugin('pages')) {
-		if ($widget_pages != 'no') elgg_register_widget_type('pages', elgg_echo('adf_platform:widget:page:title'), elgg_echo('pages:widget:description'));
-	}
-	
-	elgg_unregister_widget_type('profile_completeness');
-	if (elgg_is_active_plugin('profile_manager')) {
-		if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {
-			elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
-		}
-	}
-	
-	// Nouveaux widgets
-	if (elgg_is_active_plugin('messages')) {
-		if ($widget_messages != 'no') elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
-	}
-	
-	if (elgg_is_active_plugin('webprofiles')) {
-		if ($widget_webprofiles != 'no') elgg_register_widget_type('webprofiles', elgg_echo('webprofiles:widget:title'), elgg_echo('webprofiles:widget:description'), 'profile');
-	}
-	
-	
-	// Modification du Fil d'Ariane
-	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
-	
-	// register the color picker's JavaScript
-	elgg_register_simplecache_view('js/input/color_picker');
-	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
-	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
-	
-	// register the color picker's CSS
-	elgg_register_simplecache_view('css/input/color_picker');
-	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
-	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
-	
-	// Profil non public par défaut, si réglage activé
-	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
-	if ($public_profiles == 'yes') {
-		// Verrouillage de certaines pages à haut niveau (via le page_handler) 
-		// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
-		elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
-		// Réglage pour l'utilisateur
-		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 600); // En haut des réglages
-		// Hook pour modifier le nouveau réglage ajouté aux paramètres personnels
-		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'adf_platform_public_profile_hook');
-		// @TODO : compléter par un blocage direct au niveau de l'entité elle-même pour les listings et autres photos 
-		// (non bloquant mais avec contenu vide à la place)
-	}
-	
-	// Ssi déconnecté, hook pour les redirections pour renvoyer sur le login
-	if (!elgg_is_logged_in()) {
-		elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_public_forward_login_hook');
-	}
+	elgg_extend_view('plugins/groups/settings', 'group_tools_priority/settings');
 	
 }
 
@@ -354,7 +274,6 @@ function adf_platform_pagesetup(){
 			}
 		}
 		
-		
 		// Report content link
 		elgg_unregister_menu_item('footer', 'report_this');
 		if (elgg_is_active_plugin('reportedcontent')) {
@@ -379,12 +298,13 @@ function adf_platform_pagesetup(){
 		
 	}
 	
-	// Rewrite breadcrumbs : use a more user-friendly logic
-	// Structure du Fil : Accueil (site) > Container (group/user page owner) > Subtype > Content > action
-	// Default structure : Tool > Tool for page owner > Content > Subcontent	=> Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
-	// Group structure : All groups > Page owner (group or user)	=> Home > Page owner (group or user)
-	// Target structure : Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
-	// @todo : Insert Home at first, replace 1st entry with page owner, rename owner tool using context
+	/* Rewrite breadcrumbs : use a more user-friendly logic
+	 * Structure du Fil : Accueil (site) > Container (group/user page owner) > Subtype > Content > action
+	 * Default structure : Tool > Tool for page owner > Content > Subcontent	=> Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
+	 * Group structure : All groups > Page owner (group or user)	=> Home > Page owner (group or user)
+	 * Target structure : Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
+	 * @todo : Insert Home at first, replace 1st entry with page owner, rename owner tool using context
+	 */
 	if (elgg_get_viewtype() == 'default') {
 		global $CONFIG;
 		$context = elgg_get_context();
@@ -520,6 +440,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	forward();
 }
 
+// Redirection après login
 function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
 	global $CONFIG;
 	//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
@@ -529,9 +450,7 @@ function adf_platform_public_forward_login_hook($hook_name, $entity_type, $retur
 	return null;
 }
 
-/*
- * Performs some actions after registration
-*/
+/* Performs some actions after registration */
 function adf_platform_register_handler($event, $object_type, $object) {
 	global $CONFIG;
 	// Groupe principal (à partir du GUID de ce groupe)
@@ -546,11 +465,32 @@ function adf_platform_register_handler($event, $object_type, $object) {
 
 
 
-// Ajoute les notifications lorsqu'on rejoint un groupe
+// Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
 function adf_public_platform_group_join($event, $object_type, $relationship) {
 	if (elgg_is_logged_in()) {
 		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
-			add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+			global $NOTIFICATION_HANDLERS;
+			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'adf_public_platform');
+			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
+				switch($groupjoin_enablenotif) {
+					case 'site':
+						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
+						break;
+					case 'all':
+						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+						}
+						break;
+					case 'email':
+					default:
+						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+				}
+			} else if ($groupjoin_enablenotif == 'no') {
+				// loop through all notification types
+				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+				}
+			}
 		}
 	}
 	return true;
@@ -758,6 +698,21 @@ function elgg_make_list_from_path($content = array()) {
 // Fonctions liées à Profile_manager
 if (elgg_is_active_plugin('profile_manager')) {
 	
+	// Add new input types
+	$group_options = array("output_as_tags" => true, "admin_only" => true);
+	// Select with multiple option (displayed as a block, not a dropdown)
+	// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
+	// Group profile types selector (do smthg with selected members profile types)
+	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('custom_fields:group_profiletypes'), $group_options);
+	// Color picker
+	add_custom_field_type("custom_group_field_types", 'color', elgg_echo('custom_fields:color'), $group_options);
+	// Group selector (scope=all|member)
+	add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('custom_fields:groups_select'), $group_options);
+	// Members select (friends picker) - scope=all|friends|groupmembers
+	add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('custom_fields:members_select'), $group_options);
+	// Percentage - interval=10
+	add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('custom_fields:percentage'), $group_options);
+	
 	/* Renvoie une autorisation d'accéder ou non
 	 * Peut s'appuyer sur une autorisation explicite, ou une interdiction
 	 * L'interdiction prend le dessus sur l'autorisation
@@ -854,6 +809,185 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return $returnvalue;
 	}
 	
+	/* Return a selector with profile_manager options
+	 * That's for use in a multi-criteria search form
+	 * Params :
+	   - metadata : meta name
+	   - name : field name
+	   - value : set a specific value
+	   - empty : add empty value in options
+	   - 
+	 */
+	function esope_make_search_field_from_profile_field($params) {
+		$metadata = $params['metadata'];
+		if (empty($metadata)) return false;
+		$empty = elgg_extract('empty', $params, true);
+		$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
+		$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+		$search_field = '';
+		
+		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
+		if ($field_a) {
+			$field = $field_a[0];
+			$options = $field->getOptions();
+			$valtype = $field->metadata_type;
+			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
+			// Multiple option become select or radio
+			if ($options) {
+				$valtype = 'dropdown';
+				if ($empty) $options['empty option'] = '';
+				$options = array_reverse($options);
+			}
+			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
+		}
+		return $search_field;
+	}
+	
+}
+
+
+// Esope search page handler
+function esope_esearch_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/adf_platform';
+	require_once "$base/esearch.php";
+	return true;
+}
+
+/* Esope search function : 
+ * Just call echo esope_search() for a listing
+ * Get entities with $results_ents = esope_search('entities');
+ */
+function esope_esearch($params = array()) {
+	global $CONFIG;
+	$max_results = 500;
+	$debug = false;
+	$q = sanitize_string(get_input("q"));
+	$type = sanitize_string(get_input("entity_type"));
+	$subtype = sanitize_string(get_input("entity_subtype"));
+	$owner_guid = get_input("owner_guid");
+	$container_guid = get_input("container_guid");
+	$limit = (int) get_input("limit", 0);
+	$offset = (int) get_input("offset", 0);
+	$sort = get_input("sort");
+	$order = get_input("order");
+	// Metadata search : $metadata[name]=value
+	$metadata = get_input("metadata");
+	$metadata_case_sensitive = get_input("metadata_case_sensitive", false);
+	$metadata_name_value_pairs_operator = get_input("metadata_name_value_pairs_operator", 'AND');
+	$order_by_metadata = get_input('order_by_metadata');
+	
+	// Some cleanup on types and subtypes
+	if (empty($type)) $type = 'object';
+	if (!empty($subtype) && ($type != 'object')) $subtype = null;
+	if (empty($subtype) && ($type == 'object')) {
+		$registered = get_registered_entity_types(); // Returns all subtypes, even non-objects
+		foreach ($registered as $registered_type => $registered_subtypes) {
+			foreach ($registered_subtypes as $registered_subtype) {
+				$subtype[] = $registered_subtype;
+			}
+		}
+	}
+	
+	$result = array();
+	if ($debug) echo "Search : $q $type $subtype ($owner_guid/$container_guid) $limit $offset $sort $order<br />";
+	if ($debug) echo "Metadata : $industry $multiselect " . print_r($metadata, true) . "<br />";
+	// show hidden (unvalidated) users
+	//$hidden = access_get_show_hidden_status();
+	//access_show_hidden_entities(true);
+
+	// Recherche par nom / username / titre / description, selon les cas
+	if ($q) {
+		switch($type) {
+			case 'user':
+				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)";
+				$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				break;
+			case 'group':
+				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "groups_entity ge USING(guid)";
+				$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%')";
+				break;
+			case 'site':
+				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "sites_entity se USING(guid)";
+				$wheres[] = "(se.name like '%" . $q . "%' OR se.description like '%" . $q . "%')";
+				break;
+			case 'object':
+				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "objects_entity oe USING(guid)";
+				$wheres[] = "(oe.title like '%" . $q . "%' OR oe.description like '%" . $q . "%')";
+				break;
+		}
+	}
+
+	// Build metadata name-value pairs from input array
+	if ($metadata) foreach ($metadata as $name => $value) {
+		if (!empty($name) && !empty($value)) {
+			$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
+		}
+	}
+
+	// Paramètres de la recherche
+	$search_params = array(
+			'types' => $type,
+			'subtypes' => $subtype,
+			'owner_guid' => $owner_guid,
+			'container_guid' => $container_guid,
+			'metadata_name_value_pairs' => $metadata_name_value_pairs,
+			'metadata_case_sensitive' => $metadata_case_sensitive,
+			'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
+			'order_by_metadata' => $order_by_metadata,
+			'limit' => $limit,
+			'offset' => $offset,
+			'sort' => $sort,
+			'order' => $order,
+			'joins' => $joins,
+			'wheres' => $wheres,
+		);
+	
+	$search_params['count'] = true;
+	$count = elgg_get_entities_from_metadata($search_params);
+	if ($count > $max_results) {
+		$alert = elgg_echo('esope:search:morethanmax');
+	}
+	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
+	$search_params['count'] = false;
+	$entities = elgg_get_entities_from_metadata($search_params);
+	// Limit to something that can be handled
+	$entities = array_slice($entities, 0, $max_results);
+	
+	if ($params['returntype'] == 'entities') {
+		return $entities;
+	} else {
+		$search_params['full_view'] = false;
+		$search_params['pagination'] = false;
+		$search_params['list_type'] = 'list'; // gallery/list
+		elgg_push_context('search');
+		elgg_push_context('widgets');
+		$return = '';
+		if ($params['count']) { $return .= elgg_echo('esope:search:nbresults', array($count)); }
+		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
+		if ($alert) $return .= $alert;
+		elgg_pop_context('widgets');
+		elgg_pop_context('search');
+	}
+	
+	if (empty($return)) $return = elgg_echo('esope:search:noresult');
+	
+	return $return;
+}
+
+
+// Adaptation du code dispo sur OpenClassrooms
+// Fonction de cryptage réversible : on utilise la même fonction pour coder/décode
+// Idéalement la longueur de $key >= $text
+function esope_vernam_crypt($text, $key){
+	$keyl = strlen($key);
+	$textl = strlen($text);
+	if ($keyl < $textl){
+		$key = str_pad($key, $textl, $key, STR_PAD_RIGHT);
+	} elseif ($keyl > $textl){
+		$diff = $keyl - $textl;
+		$key = substr($key, 0, -$diff);
+	}
+	return $text ^ $key;
 }
 
 

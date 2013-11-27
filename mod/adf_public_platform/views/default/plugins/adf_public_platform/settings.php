@@ -23,6 +23,12 @@ $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
 $registered_objects = get_registered_entity_types('object');
 $group_defaultaccess_opt = array('default' => elgg_echo('adf_platform:groupdefaultaccess:default'), 'groupvis' => elgg_echo('adf_platform:groupdefaultaccess:groupvis'), 'group' => elgg_echo('adf_platform:groupdefaultaccess:group'), 'members' => elgg_echo('adf_platform:groupdefaultaccess:members'), 'public' => elgg_echo('adf_platform:groupdefaultaccess:public'));
+$group_groupjoin_enablenotif_opt = array(
+		'email' => elgg_echo('option:notify:email'),
+		'site' => elgg_echo('option:notify:site'),
+		'all' => elgg_echo('option:notify:all'),
+		'no' => elgg_echo('option:notify:no'),
+	);
 
 
 // SET DEFAULT VALUES
@@ -48,6 +54,8 @@ if (strlen($vars['entity']->displaystats) == 0) { $vars['entity']->displaystats 
 if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
 if (empty($vars['entity']->backgroundcolor)) { $vars['entity']->backgroundcolor = '#efeeea'; }
 if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
+
+// STYLES : see css/elgg view for style load & use
 // Set default colors - theme ADF
 // Titles
 if (empty($vars['entity']->titlecolor)) { $vars['entity']->titlecolor = '#0A2C83'; }
@@ -55,9 +63,10 @@ if (empty($vars['entity']->textcolor)) { $vars['entity']->textcolor = '#333333';
 // Links
 if (empty($vars['entity']->linkcolor)) { $vars['entity']->linkcolor = '#002E6E'; }
 if (empty($vars['entity']->linkhovercolor)) { $vars['entity']->linkhovercolor = '#0A2C83'; }
-// Other colors
+// Header-footer color + various other use (menu + input borders and focus...)
 if (empty($vars['entity']->color1)) { $vars['entity']->color1 = '#0050BF'; }
 if (empty($vars['entity']->color4)) { $vars['entity']->color4 = '#002E6E'; }
+// Widget + Group modules
 if (empty($vars['entity']->color2)) { $vars['entity']->color2 = '#F75C5C'; }
 if (empty($vars['entity']->color3)) { $vars['entity']->color3 = '#C61B15'; }
 // Buttons
@@ -65,14 +74,24 @@ if (empty($vars['entity']->color5)) { $vars['entity']->color5 = '#014FBC'; }
 if (empty($vars['entity']->color6)) { $vars['entity']->color6 = '#033074'; }
 if (empty($vars['entity']->color7)) { $vars['entity']->color7 = '#FF0000'; }
 if (empty($vars['entity']->color8)) { $vars['entity']->color8 = '#990000'; }
-// Divers Gris
+// Module title
+if (empty($vars['entity']->color14)) { $vars['entity']->color14 = '#FFFFFF'; }
+// Button title
+if (empty($vars['entity']->color15)) { $vars['entity']->color15 = '#FFFFFF'; }
+// Divers Gris - utilisés dans interface essentiellement (mieux vaut ne pas modifier)
 if (empty($vars['entity']->color9)) { $vars['entity']->color9 = '#CCCCCC'; }
 if (empty($vars['entity']->color10)) { $vars['entity']->color10 = '#999999'; }
 if (empty($vars['entity']->color11)) { $vars['entity']->color11 = '#333333'; }
 if (empty($vars['entity']->color12)) { $vars['entity']->color12 = '#DEDEDE'; }
 // Sub-menu
 if (empty($vars['entity']->color13)) { $vars['entity']->color13 = '#CCCCCC'; }
-
+// Fonts
+if (empty($vars['entity']->font1)) { $vars['entity']->font1 = 'Lato, sans-serif'; }
+if (empty($vars['entity']->font2)) { $vars['entity']->font2 = 'Lato-bold, sans-serif'; }
+if (empty($vars['entity']->font3)) { $vars['entity']->font3 = 'Puritan, sans-serif'; }
+if (empty($vars['entity']->font4)) { $vars['entity']->font4 = 'Puritan, Arial, sans-serif'; }
+if (empty($vars['entity']->font5)) { $vars['entity']->font5 = 'Monaco, "Courier New", Courier, monospace'; }
+if (empty($vars['entity']->font6)) { $vars['entity']->font6 = 'Georgia, times, serif'; }
 
 // Footer background color
 //if (empty($vars['entity']->footercolor)) { $vars['entity']->footercolor = '#555555'; }
@@ -167,7 +186,7 @@ echo '<div id="adf-settings-tabs">
 ?>
 <script type="text/javascript">
 $(function() {
-	$('#adf-settings-accordion').accordion({ header: 'h3', autoHeight: false });
+	$('#adf-settings-accordion').accordion({ header: 'h3', autoHeight: false, heightStyle: 'content' });
 });
 </script>
 
@@ -231,6 +250,9 @@ $(function() {
 			if (elgg_is_active_plugin('members')) {
 				echo '<p><label>' . elgg_echo('adf_platform:index_members') . '</label>';
 					echo elgg_view('input/dropdown', array( 'name' => 'params[index_members]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->index_members));
+				echo '</p><br />';
+				echo '<p><label>' . elgg_echo('adf_platform:index_recent_members') . '</label>';
+					echo elgg_view('input/dropdown', array( 'name' => 'params[index_recent_members]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->index_recent_members));
 				echo '</p><br />';
 			}
 			// Colonne droite
@@ -364,6 +386,7 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess )) . '</p>';
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $vars['entity']->groupjoin_enablenotif )) . '</p>';
 		}
 		?>
 		<br />
@@ -385,7 +408,19 @@ $(function() {
 		<h4><?php echo elgg_echo('adf_platform:config:memberssearch'); ?></h4>
 		<?php
 		if (elgg_is_active_plugin('members')) {
+			// Allow to add alpha sort
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:alpha') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_alpha )) . '</p>';
+			// Allow to remove newest
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:newest') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_newest )) . '</p>';
+			// Allow to remove popular
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular )) . '</p>';
+			// Allow to remove online
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab )) . '</p>';
+			// Allow to add a new tab search
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab )) . '</p>';
+			// Replace search by main search (more efficient)
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch )) . '</p>';
+			// Add online members
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:members:online') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online )) . '</p>';
 		}
 		
@@ -508,10 +543,33 @@ $(function() {
 	<div>
 		
 		<?php
-		echo ' <p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui )) . '</p>';
+		echo ' <p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui )) . '</p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a produciton site.</p>';
 		echo ' <p><label>Awesome Font</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[awesomefont]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->awesomefont )) . '</p>';
 		?>
 		
+		<?php echo '<h4>' . elgg_echo('adf_platform:fonts') . '</h4>'; ?>
+		<?php echo '<p><em>' . elgg_echo('adf_platform:fonts:details') . '</em></p>'; ?>
+		<p><label><?php echo elgg_echo('adf_platform:font1'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font1]', 'value' => $vars['entity']->font1 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font2'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font2]', 'value' => $vars['entity']->font2 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font3'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font3]', 'value' => $vars['entity']->font3 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font4'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font4]', 'value' => $vars['entity']->font4 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font5'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font5]', 'value' => $vars['entity']->font5 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:font6'); ?></label>
+			<?php echo elgg_view('input/text', array( 'name' => 'params[font6]', 'value' => $vars['entity']->font6 )); ?>
+		</p>
+		
+		<?php echo '<h4>' . elgg_echo('adf_platform:colors') . '</h4>'; ?>
+		<?php echo '<p><em>' . elgg_echo('adf_platform:colors:details') . '</em></p>'; ?>
 		<p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor )); ?>
 		</p>
@@ -540,6 +598,9 @@ $(function() {
 		<p><label><?php echo elgg_echo('adf_platform:color3:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[color3]', 'value' => $vars['entity']->color3 )); ?>
 		</p>
+		<p><label><?php echo elgg_echo('adf_platform:color14:color'); ?></label>
+			<?php echo elgg_view('input/color', array( 'name' => 'params[color14]', 'value' => $vars['entity']->color14 )); ?>
+		</p>
 
 		<h4><?php echo elgg_echo('adf_platform:config:styles:buttons'); ?></h4>
 		<p><label><?php echo elgg_echo('adf_platform:color5:color'); ?></label>
@@ -553,6 +614,9 @@ $(function() {
 		</p>
 		<p><label><?php echo elgg_echo('adf_platform:color8:color'); ?></label>
 			<?php echo elgg_view('input/color', array( 'name' => 'params[color8]', 'value' => $vars['entity']->color8 )); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:color15:color'); ?></label>
+			<?php echo elgg_view('input/color', array( 'name' => 'params[color15]', 'value' => $vars['entity']->color15 )); ?>
 		</p>
 
 		<!--
@@ -583,6 +647,10 @@ $(function() {
 	<h3>EXPERT</h3>
 	<div>
 		<?php
+		// Advanced search tool (alpha version, structure changes may happen)
+		$esope_search_url = $CONFIG->url . 'esearch';
+		echo ' <p><label>' . elgg_echo('esope:search:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_search_fields]', 'value' => $vars['entity']->metadata_search_fields)) . '<a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
+		
 		// Suppression des menus de l'utilisateur
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';
 		

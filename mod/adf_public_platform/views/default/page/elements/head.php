@@ -40,13 +40,6 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<?php
 	echo elgg_view('page/elements/shortcut_icon', $vars);
 	
-	/*
-	<!-- START IPhone meta //-->
-	<meta name="viewport" content="initial-scale=1.0, minimum-scale=0.1, maximum-scale=8.0" />
-	<link rel="apple-touch-icon" href="<?php echo $vars['url']; ?>iphone_touch.png" />
-	<!-- END IPhone meta //-->
-	*/
-	
 	// CSS stylesheets
 	foreach ($css as $link) {
 		echo '<link rel="stylesheet" href="' . $link . '" type="text/css" />';
@@ -78,10 +71,15 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<?php
 	// CSS complémentaire configurable
 	if (!empty($config_css)) {
-		echo '<style>' . html_entity_decode($config_css) . '</style>';
+		echo "\n<style>" . html_entity_decode($config_css) . "</style>\n";
 	}
 	
-	// JS et extensions supplémentaires (à charger après jQuery !)
+	/* jQuery : use CDN instead of registered JS ?
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	*/
+	
+	// JS et extensions supplémentaires
 	foreach ($js as $script) {
 		echo '<script type="text/javascript" src="' . $script . '"></script>' . "\n";
 	}

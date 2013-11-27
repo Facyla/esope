@@ -8,35 +8,37 @@ $groups = elgg_get_entities(array('type' => 'group', 'limit' => $groups_count));
 foreach ($groups as $ent) { $feedbackgroup_opt[$ent->guid] = $ent->name; }
 
 
+// Link to feedbacks page
+echo '<p><a href="' . $vars['url'] . 'feedback" target="_new" class="elgg-button">&raquo;&nbsp;' . elgg_echo('feedback:admin:title') . '</a></p>';
 
 // Publicly available?
 echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/dropdown', array('name' => 'params[publicAvailable_feedback]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->publicAvailable_feedback)) . '</label></p>';
 ?>
 
 <p>
-  <?php echo elgg_echo("feedback:settings:usernames");?>
-  <br>
-  <?php
-    echo "<label>".elgg_echo('feedback:user_1')."</label>";
-    echo "<input type='text' size='60' name='params[user_1]' value='".$vars['entity']->user_1."' />";
-    echo "<br />";
+	<?php echo elgg_echo("feedback:settings:usernames");?>
+	<br>
+	<?php
+		echo "<label>".elgg_echo('feedback:user_1')."</label>";
+		echo "<input type='text' size='60' name='params[user_1]' value='".$vars['entity']->user_1."' />";
+		echo "<br />";
 
-    echo "<label>".elgg_echo('feedback:user_2')."</label>";
-    echo "<input type='text' size='60' name='params[user_2]' value='".$vars['entity']->user_2."' />";
-    echo "<br />";
+		echo "<label>".elgg_echo('feedback:user_2')."</label>";
+		echo "<input type='text' size='60' name='params[user_2]' value='".$vars['entity']->user_2."' />";
+		echo "<br />";
 
-    echo "<label>".elgg_echo('feedback:user_3')."</label>";
-    echo "<input type='text' size='60' name='params[user_3]' value='".$vars['entity']->user_3."' />";
-    echo "<br />";
+		echo "<label>".elgg_echo('feedback:user_3')."</label>";
+		echo "<input type='text' size='60' name='params[user_3]' value='".$vars['entity']->user_3."' />";
+		echo "<br />";
 
-    echo "<label>".elgg_echo('feedback:user_4')."</label>";
-    echo "<input type='text' size='60' name='params[user_4]' value='".$vars['entity']->user_4."' />";
-    echo "<br />";
+		echo "<label>".elgg_echo('feedback:user_4')."</label>";
+		echo "<input type='text' size='60' name='params[user_4]' value='".$vars['entity']->user_4."' />";
+		echo "<br />";
 
-    echo "<label>".elgg_echo('feedback:user_5')."</label>";
-    echo "<input type='text' size='60' name='params[user_5]' value='".$vars['entity']->user_5."' />";
-    echo "<br />";
-  ?>
+		echo "<label>".elgg_echo('feedback:user_5')."</label>";
+		echo "<input type='text' size='60' name='params[user_5]' value='".$vars['entity']->user_5."' />";
+		echo "<br />";
+	?>
 </p>
 
 <?php

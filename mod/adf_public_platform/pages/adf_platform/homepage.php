@@ -116,9 +116,16 @@ if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
 }
 // Membres connectés et nouveaux inscrits
 $index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
-if (elgg_is_active_plugin('members') && ($index_members == 'yes')) {
-	if (!empty($right_side)) $right_side .= '<br />';
-	$right_side .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div><br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
+$index_recent_members = elgg_get_plugin_setting('index_recent_members', 'adf_public_platform');
+if (elgg_is_active_plugin('members')) {
+	if ($index_members == 'yes') {
+		if (!empty($right_side)) $right_side .= '<br />';
+		$right_side .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div>';
+	}
+	if ($index_recent_members == 'yes') {
+		if (!empty($right_side)) $right_side .= '<br />';
+		$right_side .= '<br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
+	}
 }
 
 // Composition de la ligne

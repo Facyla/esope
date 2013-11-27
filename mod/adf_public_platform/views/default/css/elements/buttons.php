@@ -22,6 +22,8 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+$color14 = $css['color14'];
+$color15 = $css['color15'];
 ?>
 /* **************************
 	BUTTONS
@@ -67,7 +69,7 @@ a.elgg-button {
 	-o-border-radius: 8px;
 	border: 0 none;
 	box-shadox: none;
-	color: #fff;
+	color: <?php echo $color15; ?>;
 	text-shadow: 1px 1px 1px #333;
 	/* margin-top: 10px; */
 	padding: 5px 9px 6px;
@@ -327,7 +329,7 @@ border:1px solid #ccc;
   border: 1px solid #999;
 }
 .elgg-menu-entity .elgg-menu-item-edit a {
-  color: #fff;
+  color: <?php echo $color15; ?>;
   padding: 3px 6px;
 	background-image: linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
 	background-image: -o-linear-gradient(top, <?php echo $color5; ?> 35%, <?php echo $color6; ?> 80%);
