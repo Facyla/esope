@@ -89,12 +89,12 @@ if (elgg_is_logged_in()) {
 						<?php if (elgg_is_logged_in()) { ?>
 							<a href="<?php echo $url . 'profile/' . $ownusername; ?>"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?> (profil)</span></a>
 							<nav>
-								<ul class="hidden">
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><?php echo elgg_echo('messages'); ?></a></li>
+								<ul>
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('friends'); ?></a></li>
 									<?php echo $friendrequests; ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
 											<!--
 									<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
 											<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
@@ -102,21 +102,21 @@ if (elgg_is_logged_in()) {
 									</li>
 											//-->
 									<?php if (elgg_is_admin_logged_in()) { ?>
-										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
+										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
 									<?php } ?>
 									
 									<?php
 									$helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
 									//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
-									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '">' . elgg_echo('adf_platform:help') . '</a></li>';
+									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('adf_platform:help') . '</a></li>';
 									?>
 									
-									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>'.elgg_echo('logout'), 'is_action' => true)); ?></li>
 									
 								</ul>
 							</nav>
 						<?php } else {
-							echo '<nav><ul><li><a href="' . $url . '">' . elgg_echo('adf_platform:loginregister') . '</a></li></ul></nav>';
+							echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('adf_platform:loginregister') . '</a></li></ul></nav>';
 						} ?>
 					</div>
 				</div>

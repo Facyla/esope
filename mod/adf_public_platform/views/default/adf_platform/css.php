@@ -613,6 +613,14 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 /* Members alpha sort and search */
 .esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
 
+/* Header nav icons (using semantic UI or awesome fonts) */
+header nav .fa { margin-right: 0.5em; }
+header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
+
+
+
+
+
 
 
 /* SECTION RESPONSIVE DESIGN */
