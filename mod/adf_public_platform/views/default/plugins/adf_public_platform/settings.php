@@ -112,6 +112,7 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 
 if (empty($vars['entity']->opengroups_defaultaccess)) { $vars['entity']->opengroups_defaultaccess = 'groupvis'; }
 if (empty($vars['entity']->closedgroups_defaultaccess)) { $vars['entity']->closedgroups_defaultaccess = 'group'; }
+if (empty($vars['entity']->awesomefont)) $vars['entity']->awesomefont = 'yes';
 
 
 // CORRECT BAD-FORMATTED VALUES
