@@ -17,6 +17,7 @@ if (strrpos($folder, $needle) !== false) {
 	$folder_parts = explode($needle, $folder);
 	$folder = end($folder_parts);
 }
+echo $folder;
 
 
 if (!empty($folder)) {

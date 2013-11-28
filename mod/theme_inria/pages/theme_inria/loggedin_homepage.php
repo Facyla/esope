@@ -42,10 +42,10 @@ $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire',
 // Activité du site
 //if ($homesite_index == 'yes') {
 	$site_activity = '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
-	//elgg_push_context('widgets');
+	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
 	$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
-	//elgg_pop_context();
+	elgg_pop_context();
 //}
 
 // Tableau de bord
