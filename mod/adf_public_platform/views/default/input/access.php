@@ -81,7 +81,6 @@ foreach ($vars['options_values'] as $key => $val) {
 	} else {
 		if (is_array($user_exclude_access) && in_array($key, $user_exclude_access)) unset($vars['options_values'][$key]);
 	}
-	}
 }
 
 if (is_array($vars['options_values']) && sizeof($vars['options_values']) > 0) {
