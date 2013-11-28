@@ -1,4 +1,9 @@
 <?php
+/* @TODO
+ * - récupérer les fichiers via un token (est-ce possible ?)
+ * - hooker sur la recherche Elgg pour inclure les résultats ou du moins un lien vers la recherche Alfresco
+ */
+
 
 /* Listing des objets retournés par une requête CMIS */
 function elgg_cmis_list_objects($objs = false, $debug = false) {
