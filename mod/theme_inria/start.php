@@ -7,11 +7,13 @@ elgg_register_event_handler('init','system','theme_inria_init');
 function theme_inria_init(){
 	global $CONFIG;
 	
+	elgg_extend_view('css', 'theme_inria/css');
+	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	elgg_unregister_widget_type('thewire');
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
 	// Inria universe : liens vers d'autres 
-	elgg_register_widget_type('inria_universe', "Outil", "Une série d'outils pratiques");
+	elgg_register_widget_type('inria_universe', "Outils", "Une série d'outils pratiques");
 	elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard', true);
 	
 	// Remplacement de la page d'accueil

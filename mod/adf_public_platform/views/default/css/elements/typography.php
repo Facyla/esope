@@ -273,8 +273,8 @@ header h1 span {
 }
 
 /* Arborescence : taille de plus en plus petite */
-.treeview { font-size:1.3em; }
-.treeview li { font-size:0.93em; }
+.treeview { font-size:16px; }
+.treeview li { font-size:0.95em; }
 .treeview li.elgg-state-selected a.selected {
   color:white; 
   background-color:<?php echo $linkcolor; ?>;
