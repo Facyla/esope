@@ -12,12 +12,13 @@
  */ 
 ?>
 <h3><?php echo elgg_echo('shortcodes:help');?></h3>
-<p>Embed PDF : [embedpdf width="600px" height="500px" url='http://infolab.stanford.edu/pub/papers/google.pdf']</p>
-<p>Google Charts : [chart data="41.52,37.79,20.67,0.03" bg="F7F9FA" labels="Reffering+sites|Search+Engines|Direct+traffic|Other" colors="058DC7,50B432,ED561B,EDEF00" size="488x200" title="Traffic Sources" type="pie"]</p>
-<p>Google Maps : [googlemap width="600" height="300" src="http://maps.google.com/maps?q=Heraklion,+Greece&hl=en&ll=35.327451,25.140495&spn=0.233326,0.445976& sll=37.0625,-95.677068&sspn=57.161276,114.169922& oq=Heraklion&hnear=Heraklion,+Greece&t=h&z=12"]</p>
-<p>Webpage Snap : [snap url="http://www.webgalli.com" alt="My description" w="400" h="300"]</p>
-<p>Videos : [video site="youtube" id="dQw4w9WgXcQ" w="600" h="340"]</p>
-<p>Diaporama (slider) : [diaporama width="600" height="340" images="IMAGE1_URL,IMAGE2_URL"]
+<blockquote><?php echo elgg_echo('shortcodes:description');?></blockquote>
+<p><?php echo elgg_echo('shortcodes:available:video');?> : [video site="youtube" id="VIDEO_ID" w="600" h="340"]</p>
+<p><?php echo elgg_echo('shortcodes:available:slider');?> : [diaporama width="600" height="340" images="IMAGE1_URL, IMAGE2_URL"]
+<p><?php echo elgg_echo('shortcodes:available:embedpdf');?> : [embedpdf width="600px" height="500px" url='PDF_URL']</p>
+<p><?php echo elgg_echo('shortcodes:available:snap');?> : [snap url="PAGE_URL" alt="My description" w="400" h="300"]</p>
+<p><?php echo elgg_echo('shortcodes:available:chart');?> : [chart data="41.52,37.79,20.67,0.03" bg="F7F9FA" labels="LABEL+1|LABEL+2|LABEL+3|LABEL+4" colors="058DC7,50B432,ED561B,EDEF00" size="488x200" title="CHART_TITLE" type="pie"]</p>
+<p><?php echo elgg_echo('shortcodes:available:googlemap');?> : [googlemap width="600" height="300" src="MAP_URL"]</p>
 </a></p>
 
 <?php

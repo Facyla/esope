@@ -33,17 +33,17 @@ $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
 
 // Le Fil
 $thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 elgg_push_context('widgets');
-$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 4, 'pagination' => false));
 elgg_pop_context('widgets');
 
 // Activité du site
 //if ($homesite_index == 'yes') {
 	$site_activity = '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
-	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
-	$site_activity .= elgg_list_river(array('limit' => 4, 'pagination' => false));
+	$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
+	// Activité du site
 	elgg_pop_context();
 //}
 
@@ -61,13 +61,13 @@ $body = '
 	<header><div class="intro">' . $firststeps . '</div></header>
 	<div class="clearfloat"></div>
 	
-	<div style="width:78%; float:left;">
+	<div style="width:68%; float:left;">
 		' . $thewire . '
 		<div class="clearfloat"></div>
 		' . $site_activity . '
 	</div>
 	
-	<div style="width:20%; float:right;">
+	<div style="width:30%; float:right;">
 		' . $intro . '
 		<div class="clearfloat"></div>
 		' . elgg_view('theme_inria/sidebar_groups') . '

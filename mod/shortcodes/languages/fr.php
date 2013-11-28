@@ -13,16 +13,16 @@
 
 $fr = array(
 	'shortcodes:help' => "Liste des Shortcodes disponibles",
+	'shortcodes:description' => "Pour utiliser un shortcode, copiez-collez l'un des codes suivant dans l'éditeur de texte, et modifiez les réglages en fonction de vos besoins",
 	'shortcodes:link' => "Shortcodes",
 	
 	'shortcodes:settings:title' => "Activation des shortcodes",
-	'shortcodes:available:embedpdf' => "Afficheur GDrive",
+	'shortcodes:available:embedpdf' => "Afficheur de documents Google Drive",
 	'shortcodes:available:chart' => "Google Chart",
-	'shortcodes:available:snap' => "Prévisualisation d'une page web'",
+	'shortcodes:available:snap' => "Prévisualisation d'une page web",
 	'shortcodes:available:googlemap' => "Carte Google Map",
 	'shortcodes:available:video' => "Vidéo",
-	'shortcodes:available:video' => "Diaporama",
-	
+	'shortcodes:available:slider' => "Diaporama",
 	
 );
 
