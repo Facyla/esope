@@ -1,5 +1,6 @@
 <?php
-$urlicon = '/mod/adf_public_platform/img/theme/';
+global $CONFIG;
+$urlicon = $CONFIG->url . '/mod/adf_public_platform/img/theme/';
 ?>
 
 $(document).ready(function() {

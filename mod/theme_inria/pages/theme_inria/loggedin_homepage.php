@@ -30,21 +30,22 @@ if ($firststeps_page instanceof ElggObject) {
 
 // Texte intro configurable
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
+$intro .= elgg_view('cmspages/view', array('pagetype' => 'home-loggedin-news'));
+$intro = '<div class="home-news">' . $intro . '</div>';
 
 // Le Fil
 $thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+//elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
-elgg_push_context('widgets');
-elgg_pop_context('widgets');
+//elgg_pop_context('widgets');
 
 // Activité du site
 //if ($homesite_index == 'yes') {
 	$site_activity = '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
-	elgg_push_context('widgets');
+	//elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
 	$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
-	// Activité du site
-	elgg_pop_context();
+	//elgg_pop_context();
 //}
 
 // Tableau de bord
