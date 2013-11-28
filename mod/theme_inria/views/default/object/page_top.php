@@ -24,6 +24,12 @@ if ($page->write_access_id == ACCESS_PUBLIC) {
 	$page->write_access_id = ACCESS_LOGGED_IN;
 }
 
+// Facyla : Export de la page courante
+elgg_register_menu_item('entity', array(
+		'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 'title' => elgg_echo('theme_inria:pages:pageexport:title'),
+		'href' => elgg_add_action_tokens_to_url($vars['url'] . 'action/pages/html_export?subpages=no&guid=' . $page->guid),
+	));
+
 
 if ($revision) {
 	$annotation = $revision;
@@ -82,7 +88,16 @@ if (!elgg_in_context('widgets')) {
 	}
 }
 
+
 if ($full) {
+	
+	// Export du wiki complet
+	elgg_register_menu_item('title', array(
+			'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:fullexport'), 'title' => elgg_echo('theme_inria:pages:fullexport:title'),
+			'href' => elgg_add_action_tokens_to_url($vars['url'] . 'action/pages/html_export?guid=' . $page->guid),
+			'link_class' => 'elgg-button elgg-button-action',
+		));
+	
 	$body = elgg_view('output/longtext', array('value' => $annotation->value));
 
 	$params = array(

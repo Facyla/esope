@@ -129,6 +129,11 @@ $french = array (
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Login LDAP",
 	
+	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
+	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',
+	'theme_inria:pages:pageexport' => '<i class="fa fa-download download icon"></i>',
+	'theme_inria:pages:pageexport:title' => 'Export HTML de cette page wiki',
+	
 );
 
 add_translation("fr",$french);

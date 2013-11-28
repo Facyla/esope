@@ -130,6 +130,11 @@ $english = array(
 	'inria:members:newest' => "New members",
 	'loginusername' => "LDAP login",
 	
+	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
+	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
+	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
+	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
+	
 );
 
 add_translation("en",$english);

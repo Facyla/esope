@@ -2,12 +2,17 @@
 
 // Initialise log browser
 elgg_register_event_handler('init','system','theme_inria_init');
+// HTML export action
+elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
+
 
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
 	
 	elgg_extend_view('css', 'theme_inria/css');
+	
+	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	elgg_unregister_widget_type('thewire');

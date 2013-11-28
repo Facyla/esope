@@ -990,5 +990,42 @@ function esope_vernam_crypt($text, $key){
 	return $text ^ $key;
 }
 
+// Récupération des pages de plus haut niveau (d'un groupe ou user)
+function esope_get_top_pages($container) {
+	global $CONFIG;
+	$top_pages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	return $top_pages;
+}
+
+// Récupération des sous-pages directes d'une page
+function esope_get_subpages($parent) {
+	global $CONFIG;
+	$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	return $subpages;
+}
+
+// Listing des sous-pages directes d'une page
+function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
+	$content = '';
+	$subpages = esope_get_subpages($parent);
+	if ($subpages) foreach ($subpages as $subpage) {
+		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
+		else if ($internal_link == 'url') $href = $subpage->getURL();
+		else $href = false;
+		if ($full_view) {
+			$content .= '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+			$content .= elgg_view("output/longtext", array("value" => $subpage->description));
+			$content .= '<p style="page-break-after:always;"></p>';
+			$content .= esope_list_subpages($subpage, $internal_link, $full_view);
+		} else {
+			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
+			$content .= esope_list_subpages($subpage, $internal_link);
+			$content .= '</li>';
+		}
+	}
+	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
+	return $content;
+}
+
 
 
