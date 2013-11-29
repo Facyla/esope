@@ -77,9 +77,9 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 // Liste d'exclusion des droits : permet de n'autoriser que certains niveaux aux membres, voire aux admins
 foreach ($vars['options_values'] as $key => $val) {
 	if (elgg_is_admin_logged_in()) {
-		if (in_array($key, $admin_exclude_access)) unset($vars['options_values'][$key]);
+		if (is_array($admin_exclude_access) && in_array($key, $admin_exclude_access)) unset($vars['options_values'][$key]);
 	} else {
-		if (in_array($key, $user_exclude_access)) unset($vars['options_values'][$key]);
+		if (is_array($user_exclude_access) && in_array($key, $user_exclude_access)) unset($vars['options_values'][$key]);
 	}
 }
 

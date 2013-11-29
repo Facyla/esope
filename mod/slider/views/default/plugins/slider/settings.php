@@ -25,18 +25,15 @@ if (empty($vars['entity']->jsparams)) {
 	$vars['entity']->jsparams = "theme : 'metallic', autoPlay : true, mode : 'f',
 			//easing : 'linear',
 			//navigationSize : 3,     // Set this to the maximum number of visible navigation tabs; false to disable
-			/* Noms des slides (hover sur les points pour naviguer)
+			/* 
+			// Noms des slides (hover sur les points pour naviguer)
 			navigationFormatter : function(index, panel){
 				return ['Slab', 'Parking Lot', 'Drive', 'Glorius Dawn', 'Bjork?', 'Traffic Circle'][index - 1];
 			},
-			*/
-			/*
 			onSlideBegin: function(e,slider) {
 				// keep the current navigation tab in view
 				slider.navWindow( slider.targetPage );
 			},
-			*/
-			/*
 			onSlideComplete : function(slider){
 				// alert('Welcome to Slide #' + slider.currentPage);
 			},
@@ -171,12 +168,12 @@ if (empty($vars['entity']->content)) {
 
 <p><label><?php echo elgg_echo('slider:settings:css_main'); ?></label><br />
   <?php echo elgg_echo('slider:settings:css_main:help'); ?><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[css_main]', 'value' => $vars['entity']->css_main )); ?>
+  <?php echo elgg_view('input/text', array( 'name' => 'params[css_main]', 'value' => $vars['entity']->css_main )); ?>
 </p><br />
 
 <p><label><?php echo elgg_echo('slider:settings:css_textslide'); ?></label><br />
   <?php echo elgg_echo('slider:settings:css_textslide:help'); ?><br />
-  <?php echo $url . elgg_view('input/text', array( 'name' => 'params[css_textslide]', 'value' => $vars['entity']->css_textslide )); ?>
+  <?php echo elgg_view('input/text', array( 'name' => 'params[css_textslide]', 'value' => $vars['entity']->css_textslide )); ?>
 </p><br />
 
 <!--

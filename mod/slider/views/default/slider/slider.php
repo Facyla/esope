@@ -23,6 +23,11 @@ $slidercontent = $vars['slidercontent']; // Complete content - except the first-
 $sliderparams = $vars['sliderparams']; // JS additional parameters
 $slidercss_main = $vars['slidercss_main']; // CSS for main ul tag
 $slidercss_textslide = $vars['slidercss_textslide']; // CSS for li .textslide
+$height = $vars['height']; // Slider container height
+$width = $vars['width']; // Slider container width
+$container_style = '';
+if ($height) $container_style .= "height:$height; ";
+if ($width) $container_style .= "width:$width; ";
 
 if (empty($slidercss_main)) {
 	$slidercss_main = elgg_get_plugin_setting('css_main', 'slider');
@@ -137,7 +142,8 @@ $(function(){
 	$('#slider<?php echo $anythingSliderUniqueID; ?>').anythingSlider({
 		theme : 'metallic',
 		autoPlay : true,
-		mode : 'f',   // fade mode
+		mode : 'f',   // fade mode,
+		hashTags : false,
 		<?php echo $sliderparams; ?>
 	});
 });
@@ -152,9 +158,11 @@ $(function(){
 #slider<?php echo $anythingSliderUniqueID; ?> .textSlide a { font-weight:bold; }
 #slider<?php echo $anythingSliderUniqueID; ?> .textSlide div { margin: 20px 36px 0 12px; }
 #slider<?php echo $anythingSliderUniqueID; ?> .textSlide div * { font-size: 16px; }
+#slider<?php echo $anythingSliderUniqueID; ?>  img { max-width: 100% !important; max-height: 100% !important; }
+#slider<?php echo $anythingSliderUniqueID; ?> .textSlide img { width: auto !important; height: auto !important; }
 </style>
 
-<ul id="slider<?php echo $anythingSliderUniqueID; ?>">
+<ul id="slider<?php echo $anythingSliderUniqueID; ?>" style="<?php echo $container_style; ?>">
 	<?php echo $slidercontent; ?>
 </ul>
 <!-- END AnythingSlider #1 -->

@@ -187,7 +187,7 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 	margin-right: 5px;
 	text-shadow: 0 2px 2px #999999;
 }
-.elgg-sidebar .elgg-module-aside h3 { color: #333333; font-size: 0.9em; margin: 0; }
+.elgg-sidebar .elgg-module-aside h3 { color: #333333; font-size: 16px; margin: 0; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
