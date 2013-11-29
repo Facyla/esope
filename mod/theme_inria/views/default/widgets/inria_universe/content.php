@@ -46,7 +46,7 @@ if (!empty($vars['entity']->tool) && ($vars['entity']->tool != 'all')) {
 			$title = elgg_echo('theme_inria:topbar:evo');
 			break;
 		case 'mailinglist':
-			$url = 'https://sympa-roc.inria.fr/';
+			$url = 'https://sympa.inria.fr/';
 			$title = elgg_echo('theme_inria:topbar:mailinglist');
 			break;
 		case 'mailer':
@@ -94,7 +94,7 @@ if ($display_all) {
 				 <br /><a target="blank" class="elgg-button elgg-button-action" href="https://partage.inria.fr"><?php echo elgg_echo('theme_inria:topbar:share'); ?></a><br />
 				 <br /><a target="blank" class="elgg-button elgg-button-action" href="http://intranet.irisa.fr/irisa/services/pavu/documentation/audioconf#resa"><?php echo elgg_echo('theme_inria:topbar:confcall'); ?></a><br />
 				 <br /><a target="blank" class="elgg-button elgg-button-action" href="http://dsi.inria.fr/services_offerts/visio/EVO">EVO</a><br />
-				 <br /><a target="blank" class="elgg-button elgg-button-action" href="https://sympa-roc.inria.fr/"><?php echo elgg_echo('theme_inria:topbar:mailinglist'); ?></a><br />
+				 <br /><a target="blank" class="elgg-button elgg-button-action" href="https://https://sympa.inria.fr//"><?php echo elgg_echo('theme_inria:topbar:mailinglist'); ?></a><br />
 			</td>
 			<td>
 				<a target="blank" class="elgg-button elgg-button-action" href="https://www.inria.fr" class="menuitemtools"><?php echo elgg_echo('theme_inria:topbar:inria'); ?></a>

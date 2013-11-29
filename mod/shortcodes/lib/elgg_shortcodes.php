@@ -144,16 +144,63 @@ elgg_add_shortcode('video','video_sc');
  * [diaporama width="600px" height="500px" images="URL1, URL2"]
  */
 function diaporama_function($atts, $content='') {
+	$slider_content = '';
 	extract(elgg_shortcode_atts(array(
 			'width' => '640px',
 			'height' => '300px',
 			'images' => '',
 		), $atts));
-	$images = explode(',', $images);
-	$slider_content = '';
-	foreach ($images as $url) {
-		$slider_content .= '<li><img src="' . trim($url) . '" /></li>';
+	$li_style = "width:$width !important; height:$height !important;";
+	if (!empty($images)) {
+		// Mode 1 : use images="URL1, URL2" attribute => works if content is not pre-parsed (eg URL are not converted to links)
+		$images = strip_tags($images);
+		$images = str_replace('&nbsp;', '', $images);
+		$images = explode(',', $images);
+	} else {
+		// We can provide content params in 2 ways : URL list, or HTML content (containing images)
+		$is_html = strpos($content, '<img');
+		if ($is_html === false) {
+			// Mode 2 : use URL list => strip tags before making an array
+			$images = strip_tags($content);
+			$images = str_replace(array('&nbsp;', '&amp;'), array('', '&'), $images);
+			$images = explode(',', $images);
+		} else {
+			// Mode 3 : use plain HTML content, in that case we can use regex or DOM
+			// Regex parser for src extraction
+			// preg_match_all('~<img.*?src=["\']+(.*?)["\']+~', $images, $urls);
+			// $images = $urls[1];
+			// DOM parser, more robust and reliable, + much more appropriate for mixed content extraction (=> list)
+			// IMPORTANT : les contenus des slides restent des images seules pour le moment, dont on extraie les URL
+			// Le contenu HTML pose des pb de dimensions
+//			$is_list = strpos($content, '<ul');
+//			if ($is_list === false) {
+				// Simple images slider
+				$doc = new DOMDocument();
+				$doc->loadHTML($content);
+				$xpath = new DOMXPath($doc);
+				$src = $xpath->query("//img/@src");
+				foreach ($src as $href) { $images[] = $href->nodeValue; }
+/*
+			} else {
+				// Complex HTML content slider - must be structured as a list
+				$doc = new DOMDocument();
+				$doc->loadHTML($content);
+				$xpath = new DOMXPath($doc);
+				//$list = $xpath->query("//li");
+				//$list = $doc->getElementsByTagName('li');
+				//foreach ($list as $item) { $slider_content .= '<li class="textSlide">' . $item->nodeValue . '</li>'; }
+				$list = $doc->getElementsByTagName('li');
+				foreach ($list as $item) {
+					$item->setAttribute('class', 'textSlide');
+					$item->setAttribute('style', $li_style);
+					$slider_content .= $doc->saveXML($item);
+				}
+			}
+*/
+		}
 	}
+	// Use images if available, full HTML content otherwise
+	if ($images) foreach ($images as $url) { $slider_content .= '<li style="'.$li_style.'"><img src="' . trim($url) . '" /></li>'; }
 	$slider_params = array(
 		// Param vars
 		// Complete content - except the first-level <ul> tag (we could use an array instead..)
