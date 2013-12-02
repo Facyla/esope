@@ -14,7 +14,9 @@
 <h3><?php echo elgg_echo('shortcodes:help');?></h3>
 <blockquote><?php echo elgg_echo('shortcodes:description');?></blockquote>
 <p><?php echo elgg_echo('shortcodes:available:video');?> : [video site="youtube" id="VIDEO_ID" w="600" h="340"]</p>
-<p><?php echo elgg_echo('shortcodes:available:slider');?> : [diaporama width="600" height="340" images="IMAGE1_URL, IMAGE2_URL"]
+<?php if (elgg_is_active_plugin('slider')) {
+	echo '<p>' . elgg_echo('shortcodes:available:slider') . ' : [diaporama width="100%" height="300px" images="IMAGE1_URL, IMAGE2_URL"]<br />[diaporama width="100%" height="300px"]<br />(IMAGES LIST)</br />[/diaporama]';
+} ?>
 <p><?php echo elgg_echo('shortcodes:available:embedpdf');?> : [embedpdf width="600px" height="500px" url='PDF_URL']</p>
 <p><?php echo elgg_echo('shortcodes:available:snap');?> : [snap url="PAGE_URL" alt="My description" w="400" h="300"]</p>
 <p><?php echo elgg_echo('shortcodes:available:chart');?> : [chart data="41.52,37.79,20.67,0.03" bg="F7F9FA" labels="LABEL+1|LABEL+2|LABEL+3|LABEL+4" colors="058DC7,50B432,ED561B,EDEF00" size="488x200" title="CHART_TITLE" type="pie"]</p>
