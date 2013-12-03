@@ -17,14 +17,17 @@ elgg_register_event_handler('init','system','ldap_auth_init');
  * Init plugin ldap_auth
  */
 function ldap_auth_init() {
-	require_once 'settings.php';
+	
+	if (!include_once 'settings.php') {
+		register_error("Please configure ldap_auth plugin first by creating a settings.php file in plugin main directory. See settings_dist.php template file.");
+	}
 	
 	//helper functions
 	elgg_register_library('elgg:ldap_auth', elgg_get_plugins_path() . 'ldap_auth/lib/ldap_auth.php');
-	
+
 	// Register the authentication handler
 	register_pam_handler('ldap_auth_handler_authenticate', 'sufficient', 'user');
-	
+
 	// Update infos from LDAP
 	elgg_register_event_handler('login','user', 'ldap_auth_handler_update');
 	

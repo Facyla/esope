@@ -73,48 +73,51 @@ function theme_inria_public_index() {
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
-		elgg_load_library("elgg:ldap_auth");
-		// Default values
-		$is_inria = false;
-		$is_active = true;
+		// Attention, ne fonctionne que si ldap_auth est activé !
+		if (elgg_is_active_plugin('ldap_auth')) {
+			elgg_load_library("elgg:ldap_auth");
+			// Default values
+			$is_inria = false;
+			$is_active = true;
 		
-		// Existe dans le LDAP : Inria ssi actif, sinon désactivé (sauf si une raison de le garder actif)
-		if (ldap_user_exists($user->username)) {
-			if (!ldap_auth_is_closed($user->username)) {
-				$is_inria = true;
-				$is_active = true;
-				$memberreason = 'validldap';
-			} else {
-				$is_inria = false;
+			// Existe dans le LDAP : Inria ssi actif, sinon désactivé (sauf si une raison de le garder actif)
+			if (ldap_user_exists($user->username)) {
+				if (!ldap_auth_is_closed($user->username)) {
+					$is_inria = true;
+					$is_active = true;
+					$memberreason = 'validldap';
+				} else {
+					$is_inria = false;
+				}
 			}
-		}
-		// Si compte non-Inria = externe
-		if (!$is_inria) {
-			// External access has some restrictions : if account was not used for more than 1 year => disable
-			if ( (time() - $user->last_action) > 31622400) {
-				$is_active = false;
-				$memberreason = 'inactive';
-			}
+			// Si compte non-Inria = externe
+			if (!$is_inria) {
+				// External access has some restrictions : if account was not used for more than 1 year => disable
+				if ( (time() - $user->last_action) > 31622400) {
+					$is_active = false;
+					$memberreason = 'inactive';
+				}
 			
-			if (in_array($user->memberreason, array('validldap', 'invalidldap')) {
-				// Si le compte a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
-				$is_active = false;
-				$memberreason = 'invalidldap';
-			} else {
-				// Si on a changé entretemps pour un compte externe, pas de changement à ce niveau
+				if (in_array($user->memberreason, array('validldap', 'invalidldap'))) {
+					// Si le compte a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
+					$is_active = false;
+					$memberreason = 'invalidldap';
+				} else {
+					// Si on a changé entretemps pour un compte externe, pas de changement à ce niveau
+				}
+			}
+			// Update user metadata : we update only if there is a change !
+			if ($is_inria && ($user->membertype != 'inria')) { $user->membertype = 'inria'; }
+			if (!$is_inria && ($user->membertype != 'external')) { $user->membertype = 'external'; }
+			if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
+			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
+		
+			// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
+			if ($user->memberstatus == 'closed') {
+				register_error("Cet accès n'est plus valide. ");
+				return false;
 			}
 		}
-		// Update user metadata : we update only if there is a change !
-		if ($is_inria && ($user->membertype != 'inria')) { $user->membertype = 'inria'; }
-		if (!$is_inria && ($user->membertype != 'external')) { $user->membertype = 'external'; }
-		if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
-		if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
-		
-		// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
-		if ($user->memberstatus == 'closed') {
-			register_error("Cet accès n'est plus valide. ");
-			return false;
-	}
 	}
 	return true;
 }

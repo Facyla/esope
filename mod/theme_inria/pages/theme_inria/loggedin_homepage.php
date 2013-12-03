@@ -3,6 +3,9 @@ global $CONFIG;
 
 gatekeeper();
 
+$own = elgg_get_logged_in_user_entity();
+inria_check_and_update_user_status('login', 'user', $own);
+
 // Premiers pas (si configuré)
 $firststeps_guid = elgg_get_plugin_setting('firststeps_guid', 'adf_public_platform');
 $firststeps_page = get_entity($firststeps_guid);
