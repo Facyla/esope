@@ -12,6 +12,7 @@ function theme_inria_init(){
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	
+	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
@@ -40,7 +41,7 @@ function theme_inria_init(){
 	
 	// Update meta fields (inria/external, active/closed)
 	if (elgg_is_active_plugin('ldap_auth')) {
-		elgg_register_event_handler('login','user', 'inria_update_user_status', 900);
+		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
 	}
 	
 }
@@ -61,30 +62,59 @@ function theme_inria_public_index() {
 
 
 /* Met à jour les infos des membres
- * Existe dans le LDAP : compte Inria
- * Pas dans le LDAP : compte externe
+ * Existe dans le LDAP ET actif : compte Inria
+ * Sinon : compte externe
+ * Qualification du compte externe faite par aileurs, sauf si ex-Inria (dans ce cas : raison = ldap)
  * Inactif ou période expirée : marque comme archivé
+ * Metadata : 
+   - membertype : type de membre => inria/external
+   - memberstatus : compte actif ou non (= permet de s'identifier ou non) => active/closed
+   - memberreason : qualification du type de compte, raison de l'accès => validldap/invalidldap/partner/researchteam/...
  */
-function inria_update_user_status($event, $object_type, $user) {
+function inria_check_and_update_user_status($event, $object_type, $user) {
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
 		elgg_load_library("elgg:ldap_auth");
+		// Default values
+		$is_inria = false;
+		$is_active = true;
+		
+		// Existe dans le LDAP : Inria ssi actif, sinon désactivé (sauf si une raison de le garder actif)
 		if (ldap_user_exists($user->username)) {
-			if ($user->membertype != 'inria') $user->membertype = 'inria';
-			if (ldap_auth_is_closed($user->username)) {
-				//$user->banned = 'yes'; // Don't ban automatically, refusing access on various criteria is enough
-				if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
+			if (!ldap_auth_is_closed($user->username)) {
+				$is_inria = true;
+				$is_active = true;
+				$memberreason = 'validldap';
 			} else {
-				if ($user->memberstatus != 'active') $user->memberstatus = 'active';
-			}
-		} else {
-			if ($user->membertype != 'external') $user->membertype = 'external';
-			// External access has some restrictions : if account was not used for more than 1 year => disable
-			if ( (time() - $user->last_action) > 31622400) {
-				if ($user->memberstatus != 'closed') $user->memberstatus = 'closed';
-			} else {
-				if ($user->memberstatus != 'active') $user->memberstatus = 'active';
+				$is_inria = false;
 			}
 		}
+		// Si compte non-Inria = externe
+		if (!$is_inria) {
+			// External access has some restrictions : if account was not used for more than 1 year => disable
+			if ( (time() - $user->last_action) > 31622400) {
+				$is_active = false;
+				$memberreason = 'inactive';
+			}
+			
+			if (in_array($user->memberreason, array('validldap', 'invalidldap')) {
+				// Si le compte a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
+				$is_active = false;
+				$memberreason = 'invalidldap';
+			} else {
+				// Si on a changé entretemps pour un compte externe, pas de changement à ce niveau
+			}
+		}
+		// Update user metadata : we update only if there is a change !
+		if ($is_inria && ($user->membertype != 'inria')) { $user->membertype = 'inria'; }
+		if (!$is_inria && ($user->membertype != 'external')) { $user->membertype = 'external'; }
+		if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
+		if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
+		
+		// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
+		if ($user->memberstatus == 'closed') {
+			register_error("Cet accès n'est plus valide. ");
+			return false;
+	}
 	}
 	return true;
 }
