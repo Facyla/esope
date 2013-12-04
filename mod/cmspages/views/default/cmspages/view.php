@@ -91,7 +91,7 @@ if ($vars['pagetype']) {
 					// we need elgg-output class for lists, also added a custom class for finer output control
 					// Can't use output/longtext view because of filtering
 					if ($vars['rawcontent']) $content .= $cmspage->description;
-					else $content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '</div>';
+					else $content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '<div class="clearfloat"></div></div>';
 					// Set container as page_owner - not really useful as a view..
 					//if (!empty($cmspage->container_guid)) elgg_set_page_owner_guid($cmspage->container_guid);
 					// Use parent entity as hierarchical navigation link
