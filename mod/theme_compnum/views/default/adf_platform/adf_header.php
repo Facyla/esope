@@ -148,7 +148,7 @@ if (elgg_is_logged_in()) {
 				
 					<?php if (elgg_is_logged_in() && !$display_menu) { ?>
 						<form id="theme_compnum-search" action="<?php echo $url . 'search'; ?>" method="post">
-							<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 							<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
 								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
 							<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
@@ -236,9 +236,9 @@ if (elgg_is_logged_in()) {
 							</ul>
 						</nav>
 						<form action="<?php echo $url . 'search'; ?>" method="post">
-							<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 							<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
-							<input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
+								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
 							<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 						</form>
 					</div>
