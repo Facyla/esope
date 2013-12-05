@@ -646,6 +646,8 @@ section div.module { width: 94%; padding: 3%; background-size:100%; }
 section div.module { min-width:180px; }
 section div.module div.activites { width:auto; }
 section div.module footer { background-size: 100%; }
+/* Listing et river */
+.elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { width:auto; }
 
 
 @media (max-width:1225px) {
