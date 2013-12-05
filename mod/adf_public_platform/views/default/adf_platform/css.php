@@ -630,7 +630,7 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 
 
 
-<?php if ($fixedwidth) { ?>
+<?php if (!$fixedwidth) { ?>
 /* SECTION RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
