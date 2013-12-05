@@ -118,9 +118,9 @@ if (elgg_is_logged_in()) {
 							<ul>
 								<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 								<?php if ($messages) { echo $messages; } ?>
-								<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('theme_compnum:friends'); ?></a></li>
+								<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-user user icon"></i><?php echo elgg_echo('theme_compnum:friends'); ?></a></li>
 								<?php echo $friendrequests; ?>
-								<li id="groups"><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('theme_compnum:group'); ?></a></li>
+								<li id="groups"><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><i class="fa fa-user users icon"></i><?php echo elgg_echo('theme_compnum:group'); ?></a></li>
 								<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('theme_compnum:usersettings'); ?></a></li>
 								<!--
 								<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
