@@ -5,6 +5,9 @@ $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
 
 // Configurable elements and default values
 
+$fixedwidth = elgg_get_plugin_setting('fixedwidth', 'adf_public_platform');
+if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+
 // Image de fond configurable
 $headbackground = elgg_get_plugin_setting('headbackground', 'adf_public_platform');
 if (empty($headbackground)) { $headbackground = $vars['url'] . 'mod/adf_public_platform/img/headimg.jpg'; }
@@ -618,18 +621,17 @@ header nav .fa { margin-right: 0.5em; }
 header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
 
 
-
-
-
-
-
-/* SECTION RESPONSIVE DESIGN */
-
 /* Menu fixé en haut lors du scrolling */
 .floating { position: fixed !important; z-index: 101; }
 header .floating { background:black; width:100%; top:0; height:30px; overflow:hidden; z-index:102; }
 #transverse.floating { top: 30px; }
 
+
+
+
+
+<?php if ($fixedwidth) { ?>
+/* SECTION RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
@@ -670,4 +672,5 @@ section div.module footer { background-size: 100%; }
 	#groups-tools > li { width:100%; }
 }
 */
+<?php } ?>
 
