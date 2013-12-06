@@ -29,12 +29,13 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 }
 
 if (!empty($cmis_password) && !empty($cmis_password2)) {
-	$password_set_message = "<p>Votre mot de passe est enregsitré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
+	$password_set_message = "<p>Votre mot de passe est enregistré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
+}
 
 ?>
 <p>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-		<legend><?php echo elgg_echo('elgg_cmis:title');?></legend>
+		<legend><?php echo elgg_echo('elgg_cmis:title'); ?></legend>
 		
 		<?php echo $password_set_message; ?>
 		<!--
