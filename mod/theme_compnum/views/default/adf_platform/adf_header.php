@@ -5,6 +5,7 @@ $urlicon = $url . 'mod/adf_public_platform/img/theme/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
+$prev_q = get_input('q', '');
 
 if (elgg_is_logged_in()) {
 	$own = $_SESSION['user'];
@@ -115,12 +116,12 @@ if (elgg_is_logged_in()) {
 						?>
 						<nav>
 							<ul>
-								<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><?php echo elgg_echo('messages'); ?></a></li>
+								<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 								<?php if ($messages) { echo $messages; } ?>
-								<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('theme_compnum:friends'); ?></a></li>
+								<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-user user icon"></i><?php echo elgg_echo('theme_compnum:friends'); ?></a></li>
 								<?php echo $friendrequests; ?>
-								<li id="groups"><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('theme_compnum:group'); ?></a></li>
-								<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><?php echo elgg_echo('theme_compnum:usersettings'); ?></a></li>
+								<li id="groups"><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><i class="fa fa-user users icon"></i><?php echo elgg_echo('theme_compnum:group'); ?></a></li>
+								<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('theme_compnum:usersettings'); ?></a></li>
 								<!--
 								<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
 										<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
@@ -128,28 +129,28 @@ if (elgg_is_logged_in()) {
 								</li>
 								//-->
 								<?php if (elgg_is_admin_logged_in()) { ?>
-									<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><?php echo elgg_echo('admin'); ?></a></li>
+									<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
 								<?php } ?>
 								
 								<?php
 								$helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
-								if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '">' . elgg_echo('adf_platform:help') . '</a></li>';
+								if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('adf_platform:help') . '</a></li>';
 								?>
 								
-								<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+								<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
 							</ul>
 						</nav>
 					<?php } else {
 						// Bouton de connexion partout sauf sur la home - en fait si : page différente
 						//if (full_url() != $url) 
-						echo '<nav><ul><li id="login"><a href="' . $url . 'login">' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
+						echo '<nav><ul><li id="login"><a href="' . $url . 'login"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
 					} ?>
 				
 					<?php if (elgg_is_logged_in() && !$display_menu) { ?>
 						<form id="theme_compnum-search" action="<?php echo $url . 'search'; ?>" method="post">
-							<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 							<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
-							<input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
+								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
 							<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 						</form>
 					<?php } ?>
@@ -167,7 +168,7 @@ if (elgg_is_logged_in()) {
 								
 								<?php if ($display_blog) { ?>
 									<li class="dossierdepreuve groups"><a <?php if (elgg_in_context('dossierdepreuve')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'dossierdepreuve/all'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:menu'); ?></a>
-										<ul>
+										<ul class="hidden">
 											<li><a href="<?php echo $url . 'dossierdepreuve/inscription'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:register'); ?></a></li>
 											<li><a href="<?php echo $url . 'dossierdepreuve/gestion'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:gestion'); ?></a></li>
 											<li><a href="<?php echo $url . 'dossierdepreuve/all'; ?>"><?php echo elgg_echo('theme_compnum:dossierpreuve:all'); ?></a></li>
@@ -188,7 +189,7 @@ if (elgg_is_logged_in()) {
 								
 								<?php if ($display_groups) { ?>
 									<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $groups_url; ?>"><?php echo $groups_name; ?></a>
-										<ul>
+										<ul class="hidden">
 											<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 											<?php if ($profile_type == 'organisation') { ?>
 												<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
@@ -205,7 +206,7 @@ if (elgg_is_logged_in()) {
 								
 								<?php if ($display_members) { ?>
 									<li class="members"><a <?php if(elgg_in_context('members') || (elgg_in_context('profile') && (full_url() != $CONFIG->url))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members/newest'; ?>"><?php echo elgg_echo('adf_platform:directory'); ?></a>
-										<ul>
+										<ul class="hidden">
 											<?php if ($profile_type == 'organisation') { ?>
 											<li><a href="<?php echo $url . ''; ?>friends/<?php echo $ownusername; ?>"><?php echo "Nos formateurs (contacts)"; ?></a></li>
 											<li><a href="<?php echo $url . ''; ?>dossierdepreuve/candidats"><?php echo "Nos candidats (@TODO)"; ?></a></li>
@@ -224,7 +225,7 @@ if (elgg_is_logged_in()) {
 								
 								<?php if ($display_admin) { ?>
 									<li class="admin"><a href="<?php echo $url . 'admin/dashboard'; ?>">Admin</a>
-										<ul>
+										<ul class="hidden">
 											<li><a href="<?php echo $url . 'cmspages'; ?>"><?php echo "Gérer les pages CMS"; ?></a></li>
 											<li><a href="<?php echo $url . 'file/add/' . $ownguid; ?>"><?php echo "Publier un fichier"; ?></a></li>
 											<li><a href="<?php echo $url . ''; ?>admin/users/add"><?php echo "Créer un nouveau compte"; ?></a></li>
@@ -235,9 +236,9 @@ if (elgg_is_logged_in()) {
 							</ul>
 						</nav>
 						<form action="<?php echo $url . 'search'; ?>" method="post">
-							<?php $search_text = 'Trouvez des groupes, des fichiers...'; ?>
+								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 							<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
-							<input type="text" id="adf-search-input" name="q" value="<?php echo $search_text; ?>" />
+								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
 							<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 						</form>
 					</div>

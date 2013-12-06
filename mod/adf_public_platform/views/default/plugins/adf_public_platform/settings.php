@@ -113,6 +113,7 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 if (empty($vars['entity']->opengroups_defaultaccess)) { $vars['entity']->opengroups_defaultaccess = 'groupvis'; }
 if (empty($vars['entity']->closedgroups_defaultaccess)) { $vars['entity']->closedgroups_defaultaccess = 'group'; }
 if (empty($vars['entity']->awesomefont)) $vars['entity']->awesomefont = 'yes';
+if (empty($vars['entity']->fixedwidth)) $vars['entity']->fixedwidth = 'no';
 
 
 // CORRECT BAD-FORMATTED VALUES
@@ -546,6 +547,7 @@ $(function() {
 		<?php
 		echo ' <p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui )) . '</p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a production site.</p>';
 		echo ' <p><label>Awesome Font</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[awesomefont]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->awesomefont )) . '</p>';
+		echo ' <p><label>Fixed width</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[fixedwidth]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->fixedwidth )) . '</p>';
 		?>
 		
 		<?php echo '<h4>' . elgg_echo('adf_platform:fonts') . '</h4>'; ?>

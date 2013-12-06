@@ -9,9 +9,15 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 //$user_cmis_url = $vars['entity']->getUserSetting("elgg_cmis_user_cmis_url", $own->guid);
 $cmis_login = $vars['entity']->getUserSetting("cmis_login", $own->guid);
 
-// Note : paswword should not be displayed
+// Note : paswword should never be displayed
 $cmis_password = $vars['entity']->getUserSetting("cmis_password", $own->guid);
 $cmis_password2 = $vars['entity']->getUserSetting("cmis_password2", $own->guid);
+
+// Suppression du mot de passe
+if ($cmis_password == 'null') {
+	$vars['entity']->setUserSetting("cmis_password", '', $own->guid);
+	$vars['entity']->setUserSetting("cmis_password2", '', $own->guid);
+}
 
 // Si le mot de passe a changé, on crypte le nouveau et on enregistre le tout
 // Cryptage avec des données stables pour l'user (username et salt)
@@ -22,11 +28,16 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password2, $own->guid);
 }
 
+if (!empty($cmis_password) && !empty($cmis_password2)) {
+	$password_set_message = "<p>Votre mot de passe est enregistré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
+}
+
 ?>
 <p>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-		<legend><?php echo elgg_echo('elgg_cmis:title');?></legend>
+		<legend><?php echo elgg_echo('elgg_cmis:title'); ?></legend>
 		
+		<?php echo $password_set_message; ?>
 		<!--
 		<label for="params[user_cmis_url]"><?php echo elgg_echo('elgg_cmis:user_cmis_url');?></label><br/>
 		<input type="text" name="params[user_cmis_url]" value="<?php echo $user_cmis_url;?>" /><br/>

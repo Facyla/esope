@@ -15,7 +15,7 @@ $atom_url = elgg_get_plugin_setting('cmis_atom_url', 'elgg_cmis');
 $repo_url = $cmis_url . $atom_url;
 //$repo_url = elgg_get_plugin_setting('user_cmis_url', $own_guid, 'elgg_cmis'); // Custom repo
 $repo_username = elgg_get_plugin_user_setting('cmis_login', $own_guid, 'elgg_cmis');
-$repo_password = elgg_get_plugin_user_setting('cmis_password', $own_guid, 'elgg_cmis');
+$repo_password = elgg_get_plugin_user_setting('cmis_password2', $own_guid, 'elgg_cmis');
 if (!empty($repo_password)) $repo_password = esope_vernam_crypt($repo_password, $own->guid . $own->salt);
 $repo_debug = elgg_get_plugin_setting('debugmode', 'elgg_cmis', false);
 if ($repo_debug == 'yes') $repo_debug = true; else $repo_debug = false;

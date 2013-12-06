@@ -5,6 +5,9 @@ $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
 
 // Configurable elements and default values
 
+$fixedwidth = elgg_get_plugin_setting('fixedwidth', 'adf_public_platform');
+if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+
 // Image de fond configurable
 $headbackground = elgg_get_plugin_setting('headbackground', 'adf_public_platform');
 if (empty($headbackground)) { $headbackground = $vars['url'] . 'mod/adf_public_platform/img/headimg.jpg'; }
@@ -74,13 +77,12 @@ $color15 = elgg_get_plugin_setting('color15', 'adf_public_platform'); // Titre b
 // Couleur de fond du footer configurable
 $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
 
-$css = elgg_extract('theme-config-css', $vars);
-$font1 = $css['font1'];
-$font2 = $css['font2'];
-$font3 = $css['font3'];
-$font4 = $css['font4'];
-$font5 = $css['font5'];
-$font6 = $css['font6'];
+$font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
+$font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
+$font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
+$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
+$font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
+$font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>
 
 
@@ -618,18 +620,20 @@ header nav .fa { margin-right: 0.5em; }
 header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
 
 
-
-
-
-
-
-/* SECTION RESPONSIVE DESIGN */
-
 /* Menu fixé en haut lors du scrolling */
 .floating { position: fixed !important; z-index: 101; }
+/*
 header .floating { background:black; width:100%; top:0; height:30px; overflow:hidden; z-index:102; }
-#transverse.floating { top: 30px; }
+*/
+header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:30px; border-top: 5px solid #333333; padding-top: 2px; overflow:hidden; z-index:102; }
+#transverse.floating { margin-top: 32px; }
 
+
+
+
+
+<?php if (!$fixedwidth) { ?>
+/* SECTION RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
@@ -646,6 +650,8 @@ section div.module { width: 94%; padding: 3%; background-size:100%; }
 section div.module { min-width:180px; }
 section div.module div.activites { width:auto; }
 section div.module footer { background-size: 100%; }
+/* Listing et river */
+.elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { width:auto; }
 
 
 @media (max-width:1225px) {
@@ -668,4 +674,5 @@ section div.module footer { background-size: 100%; }
 	#groups-tools > li { width:100%; }
 }
 */
+<?php } ?>
 
