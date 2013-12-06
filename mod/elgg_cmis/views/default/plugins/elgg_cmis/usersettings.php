@@ -9,9 +9,15 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 //$user_cmis_url = $vars['entity']->getUserSetting("elgg_cmis_user_cmis_url", $own->guid);
 $cmis_login = $vars['entity']->getUserSetting("cmis_login", $own->guid);
 
-// Note : paswword should not be displayed
+// Note : paswword should never be displayed
 $cmis_password = $vars['entity']->getUserSetting("cmis_password", $own->guid);
 $cmis_password2 = $vars['entity']->getUserSetting("cmis_password2", $own->guid);
+
+// Suppression du mot de passe
+if ($cmis_password == 'null') {
+	$vars['entity']->setUserSetting("cmis_password", '', $own->guid);
+	$vars['entity']->setUserSetting("cmis_password2", '', $own->guid);
+}
 
 // Si le mot de passe a changé, on crypte le nouveau et on enregistre le tout
 // Cryptage avec des données stables pour l'user (username et salt)
@@ -20,6 +26,8 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 	$cmis_password2 = esope_vernam_crypt($cmis_password, $key);
 	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password2, $own->guid);
+	
+	$password_set_message = "<p>Votre mot de passe a bien été enregsitré et crypté. Si vous souhaitez le changer, veuillez en enregistrer un nouveau ci-dessous. Pour le supprimer totalement, saisissez null comme mot de passe.</p>";
 }
 
 ?>
