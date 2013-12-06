@@ -622,8 +622,11 @@ header nav ul li#msg a, header nav ul li#man a { background:transparent; padding
 
 /* Menu fixé en haut lors du scrolling */
 .floating { position: fixed !important; z-index: 101; }
+/*
 header .floating { background:black; width:100%; top:0; height:30px; overflow:hidden; z-index:102; }
-#transverse.floating { top: 30px; }
+*/
+header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:30px; border-top: 5px solid #333333; padding-top: 2px; overflow:hidden; z-index:102; }
+#transverse.floating { margin-top: 32px; }
 
 
 
