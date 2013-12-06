@@ -26,15 +26,17 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 	$cmis_password2 = esope_vernam_crypt($cmis_password, $key);
 	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password2, $own->guid);
-	
-	$password_set_message = "<p>Votre mot de passe a bien été enregsitré et crypté. Si vous souhaitez le changer, veuillez en enregistrer un nouveau ci-dessous. Pour le supprimer totalement, saisissez null comme mot de passe.</p>";
 }
+
+if (!empty($cmis_password) && !empty($cmis_password2)) {
+	$password_set_message = "<p>Votre mot de passe est enregsitré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
 
 ?>
 <p>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
 		<legend><?php echo elgg_echo('elgg_cmis:title');?></legend>
 		
+		<?php echo $password_set_message; ?>
 		<!--
 		<label for="params[user_cmis_url]"><?php echo elgg_echo('elgg_cmis:user_cmis_url');?></label><br/>
 		<input type="text" name="params[user_cmis_url]" value="<?php echo $user_cmis_url;?>" /><br/>
