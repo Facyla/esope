@@ -19,12 +19,12 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
-$font1 = $css['font1'];
-$font2 = $css['font2'];
-$font3 = $css['font3'];
-$font4 = $css['font4'];
-$font5 = $css['font5'];
-$font6 = $css['font6'];
+$font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
+$font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
+$font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
+$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
+$font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
+$font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>
 
 /* ***************************************
