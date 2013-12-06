@@ -29,7 +29,7 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 }
 
 if (!empty($cmis_password) && !empty($cmis_password2)) {
-	$password_set_message = "<p>Votre mot de passe est enregistré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
+	$password_set_message = "<p>Votre mot de passe est bien enregistré (et crypté).<br />Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous.<br />Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
 }
 
 ?>
