@@ -981,13 +981,16 @@ function esope_esearch($params = array()) {
 function esope_vernam_crypt($text, $key){
 	$keyl = strlen($key);
 	$textl = strlen($text);
+	// Pad or cut key to fit text length
 	if ($keyl < $textl){
 		$key = str_pad($key, $textl, $key, STR_PAD_RIGHT);
 	} elseif ($keyl > $textl){
 		$diff = $keyl - $textl;
 		$key = substr($key, 0, -$diff);
 	}
-	return $text ^ $key;
+	$crypted = $text ^ $key;
+	//echo strlen($key) . " : " . $key . " / " . strlen($text) . " : " . $text . " => " . $crypted;
+	return $crypted;
 }
 
 // Récupération des pages de plus haut niveau (d'un groupe ou user)
