@@ -659,7 +659,7 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 				" . elgg_view('page/elements/head', $vars) . "
 				" . $headers . "
 				<style>
-				html { background:#FFFFFF; }
+				html, html body { background:#FFFFFF !important; }
 				body { border-top: 0; padding: 2px 4px; }
 				</style>
 			</head>
