@@ -162,6 +162,10 @@ $en = array(
 	// @TODO This text should definitely be adapted to your own install - HTML can be used here ; 
 	// use $CONFIG->url for site install URL, $CONFIG->email for site email
 	'groups:newgroup:disclaimer' => "<blockquote><strong>Group creation rules:</strong> <em>Please refer to General User Conditions.</em></blockquote>",
+	'groups:search:regular' => "Group search",
+	'groups:regularsearch' => "Name or keyword",
+	'search:group:go' => "Find a group",
+	'members:search' => "Find a member",
 	
 	// 
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> All fields are required",
