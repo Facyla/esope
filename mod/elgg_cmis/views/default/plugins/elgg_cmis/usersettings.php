@@ -11,7 +11,9 @@ $cmis_login = $vars['entity']->getUserSetting("cmis_login", $own->guid);
 
 // Note : paswword should never be displayed
 $cmis_password = $vars['entity']->getUserSetting("cmis_password", $own->guid);
+$cmis_password = base64_decode($cmis_password);
 $cmis_password2 = $vars['entity']->getUserSetting("cmis_password2", $own->guid);
+$cmis_password2 = base64_decode($cmis_password2);
 
 $key = $own->guid . $own->salt;
 $password_set_message = '';
@@ -29,6 +31,7 @@ if ($cmis_password == 'RAZ') {
 // Cryptage avec des données stables pour l'user (username et salt)
 if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 	$cmis_password2 = esope_vernam_crypt($cmis_password, $key);
+	$cmis_password2 = base64_encode($cmis_password2);
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password2, $own->guid);
 	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
 }
@@ -41,7 +44,8 @@ if (empty($cmis_password) && empty($cmis_password2)) {
 	$password_set_message .= "<p>Aucun mot de passe défini.</p>";
 }
 
-//echo "DEBUG : $cmis_password / $cmis_password2 => " . esope_vernam_crypt($cmis_password, $key) . ' / ' . esope_vernam_crypt($cmis_password2, $key);
+
+//echo "DEBUG : key = $key // $cmis_password / $cmis_password2 => " . esope_vernam_crypt($cmis_password, $key) . ' / ' . esope_vernam_crypt($cmis_password2, $key);
 
 
 ?>
