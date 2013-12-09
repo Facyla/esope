@@ -41,6 +41,9 @@ if (empty($cmis_password) && empty($cmis_password2)) {
 	$password_set_message .= "<p>Aucun mot de passe défini.</p>";
 }
 
+//echo "DEBUG : $cmis_password / $cmis_password2 => " . esope_vernam_crypt($cmis_password, $key) . ' / ' . esope_vernam_crypt($cmis_password2, $key);
+
+
 ?>
 <p>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
