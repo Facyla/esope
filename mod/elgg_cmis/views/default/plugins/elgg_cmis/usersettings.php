@@ -11,9 +11,7 @@ $cmis_login = $vars['entity']->getUserSetting("cmis_login", $own->guid);
 
 // Note : paswword should never be displayed
 $cmis_password = $vars['entity']->getUserSetting("cmis_password", $own->guid);
-$cmis_password = base64_decode($cmis_password);
 $cmis_password2 = $vars['entity']->getUserSetting("cmis_password2", $own->guid);
-$cmis_password2 = base64_decode($cmis_password2);
 
 $key = $own->guid . $own->salt;
 $password_set_message = '';
