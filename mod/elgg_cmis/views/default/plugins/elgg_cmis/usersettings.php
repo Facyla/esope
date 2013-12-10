@@ -13,24 +13,38 @@ $cmis_login = $vars['entity']->getUserSetting("cmis_login", $own->guid);
 $cmis_password = $vars['entity']->getUserSetting("cmis_password", $own->guid);
 $cmis_password2 = $vars['entity']->getUserSetting("cmis_password2", $own->guid);
 
+$key = $own->guid . $own->salt;
+$password_set_message = '';
+
 // Suppression du mot de passe
-if ($cmis_password == 'null') {
-	$vars['entity']->setUserSetting("cmis_password", '', $own->guid);
-	$vars['entity']->setUserSetting("cmis_password2", '', $own->guid);
+if ($cmis_password == 'RAZ') {
+	$cmis_password = '';
+	$cmis_password2 = '';
+	$vars['entity']->setUserSetting("cmis_password", $cmis_password, $own->guid);
+	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
+	$password_set_message .= "<p>Votre mot de passe a bien été supprimé.</p>";
 }
 
 // Si le mot de passe a changé, on crypte le nouveau et on enregistre le tout
 // Cryptage avec des données stables pour l'user (username et salt)
 if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
-	$key = $own->guid . $own->salt;
 	$cmis_password2 = esope_vernam_crypt($cmis_password, $key);
-	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
+	$cmis_password2 = base64_encode($cmis_password2);
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password2, $own->guid);
+	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
 }
 
+
 if (!empty($cmis_password) && !empty($cmis_password2)) {
-	$password_set_message = "<p>Votre mot de passe est enregistré (et crypté). Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous. Pour le supprimer totalement, saisissez \"null\" comme mot de passe : cela réinitialisera votre informations d'authentification.</p>";
+	$password_set_message .= "<p>Votre mot de passe est bien enregistré (et crypté).<br />Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous.<br />Pour le supprimer totalement, saisissez \"RAZ\" comme mot de passe : cela réinitialisera vos informations d'authentification.</p>";
 }
+if (empty($cmis_password) && empty($cmis_password2)) {
+	$password_set_message .= "<p>Aucun mot de passe défini.</p>";
+}
+
+
+//echo "DEBUG : key = $key // $cmis_password / $cmis_password2 => " . esope_vernam_crypt($cmis_password, $key) . ' / ' . esope_vernam_crypt($cmis_password2, $key);
+
 
 ?>
 <p>

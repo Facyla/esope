@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog French language file.
+ * French language file.
  *
  */
 
@@ -8,6 +8,7 @@ $french = array(
 	'group_chat' => "Chat du groupe",
 	'group_chat:site_chat' => "Chat du site",
 	'group_chat:object_chat' => "Chat de la page",
+	'group_chat:user_chat' => "Chat entre membres",
 	'group_chat:group_option' => "Activer le chat du groupe ?",
 	
 	'group_chat:youare' => "Vous êtes : ",

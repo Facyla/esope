@@ -79,6 +79,7 @@ function elgg_cmisembed_page_handler($page) {
 
 
 // Adds the required function for password encryption, in case the main plugin is not activated
+/*
 if (!elgg_is_active_plugin('adf_public_platform') && !function_exists('esope_vernam_crypt')) {
 	function esope_vernam_crypt($text, $key){
 		$keyl = strlen($key);
@@ -92,6 +93,7 @@ if (!elgg_is_active_plugin('adf_public_platform') && !function_exists('esope_ver
 		return $text ^ $key;
 	}
 }
+*/
 
 
 

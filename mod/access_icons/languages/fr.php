@@ -49,13 +49,6 @@ $french = array (
 <td>&nbsp;La publication n'est visible que par <strong>vous</strong>.</td>
 </tr>
 <tr>
-<td><span class=\"elgg-access elgg-access-private\">Priv&eacute; / Brouillon</span></td>
-<td>&nbsp;La publication n'est visible que par <strong>vous</strong>.</td>
-</tr>
-<td><span class=\"elgg-access elgg-access-default\">Par d&eacute;faut</span></td>
-<td>&nbsp;Il ne s'agit pas d'un niveau d'acc&egrave;s au sens propre, mais du <strong>niveau d'acc&egrave;s d&eacute;fini par d&eacute;faut</strong> pour toutes les nouvelles publications. C'est le niveau d'acc&egrave;s qui s'applique pour toute nouvelle publication.</td>
-</tr>
-<tr>
 <td><span class=\"elgg-access elgg-access-public elgg-access-limited\">Limit&eacute;</span></td>
 <td>&nbsp;Cas particulier : lorsque le site est en mode \"intranet\", le niveau d'acc&egrave;s \"Public\" est remplac&eacute; par \"Limit&eacute;\" : seuls les utilisateurs connect&eacute;s y ont acc&egrave;s. En pratique, ce niveau est &eacute;quivalent &agrave; \"Membres du site\".</td>
 </tr>
@@ -75,7 +68,7 @@ $french = array (
 	'access_icons:members:details' => "Cette publication est RÉSERVÉE AUX MEMBRES DU SITE : c'est-à-dire que tous les membres du site peuvent y accéder (ils doivent pour cela être connectés).",
 	
 	// Public access level (2)
-	'access_icons:public:details' => "Cette publication est PUBLIQUE : toute personne disposant du lien vers cette page peut y accéder sans avoir besoin de s\'identifier sur le site (elle peut donc être indexée par les moteurs de recherche).",
+	'access_icons:public:details' => "Cette publication est PUBLIQUE : toute personne disposant du lien vers cette page peut y accéder sans avoir besoin de s'identifier sur le site (elle peut donc être indexée par les moteurs de recherche).",
 	
 	// Friends access level (-2)
 	'access_icons:friends:details' => "Cette publication est RÉSERVÉE AUX CONTACS DE L'AUTEUR : seuls les contacts de l'auteur peuvent y accéder.",
