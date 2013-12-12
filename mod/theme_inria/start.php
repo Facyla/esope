@@ -44,6 +44,8 @@ function theme_inria_init(){
 		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
 	}
 	
+	elgg_register_page_handler("inria", "inria_page_handler");
+	
 }
 
 // Theme inria index
@@ -59,6 +61,18 @@ function theme_inria_public_index() {
 	return true;
 }
 
+
+function inria_page_handler($page){
+	
+	switch($page[0]){
+		case "animation":
+		default:
+			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
+			break;
+	}
+	
+	return true;
+}
 
 
 /* Met à jour les infos des membres
