@@ -116,7 +116,7 @@ if (elgg_is_logged_in()) {
 							</nav>
 						<?php } else {
 							// Bouton de connexion partout sauf sur la home
-							if (full_url() != $url) echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul></nav>';
+							if (full_url() != $url) echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul></nav>';
 						} ?>
 					</div>
 				</div>

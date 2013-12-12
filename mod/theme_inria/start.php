@@ -15,6 +15,10 @@ function theme_inria_init(){
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
+	// Add all groups excerpt to digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	
+	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	elgg_unregister_widget_type('thewire');
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));

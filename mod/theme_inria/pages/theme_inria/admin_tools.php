@@ -20,42 +20,41 @@ $content = '';
 
 // Composition de la page
 $content .= '<div id="inria-animation" class="">';
-$content .= "Cette page répertorie les principales actions d'un animateur et présente quelques infos générales utiles pour l'animation.
-<ul>
-	<li>Consulter les feedbacks : " . '<a href="' . $CONFIG->url . 'feedback">Afficher les feedbacks</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'cmspages">Gérer les pages CMS</a> et <a href="' . $CONFIG->url . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés (admin)</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</li>
-	
-	<li>" . '<a href="' . $CONFIG->url . 'event_calendar/list">Gérer les événements du site</a>' . "</li>
-	
-	<li>Consulter les statistiques globales : " . elgg_view('admin/statistics/overview') . "</li>
-	
-	<script>" . elgg_view('js/advanced_statistics/admin') . "</script>
-	<li>Consulter les statistiques d'activité : " . elgg_view('admin/advanced_statistics/activity') . "</li>
-	<li>Consulter les statistiques des contenus : " . elgg_view('admin/advanced_statistics/content') . "</li>
-	<li>Consulter les statistiques des groupes : " . elgg_view('admin/advanced_statistics/groups') . "</li>
-	<li>Consulter les statistiques du système : " . elgg_view('admin/advanced_statistics/system') . "</li>
-	<li>Consulter les statistiques des membres : " . elgg_view('admin/advanced_statistics/users') . "</li>
-	<li>Consulter les statistiques des widgets : " . elgg_view('admin/advanced_statistics/widgets') . "</li>
-</ul>";
+$content .= "Cette page répertorie les principales actions d'un animateur et présente quelques infos générales utiles pour l'animation.";
 
-$content .= '<div style="width:46%; float:left;">';
-	$content .= '';
+
+$content .= '<div style="width:27%; float:left;">';
+	$content .= "
+		<p>Consulter les feedbacks : " . '<a href="' . $CONFIG->url . 'feedback">Afficher les feedbacks</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'cmspages">Gérer les pages CMS</a> et <a href="' . $CONFIG->url . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés (admin)</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</p>
+	
+		<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'event_calendar/list">Gérer les événements du site</a>' . "</p>
+	
+		<p>Consulter les statistiques globales : " . elgg_view('admin/statistics/overview') . "</p>";
 	$content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
 
-$content .= '<div style="width:50%; float:right;">';
-	$content .= '';
+
+$content .= '<div style="width:70%; float:right;">';
+	$content .= "<script>" . elgg_view('js/advanced_statistics/admin') . "</script>
+		<p>Consulter les statistiques d'activité : " . elgg_view('admin/advanced_statistics/activity') . "</p>
+		<p>Consulter les statistiques des contenus : " . elgg_view('admin/advanced_statistics/content') . "</p>
+		<p>Consulter les statistiques des groupes : " . elgg_view('admin/advanced_statistics/groups') . "</p>
+		<p>Consulter les statistiques du système : " . elgg_view('admin/advanced_statistics/system') . "</p>
+		<p>Consulter les statistiques des membres : " . elgg_view('admin/advanced_statistics/users') . "</p>
+		<p>Consulter les statistiques des widgets : " . elgg_view('admin/advanced_statistics/widgets') . "</p>
+	";
 	$content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
 
