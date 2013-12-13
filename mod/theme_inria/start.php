@@ -15,6 +15,10 @@ function theme_inria_init(){
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
+	// Add all groups excerpt to digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	
+	
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	elgg_unregister_widget_type('thewire');
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
@@ -44,6 +48,8 @@ function theme_inria_init(){
 		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
 	}
 	
+	elgg_register_page_handler("inria", "inria_page_handler");
+	
 }
 
 // Theme inria index
@@ -59,6 +65,18 @@ function theme_inria_public_index() {
 	return true;
 }
 
+
+function inria_page_handler($page){
+	
+	switch($page[0]){
+		case "animation":
+		default:
+			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
+			break;
+	}
+	
+	return true;
+}
 
 
 /* Met à jour les infos des membres
