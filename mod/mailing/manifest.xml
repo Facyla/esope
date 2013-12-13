@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Mailing</name>
+	<author>Florian DANIEL</author>
+	<version>0.4 - 2013.12.13</version>
+	<blurb>HTML mailing tool</blurb>
+	<description>HTML mailing tool / Envoi de mails HTML (newsletter, mailings divers, etc.)</description>
+	<website>http://id.facyla.net/</website>
+	<copyright>Florian DANIEL</copyright>
+	<license>GNU Public License version 2</license>
+
+	<category>email</category>
+	<category>newsletter</category>
+	<category>admin</category>
+
+	<activate_on_install>false</activate_on_install>
+
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+</plugin_manifest>
+
+
+<!--
+TODO :
+- use better system for large mailings
+- use cron
+- choose templates
+- save emails
+- manage email lists
+- more email selecting criteria
+
+
+0.4 : 20131213
+	- EN translation + packaged for ESOPE
+
+0.3.2 : 20110621
+	- only fetch activated and valid emails (banned & inactive accounts are not filtered)
+
+0.3.1 : 20110606
+
+0.3 : 20110531
+	- admin settings : title, message, custom sender mail
+	- allow localadmins or not (multisite only feature)
+	- handle large mail volume (requires set_time_limit())
+	- many other changes
+
+0.2 : 20110529
+	- plugin anonymized
+
+0.1 : 2010.10.30
+	- initial release
+
+//-->
+
