@@ -64,7 +64,7 @@ function access_icons_groups_entity_menu_setup($hook, $type, $return, $params) {
 		'name' => 'membership',
 		'text' => $mem,
 		'href' => false,
-		'priority' => 100,
+		'priority' => 0,
 		'class' => $class, // Facyla : ajout class
 	);
 	$return[] = ElggMenuItem::factory($options);
