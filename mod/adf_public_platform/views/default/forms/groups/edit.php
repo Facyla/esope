@@ -24,9 +24,9 @@ if (isset($vars['entity'])) {
 }
 
 if (!isset($vars['entity'])) {
-  $disclaimer = elgg_get_plugin_setting('groups_disclaimer', 'adf_public_platform');
-  if (empty($displaimer)) $dislaimer = '<p>' . elgg_echo('groups:newgroup:disclaimer') . '</p>';
-  echo $disclaimer;
+	$disclaimer = elgg_get_plugin_setting('groups_disclaimer', 'adf_public_platform');
+	if (empty($displaimer)) $dislaimer = '<p>' . elgg_echo('groups:newgroup:disclaimer') . '</p>';
+	echo $disclaimer;
 }
 ?>
 
@@ -116,21 +116,21 @@ if(count($group_fields["fields"]) > 0){
 		?>
 	</label>
 </div>
+
 <?php
+if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
+	$this_owner = $vars['entity']->owner_guid;
 	
-    if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
-		$this_owner = $vars['entity']->owner_guid;
-		
-		if (!$this_owner) {
-			$this_owner = elgg_get_logged_in_user_guid();
-		}
-		$access_options = array(
-			ACCESS_PRIVATE => elgg_echo('groups:access:group'),
-			ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
-			ACCESS_PUBLIC => elgg_echo("PUBLIC")
-		);
-		
-		?>
+	if (!$this_owner) {
+		$this_owner = elgg_get_logged_in_user_guid();
+	}
+	$access_options = array(
+		ACCESS_PRIVATE => elgg_echo('groups:access:group'),
+		ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
+		ACCESS_PUBLIC => elgg_echo("PUBLIC")
+	);
+	
+	?>
 	
 	<div>
 		<label for="vis">
@@ -146,16 +146,22 @@ if(count($group_fields["fields"]) > 0){
 	
 	<?php 	
 }
-	
+
 $tools = elgg_get_config('group_tool_options');
 if ($tools) {
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
 	foreach ($tools as $group_option) {
 		$group_option_toggle_name = $group_option->name . "_enable";
-		if ($group_option->default_on) {
+		// Set all tools to some default value
+		$group_default_tools = elgg_get_plugin_setting('group_tools_default', 'adf_public_platform');
+		if (empty($group_default_tools) || ($group_default_tools == 'no')) {
+			$group_option_default_value = 'no';
+		} else if ($group_default_tools == 'yes') {
 			$group_option_default_value = 'yes';
 		} else {
-			$group_option_default_value = 'no';
+			// Let the plugins decide by themselves
+			if ($group_option->default_on) { $group_option_default_value = 'yes'; } 
+			else { $group_option_default_value = 'no'; }
 		}
 		$value = $vars['entity']->$group_option_toggle_name ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
 		?>	
@@ -173,8 +179,9 @@ if ($tools) {
 					elgg_echo('groups:no') => 'no',
 				)
 			));
-			/* Ce serait mieux de le faire comme ça à l'occasion, mais ça implique de revoir la manière dont on gère l'activation des outils 
-			// pour les groupes = long, complexe, et maintenabilité du code compromise
+			/* Ce serait mieux de le faire comme ça à l'occasion, mais ça implique de revoir la manière 
+			// dont on gère l'activation des outils pour les groupes 
+			// = long, complexe, et maintenabilité du code compromise
 			if ($value == "yes") $value = true; else $value = false;
 			echo elgg_view("input/checkbox", array(
 				"name" => $group_option_toggle_name,
@@ -187,6 +194,79 @@ if ($tools) {
 		</div>
 		<?php 
 	}
+	
+	// DEV : Placement des outils dans diverses zones
+	// En cours de dév, ne dérangeons pas les autres...
+	if (elgg_is_admin_logged_in() && elgg_get_logged_in_user_entity()->username == 'Facyla') {
+		echo 'Fonctionnalité en cours de développement. NON FONCTIONNEL A CE JOUR<br />'
+		echo '<script>
+			$(function() {
+				$("#group-layout ul").sortable({
+					connectWith: "#group-layout ul",
+					placeholder: "placeholder",
+					containment: "#group-layout",
+				});
+				$("#group-layout ul").disableSelection();
+			});
+	
+		</script>';
+		echo '<style>
+			#group-layout { background:white; width:100%; }
+			.group-layout-block { margin:1%; border:1px solid #000; background:white; }
+			#group-layout ul { list-style-type: none; margin: 0; padding: 0; width: 100%; min-height:100px; text-align:center; }
+			.group-layout-module { background:#ccc; display:block; height:20px; width:250px; margin:2px; padding:0.5em 1em; }
+			</style>';
+		echo '<div id="group-layout">';
+		
+			echo '<div class="group-layout-block" style="width:100%; ">Block 1 full width';
+				echo '<ul>';
+					foreach ($tools as $group_option) { echo '<li><span class="group-layout-module">' . $group_option->name . '</span></li>'; }
+				echo '</ul>';
+			echo '</div>';
+		
+			echo '<div class="group-layout-block" style="float:left; width:47%;">Block 2 column 1';
+				echo '<ul></ul>';
+			echo '</div>';
+			echo '<div class="group-layout-block" style="float:left; width:47%;">Block 3 column 2';
+				echo '<ul></ul>';
+			echo '</div>';
+			echo '<div class="clearfloat"></div>';
+		
+			echo '<div class="group-layout-block" style="width:100%;">Block 4 full width';
+				echo '<ul></ul>';
+			echo '</div>';
+		
+			echo '<div class="clearfloat"></div>';
+		
+		echo '</div>';
+		echo '<div class="clearfloat"></div>';
+		/*
+		// Persist the widget's new position
+		elgg.ui.widgets.move = function(event, ui) {
+
+			// elgg-widget-<guid>
+			var guidString = ui.item.attr('id');
+			guidString = guidString.substr(guidString.indexOf('elgg-widget-') + "elgg-widget-".length);
+
+			// elgg-widget-col-<column>
+			var col = ui.item.parent().attr('id');
+			col = col.substr(col.indexOf('elgg-widget-col-') + "elgg-widget-col-".length);
+
+			elgg.action('widgets/move', {
+				data: {
+					widget_guid: guidString,
+					column: col,
+					position: ui.item.index()
+				}
+			});
+
+			// @hack fixes jquery-ui/opera bug where draggable elements jump
+			ui.item.css('top', 0);
+			ui.item.css('left', 0);
+	};
+		*/
+	}
+	
 }
 ?>
 <div class="elgg-foot">

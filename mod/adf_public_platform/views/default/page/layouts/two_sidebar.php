@@ -15,6 +15,13 @@ $class = 'elgg-layout elgg-layout-two-sidebar clearfix';
 if (isset($vars['class'])) {
 	$class = "$class {$vars['class']}";
 }
+
+// Add context class, for page differenciation
+global $CONFIG;
+foreach ($CONFIG->context as $context) {
+	$class .= ' elgg-context-' . $context;
+}
+
 ?>
 
 <div class="<?php echo $class; ?>">
