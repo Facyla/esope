@@ -7,7 +7,7 @@
 		$forbidden_names = array(
 			"friends",
 			"friend",
-			"groups:invite",
+			// "groups:invite",  // Facyla : we need this menu if we change the way users are invited to groups
 		);
 		
 		if (!empty($result) && is_array($result)) {
