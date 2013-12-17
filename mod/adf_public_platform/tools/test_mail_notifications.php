@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/engine/start.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/engine/start.php';
 
 admin_gatekeeper();
 
