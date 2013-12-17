@@ -196,7 +196,7 @@ if ($tools) {
 	}
 	
 	// DEV : Placement des outils dans diverses zones
-	if (elgg_is_admin_logged_in()) {
+	if (false && elgg_is_admin_logged_in()) {
 		// 1. Choix du layout : agencement des blocs
 		echo "Layout switch : ";
 		// 2. Placement des blocs dans le layout (blocs types infos + outils)
