@@ -21,6 +21,7 @@ $no_yes_force_opt['force'] = elgg_echo('option:force');
 $replace_public_homepage_opt = array( 'default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
 $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
+$group_tools_default_opt = $no_yes_opt;
 $group_tools_default_opt['auto'] = elgg_echo('adf_platform:settings:groups:tools_default:auto');
 $registered_objects = get_registered_entity_types('object');
 $group_defaultaccess_opt = array('default' => elgg_echo('adf_platform:groupdefaultaccess:default'), 'groupvis' => elgg_echo('adf_platform:groupdefaultaccess:groupvis'), 'group' => elgg_echo('adf_platform:groupdefaultaccess:group'), 'members' => elgg_echo('adf_platform:groupdefaultaccess:members'), 'public' => elgg_echo('adf_platform:groupdefaultaccess:public'));
