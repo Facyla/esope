@@ -115,13 +115,17 @@ $en = array(
 	'adf_platform:groups:featured' => "Featured groups",
 	
 	// Widgets
-	'adf_platform:widget:bookmark:title' => 'My Bookmarks',
-	'adf_platform:widget:brainstorm:title' => 'My Brainstorm ideas',
-	'adf_platform:widget:blog:title' => 'My Blog articles',
-	'adf_platform:widget:event_calendar:title' => 'My calendar',
-	'adf_platform:widget:file:title' => 'My Files',
-	'adf_platform:widget:group:title' => 'My Groups',
-	'adf_platform:widget:page:title' => 'My Pages',
+	'adf_platform:widget:bookmark:title' => 'Bookmarks',
+	'adf_platform:widget:brainstorm:title' => 'Brainstorm ideas',
+	'adf_platform:widget:blog:title' => 'Blog articles',
+	'adf_platform:widget:event_calendar:title' => 'Calendar',
+	'adf_platform:widget:file:title' => 'Files',
+	'adf_platform:widget:group:title' => 'Groups',
+	'adf_platform:widget:page:title' => 'Pages',
+	'adf_platform:widget:user_activity:title' => 'Site activity',
+	'adf_platform:widget:user_activity:description' => 'Display the latest user activities',
+	'adf_platform:widget:site_activity:title' => 'Recent activity',
+	'adf_platform:widget:site_activity:description' => 'Display a the most recent activities across the site (river)',
 	
 	'accessibility:sidebar:title' => "Tools",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -216,7 +220,7 @@ $en = array(
 	'adf_platform:index_recent_members' => "Display newly registered members",
 	'adf_platform:homegroup_guid' => "Choose main group / help group",
 	'adf_platform:homegroup_index' => "Display latest group activity ?",
-	'adf_platform:homesite_index' => "DIsplay latest site activity ?",
+	'adf_platform:homesite_index' => "Display latest site activity ?",
 	'adf_platform:homegroup_autojoin' => "Auto-register new members in this group ? (if forced, will also register anyone who left the group)",
 	
 	'adf_platform:homeintro' => "Introduction block on public homepage (above register/login forms).",

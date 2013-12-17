@@ -48,6 +48,9 @@ function theme_inria_init(){
 		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
 	}
 	
+	// Remove unwanted widgets
+	//elgg_unregister_widget_type('river_widget');
+	
 	elgg_register_page_handler("inria", "inria_page_handler");
 	
 }

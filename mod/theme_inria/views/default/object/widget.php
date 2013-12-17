@@ -55,7 +55,7 @@ if ($can_edit) {
 }
 
 // Niveau d'accès des widgets : seulement pour l'auteur
-if ($show_access && ($wdiget->owner_guid == elgg_get_logged_in_user_guid())) $access = '<span style="">' . elgg_view('output/access', array('entity' => $widget, 'hide_text' => true)) . '</span>';
+if ($show_access && ($widget->owner_guid == elgg_get_logged_in_user_guid())) $access = '<span style="">' . elgg_view('output/access', array('entity' => $widget, 'hide_text' => true)) . '</span>';
 
 $widget_header = <<<HEADER
 	<header class="elgg-widget-handle clearfix"><h2>$title $access</h2>
