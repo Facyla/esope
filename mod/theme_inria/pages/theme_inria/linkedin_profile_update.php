@@ -1,7 +1,10 @@
 <?php
 global $CONFIG;
 
-if (!elgg_is_active_plugin('hybridauth')) forward();
+if (!elgg_is_active_plugin('hybridauth')) {
+	register_error("Hybridauth must be activated and configured first !");
+	forward();
+}
 gatekeeper();
 
 $own = elgg_get_logged_in_user_entity();

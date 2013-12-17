@@ -1,4 +1,7 @@
 <?php
+
+// Note : Use this file if you don't want to make the API keys/secrets readable by site admins !
+
 /*!
 * HybridAuth
 * http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
