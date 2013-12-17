@@ -76,14 +76,9 @@ function ldap_auth_handler_authenticate(array $credentials = array()) {
 		throw new LoginException(elgg_echo('LoginException:ContactAdmin:missingLDAP'));
 	}
 
-	if (is_array($credentials) && ($credentials['username']) && ($credentials['password'])) 	{
+	if (is_array($credentials) && ($credentials['username']) && ($credentials['password'])) {
 		$username = $credentials['username'];
 		$password = $credentials['password'];
-		/* Use more direct functions to get the paswword ?
-		$password2 = get_input('password', '', false); $password3 = $_GET["password"]; $password4 = $_POST["password"];
-		register_error("DEBUG LDAP : $username : $password = $password2 = $password3 = $password4"); // @TODO
-		error_log("DEBUG LDAP : $username : $password = $password2 = $password3 = $password4"); // @TODO
-		*/
 	} else {
 		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
 	}

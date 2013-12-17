@@ -196,75 +196,80 @@ if ($tools) {
 	}
 	
 	// DEV : Placement des outils dans diverses zones
-	// En cours de dév, ne dérangeons pas les autres...
 	if (elgg_is_admin_logged_in()) {
+		// 1. Choix du layout : agencement des blocs
+		echo "Layout switch : ":
+		// 2. Placement des blocs dans le layout (blocs types infos + outils)
+		// En cours de dév, ne dérangeons pas les autres...
 		echo 'Fonctionnalité en cours de développement. NON FONCTIONNEL A CE JOUR<br />';
 		echo '<script>
 			$(function() {
-				$("#group-layout ul").sortable({
-					connectWith: "#group-layout ul",
+				$("#group-layout ol").sortable({
+					connectWith: "#group-layout ol",
 					placeholder: "placeholder",
 					containment: "#group-layout",
+					stop: function () {
+						$("#layout-group-order1").val("");
+						$("#layout-group-order2").val("");
+						$("#layout-group-order3").val("");
+						$("#layout-group-order4").val("");
+						$(\'#group-layout li\').each(function(idx, val) {
+							var tool = $(this).attr(\'id\');
+							var block = $(this).parent().attr(\'id\');
+							// Save new value
+							var oldval = $("#layout-"+block).val();
+							if (oldval == "") {
+								var newval = tool;
+							} else {
+								var newval = oldval + "," + tool;
+							}
+							$("#layout-"+block).val(newval);
+						});
+					}
 				});
-				$("#group-layout ul").disableSelection();
+				$("#group-layout ol").disableSelection();
 			});
 	
 		</script>';
 		echo '<style>
 			#group-layout { background:white; width:100%; }
 			.group-layout-block { margin:1%; border:1px solid #000; background:white; }
-			#group-layout ul { list-style-type: none; margin: 0; padding: 0; width: 100%; min-height:100px; text-align:center; }
+			#group-layout ol { list-style-type: none; margin: 0; padding: 0; width: 100%; min-height:100px; text-align:center; }
 			.group-layout-module { background:#ccc; display:block; height:20px; width:250px; margin:2px; padding:0.5em 1em; }
 			</style>';
+		echo '<input id="layout-group-order1" name="group-order1" type="text" value="" />';
+		echo '<input id="layout-group-order2" name="group-order2" type="text" value="" />';
+		echo '<input id="layout-group-order3" name="group-order3" type="text" value="" />';
+		echo '<input id="layout-group-order4" name="group-order4" type="text" value="" />';
 		echo '<div id="group-layout">';
 		
 			echo '<div class="group-layout-block" style="width:100%; ">Block 1 full width';
-				echo '<ul>';
-					foreach ($tools as $group_option) { echo '<li><span class="group-layout-module">' . $group_option->name . '</span></li>'; }
+				echo '<ol id="group-order1">';
+					$i = 0;
+					foreach ($tools as $group_option) {
+						if ($vars['entity']->{$group_option->name . "_enable"} == 'yes') {
+							echo '<li class="tool-order" id="tool-' . $group_option->name . '"><span class="group-layout-module">' . $group_option->name . '</span></li>';
+						}
+					}
 				echo '</ul>';
 			echo '</div>';
 		
 			echo '<div class="group-layout-block" style="float:left; width:47%;">Block 2 column 1';
-				echo '<ul></ul>';
+				echo '<ol id="group-order2"></ul>';
 			echo '</div>';
 			echo '<div class="group-layout-block" style="float:left; width:47%;">Block 3 column 2';
-				echo '<ul></ul>';
+				echo '<ol id="group-order3"></ul>';
 			echo '</div>';
 			echo '<div class="clearfloat"></div>';
 		
 			echo '<div class="group-layout-block" style="width:100%;">Block 4 full width';
-				echo '<ul></ul>';
+				echo '<ol id="group-order4"></ul>';
 			echo '</div>';
 		
 			echo '<div class="clearfloat"></div>';
 		
 		echo '</div>';
 		echo '<div class="clearfloat"></div>';
-		/*
-		// Persist the widget's new position
-		elgg.ui.widgets.move = function(event, ui) {
-
-			// elgg-widget-<guid>
-			var guidString = ui.item.attr('id');
-			guidString = guidString.substr(guidString.indexOf('elgg-widget-') + "elgg-widget-".length);
-
-			// elgg-widget-col-<column>
-			var col = ui.item.parent().attr('id');
-			col = col.substr(col.indexOf('elgg-widget-col-') + "elgg-widget-col-".length);
-
-			elgg.action('widgets/move', {
-				data: {
-					widget_guid: guidString,
-					column: col,
-					position: ui.item.index()
-				}
-			});
-
-			// @hack fixes jquery-ui/opera bug where draggable elements jump
-			ui.item.css('top', 0);
-			ui.item.css('left', 0);
-	};
-		*/
 	}
 	
 }
