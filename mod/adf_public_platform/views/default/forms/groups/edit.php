@@ -197,8 +197,8 @@ if ($tools) {
 	
 	// DEV : Placement des outils dans diverses zones
 	// En cours de dév, ne dérangeons pas les autres...
-	if (elgg_is_admin_logged_in() && elgg_get_logged_in_user_entity()->username == 'Facyla') {
-		echo 'Fonctionnalité en cours de développement. NON FONCTIONNEL A CE JOUR<br />'
+	if (elgg_is_admin_logged_in()) {
+		echo 'Fonctionnalité en cours de développement. NON FONCTIONNEL A CE JOUR<br />';
 		echo '<script>
 			$(function() {
 				$("#group-layout ul").sortable({
