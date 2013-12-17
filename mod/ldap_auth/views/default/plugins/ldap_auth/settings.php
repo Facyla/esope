@@ -12,8 +12,8 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 		<legend><?php echo elgg_echo('ldap_auth:title');?></legend>
 		
 		<?php /*
-		<label for="params[cmis_url]"><?php echo elgg_echo('elgg_cmis:cmis_url');?></label><br/>
-		<input type="text" name="params[cmis_url]" value="<?php echo $vars['entity']->cmis_url;?>" /><br/>
+		<label for="params[ldap_url]"><?php echo elgg_echo('elgg_ldap:ldap_url');?></label><br/>
+		<input type="text" name="params[ldap_url]" value="<?php echo $vars['entity']->ldap_url;?>" /><br/>
 		*/ ?>
 		
 	</fieldset>

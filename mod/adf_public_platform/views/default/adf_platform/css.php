@@ -578,8 +578,9 @@ textarea, .elgg-input-rawtext { width:100%; }
 #profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }
 #profile_completeness_progress { width: 200px; line-height: 18px; position: absolute; border: 1px solid black; text-align: center; font-weight: bold; }
 
-/* Menu édition des sous-groupes (saute à droite sous Firefox) */
+/* Menu édition des sous-groupes (saute à droite sous Firefox)
 .elgg-form-groups-edit + div { clear: both; }
+*/
 
 
 /* Agencement fluide des blocs dans les groupes */

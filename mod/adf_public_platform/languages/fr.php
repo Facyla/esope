@@ -120,10 +120,10 @@ $fr = array(
 	'adf_platform:widget:file:title' => 'Fichiers',
 	'adf_platform:widget:group:title' => 'Groupes',
 	'adf_platform:widget:page:title' => 'Wikis',
-	'adf_platform:widget:user_activity:title' => 'Activité du site',
-	'adf_platform:widget:user_activity:description' => 'Affiche vos dernières activités',
-	'adf_platform:widget:site_activity:title' => 'Activité récente',
-	'adf_platform:widget:site_activity:description' => 'Affiche les dernières activités du site',
+	'adf_platform:widget:user_activity:title' => "Activité du site",
+	'adf_platform:widget:user_activity:description' => "Affiche vos dernières activités",
+	'adf_platform:widget:site_activity:title' => "Activité récente",
+	'adf_platform:widget:site_activity:description' => "Affiche les dernières activités du site",
 	
 	'accessibility:sidebar:title' => "Outils",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -151,6 +151,7 @@ $fr = array(
 	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
+	'groups:join:success' => "Groupe rejoint avec succès",
 	// Notifications
 	'link:userprofile' => "Page de profil de %s",
 	

@@ -152,6 +152,7 @@ $en = array(
 	'save:usernotifications' => "Save my notification settings for members",
 	'save:groupnotifications' => "Save my notification settings for groups",
 	'save:widgetsettings' => "Save widget settings",
+	'groups:join:success' => "Successfully joined the group",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
 	
