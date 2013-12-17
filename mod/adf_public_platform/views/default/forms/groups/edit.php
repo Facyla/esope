@@ -198,7 +198,7 @@ if ($tools) {
 	// DEV : Placement des outils dans diverses zones
 	if (elgg_is_admin_logged_in()) {
 		// 1. Choix du layout : agencement des blocs
-		echo "Layout switch : ":
+		echo "Layout switch : ";
 		// 2. Placement des blocs dans le layout (blocs types infos + outils)
 		// En cours de dév, ne dérangeons pas les autres...
 		echo 'Fonctionnalité en cours de développement. NON FONCTIONNEL A CE JOUR<br />';
