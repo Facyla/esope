@@ -29,6 +29,10 @@ $hybridauth_config = 	array(
 		"MySpace" => array("enabled" => true, "keys" => array( "key" => "", "secret" => "" )),
 		"LinkedIn" => array("enabled" => true, "keys" => array( "key" => "", "secret" => "" )),
 		*/
+		
+		// @TODO : configure also scope in settings
+		"LinkedIn" => array("scope" => 'r_fullprofile'),
+		
 	),
 	
 	// if you want to enable logging, set 'debug_mode' to true  then provide a writable file by the web server on "debug_file"
