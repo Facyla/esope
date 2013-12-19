@@ -51,13 +51,13 @@ if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
-		$metadata_search .= '<p><label>' . ucfirst(elgg_echo($metadata)) . ' ' . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></p>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst(elgg_echo($metadata)) . ' ' . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
 	}
 } else {
 	// We'll rely on text inputs then
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
-		$metadata_search .= '<p><label>' . ucfirst(elgg_echo($metadata)) . ' <input type="text" name="' . $name . '" /></label></p>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst(elgg_echo($metadata)) . ' <input type="text" name="' . $name . '" /></label></div>';
 	}
 }
 
@@ -66,17 +66,19 @@ $profiletypes_opt[0] = '';
 $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep the keys here !
 
 
-$search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">
-	' . elgg_view('input/securitytoken') . '
-	<fieldset>
-	<p><label>' . elgg_echo('esope:fulltextsearch') . ' <input type="text" name="q" value="" /></label></p>
-	' . elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user')) . '
-	<p><label>Role ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></p>
-	' . $metadata_search . '
-	<div class="clearfloat"></div>
-	<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search') . '" />
-	</fieldset>
-	</form><br />';
+$search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
+$search_form .= elgg_view('input/securitytoken');
+$search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
+$search_form .= '<fieldset>';
+// Display role filter only if it has a meaning
+if (sizeof($profiletypes_opt > 2)) {
+	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label>Role ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
+}
+$search_form .= $metadata_search . '<div class="clearfloat"></div>';
+
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="" /></label></div>';
+$search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
+$search_form .= '</fieldset></form><br />';
 
 $content .= $search_form;
 $content .= '<div id="esope-search-results"></div>';
