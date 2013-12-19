@@ -61,7 +61,7 @@ try{
 			// Format profile details makes clearer code..
 			$display_name = $user_profile->{'first-name'} . ' ' . $user_profile->{'last-name'};
 			$photo_url = $user_profile->{'picture-urls'}->{'picture-url'};
-			$photo = '<a href="<img class="linkedin-photo" src="' . $photo_url . '" />' . $photo_url . '" target="_blank">' . $photo_url . '</a><div class="clearfloat"></div>';
+			$photo = '<a href="' . $photo_url . '" target="_blank"><img class="linkedin-photo" src="' . $photo_url . '" />' . $photo_url . '</a><div class="clearfloat"></div>';
 			$summary = $user_profile->summary;
 			$profile_url = '<a target="_blank" href="' . $user_profile->{'public-profile-url'} . '">' . $user_profile->{'public-profile-url'} . '</a>';
 			$industry = $user_profile->industry;
