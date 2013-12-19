@@ -51,13 +51,13 @@ if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst(elgg_echo($metadata)) . ' ' . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst(elgg_echo($metadata)) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
 	}
 } else {
 	// We'll rely on text inputs then
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst(elgg_echo($metadata)) . ' <input type="text" name="' . $name . '" /></label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst(elgg_echo($metadata)) . '<input type="text" name="' . $name . '" /></label></div>';
 	}
 }
 

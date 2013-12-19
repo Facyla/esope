@@ -632,7 +632,14 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:30px; border-top: 5px solid #333333; padding-top: 2px; overflow:hidden; z-index:102; }
 #transverse.floating { margin-top: 32px; }
 
-
+/* ESOPE search */
+#esope-search-form { padding: 15px 0px; }
+.esope-search-metadata { float: left; margin-right: 1em; }
+#esope-search-form select { width: 7em; margin-left: 0.5em; }
+.esope-search-fulltext { width: 80%; float: left; }
+#esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.elgg-button-livesearch { float: right; }
+.esope-results-count { font-size: 0.8em; color: #808080; }
 
 
 
