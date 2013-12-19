@@ -30,8 +30,8 @@ $hybridauth_config = 	array(
 		"LinkedIn" => array("enabled" => true, "keys" => array( "key" => "", "secret" => "" )),
 		*/
 		
-		// @TODO : configure also scope in settings
-		"LinkedIn" => array("scope" => 'r_fullprofile'),
+		// @TODO : Linkedin : scope should be defined in (Linkedin) application settings, 
+		// not in Elgg (wouldn't work anyway - see Linkedin lib for details)
 		
 	),
 	

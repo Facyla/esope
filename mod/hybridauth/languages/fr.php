@@ -20,6 +20,8 @@ $fr = array(
 	'hybridauth:apikey:facebook' => "ID/clef de l'application",
 	'hybridauth:secret:facebook' => "Secret de l'application",
 	
+	// Linkedin
+	'hybridauth:linkedin:title' => "Linkedin",
 	'hybridauth:linkedin:login' => "Connecter le compte %s",
 	'hybridauth:linkedin:logged' => "Vous êtes maintenant connecté avec <b>%s</b> en tant que <b>%s</b>", // You are now connected with <b></b> as <b>' .  . '</b>
 	'hybridauth:linkedin:logout' => "Couper la connexion à Linkedin",
@@ -31,13 +33,16 @@ $fr = array(
 	'hybridauth:linkedin:editavatar' => "recadrer votre avatar",
 	'hybridauth:linkedin:viewprofile' => "vérifier votre profil mis à jour",
 	
-	'hybridauth:linkedin:import:public-profile-url' => "Importer l'URL du profil public (champ URL du profil LinkedIn)",
+	'hybridauth:linkedin:import:title' => "Importer des informations depuis votre profil LikedIn",
+	'hybridauth:linkedin:import:details' => "<p>Vous pouvez récupérer certaies informations à partir de votre profil LinkedIn pour démarrer ou compléter votre profil.</p><p>Vous pouvez prévisualiser les informatitre ons disponibles ci-dessous, et choisir pour chacune si vous sugaitez l'importer ou non. Certaines informations sont ajoutées à votre profil (afin de ne pas perdre les informations existantes).</p><p>Une fois l'import terminé, il est conseillé de poursuivre l'édition de votre profil via les liens proposés.",
+	'hybridauth:linkedin:import:profile_url' => "Importer l'URL du profil public (champ URL du profil LinkedIn)",
 	'hybridauth:linkedin:import:photo' => "Importer la photo (remplace votre photo actuelle)",
 	'hybridauth:linkedin:import:industry' => "Importer le secteur (champ secteur professionnel)",
 	'hybridauth:linkedin:import:headline' => "Importer le titre (ajouté à votre présentation en une ligne)",
 	'hybridauth:linkedin:import:status' => "Importer le statut (ajouté à votre présentation en une ligne)",
 	'hybridauth:linkedin:import:summary' => "Importer le résumé (ajouté à votre présentation détaillée)",
 	'hybridauth:linkedin:import:positions' => "Importer les postes actuels (ajouté à votre présentation détaillée)",
+	'hybridauth:linkedin:import:educations' => "Importer vos études (ajouté au champ Education)",
 	'hybridauth:linkedin:import:skills' => "Importer vos compétences (ajoutés à vos mots-clefs)",
 	
 	

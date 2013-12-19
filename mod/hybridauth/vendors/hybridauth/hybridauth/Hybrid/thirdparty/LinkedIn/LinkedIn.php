@@ -2,6 +2,8 @@
 // http://code.google.com/p/simple-linkedinphp/
 // 3.2.0 - November 29, 2011
 // hacked into the code to handel new scope (r_basicprofile+r_emailaddress) - until Paul update linkedinphp library!
+// Facyla 20131219 note : that hack is actually a bad idea, as it hardcodes params that should remain editable
+// Linkedin let's developpers define the scope in the Linkedin application itself, so just don't force and use it !
 
 /**
  * This file defines the 'LinkedIn' class. This class is designed to be a 
@@ -122,8 +124,10 @@ class LinkedIn {
 	const _URL_ACCESS                  = 'https://api.linkedin.com/uas/oauth/accessToken';
 	const _URL_API                     = 'https://api.linkedin.com';
 	const _URL_AUTH                    = 'https://www.linkedin.com/uas/oauth/authenticate?oauth_token=';
-	// const _URL_REQUEST                 = 'https://api.linkedin.com/uas/oauth/requestToken';
-	const _URL_REQUEST                 = 'https://api.linkedin.com/uas/oauth/requestToken?scope=r_basicprofile+r_emailaddress+rw_nus+r_network'; 
+	const _URL_REQUEST                 = 'https://api.linkedin.com/uas/oauth/requestToken';
+	// Facyla note : force scope only if you want to change dynamically
+	// but scope should be defined in the application itself for best flexibility
+	//const _URL_REQUEST                 = 'https://api.linkedin.com/uas/oauth/requestToken?scope=r_basicprofile+r_emailaddress+rw_nus+r_network'; 
 	const _URL_REVOKE                  = 'https://api.linkedin.com/uas/oauth/invalidateToken';
 	
 	// Library version
