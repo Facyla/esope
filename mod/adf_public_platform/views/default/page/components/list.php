@@ -61,16 +61,20 @@ if (is_array($items) && count($items) > 0) {
 		$html .= elgg_view_list_item($item, $vars);
 		$html .= '</li>';
 		*/
+		// @TODO : si on ajoute les accès comme ça, on peut avoir des doublons 
+		// si on le fait également via un menu : il faut choisir entre les deux 
+		// approches. Celle-ci est plus générique (le menu est parfois supprimé)
+		// Context : should display where entity menu is hidde (only - so we avoid doubles)
+		$access = '';
+		if (elgg_instanceof($item, 'object') && elgg_view_exists('output/access') && elgg_in_context('widgets')) {
+			$access = '<span class="elgg-list-access elgg-list-access-listing">' . elgg_view('output/access', array('entity' => $item, 'hide_text' => true)) . '</span>';
+		}
+
 		$item_html = elgg_view_list_item($item, $vars);
 		if (!empty($item_html)) {
 			//$html .= "<li id=\"$id\" class=\"$item_class\">" . $item_html . '</li>';
 			$html .= "<li id=\"$id\" class=\"$item_class\">";
-			if (elgg_instanceof($item, 'object') && elgg_view_exists('output/access')) {
-				// Note : si on ajoute les accès comme ça, on peut avoir des doublons 
-				// si on le fait également via un menu : il faut choisir entre les deux 
-				// approches. Celle-ci est plus générique (le menu est parfois supprimé)
-				$html .= '<span class="elgg-list-access">' . elgg_view('output/access', array('entity' => $item, 'hide_text' => true)) . '</span>';
-			}
+			$html .= $access;
 			$html .= $item_html;
 			$html .= '</li>';
 		} else {

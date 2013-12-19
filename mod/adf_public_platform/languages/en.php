@@ -12,6 +12,9 @@ $en = array(
 	'option:notify:all' => "Enable all methods",
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
+	
+	'profile_edit' => "Profile edition",
+	'event_calendar:view' => "View event",
 		
 	//Theme settings
 	'admin:appearance:adf_theme' => "Theme configuration",

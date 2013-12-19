@@ -13,6 +13,9 @@ $fr = array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	
+	'profile_edit' => "Edition du profil",
+	'event_calendar:view' => "Voir un événement",
+	
 	//Theme settings
 	'admin:appearance:adf_theme' => "Configuration du thème",
 	'admin:appearance:main_theme_config' => "Configuration du thème",
