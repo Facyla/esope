@@ -578,6 +578,10 @@ textarea, .elgg-input-rawtext { width:100%; }
 #profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }
 #profile_completeness_progress { width: 200px; line-height: 18px; position: absolute; border: 1px solid black; text-align: center; font-weight: bold; }
 
+/* Menu édition des sous-groupes (saute à droite sous Firefox) */
+.elgg-form.elgg-form-alt.elgg-form-groups-edit { width:96%; }
+.elgg-form.elgg-form-alt.elgg-form-groups-edit + div { clear: both; margin: 40px 0 0; padding: 0; }
+
 
 /* Agencement fluide des blocs dans les groupes */
 .elgg-gallery-fluid > li { float: right; }
@@ -628,7 +632,14 @@ header .floating { background:black; width:100%; top:0; height:30px; overflow:hi
 header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:30px; border-top: 5px solid #333333; padding-top: 2px; overflow:hidden; z-index:102; }
 #transverse.floating { margin-top: 32px; }
 
-
+/* ESOPE search */
+#esope-search-form { padding: 15px 0px; }
+.esope-search-metadata { float: left; margin-right: 1em; }
+#esope-search-form select { width: 7em; margin-left: 0.5em; }
+.esope-search-fulltext { width: 80%; float: left; }
+#esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.elgg-button-livesearch { float: right; }
+.esope-results-count { font-size: 0.8em; color: #808080; }
 
 
 

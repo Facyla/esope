@@ -47,6 +47,11 @@ if (elgg_is_active_plugin('file')) {
 if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 
 if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
+if ($widget_river_widget != 'no') {
+	elgg_unregister_widget_type('river_widget');
+	elgg_register_widget_type('river_widget', elgg_echo('adf_platform:widget:site_activity:title'), elgg_echo('adf_platform:widget:site_activity:description'), "dashboard");
+	elgg_register_widget_type('river_widget', elgg_echo('adf_platform:widget:user_activity:title'), elgg_echo('adf_platform:widget:user_activity:description'), "profile");
+}
 
 if (elgg_is_active_plugin('twitter')) {
 	if ($widget_twitter == 'no') elgg_unregister_widget_type('twitter');

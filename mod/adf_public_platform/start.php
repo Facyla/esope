@@ -945,7 +945,7 @@ function esope_esearch($params = array()) {
 	$search_params['count'] = true;
 	$count = elgg_get_entities_from_metadata($search_params);
 	if ($count > $max_results) {
-		$alert = elgg_echo('esope:search:morethanmax');
+		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
 	}
 	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
 	$search_params['count'] = false;
@@ -962,14 +962,14 @@ function esope_esearch($params = array()) {
 		elgg_push_context('search');
 		elgg_push_context('widgets');
 		$return = '';
-		if ($params['count']) { $return .= elgg_echo('esope:search:nbresults', array($count)); }
+		if ($params['count']) { $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($count)) . '</span>'; }
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
 		if ($alert) $return .= $alert;
 		elgg_pop_context('widgets');
 		elgg_pop_context('search');
 	}
 	
-	if (empty($return)) $return = elgg_echo('esope:search:noresult');
+	if (empty($return)) $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>';
 	
 	return $return;
 }

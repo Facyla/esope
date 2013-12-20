@@ -17,6 +17,12 @@ if (isset($vars['class'])) {
 	$class = "$class {$vars['class']}";
 }
 
+// Add context class, for page differenciation
+global $CONFIG;
+foreach ($CONFIG->context as $context) {
+	$class .= ' elgg-context-' . $context;
+}
+
 // navigation defaults to breadcrumbs
 $nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
 

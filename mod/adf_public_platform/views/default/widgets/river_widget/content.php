@@ -16,6 +16,7 @@ if (elgg_in_context('dashboard')) {
 		$options['relationship'] = 'friend';
 	}
 } else {
+	// Site activity on dashboard, page user activity on user page
 	$options['subject_guid'] = elgg_get_page_owner_guid();
 }
 
@@ -24,6 +25,8 @@ if (!$content) {
 	$content = elgg_echo('river:none');
 }
 
-$content .= '<span class="elgg-widget-more"><a href="' . $vars['url'] . 'activity">Voir toute l\'activité du site</a></span>';
+if (elgg_in_context('dashboard')) {
+	$content .= '<span class="elgg-widget-more"><a href="' . $vars['url'] . 'activity">' . elgg_echo('more') . '</a></span>';
+}
 
 echo $content;

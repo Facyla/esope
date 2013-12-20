@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Hybridauth integration</name>
+	<author>Facyla ~ Florian DANIEL</author>
+	<version>0.2</version>
+	<category>authentication</category>
+	<description>Embed the Hybridauth library, so the users can authenticate against third-party mainstream networks, such as Twitter, Google, Facebook, LinkedIn...</description>
+	<website>http://id.facyla.net//</website>
+	<copyright>Facyla ~ Florian DANIEL 2013</copyright>
+	<license>GNU General Public License version 2</license>
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<conflicts>
+		<type>plugin</type>
+		<name>oauth_lib</name>
+	</conflicts>
+	
+	<provides>
+		<type>plugin</type>
+		<name>hybridauth</name>
+	</provides>
+
+</plugin_manifest>
+
+
+<!-- 
+======================
+INSTALLATION
+======================
+- Place in mod directory
+- Enable plugin
+
+======================
+Version History
+======================
+
+Lib comes from https://github.com/hybridauth/hybridauth
+
+@TODO : 
+ - add more end-user doc from lib
+ - configure more networks
+ - add various interaction modes : import fields, post to, add as login, use as register source
+
+
+
+0.2 : 20131218
+	- full working version for the 4 first networks : Twitter, Google, Facebook, LinkedIn - not much documented yet though
+
+0.1 :
+	- first test release (mainly library integration)
+
+//-->

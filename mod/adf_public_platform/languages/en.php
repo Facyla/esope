@@ -12,6 +12,9 @@ $en = array(
 	'option:notify:all' => "Enable all methods",
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
+	
+	'profile_edit' => "Profile edition",
+	'event_calendar:view' => "View event",
 		
 	//Theme settings
 	'admin:appearance:adf_theme' => "Theme configuration",
@@ -44,6 +47,8 @@ $en = array(
 	'adf_platform:settings:groups:popular' => "Use popular groups tab",
 	'adf_platform:settings:groups:discussion' => "Use discussion tab",
 	'adf_platform:settings:groups:discussion:always' => "Add discussions after the group listing",
+	'adf_platform:settings:groups:tools_default' => "Enable all group tools when creating a new group",
+	'adf_platform:settings:groups:tools_default:auto' => "Auto (depending on plugins)",
 	'groups:alpha' => "Alphabetic",
 	'adf_platform:config:memberssearch' => "MEMBERS SEARCH PAGE",
 	'adf_platform:settings:members:alpha' => "Use alphabetic tab",
@@ -113,13 +118,17 @@ $en = array(
 	'adf_platform:groups:featured' => "Featured groups",
 	
 	// Widgets
-	'adf_platform:widget:bookmark:title' => 'My Bookmarks',
-	'adf_platform:widget:brainstorm:title' => 'My Brainstorm ideas',
-	'adf_platform:widget:blog:title' => 'My Blog articles',
-	'adf_platform:widget:event_calendar:title' => 'My calendar',
-	'adf_platform:widget:file:title' => 'My Files',
-	'adf_platform:widget:group:title' => 'My Groups',
-	'adf_platform:widget:page:title' => 'My Pages',
+	'adf_platform:widget:bookmark:title' => 'Bookmarks',
+	'adf_platform:widget:brainstorm:title' => 'Brainstorm ideas',
+	'adf_platform:widget:blog:title' => 'Blog articles',
+	'adf_platform:widget:event_calendar:title' => 'Calendar',
+	'adf_platform:widget:file:title' => 'Files',
+	'adf_platform:widget:group:title' => 'Groups',
+	'adf_platform:widget:page:title' => 'Pages',
+	'adf_platform:widget:user_activity:title' => 'Site activity',
+	'adf_platform:widget:user_activity:description' => 'Display the latest user activities',
+	'adf_platform:widget:site_activity:title' => 'Recent activity',
+	'adf_platform:widget:site_activity:description' => 'Display a the most recent activities across the site (river)',
 	
 	'accessibility:sidebar:title' => "Tools",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -146,6 +155,7 @@ $en = array(
 	'save:usernotifications' => "Save my notification settings for members",
 	'save:groupnotifications' => "Save my notification settings for groups",
 	'save:widgetsettings' => "Save widget settings",
+	'groups:join:success' => "Successfully joined the group",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
 	
@@ -214,7 +224,7 @@ $en = array(
 	'adf_platform:index_recent_members' => "Display newly registered members",
 	'adf_platform:homegroup_guid' => "Choose main group / help group",
 	'adf_platform:homegroup_index' => "Display latest group activity ?",
-	'adf_platform:homesite_index' => "DIsplay latest site activity ?",
+	'adf_platform:homesite_index' => "Display latest site activity ?",
 	'adf_platform:homegroup_autojoin' => "Auto-register new members in this group ? (if forced, will also register anyone who left the group)",
 	
 	'adf_platform:homeintro' => "Introduction block on public homepage (above register/login forms).",
@@ -412,7 +422,7 @@ $en = array(
 	'esope:search:type' => "Search type",
 	'esope:search:subtype' => "Object subtype",
 	'esope:search:profile_type' => "Profile type",
-	'esope:search:nbresults' => '<strong>%s results</strong><br />',
+	'esope:search:nbresults' => '%s results',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",

@@ -17,6 +17,12 @@ $touser = get_entity($message->toId);
 $icon = '';
 $class = 'message ';
 
+// Determine the real context (messages plugin don't tell us)
+$fullurl = full_url();
+$context = 'read';
+if (strpos($fullurl, 'messages/inbox')) $context = 'inbox';
+else if (strpos($fullurl, 'messages/sent')) $context = 'sent';
+
 if ($fromuser) {
 	$fromicon = elgg_view_entity_icon($fromuser, 'tiny');
 	if ($fromuser->guid == $page_owner_guid) {
@@ -43,9 +49,17 @@ if ($touser) {
 // Only check unread messages received by the page owner (sent message *are* read)
 if (($message->toId == elgg_get_page_owner_guid()) && !$message->readYet) { $class .= 'unread'; } else { $class .= 'read'; }
 
-$icon = $fromicon . ' ' . $toicon;
 //$user_link = elgg_echo('messages:from') . " $fromuser_link " . strtolower(elgg_echo('messages:to')) . " $touser_link";
-$user_link = "$fromuser_link " . strtolower(elgg_echo('messages:to')) . " $touser_link";
+if ($context == 'inbox') {
+	$user_link = $fromuser_link;
+	$icon = $fromicon;
+} else if ($context == 'sent') {
+	$user_link = $touser_link;
+	$icon = $toicon;
+} else {
+	$user_link = "$fromuser_link " . strtolower(elgg_echo('messages:to')) . " $touser_link";
+	$icon = $fromicon . ' ' . $toicon;
+}
 
 $timestamp = elgg_view_friendly_time($message->time_created);
 
@@ -79,3 +93,4 @@ if ($full) {
 } else {
 	echo elgg_view_image_block($icon, $body, array('class' => $class));
 }
+

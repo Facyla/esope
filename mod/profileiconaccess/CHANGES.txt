@@ -1,0 +1,7 @@
+== Version History ==
+
+x.x:
+
+1.0 (09/10/2012):
+  - initial release
+  - rewritten based on original version for Elgg 1.6 by Curverider

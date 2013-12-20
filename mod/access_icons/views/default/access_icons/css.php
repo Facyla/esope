@@ -7,6 +7,9 @@ $urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
 .elgg-list-access { float:right; font-size:10px; margin-left: 15px; margin-top: 6px; }
 
+/* Hack : can't easily insert access info into listings, so this class lets us "insert" it it the listing item */
+.elgg-list-access.elgg-list-access-listing { margin-bottom: -21px; margin-top: -4px; }
+
 /* Listing des groupes : groupes ouverts et fermés (membership) */
 /*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }
