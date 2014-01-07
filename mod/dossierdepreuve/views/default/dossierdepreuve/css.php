@@ -25,6 +25,9 @@ $inactivecolor = '#CCC';
 #autopositionnement_quest_tabs div a:hover, #autopositionnement_quest_tabs div a:active, #autopositionnement_quest_tabs div a:focus { text-decoration:none; }
 #autopositionnement_quest_tab_content_wrapper { border:3px solid <?php echo $activecolor ?>; padding:3px 6px; }
 
+.dossierdepreuve-question { width:80%; }
+.dossierdepreuve-answer { width: 12%; float: right; min-width: 100px; }
+
 /* Styles des boutons radio, si on veut... */
 /*
 input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_ko_16nb.png); }

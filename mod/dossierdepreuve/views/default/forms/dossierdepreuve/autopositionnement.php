@@ -721,6 +721,8 @@ if ($referentiel) {
 						} else {
 							$history_value = false;
 						}
+						// Auto-positionnement = Réponse
+						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value, 'class' => "dossierdepreuve-answer"));
 						/* Récupération des données de positionnement
 						if (!$history_value) {
 							// Attention : pas possible car c'est par compétence et non par question !!!
@@ -730,16 +732,15 @@ if ($referentiel) {
 						}
 						*/
 						if ($history_value) {
-							$tabcontent .= '<span class="question-title dossierdepreuve-question ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+							$tabcontent .= '<span class="dossierdepreuve-question ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
 						} else {
-							$tabcontent .= '<span class="question-title dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+							$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
 						}
-						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
+						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q));
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
 						//$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval');
 						$tabcontent .= '</span> ';
-						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value, 'class' => "questio-answer")) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
