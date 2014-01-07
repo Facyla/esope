@@ -167,7 +167,7 @@ $french = array(
 	'dossierdepreuve:auto_type:googleform:help' => "Ce questionnaire ne vous permet pas de sauvegarder vos résultats ni de mettre à jour votre dossier de suivi, mais peut être utilisé indépendament pour vous donner quelques pistes en fonction de vos réponses.",
 	'dossierdepreuve:auto:myowneval' => '<strong>=> Mon positionnement </strong>',
 	//'dossierdepreuve:auto:questionlabel' => "<strong>Question n°%s&nbsp;: </strong> %s<br />",
-	'dossierdepreuve:auto:questionlabel' => "%2$s<br />",
+	'dossierdepreuve:auto:questionlabel' => '%2$s',
 	'dossierdepreuve:report:questionlabel' => "<strong> - Question n°%s&nbsp;:</strong> %s<br />",
 	'dossierdepreuve:report:noeval' => "<strong>Question n°%s&nbsp;:</strong> (pas de positionnement)<br />",
 	'dossierdepreuve:report:compeval' => "Positionnement sur cette compétence&nbsp;: %s ",
