@@ -657,7 +657,7 @@ if ($referentiel) {
 				} else {
 					$tabcontent .= '<div id="autopositionnement_quest_tab_content_' . $domaine . '" style="display:none;">';
 				}
-				$domaine_basename = 'dossierdepreuve:referentiel:' . $domaine . ':description';
+				$domaine_basename = 'dossierdepreuve:referentiel:' . $domaine;
 				// Nom du domaine
 				//$tabcontent .= '<div class="dossierdepreuve-domaine nodata" id="domaine-' . $domaine . '">';
 				
@@ -675,7 +675,7 @@ if ($referentiel) {
 					//$domaine_nav_end = '<span style="float:right; line-height: 48px;">' . $submit_button . '</span>';
 				}
 				$completed_domain = '<span class="dossierdepreuve-domaine nodata domaine-' . $domaine . '"></span>';
-				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename) . '</h4>';
+				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename . ':description') . '</h4>';
 				// Ajout navigation par domaine en haut de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav . '<div class="clearfloat"></div></div>';
 				
