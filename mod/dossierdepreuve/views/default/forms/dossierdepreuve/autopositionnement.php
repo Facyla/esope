@@ -714,7 +714,7 @@ if ($referentiel) {
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
 						// Affichage titre questions
-						$tabcontent .= '<div class="question-title">';
+						$tabcontent .= '<div>';
 						// Restauration des données en session si c'est le cas
 						if (isset($history[$domaine][$competence][$i])) {
 							$history_value = $history[$domaine][$competence][$i];
@@ -730,9 +730,9 @@ if ($referentiel) {
 						}
 						*/
 						if ($history_value) {
-							$tabcontent .= '<span class="dossierdepreuve-question ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+							$tabcontent .= '<span class="question-title dossierdepreuve-question ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
 						} else {
-							$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
+							$tabcontent .= '<span class="question-title dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
 						}
 						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
 						// Positionnement = Réponse
