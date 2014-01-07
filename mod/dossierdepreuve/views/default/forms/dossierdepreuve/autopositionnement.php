@@ -711,6 +711,7 @@ if ($referentiel) {
 						if (isset($visualhelp_competence[($i-1)])) $q_help = $visualhelp_competence[($i-1)];
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
+						// Affichage titre questions
 						$tabcontent .= '<p>';
 						// Restauration des données en session si c'est le cas
 						if (isset($history[$domaine][$competence][$i])) {
