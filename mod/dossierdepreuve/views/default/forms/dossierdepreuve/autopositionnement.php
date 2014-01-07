@@ -593,19 +593,6 @@ if ($referentiel) {
 			// Pour les questions elle-mêmes : autres switchs selon les types de questionnaires ?
 			// Note : liste par domaine.. histoire de pas tout avoir d'un coup
 			
-			$tabcontent .= '<style>
-				/* Validation question */
-				.dossierdepreuve-question { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok16-green.png\') left top no-repeat; padding: 0 0 0 22px; }
-				.dossierdepreuve-question.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-16.png\') left top no-repeat; }
-				
-				/* Validation compétence */
-				.dossierdepreuve-competence { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok24-green.png\') left top no-repeat; padding: 4px 0 0 28px; }
-				.dossierdepreuve-competence.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-24.png\') left top no-repeat; }
-				
-				/* Validation domaine */
-				.dossierdepreuve-domaine { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok32-green.png\') left top no-repeat; padding: 0px 0 0 36px; width:32px; }
-				.dossierdepreuve-domaine.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-32\') left top no-repeat; }
-				</style>';
 			$tabcontent .= '<script language="javascript">
 				function validate_radio(radio, domaine, competence, question){
 					var id = \'#radio-\' + domaine + \'-\' + competence + \'-\' + question;
@@ -676,6 +663,7 @@ if ($referentiel) {
 				}
 				$completed_domain = '<span class="dossierdepreuve-domaine nodata domaine-' . $domaine . '"></span>';
 				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename . ':description') . '</h4>';
+				$domaine_nav .= '<br /><br />';
 				// Ajout navigation par domaine en haut de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav . '<div class="clearfloat"></div></div>';
 				
@@ -749,7 +737,6 @@ if ($referentiel) {
 						$tabcontent .= '</div>';
 					}
 					$tabcontent .= '</div>';
-					$tabcontent .= '<br />';
 				}
 				// Ajout navigation par domaine en bas de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav_end . $domaine_nav . '<div class="clearfloat"></div></div>';
