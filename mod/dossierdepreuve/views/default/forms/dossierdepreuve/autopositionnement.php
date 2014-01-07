@@ -80,7 +80,7 @@ $autopositionnement_opt = array(
 */
 $autopositionnement_radio = array(
 		'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
-		'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
+		//'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
 		'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
 	);
 $update_dossier_opt = array(
