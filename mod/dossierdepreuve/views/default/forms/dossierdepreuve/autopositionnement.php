@@ -657,7 +657,7 @@ if ($referentiel) {
 				} else {
 					$tabcontent .= '<div id="autopositionnement_quest_tab_content_' . $domaine . '" style="display:none;">';
 				}
-				$domaine_basename = 'dossierdepreuve:referentiel:' . $domaine;
+				$domaine_basename = 'dossierdepreuve:referentiel:' . $domaine . ':description';
 				// Nom du domaine
 				//$tabcontent .= '<div class="dossierdepreuve-domaine nodata" id="domaine-' . $domaine . '">';
 				
