@@ -662,8 +662,7 @@ if ($referentiel) {
 					//$domaine_nav_end = '<span style="float:right; line-height: 48px;">' . $submit_button . '</span>';
 				}
 				$completed_domain = '<span class="dossierdepreuve-domaine nodata domaine-' . $domaine . '"></span>';
-				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename . ':description') . '</h4>';
-				$domaine_nav .= '<br /><br />';
+				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px; margin-top:16px; margin-bottom:12px;">' . $completed_domain . elgg_echo($domaine_basename . ':description') . '</h4>';
 				// Ajout navigation par domaine en haut de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav . '<div class="clearfloat"></div></div>';
 				
@@ -906,16 +905,17 @@ if ($referentiel) {
 		// DEBUT DU FORMULAIRE - Choix du questionnaire
 		case 'start':
 		default:
-			$questionnaire_info .= '<br /><p>' . elgg_echo('dossierdepreuve:auto:description') . '</p>';
+			$questionnaire .= '<br /><p>' . elgg_echo('dossierdepreuve:auto:description') . '</p>';
 			// Global info about questionnaire
-			$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p style="padding:0 8px;">' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
+			//$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p style="padding:0 8px;">' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
 			// Public mode : we can't save data nor update dossierdepreuve object
 			if (!elgg_is_logged_in()) {
-				$questionnaire_info .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
+				$questionnaire .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
 				//system_messages(elgg_echo('dossierdepreuve:auto:warning'), 'notice');
 			}
 			// Choix du questionnaire
-			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
+			//$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
+			$questionnaire .= '<p>' . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
 			//$questionnaire .= '<p><label for="dossierdepreuve_auto_type">' . elgg_echo('dossierdepreuve:auto_type') . '</label> &nbsp; ' . elgg_view('input/radio', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'options' => $auto_type_opt, 'value' => $auto_type)) . '</p>';
 			$questionnaire_help .= elgg_echo('dossierdepreuve:auto_type:help');
 			// Note : step will be determined through this question
