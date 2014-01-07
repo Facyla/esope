@@ -17,8 +17,8 @@ $french = array(
 	// Settings
 	'dossierdepreuve:settings' => "Paramétrages du dossier de preuve",
 	'dossierdepreuve:settings:referentiels' => "Choix du référentiel",
-	'dossierdepreuve:settings:referentiel:b2iadultes' => "Référentiel B2i Adultes",
-	'dossierdepreuve:settings:referentiel:b2iadultes:help' => "Définition de la structure du référentiel, sous la forme de la liste des numéros des compétences, pour chaque domaine, sous la forme suivante, par ex. pour le B2i Adultes : 1,2,3,4;1,2,3,4;1,2,3;1,2,3,4;1,2,3",
+	'dossierdepreuve:settings:referentiel:b2iadultes' => "Référentiel B2i adultes",
+	'dossierdepreuve:settings:referentiel:b2iadultes:help' => "Définition de la structure du référentiel, sous la forme de la liste des numéros des compétences, pour chaque domaine, sous la forme suivante, par ex. pour le B2i adultes : 1,2,3,4;1,2,3,4;1,2,3;1,2,3,4;1,2,3",
 	'dossierdepreuve:settings:referentiels:help' => "Choisissez le référentiel à configurer. Si vous changez de référentiel, les valeurs précédemment enregistrées seront conservées, mais ne seront plus affichées.",
 	'dossierdepreuve:settings:referentiel:domaines' => "Liste des domaines",
 	'dossierdepreuve:settings:referentiel:competences' => "Liste des compétences",
@@ -73,7 +73,7 @@ $french = array(
 	'dossierdepreuve:report:totalvalidation:partial' => "<strong>D'après vos réponses, vous pouvez actuellement valider %s des %s domaines du référentiel (%s des %s compétences). Ce résultat est toutefois incomplet et n'utilise que vos réponses.</strong><br />",
 	'dossierdepreuve:report:totalvalidation:toopartial' => "<strong>Vous pouvez actuellement valider %s compétences (sur %s), mais avez répondu à trop peu de questions pour un résultat fiable sur l'ensemble du référentiel.</strong><br />",
 	// Mails & messages
-	'dossierdepreuve:msg:subject' => "Autopositionnement B2i Adultes",
+	'dossierdepreuve:msg:subject' => "Test d'autopositionnement B2i adultes",
 	'dossierdepreuve:msg:message' => "Vous venez de terminer votre questionnaire d'autopositionnement de la plateforme des Compétences Numériques.<br />Comme vous l'avez demandé, voici les résultats de votre test. Ceux-ci ne sont pas conservés sur la plateforme et restent anonymes.<br />Si vous le souhaitez, vous pouvez utiliser ou transmettre à votre formateur le code présent en fin de mail pour reprendre votre questionnaire dans l'état où vous l'aviez laissé.",
 	'dossierdepreuve:msg:restoredata' => "Données à utiliser pour restaurer votre autopositionnement sur le site, ou mettre à jour votre dossier de preuve avec ces informations :",
 	'dossierdepreuve:msg:thanks' => "Merci d'avoir utilisé l'outil de positionnement de Compétence Numériques !<br />Vous pouvez le recommander en envoyant ce lien aux personnes que cela pourrait intéresser :",
@@ -149,11 +149,11 @@ $french = array(
 	
 	
 	// Test d'auto-positionnement : éléments du formulaire
-	'dossierdepreuve:auto:title' => "Auto-test de positionnement B2i Adultes",
+	'dossierdepreuve:auto:title' => "Test d'auto-positionnement B2i adultes",
 	'dossierdepreuve:auto:public:disclaimer' => "Ce test de positionnement s'améliore grâce à vos retours ! N'hésitez pas à faire part de vos remarques, suggestions, corrections à <a href=\"mailto:contact@formavia.fr\">contact@formavia.fr</a> !",
 	'dossierdepreuve:auto:warning' => "Vous n'êtes pas identifié sur le site&nbsp;: les résultats de votre test ne pourront pas être enregistrés.<br /><br />Si vous disposez d'un compte, merci de <a href=\"" . $url . "login\">vous connecter</a>.<br /><br />Sinon vous pouvez utiliser ce test librement, et recevoir vos résultats par mail.",
 	'dossierdepreuve:auto:new' => "Test d'auto-positionnement",
-	'dossierdepreuve:auto:description' => "Ce test vous permet de savoir où vous en êtes par rapport au B2i Adultes. En répondant à quelques questions, il vous permettra de connaître les compétences que vous pouvez valider et d'identifier vos axes d'amélioration.",
+	'dossierdepreuve:auto:description' => "Ce test vous permet de savoir où vous en êtes par rapport au B2i adultes. En répondant à quelques questions, il vous permettra de connaître les compétences que vous pouvez valider et d'identifier vos axes d'amélioration.",
 	'dossierdepreuve:auto:contact_email' => "Votre adresse email",
 	'dossierdepreuve:auto:contact_email:help' => "Facultatif, uniquement si vous souhaitez recevoir vos résultats par mail.<br /><em>Note&nbsp;: vous pouvez envoyer les résultats à plusieurs adresses email, en les séparant par des ';')</em>",
 	'dossierdepreuve:auto_type' => "Choix du test d'autopositionnement",
@@ -198,11 +198,11 @@ $french = array(
 	'profile:types:admin' => "Administrateur",
 	'profile:types:admin:description' => "Les administrateurs de la plateforme.",
 	'profile:types:learner' => "Candidat",
-	'profile:types:learner:description' => "Un Candidat est en cours d'acquisition des compétences du B2i Adultes. Il est pour cela membre d'un groupe de formation et sous la responsabilité d'un formateur.",
+	'profile:types:learner:description' => "Un Candidat est en cours d'acquisition des compétences du B2i adultes. Il est pour cela membre d'un groupe de formation et sous la responsabilité d'un formateur.",
 	'profile:types:tutor' => "Formateur",
 	'profile:types:tutor:description' => "Un Formateur est en charge de candidats, regroupés au sein d'un ou de plusieurs groupes de formation.<br />Il est rattaché à une organisation (centre agréé).",
 	'profile:types:evaluator' => "Habilitateur",
-	'profile:types:evaluator:description' => "Formateur habilité à valider les compétences du B2i Adultes.",
+	'profile:types:evaluator:description' => "Formateur habilité à valider les compétences du B2i adultes.",
 	'profile:types:other_administrative' => "Autres et administration",
 	'profile:types:other_administrative:description' => "Autres membres hors-formation : gestion administrative, animation globale et tous les profils particuliers qui ne sont pas liés directement à la formation et à la certification au B2i.",
 	'profile:types:organisation' => "Centre agréé",
@@ -238,7 +238,7 @@ $french = array(
 	
 	
 	// Référentiel
-	'dossierdepreuve:referentiel' => "Référentiel B2i Adultes",
+	'dossierdepreuve:referentiel' => "Référentiel B2i adultes",
 	'dossierdepreuve:referentiel:domaine' => "Domaine",
 	'dossierdepreuve:referentiel:competence' => "Compétence",
 	'dossierdepreuve:referentiel:b2i:title' => "Référentiel B2i : positionnement et évaluation",
@@ -325,9 +325,9 @@ $french = array(
 	'dossierdepreuve:nodata' => "(non renseigné)",
 	'dossierdepreuve:autopositionnement:' => "(choisir une réponse)",
 	'dossierdepreuve:autopositionnement:nodata' => "(non renseigné)",
-	'dossierdepreuve:autopositionnement:100' => "Oui parfaitement",
-	'dossierdepreuve:autopositionnement:50' => "Oui mais avec difficulté",
-	'dossierdepreuve:autopositionnement:0' => "Non mais j’aimerais apprendre",
+	'dossierdepreuve:autopositionnement:100' => "Oui",
+	'dossierdepreuve:autopositionnement:50' => "Oui un peu",
+	'dossierdepreuve:autopositionnement:0' => "Non",
 	'dossierdepreuve:currentautopositionnement' => "Votre autopositionnement actuel&nbsp;: ",
 	'dossierdepreuve:competence:' => "(choisir)",
 	'dossierdepreuve:competence:100' => "Maîtrisé",
@@ -339,7 +339,7 @@ $french = array(
 	'dossierdepreuve:auto:q1:help' => "Une aide sur la question : par ex. Réponsez en fonction de ce que vous savez faire...",
 	
 	
-	// Pool de questions B2i Adultes : ce serait bien d'automatiser tout ça... 
+	// Pool de questions B2i adultes : ce serait bien d'automatiser tout ça... 
 	// sous forme d'objets ou de quelque chose d'un petit peu configurable au moins (settings..)
 	// Donc la liste ci-dessous doit être seulement une liste par défaut, réserve de contenus.
 	/*

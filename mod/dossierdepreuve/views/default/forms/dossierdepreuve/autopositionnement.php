@@ -65,7 +65,7 @@ $auto_type_opt = array(
 $autopositionnement_opt = array(
 		'' => elgg_echo ('dossierdepreuve:autopositionnement:'),
 		'100' => elgg_echo ('dossierdepreuve:autopositionnement:100'),
-		'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
+		//'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
 		'0' => elgg_echo ('dossierdepreuve:autopositionnement:0'),
 	);
 /*
