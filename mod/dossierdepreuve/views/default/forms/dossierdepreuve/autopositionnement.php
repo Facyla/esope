@@ -79,9 +79,11 @@ $autopositionnement_opt = array(
 //. '<span class="elgg-icon elgg-icon-star-alt"></span>';
 */
 $autopositionnement_radio = array(
-		'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
+		elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
+		//'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
 		//'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
-		'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		//'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
 	);
 $update_dossier_opt = array(
 		'yes' => elgg_echo ('dossierdepreuve:update_dossier:yes'),
@@ -712,7 +714,7 @@ if ($referentiel) {
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
 						// Affichage titre questions
-						$tabcontent .= '<p>';
+						$tabcontent .= '<div class="question-title">';
 						// Restauration des données en session si c'est le cas
 						if (isset($history[$domaine][$competence][$i])) {
 							$history_value = $history[$domaine][$competence][$i];
@@ -737,7 +739,7 @@ if ($referentiel) {
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
 						//$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval');
 						$tabcontent .= '</span> ';
-						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value)) . '</p>';
+						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value, 'class' => "questio-answer")) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';

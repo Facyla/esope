@@ -333,7 +333,7 @@ $french = array(
 	'dossierdepreuve:competence:' => "(choisir)",
 	'dossierdepreuve:competence:100' => "Maîtrisé",
 	'dossierdepreuve:competence:50' => "En cours",
-	'dossierdepreuve:competence:0' => "Non-Maîtrise",
+	'dossierdepreuve:competence:0' => "Non-Maîtrisé",
 	
 	// Questions du formulaire d'auto-positionnement
 	'dossierdepreuve:auto:q1' => "Une première question de positionnement : Savez-vous faire telle ou telle chose, produire tel ou tel document ? &nbsp; (A DEFINIR !!)",
