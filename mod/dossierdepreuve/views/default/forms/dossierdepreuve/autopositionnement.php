@@ -745,6 +745,7 @@ if ($referentiel) {
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
 						$i++;
+						$tabcontent .= '</div>';
 					}
 					$tabcontent .= '</div>';
 					$tabcontent .= '<br />';
