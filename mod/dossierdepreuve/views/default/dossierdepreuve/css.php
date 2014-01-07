@@ -50,15 +50,15 @@ input[type="checkbox"].question-100:checked, input[type="radio"].question-100:ch
 
 /* Validation question */
 .dossierdepreuve-question { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok16-green.png') left top no-repeat; padding: 0 0 0 22px; }
-.dossierdepreuve-question.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-16.png') left top no-repeat; */ }
+.dossierdepreuve-question.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-16.png') left top no-repeat; */ background-image:none; }
 
 /* Validation compétence */
 .dossierdepreuve-competence { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok24-green.png') left top no-repeat; padding: 4px 0 0 28px; }
-.dossierdepreuve-competence.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-24.png') left top no-repeat; */ }
+.dossierdepreuve-competence.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-24.png') left top no-repeat; */ background-image:none; }
 
 /* Validation domaine */
 .dossierdepreuve-domaine { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok32-green.png') left top no-repeat; padding: 0px 0 0 36px; width:32px; }
-.dossierdepreuve-domaine.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-32') left top no-repeat; */ }
+.dossierdepreuve-domaine.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-32') left top no-repeat; */ background-image:none; }
 
 
 
