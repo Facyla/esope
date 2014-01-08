@@ -37,7 +37,8 @@ $footer = elgg_view('page/elements/footer', $vars);
 header("Content-type: text/html; charset=UTF-8");
 
 // Allow external embed (hack)
-if (function_exists('header_remove')) { header_remove('X-Frame-Options'); } else { header('X-Frame-Options: GOFORIT'); }
+if (function_exists('header_remove')) { header_remove('X-Frame-Options'); } 
+else { header('X-Frame-Options: GOFORIT'); }
 
 
 ?>

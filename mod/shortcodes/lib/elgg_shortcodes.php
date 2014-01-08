@@ -26,11 +26,11 @@ if (elgg_get_config('https_login')) {
 
 /**
  * Embed PDF
- * [embedpdf width="600px" height="500px"]' . SHORTCODE_HTTP_PREFIX . 'infolab.stanford.edu/pub/papers/google.pdf[/embedpdf]
+ * [embedpdf width="600px" height="500px"]http://infolab.stanford.edu/pub/papers/google.pdf[/embedpdf]
  */
 function embed_pdf_function($atts) {
 	extract(elgg_shortcode_atts(array(
-			'url' => SHORTCODE_HTTP_PREFIX . '',
+			'url' => 'http://',
 			'width' => '640px',
 			'height' => '480px'
 		), $atts));
@@ -214,13 +214,13 @@ function diaporama_function($atts, $content='') {
 		// JS additional parameters
 		'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ",
 		// CSS for main ul tag
-		'slidercss_main' => 'width:'.$width.'; height:'.$height.';',
+		'slidercss_main' => "width:$width; height:$height; ",
 		'height' => $height,
 		'width' => $width,
 		// CSS for li .textslide
-		'slidercss_textslide' => '',
+		'slidercss_textslide' => '.diaporama .anythingControls li { list-style-type: none; }',
 	);
-	$content = elgg_view('slider/slider', $slider_params);
+	$content = '<span class="diaporama">' . elgg_view('slider/slider', $slider_params) . '</span>';
 	return $content;
 }
 elgg_add_shortcode('diaporama', 'diaporama_function');
