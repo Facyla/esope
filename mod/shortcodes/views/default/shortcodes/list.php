@@ -13,9 +13,9 @@
 ?>
 <h3><?php echo elgg_echo('shortcodes:help');?></h3>
 <blockquote><?php echo elgg_echo('shortcodes:description');?></blockquote>
-<p><?php echo elgg_echo('shortcodes:available:video');?> : [video site="youtube" id="VIDEO_ID" w="600" h="340"]</p>
+<p><?php echo elgg_echo('shortcodes:available:video');?> : [video site="youtube" id="VIDEO_ID" w="600px" h="340px"]</p>
 <?php if (elgg_is_active_plugin('slider')) {
-	echo '<p>' . elgg_echo('shortcodes:available:slider') . ' : [diaporama width="100%" height="300px" images="IMAGE1_URL, IMAGE2_URL"]<br />[diaporama width="100%" height="300px"]<br />(IMAGES LIST)</br />[/diaporama]';
+	echo '<p>' . elgg_echo('shortcodes:available:slider') . ' :<br />RAW HTML mode : [diaporama width="100%" height="300px" images="IMAGE1_URL, IMAGE2_URL"]<br />VISUAL EDITOR MODE : [diaporama width="100%" height="300px"]<br />(LIST OF IMAGES)</br />[/diaporama]';
 } ?>
 <p><?php echo elgg_echo('shortcodes:available:embedpdf');?> : [embedpdf width="600px" height="500px" url='PDF_URL']</p>
 <p><?php echo elgg_echo('shortcodes:available:snap');?> : [snap url="PAGE_URL" alt="My description" w="400" h="300"]</p>
