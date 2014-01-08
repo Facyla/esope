@@ -137,7 +137,7 @@ try{
 						
 						// Add with a ', ' separator
 						case 'skills':
-							$own->{$elgg_field} = $own->{$elgg_field} . ', ' . $$field;
+							$own->{$elgg_field} = implode(',', $own->{$elgg_field}) . ', ' . $$field;
 							break;
 						
 						// Add with a '<hr />' separator
@@ -153,7 +153,7 @@ try{
 						default:
 							$own->{$elgg_field} = $$field;
 					}
-					$form_report .= 'Import ' . $field . '...OK<br />';
+					$form_report .= "Import $elgg_field => $field...OK<br />";
 				}
 			}
 			// Import report
@@ -170,7 +170,7 @@ try{
 			// Formulaire pour MAJ des infos
 			$title = elgg_echo('hybridauth:linkedin:import:title');
 			$content .= elgg_echo('hybridauth:linkedin:import:details');
-				$content .= '<div class="clearfloat"></div><br />';
+			$content .= '<div class="clearfloat"></div><br />';
 			$no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
 			$content .= '<form id="linkedin-import-form" action="" method="POST">';
 			$content .= elgg_view('input/securitytokens');
