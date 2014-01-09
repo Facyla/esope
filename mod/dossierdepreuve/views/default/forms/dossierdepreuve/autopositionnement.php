@@ -65,7 +65,7 @@ $auto_type_opt = array(
 $autopositionnement_opt = array(
 		'' => elgg_echo ('dossierdepreuve:autopositionnement:'),
 		'100' => elgg_echo ('dossierdepreuve:autopositionnement:100'),
-		'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
+		//'50' => elgg_echo ('dossierdepreuve:autopositionnement:50'),
 		'0' => elgg_echo ('dossierdepreuve:autopositionnement:0'),
 	);
 /*
@@ -79,9 +79,11 @@ $autopositionnement_opt = array(
 //. '<span class="elgg-icon elgg-icon-star-alt"></span>';
 */
 $autopositionnement_radio = array(
-		'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
-		'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
-		'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
+		//'<span class="autopositionnement-question-100"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:100') => '100',
+		//'<span class="autopositionnement-question-50"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:50') => '50',
+		//'<span class="autopositionnement-question-0"></span>' . elgg_echo ('dossierdepreuve:autopositionnement:0') => '0',
 	);
 $update_dossier_opt = array(
 		'yes' => elgg_echo ('dossierdepreuve:update_dossier:yes'),
@@ -591,19 +593,6 @@ if ($referentiel) {
 			// Pour les questions elle-mêmes : autres switchs selon les types de questionnaires ?
 			// Note : liste par domaine.. histoire de pas tout avoir d'un coup
 			
-			$tabcontent .= '<style>
-				/* Validation question */
-				.dossierdepreuve-question { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok16-green.png\') left top no-repeat; padding: 0 0 0 22px; }
-				.dossierdepreuve-question.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-16.png\') left top no-repeat; }
-				
-				/* Validation compétence */
-				.dossierdepreuve-competence { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok24-green.png\') left top no-repeat; padding: 4px 0 0 28px; }
-				.dossierdepreuve-competence.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-24.png\') left top no-repeat; }
-				
-				/* Validation domaine */
-				.dossierdepreuve-domaine { /* color:green; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/check-ok32-green.png\') left top no-repeat; padding: 0px 0 0 36px; width:32px; }
-				.dossierdepreuve-domaine.nodata { /* color:red; */ background: url(\'' . $vars['url'] . 'mod/dossierdepreuve/graphics/point-interrogation-32\') left top no-repeat; }
-				</style>';
 			$tabcontent .= '<script language="javascript">
 				function validate_radio(radio, domaine, competence, question){
 					var id = \'#radio-\' + domaine + \'-\' + competence + \'-\' + question;
@@ -673,7 +662,7 @@ if ($referentiel) {
 					//$domaine_nav_end = '<span style="float:right; line-height: 48px;">' . $submit_button . '</span>';
 				}
 				$completed_domain = '<span class="dossierdepreuve-domaine nodata domaine-' . $domaine . '"></span>';
-				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px;">' . $completed_domain . elgg_echo($domaine_basename) . '</h4>';
+				$domaine_nav .= '<h4 style="text-align:center; font-size: 28px; line-height: 48px; padding-top:16px; margin-top:16px; margin-bottom:12px;">' . $completed_domain . elgg_echo($domaine_basename . ':description') . '</h4>';
 				// Ajout navigation par domaine en haut de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav . '<div class="clearfloat"></div></div>';
 				
@@ -684,7 +673,8 @@ if ($referentiel) {
 					$property_basename = str_replace(':', '_', $basename);
 					// Nom et description de la compétence
 					$tabcontent .= '<div class="dossierdepreuve-competence nodata ' . "radio-$domaine" . ' competence-' . $domaine . '-' . $competence . '">';
-					$tabcontent .= '<a href="#" title="' . str_replace(array('<br />', '<br>', '\n'), ' &nbsp; ', elgg_echo($competence_basename . ':aide')) . '"><strong>' . elgg_echo($competence_basename) . '&nbsp;:</strong> ';
+					$tabcontent .= '<a href="#" title="' . str_replace(array('<br />', '<br>', '\n'), ' &nbsp; ', elgg_echo($competence_basename . ':aide')) . '">';
+					//$tabcontent .= '<strong>' . elgg_echo($competence_basename) . '&nbsp;:</strong> ';
 					$tabcontent .= elgg_echo($competence_basename . ':description') . '</a>';
 					// Niveau global actuel sur la compétence
 					if (elgg_is_logged_in() && $dossierdepreuve) {
@@ -711,13 +701,16 @@ if ($referentiel) {
 						if (isset($visualhelp_competence[($i-1)])) $q_help = $visualhelp_competence[($i-1)];
 						// Question (et mise en page spécifique si aide visuelle associée)
 						if (!empty($q_help)) { $tabcontent .= '<div style="width:66%; float:left;">'; }
-						$tabcontent .= '<p>';
+						// Affichage titre questions
+						$tabcontent .= '<div>';
 						// Restauration des données en session si c'est le cas
 						if (isset($history[$domaine][$competence][$i])) {
 							$history_value = $history[$domaine][$competence][$i];
 						} else {
 							$history_value = false;
 						}
+						// Auto-positionnement = Réponse
+						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value, 'class' => "dossierdepreuve-answer"));
 						/* Récupération des données de positionnement
 						if (!$history_value) {
 							// Attention : pas possible car c'est par compétence et non par question !!!
@@ -731,19 +724,18 @@ if ($referentiel) {
 						} else {
 							$tabcontent .= '<span class="dossierdepreuve-question nodata ' . "radio-$domaine-$competence" . '" id="' . "radio-$domaine-$competence-$i" . '">';
 						}
-						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q)) . '</p>';
+						$tabcontent .= elgg_echo('dossierdepreuve:auto:questionlabel', array($i, $q));
 						// Positionnement = Réponse
 						//$tabcontent .= '<label><strong>=> Mon positionnement :</strong> ' . elgg_view('input/dropdown', array('name' => "answer[$domaine][$competence][$i]", 'options_values' => $autopositionnement_opt)) . '</label>';
 						//$tabcontent .= elgg_echo('dossierdepreuve:auto:myowneval');
 						$tabcontent .= '</span> ';
-						$tabcontent .= elgg_view('input/radio', array('name' => "answer[$domaine][$competence][$i]", 'options' => $autopositionnement_radio, 'align' => 'horizontal', 'js' => ' onClick="validate_radio(this, '.$domaine.', '.$competence.', '.$i.');"', 'value' => $history_value)) . '</p>';
 						// Ajout de l'aide visuelle, si définie
 						if (!empty($q_help)) { $tabcontent .= '</div><div style="width:30%; float:right; border:1px dashed grey; padding:1%;">' . $q_help . '</div>'; }
 						$tabcontent .= '<div class="clearfloat"></div><br />';
 						$i++;
+						$tabcontent .= '</div>';
 					}
 					$tabcontent .= '</div>';
-					$tabcontent .= '<br />';
 				}
 				// Ajout navigation par domaine en bas de domaine
 				$tabcontent .= '<div id="' . $domaine . '" style="width:100%;">' . $domaine_nav_end . $domaine_nav . '<div class="clearfloat"></div></div>';
@@ -913,16 +905,17 @@ if ($referentiel) {
 		// DEBUT DU FORMULAIRE - Choix du questionnaire
 		case 'start':
 		default:
-			$questionnaire_info .= '<br /><p>' . elgg_echo('dossierdepreuve:auto:description') . '</p>';
+			$questionnaire .= '<br /><p>' . elgg_echo('dossierdepreuve:auto:description') . '</p>';
 			// Global info about questionnaire
-			$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p style="padding:0 8px;">' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
+			//$questionnaire_info .= '<div class="elgg-module elgg-module-info"><div class="elgg-head"> </div><div class="elgg-body"><p style="padding:0 8px;">' . elgg_echo('dossierdepreuve:auto:public:disclaimer') . '</p></div></div>';
 			// Public mode : we can't save data nor update dossierdepreuve object
 			if (!elgg_is_logged_in()) {
-				$questionnaire_info .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
+				$questionnaire .= '<blockquote>' . elgg_echo('dossierdepreuve:auto:warning') . '</blockquote>';
 				//system_messages(elgg_echo('dossierdepreuve:auto:warning'), 'notice');
 			}
 			// Choix du questionnaire
-			$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
+			//$questionnaire .= '<p>' . elgg_echo('dossierdepreuve:domaineselection:help') . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
+			$questionnaire .= '<p>' . elgg_view('input/hidden', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'value' => 'full')) . '</p>';
 			//$questionnaire .= '<p><label for="dossierdepreuve_auto_type">' . elgg_echo('dossierdepreuve:auto_type') . '</label> &nbsp; ' . elgg_view('input/radio', array('name' => 'auto_type', 'id' => 'dossierdepreuve_auto_type', 'options' => $auto_type_opt, 'value' => $auto_type)) . '</p>';
 			$questionnaire_help .= elgg_echo('dossierdepreuve:auto_type:help');
 			// Note : step will be determined through this question

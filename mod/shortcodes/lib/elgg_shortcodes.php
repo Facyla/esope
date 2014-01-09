@@ -16,6 +16,12 @@
  * 2. Register the new shortcode : elgg_add_shortcode('embedpdf', 'embed_pdf_function');
  */
 
+// Allow to embed content when security options block (needs to use HTTPS if site uses HTTPS)
+if (elgg_get_config('https_login')) {
+	define('SHORTCODE_HTTP_PREFIX', 'https://');
+} else {
+	define('SHORTCODE_HTTP_PREFIX', 'http://');
+}
 
 
 /**
@@ -25,10 +31,10 @@
 function embed_pdf_function($atts) {
 	extract(elgg_shortcode_atts(array(
 			'url' => 'http://',
-			'width' => '640',
-			'height' => '480'
+			'width' => '640px',
+			'height' => '480px'
 		), $atts));
-	return '<iframe src="http://docs.google.com/viewer?url=' . $url . '&embedded=true" style="width:' .$width. '; height:' .$height. ';">Your browser does not support iframes</iframe>';
+	return '<iframe src="' . SHORTCODE_HTTP_PREFIX . 'docs.google.com/viewer?url=' . $url . '&embedded=true" style="width:' .$width. '; height:' .$height. ';">Your browser does not support iframes</iframe>';
 }
 elgg_add_shortcode('embedpdf', 'embed_pdf_function');
 
@@ -74,24 +80,24 @@ function chart_shortcode( $atts ) {
 	$string .= '&chs='.$size.'';
 	$string .= '&chd=t:'.$data.'';
 	$string .= '&chf='.$bg.'';
-	return '<img title="'.$title.'" src="http://chart.apis.google.com/chart?cht='.$charttype.''.$string.$advanced.'" alt="'.$title.'" />';
+	return '<img title="'.$title.'" src="' . SHORTCODE_HTTP_PREFIX . 'chart.apis.google.com/chart?cht='.$charttype.''.$string.$advanced.'" alt="'.$title.'" />';
 }
 elgg_add_shortcode('chart', 'chart_shortcode');
 
 
 /**
  * Snap Webpages
- * [snap url="http://www.webgalli.com" alt="My description" w="400" h="300"]
+ * [snap url="' . SHORTCODE_HTTP_PREFIX . 'www.webgalli.com" alt="My description" w="400" h="300"]
  */ 
 function webpage_snaps($atts, $content = null) {
 	extract(elgg_shortcode_atts(array(
-			"snap" => 'http://s.wordpress.com/mshots/v1/',
-			"url" => 'http://www.webgalli.com',
-			"alt" => 'My image',
+			"snap" => SHORTCODE_HTTP_PREFIX . 's.wordpress.com/mshots/v1/',
+			"url" => SHORTCODE_HTTP_PREFIX . 'www.webgalli.com',
+			"alt" => 'Site preview',
 			"w" => '400', // width
 			"h" => '300' // height
 		), $atts));
-	$img = '<img src="' . $snap . '' . urlencode($url) . '?w=' . $w . '&h=' . $h . '" alt="' . $alt . '"/>';
+	$img = '<img src="' . $snap . urlencode($url) . '?w=' . $w . '&h=' . $h . '" alt="' . $alt . '"/>';
 	return $img;
 }
 elgg_add_shortcode("snap", "webpage_snaps");
@@ -99,12 +105,12 @@ elgg_add_shortcode("snap", "webpage_snaps");
 
 /**
  * Embed Google Maps
- * [googlemap width="600" height="300" src="http://maps.google.com/maps?q=Heraklion,+Greece&hl=en&ll=35.327451,25.140495&spn=0.233326,0.445976& sll=37.0625,-95.677068&sspn=57.161276,114.169922& oq=Heraklion&hnear=Heraklion,+Greece&t=h&z=12"]
+ * [googlemap width="600" height="300" src="' . SHORTCODE_HTTP_PREFIX . 'maps.google.com/maps?q=Heraklion,+Greece&hl=en&ll=35.327451,25.140495&spn=0.233326,0.445976& sll=37.0625,-95.677068&sspn=57.161276,114.169922& oq=Heraklion&hnear=Heraklion,+Greece&t=h&z=12"]
  */
 function googlemap_function($atts, $content = null) {
 	extract(elgg_shortcode_atts(array(
-			"width" => '640',
-			"height" => '480',
+			"width" => '640px',
+			"height" => '480px',
 			"src" => ''
 		), $atts));
 	return '<iframe width="'.$width.'" height="'.$height.'" src="'.$src.'&output=embed" ></iframe>';
@@ -121,17 +127,17 @@ function video_sc($atts, $content=null) {
 		elgg_shortcode_atts(array(
 					'site' => 'youtube',
 					'id' => '',
-					'w' => '600',
-					'h' => '370'
+					'w' => '600px',
+					'h' => '370px'
 				), $atts)
 		);
-	if ( $site == "youtube" ) { $src = 'http://www.youtube-nocookie.com/embed/'.$id; }
-	else if ( $site == "vimeo" ) { $src = 'http://player.vimeo.com/video/'.$id; }
-	else if ( $site == "dailymotion" ) { $src = 'http://www.dailymotion.com/embed/video/'.$id; }
-	else if ( $site == "yahoo" ) { $src = 'http://d.yimg.com/nl/vyc/site/player.html#vid='.$id; }
-	else if ( $site == "bliptv" ) { $src = 'http://a.blip.tv/scripts/shoggplayer.html#file=http://blip.tv/rss/flash/'.$id; }
-	else if ( $site == "veoh" ) { $src = 'http://www.veoh.com/static/swf/veoh/SPL.swf?videoAutoPlay=0&permalinkId='.$id; }
-	else if ( $site == "viddler" ) { $src = 'http://www.viddler.com/simple/'.$id; }
+	if ( $site == "youtube" ) { $src = SHORTCODE_HTTP_PREFIX . 'www.youtube-nocookie.com/embed/'.$id; }
+	else if ( $site == "vimeo" ) { $src = SHORTCODE_HTTP_PREFIX . 'player.vimeo.com/video/'.$id; }
+	else if ( $site == "dailymotion" ) { $src = SHORTCODE_HTTP_PREFIX . 'www.dailymotion.com/embed/video/'.$id; }
+	else if ( $site == "yahoo" ) { $src = SHORTCODE_HTTP_PREFIX . 'd.yimg.com/nl/vyc/site/player.html#vid='.$id; }
+	else if ( $site == "bliptv" ) { $src = SHORTCODE_HTTP_PREFIX . 'a.blip.tv/scripts/shoggplayer.html#file=' . SHORTCODE_HTTP_PREFIX . 'blip.tv/rss/flash/'.$id; }
+	else if ( $site == "veoh" ) { $src = SHORTCODE_HTTP_PREFIX . 'www.veoh.com/static/swf/veoh/SPL.swf?videoAutoPlay=0&permalinkId='.$id; }
+	else if ( $site == "viddler" ) { $src = SHORTCODE_HTTP_PREFIX . 'www.viddler.com/simple/'.$id; }
 	if ( $id != '' ) {
 		return '<iframe width="'.$w.'" height="'.$h.'" src="'.$src.'" class="vid iframe-'.$site.'"></iframe>';
 	}
@@ -208,11 +214,13 @@ function diaporama_function($atts, $content='') {
 		// JS additional parameters
 		'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ",
 		// CSS for main ul tag
-		'slidercss_main' => 'width:'.$width.'; height:'.$height.';',
+		'slidercss_main' => "width:$width; height:$height; ",
+		'height' => $height,
+		'width' => $width,
 		// CSS for li .textslide
-		'slidercss_textslide' => '',
+		'slidercss_textslide' => '.diaporama .anythingControls li { list-style-type: none; }',
 	);
-	$content = elgg_view('slider/slider', $slider_params);
+	$content = '<span class="diaporama">' . elgg_view('slider/slider', $slider_params) . '</span>';
 	return $content;
 }
 elgg_add_shortcode('diaporama', 'diaporama_function');

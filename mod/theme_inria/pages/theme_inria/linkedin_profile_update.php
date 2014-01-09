@@ -125,7 +125,8 @@ try{
 			// This is used to map form values to Elgg metadata (or special cases) : ('form_name' => 'elgg_metadata_name')
 			$mapped_form_elgg_fields = array('profile_url' => "linkedin", 'photo' => 'avatar', 'skills' => 'skills', 'industry' => 'industry', 'headline' => 'briefdescription', 'status' => 'briefdescription', 'summary' => 'description', 'positions' => 'description', 'educations' => 'education');
 			// Process form data : fields import
-			foreach ($mapped_linkedin_elgg_fields as $field => $elgg_field) {
+			// @TODO : erreur dans les noms récupérés
+			foreach ($mapped_form_elgg_fields as $field => $elgg_field) {
 				// Import only if asked to...
 				if (get_input($field) == 'yes') {
 					switch ($field) {
@@ -136,7 +137,7 @@ try{
 						
 						// Add with a ', ' separator
 						case 'skills':
-							$own->{$elgg_field} = $own->{$elgg_field} . ', ' . $$field;
+							$own->{$elgg_field} = implode(',', $own->{$elgg_field}) . ', ' . $$field;
 							break;
 						
 						// Add with a '<hr />' separator
@@ -152,7 +153,7 @@ try{
 						default:
 							$own->{$elgg_field} = $$field;
 					}
-					$form_report .= 'Import ' . $field . '...OK<br />';
+					$form_report .= "Import $elgg_field => $field...OK<br />";
 				}
 			}
 			// Import report
@@ -160,7 +161,7 @@ try{
 				$str_editprofile = '<a href="' . $CONFIG->url . 'profile/' . $own->username . '/edit">' . elgg_echo('hybridauth:linkedin:editprofile'). '</a>';
 				$str_editavatar = '<a href="' . $CONFIG->url . 'avatar/edit/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:editavatar'). '</a>';
 				$str_viewprofile = '<a href="' . $CONFIG->url . 'profile/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:viewprofile'). '</a>';
-				$content .= '<div class="linkedin-import-report"><strong>' . elgg_echo('hybridauth:linkedin:import:done') . '</strong><br />' . $form_report;
+				$content .= '<div class="linkedin-import-report"><strong>' . elgg_echo('hybridauth:linkedin:import:done') . '</strong><br />' . $form_report . '<br />';
 				$content .= '<p>' . elgg_echo('hybridauth:linkedin:import:after', array($str_editprofile, $str_editavatar, $str_viewprofile)) . '</p>';
 				$content .= '</div><div class="clearfloat"></div>';
 			}
@@ -169,7 +170,7 @@ try{
 			// Formulaire pour MAJ des infos
 			$title = elgg_echo('hybridauth:linkedin:import:title');
 			$content .= elgg_echo('hybridauth:linkedin:import:details');
-				$content .= '<div class="clearfloat"></div><br />';
+			$content .= '<div class="clearfloat"></div><br />';
 			$no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
 			$content .= '<form id="linkedin-import-form" action="" method="POST">';
 			$content .= elgg_view('input/securitytokens');

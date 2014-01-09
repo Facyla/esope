@@ -25,18 +25,21 @@ $inactivecolor = '#CCC';
 #autopositionnement_quest_tabs div a:hover, #autopositionnement_quest_tabs div a:active, #autopositionnement_quest_tabs div a:focus { text-decoration:none; }
 #autopositionnement_quest_tab_content_wrapper { border:3px solid <?php echo $activecolor ?>; padding:3px 6px; }
 
+.dossierdepreuve-question { width:80%; }
+.dossierdepreuve-answer { width: 12%; float: right; min-width: 100px; }
+
 /* Styles des boutons radio, si on veut... */
 /*
-input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_ko_16nb.png); }
-input[type="checkbox"].question-0:checked, input[type="radio"].question-0:checked { content: url(<?php echo $urlicon; ?>smiley_ko_16.png); }
-input[type="checkbox"].question-50, input[type="radio"].question-50 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_medium_16nb.png); }
-input[type="checkbox"].question-50:checked, input[type="radio"].question-50:checked { content: url(<?php echo $urlicon; ?>smiley_medium_16.png); }
-input[type="checkbox"].question-100, input[type="radio"].question-100 { width: 16px; height: 16px; display: inline-block; content: url(<?php echo $urlicon; ?>smiley_ok_16nb.png); }
-input[type="checkbox"].question-100:checked, input[type="radio"].question-100:checked { content: url(<?php echo $urlicon; ?>smiley_ok_16.png); }
+input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ko_16nb.png); }
+input[type="checkbox"].question-0:checked, input[type="radio"].question-0:checked { content: url('<?php echo $urlicon; ?>smiley_ko_16.png); }
+input[type="checkbox"].question-50, input[type="radio"].question-50 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_medium_16nb.png); }
+input[type="checkbox"].question-50:checked, input[type="radio"].question-50:checked { content: url('<?php echo $urlicon; ?>smiley_medium_16.png); }
+input[type="checkbox"].question-100, input[type="radio"].question-100 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ok_16nb.png); }
+input[type="checkbox"].question-100:checked, input[type="radio"].question-100:checked { content: url('<?php echo $urlicon; ?>smiley_ok_16.png); }
 */
-.autopositionnement-question-0 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_ko_16.png); }
-.autopositionnement-question-50 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_medium_16.png); }
-.autopositionnement-question-100 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url(<?php echo $urlicon; ?>smiley_ok_16.png); }
+.autopositionnement-question-0 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ko_16.png); }
+.autopositionnement-question-50 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_medium_16.png); }
+.autopositionnement-question-100 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ok_16.png); }
 
 .dossierdepreuve-submit { text-align:center; }
 .dossierdepreuve-submit input { font-size:20px; }
@@ -44,5 +47,18 @@ input[type="checkbox"].question-100:checked, input[type="radio"].question-100:ch
 /* Icône dossierdepreuve */
 .elgg-menu-item-dossierdepreuve a { padding-left:32px; background: url("<?php echo $urlicon; ?>dossierdepreuve.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-dossierdepreuve a:hover, .elgg-menu-item-dossierdepreuve a:focus, .elgg-menu-item-dossierdepreuve a:active { background: url("<?php echo $urlicon; ?>dossierdepreuve.png") no-repeat scroll 9px -19px <?php echo $activecolor; ?> !important; }
+
+/* Validation question */
+.dossierdepreuve-question { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok16-green.png') left top no-repeat; padding: 0 0 0 22px; }
+.dossierdepreuve-question.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-16.png') left top no-repeat; */ background-image:none; }
+
+/* Validation compétence */
+.dossierdepreuve-competence { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok24-green.png') left top no-repeat; padding: 4px 0 0 28px; }
+.dossierdepreuve-competence.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-24.png') left top no-repeat; */ background-image:none; }
+
+/* Validation domaine */
+.dossierdepreuve-domaine { /* color:green; */ background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/check-ok32-green.png') left top no-repeat; padding: 0px 0 0 36px; width:32px; }
+.dossierdepreuve-domaine.nodata { /* color:red; background: url('<?php echo $CONFIG->url; ?>mod/dossierdepreuve/graphics/point-interrogation-32') left top no-repeat; */ background-image:none; }
+
 
 

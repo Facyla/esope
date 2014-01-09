@@ -109,7 +109,7 @@ if (elgg_is_logged_in()) {
 					echo elgg_get_plugin_setting('headertitle', 'adf_public_platform');
 					//'<span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>';
 					?></a></h1>
-					<span class="header-subtitle">la plateforme de votre parcours B2i Adultes</span>
+					<span class="header-subtitle">la plateforme de votre parcours B2i adultes</span>
 					<?php if (elgg_is_logged_in()) {
 						echo '<a href="' . $url . 'profile/' . $ownusername . '"><span id="adf-profil"><img src="' . $own->getIconURL('topbar') . '" alt="' . $own->name . '" /> ' . $own->name . ' (' . elgg_echo('dossierdepreuve:profile_type:' . $profile_type). ')</span></a>';
 						//echo '<span id="adf-profil"><img src="' . $own->getIconURL('topbar') . '" alt="' . $own->name . '" /> ' . $own->name . ' (profil)</span>';
@@ -143,7 +143,7 @@ if (elgg_is_logged_in()) {
 					<?php } else {
 						// Bouton de connexion partout sauf sur la home - en fait si : page différente
 						//if (full_url() != $url) 
-						echo '<nav><ul><li id="login"><a href="' . $url . 'login"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
+						echo '<nav><ul><li id="login"><a href="' . $url . 'login">' . elgg_echo('theme_compnum:login') . '</a></li></ul></nav>';
 					} ?>
 				
 					<?php if (elgg_is_logged_in() && !$display_menu) { ?>
