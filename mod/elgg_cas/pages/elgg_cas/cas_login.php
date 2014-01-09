@@ -102,6 +102,7 @@ if (elgg_instanceof($user, 'user')) {
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
+			elgg_load_library("elgg:ldap_auth");
 			$elgg_password = generate_random_cleartext_password();
 			// Création du compte puis MAJ avec les infos du LDAP
 			ldap_auth_create_profile($elgg_username, $elgg_password);
