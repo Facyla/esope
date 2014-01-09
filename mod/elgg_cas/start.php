@@ -69,8 +69,8 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 
 
 function elgg_cas_autologin() {
-	if (elgg_get_viewtype() == 'default') {
-		global $CONFIG;
+	global $CONFIG;
+	if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
 		// CAS autologin
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
@@ -93,8 +93,7 @@ function elgg_cas_autologin() {
 			}
 			if (phpCAS::checkAuthentication()) {
 				//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
-				$viewtype = elgg_get_viewtype();
-				if ($viewtype == 'default') system_message(elgg_echo('elgg_cas:casdetected'));
+				system_message(elgg_echo('elgg_cas:casdetected'));
 				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 			}
 		}
