@@ -74,6 +74,7 @@ phpCAS::forceAuthentication();
 $elgg_username = phpCAS::getUser();
 $user = get_user_by_username($elgg_username);
 
+
 // Si on est identifié avec un autre compte avant de passer par CAS, on prévient et on arrête la procédure
 if (elgg_is_logged_in()) {
 	$logged = elgg_get_logged_in_user_entity();
@@ -89,14 +90,36 @@ if (elgg_instanceof($user, 'user')) {
 		// CAS is valid, update metadata and finally log user in !
 		$user->is_cas_logged = true;
 		system_message(elgg_echo('elgg_cas:login:success'));
+		// MAJ profil via LDAP
+		if (elgg_is_active_plugin('ldap_auth')) {
+			elgg_load_library("elgg:ldap_auth");
+			ldap_auth_check_profile($user);
+		}
 		if (login($user)) {
 			forward('');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
-} else { $content .= elgg_echo('elgg_cas:user:notexist'); }
+} else {
+	// No existing account : CAS registration if enabled
+	// Si le compte n'existe pas encore : création
+	if (elgg_is_active_plugin('ldap_auth')) {
+		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
+		if ($casregister == 'yes') {
+			elgg_load_library("elgg:ldap_auth");
+			$elgg_password = generate_random_cleartext_password();
+			// Création du compte puis MAJ avec les infos du LDAP
+			ldap_auth_create_profile($elgg_username, $elgg_password);
+		} else {
+			$content .= elgg_echo('elgg_cas:user:notexist');
+		}
+	} else {
+		$content .= elgg_echo('elgg_cas:user:notexist');
+	}
+}
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-echo elgg_view_page($title, $content);
+// Pas de rendu dans la page en cas d'insclusion du script (autologin)
+if (!$cas_login_included) echo elgg_view_page($title, $content);
 

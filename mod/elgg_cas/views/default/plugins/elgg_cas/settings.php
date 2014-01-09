@@ -44,8 +44,10 @@ if (empty($vars['entity']->cas_context)) $vars['entity']->cas_context = '/cas';
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:autologin'); ?></label><br/>
 		<?php echo elgg_view('input/dropdown', array( 'name' => 'params[autologin]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->autologin )); ?><br/>
-
-
+		
+		<label><?php echo elgg_echo('elgg_cas:settings:casregister'); ?></label><br/>
+		<?php echo elgg_view('input/dropdown', array( 'name' => 'params[casregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->casregister )); ?><br/>
+		
 	</fieldset>
 </p>
 

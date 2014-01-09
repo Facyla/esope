@@ -37,6 +37,9 @@ function elgg_cas_init() {
 		elgg_register_event_handler("pagesetup", "system", "elgg_cas_autologin");
 	}
 	
+	// CAS registration
+	//$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
+	
 }
 
 
@@ -67,30 +70,33 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 
 function elgg_cas_autologin() {
 	global $CONFIG;
-	// CAS autologin
-	elgg_load_library('elgg:elgg_cas');
-	//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-	$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
-	$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
-	$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
-	$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
+	if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
+		// CAS autologin
+		elgg_load_library('elgg:elgg_cas');
+		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
+		$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
+		$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
+		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
 	
-	if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
-		global $cas_client_loaded;
-		if (!$cas_client_loaded) {
-			phpCAS::setDebug();
-			phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-			$cas_client_loaded = true;
-			if (!empty($cas_server_ca_cert_path)) {
-				phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-			} else {
-				phpCAS::setNoCasServerValidation();
+		if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
+			global $cas_client_loaded;
+			if (!$cas_client_loaded) {
+				phpCAS::setDebug();
+				phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+				$cas_client_loaded = true;
+				if (!empty($cas_server_ca_cert_path)) {
+					phpCAS::setCasServerCACert($cas_server_ca_cert_path);
+				} else {
+					phpCAS::setNoCasServerValidation();
+				}
 			}
-		}
-		if (phpCAS::checkAuthentication()) {
-			//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
-			system_message(elgg_echo('elgg_cas:casdetected'));
-			include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
+			if (phpCAS::checkAuthentication()) {
+				//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
+				system_message(elgg_echo('elgg_cas:casdetected'));
+				$cas_login_included = true;
+				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
+			}
 		}
 	}
 }

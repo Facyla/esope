@@ -202,7 +202,11 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 		}
 		foreach ($ldap_infos[0] as $key => $val) {
 			if ($key == 'cn') {
-				$user->name = $val[0];
+				$fullname = $val[0];
+			} else if ($key == 'sn') {
+				$lastname = $val[0];
+			} else if ($key == 'givenName') {
+				$firstname = $val[0];
 			} else {
 				if (isset($val[0])) {
 					$new = $val[0];
@@ -216,6 +220,13 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 					error_log("ldap_auth_update_profile : {$user->name} ldap_info {$key} corresponding to {$fields[$key]} is empty ");
 				}
 			}
+			// MAJ du nom : NOM Prénom
+			if (!empty($firstname) && !empty($lastname)) {
+				$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
+			} else {
+				$user->name = $fullname;
+			}
+			
 		}
 	} else {
 		return false;
