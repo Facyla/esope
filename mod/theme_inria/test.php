@@ -15,3 +15,15 @@ echo "Avant-dernier login : " . elgg_view_friendly_time($user->prev_last_login) 
 echo "Type de compte : " . $user->membertype . '<hr />';
 echo "Statut du compte : " . $user->memberstatus . '<hr />';
 
+if (elgg_is_active_plugin('ldap_auth')) {
+	echo "LDAP infos : ";
+	$auth = new LdapServer(ldap_auth_settings_auth());
+	if ($auth->bind()) {
+		$result = $auth->search('inriaLogin=' . $user->username, array('inriaentrystatus'));
+		if ($result) {
+			echo print_r($result, true);
+		}
+	}
+	echo '<hr />';
+}
+

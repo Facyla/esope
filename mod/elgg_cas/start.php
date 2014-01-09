@@ -37,6 +37,9 @@ function elgg_cas_init() {
 		elgg_register_event_handler("pagesetup", "system", "elgg_cas_autologin");
 	}
 	
+	// CAS registration
+	//$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
+	
 }
 
 
