@@ -27,23 +27,23 @@ if (elgg_is_active_plugin('ldap_auth')) {
 	$mail = new LdapServer(ldap_auth_settings_mail());
 	$info = new LdapServer(ldap_auth_settings_info());
 	
-	echo "AUTH infos :<br />";
+	echo "<br />AUTH infos :<br />";
 	if ($auth->bind()) {
-		$result = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
+		$result = $auth->search('inriaLogin=' . $username, array_keys(ldap_auth_settings_auth_fields()));
 		if ($result) { echo print_r($result, true); }
 	}
 	
-	echo "MAIL infos :<br />";
+	echo "<br /><br />MAIL infos :<br />";
 	if ($mail->bind()) {
-		$ldap_mail = $mail->search('inriaLogin=' .  $user->username, array('inriaMail'));
+		$ldap_mail = $mail->search('inriaLogin=' . $username, array('inriaMail'));
 		echo "LDAP mail : " . print_r($ldap_mail, true) . "<br />";
 		$result = $info->search('mail=' . $ldap_mail[0]['inriaMail'][0], array_keys(ldap_auth_settings_info_fields()));
 		if ($result) { echo print_r($result, true); }
 	}
 	
-	echo "INFO infos :<br />";
+	echo "<br /><br />INFO infos :<br />";
 	if ($info->bind()) {
-		$result = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
+		$result = $auth->search('inriaLogin=' . $username, array_keys(ldap_auth_settings_auth_fields()));
 		if ($result) { echo print_r($result, true); }
 	}
 	
