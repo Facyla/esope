@@ -90,12 +90,12 @@ if (elgg_instanceof($user, 'user')) {
 		// CAS is valid, update metadata and finally log user in !
 		$user->is_cas_logged = true;
 		system_message(elgg_echo('elgg_cas:login:success'));
+		// MAJ profil via LDAP
+		if (elgg_is_active_plugin('ldap_auth')) {
+			elgg_load_library("elgg:ldap_auth");
+			ldap_auth_check_profile($user);
+		}
 		if (login($user)) {
-			// MAJ profil via LDAP
-			if (elgg_is_active_plugin('ldap_auth')) {
-				elgg_load_library("elgg:ldap_auth");
-				ldap_auth_check_profile($user);
-			}
 			forward('');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';

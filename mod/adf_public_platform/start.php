@@ -1031,4 +1031,19 @@ function esope_list_subpages($parent, $internal_link = false, $full_view = false
 }
 
 
+/* Makes all name titles uppercase, including composed names and special delimiters (Jean-Paul O'Brien)
+ * Credits goes to jmarois at http://www.php.net/manual/en/function.ucwords.php
+*/
+function esope_uppercase_name($string) {
+	$string = ucwords(strtolower($string));
+	$delimiters = array('-', '\'');
+	foreach ($delimiters as $delimiter) {
+		if (strpos($string, $delimiter)!==false) {
+			$string = implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
+		}
+	}
+	return $string;
+}
+
+
 
