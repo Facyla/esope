@@ -23,15 +23,17 @@ echo "Statut du compte : " . $user->memberstatus . '<hr />';
 if (elgg_is_active_plugin('ldap_auth')) {
 	echo "LDAP infos :<br />";
 
-	echo "AUTH infos :<br />";
 	$auth = new LdapServer(ldap_auth_settings_auth());
+	$mail = new LdapServer(ldap_auth_settings_mail());
+	$info = new LdapServer(ldap_auth_settings_info());
+	
+	echo "AUTH infos :<br />";
 	if ($auth->bind()) {
 		$result = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
 		if ($result) { echo print_r($result, true); }
 	}
 	
 	echo "MAIL infos :<br />";
-	$mail = new LdapServer(ldap_auth_settings_mail());
 	if ($mail->bind()) {
 		$ldap_mail = $mail->search('inriaLogin=' .  $user->username, array('inriaMail'));
 		echo "LDAP mail : $ldap_mail<br />";
@@ -40,7 +42,6 @@ if (elgg_is_active_plugin('ldap_auth')) {
 	}
 	
 	echo "INFO infos :<br />";
-	$info = new LdapServer(ldap_auth_settings_info());
 	if ($info->bind()) {
 		$result = $auth->search('inriaLogin=' . $user->username, array_keys(ldap_auth_settings_auth_fields()));
 		if ($result) { echo print_r($result, true); }
