@@ -108,7 +108,5 @@ if (elgg_instanceof($user, 'user')) {
 }
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-
-$viewtype = elgg_get_viewtype();
-if ($viewtype == 'default') echo elgg_view_page($title, $content);
+echo elgg_view_page($title, $content);
 

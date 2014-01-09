@@ -5,6 +5,8 @@ $username = get_input('username', false);
 
 $user = get_user_by_username($username);
 
+//echo inria_update_user_status('login', 'user', $user);
+
 echo "Créé : " . elgg_view_friendly_time($user->time_created) . '<hr />';
 echo "Mis à jour : " . elgg_view_friendly_time($user->time_updated) . '<hr />';
 echo "Dernière action : " . elgg_view_friendly_time($user->last_action) . '<hr />';
