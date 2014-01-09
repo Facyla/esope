@@ -94,6 +94,7 @@ function elgg_cas_autologin() {
 			if (phpCAS::checkAuthentication()) {
 				//system_message('Identification CAS détectée. Voulez-vous <a href="' . $CONFIG->url . 'cas_auth">vous connecter avec CAS</a> ?');
 				system_message(elgg_echo('elgg_cas:casdetected'));
+				$cas_login_included = true;
 				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 			}
 		}

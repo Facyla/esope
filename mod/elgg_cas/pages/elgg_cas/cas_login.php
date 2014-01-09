@@ -108,5 +108,6 @@ if (elgg_instanceof($user, 'user')) {
 }
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-echo elgg_view_page($title, $content);
+// Pas de rendu dans la page en cas d'insclusion du script (autologin)
+if (!$cas_login_included) echo elgg_view_page($title, $content);
 
