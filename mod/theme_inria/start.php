@@ -53,6 +53,9 @@ function theme_inria_init(){
 	
 	elgg_register_page_handler("inria", "inria_page_handler");
 	
+	// Add link to longtext menu
+	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
+	
 }
 
 // Theme inria index
