@@ -36,7 +36,7 @@ if (elgg_is_active_plugin('ldap_auth')) {
 	echo "MAIL infos :<br />";
 	if ($mail->bind()) {
 		$ldap_mail = $mail->search('inriaLogin=' .  $user->username, array('inriaMail'));
-		echo "LDAP mail : $ldap_mail<br />";
+		echo "LDAP mail : " . print_r($ldap_mail, true) . "<br />";
 		$result = $info->search('mail=' . $ldap_mail[0]['inriaMail'][0], array_keys(ldap_auth_settings_info_fields()));
 		if ($result) { echo print_r($result, true); }
 	}
