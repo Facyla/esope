@@ -6,35 +6,38 @@ gatekeeper();
 $own = elgg_get_logged_in_user_entity();
 inria_check_and_update_user_status('login', 'user', $own);
 
-// Premiers pas (si configuré)
-$firststeps_guid = elgg_get_plugin_setting('firststeps_guid', 'adf_public_platform');
-$firststeps_page = get_entity($firststeps_guid);
-if ($firststeps_page instanceof ElggObject) {
-	$firststeps = '<div class="firststeps">
-			<a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">Premiers pas (cliquer pour afficher / masquer)
-				<span id="firststeps_show" style="float:right;">&#x25BC;</span>
-				<span id="firststeps_hide" style="float:right; display:none;">&#x25B2;</span>
-			</a>'
-		. '<div id="firsteps_toggle" style="padding:10px; border:0 !important;">'
-			. $firststeps_page->description
-		. '</div>' 
-	. '</div>';
-	// Masqué par défaut après les 2 premiers passages
-	// @todo : on pourrait le faire si pas connecté depuis X temps..
-	if (($_SESSION['user']->last_login >= 0) && ($_SESSION['user']->prev_last_login >= 0)) {
-		$first_time = '<script type="text/javascript">
-		$(document).ready(function() {
-			$(\'#firsteps_toggle\').hide();
-		})
-		</script>';
-		$firststeps .= $first_time;
+// Premiers pas
+$firststeps = '';
+// Réaffiché sur demande
+$hide_firststeps = get_input('firststeps', false);
+if ($hide_firststeps == 'hide') $own->hide_firststeps == 'yes';
+if ($hide_firststeps == 'show') $own->hide_firststeps == 'no';
+// Affiché jusqu'à ce qu'on demande à le masquer
+if ($own->hide_firststeps != 'yes') {
+	$firststeps = elgg_view('cmspages/view', array('pagetype' => 'premiers-pas'));
+	if (!empty($firststeps)) {
+		$firststeps = '<header><div class="iris-firststeps">
+				<div class="firststeps">' . $firststeps . '</div>
+				<a href="?firststeps=hide" class="firststeps-disable">Ne plus afficher</a>
+			</div></header>
+			<div class="clearfloat"></div>';
 	}
 }
 
+
+// Slider
+$slider_params = array(
+		'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
+		'slidercss_main' => "width:100%; height:400px;", 
+		'width' => '100%',
+		'height' => '400px', 
+	);
+$slider = elgg_view('slider/slider', $slider_params);
+
 // Texte intro configurable
-$intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
-$intro .= elgg_view('cmspages/view', array('pagetype' => 'home-loggedin-news'));
-$intro = '<div class="home-news">' . $intro . '</div>';
+//$intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
+$intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype' => 'home-loggedin-news')) . '</div>';
+
 
 // Le Fil
 $thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
@@ -61,24 +64,26 @@ $widget_body = elgg_view_layout('widgets', $params);
 
 
 // Composition de la page
-$body = '
-	<header><div class="intro">' . $firststeps . '</div></header>
-	<div class="clearfloat"></div>
-	
-	<div style="width:68%; float:left;">
-		' . $thewire . '
+$body = $firststeps . '
+	<div style="width:30%; float:left;">
+		<div class="home-box home-wire">' . $thewire . '</div>
 		<div class="clearfloat"></div>
-		' . $site_activity . '
+		<div class="home-box home-activity">' . $site_activity . '</div>
 	</div>
 	
-	<div style="width:30%; float:right;">
-		' . $intro . '
+	<div style="width:50%; float:left; margin-left:2%;" class="iris-news">
+		' . $slider . '
 		<div class="clearfloat"></div>
-		' . elgg_view('theme_inria/sidebar_groups') . '
+		' . $intro . '
+	</div>
+	
+	<div style="width:16%; float:right;">
+		<div class="clearfloat"></div>
+		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
 		<div class="clearfloat"></div><br />
-		' . elgg_view('theme_inria/users/online') . '
+		<div class="home-box">' . elgg_view('theme_inria/users/online') . '</div>
 		<div class="clearfloat"></div><br />
-		' . elgg_view('theme_inria/users/newest') . '
+		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
 	</div>
 	
 	<div class="clearfloat"></div><br />

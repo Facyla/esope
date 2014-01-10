@@ -134,3 +134,10 @@ function adf_platform_groups_handle_owned_page() {
 }
 
 
+
+function esope_groups_search_page() {
+	elgg_push_breadcrumb(elgg_echo('search'));
+	include elgg_get_plugins_path() . 'adf_public_platform/pages/search/index.php';
+}
+
+

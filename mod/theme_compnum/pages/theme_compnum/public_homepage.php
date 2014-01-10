@@ -26,7 +26,7 @@ $content = '';
 $content .= '<style>
 body > section { padding-top:0; }
 </style>';
-$content .= '<div style="background: #92b025; width:100%;">';
+$content .= '<div style="width:100%;">';
 $content .= elgg_view('slider/slider', array());
 $content .= '</div>';
 

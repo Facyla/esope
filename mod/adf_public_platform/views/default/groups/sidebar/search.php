@@ -13,3 +13,4 @@ $body = elgg_view_form('groups/search', array(
 ), $vars);
 
 echo elgg_view_module('aside', '', $body);
+
