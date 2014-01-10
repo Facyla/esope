@@ -16,6 +16,9 @@ $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:
 		<input type="text" name="params[ldap_url]" value="<?php echo $vars['entity']->ldap_url;?>" /><br/>
 		*/ ?>
 		
+		<label><?php echo elgg_echo('ldap_auth:settings:updatename'); ?></label><br/>
+		<?php echo elgg_view('input/dropdown', array( 'name' => 'params[updatename]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->updatename	 )); ?><br/>
+		
 	</fieldset>
 </p>
 
