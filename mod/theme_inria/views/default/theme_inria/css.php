@@ -23,4 +23,7 @@
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }
 .inria-tool-link { padding: 3px 5px; margin: 4px; display: inline-block; }
 
+/* Group tabs */
+.grouptab-action { float:right; }
+
 

@@ -141,6 +141,12 @@ $french = array (
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	
+	'theme_inria:groupmembership:open' => "Libre",
+	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
+	'theme_inria:groupmembership:closed' => "Restreint",
+	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les repsonsables du groupe.",
+	
+	
 );
 
 add_translation("fr",$french);

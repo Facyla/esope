@@ -136,6 +136,12 @@ $english = array(
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
 	
+	'theme_inria:groupmembership:open' => "Open",
+	'theme_inria:groupmembership:open:details' => "Group membership is open to any member.",
+	'theme_inria:groupmembership:closed' => "Closed",
+	'theme_inria:groupmembership:closed:details' => "Group membership is moderated by group admins.",
+	
+	
 );
 
 add_translation("en",$english);

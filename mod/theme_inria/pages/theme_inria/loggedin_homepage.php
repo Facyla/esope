@@ -17,8 +17,10 @@ if ($own->hide_firststeps != 'yes') {
 	$firststeps = elgg_view('cmspages/view', array('pagetype' => 'premiers-pas'));
 	if (!empty($firststeps)) {
 		$firststeps = '<header><div class="iris-firststeps">
-				<div class="firststeps">' . $firststeps . '</div>
-				<a href="?firststeps=hide" class="firststeps-disable">Ne plus afficher</a>
+				<div class="firststeps">
+					' . $firststeps . '
+					<a href="?firststeps=hide" class="firststeps-disable">Ne plus afficher</a>
+				</div>
 			</div></header>
 			<div class="clearfloat"></div>';
 	}
