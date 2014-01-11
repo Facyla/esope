@@ -366,7 +366,11 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-form-event-calendar-edit .description { font-style:italic; font-size:0.90em; }
 .elgg-form-groups-find input[type='text'] { width:250px; }
 .elgg-form-groups-find input.elgg-button-submit { vertical-align:20%; margin:0; }
-
+/* New integrated in-group search */
+.elgg-sidebar .elgg-form.elgg-form-groups-search { border: 0; background: white; padding: 0; margin-bottom: 20px; width:100%; }
+.elgg-form.elgg-form-groups-search #q { height:24px; width:84%; border:0; margin:0; }
+.groups-search-submit-button { height:24px; width:auto; border:1px solid grey; vertical-align: top; float:right; border:0; background-color:#ccc; padding:5px 7px 5px 8px; }
+.groups-search-submit-button:hover, .groups-search-submit-button:active, .groups-search-submit-button:focus { background-color:#999; }
 
 
 /* WIDGETS */

@@ -10,6 +10,9 @@
 $widget_id = $vars['entity']->guid;
 $display_all = false;
 
+$content = '';
+
+/*
 // Si un outil est choisi (et valide), on prend les bonnes valeurs pour l'afficher
 if (!empty($vars['entity']->tool) && ($vars['entity']->tool != 'all')) {
 	switch($vars['entity']->tool) {
@@ -117,8 +120,58 @@ if ($display_all) {
 	if ($description) echo '<p>' . $description . '</p>';
 	echo '<a target="blank" class="elgg-button elgg-button-action" href="' . $url . '" title="Ouvrir ' . $title . ' dans une nouvelle fenêtre">Ouvrir ' . $title . '</a>';
 }
+*/
 
+
+// This array should be identical to the one in edit view...
+$options_values = array(
+		// val => title
+		//'all' => elgg_echo('theme_inria:topbar:all'),
+		'forge' => elgg_echo('theme_inria:topbar:forge'),
+		'notepad' => elgg_echo('theme_inria:topbar:notepad'),
+		'framadate' => elgg_echo('theme_inria:topbar:framadate'),
+		'webinar' => elgg_echo('theme_inria:topbar:webinar'),
+		'ftp' => elgg_echo('theme_inria:topbar:ftp'),
+		'share' => elgg_echo('theme_inria:topbar:share'),
+		'confcall' => elgg_echo('theme_inria:topbar:confcall'),
+		'evo' => elgg_echo('theme_inria:topbar:evo'),
+		'mailinglist' => elgg_echo('theme_inria:topbar:mailinglist'),
+		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
+		'mission' => elgg_echo('theme_inria:topbar:mission'),
+		'mission2' => elgg_echo('theme_inria:topbar:mission2'),
+		'hollydays' => elgg_echo('theme_inria:topbar:hollydays'),
+		'annuaire' => elgg_echo('theme_inria:topbar:annuaire'),
+		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
+	);
+
+foreach ($options_values as $opt => $name) {
+	if ($vars['entity']->{$opt} == 'yes') {
+		switch($vars['entity']->{$opt}) {
+			case 'forge': $url = 'https://gforge.inria.fr/'; break;
+			case 'notepad': $url = 'https://notepad.inria.fr/'; break;
+			case 'framadate': $url = 'http://www.framadate.org/'; break;
+			case 'webinar': $url = 'http://qlf-devinar.inria.fr/'; break;
+			case 'ftp': $url = 'https://transfert.inria.fr/'; break;
+			case 'share': $url = 'https://partage.inria.fr'; break;
+			case 'confcall': $url = 'http://intranet.irisa.fr/irisa/services/pavu/documentation/audioconf#resa'; break;
+			case 'evo': $url = 'http://dsi.inria.fr/services_offerts/visio/EVO'; break;
+			case 'mailinglist': $url = 'https://sympa.inria.fr/'; break;
+			case 'mailer': $url = 'https://zimbra.inria.fr'; break;
+			case 'mission': $url = 'https://portail-izi.inria.fr'; break;
+			case 'mission2': $url = 'https://portail-izi.inria.fr/oreli'; break;
+			case 'hollydays': $url = 'https://casa.inria.fr'; break;
+			case 'annuaire': $url = 'https://annuaire.inria.fr/'; break;
+			case 'tickets': $url = 'https://tickets.inria.fr/'; break;
+		}
+		$content .= '<a target="_blank" class="inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="Ouvrir ' . $name . ' dans une nouvelle fenêtre">' . $name . '</a>';
+	}
+}
+
+if (empty($content)) {
+	echo "<p>Veuillez choisir les outils que vous souhaitez afficher.</p>";
+} else echo $content;
 ?>
+
 <style>
 #elgg-widget-<?php echo $widget_id; ?> header h2:after { content: ": <?php echo $title; ?>"; }
 </style>

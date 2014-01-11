@@ -16,6 +16,16 @@ $search_type = get_input('search_type', 'all');
 // @todo is there an example query to demonstrate ^
 // XSS protection is more important that searching for HTML.
 $query = stripslashes(get_input('q', get_input('tag', '')));
+$container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
+// Display results in appropriate layout for groups
+if (!empty($container_guid)) {
+	if ($container = get_entity($container_guid)) {
+		if (elgg_instanceof($container, 'group')) {
+			elgg_set_page_owner_guid($container_guid);
+			elgg_extend_view('page/elements/owner_block', 'groups/search', 800);
+		}
+	}
+}
 
 // @todo - create function for sanitization of strings for display in 1.8
 // encode <,>,&, quotes and characters above 127
@@ -47,7 +57,7 @@ $offset = ($search_type == 'all') ? 0 : get_input('offset', 0);
 $entity_type = get_input('entity_type', ELGG_ENTITIES_ANY_VALUE);
 $entity_subtype = get_input('entity_subtype', ELGG_ENTITIES_ANY_VALUE);
 $owner_guid = get_input('owner_guid', ELGG_ENTITIES_ANY_VALUE);
-$container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
+//$container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
 $friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
 $sort = get_input('sort');
 switch ($sort) {
@@ -95,6 +105,7 @@ $data = htmlspecialchars(http_build_query(array(
 	'entity_subtype' => $entity_subtype,
 	'entity_type' => $entity_type,
 	'owner_guid' => $owner_guid,
+	'container_guid' => $container_guid,
 	'search_type' => 'all',
 	//'friends' => $friends
 )));
@@ -114,6 +125,7 @@ foreach ($types as $type => $subtypes) {
 				'entity_subtype' => $subtype,
 				'entity_type' => $type,
 				'owner_guid' => $owner_guid,
+				'container_guid' => $container_guid,
 				'search_type' => 'entities',
 				'friends' => $friends
 			)));
@@ -129,6 +141,7 @@ foreach ($types as $type => $subtypes) {
 			'q' => $query,
 			'entity_type' => $type,
 			'owner_guid' => $owner_guid,
+			'container_guid' => $container_guid,
 			'search_type' => 'entities',
 			'friends' => $friends
 		)));
@@ -282,3 +295,4 @@ $layout = elgg_view($layout_view, array('params' => $params, 'body' => $body));
 $title = elgg_echo('search:results', array("\"$display_query\""));
 
 echo elgg_view_page($title, $layout);
+

@@ -38,6 +38,7 @@ $english = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
+	'theme_inria:topbar:evo' => "EVO",
 
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
@@ -45,7 +46,7 @@ $english = array(
 	'theme_inria:topbar:hollydays' => "Casa",
 	'theme_inria:topbar:mission' => "IziGFD",
 	'theme_inria:topbar:mission2' => "Oreli",
-	'theme_inria:topbar:tickets' => "SUPPORT&nbsp;Tickets",
+	'theme_inria:topbar:tickets' => "SUPPORT Tickets",
 
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",
@@ -134,6 +135,12 @@ $english = array(
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
+	
+	'theme_inria:groupmembership:open' => "Open",
+	'theme_inria:groupmembership:open:details' => "Group membership is open to any member.",
+	'theme_inria:groupmembership:closed' => "Closed",
+	'theme_inria:groupmembership:closed:details' => "Group membership is moderated by group admins.",
+	
 	
 );
 

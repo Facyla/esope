@@ -38,6 +38,7 @@ $french = array (
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
+	'theme_inria:topbar:evo' => "EVO",
 
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
@@ -45,7 +46,7 @@ $french = array (
 	'theme_inria:topbar:hollydays' => "Casa",
 	'theme_inria:topbar:mission' => "IziGFD",
 	'theme_inria:topbar:mission2' => "Oreli",
-	'theme_inria:topbar:tickets' => "Tickets&nbsp;SUPPORT",
+	'theme_inria:topbar:tickets' => "Tickets SUPPORT",
 
 	'theme_inria:event_calendar:groups' => 'Evénements du groupe',
 	'theme_inria:groups:discussions' => 'Discussions du groupe',
@@ -139,6 +140,12 @@ $french = array (
 	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilsiateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
+	
+	'theme_inria:groupmembership:open' => "Libre",
+	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
+	'theme_inria:groupmembership:closed' => "Restreint",
+	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les repsonsables du groupe.",
+	
 	
 );
 
