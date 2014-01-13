@@ -88,7 +88,7 @@
 /*
 .elgg-context-groups .elgg-menu-extras { display: none; }
 */
-.elgg-menu-item-report-this, .elgg-menu-item-rss { display: none !important; }
+.elgg-menu-item-bookmark, .elgg-menu-item-report-this, .elgg-menu-item-rss { display: none !important; }
 
 
 /* PROFILE */

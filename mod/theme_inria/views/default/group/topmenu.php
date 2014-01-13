@@ -59,17 +59,8 @@ if ($groupmenus) foreach ($groupmenus as $menu) {
 	$menu->setItemClass('grouptab-action');
 	$menu->setLinkClass('grouptab-action-link');
 	$menu->setWeight($weight);
-	$weight--; // Keep ordering (would be inverted otherwise, as menus floats right)
+	$weight--; // Keep ordering (would be inverted otherwise, as menus float right)
 	elgg_register_menu_item('group_filter', $menu);
-	/*
-		$tabs[$menu->name] = array(
-			'text' => $menu->text,
-			'href' => $menu->href,
-			'selected' => false,
-			'priority' => 800,
-			'style' => 'float:right;',
-		);
-	*/
 }
 
 

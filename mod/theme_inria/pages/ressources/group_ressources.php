@@ -26,7 +26,7 @@ $sidebar = '';
 elgg_set_context('widgets');
 
 // Add files if enabled
-if ($owner->file_enable) {
+if ($owner->file_enable == 'yes') {
 	$files = elgg_list_entities(array(
 		'type' => 'object', 'subtype' => 'file',
 		'full_view' => false, 'view_toggle_type' => false,
@@ -41,7 +41,7 @@ if ($owner->file_enable) {
 }
 
 // Add bookmarks if enabled
-if ($owner->bookmarks_enable) {
+if ($owner->bookmarks_enable == 'yes') {
 	$bookmarks = elgg_list_entities(array(
 		'type' => 'object', 'subtype' => 'bookmarks',
 		'full_view' => false, 'view_toggle_type' => false,
