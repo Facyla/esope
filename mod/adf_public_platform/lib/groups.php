@@ -15,10 +15,18 @@ function adf_platform_groups_handle_all_page() {
 		$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
 	} else $display_subgroups = false;
 
+	// Force listing context, if needed for summary rendering (but keep groups displayed)
+	/*
+	elgg_pop_context();
+	elgg_push_context('listing');
+	elgg_push_context('groups');
+	*/
+
 	// all groups doesn't get link to self
 	elgg_pop_breadcrumb();
 	elgg_push_breadcrumb(elgg_echo('groups'));
-
+	
+	
 	if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
 		elgg_register_title_button();
 	}

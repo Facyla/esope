@@ -141,10 +141,22 @@ $french = array (
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	
+	'theme_inria:groupmembership' => "Inscription",
 	'theme_inria:groupmembership:open' => "Libre",
 	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
 	'theme_inria:groupmembership:closed' => "Restreint",
 	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les repsonsables du groupe.",
+	
+	'theme_inria:groups:presentation' => "Présentation",
+	'theme_inria:groups:blog' => "Articles",
+	'theme_inria:groups:forum' => "Discussion",
+	'theme_inria:groups:pages' => "Pages wiki",
+	'theme_inria:groups:ressources' => "Ressources",
+	'ressources:group' => "Ressources de %s",
+	'ressources:notingroup' => "Pas de groupe spécifié ou groupe invalide",
+	'theme_inria:openinnewtab' => "Ouvrir dans une nouvelle fenêtre",
+	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
+	'theme_inria:ldapdetails' => "Annuaire Inria",
 	
 	
 );

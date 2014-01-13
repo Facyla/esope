@@ -192,15 +192,17 @@ function adf_platform_owner_block_menu($hook, $type, $return, $params) {
 	// Menu user
 	if (elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
 		$remove_user_tools = elgg_get_plugin_setting('remove_user_menutools', 'adf_public_platform');
-		if (!empty($remove_user_tools)) $remove_user_tools = explode(',', $remove_user_tools);
-		foreach ($return as $key => $item) {
-			$name = $item->getName();
-			//echo $name . ","; // debug: helps finding name if you don't want to look into each plugin hook
-			if (in_array($name, $remove_user_tools)) unset($return[$key]);
-			else if (elgg_in_context($name)) $item->setSelected();
+		if (!empty($remove_user_tools)) {
+			$remove_user_tools = explode(',', $remove_user_tools);
+			if ($return) foreach ($return as $key => $item) {
+				$name = $item->getName();
+				//echo $name . ","; // debug: helps finding name if you don't want to look into each plugin hook
+				if (in_array($name, $remove_user_tools)) unset($return[$key]);
+				else if (elgg_in_context($name)) $item->setSelected();
+			}
 		}
 	} else {
-		foreach ($return as $key => $item) {
+		if ($return) foreach ($return as $key => $item) {
 			if (elgg_in_context($item->getName())) $item->setSelected();
 		}
 	}
