@@ -87,6 +87,9 @@ function elgg_is_admin_logged_in() {
  */
 function elgg_is_admin_user($user_guid) {
 	global $CONFIG;
+
+	$user_guid = (int)$user_guid;
+
 	// cannot use magic metadata here because of recursion
 
 	// must support the old way of getting admin from metadata
@@ -323,6 +326,12 @@ function login(ElggUser $user, $persistent = false) {
 	set_last_login($_SESSION['guid']);
 	reset_login_failure_count($user->guid); // Reset any previous failed login attempts
 
+	// if memcache is enabled, invalidate the user in memcache @see https://github.com/Elgg/Elgg/issues/3143
+	if (is_memcache_available()) {
+		// this needs to happen with a shutdown function because of the timing with set_last_login()
+		register_shutdown_function("_elgg_invalidate_memcache_for_entity", $_SESSION['guid']);
+	}
+	
 	return true;
 }
 

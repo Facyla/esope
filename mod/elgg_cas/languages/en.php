@@ -10,6 +10,7 @@ $en = array(
 	'elgg_cas:loginbutton' => "CAS login",
 	'elgg_cas:casdetected' => "CAS login detected.",
 	'elgg_cas:login:success' => "Successfully logged in with CAS",
+	'elgg_cas:login:details' => "If you have a valid Inria access, please use CAS connection. If your Iris account doesn't exist yet, it will be created at your first login attempt.<br />If you don't have any Inria account or if it isn't valid anymore, please use login/pass regular login below.",
 	
 	'elgg_cas:settings:autologin' => "CAS autologin.",
 	'elgg_cas:settings:autologin:details' => "If activated, a valid CAS authentication will log the user in. If disabled, members need to connect through a login page.",
@@ -24,7 +25,7 @@ $en = array(
 	// Errors
 	'elgg_cas:missingparams' => "Missing CAS parameters. Please set up the plugin settings to use CAS.",
 	'elgg_cas:user:banned' => "Disabled account",
-	'elgg_cas:user:notexist' => "This account doesn't exist yet. Please create it first the regular way. Once your account exists, you can connect with CAS.",
+	'elgg_cas:user:notexist' => "This account doesn't exist yet. Please create it by login through CAS.",
 	'elgg_cas:loginfailed' => "Login failed",
 	'elgg_cas:logged:nocas' => "You're now logged in without CAS.",
 	'elgg_cas:logged:cas' => "You're now logged in with CAS account <b>%s</b>.",

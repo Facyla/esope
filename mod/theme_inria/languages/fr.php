@@ -128,7 +128,7 @@ $french = array (
 	'group_profile' => "Accueil du groupe",
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
-	'loginusername' => "Login LDAP",
+	'loginusername' => "Identifiant Iris",
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
 	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',

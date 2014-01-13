@@ -129,7 +129,7 @@ $english = array(
 	'group_profile' => "Groupe homepage",
 	'inria:groups:featured' => "Featured groups",
 	'inria:members:newest' => "New members",
-	'loginusername' => "LDAP login",
+	'loginusername' => "Iris login",
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
