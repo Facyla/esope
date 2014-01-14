@@ -76,7 +76,7 @@ echo '</p>';
 // Propriétaire un peu à part, en premier
 echo '<strong>' . elgg_echo('group_operators:operators') . '</strong><br />';
 echo '<span style="float:left;" title="' . elgg_echo('group_operators:owner') . '">' . elgg_view_entity_icon($entity->getOwnerEntity(), 'tiny') . '</span>';
-echo elgg_list_entities_from_relationship(array('relationship' => 'group_admin', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny'));
+echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' => 'operator', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny'));
 echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
 if ($entity->canEdit()) {
