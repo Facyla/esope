@@ -382,20 +382,25 @@ function adf_platform_profile_page_handler($page) {
 	
 	// Theme settings : Custom profile layout ? (default: no)
 	if ($custom_profile_layout == 'yes') {
+		
 		$content = elgg_view('adf_platform/profile/wrapper');
+		
 	} else {
+		// Classic layout + some theme options
 		$content = elgg_view('profile/wrapper');
-	}
-	// Theme settings : Remove widgets ? (default: no)
-	if ($remove_profile_widgets != 'yes') {
-		$params = array('content' => $content, 'num_columns' => 3);
-		$content = elgg_view_layout('widgets', $params);
-	}
-	// Theme settings : Add activity feed ? (default: no)
-	if ($add_profile_activity == 'yes') {
-		$db_prefix = elgg_get_config('dbprefix');
-		$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 20, 'pagination' => true));
-		$content .= '<div class="profile-activity-river">' . $activity . '</div>';
+		
+		// Theme settings : Remove widgets ? (default: no)
+		if ($remove_profile_widgets != 'yes') {
+			$params = array('content' => $content, 'num_columns' => 3);
+			$content = elgg_view_layout('widgets', $params);
+		}
+		
+		// Theme settings : Add activity feed ? (default: no)
+		if ($add_profile_activity == 'yes') {
+			$db_prefix = elgg_get_config('dbprefix');
+			$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 20, 'pagination' => true));
+			$content .= '<div class="profile-activity-river">' . $activity . '</div>';
+		}
 	}
 	
 	$body = elgg_view_layout('one_column', array('content' => $content));

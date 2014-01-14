@@ -12,6 +12,13 @@ function theme_inria_init(){
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	
+	// Extend group owner block
+	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_group_owner_block', 501);
+	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
+	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
+	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
+
+	
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
@@ -37,6 +44,9 @@ function theme_inria_init(){
 		}
 	}
 	
+	// Menus
+	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
+	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {
 		elgg_unregister_action('thewire/add');
@@ -52,6 +62,9 @@ function theme_inria_init(){
 	//elgg_unregister_widget_type('river_widget');
 	
 	elgg_register_page_handler("inria", "inria_page_handler");
+	
+	// Add a "ressources" page handler for groups
+	elgg_register_page_handler("ressources", "inria_ressources_page_handler");
 	
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
@@ -86,6 +99,38 @@ function inria_page_handler($page){
 	
 	return true;
 }
+
+function inria_ressources_page_handler($page) {
+	//elgg_load_library('elgg:groups');
+	$base_dir = elgg_get_plugins_path() . 'theme_inria/pages/ressources';
+	$page_type = $page[0];
+	// Only valid URL model : ressources/group/GUID/all (or without 'all')
+	if (isset($page[1])) set_input('guid', $page[2]);
+	switch ($page_type) {
+		case 'group':
+			include "$base_dir/group_ressources.php";
+			break;
+		default:
+			return false;
+	}
+	return true;
+}
+
+
+// Réécriture de certains menus
+function theme_inria_setup_menu() {
+	// Get the page owner entity
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_in_context('groups')) {
+		if ($page_owner instanceof ElggGroup) {
+			if (elgg_is_logged_in() && $page_owner->canEdit()) {
+				$url = elgg_get_site_url() . "group_operators/manage/{$page_owner->getGUID()}";
+				elgg_unregister_menu_item('page', 'edit');
+			}
+		}
+	}
+}
+
 
 
 /* Met à jour les infos des membres

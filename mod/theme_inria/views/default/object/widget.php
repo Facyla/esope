@@ -12,6 +12,8 @@ if (!elgg_instanceof($widget, 'object', 'widget')) {
 }
 
 $show_access = elgg_extract('show_access', $vars, true);
+// Don't display access where not needed (dashboard)
+if (elgg_in_context('dashboard')) $show_access = false;
 
 // @todo catch for disabled plugins
 $widget_types = elgg_get_widget_types('all');

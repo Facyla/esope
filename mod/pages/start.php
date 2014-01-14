@@ -298,10 +298,7 @@ function pages_write_permission_check($hook, $entity_type, $returnvalue, $params
 
 		$write_permission = $params['entity']->write_access_id;
 		$user = $params['user'];
-		
-		// Don't display "edit" link if not logged in
-		if (!elgg_is_logged_in()) return false;
-		
+
 		if ($write_permission && $user) {
 			switch ($write_permission) {
 				case ACCESS_PRIVATE:

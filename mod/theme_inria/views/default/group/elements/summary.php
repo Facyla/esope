@@ -59,29 +59,30 @@ echo $tags;
 echo elgg_view('object/summary/extend', $vars);
 
 if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
-?>
-<br />
-<p>Inscription : <?php
-	if ($entity->membership == ACCESS_PUBLIC) {
-		echo elgg_echo("theme_inria:groupmembership:open");
-		echo elgg_echo("theme_inria:groupmembership:open:details");
-	} else {
-		echo elgg_echo("theme_inria:groupmembership:closed");
-		echo elgg_echo("theme_inria:groupmembership:closed:details");
-	}
-	?>
-</p>
 
-<?php
+
+// Display some group details only in owner_block
+if (!elgg_in_context('owner_block')) { return; }
+
+if ($entity->membership == ACCESS_PUBLIC) {
+	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:open:details") . '">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
+	echo '<p class="membership-group-open">' . elgg_echo('theme_inria:groupmembership') . ' : ' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details") . '</p>';
+} else {
+	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:closed:details") . '">' . elgg_echo("theme_inria:groupmembership:closed") . '</span>';
+	echo '<p class="membership-group-closed">' . elgg_echo('theme_inria:groupmembership') . ' : ' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details") . '</p>';
+}
+echo '</p>';
+
 // Propriétaire un peu à part, en premier
 echo '<strong>' . elgg_echo('group_operators:operators') . '</strong><br />';
 echo '<span style="float:left;" title="' . elgg_echo('group_operators:owner') . '">' . elgg_view_entity_icon($entity->getOwnerEntity(), 'tiny') . '</span>';
 echo elgg_list_entities_from_relationship(array('relationship' => 'group_admin', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny'));
 echo '<div class="clearfloat"></div>';
+// Lien admin des responsables de groupes
 if ($entity->canEdit()) {
 	echo '<a href="' . $vars['url'] . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
 }
 ?>
-<br />
-<p><?php echo elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('viewall'); ?></a></p>
+<div class="clearfloat"></div><br />
+<?php echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more'); ?></a></p>
 

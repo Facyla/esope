@@ -129,17 +129,29 @@ $english = array(
 	'group_profile' => "Groupe homepage",
 	'inria:groups:featured' => "Featured groups",
 	'inria:members:newest' => "New members",
-	'loginusername' => "LDAP login",
+	'loginusername' => "Iris login",
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
 	
+	'theme_inria:groupmembership' => "Membership",
 	'theme_inria:groupmembership:open' => "Open",
 	'theme_inria:groupmembership:open:details' => "Group membership is open to any member.",
 	'theme_inria:groupmembership:closed' => "Closed",
 	'theme_inria:groupmembership:closed:details' => "Group membership is moderated by group admins.",
+	
+	'theme_inria:groups:presentation' => "Presentation",
+	'theme_inria:groups:blog' => "Articles",
+	'theme_inria:groups:forum' => "Discussion",
+	'theme_inria:groups:pages' => "Pages",
+	'theme_inria:groups:ressources' => "Ressources",
+	'ressources:group' => "Ressources of %s",
+	'ressources:notingroup' => "No group or invalid group",
+	'theme_inria:openinnewtab' => "Open link in new tab",
+	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
+	'theme_inria:ldapdetails' => "Inria details",
 	
 	
 );
