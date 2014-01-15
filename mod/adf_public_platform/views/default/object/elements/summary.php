@@ -20,7 +20,7 @@
 $entity = $vars['entity'];
 
 $title_link = elgg_extract('title', $vars, '');
-if ($title_link === '') {
+if (empty($title_link)) {
 	if (isset($entity->title)) {
 		$text = $entity->title;
 	} else {

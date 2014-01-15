@@ -15,16 +15,19 @@ function access_icons_init() {
 	
 	elgg_extend_view('css', 'access_icons/css');
 	
-	// Rewrite group menu in listing view : add classes + access level
-	elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'groups_entity_menu_setup');
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_groups_entity_menu_setup');
+	// It's pointless to tell not loggedin users that what they see is public...
+	if (elgg_is_logged_in()) {
+		// Rewrite group menu in listing view : add classes + access level
+		elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'groups_entity_menu_setup');
+		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_groups_entity_menu_setup');
 	
-	// Rewrite entity menu in listing view : add classes + access level
-	// Note : soit on utilise ce hook, soit on modifie page/components/list si on veut avoir l'accès sur tous types de contenus, y compris dans les listes et widgets (ce qui est le choix privilégié sur adf_public_platform)
-	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
+		// Rewrite entity menu in listing view : add classes + access level
+		// Note : soit on utilise ce hook, soit on modifie page/components/list si on veut avoir l'accès sur tous types de contenus, y compris dans les listes et widgets (ce qui est le choix privilégié sur adf_public_platform)
+		//elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
 	
-	// Ajout des accès sur la rivière
-	elgg_register_plugin_hook_handler('register', 'menu:river', 'access_icons_river_menu_setup');
+		// Ajout des accès sur la rivière
+		elgg_register_plugin_hook_handler('register', 'menu:river', 'access_icons_river_menu_setup');
+	}
 	
 }
 
