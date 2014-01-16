@@ -111,15 +111,15 @@ $tools_url = $url . 'inria_widget/';
 .inria-tool-notepad { background: url(<?php echo $tools_url; ?>NOTEPAD.png) no-repeat top left; }
 .inria-tool-framadate { background: url(<?php echo $tools_url; ?>FRAMADATE.png) no-repeat top left; }
 .inria-tool-webinar { background: url(<?php echo $tools_url; ?>Visioconference.png) no-repeat top left; }
-.inria-tool-ftp { background: url(<?php echo $tools_url; ?>FTP.png) no-repeat top left; }
+.inria-tool-ftp { background: url(<?php echo $tools_url; ?>TRANSFER.png) no-repeat top left; }
 .inria-tool-share { background: url(<?php echo $tools_url; ?>PARTAGE.png) no-repeat top left; }
-.inria-tool-confcall { background: url(<?php echo $tools_url; ?>Visioconferencesurpostedetravail.png) no-repeat top left; }
+.inria-tool-confcall { background: url(<?php echo $tools_url; ?>AUDIOCONFERENCE.png) no-repeat top left; }
 .inria-tool-evo { background: url(<?php echo $tools_url; ?>EVO.png) no-repeat top left; }
 .inria-tool-mailinglist { background: url(<?php echo $tools_url; ?>Listedediffusion.png) no-repeat top left; }
 .inria-tool-mailer { background: url(<?php echo $tools_url; ?>MAILER.png) no-repeat top left; }
-.inria-tool-mission { background: url(<?php echo $tools_url; ?>MISSION.png) no-repeat top left; }
-.inria-tool-mission2 { background: url(<?php echo $tools_url; ?>MISSION2.png) no-repeat top left; }
-.inria-tool-holidays { background: url(<?php echo $tools_url; ?>HOLIDAYS.png) no-repeat top left; }
+.inria-tool-mission { background: url(<?php echo $tools_url; ?>IZIGFD.png) no-repeat top left; }
+.inria-tool-mission2 { background: url(<?php echo $tools_url; ?>ORELI.png) no-repeat top left; }
+.inria-tool-holidays { background: url(<?php echo $tools_url; ?>CASA.png) no-repeat top left; }
 .inria-tool-annuaire { background: url(<?php echo $tools_url; ?>ANNUAIRE.png) no-repeat top left; }
 .inria-tool-tickets { background: url(<?php echo $tools_url; ?>TICKETS.png) no-repeat top left; }
 
