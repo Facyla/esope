@@ -26,7 +26,8 @@ $sidebar = '';
 elgg_set_context('widgets');
 
 // Add files if enabled
-if ($owner->file_enable == 'yes') {
+//if ($owner->file_enable == 'yes') {
+if (elgg_is_active_plugin('file')) {
 	$files = elgg_list_entities(array(
 		'type' => 'object', 'subtype' => 'file',
 		'full_view' => false, 'view_toggle_type' => false,

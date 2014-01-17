@@ -25,7 +25,7 @@ $options_values = array(
 		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
 		'mission' => elgg_echo('theme_inria:topbar:mission'),
 		'mission2' => elgg_echo('theme_inria:topbar:mission2'),
-		'hollydays' => elgg_echo('theme_inria:topbar:hollydays'),
+		'holidays' => elgg_echo('theme_inria:topbar:holidays'),
 		'annuaire' => elgg_echo('theme_inria:topbar:annuaire'),
 		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
 	);

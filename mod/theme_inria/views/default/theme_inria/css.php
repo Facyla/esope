@@ -1,3 +1,9 @@
+<?php
+global $CONFIG;
+$url = $CONFIG->url . 'mod/theme_inria/graphics/';
+$tools_url = $url . 'inria_widget/';
+?>
+
 /* Page d'accueil */
 .home-news { background:#efefef; padding:0.5em 1em; margin-bottom:1em; }
 .elgg-context-dashboard .elgg-form-thewire-add { width: 100%; }
@@ -97,6 +103,26 @@
 .profile-widgets .elgg-widget-add-control { float:left; text-align: left; margin: 1%; background: #eee; height: 30px; border: 2px dotted #aaa; padding: 10px 1% 0px 1%; }
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
+
+
+/* Inria Tools Widget */
+.inria-tool-link { padding-left: 34px; color: black; font-size: 18px; }
+.inria-tool-forge { background: url(<?php echo $tools_url; ?>GForge.png) no-repeat top left; }
+.inria-tool-notepad { background: url(<?php echo $tools_url; ?>NOTEPAD.png) no-repeat top left; }
+.inria-tool-framadate { background: url(<?php echo $tools_url; ?>FRAMADATE.png) no-repeat top left; }
+.inria-tool-webinar { background: url(<?php echo $tools_url; ?>Visioconference.png) no-repeat top left; }
+.inria-tool-ftp { background: url(<?php echo $tools_url; ?>TRANSFER.png) no-repeat top left; }
+.inria-tool-share { background: url(<?php echo $tools_url; ?>PARTAGE.png) no-repeat top left; }
+.inria-tool-confcall { background: url(<?php echo $tools_url; ?>AUDIOCONFERENCE.png) no-repeat top left; }
+.inria-tool-evo { background: url(<?php echo $tools_url; ?>EVO.png) no-repeat top left; }
+.inria-tool-mailinglist { background: url(<?php echo $tools_url; ?>Listedediffusion.png) no-repeat top left; }
+.inria-tool-mailer { background: url(<?php echo $tools_url; ?>MAILER.png) no-repeat top left; }
+.inria-tool-mission { background: url(<?php echo $tools_url; ?>IZIGFD.png) no-repeat top left; }
+.inria-tool-mission2 { background: url(<?php echo $tools_url; ?>ORELI.png) no-repeat top left; }
+.inria-tool-holidays { background: url(<?php echo $tools_url; ?>CASA.png) no-repeat top left; }
+.inria-tool-annuaire { background: url(<?php echo $tools_url; ?>ANNUAIRE.png) no-repeat top left; }
+.inria-tool-tickets { background: url(<?php echo $tools_url; ?>TICKETS.png) no-repeat top left; }
+
 
 
 

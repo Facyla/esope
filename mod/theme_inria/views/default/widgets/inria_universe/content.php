@@ -64,9 +64,9 @@ if (!empty($vars['entity']->tool) && ($vars['entity']->tool != 'all')) {
 			$url = 'https://portail-izi.inria.fr/oreli';
 			$title = elgg_echo('theme_inria:topbar:mission2');
 			break;
-		case 'hollydays':
+		case 'holidays':
 			$url = 'https://casa.inria.fr';
-			$title = elgg_echo('theme_inria:topbar:hollydays');
+			$title = elgg_echo('theme_inria:topbar:holidays');
 			break;
 		case 'annuaire':
 			$url = 'https://annuaire.inria.fr/';
@@ -105,7 +105,7 @@ if ($display_all) {
 					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://zimbra.inria.fr"><?php echo elgg_echo('theme_inria:topbar:mailer'); ?></a><br />
 					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://portail-izi.inria.fr"><?php echo elgg_echo('theme_inria:topbar:mission'); ?></a><br />
 					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://portail-izi.inria.fr/oreli"><?php echo elgg_echo('theme_inria:topbar:mission2'); ?></a><br />
-					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://casa.inria.fr"><?php echo elgg_echo('theme_inria:topbar:hollydays'); ?></a><br />
+					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://casa.inria.fr"><?php echo elgg_echo('theme_inria:topbar:holidays'); ?></a><br />
 					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://annuaire.inria.fr/"><?php echo elgg_echo('theme_inria:topbar:annuaire'); ?></a><br />
 					<br /><a target="blank" class="elgg-button elgg-button-action" href="https://tickets.inria.fr/"><?php echo elgg_echo('theme_inria:topbar:tickets'); ?></a><br />
 				</ul>
@@ -139,7 +139,7 @@ $options_values = array(
 		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
 		'mission' => elgg_echo('theme_inria:topbar:mission'),
 		'mission2' => elgg_echo('theme_inria:topbar:mission2'),
-		'hollydays' => elgg_echo('theme_inria:topbar:hollydays'),
+		'holidays' => elgg_echo('theme_inria:topbar:holidays'),
 		'annuaire' => elgg_echo('theme_inria:topbar:annuaire'),
 		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
 	);
@@ -159,7 +159,7 @@ foreach ($options_values as $opt => $name) {
 			case 'mailer': $url = 'https://zimbra.inria.fr'; break;
 			case 'mission': $url = 'https://portail-izi.inria.fr'; break;
 			case 'mission2': $url = 'https://portail-izi.inria.fr/oreli'; break;
-			case 'hollydays': $url = 'https://casa.inria.fr'; break;
+			case 'holidays': $url = 'https://casa.inria.fr'; break;
 			case 'annuaire': $url = 'https://annuaire.inria.fr/'; break;
 			case 'tickets': $url = 'https://tickets.inria.fr/'; break;
 		}

@@ -136,7 +136,7 @@ $color12 = $css['color12']; // #DEDEDE
 .elgg-sidebar .elgg-module-aside {
 	background:transparent; 
 	float: left;
-	margin: 40px 0 0 0;
+	margin: 20px 0 0 0;
 	padding:6px 4px 2px 4px;
 }
 

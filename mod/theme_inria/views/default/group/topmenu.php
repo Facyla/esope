@@ -34,7 +34,8 @@ $tabs['discussion'] = array(
 );
 
 // If files or bookmarks enabled
-if (($group->bookmarks_enable == 'yes') || ($group->file_enable == 'yes')) 
+// Files are always active, even if the "tool" is disabled (can be embedded)
+//if (($group->bookmarks_enable == 'yes') || ($group->file_enable == 'yes')) 
 $tabs['ressources'] = array(
 	'text' => elgg_echo('theme_inria:groups:ressources'),
 	'href' => $vars['url'] . 'ressources/group/' . $group->guid . '/all',
