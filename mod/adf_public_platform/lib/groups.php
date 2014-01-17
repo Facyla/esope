@@ -148,4 +148,9 @@ function esope_groups_search_page() {
 	include elgg_get_plugins_path() . 'adf_public_platform/pages/search/index.php';
 }
 
+function esope_groups_groupsearch_page() {
+	elgg_push_breadcrumb(elgg_echo('search'));
+	include elgg_get_plugins_path() . 'adf_public_platform/pages/groups/groupsearch.php';
+}
+
 

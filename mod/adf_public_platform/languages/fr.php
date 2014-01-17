@@ -411,11 +411,14 @@ $fr = array(
 	'grouptype:publication' => "Publications",
 	
 	/* ESOPE search */
+	'adf_platform:settings:groups:searchtab' => "Multi-criteria search tab",
 	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
 	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'members:label:search' => "Recherche",
+	'esope:label:search' => "Recherche",
 	'esope:search:title' => "Recherche avancée",
 	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
+	'esope:groupsearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
 	'esope:search:details' => "Utiliser plusieurs critières pour affiner votre recherche",
 	'esope:fulltextsearch' => "Recherche libre",
 	'esope:search:type' => "Type de recherche",
