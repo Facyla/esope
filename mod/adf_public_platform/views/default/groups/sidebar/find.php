@@ -4,6 +4,7 @@
  *
  * @package ElggGroups
  */
+
 $url = elgg_get_site_url() . 'search';
 $body = elgg_view_form('groups/regular_find', array(
 	'action' => $url,

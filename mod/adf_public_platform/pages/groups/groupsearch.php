@@ -10,8 +10,8 @@ $title = elgg_echo('groups');
 $content = '';
 
 elgg_pop_breadcrumb();
-elgg_set_context('groups');
 
+elgg_register_title_button();
 
 // Prepare JS script for forms
 $ts = time();
@@ -75,9 +75,12 @@ $content .= $search_form;
 $content .= '<div id="esope-search-results"></div>';
 
 
+$sidebar = 	'';
+$sidebar .= elgg_view('groups/sidebar/featured');
+
 $params = array(
 	'content' => $content,
-	'sidebar' => elgg_view('groups/sidebar'),
+	'sidebar' => $sidebar,
 	'title' => $title,
 	'filter_override' => elgg_view('groups/group_sort_menu', array('selected' => $vars['page'])),
 );
