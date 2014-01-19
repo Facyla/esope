@@ -165,6 +165,10 @@ function adf_platform_groups_page_handler($page) {
 			if (!empty($page[2])) set_input('q', $page[2]);
 			esope_groups_search_page();
 			break;
+		case 'groupsearch':
+			if (!empty($page[1])) set_input('q', $page[1]);
+			esope_groups_groupsearch_page();
+			break;
 		case 'owner':
 			//groups_handle_owned_page();
 			adf_platform_groups_handle_owned_page();

@@ -403,6 +403,8 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:newest') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_newest )) . '</p>';
 			// Allow to remove popular
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular )) . '</p>';
+			// Allow to add a new group tab search
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab )) . '</p>';
 			// Allow to remove discussion OR add it at page bottom
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion )) . '</p>';
 			// Set default tools status
@@ -657,6 +659,10 @@ $(function() {
 		// Advanced search tool (alpha version, structure changes may happen)
 		$esope_search_url = $CONFIG->url . 'esearch';
 		echo ' <p><label>' . elgg_echo('esope:search:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_search_fields]', 'value' => $vars['entity']->metadata_search_fields)) . '<a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
+		
+		// Advanced group search tool (alpha version, structure changes may happen)
+		$esope_search_url = $CONFIG->url . 'groups/groupsearch';
+		echo ' <p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_groupsearch_fields]', 'value' => $vars['entity']->metadata_groupsearch_fields)) . '<a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
 		
 		// Suppression des menus de l'utilisateur
 		echo ' <p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools )) . '</p>';

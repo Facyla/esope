@@ -68,7 +68,7 @@ a.elgg-button {
 	-webkit-border-radius: 8px;
 	-o-border-radius: 8px;
 	border: 0 none;
-	box-shadox: none;
+	box-shadow: none;
 	color: <?php echo $color15; ?>;
 	text-shadow: 1px 1px 1px #333;
 	/* margin-top: 10px; */
