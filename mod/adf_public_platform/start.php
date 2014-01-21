@@ -23,7 +23,7 @@ function adf_platform_init() {
 	global $CONFIG;
 	
 	// Nouvelles vues
-	elgg_extend_view('groups/sidebar/members','theme_items/online_groupmembers');
+	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
 	
 	// CSS & JS SCRIPTS

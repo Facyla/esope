@@ -84,8 +84,15 @@ function adf_platform_groups_handle_all_page() {
 	//$filter = elgg_view('groups/find');
 	$filter = elgg_view('groups/group_sort_menu', array('selected' => $selected_tab));
 	
-	$sidebar = elgg_view('groups/find');
+	// Add tags blocks before featured groups if search enabled
+	$groups_search = elgg_get_plugin_setting('groups_searchtab', 'adf_public_platform');
+	if ($groups_search == 'yes') {
+		$sidebar .= elgg_view('page/elements/group_tagcloud_block');
+	} else {
+		$sidebar = elgg_view('groups/find');
+	}
 	$sidebar .= elgg_view('groups/sidebar/featured');
+	
 	
 	// Add discussions if asked to (default to yes = in a tab)
 	if ($groups_discussion == 'always') {
