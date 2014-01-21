@@ -72,7 +72,7 @@ $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value'
 $search_form .= '<fieldset>';
 // Display role filter only if it has a meaning
 if (sizeof($profiletypes_opt > 2)) {
-	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label>Role ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
+	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 

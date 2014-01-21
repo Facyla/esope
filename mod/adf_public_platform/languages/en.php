@@ -415,6 +415,7 @@ $en = array(
 	'adf_platform:settings:groups:searchtab' => "Multi-criteria search tab",
 	'adf_platform:grouptools:priority' => "Group tools priority",
 	'adf_platform:settings:members:searchtab' => "Multi-criteria search tab",
+	'esope:search:members:role' => 'Member status',
 	'esope:label:search' => "Search",
 	'members:label:search' => "Search",
 	'esope:search:title' => "Advanced search",
