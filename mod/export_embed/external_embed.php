@@ -165,7 +165,7 @@ error_log('EXT EMBED');
 			$title = $entity->title;
 			if (empty($title)) $title = $entity->name;
 			$title = "Affichage de " . $title;
-			$body = elgg_view_entity($entity);
+			$body = elgg_view_entity($entity, array('full_view' => $full_view));
 		} else { $body = '<p>Pas d\'accès ou GUID incorrect</p>'; }
 		break;
 	
