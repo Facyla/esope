@@ -23,7 +23,7 @@ function adf_platform_init() {
 	global $CONFIG;
 	
 	// Nouvelles vues
-	elgg_extend_view('groups/sidebar/members','theme_items/online_groupmembers');
+	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
 	
 	// CSS & JS SCRIPTS
@@ -317,26 +317,29 @@ function adf_platform_pagesetup(){
 			if ($CONFIG->breadcrumbs[$last]['title'] == elgg_echo('groups')) $CONFIG->breadcrumbs[$last]['title'] = $CONFIG->breadcrumbs[$last]['title'];
 			*/
 			
-			// Remove "Tool home" entry - except for groups (all groups link)
-			if (!in_array($context, array('groups', 'profile'))) {
-				unset ($CONFIG->breadcrumbs[0]);
-			}
-			
-			// Rename "Owner tool" to the tool name (except for groups - keep group title)
-			//$CONFIG->breadcrumbs[1]['title'] = elgg_echo(elgg_get_context()) . ' ' . $CONFIG->breadcrumbs[1]['title'];
-			if (!in_array($context, array('groups', 'profile'))) $CONFIG->breadcrumbs[1]['title'] = elgg_echo($context);
-			
 			// Insert page owner only if it's a user or group (not a site..), and it's not set by the context
 			$page_owner = elgg_get_page_owner_entity();
 			if ($page_owner instanceof ElggGroup) {
+				
+				if (!in_array($context, array('groups', 'profile'))) {
+					// Remove "Tool home" entry - except for groups (all groups link)
+					// Removes owner after tool name (would duplicate group link otherwise)
+					if ($CONFIG->breadcrumbs[1]['title'] == $page_owner->name) unset ($CONFIG->breadcrumbs[0]);
+					// Rename "Owner tool" to the tool name (except for groups - keep group title)
+					// Rename the tool link with the tool name (group name otherwise)
+					$CONFIG->breadcrumbs[1]['title'] = elgg_echo($context);
+				}
+			
 				if (!elgg_in_context('groups')) {
 					$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
 					array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
+				
 			} else if ($page_owner instanceof ElggUser) {
-				array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
-				array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members') );
+				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
+				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members') );
 			}
 			
 			// Insert home link in all cases

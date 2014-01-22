@@ -88,8 +88,8 @@ function adf_platform_groups_handle_all_page() {
 			if (!$content) { $content = elgg_echo('groups:none'); }
 			break;
 			
-		default:
 		case 'newest':
+		default:
 			$options = array('type' => 'group', 'full_view' => false, 'limit' => $limit);
 			if ($display_subgroups != 'yes') {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU_SUBGROUPS_RELATIONSHIP . "' )");
@@ -102,8 +102,15 @@ function adf_platform_groups_handle_all_page() {
 	//$filter = elgg_view('groups/find');
 	$filter = elgg_view('groups/group_sort_menu', array('selected' => $selected_tab));
 	
-	$sidebar = elgg_view('groups/find');
+	// Add tags blocks before featured groups if search enabled
+	$groups_search = elgg_get_plugin_setting('groups_searchtab', 'adf_public_platform');
+	if ($groups_search == 'yes') {
+		$sidebar .= elgg_view('page/elements/group_tagcloud_block');
+	} else {
+		$sidebar = elgg_view('groups/find');
+	}
 	$sidebar .= elgg_view('groups/sidebar/featured');
+	
 	
 	// Add discussions if asked to (default to yes = in a tab)
 	if ($groups_discussion == 'always') {

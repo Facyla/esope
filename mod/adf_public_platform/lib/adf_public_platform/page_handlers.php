@@ -43,11 +43,11 @@ function adf_platform_pages_page_handler($page) {
 			break;
 		case 'add':
 			set_input('guid', $page[1]);
-			include "$base_dir/new.php";
+			include "$alt_base_dir/new.php";
 			break;
 		case 'edit':
 			set_input('guid', $page[1]);
-			include "$base_dir/edit.php";
+			include "$alt_base_dir/edit.php";
 			break;
 		case 'group':
 			include "$alt_base_dir/owner.php";

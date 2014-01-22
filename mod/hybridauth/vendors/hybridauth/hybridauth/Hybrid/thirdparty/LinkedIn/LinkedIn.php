@@ -2,8 +2,8 @@
 // http://code.google.com/p/simple-linkedinphp/
 // 3.2.0 - November 29, 2011
 // hacked into the code to handel new scope (r_basicprofile+r_emailaddress) - until Paul update linkedinphp library!
-// Facyla 20131219 note : that hack is actually a bad idea, as it hardcodes params that should remain editable
-// Linkedin let's developpers define the scope in the Linkedin application itself, so just don't force and use it !
+// Facyla note 20131219 : this in fact should not be hacked, as Linkedin lets developpers define the wanted scope 
+//   in Linkedin application settings, when creating the (required) application and API access
 
 /**
  * This file defines the 'LinkedIn' class. This class is designed to be a 

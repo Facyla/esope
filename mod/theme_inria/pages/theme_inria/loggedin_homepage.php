@@ -6,12 +6,12 @@ gatekeeper();
 $own = elgg_get_logged_in_user_entity();
 inria_check_and_update_user_status('login', 'user', $own);
 
-// Premiers pas
+// Premiers pas : s'affiche au début, peut être désactivé
 $firststeps = '';
-// Réaffiché sur demande
+// Masqué ou réaffiché sur demande
 $hide_firststeps = get_input('firststeps', false);
-if ($hide_firststeps == 'hide') $own->hide_firststeps == 'yes';
-if ($hide_firststeps == 'show') $own->hide_firststeps == 'no';
+if ($hide_firststeps == 'hide') { $own->hide_firststeps = 'yes'; } 
+else if ($hide_firststeps == 'show') { $own->hide_firststeps = 'no'; }
 // Affiché jusqu'à ce qu'on demande à le masquer
 if ($own->hide_firststeps != 'yes') {
 	$firststeps = elgg_view('cmspages/view', array('pagetype' => 'premiers-pas'));

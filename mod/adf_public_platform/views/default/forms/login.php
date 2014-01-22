@@ -20,10 +20,12 @@
 	
 	echo '<div class="clearfloat"></div>';
 	// Toogler may only exist on homepage (this view is in a form, so can't insert a toggler here)
-	if ((full_url() == elgg_get_site_url()) || (full_url() == elgg_get_site_url() . 'forgotpassword') || (full_url() == elgg_get_site_url().'login')) {
+	//if ((full_url() == elgg_get_site_url()) || (full_url() == elgg_get_site_url() . 'forgotpassword') || (full_url() == elgg_get_site_url().'login')) {
+	// Ok to add it here for login view - which can be added to forgotpassword view (if not, won't be displayed anyway), but care with login view !)
+	if ((full_url() == elgg_get_site_url()) || (full_url() == elgg_get_site_url() . 'forgotpassword')) {
 		echo '<a href="javascript:void(0);" onclick="$(\'#adf-lostpassword\').toggle(); $(\'#lostpassword_username\').val($(\'#login_username\').val());" class="adf-lostpassword-toggle">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
 	} else {
-		echo '<a href="' . elgg_get_site_url() . 'forgotpassword" class="adf-lostpassword">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
+		echo '<a href="' . elgg_get_site_url() . 'forgotpassword" class="adf-lostpassword" class="adf-lostpassword-toggle">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
 	}
 	?>
 </div>
