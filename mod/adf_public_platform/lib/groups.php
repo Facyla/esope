@@ -70,8 +70,8 @@ function adf_platform_groups_handle_all_page() {
 			if (!$content) { $content = elgg_echo('groups:none'); }
 			break;
 			
-		default:
 		case 'newest':
+		default:
 			$options = array('type' => 'group', 'full_view' => false, 'limit' => $limit);
 			if ($display_subgroups != 'yes') {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU_SUBGROUPS_RELATIONSHIP . "' )");
