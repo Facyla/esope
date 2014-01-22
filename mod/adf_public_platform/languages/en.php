@@ -42,6 +42,7 @@ $en = array(
 	'adf_platform:groupdefaultaccess:public' => "Public",
 	'adf_platform:settings:groupjoin_enablenotif' => "Enable notification when a user joins a group",
 	'adf_platform:config:grouptabs' => "GROUP TABS",
+	'adf_platform:settings:groups:friends' => "Use friends tab",
 	'adf_platform:settings:groups:alpha' => "Use alphabetic tab",
 	'adf_platform:settings:groups:newest' => "Use newest members tab",
 	'adf_platform:settings:groups:popular' => "Use popular groups tab",
@@ -50,6 +51,7 @@ $en = array(
 	'adf_platform:settings:groups:tools_default' => "Enable all group tools when creating a new group",
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (depending on plugins)",
 	'groups:alpha' => "Alphabetic",
+	'groups:friends' => "Friends",
 	'adf_platform:config:memberssearch' => "MEMBERS SEARCH PAGE",
 	'adf_platform:settings:members:alpha' => "Use alphabetic tab",
 	'adf_platform:settings:members:newest' => "Use newest members tab",
@@ -413,6 +415,7 @@ $en = array(
 	
 	/* ESOPE search */
 	'adf_platform:settings:groups:searchtab' => "Multi-criteria search tab",
+	'adf_platform:settings:groups:tags' => "Add tag cloud below search",
 	'adf_platform:grouptools:priority' => "Group tools priority",
 	'adf_platform:settings:members:searchtab' => "Multi-criteria search tab",
 	'esope:label:search' => "Search",

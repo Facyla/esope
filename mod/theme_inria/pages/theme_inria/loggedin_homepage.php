@@ -65,6 +65,12 @@ $params = array( 'content' => '', 'num_columns' => 3, 'show_access' => false);
 $widget_body = elgg_view_layout('widgets', $params);
 
 
+$firststeps = $_SERVER["HTTPS"];
+if ($_SERVER["HTTPS"]) $firststeps .= "HTTPS -  ";
+else $firststeps .= "HTTP sans S -  ";
+$firststeps .= $_SERVER['SERVER_NAME'];
+
+
 // Composition de la page
 $body = $firststeps . '
 	<div style="width:30%; float:left;">

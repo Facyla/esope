@@ -6,8 +6,14 @@
  */
 
 // Don't display this block at all if we have a search tab
+$groups_tags = elgg_get_plugin_setting('groups_tags', 'adf_public_platform');
+if ($groups_tags == 'yes') { $groups_tags_block = elgg_view('groups/sidebar/tags'); }
+
 $groups_search = elgg_get_plugin_setting('groups_searchtab', 'adf_public_platform');
-if ($groups_search == 'yes') return;
+if ($groups_search == 'yes') {
+	echo $groups_tags_block;
+	return;
+}
 
 
 /*
@@ -20,4 +26,5 @@ $body = elgg_view_form('groups/regular_find', array('action' => $url, 'method' =
 
 //echo elgg_view_module('aside', elgg_echo('groups:searchtag'), $body);
 echo $body;
+echo $groups_tags_block;
 
