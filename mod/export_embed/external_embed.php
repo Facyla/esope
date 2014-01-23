@@ -30,6 +30,7 @@ if (empty($embedurl)) {
 }
 $group_guid = get_input('group_guid', false);
 $user_guid = get_input('user_guid', false);
+$username = get_input('username', false);
 $limit = get_input('limit', 5); if ($limit > 100) $limit = 100;
 $offset = get_input('offset', 0);
 $guid = get_input('guid', false);
@@ -103,7 +104,7 @@ switch ($embedtype) {
 				'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
 				'wheres' => array("(e1.container_guid = $group_guid)"),
 			));
-error_log('EXT EMBED');
+			//error_log('EXT EMBED');
 			foreach ($activities as $item) {
 				if (elgg_instanceof($item)) {
 					$id = "elgg-{$item->getType()}-{$item->getGUID()}";
@@ -117,11 +118,26 @@ error_log('EXT EMBED');
 		} else { $body = '<p>Pas d\'accès au groupe ou GUID du groupe incorrect</p>'; }
 		break;
 	
-	// liste des groupes publics (icône + titre)
+	// liste des groupes (icône + titre)
 	case 'groups_list':
 		$title = "Liste des groupes de " . $CONFIG->site->name;
-		$groups = elgg_get_entities(array('types' => 'group', 'limit' => 9999, 'reverse_order_by' => false));
-		$body = elgg_view_entity_list($groups, '', 0, 99, false, false, false);
+		$body = elgg_list_entities(array('types' => 'group', 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view, 'reverse_order_by' => false));
+		break;
+	
+	// liste des groupes en Une (icône + titre)
+	case 'groups_featured':
+		$title = "Liste des groupes en Une de " . $CONFIG->site->name;
+		$body = elgg_list_entities_from_metadata(array('metadata_name' => 'featured_group', 'metadata_value' => 'yes', 'type' => 'group', 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view));
+		break;
+	
+	// liste des groupes en Une (icône + titre)
+	case 'profile_card':
+		$user = get_user_by_username($username);
+		if (elgg_instanceof($user, 'user')) {
+			elgg_set_page_owner_guid($user->guid);
+			$title = $user->name;
+			$body = elgg_view('adf_platform/profile/profile_card', array('user' => $user));
+		}
 		break;
 	
 	// agenda du site

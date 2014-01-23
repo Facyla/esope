@@ -146,7 +146,7 @@ $options_values = array(
 
 foreach ($options_values as $opt => $name) {
 	if ($vars['entity']->{$opt} == 'yes') {
-		switch($vars['entity']->{$opt}) {
+		switch($opt) {
 			case 'forge': $url = 'https://gforge.inria.fr/'; break;
 			case 'notepad': $url = 'https://notepad.inria.fr/'; break;
 			case 'framadate': $url = 'http://www.framadate.org/'; break;
@@ -163,12 +163,12 @@ foreach ($options_values as $opt => $name) {
 			case 'annuaire': $url = 'https://annuaire.inria.fr/'; break;
 			case 'tickets': $url = 'https://tickets.inria.fr/'; break;
 		}
-		$content .= '<a target="_blank" class="inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="Ouvrir ' . $name . ' dans une nouvelle fenêtre">' . $name . '</a>';
+		$content .= '<a target="_blank" class="inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="' . elgg_echo('theme_inria:widget:openintab', array($name)) . '">' . $name . '</a>';
 	}
 }
 
 if (empty($content)) {
-	echo "<p>Veuillez choisir les outils que vous souhaitez afficher.</p>";
+	echo '<p>' . elgg_echo('theme_inria:widget:choosetools') . '</p>';
 } else echo $content;
 ?>
 
