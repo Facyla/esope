@@ -31,14 +31,49 @@ $fr = array(
 	'export_embed:widget:params:help' => "Divers autres paramètres facultatifs peuvent être ajoutés en utilisant la syntaxe habituelle des paramètres transmis via URL : <strong>param1=valeur1&amp;param2=valeur2</strong> etc.)",
 	
 	// Embed type
-  'export_embed:type:site_activity' => 'Activité du site', 
-  'export_embed:type:friends_activity' => 'Activité de mes contacts', 
-  'export_embed:type:my_activity' => 'Mon activité', 
-  'export_embed:type:group_activity' => "Activité d'un groupe", 
-  'export_embed:type:groups_list' => 'Liste des groupes publics', 
-  'export_embed:type:agenda' => 'Agenda',
+	'export_embed:type:site_activity' => 'Activité du site', 
+	'export_embed:type:friends_activity' => 'Activité de mes contacts', 
+	'export_embed:type:my_activity' => 'Mon activité', 
+	'export_embed:type:group_activity' => "Activité d'un groupe", 
+	'export_embed:type:groups_list' => 'Liste des groupes', 
+	'export_embed:type:groups_featured' => 'Liste des groupes en Une', 
+	'export_embed:type:agenda' => 'Agenda',
+	'export_embed:type:profile_card' => "Affichage d'une fiche de profil", 
+	'export_embed:type:entity' => "Affichage d'une entité'", 
+	'export_embed:type:entities' => "Affichage d'une liste d'entités", 
 	
-	'' => "",
+	// Exported elements
+	'export_embed:notconfigured' => "<p>Ce widget n'est pas encore configuré (ou les paramètres fournis sont invalides).</p>
+		<p>
+			Pour afficher les widgets de ce site sur un autre site, veuillez utiliser les informations suivantes&nbsp;:
+			<ul>
+				<li>Adresse du site&nbsp;: <strong>" . elgg_get_site_url() . "</strong></li>
+				<li>Puis choisir le type d'information à afficher via le sélecteur.</li>
+				<li>Pour afficher l'activité d'un groupe en particulier, vous devez indiquer le GUID de ce groupe : il s'agit du nombre que vous trouverez dans l'adresse de la page d'accueil du groupe : <em>groups/profile/<strong>GUID</strong>/nom-du-groupe</em></li>
+			</ul></p>",
+	'export_embed:nocontent' => "Pas de contenu pour le moment.",
+	'export_embed:notconnected' => "ATTENTION, vous n'êtes pas connecté sur %s. Veuillez <a href=\"" . elgg_get_site_url() . "\" target=\"_blank\">vous connecter</a> pour accéder au contenu réservé aux membres",
+	'export_embed:openintab' => "Accéder à %s dans une nouvelle fenêtre",
+	'export_embed:site_activity' => "Activité de %s", 
+	'export_embed:site_activity:viewall' => "Voir toute l'activité du site", 
+	'export_embed:friends_activity' => "Activité de mes contacts", 
+	'export_embed:friends_activity:viewall' => "Voir toute l'activité du site", 
+	'export_embed:my_activity' => "Mon activité", 
+	'export_embed:my_activity:viewall' => "Voir toute l'activité du site", 
+	'export_embed:group_activity' => "Activité récente du groupe %s de %s", 
+	'export_embed:group_activity:viewall' => "Afficher le groupe %s", 
+	'export_embed:group_activity:noaccess' => "Pas d'accès au groupe ou GUID du groupe incorrect", 
+	'export_embed:groups_list' => "Liste des groupes de %s", 
+	'export_embed:groups_list:viewall' => "Afficher la liste des groupes", 
+	'export_embed:groups_list' => "'Liste des groupes en Une de %s", 
+	'export_embed:groups_list:viewall' => "Afficher la liste des groupes en Une", 
+	'export_embed:agenda' => "Agenda de %s",
+	'export_embed:agenda:viewall' => "Agenda",
+	'export_embed:entity' => "Affichage de %s", 
+	'export_embed:entity:noaccess' => "Pas d'accès ou GUID incorrect", 
+	'export_embed:entities' => "Affichage de %s", 
+	'export_embed:entities:noaccess' => "Pas d'accès ou GUID incorrects", 
+	
 	
 );
 

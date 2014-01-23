@@ -433,6 +433,17 @@ $fr = array(
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
 	
+	// View profile as someone else
+	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
+	'esope:viewprofileas:public' => "Vous visualisez votre profil public (tel qu'un non-membre peut le voir)",
+	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
+	'esope:viewprofileas:friends' => "Vous visualisez votre profil tel qu'un de vos contacts peut le voir",
+	'esope:viewprofileas:user' => "Vous visualisez votre profil tel que %s peut le voir",
+	'esope:viewprofileas:yourself' => "Vous-même",
+	'esope:viewprofileas:someonelse' => "Un autre membre",
+	'esope:viewprofileas:acontact' => "L'un de vos contacts",
+	'esope:viewprofileas:nonuser' => "Un non-membre (public)",
+	
 );
 
 add_translation('fr', $fr);

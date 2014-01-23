@@ -434,6 +434,16 @@ $en = array(
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
 	
+	// View profile as someone else
+	'esope:viewprofileas:title' => "View your profile as",
+	'esope:viewprofileas:public' => "You are viewing your public profile (as a non-user would see it)",
+	'esope:viewprofileas:contact' => "You are viewing your profile as another site member",
+	'esope:viewprofileas:friends' => "You are viewing your profile as one of your contacts",
+	'esope:viewprofileas:user' => "You are viewing your profile as %s",
+	'esope:viewprofileas:yourself' => "Yourself",
+	'esope:viewprofileas:someonelse' => "Someone else",
+	'esope:viewprofileas:acontact' => "One of your contacts",
+	'esope:viewprofileas:nonuser' => "Non-user (public)",
 	
 );
 

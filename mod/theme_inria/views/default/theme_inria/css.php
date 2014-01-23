@@ -1,8 +1,70 @@
 <?php
 global $CONFIG;
-$url = $CONFIG->url . 'mod/theme_inria/graphics/';
-$tools_url = $url . 'inria_widget/';
+$fonturl = $CONFIG->url . 'mod/theme_inria/fonts/';
+$imgurl = $CONFIG->url . 'mod/theme_inria/graphics/';
+$tools_url = $imgurl . 'inria_widget/';
 ?>
+
+/* Change Elgg sprites image */
+.elgg-icon { background-image: url(<?php echo $imgurl; ?>elgg_sprites-iris.png); }
+
+/* Add some fonts */
+@font-face {
+	font-family: 'NeoFont'; font-weight: normal; font-style: normal;
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.eot');
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.woff') format('woff'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.ttf') format('truetype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.svg#neo_sans_stdregular') format('svg');
+}
+
+/* Header */
+body { border-top:0; }
+header { background: #6F2D50; border-top: 0; height:70px; }
+header h1 { margin-top: 0; }
+header nav { top: 27px; }
+header nav #user img { float: left; margin-right: 6px; }
+header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
+
+/* Main menu */
+#transverse { background: #F8F4F5; border: 0; box-shadow: none; height: 37px; }
+#transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
+#transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: NeoFont, Arial, sans-serif; font-size: 14px; font-weight: bold; }
+#transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: #F8F4F5; color:#6D2D4F; }
+#transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: #F8F4F5; color: #6D2D4F; }
+#transverse nav ul li ul { background: #F8F4F5; top: 37px; left: 0px; box-shadow:none; }
+#transverse nav ul li ul li { background: #F8F4F5; }
+#transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
+
+/* Search */
+#transverse form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
+form input#adf-search-input { border: 0 none; border-radius: 0; color: #EF783E; }
+form input#adf-search-input:active, form input#adf-search-input:focus { color: #EF783E; }
+form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
+form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #EF783E; border: 1px solid #EF783E; }
+
+/* Forms */
+::-webkit-input-placeholder { color: #EF783E; }
+:-moz-placeholder { color: #EF783E; }
+::-moz-placeholder { color: #EF783E; }
+-ms-input-placeholder { color: #EF783E; }
+
+
+
+/* Footer */
+footer.footer-inria {
+	background: #6d2d4f;
+	background: -moz-linear-gradient(top, #bf8279 0%, #6d2d4f 75%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bf8279), color-stop(75%,#6d2d4f));
+	background: -webkit-linear-gradient(top, #bf8279 0%,#6d2d4f 75%);
+	background: -o-linear-gradient(top, #bf8279 0%,#6d2d4f 75%);
+	background: -ms-linear-gradient(top, #bf8279 0%,#6d2d4f 75%);
+	background: linear-gradient(to bottom, #bf8279 0%,#6d2d4f 75%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8279', endColorstr='#6d2d4f',GradientType=0 );
+}
+.footer-logo-inria { margin-top: 12px; }
+
+
 
 /* Page d'accueil */
 .home-news { background:#efefef; padding:0.5em 1em; margin-bottom:1em; }
@@ -63,7 +125,7 @@ $tools_url = $url . 'inria_widget/';
 	color: #999;
 }
 
-/*********    Change tab hover here    ********/
+/*********	Change tab hover here	********/
 .elgg-menu-group-filter > li > a:hover, 
 .elgg-menu-group-filter > li > a:focus, 
 .elgg-menu-group-filter > li > a:active {

@@ -9,41 +9,55 @@ $content = '';
 if (elgg_is_logged_in()) {
 	$own_user = elgg_get_logged_in_user_entity();
 	$owner = elgg_get_page_owner_entity();
+	
+	// If viewed as someone else (or public), add some links to switch view
+	// Get a random user for viewing
+	$newest_members = elgg_get_entities(array('types' => 'user', 'limit' => 5));
+	foreach ($newest_members as $ent) {
+		if ($ent->isAdmin() || ($ent->guid == $own_user->guid)) continue;
+		$random_member = $ent;
+		$random_member_username = $random_member->username;
+		break;
+	}
+	
+	
 	// Viewing a profile as someone else is limited to self profile (could lead to unwanted info leak if not..)
 	if ($owner->guid == $own_user->guid) {
 		$view_as = get_input('view_as', false);
 		if ($view_as) {
 			if ($view_as == 'public-profile') {
 				logout();
-				$viewas_notes = "<strong>You are viewing your public profile (as a non-user would see it)</strong><br />";
+				$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:public') . '</strong><br />';
+			} else if ($other_user = 'member')) {
+				if (login($random_member)) {
+					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
+				}
+			/*
+			// @TODO : add if used - not yet
+			} else if ($other_user = 'contact')) {
+				if (login($random_member)) {
+					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
+				}
+			*/
 			} else if ($other_user = get_user_by_username($view_as)) {
 				if (login($other_user)) {
-					$viewas_notes = "<strong>You are viewing your profile as {$other_user->name}</strong><br />";
+					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:user') . '</strong><br />';
 				}
 			} else {
 				$view_as = false;
 			}
 		}
 		
-		// If viewed as someone else (or public), add some links to switch view
-		// Get a random user for viewing
-		$newest_members = elgg_get_entities(array('types' => 'user', 'limit' => 5));
-		foreach ($newest_members as $ent) {
-			if ($ent->isAdmin() || ($ent->guid == $own_user->guid)) continue;
-			$other_username = $ent->username;
-			break;
-		}
-		$viewas_notes .= 'View your profile as&nbsp;: ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '">Yourself</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=' . $other_username . '">Someone else (' . $other_username . ')</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">Non-user (public)</a>';
+		$viewas_notes .= elgg_echo('esope:viewprofileas:title') . '&nbsp;: ';
+		$viewas_notes .= '<a href="' . $own_user->getURL() . '">' . elgg_echo('esope:viewprofileas:yourself') . '</a> &nbsp; ';
+		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
+		//$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=friend">' . elgg_echo('esope:viewprofileas:acontact') . '</a> &nbsp; ';
+		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
 		echo '<div class="view-profile-as" style="border:1px dotted grey; padding:2px 6px;">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
 
-$profile = '<div class="profile">
-	<div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div>
-</div>';
+$profile = '<div class="profile"><div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div></div>';
 
 $profile_details = elgg_view('profile/details');
 

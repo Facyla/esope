@@ -31,14 +31,47 @@ $en = array(
 	'export_embed:widget:params:help' => "Various other optional custom parameters can be added via the common URL parameter syntax: <strong>param1=value1&amp;param2=value2</strong> etc.)",
 	
 	// Embed type
-  'export_embed:type:site_activity' => 'Site activity', 
-  'export_embed:type:friends_activity' => 'Friends activity', 
-  'export_embed:type:my_activity' => 'My activity', 
-  'export_embed:type:group_activity' => "Group activity", 
-  'export_embed:type:groups_list' => 'Public groups list', 
-  'export_embed:type:agenda' => 'Calendar',
+	'export_embed:type:site_activity' => 'Site activity', 
+	'export_embed:type:friends_activity' => 'Friends activity', 
+	'export_embed:type:my_activity' => 'My activity', 
+	'export_embed:type:group_activity' => "Group activity", 
+	'export_embed:type:groups_list' => 'Public groups list', 
+	'export_embed:type:agenda' => 'Calendar',
+	'export_embed:type:profile_card' => "Profile card", 
+	'export_embed:type:entity' => "Entity display", 
+	'export_embed:type:entities' => "Entities display", 
 	
-	'' => "",
+	// Exported elements
+	'export_embed:notconfigured' => "<p>This widget is not configured yet (or the parameters are invalid)).</p>
+		<p>
+			If you want to display this site's widgets on another site, please use following informations&nbsp;:
+			<ul>
+				<li>Site address&nbsp;: <strong>" . elgg_get_site_url() . "</strong></li>
+				<li>Then select the informations you wish to display in the dropdown menu.</li>
+				<li>To display a specific group activity, you need to set the GUID of that group : it is the number that displays in the group URL : <em>groups/profile/<strong>GUID</strong>/group-name</em></li>
+			</ul></p>",
+	'export_embed:nocontent' => "No content yet.",
+	'export_embed:notconnected' => "CAUTION, you're not logged on %s. Please <a href=\"" . elgg_get_site_url() . "\" target=\"_blank\">log in</a> to access content that is restricted to the site members",
+	'export_embed:openintab' => "Open %s in a new tab",
+	'export_embed:site_activity' => "%s's activity", 
+	'export_embed:site_activity:viewall' => "View all site activity", 
+	'export_embed:friends_activity' => "Friends activity", 
+	'export_embed:friends_activity:viewall' => "View all site activity", 
+	'export_embed:my_activity' => "My activity", 
+	'export_embed:my_activity:viewall' => "View all site activity", 
+	'export_embed:group_activity' => "Recent activity of group %s of %s", 
+	'export_embed:group_activity:viewall' => "Display %s group", 
+	'export_embed:group_activity:noaccess' => "No access or invalid group GUID", 
+	'export_embed:groups_list' => "%s's group list", 
+	'export_embed:groups_list:viewall' => "Display group list", 
+	'export_embed:groups_list' => "Display featured group list of %s", 
+	'export_embed:groups_list:viewall' => 'Display featured group list', 
+	'export_embed:agenda' => "%s's calendar",
+	'export_embed:agenda:viewall' => 'Calendar',
+	'export_embed:entity' => "Display %s", 
+	'export_embed:entity:noaccess' => "No access or invalid GUIDs", 
+	'export_embed:entities' => "Display %s", 
+	'export_embed:entities:noaccess' => "No access or invalid GUIDs", 
 	
 );
 
