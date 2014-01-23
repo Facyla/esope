@@ -21,7 +21,7 @@ $tools_url = $imgurl . 'inria_widget/';
 /* Header */
 body { border-top:0; }
 header { background: #6F2D50; border-top: 0; height:70px; }
-header h1 { margin-top: 0; }
+header .interne h1 { margin-top: 0; }
 header nav { top: 27px; }
 header nav #user img { float: left; margin-right: 6px; }
 header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
