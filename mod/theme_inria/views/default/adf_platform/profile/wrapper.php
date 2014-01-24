@@ -28,18 +28,18 @@ if (elgg_is_logged_in()) {
 			if ($view_as == 'public-profile') {
 				logout();
 				$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:public') . '</strong><br />';
-			} else if ($other_user == 'member') {
+			} else if ($view_as == 'member') {
 				if (login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
 				}
 			/*
 			// @TODO : add if used - not yet
-			} else if ($other_user == 'contact') {
+			} else if ($view_as == 'contact') {
 				if (login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
 				}
 			*/
-			} else if ($other_user = get_user_by_username($view_as)) {
+			} else if ($view_as = get_user_by_username($view_as)) {
 				if (login($other_user)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:user') . '</strong><br />';
 				}
