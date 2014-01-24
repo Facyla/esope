@@ -124,6 +124,8 @@ $french = array (
 	'theme_inria:thewire:access' => "Accès : ",
 	'theme_inria:thewire:title' => "Inria le Fil",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
+	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
+	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",

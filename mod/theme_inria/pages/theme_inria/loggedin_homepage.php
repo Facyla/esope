@@ -29,10 +29,10 @@ if ($own->hide_firststeps != 'yes') {
 
 // Slider
 $slider_params = array(
-		'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
-		'slidercss_main' => "width:100%; height:400px;", 
-		'width' => '100%',
-		'height' => '400px', 
+		//'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
+		//'slidercss_main' => "width:100%; height:400px;", 
+		//'width' => '100%',
+		//'height' => '400px', 
 	);
 $slider = elgg_view('slider/slider', $slider_params);
 
@@ -73,9 +73,9 @@ $body = $firststeps . '
 	
 	<div style="width:38%; float:left; margin-left:3%;" class="iris-news">
 		<h2 class="hidden">Edito</h2>
-		' . $slider . '
-		<div class="clearfloat"></div>
 		' . $intro . '
+		<div class="clearfloat"></div>
+		' . $slider . '
 	</div>
 	
 	<div style="width:18%; float:right;">

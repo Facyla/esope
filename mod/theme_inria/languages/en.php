@@ -124,6 +124,8 @@ $english = array(
 	'theme_inria:thewire:access' => "Access : ",
 	'theme_inria:thewire:title' => "Inria the Wire",
 	'theme_inria:thewire:details' => "Any message or information to share ?",
+	'theme_inria:widgets:add:home' => "Edit my dashboard",
+	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	
 	// Traductions
 	'theme_inria:login' => "Log in",

@@ -133,12 +133,17 @@ footer.footer-inria {
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 5%; text-align: center; margin: 0; }
 
 .home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
-.home-box h3:first-child { font-size:14px; font-family:NeoFont; margin-bottom: 0.8em; }
+.home-box h3:first-child { font-size:14px; font-family:NeoFont; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; }
-.home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; }
+.home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
 .iris-news {  }
+.iris-news .anythingControls { position: absolute; top: 30px; left: 20px; display:none; }
+.iris-add-button { font-weight: bold; padding: 11px 26px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; }
 
+
+/* Widgets */
+.elgg-widget-add-control { clear: both; }
 section .interne .elgg-layout-one-column div.module { border: 0; background: <?php echo $module_bg_color; ?>; }
 section .interne div.module header { background: <?php echo $module_bg_color; ?>; }
 section .interne div.module header h2 { color:<?php echo $module_title_color; ?>; font-size:14px; text-transform:initial; }
@@ -152,10 +157,6 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* Navigation des pages wiki en pleine largeur */
 .full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 3em; padding: 0.5em 0.5em 1em 0.5em; background: #efefef; }
 
-
-/* Inria tools */
-.inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; min-width: 10ex; }
-.elgg-button.inria-tool-link { padding: 3px 5px; margin: 4px; display: inline-block; }
 
 
 
@@ -237,7 +238,8 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 
 /* Inria Tools Widget */
-.inria-tool-link { padding-left: 34px; background-repeat: no-repeat !important; /* color: black; font-size: 18px; */ }
+.inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }
+.elgg-button.inria-tool-link { background-repeat: no-repeat !important; padding-left: 3px 5px 3px 34px !important; margin: 4px; min-width: 10ex; /* color: black; font-size: 18px; */ }
 .inria-tool-forge { background-image: url(<?php echo $tools_url; ?>GForge.png) !important; }
 .inria-tool-notepad { background-image: url(<?php echo $tools_url; ?>NOTEPAD.png) !important; }
 .inria-tool-framadate { background-image: url(<?php echo $tools_url; ?>FRAMADATE.png) !important; }
