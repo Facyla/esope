@@ -11,6 +11,7 @@ $english = array(
 	'theme_inria:topbar:userfriends' => "My&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "My&nbsp;activities",
 	'theme_inria:topbar:profil' => "My profile",
+	'theme_inria:site:activity' => "Latest activities",
 
 
 
@@ -111,7 +112,7 @@ $english = array(
 	'file:delete' => 'Delete this file',
 	'file:upload' => 'Share new file',
 
-	'forum:none' => 'Actually there is no topics for this group',
+	'forum:none' => 'There is no topic yet for this group',
 
 	'entities:owner' => 'by %s',
 	'entities:footer:time' => 'Last update %s',
@@ -120,8 +121,9 @@ $english = array(
 	
 	'inria:mygroups' => "My groups",
 	'theme_inria:thewire:charleft' => "left",
-
-	'theme_inria:thewire:access' => "Accès : ",
+	'theme_inria:thewire:access' => "Access : ",
+	'theme_inria:thewire:title' => "Inria the Wire",
+	'theme_inria:thewire:details' => "Any message or information to share ?",
 	
 	// Traductions
 	'theme_inria:login' => "Log in",

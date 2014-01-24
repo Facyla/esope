@@ -42,19 +42,17 @@ $intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype'
 
 
 // Le Fil
-$thewire = '<h3><a href="' . $CONFIG->url . 'thewire/all">Inria, le Fil</a></h3>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
-//elgg_push_context('widgets');
+$thewire = '<h2><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:site:activity') . '</a></h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
-//elgg_pop_context('widgets');
+elgg_pop_context('widgets');
 
 // Activité du site
-//if ($homesite_index == 'yes') {
-	$site_activity = '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
-	elgg_push_context('widgets');
-	$db_prefix = elgg_get_config('dbprefix');
-	$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
-	elgg_pop_context();
-//}
+$site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_inria:site:activity') . '</a></h2>';
+elgg_push_context('widgets');
+$db_prefix = elgg_get_config('dbprefix');
+$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
+elgg_pop_context();
 
 // Tableau de bord
 // Note : il peut être intéressant de reprendre le layout des widgets si on veut séparer les colonnes et les intégrer dans l'interface
@@ -67,19 +65,21 @@ $widget_body = elgg_view_layout('widgets', $params);
 
 // Composition de la page
 $body = $firststeps . '
-	<div style="width:30%; float:left;">
+	<div style="width:38%; float:left;">
 		<div class="home-box home-wire">' . $thewire . '</div>
 		<div class="clearfloat"></div>
 		<div class="home-box home-activity">' . $site_activity . '</div>
 	</div>
 	
-	<div style="width:50%; float:left; margin-left:2%;" class="iris-news">
+	<div style="width:38%; float:left; margin-left:3%;" class="iris-news">
+		<h2 class="hidden">Edito</h2>
 		' . $slider . '
 		<div class="clearfloat"></div>
 		' . $intro . '
 	</div>
 	
-	<div style="width:16%; float:right;">
+	<div style="width:18%; float:right;">
+		<h2 class="hidden">Informations</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
 		<div class="clearfloat"></div><br />
@@ -89,6 +89,7 @@ $body = $firststeps . '
 	</div>
 	
 	<div class="clearfloat"></div><br />
+	<h2 class="hidden">Widgets</h2>
 	' . $widget_body;
 
 // Note : si on utilise la sidebar, il faut impérativement y placer un bloc de widgets

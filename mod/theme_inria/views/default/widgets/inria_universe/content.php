@@ -163,7 +163,7 @@ foreach ($options_values as $opt => $name) {
 			case 'annuaire': $url = 'https://annuaire.inria.fr/'; break;
 			case 'tickets': $url = 'https://tickets.inria.fr/'; break;
 		}
-		$content .= '<a target="_blank" class="inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="' . elgg_echo('theme_inria:widget:openintab', array($name)) . '">' . $name . '</a>';
+		$content .= '<a target="_blank" class="elgg-button elgg-button-action inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="' . elgg_echo('theme_inria:widget:openintab', array($name)) . '">' . $name . '</a>';
 	}
 }
 

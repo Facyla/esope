@@ -15,7 +15,7 @@ if ($post) {
 }
 
 echo '<div style="width:85%; float:left;">';
-	echo 'Un message ou une info à partager ?';
+	echo '<em>' . elgg_echo('theme_inria:thewire:details') . '</em>';
 	echo elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
@@ -46,8 +46,8 @@ echo '<div style="width:14%; float:right;">';
 
 	echo elgg_view('input/submit', array(
 		'value' => $text,
-		'id' => 'elgg-button elgg-button-action',
-		'style' => 'padding:0 12px; margin-top: 2px;',
+		'id' => 'elgg-button elgg-button-submit',
+		//'style' => 'padding:0 12px; margin-top: 2px;',
 	));
 	echo '</div>';
 	?>

@@ -11,6 +11,7 @@ $french = array (
 	'theme_inria:topbar:userfriends' => "Mes&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "Mes&nbsp;activités",
 	'theme_inria:topbar:profil' => "Mon profil",
+	'theme_inria:site:activity' => "Activités récentes",
 
 
 	'theme_inria:topbar:all' => "Tous",
@@ -121,6 +122,8 @@ $french = array (
 	'inria:mygroups' => "Mes groupes",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
+	'theme_inria:thewire:title' => "Inria le Fil",
+	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",
