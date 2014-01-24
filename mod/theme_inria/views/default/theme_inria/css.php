@@ -139,6 +139,7 @@ footer.footer-inria {
 .home-wire, .home-activity { background:white; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
+#thewire-textarea { height: 5em; padding: 1px 3px; }
 .iris-news {  }
 .iris-news .anythingControls { position: absolute; top: 30px; left: 20px; display:none; }
 .iris-add-button { font-weight: bold; padding: 11px 26px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; }
@@ -170,6 +171,13 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-tabs { font-size: 12px; }
 .elgg-tabs > li { margin: 0 0 0 4px; }
 .elgg-tabs > li > a { height: 18px; }
+
+
+/* Groups */
+.elgg-owner-block .elgg-head { background: #F8F4F5; }
+/* Eviter car nécessite de revoir tous les outils
+.elgg-menu-owner-block li a { background-color: #F8F4F5; }
+*/
 
 
 

@@ -14,7 +14,7 @@ if ($post) {
 	$text = elgg_echo('thewire:reply');
 }
 
-echo '<div style="width:85%; float:left;">';
+echo '<div style="width:80%; float:left;">';
 	echo '<em>' . elgg_echo('theme_inria:thewire:details') . '</em>';
 	echo elgg_view('input/plaintext', array(
 		'name' => 'body',
@@ -23,7 +23,7 @@ echo '<div style="width:85%; float:left;">';
 	));
 echo '</div>';
 
-echo '<div style="width:14%; float:right;">';
+echo '<div style="width:18%; float:right;">';
 	?>
 	<div id="thewire-characters-remaining" style="margin-bottom:5px;">
 		<span>140</span> <?php echo elgg_echo('theme_inria:thewire:charleft'); ?>
