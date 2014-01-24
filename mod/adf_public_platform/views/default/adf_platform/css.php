@@ -434,8 +434,11 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 /* Contenu des modules */
 section div.module header ul { float: right; margin: 8px 10px 0 0; }
+
 /* Boutons des widgets */
 section div.module header ul li a { float: left; margin-left: 6px; margin:0; right: auto; }
+.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
+
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }

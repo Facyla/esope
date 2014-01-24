@@ -63,6 +63,7 @@ a.elgg-button {
 	background: #cd9928 url(<?php echo elgg_get_site_url(); ?>_graphics/button_graduation.png) repeat-x left 10px;
 */
 	background: <?php echo $color6; ?>;
+	background-color: <?php echo $color6; ?>;
 	border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;

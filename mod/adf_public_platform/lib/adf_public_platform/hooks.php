@@ -211,6 +211,7 @@ function adf_platform_owner_block_menu($hook, $type, $return, $params) {
 }
 
 /* Boutons des widgets */
+// @TODO : make this a view, for easier theming..
 function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	global $CONFIG;
 	$urlicon = $CONFIG->url . 'mod/adf_public_platform/img/theme/';
@@ -227,6 +228,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 			'rel' => 'toggle',
 			'priority' => 900
 		);
+	if (elgg_get_plugin_setting('awesomefont') == 'yes') $collapse['text'] = '<button aria-label="' . elgg_echo('widget:toggle', array($widget_title)) . '"><i class="fa fa-caret-square-o-down"></i></button>';
 	$return[] = ElggMenuItem::factory($collapse);
 	
 	if ($widget->canEdit()) {
@@ -239,6 +241,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 				'id' => "elgg-widget-delete-button-$widget->guid",
 				'priority' => 900
 			);
+		if (elgg_get_plugin_setting('awesomefont') == 'yes') $delete['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
 		$return[] = ElggMenuItem::factory($delete);
 
 		if ($show_edit) {
@@ -250,6 +253,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
+			if (elgg_get_plugin_setting('awesomefont') == 'yes') $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
 			$return[] = ElggMenuItem::factory($edit);
 		}
 	}
