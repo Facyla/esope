@@ -137,7 +137,8 @@ try{
 						
 						// Add with a ', ' separator
 						case 'skills':
-							$own->{$elgg_field} = implode(',', $own->{$elgg_field}) . ', ' . $$field;
+							if (!empty($own->{$elgg_field})) $$field = implode(',', $own->{$elgg_field}) . ', ' . $$field;
+							$own->{$elgg_field} = $$field;
 							break;
 						
 						// Add with a '<hr />' separator
@@ -146,7 +147,8 @@ try{
 						case 'status':
 						case 'positions':
 						case 'summary':
-							$own->{$elgg_field} = $own->{$elgg_field} . '<hr .>' . $$field;
+							if (!empty($own->{$elgg_field})) $$field = $own->{$elgg_field} . '<hr />' . $$field;
+							$own->{$elgg_field} = $$field;
 							break;
 						
 						// Update fields (replace former content)

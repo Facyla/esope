@@ -139,7 +139,7 @@ $french = array (
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Liste des animateurs",
-	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilsiateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
+	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilisateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	
