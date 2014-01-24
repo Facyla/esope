@@ -74,7 +74,7 @@ $module_bg_color = '#F8F4F5';
 
 
 /* Header */
-body { border-top:0; background:white; font-size:12px; font-size:75%; }
+body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
 section { background:white; }
 padding-top: 25px;
 background: white;
@@ -124,6 +124,8 @@ footer.footer-inria {
 /* Buttons */
 .elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: NeoFont, sans-serif; padding: 4px 6px; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; }
+.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: NeoFont, sans-serif; padding: 4px 6px; }
+.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 1px solid <?php echo $color8; ?>; }
 
 
 /* Page d'accueil */
