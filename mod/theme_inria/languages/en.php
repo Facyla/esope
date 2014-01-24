@@ -27,7 +27,9 @@ $english = array(
 	'theme_inria:topbar:invite' => 'Invite',
 
 	'theme_inria:topbar:collaborative' => "My tools",
-	'theme_inria:inria_tool' => "Choose which tools to display",
+	'theme_inria:inria_tool' => "Choose which tool to display",
+	'theme_inria:widget:openintab' => "Open %s in a new tab",
+	'theme_inria:widget:choosetools' => "Choose the tools you want to display",
 	'theme_inria:topbar:forge' => "Gforge",
 	'theme_inria:topbar:etherpad' => "Etherpad",
 	'theme_inria:topbar:doodle' => "Doodle",

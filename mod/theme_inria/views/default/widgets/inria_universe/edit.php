@@ -30,7 +30,7 @@ $options_values = array(
 		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
 	);
 
-/* 1 tools at a time mode
+/* 1 tool at a time mode
 $params = array(
 	'name' => 'params[tool]',
 	'id' => 'num_display_'.$widget_id,

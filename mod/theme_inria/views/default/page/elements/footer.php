@@ -9,23 +9,16 @@
  */
 
 $url = $vars['url'];
-$imgurl = $vars['url'] . 'mod/adf_public_platform/img/theme/';
+$imgurl = $vars['url'] . 'mod/theme_inria/graphics/';
 
 echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 
 $footer = elgg_get_plugin_setting('footer', 'adf_public_platform');
 ?>
 
-
-<footer>
+<footer class="footer-inria">
 	<div class="interne">
-	  <?php echo $footer; ?>
+		<?php echo $footer; ?><img class="footer-logo-inria" src="<?php echo $imgurl; ?>logo-inria.png">
 	</div>
 </footer>
-
-<div id="bande"></div>
-<div class="interne credits">
-	<p>Conception & réalisation : Florian DANIEL ~ <a href="http://www.items.fr/" target="_blank" title="Items International (nouvelle fenêtre)">Items International</a> </p>
-	<p class="right">Plateforme construite avec le framework opensource Elgg 1.8</p>
-</div>
 

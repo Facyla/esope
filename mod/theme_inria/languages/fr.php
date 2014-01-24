@@ -28,6 +28,8 @@ $french = array (
 
 	'theme_inria:topbar:collaborative' => "Mes outils",
 	'theme_inria:inria_tool' => "Choisir l'outil à afficher",
+	'theme_inria:widget:openintab' => "Ouvrir %s dans une nouvelle fenêtre",
+	'theme_inria:widget:choosetools' => "Choisissez les outils que vous souhaitez afficher",
 	'theme_inria:topbar:forge' => "Gforge",
 	'theme_inria:topbar:etherpad' => "Etherpad",
 	'theme_inria:topbar:doodle' => "Doodle",

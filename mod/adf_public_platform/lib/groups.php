@@ -49,6 +49,24 @@ function adf_platform_groups_handle_all_page() {
 			if (!$content) { $content = elgg_echo('groups:none'); }
 			break;
 			
+		case 'friends':
+			if (elgg_is_logged_in()) {
+				$user_guid = elgg_get_logged_in_user_guid();
+				if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+					$content = elgg_echo('friends:none:you');
+				} else {
+					$options = array('type' => 'group', 'full_view' => FALSE, 'limit' => $limit,);
+					if ($display_subgroups != 'yes') {
+						$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU_SUBGROUPS_RELATIONSHIP . "' )");
+					}
+					foreach ($friends as $friend) { $options['container_guids'][] = $friend->getGUID(); }
+					$content = elgg_list_entities_from_metadata($options);
+					if (!$content) { $content = elgg_echo('groups:none'); }
+				}
+			}
+			if (!$content) { $content = elgg_echo('groups:none'); }
+			break;
+			
 		case 'discussion':
 			$content = elgg_list_entities(array(
 				'type' => 'object', 'subtype' => 'groupforumtopic',

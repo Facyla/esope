@@ -9,6 +9,7 @@ $groups_newest = elgg_get_plugin_setting('groups_newest', 'adf_public_platform')
 $groups_popular = elgg_get_plugin_setting('groups_popular', 'adf_public_platform');
 $groups_discussion = elgg_get_plugin_setting('groups_discussion', 'adf_public_platform');
 $groups_alpha = elgg_get_plugin_setting('groups_alpha', 'adf_public_platform');
+$groups_friends = elgg_get_plugin_setting('groups_friendstab', 'adf_public_platform');
 $groups_search = elgg_get_plugin_setting('groups_searchtab', 'adf_public_platform');
 
 // Newest, popular and discussion are default, so don't change if not asked to (should default to yes)
@@ -23,6 +24,9 @@ if (empty($groups_discussion) || ($groups_discussion == 'yes'))
 
 if ($groups_alpha == 'yes') 
 	$tabs['alpha'] = array('text' => elgg_echo('groups:alpha'), 'href' => 'groups/all?filter=alpha', 'priority' => 100);
+
+if ($groups_friends == 'yes') 
+	$tabs['friends'] = array('text' => elgg_echo('groups:friends'), 'href' => 'groups/all?filter=friends', 'priority' => 400);
 
 if ($groups_search == 'yes') 
 	$tabs['groupsearch'] = array('text' => elgg_echo('esope:label:search'), 'href' => "groups/groupsearch", 'priority' => 900);

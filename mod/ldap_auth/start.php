@@ -67,7 +67,7 @@ function ldap_auth_handler_update($event, $object_type, $user){
  * @throws LoginException
  * @access private
  */
-function ldap_auth_handler_authenticate(array $credentials = array()) {
+function ldap_auth_handler_authenticate($credentials = array()) {
 	// @TODO : debug Inria : le "problème" est que le mot de passe est filtré (get_input) via Elgg, donc on a besoin de récupérer directement le GET/POST et de savoir si c'est identique ou pas.
 	
 	// Nothing to do if LDAP module not installed
@@ -76,7 +76,7 @@ function ldap_auth_handler_authenticate(array $credentials = array()) {
 		throw new LoginException(elgg_echo('LoginException:ContactAdmin:missingLDAP'));
 	}
 
-	if (is_array($credentials) && ($credentials['username']) && ($credentials['password'])) {
+	if (is_array($credentials) && isset($credentials['username']) && isset($credentials['password'])) {
 		$username = $credentials['username'];
 		$password = $credentials['password'];
 	} else {

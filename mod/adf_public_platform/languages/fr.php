@@ -42,6 +42,7 @@ $fr = array(
 	'adf_platform:groupdefaultaccess:public' => "Public",
 	'adf_platform:settings:groupjoin_enablenotif' => "Activer les notifications lorsqu'un membre rejoint un groupe",
 	'adf_platform:config:grouptabs' => "ONGLETS DES GROUPES",
+	'adf_platform:settings:groups:friends' => "Onglet groupes des contacts",
 	'adf_platform:settings:groups:alpha' => "Onglet tri alphabétique",
 	'adf_platform:settings:groups:newest' => "Onglet liste par date",
 	'adf_platform:settings:groups:popular' => "Onglet liste par membres",
@@ -50,6 +51,7 @@ $fr = array(
 	'adf_platform:settings:groups:tools_default' => "Activer tous les outils des groupes lors de la création",
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (selon les plugins)",
 	'groups:alpha' => "Alphabétique",
+	'groups:friends' => "Contacts",
 	'adf_platform:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
 	'adf_platform:settings:members:alpha' => "Onglet tri alphabétique",
 	'adf_platform:settings:members:newest' => "Onglet liste par date",
@@ -411,7 +413,8 @@ $fr = array(
 	'grouptype:publication' => "Publications",
 	
 	/* ESOPE search */
-	'adf_platform:settings:groups:searchtab' => "Multi-criteria search tab",
+	'adf_platform:settings:groups:searchtab' => "Onglet de recherche multi-critère",
+	'adf_platform:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
 	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
 	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'esope:search:members:role' => 'Statut',
@@ -429,6 +432,17 @@ $fr = array(
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
+	
+	// View profile as someone else
+	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
+	'esope:viewprofileas:public' => "Vous visualisez votre profil public (tel qu'un non-membre peut le voir)",
+	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
+	'esope:viewprofileas:friends' => "Vous visualisez votre profil tel qu'un de vos contacts peut le voir",
+	'esope:viewprofileas:user' => "Vous visualisez votre profil tel que %s peut le voir",
+	'esope:viewprofileas:yourself' => "Vous-même",
+	'esope:viewprofileas:someonelse' => "Un autre membre",
+	'esope:viewprofileas:acontact' => "L'un de vos contacts",
+	'esope:viewprofileas:nonuser' => "Un non-membre (public)",
 	
 );
 

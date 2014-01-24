@@ -405,6 +405,10 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular )) . '</p>';
 			// Allow to add a new group tab search
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab )) . '</p>';
+			// Allow to add a new friends groups tab
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:friends') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_friendstab )) . '</p>';
+			// Add groups tags below search (or replaces search if search tab enabled)
+			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:tags') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_tags )) . '</p>';
 			// Allow to remove discussion OR add it at page bottom
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion )) . '</p>';
 			// Set default tools status
