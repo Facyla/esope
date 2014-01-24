@@ -23,9 +23,9 @@ $fr = array(
 	// Linkedin
 	'hybridauth:linkedin:title' => "Linkedin",
 	'hybridauth:linkedin:login' => "Connecter le compte %s",
-	'hybridauth:linkedin:logged' => "Vous êtes maintenant connecté avec <b>%s</b> en tant que <b>%s</b>", // You are now connected with <b></b> as <b>' .  . '</b>
+	'hybridauth:linkedin:logged' => "Vous êtes maintenant connecté avec <b>%s</b> en tant que <b>%s</b>",
 	'hybridauth:linkedin:logout' => "Couper la connexion à Linkedin",
-	'hybridauth:linkedin:loggedout' => "Logged out from Linkedin.",
+	'hybridauth:linkedin:loggedout' => "Déconnecté de Linkedin.",
 	'hybridauth:linkedin:import' => "Importer les champs sélectionnés !",
 	'hybridauth:linkedin:import:done' => "IMPORT DES CHAMPS DEPUIS LINKEDIN FAIT :",
 	'hybridauth:linkedin:import:after' => "Import terminé, veuillez %s, %s et %s.",
@@ -33,7 +33,7 @@ $fr = array(
 	'hybridauth:linkedin:editavatar' => "recadrer votre avatar",
 	'hybridauth:linkedin:viewprofile' => "vérifier votre profil mis à jour",
 	
-	'hybridauth:linkedin:import:title' => "Importer des informations depuis votre profil LikedIn",
+	'hybridauth:linkedin:import:title' => "Importer des informations depuis votre profil LinkedIn",
 	'hybridauth:linkedin:import:details' => "<p>Vous pouvez récupérer certaines informations à partir de votre profil LinkedIn pour démarrer ou compléter votre profil.</p><p>Vous pouvez prévisualiser les informations disponibles ci-dessous, et choisir pour chacune si vous sugaitez l'importer ou non. Certaines informations sont ajoutées à votre profil (afin de ne pas perdre les informations existantes).</p><p>Une fois l'import terminé, il est conseillé de poursuivre l'édition de votre profil via les liens proposés.",
 	'hybridauth:linkedin:import:profile_url' => "Importer l'URL du profil public (remplace : Profil LinkedIn)",
 	'hybridauth:linkedin:import:photo' => "Importer la photo (remplace votre photo actuelle)",
