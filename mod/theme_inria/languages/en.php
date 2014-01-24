@@ -127,6 +127,9 @@ $english = array(
 	'theme_inria:widgets:add:home' => "Edit my dashboard",
 	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	
+	// Digest
+	'theme_inria:digest:headertitle' => "What's up at ",
+	
 	// Traductions
 	'theme_inria:login' => "Log in",
 	'members:online' => "Online members",

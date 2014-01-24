@@ -11,6 +11,7 @@ function theme_inria_init(){
 	global $CONFIG;
 	
 	elgg_extend_view('css', 'theme_inria/css');
+	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
 	// Extend group owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_group_owner_block', 501);

@@ -558,7 +558,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Alertes et messages d'erreur */
 .elgg-system-messages { max-width: 500px; position: absolute; left: 20px; top: 24px; z-index: 2000; background:transparent; }
-.elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; background:white; }
+.elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; /* background:white; */ }
 .elgg-state-success { background-color: #00FF00; }
 
 /* Navigation archives des blogs */

@@ -127,6 +127,9 @@ $french = array (
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
+	// Digest
+	'theme_inria:digest:headertitle' => "Quoi de neuf sur ",
+	
 	// Traductions
 	'theme_inria:login' => "Connexion",
 	'members:online' => "Membres connectés",

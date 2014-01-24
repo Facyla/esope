@@ -18,79 +18,67 @@
 	</head>
 	<body>
 		<style type="text/css">
-			body {
-				font: 80%/1.4 "Lucida Grande", Verdana, sans-serif;
-				color: #333333;				
-			}
-			
-			a {
-				color: #4690d6;
-			}
-			
-			#notification_container {
+		body {
+				color: #333333;
+				font: 80%/1.4 "Lucida Grande",Verdana,sans-serif;
+		}
+		a {
+				color: #6D2D4F;
+		}
+		#notification_container {
+				margin: 0 auto;
 				padding: 20px 0;
 				width: 600px;
-				margin: 0 auto;
-			}
-		
-			#notification_header {
-				text-align: right;
+		}
+		#notification_header {
 				padding: 0 0 10px;
-			}
-			
-			#notification_header a {
-				text-decoration: none;
-				font-weight: bold;
-				color: #0054A7;
+				text-align: right;
+		}
+		#notification_header a {
+				color: #6D2D4F;
 				font-size: 1.5em;
-			} 
-		
-			#notification_wrapper {
-				background: #DEDEDE;
+				font-weight: bold;
+				text-decoration: none;
+		}
+		#notification_wrapper {
+				background: none repeat scroll 0 0 #FFFFFF;
 				padding: 10px;
-			}
-			
-			#notification_wrapper h2 {
-				margin: 5px 0 5px 10px;
-				color: #0054A7;
+		}
+		#notification_wrapper h2 {
+				color: #6D2D4F;
 				font-size: 1.35em;
 				line-height: 1.2em;
-			}
-			
-			#notification_content {
-				background: #FFFFFF;
+				margin: 5px 0 5px 10px;
+		}
+		#notification_content {
+				background: none repeat scroll 0 0 #FFFFFF;
 				padding: 10px;
-			}
-			
-			#notification_footer {
-				
+		}
+		#notification_footer {
+				background: none repeat scroll 0 0 #FFFFFF;
 				margin: 10px 0 0;
-				background: #B6B6B6;
 				padding: 10px;
 				text-align: right;
-			}
-			
-			#notification_footer_logo {
+		}
+		#notification_footer_logo {
 				float: left;
-			}
-			
-			#notification_footer_logo img {
-				border: none;
-			}
-			
-			.clearfloat {
-				clear:both;
-				height:0;
+		}
+		#notification_footer_logo img {
+				border: medium none;
+		}
+		.clearfloat {
+				clear: both;
 				font-size: 1px;
-				line-height: 0px;
-			}
-			
+				height: 0;
+				line-height: 0;
+		}
 		</style>
 	
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $vars["config"]->site->name));
+					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $vars["config"]->site->name . '">';
+					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $text));
 					echo $site_url;
 				?>
 			</div>
@@ -103,9 +91,6 @@
 			</div>
 			
 			<div id="notification_footer">
-				<a href="http://www.elgg.org/" id="notification_footer_logo">
-					<img src="<?php echo $vars["url"]; ?>_graphics/powered_by_elgg_badge_drk_bckgnd.gif" />
-				</a>
 				
 				<?php 
 					if(elgg_is_logged_in()){
