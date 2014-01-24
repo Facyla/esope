@@ -30,16 +30,16 @@ $inactivecolor = '#CCC';
 
 /* Styles des boutons radio, si on veut... */
 /*
-input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ko_16nb.png); }
-input[type="checkbox"].question-0:checked, input[type="radio"].question-0:checked { content: url('<?php echo $urlicon; ?>smiley_ko_16.png); }
-input[type="checkbox"].question-50, input[type="radio"].question-50 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_medium_16nb.png); }
-input[type="checkbox"].question-50:checked, input[type="radio"].question-50:checked { content: url('<?php echo $urlicon; ?>smiley_medium_16.png); }
-input[type="checkbox"].question-100, input[type="radio"].question-100 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ok_16nb.png); }
-input[type="checkbox"].question-100:checked, input[type="radio"].question-100:checked { content: url('<?php echo $urlicon; ?>smiley_ok_16.png); }
+input[type="checkbox"].question-0, input[type="radio"].question-0 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ko_16nb.png'); }
+input[type="checkbox"].question-0:checked, input[type="radio"].question-0:checked { content: url('<?php echo $urlicon; ?>smiley_ko_16.png'); }
+input[type="checkbox"].question-50, input[type="radio"].question-50 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_medium_16nb.png'); }
+input[type="checkbox"].question-50:checked, input[type="radio"].question-50:checked { content: url('<?php echo $urlicon; ?>smiley_medium_16.png'); }
+input[type="checkbox"].question-100, input[type="radio"].question-100 { width: 16px; height: 16px; display: inline-block; content: url('<?php echo $urlicon; ?>smiley_ok_16nb.png'); }
+input[type="checkbox"].question-100:checked, input[type="radio"].question-100:checked { content: url('<?php echo $urlicon; ?>smiley_ok_16.png'); }
 */
-.autopositionnement-question-0 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ko_16.png); }
-.autopositionnement-question-50 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_medium_16.png); }
-.autopositionnement-question-100 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ok_16.png); }
+.autopositionnement-question-0 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ko_16.png'); }
+.autopositionnement-question-50 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_medium_16.png'); }
+.autopositionnement-question-100 { width:16px; height:16px; display:inline-block; margin: 0 2px; background-image: url('<?php echo $urlicon; ?>smiley_ok_16.png'); }
 
 .dossierdepreuve-submit { text-align:center; }
 .dossierdepreuve-submit input { font-size:20px; }
