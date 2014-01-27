@@ -90,10 +90,16 @@ function cmspages_pagesetup() {
 
 /* Permissions for the cmspages context */
 function cmspages_permissions_check($hook, $type, $returnval, $params) {
-	if (elgg_in_context('admin') && elgg_is_admin_logged_in()) return true;
-	if (elgg_in_context('localmultisite'))	return true;
-	if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) )	return true;
-	return NULL;
+	// Handle only cmspages !!
+	if (elgg_instanceof($params['entity'], 'object', 'cmspage')) {
+		if (elgg_in_context('admin') && elgg_is_admin_logged_in()) return true;
+		if (elgg_in_context('localmultisite'))	return true;
+		if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) ) return true;
+		// Add a hook for special CMS pages edition rules - let's other plugins define an extended set of editors
+		// based on a custom or permission rules
+		return elgg_trigger_plugin_hook('cmspages:edit', 'cmspage', $params, $returnval);
+	}
+	return $returnval;
 }
 
 // Renvoie un tableau de configuration du module à partir d'une chaîne de configuration

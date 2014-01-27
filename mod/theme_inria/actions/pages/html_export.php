@@ -19,7 +19,7 @@ if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'obj
 		// On regarde où est publié ce wiki..
 		$container = get_entity($page->container_guid);
 		// ..et on change le nom en rapport
-		$filename = $filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
 		
 		// Listing des pages du container
 		$toppages = esope_get_top_pages($container);
@@ -38,7 +38,7 @@ if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'obj
 		
 	} else {
 		// Sinon export de la page courante seulement
-		$filename = $filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
 		$content .= '<h3>' . elgg_view("output/url", array("text" => $page->title, "href" => false, "name" => "page_" . $page->guid)) . '</h3>' . elgg_view("output/longtext", array("value" => $page->description)) . '<p style="page-break-after:always;"></p>';
 	}
 	
@@ -50,7 +50,19 @@ if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'obj
 	header("Content-type: text/html; charset=utf-8");  
 	header("Cache-Control: no-store, no-cache");  
 	header('Content-Disposition: attachment; filename="'.$filename.'.html"');
-	echo $content;
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><?php echo $filename; ?></title>
+	</head>
+	<body>
+		<?php echo $content; ?>
+	</body>
+	</html>
+	<?php
+	//echo elgg_render_embed_content($content, 'Export', 'iframe');
 	
 	exit;
 	

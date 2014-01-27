@@ -11,6 +11,7 @@ $french = array (
 	'theme_inria:topbar:userfriends' => "Mes&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "Mes&nbsp;activités",
 	'theme_inria:topbar:profil' => "Mon profil",
+	'theme_inria:site:activity' => "Activités récentes",
 
 
 	'theme_inria:topbar:all' => "Tous",
@@ -121,6 +122,13 @@ $french = array (
 	'inria:mygroups' => "Mes groupes",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
+	'theme_inria:thewire:title' => "Inria le Fil",
+	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
+	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
+	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
+	
+	// Digest
+	'theme_inria:digest:headertitle' => "Quoi de neuf sur ",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",
@@ -139,7 +147,7 @@ $french = array (
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Liste des animateurs",
-	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilsiateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
+	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilisateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	

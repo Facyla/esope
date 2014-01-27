@@ -434,8 +434,11 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 /* Contenu des modules */
 section div.module header ul { float: right; margin: 8px 10px 0 0; }
+
 /* Boutons des widgets */
 section div.module header ul li a { float: left; margin-left: 6px; margin:0; right: auto; }
+.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
+
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
@@ -555,7 +558,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Alertes et messages d'erreur */
 .elgg-system-messages { max-width: 500px; position: absolute; left: 20px; top: 24px; z-index: 2000; background:transparent; }
-.elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; background:white; }
+.elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; /* background:white; */ }
 .elgg-state-success { background-color: #00FF00; }
 
 /* Navigation archives des blogs */

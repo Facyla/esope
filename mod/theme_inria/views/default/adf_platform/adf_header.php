@@ -176,7 +176,7 @@ if (elgg_is_logged_in()) {
 										<ul class="hidden">
 											<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
 											<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a></li>
-											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('collections'); ?></a></li>
+											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('friends:collections'); ?></a></li>
 											<li><a href="<?php echo $url . 'invite'; ?>"><?php echo elgg_echo('friends:invite'); ?></a></li>
 											<?php echo $friendrequests_li; ?>
 										</ul>

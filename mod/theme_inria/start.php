@@ -11,6 +11,7 @@ function theme_inria_init(){
 	global $CONFIG;
 	
 	elgg_extend_view('css', 'theme_inria/css');
+	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
 	// Extend group owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_group_owner_block', 501);
@@ -68,6 +69,10 @@ function theme_inria_init(){
 	
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
+	
+	// Modification des menus standards des widgets
+	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
+	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
 }
 
@@ -192,6 +197,54 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		}
 	}
 	return true;
+}
+
+
+/* Boutons des widgets */
+function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
+	global $CONFIG;
+	$urlicon = $CONFIG->url . 'mod/theme_inria/graphics/';
+	
+	$widget = $params['entity'];
+	$show_edit = elgg_extract('show_edit', $params, true);
+	
+	$widget_title = $widget->getTitle();
+	$collapse = array(
+			'name' => 'collapse',
+			'text' => '<img src="' . $urlicon . 'widget_hide.png" alt="' . elgg_echo('widget:toggle', array($widget_title)) . '" />',
+			'href' => "#elgg-widget-content-$widget->guid",
+			'class' => 'masquer',
+			'rel' => 'toggle',
+			'priority' => 900
+		);
+	$return[] = ElggMenuItem::factory($collapse);
+	
+	if ($widget->canEdit()) {
+		$delete = array(
+				'name' => 'delete',
+				'text' => '<img src="' . $urlicon . 'widget_delete.png" alt="' . elgg_echo('widget:delete', array($widget_title)) . '" />',
+				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
+				'is_action' => true,
+				'class' => 'elgg-widget-delete-button suppr',
+				'id' => "elgg-widget-delete-button-$widget->guid",
+				'priority' => 900
+			);
+		$return[] = ElggMenuItem::factory($delete);
+
+		if ($show_edit) {
+			$edit = array(
+					'name' => 'settings',
+					'text' => '<img src="' . $urlicon . 'widget_config.png" alt="' . elgg_echo('widget:editmodule', array($widget_title)) . '" />',
+					'href' => "#widget-edit-$widget->guid",
+					'class' => "elgg-widget-edit-button config",
+					'rel' => 'toggle',
+					'priority' => 800,
+				);
+			$return[] = ElggMenuItem::factory($edit);
+		}
+	}
+	
+	return $return;
 }
 
 
