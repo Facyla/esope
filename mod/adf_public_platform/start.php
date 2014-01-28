@@ -41,7 +41,9 @@ function adf_platform_init() {
 	// Add / Replace jQuery UI
 	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	// Theme-specific JS (accessible menu)
-	elgg_register_js('adf_platform.fonction', 'mod/adf_public_platform/views/default/adf_platform/js/fonction.php', 'head');
+	elgg_register_simplecache_view('adf_platform/js/fonction');
+	$theme_js = elgg_get_simplecache_url('js', 'adf_platform/js/fonction');
+	elgg_register_js('adf_platform.fonction', $theme_js, 'head');
 	elgg_load_js('adf_platform.fonction');
 	// Passe le datepicker en français
 	elgg_register_js('jquery.datepicker.fr', 'mod/adf_public_platform/vendors/ui.datepicker-fr.js', 'head');
