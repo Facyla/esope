@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>AccEssonne ~  Thème accessible</name>
-	<author>Facyla ~ Items International 2011-2013</author>
+	<author>Facyla ~ Items International 2011-2014</author>
 	<version>0.5</version>
 	<blurb>AccEssonne ~  Thème accessible et configurable</blurb>
-<description>Né d'une collaboration entre le Département de l'Essonne et l'Assemblée des Départements de France, ce plugin fournit un thème accessible aux personnes handicapées. AccEssonne offre diverses options de configuration du thème, et INTÈGRE diveres adaptations spécifiques conçues pour la collaboration au sein d'une organisation.</description>
+<description>Né d'une collaboration entre le Département de l'Essonne et l'Assemblée des Départements de France, ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit un thème accessible et offre de nombreuses options et possibiltiés de configuration du thème. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. Les plugins de la distribution ESOPE peut être utilisés sans utiliser ce plugin.</description>
 	<website>http://departements-en-reseaux.fr/</website>
-	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla), Urbilog</copyright>
+	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla), Urbilog, Datawyz (Florain DANIEL)</copyright>
 	<license>GNU Public License version 2</license>
-
+	
 	<screenshot>
 		<description>An example screenshot</description>
 		<path>graphics/plugin_ss1.png</path>
@@ -95,7 +95,7 @@
 		<name>search</name>
 	</suggests>
 	
-	<!-- Plugin à débugguer : ne permet pas de répondre dans un groupe //-->
+	<!-- Plugin instable : ne permet pas de répondre dans un groupe - cf. patch correctif //-->
 	<conflicts>
 		<type>plugin</type>
 		<name>threads</name>
@@ -129,6 +129,9 @@
 </plugin_manifest>
 
 <!--
+0.6 : janvier 2014
+  - ajout de nombreuses options, notamment recherche fulltext en ajax pour les groupes et membres
+
 0.5 : octobre 2013
   - évolutions de la configuration du plugin
   - design plus propre (respect des normes Elgg) et responsif

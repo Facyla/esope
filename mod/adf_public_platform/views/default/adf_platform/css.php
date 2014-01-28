@@ -152,7 +152,7 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 	float: left;
 	width: 211px;
 }
-.elgg-sidebar ul.elgg-menu-page > li, , elgg-sidebar ul.elgg-menu-groups-my-status > li {
+.elgg-sidebar ul.elgg-menu-page > li, elgg-sidebar ul.elgg-menu-groups-my-status > li {
 	border-bottom: 1px solid #CCCCCC;
 	float: left;
 	width: 211px;
@@ -287,7 +287,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 */
 .elgg-menu-owner-block-categories li a:hover, .elgg-menu-owner-block-categories li a:focus, .elgg-menu-owner-block-categories li a:active, .elgg-menu-owner-block-categories li.elgg-state-selected > a 
 {
-	color:#333333 !important; background:#CCCCCC !important; border-radius:none; 
+	color:#333333 !important; background:#CCCCCC !important; border-radius:0; 
 }
 
 /* Menus différenciés : navigation complémentaire */
@@ -656,7 +656,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
 .elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
-.elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: auto; padding:1.5%; }
+.elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 0; padding:1.5%; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
 /* Menus */
 #transverse nav ul { width:auto; }

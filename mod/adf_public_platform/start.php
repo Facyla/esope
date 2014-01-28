@@ -1,7 +1,10 @@
 <?php
 /**
- * adf_platforms
- *
+ * adf_public_platform aka ESOPE
+ * 
+ * ESOPE - Elgg Social Opensource Public Environment
+ * @author Florain DANIEL - Facyla
+ * 
  */
 
 elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
@@ -36,13 +39,18 @@ function adf_platform_init() {
 	elgg_extend_view('css/ie6', 'adf_platform/css/ie6');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
+	// Sécurité
+	// Important : Enable this only if you don't need to include iframes in other websites !!
+	// @TODO : make this a setting
+	//elgg_extend_view('page/elements/head','security/framekiller');
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI
 	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	// Theme-specific JS (accessible menu)
-	elgg_register_simplecache_view('adf_platform/js/fonction');
-	$theme_js = elgg_get_simplecache_url('js', 'adf_platform/js/fonction');
+	elgg_register_simplecache_view('js/adf_platform_theme');
+	$theme_js = elgg_get_simplecache_url('js', 'adf_platform_theme');
 	elgg_register_js('adf_platform.fonction', $theme_js, 'head');
 	elgg_load_js('adf_platform.fonction');
 	// Passe le datepicker en français
