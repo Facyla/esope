@@ -1,18 +1,19 @@
 User-agent: *
+
 Allow: /
-Disallow: /_graphics/
-Disallow: /actions/
-Disallow: /data/
-Disallow: /documentation/
-Disallow: /engine/
-Disallow: /install/
-Disallow: /js/
-Disallow: /languages/
-Disallow: /log/
-Disallow: /mod/
-Disallow: /search/
-Disallow: /tag/
-Disallow: /vendors/
-Disallow: /views/
-Disallow: /20120504_V1.8.2/
+
+Disallow: /_graph
+Disallow: /actio
+Disallow: /dat
+Disallow: /doc
+Disallow: /engi
+Disallow: /insta
+Disallow: /js
+Disallow: /lang
+Disallow: /log
+Disallow: /mod
+Disallow: /searc
+Disallow: /tag
+Disallow: /vend
+Disallow: /view
 
