@@ -102,6 +102,7 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 			// seems to handle about everything we need.
 			// /!\ Liste blanche des balises autorisées
 			//'elements' => 'iframe,embed,object,param,video,script,style',
+			//'elements' => "* -script", // Blocks <script> elements (only)
 			'safe' => false, // true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
 			// Attributs interdits
 			'deny_attribute' => 'on*',

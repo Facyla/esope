@@ -7,10 +7,12 @@
 $english = array(
 	'group_chat' => 'Group Chat',
 	'group_chat:site_chat' => "Site chat",
+	'group_chat:group_chat' => "%s group chat",
 	'group_chat:object_chat' => "Page chat",
 	'group_chat:user_chat' => "User chat",
 	'group_chat:group_option' => "Enable group chat?",
 	
+	'groupchat:active' => "",
 	'group_chat:youare' => "You are: ",
 	'group_chat:joingrouptochat' => "Join group in order to chat with group member.",
 	'group_chat:group_option' => "Enable group chat ?",
@@ -27,6 +29,10 @@ $english = array(
 	// Site chat
 	'groupchat:site:openlink' => "Open chat",
 	'groupchat:site:openlink:ownwindow' => "Open chat (new window)",
+	
+	// Group chat
+	'groupchat:group:openlink' => "Open group chat",
+	'groupchat:group:openlink:ownwindow' => "Open group chat (new window)",
 	
 );
 
