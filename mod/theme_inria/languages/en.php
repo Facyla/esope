@@ -72,6 +72,7 @@ $english = array(
 	'theme_inria:topbar:publications' => 'All&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'All&nbsp;presentations',
 
+	'theme_inria:groupinvites' => "Group invite(s)",
 	'theme_inria:invite:subject' => 'Invitation',
 //$user->name, $group->name, $url
 	'theme_inria:invite:body' => 'I invite you to join the group "%s"<br /><br />
@@ -120,6 +121,8 @@ $english = array(
 	'adf_platform:directory' => 'Members',
 	
 	'inria:mygroups' => "My groups",
+	'theme_inria:firststeps:hide' => "Don't show anymore",
+	'theme_inria:firststeps:show' => "Show",
 	'theme_inria:thewire:charleft' => "left",
 	'theme_inria:thewire:access' => "Access : ",
 	'theme_inria:thewire:title' => "Inria the Wire",
@@ -142,7 +145,7 @@ $english = array(
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
-	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
+	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
 	
 	'theme_inria:groupmembership' => "Membership",

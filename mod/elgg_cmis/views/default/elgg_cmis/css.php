@@ -1,11 +1,19 @@
-#cmis-iframe { width:100%; height:300px; }
+#cmis-iframe { width:100%; height:250px; }
 #cmis-embed { width:100%; height:100%; }
 .cmis-embed {}
 
-.elgg-cmis-widget { height: 300px; width: 100%; }
+/* Widgets */
+.elgg-cmis-widget { height: 250px; width: 100%; }
 .elgg-cmis-widget iframe { height: 100%; width: 100%; }
 
-.elgg-cmis { height: 300px; width: 100%; }
+/* Group modules */
+.elgg-cmis-module { height: 200px; width: 100%; }
+
+/* Sidebar */
+.elgg-cmis-sidebar { height: 200px; width: 100%; }
+
+
+.elgg-cmis { height: 250px; width: 100%; }
 .elgg-cmis-main iframe { height: 100%; width: 100%; }
 
 

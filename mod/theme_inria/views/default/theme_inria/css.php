@@ -89,6 +89,16 @@ $module_bg_color = '#F8F4F5';
 }
 
 
+/* Effet sur listes */
+.elgg-list .elgg-item { opacity: 1.0; }
+/* Slider */
+.anythingSlider li.panel { display:none; }
+.anythingSlider li.panel.active { display:block; }
+
+.elgg-autocomplete-item .elgg-access a { display: none; }
+
+
+
 /* Header */
 body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
 section { background:white; }
@@ -152,13 +162,18 @@ footer.footer-inria {
 
 .home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
 .home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:NeoFont; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
-.home-wire, .home-activity { background:white; }
+.home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
-#thewire-textarea { height: 5em; padding: 1px 3px; }
+.home-wire #thewire-textarea { height: 4em; padding: 1px 3px; }
+.home-wire .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .iris-news {  }
 .iris-news .anythingControls { position: absolute; top: 30px; left: 20px; display:none; }
 .iris-add-button { font-weight: bold; padding: 11px 26px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; }
+.home-activity .elgg-menu-item-access { margin-top: 0; }
+.home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
+.home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
+.home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
 
 /* Widgets */

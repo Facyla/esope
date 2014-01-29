@@ -23,8 +23,21 @@ elgg_push_context('widgets');
 
 $widgets = elgg_get_widgets($owner->guid, $context);
 
+// Add widgets link widgets
+if (elgg_can_edit_widget_layout($context)) {
+	if ($show_add_widgets) { echo elgg_view('page/layouts/widgets/add_button'); }
+	$params = array(
+		'widgets' => $widgets,
+		'context' => $context,
+		'exact_match' => $exact_match,
+	);
+	echo elgg_view('page/layouts/widgets/add_panel', $params);
+}
+
+// Custom content
 echo $vars['content'];
 
+// Widget columns
 $widget_class = "elgg-col-1of{$num_columns}";
 for ($column_index = 1; $column_index <= $num_columns; $column_index++) {
 	$column_widgets = $widgets[$column_index];
@@ -40,16 +53,6 @@ for ($column_index = 1; $column_index <= $num_columns; $column_index++) {
 	echo '</div>';
 }
 
-
-if (elgg_can_edit_widget_layout($context)) {
-	if ($show_add_widgets) { echo elgg_view('page/layouts/widgets/add_button'); }
-	$params = array(
-		'widgets' => $widgets,
-		'context' => $context,
-		'exact_match' => $exact_match,
-	);
-	echo elgg_view('page/layouts/widgets/add_panel', $params);
-}
 
 
 elgg_pop_context();
