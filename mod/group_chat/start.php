@@ -10,6 +10,11 @@
  * - Pingbacks
  * - Notifications
  * - River entry for posts saved as drafts and later published
+ * 
+ * @TODO :
+ * - limit log entries
+ * - limit server load
+ * 
  */
 
 elgg_register_event_handler('init', 'system', 'group_chat_init');
@@ -29,15 +34,19 @@ function group_chat_init() {
 	elgg_register_page_handler('chat', 'group_chat_page_handler');
 	*/
 	
-	$site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
-	if ($site_chat == 'yes') {
-		elgg_register_page_handler('chat', 'group_chat_page_handler');
-		elgg_extend_view('adf_platform/adf_header', 'group_chat/sitechat_extend', 1000);
-	}
-	
 	// Extend the main css view
 	elgg_extend_view('css/elgg', 'group_chat/css');
 	
+	// Page handler for group and site chat
+	elgg_register_page_handler('chat', 'group_chat_page_handler');
+	
+	// Site chat
+	$site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
+	if ($site_chat == 'yes') {
+		elgg_extend_view('adf_platform/adf_header', 'group_chat/sitechat_extend', 1000);
+	}
+	
+	// Group chat
 	$group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
 	if ($group_chat == 'groupoption') {
 		add_group_tool_option('group_chat', elgg_echo('group_chat:group_option'), false);
@@ -45,7 +54,10 @@ function group_chat_init() {
 	if (in_array($group_chat, array('yes', 'groupoption'))) {
 		$pageowner = elgg_get_page_owner_entity();
 		if (elgg_in_context('groups') || (elgg_instanceof($pageowner, 'group'))) {
-			elgg_extend_view('group/default', 'group_chat/chat_extend');
+			// Old version : integrated into window
+			//elgg_extend_view('group/default', 'group_chat/chat_extend');
+			// New version : own window
+			elgg_extend_view('adf_platform/adf_header', 'group_chat/groupchat_extend', 1000);
 		}
 	}
 	
@@ -89,38 +101,18 @@ function get_chat_content(){
 /* Site chat : not seriously implemented yet, but functional */
 function group_chat_page_handler($page) {
 	global $CONFIG;
+	$base = elgg_get_plugins_path() . 'group_chat/pages/group_chat';
 	if (!isset($page[0])) { $page[0] = 'site'; }
+	
 	switch ($page[0]) {
+		case "group":
+			if (isset($page[1])) { set_input('group_guid', $page[1]); }
+			require_once "$base/group_chat.php";
+			break;
+			
 		case "site":
 		default:
-			gatekeeper();
-			$site = $CONFIG->site;
-			$guid = $CONFIG->site_guid;
-			$title = elgg_echo('group_chat:site_chat');
-			$vars['title'] = $title;
-			elgg_set_page_owner_guid($guid);
-			$content = '';
-			$content .= elgg_view('group_chat/site_chat', array('entity' => $site));
-			
-			// Render pure content (for popup, lightbox or embed/iframe use)
-			header('Content-Type: text/html; charset=utf-8');
-			?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<head>
-	<title><?php echo $title; ?></title>
-	<?php echo elgg_view('page/elements/head', $vars); ?>
-	<style>
-	html, body { background:#FFFFFF !important; }
-	</style>
-</head>
-<body style="height:100%; margin:0; border:0;">
-	<div style="padding:0 4px;">
-		<?php echo $content; ?>
-	</div>
-</body>
-</html>
-			<?php
+			require_once "$base/site_chat.php";
 	}
 	
 	return true;

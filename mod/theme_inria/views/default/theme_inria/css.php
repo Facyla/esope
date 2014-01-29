@@ -64,7 +64,23 @@ $module_bg_color = '#F8F4F5';
 
 /* Add some fonts */
 @font-face {
-	font-family: 'NeoFont'; font-weight: normal; font-style: normal;
+	font-family: 'Neo Sans Std'; font-weight: 100; font-style: normal;
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-light-webfont.eot');
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-light-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-light-webfont.woff') format('woff'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-light-webfont.ttf') format('truetype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-light-webfont.svg#neo_sans_stdregular') format('svg');
+}
+@font-face {
+	font-family: 'Neo Sans Std'; font-weight: 300; font-style: normal;
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-medium-webfont.eot');
+	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-medium-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-medium-webfont.woff') format('woff'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-medium-webfont.ttf') format('truetype'),
+		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-medium-webfont.svg#neo_sans_stdregular') format('svg');
+}
+@font-face {
+	font-family: 'Neo Sans Std'; font-weight: normal; font-style: normal;
 	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.eot');
 	src: url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.eot?#iefix') format('embedded-opentype'),
 		 url('<?php echo $fonturl; ?>NeoFont/neosansstd-regular-webfont.woff') format('woff'),

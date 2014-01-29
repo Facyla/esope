@@ -33,6 +33,7 @@ PRE-REQUIS : http://docs.elgg.org/wiki/Installation/Requirements
 - MySQL 5+
 
 
+
 #============================================================#
 INSTALLATION & CONFIGURATION : 
 
@@ -75,6 +76,41 @@ INSTALLATION & CONFIGURATION :
   - Site-wide categories : liste de thématiques du site (si activé)
   - groups, log rotate, garbage collector
 
+
+
+
+#============================================================#
+SECURITE : 
+De nombreuses mesures peuvent être prises du côté du serveur, notamment 
+via la mise en place d'une connexion HTTPS (nécesite un certificat valide) 
+et diverses options de configuraiton d'Apache.
+Quelques ajouts complémentaires à intégrer aux fichiers .htaccess :
+
+# Secure cookies
+<IfModule php5_module>
+	# Set cookie to use HTTPOnly (can't be used in any script - such as JS)
+	php_flag session.cookie_httponly on
+	# Allow cookie session over secure channel only
+	php_value session.cookie_secure 1
+</IfModule>
+
+# No Multiviews
+Options -Multiviews
+
+# XSS protection and various other security settings
+<IfModule mod_headers.c>
+	#Header add TimeGenerated "It took %D microseconds to serve this request."
+	Header add Strict-Transport-Security "max-age=157680000"
+	Header unset ETag
+	Header set X-Frame-Options: sameorigin
+	Header set X-XSS-Protection: "1; mode=block"
+	Header set X-Content-Type-Options: nosniff
+	Header set X-Content-Security-Policy: "allow 'self'"
+	Header set X-WebKit-CSP: "allow 'self'"
+	Header set X-Permitted-Cross-Domain-Policies: "master-only"
+	Header unset X-Powered-By
+</IfModule>
+ServerSignature Off
 
 
 

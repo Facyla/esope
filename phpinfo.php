@@ -1,5 +1,4 @@
 <?php
-exit;
-
-phpinfo();
+// Enable if you need it
+//phpinfo();
 

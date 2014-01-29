@@ -3,7 +3,10 @@
  - elements get class .floating when scrolling passes them
  - style them using element-specific CSS selectors
  */
-var position = $('.is-floatable').offset().top;
+var position = 0;
+if ($('.is-floatable').offset() != null) {
+	var position = $('.is-floatable').offset().top;
+}
 $(window).scroll(
 	function() {
 		if ($(window).scrollTop() >= position) {
