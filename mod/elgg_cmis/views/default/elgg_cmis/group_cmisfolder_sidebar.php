@@ -5,11 +5,17 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->cmis_folder_enable != "yes") { return true; }
+//if ($group->cmis_folder_enable != "yes") { return true; }
+
+if (!elgg_in_context('group_profile')) { return; }
+
+// Display only if a folder is set
+$folder = $group->cmisfolder;
+if (empty($folder)) { return true; }
+
 
 global $CONFIG;
 
-$folder = $group->cmisfolder;
 //$contenttype = $group->contenttype;
 //$recursive = $group->recursive;
 if (empty($contenttype)) $contenttype = 'document';
@@ -34,6 +40,9 @@ if (!empty($folder)) {
 } else {
 	$content = elgg_echo('elgg_cmis:noconf');
 }
+
+// Add folder link
+$title = '<a class="elgg-button" style="float:right;" href="' . $group->cmisfolder . '">' . elgg_echo('elgg_cmis:action:openfolder') . '</a>' . $title;
 
 // Sidebar module
 echo elgg_view_module('aside', $title, $content);

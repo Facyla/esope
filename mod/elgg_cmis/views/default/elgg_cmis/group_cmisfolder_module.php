@@ -3,9 +3,19 @@
  * Group CMIS folder module
  */
 
+/**
+ * Group CMIS folder module
+ */
+
 $group = elgg_get_page_owner_entity();
 
-if ($group->cmis_folder_enable != "yes") { return true; }
+//if ($group->cmis_folder_enable != "yes") { return true; }
+
+if (!elgg_in_context('group_profile')) { return; }
+
+// Display only if a folder is set
+$folder = $group->cmisfolder;
+if (empty($folder)) { return true; }
 
 global $CONFIG;
 
@@ -35,11 +45,14 @@ if (!empty($folder)) {
 	$content = elgg_echo('elgg_cmis:noconf');
 }
 
+// Add folder link
+//$content .= '<p><a class="elgg-button elgg-button-action" href="' . $group->cmisfolder . '">' . elgg_echo('elgg_cmis:action:openfolder') . '</a></p>';
+
 // Group module
 echo elgg_view('groups/profile/module', array(
 	'title' => $title,
 	'content' => $content,
-	'all_link' => false,
+	'all_link' => $group->cmisfolder,
 	'add_link' => false,
 ));
 

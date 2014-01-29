@@ -7,10 +7,12 @@
 .elgg-cmis-widget iframe { height: 100%; width: 100%; }
 
 /* Group modules */
-.elgg-cmis-module { height: 200px; width: 100%; }
+.elgg-cmis-module { height: 160px; width: 100%; }
+.elgg-cmis-module iframe { height: 100%; width: 100%; }
 
 /* Sidebar */
-.elgg-cmis-sidebar { height: 200px; width: 100%; }
+.elgg-cmis-sidebar { height: 160px; width: 100%; }
+.elgg-cmis-sidebar iframe { height: 100%; width: 100%; }
 
 
 .elgg-cmis { height: 250px; width: 100%; }

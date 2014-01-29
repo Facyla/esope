@@ -116,7 +116,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: NeoFont, Arial, sans-serif; font-size: 14px; font-weight: bold; }
 #transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
 #transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 37px; left: 0px; box-shadow:none; }
+#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
 #transverse nav ul li ul li { background: <?php echo $module_bg_color; ?>; }
 #transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 
@@ -205,7 +205,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 
 /* Groups */
-.elgg-owner-block .elgg-head { background: #F8F4F5; }
+.elgg-owner-block .elgg-head { /* background: #F8F4F5; */ background: #FFFFFF; }
 /* Eviter car nécessite de revoir tous les outils
 .elgg-menu-owner-block li a { background-color: #F8F4F5; }
 */

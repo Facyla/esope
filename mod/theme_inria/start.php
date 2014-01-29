@@ -20,9 +20,10 @@ function theme_inria_init(){
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
 	// Add CMIS folder option
-	add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
+	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with CMIS folder
 	//elgg_extend_view('groups/tool_latest', 'elgg_cmis/group_cmisfolder_module', 501);
+	// Displays only if ->cmisfolder is set
 	elgg_extend_view('page/elements/sidebar', 'elgg_cmis/group_cmisfolder_sidebar', 501);
 	
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);

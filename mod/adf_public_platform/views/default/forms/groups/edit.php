@@ -20,7 +20,7 @@ if (isset($vars['entity'])) {
 	}
 } else {
 	$membership = ACCESS_PUBLIC;
-	$access = ACCESS_PUBLIC;
+	$access = get_default_access();
 }
 
 if (!isset($vars['entity'])) {
@@ -166,7 +166,15 @@ if ($tools) {
 		$value = $vars['entity']->$group_option_toggle_name ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
 		?>	
 		<div>
-			<label for="<?php echo $group_option_toggle_name; ?>">
+			<?php
+			// @TODO : Add a hint, but only if it exists
+			$hint = '';
+			if (elgg_echo('hint:' . $group_option->name) != 'hint'.$group_option->name) {
+				//echo '<span class="group-tool-hint">' . elgg_echo('hint:' . $group_option->name) . '</span>';
+				$hint = strip_tags(elgg_echo('hint:' . $group_option->name));
+			}
+			?>
+			<label for="<?php echo $group_option_toggle_name; ?>" title="<?php echo $hint; ?>">
 				<?php echo $group_option->label; ?><br />
 			</label>
 			<?php 

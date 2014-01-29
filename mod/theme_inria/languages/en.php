@@ -165,6 +165,18 @@ $english = array(
 	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
 	'theme_inria:ldapdetails' => "Inria details",
 	
+	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
+	'profile:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
+	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab2' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab3' => "Custom tab n°3 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab3' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab4' => "Custom tab n°4 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab4' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab5' => "Custom tab n°5 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 );
 

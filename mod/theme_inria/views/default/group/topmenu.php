@@ -15,6 +15,7 @@ $tabs['home'] = array(
 	'priority' => 200,
 );
 
+/*
 // If blog enabled
 if ($group->blog_enable == 'yes') 
 $tabs['articles'] = array(
@@ -32,6 +33,7 @@ $tabs['discussion'] = array(
 	'selected' => (elgg_in_context('discussion')),
 	'priority' => 300,
 );
+*/
 
 // If files or bookmarks enabled
 // Files are always active, even if the "tool" is disabled (can be embedded)
@@ -43,6 +45,7 @@ $tabs['ressources'] = array(
 	'priority' => 300,
 );
 
+/*
 // If wiki enabled
 if ($group->pages_enable == 'yes') 
 $tabs['pages'] = array(
@@ -51,6 +54,57 @@ $tabs['pages'] = array(
 	'selected' => (elgg_in_context('pages')),
 	'priority' => 300,
 );
+*/
+
+
+// CUSTOM TABS
+// Note : requires that customtab1 to 5 are configured in some way (easiest : custom group field)
+
+// Custom tab #1
+if (!empty($group->customtab1)) {
+	$tabinfo = explode('::', $group->customtab1);
+	$tabs['customtab1'] = array(
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+	);
+}
+
+// Custom tab #2
+if (!empty($group->customtab2)) {
+	$tabinfo = explode('::', $group->customtab2);
+	$tabs['customtab2'] = array(
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+	);
+}
+
+// Custom tab #3
+if (!empty($group->customtab3)) {
+	$tabinfo = explode('::', $group->customtab3);
+	$tabs['customtab3'] = array(
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+	);
+}
+
+// Custom tab #4
+if (!empty($group->customtab4)) {
+	$tabinfo = explode('::', $group->customtab4);
+	$tabs['customtab4'] = array(
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+	);
+}
+
+// Custom tab #5
+if (!empty($group->customtab5)) {
+	$tabinfo = explode('::', $group->customtab4);
+	$tabs['customtab5'] = array(
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+	);
+}
+
 
 // Build action menu
 if (isset($CONFIG->menus['title'])) { $groupmenus = $CONFIG->menus['title']; } else { $menu = array(); }
