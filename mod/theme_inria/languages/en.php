@@ -67,7 +67,8 @@ $english = array(
 
 	'theme_inria:topbar:publications' => 'All&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'All&nbsp;presentations',
-
+	
+	'theme_inria:access:groups' => "Audience",
 	'theme_inria:groupinvites' => "Group invite(s)",
 	'theme_inria:invite:subject' => 'Invitation',
 //$user->name, $group->name, $url

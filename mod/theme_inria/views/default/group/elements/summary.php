@@ -51,7 +51,6 @@ $tags = elgg_extract('tags', $vars, '');
 if ($tags === '') { $tags = elgg_view('output/tags', array('tags' => $entity->tags)); }
 
 if ($metadata) { echo $metadata; }
-echo '<span style="float:right; margin-left:1ex;">' . elgg_view('output/access', array('entity' => $entity)) . '</span>';
 if ($title_link) { echo "<h3>$title_link</h3>"; }
 echo "<div class=\"elgg-subtext\">$subtitle</div>";
 echo $tags;
@@ -63,6 +62,8 @@ if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
 
 // Display some group details only in owner_block
 if (!elgg_in_context('owner_block')) { return; }
+
+echo '<p class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $entity)) . '</p>';
 
 if ($entity->membership == ACCESS_PUBLIC) {
 	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:open:details") . '">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
@@ -84,5 +85,8 @@ if ($entity->canEdit()) {
 }
 ?>
 <div class="clearfloat"></div><br />
-<?php echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more'); ?></a></p>
+<?php
+//echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
+echo '<p>' . elgg_echo('groups:members') . '&nbsp;: <a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $entity->getMembers(0, 0, TRUE) . ' <i class="fa fa-users"></i></a></p>';
+?>
 

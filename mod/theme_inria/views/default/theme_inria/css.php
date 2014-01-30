@@ -127,6 +127,11 @@ form input#adf-search-input:active, form input#adf-search-input:focus { color: #
 form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
 form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #EF783E; border: 1px solid #EF783E; }
 
+
+/* Sidebar */
+.elgg-sidebar { border-left: 1px dotted #CCC; }
+
+
 /* Forms */
 ::-webkit-input-placeholder { color: #EF783E; }
 :-moz-placeholder { color: #EF783E; }

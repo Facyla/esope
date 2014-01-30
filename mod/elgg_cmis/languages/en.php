@@ -17,6 +17,7 @@ $en = array(
 	'elgg_cmis:nocontent' => "No content",
 	'elgg_cmis:noresult' => "No result",
 	'elgg_cmis:noconf' => "Not configured",
+	'elgg_cmis:invalidurl' => "Invalid URL",
 	
 	// Object types
 	'elgg_cmis:document' => "Document",

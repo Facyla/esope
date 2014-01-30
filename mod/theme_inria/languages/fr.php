@@ -69,6 +69,7 @@ $french = array(
 	'theme_inria:topbar:publications' => 'Les&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'Les&nbsp;présentations',
 	
+	'theme_inria:access:groups' => "Audience",
 	'theme_inria:groupinvites' => "Invitation(s) à rejoindre un groupe",
 	'theme_inria:invite:subject' => 'Invitation',
 	//$user->name, $group->name, $url
@@ -153,7 +154,7 @@ $french = array(
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	
 	// Group info details
-	'theme_inria:groupmembership' => "Inscription",
+	'theme_inria:groupmembership' => "Adhésion",
 	'theme_inria:groupmembership:open' => "Libre",
 	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
 	'theme_inria:groupmembership:closed' => "Restreint",
