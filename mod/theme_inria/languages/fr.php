@@ -189,9 +189,20 @@ $french = array(
 	'theme_inria:embed:etherpad' => "Pad ou Iframe",
 	'theme_inria:etherpad:title' => "Intégrer un Pad (ou une autre page web) dans votre contenu",
 	'theme_inria:etherpad:details' => "Pour intégrer un Pad dans votre page, veuillez coller ci-dessous son adresse (URL) complète, puis cliquez sur le bouton Intégrer le Pad<br />Si vous souhaitez créer un nouveau Pad, veuillez utiliser d'abord le bouton Créer un Pad, puis procéder de la même manière que pour un Pad existant.",
-	'theme_inria:etherpad:access' => "Attention : les droits d'accès au Pad sont gérés de manière indépendante et diffèrent très certainement de ceux de votre contenu publié sur Iris.",
+	'theme_inria:etherpad:warning' => "<blockquote>Attention : les Pads ne sont *pas* hébergés par Iris, ce qui a des implication smportantes :
+		<ul>
+			<li>Les Pads ont une durée de vie limitée ! Les anciens Pads sont supprimés régulièrement.</li>
+			<li>Les Pads ont leurs propres droits d'accès, qui sont gérés séparément de ceux d'Iris (dans le pad lui-même), et ne correspondent généralement pas au contenu d'Iris dans lequel il est intégré.</li>
+		</ul>
+		Il est vivement recommandé de prendre les précautions suivantes :
+		<ul>
+			<li>Si vous souhaitez conserver le contenu du Pad, copiez-collez sont contenu dans le contenu Iris, dès que vous avez terminé l'écriture collaborative. Vous pouvez utiliser le contenu Iris, ou un commentaire.</li>
+			<li>Vérifiez soigneusement les accès des Pads, afin qu'ils correspondent aux lecteurs de votre contenu.</li>
+			<li>Ajoutez des précisions sur qui peut accéder au Pad, afin que les lecteurs sachent comment faire q'ils n'ont pas accès, mais surtout qu'ils sachent qui pourra lire ce qu'ils écrivent dans le Pad.</li>
+		</ul>
+	</blockquote>",
 	'theme_inria:etherpad:iframe' => "Note : vous pouvez également utiliser cet outil pour intégrer toute page sous forme d'iframe. Indiquez simplement l'URL de la page à intégrer. Attention : seules les pages sécurisées via HTTPS pourront être intégrées.",
-	'theme_inria:etherpad:existing' => "Intégrer le Pad",
+   	'theme_inria:etherpad:existing' => "Intégrer le Pad",
 	'theme_inria:etherpad:existing:help' => "Le Pad (ou l'iframe) est intégrée dans votre contenu dès que vous avez cliqué. Si la fenêtre de sélection ne se ferme pas, veuillez la fermer en cliquant en haut à droite.",
 	'theme_inria:etherpad:padurl' => "URL du Pad",
 	'theme_inria:etherpad:new' => "Créer un Pad",

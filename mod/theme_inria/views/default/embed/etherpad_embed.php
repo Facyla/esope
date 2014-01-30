@@ -4,7 +4,7 @@ $uid = esope_unique_id();
 
 echo '<h3>' . elgg_echo('theme_inria:etherpad:title') . '</h3>';
 echo '<p>' . elgg_echo('theme_inria:etherpad:details') . '</p>';
-echo '<p><strong>' . elgg_echo('theme_inria:etherpad:access') . '</strong></p>';
+echo '<p><strong>' . elgg_echo('theme_inria:etherpad:warning') . '</strong></p>';
 echo '<p>' . elgg_echo('theme_inria:etherpad:iframe') . '</p>';
 echo '<br />';
 
