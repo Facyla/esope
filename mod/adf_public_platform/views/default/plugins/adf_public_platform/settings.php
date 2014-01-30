@@ -314,10 +314,6 @@ $(function() {
 			<?php echo $url . elgg_view('input/text', array( 'name' => 'params[backgroundimg]', 'value' => $vars['entity']->backgroundimg, 'js' => 'style="width:50%;"' )); ?>
 		</p><br />
 
-		<p><label><?php echo elgg_echo('adf_platform:settings:groups_disclaimer'); ?></label>
-			<?php echo elgg_view('input/longtext', array( 'name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer )); ?>
-		</p><br />
-
 		<p><label><?php echo elgg_echo('adf_platform:settings:footer'); ?></label>
 			<?php echo elgg_view('input/longtext', array( 'name' => 'params[footer]', 'value' => $vars['entity']->footer )); ?>
 		</p><br />
@@ -370,23 +366,24 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:groups'); ?></h3>
-	<div>
-		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:groupinvites'); ?></h4>
-		<?php
-		if (elgg_is_active_plugin('groups')) {
+	<?php if (elgg_is_active_plugin('groups')) { ?>
+		<h3><?php echo elgg_echo('adf_platform:config:groups'); ?></h3>
+		<div>
+			<p><label><?php echo elgg_echo('adf_platform:settings:groups_disclaimer'); ?></label>
+				<?php echo elgg_view('input/longtext', array( 'name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer )); ?>
+			</p><br />
+			<br />
+			<h4><?php echo elgg_echo('adf_platform:config:groupinvites'); ?></h4>
+			<?php
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess )) . '</p>';
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $vars['entity']->groupjoin_enablenotif )) . '</p>';
-		}
-		?>
-		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:grouptabs'); ?></h4>
-		<?php
-		if (elgg_is_active_plugin('groups')) {
+			?>
+			<br />
+			<h4><?php echo elgg_echo('adf_platform:config:grouptabs'); ?></h4>
+			<?php
 			// Default to alpha sort
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:alpha') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_alpha )) . '</p>';
 			// Allow to remove newest
@@ -403,9 +400,9 @@ $(function() {
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion )) . '</p>';
 			// Set default tools status
 			echo ' <p><label>' . elgg_echo('adf_platform:settings:groups:tools_default') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[group_tools_default]', 'options_values' => $group_tools_default_opt, 'value' => $vars['entity']->group_tools_default )) . '</p>';
-		}
-		?>
-	</div>
+			?>
+		</div>
+	<?php } ?>
 
 
 	<h3><?php echo elgg_echo('adf_platform:config:members'); ?></h3>

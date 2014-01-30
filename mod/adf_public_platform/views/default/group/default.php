@@ -11,6 +11,10 @@ $group = $vars['entity'];
 if (!elgg_in_context('dashboard') && (elgg_in_context('owner_block') || elgg_in_context('widgets')) ) {
 //if (elgg_in_context('owner_block') || elgg_in_context('widgets')) {
   $icon = elgg_view_entity_icon($group, 'small');
+} else if (elgg_in_context('livesearch')) {
+  $icon = elgg_view_entity_icon($group, 'tiny');
+} else if (elgg_in_context('widgets') || elgg_in_context('search')) {
+  $icon = elgg_view_entity_icon($group, 'small');
 } else {
   $icon = elgg_view_entity_icon($group, 'medium');
 }

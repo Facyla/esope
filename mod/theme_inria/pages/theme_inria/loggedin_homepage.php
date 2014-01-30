@@ -19,7 +19,7 @@ if ($own->hide_firststeps != 'yes') {
 		$firststeps = '<header><div class="iris-firststeps">
 				<div class="firststeps">
 					' . $firststeps . '
-					<a href="?firststeps=hide" class="firststeps-disable">Ne plus afficher</a>
+					<a href="?firststeps=hide" class="firststeps-disable">' . elgg_echo('theme_inria:firststeps:hide') . '</a>
 				</div>
 			</div></header>
 			<div class="clearfloat"></div>';
@@ -42,17 +42,17 @@ $intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype'
 
 
 // Le Fil
-$thewire = '<h2><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:site:activity') . '</a></h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
-elgg_push_context('widgets');
+$thewire = '<h2><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:thewire:title') . '</a></h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+//elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
-elgg_pop_context('widgets');
+//elgg_pop_context('widgets');
 
 // Activité du site
 $site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_inria:site:activity') . '</a></h2>';
-elgg_push_context('widgets');
+//elgg_push_context('widgets');
 $db_prefix = elgg_get_config('dbprefix');
 $site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
-elgg_pop_context();
+//elgg_pop_context();
 
 // Tableau de bord
 // Note : il peut être intéressant de reprendre le layout des widgets si on veut séparer les colonnes et les intégrer dans l'interface
@@ -82,13 +82,13 @@ $body = $firststeps . '
 		<h2 class="hidden">Informations</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
-		<div class="clearfloat"></div><br />
+		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/users/online') . '</div>
-		<div class="clearfloat"></div><br />
+		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
 	</div>
 	
-	<div class="clearfloat"></div><br />
+	<div class="clearfloat"></div>
 	<h2 class="hidden">Widgets</h2>
 	' . $widget_body;
 

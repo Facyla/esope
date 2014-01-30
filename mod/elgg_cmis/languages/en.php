@@ -14,6 +14,9 @@ $en = array(
 	'elgg_cmis:cmis_login' => "CMIS login",
 	'elgg_cmis:cmis_password' => "CMIS password",
 	'elgg_cmis:debugmode' => "Debug mode",
+	'elgg_cmis:nocontent' => "No content",
+	'elgg_cmis:noresult' => "No result",
+	'elgg_cmis:noconf' => "Not configured",
 	
 	// Object types
 	'elgg_cmis:document' => "Document",
@@ -47,13 +50,13 @@ $en = array(
 	'elgg_cmis:widget:insearch ' => "Search text",
 	'elgg_cmis:widget:cmis' => "CMIS",
 	'elgg_cmis:widget:cmis:details' => "Generic CMIS widget (custom queries",
-	'elgg_cmis:widget:cmis_mine' => "CMIS : My Files",
+	'elgg_cmis:widget:cmis_mine' => "My Files on Partage",
 	'elgg_cmis:widget:cmis_mine:details' => "My files on Partage",
-	'elgg_cmis:widget:cmis_folder' => "CMIS : Folder",
+	'elgg_cmis:widget:cmis_folder' => "Folder on Partage",
 	'elgg_cmis:widget:cmis_folder:details' => "A folder's content on Partage",
-	'elgg_cmis:widget:cmis_search' => "CMIS : Title search",
+	'elgg_cmis:widget:cmis_search' => "Title search on Partage",
 	'elgg_cmis:widget:cmis_search:details' => "Search results on Partage",
-	'elgg_cmis:widget:cmis_insearch' => "CMIS : Fulltext search",
+	'elgg_cmis:widget:cmis_insearch' => "Fulltext search on Partage",
 	'elgg_cmis:widget:cmis_insearch:details' => "Fulltext search results on Partage",
 	
 );

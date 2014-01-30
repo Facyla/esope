@@ -72,6 +72,7 @@ $french = array (
 	'theme_inria:topbar:publications' => 'Les&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'Les&nbsp;présentations',
 	
+	'theme_inria:groupinvites' => "Invitation(s) à rejoindre un groupe",
 	'theme_inria:invite:subject' => 'Invitation',
 	//$user->name, $group->name, $url
 	'theme_inria:invite:body' => 'Je vous invite à rejoindre le groupe "%s"<br /><br />
@@ -120,6 +121,8 @@ $french = array (
 	'adf_platform:directory' => 'Membres',
 	
 	'inria:mygroups' => "Mes groupes",
+	'theme_inria:firststeps:hide' => "Ne plus afficher",
+	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
 	'theme_inria:thewire:title' => "Inria le Fil",
@@ -142,7 +145,7 @@ $french = array (
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
 	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',
-	'theme_inria:pages:pageexport' => '<i class="fa fa-download download icon"></i>',
+	'theme_inria:pages:pageexport' => '<i class="fa fa-download download icon"> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export HTML de cette page wiki',
 	
 	/* Settings */
@@ -168,6 +171,18 @@ $french = array (
 	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
 	'theme_inria:ldapdetails' => "Annuaire Inria",
 	
+	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
+	'groups:hint:cmisfolder' => "Pour afficher le contenu du dossier, collez ici l'adresse complète du dossier dans Partage",
+	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab2' => "Onglet configurable n°2 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab2' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab3' => "Onglet configurable n°3 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab3' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab4' => "Onglet configurable n°4 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab4' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab5' => "Onglet configurable n°5 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab5' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	
 );
 

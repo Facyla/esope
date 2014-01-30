@@ -43,6 +43,8 @@ if (elgg_is_logged_in()) {
 	// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
 		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());
 		$invites_count = sizeof($group_invites);
+		$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . elgg_echo('theme_inria:groupinvites') . '</a></li>';
+		/*
 		if ($invites_count == 1) {
 			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '">' . $invites_count . '</a></li>';
 			$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
@@ -52,6 +54,7 @@ if (elgg_is_logged_in()) {
 		} else {
 			$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
 		}
+		*/
 		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
 		$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
 		$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
@@ -131,10 +134,10 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a>
+								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:home'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
-										<li class="home"><a href="<?php echo $url; ?>">Accueil</a></li>
-									<li><a href="<?php echo $url; ?>activity">Activité du site</a></li>
+										<li class="home"><a href="<?php echo $url; ?>"><?php echo elgg_echo('theme_inria:topbar:home'); ?></a></li>
+									<li><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('theme_inria:site:activity'); ?></a></li>
 									</ul>
 								</li>
 								
@@ -150,13 +153,13 @@ if (elgg_is_logged_in()) {
 								</li>
 								//-->
 								
-								<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('groups'); ?></a>
+								<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
-										<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
 										<?php echo $groupinvites; ?>
+										<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
 										<?php //echo $groups; ?>
 									</ul>
 								</li>
@@ -172,20 +175,29 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('members')) { ?>
-									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a>
+									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
 											<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
+											<?php echo $friendrequests_li; ?>
 											<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a></li>
 											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('friends:collections'); ?></a></li>
 											<li><a href="<?php echo $url . 'invite'; ?>"><?php echo elgg_echo('friends:invite'); ?></a></li>
-											<?php echo $friendrequests_li; ?>
 										</ul>
 									</li>
 									<?php echo $friendrequests; ?>
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?></a></li>
+									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?> <i class="fa fa-caret-down"></i></a>
+										<ul class="hidden">
+											<?php $start_date = date('Y-m-01'); ?>
+											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/all'; ?>"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>
+											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/mine'; ?>"><?php echo elgg_echo('event_calendar:show_mine'); ?></a></li>
+											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/friends'; ?>"><?php echo elgg_echo('event_calendar:show_friends'); ?></a></li>
+											<!--
+											//-->
+										</ul>
+									</li>
 								<?php } ?>
 
 							 <!--

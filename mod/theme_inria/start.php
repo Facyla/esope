@@ -18,10 +18,17 @@ function theme_inria_init(){
 	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
-
+	
+	// Add CMIS folder option
+	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
+	// Extend group with CMIS folder
+	//elgg_extend_view('groups/tool_latest', 'elgg_cmis/group_cmisfolder_module', 501);
+	// Displays only if ->cmisfolder is set
+	elgg_extend_view('page/elements/sidebar', 'elgg_cmis/group_cmisfolder_sidebar', 501);
 	
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
-	elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
+	// Export HTML des pages wiki (dans le menu de la page - cf. object/page_top pour chaque entité)
+	//elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
 	// Add all groups excerpt to digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
@@ -32,7 +39,7 @@ function theme_inria_init(){
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
 	// Inria universe : liens vers d'autres 
 	elgg_register_widget_type('inria_universe', "Outils", "Une série d'outils pratiques", 'dashboard', true);
-	elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
+	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {

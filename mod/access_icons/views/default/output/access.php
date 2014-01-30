@@ -30,8 +30,7 @@ if (isset($vars['entity']) && elgg_instanceof($vars['entity'])) {
 		} else {
 			$access_class .= ' elgg-access-group-closed';
 		}
-
-		// @todo this is plugin specific code in core. Should be removed.
+		
 	} elseif ($container && $container->getSubtype() == 'shared_access') {
 		$access_class .= ' shared_collection';
 	} elseif ($access_id == ACCESS_PRIVATE) {
@@ -73,7 +72,7 @@ if (isset($vars['entity']) && elgg_instanceof($vars['entity'])) {
 				} else {
 					$help_details = elgg_echo('access_icons:other:details');
 					$access_class .= ' elgg-access-other';
-					error_log("Access output/access : type acces non defini."); // Note : dans ce cas il faut pouvoir ajouter la prise en charge...
+					error_log("Access output/access : undefined type access"); // Note : dans ce cas il faut pouvoir ajouter la prise en charge...
 				}
 			} else {
 				$help_details = elgg_echo('access_icons:other:details');

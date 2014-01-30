@@ -37,7 +37,7 @@ h4 {
 #digest_online a {
     color: #FFFFFF;
     font-size: 11px;
-    padding: 10px 20px 0;
+    /* padding: 10px 20px 0; */
     text-align: right;
 }
 #digest_online {
@@ -75,7 +75,7 @@ h4 {
 #digest_unsubscribe a {
     color: #FFFFFF;d
     font-size: 11px;
-    padding: 20px;
+    /* padding: 20px; */
 }
 #digest_footer {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -248,4 +248,8 @@ h4 {
 #digest_container div #digest_content .elgg-module.elgg-module-digest .elgg-body .elgg-output p {
 	font-weight: bold;
 }
+
+/* Hide subgroup text */
+.au_subgroup.au_subgroup_icon-medium { display: none; }
+
 

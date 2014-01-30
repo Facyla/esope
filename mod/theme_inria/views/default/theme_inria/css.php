@@ -89,6 +89,16 @@ $module_bg_color = '#F8F4F5';
 }
 
 
+/* Effet sur listes */
+.elgg-list .elgg-item { opacity: 1.0; }
+/* Slider */
+.anythingSlider li.panel { display:none; }
+.anythingSlider li.panel.active { display:block; }
+
+.elgg-autocomplete-item .elgg-access a { display: none; }
+
+
+
 /* Header */
 body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
 section { background:white; }
@@ -106,7 +116,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: NeoFont, Arial, sans-serif; font-size: 14px; font-weight: bold; }
 #transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
 #transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 37px; left: 0px; box-shadow:none; }
+#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
 #transverse nav ul li ul li { background: <?php echo $module_bg_color; ?>; }
 #transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 
@@ -152,13 +162,18 @@ footer.footer-inria {
 
 .home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
 .home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:NeoFont; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
-.home-wire, .home-activity { background:white; }
+.home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
-#thewire-textarea { height: 5em; padding: 1px 3px; }
+.home-wire #thewire-textarea { height: 4em; padding: 1px 3px; }
+.home-wire .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .iris-news {  }
 .iris-news .anythingControls { position: absolute; top: 30px; left: 20px; display:none; }
 .iris-add-button { font-weight: bold; padding: 11px 26px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; }
+.home-activity .elgg-menu-item-access { margin-top: 0; }
+.home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
+.home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
+.home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
 
 /* Widgets */
@@ -190,7 +205,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 
 /* Groups */
-.elgg-owner-block .elgg-head { background: #F8F4F5; }
+.elgg-owner-block .elgg-head { /* background: #F8F4F5; */ background: #FFFFFF; }
 /* Eviter car nécessite de revoir tous les outils
 .elgg-menu-owner-block li a { background-color: #F8F4F5; }
 */

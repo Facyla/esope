@@ -72,6 +72,7 @@ $english = array(
 	'theme_inria:topbar:publications' => 'All&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'All&nbsp;presentations',
 
+	'theme_inria:groupinvites' => "Group invite(s)",
 	'theme_inria:invite:subject' => 'Invitation',
 //$user->name, $group->name, $url
 	'theme_inria:invite:body' => 'I invite you to join the group "%s"<br /><br />
@@ -120,6 +121,8 @@ $english = array(
 	'adf_platform:directory' => 'Members',
 	
 	'inria:mygroups' => "My groups",
+	'theme_inria:firststeps:hide' => "Don't show anymore",
+	'theme_inria:firststeps:show' => "Show",
 	'theme_inria:thewire:charleft' => "left",
 	'theme_inria:thewire:access' => "Access : ",
 	'theme_inria:thewire:title' => "Inria the Wire",
@@ -142,7 +145,7 @@ $english = array(
 	
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
-	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon></i>',
+	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
 	
 	'theme_inria:groupmembership' => "Membership",
@@ -162,6 +165,18 @@ $english = array(
 	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
 	'theme_inria:ldapdetails' => "Inria details",
 	
+	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
+	'profile:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
+	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab2' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab3' => "Custom tab n°3 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab3' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab4' => "Custom tab n°4 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab4' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab5' => "Custom tab n°5 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 );
 
