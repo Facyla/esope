@@ -12,6 +12,7 @@ $order_options = array(
 	);
 
 
+/*
 // ADVANCED SEARCH LINK MODE
 // Build base URL
 $base_search_url = elgg_get_site_url().'search?' . htmlspecialchars(http_build_query(array(
@@ -29,9 +30,7 @@ $base_search_url = elgg_get_site_url().'search?' . htmlspecialchars(http_build_q
 	'created_time_upper' => $vars['created_time_upper'],
 	'modified_time_lower' => $vars['modified_time_lower'],
 	'modified_time_upper' => $vars['modified_time_upper'],
-
 )));
-
 
 echo '<div class="search-filter-menu">';
 foreach($sort_options as $sort_opt => $sort_name) {
@@ -42,12 +41,15 @@ foreach($sort_options as $sort_opt => $sort_name) {
 	}
 }
 echo '</div>';
+*/
 
 
 
 // ADVANCED SEARCH FORM INTERFACE
 // @TODO build an advanced seearch interface through a GET form
 echo '<form method="GET" action="' . $vars['url'] . 'search" id="advanced-search-form">';
+echo '<fieldset>';
+echo '<legend>Advanced search</legend>';
 echo elgg_view('input/securitytokens');
 echo elgg_view('input/hidden', array('name' => 'offset', 'value' => $vars['offset']));
 echo elgg_view('input/hidden', array('name' => 'limit', 'value' => $vars['limit']));
@@ -70,5 +72,6 @@ echo '<p><label>Search text : ' . elgg_view('input/text', array('name' => 'q', '
 
 echo '<p><label>' . elgg_view('input/submit', array('value' => elgg_echo('search'))) . '</label></p>';
 
+echo '</fieldset>';
 echo '</form>';
 
