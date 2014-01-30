@@ -23,10 +23,13 @@ if (!$container) {
 
 elgg_set_page_owner_guid($container->getGUID());
 
-// Add path to currently edited page
-pages_prepare_parent_breadcrumbs($container);
-elgg_push_breadcrumb($container->title, $container->getURL());
-
+// Add full path to currently edited page
+if (elgg_instanceof($container, 'group')) {
+	elgg_push_breadcrumb($container->name, "pages/group/$container->guid/all");
+} else {
+	elgg_push_breadcrumb($container->name, "pages/owner/$container->username");
+}
+pages_prepare_parent_breadcrumbs($page);
 elgg_push_breadcrumb($page->title, $page->getURL());
 elgg_push_breadcrumb(elgg_echo('edit'));
 

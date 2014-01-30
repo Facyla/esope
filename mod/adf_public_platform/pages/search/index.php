@@ -59,6 +59,8 @@ $entity_subtype = get_input('entity_subtype', ELGG_ENTITIES_ANY_VALUE);
 $owner_guid = get_input('owner_guid', ELGG_ENTITIES_ANY_VALUE);
 //$container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
 $friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
+
+// Sort
 $sort = get_input('sort');
 switch ($sort) {
 	case 'relevance':
@@ -73,10 +75,17 @@ switch ($sort) {
 		break;
 }
 
-$order = get_input('sort', 'desc');
+// Order
+$order = get_input('order', 'desc');
 if ($order != 'asc' && $order != 'desc') {
 	$order = 'desc';
 }
+
+// Dates filtering
+$created_time_lower = get_input('created_time_lower', null);
+$created_time_upper = get_input('created_time_upper', null);
+$modified_time_lower = get_input('modified_time_lower', null);
+$modified_time_upper = get_input('modified_time_upper', null);
 
 // set up search params
 $params = array(
@@ -92,7 +101,12 @@ $params = array(
 	'owner_guid' => $owner_guid,
 	'container_guid' => $container_guid,
 //	'friends' => $friends
-	'pagination' => ($search_type == 'all') ? FALSE : TRUE
+	'pagination' => ($search_type == 'all') ? FALSE : TRUE,
+	// Add date filtering
+	'created_time_lower' => $created_time_lower,
+	'created_time_upper' => $created_time_upper,
+	'modified_time_lower' => $modified_time_lower,
+	'modified_time_upper' => $modified_time_upper,
 );
 
 $types = get_registered_entity_types();
@@ -279,6 +293,11 @@ if ($search_type == 'tags') {
 $highlighted_query = search_highlight_words($searched_words, $display_query);
 
 $body = elgg_view_title(elgg_echo('search:results', array("\"$highlighted_query\"")));
+
+
+// Add advanced search & sorting tools
+$body .= elgg_view('search/mainsearch_filter', $params);
+
 
 if (!$results_html) {
 	$body .= elgg_view('search/no_results');

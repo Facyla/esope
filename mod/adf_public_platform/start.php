@@ -3,7 +3,7 @@
  * adf_public_platform aka ESOPE
  * 
  * ESOPE - Elgg Social Opensource Public Environment
- * @author Florain DANIEL - Facyla
+ * @author Florian DANIEL - Facyla
  * 
  */
 
@@ -331,12 +331,18 @@ function adf_platform_pagesetup(){
 			$page_owner = elgg_get_page_owner_entity();
 			if ($page_owner instanceof ElggGroup) {
 				
+				/*
+				$is_edit = false;
+				$last = end($CONFIG->breadcrumbs);
+				if ($last['title'] == elgg_echo('edit')) { $is_edit = true; }
+				*/
+				
+				// Remove "Tool home" entry - except for groups (all groups link) and profiles
 				if (!in_array($context, array('groups', 'profile'))) {
-					// Remove "Tool home" entry - except for groups (all groups link)
-					// Removes owner after tool name (would duplicate group link otherwise)
-					if ($CONFIG->breadcrumbs[1]['title'] == $page_owner->name) unset ($CONFIG->breadcrumbs[0]);
-					// Rename "Owner tool" to the tool name (except for groups - keep group title)
-					// Rename the tool link with the tool name (group name otherwise)
+					// Removes tool entry
+					//if ($CONFIG->breadcrumbs[1]['title'] == $page_owner->name) 
+						unset ($CONFIG->breadcrumbs[0]);
+					// Rename "Owner tool" to the tool name (displays Tool name within its container, instead the container name)
 					$CONFIG->breadcrumbs[1]['title'] = elgg_echo($context);
 				}
 			

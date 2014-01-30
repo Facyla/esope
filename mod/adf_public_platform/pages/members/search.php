@@ -39,7 +39,9 @@ function esope_search(){
 
 $search_action = "javascript:esope_search();";
 // Should be an array, so clear blanks then make it an array
-$metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'adf_public_platform');
+$metadata_search_fields = elgg_get_plugin_setting('metadata_membersearch_fields', 'adf_public_platform');
+// Default to general advanced fiilds if not set
+if (empty($metadata_search_fields)) $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'adf_public_platform');
 if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = str_replace(' ', '', $metadata_search_fields);
 	$metadata_search_fields = explode(',', $metadata_search_fields);

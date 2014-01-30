@@ -669,8 +669,12 @@ $(function() {
 		$esope_search_url = $CONFIG->url . 'esearch';
 		echo ' <p><label>' . elgg_echo('esope:search:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_search_fields]', 'value' => $vars['entity']->metadata_search_fields)) . '<a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
 		
+		// Advanced search tool (alpha version, structure changes may happen)
+		$esope_membersearch_url = $CONFIG->url . 'members/search';
+		echo ' <p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_membersearch_fields]', 'value' => $vars['entity']->metadata_membersearch_fields)) . '<a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
+		
 		// Advanced group search tool (alpha version, structure changes may happen)
-		$esope_search_url = $CONFIG->url . 'groups/groupsearch';
+		$esope_groupsearch_url = $CONFIG->url . 'groups/groupsearch';
 		echo ' <p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . '</label> ' . elgg_view('input/text', array( 'name' => 'params[metadata_groupsearch_fields]', 'value' => $vars['entity']->metadata_groupsearch_fields)) . '<a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
 		
 		// Suppression des menus de l'utilisateur
