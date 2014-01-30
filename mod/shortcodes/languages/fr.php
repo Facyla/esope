@@ -23,6 +23,8 @@ $fr = array(
 	'shortcodes:available:googlemap' => "Carte Google Map",
 	'shortcodes:available:video' => "Vidéo",
 	'shortcodes:available:slider' => "Diaporama",
+	'shortcodes:available:slider:rawhtml' => "Diaporama (version pour édition HTML)",
+	'shortcodes:available:slider:visual' => "Slider (version pour éditeur visuel)",
 	
 );
 

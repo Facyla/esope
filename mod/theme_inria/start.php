@@ -81,8 +81,8 @@ function theme_inria_init(){
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
-	// Add Etherpad embed
-	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 100);
+	// Add Etherpad (and iframes) embed
+	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
 }
 
@@ -257,12 +257,12 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 }
 
 
-// Etherpad soft integration
+// Etherpad (and iframes) soft integration
 function theme_inria_select_tab($hook, $type, $items, $vars) {
 	$items[] = ElggMenuItem::factory(array(
 		'name' => 'etherpad',
 		'text' => elgg_echo('theme_inria:embed:etherpad'),
-		'priority' => 100,
+		'priority' => 500,
 		'data' => array(
 			'view' => 'embed/etherpad_embed',
 		),
