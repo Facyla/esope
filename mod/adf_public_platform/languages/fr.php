@@ -29,6 +29,7 @@ $fr = array(
 	'adf_platform:config:toolslistings' => "PAGES DE LISTING DES OUTILS",
 	'adf_platform:config:toolslistings:details' => "Ce réglage permet de modifier le comportement par défaut des pages de listing des blogs, fichiers, etc. Par défaut seuls les publications <em>personnelles</em> du membre sont listées (pas celles dans ses groupes). Vous pouvez choisir ici de les lister toutes.",
 	'adf_platform:config:filters' => "FILTRES",
+	'adf_platform:settings:advancedsearch' => "Activer la recerche avancée (dans la recherche générale)",
 	'adf_platform:config:widgets' => "CHOIX DES WIDGETS",
 	'adf_platform:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres.<br />Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
 	'adf_platform:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)).<br />Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",

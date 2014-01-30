@@ -51,8 +51,13 @@ if (!$query) {
 
 // get limit and offset.  override if on search dashboard, where only 2
 // of each most recent entity types will be shown.
-$limit = ($search_type == 'all') ? 2 : get_input('limit', 10);
-$offset = ($search_type == 'all') ? 0 : get_input('offset', 0);
+if ($search_type == 'all') {
+	$limit = get_input('limit', 2);
+	$offset = get_input('offset', 2);
+} else {
+	$limit = get_input('limit', 10);
+	$offset = get_input('offset', 10);
+}
 
 $entity_type = get_input('entity_type', ELGG_ENTITIES_ANY_VALUE);
 $entity_subtype = get_input('entity_subtype', ELGG_ENTITIES_ANY_VALUE);
@@ -295,8 +300,11 @@ $highlighted_query = search_highlight_words($searched_words, $display_query);
 $body = elgg_view_title(elgg_echo('search:results', array("\"$highlighted_query\"")));
 
 
-// Add advanced search & sorting tools
-$body .= elgg_view('search/mainsearch_filter', $params);
+// Add advanced search & sorting tools - if enabled (don't break default behaviour/interface)
+$advancedsearch = elgg_get_plugin_setting('advancedsearch', 'adf_public_platform');
+if ($advancedsearch == 'yes') {
+	$body .= elgg_view('search/advanced_search_filter', $params);
+}
 
 
 if (!$results_html) {
