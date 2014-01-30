@@ -288,8 +288,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 /* PROFILE */
 .elgg-context-profile .elgg-widgets { float: left; }
-/* Widgets du profil façon Linkedin */
+/* Widgets du profil façon Linkedin - style défini globalement par ailleurs pour ce bouton
 .profile-widgets .elgg-widget-add-control { float:left; text-align: left; margin: 1%; background: #eee; height: 30px; border: 2px dotted #aaa; padding: 10px 1% 0px 1%; }
+*/
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
 
