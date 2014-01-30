@@ -81,7 +81,11 @@ function theme_inria_init(){
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
+	// Add Etherpad embed
+	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 100);
+	
 }
+
 
 // Theme inria index
 function theme_inria_index(){
@@ -98,7 +102,6 @@ function theme_inria_public_index() {
 
 
 function inria_page_handler($page){
-	
 	switch($page[0]){
 		case "linkedin":
 			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
@@ -108,7 +111,6 @@ function inria_page_handler($page){
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
 			break;
 	}
-	
 	return true;
 }
 
@@ -252,6 +254,20 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 	}
 	
 	return $return;
+}
+
+
+// Etherpad soft integration
+function theme_inria_select_tab($hook, $type, $items, $vars) {
+	$items[] = ElggMenuItem::factory(array(
+		'name' => 'etherpad',
+		'text' => elgg_echo('theme_inria:embed:etherpad'),
+		'priority' => 100,
+		'data' => array(
+			'view' => 'embed/etherpad_embed',
+		),
+	));
+	return $items;
 }
 
 

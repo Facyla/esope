@@ -1059,4 +1059,24 @@ function esope_uppercase_name($string) {
 }
 
 
+/* Generates a unique id per page rendering
+ * Description : This function basically increments a counter on a unique prefix, to generate ids on a given page
+ * Usage : This is useful for all dynamic / reusable elements that require a unique id for dynamic addressing
+ *   ie form fields, JS scripts, views with specific elements, etc.
+ * Note : unique ids remain reasonably short, and human-readable (diff with uniqid() native PHP fonction))
+ * Caution : cannot be used for styling, as ids will may change on each page load...
+ * Param :
+ *  - $prefix default can be overrided if needed
+ */
+function esope_unique_id($prefix = 'esope_unique_id_') {
+	global $esope_unique_id;
+	if (!isset($esope_unique_id)) {
+		$esope_unique_id = 1;
+	} else {
+		$esope_unique_id++;
+	}
+	return $prefix . $esope_unique_id;
+}
+
+
 

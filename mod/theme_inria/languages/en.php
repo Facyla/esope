@@ -1,8 +1,8 @@
 <?php
 /**
-* Elgg custom index plugin language pack
+* Elgg theme_inria plugin language pack
 * 
-* @package ElggCustom_index_INRIA
+* @package theme_inria
 **/
 
 $english = array(
@@ -12,21 +12,18 @@ $english = array(
 	'theme_inria:topbar:dashboard' => "My&nbsp;activities",
 	'theme_inria:topbar:profil' => "My profile",
 	'theme_inria:site:activity' => "Latest activities",
-
-
-
 	'theme_inria:topbar:explorer' => "Explore",
 	'theme_inria:topbar:home' => "Home",
 	'theme_inria:topbar:groups' => "All&nbsp;groups",
 	'theme_inria:topbar:members' => "All&nbsp;members",
 	'theme_inria:topbar:activity' => "All&nbsp;activities",
 	'theme_inria:topbar:pages' => "All&nbsp;pages",
-
 	'theme_inria:topbar:action' => "Actions",
 	'theme_inria:topbar:thewire' => "Write&nbsp;on&nbsp;the&nbsp;wire",
 	'theme_inria:topbar:new_group' => "Create&nbsp;a&nbsp;group",
 	'theme_inria:topbar:invite' => 'Invite',
-
+	
+	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
 	'theme_inria:inria_tool' => "Choose which tool to display",
 	'theme_inria:widget:openintab' => "Open %s in a new tab",
@@ -42,7 +39,6 @@ $english = array(
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
 	'theme_inria:topbar:evo' => "EVO",
-
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -143,11 +139,19 @@ $english = array(
 	'inria:members:newest' => "New members",
 	'loginusername' => "Iris login",
 	
+	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
 	
+	/* Settings */
+	'theme_inria:settings:animators' => "Animators list",
+	'theme_inria:settings:animators:details' => "To add/remove animators, edit the list below, using comma-separated lust of usernames. Usernamesz are those displayed in members' profile URL.",
+	'theme_inria:settings:animators:page' => "Animation page",
+	'theme_inria:settings:animators:members' => "Site members directory",
+	
+	// Group info details
 	'theme_inria:groupmembership' => "Membership",
 	'theme_inria:groupmembership:open' => "Open",
 	'theme_inria:groupmembership:open:details' => "Group membership is open to any member.",
@@ -165,6 +169,7 @@ $english = array(
 	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
 	'theme_inria:ldapdetails' => "Inria details",
 	
+	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
 	'profile:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
@@ -177,6 +182,19 @@ $english = array(
 	'groups:hint:customtab4' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab5' => "Custom tab n°5 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
+	
+	// Etherpad embed
+	'theme_inria:embed:etherpad' => "Pad or Iframe",
+	'theme_inria:etherpad:title' => "Embed a Pad into your content",
+	'theme_inria:etherpad:details' => "To embed an existing Pad into your content, please paste the full Pad URL below, then click the Embed button.<br />If you need to create a new pad, please click first on New pad button below, then proceed the same way as for an existing Pad.",
+	'theme_inria:etherpad:access' => "Caution : the Pad access rights are independant and will mostly not match those on your contentn on Iris.",
+	'theme_inria:etherpad:iframe' => "Note : you can also use this tool to embed any web page into your content. Use page URL instead of Pad URL and that's it !",
+	'theme_inria:etherpad:existing' => "Embed the Pad",
+	'theme_inria:etherpad:existing:help' => "The Pad (or the iframe) is embedded into your content as soon as you've cliqked on this button. If the embed popup remains open, please close it by clicking on close button in popup upper right corner.",
+	'theme_inria:etherpad:padurl' => "Pad URL",
+	'theme_inria:etherpad:new' => "Create a new Pad",
+	'theme_inria:etherpad:new:help' => "This opens another window and lets you create your Pad. Once created, copy the Pad URL the, go back on this page to paste it.",
+	
 	
 );
 
