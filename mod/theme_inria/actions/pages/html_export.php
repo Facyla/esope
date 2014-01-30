@@ -3,6 +3,8 @@ global $CONFIG;
 $guid = (int) get_input("guid");
 $export_subpages = get_input("subpages", 'yes');
 if ($export_subpages != 'yes') $export_subpages = false;
+$export_allpages = get_input("allpages", 'no');
+if ($export_allpages != 'yes') $export_allpages = false;
 
 
 if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page'))) {
@@ -11,18 +13,24 @@ if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'obj
 	$content = "";
 	
 	// Sommaire
-	$summary = '<h3>Sommaire</h3>';
+	$summary = '<h3>' . elgg_echo('theme_inria:summary'). '</h3>';
 	
 	if ($export_subpages) {
 		// Export des sous-pages, forcément avec sommaire
 		
-		// On regarde où est publié ce wiki..
-		$container = get_entity($page->container_guid);
+		// Export de tout le wiki du container, ou des pages sous-jacentes
+		if ($export_allpages == 'yes') {
+			// On regarde où est publié ce wiki..
+			$container = get_entity($page->container_guid);
+			// Listing des pages du container
+			$toppages = esope_get_top_pages($container);
+		} else {
+			$container = $page;
+			$toppages[] = $page;
+		}
 		// ..et on change le nom en rapport
 		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
 		
-		// Listing des pages du container
-		$toppages = esope_get_top_pages($container);
 		if ($toppages) foreach ($toppages as $parent) {
 			// Sommaire
 			$summary .= '<li>' . elgg_view("output/url", array("text" => $parent->title, "href" => "#page_" . $parent->guid, "title" => $parent->title));

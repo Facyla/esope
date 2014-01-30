@@ -146,6 +146,7 @@ $french = array(
 	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download download icon"> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export HTML de cette page wiki',
+	'theme_inria:summary' => "Sommaire",
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Liste des animateurs",

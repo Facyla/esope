@@ -145,6 +145,7 @@ $english = array(
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download" download icon> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export this page as HTML',
+	'theme_inria:summary' => "Summary",
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Animators list",
