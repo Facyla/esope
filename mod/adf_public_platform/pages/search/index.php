@@ -51,12 +51,11 @@ if (!$query) {
 
 // get limit and offset.  override if on search dashboard, where only 2
 // of each most recent entity types will be shown.
+$offset = get_input('offset', 0);
 if ($search_type == 'all') {
 	$limit = get_input('limit', 2);
-	$offset = get_input('offset', 2);
 } else {
 	$limit = get_input('limit', 10);
-	$offset = get_input('offset', 10);
 }
 
 $entity_type = get_input('entity_type', ELGG_ENTITIES_ANY_VALUE);
@@ -91,6 +90,13 @@ $created_time_lower = get_input('created_time_lower', null);
 $created_time_upper = get_input('created_time_upper', null);
 $modified_time_lower = get_input('modified_time_lower', null);
 $modified_time_upper = get_input('modified_time_upper', null);
+
+// Convert time to timestamp if needed
+if (strpos('-', $created_time_lower)) { $created_time_lower = strtotime($created_time_lower); }
+if (strpos('-', $created_time_upper)) { $created_time_upper = strtotime($created_time_upper); }
+if (strpos('-', $modified_time_lower)) { $modified_time_lower = strtotime($modified_time_lower); }
+if (strpos('-', $modified_time_lower)) { $modified_time_upper = strtotime($modified_time_upper); }
+
 
 // set up search params
 $params = array(
@@ -194,7 +200,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	// to pass the correct current search type to the views
 	$current_params = $params;
 	$current_params['search_type'] = 'entities';
-
+	
 	// foreach through types.
 	// if a plugin returns FALSE for subtype ignore it.
 	// if a plugin returns NULL or '' for subtype, pass to generic type search function.
@@ -302,6 +308,8 @@ $body = elgg_view_title(elgg_echo('search:results', array("\"$highlighted_query\
 
 // Add advanced search & sorting tools - if enabled (don't break default behaviour/interface)
 $advancedsearch = elgg_get_plugin_setting('advancedsearch', 'adf_public_platform');
+$params['types_list'] = $types;
+$params['custom_types_list'] = $custom_types;
 if ($advancedsearch == 'yes') {
 	$body .= elgg_view('search/advanced_search_filter', $params);
 }

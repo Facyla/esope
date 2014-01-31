@@ -113,7 +113,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 /* Main menu */
 #transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; height: 37px; }
 #transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
-#transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: NeoFont, Arial, sans-serif; font-size: 14px; font-weight: bold; }
+#transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: "Neo Sans Std", Arial, sans-serif; font-size: 14px; font-weight: bold; }
 #transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
 #transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
 #transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
@@ -157,9 +157,9 @@ footer.footer-inria {
 .footer-logo-inria { margin-top: 12px; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: NeoFont, sans-serif; padding: 4px 6px; }
+.elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: "Neo Sans Std", Arial, sans-serif, sans-serif; padding: 4px 6px; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; }
-.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: NeoFont, sans-serif; padding: 4px 6px; }
+.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: "Neo Sans Std", Arial, sans-serif, sans-serif; padding: 4px 6px; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 1px solid <?php echo $color8; ?>; }
 
 
@@ -170,7 +170,7 @@ footer.footer-inria {
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 5%; text-align: center; margin: 0; }
 
 .home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
-.home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:NeoFont; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
+.home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:"Neo Sans Std", Arial, sans-serif; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }

@@ -1,15 +1,45 @@
 <?php
 $sort_options = array(
-		'relevance' => 'search:sort:relevance', 
-		'created' => 'search:sort:created', 
-		'updated' => 'search:sort:updated', 
-		'alpha' => 'search:sort:alpha', 
-		'action_on' => 'search:sort:action_on',
+		'relevance' => elgg_echo('search:sort:relevance'),
+		'created' => elgg_echo('search:sort:created'),
+		'updated' => elgg_echo('search:sort:updated'),
+		'alpha' => elgg_echo('search:sort:alpha'),
+		'action_on' => elgg_echo('search:sort:action_on'),
 	);
+
 $order_options = array(
-		'desc' => 'search:order:desc', 
-		'asc' => 'search:order:asc', 
+		'desc' => elgg_echo('search:order:desc'),
+		'asc' => elgg_echo('search:order:asc'),
 	);
+
+// Type & subtype filters
+$type_options[ELGG_ENTITIES_ANY_VALUE] = elgg_echo('search:type:any');
+$subtype_options[ELGG_ENTITIES_ANY_VALUE] = elgg_echo('search:type:any');
+if ($vars['types_list']) foreach ($vars['types_list'] as $type => $subtypes) {
+	$type_options[$type] = elgg_echo('search:type:' . $type);
+	if (is_array($subtypes) && count($subtypes)) {
+		foreach ($subtypes as $subtype) {
+			$subtype_options[$subtype] = elgg_echo('search:subtype:' . $subtype);
+		}
+	}
+}
+
+// Custom search types
+$searchtype_options = array(
+		'all' => elgg_echo('search:searchtype:all'),
+		'entities' => elgg_echo('search:searchtype:entities')
+	);
+if ($vars['custom_types_list']) foreach ($vars['custom_types_list'] as $searchtype) {
+	$searchtype_options[$searchtype] = elgg_echo('search:searchtype:' . $searchtype);
+}
+
+
+
+// Convert time to timestamp if needed
+if (strpos('-', $vars['created_time_lower'])) { $vars['created_time_lower'] = strtotime($vars['created_time_lower']); }
+if (strpos('-', $vars['created_time_upper'])) { $vars['created_time_upper'] = strtotime($vars['created_time_upper']); }
+if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_lower'] = strtotime($vars['modified_time_lower']); }
+if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_upper'] = strtotime($vars['modified_time_upper']); }
 
 
 /*
@@ -49,28 +79,48 @@ echo '</div>';
 // @TODO build an advanced seearch interface through a GET form
 echo '<form method="GET" action="' . $vars['url'] . 'search" id="advanced-search-form">';
 echo '<fieldset>';
-echo '<legend>Advanced search</legend>';
+echo '<legend>' . elgg_echo('adf_platform:advancedsearch'). '</legend>';
 echo elgg_view('input/securitytokens');
 echo elgg_view('input/hidden', array('name' => 'offset', 'value' => $vars['offset']));
 echo elgg_view('input/hidden', array('name' => 'limit', 'value' => $vars['limit']));
 
+// Search types, type & subtypes are not fully implemented yet, so keep it commented
+/*
+echo '<p><label>' . elgg_echo('search:field:searchtype') . ' ' . elgg_view('input/dropdown', array('name' => 'search_type', 'options_values' => $searchtype_options, 'value' => $vars['searchtype'])) . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_echo('search:field:type') . ' ' . elgg_view('input/dropdown', array('name' => 'type', 'options_values' => $type_options, 'value' => $vars['type'])) . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_echo('search:field:subtype') . ' ' . elgg_view('input/dropdown', array('name' => 'subtype', 'options_values' => $subtype_options, 'value' => $vars['subtype'])) . '</label></p>';
+*/
+
+// Hidden fields - could be revealed if we don't use sidebar anymore...
+if (!empty($vars['search_type'])) echo elgg_view('input/hidden', array('name' => 'search_type', 'value' => $vars['search_type']));
 if (!empty($vars['type'])) echo elgg_view('input/hidden', array('name' => 'type', 'value' => $vars['type']));
 if (!empty($vars['subtype'])) echo elgg_view('input/hidden', array('name' => 'subtype', 'value' => $vars['subtype']));
+
+// Hidden fields - could be revealed if implemented in a usable way
 if (!empty($vars['owner_guid'])) echo elgg_view('input/hidden', array('name' => 'owner_guid', 'value' => $vars['owner_guid']));
 if (!empty($vars['container_guid'])) echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $vars['container_guid']));
-if (!empty($vars['search_type'])) echo elgg_view('input/hidden', array('name' => 'search_type', 'value' => $vars['search_type']));
 
-echo '<p><label>Sort type : ' . elgg_view('input/dropdown', array('name' => 'sort', 'options_values' => $sort_options, 'value' => $vars['sort'])) . '</label> &nbsp; &nbsp; ';
-echo '<label>Order results : ' . elgg_view('input/dropdown', array('name' => 'order', 'options_values' => $order_options, 'value' => $vars['order'])) . '</label></p>';
+// Sort & order
+echo '<p><label>' . elgg_echo('search:field:sort') . ' ' . elgg_view('input/dropdown', array('name' => 'sort', 'options_values' => $sort_options, 'value' => $vars['sort'])) . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_echo('search:field:order') . ' ' . elgg_view('input/dropdown', array('name' => 'order', 'options_values' => $order_options, 'value' => $vars['order'])) . '</label></p>';
 
-echo '<p><label>Creation date (after) : ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'])) . '</label> &nbsp; &nbsp; ';
-echo '<label>Creation date (before) : ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'])) . '</label></p>';
-echo '<p><label>Modification date (after) : ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'])) . '</label> &nbsp; &nbsp; ';
-echo '<label>Modification date (after) : ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'])) . '</label></p>';
+// Date filters
+/*
+echo '<p><label>' . elgg_echo('search:field:createdtimelower') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'], 'timestamp' => true)) . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_echo('search:field:createdtimeupper') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'], 'timestamp' => true)) . '</label></p>';
+echo '<p><label>' . elgg_echo('search:field:modifiedtimelower') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'], 'timestamp' => true)) . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_echo('search:field:modifiedtimeupper') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'], 'timestamp' => true)) . '</label></p>';
+*/
+echo '<p><strong>' . elgg_echo('search:field:createdtime') . '</strong> <label>' . elgg_view('input/date', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . ' </label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label>';
+echo ' &nbsp; &nbsp; ';
+echo '<strong>' . elgg_echo('search:field:modifiedtime') . '</strong> <label>' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . '</label> &nbsp; &nbsp; ';
+echo '<label>' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label></p>';
 
-echo '<p><label>Search text : ' . elgg_view('input/text', array('name' => 'q', 'value' => $vars['query'])) . '</label></p>';
+// Fulltext search
+echo '<p><label>' . elgg_echo('search:field:fulltext') . ' ' . elgg_view('input/text', array('name' => 'q', 'value' => $vars['query'])) . '</label>';
 
-echo '<p><label>' . elgg_view('input/submit', array('value' => elgg_echo('search'))) . '</label></p>';
+echo elgg_view('input/submit', array('value' => elgg_echo('search'), 'style' => "float:right;"));
 
 echo '</fieldset>';
 echo '</form>';
