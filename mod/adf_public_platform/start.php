@@ -3,7 +3,7 @@
  * adf_public_platform aka ESOPE
  * 
  * ESOPE - Elgg Social Opensource Public Environment
- * @author Florain DANIEL - Facyla
+ * @author Florian DANIEL - Facyla
  * 
  */
 
@@ -331,12 +331,18 @@ function adf_platform_pagesetup(){
 			$page_owner = elgg_get_page_owner_entity();
 			if ($page_owner instanceof ElggGroup) {
 				
+				/*
+				$is_edit = false;
+				$last = end($CONFIG->breadcrumbs);
+				if ($last['title'] == elgg_echo('edit')) { $is_edit = true; }
+				*/
+				
+				// Remove "Tool home" entry - except for groups (all groups link) and profiles
 				if (!in_array($context, array('groups', 'profile'))) {
-					// Remove "Tool home" entry - except for groups (all groups link)
-					// Removes owner after tool name (would duplicate group link otherwise)
-					if ($CONFIG->breadcrumbs[1]['title'] == $page_owner->name) unset ($CONFIG->breadcrumbs[0]);
-					// Rename "Owner tool" to the tool name (except for groups - keep group title)
-					// Rename the tool link with the tool name (group name otherwise)
+					// Removes tool entry
+					//if ($CONFIG->breadcrumbs[1]['title'] == $page_owner->name) 
+						unset ($CONFIG->breadcrumbs[0]);
+					// Rename "Owner tool" to the tool name (displays Tool name within its container, instead the container name)
 					$CONFIG->breadcrumbs[1]['title'] = elgg_echo($context);
 				}
 			
@@ -1056,6 +1062,26 @@ function esope_uppercase_name($string) {
 		}
 	}
 	return $string;
+}
+
+
+/* Generates a unique id per page rendering
+ * Description : This function basically increments a counter on a unique prefix, to generate ids on a given page
+ * Usage : This is useful for all dynamic / reusable elements that require a unique id for dynamic addressing
+ *   ie form fields, JS scripts, views with specific elements, etc.
+ * Note : unique ids remain reasonably short, and human-readable (diff with uniqid() native PHP fonction))
+ * Caution : cannot be used for styling, as ids will may change on each page load...
+ * Param :
+ *  - $prefix default can be overrided if needed
+ */
+function esope_unique_id($prefix = 'esope_unique_id_') {
+	global $esope_unique_id;
+	if (!isset($esope_unique_id)) {
+		$esope_unique_id = 1;
+	} else {
+		$esope_unique_id++;
+	}
+	return $prefix . $esope_unique_id;
 }
 
 

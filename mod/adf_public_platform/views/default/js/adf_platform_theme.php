@@ -1,8 +1,5 @@
 <?php
-$full_url = $_SERVER['SCRIPT_NAME'];
-$full_url = explode('/', $full_url);
-$full_url = array_slice($full_url, 0, -5);
-$urlicon = implode('/', $full_url) . '/img/theme/';
+$urlicon = elgg_get_site_url() . 'mod/adf_public_platform/img/theme/';
 ?>
 
 $(document).ready(function() {

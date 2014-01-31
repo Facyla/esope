@@ -34,12 +34,18 @@ function elgg_shortcode_init() {
 	}
 	
 	// Some plugin functions
-	elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	elgg_register_page_handler('shortcodes', 'shortcodes_page_handler');
 	if (!elgg_is_active_plugin('embed')) {
 		$embed_js = elgg_get_simplecache_url('js', 'shortcodes/embed');
 		elgg_register_simplecache_view('js/shortcodes/embed');
 		elgg_register_js('elgg.embed', $embed_js, 'footer');
+	}
+	
+	// Add shortcodes embed, or use longtext menu extend otherwise
+	if (elgg_is_active_plugin('embed')) {
+		elgg_register_plugin_hook_handler('register', 'menu:embed', 'shortcodes_embed_select_tab', 800);
+	} else {
+		elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	}
 	
 }
@@ -73,4 +79,19 @@ function shortcodes_page_handler($page) {
 	echo elgg_view('shortcodes/list');
 	exit;
 }
+
+
+// Shortcodes embed integration
+function shortcodes_embed_select_tab($hook, $type, $items, $vars) {
+	$items[] = ElggMenuItem::factory(array(
+		'name' => 'shortcodes',
+		'text' => elgg_echo('shortcodes:link'),
+		'priority' => 600,
+		'data' => array(
+			'view' => 'embed/shortcodes',
+		),
+	));
+	return $items;
+}
+
 

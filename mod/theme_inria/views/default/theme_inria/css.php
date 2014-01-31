@@ -126,6 +126,15 @@ form input#adf-search-input { border: 0 none; border-radius: 0; color: #EF783E; 
 form input#adf-search-input:active, form input#adf-search-input:focus { color: #EF783E; }
 form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
 form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #EF783E; border: 1px solid #EF783E; }
+/* Members search */
+.esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
+/* Search filters */
+.search-filter-menu { padding:6px; margin:4px 0; border:1px dotted #CCC; }
+.search-filter-menu a { padding:2px 4px; margin: 0 10px 6px 0; background: #F8F4F5; display: inline-block; }
+
+/* Sidebar */
+.elgg-sidebar { border-left: 1px dotted #CCC; }
+
 
 /* Forms */
 ::-webkit-input-placeholder { color: #EF783E; }
@@ -283,8 +292,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 /* PROFILE */
 .elgg-context-profile .elgg-widgets { float: left; }
-/* Widgets du profil façon Linkedin */
+/* Widgets du profil façon Linkedin - style défini globalement par ailleurs pour ce bouton
 .profile-widgets .elgg-widget-add-control { float:left; text-align: left; margin: 1%; background: #eee; height: 30px; border: 2px dotted #aaa; padding: 10px 1% 0px 1%; }
+*/
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
 

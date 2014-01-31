@@ -17,6 +17,7 @@ $fr = array(
 	'elgg_cmis:nocontent' => "Aucun contenu",
 	'elgg_cmis:noresult' => "Aucun résultat",
 	'elgg_cmis:noconf' => "Module non configuré",
+	'elgg_cmis:invalidurl' => "URL invalide",
 	
 	// Object types
 	'elgg_cmis:document' => "Document",

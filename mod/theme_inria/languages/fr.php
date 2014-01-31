@@ -1,19 +1,17 @@
 <?php
 /**
-* Elgg custom index plugin language pack
+* Elgg theme_inria plugin language pack
 * 
-* @package ElggCustom_index_INRIA
+* @package theme_inria
 **/
 
-$french = array (
+$french = array(
 	'theme_inria:topbar:me' => "Moi",
 	'theme_inria:topbar:usergroups' => 'Mes&nbsp;groupes',
 	'theme_inria:topbar:userfriends' => "Mes&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "Mes&nbsp;activités",
 	'theme_inria:topbar:profil' => "Mon profil",
 	'theme_inria:site:activity' => "Activités récentes",
-
-
 	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
@@ -21,12 +19,12 @@ $french = array (
 	'theme_inria:topbar:members' => "Les&nbsp;membres",
 	'theme_inria:topbar:activity' => "Les&nbsp;activités",
 	'theme_inria:topbar:pages' => "Les&nbsp;pages",
-
 	'theme_inria:topbar:action' => "Agir",
 	'theme_inria:topbar:thewire' => "Publier&nbsp;sur&nbsp;le&nbsp;fil",
 	'theme_inria:topbar:new_group' => "Créer&nbsp;un&nbsp;groupe",
 	'theme_inria:topbar:invite' => 'Inviter',
-
+	
+	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
 	'theme_inria:inria_tool' => "Choisir l'outil à afficher",
 	'theme_inria:widget:openintab' => "Ouvrir %s dans une nouvelle fenêtre",
@@ -42,7 +40,6 @@ $french = array (
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
 	'theme_inria:topbar:evo' => "EVO",
-
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -72,6 +69,7 @@ $french = array (
 	'theme_inria:topbar:publications' => 'Les&nbsp;publications',
 	'theme_inria:topbar:presentation' => 'Les&nbsp;présentations',
 	
+	'theme_inria:access:groups' => "Audience",
 	'theme_inria:groupinvites' => "Invitation(s) à rejoindre un groupe",
 	'theme_inria:invite:subject' => 'Invitation',
 	//$user->name, $group->name, $url
@@ -143,18 +141,21 @@ $french = array (
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Identifiant Iris",
 	
+	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
 	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',
 	'theme_inria:pages:pageexport' => '<i class="fa fa-download download icon"> HTML</i>',
 	'theme_inria:pages:pageexport:title' => 'Export HTML de cette page wiki',
+	'theme_inria:summary' => "Sommaire",
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Liste des animateurs",
-	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilisateur par des virgules'. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
+	'theme_inria:settings:animators:details' => "Pour ajouter/enlever des animateurs, modifier la liste ci-dessous en séparant les noms d'utilisateur par des virgules. Le nom d'utilisateur est celui qui est affiché dans l'URL du profil de la personne.",
 	'theme_inria:settings:animators:page' => "Page d'animation",
 	'theme_inria:settings:animators:members' => "Annuaire du site",
 	
-	'theme_inria:groupmembership' => "Inscription",
+	// Group info details
+	'theme_inria:groupmembership' => "Adhésion",
 	'theme_inria:groupmembership:open' => "Libre",
 	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
 	'theme_inria:groupmembership:closed' => "Restreint",
@@ -171,6 +172,7 @@ $french = array (
 	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
 	'theme_inria:ldapdetails' => "Annuaire Inria",
 	
+	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
 	'groups:hint:cmisfolder' => "Pour afficher le contenu du dossier, collez ici l'adresse complète du dossier dans Partage",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
@@ -183,6 +185,30 @@ $french = array (
 	'groups:hint:customtab4' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab5' => "Onglet configurable n°5 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab5' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	
+	// Etherpad embed
+	'theme_inria:embed:etherpad' => "Pad ou Iframe",
+	'theme_inria:etherpad:title' => "Intégrer un Pad (ou une autre page web) dans votre contenu",
+	'theme_inria:etherpad:details' => "Pour intégrer un Pad dans votre page, veuillez coller ci-dessous son adresse (URL) complète, puis cliquez sur le bouton Intégrer le Pad<br />Si vous souhaitez créer un nouveau Pad, veuillez utiliser d'abord le bouton Créer un Pad, puis procéder de la même manière que pour un Pad existant.",
+	'theme_inria:etherpad:warning' => "<blockquote>Attention : les Pads ne sont *pas* hébergés par Iris, ce qui a des implication smportantes :
+		<ul>
+			<li>Les Pads ont une durée de vie limitée ! Les anciens Pads sont supprimés régulièrement.</li>
+			<li>Les Pads ont leurs propres droits d'accès, qui sont gérés séparément de ceux d'Iris (dans le pad lui-même), et ne correspondent généralement pas au contenu d'Iris dans lequel il est intégré.</li>
+		</ul>
+		Il est vivement recommandé de prendre les précautions suivantes :
+		<ul>
+			<li>Si vous souhaitez conserver le contenu du Pad, copiez-collez sont contenu dans le contenu Iris, dès que vous avez terminé l'écriture collaborative. Vous pouvez utiliser le contenu Iris, ou un commentaire.</li>
+			<li>Vérifiez soigneusement les accès des Pads, afin qu'ils correspondent aux lecteurs de votre contenu.</li>
+			<li>Ajoutez des précisions sur qui peut accéder au Pad, afin que les lecteurs sachent comment faire q'ils n'ont pas accès, mais surtout qu'ils sachent qui pourra lire ce qu'ils écrivent dans le Pad.</li>
+		</ul>
+	</blockquote>",
+	'theme_inria:etherpad:iframe' => "Note : vous pouvez également utiliser cet outil pour intégrer toute page sous forme d'iframe. Indiquez simplement l'URL de la page à intégrer. Attention : seules les pages sécurisées via HTTPS pourront être intégrées.",
+   	'theme_inria:etherpad:existing' => "Intégrer le Pad",
+	'theme_inria:etherpad:existing:help' => "Le Pad (ou l'iframe) est intégrée dans votre contenu dès que vous avez cliqué. Si la fenêtre de sélection ne se ferme pas, veuillez la fermer en cliquant en haut à droite.",
+	'theme_inria:etherpad:padurl' => "URL du Pad",
+	'theme_inria:etherpad:new' => "Créer un Pad",
+	'theme_inria:etherpad:new:help' => "Ce lien ouvre une nouvelle fenêtre qui vous permet de créer un nouveau Pad. Une fois celui-ci créé, veuillez copier son adresse (URL), puis revenir sur cette page.",
+	
 	
 );
 

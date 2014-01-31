@@ -45,7 +45,7 @@ $intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype'
 $thewire = '<h2><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:thewire:title') . '</a></h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
-//elgg_pop_context('widgets');
+//elgg_pop_context();
 
 // Activité du site
 $site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_inria:site:activity') . '</a></h2>';
@@ -103,6 +103,8 @@ $sidebar = elgg_view('theme_inria/sidebar_groups') . '
 */
 
 // Supprime le lien "main" (inexistant) de l'accueil
+elgg_pop_breadcrumb();
+// Supprime le lien vers l'accueil
 elgg_pop_breadcrumb();
 
 $params = array( 'content' => $body, 'sidebar' => $sidebar, 'filter' => false);

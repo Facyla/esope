@@ -44,17 +44,16 @@ if (elgg_is_logged_in()) {
 		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());
 		$invites_count = sizeof($group_invites);
 		$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . elgg_echo('theme_inria:groupinvites') . '</a></li>';
-		/*
 		if ($invites_count == 1) {
 			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '">' . $invites_count . '</a></li>';
-			$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
 		} else if ($invites_count > 1) {
 			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvites') . '">' . $invites_count . '</a></li>';
-			$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvites') . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvites') . '</a></li>';
 		} else {
-			$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
 		}
-		*/
+		
 		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
 		$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
 		$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
