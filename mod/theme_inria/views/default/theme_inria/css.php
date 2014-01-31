@@ -121,11 +121,12 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 
 /* Search */
+input:focus, textarea:focus { background: #FFFAF0; }
 #transverse form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
 form input#adf-search-input { border: 0 none; border-radius: 0; color: #EF783E; }
 form input#adf-search-input:active, form input#adf-search-input:focus { color: #EF783E; }
 form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
-form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #EF783E; border: 1px solid #EF783E; }
+form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #FFFAF0; border: 1px solid #EF783E; }
 /* Members search */
 .esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
 /* Search filters */

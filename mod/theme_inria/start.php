@@ -4,6 +4,8 @@
 elgg_register_event_handler('init','system','theme_inria_init');
 // HTML export action
 elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
+// Modified to make pages top_level / sub-pages
+elgg_register_action("pages/edit", dirname(__FILE__) . "/actions/pages/edit.php", "public");
 
 
 /* Initialise the theme */
