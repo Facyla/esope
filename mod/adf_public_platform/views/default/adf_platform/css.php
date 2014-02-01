@@ -649,6 +649,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .esope-results-count { font-size: 0.8em; color: #808080; }
 
 /* Main search - advanced */
+#advanced-search-form { border: 1px dotted #CCC; padding: 6px; margin: 6px 0; background: #FAFAFA; }
+#advanced-search-form legend { font-weight: bold; margin-bottom:6px; }
 #advanced-search-form input { width:50ex; max-width: 70%; }
 #advanced-search-form input.elgg-button-submit { max-width: 20ex; }
 #advanced-search-form input.elgg-input-date { max-width: 12ex; }

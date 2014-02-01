@@ -20,6 +20,7 @@ echo '<div style="width:80%; float:left;">';
 		'name' => 'body',
 		'class' => 'mtm',
 		'id' => 'thewire-textarea',
+		'maxlength' => 140,
 	));
 echo '</div>';
 
