@@ -1,4 +1,17 @@
 = Version history =
+
+2.5 (2013-12-24):
+
+- added: Spanish translation thanks to Gonzalo (http://community.elgg.org/profile/GEARinvent)
+- changed: html_email_handler_make_rfc822_address() always return an email address, now falls back to site email
+
+2.4 (2013-10-31):
+
+- added: French translation thanks to Faclya (https://github.com/Facyla)(#6)
+- changed: README.txt to README.md for better readability on GitHub
+- changed: CSS definitions of font-size from em to px, for better detection by SpamAssasin
+- changed: encoding of the subject moved to a later stage for more support #7
+
 2.3.1 (2013-04-05):
 
 - fixed: problem with pagesetupdone on some Elgg installations
