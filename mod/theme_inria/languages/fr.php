@@ -210,6 +210,17 @@ $french = array(
 	'theme_inria:etherpad:new:help' => "Ce lien ouvre une nouvelle fenêtre qui vous permet de créer un nouveau Pad. Une fois celui-ci créé, veuillez copier son adresse (URL), puis revenir sur cette page.",
 	
 	
+	'event_calendar:ics:notification' => "%s a créé un nouvel événement :
+
+%s
+%s
+
+Afficher l'événement sur le site :
+%s
+
+Vous pouvez également ajouter directement cet événement à votre gestionnaire d'personnel via le fichier ICAL ci-joint : 
+%s",
+	
 );
 
 add_translation("fr",$french);

@@ -86,6 +86,10 @@ function theme_inria_init(){
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
+	// Send .ics with events notifications
+	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
+	
+	
 }
 
 
@@ -270,6 +274,36 @@ function theme_inria_select_tab($hook, $type, $items, $vars) {
 		),
 	));
 	return $items;
+}
+
+
+/**
+* Returns a more meaningful message + ICS file
+*
+* @param unknown_type $hook
+* @param unknown_type $entity_type
+* @param unknown_type $returnvalue
+* @param unknown_type $params
+*/
+function event_calendar_ics_notify_message($hook, $entity_type, $returnvalue, $params) {
+	$entity = $params['entity'];
+	$to_entity = $params['to_entity'];
+	$method = $params['method'];
+
+	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
+		$descr = $entity->description;
+		$title = $entity->title;
+		$owner = $entity->getOwnerEntity();
+		$ics_file_details = '(fichier en pièce jointe)';
+		return elgg_echo('event_calendar:ics:notification', array(
+			$owner->name,
+			$title,
+			$descr,
+			$entity->getURL(),
+			$ics_file_details,
+		));
+	}
+	return null;
 }
 
 
