@@ -219,6 +219,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* Eviter car nécessite de revoir tous les outils
 .elgg-menu-owner-block li a { background-color: #F8F4F5; }
 */
+.elgg-form.elgg-form-alt.elgg-form-groups-edit + div { padding-top:20px; }
+.au-subgroups-parentable h3, .au-subgroups-non-parentable h3 { font-size: 14px; }
+.au-subgroups-result-col { width: 100%; float: none; }
 
 
 

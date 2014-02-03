@@ -64,19 +64,23 @@ if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
 if (!elgg_in_context('owner_block')) { return; }
 
 echo '<div style="font-size:80%">';
-echo '<p class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $entity)) . '</p>';
+echo '<p>';
+echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $entity)) . '</span><br />';
 
 if ($entity->membership == ACCESS_PUBLIC) {
 	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:open:details") . '">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
-	echo '<p>' . elgg_echo('theme_inria:groupmembership') . ' : <span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details") . '</p>';
+	echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: <span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
 } else {
 	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:closed:details") . '">' . elgg_echo("theme_inria:groupmembership:closed") . '</span>';
-	echo '<p>' . elgg_echo('theme_inria:groupmembership') . ' : <span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details") . '</p>';
+	echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: <span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
 }
+echo '</p>';
 
 // Propriétaire un peu à part, en premier
 echo '<strong>' . elgg_echo('group_operators:operators') . '</strong><br />';
-//echo '<span style="float:left;" title="' . elgg_echo('group_operators:owner') . '">' . elgg_view_entity_icon($entity->getOwnerEntity(), 'tiny') . '</span>';
+$groupowner = $entity->getOwnerEntity();
+echo '<span style="float:left;" title="' . elgg_echo('group_operators:owner') . '">' . elgg_view_entity_icon($groupowner, 'tiny') . '</span>';
+// @TODO : risque de doublon dans le cas où un responsable a récupéré la propriété du groupe
 echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' => 'operator', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny'));
 echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
@@ -89,9 +93,9 @@ if ($entity->canEdit()) {
 //echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
 $nb_members = $entity->getMembers(0, 0, TRUE);
 if ($nb_members > 1) {
-	echo '<p> <i class="fa fa-users"></i> <a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
+	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
 } else {
-	echo '<p> <i class="fa fa-users"></i> <a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
+	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
 }
 ?>
 </div>
