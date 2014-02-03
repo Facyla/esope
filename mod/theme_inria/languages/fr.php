@@ -26,6 +26,8 @@ $french = array(
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
+	'theme_inria:widgets:tools' => "Outils Inria",
+	'theme_inria:widgets:tools:details' => "Une série d'outils pratiques",
 	'theme_inria:inria_tool' => "Choisir l'outil à afficher",
 	'theme_inria:widget:openintab' => "Ouvrir %s dans une nouvelle fenêtre",
 	'theme_inria:widget:choosetools' => "Choisissez les outils que vous souhaitez afficher",
@@ -50,6 +52,7 @@ $french = array(
 
 	'theme_inria:event_calendar:groups' => 'Evénements du groupe',
 	'theme_inria:groups:discussions' => 'Discussions du groupe',
+	'theme_inria:grouptools' => "Outils du groupe",
 
 	'theme_inria:category' => 'catégorie',
 
@@ -209,6 +212,17 @@ $french = array(
 	'theme_inria:etherpad:new' => "Créer un Pad",
 	'theme_inria:etherpad:new:help' => "Ce lien ouvre une nouvelle fenêtre qui vous permet de créer un nouveau Pad. Une fois celui-ci créé, veuillez copier son adresse (URL), puis revenir sur cette page.",
 	
+	
+	'event_calendar:ics:notification' => "%s a créé un nouvel événement :
+
+%s
+%s
+
+Afficher l'événement sur le site :
+%s
+
+Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
+%s",
 	
 );
 

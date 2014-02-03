@@ -3,6 +3,9 @@ require_once dirname(dirname(dirname(__FILE__))) . '/engine/start.php';
 
 gatekeeper();
 
+// Uncomment to use
+exit;
+
 $username = get_input('username', false);
 if (!$username) $username = elgg_get_logged_in_user_entity()->username;
 

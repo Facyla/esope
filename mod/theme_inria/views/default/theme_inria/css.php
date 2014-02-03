@@ -219,7 +219,10 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* Eviter car nécessite de revoir tous les outils
 .elgg-menu-owner-block li a { background-color: #F8F4F5; }
 */
-
+.elgg-form.elgg-form-au-subgroups-transfer.elgg-form-alt.elgg-form-groups-edit + div { padding-top:20px; }
+.elgg-form-au-subgroups-transfer .au-subgroups-parentable h3, .elgg-form-au-subgroups-transfer .au-subgroups-non-parentable h3 { font-size: 14px; }
+.elgg-form-au-subgroups-transfer .au-subgroups-result-col { width: 100%; float: none; }
+.elgg-form-au-subgroups-transfer .elgg-image-block .elgg-image { float: right; }
 
 
 /* Group tabs */
