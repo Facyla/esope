@@ -14,7 +14,7 @@ $french = array(
 	'theme_inria:site:activity' => "Activités récentes",
 	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
-	'theme_inria:topbar:home' => "Accueil",
+	'theme_inria:topbar:home' => "Actualités",
 	'theme_inria:topbar:groups' => "Les&nbsp;groupes",
 	'theme_inria:topbar:members' => "Les&nbsp;membres",
 	'theme_inria:topbar:activity' => "Les&nbsp;activités",
@@ -23,6 +23,7 @@ $french = array(
 	'theme_inria:topbar:thewire' => "Publier&nbsp;sur&nbsp;le&nbsp;fil",
 	'theme_inria:topbar:new_group' => "Créer&nbsp;un&nbsp;groupe",
 	'theme_inria:topbar:invite' => 'Inviter',
+	'theme_inria:menu:firststeps' => 'Premiers pas',
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -74,6 +75,7 @@ $french = array(
 	
 	'theme_inria:access:groups' => "Audience",
 	'theme_inria:groupinvites' => "Invitation(s) à rejoindre un groupe",
+	'theme_inria:friendsinvites' => "Demande(s) de contact à examiner",
 	'theme_inria:invite:subject' => 'Invitation',
 	//$user->name, $group->name, $url
 	'theme_inria:invite:body' => 'Je vous invite à rejoindre le groupe "%s"<br /><br />

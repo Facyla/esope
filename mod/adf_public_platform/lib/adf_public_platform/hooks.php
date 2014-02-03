@@ -254,7 +254,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
-			if (elgg_get_plugin_setting('awesomefont') == 'yes') $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
+			if (elgg_get_plugin_setting('awesomefont') == 'yes') $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-gear"></i></button>';
 			$return[] = ElggMenuItem::factory($edit);
 		}
 	}
