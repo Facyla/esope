@@ -40,7 +40,7 @@ function theme_inria_init(){
 	elgg_unregister_widget_type('thewire');
 	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
 	// Inria universe : liens vers d'autres 
-	elgg_register_widget_type('inria_universe', "Outils", "Une série d'outils pratiques", 'dashboard', true);
+	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widget:tools'), elgg_echo('theme_inria:widget:tools:details'), 'dashboard', false);
 	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
 	// Remplacement de la page d'accueil

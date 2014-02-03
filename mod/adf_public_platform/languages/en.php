@@ -465,6 +465,7 @@ $en = array(
 	'esope:viewprofileas:title' => "View your profile as",
 	'esope:viewprofileas:public' => "You are viewing your public profile (as a non-user would see it)",
 	'esope:viewprofileas:contact' => "You are viewing your profile as another site member",
+	'esope:viewprofileas:member' => "You are viewing your profile as another site member",
 	'esope:viewprofileas:friends' => "You are viewing your profile as one of your contacts",
 	'esope:viewprofileas:user' => "You are viewing your profile as %s",
 	'esope:viewprofileas:yourself' => "Yourself",

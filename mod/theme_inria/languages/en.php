@@ -25,6 +25,8 @@ $english = array(
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
+	'theme_inria:widgets:tools' => "Inria tools",
+	'theme_inria:widgets:tools:details' => "A list of custom Inria tools",
 	'theme_inria:inria_tool' => "Choose which tool to display",
 	'theme_inria:widget:openintab' => "Open %s in a new tab",
 	'theme_inria:widget:choosetools' => "Choose the tools you want to display",
@@ -49,6 +51,7 @@ $english = array(
 
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",
+	'theme_inria:grouptools' => "Group tools",
 
 	'theme_inria:category' => 'Categories',
 

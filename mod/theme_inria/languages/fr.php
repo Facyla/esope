@@ -26,6 +26,8 @@ $french = array(
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
+	'theme_inria:widgets:tools' => "Outils Inria",
+	'theme_inria:widgets:tools:details' => "Une série d'outils pratiques",
 	'theme_inria:inria_tool' => "Choisir l'outil à afficher",
 	'theme_inria:widget:openintab' => "Ouvrir %s dans une nouvelle fenêtre",
 	'theme_inria:widget:choosetools' => "Choisissez les outils que vous souhaitez afficher",
@@ -50,6 +52,7 @@ $french = array(
 
 	'theme_inria:event_calendar:groups' => 'Evénements du groupe',
 	'theme_inria:groups:discussions' => 'Discussions du groupe',
+	'theme_inria:grouptools' => "Outils du groupe",
 
 	'theme_inria:category' => 'catégorie',
 
