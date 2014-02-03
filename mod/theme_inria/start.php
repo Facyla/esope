@@ -565,7 +565,7 @@ error_log($attachment['mimetype'] . ' - ' . $attachment['filename'] . ' - ' . $a
 error_log('Adding attached file');
 			// Build strings that will be added before TEXT/HTML message
 			$before_message = "--mixed--" . $boundary . PHP_EOL;
-			$before_message .= "Content-Type: text/plain; charset=\"utf-8\"" . PHP_EOL;
+			$before_message .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
 			// Build strings that will be added after TEXT/HTML message
 			/*
 			$after_message = "--mixed--" . $boundary . PHP_EOL;
@@ -573,6 +573,7 @@ error_log('Adding attached file');
 			$after_message .= "Content-Transfer-Encoding: base64" . PHP_EOL;
 			$after_message .= "Content-Disposition: attachment  " . PHP_EOL;
 			*/
+			$after_message .= PHP_EOL;
 			$after_message .= $attachments;
 			$after_message .= "--mixed--" . $boundary . PHP_EOL;
 			// Wrap TEXT/HTML message into mixed message content
