@@ -381,7 +381,7 @@ function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUse
 	$filename = 'calendar.ics';
 	// @TODO : we need to get entity to filter and send correct content !!
 	$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $params['entity']));
-	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content);
+	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
 
@@ -412,7 +412,7 @@ function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 	$filename = 'calendar.ics';
 	// @TODO : we need to get entity to filter and send correct content !!
 	$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $params['entity']));
-	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content);
+	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
 	
