@@ -218,7 +218,7 @@ $french = array(
 Afficher l'événement sur le site :
 %s
 
-Vous pouvez également ajouter directement cet événement à votre gestionnaire d'personnel via le fichier ICAL ci-joint : 
+Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
 %s",
 	
 );

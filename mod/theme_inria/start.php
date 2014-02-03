@@ -86,9 +86,23 @@ function theme_inria_init(){
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
-	// Send .ics with events notifications
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
 	
+	// @TODO - DEV & TESTING !!
+	if (elgg_is_active_plugin('html_email_handler')) {
+		// Modify default events notification message
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
+		// Highest level : interception : allow to rewrite email sender
+		//elgg_register_plugin_hook_handler('object:notifications', 'all', 'event_calendar_ics_object_notifications', 1000);
+		
+		// Email sending interception : must intercept in place of html_email_handler (but we use same functions so only unregister)
+		/* @TODO : this is not functional yet !!
+		// Can add attached files but need to filter on events + get the event entity !
+		elgg_unregister_plugin_hook_handler("email", "system", "html_email_handler_email_hook");
+		elgg_register_plugin_hook_handler("email", "system", "esope_html_email_handler_email_hook", 100);
+		unregister_notification_handler("email");
+		register_notification_handler("email", "esope_html_email_handler_notification_handler");
+		*/
+	}
 	
 }
 
@@ -278,7 +292,7 @@ function theme_inria_select_tab($hook, $type, $items, $vars) {
 
 
 /**
-* Returns a more meaningful message + ICS file
+* Returns a more meaningful message for events
 *
 * @param unknown_type $hook
 * @param unknown_type $entity_type
@@ -294,7 +308,8 @@ function event_calendar_ics_notify_message($hook, $entity_type, $returnvalue, $p
 		$descr = $entity->description;
 		$title = $entity->title;
 		$owner = $entity->getOwnerEntity();
-		$ics_file_details = '(fichier en pièce jointe)';
+		$ics_file_details = ''; // @TODO : add a message for attached files ?
+		
 		return elgg_echo('event_calendar:ics:notification', array(
 			$owner->name,
 			$title,
@@ -304,6 +319,276 @@ function event_calendar_ics_notify_message($hook, $entity_type, $returnvalue, $p
 		));
 	}
 	return null;
+}
+
+/* We don't want to rewrite from this level
+function event_calendar_ics_object_notifications($hook, $entity_type, $returnvalue, $params) {
+	// @TODO : changes here
+	// Don't change default behaviour
+	return $returnvalue;
+}
+*/
+
+
+function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL){
+	
+	if (!$from) {
+		$msg = elgg_echo("NotificationException:MissingParameter", array("from"));
+		throw new NotificationException($msg);
+	}
+
+	if (!$to) {
+		$msg = elgg_echo("NotificationException:MissingParameter", array("to"));
+		throw new NotificationException($msg);
+	}
+
+	if ($to->email == "") {
+		$msg = elgg_echo("NotificationException:NoEmailAddress", array($to->guid));
+		throw new NotificationException($msg);
+	}
+
+	// To
+	$to = html_email_handler_make_rfc822_address($to);
+
+	// From
+	$site = elgg_get_site_entity();
+	// If there's an email address, use it - but only if its not from a user.
+	if (!($from instanceof ElggUser) && !empty($from->email)) {
+	    $from = html_email_handler_make_rfc822_address($from);
+	} elseif (!empty($site->email)) {
+	    // Use email address of current site if we cannot use sender's email
+	    $from = html_email_handler_make_rfc822_address($site);
+	} else {
+		// If all else fails, use the domain of the site.
+		if(!empty($site->name)){
+			$name = $site->name;
+			if (strstr($name, ',')) {
+				$name = '"' . $name . '"'; // Protect the name with quotations if it contains a comma
+			}
+			
+			$name = '=?UTF-8?B?' . base64_encode($name) . '?='; // Encode the name. If may content nos ASCII chars.
+			$from = $name . " <noreply@" . get_site_domain($site->getGUID()) . ">";
+		} else {
+			$from = "noreply@" . get_site_domain($site->getGUID());
+		}
+	}
+	
+	// generate HTML mail body
+	$html_message = html_email_handler_make_html_body($subject, $message);
+
+	// Facyla : Build attachment
+	$mimetype = 'text/calendar';
+	$filename = 'calendar.ics';
+	// @TODO : we need to get entity to filter and send correct content !!
+	$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $params['entity']));
+	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content);
+	$file_content = chunk_split(base64_encode($file_content));
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+
+	// set options for sending
+	$options = array(
+		"to" => $to,
+		"from" => $from,
+		"subject" => $subject,
+		"html_message" => $html_message,
+		"plaintext_message" => $message,
+		"attachments" => $attachments,
+	);
+	
+	if(!empty($params) && is_array($params)){
+		$options = array_merge($options, $params);
+	}
+	
+	return esope_html_email_handler_send_email($options);
+}
+
+
+function esope_html_email_handler_email_hook($hook, $type, $return, $params){
+	// generate HTML mail body
+	$html_message = html_email_handler_make_html_body($params["subject"], $params["body"]);
+	
+	// Build attachment
+	$mimetype = 'text/calendar';
+	$filename = 'calendar.ics';
+	// @TODO : we need to get entity to filter and send correct content !!
+	$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $params['entity']));
+	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content);
+	$file_content = chunk_split(base64_encode($file_content));
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+	
+	// set options for sending
+	$options = array(
+		"to" => $params["to"],
+		"from" => $params["from"],
+		"subject" => $params["subject"],
+		"html_message" => $html_message,
+		"plaintext_message" => $params["body"],
+		"attachments" => $attachments,
+	);
+	return esope_html_email_handler_send_email($options);
+}
+
+
+// This is modified version of html_email_handler function that supports attachments
+function esope_html_email_handler_send_email(array $options = null){
+error_log('TEST esope send email');
+	$result = false;
+	
+	$site = elgg_get_site_entity();
+	
+	// make site email
+	if(!empty($site->email)){
+		$sendmail_from = $site->email;
+		$site_from = html_email_handler_make_rfc822_address($site);
+	} else {
+		// no site email, so make one up
+		$sendmail_from = "noreply@" . get_site_domain($site->getGUID());
+		$site_from = $sendmail_from;
+		
+		if(!empty($site->name)){
+			$site_name = $site->name;
+			if (strstr($site_name, ',')) {
+				$site_name = '"' . $site_name . '"'; // Protect the name with quotations if it contains a comma
+			}
+			
+			$site_name = '=?UTF-8?B?' . base64_encode($site_name) . '?='; // Encode the name. If may content nos ASCII chars.
+			$site_from = $site_name . " <" . $sendmail_from . ">";
+		}
+	}
+	
+	$sendmail_options = html_email_handler_get_sendmail_options();
+	
+	// set default options
+	$default_options = array(
+		"to" => array(),
+		"from" => $site_from,
+		"subject" => "",
+		"html_message" => "",
+		"plaintext_message" => "",
+		"cc" => array(),
+		"bcc" => array(),
+		"date" => null,
+	);
+	
+	// merge options
+	$options = array_merge($default_options, $options);
+	
+	// check options
+	if(!empty($options["to"]) && !is_array($options["to"])){
+		$options["to"] = array($options["to"]);
+	}
+	if(!empty($options["cc"]) && !is_array($options["cc"])){
+		$options["cc"] = array($options["cc"]);
+	}
+	if(!empty($options["bcc"]) && !is_array($options["bcc"])){
+		$options["bcc"] = array($options["bcc"]);
+	}
+	
+	// can we send a message
+	if(!empty($options["to"]) && (!empty($options["html_message"]) || !empty($options["plaintext_message"]))){
+		// start preparing
+		// Facyla : better without spaces and special chars
+		//$boundary = uniqid($site->name);
+		$boundary = uniqid(friendly_title($site->name));
+		
+		// start building headers
+		$headers = "";
+		if(!empty($options["from"])){
+			$headers .= "From: " . $options["from"] . PHP_EOL;
+		} else {
+			$headers .= "From: " . $site_from . PHP_EOL;
+		}
+
+		// check CC mail
+		if(!empty($options["cc"])){
+			$headers .= "Cc: " . implode(", ", $options["cc"]) . PHP_EOL;
+		}
+
+		// check BCC mail
+		if(!empty($options["bcc"])){
+			$headers .= "Bcc: " . implode(", ", $options["bcc"]) . PHP_EOL;
+		}
+
+		// add a date header
+		if(!empty($options["date"])) {
+			$headers .= "Date: " . date("r", $options["date"]) . PHP_EOL;
+		}
+
+		$headers .= "X-Mailer: PHP/" . phpversion() . PHP_EOL;
+		$headers .= "MIME-Version: 1.0" . PHP_EOL;
+		
+		// Facyla : add attachments support
+		if(!empty($options["attachments"])) {
+			$headers .= "Content-Type: multipart/mixed; boundary=\"mixed--" . $boundary . "\"" . PHP_EOL . PHP_EOL;
+			// @TODO : Add multiple attachments ?
+			$attachments = '';
+error_log("Attached file");
+			foreach($options["attachments"] as $attachment) {
+error_log($attachment['mimetype'] . ' - ' . $attachment['filename'] . ' - ' . $attachment['content']);
+				//$attachments = chunk_split(base64_encode(file_get_contents('attachment.zip')));
+				$attachments .= "--mixed--" . $boundary . PHP_EOL;
+				$attachments .= "Content-Type: " . $attachment['mimetype'] . "; name=\"" . $attachment['filename'] . "\"" . PHP_EOL;
+				$attachments .= "Content-Transfer-Encoding: base64" . PHP_EOL;
+				$attachments .= "Content-Disposition: attachment  " . PHP_EOL;
+				$attachments .= $attachment['content'];
+			}
+		} else {
+			$headers .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
+		}
+
+		// start building the message
+		$message = "";
+
+		// TEXT part of message
+		if(!empty($options["plaintext_message"])){
+			$message .= "--" . $boundary . PHP_EOL;
+			$message .= "Content-Type: text/plain; charset=\"utf-8\"" . PHP_EOL;
+			$message .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
+
+			$message .= chunk_split(base64_encode($options["plaintext_message"])) . PHP_EOL . PHP_EOL;
+		}
+
+		// HTML part of message
+		if(!empty($options["html_message"])){
+			$message .= "--" . $boundary . PHP_EOL;
+			$message .= "Content-Type: text/html; charset=\"utf-8\"" . PHP_EOL;
+			$message .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
+
+			$message .= chunk_split(base64_encode($options["html_message"])) . PHP_EOL;
+		}
+
+		// Final boundry
+		$message .= "--" . $boundary . "--" . PHP_EOL;
+		
+		// Facyla : add attachment support
+		if(!empty($options["attachments"])) {
+error_log('Adding attached file');
+			// Build strings that will be added before TEXT/HTML message
+			$before_message = "--mixed--" . $boundary . PHP_EOL;
+			$before_message .= "Content-Type: text/plain; charset=\"utf-8\"" . PHP_EOL;
+			// Build strings that will be added after TEXT/HTML message
+			/*
+			$after_message = "--mixed--" . $boundary . PHP_EOL;
+			$after_message .= "Content-Type: text/calendar; name=\"calendar.ics\"" . PHP_EOL;
+			$after_message .= "Content-Transfer-Encoding: base64" . PHP_EOL;
+			$after_message .= "Content-Disposition: attachment  " . PHP_EOL;
+			*/
+			$after_message .= $attachments;
+			$after_message .= "--mixed--" . $boundary . PHP_EOL;
+			// Wrap TEXT/HTML message into mixed message content
+			$message = $before_message . PHP_EOL . $message . PHP_EOL . $after_message;
+		}
+		
+		// convert to to correct format
+		$to = implode(", ", $options["to"]);
+		
+		// encode subject to handle special chars
+		$subject = "=?UTF-8?B?" . base64_encode($options["subject"]) . "?=";
+			
+		$result = mail($to, $subject, $message, $headers, $sendmail_options);
+	}
+
+	return $result;
 }
 
 
