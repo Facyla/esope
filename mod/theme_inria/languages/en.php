@@ -189,7 +189,7 @@ $english = array(
 	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 	// Etherpad embed
-	'theme_inria:embed:etherpad' => "Pad or Iframe",
+	'theme_inria:embed:etherpad' => "Pad",
 	'theme_inria:etherpad:title' => "Embed a Pad into your content",
 	'theme_inria:etherpad:details' => "To embed an existing Pad into your content, please paste the full Pad URL below, then click the Embed button.<br />If you need to create a new pad, please click first on New pad button below, then proceed the same way as for an existing Pad.",
 	'theme_inria:etherpad:warning' => "<blockquote>Caution : the Pads are *not* hosted by Iris, which has serious implications for the pad content :
@@ -204,9 +204,10 @@ $english = array(
 			<li>Provide details on who can access the Pad content, so people know why they cannot access it, but also who will be able to read what they write into the Pad.</li>
 		</ul>
 	</blockquote>",
-	'theme_inria:etherpad:iframe' => "Note : you can also use this tool to embed any web page into your content. Use page URL instead of Pad URL. Please note that only pages secured with HTTPS can be embedded !",
+	//'theme_inria:etherpad:iframe' => "Note : you can also use this tool to embed any web page into your content. Use page URL instead of Pad URL. Please note that only pages secured with HTTPS can be embedded !",
+	'theme_inria:etherpad:iframe' => "",
 	'theme_inria:etherpad:existing' => "Embed the Pad",
-	'theme_inria:etherpad:existing:help' => "The Pad (or the iframe) is embedded into your content as soon as you've cliqked on this button. If the embed popup remains open, please close it by clicking on close button in popup upper right corner.",
+	'theme_inria:etherpad:existing:help' => "The Pad is embedded into your content as soon as you've cliqked on this button. If the embed popup remains open, please close it by clicking on close button in popup upper right corner.",
 	'theme_inria:etherpad:padurl' => "Pad URL",
 	'theme_inria:etherpad:new' => "Create a new Pad",
 	'theme_inria:etherpad:new:help' => "This opens another window and lets you create your Pad. Once created, copy the Pad URL the, go back on this page to paste it.",
