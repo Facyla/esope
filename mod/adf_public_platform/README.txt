@@ -83,7 +83,7 @@ INSTALLATION & CONFIGURATION :
 SECURITE : 
 De nombreuses mesures peuvent être prises du côté du serveur, notamment 
 via la mise en place d'une connexion HTTPS (nécesite un certificat valide) 
-et diverses options de configuraiton d'Apache.
+et diverses options de configuration d'Apache.
 Quelques ajouts complémentaires à intégrer aux fichiers .htaccess :
 
 # Secure cookies

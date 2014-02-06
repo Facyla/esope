@@ -11,7 +11,9 @@ $access_id = get_input('access_id', ACCESS_DEFAULT);
 
 $announcement = new ElggAnnouncement($guid);
 
-$editing = !$guid;
+// Note Facyla : editing should be true if there is a guid
+$editing = false;
+if ($guid) $editing = true;
 $creating = !$editing;
 
 $container = get_entity($container_guid);

@@ -13,7 +13,7 @@ $english = array(
 	'theme_inria:topbar:profil' => "My profile",
 	'theme_inria:site:activity' => "Latest activities",
 	'theme_inria:topbar:explorer' => "Explore",
-	'theme_inria:topbar:home' => "Home",
+	'theme_inria:topbar:home' => "News",
 	'theme_inria:topbar:groups' => "All&nbsp;groups",
 	'theme_inria:topbar:members' => "All&nbsp;members",
 	'theme_inria:topbar:activity' => "All&nbsp;activities",
@@ -22,6 +22,7 @@ $english = array(
 	'theme_inria:topbar:thewire' => "Write&nbsp;on&nbsp;the&nbsp;wire",
 	'theme_inria:topbar:new_group' => "Create&nbsp;a&nbsp;group",
 	'theme_inria:topbar:invite' => 'Invite',
+	'theme_inria:menu:firststeps' => 'First steps',
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
@@ -73,6 +74,7 @@ $english = array(
 	
 	'theme_inria:access:groups' => "Audience",
 	'theme_inria:groupinvites' => "Group invite(s)",
+	'theme_inria:friendsinvites' => "Friendship request(s)",
 	'theme_inria:invite:subject' => 'Invitation',
 //$user->name, $group->name, $url
 	'theme_inria:invite:body' => 'I invite you to join the group "%s"<br /><br />
