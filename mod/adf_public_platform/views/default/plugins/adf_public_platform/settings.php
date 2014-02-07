@@ -181,8 +181,11 @@ echo '<div id="adf-settings-tabs">
 	* page d'accueil connectée
 	* Interface
 	* Comportements
+	* Groupes
+	* Membres et annuaire
 	* Widgets
 	* Styles
+	* Expert
 	* Import/export
 	
 */
@@ -483,6 +486,9 @@ $(function() {
 		if (elgg_is_active_plugin('twitter')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter )) . '</p>';
 		}
+		if (elgg_is_active_plugin('thewire')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:thewire') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_thewire]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_thewire )) . '</p>';
+		}
 		if (elgg_is_active_plugin('tagcloud')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud )) . '</p>';
 		}
@@ -494,6 +500,9 @@ $(function() {
 		}
 		if (elgg_is_active_plugin('webprofiles')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:webprofiles') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_webprofiles]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_webprofiles )) . '</p>';
+		}
+		if (elgg_is_active_plugin('export_embed')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:export_embed') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_export_embed]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_export_embed )) . '</p>';
 		}
 		?>
 	</div>
