@@ -36,13 +36,21 @@ function theme_inria_init(){
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
 	
 	
+	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
-	elgg_unregister_widget_type('thewire');
-	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
+	if (elgg_is_active_plugin('thewire')) {
+		$widget_thewire = elgg_get_plugin_setting('widget_thewire', 'adf_public_platform');
+		elgg_unregister_widget_type('thewire');
+		if ($widget_thewire != 'no') {
+			elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
+		}
+	}
 	// Inria universe : liens vers d'autres 
-	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widget:tools'), elgg_echo('theme_inria:widget:tools:details'), 'dashboard', false);
+	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widgets:tools'), elgg_echo('theme_inria:widgets:tools:details'), 'dashboard', false);
 	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
+	
+	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');

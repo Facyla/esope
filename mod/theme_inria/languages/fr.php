@@ -227,6 +227,10 @@ Afficher l'événement sur le site :
 Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
 %s",
 	
+	
+	// OVERRIDE EXISTING TRANSLATIONS
+	
+	
 );
 
 add_translation("fr",$french);

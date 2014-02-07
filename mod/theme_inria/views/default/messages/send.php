@@ -11,8 +11,7 @@ $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');
 
 $recipients_options = array();
-// Override default limit (50)
-//$vars['friends'] = $page_owner->getFriends('', false);
+$vars['friends'] = $page_owner->getFriends('', false);
 foreach ($vars['friends'] as $friend) {
 	$recipients_options[$friend->guid] = $friend->name;
 }
