@@ -3,7 +3,7 @@ global $CONFIG;
 $fonturl = $CONFIG->url . 'mod/theme_inria/fonts/';
 $imgurl = $CONFIG->url . 'mod/theme_inria/graphics/';
 $tools_url = $imgurl . 'inria_widget/';
-
+?>
 
 
 header.elgg-widget-handle { background:#F8F4F5; }
