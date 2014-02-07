@@ -11,7 +11,7 @@ $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');
 
 $recipients_options = array();
-$vars['friends'] = $page_owner->getFriends('', false);
+$vars['friends'] = elgg_get_page_owner_entity()->getFriends('', false);
 foreach ($vars['friends'] as $friend) {
 	$recipients_options[$friend->guid] = $friend->name;
 }
