@@ -7,6 +7,5 @@ $tools_url = $imgurl . 'inria_widget/';
 
 
 header.elgg-widget-handle { background:#F8F4F5; }
-header.elgg-widget-handle h2 { color:#732B4A; }
-
+.elgg-page-admin header.elgg-widget-handle h2 { color:#732B4A; }
 
