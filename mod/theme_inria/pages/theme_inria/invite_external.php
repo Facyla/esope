@@ -14,7 +14,7 @@ global $CONFIG;
 gatekeeper();
 
 // Verrouillage pour membres LDAP uniquement - ou admin
-if (elgg_is_admin_logged_in() || (($user->membertype == 'inria') && ($user->memberstatus == 'active')) ) {
+if (elgg_is_admin_logged_in() || ($user->membertype == 'inria') ) {
 	$access_valid = '';
 	if ($user->membertype == 'inria') $access_valid .= 'Inria';
 	else if (elgg_is_admin_logged_in()) $access_valid .= 'Admin';
