@@ -17,7 +17,7 @@ $own = elgg_get_logged_in_user_entity();
 // Verrouillage pour membres LDAP uniquement - ou admin
 if (elgg_is_admin_logged_in() || ($own->membertype == 'inria') ) {
 	$access_valid = '';
-	if ($user->membertype == 'inria') $access_valid .= 'Inria';
+	if ($own->membertype == 'inria') $access_valid .= 'Inria';
 	else if (elgg_is_admin_logged_in()) $access_valid .= 'Admin';
 } else {
 	//register_error('You do not have the rights to access this page.');
