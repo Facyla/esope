@@ -228,6 +228,39 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 %s",
 	
 	
+	// Création de comptes
+	'inria_invite' => "Création de compte utilisateur",
+	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
+	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois celui-ci créé, le nouveau membre sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p>",
+	'theme_inria:useradd:reason' => "Motif de création de ce compte",
+	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
+	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:body' => "
+%s,
+
+Un compte utilisateur vous a été créé sur %s. Pour vous connecter, rendez-vous :
+
+%s
+
+Et authentifiez-vous avec les éléments suivant :
+
+Identifiant de connexion : %s
+Mot de passe : %s
+
+Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de changer votre mot de passe.
+",
+	'theme_inria:useradd:admin:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:admin:body' => "
+Un compte utilisateur a été créé pour %s, email %s, par %s.
+
+Motif de l'inscription :
+
+%s
+
+Voici l'adresse du nouveau compte créé : %s
+",
+	
+	
 	// OVERRIDE EXISTING TRANSLATIONS
 	
 	

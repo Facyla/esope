@@ -6,6 +6,8 @@ elgg_register_event_handler('init','system','theme_inria_init');
 elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
 // Modified to make pages top_level / sub-pages
 elgg_register_action("pages/edit", dirname(__FILE__) . "/actions/pages/edit.php", "public");
+// Inria members user add
+elgg_register_action("inria_useradd", dirname(__FILE__) . "/actions/inria_useradd.php", "logged_in");
 
 
 /* Initialise the theme */
@@ -135,6 +137,9 @@ function inria_page_handler($page){
 		case "linkedin":
 			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
 			break;
+		case "invite":
+			include(dirname(__FILE__) . '/pages/theme_inria/invite_external.php');
+			break;
 		case "animation":
 		default:
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
@@ -187,7 +192,9 @@ function theme_inria_setup_menu() {
    - memberreason : qualification du type de compte, raison de l'accès => validldap/invalidldap/partner/researchteam/...
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
+	error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
+		
 		// Attention, ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
 			elgg_load_library("elgg:ldap_auth");
@@ -205,6 +212,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 					$is_inria = false;
 				}
 			}
+			
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
 				// External access has some restrictions : if account was not used for more than 1 year => disable
@@ -214,7 +222,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				}
 			
 				if (in_array($user->memberreason, array('validldap', 'invalidldap'))) {
-					// Si le compte a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
+					// Si le compte LDAP a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
 					$is_active = false;
 					$memberreason = 'invalidldap';
 				} else {
@@ -222,11 +230,26 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				}
 			}
 			// Update user metadata : we update only if there is a change !
-			if ($is_inria && ($user->membertype != 'inria')) { $user->membertype = 'inria'; }
-			if (!$is_inria && ($user->membertype != 'external')) { $user->membertype = 'external'; }
+			if ($is_inria && ($user->membertype != 'inria')) {
+				$user->membertype = 'inria';
+				esope_set_user_profile_type($user, 'inria');
+			}
+			if (!$is_inria && ($user->membertype != 'external')) {
+				$user->membertype = 'external';
+				esope_set_user_profile_type($user, 'external');
+			}
 			if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
-		
+			
+			// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
+			if (empty($user->custom_profile_type)) {
+				if ($is_inria) {
+					esope_set_user_profile_type($user, 'inria');
+				} else {
+					esope_set_user_profile_type($user, 'external');
+				}
+			}
+			
 			// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
 			if ($user->memberstatus == 'closed') {
 				register_error("Cet accès n'est plus valide. ");

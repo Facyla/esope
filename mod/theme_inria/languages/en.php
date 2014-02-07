@@ -225,6 +225,40 @@ View event on the site :
 You can add directly this event to your own calendar application through attached ICAL file : 
 %s",
 	
+	
+	
+	// Création de comptes
+	'inria_invite' => "Create user account",
+	'theme_inria:useradd' => "New account for a non-Inria person",
+	'theme_inria:useradd:details' => "<p>As %s, you can grant access to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once created, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p>",
+	'theme_inria:useradd:reason' => "Account creation motive",
+	'theme_inria:useradd:reason:details' => "These details will be sent to the site administrator along with the new account profile, as a justification for creating the account. Please give any useful information so the account can be validated without doubt.",
+	'theme_inria:useradd:subject' => "User account created",
+	'theme_inria:useradd:body' => "
+%s,
+
+A user account has been created for you at %s. To log in, visit:
+
+%s
+
+And log in with these user credentials:
+
+Username: %s
+Password: %s
+
+Once you have logged in, we highly recommend that you change your password.
+",
+	'theme_inria:useradd:admin:subject' => "User account created",
+	'theme_inria:useradd:admin:body' => "
+A user account has been created for %s (email %s), by %s.
+
+Registration motive :
+
+%s
+
+Here is the new profile page : %s
+",
+	
 );
 
 add_translation("en",$english);

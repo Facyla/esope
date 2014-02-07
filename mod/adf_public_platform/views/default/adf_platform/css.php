@@ -578,10 +578,11 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-form-groups-edit .elgg-vertical label { float: none; clear: none; }
 */
 
+/* Limit editor max-width to container */
+textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100%; }
+
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
-/* Pas de dépassement */
-textarea { max-width:98%; }
 
 /* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
 #profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }

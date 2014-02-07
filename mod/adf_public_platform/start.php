@@ -763,6 +763,16 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return $profile_type;
 	}
 	
+	function esope_set_user_profile_type($user = false, $profiletype = '') {
+		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		$profiletype_guid = null;
+		if (!empty($profiletype)) {
+			$profiletype_guid = esope_get_profiletype_guid($profiletype);
+		}
+		$user->custom_profile_type = $profiletype_guid;
+		return $profile_type;
+	}
+	
 	/* Returns guid for a specific profile type (false if not found) */
 	function esope_get_profiletype_guid($profiletype) {
 		$profile_types = esope_get_profiletypes();

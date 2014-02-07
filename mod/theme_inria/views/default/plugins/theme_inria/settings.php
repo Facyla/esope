@@ -15,6 +15,16 @@ if ($vars['entity']->help_menu_count > 0) {
 	}
 }
 
+echo '<br />';
+
+echo "<p>Vous pouvez définir jusqu'à 3 personnes qui seront prévenues par mail de la création de tout nouveau compte par des membres Inria</p>";
+
+echo '<p><label>Identifiant 1 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify1]', 'value' => $vars['entity']->{'useradd_notify1'} )) . '</p>';
+
+echo '<p><label>Identifiant 2 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify2]', 'value' => $vars['entity']->{'useradd_notify2'} )) . '</p>';
+
+echo '<p><label>Identifiant 3 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify3]', 'value' => $vars['entity']->{'useradd_notify3'} )) . '</p>';
+
 
 /*
 echo "<div>";

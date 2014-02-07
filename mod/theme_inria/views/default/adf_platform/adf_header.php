@@ -182,7 +182,11 @@ if (elgg_is_logged_in()) {
 											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('friends:collections'); ?></a></li>
 											<?php echo $friendrequests_li; ?>
 											<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
-											<li><a href="<?php echo $url . 'invite'; ?>"><?php echo elgg_echo('friends:invite'); ?></a></li>
+											<?php
+											if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
+												echo '<li><a href="' . $url . 'inria/invite">' . elgg_echo('inria_invite') . '</a></li>';
+											}
+											?>
 										</ul>
 									</li>
 									<?php echo $friendrequests; ?>
