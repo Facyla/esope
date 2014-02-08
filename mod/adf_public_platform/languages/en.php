@@ -87,15 +87,28 @@ $en = array(
 	'adf_platform:config:contacts' => "CONTACTS & IDENTITIES",
 	'adf_platform:config:contacts:details' => "Note : not all themes use these contacts !",
 	'adf_platform:config:styles' => "COLORS & STYLE",
-	'adf_platform:config:styles:headerfooter' => "Dégradé du header et du pied de page",
-	'adf_platform:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
-	'adf_platform:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
+	'adf_platform:config:styles:headerfooter' => "Header and footer gradient",
+	'adf_platform:config:styles:groupmodules' => "Widgets and group modules gradient",
+	'adf_platform:config:styles:buttons' => "Buttons gradient (normal then :hover)",
 	'adf_platform:config:saverestore' => "IMPORT / EXPORT - <i>BETA</i>",
-	'adf_platform:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.",
-	'adf_platform:config:import' => "Import / restoration",
-	'adf_platform:config:import:details' => "Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.",
-	'adf_platform:config:export' => "Export / save",
-	'adf_platform:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
+	'adf_platform:config:saverestore:details' => "This functionnality lets you save/export the current theme configuration, and restore previous configurations, or import them into another site. You can use it as a config backup, to test various configuration settings, or as a deployment tool to transfer a theme configuration from a site to another.<br />Warning : this only include THIS plugin configuration.",
+	'adf_platform:config:import' => "Import / Restore",
+	'adf_platform:config:import:details' => "To import settings from another site, or restore a previous backup, paste the text data below, then save the plugin settings.<br />WARNING : all current settings will be replaced by those in the backup ! It is advised to keep a copy of the current settings before proceding....<br />Important note : only the settings that are defined in the backup will be replaced ; if new fields were added meanwhile, or were not part of the backup, the current settings will be kept..",
+	'adf_platform:config:export' => "Export / Save",
+	'adf_platform:config:export:details' => "Copy-paste the content of the area below and keep it in a text file or in a mail. To select all text, click in text zone, or use Ctrl-C (ou Apple-C) to copy the text.",
+	'adf_platform:config:expert' => "EXPERT",
+	'adf_platform:config:security' => "SECURITY",
+	'adf_platform:config:security:notice' => "<p>Part of security features rely on server configuration. Some improvements can also be set through .htaccess. Remaining settings can be set here.</p>
+		<p>To ensure best security, please consider following actions :</p>
+		<ul>
+			<li>Secure your webserver</li>
+			<li>Use HTTS only (requires a valid certificate)</li>
+			<li>Consider rewiewing the control on user input (ESOPE is pretty persmissive by default)</li>
+			<li>Secure cookie (requires a light patch into engine/lib/sessions.php file)</li>
+			<li>Security is a never-ending quest...</li>
+		</ul>",
+	'adf_platform:config:framekiller' => "Add frame busting code (\"frame killer\")",
+	'adf_platform:config:framekiller:details' => "<em>Note : setting this to Yes will be the prefered choice in most cases.</em><br />Warning : by activating this code, you will not be able to embed the site into another site through an iframe (depending on used layouts). If you need to embed the site or some parts of it in iframes, please test carefully before activating on a production site !",
 	
 	
 	// Overrides plugins translations

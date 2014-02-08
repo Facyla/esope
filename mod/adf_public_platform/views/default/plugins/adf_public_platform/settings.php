@@ -673,7 +673,17 @@ $(function() {
 	</div>
 
 
-	<h3>EXPERT</h3>
+	<h3><?php echo elgg_echo('adf_platform:config:security'); ?></h3>
+	<div>
+		<?php
+		echo elgg_echo('adf_platform:config:security:notice');
+		echo '<br />';
+		echo '<p><label>' . elgg_echo('adf_platform:config:framekiller') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[framekiller]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->framekiller )) . '<br />' . elgg_echo('adf_platform:config:framekiller:details') . '</p>';
+		?>
+	</div>
+	
+	
+	<h3><?php echo elgg_echo('adf_platform:config:expert'); ?></h3>
 	<div>
 		<?php
 		// Advanced search tool (alpha version, structure changes may happen)

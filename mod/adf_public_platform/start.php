@@ -41,8 +41,10 @@ function adf_platform_init() {
 	elgg_extend_view('css','accessibility/css');
 	// Sécurité
 	// Important : Enable this only if you don't need to include iframes in other websites !!
-	// @TODO : make this a setting
-	//elgg_extend_view('page/elements/head','security/framekiller');
+	$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform', 100); // Include early
+	if ($framekiller == 'yes') {
+		elgg_extend_view('page/elements/head','security/framekiller');
+	}
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
