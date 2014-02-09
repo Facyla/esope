@@ -672,6 +672,8 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 		// Return embed for use in an iframe, widget, embed in external site
 		case 'iframe':
 		default:
+			// Remove framekiller view (would break out of widgets)
+			elgg_unextend_view('page/elements/head', 'security/framekiller');
 			header('Content-Type: text/html; charset=utf-8');
 			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '" lang="' . $lang . '">

@@ -227,6 +227,9 @@ if (!elgg_is_logged_in()) {
 }
 
 
+// Remove framekiller view (would break out of widgets)
+elgg_unextend_view('page/elements/head', 'security/framekiller');
+
 
 // Display page
 // Send page headers : tell at least it's UTF-8
