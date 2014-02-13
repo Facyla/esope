@@ -4,8 +4,6 @@
 elgg_register_event_handler('init','system','theme_inria_init');
 // HTML export action
 elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
-// Modified to make pages top_level / sub-pages
-elgg_register_action("pages/edit", dirname(__FILE__) . "/actions/pages/edit.php", "public");
 // Inria members user add
 elgg_register_action("inria_useradd", dirname(__FILE__) . "/actions/inria_useradd.php", "logged_in");
 
@@ -47,6 +45,9 @@ function theme_inria_init(){
 	// Add all groups excerpt to digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
 	
+	// Modified to make pages top_level / sub-pages
+	$action_base = dirname(__FILE__);
+	elgg_register_action("pages/edit", $action_base . "/actions/pages/edit.php");
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
