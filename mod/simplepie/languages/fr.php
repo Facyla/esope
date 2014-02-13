@@ -9,6 +9,8 @@ $french = array(
 	'simplepie:excerpt' => 'Inclure un extrait',
 	'simplepie:post_date' => 'Inclure la date',
 	'simplepie:postedon' => 'Date de publication&nbsp; ',
+	'simplepie:group:feed_url' => "URL du flux RSS",
+	
 );
 
 add_translation("fr", $french);

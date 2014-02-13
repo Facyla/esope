@@ -53,9 +53,9 @@ if (empty($vars['entity']->replace_public_homepage)) { $vars['entity']->replace_
 if (strlen($vars['entity']->displaystats) == 0) { $vars['entity']->displaystats = 'no'; }
 
 // Header image
-if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
+//if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
 if (empty($vars['entity']->backgroundcolor)) { $vars['entity']->backgroundcolor = '#efeeea'; }
-if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
+//if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
 
 // STYLES : see css/elgg view for style load & use
 // Set default colors - theme ADF
@@ -106,7 +106,6 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 				<li><a href="#">Charte</a></li>
 				<li><a href="#">Mentions légales</a></li>
 				<li><a href="#">A propos</a></li>
-				<li><a href="#">Accessibilité</a></li>
 				<li><a href="#">Contact</a></li>
 			</ul>
 			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';

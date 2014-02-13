@@ -110,6 +110,7 @@ header nav { top: 27px; }
 header nav #user img { float: left; margin-right: 6px; }
 header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
+#adf-homepage .inria-login a { color: white; }
 .cas-login { float:left; }
 .basic-login { float:right; }
 
@@ -198,6 +199,9 @@ section .interne div.module header h2 { color:<?php echo $module_title_color; ?>
 section .interne div.module div.activites { background-color: <?php echo $module_bg_color; ?>; }
 .elgg-widget-more { background-color: <?php echo $module_bg_color; ?>; }
 
+#widgets-add-panel { border: 0; background: white; }
+.elgg-widgets-add-panel li { border: 0; border-radius: 3px; background: #F8F4F5; text-indent: 30px; }
+
 
 /* Page animation */
 .anim-stats .elgg-table-alt td:first-child { max-width: 180px !important; }
@@ -262,9 +266,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-context-groups .elgg-menu-extras { display: none; }
 */
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this, .elgg-menu-item-rss { display: none !important; }
-.elgg-menu-group-filter > li.grouptab-action { background: <?php echo $linkcolor; ?>; border-color: <?php echo $linkcolor; ?>; }
-.elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $linkhovercolor; ?>; border-color: <?php echo $linkhovercolor; ?>; }
-.elgg-menu-group-filter > li.grouptab-action > a:hover, .elgg-menu-group-filter > li.grouptab-action > a:focus, .elgg-menu-group-filter > li.grouptab-action > a:active { background: <?php echo $linkhovercolor; ?>; }
+.elgg-menu-group-filter > li.grouptab-action { background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; }
+.elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
+.elgg-menu-group-filter > li.grouptab-action > a:hover, .elgg-menu-group-filter > li.grouptab-action > a:focus, .elgg-menu-group-filter > li.grouptab-action > a:active { background: <?php echo $color8; ?>; }
 
 
 /* PROFILE */

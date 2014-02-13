@@ -147,6 +147,13 @@ $english = array(
 	'theme_inria:basiclogin' => "External access login",
 	'theme_inria:caslogin' => "Inria login (CAS)",
 	
+	// Profile fields
+	'theme_inria:group:feed_url' => "Enable group RSS feed",
+	'profile:feed_url' => "RSS feed URL",
+	'groups:feed_url' => "RSS feed URL",
+	'simplepie:group:feed_url:title' => "RSS feed %s",
+	'simplepie:group:feed_url:open' => "Open feed in new tab",
+	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
 	'theme_inria:pages:fullexport:title' => 'Full wiki pages export',

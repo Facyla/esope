@@ -26,6 +26,13 @@ function theme_inria_init(){
 	
 	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
 	
+	// Add RSS feed option
+	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
+	// Extend group with RSS feed reader
+	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
+	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
+	elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
+	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with CMIS folder

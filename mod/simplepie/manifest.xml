@@ -34,3 +34,11 @@
 		<version>1.2.1</version>
 	</provides>
 </plugin_manifest>
+
+
+<!--
+
+20140213 : Added support for reusable RSS feed view + group module + sidebar module (can be configured by adding a "feed_url" metadata to group profile fields)
+
+//-->
+

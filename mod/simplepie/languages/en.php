@@ -10,6 +10,8 @@ $english = array(
 	'simplepie:excerpt' => 'Include excerpt',
 	'simplepie:post_date' => 'Include post date',
 	'simplepie:postedon' => 'Posted on',
+	'simplepie:group:feed_url' => "RSS Feed URL",
+	
 );
 
 add_translation("en", $english);

@@ -148,6 +148,13 @@ $french = array(
 	'theme_inria:basiclogin' => "Connexion Externes",
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	
+	// Champs de profil
+	'theme_inria:group:feed_url' => "Activer le fil RSS du groupe",
+	'profile:feed_url' => "URL du flux RSS à afficher",
+	'groups:feed_url' => "URL du flux RSS à afficher",
+	'simplepie:group:feed_url:title' => "Flux RSS %s",
+	'simplepie:group:feed_url:open' => "Ouvrir le flux dans un nouvel onglet",
+	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
 	'theme_inria:pages:fullexport:title' => 'Export HTML du wiki complet',
