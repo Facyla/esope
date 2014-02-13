@@ -110,6 +110,10 @@ header nav { top: 27px; }
 header nav #user img { float: left; margin-right: 6px; }
 header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
+.cas-login { float:left; }
+.basic-login { float:right; }
+
+
 /* Main menu */
 #transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; height: 37px; }
 #transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
@@ -229,53 +233,19 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* ***************************************
 	GROUP FILTER MENU
 *************************************** */
-.elgg-menu-group-filter {
-	margin-bottom: 5px;
-	border-bottom: 2px solid #ccc;
-	display: table;
-	width: 100%;
-}
-.elgg-menu-group-filter > li {
-	float: left;
-	border: 2px solid #ccc;
-	border-bottom: 0;
-	background: #eee;
-	margin: 0 0 0 4px;
-	
-	-webkit-border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
-}
+.elgg-menu-group-filter { margin-bottom: 5px; border-bottom: 2px solid #ccc; display: table; width: 100%; }
+.elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 0 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
 .elgg-menu-group-filter > li:hover, 
 .elgg-menu-group-filter > li:focus, 
-.elgg-menu-group-filter > li:active {
-	background: #dedede;
-}
-.elgg-menu-group-filter > li > a {
-	text-decoration: none;
-	display: block;
-	padding: 3px 10px 0;
-	text-align: center;
-	height: 18px;
-	color: #999;
-}
+.elgg-menu-group-filter > li:active { background: transparent; }
+.elgg-menu-group-filter > li > a { text-decoration: none; display: block; padding: 3px 10px 0; text-align: center; height: 18px; color: #999; }
 
 /*********	Change tab hover here	********/
 .elgg-menu-group-filter > li > a:hover, 
 .elgg-menu-group-filter > li > a:focus, 
-.elgg-menu-group-filter > li > a:active {
-	background: #dedede;
-	color: #000;
-}
-.elgg-menu-group-filter > .elgg-state-selected {
-	border-color: #ccc;
-	background: white;
-}
-.elgg-menu-group-filter > .elgg-state-selected > a {
-	position: relative;
-	top: 2px;
-	background: white;
-}
+.elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
+.elgg-menu-group-filter > .elgg-state-selected { border-color: #ccc; background: white; }
+.elgg-menu-group-filter > .elgg-state-selected > a { position: relative; top: 2px; background: white; }
 
 .group-top-menu .elgg-menu-group-filter { margin-bottom: 0; }
 .elgg-menu-group-filter > li.grouptab-action { float: right; background: #ccc; border-color: #ccc; }
@@ -292,6 +262,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-context-groups .elgg-menu-extras { display: none; }
 */
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this, .elgg-menu-item-rss { display: none !important; }
+.elgg-menu-group-filter > li.grouptab-action { background: <?php echo $linkcolor; ?>; border-color: <?php echo $linkcolor; ?>; }
+.elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $linkhovercolor; ?>; border-color: <?php echo $linkhovercolor; ?>; }
+.elgg-menu-group-filter > li.grouptab-action > a:hover, .elgg-menu-group-filter > li.grouptab-action > a:focus, .elgg-menu-group-filter > li.grouptab-action > a:active { background: <?php echo $linkhovercolor; ?>; }
 
 
 /* PROFILE */

@@ -144,6 +144,8 @@ $english = array(
 	'inria:groups:featured' => "Featured groups",
 	'inria:members:newest' => "New members",
 	'loginusername' => "Iris login",
+	'theme_inria:basiclogin' => "External access login",
+	'theme_inria:caslogin' => "Inria login (CAS)",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',

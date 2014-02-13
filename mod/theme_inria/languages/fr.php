@@ -145,6 +145,8 @@ $french = array(
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Identifiant Iris",
+	'theme_inria:basiclogin' => "Connexion Externes",
+	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',

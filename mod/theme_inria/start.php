@@ -24,6 +24,8 @@ function theme_inria_init(){
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
+	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
+	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with CMIS folder
