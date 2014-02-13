@@ -169,7 +169,7 @@ $en = array(
 	'adf_platform:widget:user_activity:title' => 'Site activity',
 	'adf_platform:widget:user_activity:description' => 'Display the latest user activities',
 	'adf_platform:widget:site_activity:title' => 'Recent activity',
-	'adf_platform:widget:site_activity:description' => 'Display a the most recent activities across the site (river)',
+	'adf_platform:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
 	
 	'accessibility:sidebar:title' => "Tools",
 	//'breadcrumb' => "Fil d'Ariane",
