@@ -135,7 +135,7 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="javascript:void(0);" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:home'); ?> <i class="fa fa-caret-down"></i></a>
+								<li class="home"><a href="javascript:void(0);" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('theme_inria:site:activity'); ?></a></li>
 									<li><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('theme_inria:thewire:title'); ?></a></li>

@@ -199,8 +199,12 @@ section .interne div.module header h2 { color:<?php echo $module_title_color; ?>
 section .interne div.module div.activites { background-color: <?php echo $module_bg_color; ?>; }
 .elgg-widget-more { background-color: <?php echo $module_bg_color; ?>; }
 
+.elgg-widget-handle { cursor: move; }
+/* Edit widgets list */
 #widgets-add-panel { border: 0; background: white; }
-.elgg-widgets-add-panel li { border: 0; border-radius: 3px; background: #F8F4F5; text-indent: 30px; }
+.elgg-widgets-add-panel li { border: 0; border-radius: 3px; background: #F8F4F5; text-indent: 30px; border:1px dotted #6D2D4F; color:#6D2D4F; }
+/* Hide unavailable widgets */
+.elgg-widgets-add-panel .elgg-state-unavailable { display: none; }
 
 
 /* Page animation */
@@ -299,6 +303,13 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .inria-tool-annuaire { background-image: url(<?php echo $tools_url; ?>ANNUAIRE.png) !important; }
 .inria-tool-tickets { background-image: url(<?php echo $tools_url; ?>TICKETS.png) !important; }
 
+
+/* Agenda */
+.event_add_or_remove_form #group_id { max-width: 50%; }
+
+/* Texte des boutons :hover */
+.elgg-menu-entity .elgg-menu-item-edit a:hover, .elgg-menu-entity .elgg-menu-item-edit a:focus, .elgg-menu-entity .elgg-menu-item-edit a:active { color: black; text-shadow: none; }
+.elgg-button:hover, .elgg-button:active, .elgg-button:focus { color: #666; text-shadow: none; }
 
 
 

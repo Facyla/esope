@@ -477,8 +477,8 @@ $fr = array(
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
 	'esope:viewprofileas:public' => "Vous visualisez votre profil public (tel qu'un non-membre peut le voir)",
-	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
-	'esope:viewprofileas:member' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
+	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre membre peut le voir",
+	'esope:viewprofileas:member' => "Vous visualisez votre profil tel qu'un autre membre peut le voir",
 	'esope:viewprofileas:friends' => "Vous visualisez votre profil tel qu'un de vos contacts peut le voir",
 	'esope:viewprofileas:user' => "Vous visualisez votre profil tel que %s peut le voir",
 	'esope:viewprofileas:yourself' => "Vous-même",
