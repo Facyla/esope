@@ -193,7 +193,7 @@ footer.footer-inria {
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
 .home-wire #thewire-textarea { height: 4em; padding: 1px 3px; }
 .home-wire .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
-.iris-news { height: 200px; }
+.iris-news { height: 200px; overflow:hidden; }
 .iris-add-button { font-weight: bold; padding: 11px 0px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; width:100%; text-align:center; display:block; }
 .home-activity .elgg-menu-item-access { margin-top: 0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
