@@ -52,6 +52,7 @@ try {
 		$body = elgg_echo('theme_inria:useradd:body', array(
 			$name,
 			elgg_get_site_entity()->name,
+			$friend->name,
 			elgg_get_site_entity()->url,
 			$username,
 			$password,

@@ -18,7 +18,7 @@ $own = elgg_get_logged_in_user_entity();
 if (elgg_is_admin_logged_in() || ($own->membertype == 'inria') ) {
 	$access_valid = '';
 	if ($own->membertype == 'inria') $access_valid .= 'Inria';
-	else if (elgg_is_admin_logged_in()) $access_valid .= 'Admin';
+	else if (elgg_is_admin_logged_in()) $access_valid .= 'Administrateur';
 } else {
 	//register_error('You do not have the rights to access this page.');
 	forward();

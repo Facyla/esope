@@ -43,7 +43,7 @@ $english = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
-	'theme_inria:topbar:evo' => "EVO",
+	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -255,7 +255,7 @@ You can add directly this event to your own calendar application through attache
 	'theme_inria:useradd:body' => "
 %s,
 
-A user account has been created for you at %s. To log in, visit:
+A user account has been created for you at %s by %s. To log in, visit:
 
 %s
 

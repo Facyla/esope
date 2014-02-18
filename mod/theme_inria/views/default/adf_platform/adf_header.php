@@ -57,7 +57,7 @@ if (elgg_is_logged_in()) {
 		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
 		$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
 		$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
-		$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('theme_inria:friendsinvites') . '</a></li>';
+		$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . elgg_echo('theme_inria:friendsinvites') . '</a></li>';
 
 		if ($friendrequests_count == 1) {
 			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvite') . '">' . $friendrequests_count . '</a></li>';
@@ -204,19 +204,20 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 
 								<?php
-								$main_menu_help_count = elgg_get_plugin_setting('help_menu_count');
+								$main_menu_help_count = elgg_get_plugin_setting('help_menu_count', 'theme_inria');
 								if (!empty($main_menu_help_count)) {
 									?>
 									<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_inria:menu:firststeps'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
 											<?php
 											for ($i = 1; $i <= $main_menu_help_count; $i++) {
-												$main_menu_item = elgg_get_plugin_setting('help_menu_'.$i);
+												$main_menu_item = elgg_get_plugin_setting('help_menu_'.$i, 'theme_inria');
 												if (!empty($main_menu_item)) {
 													$main_menu_item = explode('::', $main_menu_item);
 													$menu_item_url = $main_menu_item[0];
-													$menu_item_link = $main_menu_item[1];
-													$menu_item_title = $main_menu_item[2];
+													if ($main_menu_item[1]) $menu_item_link = $main_menu_item[1];
+													else $menu_item_link = $main_menu_item[0];
+													if ($main_menu_item[2]) $menu_item_title = $main_menu_item[2];
 													echo '<li><a href="' . $menu_item_url . '" title="' . $menu_item_title . '">' . $menu_item_link . '</a></li>';
 												}
 											}

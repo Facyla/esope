@@ -43,7 +43,7 @@ $french = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
-	'theme_inria:topbar:evo' => "EVO",
+	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -255,7 +255,7 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 	'theme_inria:useradd:body' => "
 %s,
 
-Un compte utilisateur vous a été créé sur %s. Pour vous connecter, rendez-vous :
+Un compte utilisateur vous a été créé sur %s par %s. Pour vous connecter, rendez-vous :
 
 %s
 
