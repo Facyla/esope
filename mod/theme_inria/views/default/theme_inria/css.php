@@ -93,7 +93,7 @@ $module_bg_color = '#F8F4F5';
 .elgg-list .elgg-item { opacity: 1.0; }
 /* Slider */
 .anythingSlider li.panel { display:none; }
-.anythingSlider li.panel.active { display:block; }
+.anythingSlider li.panel.activePage { display:block; }
 .anythingSlider-cs-portfolio .arrow { top: 40%; position: absolute; z-index:10; }
 .anythingSlider .arrow span { visibility:visible; font-size: 50px; }
 .anythingSlider .arrow span a, .anythingSlider .arrow span a:hover, .anythingSlider .arrow span a:active { text-decoration: none; }
