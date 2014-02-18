@@ -96,7 +96,7 @@ $module_bg_color = '#F8F4F5';
 .anythingSlider li.panel.active { display:block; }
 .anythingSlider-cs-portfolio .arrow { top: 40%; position: absolute; z-index:10; }
 .anythingSlider .arrow span { visibility:visible; font-size: 50px; }
-.anythingSlider .arrow span a { text-decoration: none; }
+.anythingSlider .arrow span a, .anythingSlider .arrow span a:hover, .anythingSlider .arrow span a:active { text-decoration: none; }
 .arrow.back { left: 20px; }
 .arrow.forward { right: 20px; }
 .iris-news .anythingControls { position: absolute; bottom: 4px; left: 20%; }
@@ -122,7 +122,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
 .cas-login { float:left; }
 .basic-login { float:right; }
-#adf-homepage .inria-login .basic-login-toggle { float:right; color:<?php echo $linkcolor; ?>; }
+.basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:right; color:<?php echo $linkcolor; ?>; }
 
 
 /* Main menu */

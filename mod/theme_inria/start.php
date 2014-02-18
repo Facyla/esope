@@ -640,18 +640,20 @@ error_log('Adding attached file');
 function theme_inria_temp_login($user) {
 	$_SESSION['user'] = $user;
 	$_SESSION['guid'] = $user->guid;
-	$_SESSION['id'] = $_SESSION['guid'];
+	$_SESSION['id'] = $user->guid;
 	$_SESSION['username'] = $user->username;
 	$_SESSION['name'] = $user->name;
+	$_SESSION['code'] = $user->code;
+	return true;
 }
 function theme_inria_temp_logout() {
-	//$_SESSION['user']->code = "";
-	//$_SESSION['user']->save();
 	unset($_SESSION['user']);
 	unset($_SESSION['guid']);
 	unset($_SESSION['id']);
 	unset($_SESSION['username']);
 	unset($_SESSION['name']);
+	unset($_SESSION['code']);
+	return true;
 }
 
 

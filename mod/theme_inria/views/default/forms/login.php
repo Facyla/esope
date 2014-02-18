@@ -62,7 +62,10 @@ echo '<p>' . elgg_echo('elgg_cas:login:details') . '</p>';
 	<div class="clearfloat"></div>
 
 	<div class="elgg-foot">
-		<?php echo elgg_view('input/submit', array('value' => elgg_echo('login'))); ?>
+		<?php
+		echo elgg_view('input/securitytoken');
+		echo elgg_view('input/submit', array('value' => elgg_echo('login')));
+		?>
 	
 		<?php 
 		if (isset($vars['returntoreferer'])) {
