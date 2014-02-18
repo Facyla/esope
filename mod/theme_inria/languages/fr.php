@@ -116,6 +116,7 @@ $french = array(
 	'file:edit' => 'Modifier le fichier',
 	'file:delete' => 'Supprimer le fichier',
 	'file:upload' => 'Partager un nouveau fichier',
+	'files:none' => "Aucun fichier",
 	
 	'forum:none' => 'Aucune discussion pour le moment',
 	

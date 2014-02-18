@@ -116,6 +116,7 @@ $english = array(
 	'file:edit' => 'Edit this file',
 	'file:delete' => 'Delete this file',
 	'file:upload' => 'Share new file',
+	'files:none' => "No file",
 
 	'forum:none' => 'There is no topic yet for this group',
 

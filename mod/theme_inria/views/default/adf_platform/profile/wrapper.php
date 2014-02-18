@@ -30,6 +30,8 @@ if (elgg_is_logged_in()) {
 				 //logout();
 				// Note : can't use logout because it triggers the CAS logout event, which is not the attended result
 				// We do not actually need to logout the user, but only lets logged in user have a view of his public profile
+				theme_inria_temp_logout();
+				/*
 				$_SESSION['user']->code = "";
 				//$_SESSION['user']->save();
 				unset($_SESSION['username']);
@@ -38,25 +40,26 @@ if (elgg_is_logged_in()) {
 				unset($_SESSION['guid']);
 				unset($_SESSION['id']);
 				unset($_SESSION['user']);
+				*/
 				$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:public') . '</strong><br />';
 				
 			} else if ($view_as == 'member') {
 				// Site member view
-				if (login($random_member)) {
+				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
 				} else { $view_as = false; }
 				
 			/*
 			// @TODO : add if used - not yet
 			} else if ($view_as == 'contact') {
-				if (login($random_member)) {
+				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
 				}
 			*/
 				
 			} else if ($view_as = get_user_by_username($view_as)) {
 				// Specific user view
-				if (login($other_user)) {
+				if (theme_inria_temp_login($other_user)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:user') . '</strong><br />';
 				} else { $view_as = false; }
 			} else { $view_as = false; }
@@ -101,5 +104,5 @@ echo '<div class="elgg-grid">
 <div class="profile-widgets">' . $widgets . '</div>';
 
 // Restore original user
-if ($view_as) { login($own_user); }
+if ($view_as) { theme_inria_temp_login($own_user); }
 

@@ -100,6 +100,7 @@ function menu(leMenu) {
 		}
 	});
 }
-$("#transverse nav").hide(); // Plus rapide
+
+$("#transverse nav ul ul").hide(); // Plus rapide pour masquer les sous-menus
 
 
