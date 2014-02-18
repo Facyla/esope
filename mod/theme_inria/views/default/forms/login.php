@@ -22,9 +22,9 @@ echo '<p>' . elgg_echo('elgg_cas:login:details') . '</p>';
 <div class="inria-login">
 	<a href="<?php echo $CONFIG->url; ?>cas_auth" class="elgg-button elgg-button-action cas-login"><?php echo elgg_echo('theme_inria:caslogin'); ?></a>
 	<?php if (!empty($default_hide)) { ?>
-		<a href="javascript:void(0);" onclick="$('#inria-basiclogin').toggle();"  class="elgg-button elgg-button-action basic-login"><?php echo elgg_echo('theme_inria:basiclogin'); ?></a>
+		<a href="javascript:void(0);" onclick="$('#inria-basiclogin').toggle();"  class="basic-login-toggle"><?php echo elgg_echo('theme_inria:basiclogin'); ?></a>
 	<?php } else { ?>
-		<a href="javascript:void(0);" onclick="$('#inria-basiclogin').toggle();"  class="elgg-button elgg-button-action basic-login"><?php echo elgg_echo('theme_inria:basiclogin'); ?></a>
+		<a href="javascript:void(0);" onclick="$('#inria-basiclogin').toggle();"  class="basic-login-toggle"><?php echo elgg_echo('theme_inria:basiclogin'); ?></a>
 	<?php } ?>
 </div>
 <div class="clearfloat"></div>

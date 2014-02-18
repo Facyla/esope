@@ -94,6 +94,14 @@ $module_bg_color = '#F8F4F5';
 /* Slider */
 .anythingSlider li.panel { display:none; }
 .anythingSlider li.panel.active { display:block; }
+.anythingSlider-cs-portfolio .arrow { top: 40%; position: absolute; }
+.anythingSlider .arrow span { visibility:visible; z-index:10; font-size: 50px; }
+.anythingSlider .arrow span a { text-decoration: none; }
+.arrow.back { left: 20px; }
+.arrow.forward { right: 20px; }
+.iris-news .anythingControls { position: absolute; bottom: 4px; left: 20%; }
+.anythingSlider .anythingControls ul a, .anythingSlider .start-stop, .anythingSlider-cs-portfolio .anythingControls a.start-stop, .anythingSlider-cs-portfolio .anythingControls a.start-stop.playing { background-color: #6D2D4F; margin: 3px 4px; }
+.anythingSlider-cs-portfolio .anythingControls a.cur, .anythingSlider-cs-portfolio .anythingControls a:hover { background-color: #EF793E; width: 22px; height: 22px; margin: 0px 1px; }
 
 .elgg-autocomplete-item .elgg-access a { display: none; }
 
@@ -114,6 +122,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
 .cas-login { float:left; }
 .basic-login { float:right; }
+#adf-homepage .inria-login .basic-login-toggle { float:right; color:<?php echo $linkcolor; ?>; }
 
 
 /* Main menu */
@@ -184,7 +193,6 @@ footer.footer-inria {
 .home-wire #thewire-textarea { height: 4em; padding: 1px 3px; }
 .home-wire .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .iris-news { height: 200px; }
-.iris-news .anythingControls { position: absolute; top: 30px; left: 20px; display:none; }
 .iris-add-button { font-weight: bold; padding: 11px 0px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; width:100%; text-align:center; display:block; }
 .home-activity .elgg-menu-item-access { margin-top: 0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }

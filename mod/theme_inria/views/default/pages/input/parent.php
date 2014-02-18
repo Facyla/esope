@@ -21,7 +21,19 @@ $options = array();
 // Inria : we need to add an empty option to make it a top level page
 $options['top'] = "----";
 
+$depth_break = false;
 foreach ($pages as $page) {
+	// Important : pas de page sous-page d'elle-même ou d'une de ses pages filles !
+	// Pour cela, l'arbre étant ordonné, on ne liste aucune des sous-page à partir de l'actuelle
+	if ($page['guid'] == $vars['entity']->guid) {
+		$depth_break = (int)$page['depth'];
+		continue;
+	}
+	// Si depth équivalent ou inférieur à la valeur mémorisée on reprend la liste des options
+	if ($depth_break !== false) {
+		if ((int)$page['depth'] > $depth_break) { continue; } else { $depth_break = false; }
+	}
+	
 	$spacing = "";
 	for ($i = 0; $i < $page['depth']; $i++) {
 		$spacing .= "--";
