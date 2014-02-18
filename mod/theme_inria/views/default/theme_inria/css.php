@@ -110,7 +110,8 @@ header nav { top: 27px; }
 header nav #user img { float: left; margin-right: 6px; }
 header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
-#adf-homepage .inria-login a { color: white; }
+#adf-homepage .inria-login a, #adf-homepage .inria-login a:visited { color: white; }
+#adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
 .cas-login { float:left; }
 .basic-login { float:right; }
 
