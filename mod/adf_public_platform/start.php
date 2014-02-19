@@ -41,8 +41,10 @@ function adf_platform_init() {
 	elgg_extend_view('css','accessibility/css');
 	// Sécurité
 	// Important : Enable this only if you don't need to include iframes in other websites !!
-	// @TODO : make this a setting
-	//elgg_extend_view('page/elements/head','security/framekiller');
+	$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform', 100); // Include early
+	if ($framekiller == 'yes') {
+		elgg_extend_view('page/elements/head','security/framekiller');
+	}
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
@@ -670,6 +672,8 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 		// Return embed for use in an iframe, widget, embed in external site
 		case 'iframe':
 		default:
+			// Remove framekiller view (would break out of widgets)
+			elgg_unextend_view('page/elements/head', 'security/framekiller');
 			header('Content-Type: text/html; charset=utf-8');
 			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '" lang="' . $lang . '">
@@ -760,6 +764,16 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$profile_type = $custom_profile_type->metadata_name;
 			}
 		}
+		return $profile_type;
+	}
+	
+	function esope_set_user_profile_type($user = false, $profiletype = '') {
+		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		$profiletype_guid = null;
+		if (!empty($profiletype)) {
+			$profiletype_guid = esope_get_profiletype_guid($profiletype);
+		}
+		$user->custom_profile_type = $profiletype_guid;
 		return $profile_type;
 	}
 	

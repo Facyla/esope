@@ -112,7 +112,9 @@ $font6 = $css['font6'];
 
 /**** Change font and colour here ***********/
 html {
+	<?php if (!empty($backgroundimg)) { ?>
 	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
+	<?php } ?>
 	font-family: <?php echo $font4; ?>;
 }
 body {
@@ -122,7 +124,9 @@ body {
 	font-family:  <?php echo $font4; ?>;
   color:#221907;
 */
+	<?php if (!empty($backgroundimg)) { ?>
 	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
+	<?php } ?>
 	position: relative;
 	border-top: 5px solid #333333;
 }

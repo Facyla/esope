@@ -91,11 +91,25 @@ $fr = array(
 	'adf_platform:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
 	'adf_platform:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
 	'adf_platform:config:saverestore' => "SAUVEGARDE ET RESTAURATION - <i>BETA</i>",
-	'adf_platform:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.",
+	'adf_platform:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.<br />Attention : seule la configuration de CE plugin est concernée !",
 	'adf_platform:config:import' => "Import / restauration",
 	'adf_platform:config:import:details' => "Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.",
 	'adf_platform:config:export' => "Export / sauvegarde",
 	'adf_platform:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
+	'adf_platform:config:expert' => "EXPERT",
+	'adf_platform:config:security' => "SECURITÉ",
+	'adf_platform:config:security:notice' => "<p>Une aprtie de la sécurisation du site dépend du serveur. Certaines améliorations peuvent être mises en place via .htaccess. Les réglages restants peuvent être modifiés ci-dessous.</p>
+		<p>Pour assurer une sécurité maximale, veuillez considérer les points suivants :</p>
+		<ul>
+			<li>Sécurisez votre serveur web</li>
+			<li>Utilisez des connexions HTTS seulement (nécessite un certificat valide)</li>
+			<li>Envisagez de modifier les contrôles effectués sur les saisies utilisateur (ESOPE est relativement permissif par défaut)</li>
+			<li>Sécurisez les cookies (nécessite un patch dans engine/lib/sessions.php pour les versions < 1.9)</li>
+			<li>Le facteur humain est prioritaire : informez et formez...</li>
+			<li>La sécurité est une quête sans fin...</li>
+		</ul>",
+	'adf_platform:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
+	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production !",
 	
 	
 	// Overrides plugins translations
@@ -463,8 +477,8 @@ $fr = array(
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
 	'esope:viewprofileas:public' => "Vous visualisez votre profil public (tel qu'un non-membre peut le voir)",
-	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
-	'esope:viewprofileas:member' => "Vous visualisez votre profil tel qu'un autre mmebre peut le voir",
+	'esope:viewprofileas:contact' => "Vous visualisez votre profil tel qu'un autre membre peut le voir",
+	'esope:viewprofileas:member' => "Vous visualisez votre profil tel qu'un autre membre peut le voir",
 	'esope:viewprofileas:friends' => "Vous visualisez votre profil tel qu'un de vos contacts peut le voir",
 	'esope:viewprofileas:user' => "Vous visualisez votre profil tel que %s peut le voir",
 	'esope:viewprofileas:yourself' => "Vous-même",

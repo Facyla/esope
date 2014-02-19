@@ -21,13 +21,13 @@ $options_values = array(
 		'share' => elgg_echo('theme_inria:topbar:share'),
 		//'confcall' => elgg_echo('theme_inria:topbar:confcall'),
 		'evo' => elgg_echo('theme_inria:topbar:evo'),
-		//'mailinglist' => elgg_echo('theme_inria:topbar:mailinglist'),
+		'mailinglist' => elgg_echo('theme_inria:topbar:mailinglist'),
 		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
 		'mission' => elgg_echo('theme_inria:topbar:mission'),
 		'mission2' => elgg_echo('theme_inria:topbar:mission2'),
 		'holidays' => elgg_echo('theme_inria:topbar:holidays'),
 		'annuaire' => elgg_echo('theme_inria:topbar:annuaire'),
-		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
+		//'tickets' => elgg_echo('theme_inria:topbar:tickets'),
 	);
 
 /* 1 tool at a time mode

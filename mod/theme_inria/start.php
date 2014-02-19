@@ -4,8 +4,8 @@
 elgg_register_event_handler('init','system','theme_inria_init');
 // HTML export action
 elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
-// Modified to make pages top_level / sub-pages
-elgg_register_action("pages/edit", dirname(__FILE__) . "/actions/pages/edit.php", "public");
+// Inria members user add
+elgg_register_action("inria_useradd", dirname(__FILE__) . "/actions/inria_useradd.php", "logged_in");
 
 
 /* Initialise the theme */
@@ -13,6 +13,7 @@ function theme_inria_init(){
 	global $CONFIG;
 	
 	elgg_extend_view('css', 'theme_inria/css');
+	elgg_extend_view('css/admin', 'theme_inria/admin_css');
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
 	// Extend group owner block
@@ -20,6 +21,15 @@ function theme_inria_init(){
 	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
+	
+	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
+	
+	// Add RSS feed option
+	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
+	// Extend group with RSS feed reader
+	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
+	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
+	elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -35,14 +45,25 @@ function theme_inria_init(){
 	// Add all groups excerpt to digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
 	
+	// Modified to make pages top_level / sub-pages
+	$action_base = dirname(__FILE__);
+	elgg_register_action("pages/edit", $action_base . "/actions/pages/edit.php");
 	
+	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
-	elgg_unregister_widget_type('thewire');
-	elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
+	if (elgg_is_active_plugin('thewire')) {
+		$widget_thewire = elgg_get_plugin_setting('widget_thewire', 'adf_public_platform');
+		elgg_unregister_widget_type('thewire');
+		if ($widget_thewire != 'no') {
+			elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
+		}
+	}
 	// Inria universe : liens vers d'autres 
-	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widget:tools'), elgg_echo('theme_inria:widget:tools:details'), 'dashboard', false);
+	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widgets:tools'), elgg_echo('theme_inria:widgets:tools:details'), 'dashboard', false);
 	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
+	
+	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
@@ -91,17 +112,8 @@ function theme_inria_init(){
 	if (elgg_is_active_plugin('html_email_handler')) {
 		// Modify default events notification message
 		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
-		// Highest level : interception : allow to rewrite email sender
-		//elgg_register_plugin_hook_handler('object:notifications', 'all', 'event_calendar_ics_object_notifications', 1000);
-		
-		// Email sending interception : must intercept in place of html_email_handler (but we use same functions so only unregister)
-		/* @TODO : this is not functional yet !!
-		// Can add attached files but need to filter on events + get the event entity !
-		elgg_unregister_plugin_hook_handler("email", "system", "html_email_handler_email_hook");
-		elgg_register_plugin_hook_handler("email", "system", "esope_html_email_handler_email_hook", 100);
-		unregister_notification_handler("email");
-		register_notification_handler("email", "esope_html_email_handler_notification_handler");
-		*/
+		// Use hook to add attachments
+		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
 	}
 	
 }
@@ -125,6 +137,9 @@ function inria_page_handler($page){
 	switch($page[0]){
 		case "linkedin":
 			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
+			break;
+		case "invite":
+			include(dirname(__FILE__) . '/pages/theme_inria/invite_external.php');
 			break;
 		case "animation":
 		default:
@@ -178,7 +193,9 @@ function theme_inria_setup_menu() {
    - memberreason : qualification du type de compte, raison de l'accès => validldap/invalidldap/partner/researchteam/...
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
+	error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
+		
 		// Attention, ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
 			elgg_load_library("elgg:ldap_auth");
@@ -196,6 +213,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 					$is_inria = false;
 				}
 			}
+			
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
 				// External access has some restrictions : if account was not used for more than 1 year => disable
@@ -205,7 +223,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				}
 			
 				if (in_array($user->memberreason, array('validldap', 'invalidldap'))) {
-					// Si le compte a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
+					// Si le compte LDAP a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
 					$is_active = false;
 					$memberreason = 'invalidldap';
 				} else {
@@ -213,11 +231,26 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				}
 			}
 			// Update user metadata : we update only if there is a change !
-			if ($is_inria && ($user->membertype != 'inria')) { $user->membertype = 'inria'; }
-			if (!$is_inria && ($user->membertype != 'external')) { $user->membertype = 'external'; }
+			if ($is_inria && ($user->membertype != 'inria')) {
+				$user->membertype = 'inria';
+				esope_set_user_profile_type($user, 'inria');
+			}
+			if (!$is_inria && ($user->membertype != 'external')) {
+				$user->membertype = 'external';
+				esope_set_user_profile_type($user, 'external');
+			}
 			if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
-		
+			
+			// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
+			if (empty($user->custom_profile_type)) {
+				if ($is_inria) {
+					esope_set_user_profile_type($user, 'inria');
+				} else {
+					esope_set_user_profile_type($user, 'external');
+				}
+			}
+			
 			// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
 			if ($user->memberstatus == 'closed') {
 				register_error("Cet accès n'est plus valide. ");
@@ -321,15 +354,41 @@ function event_calendar_ics_notify_message($hook, $entity_type, $returnvalue, $p
 	return null;
 }
 
-/* We don't want to rewrite from this level
-function event_calendar_ics_object_notifications($hook, $entity_type, $returnvalue, $params) {
-	// @TODO : changes here
-	// Don't change default behaviour
+
+/**
+* Add attachment to events
+*
+* @param unknown_type $hook
+* @param unknown_type $entity_type
+* @param unknown_type $returnvalue
+* @param unknown_type $params
+*/
+function event_calendar_ics_notify_attachment($hook, $entity_type, $returnvalue, $params) {
+	$entity = $params['entity'];
+	$to_entity = $params['to_entity'];
+	$method = $params['method'];
+	$options = array();
+
+	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
+		// Build attachment
+		$mimetype = 'text/calendar';
+		$filename = 'calendar.ics';
+		// @TODO : we need to get entity to filter and send correct content !!
+		$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $entity));
+		$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
+		$file_content = chunk_split(base64_encode($file_content));
+		$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+		
+		// Build $options array
+		$options['attachments'] = $attachments;
+		
+		return $options;
+	}
 	return $returnvalue;
 }
-*/
 
 
+/*
 function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL){
 	
 	if (!$from) {
@@ -384,6 +443,7 @@ function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUse
 	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => 'v1_'.$filename, 'content' => $file_content);
 
 	// set options for sending
 	$options = array(
@@ -399,10 +459,12 @@ function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUse
 		$options = array_merge($options, $params);
 	}
 	
-	return esope_html_email_handler_send_email($options);
+	return html_email_handler_send_email($options);
 }
+*/
 
 
+/*
 function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 	// generate HTML mail body
 	$html_message = html_email_handler_make_html_body($params["subject"], $params["body"]);
@@ -415,6 +477,7 @@ function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => 'v2_'.$filename, 'content' => $file_content);
 	
 	// set options for sending
 	$options = array(
@@ -425,10 +488,12 @@ function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 		"plaintext_message" => $params["body"],
 		"attachments" => $attachments,
 	);
-	return esope_html_email_handler_send_email($options);
+	return html_email_handler_send_email($options);
 }
+*/
 
 
+/*
 // This is modified version of html_email_handler function that supports attachments
 function esope_html_email_handler_send_email(array $options = null){
 error_log('TEST esope send email');
@@ -567,12 +632,14 @@ error_log('Adding attached file');
 			$before_message = "--mixed--" . $boundary . PHP_EOL;
 			$before_message .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
 			// Build strings that will be added after TEXT/HTML message
+*/
 			/*
 			$after_message = "--mixed--" . $boundary . PHP_EOL;
 			$after_message .= "Content-Type: text/calendar; name=\"calendar.ics\"" . PHP_EOL;
 			$after_message .= "Content-Transfer-Encoding: base64" . PHP_EOL;
 			$after_message .= "Content-Disposition: attachment  " . PHP_EOL;
 			*/
+/*
 			$after_message .= PHP_EOL;
 			$after_message .= $attachments;
 			$after_message .= "--mixed--" . $boundary . PHP_EOL;
@@ -591,5 +658,29 @@ error_log('Adding attached file');
 
 	return $result;
 }
+*/
+
+
+// These functions are used for temporary changing the current user 
+// This lets view one's page as someone else
+function theme_inria_temp_login($user) {
+	$_SESSION['user'] = $user;
+	$_SESSION['guid'] = $user->guid;
+	$_SESSION['id'] = $user->guid;
+	$_SESSION['username'] = $user->username;
+	$_SESSION['name'] = $user->name;
+	$_SESSION['code'] = $user->code;
+	return true;
+}
+function theme_inria_temp_logout() {
+	unset($_SESSION['user']);
+	unset($_SESSION['guid']);
+	unset($_SESSION['id']);
+	unset($_SESSION['username']);
+	unset($_SESSION['name']);
+	unset($_SESSION['code']);
+	return true;
+}
+
 
 

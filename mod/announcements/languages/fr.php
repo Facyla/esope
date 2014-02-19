@@ -34,6 +34,7 @@ $french = array(
 	'announcements:post' => "Publier l'annonce", 
 	'announcements:subject' => '%s Annonce : %s',
 	'announcements:edit' => "Modifier une annonce",
+	'announcements:new' => 'Nouvelle annonce', 
 
 	/**
 	 * Actions

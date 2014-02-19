@@ -93,8 +93,8 @@ echo '<label>' . elgg_echo('search:field:subtype') . ' ' . elgg_view('input/drop
 
 // Hidden fields - could be revealed if we don't use sidebar anymore...
 if (!empty($vars['search_type'])) echo elgg_view('input/hidden', array('name' => 'search_type', 'value' => $vars['search_type']));
-if (!empty($vars['type'])) echo elgg_view('input/hidden', array('name' => 'type', 'value' => $vars['type']));
-if (!empty($vars['subtype'])) echo elgg_view('input/hidden', array('name' => 'subtype', 'value' => $vars['subtype']));
+if (!empty($vars['type'])) echo elgg_view('input/hidden', array('name' => 'entity_type', 'value' => $vars['type']));
+if (!empty($vars['subtype'])) echo elgg_view('input/hidden', array('name' => 'entity_subtype', 'value' => $vars['subtype']));
 
 // Hidden fields - could be revealed if implemented in a usable way
 if (!empty($vars['owner_guid'])) echo elgg_view('input/hidden', array('name' => 'owner_guid', 'value' => $vars['owner_guid']));

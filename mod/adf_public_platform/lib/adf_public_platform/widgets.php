@@ -14,9 +14,11 @@ $widget_messages = elgg_get_plugin_setting('widget_messages', 'adf_public_platfo
 $widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
 $widget_river_widget = elgg_get_plugin_setting('widget_river_widget', 'adf_public_platform');
 $widget_twitter = elgg_get_plugin_setting('widget_twitter', 'adf_public_platform');
+$widget_thewire = elgg_get_plugin_setting('widget_thewire', 'adf_public_platform');
 $widget_tagcloud = elgg_get_plugin_setting('widget_tagcloud', 'adf_public_platform');
 $widget_videos = elgg_get_plugin_setting('widget_videos', 'adf_public_platform');
 $widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
+$widget_export_embed = elgg_get_plugin_setting('widget_export_embed', 'adf_public_platform');
 
 
 elgg_unregister_widget_type('blog');
@@ -57,6 +59,10 @@ if (elgg_is_active_plugin('twitter')) {
 	if ($widget_twitter == 'no') elgg_unregister_widget_type('twitter');
 }
 
+if (elgg_is_active_plugin('thewire')) {
+	if ($widget_thewire == 'no') elgg_unregister_widget_type('thewire');
+}
+
 if (elgg_is_active_plugin('tagcloud')) {
 	if ($widget_tagcloud == 'no') elgg_unregister_widget_type('tagcloud');
 }
@@ -83,6 +89,9 @@ if (elgg_is_active_plugin('profile_manager')) {
 	}
 }
 
+if (elgg_is_active_plugin('export_embed')) {
+	if ($widget_export_embed == 'no') elgg_unregister_widget_type('export_embed');
+}
 
 // Nouveaux widgets
 

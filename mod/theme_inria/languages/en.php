@@ -13,7 +13,9 @@ $english = array(
 	'theme_inria:topbar:profil' => "My profile",
 	'theme_inria:site:activity' => "Latest activities",
 	'theme_inria:topbar:explorer' => "Explore",
-	'theme_inria:topbar:home' => "News",
+	'theme_inria:topbar:all' => "All",
+	'theme_inria:topbar:home' => "Home",
+	'theme_inria:topbar:news' => "News",
 	'theme_inria:topbar:groups' => "All&nbsp;groups",
 	'theme_inria:topbar:members' => "All&nbsp;members",
 	'theme_inria:topbar:activity' => "All&nbsp;activities",
@@ -41,7 +43,7 @@ $english = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
-	'theme_inria:topbar:evo' => "EVO",
+	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -114,6 +116,7 @@ $english = array(
 	'file:edit' => 'Edit this file',
 	'file:delete' => 'Delete this file',
 	'file:upload' => 'Share new file',
+	'files:none' => "No file",
 
 	'forum:none' => 'There is no topic yet for this group',
 
@@ -144,6 +147,22 @@ $english = array(
 	'inria:groups:featured' => "Featured groups",
 	'inria:members:newest' => "New members",
 	'loginusername' => "Iris login",
+	'theme_inria:basiclogin' => "External access login",
+	'theme_inria:caslogin' => "Inria login (CAS)",
+	
+	// Profile fields
+	'profile:types:inria' => "Inria",
+	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
+	'profile:types:external' => "External",
+	'profile:types:external:description' => "External profiles are people who do not belong to Inria, but were granted a special access for various reasons : as an alumni, associated researcher, subcontractor, etc.",
+	'profile:categories:aboutme' => "About me",
+	'profile:categories:inria' => "Inria data",
+	'profile:categories:coordinates' => "Detailed contact info",
+	'theme_inria:group:feed_url' => "Enable group RSS feed",
+	'profile:feed_url' => "RSS feed URL",
+	'groups:feed_url' => "RSS feed URL",
+	'simplepie:group:feed_url:title' => "RSS feed %s",
+	'simplepie:group:feed_url:open' => "Open feed in new tab",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
@@ -191,7 +210,7 @@ $english = array(
 	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 	// Etherpad embed
-	'theme_inria:embed:etherpad' => "Pad or Iframe",
+	'theme_inria:embed:etherpad' => "Pad",
 	'theme_inria:etherpad:title' => "Embed a Pad into your content",
 	'theme_inria:etherpad:details' => "To embed an existing Pad into your content, please paste the full Pad URL below, then click the Embed button.<br />If you need to create a new pad, please click first on New pad button below, then proceed the same way as for an existing Pad.",
 	'theme_inria:etherpad:warning' => "<blockquote>Caution : the Pads are *not* hosted by Iris, which has serious implications for the pad content :
@@ -206,9 +225,10 @@ $english = array(
 			<li>Provide details on who can access the Pad content, so people know why they cannot access it, but also who will be able to read what they write into the Pad.</li>
 		</ul>
 	</blockquote>",
-	'theme_inria:etherpad:iframe' => "Note : you can also use this tool to embed any web page into your content. Use page URL instead of Pad URL. Please note that only pages secured with HTTPS can be embedded !",
+	//'theme_inria:etherpad:iframe' => "Note : you can also use this tool to embed any web page into your content. Use page URL instead of Pad URL. Please note that only pages secured with HTTPS can be embedded !",
+	'theme_inria:etherpad:iframe' => "",
 	'theme_inria:etherpad:existing' => "Embed the Pad",
-	'theme_inria:etherpad:existing:help' => "The Pad (or the iframe) is embedded into your content as soon as you've cliqked on this button. If the embed popup remains open, please close it by clicking on close button in popup upper right corner.",
+	'theme_inria:etherpad:existing:help' => "The Pad is embedded into your content as soon as you've cliqked on this button. If the embed popup remains open, please close it by clicking on close button in popup upper right corner.",
 	'theme_inria:etherpad:padurl' => "Pad URL",
 	'theme_inria:etherpad:new' => "Create a new Pad",
 	'theme_inria:etherpad:new:help' => "This opens another window and lets you create your Pad. Once created, copy the Pad URL the, go back on this page to paste it.",
@@ -223,6 +243,40 @@ View event on the site :
 
 You can add directly this event to your own calendar application through attached ICAL file : 
 %s",
+	
+	
+	
+	// Création de comptes
+	'inria_invite' => "Create user account",
+	'theme_inria:useradd' => "New account for a non-Inria person",
+	'theme_inria:useradd:details' => "<p>As %s, you can grant access to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once created, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p>",
+	'theme_inria:useradd:reason' => "Account creation motive",
+	'theme_inria:useradd:reason:details' => "These details will be sent to the site administrator along with the new account profile, as a justification for creating the account. Please give any useful information so the account can be validated without doubt.",
+	'theme_inria:useradd:subject' => "User account created",
+	'theme_inria:useradd:body' => "
+%s,
+
+A user account has been created for you at %s by %s. To log in, visit:
+
+%s
+
+And log in with these user credentials:
+
+Username: %s
+Password: %s
+
+Once you have logged in, we highly recommend that you change your password.
+",
+	'theme_inria:useradd:admin:subject' => "User account created",
+	'theme_inria:useradd:admin:body' => "
+A user account has been created for %s (email %s), by %s.
+
+Registration motive :
+
+%s
+
+Here is the new profile page : %s
+",
 	
 );
 

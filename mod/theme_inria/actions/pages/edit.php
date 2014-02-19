@@ -5,6 +5,8 @@
  * @package ElggPages
  */
 
+global $CONFIG;
+
 $variables = elgg_get_config('pages');
 $input = array();
 foreach ($variables as $name => $type) {
@@ -72,8 +74,12 @@ if (sizeof($input) > 0) {
 $page->container_guid = $container_guid;
 
 if ($parent_guid && $parent_guid != $page_guid) {
+	
 	// Skip if we want to make it a top page
-	if ($parent_guid == 'top') { break; }
+	if ($parent_guid == 'top') {
+		$page->parent_guid = null;
+		break;
+	}
 	
 	// Check if parent isn't below the page in the tree
 	if ($page_guid) {
@@ -99,30 +105,23 @@ if ($parent_guid && $parent_guid != $page_guid) {
 }
 
 if ($page->save()) {
+	
+	$dbprefix = $CONFIG->dbprefix;
+	$page_top_subtype_id = get_subtype_id('object', 'page_top');
+	$page_subtype_id = get_subtype_id('object', 'page');
 
-// @TODO : we need to consider 2 cases :
-// 1. former page_top now has a parent_guid and need to become a page
-if (($parent_guid == 'top') && ($page->getSubtype() == 'page')) {
-	$parent_guid = null;
-	$page_top_subtype_id = get_subtype_id('object', 'page_top');
-	$page_subtype_id = get_subtype_id('object', 'page');
 	// Inria : change subtype if we remove parent, or add a parent
-	/*
-	// getSubtype()
-	// get_subtype_from_id
-	update_data("UPDATE {$dbprefix}entities set subtype='$subtype_id' WHERE guid=$entity->guid");
-	*/
-}
-// 2. Former page becomes a page_top
-if (!empty($page->parent_guid) && ($page->getSubtype() == 'page_top')) {
-	$parent_guid = null;
-	$page_top_subtype_id = get_subtype_id('object', 'page_top');
-	$page_subtype_id = get_subtype_id('object', 'page');
-	// Inria : change subtype if we remove parent, or add a parent
-	/*
-	update_data("UPDATE {$dbprefix}entities set subtype='$subtype_id' WHERE guid=$entity->guid");
-	*/
-}
+	// @TODO : we need to consider 2 cases :
+	// 1. Former page has no parent anymore (empty or top) and becomes a page_top
+	if (($page->getSubtype() == 'page') && (empty($parent_guid) || ($parent_guid == 'top')) ) {
+		$result = update_data("UPDATE {$dbprefix}entities set subtype='$page_top_subtype_id' WHERE guid=$page->guid");
+		/*
+		*/
+	}
+	// 2. former page_top now has a parent_guid and need to become a page
+	if (($page->getSubtype() == 'page_top') && (!empty($page->parent_guid) && ($parent_guid != 'top'))) {
+		update_data("UPDATE {$dbprefix}entities set subtype='$page_subtype_id' WHERE guid=$page->guid");
+	}
 
 
 	elgg_clear_sticky_form('page');

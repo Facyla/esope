@@ -22,6 +22,7 @@ $english = array(
 	'shortcodes:available:googlemap' => "Google Map",
 	'shortcodes:available:video' => "Video",
 	'shortcodes:available:slider' => "Slider",
+	'shortcodes:available:diaporama' => "Diaporama",
 	'shortcodes:available:slider:rawhtml' => "Slider (raw HTML version)",
 	'shortcodes:available:slider:visual' => "Slider (visual editor version)",
 	

@@ -20,36 +20,36 @@ $static = '<h2 class="invisible">' . $title . '</h2>';
 $firststeps_guid = elgg_get_plugin_setting('firststeps_guid', 'adf_public_platform');
 $firststeps_page = get_entity($firststeps_guid);
 if ($firststeps_page instanceof ElggObject) {
-  $firststeps = '<div class="firststeps">
-      <a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">' . elgg_echo('adf_platform:firststeps:linktitle') . '
-        <span id="firststeps_show" style="float:right;">&#x25BC;</span>
-        <span id="firststeps_hide" style="float:right; display:none;">&#x25B2;</span>
-      </a>'
-    . '<div id="firsteps_toggle" style="padding:10px; border:0 !important;">'
-      . $firststeps_page->description
-    . '</div>' 
-  . '</div>';
-  // Masqué par défaut après les 2 premiers passages
-  // @todo : on pourrait le faire si pas connecté depuis X temps..
-  if (($_SESSION['user']->last_login >= 0) && ($_SESSION['user']->prev_last_login >= 0)) {
-    $first_time = '<script type="text/javascript">
-    $(document).ready(function() {
-      $(\'#firsteps_toggle\').hide();
-    })
-    </script>';
-    $firststeps .= $first_time;
-  }
+	$firststeps = '<div class="firststeps">
+			<a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">' . elgg_echo('adf_platform:firststeps:linktitle') . '
+				<span id="firststeps_show" style="float:right;">&#x25BC;</span>
+				<span id="firststeps_hide" style="float:right; display:none;">&#x25B2;</span>
+			</a>'
+		. '<div id="firsteps_toggle" style="padding:10px; border:0 !important;">'
+			. $firststeps_page->description
+		. '</div>' 
+	. '</div>';
+	// Masqué par défaut après les 2 premiers passages
+	// @todo : on pourrait le faire si pas connecté depuis X temps..
+	if (($_SESSION['user']->last_login >= 0) && ($_SESSION['user']->prev_last_login >= 0)) {
+		$first_time = '<script type="text/javascript">
+		$(document).ready(function() {
+			$(\'#firsteps_toggle\').hide();
+		})
+		</script>';
+		$firststeps .= $first_time;
+	}
 }
 
 // Texte intro configurable
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
-if (empty($intro)) { $intro = elgg_echo('adf_platform:welcome:msg'); }
+if (empty($intro) && elgg_is_admin_logged_in()) { $intro = '<a href="' . $vars['url'] . 'admin/plugin_settings/adf_public_platform">' . elgg_echo('adf_platform:welcome:msg') . '</a>'; }
 
 
 // Composition de la page
 //$body = elgg_view_layout('one_column', array('content' => $static . '<div class="clearfloat"></div>' . $widgets));
-$body = '<header><div class="intro">' . $static  . $firststeps . $intro . '</div></header>';
-
+$body = '<header><div class="intro">' . $static . $firststeps . $intro . '</div></header>';
+  
 
 // BLOCS CONFIGURABLES
 $left_side = ''; $thewire = ''; $right_side = '';
@@ -69,7 +69,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 		//$left_side .= 'Activité récente dans ';
 		$left_side .= 'En direct de ';
 		$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
-		/* Forum..  bof car pas forcément activé..
+		/* Forum..	bof car pas forcément activé..
 		$left_side .= elgg_list_entities(array(
 				'type' => 'object', 'subtype' => 'groupforumtopic',
 				'order_by' => 'e.last_action desc', 'limit' => 6, 'full_view' => false,
@@ -144,16 +144,16 @@ if ($thewire && $left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:68%; float:left;">' . $left_side . '</div>';
 	$static .= '<div style="width:28%; float:right;">' . $right_side . '</div>';
 } else {
-	$static .=  $left_side . $thewire . $right_side;
+	$static .=	$left_side . $thewire . $right_side;
 }
 if (!empty($static)) $body .= '<div class="clearfloat"></div>' . $static;
 
 /* Widgets + wrap intro message in a div
- * @uses $vars['content']          Optional display box at the top of layout
- * @uses $vars['num_columns']      Number of widget columns for this layout (3)
+ * @uses $vars['content']					Optional display box at the top of layout
+ * @uses $vars['num_columns']			Number of widget columns for this layout (3)
  * @uses $vars['show_add_widgets'] Display the add widgets button and panel (true)
- * @uses $vars['exact_match']      Widgets must match the current context (false)
- * @uses $vars['show_access']      Show the access control (true)
+ * @uses $vars['exact_match']			Widgets must match the current context (false)
+ * @uses $vars['show_access']			Show the access control (true)
  */
 $params = array(
 		'content' => '', // Texte en intro des widgets (avant les 3 colonnes)

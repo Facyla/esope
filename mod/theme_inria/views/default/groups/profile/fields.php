@@ -8,7 +8,7 @@ $group = $vars['entity'];
 $profile_fields = elgg_get_config('group');
 
 // Exclude some fields from being viewed
-$exclusion_list = array('customtab1', 'customtab2', 'customtab3', 'customtab4', 'customtab5', 'cmisfolder');
+$exclusion_list = array('customtab1', 'customtab2', 'customtab3', 'customtab4', 'customtab5', 'cmisfolder', 'feed_url');
 
 if (is_array($profile_fields) && count($profile_fields) > 0) {
 

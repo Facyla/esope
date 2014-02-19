@@ -31,14 +31,14 @@ if ($own->hide_firststeps != 'yes') {
 $slider_params = array(
 		//'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
 		//'slidercss_main' => "width:100%; height:400px;", 
-		//'width' => '100%',
-		//'height' => '400px', 
+		'width' => '100%',
+		'height' => '300px', 
 	);
 $slider = elgg_view('slider/slider', $slider_params);
 
 // Texte intro configurable
 //$intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
-$intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype' => 'home-loggedin-news')) . '</div>';
+//$intro = '<div class="home-news">' . elgg_view('cmspages/view', array('pagetype' => 'home-loggedin-news')) . '</div>';
 
 
 // Le Fil
@@ -65,17 +65,20 @@ $widget_body = elgg_view_layout('widgets', $params);
 
 // Composition de la page
 $body = $firststeps . '
-	<div style="width:38%; float:left;">
-		<div class="home-box home-wire">' . $thewire . '</div>
-		<div class="clearfloat"></div>
-		<div class="home-box home-activity">' . $site_activity . '</div>
-	</div>
+	<div style="width:76%; float:left;">
+		<div style="width:100%; " class="iris-news">'
+			//. '<h2 class="hidden">Edito</h2>' . $intro . '<div class="clearfloat"></div>'
+			. $slider
+		. '</div>
+		<div class="clearfloat"></div><br /><br />
+		
+		<div style="width:40%; float:left;">
+			<div class="home-box home-activity">' . $site_activity . '</div>
+		</div>
+		<div style="width:57%; float:right;">
+			<div class="home-box home-wire">' . $thewire . '</div>
+		</div>
 	
-	<div style="width:38%; float:left; margin-left:3%;" class="iris-news">
-		<h2 class="hidden">Edito</h2>
-		' . $intro . '
-		<div class="clearfloat"></div>
-		' . $slider . '
 	</div>
 	
 	<div style="width:18%; float:right;">

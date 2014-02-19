@@ -33,6 +33,7 @@ $english = array(
 	'announcements:none' => "There are currently no announcements.",
 	'announcements:post' => 'Post Announcement', 
 	'announcements:subject' => '%s Announcement: %s',
+	'announcements:new' => 'New Announcement', 
 
 	/**
 	 * Actions

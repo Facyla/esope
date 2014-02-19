@@ -578,6 +578,9 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-form-groups-edit .elgg-vertical label { float: none; clear: none; }
 */
 
+/* Limit editor max-width to container */
+textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100%; }
+
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
 

@@ -53,9 +53,9 @@ if (empty($vars['entity']->replace_public_homepage)) { $vars['entity']->replace_
 if (strlen($vars['entity']->displaystats) == 0) { $vars['entity']->displaystats = 'no'; }
 
 // Header image
-if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
+//if (empty($vars['entity']->headerimg)) { $vars['entity']->headerimg = 'mod/adf_public_platform/img/theme/departement.png'; }
 if (empty($vars['entity']->backgroundcolor)) { $vars['entity']->backgroundcolor = '#efeeea'; }
-if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
+//if (empty($vars['entity']->backgroundimg)) { $vars['entity']->backgroundimg = 'mod/adf_public_platform/img/theme/motif_fond.jpg'; }
 
 // STYLES : see css/elgg view for style load & use
 // Set default colors - theme ADF
@@ -106,7 +106,6 @@ if (!isset($vars['entity']->footer) || ($vars['entity']->footer == 'RAZ')) {
 				<li><a href="#">Charte</a></li>
 				<li><a href="#">Mentions légales</a></li>
 				<li><a href="#">A propos</a></li>
-				<li><a href="#">Accessibilité</a></li>
 				<li><a href="#">Contact</a></li>
 			</ul>
 			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';
@@ -181,8 +180,11 @@ echo '<div id="adf-settings-tabs">
 	* page d'accueil connectée
 	* Interface
 	* Comportements
+	* Groupes
+	* Membres et annuaire
 	* Widgets
 	* Styles
+	* Expert
 	* Import/export
 	
 */
@@ -483,6 +485,9 @@ $(function() {
 		if (elgg_is_active_plugin('twitter')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter )) . '</p>';
 		}
+		if (elgg_is_active_plugin('thewire')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:thewire') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_thewire]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_thewire )) . '</p>';
+		}
 		if (elgg_is_active_plugin('tagcloud')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud )) . '</p>';
 		}
@@ -494,6 +499,9 @@ $(function() {
 		}
 		if (elgg_is_active_plugin('webprofiles')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:webprofiles') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_webprofiles]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_webprofiles )) . '</p>';
+		}
+		if (elgg_is_active_plugin('export_embed')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:export_embed') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_export_embed]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_export_embed )) . '</p>';
 		}
 		?>
 	</div>
@@ -664,7 +672,17 @@ $(function() {
 	</div>
 
 
-	<h3>EXPERT</h3>
+	<h3><?php echo elgg_echo('adf_platform:config:security'); ?></h3>
+	<div>
+		<?php
+		echo elgg_echo('adf_platform:config:security:notice');
+		echo '<br />';
+		echo '<p><label>' . elgg_echo('adf_platform:config:framekiller') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[framekiller]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->framekiller )) . '<br />' . elgg_echo('adf_platform:config:framekiller:details') . '</p>';
+		?>
+	</div>
+	
+	
+	<h3><?php echo elgg_echo('adf_platform:config:expert'); ?></h3>
 	<div>
 		<?php
 		// Advanced search tool (alpha version, structure changes may happen)

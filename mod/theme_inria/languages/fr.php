@@ -14,7 +14,8 @@ $french = array(
 	'theme_inria:site:activity' => "Activités récentes",
 	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
-	'theme_inria:topbar:home' => "Actualités",
+	'theme_inria:topbar:home' => "Accueil",
+	'theme_inria:topbar:news' => "Actualités",
 	'theme_inria:topbar:groups' => "Les&nbsp;groupes",
 	'theme_inria:topbar:members' => "Les&nbsp;membres",
 	'theme_inria:topbar:activity' => "Les&nbsp;activités",
@@ -42,7 +43,7 @@ $french = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
-	'theme_inria:topbar:evo' => "EVO",
+	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
 	'theme_inria:topbar:mailer' => "Zimbra",
@@ -115,6 +116,7 @@ $french = array(
 	'file:edit' => 'Modifier le fichier',
 	'file:delete' => 'Supprimer le fichier',
 	'file:upload' => 'Partager un nouveau fichier',
+	'files:none' => "Aucun fichier",
 	
 	'forum:none' => 'Aucune discussion pour le moment',
 	
@@ -128,7 +130,7 @@ $french = array(
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
-	'theme_inria:thewire:title' => "Inria le Fil",
+	'theme_inria:thewire:title' => "Le Fil d'actualités",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
@@ -145,6 +147,22 @@ $french = array(
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Identifiant Iris",
+	'theme_inria:basiclogin' => "Connexion Externes",
+	'theme_inria:caslogin' => "Connexion Inria (CAS)",
+	
+	// Champs de profil
+	'profile:types:inria' => "Inria",
+	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
+	'profile:types:external' => "Extérieur",
+	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'profile:categories:aboutme' => "A propos de moi",
+	'profile:categories:inria' => "Données Inria",
+	'profile:categories:coordinates' => "Coordonnées détaillées",
+	'theme_inria:group:feed_url' => "Activer le fil RSS du groupe",
+	'profile:feed_url' => "URL du flux RSS à afficher",
+	'groups:feed_url' => "URL du flux RSS à afficher",
+	'simplepie:group:feed_url:title' => "Flux RSS %s",
+	'simplepie:group:feed_url:open' => "Ouvrir le flux dans un nouvel onglet",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
@@ -192,8 +210,8 @@ $french = array(
 	'groups:hint:customtab5' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	
 	// Etherpad embed
-	'theme_inria:embed:etherpad' => "Pad ou Iframe",
-	'theme_inria:etherpad:title' => "Intégrer un Pad (ou une autre page web) dans votre contenu",
+	'theme_inria:embed:etherpad' => "Pad",
+	'theme_inria:etherpad:title' => "Intégrer un Pad dans votre contenu",
 	'theme_inria:etherpad:details' => "Pour intégrer un Pad dans votre page, veuillez coller ci-dessous son adresse (URL) complète, puis cliquez sur le bouton Intégrer le Pad<br />Si vous souhaitez créer un nouveau Pad, veuillez utiliser d'abord le bouton Créer un Pad, puis procéder de la même manière que pour un Pad existant.",
 	'theme_inria:etherpad:warning' => "<blockquote>Attention : les Pads ne sont *pas* hébergés par Iris, ce qui a des implication smportantes :
 		<ul>
@@ -207,9 +225,10 @@ $french = array(
 			<li>Ajoutez des précisions sur qui peut accéder au Pad, afin que les lecteurs sachent comment faire q'ils n'ont pas accès, mais surtout qu'ils sachent qui pourra lire ce qu'ils écrivent dans le Pad.</li>
 		</ul>
 	</blockquote>",
-	'theme_inria:etherpad:iframe' => "Note : vous pouvez également utiliser cet outil pour intégrer toute page sous forme d'iframe. Indiquez simplement l'URL de la page à intégrer. Attention : seules les pages sécurisées via HTTPS pourront être intégrées.",
+	//'theme_inria:etherpad:iframe' => "Note : vous pouvez également utiliser cet outil pour intégrer toute page sous forme d'iframe. Indiquez simplement l'URL de la page à intégrer. Attention : seules les pages sécurisées via HTTPS pourront être intégrées.",
+	'theme_inria:etherpad:iframe' => "",
    	'theme_inria:etherpad:existing' => "Intégrer le Pad",
-	'theme_inria:etherpad:existing:help' => "Le Pad (ou l'iframe) est intégrée dans votre contenu dès que vous avez cliqué. Si la fenêtre de sélection ne se ferme pas, veuillez la fermer en cliquant en haut à droite.",
+	'theme_inria:etherpad:existing:help' => "Le Pad est intégrée dans votre contenu dès que vous avez cliqué. Si la fenêtre de sélection ne se ferme pas, veuillez la fermer en cliquant en haut à droite.",
 	'theme_inria:etherpad:padurl' => "URL du Pad",
 	'theme_inria:etherpad:new' => "Créer un Pad",
 	'theme_inria:etherpad:new:help' => "Ce lien ouvre une nouvelle fenêtre qui vous permet de créer un nouveau Pad. Une fois celui-ci créé, veuillez copier son adresse (URL), puis revenir sur cette page.",
@@ -225,6 +244,43 @@ Afficher l'événement sur le site :
 
 Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
 %s",
+	
+	
+	// Création de comptes
+	'inria_invite' => "Création de compte utilisateur",
+	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
+	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois celui-ci créé, le nouveau membre sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p>",
+	'theme_inria:useradd:reason' => "Motif de création de ce compte",
+	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
+	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:body' => "
+%s,
+
+Un compte utilisateur vous a été créé sur %s par %s. Pour vous connecter, rendez-vous :
+
+%s
+
+Et authentifiez-vous avec les éléments suivant :
+
+Identifiant de connexion : %s
+Mot de passe : %s
+
+Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de changer votre mot de passe.
+",
+	'theme_inria:useradd:admin:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:admin:body' => "
+Un compte utilisateur a été créé pour %s, email %s, par %s.
+
+Motif de l'inscription :
+
+%s
+
+Voici l'adresse du nouveau compte créé : %s
+",
+	
+	
+	// OVERRIDE EXISTING TRANSLATIONS
+	
 	
 );
 
