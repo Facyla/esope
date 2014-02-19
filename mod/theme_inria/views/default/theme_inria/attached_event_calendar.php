@@ -23,11 +23,11 @@ UID:<?php echo elgg_get_site_url().'event_calendar/view/'.$event->guid; ?>
 
 URL:<?php echo elgg_get_site_url().'event_calendar/view/'.$event->guid; ?>
 
-DTSTAMP:<?php echo date("Ymd\THis\Z", $event->getTimeUpdated())?>
+DTSTAMP:<?php echo date("Ymd\THis\Z", $event->time_updated)?>
 
-CREATED:<?php echo date("Ymd\THis\Z", $event->getTimeCreated())?>
+CREATED:<?php echo date("Ymd\THis\Z", $event->time_created)?>
 
-LAST-MODIFIED:<?php echo date("Ymd\THis\Z", $event->getTimeUpdated())  ?>
+LAST-MODIFIED:<?php echo date("Ymd\THis\Z", $event->time_updated)  ?>
 
 DTSTART;VALUE=DATE:<?php echo date("Ymd\THis\Z", $event->start_date);  ?>
 

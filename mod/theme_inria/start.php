@@ -112,17 +112,8 @@ function theme_inria_init(){
 	if (elgg_is_active_plugin('html_email_handler')) {
 		// Modify default events notification message
 		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
-		// Highest level : interception : allow to rewrite email sender
-		//elgg_register_plugin_hook_handler('object:notifications', 'all', 'event_calendar_ics_object_notifications', 1000);
-		
-		// Email sending interception : must intercept in place of html_email_handler (but we use same functions so only unregister)
-		/* @TODO : this is not functional yet !!
-		// Can add attached files but need to filter on events + get the event entity !
-		elgg_unregister_plugin_hook_handler("email", "system", "html_email_handler_email_hook");
-		elgg_register_plugin_hook_handler("email", "system", "esope_html_email_handler_email_hook", 100);
-		unregister_notification_handler("email");
-		register_notification_handler("email", "esope_html_email_handler_notification_handler");
-		*/
+		// Use hook to add attachments
+		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
 	}
 	
 }
@@ -363,15 +354,41 @@ function event_calendar_ics_notify_message($hook, $entity_type, $returnvalue, $p
 	return null;
 }
 
-/* We don't want to rewrite from this level
-function event_calendar_ics_object_notifications($hook, $entity_type, $returnvalue, $params) {
-	// @TODO : changes here
-	// Don't change default behaviour
+
+/**
+* Add attachment to events
+*
+* @param unknown_type $hook
+* @param unknown_type $entity_type
+* @param unknown_type $returnvalue
+* @param unknown_type $params
+*/
+function event_calendar_ics_notify_attachment($hook, $entity_type, $returnvalue, $params) {
+	$entity = $params['entity'];
+	$to_entity = $params['to_entity'];
+	$method = $params['method'];
+	$options = array();
+
+	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
+		// Build attachment
+		$mimetype = 'text/calendar';
+		$filename = 'calendar.ics';
+		// @TODO : we need to get entity to filter and send correct content !!
+		$file_content = elgg_view('theme_inria/attached_event_calendar', array('entity' => $entity));
+		$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
+		$file_content = chunk_split(base64_encode($file_content));
+		$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+		
+		// Build $options array
+		$options['attachments'] = $attachments;
+		
+		return $options;
+	}
 	return $returnvalue;
 }
-*/
 
 
+/*
 function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL){
 	
 	if (!$from) {
@@ -426,6 +443,7 @@ function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUse
 	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => 'v1_'.$filename, 'content' => $file_content);
 
 	// set options for sending
 	$options = array(
@@ -441,10 +459,12 @@ function esope_html_email_handler_notification_handler(ElggEntity $from, ElggUse
 		$options = array_merge($options, $params);
 	}
 	
-	return esope_html_email_handler_send_email($options);
+	return html_email_handler_send_email($options);
 }
+*/
 
 
+/*
 function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 	// generate HTML mail body
 	$html_message = html_email_handler_make_html_body($params["subject"], $params["body"]);
@@ -457,6 +477,7 @@ function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 	$file_content = elgg_view('theme_inria/attached_event_calendar_wrapper', array('body' => $file_content));
 	$file_content = chunk_split(base64_encode($file_content));
 	$attachments[] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+	$attachments[] = array('mimetype' => $mimetype, 'filename' => 'v2_'.$filename, 'content' => $file_content);
 	
 	// set options for sending
 	$options = array(
@@ -467,10 +488,12 @@ function esope_html_email_handler_email_hook($hook, $type, $return, $params){
 		"plaintext_message" => $params["body"],
 		"attachments" => $attachments,
 	);
-	return esope_html_email_handler_send_email($options);
+	return html_email_handler_send_email($options);
 }
+*/
 
 
+/*
 // This is modified version of html_email_handler function that supports attachments
 function esope_html_email_handler_send_email(array $options = null){
 error_log('TEST esope send email');
@@ -609,12 +632,14 @@ error_log('Adding attached file');
 			$before_message = "--mixed--" . $boundary . PHP_EOL;
 			$before_message .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
 			// Build strings that will be added after TEXT/HTML message
+*/
 			/*
 			$after_message = "--mixed--" . $boundary . PHP_EOL;
 			$after_message .= "Content-Type: text/calendar; name=\"calendar.ics\"" . PHP_EOL;
 			$after_message .= "Content-Transfer-Encoding: base64" . PHP_EOL;
 			$after_message .= "Content-Disposition: attachment  " . PHP_EOL;
 			*/
+/*
 			$after_message .= PHP_EOL;
 			$after_message .= $attachments;
 			$after_message .= "--mixed--" . $boundary . PHP_EOL;
@@ -633,6 +658,7 @@ error_log('Adding attached file');
 
 	return $result;
 }
+*/
 
 
 // These functions are used for temporary changing the current user 
