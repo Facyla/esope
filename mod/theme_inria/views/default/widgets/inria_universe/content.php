@@ -129,11 +129,11 @@ $options_values = array(
 		//'all' => elgg_echo('theme_inria:topbar:all'),
 		'forge' => elgg_echo('theme_inria:topbar:forge'),
 		'notepad' => elgg_echo('theme_inria:topbar:notepad'),
-		'framadate' => elgg_echo('theme_inria:topbar:framadate'),
-		'webinar' => elgg_echo('theme_inria:topbar:webinar'),
+		//'framadate' => elgg_echo('theme_inria:topbar:framadate'),
+		//'webinar' => elgg_echo('theme_inria:topbar:webinar'),
 		'ftp' => elgg_echo('theme_inria:topbar:ftp'),
 		'share' => elgg_echo('theme_inria:topbar:share'),
-		'confcall' => elgg_echo('theme_inria:topbar:confcall'),
+		//'confcall' => elgg_echo('theme_inria:topbar:confcall'),
 		'evo' => elgg_echo('theme_inria:topbar:evo'),
 		'mailinglist' => elgg_echo('theme_inria:topbar:mailinglist'),
 		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
@@ -141,7 +141,7 @@ $options_values = array(
 		'mission2' => elgg_echo('theme_inria:topbar:mission2'),
 		'holidays' => elgg_echo('theme_inria:topbar:holidays'),
 		'annuaire' => elgg_echo('theme_inria:topbar:annuaire'),
-		'tickets' => elgg_echo('theme_inria:topbar:tickets'),
+		//'tickets' => elgg_echo('theme_inria:topbar:tickets'),
 	);
 
 foreach ($options_values as $opt => $name) {
@@ -149,11 +149,11 @@ foreach ($options_values as $opt => $name) {
 		switch($opt) {
 			case 'forge': $url = 'https://gforge.inria.fr/'; break;
 			case 'notepad': $url = 'https://notepad.inria.fr/'; break;
-			case 'framadate': $url = 'http://www.framadate.org/'; break;
-			case 'webinar': $url = 'http://qlf-devinar.inria.fr/'; break;
+			//case 'framadate': $url = 'http://www.framadate.org/'; break;
+			//case 'webinar': $url = 'http://qlf-devinar.inria.fr/'; break;
 			case 'ftp': $url = 'https://transfert.inria.fr/'; break;
 			case 'share': $url = 'https://partage.inria.fr'; break;
-			case 'confcall': $url = 'http://intranet.irisa.fr/irisa/services/pavu/documentation/audioconf#resa'; break;
+			//case 'confcall': $url = 'http://intranet.irisa.fr/irisa/services/pavu/documentation/audioconf#resa'; break;
 			case 'evo': $url = 'https://evo.renater.fr/'; break;
 			case 'mailinglist': $url = 'https://sympa.inria.fr/'; break;
 			case 'mailer': $url = 'https://zimbra.inria.fr'; break;
@@ -161,7 +161,7 @@ foreach ($options_values as $opt => $name) {
 			case 'mission2': $url = 'https://portail-izi.inria.fr/oreli'; break;
 			case 'holidays': $url = 'https://casa.inria.fr'; break;
 			case 'annuaire': $url = 'https://annuaire.inria.fr/'; break;
-			case 'tickets': $url = 'https://tickets.inria.fr/'; break;
+			//case 'tickets': $url = 'https://tickets.inria.fr/'; break;
 		}
 		$content .= '<a target="_blank" class="elgg-button elgg-button-action inria-tool-link inria-tool-'.$opt.'" href="' . $url . '" title="' . elgg_echo('theme_inria:widget:openintab', array($name)) . '">' . $name . '</a>';
 	}
