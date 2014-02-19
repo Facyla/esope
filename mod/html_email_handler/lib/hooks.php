@@ -33,7 +33,7 @@
 			"from" => $params["from"],
 			"subject" => $params["subject"],
 			"html_message" => $html_message,
-			"plaintext_message" => $params["body"],
+			"plaintext_message" => $params["body"]
 		);
 		
 		// Add optional attachments
