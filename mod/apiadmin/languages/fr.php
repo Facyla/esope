@@ -42,8 +42,8 @@ $french = array(
 	'apiadmin:public' => "Publique",
 	'apiadmin:private' => "Privée",
 
-	'apiadmin:settings:enable_stats' => "Activer la collecte de statsitiques sur la clef d'API",
-	'apiadmin:settings:keep_tables' => "Ne pas supprimer les tables de statistques de la base de données lors de la désactivation du plugin",
+	'apiadmin:settings:enable_stats' => "Activer la collecte de statistiques sur l'utilisation des clefs d'API",
+	'apiadmin:settings:keep_tables' => "Ne pas supprimer les tables des statistques de la base de données lors de la désactivation du plugin",
 
 	'item:object:api_key' => "Clefs d'API",
 
