@@ -718,6 +718,5 @@ function theme_inria_auth_renewtoken($username = false) {
 	
 	throw new SecurityException(elgg_echo('SecurityException:tokenrenewalfailed'));
 }
-}
 
 
