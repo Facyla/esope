@@ -730,7 +730,7 @@ function theme_inria_auth_renewtoken($username = false) {
 	throw new SecurityException(elgg_echo('SecurityException:tokenrenewalfailed'));
 }
 
-// Token rewewal function for API calls
+// Get a user GUID from username (or email)
 function theme_inria_user_getguid($username = false) {
 	// check if username is an email address
 	if (is_email_address($username)) {
@@ -740,7 +740,7 @@ function theme_inria_user_getguid($username = false) {
 			$username = $users[0]->username;
 		}
 	}
-	if ($user = get_user_by_username($username)) { return $user->guid }
+	if ($user = get_user_by_username($username)) { return $user->guid; }
 	throw new InvalidParameterException($username);
 }
 
