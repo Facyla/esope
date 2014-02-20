@@ -115,17 +115,14 @@ section { padding-top: 25px; }
 section header { background: none; border-top: 0 none; height: auto; }
 section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 
+#transverse nav ul li.group-invites, .interne nav ul li.group-invites, 
+#transverse nav ul li.invites, .interne nav ul li.invites { margin:-6px 0 0 4px; }
 #transverse nav ul li.group-invites, 
-.interne nav ul li.invites { margin:-6px 0 0 4px; }
-#transverse nav ul li.group-invites { margin:-8px 0 0 -22px; border:0; }
-#transverse nav ul li.group-invites a,
-#transverse ul li.group-invites a:hover,
-#transverse ul li.group-invites a:focus,
-#transverse ul li.group-invites a:active,
-.interne nav ul li.invites a,
-.interne nav ul li.invites a:hover,
-.interne nav ul li.invites a:focus,
-.interne nav ul li.invites a:active {
+#transverse nav ul li.invites { margin:-8px 0 0 -22px; border:0; }
+#transverse nav ul li.group-invites a, #transverse ul li.group-invites a:hover, #transverse ul li.group-invites a:focus, #transverse ul li.group-invites a:active,
+.interne nav ul li.group-invites a, .interne nav ul li.group-invites a:hover, .interne nav ul li.group-invites a:focus, .interne nav ul li.group-invites a:active, 
+#transverse nav ul li.invites a, #transverse ul li.invites a:hover, #transverse ul li.invites a:focus, #transverse ul li.invites a:active,
+.interne nav ul li.invites a, .interne nav ul li.invites a:hover, .interne nav ul li.invites a:focus, .interne nav ul li.invites a:active {
 	float: right;
 	background: #CD190A;
 	color: #fff;
