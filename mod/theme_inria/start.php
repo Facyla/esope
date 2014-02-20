@@ -143,6 +143,18 @@ function theme_inria_init(){
 		true,
 		false
 	);
+	// Returns a user username for a given GUID
+	expose_function(
+		"user.getusername",
+		"theme_inria_user_getusername",
+		array(
+			'guid' => array ('type' => 'string'),
+		),
+		elgg_echo('user.getusername'),
+		'POST',
+		true,
+		false
+	);
 	
 	
 }
@@ -742,6 +754,13 @@ function theme_inria_user_getguid($username = false) {
 	}
 	if ($user = get_user_by_username($username)) { return $user->guid; }
 	throw new InvalidParameterException($username);
+}
+
+// Get a user username from GUID
+function theme_inria_user_getusername($guid = false) {
+	// check if guid is a real user and return username if ok
+	if (($user = get_entity($guid)) && elgg_instanceof($user, 'user')) { return $user->username; }
+	throw new InvalidParameterException($guid);
 }
 
 
