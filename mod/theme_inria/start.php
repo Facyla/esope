@@ -131,6 +131,18 @@ function theme_inria_init(){
 		true,
 		true
 	);
+	// Returns a user GUID for a given username
+	expose_function(
+		"user.getguid",
+		"theme_inria_user_getguid",
+		array(
+			'username' => array ('type' => 'string'),
+		),
+		elgg_echo('user.getguid'),
+		'POST',
+		true,
+		false
+	);
 	
 	
 }
@@ -701,7 +713,6 @@ function theme_inria_temp_logout() {
 
 
 // Token rewewal function for API calls
-// 
 function theme_inria_auth_renewtoken($username = false) {
 	// check if username is an email address
 	if (is_email_address($username)) {
@@ -717,6 +728,20 @@ function theme_inria_auth_renewtoken($username = false) {
 	}
 	
 	throw new SecurityException(elgg_echo('SecurityException:tokenrenewalfailed'));
+}
+
+// Token rewewal function for API calls
+function theme_inria_user_getguid($username = false) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	if ($user = get_user_by_username($username)) { return $user->guid }
+	throw new InvalidParameterException($username);
 }
 
 
