@@ -64,7 +64,7 @@ $tabs['pages'] = array(
 if (!empty($group->customtab1)) {
 	$tabinfo = explode('::', $group->customtab1);
 	$tabs['customtab1'] = array(
-		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
 }
@@ -73,7 +73,7 @@ if (!empty($group->customtab1)) {
 if (!empty($group->customtab2)) {
 	$tabinfo = explode('::', $group->customtab2);
 	$tabs['customtab2'] = array(
-		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
 }
@@ -82,7 +82,7 @@ if (!empty($group->customtab2)) {
 if (!empty($group->customtab3)) {
 	$tabinfo = explode('::', $group->customtab3);
 	$tabs['customtab3'] = array(
-		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
 }
@@ -91,7 +91,7 @@ if (!empty($group->customtab3)) {
 if (!empty($group->customtab4)) {
 	$tabinfo = explode('::', $group->customtab4);
 	$tabs['customtab4'] = array(
-		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
 }
@@ -100,7 +100,7 @@ if (!empty($group->customtab4)) {
 if (!empty($group->customtab5)) {
 	$tabinfo = explode('::', $group->customtab4);
 	$tabs['customtab5'] = array(
-		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => $tabinfo[2],
+		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
 }

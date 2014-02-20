@@ -5,6 +5,8 @@
  * @package ElggBookmarks
  */
 
+global $CONFIG;
+
 $owner = elgg_get_page_owner_entity();
 if (!$owner) { forward('', '404'); }
 
@@ -33,9 +35,16 @@ if (elgg_is_active_plugin('file')) {
 		'full_view' => false, 'view_toggle_type' => false,
 		'container_guid' => $owner->guid,
 	));
-	if (!$files) { $files = elgg_echo('files:none'); }
+	if (!$files) { $files = '<p>' . elgg_echo('files:none') . '</p>'; }
 	
-	$files = '<h3><a href="' . $vars['url'] . 'file/group/' . $owner->guid . '/all">' . elgg_echo("file:user", array($owner->name)) . '</a></h3>' . $files;
+	$files = '<h3><a href="' . $CONFIG->url . 'file/group/' . $owner->guid . '/all">' . elgg_echo("file:user", array($owner->name)) . '</a></h3>' . $files;
+	
+	// Add link
+	if ($owner->canWriteToContainer()) $files .= '<p class="elgg-widget-more">' . elgg_view('output/url', array(
+		'href' => "file/add/$owner->guid",
+		'text' => elgg_echo('file:add'),
+		'is_trusted' => true,
+	)) . '</p>';
 	// Sidebar : not sure it adds anything but complexity
 	//$sidebar .= file_get_type_cloud(elgg_get_page_owner_guid());
 	//$sidebar .= elgg_view('file/sidebar');
@@ -48,9 +57,16 @@ if ($owner->bookmarks_enable == 'yes') {
 		'full_view' => false, 'view_toggle_type' => false,
 		'container_guid' => $owner->guid,
 	));
-	if (!$bookmarks) { $bookmarks = elgg_echo('bookmarks:none'); }
+	if (!$bookmarks) { $bookmarks = '<p>' . elgg_echo('bookmarks:none') . '</p>'; }
 	
-	$bookmarks = '<h3><a href="' . $vars['url'] . 'bookmarks/group/' . $owner->guid . '/all">' . elgg_echo('bookmarks:owner', array($owner->name)) . '</a></h3>' . $bookmarks;
+	// Add link
+	$bookmarks = '<h3><a href="' . $CONFIG->url . 'bookmarks/group/' . $owner->guid . '/all">' . elgg_echo('bookmarks:owner', array($owner->name)) . '</a></h3>' . $bookmarks;
+	if ($owner->canWriteToContainer()) $bookmarks .= '<p class="elgg-widget-more">' . elgg_view('output/url', array(
+		'href' => "bookmarks/add/$owner->guid",
+		'text' => elgg_echo('bookmarks:add'),
+		'is_trusted' => true,
+	)) . '</p>';
+
 	// Sidebar : not sure it adds anything but complexity
 	//$sidebar .= elgg_view('bookmarks/sidebar');
 }

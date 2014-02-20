@@ -75,9 +75,9 @@
 		// can we send a message
 		if(!empty($options["to"]) && (!empty($options["html_message"]) || !empty($options["plaintext_message"]))){
 			// start preparing
-		// Facyla : better without spaces and special chars
-		//$boundary = uniqid($site->name);
-		$boundary = uniqid(friendly_title($site->name));
+			// Facyla : better without spaces and special chars
+			//$boundary = uniqid($site->name);
+			$boundary = uniqid(friendly_title($site->name));
 			
 			// start building headers
 			$headers = "";

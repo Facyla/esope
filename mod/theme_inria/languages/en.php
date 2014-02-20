@@ -278,6 +278,10 @@ Registration motive :
 Here is the new profile page : %s
 ",
 	
+	// API
+	'auth.renewtoken' => "User token renewal API",
+	'SecurityException:tokenrenewalfailed' => "Token renewal failed: connection is lost. If you had ongoing changes, you should copy-paste them before logging in again.",
+	
 );
 
 add_translation("en",$english);

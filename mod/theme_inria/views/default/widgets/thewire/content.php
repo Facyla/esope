@@ -8,11 +8,12 @@ $num = $vars['entity']->num_display;
 $options = array(
 	'type' => 'object',
 	'subtype' => 'thewire',
-	//'container_guid' => $vars['entity']->owner_guid,
 	'limit' => $num,
 	'full_view' => FALSE,
 	'pagination' => FALSE,
 );
+// Limit display to own wire posts if we are on user profile page
+if (elgg_in_context('profile')) { $options['container_guid'] = $vars['entity']->owner_guid; }
 $content = elgg_list_entities($options);
 
 echo $content;
