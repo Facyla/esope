@@ -11,9 +11,10 @@
 		'friend_request:newfriend:subject' => "%s wants to be your friend!",
 		'friend_request:newfriend:body' => "%s wants to be your friend! But they are waiting for you to approve the request...so login now so you can approve the request!
 
-You can view your pending friend requests at (Make sure you are logged into the website before clicking on the following link otherwise you will be redirected to the login page.):
-
+You can view your pending friend requests at:
 %s
+
+Make sure you are logged into the website before clicking on the following link otherwise you will be redirected to the login page.
 
 (You cannot reply to this email.)",
 		
@@ -25,6 +26,10 @@ You can view your pending friend requests at (Make sure you are logged into the 
 		
 		// Approve request
 		'friend_request:approve' => "Approve",
+		'friend_request:approve:subject' => "%s has accepted your friend request",
+		'friend_request:approve:message' => "Dear %s,
+	
+	%s has accepted your request to become a friend.",
 		'friend_request:approve:successful' => "%s is now a friend",
 		'friend_request:approve:fail' => "Error while creating friend relation with %s",
 	
@@ -34,12 +39,12 @@ You can view your pending friend requests at (Make sure you are logged into the 
 		'friend_request:decline:message' => "Dear %s,
 
 %s has declined your request to become a friend.",
-		'friend_request:decline:success' => "Friend request succesfully declined",
+		'friend_request:decline:success' => "Friend request successfully declined",
 		'friend_request:decline:fail' => "Error while declining Friend request, please try again",
 		
 		// Revoke request
 		'friend_request:revoke' => "Revoke",
-		'friend_request:revoke:success' => "Friend request succesfully revoked",
+		'friend_request:revoke:success' => "Friend request successfully revoked",
 		'friend_request:revoke:fail' => "Error while revoking Friend request, please try again",
 	
 		// Views
@@ -53,4 +58,3 @@ You can view your pending friend requests at (Make sure you are logged into the 
 	);
 					
 	add_translation("en", $english);
-?>

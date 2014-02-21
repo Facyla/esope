@@ -1,36 +1,38 @@
 <?php
 $language = array (
-	'friend_request:menu' => 'Demandes de contacts',
-	'friend_request:title' => 'Demande de contact de %s',
-	'friend_request:newfriend:body' => '%s aimerait être votre contact, mais attend que vous approuviez sa demande... Merci de vous connecter et confirmer ou non cette demande.
+	'friend_request' => "Demandes de contact",
+	'friend_request:menu' => "Demandes de contact",
+	'friend_request:title' => "Demandes de contact pour %s",
+	'friend_request:new' => "Nouvelle demande de contact",
+	'friend_request:friend:add:pending' => "Demande de contact en attente",
+	'friend_request:newfriend:subject' => "%s aimerait devenir votre contact !",
+	'friend_request:newfriend:body' => "%s aimerait devenir votre contact ! Mais pour cela vous devez approuver sa demande... Pour accepter ou refuser cette demande de contact, veuillez vous connecter sur le site !
 
-Vous pouvez voir les demandes de contact en attente en suivant ce lien (vous devez vous connecter sur le réseau avant de cliquer sur le lien, sinon vous serez redirigé sur la page de connexion) :
+Vous pouvez voir les demandes de contact en attente sur :
 %s
 
-Vous ne pouvez pas répondre à ce mail.',
-	'friend_request:add:failure' => 'Désolé, à cause d\'une erreur système, nous somme dans l\'impossibilité de compléter votre demande. Veuillez réessayer.',
-	'friend_request:decline:message' => 'Cher %s,
+Assurez-vous d'être connecté sur le site web avant de cliquer sur le lien suivant, sinon vous serez redirigé sur la page de connexion.
 
-%s a refusé votre demande de contact',
-	'friend_request:decline:success' => 'Demande de contact refusée',
-	'friend_request' => 'Demande de contact',
-	'friend_request:new' => 'Nouvelle demande de contact',
-	'friend_request:friend:add:pending' => 'Demande de contact en attente',
-	'friend_request:newfriend:subject' => '%s aimerait être votre contact !',
-	'friend_request:add:successful' => 'Vous avez demandé à entrer en contact(s) avec %s. Votre demande doit être acceptée.',
-	'friend_request:add:exists' => 'Vous avez déjà demandé à être en contact avec %s',
-	'friend_request:approve' => 'Accepter',
-	'friend_request:approve:successful' => '%s est maintenant votre contact',
-	'friend_request:approve:fail' => 'Erreur pendant la création de la mise en relation avec %s',
-	'friend_request:decline' => 'Refuser',
-	'friend_request:decline:subject' => '%s a refusé la demande de contact',
-	'friend_request:decline:fail' => 'Erreur durant le refus de la demande de contact, merci d\'essayer à nouveau',
-	'friend_request:revoke' => 'Révoquer la demande de contact',
-	'friend_request:revoke:success' => 'La demande de contact a bien été révoquée',
-	'friend_request:revoke:fail' => 'Erreur de la révocation de la demande de contact, merci d\'essayer à nouveau',
-	'friend_request:received:title' => 'Demande de contact reçue',
-	'friend_request:received:none' => 'Aucune demande de contact en attente',
-	'friend_request:sent:title' => 'Envoi de demande de contact',
-	'friend_request:sent:none' => 'Aucun envoi de demande de contact en attente',
+(Vous ne pouvez pas répondre à cet e-mail.)",
+	'friend_request:add:failure' => "Désolé, mais à cause d'une erreur système votre demande n'a pas pu être traitée. Veuillez essayer de nouveau.",
+	'friend_request:add:successful' => "Vous avez demandé à être en contact avec %s. Votre demande doit être acceptée avant que cette personne apparaisse dans votre liste de contacts.",
+	'friend_request:add:exists' => "Vous avez déjà demandé à être contact de %s.",
+	'friend_request:approve' => "Accepter",
+	'friend_request:approve:successful' => "%s est maintenant votre contact",
+	'friend_request:approve:fail' => "Erreur durant la création de la relation de contact avec %s",
+	'friend_request:decline' => "Décliner",
+	'friend_request:decline:subject' => "%s a refusé votre demande de contact",
+	'friend_request:decline:message' => "Cher %s,
+
+%s a décliné votre invitation pour devenir son contact.",
+	'friend_request:decline:success' => "Demande de contact refusée",
+	'friend_request:decline:fail' => "Erreur lors du refus de la demande de contact, merci de réessayer.",
+	'friend_request:revoke' => "Révoquer",
+	'friend_request:revoke:success' => "Demande de contact révoquée avec succès",
+	'friend_request:revoke:fail' => "Erreur lors de la révocation de la demande de contact, merci de réessayer",
+	'friend_request:received:title' => "Demandes de contact reçues",
+	'friend_request:received:none' => "Pas de demande en attente de votre approbation",
+	'friend_request:sent:title' => "Demandes de contact envoyées",
+	'friend_request:sent:none' => "Pas de demande envoyée en attente d'approbation",
 );
 add_translation("fr", $language);
