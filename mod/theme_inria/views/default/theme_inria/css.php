@@ -293,6 +293,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
 
+a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; }
+.avatar_edit_hover:hover, .avatar_edit_hover:active, .avatar_edit_hover:focus { opacity:1; background:rgba(0,0,0,0.3); }
+
 
 /* Inria Tools Widget */
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }

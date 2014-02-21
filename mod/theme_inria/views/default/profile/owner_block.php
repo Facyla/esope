@@ -17,10 +17,10 @@ $icon = elgg_view_entity_icon($user, 'large', array(
 ));
 // @TODO : Remove empty link before adding new link !
 /*
-if ($user->guid == elgg_get_logged_in_user_guid()) {
-	$icon= '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . $icon . '</a>';
-}
 */
+if ($user->guid == elgg_get_logged_in_user_guid()) {
+	$icon= '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
+}
 
 // grab the actions and admin menu items from user hover
 $menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());

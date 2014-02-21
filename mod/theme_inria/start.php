@@ -131,6 +131,30 @@ function theme_inria_init(){
 		true,
 		true
 	);
+	// Returns a user GUID for a given username
+	expose_function(
+		"user.getguid",
+		"theme_inria_user_getguid",
+		array(
+			'username' => array ('type' => 'string'),
+		),
+		elgg_echo('user.getguid'),
+		'POST',
+		true,
+		false
+	);
+	// Returns a user username for a given GUID
+	expose_function(
+		"user.getusername",
+		"theme_inria_user_getusername",
+		array(
+			'guid' => array ('type' => 'string'),
+		),
+		elgg_echo('user.getusername'),
+		'POST',
+		true,
+		false
+	);
 	
 	
 }
@@ -701,7 +725,6 @@ function theme_inria_temp_logout() {
 
 
 // Token rewewal function for API calls
-// 
 function theme_inria_auth_renewtoken($username = false) {
 	// check if username is an email address
 	if (is_email_address($username)) {
@@ -717,6 +740,27 @@ function theme_inria_auth_renewtoken($username = false) {
 	}
 	
 	throw new SecurityException(elgg_echo('SecurityException:tokenrenewalfailed'));
+}
+
+// Get a user GUID from username (or email)
+function theme_inria_user_getguid($username = false) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	if ($user = get_user_by_username($username)) { return $user->guid; }
+	throw new InvalidParameterException($username);
+}
+
+// Get a user username from GUID
+function theme_inria_user_getusername($guid = false) {
+	// check if guid is a real user and return username if ok
+	if (($user = get_entity($guid)) && elgg_instanceof($user, 'user')) { return $user->username; }
+	throw new InvalidParameterException($guid);
 }
 
 
