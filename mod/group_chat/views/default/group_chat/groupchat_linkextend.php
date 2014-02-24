@@ -30,9 +30,10 @@ if ($chat_content) {
 	$text .= ' ' . $chat_icon;
 }
 
+$popup_id = 'groupchat_group_' . elgg_get_page_owner_guid();
 
 // Build link
-$open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="window.open(this.href, \'' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '\', \'menubar=no, status=no, scrollbars=no, menubar=no, width=400, height=500\'); return false;" class="' . $class . '">' . $text . '</a>';
+$open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="if(!' . $popup_id . ' || ' . $popup_id . '.closed){ ' . $popup_id . ' = window.open(this.href, \'' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '\', \'menubar=no, status=no, scrollbars=no, menubar=no, width=400, height=500\'); return false; } else { ' . $popup_id . '.focus(); return false; }" class="' . $class . '">' . $text . '</a>';
 
 echo $open_group_chat_newlink;
 

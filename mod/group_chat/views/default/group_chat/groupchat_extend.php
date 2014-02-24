@@ -26,5 +26,12 @@ if ($chat_content) {
 // Build link
 $open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="window.open(this.href, \'' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '\', \'menubar=no, status=no, scrollbars=no, menubar=no, width=400, height=500\'); return false;" id="groupchat-grouplink" class="' . $class . '">' . $chat_icon . $active . elgg_echo('groupchat:group:openlink:ownwindow') . '</a>';
 
+/* @TODO : open chat window once - better with a function
+$popup_id = 'groupchat_group_' . elgg_get_page_owner_guid();
+
+// Build link
+$open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="if(' . $popup_id . '.closed()){ ' . $popup_id . ' = window.open(this.href, \'' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '\', \'menubar=no, status=no, scrollbars=no, menubar=no, width=400, height=500\'); } else { ' . $popup_id . '.focus(); } return false;" id="groupchat-grouplink" class="' . $class . '">' . $chat_icon . $active . elgg_echo('groupchat:group:openlink:ownwindow') . '</a>';
+*/
+
 echo $open_group_chat_newlink;
 

@@ -31,16 +31,6 @@ if (elgg_is_logged_in()) {
 				// Note : can't use logout because it triggers the CAS logout event, which is not the attended result
 				// We do not actually need to logout the user, but only lets logged in user have a view of his public profile
 				theme_inria_temp_logout();
-				/*
-				$_SESSION['user']->code = "";
-				//$_SESSION['user']->save();
-				unset($_SESSION['username']);
-				unset($_SESSION['name']);
-				unset($_SESSION['code']);
-				unset($_SESSION['guid']);
-				unset($_SESSION['id']);
-				unset($_SESSION['user']);
-				*/
 				$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:public') . '</strong><br />';
 				
 			} else if ($view_as == 'member') {
@@ -65,11 +55,13 @@ if (elgg_is_logged_in()) {
 			} else { $view_as = false; }
 		}
 		
+		// View as switch links
 		$viewas_notes .= elgg_echo('esope:viewprofileas:title') . '&nbsp;: ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '">' . elgg_echo('esope:viewprofileas:yourself') . '</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
+		if (!empty($view_as)) $viewas_notes .= '<a href="' . $own_user->getURL() . '">' . elgg_echo('esope:viewprofileas:yourself') . '</a> &nbsp; ';
+		if ($view_as != 'member') $viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
 		//$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=friend">' . elgg_echo('esope:viewprofileas:acontact') . '</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
+		if ($view_as != 'public-profile') $viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
+		
 		echo '<div class="view-profile-as">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
