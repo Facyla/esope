@@ -70,7 +70,7 @@ if (elgg_is_logged_in()) {
 		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
 		//$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=friend">' . elgg_echo('esope:viewprofileas:acontact') . '</a> &nbsp; ';
 		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
-		echo '<div class="view-profile-as" style="border:1px dotted grey; padding:2px 6px;">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
+		echo '<div class="view-profile-as">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
 

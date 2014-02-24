@@ -22,7 +22,10 @@ function theme_inria_init(){
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
+	// Rewritten in a more specific way for Iris theme
 	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
+	
+	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
 	
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);

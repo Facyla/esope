@@ -163,6 +163,8 @@ $english = array(
 	'groups:feed_url' => "RSS feed URL",
 	'simplepie:group:feed_url:title' => "RSS feed %s",
 	'simplepie:group:feed_url:open' => "Open feed in new tab",
+	'theme_inria:profile:linkedinimport' => "You can import some of your profile fields directly from",
+	'theme_inria:profile:linkedinimport:warning' => "Warning, if you've just modified some of your profile fields, please save them before importing fields from your LinkedIn profile",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',

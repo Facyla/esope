@@ -163,6 +163,8 @@ $french = array(
 	'groups:feed_url' => "URL du flux RSS à afficher",
 	'simplepie:group:feed_url:title' => "Flux RSS %s",
 	'simplepie:group:feed_url:open' => "Ouvrir le flux dans un nouvel onglet",
+	'theme_inria:profile:linkedinimport' => "Vous pouvez importer certains champs de votre profil directement depuis",
+	'theme_inria:profile:linkedinimport:warning' => "Attention, si vous avez modifié les données de votre profil, veuillez les enregistrer avant d'importer des données depuis LinkedIn",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
