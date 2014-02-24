@@ -31,7 +31,7 @@ $french = array(
 	'announcements:error' => "Erreur lors de la publication de l'annonce.",
 	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'pg/profile/%s">Profil</a>)',
 	'announcements:none' => "Aucune annonce pour le moment.",
-git commit 	'announcements:post' => "Publier l'annonce", 
+	'announcements:post' => "Publier l'annonce", 
 	'announcements:subject' => '%s Annonce : %s',
 	'announcements:edit' => "Modifier une annonce",
 	'announcements:new' => 'Nouvelle annonce', 

@@ -196,6 +196,8 @@ $english = array(
 	'theme_inria:openinnewtab' => "Open link in new tab",
 	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
 	'theme_inria:ldapdetails' => "Inria details",
+	'theme_inria:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
+	'theme_inria:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",

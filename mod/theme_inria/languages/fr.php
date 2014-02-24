@@ -196,6 +196,8 @@ $french = array(
 	'theme_inria:openinnewtab' => "Ouvrir dans une nouvelle fenêtre",
 	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
 	'theme_inria:ldapdetails' => "Annuaire Inria",
+	'theme_inria:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
+	'theme_inria:subgroups:search:details' => "Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes dont vous avez le droit d'éditer apparâitront.",
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
