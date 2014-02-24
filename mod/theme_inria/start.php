@@ -87,6 +87,9 @@ function theme_inria_init(){
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
 	
+	// Remplacement du modèle d'event_calendar
+	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
+	
 	// Update meta fields (inria/external, active/closed)
 	if (elgg_is_active_plugin('ldap_auth')) {
 		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
@@ -214,6 +217,7 @@ function inria_ressources_page_handler($page) {
 function theme_inria_setup_menu() {
 	// Get the page owner entity
 	$page_owner = elgg_get_page_owner_entity();
+	
 	if (elgg_in_context('groups')) {
 		if ($page_owner instanceof ElggGroup) {
 			if (elgg_is_logged_in() && $page_owner->canEdit()) {
@@ -221,6 +225,22 @@ function theme_inria_setup_menu() {
 				elgg_unregister_menu_item('page', 'edit');
 			}
 		}
+	}
+	
+	// Add missing collections and invites menus in members page
+	if (elgg_in_context('members')) {
+		
+		collections_submenu_items();
+		
+		$menu_item = array(
+			"name" => "friend_request",
+			"text" => elgg_echo("friend_request:menu"),
+			"href" => "friend_request/" . elgg_get_logged_in_user_entity()->username,
+			"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+			"section" => "friend_request"
+		);
+		elgg_register_menu_item("page", $menu_item);
+		
 	}
 }
 

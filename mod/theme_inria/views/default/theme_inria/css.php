@@ -155,7 +155,14 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 
 
 /* Sidebar */
-.elgg-sidebar { border-left: 1px dotted #CCC; }
+.elgg-sidebar { border-left: 1px dotted #CCC; margin-top:1%; }
+.elgg-sidebar .elgg-module-aside h3 { font-size:14px; }
+
+/* Titre objets dans les widgets notamment */
+.elgg-module .entity_title { font-size: 14px; }
+
+/* Titre listing des groupes */
+.elgg-context-groups .elgg-list-entity h3 { font-size: 18px; }
 
 
 /* Forms */

@@ -125,7 +125,7 @@ $french = array(
 
 	'adf_platform:directory' => 'Membres',
 	
-	'inria:mygroups' => "Mes groupes",
+	'inria:mygroups' => "Tous mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
@@ -253,8 +253,9 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 	// Création de comptes
 	'inria_invite' => "Création de compte utilisateur",
 	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
-	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois celui-ci créé, le nouveau membre sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p>",
+	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
+	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
 	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
 	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:body' => "

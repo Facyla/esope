@@ -156,11 +156,11 @@ if (elgg_is_logged_in()) {
 								
 								<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
-										<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('inria:mygroups'); ?></a></li>
+										<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 										<?php echo $groupinvites; ?>
-										<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_inria:topbar:new_group'); ?></a></li>
+										<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
 										<?php //echo $groups; ?>
 									</ul>
 								</li>
@@ -197,7 +197,9 @@ if (elgg_is_logged_in()) {
 										<ul class="hidden">
 											<?php $start_date = date('Y-m-01'); ?>
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/mine'; ?>"><?php echo elgg_echo('event_calendar:show_mine'); ?></a></li>
+											<!--
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/friends'; ?>"><?php echo elgg_echo('event_calendar:show_friends'); ?></a></li>
+											//-->
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/all'; ?>"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>
 										</ul>
 									</li>
