@@ -79,6 +79,7 @@ $en = array(
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (depending on plugins)",
 	'groups:alpha' => "Alphabetic",
 	'groups:friends' => "Friends",
+	'groups:onlinenow' => "Online group members",
 	'adf_platform:config:memberssearch' => "MEMBERS SEARCH PAGE",
 	'adf_platform:settings:members:alpha' => "Use alphabetic tab",
 	'adf_platform:settings:members:newest' => "Use newest members tab",

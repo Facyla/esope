@@ -79,6 +79,7 @@ $fr = array(
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (selon les plugins)",
 	'groups:alpha' => "Alphabétique",
 	'groups:friends' => "Contacts",
+	'groups:onlinenow' => "Membres du groupe en ligne",
 	'adf_platform:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
 	'adf_platform:settings:members:alpha' => "Onglet tri alphabétique",
 	'adf_platform:settings:members:newest' => "Onglet liste par date",

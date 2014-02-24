@@ -28,10 +28,12 @@ $french = array(
 	// Site chat
 	'groupchat:site:openlink' => "Afficher le chat",
 	'groupchat:site:openlink:ownwindow' => "Afficher le chat (nouvelle fenêtre)",
+	'groupchat:site:openlink:ownwindow:theme' => "Ouvrir le chat du site",
 	
 	// Group chat
 	'groupchat:group:openlink' => "Afficher le chatde groupe",
 	'groupchat:group:openlink:ownwindow' => "Afficher le chat du groupe (nouvelle fenêtre)",
+	'groupchat:group:openlink:ownwindow:theme' => "Ouvrir le chat du groupe",
 	
 );
 
