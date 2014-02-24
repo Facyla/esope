@@ -53,8 +53,8 @@ function adf_platform_groups_handle_all_page() {
 			$options = array(
 					'type' => 'group', 'metadata_name' => 'featured_group', 'metadata_value' => 'yes',
 					'full_view' => false, 'limit' => $limit,
-				));
-			$content = elgg_list_entities_from_relationship_count($options);
+				);
+			$content = elgg_list_entities_from_metadata($options);
 			if (!$content) { $content = elgg_echo('groups:none'); }
 			break;
 			

@@ -72,6 +72,7 @@ $fr = array(
 	'adf_platform:settings:groups:alpha' => "Onglet tri alphabétique",
 	'adf_platform:settings:groups:newest' => "Onglet liste par date",
 	'adf_platform:settings:groups:popular' => "Onglet liste par membres",
+	'adf_platform:settings:groups:featured' => "Onglet liste à la Une",
 	'adf_platform:settings:groups:discussion' => "Onglet des discussions de forum",
 	'adf_platform:settings:groups:discussion:always' => "Toujours affiché (après la liste des groupes)",
 	'adf_platform:settings:groups:tools_default' => "Activer tous les outils des groupes lors de la création",

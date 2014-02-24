@@ -72,6 +72,7 @@ $en = array(
 	'adf_platform:settings:groups:alpha' => "Use alphabetic tab",
 	'adf_platform:settings:groups:newest' => "Use newest members tab",
 	'adf_platform:settings:groups:popular' => "Use popular groups tab",
+	'adf_platform:settings:groups:featured' => "Use featured groups tab",
 	'adf_platform:settings:groups:discussion' => "Use discussion tab",
 	'adf_platform:settings:groups:discussion:always' => "Add discussions after the group listing",
 	'adf_platform:settings:groups:tools_default' => "Enable all group tools when creating a new group",

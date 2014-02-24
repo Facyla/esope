@@ -11,6 +11,7 @@ $groups_discussion = elgg_get_plugin_setting('groups_discussion', 'adf_public_pl
 $groups_alpha = elgg_get_plugin_setting('groups_alpha', 'adf_public_platform');
 $groups_friends = elgg_get_plugin_setting('groups_friendstab', 'adf_public_platform');
 $groups_search = elgg_get_plugin_setting('groups_searchtab', 'adf_public_platform');
+$groups_featured = elgg_get_plugin_setting('groups_featured', 'adf_public_platform');
 
 // Newest, popular and discussion are default, so don't change if not asked to (should default to yes)
 if (empty($groups_newest) || ($groups_newest == 'yes')) 
@@ -18,6 +19,9 @@ if (empty($groups_newest) || ($groups_newest == 'yes'))
 
 if (empty($groups_popular) || ($groups_popular == 'yes')) 
 	$tabs['popular'] = array('text' => elgg_echo('groups:popular'), 'href' => 'groups/all?filter=popular', 'priority' => 300);
+
+if ($groups_featured == 'yes') 
+	$tabs['featuredgroups'] = array('text' => elgg_echo('groups:featured'), 'href' => 'groups/all?filter=featured', 'priority' => 310);
 
 if (empty($groups_discussion) || ($groups_discussion == 'yes')) 
 	$tabs['discussion'] = array('text' => elgg_echo('groups:latestdiscussion'), 'href' => 'groups/all?filter=discussion', 'priority' => 400);
