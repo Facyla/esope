@@ -32,8 +32,21 @@ if ($chat_content) {
 
 $popup_id = 'groupchat_group_' . elgg_get_page_owner_guid();
 
+echo '<script type="text/javascript">
+var '.$popup_id.';
+// Open a window only once
+function window_'.$popup_id.'(url) {
+	if('.$popup_id.' && !'.$popup_id.'.closed){
+		'.$popup_id.'.focus();
+	} else {
+		'.$popup_id.' =  window.open(url, "' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
+		'.$popup_id.'.focus();
+	}
+}
+</script>';
+
 // Build link
-$open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="var ' . $popup_id . '; if(!' . $popup_id . ' || ' . $popup_id . '.closed){ ' . $popup_id . ' = window.open(this.href, \'' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '\', \'menubar=no, status=no, scrollbars=no, menubar=no, width=400, height=500\'); return false; } else { ' . $popup_id . '.focus(); return false; }" class="' . $class . '">' . $text . '</a>';
+$open_group_chat_newlink = '<a href="' . $open_group_chat_url . '" onclick="window_'.$popup_id.'(this.href); return false;" class="' . $class . '">' . $text . '</a>';
 
 echo $open_group_chat_newlink;
 

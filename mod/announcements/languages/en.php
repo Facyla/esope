@@ -34,6 +34,7 @@ $english = array(
 	'announcements:post' => 'Post Announcement', 
 	'announcements:subject' => '%s Announcement: %s',
 	'announcements:new' => 'New Announcement', 
+	'announcement:new' => 'New Announcement', 
 
 	/**
 	 * Actions

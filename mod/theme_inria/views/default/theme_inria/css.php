@@ -250,6 +250,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-form-au-subgroups-transfer .au-subgroups-result-col { width: 100%; float: none; }
 .elgg-form-au-subgroups-transfer .elgg-image-block .elgg-image { float: right; }
 .elgg-form-groups-search .blockform { border: 1px solid #ccc; }
+.au-subgroups-non-parentable { display: none; }
 
 
 /* Group tabs */
