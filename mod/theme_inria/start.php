@@ -708,7 +708,6 @@ error_log('Adding attached file');
 // These functions are used for temporary changing the current user 
 // This lets view one's page as someone else
 function theme_inria_temp_login($user) {
-	theme_inria_temp_logout();
 	$_SESSION['user'] = $user;
 	$_SESSION['guid'] = $user->guid;
 	$_SESSION['id'] = $user->guid;
@@ -728,7 +727,6 @@ function theme_inria_temp_logout() {
 	unset($_SESSION['username']);
 	unset($_SESSION['name']);
 	unset($_SESSION['code']);
-	//setcookie("elggperm", "", (time() - (86400 * 30)), "/");
 	session_destroy();
 	_elgg_session_boot(NULL, NULL, NULL);
 	return true;

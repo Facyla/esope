@@ -35,6 +35,7 @@ if (elgg_is_logged_in()) {
 				
 			} else if ($view_as == 'member') {
 				// Site member view
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
 				} else { $view_as = false; }
@@ -42,6 +43,7 @@ if (elgg_is_logged_in()) {
 			/*
 			// @TODO : add if used - not yet
 			} else if ($view_as == 'contact') {
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
 				}
@@ -49,6 +51,7 @@ if (elgg_is_logged_in()) {
 				
 			} else if ($view_as = get_user_by_username($view_as)) {
 				// Specific user view
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($other_user)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:user') . '</strong><br />';
 				} else { $view_as = false; }

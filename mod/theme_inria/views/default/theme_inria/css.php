@@ -298,7 +298,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
-.linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+.linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
 
 
 /* Inria Tools Widget */
