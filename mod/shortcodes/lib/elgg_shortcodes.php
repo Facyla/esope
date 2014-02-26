@@ -212,15 +212,16 @@ function diaporama_function($atts, $content='') {
 		// Complete content - except the first-level <ul> tag (we could use an array instead..)
 		'slidercontent' => $slider_content,
 		// JS additional parameters
-		'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ",
+		//'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ",
+		'sliderparams' => "theme : 'cs-portfolio', autoPlay : true, mode : 'f', resizeContents : true, expand : true, buildNavigation : true, buildStartStop : false, toggleControls : true, toggleArrows : true, delay : 3000, forwardText: '&rsaquo;', backText: '&lsaquo;', ",
 		// CSS for main ul tag
-		'slidercss_main' => "width:$width; height:$height; ",
-		'height' => $height,
-		'width' => $width,
+		//'slidercss_main' => "width:$width; height:$height; ",
+		//'height' => $height,
+		//'width' => $width,
 		// CSS for li .textslide
 		'slidercss_textslide' => '.diaporama .anythingControls li { list-style-type: none; }',
 	);
-	$content = '<span class="diaporama">' . elgg_view('slider/slider', $slider_params) . '</span>';
+	$content = '<div class="diaporama" style="width:'.$width.'; height:'.$height.';">' . elgg_view('slider/slider', $slider_params) . '</div>';
 	return $content;
 }
 elgg_add_shortcode('diaporama', 'diaporama_function');

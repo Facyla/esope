@@ -49,6 +49,26 @@ function adf_platform_groups_handle_all_page() {
 			if (!$content) { $content = elgg_echo('groups:none'); }
 			break;
 			
+		case 'featured':
+			$options = array(
+					'type' => 'group', 'metadata_name' => 'featured_group', 'metadata_value' => 'yes',
+					'full_view' => false, 'limit' => $limit,
+				);
+			$content = elgg_list_entities_from_metadata($options);
+			if (!$content) { $content = elgg_echo('groups:none'); }
+			break;
+			
+			$options = array(
+				'type' => 'group', 'relationship' => 'member', 'inverse_relationship' => false,
+				'full_view' => false, 'limit' => $limit,
+			);
+			if ($display_subgroups != 'yes') {
+				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU_SUBGROUPS_RELATIONSHIP . "' )");
+			}
+			$content = elgg_list_entities_from_relationship_count($options);
+			if (!$content) { $content = elgg_echo('groups:none'); }
+			break;
+			
 		case 'friends':
 			if (elgg_is_logged_in()) {
 				$user_guid = elgg_get_logged_in_user_guid();

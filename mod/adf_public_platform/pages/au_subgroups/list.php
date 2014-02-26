@@ -2,6 +2,7 @@
 
 $page_owner = elgg_get_page_owner_entity();
 $title = elgg_echo('au_subgroups:subgroups');
+echo elgg_pop_context();
 elgg_set_context('au_subgroups');
 
 // set up breadcrumb navigation
@@ -11,7 +12,6 @@ elgg_push_breadcrumb(elgg_echo('au_subgroups:subgroups'));
 
 //$content = au_subgroups_list_subgroups($page_owner, 10, true);
 // List subgroups : filtering by grouptype added
-elgg_push_context('widgets');
 $content = '';
 $options = array(
 		'types' => array('group'), 'limit' => $limit, 'full_view' => false, 'limit' => false, 
@@ -37,20 +37,22 @@ if ($subgroups) {
 			if ($display_accordion) {
 				$content .= '<h3>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h3>';
 			}
+			elgg_push_context('widgets');
 			$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			elgg_pop_context();
 		}
 	}
 	$content .= '</div>';
-	elgg_pop_context();
 	
 } else {
 	$content = '<p>' . elgg_echo('au_subgroups:nogroups') . '</p>';
 }
+elgg_push_context('au_subgroups');
 
 $body = elgg_view_layout('content', array(
-    'title' => $title,
-    'content' => $content,
-    'filter' => false
-));
+		'title' => $title,
+		'content' => $content,
+		'filter' => false
+	));
 
 echo elgg_view_page($title, $body);

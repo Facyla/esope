@@ -101,7 +101,7 @@ $module_bg_color = '#F8F4F5';
 .anythingSlider li.panel.activePage { display:block; }
 .anythingSlider-cs-portfolio .arrow { top: 40%; position: absolute; z-index:10; }
 .anythingSlider .arrow span { visibility:visible; font-size: 50px; }
-.anythingSlider .arrow span a, .anythingSlider .arrow span a:hover, .anythingSlider .arrow span a:active { text-decoration: none; }
+.anythingSlider .arrow a, .anythingSlider .arrow a:hover, .anythingSlider .arrow a:active { text-decoration: none; }
 .arrow.back { left: 20px; }
 .arrow.forward { right: 20px; }
 .iris-news .anythingControls { position: absolute; bottom: 4px; left: 20%; }
@@ -153,9 +153,21 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .search-filter-menu { padding:6px; margin:4px 0; border:1px dotted #CCC; }
 .search-filter-menu a { padding:2px 4px; margin: 0 10px 6px 0; background: #F8F4F5; display: inline-block; }
 
+/* Members menu */
+.elgg-menu-item-members { background-image: none; }
 
 /* Sidebar */
-.elgg-sidebar { border-left: 1px dotted #CCC; }
+.elgg-sidebar { border-left: 0px dotted #CCC; }
+.elgg-context-groups .elgg-sidebar { border-left: 1px dotted #CCC; padding-top:1%; }
+.elgg-sidebar .elgg-module-aside h3 { font-size:14px; }
+
+/* Titre objets dans les widgets notamment */
+.elgg-module .entity_title { font-size: 14px; }
+
+/* Titre listing des groupes */
+.elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
+.elgg-context-groups .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
+.elgg-context-groups ul.elgg-list li.elgg-item div.elgg-image a img { width: 100%; height: 100%; }
 
 
 /* Forms */
@@ -204,6 +216,9 @@ footer.footer-inria {
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
+/* Réduciton des contenus de la rivière : voir si home seule ou partout */
+.elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
+
 
 /* Widgets */
 .elgg-widget-add-control { clear: both; padding-top: 20px; }
@@ -228,6 +243,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 3em; padding: 0.5em 0.5em 1em 0.5em; background: #efefef; }
 
 /* Messages */
+.elgg-page-messages .elgg-system-messages { top: 110px; left: auto; right: 20px; }
 .elgg-state-success { background-color: #6d2d4f; }
 
 /* Tabs et filtres */
@@ -250,6 +266,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-form-au-subgroups-transfer .au-subgroups-result-col { width: 100%; float: none; }
 .elgg-form-au-subgroups-transfer .elgg-image-block .elgg-image { float: right; }
 .elgg-form-groups-search .blockform { border: 1px solid #ccc; }
+
+.elgg-form-groups-edit { margin-bottom: 20px; }
+.au-subgroups-non-parentable { display: none; }
 
 
 /* Group tabs */
@@ -296,6 +315,10 @@ section .interne div.module div.activites { background-color: <?php echo $module
 a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; }
 .avatar_edit_hover:hover, .avatar_edit_hover:active, .avatar_edit_hover:focus { opacity:1; background:rgba(0,0,0,0.3); }
 
+.view-profile-as { border:1px dotted grey; padding:2px 6px; }
+.edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
+.linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+
 
 /* Inria Tools Widget */
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }
@@ -324,5 +347,9 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .elgg-menu-entity .elgg-menu-item-edit a:hover, .elgg-menu-entity .elgg-menu-item-edit a:focus, .elgg-menu-entity .elgg-menu-item-edit a:active { color: black; text-shadow: none; }
 .elgg-button:hover, .elgg-button:active, .elgg-button:focus { color: #666; text-shadow: none; }
 
+
+/* Group chat */
+.groupchat-grouplink-theme .fa-comments-o { color: #999; }
+.groupchat-grouplink-theme .fa-comments {  }
 
 

@@ -31,20 +31,11 @@ if (elgg_is_logged_in()) {
 				// Note : can't use logout because it triggers the CAS logout event, which is not the attended result
 				// We do not actually need to logout the user, but only lets logged in user have a view of his public profile
 				theme_inria_temp_logout();
-				/*
-				$_SESSION['user']->code = "";
-				//$_SESSION['user']->save();
-				unset($_SESSION['username']);
-				unset($_SESSION['name']);
-				unset($_SESSION['code']);
-				unset($_SESSION['guid']);
-				unset($_SESSION['id']);
-				unset($_SESSION['user']);
-				*/
 				$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:public') . '</strong><br />';
 				
 			} else if ($view_as == 'member') {
 				// Site member view
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
 				} else { $view_as = false; }
@@ -52,6 +43,7 @@ if (elgg_is_logged_in()) {
 			/*
 			// @TODO : add if used - not yet
 			} else if ($view_as == 'contact') {
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($random_member)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
 				}
@@ -59,18 +51,21 @@ if (elgg_is_logged_in()) {
 				
 			} else if ($view_as = get_user_by_username($view_as)) {
 				// Specific user view
+				theme_inria_temp_logout();
 				if (theme_inria_temp_login($other_user)) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:user') . '</strong><br />';
 				} else { $view_as = false; }
 			} else { $view_as = false; }
 		}
 		
+		// View as switch links
 		$viewas_notes .= elgg_echo('esope:viewprofileas:title') . '&nbsp;: ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '">' . elgg_echo('esope:viewprofileas:yourself') . '</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
+		if (!empty($view_as)) $viewas_notes .= '<a href="' . $own_user->getURL() . '">' . elgg_echo('esope:viewprofileas:yourself') . '</a> &nbsp; ';
+		if ($view_as != 'member') $viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=member">' . elgg_echo('esope:viewprofileas:someonelse') . '</a> &nbsp; ';
 		//$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=friend">' . elgg_echo('esope:viewprofileas:acontact') . '</a> &nbsp; ';
-		$viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
-		echo '<div class="view-profile-as" style="border:1px dotted grey; padding:2px 6px;">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
+		if ($view_as != 'public-profile') $viewas_notes .= '<a href="' . $own_user->getURL() . '?view_as=public-profile">' . elgg_echo('esope:viewprofileas:nonuser') . '</a>';
+		
+		echo '<div class="view-profile-as">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
 

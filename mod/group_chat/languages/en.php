@@ -29,10 +29,12 @@ $english = array(
 	// Site chat
 	'groupchat:site:openlink' => "Open chat",
 	'groupchat:site:openlink:ownwindow' => "Open chat (new window)",
+	'groupchat:site:openlink:ownwindow:theme' => "Open site chat",
 	
 	// Group chat
 	'groupchat:group:openlink' => "Open group chat",
 	'groupchat:group:openlink:ownwindow' => "Open group chat (new window)",
+	'groupchat:group:openlink:ownwindow:theme' => "Open group chat",
 	
 );
 

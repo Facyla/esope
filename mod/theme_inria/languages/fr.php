@@ -125,7 +125,7 @@ $french = array(
 
 	'adf_platform:directory' => 'Membres',
 	
-	'inria:mygroups' => "Mes groupes",
+	'inria:mygroups' => "Tous mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
@@ -163,6 +163,8 @@ $french = array(
 	'groups:feed_url' => "URL du flux RSS à afficher",
 	'simplepie:group:feed_url:title' => "Flux RSS %s",
 	'simplepie:group:feed_url:open' => "Ouvrir le flux dans un nouvel onglet",
+	'theme_inria:profile:linkedinimport' => "Vous pouvez importer certains champs de votre profil directement depuis",
+	'theme_inria:profile:linkedinimport:warning' => "Attention, si vous avez modifié les données de votre profil, veuillez les enregistrer avant d'importer des données depuis LinkedIn",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
@@ -194,6 +196,8 @@ $french = array(
 	'theme_inria:openinnewtab' => "Ouvrir dans une nouvelle fenêtre",
 	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
 	'theme_inria:ldapdetails' => "Annuaire Inria",
+	'theme_inria:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
+	'theme_inria:subgroups:search:details' => "Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes dont vous avez le droit d'éditer apparâitront.",
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
@@ -249,8 +253,9 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 	// Création de comptes
 	'inria_invite' => "Création de compte utilisateur",
 	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
-	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois celui-ci créé, le nouveau membre sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p>",
+	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
+	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
 	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
 	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:body' => "

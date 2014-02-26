@@ -1098,5 +1098,13 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 	return $prefix . $esope_unique_id;
 }
 
-
+// Determines wether a given link is internal or external
+// Note : based on domain, won't work for subdir install
+function esope_is_external_link($url) {
+	global $CONFIG;
+	$elements = parse_url($url);
+	$base_elements = parse_url($CONFIG->url);
+	if ($elements['host'] != $base_elements['host']) return true;
+	return false;
+}
 

@@ -394,6 +394,8 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:newest') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_newest )) . '</p>';
 			// Allow to remove popular
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular )) . '</p>';
+			// Allow to add featured
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:featured') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_featured )) . '</p>';
 			// Allow to add a new group tab search
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab )) . '</p>';
 			// Allow to add a new friends groups tab

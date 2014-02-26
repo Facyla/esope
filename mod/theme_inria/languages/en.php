@@ -163,6 +163,8 @@ $english = array(
 	'groups:feed_url' => "RSS feed URL",
 	'simplepie:group:feed_url:title' => "RSS feed %s",
 	'simplepie:group:feed_url:open' => "Open feed in new tab",
+	'theme_inria:profile:linkedinimport' => "You can import some of your profile fields directly from",
+	'theme_inria:profile:linkedinimport:warning' => "Warning, if you've just modified some of your profile fields, please save them before importing fields from your LinkedIn profile",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-download" download icon></i>HTML Export',
@@ -194,6 +196,8 @@ $english = array(
 	'theme_inria:openinnewtab' => "Open link in new tab",
 	'theme_inria:openinnewtab:bookmark' => "Open bookmark to %s in a new tab",
 	'theme_inria:ldapdetails' => "Inria details",
+	'theme_inria:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
+	'theme_inria:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
@@ -249,8 +253,9 @@ You can add directly this event to your own calendar application through attache
 	// Création de comptes
 	'inria_invite' => "Create user account",
 	'theme_inria:useradd' => "New account for a non-Inria person",
-	'theme_inria:useradd:details' => "<p>As %s, you can grant access to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once created, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p>",
+	'theme_inria:useradd:details' => "<p>As %s, you can grant access to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once the account will be created and validated by an administrator, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p><p>Please contact <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a> for any questions.</p>",
 	'theme_inria:useradd:reason' => "Account creation motive",
+	'theme_inria:useradd:group' => "Group to which the user should be registered",
 	'theme_inria:useradd:reason:details' => "These details will be sent to the site administrator along with the new account profile, as a justification for creating the account. Please give any useful information so the account can be validated without doubt.",
 	'theme_inria:useradd:subject' => "User account created",
 	'theme_inria:useradd:body' => "

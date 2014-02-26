@@ -7,6 +7,7 @@ $own = elgg_get_logged_in_user_entity();
 inria_check_and_update_user_status('login', 'user', $own);
 
 // Premiers pas : s'affiche au début, peut être désactivé
+/* Pas utilisé car remplacé par un menu configurable
 $firststeps = '';
 // Masqué ou réaffiché sur demande
 $hide_firststeps = get_input('firststeps', false);
@@ -25,6 +26,7 @@ if ($own->hide_firststeps != 'yes') {
 			<div class="clearfloat"></div>';
 	}
 }
+*/
 
 
 // Slider
@@ -42,17 +44,17 @@ $slider = elgg_view('slider/slider', $slider_params);
 
 
 // Le Fil
-$thewire = '<h2><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:thewire:title') . '</a></h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_inria:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 //elgg_pop_context();
 
 // Activité du site
 $site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_inria:site:activity') . '</a></h2>';
-//elgg_push_context('widgets');
+elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
 $site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false));
-//elgg_pop_context();
+elgg_pop_context();
 
 // Tableau de bord
 // Note : il peut être intéressant de reprendre le layout des widgets si on veut séparer les colonnes et les intégrer dans l'interface
@@ -64,7 +66,8 @@ $widget_body = elgg_view_layout('widgets', $params);
 
 
 // Composition de la page
-$body = $firststeps . '
+//$body = $firststeps . '
+$body = '
 	<div style="width:76%; float:left;">
 		<div style="width:100%; " class="iris-news">'
 			//. '<h2 class="hidden">Edito</h2>' . $intro . '<div class="clearfloat"></div>'

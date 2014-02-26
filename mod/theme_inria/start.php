@@ -22,7 +22,10 @@ function theme_inria_init(){
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
+	// Rewritten in a more specific way for Iris theme
 	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
+	
+	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
 	
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -83,6 +86,9 @@ function theme_inria_init(){
 		elgg_unregister_action('thewire/add');
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
+	
+	// Remplacement du modèle d'event_calendar
+	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
 	
 	// Update meta fields (inria/external, active/closed)
 	if (elgg_is_active_plugin('ldap_auth')) {
@@ -211,6 +217,7 @@ function inria_ressources_page_handler($page) {
 function theme_inria_setup_menu() {
 	// Get the page owner entity
 	$page_owner = elgg_get_page_owner_entity();
+	
 	if (elgg_in_context('groups')) {
 		if ($page_owner instanceof ElggGroup) {
 			if (elgg_is_logged_in() && $page_owner->canEdit()) {
@@ -218,6 +225,22 @@ function theme_inria_setup_menu() {
 				elgg_unregister_menu_item('page', 'edit');
 			}
 		}
+	}
+	
+	// Add missing collections and invites menus in members page
+	if (elgg_in_context('members')) {
+		
+		collections_submenu_items();
+		
+		$menu_item = array(
+			"name" => "friend_request",
+			"text" => elgg_echo("friend_request:menu"),
+			"href" => "friend_request/" . elgg_get_logged_in_user_entity()->username,
+			"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+			"section" => "friend_request"
+		);
+		elgg_register_menu_item("page", $menu_item);
+		
 	}
 }
 
@@ -711,15 +734,21 @@ function theme_inria_temp_login($user) {
 	$_SESSION['username'] = $user->username;
 	$_SESSION['name'] = $user->name;
 	$_SESSION['code'] = $user->code;
+	$_SESSION['user']->save();
+	session_regenerate_id();
 	return true;
 }
 function theme_inria_temp_logout() {
+	$_SESSION['user']->code = "";
+	$_SESSION['user']->save();
 	unset($_SESSION['user']);
 	unset($_SESSION['guid']);
 	unset($_SESSION['id']);
 	unset($_SESSION['username']);
 	unset($_SESSION['name']);
 	unset($_SESSION['code']);
+	session_destroy();
+	_elgg_session_boot(NULL, NULL, NULL);
 	return true;
 }
 

@@ -15,7 +15,6 @@ if ($post) {
 }
 
 echo '<div style="width:80%; float:left;">';
-	echo '<em>' . elgg_echo('theme_inria:thewire:details') . '</em>';
 	echo elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',

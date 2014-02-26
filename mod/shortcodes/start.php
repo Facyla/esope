@@ -51,6 +51,9 @@ function elgg_shortcode_init() {
 }
 
 function elgg_shortcode_filter($hook, $entity_type, $returnvalue, $params){
+	// Skip shortcodes for search, listings and and widgets (no space)
+	// Mainly because rendered code will be stripped before rendering (breaks some shortcodes)
+	if (elgg_in_context('search') || elgg_in_context('widgets') || elgg_in_context('listing') || elgg_in_context('activity')) return $returnvalue;
 	return elgg_do_shortcode($returnvalue);
 }	
 

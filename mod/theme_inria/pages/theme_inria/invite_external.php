@@ -25,8 +25,7 @@ if (elgg_is_admin_logged_in() || ($own->membertype == 'inria') ) {
 }
 
 elgg_set_context('members');
-elgg_push_context('inria_invite');
-elgg_push_breadcrumb('inria_invite');
+elgg_push_breadcrumb(elgg_echo('inria_invite'));
 
 $content = '';
 $sidebar = '';
