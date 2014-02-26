@@ -113,7 +113,8 @@ echo '<label>' . elgg_echo('search:field:modifiedtimeupper') . '&nbsp;: ' . elgg
 */
 echo '<p><strong>' . elgg_echo('search:field:createdtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('input/date', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . ' </label> &nbsp; &nbsp; ';
 echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label>';
-echo ' &nbsp; &nbsp; ';
+//echo ' &nbsp; &nbsp; ';
+echo '</p><p>';
 echo '<strong>' . elgg_echo('search:field:modifiedtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . '</label> &nbsp; &nbsp; ';
 echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label></p>';
 

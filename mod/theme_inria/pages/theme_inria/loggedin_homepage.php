@@ -7,6 +7,7 @@ $own = elgg_get_logged_in_user_entity();
 inria_check_and_update_user_status('login', 'user', $own);
 
 // Premiers pas : s'affiche au début, peut être désactivé
+/* Pas utilisé car remplacé par un menu configurable
 $firststeps = '';
 // Masqué ou réaffiché sur demande
 $hide_firststeps = get_input('firststeps', false);
@@ -25,6 +26,7 @@ if ($own->hide_firststeps != 'yes') {
 			<div class="clearfloat"></div>';
 	}
 }
+*/
 
 
 // Slider
@@ -64,7 +66,8 @@ $widget_body = elgg_view_layout('widgets', $params);
 
 
 // Composition de la page
-$body = $firststeps . '
+//$body = $firststeps . '
+$body = '
 	<div style="width:76%; float:left;">
 		<div style="width:100%; " class="iris-news">'
 			//. '<h2 class="hidden">Edito</h2>' . $intro . '<div class="clearfloat"></div>'

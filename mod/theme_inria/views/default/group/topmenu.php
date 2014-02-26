@@ -67,6 +67,7 @@ if (!empty($group->customtab1)) {
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
+	if (esope_is_external_link($tabinfo[0])) $tabs['customtab1']['target'] = '_blank';
 }
 
 // Custom tab #2
@@ -76,6 +77,7 @@ if (!empty($group->customtab2)) {
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
+	if (esope_is_external_link($tabinfo[0])) $tabs['customtab2']['target'] = '_blank';
 }
 
 // Custom tab #3
@@ -85,6 +87,7 @@ if (!empty($group->customtab3)) {
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
+	if (esope_is_external_link($tabinfo[0])) $tabs['customtab3']['target'] = '_blank';
 }
 
 // Custom tab #4
@@ -94,6 +97,7 @@ if (!empty($group->customtab4)) {
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
+	if (esope_is_external_link($tabinfo[0])) $tabs['customtab4']['target'] = '_blank';
 }
 
 // Custom tab #5
@@ -103,6 +107,7 @@ if (!empty($group->customtab5)) {
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
 		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
 	);
+	if (esope_is_external_link($tabinfo[0])) $tabs['customtab5']['target'] = '_blank';
 }
 
 

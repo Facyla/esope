@@ -153,16 +153,21 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .search-filter-menu { padding:6px; margin:4px 0; border:1px dotted #CCC; }
 .search-filter-menu a { padding:2px 4px; margin: 0 10px 6px 0; background: #F8F4F5; display: inline-block; }
 
+/* Members menu */
+.elgg-menu-item-members { background-image: none; }
 
 /* Sidebar */
-.elgg-sidebar { border-left: 1px dotted #CCC; margin-top:1%; }
+.elgg-sidebar { border-left: 0px dotted #CCC; }
+.elgg-context-groups .elgg-sidebar { border-left: 1px dotted #CCC; padding-top:1%; }
 .elgg-sidebar .elgg-module-aside h3 { font-size:14px; }
 
 /* Titre objets dans les widgets notamment */
 .elgg-module .entity_title { font-size: 14px; }
 
 /* Titre listing des groupes */
-.elgg-context-groups .elgg-list-entity h3 { font-size: 18px; }
+.elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
+.elgg-context-groups .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
+.elgg-context-groups ul.elgg-list li.elgg-item div.elgg-image a img { width: 100%; height: 100%; }
 
 
 /* Forms */
@@ -211,6 +216,9 @@ footer.footer-inria {
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
+/* Réduciton des contenus de la rivière : voir si home seule ou partout */
+.elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
+
 
 /* Widgets */
 .elgg-widget-add-control { clear: both; padding-top: 20px; }
@@ -235,6 +243,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 3em; padding: 0.5em 0.5em 1em 0.5em; background: #efefef; }
 
 /* Messages */
+.elgg-page-messages .elgg-system-messages { top: 110px; left: auto; right: 20px; }
 .elgg-state-success { background-color: #6d2d4f; }
 
 /* Tabs et filtres */
