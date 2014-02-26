@@ -266,7 +266,7 @@ You can add directly this event to your own calendar application through attache
 	'theme_inria:useradd:reason' => "Account creation motive",
 	'theme_inria:useradd:group' => "Group to which the user should be registered",
 	'theme_inria:useradd:reason:details' => "These details will be sent to the site administrator along with the new account profile, as a justification for creating the account. Please give any useful information so the account can be validated without doubt.",
-	'theme_inria:useradd:adminvalidation' => "The new account will not be activated immediately, the email should be confirmed by the invitee, and the new account approved by an administrator.",
+	'theme_inria:useradd:adminvalidation' => "WARNING : the new account will not be activated immediately : the email has to be confirmed by the invitee, and the new account approved by an administrator.",
 	'theme_inria:useradd:disabled:adminvalidation' => "The created account will be disabled until an administrator validates it. Please be patient, you will receive a new mail once it has been validated.",
 	'theme_inria:useradd:subject' => "User account created",
 	'theme_inria:useradd:body' => "
