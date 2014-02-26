@@ -43,8 +43,8 @@ try {
 			access_show_hidden_entities(TRUE);
 			$new_user->disable('uservalidationbyadmin_new_user', FALSE);
 			// set user as unvalidated and send out validation email
-			elgg_set_user_validation_status($user->guid, FALSE);
-			uservalidationbyadmin_request_validation($user->guid);
+			elgg_set_user_validation_status($new_user->guid, FALSE);
+			uservalidationbyadmin_request_validation($new_user->guid);
 			elgg_pop_context();
 			access_show_hidden_entities($hidden_entities);
 			$disable_notice = '<p>' . elgg_echo('theme_inria:useradd:disabled:adminvalidation') . '</p>';
