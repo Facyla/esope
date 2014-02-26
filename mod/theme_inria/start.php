@@ -282,7 +282,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			if (!$is_inria) {
 				// External access has some restrictions : if account was not used for more than 1 year => disable
 				// Skip unused accounts (just created ones...)
-				if ( !empty($user->last_action) && ((time() - $user->last_action) > 31622400))) {
+				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
 					$is_active = false;
 					$memberreason = 'inactive';
 				}
