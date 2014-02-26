@@ -166,8 +166,8 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 
 /* Titre listing des groupes */
 .elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
-.elgg-context-groups .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
-.elgg-context-groups ul.elgg-list li.elgg-item div.elgg-image a img { width: 100%; height: 100%; }
+.elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
+.elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 
 
 /* Forms */
@@ -192,7 +192,7 @@ footer.footer-inria {
 
 /* Buttons */
 .elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
-.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; }
+.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
 .elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
 

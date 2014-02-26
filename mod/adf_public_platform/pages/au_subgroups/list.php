@@ -2,13 +2,12 @@
 
 $page_owner = elgg_get_page_owner_entity();
 $title = elgg_echo('au_subgroups:subgroups');
-echo elgg_pop_context();
 elgg_set_context('au_subgroups');
 
 // set up breadcrumb navigation
 au_subgroups_parent_breadcrumbs($page_owner);
-elgg_push_breadcrumb($page_owner->name, $page_owner->getURL());
-elgg_push_breadcrumb(elgg_echo('au_subgroups:subgroups'));
+// Note : we need to pass through any elgg_view to trigger the breadcrumb generation and "fix" it
+$weired = elgg_view('dummy');
 
 //$content = au_subgroups_list_subgroups($page_owner, 10, true);
 // List subgroups : filtering by grouptype added
@@ -47,7 +46,6 @@ if ($subgroups) {
 } else {
 	$content = '<p>' . elgg_echo('au_subgroups:nogroups') . '</p>';
 }
-elgg_push_context('au_subgroups');
 
 $body = elgg_view_layout('content', array(
 		'title' => $title,

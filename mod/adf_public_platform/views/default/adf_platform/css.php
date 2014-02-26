@@ -284,7 +284,8 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 */
 .elgg-menu-owner-block-categories li a:hover, .elgg-menu-owner-block-categories li a:focus, .elgg-menu-owner-block-categories li a:active, .elgg-menu-owner-block-categories li.elgg-state-selected > a 
 {
-	color:#333333 !important; background:#CCCCCC !important; border-radius:0; 
+	background-color: <?php echo $linkcolor; ?>; color: white;
+	border-radius:0;
 }
 
 /* Menus différenciés : navigation complémentaire */
@@ -302,7 +303,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 	text-decoration: none;
 }
 
-.elgg-sidebar ul.elgg-menu-page > li { border-bottom:1px solid #CCCCCC !important; }
+.elgg-sidebar ul.elgg-menu-page > li { border-bottom:0px solid #CCCCCC !important; }
 /* Evite que le texte alternatif casse la mise en forme si l'image ne s'affiche pas.. */
 .elgg-sidebar .elgg-head .elgg-image { max-width: 60px; overflow: hidden; }
 
