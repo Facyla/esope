@@ -37,7 +37,16 @@ try {
 		
 		// Disable new user if required by plugin setting
 		if (elgg_get_plugin_setting('admin_validation', 'theme_inria') == 'yes') {
+			// Use the same code as in uservalidationbyadmin uservalidationbyadmin_disable_new_user hook
+			elgg_push_context('uservalidationbyadmin_new_user');
+			$hidden_entities = access_get_show_hidden_status();
+			access_show_hidden_entities(TRUE);
 			$new_user->disable('uservalidationbyadmin_new_user', FALSE);
+			// set user as unvalidated and send out validation email
+			elgg_set_user_validation_status($user->guid, FALSE);
+			uservalidationbyadmin_request_validation($user->guid);
+			elgg_pop_context();
+			access_show_hidden_entities($hidden_entities);
 			$disable_notice = '<p>' . elgg_echo('theme_inria:useradd:disabled:adminvalidation') . '</p>';
 		}
 	

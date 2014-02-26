@@ -28,15 +28,15 @@ echo '<p><label>Identifiant 3 </label> ' . elgg_view('input/text', array( 'name'
 
 echo '<h3>Modération des invitations à rejoindre Iris</h3>';
 
-echo "<p>Vous pouvez choisir de ne pas activer les comptes, et requérir une validaiton manuelle par un administrateur.<br />Note : l'activation de cette fonctionnalité nécesssite que le plugin \"User validation by admin\" soit activé (et \"User validation by email désactivé\").</p>";
-
-echo '<p><label>Validation manuelle des comptes par un admin</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[admin_validation]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->admin_validation )) . '</p>';
-
 if (($vars['entity']->admin_validation == 'yes') && !elgg_is_active_plugin('uservalidationbyadmin')) {
 	register_error("Attention : le plugin uservalidationbyadmin n'est pas activé !  Les comptes créés ne pourront pas être activés !");
 } else {
 	echo " &nbsp; <strong>OK - plugin uservalidationbyadmin activé</strong>";
 }
+
+echo "<p>Vous pouvez choisir de ne pas activer les comptes, et requérir une validaiton manuelle par un administrateur.<br />Note : l'activation de cette fonctionnalité nécesssite que le plugin \"User validation by admin\" soit activé (et \"User validation by email désactivé\").</p>";
+
+echo '<p><label>Validation manuelle des comptes par un admin</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[admin_validation]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->admin_validation )) . '</p>';
 
 
 /*
