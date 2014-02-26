@@ -159,12 +159,21 @@ $french = array(
 	'profile:categories:inria' => "Données Inria",
 	'profile:categories:coordinates' => "Coordonnées détaillées",
 	'theme_inria:group:feed_url' => "Activer le fil RSS du groupe",
-	'profile:feed_url' => "URL du flux RSS à afficher",
-	'groups:feed_url' => "URL du flux RSS à afficher",
+	'profile:feed_url' => "Flux RSS à afficher (URL::Titre::Nombre éléments à afficher)",
+	'groups:feed_url' => "Flux RSS à afficher (URL::Titre::Nombre éléments à afficher)",
 	'simplepie:group:feed_url:title' => "Flux RSS %s",
 	'simplepie:group:feed_url:open' => "Ouvrir le flux dans un nouvel onglet",
-	'theme_inria:profile:linkedinimport' => "Vous pouvez importer certains champs de votre profil directement depuis",
+	'theme_inria:profile:linkedinimport' => "Vous pouvez importer votre photo et certains champs directement depuis votre profil",
 	'theme_inria:profile:linkedinimport:warning' => "Attention, si vous avez modifié les données de votre profil, veuillez les enregistrer avant d'importer des données depuis LinkedIn",
+	'theme_inria:linkedin:import:profile_url' => "Importer l'URL du profil public (remplace : Profil LinkedIn)",
+	'theme_inria:linkedin:import:photo' => "Importer la photo (remplace votre photo actuelle)",
+	'theme_inria:linkedin:import:industry' => "Importer le secteur (remplace : Secteur professionnel)",
+	'theme_inria:linkedin:import:headline' => "Importer le titre (ajouté à : Fonction / rôle)",
+	'theme_inria:linkedin:import:status' => "Importer le statut (ajouté à : Fonction / rôle)",
+	'theme_inria:linkedin:import:summary' => "Importer le résumé (ajouté à : A propos de moi)",
+	'theme_inria:linkedin:import:positions' => "Importer les postes actuels (ajoutés à : A propos de moi)",
+	'theme_inria:linkedin:import:educations' => "Importer vos études (ajoutées à : Etudes)",
+	'theme_inria:linkedin:import:skills' => "Importer vos compétences (ajoutées à : Compétences)",
 	
 	// HTML export (wiki pages)
 	'theme_inria:pages:fullexport' => '<i class="fa fa-cloud-download" cloud download icon"></i> Export HTML',
@@ -197,7 +206,7 @@ $french = array(
 	'theme_inria:openinnewtab:bookmark' => "Ouvrir le lien vers %s dans une nouvelle fenêtre",
 	'theme_inria:ldapdetails' => "Annuaire Inria",
 	'theme_inria:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
-	'theme_inria:subgroups:search:details' => "Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes dont vous avez le droit d'éditer apparâitront.",
+	'theme_inria:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
@@ -257,6 +266,7 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
 	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
 	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
+	'theme_inria:useradd:disabled:adminvalidation' => "Le comtpe créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
 	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:body' => "
 %s,

@@ -122,10 +122,10 @@ try{
 			// This is used for auto-generation of the form inputs ('linkedin-metadata-name' => 'form_name')
 			// Note 'form_name' must match in both arrays !
 			//$mapped_linkedin_form_fields = array('public-profile-url' => "profile_url", 'photo' => 'photo', 'skills' => 'skills', 'industry' => 'industry', 'headline' => 'headline', 'status' => 'status', 'summary' => 'summary', 'positions' => 'positions', 'educations' => 'educations');
-			$mapped_linkedin_form_fields = array('public-profile-url' => "profile_url", 'photo' => 'photo', 'skills' => 'skills', 'headline' => 'headline', 'status' => 'status', 'summary' => 'summary', 'educations' => 'educations');
+			$mapped_linkedin_form_fields = array('public-profile-url' => "profile_url", 'photo' => 'photo', 'skills' => 'skills', 'headline' => 'headline', 'summary' => 'summary', 'educations' => 'educations');
 			// This is used to map form values to Elgg metadata (or special cases) : ('form_name' => 'elgg_metadata_name')
 			//$mapped_form_elgg_fields = array('profile_url' => "linkedin", 'photo' => 'avatar', 'skills' => 'skills', 'industry' => 'industry', 'headline' => 'briefdescription', 'status' => 'briefdescription', 'summary' => 'description', 'positions' => 'description', 'educations' => 'education');
-			$mapped_form_elgg_fields = array('profile_url' => "linkedin", 'photo' => 'avatar', 'skills' => 'skills', 'headline' => 'briefdescription', 'status' => 'briefdescription', 'summary' => 'description', 'educations' => 'education');
+			$mapped_form_elgg_fields = array('profile_url' => "linkedin", 'photo' => 'avatar', 'skills' => 'skills', 'headline' => 'briefdescription', 'summary' => 'description', 'educations' => 'education');
 			// Process form data : fields import
 			// @TODO : erreur dans les noms récupérés
 			foreach ($mapped_form_elgg_fields as $field => $elgg_field) {
@@ -180,7 +180,7 @@ try{
 			$content .= elgg_view('input/securitytokens');
 			
 			foreach ($mapped_linkedin_form_fields as $linkedin_metaname => $form_name) {
-				$content .= '<label>' . elgg_view('input/dropdown', array('name' => $form_name, 'options_values' => $no_yes_opt, 'value' => 'no')) . ' ' . elgg_echo("hybridauth:linkedin:import:$form_name") . '</label>';
+				$content .= '<label>' . elgg_view('input/dropdown', array('name' => $form_name, 'options_values' => $no_yes_opt, 'value' => 'no')) . ' ' . elgg_echo("theme_inria:linkedin:import:$form_name") . '</label>';
 				$content .= '<div class="linkedin-import-field-content">' . $$form_name . '</div>';
 				$content .= '<div class="clearfloat"></div><br />';
 			}

@@ -31,9 +31,16 @@ $custom_profile_fields = get_input("custom_profile_fields");
 try {
 	// No duplicate emails !
 	$guid = register_user($username, $password, $name, $email, false);
-
+	
 	if ((trim($password) != "") && ($guid)) {
 		$new_user = get_entity($guid);
+		
+		// Disable new user if required by plugin setting
+		if (elgg_get_plugin_setting('admin_validation', 'theme_inria') == 'yes') {
+			$new_user->disable('uservalidationbyadmin_new_user', FALSE);
+			$disable_notice = '<p>' . elgg_echo('theme_inria:useradd:disabled:adminvalidation') . '</p>';
+		}
+	
 		
 		elgg_clear_sticky_form('useradd');
 
@@ -57,6 +64,7 @@ try {
 			$username,
 			$password,
 		));
+		if ($disable_notice) $body .= $disable_notice;
 		notify_user($new_user->guid, elgg_get_site_entity()->guid, $subject, $body);
 		
 		
@@ -69,6 +77,7 @@ try {
 			$reason,
 			$new_user->getURL(),
 		));
+		if ($disable_notice) $body .= $disable_notice;
 		$notified[] = elgg_get_plugin_setting('useradd_notify1', 'theme_inria');
 		$notified[] = elgg_get_plugin_setting('useradd_notify2', 'theme_inria');
 		$notified[] = elgg_get_plugin_setting('useradd_notify3', 'theme_inria');
