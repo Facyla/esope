@@ -266,7 +266,7 @@ Vous pouvez également ajouter directement cet événement à votre gestionnaire
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
 	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
 	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
-	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas immédiatement activé : l'email devra préalablement être confirmé par l'invité, et le compte validé par un administrateur.",
+	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
 	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
 	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:body' => "
