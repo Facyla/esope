@@ -52,6 +52,7 @@ $english = array(
 	'theme_inria:topbar:mission2' => "Oreli",
 	'theme_inria:topbar:tickets' => "SUPPORT Tickets",
 
+	'theme_inria:members' => "Members",
 	'theme_inria:event_calendar' => "Events",
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",

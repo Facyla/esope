@@ -32,7 +32,7 @@ function theme_inria_init(){
 	// Extend group with RSS feed reader
 	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
 	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
-	elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
+	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -242,6 +242,17 @@ function theme_inria_setup_menu() {
 		elgg_register_menu_item("page", $menu_item);
 		
 	}
+	
+	// Ajout menu Invitations à rejoindre Iris
+	$menu_item = array(
+		"name" => "inria_invite",
+		"text" => elgg_echo("inria_invite"),
+		"href" => "inria/invite",
+		"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+		"section" => "inria_invite"
+	);
+	elgg_register_menu_item("page", $menu_item);
+	
 }
 
 
