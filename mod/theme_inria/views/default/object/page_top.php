@@ -110,6 +110,11 @@ if ($full) {
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
 
+	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
+	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
+	$wiki_nav = '<div class="full-width-pages-nav">' . elgg_view('pages/sidebar/full-width-navigation') . '</div>';
+	echo $wiki_nav;
+	
 	echo elgg_view('object/elements/full', array(
 		'entity' => $page,
 		'title' => false,
@@ -118,11 +123,6 @@ if ($full) {
 		'body' => $body,
 	));
 	
-	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
-	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
-	echo '<div class="full-width-pages-nav">' . elgg_view('pages/sidebar/full-width-navigation') . '</div>';
-	
-
 } else {
 	// brief view
 
