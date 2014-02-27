@@ -137,8 +137,8 @@ if (elgg_is_logged_in()) {
 							<ul>
 								<li class="home"><a href="javascript:void(0);" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
-										<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('theme_inria:site:activity'); ?></a></li>
-									<li><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('theme_inria:thewire:title'); ?></a></li>
+										<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('river:all'); ?></a></li>
+									<li><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('thewire:everyone'); ?></a></li>
 									</ul>
 								</li>
 								
@@ -197,8 +197,8 @@ if (elgg_is_logged_in()) {
 										<ul class="hidden">
 											<?php $start_date = date('Y-m-01'); ?>
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/all'; ?>"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>
-											<!--
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/mine'; ?>"><?php echo elgg_echo('event_calendar:show_mine'); ?></a></li>
+											<!--
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/friends'; ?>"><?php echo elgg_echo('event_calendar:show_friends'); ?></a></li>
 											//-->
 										</ul>

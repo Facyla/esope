@@ -15,13 +15,13 @@ $tabs = array(
 		'selected' => ($filter_context == 'all'),
 		'priority' => 200,
 	),
-/* Non souhaité pour Iris
 	'mine' => array(
 		'text' => elgg_echo('event_calendar:show_mine'),
 		'href' => "$url_start/mine",
 		'selected' => ($filter_context == 'mine'),
 		'priority' => 300,
 	),
+/* Non souhaité pour Iris
 	'friend' => array(
 		'text' => elgg_echo('event_calendar:show_friends'),
 		'href' =>  "$url_start/friends",
