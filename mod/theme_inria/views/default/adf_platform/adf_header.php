@@ -184,7 +184,7 @@ if (elgg_is_logged_in()) {
 											<?php echo $friendrequests_li; ?>
 											<?php
 											if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
-												echo '<li><a href="' . $url . 'inria/invite">' . elgg_echo('inria_invite') . '</a></li>';
+												//echo '<li><a href="' . $url . 'inria/invite">' . elgg_echo('inria_invite') . '</a></li>';
 											}
 											?>
 										</ul>

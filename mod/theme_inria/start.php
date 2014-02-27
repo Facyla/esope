@@ -244,14 +244,18 @@ function theme_inria_setup_menu() {
 	}
 	
 	// Ajout menu Invitations à rejoindre Iris
-	$menu_item = array(
-		"name" => "inria_invite",
-		"text" => elgg_echo("inria_invite"),
-		"href" => "inria/invite",
-		"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
-		"section" => "inria_invite"
-	);
-	elgg_register_menu_item("page", $menu_item);
+	if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
+		/*
+		$menu_item = array(
+			"name" => "inria_invite",
+			"text" => elgg_echo("inria_invite"),
+			"href" => "inria/invite",
+			"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+			"section" => "inria_invite"
+		);
+		elgg_register_menu_item("page", $menu_item);
+		*/
+	}
 	
 }
 
