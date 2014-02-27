@@ -154,6 +154,10 @@ $french = array(
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	
 	// Champs de profil
+	'inria_location' => "Localisation",
+	'epi_ou_service' => "EPI ou service",
+	'inria_phone' => "Téléphone",
+	'inria_room' => "Bureau",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
 	'profile:types:external' => "Extérieur",

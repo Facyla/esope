@@ -154,6 +154,10 @@ $english = array(
 	'theme_inria:caslogin' => "Inria login (CAS)",
 	
 	// Profile fields
+	'inria_location' => "Location",
+	'epi_ou_service' => "EPI or service",
+	'inria_phone' => "Phone",
+	'inria_room' => "Office",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
 	'profile:types:external' => "External",
