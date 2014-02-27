@@ -50,7 +50,7 @@ if ($categories) {
 }
 
 // Pour récupérer sticky forms
-echo elgg_view('input/referentiel', array('referentiel_tags' => $referentiel_tags));
+echo elgg_view('input/referentiel', $vars);
 
 ?>
 <div>
