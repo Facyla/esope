@@ -575,7 +575,7 @@ $french = array(
 	'admin:site:access:warning' => "Changer les paramètres d'accès n'affectera que les permissions de contenu créées dans le futur.",
 
 	'admin:site:secret:intro' => 'Elgg utilise une clef pour créer des jetons de sécurité utilisés dans de nombreux cas.',
-	'admin:site:secret_regenerated' => "Le clef secrète du site a bien été générée à nouveau.",
+	'admin:site:secret_regenerated' => "La clef secrète du site a bien été générée à nouveau.",
 	'admin:site:secret:regenerate' => "Générer une nouvelle clef secrète du site",
 	'admin:site:secret:regenerate:help' => "Note: Ceci peut indisposer certains utilisateurs en invalidant leurs jetons de connexion utilisés par les cookies \"se souvenir de moi\", les demande validation par mail, codes d'invitation, etc.",
 	'site_secret:current_strength' => 'Niveau de sécurité de la clef',
@@ -996,6 +996,8 @@ Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de ch
 
 	'update:twitter_api:deactivated' => "Twitter API (précédemment Twitter Service) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
 	'update:oauth_api:deactivated' => "OAuth API (précédemment OAuth Lib) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
+	'upgrade:site_secret_warning:moderate' => "Il est conseillé de générer une nouvelle clef du site pour améliorer la sécurité du système. Voyez dans Configurer &gt; Paramètres &gt; Clef secrète du site",
+	'upgrade:site_secret_warning:weak' => "Il est vivement conseillé de générer une nouvelle clef du site pour améliorer la sécurité du système. Voyez dans Configurer &gt; Paramètres &gt; Clef secrète du site",
 
 	'deprecated:function' => "%s() a été déclaré obsolète par %s()",
 
