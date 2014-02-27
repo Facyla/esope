@@ -52,6 +52,7 @@ $english = array(
 	'theme_inria:topbar:mission2' => "Oreli",
 	'theme_inria:topbar:tickets' => "SUPPORT Tickets",
 
+	'theme_inria:event_calendar' => "Events",
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",
 	'theme_inria:grouptools' => "Group tools",
@@ -254,7 +255,7 @@ $english = array(
 View event on the site :
 %s
 
-You can add directly this event to your own calendar application through attached ICAL file : 
+You can add directly this event to your own calendar application through the attached ICAL file. 
 %s",
 	
 	

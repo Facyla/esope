@@ -193,7 +193,7 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('adf_platform:event_calendar'); ?> <i class="fa fa-caret-down"></i></a>
+									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:event_calendar'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
 											<?php $start_date = date('Y-m-01'); ?>
 											<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/all'; ?>"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>

@@ -136,7 +136,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 #transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
 #transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
 #transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
+#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; z-index: 10; }
 #transverse nav ul li ul li { background: <?php echo $module_bg_color; ?>; }
 #transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 

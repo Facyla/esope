@@ -52,6 +52,7 @@ $french = array(
 	'theme_inria:topbar:mission2' => "Oreli",
 	'theme_inria:topbar:tickets' => "Tickets SUPPORT",
 
+	'theme_inria:event_calendar' => "Evénements",
 	'theme_inria:event_calendar:groups' => 'Evénements du groupe',
 	'theme_inria:groups:discussions' => 'Discussions du groupe',
 	'theme_inria:grouptools' => "Outils du groupe",
@@ -255,7 +256,7 @@ $french = array(
 Afficher l'événement sur le site :
 %s
 
-Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
+Vous pouvez également ajouter directement cet événement à votre agenda via le fichier ICAL ci-joint.
 %s",
 	
 	
