@@ -53,7 +53,7 @@ foreach ($options_values as $opt => $name) {
 	?>
 	<div class="inria-tool-widget">
 		<label for="inria_tool_<?php echo $widget_id . '_' . $opt; ?>"><?php echo $name; ?>&nbsp;:</label>
-		<?php echo elgg_view('input/radio', array('name' => 'params['.$opt.']', 'value' => $vars['entity']->{$opt}, 'options' => $no_yes_opt, 'align' => 'horizontal')); ?>
+		<?php echo elgg_view('input/radio', array('name' => 'params['.$opt.']', 'value' => $vars['entity']->{$opt}, 'options' => $yes_no_opt, 'align' => 'horizontal')); ?>
 	</div>
 	<?php
 }
