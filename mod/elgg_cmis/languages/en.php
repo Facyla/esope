@@ -61,10 +61,9 @@ $en = array(
 	'elgg_cmis:widget:cmis_insearch:details' => "Fulltext search results on Partage",
 	
 	/* Usersettings */
-	'elgg_cmis:details' => "This settings pane gives you an easy access to Partage by saving your Partage password. This will be useful in two cases :<ul>
-	<li>direct access to your Partage files through the Partage widget on homepage \"My files on Partage\"</li>
-	<li>direct access to a specific folder on Partage through a group, when the Iris group admin has sety it up.</li>
-</ul>
+	'elgg_cmis:details' => "This settings pane gives you an easy access to Partage by saving your Partage password. This will be useful in two cases :
+	 - direct access to your Partage files through the Partage widget on homepage \"My files on Partage\"<br />
+ - direct access to a specific folder on Partage through a group, when the Iris group admin has set it up.<br />
 Your password will be encrypted.",
 	'elgg_cmis:nopassword' => "Password not set.",
 	'elgg_cmis:changepassword' => "Your password has been successfully saved (and encrypted).<br />If you wish to update it, please fill then save your new credentials below.<br />To remove your password, please type \"RAZ\" as password: this will remove all your Partage credentials in Iris.",
