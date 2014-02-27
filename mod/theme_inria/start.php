@@ -34,6 +34,9 @@ function theme_inria_init(){
 	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
+	// Supprimer le suivi de l'activité (toujours activé)
+	remove_group_tool_option('activity');
+	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with CMIS folder
