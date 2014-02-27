@@ -18,6 +18,10 @@ Assurez-vous d'être connecté sur le site web avant de cliquer sur le lien suiv
 	'friend_request:add:successful' => "Vous avez demandé à être en contact avec %s. Votre demande doit être acceptée avant que cette personne apparaisse dans votre liste de contacts.",
 	'friend_request:add:exists' => "Vous avez déjà demandé à être contact de %s.",
 	'friend_request:approve' => "Accepter",
+	'friend_request:approve:subject' => "%s a accepté votre demande de contact",
+	'friend_request:approve:message' => "Cher %s,
+
+%s a acccepté votre de demande de contact.",
 	'friend_request:approve:successful' => "%s est maintenant votre contact",
 	'friend_request:approve:fail' => "Erreur durant la création de la relation de contact avec %s",
 	'friend_request:decline' => "Décliner",
