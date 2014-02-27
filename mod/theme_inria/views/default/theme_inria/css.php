@@ -330,6 +330,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .inria-tool-ftp { background-image: url(<?php echo $tools_url; ?>TRANSFER.png) !important; }
 .inria-tool-share { background-image: url(<?php echo $tools_url; ?>PARTAGE.png) !important; }
 .inria-tool-confcall { background-image: url(<?php echo $tools_url; ?>AUDIOCONFERENCE.png) !important; }
+.inria-tool-intranet { background-image: url(<?php echo $tools_url; ?>intranet.png) !important; }
 .inria-tool-evo { background-image: url(<?php echo $tools_url; ?>EVO.png) !important; }
 .inria-tool-mailinglist { background-image: url(<?php echo $tools_url; ?>Listedediffusion.png) !important; }
 .inria-tool-mailer { background-image: url(<?php echo $tools_url; ?>MAILER.png) !important; }
