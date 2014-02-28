@@ -20,6 +20,7 @@ $options_values = array(
 		'ftp' => elgg_echo('theme_inria:topbar:ftp'),
 		'share' => elgg_echo('theme_inria:topbar:share'),
 		//'confcall' => elgg_echo('theme_inria:topbar:confcall'),
+		'intranet' => elgg_echo('theme_inria:topbar:intranet'),
 		'evo' => elgg_echo('theme_inria:topbar:evo'),
 		'mailinglist' => elgg_echo('theme_inria:topbar:mailinglist'),
 		'mailer' => elgg_echo('theme_inria:topbar:mailer'),
@@ -47,12 +48,12 @@ $inria_tool = elgg_view('input/dropdown', $params);
 */
 
 // Multi-tool mode
-$no_yes_opt = array( elgg_echo('option:no') => 'no', elgg_echo('option:yes') => 'yes' );
+$yes_no_opt = array( elgg_echo('option:yes') => 'yes', elgg_echo('option:no') => 'no');
 foreach ($options_values as $opt => $name) {
 	?>
 	<div class="inria-tool-widget">
 		<label for="inria_tool_<?php echo $widget_id . '_' . $opt; ?>"><?php echo $name; ?>&nbsp;:</label>
-		<?php echo elgg_view('input/radio', array('name' => 'params['.$opt.']', 'value' => $vars['entity']->{$opt}, 'options' => $no_yes_opt, 'align' => 'horizontal')); ?>
+		<?php echo elgg_view('input/radio', array('name' => 'params['.$opt.']', 'value' => $vars['entity']->{$opt}, 'options' => $yes_no_opt, 'align' => 'horizontal')); ?>
 	</div>
 	<?php
 }

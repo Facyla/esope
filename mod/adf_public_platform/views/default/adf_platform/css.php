@@ -272,7 +272,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-page .elgg-menu-item-groups-owned a, 
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a, 
 .elgg-menu-page .elgg-menu-owner-block-categories li a {
-	font-weight:bold !important; font-size:14px; color:#333333;
+	/* font-weight:bold !important; */ font-size:14px; color:<?php echo $linkcolor; ?>;
 }
 
 .elgg-menu-page .elgg-menu-item-groups-all a:hover, .elgg-menu-page .elgg-menu-item-groups-all a:focus, .elgg-menu-page .elgg-menu-item-groups-all a:active, .elgg-menu-page .elgg-menu-item-groups-all.elgg-state-selected > a,

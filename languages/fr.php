@@ -104,6 +104,7 @@ $french = array(
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => "%s n'est pas installé",
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => "Manquant",
 
+	'ElggPlugin:Dependencies:ActiveDependent' => "D'autres plugins listent %s comme dépendance.  Vous devez désactiver les plugins suivants avant de désactiver celui-ci : %s",
 
 	'InvalidParameterException:NonElggUser' => "Passage d'un utilisateur de type non-Elgg vers un constructeur d'utilisateur Elgg !",
 
@@ -567,9 +568,23 @@ $french = array(
 	'admin:settings' => "Paramètres",
 	'admin:settings:basic' => "Réglages de base",
 	'admin:settings:advanced' => "Paramètres avancés",
+	'admin:settings:advanced/site_secret' => 'Clef secrète du site',
 	'admin:site:description' => "Ce menu vous permet de définir les paramètres principaux de votre site. Choisissez une option ci-dessous pour commencer.",
+	'admin:settings:advanced:site_secret' => 'Clef secrète du site',
 	'admin:site:opt:linktext' => "Configurer le site...",
 	'admin:site:access:warning' => "Changer les paramètres d'accès n'affectera que les permissions de contenu créées dans le futur.",
+
+	'admin:site:secret:intro' => 'Elgg utilise une clef pour créer des jetons de sécurité utilisés dans de nombreux cas.',
+	'admin:site:secret_regenerated' => "La clef secrète du site a bien été générée à nouveau.",
+	'admin:site:secret:regenerate' => "Générer une nouvelle clef secrète du site",
+	'admin:site:secret:regenerate:help' => "Note: Ceci peut indisposer certains utilisateurs en invalidant leurs jetons de connexion utilisés par les cookies \"se souvenir de moi\", les demande validation par mail, codes d'invitation, etc.",
+	'site_secret:current_strength' => 'Niveau de sécurité de la clef',
+	'site_secret:strength:weak' => "Faible",
+	'site_secret:strength_msg:weak' => "Il est vivement recommandé que vous génériez une nouvelle clef secrète pour le site.",
+	'site_secret:strength:moderate' => "Moyenne",
+	'site_secret:strength_msg:moderate' => "Il est recommandé que vous génériez une nouvelle clef secrète pour une meilleure sécurité du site.",
+	'site_secret:strength:strong' => "Forte",
+	'site_secret:strength_msg:strong' => "&#x2713; Votre clef secrète du site est suffisamment forte.",
 
 	'admin:dashboard' => "Tableau de bord",
 	'admin:widget:online_users' => "Utilisateurs en ligne",
@@ -823,6 +838,7 @@ $french = array(
 	'total' => "Total",
 
 	'learnmore' => "Cliquer ici pour en apprendre plus.",
+	'unknown_error' => 'Erreur inconnue',
 
 	'content' => "contenu",
 	'content:latest' => "Dernière activité",
@@ -980,6 +996,8 @@ Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de ch
 
 	'update:twitter_api:deactivated' => "Twitter API (précédemment Twitter Service) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
 	'update:oauth_api:deactivated' => "OAuth API (précédemment OAuth Lib) a été désactivée lors de la mise à niveau. Veuillez l'activer manuellement si nécessaire.",
+	'upgrade:site_secret_warning:moderate' => "Il est conseillé de générer une nouvelle clef du site pour améliorer la sécurité du système. Voyez dans Configurer &gt; Paramètres &gt; Clef secrète du site",
+	'upgrade:site_secret_warning:weak' => "Il est vivement conseillé de générer une nouvelle clef du site pour améliorer la sécurité du système. Voyez dans Configurer &gt; Paramètres &gt; Clef secrète du site",
 
 	'deprecated:function' => "%s() a été déclaré obsolète par %s()",
 

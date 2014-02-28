@@ -78,7 +78,7 @@ $profile_details = elgg_view('profile/details');
 	$db_prefix = elgg_get_config('dbprefix');
 	$user = elgg_get_page_owner_entity();
 	elgg_set_context('widgets');
-	$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 10, 'pagination' => true));
+	$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 8, 'pagination' => true));
 	$activity = '<div class="profile-activity-river">' . $activity . '</div>';
 	elgg_pop_context();
 //}

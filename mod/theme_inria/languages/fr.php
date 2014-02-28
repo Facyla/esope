@@ -43,6 +43,7 @@ $french = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
+	'theme_inria:topbar:intranet' => "Intranet",
 	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
@@ -52,6 +53,8 @@ $french = array(
 	'theme_inria:topbar:mission2' => "Oreli",
 	'theme_inria:topbar:tickets' => "Tickets SUPPORT",
 
+	'theme_inria:members' => "Membres",
+	'theme_inria:event_calendar' => "Evénements",
 	'theme_inria:event_calendar:groups' => 'Evénements du groupe',
 	'theme_inria:groups:discussions' => 'Discussions du groupe',
 	'theme_inria:grouptools' => "Outils du groupe",
@@ -151,6 +154,10 @@ $french = array(
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	
 	// Champs de profil
+	'profile:inria_location' => "Localisation",
+	'profile:epi_ou_service' => "EPI ou service",
+	'profile:inria_phone' => "Téléphone",
+	'profile:inria_room' => "Bureau",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
 	'profile:types:external' => "Extérieur",
@@ -255,18 +262,19 @@ $french = array(
 Afficher l'événement sur le site :
 %s
 
-Vous pouvez également ajouter directement cet événement à votre gestionnaire d'agenda via le fichier ICAL ci-joint : 
+Vous pouvez également ajouter directement cet événement à votre agenda via le fichier ICAL ci-joint.
 %s",
 	
 	
 	// Création de comptes
-	'inria_invite' => "Création de compte utilisateur",
+	'inria_invite' => "Invitations sur Iris",
 	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
-	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de créer un compte pour donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
+	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
 	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
 	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
-	'theme_inria:useradd:disabled:adminvalidation' => "Le comtpe créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
+	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
+	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
 	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:body' => "
 %s,

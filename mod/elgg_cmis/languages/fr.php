@@ -61,6 +61,15 @@ $fr = array(
 	'elgg_cmis:widget:cmis_insearch' => "Recherche plein texte sur Partage",
 	'elgg_cmis:widget:cmis_insearch:details' => "Liste des résultats d'une recherche plein texte sur Partage",
 	
+	/* Usersettings */
+	'elgg_cmis:details' => "Ce panneau de configuration vous permet de  pouvoir accéder facilement à vos données sur Partage en pré-enregistrant votre mot de passe Partage. Il vous sera utile dans deux cas :<br />
+ - l'accès direct à vos fichiers  sous Partage via le tableau de bord de la page d'accueil \"Mes fichiers sous Partage\"<br />
+ - l'accès direct à un répertoire dédié sous Partage via un groupe, lorsque le responsable du groupe l'a prévu.<br />
+Votre mot de passe sera crypté.",
+	'elgg_cmis:nopassword' => "Aucun mot de passe défini.",
+	'elgg_cmis:changepassword' => "Votre mot de passe est bien enregistré (et crypté).<br />Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous.<br />Pour le supprimer totalement, saisissez \"RAZ\" comme mot de passe : cela réinitialisera vos informations d'authentification.",
+	'elgg_cmis:deletedpassword' => "Votre mot de passe a bien été supprimé.",
+	
 );
 
 add_translation('fr', $fr);

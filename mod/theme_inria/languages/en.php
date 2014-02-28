@@ -43,6 +43,7 @@ $english = array(
 	'theme_inria:topbar:share' => "Partage",
 	'theme_inria:topbar:confcall' => "Audioconf",
 	'theme_inria:topbar:mailinglist' => "Sympa",
+	'theme_inria:topbar:intranet' => "Intranet",
 	'theme_inria:topbar:evo' => "SeeVogh",
 	'theme_inria:topbar:inria' => "INRIA",
 	'theme_inria:topbar:annuaire' => "Annuaire",
@@ -52,6 +53,8 @@ $english = array(
 	'theme_inria:topbar:mission2' => "Oreli",
 	'theme_inria:topbar:tickets' => "SUPPORT Tickets",
 
+	'theme_inria:members' => "Members",
+	'theme_inria:event_calendar' => "Events",
 	'theme_inria:event_calendar:groups' => "Group's events",
 	'theme_inria:groups:discussions' => "Group's topic",
 	'theme_inria:grouptools' => "Group tools",
@@ -151,6 +154,10 @@ $english = array(
 	'theme_inria:caslogin' => "Inria login (CAS)",
 	
 	// Profile fields
+	'profile:inria_location' => "Location",
+	'profile:epi_ou_service' => "EPI or service",
+	'profile:inria_phone' => "Phone",
+	'profile:inria_room' => "Office",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
 	'profile:types:external' => "External",
@@ -210,7 +217,7 @@ $english = array(
 	
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
-	'profile:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
+	'groups:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",
@@ -254,18 +261,19 @@ $english = array(
 View event on the site :
 %s
 
-You can add directly this event to your own calendar application through attached ICAL file : 
+You can add directly this event to your own calendar application through the attached ICAL file. 
 %s",
 	
 	
 	
 	// Création de comptes
-	'inria_invite' => "Create user account",
-	'theme_inria:useradd' => "New account for a non-Inria person",
-	'theme_inria:useradd:details' => "<p>As %s, you can grant access to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once the account will be created and validated by an administrator, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p><p>Please contact <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a> for any questions.</p>",
+	'inria_invite' => "Invite  user account",
+	'theme_inria:useradd' => "Create a new account for a non-Inria person",
+	'theme_inria:useradd:details' => "<p>As %s, you can grant access to to Iris people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once the account will be created and validated by an administrator, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p><p>Please contact <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a> for any questions.</p>",
 	'theme_inria:useradd:reason' => "Account creation motive",
 	'theme_inria:useradd:group' => "Group to which the user should be registered",
 	'theme_inria:useradd:reason:details' => "These details will be sent to the site administrator along with the new account profile, as a justification for creating the account. Please give any useful information so the account can be validated without doubt.",
+	'theme_inria:useradd:adminvalidation' => "WARNING : the new account will not be activated immediately! The new account has to be approved by an administrator.",
 	'theme_inria:useradd:disabled:adminvalidation' => "The created account will be disabled until an administrator validates it. Please be patient, you will receive a new mail once it has been validated.",
 	'theme_inria:useradd:subject' => "User account created",
 	'theme_inria:useradd:body' => "

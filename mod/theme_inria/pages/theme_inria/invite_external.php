@@ -18,7 +18,7 @@ $own = elgg_get_logged_in_user_entity();
 if (elgg_is_admin_logged_in() || ($own->membertype == 'inria') ) {
 	$access_valid = '';
 	if ($own->membertype == 'inria') $access_valid .= 'Inria';
-	else if (elgg_is_admin_logged_in()) $access_valid .= 'Administrateur';
+	else if (elgg_is_admin_logged_in()) $access_valid .= 'Admin';
 } else {
 	//register_error('You do not have the rights to access this page.');
 	forward();
@@ -29,14 +29,19 @@ elgg_push_breadcrumb(elgg_echo('inria_invite'));
 
 $content = '';
 $sidebar = '';
-$title = elgg_echo('theme_inria:useradd');
+$title = elgg_echo('inria_invite');
+$content .= '<p><strong>' . elgg_echo('theme_inria:useradd') . '</strong></p>';
 
 $content .= elgg_echo('theme_inria:useradd:details', array($access_valid));
+if (elgg_get_plugin_setting('admin_validation', 'theme_inria') == 'yes') {
+	$content .= '<p><em>' . elgg_echo('theme_inria:useradd:adminvalidation') . '</em></p>';
+}
+
 $content .= elgg_view_form('inria_useradd', '', array());
 
 
 // Composition de la page
-$body = elgg_view_layout('content', array('content' => $content, 'sidebar' => false, 'filter' => false));
+$body = elgg_view_layout('content', array('title' => $title, 'content' => $content, 'sidebar' => false, 'filter' => false));
 
 
 // Affichage

@@ -22,7 +22,7 @@ if ($cmis_password == 'RAZ') {
 	$cmis_password2 = '';
 	$vars['entity']->setUserSetting("cmis_password", $cmis_password, $own->guid);
 	$vars['entity']->setUserSetting("cmis_password2", $cmis_password2, $own->guid);
-	$password_set_message .= "<p>Votre mot de passe a bien été supprimé.</p>";
+	$password_set_message .= "<p>" . elgg_echo('elgg_cmis:deletedpassword') . "</p>";
 }
 
 // Si le mot de passe a changé, on crypte le nouveau et on enregistre le tout
@@ -36,10 +36,10 @@ if (!empty($cmis_password) && ($cmis_password != $cmis_password2)) {
 
 
 if (!empty($cmis_password) && !empty($cmis_password2)) {
-	$password_set_message .= "<p>Votre mot de passe est bien enregistré (et crypté).<br />Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous.<br />Pour le supprimer totalement, saisissez \"RAZ\" comme mot de passe : cela réinitialisera vos informations d'authentification.</p>";
+	$password_set_message .= "<p>" . elgg_echo('elgg_cmis:changepassword') . "</p>";
 }
 if (empty($cmis_password) && empty($cmis_password2)) {
-	$password_set_message .= "<p>Aucun mot de passe défini.</p>";
+	$password_set_message .= "<p>" . elgg_echo('elgg_cmis:nopassword') . "</p>";
 }
 
 
@@ -47,22 +47,21 @@ if (empty($cmis_password) && empty($cmis_password2)) {
 
 
 ?>
-<p>
-	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-		<legend><?php echo elgg_echo('elgg_cmis:title'); ?></legend>
-		
-		<?php echo $password_set_message; ?>
-		<!--
-		<label for="params[user_cmis_url]"><?php echo elgg_echo('elgg_cmis:user_cmis_url');?></label><br/>
-		<input type="text" name="params[user_cmis_url]" value="<?php echo $user_cmis_url;?>" /><br/>
-		//-->
-		
-		<label for="params[cmis_login]"><?php echo elgg_echo('elgg_cmis:cmis_login');?></label><br/>
-		<input type="text" name="params[cmis_login]" value="<?php echo $cmis_login; ?>" /><br/>
-		
-		<label for="params[elgg_cmis:cmis_password]"><?php echo elgg_echo('elgg_cmis:cmis_password');?></label><br/>
-		<input type="password" name="params[cmis_password]" value="" /><br/>
-		
-	</fieldset>
-</p>
+<p><?php echo elgg_echo('elgg_cmis:details'); ?></p>
+<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
+	<legend><?php echo elgg_echo('elgg_cmis:title'); ?></legend>
+	
+	<?php echo $password_set_message; ?>
+	<!--
+	<label for="params[user_cmis_url]"><?php echo elgg_echo('elgg_cmis:user_cmis_url');?></label><br/>
+	<input type="text" name="params[user_cmis_url]" value="<?php echo $user_cmis_url;?>" /><br/>
+	//-->
+	
+	<label for="params[cmis_login]"><?php echo elgg_echo('elgg_cmis:cmis_login');?></label><br/>
+	<input type="text" name="params[cmis_login]" value="<?php echo $cmis_login; ?>" /><br/>
+	
+	<label for="params[elgg_cmis:cmis_password]"><?php echo elgg_echo('elgg_cmis:cmis_password');?></label><br/>
+	<input type="password" name="params[cmis_password]" value="" /><br/>
+	
+</fieldset>
 

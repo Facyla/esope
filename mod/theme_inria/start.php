@@ -32,7 +32,10 @@ function theme_inria_init(){
 	// Extend group with RSS feed reader
 	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
 	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
-	elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
+	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
+	
+	// Supprimer le suivi de l'activité (toujours activé)
+	remove_group_tool_option('activity');
 	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -242,6 +245,21 @@ function theme_inria_setup_menu() {
 		elgg_register_menu_item("page", $menu_item);
 		
 	}
+	
+	// Ajout menu Invitations à rejoindre Iris
+	if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
+		/*
+		$menu_item = array(
+			"name" => "inria_invite",
+			"text" => elgg_echo("inria_invite"),
+			"href" => "inria/invite",
+			"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+			"section" => "inria_invite"
+		);
+		elgg_register_menu_item("page", $menu_item);
+		*/
+	}
+	
 }
 
 
@@ -281,7 +299,8 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
 				// External access has some restrictions : if account was not used for more than 1 year => disable
-				if ( (time() - $user->last_action) > 31622400) {
+				// Skip unused accounts (just created ones...)
+				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
 					$is_active = false;
 					$memberreason = 'inactive';
 				}
