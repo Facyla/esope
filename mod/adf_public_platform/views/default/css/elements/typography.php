@@ -127,7 +127,7 @@ body {
 	<?php if (!empty($backgroundimg)) { ?>
 	background: <?php echo $backgroundcolor; ?> url("<?php echo $backgroundimg; ?>") left top repeat scroll !important;
 	<?php } ?>
-	position: relative;
+	position: static; /* Other than static breaks avatar cropper on Chrome */
 	border-top: 5px solid #333333;
 }
 
