@@ -17,7 +17,8 @@ $entity_guid = get_input('entity_guid');
 $title = elgg_echo('guidtool:editguid', array($entity_guid));
 
 access_show_hidden_entities(true);
-$body = elgg_view_form("guidtool/edit", array('entity_guid' => $entity_guid));
+$body = '<p>' . elgg_echo("guidtool:editguid:warning") . '</p>';
+$body .= elgg_view_form("guidtool/edit", array('entity_guid' => $entity_guid));
 access_show_hidden_entities(false);
 
 $body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));

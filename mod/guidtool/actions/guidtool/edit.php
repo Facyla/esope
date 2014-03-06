@@ -20,7 +20,7 @@ if ($entity) {
 	if (!empty($edit_fields)) $edit_fields = explode(',', $edit_fields);
 	
 	// Update only explicitely asked fields
-	foreach ($edit_fields as $field) {
+	if ($edit_fields) foreach ($edit_fields as $field) {
 		
 		// Some fields cannot be edited in any case.
 		// Or at least not that way : use DB queries if you really need to change type, subtype or  guid...
@@ -67,6 +67,19 @@ if ($entity) {
 							$entity->$field = $new_value;
 							$done = true;
 						} else register_error("Invalid GUID for $field : $new_value is not a user/group/site");
+						break;
+					
+					case 'access_id':
+						// Should be a valid access_id : -2 >= access_id >= 2, or is a valid collection id
+						if ((($new_value >= -2) && ($new_value <= 2)) || (($test_access = get_access_collection($new_value)) && ($test_access != false))) {
+							// Access default is not a value => use site default value
+							if ($new_value == -1) {
+								$new_value = $CONFIG->default_access;
+								system_message("$field updated to site default : $new_value");
+							}
+							$entity->$field = $new_value;
+							$done = true;
+						} else register_error("Invalid access id $field : $new_value is neither a default access level nor a valid collection id");
 						break;
 					
 					default:

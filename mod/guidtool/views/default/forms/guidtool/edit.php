@@ -32,7 +32,7 @@ $annotations = elgg_get_annotations($options);
 $relationships = get_entity_relationships($entity->guid);
 
 $exportable_values = $entity->getExportableValues();
-$non_editable_properties = array('guid', 'type', 'subtype', 'tables_split', 'tables_loaded');
+$non_editable_fields = array('guid', 'type', 'subtype', 'tables_split', 'tables_loaded');
 
 echo '<p>';
 echo '<a href="' . $entity->getURL() . '" class="elgg-button elgg-button-action">' . elgg_echo('guidtool:regularview') . '</a> ';
@@ -49,12 +49,18 @@ echo '<div>';
 echo '<h2>' . elgg_echo('Entity') . '</h2>';
 	foreach ($entity as $k => $v) {
 		if ((in_array($k, $exportable_values)) || (elgg_is_admin_logged_in())) {
-			if (in_array($k, $non_editable_properties)) {
+			if (in_array($k, $non_editable_fields)) {
+				// Non-editable yet
 				echo '<p class="margin-none"><b>' . $k . '&nbsp;: </b>' . strip_tags($v) . '</p>';
-				echo '<input type="hidden" name="' . $k . '" value="' . $v . '" />';
+				//echo '<input type="hidden" name="' . $k . '" value="' . $v . '" />';
 			} else {
-				//echo '<p class="margin-none"><label>' . $k . '&nbsp;: </label><textarea name="' . $k . '">' . $v . '</textarea></p>';
-				echo '<p class="margin-none"><label>' . $k . '&nbsp;: </label><input type="text" name="' . $k . '" value="' . $v . '" /></p>';
+				// Textareas should be used only if we have very much content
+				// Text inputs should be sufficient in most cases
+				if (strlen($v) > 100) {
+					echo '<p class="margin-none"><label>' . $k . '&nbsp;: </label><textarea name="' . $k . '">' . $v . '</textarea></p>';
+				} else {
+					echo '<p class="margin-none"><label>' . $k . '&nbsp;: </label><input type="text" name="' . $k . '" value="' . $v . '" /></p>';
+				}
 			}
 		}
 	}
@@ -65,6 +71,8 @@ if ($metadata) {
 	echo '<div id="metadata" class="mtm">';
 	echo '<h2>' . elgg_echo('metadata') . '</h2>';
 	foreach ($metadata as $m) {
+		// @TODO : we can edit metadata only if we merge the "arrays" before
+		// but metadata can accept content like commas, so must be very careful with separators
 		echo '<p class="margin-none"><b>' . $m->name . '&nbsp;: </b>' .$m->value . '</p>';
 	}
 	echo '</div><br />';
