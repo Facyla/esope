@@ -71,6 +71,7 @@ function guidtool_page_handler($page) {
 				break;
 				
 			case 'export':
+				if (!isset($page[2]) || empty($page[2])) $page[2] = 'json';
 				if ((isset($page[1]) && (!empty($page[1])))) {
 					set_input('entity_guid', $page[1]);
 					if ((isset($page[2]) && (!empty($page[2])))) {
@@ -84,11 +85,12 @@ function guidtool_page_handler($page) {
 				break;
 			
 			case 'import' :
+				if (!isset($page[1]) || empty($page[1])) $page[1] = 'opendd';
 				if ((isset($page[1]) && (!empty($page[1])))) {
 					set_input('format', $page[1]);
 					include($base . 'import.php');
 				} else {
-					set_input('forward_url', $CONFIG->url . "guidtool/import/");	
+					set_input('forward_url', $CONFIG->url . "guidtool/import/");
 					include($base . 'format_picker.php');
 				} 
 				break;

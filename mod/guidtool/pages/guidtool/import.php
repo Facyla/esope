@@ -18,6 +18,6 @@ $format = get_input('format', 'opendd');
 $title = elgg_echo("guidtool:import");
 $body = elgg_view("forms/guidtool/import", array('format' => $format, 'forward_url'));
 
-$body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));
+$body = elgg_view_layout('admin', array('title' => $title, 'content' => $body));
 
 echo elgg_view_page($title, $body);

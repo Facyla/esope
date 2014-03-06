@@ -10,13 +10,15 @@
  */
 
 admin_gatekeeper();
-elgg_set_context('admin');
+global $CONFIG;
 
 $entity_guid = get_input('entity_guid');
+$format = get_input('format', 'json');
 
 // Render the file upload page
 $title = elgg_echo('guidbrowser:export');
-$body = elgg_view("forms/guidtool/export", array('entity_guid' => $entity_guid));
+
+$body = elgg_view("forms/guidtool/export", array('entity_guid' => $entity_guid, 'format' => $format));
 
 $body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));
 

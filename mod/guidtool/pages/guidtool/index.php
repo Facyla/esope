@@ -11,15 +11,12 @@
  * @updated for Elgg 1.8 Facyla 2013
  */
 
-//require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
-
 admin_gatekeeper();
-//elgg_set_context('admin');
+elgg_set_context('admin');
 
 $title = elgg_echo("guidtool");
 
-$context = elgg_get_context(); 
-elgg_set_context('search');
+elgg_push_context('search');
 
 $limit = get_input('limit', 10);
 $offset = get_input('offset');
@@ -39,9 +36,10 @@ if ($entities) foreach ($entities as $e) {
 
 $body = elgg_view_entity_list($wrapped_entries, array('count' => $count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false));
 
-elgg_set_context($context);
+elgg_pop_context($context);
 
 
 // Display main admin menu
-$body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));
+$body = elgg_view_layout('admin', array('title' => $title, 'content' => $body));
 echo elgg_view_page($title, $body);
+

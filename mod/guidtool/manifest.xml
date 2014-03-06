@@ -14,7 +14,10 @@
 1.8 : 20140306
 	- updated to Elgg 1.8
 	- added an "edit" functionnality
-	- warning : import/export not tested
+	
+	- warning : import/export do not work properly for the moment (i don't use them so didn't take the time to repair)
+	- export was partially repaired, using JSON format (opendd seems not supported anymore in core)
+	- import might work using opendd format
 
 //-->
 

@@ -19,6 +19,6 @@ $formats = guidtool_get_import_actions();
 $title = elgg_echo("guidtool:pickformat");
 $body = elgg_view('forms/guidtool/format', array('formats' => $formats));
 
-$body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));
+$body = elgg_view_layout('admin', array('title' => $title, 'content' => $body));
 
 echo elgg_view_page($title, $body);

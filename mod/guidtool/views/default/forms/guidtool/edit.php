@@ -43,6 +43,8 @@ echo '</p>';
 // Edit GUID fields form
 $guidtool_edit_fields = get_input('guidtool_edit_fields', '');
 echo '<p class="margin-none"><label>Edit fields&nbsp;: </label><input type="text" name="guidtool_edit_fields" value="' . $guidtool_edit_fields . '" /><br />By default, no field value will be changed : you need to manually set here which fields will be updated once you save the form. Please separate fields by commas. Extra space are allowed.</p>';
+// We need at least the GUID to edit..
+echo '<input type="hidden" name="guid" value="' . $entity_guid . '" />';
 
 
 echo '<div>';
@@ -99,4 +101,5 @@ echo '</div>';
 
 
 echo '<input type="submit" value="' . elgg_echo('save') . '" />';
+echo '</div>';
 
