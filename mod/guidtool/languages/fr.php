@@ -10,24 +10,28 @@
  */
 
 $french = array(
-
 	/**
 	 * Menu items and titles
 	 */
+	'guidtool' => 'Outil GUID',
+	'guidtool:browse' => 'Explorer les GUIDs',
+	'guidtool:import' => 'Importer des données GUID',
+	'guidtool:import:desc' => 'Collez les données à importer dans la fenetre suivante ; elles doivent impérativement être au format "%s".',
 
-		'guidtool' => 'Outil GUID',
-		'guidtool:browse' => 'Explorer les GUIDs',
-		'guidtool:import' => 'Importer des données GUID',
-		'guidtool:import:desc' => 'Collez les données à importer dans la fenetre suivante ; elles doivent impérativement être au format "%s".',
+	'guidtool:pickformat' => 'Veuillez choisir le format que vous souhaitez utiliser pour importer ou exporter.',
 
-		'guidtool:pickformat' => 'Veuillez choisir le format que vous souhiatez utiliser pour importer ou exporter.',
+	'guidbrowser:export' => 'Exporter',
 
-		'guidbrowser:export' => 'Exporter',
+	'guidtool:editguid' => 'Modifier le GUID : %s',
+	'guidtool:viewguid' => 'Afficher le GUID : %s',
+	
+	'guidtool:regularview' => "Afficher l'entité (vue normale)",
+	'guidtool:regularedit' => "Modifier l'entité (vue normale)",
 
-		'guidtool:deleted' => 'GUID %d supprimé',
-		'guidtool:notdeleted' => 'GUID %d non supprimé',
+	'guidtool:deleted' => 'GUID %d supprimé',
+	'guidtool:notdeleted' => 'GUID %d non supprimé',
 );
-				
+
 add_translation("fr",$french);
 
 
