@@ -67,8 +67,14 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<!--[if lt IE 9]>
 		<script type="text/javascript" src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/views/default/adf_platform/js/html5-ie.php"></script>
 	<![endif]-->
-	
 	<?php
+	if ($config_awesomefont == 'yes') {
+		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />';
+	}
+	if ($config_semanticui == 'yes') {
+		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />';
+	}
+	
 	// CSS complémentaire configurable
 	if (!empty($config_css)) {
 		echo "\n<style>" . html_entity_decode($config_css) . "</style>\n";
@@ -83,16 +89,10 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	foreach ($js as $script) {
 		echo '<script type="text/javascript" src="' . $script . '"></script>' . "\n";
 	}
-	
-	echo '<script type="text/javascript">' . elgg_view('js/initialize_elgg') . '</script>';
-	
-	if ($config_awesomefont == 'yes') {
-		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />';
-	}
 	if ($config_semanticui == 'yes') {
-		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />';
 		echo '<script src="' . $theme_url . 'vendors/semantic-ui/packaged/javascript/semantic.js"></script>';
 	}
+	echo '<script type="text/javascript">' . elgg_view('js/initialize_elgg') . '</script>';
 	
 	echo $feedref;
 	
