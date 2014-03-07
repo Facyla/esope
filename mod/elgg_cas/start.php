@@ -27,6 +27,10 @@ function elgg_cas_init() {
 	
 	// CAS page handler
 	elgg_register_page_handler('cas_auth', 'elgg_cas_page_handler');
+	$enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
+	if ($enable_ws_auth == 'yes') {
+		elgg_register_page_handler('cas_auth_ws', 'elgg_cas_page_handler_ws');
+	}
 	
 	// Redirection pour déconnexion CAS après la fin du logout
 	elgg_register_event_handler('logout','user','elgg_cas_logout_handler', 1);
@@ -43,6 +47,7 @@ function elgg_cas_init() {
 }
 
 
+// CAS auth page handler
 function elgg_cas_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas';
 	if (!isset($page[0])) { $page[0] = 'login'; }
@@ -52,6 +57,20 @@ function elgg_cas_page_handler($page) {
 		case 'login':
 		default:
 			if (!include_once "$base/cas_login.php") return false;
+	}
+	return true;
+}
+
+// Same, but for webservices auth
+function elgg_cas_page_handler_ws($page) {
+	$base = elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas';
+	if (!isset($page[0])) { $page[0] = 'login'; }
+	
+	switch($page[0]) {
+		case 'logout': set_input('logout', 'logout');
+		case 'login':
+		default:
+			if (!include_once "$base/cas_login_ws.php") return false;
 	}
 	return true;
 }

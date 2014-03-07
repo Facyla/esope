@@ -10,24 +10,30 @@
  */
 
 $french = array(
-
 	/**
 	 * Menu items and titles
 	 */
+	'guidtool' => 'Outil GUID',
+	'guidtool:browse' => 'Explorer les GUIDs',
+	'guidtool:import' => 'Importer des données GUID',
+	'guidtool:import:desc' => 'Collez les données à importer dans la fenetre suivante ; elles doivent impérativement être au format "%s".',
 
-		'guidtool' => 'Outil GUID',
-		'guidtool:browse' => 'Explorer les GUIDs',
-		'guidtool:import' => 'Importer des données GUID',
-		'guidtool:import:desc' => 'Collez les données à importer dans la fenetre suivante ; elles doivent impérativement être au format "%s".',
+	'guidtool:pickformat' => 'Veuillez choisir le format que vous souhaitez utiliser pour importer ou exporter.',
 
-		'guidtool:pickformat' => 'Veuillez choisir le format que vous souhiatez utiliser pour importer ou exporter.',
+	'guidbrowser:export' => 'Exporter',
 
-		'guidbrowser:export' => 'Exporter',
-
-		'guidtool:deleted' => 'GUID %d supprimé',
-		'guidtool:notdeleted' => 'GUID %d non supprimé',
+	'guidtool:editguid' => 'Modifier le GUID : %s',
+	'guidtool:viewguid' => 'Afficher le GUID : %s',
+	
+	'guidtool:regularview' => "Afficher l'entité (vue normale)",
+	'guidtool:regularedit' => "Modifier l'entité (vue normale)",
+	
+	'guidtool:editguid:warning' => "<strong>ATTENTION : malgré l'intégration de quelques vérifications et protections préliminaires contre les erreurs de mannipulation les plus fréquentes lors d'une modification directe des propriétés d'une entité Elgg, cet outil doit être considéré comme potentiellement dangereux s'il est utilisé sans une compréhension en profondeur du modèle de données et de fonctionnement d'Elgg.</strong><br />Il fournit une interface qui permet de modifier directement une série de propriété généralement accessible seulement par des modificaitons directes en base de données, et qui ne sont généralement pas accessibles y compris aux administrateurs. D'un point de vue usages, cet outil facilite la modification des propriétaires et conteneurs, l'activation désactivation des entités Elgg, la modification des timestamps, etc.<br /><strong>Cela peut être utile, mais de grands pouvoirs impliquent de grandes responsabilités : à n'utiliser qu'avec les plus grandes précautions !!</strong><br />",
+	
+	'guidtool:deleted' => 'GUID %d supprimé',
+	'guidtool:notdeleted' => 'GUID %d non supprimé',
 );
-				
+
 add_translation("fr",$french);
 
 

@@ -12,11 +12,9 @@
 $entity_guid = get_input('entity_guid');
 
 // Render the file upload page
-$title = "GUID: $entity_guid";
-$body = elgg_view_title($title);
-$body .= elgg_view("guidtool/profile", array('entity_guid' => $entity_guid));
+$title = elgg_echo('guidtool:viewguid', array($entity_guid));
+$body = elgg_view("guidtool/profile", array('entity_guid' => $entity_guid));
 
-//$body = elgg_view_layout('two_column_left_sidebar', '', $body);
-$body = elgg_view_layout('one_column', array('content' => $body, 'sidebar' => ''));
+$body = elgg_view_layout('content', array('title' => $title, 'content' => $body, 'sidebar' => '', 'filter' => false));
 echo elgg_view_page($title, $body);
 

@@ -46,9 +46,8 @@ unset($vars['disable_security']);
 $attributes = elgg_format_attributes($vars);
 
 if (empty($legend)) {
-  echo "<form $attributes><div class=\"blockform\">$body</div></form>";
+	echo "<form $attributes><div class=\"blockform\">$body</div></form>";
 } else {
-  echo "<form $attributes><fieldset>" . $legend . $body . "</fieldset></form>";
+	echo "<form $attributes><fieldset>" . $legend . $body . "</fieldset></form>";
 }
-
 
