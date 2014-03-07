@@ -204,7 +204,12 @@ function adf_platform_init() {
 	elgg_register_page_handler('messages', 'adf_platform_messages_page_handler');
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
-	
+	// Ajout gestionnaire pour les dossiers
+	/* @TODO : add setting + see if we want this by default or not
+	if (elgg_is_active_plugin('file_tools') && elgg_is_logged_in()) {
+		elgg_register_page_handler('folders','maghrenov_folder_handler');
+	}
+	*/
 	
 	// MODIFICATION DES WIDGETS : (DES)ACTIVATION ET TITRES
 	require_once(dirname(__FILE__) . '/lib/adf_public_platform/widgets.php');
