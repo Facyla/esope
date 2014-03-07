@@ -35,13 +35,15 @@ if (empty($num)) $num = 10; else $num = (int) $num;
 $all_link = '<a href="' . $feed . '" target="_blank">' . elgg_echo('simplepie:group:feed_url:open') . '</a>';
 
 $content = '<div style="padding:6px;">' . elgg_view('simplepie/feed_reader', array('feed_url' => $feed, 'excerpt' => false, 'num_items' => $num, 'post_date' => false)) . '</div>';
+$content .= '<span class="elgg-widget-more">' . $all_link . '</span>';
 
 
 // Group module
-echo '<br />' . elgg_view('groups/profile/module', array(
-	'title' => $title,
-	'content' => $content,
-	'all_link' => false,
-	'add_link' => $all_link,
+// Note: we don't use groups/profile/module view because we're not inside a list
+echo '<br />';
+echo elgg_view_module('info', '', $content, array(
+	'header' => '<h3>' . $title . '</h3>',
+	'class' => 'elgg-module-group',
 ));
+
 
