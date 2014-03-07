@@ -16,12 +16,12 @@ $content .= "<p>Ce script ajoute un titre aux feedbacks, de sorte qu'ils puissen
 $options = array('types' => 'object', 'subtypes' => 'feedback', 'limit' => false);
 
 $feedbacks = elgg_get_entities($options);
-$content .= "Le site comporte actuellement  " . count($feedbacks) . " feedabcks.<br />";
+$content .= "Le site comporte actuellement  " . count($feedbacks) . " feedbacks.<br />";
 $content .= "Actuellement, le plugin \"feedback\" est ";
 if (elgg_is_active_plugin('feedback')) {
 	$content .= 'ACTIVE : vous pouvez continuer.<br />';
 	if ($feedbacks) {
-		$content .= " Vous devriez mettre à jour les feedabcks.<br />";
+		$content .= " Vous devriez mettre à jour les feedbacks.<br />";
 		$content .= '<br /><a class="elgg-button elgg-button-action" href="' . full_url() . '?action=convert_feedbacks">Convertir les feedbacks !</a><br />';
 	} else $content .= " Il n'y a aucun feedback à mettre à jour : inutile de faire quoi que ce soit, les titres sont intégrés désormais.<br />";
 } else {
