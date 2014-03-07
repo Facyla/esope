@@ -53,11 +53,14 @@ if (!elgg_is_logged_in()) {
 	$feedback->container_guid = $feedback_user;
 }
 // Set the feedback's content
+$feedback_txt = get_input('txt');
+// Title is used by river...
+$feedback->title = elgg_get_excerpt($feedback_txt, 25);
 $feedback->page = get_input('page');
 $feedback->mood = get_input('mood');
 $feedback->about = get_input('about');
 $feedback->id = $feedback_sender = get_input('id');
-$feedback->txt = $feedback_txt = get_input('txt');
+$feedback->txt = $feedback_txt;
 $feedback->status = get_input('status', 'open'); // Default status = open
 
 // save the feedback now
