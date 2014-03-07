@@ -1108,3 +1108,83 @@ function esope_is_external_link($url) {
 	return false;
 }
 
+
+if (elgg_is_active_plugin('file_tools')) {
+	
+	// Recursive function that lists folders and their content
+	// bool $view_files : display folder files
+	function esope_view_folder_content($folder, $view_files = true) {
+		$files_content = '';
+		if ($view_files) {
+			$files_content = esope_view_folder_files($folder['folder']->container_guid, $folder['folder']);
+		}
+		$content .= '<li><strong>';
+		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+	
+		if ($folder['children']) {
+			$content .= '<i class="fa fa-folder-open"></i> ' . $folder_title_link . '</strong>';
+			if (!empty($folder['folder']->description)) $content .= ' <em>' . $folder['folder']->description . '</em>';
+			$folders_content = '';
+			foreach ($folder['children'] as $children) { $folders_content .= esope_view_folder_content($children); }
+			if (!empty($folders_content) || !empty($files_content)) {
+				$content .= '<ul>';
+				$content .= $folders_content;
+				$content .= $files_content;
+				$content .= '</ul>';
+			}
+		} else {
+			$content .= '<i class="fa fa-folder-open"></i> ' . $folder_title_link . '</strong>';
+			if (!empty($folder['folder']->description)) $content .= ' <em>' . $folder['folder']->description . '</em>';
+			if (!empty($files_content)) $content .= '<ul>' . $files_content . '</ul>';
+		}
+		$content .= '</li>';
+		return $content;
+	}
+
+	// List files in a specific folder
+	function esope_view_folder_files($container_guid, $folder = false) {
+		$sort_by = elgg_get_plugin_setting("sort", "file_tools");
+		$direction = elgg_get_plugin_setting("sort_direction", "file_tools");
+		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $container_guid, 'limit' => false);
+		if($sort_by == "simpletype") {
+			$options["order_by_metadata"] = array("name" => "mimetype", "direction" => $direction);
+		} else {
+			$options["order_by"] = $sort_by . " " . $direction;
+		}
+		if ($folder) {
+			// Display only files in this folder
+			$options["relationship"] = FILE_TOOLS_RELATIONSHIP;
+			$options["relationship_guid"] = $folder->guid;
+			$options["inverse_relationship"] = false;
+			$files = elgg_get_entities_from_relationship($options);
+		} else {
+			// Display only files in main folder
+			$options['wheres'] = "NOT EXISTS (
+				SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r 
+				WHERE r.guid_two = e.guid AND r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
+			$options['joins'] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid");
+			$files = elgg_get_entities($options);
+		}
+	
+		if ($files) {
+			elgg_set_context('widgets');
+			//$files_content = elgg_view_entity_list($files, array("full_view" => false, "pagination" => false));
+			// Note : méthode qui permet de n'afficher que des <li> (sans <ul>)
+			foreach ($files as $ent) {
+				//$files_content .= elgg_view_list_item($ent);
+				//$files_content .= '<li class="elgg-item">' . elgg_view_entity($ent, array("full_view" => false)) . '</li>';
+				$files_content .= '<li idf="folder-file-' . $ent->guid . '" class="folder-file">' 
+				. '<a href="' . $ent->getURL() . '"> ' 
+				. '<img src="' . $ent->getIconURL('small') . '" style="width:2ex;" /> '
+				. $ent->title . '</a>' 
+				//. elgg_view_entity($ent, array("full_view" => false)) 
+				. '</li>';
+			}
+			elgg_pop_context();
+		}
+		return $files_content;
+	}
+	
+}
+
+
