@@ -18,7 +18,7 @@ $feed = $group->feed_url;
 $needle = '::';
 // Separate pieces of data if set
 if (strrpos($feed, $needle) !== false) {
-	$feed_parts = explode($needle, $folder);
+	$feed_parts = explode($needle, $feed);
 	$feed = $feed_parts[0];
 	$title = $feed_parts[1];
 	$num = $feed_parts[2];

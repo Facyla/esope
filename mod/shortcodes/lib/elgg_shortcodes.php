@@ -152,11 +152,12 @@ elgg_add_shortcode('video','video_sc');
 function diaporama_function($atts, $content='') {
 	$slider_content = '';
 	extract(elgg_shortcode_atts(array(
-			'width' => '640px',
+			'width' => '100%',
 			'height' => '300px',
 			'images' => '',
 		), $atts));
-	$li_style = "width:$width !important; height:$height !important;";
+	$li_style = '';
+	//$li_style = "width:$width !important; height:$height !important;";
 	if (!empty($images)) {
 		// Mode 1 : use images="URL1, URL2" attribute => works if content is not pre-parsed (eg URL are not converted to links)
 		$images = strip_tags($images);
