@@ -639,7 +639,6 @@ function user_getguid($username = false) {
 	throw new InvalidParameterException($username);
 }
 
-// Returns a user GUID for a given username
 expose_function(
 	"user.getguid",
 	"user_getguid",
@@ -662,7 +661,6 @@ function user_getusername($guid = false) {
 	throw new InvalidParameterException($guid);
 }
 
-// Returns a user username for a given GUID
 expose_function(
 	"user.getusername",
 	"user_getusername",
