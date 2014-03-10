@@ -4,13 +4,13 @@ $french = array(
 	// general
 	'item:object:newsletter' => "Lettre d'information",
 	'item:object:newsletter_template' => "Modèle de lettre d'information",
-	'item:object:newsletter_subscription' => "Anonnement à la lettre d'information",
+	'item:object:newsletter_subscription' => "Abonnement à la lettre d'information",
 	'newsletter:add' => "Nouvelle lettre d'information",
 	'newsletter:subscribe' => "S'abonner",
 	'newsletter:unsubscribe' => "Se désabonner",
 	'newsletter:duplicate_of' => "Duplicata de",
 	
-	'newsletter:status:concept' => "Concept",
+	'newsletter:status:concept' => "Conception",
 	'newsletter:status:sending' => "Envoi en cours",
 	'newsletter:status:scheduled' => "Programmé",
 	'newsletter:status:sent' => "Envoyé",
@@ -32,7 +32,7 @@ $french = array(
 	'newsletter:menu:owner_block:group' => "Lettre d'information de groupe",
 	
 	'newsletter:menu:filter:sent' => "Envoyé",
-	'newsletter:menu:filter:concept' => "Concept",
+	'newsletter:menu:filter:concept' => "Conception",
 	'newsletter:menu:filter:scheduled' => "Programmé",
 	'newsletter:menu:filter:sending' => "Envoi en cours",
 	

@@ -1,0 +1,7 @@
+# Solves Firefox display bug
+<FilesMatch ".(ttf|otf|eot|woff)$">
+	<ifModule mod_headers.c>
+	Header set Access-Control-Allow-Origin "*"
+	</ifModule>
+</FilesMatch>
+

@@ -14,41 +14,38 @@
  * @param string $offset   Indexing offset, if any
  *
  * @return array
- */    				
+ */
 function group_get_groups($context, $username, $limit, $offset){
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
 	
 	if($context == "all"){
 		$groups = elgg_get_entities(array(
-											'types' => 'group',
-											'limit' => $limit,
-											'full_view' => FALSE,
-											));
+			'types' => 'group',
+			'limit' => $limit, 'full_view' => FALSE,
+		));
 	}
 	if($context == "mine" || $context ==  "user"){
 		$groups = $user->getGroups();
 	}
 	if($context == "owned"){
 		$groups = elgg_get_entities(array(
-											'types' => 'group',
-											'owner_guid' => $user->guid,
-											'limit' => $limit,
-											'full_view' => FALSE,
-											));
+			'types' => 'group',
+			'owner_guid' => $user->guid,
+			'limit' => $limit, 'full_view' => FALSE,
+		));
 	}
 	if($context == "featured"){
 		$groups = elgg_get_entities_from_metadata(array(
-														'metadata_name' => 'featured_group',
-														'metadata_value' => 'yes',
-														'types' => 'group',
-														'limit' => 10,
-														));
+			'metadata_name' => 'featured_group',
+			'metadata_value' => 'yes',
+			'types' => 'group',
+			'limit' => 10,
+		));
 	}
-	
 	
 	if($groups){
 	foreach($groups as $single){
@@ -64,18 +61,20 @@ function group_get_groups($context, $username, $limit, $offset){
 	}
 	return $return;
 }
+
 expose_function('group.get_groups',
-				"group_get_groups",
-				array(	'context' => array ('type' => 'string', 'required' => false, 'default' => elgg_is_logged_in() ? "user" : "all"),
-						'username' => array ('type' => 'string', 'required' => false),
-						'limit' => array ('type' => 'int', 'required' => false),
-						'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Get groups use is a member of",
-				'GET',
-				false,
-				false);	
-				
+	"group_get_groups",
+	array(	'context' => array ('type' => 'string', 'required' => false, 'default' => elgg_is_logged_in() ? "user" : "all"),
+			'username' => array ('type' => 'string', 'required' => false),
+			'limit' => array ('type' => 'int', 'required' => false),
+			'offset' => array ('type' => 'int', 'required' => false),
+		),
+	elgg_echo('web_services:group:get_groups'),
+	'GET',
+	true,
+	true);
+
+
  /**
  * Web service for joining a group
  *
@@ -104,8 +103,6 @@ function get_group($guid) {
 			}
 	}
 	
-	
-	
 	$group_info['name'] = $group->name;
 	$group_info['owner_name'] = $owner->name;
 	$group_info['members_count'] = count($group->getMembers($limit=0));
@@ -115,17 +112,19 @@ function get_group($guid) {
 	$group_info['enabled_options'] = $CONFIG->group_tool_options;	
 	return $group_info;
 	
-} 
-			
+}
+
 expose_function('group.get',
-				"get_group",
-				array('guid' => array ('type' => 'int'),
-					),
-				"Get group",
-				'GET',
-				false,
-				false);
- /**
+	"get_group",
+	array('guid' => array ('type' => 'int'),
+		),
+	elgg_echo('web_services:group:get'),
+	'GET',
+	true,
+	true);
+
+
+/**
  * Web service for joining a group
  *
  * @param string $username username of author
@@ -188,18 +187,19 @@ function group_join($username, $groupid) {
 		$return['message'] = elgg_echo("groups:cantjoin");
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.join',
-				"group_join",
-				array('username' => array ('type' => 'string'),
-						'groupid' => array ('type' => 'string'),
-					),
-				"Join a group",
-				'POST',
-				true,
-				false);
-				
+	"group_join",
+	array('username' => array ('type' => 'string'),
+			'groupid' => array ('type' => 'string'),
+		),
+	elgg_echo('web_services:group:join'),
+	'POST',
+	true,
+	true);
+
+
  /**
  * Web service for leaving a group
  *
@@ -210,7 +210,7 @@ expose_function('group.join',
  */
 function group_leave($username, $groupid) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -236,21 +236,21 @@ function group_leave($username, $groupid) {
 		$return['message'] = elgg_echo("groups:cantleave");
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.leave',
-				"group_leave",
-				array('username' => array ('type' => 'int'),
-						'groupid' => array ('type' => 'string'),
-					),
-				"leave a group",
-				'POST',
-				true,
-				false);
+	"group_leave",
+	array('username' => array ('type' => 'int'),
+		'groupid' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:group:leave'),
+	'POST',
+	true,
+	true);
 
 function group_save($groupid, $username){
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -259,17 +259,17 @@ function group_save($groupid, $username){
 	}
 }
 expose_function('group.save',
-				"group_save",
-				array(
-						'groupid' => array ('type' => 'int'),
-						'username' => array ('type' => 'string', 'required' => false),
-					),
-				"leave a group",
-				'POST',
-				true,
-				false);
+	"group_save",
+	array(
+		'groupid' => array ('type' => 'int'),
+		'username' => array ('type' => 'string', 'required' => false),
+		),
+	elgg_echo('web_services:group:save'),
+	'POST',
+	true,
+	true);
 
-			
+
  /**
  * Web service for posting a new topic to a group
  *
@@ -284,7 +284,7 @@ expose_function('group.save',
  */
 function group_forum_save_post($groupid, $title, $desc, $tags, $status, $access_id ,$username) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -322,24 +322,25 @@ function group_forum_save_post($groupid, $title, $desc, $tags, $status, $access_
 		$return['message'] = elgg_echo('discussion:topic:created');
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.forum.save_post',
-				"group_forum_save_post",
-				array(
-						'groupid' => array ('type' => 'int'),
-						'title' => array ('type' => 'string'),
-						'desc' => array ('type' => 'string'),
-						'tags' => array ('type' => 'string', 'required' => false, 'default'=>' '),
-						'status' => array ('type' => 'string', 'required' => false, 'default'=>"published"),
-						'access_id' => array ('type' => 'int', 'required' => false, 'default'=>ACCESS_DEFAULT),
-						'username' => array ('type' => 'string', 'required' =>false),
-					),
-				"Post to a group",
-				'POST',
-				true,
-				true);
-				
+	"group_forum_save_post",
+	array(
+		'groupid' => array ('type' => 'int'),
+		'title' => array ('type' => 'string'),
+		'desc' => array ('type' => 'string'),
+		'tags' => array ('type' => 'string', 'required' => false, 'default'=>' '),
+		'status' => array ('type' => 'string', 'required' => false, 'default'=>"published"),
+		'access_id' => array ('type' => 'int', 'required' => false, 'default'=>ACCESS_DEFAULT),
+		'username' => array ('type' => 'string', 'required' =>false),
+	),
+	elgg_echo('web_services:group:save_post'),
+	'POST',
+	true,
+	true);
+
+
 /**
  * Web service for deleting a topic from a group
  *
@@ -357,7 +358,7 @@ function group_forum_delete_post( $topicid, $username) {
 	}
 
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -381,19 +382,20 @@ function group_forum_delete_post( $topicid, $username) {
 		throw new InvalidParameterException($msg);
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.forum.delete_post',
-				"group_forum_delete_post",
-				array(
-						'topicid' => array ('type' => 'int'),
-						'username' => array ('type' => 'string', 'required'=>false),
-					),
-				"Post to a group",
-				'POST',
-				true,
-				true);
-				
+	"group_forum_delete_post",
+	array(
+			'topicid' => array ('type' => 'int'),
+			'username' => array ('type' => 'string', 'required'=>false),
+		),
+	elgg_echo('web_services:group:delete_post'),
+	'POST',
+	true,
+	true);
+
+
 /**
  * Web service get latest post in a group
  *
@@ -442,18 +444,20 @@ function group_forum_get_posts($guid, $limit = 10, $offset = 0) {
 		throw new InvalidParameterException($msg);
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.forum.get_posts',
-				"group_forum_get_posts",
-				array('guid' => array ('type' => 'int'),
-					  'limit' => array ('type' => 'int', 'required' => false),
-					  'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Get posts from a group",
-				'GET',
-				false,
-				false);
+	"group_forum_get_posts",
+	array('guid' => array ('type' => 'int'),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:group:get_posts'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service get single post from a group forum
  *
@@ -466,37 +470,38 @@ expose_function('group.forum.get_posts',
 function group_forum_get_post($guid, $limit = 10, $offset = 0) {
 	$discussion = get_entity($guid);
 	
-			$post['guid'] = $discussion->guid;
-			$post['title'] = $discussion->title;
-			$post['description'] = strip_tags($discussion->description);
-			$user = get_entity($discussion->owner_guid);
-			$post['owner']['guid'] = $user->guid;
-			$post['owner']['name'] = $user->name;
-			$post['owner']['username'] = $user->username;
-			$post['owner']['avatar_url'] = get_entity_icon_url($user,'small');
-			$post['container_guid'] = $discussion->container_guid;
-			$post['access_id'] = $discussion->access_id;
-			$post['time_created'] = (int)$discussion->time_created;
-			$post['time_updated'] = (int)$discussion->time_updated;
-			$post['last_action'] = (int)$discussion->last_action;
+	$post['guid'] = $discussion->guid;
+	$post['title'] = $discussion->title;
+	$post['description'] = strip_tags($discussion->description);
+	$user = get_entity($discussion->owner_guid);
+	$post['owner']['guid'] = $user->guid;
+	$post['owner']['name'] = $user->name;
+	$post['owner']['username'] = $user->username;
+	$post['owner']['avatar_url'] = get_entity_icon_url($user,'small');
+	$post['container_guid'] = $discussion->container_guid;
+	$post['access_id'] = $discussion->access_id;
+	$post['time_created'] = (int)$discussion->time_created;
+	$post['time_updated'] = (int)$discussion->time_updated;
+	$post['last_action'] = (int)$discussion->last_action;
 	
 	if(!$discussion) {
 		$msg = elgg_echo('discussion:topic:notfound');
 		throw new InvalidParameterException($msg);
 	}
 	return $post;
-} 
-				
+}
+
 expose_function('group.forum.get_post',
-				"group_forum_get_post",
-				array('guid' => array ('type' => 'int'),
-					  'limit' => array ('type' => 'int', 'required' => false),
-					  'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Get a single post from a group forum",
-				'GET',
-				false,
-				false);
+	"group_forum_get_post",
+	array('guid' => array ('type' => 'int'),
+		  'limit' => array ('type' => 'int', 'required' => false),
+		  'offset' => array ('type' => 'int', 'required' => false),
+		),
+	elgg_echo('web_services:group:get_post'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service get replies on a post
@@ -512,8 +517,7 @@ function group_forum_get_replies($guid, $limit = 10, $offset = 0) {
 	$options = array(
 		'guid' => $guid,
 		'annotation_name' => 'group_topic_post',
-		'limit' => $limit,
-		'offset' => $offset,
+		'limit' => $limit, 'offset' => $offset,
 	);
 	$content = elgg_get_annotations($options);
 	if($content) {
@@ -542,19 +546,20 @@ function group_forum_get_replies($guid, $limit = 10, $offset = 0) {
 
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('group.forum.get_replies',
-				"group_forum_get_replies",
-				array('guid' => array ('type' => 'int'),
-					  'limit' => array ('type' => 'int', 'required' => false),
-					  'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Get posts from a group",
-				'GET',
-				false,
-				false);
-				
+	"group_forum_get_replies",
+	array('guid' => array ('type' => 'int'),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:group:get_replies'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service post a reply
  *
@@ -572,7 +577,7 @@ function group_forum_save_reply( $postid, $text, $username) {
 	}
 
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -596,20 +601,21 @@ function group_forum_save_reply( $postid, $text, $username) {
 	
 	$return['success'] = true;
 	return $return;
-} 
-				
+}
+
 expose_function('group.forum.save_reply',
-				"group_forum_save_reply",
-				array(
-						'postid' => array ('type' => 'string'),
-						'text' => array ('type' => 'string'),
-						'username' => array ('type' => 'string', 'required'=>false),
-					),
-				"Post a reply to a group",
-				'POST',
-				true,
-				true);
-				
+	"group_forum_save_reply",
+	array(
+		'postid' => array ('type' => 'string'),
+		'text' => array ('type' => 'string'),
+		'username' => array ('type' => 'string', 'required'=>false),
+	),
+	elgg_echo('web_services:group:save_reply'),
+	'POST',
+	true,
+	true);
+
+
 /**
  * Web service delete a reply
  *
@@ -627,7 +633,7 @@ function group_forum_delete_reply( $id, $username) {
 	}
 	
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -649,19 +655,19 @@ function group_forum_delete_reply( $id, $username) {
 		throw new InvalidParameterException($msg);
 	}
 	return $return;
+}
 
-} 
-				
 expose_function('group.forum.delete_reply',
-				"group_forum_delete_reply",
-				array(
-						'id' => array ('type' => 'string'),
-						'username' => array ('type' => 'string', 'required' =>false),
-					),
-				"Delete a reply from a group forum post",
-				'POST',
-				true,
-				true);
+	"group_forum_delete_reply",
+	array(
+		'id' => array ('type' => 'string'),
+		'username' => array ('type' => 'string', 'required' =>false),
+	),
+	elgg_echo('web_services:group:delete_post'),
+	'POST',
+	true,
+	true);
+
 
 /**
  * Web service to get activity feed for a group
@@ -673,36 +679,35 @@ expose_function('group.forum.delete_reply',
  * @return bool
  */
 function group_activity($guid, $limit = 10, $offset = 0) {
-$group = get_entity($guid);			
-if(!$guid){
-	$msg = elgg_echo('groups:notfound');
-	throw new InvalidParameterException($msg);
-}
+	$group = get_entity($guid);
+	if(!$guid){
+		$msg = elgg_echo('groups:notfound');
+		throw new InvalidParameterException($msg);
+	}
 
-$db_prefix = elgg_get_config('dbprefix');
-
-
-global $jsonexport;
+	$db_prefix = elgg_get_config('dbprefix');
+	global $jsonexport;
 	
-$content = elgg_list_river(array(
-	'limit' => $limit,
-	'pagination' => false,
-	'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
-	'wheres' => array("(e1.container_guid = $group->guid)"),
-));
+	$content = elgg_list_river(array(
+		'limit' => $limit,
+		'offset' => $offset,
+		'pagination' => false,
+		'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
+		'wheres' => array("(e1.container_guid = $group->guid)"),
+	));
 
-return $jsonexport['activity'];
-
+	return $jsonexport['activity'];
 }
+
 expose_function('group.activity',
-				"group_activity",
-				array(
-						'guid' => array ('type' => 'int'),
-						'limit' => array ('type' => 'int', 'required' => false),
-					  	'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Get the activity feed for a group",
-				'GET',
-				false,
-				false);
-				
+	"group_activity",
+	array(
+		'guid' => array ('type' => 'int'),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:group:activity'),
+	'GET',
+	true,
+	true);
+

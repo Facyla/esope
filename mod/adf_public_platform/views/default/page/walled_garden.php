@@ -13,12 +13,46 @@ $replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_p
 
 $content = '';
 
-// Contenu de la page
-if (!empty($vars['content'])) {
+// Contenu de la page => $vars['body']
+// @TODO : mieux gérer l'affichage si $vars['body'] est renseigné
+
+// Display reset password form if asked to
+$user_guid = get_input('u', false);
+$code = get_input('c', false);
+if ($user_guid && $code) {
+	$user = get_entity($user_guid);
+	if (!$user instanceof ElggUser) {
+		register_error(elgg_echo('user:passwordreset:unknown_user'));
+		forward();
+	}
+	$params = array('guid' => $user_guid, 'code' => $code);
 	
-	$content .= $vars['content'];
-	
-} else {
+	$content .= '<header><div class="interne">';
+	$headertitle = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+	if (empty($headertitle)) $content .= '<h1 class="invisible">' . $CONFIG->site->name . '</h1>';
+	else $content .= '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+	$content .= '</div></header>';
+	$content .= '<div class="elgg-page-messages">';
+	$content .= elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
+	$content .= '</div>';
+	$content .= '<div class="clearfloat"></div>';
+
+	$content .= '<div id="adf-homepage" class="interne">';
+	$content .= '<div id="adf-loginbox">';
+	$content .= elgg_view_form('user/passwordreset', array('class' => 'elgg-form-account'), $params);
+	$content .= '<div class="clearfloat"></div>';
+	$content .= '</div>';
+	$content .= '</div>';
+
+	$content .= elgg_view('page/elements/footer');
+
+}
+
+
+
+
+// Display default page only if no specific content has been set before
+if (empty($content)) {
 	
 	// Formulaire de renvoi du mot de passe
 	$lostpassword_form = '<div id="adf-lostpassword" style="display:none;">';
@@ -127,11 +161,10 @@ header("Content-type: text/html; charset=UTF-8");
 
 <body>
 	
-	<?php
-	echo $content;
+	<?php echo $content; ?>
 	
-	?>
-
+	<?php //echo elgg_view('page/elements/foot', $vars); ?>
+	
 </body>
 </html>
 

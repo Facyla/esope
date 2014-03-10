@@ -22,20 +22,19 @@ if (elgg_view_exists($item->view, 'default')) {
 }
 
 if($object->type == "user" || $object->type == "group"){
-		$item->object_metadata['name'] = $object->name;
-		$item->object_metadata['username'] = $object->username;
-		$item->object_metadata['avatar_url'] = get_entity_icon_url($object,'medium');
-		if($annotation){
-		$item->object_metadata['message'] = $annotation->value;
-		} 
-		$item->object_metadata['description'] = $object->description;
-	} else {
-		$item->object_metadata['name'] = $object->title;
-		if($annotation){
-		$item->object_metadata['message'] = $annotation->value;
-		} 
-		$item->object_metadata['description'] = $object->description;
-
+	$item->object_metadata['name'] = $object->name;
+	$item->object_metadata['username'] = $object->username;
+	$item->object_metadata['avatar_url'] = get_entity_icon_url($object,'medium');
+	if($annotation){
+	$item->object_metadata['message'] = $annotation->value;
+	} 
+	$item->object_metadata['description'] = $object->description;
+} else {
+	$item->object_metadata['name'] = $object->title;
+	if($annotation){
+	$item->object_metadata['message'] = $annotation->value;
+	} 
+	$item->object_metadata['description'] = $object->description;
 }
 
 if($subject->type == "user" || $object->type == "group"){
@@ -48,3 +47,4 @@ if($subject->type == "user" || $object->type == "group"){
 
 
 $jsonexport['activity'][] = $vars['item'];
+

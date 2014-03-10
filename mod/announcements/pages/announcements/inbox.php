@@ -21,7 +21,6 @@ $body = elgg_view_layout('content', array(
 	'title' => elgg_echo('announcements:inbox'),
 	'content' => $content,
 	'filter' => '',
-	'buttons' => '',
 ));
 
 echo elgg_view_page($title, $body);

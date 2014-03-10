@@ -12,14 +12,14 @@
  * Web service to get file list by all users
  *
  * @param string $context eg. all, friends, mine, groups
- * @param int $limit  (optional) default 10
+ * @param int $limit	(optional) default 10
  * @param int $offset (optional) default 0
- * @param int $group_guid (optional)  the guid of a group, $context must be set to 'group'
+ * @param int $group_guid (optional)	the guid of a group, $context must be set to 'group'
  * @param string $username (optional) the username of the user default loggedin user
  *
  * @return array $file Array of files uploaded
  */
-function blog_get_posts($context,  $limit = 10, $offset = 0,$group_guid, $username) {	
+function blog_get_posts($context,	$limit = 10, $offset = 0,$group_guid, $username) {	
 	if(!$username) {
 		$user = get_loggedin_user();
 	} else {
@@ -29,45 +29,38 @@ function blog_get_posts($context,  $limit = 10, $offset = 0,$group_guid, $userna
 		}
 	}
 		
-		if($context == "all"){
+		if($context == "all") {
 		$params = array(
-			'types' => 'object',
-			'subtypes' => 'blog',
-			'limit' => $limit,
-			'full_view' => FALSE,
+			'types' => 'object', 'subtypes' => 'blog',
+			'limit' => $limit, 'full_view' => FALSE,
 		);
 		}
-		if($context == "mine" || $context ==  "user"){
+		if($context == "mine" || $context ==	"user") {
 		$params = array(
-			'types' => 'object',
-			'subtypes' => 'blog',
+			'types' => 'object', 'subtypes' => 'blog',
 			'owner_guid' => $user->guid,
-			'limit' => $limit,
-			'full_view' => FALSE,
+			'limit' => $limit, 'full_view' => FALSE,
 		);
 		}
-		if($context == "group"){
+		if($context == "group") {
 		$params = array(
-			'types' => 'object',
-			'subtypes' => 'blog',
+			'types' => 'object', 'subtypes' => 'blog',
 			'container_guid'=> $group_guid,
-			'limit' => $limit,
-			'full_view' => FALSE,
+			'limit' => $limit, 'full_view' => FALSE,
 		);
 		}
 		$latest_blogs = elgg_get_entities($params);
 		
-		if($context == "friends"){
-		$latest_blogs = get_user_friends_objects($user->guid, 'blog', $limit, $offset);
+		if($context == "friends") {
+			$latest_blogs = get_user_friends_objects($user->guid, 'blog', $limit, $offset);
 		}
-	
 	
 	if($latest_blogs) {
 		foreach($latest_blogs as $single ) {
 			$blog['guid'] = $single->guid;
 			$blog['title'] = $single->title;
 			$blog['excerpt'] = $single->excerpt;
-
+			
 			$owner = get_entity($single->owner_guid);
 			$blog['owner']['guid'] = $owner->guid;
 			$blog['owner']['name'] = $owner->name;
@@ -81,8 +74,7 @@ function blog_get_posts($context,  $limit = 10, $offset = 0,$group_guid, $userna
 			$blog['last_action'] = (int)$single->last_action;
 			$return[] = $blog;
 		}
-	}
-	else {
+	} else {
 		$msg = elgg_echo('blog:none');
 		throw new InvalidParameterException($msg);
 	}
@@ -90,29 +82,29 @@ function blog_get_posts($context,  $limit = 10, $offset = 0,$group_guid, $userna
 }
 
 expose_function('blog.get_posts',
-				"blog_get_posts",
-				array(
-						'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
-					  'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
-					  'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
-					  'group_guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
-					   'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Get list of blog posts",
-				'GET',
-				false,
-				false);
+	"blog_get_posts",
+	array(
+			'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
+			'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
+			'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
+			'group_guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
+			 'username' => array ('type' => 'string', 'required' => false),
+		),
+	elgg_echo('web_services:blog:get_posts'),
+	'GET',
+	true,
+	true);
 
 
 /**
  * Web service for making a blog post
  *
  * @param string $username username of author
- * @param string $title    the title of blog
- * @param string $excerpt  the excerpt of blog
- * @param string $text     the content of blog
- * @param string $tags     tags for blog
- * @param string $access   Access level of blog
+ * @param string $title		the title of blog
+ * @param string $excerpt	the excerpt of blog
+ * @param string $text		 the content of blog
+ * @param string $tags		 tags for blog
+ * @param string $access	 Access level of blog
  *
  * @return bool
  */
@@ -143,26 +135,27 @@ function blog_save($title, $text, $excerpt, $tags , $access, $container_guid) {
 	$return['success'] = true;
 	$return['message'] = elgg_echo('blog:message:saved');
 	return $return;
-	} 
-	
+}
+
 expose_function('blog.save_post',
-				"blog_save",
-				array(
-						'title' => array ('type' => 'string', 'required' => true),
-						'text' => array ('type' => 'string', 'required' => true),
-						'excerpt' => array ('type' => 'string', 'required' => false),
-						'tags' => array ('type' => 'string', 'required' => false, 'default' => "blog"),
-						'access' => array ('type' => 'string', 'required' => false, 'default'=>ACCESS_PUBLIC),
-						'container_guid' => array ('type' => 'int', 'required' => false, 'default' => 0),
-					),
-				"Post a blog post",
-				'POST',
-				true,
-				false);
+	"blog_save",
+	array(
+			'title' => array ('type' => 'string', 'required' => true),
+			'text' => array ('type' => 'string', 'required' => true),
+			'excerpt' => array ('type' => 'string', 'required' => false),
+			'tags' => array ('type' => 'string', 'required' => false, 'default' => "blog"),
+			'access' => array ('type' => 'string', 'required' => false, 'default'=>ACCESS_PUBLIC),
+			'container_guid' => array ('type' => 'int', 'required' => false, 'default' => 0),
+		),
+	elgg_echo('web_services:blog:save_post'),
+	'POST',
+	true,
+	true);
+
 /**
  * Web service for delete a blog post
  *
- * @param string $guid     GUID of a blog entity
+ * @param string $guid		 GUID of a blog entity
  * @param string $username Username of reader (Send NULL if no user logged in)
  * @param string $password Password for authentication of username (Send NULL if no user logged in)
  *
@@ -199,30 +192,32 @@ function blog_delete_post($guid, $username) {
 	
 	return $return;
 }
-	
+
 expose_function('blog.delete_post',
-				"blog_delete_post",
-				array('guid' => array ('type' => 'string'),
-						'username' => array ('type' => 'string'),
-					),
-				"Read a blog post",
-				'POST',
-				true,
-				false);			
+	"blog_delete_post",
+	array('guid' => array ('type' => 'string'),
+			'username' => array ('type' => 'string'),
+		),
+	elgg_echo('web_services:blog:delete_post'),
+	'POST',
+	true,
+	true);
+
+
 /**
  * Web service for read a blog post
  *
- * @param string $guid     GUID of a blog entity
+ * @param string $guid		 GUID of a blog entity
  * @param string $username Username of reader (Send NULL if no user logged in)
  * @param string $password Password for authentication of username (Send NULL if no user logged in)
  *
- * @return string $title       Title of blog post
- * @return string $content     Text of blog post
- * @return string $excerpt     Excerpt
- * @return string $tags        Tags of blog post
- * @return string $owner_guid  GUID of owner
- * @return string $access_id   Access level of blog post (0,-2,1,2)
- * @return string $status      (Published/Draft)
+ * @return string $title			 Title of blog post
+ * @return string $content		 Text of blog post
+ * @return string $excerpt		 Excerpt
+ * @return string $tags				Tags of blog post
+ * @return string $owner_guid	GUID of owner
+ * @return string $access_id	 Access level of blog post (0,-2,1,2)
+ * @return string $status			(Published/Draft)
  * @return string $comments_on On/Off
  */
 function blog_get_post($guid, $username) {
@@ -262,26 +257,26 @@ function blog_get_post($guid, $username) {
 	$return['comments_on'] = $blog->comments_on;
 	return $return;
 }
-	
+
 expose_function('blog.get_post',
-				"blog_get_post",
-				array('guid' => array ('type' => 'string'),
-						'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Read a blog post",
-				'GET',
-				false,
-				false);
+	"blog_get_post",
+	array('guid' => array ('type' => 'string'),
+			'username' => array ('type' => 'string', 'required' => false),
+		),
+	elgg_echo('web_services:blog:delete_post'),
+	'GET',
+	true,
+	true);
 /**
  * Web service to retrieve comments on a blog post
  *
  * @param string $guid blog guid
- * @param string $limit    Number of users to return
- * @param string $offset   Indexing offset, if any
+ * @param string $limit		Number of users to return
+ * @param string $offset	 Indexing offset, if any
  *
  * @return array
- */    				
-function blog_get_comments($guid, $limit = 10, $offset = 0){
+ */						
+function blog_get_comments($guid, $limit = 10, $offset = 0) {
 	$blog = get_entity($guid);
 	
 $options = array(
@@ -294,8 +289,8 @@ $options = array(
 
 	$comments = elgg_get_annotations($options);
 
-	if($comments){
-	foreach($comments as $single){
+	if($comments) {
+	foreach($comments as $single) {
 		$comment['guid'] = $single->id;
 		$comment['description'] = strip_tags($single->value);
 		
@@ -314,17 +309,19 @@ $options = array(
 	}
 	return $return;
 }
+
 expose_function('blog.get_comments',
-				"blog_get_comments",
-				array(	'guid' => array ('type' => 'string'),
-						'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
-						'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
-						
-					),
-				"Get comments for a blog post",
-				'GET',
-				false,
-				false);	
+	"blog_get_comments",
+	array(	'guid' => array ('type' => 'string'),
+			'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
+			'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
+		),
+	elgg_echo('web_services:blog:get_comments'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service to comment on a post
  *
@@ -333,8 +330,8 @@ expose_function('blog.get_comments',
  * @param int $access_id
  *
  * @return array
- */    				
-function blog_post_comment($guid, $text){
+ */						
+function blog_post_comment($guid, $text) {
 	
 	$entity = get_entity($guid);
 
@@ -348,7 +345,7 @@ function blog_post_comment($guid, $text){
 								$entity->access_id);
 
 
-	if($annotation){
+	if($annotation) {
 		// notify if poster wasn't owner
 		if ($entity->owner_guid != $user->guid) {
 
@@ -373,12 +370,14 @@ function blog_post_comment($guid, $text){
 	}
 	return $return;
 }
+
 expose_function('blog.post_comment',
-				"blog_post_comment",
-				array(	'guid' => array ('type' => 'int'),
-						'text' => array ('type' => 'string'),
-					),
-				"Post a comment on a blog post",
-				'POST',
-				true,
-				true);	
+	"blog_post_comment",
+	array(	'guid' => array ('type' => 'int'),
+			'text' => array ('type' => 'string'),
+		),
+	elgg_echo('web_services:blog:get_comments'),
+	'POST',
+	true,
+	true);
+

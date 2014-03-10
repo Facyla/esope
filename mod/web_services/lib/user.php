@@ -20,14 +20,15 @@ function user_get_profile_fields() {
 	}
 	return $profile_labels;
 }
-	
+
 expose_function('user.get_profile_fields',
-				"user_get_profile_fields",
-				array(),
-				"Get user profile labels",
-				'GET',
-				false,
-				false);
+	"user_get_profile_fields",
+	array(),
+	elgg_echo('web_services:user:get_profile_fields'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service to get profile information
@@ -39,7 +40,7 @@ expose_function('user.get_profile_fields',
 function user_get_profile($username) {
 	//if $username is not provided then try and get the loggedin user
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -74,13 +75,15 @@ function user_get_profile($username) {
 }
 
 expose_function('user.get_profile',
-				"user_get_profile",
-				array('username' => array ('type' => 'string', 'required' => false)
-					),
-				"Get user profile information",
-				'GET',
-				false,
-				false);
+	"user_get_profile",
+	array('username' => array ('type' => 'string', 'required' => false)
+		),
+	elgg_echo('web_services:user:get_profile'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service to update profile information
  *
@@ -90,7 +93,7 @@ expose_function('user.get_profile',
  */
 function user_save_profile($username, $profile) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -159,16 +162,17 @@ function user_save_profile($username, $profile) {
 	
 	return "Success";
 }
-	
+
 expose_function('user.save_profile',
-				"user_save_profile",
-				array('username' => array ('type' => 'string'),
-					 'profile' => array ('type' => 'array'),
-					),
-				"Get user profile information with username",
-				'POST',
-				true,
-				false);
+	"user_save_profile",
+	array('username' => array ('type' => 'string'),
+		'profile' => array ('type' => 'array'),
+	),
+	elgg_echo('web_services:user:'),
+	'POST',
+	true,
+	true);
+
 
 /**
  * Web service to get all users registered with an email ID
@@ -193,13 +197,14 @@ function user_get_user_by_email($email) {
 }
 
 expose_function('user.get_user_by_email',
-				"user_get_user_by_email",
-				array('email' => array ('type' => 'string'),
-					),
-				"Get Username by email",
-				'GET',
-				false,
-				false);
+	"user_get_user_by_email",
+	array('email' => array ('type' => 'string'),
+		),
+	elgg_echo('web_services:user:get_user_by_email'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service to check availability of username
@@ -207,7 +212,7 @@ expose_function('user.get_user_by_email',
  * @param string $username Username to check for availaility 
  *
  * @return bool
- */           
+ */
 function user_check_username_availability($username) {
 	$user = get_user_by_username($username);
 	if (!$user) {
@@ -218,13 +223,15 @@ function user_check_username_availability($username) {
 }
 
 expose_function('user.check_username_availability',
-				"user_check_username_availability",
-				array('username' => array ('type' => 'string'),
-					),
-				"Get Username by email",
-				'GET',
-				false,
-				false);
+	"user_check_username_availability",
+	array(
+		'username' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:check_username_availability'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service to register user
@@ -235,7 +242,7 @@ expose_function('user.check_username_availability',
  * @param string $password Password 
  *
  * @return bool
- */           
+ */
 function user_register($name, $email, $username, $password) {
 	$user = get_user_by_username($username);
 	if (!$user) {
@@ -249,16 +256,17 @@ function user_register($name, $email, $username, $password) {
 }
 
 expose_function('user.register',
-				"user_register",
-				array('name' => array ('type' => 'string'),
-						'email' => array ('type' => 'string'),
-						'username' => array ('type' => 'string'),
-						'password' => array ('type' => 'string'),
-					),
-				"Register user",
-				'GET',
-				false,
-				false);
+	"user_register",
+	array('name' => array ('type' => 'string'),
+		'email' => array ('type' => 'string'),
+		'username' => array ('type' => 'string'),
+		'password' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:register'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service to add as friend
@@ -267,10 +275,10 @@ expose_function('user.register',
  * @param string $friend Username to be added as friend
  *
  * @return bool
- */           
+ */
 function user_friend_add($friend, $username) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -303,16 +311,16 @@ function user_friend_add($friend, $username) {
 }
 
 expose_function('user.friend.add',
-				"user_friend_add",
-				array(
-						'friend' => array ('type' => 'string'),
-						'username' => array ('type' => 'string', 'required' =>false),
-					),
-				"Add a user as friend",
-				'POST',
-				true,
-				false);	
-				
+	"user_friend_add",
+	array(
+		'friend' => array ('type' => 'string'),
+		'username' => array ('type' => 'string', 'required' =>false),
+	),
+	elgg_echo('web_services:user:friend:add'),
+	'POST',
+	true,
+	true);
+
 
 /**
  * Web service to remove friend
@@ -321,10 +329,10 @@ expose_function('user.friend.add',
  * @param string $friend Username to be removed from friend
  *
  * @return bool
- */           
+ */
 function user_friend_remove($friend,$username) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -356,16 +364,17 @@ function user_friend_remove($friend,$username) {
 }
 
 expose_function('user.friend.remove',
-				"user_friend_remove",
-				array(
-						'friend' => array ('type' => 'string'),
-						'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Remove friend",
-				'GET',
-				true,
-				true);				
-				
+	"user_friend_remove",
+	array(
+			'friend' => array ('type' => 'string'),
+			'username' => array ('type' => 'string', 'required' => false),
+		),
+	elgg_echo('web_services:user:friend:remove'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service to get friends of a user
  *
@@ -374,12 +383,12 @@ expose_function('user.friend.remove',
  * @param string $offset   Indexing offset, if any
  *
  * @return array
- */           
+ */
 function user_get_friends($username, $limit = 10, $offset = 0) {
 	if($username){
 		$user = get_user_by_username($username);
 	} else {
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	}
 	if (!$user) {
 		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
@@ -402,16 +411,17 @@ function user_get_friends($username, $limit = 10, $offset = 0) {
 }
 
 expose_function('user.friend.get_friends',
-				"user_get_friends",
-				array('username' => array ('type' => 'string', 'required' => false),
-						'limit' => array ('type' => 'int', 'required' => false),
-						'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Register user",
-				'GET',
-				false,
-				false);	
-				
+	"user_get_friends",
+	array('username' => array ('type' => 'string', 'required' => false),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:user:get_friends'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service to obtains the people who have made a given user a friend
  *
@@ -420,10 +430,10 @@ expose_function('user.friend.get_friends',
  * @param string $offset   Indexing offset, if any
  *
  * @return array
- */           
+ */
 function user_get_friends_of($username, $limit = 10, $offset = 0) {
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 	}
@@ -448,16 +458,16 @@ function user_get_friends_of($username, $limit = 10, $offset = 0) {
 }
 
 expose_function('user.friend.get_friends_of',
-				"user_get_friends_of",
-				array('username' => array ('type' => 'string', 'required' => true),
-						'limit' => array ('type' => 'int', 'required' => false),
-						'offset' => array ('type' => 'int', 'required' => false),
-					),
-				"Register user",
-				'GET',
-				false,
-				false);	
-				
+	"user_get_friends_of",
+	array('username' => array ('type' => 'string', 'required' => true),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:user:friend:get_friends_of'),
+	'GET',
+	true,
+	true);
+
 
 /**
  * Web service to retrieve the messageboard for a user
@@ -467,10 +477,10 @@ expose_function('user.friend.get_friends_of',
  * @param string $offset   Indexing offset, if any
  *
  * @return array
- */    				
+ */
 function user_get_messageboard($limit = 10, $offset = 0, $username){
 	if(!$username){
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -478,47 +488,50 @@ function user_get_messageboard($limit = 10, $offset = 0, $username){
 		}
 	}
 	
-$options = array(
-	'annotations_name' => 'messageboard',
-	'guid' => $user->guid,
-	'limit' => $limit,
-	'pagination' => false,
-	'reverse_order_by' => true,
-);
+	$options = array(
+		'annotations_name' => 'messageboard',
+		'guid' => $user->guid,
+		'limit' => $limit,
+		'pagination' => false,
+		'reverse_order_by' => true,
+	);
 
 	$messageboard = elgg_get_annotations($options);
 	
 	if($messageboard){
-	foreach($messageboard as $single){
-		$post['id'] = $single->id;
-		$post['description'] = $single->value;
+		foreach($messageboard as $single){
+			$post['id'] = $single->id;
+			$post['description'] = $single->value;
 		
-		$owner = get_entity($single->owner_guid);
-		$post['owner']['guid'] = $owner->guid;
-		$post['owner']['name'] = $owner->name;
-		$post['owner']['username'] = $owner->username;
-		$post['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$owner = get_entity($single->owner_guid);
+			$post['owner']['guid'] = $owner->guid;
+			$post['owner']['name'] = $owner->name;
+			$post['owner']['username'] = $owner->username;
+			$post['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
 		
-		$post['time_created'] = (int)$single->time_created;
-		$return[] = $post;
-	}
-} else {
+			$post['time_created'] = (int)$single->time_created;
+			$return[] = $post;
+		}
+	} else {
 		$msg = elgg_echo('messageboard:none');
 		throw new InvalidParameterException($msg);
 	}
- 	return $return;
+	return $return;
 }
+
 expose_function('user.get_messageboard',
-				"user_get_messageboard",
-				array(
-						'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
-						'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
-						'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Get a users messageboard",
-				'GET',
-				false,
-				false);	
+	"user_get_messageboard",
+	array(
+		'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
+		'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
+		'username' => array ('type' => 'string', 'required' => false),
+	),
+	elgg_echo('web_services:user:get_messageboard'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service to post to a messageboard
  *
@@ -530,7 +543,7 @@ expose_function('user.get_messageboard',
  */    				
 function user_post_messageboard($text, $to, $from){
 	if(!$to){
-		$to_user = get_loggedin_user();
+		$to_user = elgg_get_logged_in_user_entity();
 	} else {
 		$to_user = get_user_by_username($to);
 		if (!$to_user) {
@@ -538,7 +551,7 @@ function user_post_messageboard($text, $to, $from){
 		}
 	}
 	if(!$from){
-		$from_user = get_loggedin_user();
+		$from_user = elgg_get_logged_in_user_entity();
 	} else {
 		$from_user = get_user_by_username($from);
 		if (!$from_user) {
@@ -555,14 +568,108 @@ function user_post_messageboard($text, $to, $from){
 	}
 	return $return;
 }
+
 expose_function('user.post_messageboard',
-				"user_post_messageboard",
-				array(
-						'text' => array ('type' => 'string'),
-						'to' => array ('type' => 'string', 'required' => false),
-						'from' => array ('type' => 'string', 'required' => false),
-					),
-				"Post a messageboard post",
-				'POST',
-				true,
-				true);	
+	"user_post_messageboard",
+	array(
+		'text' => array ('type' => 'string'),
+		'to' => array ('type' => 'string', 'required' => false),
+		'from' => array ('type' => 'string', 'required' => false),
+	),
+	elgg_echo('web_services:user:post_messageboard'),
+	'POST',
+	true,
+	true);
+
+
+/**
+ * Web service to get activity feed for a user
+ *
+ * @param int $username - the username
+ * @param int $limit default 10
+ * @param int $offset default 0
+ *
+ * @return bool
+ */
+function user_activity($username, $limit = 10, $offset = 0) {
+	$user = get_user_by_username($username);		
+	if(!$user){
+		$msg = elgg_echo('users:notfound');
+		throw new InvalidParameterException($msg);
+	}
+
+	$db_prefix = elgg_get_config('dbprefix');
+	global $jsonexport;
+	
+	$content = elgg_list_river(array(
+		'limit' => $limit,
+		'offset' => $offset,
+		'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.subject_guid"),
+		'wheres' => array("(e1.guid = " . $user->guid . ")"),
+	));
+
+	return $jsonexport['activity'];
+}
+
+expose_function('user.activity',
+	"user_activity",
+	array(
+		'username' => array ('type' => 'string'),
+		'limit' => array ('type' => 'int', 'required' => false),
+		'offset' => array ('type' => 'int', 'required' => false),
+	),
+	elgg_echo('web_services:user:activity'),
+	'GET',
+	true,
+	true);
+
+
+
+// Get a user GUID from username (or email)
+function user_getguid($username = false) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	if ($user = get_user_by_username($username)) { return $user->guid; }
+	throw new InvalidParameterException($username);
+}
+
+expose_function(
+	"user.getguid",
+	"user_getguid",
+	array(
+		'username' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:get_guid'),
+	'POST',
+	true,
+	false
+);
+
+
+// Get a user username from GUID
+function user_getusername($guid = false) {
+	// check if guid is a real user and return username if ok
+	if (($user = get_entity($guid)) && elgg_instanceof($user, 'user')) {
+		return $user->username;
+	}
+	throw new InvalidParameterException($guid);
+}
+
+expose_function(
+	"user.getusername",
+	"user_getusername",
+	array(
+		'guid' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:get_username'),
+	'POST',
+	true,
+	false
+);
+

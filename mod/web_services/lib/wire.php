@@ -19,7 +19,7 @@
  */
 function wire_save_post($text, $access = ACCESS_PUBLIC, $wireMethod = "api", $username) {
 	if(!$username) {
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -40,21 +40,22 @@ function wire_save_post($text, $access = ACCESS_PUBLIC, $wireMethod = "api", $us
 	}
 	$return['success'] = true;
 	return $return;
-	} 
-				
+}
+
 expose_function('wire.save_post',
-				"wire_save_post",
-				array(
-						'text' => array ('type' => 'string'),
-						'access' => array ('type' => 'string', 'required' => false),
-						'wireMethod' => array ('type' => 'string', 'required' => false),
-						'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Post a wire post",
-				'POST',
-				true,
-				true);
-				
+	"wire_save_post",
+	array(
+			'text' => array ('type' => 'string'),
+			'access' => array ('type' => 'string', 'required' => false),
+			'wireMethod' => array ('type' => 'string', 'required' => false),
+			'username' => array ('type' => 'string', 'required' => false),
+		),
+	elgg_echo('web_services:wire:save_post'),
+	'POST',
+	true,
+	true);
+
+
 /**
  * Web service for read latest wire post of user
  *
@@ -65,7 +66,7 @@ expose_function('wire.save_post',
  */
 function wire_get_posts($context, $limit = 10, $offset = 0, $username) {
 	if(!$username) {
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -78,58 +79,59 @@ function wire_get_posts($context, $limit = 10, $offset = 0, $username) {
 			'types' => 'object',
 			'subtypes' => 'thewire',
 			'limit' => $limit,
+			'offset' => $offset,
 			'full_view' => FALSE,
 		);
-		}
-		if($context == "mine" || $context == "user"){
-		$params = array(
-			'types' => 'object',
-			'subtypes' => 'thewire',
-			'owner_guid' => $user->guid,
-			'limit' => $limit,
-			'full_view' => FALSE,
-		);
-		}
-		$latest_wire = elgg_get_entities($params);
-		
-		if($context == "friends"){
+	}
+	if($context == "mine" || $context == "user"){
+	$params = array(
+		'types' => 'object',
+		'subtypes' => 'thewire',
+		'owner_guid' => $user->guid,
+		'limit' => $limit,
+		'full_view' => FALSE,
+	);
+	}
+	$latest_wire = elgg_get_entities($params);
+	
+	if($context == "friends"){
 		$latest_wire = get_user_friends_objects($user->guid, 'thewire', $limit, $offset);
-		}
+	}
 
-if($latest_wire){
-	foreach($latest_wire as $single ) {
-		$wire['guid'] = $single->guid;
+	if($latest_wire){
+		foreach($latest_wire as $single ) {
+			$wire['guid'] = $single->guid;
 		
-		$owner = get_entity($single->owner_guid);
-		$wire['owner']['guid'] = $owner->guid;
-		$wire['owner']['name'] = $owner->name;
-		$wire['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$owner = get_entity($single->owner_guid);
+			$wire['owner']['guid'] = $owner->guid;
+			$wire['owner']['name'] = $owner->name;
+			$wire['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
 			
-		$wire['time_created'] = (int)$single->time_created;
-		$wire['description'] = $single->description;
-		$return[] = $wire;
-	} 
-} else {
+			$wire['time_created'] = (int)$single->time_created;
+			$wire['description'] = $single->description;
+			$return[] = $wire;
+		} 
+	} else {
 		$msg = elgg_echo('thewire:noposts');
 		throw new InvalidParameterException($msg);
 	}
 	
 	return $return;
-	} 
-				
+}
+
 expose_function('wire.get_posts',
-				"wire_get_posts",
-				array(	'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
-						'limit' => array ('type' => 'int', 'required' => false),
-						'offset' => array ('type' => 'int', 'required' => false),
-						'username' => array ('type' => 'string', 'required' =>false),
-					),
-				"Read lates wire post",
-				'GET',
-				false,
-				false);
-				
-				
+	"wire_get_posts",
+	array(	'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
+			'limit' => array ('type' => 'int', 'required' => false),
+			'offset' => array ('type' => 'int', 'required' => false),
+			'username' => array ('type' => 'string', 'required' =>false),
+		),
+	elgg_echo('web_services:wire:get_posts'),
+	'GET',
+	true,
+	true);
+
+
 /**
  * Web service for delete a wire post
  *
@@ -169,14 +171,15 @@ function wire_delete($username, $wireid) {
 		$return['message'] = elgg_echo("thewire:notdeleted");
 	}
 	return $return;
-} 
-				
+}
+
 expose_function('wire.delete_posts',
-				"wire_delete",
-				array('username' => array ('type' => 'string'),
-						'wireid' => array ('type' => 'int'),
-					),
-				"Delete a wire post",
-				'POST',
-				true,
-				false);
+	"wire_delete",
+	array('username' => array ('type' => 'string'),
+		'wireid' => array ('type' => 'int'),
+	),
+	elgg_echo('web_services:wire:delete_posts'),
+	'POST',
+	true,
+	true);
+

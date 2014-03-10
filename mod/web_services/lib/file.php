@@ -18,9 +18,9 @@
  *
  * @return array $file Array of files uploaded
  */
-function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $username) {	
+function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $username) {
 	if(!$username) {
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -28,37 +28,37 @@ function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $usern
 		}
 	}
 		
-		if($context == "all"){
-		$params = array(
-			'types' => 'object',
-			'subtypes' => 'file',
-			'limit' => $limit,
-			'full_view' => FALSE,
-		);
-		}
-		if($context == "mine" || $context == "user"){
-		$params = array(
-			'types' => 'object',
-			'subtypes' => 'file',
-			'owner_guid' => $user->guid,
-			'limit' => $limit,
-			'full_view' => FALSE,
-		);
-		}
-		if($context == "group"){
-		$params = array(
-			'types' => 'object',
-			'subtypes' => 'file',
-			'container_guid'=> $group_guid,
-			'limit' => $limit,
-			'full_view' => FALSE,
-		);
-		}
-		$latest_file = elgg_get_entities($params);
-		
-		if($context == "friends"){
+	if($context == "all"){
+	$params = array(
+		'types' => 'object',
+		'subtypes' => 'file',
+		'limit' => $limit,
+		'full_view' => FALSE,
+	);
+	}
+	if($context == "mine" || $context == "user"){
+	$params = array(
+		'types' => 'object',
+		'subtypes' => 'file',
+		'owner_guid' => $user->guid,
+		'limit' => $limit,
+		'full_view' => FALSE,
+	);
+	}
+	if($context == "group"){
+	$params = array(
+		'types' => 'object',
+		'subtypes' => 'file',
+		'container_guid'=> $group_guid,
+		'limit' => $limit,
+		'full_view' => FALSE,
+	);
+	}
+	$latest_file = elgg_get_entities($params);
+	
+	if($context == "friends"){
 		$latest_file = get_user_friends_objects($user->guid, 'file', $limit, $offset);
-		}
+	}
 	
 	
 	if($latest_file) {
@@ -87,17 +87,18 @@ function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $usern
 	}
 	return $return;
 }
-	
+
 expose_function('file.get_files',
-				"file_get_files",
-				array(
-						'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
-					  'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
-					  'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
-					  'group_guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
-					   'username' => array ('type' => 'string', 'required' => false),
-					),
-				"Get file uploaded by all users",
-				'GET',
-				false,
-				false);
+	"file_get_files",
+	array(
+		'context' => array ('type' => 'string', 'required' => false, 'default' => 'all'),
+		'limit' => array ('type' => 'int', 'required' => false, 'default' => 10),
+		'offset' => array ('type' => 'int', 'required' => false, 'default' => 0),
+		'group_guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
+		'username' => array ('type' => 'string', 'required' => false),
+	),
+	elgg_echo('web_services:file:get_files'),
+	'GET',
+	true,
+	true);
+
