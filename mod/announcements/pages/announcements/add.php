@@ -20,8 +20,7 @@ $vars = array(
 $content = elgg_view_form('announcements/save', array(), $vars);
 
 $body = elgg_view_layout('content', array(
-	'filter' => '', 
-	'buttons' => '',
+	'filter' => false, 
 	'content' => $content,
 	'title' => $title,
 ));
