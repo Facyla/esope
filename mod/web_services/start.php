@@ -24,6 +24,7 @@ foreach($enabled as $service) {
 	elgg_register_library('webservice:'.$service, elgg_get_plugins_path() . 'web_services/lib/'.$service.'.php');
 	elgg_load_library('webservice:'.$service);
 }
+
 //Core Library should be default
 elgg_register_library('webservice:core', elgg_get_plugins_path() . 'web_services/lib/core.php');
 elgg_load_library('webservice:core');
@@ -61,3 +62,4 @@ function web_services_test($hook, $type, $value, $params) {
 
 
 elgg_register_event_handler('init', 'system', 'web_services_init');
+

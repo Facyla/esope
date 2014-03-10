@@ -15,3 +15,4 @@ echo elgg_view('output/url', array(
 	'class' => 'elgg-button elgg-button-submit',
 ));
 echo '</div>';
+

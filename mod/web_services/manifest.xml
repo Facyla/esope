@@ -10,7 +10,14 @@
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_version</type>
-		<version>2010030101</version>
+		<version>1.8</version>
 	</requires>
 	<admin_interface>advanced</admin_interface>
 </plugin_manifest>
+
+
+<!--
+Plugin reviewed adn updated by George ROSCA (Inria) and Florian DANIEL (ITEMS International)
+
+//-->
+
