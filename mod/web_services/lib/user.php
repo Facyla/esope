@@ -623,3 +623,55 @@ expose_function('user.activity',
 	true,
 	true);
 
+
+
+// Get a user GUID from username (or email)
+function user_getguid($username = false) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	if ($user = get_user_by_username($username)) { return $user->guid; }
+	throw new InvalidParameterException($username);
+}
+
+// Returns a user GUID for a given username
+expose_function(
+	"user.getguid",
+	"user_getguid",
+	array(
+		'username' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:get_guid'),
+	'POST',
+	true,
+	false
+);
+
+
+// Get a user username from GUID
+function user_getusername($guid = false) {
+	// check if guid is a real user and return username if ok
+	if (($user = get_entity($guid)) && elgg_instanceof($user, 'user')) {
+		return $user->username;
+	}
+	throw new InvalidParameterException($guid);
+}
+
+// Returns a user username for a given GUID
+expose_function(
+	"user.getusername",
+	"user_getusername",
+	array(
+		'guid' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:user:get_username'),
+	'POST',
+	true,
+	false
+);
+

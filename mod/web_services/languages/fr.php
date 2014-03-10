@@ -38,6 +38,8 @@ $french = array(
 	'web_services:core:nooauth' => "non",
 	'web_services:core:river_feed' => "Récupérer la rivière d'activité",
 	'web_services:core:search' => "Effectuer une recherche",
+	'web_services:core:auth_renewtoken' => "Renouvellement du jeton d'API utilisateur",
+	'SecurityException:tokenrenewalfailed' => "Echec du renouvellement du jeton d'API : connexion perdue. Si vous aviez des modifications en cours, vous devriez les copier-coller avant de vous reconnecter.",
 	
 	// Blog webservice
 	'web_services:blog:get_posts' => "Récupérer la liste des articles de blog",
@@ -52,10 +54,10 @@ $french = array(
 	
 	// Group webservice
 	'web_services:group:get_groups' => "Get groups user is a member of",
-	'web_services:group:get' => "Get a group",
-	'web_services:group:join' => "Join a group",
-	'web_services:group:leave' => "Leave a group",
-	'web_services:group:save' => "Save a group",
+	'web_services:group:get' => "Récupérer un groupe",
+	'web_services:group:join' => "Rejoindre un groupe",
+	'web_services:group:leave' => "Quitter un groupe",
+	'web_services:group:save' => "Enregistrer un groupe",
 	'web_services:group:save_post' => "Post a topic to a group forum",
 	'web_services:group:delete_post' => "Delete topic post from a group forum",
 	'web_services:group:get_posts' => "Get posts from a group",
@@ -76,14 +78,16 @@ $french = array(
 	'web_services:user:save_profile' => "Get user profile information with username",
 	'web_services:user:get_user_by_email' => "Get username(s) by email",
 	'web_services:user:check_username_availability' => "Check username availability",
-	'web_services:user:register' => "Register user",
-	'web_services:user:friend:add' => "Add a user as friend",
-	'web_services:user:friend:remove' => "Remove friend",
-	'web_services:user:get_friends' => "Get user friends",
-	'web_services:user:friend:get_friends_of' => "Get users user if friend of",
+	'web_services:user:register' => "Créer un compte utilisateur",
+	'web_services:user:friend:add' => "Ajouter un contact",
+	'web_services:user:friend:remove' => "Supprimer un contact",
+	'web_services:user:get_friends' => "Récupérer les contacts",
+	'web_services:user:friend:get_friends_of' => "Récupérer les membres dont le membre est un contact",
 	'web_services:user:get_messageboard' => "Get a users messageboard",
 	'web_services:user:post_messageboard' => "Post a messageboard post",
 	'web_services:user:activity' => "Get the activity feed for a user",
+	'web_services:user:get_guid' => "Get the user GUID for a given username",
+	'web_services:user:get_username' => "Get the user username for a given GUID",
 	
 	// Message webservice
 	'web_services:message:read' => "Lire un message",

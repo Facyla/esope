@@ -301,11 +301,6 @@ Motif de l'inscription :
 Voici l'adresse du nouveau compte créé : %s
 ",
 	
-	// API
-	'auth.renewtoken' => "Renouvellement du jeton d'API utilisateur",
-	'SecurityException:tokenrenewalfailed' => "Echec du renouvellement du jeton d'API : connexion perdue. Si vous aviez des modifications en cours, vous devriez les copier-coller avant de vous reconnecter.",
-	
-	
 	
 );
 

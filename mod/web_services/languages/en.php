@@ -38,6 +38,8 @@ $english = array(
 	'web_services:core:nooauth' => "no",
 	'web_services:core:river_feed' => "Get river feed",
 	'web_services:core:search' => "Perform a search",
+	'web_services:core:auth_renewtoken' => "API user token renewal",
+	'SecurityException:tokenrenewalfailed' => "Token renewal failed: connection is lost. If you had ongoing changes, you should copy-paste them before logging in again.",
 	
 	// Blog webservice
 	'web_services:blog:get_posts' => "Get list of blog posts",
@@ -84,6 +86,8 @@ $english = array(
 	'web_services:user:get_messageboard' => "Get a users messageboard",
 	'web_services:user:post_messageboard' => "Post a messageboard post",
 	'web_services:user:activity' => "Get the activity feed for a user",
+	'web_services:user:get_guid' => "Get the user GUID for a given username",
+	'web_services:user:get_username' => "Get the user username for a given GUID",
 	
 	// Message webservice
 	'web_services:message:read' => "Read a single message",

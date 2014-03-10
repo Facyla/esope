@@ -156,3 +156,39 @@ expose_function('site.search',
 	false,
 	false);
 
+
+// Authentication token renewal api (requires success on auth.gettoken api call)
+// This should be used to renew auth token without logging in again after token expires
+// So should be called about every 5-12 minutes (token expires after 15 minutes)
+
+function auth_renewtoken($username = false) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	if ($user = get_user_by_username($username)) {
+		$token = create_user_token($username);
+		if ($token) { return $token; }
+	}
+	
+	throw new SecurityException(elgg_echo('SecurityException:tokenrenewalfailed'));
+}
+
+// Token rewewal function for API calls
+expose_function(
+	"auth.renewtoken",
+	"auth_renewtoken",
+	array(
+		'username' => array ('type' => 'string'),
+	),
+	elgg_echo('web_services:core:auth_renewtoken'),
+	'POST',
+	true,
+	true
+);
+
+
