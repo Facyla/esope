@@ -14,17 +14,30 @@ global $CONFIG;
 
 $url = $vars['url'];
 
+// Define dropdown options
 $yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
+
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
+
 $replace_public_homepage_opt = array( 'default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
+
 $groups_discussion_opt = $yes_no_opt;
 $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discussion:always');
+
 $group_tools_default_opt = $no_yes_opt;
 $group_tools_default_opt['auto'] = elgg_echo('adf_platform:settings:groups:tools_default:auto');
+
+$pages_list_subpages_opt = $no_yes_opt;
+$pages_list_subpages_opt['user'] = elgg_echo('adf_platform:settings:pages_list_subpages:user');
+$pages_list_subpages_opt['group'] = elgg_echo('adf_platform:settings:pages_list_subpages:group');
+//$pages_list_subpages_opt['all'] = elgg_echo('adf_platform:settings:pages_list_subpages:all');
+
 $registered_objects = get_registered_entity_types('object');
+
 $group_defaultaccess_opt = array('default' => elgg_echo('adf_platform:groupdefaultaccess:default'), 'groupvis' => elgg_echo('adf_platform:groupdefaultaccess:groupvis'), 'group' => elgg_echo('adf_platform:groupdefaultaccess:group'), 'members' => elgg_echo('adf_platform:groupdefaultaccess:members'), 'public' => elgg_echo('adf_platform:groupdefaultaccess:public'));
+
 $group_groupjoin_enablenotif_opt = array(
 		'email' => elgg_echo('option:notify:email'),
 		'site' => elgg_echo('option:notify:site'),
@@ -355,6 +368,7 @@ $(function() {
 		}
 		if (elgg_is_active_plugin('pages')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall )) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages )) . '</p>';
 		}
 		?>
 		
