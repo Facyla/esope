@@ -14,8 +14,8 @@ elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 
 $open_group_chat_url = $CONFIG->url . 'chat/group/' . elgg_get_page_owner_guid();
-$chat_icon = '<i class="fa fa-comments-o"></i>';
-$text = '<i class="fa fa-external-link"></i> ' . elgg_echo('groupchat:group:openlink:ownwindow:theme');
+$chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
+$text = '<i class="fa fa-external-link"></i> &nbsp; ' . elgg_echo('groupchat:group:openlink:ownwindow:theme');
 
 $class = 'groupchat-grouplink-theme';
 $active = '';
@@ -23,7 +23,7 @@ $active = '';
 $chat_content = get_chat_content();
 if ($chat_content) {
 	$class .= ' chat-active-theme';
-	$chat_icon = '<i class="fa fa-comments"></i>';
+	$chat_icon = '<i class="fa fa-comments"></i> &nbsp; ';
 	$active = elgg_echo('groupchat:active');
 	$text .= ' ' . $chat_icon . $active;
 } else {

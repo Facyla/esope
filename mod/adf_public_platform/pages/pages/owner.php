@@ -28,6 +28,33 @@ $use_owner = elgg_get_plugin_setting('pages_user_listall', 'adf_public_platform'
 if (($use_owner == 'yes') && elgg_instanceof(elgg_get_page_owner_entity(), 'user')) $options['owner_guid'] = elgg_get_page_owner_guid();
 else $options['container_guid'] = elgg_get_page_owner_guid();
 
+// List also subpages ?  , but should allow various behaviour
+$pages_list_subpages = elgg_get_plugin_setting('pages_list_subpages', 'adf_public_platform');
+if (!empty($pages_list_subpages) && ($pages_list_subpages != 'no')) {
+	switch ($pages_list_subpages) {
+		case 'all':
+		case 'yes':
+			$options['subtypes'] = array('page_top', 'page');
+			break;
+		
+		case 'user':
+			if (elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
+				$options['subtypes'] = array('page_top', 'page');
+			}
+			break;
+		
+		case 'group':
+			if (elgg_instanceof(elgg_get_page_owner_entity(), 'group')) {
+				$options['subtypes'] = array('page_top', 'page');
+			}
+			break;
+		
+		default:
+			// No change (to maintain default previous behaviour)
+	}
+}
+
+
 $content = elgg_list_entities($options);
 if (!$content) {
 	$content = '<p>' . elgg_echo('pages:none') . '</p>';

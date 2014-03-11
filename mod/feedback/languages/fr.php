@@ -14,6 +14,7 @@
  */
 
 $french = array(
+	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Feedbacks du site',
 	'item:object:feedback' => 'Feedback',
 	'feedback:label' => 'Feedback',
@@ -70,21 +71,34 @@ $french = array(
 	'feedback:email:subject' => 'Feedback reçu de %s',
 	'feedback:email:body' => '%s',
 	
-	// Added by Facyla - To be translated
-	'feedback:close:success' => "Feedback marqué comme fermé.",
-	'feedback:close:error' => "Impossible de fermer ce feedback",
+	
+	// Added by Facyla
+	
+	'feedback:group' => "Feedbacks",
+	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
+	'feedback:enablefeedback' => "Activer le feedback dans ce groupe",
+	'feedback:page:unknown' => "URL inconnue",
+	'feedback:viewfull' => "Afficher la discusion en pleine page",
+	'feedback:commentsreply' => "%s commentaire(s) &nbsp; &raquo;&nbsp;Répondre",
+	
+	// Settings
 	'feedback:settings:memberview' => "Les membres du site peuvent-ils consulter les feedbacks ?",
 	'feedback:settings:comment' => "Est-il possible de commenter et de répondre aux feedbacks ?",
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
-	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
-	'feedback:enablefeedback' => "Activer le feedback dans ce groupe",
-	'feedback:group' => "Feedbacks",
-	'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer ?",
-	'feedback:page:unknown' => "URL inconnue",
+	
+	// Feedback status
 	'feedback:list:status:open' => "Ouvert",
-	'feedback:list:status:closed' => "Fermé",
 	'feedback:status:open' => "Feedbacks ouverts",
+	'feedback:list:status:closed' => "Fermé",
 	'feedback:status:closed' => "Feedbacks fermés",
+	'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer la fermeture ?",
+	'feedback:close:success' => "Feedback marqué comme fermé.",
+	'feedback:close:error' => "Impossible de fermer ce feedback",
+	'feedback:reopenconfirm' => "Un feedback ouvert est considéré comme à traiter et le sujet comme actif, confirmer la réouverture ?",
+	'feedback:reopen:success' => "Feedback marqué comme ouvert.",
+	'feedback:reopen:error' => "Impossible de rouvrir ce feedback",
+	
+	// About - feedback types
 	'feedback:about' => "de type",
 	'feedback:about:question' => "Question",
 	'feedback:access:admin' => "Administrateur seulement",

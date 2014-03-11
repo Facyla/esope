@@ -15,6 +15,7 @@ $french = array(
 	'groupchat:active' => "",
 	'group_chat:youare' => "Vous êtes : ",
 	'group_chat:joingrouptochat' => "Vous devez être membre du groupe pour chatter avec ses membres.",
+	'group_chat:group_option' => "Activer le chat dans les groupes ?",
 	
 	/* Settings */
 	'group_chat:setting' => "Historique du chat (nombre de jours affichés ; 2 jours par défaut)",
@@ -31,7 +32,7 @@ $french = array(
 	'groupchat:site:openlink:ownwindow:theme' => "Ouvrir le chat du site",
 	
 	// Group chat
-	'groupchat:group:openlink' => "Afficher le chatde groupe",
+	'groupchat:group:openlink' => "Afficher le chat de groupe",
 	'groupchat:group:openlink:ownwindow' => "Afficher le chat du groupe (nouvelle fenêtre)",
 	'groupchat:group:openlink:ownwindow:theme' => "Ouvrir le chat du groupe",
 	

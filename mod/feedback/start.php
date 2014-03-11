@@ -59,12 +59,16 @@ function feedback_init() {
 	// page handler
 	elgg_register_page_handler('feedback','feedback_page_handler');
 	
+		// Register a URL handler for bookmarks
+	elgg_register_entity_url_handler('object', 'feedback', 'feedback_url');
+	
 	// menu des groupes
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
 	
 	// Register actions
 	elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
 	elgg_register_action("feedback/close", elgg_get_plugins_path() . 'feedback/actions/close.php', 'admin');
+	elgg_register_action("feedback/reopen", elgg_get_plugins_path() . 'feedback/actions/reopen.php', 'admin');
 	elgg_register_action('feedback/submit_feedback', elgg_get_plugins_path() . 'feedback/actions/submit_feedback.php', 'public');
 	
 }
@@ -77,6 +81,13 @@ function feedback_init() {
  */
 function feedback_page_handler($page) {
 	switch($page[0]) {
+		case 'view':
+			set_input('guid', $page[1]);
+			include(dirname(__FILE__) . "/pages/feedback/view.php");
+			return true;
+			break;
+		
+		// Following all use default page
 		case 'group': set_input('group', $page[1]); break;
 		case 'status': set_input('status', $page[1]); break;
 		case 'about': set_input('about', $page[1]); break;
@@ -86,7 +97,21 @@ function feedback_page_handler($page) {
 	return true;
 }
 
+/**
+ * Populates the ->getUrl() method for feedback objects
+ *
+ * @param ElggEntity $entity The feedback
+ * @return string feedback item URL
+ */
+function feedback_url($entity) {
+	global $CONFIG;
+	$title = $entity->title;
+	$title = elgg_get_friendly_title($title);
+	return $CONFIG->url . "feedback/view/" . $entity->getGUID() . "/" . $title;
+}
 
+
+// Feedback menu
 function feedback_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'group')) {
 		$feedbackgroup = elgg_get_plugin_setting('feedbackgroup', 'feedback');

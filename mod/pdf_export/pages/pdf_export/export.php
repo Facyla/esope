@@ -6,13 +6,22 @@
  * @author Facyla ~ Florian DANIEL
  */
 
-
 global $CONFIG;
-$error = false;
-$separator = '<hr /><br /><br />';
-$date_format = 'd/m/Y';
-$gen_date_format = 'd/m/Y à H:i';
+
 $debug = get_input('debug', false);
+
+$error = false;
+$html = '';
+$intro = '';
+$separator = elgg_echo('pdfexport:separator');
+$date_format = elgg_echo('pdfexport:entitydate:format');
+$gen_date_format = elgg_echo('pdfexport:generated:format');
+
+// Handle untranslated languages case (set defaults, should not be empty)
+if (empty($separator)) { $separator = '<hr /><br /><br />'; }
+if (empty($date_format)) { $date_format = 'd/m/Y'; }
+if (empty($gen_date_format)) { $gen_date_format = 'd/m/Y at H:i'; }
+
 
 // Get input data
 // Si une URL de récupération des données HTML est fournie, on l'utilise
@@ -24,10 +33,14 @@ if (!empty($export_html)) {
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 $generator = get_input('generator', 'mpdf');
+
 // Load CSS files
 $css = '';
 $css_files = elgg_get_loaded_css();
 foreach ($css_files as $css_file) { $css .= file_get_contents($css_file) . "\n"; }
+
+// Disable intro text if asked in setttings (default: no = keep intro)
+$disableintro = elgg_get_plugin_setting('disableintro', 'pdf_export');
 
 
 // Generate page content (exception for TCPDF, needs some rewriting before using such inputs)
@@ -44,32 +57,38 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 	// Nom de l'auteur du PDF
 	$pdf_author = $CONFIG->site->name;
 	$pdf_author .= ' - ' . $container->name;
-	$pdf_author .= ' - ' . $container->name;
+	if ($owner->name != $container->name) { $pdf_author .= ' - ' . $owner->name; }
 	// Autres données utiles
 	/*
 	$pdf_subject = $pdf_title;
-	if (is_array($object->tags)) $pdf_tags = 'FormaVia, ' . implode(', ', $object->tags);
-	else if (!empty($object->tags)) $pdf_tags = 'FormaVia, ' . $object->tags;
-	else $pdf_tags = 'FormaVia';
+	if (is_array($object->tags)) $pdf_tags = $CONFIG->site->name . ', ' . implode(', ', $object->tags);
+	else if (!empty($object->tags)) $pdf_tags = $CONFIG->site->name . ', ' . $object->tags;
+	else $pdf_tags = $CONFIG->site->name;
 	*/
 	// Nom du fichier exporté (unique et daté)
 	$pdf_filename = $guid . '_' . elgg_get_friendly_title($pdf_title) . '_' . date('YmdHis', time()) . '.pdf';
 	
+	
 	// Page content : intro + html
 	if ($object instanceof ElggObject) {
-		// Différent si dans groupe ou à titre personnel (portfolio)
-		if ($container instanceof ElggGroup) {
-			$intro .= elgg_echo('pdfexport:publishedin') . '<a href="' . $container->getURL() . '">' . $container->name . '</a>';
-			//$intro .= ' le ' . date('d/m/Y à H:i', $object->time_created);
-			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
-			if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
-		} else {
-			$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a> ';
-			$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
-			if ($object->time_updated > $object->time_created) $intro .= ' (' . elgg_echo('pdfexport:lastupdated') . date($date_format, $object->time_updated) . ')';
+		
+		// INTRO - if not disabled
+		if ($disableintro != 'yes') {
+			// Différent si dans groupe ou à titre personnel (portfolio)
+			if ($container instanceof ElggGroup) {
+				$intro .= elgg_echo('pdfexport:publishedin') . '<a href="' . $container->getURL() . '">' . $container->name . '</a>';
+				//$intro .= ' le ' . date('d/m/Y à H:i', $object->time_created);
+				$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
+				if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
+			} else {
+				$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a> ';
+				$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
+				if ($object->time_updated > $object->time_created) $intro .= ' (' . elgg_echo('pdfexport:lastupdated') . date($date_format, $object->time_updated) . ')';
+			}
+			$intro .= '<br />';
+			if (!empty($object->tags)) $intro .= elgg_echo('pdfexport:tags') . ': ' . elgg_view('output/tags', array('tags' => $object->tags)) . '<br />';
 		}
-		$intro .= '<br />';
-		if (!empty($object->tags)) $intro .= elgg_echo('pdfexport:tags') . ': ' . elgg_view('output/tags', array('tags' => $object->tags)) . '<br />';
+		
 		// HTML content
 		$html .= elgg_view_title($pdf_title);
 		$html .= elgg_view('output/longtext', array('value' => $object->description));
@@ -97,15 +116,19 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 		$body = elgg_echo('pdfexport:error:badtype');
 	}
 	
-	// Complément pour l'entête
-	$intro .= '<a href="' . $object->getURL() . '">' . $object->getURL() . '</a><br />';
-	$intro .= elgg_echo('pdfexport:generated') . date($gen_date_format, time()) . '<br />';
-	// Composition du contenu
-	$html = '<em>' . $intro . '</em>' . $separator . $html;
+	// Complément pour l'entête - si non désactivé
+	if ($disableintro != 'yes') {
+		$intro .= '<a href="' . $object->getURL() . '">' . $object->getURL() . '</a><br />';
+		$intro .= elgg_echo('pdfexport:generated') . date($gen_date_format, time()) . '<br />';
+		// Composition du contenu
+		$html = '<em>' . $intro . '</em>' . $separator . $html;
+	}
 	
 } else {
 	if (!empty($html)) {
-		$intro = "Page générée à partir d'un texte non issu de ce site";
+		if ($disableintro != 'yes') {
+			$intro .= elgg_echo('pdfexport:externalhtml');
+		}
 		$pdf_title = get_input('title');
 		// Nom du fichier exporté (daté)
 		$pdf_filename = date('YmdHis', time()) . '_' . elgg_get_friendly_title($pdf_title) . '.pdf';
@@ -115,6 +138,8 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 	}
 }
 
+
+// Provides useful info for debugging
 if ($debug) {
 	echo '<h2>FILENAME</h2>' . nl2br(htmlentities($pdf_filename)) . '<hr />';
 	echo '<h2>INTRO</h2>' . nl2br(htmlentities($intro)) . '<hr />';
@@ -123,6 +148,8 @@ if ($debug) {
 	exit;
 }
 
+
+// Generate the PDF
 if (!$error) {
 	// Infos utiles à rendre disponibles pour l'export
 	set_input('html', $html);

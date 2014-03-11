@@ -36,12 +36,25 @@ $icon = elgg_view('icon/default', array('entity' => $vars['entity'], 'size' => '
 
 $controls = '';
 if ($full) $controls .= $access_mark;
-if ($status != 'closed') {
-	$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
-} else {
-	$controls .= '<span class="elgg-icon elgg-icon-round-checkmark" title="' . $status_mark . '"></span>';
+switch ($status) {
+	case 'closed':
+		$controls .= '<span class="elgg-icon elgg-icon-round-checkmark" title="' . $status_mark . '"></span>';
+		// Only admins can reopen feedbacks
+		if (elgg_is_admin_logged_in) {
+			$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/reopen?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'class' => 'elgg-icon elgg-icon-redo'));
+		}
+		break;
+		
+	default:
+		// Only admins can close feedbacks
+		if (elgg_is_admin_logged_in) {
+			$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
+		}
 }
-$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/delete?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-delete'));
+// Only admins can delete feedbacks
+if (elgg_is_admin_logged_in) {
+	$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/delete?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-trash'));
+}
 
 $class = 'feedback-mood-' . $vars['entity']->mood . ' feedback-about-' . $vars['entity']->about . ' feedback-status-' . $status;
 
@@ -68,8 +81,8 @@ if ($comment == 'yes') {
 	if (!$full) {
 		$num_comments_feedback = $vars['entity']->countComments();
 		$info .= '<div class="clearfloat"></div>';
-		$info .= '<a href="' . $vars['entity']->getURL() . '">Afficher la discusion en pleine page</a>';
-		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_'.$vars['entity']->getGUID().'\').toggle()" style="float:right;">'.$num_comments_feedback.' commentaire(s) &nbsp; &raquo;&nbsp;Répondre</a>';
+		$info .= '<a href="' . $vars['entity']->getURL() . '">' . elgg_echo('feedback:viewfull') . '</a>';
+		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_'.$vars['entity']->getGUID().'\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', array($num_comments_feedback)) . '</a>';
 	}
 	$info .= '<div id="feedback_' . $vars['entity']->guid . '"';
 	if (!$full) $info .= ' style="display:none;"';
