@@ -18,7 +18,7 @@ $english = array(
 	'group_chat:group_option' => "Enable group chat ?",
 	
 	/* Settings */
-	'group_chat:setting' => 'Number of day\'s history',
+	'group_chat:setting' => "Number of day's history",
 	'group_chat:settings:group_chat' => "Group chat",
 	'group_chat:settings:site_chat' => "Site global chat",
 	// Settings values
