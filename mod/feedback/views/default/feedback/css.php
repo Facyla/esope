@@ -128,7 +128,7 @@
 
 /* Feedbacks status */
 .feedback-status-open {  }
-.feedback-status-closed { border:1px solid green; border-left:3px solid green; margin-left:20px; opacity:0.6; }
+.feedback-status-closed { border:1px solid green; border-left:3px solid green; margin-left:20px; opacity:0.8; }
 
 .closed_button { float:right; width: auto; padding: 4px; margin:15px 0 0 10px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
 

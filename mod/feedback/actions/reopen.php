@@ -22,11 +22,11 @@ $guid = (int) get_input('guid');
 // Make sure we actually have permission to edit
 $feedback = get_entity($guid);
 if ( $feedback->getSubtype() == "feedback" && $feedback->canEdit() ) {
-	// Set this feedback as answered / closed
-	$feedback->status = "closed";
+	// Set this feedback as open
+	$feedback->status = "open";
 	// Success message
-	system_message(elgg_echo("feedback:close:success"));
-} else register_error(elgg_echo("feedback:close:error"));
+	system_message(elgg_echo("feedback:reopen:success"));
+} else register_error(elgg_echo("feedback:reopen:error"));
 
 forward(REFERER);
 
