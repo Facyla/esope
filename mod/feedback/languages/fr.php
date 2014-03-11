@@ -72,7 +72,7 @@ $french = array(
 	'feedback:email:body' => '%s',
 	
 	
-	// Added by Facyla - To be translated
+	// Added by Facyla
 	
 	'feedback:group' => "Feedbacks",
 	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",

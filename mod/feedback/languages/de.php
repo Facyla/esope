@@ -68,6 +68,41 @@ $german = array(
 
 	'feedback:email:subject' => 'Feedback von %s',
 	'feedback:email:body' => '%s',
+
+
+	// Added by Facyla - To be translated
+	
+	'feedback:group' => "Feedbacks",
+	'feedback:option:grouptool' => "Leave choice to each group admin(s)",
+	'feedback:enablefeedback' => "Enable feedback in this group",
+	'feedback:page:unknown' => "Unknown URL",
+	'feedback:viewfull' => "Display discussion in a full page",
+	'feedback:commentsreply' => "%s comment(s) &nbsp; &raquo;&nbsp;Reply",
+	
+	// Settings
+	'feedback:settings:memberview' => "Are site members allowed to view feedbacks ?",
+	'feedback:settings:comment' => "Enable commenting on / replying to feedbacks ?",
+	'feedback:settings:feedbackgroup' => "Associate feedbacks to one or multiple groups ?",
+	
+	// Feedback status
+	'feedback:list:status:open' => "Open",
+	'feedback:status:open' => "Open feedbacks",
+	'feedback:list:status:closed' => "Closed",
+	'feedback:status:closed' => "Closed feedbacks",
+	'feedback:closeconfirm' => "A closed feedback is considered as solved, confirm closing feedback ?",
+	'feedback:close:success' => "Feedback marked as closed.",
+	'feedback:close:error' => "Unable to close this feedback",
+	'feedback:reopenconfirm' => "An open feedback is considered as active and to be replied to, confirm re-opening ?",
+	'feedback:reopen:success' => "Feedback marked as open.",
+	'feedback:reopen:error' => "Unable to re-open this feedback",
+	
+	// About - feedback types
+	'feedback:about' => "of type",
+	'feedback:about:question' => "Question",
+	'feedback:access:admin' => "Admin only",
+	'feedback:access:sitemembers' => "Site members",
+	'feedback:access:group' => "Group members",
+
 );
 
 add_translation("de", $german);
