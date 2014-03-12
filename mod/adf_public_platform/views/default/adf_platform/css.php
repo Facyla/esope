@@ -362,6 +362,12 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
 .elgg-form-event-calendar-edit .description { font-style:italic; font-size:0.90em; }
+.event-calendar-edit-form-block { width: auto; }
+/*
+.event-calendar-edit-form { background: transparent; }
+.event-calendar-edit-form-block { background-color: transparent; border: 0; }
+*/
+
 .elgg-form-groups-find input[type='text'] { width:250px; }
 .elgg-form-groups-find input.elgg-button-submit { vertical-align:20%; margin:0; }
 /* New integrated in-group search */
