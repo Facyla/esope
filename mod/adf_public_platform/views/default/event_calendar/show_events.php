@@ -32,7 +32,12 @@ if ($vars['events']) {
 		$event_list = elgg_view_entity_list($vars['events'], $options);
 	}
 } else {
+	if ($listing_format == 'full') {
+		// show the empty calendar
+		$event_list = elgg_view('event_calendar/full_calendar_view',$vars);
+	} else {
 	$event_list = '<p>'.elgg_echo('event_calendar:no_events_found').'</p>';
+	}
 }
 if ($listing_format == 'paged' || $listing_format == 'full') {
 	echo $event_list;
@@ -56,16 +61,16 @@ if ($listing_format == 'paged' || $listing_format == 'full') {
 		);
 	set_input('event_calendar_vars', $event_calendar_vars);
 	elgg_extend_view('page/elements/sidebar', 'event_calendar/calendar', 600);
-  ?>
-  <div style="width:100%">
-    <div id="event_list" style="">
-      <?php echo $event_list; ?>
-    </div>
-    <?php /* Replaced by extending sidebar with agenda
-    <div style="float:right;">
-      <?php echo elgg_view('event_calendar/calendar',$vars); ?>
-    </div>
-    */ ?>
-  </div>
-  <?php
+	?>
+	<div style="width:100%">
+		<div id="event_list" style="">
+			<?php echo $event_list; ?>
+		</div>
+		<?php /* Replaced by extending sidebar with agenda
+		<div style="float:right;">
+			<?php echo elgg_view('event_calendar/calendar',$vars); ?>
+		</div>
+		*/ ?>
+	</div>
+	<?php
 }

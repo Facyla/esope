@@ -38,25 +38,77 @@ handleEventClick = function(event) {
 };
 
 handleEventDrop = function(event,dayDelta,minuteDelta,allDay,revertFunc) {
-
-    if (!confirm("Are you sure about this change?")) {
-        revertFunc();
-    } else {
-    	elgg.action('event_calendar/modify_full_calendar',
-    		{
-    			data: {event_guid: event.guid,dayDelta: dayDelta, minuteDelta: minuteDelta},
-    			success: function (res) {
-    				var success = res.success;
-    				var msg = res.message;
-    				if (!success) {
-    					elgg.register_error(msg,2000);
-    					revertFunc()
-    				}
-    			}
-    		}
-    	);
-    }
+	if (!confirm("Are you sure about this change?")) {
+			revertFunc();
+	} else {
+		elgg.action('event_calendar/modify_full_calendar',
+			{
+				data: {event_guid: event.guid,dayDelta: dayDelta, minuteDelta: minuteDelta},
+				success: function (res) {
+					var success = res.success;
+					var msg = res.message;
+					if (!success) {
+						elgg.register_error(msg,2000);
+						revertFunc()
+					}
+				}
+			}
+		);
+	}
 };
+
+// Facyla : imported from next version : update events list
+getISODate = function(d) {
+	var year = d.getFullYear();
+	var month = d.getMonth()+1;
+	month =	month < 10 ? '0' + month : month;
+	var day = d.getDate();
+	day = day < 10 ? '0' + day : day;
+	return year +"-"+month+"-"+day;
+}
+
+handleGetEvents = function(start, end, callback) {
+	var start_date = getISODate(start);
+	var end_date = getISODate(end);
+	var url = "event_calendar/get_fullcalendar_events/"+start_date+"/"+end_date+"/<?php echo $vars['filter']; ?>/<?php echo $vars['group_guid']; ?>";
+	elgg.getJSON(url, {success:
+		function(events) {
+			//alert(JSON.stringify(events));
+			callback(events);
+		}
+		});
+	// reset date links and classes
+	//$('.fc-widget-content').removeClass('event-calendar-date-selected');
+	var link = $('.elgg-menu-item-event-calendar-0add').find('a').attr('href');
+	if (link != undefined) {
+		var ss = link.split('/');
+		var last_ss = ss[ss.length-1];
+		var group_guid;
+		if (last_ss == 'add') {
+			group_guid = 0;
+		} else if (last_ss.split('-').length == 3) {
+			group_guid = ss[ss.length-2];
+		} else {
+			group_guid = last_ss;
+		}
+		var url = elgg.get_site_url();
+		$('.elgg-menu-item-event-calendar-0add').find('a').attr('href',url+'event_calendar/add/'+group_guid);
+		$('.elgg-menu-item-event-calendar-1schedule').find('a').attr('href',url+'event_calendar/schedule/'+group_guid);
+	}
+}
+
+
+handleViewDisplay = function(view) {
+	// TODO: finish this, need to highlight selected date if any
+	var current_iso = $('#event-calendar-selected-date').val();
+	if (view == 'month') {
+		goToDateFlag = 0;
+	} else if (goToDateFlag == 0 && current_iso != "") {
+		goToDateFlag = 1;
+		var a = current_iso.split("-");
+		$('#calendar').fullCalendar('gotoDate',parseInt(a[0],10),parseInt(a[1],10)-1,parseInt(a[2],10));
+	}
+}
 
 $(document).ready(function() {
 	var events = <?php echo $json_events_string; ?>;
@@ -68,7 +120,8 @@ $(document).ready(function() {
 			url: events[i].url,
 			start : new Date(1000*events[i].start_date),
 			end : new Date(1000*events[i].end_date),
-			allDay: events[i].allDay
+			allDay: events[i].allDay,
+			viewDisplay: handleViewDisplay,
 		});
 	}
 	
@@ -78,11 +131,14 @@ $(document).ready(function() {
 			center: 'title',
 			right: 'month,agendaWeek,agendaDay'
 		},
+		month: <?php echo date('n',strtotime($vars['start_date']))-1; ?>,
+		ignoreTimezone: true,
 		editable: true,
 		slotMinutes: 15,
 		eventDrop: handleEventDrop,
 		eventClick: handleEventClick,
-		events: cal_events,
+		//events: cal_events,
+		events: handleGetEvents,
 		
 		// Additions for some additional settings & translations
 		firstDay: 1,

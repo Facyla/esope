@@ -265,6 +265,9 @@ function event_calendar_page_handler($page) {
 			gatekeeper();
 			echo event_calendar_get_page_content_review_requests($page[1]);
 			break;
+		case 'get_fullcalendar_events':
+			echo event_calendar_get_page_content_fullcalendar_events($page[1],$page[2],$page[3],$page[4]);
+			break;
 		default:
 			return FALSE;
 	}

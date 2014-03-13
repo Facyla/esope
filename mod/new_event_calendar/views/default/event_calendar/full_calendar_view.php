@@ -132,7 +132,7 @@ handleGetEvents = function(start, end, callback) {
 		$('.elgg-menu-item-event-calendar-0add').find('a').attr('href',url+'event_calendar/add/'+group_guid);
 		$('.elgg-menu-item-event-calendar-1schedule').find('a').attr('href',url+'event_calendar/schedule/'+group_guid);
 	}
-	}
+}
 	
 handleViewDisplay = function(view) {
 	// TODO: finish this, need to highlight selected date if any

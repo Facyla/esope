@@ -270,7 +270,7 @@ if($event_calendar_hide_access == 'yes') {
 	$body .= '</label></p>';
 }
 
-if (!$vars['entity']) echo elgg_view('prevent_notifications/prevent_form_extend', array());
+if (!$event) $body .= elgg_view('prevent_notifications/prevent_form_extend', array());
 
 $body .= elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:submit')));
 
