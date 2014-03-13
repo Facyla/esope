@@ -124,6 +124,7 @@ function theme_inria_init(){
 		// Use hook to add attachments
 		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
 	}
+	// @TODO : ajouter interception création event pour ajouter l'auteur aux personnes notifiées
 	
 	
 }
