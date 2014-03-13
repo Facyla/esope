@@ -39,7 +39,8 @@ elgg_load_js("jquery.hashchange");
 $content .= '<script type="text/javascript">
 $(function () {
 	$("#folders-all").tree({
-		ui : { theme_name : "default" },
+		ui : { theme_name : "classic" },
+		// themes : classic, default, checkbox
 		types : {
 			"default" : {
 				clickable: false,
@@ -63,7 +64,12 @@ $(function() {
 
 
 // List folders and files by group
-$all_groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
+// Alphabetic sort
+$db_prefix = elgg_get_config('dbprefix');
+$options = array('type' => 'group', 'limit' => false);
+$options['joins'] = array("JOIN {$db_prefix}groups_entity ge ON e.guid = ge.guid");
+$options['order_by'] = 'ge.name ASC';
+$all_groups = elgg_get_entities($options);
 if ($all_groups) {
 	$content .= '<div id="folders-all">';
 	$content .= '<ul>';

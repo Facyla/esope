@@ -1,0 +1,14 @@
+IMPORTANT : this version is based on latest event_calendar at 20140312
+
+But it introduces deep changes in event_calendar, and will likely break most theme that override some calendar views...
+
+If you wish to use it, please make following changes :
+ - rename adf_public_platform/views/default/event_calendar/ to _event_calendar/
+ - rename adf_public_platform/views/default/forms/event_calendar/edit.php to _event_calendar/edit.php
+ - rename adf_public_platform/views/default/object/event_calendar.php to _event_calendar.php
+ - rename prevent_notifiations/views/default/forms/event_calendar to _event_calendar/
+
+New version introduces repeated events, linking to a BBB server, and event polls support.
+Also makes the full calendar view work better.
+
+

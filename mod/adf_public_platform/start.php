@@ -1151,6 +1151,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		$sort_by = elgg_get_plugin_setting("sort", "file_tools");
 		$direction = elgg_get_plugin_setting("sort_direction", "file_tools");
 		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $container_guid, 'limit' => false);
+		$options['joins'] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid");
 		if($sort_by == "simpletype") {
 			$options["order_by_metadata"] = array("name" => "mimetype", "direction" => $direction);
 		} else {
@@ -1167,7 +1168,6 @@ if (elgg_is_active_plugin('file_tools')) {
 			$options['wheres'] = "NOT EXISTS (
 				SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r 
 				WHERE r.guid_two = e.guid AND r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
-			$options['joins'] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid");
 			$files = elgg_get_entities($options);
 		}
 	
