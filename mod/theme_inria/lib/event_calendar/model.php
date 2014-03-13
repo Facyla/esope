@@ -1851,7 +1851,7 @@ function event_calendar_get_page_content_fullcalendar_events($start_date,$end_da
 			} else {
 				$event_item['id'] = $event->guid;
 				$event_item['is_event_poll'] = FALSE;
-				$event_item['url'] = elgg_get_site_url().'event_calendar/view_light_box/'.$event->guid;
+				$event_item['url'] = elgg_get_site_url().'event_calendar/view/'.$event->guid;
 			}
 
 			// Allow other plugins to modify the data
