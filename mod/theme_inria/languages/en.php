@@ -301,6 +301,8 @@ Registration motive :
 Here is the new profile page : %s
 ",
 	
+	'theme_inria:pages:summarytoggle' => "Wiki navigation (show/hide)",
+	
 	
 );
 

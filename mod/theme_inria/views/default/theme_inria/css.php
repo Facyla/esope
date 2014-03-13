@@ -240,7 +240,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .anim-stats .elgg-table-alt td:first-child { max-width: 180px !important; }
 
 /* Navigation des pages wiki en pleine largeur */
-.full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 3em; padding: 0.5em 0.5em 1em 0.5em; background: #efefef; }
+.full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 0.5em; margin-bottom: 1em; padding: 0.5em; background: #efefef; }
 
 /* Messages */
 .elgg-page-messages .elgg-system-messages { top: 110px; left: auto; right: 20px; }

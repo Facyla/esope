@@ -301,6 +301,8 @@ Motif de l'inscription :
 Voici l'adresse du nouveau compte créé : %s
 ",
 	
+	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",
+	
 	
 );
 
