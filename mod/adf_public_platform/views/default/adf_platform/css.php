@@ -582,11 +582,18 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .elgg-form-groups-edit .elgg-vertical label { float: none; clear: none; }
 */
 
+
+/* Editeur tinymce */
+.elgg-longtext-control { font-size: 11px; padding: 1px 5px; margin-left: 3px; border:1px solid transparent; border-radius: 3px; }
+.elgg-longtext-control:hover, .elgg-longtext-control:active, .elgg-longtext-control:focus { text-decoration: none; background-color: #e5e7f5; border-color: <?php echo $linkcolor; ?>; }
+.mceEditor iframe { min-height: 250px; }
+.elgg-form-comments-add .mceEditor iframe { min-height: 100px; }
 /* Limit editor max-width to container */
 textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100% !important; }
 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
+
 
 /* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
 #profile_completeness_container { background: none repeat scroll 0 0 #EEEEEE; border-top: 1px solid white; width: 200px; padding: 15px; float: left; clear: left; }
