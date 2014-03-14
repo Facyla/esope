@@ -334,11 +334,11 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 #profile-owner-block .profile-type { background:transparent; border:0; }
 #profile-owner-block .profile-type- { background:black; }
 #profile-owner-block .profile-type-inria { background:#e33729; }
-#profile-owner-block .profile-type-external { background:#cccccc; }
+#profile-owner-block .profile-type-external { background:#333333; }
 
 .profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
-.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333333; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
 
 /* Bannière spéciale compte archivé */
 .profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
