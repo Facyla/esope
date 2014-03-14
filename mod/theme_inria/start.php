@@ -254,7 +254,7 @@ error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 		
 		// Default values
 		$is_inria = false;
-		$is_active = true;
+		$account_status = 'active';
 		
 		// Attention, la vérification LDAP ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
@@ -266,7 +266,7 @@ error_log("LDAP plugin active");
 			if (ldap_user_exists($user->username)) {
 				if (!ldap_auth_is_closed($user->username)) {
 					$is_inria = true;
-					$is_active = true;
+					$account_status = 'active';
 					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
 					$memberreason = 'validldap';
 error_log("Valid LDAP account");
@@ -280,31 +280,35 @@ error_log("NO valid LDAP account");
 				// External access has some restrictions : if account was not used for more than 1 year => disable
 				// Skip unused accounts (just created ones...)
 				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
-					$is_active = false;
+					$account_status = 'closed';
 					$memberreason = 'inactive';
 				}
 				
 				// Si le compte LDAP vient d'être fermé, et qu'on n'a pas de nouveau motif, il est archivé
 				// Càd que si l'ancien statut était un LDAP valide => désactivation du compte
 				if (($user->membertype == 'inria') && ($user->memberreason == 'validldap')) {
-					$is_active = false;
+					$account_status = 'closed';
 					$memberreason = 'invalidldap';
 				}
 			}
 			
 			// Update user metadata : only if there is a change !
 error_log("Account and status update : previous = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
-			// Type de profil
-			if ($is_inria && ($user->membertype != 'inria')) {
-				$user->membertype = 'inria';
-				esope_set_user_profile_type($user, 'inria');
-			}
-			if (!$is_inria && ($user->membertype != 'external')) {
-				$user->membertype = 'external';
-				esope_set_user_profile_type($user, 'external');
+			// Type de profil (profile_manager)
+			$profiletype_guid = $user->custom_profile_type;
+			$inria_profiletype_guid = esope_get_profiletype_guid('inria');
+			$external_profiletype_guid = esope_get_profiletype_guid('external');
+			
+			// MAJ des données : Type de compte et type de profil, puis statut et motif de validité
+			if ($is_inria) {
+				if ($user->membertype != 'inria') { $user->membertype = 'inria'; }
+				if ($profiletype_guid != $inria_profiletype_guid) { $user->custom_profile_type = $inria_profiletype_guid; }
+			} else {
+				if ($user->membertype != 'external') { $user->membertype = 'external'; }
+				if ($profiletype_guid != $external_profiletype_guid) { $user->custom_profile_type = $external_profiletype_guid; }
 			}
 			// Statut du compte
-			if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
+			if ($user->memberstatus != $account_status) { $user->memberstatus = $account_status; }
 			// Motif de validité
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
 			
