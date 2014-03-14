@@ -209,7 +209,8 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 			} else if ($key == 'givenName') {
 				$firstname = $val[0];
 			} else {
-				if (isset($val[0])) {
+				// No value is also a valid value (updated in LDAP to empty)
+				//if (isset($val[0])) {
 					$new = $val[0];
 					$current = $user->$fields[$key];
 					if ($current != $new) {
@@ -217,9 +218,11 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 							error_log("ldap_auth_update_profile : failed createmetada guid " . $user->getGUID() . " name " . $fields[$key] . " val " . $val[0]);
 						}
 					}
+				/*
 				} else {
 					error_log("ldap_auth_update_profile : {$user->name} ldap_info {$key} corresponding to {$fields[$key]} is empty ");
 				}
+				*/
 			}
 			
 			// Update name if asked, or empty name, or name is username (which means it was just created)
