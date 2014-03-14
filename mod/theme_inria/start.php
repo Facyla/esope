@@ -336,7 +336,8 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		}
 		
 		// Verrouillage à l'entrée si le compte est inactif (= archivé mais pas désactivé !!)
-		if ($user->memberstatus == 'closed') {
+		// Mais seulement si c'est l'user lui-même (la vérification/MAJ a pu être appellée par un autre user)
+		if (($user->guid == $_SESSION['guid']) && ($user->memberstatus == 'closed')) {
 			register_error(elgg_echo('theme_inria:invalidaccess'));
 			return false;
 		}
