@@ -18,7 +18,7 @@ elgg_register_event_handler('init','system','ldap_auth_init');
  */
 function ldap_auth_init() {
 	if (!include_once 'settings.php') {
-		register_error("Please configure ldap_auth plugin first by creating a settings.php file in plugin main directory. See settings_dist.php template file.");
+		register_error(elgg_echo('ldap_auth:missingsettings'));
 	}
 	
 	//helper functions
