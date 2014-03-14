@@ -61,7 +61,7 @@ foreach($cats as $cat_guid => $cat){
 	$even_odd = "even";
 	
 	// Display only Inria category fields (LDAP data)
-	if (elgg_is_logged_in() && ($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) {} else { continue; }
+	if (elgg_is_logged_in() && ($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria') && (esope_get_user_profile_type($user) == 'inria')) {} else { continue; }
 	
 	if($show_header){
 		// make nice title
