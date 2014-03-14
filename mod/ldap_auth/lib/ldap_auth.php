@@ -1,6 +1,6 @@
 <?php
 if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
-	register_error("LDAP : missing LDAP settings file settings.php in plugin root folder - Il manque le fichier de configuration LDAP settings.php dans la racine du dossier du plugin.");
+	register_error(elgg_echo('ldap_auth:missingsettings'));
 }
 
 /**
@@ -34,6 +34,7 @@ function ldap_auth_login($username, $password) {
 	if ( !ldap_auth_is_closed($username) ) {
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
+				ldap_auth_check_profile($user);
 				return login($user);
 			}
 			if ($user = ldap_auth_create_profile($username, $password)) {

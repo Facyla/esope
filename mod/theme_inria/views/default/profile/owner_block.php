@@ -138,7 +138,11 @@ foreach($cats as $cat_guid => $cat){
 	
 	if(!empty($field_result)){
 		$details_result .= $cat_title;
-		$details_result .= "<div>" . $field_result . "</div>";	
+		// Add email
+		$field_result .= "<div class='" . $even_odd . "'>";
+		$field_result .= "<b>Email</b>:&nbsp;" . elgg_view("output/email", array("value" =>  $user->email));
+		$field_result .= "</div>\n";
+		$details_result .= "<div>" . $field_result . "</div>";
 	}
 }
 if ($details_result) $inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';

@@ -261,6 +261,9 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			//error_log("LDAP plugin active");
 			elgg_load_library("elgg:ldap_auth");
 			
+			// Update LDAP data
+			ldap_auth_check_profile($user);
+			
 			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
