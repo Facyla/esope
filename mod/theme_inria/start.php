@@ -250,7 +250,7 @@ function theme_inria_setup_menu() {
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
-error_log("Inria : profile update : $event, $object_type, " . $user->guid);
+		//error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 		
 		// Default values
 		$is_inria = false;
@@ -258,9 +258,9 @@ error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 		
 		// Attention, la vérification LDAP ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
+			//error_log("LDAP plugin active");
 			elgg_load_library("elgg:ldap_auth");
-		
-error_log("LDAP plugin active");
+			
 			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
@@ -269,14 +269,14 @@ error_log("LDAP plugin active");
 					$account_status = 'active';
 					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
 					$memberreason = 'validldap';
-error_log("Valid LDAP account");
+					//error_log("Valid LDAP account");
 				}
 			}
 			
 			// Statut du compte
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
-error_log("NO valid LDAP account");
+				//error_log("NO valid LDAP account");
 				// External access has some restrictions : if account was not used for more than 1 year => disable
 				// Skip unused accounts (just created ones...)
 				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
@@ -293,7 +293,7 @@ error_log("NO valid LDAP account");
 			}
 			
 			// Update user metadata : only if there is a change !
-error_log("Account and status update : previous = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+			//error_log("Account update : before = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
 			// Type de profil (profile_manager)
 			$profiletype_guid = $user->custom_profile_type;
 			$inria_profiletype_guid = esope_get_profiletype_guid('inria');
@@ -313,7 +313,7 @@ error_log("Account and status update : previous = {$user->membertype} / {$user->
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
 			
 		}
-error_log("Account and status update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+		//error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
 		
 		// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
 		// Compte externe par défaut (si on n'a pas eu d'info du LDAP)
