@@ -94,7 +94,7 @@ if (elgg_is_logged_in()) {
 
 
 echo '<div class="elgg-grid">';
-if (elgg_is_logged_in) {
+if (elgg_is_logged_in()) {
 	echo '<div style="float:left; width:24%;">' . $profile . '</div>';
 	echo '<div style="float:left; width:50%;">' . $profile_details . '</div>';
 	echo '<div style="float:right; width:24%;">' . $activity . '</div>';
