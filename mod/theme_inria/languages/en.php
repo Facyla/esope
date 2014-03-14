@@ -163,6 +163,7 @@ $english = array(
 	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
 	'profile:types:external' => "External",
 	'profile:types:external:description' => "External profiles are people who do not belong to Inria, but were granted a special access for various reasons : as an alumni, associated researcher, subcontractor, etc.",
+	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "About me",
 	'profile:categories:inria' => "Inria data",
 	'profile:categories:coordinates' => "Detailed contact info",

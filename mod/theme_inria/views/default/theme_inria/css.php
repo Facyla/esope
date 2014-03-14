@@ -316,12 +316,33 @@ section .interne div.module div.activites { background-color: <?php echo $module
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
 
-a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; }
+a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; border:3px solid transparent; }
 .avatar_edit_hover:hover, .avatar_edit_hover:active, .avatar_edit_hover:focus { opacity:1; background:rgba(0,0,0,0.3); }
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
 .linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+
+
+/* Profils différenciés */
+#profile-owner-block .elgg-avatar { border: 3px solid transparent; }
+#profile-owner-block .elgg-avatar img { background-size: cover !important; }
+#profile-owner-block .elgg-avatar.profile-type- { border: 3px solid black; }
+#profile-owner-block .elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
+#profile-owner-block .elgg-avatar.profile-type-external img { border: 3px solid #cccccc; }
+
+#profile-owner-block .profile-type { background:transparent; border:0; }
+#profile-owner-block .profile-type- { background:black; }
+#profile-owner-block .profile-type-inria { background:#e33729; }
+#profile-owner-block .profile-type-external { background:#cccccc; }
+
+.profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
+.profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+
+/* Bannière spéciale compte archivé */
+.profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
+.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 20px; font-weight: bold; text-transform: uppercase; color: white; }
 
 
 /* Inria Tools Widget */

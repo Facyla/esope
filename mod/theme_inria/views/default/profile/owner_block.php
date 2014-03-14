@@ -19,8 +19,15 @@ $icon = elgg_view_entity_icon($user, 'large', array(
 /*
 */
 if ($user->guid == elgg_get_logged_in_user_guid()) {
-	$icon= '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
+	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
 }
+
+// Add profile type badge, if defined
+$profile_type = esope_get_user_profile_type($user);
+if (empty($profile_type)) $profile_type = 'external';
+if (!empty($profile_type)) $icon = '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>' . $icon;
+// Archive banner, if account is closed
+if ($user->memberstatus == 'closed') $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
 
 // grab the actions and admin menu items from user hover
 $menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());
@@ -50,7 +57,7 @@ foreach($cats as $cat_guid => $cat){
 	$even_odd = "even";
 	
 	// Display only Inria category fields (LDAP data)
-	if (($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) {} else { continue; }
+	if (elgg_is_logged_in() && ($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) {} else { continue; }
 	
 	if($show_header){
 		// make nice title
