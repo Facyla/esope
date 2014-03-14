@@ -325,8 +325,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 
 /* Profils différenciés */
-.elgg-avatar { border: 3px solid transparent; }
-.elgg-avatar img { background-size: cover !important; }
+.elgg-avatar img { border: 3px solid transparent; background-size: cover !important; }
 .elgg-avatar.profile-type- img { border: 3px solid transparent; }
 .elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
 .elgg-avatar.profile-type-external img { border: 3px solid #333333; }
