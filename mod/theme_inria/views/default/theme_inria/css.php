@@ -169,6 +169,10 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 
+/* Flux RSS des groupes */
+.elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }
+.elgg-list .simplepie-list li h4 { font-weight:normal }
+
 
 /* Forms */
 ::-webkit-input-placeholder { color: #EF783E; }

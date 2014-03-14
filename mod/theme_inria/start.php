@@ -30,8 +30,9 @@ function theme_inria_init(){
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with RSS feed reader
+	// Note : directly integrated in groups/profile/widgets
 	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
-	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
+	//elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
 	// Supprimer le suivi de l'activité (toujours activé)

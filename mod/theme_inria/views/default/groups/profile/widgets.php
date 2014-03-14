@@ -24,6 +24,11 @@ if ($right || $left) {
 echo "</ul>";
 
 
+// Add RSS feed
+if (elgg_is_active_plugin('simplepie')) {
+	$rss_feed = elgg_view('simplepie/group_simplepie_feed', $vars);
+}
+
 // Add group activity
 $group = $vars['entity'];
 if (!$group) { return true; }
@@ -41,6 +46,16 @@ elgg_pop_context();
 
 if (!$activity) { $activity = '<p>' . elgg_echo('groups:activity:none') . '</p>'; }
 
-echo '<h3>' . $all_link . '</h3>';
-echo $activity;
+
+// Use 2 columns if RSS feed enabled in this group
+if (!empty($rss_feed)) {
+	echo '<div style="width:48%; float:left;">';
+	echo '<h3>' . $all_link . '</h3>' . $activity;
+	echo '</div>';
+	echo '<div style="width:48%; float:right;">';
+	echo $rss_feed;
+	echo '</div>';
+} else {
+	echo '<h3>' . $all_link . '</h3>' . $activity;
+}
 
