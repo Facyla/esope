@@ -329,7 +329,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 #profile-owner-block .elgg-avatar img { background-size: cover !important; }
 #profile-owner-block .elgg-avatar.profile-type- { border: 3px solid black; }
 #profile-owner-block .elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
-#profile-owner-block .elgg-avatar.profile-type-external img { border: 3px solid #cccccc; }
+#profile-owner-block .elgg-avatar.profile-type-external img { border: 3px solid #333333; }
 
 #profile-owner-block .profile-type { background:transparent; border:0; }
 #profile-owner-block .profile-type- { background:black; }
