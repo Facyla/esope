@@ -152,6 +152,7 @@ $french = array(
 	'loginusername' => "Identifiant Iris",
 	'theme_inria:basiclogin' => "Connexion Externes",
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
+	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
 	// Champs de profil
 	'profile:inria_location' => "Localisation",

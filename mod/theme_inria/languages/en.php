@@ -152,6 +152,7 @@ $english = array(
 	'loginusername' => "Iris login",
 	'theme_inria:basiclogin' => "External access login",
 	'theme_inria:caslogin' => "Inria login (CAS)",
+	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
 	// Profile fields
 	'profile:inria_location' => "Location",
