@@ -10,6 +10,9 @@
  */
 
 $fr = array(
+	
+	'ldap_auth:missingsettings' => "Veuillez configurer le plugin ldap_auth plugin en créant un fichier settings.php à la racine du plugin. Voyez le fichier settings_dist.php pour un exemple de fichier de configuration.",
+	
 	'ldap_auth:settings:label:host' => "Host settings",
 	'ldap_auth:settings:label:connection_search' => "LDAP settings",
 	'ldap_auth:settings:label:hostname' => "Hostname",
