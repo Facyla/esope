@@ -273,8 +273,8 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				}
 			}
 			
-			// Bypass admin : tout admin est Inria de fait (Iris)
-			if (elgg_is_admin_logged_in()) {
+			// Bypass admin : tout admin est Inria de fait (eg.: Iris)
+			if (elgg_is_admin_user($user->guid)) {
 				$is_inria = true;
 				$account_status = 'active';
 				$memberreason = 'admin';
