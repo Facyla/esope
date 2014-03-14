@@ -325,16 +325,11 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 
 /* Profils différenciés */
-#profile-owner-block .elgg-avatar { border: 3px solid transparent; }
-#profile-owner-block .elgg-avatar img { background-size: cover !important; }
-#profile-owner-block .elgg-avatar.profile-type- { border: 3px solid black; }
-#profile-owner-block .elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
-#profile-owner-block .elgg-avatar.profile-type-external img { border: 3px solid #333333; }
-
-#profile-owner-block .profile-type { background:transparent; border:0; }
-#profile-owner-block .profile-type- { background:black; }
-#profile-owner-block .profile-type-inria { background:#e33729; }
-#profile-owner-block .profile-type-external { background:#333333; }
+.elgg-avatar { border: 3px solid transparent; }
+.elgg-avatar img { background-size: cover !important; }
+.elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
+.elgg-avatar.profile-type- img, 
+.elgg-avatar.profile-type-external img { border: 3px solid #333333; }
 
 .profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
