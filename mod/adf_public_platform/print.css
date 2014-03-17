@@ -3,7 +3,8 @@
 /* Masquage des éléments d'interface */
 .elgg-page > header, #transverse, footer { display: none; }
 /* Masquage des formulaires */
-.elgg-form-comments-add, .elgg-form-discussion-reply-save, #feedbackWrapper { display: none; }
+.elgg-form, .elgg-form-comments-add, .elgg-form-discussion-reply-save { display: none; }
+#feedbackWrapper, #groupchat-grouplink, #groupchat-sitelink { display: none; }
 
 /* Page layout */
 .interne { max-width: 100%; width: 98%; margin: auto; }
