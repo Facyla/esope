@@ -14,7 +14,13 @@ $french = array(
 	'notification_messages:delete' => "a supprimé",
 	'notification_messages:update' => "a mis à jour",
 	
-	// 
+	// Settings
+	'notification_messages:object:subtype' => "Type d'objet",
+	'notification_messages:setting' => "Réglage",
+	'notification_messages:subject:default' => "Sujet par défaut",
+	'notification_messages:subject:allow' => "Sujet amélioré",
+	'notification_messages:subject:deny' => "Bloqué (pas de notification)",
+	
 	'notification_messages:untitled' => "(sans titre)",
 
 );
