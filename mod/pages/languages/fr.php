@@ -11,6 +11,8 @@ $french = array(
 	 * Menu items and titles
 	 */
 
+	'page' => "Page wiki",
+	'page_top' => "Wiki",
 	'pages' => "Pages wiki",
 	'pages:owner' => "Wiki de %s",
 	'pages:friends' => "Pages wiki de vos contacts ",
@@ -28,9 +30,9 @@ $french = array(
 
 	'pages:navigation' => "Navigation",
 	'pages:via' => "via les pages",
-	'item:object:page_top' => "Pages wiki (accueil)",
-	'item:object:page' => "Pages wiki (pages intérieures)",
-	'pages:nogroup' => "Le wiki du groupe ne comporte encore aucune page",
+	'item:object:page_top' => "Wiki",
+	'item:object:page' => "Page wiki",
+	'pages:nogroup' => "Aucun wiki pour le moment",
 	'pages:more' => "Plus de pages wiki",
 	'pages:none' => "Aucune page wiki créé pour l'instant",
 
