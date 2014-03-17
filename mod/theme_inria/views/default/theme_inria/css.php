@@ -325,10 +325,12 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 
 /* Profils différenciés */
-.elgg-avatar img { border: 3px solid transparent; background-size: cover !important; }
-.elgg-avatar.profile-type- img { border: 3px solid transparent; }
-.elgg-avatar.profile-type-inria img { border: 3px solid #e33729;; }
-.elgg-avatar.profile-type-external img { border: 3px solid #333333; }
+.elgg-avatar img { border: 1px solid transparent; background-size: cover !important; }
+.elgg-avatar.profile-type- img { border: 1px solid transparent; }
+.elgg-avatar.profile-type-inria img { border: 1px solid #e33729;; }
+.elgg-avatar.profile-type-external img { border: 1px solid #333333; }
+/* Bordure large seulement sur page de profil */
+#profile-owner-block .elgg-avatar img { border-width: 3px; }
 
 .profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
