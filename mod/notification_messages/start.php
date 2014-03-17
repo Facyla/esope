@@ -13,7 +13,7 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
 function notification_messages_init() {
 	global $CONFIG;
 	
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'notification_messages_notify_message');
+	elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
 	
 }
 
@@ -43,7 +43,7 @@ function notification_messages_readable_subtype($subtype) {
 * @param unknown_type $returnvalue
 * @param unknown_type $params
 */
-function notification_messages_notify_message($hook, $entity_type, $returnvalue, $params) {
+function notification_messages_notify_subject($hook, $entity_type, $returnvalue, $params) {
 	$entity = $params['entity'];
 	$to_entity = $params['to_entity'];
 	$method = $params['method'];
@@ -51,7 +51,7 @@ function notification_messages_notify_message($hook, $entity_type, $returnvalue,
 	if (elgg_instanceof($entity, 'object')) {
 		$subtype = $entity->getSubtype();
 		
-		// Determine behaviour
+		// Determine behaviour - default is not changing anything (can be already specific)
 		$setting = elgg_get_plugin_setting('object_' . $subtype, 'notification_messages');
 		if (empty($setting)) $setting == 'default';
 		switch ($setting) {
@@ -77,7 +77,7 @@ function notification_messages_notify_message($hook, $entity_type, $returnvalue,
 		// If still nothing, fail-safe to untitled
 		if (empty($msg_title)) { $msg_title = elgg_echo('notification_messages:untitled'); }
 		
-		// Container is mainly group or user, can be a site sometimes
+		// Container should be a group or user, can also be a site
 		$container = $entity->getContainerEntity();
 		if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group")) { $msg_container = $container->name; }
 		
