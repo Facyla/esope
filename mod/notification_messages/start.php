@@ -88,8 +88,8 @@ function notification_messages_notify_subject($hook, $entity_type, $returnvalue,
 		
 		// Use new subject structure : [subtype container] Title
 		$returnvalue = elgg_echo('notification_messages:objects:subject', array($msg_subtype, $msg_container, $msg_title));
-		// Encode in UTF-8 so we have best subject title support
-		$returnvalue='=?utf-8?B?'.base64_encode($returnvalue).'?=';
+		// Encode in UTF-8 so we have best subject title support ? @TODO : not working at all for now...
+		//$returnvalue = '=?utf-8?B?'.base64_encode($returnvalue).'?=';
 		
 	}
 	
