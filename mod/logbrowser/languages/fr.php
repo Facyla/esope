@@ -6,7 +6,7 @@
  */
 
 $french = array(
-	'admin:utilities:logbrowser' => "Connection aux journaux",
+	'admin:utilities:logbrowser' => "Connexion aux journaux",
 	'logbrowser' => "Visualiseur de journal",
 	'logbrowser:browse' => "Visualiser les journaux système",
 	'logbrowser:search' => "Affiner les résultats",
@@ -18,9 +18,9 @@ $french = array(
 
 	'logbrowser:date' => "Date et heure",
 	'logbrowser:user:name' => "Utilisateur",
-	'logbrowser:user:guid' => "Guide de l'utilisateur",
-	'logbrowser:object' => "Type de l'objet",
-	'logbrowser:object:guid' => "Aide à propos des Objets",
+	'logbrowser:user:guid' => "GUID de l'utilisateur",
+	'logbrowser:object' => "Type d'objet",
+	'logbrowser:object:guid' => "GUID de l'objet",
 	'logbrowser:action' => "Action",
 	
 	'admin:administer_utilities:logbrowser' => "Visualiseur de journal",
