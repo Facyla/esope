@@ -111,7 +111,7 @@ $fr = array(
 			<li>La sécurité est une quête sans fin...</li>
 		</ul>",
 	'adf_platform:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
-	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production !",
+	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production, et utilisez le code de désactivation lorsque c'est nécessaire.",
 	
 	
 	// Overrides plugins translations
