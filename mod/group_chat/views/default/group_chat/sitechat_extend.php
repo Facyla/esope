@@ -24,6 +24,7 @@ if ($chat_content) {
 elgg_set_page_owner_guid($guid);
 */
 
+// Note : IE doesn't like space nor hyphens - in window title, consider it is an id and don't use them...
 echo '<script type="text/javascript">
 var '.$popup_id.';
 // Open a window only once
@@ -31,7 +32,7 @@ function window_'.$popup_id.'(url) {
 	if('.$popup_id.' && !'.$popup_id.'.closed){
 		'.$popup_id.'.focus();
 	} else {
-		'.$popup_id.' =  window.open(url, "' . elgg_echo('group_chat:site_chat') . ' ' . elgg_get_page_owner_entity()->name . '", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
+		'.$popup_id.' =  window.open(url, "site_chat", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
 		'.$popup_id.'.focus();
 	}
 }
