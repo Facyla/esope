@@ -66,6 +66,7 @@ if ($event) {
 	$contact = $event->contact;
 	$organiser = $event->organiser;
 	$event_tags = $event->event_tags;
+	if (empty($event_tags)) { $event_tags = $event->tags; }
 	$long_description = $event->long_description;
 	$access = $event->access_id;
 	if ($event_calendar_times != 'no') {
@@ -99,6 +100,7 @@ if ($event) {
 	$contact = $fd['contact'];
 	$organiser = $fd['organiser'];
 	$event_tags = $fd['event_tags'];
+	if (empty($event_tags)) { $event_tags = $fd['tags']; }
 	$long_description = $fd['long_description'];
 	$access = $fd['access_id'];
 	if ($event_calendar_times != 'no') {
@@ -248,7 +250,7 @@ if ($event_calendar_personal_manage == 'by_event') {
 }
 
 $body .= '<p><label for="tags">'.elgg_echo("event_calendar:event_tags_label").'<br />';
-$body .= elgg_view("input/tags",array('name' => 'event_tags','value'=>$event_tags));
+$body .= elgg_view("input/tags",array('name' => 'tags','value'=>$event_tags));
 $body .= '</label></p>';
 $body .= '<p class="description">'.$prefix['event_tags'].elgg_echo('event_calendar:event_tags_description').'</p>';
 
