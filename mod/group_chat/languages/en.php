@@ -7,7 +7,7 @@
 $english = array(
 	'group_chat' => 'Group Chat',
 	'group_chat:site_chat' => "Site chat",
-	'group_chat:group_chat' => "%s group chat",
+	'group_chat:group_chat' => "%s's group chat",
 	'group_chat:object_chat' => "Page chat",
 	'group_chat:user_chat' => "User chat",
 	'group_chat:group_option' => "Enable group chat?",

@@ -248,7 +248,7 @@ if ($event_calendar_personal_manage == 'by_event') {
 }
 
 $body .= '<p><label for="tags">'.elgg_echo("event_calendar:event_tags_label").'<br />';
-$body .= elgg_view("input/tags",array('name' => 'tags','value'=>$event_tags));
+$body .= elgg_view("input/tags",array('name' => 'event_tags','value'=>$event_tags));
 $body .= '</label></p>';
 $body .= '<p class="description">'.$prefix['event_tags'].elgg_echo('event_calendar:event_tags_description').'</p>';
 
