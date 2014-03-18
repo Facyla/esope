@@ -11,7 +11,8 @@ global $CONFIG;
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 
-$open_group_chat_url = $CONFIG->url . 'chat/group/' . elgg_get_page_owner_guid();
+$group = elgg_get_page_owner_entity();
+$open_group_chat_url = $CONFIG->url . 'chat/group/' . $group->guid;
 $chat_icon = '<span class="elgg-icon elgg-icon-speech-bubble-alt"></span>';
 
 $class = '';
@@ -32,7 +33,7 @@ function window_'.$popup_id.'(url) {
 	if('.$popup_id.' && !'.$popup_id.'.closed){
 		'.$popup_id.'.focus();
 	} else {
-		'.$popup_id.' =  window.open(url, "' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
+		'.$popup_id.' =  window.open(url, "group_chat_' . $group->guid . '", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
 		'.$popup_id.'.focus();
 	}
 }

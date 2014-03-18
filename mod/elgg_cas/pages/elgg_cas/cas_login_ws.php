@@ -87,6 +87,7 @@ if (elgg_is_logged_in()) {
 	if (phpCAS::isAuthenticated()) {
 		$elgg_username = phpCAS::getUser();
 		elgg_cas_register_guid($_GET['guid'], create_user_token($elgg_username), $elgg_username);
+		header('Location: iris://login');
 
 		$user = get_user_by_username($elgg_username);
 		if ($user->guid == $logged->guid) { $user->is_cas_logged = true; }
@@ -124,7 +125,7 @@ if (elgg_is_logged_in()) {
 	$logged = elgg_get_logged_in_user_entity();
 	if ($user->guid != $logged->guid) {
 		register_error(elgg_echo('elgg_cas:alreadylogged', array($user->username, $user->name, $logged->username, $logged->name)));
-		forward();
+		forward('iris://login');
 	}
 }
 
@@ -140,10 +141,7 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
-			// Redirect to app
-			$_SESSION['last_forward_from'] = 'iris://login';
-			header('Location: iris://login');
-			forward('');
+			forward('iris://login');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
@@ -159,9 +157,7 @@ if (elgg_instanceof($user, 'user')) {
 			// Création du compte puis MAJ avec les infos du LDAP
 			$user = ldap_auth_create_profile($elgg_username, $elgg_password);
 			if (elgg_instanceof($user, 'user')) {
-				// Redirect to app
-				$_SESSION['last_forward_from'] = 'iris://login';
-				header('Location: iris://login');
+				forward('iris://login');
 			}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
