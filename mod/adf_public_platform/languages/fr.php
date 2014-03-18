@@ -111,7 +111,7 @@ $fr = array(
 			<li>La sécurité est une quête sans fin...</li>
 		</ul>",
 	'adf_platform:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
-	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production !",
+	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production, et utilisez le code de désactivation lorsque c'est nécessaire.",
 	
 	
 	// Overrides plugins translations
@@ -306,8 +306,12 @@ $fr = array(
 	'widgets:profile:add' => "Ajouter des modules à ma page de profil",
 	'adf_platform:settings:publicpages' => "Listes des pages publiques (accessibles hors connexion)",
 	'adf_platform:settings:publicpages:help' => "Les \"Pages publiques\" sont accessibles à tous, hors connexion. Elles permettent de rendre publics la charte, les mentions légales et autres pages importantes du site.<br />Indiquez une adresse complète de page (URL) par ligne, sans le nom de domaine et le slash initial ('/'), par exemple : pages/view/1234/mentions-legales",
-	'adf_platform:home:public_profiles' => "Profil public au choix du membre ? Non = public ; Oui = opt-in (non-public par défaut)",
-	'adf_platform:home:public_profiles:help' => "Ce réglage permet de donner la possibilité aux membres du site de choisir de rendre leur profil accessible depuis internet, sans compte sur le site. Par défaut leur profil sera réservé aux membres, jusqu'à-ce qu'ils choisissent de le rendre public. Si ce réglage est désactivé, les profils sont publics.<br />A noter : en mode \"intranet\", aucune page n'est visible de l'extérieur, y compris les pages de profil, et ce réglage n'a aucun effet.",
+	'adf_platform:home:public_profiles:title' => "Profils publics",
+	'adf_platform:home:public_profiles' => "Permettre aux membres de choisir la visibilité de leur profil ? Non = toujours public ; Oui = au choix du membre (non-public par défaut)",
+	'adf_platform:home:public_profiles:help' => "Ce réglage permet de donner la possibilité aux membres du site de choisir de rendre ou non leur profil accessible depuis internet. Par défaut leur profil sera réservé aux membres, jusqu'à-ce qu'ils choisissent de le rendre public (Opt-in). Si ce réglage est désactivé, les profils sont toujours publics.<br />A noter : en mode \"intranet\", aucune page n'est visible de l'extérieur, y compris les pages de profil, et ce réglage n'a aucun effet.",
+	'adf_platform:home:public_profiles_default' => "Utiliser plutôt le mode Opt-out ?",
+	'adf_platform:home:public_profiles_default:help' => "En mode Opt-out, les profils seront publics tant que le membre ne décide pas de les rendre privé.",
+	'adf_public_platform:noprofile' => "Profil inexistant ou non public.",
 	'adf_platform:usersettings:public_profiles:title' => "Choisir la visibilité de mon profil",
 	'adf_platform:usersettings:public_profile' => "Rendre mon profil public",
 	'adf_platform:usersettings:public_profile:help' => "Par défaut votre profil n'est visible que des membres du site, afin de ne pas exposer votre profil publiquement sans votre accord volontaire. Ce réglage vous permet de le rendre accessible de l'extérieur.<br />Veuillez noter que tous vos autres réglages de visibilité des champs et des widgets qui composent votre page du profil restent valables : par exemple si vous avez choisi que votre numéro de téléphone ou la liste de contacts sont réservés à vos contacts, rendre votre profil public ne modifiera pas ce réglage, et cette information restera réservée à vos contacts.<br />Il est conseillé de rendre votre profil public si vous souhaitez présenter vos compétences ou partager certaines informations choisies sur internet.",

@@ -40,11 +40,13 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<?php
 	echo elgg_view('page/elements/shortcut_icon', $vars);
 	
-	// CSS stylesheets
+	// CSS stylesheets - default is for all media types
 	foreach ($css as $link) {
-		echo '<link rel="stylesheet" href="' . $link . '" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . $link . '" type="text/css" media="all" />';
 	}
+	// Specific CSS for print
 	echo '<link rel="stylesheet" href="' . $theme_url . 'print.css" type="text/css" media="print" />';
+	// Other stylesheets
 	echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" />';
 	
 	$ie_url = elgg_get_simplecache_url('css', 'ie');

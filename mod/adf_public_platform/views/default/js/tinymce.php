@@ -66,6 +66,7 @@ elgg.tinymce.init = function() {
 		theme_advanced_resize_horizontal : false,
 		theme_advanced_path : true,
 		width : "100%",
+		//height: "200px",
 		extended_valid_elements : "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value]",
 		setup : function(ed) {
 			//show the number of words

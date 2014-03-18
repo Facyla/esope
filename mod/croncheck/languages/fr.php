@@ -9,7 +9,7 @@ $french = array(
 	'croncheck:friendly_time' => 'Date et heure',
 	
 	'croncheck:no_run' => "Ce CRON n'a jamais été exécuté auparavant (depuis que ce plugin a été activé)",
-	'croncheck:none_registered' => 'Au événement enregistré pour cet intervale',
+	'croncheck:none_registered' => 'Aucun événement enregistré pour cet intervale',
 	
 	// widget
 	'croncheck:widget:title' => "Croncheck",

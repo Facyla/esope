@@ -152,6 +152,7 @@ $french = array(
 	'loginusername' => "Identifiant Iris",
 	'theme_inria:basiclogin' => "Connexion Externes",
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
+	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
 	// Champs de profil
 	'profile:inria_location' => "Localisation",
@@ -162,6 +163,7 @@ $french = array(
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
 	'profile:types:external' => "Extérieur",
 	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "A propos de moi",
 	'profile:categories:inria' => "Données Inria",
 	'profile:categories:coordinates' => "Coordonnées détaillées",
@@ -300,6 +302,8 @@ Motif de l'inscription :
 
 Voici l'adresse du nouveau compte créé : %s
 ",
+	
+	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",
 	
 	
 );

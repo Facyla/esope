@@ -140,6 +140,9 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
+			// Redirect to app
+			$_SESSION['last_forward_from'] = 'iris://login';
+			header('Location: iris://login');
 			forward('');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
@@ -154,7 +157,12 @@ if (elgg_instanceof($user, 'user')) {
 			elgg_load_library("elgg:ldap_auth");
 			$elgg_password = generate_random_cleartext_password();
 			// Création du compte puis MAJ avec les infos du LDAP
-			ldap_auth_create_profile($elgg_username, $elgg_password);
+			$user = ldap_auth_create_profile($elgg_username, $elgg_password);
+			if (elgg_instanceof($user, 'user')) {
+				// Redirect to app
+				$_SESSION['last_forward_from'] = 'iris://login';
+				header('Location: iris://login');
+			}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}
@@ -164,6 +172,6 @@ if (elgg_instanceof($user, 'user')) {
 }
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-// Pas de rendu dans la page en cas d'insclusion du script (autologin)
+// Pas de rendu dans la page en cas d'inclusion du script (autologin)
 if (!$cas_login_included) echo elgg_view_page($title, $content);
 

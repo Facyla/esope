@@ -11,6 +11,10 @@ if (!$user) {
 	return TRUE;
 }
 
+
+// Check data on the fly
+inria_check_and_update_user_status('login', 'user', $user);
+
 $icon = elgg_view_entity_icon($user, 'large', array(
 	'use_hover' => false,
 	'use_link' => false,
@@ -19,8 +23,15 @@ $icon = elgg_view_entity_icon($user, 'large', array(
 /*
 */
 if ($user->guid == elgg_get_logged_in_user_guid()) {
-	$icon= '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
+	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
 }
+
+// Add profile type badge, if defined
+$profile_type = esope_get_user_profile_type($user);
+if (empty($profile_type)) $profile_type = 'external';
+if (!empty($profile_type)) $icon = '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>' . $icon;
+// Archive banner, if account is closed
+if ($user->memberstatus == 'closed') $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
 
 // grab the actions and admin menu items from user hover
 $menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());
@@ -50,7 +61,7 @@ foreach($cats as $cat_guid => $cat){
 	$even_odd = "even";
 	
 	// Display only Inria category fields (LDAP data)
-	if (($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) {} else { continue; }
+	if (elgg_is_logged_in() && ($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria') && (esope_get_user_profile_type($user) == 'inria')) {} else { continue; }
 	
 	if($show_header){
 		// make nice title
@@ -127,7 +138,11 @@ foreach($cats as $cat_guid => $cat){
 	
 	if(!empty($field_result)){
 		$details_result .= $cat_title;
-		$details_result .= "<div>" . $field_result . "</div>";	
+		// Add email
+		$field_result .= "<div class='" . $even_odd . "'>";
+		$field_result .= "<b>Email</b>:&nbsp;" . elgg_view("output/email", array("value" =>  $user->email));
+		$field_result .= "</div>\n";
+		$details_result .= "<div>" . $field_result . "</div>";
 	}
 }
 if ($details_result) $inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';

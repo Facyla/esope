@@ -169,6 +169,10 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 
+/* Flux RSS des groupes */
+.elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }
+.elgg-list .simplepie-list li h4 { font-weight:normal }
+
 
 /* Forms */
 ::-webkit-input-placeholder { color: #EF783E; }
@@ -240,7 +244,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .anim-stats .elgg-table-alt td:first-child { max-width: 180px !important; }
 
 /* Navigation des pages wiki en pleine largeur */
-.full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 3em; padding: 0.5em 0.5em 1em 0.5em; background: #efefef; }
+.full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 0.5em; margin-bottom: 1em; padding: 0.5em; background: #efefef; }
 
 /* Messages */
 .elgg-page-messages .elgg-system-messages { top: 110px; left: auto; right: 20px; }
@@ -312,12 +316,29 @@ section .interne div.module div.activites { background-color: <?php echo $module
 #elgg-widget-col-1 { clear: both; }
 .inria-ldap-details { border: 1px solid black; padding: 4px; margin: 0 0 10px 0; background: white; }
 
-a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; }
+a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200px; text-align: center; vertical-align: 50%; line-height: 200px; opacity:0; color:#FFF; text-decoration:none; border:3px solid transparent; }
 .avatar_edit_hover:hover, .avatar_edit_hover:active, .avatar_edit_hover:focus { opacity:1; background:rgba(0,0,0,0.3); }
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
 .linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+
+
+/* Profils différenciés */
+.elgg-avatar img { border: 1px solid transparent; background-size: cover !important; }
+.elgg-avatar.profile-type- img { border: 1px solid transparent; }
+.elgg-avatar.profile-type-inria img { border: 1px solid #e33729;; }
+.elgg-avatar.profile-type-external img { border: 1px solid #333333; }
+/* Bordure large seulement sur page de profil */
+#profile-owner-block .elgg-avatar img { border-width: 3px; }
+
+.profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
+.profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333333; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+
+/* Bannière spéciale compte archivé */
+.profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
+.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 20px; font-weight: bold; text-transform: uppercase; color: white; }
 
 
 /* Inria Tools Widget */

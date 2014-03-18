@@ -44,9 +44,9 @@ function prevent_notifications_init() {
 function prevent_notifications_object_notifications_disable($hook, $entity_type, $returnvalue, $params) {
 	$send_notification = get_input('send_notification', 'yes');
 	if ($send_notification == 'no') {
-		// Don't notify
+		// Don't notify if explicitely asked to
 		$msg = elgg_echo('prevent_notifications:notsent');
-		system_messages($msg);
+		system_message($msg);
 		return true;
 	}
 	// Don't change default behaviour

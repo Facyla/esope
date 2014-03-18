@@ -30,8 +30,9 @@ function theme_inria_init(){
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
 	// Extend group with RSS feed reader
+	// Note : directly integrated in groups/profile/widgets
 	//elgg_extend_view('groups/tool_latest', 'simplepie/group_simplepie_module', 501);
-	elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
+	//elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
 	// Supprimer le suivi de l'activité (toujours activé)
@@ -93,10 +94,8 @@ function theme_inria_init(){
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
 	
-	// Update meta fields (inria/external, active/closed)
-	if (elgg_is_active_plugin('ldap_auth')) {
-		elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
-	}
+	// Check access validity and update meta fields (inria/external, active/closed)
+	elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
 	
 	// Remove unwanted widgets
 	//elgg_unregister_widget_type('river_widget');
@@ -124,6 +123,7 @@ function theme_inria_init(){
 		// Use hook to add attachments
 		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
 	}
+	// @TODO : ajouter interception création event pour ajouter l'auteur aux personnes notifiées
 	
 	
 }
@@ -207,17 +207,19 @@ function theme_inria_setup_menu() {
 	}
 	
 	// Ajout menu Invitations à rejoindre Iris
-	if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
-		/*
-		$menu_item = array(
-			"name" => "inria_invite",
-			"text" => elgg_echo("inria_invite"),
-			"href" => "inria/invite",
-			"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
-			"section" => "inria_invite"
-		);
-		elgg_register_menu_item("page", $menu_item);
-		*/
+	if (elgg_is_logged_in()) {
+		$own = elgg_get_logged_in_user_entity();
+		//if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
+		if (elgg_is_admin_logged_in()) {
+			$menu_item = array(
+				"name" => "inria_invite",
+				"text" => elgg_echo("inria_invite"),
+				"href" => "inria/invite",
+				"contexts" => array("friends", "friendsof", "collections", "messages", "members"),
+				"section" => "inria_invite"
+			);
+			elgg_register_menu_item("page", $menu_item);
+		}
 	}
 	
 }
@@ -225,81 +227,121 @@ function theme_inria_setup_menu() {
 
 
 /* Met à jour les infos des membres
- * Existe dans le LDAP ET actif : compte Inria
- * Sinon : compte externe
- * Qualification du compte externe faite par aileurs, sauf si ex-Inria (dans ce cas : raison = ldap)
- * Inactif ou période expirée : marque comme archivé
+ *
+ * 1. Type de compte
+ *  - Si existe dans le LDAP ET actif : compte Inria actif
+ *  - Sinon : compte externe
+ *
+ * 2. Statut du compte :
+ * Inactif ou période expirée : marqué comme archivé
+ *  - un compte Inria valide est toujours actif
+ *  - un compte externe peut être archivé (plus possible de se connecter avec) :
+ *    * si inactif plus de X temps
+ *    * ou manuellement par un admin
+ *  - un compte archivé peut être réactivé : 
+ *    * par un admin
+ *    * s'il a de nouveau un ldap actif
+ *
  * Metadata : 
-   - membertype : type de membre => inria/external
-   - memberstatus : compte actif ou non (= permet de s'identifier ou non) => active/closed
-   - memberreason : qualification du type de compte, raison de l'accès => validldap/invalidldap/partner/researchteam/...
+ *  - membertype : type de membre => inria/external
+ *  - memberstatus : statut du compte = actif ou non (= permet de s'identifier ou non) => active/closed
+ *  - memberreason : qualification du type de compte, raison de la validité de l'accès => validldap/invalidldap/partner/researchteam/...
+ *
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
-	error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
+		//error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 		
-		// Attention, ne fonctionne que si ldap_auth est activé !
+		// Default values
+		$is_inria = false;
+		$account_status = 'active';
+		
+		// Attention, la vérification LDAP ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
+			//error_log("LDAP plugin active");
 			elgg_load_library("elgg:ldap_auth");
-			// Default values
-			$is_inria = false;
-			$is_active = true;
-		
-			// Existe dans le LDAP : Inria ssi actif, sinon désactivé (sauf si une raison de le garder actif)
+			
+			// Update LDAP data
+			ldap_auth_check_profile($user);
+			
+			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
+			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
 				if (!ldap_auth_is_closed($user->username)) {
 					$is_inria = true;
-					$is_active = true;
+					$account_status = 'active';
+					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
 					$memberreason = 'validldap';
-				} else {
-					$is_inria = false;
+					//error_log("Valid LDAP account");
 				}
 			}
 			
+			// Bypass admin : tout admin est Inria de fait (eg.: Iris)
+			if (elgg_is_admin_user($user->guid)) {
+				$is_inria = true;
+				$account_status = 'active';
+				$memberreason = 'admin';
+			}
+			
+			// Statut du compte
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
+				//error_log("NO valid LDAP account");
 				// External access has some restrictions : if account was not used for more than 1 year => disable
 				// Skip unused accounts (just created ones...)
 				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
-					$is_active = false;
+					$account_status = 'closed';
 					$memberreason = 'inactive';
 				}
-			
-				if (in_array($user->memberreason, array('validldap', 'invalidldap'))) {
-					// Si le compte LDAP a été fermé, et qu'on n'a donné aucun nouveau motif d'activation, il devient inactif
-					$is_active = false;
+				
+				// Si le compte LDAP vient d'être fermé, et qu'on n'a pas de nouveau motif, il est archivé
+				// Càd que si l'ancien statut était un LDAP valide => désactivation du compte
+				if (($user->membertype == 'inria') && ($user->memberreason == 'validldap')) {
+					$account_status = 'closed';
 					$memberreason = 'invalidldap';
-				} else {
-					// Si on a changé entretemps pour un compte externe, pas de changement à ce niveau
 				}
 			}
-			// Update user metadata : we update only if there is a change !
-			if ($is_inria && ($user->membertype != 'inria')) {
-				$user->membertype = 'inria';
-				esope_set_user_profile_type($user, 'inria');
+			
+			// Update user metadata : only if there is a change !
+			//error_log("Account update : before = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+			// Type de profil (profile_manager)
+			$profiletype_guid = $user->custom_profile_type;
+			$inria_profiletype_guid = esope_get_profiletype_guid('inria');
+			$external_profiletype_guid = esope_get_profiletype_guid('external');
+			
+			// MAJ des données : Type de compte et type de profil, puis statut et motif de validité
+			if ($is_inria) {
+				if ($user->membertype != 'inria') { $user->membertype = 'inria'; }
+				if ($profiletype_guid != $inria_profiletype_guid) { $user->custom_profile_type = $inria_profiletype_guid; }
+			} else {
+				if ($user->membertype != 'external') { $user->membertype = 'external'; }
+				if ($profiletype_guid != $external_profiletype_guid) { $user->custom_profile_type = $external_profiletype_guid; }
 			}
-			if (!$is_inria && ($user->membertype != 'external')) {
-				$user->membertype = 'external';
-				esope_set_user_profile_type($user, 'external');
-			}
-			if ($is_active) { $user->memberstatus = 'active'; } else { $user->memberstatus = 'closed'; }
+			// Statut du compte
+			if ($user->memberstatus != $account_status) { $user->memberstatus = $account_status; }
+			// Motif de validité
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
 			
-			// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
-			if (empty($user->custom_profile_type)) {
-				if ($is_inria) {
-					esope_set_user_profile_type($user, 'inria');
-				} else {
-					esope_set_user_profile_type($user, 'external');
-				}
-			}
-			
-			// Verrouillage à l'entrée si le compte est devenu inactif (= archivé mais pas désactivé !!)
-			if ($user->memberstatus == 'closed') {
-				register_error("Cet accès n'est plus valide. ");
-				return false;
+		}
+		//error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+		
+		// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
+		// Compte externe par défaut (si on n'a pas eu d'info du LDAP)
+		if (empty($user->custom_profile_type)) {
+			if ($is_inria) {
+				esope_set_user_profile_type($user, 'inria');
+			} else {
+				esope_set_user_profile_type($user, 'external');
 			}
 		}
+		
+		// Verrouillage à l'entrée si le compte est inactif (= archivé mais pas désactivé !!)
+		// Mais seulement si c'est l'user lui-même (la vérification/MAJ a pu être appellée par un autre user)
+		if (($user->guid == $_SESSION['guid']) && ($user->memberstatus == 'closed')) {
+			register_error(elgg_echo('theme_inria:invalidaccess'));
+			return false;
+		}
+	
 	}
 	return true;
 }

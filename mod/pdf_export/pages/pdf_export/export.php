@@ -20,7 +20,7 @@ $gen_date_format = elgg_echo('pdfexport:generated:format');
 // Handle untranslated languages case (set defaults, should not be empty)
 if (empty($separator)) { $separator = '<hr /><br /><br />'; }
 if (empty($date_format)) { $date_format = 'd/m/Y'; }
-if (empty($gen_date_format)) { $gen_date_format = 'd/m/Y at H:i'; }
+if (empty($gen_date_format)) { $gen_date_format = 'd/m/Y \a\t H:i'; }
 
 
 // Get input data
@@ -79,7 +79,7 @@ if ($guid && ($object = get_entity($guid)) && ($generator != 'tcpdf') ) {
 				$intro .= elgg_echo('pdfexport:publishedin') . '<a href="' . $container->getURL() . '">' . $container->name . '</a>';
 				//$intro .= ' le ' . date('d/m/Y à H:i', $object->time_created);
 				$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);
-				if ($object->time_updated > $object->time_created) $intro .= ' (dernière mise à jour le ' . date($date_format, $object->time_updated) . ')';
+				if ($object->time_updated > $object->time_created) $intro .= ' (' . elgg_echo('pdfexport:lastupdated') . date($date_format, $object->time_updated) . ')';
 			} else {
 				$intro .= elgg_echo('pdfexport:publishedby') . '<a href="' . $owner->getURL() . '">' . $owner->name . '</a> ';
 				$intro .= elgg_echo('pdfexport:publisheddate') . date($date_format, $object->time_created);

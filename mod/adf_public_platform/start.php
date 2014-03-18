@@ -133,7 +133,7 @@ function adf_platform_init() {
 	// Modification du Fil d'Ariane
 	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
 	
-	// Profil non public par défaut, si réglage activé
+	// Permet de rendre le profil non public, si réglage activé
 	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
 	if ($public_profiles == 'yes') {
 		// Verrouillage de certaines pages à haut niveau (via le page_handler) 

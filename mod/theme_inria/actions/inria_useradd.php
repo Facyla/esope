@@ -41,6 +41,8 @@ try {
 		$new_user->membertype = 'external';
 		$new_user->memberstatus = 'active';
 		$new_user->firstmemberreason = 'created_by_inria_member';
+		$new_user->membercreatedby = $friend_guid;
+		$new_user->registermemberreason = "Account registered by {$friend->name} ($friend_guid) with motive : $reason";
 		// Intitiate this because account would be disabled if not set at creation
 		$new_user->last_action = time();
 		esope_set_user_profile_type($new_user, 'external');

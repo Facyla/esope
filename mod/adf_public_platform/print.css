@@ -1,13 +1,22 @@
 /* Feuille de style 'print' destinée à l'impression des pages du site */
 
+/* Masquage des éléments d'interface */
+.elgg-page > header, #transverse, footer { display: none; }
+/* Masquage des formulaires */
+.elgg-form, .elgg-form-comments-add, .elgg-form-discussion-reply-save { display: none; }
+#feedbackWrapper, #groupchat-grouplink, #groupchat-sitelink { display: none; }
+
+/* Page layout */
+.interne { max-width: 100%; width: 98%; margin: auto; }
+
 .elgg-page-topbar, .elgg-page-header, .elgg-page-footer { display:none; }
 #page_container:before { content:"Merci d’économiser de l’encre et du papier : n’imprimez ce message que si c’est vraiment nécessaire"; display:block; border-bottom:1px solid grey; font-style:italic; }
 /*
-#page_container:after { content:'Page imprimée depuis Départements en réseaux.fr'; display:block; border-top:1px solid grey; font-style:italic; }
+#page_container:after { content:'La version pour impression peut ne pas rendre compte exactement de la version en ligne'; display:block; border-top:1px solid grey; font-style:italic; }
 */
 #page_container { width:95%; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
 #page_container .elgg-inner { width:100%; }
-#page_container .elgg-main { border:2px inset #999; }
+#page_container .elgg-main { border:0; }
 html *, body * { min-height:0 !important; }
 
 

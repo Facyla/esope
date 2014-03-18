@@ -152,6 +152,7 @@ $english = array(
 	'loginusername' => "Iris login",
 	'theme_inria:basiclogin' => "External access login",
 	'theme_inria:caslogin' => "Inria login (CAS)",
+	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
 	// Profile fields
 	'profile:inria_location' => "Location",
@@ -162,6 +163,7 @@ $english = array(
 	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
 	'profile:types:external' => "External",
 	'profile:types:external:description' => "External profiles are people who do not belong to Inria, but were granted a special access for various reasons : as an alumni, associated researcher, subcontractor, etc.",
+	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "About me",
 	'profile:categories:inria' => "Inria data",
 	'profile:categories:coordinates' => "Detailed contact info",
@@ -300,6 +302,8 @@ Registration motive :
 
 Here is the new profile page : %s
 ",
+	
+	'theme_inria:pages:summarytoggle' => "Wiki navigation (show/hide)",
 	
 	
 );

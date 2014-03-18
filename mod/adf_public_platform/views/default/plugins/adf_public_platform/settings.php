@@ -427,8 +427,15 @@ $(function() {
 
 	<h3><?php echo elgg_echo('adf_platform:config:members'); ?></h3>
 	<div>
-		<p><label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?></label>
+		<p>
+			<label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?>
 			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles )); ?>
+		</label>
+		</p>
+		<p><em><?php echo elgg_echo('adf_platform:home:public_profiles:help'); ?></em></p>
+		<p>
+			<label><?php echo elgg_echo('adf_platform:home:public_profiles_default'); ?>
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles_default )); ?></label>
 		</p>
 		
 		<h4><?php echo elgg_echo('adf_platform:profile:settings'); ?></h4>

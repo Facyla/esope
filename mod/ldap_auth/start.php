@@ -17,9 +17,8 @@ elgg_register_event_handler('init','system','ldap_auth_init');
  * Init plugin ldap_auth
  */
 function ldap_auth_init() {
-	
 	if (!include_once 'settings.php') {
-		register_error("Please configure ldap_auth plugin first by creating a settings.php file in plugin main directory. See settings_dist.php template file.");
+		register_error(elgg_echo('ldap_auth:missingsettings'));
 	}
 	
 	//helper functions
@@ -34,7 +33,6 @@ function ldap_auth_init() {
 }
 
 
-
 /** Hook to update user profile at each login 
  * 
  * @param string $event  must be login
@@ -44,7 +42,7 @@ function ldap_auth_init() {
  * Note : always return true because we want to try updating data, but not block login process
  */
 function ldap_auth_handler_update($event, $object_type, $user){
-	if( $event == 'login' && $object_type == 'user' && $user && $user instanceof ElggUser){
+	if ( ($event == 'login') && ($object_type == 'user') && $user && elgg_instanceof($user, 'user')) {
 		elgg_load_library("elgg:ldap_auth");
 		// Update LDAP fields
 		$return = ldap_auth_check_profile($user);
@@ -52,7 +50,6 @@ function ldap_auth_handler_update($event, $object_type, $user){
 	}
 	return true;
 }
-
 
 
 /**
