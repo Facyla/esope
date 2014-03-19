@@ -48,7 +48,7 @@ function ldap_auth_handler_update($event, $object_type, $user){
 		$return = ldap_auth_check_profile($user);
 		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}
-	//return null;
+	return true;
 }
 
 
