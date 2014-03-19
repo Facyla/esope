@@ -19,17 +19,17 @@ $icon = elgg_view_entity_icon($user, 'large', array(
 	'use_hover' => false,
 	'use_link' => false,
 ));
-// @TODO : Remove empty link before adding new link !
-/*
-*/
-if ($user->guid == elgg_get_logged_in_user_guid()) {
-	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
-}
 
 $profile_type = esope_get_user_profile_type($user);
 if (elgg_is_logged_in()) {
-	$own_profile_type = esope_get_user_profile_type(elgg_get_logged_in_user_entity());
+	$own = elgg_get_logged_in_user_entity();
+	$own_profile_type = esope_get_user_profile_type($own);
 } else $own_profile_type = false;
+
+
+if ($user->guid == $own->guid) {
+	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
+}
 
 // Add profile type badge, if defined
 if (empty($profile_type)) $profile_type = 'external';
@@ -153,7 +153,12 @@ if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_ty
 			$details_result .= "<div>" . $field_result . "</div>";
 		}
 	}
-	if ($details_result) $inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
+	if ($details_result) {
+		if ($user->guid == $own->guid) {
+			$details_result .= '<p><small>' . elgg_echo('theme_inria:ldapprofile:updatelink') . '</small></p>';
+		}
+		$inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
+	}
 }
 
 
