@@ -235,5 +235,5 @@ function uservalidationbyadmin_check_manual_login($event, $type, $user) {
 
 	access_show_hidden_entities($access_status);
 
-	return $return;
+	if ($return === false) return $return;
 }
