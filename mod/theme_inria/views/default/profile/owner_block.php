@@ -55,8 +55,6 @@ if (elgg_is_logged_in() && $actions) {
 
 
 // Inria fields (from LDAP)
-$ia = elgg_get_ignore_access();
-elgg_set_ignore_access(true);
 $categorized_fields = profile_manager_get_categorized_fields($user);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
@@ -161,7 +159,6 @@ if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_ty
 		$inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
 	}
 }
-elgg_set_ignore_access($ia);
 
 
 // if admin, display admin links
