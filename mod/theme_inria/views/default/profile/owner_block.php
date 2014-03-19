@@ -56,9 +56,10 @@ $categorized_fields = profile_manager_get_categorized_fields($user);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
-// Display only for Inria accounts (LDAP data)
+// Display only for Inria accounts (LDAP data), and for logged in, Inria viewers
 echo '<!-- ' . $profile_type . ' //-->';
-if (elgg_is_logged_in() && ($profile_type == 'inria')) {
+if (elgg_is_logged_in() && ($profile_type == 'inria') && (esope_get_user_profile_type($user) == 'inria') {
+echo '<!-- TTESTT : ' . $profile_type . ' / ' . esope_get_user_profile_type($user) . ' //-->';
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
 		$cat_title = "";
