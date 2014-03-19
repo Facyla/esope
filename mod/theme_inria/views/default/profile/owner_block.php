@@ -55,9 +55,7 @@ if (elgg_is_logged_in() && $actions) {
 
 
 // Inria fields (from LDAP)
-$ia = elgg_set_ignore_access(true);
-$categorized_fields = profile_manager_get_categorized_fields($user);
-//elgg_set_ignore_access($ia);
+$categorized_fields = profile_manager_get_categorized_fields($user, false, false, true);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
