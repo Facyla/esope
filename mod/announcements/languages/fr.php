@@ -29,7 +29,7 @@ $french = array(
 	'announcements:add' => 'Faire une annonce',
 	'announcements:date' => 'Publié %s par %s.',
 	'announcements:error' => "Erreur lors de la publication de l'annonce.",
-	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'pg/profile/%s">Profil</a>)',
+	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'profile/%s">Profil</a>)',
 	'announcements:none' => "Aucune annonce pour le moment.",
 	'announcements:post' => "Publier l'annonce", 
 	'announcements:subject' => '%s Annonce : %s',

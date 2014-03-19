@@ -29,7 +29,7 @@ $english = array(
 	'announcements:add' => 'Add an announcement',
 	'announcements:date' => 'Posted %s by %s.',
 	'announcements:error' => 'Error posting announcement.',
-	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'pg/profile/%s">Profile</a>)',
+	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'profile/%s">Profile</a>)',
 	'announcements:none' => "There are currently no announcements.",
 	'announcements:post' => 'Post Announcement', 
 	'announcements:subject' => '%s Announcement: %s',

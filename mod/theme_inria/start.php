@@ -343,7 +343,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		}
 	
 	}
-	return true;
+	return null;
 }
 
 
