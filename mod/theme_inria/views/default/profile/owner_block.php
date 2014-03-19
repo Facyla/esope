@@ -155,7 +155,7 @@ if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_ty
 	}
 	if ($details_result) {
 		if ($user->guid == $own->guid) {
-			$details_result .= '<p><small>' . elgg_echo('theme_inria:ldapprofile:updatelink') . '</small></p>';
+			$details_result .= '<p class="update-ldap-details">' . elgg_echo('theme_inria:ldapprofile:updatelink') . '</p>';
 		}
 		$inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
 	}
