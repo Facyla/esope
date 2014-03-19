@@ -26,7 +26,10 @@ if ($user->guid == elgg_get_logged_in_user_guid()) {
 	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
 }
 
-$profile_type = esope_get_user_profile_type(elgg_get_logged_in_user_entity());
+$profile_type = esope_get_user_profile_type($user);
+if (elgg_is_logged_in()) {
+	$own_profile_type = esope_get_user_profile_type(elgg_get_logged_in_user_entity());
+} else $own_profile_type = false;
 
 // Add profile type badge, if defined
 if (empty($profile_type)) $profile_type = 'external';
@@ -56,10 +59,9 @@ $categorized_fields = profile_manager_get_categorized_fields($user);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
-// Display only for Inria accounts (LDAP data), and for logged in, Inria viewers
-echo '<!-- ' . $profile_type . ' //-->';
-if (elgg_is_logged_in() && ($profile_type == 'inria') && (esope_get_user_profile_type($user) == 'inria')) {
-echo '<!-- TTESTT : ' . $profile_type . ' / ' . esope_get_user_profile_type($user) . ' //-->';
+// Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
+echo '<!-- TTESTT : ' . $profile_type . ' / ' . $own_profile_type . ' //-->';
+if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_type == 'inria') ) {
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
 		$cat_title = "";
