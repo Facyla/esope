@@ -162,8 +162,10 @@ function adf_platform_init() {
 	}
 	// ESOPE search endpoint
 	elgg_register_action("esope/esearch", elgg_get_plugins_path() . 'adf_public_platform/actions/esope/esearch.php');
-		
-		
+	// Manually reset login failure counter
+	elgg_register_action("admin/reset_login_failures", elgg_get_plugins_path() . 'adf_public_platform/actions/admin/reset_login_failures.php');
+	
+	
 	// NEW & REWRITTEN PAGE HANDLERS
 	// Note : modification de pages de listing (non gérables par des vues)
 	// @dev : Related functions are in lib/adf_public/platform/page_handlers.php
