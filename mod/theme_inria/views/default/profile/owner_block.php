@@ -57,7 +57,7 @@ $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
 // Display only for Inria accounts (LDAP data)
-if (elgg_is_logged_in() && ($profile_type == 'inria') {
+if (elgg_is_logged_in() && ($profile_type == 'inria')) {
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
 		$cat_title = "";
