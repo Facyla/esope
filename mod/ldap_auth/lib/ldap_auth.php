@@ -42,7 +42,7 @@ function ldap_auth_login($username, $password) {
 			}
 		}
 	}
-	return false;
+	return null;
 }
 
 /**
