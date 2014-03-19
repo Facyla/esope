@@ -42,7 +42,7 @@ function ldap_auth_login($username, $password) {
 			}
 		}
 	}
-	return null;
+	// Return nothing means handler wants to be skipped
 }
 
 /**
