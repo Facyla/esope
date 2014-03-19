@@ -55,12 +55,13 @@ if (elgg_is_logged_in() && $actions) {
 
 
 // Inria fields (from LDAP)
+$ia = elgg_set_ignore_access(true);
 $categorized_fields = profile_manager_get_categorized_fields($user);
+elgg_set_ignore_access($ia);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
 // Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
-echo '<!-- TTESTT : ' . $profile_type . ' / ' . $own_profile_type . ' //-->';
 if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_type == 'inria') ) {
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
