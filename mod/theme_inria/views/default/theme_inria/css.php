@@ -340,6 +340,8 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
 .profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 20px; font-weight: bold; text-transform: uppercase; color: white; }
 
+.update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
+
 
 /* Inria Tools Widget */
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }

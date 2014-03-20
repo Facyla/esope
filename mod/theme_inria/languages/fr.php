@@ -305,6 +305,7 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",
 	
+	'theme_inria:ldapprofile:updatelink' => "Plus à jour ? Veuillez contacter le <a href=\"http://dsi.inria.fr/services/support/index_html#SMI\">SIC de votre centre</a>",
 	
 );
 
