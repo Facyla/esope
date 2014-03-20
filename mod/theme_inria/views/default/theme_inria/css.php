@@ -377,3 +377,19 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .groupchat-grouplink-theme .fa-comments {  }
 
 
+
+/* ELEMENTS PRINTS SPECIFIQUES A IRIS */
+@media print {
+	a:after { content: " (" attr(href) ") "; }
+	.group-top-menu { display: none !important; }
+	.elgg-sidebar { display: none !important; }
+	.elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
+	/* Navigation wiki */
+	.full-width-pages-nav { display:none !important; }
+	/* Entity menu */
+	.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history, .elgg-menu-item-htmlexport { display:none !important; }
+	
+}
+
+
+
