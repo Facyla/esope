@@ -19,4 +19,19 @@
 #page_container .elgg-main { border:0; }
 html *, body * { min-height:0 !important; }
 
+/* Add URL to links */
+a:after { content: " (" attr(href) ") "; }
+
+/* No sidebar */
+.elgg-sidebar { display: none !important; }
+.elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
+
+/* Navigation wiki */
+.full-width-pages-nav { display:none !important; }
+
+/* Entity menu */
+.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history, .elgg-menu-item-htmlexport { display:none !important; }
+
+.group-top-menu { display: none !important; }
+
 
