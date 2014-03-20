@@ -19,14 +19,14 @@
 #page_container .elgg-main { border:0; }
 html *, body * { min-height:0 !important; }
 
-/* Add URL to links */
-a:after { content: " (" attr(href) ") "; }
+/* Add URL to links  - but only in content blocks (not in interface) */
+.elgg-output a[href*="://"]:after { content: " (" attr(href) ") "; }
 
 /* No sidebar */
 .elgg-sidebar { display: none !important; }
 .elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
 
-/* Navigation wiki */
+/* No wiki navigation */
 .full-width-pages-nav { display:none !important; }
 
 /* Entity menu */
