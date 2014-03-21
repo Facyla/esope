@@ -36,9 +36,8 @@ html *, body * { min-height:0 !important; }
 
 
 html, body, section { background:white !important; }
-* { background-color: white !important; }
-* { color: black !important; font-family:"times new roman",times,serif; text-align:justify; }
-a:link { font-weight: bold; text-decoration: underline; }
+* { background-color: white !important; color: black !important; font-family:"times new roman",times,serif; text-align:justify; }
+a:link { text-decoration: underline; }
 
 #elgg-print-message { display: block; }
 
