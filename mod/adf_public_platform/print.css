@@ -25,8 +25,23 @@ html *, body * { min-height:0 !important; }
 .elgg-sidebar { display: none !important; }
 .elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
 
-/* Entity menu */
-.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history { display:none !important; }
+/* Various menus and actions (some are kept) */
+.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history, 
+.elgg-menu-item-reply, .elgg-menu-item-previous, .elgg-menu-item-likes, 
+.elgg-menu-widget { display:none !important; }
+.elgg-requires-confirmation { display:none !important; }
+.elgg-button { display:none !important; }
+
+.elgg-main .elgg-breadcrumbs { top:0; }
+
+
+html, body, section { background:white !important; }
+* { background-color: white !important; }
+* { color: black !important; font-family:"times new roman",times,serif; text-align:justify; }
+a:link { font-weight: bold; text-decoration: underline; }
+
+#elgg-print-message { display: block; }
+
 
 
 /* Eléments propres à certains thèmes */
@@ -36,17 +51,4 @@ html *, body * { min-height:0 !important; }
 .full-width-pages-nav { display:none !important; }
 .elgg-menu-item-pdfexport, .elgg-menu-item-htmlexport { display:none !important; }
 
-
-html, body { background:white !important; }
-* {
-	color: black !important;
-	background-color: white !important;
-	font-family:"times new roman",times,serif;
-	text-align:justify;
-}
-a:link {
-	font-weight: bold;
-	text-decoration: underline;
-}
-#elgg-print-message { display: block; }
 
