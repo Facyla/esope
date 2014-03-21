@@ -1121,30 +1121,46 @@ if (elgg_is_active_plugin('file_tools')) {
 	// Recursive function that lists folders and their content
 	// bool $view_files : display folder files
 	function esope_view_folder_content($folder, $view_files = true) {
+		$content = '';
+		$folder_content = '';
+		$folder_description = '';
 		$files_content = '';
+		// Folder link
+		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+		// Folder description
+		if (!empty($folder['folder']->description)) $folder_description .= ' <em>' . $folder['folder']->description . '</em>';
+		
+		// Determine folder content
 		if ($view_files) {
 			$files_content = esope_view_folder_files($folder['folder']->container_guid, $folder['folder']);
 		}
-		$content .= '<li><strong>';
-		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
-	
+		
+		// Folders has children folders
 		if ($folder['children']) {
-			$content .= '<i class="fa fa-folder-open"></i> ' . $folder_title_link . '</strong>';
-			if (!empty($folder['folder']->description)) $content .= ' <em>' . $folder['folder']->description . '</em>';
-			$folders_content = '';
-			foreach ($folder['children'] as $children) { $folders_content .= esope_view_folder_content($children); }
-			if (!empty($folders_content) || !empty($files_content)) {
-				$content .= '<ul>';
-				$content .= $folders_content;
-				$content .= $files_content;
-				$content .= '</ul>';
-			}
-		} else {
-			$content .= '<i class="fa fa-folder-open"></i> ' . $folder_title_link . '</strong>';
-			if (!empty($folder['folder']->description)) $content .= ' <em>' . $folder['folder']->description . '</em>';
-			if (!empty($files_content)) $content .= '<ul>' . $files_content . '</ul>';
+			foreach ($folder['children'] as $children) { $folder_content .= esope_view_folder_content($children); }
 		}
+		
+		// Folder icon : tell if subfolders (-open-o), or if only content inside (-o)
+		$folder_icon = 'fa-folder';
+		if (!empty($folder_content)) {
+			$folder_icon .= '-open-o';
+		} else {
+			if (!empty($files_content)) { $folder_icon .= '-o'; }
+		}
+		$folder_icon = '<i class="fa ' . $folder_icon . '"></i> ';
+		
+		// Add file content if asked
+		if ($view_files) {
+			// Handle empty folder case (no file inside, nor subfolder)
+			if (empty($files_content) && empty($folder_content)) { $files_content .= '<li>' . elgg_echo('file:none') . '</li>'; }
+			$folder_content .= $files_content;
+		}
+		
+		// Compose rendered folder content
+		$content .= '<li><strong>' . $folder_icon . $folder_title_link. '</strong>' . $folder_description;
+		if (!empty($folder_content)) { $content .= '<ul>' . $folder_content . '</ul>'; }
 		$content .= '</li>';
+		
 		return $content;
 	}
 
@@ -1175,16 +1191,12 @@ if (elgg_is_active_plugin('file_tools')) {
 	
 		if ($files) {
 			elgg_set_context('widgets');
-			//$files_content = elgg_view_entity_list($files, array("full_view" => false, "pagination" => false));
 			// Note : méthode qui permet de n'afficher que des <li> (sans <ul>)
 			foreach ($files as $ent) {
-				//$files_content .= elgg_view_list_item($ent);
-				//$files_content .= '<li class="elgg-item">' . elgg_view_entity($ent, array("full_view" => false)) . '</li>';
 				$files_content .= '<li idf="folder-file-' . $ent->guid . '" class="folder-file">' 
 				. '<a href="' . $ent->getURL() . '"> ' 
 				. '<img src="' . $ent->getIconURL('small') . '" style="width:2ex;" /> '
 				. $ent->title . '</a>' 
-				//. elgg_view_entity($ent, array("full_view" => false)) 
 				. '</li>';
 			}
 			elgg_pop_context();
