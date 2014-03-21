@@ -376,4 +376,9 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .groupchat-grouplink-theme .fa-comments-o { color: #999; }
 .groupchat-grouplink-theme .fa-comments {  }
 
+/* Impression */
+.elgg-print-message { display:none; }
+.footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 12px; }
+
+
 

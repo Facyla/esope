@@ -307,6 +307,8 @@ Here is the new profile page : %s
 	
 	'theme_inria:ldapprofile:updatelink' => "Out of date ? Please <a href=\"http://dsi.inria.fr/services/support/index_html#SMI\">contact your center SIC</a>",
 	
+	'theme_inria:print' => "Print page",
+	
 );
 
 add_translation("en",$english);
