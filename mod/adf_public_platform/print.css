@@ -19,4 +19,21 @@
 #page_container .elgg-main { border:0; }
 html *, body * { min-height:0 !important; }
 
+/* .elgg-output a:after { content: " (" attr(href) ") "; } */
+
+/* Main layout : no sidebar */
+.elgg-sidebar { display: none !important; }
+.elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
+
+/* Entity menu */
+.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history { display:none !important; }
+
+
+/* Eléments propres à certains thèmes */
+
+.group-top-menu { display: none !important; }
+/* Navigation wiki */
+.full-width-pages-nav { display:none !important; }
+.elgg-menu-item-htmlexport { display:none !important; }
+
 
