@@ -319,7 +319,7 @@ $fr = array(
 	'adf_platform:action:public_profile:saved' => "La visibilité de votre profil a bien été modifiée.",
 	'adf_platform:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
 	'adf_platform:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
-		
+	'adf_platform:members:hide_directory' => "Masquer l'annuaire des membres aux non-membres (pas d'annuaire public)",
 	
 	// Behaviour settings
 	'adf_platform:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",

@@ -66,8 +66,13 @@ $english = array(
 	'feedback:settings:public' => "Should logged-out site visitors be allowed to give feedback? ",
 	'feedback:settings:usernames' => "You can enter up to 5 users who should receive notifications if new feedback has been given. Enter the usernames in the following: ",
 
-	'feedback:email:subject' => 'Received feedback from %s',
-	'feedback:email:body' => '%s',
+	'feedback:email:subject' => '[Feedback] %s',
+	'feedback:email:body' => "%s has made a feedback: \"%s\" 
+	
+	%s
+	
+	View online: %s
+	",
 
 
 	// Added by Facyla
@@ -102,6 +107,14 @@ $english = array(
 	'feedback:access:admin' => "Admin only",
 	'feedback:access:sitemembers' => "Site members",
 	'feedback:access:group' => "Group members",
+
+	'feedback:email:reply:subject' => '[Feedback] %s',
+	'feedback:email:reply:body' => "%s has replied on \"%s\" :
+	
+	%s
+	
+	View online: %s
+	",
 
 );
 

@@ -68,8 +68,13 @@ $french = array(
 	'feedback:settings:public' => "Les visiteurs non connectés peuvent-ils publier des feedbacks ? ",
 	'feedback:settings:usernames' => "Vous pouvez définir jusqu'à 5 membres qui recevront des notifications à chaque nouveau feedback. Saisissez leurs identifiants ci-dessous : ",
 
-	'feedback:email:subject' => 'Feedback reçu de %s',
-	'feedback:email:body' => '%s',
+	'feedback:email:subject' => '[Feedback] %s',
+	'feedback:email:body' => "%s a fait un feedback : \"%s\" 
+	
+	%s
+	
+	Voir en ligne : %s
+	",
 	
 	
 	// Added by Facyla
@@ -104,7 +109,14 @@ $french = array(
 	'feedback:access:admin' => "Administrateur seulement",
 	'feedback:access:sitemembers' => "Membres du site",
 	'feedback:access:group' => "Membres du groupe",
+
+	'feedback:email:reply:subject' => "[Feedback] %s",
+	'feedback:email:reply:body' => "%s a répondu sur \"%s\" :
 	
+	%s
+	
+	Voir en ligne : %s
+	",
 	
 );
 

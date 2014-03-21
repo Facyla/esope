@@ -65,6 +65,9 @@ function feedback_init() {
 	// menu des groupes
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
 	
+	// Interception des commentaires
+	elgg_register_event_handler('create', 'annotation', 'feedback_create_annotation_event_handler');
+	
 	// Register actions
 	elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
 	elgg_register_action("feedback/close", elgg_get_plugins_path() . 'feedback/actions/close.php', 'admin');
@@ -126,6 +129,49 @@ function feedback_owner_block_menu($hook, $type, $return, $params) {
 		}
 	}
 	return $return;
+}
+
+
+function feedback_create_annotation_event_handler($event, $type, $annotation){
+	global $CONFIG;
+	if(!empty($annotation) && ($annotation instanceof ElggAnnotation)){
+		// check if the entity isn't PRIVATE
+		if($entity = $annotation->getEntity()){
+			if (elgg_instanceof($entity, 'object', 'feedback')) {
+				$feedback_title = $entity->title;
+				$details = $entity->about;
+				if (!empty($details)) $details .= ', ';
+				$details .= $entity->mood;
+				if (!empty($details)) $details = " ($details)";
+				$feedback_title .= $details;
+				$comment_owner = $annotation->getOwnerEntity();
+				$comment_sender = '<a href="' . $comment_owner->getURL() . '">' . $comment_owner->name . '</a>';
+				$comment_content = $annotation->value;
+				// Notify admins
+				$user_guids = array();
+				for ( $idx=1; $idx<=5; $idx++ ) {
+					$name = elgg_get_plugin_setting( 'user_'.$idx, 'feedback' );
+					if ( !empty($name) ) {
+						if ( $user = get_user_by_username($name) ) {
+							$user_guids[] = $user->guid;
+						}
+					}
+				}
+				if (count($user_guids) > 0) {
+					notify_user(
+							$user_guids, 
+							$CONFIG->site->guid, 
+							elgg_echo('feedback:email:reply:subject', array($feedback_title)), 
+							elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $comment_content, $entity->getURL())), 
+							null, 
+							'email'
+						);
+				}
+				
+			}
+		}
+	}
+	return true;
 }
 
 

@@ -319,6 +319,7 @@ $en = array(
 	'adf_platform:action:public_profile:saved' => "Your profile visibility has been successfully modified.",
 	'adf_platform:usersettings:public_profile:public' => "Your profile is now PUBLIC.",
 	'adf_platform:usersettings:public_profile:private' => "Your profile is now RESTRICTED TO MEMBERS.",
+	'adf_platform:members:hide_directory' => "Hide members directory to non-members (no public directory)",
 		
 	
 	// Behaviour settings
