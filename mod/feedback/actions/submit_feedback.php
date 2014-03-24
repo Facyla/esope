@@ -75,6 +75,11 @@ if ($feedback->save()) {
 elgg_set_ignore_access($ia);
 
 // now email if required - note: we'll email anyway, on success or error
+$details = $feedback->about;
+if (!empty($details)) $details .= ', ';
+$details .= $feedback->mood;
+if (!empty($details)) $details = " ($details)";
+$feedback_title = $feedback->title . $details;
 $user_guids = array();
 for ( $idx=1; $idx<=5; $idx++ ) {
 	$name = elgg_get_plugin_setting( 'user_'.$idx, 'feedback' );
@@ -85,7 +90,14 @@ for ( $idx=1; $idx<=5; $idx++ ) {
 	}
 }
 if (count($user_guids) > 0) {
-	notify_user($user_guids, $CONFIG->site->guid, sprintf(elgg_echo('feedback:email:subject'), $feedback_sender), sprintf(elgg_echo('feedback:email:body'), $feedback_txt));
+	notify_user(
+			$user_guids, 
+			$CONFIG->site->guid, 
+			elgg_echo('feedback:email:subject', array($feedback_title)), 
+			elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback->getURL())), 
+			null, 
+			'email'
+		);
 }
 
 exit();

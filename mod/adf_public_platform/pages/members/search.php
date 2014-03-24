@@ -5,8 +5,11 @@
  */
 
 global $CONFIG;
-$num_members = get_number_users();
 
+$hide_directory = elgg_get_plugin_setting('hide_directory', 'adf_public_platform');
+if ($hide_directory == 'yes') gatekeeper();
+
+$num_members = get_number_users();
 $title = elgg_echo('members');
 
 $content = '';

@@ -438,6 +438,11 @@ $(function() {
 			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles_default )); ?></label>
 		</p>
 		
+		<p>
+			<label><?php echo elgg_echo('adf_platform:members:hide_directory'); ?>
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[hide_directory]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->hide_directory )); ?></label>
+		</p>
+		
 		<h4><?php echo elgg_echo('adf_platform:profile:settings'); ?></h4>
 		<p><label><?php echo elgg_echo('adf_platform:profile:add_profile_activity'); ?></label>
 			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->add_profile_activity )); ?>

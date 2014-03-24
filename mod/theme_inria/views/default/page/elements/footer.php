@@ -18,6 +18,9 @@ $footer = elgg_get_plugin_setting('footer', 'adf_public_platform');
 
 <footer class="footer-inria">
 	<div class="interne">
+		<!--
+		<a class="print-page" href="javascript:window.print();"><i class="fa fa-print"></i> <?php echo elgg_echo('theme_inria:print'); ?></a>
+		//-->
 		<?php echo $footer; ?><img class="footer-logo-inria" src="<?php echo $imgurl; ?>logo-inria.png">
 	</div>
 </footer>
