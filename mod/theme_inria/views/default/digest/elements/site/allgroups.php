@@ -50,6 +50,7 @@ foreach ($groups as $group) {
 	unset($items);
 }
 
-
-echo elgg_view_module("digest", "Activté récente dans vos groupes", $all_content);
+if (!empty($all_content)) {
+	echo elgg_view_module("digest", "Activité récente dans vos groupes", $all_content);
+}
 
