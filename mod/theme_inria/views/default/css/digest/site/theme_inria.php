@@ -68,12 +68,13 @@ h4 {
     min-height: 100px;
 }
 #digest_unsubscribe {
-    color: #FFFFFF;d
+    color: #FFFFFF !important;
     font-size: 11px;
     padding: 20px;
 }
 #digest_unsubscribe a {
-    color: #FFFFFF;d
+    color: #FFFFFF;
+    text-decoration: underline;
     font-size: 11px;
     /* padding: 20px; */
 }
@@ -83,7 +84,7 @@ h4 {
     border-radius: 0 0 5px 5px;
     border-style: solid;
     border-width: 1px;
-    padding: 30px;
+    padding: 3px 6px;
 }
 .digest-footer-quote {
     color: #AFAFAF;
