@@ -20,16 +20,20 @@
 	position: fixed;
 	top: 150px;
 	left: 0px;
-	width: 450px;
-	z-index:1;
+	max-width: 100%;
+	z-index:21;
 }
 
 #feedBackToggler {
 	float: left;
 }
 
+#feedBackTogglerLink { float:left; position:relative; left:-1px; }
+
 #feedBackContent {
-	width: 400px;
+	width: 500px;
+	min-width: 50%;
+	max-width: 80%;
 	display: none;
 	overflow: hidden;
 	float: left;
@@ -44,6 +48,7 @@
 	-webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+	padding:0 0 10px 0;
 }
 
 #feedBackContent h1 {
@@ -58,6 +63,10 @@
 	text-decoration: none;
 }
 
+#feedBackText { padding-top:5px; }
+
+#feedBackSend { padding-top:10px; }
+
 #feedbackError {
 	font-style: bold;
 	color: black;
@@ -71,36 +80,26 @@
 	padding: 2px 4px;
 }
 
-.feedbackLabel {
-}
+#feedBackIntro { padding:2px 4px; font-size:12px; }
 
-.feedbackText {
-	width:350px;
-}
+.feedbackText { width:350px; }
 
-.feedbackTextbox {
-	width:350px;
-	height:75px;
-}
+.feedbackTextbox { width:350px; height:75px; }
 
-.captcha {
-	padding:10px;
-}
-.captcha-left {
-	float:none;
-}
-.captcha-middle {
-	float:none;
-}
-.captcha-right {
-	float:none;
-}
-.captcha-input-text {
-	width:100px;
-}
-
-
+.feedbackLabel {}
+#feedBackForm label { margin-right: 10px; }
+#feedBackForm input[type="radio"] { margin: 0; }
 #feedBackFormInputs { padding:10px; }
+
+#feedbackDisplay { padding-top:10px; font-size:12px; }
+
+#feedbackClose { padding-top:10px; }
+
+.captcha { padding:10px; }
+.captcha-left { float:none; }
+.captcha-middle { float:none; }
+.captcha-right { float:none; }
+.captcha-input-text { width:100px; }
 
 .submitted-feedback { padding:2px; margin-bottom:4px; }
 

@@ -118,6 +118,8 @@ $french = array(
 	Voir en ligne : %s
 	",
 	
+	'feedback:linktofeedbacks' => "&raquo;&nbsp;Afficher les précédents feedbacks",
+	
 );
 
 add_translation("fr",$french);

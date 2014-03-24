@@ -115,7 +115,9 @@ $english = array(
 	
 	View online: %s
 	",
-
+	
+	'feedback:linktofeedbacks' => "&raquo;&nbsp;View all previous feedbacks",
+	
 );
 
 add_translation("en", $english);
