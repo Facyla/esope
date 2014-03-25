@@ -53,7 +53,7 @@ h4 {
     border-style: solid;
     border-width: 1px;
     min-height: 10px;
-    padding: 10px 30px;
+    padding: 0px 30px 10px 30px;
 }
 #digest_header h1 {
 	color: #FFFFFF;

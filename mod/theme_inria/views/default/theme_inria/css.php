@@ -381,5 +381,13 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .elgg-print-message { display:none; }
 .footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 12px; }
 
+pre, code, blockquote {
+	background: none repeat scroll 0 0 #F8F4F5;
+	color: #000000;
+	font-family: Neo Sans Std,Arial;
+	font-size: 14px;
+	overflow: auto;
+	white-space: pre-wrap; word-wrap: break-word;
+}
 
 
