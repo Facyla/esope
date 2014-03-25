@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Elgg Feedback plugin
  * Feedback interface for Elgg sites
@@ -13,23 +12,26 @@
  * for Elgg 1.8 by iionly
  * iionly@gmx.de
  */
-
 ?>
 
 #feedbackWrapper {
 	position: fixed;
 	top: 150px;
 	left: 0px;
-	width: 450px;
-	z-index:1;
+	max-width: 100%;
+	z-index:21;
 }
 
 #feedBackToggler {
 	float: left;
 }
 
+#feedBackTogglerLink { float:left; position:relative; left:-1px; }
+
 #feedBackContent {
-	width: 400px;
+	width: 500px;
+	min-width: 50%;
+	max-width: 80%;
 	display: none;
 	overflow: hidden;
 	float: left;
@@ -44,12 +46,13 @@
 	-webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+	padding:0 0 6px 0;
 }
 
 #feedBackContent h1 {
-	padding-top:10px;
-	padding-left:10px;
-	padding-bottom:10px;
+	padding-top:6px;
+	padding-left:6px;
+	padding-bottom:6px;
 	color: white;
 	background-color: #4690D6;
 	font-style: italic;
@@ -57,6 +60,10 @@
 	text-shadow: 1px 2px 4px #333;
 	text-decoration: none;
 }
+
+#feedBackText { padding-top:5px; }
+
+#feedBackSend { padding-top:6px; }
 
 #feedbackError {
 	font-style: bold;
@@ -71,36 +78,25 @@
 	padding: 2px 4px;
 }
 
-.feedbackLabel {
-}
+#feedBackIntro { padding:2px 4px; font-size:13px; }
 
-.feedbackText {
-	width:350px;
-}
+#feedBackFormInputs { padding:6px; font-size: 12px;}
+.feedbackLabel {}
+#feedBackForm label { margin-right: 8px; }
+#feedBackForm input[type="radio"] { margin: 0; }
 
-.feedbackTextbox {
-	width:350px;
-	height:75px;
-}
+.feedBackText { width:100%; }
+.feedbackTextbox { width:100%; height:75px; }
 
-.captcha {
-	padding:10px;
-}
-.captcha-left {
-	float:none;
-}
-.captcha-middle {
-	float:none;
-}
-.captcha-right {
-	float:none;
-}
-.captcha-input-text {
-	width:100px;
-}
+#feedbackDisplay { padding-top:6px; font-size:12px; }
 
+#feedbackClose { padding-top:6px; }
 
-#feedBackFormInputs { padding:10px; }
+.captcha { padding:6px; }
+.captcha-left { float:none; }
+.captcha-middle { float:none; }
+.captcha-right { float:none; }
+.captcha-input-text { width:100px; }
 
 .submitted-feedback { padding:2px; margin-bottom:4px; }
 
@@ -130,7 +126,7 @@
 .feedback-status-open {  }
 .feedback-status-closed { border:1px solid green; border-left:3px solid green; margin-left:20px; opacity:0.8; }
 
-.closed_button { float:right; width: auto; padding: 4px; margin:15px 0 0 10px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
+.closed_button { float:right; width: auto; padding: 4px; margin:12px 0 0 8px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
 
 .submitted-feedback .controls { float:right; }
 .submitted-feedback .controls a { margin-right:8px; margin-top:2px; }

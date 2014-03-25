@@ -16,6 +16,8 @@
 
 global $CONFIG;
 
+$imgurl = $CONFIG->url.'mod/feedback/_graphics/';
+
 $user_ip = $_SERVER[REMOTE_ADDR];
 
 $user_id = elgg_echo('feedback:default:id');
@@ -29,9 +31,9 @@ if (elgg_is_logged_in()) {
 $feedback_url = $vars['url'] . "action/feedback/submit_feedback"; //"?&__elgg_token=$token&__elgg_ts=$ts";
 $feedback_url = elgg_add_action_tokens_to_url($feedback_url);
 
-$progress_img = '<img src="'.$CONFIG->url.'mod/feedback/_graphics/ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
-$open_img = '<img src="'.$CONFIG->url.'mod/feedback/_graphics/slide-button-open.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
-$close_img = '<img src="'.$CONFIG->url.'mod/feedback/_graphics/slide-button-close.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$progress_img = '<img src="' . $imgurl . 'ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
+$open_img = '<img src="' . $imgurl . 'slide-button-open.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$close_img = '<img src="' . $imgurl . 'slide-button-close.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
 
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview == 'yes') $memberview = true; else $memberview = false;
@@ -40,17 +42,17 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 <div id="feedbackWrapper">
 
 	<div id="feedBackToggler">
-		<a id="feedBackTogglerLink" href="javascript:void(0)" onclick="FeedBack_Toggle();this.blur();" style="float:left;position:relative;left:-1px;">
+		<a id="feedBackTogglerLink" href="javascript:void(0)" onclick="FeedBack_Toggle();this.blur();">
 			<?php echo $open_img ?>
 		</a>
 	</div>
 
-	<div id="feedBackContent" class="elgg-module elgg-module-info" style="padding:0 0 10px 0;">
+	<div id="feedBackContent" class="elgg-module elgg-module-info">
 		<div class="elgg-head">
 			<h3><?php echo elgg_echo('feedback:title'); ?></h3>
 		</div>
 
-		<div style="padding:6px;">
+		<div id="feedBackIntro">
 			<?php
 			echo elgg_echo('feedback:message');
 			// Additional message if tool is for admin only (= no discussion/animation tool)
@@ -59,10 +61,11 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 		</div>
 
 		<div id="feedBackFormInputs">
+			
 			<form id="feedBackForm" action="" method="post" onsubmit="FeedBack_Send();return false;">
+				
 				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>:&nbsp;&nbsp;&nbsp;&nbsp;</b></div>
-					<div style="float:left">
+					<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
 						<label class="angry"><input type="radio" name="mood" value="angry"> <?php echo elgg_echo('feedback:mood:angry'); ?></label>
 						<label class="neutral"><input type="radio" name="mood" value="neutral" checked> <?php echo elgg_echo('feedback:mood:neutral'); ?></label>
 						<label class="happy"><input type="radio" name="mood" value="happy"> <?php echo elgg_echo('feedback:mood:happy'); ?></label>
@@ -70,9 +73,9 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					<div style="clear:both;"></div>
 				</div>
 				<br />
+				
 				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>:&nbsp;&nbsp;&nbsp;&nbsp;</b></div>
-					<div style="float:left">
+					<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
 						<label class="bug_report"><input type="radio" name="about" value="bug_report"> <?php echo elgg_echo('feedback:about:bug_report'); ?></label>
 						<label class="content"><input type="radio" name="about" value="content"> <?php echo elgg_echo('feedback:about:content'); ?></label>
 						<label class="suggestions"><input type="radio" name="about" value="suggestions" checked> <?php echo elgg_echo('feedback:about:suggestions'); ?></label>
@@ -83,6 +86,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					<div style="clear:both;"></div>
 				</div>
 				<br />
+				
 				<?php
 				// Access dropdown only if member view is allowed and logged_in
 				// (otherwise use private access_id)
@@ -107,9 +111,11 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 				<div>
 					<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:id'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:id'); ?>';}" class="feedbackText" />
 				</div>
-				<div style="padding-top:5px;">
+				
+				<div id="feedBackText">
 					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:txt'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:txt'); ?>';}" class="feedbackTextbox mceNoEditor"><?php echo elgg_echo('feedback:default:txt'); ?></textarea>
 				</div>
+				
 				<?php
 				// only use captcha when logged out
 				if (!elgg_is_logged_in() ) {
@@ -119,16 +125,24 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					}
 				}
 				?>
-				<div style="padding-top:10px;">
+				
+				<div id="feedBackSend">
 					<input id="feedback_send_btn"	 name=""	 value="<?php echo elgg_echo('send'); ?>"	 type="button" class="elgg-button elgg-button-submit" onclick="FeedBack_Send();"	/>
 					<input id="feedback_cancel_btn" name="" value="<?php echo elgg_echo('cancel'); ?>" type="button" class="elgg-button elgg-button-cancel" onclick="FeedBack_Toggle();" />
 					&nbsp;
 				</div>
+				
+				<?php if ($memberview) {
+					// Additional message if tool is for members (= link to feedback page)
+					echo '<p id="feedbackDisplay"><a href="' . $CONFIG->url . 'feedback" target="_blank">' . elgg_echo('feedback:linktofeedbacks') . '</a></p>';
+				} ?>
+				
 			</form>
+			
 		</div>
 		<div id="feedBackFormStatus"></div>
-		<div id='feedbackClose' style="padding-top:10px;">
-			<input id="feedback_close_btn"	 name="<?php echo elgg_echo('close'); ?>"	 value="Close"	 type="button" class="elgg-button elgg-button-cancel" onclick="FeedBack_Toggle();"	/>
+		<div id="feedbackClose">
+			<input id="feedback_close_btn" name="<?php echo elgg_echo('close'); ?>" value="Close" type="button" class="elgg-button elgg-button-cancel" onclick="FeedBack_Toggle();" />
 		</div>
 	</div>
 
@@ -158,7 +172,7 @@ function FeedBack_Toggle() {
 		document.forms["feedBackForm"].reset();
 	} else {
 		toggle_state = 1;
-		$("#feedbackWrapper").width("450px");
+		$("#feedbackWrapper").width("100%");
 		$("#feedBackTogglerLink").html('<?php echo $close_img?>');
 	}
 

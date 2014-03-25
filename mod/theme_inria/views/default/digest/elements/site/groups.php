@@ -27,7 +27,7 @@
 
 			$group_items .= "<td>";
 			$group_items .= elgg_view_entity_icon($group, "medium") . "<br />";
-			$group_items .= "<a href='" . $group_url . "'>" . $group->name . "</a>";
+			$group_items .= "<a href='" . $group->getURL() . "'>" . $group->name . "</a>";
 			$group_items .= "</td>";
 
 			if(($index % 3) === 2 ){
