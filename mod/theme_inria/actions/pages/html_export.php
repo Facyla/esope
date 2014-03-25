@@ -1,15 +1,15 @@
 <?php
 global $CONFIG;
-$guid = (int) get_input("guid");
+$guid = get_input("guid");
 $export_subpages = get_input("subpages", 'yes');
 if ($export_subpages != 'yes') $export_subpages = false;
 $export_allpages = get_input("allpages", 'no');
 if ($export_allpages != 'yes') $export_allpages = false;
 
-
-if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page'))) {
-	elgg_load_library('elgg:pages');
-	set_time_limit(0);
+$page = get_entity($guid);
+if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page')) {
+	//elgg_load_library('elgg:pages');
+	//set_time_limit(0); // We should not need that for an HTML page
 	$content = "";
 	
 	// Sommaire
@@ -21,7 +21,7 @@ if (!empty($guid) && ($page = get_entity($guid)) && (elgg_instanceof($page, 'obj
 		// Export de tout le wiki du container, ou des pages sous-jacentes
 		if ($export_allpages == 'yes') {
 			// On regarde où est publié ce wiki..
-			$container = get_entity($page->container_guid);
+			$container = $page->getContainerEntity();
 			// Listing des pages du container
 			$toppages = esope_get_top_pages($container);
 		} else {

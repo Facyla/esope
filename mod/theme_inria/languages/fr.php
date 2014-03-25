@@ -309,6 +309,22 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'theme_inria:print' => "Imprimer la page",
 	
+	'theme_inria:publicprofile:title' => "Visibilité du profil",
+	'theme_inria:publicprofile:yes' => "Public",
+	'theme_inria:publicprofile:no' => "Non public",
+	'theme_inria:publicprofile:othersettings' => "Vous pouvez choisir la visibilité générale de votre profil ci-dessous. Deux autres éléments vous permettent de contrôler plus finement la visibilité de votre photo et de vos informations personnelles",
+	
+	// Actions
+	'theme_inria:action:archive_user' => "Archiver le compte",
+	'theme_inria:action:unarchive_user' => "Dé-archiver le compte",
+	'theme_inria:action:remove_user_email' => "Supprimer email du compte",
+	'theme_inria:removeemail:ok' => "Email du compte supprimé",
+	'theme_inria:removeemail:error' => "L'email du compte n'a pas pu être supprimé",
+	'theme_inria:archiveuser:ok' => "Compte utilisateur archivé",
+	'theme_inria:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
+	'theme_inria:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
+	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
+	
 );
 
 add_translation("fr",$french);

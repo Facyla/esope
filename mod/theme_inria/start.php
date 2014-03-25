@@ -2,10 +2,16 @@
 
 // Initialise log browser
 elgg_register_event_handler('init','system','theme_inria_init');
+
+$action_url = dirname(__FILE__) . "/actions/";
 // HTML export action
-elgg_register_action("pages/html_export", dirname(__FILE__) . "/actions/pages/html_export.php", "public");
+elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
 // Inria members user add
-elgg_register_action("inria_useradd", dirname(__FILE__) . "/actions/inria_useradd.php", "logged_in");
+elgg_register_action("inria_useradd", $action_url . "inria_useradd.php", "logged_in");
+// Inria members admin tools
+elgg_register_action("inria_remove_user_email", $action_url . "inria_remove_user_email.php", "logged_in");
+elgg_register_action("inria_archive_user", $action_url . "inria_archive_user.php", "logged_in");
+elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
 
 
 /* Initialise the theme */
@@ -48,7 +54,10 @@ function theme_inria_init(){
 	// Displays only if ->cmisfolder is set
 	elgg_extend_view('page/elements/sidebar', 'elgg_cmis/group_cmisfolder_sidebar', 501);
 	
+	// Extend public profile settings
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);
+	//elgg_extend_view('adf_platform/account/public_profile', 'theme_inria/usersettings_extend', 501);
+	
 	// Export HTML des pages wiki (dans le menu de la page - cf. object/page_top pour chaque entité)
 	//elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
@@ -87,6 +96,7 @@ function theme_inria_init(){
 	
 	// Menus
 	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
+	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {
@@ -774,6 +784,49 @@ function theme_inria_temp_logout() {
 	session_destroy();
 	_elgg_session_boot(NULL, NULL, NULL);
 	return true;
+}
+
+
+function theme_inria_user_hover_menu($hook, $type, $return, $params) {
+	$user = $params['entity'];
+	
+	// Allow admins to perform these actions, except only to other admins
+	if (elgg_is_admin_logged_in() && !($user->isAdmin())){
+		
+		if ($user->membertype == 'inria') { $is_inria = true; }
+		if ($user->memberstatus == 'closed') { $is_archived = true; }
+		
+		if (!$is_inria) {
+			// Email removal is limited to non-valid LDAP users, only if they have a non-empty email
+			if (!empty($user->email)){
+				$url = "action/inria_remove_user_email?guid=" . $user->getGUID();
+				$title = elgg_echo("theme_inria:action:remove_user_email");
+				$item = new ElggMenuItem('remove_user_email', $title, $url);
+				$item->setSection('admin');
+				$item->setConfirmText(elgg_echo("question:areyousure"));
+				$return[] = $item;
+			}
+			// Archive can only apply to non-valid LDAP users + not archived yet
+			if (!$is_archived) {
+				$url = "action/inria_archive_user?guid=" . $user->getGUID();
+				$title = elgg_echo("theme_inria:action:archive_user");
+				$item = new ElggMenuItem('archive_user', $title, $url);
+				$item->setSection('admin');
+				$item->setConfirmText(elgg_echo("question:areyousure"));
+				$return[] = $item;
+			}
+		}
+		// Un-archive can be useful in any situation
+		if ($is_archived) {
+			$url = "action/inria_unarchive_user?guid=" . $user->getGUID();
+			$title = elgg_echo("theme_inria:action:unarchive_user");
+			$item = new ElggMenuItem('unarchive_user', $title, $url);
+			$item->setSection('admin');
+			$item->setConfirmText(elgg_echo("question:areyousure"));
+			$return[] = $item;
+		}
+		return $return;
+	}
 }
 
 
