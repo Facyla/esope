@@ -18,8 +18,10 @@ if ($user) {
 			'value' => $user->name,
 		));
 		echo elgg_view_module('info', $title, $content);
+	} else {
+		$content .= elgg_view('input/hidden', array('name' => 'name', 'value' => $user->name));
 	}
-
+	
 	// need the user's guid to make sure the correct user gets updated
 	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $user->guid));
 }

@@ -19,5 +19,7 @@ if ($user) {
 			'value' => $user->email,
 		));
 		echo elgg_view_module('info', $title, $content);
+	} else {
+		echo elgg_view('input/hidden', array('name' => 'email', 'value' => $user->email));
 	}
 }
