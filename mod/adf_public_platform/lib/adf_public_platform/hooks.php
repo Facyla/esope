@@ -27,24 +27,7 @@ function adf_platform_route($hook_name, $entity_type, $return_value, $parameters
 			if ($handler == 'profile') {
 				$username = $segments[0];
 				if ($user = get_user_by_username($username)) {
-					// Selon le réglage par défaut, le profil est visible ou masqué par défaut
-					$public_profiles_default = elgg_get_plugin_setting('public_profiles_default', 'adf_public_platform');
-					if (empty($public_profiles_default)) { $public_profiles_default = 'no'; }
-					
-					// Le profil n'est accessible que si l'user ou à défaut le site en a décidé ainsi, sinon => forward
-					if ($public_profiles_default == 'no') {
-						// Opt-in : profil restreint par défaut
-						if ($user->public_profile != 'yes') {
-							register_error(elgg_echo('adf_public_platform:noprofile'));
-							forward($home);
-						}
-					} else {
-						// Opt-out : profil public par défaut
-						if ($user->public_profile == 'no') {
-							register_error(elgg_echo('adf_public_platform:noprofile'));
-							forward($home);
-						}
-					}
+					esope_user_profile_gatekeeper($user);
 				}
 			}
 		}

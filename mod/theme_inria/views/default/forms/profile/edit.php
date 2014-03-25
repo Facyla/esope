@@ -14,12 +14,19 @@
 	*/
 	
 	// id profile_edit_form
-	?>	
-	<div>
-		<label for="name"><?php echo elgg_echo('user:name:label'); ?></label>
-		<?php echo elgg_view('input/text', array('name' => 'name', 'value' => $vars['entity']->name)); ?>
-	</div>
-	<?php 
+	
+	// Inria member name is updated through LDAP - can't be changed
+	// Admin users can change it anyway (data does not necessarly come from LDAP)
+	if ((esope_get_user_profile_type($vars['entity']) != 'inria') || elgg_is_admin_logged_in()) {
+		?>
+		<div>
+			<label for="name"><?php echo elgg_echo('user:name:label'); ?></label>
+			<?php echo elgg_view('input/text', array('name' => 'name', 'value' => $vars['entity']->name)); ?>
+		</div>
+		<?php 
+	} else {
+		echo elgg_view('input/hidden', array('name' => 'name', 'value' => $vars['entity']->name));
+	}
 	
 	// Build fields
 	

@@ -197,9 +197,11 @@ function ldap_auth_check_profile(ElggUser $user) {
  * @return bool Return true on success
  */
 function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields) {
+	$mainpropchange = false;
 	if (count($ldap_infos) == 1 && count($ldap_mail) == 1) {
 		if ($user->email != $ldap_mail[0]['inriaMail'][0]) {
 			$user->email = $ldap_mail[0]['inriaMail'][0];
+			$mainpropchange = true;
 		}
 		foreach ($ldap_infos[0] as $key => $val) {
 			if ($key == 'cn') {
@@ -228,6 +230,7 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 			// Update name if asked, or empty name, or name is username (which means it was just created)
 			$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
 			if (($updatename == 'yes') || empty($user->name) || ($user->name == $user->username)) {
+				$mainpropchange = true;
 				// MAJ du nom : NOM Prénom, ssi on dispose des 2 infos
 				if (!empty($firstname) && !empty($lastname)) {
 					$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
@@ -235,8 +238,8 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 					$user->name = $fullname;
 				}
 			}
-			
 		}
+		if ($mainpropchange) $user->save();
 	} else {
 		return false;
 	}

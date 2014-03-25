@@ -17,6 +17,9 @@ function theme_inria_init(){
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
 	// Extend group owner block
+	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
+	
+	// Extend group owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_group_owner_block', 501);
 	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
