@@ -1050,6 +1050,7 @@ function esope_get_subpages($parent) {
 // Listing des sous-pages directes d'une page
 // @TODO : recursivity is not very good because generated content can be easily huge
 // So when using full_view, we'll echo directly instead of returning content
+// @TODO : list all pages and organize/sort, then rendering
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
 	$subpages = esope_get_subpages($parent);

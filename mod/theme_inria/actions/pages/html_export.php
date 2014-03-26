@@ -6,10 +6,12 @@ if ($export_subpages != 'yes') $export_subpages = false;
 $export_allpages = get_input("allpages", 'no');
 if ($export_allpages != 'yes') $export_allpages = false;
 
+// @TODO : this is much too long - requires reviewing
+
 $page = get_entity($guid);
 if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page')) {
 	//elgg_load_library('elgg:pages');
-	//set_time_limit(0); // We should not need that for an HTML page export
+	set_time_limit(30); // We should not need more than 30 seconds for an HTML page export
 	$content = "";
 	
 	// Sommaire
