@@ -87,15 +87,8 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 		<?php
 	}
 	
-	
 	// Pour rendu dans iframe
 	//$content = elgg_render_embed_content($content, $title, 'iframe');
-	
-		<?php echo $content; ?>
-	</body>
-	</html>
-	<?php
-	//echo elgg_render_embed_content($content, 'Export', 'iframe');
 	
 	exit;
 	
