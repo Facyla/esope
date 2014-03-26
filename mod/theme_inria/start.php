@@ -137,6 +137,7 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
 	}
 	// @TODO : ajouter interception création event pour ajouter l'auteur aux personnes notifiées
+	elgg_register_event_handler('create','object', 'theme_inria_notify_event_owner', 900);
 	
 	
 }
@@ -483,6 +484,20 @@ function event_calendar_ics_notify_attachment($hook, $entity_type, $returnvalue,
 		return $options;
 	}
 	return $returnvalue;
+}
+
+/* Sends also a message to the event owner */
+function theme_inria_notify_event_owner($event, $type, $object) {
+	if(!empty($object) && elgg_instanceof($object, "object", "event_calendar")) {
+		global $CONFIG;
+		$owner = $object->getOwnerEntity();
+		$default_subject = $CONFIG->register_objects['object']['event_calendar'] . ": " . $object->getURL();
+		$subject = elgg_trigger_plugin_hook("notify:entity:subject", 'object', array("entity" => $object, "to_entity" => $owner, "method" => 'email'), $default_subject);
+		if (empty($subject)) $subject = $default_subject;
+		$message = event_calendar_ics_notify_message('notify:entity:message', 'event', '', array('entity' => $object, 'to_entity' => $owner, 'method' => 'email'));
+		$params = elgg_trigger_plugin_hook('notify:entity:params', 'object', array("entity" => $object, "to_entity" => $owner, "method" => 'email'), null);
+		notify_user($owner->guid, $object->container_guid, $subject, $message, $params, 'email');
+	}
 }
 
 
