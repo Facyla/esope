@@ -60,7 +60,7 @@ $messages[$message->time_created] = $message;
 
 
 // 2. TRI ET AFFICHAGE
-ksort($messages);
+krsort($messages);
 $content .= '<ul class="elgg-list elgg-list-entity">';
 foreach ($messages as $timestamp => $ent) {
 	$ent_title = str_replace('RE: ', '', $ent->title);

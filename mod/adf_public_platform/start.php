@@ -1048,6 +1048,9 @@ function esope_get_subpages($parent) {
 }
 
 // Listing des sous-pages directes d'une page
+// @TODO : recursivity is not very good because generated content can be easily huge
+// So when using full_view, we'll echo directly instead of returning content
+// @TODO : list all pages and organize/sort, then rendering
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
 	$subpages = esope_get_subpages($parent);
@@ -1056,10 +1059,10 @@ function esope_list_subpages($parent, $internal_link = false, $full_view = false
 		else if ($internal_link == 'url') $href = $subpage->getURL();
 		else $href = false;
 		if ($full_view) {
-			$content .= '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
-			$content .= elgg_view("output/longtext", array("value" => $subpage->description));
-			$content .= '<p style="page-break-after:always;"></p>';
-			$content .= esope_list_subpages($subpage, $internal_link, $full_view);
+			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+			echo elgg_view("output/longtext", array("value" => $subpage->description));
+			echo '<p style="page-break-after:always;"></p>';
+			echo esope_list_subpages($subpage, $internal_link, $full_view);
 		} else {
 			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
 			$content .= esope_list_subpages($subpage, $internal_link);
@@ -1204,6 +1207,39 @@ if (elgg_is_active_plugin('file_tools')) {
 		return $files_content;
 	}
 	
+}
+
+/* User profile visbility gatekeeper
+ * Forwards to home if public profile is not allowed
+ * $user : defaults to page owner
+ */
+function esope_user_profile_gatekeeper($user = false) {
+	// No user profile gatekeeper if viewer is logged in
+	if (elgg_is_logged_in()) return true;
+	
+	// Defaults to page owner, so most cases where we need to protect user profile are handled
+	if (!$user) $user = elgg_get_page_owner_entity();
+	
+	if (elgg_instanceof($user, 'user')) {
+		// Selon le réglage par défaut, le profil est visible ou masqué par défaut
+		$public_profiles_default = elgg_get_plugin_setting('public_profiles_default', 'adf_public_platform');
+		if (empty($public_profiles_default)) { $public_profiles_default = 'no'; }
+	
+		// Le profil n'est accessible que si l'user ou à défaut le site en a décidé ainsi, sinon => forward
+		if ($public_profiles_default == 'no') {
+			// Opt-in : profil restreint par défaut
+			if ($user->public_profile != 'yes') {
+				register_error(elgg_echo('adf_public_platform:noprofile'));
+				forward($home);
+			}
+		} else {
+			// Opt-out : profil public par défaut
+			if ($user->public_profile == 'no') {
+				register_error(elgg_echo('adf_public_platform:noprofile'));
+				forward($home);
+			}
+		}
+	}
 }
 
 

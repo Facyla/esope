@@ -301,8 +301,9 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* Hide group extras tools */
 /*
 .elgg-context-groups .elgg-menu-extras { display: none; }
+.elgg-menu-item-rss { display: none !important; }
 */
-.elgg-menu-item-bookmark, .elgg-menu-item-report-this, .elgg-menu-item-rss { display: none !important; }
+.elgg-menu-item-bookmark, .elgg-menu-item-report-this { display: none !important; }
 .elgg-menu-group-filter > li.grouptab-action { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; }
 .elgg-menu-group-filter > li.grouptab-action a { color: white; }
 .elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
@@ -381,5 +382,6 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .elgg-print-message { display:none; }
 .footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 12px; }
 
+pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; font-size: 14px; }
 
 

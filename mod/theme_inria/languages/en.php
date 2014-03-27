@@ -309,6 +309,22 @@ Here is the new profile page : %s
 	
 	'theme_inria:print' => "Print page",
 	
+	'theme_inria:publicprofile:title' => "Profile visibility",
+	'theme_inria:publicprofile:yes' => "Public",
+	'theme_inria:publicprofile:no' => "Not public",
+	'theme_inria:publicprofile:othersettings' => "You can change your profile visibility setting below. Two other elements let you have a finer control over your avatar visibility and your personnal data",
+	
+	// Actions
+	'theme_inria:action:archive_user' => "Archive account",
+	'theme_inria:action:unarchive_user' => "Un-archive account",
+	'theme_inria:action:remove_user_email' => "Remove user email",
+	'theme_inria:removeemail:ok' => "User email successfully removed",
+	'theme_inria:removeemail:error' => "User email could not be removed",
+	'theme_inria:archiveuser:ok' => "User successfully archived",
+	'theme_inria:archiveuser:error' => "User could not be archived",
+	'theme_inria:unarchiveuser:ok' => "User successfully un-archived",
+	'theme_inria:unarchiveuser:error' => "User could not be un-archived",
+	
 );
 
 add_translation("en",$english);

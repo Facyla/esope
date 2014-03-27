@@ -44,10 +44,29 @@ $menu = $builder->getMenu();
 $actions = elgg_extract('action', $menu, array());
 $admin = elgg_extract('admin', $menu, array());
 
+// Add public setting profile link
+$public_profile_setting = '';
+if (elgg_is_logged_in() && ($user->guid == $_SESSION['user']->guid)) {
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+	if ($public_profiles == 'yes') {
+		$public_profile_setting = $user->public_profile;
+		// If no value, use default
+		if (empty($public_profile_setting)) {
+			$public_profile_setting = elgg_get_plugin_setting('public_profiles_default', 'adf_public_platform');
+			// No default means 'no' (not public)
+			if (empty($public_profiles_default)) { $public_profiles_default = 'no'; }
+		}
+	}
+	// Compose final message
+	$public_profile_setting = elgg_echo('theme_inria:publicprofile:title') . '&nbsp;: <a href="' . $CONFIG->url . 'settings/user/' . $user->username . '">' . elgg_echo('theme_inria:publicprofile:'.$public_profile_setting) . '</a>';
+}
+
 $profile_actions = '';
 if (elgg_is_logged_in() && $actions) {
 	$profile_actions = '<ul class="elgg-menu profile-action-menu mvm">';
 	foreach ($actions as $action) {
+		//$profile_actions .= $action->getName() . print_r($action, true);
+		if ($action->getName() == 'avatar:edit') continue;
 		$profile_actions .= '<li>' . $action->getContent(array('class' => 'elgg-button elgg-button-action')) . '</li>';
 	}
 	$profile_actions .= '</ul>';
@@ -188,6 +207,7 @@ echo <<<HTML
 
 <div id="profile-owner-block">
 	$icon
+	$public_profile_setting
 	$profile_actions
 	$inria_fields
 	$content_menu
