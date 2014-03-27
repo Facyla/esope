@@ -18,35 +18,16 @@
 	if($newest_groups = elgg_get_entities($group_options)){
 		$title = elgg_view("output/url", array("text" => elgg_echo("groups"), "href" => "groups/all"));
 		
-		$group_items = "<table class='digest-groups'>";
+		$group_items = "<div class='digest-groups'>";
 		
 		foreach($newest_groups as $index => $group){
-			if(($index % 3 == 0)){
-				$group_items .= "<tr>";
-			}
-
-			$group_items .= "<td>";
-			$group_items .= elgg_view_entity_icon($group, "medium") . "<br />";
-			$group_items .= "<a href='" . $group->getURL() . "'>" . $group->name . "</a>";
-			$group_items .= "</td>";
-
-			if(($index % 3) === 2 ){
-				$group_items .= "</tr>";
-			}
-		}
-		
-		if(($index % 3) !== 2){
-			if(($index + 2) % 3){
-				$group_items .= "<td>&nbsp;</td>";
-				$group_items .= "<td>&nbsp;</td>";
-			} elseif(($index + 1) % 3){
-				$group_items .= "<td>&nbsp;</td>";
-			}
-			
-			$group_items .= "</tr>";
+			$group_items .= '<div class="table-item">';
+			$group_items .= elgg_view_entity_icon($group, "medium");
+			$group_items .= '<a href="' . $group->getURL() . '">' . $group->name . '</a>';
+			$group_items .= '</div>';
 		}
 			
-		$group_items .= "</table>";
+		$group_items .= "</div>";
 		
 		echo elgg_view_module("digest", $title, $group_items);
 	}

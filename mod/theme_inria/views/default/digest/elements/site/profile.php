@@ -38,38 +38,17 @@
 		if($newest_members = elgg_get_entities_from_relationship($member_options)){
 			$title = elgg_view("output/url", array("text" => elgg_echo("members"), "href" => "members" ));
 		
-			$content = "<table class='digest-profile'>";
+			$content = "<div class='digest-profile'>";
 		
 			foreach($newest_members as $index => $mem){
-				if(($index % 3 == 0)){
-					// only 3 per line
-					$content .= "<tr>";
-				}
-		
-				$content .= "<td>";
+				$content .= '<div class="table-item">';
 				$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
 				$content .= "<a href='" .  $mem->getURL() . "'>" . $mem->name . "</a><br />";
 				$content .= $mem->briefdescription;
-				$content .= "</td>";
-					
-				if(($index % 3) === 2 ){
-					$content .= "</tr>";
-				}
+				$content .= "</div>";
 			}
-		
-			if(($index % 3) !== 2){
-				// fill up empty columns
-				if(($index + 2) % 3){
-					$content .= "<td>&nbsp;</td>";
-					$content .= "<td>&nbsp;</td>";
-				} elseif(($index + 1) % 3){
-					$content .= "<td>&nbsp;</td>";
-				}
-					
-				$content .= "</tr>";
-			}
-				
-			$content .= "</table>";
+			
+			$content .= "</div>";
 		
 			$digest_site_profile_body[$key] = $content;
 			echo elgg_view_module("digest", $title , $content);
