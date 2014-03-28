@@ -34,12 +34,12 @@ if (strrpos($folder, $needle) !== false) {
 		$embed_url = $CONFIG->url . 'cmis/repo/list/'.$contenttype.'/folder/' . $folder . '?embed=iframe&recursive='.$recursive;
 		//$content = '<div class="elgg-cmis-sidebar elgg-cmis-sidebar-folder"><iframe src="' . $embed_url .'">' . elgg_echo('elgg_cmis:loading') . '</iframe></div>';
 		
-	// Nouveau contenu : apparemment pas de lien direct pour uploader...
-	// /share/page/create-content?destination=workspace://SpacesStore/$folder&itemId=cm:content&mimeType=text/plain
+		// Nouveau contenu : apparemment pas de lien direct pour uploader...
+		// /share/page/create-content?destination=workspace://SpacesStore/$folder&itemId=cm:content&mimeType=text/plain
 	
-	// Add folder link to title
-	//$folder_link = $folder; // @TODO si on veut générer le lien automatiquement
-	$title = '<a class="elgg-button" style="float:right;" href="' . $group->cmisfolder . '">' . elgg_echo('elgg_cmis:action:openfolder') . '</a>' . $title;
+		// Add folder link to title
+		//$folder_link = $folder; // @TODO si on veut générer le lien automatiquement
+		$title = '<a class="elgg-button" style="float:right;" href="' . $group->cmisfolder . '">' . elgg_echo('elgg_cmis:action:openfolder') . '</a>' . $title;
 	
 	} else {
 		$content = elgg_echo('elgg_cmis:noconf');

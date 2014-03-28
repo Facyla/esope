@@ -110,6 +110,27 @@ if (!empty($group->customtab5)) {
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab5']['target'] = '_blank';
 }
 
+// Partage folder
+if (!empty($group->cmisfolder)) {
+	$tabinfo = explode('::', $group->cmisfolder);
+	// Forme d'une URL de partage : share/page/folder-details?nodeRef=workspace://SpacesStore/ + identifiant Alfresco
+	$needle = 'SpacesStore/';
+	// Keep only useful info if full URL was provided
+	if (strrpos($tabinfo[0], $needle) !== false) {
+		$folder_parts = explode($needle, $tabinfo[0]);
+		$folder = end($folder_parts);
+		// We have a valid URL : now determine title, and finally add new tab
+		if (!empty($folder)) {
+			if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('elgg_cmis:widget:cmis_folder'); }
+			$tabs['cmisfolder'] = array(
+				'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
+				'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+			);
+			if (esope_is_external_link($tabinfo[0])) $tabs['cmisfolder']['target'] = '_blank';
+		}
+	}
+}
+
 
 // Build action menu
 if (isset($CONFIG->menus['title'])) { $groupmenus = $CONFIG->menus['title']; } else { $menu = array(); }
