@@ -6,7 +6,7 @@ $events = $vars['events'];
 $event_array = array();
 $times_supported = elgg_get_plugin_setting('times','event_calendar') != 'no';
 
-foreach($events as $e) {
+if ($events) foreach($events as $e) {
 	$event_item = array(
 		'guid' => $e->guid,
 		//'title' => '<a href="'.$e->url.'">'.$e->title.'</a>',
