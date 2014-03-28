@@ -317,6 +317,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:publicprofile:yes' => "Public",
 	'theme_inria:publicprofile:no' => "Non public",
 	'theme_inria:publicprofile:othersettings' => "Vous pouvez choisir la visibilité générale de votre profil ci-dessous. Deux autres éléments vous permettent de contrôler plus finement la visibilité de votre photo et de vos informations personnelles",
+	'theme_inria:preview:noredirected' => "Il n'y a pas eu de redirection vers la page d'accueil seulement parce que vous pré-visualiez votre propre profil. Avec ces réglages de visibilité de votre profil, les autres visiteurs seront redirigés vers l'accueil.",
 	
 	// Actions
 	'theme_inria:action:archive_user' => "Archiver le compte",

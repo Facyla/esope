@@ -69,10 +69,12 @@ if (elgg_is_logged_in()) {
 	}
 }
 
-// Now we "are" the new viewing user, apply profile gatekeeper : will redirect if no public view is allowed
-$allowed = esope_user_profile_gatekeeper($owner);
+// Now we "are" the new viewing user, apply profile gatekeeper
+// But don't redirect at that time, or we would also leave the user disconnected !
+$allowed = esope_user_profile_gatekeeper($owner, false);
 if (!$allowed) {
 	register_error(elgg_echo('adf_public_platform:noprofile'));
+	echo elgg_echo('theme_inria:preview:noredirected');
 } else {
 
 	$profile = '<div class="profile"><div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div></div>';
