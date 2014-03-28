@@ -39,7 +39,7 @@ if (elgg_instanceof($entity, 'object', 'file') && (file_get_general_file_type($e
 	$image = elgg_view_entity_icon($entity, 'small', array('link_class' => ''));
 	$image .= '<span class="hidden">' . elgg_view_entity_icon($entity, 'large', array('link_class' => 'embed-insert')) . '</span>';
 } else {
-	$image = elgg_view_entity_icon($entity, 'small', array('link_class' => 'embed-insert'));
+	$image = elgg_view_entity_icon($entity, 'tiny', array('link_class' => 'embed-insert'));
 }
 
 echo elgg_view_image_block($image, $body);

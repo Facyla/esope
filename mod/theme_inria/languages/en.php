@@ -155,6 +155,11 @@ $english = array(
 	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
 	// Profile fields
+	'inria_location' => "Inria entity (CRI or headquarters)",
+	'epi_ou_service' => "Inria project team or service",
+	'interests' => "Tags",
+	'skills' => "Skills",
+	'profile:types:inria' => "Inria",
 	'profile:inria_location' => "Location",
 	'profile:epi_ou_service' => "EPI or service",
 	'profile:inria_phone' => "Phone",

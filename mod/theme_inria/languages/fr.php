@@ -155,6 +155,10 @@ $french = array(
 	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
 	// Champs de profil
+	'inria_location' => "Entité Inria (CRI ou siège)",
+	'epi_ou_service' => "Equipe projet Inria ou service",
+	'interests' => "Mots clés",
+	'skills' => "Compétences",
 	'profile:inria_location' => "Localisation",
 	'profile:epi_ou_service' => "EPI ou service",
 	'profile:inria_phone' => "Téléphone",
