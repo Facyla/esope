@@ -1218,8 +1218,9 @@ if (elgg_is_active_plugin('file_tools')) {
 /* User profile visbility gatekeeper
  * Forwards to home if public profile is not allowed
  * $user : defaults to page owner
+ * $forward : allow to determine visibility, not actually forward
  */
-function esope_user_profile_gatekeeper($user = false) {
+function esope_user_profile_gatekeeper($user = false, $forward = true) {
 	// No user profile gatekeeper if viewer is logged in
 	if (elgg_is_logged_in()) return true;
 	
@@ -1235,17 +1236,23 @@ function esope_user_profile_gatekeeper($user = false) {
 		if ($public_profiles_default == 'no') {
 			// Opt-in : profil restreint par défaut
 			if ($user->public_profile != 'yes') {
-				register_error(elgg_echo('adf_public_platform:noprofile'));
-				forward($home);
+				if ($forward) {
+					register_error(elgg_echo('adf_public_platform:noprofile'));
+					forward();
+				} else { return false; }
 			}
 		} else {
 			// Opt-out : profil public par défaut
 			if ($user->public_profile == 'no') {
-				register_error(elgg_echo('adf_public_platform:noprofile'));
-				forward($home);
+				if ($forward) {
+					register_error(elgg_echo('adf_public_platform:noprofile'));
+					forward();
+				} else { return false; }
 			}
 		}
 	}
+	// Don't block anything else than a user
+	return true;
 }
 
 

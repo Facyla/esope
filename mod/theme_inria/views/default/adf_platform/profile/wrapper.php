@@ -70,46 +70,49 @@ if (elgg_is_logged_in()) {
 }
 
 // Now we "are" the new viewing user, apply profile gatekeeper : will redirect if no public view is allowed
-esope_user_profile_gatekeeper($owner);
-
-
-
-$profile = '<div class="profile"><div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div></div>';
-
-$profile_details = elgg_view('profile/details');
-
-// Fil d'activité réservé aux membres
-if (elgg_is_logged_in()) {
-	// Theme settings : Add activity feed ? (default: no)
-	//if ($add_profile_activity == 'yes') {
-		$db_prefix = elgg_get_config('dbprefix');
-		$user = elgg_get_page_owner_entity();
-		elgg_set_context('widgets');
-		$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 8, 'pagination' => true));
-		$activity = '<div class="profile-activity-river">' . $activity . '</div>';
-		elgg_pop_context();
-	//}
-}
-
-// Theme settings : Remove widgets ? (default: no)
-//if ($remove_profile_widgets != 'yes') {
-	$params = array('num_columns' => 3);
-	$widgets = elgg_view_layout('widgets', $params);
-//}
-
-
-echo '<div class="elgg-grid">';
-if (elgg_is_logged_in()) {
-	echo '<div style="float:left; width:24%;">' . $profile . '</div>';
-	echo '<div style="float:left; width:50%;">' . $profile_details . '</div>';
-	echo '<div style="float:right; width:24%;">' . $activity . '</div>';
+$allowed = esope_user_profile_gatekeeper($owner);
+if (!$allowed) {
+	register_error(elgg_echo('adf_public_platform:noprofile'));
 } else {
-	echo '<div style="float:left; width:24%;">' . $profile . '</div>';
-	echo '<div style="float:right; width:74%;">' . $profile_details . '</div>';
+
+	$profile = '<div class="profile"><div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div></div>';
+
+	$profile_details = elgg_view('profile/details');
+
+	// Fil d'activité réservé aux membres
+	if (elgg_is_logged_in()) {
+		// Theme settings : Add activity feed ? (default: no)
+		//if ($add_profile_activity == 'yes') {
+			$db_prefix = elgg_get_config('dbprefix');
+			$user = elgg_get_page_owner_entity();
+			elgg_set_context('widgets');
+			$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 8, 'pagination' => true));
+			$activity = '<div class="profile-activity-river">' . $activity . '</div>';
+			elgg_pop_context();
+		//}
+	}
+
+	// Theme settings : Remove widgets ? (default: no)
+	//if ($remove_profile_widgets != 'yes') {
+		$params = array('num_columns' => 3);
+		$widgets = elgg_view_layout('widgets', $params);
+	//}
+
+
+	echo '<div class="elgg-grid">';
+	if (elgg_is_logged_in()) {
+		echo '<div style="float:left; width:24%;">' . $profile . '</div>';
+		echo '<div style="float:left; width:50%;">' . $profile_details . '</div>';
+		echo '<div style="float:right; width:24%;">' . $activity . '</div>';
+	} else {
+		echo '<div style="float:left; width:24%;">' . $profile . '</div>';
+		echo '<div style="float:right; width:74%;">' . $profile_details . '</div>';
+	}
+	echo '<div class="clearfloat"></div>';
+	echo'</div>';
+	echo'<div class="profile-widgets">' . $widgets . '</div>';
+
 }
-echo '<div class="clearfloat"></div>';
-echo'</div>';
-echo'<div class="profile-widgets">' . $widgets . '</div>';
 
 // Restore original user
 if ($view_as) { theme_inria_temp_login($own_user); }
