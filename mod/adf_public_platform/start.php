@@ -793,15 +793,21 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return false;
 	}
 
-	/* Returns all profile types as $profiletype_guid => $profiletype_name */
-	function esope_get_profiletypes() {
+	/* Returns all profile types as $profiletype_guid => $profiletype_name
+	 * Can also return translated name (for use in a dropdown input)
+	 */
+	function esope_get_profiletypes($use_translation = false) {
 		$profile_types_options = array(
 				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
 			);
 		if ($custom_profile_types = elgg_get_entities($profile_types_options)) {
 			foreach($custom_profile_types as $type) {
-				$profiletypes[$type->guid] = $type->metadata_name;
+				if ($use_translation) {
+					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $type->metadata_name);
+				} else {
+					$profiletypes[$type->guid] = $type->metadata_name;
+				}
 			}
 		}
 		return $profiletypes;
