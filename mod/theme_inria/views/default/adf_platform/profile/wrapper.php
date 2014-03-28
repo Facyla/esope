@@ -5,7 +5,7 @@
 
 $content = '';
 
-// Viewing a profile as someone else doesn't mean antyhing if you're not connected
+// Viewing a profile as someone else doesn't mean anything if you're not connected
 if (elgg_is_logged_in()) {
 	$own_user = elgg_get_logged_in_user_entity();
 	$owner = elgg_get_page_owner_entity();
@@ -68,6 +68,11 @@ if (elgg_is_logged_in()) {
 		echo '<div class="view-profile-as">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
+
+// Now we "are" the new viewing user, apply profile gatekeeper : will redirect if no public view is allowed
+esope_user_profile_gatekeeper($owner);
+
+
 
 $profile = '<div class="profile"><div class="elgg-inner clearfix">' . elgg_view('profile/owner_block') . '</div></div>';
 
