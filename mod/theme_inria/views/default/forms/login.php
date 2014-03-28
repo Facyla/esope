@@ -55,7 +55,7 @@ echo '<p>' . elgg_echo('elgg_cas:login:details') . '</p>';
 
 	<div id="adf-persistent">
 		<label for="persistent">
-			<input type="checkbox" name="persistent" id="persistent" checked="checked" />
+			<input type="checkbox" name="persistent" id="persistent" />
 			<?php echo elgg_echo('user:persistent'); ?>
 		</label>
 	</div>
