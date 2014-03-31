@@ -155,6 +155,11 @@ $english = array(
 	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
 	// Profile fields
+	'inria_location' => "Inria entity (CRI or headquarters)",
+	'epi_ou_service' => "Inria project team or service",
+	'interests' => "Tags",
+	'skills' => "Skills",
+	'profile:types:inria' => "Inria",
 	'profile:inria_location' => "Location",
 	'profile:epi_ou_service' => "EPI or service",
 	'profile:inria_phone' => "Phone",
@@ -193,7 +198,7 @@ $english = array(
 	
 	/* Settings */
 	'theme_inria:settings:animators' => "Animators list",
-	'theme_inria:settings:animators:details' => "To add/remove animators, edit the list below, using comma-separated lust of usernames. Usernamesz are those displayed in members' profile URL.",
+	'theme_inria:settings:animators:details' => "To add/remove animators, edit the list below, using comma-separated lust of usernames. Usernames are those displayed in members' profile URL.",
 	'theme_inria:settings:animators:page' => "Animation page",
 	'theme_inria:settings:animators:members' => "Site members directory",
 	
@@ -313,6 +318,7 @@ Here is the new profile page : %s
 	'theme_inria:publicprofile:yes' => "Public",
 	'theme_inria:publicprofile:no' => "Not public",
 	'theme_inria:publicprofile:othersettings' => "You can change your profile visibility setting below. Two other elements let you have a finer control over your avatar visibility and your personnal data",
+	'theme_inria:preview:noredirected' => "You were not redirected to homepage only because you are previewing your own profile. According to your settings, other visitors would be redirected.",
 	
 	// Actions
 	'theme_inria:action:archive_user' => "Archive account",

@@ -35,11 +35,11 @@ $params = array(
 $body = elgg_view('object/elements/summary', $params);
 
 // This lets editors add images in a reasonnable size, and uncroped
-if (elgg_instanceof($entity, 'object', 'file') && (file_get_general_file_type($entity->mimetype))) {
+if (elgg_instanceof($entity, 'object', 'file') && (file_get_general_file_type($entity->mimetype) == 'image')) {
 	$image = elgg_view_entity_icon($entity, 'small', array('link_class' => ''));
 	$image .= '<span class="hidden">' . elgg_view_entity_icon($entity, 'large', array('link_class' => 'embed-insert')) . '</span>';
 } else {
-	$image = elgg_view_entity_icon($entity, 'small', array('link_class' => 'embed-insert'));
+	$image = elgg_view_entity_icon($entity, 'tiny', array('link_class' => 'embed-insert'));
 }
 
 echo elgg_view_image_block($image, $body);

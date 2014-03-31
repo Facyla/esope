@@ -52,7 +52,7 @@ function theme_inria_init(){
 	// Extend group with CMIS folder
 	//elgg_extend_view('groups/tool_latest', 'elgg_cmis/group_cmisfolder_module', 501);
 	// Displays only if ->cmisfolder is set
-	elgg_extend_view('page/elements/sidebar', 'elgg_cmis/group_cmisfolder_sidebar', 501);
+	//elgg_extend_view('page/elements/sidebar', 'elgg_cmis/group_cmisfolder_sidebar', 501);
 	
 	// Extend public profile settings
 	elgg_extend_view('core/settings/account', 'theme_inria/usersettings_extend', 100);

@@ -793,15 +793,21 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return false;
 	}
 
-	/* Returns all profile types as $profiletype_guid => $profiletype_name */
-	function esope_get_profiletypes() {
+	/* Returns all profile types as $profiletype_guid => $profiletype_name
+	 * Can also return translated name (for use in a dropdown input)
+	 */
+	function esope_get_profiletypes($use_translation = false) {
 		$profile_types_options = array(
 				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
 			);
 		if ($custom_profile_types = elgg_get_entities($profile_types_options)) {
 			foreach($custom_profile_types as $type) {
-				$profiletypes[$type->guid] = $type->metadata_name;
+				if ($use_translation) {
+					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $type->metadata_name);
+				} else {
+					$profiletypes[$type->guid] = $type->metadata_name;
+				}
 			}
 		}
 		return $profiletypes;
@@ -1212,8 +1218,9 @@ if (elgg_is_active_plugin('file_tools')) {
 /* User profile visbility gatekeeper
  * Forwards to home if public profile is not allowed
  * $user : defaults to page owner
+ * $forward : allow to determine visibility, not actually forward
  */
-function esope_user_profile_gatekeeper($user = false) {
+function esope_user_profile_gatekeeper($user = false, $forward = true) {
 	// No user profile gatekeeper if viewer is logged in
 	if (elgg_is_logged_in()) return true;
 	
@@ -1229,17 +1236,23 @@ function esope_user_profile_gatekeeper($user = false) {
 		if ($public_profiles_default == 'no') {
 			// Opt-in : profil restreint par défaut
 			if ($user->public_profile != 'yes') {
-				register_error(elgg_echo('adf_public_platform:noprofile'));
-				forward($home);
+				if ($forward) {
+					register_error(elgg_echo('adf_public_platform:noprofile'));
+					forward();
+				} else { return false; }
 			}
 		} else {
 			// Opt-out : profil public par défaut
 			if ($user->public_profile == 'no') {
-				register_error(elgg_echo('adf_public_platform:noprofile'));
-				forward($home);
+				if ($forward) {
+					register_error(elgg_echo('adf_public_platform:noprofile'));
+					forward();
+				} else { return false; }
 			}
 		}
 	}
+	// Don't block anything else than a user
+	return true;
 }
 
 
