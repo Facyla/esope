@@ -15,6 +15,20 @@
 
 $entity = $vars['entity'];
 
+// Don't display users if they don't allow their profile to be displayed
+// @TODO : note this can let to 
+if (elgg_instanceof ($entity, 'user')) {
+	$allowed = esope_user_profile_gatekeeper($entity, false);
+	if (!$allowed) {
+		$icon_url = elgg_get_site_url() . "_graphics/icons/default/tiny.png";
+		$spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
+		$icon = '<div class="elgg-avatar elgg-avatar-tiny"><a>' . elgg_view('output/img', array('src' => $spacer_url, 'style' => "background: url($icon_url) no-repeat;")) . '</a></div>';
+		$body = elgg_echo('InvalidParameterException:NoEntityFound');
+		echo elgg_view_image_block($icon, $body);
+		return;
+	}
+}
+
 $icon = $entity->getVolatileData('search_icon');
 if (!$icon) {
 	// display the entity's owner by default if available.
