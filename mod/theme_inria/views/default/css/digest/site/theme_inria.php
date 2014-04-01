@@ -45,7 +45,7 @@ h4 {
 	font-size: 11px;
 	/* padding: 10px 20px 0; */
 	text-align: right;
-	tex-decoration:underline;
+	text-decoration:underline;
 }
 #digest_header {
 	background: none repeat scroll 0 0 #6D2D4F;
