@@ -21,7 +21,7 @@
 		"created_time_lower" => $ts_lower,
 		"created_time_upper" => $ts_upper,
 		"joins" => array(
-				"JOIN " . $dbprefix . "metadata bm ON e.guid = bm.entity_guid"				
+				"JOIN " . $dbprefix . "metadata bm ON e.guid = bm.entity_guid"
 		),
 		"wheres" => array(
 				"bm.name_id = " . $blog_status_name_id,				
