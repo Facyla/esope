@@ -3,8 +3,18 @@
 $entity = $vars["entity"];
 $offset = (int) max(get_input("offset", 0), 0);
 $limit = 10;
-$subtype = get_input("subtype", 'blog');
+$subtype = get_input('subtype', 'blog');
 if ($subtype == 'pages') $subtype = array('page', 'page_top');
+if ($subtype == 'all') $subtype = null;
+$allowed_subtypes = array(
+	'all' => elgg_echo('theme_inria:option:nofilter'),
+	'blog' => elgg_echo('blog'),
+	'bookmarks' => elgg_echo('bookmarks'),
+	'event_calendar' => elgg_echo('event_calendar'),
+	'pages' => elgg_echo('pages'),
+	'file' => elgg_echo('file'), 
+	'groupforumtopic' => elgg_echo('groups:forum'),
+);
 
 $query = get_input("q");
 $query = sanitise_string($query);
@@ -36,10 +46,11 @@ if ($count > 0) {
 	$entities = elgg_get_entities($options);
 	
 	$form_data = elgg_view("input/text", array("name" => "q", "value" => $query));
-	$form_data .= elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype, 'options_values' => array('' => '(aucun filtre)', 'blog' => 'Articles', 'bookmarks' => 'Liens web', 'event_calendar' => 'Evénements', 'pages' => 'Wikis', 'file' => 'Fichiers', 'groupforumtopic' => "Discussions")));
+	$form_data .= elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype, 'options_values' => $allowed_subtypes));
 	$form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
 	
 	echo elgg_view("input/form", array("action" => "newsletter/embed/" . $entity->getGUID(), "id" => "newsletter-embed-search", "body" => $form_data));
+	echo '<div class="clearfloat"></div>';
 	
 	echo "<ul id='newsletter-embed-list'>";
 	foreach ($entities as $entity) {

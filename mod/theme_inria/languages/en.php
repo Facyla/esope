@@ -331,6 +331,9 @@ Here is the new profile page : %s
 	'theme_inria:unarchiveuser:ok' => "User successfully un-archived",
 	'theme_inria:unarchiveuser:error' => "User could not be un-archived",
 	
+	'theme_inria:option:nofilter' => "(no filter)",
+	
+	
 );
 
 add_translation("en",$english);

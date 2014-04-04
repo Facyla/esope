@@ -330,6 +330,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
+	'theme_inria:option:nofilter' => "(aucun filtre)",
+	
 );
 
 add_translation("fr",$french);
