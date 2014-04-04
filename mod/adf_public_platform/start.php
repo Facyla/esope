@@ -1215,10 +1215,11 @@ if (elgg_is_active_plugin('file_tools')) {
 	
 }
 
-/* User profile visbility gatekeeper
+/* User profile visibility gatekeeper
  * Forwards to home if public profile is not allowed
  * $user : defaults to page owner
  * $forward : allow to determine visibility, not actually forward
+ * If no forward set, returns true if allowed, false if not allowed
  */
 function esope_user_profile_gatekeeper($user = false, $forward = true) {
 	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
