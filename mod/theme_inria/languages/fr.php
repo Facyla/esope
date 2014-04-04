@@ -140,6 +140,10 @@ $french = array(
 	
 	// Digest
 	'theme_inria:digest:headertitle' => "Quoi de neuf sur ",
+	'theme_inria:digest:friends' => "Activité de mes contacts sur Iris",
+	'theme_inria:digest:groups' => "Nouveaux groupes sur Iris",
+	'theme_inria:digest:members' => "Nouveaux membres d'Iris",
+	'theme_inria:digest:thewire' => "Sur le fil",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",

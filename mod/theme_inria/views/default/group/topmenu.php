@@ -133,7 +133,7 @@ if (!empty($group->cmisfolder)) {
 
 
 // Build action menu
-//if (elgg_in_context('group_profile')) {
+if (elgg_in_context('group_profile')) {
 	if (isset($CONFIG->menus['title'])) { $groupmenus = $CONFIG->menus['title']; } else { $menu = array(); }
 	$weight = 500;
 	if ($groupmenus) foreach ($groupmenus as $menu) {
@@ -144,7 +144,7 @@ if (!empty($group->cmisfolder)) {
 		$weight--; // Keep ordering (would be inverted otherwise, as menus float right)
 		elgg_register_menu_item('group_filter', $menu);
 	}
-//}
+}
 
 
 foreach ($tabs as $name => $tab) {
