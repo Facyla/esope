@@ -27,9 +27,9 @@ if (!$title) {
 }
 $title = elgg_view_title($title, array('class' => 'elgg-heading-main'));
 
-// Groups : we use a different layout
+// Groups : we use a different layout on group homepage
 $owner = elgg_get_page_owner_entity();
-if (!elgg_instanceof($owner, 'group')) {
+if (!(elgg_instanceof($owner, 'group') && (elgg_get_context() == 'group_profile'))) {
 	if (isset($vars['buttons']) && $vars['buttons']) {
 		$buttons = $vars['buttons'];
 	} else {

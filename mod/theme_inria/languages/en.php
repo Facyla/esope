@@ -140,6 +140,10 @@ $english = array(
 	
 	// Digest
 	'theme_inria:digest:headertitle' => "What's up at ",
+	'theme_inria:digest:friends' => "My friends activity on Iris",
+	'theme_inria:digest:groups' => "New groups on Iris",
+	'theme_inria:digest:members' => "New Iris members",
+	'theme_inria:digest:thewire' => "Inria the Wire",
 	
 	// Traductions
 	'theme_inria:login' => "Log in",
@@ -330,6 +334,9 @@ Here is the new profile page : %s
 	'theme_inria:archiveuser:error' => "User could not be archived",
 	'theme_inria:unarchiveuser:ok' => "User successfully un-archived",
 	'theme_inria:unarchiveuser:error' => "User could not be un-archived",
+	
+	'theme_inria:option:nofilter' => "(no filter)",
+	
 	
 );
 

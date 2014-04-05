@@ -16,7 +16,7 @@
 	);
 
 	if($newest_groups = elgg_get_entities($group_options)){
-		$title = elgg_view("output/url", array("text" => elgg_echo("groups"), "href" => "groups/all"));
+		$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:groups"), "href" => "groups/all"));
 		
 		$group_items = "<div class='digest-groups'>";
 		

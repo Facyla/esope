@@ -140,6 +140,10 @@ $french = array(
 	
 	// Digest
 	'theme_inria:digest:headertitle' => "Quoi de neuf sur ",
+	'theme_inria:digest:friends' => "Activité de mes contacts sur Iris",
+	'theme_inria:digest:groups' => "Nouveaux groupes sur Iris",
+	'theme_inria:digest:members' => "Nouveaux membres d'Iris",
+	'theme_inria:digest:thewire' => "Sur le fil",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",
@@ -329,6 +333,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
 	'theme_inria:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
+	
+	'theme_inria:option:nofilter' => "(aucun filtre)",
 	
 );
 

@@ -1,0 +1,41 @@
+<?php
+
+	/**
+	* Shows the latests thewires in the Digest
+	*
+	*/
+	
+	$ts_lower = (int) elgg_extract("ts_lower", $vars);
+	$ts_upper = (int) elgg_extract("ts_upper", $vars);
+
+	// only show thewires that are published
+	$dbprefix = elgg_get_config("dbprefix");
+	
+	$thewire_options = array(
+		"type" => "object",
+		"subtype" => "thewire",
+		"limit" => 5,
+		"created_time_lower" => $ts_lower,
+		"created_time_upper" => $ts_upper,
+	);
+
+	if($thewires = elgg_get_entities($thewire_options)){
+		$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:thewire"), "href" => "thewire/all" ));
+		
+		$latest_thewires = "";
+		
+		foreach($thewires as $thewire){
+			$thewire_url = $thewire->getURL();
+			
+			$latest_thewires .= "<div class='digest-blog'>";
+			$owner = $thewire->getOwnerEntity();
+			$latest_thewires .= "<a href='" . $thewire_url. "'><img src='". $owner->getIconURL("small") . "' style='border-radius: 5px; padding: 0; margin: 0 5px 0 0;' /></a>";
+			$latest_thewires .= "<span>";
+			$latest_thewires .= "<h4><a href='" . $thewire_url. "'>" . $thewire->description . "</a></h4>";
+			$latest_thewires .= "</span>";
+			$latest_thewires .= "</div>";
+		}
+		
+		echo elgg_view_module("digest", $title, $latest_thewires);
+	}
+	

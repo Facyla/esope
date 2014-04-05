@@ -1215,14 +1215,17 @@ if (elgg_is_active_plugin('file_tools')) {
 	
 }
 
-/* User profile visbility gatekeeper
+/* User profile visibility gatekeeper
  * Forwards to home if public profile is not allowed
  * $user : defaults to page owner
  * $forward : allow to determine visibility, not actually forward
+ * If no forward set, returns true if allowed, false if not allowed
  */
 function esope_user_profile_gatekeeper($user = false, $forward = true) {
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+
 	// No user profile gatekeeper if viewer is logged in
-	if (elgg_is_logged_in()) return true;
+	if (elgg_is_logged_in() || ($public_profiles == 'no')) return true;
 	
 	// Defaults to page owner, so most cases where we need to protect user profile are handled
 	if (!$user) $user = elgg_get_page_owner_entity();
@@ -1230,7 +1233,7 @@ function esope_user_profile_gatekeeper($user = false, $forward = true) {
 	if (elgg_instanceof($user, 'user')) {
 		// Selon le réglage par défaut, le profil est visible ou masqué par défaut
 		$public_profiles_default = elgg_get_plugin_setting('public_profiles_default', 'adf_public_platform');
-		if (empty($public_profiles_default)) { $public_profiles_default = 'no'; }
+		if (empty($public_profiles_default)) { $public_profiles_default = 'yes'; }
 	
 		// Le profil n'est accessible que si l'user ou à défaut le site en a décidé ainsi, sinon => forward
 		if ($public_profiles_default == 'no') {

@@ -20,9 +20,23 @@ $menu = elgg_view_menu('river', array(
 // river item header
 $timestamp = elgg_get_friendly_time($item->getPostedTime());
 
+// Esope : User profile gatekeeper block
+$subject = $item->getSubjectEntity();
+$object = $item->getObjectEntity();
+$subject_allowed = esope_user_profile_gatekeeper($subject, false);
+$object_allowed = esope_user_profile_gatekeeper($object, false);
+if (!$subject_allowed || !$object_allowed) {
+	$summary = elgg_echo('InvalidParameterException:NoEntityFound');
+echo <<<RIVER
+$menu
+<div class="elgg-river-summary">$summary $group_string <span class="elgg-river-timestamp">$timestamp</span></div>
+$message
+RIVER;
+return;
+}
+
 $summary = elgg_extract('summary', $vars, elgg_view('river/elements/summary', array('item' => $vars['item'])));
 if ($summary === false) {
-	$subject = $item->getSubjectEntity();
 	$summary = elgg_view('output/url', array(
 		'href' => $subject->getURL(),
 		'text' => $subject->name,
@@ -64,7 +78,6 @@ if (elgg_in_context('widgets')) {
 }
 
 $group_string = '';
-$object = $item->getObjectEntity();
 $container = $object->getContainerEntity();
 if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_guid()) {
 	$group_link = elgg_view('output/url', array(

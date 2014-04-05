@@ -1,4 +1,5 @@
 <?php
+return;
 
 	/**
 	* Shows the latests blogs in the Digest

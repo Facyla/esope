@@ -62,6 +62,7 @@ function theme_inria_init(){
 	//elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
 	// Add all groups excerpt to digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
 	
 	// Modified to make pages top_level / sub-pages
