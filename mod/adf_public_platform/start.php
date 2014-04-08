@@ -484,6 +484,7 @@ function adf_platform_public_forward_login_hook($hook_name, $reason, $location, 
 function adf_platform_forward_hook($hook_name, $reason, $location, $parameters) {
 	global $CONFIG;
 	$forward_url = $parameters['forward_url'];
+error_log("FORWAR : $forward_url / " . $_SERVER['HTTP_REFERER']);
 	if ($forward_url == $_SERVER['HTTP_REFERER']) {
 		if ((strpos($forward_url, 'http:') === 0) || (strpos($url, 'https:') === 0)) {
 			$site_url = elgg_get_site_url();
