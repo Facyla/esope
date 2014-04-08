@@ -76,6 +76,17 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
+	// Login as menu link
+	if (elgg_is_active_plugin('login_as')) {
+		$original_user_guid = isset($_SESSION['login_as_original_user_guid']) ? $_SESSION['login_as_original_user_guid'] : NULL;
+		if ($original_user_guid) {
+			$original_user = get_entity($original_user_guid);
+			$loginas_title = elgg_echo('login_as:return_to_user', array($ownusername, $original_user->username));
+			$loginas_html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
+			$loginas_logout = '<li id="logout">' . elgg_view('output/url', array('href' => $url . "action/logout_as", 'text' => $loginas_html, 'is_action' => true, 'name' => 'login_as_return', 'title' => $loginas_title, 'class' => 'login-as-topbar')) . '</li>';
+		}
+	}
+	
 }
 ?>
 
@@ -110,7 +121,7 @@ if (elgg_is_logged_in()) {
 									//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
 									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('adf_platform:help') . '</a></li>';
 									?>
-									
+									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
 									
 								</ul>

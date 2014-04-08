@@ -89,6 +89,17 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
+	// Login as menu link
+	if (elgg_is_active_plugin('login_as')) {
+		$original_user_guid = isset($_SESSION['login_as_original_user_guid']) ? $_SESSION['login_as_original_user_guid'] : NULL;
+		if ($original_user_guid) {
+			$original_user = get_entity($original_user_guid);
+			$loginas_title = elgg_echo('login_as:return_to_user', array($ownusername, $original_user->username));
+			$loginas_html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
+			$loginas_logout = '<li id="logout">' . elgg_view('output/url', array('href' => $url . "action/logout_as", 'text' => $loginas_html, 'is_action' => true, 'name' => 'login_as_return', 'title' => $loginas_title, 'class' => 'login-as-topbar')) . '</li>';
+		}
+	}
+	
 }
 ?>
 
@@ -106,6 +117,7 @@ if (elgg_is_logged_in()) {
 							<nav>
 								<ul>
 									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
+									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
 									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
