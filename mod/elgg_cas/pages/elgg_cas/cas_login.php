@@ -2,7 +2,8 @@
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
-$forward = get_input('forward', '');
+// Allow to forward to asked URL after successful login, or last forwward if not explicitely set
+$forward = get_input('forward', $_SESSION['last_forward_from']);
 
 global $cas_client_loaded;
 

@@ -472,11 +472,13 @@ function adf_platform_login_handler($event, $object_type, $object) {
 
 // Redirection après login
 function adf_platform_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
-	global $CONFIG;
-	//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
-	// Si jamais la valeur de retour n'est pas définie, on le fait
-	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-	if (!elgg_is_logged_in()) return $CONFIG->url . 'login';
+	if (!elgg_is_logged_in()) {
+		global $CONFIG;
+		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
+		// Si jamais la valeur de retour n'est pas définie, on le fait
+		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
+		return $CONFIG->url . 'login';
+	}
 	return null;
 }
 
