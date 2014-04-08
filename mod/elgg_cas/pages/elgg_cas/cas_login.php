@@ -2,6 +2,8 @@
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
+$forward = get_input('forward', '');
+
 global $cas_client_loaded;
 
 elgg_load_library('elgg:elgg_cas');
@@ -96,7 +98,7 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
-			forward('');
+			forward($forward);
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
