@@ -43,7 +43,7 @@
 			foreach($newest_members as $index => $mem){
 				$content .= '<div class="table-item">';
 				//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
-				$content .= '<a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /><br />' . $mem->name . '</a><br />';
+				$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
 				$content .= $mem->briefdescription;
 				$content .= "</div>";
 			}
