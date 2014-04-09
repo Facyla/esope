@@ -626,7 +626,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 
 /* Returns groups that are wether owned (created) or operated by the user
  * $user_guid default to logged in user
- * $mode accepts : all (owned+operated), owned, operated
+ * $mode accepts : all (owned+operated), owned (only), operated (only)
  * Note : only 'all' mode returns an indexed array !
  */
 function esope_get_owned_groups($user_guid = false, $mode = 'all') {
