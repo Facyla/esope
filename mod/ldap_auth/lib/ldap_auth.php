@@ -131,18 +131,21 @@ function ldap_user_exists($username) {
  * @return ElggUser|false Depending on success
  */
 function ldap_auth_create_profile($username, $password) {
-	// Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
 	$new_username = $username;
+	// Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
 	// Only use this if Elgg needs username >= 4 chars, but you'd better add 
 	// $CONFIG->minusername = 4;
 	// in engine/settings.php file.
 	//while (strlen($new_username) < 4) { $new_username .= '0'; }
+	
 	//the local password can't be use because ldap auth is call before any other authentifaction method 
-	if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
+	//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
+	// Email : we use a noreply email until it is updated by LDAP
+	if ($user_guid = register_user($new_username, $password, $username, "noreply@inria.fr", true)) {
 		$user = get_user($user_guid);
 		//update profile with ldap infos
 		$user->ldap_username = $username;
-		ldap_auth_check_profile($user);
+		if (!ldap_auth_check_profile($user)) error_log("LDAP auth error : cannot update profile $user_guid on registration");
 		// Success, credentials valid and account has been created
 		return $user;
 	}

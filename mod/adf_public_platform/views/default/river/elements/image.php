@@ -10,7 +10,7 @@
 $subject = $vars['item']->getSubjectEntity();
 
 if (elgg_get_context() == 'digest') {
-	echo '<a href="' .  $subject->getURL() . '"><img src="' . $subject->getIconUrl('small') .  '" /></a>';
+	echo '<div class="elgg-avatar elgg-avatar-small"><a href="' .  $subject->getURL() . '"><img src="' . $subject->getIconUrl('small') .  '" /></a></div>';
 } else {
 	if (elgg_in_context('widgets')) {
 		echo elgg_view_entity_icon($subject, 'tiny');

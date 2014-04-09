@@ -151,6 +151,8 @@ function adf_platform_init() {
 	if (!elgg_is_logged_in()) {
 		elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_public_forward_login_hook');
 	}
+	// Hook pour ne pas rediriger sur un site externe
+	elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_forward_hook', 600);
 	
 	
 	// NEW & REWRITTEN ACTIONS
@@ -469,12 +471,29 @@ function adf_platform_login_handler($event, $object_type, $object) {
 }
 
 // Redirection après login
-function adf_platform_public_forward_login_hook($hook_name, $entity_type, $return_value, $parameters) {
+function adf_platform_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
+	if (!elgg_is_logged_in()) {
+		global $CONFIG;
+		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
+		// Si jamais la valeur de retour n'est pas définie, on le fait
+		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
+		return $CONFIG->url . 'login';
+	}
+	return null;
+}
+
+// Vérification des URL de redirection : si redirection vers un REFERER HTTP externe, forward vers l'accueil
+function adf_platform_forward_hook($hook_name, $reason, $location, $parameters) {
 	global $CONFIG;
-	//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
-	// Si jamais la valeur de retour n'est pas définie, on le fait
-	if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-	if (!elgg_is_logged_in()) return $CONFIG->url . 'login';
+	$forward_url = $parameters['forward_url'];
+	if ($forward_url == $_SERVER['HTTP_REFERER']) {
+		if ((strpos($forward_url, 'http:') === 0) || (strpos($forward_url, 'https:') === 0)) {
+			$site_url = elgg_get_site_url();
+			if (strpos($forward_url, $site_url) !== 0) {
+				return $site_url;
+			}
+		}
+	}
 	return null;
 }
 
