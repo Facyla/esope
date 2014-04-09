@@ -18,7 +18,7 @@ if (elgg_get_context() == 'digest') {
 	echo elgg_view('river/elements/layout', array(
 		'item' => $vars['item'],
 		'summary' => $string,
-		'attachments' => '<div class="elgg-avatar elgg-avatar-tiny"><img src="' . $subject->getIconUrl('tiny') .  '" /></div>';
+		'attachments' => '<div class="elgg-avatar elgg-avatar-tiny"><img src="' . $subject->getIconUrl('tiny') .  '" /></div>',
 	));
 } else {
 	echo elgg_view('river/elements/layout', array(
