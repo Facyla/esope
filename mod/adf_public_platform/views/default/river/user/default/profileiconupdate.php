@@ -14,7 +14,7 @@ $subject_link = elgg_view('output/url', array(
 
 $string = elgg_echo('river:update:user:avatar', array($subject_link));
 
-if (elgg_get_context() == 'digest') {
+if (elgg_in_context('digest')) {
 	echo elgg_view('river/elements/layout', array(
 		'item' => $vars['item'],
 		'summary' => $string,
