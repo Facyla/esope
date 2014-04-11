@@ -9,8 +9,7 @@
 
 $subject = $vars['item']->getSubjectEntity();
 
-echo elgg_get_context();
-if (elgg_in_context('digest')) {
+if (elgg_in_context('digest') || elgg_in_context('cron')) {
 	echo '<div class="elgg-avatar elgg-avatar-small"><a href="' .  $subject->getURL() . '"><img src="' . $subject->getIconUrl('small') .  '" /></a></div>';
 } else {
 	if (elgg_in_context('widgets')) {
