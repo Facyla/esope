@@ -36,6 +36,7 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 // Output the head content
 ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<title><?php echo $title; ?></title>
 	<?php
 	echo elgg_view('page/elements/shortcut_icon', $vars);
@@ -68,6 +69,7 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<![endif]-->
 	<!--[if lt IE 9]>
 		<script type="text/javascript" src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/views/default/adf_platform/js/html5-ie.php"></script>
+		<script src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/vendors/html5shiv.js"></script>
 	<![endif]-->
 	<?php
 	if ($config_awesomefont == 'yes') {
