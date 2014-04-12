@@ -226,6 +226,9 @@ $en = array(
 	'accessibility:revert' => "Delete",
 	
 	
+	'adf_platform:moreinfoon' => "More information on %s",
+	'adf_platform:expand' => "Expand",
+	'adf_platform:compress' => "Compress",
 	'adf_platform:homepage' => "Homepage",
 	'announcements' => "Announcements",
 	'event_calendar' => "Calendar",

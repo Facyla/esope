@@ -226,6 +226,9 @@ $fr = array(
 	'accessibility:revert' => "Supprimer",
 	
 	
+	'adf_platform:moreinfoon' => "Plus d'informations sur %s",
+	'adf_platform:expand' => "Développer",
+	'adf_platform:compress' => "Réduire",
 	'adf_platform:homepage' => "Accueil",
 	'announcements' => "Annonces",
 	'event_calendar' => "Agenda",

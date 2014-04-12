@@ -5,7 +5,7 @@
 $subject = $vars['item']->getSubjectEntity();
 $object = $vars['item']->getObjectEntity();
 
-if (elgg_get_context() == 'digest') {
+if (elgg_in_context('digest') || elgg_in_context('cron')) {
 	$subject_icon = '<div class="elgg-avatar elgg-avatar-tiny"><a href="' .  $subject->getURL() . '"><img src="' . $subject->getIconUrl('tiny') .  '" /></a></div>';
 	$object_icon = '<div class="elgg-avatar elgg-avatar-tiny"><a href="' .  $object->getURL() . '"><img src="' . $object->getIconUrl('tiny') .  '" /></a></div>';
 } else {
