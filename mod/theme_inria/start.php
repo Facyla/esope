@@ -4,19 +4,31 @@
 elgg_register_event_handler('init','system','theme_inria_init');
 
 $action_url = dirname(__FILE__) . "/actions/";
-// HTML export action
-elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
-// Inria members user add
-elgg_register_action("inria_useradd", $action_url . "inria_useradd.php", "logged_in");
-// Inria members admin tools
-elgg_register_action("inria_remove_user_email", $action_url . "inria_remove_user_email.php", "logged_in");
-elgg_register_action("inria_archive_user", $action_url . "inria_archive_user.php", "logged_in");
-elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
 
 
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
+	$action_url = dirname(__FILE__) . "/actions/";
+	
+	// HTML export action
+	elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
+	// Inria members user add
+	elgg_register_action("inria_useradd", $action_url . "inria_useradd.php", "logged_in");
+	// Inria members admin tools
+	elgg_register_action("inria_remove_user_email", $action_url . "inria_remove_user_email.php", "logged_in");
+	elgg_register_action("inria_archive_user", $action_url . "inria_archive_user.php", "logged_in");
+	elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
+	
+	// Modified to make pages top_level / sub-pages
+	elgg_register_action("pages/edit", $action_url . "pages/edit.php");
+	
+	// Rewrite friends and friends request to remove river entries
+	elgg_unregister_action('friends/add');
+	elgg_unregister_action('friend_request/approve');
+	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
+	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
+	
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
@@ -64,10 +76,6 @@ function theme_inria_init(){
 	// Add all groups excerpt to digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
-	
-	// Modified to make pages top_level / sub-pages
-	$action_base = dirname(__FILE__);
-	elgg_register_action("pages/edit", $action_base . "/actions/pages/edit.php");
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
