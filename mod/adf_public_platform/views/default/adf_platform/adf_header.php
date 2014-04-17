@@ -138,7 +138,7 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> >Accueil</a>
+								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?></a>
 									<?php if (elgg_is_active_plugin('dashboard')) { ?>
 										<ul class="hidden">
 											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
