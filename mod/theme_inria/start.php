@@ -168,6 +168,9 @@ function theme_inria_public_index() {
 
 function inria_page_handler($page){
 	switch($page[0]){
+		case "userimage":
+			include(dirname(__FILE__) . '/pages/theme_inria/userimage.php');
+			break;
 		case "linkedin":
 			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
 			break;
