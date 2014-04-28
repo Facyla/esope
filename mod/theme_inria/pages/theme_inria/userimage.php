@@ -10,6 +10,7 @@ global $CONFIG;
 
 $size = get_input('size', "small");
 $embed = get_input('embed', false);
+$debug = get_input('debug', false);
 
 if ($size == 'help') {
 	header('Content-Type: text/html; charset=utf-8');
@@ -33,9 +34,12 @@ if (elgg_is_logged_in()) {
 } else {
 	$imgurl = $CONFIG->url . '_graphics/icons/user/default' . $size . '.gif';
 	// CAS autologin, if CAS detected
-	if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
+	//if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
+	if ($debug) echo "Not logged in<br />";
+	if (elgg_is_active_plugin('elgg_cas')) {
 		//elgg_cas_autologin(); // Forwards to home if not logged in
 		// CAS login
+		if ($debug) echo "CAS active<br />";
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
 		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
@@ -44,6 +48,7 @@ if (elgg_is_logged_in()) {
 		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
 		if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
 			global $cas_client_loaded;
+			if ($debug) echo "CAS test<br />";
 			if (!$cas_client_loaded) {
 				phpCAS::setDebug();
 				phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
@@ -55,11 +60,18 @@ if (elgg_is_logged_in()) {
 				}
 			}
 			if (phpCAS::checkAuthentication()) {
+				if ($debug) echo "AUTH OK<br />";
 				$elgg_username = phpCAS::getUser();
-				$user = get_user_by_username($elgg_username);
-				if (elgg_instanceof($user, 'user')) {
-					if (!$user->isBanned()) {
-						$imgurl = $user->getIconURL($size);
+				if ($debug) echo "Username : $elgg_username<br />";
+				$own = get_user_by_username($elgg_username);
+				// Need to log in user so access levels apply
+				login($own);
+				if (elgg_instanceof($own, 'user')) {
+					if ($debug) echo "User OK<br />";
+					if (!$own->isBanned()) {
+						if ($debug) echo "User not banned<br />";
+						$imgurl = $own->getIconURL($size);
+						if ($debug) echo "User img url : $imgurl<br />";
 					}
 				}
 			}
