@@ -31,6 +31,10 @@ if (elgg_is_logged_in()) {
 	//$own = get_user_by_username('test2'); // Pour avoir l'image d'un autre membre
 	$imgurl = $own->getIconURL($size);
 } else {
+	// CAS autologin, if CAS detected
+	if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
+		elgg_cas_autologin();
+	}
 	$imgurl = $CONFIG->url . '_graphics/icons/user/default' . $size . '.gif';
 }
 

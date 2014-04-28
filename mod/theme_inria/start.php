@@ -178,9 +178,10 @@ function inria_page_handler($page){
 			include(dirname(__FILE__) . '/pages/theme_inria/invite_external.php');
 			break;
 		case "animation":
-		default:
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
 			break;
+		default:
+			include(dirname(__FILE__) . '/pages/theme_inria/index.php');
 	}
 	return true;
 }
