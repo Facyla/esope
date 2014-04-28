@@ -34,6 +34,8 @@ if (elgg_is_logged_in()) {
 	// CAS autologin, if CAS detected
 	if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
 		elgg_cas_autologin();
+		$url = full_url();
+		forward($url);
 	}
 	$imgurl = $CONFIG->url . '_graphics/icons/user/default' . $size . '.gif';
 }
