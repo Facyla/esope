@@ -58,6 +58,8 @@ if (elgg_is_logged_in()) {
 			if (phpCAS::checkAuthentication()) {
 				$elgg_username = phpCAS::getUser();
 				$own = get_user_by_username($elgg_username);
+				// Need to log in user so access levels apply
+				login($own);
 			}
 		}
 	}

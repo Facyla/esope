@@ -64,6 +64,8 @@ if (elgg_is_logged_in()) {
 				$elgg_username = phpCAS::getUser();
 				if ($debug) echo "Username : $elgg_username<br />";
 				$own = get_user_by_username($elgg_username);
+				// Need to log in user so access levels apply
+				login($own);
 				if (elgg_instanceof($own, 'user')) {
 					if ($debug) echo "User OK<br />";
 					if (!$own->isBanned()) {
