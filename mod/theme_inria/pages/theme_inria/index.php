@@ -1,15 +1,13 @@
 <?php
 /**
- * Walled garden page shell
- *
- * Used for the walled garden index page
+ * Inria base page
  */
 
 global $CONFIG;
 
 gatekeeper();
 
-register_error("Adresse invalide, veuillez la compléter pour accéder à la page souhiatée.");
+register_error("Adresse invalide, veuillez la compléter pour accéder à la page souhaitée.");
 forward();
 
 $content = '';
