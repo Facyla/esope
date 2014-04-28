@@ -77,44 +77,51 @@ $content = '<div style="">';
 
 // Vérification si tout est ok pour affichage
 if (elgg_instanceof($user, 'user')) {
-	$title = "Fiche de profil de " . $user->name;
-	//$imgurl = $user->getIconURL('medium');
-	//$userimg = '<img src="' . $imgurl . '" />';
+	// Autorisé si l'user l'autorise, ou si on est connecté sur Iris ou via CAS
+	$allowed = esope_user_profile_gatekeeper($user, false);
+	if ($allowed || elgg_instanceof($own, 'user')) {
+		$title = "Fiche de profil de " . $user->name;
+		//$imgurl = $user->getIconURL('medium');
+		//$userimg = '<img src="' . $imgurl . '" />';
 	
-	$profile_type = esope_get_user_profile_type($user);
-	if (empty($profile_type)) $profile_type = 'external';
-	$statut = elgg_echo('profile:types:'.$profile_type);
+		$profile_type = esope_get_user_profile_type($user);
+		if (empty($profile_type)) $profile_type = 'external';
+		$statut = elgg_echo('profile:types:'.$profile_type);
 	
-	$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => true, 'use_link' => false));
-	$userimg = '<span style="float:left; margin: 0 2ex 1ex 0;">' . $userimg . '</span>';
+		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => true, 'use_link' => false));
+		$userimg = '<span style="float:left; margin: 0 2ex 1ex 0;">' . $userimg . '</span>';
 	
-	$content .= '<h1 style="' . $style_h1 . '">' . $user->name . '</h1>';
+		$content .= '<h1 style="' . $style_h1 . '">' . $user->name . '</h1>';
 	
-	$content .= '<div style="padding:1ex;">';
+		$content .= '<div style="padding:1ex;">';
 	
-		$content .= '<h2 style="' . $style_h2 . '">Informations principales</h2>';
-		$content .= '<div style="color:#555; width:60%; float:left;">';
-			$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Equipe-projet/services&nbsp;:</strong> " . $user->epi_ou_service . '</p>';
-			$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Bureau&nbsp;:</strong> " . $user->inria_room . '</p>';
-			$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Adresse mail&nbsp;:</strong> " . $user->email . '</p>';
-			$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Ligne directe&nbsp;:</strong> " . $user->inria_phone . '</p>';
-			$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Autre numéro&nbsp;:</strong> " . $user->phone . '</p>';
+			$content .= '<h2 style="' . $style_h2 . '">Informations principales</h2>';
+			$content .= '<div style="color:#555; width:60%; float:left;">';
+				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Equipe-projet/services&nbsp;:</strong> " . $user->epi_ou_service . '</p>';
+				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Bureau&nbsp;:</strong> " . $user->inria_room . '</p>';
+				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Adresse mail&nbsp;:</strong> " . $user->email . '</p>';
+				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Ligne directe&nbsp;:</strong> " . $user->inria_phone . '</p>';
+				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Autre numéro&nbsp;:</strong> " . $user->phone . '</p>';
+			$content .= '</div>';
+	
+			$content .= '<div style="color:#555; width:30%; float:right;">';
+				$content .= "<p><strong>Centre de recherche&nbsp;:</strong><br />" . $user->inria_location . '</p>';
+			$content .= '</div>';
+			$content .= '<div class="clearfloat"></div><br />';
+	
+			$content .= '<h2 style="' . $style_h2 . '">Profil Iris</h2>';
+			$content .= $userimg;
+			$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
+			$content .= "<p><strong>Statut&nbsp;:</strong> " . $statut . '</p>';
+			$content .= "<p><strong>Fonction / Rôle&nbsp;:</strong> " . $user->briefdescription . '</p>';
+			$content .= '<div class="clearfloat"></div><br />';
+			$content .= "<p><strong>Compétences&nbsp;:</strong> " . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
+	
 		$content .= '</div>';
-	
-		$content .= '<div style="color:#555; width:30%; float:right;">';
-			$content .= "<p><strong>Centre de recherche&nbsp;:</strong><br />" . $user->inria_location . '</p>';
-		$content .= '</div>';
-		$content .= '<div class="clearfloat"></div><br />';
-	
-		$content .= '<h2 style="' . $style_h2 . '">Profil Iris</h2>';
-		$content .= $userimg;
-		$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
-		$content .= "<p><strong>Statut&nbsp;:</strong> " . $statut . '</p>';
-		$content .= "<p><strong>Fonction / Rôle&nbsp;:</strong> " . $user->briefdescription . '</p>';
-		$content .= '<div class="clearfloat"></div><br />';
-		$content .= "<p><strong>Compétences&nbsp;:</strong> " . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
-	
-	$content .= '</div>';
+		
+	} else {
+		$content = elgg_echo('InvalidParameterException:NoEntityFound');
+	}
 	
 } else {
 	$content .= "Profil demandé inexistant, ou indisponible hors connexion.";
