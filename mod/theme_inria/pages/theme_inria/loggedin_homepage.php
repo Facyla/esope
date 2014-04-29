@@ -92,7 +92,7 @@ $body = '
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
 		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/online') . '</div>
+		<div class="home-box">' . elgg_view('theme_inria/users/online', array('limit' => 30)) . '</div>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
 	</div>

@@ -18,7 +18,7 @@ $content = '';
 
 // Couleurs
 $style_h1 = 'font-family: NeoFont, Arial; color:#666; text-transform:capitalize; font-size:26px; font-weight:300; border-bottom:1px solid #DEDEDE; width:100%; margin: 0 0 0.5ex; padding: 1ex 1ex 0.5ex 1ex;';
-$style_h2 = 'color:#ff0000; text-transform:uppercase; font-size:14px; border-bottom:1px solid #DEDEDE; width:100%; padding: 0.5ex 0ex 0.1ex 0ex; margin: 1ex 0;';
+$style_h2 = 'color:#E33729; text-transform:uppercase; font-size:14px; border-bottom:1px solid #DEDEDE; width:100%; padding: 0.5ex 0ex 0.1ex 0ex; margin: 1ex 0;';
 $style_h3 = 'font-size:24px;';
 
 
@@ -82,6 +82,7 @@ if (elgg_instanceof($user, 'user')) {
 	// Autorisé si l'user l'autorise, ou si on est connecté sur Iris ou via CAS
 	$allowed = esope_user_profile_gatekeeper($user, false);
 	if ($allowed || elgg_instanceof($own, 'user')) {
+		
 		$title = "Fiche de profil de " . $user->name;
 		//$imgurl = $user->getIconURL('medium');
 		//$userimg = '<img src="' . $imgurl . '" />';
@@ -92,7 +93,9 @@ if (elgg_instanceof($user, 'user')) {
 	
 		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => true, 'use_link' => false));
 		$userimg = '<span style="float:left; margin: 0 2ex 1ex 0;">' . $userimg . '</span>';
-	
+		
+		/* Non utilisé car géré direct par l'intranet
+		
 		$content .= '<h1 style="' . $style_h1 . '">' . $user->name . '</h1>';
 	
 		$content .= '<div style="padding:1ex;">';
@@ -117,6 +120,8 @@ if (elgg_instanceof($user, 'user')) {
 			$content .= '<div class="clearfloat"></div><br />';
 	
 			$content .= '<h2 style="' . $style_h2 . '">' . elgg_echo('theme_inria:profile:irisprofile') . '</h2>';
+			*/
+			
 			$content .= $userimg;
 			$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
 			$content .= '<p><strong>' . elgg_echo('theme_inria:userprofile:status') . '&nbsp;:</strong> ' . $statut . '</p>';
@@ -126,7 +131,7 @@ if (elgg_instanceof($user, 'user')) {
 			if (!empty($user->skills)) 
 			$content .= '<p><strong>' . elgg_echo('skills') . '&nbsp;:</strong> ' . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
 	
-		$content .= '</div>';
+		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
 		
 	} else {
 		$content = elgg_echo('InvalidParameterException:NoEntityFound');
