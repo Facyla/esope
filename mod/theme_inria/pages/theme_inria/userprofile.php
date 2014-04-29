@@ -106,9 +106,9 @@ if (elgg_instanceof($user, 'user')) {
 				if (!empty($user->email)) 
 				$content .= '<li><strong>' . elgg_echo('email') . '&nbsp;:</strong> <a href="mailto:' . $user->email . '" target="_blank">' . $user->email . '</a></li>';
 				if (!empty($user->inria_phone)) 
-				$content .= '<li><strong>' . elgg_echo('profile:inria_phone') . '&nbsp;:</strong> ' . $user->inria_phone . '</p>';
+				$content .= '<li><strong>' . elgg_echo('profile:phone') . '&nbsp;:</strong> ' . $user->phone . '</p>';
 				if (!empty($user->phone)) 
-				$content .= '<li><strong>' . elgg_echo('profile:phone') . '&nbsp;:</strong> ' . $user->phone . '</li>';
+				$content .= '<li><strong>' . elgg_echo('profile:mobile') . '&nbsp;:</strong> ' . $user->mobile . '</li>';
 			$content .= '</ul></div>';
 	
 			$content .= '<div style="color:#555; width:30%; float:right;">';
