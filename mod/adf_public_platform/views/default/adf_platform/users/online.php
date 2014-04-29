@@ -1,9 +1,8 @@
 <?php
-// Timeframe : 30 minutes (30*60)
-// Max : 50
 $max = elgg_extract('limit', $vars, 60);
 $duration = elgg_extract('duration', $vars, 1800);
-$online_members = find_active_users($duration, $max, 0); ?>
+$online_members = find_active_users($duration, $max, 0);
+?>
 
 <div class="sidebarBox">
 	<?php
