@@ -104,7 +104,7 @@ if (elgg_instanceof($user, 'user')) {
 				if (!empty($user->inria_room)) 
 				$content .= '<li><strong>' . elgg_echo('profile:inria_room') . '&nbsp;:</strong> ' . $user->inria_room . '</li>';
 				if (!empty($user->email)) 
-				$content .= '<li><strong>' . elgg_echo('email') . '&nbsp;:</strong> ' . $user->email . '</li>';
+				$content .= '<li><strong>' . elgg_echo('email') . '&nbsp;:</strong> <a href="mailto:' . $user->email . '" target="_blank">' . $user->email . '</a></li>';
 				if (!empty($user->inria_phone)) 
 				$content .= '<li><strong>' . elgg_echo('profile:inria_phone') . '&nbsp;:</strong> ' . $user->inria_phone . '</p>';
 				if (!empty($user->phone)) 
