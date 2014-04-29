@@ -159,6 +159,12 @@ $french = array(
 	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
 	// Champs de profil
+	'theme_inria:profile:maininfo' => "Informations principales",
+	'theme_inria:profile:irisprofile' => "Profil Iris",
+	'theme_inria:noprofilefound' => "Profil demandé inexistant, ou indisponible hors connexion.",
+	'theme_inria:userprofile:irisopen' => "Accéder à Iris",
+	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
+	'theme_inria:userprofile:status' => "Statut",
 	'inria_location' => "Entité Inria (CRI ou siège)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'interests' => "Mots clés",

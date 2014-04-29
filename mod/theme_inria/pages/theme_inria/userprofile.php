@@ -97,27 +97,34 @@ if (elgg_instanceof($user, 'user')) {
 	
 		$content .= '<div style="padding:1ex;">';
 	
-			$content .= '<h2 style="' . $style_h2 . '">Informations principales</h2>';
-			$content .= '<div style="color:#555; width:60%; float:left;">';
-				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Equipe-projet/services&nbsp;:</strong> " . $user->epi_ou_service . '</p>';
-				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Bureau&nbsp;:</strong> " . $user->inria_room . '</p>';
-				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Adresse mail&nbsp;:</strong> " . $user->email . '</p>';
-				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Ligne directe&nbsp;:</strong> " . $user->inria_phone . '</p>';
-				$content .= "<p><strong> &nbsp; &nbsp;&gt;&nbsp; Autre numéro&nbsp;:</strong> " . $user->phone . '</p>';
-			$content .= '</div>';
+			$content .= '<h2 style="' . $style_h2 . '">' . elgg_echo('theme_inria:profile:maininfo') . '</h2>';
+			$content .= '<div class="elgg-output" style="color:#555; width:60%; float:left;"><ul>';
+				if (!empty($user->epi_ou_service)) 
+				$content .= '<li><strong>' . elgg_echo('profile:epi_ou_service') . '&nbsp;:</strong> ' . $user->epi_ou_service . '</li>';
+				if (!empty($user->inria_room)) 
+				$content .= '<li><strong>' . elgg_echo('profile:inria_room') . '&nbsp;:</strong> ' . $user->inria_room . '</li>';
+				if (!empty($user->email)) 
+				$content .= '<li><strong>' . elgg_echo('email') . '&nbsp;:</strong> ' . $user->email . '</li>';
+				if (!empty($user->inria_phone)) 
+				$content .= '<li><strong>' . elgg_echo('profile:inria_phone') . '&nbsp;:</strong> ' . $user->inria_phone . '</p>';
+				if (!empty($user->phone)) 
+				$content .= '<li><strong>' . elgg_echo('profile:phone') . '&nbsp;:</strong> ' . $user->phone . '</li>';
+			$content .= '</ul></div>';
 	
 			$content .= '<div style="color:#555; width:30%; float:right;">';
-				$content .= "<p><strong>Centre de recherche&nbsp;:</strong><br />" . $user->inria_location . '</p>';
+				$content .= '<p><strong>' . elgg_echo('profile:inria_location') . '&nbsp;:</strong><br />' . $user->inria_location . '</p>';
 			$content .= '</div>';
 			$content .= '<div class="clearfloat"></div><br />';
 	
-			$content .= '<h2 style="' . $style_h2 . '">Profil Iris</h2>';
+			$content .= '<h2 style="' . $style_h2 . '">' . elgg_echo('theme_inria:profile:irisprofile') . '</h2>';
 			$content .= $userimg;
 			$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
-			$content .= "<p><strong>Statut&nbsp;:</strong> " . $statut . '</p>';
-			$content .= "<p><strong>Fonction / Rôle&nbsp;:</strong> " . $user->briefdescription . '</p>';
+			$content .= '<p><strong>' . elgg_echo('theme_inria:userprofile:status') . '&nbsp;:</strong> ' . $statut . '</p>';
+			if (!empty($user->briefdescription)) 
+			$content .= '<p><strong>' . elgg_echo('profile:briefdescription') . '&nbsp;:</strong> ' . $user->briefdescription . '</p>';
 			$content .= '<div class="clearfloat"></div><br />';
-			$content .= "<p><strong>Compétences&nbsp;:</strong> " . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
+			if (!empty($user->skills)) 
+			$content .= '<p><strong>' . elgg_echo('skills') . '&nbsp;:</strong> ' . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
 	
 		$content .= '</div>';
 		
@@ -126,14 +133,14 @@ if (elgg_instanceof($user, 'user')) {
 	}
 	
 } else {
-	$content .= "Profil demandé inexistant, ou indisponible hors connexion.";
+	$content .= elgg_echo('theme_inria:noprofilefound');
 }
 $content .= '<div class="clearfloat"></div><br />';
 
 if (elgg_is_logged_in()) {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . '">Accéder à Iris</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
 } else {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'login">Se connecter à Iris</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
 }
 
 $content .= '<div class="clearfloat"></div><br />';

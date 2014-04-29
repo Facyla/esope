@@ -159,6 +159,12 @@ $english = array(
 	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
 	// Profile fields
+	'theme_inria:profile:maininfo' => "Main information",
+	'theme_inria:profile:irisprofile' => "Iris profile",
+	'theme_inria:noprofilefound' => "Profile not available (profile does not exist or has limited access).",
+	'theme_inria:userprofile:irisopen' => "Open Iris",
+	'theme_inria:userprofile:irislogin' => "Log in to Iris",
+	'theme_inria:userprofile:status' => "Status",
 	'inria_location' => "Inria entity (CRI or headquarters)",
 	'epi_ou_service' => "Inria project team or service",
 	'interests' => "Tags",
