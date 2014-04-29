@@ -25,6 +25,9 @@ $french = array(
 	'theme_inria:topbar:new_group' => "Créer&nbsp;un&nbsp;groupe",
 	'theme_inria:topbar:invite' => 'Inviter',
 	'theme_inria:menu:firststeps' => 'Premiers pas',
+	'theme_inria:home:information' => "Informations",
+	'theme_inria:home:widgets' => "Widgets",
+	'theme_inria:home:edito' => "Edito",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
