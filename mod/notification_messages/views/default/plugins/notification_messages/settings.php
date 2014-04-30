@@ -1,6 +1,8 @@
 <?php
 global $CONFIG;
 
+$yesno_options = array("yes" => elgg_echo("option:yes"), "no" => elgg_echo("option:no"));
+
 $notify_subject_opt = array(
 	'default' => elgg_echo('notification_messages:subject:default'), 
 	'allow' => elgg_echo('notification_messages:subject:allow'), 
@@ -43,4 +45,12 @@ $options = array(
 		'options_values' => $notify_subject_opt,
 	);
 echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/dropdown', $options) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
+
+
+echo "<div>";
+echo elgg_echo("notification_messages:settings:object_notifications_hook");
+echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[object_notifications_hook]", "options_values" => $noyes_options, "value" => $plugin->object_notifications_hook));
+echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:object_notifications_hook:subtext") . "</div>";
+echo "</div>";
+
 

@@ -31,7 +31,12 @@ $french = array(
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(sans titre)",
-
+	
+	
+	// Object:notifications hook control
+	'notification_messages:settings:object_notifications_hook' => "Activer le hook sur object:notifications",
+	'notification_messages:settings:object_notifications_hook:subtext' => "Ce hook permet à d'autres plugins d'ajouter facilement des pièces jointes aux emails envoyés, de la même manière qu'ils peuvent modifier le contenu des messages. Attention car il peut causer des problèmes de compatibilité dans certains cas, en bloquant l'utilisation du hook par d'autres plugins -notamment advanced_notifications- car il prend en charge le processus d'envoi et répond donc \"true\" au hook.<br />Si vous ne savez pas quoi faire, laissez le réglage par défaut.",
+	
 );
 
 add_translation("fr", $french);
