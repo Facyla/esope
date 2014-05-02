@@ -27,12 +27,12 @@ $body .= elgg_echo('comment_tracker:setting:autosubscribe') . '&nbsp;';
 
 $value = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $user->guid, 'comment_tracker');
 $body .= elgg_view('input/dropdown', array(
-    'name' => 'comment_tracker_autosubscribe',
-    'value' => $value ? $value : 'yes',
-    'options_values' => array(
-        'yes' => elgg_echo('option:yes'),
-        'no' => elgg_echo('option:no')
-    )
+	'name' => 'comment_tracker_autosubscribe',
+	'value' => $value ? $value : 'yes',
+	'options_values' => array(
+		'yes' => elgg_echo('option:yes'),
+		'no' => elgg_echo('option:no')
+	)
 ));
 
 echo elgg_view_module('info', elgg_echo('comment:notification:settings'), $body);
@@ -42,10 +42,8 @@ echo elgg_view_module('info', elgg_echo('comment:notification:settings'), $body)
 					<td>&nbsp;</td>
 				<?php
 				$i = 0; 
-				foreach($NOTIFICATION_HANDLERS as $method => $foo)
-				{
-					if ($i > 0)
-					{
+				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+					if ($i > 0) {
 						echo "<td class=\"spacercolumn\">&nbsp;</td>";
 					}
 				?>
@@ -59,14 +57,10 @@ echo elgg_view_module('info', elgg_echo('comment:notification:settings'), $body)
 			<?php	
 			$fields = '';
 			$i = 0;
-			foreach($NOTIFICATION_HANDLERS as $method => $foo)
-			{
-				if (!check_entity_relationship($user->guid, 'block_comment_notify' . $method, $CONFIG->site_guid))
-				{
+			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+				if (!check_entity_relationship($user->guid, 'block_comment_notify' . $method, $CONFIG->site_guid)) {
 					$checked[$method] = 'checked="checked"';
-				} 
-				else
-				{
+				} else {
 					$checked[$method] = '';
 				}
 				
@@ -92,3 +86,4 @@ END;
 				<td>&nbsp;</td>
 			</tr>
 		</table>
+		

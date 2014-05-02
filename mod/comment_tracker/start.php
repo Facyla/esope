@@ -19,11 +19,11 @@ require_once 'lib/functions.php';
 
 // Initialise comment tracker plugin
 function comment_tracker_init() {
-    
-    if (elgg_is_logged_in()) {
-        elgg_extend_view('page/elements/comments', "comment_tracker/manage_subscription", 400);
-        elgg_extend_view('discussion/replies', "comment_tracker/manage_subscription", 400);
-    }
+	
+	if (elgg_is_logged_in()) {
+		elgg_extend_view('page/elements/comments', "comment_tracker/manage_subscription", 400);
+		elgg_extend_view('discussion/replies', "comment_tracker/manage_subscription", 400);
+	}
 	
 
 	// Extend views
@@ -99,3 +99,4 @@ function comment_tracker_page_handler($page) {
 
 // Register event handlers
 elgg_register_event_handler('init','system','comment_tracker_init');
+

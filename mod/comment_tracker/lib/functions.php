@@ -27,7 +27,7 @@ function comment_tracker_is_subscribed($user, $entity) {
  * @param type $entity
  */
 function comment_tracker_is_unsubscribed($user, $entity) {
-    if (!elgg_instanceof($user, 'user')) {
+	if (!elgg_instanceof($user, 'user')) {
 		return false;
 	}
 	
@@ -57,43 +57,42 @@ function comment_tracker_notify($annotation, $ann_user, $params = array()) {
 	$entity = get_entity($annotation->entity_guid);
 	
 	if ($entity instanceof ElggObject) {
-        
+		
 		$container = get_entity($entity->container_guid);
 		if ($entity->getSubtype() == 'groupforumtopic') {
-            $subject = elgg_echo('comment:notify:subject:groupforumtopic', array(
-                $ann_user->name,
-                $entity->title,
-                $container->name
-            ));
-        }
-        else {
-            $content_type = elgg_echo($entity->getSubtype());
-            if ($content_type == $entity->getSubtype()) {
-                // wasn't translated that way, try item:object:subtype
-                $content_type = elgg_echo('item:object:'.$entity->getSubtype());
-                
-                if ($content_type == 'item:object:'.$entity->getSubtype()) {
-                    $content_type = elgg_echo('comment_tracker:item');
-                }
-            }
-            
-            // construct subject for an entity
-            if (elgg_instanceof($container, 'group')) {
-                $subject = elgg_echo('comment:notify:subject:comment:group', array(
-                    $ann_user->name,
-                    $content_type,
-                    $entity->title ? $entity->title : $entity->name,
-                    $container->name                    
-                ));
-            }
-            else {
-                $subject = elgg_echo('comment:notify:subject:comment', array(
-                    $ann_user->name,
-                    $content_type,
-                    $entity->title ? $entity->title : $entity->name
-                ));
-            }
-        }
+			$subject = elgg_echo('comment:notify:subject:groupforumtopic', array(
+				$ann_user->name,
+				$entity->title,
+				$container->name
+			));
+		} else {
+			$content_type = elgg_echo($entity->getSubtype());
+			if ($content_type == $entity->getSubtype()) {
+				// wasn't translated that way, try item:object:subtype
+				$content_type = elgg_echo('item:object:'.$entity->getSubtype());
+				
+				if ($content_type == 'item:object:'.$entity->getSubtype()) {
+					$content_type = elgg_echo('comment_tracker:item');
+				}
+			}
+			
+			// construct subject for an entity
+			if (elgg_instanceof($container, 'group')) {
+				$subject = elgg_echo('comment:notify:subject:comment:group', array(
+					$ann_user->name,
+					$content_type,
+					$entity->title ? $entity->title : $entity->name,
+					$container->name
+				));
+			}
+			else {
+				$subject = elgg_echo('comment:notify:subject:comment', array(
+					$ann_user->name,
+					$content_type,
+					$entity->title ? $entity->title : $entity->name
+				));
+			}
+		}
 		
 		$entity_link = elgg_view('output/url', array(
 			'url' => $entity->getUrl(),
@@ -212,12 +211,12 @@ function comment_tracker_subscribe($user_guid, $entity_guid) {
 		}
 		
 		if (!check_entity_relationship($user_guid, COMMENT_TRACKER_RELATIONSHIP, $entity_guid)) {
-            // undo a subscription block
-            remove_entity_relationship($user_guid, COMMENT_TRACKER_UNSUBSCRIBE_RELATIONSHIP, $entity_guid);
+			// undo a subscription block
+			remove_entity_relationship($user_guid, COMMENT_TRACKER_UNSUBSCRIBE_RELATIONSHIP, $entity_guid);
 			return add_entity_relationship($user_guid, COMMENT_TRACKER_RELATIONSHIP, $entity_guid);
 		}
 	}
-	return false;
+	return true;
 }
 
 /**
@@ -234,8 +233,8 @@ function comment_tracker_unsubscribe($user_guid, $entity_guid) {
 		}
 		
 		if (check_entity_relationship($user_guid, COMMENT_TRACKER_RELATIONSHIP, $entity_guid)) {
-            // add a subscription block
-            add_entity_relationship($user_guid, COMMENT_TRACKER_UNSUBSCRIBE_RELATIONSHIP, $entity_guid);
+			// add a subscription block
+			add_entity_relationship($user_guid, COMMENT_TRACKER_UNSUBSCRIBE_RELATIONSHIP, $entity_guid);
 			return remove_entity_relationship($user_guid, COMMENT_TRACKER_RELATIONSHIP, $entity_guid);
 		}
 	}
@@ -244,27 +243,28 @@ function comment_tracker_unsubscribe($user_guid, $entity_guid) {
 
 
 function comment_tracker_get_entity_subtypes() {
-    	// only allow subscriptions on objects that have comments
-		// pre-populate with some common plugin objects
-		// allow other plugins to add/remove subtypes
-		static $subscription_subtypes;
+	// only allow subscriptions on objects that have comments
+	// pre-populate with some common plugin objects
+	// allow other plugins to add/remove subtypes
+	static $subscription_subtypes;
+	
+	if (!$subscription_subtypes) {
+		$base_types = array(
+			'blog',
+			'bookmarks',
+			'event_calendar', // event calendar
+			'file',
+			'groupforumtopic',
+			'image',	// tidypics
+			'page',
+			'page_top',
+			'poll'	// poll
+		);
 		
-		if (!$subscription_subtypes) {
-		  $base_types = array(
-			  'blog',
-			  'bookmarks',
-			  'event_calendar', // event calendar
-			  'file',
-			  'groupforumtopic',
-			  'image',	// tidypics
-			  'page',
-			  'page_top',
-			  'poll'  // poll
-		  );
-		  
-		  // other plugins can add allowed object subtypes in this hook
-		  $subscription_subtypes = elgg_trigger_plugin_hook('subscription_types', 'comment_tracker', array(), $base_types);
-        }
-
-        return $subscription_subtypes;
+		// other plugins can add allowed object subtypes in this hook
+		$subscription_subtypes = elgg_trigger_plugin_hook('subscription_types', 'comment_tracker', array(), $base_types);
+	}
+	
+	return $subscription_subtypes;
 }
+
