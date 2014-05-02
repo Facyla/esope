@@ -89,7 +89,8 @@ if ($full && !elgg_in_context('gallery')) {
 } elseif (elgg_in_context('gallery')) {
 	echo '<div class="file-gallery-item">';
 	echo "<h3>" . $file->title . "</h3>";
-	// Pas de dowload direct dans la galerie sinon on pert tout accès à la page du fichier
+	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
+	// Note : de plus cette fonction est apportée par file_tools...
 	$file_icon = elgg_view_entity_icon($file, 'medium');
 	//$file_icon = '<a href="' . $vars['url'] . 'file/download/' . $file->guid . '" title="' . elgg_echo('file:download') . '" target="_blank"><img src="' . $file->getIconURL('medium') . '" /></a>';
 	echo $file_icon;
