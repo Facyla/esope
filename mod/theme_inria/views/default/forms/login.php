@@ -14,7 +14,8 @@ global $CONFIG;
 
 // Hide form only on homepage
 $default_hide = '';
-if ($CONFIG->url == full_url()) $default_hide = 'display:none;';
+//if ($CONFIG->url == full_url()) $default_hide = 'display:none;';
+$default_hide = 'display:none;'; // Toujours masqué par défaut
 
 echo '<p>' . elgg_echo('elgg_cas:login:details') . '</p>';
 ?>
