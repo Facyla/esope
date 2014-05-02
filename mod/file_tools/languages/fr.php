@@ -84,7 +84,7 @@ $fr = array(
 	'file_tools:upload:tabs:multi' => "Plusieurs fichiers",
 	'file_tools:upload:tabs:zip' => "Fichier ZIP",
 	'file_tools:upload:form:choose' => 'Choisir le fichier',
-	'file_tools:upload:form:info' => 'Cliquer sur Sélectionner les fichiers pour sélectionner et enovyer plusieurs fichiers',
+	'file_tools:upload:form:info' => 'Cliquer sur Sélectionner les fichiers pour sélectionner et envoyer plusieurs fichiers',
 	'file_tools:upload:form:zip:info' => "Vous pouvez charger un fichier ZIP. Il sera extrait et chaque fichier sera importé séparemment. S'il y a des dossiers dans le ZIP, chaque fichier sera importé dans son propre dossier. Les types de fichier non autorisés ne seront pas importés.",
 	
 	// actions
