@@ -1066,13 +1066,13 @@ function esope_get_top_pages($container) {
 }
 
 // Récupération des sous-pages directes d'une page
-function esope_get_subpages($guid) {
+function esope_get_subpages($parent) {
 	global $CONFIG;
 	$debug_ts = microtime(TRUE);
-	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
-	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	foreach ($all_subpages as $ent) {
-		if ($ent->parent_guid == $guid) {
+		if ($ent->parent_guid == $parent->guid) {
 			$subpages[] = $ent;
 		}
 	}
@@ -1086,7 +1086,7 @@ function esope_get_subpages($guid) {
 // @TODO : list all pages and organize/sort, then rendering
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
-	$subpages = esope_get_subpages($parent->guid);
+	$subpages = esope_get_subpages($parent);
 	if ($subpages) foreach ($subpages as $subpage) {
 		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
 		else if ($internal_link == 'url') $href = $subpage->getURL();
