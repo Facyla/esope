@@ -11,6 +11,65 @@ if ($debug) global $debug_ts;
 if ($debug) $debug_ts = microtime(TRUE);
 
 // @TODO : this is much too long - requires reviewing
+/* Builds a tree from parent_guid relations */
+function esope_parent_to_tree($array, $top_parent) {
+	$flat = array();
+	$tree = array();
+	$root_guid = $top_parent->guid;
+	//$flat[$root_guid] = array();
+	//$tree[$root_guid] = array();
+	foreach ($array as $ent) {
+		$child = $ent->guid;
+		$parent = $ent->parent_guid;
+		if (!isset($flat[$child])) {
+			$flat[$child] = array();
+			$flat[$child]['ent'] = $ent;
+		}
+		// Root can be : no parent, or same as defined parent guid
+		if (empty($parent) || ($parent == $root_guid)) {
+			$tree[$child] =& $flat[$child];
+		} else {
+			$flat[$parent][$child] =& $flat[$child];
+			$flat[$parent][$child]['ent'] =& $ent;
+		}
+	}
+	return $tree;
+}
+
+function esope_display_pages_tree($parent, $internal_link = false, $full_view = false) {
+	$content = '';
+	foreach ($parent as $guid => $children) {
+		if ($guid == 'ent') continue;
+		if ($internal_link == 'internal') $href = '#page_' . $guid;
+		else if ($internal_link == 'url') $href = $children['ent']->getURL();
+		else $href = false;
+		if ($full_view) {
+			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $children['ent']->title, 'name' => 'page_' . $guid)) . '</h3>';
+			echo elgg_view("output/longtext", array("value" => $children['ent']->description));
+			echo '<p style="page-break-after:always;"></p>';
+			echo esope_display_pages_tree($children, $internal_link, $full_view);
+		} else {
+			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $children['ent']->title));
+			$content .= esope_display_pages_tree($children, $internal_link);
+			$content .= '</li>';
+		}
+	}
+	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
+	return $content;
+}
+
+if ($debug) {
+	$parent = get_entity($guid);
+	
+	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$tree = esope_parent_to_tree($all_subpages, $parent);
+	/*
+	echo '<pre>' . esope_display_pages_tree($tree, 'internal', false) . '</pre>';
+	echo '<pre>' . esope_display_pages_tree($tree, false, true) . '</pre>';
+	exit;
+	*/
+}
+
 
 if ($debug) error_log("Test export HTML");
 
@@ -54,6 +113,8 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 		
 		<?php
 		// Sommaire
+		if ($debug) echo '<div class="elgg-output"><ul>' . esope_display_pages_tree($tree, 'internal', false) . '</ul></div><hr />';
+		else {
 		echo '<div class="elgg-output"><ul>';
 		if ($toppages) foreach ($toppages as $parent) {
 			if ($debug) error_log("Test export HTML : T1 {$parent->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
@@ -63,14 +124,18 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 			echo "\n";
 		}
 		echo '</ul></div><hr />';
+		}
 		
 		// Contenu
+		if ($debug) echo esope_display_pages_tree($tree, 'url', true);
+		else {
 		if ($toppages) foreach ($toppages as $parent) {
 			if ($debug) error_log("Test export HTML : T2 = " . round((microtime(TRUE)-$debug_ts), 4));
 			echo '<h3>' . elgg_view("output/url", array("text" => $parent->title, "href" => false, "name" => "page_" . $parent->guid)) . '</h3>' . elgg_view("output/longtext", array("value" => $parent->description));
 			echo esope_list_subpages($parent, false, true);
 			echo '<p style="page-break-after:always;"></p>';
 			echo "\n";
+		}
 		}
 		?>
 		
