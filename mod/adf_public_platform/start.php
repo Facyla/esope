@@ -1068,15 +1068,14 @@ function esope_get_top_pages($container) {
 // Récupération des sous-pages directes d'une page
 function esope_get_subpages($parent) {
 	global $CONFIG;
-	$debug_ts = microtime(TRUE);
 	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	// Metadata search is way too long, filtering is much quicker alternative
 	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	foreach ($all_subpages as $ent) {
 		if ($ent->parent_guid == $parent->guid) {
 			$subpages[] = $ent;
 		}
 	}
-	error_log("Test subpages de $guid " . round((microtime(TRUE)-$debug_ts), 4));
 	return $subpages;
 }
 
