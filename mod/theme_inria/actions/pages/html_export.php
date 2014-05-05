@@ -7,6 +7,7 @@ $export_allpages = get_input("allpages", 'no');
 if ($export_allpages != 'yes') $export_allpages = false;
 
 $debug = true;
+if ($debug) global $debug_ts;
 if ($debug) $debug_ts = microtime(TRUE);
 
 // @TODO : this is much too long - requires reviewing

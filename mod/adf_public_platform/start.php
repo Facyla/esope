@@ -1077,12 +1077,13 @@ function esope_get_subpages($parent) {
 // So when using full_view, we'll echo directly instead of returning content
 // @TODO : list all pages and organize/sort, then rendering
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
+global $debug_ts;
 	$content = '';
 	$subpages = esope_get_subpages($parent);
 	if ($subpages) foreach ($subpages as $subpage) {
+		$href = false;
 		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
 		else if ($internal_link == 'url') $href = $subpage->getURL();
-		else $href = false;
 		if ($full_view) {
 			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
 			echo elgg_view("output/longtext", array("value" => $subpage->description));
@@ -1093,6 +1094,7 @@ function esope_list_subpages($parent, $internal_link = false, $full_view = false
 			$content .= esope_list_subpages($subpage, $internal_link);
 			$content .= '</li>';
 		}
+error_log(" : subpage {$subpage->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
 	}
 	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
 	return $content;
