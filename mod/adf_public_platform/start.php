@@ -1066,9 +1066,9 @@ function esope_get_top_pages($container) {
 }
 
 // Récupération des sous-pages directes d'une page
-function esope_get_subpages($parent) {
+function esope_get_subpages($guid) {
 	global $CONFIG;
-	$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	return $subpages;
 }
 
@@ -1079,22 +1079,23 @@ function esope_get_subpages($parent) {
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 global $debug_ts;
 	$content = '';
-	$subpages = esope_get_subpages($parent);
+	$subpages = esope_get_subpages($parent->guid);
 	if ($subpages) foreach ($subpages as $subpage) {
+error_log(" : start subpage {$subpage->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
 		$href = false;
 		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
 		else if ($internal_link == 'url') $href = $subpage->getURL();
 		if ($full_view) {
-			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
-			echo elgg_view("output/longtext", array("value" => $subpage->description));
-			echo '<p style="page-break-after:always;"></p>';
-			echo esope_list_subpages($subpage, $internal_link, $full_view);
+			$content .= '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+			$content .= elgg_view("output/longtext", array("value" => $subpage->description));
+			$content .= '<p style="page-break-after:always;"></p>';
+			$content .= esope_list_subpages($subpage, $internal_link, $full_view);
 		} else {
 			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
 			$content .= esope_list_subpages($subpage, $internal_link);
 			$content .= '</li>';
 		}
-error_log(" : subpage {$subpage->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
+error_log(" : end subpage {$subpage->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
 	}
 	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
 	return $content;
