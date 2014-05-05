@@ -1278,3 +1278,13 @@ function esope_user_profile_gatekeeper($user = false, $forward = true) {
 }
 
 
+// Credits goes to rommel http://www.php.net/manual/fr/function.filesize.php
+function esope_human_filesize($filepath, $decimals = 2) {
+	$bytes = filesize($filepath);
+	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
+	$sz = 'BKMGTP';
+	$factor = floor((strlen($bytes) - 1) / 3);
+	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor];
+}
+
+

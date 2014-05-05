@@ -499,6 +499,9 @@ $fr = array(
 	'esope:viewprofileas:acontact' => "L'un de vos contacts",
 	'esope:viewprofileas:nonuser' => "Un non-membre (public)",
 	
+	'esope:filesize:units' => "OKMGTP",
+	'esope:embed:file:download' => "télécharger",
+	
 );
 
 add_translation('fr', $fr);

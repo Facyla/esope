@@ -500,6 +500,9 @@ $en = array(
 	'esope:viewprofileas:acontact' => "One of your contacts",
 	'esope:viewprofileas:nonuser' => "Non-user (public)",
 	
+	'esope:filesize:units' => "BKMGTP",
+	'esope:embed:file:download' => "download",
+	
 );
 
 add_translation('en', $en);

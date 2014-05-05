@@ -131,7 +131,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 
 
 /* Main menu */
-#transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; height: 37px; }
+#transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
 #transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
 #transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
 #transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
@@ -203,6 +203,7 @@ footer.footer-inria {
 
 
 /* Page d'accueil */
+.elgg-context-dashboard > .elgg-main { padding: 0; }
 .home-news { /* background:#efefef; */ padding:0.5em 1em; margin-bottom:1em; }
 .elgg-context-dashboard .elgg-form-thewire-add { width: 100%; }
 .elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; }

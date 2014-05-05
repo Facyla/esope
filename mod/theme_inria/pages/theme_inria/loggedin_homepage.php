@@ -69,33 +69,36 @@ $widget_body = elgg_view_layout('widgets', $params);
 //$body = $firststeps . '
 $body = '
 	<div style="width:76%; float:left;">
-		<div style="width:100%; " class="iris-news">'
-			//. '<h2 class="hidden">Edito</h2>' . $intro . '<div class="clearfloat"></div>'
-			. $slider
-		. '</div>
-		<div class="clearfloat"></div><br /><br />
+		<div style="padding: 0 26px 26px 13px;">
 		
-		<div style="width:40%; float:left;">
-			<div class="home-box home-activity">' . $site_activity . '</div>
-		</div>
-		<div style="width:57%; float:right;">
-			<div class="home-box home-wire">' . $thewire . '</div>
-		</div>
+			<div style="width:100%;" class="iris-news">'
+				//. '<h2 class="hidden">' . elgg_echo('theme_inria:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
+				. $slider
+			. '</div>
+			<div class="clearfloat"></div><br /><br />
+		
+			<div style="width:40%; float:left;">
+				<div class="home-box home-activity">' . $site_activity . '</div>
+			</div>
+			<div style="width:57%; float:right;">
+				<div class="home-box home-wire">' . $thewire . '</div>
+			</div>
 	
+		</div>
 	</div>
 	
-	<div style="width:18%; float:right;">
-		<h2 class="hidden">Informations</h2>
+	<div style="width:22%; float:right;">
+		<h2 class="hidden">' . elgg_echo('theme_inria:home:information') . '</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
 		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/online') . '</div>
+		<div class="home-box">' . elgg_view('theme_inria/users/online', array('limit' => 30)) . '</div>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
 	</div>
 	
 	<div class="clearfloat"></div>
-	<h2 class="hidden">Widgets</h2>
+	<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>
 	' . $widget_body;
 
 // Note : si on utilise la sidebar, il faut impérativement y placer un bloc de widgets
@@ -113,6 +116,7 @@ elgg_pop_breadcrumb();
 // Supprime le lien vers l'accueil
 elgg_pop_breadcrumb();
 
+// Note : sidebar is not used, as the whole layout is defined on content $body
 $params = array( 'content' => $body, 'sidebar' => $sidebar, 'filter' => false);
 $body = elgg_view_layout('one_column', $params);
 

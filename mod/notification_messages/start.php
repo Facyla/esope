@@ -27,7 +27,7 @@ function notification_messages_init() {
 			elgg_unregister_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "advanced_notifications_discussion_reply_subject_hook");
 		}
 		// Handle forum topic replyu subject
-		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notifications_messages_reply_subject_hook");
+		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notification_messages_reply_subject_hook");
 	}
 	
 	
@@ -37,7 +37,15 @@ function notification_messages_init() {
 		elgg_unregister_plugin_hook_handler("action", "comments/add", "advanced_notifications_comment_action_hook");
 	}
 	// Handle generic comments notifications actions and notification
-	elgg_register_plugin_hook_handler("action", "comments/add", "notifications_messages_comment_action_hook");
+	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook");
+	
+	// register a hook to add a new hook that allows adding attachments and other params
+	// Note : enabled by default because it was previously embedded in html_email_handler, 
+	// but is required by notifications messages
+	if (elgg_get_plugin_setting("object_notifications_hook", "notification_messages") != "no"){
+		elgg_register_plugin_hook_handler('object:notifications', 'all', 'notification_messages_object_notifications_hook');
+	}
+	
 	
 }
 
@@ -147,7 +155,7 @@ function notification_messages_build_subject($entity) {
 
 
 // Handle group topic reply subject hook
-function notifications_messages_reply_subject_hook($hook, $type, $returnvalue, $params) {
+function notification_messages_reply_subject_hook($hook, $type, $returnvalue, $params) {
 	$entity_guid = $params['annotation']->entity_guid;
 	if ($entity_guid && ($entity = get_entity($entity_guid))) {
 		$subject = notification_messages_build_subject($entity);
@@ -158,7 +166,7 @@ function notifications_messages_reply_subject_hook($hook, $type, $returnvalue, $
 
 
 /* Override default action only if enabled */
-function notifications_messages_comment_action_hook($hooks, $type, $returnvalue, $params) {
+function notification_messages_comment_action_hook($hooks, $type, $returnvalue, $params) {
 	$generic_comment = elgg_get_plugin_setting('generic_comment', 'notification_messages');
 	switch ($generic_comment) {
 		case 'allow':
@@ -173,5 +181,113 @@ function notifications_messages_comment_action_hook($hooks, $type, $returnvalue,
 	}
 	return $returnvalue;
 }
+
+
+/**
+ * Automatically triggered notification on 'create' events that looks at registered
+ * objects and attempts to send notifications to anybody who's interested
+ *
+ * @see register_notification_object
+ *
+ * @param string $event       create
+ * @param string $object_type mixed
+ * @param mixed  $object      The object created
+ *
+ * @return bool
+ * @access private
+ */
+/* Note : this hook is used to add a new hook that let's plugins set $params 
+ * This makes it easy for plugins to add attachments
+ * (Note : this is more generic to support further settings (just in case...)
+ * Use : return $options['attachments'] = $attachments
+ * With $attachments being an array of file attachments :
+ * $attachments[] = array(
+ * 		'content' => $file_content, // File content
+ * 		'filepath' => $file_content, // Alternate file path for file content retrieval
+ * 		'filename' => $file_content, // Attachment file name
+ * 		'mimetype' => $file_content, // MIME type of attachment
+ * 	);
+ */
+function notification_messages_object_notifications_hook($hook, $entity_type, $returnvalue, $params) {
+	// Get config data
+	global $CONFIG, $SESSION, $NOTIFICATION_HANDLERS;
+
+	// Facyla : warning, if a plugin hook returned "true" (e.g. for blocking notification process), 
+	// this wouldn't be handled, so we should check it before going through the whole process !!
+	if ($returnvalue === true) return true;
+
+	$event = $params['event'];
+	$object = $params['object'];
+	$object_type = $params['object_type'];
+
+	// Have we registered notifications for this type of entity?
+	$object_type = $object->getType();
+	if (empty($object_type)) {
+		$object_type = '__BLANK__';
+	}
+
+	$object_subtype = $object->getSubtype();
+	if (empty($object_subtype)) {
+		$object_subtype = '__BLANK__';
+	}
+
+	if (isset($CONFIG->register_objects[$object_type][$object_subtype])) {
+		$subject = $CONFIG->register_objects[$object_type][$object_subtype];
+		$string = $subject . ": " . $object->getURL();
+
+		// Get users interested in content from this person and notify them
+		// (Person defined by container_guid so we can also subscribe to groups if we want)
+		foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
+			$interested_users = elgg_get_entities_from_relationship(array(
+				'site_guids' => ELGG_ENTITIES_ANY_VALUE,
+				'relationship' => 'notify' . $method,
+				'relationship_guid' => $object->container_guid,
+				'inverse_relationship' => TRUE,
+				'type' => 'user',
+				'limit' => false
+			));
+			/* @var ElggUser[] $interested_users */
+
+			if ($interested_users && is_array($interested_users)) {
+				foreach ($interested_users as $user) {
+					if ($user instanceof ElggUser && !$user->isBanned()) {
+						if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user)
+						&& $object->access_id != ACCESS_PRIVATE) {
+							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
+								'entity' => $object,
+								'to_entity' => $user,
+								'method' => $method), $string);
+							if (empty($body) && $body !== false) {
+								$body = $string;
+							}
+							
+							// this is new, trigger a hook to make a custom subject
+							$new_subject = elgg_trigger_plugin_hook("notify:entity:subject", $object->getType(), array(
+								"entity" => $object,
+								"to_entity" => $user,
+								"method" => $method), $subject);
+							// Keep new value only if correct subject
+							if (!empty($new_subject)) { $subject = $new_subject; }
+							
+							// Params hook : see doc above
+							$options = elgg_trigger_plugin_hook('notify:entity:params', $object->getType(), array(
+								'entity' => $object,
+								'to_entity' => $user,
+								'method' => $method), null);
+							
+							if ($body !== false) {
+								notify_user($user->guid, $object->container_guid, $subject, $body,
+									$options, array($method));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	// Stop notifications here once done
+	return true;
+}
+
 
 

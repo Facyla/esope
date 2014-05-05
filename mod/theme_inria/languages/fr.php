@@ -25,6 +25,9 @@ $french = array(
 	'theme_inria:topbar:new_group' => "Créer&nbsp;un&nbsp;groupe",
 	'theme_inria:topbar:invite' => 'Inviter',
 	'theme_inria:menu:firststeps' => 'Premiers pas',
+	'theme_inria:home:information' => "Informations",
+	'theme_inria:home:widgets' => "Widgets",
+	'theme_inria:home:edito' => "Edito",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -159,6 +162,12 @@ $french = array(
 	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
 	// Champs de profil
+	'theme_inria:profile:maininfo' => "Informations principales",
+	'theme_inria:profile:irisprofile' => "Profil Iris",
+	'theme_inria:noprofilefound' => "Profil demandé inexistant, ou indisponible hors connexion.",
+	'theme_inria:userprofile:irisopen' => "Accéder à Iris",
+	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
+	'theme_inria:userprofile:status' => "Statut",
 	'inria_location' => "Entité Inria (CRI ou siège)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'interests' => "Mots clés",
