@@ -6,12 +6,18 @@ if ($export_subpages != 'yes') $export_subpages = false;
 $export_allpages = get_input("allpages", 'no');
 if ($export_allpages != 'yes') $export_allpages = false;
 
+$debug = false;
+if ($debug) global $debug_ts;
+if ($debug) $debug_ts = microtime(TRUE);
+
 // @TODO : this is much too long - requires reviewing
+
+if ($debug) error_log("Test export HTML");
 
 $page = get_entity($guid);
 if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page')) {
 	//elgg_load_library('elgg:pages');
-	set_time_limit(30); // We should not need more than 30 seconds for an HTML page export
+	set_time_limit(120); // Export may sometimes be very long, but 120 seems a reasonnable max
 	$content = "";
 	
 	// Sommaire
@@ -48,23 +54,32 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 		
 		<?php
 		// Sommaire
+		echo '<div class="elgg-output"><ul>';
 		if ($toppages) foreach ($toppages as $parent) {
-			$summary .= '<li>' . elgg_view("output/url", array("text" => $parent->title, "href" => "#page_" . $parent->guid, "title" => $parent->title));
-			$summary .= esope_list_subpages($parent, 'internal', false);
-			$summary .='</li>';
+			if ($debug) error_log("Test export HTML : T1 {$parent->guid} = " . round((microtime(TRUE)-$debug_ts), 4));
+			echo '<li>' . elgg_view("output/url", array("text" => $parent->title, "href" => "#page_" . $parent->guid, "title" => $parent->title));
+			echo esope_list_subpages($parent, 'internal', false);
+			echo '</li>';
+			echo "\n";
 		}
-		echo '<div class="elgg-output"><ul>' . $summary . '</ul></div><hr />';
+		echo '</ul></div><hr />';
 		
 		// Contenu
 		if ($toppages) foreach ($toppages as $parent) {
+			if ($debug) error_log("Test export HTML : T2 = " . round((microtime(TRUE)-$debug_ts), 4));
 			echo '<h3>' . elgg_view("output/url", array("text" => $parent->title, "href" => false, "name" => "page_" . $parent->guid)) . '</h3>' . elgg_view("output/longtext", array("value" => $parent->description));
 			echo esope_list_subpages($parent, false, true);
 			echo '<p style="page-break-after:always;"></p>';
+			echo "\n";
 		}
 		?>
+		
 		</body>
 		</html>
 		<?php
+		
+		if ($debug) error_log("Test export HTML : T3 = " . round((microtime(TRUE)-$debug_ts), 4));
+		exit;
 		
 	} else {
 		// Sinon export de la page courante seulement

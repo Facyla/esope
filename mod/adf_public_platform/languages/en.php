@@ -501,7 +501,7 @@ $en = array(
 	'esope:viewprofileas:nonuser' => "Non-user (public)",
 	
 	'esope:filesize:units' => "BKMGTP",
-	'esope:embed:file:download' => "download",
+	'esope:embed:file:download' => "open",
 	
 );
 

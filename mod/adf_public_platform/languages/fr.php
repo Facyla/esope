@@ -500,7 +500,7 @@ $fr = array(
 	'esope:viewprofileas:nonuser' => "Un non-membre (public)",
 	
 	'esope:filesize:units' => "OKMGTP",
-	'esope:embed:file:download' => "télécharger",
+	'esope:embed:file:download' => "ouvrir",
 	
 );
 
