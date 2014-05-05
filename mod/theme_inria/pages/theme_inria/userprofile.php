@@ -132,7 +132,7 @@ if (elgg_instanceof($user, 'user')) {
 			if (!empty($user->skills)) 
 			$content .= '<p><strong>' . elgg_echo('skills') . '&nbsp;:</strong> ' . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
 			if (!empty($user->description)) 
-			$content .= '<p><strong>' . elgg_echo('description') . '&nbsp;:</strong> ' . elgg_view('output/longtext', array('content' => $user->description)) . '</p>';
+			$content .= '<p><strong>' . elgg_echo('description') . '&nbsp;:</strong> ' . elgg_view('output/longtext', array('value' => $user->description)) . '</p>';
 			
 		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
 		
