@@ -1070,7 +1070,7 @@ function esope_get_subpages($parent) {
 	global $CONFIG;
 	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
-	// Limit searched entities with "guids" => $guids
+	// Limit searched entities range with "guids" => $guids
 	$md_name = get_metastring_id('parent_guid');
 	$md_value = get_metastring_id($parent->guid);
 	// Can't be empty or we'll get a bad error
