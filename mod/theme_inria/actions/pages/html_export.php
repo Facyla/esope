@@ -17,7 +17,7 @@ if ($debug) error_log("Test export HTML");
 $page = get_entity($guid);
 if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page')) {
 	//elgg_load_library('elgg:pages');
-	set_time_limit(30); // We should not need more than 30 seconds for an HTML page export
+	set_time_limit(120); // Export may sometimes be very long, but 120 seems a reasonnable max
 	$content = "";
 	
 	// Sommaire
