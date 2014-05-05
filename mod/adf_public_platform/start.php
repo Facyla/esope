@@ -1069,7 +1069,13 @@ function esope_get_top_pages($container) {
 function esope_get_subpages($guid) {
 	global $CONFIG;
 	$debug_ts = microtime(TRUE);
-	$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$all_subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	foreach ($all_subpages as $ent) {
+		if ($ent->parent_guid == $guid) {
+			$subpages[] = $ent;
+		}
+	}
 	error_log("Test subpages de $guid " . round((microtime(TRUE)-$debug_ts), 4));
 	return $subpages;
 }

@@ -158,7 +158,7 @@ $content .= '</div>';
 
 
 //elgg_render_embed_content($content = '', $title = '', $embed_mode = 'iframe', $headers);
-elgg_render_embed_content($content, $title);
+elgg_render_embed_content($content, $title, 'iframe', null);
 
 
 
