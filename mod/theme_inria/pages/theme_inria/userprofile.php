@@ -123,14 +123,17 @@ if (elgg_instanceof($user, 'user')) {
 			*/
 			
 			$content .= $userimg;
-			$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
+			//$content .= '<h3 style="' . $style_h3 . '"><a href="' . $user->getURL() . '">' . $user->name . '</a></h3>';
+			$content .= '<h3 style="' . $style_h3 . '">' . $user->name . '</h3>';
 			$content .= '<p><strong>' . elgg_echo('theme_inria:userprofile:status') . '&nbsp;:</strong> ' . $statut . '</p>';
 			if (!empty($user->briefdescription)) 
 			$content .= '<p><strong>' . elgg_echo('profile:briefdescription') . '&nbsp;:</strong> ' . $user->briefdescription . '</p>';
 			$content .= '<div class="clearfloat"></div><br />';
 			if (!empty($user->skills)) 
 			$content .= '<p><strong>' . elgg_echo('skills') . '&nbsp;:</strong> ' . elgg_view('output/tags', array('tags' => $user->skills)) . '</p>';
-	
+			if (!empty($user->description)) 
+			$content .= '<p><strong>' . elgg_echo('description') . '&nbsp;:</strong> ' . elgg_view('output/longtext', array('tags' => $user->description)) . '</p>';
+			
 		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
 		
 	} else {
@@ -142,11 +145,13 @@ if (elgg_instanceof($user, 'user')) {
 }
 $content .= '<div class="clearfloat"></div><br />';
 
+/*
 if (elgg_is_logged_in()) {
 	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
 } else {
 	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
 }
+*/
 
 $content .= '<div class="clearfloat"></div><br />';
 $content .= '</div>';
