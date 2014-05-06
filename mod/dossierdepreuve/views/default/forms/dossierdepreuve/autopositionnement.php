@@ -517,7 +517,7 @@ if ($referentiel) {
 	
 	
 	// Infos toujours affichées (si disponibles)
-	if (!empty($auto_type) && ($step != 'googleform') && ($step != 'final')) {
+	if (!empty($auto_type) && ($step != 'googleform') && ($step != 'final') && ($step != 'endofquest')) {
 		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:info', array($total_competences, $total_domaines));
 		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infotype', array(elgg_echo('dossierdepreuve:auto_type:'.$auto_type)));
 		if (!empty($limited)) $questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infoselection', array($total_domaines_selection)) . implode(', ', $selection) . ".<br />";
