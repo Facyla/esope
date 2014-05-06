@@ -807,7 +807,7 @@ if ($referentiel) {
 				$msg_content .= '<hr /><p>' . elgg_echo('dossierdepreuve:msg:restoredata') . '<hr />' . serialize($history_data) . '<hr />';
 				$msg_content .= '<p>' . elgg_echo('dossierdepreuve:msg:thanks') . ' ' . $CONFIG->url . '</p>';
 				$msg_params = null;
-				$emails = str_replace(' ', '', $email);
+				$emails = str_replace(' ', ',', $email);
 				$emails = str_replace(array(',', '|', "\n", "\r"), ';', $emails);
 				$emails = explode(';', $emails);
 				if (!is_array($emails)) $emails[] = $email;
