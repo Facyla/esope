@@ -1070,13 +1070,18 @@ function esope_get_subpages($parent) {
 	global $CONFIG;
 	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
-	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
-	foreach ($all_subpages as $ent) {
-		if ($ent->parent_guid == $parent->guid) {
-			$subpages[] = $ent;
-		}
+	// Limit searched entities range with "guids" => $guids
+	$md_name = get_metastring_id('parent_guid');
+	$md_value = get_metastring_id($parent->guid);
+	// Can't be empty or we'll get a bad error
+	if (!empty($md_name) && !empty($md_value)) {
+		$guids_row = get_data("SELECT entity_guid FROM {$CONFIG->dbprefix}metadata where name_id = $md_name and value_id = $md_value");
+		foreach ($guids_row as $row) { $guids[] = $row->entity_guid; }
 	}
-	return $subpages;
+	if ($guids) {
+		$subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc', 'guids' => $guids));
+		return $subpages;
+	}
 }
 
 // Listing des sous-pages directes d'une page
