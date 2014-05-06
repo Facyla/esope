@@ -91,7 +91,7 @@ if (elgg_instanceof($user, 'user')) {
 		if (empty($profile_type)) $profile_type = 'external';
 		$statut = elgg_echo('profile:types:'.$profile_type);
 	
-		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => true, 'use_link' => false));
+		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => false, 'use_link' => false));
 		$userimg = '<span style="float:left; margin: 0 2ex 1ex 0;">' . $userimg . '</span>';
 		
 		/* Non utilisé car géré direct par l'intranet
