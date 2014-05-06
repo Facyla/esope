@@ -104,12 +104,14 @@ if ($show_menu) {
 
 if ($use_link) {
 	$class = elgg_extract('link_class', $vars, '');
+	$target = elgg_extract('target', $vars, '');
 	$url = elgg_extract('href', $vars, $user->getURL());
 	echo elgg_view('output/url', array(
 		'href' => $url,
 		'text' => $icon,
 		'is_trusted' => true,
 		'class' => $class,
+		'target' => $target,
 	));
 } else {
 	echo "<a>$icon</a>";

@@ -517,7 +517,7 @@ if ($referentiel) {
 	
 	
 	// Infos toujours affichées (si disponibles)
-	if (!empty($auto_type) && ($step != 'googleform') && ($step != 'final')) {
+	if (!empty($auto_type) && ($step != 'googleform') && ($step != 'final') && ($step != 'endofquest')) {
 		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:info', array($total_competences, $total_domaines));
 		$questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infotype', array(elgg_echo('dossierdepreuve:auto_type:'.$auto_type)));
 		if (!empty($limited)) $questionnaire_info .= elgg_echo('dossierdepreuve:referentiel:infoselection', array($total_domaines_selection)) . implode(', ', $selection) . ".<br />";
@@ -571,7 +571,7 @@ if ($referentiel) {
 	if (empty($step) || in_array($step, array('start', 'selection'))) {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:start")));
 	} else if ($step == 'quest') {
-		$submit_button = elgg_echo('dossierdepreuve:next:details') . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend')));
+		$submit_button = elgg_echo('dossierdepreuve:next:details') . '<br /><br />' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend'))) . '<br />';
 	} else if ($step == 'endofquest') {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:sendonly")));
 	} else if ($step == 'final') {
@@ -807,7 +807,7 @@ if ($referentiel) {
 				$msg_content .= '<hr /><p>' . elgg_echo('dossierdepreuve:msg:restoredata') . '<hr />' . serialize($history_data) . '<hr />';
 				$msg_content .= '<p>' . elgg_echo('dossierdepreuve:msg:thanks') . ' ' . $CONFIG->url . '</p>';
 				$msg_params = null;
-				$emails = str_replace(' ', '', $email);
+				$emails = str_replace(' ', ',', $email);
 				$emails = str_replace(array(',', '|', "\n", "\r"), ';', $emails);
 				$emails = explode(';', $emails);
 				if (!is_array($emails)) $emails[] = $email;
