@@ -12,6 +12,7 @@ $french = array (
 	'members:label:candidat' => "Candidats",
 	
 	'theme_compnum:login' => "Connectez-vous",
+	'theme_compnum:loginwarning' => "Connectez-vous avec les identifiants que vous avez reçus. Si vous n'avez pas d'identifiants, veuillez contacter un centre agréé.",
 	'theme_compnum:friends' => "Contacts",
 	'theme_compnum:usersettings' => "Paramètres",
 	'theme_compnum:group' => "Groupes",
