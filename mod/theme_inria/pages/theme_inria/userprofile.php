@@ -91,7 +91,8 @@ if (elgg_instanceof($user, 'user')) {
 		if (empty($profile_type)) $profile_type = 'external';
 		$statut = elgg_echo('profile:types:'.$profile_type);
 	
-		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => false, 'use_link' => false));
+		//$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => false, 'use_link' => false));
+		$userimg = elgg_view_entity_icon($user, 'medium', array('use_hover' => false, 'use_link' => true, 'target' => "_blank"));
 		$userimg = '<span style="float:left; margin: 0 2ex 1ex 0;"><a href="' . $user->getURL() . '" target="_blank">' . $userimg . '</a></span>';
 		
 		/* Non utilisé car géré direct par l'intranet
