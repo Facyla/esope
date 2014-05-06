@@ -571,7 +571,7 @@ if ($referentiel) {
 	if (empty($step) || in_array($step, array('start', 'selection'))) {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:start")));
 	} else if ($step == 'quest') {
-		$submit_button = elgg_echo('dossierdepreuve:next:details') . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend')));
+		$submit_button = elgg_echo('dossierdepreuve:next:details') . '<br /><br />' . elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:next"), 'class' => 'elgg-button elgg-button-action elgg-requires-confirmation', 'rel' => elgg_echo('dossierdepreuve:report:confirmsend'))) . '<br />';
 	} else if ($step == 'endofquest') {
 		$submit_button = elgg_view('input/submit', array('value' => elgg_echo("dossierdepreuve:sendonly")));
 	} else if ($step == 'final') {
