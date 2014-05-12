@@ -167,7 +167,7 @@ echo '</ul>';
 // Esope : limits selector
 if ($advanced_pagination) {
 	echo '<ul class="elgg-pagination">';
-	$limits_opts = array(10, 30, 100);
+	$limits_opts = array(10 => 10, 30 => 30, 100 => 100);
 	if (!in_array($limit, $limits_opts)) $limits_opts[$limit] = $limit;
 	foreach ($limits_opts as $num) {
 		$url = elgg_http_add_url_query_elements($base_url, array('limit' => $num));
