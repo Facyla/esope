@@ -145,7 +145,9 @@ function ldap_auth_create_profile($username, $password) {
 		$user = get_user($user_guid);
 		//update profile with ldap infos
 		$user->ldap_username = $username;
-		if (!ldap_auth_check_profile($user)) error_log("LDAP auth error : cannot update profile $user_guid on registration");
+		if (!ldap_auth_check_profile($user)) {
+			error_log("LDAP auth error : cannot update profile $user_guid on registration");
+		}
 		// Success, credentials valid and account has been created
 		return $user;
 	}
