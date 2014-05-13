@@ -148,6 +148,11 @@ function theme_inria_init(){
 	// @TODO : ajouter interception création event pour ajouter l'auteur aux personnes notifiées
 	elgg_register_event_handler('create','object', 'theme_inria_notify_event_owner', 900);
 	
+	// Filtrage des contenus saisis
+	if (elgg_is_active_plugin('htmlawed')) {
+		elgg_unregister_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags');
+		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
+	}
 	
 }
 
@@ -858,6 +863,54 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 		}
 		return $return;
 	}
+}
+
+
+
+/**
+ * htmLawed filtering of data
+ *
+ * Called on the 'validate', 'input' plugin hook
+ *
+ * Triggers the 'config', 'htmlawed' plugin hook so that plugins can change
+ * htmlawed's configuration. For information on configuraton options, see
+ * http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s2.2
+ *
+ * @param string $hook	 Hook name
+ * @param string $type	 The type of hook
+ * @param mixed	$result Data to filter
+ * @param array	$params Not used
+ * @return mixed
+ */
+function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
+	$var = $result;
+	elgg_load_library('htmlawed');
+	$htmlawed_config = array(
+			// seems to handle about everything we need.
+			// /!\ Liste blanche des balises autorisées
+			//'elements' => 'iframe,embed,object,param,video,script,style',
+			'elements' => "* -script", // Blocks <script> elements (only)
+			'safe' => false, // true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
+			// Attributs interdits
+			'deny_attribute' => 'on*',
+			// Filtrage supplémentaires des attributs autorisés (cf. start de htmLawed) : 
+			// bloque tous les styles non explicitement autorisé
+			//'hook_tag' => 'htmlawed_tag_post_processor',
+			
+			'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
+			// apparent this doesn't work.
+			// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
+		);
+	// add nofollow to all links on output
+	if (!elgg_in_context('input')) { $htmlawed_config['anti_link_spam'] = array('/./', ''); }
+	$htmlawed_config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $htmlawed_config);
+	if (!is_array($var)) {
+		$result = htmLawed($var, $htmlawed_config);
+	} else {
+		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
+		$result = $var;
+	}
+	return $result;
 }
 
 
