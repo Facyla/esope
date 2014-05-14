@@ -183,6 +183,7 @@ class LdapServer
 		$entry = ldap_first_entry($this->getLink(), $qry);
 		if($entry)
 		{
+			if (count($attributes) < 1) $attributes = ldap_get_attributes( $this->getLink(), $entry );
 			while( $entry )
 			{
 				if(is_array($attributes) && count($attributes) > 0 ){
