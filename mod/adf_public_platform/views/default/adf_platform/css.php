@@ -318,7 +318,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-pagination a, .elgg-pagination span { display: inline-block; margin-bottom: 1px; }
 .elgg-pagination-limit { margin-top:0; }
 .elgg-pagination.elgg-pagination-limit li { margin-right:0; }
-.elgg-pagination.elgg-pagination-limit a { border-color:transparent; font-size:0.85em; padding:2px; }
+.elgg-pagination.elgg-pagination-limit a { border-color:transparent; font-size:0.85em; padding:2px 4px 2px 0; }
 .elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { background-color:transparent; border-color:transparent; }
 .elgg-pagination-limit .elgg-state-selected span { font-weight:bold; border-color:transparent; }
 
