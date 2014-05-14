@@ -171,6 +171,11 @@ function ldap_auth_create_profile($username, $password) {
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_check_profile(ElggUser $user) {
+	
+	// Hook : return anything but "continue" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("ldap_auth:check_profile", "user", array("user" => $user), "continue");
+	if ($hook_result != 'continue') return $hook_result;
+	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	if (!$user && $user instanceof ElggUser) return false;
@@ -182,8 +187,6 @@ function ldap_auth_check_profile(ElggUser $user) {
 		$ldap_mail = $mail->search("$username_field_name={$user->username}", array($mail_field_name));
 		$user_mail = $ldap_mail[0][$mail_field_name][0];
 		$user_uid = $ldap_mail[0]['uid'][0];
-		
-		echo print_r($ldap_mail, true); return true;
 		// There should be only 1 email <=> 1 username, but don't update in doubt
 		if ($ldap_mail && count($ldap_mail) == 1) {
 			$ldap_infos = $info->search("$mail_field_name=$user_mail", array_keys(ldap_auth_settings_info_fields()));
@@ -217,6 +220,11 @@ function ldap_auth_check_profile(ElggUser $user) {
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields) {
+	
+	// Hook : return anything but "continue" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("ldap_auth:update_profile", "user", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
+	if ($hook_result != 'continue') return $hook_result;
+	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$mainpropchange = false;
@@ -275,6 +283,11 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_clean_group_name(array $infos) {
+	
+	// Hook : return anything but "continue" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("ldap_auth:clean_group_name", "user", array("infos" => $infos), "continue");
+	if ($hook_result != 'continue') return $hook_result;
+	
 	$res = $infos;
 	$cn = explode(',',$infos[0]['inriagroupmemberof'][0],2);
 	$group = explode('=',$cn[0]);
