@@ -16,6 +16,6 @@
 	</div>
 	<p><?php echo elgg_echo('vazco_text_captcha:entercaptcha:description'); ?>:</p>
 	<div class="captcha-left">
-		<?php echo elgg_view('input/text', array('internalname' => 'captcha_input', 'class' => 'captcha-input-text')); ?>
+		<?php echo elgg_view('input/text', array('name' => 'captcha_input', 'class' => 'captcha-input-text')); ?>
 	</div>
 </div>
