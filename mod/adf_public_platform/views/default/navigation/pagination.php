@@ -9,7 +9,7 @@
  * @uses int    $vars['limit']      Number of items per page
  * @uses int    $vars['count']      Number of items in list
  * @uses string $vars['base_url']   Base URL to use in links
- * @uses string $vars['offset_key'] The string to use for offet in the URL
+ * @uses string $vars['offset_key'] The string to use for offset in the URL
  */
 
 if (elgg_in_context('widget')) {
@@ -34,6 +34,10 @@ if (isset($vars['base_url']) && $vars['base_url']) {
 } else {
 	$base_url = current_page_url();
 }
+
+// ESOPE : improved navigation
+$advanced_pagination = elgg_get_plugin_setting('advanced_pagination', 'adf_public_platform');
+if ($advanced_pagination != 'yes') $advanced_pagination = false;
 
 $num_pages = elgg_extract('num_pages', $vars, 10);
 $delta = ceil($num_pages / 2);
@@ -102,6 +106,16 @@ if ($current_page < $total_pages) {
 
 echo '<ul class="elgg-pagination">';
 
+// Esope : Ajout "first" link
+if ($advanced_pagination) {
+	if ($pages->items[0] > 1) {
+		$page_offset = 1;
+		$url = elgg_http_add_url_query_elements($base_url, array($offset_key => 0));
+		$link = elgg_view('output/url', array('href'=>$url, 'text'=>'1', 'is_trusted' => true));
+		echo "<li>$link</li>";
+	}
+}
+
 if ($pages->prev['href']) {
   $pages->prev['title'] = elgg_echo('previouspage');
 	$link = elgg_view('output/url', $pages->prev);
@@ -136,4 +150,36 @@ if ($pages->next['href']) {
 	echo "<li class=\"elgg-state-disabled\"><span>{$pages->next['text']}</span></li>";
 }
 
+// Esope : Ajout "last" link
+if ($advanced_pagination) {
+	if (end($pages->items) < $total_pages) {
+		$page_offset = ($total_pages - 1) * $limit;
+		$url = elgg_http_add_url_query_elements($base_url, array($offset_key => $page_offset));
+		$lasttext = elgg_echo('adf_platform:advanced_pagination:last', array($total_pages));
+		$link = elgg_view('output/url', array('href'=>$url, 'text'=>$lasttext, 'is_trusted' => true));
+		echo "<li>$link</li>";
+	}
+}
+
 echo '</ul>';
+
+
+// Esope : limits selector
+if ($advanced_pagination) {
+	echo '<ul class="elgg-pagination">';
+	$limits_opts = array(10, 30, 100);
+	if (!in_array($limit, $limits_opts)) $limits_opts[] = $limit;
+	sort($limits_opts);
+	
+	foreach ($limits_opts as $num) {
+		$url = elgg_http_add_url_query_elements($base_url, array('limit' => $num));
+		if ($limit == $num) {
+			echo '<li class="elgg-state-selected"><span>' . $num . '</span></li>';
+		} else {
+			echo '<li>' . elgg_view('output/url', array('href'=>$url, 'text'=>$num, 'is_trusted' => true)) . '</li>';
+		}
+	}
+	echo '<li class="elgg-state-disabled">' . elgg_echo('adf_platform:advanced_pagination:perpage') . '</li>';
+	echo '</ul>';
+}
+

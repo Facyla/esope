@@ -370,6 +370,8 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall )) . '</p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages )) . '</p>';
 		}
+		// Add limit links to navigation
+			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination )) . '</p>';
 		?>
 		
 		<br />

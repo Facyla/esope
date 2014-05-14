@@ -15,7 +15,7 @@ $french = array (
 	
 	'access_icons:settings:helptext:default' => "<p>Il est essentiel de d&eacute;finir correctement les droits d'acc&egrave;s lorsque vous faites de nouvelles publications, afin de garantir que les informations que vous publi&eacute;es sont partag&eacute;es avec les bonnes personnes.</p>
 <p>Seules les personnes avec lesquelles vous partagez vos publications y auront acc&egrave;s. Les autres ne sauront pas que vous avez publi&eacute; quelque chose.</p>
-<p>Ainsi, si vous cr&eacute;ez un article en mode \"Priv&eacute;\", personne ne pourra le lire. Inversement, pour qu'une image puisse &ecirc;tre ins&eacute;r&eacute;e dans un article qui sera visible hors connexion, elle doit &ecirc;etre publi&eacute;e en mode \"Public\".</p>
+<p>Ainsi, si vous cr&eacute;ez un article en mode \"Priv&eacute;\", personne ne pourra le lire. Inversement, pour qu'une image puisse &ecirc;tre ins&eacute;r&eacute;e dans un article qui sera visible hors connexion, elle doit &ecirc;tre publi&eacute;e en mode \"Public\".</p>
 <p>&nbsp;</p>
 <table>
 <tbody>

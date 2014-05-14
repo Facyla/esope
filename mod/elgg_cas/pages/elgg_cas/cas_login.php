@@ -110,22 +110,20 @@ if (elgg_instanceof($user, 'user')) {
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
-			elgg_load_library("elgg:ldap_auth");
-			$elgg_password = generate_random_cleartext_password();
-			if (!elgg_is_active_plugin('ldap_auth')) {
-				error_log("LDAP plugin disabled, please enable it (contact admin with this message).");
-			}
-			// Création du compte puis MAJ avec les infos du LDAP
-			ldap_auth_create_profile($elgg_username, $elgg_password);
+				elgg_load_library("elgg:ldap_auth");
+				$elgg_password = generate_random_cleartext_password();
+				// Création du compte puis MAJ avec les infos du LDAP
+				ldap_auth_create_profile($elgg_username, $elgg_password);
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}
 	} else {
+		error_log("LDAP plugin disabled, please enable it (contact site administrator with this message).");
 		$content .= elgg_echo('elgg_cas:user:notexist');
 	}
 }
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
-// Pas de rendu dans la page en cas d'insclusion du script (autologin)
+// Pas de rendu dans la page en cas d'inclusion du script (autologin)
 if (!$cas_login_included) echo elgg_view_page($title, $content);
 

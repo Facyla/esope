@@ -187,7 +187,7 @@ function adf_platform_init() {
 	// Pour permettre à tout éditeur valable de la page d'y ajouter une sous-page
 	elgg_unregister_page_handler('pages', 'pages_page_handler');
 	elgg_register_page_handler('pages', 'adf_platform_pages_page_handler');
-	// Pour modifier la page d'arrivée par défaut en popular
+	// Pour modifier la page d'arrivée et mettre en place la recherche avancée
 	elgg_unregister_page_handler('members', 'members_page_handler');
 	elgg_register_page_handler('members', 'adf_platform_members_page_handler');
 	// Pour pouvoir lister tous les articles d'un membre (option du thème désactivée par défaut)
