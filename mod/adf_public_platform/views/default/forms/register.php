@@ -63,11 +63,9 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<label for='register-name'><?php echo elgg_echo('name'); ?></label>
 		
 		<?php if($show_hints){ ?>
-		<span class='custom_fields_more_info' id='more_info_name'></span> 		
+		<span class='custom_fields_more_info' id='more_info_name'></span> 
 		<span class='custom_fields_more_info_text' id='text_more_info_name'><?php echo elgg_echo("profile_manager:register:hints:name")?></span>
 		<?php } ?>
-		
-		<br />
 		
 		<?php
 		echo elgg_view('input/text', array(
@@ -83,11 +81,10 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<label for='register-email'><?php echo elgg_echo('email'); ?></label>
 		
 		<?php if($show_hints){ ?>
-		<span class='custom_fields_more_info' id='more_info_email'></span> 		
+		<span class='custom_fields_more_info' id='more_info_email'></span>
 		<span class='custom_fields_more_info_text' id='text_more_info_email'><?php echo elgg_echo("profile_manager:register:hints:email")?></span>
 		<?php } ?>
 		
-		<br />
 		<div class='profile_manager_register_input_container'>
 			<?php
 			echo elgg_view('input/text', array(
@@ -103,11 +100,10 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<label for='register-username'><?php echo elgg_echo('username'); ?></label>
 		
 		<?php if($show_hints){ ?>
-		<span class='custom_fields_more_info' id='more_info_username'></span> 		
+		<span class='custom_fields_more_info' id='more_info_username'></span>
 		<span class='custom_fields_more_info_text' id='text_more_info_username'><?php echo elgg_echo("profile_manager:register:hints:username")?></span>
 		<?php } ?>
 		
-		<br />
 		<div class='profile_manager_register_input_container'>
 			<?php
 			echo elgg_view('input/text', array(
@@ -123,11 +119,10 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<label for='register-password'><?php echo elgg_echo('password'); ?></label>
 		
 		<?php if($show_hints){ ?>
-		<span class='custom_fields_more_info' id='more_info_password'></span> 		
+		<span class='custom_fields_more_info' id='more_info_password'></span>
 		<span class='custom_fields_more_info_text' id='text_more_info_password'><?php echo elgg_echo("profile_manager:register:hints:password")?></span>
 		<?php } ?>
 		
-		<br />
 		<div class='profile_manager_register_input_container'>
 			<?php
 			echo elgg_view('input/password', array(
@@ -143,11 +138,10 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<label for='register-password2'><?php echo elgg_echo('passwordagain'); ?></label>
 		
 		<?php if($show_hints){ ?>
-		<span class='custom_fields_more_info' id='more_info_passwordagain'></span> 		
+		<span class='custom_fields_more_info' id='more_info_passwordagain'></span>
 		<span class='custom_fields_more_info_text' id='text_more_info_passwordagain'><?php echo elgg_echo("profile_manager:register:hints:passwordagain")?></span>
 		<?php } ?>
 		
-		<br />
 		<div class='profile_manager_register_input_container'>
 			<?php
 			echo elgg_view('input/password', array(
@@ -156,7 +150,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 				'value' => $password2,
 			));
 			?>
-			<span class='elgg-icon profile_manager_validate_icon'></span>
+			<span class="elgg-icon profile_manager_validate_icon"></span>
 		</div>
 	</div>
 	<?php 
@@ -175,12 +169,12 @@ echo "</div>";
 
 echo '<hr class="adf-lightseparator" />';
 
-echo "<div id='profile_manager_register_right'>";
-echo elgg_view("register/extend_side");
-echo "</div>";
+$extend_side = elgg_view("register/extend_side");
+if ($extend_side) echo '<div id="profile_manager_register_right">' . $extend_side . '</div><hr class="adf-lightseparator" />';
+
 
 echo "<div class='clearfloat'></div>";
-echo '<br />';
+//echo '<br />';
 echo "<div class='elgg-foot'>";
 echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
 echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));

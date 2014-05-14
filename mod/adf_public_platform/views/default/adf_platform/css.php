@@ -315,6 +315,13 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 	font-size: 0.85em;
 }
 
+.elgg-pagination a, .elgg-pagination span { display: inline-block; margin-bottom: 1px; }
+.elgg-pagination-limit { margin-top:0; }
+.elgg-pagination.elgg-pagination-limit li { margin-right:0; }
+.elgg-pagination.elgg-pagination-limit a { border-color:transparent; font-size:0.85em; padding:2px; }
+.elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { background-color:transparent; border-color:transparent; }
+.elgg-pagination-limit .elgg-state-selected span { font-weight:bold; border-color:transparent; }
+
 
 
 /* BLOCS SPECIFIQUES : CONNEXION, etc. - MAIN BLOCKS : LOGIN, etc. */
@@ -334,10 +341,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #adf-homepage .elgg-form { background:transparent; }
 #adf-homepage h2 { font-size:20px; font-weight:normal; }
 
-#adf-homepage label { width:130px; float:left; margin:0 0 16px 0; clear:both; text-align:right; }
+#adf-homepage label { width:130px; float:left; margin:0 30px 16px 0; clear:both; text-align:right; }
 #adf-homepage input[type='text'], 
 #adf-homepage input[type='password'], 
-#adf-homepage select { width:280px; float:right; margin-bottom:16px; }
+#adf-homepage select { width:auto; min-width:200px; float:left; margin-bottom:16px; }
 
 #adf-homepage form.elgg-form { width:100%; padding:0; }
 
@@ -356,8 +363,9 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #adf-homepage ul { list-style-type: square; }
 #adf-homepage ul li { margin-bottom:8px; }
 #adf-homepage .elgg-form-register fieldset > div, #adf-homepage .elgg-form-register .mandatory { clear: both; }
-
-
+select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
+#profile_manager_register_left { width:100%; }
+.custom_profile_type_description { float: left; margin-left: 1ex; }
 
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
