@@ -144,7 +144,7 @@ function ldap_auth_is_valid($username, $password) {
 	
 	//we need to bind anonymously to do search for rdn
 	//$rdn = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array());
-	$auth = new LdapServer(ldap_auth_settings_auth());
+	$auth = new LdapServer(ldap_auth_settings_auth(), 'rdn');
 	if ($auth->bind()) {
 		//we need the rdn to perform a bind with password
 		$rdn = $auth->search("$username_field_name=$username");
@@ -267,7 +267,6 @@ function ldap_auth_check_profile(ElggUser $user) {
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields) {
-	
 	// Hook : return anything but "continue" will stop and return hook result
 	$hook_result = elgg_trigger_plugin_hook("ldap_auth:update_profile", "user", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
 	if ($hook_result != 'continue') return $hook_result;
@@ -330,7 +329,6 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_clean_group_name(array $infos) {
-	
 	// Hook : return anything but "continue" will stop and return hook result
 	$hook_result = elgg_trigger_plugin_hook("ldap_auth:clean_group_name", "user", array("infos" => $infos), "continue");
 	if ($hook_result != 'continue') return $hook_result;
