@@ -150,23 +150,18 @@ class LdapServer {
 		
 		$entry = ldap_first_entry($this->getLink(), $qry);
 		if ($entry) {
-			//if ((count($attributes) < 1) && ($attributes != 'rdn')) $attributes = ldap_get_attributes($this->getLink(), $entry);
 			if ($attributes[0] == "*") {
 				$get_attributes = ldap_get_attributes($this->getLink(), $entry);
 				$count = $get_attributes['count'];
-				//$get_attributes = array_pop($get_attributes); // Remove "count" entry
 				$attributes = array();
-				for ($i = 0; $i <= $count; $i++) {
-					$attributes[] = $get_attributes[$i];
-				}
-				//if (is_array($attributes)) { $test = print_r($attributes, true); error_log($test); }
+				// Get attributes only (not arrays)
+				for ($i = 0; $i < $count; $i++) { $attributes[] = $get_attributes[$i]; }
 			}
 			while ($entry) {
 				if (is_array($attributes) && count($attributes) > 0 ) {
 					foreach ($attributes as $attribute) {
 						$values = array();
 						// "ldap_get_values(): Cannot get the value(s) of attribute Decoding error" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
-						//"ldap_get_values() expects parameter 3 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
 						if (is_array($attribute)) { $test = print_r($attribute, true); error_log($test); }
 						$vals = ldap_get_values($this->getLink(), $entry, $attribute);
 						for ($i=0;$i < $vals['count'];$i++) {
