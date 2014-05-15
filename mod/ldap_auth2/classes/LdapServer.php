@@ -163,7 +163,8 @@ class LdapServer {
 						$values = array();
 						// "ldap_get_values(): Cannot get the value(s) of attribute Decoding error"
 						if (is_array($attribute)) { $test = print_r($attribute, true); error_log($test); }
-						$vals = @ldap_get_values($this->getLink(), $entry, $attribute);
+						error_log("Get values for $attribute");
+						$vals = ldap_get_values($this->getLink(), $entry, $attribute);
 						if ($vals) for ($i=0;$i < $vals['count'];$i++) {
 							 $values[]=$vals[$i];
 						}
