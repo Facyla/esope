@@ -152,7 +152,7 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
-	if (elgg_is_active_plugin('ldap_auth') || elgg_is_active_plugin('ldap_auth2')) {
+	if (elgg_is_active_plugin('ldap_auth')) {
 		elgg_register_plugin_hook_handler('ldap_auth:check_profile', 'user', 'theme_inria_ldap_check_profile');
 		elgg_register_plugin_hook_handler('ldap_auth:update_profile', 'user', 'theme_inria_ldap_update_profile');
 		elgg_register_plugin_hook_handler('ldap_auth:clean_group_name', 'user', 'theme_inria_ldap_clean_group_name');

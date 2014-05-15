@@ -1,17 +1,18 @@
 <?php
-/**
- * Elgg LDAP authentication
- * 
- * @package ElggLDAPAuth
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @author Misja Hoebe <misja@elgg.com>
- * @copyright Curverider Ltd 2008
- * @link http://elgg.com
- */
 
-$fr = array(
+	/**
+	 * Elgg LDAP authentication
+	 * 
+	 * @package ElggLDAPAuth
+	 * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+	 * @author Misja Hoebe <misja@elgg.com>
+	 * @copyright Curverider Ltd 2008
+	 * @link http://elgg.com
+	 */
+
+$en = array(
 	
-	'ldap_auth:missingsettings' => "Veuillez configurer le plugin ldap_auth plugin en créant un fichier settings.php à la racine du plugin. Voyez le fichier settings_dist.php pour un exemple de fichier de configuration.",
+	'ldap_auth:missingsettings' => "Please configure ldap_auth plugin first by creating a settings.php file in plugin main directory. See settings_dist.php template file.",
 	
 	'ldap_auth:settings:label:host' => "Host settings",
 	'ldap_auth:settings:label:connection_search' => "LDAP settings",
@@ -38,20 +39,13 @@ $fr = array(
 	'ldap_auth:settings:label:start_tls' => "Start TLS",
 	'ldap_auth:settings:help:start_tls' => "Start TLS to secure LDAP authentication (server needs to support LDAPS).",
 	
-	'ldap_auth:settings:updatename' => "Forcer la mise à jour des noms affichés sur la base des informations du LDAP (NOM Prénom) ?",
+	'ldap_auth:settings:updatename' => "Force update name based on LAST NAME First Name info ?",
 	
 	'ldap_auth:no_account' => "Your credentials are valid, but no account was found - please contact the system administrator",
 	'ldap_auth:no_register' => 'An account could not get created for you - please contact the system administrator.',
 	'ldap_auth:invalid:password' => 'LDAP : votre mot de passe est incorrect',
-	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (attention à la casse)',
-	
-	'ldap_auth:title' => "Authentification LDAP",
-	'elgg_ldap:mail_field_name' => "Nom du champ donnant l'email du compte dans LDAP",
-	'elgg_ldap:username_field_name' => "Nom du champ donnant l'username du compte dans LDAP (et Elgg)",
-	'elgg_ldap:status_field_name' => "Nom du champ donnant le statut du compte LDAP actif/inactif",
-	'elgg_ldap:generic_register_email' => "Adresse email générique pour la création des comptes (avant MAJ via LDAP)",
-	
+	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (Attention à la casse)',
 );
 
-add_translation('fr', $fr);
+add_translation('en', $en);
 

@@ -12,11 +12,13 @@
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
-function ldap_auth_settings_mail(){
-	return array(	'host' => 'ldaps://ToBeCompleted',
- 					'port' => 636,
- 					'version' => 3,
- 					'basedn' => 'ToBeCompleted' );
+function ldap_auth_settings_mail() {
+	return array(
+		'host' => 'ldaps://ToBeCompleted',
+		'port' => 636,
+		'version' => 3,
+		'basedn' => 'ToBeCompleted'
+	);
 }
 
 /**
@@ -25,11 +27,13 @@ function ldap_auth_settings_mail(){
  * 
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
-function ldap_auth_settings_info(){
-	return array(	'host' => 'ToBeCompleted',
- 					'port' => 9009,
-					'version' => 3,
- 					'basedn' => 'ToBeCompleted' );
+function ldap_auth_settings_info() {
+	return array(
+		'host' => 'ToBeCompleted',
+		'port' => 9009,
+		'version' => 3,
+		'basedn' => 'ToBeCompleted'
+	);
 }
 
 /**
@@ -38,11 +42,13 @@ function ldap_auth_settings_info(){
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
-function ldap_auth_settings_auth(){
-	return array(	'host' => 'ldaps://ToBeCompleted',
- 					'port' => 636,
-					'version' => 3,
- 					'basedn' => 'ToBeCompleted' );
+function ldap_auth_settings_auth() {
+	return array(
+		'host' => 'ldaps://ToBeCompleted',
+		'port' => 636,
+		'version' => 3,
+		'basedn' => 'ToBeCompleted'
+	);
 }
 
 /**
@@ -51,13 +57,14 @@ function ldap_auth_settings_auth(){
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
-function ldap_auth_settings_info_fields()
-{
-	return array('cn' => 'name',
-				'ou' => 'ToBeCompleted',
-				'l' => 'location',
-				'roomNumber' => 'room',
-				'telephoneNumber' => 'phone');
+function ldap_auth_settings_info_fields() {
+	return array(
+		'cn' => 'name',
+		'ou' => 'ToBeCompleted',
+		'l' => 'location',
+		'roomNumber' => 'room',
+		'telephoneNumber' => 'phone'
+	);
 }
 
 /**
@@ -66,9 +73,11 @@ function ldap_auth_settings_info_fields()
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
-function ldap_auth_settings_auth_fields()
-{
-	return array(	'cn' => 'name',
-			'inriagroupmemberof' => 'ToBeCompleted',
-			'ou' => 'location');
+function ldap_auth_settings_auth_fields() {
+	return array(
+		'cn' => 'name',
+		'inriagroupmemberof' => 'ToBeCompleted',
+		'ou' => 'location'
+	);
 }
+
