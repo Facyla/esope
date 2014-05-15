@@ -29,7 +29,7 @@ if (elgg_instanceof($user, "user")) {
 } else echo "Pas de compte à ce nom<hr />";
 
 // Tests LDAP
-if (elgg_is_active_plugin('ldap_auth')) {
+if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	
 	echo "<h3>LDAP functions tests</h3>";
 	
