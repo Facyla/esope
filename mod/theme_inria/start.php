@@ -3,8 +3,6 @@
 // Initialise log browser
 elgg_register_event_handler('init','system','theme_inria_init');
 
-$action_url = dirname(__FILE__) . "/actions/";
-
 
 /* Initialise the theme */
 function theme_inria_init(){
@@ -298,6 +296,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			
 			// Update LDAP data
 			ldap_auth_check_profile($user);
+			return true;
 			
 			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)

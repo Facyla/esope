@@ -11,7 +11,7 @@ if (!$username) $username = elgg_get_logged_in_user_entity()->username;
 
 $user = get_user_by_username($username);
 
-//echo inria_update_user_status('login', 'user', $user);
+//echo inria_check_and_update_user_status('login', 'user', $user);
 
 echo "Créé : " . elgg_view_friendly_time($user->time_created) . '<hr />';
 echo "Mis à jour : " . elgg_view_friendly_time($user->time_updated) . '<hr />';

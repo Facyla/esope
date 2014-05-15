@@ -13,8 +13,8 @@
 	
 	echo '<br/>';
 	
-	echo elgg_view('input/longtext', array(
-			'internalname' => 'params[tasks]',
+	echo elgg_view('input/plaintext', array(
+			'name' => 'params[tasks]',
 			'value' => $param
 		));
 ?>

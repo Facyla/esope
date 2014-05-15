@@ -12,7 +12,7 @@
 	$english = array(
 	
 		'vazco_text_captcha:entercaptcha' => 'Answer simple question',
-		'vazco_text_captcha:entercaptcha:description' => 'Please inpt answer below',
+		'vazco_text_captcha:entercaptcha:description' => 'Please input answer below',
 		'vazco_text_captcha:captchafail' => 'Sorry, the number that you entered wasn\'t correct.',
 		'vazco_text_captcha:tasks' => 'Define additional tasks:'
 	);

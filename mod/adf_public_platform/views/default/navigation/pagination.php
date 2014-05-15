@@ -166,7 +166,7 @@ echo '</ul>';
 
 // Esope : limits selector
 if ($advanced_pagination) {
-	echo '<ul class="elgg-pagination">';
+	echo '<ul class="elgg-pagination elgg-pagination-limit">';
 	$limits_opts = array(10, 30, 100);
 	if (!in_array($limit, $limits_opts)) $limits_opts[] = $limit;
 	sort($limits_opts);

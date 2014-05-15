@@ -4,7 +4,7 @@
 		public static function getCaptchaChallengeArray()
 		{
 			$arr = array();
-			$tasks_txt = get_plugin_setting('tasks','vazco_text_captcha');
+			$tasks_txt = elgg_get_plugin_setting('tasks','vazco_text_captcha');
 			$tasks_txt = str_replace("\r\n", "\n", $tasks_txt);
 			$tasks = explode("\n", $tasks_txt);
 			foreach($tasks as $i => $row)
