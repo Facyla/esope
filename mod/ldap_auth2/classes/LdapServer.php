@@ -155,10 +155,11 @@ class LdapServer {
 				$get_attributes = ldap_get_attributes($this->getLink(), $entry);
 				$count = $get_attributes['count'];
 				//$get_attributes = array_pop($get_attributes); // Remove "count" entry
-				for ($i = 0; $i < $count; $i++) {
+				$attributes = array();
+				for ($i = 0; $i <= $count; $i++) {
 					$attributes[] = $get_attributes[$i];
 				}
-				if (is_array($attributes)) { $test = print_r($attributes, true); error_log($test); }
+				//if (is_array($attributes)) { $test = print_r($attributes, true); error_log($test); }
 			}
 			while ($entry) {
 				if (is_array($attributes) && count($attributes) > 0 ) {
