@@ -13,6 +13,12 @@ if (!$username) {
 }
 
 header('Content-type: text/html; charset=utf-8');
+echo '<form method="POST">
+	<input type="text" name="username" placeholder="username" value="' . $username . '">
+	<input type="text" name="password" placeholder="password" value="' . $password . '">
+	<input type="submit" value="Tester vec ces valeurs">
+	</form>';
+
 echo "<h2>User info for $username</h2>";
 
 echo "<h3>Elgg user info</h3>";
@@ -29,18 +35,19 @@ if (elgg_instanceof($user, "user")) {
 } else echo "Pas de compte à ce nom<hr />";
 
 // Tests LDAP
-if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
+if (elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
+	elgg_load_library("elgg:ldap_auth");
 	
 	echo "<h3>LDAP functions tests</h3>";
 	
 	if (ldap_user_exists($username)) $ldap_user_exists = "TRUE"; else $ldap_user_exists = "FALSE";
-	echo "<p><strong>Testing 'ldap_user_exists(username)' : $ldap_user_exists</h3>";
+	echo "<p><strong>Testing 'ldap_user_exists(username)' :</strong> $ldap_user_exists</p>";
 	
 	if (ldap_auth_is_closed($username)) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' : $ldap_auth_is_closed</h3>";
+	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' :</strong> $ldap_auth_is_closed</p>";
 	
 	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' : $ldap_auth_is_valid</h3>";
+	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
 	
 	// ldap_auth_create_profile($username, $password)
 	// ldap_auth_check_profile(ElggUser $user)
@@ -67,7 +74,6 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	// Update inria user
 	//inria_check_and_update_user_status($event, $object_type, $user);
 	
-	elgg_load_library("elgg:ldap_auth");
 	//ldap_auth_check_profile($user);
 
 

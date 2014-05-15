@@ -21,8 +21,8 @@ function ldap_auth_init() {
 		register_error(elgg_echo('ldap_auth:missingsettings'));
 	}
 	
-	//helper functions
-	elgg_register_library('elgg:ldap_auth', elgg_get_plugins_path() . 'ldap_auth/lib/ldap_auth.php');
+	// LDAP helper functions for Elgg interfacing
+	elgg_register_library('elgg:ldap_auth', dirname(__FILE__) . '/lib/ldap_auth.php');
 
 	// Register the authentication handler
 	register_pam_handler('ldap_auth_handler_authenticate', 'sufficient', 'user');
