@@ -161,8 +161,9 @@ class LdapServer {
 				if (is_array($attributes) && count($attributes) > 0 ) {
 					foreach ($attributes as $attribute) {
 						$values = array();
+						// "ldap_get_values(): Cannot get the value(s) of attribute Decoding error"
 						if (is_array($attribute)) { $test = print_r($attribute, true); error_log($test); }
-						$vals = ldap_get_values($this->getLink(), $entry, $attribute);
+						$vals = ldap_get_values($this->getLink(), $entry, $attribute.";binary");
 						for ($i=0;$i < $vals['count'];$i++) {
 							 $values[]=$vals[$i];
 						}
