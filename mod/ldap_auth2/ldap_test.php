@@ -127,5 +127,7 @@ if (elgg_is_active_plugin('ldap_auth') || elgg_is_active_plugin('ldap_auth2') ||
 			    'uid' => 'ldap_uid',
 	);
 
+} else {
+	echo "Plugin LDAP inactif.";
 }
 
