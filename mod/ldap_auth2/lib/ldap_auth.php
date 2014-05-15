@@ -1,5 +1,4 @@
 <?php
-error_log('LDAP : loading lib');
 if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
 	register_error(elgg_echo('ldap_auth:missingsettings'));
 }

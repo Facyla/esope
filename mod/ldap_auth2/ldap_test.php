@@ -36,10 +36,8 @@ if (elgg_instanceof($user, "user")) {
 
 // Tests LDAP
 if (elgg_is_active_plugin('ldap_auth') || elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
-	error_log('LDAP : plugin active');
 	elgg_load_library("elgg:ldap_auth");
 	
-	error_log('LDAP : lib loaded');
 	echo "<h3>LDAP settings</h3>";
 	
 	//Test new config

@@ -107,50 +107,37 @@ class LdapServer {
 	
 	/**
 	 * Search LDAP tree
-	 * @param filter string <p>
+	 * @param filter string
 	 * The search filter can be simple or advanced, using boolean operators in
 	 * the format described in the LDAP documentation (see the Netscape Directory SDK for full
 	 * information on filters).
-	 * </p>
-	 * @param attributes array[optional] <p>
+	 * @param attributes array[optional]
 	 * An array of the required attributes, e.g. array("mail", "sn", "cn").
 	 * Note that the "dn" is always returned irrespective of which attributes
 	 * types are requested.
-	 * </p>
-	 * <p>
 	 * Using this parameter is much more efficient than the default action
 	 * (which is to return all attributes and their associated values). 
 	 * The use of this parameter should therefore be considered good
 	 * practice.
-	 * </p>
-	 * @param attrsonly int[optional] <p>
+	 * @param attrsonly int[optional]
 	 * Should be set to 1 if only attribute types are wanted. If set to 0
 	 * both attributes types and attribute values are fetched which is the
 	 * default behaviour.
-	 * </p>
-	 * @param sizelimit int[optional] <p>
+	 * @param sizelimit int[optional]
 	 * Enables you to limit the count of entries fetched. Setting this to 0
 	 * means no limit.
-	 * </p>
-	 * <p>
 	 * This parameter can NOT override server-side preset sizelimit. You can
 	 * set it lower though.
-	 * </p>
-	 * <p>
 	 * Some directory server hosts will be configured to return no more than
 	 * a preset number of entries. If this occurs, the server will indicate
 	 * that it has only returned a partial results set. This also occurs if
 	 * you use this parameter to limit the count of fetched entries.
-	 * </p>
-	 * @param timelimit int[optional] <p>
+	 * @param timelimit int[optional]
 	 * Sets the number of seconds how long is spend on the search. Setting
 	 * this to 0 means no limit.
-	 * </p>
-	 * <p>
 	 * This parameter can NOT override server-side preset timelimit. You can
 	 * set it lower though.
-	 * </p>
-	 * @param deref int[optional] <p>
+	 * @param deref int[optional]
 	 * Specifies how aliases should be handled during the search. It can be
 	 * one of the following:
 	 * LDAP_DEREF_NEVER - (default) aliases are never
@@ -174,6 +161,7 @@ class LdapServer {
 						$values = array();
 						// "ldap_get_values(): Cannot get the value(s) of attribute Decoding error" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
 						//"ldap_get_values() expects parameter 3 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
+						if (is_array($attribute)) { $test = print_r($attribute, true); error_log($test); }
 						$vals = ldap_get_values($this->getLink(), $entry, $attribute);
 						for ($i=0;$i < $vals['count'];$i++) {
 							 $values[]=$vals[$i];
@@ -195,17 +183,11 @@ class LdapServer {
 	
 	/**
 	 * Bind to LDAP directory
-	
-	 * @param bind_rdn string[optional] <p>
-	 * </p>
-	 * @param bind_password string[optional] <p>
-	 * </p>
+	 * @param bind_rdn string[optional]
+	 * @param bind_password string[optional]
 	 * @return bool Returns true on success or false on failure.
 	 */
 	public function bind($rdn=null, $password=null) {
-		// "ldap_bind() expects parameter 2 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 199)
-		$test = print_r($rdn, true);
-		error_log("LDAP : rdn bind string : $test");
 		return ldap_bind($this->getLink(), $rdn, $password);
 	}
 	
