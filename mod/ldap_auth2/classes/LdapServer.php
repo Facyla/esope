@@ -153,6 +153,7 @@ class LdapServer {
 			//if ((count($attributes) < 1) && ($attributes != 'rdn')) $attributes = ldap_get_attributes($this->getLink(), $entry);
 			if ($attributes[0] == "*") {
 				$attributes = ldap_get_attributes($this->getLink(), $entry);
+				if (is_array($attributes)) { $test = print_r($attributes, true); error_log($test); }
 				//$attributes = array_pop($attributes);
 			}
 			while ($entry) {
