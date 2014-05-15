@@ -163,15 +163,18 @@ class LdapServer {
 		
 		$entry = ldap_first_entry($this->getLink(), $qry);
 		if ($entry) {
-			if (count($attributes) < 1) $attributes = ldap_get_attributes($this->getLink(), $entry);
+			if ((count($attributes) < 1) && ($attributes != 'rdn')) $attributes = ldap_get_attributes($this->getLink(), $entry);
 			while ($entry) {
 				if (is_array($attributes) && count($attributes) > 0 ) {
 					foreach ($attributes as $attribute) {
 						$values = array();
+						// "ldap_get_values(): Cannot get the value(s) of attribute Decoding error" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
+						//"ldap_get_values() expects parameter 3 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 171)
 						$vals = ldap_get_values($this->getLink(), $entry, $attribute);
 						for ($i=0;$i < $vals['count'];$i++) {
 							 $values[]=$vals[$i];
 						}
+						// "Illegal offset type" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 175)
 						$result[$attribute] = $values;
 					}
 				} else {
@@ -196,6 +199,8 @@ class LdapServer {
 	 * @return bool Returns true on success or false on failure.
 	 */
 	public function bind($rdn=null, $password=null) {
+		// "ldap_bind() expects parameter 2 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 199)
+		if (is_array($rdn)) error_log(print_r($rdn, true));
 		return ldap_bind($this->getLink(), $rdn, $password);
 	}
 	

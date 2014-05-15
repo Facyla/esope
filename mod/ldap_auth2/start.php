@@ -65,15 +65,12 @@ function ldap_auth_handler_update($event, $object_type, $user){
  * @access private
  */
 function ldap_auth_handler_authenticate($credentials = array()) {
-	// attention si le mot de passe est filtré (get_input) via Elgg
-	// on a besoin de récupérer directement le GET/POST et de savoir si c'est identique ou pas.
-	
 	// Nothing to do if LDAP module not installed
 	if (!function_exists('ldap_connect')) {
 		error_log("DEBUG : LDAP PHP extension is not installed !");
 		throw new LoginException(elgg_echo('LoginException:ContactAdmin:missingLDAP'));
 	}
-
+	
 	if (is_array($credentials) && isset($credentials['username']) && isset($credentials['password'])) {
 		$username = $credentials['username'];
 		$password = $credentials['password'];

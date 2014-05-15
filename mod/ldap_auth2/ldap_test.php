@@ -72,7 +72,13 @@ if (elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
 	echo "<p><strong>Testing 'ldap_get_email(username)' :</strong> $ldap_get_email</p>";
 	
 	$user_infos = ldap_get_search_infos("inriaLogin=$username", $auth_settings, array());
-	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, ldap_server, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
+	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, auth_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
+	
+	$user_infos = ldap_get_search_infos("inriaLogin=$username", $mail_settings, array());
+	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, mail_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
+	
+	$user_infos = ldap_get_search_infos("inriaLogin=$username", $info_settings, array());
+	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, info_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
 	// ldap_auth_create_profile($username, $password)
 	// ldap_auth_check_profile(ElggUser $user)
@@ -84,88 +90,42 @@ if (elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
 	
 	//ldap_auth_check_profile($user);
 
-
-	$auth = new LdapServer($auth_settings);
-	$mail = new LdapServer($mail_settings);
-	$info = new LdapServer($info_settings);
-	
 	$ldap_people_fields = array(
-                'givenName' => 'firstname',
-                'sn' => 'lastname',
-                'cn' => 'inria_name',
-                //'telephoneNumber' => 'inria_phone', // multiple
-                //'roomNumber' => 'inria_room', // multiple
-                'inriagroupmemberof' => 'epi_ou_service',
-                'ou' => 'inria_location', // organisation (lieu)
-                //'l' => 'inria_location', // deprecated ?
+		'givenName' => 'firstname',
+		'sn' => 'lastname',
+		'cn' => 'inria_name',
+		//'telephoneNumber' => 'inria_phone', // multiple
+		//'roomNumber' => 'inria_room', // multiple
+		'inriagroupmemberof' => 'epi_ou_service',
+		'ou' => 'inria_location', // organisation (lieu)
+		//'l' => 'inria_location', // deprecated ?
 
-                //'displayName' => 'inria_name2', // same as cn
-                //'mobile' => 'mobile',
-                'mail' => 'email',
-                //'secretary' => 'secretary',
-                'uid' => 'ldap_uid',
+		//'displayName' => 'inria_name2', // same as cn
+		//'mobile' => 'mobile',
+		'mail' => 'email',
+		//'secretary' => 'secretary',
+		'uid' => 'ldap_uid',
 	);
 	
-        $ldap_contacts_fields = array(
-                'givenName' => 'firstname',
-                'sn' => 'lastname',
-                'cn' => 'inria_name',
-                'telephoneNumber' => 'inria_phone', // multiple
-                'telephoneNumber;x-location-ad0015r' => 'inria_phone', // multiple
-                'telephoneNumber;x-location-ad0010a' => 'inria_phone', // multiple
-                'telephoneNumber;x-location-ad00110' => 'inria_phone', // multiple
-                'roomNumber' => 'inria_room', // multiple
-                //'inriagroupmemberof' => 'epi_ou_service',
-                'ou' => 'inria_location', // organisation (lieu)
-                //'l' => 'inria_location', // deprecated ?
+	$ldap_contacts_fields = array(
+			    'givenName' => 'firstname',
+			    'sn' => 'lastname',
+			    'cn' => 'inria_name',
+			    'telephoneNumber' => 'inria_phone', // multiple
+			    'telephoneNumber;x-location-ad0015r' => 'inria_phone', // multiple
+			    'telephoneNumber;x-location-ad0010a' => 'inria_phone', // multiple
+			    'telephoneNumber;x-location-ad00110' => 'inria_phone', // multiple
+			    'roomNumber' => 'inria_room', // multiple
+			    //'inriagroupmemberof' => 'epi_ou_service',
+			    'ou' => 'inria_location', // organisation (lieu)
+			    //'l' => 'inria_location', // deprecated ?
 
-                'displayName' => 'inria_name2', // same as cn
-                //'mobile' => 'mobile',
-                'mail' => 'email',
-                'secretary' => 'secretary',
-                'uid' => 'ldap_uid',
-        );
+			    'displayName' => 'inria_name2', // same as cn
+			    //'mobile' => 'mobile',
+			    'mail' => 'email',
+			    'secretary' => 'secretary',
+			    'uid' => 'ldap_uid',
+	);
 
-
-	echo '<pre>';
-	if ( $info->bind() && $auth->bind() && $mail->bind()) {
-		echo "<br />BIND OK";
-
-                echo "<br />BASE infos (from people branch) :<br />";
-                $ldap_mail = $auth->search('inriaLogin=' . $username, array('mail', 'uid'));
-                $user_mail = $ldap_mail[0]['mail'][0];
-                $user_uid = $ldap_mail[0]['uid'][0];
-                echo "<br />Email : $user_mail<br />";
-                echo "UID : $user_uid<br /><br />";
-
-		echo "<br />AUTH infos : (people branch, based on username)<br />";
-//		$result = $auth->search('inriaLogin=' . $username, array_keys($ldap_people_fields));
-		$result = $auth->search('inriaLogin=' . $username);
-		if ($result) { echo print_r($result, true); }
-		
-		echo "<br /><br />MAIL infos : (contacts branch, based on user UID)<br />";
-		//$result = $mail->search('mail=' . $user_mail, array_keys(ldap_contacts_fields));
-//		$result = $mail->search('uid=' . $user_uid, array_keys($ldap_contacts_fields));
-		$result = $mail->search('uid=' . $user_uid);
-		if ($result) { echo print_r($result, true); }
-	
-		echo "<br /><br />INFO infos : (contacts branch, based on user UID)<br />";
-		//$result = $info->search('mail=' . $user_mail, array_keys($ldap_contacts_fields));
-//		$result = $info->search('uid=' . $user_uid, array_keys($ldap_contacts_fields));
-		$result = $info->search('uid=' . $user_uid);
-		if ($result) { echo print_r($result, true); }
-
-		echo "<br /><br />Locality infos : (contacts branch on objectClass=locality)<br />";
-		$result = $info->search('objectClass=locality', array('l', 'description'));
-		if ($result) {
-			foreach($result as $num => $locality) {
-				echo "{$locality['l'][0]} => {$locality['description'][0]}\n";
-			}
-			//echo print_r($result, true);
-		}
-	}
-	echo '</pre>';
-	
-	echo '<hr />';
 }
 

@@ -55,11 +55,7 @@ function ldap_auth_login($username, $password) {
  */
 function ldap_user_exists($username) {
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	if ($auth->bind()) {
-		$result = $auth->search("$username_field_name=$username", array($status_field_name));
-		//$result = $auth->search("$username_field_name=$username", array($username_field_name)); // No need to check any other field than username..
+	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($username_field_name));
 		if ($result) { return true; }
 	}
 	// Error or not found : same as doesn't exist
@@ -119,16 +115,14 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 function ldap_auth_is_closed($username) {
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	if ($auth->bind()) {
-		$result = $auth->search("$username_field_name=$username", array($status_field_name));
-		if ($result && $result[0][$status_field_name][0] == 'closed') {
-			return true;
-			// No need to throw exception on a simple test - we need it for other tests
-			//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
-		} else {
-			return false;
-		}
+	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($status_field_name));
+	if ($result && $result[0][$status_field_name][0] == 'closed') {
+		return true;
+		// No need to throw exception on a simple test - we need it for other tests
+		//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
+	} else {
+		// Not closed <=> active
+		return false;
 	}
 	// Error or not found : same as closed (not a valid ldap login)
 	return true;
@@ -146,9 +140,11 @@ function ldap_auth_is_closed($username) {
  * @access private
  */
 function ldap_auth_is_valid($username, $password) {
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	//we need to bind anonymously to do search for rdn
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	
+	//we need to bind anonymously to do search for rdn
+	//$rdn = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array());
+	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ($auth->bind()) {
 		//we need the rdn to perform a bind with password
 		$rdn = $auth->search("$username_field_name=$username");
@@ -177,7 +173,7 @@ function ldap_auth_is_valid($username, $password) {
  * @return ElggUser|false Depending on success
  */
 function ldap_auth_create_profile($username, $password) {
-	$generic_register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
+	$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
 	$new_username = $username;
 	/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
 	 * Only use this if Elgg needs username >= 4 chars, but you'd better add in engine/settings.php file:
@@ -189,7 +185,9 @@ function ldap_auth_create_profile($username, $password) {
 	//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 	// Email : we use a noreply email until it is updated by LDAP
 	// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
-	if ($user_guid = register_user($new_username, $password, $username, $generic_register_email, true)) {
+	//$user_email = ldap_get_email($username);
+	//if (is_email_address($user_email)) $register_email = $user_email;
+	if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
 		$user = get_user($user_guid);
 		//update profile with ldap infos
 		$user->ldap_username = $username;
@@ -223,33 +221,36 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	if (!$user && $user instanceof ElggUser) return false;
-	// require settings.php
-	$mail = new LdapServer(ldap_auth_settings_mail());
-	$info = new LdapServer(ldap_auth_settings_info());
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	if ( $info->bind() && $auth->bind() && $mail->bind()) {
-		$ldap_mail = $mail->search("$username_field_name={$user->username}", array($mail_field_name));
-		$user_mail = $ldap_mail[0][$mail_field_name][0];
-		$user_uid = $ldap_mail[0]['uid'][0];
-		// There should be only 1 email <=> 1 username, but don't update in doubt
-		if ($ldap_mail && count($ldap_mail) == 1) {
-			$ldap_infos = $info->search("$mail_field_name=$user_mail", array_keys(ldap_auth_settings_info_fields()));
-			// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
-			if ($ldap_infos && count($ldap_infos) > 1) { $ldap_infos = array(end($ldap_infos)); }
-			if ($ldap_infos && count($ldap_infos) == 1) {
-				return ldap_auth_update_profile($user, $ldap_infos, $ldap_mail, ldap_auth_settings_info_fields());
-			} else {
-				//we still can use auth as alternative info source - less infos
-				$ldap_infos = $auth->search("$username_field_name={$user->username}", array_keys(ldap_auth_settings_auth_fields()));
-				$ldap_infos = ldap_auth_clean_group_name($ldap_infos);
-				if ($ldap_infos && count($ldap_infos) == 1) {
-					return ldap_auth_update_profile($user, $ldap_infos, $ldap_mail, ldap_auth_settings_auth_fields());
-				}
-			}
-		}
+	
+	$user_mail = ldap_get_email($user->username);
+	
+	// Auth branch is always required
+	$auth_result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array_keys(ldap_auth_settings_auth_fields()));
+	if (!$auth_result) {
+		error_log("LDAP_auth : cannot bind to LDAP auth server");
+		return false;
 	} else {
-		error_log("LDAP_auth : cannot bind to LDAP server");
+		if (count($auth_result) > 1) {
+			error_log("LDAP_auth : username matches multiple users, so cannot update user data");
+			$auth_result = array(end($auth_result)); }
+			return false;
+		}
 	}
+	
+	// Info branch is optional - though useful
+	$ldap_infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array_keys(ldap_auth_settings_info_fields()));
+	if ($ldap_infos) {
+		// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
+		if (count($ldap_infos) > 1) { $ldap_infos = array(end($ldap_infos)); }
+		return ldap_auth_update_profile($user, $ldap_infos, $auth_result, ldap_auth_settings_info_fields());
+	} else {
+		// Chech fallback branch
+		$auth_result = ldap_auth_clean_group_name($auth_result);
+		if (count($auth_result) == 1) {
+			return ldap_auth_update_profile($user, $auth_result, $ldap_mail, ldap_auth_settings_auth_fields());
+		}
+	}
+	// Could not update data
 	return false;
 }
 
