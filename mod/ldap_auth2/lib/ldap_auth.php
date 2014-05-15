@@ -1,4 +1,5 @@
 <?php
+error_log('LDAP : loading lib');
 if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
 	register_error(elgg_echo('ldap_auth:missingsettings'));
 }
@@ -56,8 +57,7 @@ function ldap_auth_login($username, $password) {
 function ldap_user_exists($username) {
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($username_field_name));
-		if ($result) { return true; }
-	}
+	if ($result) { return true; }
 	// Error or not found : same as doesn't exist
 	return false;
 }
@@ -231,8 +231,8 @@ function ldap_auth_check_profile(ElggUser $user) {
 		return false;
 	} else {
 		if (count($auth_result) > 1) {
+			//$auth_result = array(end($auth_result));
 			error_log("LDAP_auth : username matches multiple users, so cannot update user data");
-			$auth_result = array(end($auth_result)); }
 			return false;
 		}
 	}
