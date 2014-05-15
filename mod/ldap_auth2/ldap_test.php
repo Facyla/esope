@@ -11,6 +11,7 @@ if (!$username) {
 } else {
 	$user = get_user_by_username($username);
 }
+$password = get_input('password', false);
 
 header('Content-type: text/html; charset=utf-8');
 echo '<form method="POST">
