@@ -38,23 +38,7 @@ if (elgg_instanceof($user, "user")) {
 if (elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
 	elgg_load_library("elgg:ldap_auth");
 	
-	echo "<h3>LDAP functions tests</h3>";
-	
-	if (ldap_user_exists($username)) $ldap_user_exists = "TRUE"; else $ldap_user_exists = "FALSE";
-	echo "<p><strong>Testing 'ldap_user_exists(username)' :</strong> $ldap_user_exists</p>";
-	
-	if (ldap_auth_is_closed($username)) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' :</strong> $ldap_auth_is_closed</p>";
-	
-	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
-	
-	// ldap_auth_create_profile($username, $password)
-	// ldap_auth_check_profile(ElggUser $user)
-	// ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields)
-	// ldap_auth_clean_group_name(array $infos)
-	
-	echo "<h3>LDAP settings tests</h3>";
+	echo "<h3>LDAP settings</h3>";
 	
 	//Test new config
 	$auth_settings = array('host' => 'ldaps://ildap.inria.fr', 'port' => 636, 'version' => 3, 'basedn' => 'ou=people,dc=inria,dc=fr');
@@ -70,6 +54,30 @@ if (elgg_is_active_plugin('ldap_auth2') || function_exists('ldap_auth_login')) {
 	echo '<pre>Settings AUTH : ' . print_r($auth_settings, true) . '</pre>';
 	echo '<pre>Settings MAIL : ' . print_r($mail_settings, true) . '</pre>';
 	echo '<pre>Settings INFO : ' . print_r($info_settings, true) . '</pre>';
+	
+
+	
+	echo "<h3>LDAP functions tests</h3>";
+	
+	if (ldap_user_exists($username)) $ldap_user_exists = "TRUE"; else $ldap_user_exists = "FALSE";
+	echo "<p><strong>Testing 'ldap_user_exists(username)' :</strong> $ldap_user_exists</p>";
+	
+	if (ldap_auth_is_closed($username)) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
+	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' :</strong> $ldap_auth_is_closed</p>";
+	
+	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
+	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
+	
+	$ldap_get_email = ldap_get_email($username);
+	echo "<p><strong>Testing 'ldap_get_email(username)' :</strong> $ldap_get_email</p>";
+	
+	$user_infos = ldap_get_search_infos("inriaLogin=$username", $auth_settings, array());
+	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, ldap_server, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
+	
+	// ldap_auth_create_profile($username, $password)
+	// ldap_auth_check_profile(ElggUser $user)
+	// ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields)
+	// ldap_auth_clean_group_name(array $infos)
 	
 	// Update inria user
 	//inria_check_and_update_user_status($event, $object_type, $user);

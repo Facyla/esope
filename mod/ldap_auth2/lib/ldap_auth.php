@@ -3,6 +3,12 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
 	register_error(elgg_echo('ldap_auth:missingsettings'));
 }
 
+/* TODO
+ * - use only 2 sources : auth + infos
+ * - make the plugin more generic (hooks + settings)
+ * - add generic helper fonctions
+ */
+
 /**
  * ldap_auth helper functions
  *
@@ -57,6 +63,47 @@ function ldap_user_exists($username) {
 		if ($result) { return true; }
 	}
 	// Error or not found : same as doesn't exist
+	return false;
+}
+
+
+/* Return user email from username */
+function ldap_get_email($username) {
+	// Check LDAP server data
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
+	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($mail_field_name));
+	if ($result) {
+		$user_mail = $result[0][$mail_field_name][0];
+		if (!empty($user_mail)) { return $user_mail; }
+	}
+	// Error or not found : same as doesn't exist
+	return false;
+}
+
+
+/* Return user data from ldap search, using data caching
+ * $criteria : field=value or other valid ldap search cirteria
+ * $ldap_server : LdapServer settings
+ * $attributes : list of attributes to be returned
+ */
+function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
+	$data_key = $field . "+" . $value . "+" . implode(';', $ldap_server) . "+" . implode(';', $attributes);
+	$data_key = md5($data_key);
+	// Use caching
+	global $ldap_auth_data;
+	if (isset($ldap_auth_data[$data_key])) { return $ldap_auth_data[$data_key]; }
+	// Check LDAP server data
+	$ldap = new LdapServer($ldap_server);
+	if ($ldap->bind()) {
+		$results = $ldap->search($criteria, $attributes);
+		// Cache results
+		if ($results) {
+			$ldap_auth_data[$data_key] = $results;
+			return $results;
+		}
+	}
+	// Error or not found
 	return false;
 }
 
