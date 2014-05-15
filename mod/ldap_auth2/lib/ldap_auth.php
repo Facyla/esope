@@ -230,7 +230,7 @@ function ldap_auth_check_profile(ElggUser $user) {
 	// Auth branch is always required
 	$auth_result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array_keys(ldap_auth_settings_auth_fields()));
 	if (!$auth_result) {
-		error_log("LDAP_auth : cannot bind to LDAP auth server");
+		error_log("LDAP_auth : cannot bind to LDAP auth server on $username_field_name=$username");
 		return false;
 	} else {
 		if (count($auth_result) > 1) {
