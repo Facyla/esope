@@ -161,11 +161,13 @@ class LdapServer {
 				if (is_array($attributes) && count($attributes) > 0 ) {
 					foreach ($attributes as $attribute) {
 						$values = array();
-						$vals = ldap_get_values($this->getLink(), $entry, "$attribute");
-						if ($vals) for ($i=0;$i < $vals['count'];$i++) {
-							 $values[]=$vals[$i];
+						$vals = @ldap_get_values($this->getLink(), $entry, "$attribute");
+						if ($vals) {
+							for ($i=0;$i < $vals['count'];$i++) {
+								 $values[]=$vals[$i];
+							}
+							$result[$attribute] = $values;
 						}
-						$result[$attribute] = $values;
 					}
 				} else {
 					$result = ldap_get_dn($this->getLink(), $entry);
