@@ -152,7 +152,7 @@ class LdapServer {
 		if ($entry) {
 			if ($attributes[0] == "*") {
 				$get_attributes = ldap_get_attributes($this->getLink(), $entry);
-				$count = $get_attributes['count'] - 1;
+				$count = $get_attributes['count'];
 				$attributes = array();
 				// Get attributes only (not arrays)
 				for ($i = 0; $i < $count; $i++) { $attributes[] = $get_attributes[$i]; }

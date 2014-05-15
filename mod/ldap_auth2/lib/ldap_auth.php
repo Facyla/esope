@@ -92,14 +92,14 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 		error_log("LDAP : using cache $data_key = " . $ldap_auth_data[$data_key]);
 		return $ldap_auth_data[$data_key];
 	}
-	*/
 	// Check LDAP server data
+	*/
 	$ldap = new LdapServer($ldap_server);
 	if ($ldap->bind()) {
 		$results = $ldap->search($criteria, $attributes);
 		// Cache results
 		if ($results) {
-			$ldap_auth_data[$data_key] = $results;
+			if ($datakey) $ldap_auth_data[$data_key] = $results;
 			return $results;
 		}
 	}
