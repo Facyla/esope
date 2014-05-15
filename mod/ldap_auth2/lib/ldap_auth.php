@@ -67,7 +67,7 @@ function ldap_user_exists($username) {
 function ldap_get_email($username) {
 	// Check LDAP server data
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($mail_field_name));
 	if ($result) {
 		$user_mail = $result[0][$mail_field_name][0];
@@ -218,7 +218,7 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$hook_result = elgg_trigger_plugin_hook("ldap_auth:check_profile", "user", array("user" => $user), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
-	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	if (!$user && $user instanceof ElggUser) return false;
 	
@@ -272,7 +272,7 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 	$hook_result = elgg_trigger_plugin_hook("ldap_auth:update_profile", "user", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
-	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'inriaMail');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$mainpropchange = false;
 	if (count($ldap_infos) == 1 && count($ldap_mail) == 1) {
