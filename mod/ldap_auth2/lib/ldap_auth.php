@@ -83,6 +83,7 @@ function ldap_get_email($username) {
  * $attributes : list of attributes to be returned
  */
 function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
+	/*
 	$data_key = $field . "+" . $value . "+" . implode(';', $ldap_server) . "+" . implode(';', $attributes);
 	$data_key = md5($data_key);
 	// Use caching
@@ -91,6 +92,7 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 		error_log("LDAP : using cache $data_key = " . $ldap_auth_data[$data_key]);
 		return $ldap_auth_data[$data_key];
 	}
+	*/
 	// Check LDAP server data
 	$ldap = new LdapServer($ldap_server);
 	if ($ldap->bind()) {
