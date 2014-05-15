@@ -46,6 +46,7 @@ $en = array(
 	'ldap_auth:invalid:password' => 'LDAP : incorrect password',
 	'ldap_auth:invalid:username' => 'LDAP : unknown login (check your username)',
 	
+	'ldap_auth:title' => "LDAP authentication",
 	'elgg_ldap:mail_field_name' => "Email field name in LDAP",
 	'elgg_ldap:username_field_name' => "Username field name in LDAP (should match Elgg)",
 	'elgg_ldap:status_field_name' => "Active status field name in LDAP",

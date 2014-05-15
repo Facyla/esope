@@ -10,7 +10,7 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
  */
 
 /**
- * Login process when using LDAP
+ * Login process using LDAP
  *
  * @param string $username the LDAP login.
  * @param string $password the coresponding LDAP password.
@@ -19,18 +19,11 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
  * @throws LoginException
  * @access private
  */
+/** Note : normalement les caractères spéciaux sont bien traités par cette fonction
+ * Pour afficher le mot de passe en clair, utiliser htmlentities($password, ENT_QUOTES,'UTF-8');
+ * Eviter d'utiliser stripslashes (supprime les antislashs si ceux-ci sont utilisés)
+*/
 function ldap_auth_login($username, $password) {
-	/* Notes : normalement les caractères spéciaux sont bien traités.. il ne devrait pas y avoir de raison qu'ils ne passent pas.
-	Pour afficher le mot de passe en clair, utiliser htmlentities($password, ENT_QUOTES,'UTF-8');
-	On n'a normalement pas besoin d'utiliser stripslashes (qui supprime les antislashs si ceux-ci sont utilisés)
-	$password2 = get_input('password', '', false); $password3 = $_GET["password"]; $password4 = $_POST["password"];
-	//$pwd = stripslashes($password); $pwd2 = stripslashes($password2); $pwd3 = stripslashes($password3); $pwd4 = stripslashes($password4);
-	$pwd = $password; $pwd2 = $password2; $pwd3 = $password3; $pwd4 = $password4;
-	error_log("DEBUG LDAP ldap_auth_login : $username : $pwd  2= $pwd2  3= $pwd3  4= $pw4"); // @TODO
-	$pwd = htmlentities($pwd, ENT_QUOTES,'UTF-8'); $pwd2 = htmlentities($pwd2, ENT_QUOTES,'UTF-8'); $pwd3 = htmlentities($pwd3, ENT_QUOTES,'UTF-8'); $pwd4 = htmlentities($pwd4, ENT_QUOTES,'UTF-8');
-	register_error("DEBUG LDAP ldap_auth_login : $username : $pwd  2= $pwd2  3= $pwd3  4= $pw4"); // @TODO
-	*/
-	
 	if ( !ldap_auth_is_closed($username) ) {
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
@@ -44,6 +37,56 @@ function ldap_auth_login($username, $password) {
 	}
 	// Return nothing means handler wants to be skipped
 }
+
+/**
+ * Check if LDAP account exists
+ *
+ * @param string $username the LDAP login.
+ * 
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function ldap_user_exists($username) {
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
+	$auth = new LdapServer(ldap_auth_settings_auth());
+	if ($auth->bind()) {
+		$result = $auth->search("$username_field_name=$username", array($status_field_name));
+		//$result = $auth->search("$username_field_name=$username", array($username_field_name)); // No need to check any other field than username..
+		if ($result) { return true; }
+	}
+	// Error or not found : same as doesn't exist
+	return false;
+}
+
+/**
+ * Check if LDAP account is closed
+ *
+ * @param string $username the LDAP login.
+ * 
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function ldap_auth_is_closed($username) {
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
+	$auth = new LdapServer(ldap_auth_settings_auth());
+	if ($auth->bind()) {
+		$result = $auth->search("$username_field_name=$username", array($status_field_name));
+		if ($result && $result[0][$status_field_name][0] == 'closed') {
+			return true;
+			// No need to throw exception on a simple test - we need it for other tests
+			//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
+		} else {
+			return false;
+		}
+	}
+	// Error or not found : same as closed (not a valid ldap login)
+	return true;
+}
+
 
 /**
  * Check if LDAP credentials are valid
@@ -78,55 +121,6 @@ function ldap_auth_is_valid($username, $password) {
 	return false;
 }
 
-/**
- * Check if LDAP account is closed
- *
- * @param string $username the LDAP login.
-  * 
- * @return bool
- * @throws LoginException
- * @access private
- */
-function ldap_auth_is_closed($username) {
-	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	if ($auth->bind()) {
-		$result = $auth->search("$username_field_name=$username", array($status_field_name));
-		if ($result && $result[0][$status_field_name][0] == 'closed') {
-			return true;
-			// No need to throw exception on a simple test - we need it for other tests
-			//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
-		} else {
-			return false;
-		}
-	}
-	// Error or not found : same as closed (not a valid ldap login)
-	return true;
-}
-
-
-/**
- * Check if LDAP account exists
- *
- * @param string $username the LDAP login.
-  * 
- * @return bool
- * @throws LoginException
- * @access private
- */
-function ldap_user_exists($username) {
-	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
-	$auth = new LdapServer(ldap_auth_settings_auth());
-	if ($auth->bind()) {
-		$result = $auth->search("$username_field_name=$username", array($status_field_name));
-		if ($result) { return true; }
-	}
-	// Error or not found : same as doesn't exist
-	return false;
-}
-
 
 /**
  * Create user by username
@@ -138,24 +132,27 @@ function ldap_user_exists($username) {
 function ldap_auth_create_profile($username, $password) {
 	$generic_register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
 	$new_username = $username;
-	// Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
-	// Only use this if Elgg needs username >= 4 chars, but you'd better add 
-	// $CONFIG->minusername = 4;
-	// in engine/settings.php file.
+	/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
+	 * Only use this if Elgg needs username >= 4 chars, but you'd better add in engine/settings.php file:
+	 * $CONFIG->minusername = 4;
+	*/
 	//while (strlen($new_username) < 4) { $new_username .= '0'; }
 	
-	//the local password can't be use because ldap auth is call before any other authentifaction method 
+	// Note : local password can't be used because ldap_auth is called before other authentication methods
 	//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 	// Email : we use a noreply email until it is updated by LDAP
+	// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
 	if ($user_guid = register_user($new_username, $password, $username, $generic_register_email, true)) {
 		$user = get_user($user_guid);
 		//update profile with ldap infos
 		$user->ldap_username = $username;
 		if (!ldap_auth_check_profile($user)) {
-			error_log("LDAP auth error : cannot update profile $user_guid on registration");
+			error_log("LDAP_auth : cannot update profile $user_guid on registration");
 		}
 		// Success, credentials valid and account has been created
 		return $user;
+	} else {
+		error_log("LDAP_auth : cannot automatically create user $username");
 	}
 	return null;
 }
@@ -203,6 +200,8 @@ function ldap_auth_check_profile(ElggUser $user) {
 				}
 			}
 		}
+	} else {
+		error_log("LDAP_auth : cannot bind to LDAP server");
 	}
 	return false;
 }
