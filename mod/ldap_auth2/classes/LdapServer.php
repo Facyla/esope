@@ -202,7 +202,7 @@ class LdapServer {
 		// "ldap_bind() expects parameter 2 to be string, array given" in file /appli/devnet/elgg/mod/ldap_auth2/classes/LdapServer.php (line 199)
 		if (is_array($rdn)) {
 			$test = print_r($rdn, true);
-			error_log($rdn);
+			error_log($test);
 		}
 		return ldap_bind($this->getLink(), $rdn, $password);
 	}
