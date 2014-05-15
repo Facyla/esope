@@ -152,6 +152,12 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
+	if (elgg_is_active_plugin('ldap_auth') || elgg_is_active_plugin('ldap_auth2')) {
+		elgg_register_plugin_hook_handler('ldap_auth:check_profile', 'user', 'theme_inria_ldap_check_profile');
+		elgg_register_plugin_hook_handler('ldap_auth:update_profile', 'user', 'theme_inria_ldap_update_profile');
+		elgg_register_plugin_hook_handler('ldap_auth:clean_group_name', 'user', 'theme_inria_ldap_clean_group_name');
+	}
+	
 }
 
 
@@ -912,4 +918,23 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 	return $result;
 }
 
+
+function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
+	$user = $params['user'];
+	error_log("LDAP hook : check_profile");
+	return $result;
+}
+function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
+	$user = $params['user'];
+	$infos = $params['infos'];
+	$mail = $params['mail'];
+	$fields = $params['fields'];
+	error_log("LDAP hook : update_profile");
+	return $result;
+}
+function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
+	$infos = $params['infos'];
+	error_log("LDAP hook : clean_group_name");
+	return $result;
+}
 

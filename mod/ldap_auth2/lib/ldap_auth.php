@@ -217,7 +217,6 @@ function ldap_auth_create_profile($username, $password) {
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_check_profile(ElggUser $user) {
-	
 	// Hook : return anything but "continue" will stop and return hook result
 	$hook_result = elgg_trigger_plugin_hook("ldap_auth:check_profile", "user", array("user" => $user), "continue");
 	if ($hook_result != 'continue') return $hook_result;
@@ -313,7 +312,11 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 				$mainpropchange = true;
 				// MAJ du nom : NOM Prénom, ssi on dispose des 2 infos
 				if (!empty($firstname) && !empty($lastname)) {
-					$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
+					if (function_exists('esope_uppercase_name')) {
+						$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
+					} else {
+						$user->name = strtoupper($lastname) . ' ' . $firstname;
+					}
 				} else if (!empty($fullname)) {
 					$user->name = $fullname;
 				}
