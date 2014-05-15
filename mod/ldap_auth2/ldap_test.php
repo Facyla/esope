@@ -36,7 +36,7 @@ if (elgg_is_active_plugin('ldap_auth')) {
 	if (ldap_user_exists($username)) $ldap_user_exists = "TRUE"; else $ldap_user_exists = "FALSE";
 	echo "<p><strong>Testing 'ldap_user_exists(username)' : $ldap_user_exists</h3>";
 	
-	if (ldap_auth_is_closed($username) {) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
+	if (ldap_auth_is_closed($username)) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
 	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' : $ldap_auth_is_closed</h3>";
 	
 	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
@@ -144,7 +144,9 @@ if (elgg_is_active_plugin('ldap_auth')) {
 		echo "<br /><br />Locality infos : (contacts branch on objectClass=locality)<br />";
 		$result = $info->search('objectClass=locality', array('l', 'description'));
 		if ($result) {
-			foreach($result as $num => $locality) {echo "{$locality['l'][0]} => {$locality['description'][0]}\n"; }
+			foreach($result as $num => $locality) {
+				echo "{$locality['l'][0]} => {$locality['description'][0]}\n";
+			}
 			//echo print_r($result, true);
 		}
 	}
