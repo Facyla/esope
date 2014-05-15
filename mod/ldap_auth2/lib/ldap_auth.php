@@ -144,7 +144,7 @@ function ldap_auth_is_valid($username, $password) {
 	
 	//we need to bind anonymously to do search for rdn
 	//$rdn = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array());
-	$auth = new LdapServer(ldap_auth_settings_auth(), 'rdn');
+	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ($auth->bind()) {
 		//we need the rdn to perform a bind with password
 		$rdn = $auth->search("$username_field_name=$username");
