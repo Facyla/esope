@@ -87,7 +87,10 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 	$data_key = md5($data_key);
 	// Use caching
 	global $ldap_auth_data;
-	if (isset($ldap_auth_data[$data_key])) { return $ldap_auth_data[$data_key]; }
+	if (isset($ldap_auth_data[$data_key])) {
+		error_log("LDAP : using cache $data_key = " . $ldap_auth_data[$data_key]);
+		return $ldap_auth_data[$data_key];
+	}
 	// Check LDAP server data
 	$ldap = new LdapServer($ldap_server);
 	if ($ldap->bind()) {
