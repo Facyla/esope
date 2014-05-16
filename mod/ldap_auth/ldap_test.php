@@ -103,8 +103,10 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	if (ldap_auth_is_active($username)) $ldap_auth_is_active = "TRUE"; else $ldap_auth_is_active = "FALSE";
 	echo "<p><strong>Testing 'ldap_auth_is_active(username)' :</strong> $ldap_auth_is_active</p>";
 	
-	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
+	if (!empty($password)) {
+		if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
+		echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
+	}
 	
 	$ldap_get_email = ldap_get_email($username);
 	echo "<p><strong>Testing 'ldap_get_email(username)' :</strong> $ldap_get_email</p>";
@@ -125,7 +127,7 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	
 	// ldap_auth_create_profile($username, $password)
 	// ldap_auth_check_profile(ElggUser $user)
-	// ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields)
+	// ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_auth, Array $fields)
 	// ldap_auth_clean_group_name(array $infos)
 	
 	// Update inria user

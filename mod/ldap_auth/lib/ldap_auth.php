@@ -1,10 +1,17 @@
 <?php
+/**
+ * Elgg LDAP lib
+ * @filesource lib/ldap_auth.php
+ * @package Elgg.ldap_auth
+ * @author Simon Bouland <simon.bouland@inria.fr>
+ * @author Florian DANIEL <facyla@gmail.com>
+ */
+
 if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
 	register_error(elgg_echo('ldap_auth:missingsettings'));
 }
 
 /* TODO
- * - use only 2 sources : auth + infos
  * - make the plugin more generic (hooks + settings)
  * - add generic helper fonctions
  */
@@ -211,23 +218,21 @@ function ldap_auth_create_profile($username, $password) {
 
 
 /**
- * Search for user info in LDAP directories
- * And update Elgg profile
+ * Search for user info in LDAP directories and update Elgg profile
  *
  * @param ElggUser $user The user
  *
  * @return bool Return true on success
  */
-// @TODO : add a hook to let plugin write their own methods
 function ldap_auth_check_profile(ElggUser $user) {
-	// Hook : return anything but "continue" will stop and return hook result
+	if (!$user && $user instanceof ElggUser) return false;
+	
+	// Hook : return anything but default "continue" will stop and return hook result
 	$hook_result = elgg_trigger_plugin_hook("check_profile", "ldap_auth", array("user" => $user), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	if (!$user && $user instanceof ElggUser) return false;
-	
 	$user_mail = ldap_get_email($user->username);
 	
 	// Auth branch is always required
@@ -246,15 +251,14 @@ function ldap_auth_check_profile(ElggUser $user) {
 	// Info branch is optional - though useful
 	$ldap_infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array_keys(ldap_auth_settings_info_fields()));
 	if ($ldap_infos) {
-		// Note : if we have more than 1 result, it means the info has been updated ! so keep the latest result
+		// Note : more than 1 result usually means info has been updated ! so keep the latest
 		if (count($ldap_infos) > 1) { $ldap_infos = array(end($ldap_infos)); }
-		return ldap_auth_update_profile($user, $ldap_infos, $auth_result, ldap_auth_settings_info_fields());
+		return ldap_auth_update_profile($user, $auth_result, $ldap_infos, ldap_auth_settings_info_fields());
 	} else {
-		// Chech fallback branch
+		// Chech fallback branch : use only auth (source + fields)
 		$auth_result = ldap_auth_clean_group_name($auth_result);
-		if (count($auth_result) == 1) {
-			return ldap_auth_update_profile($user, $auth_result, $ldap_mail, ldap_auth_settings_auth_fields());
-		}
+		if (count($auth_result) > 1) { $auth_result = array(end($auth_result)); }
+		return ldap_auth_update_profile($user, $auth_result, $auth_result, ldap_auth_settings_auth_fields());
 	}
 	// Could not update data
 	return false;
@@ -265,24 +269,23 @@ function ldap_auth_check_profile(ElggUser $user) {
  * Update Elgg profile
  *
  * @param ElggUser 	$user 		The user to update
- * @param array 	$ldap_infos Search result of the form $ldap_infos
- * @param array 	$ldap_mail 	Search result of the form $ldap_mail[0]['inriaMail'][0]
+ * @param array 	$ldap_infos Search result from $ldap_infos
+ * @param array 	$ldap_auth 	Search result from $ldap_auth (containing email)
  * @param array 	$fields		ldap_auth_settings_info_fields() or ldap_auth_settings_auth_fields()
  *
  * @return bool Return true on success
  */
-// @TODO : add a hook to let plugin write their own methods
-function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields) {
-	// Hook : return anything but "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
+function ldap_auth_update_profile(ElggUser $user, Array $ldap_auth, Array $ldap_infos, Array $fields) {
+	// Hook : return anything but default "continue" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'auth' => $ldap_auth, 'fields' => $fields), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$mainpropchange = false;
-	if (count($ldap_infos) == 1 && count($ldap_mail) == 1) {
-		if ($user->email != $ldap_mail[0][$mail_field_name][0]) {
-			$user->email = $ldap_mail[0][$mail_field_name][0];
+	if (count($ldap_infos) == 1 && count($ldap_auth) == 1) {
+		if ($user->email != $ldap_auth[0][$mail_field_name][0]) {
+			$user->email = $ldap_auth[0][$mail_field_name][0];
 			$mainpropchange = true;
 		}
 		foreach ($ldap_infos[0] as $key => $val) {
@@ -339,7 +342,7 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_clean_group_name(array $infos) {
-	// Hook : return anything but "continue" will stop and return hook result
+	// Hook : return anything but default "continue" will stop and return hook result
 	$hook_result = elgg_trigger_plugin_hook("clean_group_name", "ldap_auth", array("infos" => $infos), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	

@@ -926,7 +926,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$user = $params['user'];
 	$infos = $params['infos'];
-	$mail = $params['mail'];
+	$mail = $params['auth'];
 	$fields = $params['fields'];
 	error_log("LDAP hook : update_profile");
 	return $result;
