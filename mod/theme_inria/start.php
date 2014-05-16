@@ -927,8 +927,8 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$user = $params['user'];
-	$infos = $params['infos'];
 	$auth = $params['auth'];
+	$infos = $params['infos'];
 	$fields = $params['fields'];
 	error_log("LDAP hook : update_profile");
 	
@@ -981,10 +981,13 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 			if (substr($key, 0, 10) == 'roomNumber') {
+				error_log("ldap_auth_update_profile : found roomNumber {$val[0]}");
 				$roomNumber[] = $val[0];
 			} else if (substr($key, 0, 15) == 'telephoneNumber') {
+				error_log("ldap_auth_update_profile : found telephoneNumber {$val[0]}");
 				$telephoneNumber[] = $val[0];
 			} else if (substr($key, 0, 9) == 'secretary') {
+				error_log("ldap_auth_update_profile : found secretary {$val[0]}");
 				$secretary[] = $val[0];
 			} else {
 				// No value is also a valid value (updated in LDAP to empty)
