@@ -248,7 +248,7 @@ function ldap_auth_check_profile(ElggUser $user) {
 		}
 	}
 	
-	// Info branch is optional - though useful
+	// Info branch is optional - though useful. Best is to use both, fallback on auth only
 	$ldap_infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array_keys(ldap_auth_settings_info_fields()));
 	if ($ldap_infos) {
 		// Note : more than 1 result usually means info has been updated ! so keep the latest
