@@ -977,12 +977,6 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	
 	// Then Update using infos fields (optional)
-		'ou' => 'epi_ou_service', // Organisation
-		'roomNumber' => 'inria_room', // Multiple values : roomNumber;x-locality-[code]
-		'telephoneNumber' => 'inria_phone', // Multiple values : telephoneNumber;x-locality-[code]
-		'secretary' => 'secretary', // Multiple values
-	
-	
 	foreach ($infos[0] as $key => $val) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
