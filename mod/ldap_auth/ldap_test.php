@@ -43,17 +43,14 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	
 	//Test new config
 	$auth_settings = array('host' => 'ldaps://ildap.inria.fr', 'port' => 636, 'version' => 3, 'basedn' => 'ou=people,dc=inria,dc=fr');
-	$mail_settings = array('host' => 'ldaps://ildap.inria.fr', 'port' => 636, 'version' => 3, 'basedn' => 'ou=contacts,dc=inria,dc=fr');
 	$info_settings = array('host' => 'ldaps://ildap.inria.fr', 'port' => 636, 'version' => 3, 'basedn' => 'ou=contacts,dc=inria,dc=fr');
 	
 	//Current config
 /*
 	$auth_settings = ldap_auth_settings_auth();
-	$mail_settings = ldap_auth_settings_mail();
 	$info_settings = ldap_auth_settings_info();
 */
 	echo '<pre>Settings AUTH : ' . print_r($auth_settings, true) . '</pre>';
-	echo '<pre>Settings MAIL : ' . print_r($mail_settings, true) . '</pre>';
 	echo '<pre>Settings INFO : ' . print_r($info_settings, true) . '</pre>';
 	
 
@@ -114,9 +111,6 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$user_infos = ldap_get_search_infos("inriaLogin=$username", $auth_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, auth_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
-	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $mail_settings, array('*'));
-	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, mail_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
-	
 	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $info_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, info_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
@@ -134,7 +128,16 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	//inria_check_and_update_user_status($event, $object_type, $user);
 	
 	//ldap_auth_check_profile($user);
+	
+	echo "<p>Locality infos : (contacts branch on objectClass=locality)<br />";
+	$result = $info->search('objectClass=locality', array('*'));
+	if ($result) {
+		foreach($result as $num => $locality) {echo "{$locality['l'][0]} => {$locality['description'][0]}<br />"; }
+		echo print_r($result, true);
+	}
+	echo '</p>';
 
+	
 } else {
 	echo "Plugin LDAP inactif.";
 }

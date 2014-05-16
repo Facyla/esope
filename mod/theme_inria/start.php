@@ -920,7 +920,7 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	$user = $params['user'];
-	error_log("LDAP hook : check_profile");
+	//error_log("LDAP hook : check_profile");
 	return $result;
 }
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
@@ -928,12 +928,13 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$infos = $params['infos'];
 	$mail = $params['auth'];
 	$fields = $params['fields'];
-	error_log("LDAP hook : update_profile");
+	//error_log("LDAP hook : update_profile");
 	return $result;
 }
 function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
 	$infos = $params['infos'];
-	error_log("LDAP hook : clean_group_name");
+	//error_log("LDAP hook : clean_group_name");
 	return $result;
 }
+
 
