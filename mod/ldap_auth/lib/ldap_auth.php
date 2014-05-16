@@ -86,6 +86,7 @@ function ldap_get_email($username) {
  */
 function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 	/*
+	*/
 	$data_key = $field . "+" . $value . "+" . implode(';', $ldap_server) . "+" . implode(';', $attributes);
 	$data_key = md5($data_key);
 	// Use caching
@@ -95,7 +96,6 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 		return $ldap_auth_data[$data_key];
 	}
 	// Check LDAP server data
-	*/
 	$ldap = new LdapServer($ldap_server);
 	if ($ldap->bind()) {
 		$results = $ldap->search($criteria, $attributes);
@@ -231,9 +231,9 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$user_mail = ldap_get_email($user->username);
 	
 	// Auth branch is always required
-	$auth_result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array_keys(ldap_auth_settings_auth_fields()));
+	$auth_result = ldap_get_search_infos("$username_field_name={$user->username}", ldap_auth_settings_auth(), array_keys(ldap_auth_settings_auth_fields()));
 	if (!$auth_result) {
-		error_log("LDAP_auth : cannot bind to LDAP auth server on $username_field_name=$username");
+		error_log("LDAP_auth : cannot bind to LDAP auth server on $username_field_name={$user->username}");
 		return false;
 	} else {
 		if (count($auth_result) > 1) {

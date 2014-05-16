@@ -112,7 +112,7 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$user_infos = ldap_get_search_infos("inriaLogin=$username", $auth_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, auth_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
-	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $mail_settings, array_keys('*'));
+	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $mail_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, mail_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
 	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $info_settings, array('*'));
