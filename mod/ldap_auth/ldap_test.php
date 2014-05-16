@@ -100,8 +100,8 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	if (ldap_user_exists($username)) $ldap_user_exists = "TRUE"; else $ldap_user_exists = "FALSE";
 	echo "<p><strong>Testing 'ldap_user_exists(username)' :</strong> $ldap_user_exists</p>";
 	
-	if (ldap_auth_is_closed($username)) $ldap_auth_is_closed = "TRUE"; else $ldap_auth_is_closed = "FALSE";
-	echo "<p><strong>Testing 'ldap_auth_is_closed(username)' :</strong> $ldap_auth_is_closed</p>";
+	if (ldap_auth_is_active($username)) $ldap_auth_is_active = "TRUE"; else $ldap_auth_is_active = "FALSE";
+	echo "<p><strong>Testing 'ldap_auth_is_active(username)' :</strong> $ldap_auth_is_active</p>";
 	
 	if (ldap_auth_is_valid($username, $password)) $ldap_auth_is_valid = "TRUE"; else $ldap_auth_is_valid = "FALSE";
 	echo "<p><strong>Testing 'ldap_auth_is_valid(username, password)' :</strong> $ldap_auth_is_valid</p>";
@@ -112,11 +112,18 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$user_infos = ldap_get_search_infos("inriaLogin=$username", $auth_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, auth_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
-	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $mail_settings, array_keys($ldap_contacts_fields));
+	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $mail_settings, array_keys('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, mail_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
 	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $info_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, info_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
+	
+	/*
+	if (ldap_auth_is_active($username)) {
+		echo inria_check_and_update_user_status('login', 'user', $user);
+		echo ldap_auth_check_profile($user);
+	}
+	*/
 	
 	// ldap_auth_create_profile($username, $password)
 	// ldap_auth_check_profile(ElggUser $user)
