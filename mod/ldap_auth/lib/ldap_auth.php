@@ -30,7 +30,9 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
  * Eviter d'utiliser stripslashes (supprime les antislashs si ceux-ci sont utilisés)
 */
 function ldap_auth_login($username, $password) {
-	if ( !ldap_auth_is_closed($username) ) {
+	// User can be logged in or created only if not closed
+	if (ldap_auth_is_active($username)) {
+		// Login requires valid username/pass
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
 				ldap_auth_check_profile($user);
@@ -116,20 +118,20 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
  * @throws LoginException
  * @access private
  */
-function ldap_auth_is_closed($username) {
+function ldap_auth_is_active($username) {
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaentrystatus');
+	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaEntryStatus');
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($status_field_name));
 	if ($result && $result[0][$status_field_name][0] == 'closed') {
-		return true;
+		return false;
 		// No need to throw exception on a simple test - we need it for other tests
 		//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
 	} else {
 		// Not closed <=> active
-		return false;
+		return true;
 	}
 	// Error or not found : same as closed (not a valid ldap login)
-	return true;
+	return false;
 }
 
 
@@ -139,7 +141,7 @@ function ldap_auth_is_closed($username) {
  * @param string $username the LDAP login.
  * @param string $password the coresponding LDAP password.
  *
- * @return bool Return true on success
+ * @return bool Return true on success, false on invalid credentials
  * @throws LoginException
  * @access private
  */
@@ -170,38 +172,42 @@ function ldap_auth_is_valid($username, $password) {
 
 
 /**
- * Create user by username
+ * Create user by username - requires active LDAP access
  *
  * @param string $username The user's username
  *
  * @return ElggUser|false Depending on success
  */
 function ldap_auth_create_profile($username, $password) {
-	$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
-	$new_username = $username;
-	/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
-	 * Only use this if Elgg needs username >= 4 chars, but you'd better add in engine/settings.php file:
-	 * $CONFIG->minusername = 4;
-	*/
-	//while (strlen($new_username) < 4) { $new_username .= '0'; }
+	// Registration is allowed only if set in plugin
+	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', true);
+	if ($allow_registration) {
+		$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
+		$new_username = $username;
+		/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
+		 * Only use this if Elgg needs username >= 4 chars, but you'd better add in engine/settings.php file:
+		 * $CONFIG->minusername = 4;
+		*/
+		//while (strlen($new_username) < 4) { $new_username .= '0'; }
 	
-	// Note : local password can't be used because ldap_auth is called before other authentication methods
-	//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
-	// Email : we use a noreply email until it is updated by LDAP
-	// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
-	//$user_email = ldap_get_email($username);
-	//if (is_email_address($user_email)) $register_email = $user_email;
-	if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
-		$user = get_user($user_guid);
-		//update profile with ldap infos
-		$user->ldap_username = $username;
-		if (!ldap_auth_check_profile($user)) {
-			error_log("LDAP_auth : cannot update profile $user_guid on registration");
+		// Note : local password can't be used because ldap_auth is called before other authentication methods
+		//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
+		// Email : we use a noreply email until it is updated by LDAP
+		// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
+		//$user_email = ldap_get_email($username);
+		//if (is_email_address($user_email)) $register_email = $user_email;
+		if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
+			$user = get_user($user_guid);
+			//update profile with ldap infos
+			$user->ldap_username = $username;
+			if (!ldap_auth_check_profile($user)) {
+				error_log("LDAP_auth : cannot update profile $user_guid on registration");
+			}
+			// Success, credentials valid and account has been created
+			return $user;
+		} else {
+			error_log("LDAP_auth : cannot automatically create user $username");
 		}
-		// Success, credentials valid and account has been created
-		return $user;
-	} else {
-		error_log("LDAP_auth : cannot automatically create user $username");
 	}
 	return null;
 }

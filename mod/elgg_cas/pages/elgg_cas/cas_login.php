@@ -111,9 +111,11 @@ if (elgg_instanceof($user, 'user')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
 				elgg_load_library("elgg:ldap_auth");
-				$elgg_password = generate_random_cleartext_password();
-				// Création du compte puis MAJ avec les infos du LDAP
-				ldap_auth_create_profile($elgg_username, $elgg_password);
+				if (ldap_auth_is_active($username)) {
+					$elgg_password = generate_random_cleartext_password();
+					// Création du compte puis MAJ avec les infos du LDAP
+					ldap_auth_create_profile($elgg_username, $elgg_password);
+				}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}

@@ -308,7 +308,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
-				if (!ldap_auth_is_closed($user->username)) {
+				if (ldap_auth_is_active($user->username)) {
 					$is_inria = true;
 					$account_status = 'active';
 					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
