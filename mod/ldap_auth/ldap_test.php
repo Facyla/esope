@@ -118,12 +118,10 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$user_infos = ldap_get_search_infos("mail=$ldap_get_email", $info_settings, array('*'));
 	echo "<p><strong>Testing 'ldap_get_search_infos(criteria, info_settings, attributes)' :</strong> <pre>" . print_r($user_infos, true) . "</pre></p>";
 	
-	/*
 	if (ldap_auth_is_active($username)) {
-		echo inria_check_and_update_user_status('login', 'user', $user);
+		//echo inria_check_and_update_user_status('login', 'user', $user);
 		echo ldap_auth_check_profile($user);
 	}
-	*/
 	
 	// ldap_auth_create_profile($username, $password)
 	// ldap_auth_check_profile(ElggUser $user)

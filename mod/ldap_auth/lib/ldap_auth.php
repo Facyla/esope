@@ -110,7 +110,7 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 }
 
 /**
- * Check if LDAP account is closed
+ * Check if LDAP account is valid/closed
  *
  * @param string $username the LDAP login.
  * 
@@ -122,15 +122,12 @@ function ldap_auth_is_active($username) {
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaEntryStatus');
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($status_field_name));
-	if ($result && $result[0][$status_field_name][0] == 'closed') {
-		return false;
-		// No need to throw exception on a simple test - we need it for other tests
-		//throw new LoginException(elgg_echo('LoginException:LDAP:ClosedUser'));
-	} else {
+	if ($result) {
+		$status = $result[0][$status_field_name][0];
 		// Not closed <=> active
-		return true;
+		if ($status != 'closed') { return true; }
 	}
-	// Error or not found : same as closed (not a valid ldap login)
+	// Error or not found => not a valid ldap login (same as closed)
 	return false;
 }
 
@@ -224,7 +221,7 @@ function ldap_auth_create_profile($username, $password) {
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_check_profile(ElggUser $user) {
 	// Hook : return anything but "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("ldap_auth:check_profile", "user", array("user" => $user), "continue");
+	$hook_result = elgg_trigger_plugin_hook("check_profile", "ldap_auth", array("user" => $user), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
@@ -277,7 +274,7 @@ function ldap_auth_check_profile(ElggUser $user) {
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap_mail, Array $fields) {
 	// Hook : return anything but "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("ldap_auth:update_profile", "user", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
+	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'mail' => $ldap_mail, 'fields' => $fields), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
@@ -343,7 +340,7 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_infos, Array $ldap
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_clean_group_name(array $infos) {
 	// Hook : return anything but "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("ldap_auth:clean_group_name", "user", array("infos" => $infos), "continue");
+	$hook_result = elgg_trigger_plugin_hook("clean_group_name", "ldap_auth", array("infos" => $infos), "continue");
 	if ($hook_result != 'continue') return $hook_result;
 	
 	$res = $infos;
