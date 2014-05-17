@@ -988,7 +988,6 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	foreach ($infos[0] as $key => $val) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
-			error_log("LDAP : processing key $key");
 			if (substr($key, 0, 10) == 'roomNumber') {
 				$roomNumber[] = $val[0];
 			} else if (substr($key, 0, 15) == 'telephoneNumber') {
@@ -996,8 +995,6 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			} else if (substr($key, 0, 9) == 'secretary') {
 				$secretary[] = $val[0];
 			} else if ($key == 'ou') {
-				$test = print_r($val, true);
-				error_log("ldap_auth_update_profile : found ou values = $test");
 				$epi_ou_service = $val;
 			} else {
 				$meta_name = $fields[$key];
@@ -1050,7 +1047,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$current = $user->$fields['ou'];
 		if ($current != $new) {
 			if (!create_metadata($user->guid, $fields['ou'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=epi_ou_service, val: " . $new);
+				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name={$fields['ou']}, val: " . $new);
 			}
 		}
 	}
