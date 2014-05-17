@@ -959,12 +959,15 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		} else if ($key == 'givenName') {
 			$firstname = $val[0];
 		} else {
-			// No value is a valid value (updated in LDAP to empty)
+			$meta_name = $auth_fields[$key];
+			// Update only defined metadata
+			if (empty($meta_name)) continue;
+			// Value : empty value is a valid value (updated in LDAP to empty)
 			$new = $val[0];
-			$current = $user->$auth_fields[$key];
+			$current = $user->$meta_name;
 			if ($current != $new) {
-				if (!create_metadata($user->guid, $auth_fields[$key], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $auth_fields[$key] . " val: " . $val[0]);
+				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
 				}
 			}
 		}
@@ -996,12 +999,15 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				error_log("ldap_auth_update_profile : found secretary {$val[0]}");
 				$secretary[] = $val[0];
 			} else {
-				// No value is also a valid value (updated in LDAP to empty)
+				$meta_name = $fields[$key];
+				// Update only defined metadata
+				if (empty($meta_name)) continue;
+				// Value : empty value is a valid value (updated in LDAP to empty)
 				$new = $val[0];
-				$current = $user->$fields[$key];
+				$current = $user->$meta_name;
 				if ($current != $new) {
-					if (!create_metadata($user->getGUID(), $fields[$key], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $fields[$key] . " val: " . $val[0]);
+					if (!create_metadata($user->getGUID(), $$meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $$meta_name . " val: " . $val[0]);
 					}
 				}
 			}
