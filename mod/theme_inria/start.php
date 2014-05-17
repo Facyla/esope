@@ -998,6 +998,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			} else if (substr($key, 0, 9) == 'secretary') {
 				error_log("ldap_auth_update_profile : found secretary {$val[0]}");
 				$secretary[] = $val[0];
+			} else if ($key == 'ou') {
+				error_log("ldap_auth_update_profile : found ou ");
+				$epi_ou_service = $val;
 			} else {
 				$meta_name = $fields[$key];
 				// Update only defined metadata
@@ -1040,6 +1043,16 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		if ($current != $new) {
 			if (!create_metadata($user->guid, $fields['secretary'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
 				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=secretary, val: " . $new);
+			}
+		}
+	}
+	// Update special field
+	if ($epi_ou_service) {
+		$new = implode(', ', $epi_ou_service);
+		$current = $user->$fields['ou'];
+		if ($current != $new) {
+			if (!create_metadata($user->guid, $fields['secretary'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=epi_ou_service, val: " . $new);
 			}
 		}
 	}
