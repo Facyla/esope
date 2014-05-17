@@ -1012,13 +1012,13 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		}
 	}
 	
-	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'ou');
+	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'epi_ou_service');
 	foreach ($special_fields as $special_field) {
 		if ($$special_field) {
 			$new = implode(', ', $$special_field);
 			$current = $user->$fields[$special_field];
-			error_log("LDAP : processing $special_field : {$fields[$special_field]} = $new} ($current)");
 			if ($current != $new) {
+				error_log("LDAP : processing $special_field : {$fields[$special_field]} = $new} ($current)");
 				if (!create_metadata($user->getGUID(), $fields[$special_field], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
 					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name={$fields[$special_field]}, val: " . $new);
 				}
