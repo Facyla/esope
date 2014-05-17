@@ -930,7 +930,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$auth = $params['auth'];
 	$infos = $params['infos'];
 	$fields = $params['fields'];
-	error_log("LDAP hook : update_profile");
+	//error_log("LDAP hook : update_profile");
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -1004,44 +1004,59 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				$new = $val[0];
 				$current = $user->$meta_name;
 				if ($current != $new) {
-					if (!create_metadata($user->getGUID(), $$meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $$meta_name . " val: " . $val[0]);
+					if (!create_metadata($user->getGUID(), $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
 					}
 				}
 			}
 		}
 	}
-	// Update special field
+	
+	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'ou');
+	foreach ($special_fields as $special_field) {
+		if ($$special_field) {
+			$new = implode(', ', $$special_field);
+			$current = $user->$fields[$special_field];
+			error_log("LDAP : processing $special_field : {$fields[$special_field]} = $new} ($current)")
+			if ($current != $new) {
+				if (!create_metadata($user->getGUID(), $fields[$special_field], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name={$fields[$special_field]}, val: " . $new);
+				}
+			}
+		}
+	}
+	/*
+	// Update special field "roomNumber"
 	if ($roomNumber) {
 		$new = implode(', ', $roomNumber);
 		$current = $user->$fields['roomNumber'];
 		if ($current != $new) {
 			if (!create_metadata($user->getGUID(), $fields['roomNumber'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=roomNumber, val: " . $new);
+				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name={$fields['roomNumber']}, val: " . $new);
 			}
 		}
 	}
-	// Update special field
+	// Update special field "telephoneNumber"
 	if ($telephoneNumber) {
 		$new = implode(', ', $telephoneNumber);
 		$current = $user->$fields['telephoneNumber'];
 		if ($current != $new) {
 			if (!create_metadata($user->guid, $fields['telephoneNumber'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=telephoneNumber, val: " . $new);
+				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name={$fields['telephoneNumber']}, val: " . $new);
 			}
 		}
 	}
-	// Update special field
+	// Update special field "secretary"
 	if ($secretary) {
 		$new = implode(', ', $secretary);
 		$current = $user->$fields['secretary'];
 		if ($current != $new) {
 			if (!create_metadata($user->guid, $fields['secretary'], $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=secretary, val: " . $new);
+				error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name={$fields['secretary']}, val: " . $new);
 			}
 		}
 	}
-	// Update special field
+	// Update special field "ou => epi_ou_service"
 	if ($epi_ou_service) {
 		$new = implode(', ', $epi_ou_service);
 		$current = $user->$fields['ou'];
@@ -1051,6 +1066,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			}
 		}
 	}
+	*/
 	
 	// Some changes require saving entity
 	if ($mainpropchange) $user->save();
