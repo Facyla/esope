@@ -935,7 +935,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$user_mail = ldap_get_email($user->username);
-	$ldap_infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array('*'));
+	$infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array('*'));
 	
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
