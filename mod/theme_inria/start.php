@@ -1016,11 +1016,11 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	foreach ($special_fields as $special_field) {
 		if ($$special_field) {
 			$meta_name = $fields[$special_field];
-			error_log("LDAP : processing $special_field : $meta_name = $new} ($current)");
 			// Update only defined metadata
 			if (empty($meta_name)) continue;
 			$new = implode(', ', $$special_field);
 			$current = $user->$meta_name;
+			error_log("LDAP : processing $special_field : $meta_name = $new} ($current)");
 			if ($current != $new) {
 				if (!create_metadata($user->getGUID(), $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
 					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=$meta_name, val: " . $new);
