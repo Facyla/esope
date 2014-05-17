@@ -932,6 +932,11 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$fields = $params['fields'];
 	error_log("LDAP hook : update_profile");
 	
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$user_mail = ldap_get_email($user->username);
+	$ldap_infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array('*'));
+	
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$mainpropchange = false;
@@ -946,7 +951,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	// Some data are only in auth branch
 	// Note : Dans branche "people" uniquement, "ou" correspond à "location"
-	foreach ($auth[0] as $key => $val) {
+	if ($auth[0]) foreach ($auth[0] as $key => $val) {
 		if ($key == 'cn') {
 			$fullname = $val[0];
 		} else if ($key == 'sn') {
@@ -980,6 +985,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	foreach ($infos[0] as $key => $val) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
+			error_log("LDAP : processing key $key");
 			if (substr($key, 0, 10) == 'roomNumber') {
 				error_log("ldap_auth_update_profile : found roomNumber {$val[0]}");
 				$roomNumber[] = $val[0];

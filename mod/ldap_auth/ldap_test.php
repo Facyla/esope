@@ -22,6 +22,7 @@ echo '<form method="POST">
 
 echo "<h2>User info for $username</h2>";
 
+echo substr("telephoneNumber;x-location-ad0011o", 0, 15);
 echo "<h3>Elgg user info</h3>";
 if (elgg_instanceof($user, "user")) {
 	echo "Créé : " . elgg_view_friendly_time($user->time_created) . '<hr />';
