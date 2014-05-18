@@ -1022,11 +1022,12 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			$new = implode(', ', $$special_field);
 			$current = $user->$meta_name;
 			if ($current != $new) {
-				error_log("LDAP : processing $special_field : $meta_name = $new (old = $current)");
+				$user->$meta_name = $new;
+				/*
 				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
 					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=$meta_name, val: " . $new);
-					$user->$meta_name = $new;
 				}
+				*/
 			}
 		}
 	}
