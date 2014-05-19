@@ -4,7 +4,6 @@ global $CONFIG;
 gatekeeper();
 
 $own = elgg_get_logged_in_user_entity();
-inria_check_and_update_user_status('login', 'user', $own);
 
 // Premiers pas : s'affiche au début, peut être désactivé
 /* Pas utilisé car remplacé par un menu configurable
@@ -17,10 +16,10 @@ else if ($hide_firststeps == 'show') { $own->hide_firststeps = 'no'; }
 if ($own->hide_firststeps != 'yes') {
 	$firststeps = elgg_view('cmspages/view', array('pagetype' => 'premiers-pas'));
 	if (!empty($firststeps)) {
-		$firststeps = '<header><div class="iris-firststeps">
+		$firststeps = '<header><div class="cocon-firststeps">
 				<div class="firststeps">
 					' . $firststeps . '
-					<a href="?firststeps=hide" class="firststeps-disable">' . elgg_echo('theme_inria:firststeps:hide') . '</a>
+					<a href="?firststeps=hide" class="firststeps-disable">' . elgg_echo('theme_cocon:firststeps:hide') . '</a>
 				</div>
 			</div></header>
 			<div class="clearfloat"></div>';
@@ -44,13 +43,13 @@ $slider = elgg_view('slider/slider', $slider_params);
 
 
 // Le Fil
-$thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_inria:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_inria:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_cocon:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_cocon:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 //elgg_pop_context();
 
 // Activité du site
-$site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_inria:site:activity') . '</a></h2>';
+$site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_cocon:site:activity') . '</a></h2>';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
 $site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
@@ -71,8 +70,8 @@ $body = '
 	<div style="width:76%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
 		
-			<div style="width:100%;" class="iris-news">'
-				//. '<h2 class="hidden">' . elgg_echo('theme_inria:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
+			<div style="width:100%;" class="cocon-news">'
+				//. '<h2 class="hidden">' . elgg_echo('theme_cocon:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
 				. $slider
 			. '</div>
 			<div class="clearfloat"></div><br /><br />
@@ -88,27 +87,27 @@ $body = '
 	</div>
 	
 	<div style="width:22%; float:right;">
-		<h2 class="hidden">' . elgg_echo('theme_inria:home:information') . '</h2>
+		<h2 class="hidden">' . elgg_echo('theme_cocon:home:information') . '</h2>
 		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/sidebar_groups') . '</div>
+		<div class="home-box">' . elgg_view('theme_cocon/sidebar_groups') . '</div>
 		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/online', array('limit' => 30)) . '</div>
+		<div class="home-box">' . elgg_view('theme_cocon/users/online', array('limit' => 30)) . '</div>
 		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
+		<div class="home-box">' . elgg_view('theme_cocon/users/newest') . '</div>
 	</div>
 	
 	<div class="clearfloat"></div>
-	<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>
+	<h2 class="hidden">' . elgg_echo('theme_cocon:home:widgets') . '</h2>
 	' . $widget_body;
 
 // Note : si on utilise la sidebar, il faut impérativement y placer un bloc de widgets
 // sinon on déséquilibre trop la page
 /*
-$sidebar = elgg_view('theme_inria/sidebar_groups') . '
+$sidebar = elgg_view('theme_cocon/sidebar_groups') . '
 		<div class="clearfloat"></div><br />
-		' . elgg_view('theme_inria/users/online') . '
+		' . elgg_view('theme_cocon/users/online') . '
 		<div class="clearfloat"></div><br />
-		' . elgg_view('theme_inria/users/newest');
+		' . elgg_view('theme_cocon/users/newest');
 */
 
 // Supprime le lien "main" (inexistant) de l'accueil
