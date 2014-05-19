@@ -43,8 +43,16 @@ $en = array(
 	
 	'ldap_auth:no_account' => "Your credentials are valid, but no account was found - please contact the system administrator",
 	'ldap_auth:no_register' => 'An account could not get created for you - please contact the system administrator.',
-	'ldap_auth:invalid:password' => 'LDAP : votre mot de passe est incorrect',
-	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (Attention à la casse)',
+	'ldap_auth:invalid:password' => 'LDAP : incorrect password',
+	'ldap_auth:invalid:username' => 'LDAP : unknown login (check your username)',
+	
+	'ldap_auth:title' => "LDAP authentication",
+	'ldap_auth:settings:allow_registration' => "Allow registration with an LDAP account (requires valid LDAP username) ?",
+	'elgg_ldap:mail_field_name' => "Email field name in LDAP",
+	'elgg_ldap:username_field_name' => "Username field name in LDAP (should match Elgg)",
+	'elgg_ldap:status_field_name' => "Active status field name in LDAP",
+	'elgg_ldap:generic_register_email' => "Generic email address used to create new accounts (before LDAP fields update)",
+	
 );
 
 add_translation('en', $en);

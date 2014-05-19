@@ -65,8 +65,7 @@ function ldap_auth_handler_update($event, $object_type, $user){
  * @access private
  */
 function ldap_auth_handler_authenticate($credentials = array()) {
-	// attention si le mot de passe est filtré (get_input) via Elgg
-	// on a besoin de récupérer directement le GET/POST et de savoir si c'est identique ou pas.
+	// @TODO : debug Inria : le "problème" est que le mot de passe est filtré (get_input) via Elgg, donc on a besoin de récupérer directement le GET/POST et de savoir si c'est identique ou pas.
 	
 	// Nothing to do if LDAP module not installed
 	if (!function_exists('ldap_connect')) {

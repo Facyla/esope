@@ -44,6 +44,14 @@ $fr = array(
 	'ldap_auth:no_register' => 'An account could not get created for you - please contact the system administrator.',
 	'ldap_auth:invalid:password' => 'LDAP : votre mot de passe est incorrect',
 	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (attention à la casse)',
+	
+	'ldap_auth:title' => "Authentification LDAP",
+	'ldap_auth:settings:allow_registration' => "Permettre de créer un compte à partir d'un compte LDAP (l'identifiant doit exister dans LDAP) ?",
+	'elgg_ldap:mail_field_name' => "Nom du champ donnant l'email du compte dans LDAP",
+	'elgg_ldap:username_field_name' => "Nom du champ donnant l'username du compte dans LDAP (et Elgg)",
+	'elgg_ldap:status_field_name' => "Nom du champ donnant le statut du compte LDAP actif/inactif",
+	'elgg_ldap:generic_register_email' => "Adresse email générique pour la création des comptes (avant MAJ via LDAP)",
+	
 );
 
 add_translation('fr', $fr);

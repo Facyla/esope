@@ -152,6 +152,12 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
+	if (elgg_is_active_plugin('ldap_auth')) {
+		elgg_register_plugin_hook_handler('check_profile', 'ldap_auth', 'theme_inria_ldap_check_profile');
+		elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
+		elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
+	}
+	
 }
 
 
@@ -291,17 +297,16 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		
 		// Attention, la vérification LDAP ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
-			//error_log("LDAP plugin active");
+			//if (function_exists('ldap_auth_check_profile')) {
 			elgg_load_library("elgg:ldap_auth");
 			
 			// Update LDAP data
 			ldap_auth_check_profile($user);
-			return true;
 			
 			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
-				if (!ldap_auth_is_closed($user->username)) {
+				if (ldap_auth_is_active($user->username)) {
 					$is_inria = true;
 					$account_status = 'active';
 					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
@@ -909,6 +914,136 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
 		$result = $var;
 	}
+	return $result;
+}
+
+
+// LDAP update functions
+function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
+	$user = $params['user'];
+	//error_log("LDAP hook : check_profile");
+	return $result;
+}
+
+function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
+	$user = $params['user'];
+	$auth = $params['auth'];
+	$infos = $params['infos'];
+	$fields = $params['fields'];
+	//error_log("LDAP hook : update_profile");
+	
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$user_mail = ldap_get_email($user->username);
+	$infos = ldap_get_search_infos("$mail_field_name=$user_mail", ldap_auth_settings_info(), array('*'));
+	
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$mainpropchange = false;
+	
+	// Update using auth fields first
+	$auth_fields = ldap_auth_settings_auth_fields();
+	// Update email
+	$ldap_mail = $ldap_auth[0][$mail_field_name][0];
+	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
+		$user->email = $ldap_mail;
+		$mainpropchange = true;
+	}
+	// Some data are only in auth branch
+	// Note : Dans branche "people" uniquement, "ou" correspond à "location"
+	if ($auth[0]) foreach ($auth[0] as $key => $val) {
+		if ($key == 'cn') {
+			$fullname = $val[0];
+		} else if ($key == 'sn') {
+			$lastname = $val[0];
+		} else if ($key == 'givenName') {
+			$firstname = $val[0];
+		} else {
+			$meta_name = $auth_fields[$key];
+			// Update only defined metadata
+			if (empty($meta_name)) continue;
+			// Value : empty value is a valid value (updated in LDAP to empty)
+			$new = $val[0];
+			$current = $user->$meta_name;
+			if ($current != $new) {
+				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
+				}
+			}
+		}
+	}
+	// Finally update displayed name : if asked, or empty name, or name is username (which means it was just created)
+	$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
+	if (($updatename == 'yes') || empty($user->name) || ($user->name == $user->username)) {
+		$mainpropchange = true;
+		// MAJ du nom : NOM Prénom, ssi on dispose des 2 infos
+		if (!empty($firstname) && !empty($lastname)) {
+			$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
+		} else if (!empty($fullname)) {
+			$user->name = $fullname;
+		}
+	}
+	
+	// Then Update using infos fields (optional)
+	foreach ($infos[0] as $key => $val) {
+		// We don't want to update some fields that were processed in auth
+		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
+			if (substr($key, 0, 10) == 'roomNumber') {
+				$roomNumber[] = $val[0];
+			} else if (substr($key, 0, 15) == 'telephoneNumber') {
+				$telephoneNumber[] = $val[0];
+			} else if (substr($key, 0, 9) == 'secretary') {
+				$secretary[] = $val[0];
+			} else if ($key == 'ou') {
+				$ou = $val;
+			} else {
+				$meta_name = $fields[$key];
+				// Update only defined metadata
+				if (empty($meta_name)) continue;
+				// Value : empty value is a valid value (updated in LDAP to empty)
+				$new = $val[0];
+				$current = $user->$meta_name;
+				if ($current != $new) {
+					if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=" . $meta_name . " val: " . $val[0]);
+					}
+				}
+			}
+		}
+	}
+	
+	// Process special fields (arrays, multiple keys, etc.)
+	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'ou');
+	foreach ($special_fields as $special_field) {
+		if ($$special_field) {
+			$meta_name = $fields[$special_field];
+			// Update only defined metadata
+			if (empty($meta_name)) continue;
+			$new = implode(', ', $$special_field);
+			$current = $user->$meta_name;
+			if ($current != $new) {
+				$user->$meta_name = $new;
+				/*
+				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
+					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=$meta_name, val: " . $new);
+				}
+				*/
+			}
+		}
+	}
+	
+	// Some changes require saving entity
+	if ($mainpropchange) $user->save();
+	
+	// Tell update has been successfully done
+	return true;
+	// Not updated : keep going
+	//return $result;
+}
+
+function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
+	$infos = $params['infos'];
+	//error_log("LDAP hook : clean_group_name");
 	return $result;
 }
 

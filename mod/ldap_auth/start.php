@@ -21,8 +21,8 @@ function ldap_auth_init() {
 		register_error(elgg_echo('ldap_auth:missingsettings'));
 	}
 	
-	//helper functions
-	elgg_register_library('elgg:ldap_auth', elgg_get_plugins_path() . 'ldap_auth/lib/ldap_auth.php');
+	// LDAP helper functions for Elgg interfacing
+	elgg_register_library('elgg:ldap_auth', dirname(__FILE__) . '/lib/ldap_auth.php');
 
 	// Register the authentication handler
 	register_pam_handler('ldap_auth_handler_authenticate', 'sufficient', 'user');
@@ -65,14 +65,12 @@ function ldap_auth_handler_update($event, $object_type, $user){
  * @access private
  */
 function ldap_auth_handler_authenticate($credentials = array()) {
-	// @TODO : debug Inria : le "problème" est que le mot de passe est filtré (get_input) via Elgg, donc on a besoin de récupérer directement le GET/POST et de savoir si c'est identique ou pas.
-	
 	// Nothing to do if LDAP module not installed
 	if (!function_exists('ldap_connect')) {
 		error_log("DEBUG : LDAP PHP extension is not installed !");
 		throw new LoginException(elgg_echo('LoginException:ContactAdmin:missingLDAP'));
 	}
-
+	
 	if (is_array($credentials) && isset($credentials['username']) && isset($credentials['password'])) {
 		$username = $credentials['username'];
 		$password = $credentials['password'];
