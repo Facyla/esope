@@ -52,7 +52,8 @@ $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire',
 $site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_cocon:site:activity') . '</a></h2>';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
-$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
+//$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
+$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object')));
 elgg_pop_context();
 
 // Tableau de bord

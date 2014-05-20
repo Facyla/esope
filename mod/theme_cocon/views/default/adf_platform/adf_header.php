@@ -2,6 +2,7 @@
 
 $url = $vars['url'];
 $urlicon = $url . 'mod/adf_public_platform/img/theme/';
+$urlimg = $url . 'mod/theme_cocon/graphics/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
@@ -91,27 +92,23 @@ if (elgg_is_logged_in()) {
 ?>
 
 			<header>
-				<div class="is-floatable">
+				<div class="">
 					<div class="interne">
-						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><?php
-						echo elgg_get_plugin_setting('headertitle', 'adf_public_platform');
-						//'<span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>';
+						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
+						<img src="<?php echo $urlimg; ?>logo_ministere.png" />
+						<img src="<?php echo $urlimg; ?>header_cocon.png" />
+						<?php
+						//echo elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+
 						?></a></h1>
 						<?php if (elgg_is_logged_in()) { ?>
-							<a href="<?php echo $url . 'profile/' . $ownusername; ?>"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></span></a>
 							<nav>
 								<ul>
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
-									<?php if ($messages) { echo $messages; } ?>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('friends'); ?></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo elgg_echo('friends'); ?>"><i class="fa fa-user user icon"></i></a></li>
 									<?php echo $friendrequests; ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
-											<!--
-									<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
-											<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
-											<li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
-									</li>
-											//-->
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><i class="fa fa-envelope mail icon"></i></a></li>
+									<?php if ($messages) { echo $messages; } ?>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('adf_platform:usersettings'); ?>"><i class="fa fa-cog setting icon"></i></a></li>
 									<?php if (elgg_is_admin_logged_in()) { ?>
 										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
 									<?php } ?>
@@ -122,19 +119,21 @@ if (elgg_is_logged_in()) {
 									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('adf_platform:help') . '</a></li>';
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>" title="<?php echo $own->name; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
 									
 								</ul>
 							</nav>
 						<?php } else {
-							echo '<nav><ul><li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('adf_platform:loginregister') . '</a></li></ul></nav>';
+							// Bouton de connexion partout sauf sur la home
+							if (full_url() != $url) echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_cocon:login') . '</a></li></ul></nav>';
 						} ?>
 					</div>
 				</div>
 			</header>
 			
 			<?php if (elgg_is_logged_in()) { ?>
-				<div id="transverse" class="is-floatable">
+				<div id="transverse" class="">
 					<div class="interne">
 						<nav>
 							<ul>
@@ -175,6 +174,16 @@ if (elgg_is_logged_in()) {
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
 									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?></a></li>
 								<?php } ?>
+
+								<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_cocon:menu:live'); ?> <i class="fa fa-caret-down"></i></a>
+									<ul class="hidden">
+										<li><a href="<?php echo $url; ?>cmspages/read/visio1">Salle n°1</a></li>
+										<li><a href="<?php echo $url; ?>cmspages/read/visio2">Salle n°2</a></li>
+										<li><a href="<?php echo $url; ?>cmspages/read/visio3">Salle n°3</a></li>
+										<li><a href="<?php echo $url; ?>cmspages/read/visio4">Salle n°4</a></li>
+										<li><a href="<?php echo $url; ?>cmspages/read/visio5">Salle n°5</a></li>
+									</ul>
+								</li>
 								
 							</ul>
 						</nav>

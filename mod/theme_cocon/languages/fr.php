@@ -21,6 +21,8 @@ $french = array(
 	'theme_cocon:groups:featured' => "Groupes en Une",
 	'theme_cocon:members:newest' => "Nouveaux membres",
 	'theme_cocon:thewire:charleft' => "max",
+	'theme_cocon:login' => "Connexion",
+	'theme_cocon:menu:live' => "Visioconférence",
 	
 );
 
