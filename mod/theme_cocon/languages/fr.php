@@ -20,6 +20,7 @@ $french = array(
 	
 	'theme_cocon:groups:featured' => "Groupes en Une",
 	'theme_cocon:members:newest' => "Nouveaux membres",
+	'theme_cocon:thewire:charleft' => "max",
 	
 );
 

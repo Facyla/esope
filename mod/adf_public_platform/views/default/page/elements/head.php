@@ -34,6 +34,13 @@ $config_semanticui = elgg_get_plugin_setting('semanticui', 'adf_public_platform'
 $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 
 // Output the head content
+/*
+ * @TODO : META tags
+ * description (réglage générique ou distinction par page): <meta name="description" content="XXXX">
+ * keywords (distinction par page): <meta name="keywords" content="XXXX">
+ * author (distinction par page): <meta name="author" content="XXXX">
+ * robots (intérêt moyen) (réglage générique ou distinction par page): <meta name="robots" content="XXXX">
+*/
 ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">

@@ -7,7 +7,7 @@
 // don't filter since we strip and filter escapes some characters
 $body = get_input('body', '', false);
 
-$access_id = 16; // Niveau d'accès réservé Items Interne
+$access_id = 1; // Niveau d'accès réservé Items Interne
 $method = 'site';
 $parent_guid = (int) get_input('parent_guid');
 
@@ -21,7 +21,7 @@ if ($group_guid) {
 }
 */
 // Niveau d'accès manuel
-$access_id = (int) get_input('access_id', 16);;
+$access_id = (int) get_input('access_id', 1);
 
 if ($parent_guid) {
 	$parent = get_entity($parent_guid);
