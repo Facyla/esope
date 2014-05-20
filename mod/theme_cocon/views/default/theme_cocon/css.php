@@ -22,11 +22,36 @@ header { background: transparent; }
 header h1 { margin-top: 16px; }
 header h1:hover { text-decoration:none; }
 header nav ul li { width: 30px; height: 30px; background: white; border-radius: 16px; line-height: 30px; text-align: center; }
-header nav ul li a { font-size: 18px; color:#2a7d9f; }
-#transverse { box-shadow:none; border-bottom:0; background:white; }
-#transverse nav ul li a { color:#2a7d9f; }
-footer.footer-cocon { height: 30px; background:#2c8eb0; }
-footer ul li { margin: 6px 7px 6px 0; font-size: 14px; font-weight: bold; font-family: Montserrat, sans-serif; }
+header nav ul li a { font-size: 18px; color:#2a7d9f; text-shadow:none; }
+header nav .fa { margin-right: 0; }
+#transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
+#transverse nav ul li a { color:#2a7d9f; font-weight:bold; padding: 12px 10px 9px 10px; font-size: 14px; }
+#transverse nav ul li:first-child { border-left:0; }
+#transverse nav ul li li { border-right:0; }
+/* Search form */
+#transverse form { border: 0; }
+form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; }
+form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white; }
+
+/* Footer */
+footer.footer-cocon { height: 37px; background:#2c8eb0; }
+footer.footer-cocon ul li { margin: 8px 7px 6px 0; }
+footer.footer-cocon ul li a { font-size: 14px; font-weight: bold; font-family: Montserrat, sans-serif; }
+footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>puce_footer.png") left 7px no-repeat; }
+
+.elgg-sidebar { background: rgba(255,255,255,0.9); }
+
+
+/* Boutons @TODO */
+.elgg-button {
+border: 1px solid white !important;
+/* background: transparent !important; */
+box-shadow: 0 1px 3px #000 !important;
+border-radius: 16px !important;
+}
+
+.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; font-size: 9px; margin: 3px 3px 0 0; }
+
 
 /* Accueil */
 .anythingSlider { min-height: 300px; }
