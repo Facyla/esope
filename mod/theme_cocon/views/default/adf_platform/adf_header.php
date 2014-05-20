@@ -134,7 +134,7 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?></a>
+								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?> <i class="fa fa-caret-down"></i></a>
 									<?php if (elgg_is_active_plugin('dashboard')) { ?>
 										<ul class="hidden">
 											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
@@ -146,7 +146,7 @@ if (elgg_is_logged_in()) {
 								<?php /* activity : Fil d'activité du site */ ?>
 								
 								<?php if (elgg_is_active_plugin('groups')) { ?>
-									<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?></a>
+									<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
 											<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
 											<?php echo $groups; ?>
@@ -156,7 +156,7 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('categories')) { ?>
-									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?></a>
+									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
 											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('adf_platform:categories:all'); ?></a></li>
 											<?php echo $categories; ?>
