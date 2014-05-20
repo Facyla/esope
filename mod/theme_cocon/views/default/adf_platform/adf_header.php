@@ -95,8 +95,8 @@ if (elgg_is_logged_in()) {
 				<div class="">
 					<div class="interne">
 						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
-						<img src="<?php echo $urlimg; ?>header_ministere.png" />
-						<img src="<?php echo $urlimg; ?>header_cocon.png" alt="<?php echo elgg_get_plugin_setting('headertitle', 'adf_public_platform'); ?>" />
+						<img src="<?php echo $urlimg; ?>header_ministere.jpg" />
+						<img src="<?php echo $urlimg; ?>header_cocon.png" />
 						</a></h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
@@ -107,16 +107,16 @@ if (elgg_is_logged_in()) {
 									<?php if ($messages) { echo $messages; } ?>
 									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('adf_platform:usersettings'); ?>"><i class="fa fa-cog setting icon"></i></a></li>
 									<?php if (elgg_is_admin_logged_in()) { ?>
-										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
+										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>" title="<?php echo elgg_echo('admin'); ?>"><i class="fa fa-cogs settings icon"></i></a></li>
 									<?php } ?>
 									
 									<?php
 									$helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
 									//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
-									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('adf_platform:help') . '</a></li>';
+									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '" title="' . elgg_echo('adf_platform:help') . '"><i class="fa fa-question help icon"></i></a></li>';
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off sign out icon"></i>', 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
 									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>" title="<?php echo $own->name; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
 									
 								</ul>
