@@ -46,6 +46,7 @@ $slider = elgg_view('slider/slider', $slider_params);
 $thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_cocon:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_cocon:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+$thewire .= '<div class="clearfloat"></div>';
 //elgg_pop_context();
 
 // Activité du site
