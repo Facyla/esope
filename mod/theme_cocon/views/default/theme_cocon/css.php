@@ -82,18 +82,18 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
-.home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
-.sidebarBox h3 { background: #c5dc1c; min-height: 40px; padding: 12px 4px 0 10px; }
+.home-box h2, .home-box h3, .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
+.sidebarBox h3, #sidebar-featured-groups h3 { background: #c5dc1c; min-height: 40px; padding: 12px 4px 0 10px; line-height:1; }
 .home-box h2 img { float:left; margin-right:15px; }
 /* Activity */
 .home-box.home-activity { background:white; }
-.home-box.home-activity h2 { padding: 12px 10px; line-height:45px; background:#bc9a33; }
+.home-box.home-activity h2 { padding: 12px 10px; line-height:45px; background:#bc9a33; min-height: 40px; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 12px 0 0 10px; width: 100%; }
+.home-box.home-wire h2 { background: #e45833; padding: 12px 0 0 10px; width: 100%; min-height: 40px; }
 
 /* Widgets */
 section .elgg-layout-one-column div.module { border-radius:0; border:0; }
