@@ -101,11 +101,11 @@ if (elgg_is_logged_in()) {
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo elgg_echo('friends'); ?>" /></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo elgg_echo('friends'); ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo elgg_echo('friends'); ?>" /></a></li>
 									<?php echo $friendrequests; ?>
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><img src="<?php echo $urlpictos; ?>mail.png" alt="<?php echo elgg_echo('messages'); ?>" /></a></li>
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><img src="<?php echo $urlpictos; ?>mail.png" alt="<?php echo elgg_echo('messages'); ?>" /></a></li>
 									<?php if ($messages) { echo $messages; } ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><img src="<?php echo $urlpictos; ?>settings.png" alt="<?php echo elgg_echo('adf_platform:usersettings'); ?>" /></a></li>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('adf_platform:usersettings'); ?>"><img src="<?php echo $urlpictos; ?>settings.png" alt="<?php echo elgg_echo('adf_platform:usersettings'); ?>" /></a></li>
 									<?php if (elgg_is_admin_logged_in()) { ?>
 										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>" title="<?php echo elgg_echo('admin'); ?>"><i class="fa fa-cogs settings icon"></i></a></li>
 									<?php } ?>
@@ -116,7 +116,7 @@ if (elgg_is_logged_in()) {
 									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '" title="' . elgg_echo('adf_platform:help') . '"><img src="' . $urlpictos . 'help.png" /></a></li>';
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<img src="' . $urlpictos . 'logout.png" />', 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<img src="' . $urlpictos . 'logout.png" />', 'alt' => elgg_echo('logout'), 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
 									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
 									
 								</ul>

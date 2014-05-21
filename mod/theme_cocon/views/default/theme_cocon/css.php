@@ -25,7 +25,7 @@ html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-r
 header { background: transparent; border-top:0; height:120px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
-header nav ul li { margin-right:7px; }
+header nav ul li { margin-left:7px; margin-right:0px; }
 header nav ul li a { width: 30px; height: 30px; background: white !important; border-radius: 16px; line-height: 30px; text-align: center; font-size: 18px; color:#2a7d9f; text-shadow:none; padding: 0 !important; display: inline-block; }
 header nav a .fa { margin-right: 0; }
 #user img { border-radius: 14px; width: 28px; padding-top: 1px; }
@@ -40,8 +40,8 @@ header nav a .fa { margin-right: 0; }
 :-moz-placeholder { color:#2a7d9f; }
 ::-moz-placeholder { color:#2a7d9f; }
 :-ms-input-placeholder { color:#2a7d9f; }
-form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; background:white; }
-form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white; border:0; }
+form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; }
+form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; }
 
 /* Footer */
 footer.footer-cocon { height: 37px; background:#2a7d9f; }
