@@ -29,7 +29,7 @@ header nav { background: #00668c; top: 0; padding: 7px 4px; border-radius: 0 0 8
 header nav ul li { margin-left:3px; margin-right:3px; }
 header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; font-weight: normal; color:white; text-shadow:none; padding: 0; display: inline-block; vertical-align: top; }
 header nav ul li a img { width: 18px; height: 18px; background: white; border-radius: 10px; border:1px solid white; }
-header nav a .fa { margin-right: 0; width: 18px; height: 18px; background: white; border-radius: 10px; border:1px solid white; font-size:14px; color: #00658d; }
+header nav a .fa { margin-right: 0; width: 18px; height: 18px; line-height: 18px; background: white; border-radius: 10px; border:1px solid white; font-size:13px; color: #00658d; }
 header nav ul li.invites a, header nav ul li.group-invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; font-size:8px; }
 .interne nav ul li.invites,.interne nav ul li.group-invites { margin: -4px 0 0 0; }
 
@@ -67,6 +67,8 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 	box-shadow: 0 1px 3px #000 !important;
 	border-radius: 16px !important;
 }
+.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:white; }
+
 .home-box .viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 3px; max-width: 24px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); font-size: 8px; }
 .home-box .viewall a, module span.groups-widget-viewall a { font-size: 7px; color:white; text-decoration:none; }
 
