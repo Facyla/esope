@@ -33,14 +33,14 @@ header nav a .fa { margin-right: 0; }
 #transverse nav ul li { border-right:0; }
 #transverse nav ul li:first-child { border-left:0; }
 #transverse nav ul li a { color:#2a7d9f; line-height: 40px; padding: 0 10px; font-size: 17px; }
-#transverse nav ul li li a { font-weight:normal; }
+#transverse nav ul li li a { line-height: auto; padding: 0; font-weight:normal; }
 /* Search form */
 #transverse form { border: 0; }
 ::-webkit-input-placeholder { color:#2a7d9f; }
 :-moz-placeholder { color:#2a7d9f; }
 ::-moz-placeholder { color:#2a7d9f; }
 :-ms-input-placeholder { color:#2a7d9f; }
-form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; }
+form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; border-radius:0; }
 form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; }
 
 /* Footer */
@@ -103,15 +103,15 @@ section .elgg-layout-one-column div.module header { border-radius:0; }
 a.elgg-button { border-width: 2px; border-radius: 12px; }
 
 /* More button */
-.elgg-widget-more { line-height: 40px; color: white; background: transparent; }
-.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px;
-color: white; display: inline-block; margin: 2px 6px; }
+.elgg-widget-more { line-height: 40px; /* color: white; */ background: transparent; }
+.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px; /* color: white; */ display: inline-block; margin: 2px 6px; background: rgba(255,255,255,0.2); }
 
 /* Users and avatars */
 .elgg-avatar-tiny > a > img { border-radius: 10px; border: 1px solid white; }
 .elgg-avatar-small > a > img { border-radius: 20px; border: 1px solid white; }
 
 /* Chat */
-#groupchat-sitelink { font-size: 20px; height: 24px; border: 0; }
+.elgg-page #groupchat-sitelink { font-size: 20px; height: 30px; border: 0; border-radius:15px; }
+.elgg-page #groupchat-sitelink i.fa { font-size: 24px; }
 
 
