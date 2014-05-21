@@ -93,10 +93,12 @@ if (elgg_is_logged_in()) {
 			<header>
 				<div class="">
 					<div class="interne">
-						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
-						<img src="<?php echo $urlimg; ?>header_ministere.jpg" />
-						<img src="<?php echo $urlimg; ?>header_cocon.png" />
-						</a></h1>
+						<h1>
+							<img src="<?php echo $urlimg; ?>header_ministere.jpg" />
+							<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
+								<img src="<?php echo $urlimg; ?>header_cocon.png" />
+							</a>
+						</h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>
