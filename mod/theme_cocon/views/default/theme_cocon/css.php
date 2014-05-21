@@ -21,9 +21,10 @@ html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-r
 header { background: transparent; }
 header h1 { margin-top: 16px; }
 header h1:hover { text-decoration:none; }
-header nav ul li { width: 30px; height: 30px; background: white; border-radius: 16px; line-height: 30px; text-align: center; }
-header nav ul li a { font-size: 18px; color:#2a7d9f; text-shadow:none; }
-header nav .fa { margin-right: 0; }
+header nav ul li { }
+header nav ul li a { width: 30px; height: 30px; background: white; border-radius: 16px; line-height: 30px; text-align: center; font-size: 18px; color:#2a7d9f; text-shadow:none; }
+header nav a .fa { margin-right: 0; }
+#user img { border-radius: 10px; }
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
 #transverse nav ul li { border-right:0; }
 #transverse nav ul li:first-child { border-left:0; }
