@@ -67,7 +67,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 	box-shadow: 0 1px 3px #000 !important;
 	border-radius: 16px !important;
 }
-.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
+.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit, .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
 
 .home-box .viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 3px; max-width: 24px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); font-size: 8px; }
 .home-box .viewall a, module span.groups-widget-viewall a { font-size: 7px; color:white; text-decoration:none; }
