@@ -135,17 +135,17 @@ li#elgg-widget-type-filerepo { background-color: #80aa84; }
 li#elgg-widget-type-friends { background-color: #397188; }
 li#elgg-widget-type-points_left {  }
 
-.elgg-widget-instance-group_activity header { background-color: #98519d; }
-.elgg-widget-instance-a_users_groups header { background-color: #c5dc1c; }
-.elgg-widget-instance-messages header { background-color: #c8596a; }
-.elgg-widget-instance-event_calendar header { background-color: #78ad45; }
-.elgg-widget-instance-thewire header { background-color: #f23a32; }
-.elgg-widget-instance-profile_completeness header { background-color: #feb743; }
-.elgg-widget-instance-blog header { background-color: #7e88c3; }
-.elgg-widget-instance-bookmarks header { background-color: #c07a9e; }
-.elgg-widget-instance-pages header { background-color: #c34840; }
-.elgg-widget-instance-filerepo header { background-color: #80aa84; }
-.elgg-widget-instance-friends header { background-color: #397188; }
+.elgg-widget-instance-group_activity header { background: #98519d; }
+.elgg-widget-instance-a_users_groups header { background: #c5dc1c; }
+.elgg-widget-instance-messages header { background: #c8596a; }
+.elgg-widget-instance-event_calendar header { background: #78ad45; }
+.elgg-widget-instance-thewire header { background: #f23a32; }
+.elgg-widget-instance-profile_completeness header { background: #feb743; }
+.elgg-widget-instance-blog header { background: #7e88c3; }
+.elgg-widget-instance-bookmarks header { background: #c07a9e; }
+.elgg-widget-instance-pages header { background: #c34840; }
+.elgg-widget-instance-filerepo header { background: #80aa84; }
+.elgg-widget-instance-friends header { background: #397188; }
 .elgg-widget-instance-points_left header {  }
 
 
