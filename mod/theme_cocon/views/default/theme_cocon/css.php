@@ -36,7 +36,7 @@ header nav a .fa { margin-right: 0; }
 #transverse nav ul li li a { font-weight:normal; }
 /* Search form */
 #transverse form { border: 0; }
-::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder { color:#2a7d9f }
+::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder { color:#2a7d9f; }
 form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; background:white; }
 form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white; border:0; }
 
@@ -73,7 +73,7 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 16px; }
 /* Activity */
 .home-box.home-activity { background:#bc9a33; }
-.home-box.home-activity h2, .home-box.home-wire h2 { padding: 12px 10px; }
+.home-box.home-activity h2 { padding: 12px 10px; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .home-box.home-activity * { color: white !important; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
