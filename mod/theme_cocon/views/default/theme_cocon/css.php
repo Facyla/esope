@@ -56,13 +56,13 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* Boutons @TODO */
 .elgg-button {
-border: 1px solid white !important;
-/* background: transparent !important; */
-box-shadow: 0 1px 3px #000 !important;
-border-radius: 16px !important;
+	border: 1px solid white !important;
+	/* background: transparent !important; */
+	box-shadow: 0 1px 3px #000 !important;
+	border-radius: 16px !important;
 }
-span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); }
-span.groups-widget-viewall a { font-size: 8px; color:white; }
+.home-box viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); }
+.home-box viewall a, module span.groups-widget-viewall a { font-size: 8px; color:white; }
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }

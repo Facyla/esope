@@ -48,14 +48,14 @@ $slider = elgg_view('slider/slider', $slider_params);
 
 
 // Le Fil
-$thewire = '<span class="groups-widget-viewall" style="float:right;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'thewire_45.png" />' . elgg_echo('theme_cocon:thewire:title') . '</h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<span class="viewall" style="float:right;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'thewire_45.png" />' . elgg_echo('theme_cocon:thewire:title') . '</h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 $thewire .= '<div class="clearfloat"></div>';
 //elgg_pop_context();
 
 // Activité du site
-$site_activity = '<span class="groups-widget-viewall" style="float:right;"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'activity.png" />' . elgg_echo('theme_cocon:site:activity') . '</h2>';
+$site_activity = '<span class="viewall" style="float:right;"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'activity.png" />' . elgg_echo('theme_cocon:site:activity') . '</h2>';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
 //$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
