@@ -83,6 +83,7 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
 .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
+.sidebarBox h3 { background: #c5dc1c; min-height: 40px; padding: 12px 4px 0 10px; }
 .home-box h2 img { float:left; margin-right:15px; }
 /* Activity */
 .home-box.home-activity { background:white; }
@@ -109,4 +110,8 @@ color: white; display: inline-block; margin: 2px 6px; }
 /* Users and avatars */
 .elgg-avatar-tiny > a > img { border-radius: 10px; border: 1px solid white; }
 .elgg-avatar-small > a > img { border-radius: 20px; border: 1px solid white; }
+
+/* Chat */
+#groupchat-sitelink { font-size: 20px; height: 24px; border: 0; }
+
 
