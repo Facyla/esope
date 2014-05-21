@@ -111,7 +111,7 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 .elgg-avatar-small > a > img { border-radius: 20px; border: 1px solid white; }
 
 /* Chat */
-.elgg-page #groupchat-sitelink { font-size: 20px; height: 30px; border: 0; border-radius:15px; }
-.elgg-page #groupchat-sitelink i.fa { font-size: 24px; }
+.elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top:7px; }
+.elgg-page #groupchat-sitelink i.fa { font-size: 30px; }
 
 
