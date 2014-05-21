@@ -6,6 +6,9 @@
  */
 
 global $CONFIG;
+$urlimg = $CONFIG->url;
+$urlimg = $url . 'mod/theme_cocon/graphics/';
+$urlpictos = $urlimg . 'pictos/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
