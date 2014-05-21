@@ -73,10 +73,11 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
-.home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 16px; }
+.home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
+.home-box h2 img { float:left; margin-right:15px; }
 /* Activity */
 .home-box.home-activity { background:#bc9a33; }
-.home-box.home-activity h2 { padding: 12px 10px; }
+.home-box.home-activity h2 { padding: 12px 10px; line-height:45px; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .home-box.home-activity * { color: white !important; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
