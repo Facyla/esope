@@ -116,7 +116,7 @@ if (elgg_is_logged_in()) {
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off sign out icon"></i>', 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
-									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>" title="<?php echo $own->name; ?>"><img src="<?php echo $own->getIconURL('tiny'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
+									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>" title="<?php echo $own->name; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
 									
 								</ul>
 							</nav>
