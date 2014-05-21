@@ -126,7 +126,7 @@ if (empty($content)) {
 		'height' => '300px', 
 		);
 		$slider = elgg_view('slider/slider', $slider_params);
-		$content .= '<div class="cocon-public-slider">' . $slider . '</div>';
+		$content .= '<div class="elgg-context-dashboard cocon-public-slider">' . $slider . '</div>';
 	
 		$content .= '<div id="adf-public-col1">';
 		$intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
