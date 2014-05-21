@@ -94,5 +94,6 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 .elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px;
 color: white; display: inline-block; margin: 2px 6px; }
 
-
+/* Users and avatars */
+.elgg-avatar-tiny > a > img { border-radius: 20px; border: 1px solid white; }
 
