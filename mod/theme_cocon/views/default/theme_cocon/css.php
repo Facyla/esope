@@ -38,10 +38,10 @@ form input#adf-search-submit-button, form input#adf-search-submit-button:active,
 /* Footer */
 footer.footer-cocon { height: 37px; background:#2c8eb0; }
 footer.footer-cocon ul { width:auto; }
-footer.footer-cocon ul li { margin: 8px 7px 6px 0; }
+footer.footer-cocon ul li { margin: 10px 7px 6px 0; }
 footer.footer-cocon ul li:first-child { padding-left:0; }
 footer.footer-cocon ul li a { font-size: 14px; font-family: Montserrat, sans-serif; }
-footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>puce_footer.png") left 7px no-repeat; }
+footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>puce_footer.png") left 5px no-repeat; }
 
 .elgg-sidebar { background: rgba(255,255,255,0.9); }
 
@@ -60,11 +60,9 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 .anythingSlider { min-height: 300px; }
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
-.home-box .sidebarBox h3 a { color:white; font-family:Montserrat, sans-serif; font-size }
-.home-box h2 a, .home-box h3 a { color: white; text-decoration:none; }
-.home-box.home-activity { background:#bc9a33; }
-.home-box.home-wire { background:#e45833; }
-.home-box.home-activity {}
+.home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 16px; }
+.home-box.home-activity { background:#bc9a33; padding: 0.5ex 0 0 0.5ex; }
+.home-box.home-wire { background:#e45833; padding: 0.5ex 0 0 0.5ex; }
 
 
 /* Boutons */
