@@ -119,6 +119,7 @@ section .elgg-layout-one-column div.module header { border-radius:0; }
 .cocon-widget-add-button { background: white; color: #00668c; border-radius: 14px; padding: 5px 8px; font-size: 8px; text-transform: uppercase; font-weight: bold; display: inline-block; }
 #widgets-add-panel { background: white; border: 0; }
 #widgets-add-panel li { border: 0; color: white; background-color: #00668c; }
+.elgg-widgets-add-panel .elgg-state-unavailable { opacity: 0.4; }
 
 /* Couleurs associées aux outils */
 li#elgg-widget-type-group_activity { background-color: #98519d; }
@@ -133,6 +134,20 @@ li#elgg-widget-type-pages { background-color: #c34840; }
 li#elgg-widget-type-filerepo { background-color: #80aa84; }
 li#elgg-widget-type-friends { background-color: #397188; }
 li#elgg-widget-type-points_left {  }
+
+.elgg-widget-instance-group_activity header { background-color: #98519d; }
+.elgg-widget-instance-a_users_groups header { background-color: #c5dc1c; }
+.elgg-widget-instance-messages header { background-color: #c8596a; }
+.elgg-widget-instance-event_calendar header { background-color: #78ad45; }
+.elgg-widget-instance-thewire header { background-color: #f23a32; }
+.elgg-widget-instance-profile_completeness header { background-color: #feb743; }
+.elgg-widget-instance-blog header { background-color: #7e88c3; }
+.elgg-widget-instance-bookmarks header { background-color: #c07a9e; }
+.elgg-widget-instance-pages header { background-color: #c34840; }
+.elgg-widget-instance-filerepo header { background-color: #80aa84; }
+.elgg-widget-instance-friends header { background-color: #397188; }
+.elgg-widget-instance-points_left header {  }
+
 
 
 /* Boutons */
