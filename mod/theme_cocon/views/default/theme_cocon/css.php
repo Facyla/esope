@@ -61,7 +61,7 @@ border: 1px solid white !important;
 box-shadow: 0 1px 3px #000 !important;
 border-radius: 16px !important;
 }
-span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; }
+span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); }
 span.groups-widget-viewall a { font-size: 8px; color:white; }
 
 /* Accueil déconnecté */
@@ -105,7 +105,7 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 
 /* More button */
 .elgg-widget-more { line-height: 40px; /* color: white; */ background: transparent; }
-.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px; /* color: white; */ display: inline-block; margin: 2px 6px; background: rgba(255,255,255,0.2); }
+.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px; /* color: white; */ display: inline-block; margin: 2px 6px; }
 
 /* Users and avatars */
 .elgg-avatar-tiny > a > img { border-radius: 10px; border: 1px solid white; }
