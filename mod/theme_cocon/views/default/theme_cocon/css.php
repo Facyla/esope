@@ -72,7 +72,7 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 .elgg-context-dashboard .anythingSlider * { color: white; }
 .anythingSlider h3, .anythingSlider p { padding: 12px 0 0 10px; }
 .anythingSlider ul ul, .anythingSlider li li { padding-left: 10px; font-size:14px; }
-#adf-homepage .anythingSlider li li { list-style-type: circle; }
+#adf-homepage .anythingSlider li li { /* list-style-type: circle; */ }
 .elgg-context-dashboard .anythingControls { position: absolute; bottom: 20px; left: 20px; display: none; }
 .elgg-context-dashboard .anythingControls li { width: 40px; border-radius: 20px; border: 1px solid white; height: 40px; text-align: center; line-height: 40px; color: white; }
 .elgg-context-dashboard .anythingSlider .arrow span { visibility:initial; }
