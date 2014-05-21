@@ -64,6 +64,8 @@ border-radius: 16px !important;
 span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; font-size: 9px; margin: 3px 3px 0 0; }
 .elgg-module span.groups-widget-viewall a { font-size: 8px; }
 
+/* Accueil déconnecté */
+#adf-loginbox { padding-top:6px; }
 
 /* Accueil */
 .elgg-context-dashboard .anythingSlider { min-height: 300px; background: #397188; font-family: Montserrat; }
