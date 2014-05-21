@@ -62,12 +62,13 @@ box-shadow: 0 1px 3px #000 !important;
 border-radius: 16px !important;
 }
 span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; }
-span.groups-widget-viewall a { font-size: 8px; }
+span.groups-widget-viewall a { font-size: 8px; color:white; }
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }
 
 /* Accueil */
+.elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .elgg-context-dashboard .anythingSlider { min-height: 300px; background: #397188; font-family: Montserrat; }
 .elgg-context-dashboard .anythingSlider * { color: white; }
 .anythingSlider h3, .anythingSlider p { padding: 12px 0 0 10px; }
@@ -80,7 +81,7 @@ span.groups-widget-viewall a { font-size: 8px; }
 .elgg-context-dashboard span.back { left: 20px; content: "<"; }
 .elgg-context-dashboard span.forward { right: 20px; content: ">"; }
 
-.elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
+.home-box { background:white; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
 .home-box h2, .home-box h3, .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
 .sidebarBox h3, #sidebar-featured-groups h3 { background: #c5dc1c; min-height: 40px; padding: 12px 4px 0 10px; line-height:1; }
