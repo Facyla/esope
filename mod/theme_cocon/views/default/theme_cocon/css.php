@@ -28,6 +28,8 @@ header h1:hover { text-decoration:none; }
 header nav ul li { margin-left:7px; margin-right:0px; }
 header nav ul li a { width: 30px; height: 30px; background: white !important; border-radius: 16px; line-height: 30px; text-align: center; font-size: 18px; color:#2a7d9f; text-shadow:none; padding: 0 !important; display: inline-block; }
 header nav a .fa { margin-right: 0; }
+header nav ul li.invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px; }
+
 #user img { border-radius: 14px; width: 28px; padding-top: 1px; }
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
 #transverse nav ul li { border-right:0; }
@@ -118,6 +120,9 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 /* Users and avatars */
 .elgg-avatar-tiny > a > img { border-radius: 10px; border: 1px solid white; }
 .elgg-avatar-small > a > img { border-radius: 20px; border: 1px solid white; }
+
+/* Feedback */
+#feedbackWrapper { top: 170px; }
 
 /* Chat */
 .elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top:7px; }
