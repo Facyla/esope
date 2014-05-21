@@ -25,7 +25,8 @@ html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-r
 header { background: transparent; border-top:0; height:120px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
-header nav ul li { margin-left:7px; margin-right:0px; }
+header nav { background: #00668c; top: 0; padding: 7px 4px; border-radius: 0 0 8px 8px; }
+header nav ul li { margin-left:3px; margin-right:3px; }
 header nav ul li a { width: 30px; height: 30px; background: white !important; border-radius: 16px; line-height: 30px; text-align: center; font-size: 18px; color:#2a7d9f; text-shadow:none; padding: 0 !important; display: inline-block; }
 header nav a .fa { margin-right: 0; }
 header nav ul li.invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; }
@@ -36,6 +37,8 @@ header nav ul li.invites a { width: auto; height: auto; background: red !importa
 #transverse nav ul li:first-child { border-left:0; }
 #transverse nav ul li a { color:#2a7d9f; line-height: 40px; padding: 0 10px; font-size: 17px; }
 #transverse nav ul li ul li a { line-height: 2em; font-weight:normal; }
+#transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: #02658e; color: white; }
+#transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: #02658e; }
 /* Search form */
 #transverse form { border: 0; }
 ::-webkit-input-placeholder { color:#2a7d9f; }
@@ -131,5 +134,6 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 .elgg-page #groupchat-grouplink i.fa { font-size: 30px; }
 
 
-
+/* Agenda */
+.elgg-context-event_calendar .elgg-sidebar { background: transparent; }
 
