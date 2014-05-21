@@ -117,7 +117,7 @@ if (elgg_is_logged_in()) {
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<img src="' . $urlpictos . 'logout.png" />', 'alt' => elgg_echo('logout'), 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
-									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('tiny'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
+									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('tiny'); ?>" alt="<?php echo elgg_echo('adf_platform:myprofile'); ?>" />&nbsp;<?php echo $own->name; ?></a></li>
 									
 								</ul>
 							</nav>

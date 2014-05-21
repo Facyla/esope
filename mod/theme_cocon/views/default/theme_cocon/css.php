@@ -27,11 +27,11 @@ header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
 header nav { background: #00668c; top: 0; padding: 7px 4px; border-radius: 0 0 8px 8px; }
 header nav ul li { margin-left:3px; margin-right:3px; }
-header nav ul li a { width: 30px; height: 30px; background: white !important; border-radius: 16px; line-height: 30px; text-align: center; font-size: 18px; color:#2a7d9f; text-shadow:none; padding: 0 !important; display: inline-block; }
+header nav ul li a { width: 20px; height: 20px; background: white !important; border-radius: 10px; line-height: 20px; text-align: center; font-size: 8px; color:white; text-shadow:none; padding: 0 !important; display: inline-block; }
+#user img { border-radius: 14px; width: 18px; padding-top: 1px; }
 header nav a .fa { margin-right: 0; }
 header nav ul li.invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; }
 
-#user img { border-radius: 14px; width: 28px; padding-top: 1px; }
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
 #transverse nav ul li { border-right:0; }
 #transverse nav ul li:first-child { border-left:0; }
