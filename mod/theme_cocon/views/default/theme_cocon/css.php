@@ -32,7 +32,7 @@ header nav a .fa { margin-right: 0; }
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
 #transverse nav ul li { border-right:0; }
 #transverse nav ul li:first-child { border-left:0; }
-#transverse nav ul li a { color:#2a7d9f; line-height: 40px; padding: 0; font-size: 17px; }
+#transverse nav ul li a { color:#2a7d9f; line-height: 40px; padding: 0 10px; font-size: 17px; }
 #transverse nav ul li li a { font-weight:normal; }
 /* Search form */
 #transverse form { border: 0; }
