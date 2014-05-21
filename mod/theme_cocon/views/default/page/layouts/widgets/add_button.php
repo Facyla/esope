@@ -14,4 +14,6 @@
 			));
 		?>
 	</div>
+	<div class="clearfloat"></div>
 </div>
+

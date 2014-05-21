@@ -67,7 +67,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 	box-shadow: 0 1px 3px #000 !important;
 	border-radius: 16px !important;
 }
-.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit, .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
+.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit, 	.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
 
 .home-box .viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 3px; max-width: 24px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); font-size: 8px; }
 .home-box .viewall a, module span.groups-widget-viewall a { font-size: 7px; color:white; text-decoration:none; }
@@ -115,6 +115,25 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 /* Widgets */
 section .elgg-layout-one-column div.module { border-radius:0; border:0; }
 section .elgg-layout-one-column div.module header { border-radius:0; }
+.cocon-widget-add-control { width: 22%; float: right; background: #00668c; padding: 8px 10px; margin-bottom: 10px; }
+.cocon-widget-add-button { background: white; color: #00668c; border-radius: 14px; padding: 5px 8px; font-size: 8px; text-transform: uppercase; font-weight: bold; display: inline-block; }
+#widgets-add-panel { background: white; border: 0; }
+#widgets-add-panel li { border: 0; color: white; background-color: #00668c; }
+
+/* Couleurs associées aux outils */
+#elgg-widget-type-group_activity { color: #98519d; }
+#elgg-widget-type-a_users_groups { color: #c5dc1c; }
+#elgg-widget-type-messages { color: #c8596a; }
+#elgg-widget-type-event_calendar { color: #78ad45; }
+#elgg-widget-type-thewire { color: #f23a32; }
+#elgg-widget-type-profile_completeness { color: #feb743; }
+#elgg-widget-type-blog { color: #7e88c3; }
+#elgg-widget-type-bookmarks { color: #c07a9e; }
+#elgg-widget-type-pages { color: #c34840; }
+#elgg-widget-type-filerepo { color: #80aa84; }
+#elgg-widget-type-friends { color: #397188; }
+#elgg-widget-type-points_left {  }
+
 
 /* Boutons */
 a.elgg-button { border-width: 2px; border-radius: 12px; }
