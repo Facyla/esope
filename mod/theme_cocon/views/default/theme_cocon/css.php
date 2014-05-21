@@ -68,8 +68,12 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 .elgg-context-dashboard .anythingSlider { min-height: 300px; background: #c9c658; font-family: Montserrat; }
 .elgg-context-dashboard .anythingSlider * { color: white; }
 .anythingSlider h3, .anythingSlider p { padding: 12px 0 0 10px; }
-.anythingControls li { width: 40px; border-radius: 20px; border: 1px solid white; height: 40px; text-align: center; line-height: 40px; color: white; }
 .elgg-context-dashboard .anythingControls { position: absolute; bottom: 20px; left: 20px; }
+.elgg-context-dashboard .anythingControls li { width: 40px; border-radius: 20px; border: 1px solid white; height: 40px; text-align: center; line-height: 40px; color: white; }
+.elgg-context-dashboard .anythingSlider .arrow span { visibility:initial; }
+.elgg-context-dashboard span.arrow { position: absolute; bottom: 20px; width: 40px; border-radius: 20px; border: 1px solid white; height: 40px; text-align: center; line-height: 40px; color: white; }
+.elgg-context-dashboard span.back { left: 20px; }
+.elgg-context-dashboard span.forward { right: 20px; }
 
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
