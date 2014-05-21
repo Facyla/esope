@@ -61,8 +61,8 @@ border: 1px solid white !important;
 box-shadow: 0 1px 3px #000 !important;
 border-radius: 16px !important;
 }
-span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; font-size: 9px; margin: 3px 3px 0 0; }
-.elgg-module span.groups-widget-viewall a { font-size: 8px; }
+span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; display: inline-block; padding: 4px; max-width: 5ex; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; }
+span.groups-widget-viewall a { font-size: 8px; }
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }
@@ -93,7 +93,7 @@ span.groups-widget-viewall { border: 1px solid white; border-radius: 16px; displ
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 12px 0 0 10px; width: 100%; min-height: 40px; }
+.home-box.home-wire h2 { background: #e45833; padding: 12px 0 0 0px; width: 100%; min-height: 40px; }
 
 /* Widgets */
 section .elgg-layout-one-column div.module { border-radius:0; border:0; }
