@@ -31,7 +31,7 @@ function theme_cocon_init(){
 	}
 	
 	// Remplacement du modèle d'event_calendar
-	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_cocon/lib/event_calendar/model.php');
+	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_cocon/lib/event_calendar/model.php');
 	
 	// Modification des menus standards des widgets
 	/*

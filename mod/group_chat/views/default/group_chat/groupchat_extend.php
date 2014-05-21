@@ -13,7 +13,8 @@ elgg_load_css('lightbox');
 
 $group = elgg_get_page_owner_entity();
 $open_group_chat_url = $CONFIG->url . 'chat/group/' . $group->guid;
-$chat_icon = '<span class="elgg-icon elgg-icon-speech-bubble-alt"></span>';
+//$chat_icon = '<span class="elgg-icon elgg-icon-speech-bubble-alt"></span>';
+$chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 
 $class = '';
 $active = '';
@@ -21,6 +22,7 @@ $active = '';
 $chat_content = get_chat_content();
 if ($chat_content) {
 	$class = 'chat-active';
+	$chat_icon = '<i class="fa fa-comments"></i> &nbsp; ';
 	$active = elgg_echo('groupchat:active');
 }
 

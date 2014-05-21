@@ -40,7 +40,7 @@ header nav a .fa { margin-right: 0; }
 :-moz-placeholder { color:#2a7d9f; }
 ::-moz-placeholder { color:#2a7d9f; }
 :-ms-input-placeholder { color:#2a7d9f; }
-form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; border-radius:0; }
+form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; border-radius:0; background:#e4ecf5; }
 form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; }
 
 /* Footer */
@@ -63,6 +63,11 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 }
 .home-box .viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 3px; max-width: 24px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); font-size: 8px; }
 .home-box .viewall a, module span.groups-widget-viewall a { font-size: 7px; color:white; text-decoration:none; }
+
+/* Messages */
+.elgg-state-succes { color:#78ad45; }
+.elgg-state-error { color:#c34840; }
+.elgg-state-notice { color:#397188; }
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }
@@ -117,5 +122,9 @@ a.elgg-button { border-width: 2px; border-radius: 12px; }
 /* Chat */
 .elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top:7px; }
 .elgg-page #groupchat-sitelink i.fa { font-size: 30px; }
+.elgg-page #groupchat-grouplink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top:7px; color: white; background: #c5dc1c; }
+.elgg-page #groupchat-grouplink i.fa { font-size: 30px; }
+
+
 
 
