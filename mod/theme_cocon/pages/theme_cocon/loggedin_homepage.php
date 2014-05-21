@@ -4,6 +4,9 @@ global $CONFIG;
 gatekeeper();
 
 $own = elgg_get_logged_in_user_entity();
+$urlimg = $CONFIG->url;
+$urlimg = $url . 'mod/theme_cocon/graphics/';
+$urlpictos = $urlimg . 'pictos/';
 
 // Premiers pas : s'affiche au début, peut être désactivé
 /* Pas utilisé car remplacé par un menu configurable
@@ -43,14 +46,14 @@ $slider = elgg_view('slider/slider', $slider_params);
 
 
 // Le Fil
-$thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_cocon:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_cocon:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<h2 style="float:left;"><img src="' . $urlpictos . 'thewire_45.png" /> <a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_cocon:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_cocon:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 $thewire .= '<div class="clearfloat"></div>';
 //elgg_pop_context();
 
 // Activité du site
-$site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_cocon:site:activity') . '</a></h2>';
+$site_activity = '<h2><img src="' . $urlpictos . 'activity.png" /> <a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_cocon:site:activity') . '</a></h2>';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
 //$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
