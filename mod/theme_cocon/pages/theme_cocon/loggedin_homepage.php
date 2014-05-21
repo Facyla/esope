@@ -32,6 +32,7 @@ if ($own->hide_firststeps != 'yes') {
 
 
 // Slider
+/*
 $slider_params = array(
 		//'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
 		//'slidercss_main' => "width:100%; height:400px;", 
@@ -39,6 +40,7 @@ $slider_params = array(
 		'height' => '300px', 
 	);
 $slider = elgg_view('slider/slider', $slider_params);
+*/
 
 // Texte intro configurable
 //$intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
