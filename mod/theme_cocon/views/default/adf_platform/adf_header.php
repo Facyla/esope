@@ -2,6 +2,7 @@
 
 $url = $vars['url'];
 $urlimg = $url . 'mod/theme_cocon/graphics/';
+$urlpictos = $urlimg . 'pictos/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
@@ -94,19 +95,17 @@ if (elgg_is_logged_in()) {
 				<div class="">
 					<div class="interne">
 						<h1>
-							<img src="<?php echo $urlimg; ?>header_ministere.jpg" />
-							<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
-								<img src="<?php echo $urlimg; ?>header_cocon.png" />
+							<img src="<?php echo $urlimg; ?>header_ministere.jpg" /><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><img src="<?php echo $urlimg; ?>header_cocon.png" style="margin-left:14px;" />
 							</a>
 						</h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo elgg_echo('friends'); ?>"><i class="fa fa-user user icon"></i></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><img src="' . $urlpictos . 'contacts.png" alt="<?php echo elgg_echo('friends'); ?>" /></a></li>
 									<?php echo $friendrequests; ?>
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><i class="fa fa-envelope mail icon"></i></a></li>
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><img src="' . $urlpictos . 'mail.png" alt="<?php echo elgg_echo('messages'); ?>" /></a></li>
 									<?php if ($messages) { echo $messages; } ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('adf_platform:usersettings'); ?>"><i class="fa fa-cog setting icon"></i></a></li>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><img src="' . $urlpictos . 'settings.png" alt="<?php echo elgg_echo('adf_platform:usersettings'); ?>" /></a></li>
 									<?php if (elgg_is_admin_logged_in()) { ?>
 										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>" title="<?php echo elgg_echo('admin'); ?>"><i class="fa fa-cogs settings icon"></i></a></li>
 									<?php } ?>
@@ -114,11 +113,11 @@ if (elgg_is_logged_in()) {
 									<?php
 									$helplink = elgg_get_plugin_setting('helplink', 'adf_public_platform');
 									//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
-									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '" title="' . elgg_echo('adf_platform:help') . '"><i class="fa fa-question help icon"></i></a></li>';
+									if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '" title="' . elgg_echo('adf_platform:help') . '"><img src="' . $urlpictos . 'help.png" /></a></li>';
 									?>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off sign out icon"></i>', 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
-									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>" title="<?php echo $own->name; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
+									<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<img src="' . $urlpictos . 'logout.png" />', 'title' => elgg_echo('logout'), 'is_action' => true)); ?></li>
+									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" /></a></li>
 									
 								</ul>
 							</nav>
@@ -191,7 +190,7 @@ if (elgg_is_logged_in()) {
 								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 								<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
 								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
-								<input type="image" id="adf-search-submit-button" src="<?php echo $urlimg; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
+								<input type="image" id="adf-search-submit-button" src="<?php echo $urlimg; ?>pictos/recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 							</form>
 						<?php } ?>
 					</div>
