@@ -76,13 +76,7 @@ $widget_body = elgg_view_layout('widgets', $params);
 $body = '
 	<div style="width:76%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
-		
-			<div style="width:100%;" class="cocon-news">'
-				//. '<h2 class="hidden">' . elgg_echo('theme_cocon:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
-				. $slider
-			. '</div>
-			<div class="clearfloat"></div><br /><br />
-		
+			
 			<div style="width:40%; float:left;">
 				<div class="home-box home-activity">' . $site_activity . '</div>
 			</div>
