@@ -209,18 +209,18 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 
 /* Modules des groupes */
 .elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 4px 6px 4px 6px; }
-.elgg-module-group-group-activity .elgg-head { background-color: #98519d; }
+.elgg-module-group-group-activity .elgg-head { background-color: #97519c; }
 .elgg-module-group-event-calendar .elgg-head { background-color: #78ad45; }
 .elgg-module-group-blog .elgg-head { background-color: #7e88c3; }
 .elgg-module-group-bookmarks .elgg-head { background-color: #c07a9e; }
 .elgg-module-group-pages .elgg-head { background-color: #c34840; }
 .elgg-module-group-file .elgg-head { background-color: #80aa84; }
-.elgg-module-group-brainstorm .elgg-head { background-color: #feb743; }
+.elgg-module-group-brainstorm .elgg-head { background-color: #eace6d; }
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
 
 .elgg-module-group .elgg-head h3 { background-size: 34px; padding: 8px 0px 0px 40px; min-height: 30px; }
-.elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>activity.png"); }
+.elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); }
 .elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); }
 .elgg-module-group-blog .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
 .elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); }
@@ -232,26 +232,26 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
-.elgg-module-group-group-activity .elgg-body { border-color: #98519d; }
+.elgg-module-group-group-activity .elgg-body { border-color: #97519c; }
 .elgg-module-group-event-calendar .elgg-body { border-color: #78ad45; }
 .elgg-module-group-blog .elgg-body { border-color: #7e88c3; }
 .elgg-module-group-bookmarks .elgg-body { border-color: #c07a9e; }
 .elgg-module-group-pages .elgg-body { border-color: #c34840; }
 .elgg-module-group-file .elgg-body { border-color: #80aa84; }
 .elgg-module-group-brainstorm .elgg-body { border-color: #c5dc1c; }
-.elgg-module-group-announcements .elgg-body { border-color: #7e89c1; }
+.elgg-module-group-announcements .elgg-body { border-color: #eace6d; }
 .elgg-module-group-discussion .elgg-body { border-color: #f43930; }
 
 /* Bloc more des modules des groupes */
 .elgg-module-group .elgg-widget-more { background: #00668c; color: white; padding: 4px; }
 .elgg-module-group .elgg-widget-more a { color: white; }
-.elgg-module-group-group-activity .elgg-widget-more { background-color: #98519d; color: white; }
+.elgg-module-group-group-activity .elgg-widget-more { background-color: #97519c; color: white; }
 .elgg-module-group-event-calendar .elgg-widget-more { background-color: #78ad45; color: white; }
 .elgg-module-group-blog .elgg-widget-more { background-color: #7e88c3; color: white; }
 .elgg-module-group-bookmarks .elgg-widget-more { background-color: #c07a9e; color: white; }
 .elgg-module-group-pages .elgg-widget-more { background-color: #c34840; color: white; }
 .elgg-module-group-file .elgg-widget-more { background-color: #80aa84; color: white; }
-.elgg-module-group-brainstorm .elgg-widget-more { background-color: #c5dc1c; color: white; }
+.elgg-module-group-brainstorm .elgg-widget-more { background-color: #eace6d; color: white; }
 .elgg-module-group-announcements .elgg-widget-more { background-color: #7e89c1; color: white; }
 .elgg-module-group-discussion .elgg-widget-more { background-color: #f43930; color: white; }
 
