@@ -96,6 +96,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }
+#adf-homepage form.elgg-form.elgg-form-register { background: #FAFAFA; padding: 10px; margin-top: 30px; }
 
 /* Accueil */
 .elgg-context-dashboard .elgg-main, .elgg-context-dashboard #slider1 { background: transparent; }
