@@ -2,7 +2,7 @@
 global $CONFIG;
 $imgurl = $CONFIG->url . 'mod/theme_cocon/graphics/';
 $fonturl = $CONFIG->url . 'mod/theme_cocon/fonts/';
-$sideicon = $imgurl . 'pictos/';
+$sideicon = $imgurl . 'side_icons/';
 $sidecolor = "#00668c";
 // @TODO : list tools colors here for quicker changes
 
