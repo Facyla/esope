@@ -10,7 +10,7 @@ $imgurl = $CONFIG->url . 'mod/theme_cocon/graphics/';
 		<?php
 			echo elgg_view('output/url', array(
 				'href' => '#widgets-add-panel',
-				'text' => '<img src="' . $imgurl . 'widgets_edit.png" />&nbsp;' . elgg_echo('widgets:add'),
+				'text' => '<img src="' . $imgurl . 'pictos/widgets_edit.png" />&nbsp;' . elgg_echo('widgets:add'),
 				'class' => 'cocon-widget-add-button',
 				'rel' => 'toggle',
 			));
