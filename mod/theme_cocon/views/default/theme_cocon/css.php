@@ -209,7 +209,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 
 /* Modules des groupes */
 .elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 4px 6px 4px 6px; }
-.elgg-module-group-group-activity .elgg-head { background-color: #97519c; }
+.elgg-module-group-activity .elgg-head { background-color: #97519c; }
 .elgg-module-group-event-calendar .elgg-head { background-color: #78ad45; }
 .elgg-module-group-blog .elgg-head { background-color: #7e88c3; }
 .elgg-module-group-bookmarks .elgg-head { background-color: #c07a9e; }
@@ -232,7 +232,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
-.elgg-module-group-group-activity .elgg-body { border-color: #97519c; }
+.elgg-module-group-activity .elgg-body { border-color: #97519c; }
 .elgg-module-group-event-calendar .elgg-body { border-color: #78ad45; }
 .elgg-module-group-blog .elgg-body { border-color: #7e88c3; }
 .elgg-module-group-bookmarks .elgg-body { border-color: #c07a9e; }
