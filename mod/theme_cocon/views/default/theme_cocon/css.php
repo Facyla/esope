@@ -64,13 +64,12 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button {
 	/* border: 1px solid white !important; */
 	/* background: transparent !important; */
-	box-shadow: 0 1px 3px #000 !important;
+	box-shadow: 0 1px 3px #00668c !important;
 	border-radius: 16px !important;
-	color:#00668e;
 }
 /* Boutons */
-.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit, 	.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
-
+.elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
+.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; }
 .home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: white; color: #00668e; font-size: 8px; }
 .home-box .viewall a, module span.groups-widget-viewall a { font-size: 7px; color:white; text-decoration:none; }
 
@@ -137,7 +136,8 @@ li#elgg-widget-type-filerepo { background-color: #80aa84; }
 li#elgg-widget-type-friends { background-color: #397188; }
 li#elgg-widget-type-points_left {  }
 
-.module.elgg-widget-instance-group_activity header, section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { background: #98519d; }
+.module.elgg-widget-instance-group_activity header { background: #98519d; }
+section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { background: #98519d !important; }
 .module.elgg-widget-instance-a_users_groups header { background: #c5dc1c; }
 .module.elgg-widget-instance-messages header { background: #c8596a; }
 .module.elgg-widget-instance-event_calendar header { background: #78ad45; }
