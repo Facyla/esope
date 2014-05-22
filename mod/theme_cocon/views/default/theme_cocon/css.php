@@ -135,6 +135,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 section .elgg-layout-one-column div.module { border-radius:0; border:0; }
 section .elgg-layout-one-column div.module header { border-radius:0; }
 .cocon-widget-add-control { width: 22%; float: right; background: #00668c; padding: 8px 10px; margin-bottom: 10px; text-align: left; }
+.cocon-widget-add-control img { float: left; margin-right: 4px; height: 20px; }
 .cocon-widget-add-button { background: white; color: #00668c; border-radius: 14px; padding: 5px 8px; font-size: 8px; text-transform: uppercase; font-weight: bold; display: inline-block; }
 #widgets-add-panel { background: white; border: 0; }
 #widgets-add-panel li { border: 0; color: white; background-color: #00668c; }
