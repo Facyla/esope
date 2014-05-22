@@ -52,7 +52,7 @@ header .interne nav ul li.invites a, header .interne nav ul li.group-invites a {
 ::-moz-placeholder { color:#2a7d9f; }
 :-ms-input-placeholder { color:#2a7d9f; }
 form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; border-radius:0; background:#e4ecf5; }
-form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; }
+form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; padding: 0px 0px 0px 8px; height: 27px; }
 .elgg-form.elgg-form-groups-search #q { background:#e4ecf5; }
 
 /* Footer */
