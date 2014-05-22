@@ -219,7 +219,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
 
-.elgg-module-group .elgg-head h3 { background-size: 34px; padding: 8px 0px 0px 40px; min-height: 30px; }
+.elgg-module-group .elgg-head h3 { background-size: 34px; padding: 8px 0px 0px 40px; min-height: 30px; background-image: url("<?php echo $picto_module; ?>groups.png"); }
 .elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); }
 .elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); }
 .elgg-module-group-blog .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
