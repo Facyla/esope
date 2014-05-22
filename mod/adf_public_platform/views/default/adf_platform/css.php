@@ -152,7 +152,8 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 .elgg-sidebar ul.elgg-menu-page > li, elgg-sidebar ul.elgg-menu-groups-my-status > li {
 	border-bottom: 1px solid #CCCCCC;
 	float: left;
-	width: 211px;
+	/* width: 211px; */
+	width:100%;
 }
 .elgg-menu-groups-my-status li a {
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
