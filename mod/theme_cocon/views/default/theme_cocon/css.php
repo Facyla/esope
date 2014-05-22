@@ -186,8 +186,21 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
 
+/* Bordures des modules des groupes */
+.elgg-module-group > .elgg-body { background: #00668c; }
+.elgg-module-group-group-activity .elgg-body { border-color: #98519d; }
+.elgg-module-group-event-calendar .elgg-body { border-color: #78ad45; }
+.elgg-module-group-blog .elgg-body { border-color: #7e88c3; }
+.elgg-module-group-bookmarks .elgg-body { border-color: #c07a9e; }
+.elgg-module-group-pages .elgg-body { border-color: #c34840; }
+.elgg-module-group-file .elgg-body { border-color: #80aa84; }
+.elgg-module-group-brainstorm .elgg-body { border-color: #c5dc1c; }
+.elgg-module-group-announcements .elgg-body { border-color: #7e89c1; }
+.elgg-module-group-discussion .elgg-body { border-color: #f43930; }
+
 /* Bloc more des modules des groupes */
-.elgg-module-group .elgg-widget-more { background: #00668c; color: white; }
+.elgg-module-group .elgg-widget-more { background: #00668c; color: white; padding: 4px; }
+.elgg-module-group .elgg-widget-more a { color: white; }
 .elgg-module-group-group-activity .elgg-widget-more { background-color: #98519d; color: white; }
 .elgg-module-group-event-calendar .elgg-widget-more { background-color: #78ad45; color: white; }
 .elgg-module-group-blog .elgg-widget-more { background-color: #7e88c3; color: white; }
