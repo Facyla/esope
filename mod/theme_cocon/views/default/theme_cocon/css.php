@@ -173,6 +173,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-points_left header { background-color: #c5dc1c; }
 
 section div.module header h2 { margin: 4px 0 0 8px; padding: 10px 0 4px 42px; background-size: 34px; max-width: 176px; min-height: 30px; }
+section div.elgg-widget-instance-activity header h2 { background-image: url("<?php echo $picto_module; ?>activity.png"); }
 section div.elgg-widget-instance-group_activity header h2 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); }
 section div.elgg-widget-instance-a_users_groups header h2 { background-image: url("<?php echo $picto_module; ?>groups.png"); }
 section div.elgg-widget-instance-messages header h2 { background-image: url("<?php echo $picto_module; ?>messages.png"); }
@@ -182,8 +183,8 @@ section div.elgg-widget-instance-profile_completeness header h2 { background-ima
 section div.elgg-widget-instance-blog header h2 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
 section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); }
 section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); }
-section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); }
-section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>firneds.png"); }
+section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>file.png"); }
+section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
 section div.elgg-widget-instance-points_left header h2 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
 
 
@@ -205,6 +206,7 @@ div.elgg-widget-instance-filerepo .elgg-widget-more { background: #80aa84; color
 div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc1c; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 
+
 /* Modules des groupes */
 .elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 10px; }
 .elgg-module-group-group-activity .elgg-head { background-color: #98519d; }
@@ -216,6 +218,17 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-brainstorm .elgg-head { background-color: #c5dc1c; }
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
+
+.elgg-module-group .elgg-head h3 { background-size: 34px; }
+.elgg-module-group-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>activity.png"); #98519d; }
+.elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>event-calendar.png"); #78ad45; }
+.elgg-module-group-blog .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>blog.png"); #7e88c3; }
+.elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); #c07a9e; }
+.elgg-module-group-pages .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>pages.png"); #c34840; }
+.elgg-module-group-file .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>file.png"); #80aa84; }
+.elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); #c5dc1c; }
+.elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>announcements.png"); #7e89c1; }
+.elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); #f43930; }
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
