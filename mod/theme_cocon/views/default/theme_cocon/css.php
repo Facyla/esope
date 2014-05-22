@@ -62,11 +62,12 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* Boutons @TODO */
 .elgg-button {
-	border: 1px solid white !important;
+	/* border: 1px solid white !important; */
 	/* background: transparent !important; */
 	box-shadow: 0 1px 3px #000 !important;
 	border-radius: 16px !important;
 }
+/* Boutons */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit, 	.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { color:#00658f; }
 
 .home-box .viewall, span.groups-widget-viewall { border: 1px solid white; border-radius: 20px; display: inline-block; padding: 3px; max-width: 24px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: rgba(255,255,255,0.2); font-size: 8px; }
@@ -150,26 +151,22 @@ li#elgg-widget-type-points_left {  }
 
 /* @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
 */
-div.elgg-module-widget .elgg-widget-more { background: #00668c; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-module-widget .elgg-widget-more { background: #00668c; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 div.elgg-module-widget .elgg-widget-more a { color: white; }
-div.elgg-widget-instance-group_activity .elgg-widget-more { background: #98519d; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-a_users_groups .elgg-widget-more { background: #c5dc1c; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-messages .elgg-widget-more { background: #c8596a; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-event_calendar .elgg-widget-more { background: #78ad45; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-thewire .elgg-widget-more { background: #f23a32; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-profile_completeness .elgg-widget-more { background: #feb743; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-blog .elgg-widget-more { background: #7e88c3; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-bookmarks .elgg-widget-more { background: #c07a9e; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-pages .elgg-widget-more { background: #c34840; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-filerepo .elgg-widget-more { background: #80aa84; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-points_left .elgg-widget-more { margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-group_activity .elgg-widget-more { background: #98519d; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-a_users_groups .elgg-widget-more { background: #c5dc1c; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-messages .elgg-widget-more { background: #c8596a; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-event_calendar .elgg-widget-more { background: #78ad45; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-thewire .elgg-widget-more { background: #f23a32; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-profile_completeness .elgg-widget-more { background: #feb743; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-blog .elgg-widget-more { background: #7e88c3; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-bookmarks .elgg-widget-more { background: #c07a9e; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-pages .elgg-widget-more { background: #c34840; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-filerepo .elgg-widget-more { background: #80aa84; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-points_left .elgg-widget-more { color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 
 
-
-
-/* Boutons */
-a.elgg-button { border-width: 2px; border-radius: 12px; }
 
 /* More button */
 .elgg-widget-more { line-height: 40px; /* color: white; */ background: transparent; }
