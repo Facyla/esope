@@ -85,7 +85,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; border:0; }
 /* View all button */
-.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 10px 3px 0 0; background: white; color: #00668e; font-size: 8px; }
+.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 14px 3px 0 0; background: white; color: #00668e; font-size: 8px; }
 .home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
 .home-box .viewall a:hover, .home-box .viewall a:focus, .home-box .viewall a:active, module span.groups-widget-viewall a:hover, .elgg-module span.groups-widget-viewall a:focus, .elgg-module span.groups-widget-viewall a:active {  }
 
@@ -208,27 +208,27 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 
 
 /* Modules des groupes */
-.elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 10px; }
+.elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 4px 6px 4px 6px; }
 .elgg-module-group-group-activity .elgg-head { background-color: #98519d; }
 .elgg-module-group-event-calendar .elgg-head { background-color: #78ad45; }
 .elgg-module-group-blog .elgg-head { background-color: #7e88c3; }
 .elgg-module-group-bookmarks .elgg-head { background-color: #c07a9e; }
 .elgg-module-group-pages .elgg-head { background-color: #c34840; }
 .elgg-module-group-file .elgg-head { background-color: #80aa84; }
-.elgg-module-group-brainstorm .elgg-head { background-color: #c5dc1c; }
+.elgg-module-group-brainstorm .elgg-head { background-color: #feb743; }
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
 
-.elgg-module-group .elgg-head h3 { background-size: 34px; }
-.elgg-module-group-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>activity.png"); #98519d; }
-.elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>event-calendar.png"); #78ad45; }
-.elgg-module-group-blog .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>blog.png"); #7e88c3; }
-.elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); #c07a9e; }
-.elgg-module-group-pages .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>pages.png"); #c34840; }
-.elgg-module-group-file .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>file.png"); #80aa84; }
-.elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); #c5dc1c; }
-.elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>announcements.png"); #7e89c1; }
-.elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); #f43930; }
+.elgg-module-group .elgg-head h3 { background-size: 34px; padding: 8px 0px 0px 40px; min-height: 30px; }
+.elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>activity.png"); }
+.elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); }
+.elgg-module-group-blog .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
+.elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); }
+.elgg-module-group-pages .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>pages.png"); }
+.elgg-module-group-file .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>files.png"); }
+.elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
+.elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>announcements.png");}
+.elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); }
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
