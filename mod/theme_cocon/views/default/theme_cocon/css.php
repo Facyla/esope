@@ -172,7 +172,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-friends header { background: #397188; }
 .module.elgg-widget-instance-points_left header { background-color: #c5dc1c; }
 
-section div.module header h2 { margin: 6px 0 0 12px; padding: 7px 0 5px 30px; background-size: 26px; }
+section div.module header h2 { margin: 4px 0 0 8px; padding: 10px 0 4px 42px; background-size: 34px; max-width: 176px; min-height: 30px; }
 section div.elgg-widget-instance-group_activity header h2 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); }
 section div.elgg-widget-instance-a_users_groups header h2 { background-image: url("<?php echo $picto_module; ?>groups.png"); }
 section div.elgg-widget-instance-messages header h2 { background-image: url("<?php echo $picto_module; ?>messages.png"); }
