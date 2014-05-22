@@ -171,16 +171,18 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-friends header { background: #397188; }
 .module.elgg-widget-instance-points_left header { background-color: #c5dc1c; }
 
-section div.elgg-widget-instance-group_activity header h2 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); #98519d; }
-section div.elgg-widget-instance-a_users_groups header h2 { background-image: url("<?php echo $picto_module; ?>groups.png"); #c5dc1c; }
-section div.elgg-widget-instance-messages header h2 { background-image: url("<?php echo $picto_module; ?>messages.png"); #c8596a; }
-section div.elgg-widget-instance-event_calendar header h2 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); #78ad45; }
-section div.elgg-widget-instance-thewire header h2 { background-image: url("<?php echo $picto_module; ?>thewire.png"); #f23a32; }
-section div.elgg-widget-instance-profile_completeness header h2 { background-image: url("<?php echo $picto_module; ?>profile.png"); #feb743; }
-section div.elgg-widget-instance-blog header h2 { background-image: url("<?php echo $picto_module; ?>blog.png"); #7e88c3; }
-section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); #c07a9e; }
-section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); #c34840; }
-section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); #80aa84; }
+section div.elgg-widget-instance-group_activity header h2 { background-size: 26px; }
+
+section div.elgg-widget-instance-group_activity header h2 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); }
+section div.elgg-widget-instance-a_users_groups header h2 { background-image: url("<?php echo $picto_module; ?>groups.png"); }
+section div.elgg-widget-instance-messages header h2 { background-image: url("<?php echo $picto_module; ?>messages.png"); }
+section div.elgg-widget-instance-event_calendar header h2 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); }
+section div.elgg-widget-instance-thewire header h2 { background-image: url("<?php echo $picto_module; ?>thewire.png"); }
+section div.elgg-widget-instance-profile_completeness header h2 { background-image: url("<?php echo $picto_module; ?>profile.png"); }
+section div.elgg-widget-instance-blog header h2 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
+section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); }
+section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); }
+section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); }
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>firneds.png"); }
 section div.elgg-widget-instance-points_left header h2 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
 
