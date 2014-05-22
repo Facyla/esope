@@ -38,7 +38,7 @@ header .interne nav ul li.invites a, header .interne nav ul li.group-invites a {
 .interne nav ul li.invites, .interne nav ul li.group-invites { margin: -4px 0 0 0; }
 
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
-#transverse nav ul li { border-right:0; }
+#transverse nav ul li { border-right:0; padding-left:0; }
 #transverse nav ul li:first-child { border-left:0; }
 #transverse nav ul li a { color:#2a7d9f; line-height: 40px; padding: 0 10px; font-size: 17px; }
 #transverse nav ul li ul li a { line-height: 2em; font-weight:normal; }
@@ -288,9 +288,9 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 body #feedbackWrapper { top: 170px; }
 
 /* Chat */
-.elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top:7px; }
+.elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top: 46px; }
 .elgg-page #groupchat-sitelink i.fa { font-size: 30px; }
-.elgg-page #groupchat-grouplink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; color: white; background: #c5dc1c; }
+.elgg-page #groupchat-grouplink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; color: white; background: #c5dc1c; top: 84px; }
 .elgg-page #groupchat-grouplink i.fa { font-size: 30px; }
 
 
