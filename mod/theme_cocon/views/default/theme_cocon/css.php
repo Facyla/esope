@@ -150,18 +150,20 @@ li#elgg-widget-type-points_left {  }
 
 /* @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
 */
-div.elgg-widget-instance-group_activity { background: #98519d; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-a_users_groups .elgg-widget-more { background: #c5dc1c; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-messages .elgg-widget-more { background: #c8596a; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-event_calendar .elgg-widget-more { background: #78ad45; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-thewire .elgg-widget-more { background: #f23a32; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-profile_completeness .elgg-widget-more { background: #feb743; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-blog .elgg-widget-more { background: #7e88c3; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-bookmarks .elgg-widget-more { background: #c07a9e; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-pages .elgg-widget-more { background: #c34840; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-filerepo .elgg-widget-more { background: #80aa84; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
-div.elgg-widget-instance-points_left .elgg-widget-more {  color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-module-widget .elgg-widget-more { background: #00668c; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-module-widget .elgg-widget-more a { color: white; }
+div.elgg-widget-instance-group_activity .elgg-widget-more { background: #98519d; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-a_users_groups .elgg-widget-more { background: #c5dc1c; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-messages .elgg-widget-more { background: #c8596a; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-event_calendar .elgg-widget-more { background: #78ad45; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-thewire .elgg-widget-more { background: #f23a32; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-profile_completeness .elgg-widget-more { background: #feb743; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-blog .elgg-widget-more { background: #7e88c3; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-bookmarks .elgg-widget-more { background: #c07a9e; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-pages .elgg-widget-more { background: #c34840; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-filerepo .elgg-widget-more { background: #80aa84; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
+div.elgg-widget-instance-points_left .elgg-widget-more { margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 
 
 
