@@ -30,7 +30,7 @@ header nav ul li { margin-left:3px; margin-right:3px; }
 header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; font-weight: normal; color:white; text-shadow:none; padding: 0; display: inline-block; vertical-align: top; }
 header nav ul li a img { width: 18px; height: 18px; background: white; border-radius: 10px; border:1px solid white; }
 header nav a .fa { margin-right: 0; width: 18px; height: 18px; line-height: 18px; background: white; border-radius: 10px; border:1px solid white; font-size:13px; color: #00658d; }
-header .interne nav ul li.invites a, header .interne nav ul li.group-invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; font-size:8px; }
+header .interne nav ul li.invites a, header .interne nav ul li.group-invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; font-size:10px !important; }
 .interne nav ul li.invites, .interne nav ul li.group-invites { margin: -4px 0 0 0; }
 
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
