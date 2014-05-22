@@ -57,7 +57,15 @@ footer.footer-cocon ul li:first-child { padding-left:0; }
 footer.footer-cocon ul li a { font-size: 14px; font-family: Montserrat, sans-serif; }
 footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>puce_footer.png") left 5px no-repeat; }
 
+
+/* Barre latérale */
+/*
 .elgg-sidebar { background: rgba(255,255,255,0.9); }
+*/
+.elgg-sidebar .elgg-module-aside { background: white; }
+
+/* Agenda */
+.elgg-context-event_calendar .elgg-sidebar { background: transparent; }
 
 
 /* Boutons @TODO */
@@ -175,7 +183,7 @@ div.elgg-widget-instance-friends .elgg-widget-more { background: #397188; color:
 div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc1c; color: white; margin: 0 -10px -10px -10px; display: block; padding: 4px 10px; }
 
 /* Modules des groupes */
-.elgg-module-group .elgg-head { background: #00668c; }
+.elgg-module-group .elgg-head { background: #00668c; border-radius: 0; padding: 10px; }
 .elgg-module-group-group-activity .elgg-head { background-color: #98519d; }
 .elgg-module-group-event-calendar .elgg-head { background-color: #78ad45; }
 .elgg-module-group-blog .elgg-head { background-color: #7e88c3; }
@@ -230,7 +238,4 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-page #groupchat-grouplink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; color: white; background: #c5dc1c; }
 .elgg-page #groupchat-grouplink i.fa { font-size: 30px; }
 
-
-/* Agenda */
-.elgg-context-event_calendar .elgg-sidebar { background: transparent; }
 
