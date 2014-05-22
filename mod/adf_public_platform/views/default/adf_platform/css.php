@@ -446,7 +446,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 
 /* Contenu des modules */
-section div.module header ul { float: right; margin: 8px 10px 0 0; }
+section div.module header ul { float: right; margin: 8px 10px 0 6px; }
 
 /* Boutons des widgets */
 section div.module header ul li a { float: left; margin-left: 6px; margin:0; right: auto; }

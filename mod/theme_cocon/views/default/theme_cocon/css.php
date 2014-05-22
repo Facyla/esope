@@ -1,7 +1,8 @@
 <?php
 global $CONFIG;
-$imgurl = $CONFIG->url . 'mod/theme_cocon/graphics/';
 $fonturl = $CONFIG->url . 'mod/theme_cocon/fonts/';
+$imgurl = $CONFIG->url . 'mod/theme_cocon/graphics/';
+$picto_module = $imgurl . 'pictos/module_';
 $sideicon = $imgurl . 'side_icons/';
 $sidecolor = "#00668c";
 // @TODO : list tools colors here for quicker changes
@@ -29,7 +30,7 @@ html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-r
 header { background: transparent; border-top:0; height:120px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
-header nav { background: #00668c; top: 0; padding: 7px 4px; border-radius: 0 0 8px 8px; }
+header nav { background: #00668c; top: 0; padding: 5px 4px 1px 4px; border-radius: 0 0 12px 12px; }
 header nav ul li { margin-left:3px; margin-right:3px; }
 header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; font-weight: normal; color:white; text-shadow:none; padding: 0; display: inline-block; vertical-align: top; }
 header nav ul li a img { width: 18px; height: 18px; background: white; border-radius: 10px; border:1px solid white; }
@@ -156,8 +157,8 @@ li#elgg-widget-type-friends { background-color: #397188; }
 li#elgg-widget-type-points_left { background-color: #c5dc1c; }
 
 /* Widgets */
-.module.elgg-widget-instance-group_activity header { background: #98519d; }
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { background: #98519d !important; }
+.module.elgg-widget-instance-group_activity header { background: #98519d; }
 .module.elgg-widget-instance-a_users_groups header { background: #c5dc1c; }
 .module.elgg-widget-instance-messages header { background: #c8596a; }
 .module.elgg-widget-instance-event_calendar header { background: #78ad45; }
@@ -169,6 +170,20 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-filerepo header { background: #80aa84; }
 .module.elgg-widget-instance-friends header { background: #397188; }
 .module.elgg-widget-instance-points_left header { background-color: #c5dc1c; }
+
+section div.elgg-widget-instance-group_activity header h2 { background-image: url("<?php echo $picto_module; ?>groups_activity.png"); #98519d; }
+section div.elgg-widget-instance-a_users_groups header h2 { background-image: url("<?php echo $picto_module; ?>groups.png"); #c5dc1c; }
+section div.elgg-widget-instance-messages header h2 { background-image: url("<?php echo $picto_module; ?>messages.png"); #c8596a; }
+section div.elgg-widget-instance-event_calendar header h2 { background-image: url("<?php echo $picto_module; ?>event_calendar.png"); #78ad45; }
+section div.elgg-widget-instance-thewire header h2 { background-image: url("<?php echo $picto_module; ?>thewire.png"); #f23a32; }
+section div.elgg-widget-instance-profile_completeness header h2 { background-image: url("<?php echo $picto_module; ?>profile.png"); #feb743; }
+section div.elgg-widget-instance-blog header h2 { background-image: url("<?php echo $picto_module; ?>blog.png"); #7e88c3; }
+section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); #c07a9e; }
+section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); #c34840; }
+section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); #80aa84; }
+section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>firneds.png"); }
+section div.elgg-widget-instance-points_left header h2 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
+
 
 /* Bloc more des widgets
  * @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
@@ -277,8 +292,8 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 
 
 /* More button */
-.elgg-widget-more { line-height: 40px; /* color: white; */ background: transparent; }
-.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 20px; text-align: center; width: 40px; height: 40px; line-height: 40px; /* color: white; */ display: inline-block; margin: 2px 6px; }
+.elgg-widget-more { line-height: 36px; /* color: white; */ background: transparent; font-size: 0.9em; }
+.elgg-widget-more:before { text-shadow: none; border: 1px solid white; border-radius: 15px; text-align: center; width: 30px; height: 30px; line-height: 30px; /* color: white; */ display: inline-block; margin: 2px 6px 2px 0; }
 
 /* Users and avatars */
 .elgg-avatar-tiny > a > img { border-radius: 10px; border: 1px solid white; }
