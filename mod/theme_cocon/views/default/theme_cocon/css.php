@@ -187,7 +187,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
 
 /* Bordures des modules des groupes */
-.elgg-module-group > .elgg-body { background: #00668c; }
+.elgg-module-group > .elgg-body { border-color: #00668c; }
 .elgg-module-group-group-activity .elgg-body { border-color: #98519d; }
 .elgg-module-group-event-calendar .elgg-body { border-color: #78ad45; }
 .elgg-module-group-blog .elgg-body { border-color: #7e88c3; }
