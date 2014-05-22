@@ -71,7 +71,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; border:0; }
 /* View all button */
-.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 3px 3px 0 0; background: white; color: #00668e; font-size: 8px; }
+.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 10px 3px 0 0; background: white; color: #00668e; font-size: 8px; }
 .home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
 .home-box .viewall a:hover, .home-box .viewall a:focus, .home-box .viewall a:active, module span.groups-widget-viewall a:hover, .elgg-module span.groups-widget-viewall a:focus, .elgg-module span.groups-widget-viewall a:active {  }
 
@@ -185,6 +185,18 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-brainstorm .elgg-head { background-color: #c5dc1c; }
 .elgg-module-group-announcements .elgg-head { background-color: #7e89c1; }
 .elgg-module-group-discussion .elgg-head { background-color: #f43930; }
+
+/* Bloc more des modules des groupes */
+.elgg-module-group .elgg-widget-more { background: #00668c; color: white; }
+.elgg-module-group-group-activity .elgg-widget-more { background-color: #98519d; color: white; }
+.elgg-module-group-event-calendar .elgg-widget-more { background-color: #78ad45; color: white; }
+.elgg-module-group-blog .elgg-widget-more { background-color: #7e88c3; color: white; }
+.elgg-module-group-bookmarks .elgg-widget-more { background-color: #c07a9e; color: white; }
+.elgg-module-group-pages .elgg-widget-more { background-color: #c34840; color: white; }
+.elgg-module-group-file .elgg-widget-more { background-color: #80aa84; color: white; }
+.elgg-module-group-brainstorm .elgg-widget-more { background-color: #c5dc1c; color: white; }
+.elgg-module-group-announcements .elgg-widget-more { background-color: #7e89c1; color: white; }
+.elgg-module-group-discussion .elgg-widget-more { background-color: #f43930; color: white; }
 
 
 
