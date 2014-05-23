@@ -55,7 +55,7 @@
 				padding: 10px;
 		}
 		#notification_footer {
-				background: none repeat scroll 0 0 #02658e;
+				background: none repeat scroll 0 0 #FFFFFF;
 				margin: 10px 0 0;
 				padding: 10px;
 				text-align: right;
