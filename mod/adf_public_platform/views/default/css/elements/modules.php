@@ -4,6 +4,7 @@ global $CONFIG;
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
 $urlicon = $css['urlicon'];
+$titlecolor = $css['titlecolor'];
 $linkcolor = $css['linkcolor'];
 $linkhovercolor = $css['linkhovercolor'];
 $color1 = $css['color1'];
