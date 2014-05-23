@@ -55,7 +55,7 @@ h4 {
 }
 
 #digest_header {
-	padding: 10px 30px;
+	padding: 0;
 	min-height: 20px;
 	
 	background: #02658e;
@@ -65,13 +65,17 @@ h4 {
 	border-bottom: 1px solid #02658e;
 	border-right: 1px solid #02658e;
 	
-	-webkit-border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 }
 
 #digest_header h1{
 	color: #FFFFFF;	
+}
+
+#digest_header h1 img{
+	max-width:90%;
 }
 
 #digest_container {
