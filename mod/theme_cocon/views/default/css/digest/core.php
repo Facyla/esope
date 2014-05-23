@@ -11,7 +11,7 @@ body {
 }
 
 a {
-	color: #02658e;
+	color: #1695CC;
 	text-decoration: none;
 }
 
@@ -27,7 +27,7 @@ h1,
 h2,
 h3,
 h4 {
-	color: #02658e;
+	color: #1695CC;
 	margin: 0;
 }
 

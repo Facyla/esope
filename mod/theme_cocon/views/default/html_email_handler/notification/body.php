@@ -23,7 +23,7 @@
 				font: 80%/1.4 "Lucida Grande",Verdana,sans-serif;
 		}
 		a {
-				color: #6D2D4F;
+				color: #1695CC;
 		}
 		#notification_container {
 				margin: 0 auto;
@@ -35,7 +35,7 @@
 				text-align: right;
 		}
 		#notification_header a {
-				color: #6D2D4F;
+				color: #1695CC;
 				font-size: 1.5em;
 				font-weight: bold;
 				text-decoration: none;
