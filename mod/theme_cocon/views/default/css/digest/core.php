@@ -5,13 +5,13 @@
 ?>
 
 body {
-	background: #f6f6f6;
+	background: #ffffff;
 	color: #333333;
 	font: 80%/1.4 "Lucida Grande",Arial,Tahoma,Verdana,sans-serif;
 }
 
 a {
-	color: #4690d6;
+	color: #02658e;
 	text-decoration: none;
 }
 
@@ -27,7 +27,7 @@ h1,
 h2,
 h3,
 h4 {
-	color: #4690d6;
+	color: #02658e;
 	margin: 0;
 }
 
@@ -58,12 +58,12 @@ h4 {
 	padding: 10px 30px;
 	min-height: 20px;
 	
-	background: #4690d6;
+	background: #02658e;
 	
-	border-top: 1px solid #dbdbdb;
-	border-left: 1px solid #dbdbdb;
-	border-bottom: 1px solid #dbdbdb;
-	border-right: 1px solid #dbdbdb;
+	border-top: 1px solid #02658e;
+	border-left: 1px solid #02658e;
+	border-bottom: 1px solid #02658e;
+	border-right: 1px solid #02658e;
 	
 	-webkit-border-radius: 5px 5px 0 0;
 	-moz-border-radius: 5px 5px 0 0;
@@ -95,9 +95,9 @@ h4 {
 	background: #F0F0F0;
 	
 	border-top: 1px solid #FFFFFF;
-	border-left: 1px solid #dbdbdb;
-	border-bottom: 1px solid #dbdbdb;
-	border-right: 1px solid #dbdbdb;
+	border-left: 1px solid #02658e;
+	border-bottom: 1px solid #02658e;
+	border-right: 1px solid #02658e;
 	
 	-webkit-border-radius: 0 0 5px 5px;
 	-moz-border-radius: 0 0 5px 5px;
@@ -133,14 +133,14 @@ h4 {
 	padding: 30px;
 	
 	border-top: 1px solid #FFFFFF;
-	border-left: 1px solid #dbdbdb;
-	border-bottom: 1px solid #dbdbdb;
-	border-right: 1px solid #dbdbdb;
+	border-left: 1px solid #02658e;
+	border-bottom: 1px solid #02658e;
+	border-right: 1px solid #02658e;
 }
 
 .elgg-module-digest .elgg-head {
 	padding-bottom: 5px;
-	border-bottom: 1px solid #dbdbdb;
+	border-bottom: 1px solid #02658e;
 }
 
 .elgg-module-digest h1 a,

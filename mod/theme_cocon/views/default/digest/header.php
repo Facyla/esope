@@ -18,7 +18,7 @@
 	$site = elgg_get_site_entity();
 	
 	echo '<h1 style="text-align:center;">';
-	echo elgg_echo('theme_inria:digest:headertitle') . ' <img src="' . $vars['url'] . 'mod/theme_cocon/graphics/logo_cocon.png" alt="Cocon" align="absbottom" />  ?';
+	echo elgg_echo('theme_inria:digest:headertitle') . ' <img src="' . $vars['url'] . 'mod/theme_cocon/graphics/email/logo_cocon.png" alt="Cocon" align="absbottom" />  ?';
 	/*
 	if(!empty($group)){
 		echo elgg_echo("digest:message:title:group", array($site->name, $group->name, elgg_echo("digest:interval:" . $interval)));
