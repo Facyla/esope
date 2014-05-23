@@ -30,7 +30,7 @@ html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-r
 header { background: transparent; border-top:0; height:120px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
-header nav { background: #00668c; top: 0; padding: 5px 4px 1px 4px; border-radius: 0 0 12px 12px; }
+header nav { background: #00668c; top: 0; padding: 4px 4px 1px 4px; border-radius: 0 0 12px 12px; }
 header nav ul li { margin-left:3px; margin-right:3px; float:none; display: inline-block; height:23px; }
 header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; font-weight: normal; color:white; text-shadow:none; padding: 0; display: inline-block; vertical-align: top; text-decoration: none !important; }
 header nav ul li a img { width: 18px; height: 18px; background: transparent; border-radius: 10px; border:0; }
