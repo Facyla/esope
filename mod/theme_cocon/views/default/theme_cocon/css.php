@@ -91,7 +91,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 
 /* Messages */
-.elgg-state-success { background-color:#78ad45; }
+.elgg-message.elgg-state-success { background-color:#78ad45; }
 .elgg-state-error { background-color:#c34840; }
 .elgg-state-notice { background-color:#397188; }
 
