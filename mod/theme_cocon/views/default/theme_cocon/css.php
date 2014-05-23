@@ -91,9 +91,9 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 
 /* Messages */
-.elgg-state-succes { color:#78ad45; }
-.elgg-state-error { color:#c34840; }
-.elgg-state-notice { color:#397188; }
+.elgg-state-succes { background-color:#78ad45; }
+.elgg-state-error { background-color:#c34840; }
+.elgg-state-notice { background-color:#397188; }
 
 /* Accueil déconnecté */
 #adf-loginbox { padding-top:6px; }
