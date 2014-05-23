@@ -78,7 +78,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button {
 	/* border: 1px solid white !important; */
 	/* background: transparent !important; */
-	box-shadow: 0 1px 3px #00668c !important;
+	box-shadow: 0 1px 3px #00668c;
 	border-radius: 16px !important;
 	border:0;
 }

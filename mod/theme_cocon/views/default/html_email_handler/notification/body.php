@@ -41,11 +41,11 @@
 				text-decoration: none;
 		}
 		#notification_wrapper {
-				background: none repeat scroll 0 0 #FFFFFF;
+				background: none repeat scroll 0 0 #02658e;
 				padding: 10px;
 		}
 		#notification_wrapper h2 {
-				color: #6D2D4F;
+				color: #FFF;
 				font-size: 1.35em;
 				line-height: 1.2em;
 				margin: 5px 0 5px 10px;
@@ -55,7 +55,7 @@
 				padding: 10px;
 		}
 		#notification_footer {
-				background: none repeat scroll 0 0 #FFFFFF;
+				background: none repeat scroll 0 0 #02658e;
 				margin: 10px 0 0;
 				padding: 10px;
 				text-align: right;
@@ -77,7 +77,7 @@
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $vars["config"]->site->name . '">';
+					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_cocon/graphics/logo_iris_inria.png" alt="' . $vars["config"]->site->name . '">';
 					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $text));
 					echo $site_url;
 				?>
