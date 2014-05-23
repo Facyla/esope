@@ -170,7 +170,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-pages header { background: #c34840; }
 .module.elgg-widget-instance-filerepo header { background: #80aa84; }
 .module.elgg-widget-instance-friends header { background: #397188; }
-.module.elgg-widget-instance-points_left header { background-color: #eace6d; }
+.module.elgg-widget-instance-points_left header { background: #eace6d; }
 
 section div.module header h2 { margin: 4px 0 0 8px; padding: 10px 0 4px 42px; background-size: 34px; max-width: 176px; min-height: 30px; }
 section div.elgg-widget-instance-activity header h2 { background-image: url("<?php echo $picto_module; ?>activity.png"); }
@@ -185,7 +185,7 @@ section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?
 section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); }
 section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); }
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
-section div.elgg-widget-instance-points_left header h2 { background: url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px transparent; }
+section div.elgg-widget-instance-points_left header h2 { background-image: url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px #eace6d; }
 
 
 /* Bloc more des widgets
