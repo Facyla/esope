@@ -326,7 +326,7 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 body #feedbackWrapper { top: 170px; }
 
 /* Chat */
-.elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top: 40px; }
+.elgg-page #groupchat-sitelink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; top: 38px; }
 .elgg-page #groupchat-sitelink i.fa { font-size: 30px; }
 .elgg-page #groupchat-grouplink { height: 30px; width:28px; line-height:30px; border: 0; border-radius:15px; padding: 0px 16px 0px 6px; color: white; background: #c5dc1c; top: 80px; }
 .elgg-page #groupchat-grouplink i.fa { font-size: 30px; }
