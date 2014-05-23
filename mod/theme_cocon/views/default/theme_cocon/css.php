@@ -36,7 +36,7 @@ header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; fon
 header nav ul li a img { width: 18px; height: 18px; background: white; border-radius: 10px; border:1px solid white; }
 header nav a .fa { margin-right: 0; width: 18px; height: 18px; line-height: 18px; background: white; border-radius: 10px; border:1px solid white; font-size:13px; color: #00658d; }
 header .interne nav ul li.invites a, header .interne nav ul li.group-invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; font-size:10px !important; }
-.interne nav ul li.invites, .interne nav ul li.group-invites { margin: -4px 0 0 0; }
+#transverse nav ul li.group-invites, .interne nav ul li.group-invites, #transverse nav ul li.invites, .interne nav ul li.invites { margin: -6px 4px 0 0 !important; }
 
 #transverse { box-shadow:none; border-bottom:0; background:white; height:40px; }
 #transverse nav ul li { border-right:0; padding-left:0; }
