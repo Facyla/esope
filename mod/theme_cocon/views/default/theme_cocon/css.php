@@ -34,7 +34,7 @@ header nav { background: #00668c; top: 0; padding: 4px 4px 1px 4px; border-radiu
 header nav ul li { margin-left:3px; margin-right:3px; float:none; display: inline-block; height:23px; }
 header nav ul li a { line-height: 20px; text-align: center; font-size: 10px; font-weight: normal; color:white; text-shadow:none; padding: 0; display: inline-block; vertical-align: top; text-decoration: none !important; }
 header nav ul li a img { width: 18px; height: 18px; background: transparent; border-radius: 10px; border:0; }
-header nav a .fa { margin-right: 0; width: 18px; height: 18px; line-height: 18px; background: white; border-radius: 10px; border:1px solid white; font-size:13px; color: #00658d; }
+header nav a .fa { margin-right: 0; width: 18px; height: 18px; line-height: 18px; background: white; border-radius: 10px; font-size:10px; color: #00658d; }
 #user img { float: left; }
 header .interne nav ul li.invites a, header .interne nav ul li.group-invites a { width: auto; height: auto; background: red !important; line-height: initial; padding: 2px 5px 2px 6px !important; font-size:10px !important; }
 #transverse nav ul li.group-invites, .interne nav ul li.group-invites, #transverse nav ul li.invites, .interne nav ul li.invites { margin: -6px 4px 0 0 !important; }
