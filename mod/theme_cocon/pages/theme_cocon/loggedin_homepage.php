@@ -77,10 +77,10 @@ $body = '
 	<div style="width:76%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
 			
-			<div style="width:40%; float:left;">
+			<div style="width:47%; float:left;">
 				<div class="home-box home-activity">' . $site_activity . '</div>
 			</div>
-			<div style="width:57%; float:right;">
+			<div style="width:50%; float:right;">
 				<div class="home-box home-wire">' . $thewire . '</div>
 			</div>
 	

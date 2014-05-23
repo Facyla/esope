@@ -85,7 +85,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; border:0; }
 /* View all button */
-.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 12px 7px 0 0; background: white; color: #00668e; font-size: 8px; }
+.home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 20px 7px 0 0; background: white; color: #00668e; font-size: 8px; }
 .home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
 .home-box .viewall a:hover, .home-box .viewall a:focus, .home-box .viewall a:active, module span.groups-widget-viewall a:hover, .elgg-module span.groups-widget-viewall a:focus, .elgg-module span.groups-widget-viewall a:active {  }
 
@@ -120,7 +120,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .home-box h2 img { float:left; margin-right:10px; }
 /* Activity */
 .home-box.home-activity { background:white; }
-.home-box.home-activity h2 { padding: 8px 10px; line-height:34px; background:#98519d; min-height: 45px; }
+.home-box.home-activity h2 { padding: 8px 10px; line-height:40px; background:#98519d; min-height: 45px; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
 /* Members */
@@ -128,7 +128,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 0px; width: 100%; line-height:34px; min-height: 45px; }
+.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 0px; width: 100%; line-height:40px; min-height: 45px; }
 .home-box.home-wire .elgg-item { padding: 0 10px; }
 
 /* Widgets */
