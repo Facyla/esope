@@ -155,7 +155,7 @@ li#elgg-widget-type-bookmarks { background-color: #c07a9e; }
 li#elgg-widget-type-pages { background-color: #c34840; }
 li#elgg-widget-type-filerepo { background-color: #80aa84; }
 li#elgg-widget-type-friends { background-color: #397188; }
-li#elgg-widget-type-points_left { background-color: #c5dc1c; }
+li#elgg-widget-type-points_left { background-color: #eace6d; }
 
 /* Widgets */
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { background: #98519d !important; }
@@ -170,7 +170,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .module.elgg-widget-instance-pages header { background: #c34840; }
 .module.elgg-widget-instance-filerepo header { background: #80aa84; }
 .module.elgg-widget-instance-friends header { background: #397188; }
-.module.elgg-widget-instance-points_left header { background-color: #c5dc1c; }
+.module.elgg-widget-instance-points_left header { background-color: #eace6d; }
 
 section div.module header h2 { margin: 4px 0 0 8px; padding: 10px 0 4px 42px; background-size: 34px; max-width: 176px; min-height: 30px; }
 section div.elgg-widget-instance-activity header h2 { background-image: url("<?php echo $picto_module; ?>activity.png"); }
