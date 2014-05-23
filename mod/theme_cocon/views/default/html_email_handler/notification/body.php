@@ -45,7 +45,7 @@
 				padding: 10px;
 		}
 		#notification_wrapper h2 {
-				color: #FFF;
+				color: #FFFFFF;
 				font-size: 1.35em;
 				line-height: 1.2em;
 				margin: 5px 0 5px 10px;

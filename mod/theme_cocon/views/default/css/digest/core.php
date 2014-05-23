@@ -27,7 +27,7 @@ h1,
 h2,
 h3,
 h4 {
-	color: #1695CC;
+	color: #02658e;
 	margin: 0;
 }
 
