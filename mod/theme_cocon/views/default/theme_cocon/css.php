@@ -183,7 +183,7 @@ section div.elgg-widget-instance-profile_completeness header h2 { background-ima
 section div.elgg-widget-instance-blog header h2 { background-image: url("<?php echo $picto_module; ?>blog.png"); }
 section div.elgg-widget-instance-bookmarks header h2 { background-image: url("<?php echo $picto_module; ?>bookmarks.png"); }
 section div.elgg-widget-instance-pages header h2 { background-image: url("<?php echo $picto_module; ?>pages.png"); }
-section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>file.png"); }
+section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?php echo $picto_module; ?>files.png"); }
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
 section div.elgg-widget-instance-points_left header h2 { url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px transparent; }
 
