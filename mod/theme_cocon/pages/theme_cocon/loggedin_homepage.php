@@ -87,7 +87,7 @@ $body = '
 		</div>
 	</div>
 	
-	<div style="width:22%; float:right;">
+	<div style="width:24%; float:right;">
 		<h2 class="hidden">' . elgg_echo('theme_cocon:home:information') . '</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_cocon/sidebar_groups') . '</div>
