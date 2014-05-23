@@ -86,8 +86,8 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; border:0; }
 /* Bouton delete */
 .elgg-button-delete { background:#c34840; border-color:#993333; text-shadow: none; box-shadow: 1px 0 3px 0 #c34840 !important; color:white; }
-/* Bouton cancel */
-.elgg-button.elgg-elgg-state-disabled { color: #333; box-shadow: 0px 1px 3px 0 #666 !important; }
+/* Bouton désactivé */
+.elgg-button.elgg-state-disabled { color: #333; box-shadow: 0px 1px 3px 0 #666 !important; }
 /* View all button */
 .home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 20px 7px 0 0; background: white; color: #00668e; font-size: 8px; }
 .home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
