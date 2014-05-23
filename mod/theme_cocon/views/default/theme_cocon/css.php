@@ -74,7 +74,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-context-event_calendar .elgg-sidebar { background: transparent; }
 
 
-/* Boutons @TODO */
+/* Boutons */
 .elgg-button {
 	/* border: 1px solid white !important; */
 	/* background: transparent !important; */
@@ -84,7 +84,8 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 }
 /* Boutons action & submit */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
-.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active { background:#00658f; color:white; border:0; }
+.elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active, .elgg-button.elgg-button-action.profile-manager-account-change-username:hover, .elgg-button.elgg-button-action.profile-manager-account-change-username:active, .elgg-button.elgg-button-action.profile-manager-account-change-username:focus { background:#00658f; color:white; border:0; }
+
 /* Bouton delete */
 .elgg-button-delete { background:#c34840; border-color:#993333; text-shadow: none; box-shadow: 0 1px 3px 0 #c34840 !important; color:white; }
 .elgg-button-cancel { background: #ddd; box-shadow: 0 1px 3px 0 #666; }
