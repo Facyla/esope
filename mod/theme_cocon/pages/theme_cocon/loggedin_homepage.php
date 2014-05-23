@@ -74,7 +74,7 @@ $widget_body = elgg_view_layout('widgets', $params);
 // Composition de la page
 //$body = $firststeps . '
 $body = '
-	<div style="width:76%; float:left;">
+	<div style="width:74%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
 			
 			<div style="width:47%; float:left;">
@@ -87,7 +87,7 @@ $body = '
 		</div>
 	</div>
 	
-	<div style="width:24%; float:right;">
+	<div style="width:26%; float:right;">
 		<h2 class="hidden">' . elgg_echo('theme_cocon:home:information') . '</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_cocon/sidebar_groups') . '</div>
