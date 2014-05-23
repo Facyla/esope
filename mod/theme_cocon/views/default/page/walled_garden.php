@@ -31,7 +31,7 @@ if ($user_guid && $code) {
 	$params = array('guid' => $user_guid, 'code' => $code);
 	
 	$content .= '<header><div class="interne">';
-	$content .= '<h1><img src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a></h1>';
+	$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
 	$content .= '</div></header>';
 	$content .= '<div class="elgg-page-messages">';
 	$content .= elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
@@ -107,7 +107,7 @@ if (empty($content)) {
 		
 	} else {
 		$content .= '<header><div class="interne">';
-		$content .= '<h1><img src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a></h1>';
+		$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
 		$content .= '</div></header>';
 
 		$content .= '<div class="elgg-page-messages">';
