@@ -95,8 +95,11 @@ if (elgg_is_logged_in()) {
 				<div class="">
 					<div class="interne">
 						<h1>
-							<img src="<?php echo $urlimg; ?>header_ministere.jpg" /><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><img src="<?php echo $urlimg; ?>header_cocon.png" style="margin-left:14px;" />
-							</a>
+							<img src="<?php echo $urlimg; ?>header.png" />
+							<!--
+							<img src="<?php echo $urlimg; ?>header_ministere.jpg" />
+							<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><img src="<?php echo $urlimg; ?>header_cocon.png" style="margin-left:14px;" /></a>
+							//-->
 						</h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
