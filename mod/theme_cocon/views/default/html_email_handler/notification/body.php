@@ -77,7 +77,7 @@
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_cocon/graphics/logo_iris_inria.png" alt="' . $vars["config"]->site->name . '">';
+					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png" alt="' . $vars["config"]->site->name . '">';
 					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $text));
 					echo $site_url;
 				?>
