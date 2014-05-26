@@ -168,6 +168,7 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
+.au_subgroups_group_icon span.au_subgroup { display: none; }
 
 /* Flux RSS des groupes */
 .elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }
@@ -275,6 +276,8 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 .elgg-form-groups-edit { margin-bottom: 20px; }
 .au-subgroups-non-parentable { display: none; }
+
+.elgg-context-groups .elgg-module-aside li .elgg-image-block > .elgg-body { border-bottom: 1px dotted #CCCCCC; }
 
 
 /* Group tabs */

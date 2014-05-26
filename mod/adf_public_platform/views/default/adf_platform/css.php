@@ -192,8 +192,10 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
 	margin-right: 5px;
+	/*
 	height: 25px;
 	width: 25px;
+	*/
 }
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
 	float: left;
