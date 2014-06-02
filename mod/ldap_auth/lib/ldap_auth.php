@@ -203,7 +203,8 @@ function ldap_auth_create_profile($username, $password) {
 		if (is_email_address($user_email)) {
 			$existing_user = get_user_by_email($user_email);
 			if ($existing_user) {
-				register_error("User already exists with email $user_email : please contact site administrator at {$CONFIG->email} so your site login matches LDAP login");
+				register_error("User(s) already exist, registered with your email $user_email : please contact site administrator at {$CONFIG->site->email} so your site login matches LDAP login");
+				return false;
 			} else {
 				$register_email = $user_email;
 			}
@@ -222,7 +223,7 @@ function ldap_auth_create_profile($username, $password) {
 			error_log("LDAP_auth : cannot automatically create user $username");
 		}
 	}
-	return null;
+	return false;
 }
 
 

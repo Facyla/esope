@@ -925,6 +925,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	return $result;
 }
 
+// Hook pour MAJ des infos du profil
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$user = $params['user'];
 	$auth = $params['auth'];
@@ -950,7 +951,6 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$mainpropchange = true;
 	}
 	// Some data are only in auth branch
-	// Note : Dans branche "people" uniquement, "ou" correspond à "location"
 	if ($auth[0]) foreach ($auth[0] as $key => $val) {
 		if ($key == 'cn') {
 			$fullname = $val[0];
@@ -958,6 +958,8 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			$lastname = $val[0];
 		} else if ($key == 'givenName') {
 			$firstname = $val[0];
+		} else if ($key == 'ou') {
+			$ou[] = $val[0];
 		} else {
 			$meta_name = $auth_fields[$key];
 			// Update only defined metadata
@@ -984,10 +986,16 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		}
 	}
 	
-	// Then Update using infos fields (optional)
+	// Then Update using infos fields (contacts branch - optional)
 	if ($infos[0]) foreach ($infos[0] as $key => $val) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
+			// Extraction de la localisation
+			if (strpos($key, 'x-location-')) {
+				$find_loc = explode('x-location-', $key)
+				$location[] = $find_loc[1];
+			}
+			// Traitement des données
 			if (substr($key, 0, 10) == 'roomNumber') {
 				$roomNumber[] = $val[0];
 			} else if (substr($key, 0, 15) == 'telephoneNumber') {
@@ -995,7 +1003,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			} else if (substr($key, 0, 9) == 'secretary') {
 				$secretary[] = $val[0];
 			} else if ($key == 'ou') {
-				$ou = $val;
+				$ou[] = $val[0];
 			} else {
 				$meta_name = $fields[$key];
 				// Update only defined metadata
@@ -1016,6 +1024,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'ou');
 	foreach ($special_fields as $special_field) {
 		if ($$special_field) {
+			$$special_field = array_unique($$special_field);
 			$meta_name = $fields[$special_field];
 			// Update only defined metadata
 			if (empty($meta_name)) continue;
@@ -1030,6 +1039,13 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				*/
 			}
 		}
+	}
+	
+	// Cas très particulier de la localisation : déduit des contacts tél et room
+	if ($location) {
+		$new = implode(', ', $location);
+		$current = $user->inria_location;
+		if ($current != $new) { $user->inria_location = $new; }
 	}
 	
 	// Some changes require saving entity
