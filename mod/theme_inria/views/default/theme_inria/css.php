@@ -165,7 +165,8 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .elgg-module .entity_title { font-size: 14px; }
 
 /* Titre listing des groupes */
-div.groups-profile-icon img { height: auto; max-height: 100px; max-width: 200px; }
+.groups-profile-icon .au_subgroups_group_icon-large { height: auto; width: auto; }
+.groups-profile-icon .au_subgroups_group_icon-large img { height: auto; max-height: 100px; max-width: 200px; }
 .elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
