@@ -927,11 +927,12 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 // Hook pour MAJ des infos du profil
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
+	$debug = true;
 	$user = $params['user'];
 	$auth = $params['auth'];
 	$infos = $params['infos'];
 	$fields = $params['fields'];
-	//error_log("LDAP hook : update_profile");
+	if ($debug) error_log("LDAP hook : update_profile");
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -969,7 +970,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			$current = $user->$meta_name;
 			if ($current != $new) {
 				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
+					if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
 				}
 			}
 		}
@@ -994,6 +995,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			if (strpos($key, 'x-location-')) {
 				$find_loc = explode('x-location-', $key);
 				$location[] = $find_loc[1];
+				if ($debug) error_log("ldap_auth_update_profile (theme_inria) : found location from $key = {$find_loc[1]}");
 			}
 			// Traitement des données
 			if (substr($key, 0, 10) == 'roomNumber') {
@@ -1012,9 +1014,12 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				$new = $val[0];
 				$current = $user->$meta_name;
 				if ($current != $new) {
+					$user->$meta_name = $new;
+					/*
 					if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-						error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=" . $meta_name . " val: " . $val[0]);
+						if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->guid . " name=" . $meta_name . " val: " . $val[0]);
 					}
+					*/
 				}
 			}
 		}
