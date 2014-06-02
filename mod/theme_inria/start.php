@@ -918,8 +918,10 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 }
 
 
+
 // LDAP update functions
-function theme_inria_ldap_convert_locality($codes = array()) {
+// Conversion des codes de localisation en un nom compréhensible
+function theme_inria_ldap_convert_locality($codes) {
 	$result = ldap_get_search_infos('objectClass=locality', ldap_auth_settings_info(), array('*'));
 	if ($result) {
 		// Create localities map
@@ -928,7 +930,7 @@ function theme_inria_ldap_convert_locality($codes = array()) {
 			$locality_table[$code] = $locality['description'][0];
 		}
 		// Find human-readable localities
-		foreach($codes as $code) { $localities[] = $locality_table[$code]; }
+		foreach($codes as $code) { $localities[] = $locality_table[strtoupper($code)]; }
 		return $localities;
 	} else return false;
 }
@@ -941,7 +943,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 // Hook pour MAJ des infos du profil
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
-	$debug = true;
+	$debug = false;
 	$user = $params['user'];
 	$auth = $params['auth'];
 	$infos = $params['infos'];
@@ -1056,7 +1058,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				$user->$meta_name = $new;
 				/*
 				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-					error_log("ldap_auth_update_profile : failed create_metadata for guid " . $user->guid . " name=$meta_name, val: " . $new);
+					error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->guid . " name=$meta_name, val: " . $new);
 				}
 				*/
 			}
