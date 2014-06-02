@@ -9,6 +9,8 @@
  * @link http://id.facyla.net/
 */
 
+// TODO : permettre d'utiliser une cmspage existante comme moteur de template en passant des params côté code cette fois : 
+// elgg_view('cmspages/view',array('pagetype'=>"maghrenov-public-template", 'customvar1' => 'whatever'))
 
 // Hooks
 elgg_register_plugin_hook_handler('permissions_check', 'object', 'cmspages_permissions_check');
@@ -293,7 +295,7 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 	preg_match_all($motif, $content, $templates);
 	foreach ($templates[0] as $template) {
 		$return .= '<li>';
-		$return .= '<a href="' . $CONFIG . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+		$return .= '<a href="' . $CONFIG->url . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
 		if ($recursive) {
 				$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
 				$cmspages = elgg_get_entities_from_metadata($options);
