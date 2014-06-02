@@ -932,7 +932,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$auth = $params['auth'];
 	$infos = $params['infos'];
 	$fields = $params['fields'];
-	if ($debug) error_log("LDAP hook : update_profile");
+	if ($debug) error_log("LDAP hook : update_profile (theme_inria)");
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -949,7 +949,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$mainpropchange = true;
 	}
 	// Some data are only in auth branch
-	if ($auth[0]) {
+	if ($auth) {
 		if ($debug) error_log("LDAP hook : update_profile : processing PEOPLE branch fields");
 		foreach ($auth[0] as $key => $val) {
 			if ($key == 'cn') {
@@ -988,7 +988,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	
 	// Then Update using infos fields (contacts branch - optional)
-	if ($infos[0]) {
+	if ($infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
 		foreach ($infos[0] as $key => $val) {
 			// We don't want to update some fields that were processed in auth
