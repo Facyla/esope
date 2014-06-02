@@ -10,6 +10,8 @@ $en = array(
 	'elgg_cas:loginbutton' => "CAS login",
 	'elgg_cas:casdetected' => "CAS login detected.",
 	'elgg_cas:login:success' => "Successfully logged in with CAS",
+	'elgg_cas:noaccountyet' => "No account created yet",
+	'elgg_cas:login:validcas' => "Valid CAS authentification",
 	'elgg_cas:login:details' => "If you have a valid Inria access, please use CAS connection. If your Iris account doesn't exist yet, it will be created at your first login attempt.<br />If you don't have any Inria account or if it isn't valid anymore, please use login/pass regular login below.",
 	
 	'elgg_cas:settings:autologin' => "CAS autologin.",

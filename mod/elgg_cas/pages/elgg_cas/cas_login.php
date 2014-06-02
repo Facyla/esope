@@ -75,6 +75,9 @@ phpCAS::forceAuthentication();
 
 // A ce stade, l'identification via CAS est OK
 $elgg_username = phpCAS::getUser();
+$content .= '<p>' . elgg_echo('elgg_cas:login:validcas') . '</p>';
+
+// Récupération du compte associé, s'il existe
 $user = get_user_by_username($elgg_username);
 
 
@@ -99,12 +102,15 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
+			// Get back to asked page
 			forward($forward);
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
+	$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
+	error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
@@ -115,6 +121,8 @@ if (elgg_instanceof($user, 'user')) {
 					$elgg_password = generate_random_cleartext_password();
 					// Création du compte puis MAJ avec les infos du LDAP
 					ldap_auth_create_profile($elgg_username, $elgg_password);
+				} else {
+					error_log("Not active account");
 				}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
