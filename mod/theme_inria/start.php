@@ -936,8 +936,13 @@ function theme_inria_ldap_convert_locality($codes) {
 }
 
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
-	$user = $params['user'];
 	//error_log("LDAP hook : check_profile");
+	$user = $params['user'];
+	
+	// Do not update accounts that do not have an active LDAP account 
+	// (because we might want to update their email - which can be invalid if account has been disabled)
+	if (!ldap_auth_is_active($username)) return false;
+	
 	return $result;
 }
 
