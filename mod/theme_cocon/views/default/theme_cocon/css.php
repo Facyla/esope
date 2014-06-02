@@ -9,19 +9,18 @@ $sidecolor = "#00668c";
 
 ?>
 
-/* Add some fonts */
+/* Add some fonts : local + GFont as failsafe */
 @font-face {
-	font-family: 'Montserrat';
-	src: url('<?php echo $fonturl; ?>Montserrat/Montserrat-Regular.ttf') format('truetype');
+	font-family: 'Montserrat'; font-style: normal; font-weight: 400;
+	src: local('Montserrat-Regular'), url('<?php echo $fonturl; ?>Montserrat/Montserrat-Regular.ttf') format('truetype'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/zhcz-_WihjSQC0oHJ9TCYBsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
 }
 @font-face {
-	font-family: 'Montserrat';
-	font-weight: bold;
-	src: url('<?php echo $fonturl; ?>Montserrat/Montserrat-Bold.ttf') format('truetype');
+	font-family: 'Montserrat'; font-style: normal; font-weight: 700;
+	src: local('Montserrat-Bold'), url('<?php echo $fonturl; ?>Montserrat/Montserrat-Bold.ttf') format('truetype'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/IQHow_FEYlDC4Gzy_m8fcgFhaRv2pGgT5Kf0An0s4MM.woff) format('woff');
 }
 @font-face {
-	font-family: 'MontserratBold';
-	src: url('<?php echo $fonturl; ?>Montserrat/Montserrat-Bold.ttf') format('truetype');
+	font-family: 'MontserratBold'; font-style: normal; font-weight: 700;
+	src: local('Montserrat-Bold'), url('<?php echo $fonturl; ?>Montserrat/Montserrat-Bold.ttf') format('truetype'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/IQHow_FEYlDC4Gzy_m8fcgFhaRv2pGgT5Kf0An0s4MM.woff) format('woff');
 }
 
 
@@ -85,6 +84,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 }
 /* Boutons action & submit */
 .elgg-button-action, .elgg-menu .elgg-button-action, .elgg-button-submit { color:#00658f; text-shadow: none; }
+.elgg-menu.elgg-menu-entity li a { color:#00658f; text-shadow: none; }
 .elgg-button-action:hover, .elgg-button-action:focus, .elgg-button-action:active, .elgg-menu .elgg-button-action:hover, .elgg-menu .elgg-button-action:focus, .elgg-menu .elgg-button-action:active, .elgg-button-submit:hover, .elgg-button-submit:focus, .elgg-button-submit:active, .elgg-button.elgg-button-action.profile-manager-account-change-username:hover, .elgg-button.elgg-button-action.profile-manager-account-change-username:active, .elgg-button.elgg-button-action.profile-manager-account-change-username:focus { background:#00658f; color:white; border:0; }
 
 /* Bouton delete */
