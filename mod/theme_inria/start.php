@@ -985,7 +985,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	
 	// Then Update using infos fields (optional)
-	foreach ($infos[0] as $key => $val) {
+	if ($infos[0]) foreach ($infos[0] as $key => $val) {
 		// We don't want to update some fields that were processed in auth
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 			if (substr($key, 0, 10) == 'roomNumber') {
