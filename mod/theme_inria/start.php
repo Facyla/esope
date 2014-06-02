@@ -992,7 +992,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 			// Extraction de la localisation
 			if (strpos($key, 'x-location-')) {
-				$find_loc = explode('x-location-', $key)
+				$find_loc = explode('x-location-', $key);
 				$location[] = $find_loc[1];
 			}
 			// Traitement des données
