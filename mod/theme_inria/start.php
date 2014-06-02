@@ -919,6 +919,20 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 
 
 // LDAP update functions
+function theme_inria_ldap_convert_locality($codes = array()) {
+	$result = ldap_get_search_infos('objectClass=locality', ldap_auth_settings_info(), array('*'));
+	if ($result) {
+		// Create localities map
+		foreach($result as $num => $locality) {
+			$code = $locality['l'][0];
+			$locality_table[$code] = $locality['description'][0];
+		}
+		// Find human-readable localities
+		foreach($codes as $code) { $localities[] = $locality_table[$code]; }
+		return $localities;
+	} else return false;
+}
+
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	$user = $params['user'];
 	//error_log("LDAP hook : check_profile");
@@ -1051,6 +1065,8 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	
 	// Cas très particulier de la localisation : déduit des contacts tél et room
 	if ($location) {
+		$location = array_unique($location);
+		$location = theme_inria_ldap_convert_locality($location);
 		$new = implode(', ', $location);
 		$current = $user->inria_location;
 		if ($current != $new) { $user->inria_location = $new; }
