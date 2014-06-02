@@ -183,6 +183,7 @@ function ldap_auth_is_valid($username, $password) {
  * @return ElggUser|false Depending on success
  */
 function ldap_auth_create_profile($username, $password) {
+	global $CONFIG;
 	// Registration is allowed only if set in plugin
 	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', true);
 	if ($allow_registration) {
@@ -198,8 +199,16 @@ function ldap_auth_create_profile($username, $password) {
 		//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 		// Email : we use a noreply email until it is updated by LDAP
 		// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
-		//$user_email = ldap_get_email($username);
-		//if (is_email_address($user_email)) $register_email = $user_email;
+		$user_email = ldap_get_email($username);
+		if (is_email_address($user_email)) {
+			$existing_user = get_user_by_email($user_email);
+			if ($existing_user) {
+				register_error("User already exists with email $user_email : please contact site administrator at {$CONFIG->email} so your site login matches LDAP login");
+			} else {
+				$register_email = $user_email;
+			}
+		}
+		
 		if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
 			$user = get_user($user_guid);
 			//update profile with ldap infos
