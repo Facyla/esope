@@ -24,6 +24,7 @@ echo "<h2>User info for $username</h2>";
 
 echo "<h3>Elgg user info</h3>";
 if (elgg_instanceof($user, "user")) {
+	echo "GUID : " . $user->guid . '<hr />';
 	echo "Créé : " . elgg_view_friendly_time($user->time_created) . '<hr />';
 	echo "Mis à jour : " . elgg_view_friendly_time($user->time_updated) . '<hr />';
 	echo "Dernière action : " . elgg_view_friendly_time($user->last_action) . '<hr />';
