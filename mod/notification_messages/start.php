@@ -390,7 +390,10 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 
 	// Facyla : don't strip tags if sending by email, but use output filters
 	if (elgg_is_active_plugin('html_email_handler')) {
-		$message_contents = html_email_handler_css_inliner($body);
+		$message_contents = $body;
+		// Note : CSS inliner add HTML doctype headers to the generated content
+		// should no be very useful anyway as styles should be already inline in messages
+		//$message_contents = html_email_handler_css_inliner($message_contents);
 		$message_contents = parse_urls($message_contents);
 		$message_contents = filter_tags($message_contents);
 		$message_contents = elgg_autop($message_contents);
