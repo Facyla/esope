@@ -989,9 +989,12 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				$new = $val[0];
 				$current = $user->$meta_name;
 				if ($current != $new) {
+					$user->$meta_name = $new;
+					/*
 					if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
 						if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
 					}
+					*/
 				}
 			}
 		}

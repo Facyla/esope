@@ -54,3 +54,10 @@ echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:ob
 echo "</div>";
 
 
+echo "<div>";
+echo elgg_echo("notification_messages:settings:messages_send");
+echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[messages_send]", "options_values" => $yesno_options, "value" => $plugin->messages_send));
+echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:messages_send:subtext") . "</div>";
+echo "</div>";
+
+
