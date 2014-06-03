@@ -152,7 +152,8 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 .elgg-sidebar ul.elgg-menu-page > li, elgg-sidebar ul.elgg-menu-groups-my-status > li {
 	border-bottom: 1px solid #CCCCCC;
 	float: left;
-	width: 211px;
+	/* width: 211px; */
+	width:100%;
 }
 .elgg-menu-groups-my-status li a {
 	-moz-border-radius:0; -webkit-border-radius:0; border-radius:0;
@@ -191,8 +192,10 @@ section div.intro { font-family:<?php echo $font4; ?>; font-size: 1.25em; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
 	margin-right: 5px;
+	/*
 	height: 25px;
 	width: 25px;
+	*/
 }
 .elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
 	float: left;
@@ -445,7 +448,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 
 /* Contenu des modules */
-section div.module header ul { float: right; margin: 8px 10px 0 0; }
+section div.module header ul { float: right; margin: 8px 10px 0 6px; }
 
 /* Boutons des widgets */
 section div.module header ul li a { float: left; margin-left: 6px; margin:0; right: auto; }

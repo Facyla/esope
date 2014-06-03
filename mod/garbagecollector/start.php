@@ -10,7 +10,6 @@ elgg_register_event_handler('init', 'system', 'garbagecollector_init');
 function garbagecollector_init() {
 	$period = elgg_get_plugin_setting('period', 'garbagecollector');
 	switch ($period) {
-		case 'daily':
 		case 'weekly':
 		case 'monthly':
 		case 'yearly':

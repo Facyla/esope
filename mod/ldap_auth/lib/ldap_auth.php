@@ -183,6 +183,7 @@ function ldap_auth_is_valid($username, $password) {
  * @return ElggUser|false Depending on success
  */
 function ldap_auth_create_profile($username, $password) {
+	global $CONFIG;
 	// Registration is allowed only if set in plugin
 	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', true);
 	if ($allow_registration) {
@@ -198,8 +199,17 @@ function ldap_auth_create_profile($username, $password) {
 		//if ($user_guid = register_user($new_username, $password, $username, $username . "@inria.fr")) {
 		// Email : we use a noreply email until it is updated by LDAP
 		// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
-		//$user_email = ldap_get_email($username);
-		//if (is_email_address($user_email)) $register_email = $user_email;
+		$user_email = ldap_get_email($username);
+		if (is_email_address($user_email)) {
+			$existing_user = get_user_by_email($user_email);
+			if ($existing_user) {
+				register_error("User(s) already exist, registered with your email $user_email : please contact site administrator at {$CONFIG->site->email} so your site login matches LDAP login");
+				return false;
+			} else {
+				$register_email = $user_email;
+			}
+		}
+		
 		if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
 			$user = get_user($user_guid);
 			//update profile with ldap infos
@@ -213,7 +223,7 @@ function ldap_auth_create_profile($username, $password) {
 			error_log("LDAP_auth : cannot automatically create user $username");
 		}
 	}
-	return null;
+	return false;
 }
 
 
@@ -227,9 +237,9 @@ function ldap_auth_create_profile($username, $password) {
 function ldap_auth_check_profile(ElggUser $user) {
 	if (!$user && $user instanceof ElggUser) return false;
 	
-	// Hook : return anything but default "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("check_profile", "ldap_auth", array("user" => $user), "continue");
-	if ($hook_result != 'continue') return $hook_result;
+	// Hook : return anything but default "keepgoing" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("check_profile", "ldap_auth", array("user" => $user), "keepgoing");
+	if ($hook_result !== "keepgoing") return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -276,9 +286,9 @@ function ldap_auth_check_profile(ElggUser $user) {
  * @return bool Return true on success
  */
 function ldap_auth_update_profile(ElggUser $user, Array $ldap_auth, Array $ldap_infos, Array $fields) {
-	// Hook : return anything but default "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'auth' => $ldap_auth, 'fields' => $fields), "continue");
-	if ($hook_result != 'continue') return $hook_result;
+	// Hook : return anything but default "keepgoing" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'auth' => $ldap_auth, 'fields' => $fields), "keepgoing");
+	if ($hook_result !== "keepgoing") return $hook_result;
 	
 	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -342,9 +352,9 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_auth, Array $ldap_
  */
 // @TODO : add a hook to let plugin write their own methods
 function ldap_auth_clean_group_name(array $infos) {
-	// Hook : return anything but default "continue" will stop and return hook result
-	$hook_result = elgg_trigger_plugin_hook("clean_group_name", "ldap_auth", array("infos" => $infos), "continue");
-	if ($hook_result != 'continue') return $hook_result;
+	// Hook : return anything but default "keepgoing" will stop and return hook result
+	$hook_result = elgg_trigger_plugin_hook("clean_group_name", "ldap_auth", array("infos" => $infos), "keepgoing");
+	if ($hook_result !== "keepgoing") return $hook_result;
 	
 	$res = $infos;
 	$cn = explode(',',$infos[0]['inriagroupmemberof'][0],2);

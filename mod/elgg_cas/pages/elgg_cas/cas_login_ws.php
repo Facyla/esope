@@ -44,6 +44,9 @@ if (isset($_GET['read'])) {
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
+// Allow to forward to asked URL after successful login, or last forwward if not explicitely set
+$forward = get_input('forward', $_SESSION['last_forward_from']);
+
 global $cas_client_loaded;
 
 elgg_load_library('elgg:elgg_cas');
@@ -117,6 +120,9 @@ phpCAS::forceAuthentication();
 
 // A ce stade, l'identification via CAS est OK
 $elgg_username = phpCAS::getUser();
+$content .= '<p>' . elgg_echo('elgg_cas:login:validcas') . '</p>';
+
+// Récupération du compte associé, s'il existe
 $user = get_user_by_username($elgg_username);
 elgg_cas_register_guid($_GET['guid'], create_user_token($elgg_username), $elgg_username);
 
@@ -141,30 +147,36 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
+			//Get back to app
 			forward('iris://login');
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
+	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
+	error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
 			elgg_load_library("elgg:ldap_auth");
-			if (ldap_auth_is_active($username)) {
+			if (ldap_auth_is_active($elgg_username)) {
 				$elgg_password = generate_random_cleartext_password();
 				// Création du compte puis MAJ avec les infos du LDAP
 				$user = ldap_auth_create_profile($elgg_username, $elgg_password);
 				if (elgg_instanceof($user, 'user')) {
 					forward('iris://login');
 				}
+			} else {
+				error_log("Not active account");
 			}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}
 	} else {
+		error_log("LDAP plugin disabled, please enable it (contact site administrator with this message).");
 		$content .= elgg_echo('elgg_cas:user:notexist');
 	}
 }

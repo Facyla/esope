@@ -4,6 +4,7 @@ global $CONFIG;
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
 $urlicon = $css['urlicon'];
+$titlecolor = $css['titlecolor'];
 $linkcolor = $css['linkcolor'];
 $linkhovercolor = $css['linkhovercolor'];
 $color1 = $css['color1'];
@@ -403,6 +404,7 @@ section .elgg-layout-one-column div.module footer { background: none; height:0; 
 /* Icônes pour les widgets */
 section div.module header h2 {
 	padding: 5px 0 5px 30px; margin:0 0 0 4px; max-width: 190px; min-height:24px;
+	/* padding: 5px 0 5px 30px; margin:0 75px 0 4px; min-height:24px; */
 }
 
 section div.elgg-widget-instance-a_users_groups header h2 {

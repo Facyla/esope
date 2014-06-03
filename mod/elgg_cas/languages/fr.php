@@ -10,6 +10,8 @@ $fr = array(
 	'elgg_cas:loginbutton' => "Connexion CAS",
 	'elgg_cas:casdetected' => "Identification CAS détectée.",
 	'elgg_cas:login:success' => "Connexion avec CAS réussie",
+	'elgg_cas:login:validcas' => "Authentification CAS valide",
+	'elgg_cas:noaccountyet' => "Pas encore de compte créé",
 	'elgg_cas:login:details' => "Personnel Inria, veuillez utiliser la connexion CAS. Si votre compte Iris n'existe pas encore, il sera créé lors de votre première connexion.<br />Si vous ne disposez pas de compte Inria ou si celui-ci n'est plus actif, veuillez utiliser la connexion par identifiant / mot de passe",
 	
 	'elgg_cas:settings:autologin' => "Login CAS automatique.",

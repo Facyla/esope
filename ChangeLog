@@ -1,6 +1,172 @@
+2014-03-12  Brett Profitt <brett.profitt@gmail.com>
+
+  	* CHANGES.txt: chore(release): Updated CHANGES.txt.
+
+2014-03-12  RiverVanRain <river.vanrain@gmail.com>
+
+  	* views/default/graphics/ajax_loader.php: fix(ui): Fixed ajax loader's ID
+  attribute.
+
+2014-03-11  Matt Beckett <beck24@gmail.com>
+
+  	* views/rss/page/default.php, views/rss/river/item.php: fix(views): rss w3c
+  validation improvements
+
+2014-03-01  Brett Profitt <brett.profitt@gmail.com>
+
+  	* mod/htmlawed/tests/tags.php: chore(htmlawed): Added more comprehensive
+  tests for HTMLawed.  Fixes #6297
+
+  	* mod/groups/lib/discussion.php: fix(groups): Linking the group name and
+  adding the "discussion topics" breadcrumb.  Fixes #6449
+
+2014-02-11  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* views/default/page/elements/tagcloud_block.php: fix(views): define type
+  variable  The view is passing a type to the tagcloud view, but it seems the
+  only type that is supported is object
+
+  	* mod/pages/start.php: fix(pages): comment out annotaton menu hook handler
+  registration  Do not register a handler for "register","menu:annotation" hook
+  - the callback function is not defined  Refs #6410
+
+2014-02-10  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* views/default/graphics/ajax_loader.php: fix(views): use api to format ajax
+  loader attributes  Reduce noise in logs by declaring variables and using
+  elgg_format_attributes()  Refs #6458
+
+  	* engine/lib/output.php: fix(output): terminate attribute formatting early
+  if attributes are not set  Reduce noise in logs by terminating
+  elgg_format_attributes() early  Refs #6458
+
+  	* engine/lib/deprecated-1.8.php: fix(hhvm): hhvm compatibility  Reducing
+  scrutinizer noise
+
+  	* engine/lib/deprecated-1.8.php: fix(deprecated): fix incorrectly referenced
+  variable
+
+  	* engine/lib/deprecated-1.8.php: fix(deprecated): fix incorrectly referenced
+  variable
+
+  	* engine/lib/deprecated-1.8.php: fix(deprecated): fix container reference in
+  getter function
+
+  	* engine/lib/deprecated-1.7.php: fix(hhvm): hhvm compatibility  Reducing
+  scrutinizer noise
+
+2014-02-23  Steve Clay <steve@mrclay.org>
+
+  	* views/default/navigation/menu/elements/section.php: fix(menus): eliminates
+  warnings in section menus  Handles case where $vars['items'] is empty/not an
+  array.  Fixes #6558
+
+  	* engine/handlers/cache_handler.php: fix(router): better handles invalid
+  cache requests  If a cache request doesn't match the pattern, we no longer
+  continue to march on into errors.  Fixes #6559
+
+2014-02-21  pattyland <mail@pattyland.de>
+
+  	* mod/twitter_api/vendors/twitteroauth/OAuth.php: chore(oauth):
+  compatibility with OAuth PHP module
+
+2014-02-23  Sem <sembrestels@riseup.net>
+
+  	* engine/lib/views.php: chore(views): moved check to avoid an array index
+  warning
+
+2014-01-20  Steve Clay <steve@mrclay.org>
+
+  	* actions/admin/user/resetpassword.php, engine/classes/ElggCrypto.php,
+  engine/lib/sessions.php, ...4012000-1.8.18-remember_me-9a8a433685cf7be9.php,
+  engine/lib/user_settings.php, engine/lib/users.php,
+  engine/tests/api/access_collections.php,
+  .../actions/twitter_api/interstitial_settings.php,
+  mod/twitter_api/lib/twitter_api.php, version.php: fix(security): Implements
+  stronger remember me cookie strategy  This implements remember me tokens
+  using a greater entropy pool, replacing codes as users return to the site,
+  and mitigating a brute-force attack by introducing a delay when an invalid
+  elggperm cookie is given. For admins, the tokens are removed immediately.
+
+2014-02-18  Brett Profitt <brett.profitt@gmail.com>
+
+  	* actions/admin/site/regenerate_secret.php,
+  actions/admin/site/update_advanced.php, languages/en.php,
+  views/default/forms/admin/site/update_advanced.php,
+  views/default/js/admin.php: chore(admin): Moved site secret regeneration to
+  the advanced settings action and form.
+
+2014-02-12  Brett Profitt <brett.profitt@gmail.com>
+
+  	* actions/admin/site/regenerate_secret.php, engine/lib/admin.php,
+  languages/en.php, .../admin/settings/advanced/site_secret.php,
+  views/default/css/admin.php,
+  .../default/forms/admin/site/regenerate_secret.php,
+  views/default/forms/admin/site/update_advanced.php,
+  views/default/js/admin.php: chore(admin): Moved site secret regeneration to
+  advanced settings.  Fixes #6443.
+
+2014-02-11  Sem <sembrestels@riseup.net>
+
+  	* mod/thewire/views/default/js/thewire.php: chore(thewire): few code
+  enhancements in the wire js file
+
+2014-02-10  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* mod/groups/start.php: perf(groups): remove redundant filter of user-owner
+  group acls  Since 1.8 upgrade the iteration to filter out acls that define
+  group membership and are owned by the user are redundant  Fixes #6434
+
+  	* engine/lib/output.php: chore(output): add deprecation warning and update
+  docs  Adds a deprecation warning for use of js attribute, updates docs with
+  an example, removes the todo for style (support for this would require
+  additional overhead for checking proper tokenization, whether or not style
+  properties are closed with semicolon etc)
+
+2014-02-06  Centillien <gkanters@gmail.com>
+
+  	* mod/file/views/rss/file/enclosure.php: fix(rss): corrects syntax errors
+  preventing RSS validation  Now RSS pages with files will be validated by W3C
+  and are more likely to be handled by a wide variety of RSS readers.  Fixes
+  #6411
+
+2014-02-06  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggBatch.php: perf(batch): reduce memory usage during
+  batch processes  Result sets for batch queries tend to be large and bloat the
+  query cache without being of much use. Since the LRU cache is limited in key
+  size (not memory size), the simplest solution is to flush it during batch
+  operations.
+
+  	* engine/classes/ElggVolatileMetadataCache.php: fix(cache): removes memory
+  leak when clearing an entity's metadata cache   When clearing the metadata
+  cache for a particular entity, an empty array was unnecessarily left for each
+  GUID removed from cache. This instead removes the entire key for the GUID.
+
+2014-02-04  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/lib/admin.php, engine/tests/regression/trac_bugs.php: fix(menu):
+  check if admin page menu items exist before sorting them  Allow admin page
+  menu to be altered without causing WSOD. Adds regression test Fixes #6379
+
+2014-01-18  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggCrypto.php: Make ElggCrypto::getRandomBytes static
+
+2014-01-17  Steve Clay <steve@mrclay.org>
+
+  	* engine/tests/objects/entities.php: Test for remove_subtype()
+
+  	* engine/tests/objects/sites.php: Test for ElggSite::getUrl
+
 2014-01-11  Steve Clay <steve@mrclay.org>
 
   	* CHANGES.txt, version.php: Prepare for 1.8.18 release
+
+2014-01-07  Centillien <gkanters@gmail.com>
+
+  	* mod/uservalidationbyemail/start.php: Fixes #6294 : Correct handling of
+  email login
 
 2014-01-06  Steve Clay <steve@mrclay.org>
 
@@ -154,11 +320,21 @@
   	* mod/developers/manifest.xml: changed the bugtracker url from the
   developers plugin to GitHub
 
+2013-10-22  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* engine/lib/entities.php: as request by mrclay return a boolean
+
 2013-10-22  Jeroen Dalsem <jdalsem@coldtrick.com>
 
   	* mod/file/actions/file/upload.php: remove thumbnails if no longer needed
 
 2013-10-22  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* engine/classes/ElggSite.php: ElggSite->getURL() returns the site url
+  instead if view/<guid>
+
+  	* engine/lib/entities.php: invalidate the subtype_cache when removing a
+  subtype
 
   	* engine/tests/api/entity_getter_functions.php: fixed a unittest I broke in
   #398

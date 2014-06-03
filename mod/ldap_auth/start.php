@@ -45,6 +45,7 @@ function ldap_auth_handler_update($event, $object_type, $user){
 	if ( ($event == 'login') && ($object_type == 'user') && $user && elgg_instanceof($user, 'user')) {
 		elgg_load_library("elgg:ldap_auth");
 		// Update LDAP fields
+		// @TODO : vérifier que le compte n'est pas désactivé valide avant : ldap_auth_is_active($username)
 		$return = ldap_auth_check_profile($user);
 		//error_log("LDAP_AUTH start.php ldap_auth_handler_update failed : " . $return);
 	}

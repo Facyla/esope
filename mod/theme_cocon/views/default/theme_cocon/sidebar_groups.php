@@ -14,6 +14,6 @@ if ($groups) {
 	}
 	elgg_pop_context();
 
-	echo '<div id="sidebar-featured-groups"><h3><a href="' . $vars['url'] . 'groups/all?filter=featured">' . elgg_echo("theme_cocon:groups:featured") . '</a></h3>' . $body . '</div>';
+	echo '<div id="sidebar-featured-groups"><h3><a href="' . $vars['url'] . 'groups/all?filter=featured"><i class="fa fa-group"></i> ' . elgg_echo("theme_cocon:groups:featured") . '</a></h3>' . $body . '</div>';
 }
 

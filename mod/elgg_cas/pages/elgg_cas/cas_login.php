@@ -75,15 +75,17 @@ phpCAS::forceAuthentication();
 
 // A ce stade, l'identification via CAS est OK
 $elgg_username = phpCAS::getUser();
-$user = get_user_by_username($elgg_username);
+$content .= '<p>' . elgg_echo('elgg_cas:login:validcas') . '</p>';
 
+// Récupération du compte associé, s'il existe
+$user = get_user_by_username($elgg_username);
 
 // Si on est identifié avec un autre compte avant de passer par CAS, on prévient et on arrête la procédure
 if (elgg_is_logged_in()) {
 	$logged = elgg_get_logged_in_user_entity();
 	if ($user->guid != $logged->guid) {
 		register_error(elgg_echo('elgg_cas:alreadylogged', array($user->username, $user->name, $logged->username, $logged->name)));
-		forward();
+		forward($forward);
 	}
 }
 
@@ -99,22 +101,30 @@ if (elgg_instanceof($user, 'user')) {
 			ldap_auth_check_profile($user);
 		}
 		if (login($user)) {
+			// Get back to asked page
 			forward($forward);
 			// Ou on peut aussi afficher un message...
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
+	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
+	error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
 				elgg_load_library("elgg:ldap_auth");
-				if (ldap_auth_is_active($username)) {
+				if (ldap_auth_is_active($elgg_username)) {
 					$elgg_password = generate_random_cleartext_password();
 					// Création du compte puis MAJ avec les infos du LDAP
-					ldap_auth_create_profile($elgg_username, $elgg_password);
+					$user = ldap_auth_create_profile($elgg_username, $elgg_password);
+				if (elgg_instanceof($user, 'user')) {
+					forward($forward);
+				}
+				} else {
+					error_log("Not active account");
 				}
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');

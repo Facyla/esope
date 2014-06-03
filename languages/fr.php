@@ -366,8 +366,8 @@ $french = array(
 	'avatar:crop:fail' => "Le recadrage de la photo a échoué",
 
 	'profile:edit' => "Modifier mon profil",
-	'profile:aboutme' => "A propos de moi",
-	'profile:description' => "A propos de moi",
+	'profile:aboutme' => "A mon propos",
+	'profile:description' => "A mon propos",
 	'profile:briefdescription' => "Brève description",
 	'profile:location' => "Lieu",
 	'profile:skills' => "Compétences",

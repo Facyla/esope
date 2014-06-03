@@ -4,6 +4,9 @@ global $CONFIG;
 gatekeeper();
 
 $own = elgg_get_logged_in_user_entity();
+$urlimg = $CONFIG->url;
+$urlimg = $url . 'mod/theme_cocon/graphics/';
+$urlpictos = $urlimg . 'pictos/';
 
 // Premiers pas : s'affiche au début, peut être désactivé
 /* Pas utilisé car remplacé par un menu configurable
@@ -29,6 +32,7 @@ if ($own->hide_firststeps != 'yes') {
 
 
 // Slider
+/*
 $slider_params = array(
 		//'sliderparams' => "theme:'cs-portfolio', buildStartStop:false, resizeContents:false, ", 
 		//'slidercss_main' => "width:100%; height:400px;", 
@@ -36,6 +40,7 @@ $slider_params = array(
 		'height' => '300px', 
 	);
 $slider = elgg_view('slider/slider', $slider_params);
+*/
 
 // Texte intro configurable
 //$intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
@@ -43,16 +48,18 @@ $slider = elgg_view('slider/slider', $slider_params);
 
 
 // Le Fil
-$thewire = '<h2 style="float:left;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('theme_cocon:thewire:title') . '</a></h2><em style="float:right;">' . elgg_echo('theme_cocon:thewire:details') . '</em>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire = '<span class="viewall" style="float:right;"><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'thewire_45.png" />' . elgg_echo('theme_cocon:thewire:title') . '</h2>' . elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
 $thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+$thewire .= '<div class="clearfloat"></div>';
 //elgg_pop_context();
 
 // Activité du site
-$site_activity = '<h2><a href="' . $CONFIG->url . 'activity">' . elgg_echo('theme_cocon:site:activity') . '</a></h2>';
+$site_activity = '<span class="viewall" style="float:right;"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('link:view:all') . '</a></span><h2><img src="' . $urlpictos . 'activity.png" />' . elgg_echo('theme_cocon:site:activity') . '</h2>';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 $db_prefix = elgg_get_config('dbprefix');
-$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
+//$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
+$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object')));
 elgg_pop_context();
 
 // Tableau de bord
@@ -67,26 +74,20 @@ $widget_body = elgg_view_layout('widgets', $params);
 // Composition de la page
 //$body = $firststeps . '
 $body = '
-	<div style="width:76%; float:left;">
+	<div style="width:74%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
-		
-			<div style="width:100%;" class="cocon-news">'
-				//. '<h2 class="hidden">' . elgg_echo('theme_cocon:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
-				. $slider
-			. '</div>
-			<div class="clearfloat"></div><br /><br />
-		
-			<div style="width:40%; float:left;">
+			
+			<div style="width:47%; float:left;">
 				<div class="home-box home-activity">' . $site_activity . '</div>
 			</div>
-			<div style="width:57%; float:right;">
+			<div style="width:50%; float:right;">
 				<div class="home-box home-wire">' . $thewire . '</div>
 			</div>
 	
 		</div>
 	</div>
 	
-	<div style="width:22%; float:right;">
+	<div style="width:26%; float:right;">
 		<h2 class="hidden">' . elgg_echo('theme_cocon:home:information') . '</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_cocon/sidebar_groups') . '</div>

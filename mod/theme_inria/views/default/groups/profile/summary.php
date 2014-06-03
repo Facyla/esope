@@ -27,7 +27,7 @@ if (!$owner) {
 		<div class="groups-profile-icon">
 			<?php
 				// we don't force icons to be square so don't set width/height
-				echo elgg_view_entity_icon($group, 'medium', array(
+				echo elgg_view_entity_icon($group, 'large', array(
 					'href' => '',
 					'width' => '',
 					'height' => '',
