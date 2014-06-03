@@ -70,7 +70,7 @@ function user_get_profile($username) {
 	
 	$profile_info['core'] = $core;
 	$profile_info['profile_fields'] = $profile_fields;
-	$profile_info['avatar_url'] = get_entity_icon_url($user,'medium');
+	$profile_info['avatar_url'] = $user->getIconURL('medium');
 	return $profile_info;
 }
 
@@ -168,7 +168,7 @@ expose_function('user.save_profile',
 	array('username' => array ('type' => 'string'),
 		'profile' => array ('type' => 'array'),
 	),
-	elgg_echo('web_services:user:'),
+	elgg_echo('web_services:user:save_profile'),
 	'POST',
 	true,
 	true);
@@ -376,6 +376,267 @@ expose_function('user.friend.remove',
 
 
 /**
+ * Web service to remove group join requests
+ *
+ * @param string $username Username
+ * @param string $group_guid target group's guid
+ *
+ * @return array
+ */
+function user_remove_join_request($username, $group_guid) {
+	if ($username) {
+		$user = get_user_by_username($username);
+	} else {
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if (!$user) {
+		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
+	}
+	$group = get_entity($group_guid);
+	if (!elgg_instanceof($group, 'group')) {
+		throw new InvalidParameterException('group:notfound');
+	}
+	if (check_entity_relationship($user->guid, 'membership_request', $group->guid)) {
+		remove_entity_relationship($user->guid, 'membership_request', $group->guid);
+		system_message(elgg_echo("groups:joinrequestkilled"));
+		$return['message'] = "groups:joinrequestkilled";
+	} else {
+		$return['message'] = "groups:nojoinrequest";
+	}
+	return $return;
+}
+
+expose_function('user.remove_join_request',
+	"user_remove_join_request",
+	array(
+		'username' => array ('type' => 'string', 'required' => true),
+		'group_guid' => array('type' => 'int', 'required' => true),
+	),
+	elgg_echo('web_services:user:group_join_request:remove'),
+	'GET',
+	true,
+	true
+);
+
+/**
+ * Web service to remove friend requests
+ *
+ * @param string $username Username
+ *
+ * @return array
+ */
+function user_remove_friend_request($username) {
+	$friend = get_user_by_username($username);
+	if (!$friend) {
+		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
+	}
+	$user = elgg_get_logged_in_user_entity();
+
+	if(remove_entity_relationship($friend->getGUID(), "friendrequest", $user->getGUID())) {
+//		$subject = elgg_echo("friend_request:decline:subject", array($user->name));
+//		$message = elgg_echo("friend_request:decline:message", array($friend->name, $user->name));
+			
+//		notify_user($friend->getGUID(), $user->getGUID(), $subject, $message);
+		$return['message'] = "friend_request:decline:success";
+	} else {
+		$return['message'] = "friend_request:decline:fail";
+	}
+	return $return;
+}
+
+expose_function('user.remove_friend_request',
+	"user_remove_friend_request",
+	array(
+		'username' => array ('type' => 'string', 'required' => true),
+	),
+	elgg_echo('web_services:user:friend_request:remove'),
+	'GET',
+	true,
+	true
+);
+
+
+/**
+ * Web service to accept group join requests
+ *
+ * @param string $username Username
+ * @param string $group_guid target group's guid
+ *
+ * @return array
+ */
+function user_accept_join_request($username, $group_guid) {
+	if ($username) {
+		$user = get_user_by_username($username);
+	} else {
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if (!$user) {
+		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
+	}
+	$group = get_entity($group_guid);
+	if (!elgg_instanceof($group, 'group')) {
+		throw new InvalidParameterException('group:notfound');
+	}
+	if ($user && $group && $group->canEdit()) {
+		if (!$group->isMember($user)) {
+			if (groups_join_group($group, $user)) {
+				// send welcome email to user
+				notify_user($user->getGUID(), $group->owner_guid,
+						elgg_echo('groups:welcome:subject', array($group->name)),
+						elgg_echo('groups:welcome:body', array(
+							$user->name,
+							$group->name,
+							$group->getURL())
+				));
+				system_message(elgg_echo('groups:addedtogroup'));
+				$return['message'] = 'groups:addedtogroup';
+			} else {
+				$return['message'] = 'groups:joinaccepterror';
+			}
+		}
+	}
+	return $return;
+}
+
+expose_function('user.accept_join_request',
+	"user_accept_join_request",
+	array(
+		'username' => array ('type' => 'string', 'required' => true),
+		'group_guid' => array('type' => 'int', 'required' => true),
+	),
+	elgg_echo('web_services:user:group_join_request:accept'),
+	'GET',
+	true,
+	true
+);
+
+/**
+ * Web service to accept friend requests
+ *
+ * @param string $username Username
+ *
+ * @return array
+ */
+function user_accept_friend_request($username) {
+	$friend = get_user_by_username($username);
+	if (!$friend) {
+		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
+	}
+	$user = elgg_get_logged_in_user_entity();
+
+	if(remove_entity_relationship($friend->getGUID(), "friendrequest", $user->getGUID())) {
+			
+		$user->addFriend($friend->getGUID());
+		$friend->addFriend($user->getGUID());			//Friends mean reciprical...
+			
+		// notify the user about the acceptance
+		$subject = elgg_echo("friend_request:approve:subject", array($user->name));
+		$message = elgg_echo("friend_request:approve:message", array($friend->name, $user->name));
+			
+		notify_user($friend->getGUID(), $user->getGUID(), $subject, $message);		
+		system_message(elgg_echo("friend_request:approve:successful", array($friend->name)));
+			
+		// add to river
+		add_to_river("river/relationship/friend/create", "friend", $user->getGUID(), $friend->getGUID());
+		add_to_river("river/relationship/friend/create", "friend", $friend->getGUID(), $user->getGUID());
+
+		$return['message'] = 'friend_request:approve:successful';
+	} else {
+		register_error(elgg_echo("friend_request:approve:fail", array($friend->name)));
+		$return['message'] = 'friend_request:approve:fail';
+	}
+	return $return;
+}
+
+expose_function('user.accept_friend_request',
+	"user_accept_friend_request",
+	array(
+		'username' => array ('type' => 'string', 'required' => true),
+	),
+	elgg_echo('web_services:user:friend_request:accept'),
+	'GET',
+	true,
+	true
+);
+			
+
+/**
+ * Web service to get friend requests and group join requests
+ *
+ * @param string $username Username
+ *
+ * @return array
+ */  
+function user_get_user_requests($username, $group_guid) {
+	if ($username) {
+		$user = get_user_by_username($username);
+	} else {
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if (!$user) {
+		throw new InvalidParameterException(elgg_echo('registration:usernamenotvalid'));
+	}
+	$options = array(
+		"type" => "user",
+		"limit" => false,
+		"relationship" => "friendrequest",
+		"relationship_guid" => $user->getGUID(),
+		"inverse_relationship" => true
+	);
+	
+	// Get all received requests
+	$received_requests = elgg_get_entities_from_relationship($options);
+
+	foreach($received_requests as $single) {
+		$friend['guid'] = $single->guid;
+		$friend['username'] = $single->username;
+		$friend['name'] = $single->name;
+		$friend['avatar_url'] = $single->getIconURL('small');
+		$return['friend'][] = $friend;
+	}
+
+	$owned_groups = elgg_get_entities(array(
+		'type' => 'group',
+		'owner_guid' => $user->guid,
+	));
+
+	foreach($owned_groups as $group) {
+		$options = array(
+			"type" => "user",
+			"limit" => false,
+			"relationship" => "membership_request",
+			"relationship_guid" => $group->guid,
+			"inverse_relationship" => true
+		);
+		$requests = elgg_get_entities_from_relationship($options);
+
+		foreach($requests as $request) {
+			$join['group_guid'] = $group->guid;
+			$join['group_name'] = $group->name;
+			$join['username'] = $request->username;
+			$join['name'] = $request->name;
+			$join['avatar_url'] = $request->getIconURL('small');
+			$return['join'][] = $join;
+		}
+	}
+
+	return $return;
+}
+
+expose_function('user.get_user_requests',
+	"user_get_user_requests",
+	array(
+		'username' => array ('type' => 'string', 'required' => false)
+	),
+	elgg_echo('web_services:user:requests:list'),
+	'GET',
+	true,
+	true
+);
+
+
+
+/**
  * Web service to get friends of a user
  *
  * @param string $username Username
@@ -400,7 +661,7 @@ function user_get_friends($username, $limit = 10, $offset = 0) {
 		$friend['guid'] = $single->guid;
 		$friend['username'] = $single->username;
 		$friend['name'] = $single->name;
-		$friend['avatar_url'] = get_entity_icon_url($single,'small');
+		$friend['avatar_url'] = $single->getIconURL('small');
 		$return[] = $friend;
 	}
 	} else {
@@ -447,7 +708,7 @@ function user_get_friends_of($username, $limit = 10, $offset = 0) {
 		$return['guid'] = $friend->guid;
 		$return['username'] = $friend->username;
 		$return['name'] = $friend->name;
-		$return['avatar_url'] = get_entity_icon_url($friend,'small');
+		$return['avatar_url'] = $friend->getIconURL('small');
 		$success = true;
 	}
 	
@@ -507,7 +768,7 @@ function user_get_messageboard($limit = 10, $offset = 0, $username){
 			$post['owner']['guid'] = $owner->guid;
 			$post['owner']['name'] = $owner->name;
 			$post['owner']['username'] = $owner->username;
-			$post['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$post['owner']['avatar_url'] = $owner->getIconURL('small');
 		
 			$post['time_created'] = (int)$single->time_created;
 			$return[] = $post;

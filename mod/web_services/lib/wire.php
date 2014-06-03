@@ -105,7 +105,7 @@ function wire_get_posts($context, $limit = 10, $offset = 0, $username) {
 			$owner = get_entity($single->owner_guid);
 			$wire['owner']['guid'] = $owner->guid;
 			$wire['owner']['name'] = $owner->name;
-			$wire['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$wire['owner']['avatar_url'] = $owner->getIconURL('small');
 			
 			$wire['time_created'] = (int)$single->time_created;
 			$wire['description'] = $single->description;

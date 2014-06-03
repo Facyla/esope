@@ -11,7 +11,7 @@
 * @copyright Facyla 2010
 * @link http://id.facyla.net/
 */
-$name = page_owner_entity()->name;
+$name = elgg_get_page_owner_entity()->name;
 
 $doyoubuzz = $vars['entity']->widgets_collection_doyoubuzz;
 $delicious = $vars['entity']->widgets_collection_delicious;

@@ -187,9 +187,9 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			break;
 			
 		case 'search':
-			// Affichage des résultats d'une rechrche (par type d'entité)
+			// Affichage des résultats d'une recherche (par type d'entité)
 			$return .= '<h3>' . elgg_echo('cmspages:searchresults') . '</h3>';
-			// @todo : améliorer la recherche, mais sans tout réécrire..
+			// @TODO : améliorer la recherche, mais sans tout réécrire..
 			switch($module_config['type']) {
 				case 'object': $ents = search_for_object($module_config['criteria']); break;
 				case 'group': $ents = search_for_group($module_config['criteria']); break;
