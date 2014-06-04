@@ -46,7 +46,7 @@ if ($groups) {
 	echo '<div class="au-subgroups-result-col">';
 	
 	if (count($groups) >= ($limit - 1)) {
-		echo '<p>' . elgg_echo('theme_inria:subgroups:search:overmax', array($limit)) . '</p>';
+		echo '<p>' . elgg_echo('esope:subgroups:search:overmax', array($limit)) . '</p>';
 	}
 	
 	for ($i=0; $i<count($groups); $i++) {
@@ -69,6 +69,6 @@ if ($groups) {
 }
 else {
 	echo elgg_echo('au_subgroups:search:noresults');
-	if (empty($wheres)) echo '<p>' . elgg_echo('theme_inria:subgroups:search:details') . '</p>';
+	if (empty($wheres)) echo '<p>' . elgg_echo('esope:subgroups:search:details') . '</p>';
 }
 elgg_set_context($context);

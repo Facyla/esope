@@ -505,6 +505,10 @@ $fr = array(
 	'esope:filesize:units' => "OKMGTP",
 	'esope:embed:file:download' => "ouvrir",
 	
+	'esope:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
+	'esope:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
+	
+	
 );
 
 add_translation('fr', $fr);
