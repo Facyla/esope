@@ -311,7 +311,8 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 /* Group listing menu */
 .elgg-menu-item-members { background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
 
-
+/* File tree */
+#file_tools_list_tree_container div.elgg-body { padding: 6px; }
 
 
 /* More button */
