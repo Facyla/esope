@@ -941,7 +941,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	
 	// Do not update accounts that do not have an active LDAP account 
 	// (because we might want to update their email - which can be invalid if account has been disabled)
-	if (!ldap_auth_is_active($username)) return false;
+	if (!ldap_auth_is_active($user->username)) return false;
 	
 	return $result;
 }

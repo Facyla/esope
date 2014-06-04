@@ -212,6 +212,7 @@ function ldap_auth_create_profile($username, $password) {
 		
 		if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
 			$user = get_user($user_guid);
+			login($user);
 			//update profile with ldap infos
 			$user->ldap_username = $username;
 			if (!ldap_auth_check_profile($user)) {
@@ -220,7 +221,7 @@ function ldap_auth_create_profile($username, $password) {
 			// Success, credentials valid and account has been created
 			return $user;
 		} else {
-			error_log("LDAP_auth : cannot automatically create user $username");
+			error_log("LDAP_auth : cannot automatically create user $new_username");
 		}
 	}
 	return false;
