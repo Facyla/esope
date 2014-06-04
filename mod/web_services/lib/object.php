@@ -21,7 +21,8 @@ function object_get_post($guid, $username) {
 
 	if (!elgg_instanceof($object, 'object', 'blog')
 		&& !elgg_instanceof($object, 'object', 'page')
-		&& !elgg_instanceof($object, 'object', 'page_top')) {
+		&& !elgg_instanceof($object, 'object', 'page_top')
+		&& !elgg_instanceof($object, 'object', 'feedback')) {
 		$return['content'] = elgg_echo('object:error:post_not_found');
 		return $return;
 	}
