@@ -105,6 +105,10 @@ $french = array(
 	'web_services:message:sent' => "Récupérer les messages envoyés",
 	'web_services:message:send' => "Envoyer un message",
 	
+	// Object
+	'web_services:object:get_post' => "Lire une publication",
+	'object:error:post_not_found' => "Publication non trouvée",
+	
 	
 );
 

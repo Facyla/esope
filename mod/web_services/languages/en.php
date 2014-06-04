@@ -106,6 +106,10 @@ $english = array(
 	'web_services:message:sent' => "Get sent messages",
 	'web_services:message:send' => "Send a message",
 	
+	// Object
+	'web_services:object:get_post' => "Read a content",
+	'object:error:post_not_found' => "Content not found",
+	
 	
 );
 
