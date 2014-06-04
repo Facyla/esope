@@ -125,6 +125,10 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 
 // Permet l'accès à diverses pages en mode "walled garden"
 function adf_public_platform_public_pages($hook, $type, $return_value, $params) {
+	// Add very useful pages !
+	$return_value[] = 'resetpassword.*';
+	$return_value[] = 'uservalidationbyemail.*';
+	
 	// Get and prepare valid domain config array from plugin settings
 	$publicpages = elgg_get_plugin_setting('publicpages', 'adf_public_platform');
 	$publicpages = preg_replace('/\r\n|\r/', "\n", $publicpages);
@@ -268,7 +272,9 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($return['segments'][0] == 'subgroups') {
 			elgg_load_library('elgg:groups');
 			$group = get_entity($return['segments'][2]);
-			if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
+			echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
+			//if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
+			if (!elgg_instanceof($group, 'group') || (($group->subgroups_enable == 'no') && ($return['segments'][1] != "delete"))) {
 				return $return;
 			}
 	
@@ -289,12 +295,12 @@ if (elgg_is_active_plugin('au_subgroups')) {
 						return true;
 					}
 					break;
-		
-			case 'list':
-			if (include(elgg_get_plugins_path() . 'adf_public_platform/pages/au_subgroups/list.php')) {
-				return true;
-			}
-			break;
+				
+				case 'list':
+				if (include(elgg_get_plugins_path() . 'adf_public_platform/pages/au_subgroups/list.php')) {
+					return true;
+				}
+				break;
 			}
 		}
 		
