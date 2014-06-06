@@ -87,12 +87,15 @@ if (elgg_instanceof($user, 'user')) {
 				'relationship' => 'member',
 				'relationship_guid' => $own->guid,
 				'inverse_relationship' => false,
+				'limit' => $limit,
 			));
 			if ($groups) {
 				elgg_push_context('widgets');
+				$content .= '<div>';
 				foreach ($groups as $group) {
 					$content .= '<a href="' . $group->getURL() . '" title="' . $group->name . '" target="_blank"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
 				}
+				$content .= '</div>';
 				elgg_pop_context();
 
 				$content .= '<p><a href="' . $vars['url'] . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-cog"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
