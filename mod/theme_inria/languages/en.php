@@ -131,7 +131,8 @@ $english = array(
 
 	'adf_platform:directory' => 'Members',
 	
-	'inria:mygroups' => "My groups",
+	'inria:mygroups' => "All my groups",
+	'inria:mygroups:title' => "My groups",
 	'theme_inria:firststeps:hide' => "Don't show anymore",
 	'theme_inria:firststeps:show' => "Show",
 	'theme_inria:thewire:charleft' => "left",

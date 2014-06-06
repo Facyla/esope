@@ -508,6 +508,9 @@ $fr = array(
 	'esope:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
 	'esope:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	
+	'esope:input:nogroup' => "Aucun groupe",
+	'esope:input:donotchange' => "Ne pas changer (%s)",
+	
 	
 );
 

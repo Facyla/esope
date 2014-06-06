@@ -509,6 +509,9 @@ $en = array(
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
 	
+	'esope:input:nogroup' => "No group selected",
+	'esope:input:donotchange' => "Do not change (%s)",
+	
 );
 
 add_translation('en', $en);

@@ -132,6 +132,7 @@ $french = array(
 	'adf_platform:directory' => 'Membres',
 	
 	'inria:mygroups' => "Tous mes groupes",
+	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
