@@ -921,11 +921,18 @@ function esope_esearch_page_handler($page) {
 /* Esope search function : 
  * Just call echo esope_search() for a listing
  * Get entities with $results_ents = esope_search('entities');
+ * Params :
+ 	- q : full search query
+ 	- entity_type : site | object | user | group
+ 	- entity_subtype : usually an object subtype
+ 	- owner_guid : owner of entity
+ 	- container_guid : container of entity
+ 	- metadata : list of metadata and values
  */
 function esope_esearch($params = array()) {
 	global $CONFIG;
 	$max_results = 500;
-	$debug = false;
+	$debug = get_input("debug", false);
 	$q = sanitize_string(get_input("q"));
 	$type = sanitize_string(get_input("entity_type"));
 	$subtype = sanitize_string(get_input("entity_subtype"));
@@ -954,8 +961,8 @@ function esope_esearch($params = array()) {
 	}
 	
 	$result = array();
-	if ($debug) echo "Search : $q $type $subtype ($owner_guid/$container_guid) $limit $offset $sort $order<br />";
-	if ($debug) echo "Metadata : $industry $multiselect " . print_r($metadata, true) . "<br />";
+	if ($debug) echo "Search : $q $type " . print_r($subtype, true) . " ($owner_guid/$container_guid) $limit $offset $sort $order<br />";
+	if ($debug) echo "Metadata : " . print_r($metadata, true) . "<br />";
 	// show hidden (unvalidated) users
 	//$hidden = access_get_show_hidden_status();
 	//access_show_hidden_entities(true);
@@ -993,8 +1000,6 @@ function esope_esearch($params = array()) {
 	$search_params = array(
 			'types' => $type,
 			'subtypes' => $subtype,
-			'owner_guid' => $owner_guid,
-			'container_guid' => $container_guid,
 			'metadata_name_value_pairs' => $metadata_name_value_pairs,
 			'metadata_case_sensitive' => $metadata_case_sensitive,
 			'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
@@ -1003,20 +1008,24 @@ function esope_esearch($params = array()) {
 			'offset' => $offset,
 			'sort' => $sort,
 			'order' => $order,
-			'joins' => $joins,
-			'wheres' => $wheres,
 		);
+	if ($joins) $search_params['joins'] = $joins;
+	if ($wheres) $search_params['wheres'] = $wheres;
+	if ($owner_guid) $search_params['owner_guids'] = $owner_guid;
+	if ($container_guid) $search_params['container_guids'] = $container_guid;
 	
+	// Perform search results count
 	$search_params['count'] = true;
 	$count = elgg_get_entities_from_metadata($search_params);
 	if ($count > $max_results) {
 		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
 	}
 	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
+	// Perform entities search
 	$search_params['count'] = false;
 	$entities = elgg_get_entities_from_metadata($search_params);
 	// Limit to something that can be handled
-	$entities = array_slice($entities, 0, $max_results);
+	if (is_array($entities)) $entities = array_slice($entities, 0, $max_results);
 	
 	if ($params['returntype'] == 'entities') {
 		return $entities;
@@ -1027,7 +1036,10 @@ function esope_esearch($params = array()) {
 		elgg_push_context('search');
 		elgg_push_context('widgets');
 		$return = '';
-		if ($params['count']) { $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($count)) . '</span>'; }
+		if ($params['count']) {
+			if ($count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($count)) . '</span>';
+			else $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+		}
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
 		if ($alert) $return .= $alert;
 		elgg_pop_context('widgets');

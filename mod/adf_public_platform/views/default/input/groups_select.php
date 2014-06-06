@@ -21,13 +21,13 @@ switch($scope) {
 // Compose select
 $content .= '<select name="' . $vars['name'] . '" id="' . $vars['name'] . '" class="elgg-input-dropdown elgg-input-groups_select ' . $vars['class'] . '" ' . $vars['js'] . '>';
 if ($vars["empty_value"] || !isset($vars["empty_value"])) {
-	if (!empty($vars['value'])) $content .= '<option value="0">Aucun groupe</option>';
-	else $content .= '<option selected="selected" value="0">Aucun groupe</option>';
+	if (!empty($vars['value'])) $content .= '<option value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
+	else $content .= '<option selected="selected" value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
 }
 // Add current value (= don't change option)
 if (isset($vars['value'])) {
 	if ($current = get_entity($vars['value'])) {
-		$content .= '<option selected="selected" value="' . $vars['value'] . '">Ne pas changer (' . $current->name . ')</option>';
+		$content .= '<option selected="selected" value="' . $vars['value'] . '">' . elgg_echo('esope:input:donotchange', array($current->name)) .'</option>';
 	}
 }
 // Add container group option

@@ -612,7 +612,11 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 /* Menu édition des sous-groupes (saute à droite sous Firefox) */
 .elgg-form.elgg-form-alt.elgg-form-groups-edit { width:96%; }
+/* Deprecated by au_subgroups/group/transfer view replacement (remove div)
 .elgg-form.elgg-form-alt.elgg-form-groups-edit + div { clear: both; margin: 40px 0 0; padding: 0; }
+*/
+.au-subgroups-result-col { width: auto; }
+.au-subgroups-search-results { float:none; width: auto; }
 
 
 /* Agencement fluide des blocs dans les groupes */

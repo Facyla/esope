@@ -120,9 +120,9 @@ if (elgg_instanceof($user, 'user')) {
 					$elgg_password = generate_random_cleartext_password();
 					// Création du compte puis MAJ avec les infos du LDAP
 					$user = ldap_auth_create_profile($elgg_username, $elgg_password);
-				if (elgg_instanceof($user, 'user')) {
-					forward($forward);
-				}
+					if (elgg_instanceof($user, 'user') && login($user)) {
+						forward($forward);
+					} else { error_log("Could not create account for : $elgg_username"); }
 				} else {
 					error_log("Not active account");
 				}

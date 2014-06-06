@@ -8,6 +8,7 @@
 
 $english = array(
 	'web_services:user' => "User", 
+	'web_services:object' => "Object", 
 	'web_services:blog' => "Blog", 
 	'web_services:wire' => "Wire", 
 	'web_services:core' => "Core", 
@@ -51,6 +52,9 @@ $english = array(
 	
 	// File webservice
 	'web_services:file:get_files' => "Get file uploaded by all users",
+	'web_services:file:get_info' => "Get file information",
+	'web_services:file:get_content' => "Get file content",
+	'web_services:file:not_found' => "File not found",
 	
 	// Group webservice
 	'web_services:group:get_groups' => "Get groups user is a member of",
@@ -75,7 +79,7 @@ $english = array(
 	// User webservice
 	'web_services:user:get_profile_fields' => "Get user profile labels",
 	'web_services:user:get_profile' => "Get user profile information",
-	'web_services:user:save_profile' => "Get user profile information with username",
+	'web_services:user:save_profile' => "Save user profile information",
 	'web_services:user:get_user_by_email' => "Get username(s) by email",
 	'web_services:user:check_username_availability' => "Check username availability",
 	'web_services:user:register' => "Register user",
@@ -88,6 +92,12 @@ $english = array(
 	'web_services:user:activity' => "Get the activity feed for a user",
 	'web_services:user:get_guid' => "Get the user GUID for a given username",
 	'web_services:user:get_username' => "Get the user username for a given GUID",
+	'web_services:user:group_join_request:remove' => "remove user join request",
+	'web_services:user:group_join_request:accept' => "accept user join request",
+	'web_services:user:friend_request:remove' => "remove user friend request",
+	'web_services:user:friend_request:accept' => "accept user friend request",
+	'web_services:user:requests:list' => "Get user friendship and groups requests",
+
 	
 	// Message webservice
 	'web_services:message:read' => "Read a single message",
@@ -95,6 +105,10 @@ $english = array(
 	'web_services:message:inbox' => "Get inbox messages",
 	'web_services:message:sent' => "Get sent messages",
 	'web_services:message:send' => "Send a message",
+	
+	// Object
+	'web_services:object:get_post' => "Read a content",
+	'object:error:post_not_found' => "Content not found",
 	
 	
 );

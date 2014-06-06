@@ -52,7 +52,7 @@ function group_get_groups($context, $username, $limit, $offset){
 		$group['guid'] = $single->guid;
 		$group['name'] = $single->name;
 		$group['members'] = count($single->getMembers($limit=0));
-		$group['avatar_url'] = get_entity_icon_url($single,'small');
+		$group['avatar_url'] = $single->getIconURL('small');
 		$return[] = $group;
 	}
 	} else {
@@ -107,7 +107,7 @@ function get_group($guid) {
 	$group_info['owner_name'] = $owner->name;
 	$group_info['members_count'] = count($group->getMembers($limit=0));
 	$group_info['fields'] = $group_field;
-	$group_info['avatar_url'] = get_entity_icon_url($group,'medium');
+	$group_info['avatar_url'] = $group->getIconURL('medium');
 	global $CONFIG;
 	$group_info['enabled_options'] = $CONFIG->group_tool_options;	
 	return $group_info;
@@ -220,7 +220,7 @@ function group_leave($username, $groupid) {
 	
 	$group = get_entity($groupid);
 	$return['success'] = false;
-	set_page_owner($group->guid);
+	elgg_set_page_owner_guid($group->guid);
 	if (($user instanceof ElggUser) && ($group instanceof ElggGroup)) {
 		if ($group->getOwnerGUID() != elgg_get_logged_in_user_guid()) {
 			if ($group->leave($user)) {
@@ -430,7 +430,7 @@ function group_forum_get_posts($guid, $limit = 10, $offset = 0) {
 			$post['owner']['guid'] = $user->guid;
 			$post['owner']['name'] = $user->name;
 			$post['owner']['username'] = $user->username;
-			$post['owner']['avatar_url'] = get_entity_icon_url($user,'small');
+			$post['owner']['avatar_url'] = $user->getIconURL('small');
 			$post['container_guid'] = $single->container_guid;
 			$post['access_id'] = $single->access_id;
 			$post['time_created'] = (int)$single->time_created;
@@ -477,7 +477,7 @@ function group_forum_get_post($guid, $limit = 10, $offset = 0) {
 	$post['owner']['guid'] = $user->guid;
 	$post['owner']['name'] = $user->name;
 	$post['owner']['username'] = $user->username;
-	$post['owner']['avatar_url'] = get_entity_icon_url($user,'small');
+	$post['owner']['avatar_url'] = $user->getIconURL('small');
 	$post['container_guid'] = $discussion->container_guid;
 	$post['access_id'] = $discussion->access_id;
 	$post['time_created'] = (int)$discussion->time_created;
@@ -530,7 +530,7 @@ function group_forum_get_replies($guid, $limit = 10, $offset = 0) {
 			$post['owner']['guid'] = $user->guid;
 			$post['owner']['name'] = $user->name;
 			$post['owner']['username'] = $user->username;
-			$post['owner']['avatar_url'] = get_entity_icon_url($user,'small');
+			$post['owner']['avatar_url'] = $user->getIconURL('small');
 			$post['entity_guid'] = $single->entity_guid;
 			$post['access_id'] = $single->access_id;
 			$post['time_created'] =(int) $single->time_created;

@@ -9,7 +9,7 @@
  */
  
  /**
- * Web service to get file list by all users
+ * Web service to get blog list by all users
  *
  * @param string $context eg. all, friends, mine, groups
  * @param int $limit	(optional) default 10
@@ -21,7 +21,7 @@
  */
 function blog_get_posts($context,	$limit = 10, $offset = 0,$group_guid, $username) {	
 	if(!$username) {
-		$user = get_loggedin_user();
+		$user = elgg_get_logged_in_user_entity();
 	} else {
 		$user = get_user_by_username($username);
 		if (!$user) {
@@ -65,7 +65,7 @@ function blog_get_posts($context,	$limit = 10, $offset = 0,$group_guid, $usernam
 			$blog['owner']['guid'] = $owner->guid;
 			$blog['owner']['name'] = $owner->name;
 			$blog['owner']['username'] = $owner->username;
-			$blog['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$blog['owner']['avatar_url'] = $owner->getIconURL('small');
 			
 			$blog['container_guid'] = $single->container_guid;
 			$blog['access_id'] = $single->access_id;
@@ -109,7 +109,7 @@ expose_function('blog.get_posts',
  * @return bool
  */
 function blog_save($title, $text, $excerpt, $tags , $access, $container_guid) {
-	$user = get_loggedin_user();
+	$user = elgg_get_logged_in_user_entity();
 	if (!$user) {
 		throw new InvalidParameterException('registration:usernamenotvalid');
 	}
@@ -263,10 +263,13 @@ expose_function('blog.get_post',
 	array('guid' => array ('type' => 'string'),
 			'username' => array ('type' => 'string', 'required' => false),
 		),
-	elgg_echo('web_services:blog:delete_post'),
+	elgg_echo('web_services:blog:get_post'),
 	'GET',
 	true,
-	true);
+	true
+);
+
+
 /**
  * Web service to retrieve comments on a blog post
  *
@@ -298,7 +301,7 @@ $options = array(
 		$comment['owner']['guid'] = $owner->guid;
 		$comment['owner']['name'] = $owner->name;
 		$comment['owner']['username'] = $owner->username;
-		$comment['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+		$comment['owner']['avatar_url'] = $owner->getIconURL('small');
 		
 		$comment['time_created'] = (int)$single->time_created;
 		$return[] = $comment;
@@ -332,23 +335,19 @@ expose_function('blog.get_comments',
  * @return array
  */						
 function blog_post_comment($guid, $text) {
-	
 	$entity = get_entity($guid);
-
 	$user = elgg_get_logged_in_user_entity();
-
 	$annotation = create_annotation($entity->guid,
-								'generic_comment',
-								$text,
-								"",
-								$user->guid,
-								$entity->access_id);
-
+		'generic_comment',
+		$text,
+		"",
+		$user->guid,
+		$entity->access_id
+	);
 
 	if($annotation) {
 		// notify if poster wasn't owner
 		if ($entity->owner_guid != $user->guid) {
-
 			notify_user($entity->owner_guid,
 					$user->guid,
 					elgg_echo('generic_comment:email:subject'),
@@ -376,8 +375,9 @@ expose_function('blog.post_comment',
 	array(	'guid' => array ('type' => 'int'),
 			'text' => array ('type' => 'string'),
 		),
-	elgg_echo('web_services:blog:get_comments'),
+	elgg_echo('web_services:blog:post_comment'),
 	'POST',
 	true,
-	true);
+	true
+);
 

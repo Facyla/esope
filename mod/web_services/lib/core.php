@@ -129,7 +129,7 @@ function site_search($query, $offset, $limit, $sort, $order, $search_type, $enti
 				$result['guid'] = $single->guid;
 				$result['type'] = $single->type;
 				$result['subtype'] = get_subtype_from_id($single->subtype);
-				$result['avatar_url'] = get_entity_icon_url($single,'small');
+				$result['avatar_url'] = $single->getIconURL('small');
 				
 				$return[$type][$single->guid] = $result;
 			}

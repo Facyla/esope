@@ -69,7 +69,7 @@ function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $usern
 			$owner = get_entity($single->owner_guid);
 			$file['owner']['guid'] = $owner->guid;
 			$file['owner']['name'] = $owner->name;
-			$file['owner']['avatar_url'] = get_entity_icon_url($owner,'small');
+			$file['owner']['avatar_url'] = $owner->getIconURL('small');
 			
 			$file['container_guid'] = $single->container_guid;
 			$file['access_id'] = $single->access_id;
@@ -77,7 +77,7 @@ function file_get_files($context,  $limit = 10, $offset = 0, $group_guid, $usern
 			$file['time_updated'] = (int)$single->time_updated;
 			$file['last_action'] = (int)$single->last_action;
 			$file['MIMEType'] = $single->mimetype;
-			$file['file_icon'] = get_entity_icon_url($single,'small');
+			$file['file_icon'] = $single->getIconURL('small');
 			$return[] = $file;
 		}
 	}
@@ -100,5 +100,60 @@ expose_function('file.get_files',
 	elgg_echo('web_services:file:get_files'),
 	'GET',
 	true,
-	true);
+	true
+);
 
+
+function file_get_info($guid) {
+	$file = get_entity($guid);
+	if (!elgg_instanceof($file, 'object', 'file')) {
+		$return['content'] = elgg_echo('web_services:file:not_found');
+		return $return;
+	}
+	$return['name'] = $file->getFilename();
+	$return['title'] = $file->get('title');
+	$return['description'] = $file->get('description');
+	$return['mimeType'] = $file->getMimeType();
+	$return['size'] = $file->size();
+	$return['time_created'] = (int)$file->time_created;
+
+	$owner = get_entity($file->owner_guid);
+	$return['owner']['guid'] = $owner->guid;
+	$return['owner']['name'] = $owner->name;
+	$return['owner']['username'] = $owner->username;
+	$return['owner']['avatar_url'] = $owner->getIconURL('small');
+	return $return;
+}
+
+expose_function('file.get_info',
+	"file_get_info",
+	array(
+		'guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
+		),
+	elgg_echo('web_services:file:get_info'),
+	'POST',
+	true,
+	true
+);
+
+
+function file_get_file($guid) {
+	$file = get_entity($guid);
+	if (!elgg_instanceof($file, 'object', 'file')) {
+		$return['content'] = elgg_echo('web_services:file:not_found');
+		return $return;
+	}
+	$return['content'] = base64_encode($file->grabFile());
+	return $return;
+}
+
+expose_function('file.get_file',
+	"file_get_file",
+	array(
+		'guid' => array ('type'=> 'int', 'required'=>false, 'default' =>0),
+		),
+	elgg_echo('web_services:file:get_content'),
+	'POST',
+	true,
+	true
+);
