@@ -47,11 +47,11 @@ $french = array(
 	'web_services:blog:save_post' => "Publier un article de blog",
 	'web_services:blog:delete_post' => "Supprimer un article de blog",
 	'web_services:blog:get_post' => "Lire un article de blog",
-	'web_services:blog:get_comments' => "Get comments for a blog post",
-	'web_services:blog:post_comment' => "Post a comment on a blog post",
+	'web_services:blog:get_comments' => "Récupérer les commentaires d'un article",
+	'web_services:blog:post_comment' => "Publier un commentaire sur un article",
 	
 	// File webservice
-	'web_services:file:get_files' => "Get file uploaded by all users",
+	'web_services:file:get_files' => "Récupérer les fichiers envoyés par les utilisateurs",
 	'web_services:file:get_info' => "Récupérer les informations du fichier",
 	'web_services:file:get_content' => "Récupérer le contenu du fichier",
 	'web_services:file:not_found' => "Fichier non trouvé",
