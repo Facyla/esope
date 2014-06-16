@@ -246,8 +246,13 @@ expose_function('user.check_username_availability',
 function user_register($name, $email, $username, $password) {
 	$user = get_user_by_username($username);
 	if (!$user) {
-		$return['success'] = true;
-		$return['guid'] = register_user($username, $password, $name, $email);
+		if (elgg_is_admin_logged_in()) {
+			$return['success'] = true;
+			$return['guid'] = register_user($username, $password, $name, $email);
+		} else {
+			$return['success'] = false;
+			$return['message'] = elgg_echo('registration:adminonly');
+		}
 	} else {
 		$return['success'] = false;
 		$return['message'] = elgg_echo('registration:userexists');
@@ -296,7 +301,6 @@ function user_friend_add($friend, $username) {
 		$msg = elgg_echo('friends:alreadyadded', array($friend_user->name));
 	 	throw new InvalidParameterException($msg);
 	}
-	
 	
 	if ($user->addFriend($friend_user->guid)) {
 		// add to river
@@ -351,9 +355,7 @@ function user_friend_remove($friend,$username) {
 	 	throw new InvalidParameterException($msg);
 	}
 	
-	
-		if ($user->removeFriend($friend_user->guid)) {
-		
+	if ($user->removeFriend($friend_user->guid)) {
 		$return['message'] = elgg_echo("friends:remove:successful", array($friend->name));
 		$return['success'] = true;
 	} else {
