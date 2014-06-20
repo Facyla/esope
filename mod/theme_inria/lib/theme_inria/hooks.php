@@ -9,14 +9,14 @@
 // Theme inria logged in index page
 function theme_inria_index(){
 	global $CONFIG;
-	include(dirname(__FILE__) . '/pages/theme_inria/loggedin_homepage.php');
+	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/loggedin_homepage.php');
 	return true;
 }
 
 // Theme inria public index page
 function theme_inria_public_index() {
 	global $CONFIG;
-	include(dirname(__FILE__) . '/pages/theme_inria/public_homepage.php');
+	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/public_homepage.php');
 	return true;
 }
 
