@@ -296,7 +296,8 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 			} else if ($key == 'givenName') {
 				$firstname = $val[0];
 			} else if ($key == 'ou') {
-				$ou[] = $val[0];
+				// Note : we want to use only contacts branch for the 'ou' field
+				// $ou[] = $val[0];
 			} else {
 				$meta_name = $auth_fields[$key];
 				// Update only defined metadata
