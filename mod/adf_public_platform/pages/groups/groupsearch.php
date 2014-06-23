@@ -50,7 +50,7 @@ $metadata_search = '';
 // Build metadata search fields
 if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
-	foreach ($metadata_search_fields as $metadata) {
+	if ($metadata_search_fields) foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
 		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst(elgg_echo($metadata)) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
 	}
