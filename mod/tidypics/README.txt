@@ -1,37 +1,86 @@
 Tidypics plugin for Elgg 1.8
-Latest Version: 1.8.1beta11
-Released: 2013-09-01
+Latest Version: 1.8.1beta14
+Released: 2014-06-09
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
-Copyright: (c) iionly 2013, (C) Cash Costello 2011-2013
+Copyright: (c) iionly 2013-2014, (C) Cash Costello 2011-2014
+
+
+The photo gallery plugin for Elgg 1.8 (requires Elgg 1.8.16 at minimum! Please upgrade your Elgg installation first before installing/upgrading the Tidypics plugin).
+
+Features:
+
+ - Photos organized in albums or group albums,
+ - Commenting on photos and albums,
+ - Tagging (members or word tags),
+ - Slideshow,
+ - Watermarking,
+ - Upload multiple photos at once (HTML5/HTML4 uploader or web form),
+ - Sorting photos in albums,
+ - RSS feeds,
+ - Notifications on new uploads,
+ - Activity (river) integration,
+ - Views counter,
+ - Exif data support,
+ - Userpoints support (requires Elggx Userpoints plugin),
+ - Various listing options (All/Mine/Friends photos, All/Mine/Friends albums, listing photos sorted by number/date of views, number/date of comments, number/date/average of ratings),
+ - Admin Customization: supports GD, Imagick and ImageMagick, quotas, size restrictions, and more.
 
 
 
-This is a slightly improved version of the Tidypics plugin for Elgg 1.8.
+Todo:
 
-ATTENTION:
-
-Requires Elgg 1.8.16 at minimum! Please upgrade your Elgg installation first before upgrading the Tidypics plugin.
-
-Currently still in beta! Most things should work. If you notice any issues, please tell me!
-
-
-Known issues:
-
-- watermarking not fully working.
+- Get watermarking fully working (original uploaded image file gets not yet watermarked but only the resized image files),
+- Add option to remove the original uploaded image after resized thumbnail images have been created,
+- Replace PiclensLite slideshow with Galleria slideshow (no flash required, responsive).
 
 
 
 Installation and configuration:
 
-IMPORTANT: If you have a previous version of the tidypics plugin installed then disable the plugin on your site and remove the tidypics folder from the mod folder on your server before installing the new version!
-1. copy the tidypics plugin folder into the mod folder on your server,
-2. enable the plugin in the admin section of your site,
-3. configure the plugin settings. Especially, check if there's an "Upgrade" button visible on the Tidypics plugin settings page and if yes, execute the upgrade.
+IMPORTANT: If you have a previous version of the tidypics plugin installed, first disable the Tidypics plugin on your site, then remove the tidypics folder from the mod folder on your server before installing the new version!
+1. Copy the tidypics plugin folder into the mod folder on your server,
+2. Enable the plugin in the admin section of your site,
+3. Check if there's an "Upgrade" button visible on the Tidypics plugin settings page and if yes, FIRST make a DATABASE BACKUP and then execute the upgrade.
+4. Configure the plugin settings.
 
 
 
 Changelog:
+
+Changes for release 1.8.1beta14 (by iionly, YaNoo and Joaquín):
+
+- Uploadify flash uploader replaced by Plupload HTML5/HTML4 uploader (thanks to YaNoo for taking the initiative and providing a PR - otherwise you would have had to wait longer for me to implement it),
+- Spanish language file added (provided by Joaquín).
+
+
+Changes for release 1.8.1beta13 (by iionly and Juho Jaakkola):
+
+ATTENTION: this new release contains an update script that changes database entries related to comments and likes made on Tidypics image upload river entries. Read the changelog carefully BEFORE running the upgrade to understand what it does and in any case make a database backup before executing the upgrade to be able to revert to the former state if you are not content with the result. The backup is also important because the script might possibly take some time to finish depending on how many database entries are in need to be updated.
+
+- Code cleanup,
+- Flash uploader: limit number of images that can be added in one go to 10,
+- Fix on friends tab pages of "All Photos" and "All photo albums" to check if user has friends and display a fitting message if not instead of saying the friends would not have uploaded image yet (which shows when the user has friends but they have not yet uploaded images),
+- Removed plugin setting to turn commenting on albums on/off. Commenting on albums is now always on,
+- Commenting on image uploads on the Activity page (commenting on Tidypics_batch entities): when commenting on an upload of a single image the comment will be added to this image and when commenting on an upload of more than a single image the comment will be added to the corresponding album (in both cases the comment made will still be shown also on the activity page below this river entry),
+- the same with liking image uploads entries on the Activity page: if a single image was uploaded this image will get the like and if more than a single image was uploaded the corresponding album will get the like (in both cases the like will also be shown on the activity page in the river menu of this entry),
+- IMPORTANT!!!!!! Please read: upgrade script to assign existing comments and likes made on image upload river entries either to the corresponding image or album. This script makes the existing comments and likes consistent with the future comments and likes created on Tidypics 1.8.1beta13. The update script (mod/tidypics/upgrades/2013121201.php) does the folling:
+		1. upgrading of comments on river entries that were made with Tidypics 1.8.0rc1 or earlier,
+		2. slightly different procedure for upgrading comments on river entries made with a Tidypics 1.8.1betaXX version: for these comments a second database entry was created for the comment to show not only on the activity page but also on the albums' pages. The upgrade script identifies these second comment entries by the lack of corresponding river entries in the database and then deletes these entries. If you have by any means deleted entries on the activity page informing about comments made on album pages or if you prevent such entries to be created on your site somehow then these comments will also get deleted. Unfortunately, there's no other way of getting rid of the duplicate comments entries that are now no longer needed. If in doubt, comment out "Part 3" of the upgrade code in mod/tidypics/upgrades/2013121201.php.
+		3. upgrading of likes on river entries: here's a check included if a user has already liked the album or image the like made to the river entry would get moved to. If there's not already an existing like the like will get moved from the river entry and added to the album/image. If the user has already liked the image or corresponding album the like will not get added to avoid duplicate likings.
+
+
+Changes for release 1.8.1beta12 (by iionly):
+
+- Added placeholder images to be displayed in case no images have been uploaded to an album yet in the image sizes previously missing,
+- On deletion of an album the corresponding album folder in data directory gets deleted and no longer the (empty) album folder remains,
+- Flash uploader fixed in the case of group albums when someone else than the album creator wants to upload images to a group album,
+- Navigation arrows hidden if an album contains only a single image,
+- Correction of title of group pages "Most recent albums" widget,
+- "View all" link in Latest Photos widget on profile pages working for site visitors not logged in,
+- Fixed list of offered existing albums to select from for image uploads when in group context,
+- Fixed display of image and album gallery pages when images or albums exist that belong to groups with restricted access (The images or albums shown in the gallery pages depend on the viewing user having the necessary right for viewing depending on the access level defined for these albums including the images within these albums. For example a user gets to see all albums with "public" access level regardless if logged in or not. But if you set the access level "public" or "logged in" for a group album this results in even a non-group member being able to get access to such albums and their content. But if the group itself is a restricted group certain problems arise when this group contains "public" or "logged-in" content. In case of the gallery views within Tidypics the outcome is a fatal error occuring on these pages. This fix avoids the fatal error from happening. Still the group images and albums of restricted albums are included in the listings due to the access level set for them. If you don't want any albums or images of restricted groups to be seen by non-group-members you must set the access level of these albums to the corresponding group's level).
+
 
 Changes for release 1.8.1beta11 (by iionly):
 - Some general code cleanup,

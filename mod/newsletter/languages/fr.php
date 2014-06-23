@@ -46,7 +46,7 @@ $french = array(
 	// long text menu
 	'newsletter:menu:longtext:embed_blog' => "Intégrer un article de blog",
 	
-	'newsletter:breadcrumb:site' => "Lettres d'information'",
+	'newsletter:breadcrumb:site' => "Lettres d'information",
 	'newsletter:breadcrumb:log' => "Journal d'envoi",
 	'newsletter:breadcrumb:received' => "Reçues",
 	
@@ -154,7 +154,7 @@ $french = array(
 Veuillez vérifier les deux paramètres ci-dessous et cliquer sur le lien de désabonnement pour terminer le processus.",
 	'newsletter:unsubscribe:email' => "Votre adresse email %s sera désabonnée si vous cliquez sur le bouton ci-dessous.",
 	'newsletter:unsubscribe:email:empty' => "Saisissez votre adresse email et cliquez sur le bouton de désabonnement ci-dessous pour vous désabonner.",
-	'newsletter:unsubscribe:entity' => "Je ne souhaite plus recevoir la lettre '%s'",
+	'newsletter:unsubscribe:entity' => "Je ne souhaite plus recevoir la lettre \"%s\"",
 	'newsletter:unsubscribe:all' => "Je ne souhaite plus recevoir aucune lettre d'information du réseau %s",
 	
 	// sidebar - subscribe

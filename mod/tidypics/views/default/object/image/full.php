@@ -9,6 +9,7 @@
  */
 
 $image = $photo = $vars['entity'];
+$album = $image->getContainerEntity();
 
 $img = elgg_view_entity_icon($image, 'large', array(
 	'href' => $image->getIconURL('master'),
@@ -49,18 +50,14 @@ $summary = elgg_view_image_block($owner_icon, $list_body, $params);
 echo $summary;
 
 echo '<div class="tidypics-photo-wrapper center">';
-echo elgg_view('object/image/navigation', $vars);
+if ($album->getSize() > 1) {
+	echo elgg_view('object/image/navigation', $vars);
+}
 echo elgg_view('photos/tagging/help', $vars);
 echo elgg_view('photos/tagging/select', $vars);
 echo $img;
 echo elgg_view('photos/tagging/tags', $vars);
 echo '</div>';
-
-// alternative way to display the fivestar rating widget in case the default view defined in Elggx Fivestar is not to be used
-// if (elgg_is_active_plugin('elggx_fivestar')) {
-//     echo '<br>';
-//     echo elgg_view('elggx_fivestar/voting', array('entity'=> $vars['entity']));
-// }
 
 if ($photo->description) {
 	echo elgg_view('output/longtext', array(
