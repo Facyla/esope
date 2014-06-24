@@ -24,12 +24,17 @@ function elgg_cmis_init(){
 	// Custom CMIS functions
 	elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis.php');
 	
-	// CMIS widgets
+	// CMIS widgets - add only if enabled
+	if (elgg_get_plugin_setting('widget_mine', 'elgg_cmis') == 'yes') 
 	elgg_register_widget_type('elgg_cmis_mine', elgg_echo('elgg_cmis:widget:cmis_mine'), elgg_echo('elgg_cmis:widget:cmis_mine:details'), 'dashboard', false);
-	//elgg_register_widget_type('elgg_cmis', elgg_echo('elgg_cmis:widget:cmis'), elgg_echo('elgg_cmis:widget:cmis:details'), 'dashboard', true);
-	//elgg_register_widget_type('elgg_cmis_folder', elgg_echo('elgg_cmis:widget:cmis_folder'), elgg_echo('elgg_cmis:widget:cmis_folder:details'), 'dashboard', true);
-	//elgg_register_widget_type('elgg_cmis_search', elgg_echo('elgg_cmis:widget:cmis_search'), elgg_echo('elgg_cmis:widget:cmis_search:details'), 'dashboard', true);
-	//elgg_register_widget_type('elgg_cmis_insearch', elgg_echo('elgg_cmis:widget:cmis_insearch'), elgg_echo('elgg_cmis:widget:cmis_insearch:details'), 'dashboard', true);
+	if (elgg_get_plugin_setting('widget_cmis', 'elgg_cmis') == 'yes') 
+	elgg_register_widget_type('elgg_cmis', elgg_echo('elgg_cmis:widget:cmis'), elgg_echo('elgg_cmis:widget:cmis:details'), 'dashboard', true);
+	if (elgg_get_plugin_setting('widget_folder', 'elgg_cmis') == 'yes') 
+	elgg_register_widget_type('elgg_cmis_folder', elgg_echo('elgg_cmis:widget:cmis_folder'), elgg_echo('elgg_cmis:widget:cmis_folder:details'), 'dashboard', true);
+	if (elgg_get_plugin_setting('widget_search', 'elgg_cmis') == 'yes') 
+	elgg_register_widget_type('elgg_cmis_search', elgg_echo('elgg_cmis:widget:cmis_search'), elgg_echo('elgg_cmis:widget:cmis_search:details'), 'dashboard', true);
+	if (elgg_get_plugin_setting('widget_insearch', 'elgg_cmis') == 'yes') 
+	elgg_register_widget_type('elgg_cmis_insearch', elgg_echo('elgg_cmis:widget:cmis_insearch'), elgg_echo('elgg_cmis:widget:cmis_insearch:details'), 'dashboard', true);
 	
 	// CMIS page handler
 	elgg_register_page_handler('cmis', 'elgg_cmis_page_handler');
