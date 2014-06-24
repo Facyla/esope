@@ -30,7 +30,7 @@ if (empty($vars['entity']->cmis_atom_url)) $vars['entity']->cmis_atom_url = 'cmi
 <br />
 
 <fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-	<legend><?php echo elgg_echo('elgg_cmis:settings:widgets'); ?></legend>
+	<legend><?php echo elgg_echo('elgg_cmis:widgets'); ?></legend>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis_mine'); ?> 
 	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_mine )); ?></label></p>
