@@ -1,7 +1,6 @@
 <?php
 /* CMIS and Alfresco CMIS plugin
  * Implements access to a CMIS repository, through SOAP and ATOMPUB
- * Note : Currently only ATOMPUB is working
  * Also provides widgets and views for Alfresco embeds, using current (browser) authentication
  * @author : Florian DANIEL
  */
