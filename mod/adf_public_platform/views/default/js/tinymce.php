@@ -1,3 +1,33 @@
+<?php
+// Get plugin settings, and set defaults if they are missing
+$plugins = strip_tags(elgg_get_plugin_setting('plugins', 'tinymce'));
+if (empty($plugins)) $plugins = "lists,spellchecker,autosave,fullscreen,paste,table,template,style,inlinepopups,contextmenu,searchreplace,emotions";
+// Toobars
+$advanced_buttons1 = strip_tags(elgg_get_plugin_setting('advanced_buttons1', 'tinymce'));
+if (empty($advanced_buttons1)) $advanced_buttons1 = "removeformat,formatselect,bold,italic,underline,strikethrough,forecolor,link,unlink,blockquote,sub,sup,hr,fullscreen";
+$advanced_buttons2 = strip_tags(elgg_get_plugin_setting('advanced_buttons2', 'tinymce'));
+if (empty($advanced_buttons2)) $advanced_buttons2 = "visualaid,|,code,|,pastetext,pasteword,emotions,|,search,replace,|,bullist,numlist,indent,outdent,|,justifyleft,justifycenter,justifyright,justifyfull";
+$advanced_buttons3 = strip_tags(elgg_get_plugin_setting('advanced_buttons3', 'tinymce'));
+if (empty($advanced_buttons3)) $advanced_buttons3 = "image,|,tablecontrols,|,undo,redo,|,spellchecker";
+$advanced_buttons4 = strip_tags(elgg_get_plugin_setting('advanced_buttons4', 'tinymce'));
+// Templates
+$enable_templates = strip_tags(elgg_get_plugin_setting('enable_templates', 'tinymce'));
+if ($enable_templates == "yes") {
+	$templates_cmspages = strip_tags(elgg_get_plugin_setting('templates_cmspages', 'tinymce'));
+	$templates_htmlfiles = strip_tags(elgg_get_plugin_setting('templates_htmlfiles', 'tinymce'));
+	$templates_guids = strip_tags(elgg_get_plugin_setting('templates_guids', 'tinymce'));
+	$templates = '';
+	// Build and add the JS params for templates
+	if (!empty($templates_cmspages)) $templates .= esope_tinymce_prepare_templates($templates_cmspages, 'cmspage');
+	if (!empty($templates_htmlfiles)) $templates .= esope_tinymce_prepare_templates($templates_htmlfiles, 'url');
+	if (!empty($templates_guids)) $templates .= esope_tinymce_prepare_templates($templates_guids, 'guid');
+}
+// Editor-based filtering
+$extended_valid_elements = strip_tags(elgg_get_plugin_setting('extended_valid_elements', 'tinymce'));
+if (empty($extended_valid_elements)) $extended_valid_elements = "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value]";
+
+?>
+
 elgg.provide('elgg.tinymce');
 
 /**
@@ -44,9 +74,10 @@ elgg.tinymce.init = function() {
 		gecko_spellcheck : true,
 		browser_spellcheck : true,
 		spellchecker_languages : "+French=fr,English=en",
-		//plugins : "lists,spellchecker,autosave,fullscreen,paste,table,template,style,inlinepopups,contextmenu,acheck",
-		plugins : "lists,spellchecker,autosave,fullscreen,paste,table,template,style,inlinepopups,contextmenu,searchreplace,emotions",
-		<?php /*
+		//relative_urls : false,
+		//document_base_url : elgg.config.wwwroot,
+		convert_urls : false,
+		<?php /* SOME INLINE DOC
 		All available plugins :
 		  pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template
 		All available buttons :
@@ -55,13 +86,12 @@ elgg.tinymce.init = function() {
       theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
       theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,spellchecker",
 		*/ ?>
-		//relative_urls : false,
-		//document_base_url : elgg.config.wwwroot,
-		convert_urls : false,
-		theme_advanced_buttons1 : "removeformat,formatselect,bold,italic,underline,strikethrough,forecolor,link,unlink,blockquote,sub,sup,hr,fullscreen",
+		plugins : "<?php echo $plugins; ?>",
+		theme_advanced_buttons1 : "<?php echo $advanced_buttons1; ?>",
 		// Si des modèles sont configurés, ajouter ",template" avant "image" pour les intégrer
-		theme_advanced_buttons2 : "visualaid,|,code,|,pastetext,pasteword,emotions,|,search,replace,|,bullist,numlist,indent,outdent,|,justifyleft,justifycenter,justifyright,justifyfull",
-		theme_advanced_buttons3 : "image,|,tablecontrols,|,undo,redo,|,spellchecker",
+		theme_advanced_buttons2 : "<?php echo $advanced_buttons2; ?>",
+		theme_advanced_buttons3 : "<?php echo $advanced_buttons3; ?>",
+		theme_advanced_buttons4 : "<?php echo $advanced_buttons4; ?>",
 		theme_advanced_toolbar_location : "top",
 		theme_advanced_toolbar_align : "left",
 		theme_advanced_statusbar_location : "bottom",
@@ -70,7 +100,7 @@ elgg.tinymce.init = function() {
 		theme_advanced_path : true,
 		width : "100%",
 		//height: "200px",
-		extended_valid_elements : "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value]",
+		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
 		setup : function(ed) {
 			//show the number of words
 			ed.onLoadContent.add(function(ed, o) {
@@ -86,14 +116,9 @@ elgg.tinymce.init = function() {
 			});
 		},
 		content_css: elgg.config.wwwroot + 'mod/tinymce/css/elgg_tinymce.css',
-		/* Copy this file in your theme, uncomment and edit to use templates 
-		template_templates : [
-		{
-			title : "Fiche : Tension",
-			src : "/templates/d3p_fiche_tension.php",
-			description : "Fiche : Tension"
-		},
-		*/
+		<?php if ($templates) { ?>
+			template_templates : [ <?php echo $templates; ?> ],
+		<?php } ?>
 	});
 
 	// work around for IE/TinyMCE bug where TinyMCE loses insert carot

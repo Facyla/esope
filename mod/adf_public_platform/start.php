@@ -1312,3 +1312,48 @@ function esope_human_filesize($filepath, $decimals = 2) {
 }
 
 
+/* Prepare JS string that can be added directly to the template config in tinymce
+ * $templates : string usually set in plugins settings, formatted as : source::title::description
+ * $source : can be an URL to the HTML template file, or cmspage, or object GUID
+ */
+function esope_tinymce_prepare_templates($templates, $type = 'url') {
+	global $CONFIG;
+	$templates = preg_replace('/\r\n|\n|\r/', '\n', $templates);
+	$templates = explode('\n', $templates);
+	$js_templates = '';
+	foreach ($templates as $template) {
+		$template = trim($template);
+		if (!empty($template)) {
+			$template = explode('::', $template);
+			$source = trim($template[0]);
+			$title = trim($template[1]);
+			$description = trim($template[2]);
+			switch($type) {
+				case 'cmspage':
+					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
+					break;
+				case 'guid':
+					if ($ent = get_entity($source)) {
+						// @TODO : add an URL access to an entity description (with access rights)
+						// Maybe something with the metadata export URL ?
+						//$source = $CONFIG->url . 'view/read/' . $source . '?embed=true';
+						//$title = $ent->title;
+						//$description = $ent->briefdescription; // Or/and excerpt ?
+					} else $source = false;
+					break;
+				case 'url':
+				default:
+					$source = trim($template[0]);
+			}
+			// Allow some failsafe behaviour
+			if (empty($source)) continue;
+			if (empty($title)) $title = $source;
+			if (empty($description)) $description = $title;
+			// Add config line to templates config
+			$js_templates .= '{ title : "' . $title . '", src : "' . $source . '", description : "' . $description . '" }, ' . "\n";
+		}
+	}
+	return $js_templates;
+}
+
+

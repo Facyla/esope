@@ -20,6 +20,8 @@ $widget_tagcloud = elgg_get_plugin_setting('widget_tagcloud', 'adf_public_platfo
 $widget_videos = elgg_get_plugin_setting('widget_videos', 'adf_public_platform');
 $widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
 $widget_export_embed = elgg_get_plugin_setting('widget_export_embed', 'adf_public_platform');
+$widget_freehtml = elgg_get_plugin_setting('widget_freehtml', 'adf_public_platform');
+$widget_searchresults = elgg_get_plugin_setting('widget_searchresults', 'adf_public_platform');
 
 
 elgg_unregister_widget_type('blog');
@@ -102,6 +104,7 @@ if (elgg_is_active_plugin('export_embed')) {
 	if ($widget_export_embed == 'no') elgg_unregister_widget_type('export_embed');
 }
 
+
 // Nouveaux widgets
 
 if (elgg_is_active_plugin('messages')) {
@@ -111,4 +114,11 @@ if (elgg_is_active_plugin('messages')) {
 if (elgg_is_active_plugin('webprofiles')) {
 	if ($widget_webprofiles != 'no') elgg_register_widget_type('webprofiles', elgg_echo('webprofiles:widget:title'), elgg_echo('webprofiles:widget:description'), 'profile');
 }
+
+
+// Widgets intégrés
+
+if ($widget_freehtml != 'no') elgg_register_widget_type('freehtml', elgg_echo('esope:widget:freehtml'), elgg_echo('esope:widget:freehtml:description'), 'all', true);
+
+if ($widget_searchresults != 'no') elgg_register_widget_type('searchresults', elgg_echo('esope:widget:searchresults'), elgg_echo('esope:widget:searchresults:description'), 'all', true);
 
