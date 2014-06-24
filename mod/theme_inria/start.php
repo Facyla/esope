@@ -88,7 +88,6 @@ function theme_inria_init(){
 	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widgets:tools'), elgg_echo('theme_inria:widgets:tools:details'), 'dashboard', false);
 	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
-	
 	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {

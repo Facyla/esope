@@ -165,6 +165,7 @@ $fr = array(
 	'adf_platform:widget:blog:title' => 'Articles',
 	'adf_platform:widget:event_calendar:title' => 'Agenda',
 	'adf_platform:widget:file:title' => 'Fichiers',
+	'adf_platform:widget:file_folder:title' => 'Dossiers de fichiers',
 	'adf_platform:widget:group:title' => 'Groupes',
 	'adf_platform:widget:page:title' => 'Wikis',
 	'adf_platform:widget:user_activity:title' => "Activité du site",

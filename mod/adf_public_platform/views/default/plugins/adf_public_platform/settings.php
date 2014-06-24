@@ -500,6 +500,9 @@ $(function() {
 		if (elgg_is_active_plugin('file')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file )) . '</p>';
 		}
+		if (elgg_is_active_plugin('file_tools')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file_folder') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file_folder]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file_folder )) . '</p>';
+		}
 		if (elgg_is_active_plugin('groups')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups )) . '</p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity )) . '</p>';
