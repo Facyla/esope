@@ -919,8 +919,8 @@ function esope_esearch_page_handler($page) {
 }
 
 /* Esope search function : 
- * Just call echo esope_search() for a listing
- * Get entities with $results_ents = esope_search('entities');
+ * Just call echo esope_esearch() for a listing
+ * Get entities with $results_ents = esope_esearch(array('returntype' => 'entities'));
  * Params :
  	- q : full search query
  	- entity_type : site | object | user | group
