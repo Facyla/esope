@@ -1334,11 +1334,12 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
-						// @TODO : add an URL access to an entity description (with access rights)
-						// Maybe something with the metadata export URL ?
-						//$source = $CONFIG->url . 'view/read/' . $source . '?embed=true';
-						//$title = $ent->title;
-						//$description = $ent->briefdescription; // Or/and excerpt ?
+						// @TODO : provide a REST URL access to an entity description (with access rights)
+						// Best we can get now would be exported JSON
+						// Export description only : export/default/1073/attr/description/
+						$source = $CONFIG->url . 'export/default/' . $source . '/attr/description/';
+						if (empty($title)) $title = $ent->title;
+						else if (empty($description)) $description = $ent->title;
 					} else $source = false;
 					break;
 				case 'url':
