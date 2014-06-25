@@ -215,17 +215,17 @@ $(function() {
 
 	<h3><?php echo elgg_echo('adf_platform:config:publichomepage'); ?></h3>
 	<div>
-		<p><label><?php echo elgg_echo('adf_platform:settings:replace_public_homepage'); ?></label>
-			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[replace_public_homepage]', 'options_values' => $replace_public_homepage_opt, 'value' => $vars['entity']->replace_public_homepage )); ?>
+		<p><label><?php echo elgg_echo('adf_platform:settings:replace_public_homepage'); ?> 
+			<?php echo elgg_view('input/dropdown', array( 'name' => 'params[replace_public_homepage]', 'options_values' => $replace_public_homepage_opt, 'value' => $vars['entity']->replace_public_homepage )); ?></label>
 		</p>
 		<?php
 		// Note : les réglages s'appliquent sur la page d'accueil par défaut en mode walled garden, qui peut être gérée par cmspages
 		if (empty($vars['entity']->replace_public_homepage) || ($vars['entity']->replace_public_homepage == 'default')) { ?>
-			<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?></label>
-				<?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro, 'class' => 'elgg-input-rawtext' )); ?>
+			<p><label><?php echo elgg_echo('adf_platform:homeintro'); ?> 
+				<?php echo elgg_view('input/longtext', array( 'name' => 'params[homeintro]', 'value' => $vars['entity']->homeintro, 'class' => 'elgg-input-rawtext' )); ?></label>
 			</p><br />
-			<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?></label>
-				<?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?>
+			<p><label><?php echo elgg_echo('adf_platform:home:displaystats'); ?> 
+				<?php echo elgg_view('input/dropdown', array( 'name' => 'params[displaystats]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->displaystats )); ?></label>
 			</p>
 			<?php
 		} else if ($vars['entity']->replace_public_homepage == 'cmspages') {
@@ -500,6 +500,9 @@ $(function() {
 		if (elgg_is_active_plugin('file')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file )) . '</p>';
 		}
+		if (elgg_is_active_plugin('file_tools')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file_folder') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_file_folder]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file_folder )) . '</p>';
+		}
 		if (elgg_is_active_plugin('groups')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups )) . '</p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity )) . '</p>';
@@ -533,6 +536,8 @@ $(function() {
 		if (elgg_is_active_plugin('export_embed')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:export_embed') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_export_embed]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_export_embed )) . '</p>';
 		}
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:freehtml') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_freehtml]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_freehtml )) . '</p>';
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:searchresults') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[widget_searchresults]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_searchresults )) . '</p>';
 		?>
 	</div>
 

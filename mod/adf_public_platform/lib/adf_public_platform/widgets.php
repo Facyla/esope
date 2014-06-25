@@ -6,6 +6,7 @@ $widget_bookmarks = elgg_get_plugin_setting('widget_bookmarks', 'adf_public_plat
 $widget_brainstorm = elgg_get_plugin_setting('widget_brainstorm', 'adf_public_platform');
 $widget_event_calendar = elgg_get_plugin_setting('widget_event_calendar', 'adf_public_platform');
 $widget_file = elgg_get_plugin_setting('widget_file', 'adf_public_platform');
+$widget_file_folder = elgg_get_plugin_setting('widget_file_folder', 'adf_public_platform');
 $widget_groups = elgg_get_plugin_setting('widget_groups', 'adf_public_platform');
 $widget_pages = elgg_get_plugin_setting('widget_pages', 'adf_public_platform');
 $widget_friends = elgg_get_plugin_setting('widget_friends', 'adf_public_platform');
@@ -19,6 +20,8 @@ $widget_tagcloud = elgg_get_plugin_setting('widget_tagcloud', 'adf_public_platfo
 $widget_videos = elgg_get_plugin_setting('widget_videos', 'adf_public_platform');
 $widget_webprofiles = elgg_get_plugin_setting('widget_webprofiles', 'adf_public_platform');
 $widget_export_embed = elgg_get_plugin_setting('widget_export_embed', 'adf_public_platform');
+$widget_freehtml = elgg_get_plugin_setting('widget_freehtml', 'adf_public_platform');
+$widget_searchresults = elgg_get_plugin_setting('widget_searchresults', 'adf_public_platform');
 
 
 elgg_unregister_widget_type('blog');
@@ -45,6 +48,14 @@ elgg_unregister_widget_type('filerepo');
 if (elgg_is_active_plugin('file')) {
 	if ($widget_file != 'no') elgg_register_widget_type('filerepo', elgg_echo('adf_platform:widget:file:title'), elgg_echo("file:widget:description"));
 }
+
+elgg_unregister_widget_type('file_tree');
+	if (elgg_is_active_plugin('file_tools')) {
+		// Réactive widget des dossiers si demandé (et Dossiers activés)
+		$is_folder_enabled = elgg_get_plugin_setting('user_folder_structure', 'file_tools');
+		if (($widget_file_folder != 'no') && ($is_folder_enabled == 'yes')) elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups", true);
+	}
+
 
 if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 
@@ -93,6 +104,7 @@ if (elgg_is_active_plugin('export_embed')) {
 	if ($widget_export_embed == 'no') elgg_unregister_widget_type('export_embed');
 }
 
+
 // Nouveaux widgets
 
 if (elgg_is_active_plugin('messages')) {
@@ -102,4 +114,11 @@ if (elgg_is_active_plugin('messages')) {
 if (elgg_is_active_plugin('webprofiles')) {
 	if ($widget_webprofiles != 'no') elgg_register_widget_type('webprofiles', elgg_echo('webprofiles:widget:title'), elgg_echo('webprofiles:widget:description'), 'profile');
 }
+
+
+// Widgets intégrés
+
+if ($widget_freehtml != 'no') elgg_register_widget_type('freehtml', elgg_echo('esope:widget:freehtml'), elgg_echo('esope:widget:freehtml:description'), 'all', true);
+
+if ($widget_searchresults != 'no') elgg_register_widget_type('searchresults', elgg_echo('esope:widget:searchresults'), elgg_echo('esope:widget:searchresults:description'), 'all', true);
 
