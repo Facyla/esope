@@ -279,7 +279,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	
 	// Update using auth fields first
 	$auth_fields = ldap_auth_settings_auth_fields();
-	$fields = ldap_auth_settings_infos_fields();
+	$fields = ldap_auth_settings_info_fields();
 	// Update email
 	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
 		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $ldap_mail");
