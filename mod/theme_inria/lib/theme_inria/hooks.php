@@ -288,7 +288,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	// Some data are only in auth branch
 	if ($auth) {
 		if ($debug) error_log("LDAP hook : update_profile : processing PEOPLE branch fields");
-		foreach ($auth[0] as $key => $val) {
+		//foreach ($auth[0] as $key => $val) {
+		foreach ($auth_fields as $key => $elgg_field) {
+			$val = $auth[0][$key];
 			if ($key == 'cn') {
 				$fullname = $val[0];
 			} else if ($key == 'sn') {
@@ -337,8 +339,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	// Then Update using infos fields (contacts branch - optional)
 	if ($infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
-		foreach ($infos[0] as $key => $val) {
-			// We don't want to update some fields that were processed in auth
+		//foreach ($infos[0] as $key => $val) {
+		foreach ($fields as $key => $elgg_field) {
+			$val = $infos[0][$key];			// We don't want to update some fields that were processed in auth
 			if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 				// Extraction de la localisation
 				if (strpos($key, 'x-location-')) {
