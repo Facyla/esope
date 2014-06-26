@@ -1,5 +1,5 @@
 <?php
-// Facyla : modifié pour permettre d'ajouter un paramètre subtype à la requête d'embed
+
 ?>
 //<script>
 elgg.provide("elgg.newsletter");
@@ -37,9 +37,11 @@ elgg.newsletter.init = function() {
 		event.preventDefault();
 
 		var query = $(this).find("[name='q']").val();
+		// ESOPE : add subtype and template support
 		var subtype = $(this).find("[name='subtype']").val();
-		var url = $(this).attr("action") + "?q=" + query + "&subtype=" + subtype;
-			
+		var template = $(this).find("[name='template']").val();
+		var url = $(this).attr("action") + "?q=" + query + "&subtype=" + subtype + "&template=" + template;
+		
 		$(this).parent().load(url);
 	});
 }

@@ -44,7 +44,7 @@ $french = array(
 	'newsletter:menu:steps:schedule' => "Programmation",
 		
 	// long text menu
-	'newsletter:menu:longtext:embed_blog' => "Intégrer un article de blog",
+	'newsletter:menu:longtext:embed_blog' => "Intégrer une publication",
 	
 	'newsletter:breadcrumb:site' => "Lettres d'information",
 	'newsletter:breadcrumb:log' => "Journal d'envoi",

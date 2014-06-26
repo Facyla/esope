@@ -50,12 +50,12 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	
 	// CSS stylesheets - default is for all media types
 	foreach ($css as $link) {
-		echo '<link rel="stylesheet" href="' . $link . '" type="text/css" media="all" />';
+		echo '<link rel="stylesheet" href="' . $link . '" type="text/css" media="all" />' . "\n";
 	}
 	// Specific CSS for print
-	echo '<link rel="stylesheet" href="' . $theme_url . 'print.css" type="text/css" media="print" />';
+	echo '<link rel="stylesheet" href="' . $theme_url . 'print.css" type="text/css" media="print" />' . "\n";
 	// Other stylesheets
-	echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" />';
+	echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" />' . "\n";
 	
 	$ie_url = elgg_get_simplecache_url('css', 'ie');
 	$ie7_url = elgg_get_simplecache_url('css', 'ie7');
@@ -80,10 +80,10 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<![endif]-->
 	<?php
 	if ($config_awesomefont == 'yes') {
-		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />';
+		echo '<link rel="stylesheet" href="' . $theme_url . 'vendors/font-awesome/css/font-awesome.min.css" />' . "\n";
 	}
 	if ($config_semanticui == 'yes') {
-		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />';
+		echo '<link rel="stylesheet" type="text/css" href="' . $theme_url . 'vendors/semantic-ui/packaged/css/semantic.css" />' . "\n";
 	}
 	
 	// CSS complémentaire configurable
@@ -101,9 +101,9 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 		echo '<script type="text/javascript" src="' . $script . '"></script>' . "\n";
 	}
 	if ($config_semanticui == 'yes') {
-		echo '<script src="' . $theme_url . 'vendors/semantic-ui/packaged/javascript/semantic.js"></script>';
+		echo '<script src="' . $theme_url . 'vendors/semantic-ui/packaged/javascript/semantic.js"></script>' . "\n";
 	}
-	echo '<script type="text/javascript">' . elgg_view('js/initialize_elgg') . '</script>';
+	echo '<script type="text/javascript">' . elgg_view('js/initialize_elgg') . '</script>' . "\n";
 	
 	echo $feedref;
 	
