@@ -336,9 +336,11 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	// Then Update using infos fields (contacts branch - optional)
 	if (true || $infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
-		//foreach ($infos[0] as $key => $val) {
-		foreach ($fields as $key => $elgg_field) {
-			$val = $infos[0][$key];			// We don't want to update some fields that were processed in auth
+		// Note : cannot use config fields here because office and phone do not have a unique name
+		foreach ($infos[0] as $key => $val) {
+			$val = $infos[0][$key];
+			$elgg_field = $fields[$key];
+			// We don't want to update some fields that were processed in auth
 			if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 				// Extraction de la localisation
 				if (strpos($key, 'x-location-')) {
@@ -367,6 +369,11 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				}
 			}
 		}
+	}
+	
+	// Clean configured entries that are not defined anymore in contact branch
+	foreach ($fields as $key => $elgg_field) {
+		if (empty($infos[0][$key])) $user->$elggfield = null;
 	}
 	
 	// Process special fields (arrays, multiple keys, etc.)
