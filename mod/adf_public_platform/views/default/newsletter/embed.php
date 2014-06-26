@@ -107,6 +107,12 @@ if ($count > 0) {
 				if ($entity->address) {
 					$embed_content .= '<div class="sharing_item_address"><p><a href="' . $entity->address . '" target="_blank">' . elgg_echo('bookmarks:visit') . '</a></p></div>';
 				}
+				// Event_calendar support : basic ; replaces regular content
+				if ($subtype == 'event_calendar') {
+					elgg_push_context('widgets');
+					$embed_content = elgg_view('object/event_calendar', array('entity' => $entity, 'full_view' => false));
+					elgg_pop_context();
+				}
 				break;
 		
 			// Custom template #2 : same as 'fullcontent' + photo auteur + nb commentaires
@@ -139,6 +145,13 @@ if ($count > 0) {
 				if ($entity->address) {
 					$embed_content .= '<div class="sharing_item_address"><p><a href="' . $entity->address . '" target="_blank">' . elgg_echo('bookmarks:visit') . '</a></p></div>';
 				}
+				// Event_calendar support : basic ; replaces regular content
+				if ($subtype == 'event_calendar') {
+					elgg_push_context('widgets');
+					$embed_content = elgg_view('object/event_calendar', array('entity' => $entity, 'full_view' => false));
+					elgg_pop_context();
+				}
+				// Compose final view
 				$embed_content = '<div style="float: left; margin: 5px;">' . $image . '</div>' . $embed_content;
 				break;
 		

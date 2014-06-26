@@ -58,6 +58,7 @@ if ($full) {
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
 		echo elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
 	}
+	
 } else {
 	
 	$time_bit = event_calendar_get_formatted_time($event);
@@ -74,7 +75,7 @@ if ($full) {
 		$extras[] = $event->description;
 	}
 	
-	if ($event_calendar_venue_view = elgg_get_plugin_setting('venue_view', 'event_calendar') == 'yes') {
+	if (elgg_get_plugin_setting('venue_view', 'event_calendar') == 'yes') {
 		$extras[] = $event->venue;
 	}
 	if ($extras) {
@@ -107,4 +108,4 @@ if ($full) {
 	echo '<h3><a href="'.$event->getURL().'">' . $event->title . '</a></h3>' . '<br class="clearfloat" />' . elgg_view_image_block($icon, $list_body);
 }
 
-?>
+
