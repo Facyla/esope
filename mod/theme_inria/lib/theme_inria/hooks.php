@@ -399,6 +399,8 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$new = implode(', ', $location);
 		$current = $user->inria_location;
 		if ($current != $new) { $user->inria_location = $new; }
+	} else {
+		if (!empty($user->inria_location)) $user->inria_location = null;
 	}
 	
 	// Some changes require saving entity
