@@ -264,7 +264,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 // Hook principal pour gérer la MAJ des infos du profil
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
-	$debug = true;
+	$debug = false;
 	$user = $params['user'];
 	$auth = $params['auth'];
 	$infos = $params['infos'];
@@ -279,7 +279,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	
 	// Update using auth fields first
 	$auth_fields = ldap_auth_settings_auth_fields();
+	// Also update using infos fields (so empty values are updated)
 	$fields = ldap_auth_settings_info_fields();
+	
 	// Update email
 	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
 		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $ldap_mail");
@@ -289,7 +291,6 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	// Some data are only in auth branch
 	if ($auth) {
 		if ($debug) error_log("LDAP hook : update_profile : processing PEOPLE branch fields");
-		//foreach ($auth[0] as $key => $val) {
 		foreach ($auth_fields as $key => $elgg_field) {
 			$val = $auth[0][$key];
 			if ($debug) error_log("$key => $elgg_field = $val[0]");
@@ -309,19 +310,13 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 					$user->inria_location_main = $val[0];
 				}
 			} else {
-				$meta_name = $elgg_field;
 				// Update only defined metadata
-				if (empty($meta_name)) continue;
+				if (empty($elgg_field)) continue;
 				// Value : empty value is a valid value (updated in LDAP to empty)
 				$new = $val[0];
-				$current = $user->$meta_name;
+				$current = $user->$elgg_field;
 				if ($current != $new) {
-					$user->$meta_name = $new;
-					/*
-					if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-						if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
-					}
-					*/
+					$user->$elgg_field = $new;
 				}
 			}
 		}
@@ -359,21 +354,15 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				} else if (substr($key, 0, 9) == 'secretary') {
 					$secretary[] = $val[0];
 				} else if ($key == 'ou') {
-					$ou[] = $val[0];
+					//$ou[] = $val[0];
 				} else {
-					$meta_name = $elgg_field;
 					// Update only defined metadata
-					if (empty($meta_name)) continue;
+					if (empty($elgg_field)) continue;
 					// Value : empty value is a valid value (updated in LDAP to empty)
 					$new = $val[0];
-					$current = $user->$meta_name;
+					$current = $user->$elgg_field;
 					if ($current != $new) {
-						$user->$meta_name = $new;
-						/*
-						if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-							if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->guid . " name=" . $meta_name . " val: " . $val[0]);
-						}
-						*/
+						$user->$elgg_field = $new;
 					}
 				}
 			}
