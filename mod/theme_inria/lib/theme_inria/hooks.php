@@ -291,6 +291,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		//foreach ($auth[0] as $key => $val) {
 		foreach ($auth_fields as $key => $elgg_field) {
 			$val = $auth[0][$key];
+			if ($debug) error_log("$key => $elgg_field = $val[0]");
 			if ($key == 'cn') {
 				$fullname = $val[0];
 			} else if ($key == 'sn') {
@@ -307,7 +308,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 					$user->inria_location_main = $val[0];
 				}
 			} else {
-				$meta_name = $auth_fields[$key];
+				$meta_name = $elgg_field;
 				// Update only defined metadata
 				if (empty($meta_name)) continue;
 				// Value : empty value is a valid value (updated in LDAP to empty)
@@ -359,7 +360,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				} else if ($key == 'ou') {
 					$ou[] = $val[0];
 				} else {
-					$meta_name = $fields[$key];
+					$meta_name = $elgg_field;
 					// Update only defined metadata
 					if (empty($meta_name)) continue;
 					// Value : empty value is a valid value (updated in LDAP to empty)
