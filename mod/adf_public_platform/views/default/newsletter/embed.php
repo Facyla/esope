@@ -23,7 +23,7 @@ $newsletter = $vars["entity"];
 $offset = (int) max(get_input("offset", 0), 0);
 $limit = (int) max(get_input("limit", 10), 0);
 // Subtypes adjustments
-$subtype = get_input('subtype', 'none');
+$subtype = get_input('subtype', 'all');
 if ($subtype == 'all') $subtype = array('blog', 'bookmarks', 'event_calendar', 'file', 'groupforumtopic', 'page', 'page_top');
 else if ($subtype == 'pages') $subtype = array('page', 'page_top');
 // Used to select various embed content templates

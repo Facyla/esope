@@ -10,13 +10,7 @@ echo elgg_view("output/text", array("value" => elgg_echo("newsletter:edit:conten
 
 echo "<div class='mvm'>";
 
-echo elgg_view_menu('longtext', array(
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-	'id' => $id,
-));
-
-echo elgg_view("input/plaintext", array("name" => "content", "value" => $entity->content, "id" => $id, "class" => "newsletter-input-plaintext"));
+echo elgg_view("input/longtext", array("name" => "content", "value" => $entity->content, "id" => $id, "class" => "newsletter-input-plaintext"));
 echo "</div>";
 
 echo elgg_view("newsletter/placeholders");
