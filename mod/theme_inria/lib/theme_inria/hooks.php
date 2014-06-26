@@ -279,6 +279,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	
 	// Update using auth fields first
 	$auth_fields = ldap_auth_settings_auth_fields();
+	$fields = ldap_auth_settings_infos_fields();
 	// Update email
 	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
 		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $ldap_mail");
@@ -338,7 +339,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	
 	// Then Update using infos fields (contacts branch - optional)
-	if ($infos) {
+	if (true || $infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
 		//foreach ($infos[0] as $key => $val) {
 		foreach ($fields as $key => $elgg_field) {
