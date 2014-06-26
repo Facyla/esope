@@ -264,7 +264,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 // Hook principal pour gérer la MAJ des infos du profil
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
-	$debug = false;
+	$debug = true;
 	$user = $params['user'];
 	$auth = $params['auth'];
 	$infos = $params['infos'];
