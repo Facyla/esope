@@ -299,7 +299,11 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				// Note : "we want to use only contacts branch for the 'ou' field
 				// But here it can be used for the location
 				// $ou[] = $val[0];
-				$location_ou = $val[0];
+				//$location_ou = $val[0];
+				// Latest update : used for main location (centre de rattachement)
+				if ($user->inria_location_main != $val[0]) {
+					$user->inria_location_main = $val[0];
+				}
 			} else {
 				$meta_name = $auth_fields[$key];
 				// Update only defined metadata
@@ -397,7 +401,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$location = array_unique($location);
 		$location = theme_inria_ldap_convert_locality($location);
 		// Add the other location field from people branch if it exists
-		if (!empty($loation_ou)) $location[] = $location_ou;
+		//if (!empty($loation_ou)) $location[] = $location_ou;
 		$new = implode(', ', $location);
 		$current = $user->inria_location;
 		if ($current != $new) { $user->inria_location = $new; }
