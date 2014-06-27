@@ -62,7 +62,7 @@ unset($options["count"]);
 $form_data = '';
 $form_data .= '<p><label>' . elgg_echo('newsletter:embed:templates') . ' ' . elgg_view("input/dropdown", array("name" => "template", "value" => $template, 'options_values' => $available_templates)) . '</label></p>';
 $form_data .= '<p><label>' . elgg_echo('newsletter:embed:search') . ' ' . elgg_view("input/text", array("name" => "q", "value" => $query)) . '</label></p>';
-$form_data .= '<p><label>' . elgg_echo('newsletter:embed:search') . ' ' . elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype, 'options_values' => $allowed_subtypes)) . '</label></p>';
+$form_data .= '<p><label>' . elgg_echo('newsletter:embed:subtype') . ' ' . elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype, 'options_values' => $allowed_subtypes)) . '</label></p>';
 $form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
 
 echo elgg_view("input/form", array("action" => "newsletter/embed/" . $newsletter->getGUID(), "id" => "newsletter-embed-search", "body" => $form_data));
