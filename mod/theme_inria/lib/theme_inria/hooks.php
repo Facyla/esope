@@ -279,6 +279,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	
 	// Update using auth fields first
 	$auth_fields = ldap_auth_settings_auth_fields();
+	// Also update using infos fields (so empty values are updated)
+	$fields = ldap_auth_settings_info_fields();
+	
 	// Update email
 	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
 		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $ldap_mail");
@@ -288,7 +291,9 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	// Some data are only in auth branch
 	if ($auth) {
 		if ($debug) error_log("LDAP hook : update_profile : processing PEOPLE branch fields");
-		foreach ($auth[0] as $key => $val) {
+		foreach ($auth_fields as $key => $elgg_field) {
+			$val = $auth[0][$key];
+			if ($debug) error_log("$key => $elgg_field = $val[0]");
 			if ($key == 'cn') {
 				$fullname = $val[0];
 			} else if ($key == 'sn') {
@@ -299,21 +304,19 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				// Note : "we want to use only contacts branch for the 'ou' field
 				// But here it can be used for the location
 				// $ou[] = $val[0];
-				$location_ou = $val[0];
+				//$location_ou = $val[0];
+				// Latest update : used for main location (centre de rattachement)
+				if ($user->inria_location_main != $val[0]) {
+					$user->inria_location_main = $val[0];
+				}
 			} else {
-				$meta_name = $auth_fields[$key];
 				// Update only defined metadata
-				if (empty($meta_name)) continue;
+				if (empty($elgg_field)) continue;
 				// Value : empty value is a valid value (updated in LDAP to empty)
 				$new = $val[0];
-				$current = $user->$meta_name;
+				$current = $user->$elgg_field;
 				if ($current != $new) {
-					$user->$meta_name = $new;
-					/*
-					if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-						if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->getGUID() . " name=" . $meta_name . " val: " . $val[0]);
-					}
-					*/
+					$user->$elgg_field = $new;
 				}
 			}
 		}
@@ -331,9 +334,12 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	}
 	
 	// Then Update using infos fields (contacts branch - optional)
-	if ($infos) {
+	if (true || $infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
+		// Note : cannot use config fields here because office and phone do not have a unique name
 		foreach ($infos[0] as $key => $val) {
+			$val = $infos[0][$key];
+			$elgg_field = $fields[$key];
 			// We don't want to update some fields that were processed in auth
 			if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
 				// Extraction de la localisation
@@ -350,25 +356,24 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 				} else if (substr($key, 0, 9) == 'secretary') {
 					$secretary[] = $val[0];
 				} else if ($key == 'ou') {
-					$ou[] = $val[0];
+					//$ou[] = $val[0];
 				} else {
-					$meta_name = $fields[$key];
 					// Update only defined metadata
-					if (empty($meta_name)) continue;
+					if (empty($elgg_field)) continue;
 					// Value : empty value is a valid value (updated in LDAP to empty)
 					$new = $val[0];
-					$current = $user->$meta_name;
+					$current = $user->$elgg_field;
 					if ($current != $new) {
-						$user->$meta_name = $new;
-						/*
-						if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-							if ($debug) error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->guid . " name=" . $meta_name . " val: " . $val[0]);
-						}
-						*/
+						$user->$elgg_field = $new;
 					}
 				}
 			}
 		}
+	}
+	
+	// Clean configured entries that are not defined anymore in contact branch
+	foreach ($fields as $key => $elgg_field) {
+		if (empty($infos[0][$key])) $user->$elggfield = null;
 	}
 	
 	// Process special fields (arrays, multiple keys, etc.)
@@ -397,10 +402,12 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 		$location = array_unique($location);
 		$location = theme_inria_ldap_convert_locality($location);
 		// Add the other location field from people branch if it exists
-		if (!empty($loation_ou)) $location[] = $location_ou;
+		//if (!empty($loation_ou)) $location[] = $location_ou;
 		$new = implode(', ', $location);
 		$current = $user->inria_location;
 		if ($current != $new) { $user->inria_location = $new; }
+	} else {
+		if (!empty($user->inria_location)) $user->inria_location = null;
 	}
 	
 	// Some changes require saving entity

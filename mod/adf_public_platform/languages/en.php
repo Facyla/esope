@@ -555,6 +555,15 @@ $en = array(
 	'esope:tinymce:extended_valid_elements' => "List of allowed HTML tags and properties",
 	'esope:tinymce:extended_valid_elements:details' => "Lets you control precisely the allowed HTML tags and properties in the TinyMCE editor.<br />IMPORTANT: this setting defines solely what is allowed in the TinyMCE editor, and NOT what will be further filtered by HTMLawed, or by any other filtering function that is enabled on the site. Also note that the editor can be disabled. If you wish to enable/disable specific tags, please also set HTMLawed config (or any other filter) accordingly!",
 	
+	// Newsletter additions
+	'newsletter:embed:templates' => "Choose content template",
+	'newsletter:embed:template:default' => "Basic",
+	'newsletter:embed:template:fullcontent' => "Content",
+	'newsletter:embed:template:fullcontentauthor' => "Content + author",
+	'newsletter:embed:search' => "Search a publication",
+	'newsletter:embed:subtype' => "Publication type",
+	
+	
 );
 
 add_translation('en', $en);

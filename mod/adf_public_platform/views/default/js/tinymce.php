@@ -1,7 +1,8 @@
 <?php
 // Get plugin settings, and set defaults if they are missing
 $plugins = strip_tags(elgg_get_plugin_setting('plugins', 'tinymce'));
-if (empty($plugins)) $plugins = "lists,spellchecker,autosave,fullscreen,paste,table,template,style,inlinepopups,contextmenu,searchreplace,emotions";
+if (empty($plugins)) $plugins = "lists,spellchecker,autosave,fullscreen,paste,table,template,style,inlinepopups,contextmenu,searchreplace,emotions,media,advimage,advlink,xhtmlxtras";
+
 // Toobars
 $advanced_buttons1 = strip_tags(elgg_get_plugin_setting('advanced_buttons1', 'tinymce'));
 if (empty($advanced_buttons1)) $advanced_buttons1 = "removeformat,formatselect,bold,italic,underline,strikethrough,forecolor,link,unlink,blockquote,sub,sup,hr,fullscreen";
@@ -65,7 +66,7 @@ elgg.tinymce.init = function() {
 	});
 
 	tinyMCE.init({
-		language : "fr",
+		language : "<?php echo tinymce_get_site_language(); ?>",
 		table_inline_editing : true,
 		mode : "specific_textareas",
 		editor_selector : "elgg-input-longtext",
@@ -114,8 +115,20 @@ elgg.tinymce.init = function() {
 				var text = elgg.echo('tinymce:word_count') + strip.split(' ').length + ' ';
 				tinymce.DOM.setHTML(tinymce.DOM.get(tinyMCE.activeEditor.id + '_path_row'), text);
 			});
+			
+			// prevent Firefox from dragging/dropping files into editor
+			ed.onInit.add(function(ed) {
+				if (tinymce.isGecko) {
+					tinymce.dom.Event.add(ed.getBody().parentNode, "drop", function(e) {
+						if (e.dataTransfer.files.length > 0) {
+							e.preventDefault();
+						}
+					});
+				}
+			});
 		},
 		content_css: elgg.config.wwwroot + 'mod/tinymce/css/elgg_tinymce.css',
+		
 		<?php if ($templates) { ?>
 			template_templates : [ <?php echo $templates; ?> ],
 		<?php } ?>

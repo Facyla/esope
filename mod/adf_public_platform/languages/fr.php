@@ -554,6 +554,14 @@ $fr = array(
 	'esope:tinymce:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
 	'esope:tinymce:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur TinyMCE.<br />IMPORTANT : ce réglage définit uniquement le comportement de TinyMCE, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
 	
+	// Newsletter additions
+	'newsletter:embed:templates' => "Modèle à insérer",
+	'newsletter:embed:template:default' => "Basique",
+	'newsletter:embed:template:fullcontent' => "Contenu",
+	'newsletter:embed:template:fullcontentauthor' => "Contenu + auteur",
+	'newsletter:embed:search' => "Rechercher une publication",
+	'newsletter:embed:subtype' => "Type de publication",
+	
 );
 
 add_translation('fr', $fr);
