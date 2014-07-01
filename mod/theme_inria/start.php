@@ -39,7 +39,7 @@ function theme_inria_init(){
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_group_owner_block', 501);
 	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
-	elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
+	//elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
 	// Rewritten in a more specific way for Iris theme
 	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
