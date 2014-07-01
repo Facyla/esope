@@ -556,6 +556,15 @@ function adf_public_platform_group_leave($event, $object_type, $relationship) {
 }
 
 
+// @TODO : Désactive les notifications "site" pour les commentaires
+// voir sur quoi s'accrocher ?? doit être rétroactif sur tous les membres, et ne pas bloquer les réglages manuels. Donc exécuté une seule fois au démarrage du plugin, ou autre manière de gérer le pb.
+/*
+function adf_public_platform_comments_disable_site() {
+	//add_entity_relationship($user->guid, 'block_comment_notify' . $method, $CONFIG->site_guid
+}
+*/
+
+
 if (!function_exists('messages_get_unread')) {
 	/**
 	 * Returns the unread messages in a user's inbox
