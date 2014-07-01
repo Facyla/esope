@@ -16,8 +16,10 @@ if (elgg_is_active_plugin('notifications')) {
 	}
 }
 
+/*
 echo elgg_view('groups/sidebar/my_status', array(
 	'entity' => $entity,
 	'subscribed' => $subscribed
 ));
+*/
 
