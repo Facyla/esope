@@ -351,6 +351,8 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
 
 
+/* Widgets */
+section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { color: <?php echo $link_color; ?>; }
 /* Inria Tools Widget */
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }
 .elgg-button.inria-tool-link { background-repeat: no-repeat !important; padding: 3px 5px 3px 34px !important; margin: 4px; min-width: 10ex; /* color: black; font-size: 16px; */ }
