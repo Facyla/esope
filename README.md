@@ -1,15 +1,23 @@
-> ESOPE pour Environnement Social Opensource Public Elgg, est le nouveau nom du projet initié sous le nom de "Departements en réseaux"
+> ESOPE pour Environnement Social Opensource Public Elgg, est une distribution francisée d'Elgg, conçue pour faciliter et accélérer la mise en place de plateformes collaboratives "clefs en main".
 > In english: Elgg Social Opensource Public Environment)
 
-> La distribution est désormais hébergée sur Github : https://github.com/Facyla/esope
+
+# A propos d'Elgg
+Lire (README.txt)
+* Copyright : (COPYRIGHT.txt)
+* Contributeurs : (CONTRIBUTORS.txt)
+* Licence : (LICENSE.txt)
+* Installation : (INSTALL.txt)
+* Mise à jour : (UPGRADE.txt)
 
 
-# Présentation historique de Départements en réseaux
-Departements-en-reseaux.fr est une plateforme collaborative construite à partir d'Elgg 1.8, proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
+# Présentation d'ESOPE
+ESOPE est le nouveau nom du projet initié sous le nom de "Departements en réseaux" en partenariat par l'Assemeblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International.
+Departements-en-reseaux.fr est une plateforme collaborative proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
 Crédits
 * la version originelle de Départements en réseaux a été réalisée grâce au soutien du Conseil Général de l'Essonne, en partenariat avec l'Assemblée des Départements de France (ADF)
-* Conception et réalisation : Facyla (Florian DANIEL) / ITEMS International
+* Conception, réalisation et maintenance : Facyla ~ Florian DANIEL / ITEMS International
 * Conception graphique et accessibilité : Urbilog
 
 
@@ -47,7 +55,7 @@ Crédits
 * Florian DANIEL - Facyla
 
 
-# Contributeurs
+# Principaux contributeurs
 * Conseil Général de l'Essonne
 * Assemblée des Départements de France (ADF)
 * ITEMS International
@@ -55,5 +63,6 @@ Crédits
 * Région Rhône-Alpes (via le projet FormaVia)
 * Inria
 * Cartier International
+
 
 
