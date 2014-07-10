@@ -3,12 +3,30 @@
 
 
 # A propos d'Elgg
-Lire (README.txt)
-* Copyright : (COPYRIGHT.txt)
-* Contributeurs : (CONTRIBUTORS.txt)
-* Licence : (LICENSE.txt)
-* Installation : (INSTALL.txt)
-* Mise à jour : (UPGRADE.txt)
+Lire [README.txt](README.txt)
+* Copyright :  [COPYRIGHT.txt](COPYRIGHT.txt)
+* Contributeurs : [CONTRIBUTORS.txt](CONTRIBUTORS.txt)
+* Licence : [LICENSE.txt](LICENSE.txt)
+* Installation : [INSTALL.txt](INSTALL.txt)
+* Mise à jour : [UPGRADE.txt](UPGRADE.txt)
+
+
+# Installation d'ESOPE
+1. L'installation d'ESOPE est identique en tous points à celle d'un Elgg standard.
+  1. Placez les scripts dans le répertoire de votre choix, par ex. dans /var/www/esope/
+  2. Créer un répertoire pour les données, hors du répertoire web, par ex. dans /var/www/esope-data/
+  3. Créez une base de données MySQL
+  4. Visitez la page web, qui vous redirige sur le script d'installation, et suivez les instructions. Vous pourrez avoir besoin d'effectuer des modifications de configuration si nécessaire : les plus fréquentes sont de modifier les droits d'accès sur les dossiers d'installation, et activer le module php mod_rewrite.
+2. Une fois l'installation terminée, connectez-vous et cliquez sur "Settings" pour modifier la langue utilisée et basculer l'interface en français.
+3. Cliquez sur "Administration", et activez le plugin "Acc'Essone". Ce plugin rassemble l'ensemble des modifications *spécifiques* de cette distribution, et doit toujours être placé en fin de liste. Il spécifie également une série de dépendances obligatoires ou facultatives : vous devez d'abord activer les dépendances obligatoires (required) pour pouvoir activer ce plugin.
+4. Activez les autres plugins de votre choix
+5. Configurez le site :
+  1. Paramètres > Réglages de base
+  2. Paramètres > Paramètres avancés
+  3. Apparence > Configuration du thème (propre à ESOPE)
+  4. puis en fonction des plugins activés
+6. Si vous souhaitez modifier l'apparence ou les foncitonnalité au-delà des possibilités proposées par ESOPE, créez un plugin de thème (par ex. theme_montheme) et placez-le en toute fin de liste, après "Acc'Essonne".
+
 
 
 # Présentation d'ESOPE
