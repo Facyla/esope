@@ -752,6 +752,7 @@ input[type="submit"]:hover, .elgg-button-submit:hover, .elgg-button-action:hover
 .elgg-menu-hz > li > a {
 	display:inline-block;
 	vertical-align:middle;
+	margin-right: 1ex;
 }
 /* Allow inline image blocks in horizontal menus */
 .elgg-menu-hz .elgg-body:after {
