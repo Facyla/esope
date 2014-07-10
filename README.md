@@ -31,21 +31,33 @@ Lire [README.txt](README.txt)
 
 
 ## Présentation d'ESOPE
-ESOPE est le nouveau nom du projet initié sous le nom de "Departements en réseaux" en partenariat par l'Assemeblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International.
+ESOPE est le nouveau nom du projet initié en partenariat sous le nom de "Departements en réseaux" par l'Assemblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International.
 Departements-en-reseaux.fr est une plateforme collaborative proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
 Crédits
-* la version originelle de Départements en réseaux a été réalisée grâce au soutien du Conseil Général de l'Essonne, en partenariat avec l'Assemblée des Départements de France (ADF)
-* Conception, réalisation et maintenance : Facyla ~ Florian DANIEL / ITEMS International
-* Conception graphique et accessibilité : Urbilog
+* la version originelle et les adaptations graphiques initiales de Départements en réseaux ont été réalisés grâce au soutien du Conseil Général de l'Essonne, par ITEMS International (intégration et développement) et Urbilog (graphisme et accessibilité)
+
+
+## Conception et maintenance d'ESOPE
+* Florian DANIEL - Facyla / ITEMS International
+
+
+## Principaux contributeurs
+* Conseil Général de l'Essonne
+* Assemblée des Départements de France (ADF)
+* ITEMS International
+* Agence Nationale de Lutte Contre l'Illetrisme (ANLCI)
+* Région Rhône-Alpes (via le projet FormaVia)
+* Inria
+* Cartier International
 
 
 ## Contenu de la plateforme
 * Elgg core, et plugins associés
 * Traduction intégrale FR
 * Un plugin qui sert de pivot à cette distribution : adf_public_platform ("Acc'Essonne")
-* De nombreux plugins communautaires vérifiés
 * Plusieurs thèmes et développements pour des usages spécifiques
+* De nombreux plugins communautaires vérifiés
 
 
 ### Elgg Core (plugins inclus dans la distribution standard)
@@ -157,22 +169,6 @@ Crédits
 * vazco_text_captcha (Vasco)
 * videos
 * views_counter
-* web_services (ESOPE)
-
-
-
-## Conception et maintenance
-* Florian DANIEL - Facyla
-
-
-## Principaux contributeurs
-* Conseil Général de l'Essonne
-* Assemblée des Départements de France (ADF)
-* ITEMS International
-* Agence Nationale de Lutte Contre l'Illetrisme (ANLCI)
-* Région Rhône-Alpes (via le projet FormaVia)
-* Inria
-* Cartier International
-
+* web_services
 
 
