@@ -17,7 +17,7 @@ $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $container = $bookmark->getContainerEntity();
 $categories = elgg_view('output/categories', $vars);
 
-$link = elgg_view('output/url', array('href' => $bookmark->address));
+$link = elgg_view('output/url', array('href' => $bookmark->address, 'target' => '_blank'));
 $description = elgg_view('output/longtext', array('value' => $bookmark->description, 'class' => 'pbl'));
 
 $owner_link = elgg_view('output/url', array(
@@ -111,7 +111,7 @@ HTML;
 			$bits = parse_url($url);
 			if (isset($bits['host'])) { $display_text = $bits['host']; } else { $display_text = elgg_get_excerpt($url, 100); }
 		}
-		$link = elgg_view('output/url', array('href' => $bookmark->address, 'text' => $display_text));
+		$link = elgg_view('output/url', array('href' => $bookmark->address, 'text' => $display_text, 'target' => '_blank'));
 		$content = elgg_view_icon('push-pin-alt') . "$link{$excerpt}";
 	}
 	
