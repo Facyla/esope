@@ -1,1 +1,0 @@
-<?php echo elgg_view('input/autocomplete',array('mustMatch'=>'true','minChars'=>$vars['minChars'],'internalname'=>$vars['internalname'],'internalid'=>$vars['internalid'],'value'=>$vars['value'],'title'=>$vars['title'],'class'=>$vars['class'],'width'=>$vars['width'],'lookup_url'=>$vars['url'].'mod/autocomplete/members_complete.php')); ?>
