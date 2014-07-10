@@ -352,7 +352,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 
 /* Widgets */
-section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { color: <?php echo $titlecolor; ?>; }
+section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { color: <?php echo $titlecolor; ?> !important; }
 /* Inria Tools Widget */
 .inria-tool-widget .elgg-horizontal label { float: left; clear: none !important; }
 .elgg-button.inria-tool-link { background-repeat: no-repeat !important; padding: 3px 5px 3px 34px !important; margin: 4px; min-width: 10ex; /* color: black; font-size: 16px; */ }

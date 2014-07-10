@@ -8,7 +8,7 @@ $guid = $vars['entity']->group_guid;
 
 $content = '';
 
-if ($guid & ($entity = get_entity($guid))) {
+if ($guid && ($entity = get_entity($guid))) {
 	$title = $entity->name;
 	$title = '<a href="' . $entity->getURL() . '">' . $title . '</a>';
 	//$content = "<div class=\"widget-title-details\">$title</div>";
