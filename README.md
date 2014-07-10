@@ -1,8 +1,9 @@
+# Environnement Social Opensource Public Elgg
 > ESOPE pour Environnement Social Opensource Public Elgg, est une distribution francisée d'Elgg, conçue pour faciliter et accélérer la mise en place de plateformes collaboratives "clefs en main".
 > In english: Elgg Social Opensource Public Environment)
 
 
-# A propos d'Elgg
+## A propos d'Elgg
 Lire [README.txt](README.txt)
 * Copyright :  [COPYRIGHT.txt](COPYRIGHT.txt)
 * Contributeurs : [CONTRIBUTORS.txt](CONTRIBUTORS.txt)
@@ -11,7 +12,7 @@ Lire [README.txt](README.txt)
 * Mise à jour : [UPGRADE.txt](UPGRADE.txt)
 
 
-# Installation d'ESOPE
+## Installation d'ESOPE
 1. L'installation d'ESOPE est identique en tous points à celle d'un Elgg standard.
   1. Placez les scripts dans le répertoire de votre choix, par ex. dans /var/www/esope/
   2. Créer un répertoire pour les données, hors du répertoire web, par ex. dans /var/www/esope-data/
@@ -29,7 +30,7 @@ Lire [README.txt](README.txt)
 
 
 
-# Présentation d'ESOPE
+## Présentation d'ESOPE
 ESOPE est le nouveau nom du projet initié sous le nom de "Departements en réseaux" en partenariat par l'Assemeblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International.
 Departements-en-reseaux.fr est une plateforme collaborative proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
@@ -39,41 +40,132 @@ Crédits
 * Conception graphique et accessibilité : Urbilog
 
 
-# Contenu de la plateforme
+## Contenu de la plateforme
 * Elgg core, et plugins associés
-* Traduction intégrale FR (et bien sûr EN)
-* Plusieurs plugins communautaires (testés pour leur intégration, et parfois améliorés)
+* Traduction intégrale FR
 * Un plugin qui sert de pivot à cette distribution : adf_public_platform ("Acc'Essonne")
+* De nombreux plugins communautaires vérifiés
 * Plusieurs thèmes et développements pour des usages spécifiques
 
-## Plugins communautaires
-* brainstorm (Manutopik)
-* profile_manager (ColdTrick)
+
+### Elgg Core (plugins inclus dans la distribution standard)
+* blog
+* bookmarks
+* categories
+* custom_index
+* dashboard
+* developers
+* diagnostics
+* embed
+* externalpages
+* file
+* garbagecollector
+* groups
+* htmlawed
+* invitefriends
+* likes
+* logbrowser
+* logrotate
+* members
+* messageboard
+* messages
+* notifications
+* pages
+* oauth_api (supprimé des dernières versions)
+* profile
+* reportedcontent
+* search
+* tagcloud
+* thewire
+* tinymce
+* twitter_api
+* uservalidationbyemail
+* zaudio
+
+### ESOPE core (plugins spécifiques à ESOPE)
+* adf_public_platform (Acc'Essonne, ESOPE) : thème accessible et configurable - le coeur de cette distribution
+	- configuration du thème : éléments d'interface, couleurs, polices, styles
+	- réorganisation des menus et de la page d'accueil
+	- nombreux réglages fonctionnels : groupes, notifications, outils, recherche, etc.
+	- accessibilité améliorée (notamment navigation au clavier)
+	- liste de pages publiques explicitement définies
+	- et de nombreux réglages avancés...
+* adf_registration_filter (Inscript-Essonne, ESOPE) : inscriptions limitées en fonction de noms de domaines autorisés (accès réservé aux membres d'une ou plusieurs organisations)
+
+
+### Thèmes (thèmes spécifiques construits à partir d'ESOPE)
+* theme_cocon : Thème Collèges connectés (Ministère de l'éducation nationale, DNE)
+* theme_compnum : Thème Compétences Numériques B2i Adultes (FormaVia)
+* theme_inria : Thème Iris (Inria)
+
+### Plugins communautaires
+* access_icons
+* advanced_notifications (ColdTrick)
+* advanced_statistics (ColdTrick)
+* announcements
+* apiadmin
+* au_subgroups (Matt Beckett, Athabasta University)
+* auto_sitemap
+* backup-tool
+* blog_tools (ColdTrick)
+* cmspages (Facyla)
+* comment_tracker
+* croncheck
+* digest (ColdTrick)
+* dossierdepreuve (FormaVia)
+* elgg-brainstorm (Manutopik)
+* elgg_cas (Inria)
+* elgg_cmis (Inria)
+* elgg_file_viewer
 * event_calendar (Kevin Jardine)
-* friend_requests
+* export_embed (Facyla)
+* externalmembers (version de développement) : projet de plugin de gestion d'accès externes limités à certaines ressources
+* feedback (Facyla)
+* file_tools (ColdTrick)
+* friend_request
+* gdocs_file_previewer
+* group_chat (Facyla)
 * group_operators
-* guidtool
+* guidtool (ESOPE)
+* html_email_handler (ColdTrick)
+* hybridauth (Facyla)
+* ldap_auth (Inria)
+* ldap_auth_old (ancienne version de ldap_auth)
 * login_as
-* profile_manager
+* mailing (Facyla)
+* metatags
+* new_event_calendar (version de développement de event_calendar)
+* newsletter (ColdTrick)
+* no_friends
+* notification_messages (Facyla)
+* pdf_export (Facyla)
+* plugin_template (ESOPE, modèle de plugin)
+* prevent_notifications (Facyla)
+* profileiconaccess
+* profile_manager (ColdTrick)
+* related-items
+* security_tools (ColdTrick)
+* shortcodes (Team Webgalli)
+* simplepie (Facyla)
+* slider (Facyla)
 * threads
-* & much more
-
-## Développements spécifiques à cette distribution
-* Acc'Essonne : thème accessible et configurable - le coeur de cette distribution
-	* réorganisation des menus
-	* modifications fonctionnelles : groupes, notifications, outils, etc.
-	* accessibilité : plateforme accessible aux utilisateurs handicapés (navigation au clavier et lecture d'écran)
-	* liste de pages publiques explicitement définies
-* Inscript-Essonne : inscriptions limitées en fonction de noms de domaines autorisés (accès réservé aux membres d'une ou plusieurs organisations)
-* En projet
-	* accès externes limités à certaines ressources, pour permettre des accès limités à des collaborateurs externes
+* tidypics
+* translation_editor (ColdTrick)
+* twitter
+* uservalidationbyadmin
+* upload_users
+* vazco_text_captcha (Vasco)
+* videos
+* views_counter
+* web_services (ESOPE)
 
 
-# Conception et maintenance
+
+## Conception et maintenance
 * Florian DANIEL - Facyla
 
 
-# Principaux contributeurs
+## Principaux contributeurs
 * Conseil Général de l'Essonne
 * Assemblée des Départements de France (ADF)
 * ITEMS International
