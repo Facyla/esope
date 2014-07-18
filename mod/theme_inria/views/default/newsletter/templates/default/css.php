@@ -2,6 +2,8 @@
 global $CONFIG;
 ?>
 
+/* Iris Newsletter Style */
+
 body {
 	background: #f6f6f6;
 	color: #333333;
@@ -85,7 +87,8 @@ h4 {
 }
 
 #newsletter_footer {
-	background: #F0F0F0;
+	background: #6D2D4F;
+	color: white;
 	
 	border-top: 1px solid #FFFFFF;
 	border-left: 1px solid #dbdbdb;
