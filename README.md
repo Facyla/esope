@@ -13,6 +13,13 @@ Lire [README.txt](README.txt)
 
 
 ## Installation d'ESOPE
+### PRE-REQUIS : http://docs.elgg.org/wiki/Installation/Requirements
+- Serveur Web (Apache...)
+- URL rewriting
+- PHP 5.2+, avec les extensions GD, Multibyte String support, et la possibilité d'envoyer des mails
+- MySQL 5+
+
+### Procédure d'installation
 1. L'installation d'ESOPE est identique en tous points à celle d'un Elgg standard.
   1. Placez les scripts dans le répertoire de votre choix, par ex. dans /var/www/esope/
   2. Créer un répertoire pour les données, hors du répertoire web, par ex. dans /var/www/esope-data/
@@ -28,10 +35,44 @@ Lire [README.txt](README.txt)
   4. puis en fonction des plugins activés
 6. Si vous souhaitez modifier l'apparence ou les foncitonnalité au-delà des possibilités proposées par ESOPE, créez un plugin de thème (par ex. theme_montheme) et placez-le en toute fin de liste, après "Acc'Essonne".
 
+Note : Si vous n'avez accès qu'à la racine web (par ex. sur un hébergement mutualisé), vous pouvez créer le dossier "data" dans ce répertoire et ajouter dans data/ un fichier .htaccess avec pour contenu : deny from all
+
+### Sécurisation
+De nombreuses mesures peuvent être prises du côté du serveur, notamment via la mise en place d'une connexion HTTPS (nécesite un certificat valide) et diverses options de configuration d'Apache.
+
+Quelques pistes d'ajouts complémentaires à intégrer aux fichiers .htaccess. Attention : certaines de ces instructions peuvent bloquer l'intégration de contenus tiers -embed- voire bloquer le foncitonnement de certaines scripts ; veuillez les tester soigneusement avant de les utiliser en production :
+
+# Secure cookies
+<IfModule php5_module>
+	# Set cookie to use HTTPOnly (can't be used in any script - such as JS)
+	php_flag session.cookie_httponly on
+	# Allow cookie session over secure channel only
+	php_value session.cookie_secure 1
+</IfModule>
+
+# No Multiviews
+Options -Multiviews
+
+# XSS protection and various other security settings
+<IfModule mod_headers.c>
+	#Header add TimeGenerated "It took %D microseconds to serve this request."
+	Header add Strict-Transport-Security "max-age=157680000"
+	Header unset ETag
+	Header set X-Frame-Options: sameorigin
+	Header set X-XSS-Protection: "1; mode=block"
+	Header set X-Content-Type-Options: nosniff
+	Header set X-Content-Security-Policy: "allow 'self'"
+	Header set X-WebKit-CSP: "allow 'self'"
+	Header set X-Permitted-Cross-Domain-Policies: "master-only"
+	Header unset X-Powered-By
+</IfModule>
+ServerSignature Off
+
+
 
 
 ## Présentation d'ESOPE
-ESOPE est le nouveau nom du projet initié en partenariat sous le nom de "Departements en réseaux" par l'Assemblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International.
+ESOPE est le nom du projet partenarial initié par l'Assemblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International, et qui a donné lieu au site "Departements en réseaux".
 Departements-en-reseaux.fr est une plateforme collaborative proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
 Crédits
