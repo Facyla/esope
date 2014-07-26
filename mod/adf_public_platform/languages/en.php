@@ -564,6 +564,13 @@ $en = array(
 	'newsletter:embed:subtype' => "Publication type",
 	
 	
+	// Nouveaux champs
+	'profile:field:group_profiletypes' => 'Group types',
+	'profile:field:colors' => 'Color (CSS)',
+	'profile:field:groups_select' => 'Group select',
+	'profile:field:members_select' => 'Member select',
+	'profile:field:percentage' => 'Percentage',
+	
 );
 
 add_translation('en', $en);
