@@ -41,7 +41,7 @@ function adf_platform_init() {
 	elgg_extend_view('css','accessibility/css');
 	// Sécurité
 	// Important : Enable this only if you don't need to include iframes in other websites !!
-	$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform', 100); // Include early
+	$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform');
 	if ($framekiller == 'yes') {
 		elgg_extend_view('page/elements/head','security/framekiller');
 	}
@@ -761,15 +761,15 @@ if (elgg_is_active_plugin('profile_manager')) {
 	// Select with multiple option (displayed as a block, not a dropdown)
 	// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
 	// Group profile types selector (do smthg with selected members profile types)
-	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('custom_fields:group_profiletypes'), $group_options);
+	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('profile:field:group_profiletypes'), $group_options);
 	// Color picker
-	add_custom_field_type("custom_group_field_types", 'color', elgg_echo('custom_fields:color'), $group_options);
+	add_custom_field_type("custom_group_field_types", 'color', elgg_echo('profile:field:color'), $group_options);
 	// Group selector (scope=all|member)
-	add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('custom_fields:groups_select'), $group_options);
+	add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('profile:field:groups_select'), $group_options);
 	// Members select (friends picker) - scope=all|friends|groupmembers
-	add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('custom_fields:members_select'), $group_options);
+	add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
 	// Percentage - interval=10
-	add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('custom_fields:percentage'), $group_options);
+	add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
 	
 	/* Renvoie une autorisation d'accéder ou non
 	 * Peut s'appuyer sur une autorisation explicite, ou une interdiction
@@ -1370,18 +1370,18 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 /* Return a list of valid users from a string
  * Input string can be a GUID or username list
  */
-function esope_get_users_from_setting($userlist) {
-	if ($userlist = explode(',', trim($userlist)) ) {
-		if ($userlist) foreach($userlist as $id) {
-			$id = trim($id);
-			if (($user = get_entity($id)) && elgg_instanceof($user, 'user')) {
-				$users[$user->guid] = $user;
-			} else if (($user = get_user_by_username($id)) && elgg_instanceof($user, 'user')) {
-				$users[$user->guid] = $user;
-			}
+function esope_get_users_from_setting($setting) {
+	$userlist = explode(',', trim($setting));
+	$users = array();
+	if ($userlist) foreach($userlist as $id) {
+		$id = trim($id);
+		if (($user = get_entity($id)) && elgg_instanceof($user, 'user')) {
+			$users[$user->guid] = $user;
+		} else if (($user = get_user_by_username($id)) && elgg_instanceof($user, 'user')) {
+			$users[$user->guid] = $user;
 		}
-		return $users;
 	}
+	return $users;
 }
 
 

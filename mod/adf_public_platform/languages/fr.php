@@ -562,6 +562,13 @@ $fr = array(
 	'newsletter:embed:search' => "Rechercher une publication",
 	'newsletter:embed:subtype' => "Type de publication",
 	
+	// Nouveaux champs
+	'profile:field:group_profiletypes' => 'Types des groupes',
+	'profile:field:colors' => 'Couleur (CSS)',
+	'profile:field:groups_select' => 'Sélecteur de groupe',
+	'profile:field:members_select' => 'Sélecteur de membre',
+	'profile:field:percentage' => 'Pourcentage',
+	
 );
 
 add_translation('fr', $fr);
