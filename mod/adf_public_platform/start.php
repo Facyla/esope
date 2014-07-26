@@ -1367,3 +1367,22 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 }
 
 
+/* Return a list of valid users from a string
+ * Input string can be a GUID or username list
+ */
+function esope_get_users_from_setting($userlist) {
+	if ($userlist = explode(',', trim($userlist)) ) {
+		if ($userlist) foreach($userlist as $id) {
+			$id = trim($id);
+			if (($user = get_entity($id)) && elgg_instanceof($user, 'user')) {
+				$users[$user->guid] = $user;
+			} else if (($user = get_user_by_username($id)) && elgg_instanceof($user, 'user')) {
+				$users[$user->guid] = $user;
+			}
+		}
+		return $users;
+	}
+}
+
+
+
