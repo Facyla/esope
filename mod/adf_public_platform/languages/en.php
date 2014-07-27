@@ -570,6 +570,7 @@ $en = array(
 	'profile:field:colors' => 'Color (CSS)',
 	'profile:field:groups_select' => 'Group select',
 	'profile:field:members_select' => 'Member select',
+	'members_select:myself' => 'Myself',
 	'profile:field:percentage' => 'Percentage',
 	
 );
