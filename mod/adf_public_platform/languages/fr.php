@@ -12,6 +12,7 @@ $fr = array(
 	'option:notify:all' => "Activer toutes les méthodes",
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
+	'option:none' => "(aucune sélection)",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
