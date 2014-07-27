@@ -12,6 +12,7 @@ $en = array(
 	'option:notify:all' => "Enable all methods",
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
+	'option:none' => "(none selected)",
 	
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
