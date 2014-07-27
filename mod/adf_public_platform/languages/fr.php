@@ -568,6 +568,7 @@ $fr = array(
 	'profile:field:colors' => 'Couleur (CSS)',
 	'profile:field:groups_select' => 'Sélecteur de groupe',
 	'profile:field:members_select' => 'Sélecteur de membre',
+	'members_select:myself' => 'Moi-même',
 	'profile:field:percentage' => 'Pourcentage',
 	
 );
