@@ -12,6 +12,7 @@ $en = array(
 	'option:notify:all' => "Enable all methods",
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
+	'option:none' => "(none selected)",
 	
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
@@ -563,6 +564,14 @@ $en = array(
 	'newsletter:embed:search' => "Search a publication",
 	'newsletter:embed:subtype' => "Publication type",
 	
+	
+	// Nouveaux champs
+	'profile:field:group_profiletypes' => 'Group types',
+	'profile:field:colors' => 'Color (CSS)',
+	'profile:field:groups_select' => 'Group select',
+	'profile:field:members_select' => 'Member select',
+	'members_select:myself' => 'Myself',
+	'profile:field:percentage' => 'Percentage',
 	
 );
 

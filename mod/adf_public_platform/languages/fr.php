@@ -12,6 +12,7 @@ $fr = array(
 	'option:notify:all' => "Activer toutes les méthodes",
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
+	'option:none' => "(aucune sélection)",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
@@ -561,6 +562,14 @@ $fr = array(
 	'newsletter:embed:template:fullcontentauthor' => "Contenu + auteur",
 	'newsletter:embed:search' => "Rechercher une publication",
 	'newsletter:embed:subtype' => "Type de publication",
+	
+	// Nouveaux champs
+	'profile:field:group_profiletypes' => 'Types des groupes',
+	'profile:field:colors' => 'Couleur (CSS)',
+	'profile:field:groups_select' => 'Sélecteur de groupe',
+	'profile:field:members_select' => 'Sélecteur de membre',
+	'members_select:myself' => 'Moi-même',
+	'profile:field:percentage' => 'Pourcentage',
 	
 );
 

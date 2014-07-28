@@ -1,7 +1,8 @@
-Départements en réseaux.fr est une plateforme collaborative construite à partir d'Elgg 1.8, proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
+ESOPE est une plateforme collaborative construite à partir d'Elgg 1.8, proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 
 Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
 
+Ce plugin regroupe toutes les spécificités de la plateforme ESOPE.
 
 #============================================================#
 === Crédits ===

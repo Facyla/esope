@@ -47,7 +47,7 @@ $feedback_sender = get_input('id');
 $feedback_status = get_input('status', 'open'); // Default status = open
 
 // Refuse empty feedbacks
-if (empty($feedback_txt) || empty(feedback_sender)) {
+if (empty($feedback_txt) || empty($feedback_sender)) {
 	// Error message
 	echo '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
 	exit;
