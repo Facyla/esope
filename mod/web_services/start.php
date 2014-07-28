@@ -20,7 +20,7 @@ function web_services_init() {
 
 $enabled = unserialize(elgg_get_plugin_setting('enabled_webservices', 'web_services'));
 
-foreach($enabled as $service) {
+if ($enabled) foreach($enabled as $service) {
 	elgg_register_library('webservice:'.$service, elgg_get_plugins_path() . 'web_services/lib/'.$service.'.php');
 	elgg_load_library('webservice:'.$service);
 }
