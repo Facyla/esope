@@ -63,7 +63,7 @@ $french = array(
 	'rssimport:importé:on' => "Importé dans",
 	'rssimport:importé' => "Les éléments ont été importés",
 	'rssimport:into' => "Import dans",
-	'rssimport:invalid:content:type' => "Impossible d'importer dans le type de contenu %s pour le moment",
+	'rssimport:invalid:content:type' => "Impossible d'importer dans les \"%s\" pour le moment",
 	'rssimport:invalid:id' => "Flux RSS invalide",
 	'rssimport:invalid:history' => "Historique invalide",
 	'rssimport:invalid:permalink' => "Lien invalide.",
@@ -126,6 +126,9 @@ $french = array(
 	'rssimport:role:user' => "Tous les membres",
 	'rssimport:role:groupadmin' => "Responsables de groupes",
 	'rssimport:role:admin' => "Administrateurs seulement",
+	
+	// ESOPE : internationalize date string
+	'rssimport:date:format' => 'j/m/Y à H:i',
 	
 );
 
