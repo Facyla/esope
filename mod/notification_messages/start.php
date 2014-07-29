@@ -409,7 +409,8 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 		$sender = get_user($sender_guid);
 		
 		//$subject = elgg_echo('messages:email:subject');
-		$excerpt = elgg_get_excerpt($message_contents, 20);
+		$excerpt = $subject;
+		if (strlen($excerpt) > 12) $excerpt = elgg_get_excerpt($excerpt, 12) . '..';
 		$subject = elgg_echo('notification_messages:email:subject', array($CONFIG->site->name, $sender->name, $excerpt));
 		$body = elgg_echo('messages:email:body', array(
 			$sender->name,
