@@ -215,8 +215,8 @@ $fr = array(
 	
 	// New group
 	// @TODO : Ce texte devrait être adapté à votre site !
-	// use $CONFIG->url for site install URL, $CONFIG->email for site email
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->email . "&subject=Demande%20de%20validation%20de%20groupe&body=Contact%20%depuis%20la%20page%20http%3A%2F%2Fdepartements-en-reseaux.fr%2Fgroups%2Fadd%2F129\" title=\"Ecrire au secrétariat de la plateforme\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"' . $CONFIG->url . 'pages/view/3792/charte-de-dpartements-en-rseaux\">règles d’utilisation et de création de contenus de « Départements-en-réseaux »</a></em></blockquote>",
+	// use $CONFIG->url for site install URL, $CONFIG->site->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . $CONFIG->url . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
 	'groups:search:regular' => "Recherche de groupe",
 	'groups:regularsearch' => "Nom ou mot-clef",
 	'search:group:go' => "Rechercher un groupe",
@@ -255,7 +255,7 @@ $fr = array(
 	'adf_platform:headertitle' => "Titre du site (cliquable, dans le bandeau)",
 	'adf_platform:headertitle:help' => "Pour agrandir certains caractères, encadrez-les de balises, et utilisez la classe 'minuscule' pour changer la casse&nbsp;: &lt;span&gt;T&lt;/span&gt;itre.&lt;span class=\"minuscule\"&gt;fr&lt;/span&gt;",
 	'adf_platform:header:content' => "Contenu de l'entête (code HTML libre). Pour retrouver la configuration initiale avec une image de logo configurable, remplacez le contenu par \"RAZ\" (en mode HTML).",
-	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $vars['url'] . '/mod/adf_public_platform/img/logo.gif" alt="Logo du site"  /></a></div>',
+	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $CONFIG->url . '/mod/adf_public_platform/img/logo.gif" alt="Logo du site"  /></a></div>',
 	'adf_platform:header:height' => "Hauteur de l'entête du menu (identique à celle de l'image de fond utilisée - ou inférieure)",
 	'adf_platform:header:background' => "URL de l'image de fond de l'entête (apparaît également sous le menu)",
 	'adf_platform:footer:color' => "Couleur de fond du footer",

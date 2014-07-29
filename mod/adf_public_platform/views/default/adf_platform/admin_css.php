@@ -14,4 +14,6 @@ textarea, .elgg-input-rawtext { width:100%; }
 #adf_public_platform-settings input { max-width:40%; }
 #adf_public_platform-settings label { font-size:90%; }
 
+.elgg-form fieldset { border:1px solid #999; padding:1ex; margin:2ex 0ex; }
+.elgg-form fieldset legend { padding:0 0.5ex; }
 
