@@ -24,8 +24,13 @@ $french = array(
 	'notification_messages:subject:deny' => "Bloqué (pas de notification)",
 	'notification_messages:settings:group_topic_post' => "Activer pour les réponses dans les forums",
 	'notification_messages:settings:comments' => "Commentaires",
+	'notification_messages:settings:messages' => "Messages",
 	'notification_messages:settings:comments:details' => "Si vous avez activé ce plugin, vous souhaitez probablement activer ce réglage, de manière à utiliser le même titre pour les commentaires que pour les nouvelles publications.",
 	'notification_messages:settings:generic_comment' => "Activer pour les commentaires génériques",
+	'notification_messages:settings:notify_user' => "Notifier également l'auteur des commentaires ?",
+	'notification_messages:settings:notify_user:details' => "Par défaut l'auteur d'un commentaire n'est pas notifié. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
+	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la configuration de comment_tracker.",
+	'notification_messages:settings:expert' => "Expert",
 	
 	// Notification subject
 	'notification_messages:objects:subject' => "[%s | %s] %s",

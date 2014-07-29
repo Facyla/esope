@@ -329,7 +329,7 @@ function adf_platform_pagesetup(){
 	if (elgg_get_viewtype() == 'default') {
 		global $CONFIG;
 		$context = elgg_get_context();
-		if (is_array($CONFIG->breadcrumbs)) {
+		if (isset($CONFIG->breadcrumbs) && is_array($CONFIG->breadcrumbs)) {
 			
 			/*
 			// Pour intervenir sur le dernier élément du fil d'Ariane

@@ -44,7 +44,7 @@ function notification_messages_init() {
 		elgg_unregister_plugin_hook_handler("action", "comments/add", "advanced_notifications_comment_action_hook");
 	}
 	// Handle generic comments notifications actions and notification
-	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook");
+	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook", 1000);
 	
 	// register a hook to add a new hook that allows adding attachments and other params
 	// Note : enabled by default because it is required by notifications messages
