@@ -312,6 +312,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
  */
 // Note : change is avoid to strip tags in sent message when html_email_handler is used
 function notification_messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
+	global $CONFIG;
 
 	// @todo remove globals
 	global $messagesendflag;
@@ -400,11 +401,16 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	} else {
 		$message_contents = strip_tags($body);
 	}
-	if (($recipient_guid != elgg_get_logged_in_user_guid()) && $notify) {
+	
+	// Allow cron override - This is only for simulation purpose
+	// As when using a real cron there is no one logged in so it should pass anyway
+	if ((($recipient_guid != elgg_get_logged_in_user_guid()) || elgg_in_context('cron')) && $notify) {
 		$recipient = get_user($recipient_guid);
 		$sender = get_user($sender_guid);
 		
-		$subject = elgg_echo('messages:email:subject');
+		//$subject = elgg_echo('messages:email:subject');
+		$excerpt = elgg_get_excerpt($message_contents, 20);
+		$subject = elgg_echo('notification_messages:email:subject', array($CONFIG->site->name, $sender->name, $excerpt));
 		$body = elgg_echo('messages:email:body', array(
 			$sender->name,
 			$message_contents,
@@ -413,15 +419,15 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 			elgg_get_site_url() . "messages/compose?send_to=" . $sender_guid
 		));
 		
-	// Trigger a hook to provide better integration with other plugins
-	$hook_subject = elgg_trigger_plugin_hook('notify:message:subject', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $subject);
-	// Failsafe backup if hook as returned empty content but not false (= stop)
-	if (!empty($hook_subject) && ($hook_subject !== false)) { $body = $hook_subject; }
+		// Trigger a hook to provide better integration with other plugins
+		$hook_subject = elgg_trigger_plugin_hook('notify:message:subject', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $subject);
+		// Failsafe backup if hook as returned empty content but not false (= stop)
+		if (!empty($hook_subject) && ($hook_subject !== false)) { $subject = $hook_subject; }
 	
-	// Trigger a hook to provide better integration with other plugins
-	$hook_body = elgg_trigger_plugin_hook('notify:message:message', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $body);
-	// Failsafe backup if hook as returned empty content but not false (= stop)
-	if (!empty($hook_body) && ($hook_body !== false)) { $body = $hook_body; }
+		// Trigger a hook to provide better integration with other plugins
+		$hook_body = elgg_trigger_plugin_hook('notify:message:message', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $body);
+		// Failsafe backup if hook as returned empty content but not false (= stop)
+		if (!empty($hook_body) && ($hook_body !== false)) { $body = $hook_body; }
 		
 		notify_user($recipient_guid, $sender_guid, $subject, $body);
 	}
