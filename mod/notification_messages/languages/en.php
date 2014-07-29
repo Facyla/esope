@@ -36,6 +36,8 @@ $english = array(
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(untitled)",
+	// Messages
+	'notification_messages:email:subject' => "[%s] Message from %s : %s",
 	
 	// Object:notifications hook control
 	'notification_messages:settings:object_notifications_hook' => "Enable the hook on object:notifications",

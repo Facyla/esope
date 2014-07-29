@@ -36,6 +36,8 @@ $french = array(
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(sans titre)",
+	// Messages
+	'notification_messages:email:subject' => "[%s] Message de %s : %s",
 	
 	
 	// Object:notifications hook control
