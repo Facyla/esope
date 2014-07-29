@@ -16,7 +16,7 @@ if (isset($vars['class'])) {
 }
 
 if (isset($vars['name']) && !isset($vars['id'])) {
-  $vars['id'] = $vars['name'];
+	$vars['id'] = $vars['name'];
 }
 
 $defaults = array(

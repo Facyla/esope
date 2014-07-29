@@ -20,7 +20,7 @@ function notification_messages_init() {
 		elgg_register_action("messages/send", "$action_path/send.php");
 	}
 	
-	// OBJECTS
+	// REGULAR OBJECTS
 	// Handle new (registered) objects notification subjects
 	elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
 	
@@ -33,7 +33,7 @@ function notification_messages_init() {
 			// Forum topic reply subject
 			elgg_unregister_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "advanced_notifications_discussion_reply_subject_hook");
 		}
-		// Handle forum topic replyu subject
+		// Handle forum topic reply subject
 		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notification_messages_reply_subject_hook");
 	}
 	
@@ -47,12 +47,10 @@ function notification_messages_init() {
 	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook");
 	
 	// register a hook to add a new hook that allows adding attachments and other params
-	// Note : enabled by default because it was previously embedded in html_email_handler, 
-	// but is required by notifications messages
+	// Note : enabled by default because it is required by notifications messages
 	if (elgg_get_plugin_setting("object_notifications_hook", "notification_messages") != "no"){
 		elgg_register_plugin_hook_handler('object:notifications', 'all', 'notification_messages_object_notifications_hook');
 	}
-	
 	
 }
 
@@ -260,6 +258,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 					if ($user instanceof ElggUser && !$user->isBanned()) {
 						if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user)
 						&& $object->access_id != ACCESS_PRIVATE) {
+							// Message content
 							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
 								'entity' => $object,
 								'to_entity' => $user,
@@ -268,6 +267,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 								$body = $string;
 							}
 							
+							// Message subject
 							// this is new, trigger a hook to make a custom subject
 							$new_subject = elgg_trigger_plugin_hook("notify:entity:subject", $object->getType(), array(
 								"entity" => $object,
@@ -282,9 +282,9 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 								'to_entity' => $user,
 								'method' => $method), null);
 							
+							// Notify the user
 							if ($body !== false) {
-								notify_user($user->guid, $object->container_guid, $subject, $body,
-									$options, array($method));
+								notify_user($user->guid, $object->container_guid, $subject, $body, $options, array($method));
 							}
 						}
 					}
