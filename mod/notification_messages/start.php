@@ -412,7 +412,17 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 			$sender->name,
 			elgg_get_site_url() . "messages/compose?send_to=" . $sender_guid
 		));
-
+		
+	// Trigger a hook to provide better integration with other plugins
+	$hook_subject = elgg_trigger_plugin_hook('notify:message:subject', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $subject);
+	// Failsafe backup if hook as returned empty content but not false (= stop)
+	if (!empty($hook_subject) && ($hook_subject !== false)) { $body = $hook_subject; }
+	
+	// Trigger a hook to provide better integration with other plugins
+	$hook_body = elgg_trigger_plugin_hook('notify:message:message', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $body);
+	// Failsafe backup if hook as returned empty content but not false (= stop)
+	if (!empty($hook_body) && ($hook_body !== false)) { $body = $hook_body; }
+		
 		notify_user($recipient_guid, $sender_guid, $subject, $body);
 	}
 
