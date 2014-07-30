@@ -19,33 +19,53 @@
 	top: 150px;
 	left: 0px;
 	max-width: 100%;
-	z-index:21;
+	z-index:9999;
 }
 
 #feedBackToggler {
 	float: left;
+	z-index: 10;
+	position: fixed;
 }
 
-#feedBackTogglerLink { float:left; position:relative; left:-1px; }
+#feedBackTogglerLink {
+	float:left; 
+	position:relative; 
+	background: #eee;
+	border: 1px outset;
+	border-radius: 0 3px 3px 0;
+	border-left: 0;
+	box-shadow: 0 0 3px 0 white;
+}
+
+#feedBackContentWrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: rgba(0,0,0,0.8);
+}
 
 #feedBackContent {
 	width: 500px;
 	min-width: 50%;
 	max-width: 80%;
-	display: none;
 	overflow: hidden;
-	float: left;
+	margin-left:auto;
+	margin-right:auto;
 	color: black;
+	margin-top: 5ex;
 	background-color: white;
 	/* Use default elgg module styles instead
 	border: solid #fff 2px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
 	*/
-	-webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
+	-moz-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
+	box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
 	padding:0 0 6px 0;
 }
 

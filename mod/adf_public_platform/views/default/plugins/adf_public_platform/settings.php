@@ -422,6 +422,9 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion )) . '</p>';
 			// Set default tools status
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tools_default') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[group_tools_default]', 'options_values' => $group_tools_default_opt, 'value' => $vars['entity']->group_tools_default )) . '</p>';
+			// Enable group top tab menu
+			// Usage: $group->customtab1 to 8 with URL::LinkTitle::TitleProperty syntax
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:topmenu') . ' </label> ' . elgg_view('input/dropdown', array( 'name' => 'params[groups_topmenu]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_topmenu )) . '</p>';
 			?>
 		</div>
 	<?php } ?>

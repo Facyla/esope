@@ -571,6 +571,28 @@ $fr = array(
 	'members_select:myself' => 'Moi-même',
 	'profile:field:percentage' => 'Pourcentage',
 	
+	// Menu top des groupes
+	'esope:groups:home' => "Présentation",
+	'adf_platform:settings:groups:topmenu' => "Activer les onglets dasn les groupes (menu supérieur)",
+	'adf_platform:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
+	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab2' => "Onglet configurable n°2 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab2' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab3' => "Onglet configurable n°3 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab3' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab4' => "Onglet configurable n°4 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab4' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab5' => "Onglet configurable n°5 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab5' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab6' => "Onglet configurable n°6 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab6' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab7' => "Onglet configurable n°7 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab7' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
+	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	
+	
 );
 
 add_translation('fr', $fr);

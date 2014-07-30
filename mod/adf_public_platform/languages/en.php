@@ -573,6 +573,27 @@ $en = array(
 	'members_select:myself' => 'Myself',
 	'profile:field:percentage' => 'Percentage',
 	
+	// Menu top des groupes
+	'esope:groups:home' => "Group home",
+	'adf_platform:settings:groups:topmenu' => "Enable group top menu",
+	'adf_platform:settings:groups:topmenu:help' => "This menu lets you add up to 8 custom tabs, by adding customtab1 to customtab8 to groups (easiest is to use profile_manager groups fields config).",
+	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab2' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab3' => "Custom tab n°3 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab3' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab4' => "Custom tab n°4 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab4' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab5' => "Custom tab n°5 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab5' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab6' => "Custom tab n°6 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab6' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab7' => "Custom tab n°7 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab7' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'groups:customtab8' => "Custom tab n°8 (URL::Tab title::Optional tooltip)",
+	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
+	
 );
 
 add_translation('en', $en);

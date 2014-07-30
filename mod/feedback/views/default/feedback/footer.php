@@ -32,8 +32,8 @@ $feedback_url = $vars['url'] . "action/feedback/submit_feedback"; //"?&__elgg_to
 $feedback_url = elgg_add_action_tokens_to_url($feedback_url);
 
 $progress_img = '<img src="' . $imgurl . 'ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
-$open_img = '<img src="' . $imgurl . 'slide-button-open.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
-$close_img = '<img src="' . $imgurl . 'slide-button-close.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$open_img = '<img src="' . $imgurl . 'slide-button-open.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$close_img = '<img src="' . $imgurl . 'slide-button-close.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
 
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview == 'yes') $memberview = true; else $memberview = false;
@@ -44,10 +44,11 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 	<div id="feedBackToggler">
 		<a id="feedBackTogglerLink" href="javascript:void(0)" onclick="FeedBack_Toggle();this.blur();">
 			<?php echo $open_img ?>
+			<div style="display:none"><?php echo $close_img ?></div>
 		</a>
 	</div>
 
-	<div id="feedBackContent" class="elgg-module elgg-module-info">
+	<div id="feedBackContentWrapper"><div id="feedBackContent" class="elgg-module elgg-module-info">
 		<div class="elgg-head">
 			<h3><?php echo elgg_echo('feedback:title'); ?></h3>
 		</div>
@@ -145,6 +146,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 			<input id="feedback_close_btn" name="<?php echo elgg_echo('close'); ?>" value="Close" type="button" class="elgg-button elgg-button-cancel" onclick="FeedBack_Toggle();" />
 		</div>
 	</div>
+	</div>
 
 	<div style="clear:both;"></div>
 
@@ -157,14 +159,14 @@ if ( elgg_is_logged_in() ) {
 	echo "$('#feedback_id').attr ('disabled', 'disabled');";
 }
 ?>
-$("#feedbackWrapper").width("50px");
+//$("#feedbackWrapper").width("50px");
 $('#feedbackClose').hide();
 var toggle_state = 0;
 
 function FeedBack_Toggle() {
 	if ( toggle_state ) {
 		toggle_state = 0;
-		$("#feedbackWrapper").width("50px");
+		//$("#feedbackWrapper").width("50px");
 		$("#feedBackTogglerLink").html('<?php echo $open_img?>');
 		$('#feedBackFormInputs').show();
 		$("#feedBackFormStatus").html("");
@@ -172,11 +174,11 @@ function FeedBack_Toggle() {
 		document.forms["feedBackForm"].reset();
 	} else {
 		toggle_state = 1;
-		$("#feedbackWrapper").width("100%");
+		//$("#feedbackWrapper").width("100%");
 		$("#feedBackTogglerLink").html('<?php echo $close_img?>');
 	}
 
-	$("#feedBackContent").toggle();
+	$("#feedBackContentWrapper").toggle();
 }
 
 function FeedBack_Send() {
