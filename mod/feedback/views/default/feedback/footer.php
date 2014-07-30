@@ -32,8 +32,8 @@ $feedback_url = $vars['url'] . "action/feedback/submit_feedback"; //"?&__elgg_to
 $feedback_url = elgg_add_action_tokens_to_url($feedback_url);
 
 $progress_img = '<img src="' . $imgurl . 'ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
-$open_img = '<img src="' . $imgurl . 'slide-button-open.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
-$close_img = '<img src="' . $imgurl . 'slide-button-close.gif" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$open_img = '<img src="' . $imgurl . 'slide-button-open.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
+$close_img = '<img src="' . $imgurl . 'slide-button-close.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
 
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview == 'yes') $memberview = true; else $memberview = false;
