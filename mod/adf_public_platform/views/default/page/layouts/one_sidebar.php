@@ -31,7 +31,7 @@ $nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
 <div class="<?php echo $class; ?>">
 	<?php
 	// Add tab menu for groups (check view for setting))
-	echo elgg_view('group/topmenu', array('entity' => $owner));
+	echo elgg_view('group/top_menu', array('entity' => $owner));
 	?>
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
 	<div class="elgg-sidebar">
