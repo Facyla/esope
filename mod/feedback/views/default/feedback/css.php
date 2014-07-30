@@ -26,7 +26,15 @@
 	float: left;
 }
 
-#feedBackTogglerLink { float:left; position:relative; left:-1px; }
+#feedBackTogglerLink {
+	float:left; 
+	position:relative; 
+	background: #eee;
+	border: 1px outset;
+	border-radius: 0 3px 3px 0;
+	border-left: 0;
+	box-shadow: 0 0 3px 0 white;
+}
 
 #feedBackContent {
 	width: 500px;
