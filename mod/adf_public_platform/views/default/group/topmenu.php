@@ -3,6 +3,9 @@
 $group = elgg_get_page_owner_entity();
 if (elgg_instanceof($group, 'group')) {
 	
+	// Add per-group custom CSS
+	if (!empty($group->customcss)) { echo '<style>' . $group->customcss . '</style>'; }
+	
 	// Can be used to add a custom group tab menu
 	if (elgg_get_plugin_setting('groups_topmenu', 'adf_public_platform') == 'yes') {
 		
@@ -43,6 +46,7 @@ if (elgg_instanceof($group, 'group')) {
 		echo '<div class="group-top-menu">';
 		echo elgg_view_menu('group_filter', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 		echo '</div>';
+		
 	}
 }
 
