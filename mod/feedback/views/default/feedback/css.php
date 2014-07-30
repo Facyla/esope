@@ -44,7 +44,7 @@
 	top: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(0,0,0,0.8);
 }
 
 #feedBackContent {
@@ -59,13 +59,13 @@
 	background-color: white;
 	/* Use default elgg module styles instead
 	border: solid #fff 2px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
 	*/
-	-webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
+	-moz-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
+	box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
 	padding:0 0 6px 0;
 }
 
