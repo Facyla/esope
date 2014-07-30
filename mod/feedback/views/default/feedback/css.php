@@ -24,6 +24,8 @@
 
 #feedBackToggler {
 	float: left;
+	z-index: 10;
+	position: fixed;
 }
 
 #feedBackTogglerLink {
@@ -36,14 +38,24 @@
 	box-shadow: 0 0 3px 0 white;
 }
 
+#feedBackContentWrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: rgba(0,0,0,0.5);
+}
+
 #feedBackContent {
 	width: 500px;
 	min-width: 50%;
 	max-width: 80%;
-	display: none;
 	overflow: hidden;
-	float: left;
+	margin-left:auto;
+	margin-right:auto;
 	color: black;
+	margin-top: 5ex;
 	background-color: white;
 	/* Use default elgg module styles instead
 	border: solid #fff 2px;
