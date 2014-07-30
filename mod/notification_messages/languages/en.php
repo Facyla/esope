@@ -24,13 +24,20 @@ $english = array(
 	'notification_messages:subject:deny' => "Blocked (no notification at all)",
 	'notification_messages:settings:group_topic_post' => "Enable for group topic replies",
 	'notification_messages:settings:comments' => "Comments",
+	'notification_messages:settings:messages' => "Messages",
 	'notification_messages:settings:comments:details' => "If you have enabled this plugin, you probably wish to enable this setting, so all comments will use the same subject as the new content.",
 	'notification_messages:settings:generic_comment' => "Enable for all generic comments",
+	'notification_messages:settings:notify_user' => "Notify also comment author ?",
+	'notification_messages:settings:notify_user:details' => "By default, the comment author is not notified. You can change thios behaviour, which can be particularly useful when using email reply.",
+	'notification_messages:settings:notify_user:comment_tracker' => "When comment_tracker plugin is enabled, this setting is not available and should be set directly in comment_tracker plugin settings.",
+	'notification_messages:settings:expert' => "Expert",
 	
 	// Notification subject
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(untitled)",
+	// Messages
+	'notification_messages:email:subject' => "[%s] Message from %s : %s",
 	
 	// Object:notifications hook control
 	'notification_messages:settings:object_notifications_hook' => "Enable the hook on object:notifications",

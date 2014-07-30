@@ -65,7 +65,8 @@ function rssimport_blog_import($item, $rssimport){
 	$blog = new ElggBlog();
 	$blog->subtype = "blog";
   $blog->excerpt = elgg_get_excerpt($item->get_content());
-	$blog->owner_guid = $rssimport->owner_guid;
+	//$blog->owner_guid = $rssimport->owner_guid;
+	$blog->owner_guid = rssimport_get_owner_guid($rssimport);
 	$blog->container_guid = $rssimport->container_guid;
 	$blog->access_id = $rssimport->defaultaccess;
 	$blog->title = $item->get_title();
@@ -73,6 +74,9 @@ function rssimport_blog_import($item, $rssimport){
 	//	build content of blog post
 	$author = $item->get_author();
 	$blogbody = $item->get_content();
+	// Filter content
+	$parse_permalink = parse_url($item->get_permalink());
+	$blogbody = rssimport_filter_content($blogbody, $parse_permalink['host']);
 	$blogbody .= "<br><br>";
 	$blogbody .= "<hr><br>";
 	$blogbody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -81,6 +85,8 @@ function rssimport_blog_import($item, $rssimport){
 	if(is_object($author)){
 		$blogbody .= elgg_echo('rssimport:by') . ": " . $author->get_name() . "<br>";
 	}
+	// ESOPE : add real data source, if defined
+	$blogbody = rssimport_add_source($item);
 	
 	$blogbody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
 	$blog->description = $blogbody;
@@ -125,11 +131,20 @@ function rssimport_bookmarks_import($item, $rssimport){
 		
 		$bookmark = new ElggObject;
 		$bookmark->subtype = "bookmarks";
-		$bookmark->owner_guid = $rssimport->owner_guid;
+		//$bookmark->owner_guid = $rssimport->owner_guid;
+		$bookmark->owner_guid = rssimport_get_owner_guid($rssimport);
 		$bookmark->container_guid = $rssimport->container_guid;
 		$bookmark->title = $item->get_title();
 		$bookmark->address = $item->get_permalink();
-		$bookmark->description = $item->get_description();
+		//$bookmark->description = $item->get_description();
+		$bookmarkbody = $item->get_description();
+		// Filter content
+		$parse_permalink = parse_url($item->get_permalink());
+		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_permalink['host']);
+		// ESOPE : add real data source, if defined
+		$bookmarkbody .= rssimport_add_source($item);
+		$bookmark->description = $bookmarkbody;
+		
 		$bookmark->access_id = $rssimport->defaultaccess;
 		
 		// merge default tags with any from the feed
@@ -237,6 +252,7 @@ function rssimport_create_comparison_token($item){
  * @return boolean 
  */
 function rssimport_content_importable($rssimport) {
+  /* ESOPE : Replaced by function that tells if import is allowed for each tool
   // this will be called multiple times, remember which plugins are enabled
   static $blog_enabled;
   static $bookmarks_enabled;
@@ -252,6 +268,10 @@ function rssimport_content_importable($rssimport) {
   if ($pages_enabled === NULL) {
     $pages_enabled = elgg_is_active_plugin('pages');
   }
+  */
+  $blog_enabled = rssimport_tool_enabled('blog');
+  $bookmarks_enabled = rssimport_tool_enabled('bookmarks');
+  $pages_enabled = rssimport_tool_enabled('pages');
   
   // only import if the receiving content type's plugin is active
   if (!($rssimport->import_into == 'blog' && $blog_enabled)
@@ -481,7 +501,8 @@ function rssimport_page_import($item, $rssimport){
 		$parent = new ElggObject();
 		$parent->subtype = 'page_top';
 		$parent->container_guid = $rssimport->container_guid;
-		$parent->owner_guid = $rssimport->owner_guid;
+		//$parent->owner_guid = $rssimport->owner_guid;
+		$parent->owner_guid = rssimport_get_owner_guid($rssimport);
 		$parent->access_id = $rssimport->defaultaccess;
 		$parent->parent_guid = 0;
 		$parent->write_access_id = ACCESS_PRIVATE;
@@ -508,7 +529,8 @@ function rssimport_page_import($item, $rssimport){
 	$page = new ElggObject();
 	$page->subtype = 'page';
 	$page->container_guid = $rssimport->container_guid;
-	$page->owner_guid = $rssimport->owner_guid;
+	//$page->owner_guid = $rssimport->owner_guid;
+	$page->owner_guid = rssimport_get_owner_guid($rssimport);
 	$page->access_id = $rssimport->defaultaccess;
 	$page->parent_guid = $parent_guid;
 	$page->write_access_id = ACCESS_PRIVATE;
@@ -516,13 +538,20 @@ function rssimport_page_import($item, $rssimport){
 	
 	$author = $item->get_author();
 	$pagebody = $item->get_content();
+	// Filter content
+	$parse_permalink = parse_url($item->get_permalink());
+	$pagebody = rssimport_filter_content($pagebody, $parse_permalink['host']);
 	$pagebody .= "<br><br>";
 	$pagebody .= "<hr><br>";
 	$pagebody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
 	if(is_object($author)){
 		$pagebody .= elgg_echo('rssimport:by') . ": " . $author->get_name() . "<br>";
 	}
-	$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
+	// ESOPE : add real data source, if defined
+	$pagebody = rssimport_add_source($item);
+	//$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
+	$date_format = elgg_echo('rssimport:date:format');
+	$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date($date_format);
 	
 	$page->description = $pagebody;
 	
@@ -601,3 +630,113 @@ function rssimport_prevent_notification($hook, $type, $return, $params) {
     return TRUE;
   }
 }
+
+
+
+/* ESOPE IMPROVEMENTS */
+
+// Tells if rssimport is enabled for a given tool (finer control over available import tools)
+// Use active plugin + rssimport admin config
+function rssimport_tool_enabled($tool) {
+	global ${'rss_import_' . $tool . '_enabled'};
+	// Activation relies on : plugin activated + allowed in plugin settings
+	// use static vars so we only have to call is_plugin_enabled once
+	if (!isset(${'rss_import_' . $tool . '_enabled'})) {
+		if (elgg_is_active_plugin($tool) && (elgg_get_plugin_setting($tool . '_enable', 'rssimport') == 'yes')) {
+			${'rss_import_' . $tool . '_enabled'} = true;
+		} else {
+			${'rss_import_' . $tool . '_enabled'} = false;
+		}
+	}
+	return ${'rss_import_' . $tool . '_enabled'};
+}
+
+// Sets the desired owner for the imported content
+// Defaults to container (=> group if in a group, user otherwise)
+function rssimport_get_owner_guid($rssimport) {
+	if (!elgg_instanceof($rssimport, 'object')) { return 0; }
+	$ownership = elgg_get_plugin_setting('ownership', 'rssimport');
+	switch($ownership) {
+		case 'owner':
+			return $rssimport->owner_guid;
+		case 'container':
+		default:
+			return $rssimport->container_guid;
+	}
+}
+
+
+// Returns a list of links from an importable item
+// Liste de liens vers la ou les sources de l'article (URL originelle généralement)
+function rssimport_get_source($item) {
+	// Source originelle du flux, si définie
+	//$source = $item->data['child']['']['source'][0]['attribs']['']['url']; // Plus compact si 1 seul élément
+	$return = '';
+	$items_sources = $item->get_item_tags('', 'source');
+	if ($items_sources) {
+		foreach ($items_sources as $source) {
+			$return[] .= '<a href="' . $source['attribs']['']['url'] . '">' . $source['data'] . '</a>';
+		}
+		return implode(', ', $return);
+	}
+	return false;
+}
+
+// Convenient function to add the source if it is defined
+function rssimport_add_source($item) {
+	$item_source = rssimport_get_source($item);
+	if ($item_source) {
+		return '<p class="rss-source">' . elgg_echo('rssimport:source') . '&nbsp;: '. $item_source . '<p>';
+	}
+	return '';
+}
+
+
+// Returns filtered content depending on source
+// $content : content to be filtered
+// $filter : filter name or full domain name of imported RSS feed
+function rssimport_filter_content($content, $filter = 'auto') {
+	switch($filter) {
+		case 'diigo':
+		case 'www.diigo.com':
+		case 'groups.diigo.com':
+			//error_log("DEBUG rssimport lib : DIIGO");
+			/* Process pour Diigo :
+			 * Notes : on n'a pas toujours la liste ni l'auteur, d'où découpe un peu complexe..
+			 1. on coupe sur le séparateur des tags  // <p><strong>Tags:</strong>
+			 2. pour avoir le contenu, partie 0, on enlève le début et les autres parties inutiles (sur Diigo on n'est censé avoir qu'un paragraphe)
+				 // <p><strong>Comments:</strong>  // <ul><li>  // </li></ul>  // </p>
+			 3. pour avoir les tags, partie 1, on coupe au premier <p>, séparateur de fin des tags  // </p>
+			 4. on enlève toutes les balises HTML de ce qui reste (partie 0), après avoir préparé et nettoyé la chaîne
+			 5. on explode sur ',' pour avoir un array de tags
+			*/
+			$parts = explode('<p><strong>Tags:</strong>', $content);
+			$content = str_replace(array('<p><strong>Comments:</strong>', '<ul><li>', '</li></ul>', '</p>'), '', $parts[0]);
+			/*
+			if ($extract_tags) {
+				//error_log("DEBUG rssimport lib : part1 = " . print_r($parts, true));
+				$tags_parts = explode('</p>', $parts[1]);
+				// On remplace les fins de liens par des marqueurs pour couper de manière certaine chacun des tags
+				// + un peu de nettoyage
+				$tags_string = str_replace(array('</a>', "\t", "\n", "\r"), array(',', '', '', ''), $tags_parts[0]);
+				// On enlève les restes de balises (<a> non fermés)
+				$tags_string = strip_tags($tags_string);
+				// On enlève tabulations et retours à la ligne
+				$tags_string = str_replace(array('\t', '\n', '\r'), '', $tags_string);
+				$tags = explode(',', $tags_string);
+				$tags = array_map("trim", $tags);
+				//error_log("DEBUG rssimport lib : TAGS = " . implode(',', $tags));
+			}
+			*/
+			break;
+		case 'scoop.it':
+		case 'www.scoop.it':
+			break;
+		case 'auto':
+		default:
+			// nothing yet..
+	}
+	return $content;
+}
+
+

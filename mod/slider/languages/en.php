@@ -21,5 +21,5 @@ $en = array(
 	
 );
 
-add_translation("en",$english);
+add_translation("en",$en);
 

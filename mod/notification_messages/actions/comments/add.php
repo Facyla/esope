@@ -32,8 +32,21 @@ if (!$annotation) {
 }
 
 // notify if poster wasn't owner
+$notify = false;
 if ($entity->owner_guid != $user->guid) {
-	
+	$notify = true;
+} else {
+	// Setting is synchronized between with comment_tracker's
+	if (elgg_is_active_plugin('comment_tracker')) {
+		$notify_user = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
+	} else {
+		$notify_user = elgg_get_plugin_setting('notify_owner', 'notification_messages');
+	}
+	if ($notify_user == 'yes') { $notify = true; }
+}
+
+
+if ($notify) {
 	// Build more explicit subject
 	$default_subject = elgg_echo('generic_comment:email:subject');
 	$subject = notification_messages_build_subject($entity);
@@ -45,8 +58,12 @@ if ($entity->owner_guid != $user->guid) {
 				$comment_text,
 				$entity->getURL(),
 				$user->name,
-				$user->getURL()
+				$user->getURL(),
 			));
+	// Trigger a hook to provide better integration with other plugins
+	$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+	// Failsafe backup if hook as returned empty content but not false (= stop)
+	if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 	
 	// Send notifications
 	notify_user($entity->owner_guid, $user->guid, $subject, $message);
@@ -59,3 +76,4 @@ add_to_river('river/annotation/generic_comment/create', 'comment', $user->guid, 
 
 // Forward to the page the action occurred on
 forward(REFERER);
+

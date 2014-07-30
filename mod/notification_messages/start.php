@@ -20,7 +20,7 @@ function notification_messages_init() {
 		elgg_register_action("messages/send", "$action_path/send.php");
 	}
 	
-	// OBJECTS
+	// REGULAR OBJECTS
 	// Handle new (registered) objects notification subjects
 	elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
 	
@@ -33,7 +33,7 @@ function notification_messages_init() {
 			// Forum topic reply subject
 			elgg_unregister_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "advanced_notifications_discussion_reply_subject_hook");
 		}
-		// Handle forum topic replyu subject
+		// Handle forum topic reply subject
 		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notification_messages_reply_subject_hook");
 	}
 	
@@ -44,15 +44,13 @@ function notification_messages_init() {
 		elgg_unregister_plugin_hook_handler("action", "comments/add", "advanced_notifications_comment_action_hook");
 	}
 	// Handle generic comments notifications actions and notification
-	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook");
+	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook", 1000);
 	
 	// register a hook to add a new hook that allows adding attachments and other params
-	// Note : enabled by default because it was previously embedded in html_email_handler, 
-	// but is required by notifications messages
+	// Note : enabled by default because it is required by notifications messages
 	if (elgg_get_plugin_setting("object_notifications_hook", "notification_messages") != "no"){
 		elgg_register_plugin_hook_handler('object:notifications', 'all', 'notification_messages_object_notifications_hook');
 	}
-	
 	
 }
 
@@ -260,6 +258,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 					if ($user instanceof ElggUser && !$user->isBanned()) {
 						if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user)
 						&& $object->access_id != ACCESS_PRIVATE) {
+							// Message content
 							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
 								'entity' => $object,
 								'to_entity' => $user,
@@ -268,6 +267,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 								$body = $string;
 							}
 							
+							// Message subject
 							// this is new, trigger a hook to make a custom subject
 							$new_subject = elgg_trigger_plugin_hook("notify:entity:subject", $object->getType(), array(
 								"entity" => $object,
@@ -282,9 +282,9 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 								'to_entity' => $user,
 								'method' => $method), null);
 							
+							// Notify the user
 							if ($body !== false) {
-								notify_user($user->guid, $object->container_guid, $subject, $body,
-									$options, array($method));
+								notify_user($user->guid, $object->container_guid, $subject, $body, $options, array($method));
 							}
 						}
 					}
@@ -312,6 +312,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
  */
 // Note : change is avoid to strip tags in sent message when html_email_handler is used
 function notification_messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
+	global $CONFIG;
 
 	// @todo remove globals
 	global $messagesendflag;
@@ -400,11 +401,17 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	} else {
 		$message_contents = strip_tags($body);
 	}
-	if (($recipient_guid != elgg_get_logged_in_user_guid()) && $notify) {
+	
+	// Allow cron override - This is only for simulation purpose
+	// As when using a real cron there is no one logged in so it should pass anyway
+	if ((($recipient_guid != elgg_get_logged_in_user_guid()) || elgg_in_context('cron')) && $notify) {
 		$recipient = get_user($recipient_guid);
 		$sender = get_user($sender_guid);
 		
-		$subject = elgg_echo('messages:email:subject');
+		//$subject = elgg_echo('messages:email:subject');
+		$excerpt = $subject;
+		if (strlen($excerpt) > 12) $excerpt = elgg_get_excerpt($excerpt, 12) . '..';
+		$subject = elgg_echo('notification_messages:email:subject', array($CONFIG->site->name, $sender->name, $excerpt));
 		$body = elgg_echo('messages:email:body', array(
 			$sender->name,
 			$message_contents,
@@ -412,7 +419,17 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 			$sender->name,
 			elgg_get_site_url() . "messages/compose?send_to=" . $sender_guid
 		));
-
+		
+		// Trigger a hook to provide better integration with other plugins
+		$hook_subject = elgg_trigger_plugin_hook('notify:message:subject', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $subject);
+		// Failsafe backup if hook as returned empty content but not false (= stop)
+		if (!empty($hook_subject) && ($hook_subject !== false)) { $subject = $hook_subject; }
+	
+		// Trigger a hook to provide better integration with other plugins
+		$hook_body = elgg_trigger_plugin_hook('notify:message:message', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $body);
+		// Failsafe backup if hook as returned empty content but not false (= stop)
+		if (!empty($hook_body) && ($hook_body !== false)) { $body = $hook_body; }
+		
 		notify_user($recipient_guid, $sender_guid, $subject, $body);
 	}
 

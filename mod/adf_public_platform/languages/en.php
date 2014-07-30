@@ -255,7 +255,7 @@ $en = array(
 	'adf_platform:headertitle' => "Site title (clickable, in header)",
 	'adf_platform:headertitle:help' => "To increase size of caracters, wrap them with span. Use span with 'minuscule' class to lowercase&nbsp;: &lt;span&gt;T&lt;/span&gt;itle.&lt;span class=\"minuscule\"&gt;en&lt;/span&gt;",
 	'adf_platform:header:content' => "Custom header code (free HTML). Reset to initial configuration by replacing content by \"RAZ\" (in HTML mode).",
-	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $vars['url'] . '/mod/adf_public_platform/img/logo.gif" alt="Site logo"  /></a></div>',
+	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $CONFIG->url . '/mod/adf_public_platform/img/logo.gif" alt="Site logo"  /></a></div>',
 	'adf_platform:header:height' => "Height of header banner (use same value as header background image height - or lower)",
 	'adf_platform:header:background' => "Background image URL (display under the top level menu)",
 	'adf_platform:footer:color' => "Footer background color",
