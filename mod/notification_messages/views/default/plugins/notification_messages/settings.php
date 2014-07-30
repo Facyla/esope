@@ -57,7 +57,7 @@ echo "<fieldset>";
 		// Synchronize setting with comment tracker's and block editing
 		$notify_user = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
 		$plugin->notify_user = $notify_user;
-		echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notify_user]", "options_values" => $noyes_options, "value" => $plugin->notify_user, 'disabled' => 'disabled')) . '</label>';
+		echo '&nbsp;: ' . $noyes_options[$plugin->notify_user] . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
 		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_user:comment_tracker") . "</strong></div>";
 	} else {
