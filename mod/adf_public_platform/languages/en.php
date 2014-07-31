@@ -595,6 +595,9 @@ $en = array(
 	'groups:customtab8' => "Custom tab n°8 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
+	'esope:bookmarks:container' => "Publish in...",
+	'esope:container:option:own' => "%s (personnel)",
+	
 );
 
 add_translation('en', $en);

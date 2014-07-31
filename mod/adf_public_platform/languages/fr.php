@@ -593,6 +593,8 @@ $fr = array(
 	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	
+	'esope:bookmarks:container' => "Publier dans...",
+	'esope:container:option:own' => "%s (personnel)",
 	
 );
 
