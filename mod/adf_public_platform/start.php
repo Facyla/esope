@@ -1391,7 +1391,7 @@ function esope_get_users_from_setting($setting) {
 function esope_get_meta_values($meta_name) {
 	$meta_opt = array();
 	$metadatas = elgg_get_metadata(array('metadata_names' => $meta_name));
-	if ($metadata) {
+	if ($metadatas) {
 		foreach($metadatas as $meta) {
 			if (!in_array($meta->value, $meta_opt)) { $meta_opt[] = $meta->value; }
 		}
