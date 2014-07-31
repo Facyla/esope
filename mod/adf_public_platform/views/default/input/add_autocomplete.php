@@ -30,7 +30,7 @@ if (!empty($vars['selector'])) {
 // Main JS lib - used by both main methods
 elgg_load_js('jquery.ui.autocomplete.html');
 
-if ($vars['autocomplete-data'])) {
+if ($vars['autocomplete-data']) {
 	// MODE 1 - Fixed list autocomplete
 	// Autocomplete list looks like : [ "Custom", "Tag", "Auto", "Completion" ]
 	echo '<script type="text/javascript">
