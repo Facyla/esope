@@ -760,6 +760,8 @@ if (elgg_is_active_plugin('profile_manager')) {
 	$group_options = array("output_as_tags" => true, "admin_only" => true);
 	// Select with multiple option (displayed as a block, not a dropdown)
 	// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
+	// Plaintext - useful for CSS or raw HTML/JS code
+	add_custom_field_type("custom_group_field_types", 'plaintext', elgg_echo('profile:field:plaintext'), $group_options);
 	// Group profile types selector (do smthg with selected members profile types)
 	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('profile:field:group_profiletypes'), $group_options);
 	// Color picker

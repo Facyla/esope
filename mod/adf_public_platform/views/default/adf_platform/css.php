@@ -692,9 +692,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 /* Group topmenu */
-.elgg-menu-group-filter { background-color: <?php echo $titlecolor; ?>; padding: 0 1ex; border-radius: 10px 10px 0 0; }
-.elgg-menu-group-filter li a { color: white; opacity:0.8; padding: 1ex; }
-.elgg-menu-group-filter li a:hover, .elgg-menu-group-filter li a:active, .elgg-menu-group-filter li a:focus, .elgg-menu-group-filter li.elgg-state-selected a { text-decoration:none; opacity:1; }
+.elgg-menu-group-topmenu { background-color: <?php echo $titlecolor; ?>; padding: 0 1ex; border-radius: 10px 10px 0 0; }
+.elgg-menu-group-topmenu li a { color: white; opacity:0.8; padding: 1ex; }
+.elgg-menu-group-topmenu li a:hover, .elgg-menu-group-topmenu li a:active, .elgg-menu-group-topmenu li a:focus, .elgg-menu-group-topmenu li.elgg-state-selected a { text-decoration:none; opacity:1; }
 
 
 <?php if (!$fixedwidth) { ?>

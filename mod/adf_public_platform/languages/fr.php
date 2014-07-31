@@ -564,6 +564,7 @@ $fr = array(
 	'newsletter:embed:subtype' => "Type de publication",
 	
 	// Nouveaux champs
+	'profile:field:plaintext' => 'Texte (sans éditeur)',
 	'profile:field:group_profiletypes' => 'Types des groupes',
 	'profile:field:colors' => 'Couleur (CSS)',
 	'profile:field:groups_select' => 'Sélecteur de groupe',
@@ -573,7 +574,7 @@ $fr = array(
 	
 	// Menu top des groupes
 	'esope:groups:home' => "Présentation",
-	'adf_platform:settings:groups:topmenu' => "Activer les onglets dasn les groupes (menu supérieur)",
+	'adf_platform:settings:groups:topmenu' => "Activer les onglets dans les groupes (menu supérieur)",
 	'adf_platform:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",

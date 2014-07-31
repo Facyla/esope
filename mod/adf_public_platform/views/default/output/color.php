@@ -14,6 +14,6 @@ $barstyle = (isset($vars['barstyle'])) ? $vars['barstyle'] : "width:100%; backgr
 ?>
 <span style="<?php echo $position; ?>">
 	<div style="<?php echo $wrapperstyle; ?> width:<?php echo $width; ?>;">
-		<div style="position:relative; left: 0; top:0; height:100%; <?php echo $barstyle; ?>">
+		<div style="position:relative; left: 0; top:0; height:100%; <?php echo $barstyle; ?>"></div>
 	</div>
 </span>
