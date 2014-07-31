@@ -24,7 +24,7 @@ if (!empty($vars['selector'])) {
 } else if (!empty($vars['id'])) {
 	$selector = "#" . $vars['id'];
 } else if (!empty($vars['name'])) {
-	$selector = 'input[name="' . $vars['name'] . '"]';
+	$selector = '"input[name=\'' . $vars['name'] . '\']"';
 }
 
 // Main JS lib - used by both main methods
