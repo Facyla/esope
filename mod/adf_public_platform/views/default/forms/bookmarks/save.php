@@ -14,14 +14,20 @@ $access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 $container_guid = elgg_extract('container_guid', $vars);
 $guid = elgg_extract('guid', $vars, null);
 $shares = elgg_extract('shares', $vars, array());
+$place = get_input('place');
 
+// Allow to change container (bookmarklet use)
+if (!$guid && ($place == 'yes')) {
+	?>
+	<div>
+		<label><?php echo elgg_echo('esope:bookmarks:container'); ?></label><br />
+		<?php echo elgg_view('input/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'scope' => 'member', 'add_owner' => true)); ?>
+	</div>
+	<?php
+} else {
+	echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+}
 ?>
-<div>
-	<label><?php echo elgg_echo('esope:bookmarks:container'); ?></label><br />
-	<?php echo elgg_view('input/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'scope' => 'member', 'add_owner' => true)); ?>
-</div>
-
-
 <div>
 	<label><?php echo elgg_echo('title'); ?></label><br />
 	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?>
@@ -52,8 +58,6 @@ if ($categories) {
 </div>
 <div class="elgg-foot">
 <?php
-
-//echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
 
 if ($guid) {
 	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));

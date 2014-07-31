@@ -25,7 +25,7 @@ $img = elgg_view('output/img', array(
 	'alt' => $title,
 ));
 // Note : keep default container so we can send directly to a group, but allow to change in the form
-$bookmarklet = '<a href="javascript:location.href=\'' . $url . 'bookmarks/add/' . $guid . '?address=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection())">' . $img . '</a>';
+$bookmarklet = '<a href="javascript:location.href=\'' . $url . 'bookmarks/add/' . $guid . '?address=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&place=yes&description=\'+encodeURIComponent(document.getSelection())">' . $img . '</a>';
 //$bookmarklet = '<a href="javascript:location.href=\'' . $url . 'bookmarks/add?address=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection())">' . $img . '</a>';
 
 ?>
