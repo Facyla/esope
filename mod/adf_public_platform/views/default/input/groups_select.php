@@ -1,7 +1,9 @@
 <?php
+// Select a group, or none
+
 $content ='';
 $scope = $vars["scope"]; // default = all, member
-if (!($vars["entity"] instanceof ElggGroup)) { $scope = 'all'; }
+if (!elgg_instanceof($vars["entity"], 'group')) { $scope = 'all'; }
 
 switch($scope) {
 	case 'member':
@@ -29,6 +31,11 @@ if (isset($vars['value'])) {
 	if ($current = get_entity($vars['value'])) {
 		$content .= '<option selected="selected" value="' . $vars['value'] . '">' . elgg_echo('esope:input:donotchange', array($current->name)) .'</option>';
 	}
+}
+// Add current value (= don't change option)
+if ($vars['add_owner']) {
+	$own = elgg_get_logged_in_user_entity();
+	$content .= '<option value="' . $own->guid . '">' .  elgg_echo('esope:container:option:own', array($own->name)) .'</option>';
 }
 // Add container group option
 if ($vars["entity"] instanceof ElggGroup) {

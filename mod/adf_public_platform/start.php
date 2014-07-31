@@ -979,6 +979,7 @@ function esope_esearch($params = array()) {
 	//access_show_hidden_entities(true);
 
 	// Recherche par nom / username / titre / description, selon les cas
+	// @TODO ajouter par tag
 	if ($q) {
 		switch($type) {
 			case 'user':
@@ -1384,6 +1385,20 @@ function esope_get_users_from_setting($setting) {
 		}
 	}
 	return $users;
+}
+
+
+// Return distinct metadata values for a given metadata name
+// @TODO : we could get it more quickly with a direct SQL query
+function esope_get_meta_values($meta_name) {
+	$meta_opt = array();
+	$metadatas = elgg_get_metadata(array('metadata_names' => $meta_name));
+	if ($metadatas) {
+		foreach($metadatas as $meta) {
+			if (!in_array($meta->value, $meta_opt)) { $meta_opt[] = $meta->value; }
+		}
+	}
+	return $meta_opt;
 }
 
 

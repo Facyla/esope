@@ -31,15 +31,15 @@ $french = array(
 Retrouvez votre publication via :
 %5$s
 
-ou consultez le profil de  %2$s\'s via :
+ou consultez le profil de  %2$s via :
 %6$s
 
 Merci,
 %4$s
 ',
-  'likes:delete:confirm' => "Etes-vous sûr(e) de vouloir annuler votre appréciation ?",
+	'likes:delete:confirm' => "Etes-vous sûr(e) de vouloir annuler votre appréciation ?",
 
 );
-	
+
 
 add_translation("fr", $french);

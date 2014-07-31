@@ -1,7 +1,0 @@
-Change in lib/functions.php : 
-	added in digest_process function :
-		// Make sending process safer by disabling max_execution_time (avoids breaks if set too low)
-		set_time_limit(0);
-	see PR for details : https://github.com/ColdTrick/digest/pull/8
-
-
