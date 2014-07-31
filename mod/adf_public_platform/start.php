@@ -979,6 +979,7 @@ function esope_esearch($params = array()) {
 	//access_show_hidden_entities(true);
 
 	// Recherche par nom / username / titre / description, selon les cas
+	// @TODO ajouter par tag
 	if ($q) {
 		switch($type) {
 			case 'user':
