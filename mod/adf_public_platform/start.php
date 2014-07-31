@@ -1388,6 +1388,7 @@ function esope_get_users_from_setting($setting) {
 
 
 // Return distinct metadata values for a given metadata name
+// @TODO : we could get it more quickly with a direct SQL query
 function esope_get_meta_values($meta_name) {
 	$meta_opt = array();
 	$metadatas = elgg_get_metadata(array('metadata_names' => $meta_name));
