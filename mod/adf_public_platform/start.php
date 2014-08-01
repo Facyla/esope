@@ -1185,6 +1185,7 @@ if (elgg_is_active_plugin('file_tools')) {
 	// Recursive function that lists folders and their content
 	// bool $view_files : display folder files
 	function esope_view_folder_content($folder, $view_files = true) {
+		global $CONFIG;
 		$content = '';
 		$folder_content = '';
 		$folder_description = '';
