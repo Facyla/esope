@@ -133,5 +133,5 @@ if ($cmspage->save()) {
 
 elgg_set_ignore_access(false);
 // Forward back to the page
- forward("cmspages/$pagetype");
+ forward("cmspages?pagetype=$pagetype");
 
