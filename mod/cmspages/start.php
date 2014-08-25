@@ -21,7 +21,7 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 
 // Register actions
 global $CONFIG;
-$actions_path = elgg_get_plugins_path() . 'cmspages/actions/';
+$actions_path = elgg_get_plugins_path() . 'cmspages/actions/cmspages/';
 elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
 elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
 
@@ -85,7 +85,8 @@ function cmspages_pagesetup() {
 	if ( (elgg_in_context('admin') || elgg_is_admin_logged_in())
 		|| ((elgg_in_context('cmspages_admin')) && in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))))
 		) {
-		$item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/'); elgg_register_menu_item('topbar', $item);
+		$item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/');
+		elgg_register_menu_item('topbar', $item);
 	}
 	return true;
 }
@@ -94,9 +95,9 @@ function cmspages_pagesetup() {
 function cmspages_permissions_check($hook, $type, $returnval, $params) {
 	// Handle only cmspages !!
 	if (elgg_instanceof($params['entity'], 'object', 'cmspage')) {
-		if (elgg_in_context('admin') && elgg_is_admin_logged_in()) return true;
-		if (elgg_in_context('localmultisite'))	return true;
-		if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) ) return true;
+		if (elgg_in_context('admin') && elgg_is_admin_logged_in()) { return true; }
+		if (elgg_in_context('localmultisite')) { return true; }
+		if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) ) { return true; }
 		// Add a hook for special CMS pages edition rules - let's other plugins define an extended set of editors
 		// based on a custom or permission rules
 		return elgg_trigger_plugin_hook('cmspages:edit', 'cmspage', $params, $returnval);
@@ -339,4 +340,5 @@ function cmspages_public_pages($hook, $type, $return_value, $params) {
 	
 	return $return_value;
 }
+
 
