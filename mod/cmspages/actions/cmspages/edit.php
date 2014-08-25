@@ -74,9 +74,8 @@ $cmspage = NULL;
 if (strlen($pagetype)>0) {
 	//$cmspages = get_entities_from_metadata('pagetype', $pagetype, "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
 	$options = array(
-			'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage',
+			'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1
 			//'owner_guid' => 0, 'site_guid' => 0, 
-			'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false,
 		);
 	$cmspages = elgg_get_entities_from_metadata($options);
 	$cmspage = $cmspages[0];
