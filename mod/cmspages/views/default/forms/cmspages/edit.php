@@ -132,16 +132,17 @@ if ($display_form) {
 		$form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
 		
 			// Contenu du bloc / de la page
-			$form_body .= '<p><label>';
+			$form_body .= '<label for="cmspage_content">';
 			if (in_array($content_type, array('rawhtml'))) {
-				$form_body .= elgg_echo('cmspages:content:rawhtml') . "<br/>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
+				$form_body .= elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
 			} else if ($content_type == 'template') {
-				$form_body .= elgg_echo('cmspages:content:template') . "<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
+				$form_body .= elgg_echo('cmspages:content:template') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
 			} else {
-				$form_body .= elgg_echo('cmspages:content:') . "<br/>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description));
+				$form_body .= elgg_echo('cmspages:content:') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
 			}
+			// Templates utilisés par le contenu
 			if ($content_type == 'template') { $form_body .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
-			$form_body .= '</label></p><div class="clearfloat"></div>';
+			$form_body .= '<div class="clearfloat"></div><br />';
 		
 			// GUID - We don't really care (not used)
 			//$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid));
@@ -190,6 +191,7 @@ if ($display_form) {
 		$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
 		
 	$form_body .= '</fieldset><br />';
+	$form_body .= '<br />';
 	
 	
 	// NON UTILISE

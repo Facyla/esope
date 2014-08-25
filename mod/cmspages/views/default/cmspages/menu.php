@@ -18,11 +18,7 @@ $new_page = true;
 $tooshort = (strlen($pagetype)<3) ? true : false;
 
 // Get cmspages
-$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true);
-$cmspages_count = elgg_get_entities($params);
-$params['limit'] = $cmspages_count;
-$params['count'] = false;
-$cmspages = elgg_get_entities($params);
+$cmspages = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0));
 
 if ($cmspages) {
 	// Tri alphabétique des pages (sur la base du pagetype)
@@ -63,52 +59,34 @@ if ($new_page) {
 ?>
 
 <div style="border:1px dashed #DEDEDE; padding:6px 12px;">
-	<form name="cmspage_switcher">
-		<?php echo elgg_echo('cmspages:pageselect'); ?> 
-		<select name="pagetype"	onChange="javascript:document.cmspage_switcher.submit();" style="max-width:100%;">
+	<form name="cmspage_switcher" id="cmspages-form-select">
+		<label><?php echo elgg_echo('cmspages:pageselect'); ?> 
+		<select name="pagetype" onChange="javascript:document.cmspage_switcher.submit();" style="max-width:100%;">
 			<option value="" disabled="disabled"><?php echo elgg_echo('cmspages:pageselect'); ?></option>
 			<?php echo $page_options; ?>
 		</select>
-		<?php echo elgg_echo('cmspages:pagescreated', array($cmspages_count)); ?><br />
-	</form><br />
-
-	<form name="new_cmspage">
+		</label>
+	</form>
+	
+	<form name="new_cmspage" id="cmspages-form-new">
 		<?php
 		$title_value = ($tooshort) ? $pagetype : ' ' . elgg_echo('cmspages:addnewpage') . ' ';
 		$tab_w = 5;
 		if (empty($title_value)) $title_value = elgg_echo('cmspages:settitle');
 		$tab_w = strlen($title_value); $tab_nw = ($tab_w < 40) ? 40 : $tab_w;
+		echo elgg_echo('cmspages:or');
 		?>
-		<input type="text" style="border:1px solid #DEDEDE; width:<?php echo $tab_w; ?>ex;" name="pagetype" value="<?php echo $title_value; ?>" onclick="if (this.value=='<?php echo $title_value; ?>') { this.value=''; this.style.width='50ex' }" title="<?php echo elgg_echo('cmspages:newtitle'); ?>" />
+		<input type="text" style="border:1px solid #DEDEDE; width:<?php echo $tab_w; ?>ex;" name="pagetype" value="<?php echo $title_value; ?>" onclick="if (this.value=='<?php echo $title_value; ?>') { this.value=''; this.style.width='100%' }" title="<?php echo elgg_echo('cmspages:newtitle'); ?>" />
 		<noscript><input type="submit" style="border:0; margin:0; padding:1px 1px 3px 1px; font-size:10px; background: #0000FF;" value="<?php echo elgg_echo('cmspages:new'); ?>" /> &nbsp; </noscript>
-	</form><br />
+	</form>
 	
-	<blockquote style="padding:6px 12px;">
+	<p><blockquote style="padding:6px 12px;">
 		<a href="javascript:void(0);" class="inline_toggler" onclick="$('#cmspages_instructions').toggle();">&raquo;&nbsp;<?php echo elgg_echo('cmspages:showinstructions'); ?></a>
 		<div id="cmspages_instructions" style="display:none;"><?php echo elgg_echo('cmspages:instructions'); ?></div>
-	</blockquote>
+	</blockquote></p>
 	
 </div>
 <br />
 
-
-<?php
-// Edit currently selected cms page
-if (!$tooshort) {
-	// If page exists, link to delete - Si page existante, lien pour suppression
-	if (!$new_page) {
-		$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
-		$this_pages = elgg_get_entities_from_metadata($options);
-		// Get selected page GUID
-		if ($this_pages) { $this_page = $this_pages[0]; $cmspage_guid = $this_page->guid; }
-		/*
-		echo '<span style="float:right; font-weight:bold; color:red;" class="delete">';
-		$delete_form_body = '<input type="hidden" name="cmspage_guid" value="' . $cmspage_guid . '" /><input type="submit" name="delete" value="' . elgg_echo('cmspages:delete') . '" onclick="javascript:return confirm(\'' . elgg_echo('cmspages:deletewarning') . '\');" style="border:0; font-weight:bold; color:red;" class="elgg-button delete" />';
-		echo '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body, 'js' => ' style="background:transparent;"')) . '</div>';
-		echo '</span>';
-		*/
-	}
-	//echo '<h3><a href="' . $url . '">' . $cmspage_title . '</a></h3>';
-}
 
 

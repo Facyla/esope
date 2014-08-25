@@ -66,6 +66,8 @@ $fr = array(
 	'cmspages:searchresults' => "Résultats de recherche",
 	'cmspages:error:updatedpagetypes' => "Attention : suite au changement de version, les noms internes (pagetype) des pages ont été mis à jour ('_' remplacé par '-'). Suite à cette mise à jour, veuillez sélectionner à nouveau la page à éditer.",
 	
+	'cmspages:or' => "ou",
+	
 	// @TODO : missing translations in other languages
 	'cmspages:fieldset:main' => "Principaux paramètres",
 	'cmspages:fieldset:advanced' => "Paramètres avancés",

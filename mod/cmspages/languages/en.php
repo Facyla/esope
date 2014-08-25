@@ -66,6 +66,8 @@ $english = array(
 	'cmspages:searchresults' => "Search results",
 	'cmspages:error:updatedpagetypes' => "Warning: following a major version change, the internal pages names (pagetype) have been updated ('_' remplaced by '-'). Now it's done, please select again the page to edit.",
 	
+	'cmspages:or' => "or",
+	
 	// @TODO : missing translations in other languages
 	'cmspages:fieldset:main' => "Main parameters",
 	'cmspages:fieldset:advanced' => "Advanced parameters",

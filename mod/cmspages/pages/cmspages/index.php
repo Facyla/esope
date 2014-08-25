@@ -50,6 +50,9 @@ $title = elgg_echo('cmspages');
 //elgg_set_page_owner_guid($_SESSION['guid']); // Set admin user for owner block
 elgg_set_page_owner_guid($CONFIG->site->guid);
 
+$cmspages_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true));
+$title .= ' ~ ' . elgg_echo('cmspages:pagescreated', array($cmspages_count));
+
 
 
 if (elgg_instanceof($cmspage, 'object')) {
@@ -62,15 +65,6 @@ if (elgg_instanceof($cmspage, 'object')) {
 	if ($new_page) {
 		$cmspage_title = ($tooshort) ? elgg_echo('cmspages:createmenu', array($pagetype)) : elgg_echo('cmspages:newpage', array($pagetype));
 	}
-
-
-	
-	// Informations utiles : URL de la page + vue à utiliser pour charger la page
-	/*
-	$cmspage_infos .= '<blockquote>' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'cmspages/read/' . $pagetype . '</a><br />';
-	$cmspage_infos .= elgg_echo('cmspages:cmspage_view') . ' ' . elgg_view('input/text', array('value' => 'elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))', 'disabled' => "disabled", 'style' => "width:70ex"));
-	$cmspage_infos .= '</blockquote>';
-	*/
 	
 	// Delete link
 	$delete_link .= '<span style="float:right; font-weight:bold; color:red;" class="delete">';
@@ -96,9 +90,8 @@ if ($display_form) {
 
 
 
-$params = array('title' => $title, 'content' => $content, 'sidebar' => $sidebar);
-
-$page = elgg_view_layout('one_sidebar', $params);
+//$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $sidebar . $content));
 
 echo elgg_view_page($title, $page);
 

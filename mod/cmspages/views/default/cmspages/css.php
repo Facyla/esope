@@ -11,3 +11,6 @@
 #cmspages-edit-form fieldset { border: 1px solid; padding: 1ex; }
 #cmspages-edit-form legend { margin:0 1ex; }
 
+#cmspages-form-select, #cmspages-form-new { display:inline-block; }
+
+
