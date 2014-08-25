@@ -36,7 +36,7 @@ if ($tooshort) {
 	register_error(elgg_echo('cmspages:unsettooshort'));
 	$display_form = false;
 }
-
+// Get current page, if it exists
 if ($display_form) {
 	$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
 	$cmspages = elgg_get_entities_from_metadata($options);
@@ -88,9 +88,11 @@ $sidebar .= $cmspage_infos;
 
 // Edit page content
 // Existing pages will use the entity - new ones the pagetype
-$content .= $delete_link;
-$content .= '<h3><a href="' . $url . '">' . $cmspage_title . '</a></h3>';
-$content .= elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype, 'entity' => $cmspage));
+if ($display_form) {
+	$content .= $delete_link;
+	$content .= '<h3><a href="' . $url . '">' . $cmspage_title . '</a></h3>';
+	$content .= elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype, 'entity' => $cmspage));
+}
 
 
 
