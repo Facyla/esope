@@ -1,0 +1,2 @@
+NOTE : small change in start.php to allow public viewing of files
+

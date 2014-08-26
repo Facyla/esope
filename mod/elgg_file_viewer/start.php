@@ -85,7 +85,8 @@ function elgg_file_viewer_get_public_url($file) {
 	}
 
 	if (!elgg_is_logged_in()) {
-		return $file->getURL();
+		// ESOPE ~ Facyla : why block public viewing ?
+		//return $file->getURL();
 	}
 
 	$user = elgg_get_logged_in_user_entity();
