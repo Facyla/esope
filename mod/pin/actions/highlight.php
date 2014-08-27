@@ -12,40 +12,45 @@
 require_once (dirname(dirname(dirname(dirname(__FILE__)))) . "/engine/start.php");
 
 gatekeeper();
-action_gatekeeper();
 
-$guid = get_input('guid');
-$entity = get_entity($guid);
+$guid = get_input('guid', false);
 $callback = get_input('callback', false);
+$action = get_input('action', '');
+$pin_list = get_input('list', true);
 
-// Si déjà mis en avant
-if ($entity->highlight) {
-	// @todo voir si on annule la mise en avant, ou autre selon l'action demandée (par défaut : annuler)
-	$action = get_input('action', 'unhighlight');
-	switch($action) {
-		case 'unhighlight':
-		default:
-			$entity->highlight = false;
-			if ($callback) {
-				header('HTTP/1.1 200 OK');
-				echo elgg_echo('pin:highlighted:false'); exit;
-			} else {
-				system_message(elgg_echo('pin:highlighted:false'));
-			}
-	}
-
-// Si pas mis en avant, on le fait
-} else {
+// Works only for valid Elgg entities
+if ($guid) { $entity = get_entity($guid); }
+if ($entity instanceof ElggEntity) {
+	// Si demande d'épinglage ou si pas encore épinglé
+	if (($action == 'highlight') || !$entity->highlight) {
+		// Si pas mis en avant, action = mise en avant
+		// Notes : plusieurs valeurs possibles pour différencier différents types de mise en valeur
+		// @TODO : gérer une liste de valeurs plutôt qu'une seule pour le moment ?
+		switch($action) {
+			case 'highlight':
+			default:
+				$entity->highlight = $pin_list;
+		}
+		$message = elgg_echo('pin:highlighted:true');
 	
-	// @todo : utiliser plusieurs valeurs pour différencier différents types de mise en valeur ?
-	$entity->highlight = true;
-	if ($callback) {
-		header('HTTP/1.1 200 OK');
-		echo elgg_echo('pin:highlighted:true'); exit;
 	} else {
-		system_message(elgg_echo('pin:highlighted:true'));
+		// Si demande de désépinglage ou si déjà mis en avant
+		// @todo voir si on annule la mise en avant, ou autre selon l'action demandée (par défaut : annuler)
+		switch($action) {
+			case 'unhighlight':
+			default:
+				$entity->highlight = false;
+		}
+		$message = elgg_echo('pin:highlighted:false');
 	}
-	
 }
 
-forward($_SESSION['last_forward_from']);
+if ($callback) {
+	header('HTTP/1.1 200 OK');
+	echo $message;
+	exit;
+} else {
+	system_message($message);
+	forward($_SESSION['last_forward_from']);
+}
+

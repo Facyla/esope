@@ -47,7 +47,7 @@ if (elgg_instanceof($ent, 'object')) {
 				// Not pinned yet
 				$details .= elgg_echo('pin:unhighlighted');
 				$icon = '<img src="'.$imgurl.'pin_add.png" />';
-				$href = $url . '&action=pin';
+				$href = $url . '&action=highlight';
 				$title = elgg_echo('pin:highlight:true');
 				$text = 'Pin';
 				$alt = 'highlight';
@@ -58,7 +58,7 @@ if (elgg_instanceof($ent, 'object')) {
 					case 'admin':
 					default:
 						$icon = '<img src="'.$imgurl.'pin_remove.png" />';
-						$href = $url . '&action=unpin';
+						$href = $url . '&action=unhighlight';
 						$title = elgg_echo('pin:highlight:false');
 						$text = 'Un-Pin';
 						$alt = 'un-highlight';
