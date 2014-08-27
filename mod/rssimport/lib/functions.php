@@ -77,6 +77,8 @@ function rssimport_blog_import($item, $rssimport){
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
 	$parse_rss_url = parse_url($rssimport->description);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($blogbody, $parse_rss_url['host'], true);
 	$blogbody = rssimport_filter_content($blogbody, $parse_rss_url['host']);
 	$blogbody .= "<br><br>";
 	$blogbody .= "<hr><br>";
@@ -94,8 +96,6 @@ function rssimport_blog_import($item, $rssimport){
 	
 	//add feed tags to default tags and remove duplicates
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
-	// Tags extraits du contenu filtré, s'il y a lieu
-	$extracted_tags = rssimport_filter_content($blogbody, $parse_rss_url['host'], true);
 	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
@@ -145,6 +145,8 @@ function rssimport_bookmarks_import($item, $rssimport){
 		// Filter content
 		$parse_permalink = parse_url($item->get_permalink());
 		$parse_rss_url = parse_url($rssimport->description);
+		// Tags extraits du contenu filtré, s'il y a lieu
+		$extracted_tags = rssimport_filter_content($bookmarkbody, $parse_rss_url['host'], true);
 		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_rss_url['host']);
 		// ESOPE : add real data source, if defined
 		$bookmarkbody .= rssimport_add_source($item);
@@ -154,8 +156,6 @@ function rssimport_bookmarks_import($item, $rssimport){
 		
 		// merge default tags with any from the feed
 		$tagarray = string_to_tag_array($rssimport->defaulttags);
-		// Tags extraits du contenu filtré, s'il y a lieu
-		$extracted_tags = rssimport_filter_content($bookmarkbody, $parse_rss_url['host'], true);
 		$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 		foreach ($item->get_categories() as $category)
 		{
@@ -549,6 +549,8 @@ function rssimport_page_import($item, $rssimport){
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
 	$parse_rss_url = parse_url($rssimport->description);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($pagebody, $parse_rss_url['host'], true);
 	$pagebody = rssimport_filter_content($pagebody, $parse_rss_url['host']);
 	$pagebody .= "<br><br>";
 	$pagebody .= "<hr><br>";
@@ -566,8 +568,6 @@ function rssimport_page_import($item, $rssimport){
 	
 	//set default tags
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
-	// Tags extraits du contenu filtré, s'il y a lieu
-	$extracted_tags = rssimport_filter_content($pagebody, $parse_rss_url['host'], true);
 	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
