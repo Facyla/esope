@@ -102,6 +102,7 @@ function rssimport_blog_import($item, $rssimport){
 			$tagarray[] = $category->get_label();
 		}
 	$tagarray = array_unique($tagarray);
+	$tagarray = array_filter($tagarray); // Remove empty values
 	$tagarray = array_values($tagarray);
 	
 		// Now let's add tags. We can pass an array directly to the object property! Easy.
@@ -162,6 +163,7 @@ function rssimport_bookmarks_import($item, $rssimport){
 			$tagarray[] = $category->get_label();
 		}
 		$tagarray = array_unique($tagarray);
+		$tagarray = array_filter($tagarray); // Remove empty values
 		$tagarray = array_values($tagarray);
 		$bookmark->tags = $tagarray;
 		
@@ -574,6 +576,7 @@ function rssimport_page_import($item, $rssimport){
 			$tagarray[] = $category->get_label();
 		}
 	$tagarray = array_unique($tagarray);
+	$tagarray = array_filter($tagarray); // Remove empty values
 	$tagarray = array_values($tagarray);
 
 	// Now let's add tags. We can pass an array directly to the object property! Easy.
