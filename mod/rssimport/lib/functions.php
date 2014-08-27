@@ -94,6 +94,9 @@ function rssimport_blog_import($item, $rssimport){
 	
 	//add feed tags to default tags and remove duplicates
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($blogbody, $parse_rss_url['host'], true);
+	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
@@ -151,6 +154,9 @@ function rssimport_bookmarks_import($item, $rssimport){
 		
 		// merge default tags with any from the feed
 		$tagarray = string_to_tag_array($rssimport->defaulttags);
+		// Tags extraits du contenu filtré, s'il y a lieu
+		$extracted_tags = rssimport_filter_content($bookmarkbody, $parse_rss_url['host'], true);
+		$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 		foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
@@ -560,6 +566,9 @@ function rssimport_page_import($item, $rssimport){
 	
 	//set default tags
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($pagebody, $parse_rss_url['host'], true);
+	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
@@ -698,7 +707,7 @@ function rssimport_add_source($item) {
 // Returns filtered content depending on source
 // $content : content to be filtered
 // $filter : filter name or full domain name of imported RSS feed
-function rssimport_filter_content($content, $filter = 'auto') {
+function rssimport_filter_content($content, $filter = 'auto', $extract_tags = false) {
 	switch($filter) {
 		case 'diigo':
 		case 'www.diigo.com':
@@ -736,6 +745,11 @@ function rssimport_filter_content($content, $filter = 'auto') {
 		case 'auto':
 		default:
 			// nothing yet..
+	}
+	if ($extract_tags) {
+		if (!$tags) $tags = array();
+		else if (!is_array($tags)) $tags = array($tags);
+		return $tags;
 	}
 	return $content;
 }
