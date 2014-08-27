@@ -1,9 +1,9 @@
 Feedback plugin for Elgg 1.8
-Latest Version: 1.8.0beta1
-Released: 2012-07-05
-Contact: iionly@gmx.de
+Latest Version: 1.8.19
+Released: 2014-08-27
+Contact: fd@items.fr
 License: GNU General Public License version 2
-Copyright: (c) iionly (for Elgg 1.8), Simon ST (for Elgg 1.7), Prashant Juvekar
+Copyright: (c) Facyla (1.8 improvements), iionly (for Elgg 1.8), Simon ST (for Elgg 1.7), Prashant Juvekar
 
 
 This plugin will display a feedback dialog window on the left hand side of the pages on your Elgg site. Normally, the dialog windows is minimized but can be brought up by a slider button. The feedback button will show up on all pages on your site when a user is logged in. For logged-out site visitors you can configure the feedback button to show or not via a plugin setting.
@@ -23,6 +23,11 @@ Installation:
 
 
 Changelog:
+
+1.8.19 - Facyla additions
+	listing page and categorization menu, public comments, feedback status, notifications, various rewrites...
+	Update from older version which do not have a feedback title : run mod/feedback/tools/feedbacks_title.php
+
 
 1.8.0beta1:
 
