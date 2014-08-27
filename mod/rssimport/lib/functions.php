@@ -76,7 +76,8 @@ function rssimport_blog_import($item, $rssimport){
 	$blogbody = $item->get_content();
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
-	$blogbody = rssimport_filter_content($blogbody, $parse_permalink['host']);
+	$parse_rss_url = parse_url($rssimport->description);
+	$blogbody = rssimport_filter_content($blogbody, $parse_rss_url['host']);
 	$blogbody .= "<br><br>";
 	$blogbody .= "<hr><br>";
 	$blogbody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -140,7 +141,8 @@ function rssimport_bookmarks_import($item, $rssimport){
 		$bookmarkbody = $item->get_description();
 		// Filter content
 		$parse_permalink = parse_url($item->get_permalink());
-		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_permalink['host']);
+		$parse_rss_url = parse_url($rssimport->description);
+		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_rss_url['host']);
 		// ESOPE : add real data source, if defined
 		$bookmarkbody .= rssimport_add_source($item);
 		$bookmark->description = $bookmarkbody;
@@ -540,7 +542,8 @@ function rssimport_page_import($item, $rssimport){
 	$pagebody = $item->get_content();
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
-	$pagebody = rssimport_filter_content($pagebody, $parse_permalink['host']);
+	$parse_rss_url = parse_url($rssimport->description);
+	$pagebody = rssimport_filter_content($pagebody, $parse_rss_url['host']);
 	$pagebody .= "<br><br>";
 	$pagebody .= "<hr><br>";
 	$pagebody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -712,7 +715,6 @@ function rssimport_filter_content($content, $filter = 'auto') {
 			*/
 			$parts = explode('<p><strong>Tags:</strong>', $content);
 			$content = str_replace(array('<p><strong>Comments:</strong>', '<ul><li>', '</li></ul>', '</p>'), '', $parts[0]);
-			/*
 			if ($extract_tags) {
 				//error_log("DEBUG rssimport lib : part1 = " . print_r($parts, true));
 				$tags_parts = explode('</p>', $parts[1]);
@@ -727,7 +729,6 @@ function rssimport_filter_content($content, $filter = 'auto') {
 				$tags = array_map("trim", $tags);
 				//error_log("DEBUG rssimport lib : TAGS = " . implode(',', $tags));
 			}
-			*/
 			break;
 		case 'scoop.it':
 		case 'www.scoop.it':

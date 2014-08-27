@@ -35,7 +35,6 @@ function pin_init() {
 		}
 	}
 	
-	
 	elgg_register_action("pin/highlight",false,$CONFIG->pluginspath . "pin/actions/highlight.php");
 	
 }
@@ -43,9 +42,20 @@ function pin_init() {
 
 // Add pin button to entity menu (close to end of the menu)
 function pin_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) { return $return; }
+	// Not in widgets, and for admin users only
+	if (elgg_in_context('widgets') { return $return; }
+	if (!elgg_is_admin_logged_in()) { return $return; }
+	if (!elgg_is_logged_in()) { return $return; }
 	$entity = $params['entity'];
 	if ($entity->getType() == 'object') {
+		// @TODO : filter on chosen subtypes only
+		/*
+		// Types d'entités concernées
+		$validhighlight = elgg_get_plugin_setting('validhighlight', 'pin');
+		if (!empty($validhighlight)) $validhighlight = explode(',', $validhighlight);
+		else $validhighlight = get_registered_entity_types('object');
+		*/
+		
 		$options = array('name' => 'pins', 'href' => false, 'priority' => 900, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));
 		$return[] = ElggMenuItem::factory($options);
 	}
