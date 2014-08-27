@@ -10,7 +10,7 @@ if ($groups) {
 	$body = '';
 	foreach ($groups as $group) {
 		//$body .= elgg_view_entity_icon($group, 'small');
-		$body .= '<a href="' . $group->getURL() . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" title="' . $group->title . '" /></a>';
+		$body .= '<a href="' . $group->getURL() . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" title="' . $group->name . '" /></a>';
 	}
 	elgg_pop_context();
 
