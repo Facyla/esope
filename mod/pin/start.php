@@ -43,7 +43,7 @@ function pin_init() {
 // Add pin button to entity menu (close to end of the menu)
 function pin_entity_menu_setup($hook, $type, $return, $params) {
 	// Not in widgets, and for admin users only
-	if (elgg_in_context('widgets') { return $return; }
+	if (elgg_in_context('widgets')) { return $return; }
 	if (!elgg_is_admin_logged_in()) { return $return; }
 	if (!elgg_is_logged_in()) { return $return; }
 	$entity = $params['entity'];
