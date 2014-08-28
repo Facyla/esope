@@ -1,0 +1,8 @@
+Some changes have been made in this version, with the care to limit them to the functions.php file :
+
+- new functions added : start at /* ESOPE IMPROVEMENTS */
+- add content filtering
+- get source URL (site the article originates from)
+- setting to switch author (container rather than import owner)
+- facilitating functions...
+

@@ -76,7 +76,10 @@ function rssimport_blog_import($item, $rssimport){
 	$blogbody = $item->get_content();
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
-	$blogbody = rssimport_filter_content($blogbody, $parse_permalink['host']);
+	$parse_rss_url = parse_url($rssimport->description);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($blogbody, $parse_rss_url['host'], true);
+	$blogbody = rssimport_filter_content($blogbody, $parse_rss_url['host']);
 	$blogbody .= "<br><br>";
 	$blogbody .= "<hr><br>";
 	$blogbody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -93,11 +96,13 @@ function rssimport_blog_import($item, $rssimport){
 	
 	//add feed tags to default tags and remove duplicates
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
+	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
 		}
 	$tagarray = array_unique($tagarray);
+	$tagarray = array_filter($tagarray); // Remove empty values
 	$tagarray = array_values($tagarray);
 	
 		// Now let's add tags. We can pass an array directly to the object property! Easy.
@@ -140,7 +145,10 @@ function rssimport_bookmarks_import($item, $rssimport){
 		$bookmarkbody = $item->get_description();
 		// Filter content
 		$parse_permalink = parse_url($item->get_permalink());
-		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_permalink['host']);
+		$parse_rss_url = parse_url($rssimport->description);
+		// Tags extraits du contenu filtré, s'il y a lieu
+		$extracted_tags = rssimport_filter_content($bookmarkbody, $parse_rss_url['host'], true);
+		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_rss_url['host']);
 		// ESOPE : add real data source, if defined
 		$bookmarkbody .= rssimport_add_source($item);
 		$bookmark->description = $bookmarkbody;
@@ -149,11 +157,13 @@ function rssimport_bookmarks_import($item, $rssimport){
 		
 		// merge default tags with any from the feed
 		$tagarray = string_to_tag_array($rssimport->defaulttags);
+		$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 		foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
 		}
 		$tagarray = array_unique($tagarray);
+		$tagarray = array_filter($tagarray); // Remove empty values
 		$tagarray = array_values($tagarray);
 		$bookmark->tags = $tagarray;
 		
@@ -540,7 +550,10 @@ function rssimport_page_import($item, $rssimport){
 	$pagebody = $item->get_content();
 	// Filter content
 	$parse_permalink = parse_url($item->get_permalink());
-	$pagebody = rssimport_filter_content($pagebody, $parse_permalink['host']);
+	$parse_rss_url = parse_url($rssimport->description);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($pagebody, $parse_rss_url['host'], true);
+	$pagebody = rssimport_filter_content($pagebody, $parse_rss_url['host']);
 	$pagebody .= "<br><br>";
 	$pagebody .= "<hr><br>";
 	$pagebody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -557,11 +570,13 @@ function rssimport_page_import($item, $rssimport){
 	
 	//set default tags
 	$tagarray = string_to_tag_array($rssimport->defaulttags);
+	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
 	foreach ($item->get_categories() as $category)
 		{
 			$tagarray[] = $category->get_label();
 		}
 	$tagarray = array_unique($tagarray);
+	$tagarray = array_filter($tagarray); // Remove empty values
 	$tagarray = array_values($tagarray);
 
 	// Now let's add tags. We can pass an array directly to the object property! Easy.
@@ -695,7 +710,7 @@ function rssimport_add_source($item) {
 // Returns filtered content depending on source
 // $content : content to be filtered
 // $filter : filter name or full domain name of imported RSS feed
-function rssimport_filter_content($content, $filter = 'auto') {
+function rssimport_filter_content($content, $filter = 'auto', $extract_tags = false) {
 	switch($filter) {
 		case 'diigo':
 		case 'www.diigo.com':
@@ -712,7 +727,6 @@ function rssimport_filter_content($content, $filter = 'auto') {
 			*/
 			$parts = explode('<p><strong>Tags:</strong>', $content);
 			$content = str_replace(array('<p><strong>Comments:</strong>', '<ul><li>', '</li></ul>', '</p>'), '', $parts[0]);
-			/*
 			if ($extract_tags) {
 				//error_log("DEBUG rssimport lib : part1 = " . print_r($parts, true));
 				$tags_parts = explode('</p>', $parts[1]);
@@ -727,7 +741,6 @@ function rssimport_filter_content($content, $filter = 'auto') {
 				$tags = array_map("trim", $tags);
 				//error_log("DEBUG rssimport lib : TAGS = " . implode(',', $tags));
 			}
-			*/
 			break;
 		case 'scoop.it':
 		case 'www.scoop.it':
@@ -735,6 +748,11 @@ function rssimport_filter_content($content, $filter = 'auto') {
 		case 'auto':
 		default:
 			// nothing yet..
+	}
+	if ($extract_tags) {
+		if (!$tags) $tags = array();
+		else if (!is_array($tags)) $tags = array($tags);
+		return $tags;
 	}
 	return $content;
 }

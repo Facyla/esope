@@ -45,6 +45,8 @@ function adf_platform_init() {
 	if ($framekiller == 'yes') {
 		elgg_extend_view('page/elements/head','security/framekiller');
 	}
+	// Commentaires
+	elgg_extend_view('page/elements/comments', 'comments/public_notice', 1000);
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');

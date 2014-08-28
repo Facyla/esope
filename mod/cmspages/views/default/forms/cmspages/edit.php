@@ -175,10 +175,10 @@ if ($display_form) {
 		$form_body .= '<legend>' . elgg_echo('cmspages:fieldset:advanced') . '</legend>';
 	
 		// CSS
-		$form_body .= '<p><label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '<br /><em>' . elgg_echo('cmspages:js:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '<br /><em>' . elgg_echo('cmspages:css:details') . '</em></p>';
 	
 		// JS
-		$form_body .= '<p><label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '<br /><em>' . elgg_echo('cmspages:css:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '<br /><em>' . elgg_echo('cmspages:js:details') . '</em></p>';
 		
 		// Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou tous si aucun filtre défini)
 		$form_body .= '<p><label>' . elgg_echo('cmspages:contexts') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts, 'js' => ' style="width:400px;"')) . '</label><br /><em>' . elgg_echo('cmspages:contexts:details') . '</em></p>';
