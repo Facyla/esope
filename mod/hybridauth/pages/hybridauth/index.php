@@ -1,7 +1,7 @@
 <?php
 global $CONFIG;
 
-//if (elgg_get_plugin_setting('twitter_enable', 'hybridauth') == 'yes') {}
+$content = '';
 
 // @TODO : list enabled identity providers
 
@@ -11,6 +11,7 @@ foreach ($providers as $key => $name) {
 	// Add provider only if activated
 	if (elgg_get_plugin_setting($key.'_enable', 'hybridauth') == 'yes') {
 		$content .= '<p><a href="' . $CONFIG->url . 'hybridauth/' . $key . '"><img src="' . $CONFIG->url . 'mod/hybridauth/graphics/' . $key . '.png" style="float:left;" /> Login / associate with ' . $name . ' account.</p>';
+		$content .= '<div class="clearfloat"></div>';
 	}
 }
 
