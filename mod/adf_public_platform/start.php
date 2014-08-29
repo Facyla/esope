@@ -129,6 +129,10 @@ function adf_platform_init() {
 		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
 	}
 	
+	// Sélection du menu messages (lorsque filtre unread utilisé)
+	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'esope_prepare_menu_page_hook', 1000);
+	elgg_register_plugin_hook_handler('prepare', 'menu:site', 'esope_prepare_menu_page_hook');
+	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
@@ -581,7 +585,10 @@ if (!function_exists('messages_get_unread')) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		$db_prefix = elgg_get_config('dbprefix');
-
+		
+		$limit = get_input('limit', $limit);
+		$offset = get_input('offset', 0);
+		
 		// denormalize the md to speed things up.
 		// seriously, 10 joins if you don't.
 		$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
@@ -609,6 +616,7 @@ if (!function_exists('messages_get_unread')) {
 			),
 			'owner_guid' => $user_guid,
 			'limit' => $limit,
+			'offset' => $offset,
 		);
 
 		return elgg_get_entities_from_metadata($options);

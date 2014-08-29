@@ -322,3 +322,24 @@ if (elgg_is_active_plugin('au_subgroups')) {
 }
 
 
+/* Modification du menu de la page
+ * Sélection du menu basée sur l'URL de la page sans paramètre
+ * Select menu without using the URL parameters : e.g. /messages/inbox/admin?unread=true will select menu /messages/inbox/admin too
+ * Also select parent menus based on page handler : /members/popular will also select /members
+ */
+function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
+	$base_url = explode('?', full_url());
+	$base_url = $base_url[0];
+	foreach($return as $menu_block) {
+		foreach($menu_block as $element) {
+			$href = $element->getHref();
+			// Select base menu (based on base url, without parameters)
+			if ($href == $base_url) { $element->setSelected(); }
+			// Select parent menu (based on page handler sequence)
+			if (strpos($base_url, $href) === 0) { $element->setSelected(); }
+		}
+	}
+	return $return;
+}
+
+

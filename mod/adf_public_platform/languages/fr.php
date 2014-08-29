@@ -596,6 +596,10 @@ $fr = array(
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
 	
+	// Messages
+	'esope:messages:allinbox' => "Tous les messages reçus",
+	'esope:messages:unreadonly' => "Messages non lus seulement",
+	
 );
 
 add_translation('fr', $fr);

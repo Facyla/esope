@@ -598,6 +598,11 @@ $en = array(
 	'esope:bookmarks:container' => "Publish in...",
 	'esope:container:option:own' => "%s (personnel)",
 	
+	// Messages
+	'esope:messages:allinbox' => "All incoming messages",
+	'esope:messages:unreadonly' => "Unread messages only",
+	
+	
 );
 
 add_translation('en', $en);
