@@ -7,9 +7,9 @@
  */
 
 $password = $password2 = '';
-$username = get_input('u');
-$email = get_input('e');
-$name = get_input('n');
+$username = elgg_extract('username', $vars, get_input('u'));
+$email = elgg_extract('email', $vars, get_input('e'));
+$name = elgg_extract('name', $vars, get_input('n'));
 
 if (elgg_is_sticky_form('register')) {
 	extract(elgg_get_sticky_values('register'));
