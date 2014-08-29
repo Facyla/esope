@@ -10,7 +10,7 @@ $providers = array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' =>
 foreach ($providers as $key => $name) {
 	// Add provider only if activated
 	if (elgg_get_plugin_setting($key.'_enable', 'hybridauth') == 'yes') {
-		$content .= 
+		$content .= '<p><a href="' . $CONFIG->url . 'hybridauth/' . $key . '"><img src="' . $CONFIG->url . 'mod/hybridauth/graphics/' . $key . '.png" style="float:left;" /> Login / associate with ' . $name . ' account.</p>';
 	}
 }
 
