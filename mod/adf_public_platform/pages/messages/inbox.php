@@ -28,8 +28,12 @@ $title = elgg_echo('messages:user', array($page_owner->name));
 // ESOPE : add unread filter
 $unread = get_input('unread', false);
 if ($unread) {
-	$unread_messages = messages_get_unread($page_owner->guid);
-	$list = elgg_view_entity_list($unread_messages, array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false));
+	// We need to set limit and offset because we must use this direct function
+	$limit = get_input('limit', 10);
+	$offset = get_input('offset', 0);
+	$count_unread_messages = messages_get_unread($page_owner->guid, $limit, true);
+	$unread_messages = messages_get_unread($page_owner->guid, $limit);
+	$list = elgg_view_entity_list($unread_messages, array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset));
 } else {
 	$list = elgg_list_entities_from_metadata(array(
 		'type' => 'object',

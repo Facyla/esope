@@ -580,14 +580,11 @@ if (!function_exists('messages_get_unread')) {
 	 *
 	 * @return array
 	 */
-	function messages_get_unread($user_guid = 0, $limit = 10) {
+	function messages_get_unread($user_guid = 0, $limit = 10, $count = false) {
 		if (!$user_guid) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		$db_prefix = elgg_get_config('dbprefix');
-		
-		$limit = get_input('limit', $limit);
-		$offset = get_input('offset', 0);
 		
 		// denormalize the md to speed things up.
 		// seriously, 10 joins if you don't.
@@ -617,6 +614,7 @@ if (!function_exists('messages_get_unread')) {
 			'owner_guid' => $user_guid,
 			'limit' => $limit,
 			'offset' => $offset,
+			'count' => $count,
 		);
 
 		return elgg_get_entities_from_metadata($options);
