@@ -21,24 +21,40 @@ try{
 		$user_profile = $linkedin->getUserProfile();
 		$linkedin_username = $user_profile->displayName;
 		$linkedin_unique_id = $user_profile->identifier;
+		$linkedin_name = $user_profile->firstName . ' ' . $user_profile->lastName;
+		$linkedin_description = $user_profile->description;
+		$linkedin_website = $user_profile->webSiteURL;
+		$linkedin_profileurl = $user_profile->profileURL;
+		$linkedin_photourl = $user_profile->photoURL;
+		$linkedin_location = $user_profile->region;
+		$linkedin_email = $user_profile->emailVerified;
+		if (empty($linkedin_email)) $linkedin_email = $user_profile->email;
 		
 		$content .= '<img src="' . $CONFIG->url . 'mod/hybridauth/graphics/linkedin.png" style="float:left;" />';
 		$content .= '<p>' . elgg_echo('hybridauth:connectedwith', array($linkedin->id, $linkedin_username)) . '</p>';
 		//$content .= "And your provider user identifier is: <b>{$linkedin_unique_id}</b><br />";  
-		$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
+		//$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
 		
 		if (elgg_is_logged_in()) { $user = elgg_get_logged_in_user_entity(); }
 		
-		// @TODO : internalize LinkedIn version first, then adapt here
 		// We're now logged in with LinkedIn, so check which user is associated to this account
-		$associated_users = elgg_get_entities_from_metadata(array('metadata_names' => 'hybridauth_linkedin_uniqid', 'metadata_values' => $linkedin_unique_id, 'types' => 'user'));
-		$associated_user = false;
-		if ($associated_users) { $associated_user = $associated_users[0]; }
+		// A matching email is considered as a valid authentication (no need to add an explicit association)
+		$email_user = get_user_by_email($linkedin_email);
+		if (elgg_instanceof($email_user, 'user')) {
+			$associated_user = $email_user;
+		}
+		// If email doesn't match, we can use explicit association (let's associate with a different email)
+		if (!associated_user) {
+			$associated_users = elgg_get_entities_from_metadata(array('metadata_names' => 'hybridauth_linkedin_uniqid', 'metadata_values' => $linkedin_unique_id, 'types' => 'user'));
+			$associated_user = false;
+			if ($associated_users) { $associated_user = $associated_users[0]; }
+		}
+		
 		// Check if we're already logged in
 		if (elgg_is_logged_in()) { $user = elgg_get_logged_in_user_entity(); }
 	
 		// Note : we need 2 separate "if" so we can perform post-login actions
-		if (false && !elgg_is_logged_in()) {
+		if (!elgg_is_logged_in()) {
 			if ($associated_user) {
 				// Log in the associated user
 				login($associated_user);
@@ -53,7 +69,7 @@ try{
 				// Explain options
 				$content .= '<p><strong>' . elgg_echo('hybridauth:noacccount') . '</strong></p>';
 				if ($user) {
-					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($linkedin_username)) . '</p>';
+					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($linkedin_username, 'LinkedIn')) . '</p>';
 				} else {
 					if (strlen($linkedin_username) >= 4) {
 						$content .= '<p><strong>' . elgg_echo('hybridauth:availableusername', array($linkedin_username)) . '</p>';
@@ -81,7 +97,7 @@ try{
 			if (!$associated_user) {
 				// No association means we need to associate with currently logged in user
 				$user->hybridauth_linkedin_uniqid = $linkedin_unique_id; // Really unique user ID
-				$content .= '<p>' . elgg_echo('hybridauth:association:success') . '</p>';
+				$content .= '<p>' . elgg_echo('hybridauth:association:success', array('LinkedIn')) . '</p>';
 				$associated_user = $user;
 			}
 		
@@ -103,7 +119,7 @@ try{
 					$user->hybridauth_linkedin_uniqid = null;
 					$linkedin->logout();
 				} else {
-					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('LinkedIn')) . '</p>';
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('LinkedIn', 'LinkedIn')) . '</p>';
 					$content .= '<p><a href="?revoke=' . $linkedin_unique_id . '" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:revokeassociation', array('LinkedIn')) . '</a></p>';
 				}
 				// @TODO allow multiple associations ?

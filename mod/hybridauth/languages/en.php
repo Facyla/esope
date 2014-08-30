@@ -46,6 +46,25 @@ $en = array(
 	'hybridauth:linkedin:import:educations' => "Import studies (added to : Studies)",
 	'hybridauth:linkedin:import:skills' => "Import skills (added to : Skills)",
 	
+	// Login and registration
+	'hybridauth:connectedwith' => "You are now connected with <b>%s</b> as <b>%s</b>",
+	'hybridauth:noacccount' => "There is no account associated yet. You have 2 options :",
+	'hybridauth:existingacccount' => "<strong>There is an existing account using the same username %s.</strong><br />If you own this account, we suggest you prefer option 1 and login to associate it with your %s account. If you don't, please use another username to register.",
+	'hybridauth:availableusername' => "The username %s is available on this site.<br />If you do not have any account yet, you may use this username to register.</strong>",
+	'hybridauth:logintoassociate' => "Login to associate your account with %s",
+	'hybridauth:logintoassociate:details' => "Use this option if you already have an account and wish to associate it with your %s account %s.<br />Please use the form below to login, and get back to this page to confirm the association with your %s account.<br />You'll be then able to login directly with %s.",
+	'hybridauth:loginnow' => "Login now",
+	'hybridauth:registertoassociate' => "Or create an account on this site",
+	'hybridauth:registertoassociate:details' => "Prefer this option if you do not have any account on this site, or wish to associate your %s account %s with a new account.<br />Please complete the registration form with a valid email address, and confirm the registration.<br />Once your account is created, it will be associated with your %s account so we will be able to login with %s.",
+	'hybridauth:registernow' => "Create an account now",
+	'hybridauth:association:success' => "Association successful : you can now login with your %s account.",
+	'hybridauth:otheraccountassociated' => "Another account is already associated with this %s account : sorry but cannot continue with association.<br />Logging out from %s.",
+	'hybridauth:revokeassociation:details' => "Do you want to revoke access with %s ? If you do this, you won't be able to connect with Twitter anymore.<br /><em>Note : you will be able to enable a new %s association at any time.</em>",
+	'hybridauth:' => "Account %s (%s) is associated with your account %s.</strong> You can login with %s.",
+	'hybridauth:association:link' => "set up a new %s association",
+	'hybridauth:revokeassociation:success' => "%s association removed. You can %s or keep browsing the site.",
+	'hybridauth:revokeassociation' => "Revoke %s association",
+	
 );
 
 add_translation("en",$en);

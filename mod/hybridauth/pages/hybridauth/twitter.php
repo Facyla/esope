@@ -59,7 +59,7 @@ try{
 				// Explain options
 				$content .= '<p><strong>' . elgg_echo('hybridauth:noacccount') . '</strong></p>';
 				if ($user) {
-					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($twitter_username)) . '</p>';
+					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($twitter_username, 'Twitter')) . '</p>';
 				} else {
 					if (strlen($twitter_username) >= 4) {
 						$content .= '<p><strong>' . elgg_echo('hybridauth:availableusername', array($twitter_username)) . '</p>';
@@ -87,7 +87,7 @@ try{
 			if (!$associated_user) {
 				// No association means we need to associate with currently logged in user
 				$user->hybridauth_twitter_uniqid = $twitter_unique_id; // Really unique user ID
-				$content .= '<p>' . elgg_echo('hybridauth:association:success') . '</p>';
+				$content .= '<p>' . elgg_echo('hybridauth:association:success', array('Twitter')) . '</p>';
 				$associated_user = $user;
 			}
 		
@@ -109,7 +109,7 @@ try{
 					$user->hybridauth_twitter_uniqid = null;
 					$twitter->logout();
 				} else {
-					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('Twitter')) . '</p>';
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('Twitter', 'Twitter')) . '</p>';
 					$content .= '<p><a href="?revoke=' . $twitter_unique_id . '" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:revokeassociation', array('Twitter')) . '</a></p>';
 				}
 				// @TODO allow multiple associations ?
