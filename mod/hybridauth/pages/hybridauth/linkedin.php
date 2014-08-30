@@ -41,7 +41,8 @@ try{
 		
 		// We're now logged in with LinkedIn, so check which user is associated to this account
 		// A matching email is considered as a valid authentication (no need to add an explicit association)
-		$email_user = get_user_by_email($linkedin_email);
+		$email_users = get_user_by_email($linkedin_email);
+		$email_user = $email_users[0];
 		if (elgg_instanceof($email_user, 'user')) {
 			$associated_user = $email_user;
 		}
