@@ -20,17 +20,96 @@ try{
 		// User profile data
 		$user_profile = $linkedin->getUserProfile();
 		$linkedin_username = $user_profile->displayName;
-		$linkedin_uniqid = $user_profile->identifier;
+		$linkedin_unique_id = $user_profile->identifier;
 		
 		$content .= '<img src="' . $CONFIG->url . 'mod/hybridauth/graphics/linkedin.png" style="float:left;" />';
 		$content .= '<p>' . elgg_echo('hybridauth:connectedwith', array($linkedin->id, $linkedin_username)) . '</p>';
-		//$content .= "And your provider user identifier is: <b>{$linkedin_uniqid}</b><br />";  
-		//$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
+		//$content .= "And your provider user identifier is: <b>{$linkedin_unique_id}</b><br />";  
+		$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
 		
 		if (elgg_is_logged_in()) { $user = elgg_get_logged_in_user_entity(); }
 		
-		// @TODO : internalize Twitter version first, then adapt here
+		// @TODO : internalize LinkedIn version first, then adapt here
+		// We're now logged in with LinkedIn, so check which user is associated to this account
+		$associated_users = elgg_get_entities_from_metadata(array('metadata_names' => 'hybridauth_linkedin_uniqid', 'metadata_values' => $linkedin_unique_id, 'types' => 'user'));
+		$associated_user = false;
+		if ($associated_users) { $associated_user = $associated_users[0]; }
+		// Check if we're already logged in
+		if (elgg_is_logged_in()) { $user = elgg_get_logged_in_user_entity(); }
+	
+		// Note : we need 2 separate "if" so we can perform post-login actions
+		if (false && !elgg_is_logged_in()) {
+			if ($associated_user) {
+				// Log in the associated user
+				login($associated_user);
+				$user = $associated_user;
+			} else {
+				// Login/register to associate with an existing user
+				// Note : we need to login user first, or register it, beccause we need to guarantee the association
+			
+				// Is there any account with same username ?
+				$user = get_user_by_username($user_profile->displayName);
 		
+				// Explain options
+				$content .= '<p><strong>' . elgg_echo('hybridauth:noacccount') . '</strong></p>';
+				if ($user) {
+					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($linkedin_username)) . '</p>';
+				} else {
+					if (strlen($linkedin_username) >= 4) {
+						$content .= '<p><strong>' . elgg_echo('hybridauth:availableusername', array($linkedin_username)) . '</p>';
+					}
+				}
+				$content .= '<h4>' . elgg_echo('hybridauth:logintoassociate', array('LinkedIn')) . '</h4>';
+				$content .= '<p>' . elgg_echo('hybridauth:logintoassociate:details', array('LinkedIn', $linkedin_username, 'LinkedIn', 'LinkedIn')) . '</p>';
+				$content .= '<p><a href="#hybridauth-linkedin-login" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:loginnow') . '</a></p>';
+				$login_vars = array('returntoreferer' => full_url());
+				if ($user) $login_vars['username'] = $linkedin_username;
+				$content .= '<div id="hybridauth-linkedin-login" style="display:none;">' . elgg_view_form('login', null, $login_vars) . '</div>';
+				$content .= '<div class="clearfloat"></div>';
+				$content .= '<h4>' . elgg_echo('hybridauth:registertoassociate') . '</h4>';
+				$content .= '<p>' . elgg_echo('hybridauth:registertoassociate:details', array('LinkedIn', $linkedin_username, 'LinkedIn', 'LinkedIn')) . '</p>';
+				$content .= '<p><a href="#hybridauth-linkedin-register" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:registernow') . '</a></p>';
+				$register_vars = array('name' => $linkedin_name);
+				if (!$user) $register_vars['username'] = $linkedin_username;
+				$content .= '<div id="hybridauth-linkedin-register" style="display:none;">' . elgg_view_form('register', null, $register_vars) . '</div>';
+				$content .= '<div class="clearfloat"></div>';
+			}
+		}
+	
+		if (false && elgg_is_logged_in()) {
+			// Create association if it none exist yet
+			if (!$associated_user) {
+				// No association means we need to associate with currently logged in user
+				$user->hybridauth_linkedin_uniqid = $linkedin_unique_id; // Really unique user ID
+				$content .= '<p>' . elgg_echo('hybridauth:association:success') . '</p>';
+				$associated_user = $user;
+			}
+		
+			// These are the option people get once all is set up (association done)
+			// If we already have an association, then we can login safely, or check the association if already logged in
+			// Already logged in => associated user has to remain unique so we can login with it
+			if ($associated_user->guid != $user->guid) {
+				// Another user is associated with this LinkedIn account => cannot associate nor update
+				$content .= '<p>' . elgg_echo('hybridauth:otheraccountassociated', array('LinkedIn', 'LinkedIn')) . '</p>';
+				$linkedin->logout();
+			} else {
+				// Same user as logged in => any further action is allowed
+				$content .= '<p><strong>' . elgg_echo('hybridauth:association:ok', array($user->username, $user->name, $linkedin_username, 'LinkedIn')) . '</p>';
+				// Revoke association
+				$revoke_access = get_input('revoke', false);
+				if ($revoke_access) {
+					$linkedin_association_link = '<a href="' . $CONFIG->url . 'hybridauth/linkedin">' . elgg_echo('hybridauth:association:link', array('LinkedIn')) . '</a>';
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:success', array('LinkedIn', $linkedin_association_link)) . '</p>';
+					$user->hybridauth_linkedin_uniqid = null;
+					$linkedin->logout();
+				} else {
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('LinkedIn')) . '</p>';
+					$content .= '<p><a href="?revoke=' . $linkedin_unique_id . '" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:revokeassociation', array('LinkedIn')) . '</a></p>';
+				}
+				// @TODO allow multiple associations ?
+				//$content .= "<p>(FUTURE) You can also add another association if you wish to login with other LinkedIn accounts.</p>";
+			}
+		}
 		
 		// User contacts
 		/*

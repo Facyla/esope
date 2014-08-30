@@ -35,7 +35,7 @@ try{
 	
 		// Check if user is registered locally - note we cannot use email (not provided by Twitter API)
 		// As we cannot rely on email, we need to associate an existing account with Twitter : $user->hybridauth_twitter_uniqid = $twitter_username;
-	
+		
 		// We're now logged in with Twitter, so check which user is associated to this account
 		$associated_users = elgg_get_entities_from_metadata(array('metadata_names' => 'hybridauth_twitter_uniqid', 'metadata_values' => $twitter_unique_id, 'types' => 'user'));
 		$associated_user = false;
@@ -50,6 +50,7 @@ try{
 				login($associated_user);
 				$user = $associated_user;
 			} else {
+				// Login/register to associate with an existing user
 				// Note : we need to login user first, or register it, beccause we need to guarantee the association
 			
 				// Is there any account with same username ?
@@ -84,7 +85,7 @@ try{
 		if (elgg_is_logged_in()) {
 			// Create association if it none exist yet
 			if (!$associated_user) {
-				// No association means we need to associate with currently logged in user, or login/register to associate with an existing user
+				// No association means we need to associate with currently logged in user
 				$user->hybridauth_twitter_uniqid = $twitter_unique_id; // Really unique user ID
 				$content .= '<p>' . elgg_echo('hybridauth:association:success') . '</p>';
 				$associated_user = $user;
@@ -115,8 +116,8 @@ try{
 				//$content .= "<p>(FUTURE) You can also add another association if you wish to login with other Twitter accounts.</p>";
 			}
 		}
-	
-	
+		
+		
 		// User contacts
 		/*
 		$user_contacts = $twitter->getUserContacts();
