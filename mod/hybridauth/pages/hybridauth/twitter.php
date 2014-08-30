@@ -29,7 +29,7 @@ try{
 		$twitter_location = $user_profile->region;
 	
 		$content .= '<img src="' . $CONFIG->url . 'mod/hybridauth/graphics/twitter.png" style="float:left;" />';
-		$content .= "<p>You are now connected with <b>{$twitter->id}</b> as <b>{$twitter_username}</b></p>";
+		$content .= '<p>' . elgg_echo('hybridauth:connectedwith', array($twitter->id, $twitter_username)) . '</p>';
 		//$content .= "Your unique Twitter identifier is: <b>{$twitter_unique_id}</b><br />";  
 		//$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
 	
@@ -56,24 +56,24 @@ try{
 				$user = get_user_by_username($user_profile->displayName);
 		
 				// Explain options
-				$content .= "<p><strong>There is no account associated with this Twitter account yet. You have 2 options :</strong></p>";
+				$content .= '<p><strong>' . elgg_echo('hybridauth:noacccount') . '</strong></p>';
 				if ($user) {
-					$content .= "<p><strong>There is an existing account using the same username $twitter_username.</strong><br />If you own this account, we suggest you prefer option 1 and login to associate it with your Twitter account. If you don't, please use another username to register.</p>";
+					$content .= '<p>' . elgg_echo('hybridauth:existingacccount', array($twitter_username)) . '</p>';
 				} else {
 					if (strlen($twitter_username) >= 4) {
-						$content .= "<p><strong>The username $twitter_username is available on this site.<br />If you do not have any account yet, you may use this username to register.</strong></p>";
+						$content .= '<p><strong>' . elgg_echo('hybridauth:availableusername', array($twitter_username)) . '</p>';
 					}
 				}
-				$content .= '<h4>Login to associate your account with Twitter</h4>';
-				$content .= "<p>Use this option if you already have an account and wish to associate it with your Twitter account $twitter_username.<br />Please use the form below to login, and get back to this page to confirm the association with your Twitter account.<br />You'll be then able to login directly with Twitter.</p>";
-				$content .= '<p><a href="#hybridauth-twitter-login" rel="toggle" class="elgg-button elgg-button-action">Login now</a></p>';
+				$content .= '<h4>' . elgg_echo('hybridauth:logintoassociate', array('Twitter')) . '</h4>';
+				$content .= '<p>' . elgg_echo('hybridauth:logintoassociate:details', array('Twitter', $twitter_username, 'Twitter', 'Twitter')) . '</p>';
+				$content .= '<p><a href="#hybridauth-twitter-login" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:loginnow') . '</a></p>';
 				$login_vars = array('returntoreferer' => full_url());
 				if ($user) $login_vars['username'] = $twitter_username;
 				$content .= '<div id="hybridauth-twitter-login" style="display:none;">' . elgg_view_form('login', null, $login_vars) . '</div>';
 				$content .= '<div class="clearfloat"></div>';
-				$content .= '<h4>Or create an account on this site</h4>';
-				$content .= "<p>Prefer this option if you do not have any account on this site, or wish to associate your Twitter account $twitter_username with a new account.<br />Please complete the registration form with a valid email address, and confirm the registration.<br />Once your account is created, it will be associated with your Twitter account so we will be able to login with Twitter.</p>";
-				$content .= '<p><a href="#hybridauth-twitter-register" rel="toggle" class="elgg-button elgg-button-action">Create an account now</a></p>';
+				$content .= '<h4>' . elgg_echo('hybridauth:registertoassociate') . '</h4>';
+				$content .= '<p>' . elgg_echo('hybridauth:registertoassociate:details', array('Twitter', $twitter_username, 'Twitter', 'Twitter') . '</p>';
+				$content .= '<p><a href="#hybridauth-twitter-register" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:registernow') . '</a></p>';
 				$register_vars = array('name' => $twitter_name);
 				if (!$user) $register_vars['username'] = $twitter_username;
 				$content .= '<div id="hybridauth-twitter-register" style="display:none;">' . elgg_view_form('register', null, $register_vars) . '</div>';
@@ -86,7 +86,7 @@ try{
 			if (!$associated_user) {
 				// No association means we need to associate with currently logged in user, or login/register to associate with an existing user
 				$user->hybridauth_twitter_uniqid = $twitter_unique_id; // Really unique user ID
-				$content .= "<p>No account was associated with this Twitter account yet. Association successful : you can now login with your Twitter account.</p>";
+				$content .= '<p>' . elgg_echo('hybridauth:association:success') . '</p>';
 				$associated_user = $user;
 			}
 		
@@ -95,20 +95,21 @@ try{
 			// Already logged in => associated user has to remain unique so we can login with it
 			if ($associated_user->guid != $user->guid) {
 				// Another user is associated with this Twitter account => cannot associate nor update
-				$content .= "<p>Another account is already associated with this Twitter account : sorry but cannot continue with association.<br />Logging out from Twitter.</p>";
+				$content .= '<p>' . elgg_echo('hybridauth:otheraccountassociated', array('Twitter', 'Twitter')) . '</p>';
 				$twitter->logout();
 			} else {
 				// Same user as logged in => any further action is allowed
-				$content .= "<p><strong>Account {$user->username} ({$user->name}) is associated with your Twitter account $twitter_username.</strong> You can login with Twitter.</p>";
+				$content .= '<p><strong>' . elgg_echo('hybridauth:association:ok', array($user->username, $user->name, $twitter_username, 'Twitter')) . '</p>';
 				// Revoke association
 				$revoke_access = get_input('revoke', false);
 				if ($revoke_access) {
-					$content .= '<p>Twitter association removed. You can <a href="' . $CONFIG->url . 'hybridauth/twitter">set up a new Twitter association</a> or keep browsing the site</p>';
+					$twitter_association_link = '<a href="' . $CONFIG->url . 'hybridauth/twitter">' . elgg_echo('hybridauth:association:link', array('Twitter')) . '</a>';
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:success', array('Twitter', $twitter_association_link)) . '</p>';
 					$user->hybridauth_twitter_uniqid = null;
 					$twitter->logout();
 				} else {
-					$content .= "<p>Do you want to revoke access with Twitter ? If you do this, you won't be able to connect with Twitter anymore.<br /><em>Note : you will be able to enable a new Twitter association at any time.</em></p>";
-					$content .= '<p><a href="?revoke=' . $twitter_unique_id . '" class="elgg-button elgg-button-action">Revoke Twitter association</a></p>';
+					$content .= '<p>' . elgg_echo('hybridauth:revokeassociation:details', array('Twitter')) . '</p>';
+					$content .= '<p><a href="?revoke=' . $twitter_unique_id . '" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:revokeassociation', array('Twitter')) . '</a></p>';
 				}
 				// @TODO allow multiple associations ?
 				//$content .= "<p>(FUTURE) You can also add another association if you wish to login with other Twitter accounts.</p>";

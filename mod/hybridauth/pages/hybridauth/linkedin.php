@@ -23,7 +23,7 @@ try{
 		$linkedin_uniqid = $user_profile->identifier;
 		
 		$content .= '<img src="' . $CONFIG->url . 'mod/hybridauth/graphics/linkedin.png" style="float:left;" />';
-		$content .= "<p>You are now connected with <b>{$linkedin->id}</b> as <b>{$linkedin_username}</b></p>";
+		$content .= '<p>' . elgg_echo('hybridauth:connectedwith', array($linkedin->id, $linkedin_username)) . '</p>';
 		//$content .= "And your provider user identifier is: <b>{$linkedin_uniqid}</b><br />";  
 		//$content .= "<pre>" . print_r( $user_profile, true ) . "</pre><br />";
 		
