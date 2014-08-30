@@ -72,7 +72,7 @@ try{
 				$content .= '<div id="hybridauth-twitter-login" style="display:none;">' . elgg_view_form('login', null, $login_vars) . '</div>';
 				$content .= '<div class="clearfloat"></div>';
 				$content .= '<h4>' . elgg_echo('hybridauth:registertoassociate') . '</h4>';
-				$content .= '<p>' . elgg_echo('hybridauth:registertoassociate:details', array('Twitter', $twitter_username, 'Twitter', 'Twitter') . '</p>';
+				$content .= '<p>' . elgg_echo('hybridauth:registertoassociate:details', array('Twitter', $twitter_username, 'Twitter', 'Twitter')) . '</p>';
 				$content .= '<p><a href="#hybridauth-twitter-register" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('hybridauth:registernow') . '</a></p>';
 				$register_vars = array('name' => $twitter_name);
 				if (!$user) $register_vars['username'] = $twitter_username;
