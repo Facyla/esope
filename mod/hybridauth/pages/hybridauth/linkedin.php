@@ -19,9 +19,11 @@ try{
 	if ($is_user_logged_in) {
 		// User profile data
 		$user_profile = $linkedin->getUserProfile();
-		$linkedin_username = $user_profile->displayName;
+		$linkedin_username = str_replace(' ', '', $user_profile->displayName);
 		$linkedin_unique_id = $user_profile->identifier;
-		$linkedin_name = $user_profile->firstName . ' ' . $user_profile->lastName;
+		$linkedin_name = $user_profile->displayName;
+		$linkedin_firstname = $user_profile->firstName;
+		$linkedin_lastname = $user_profile->lastName;
 		$linkedin_description = $user_profile->description;
 		$linkedin_website = $user_profile->webSiteURL;
 		$linkedin_profileurl = $user_profile->profileURL;
@@ -44,7 +46,7 @@ try{
 			$associated_user = $email_user;
 		}
 		// If email doesn't match, we can use explicit association (let's associate with a different email)
-		if (!associated_user) {
+		if (!$associated_user) {
 			$associated_users = elgg_get_entities_from_metadata(array('metadata_names' => 'hybridauth_linkedin_uniqid', 'metadata_values' => $linkedin_unique_id, 'types' => 'user'));
 			$associated_user = false;
 			if ($associated_users) { $associated_user = $associated_users[0]; }
@@ -55,7 +57,7 @@ try{
 	
 		// Note : we need 2 separate "if" so we can perform post-login actions
 		if (!elgg_is_logged_in()) {
-			if ($associated_user) {
+			if ($email_user || $associated_user) {
 				// Log in the associated user
 				login($associated_user);
 				$user = $associated_user;
@@ -92,9 +94,10 @@ try{
 			}
 		}
 	
-		if (false && elgg_is_logged_in()) {
+		if (elgg_is_logged_in()) {
 			// Create association if it none exist yet
-			if (!$associated_user) {
+			// Note : as we can login with email association, we also need to check explicit association
+			if (!$associated_user || empty($user->hybridauth_linkedin_uniqid)) {
 				// No association means we need to associate with currently logged in user
 				$user->hybridauth_linkedin_uniqid = $linkedin_unique_id; // Really unique user ID
 				$content .= '<p>' . elgg_echo('hybridauth:association:success', array('LinkedIn')) . '</p>';
