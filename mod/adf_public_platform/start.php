@@ -146,7 +146,7 @@ function adf_platform_init() {
 		// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
 		elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
 		// Réglage pour l'utilisateur
-		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 600); // En haut des réglages
+		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 50); // En haut des réglages
 		// Hook pour modifier le nouveau réglage ajouté aux paramètres personnels
 		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'adf_platform_public_profile_hook');
 		// @TODO : compléter par un blocage direct au niveau de l'entité elle-même pour les listings et autres photos 
