@@ -2,7 +2,10 @@
 
 $en = array(
 	
-	'hybridauth:settings:title' => "Paramètres et clefs d'API",
+	'hybridauth:index' => "Hybridauth identity providers integration",
+	
+	'hybridauth:settings:main' => "Main settings",
+	'hybridauth:settings:providers' => "Identity providers and API keys",
 	
 	'hybridauth:available:twitter' => "Enable Twitter integration",
 	'hybridauth:apikey:twitter' => "Application ID/key",
@@ -20,7 +23,15 @@ $en = array(
 	'hybridauth:apikey:facebook' => "Application ID/key",
 	'hybridauth:secret:facebook' => "Application secret",
 	
-
+	// Login / registration
+	'hybridauth:settings:login' => "Allow login with enabled identity providers",
+	'hybridauth:settings:register' => "Allow registration with enabled identity providers",
+	'hybridauth:settings:register:details' => "The registration process requires a valid registration but will pre-fill some fields",
+	
+	'hybridauth:configureassociation' => "Configure association with %s account",
+	'hybridauth:loginwith' => "Login with %s",
+	'hybridauth:orloginwith' => "Or login with",
+	
 	// Linkedin
 	'hybridauth:linkedin:title' => "Linkedin",
 	'hybridauth:linkedin:login' => "Connect %s account",

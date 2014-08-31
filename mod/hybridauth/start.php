@@ -6,6 +6,14 @@ function hybridauth_init() {
 	elgg_extend_view('css','hybridauth/css');
 	elgg_register_page_handler('hybridauth','hybridauth_page_handler');
 	
+	if (elgg_get_plugin_setting('login_enable', 'hybridauth') == 'yes') {
+		elgg_extend_view('forms/login', 'hybridauth/login');
+	}
+	if (elgg_get_plugin_setting('register_enable', 'hybridauth') == 'yes') {
+		elgg_extend_view('forms/register', 'hybridauth/login');
+	}
+	
+	
 	// Short code processing library (from Wordpress)
 	$root = elgg_get_plugins_path();
 	elgg_register_library('hybridauth', $root."hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php");

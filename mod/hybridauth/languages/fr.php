@@ -2,7 +2,10 @@
 
 $fr = array(
 	
-	'hybridauth:settings:title' => "Paramètres et clefs d'API",
+	'hybridauth:index' => "Fournisseurs d'identité intégrés via Hybridauth",
+	
+	'hybridauth:settings:main' => "Paramètres principaux",
+	'hybridauth:settings:providers' => "Fournisseurs d'identité et clefs d'API",
 	
 	'hybridauth:available:twitter' => "Activer l'intégration Twitter",
 	'hybridauth:apikey:twitter' => "ID/clef de l'application",
@@ -19,6 +22,16 @@ $fr = array(
 	'hybridauth:available:facebook' => "Activer l'intégration Facebook",
 	'hybridauth:apikey:facebook' => "ID/clef de l'application",
 	'hybridauth:secret:facebook' => "Secret de l'application",
+	
+	// Login / registration
+	'hybridauth:settings:login' => "Permettre de se connecter avec les fournisseurs d'identité activés",
+	'hybridauth:settings:register' => "Permettre de s'inscrire avec les fournisseurs d'identité activés",
+	'hybridauth:settings:register:details' => "Le processus d'inscription nécessite de s'inscrire régulièrement, mais pré-remplit certains champs.",
+	
+	'hybridauth:configureassociation' => "Configurer l'association avec le compte %s",
+	'hybridauth:loginwith' => "Se connecter avec %s",
+	'hybridauth:orloginwith' => "Ou connexion via",
+	
 	
 	// Linkedin
 	'hybridauth:linkedin:title' => "Linkedin",

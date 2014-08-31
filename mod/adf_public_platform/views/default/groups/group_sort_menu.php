@@ -29,7 +29,7 @@ if (empty($groups_discussion) || ($groups_discussion == 'yes'))
 if ($groups_alpha == 'yes') 
 	$tabs['alpha'] = array('text' => elgg_echo('groups:alpha'), 'href' => 'groups/all?filter=alpha', 'priority' => 100);
 
-if ($groups_friends == 'yes') 
+if (elgg_is_logged_in() && ($groups_friends == 'yes')) 
 	$tabs['friends'] = array('text' => elgg_echo('groups:friends'), 'href' => 'groups/all?filter=friends', 'priority' => 400);
 
 if ($groups_search == 'yes') 
