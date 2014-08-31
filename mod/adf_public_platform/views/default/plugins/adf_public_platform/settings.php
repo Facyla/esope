@@ -707,6 +707,25 @@ $(function() {
 			<?php echo elgg_echo('adf_platform:css:help'); ?>
 			<?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css, 'js' => ' style="min-height:500px;"' )); ?>
 		</p>
+		
+		<?php
+		// @TODO Notifications, Digest and Newsletter default wrappers
+		?>
+		<?php if (elgg_is_active_plugin('html_email_handler')) { ?>
+			<p><label><?php echo elgg_echo('esope:html_email_handler:css'); ?></label><br />
+				<?php echo elgg_echo('esope:html_email_handler:css:help'); ?>
+				<?php echo elgg_view('input/plaintext', array( 'name' => 'params[notification_css]', 'value' => $vars['entity']->notification_css, 'js' => ' style="min-height:500px;"' )); ?>
+			</p>
+			<?php echo '<p>' . elgg_echo('esope:html_email_handler:wrapper:help') . '</p>'; ?>
+		<?php } ?>
+		<?php if (elgg_is_active_plugin('digest')) { ?>
+			<?php echo '<p>' . elgg_echo('esope:digest:css:help') . '</p>'; ?>
+			<?php echo '<p>' . elgg_echo('esope:digest:wrapper:help') . '</p>'; ?>
+		<?php } ?>
+		<?php if (elgg_is_active_plugin('newsletter')) { ?>
+			<?php echo '<p>' . elgg_echo('esope:newsletter:css:help') . '</p>'; ?>
+			<?php echo '<p>' . elgg_echo('esope:newsletter:wrapper:help') . '</p>'; ?>
+		<?php } ?>
 	</div>
 
 

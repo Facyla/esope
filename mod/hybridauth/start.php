@@ -10,7 +10,7 @@ function hybridauth_init() {
 		elgg_extend_view('forms/login', 'hybridauth/login');
 	}
 	if (elgg_get_plugin_setting('register_enable', 'hybridauth') == 'yes') {
-		elgg_extend_view('forms/register', 'hybridauth/login');
+		elgg_extend_view('forms/register', 'hybridauth/register', 100);
 	}
 	
 	

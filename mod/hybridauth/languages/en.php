@@ -31,6 +31,8 @@ $en = array(
 	'hybridauth:configureassociation' => "Configure association with %s account",
 	'hybridauth:loginwith' => "Login with %s",
 	'hybridauth:orloginwith' => "Or login with",
+	'hybridauth:registerwith' => "Register with %s",
+	'hybridauth:orregisterwith' => "Register with",
 	
 	// Linkedin
 	'hybridauth:linkedin:title' => "Linkedin",

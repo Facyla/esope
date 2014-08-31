@@ -80,7 +80,7 @@ $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
 $font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
 $font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
 $font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
-$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
+$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform'); // Main font
 $font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
 $font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>

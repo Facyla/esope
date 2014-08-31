@@ -600,6 +600,15 @@ $fr = array(
 	'esope:messages:allinbox' => "Tous les messages reçus",
 	'esope:messages:unreadonly' => "Messages non lus seulement",
 	
+	// Notification, digest and newsletter CSS and wrappers
+	'esope:html_email_handler:css' => "CSS personnalisées des notifications",
+	'esope:html_email_handler:css:help' => "Si défini, cette feuille de style remplace celle par défaut définie dans la vue html_email_handler/notification/body.",
+	'esope:html_email_handler:wrapper:help' => "Si vous souhaitez éditer le modèle de page des notifications, veuillez copier et éditer la vue html_email_handler/notification/body dans votre plugin de thème.",
+	'esope:digest:css:help' => "Si vous souhaitez éditer les styles des résumés, veuillez copier et éditer les vues css/digest/* dans votre plugin de thème.",
+	'esope:digest:wrapper:help' => "Si vous souhaitez éditer le modèle de page des résumés, veuillez copier et éditer la vue page/layouts/digest dans votre plugin de thème.<br />Pour modifier les contenus et leur structure, veuillez consulter la documentation détaillée fournie avec le plugin Digest. Les vues utiles sont situées dans digest/elements/* mais vous devrez également définir les élements à intégrer aux résumés.",
+	'esope:newsletter:css:help' => "Si vous souhaitez éditer les styles par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/css dans votre plugin de thème.",
+	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
+	
 );
 
 add_translation('fr', $fr);

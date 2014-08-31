@@ -602,6 +602,14 @@ $en = array(
 	'esope:messages:allinbox' => "All incoming messages",
 	'esope:messages:unreadonly' => "Unread messages only",
 	
+	// Notification, digest and newsletter CSS and wrappers
+	'esope:html_email_handler:css' => "Notifications custom CSS",
+	'esope:html_email_handler:css:help' => "If set, this CSS will replace default CSS (in html_email_handler/notification/body).",
+	'esope:html_email_handler:wrapper:help' => "If you want to edit the notification wrapper, please copy and edit the default wrapper in your theme (html_email_handler/notification/body).",
+	'esope:digest:css:help' => "If you want to edit the digest CSS, please copy and edit the default CSS in your theme (css/digest/*).",
+	'esope:digest:wrapper:help' => "If you want to edit the digest wrapper, please copy and edit the default wrapper in your theme (page/layouts/digest).<br />To edit the inner elements content and wrappers, please read the Digest documentation for more detailed instructions. The views are located in digest/elements/* but you'll need to register elements to add them to the digests.",
+	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
+	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	
 );
 
