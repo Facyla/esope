@@ -12,7 +12,7 @@ $no_yes_opt = array_reverse($yes_no_opt);
 		<legend><?php echo elgg_echo('hybridauth:settings:main'); ?></legend>
 		<?php
 		echo '<p><label>' . elgg_echo('hybridauth:settings:login') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[login_enable]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->{'login_enable'} )) . '</p>';
-		echo '<p><label>' . elgg_echo('hybridauth:settings:register') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[register_enable]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->{'register_enable'} )) . '<br /><em>' . elgg_echo('hybridauth:settings:register') . '</em></p>';
+		echo '<p><label>' . elgg_echo('hybridauth:settings:register') . '</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[register_enable]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->{'register_enable'} )) . '<br /><em>' . elgg_echo('hybridauth:settings:register:details') . '</em></p>';
 		?>
 	</fieldset>
 	<br />
