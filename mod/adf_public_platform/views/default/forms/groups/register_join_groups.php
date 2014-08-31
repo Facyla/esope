@@ -3,6 +3,8 @@
 * Elgg register form : extend with join groups
 */
 
+// @TODO adapt to Elgg 1.8 and integrate
+
 $groups = get_input('g');
 if ($groups) $group_guids = explode(',', $groups);
 
