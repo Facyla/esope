@@ -4,6 +4,8 @@
  */
 global $CONFIG;
 
+// @TODO : Check that we have a public page before adding sharing links !!
+
 $lang = get_current_language();
 $full_url = full_url();
 $share_url = rawurlencode($full_url);
