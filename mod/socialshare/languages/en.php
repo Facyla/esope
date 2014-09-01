@@ -6,14 +6,34 @@ global $CONFIG;
 
 $en = array(
 	
-	'socialshare:facebook:title' => "Share via Facebook",
-	
+	// Twitter
 	'socialshare:twitter:title' => "Tweet this",
 	
-	'socialshare:googleplus:title' => "Share via Google+",
+	// LinkedIn
+	'socialshare:linkedin:title' => "Share via LinkedIn",
 	
-	'socialshare:mail:params' => "I invite you to look at this page&amp;body=Hello,%0D%0AI think this page can interest you : %s",
-	'socialshare:mail:title' => "Share via email",
+	// Google+
+	'socialshare:google:title' => "Share via Google+",
+	
+	// Pinterest
+	'socialshare:pinterest:title' => "Share via Pinterest",
+	
+	// Facebook
+	'socialshare:facebook:title' => "Share via Facebook",
+	
+	// Email
+	'socialshare:email:title' => "Share via email",
+	'socialshare:email:subject' => "I invite you to watch this page %s",
+	'socialshare:email:params' => "Hi,
+	
+	I think this page can interest you : %s
+	%s
+	
+	%s",
+	
+	// Settings
+	'socialshare:extendviews' => "Views to extend",
+	'socialshare:extendviews:help' => "Add below the views you wish to extend with sharing links.",
 	
 );
 

@@ -6,14 +6,34 @@ global $CONFIG;
 
 $fr = array(
 	
-	'socialshare:facebook:title' => "Partager cette page via Facebook",
-	
+	// Twitter
 	'socialshare:twitter:title' => "Twitter",
 	
-	'socialshare:googleplus:title' => "Partager cette page via Google+",
+	// LinkedIn
+	'socialshare:linkedin:title' => "Partager sur LinkedIn",
 	
-	'socialshare:mail:params' => "Je vous invite à regarder cette page&amp;body=Bonjour,%0D%0AJe pense que cette page peut vous intéresser : ",
-	'socialshare:mail:title' => "Partager cette page par email",
+	// Google+
+	'socialshare:google:title' => "Partager sur Google+",
+	
+	// Pinterest
+	'socialshare:pinterest:title' => "Partager sur Pinterest",
+	
+	// Facebook
+	'socialshare:facebook:title' => "Partager sur Facebook",
+	
+	// Email
+	'socialshare:email:title' => "Partager par email",
+	'socialshare:email:subject' => "Je vous invite à regarder cette page %s",
+	'socialshare:email:body' => "Bonjour,
+	
+	Je pense que cette page peut vous intéresser : %s
+	%s
+	
+	%s",
+	
+	// Settings
+	'socialshare:extendviews' => "Vues à étendre",
+	'socialshare:extendviews:help' => "Ajouter ci-dessous la liste des vues à étendre avec les liens de partage.",
 	
 );
 
