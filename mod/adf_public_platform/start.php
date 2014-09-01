@@ -13,11 +13,6 @@ elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
 elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); // Menu
 
-// Gestion des notifications par mail lors de l'entrée dans un groupe
-elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
-// Suppression des notifications lorsqu'on quitte le groupe
-elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
-
 
 /**
  * Init adf_platform plugin.
@@ -85,6 +80,17 @@ function adf_platform_init() {
 	
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
 	// Related functions are in lib/adf_public/platform/hooks.php
+	
+	// Gestion des notifications par mail lors de l'entrée dans un groupe
+	elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
+	// Suppression des notifications lorsqu'on quitte le groupe
+	elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
+	
+	// Gestion des actions post-inscription
+	elgg_register_plugin_hook_handler('register', 'user', 'esope_create_user_hook');
+	// Gestion des actions post-login
+	elgg_register_event_handler('login','user','esope_login_user_action', 800);
+	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
@@ -1466,5 +1472,45 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	return $groups;
 }
 
+
+// Perform some post-login actions (join groups, etc.)
+function esope_login_user_action($event, $type, $user) {
+	if (elgg_instanceof($user, "user")) {
+		if (!$user->isBanned()) {
+			// Try to join groups asked at registration
+			if ($user->join_groups) {
+				foreach($user->join_groups as $group_guid) {
+					if ($group = get_entity($group_guid)) {
+						// Process only groups that haven't been joined yet
+						if (!$group->isMember($user)) {
+							if (!$group->join($user)) {
+								// Handle subgroups cases
+								if (elgg_is_active_plugin('au_subgroups')) {
+									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
+									while ($parent = au_subgroups_get_parent_group($group)) {
+										//  Join only if parent group is public membership or if we have a join pending
+										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
+											// Join group, or add to join list
+											if (!$parent->join($user)) { $join_children[] = $parent->guid; }
+										}
+									}
+									// Start joining from upper parents if needed
+									if ($join_children) {
+										$join_children = array_reverse($join_children);
+										foreach($join_children as $children) { $children->join($user); }
+									}
+									// Try to join group again
+									if ($group->join($user)) {}
+								}
+							}
+						}
+					}
+				}
+				// Update waiting list
+				$user->join_groups = null;
+			}
+		}
+	}
+}
 
 

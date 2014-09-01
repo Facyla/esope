@@ -32,6 +32,12 @@ $french = array(
 	
 	'guidtool:deleted' => 'GUID %d supprimé',
 	'guidtool:notdeleted' => 'GUID %d non supprimé',
+	
+	'guidtool:entity:enabled' => "Entité activée (visible)",
+	'guidtool:entity:disabled' => "Entité désactivée (cachée)",
+	'guidtool:entity:enable' => "Activer l'entité",
+	'guidtool:entity:disable' => "Désactiver l'entité",
+	
 );
 
 add_translation("fr",$french);

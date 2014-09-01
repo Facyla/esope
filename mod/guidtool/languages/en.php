@@ -32,6 +32,12 @@ $english = array(
 	
 	'guidtool:deleted' => 'GUID %d deleted',
 	'guidtool:notdeleted' => 'GUID %d not deleted',
+	
+	'guidtool:entity:enabled' => "Entity enabled (visible)",
+	'guidtool:entity:disabled' => "Entity disabled (hidden)",
+	'guidtool:entity:enable' => "Enable entity",
+	'guidtool:entity:disable' => "Disable entity",
+	
 );
 
 add_translation("en",$english);

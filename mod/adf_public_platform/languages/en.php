@@ -533,6 +533,7 @@ $en = array(
 	
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
+	'esope:subgroups:tryjoiningparent' => "Trying to join parent groups to allow joining %s",
 	
 	'esope:input:nogroup' => "No group selected",
 	'esope:input:donotchange' => "Do not change (%s)",
@@ -612,6 +613,7 @@ $en = array(
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	
 	// Join groups at registration
+	'esope:settings:register:joingroup' => "Allow to join groups at registration",
 	'esope:register:joingroups' => "Join groups",
 	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
 	'esope:register:morejoingroups' => "Display more groups",

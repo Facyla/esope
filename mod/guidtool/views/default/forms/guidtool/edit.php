@@ -25,6 +25,17 @@ if (!$entity) {
 	throw new InvalidParameterException(elgg_echo('InvalidParameterException:NoEntityFound'));
 }
 
+if ($entity->isEnabled()) {
+	// Entity is enabled
+	//echo '<p><blockquote>' . elgg_echo('guidtool:entity:enabled') . '</blockquote></p>';
+	// @TODO disable it ?
+} else {
+	// Entity is not enabled (hidden)
+	echo '<p><blockquote>' . elgg_echo('guidtool:entity:disabled') . '</blockquote></p>';
+	// @TODO enable it ?
+}
+
+
 // Get data on GUID
 $options = array('guid' => $entity->guid, 'limit' => 0);
 $metadata = elgg_get_metadata($options);
