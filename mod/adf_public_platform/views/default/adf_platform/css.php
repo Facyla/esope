@@ -366,6 +366,9 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #adf-homepage ul { list-style-type: square; }
 #adf-homepage ul li { margin-bottom:8px; }
 #adf-homepage .elgg-form-register fieldset > div, #adf-homepage .elgg-form-register .mandatory { clear: both; }
+#adf-homepage .profile_manager_register_category { margin: 15px 0 15px 0 !important; }
+#adf-homepage .captcha-left { display:inline-block; }
+
 select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #adf-homepage .register-fullwidth { clear:both; }
 #adf-homepage .register-fullwidth label { width:auto; }
