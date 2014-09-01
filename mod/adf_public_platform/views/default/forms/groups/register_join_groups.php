@@ -5,26 +5,36 @@
 
 // @TODO adapt to Elgg 1.8 and integrate
 
-$groups = get_input('g');
-if ($groups) $group_guids = explode(',', $groups);
+$group_guids = get_input('g', false);
+if ($group_guids) $group_guids = explode(',', $group_guids);
 
 // Choix des groupes
-$groups_array = fing_get_groups('featured', 'open');
-$form_body .= '<div id="register_groups_featured">';
-  $form_body .= "<p><strong>Rejoindre des groupes</strong></p>";
-  foreach ($groups_array as $ent) {
-    $form_body .= "<label>";
-    $form_body .= '<input type="checkbox" name="groups[]" value="' . $ent->guid . '" />';
-    $form_body .= '<img src="' . $ent->getIcon('tiny') . '" /> ';
-    $form_body .= $ent->name;
-    $form_body .= "</label><br />";
-  }
-$form_body .= '</div>';
-$form_body .= '<div id="register_groups_full" style="display:none;">';
-  $groups_array = fing_get_groups('', 'open');
-  $form_body .= "<p><label>Rejoindre des groupes<br />";
-  $form_body .= elgg_view('friends/picker',array('entities' => $groups_array, 'internalname' => 'groups', 'highlight' => 'all', 'value' => $group_guids));
-  $form_body .= "</label></p>";
-$form_body .= '</div>';
-$form_body .= '<p><a style="font-weight:bold;" href="javascript:void(0);" onclick="$(\'#register_groups_featured\').toggle();$(\'#register_groups_full\').toggle();">Afficher plus de groupes</a></p>';
+$groups = esope_get_joingroups('featured', 'open');
+$content .= '<div class="clearfloat"></div>';
+$content .= '<div id="register_joingroups">';
+$content .= '<fieldset style="border:1px solid #333; padding:1ex; margin:2ex 0;">';
+	$content .= '<legend style="padding:0 1ex;">' . elgg_echo('esope:register:joingroups') . '</legend>';
+	$content .= '<p><em>' . elgg_echo('esope:register:joingroups:help') . '</em></p>';
+	// Featured (open & public) groups
+	$content .= '<div id="register_groups_featured">';
+		foreach ($groups as $ent) {
+			$content .= '<label><input type="checkbox" name="groups[]" value="' . $ent->guid . '" />';
+			$content .= '<img src="' . $ent->getIcon('tiny') . '" /> ' . $ent->name . '</label><br />';
+		}
+		// Toggle more groups
+		$content .= '<div class="clearfloat"></div><br />';
+		$content .= '<p><a href="javascript:void(0);" onclick="$(\'#register_groups_featured\').toggle();$(\'#register_groups_full\').toggle();">' . elgg_echo('esope:register:morejoingroups') . '</a></p>';
+	$content .= '</div>';
+	// All open & public groups
+	$content .= '<div id="register_groups_full" style="display:none;">';
+		$groups = esope_get_joingroups('', 'open');
+		//$content .= '<p>' . elgg_view('friends/picker',array('entities' => $groups, 'internalname' => 'groups', 'highlight' => 'all', 'value' => $group_guids)) . '</p>';
+		foreach ($groups as $ent) {
+			$content .= '<label><input type="checkbox" name="groups[]" value="' . $ent->guid . '" />';
+			$content .= '<img src="' . $ent->getIcon('tiny') . '" /> ' . $ent->name . '</label><br />';
+		}
+	$content .= '</div>';
+$content .= '</div>';
+
+echo $content;
 

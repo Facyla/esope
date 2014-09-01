@@ -609,6 +609,13 @@ $fr = array(
 	'esope:newsletter:css:help' => "Si vous souhaitez éditer les styles par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/css dans votre plugin de thème.",
 	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
 	
+	// Join groups at registration
+	'esope:register:joingroups' => "Rejoindre des groupes",
+	'esope:register:joingroups:help' => "Vous pouvez choisir de rejoindre une sélection de groupes. Notez qu'il ne s'agit que de groupes publics et en libre accès : vous pourrez rejoindre davantage de groupes une fois votre inscription terminée.",
+	'esope:register:morejoingroups' => "Afficher plus de groupes",
+	
+	'readmore' => "Lire la suite",
+	
 );
 
 add_translation('fr', $fr);

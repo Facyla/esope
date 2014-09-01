@@ -367,7 +367,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #adf-homepage ul li { margin-bottom:8px; }
 #adf-homepage .elgg-form-register fieldset > div, #adf-homepage .elgg-form-register .mandatory { clear: both; }
 select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
+#adf-homepage .register-fullwidth { clear:both; }
+#adf-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
+.profile_manager_register_input_container { display:inline-block; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 
 /* FORMULAIRES - FORMS */

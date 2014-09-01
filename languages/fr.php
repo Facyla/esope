@@ -478,7 +478,7 @@ $french = array(
 	'register' => "Créer un compte",
 	'registerok' => "Vous vous êtes enregistré avec succès sur %s.",
 	'registerbad' => "La création de votre compte n'a pas fonctionné pour une raison inconnue.",
-	'registerdisabled' => "Votre compte a été désactivé par l'administrateur du site.",
+	'registerdisabled' => "La création de compte est désactivée sur ce site.",
 
 	'registration:notemail' => "L'adresse email que vous avez renseignée n'apparaît pas comme valide.",
 	'registration:userexists' => "Ce nom d'utilisateur existe déjà, merci d'en choisir un autre",

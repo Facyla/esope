@@ -78,7 +78,9 @@ $fr = array(
 	'cmspages:content_type:template' => "Template (agencement de pages et modules CMS)",
 	'cmspages:content_type:template:details' => "Utilisation des templates :<ul>
 		<li>{{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype'</li>
-		<li>{{%CONTENT%}} : insère le contenu chargé par un outil tiers (blogs externes typiquement)</li>
+		<li>{{%CONTENT%}} : insère le contenu chargé dans la vue par un outil tiers via le paramètre 'content'</li>
+		<li>{{[shortcode]}} : insère le shortcode 'shortcode' (si le plugin elgg_shortcode est activé)</li>
+		<li>{{:forms/register|username=admin}} : insère la vue forms/register en lui passant le paramètres 'username' => 'admin'</li>
 		</ul>",
 	'cmspages:content:rawhtml' => "Contenu de la page ou du bloc (code HTML)",
 	'cmspages:content:template' => "Structure ou contenu du template",

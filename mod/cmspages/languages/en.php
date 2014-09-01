@@ -78,7 +78,9 @@ $english = array(
 	'cmspages:content_type:template' => "Template",
 	'cmspages:content_type:template:details' => "Templates usage:<ul>
 		<li>{{cmspages-pagetype}} : inserts the 'cmspages-pagetype' page content</li>
-		<li>{{%CONTENT%}} : inserts the content loaded by an external tool (e.g. external blogs)</li>
+		<li>{{%CONTENT%}} : inserts the content loaded to the cmspage view by an external tool, using param 'content'</li>
+		<li>{{[shortcode]}} : inserts the 'shortcode' shortcode (if elgg_shortcode plugin enabled)</li>
+		<li>{{:forms/register|username=admin|other_param=XXX}} : inserts the forms/register view with parameter 'username' => 'admin'</li>
 		</ul>",
 	'cmspages:content:rawhtml' => "Page or block content (HTML)",
 	'cmspages:content:template' => "Template structure or content",

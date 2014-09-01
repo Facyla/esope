@@ -611,6 +611,13 @@ $en = array(
 	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	
+	// Join groups at registration
+	'esope:register:joingroups' => "Join groups",
+	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
+	'esope:register:morejoingroups' => "Display more groups",
+	
+	'readmore' => "Read more",
+	
 );
 
 add_translation('en', $en);

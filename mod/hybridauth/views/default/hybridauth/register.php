@@ -9,7 +9,7 @@ $providers = array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' =>
 
 if ($providers) {
 	if (!elgg_is_logged_in()) {
-		$content .= '<h4>' . elgg_echo('hybridauth:orregisterwith') . '</h4>';
+		//$content .= '<h4>' . elgg_echo('hybridauth:orregisterwith') . '</h4>';
 	}
 	$content .= '<p>';
 	foreach ($providers as $key => $name) {

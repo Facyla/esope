@@ -28,7 +28,6 @@ function adf_platform_init() {
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
-	
 	// CSS & JS SCRIPTS
 	elgg_extend_view('css/elgg', 'adf_platform/css');
 	elgg_extend_view('css/admin', 'adf_platform/admin_css');
@@ -47,6 +46,8 @@ function adf_platform_init() {
 	}
 	// Commentaires
 	elgg_extend_view('page/elements/comments', 'comments/public_notice', 1000);
+	
+	elgg_extend_view('register/extend', 'forms/groups/register_join_groups', 600);
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
@@ -1408,6 +1409,61 @@ function esope_get_meta_values($meta_name) {
 		}
 	}
 	return $meta_opt;
+}
+
+
+/* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea
+ * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
+ * Return : Tableau filtré, ou false
+ */
+function esope_get_input_array($input = false) {
+	if ($input) {
+		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
+		$input = preg_replace('/\r\n|\n|\r/', '\n', $input);
+		$input = str_replace(array(",", ";", "|"),"\n",$input);
+		$input = explode("\n",$input);
+		// Suppression des espaces
+		$input = array_map('trim', $input);
+		// Suppression des doublons
+		$input = array_unique($input);
+		// Supression valeurs vides
+		$input = array_filter($input);
+	}
+	return $input;
+}
+
+
+/* Renvoie un array de groupes selon les critères featured et open membership
+ *
+ * string $mode : types de groupes = (default), ou featured
+ * bool $filter : groupes en inscription libre seulement
+ * bool $bypass : ne pas tenir compte des accès (mode admin)
+ *
+*/
+function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
+	// Admin : on ne tient pas compte des accès
+	if ($bypass) {
+		$ia = elgg_get_ignore_access();
+		elgg_set_ignore_access(true);
+	}
+	switch($mode) {
+		case 'featured':
+			// Groupes en Une
+			$groups = elgg_get_entities_from_metadata(array('metadata_name' => 'featured_group', 'metadata_value' => 'yes', 'type' => 'group', 'limit' => 0));
+			break;
+		default:
+			// Tous groupes
+			$groups = elgg_get_entities(array('type' => 'group', 'limit' => 0));
+	}
+	// Filtre des groupes en inscription libre
+	if ($filter == 'open') {
+		foreach ($groups as $k => $ent) {
+			if (!$ent->isPublicMembership()) { unset($groups[$k]); }
+		}
+	}
+	if ($bypass) { elgg_set_ignore_access($ia); }
+	usort($groups, create_function('$a,$b', 'return strcmp($a->name,$b->name);')); 
+	return $groups;
 }
 
 

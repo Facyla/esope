@@ -231,15 +231,18 @@ function adf_platform_groups_handle_owned_page() {
 }
 
 
-
+// Search restrited to group content
 function esope_groups_search_page() {
 	elgg_push_breadcrumb(elgg_echo('search'));
 	include elgg_get_plugins_path() . 'adf_public_platform/pages/search/index.php';
 }
 
+// Search into a group
 function esope_groups_groupsearch_page() {
 	elgg_push_breadcrumb(elgg_echo('search'));
 	include elgg_get_plugins_path() . 'adf_public_platform/pages/groups/groupsearch.php';
 }
+
+
 
 
