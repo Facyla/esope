@@ -812,8 +812,8 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$profile_type = false;
 		// Type de profil
 		if ($profile_type_guid = $user->custom_profile_type) {
-			if (($custom_profile_type = get_entity($profile_type_guid)) && ($custom_profile_type instanceof ProfileManagerCustomProfileType)) {
-				$profile_type = $custom_profile_type->metadata_name;
+			if (($type = get_entity($profile_type_guid)) && ($type instanceof ProfileManagerCustomProfileType)) {
+				$profile_type = strtolower($type->metadata_name);
 			}
 		}
 		return $profile_type;
@@ -848,10 +848,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 			);
 		if ($custom_profile_types = elgg_get_entities($profile_types_options)) {
 			foreach($custom_profile_types as $type) {
+				$profile_type = strtolower($type->metadata_name);
 				if ($use_translation) {
-					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $type->metadata_name);
+					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
 				} else {
-					$profiletypes[$type->guid] = $type->metadata_name;
+					$profiletypes[$type->guid] = $profile_type;
 				}
 			}
 		}
