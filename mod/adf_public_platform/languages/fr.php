@@ -101,7 +101,7 @@ $fr = array(
 	'adf_platform:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
 	'adf_platform:config:expert' => "EXPERT",
 	'adf_platform:config:security' => "SECURITÉ",
-	'adf_platform:config:security:notice' => "<p>Une aprtie de la sécurisation du site dépend du serveur. Certaines améliorations peuvent être mises en place via .htaccess. Les réglages restants peuvent être modifiés ci-dessous.</p>
+	'adf_platform:config:security:notice' => "<p>Une partie de la sécurisation du site dépend du serveur. Certaines améliorations peuvent être mises en place via .htaccess. Les réglages restants peuvent être modifiés ci-dessous.</p>
 		<p>Pour assurer une sécurité maximale, veuillez considérer les points suivants :</p>
 		<ul>
 			<li>Sécurisez votre serveur web</li>
