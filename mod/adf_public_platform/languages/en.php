@@ -533,6 +533,7 @@ $en = array(
 	
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
+	'esope:subgroups:tryjoiningparent' => "Trying to join parent groups to allow joining %s",
 	
 	'esope:input:nogroup' => "No group selected",
 	'esope:input:donotchange' => "Do not change (%s)",
@@ -597,6 +598,27 @@ $en = array(
 	
 	'esope:bookmarks:container' => "Publish in...",
 	'esope:container:option:own' => "%s (personnel)",
+	
+	// Messages
+	'esope:messages:allinbox' => "All incoming messages",
+	'esope:messages:unreadonly' => "Unread messages only",
+	
+	// Notification, digest and newsletter CSS and wrappers
+	'esope:html_email_handler:css' => "Notifications custom CSS",
+	'esope:html_email_handler:css:help' => "If set, this CSS will replace default CSS (in html_email_handler/notification/body).",
+	'esope:html_email_handler:wrapper:help' => "If you want to edit the notification wrapper, please copy and edit the default wrapper in your theme (html_email_handler/notification/body).",
+	'esope:digest:css:help' => "If you want to edit the digest CSS, please copy and edit the default CSS in your theme (css/digest/*).",
+	'esope:digest:wrapper:help' => "If you want to edit the digest wrapper, please copy and edit the default wrapper in your theme (page/layouts/digest).<br />To edit the inner elements content and wrappers, please read the Digest documentation for more detailed instructions. The views are located in digest/elements/* but you'll need to register elements to add them to the digests.",
+	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
+	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
+	
+	// Join groups at registration
+	'esope:settings:register:joingroup' => "Allow to join groups at registration",
+	'esope:register:joingroups' => "Join groups",
+	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
+	'esope:register:morejoingroups' => "Display more groups",
+	
+	'readmore' => "Read more",
 	
 );
 

@@ -14,15 +14,8 @@ if (elgg_instanceof($ent, 'object')) {
 	$_SESSION['last_forward_from'] = current_page_url();
 	
 	// Check plugin settings
-	$extendfullonly = elgg_get_plugin_setting('extendfullonly ', 'pin');
-	if ($extendfullonly != 'no') $extendfullonly = true; else $extendfullonly	= false; 
 	$usehighlight = elgg_get_plugin_setting('highlight', 'pin');
-	if ($usehighlight == 'yes') $usehighlight = true; else $usehighlight = false;
-	
-	// @todo : ajaxify actions
-	
-	
-	if ($usehighlight) {
+	if ($usehighlight == 'yes') {
 		// Highlight - admin or moderator selected content
 		/* Mise en valeur d'un contenu :
 		 * (int) or (array) highlight : (true or value or array of values) / (false or null)
@@ -100,7 +93,8 @@ if (elgg_instanceof($ent, 'object')) {
 	
 	
 	// Render the view only if not empty
-	if ($body) echo '<div class="pin_container">' . $body . '</div>';
+	//if ($body) echo '<div class="pin_container">' . $body . '</div>';
+	if ($body) echo $body;
 	
 }
 

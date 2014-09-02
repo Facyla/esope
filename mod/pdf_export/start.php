@@ -48,14 +48,15 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 		if (in_array($params['entity']->getSubtype(), $validsubtypes)) {
 			// Menu elements
 			$link_url = $CONFIG->url . 'pdfexport/pdf/' . $params['entity']->guid;
-			$text = '<img src="' . $CONFIG->url . 'mod/pdf_export/graphics/pdf4_32.png" alt="' . elgg_echo('pdfexport:download:alt') . '" />';
+			//$text = '<i class="fa fa-file-pdf-o"></i> PDF';
+			$text = '<img src="' . $CONFIG->url . 'mod/pdf_export/graphics/pdf5_32.png" alt="' . elgg_echo('pdfexport:download:alt') . '" style="height:20px;"/>';
 			//$text = '<img src="' . $CONFIG->url . 'mod/pdf_export/graphics/pdf4_16.png" alt="' . elgg_echo('pdfexport:download:alt') . '" />';
 			$title = elgg_echo('pdfexport:download:title');
 			// Build the menu
 			$pdf_export_menu = new ElggMenuItem('pdf_export', $text, $link_url);
 			$pdf_export_menu->addLinkClass('pdf_export');
 			$pdf_export_menu->setTooltip($title);
-			$pdf_export_menu->setPriority(900);
+			$pdf_export_menu->setPriority(1000);
 			$return[] = $pdf_export_menu;
 		}
 	}

@@ -16,7 +16,7 @@ Pour écrire un message à %s, cliquez sur :
 Vous devez vous connecter pour répondre à cet email.',
   'messages:notfound' => 'Désolé, ce message n\'a pas pu être trouvé.',
   'messages:notdeleted' => 'Désolé, ce message n\'a pas pu être effacé.',
-  'messages:user:nonexist' => 'Le destinataire n\'a pas pu être trouvé dans la base de données des membres.',
+  'messages:user:nonexist' => 'Le destinataire n\'a pas pu être trouvé parmi les membres.',
   'messages:deleted_sender' => 'Compte de membre supprimé',
   'messages:send' => 'Envoyer le message',
   'messages' => 'Messages',
@@ -55,6 +55,6 @@ Vous devez vous connecter pour répondre à cet email.',
   'messages:blank' => 'Désolé, vous devez écrire quelque chose dans votre message avant de pouvoir l\'enregistrer.',
   'messages:nopermission' => 'Vous n\'avez pas l\'autorisation de modifier ce message.',
   'messages:nomessages' => 'Il n\'y a aucun message.',
-  'messages:user:blank' => 'Vous n\'avez sélectionné personne à qui envoyer ce message.',
+  'messages:user:blank' => 'Vous n\'avez pas sélectionné de destinataire.',
 );
 add_translation("fr", $language);

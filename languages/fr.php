@@ -478,7 +478,7 @@ $french = array(
 	'register' => "Créer un compte",
 	'registerok' => "Vous vous êtes enregistré avec succès sur %s.",
 	'registerbad' => "La création de votre compte n'a pas fonctionné pour une raison inconnue.",
-	'registerdisabled' => "Votre compte a été désactivé par l'administrateur du site.",
+	'registerdisabled' => "La création de compte est désactivée sur ce site.",
 
 	'registration:notemail' => "L'adresse email que vous avez renseignée n'apparaît pas comme valide.",
 	'registration:userexists' => "Ce nom d'utilisateur existe déjà, merci d'en choisir un autre",
@@ -892,16 +892,16 @@ $french = array(
 	'useradd:body' => "
 %s,
 
-Un compte utilisateur vous a été créé sur %s. Pour vous connecter, rendez-vous :
+Un compte utilisateur a été créé pour vous sur %s. Pour vous connecter, rendez-vous sur :
 
 %s
 
-Et authentifiez-vous avec les éléments suivant :
+Identifiez-vous avec les éléments suivants :
 
 Identifiant de connexion : %s
 Mot de passe : %s
 
-Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de changer votre mot de passe.
+Une fois que vous vous êtes connecté(e), vous pouvez changer votre mot de passe via vos Paramètres.
 ",
 
 /**

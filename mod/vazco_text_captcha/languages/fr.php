@@ -12,13 +12,13 @@
 $french = array(
 
 	'vazco_text_captcha:entercaptcha' => "Merci de répondre à une question simple",
-	'vazco_text_captcha:entercaptcha:description' => "Votre réponse",
+	'vazco_text_captcha:entercaptcha:description' => "Votre réponse ",
 	'vazco_text_captcha:captchafail' => "Désolé, la réponse saisie est incorrecte.",
 	'vazco_text_captcha:tasks' => "Ajouter des questions :<ul>
 			<li>Saisissez une question par ligne</li>
 			<li>Utilisez un | pour séparer question et réponse (sans espace entre les deux)</li>
 		</ul>",
 );
-				
+
 add_translation("fr",$french);
 

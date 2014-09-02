@@ -13,11 +13,6 @@ elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
 elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); // Menu
 
-// Gestion des notifications par mail lors de l'entrée dans un groupe
-elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
-// Suppression des notifications lorsqu'on quitte le groupe
-elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
-
 
 /**
  * Init adf_platform plugin.
@@ -27,7 +22,6 @@ function adf_platform_init() {
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
-	
 	
 	// CSS & JS SCRIPTS
 	elgg_extend_view('css/elgg', 'adf_platform/css');
@@ -47,6 +41,8 @@ function adf_platform_init() {
 	}
 	// Commentaires
 	elgg_extend_view('page/elements/comments', 'comments/public_notice', 1000);
+	
+	elgg_extend_view('register/extend', 'forms/groups/register_join_groups', 600);
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
@@ -84,6 +80,17 @@ function adf_platform_init() {
 	
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
 	// Related functions are in lib/adf_public/platform/hooks.php
+	
+	// Gestion des notifications par mail lors de l'entrée dans un groupe
+	elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
+	// Suppression des notifications lorsqu'on quitte le groupe
+	elgg_register_event_handler('delete','member','adf_public_platform_group_leave', 800);
+	
+	// Gestion des actions post-inscription
+	elgg_register_plugin_hook_handler('register', 'user', 'esope_create_user_hook');
+	// Gestion des actions post-login
+	elgg_register_event_handler('login','user','esope_login_user_action', 800);
+	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
@@ -129,6 +136,10 @@ function adf_platform_init() {
 		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
 	}
 	
+	// Sélection du menu messages (lorsque filtre unread utilisé)
+	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'esope_prepare_menu_page_hook', 1000);
+	elgg_register_plugin_hook_handler('prepare', 'menu:site', 'esope_prepare_menu_page_hook');
+	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
@@ -142,7 +153,7 @@ function adf_platform_init() {
 		// Attention : ça ne bloque pas un accès direct s'il existe des fichiers à la racine du plugin...
 		elgg_register_plugin_hook_handler('route', 'all', 'adf_platform_route');
 		// Réglage pour l'utilisateur
-		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 600); // En haut des réglages
+		elgg_extend_view("forms/account/settings", "adf_platform/account/public_profile", 50); // En haut des réglages
 		// Hook pour modifier le nouveau réglage ajouté aux paramètres personnels
 		elgg_register_plugin_hook_handler('usersettings:save', 'user', 'adf_platform_public_profile_hook');
 		// @TODO : compléter par un blocage direct au niveau de l'entité elle-même pour les listings et autres photos 
@@ -576,12 +587,12 @@ if (!function_exists('messages_get_unread')) {
 	 *
 	 * @return array
 	 */
-	function messages_get_unread($user_guid = 0, $limit = 10) {
+	function messages_get_unread($user_guid = 0, $limit = 10, $count = false) {
 		if (!$user_guid) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		$db_prefix = elgg_get_config('dbprefix');
-
+		
 		// denormalize the md to speed things up.
 		// seriously, 10 joins if you don't.
 		$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
@@ -609,6 +620,8 @@ if (!function_exists('messages_get_unread')) {
 			),
 			'owner_guid' => $user_guid,
 			'limit' => $limit,
+			'offset' => $offset,
+			'count' => $count,
 		);
 
 		return elgg_get_entities_from_metadata($options);
@@ -799,8 +812,8 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$profile_type = false;
 		// Type de profil
 		if ($profile_type_guid = $user->custom_profile_type) {
-			if (($custom_profile_type = get_entity($profile_type_guid)) && ($custom_profile_type instanceof ProfileManagerCustomProfileType)) {
-				$profile_type = $custom_profile_type->metadata_name;
+			if (($type = get_entity($profile_type_guid)) && ($type instanceof ProfileManagerCustomProfileType)) {
+				$profile_type = strtolower($type->metadata_name);
 			}
 		}
 		return $profile_type;
@@ -835,10 +848,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 			);
 		if ($custom_profile_types = elgg_get_entities($profile_types_options)) {
 			foreach($custom_profile_types as $type) {
+				$profile_type = strtolower($type->metadata_name);
 				if ($use_translation) {
-					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $type->metadata_name);
+					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
 				} else {
-					$profiletypes[$type->guid] = $type->metadata_name;
+					$profiletypes[$type->guid] = $profile_type;
 				}
 			}
 		}
@@ -1404,5 +1418,100 @@ function esope_get_meta_values($meta_name) {
 	return $meta_opt;
 }
 
+
+/* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea
+ * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
+ * Return : Tableau filtré, ou false
+ */
+function esope_get_input_array($input = false) {
+	if ($input) {
+		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
+		$input = preg_replace('/\r\n|\n|\r/', '\n', $input);
+		$input = str_replace(array(",", ";", "|"),"\n",$input);
+		$input = explode("\n",$input);
+		// Suppression des espaces
+		$input = array_map('trim', $input);
+		// Suppression des doublons
+		$input = array_unique($input);
+		// Supression valeurs vides
+		$input = array_filter($input);
+	}
+	return $input;
+}
+
+
+/* Renvoie un array de groupes selon les critères featured et open membership
+ *
+ * string $mode : types de groupes = (default), ou featured
+ * bool $filter : groupes en inscription libre seulement
+ * bool $bypass : ne pas tenir compte des accès (mode admin)
+ *
+*/
+function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
+	// Admin : on ne tient pas compte des accès
+	if ($bypass) {
+		$ia = elgg_get_ignore_access();
+		elgg_set_ignore_access(true);
+	}
+	switch($mode) {
+		case 'featured':
+			// Groupes en Une
+			$groups = elgg_get_entities_from_metadata(array('metadata_name' => 'featured_group', 'metadata_value' => 'yes', 'type' => 'group', 'limit' => 0));
+			break;
+		default:
+			// Tous groupes
+			$groups = elgg_get_entities(array('type' => 'group', 'limit' => 0));
+	}
+	// Filtre des groupes en inscription libre
+	if ($filter == 'open') {
+		foreach ($groups as $k => $ent) {
+			if (!$ent->isPublicMembership()) { unset($groups[$k]); }
+		}
+	}
+	if ($bypass) { elgg_set_ignore_access($ia); }
+	usort($groups, create_function('$a,$b', 'return strcmp($a->name,$b->name);')); 
+	return $groups;
+}
+
+
+// Perform some post-login actions (join groups, etc.)
+function esope_login_user_action($event, $type, $user) {
+	if (elgg_instanceof($user, "user")) {
+		if (!$user->isBanned()) {
+			// Try to join groups asked at registration
+			if ($user->join_groups) {
+				foreach($user->join_groups as $group_guid) {
+					if ($group = get_entity($group_guid)) {
+						// Process only groups that haven't been joined yet
+						if (!$group->isMember($user)) {
+							if (!$group->join($user)) {
+								// Handle subgroups cases
+								if (elgg_is_active_plugin('au_subgroups')) {
+									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
+									while ($parent = au_subgroups_get_parent_group($group)) {
+										//  Join only if parent group is public membership or if we have a join pending
+										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
+											// Join group, or add to join list
+											if (!$parent->join($user)) { $join_children[] = $parent->guid; }
+										}
+									}
+									// Start joining from upper parents if needed
+									if ($join_children) {
+										$join_children = array_reverse($join_children);
+										foreach($join_children as $children) { $children->join($user); }
+									}
+									// Try to join group again
+									if ($group->join($user)) {}
+								}
+							}
+						}
+					}
+				}
+				// Update waiting list
+				$user->join_groups = null;
+			}
+		}
+	}
+}
 
 

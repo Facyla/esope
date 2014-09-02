@@ -292,22 +292,62 @@ function cmspages_render_template($template, $content = null) {
 function cmspages_list_subtemplates($content, $recursive = true) {
 	global $CONFIG;
 	$return = '';
+	// List all template types = everything between {{ and }}
 	$motif = "#(?<=\{{)(.*?)(?=\}})#";
+	// List templates only (exclude shortcodes, content vars and views)
+	//$motif = "#(?<=\{{)([^:[%]*?)(?=\}})#";
 	preg_match_all($motif, $content, $templates);
-	foreach ($templates[0] as $template) {
-		$return .= '<li>';
-		$return .= '<a href="' . $CONFIG->url . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
-		if ($recursive) {
-				$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
-				$cmspages = elgg_get_entities_from_metadata($options);
-				if ($cmspages) {
-					$cmspage = $cmspages[0];
-					$return .= cmspages_list_subtemplates($cmspage->description, $recursive);
-				}
+	if ($templates[0]) {
+		$return .= '<ul>';
+		foreach ($templates[0] as $template) {
+			$first_letter = substr($template, 0, 1);
+			switch($first_letter) {
+				case '%':
+					$content_vars .= '<li>\'' . str_replace('%', '', strtolower($template)) . '\'</li>';
+					break;
+					
+				case ':':
+					$view_param = explode('|', substr($template, 1));
+					$params = array();
+					foreach($view_param as $key => $param) {
+						if ($key == 0) {
+							$views .= "<li>elgg_view('" . strtolower($view_param[0]) . "'";
+						} else {
+							$params[] = "'" . str_replace('=', "' => \"", $param) . '"';
+						}
+					}
+					if (!empty($params)) $views .= ', array(' . implode(', ', $params) . ')';
+					$views .= ')</li>';
+					break;
+					
+				case '[':
+					$shortcodes .= '<li>' . strtolower($template) . '</li>';
+					break;
+					
+				default:
+					$return .= '<li>';
+					$return .= '<a href="' . $CONFIG->url . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+					if ($recursive) {
+							$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
+							$cmspages = elgg_get_entities_from_metadata($options);
+							if ($cmspages) {
+								$cmspage = $cmspages[0];
+								$return .= cmspages_list_subtemplates($cmspage->description, $recursive);
+							}
+					}
+					$return .= '</li>';
+			}
 		}
-		$return .= '</li>';
+		$return .= '</ul>';
 	}
-	if (!empty($return)) $return = '<ul>' . $return . '</ul>';
+	
+	// List content vars
+	if ($content_vars) { $return .= '<br />Content parameters<ul>' . $content_vars . '</ul>'; }
+	// List shortcodes
+	if ($shortcodes) { $return .= '<br />Shortcodes<ul>' . $shortcodes . '</ul>'; }
+	// List views
+	if ($views) { $return .= '<br />Views<ul>' . $views . '</ul>'; }
+	
 	return $return;
 }
 

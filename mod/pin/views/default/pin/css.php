@@ -2,8 +2,8 @@
 $iconurl = $vars['url'] . 'mod/pin/graphics/';
 ?>
 
-.pin_container { padding:3px 6px; background:transparent; font-size:11px; }
-.pin_container * a:hover { text-decoration:none; }
+.elgg-menu-item-pins { padding:3px 6px; background:transparent; font-size:14px; text-decoration:none; }
+.elgg-menu-item-pins a, .pin_container a:hover { text-decoration:none; }
 
 
 .icon-footprint { background:url(<?php echo $iconurl; ?>pin_icons.png) no-repeat top left; background-position:0 0; width:22px; height:16px; margin-bottom:4px; float:left; }

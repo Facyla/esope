@@ -10,6 +10,7 @@
 /* Cmspages edit form */
 #cmspages-edit-form fieldset { border: 1px solid; padding: 1ex; }
 #cmspages-edit-form legend { margin:0 1ex; }
+#cmspages-edit-form ul { list-style-type: square; margin-left: 3ex; }
 
 #cmspages-form-select, #cmspages-form-new { display:inline-block; }
 

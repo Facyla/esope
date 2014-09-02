@@ -5,13 +5,14 @@
  * @package Elgg
  * @subpackage Core
  */
+$username = elgg_extract('username', $vars, get_input('u'));
 ?>
 
 <p class="invisible"><?php echo elgg_echo('accessibility:allfieldsmandatory'); ?></p>
 
 <div>
 	<label for="login_username"><?php echo elgg_echo('loginusername'); ?>*</label>
-	<?php echo elgg_view('input/text', array('name' => 'username', 'class' => 'elgg-autofocus', 'id' => "login_username", )); ?>
+	<?php echo elgg_view('input/text', array('name' => 'username', 'class' => 'elgg-autofocus', 'id' => "login_username", 'value' => $username)); ?>
 </div>
 <div>
 	<label for="login_password"><?php echo elgg_echo('password'); ?>*</label>

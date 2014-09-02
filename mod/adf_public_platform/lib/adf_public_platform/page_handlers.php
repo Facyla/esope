@@ -442,7 +442,12 @@ function adf_platform_messages_page_handler($page) {
 	switch ($page[0]) {
 		case 'inbox':
 			set_input('username', $page[1]);
-			include("$base_dir/inbox.php");
+			include("$custom_dir/inbox.php");
+			break;
+		case 'unread':
+			// Note : la page inbox intègre un switch, version alternative avec une page spécifique, qui nécessiterait l'ajout d'un menu'
+			set_input('username', $page[1]);
+			include("$custom_dir/unread.php");
 			break;
 		case 'sent':
 			set_input('username', $page[1]);

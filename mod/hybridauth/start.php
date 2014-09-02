@@ -6,6 +6,14 @@ function hybridauth_init() {
 	elgg_extend_view('css','hybridauth/css');
 	elgg_register_page_handler('hybridauth','hybridauth_page_handler');
 	
+	if (elgg_get_plugin_setting('login_enable', 'hybridauth') == 'yes') {
+		elgg_extend_view('forms/login', 'hybridauth/login');
+	}
+	if (elgg_get_plugin_setting('register_enable', 'hybridauth') == 'yes') {
+		elgg_extend_view('forms/register', 'hybridauth/register', 100);
+	}
+	
+	
 	// Short code processing library (from Wordpress)
 	$root = elgg_get_plugins_path();
 	elgg_register_library('hybridauth', $root."hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php");
@@ -27,10 +35,12 @@ function hybridauth_page_handler($page) {
 			break;
 			
 		case 'twitter':
+			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
 			include(dirname(__FILE__) . "/pages/hybridauth/twitter.php");
 			break;
 			
 		case 'linkedin':
+			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
 			include(dirname(__FILE__) . "/pages/hybridauth/linkedin.php");
 			break;
 		case 'linkedin_profile_update':
@@ -38,10 +48,12 @@ function hybridauth_page_handler($page) {
 			break;
 			
 		case 'google':
+			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
 			include(dirname(__FILE__) . "/pages/hybridauth/google.php");
 			break;
 			
 		case 'facebook':
+			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
 			include(dirname(__FILE__) . "/pages/hybridauth/facebook.php");
 			break;
 			

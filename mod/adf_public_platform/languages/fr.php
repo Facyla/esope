@@ -532,6 +532,7 @@ $fr = array(
 	
 	'esope:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
 	'esope:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
+	'esope:subgroups:tryjoiningparent' => "Tentative d'inscription dans les groupes parents pour vous inscrire à %s",
 	
 	'esope:input:nogroup' => "Aucun groupe",
 	'esope:input:donotchange' => "Ne pas changer (%s)",
@@ -574,7 +575,7 @@ $fr = array(
 	
 	// Menu top des groupes
 	'esope:groups:home' => "Présentation",
-	'adf_platform:settings:groups:topmenu' => "Activer les onglets dans les groupes (menu supérieur)",
+	'adf_platform:settings:groups:topmenu' => "Activer le menu supérieur configurable  dans les groupes",
 	'adf_platform:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
@@ -595,6 +596,27 @@ $fr = array(
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
+	
+	// Messages
+	'esope:messages:allinbox' => "Tous les messages reçus",
+	'esope:messages:unreadonly' => "Messages non lus seulement",
+	
+	// Notification, digest and newsletter CSS and wrappers
+	'esope:html_email_handler:css' => "CSS personnalisées des notifications",
+	'esope:html_email_handler:css:help' => "Si défini, cette feuille de style remplace celle par défaut définie dans la vue html_email_handler/notification/body.",
+	'esope:html_email_handler:wrapper:help' => "Si vous souhaitez éditer le modèle de page des notifications, veuillez copier et éditer la vue html_email_handler/notification/body dans votre plugin de thème.",
+	'esope:digest:css:help' => "Si vous souhaitez éditer les styles des résumés, veuillez copier et éditer les vues css/digest/* dans votre plugin de thème.",
+	'esope:digest:wrapper:help' => "Si vous souhaitez éditer le modèle de page des résumés, veuillez copier et éditer la vue page/layouts/digest dans votre plugin de thème.<br />Pour modifier les contenus et leur structure, veuillez consulter la documentation détaillée fournie avec le plugin Digest. Les vues utiles sont situées dans digest/elements/* mais vous devrez également définir les élements à intégrer aux résumés.",
+	'esope:newsletter:css:help' => "Si vous souhaitez éditer les styles par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/css dans votre plugin de thème.",
+	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
+	
+	// Join groups at registration
+	'esope:settings:register:joingroups' => "Permettre de rejoindre des groupes dès l'inscription",
+	'esope:register:joingroups' => "Rejoindre des groupes",
+	'esope:register:joingroups:help' => "Vous pouvez choisir de rejoindre une sélection de groupes. Notez qu'il ne s'agit que de groupes publics et en libre accès : vous pourrez rejoindre davantage de groupes une fois votre inscription terminée.",
+	'esope:register:morejoingroups' => "Afficher plus de groupes",
+	
+	'readmore' => "Lire la suite",
 	
 );
 

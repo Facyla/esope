@@ -322,3 +322,50 @@ if (elgg_is_active_plugin('au_subgroups')) {
 }
 
 
+/* Modification du menu de la page
+ * Sélection du menu basée sur l'URL de la page sans paramètre
+ * Select menu without using the URL parameters : e.g. /messages/inbox/admin?unread=true will select menu /messages/inbox/admin too
+ * Also select parent menus based on page handler : /members/popular will also select /members
+ */
+function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
+	$base_url = explode('?', full_url());
+	$base_url = $base_url[0];
+	if (!empty($base_url)) {
+		foreach($return as $menu_block) {
+			foreach($menu_block as $element) {
+				$href = $element->getHref();
+				if (!empty($href)) {
+					// Select base menu (based on base url, without parameters)
+					if ($href == $base_url) { $element->setSelected(); }
+					// Select parent menu (based on page handler sequence)
+					if (strpos($base_url, $href) === 0) { $element->setSelected(); }
+				}
+			}
+		}
+	}
+	return $return;
+}
+
+
+// Perform some post-login actions (join groups, etc.)
+function esope_create_user_hook($hook, $type, $return_value, $params) {
+	if (is_array($params)) {
+		$user = elgg_extract("user", $params);
+		if (elgg_instanceof($user, "user")) {
+			if (!$user->isBanned()) {
+				$group_guids = get_input('join_groups', false);
+				if ($group_guids) {
+					// We'll process it later, at first login
+					// The input should be an array, but allow comma-separated input as well for extendability reasons
+					// e.g. for registration using URL (GET)
+					if (!is_array($group_guids)) { $group_guids = explode(',', $group_guids); }
+					$user->join_groups = $group_guids;
+				}
+			}
+		}
+	}
+	// We don't change anything to the process
+	return $return_value;
+}
+
+

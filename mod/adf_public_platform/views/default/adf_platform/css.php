@@ -80,7 +80,7 @@ $footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
 $font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
 $font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
 $font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
-$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
+$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform'); // Main font
 $font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
 $font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>
@@ -366,8 +366,14 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #adf-homepage ul { list-style-type: square; }
 #adf-homepage ul li { margin-bottom:8px; }
 #adf-homepage .elgg-form-register fieldset > div, #adf-homepage .elgg-form-register .mandatory { clear: both; }
+#adf-homepage .profile_manager_register_category { margin: 15px 0 15px 0 !important; }
+#adf-homepage .captcha-left { display:inline-block; }
+
 select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
+#adf-homepage .register-fullwidth { clear:both; }
+#adf-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
+.profile_manager_register_input_container { display:inline-block; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 
 /* FORMULAIRES - FORMS */

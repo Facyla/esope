@@ -7,9 +7,9 @@
  */
 
 $password = $password2 = '';
-$username = get_input('u');
-$email = get_input('e');
-$name = get_input('n');
+$username = elgg_extract('username', $vars, get_input('u'));
+$email = elgg_extract('email', $vars, get_input('e'));
+$name = elgg_extract('name', $vars, get_input('n'));
 
 if (elgg_is_sticky_form('register')) {
 	extract(elgg_get_sticky_values('register'));
@@ -18,43 +18,25 @@ if (elgg_is_sticky_form('register')) {
 
 // must accept terms
 if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manager")){
-	$link_begin = "<a target='_blank' href='" . $accept_terms . "'>";
-	$link_end = "</a>";
+	$link_begin = '<a target="_blank" href="' . $accept_terms . '">';
+	$link_end = '</a>';
 	
-	$terms = "<div class='mandatory'>";
-	$terms .= "<input id='register-accept_terms' type='checkbox' name='accept_terms' value='yes' /> ";
-	$terms .= "<label for='register-accept_terms'>" . elgg_echo("profile_manager:registration:accept_terms", array($link_begin, $link_end)) . "</label>";
-	$terms .= "</div>";
+	$terms = '<div class="mandatory register-fullwidth">';
+	$terms .= '<label for="register-accept_terms" class="register-fullwidth">';
+	$terms .= '<input id="register-accept_terms" type="checkbox" name="accept_terms" value="yes" /> ';
+	$terms .= elgg_echo("profile_manager:registration:accept_terms", array($link_begin, $link_end));
+	$terms .= '</label>';
+	$terms .= '</div>';
 }
 
 ?>
 <h2><?php echo elgg_echo('register'); ?></h2>
 
-<div>
-  <?php
-  if (elgg_is_active_plugin('adf_registration_filter')) {
-    // Get and prepare valid domain config array from plugin settings
-    $whitelist = elgg_get_plugin_setting('whitelist', 'adf_registration_filter');
-    // Add csv support - cut also on ";" and ","
-    $whitelist = str_replace(array(' ', '<p>', '</p>'), '', $whitelist); // Clean list - delete all white spaces
-    $whitelist = preg_replace('/\r\n|\r/', ", ", $whitelist);
-    $whitelist = str_replace(array(';'), ", ", $whitelist);
-    $whitelist_intro = substr($whitelist, 0, 185);
-    $whitelist_end = '<span id="adf-register-whitelist" style="display:none;">' . substr($whitelist, 185) . '</span>';
-    echo elgg_echo('registration_filter:register:whitelist') . $whitelist_intro . '<a href="javascript:void(0);" onclick="$(\'#adf-register-whitelist\').toggle(); this.innerHTML=\'\';">.. Lire la suite</a>' . $whitelist_end;
-  }
-  ?>
-</div>
-
-<hr class="adf-strongseparator" />
-
 <?php
 echo "<div id='profile_manager_register_left'>";
 
 $show_hints = false;
-if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
-	$show_hints = true;
-}
+if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes") { $show_hints = true; }
 ?>
 
 <fieldset>
@@ -67,14 +49,17 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 		<span class='custom_fields_more_info_text' id='text_more_info_name'><?php echo elgg_echo("profile_manager:register:hints:name")?></span>
 		<?php } ?>
 		
+		<div class='profile_manager_register_input_container'>
 		<?php
 		echo elgg_view('input/text', array(
 			'id' => 'register-name',
 			'name' => 'name',
 			'value' => $name,
-			'class' => 'elgg-autofocus'
+			'class' => 'elgg-autofocus',
+			'required' => 'required',
 		));
 		?>
+		</div>
 		
 	</div>
 	<div class="mandatory">
@@ -91,6 +76,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 				'id' => 'register-email',
 				'name' => 'email',
 				'value' => $email,
+				'required' => 'required',
 			));
 			?>
 			<span class='elgg-icon profile_manager_validate_icon'></span>
@@ -110,6 +96,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 				'id' => 'register-username',
 				'name' => 'username',
 				'value' => $username,
+				'required' => 'required',
 			));
 			?>
 			<div class='elgg-icon profile_manager_validate_icon'></div>
@@ -118,7 +105,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 	<div class="mandatory">
 		<label for='register-password'><?php echo elgg_echo('password'); ?></label>
 		
-		<?php if($show_hints){ ?>
+		<?php if ($show_hints) { ?>
 		<span class='custom_fields_more_info' id='more_info_password'></span>
 		<span class='custom_fields_more_info_text' id='text_more_info_password'><?php echo elgg_echo("profile_manager:register:hints:password")?></span>
 		<?php } ?>
@@ -129,6 +116,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 				'id' => 'register-password',
 				'name' => 'password',
 				'value' => $password,
+				'required' => 'required',
 			));
 			?>
 			<span class='elgg-icon profile_manager_validate_icon'></span>
@@ -148,6 +136,7 @@ if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes"){
 				'id' => 'register-password2',
 				'name' => 'password2',
 				'value' => $password2,
+				'required' => 'required',
 			));
 			?>
 			<span class="elgg-icon profile_manager_validate_icon"></span>
