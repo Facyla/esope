@@ -194,7 +194,7 @@ function adf_platform_groups_page_handler($page) {
 			groups_handle_activity_page($page[1]);
 			break;
 		case 'members':
-			groups_handle_members_page($page[1]);
+			adf_platform_groups_handle_members_page($page[1]);
 			break;
 		case 'invite':
 			groups_handle_invite_page($page[1]);
