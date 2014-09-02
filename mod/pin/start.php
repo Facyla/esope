@@ -59,7 +59,7 @@ function pin_entity_menu_setup($hook, $type, $return, $params) {
 		else $validhighlight = get_registered_entity_types('object');
 		*/
 		
-		$options = array('name' => 'pins', 'href' => false, 'priority' => 900, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));
+		$options = array('name' => 'pins', 'href' => false, 'priority' => 200, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));
 		$return[] = ElggMenuItem::factory($options);
 	}
 	return $return;
