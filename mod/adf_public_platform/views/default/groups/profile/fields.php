@@ -21,10 +21,11 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 			continue;
 		}
 		
-		// Skip exlcuded fields
+		// Skip excluded fields
 		if (in_array($key, $hide_fields)) { continue; }
 		
-		$value = trim($group->$key);
+		$value = $group->$key;
+		if (!is_array($value)) $value = trim($value);
 		if (empty($value)) { continue; }
 
 		$options = array('value' => $group->$key);

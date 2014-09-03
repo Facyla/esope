@@ -4,7 +4,9 @@
 * 
 * @package ElggGroups
 */ 
-	
+
+$group = $vars['entity'];
+
 // tools widget area
 echo '<ul id="groups-tools" class="elgg-gallery elgg-gallery-fluid mtl clearfix">';
 
@@ -36,7 +38,6 @@ echo "</ul>";
 // Add group activity or group content
 // ESOPE : add activity if asked
 if (elgg_get_plugin_setting('groups_add_activity', 'adf_public_platform') == 'yes') {
-	$group = $vars['entity'];
 	if ($group) {
 		elgg_push_context('widgets');
 		$db_prefix = elgg_get_config('dbprefix');
