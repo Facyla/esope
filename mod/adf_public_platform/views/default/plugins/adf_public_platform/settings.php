@@ -29,6 +29,10 @@ $groups_discussion_opt['always'] = elgg_echo('adf_platform:settings:groups:discu
 $group_tools_default_opt = $no_yes_opt;
 $group_tools_default_opt['auto'] = elgg_echo('adf_platform:settings:groups:tools_default:auto');
 
+$groups_disable_widgets_opt = $no_yes_opt;
+$groups_disable_widgets_opt['public'] = elgg_echo('esope:groups:disable_widgets:public');
+$groups_disable_widgets_opt['loggedin'] = elgg_echo('esope:groups:disable_widgets:loggedin');
+
 $pages_list_subpages_opt = $no_yes_opt;
 $pages_list_subpages_opt['user'] = elgg_echo('adf_platform:settings:pages_list_subpages:user');
 $pages_list_subpages_opt['group'] = elgg_echo('adf_platform:settings:pages_list_subpages:group');
@@ -400,12 +404,17 @@ $(function() {
 			echo '<br />';
 			// Set default tools status
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tools_default') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[group_tools_default]', 'options_values' => $group_tools_default_opt, 'value' => $vars['entity']->group_tools_default)) . '</p>';
-			// Enable group top tab menu
-			// Usage: $group->customtab1 to 8 with URL::LinkTitle::TitleProperty syntax
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:topmenu') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_topmenu]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_topmenu)) . '</p>';
 			// Default group content access
 			echo '<p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess)) . '</p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess)) . '</p>';
+			// Group layout
+			// Enable group top tab menu
+			// Usage: $group->customtab1 to 8 with URL::LinkTitle::TitleProperty syntax
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:topmenu') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_topmenu]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_topmenu)) . '</p>';
+			// Remove group widgets
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:disable_widgets') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $vars['entity']->groups_disable_widgets)) . '</p>';
+			// Add group activity
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</p>';
 			echo '<br />';
 			
 			echo '<h4>' . elgg_echo('adf_platform:config:groupinvites') . '</h4>';
