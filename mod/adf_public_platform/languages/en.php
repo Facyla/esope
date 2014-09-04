@@ -57,6 +57,7 @@ $en = array(
 	'adf_platform:config:widgets' => "ENABLED WIDGETS",
 	'adf_platform:settings:removeusermenutools' => "(expert) Remove user menu items.<br />Use link id, eg.: blog,liked_content,photos (NO spacing)",
 	'adf_platform:settings:removeusertools' => "(expert) Remove user content creation button.<br />Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
+	'adf_platform:settings:group_hide_profile_field' => "(expert) List groups fields metadata names that you want to hide in group profile page.",
 	'adf_platform:settings:user_exclude_access' => "(expert) Removes chosen access levels for members. Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:settings:admin_exclude_access' => "(expert) Removes chosen access levels for admins (take care !). Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:config:groupinvites' => "GROUP INVITES",

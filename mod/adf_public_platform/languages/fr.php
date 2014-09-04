@@ -57,6 +57,7 @@ $fr = array(
 	'adf_platform:config:widgets' => "CHOIX DES WIDGETS",
 	'adf_platform:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres.<br />Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
 	'adf_platform:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)).<br />Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",
+	'adf_platform:settings:group_hide_profile_field' => "(expert) Liste des noms des champs des groupes à masquer dans la page d'accueil du groupe.",
 	'adf_platform:settings:user_exclude_access' => "(expert) Supprime les niveaux d'accès des membres. Indiquer les id, par ex: -2,0,1,2 (sans espace)",
 	'adf_platform:settings:admin_exclude_access' => "(expert) Supprime les niveaux d'accès des admins (attention !). Indiquer les id, par ex: -2,0,1,2 (sans espace)",
 	'adf_platform:config:groupinvites' => "INVITATIONS DANS LES GROUPES",
