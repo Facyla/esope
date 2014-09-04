@@ -175,7 +175,7 @@ $en = array(
 	'adf_platform:widget:site_activity:title' => 'Recent activity',
 	'adf_platform:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
 	
-	'accessibility:sidebar:title' => "Tools",
+	'accessibility:sidebar:title' => "Secondary menu",
 	//'breadcrumb' => "Fil d'Ariane",
 	'breadcrumbs' => "Back to ",
 	// Pending requests

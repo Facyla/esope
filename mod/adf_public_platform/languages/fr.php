@@ -174,7 +174,7 @@ $fr = array(
 	'adf_platform:widget:site_activity:title' => "Activité récente",
 	'adf_platform:widget:site_activity:description' => "Affiche les dernières activités du site",
 	
-	'accessibility:sidebar:title' => "Outils",
+	'accessibility:sidebar:title' => "Menu secondaire",
 	//'breadcrumb' => "Fil d'Ariane",
 	'breadcrumbs' => "Revenir à ",
 	// Demandes en attente
@@ -200,7 +200,7 @@ $fr = array(
 	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
-	'groups:join:success' => "Groupe rejoint avec succès",
+	'groups:join:success' => "Vous êtes désormais membre du groupe",
 	// Notifications
 	'link:userprofile' => "Page de profil de %s",
 	
