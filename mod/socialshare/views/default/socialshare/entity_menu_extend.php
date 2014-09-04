@@ -16,7 +16,7 @@ $params = array(
 $body .= elgg_view('output/url', $params);
 $body .= '<div class="elgg-module elgg-module-popup elgg-socialshare hidden clearfix" id="socialshare-' . $guid . '">';
 	$body .= '<div id="socialshare-links-popup">';
-		$body .= elgg_view('socialshare/extend', array());
+		$body .= elgg_view('socialshare/extend', array('shareurl' => $vars['entity']->getURL()));
 		$body .= '<div class="clearfloat"></div>';
 	$body .= '</div>';
 $body .= '</div>';
