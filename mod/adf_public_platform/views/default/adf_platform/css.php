@@ -634,6 +634,9 @@ textarea, .elgg-input-rawtext { width:100%; }
 #groups-tools > li:nth-child(2n+1) { margin-right: 0; margin-left: 0; }
 #groups-tools > li:nth-child(2n) { margin-right: 0; margin-left: 0; }
 
+.groups-members-count { float: right; }
+
+
 /* Generic useful classes */
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
