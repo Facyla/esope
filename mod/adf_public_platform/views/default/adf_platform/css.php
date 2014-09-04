@@ -626,6 +626,7 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 
 /* Agencement fluide des blocs dans les groupes */
+.groups-profile-icon .au_subgroups_group_icon-large { height: auto; }
 .elgg-gallery-fluid > li { float: right; }
 #groups-tools > li.odd { float: left; }
 #groups-tools > li { margin-bottom: 20px; min-height: 100px; width: 50%; min-width: 300px; display:inline-block; }

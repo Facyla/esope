@@ -6,13 +6,17 @@
  * @uses int $vars['entity'] - The entity whose access ID to display.
  */
 
+// Displaying access levels when we're logged out is a nonsense : it's always public...
+// Note : we need to block it here because access is added in core : /engine/lib/navigation.php
+if (!elgg_is_logged_in()) { return; }
+
 //sort out the access level for display
 if (isset($vars['entity']) && elgg_instanceof($vars['entity'])) {
 	$access_id = $vars['entity']->access_id;
 	$access_class = 'elgg-access';
 	if (!$vars['hide_text']) {
 		$access_id_string = get_readable_access_level($access_id);
-		$access_id_string = htmlspecialchars($access_id_string, ENT_QUOTES, 'UTF-8', false);
+		$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($access_id_string, ENT_QUOTES, 'UTF-8', false);
 	} else $access_id_string = '&nbsp;';
 
 	// if within a group or shared access collection display group name and open/closed membership status
