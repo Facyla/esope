@@ -601,6 +601,7 @@ $fr = array(
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
+	'esope:container:publishedin' => "Publié dans",
 	
 	// Messages
 	'esope:messages:allinbox' => "Tous les messages reçus",

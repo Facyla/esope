@@ -602,7 +602,8 @@ $en = array(
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 	'esope:bookmarks:container' => "Publish in...",
-	'esope:container:option:own' => "%s (personnel)",
+	'esope:container:option:own' => "%s (own)",
+	'esope:container:publishedin' => "Published in",
 	
 	// Messages
 	'esope:messages:allinbox' => "All incoming messages",
