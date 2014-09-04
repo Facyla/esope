@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>theme editorial</name>
+	<author>Alexandre ROBERT</author>
+	<version>0.1</version>
+	<blurb>Plugin long name</blurb>
+<description>Plugins description</description>
+	<website>http://departements-en-reseaux.fr/</website>
+	<copyright>Copyright</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/plugin_ss1.png</path>
+	</screenshot>
+
+	<category>category1</category>
+	<category>category2</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>htmlawed</name>
+	</requires>
+	
+	<conflicts>
+		<type>plugin</type>
+		<name>threads</name>
+	</conflicts>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>file</name>
+	</suggests>
+
+	
+</plugin_manifest>
+
+<!--
+COMMENTS - HISTORY
+
+
+//-->
+
