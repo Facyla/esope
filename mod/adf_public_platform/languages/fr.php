@@ -453,7 +453,7 @@ $fr = array(
 	// LinkdeIn
 	'esope:settings:linkedin' => "URL de la page/compte Linkedin",
 	'esope:settings:linkedin:help' => "",
-	'esope:settings:linkedin:icon' => '<i class="fa fa-lindekin-square"></i>',
+	'esope:settings:linkedin:icon' => '<i class="fa fa-linkedin"></i>',
 	'esope:settings:linkedin:title' => "LinkedIn",
 	// Netvibes
 	'esope:settings:netvibes' => "URL de la page/compte Netvibes",
