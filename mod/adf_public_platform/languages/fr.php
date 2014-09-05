@@ -470,11 +470,36 @@ $fr = array(
 	'esope:settings:youtube:help' => "",
 	'esope:settings:youtube:icon' => '<i class="fa fa-youtube-square"></i>',
 	'esope:settings:youtube:title' => "Youtube",
-	// Dalymotion
+	// Vimeo
+	'esope:settings:vimeo' => "URL de la page/compte Vimeo",
+	'esope:settings:vimeo:help' => "",
+	'esope:settings:vimeo:icon' => '<i class="fa fa-vimeo-square"></i>',
+	'esope:settings:vimeo:title' => "Vimeo",
+	// Dailymotion
 	'esope:settings:dailymotion' => "URL de la page/compte Dailymotion",
 	'esope:settings:dailymotion:help' => "",
 	'esope:settings:dailymotion:icon' => 'DM',
 	'esope:settings:dailymotion:title' => "Dailymotion",
+	// Vine
+	'esope:settings:vine' => "URL de la page/compte Vine",
+	'esope:settings:vine:help' => "",
+	'esope:settings:vine:icon' => '<i class="fa fa-vine"></i>',
+	'esope:settings:vine:title' => "Vine",
+	// Instagram
+	'esope:settings:instagram' => "URL de la page/compte Instagram",
+	'esope:settings:instagram:help' => "",
+	'esope:settings:instagram:icon' => '<i class="fa fa-instagram"></i>',
+	'esope:settings:instagram:title' => "Instagram",
+	// Github
+	'esope:settings:github' => "URL de la page/compte Github",
+	'esope:settings:github:help' => "",
+	'esope:settings:github:icon' => '<i class="fa fa-github-square"></i>',
+	'esope:settings:github:title' => "Github",
+	// Delicious
+	'esope:settings:delicious' => "URL de la page/compte Delicious",
+	'esope:settings:delicious:help' => "",
+	'esope:settings:delicious:icon' => '<i class="fa fa-delicious"></i>',
+	'esope:settings:delicious:title' => "Delicious",
 	// Pinterest
 	'esope:settings:pinterest' => "URL de la page/compte Pinterest",
 	'esope:settings:pinterest:help' => "",

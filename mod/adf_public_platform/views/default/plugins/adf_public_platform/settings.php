@@ -563,62 +563,18 @@ $(function() {
 
 
 	<h3><?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
-	<?php /* Note : use view page/elements/social_presence for rendering + update tools list */ ?>
 	<div>
 		<br />
 		<blockquote><?php echo elgg_echo('adf_platform:config:contacts'); ?></blockquote>
-		<p><label><?php echo elgg_echo('esope:settings:contactemail'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[contactemail]', 'value' => $vars['entity']->contactemail, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:contactemail:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:rss'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[rss]', 'value' => $vars['entity']->rss, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:rss:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:twitter'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[twitter]', 'value' => $vars['entity']->twitter, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:twitter:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:facebook'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[facebook]', 'value' => $vars['entity']->facebook, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:facebook:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:googleplus'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[googleplus]', 'value' => $vars['entity']->googleplus, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:googleplus:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:linkedin'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[linkedin]', 'value' => $vars['entity']->linkedin, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:linkedin:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:netvibes'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[netvibes]', 'value' => $vars['entity']->netvibes, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:netvibes:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:flickr'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[flickr]', 'value' => $vars['entity']->flickr, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:flickr:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:youtube'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[youtube]', 'value' => $vars['entity']->youtube, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:youtube:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:dailymotion'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[dailymotion]', 'value' => $vars['entity']->dailymotion, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:dailymotion:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:pinterest'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[pinterest]', 'value' => $vars['entity']->pinterest, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:pinterest:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:tumblr'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[tumblr]', 'value' => $vars['entity']->tumblr, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:tumblr:help'); ?>
-		</p><br />
-		<p><label><?php echo elgg_echo('esope:settings:slideshare'); ?></label>
-			<?php echo elgg_view('input/text', array('name' => 'params[slideshare]', 'value' => $vars['entity']->slideshare, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('esope:settings:slideshare:help'); ?>
-		</p><br />
+		<?php
+		// Note : use view page/elements/social_presence for rendering
+		// Important : update tools list in view if updated here !
+		// @TODO : could also make this list a setting and let people update it live..
+		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'lindekin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
+		foreach ($tools as $tool) {
+			echo '<p><label>' . elgg_echo("esope:settings:$tool") . '</label>' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '<br />' . elgg_echo("esope:settings:$tool:help") . '</p><br />';
+		}
+		?>
 	</div>
 
 
