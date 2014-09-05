@@ -220,6 +220,8 @@ $(function() {
 	<p><?php echo elgg_echo('adf_platform:homeintro'); ?></p>
 
 
+
+	<!-- ACCUEIL PUBLIC //-->
 	<h3><i class="fa fa-home"></i> <?php echo elgg_echo('adf_platform:config:publichomepage'); ?></h3>
 	<div>
 		<p><label><?php echo elgg_echo('adf_platform:settings:replace_public_homepage'); ?> 
@@ -243,6 +245,7 @@ $(function() {
 	</div>
 
 
+	<!-- ACCUEIL CONNECTE //-->
 	<h3><i class="fa fa-home"></i> <?php echo elgg_echo('adf_platform:config:loggedhomepage'); ?></h3>
 	<div>
 		<?php
@@ -301,6 +304,8 @@ $(function() {
 	</div>
 
 
+
+<!-- INTERFACE //-->
 	<h3><i class="fa fa-picture-o"></i> <?php echo elgg_echo('adf_platform:config:interface'); ?></h3>
 	<div>
 		<img src="<?php echo $url . $vars['entity']->faviconurl; ?>" style="float:right; max-height:64px; max-width:64px; background:black;" />
@@ -325,10 +330,6 @@ $(function() {
 			<?php echo $url . elgg_view('input/text', array('name' => 'params[helplink]', 'value' => $vars['entity']->helplink, 'js' => 'style="width:50%;"')); ?>
 		</p><br />
 		
-		<p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label> 
-			<?php echo elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor, 'js' => 'style="width:12ex;"')); ?>
-		</p><br />
-		
 		<img src="<?php echo $url . $vars['entity']->backgroundimg; ?>" style="float:right; max-height:100px; max-width:200px; background:black;" />
 		<p><label><?php echo elgg_echo('adf_platform:settings:backgroundimg'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:backgroundimg:help'); ?><br />
@@ -348,244 +349,18 @@ $(function() {
 	</div>
 
 
-	<h3><i class="fa fa-cog"></i> <?php echo elgg_echo('adf_platform:config:behaviour'); ?></h3>
-	<div>
-		<p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
-			<?php echo $url . elgg_view('input/text', array('name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"')); ?>
-		</p>
-		
-		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:toolslistings'); ?></h4>
-		<p><?php echo elgg_echo('adf_platform:config:toolslistings:details'); ?></p>
-		<?php
-		if (elgg_is_active_plugin('blog')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:blog_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[blog_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->blog_user_listall)) . '</p>';
-		}
-		if (elgg_is_active_plugin('bookmarks')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:bookmarks_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[bookmarks_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->bookmarks_user_listall)) . '</p>';
-		}
-		/*
-		if (elgg_is_active_plugin('brainstorm')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:brainstorm_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[brainstorm_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->brainstorm_user_listall)) . '</p>';
-		}
-		*/
-		if (elgg_is_active_plugin('file')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:file_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[file_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->file_user_listall)) . '</p>';
-		}
-		if (elgg_is_active_plugin('pages')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall)) . '</p>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages)) . '</p>';
-		}
-		// Add limit links to navigation
-			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination)) . '</p>';
-		?>
-		
-		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:filters'); ?></h4>
-		<?php
-		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_friends)) . '</p>';
-		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:mine') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_mine)) . '</p>';
-		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:all') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_all)) . '</p>';
-		echo '<br />';
-		echo '<p><label>' . elgg_echo('adf_platform:settings:advancedsearch') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[advancedsearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advancedsearch)) . '</p>';
-		?>
-	</div>
 
-
-	<?php if (elgg_is_active_plugin('groups')) {
-		
-		echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('adf_platform:config:groups') . '</h3>';
-		echo '<div>';
-			// Join groups at registration
-			echo '<p><label>' . elgg_echo('esope:settings:register:joingroups') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[register_joingroups]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->register_joingroups)) . '</p>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $vars['entity']->groupjoin_enablenotif)) . '</p>';
-			// Group creation disclaimer
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups_disclaimer') . '</label>';
-				echo elgg_view('input/longtext', array('name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer));
-			echo '</p>';
-			echo '<br />';
-			// Set default tools status
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tools_default') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[group_tools_default]', 'options_values' => $group_tools_default_opt, 'value' => $vars['entity']->group_tools_default)) . '</p>';
-			// Default group content access
-			echo '<p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess)) . '</p>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess)) . '</p>';
-			// Group layout
-			// Enable group top tab menu
-			// Usage: $group->customtab1 to 8 with URL::LinkTitle::TitleProperty syntax
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:topmenu') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_topmenu]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_topmenu)) . '</p>';
-			// Remove group widgets
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:disable_widgets') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $vars['entity']->groups_disable_widgets)) . '</p>';
-			// Add group activity
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</p>';
-			echo '<br />';
-			
-			echo '<h4>' . elgg_echo('adf_platform:config:groupinvites') . '</h4>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone)) . '</p>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister)) . '</p>';
-			echo '<br />';
-			
-			echo '<h4>' . elgg_echo('adf_platform:config:grouptabs') . '</h4>';
-			// Default to alpha sort
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:alpha') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_alpha)) . '</p>';
-			// Allow to remove newest
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:newest') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_newest)) . '</p>';
-			// Allow to remove popular
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular)) . '</p>';
-			// Allow to add featured
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:featured') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_featured)) . '</p>';
-			// Allow to add a new group tab search
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab)) . '</p>';
-			// Allow to add a new friends groups tab
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_friendstab)) . '</p>';
-			// Add groups tags below search (or replaces search if search tab enabled)
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tags') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_tags)) . '</p>';
-			// Allow to remove discussion OR add it at page bottom
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion)) . '</p>';
-			?>
-		</div>
-	<?php } ?>
-
-
-	<h3><i class="fa fa-user"></i> <?php echo elgg_echo('adf_platform:config:members'); ?></h3>
-	<div>
-		<p>
-			<label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles)); ?>
-		</label>
-		</p>
-		<p><em><?php echo elgg_echo('adf_platform:home:public_profiles:help'); ?></em></p>
-		<p>
-			<label><?php echo elgg_echo('adf_platform:home:public_profiles_default'); ?>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles_default)); ?></label>
-		</p>
-		
-		<p>
-			<label><?php echo elgg_echo('adf_platform:members:hide_directory'); ?>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[hide_directory]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->hide_directory)); ?></label>
-		</p>
-		
-		<h4><?php echo elgg_echo('adf_platform:profile:settings'); ?></h4>
-		<p><label><?php echo elgg_echo('adf_platform:profile:add_profile_activity'); ?></label>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->add_profile_activity)); ?>
-		</p>
-		<p><label><?php echo elgg_echo('adf_platform:profile:remove_profile_widgets'); ?></label>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_profile_widgets)); ?>
-		</p>
-		<p><label><?php echo elgg_echo('adf_platform:profile:custom_profile_layout'); ?></label>
-			<?php echo elgg_view('input/dropdown', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->custom_profile_layout)); ?>
-		</p>
-		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:memberssearch'); ?></h4>
-		<?php
-		if (elgg_is_active_plugin('members')) {
-			// Allow to add alpha sort
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:alpha') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_alpha)) . '</p>';
-			// Allow to remove newest
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:newest') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_newest)) . '</p>';
-			// Allow to remove popular
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular)) . '</p>';
-			// Allow to remove online
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab)) . '</p>';
-			// Allow to add a new tab search
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab)) . '</p>';
-			// Replace search by main search (more efficient)
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch)) . '</p>';
-			// Add online members
-			echo '<p><label>' . elgg_echo('adf_platform:settings:members:online') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online)) . '</p>';
-		}
-		
-		echo '<p><label>' . elgg_echo('adf_platform:settings:remove_collections') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_collections)) . '</p>';
-		
-		?>
-	</div>
-	
-	
-	<h3><i class="fa fa-puzzle-piece"></i> <?php echo elgg_echo('adf_platform:config:widgets'); ?></h3>
-	<div>
-		<?php
-		if (elgg_is_active_plugin('blog')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:blog') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_blog]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_blog)) . '</p>';
-		}
-		if (elgg_is_active_plugin('bookmarks')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:bookmarks') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_bookmarks]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_bookmarks)) . '</p>';
-		}
-		if (elgg_is_active_plugin('brainstorm')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:brainstorm') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_brainstorm]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_brainstorm)) . '</p>';
-		}
-		if (elgg_is_active_plugin('event_calendar')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:event_calendar') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_event_calendar]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_event_calendar)) . '</p>';
-		}
-		if (elgg_is_active_plugin('file')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file)) . '</p>';
-		}
-		if (elgg_is_active_plugin('file_tools')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file_folder') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_file_folder]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file_folder)) . '</p>';
-		}
-		if (elgg_is_active_plugin('groups')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups)) . '</p>';
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity)) . '</p>';
-		}
-		if (elgg_is_active_plugin('pages')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:pages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages)) . '</p>';
-		}
-		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends)) . '</p>';
-		if (elgg_is_active_plugin('messages')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages)) . '</p>';
-		}
-		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget)) . '</p>';
-		if (elgg_is_active_plugin('twitter')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter)) . '</p>';
-		}
-		if (elgg_is_active_plugin('thewire')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:thewire') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_thewire]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_thewire)) . '</p>';
-		}
-		if (elgg_is_active_plugin('tagcloud')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud)) . '</p>';
-		}
-		if (elgg_is_active_plugin('videos')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:videos') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_videos]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_videos)) . '</p>';
-		}
-		if (elgg_is_active_plugin('profile_manager')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:profile_completeness') . '</label> ' . elgg_echo('adf_platform:settings:widget:profile_completeness:help') . '</p>';
-		}
-		if (elgg_is_active_plugin('webprofiles')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:webprofiles') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_webprofiles]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_webprofiles)) . '</p>';
-		}
-		if (elgg_is_active_plugin('export_embed')) {
-			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:export_embed') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_export_embed]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_export_embed)) . '</p>';
-		}
-		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:freehtml') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_freehtml]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_freehtml)) . '</p>';
-		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:searchresults') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_searchresults]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_searchresults)) . '</p>';
-		?>
-	</div>
-
-
-	<h3><i class="fa fa-phone"></i> <?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
-	<div>
-		<p><em><?php echo elgg_echo('adf_platform:config:contacts'); ?></em></p>
-		<?php
-		// Note : use view page/elements/social_presence for rendering
-		// Important : update tools list in view if updated here !
-		// @TODO : could also make this list a setting and let people update it live..
-		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
-		foreach ($tools as $tool) {
-			echo '<p><label>' . elgg_echo("esope:settings:$tool:icon") . ' &nbsp; ' . elgg_echo("esope:settings:$tool") . '' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '</label><br />' . elgg_echo("esope:settings:$tool:help") . '</p>';
-		}
-		?>
-	</div>
-
-
+<!-- STYLES //-->
 	<h3><i class="fa fa-paint-brush"></i> <?php echo elgg_echo('adf_platform:config:styles'); ?></h3>
 	<div>
-		
 		<?php
-		echo '<p><label>Semantic UI</label> ' . elgg_view('input/dropdown', array('name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui)) . '</p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a production site.</p>';
-		echo '<p><label>Awesome Font</label> ' . elgg_view('input/dropdown', array('name' => 'params[awesomefont]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->awesomefont)) . '</p>';
+		echo '<p><label>Font Awesome</label> ' . elgg_view('input/dropdown', array('name' => 'params[awesomefont]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->awesomefont)) . '</p>';
 		echo '<p><label>Fixed width</label> ' . elgg_view('input/dropdown', array('name' => 'params[fixedwidth]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->fixedwidth)) . '</p>';
-		?>
+		echo '<p><label>(alpha) Semantic UI</label> ' . elgg_view('input/dropdown', array('name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->semanticui)) . '</p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a production site.</p>';
 		
-		<?php echo '<h4>' . elgg_echo('adf_platform:fonts') . '</h4>'; ?>
-		<?php echo '<p><em>' . elgg_echo('adf_platform:fonts:details') . '</em></p>'; ?>
+		echo '<h4>' . elgg_echo('adf_platform:fonts') . '</h4>';
+		echo '<p><em>' . elgg_echo('adf_platform:fonts:details') . '</em></p>';
+		?>
 		<p><label><?php echo elgg_echo('adf_platform:font1'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[font1]', 'value' => $vars['entity']->font1)); ?>
 		</p>
@@ -607,6 +382,9 @@ $(function() {
 		
 		<?php echo '<h4>' . elgg_echo('adf_platform:colors') . '</h4>'; ?>
 		<?php echo '<p><em>' . elgg_echo('adf_platform:colors:details') . '</em></p>'; ?>
+		<p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label> 
+			<?php echo elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor, 'js' => 'style="width:12ex;"')); ?>
+		</p>
 		<p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
 			<?php echo elgg_view('input/color', array('name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor)); ?>
 		</p>
@@ -700,6 +478,243 @@ $(function() {
 	</div>
 
 
+
+<!-- COMPORTEMENT //-->
+	<h3><i class="fa fa-cog"></i> <?php echo elgg_echo('adf_platform:config:behaviour'); ?></h3>
+	<div>
+		<p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
+			<?php echo $url . elgg_view('input/text', array('name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"')); ?>
+		</p>
+		
+		<br />
+		<h4><?php echo elgg_echo('adf_platform:config:toolslistings'); ?></h4>
+		<p><?php echo elgg_echo('adf_platform:config:toolslistings:details'); ?></p>
+		<?php
+		if (elgg_is_active_plugin('blog')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:blog_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[blog_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->blog_user_listall)) . '</p>';
+		}
+		if (elgg_is_active_plugin('bookmarks')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:bookmarks_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[bookmarks_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->bookmarks_user_listall)) . '</p>';
+		}
+		/*
+		if (elgg_is_active_plugin('brainstorm')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:brainstorm_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[brainstorm_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->brainstorm_user_listall)) . '</p>';
+		}
+		*/
+		if (elgg_is_active_plugin('file')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:file_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[file_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->file_user_listall)) . '</p>';
+		}
+		if (elgg_is_active_plugin('pages')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages)) . '</p>';
+		}
+		// Add limit links to navigation
+			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination)) . '</p>';
+		?>
+		
+		<br />
+		<h4><?php echo elgg_echo('adf_platform:config:filters'); ?></h4>
+		<?php
+		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_friends)) . '</p>';
+		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:mine') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_mine)) . '</p>';
+		echo '<p><label>' . elgg_echo('adf_platform:settings:filters:all') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->disable_all)) . '</p>';
+		echo '<br />';
+		echo '<p><label>' . elgg_echo('adf_platform:settings:advancedsearch') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[advancedsearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advancedsearch)) . '</p>';
+		?>
+	</div>
+
+
+
+<!-- GROUPES //-->
+	<?php if (elgg_is_active_plugin('groups')) {
+		echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('adf_platform:config:groups') . '</h3>';
+		echo '<div>';
+			// Join groups at registration
+			echo '<p><label>' . elgg_echo('esope:settings:register:joingroups') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[register_joingroups]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->register_joingroups)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $vars['entity']->groupjoin_enablenotif)) . '</p>';
+			// Group creation disclaimer
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups_disclaimer') . '</label>';
+				echo elgg_view('input/longtext', array('name' => 'params[groups_disclaimer]', 'value' => $vars['entity']->groups_disclaimer));
+			echo '</p>';
+			echo '<br />';
+			// Set default tools status
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tools_default') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[group_tools_default]', 'options_values' => $group_tools_default_opt, 'value' => $vars['entity']->group_tools_default)) . '</p>';
+			// Default group content access
+			echo '<p><label>' . elgg_echo('adf_platform:settings:opengroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[opengroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->opengroups_defaultaccess)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:closedgroups:defaultaccess') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[closedgroups_defaultaccess]', 'options_values' => $group_defaultaccess_opt, 'value' => $vars['entity']->closedgroups_defaultaccess)) . '</p>';
+			// Group layout
+			// Enable group top tab menu
+			// Usage: $group->customtab1 to 8 with URL::LinkTitle::TitleProperty syntax
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:topmenu') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_topmenu]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_topmenu)) . '</p>';
+			// Remove group widgets
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:disable_widgets') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $vars['entity']->groups_disable_widgets)) . '</p>';
+			// Add group activity
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</p>';
+			echo '<br />';
+			
+			echo '<h4>' . elgg_echo('adf_platform:config:groupinvites') . '</h4>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister)) . '</p>';
+			echo '<br />';
+			
+			echo '<h4>' . elgg_echo('adf_platform:config:grouptabs') . '</h4>';
+			// Default to alpha sort
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:alpha') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_alpha)) . '</p>';
+			// Allow to remove newest
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:newest') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_newest)) . '</p>';
+			// Allow to remove popular
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:popular') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_popular)) . '</p>';
+			// Allow to add featured
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:featured') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_featured)) . '</p>';
+			// Allow to add a new group tab search
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab)) . '</p>';
+			// Allow to add a new friends groups tab
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_friendstab)) . '</p>';
+			// Add groups tags below search (or replaces search if search tab enabled)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tags') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_tags)) . '</p>';
+			// Allow to remove discussion OR add it at page bottom
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion)) . '</p>';
+			?>
+		</div>
+	<?php } ?>
+
+
+<!-- MEMBRES //-->
+	<h3><i class="fa fa-user"></i> <?php echo elgg_echo('adf_platform:config:members'); ?></h3>
+	<div>
+		<p>
+			<label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles)); ?>
+		</label>
+		</p>
+		<p><em><?php echo elgg_echo('adf_platform:home:public_profiles:help'); ?></em></p>
+		<p>
+			<label><?php echo elgg_echo('adf_platform:home:public_profiles_default'); ?>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->public_profiles_default)); ?></label>
+		</p>
+		
+		<p>
+			<label><?php echo elgg_echo('adf_platform:members:hide_directory'); ?>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[hide_directory]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->hide_directory)); ?></label>
+		</p>
+		
+		<h4><?php echo elgg_echo('adf_platform:profile:settings'); ?></h4>
+		<p><label><?php echo elgg_echo('adf_platform:profile:add_profile_activity'); ?></label>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->add_profile_activity)); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:profile:remove_profile_widgets'); ?></label>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_profile_widgets)); ?>
+		</p>
+		<p><label><?php echo elgg_echo('adf_platform:profile:custom_profile_layout'); ?></label>
+			<?php echo elgg_view('input/dropdown', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->custom_profile_layout)); ?>
+		</p>
+		<br />
+		<h4><?php echo elgg_echo('adf_platform:config:memberssearch'); ?></h4>
+		<?php
+		if (elgg_is_active_plugin('members')) {
+			// Allow to add alpha sort
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:alpha') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_alpha)) . '</p>';
+			// Allow to remove newest
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:newest') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_newest)) . '</p>';
+			// Allow to remove popular
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular)) . '</p>';
+			// Allow to remove online
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab)) . '</p>';
+			// Allow to add a new tab search
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab)) . '</p>';
+			// Replace search by main search (more efficient)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch)) . '</p>';
+			// Add online members
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:online') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online)) . '</p>';
+		}
+		
+		echo '<p><label>' . elgg_echo('adf_platform:settings:remove_collections') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_collections)) . '</p>';
+		
+		?>
+	</div>
+
+
+
+<!-- WIDGETS //-->
+	<h3><i class="fa fa-puzzle-piece"></i> <?php echo elgg_echo('adf_platform:config:widgets'); ?></h3>
+	<div>
+		<?php
+		if (elgg_is_active_plugin('blog')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:blog') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_blog]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_blog)) . '</p>';
+		}
+		if (elgg_is_active_plugin('bookmarks')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:bookmarks') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_bookmarks]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_bookmarks)) . '</p>';
+		}
+		if (elgg_is_active_plugin('brainstorm')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:brainstorm') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_brainstorm]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_brainstorm)) . '</p>';
+		}
+		if (elgg_is_active_plugin('event_calendar')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:event_calendar') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_event_calendar]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_event_calendar)) . '</p>';
+		}
+		if (elgg_is_active_plugin('file')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_file]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file)) . '</p>';
+		}
+		if (elgg_is_active_plugin('file_tools')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:file_folder') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_file_folder]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_file_folder)) . '</p>';
+		}
+		if (elgg_is_active_plugin('groups')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:groups') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_groups]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_groups)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:group_activity') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_group_activity]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_group_activity)) . '</p>';
+		}
+		if (elgg_is_active_plugin('pages')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:pages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_pages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_pages)) . '</p>';
+		}
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:friends') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_friends]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_friends)) . '</p>';
+		if (elgg_is_active_plugin('messages')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:messages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_messages]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_messages)) . '</p>';
+		}
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:river_widget') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_river_widget]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_river_widget)) . '</p>';
+		if (elgg_is_active_plugin('twitter')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:twitter') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_twitter]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_twitter)) . '</p>';
+		}
+		if (elgg_is_active_plugin('thewire')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:thewire') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_thewire]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_thewire)) . '</p>';
+		}
+		if (elgg_is_active_plugin('tagcloud')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:tagcloud') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_tagcloud]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_tagcloud)) . '</p>';
+		}
+		if (elgg_is_active_plugin('videos')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:videos') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_videos]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_videos)) . '</p>';
+		}
+		if (elgg_is_active_plugin('profile_manager')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:profile_completeness') . '</label> ' . elgg_echo('adf_platform:settings:widget:profile_completeness:help') . '</p>';
+		}
+		if (elgg_is_active_plugin('webprofiles')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:webprofiles') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_webprofiles]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_webprofiles)) . '</p>';
+		}
+		if (elgg_is_active_plugin('export_embed')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:widget:export_embed') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_export_embed]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_export_embed)) . '</p>';
+		}
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:freehtml') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_freehtml]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_freehtml)) . '</p>';
+		echo '<p><label>' . elgg_echo('adf_platform:settings:widget:searchresults') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[widget_searchresults]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->widget_searchresults)) . '</p>';
+		?>
+	</div>
+
+
+
+<!-- CONTACTS //-->
+	<h3><i class="fa fa-phone"></i> <?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
+	<div>
+		<p><em><?php echo elgg_echo('adf_platform:config:contacts'); ?></em></p>
+		<?php
+		// Note : use view page/elements/social_presence for rendering
+		// Important : update tools list in view if updated here !
+		// @TODO : could also make this list a setting and let people update it live..
+		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
+		foreach ($tools as $tool) {
+			echo '<p><label>' . elgg_echo("esope:settings:$tool:icon") . ' &nbsp; ' . elgg_echo("esope:settings:$tool") . '' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '</label><br />' . elgg_echo("esope:settings:$tool:help") . '</p>';
+		}
+		?>
+	</div>
+
+
+
+<!-- SECURITE //-->
 	<h3><i class="fa fa-shield"></i> <?php echo elgg_echo('adf_platform:config:security'); ?></h3>
 	<div>
 		<?php
@@ -708,8 +723,10 @@ $(function() {
 		echo '<p><label>' . elgg_echo('adf_platform:config:framekiller') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[framekiller]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->framekiller)) . '<br />' . elgg_echo('adf_platform:config:framekiller:details') . '</p>';
 		?>
 	</div>
-	
-	
+
+
+
+<!-- REGLAGES EXPERTS //-->
 	<h3><i class="fa fa-cogs"></i> <?php echo elgg_echo('adf_platform:config:expert'); ?></h3>
 	<div>
 		<?php
@@ -745,6 +762,7 @@ $(function() {
 	</div>
 
 
+	<!-- SAUVEGARDE ET RESTAURATION //-->
 	<h3><i class="fa fa-archive"></i> <?php echo elgg_echo('adf_platform:config:saverestore'); ?></h3>
 	<div>
 		<p><?php echo elgg_echo('adf_platform:config:saverestore:details'); ?></p>
