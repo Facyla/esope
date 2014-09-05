@@ -242,7 +242,7 @@ footer img { float: right; }
 	border-top: 2px solid <?php echo $color1; ?>;
 	height: 10px;
 }
-.interne.credits { position:initial; }
+.interne.credits { position:initial; clear:both; }
 div.credits { font-size: 0.85em; }
 div.credits p { float: left; color: #333333; margin: 4px 0 5px; }
 div.credits a { color: #333333; text-decoration:underline; }
