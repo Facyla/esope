@@ -57,6 +57,7 @@ $en = array(
 	'adf_platform:config:widgets' => "ENABLED WIDGETS",
 	'adf_platform:settings:removeusermenutools' => "(expert) Remove user menu items.<br />Use link id, eg.: blog,liked_content,photos (NO spacing)",
 	'adf_platform:settings:removeusertools' => "(expert) Remove user content creation button.<br />Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
+	'adf_platform:settings:group_hide_profile_field' => "(expert) List groups fields metadata names that you want to hide in group profile page.",
 	'adf_platform:settings:user_exclude_access' => "(expert) Removes chosen access levels for members. Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:settings:admin_exclude_access' => "(expert) Removes chosen access levels for admins (take care !). Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:config:groupinvites' => "GROUP INVITES",
@@ -175,7 +176,7 @@ $en = array(
 	'adf_platform:widget:site_activity:title' => 'Recent activity',
 	'adf_platform:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
 	
-	'accessibility:sidebar:title' => "Tools",
+	'accessibility:sidebar:title' => "Secondary menu",
 	//'breadcrumb' => "Fil d'Ariane",
 	'breadcrumbs' => "Back to ",
 	// Pending requests
@@ -601,7 +602,8 @@ $en = array(
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
 	
 	'esope:bookmarks:container' => "Publish in...",
-	'esope:container:option:own' => "%s (personnel)",
+	'esope:container:option:own' => "%s (own)",
+	'esope:container:publishedin' => "Published in",
 	
 	// Messages
 	'esope:messages:allinbox' => "All incoming messages",

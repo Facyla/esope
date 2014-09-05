@@ -203,7 +203,8 @@ if ($tools) {
 		<?php 
 	}
 	
-	// DEV : Placement des outils dans diverses zones
+	// // @TODO : Placement des outils dans diverses zones
+	/*
 	if (false && elgg_is_admin_logged_in()) {
 		// 1. Choix du layout : agencement des blocs
 		echo "Layout switch : ";
@@ -279,12 +280,12 @@ if ($tools) {
 		echo '</div>';
 		echo '<div class="clearfloat"></div>';
 	}
+	*/
 	
 }
 ?>
 <div class="elgg-foot">
 	<?php
-	
 	if (isset($vars['entity'])) {
 		echo elgg_view('input/hidden', array(
 			'name' => 'group_guid',
@@ -293,9 +294,9 @@ if ($tools) {
 	}
 	
 	if (isset($vars['entity'])) {
-  	echo elgg_view('input/submit', array('value' => elgg_echo('save:group')));
+		echo elgg_view('input/submit', array('value' => elgg_echo('save:group')));
 	} else {
-  	echo elgg_view('input/submit', array('value' => elgg_echo('save:newgroup')));
+		echo elgg_view('input/submit', array('value' => elgg_echo('save:newgroup')));
 	}
 
 	if (isset($vars['entity'])) {
@@ -310,3 +311,4 @@ if ($tools) {
 	}
 	?>
 </div>
+

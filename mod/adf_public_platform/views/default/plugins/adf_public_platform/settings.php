@@ -133,6 +133,9 @@ if (empty($vars['entity']->closedgroups_defaultaccess)) { $vars['entity']->close
 if (empty($vars['entity']->awesomefont)) $vars['entity']->awesomefont = 'yes';
 if (empty($vars['entity']->fixedwidth)) $vars['entity']->fixedwidth = 'no';
 
+// Hide by default some profile fields that are known to be used for configuration but should not be displayed
+if (!isset($vars['entity']->group_hide_profile_field)) { $vars['entity']->group_hide_profile_field = 'customcss, cmisfolder, feed_url, customtab1, customtab2, customtab3, customtab4, customtab5, customtab6, customtab7, customtab8'; }
+
 
 // CORRECT BAD-FORMATTED VALUES
 // Remove spaces
@@ -775,6 +778,9 @@ $(function() {
 		echo '<p><label>' . elgg_echo('adf_platform:settings:removeusertools') . '</label> ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools)) . '<em>' . implode(',', $registered_objects) . '</em></p>';
 		// Note : la suppression de filtres dans les listings est un réglage général à part, 
 		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+		
+		// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
+		echo '<p><label>' . elgg_echo('adf_platform:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $vars['entity']->group_hide_profile_field)) . '</p>';
 		
 		// Suppression des niveaux d'accès pour les membres
 		echo '<p><label>' . elgg_echo('adf_platform:settings:user_exclude_access') . '</label> ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $vars['entity']->user_exclude_access)) . '</p>';

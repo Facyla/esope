@@ -41,8 +41,10 @@ function adf_platform_init() {
 	}
 	// Commentaires
 	elgg_extend_view('page/elements/comments', 'comments/public_notice', 1000);
-	
+	// Join groups at registration
 	elgg_extend_view('register/extend', 'forms/groups/register_join_groups', 600);
+	// Extend groups sidebar (below owner_block and search)
+	elgg_extend_view('groups/sidebar/members', 'groups/sidebar/cmspages_extend', 100);
 	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
@@ -1419,7 +1421,7 @@ function esope_get_meta_values($meta_name) {
 }
 
 
-/* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea
+/* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
  * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
  * Return : Tableau filtré, ou false
  */
