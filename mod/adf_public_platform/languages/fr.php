@@ -424,34 +424,74 @@ $fr = array(
 	'adf_platform:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	
-	'adf_platform:settings:contact:contactemail' => "Adresse email de contact",
-	'adf_platform:settings:contactemail:help' => "",
-	'adf_platform:settings:rss' => "URL du flux RSS",
-	'adf_platform:settings:rss:help' => "",
-	'adf_platform:settings:twitter' => "URL de la page Twitter (compte ou recherche sur hashtag)",
-	'adf_platform:settings:twitter:help' => "",
-	'adf_platform:settings:facebook' => "URL de la page/compte Facebook",
-	'adf_platform:settings:facebook:help' => "",
-	'adf_platform:settings:googleplus' => "URL de la page/compte Google+",
-	'adf_platform:settings:googleplus:help' => "",
-	'adf_platform:settings:linkedin' => "URL de la page/compte Linkedin",
-	'adf_platform:settings:linkedin:help' => "",
-	'adf_platform:settings:netvibes' => "URL de la page/compte Netvibes",
-	'adf_platform:settings:netvibes:help' => "",
-	'adf_platform:settings:flickr' => "URL de la page/compte FlickR",
-	'adf_platform:settings:flickr:help' => "",
-	'adf_platform:settings:youtube' => "URL de la page/compte Youtube",
-	'adf_platform:settings:youtube:help' => "",
-	'adf_platform:settings:dailymotion' => "URL de la page/compte Dailymotion",
-	'adf_platform:settings:dailymotion:help' => "",
-	'adf_platform:settings:pinterest' => "URL de la page/compte Pinterest",
-	'adf_platform:settings:pinterest:help' => "",
-	'adf_platform:settings:tumblr' => "URL de la page/compte Tumblr",
-	'adf_platform:settings:tumblr:help' => "",
-	'adf_platform:settings:slideshare' => "URL de la page/compte Slideshare",
-	'adf_platform:settings:slideshare:help' => "",
+	/* Social presence */
+	// Email
+	'esope:settings:contactemail' => "Adresse email de contact",
+	'esope:settings:contactemail:help' => "",
+	'esope:settings:contactemail:icon' => '<i class="fa fa-envelope-square"></i>',
+	'esope:settings:contactemail:title' => "Email",
+	// RSS
+	'esope:settings:rss' => "URL du flux RSS",
+	'esope:settings:rss:help' => "",
+	'esope:settings:rss:icon' => '<i class="fa fa-rss-square"></i>',
+	'esope:settings:rss:title' => "RSS",
+	// Twitter
+	'esope:settings:twitter' => "URL de la page Twitter (compte ou recherche sur hashtag)",
+	'esope:settings:twitter:help' => "",
+	'esope:settings:twitter:icon' => '<i class="fa fa-twitter-square"></i>',
+	'esope:settings:twitter:title' => "Twitter",
+	// Facebook
+	'esope:settings:facebook' => "URL de la page/compte Facebook",
+	'esope:settings:facebook:help' => "",
+	'esope:settings:facebook:icon' => '<i class="fa fa-facebook-square"></i>',
+	'esope:settings:facebook:title' => "Facebook",
+	// Google+
+	'esope:settings:googleplus' => "URL de la page/compte Google+",
+	'esope:settings:googleplus:help' => "",
+	'esope:settings:googleplus:icon' => '<i class="fa fa-google-plus-square"></i>',
+	'esope:settings:googleplus:title' => "Google+",
+	// LinkdeIn
+	'esope:settings:linkedin' => "URL de la page/compte Linkedin",
+	'esope:settings:linkedin:help' => "",
+	'esope:settings:lindekin:icon' => '<i class="fa fa-lindekin-square"></i>',
+	'esope:settings:lindekin:title' => "LindekIn",
+	// Netvibes
+	'esope:settings:netvibes' => "URL de la page/compte Netvibes",
+	'esope:settings:netvibes:help' => "",
+	'esope:settings:netvibes:icon' => 'NetVibes',
+	'esope:settings:netvibes:title' => "NetVibes",
+	// FlickR
+	'esope:settings:flickr' => "URL de la page/compte FlickR",
+	'esope:settings:flickr:help' => "",
+	'esope:settings:flickr:icon' => '<i class="fa fa-flickr-square"></i>',
+	'esope:settings:flickr:title' => "FlickR",
+	// Youtube
+	'esope:settings:youtube' => "URL de la page/compte Youtube",
+	'esope:settings:youtube:help' => "",
+	'esope:settings:youtube:icon' => '<i class="fa fa-youtube-square"></i>',
+	'esope:settings:youtube:title' => "Youtube",
+	// Dalymotion
+	'esope:settings:dailymotion' => "URL de la page/compte Dailymotion",
+	'esope:settings:dailymotion:help' => "",
+	'esope:settings:dailymotion:icon' => 'DM',
+	'esope:settings:dailymotion:title' => "Dailymotion",
+	// Pinterest
+	'esope:settings:pinterest' => "URL de la page/compte Pinterest",
+	'esope:settings:pinterest:help' => "",
+	'esope:settings:pinterest:icon' => '<i class="fa fa-pinterest-square"></i>',
+	'esope:settings:pinterest:title' => "Pinterest",
+	// TumblR
+	'esope:settings:tumblr' => "URL de la page/compte Tumblr",
+	'esope:settings:tumblr:help' => "",
+	'esope:settings::icon' => '<i class="fa fa-tumblr-square"></i>',
+	'esope:settings::title' => "TumblR",
+	// Slideshare
+	'esope:settings:slideshare' => "URL de la page/compte Slideshare",
+	'esope:settings:slideshare:help' => "",
+	'esope:settings:slideshare:icon' => '<i class="fa fa-slideshare"></i>',
+	'esope:settings:slideshare:title' => "Slideshare",
 	
-
+	
 	// DATES
 	'date:format' => 'D d F Y',
 	'date:day:0' => 'Dimanche',

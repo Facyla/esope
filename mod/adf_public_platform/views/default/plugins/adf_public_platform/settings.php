@@ -563,60 +563,61 @@ $(function() {
 
 
 	<h3><?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
+	<?php /* Note : use view page/elements/social_presence for rendering + update tools list */ ?>
 	<div>
 		<br />
 		<blockquote><?php echo elgg_echo('adf_platform:config:contacts'); ?></blockquote>
-		<p><label><?php echo elgg_echo('adf_platform:settings:contact:contactemail'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:contactemail'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[contactemail]', 'value' => $vars['entity']->contactemail, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:contactemail:help'); ?>
+			<?php echo elgg_echo('esope:settings:contactemail:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:rss'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:rss'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[rss]', 'value' => $vars['entity']->rss, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:rss:help'); ?>
+			<?php echo elgg_echo('esope:settings:rss:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:twitter'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:twitter'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[twitter]', 'value' => $vars['entity']->twitter, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:twitter:help'); ?>
+			<?php echo elgg_echo('esope:settings:twitter:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:facebook'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:facebook'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[facebook]', 'value' => $vars['entity']->facebook, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:facebook:help'); ?>
+			<?php echo elgg_echo('esope:settings:facebook:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:googleplus'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:googleplus'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[googleplus]', 'value' => $vars['entity']->googleplus, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:googleplus:help'); ?>
+			<?php echo elgg_echo('esope:settings:googleplus:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:linkedin'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:linkedin'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[linkedin]', 'value' => $vars['entity']->linkedin, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:linkedin:help'); ?>
+			<?php echo elgg_echo('esope:settings:linkedin:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:netvibes'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:netvibes'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[netvibes]', 'value' => $vars['entity']->netvibes, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:netvibes:help'); ?>
+			<?php echo elgg_echo('esope:settings:netvibes:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:flickr'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:flickr'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[flickr]', 'value' => $vars['entity']->flickr, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:flickr:help'); ?>
+			<?php echo elgg_echo('esope:settings:flickr:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:youtube'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:youtube'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[youtube]', 'value' => $vars['entity']->youtube, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:youtube:help'); ?>
+			<?php echo elgg_echo('esope:settings:youtube:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:dailymotion'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:dailymotion'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[dailymotion]', 'value' => $vars['entity']->dailymotion, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:dailymotion:help'); ?>
+			<?php echo elgg_echo('esope:settings:dailymotion:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:pinterest'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:pinterest'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[pinterest]', 'value' => $vars['entity']->pinterest, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:pinterest:help'); ?>
+			<?php echo elgg_echo('esope:settings:pinterest:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:tumblr'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:tumblr'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[tumblr]', 'value' => $vars['entity']->tumblr, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:tumblr:help'); ?>
+			<?php echo elgg_echo('esope:settings:tumblr:help'); ?>
 		</p><br />
-		<p><label><?php echo elgg_echo('adf_platform:settings:slideshare'); ?></label>
+		<p><label><?php echo elgg_echo('esope:settings:slideshare'); ?></label>
 			<?php echo elgg_view('input/text', array('name' => 'params[slideshare]', 'value' => $vars['entity']->slideshare, 'js' => 'style="width:50%;"')); ?><br />
-			<?php echo elgg_echo('adf_platform:settings:slideshare:help'); ?>
+			<?php echo elgg_echo('esope:settings:slideshare:help'); ?>
 		</p><br />
 	</div>
 
