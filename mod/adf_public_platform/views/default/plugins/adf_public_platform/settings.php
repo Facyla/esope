@@ -220,7 +220,7 @@ $(function() {
 	<p><?php echo elgg_echo('adf_platform:homeintro'); ?></p>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:publichomepage'); ?></h3>
+	<h3><i class="fa fa-home"></i> <?php echo elgg_echo('adf_platform:config:publichomepage'); ?></h3>
 	<div>
 		<p><label><?php echo elgg_echo('adf_platform:settings:replace_public_homepage'); ?> 
 			<?php echo elgg_view('input/dropdown', array('name' => 'params[replace_public_homepage]', 'options_values' => $replace_public_homepage_opt, 'value' => $vars['entity']->replace_public_homepage)); ?></label>
@@ -243,7 +243,7 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:loggedhomepage'); ?></h3>
+	<h3><i class="fa fa-home"></i> <?php echo elgg_echo('adf_platform:config:loggedhomepage'); ?></h3>
 	<div>
 		<?php
 		echo '<p><label>' . elgg_echo('adf_platform:settings:replace_home') . '</label>';
@@ -301,9 +301,8 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:interface'); ?></h3>
+	<h3><i class="fa fa-picture-o"></i> <?php echo elgg_echo('adf_platform:config:interface'); ?></h3>
 	<div>
-		<br />
 		<img src="<?php echo $url . $vars['entity']->faviconurl; ?>" style="float:right; max-height:64px; max-width:64px; background:black;" />
 		<p><label><?php echo elgg_echo('adf_platform:faviconurl'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:faviconurl:help'); ?><br />
@@ -349,7 +348,7 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:behaviour'); ?></h3>
+	<h3><i class="fa fa-cog"></i> <?php echo elgg_echo('adf_platform:config:behaviour'); ?></h3>
 	<div>
 		<p><label><?php echo elgg_echo('adf_platform:settings:redirect'); ?></label><br />
 			<?php echo $url . elgg_view('input/text', array('name' => 'params[redirect]', 'value' => $vars['entity']->redirect, 'js' => 'style="width:50%;"')); ?>
@@ -395,7 +394,7 @@ $(function() {
 
 	<?php if (elgg_is_active_plugin('groups')) {
 		
-		echo '<h3>' . elgg_echo('adf_platform:config:groups') . '</h3>';
+		echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('adf_platform:config:groups') . '</h3>';
 		echo '<div>';
 			// Join groups at registration
 			echo '<p><label>' . elgg_echo('esope:settings:register:joingroups') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[register_joingroups]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->register_joingroups)) . '</p>';
@@ -447,7 +446,7 @@ $(function() {
 	<?php } ?>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:members'); ?></h3>
+	<h3><i class="fa fa-user"></i> <?php echo elgg_echo('adf_platform:config:members'); ?></h3>
 	<div>
 		<p>
 			<label><?php echo elgg_echo('adf_platform:home:public_profiles'); ?>
@@ -498,11 +497,10 @@ $(function() {
 		echo '<p><label>' . elgg_echo('adf_platform:settings:remove_collections') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_collections)) . '</p>';
 		
 		?>
-		
 	</div>
 	
 	
-	<h3><?php echo elgg_echo('adf_platform:config:widgets'); ?></h3>
+	<h3><i class="fa fa-puzzle-piece"></i> <?php echo elgg_echo('adf_platform:config:widgets'); ?></h3>
 	<div>
 		<?php
 		if (elgg_is_active_plugin('blog')) {
@@ -562,23 +560,22 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
+	<h3><i class="fa fa-phone"></i> <?php echo elgg_echo('adf_platform:config:contacts'); ?></h3>
 	<div>
-		<br />
-		<blockquote><?php echo elgg_echo('adf_platform:config:contacts'); ?></blockquote>
+		<p><em><?php echo elgg_echo('adf_platform:config:contacts'); ?></em></p>
 		<?php
 		// Note : use view page/elements/social_presence for rendering
 		// Important : update tools list in view if updated here !
 		// @TODO : could also make this list a setting and let people update it live..
 		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
 		foreach ($tools as $tool) {
-			echo '<p><label>' . elgg_echo("esope:settings:$tool") . '</label>' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '<br />' . elgg_echo("esope:settings:$tool:help") . '</p><br />';
+			echo '<p><label>' . elgg_echo("esope:settings:$tool:icon") . ' &nbsp; ' . elgg_echo("esope:settings:$tool") . '' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '</label><br />' . elgg_echo("esope:settings:$tool:help") . '</p>';
 		}
 		?>
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:styles'); ?></h3>
+	<h3><i class="fa fa-paint-brush"></i> <?php echo elgg_echo('adf_platform:config:styles'); ?></h3>
 	<div>
 		
 		<?php
@@ -703,7 +700,7 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:security'); ?></h3>
+	<h3><i class="fa fa-shield"></i> <?php echo elgg_echo('adf_platform:config:security'); ?></h3>
 	<div>
 		<?php
 		echo elgg_echo('adf_platform:config:security:notice');
@@ -713,7 +710,7 @@ $(function() {
 	</div>
 	
 	
-	<h3><?php echo elgg_echo('adf_platform:config:expert'); ?></h3>
+	<h3><i class="fa fa-cogs"></i> <?php echo elgg_echo('adf_platform:config:expert'); ?></h3>
 	<div>
 		<?php
 		// Advanced search tool (alpha version, structure changes may happen)
@@ -748,7 +745,7 @@ $(function() {
 	</div>
 
 
-	<h3><?php echo elgg_echo('adf_platform:config:saverestore'); ?></h3>
+	<h3><i class="fa fa-archive"></i> <?php echo elgg_echo('adf_platform:config:saverestore'); ?></h3>
 	<div>
 		<p><?php echo elgg_echo('adf_platform:config:saverestore:details'); ?></p>
 

@@ -88,8 +88,6 @@ $en = array(
 	'adf_platform:settings:members:popular' => "Use popular members tab",
 	'adf_platform:settings:members:onlinetab' => "Use online members tab",
 	'members:label:alpha' => "Alphabetic",
-	'adf_platform:config:contacts' => "CONTACTS & IDENTITIES",
-	'adf_platform:config:contacts:details' => "Note : not all themes use these contacts !",
 	'adf_platform:config:styles' => "COLORS & STYLE",
 	'adf_platform:config:styles:headerfooter' => "Header and footer gradient",
 	'adf_platform:config:styles:groupmodules' => "Widgets and group modules gradient",
@@ -426,6 +424,8 @@ $en = array(
 	'adf_platform:settings:members:online' => "Display online members on sidebar (default : no)",
 	
 	/* Social presence */
+	'adf_platform:config:contacts' => "CONTACTS & IDENTITIES",
+	'adf_platform:config:contacts:details' => "Note : some themes use theses information to display links to social presence in top menu (or elswhere).",
 	// Email
 	'esope:settings:contactemail' => "Contact email",
 	'esope:settings:contactemail:help' => "",
@@ -459,12 +459,12 @@ $en = array(
 	// Netvibes
 	'esope:settings:netvibes' => "Netvibes page/account URL",
 	'esope:settings:netvibes:help' => "",
-	'esope:settings:netvibes:icon' => 'NetVibes',
+	'esope:settings:netvibes:icon' => 'NV',
 	'esope:settings:netvibes:title' => "NetVibes",
 	// FlickR
 	'esope:settings:flickr' => "FlickR page/account URL",
 	'esope:settings:flickr:help' => "",
-	'esope:settings:flickr:icon' => '<i class="fa fa-flickr-square"></i>',
+	'esope:settings:flickr:icon' => '<i class="fa fa-flickr"></i>',
 	'esope:settings:flickr:title' => "FlickR",
 	// Youtube
 	'esope:settings:youtube' => "Youtube page/account URL",
@@ -509,8 +509,8 @@ $en = array(
 	// TumblR
 	'esope:settings:tumblr' => "TumblR page/account URL",
 	'esope:settings:tumblr:help' => "",
-	'esope:settings::icon' => '<i class="fa fa-tumblr-square"></i>',
-	'esope:settings::title' => "TumblR",
+	'esope:settings:tumblr:icon' => '<i class="fa fa-tumblr-square"></i>',
+	'esope:settings:tumblr:title' => "TumblR",
 	// Slideshare
 	'esope:settings:slideshare' => "Slideshare page/account URL",
 	'esope:settings:slideshare:help' => "",

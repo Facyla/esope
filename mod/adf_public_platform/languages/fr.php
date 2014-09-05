@@ -88,8 +88,6 @@ $fr = array(
 	'adf_platform:settings:members:popular' => "Onglet liste par contacts",
 	'adf_platform:settings:members:onlinetab' => "Onglet liste en ligne",
 	'members:label:alpha' => "Alphabétique",
-	'adf_platform:config:contacts' => "CONTACTS ET COORDONNEES",
-	'adf_platform:config:contacts:details' => "Note : ces coordonnées ne sont pas utilisées par tous les thèmes (actuellement : seulement compétences numériques)",
 	'adf_platform:config:styles' => "COULEURS & STYLE",
 	'adf_platform:config:styles:headerfooter' => "Dégradé du header et du pied de page",
 	'adf_platform:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
@@ -425,6 +423,8 @@ $fr = array(
 	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	
 	/* Social presence */
+	'adf_platform:config:contacts' => "CONTACTS ET COORDONNEES",
+	'adf_platform:config:contacts:details' => "Certains thèmes utilisent ces coordonnées pour ajouter des liens vers les présences sociales de votre réseau, soit dans le bandeau supérieur, soit à un autre emplacement défini par le thème.",
 	// Email
 	'esope:settings:contactemail' => "Adresse email de contact",
 	'esope:settings:contactemail:help' => "",
@@ -458,12 +458,12 @@ $fr = array(
 	// Netvibes
 	'esope:settings:netvibes' => "URL de la page/compte Netvibes",
 	'esope:settings:netvibes:help' => "",
-	'esope:settings:netvibes:icon' => 'NetVibes',
+	'esope:settings:netvibes:icon' => 'NV',
 	'esope:settings:netvibes:title' => "NetVibes",
 	// FlickR
 	'esope:settings:flickr' => "URL de la page/compte FlickR",
 	'esope:settings:flickr:help' => "",
-	'esope:settings:flickr:icon' => '<i class="fa fa-flickr-square"></i>',
+	'esope:settings:flickr:icon' => '<i class="fa fa-flickr"></i>',
 	'esope:settings:flickr:title' => "FlickR",
 	// Youtube
 	'esope:settings:youtube' => "URL de la page/compte Youtube",
@@ -508,8 +508,8 @@ $fr = array(
 	// TumblR
 	'esope:settings:tumblr' => "URL de la page/compte Tumblr",
 	'esope:settings:tumblr:help' => "",
-	'esope:settings::icon' => '<i class="fa fa-tumblr-square"></i>',
-	'esope:settings::title' => "TumblR",
+	'esope:settings:tumblr:icon' => '<i class="fa fa-tumblr-square"></i>',
+	'esope:settings:tumblr:title' => "TumblR",
 	// Slideshare
 	'esope:settings:slideshare' => "URL de la page/compte Slideshare",
 	'esope:settings:slideshare:help' => "",
