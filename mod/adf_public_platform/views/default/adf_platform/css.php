@@ -242,6 +242,7 @@ footer img { float: right; }
 	border-top: 2px solid <?php echo $color1; ?>;
 	height: 10px;
 }
+.interne.credits { position:initial; }
 div.credits { font-size: 0.85em; }
 div.credits p { float: left; color: #333333; margin: 4px 0 5px; }
 div.credits a { color: #333333; text-decoration:underline; }
@@ -718,7 +719,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 /* Menus */
 #transverse nav ul { width:auto; }
 /* Largeur de page standard */
-.interne {min-width:200px; width:auto; max-width:80%; }
+.interne { min-width:200px; width:auto; max-width:80%; }
 /* Quand on utilise les widgets */
 .elgg-widgets { min-width:200px; }
 section div.module { width: 94%; padding: 3%; background-size:100%; }
