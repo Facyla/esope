@@ -17,9 +17,9 @@ $footer = elgg_get_plugin_setting('footer', 'adf_public_platform');
 ?>
 
 
-<footer>
+<footer id="site-footer">
 	<div class="interne">
-	  <?php echo $footer; ?>
+		<?php echo $footer; ?>
 	</div>
 </footer>
 
