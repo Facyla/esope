@@ -570,7 +570,7 @@ $(function() {
 		// Note : use view page/elements/social_presence for rendering
 		// Important : update tools list in view if updated here !
 		// @TODO : could also make this list a setting and let people update it live..
-		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'lindekin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
+		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
 		foreach ($tools as $tool) {
 			echo '<p><label>' . elgg_echo("esope:settings:$tool") . '</label>' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $vars['entity']->$tool, 'js' => 'style="width:50%;"')) . '<br />' . elgg_echo("esope:settings:$tool:help") . '</p><br />';
 		}

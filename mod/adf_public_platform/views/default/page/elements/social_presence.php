@@ -3,7 +3,7 @@
 
 $content = '';
 
-$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'lindekin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
+$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
 
 foreach ($tools as $tool) {
 	$tool_value = elgg_get_plugin_setting($tool, 'adf_public_platform');
