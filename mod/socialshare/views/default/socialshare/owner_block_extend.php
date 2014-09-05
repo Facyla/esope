@@ -10,7 +10,7 @@ if (elgg_get_plugin_setting('extend_owner_block', 'socialshare') != 'yes') { ret
 $page_owner = elgg_get_page_owner_entity();
 if (elgg_instanceof($page_owner, 'group') && ($page_owner->access_id == 2)) {
 	$share_url = $page_owner->getURL();
-	echo '<div id="socialshare-links">';
+	echo '<div class="socialshare-links">';
 		echo elgg_view('socialshare/extend', array('shareurl' => $share_url));
 		echo '<div class="clearfloat"></div>';
 	echo '</div>';
