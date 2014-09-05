@@ -22,6 +22,6 @@ $day = date('d', $event->start_date);
 $year = date('Y', $event->start_date);
 
 
-echo '<div class="timeline-event"><div class="timeline-event-content"><h3 class="timeline-title"><a href="'.$event->getURL().'">' . $month . ' ' . $day . '</a></h3><div class="timeline-event-description">' . $event->description . '</div></div></div>';
+echo '<div class="timeline-event"><div class="timeline-event-content"><h3 class="timeline-title"><a href="'.$event->getURL().'" title="' . $event->title . '">' . $month . ' ' . $day . '</a></h3><div class="timeline-event-description">' . $event->description . '</div></div></div>';
 
 
