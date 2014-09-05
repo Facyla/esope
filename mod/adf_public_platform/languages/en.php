@@ -454,8 +454,8 @@ $en = array(
 	// LinkdeIn
 	'esope:settings:linkedin' => "LinkedIn page/account URL",
 	'esope:settings:linkedin:help' => "",
-	'esope:settings:lindekin:icon' => '<i class="fa fa-lindekin-square"></i>',
-	'esope:settings:lindekin:title' => "LindekIn",
+	'esope:settings:linkedin:icon' => '<i class="fa fa-linkedin-square"></i>',
+	'esope:settings:linkedin:title' => "LinkedIn",
 	// Netvibes
 	'esope:settings:netvibes' => "Netvibes page/account URL",
 	'esope:settings:netvibes:help' => "",
