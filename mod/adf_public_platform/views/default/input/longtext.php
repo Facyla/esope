@@ -20,7 +20,7 @@ if (isset($vars['class'])) {
 $defaults = array(
 	'value' => '',
 	//'id' => 'elgg-input-' . rand(), //@todo make this more robust
-	'id' => 'elgg-input-' . esope_unique_id(),
+	'id' => 'elgg-input-' . esope_unique_id(''),
 );
 
 $vars = array_merge($defaults, $vars);
