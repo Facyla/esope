@@ -20,6 +20,7 @@ var TogetherJSConfig_suppressJoinConfirmation = true;
 var TogetherJSConfig_disableWebRTC = true;
 var TogetherJSConfig_getUserName = function () { return '<?php echo $username; ?>'; };
 var TogetherJSConfig_getUserAvatar = function () { return '<?php echo $usericon; ?>'; };
+var TogetherJSConfig_tinymce = true;
 </script>
 <script src="https://togetherjs.com/togetherjs.js"></script>
 <script>
