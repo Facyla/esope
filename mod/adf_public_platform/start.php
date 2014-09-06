@@ -1177,6 +1177,7 @@ function esope_uppercase_name($string) {
  * Param :
  *  - $prefix default can be overrided if needed
  */
+// @TODO : make id unique *per prefix*
 function esope_unique_id($prefix = 'esope_unique_id_') {
 	global $esope_unique_id;
 	if (!isset($esope_unique_id)) {
