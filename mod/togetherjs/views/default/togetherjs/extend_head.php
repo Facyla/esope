@@ -24,12 +24,14 @@ var TogetherJSConfig_getUserAvatar = function () { return '<?php echo $usericon;
 </script>
 <script src="https://togetherjs.com/togetherjs.js"></script>
 <script>
+// Update name and profile picture
 TogetherJS.refreshUserData();
-//TogetherJS.addTracker(tinyMCE, true);
+
+TogetherJS.addTracker(tinyMCE, true);
 
 $(function () {
   tinymce.init({ 
-    selector: '.tinymce'
+    selector: '.elgg-input-longtext',
   });
 });
 
