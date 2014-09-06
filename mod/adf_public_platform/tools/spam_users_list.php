@@ -30,11 +30,7 @@ $delete_guids = get_input('delete_guids', false);
 if ($delete_guids) { $guids = esope_get_input_array($delete_guids); }
 
 $email_match = get_input('email_match', false);
-//if ($email_match) { $matches = esope_get_input_array($email_match); }
-if ($email_match) {
-	$matches = explode("\n", $email_match);
-	$matches = array_map('trim', $matches);
-}
+if ($email_match) { $matches = esope_get_input_array($email_match); }
 
 echo implode(', ', $matches);
 
