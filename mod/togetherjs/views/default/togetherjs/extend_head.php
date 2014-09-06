@@ -27,7 +27,7 @@ var TogetherJSConfig_getUserAvatar = function () { return '<?php echo $usericon;
 // Update name and profile picture
 TogetherJS.refreshUserData();
 
-TogetherJS.addTracker(tinyMCE, true);
+TogetherJS.addTracker(tinymceEditor, true);
 
 $(function () {
   tinymce.init({ 
