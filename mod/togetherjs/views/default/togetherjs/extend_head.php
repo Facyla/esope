@@ -33,6 +33,7 @@ $(function () {
   });
 });
 
+/*
   // check for a tinymce instance
   if (tinymce !== undefined) {
     tinymce.on("AddEditor", function (event) {
@@ -43,5 +44,6 @@ $(function () {
     });
   }
 });
+*/
 </script>
 

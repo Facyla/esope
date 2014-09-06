@@ -69,7 +69,7 @@ elgg.tinymce.init = function() {
 		language : "<?php echo tinymce_get_site_language(); ?>",
 		table_inline_editing : true,
 		mode : "specific_textareas",
-		editor_selector : "elgg-input-longtext",
+		editor_selector : "elgg-input-longtext tinmyce",
 		editor_deselector : "elgg-input-rawtext",
 		theme : "advanced",
 		gecko_spellcheck : true,
