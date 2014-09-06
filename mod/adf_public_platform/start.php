@@ -1429,9 +1429,8 @@ function esope_get_meta_values($meta_name) {
 function esope_get_input_array($input = false) {
 	if ($input) {
 		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-		$input = preg_replace('/\r\n|\n|\r/', '\n', $input);
-		$input = str_replace(array(",", ";", "|"),"\n",$input);
-		$input = explode("\n",$input);
+		$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+		$input = explode("\n", $input);
 		// Suppression des espaces
 		$input = array_map('trim', $input);
 		// Suppression des doublons
