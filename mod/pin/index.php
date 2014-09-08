@@ -10,25 +10,22 @@ $body = '';
 
 
 // Highlighted - for everybody
-$body .= elgg_view('pin/highlight_listing', array('exclude' => null, 'nolink' => true));
+$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true));
 //$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null));
 
-$usehighlight = elgg_get_plugin_setting('highlight', 'pin');
-if ($usehighlight == 'yes') {
-  $body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';
-  $ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
-  //$ents = get_entities_from_metadata('highlight', '', 'object', '', 0, 10);
-  //get_entities_from_annotations ($entity_type="", $entity_subtype="", $name="", $value="", $owner_guid=0, $group_guid=0, $limit=10, $offset=0, $order_by="asc", $count=false, $timelower=0, $timeupper=0);
-  //$ents = get_entities_from_annotations("object", "", "memorize", "", 0, 0, 10, 0, "asc", false, 0, 0);
-  $body .= '<ul>';
-  foreach ($ents as $ent) {
-    $linktext = $ent->title;
-    if (empty($linktext)) $linktext = $ent->description;
-    if (empty($linktext)) $linktext = elgg_echo('item:object:'.$ent->getSubtype());
-    $body .= '<li><a href="' . $ent->getURL() . '">' . $linktext . '</a> - <small>' . get_entity($ent->container_guid)->name . '</small></li>';
-  }
-  $body .= '</ul>';
+$body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';
+$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
+//$ents = get_entities_from_metadata('highlight', '', 'object', '', 0, 10);
+//get_entities_from_annotations ($entity_type="", $entity_subtype="", $name="", $value="", $owner_guid=0, $group_guid=0, $limit=10, $offset=0, $order_by="asc", $count=false, $timelower=0, $timeupper=0);
+//$ents = get_entities_from_annotations("object", "", "memorize", "", 0, 0, 10, 0, "asc", false, 0, 0);
+$body .= '<ul>';
+foreach ($ents as $ent) {
+  $linktext = $ent->title;
+  if (empty($linktext)) $linktext = $ent->description;
+  if (empty($linktext)) $linktext = elgg_echo('item:object:'.$ent->getSubtype());
+  $body .= '<li><a href="' . $ent->getURL() . '">' . $linktext . '</a> - <small>' . get_entity($ent->container_guid)->name . '</small></li>';
 }
+$body .= '</ul>';
 
 
 
