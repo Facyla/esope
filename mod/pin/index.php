@@ -3,14 +3,14 @@ require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 
 global $CONFIG;
 
-$limit = 999;
+$limit = 0;
 
 $title = elgg_echo('pin:title');
 $body = '';
 
 
 // Highlighted - for everybody
-$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true));
+$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true, 'limit' => 0));
 //$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null));
 
 $body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';

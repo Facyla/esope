@@ -7,7 +7,7 @@
  * 
  */
 
-elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
+elgg_register_event_handler('init', 'system', 'esope_init'); // Init
 
 // Menu doit être chargé en dernier pour overrider le reste
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
@@ -15,9 +15,9 @@ elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); //
 
 
 /**
- * Init adf_platform plugin.
+ * Init ESOPE plugin.
  */
-function adf_platform_init() {
+function esope_init() {
 	global $CONFIG;
 	
 	// Nouvelles vues
@@ -1515,5 +1515,43 @@ function esope_login_user_action($event, $type, $user) {
 		}
 	}
 }
+
+
+/* Returns an array with images extracted from a text field
+ * string $html : the HTML input content
+ * bool $full_tag : return full <img /> tag, or only src if false
+ */
+function esope_extract_images($html, $full_tag = true) {
+	/* 
+	// Regex method : not as failsafe as we'd like to
+	preg_match_all('/<img[^>]+>/i',$html,$out); 
+	$images = $out[0];
+	*/
+	
+	// DOM method : most failsafe
+	$html = file_get_contents('http://www.google.com/');
+	$dom = new domDocument;
+	$dom->loadHTML($html);
+	$dom->preserveWhiteSpace = false;
+	$images = $dom->getElementsByTagName('img');
+	if ($full_tag) { return $images; }
+	
+	// Extract src
+	$src = array();
+	foreach ($images as $image) {
+		$src = $image->getAttribute('src');
+	}
+	return $src;
+}
+
+/* Returns the first image found in a text string
+ * string $html : the HTML input content
+ * bool $full_tag : return full <img /> tag, or only src if false
+ */
+function esope_extract_first_image($html, $full_tag = true) {
+	$images = esope_extract_images($html, $full_tag);
+	return $images[0];
+}
+
 
 
