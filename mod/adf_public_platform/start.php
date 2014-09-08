@@ -1541,7 +1541,7 @@ function esope_extract_images($html, $full_tag = true) {
 	// Extract src
 	$src = array();
 	foreach ($images as $image) {
-		$src = $image->getAttribute('src');
+		$src[] = $image->getAttribute('src');
 	}
 	return $src;
 }

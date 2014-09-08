@@ -40,6 +40,17 @@ function pin_init() {
 	
 	elgg_register_action("pin/highlight",false,$CONFIG->pluginspath . "pin/actions/highlight.php");
 	
+	elgg_register_page_handler('pin', 'pin_page_handler');
+	
+}
+
+
+
+// Esope search page handler
+function pin_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'pin/pages/pin';
+	require_once "$base/index.php";
+	return true;
 }
 
 
@@ -51,16 +62,18 @@ function pin_entity_menu_setup($hook, $type, $return, $params) {
 	if (!elgg_is_logged_in()) { return $return; }
 	$entity = $params['entity'];
 	if ($entity->getType() == 'object') {
-		// @TODO : filter on chosen subtypes only
-		/*
-		// Types d'entités concernées
+		$subtype = $entity->getSubtype();
+		// Filter on chosen subtypes only
+		// Types d'entités autorisées
 		$validhighlight = elgg_get_plugin_setting('validhighlight', 'pin');
-		if (!empty($validhighlight)) $validhighlight = explode(',', $validhighlight);
-		else $validhighlight = get_registered_entity_types('object');
-		*/
-		
-		$options = array('name' => 'pins', 'href' => false, 'priority' => 200, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));
-		$return[] = ElggMenuItem::factory($options);
+		if (!empty($validhighlight)) {
+			if (function_exists('esope_get_input_array')) $validhighlight = esope_get_input_array($validhighlight);
+			else $validhighlight = explode(',', $validhighlight);
+		}
+		if (empty($validhighlight) || in_array($subtype, $validhighlight)) {
+			$options = array('name' => 'pins', 'href' => false, 'priority' => 200, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 	return $return;
 }
