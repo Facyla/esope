@@ -1529,7 +1529,9 @@ function esope_extract_images($html, $full_tag = true) {
 	*/
 	
 	// DOM method : most failsafe
-	$html = file_get_contents('http://www.google.com/');
+	if (function_exists('mb_convert_encoding')) {
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+	}
 	$dom = new domDocument;
 	$dom->loadHTML($html);
 	$dom->preserveWhiteSpace = false;

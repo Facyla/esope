@@ -3,27 +3,37 @@ require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 
 global $CONFIG;
 
-$limit = 0;
-
 $title = elgg_echo('pin:title');
 $body = '';
 
 
 // Highlighted - for everybody
-$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true, 'limit' => 0));
+//$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true, 'limit' => "0"));
 //$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null));
 
 $body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';
-$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
-//$ents = get_entities_from_metadata('highlight', '', 'object', '', 0, 10);
-//get_entities_from_annotations ($entity_type="", $entity_subtype="", $name="", $value="", $owner_guid=0, $group_guid=0, $limit=10, $offset=0, $order_by="asc", $count=false, $timelower=0, $timeupper=0);
-//$ents = get_entities_from_annotations("object", "", "memorize", "", 0, 0, 10, 0, "asc", false, 0, 0);
+$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => 0));
 $body .= '<ul>';
 foreach ($ents as $ent) {
-  $linktext = $ent->title;
-  if (empty($linktext)) $linktext = $ent->description;
-  if (empty($linktext)) $linktext = elgg_echo('item:object:'.$ent->getSubtype());
-  $body .= '<li><a href="' . $ent->getURL() . '">' . $linktext . '</a> - <small>' . get_entity($ent->container_guid)->name . '</small></li>';
+	// Récupération icône du plus pertinent (lieu de publication) au moins pire (site courant)..
+	if ($ent_for_icon = get_entity($ent->container_guid)) {} 
+	else if ($ent_for_icon = get_entity($ent->owner_guid)) {}
+	else if ($ent_for_icon = get_entity($ent->site_guid)) {}
+	if ($ent_for_icon instanceof ElggEntity) { $icon = get_entity_icon_url($ent_for_icon, "small"); }
+	$icon = '<a href="' . $ent->getURL() . '"><img src="'.$icon.'" /></a>';
+	
+	$linktext = $ent->title;
+	if (empty($linktext)) $linktext = $ent->description;
+	if (empty($linktext)) $linktext = elgg_echo('item:object:'.$ent->getSubtype());
+	$owner = get_entity($ent->owner_guid);
+	$info = '<a href="' . $ent->getURL() . '">' . $linktext . '</a><br />
+		<p class="owner_timestamp"><a href="' . $owner->getURL() . '">' . $owner->name . '</a> ' 
+		. friendly_time($ent->time_created);
+	if ($ent_for_icon->guid != $owner->guid) {
+		$info .= ' <i>in</i> <a href="' . $ent_for_icon->getURL() . '">' . $ent_for_icon->name . '</a>';
+	}
+	$info .= '</p>';
+	$body .= elgg_view_listing($icon, $info);
 }
 $body .= '</ul>';
 
