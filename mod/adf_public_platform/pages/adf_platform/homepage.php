@@ -43,7 +43,9 @@ if ($firststeps_page instanceof ElggObject) {
 
 // Texte intro configurable
 $intro = elgg_get_plugin_setting('dashboardheader', 'adf_public_platform');
+/*
 if (empty($intro) && elgg_is_admin_logged_in()) { $intro = '<a href="' . $vars['url'] . 'admin/plugin_settings/adf_public_platform">' . elgg_echo('adf_platform:welcome:msg') . '</a>'; }
+*/
 
 
 // Composition de la page

@@ -550,7 +550,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Mes paramètres */
 .elgg-form-usersettings-save .elgg-body { padding-bottom: 10px; }
-.elgg-form-usersettings-save .elgg-body input, .elgg-form-usersettings-save .elgg-body textarea { background: #f6f6f6; }
+.elgg-form-usersettings-save .elgg-body input[type=text], .elgg-form-usersettings-save .elgg-body textarea { background: #f6f6f6; }
 
 
 

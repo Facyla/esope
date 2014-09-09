@@ -1,27 +1,18 @@
 <?php
-$limit = get_input('limit', 10);
-$offset = get_input('offset', 0);
+global $CONFIG;
 
-$exclude = $vars['exclude'];
-if (isset($vars['nolink'])) $nolink = true; else $nolink = false;
+$title = elgg_echo('pin:title');
+$body = '';
 
-// Highlighted - for everybody, depending of their access rights
-$body .= '<h2>Articles choisis</h2>';
-$body .= '<div class="clearfloat"></div><br />';
-//$homehighlight .=	'<div class="clearfloat"></div>';
+
+// Highlighted - for everybody
+//$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null, 'nolink' => true, 'limit' => "0"));
+//$body .= elgg_view('pin/highlight_nicelisting', array('exclude' => null));
 
 //$body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';
-$ents_count = get_entities_from_metadata('highlight', '', 'object', '', 0, $limit, 0, '', -1, true);
-$ents = get_entities_from_metadata('highlight', '', 'object', '', 0, $ents_count, 0, '', -1, false);
-
-//$body .= elgg_view_entity_list($ents, $ents_count, $offset, $limit, false, false, true);
-
-$i = 0;
+$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => 0));
+$body .= '<ul>';
 foreach ($ents as $ent) {
-	// On passe si déjà publié (ou exclu pour X autre raison)
-	if (is_array($exclude) && in_array($ent->guid, $exclude)) { continue; }
-	$i++;
-	
 	// Récupération icône du plus pertinent (lieu de publication) au moins pire (site courant)..
 	if ($ent_for_icon = get_entity($ent->container_guid)) {} 
 	else if ($ent_for_icon = get_entity($ent->owner_guid)) {}
@@ -41,11 +32,15 @@ foreach ($ents as $ent) {
 	}
 	$info .= '</p>';
 	$body .= elgg_view_listing($icon, $info);
-	if ($i > $limit) { break; }
 }
-if (!$nolink) {
-	$body .= '<br /><h4><a href="' . $CONFIG->url . 'mod/pin/index.php">&raquo;&nbsp;Retrouver tous les articles choisis</a></h4>';
-}
+$body .= '</ul>';
 
-echo $body;
+
+
+// Build page content
+$body = elgg_view_layout('one_column', array('content' => $body));
+
+
+// Affichage
+echo elgg_view_page($title, $body);
 

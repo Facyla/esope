@@ -7,7 +7,7 @@
  * 
  */
 
-elgg_register_event_handler('init', 'system', 'adf_platform_init'); // Init
+elgg_register_event_handler('init', 'system', 'esope_init'); // Init
 
 // Menu doit être chargé en dernier pour overrider le reste
 //elgg_register_event_handler("init", "system", "adf_platform_pagesetup", 999); // Menu
@@ -15,9 +15,9 @@ elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); //
 
 
 /**
- * Init adf_platform plugin.
+ * Init ESOPE plugin.
  */
-function adf_platform_init() {
+function esope_init() {
 	global $CONFIG;
 	
 	// Nouvelles vues
@@ -1177,6 +1177,7 @@ function esope_uppercase_name($string) {
  * Param :
  *  - $prefix default can be overrided if needed
  */
+// @TODO : make id unique *per prefix*
 function esope_unique_id($prefix = 'esope_unique_id_') {
 	global $esope_unique_id;
 	if (!isset($esope_unique_id)) {
@@ -1428,9 +1429,8 @@ function esope_get_meta_values($meta_name) {
 function esope_get_input_array($input = false) {
 	if ($input) {
 		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-		$input = preg_replace('/\r\n|\n|\r/', '\n', $input);
-		$input = str_replace(array(",", ";", "|"),"\n",$input);
-		$input = explode("\n",$input);
+		$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+		$input = explode("\n", $input);
 		// Suppression des espaces
 		$input = array_map('trim', $input);
 		// Suppression des doublons
@@ -1515,5 +1515,45 @@ function esope_login_user_action($event, $type, $user) {
 		}
 	}
 }
+
+
+/* Returns an array with images extracted from a text field
+ * string $html : the HTML input content
+ * bool $full_tag : return full <img /> tag, or only src if false
+ */
+function esope_extract_images($html, $full_tag = true) {
+	/* 
+	// Regex method : not as failsafe as we'd like to
+	preg_match_all('/<img[^>]+>/i',$html,$out); 
+	$images = $out[0];
+	*/
+	
+	// DOM method : most failsafe
+	if (function_exists('mb_convert_encoding')) {
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+	}
+	$dom = new domDocument;
+	$dom->loadHTML($html);
+	$dom->preserveWhiteSpace = false;
+	$images = $dom->getElementsByTagName('img');
+	if ($full_tag) { return $images; }
+	
+	// Extract src
+	$src = array();
+	foreach ($images as $image) {
+		$src[] = $image->getAttribute('src');
+	}
+	return $src;
+}
+
+/* Returns the first image found in a text string
+ * string $html : the HTML input content
+ * bool $full_tag : return full <img /> tag, or only src if false
+ */
+function esope_extract_first_image($html, $full_tag = true) {
+	$images = esope_extract_images($html, $full_tag);
+	return $images[0];
+}
+
 
 

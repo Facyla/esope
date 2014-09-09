@@ -41,10 +41,15 @@ if (!empty($slidercontent)) {
 	// Si on a un <ul> ou <ol> au début et </ul> ou </ol> à la fin de la liste
 	if (in_array(substr($slidercontent, 0, 4), array('<ol>', '<ul>'))) {
 		$slidercontent = substr($slidercontent, 4);
+		// Note : this technique avoids errors when an extra line was added after the list..
+		if ($start_list == '<ul>') { $end_pos = strripos($slidercontent, '</ul>'); } else { $end_pos = strripos($slidercontent, '</ol>'); }
+		if ($end_pos !== false) { $slidercontent = substr($slidercontent, 0, $end_pos); }
 	}
+	/*
 	if (in_array(substr($slidercontent, -5), array('</ol>', '</ul>'))) {
 		$slidercontent = substr($slidercontent, 0, -5);
 	}
+	*/
 }
 
 if (empty($sliderparams)) {
