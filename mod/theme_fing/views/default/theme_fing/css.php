@@ -156,6 +156,7 @@ ul.elgg-list li.elgg-item div.elgg-image .elgg-avatar-tiny a img { margin-right:
 /* Limit slides content size */
 .fing-slider { height: 250px; overflow:hidden; }
 .fing-slider #slider1 img { max-height: 250px !important; }
+.textSlide h3, h3.textSlide { font-size: 20px; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
 .anythingSlider li.panel.activePage { display:block; }
