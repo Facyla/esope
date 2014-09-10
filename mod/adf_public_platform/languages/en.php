@@ -635,7 +635,7 @@ $en = array(
 	// Nouveaux champs
 	'profile:field:plaintext' => 'Plain text (no editor)',
 	'profile:field:group_profiletypes' => 'Group types',
-	'profile:field:colors' => 'Color (CSS)',
+	'profile:field:color' => 'Color (CSS)',
 	'profile:field:groups_select' => 'Group select',
 	'profile:field:members_select' => 'Member select',
 	'members_select:myself' => 'Myself',
