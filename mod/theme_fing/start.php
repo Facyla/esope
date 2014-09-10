@@ -46,6 +46,11 @@ function theme_fing_init(){
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_fing/actions/thewire/add.php');
 	}
 	
+	
+	// Extend digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+
+	
 	// @TODO - DEV & TESTING !!
 	/*
 	if (elgg_is_active_plugin('html_email_handler')) {

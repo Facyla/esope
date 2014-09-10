@@ -46,6 +46,8 @@ function esope_init() {
 	// Extend groups sidebar (below owner_block and search)
 	elgg_extend_view('groups/sidebar/members', 'groups/sidebar/cmspages_extend', 100);
 	
+	elgg_extend_view('css/digest/core', 'css/digest/esope');
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI

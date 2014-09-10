@@ -682,6 +682,8 @@ $en = array(
 	'esope:digest:wrapper:help' => "If you want to edit the digest wrapper, please copy and edit the default wrapper in your theme (page/layouts/digest).<br />To edit the inner elements content and wrappers, please read the Digest documentation for more detailed instructions. The views are located in digest/elements/* but you'll need to register elements to add them to the digests.",
 	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
+	'esope:digest:groups' => "New groups",
+	'esope:digest:members' => "New members",
 	
 	// Join groups at registration
 	'esope:settings:register:joingroup' => "Allow to join groups at registration",
