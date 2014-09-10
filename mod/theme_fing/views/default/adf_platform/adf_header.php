@@ -172,9 +172,9 @@ if (elgg_is_logged_in()) {
 								</li>
 								<?php echo $invites; ?>
 								
-								<li class="groups"><a <?php if (full_url() == $url . 'groups/search?entity_type=group&search_type=tags&q=Projet') { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/search?entity_type=group&search_type=tags&q=Projet">Projets</a></li>
+								<li class="groups"><a <?php if (full_url() == $url . 'fing/projet') { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>fing/projet"><?php echo elgg_echo('theme_fing:projet'); ?></a></li>
 								
-								<li class="groups"><a <?php if (full_url() == $url . 'groups/search?entity_type=group&search_type=tags&q=Prospective') { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/search?entity_type=group&search_type=tags&q=Prospective">Prospective</a></li>
+								<li class="groups"><a <?php if (full_url() == $url . 'fing/prospective') { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>fing/prospective"><?php echo elgg_echo('theme_fing:prospective'); ?></a></li>
 								
 							<?php } ?>
 							
