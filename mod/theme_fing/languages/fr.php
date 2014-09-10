@@ -26,6 +26,9 @@ $french = array(
 	'theme_fing:groups:featured' => "Nos travaux",
 	'theme_fing:homegroups:featured' => "Nos travaux en cours",
 	'groups:theme' => "Thématique",
+	'theme_fing:projet' => "Projets",
+	'theme_fing:prospective' => "Prospective",
+	'theme_fing:archive' => "Archives",
 	
 	'profile:types:fing' => "Equipe Fing",
 	'profile:types:adherents' => "Adhérents",

@@ -99,15 +99,22 @@ function theme_fing_get_pin_entities() {
 	} else return false;
 }
 
-/*
+
 function fing_page_handler($page){
+	$page[0] = strtolower($page[0]);
 	switch($page[0]){
 		default:
-			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
+			case 'archive':
+			case 'projet':
+			case 'prospective':
+				set_input('theme', $page[0]);
+				include(dirname(__FILE__) . '/pages/theme_fing/groups.php');
+				break;
+			default:
+				include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
 	return true;
 }
-*/
 
 
 
