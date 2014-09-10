@@ -16,6 +16,11 @@ $sidebar = '';
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb($title);
 
+
+// Add custom intro block
+$content .= elgg_view('cmspages/view', array('pagetype' => "group-theme-$theme"));
+
+// Get and list groups
 $params = array(
 	'type' => 'group', 'limit' => 0,
 	'metadata_name_value_pairs' => array('name' => 'theme', 'value' => $theme, 'case_sensitive' => false),
@@ -30,7 +35,7 @@ $content .= elgg_list_entities_from_metadata($params);
 
 // Add recent activity in these groups in sidebar
 $offset = get_input('offset', 0); 
-$limit = get_input('limit', 5 ); 
+$limit = get_input('limit', 10); 
 $dbprefix = get_config("dbprefix");
 $group_guids_in = implode(',', $group_guids);
 $sql = "SELECT r.* FROM " . $dbprefix . "river r";
@@ -47,7 +52,6 @@ if (!empty($items)) {
 	);
 	$sidebar .= elgg_view("page/components/list", $options);
 }
-
 
 
 $body = elgg_view_layout('content', array(
