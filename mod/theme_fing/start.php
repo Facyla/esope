@@ -49,7 +49,11 @@ function theme_fing_init(){
 	
 	// Extend digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
-
+	
+	// Replace group and user default icons
+	/*
+	elgg_register_plugin_hook_handler('entity:icon:url', 'group', 'theme_fing_groups_icon_url_override');
+	*/
 	
 	// @TODO - DEV & TESTING !!
 	/*
@@ -120,6 +124,27 @@ function fing_page_handler($page){
 	}
 	return true;
 }
+
+
+/**
+ * Override the default entity icon for groups
+ *
+ * @return string Relative URL
+ */
+/*
+function theme_fing_groups_icon_url_override($hook, $type, $returnvalue, $params) {
+	$group = $params['entity'];
+	$size = $params['size'];
+	
+	// Already has an icon
+	if ($returnvalue != "mod/groups/graphics/default{$size}.gif") {
+		return $returnvalue;
+	}
+	
+	// If using default, return a new default
+	return "mod/theme_fing/graphics/groups/{$size}.png";
+}
+*/
 
 
 

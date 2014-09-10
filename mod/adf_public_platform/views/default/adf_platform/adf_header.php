@@ -138,7 +138,7 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="<?php echo $url; ?>" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?></a>
+								<li class="home"><a href="<?php echo $url; ?>" <?php if ((full_url() == $url) || (full_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?></a>
 									<?php if (elgg_is_active_plugin('dashboard')) { ?>
 										<ul class="hidden">
 											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
@@ -169,7 +169,7 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('members')) { ?>
-									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('adf_platform:directory'); ?></a></li>
+									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('adf_platform:directory'); ?></a></li>
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
