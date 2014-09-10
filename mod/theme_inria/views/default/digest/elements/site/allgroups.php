@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Shows the publication activity of the member's groups in the Digest
+* Shows the activity of the member's groups in the Digest
 *
 */
 
