@@ -5,8 +5,6 @@
  * @package ElggPages
  */
 
-gatekeeper();
-
 $theme = strtolower(get_input('theme'));
 
 $title = elgg_echo('theme_fing:' . $theme);

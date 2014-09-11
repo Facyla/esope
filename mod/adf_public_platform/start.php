@@ -86,8 +86,11 @@ function esope_init() {
 	//elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
 	
 	
-	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
+	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS, et d'EVENTS
 	// Related functions are in lib/adf_public/platform/hooks.php
+	
+	// Affichage des dates
+	elgg_register_plugin_hook_handler('format', 'friendly:time','esope_friendly_time_hook');
 	
 	// Gestion des notifications par mail lors de l'entrée dans un groupe
 	elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);
@@ -152,7 +155,7 @@ function esope_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'adf_public_platform_public_pages');
 	
 	// Modification du Fil d'Ariane
-	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
+	//elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'adf_platform_alter_breadcrumb');
 	
 	// Permet de rendre le profil non public, si réglage activé
 	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
@@ -408,7 +411,7 @@ function adf_platform_pagesetup(){
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'));
 			} else {
 				// Par défaut : contexte
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo(elgg_get_context()), 'link' => $CONFIG->url . $context);
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $CONFIG->url . $context);
 			}
 		}
 	}

@@ -21,12 +21,18 @@
 	
 	<requires>
 		<type>plugin</type>
-		<version>blog_tools</version>
+		<name>blog_tools</name>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
 		<name>adf_public_platform</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>adf_public_platform</name>
+		<priority>after</priority>
 	</requires>
 	
 </plugin_manifest>

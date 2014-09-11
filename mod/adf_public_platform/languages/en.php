@@ -519,6 +519,9 @@ $en = array(
 	
 
 	// DATES
+	'date:format:friendly' => 'm/d/Y H:i',
+	'date:time:on' => "on",
+	'date:time:at' => "at",
 	'date:format' => 'D, F d, Y',
 	'date:day:0' => 'Sunday',
 	'date:day:1' => 'Monday',
