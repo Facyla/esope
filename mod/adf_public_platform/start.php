@@ -86,8 +86,11 @@ function esope_init() {
 	//elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
 	
 	
-	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS
+	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS, et d'EVENTS
 	// Related functions are in lib/adf_public/platform/hooks.php
+	
+	// Affichage des dates
+	elgg_register_plugin_hook_handler('format', 'friendly:time','esope_friendly_time_hook');
 	
 	// Gestion des notifications par mail lors de l'entrée dans un groupe
 	elgg_register_event_handler('create','member','adf_public_platform_group_join', 800);

@@ -8,14 +8,14 @@
  * - ne filtre que si on l'a explicitement demandé quelque part (pas de modification du comportement par défaut
  * 
 */
-function adf_platform_route($hook_name, $entity_type, $return_value, $parameters) {
+function adf_platform_route($hook, $type, $return, $params) {
 	global $CONFIG;
 	$home = $CONFIG->url;
 	
 	// Page handler et segments de l'URL
 	// Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
-	$handler = $return_value['handler'];
-	$segments = $return_value['segments'];
+	$handler = $return['handler'];
+	$segments = $return['segments'];
 	//echo print_r($segments, true); // debug
 	//register_error($handler . ' => ' . print_r($segments, true));
 	//error_log('DEBUG externalmembers ROUTE : ' . $handler . ' => ' . print_r($segments, true));
@@ -39,13 +39,13 @@ function adf_platform_route($hook_name, $entity_type, $return_value, $parameters
 	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
-	 * return $parameters; // Laisse le fonctionnement habituel se poursuivre
+	 * return $params; // Laisse le fonctionnement habituel se poursuivre
 	*/
 	// Par défaut on ne fait rien du tout
-	return $parameters;
+	return $params;
 }
 
-function adf_platform_public_profile_hook($hook_name, $entity_type, $return_value, $parameters){
+function adf_platform_public_profile_hook($hook, $type, $return, $params){
 	$user_guid = (int) get_input('guid');
 	$public_profile = get_input('public_profile');
 	// On ne modifie que si le réglage global est actif
@@ -124,10 +124,10 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 
 
 // Permet l'accès à diverses pages en mode "walled garden"
-function adf_public_platform_public_pages($hook, $type, $return_value, $params) {
+function adf_public_platform_public_pages($hook, $type, $return, $params) {
 	// Add very useful pages !
-	$return_value[] = 'resetpassword.*';
-	$return_value[] = 'uservalidationbyemail.*';
+	$return[] = 'resetpassword.*';
+	$return[] = 'uservalidationbyemail.*';
 	
 	// Get and prepare valid domain config array from plugin settings
 	$publicpages = elgg_get_plugin_setting('publicpages', 'adf_public_platform');
@@ -137,18 +137,18 @@ function adf_public_platform_public_pages($hook, $type, $return_value, $params) 
 	$publicpages = str_replace(array(';', ','), "\n", $publicpages);
 	$publicpages = explode("\n",$publicpages);
 	foreach ($publicpages as $publicpage) {
-		if (!empty($publicpage)) $return_value[] = $publicpage;
+		if (!empty($publicpage)) $return[] = $publicpage;
 	}
 	/* Pages publiques ADF au 27 juillet 2012
-	$return_value[] = 'pages/view/3792/charte-de-dpartements-en-rseaux';
-	$return_value[] = 'pages/view/3819/mentions-lgales';
-	$return_value[] = 'pages/view/3827/a-propos-de-dpartements-en-rseaux';
-	$return_value[] = 'pages/group/3519/all';
+	$return[] = 'pages/view/3792/charte-de-dpartements-en-rseaux';
+	$return[] = 'pages/view/3819/mentions-lgales';
+	$return[] = 'pages/view/3827/a-propos-de-dpartements-en-rseaux';
+	$return[] = 'pages/group/3519/all';
 	*/
 	/* Les pages à rendre accessibles doivent correspondre	à l'URL complète
-	$return_value[] = '';
+	$return[] = '';
 	*/
-	return $return_value;
+	return $return;
 }
 
 
@@ -348,7 +348,7 @@ function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
 
 
 // Perform some post-login actions (join groups, etc.)
-function esope_create_user_hook($hook, $type, $return_value, $params) {
+function esope_create_user_hook($hook, $type, $return, $params) {
 	if (is_array($params)) {
 		$user = elgg_extract("user", $params);
 		if (elgg_instanceof($user, "user")) {
@@ -365,7 +365,59 @@ function esope_create_user_hook($hook, $type, $return_value, $params) {
 		}
 	}
 	// We don't change anything to the process
-	return $return_value;
+	return $return;
 }
+
+
+/* Returns an absolute time
+ * $timestamp : the UNIX timestamp
+ */
+function esope_friendly_time_hook($hook, $type, $return, $params) {
+	global $esope_friendly_time_mode;
+	global $esope_friendly_time_months;
+	//global $esope_friendly_time_format;
+	
+	$timestamp = $params['time'];
+	
+	// Mode should default to auto
+	if (!isset($esope_friendly_time_mode)) {
+		$mode = elgg_get_plugin_setting('friendly_time_mode', 'adf_public_platform');
+	}
+	
+	// Don't change anything
+	if ($mode == 'no') { return $returnvalue; }
+	// If we're not forcing, use automatic mode <=> don't change anything if not older than a day
+	if (($mode != 'yes') && (time() - $timestamp < 60*60*24)) { return $returnvalue; }
+	
+	// Otherwise we use our new format
+	/*
+	if (!isset($esope_friendly_time_format)) {
+		$format = elgg_get_plugin_setting('friendly_time_format', 'adf_public_platform');
+		if (empty($format)) $format = elgg_echo('date:format:friendly');
+		$date = date('d/m/Y H:i', $timestamp);
+	}
+	*/
+	
+	if (!isset($esope_friendly_time_months)) {
+		$$esope_friendly_time_months = array();
+		for ($i=0; $i<12; $i++) {
+			$esope_friendly_time_months[$i] = elgg_echo("date:month:$i");
+		}
+	}
+	
+	// Compose date
+	$date = elgg_echo('date:time:on') . ' ' . date('j', $timestamp);
+	
+	$month = date('n', $timestamp);
+	$date .= ' ' . strtolower($esope_friendly_time_months[$month]);
+	
+	$date .= ' ' . date('Y', $timestamp);
+	/*
+	$date .= ' ' . elgg_echo('date:time:at') . ' ';
+	$date .= date('H:i', $timestamp);
+	*/
+	return $date;
+}
+
 
 

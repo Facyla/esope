@@ -518,6 +518,9 @@ $fr = array(
 	
 	
 	// DATES
+	'date:format:friendly' => 'd/m/Y à H:i',
+	'date:time:on' => "le",
+	'date:time:at' => "à",
 	'date:format' => 'D d F Y',
 	'date:day:0' => 'Dimanche',
 	'date:day:1' => 'Lundi',
