@@ -46,6 +46,16 @@ function theme_fing_init(){
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_fing/actions/thewire/add.php');
 	}
 	
+	
+	// Extend digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/pin_highlight', 400);
+	
+	// Replace group and user default icons
+	/*
+	elgg_register_plugin_hook_handler('entity:icon:url', 'group', 'theme_fing_groups_icon_url_override');
+	*/
+	
 	// @TODO - DEV & TESTING !!
 	/*
 	if (elgg_is_active_plugin('html_email_handler')) {
@@ -99,13 +109,41 @@ function theme_fing_get_pin_entities() {
 	} else return false;
 }
 
-/*
+
 function fing_page_handler($page){
+	$page[0] = strtolower($page[0]);
 	switch($page[0]){
 		default:
-			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
+			case 'archive':
+			case 'projet':
+			case 'prospective':
+				set_input('theme', $page[0]);
+				include(dirname(__FILE__) . '/pages/theme_fing/groups.php');
+				break;
+			default:
+				include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
 	return true;
+}
+
+
+/**
+ * Override the default entity icon for groups
+ *
+ * @return string Relative URL
+ */
+/*
+function theme_fing_groups_icon_url_override($hook, $type, $returnvalue, $params) {
+	$group = $params['entity'];
+	$size = $params['size'];
+	
+	// Already has an icon
+	if ($returnvalue != "mod/groups/graphics/default{$size}.gif") {
+		return $returnvalue;
+	}
+	
+	// If using default, return a new default
+	return "mod/theme_fing/graphics/groups/{$size}.png";
 }
 */
 

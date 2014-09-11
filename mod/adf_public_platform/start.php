@@ -46,6 +46,8 @@ function esope_init() {
 	// Extend groups sidebar (below owner_block and search)
 	elgg_extend_view('groups/sidebar/members', 'groups/sidebar/cmspages_extend', 100);
 	
+	elgg_extend_view('css/digest/core', 'css/digest/esope');
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI
@@ -75,6 +77,10 @@ function esope_init() {
 	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
 	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
 	
+	
+	if (elgg_is_active_plugin('profile_manager')) {
+		esope_register_custom_field_types();
+	}
 	
 	// Pour faire apparaître le menu dans le menu "apparence" - mais @todo intégrer dans un form
 	//elgg_register_admin_menu_item('configure', 'adf_theme', 'appearance');
@@ -773,22 +779,25 @@ function elgg_make_list_from_path($content = array()) {
 // Fonctions liées à Profile_manager
 if (elgg_is_active_plugin('profile_manager')) {
 	
-	// Add new input types
-	$group_options = array("output_as_tags" => true, "admin_only" => true);
-	// Select with multiple option (displayed as a block, not a dropdown)
-	// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
-	// Plaintext - useful for CSS or raw HTML/JS code
-	add_custom_field_type("custom_group_field_types", 'plaintext', elgg_echo('profile:field:plaintext'), $group_options);
-	// Group profile types selector (do smthg with selected members profile types)
-	add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('profile:field:group_profiletypes'), $group_options);
-	// Color picker
-	add_custom_field_type("custom_group_field_types", 'color', elgg_echo('profile:field:color'), $group_options);
-	// Group selector (scope=all|member)
-	add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('profile:field:groups_select'), $group_options);
-	// Members select (friends picker) - scope=all|friends|groupmembers
-	add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
-	// Percentage - interval=10
-	add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
+	// Nouveaux types de champs pour les profils et les groupes
+	function esope_register_custom_field_types() {
+		// Add new input types
+		$group_options = array("output_as_tags" => true, "admin_only" => true);
+		// Select with multiple option (displayed as a block, not a dropdown)
+		// @debug : this input can't be used with profile manager (because of reading values method) - use multiselect instead
+		// Plaintext - useful for CSS or raw HTML/JS code
+		add_custom_field_type("custom_group_field_types", 'plaintext', elgg_echo('profile:field:plaintext'), $group_options);
+		// Group profile types selector (do smthg with selected members profile types)
+		add_custom_field_type("custom_group_field_types", 'group_profiletypes', elgg_echo('profile:field:group_profiletypes'), $group_options);
+		// Color picker
+		add_custom_field_type("custom_group_field_types", 'color', elgg_echo('profile:field:color'), $group_options);
+		// Group selector (scope=all|member)
+		add_custom_field_type("custom_group_field_types", 'groups_select', elgg_echo('profile:field:groups_select'), $group_options);
+		// Members select (friends picker) - scope=all|friends|groupmembers
+		add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
+		// Percentage - interval=10
+		add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
+	}
 	
 	/* Renvoie une autorisation d'accéder ou non
 	 * Peut s'appuyer sur une autorisation explicite, ou une interdiction
@@ -1550,6 +1559,7 @@ function esope_extract_images($html, $full_tag = true) {
  * string $html : the HTML input content
  * bool $full_tag : return full <img /> tag, or only src if false
  */
+// @TODO set featured icon by using inline image and resizing it
 function esope_extract_first_image($html, $full_tag = true) {
 	$images = esope_extract_images($html, $full_tag);
 	return $images[0];

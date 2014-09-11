@@ -155,7 +155,8 @@ ul.elgg-list li.elgg-item div.elgg-image .elgg-avatar-tiny a img { margin-right:
 /* Slider */
 /* Limit slides content size */
 .fing-slider { height: 250px; overflow:hidden; }
-.fing-slider #slider1 img { max-height: 250px !important; }
+.fing-slider #slider1 img { max-height: 200px !important; }
+.fing-slider #slider1 .textSlide { max-height: 200px; padding: 6px 12px; }
 .textSlide h3, h3.textSlide { font-size: 20px; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
