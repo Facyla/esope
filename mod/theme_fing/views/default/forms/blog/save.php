@@ -74,6 +74,8 @@ $status .= "&nbsp;" . elgg_view('input/dropdown', array(
 $status .= "</div>";
 
 // advanced publication options
+// Note : adding failsafe check
+if (elgg_is_active_plugin()) 
 if (blog_tools_use_advanced_publication_options()) {
 	if(!empty($blog)){
 		$publication_date_value = elgg_extract("publication_date", $vars, $blog->publication_date);

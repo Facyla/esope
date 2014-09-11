@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
-	<name>Thème Fing</name>
+	<name>Thème FING</name>
 	<author>Florian Daniel ~ 2014</author>
-	<version>0.1</version>
-	<blurb>Thème du réseau social de la Fing</blurb>
-	<description>Surcouche d'adaptations graphiques, ergonomiques et fonctionnelles.</description>
-	<website>http://reseaufing.org/</website>
+	<version>0.2</version>
+	<blurb>Thème du réseau FING</blurb>
+	<description>Adaptations graphiques, ergonomiques et fonctionnelles pour le Réseau de la FING</description>
+	<website>http://reseau.fing.org/</website>
 	<copyright>ITEMS International</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<category>admin</category>
 	<category>theme</category>
-	<category>functional adaptations</category>
 	
 	<activate_on_install>false</activate_on_install>
 	
@@ -19,11 +18,16 @@
 		<type>elgg_release</type>
 		<version>1.8</version>
 	</requires>
-   
-	<suggests>
+	
+	<requires>
+		<type>plugin</type>
+		<version>blog_tools</version>
+	</requires>
+	
+	<requires>
 		<type>plugin</type>
 		<name>adf_public_platform</name>
-	</suggests>
+	</requires>
 	
 </plugin_manifest>
 

@@ -93,7 +93,7 @@ if ($homesite_index == 'yes') {
 	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
-	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'types' => array('object')));
+	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'types' => array('object'), 'action_types' => array('create', 'comment', 'reply')));
 	elgg_pop_context();
 }
 // BLOC CENTRAL
