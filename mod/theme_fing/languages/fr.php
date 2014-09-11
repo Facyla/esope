@@ -33,6 +33,8 @@ $french = array(
 	'profile:types:fing' => "Equipe Fing",
 	'profile:types:adherents' => "Adhérents",
 	
+	'theme_fing:digest:pin' => "Contenus sélectionnés",
+	
 );
 
 add_translation("fr",$french);

@@ -1559,6 +1559,7 @@ function esope_extract_images($html, $full_tag = true) {
  * string $html : the HTML input content
  * bool $full_tag : return full <img /> tag, or only src if false
  */
+// @TODO set featured icon by using inline image and resizing it
 function esope_extract_first_image($html, $full_tag = true) {
 	$images = esope_extract_images($html, $full_tag);
 	return $images[0];

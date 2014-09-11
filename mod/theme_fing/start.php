@@ -49,6 +49,7 @@ function theme_fing_init(){
 	
 	// Extend digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/pin_highlight', 400);
 	
 	// Replace group and user default icons
 	/*
