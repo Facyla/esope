@@ -36,7 +36,7 @@ if (is_array($breadcrumbs) && count($breadcrumbs) > 0) {
 		} else {
 			$crumb = $breadcrumb['title'];
 		}
-		echo "<li>$crumb</li>";
+		if (!empty($crumb)) echo "<li>$crumb</li>";
 	}
 	echo '</ul>';
 }

@@ -126,6 +126,7 @@ section div.module div.activites ul li .profile-type img { margin: 0; }
 */
 
 ul.elgg-list li.elgg-item div.elgg-image .elgg-avatar-tiny a img { margin-right:0; }
+.elgg-avatar.elgg-avatar-tiny.elgg-autocomplete-item.profile-type > a { padding: 0; }
 .elgg-avatar-tiny { width: 25px; border-radius: 3px; border: 1px solid transparent; margin-right:5px; }
 .elgg-avatar-tiny.profile-type-adherents { border: 1px solid #3F732E; }
 .elgg-avatar-tiny.profile-type-fing { border: 1px solid #95328F; }
