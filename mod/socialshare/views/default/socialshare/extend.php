@@ -60,7 +60,7 @@ foreach ($providers as $key => $name) {
 				$img = '<i class="fa fa-envelope-square"></i>';
 				$subject = elgg_echo('socialshare:email:subject', array($share_title));
 				$subject = rawurlencode($subject);
-				$body = elgg_echo('socialshare:email:body', array($share_title, $full_url_url, $share_description));
+				$body = elgg_echo('socialshare:email:body', array($share_title, $full_url, $share_description));
 				$body = rawurlencode($body);
 				echo '<a target="_blank" href="mailto:?subject=' . $subject . '&body=' . $body . '" title="' . elgg_echo('socialshare:email:title') . '" title="' . elgg_echo("socialshare:$key:title") . '">' . $img . '</a>';
 				break;
