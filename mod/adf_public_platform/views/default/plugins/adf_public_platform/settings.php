@@ -620,6 +620,8 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:popular') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_popular)) . '</p>';
 			// Allow to remove online
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onlinetab') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->members_onlinetab)) . '</p>';
+			// Allow to add profile types tabs
+			echo '<p><label>' . elgg_echo('adf_platform:settings:members:profiletypes') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_profiletypes]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_profiletypes)) . '</p>';
 			// Allow to add a new tab search
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/dropdown', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab)) . '</p>';
 			// Replace search by main search (more efficient)

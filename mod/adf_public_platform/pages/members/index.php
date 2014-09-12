@@ -45,7 +45,13 @@ switch ($vars['page']) {
 	
 	case 'newest':
 	default:
-		$content = elgg_list_entities($options);
+		// Check if there is a corresponding profile type, otherwise use regular listing
+		if (esope_get_profiletype_guid($vars['page'])) {
+			// List by profile type
+			$content = esope_list_members_by_profiletype($vars['page']);
+		} else {
+			$content = elgg_list_entities($options);
+		}
 		break;
 }
 

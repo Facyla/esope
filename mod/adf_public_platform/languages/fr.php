@@ -87,6 +87,7 @@ $fr = array(
 	'adf_platform:settings:members:newest' => "Onglet liste par date",
 	'adf_platform:settings:members:popular' => "Onglet liste par contacts",
 	'adf_platform:settings:members:onlinetab' => "Onglet liste en ligne",
+	'adf_platform:settings:members:profiletypes' => "Onglets des types de profils",
 	'members:label:alpha' => "Alphabétique",
 	'adf_platform:config:styles' => "COULEURS & STYLE",
 	'adf_platform:config:styles:headerfooter' => "Dégradé du header et du pied de page",
