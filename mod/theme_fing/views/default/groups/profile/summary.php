@@ -40,6 +40,9 @@ if (!$owner) {
 				?>
 			</div>
 			<div class="groups-stats">
+				<?php
+				echo elgg_view('group/elements/group_admins', $vars);
+				/*
 				<p>
 					<b><?php echo elgg_echo("groups:owner"); ?>: </b>
 					<?php
@@ -50,6 +53,8 @@ if (!$owner) {
 						));
 					?>
 				</p>
+				*/
+				?>
 			</div>
 		</div>
 		<div class="groups-profile-fields elgg-body">
@@ -59,6 +64,8 @@ if (!$owner) {
 	<?php } else { ?>
 		
 		<div class="groups-profile-fields elgg-body">
+			<?php
+			/*
 			<p>
 				<b><?php echo elgg_echo("groups:owner"); ?>: </b>
 				<?php
@@ -69,7 +76,9 @@ if (!$owner) {
 					));
 				?>
 			</p>
+			*/ ?>
 			<?php echo elgg_view('groups/profile/fields', $vars); ?>
+			<?php echo elgg_view('group/elements/group_admins', $vars); ?>
 		</div>
 		
 	<?php } ?>

@@ -18,8 +18,7 @@ if ($hide_fields) {
 $hide_fields = elgg_trigger_plugin_hook('groups:profile:hide', 'fields', array(), $hide_fields);
 
 // Hide some labels
-//$hide_labels = array('description', 'interests');
-$hide_labels = array();
+$hide_labels = array('description', 'interests');
 
 if (is_array($profile_fields) && count($profile_fields) > 0) {
 
@@ -43,6 +42,7 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 		}
 
 		echo "<div class=\"{$even_odd}\">";
+		
 		if (!in_array($key, $hide_labels)) {
 			echo "<strong>";
 			echo elgg_echo("groups:$key");
