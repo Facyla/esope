@@ -41,7 +41,6 @@ if (!$owner) {
 			</div>
 			<div class="groups-stats">
 				<?php
-				echo elgg_view('group/elements/group_admins', $vars);
 				/*
 				<p>
 					<b><?php echo elgg_echo("groups:owner"); ?>: </b>
@@ -60,6 +59,7 @@ if (!$owner) {
 		<div class="groups-profile-fields elgg-body">
 			<?php echo elgg_view('groups/profile/fields', $vars); ?>
 		</div>
+		<?php echo elgg_view('group/elements/group_admins', $vars); ?>
 		
 	<?php } else { ?>
 		
