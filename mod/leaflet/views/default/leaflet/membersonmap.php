@@ -18,8 +18,9 @@ $username = $user->username . '_' . $user->guid;
 
 $members_map = '';
 $users = elgg_get_entities(array('types' => 'user', 'limit' => 0));
+//set_time_limit(0); // Firts processing can be quite long, as we need to geocode each user account...
 foreach ($users as $ent) {
-	if (empty($ent->location)) continue;
+	if (empty($ent->location)) continue; // Quick and dirty bypass - @TODO need to use some cron task instead for first geocoding pass
 	$lat = $ent->getLatitude();
 	$long = $ent->getLongitude();
 	if (!$lat || !$long) {
