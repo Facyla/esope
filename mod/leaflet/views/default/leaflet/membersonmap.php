@@ -31,11 +31,13 @@ foreach ($users as $ent) {
 	}
 	if ($lat && $long) {
 		$name = $ent->name;
+		$name = json_encode($name);
+		
 		$description = elgg_view_entity($ent, array('full_view' => false));
 		$description = json_encode($description);
 		
 		$members_map .= "
-			marker = L.marker([$lat, $long], {icon: onlineUsersMarker, title: '$name'});
+			marker = L.marker([$lat, $long], {icon: onlineUsersMarker, title: $name});
 			marker.bindPopup($description);
 			onlineUsersMarkers.addLayer(marker);
 			";
