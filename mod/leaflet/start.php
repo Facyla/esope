@@ -75,6 +75,10 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		// Mapquest API
 		$api_key = elgg_get_plugin_setting('osm_api_key', 'leaflet');
 		if (empty($api_key)) $api_key = elgg_get_plugin_setting('api_key', 'osm_maps');
+		if (empty($api_key)) {
+			error_log("LEAFLET : missing API key. Cannot geocode.");
+			return false;
+		}
 		//$callback = get_input('callback', 'renderOptions');
 		$inFormat = get_input('inFormat', 'kvp');
 		$outFormat = get_input('outFormat', 'json');
@@ -90,7 +94,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$latlong = $obj->results[0]->locations[0]->latLng;
 		$lat = $latlong->lat;
 		$long = $latlong->lng;
-error_log("GEOCODING start : {$params['location']} => $lat,$long  using URL $address");
+		//error_log("GEOCODING start : {$params['location']} => $lat,$long  using URL $address");
 		
 		// Return geocoded address if it is valid
 		if (!empty($lat) && !empty($long)) {
