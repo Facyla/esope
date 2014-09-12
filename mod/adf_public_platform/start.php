@@ -1526,6 +1526,7 @@ function esope_login_user_action($event, $type, $user) {
 			}
 		}
 	}
+	return null;
 }
 
 
