@@ -87,6 +87,7 @@ $en = array(
 	'adf_platform:settings:members:newest' => "Use newest members tab",
 	'adf_platform:settings:members:popular' => "Use popular members tab",
 	'adf_platform:settings:members:onlinetab' => "Use online members tab",
+	'adf_platform:settings:members:profiletypes' => "Add profile type tabs",
 	'members:label:alpha' => "Alphabetic",
 	'adf_platform:config:styles' => "COLORS & STYLE",
 	'adf_platform:config:styles:headerfooter' => "Header and footer gradient",

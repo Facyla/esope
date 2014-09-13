@@ -1,4 +1,6 @@
 <?php
+if (!elgg_is_logged_in()) { return; }
+
 $count = find_active_users(600, 10, 0, true);
 $users = find_active_users(600, $count);
 $group = elgg_get_page_owner_entity();

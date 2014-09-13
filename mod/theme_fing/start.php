@@ -20,6 +20,10 @@ function theme_fing_init(){
 	//else elgg_extend_view('groups/sidebar/members', 'groups/sidebar/group_news_extend', 100);
 	elgg_extend_view('page/elements/owner_block', 'groups/sidebar/group_news_extend', 800);
 	
+	// Pas d'inscription aux événements / Remove event_calendars menus : personnal calendar + participants listing
+	elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'event_calendar_entity_menu_setup');
+	elgg_unregister_plugin_hook_handler('prepare', 'menu:entity', 'event_calendar_entity_menu_setup');
+	
 	// Extend group owner block
 	//elgg_extend_view('page/elements/owner_block', 'theme_fing/extend_user_owner_block', 501);
 	
