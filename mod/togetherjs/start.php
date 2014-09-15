@@ -17,9 +17,12 @@ function togetherjs_init() {
 	
 	elgg_extend_view('css', 'togetherjs/css');
 	
+	elgg_register_js('togetherjs', 'https://togetherjs.com/togetherjs.js', 'head');
+	
 	// @TODO : make it a setting
 	if (elgg_is_logged_in()) {
-		elgg_extend_view('page/elements/head', 'togetherjs/extend_head');
+		elgg_load_js('togetherjs');
+		elgg_extend_view('page/elements/head', 'togetherjs/extend_head', 10);
 		elgg_extend_view('page/elements/footer', 'togetherjs/extend_body');
 	}
 	
