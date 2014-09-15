@@ -103,17 +103,41 @@ elgg.tinymce.init = function() {
 		//height: "200px",
 		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
 		setup : function(ed) {
-			// show the number of words at startup
+			// Show HTML path
 			ed.onLoadContent.add(function(ed, o) {
 				var strip = (tinyMCE.activeEditor.getContent()).replace(/(&lt;([^&gt;]+)&gt;)/ig,"");
 				var text = elgg.echo('tinymce:word_count') + strip.split(' ').length + ' ';
 				tinymce.DOM.setHTML(tinymce.DOM.get(tinyMCE.activeEditor.id + '_path_row'), text);
 			});
-			// Update word count
+			//show the number of words
 			ed.onKeyUp.add(function(ed, e) {
 				var strip = (tinyMCE.activeEditor.getContent()).replace(/(&lt;([^&gt;]+)&gt;)/ig,"");
 				var text = elgg.echo('tinymce:word_count') + strip.split(' ').length + ' ';
 				tinymce.DOM.setHTML(tinymce.DOM.get(tinyMCE.activeEditor.id + '_path_row'), text);
+				
+				//Fire an event for TogetherJS
+				/*
+				*/
+				var target = tinyMCE.activeEditor.id;
+				var content = tinyMCE.activeEditor.getContent();
+				//alert("Test " + target + " // " + content);
+				if (TogetherJS) {
+					TogetherJS.send({
+							type: "form-update",
+							element: target,
+							value: content,
+						});
+					
+					/*
+						TogetherJS.send({
+							type: "tinymceUpdate",
+							element: target,
+							value: content,
+						});
+					*/
+				
+				}
+				
 			});
 			
 			// prevent Firefox from dragging/dropping files into editor
@@ -126,6 +150,7 @@ elgg.tinymce.init = function() {
 					});
 				}
 			});
+			
 		},
 		content_css: elgg.config.wwwroot + 'mod/tinymce/css/elgg_tinymce.css',
 		

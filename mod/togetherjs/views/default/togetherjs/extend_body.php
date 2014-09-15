@@ -1,14 +1,6 @@
 <script>
 // Update name and profile picture
 TogetherJS.refreshUserData();
-
-// Load tinymce support
-$(function () {
-  tinymce.init({ 
-    selector: '.mceContentBody',
-  });
-});
-
 </script>
 
 <div id="together-js">
