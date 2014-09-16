@@ -32,6 +32,11 @@ COMMENTS - HISTORY
 This plugins integrates the PHP client for Etherpad Lite by 0x46616c6b
 See https://github.com/0x46616c6b/etherpad-lite-client
 
+0.2 : 201409.16 - first release
+	- API integration
+	- create and update pads
+	- handle access controls
+
 0.1 : 201409.16 - first version
 
 //-->
