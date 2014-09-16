@@ -13,7 +13,7 @@ global $CONFIG;
 
 $title = "Title";
 
-$body = "Plugin_tempalte page content";
+$body = "Plugin_template page content";
 
 
 // Render the page
