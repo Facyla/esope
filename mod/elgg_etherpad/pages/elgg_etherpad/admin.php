@@ -11,9 +11,9 @@
 // Load Elgg engine
 global $CONFIG;
 
-gatekeeper();
+admin_gatekeeper();
 
-$title = "Pads";
+$title = "Pad API playground";
 
 $body = "";
 
@@ -24,8 +24,8 @@ $cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 //$client = new \EtherpadLite\Client($api_key, $server);
 $client = new EtherpadLiteClient($api_key, $server.'/api');
 
-
-
+$documentation = '<h3>Documentation</h3>';
+$documentation .= '<ul>';
 // Let's add some documentation
 // http://etherpad.org/doc/v1.4.1/#index_createauthor_name
 $available_methods = $client->getMethods();
@@ -40,43 +40,13 @@ foreach ($available_methods as $method_name => $method_args) {
 $documentation .= '</ul>';
 
 
-$own = elgg_get_logged_in_user_entity();
-$authorMapper = $own->guid;
-$name = $own->name;
+$parameters = array('authorID', 'authorMapper', 'name', 'sessionID', 'validUntil', 'padID', 'padName', 'text', 'rev', 'html', 'msg', 'groupMapper', 'groupID', 'start', 'end');
 
-// 1. Check we have an author, or create it
-// 2. Then create the associated group
-// 3. Create a main pad for the user
-// 4. Open a session an link to that pad
-// Portal maps the internal userid to an etherpad author
-$response = $client->createAuthorIfNotExistsFor($authorMapper, $name);
-$authorID = elgg_etherpad_get_response_data($response, 'authorID');
-$groupMapper = $authorMapper;
-//$body .= elgg_etherpad_view_response($response);
-// Portal maps the internal userid to an etherpad group
-$response = $client->createGroupIfNotExistsFor($groupMapper);
-$groupID = elgg_etherpad_get_response_data($response, 'groupID');
-//$body .= elgg_etherpad_view_response($response);
-// Try to create a new (main) pad in the userGroup
-$padName = "main-" . $own->username;
-$text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
-$response = $client->createGroupPad($groupID, $padName, $text);
-//$body .= elgg_etherpad_view_response($response);
-$padID = $groupID . '$' . $padName;
-// Portal starts the session for the user on the group
-$validUntil = time() + 300;
-$response = $client->createSession($groupID, $authorID, $validUntil);
-$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
-$body .= elgg_etherpad_view_response($response);
-// Set session cookie (only on same domain !)
-if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
-if(!setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)){
-	throw new Exception(elgg_echo('etherpad:error:cookies_required'));
-}
-//$body .= " authorID = $authorID / groupMapper = $groupMapper / groupID = $groupID / sessionID = $sessionID ";
-$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+// Potential vars
+//$name = elgg_get_logged_in_user_entity()->name;
+//$authorMapper = elgg_get_logged_in_user_entity()->guid;
 
-/*
+
 $body .= '<div style="float:left; width:48%;">';
 	// BUILD FORM
 	$query = get_input('query', 'checkToken');
@@ -147,7 +117,11 @@ $body .= '<div style="float:left; width:48%;">';
 	}
 
 $body .= elgg_etherpad_view_response($response);
-*/
+
+$body .= '</div>';
+
+$body .= '<div style="float:right; width:48%;">' . elgg_view('output/longtext', array('value' => $documentation)) . '</div>';
+
 
 // Render the page
 echo elgg_view_page($title, $body);

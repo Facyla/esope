@@ -13,7 +13,7 @@ function elgg_etherpad_view_response($response) {
 function elgg_etherpad_get_response_data($response, $key = false) {
 	$return = false;
 	if ($response) {
-		$return = $response;
+		$return = $response->data;
 		if ($key) { $return = $return->$key; }
 	}
 	return $return;

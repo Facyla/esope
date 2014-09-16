@@ -45,9 +45,8 @@ function elgg_etherpad_init() {
 function elgg_etherpad_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_etherpad/pages/elgg_etherpad';
 	switch ($page[0]) {
-		case 'view':
-			set_input('guid', $page[1]);
-			include "$base/example_page.php";
+		case 'admin':
+			include "$base/admin.php";
 			break;
 		default:
 			include "$base/index.php";

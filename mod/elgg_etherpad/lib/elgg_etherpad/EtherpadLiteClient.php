@@ -65,7 +65,8 @@ class EtherpadLiteClient {
 		
 		$result = json_decode($result);
 		if ($result === null){ throw new UnexpectedValueException("JSON response could not be decoded"); }
-		return $this->handleResult($result);
+		//return $this->handleResult($result);
+		return $result;
 	}
 
 
