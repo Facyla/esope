@@ -1,7 +1,0 @@
-<phpunit bootstrap="src/Tests/bootstrap.php">
-    <testsuites>
-        <testsuite name="EtherpadLiteClient Tests">
-            <directory>src/Tests/EtherpadLite</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>

@@ -15,80 +15,26 @@ $title = "Pad";
 
 $body = "";
 
-
-function elgg_etherpad_view_response($response) {
-	$content = false;
-	if ($response) {
-		$content .= "Code : " . $response->getCode() . ' - ';
-		$content .= "Message : " . $response->getMessage() . ' - ';
-		$content .= "Réponse : <pre>" . print_r($response->getData(), true) . '</pre>';
-	}
-	return $content;
-}
-
-function elgg_etherpad_get_response_data($response, $key = false) {
-	$return = false;
-	if ($response) {
-		$return = $response->getData();
-		if ($key) { $return = $return[$key]; }
-	}
-	return $return;
-}
-
-
 $server = elgg_get_plugin_setting('server', 'elgg_etherpad');
-$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 $api_key = elgg_get_plugin_setting('api_key', 'elgg_etherpad');
+$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 
-$client = new \EtherpadLite\Client($api_key, $server);
+//$client = new \EtherpadLite\Client($api_key, $server);
+$client = new EtherpadLiteClient($api_key, $server.'/api');
 
-$documentation = '<h3>Documentation</h3>
-	<p>Groupes : des groupes de pads (indépendant des auteurs)</p>
-	<p>Auteur : compte avec un id, peut être mappé sur un identifiant</p>
-	<ul>
-		<li>createGroup() creates a new group</li>
-		<li>createGroupIfNotExistsFor($groupMapper) this functions helps you to map your application group ids to etherpad lite group ids</li>
-		<li>deleteGroup($groupID) deletes a group</li>
-		<li>listPads($groupID) returns all pads of this group</li>
-		<li>createGroupPad($groupID, $padName, $text = null) creates a new pad in this group</li>
-		<li>listAllGroups() lists all existing groups</li>
-		<li></li>
-		<li>createAuthor($name = null) creates a new author</li>
-		<li>createAuthorIfNotExistsFor($authorMapper, $name = null) this functions helps you to map your application author ids to etherpad lite author ids</li>
-		<li>listPadsOfAuthor($authorID) returns an array of all pads this author contributed to</li>
-		<li>getAuthorName($authorID) Returns the Author Name of the author</li>
-		<li></li>
-		<li>createSession($groupID, $authorID, $validUntil) creates a new session. validUntil is an unix timestamp in seconds</li>
-		<li>deleteSession($sessionID) creates a new session. validUntil is an unix timestamp in seconds</li>
-		<li>getSessionInfo($sessionID) returns informations about a session</li>
-		<li>listSessionsOfGroup($groupID) returns all sessions of a group</li>
-		<li>listSessionsOfAuthor($authorID) returns all sessions of an author</li>
-		<li></li>
-		<li>getText($padID, $rev = null) returns the text of a pad</li>
-		<li>setText($padID, $text) sets the text of a pad</li>
-		<li>getHTML($padID, $rev = null) returns the text of a pad formatted as HTML</li>
-		<li>setHTML($padID, $html) sets the html of a pad</li>
-		<li></li>
-		<li>getChatHistory($padID, $start = null, $end = null) a part of the chat history, when start and end are given, the whole chat histroy, when no extra parameters are given</li>
-		<li>getChatHead($padID) returns the chatHead (last number of the last chat-message) of the pad</li>
-		<li></li>
-		<li>createPad($padID, $text = null) creates a new (non-group) pad. Note that if you need to create a group Pad, you should call createGroupPad.</li>
-		<li>getRevisionsCount($padID) returns the number of revisions of this pad</li>
-		<li>padUsersCount($padID) returns the number of user that are currently editing this pad</li>
-		<li>padUsers($padID) returns the list of users that are currently editing this pad</li>
-		<li>deletePad($padID) deletes a pad</li>
-		<li>getReadOnlyID($padID) returns the read only link of a pad</li>
-		<li>setPublicStatus($padID, $publicStatus) sets a boolean for the public status of a pad</li>
-		<li>getPublicStatus($padID) return true of false</li>
-		<li>setPassword($padID, $password) returns ok or a error message</li>
-		<li>isPasswordProtected($padID) returns true or false</li>
-		<li>listAuthorsOfPad($padID) returns an array of authors who contributed to this pad</li>
-		<li>getLastEdited($padID) returns the timestamp of the last revision of the pad</li>
-		<li>sendClientsMessage($padID, $msg) sends a custom message of type $msg to the pad</li>
-		<li>checkToken() returns ok when the current api token is valid</li>
-		<li></li>
-		<li>listAllPads() lists all pads on this epl instance</li>
-	</ul>';
+$documentation = '<h3>Documentation</h3>';
+$documentation .= '<ul>';
+// Let's add some documentation
+// http://etherpad.org/doc/v1.4.1/#index_createauthor_name
+$available_methods = $client->getMethods();
+foreach ($available_methods as $method_name => $method_args) {
+	// Build online doc URL
+	$method_doc_url = 'http://etherpad.org/doc/v1.4.1/#index_' . strtolower($method_name);
+	if (count($method_args) > 0) $method_doc_url .= '_' . strtolower(implode('_', $method_args));
+	// Add some basic doc
+	$documentation .= '<li><a href="' . $method_doc_url . '" target="_blank">' . $method_name . '(' . implode(', ', $method_args) . ')</a> : ' . $client->getMethodInfo($method_name) . '</li>';
+}
+$documentation .= '</ul>';
 
 
 $parameters = array('authorID', 'authorMapper', 'name', 'sessionID', 'validUntil', 'padID', 'padName', 'text', 'rev', 'html', 'msg', 'groupMapper', 'groupID', 'start', 'end');
@@ -102,7 +48,7 @@ $body .= '<div style="float:left; width:48%;">';
 	// BUILD FORM
 	$query = get_input('query', 'checkToken()');
 	$body .= '<form method="POST">';
-	$body .= '<p>Requête : ' . elgg_view('input/text', array('name' => 'query', 'value' => $query)) . '</p>';
+	$body .= '<p>Requête : ' . elgg_view('input/dropdown', array('name' => 'query', 'value' => $query, 'options' => array_keys($available_methods))) . '</p>';
 	foreach ($parameters as $parameter) {
 		$$parameter = get_input($parameter, false);
 		$body .= '<p><label>' . $parameter . ' : ' . elgg_view('input/text', array('name' => $parameter, 'value' => $$parameter)) . '</label></p>';
@@ -142,18 +88,17 @@ $body .= '<div style="float:left; width:48%;">';
 				$groupID = elgg_etherpad_get_response_data($response, 'groupID');
 				$body .= elgg_etherpad_view_response($response);
 				// Portal starts the session for the user on the group
-				//$validUntil = time() + 3600;
-				$validUntil = mktime(date("H"), date("i")+5, 0, date("m"), date("d"), date("y"));
+				$validUntil = time() + 300;
 				$response = $client->createSession($groupID, $authorID, $validUntil);
 				$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 				$body .= elgg_etherpad_view_response($response);
-				$body .= " authorID = $authorID / groupID = $groupID / sessionID = $sessionID ";
 				// Set session cookie (only on same domain !)
 				if (!$cookiedomain) $cookiedomain = "." . parse_url(elgg_get_site_url(), PHP_URL_HOST);
 				if(!setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)){
 					throw new Exception(elgg_echo('etherpad:error:cookies_required'));
 				}
-				$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank">Open Pad</a></p>';
+				//$body .= " authorID = $authorID / groupMapper = $groupMapper / groupID = $groupID / sessionID = $sessionID ";
+				$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
 			}
 			break;
 		case 'listPadsOfAuthor': if ($authorID) { $response = $client->listPadsOfAuthor($authorID); } break;
