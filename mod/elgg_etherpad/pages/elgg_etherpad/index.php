@@ -21,29 +21,25 @@ $server = elgg_get_plugin_setting('server', 'elgg_etherpad');
 $api_key = elgg_get_plugin_setting('api_key', 'elgg_etherpad');
 $cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 
+$own = elgg_get_logged_in_user_entity();
+$authorMapper = $own->guid;
+$name = $own->name;
+
 //$client = new \EtherpadLite\Client($api_key, $server);
 $client = new EtherpadLiteClient($api_key, $server.'/api');
 
 
 
-// Let's add some documentation
 // http://etherpad.org/doc/v1.4.1/#index_createauthor_name
 $available_methods = $client->getMethods();
 foreach ($available_methods as $method_name => $method_args) {
 	$methods_opts[$method_name] = $method_name;
-	// Build online doc URL
-	$method_doc_url = 'http://etherpad.org/doc/v1.4.1/#index_' . strtolower($method_name);
-	if (count($method_args) > 0) $method_doc_url .= '_' . strtolower(implode('_', $method_args));
-	// Add some basic doc
-	$documentation .= '<li><a href="' . $method_doc_url . '" target="_blank">' . $method_name . '(' . implode(', ', $method_args) . ')</a> : ' . $client->getMethodInfo($method_name) . '</li>';
 }
-$documentation .= '</ul>';
 
 
-$own = elgg_get_logged_in_user_entity();
-$authorMapper = $own->guid;
-$name = $own->name;
+// MAIN CONTENT
 
+// Etherpad Lite User process
 // 1. Check we have an author, or create it
 // 2. Then create the associated group
 // 3. Create a main pad for the user
@@ -70,27 +66,31 @@ $sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 //$body .= elgg_etherpad_view_response($response);
 // Set session cookie (only on same domain !)
 if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
-if(!setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)){
-	throw new Exception(elgg_echo('etherpad:error:cookies_required'));
+if(setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)) {
+	$body .= '<iframe src="' . $server . '/p/' . $padID . '" style="height:400px; width:100%;"></iframe>';
 }
-//$body .= " authorID = $authorID / groupMapper = $groupMapper / groupID = $groupID / sessionID = $sessionID ";
-$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+
+
+// SIDEBAR
+$sidebar .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Pad personnel</a></p>';
 
 // Now list all user's pads
-$body .= '<h3>Vos pads<h3>';
+$sidebar .= '<br />';
+$sidebar .= '<h3>Vos pads<h3>';
 $response = $client->listPadsOfAuthor($authorID);
 $own_pads = elgg_etherpad_get_response_data($response, 'padIDs');
 foreach ($own_pads as $padID) {
 	// @TODO : sort by group
-	$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+	$sidebar .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
 }
 
-$body .= '<h3>Tous les pads<h3>';
+$sidebar .= '<br />';
+$sidebar .= '<h3>Tous les pads<h3>';
 $response = $client->listAllPads();
 $all_pads = elgg_etherpad_get_response_data($response, 'padIDs');
 foreach ($all_pads as $padID) {
 	// @TODO : sort by group
-	$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+	$sidebar .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
 }
 
 
@@ -166,6 +166,12 @@ $body .= '<div style="float:left; width:48%;">';
 
 $body .= elgg_etherpad_view_response($response);
 */
+
+$body = elgg_view_layout('one_sidebar', array(
+		'content' => $body,
+		'title' => $title,
+		'sidebar' => $sidebar,
+	));
 
 // Render the page
 echo elgg_view_page($title, $body);
