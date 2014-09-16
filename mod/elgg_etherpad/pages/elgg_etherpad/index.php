@@ -1,6 +1,6 @@
 <?php
 /**
-* Elgg output page content
+* Elgg Etherpad Lite integration
 * 
 * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
 * @author Facyla
@@ -11,7 +11,9 @@
 // Load Elgg engine
 global $CONFIG;
 
-$title = "Pad";
+admin_gatekeeper();
+
+$title = "Pad API playground";
 
 $body = "";
 
@@ -28,6 +30,7 @@ $documentation .= '<ul>';
 // http://etherpad.org/doc/v1.4.1/#index_createauthor_name
 $available_methods = $client->getMethods();
 foreach ($available_methods as $method_name => $method_args) {
+	$methods_opts[$method_name] = $method_name;
 	// Build online doc URL
 	$method_doc_url = 'http://etherpad.org/doc/v1.4.1/#index_' . strtolower($method_name);
 	if (count($method_args) > 0) $method_doc_url .= '_' . strtolower(implode('_', $method_args));
@@ -46,9 +49,9 @@ $parameters = array('authorID', 'authorMapper', 'name', 'sessionID', 'validUntil
 
 $body .= '<div style="float:left; width:48%;">';
 	// BUILD FORM
-	$query = get_input('query', 'checkToken()');
+	$query = get_input('query', 'checkToken');
 	$body .= '<form method="POST">';
-	$body .= '<p>Requête : ' . elgg_view('input/dropdown', array('name' => 'query', 'value' => $query, 'options' => array_keys($available_methods))) . '</p>';
+	$body .= '<p>Requête : ' . elgg_view('input/dropdown', array('name' => 'query', 'value' => $query, 'options_values' => $methods_opts)) . '</p>';
 	foreach ($parameters as $parameter) {
 		$$parameter = get_input($parameter, false);
 		$body .= '<p><label>' . $parameter . ' : ' . elgg_view('input/text', array('name' => $parameter, 'value' => $$parameter)) . '</label></p>';
@@ -56,6 +59,7 @@ $body .= '<div style="float:left; width:48%;">';
 	$body .= '<p>' . elgg_view('input/submit', array('value' => "Effectuer la requête")) . '</p>';
 	$body .= '</form>';
 	
+	// Adapt some parameters
 	if ($authorMapper) {
 		if (($author = get_entity($authorMapper)) && elgg_instanceof($author, 'user')) {
 			$authorMapper = $author->guid;
@@ -68,6 +72,7 @@ $body .= '<div style="float:left; width:48%;">';
 			$name = false;
 		}
 	}
+	
 	
 	// Perform query
 	switch($query) {
@@ -111,22 +116,11 @@ $body .= '<div style="float:left; width:48%;">';
 		default: $response = $client->checkToken();
 	}
 
+$body .= elgg_etherpad_view_response($response);
+
 $body .= '</div>';
 
 $body .= '<div style="float:right; width:48%;">' . elgg_view('output/longtext', array('value' => $documentation)) . '</div>';
-
-/** @var $response \EtherpadLite\Response */
-/*
-$response = $client->checkToken();
-$body .= "Code : " . $response->getCode() . '<br />';
-$body .= "Message : " . $response->getMessage() . '<br />';
-$body .= "Data : " . $response->getData() . '<br />';
-
-$response = $client->listAllPads();
-$body .= "Code : " . $response->getCode() . '<br />';
-$body .= "Message : " . $response->getMessage() . '<br />';
-$body .= "Data : " . print_r($response->getData(), true) . '<br />';
-*/
 
 
 // Render the page
