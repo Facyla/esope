@@ -64,10 +64,10 @@ $response = $client->createGroupPad($groupID, $padName, $text);
 //$body .= elgg_etherpad_view_response($response);
 $padID = $groupID . '$' . $padName;
 // Portal starts the session for the user on the group
-$validUntil = time() + 300;
+$validUntil = time() + 60*60*12;
 $response = $client->createSession($groupID, $authorID, $validUntil);
 $sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
-$body .= elgg_etherpad_view_response($response);
+//$body .= elgg_etherpad_view_response($response);
 // Set session cookie (only on same domain !)
 if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
 if(!setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)){
@@ -75,6 +75,24 @@ if(!setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain)){
 }
 //$body .= " authorID = $authorID / groupMapper = $groupMapper / groupID = $groupID / sessionID = $sessionID ";
 $body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+
+// Now list all user's pads
+$body .= '<h3>Vos pads<h3>';
+$response = $client->listPadsOfAuthor($authorID);
+$own_pads = elgg_etherpad_get_response_data($response, 'padIDs');
+foreach ($own_pads as $padID) {
+	// @TODO : sort by group
+	$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+}
+
+$body .= '<h3>Tous les pads<h3>';
+$response = $client->listAllPads();
+$all_pads = elgg_etherpad_get_response_data($response, 'padIDs');
+foreach ($all_pads as $padID) {
+	// @TODO : sort by group
+	$body .= '<p><a href="' . $server . '/p/' . $padID . '" target="_blank" class="elgg-button elgg-button-action">Open "' . $padID . '" pad</a></p>';
+}
+
 
 /*
 $body .= '<div style="float:left; width:48%;">';
