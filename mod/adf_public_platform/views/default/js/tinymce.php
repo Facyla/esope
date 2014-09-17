@@ -64,7 +64,8 @@ elgg.tinymce.init = function() {
 	$('.elgg-input-longtext').parents('form').submit(function() {
 		tinyMCE.triggerSave();
 	});
-
+	
+	// Regular, advanced configuration editor
 	tinyMCE.init({
 		language : "<?php echo tinymce_get_site_language(); ?>",
 		table_inline_editing : true,
@@ -133,7 +134,15 @@ elgg.tinymce.init = function() {
 			template_templates : [ <?php echo $templates; ?> ],
 		<?php } ?>
 	});
-
+	
+	// Setup a new, basic config
+	tinyMCE.init({
+		mode : "specific_textareas",
+		editor_selector : "simple-editor",
+		theme : "simple",
+	});
+	
+	
 	// work around for IE/TinyMCE bug where TinyMCE loses insert carot
 	if ($.browser.msie) {
 		$(".embed-control").live('hover', function() {
