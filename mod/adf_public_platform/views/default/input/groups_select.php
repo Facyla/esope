@@ -15,13 +15,28 @@ switch($scope) {
 		break;
 	case 'all':
 	default:
-		$groups_count = elgg_get_entities(array('types' => 'group', 'limit' => 10, 'count' => true));
-		$groups = elgg_get_entities(array('types' => 'group', 'limit' => $groups_count));
+		$groups = elgg_get_entities(array('types' => 'group', 'limit' => 0));
 }
 
+// Allow to filter by metadata : array('name' => $metaname, 'value' => $metavalue)
+// Note : typical use is checking that a group tool is enabled by setting 'filter' => array('name' => 'bookmarks_enable', 'value' => 'yes')
+$filter = $vars["filter"];
+if ($filter) {
+	$metaname = $filter['name'];
+	$metavalue = $filter['value'];
+	$filtered_groups = array();
+	foreach ($groups as $ent) {
+		if ($ent->$metaname == $metavalue) {
+			$filtered_groups[] = $ent;
+		}
+	}
+	$groups = $filtered_groups;
+}
 
 // Compose select
 $content .= '<select name="' . $vars['name'] . '" id="' . $vars['name'] . '" class="elgg-input-dropdown elgg-input-groups_select ' . $vars['class'] . '" ' . $vars['js'] . '>';
+
+// Add empty value option
 if ($vars["empty_value"] || !isset($vars["empty_value"])) {
 	if (!empty($vars['value'])) $content .= '<option value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
 	else $content .= '<option selected="selected" value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
@@ -32,7 +47,7 @@ if (isset($vars['value'])) {
 		$content .= '<option selected="selected" value="' . $vars['value'] . '">' . elgg_echo('esope:input:donotchange', array($current->name)) .'</option>';
 	}
 }
-// Add current value (= don't change option)
+// Add currently logged in user value
 if ($vars['add_owner']) {
 	$own = elgg_get_logged_in_user_entity();
 	$content .= '<option value="' . $own->guid . '">' .  elgg_echo('esope:container:option:own', array($own->name)) .'</option>';
