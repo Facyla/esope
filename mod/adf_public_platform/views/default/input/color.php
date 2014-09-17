@@ -24,7 +24,6 @@ else $vars['id'] = $vars['id'] . " elgg-colorpicker-$id";
 echo elgg_view('input/text', $vars);
 echo '<span id="elgg-colorpicker-' . $id . '-formats"></span>';
 
-
 ?>
 <script>
 $(function() {

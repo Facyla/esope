@@ -395,6 +395,7 @@ $en = array(
 	'esope:widget:freehtml:description' => "Let's you integrate any text you want, including HTML.",
 	'esope:widget:searchresults' => "Tag search",
 	'esope:widget:searchresults:description' => "Displays the results of a search by tag.",
+	'esope:widgets:freehtml:title' => "Title (updates after page reload)",
 	'esope:widgets:freehtml:content' => "Content (HTML)",
 	'esope:widgets:freehtml:no_content' => "Please configure the widget with the desired content (HTML allowed).",
 	'esope:widgets:searchresults:tags' => "Tag(s) (comma separated)",
