@@ -72,7 +72,7 @@ $slider = elgg_view('slider/slider', $slider_vars);
 $home_pins = '';
 $i = 0;
 // Note : limit should be set to nb_exclude+nb_todisplay, so N+3
-$pin_max = 8;
+$pin_max = 6;
 $pin_limit = count($pin_exclude) + $pin_max;
 $params = array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $pin_limit);
 $recent_pins = elgg_get_entities_from_metadata($params);
