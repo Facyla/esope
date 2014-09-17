@@ -22,6 +22,7 @@ $digest_entity = elgg_extract("group", $vars, $site);
 if (!elgg_instanceof($digest_entity, 'group')) {
 	$digest_entity = $site;
 }
+
 $unsubscribe_link = digest_create_unsubscribe_link($digest_entity->getGUID(), $user);
 
 $site_url = elgg_view("output/url", array("href" => $site->url, "text" => $site->name));
