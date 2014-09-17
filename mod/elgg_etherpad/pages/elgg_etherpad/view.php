@@ -11,7 +11,7 @@
 // Load Elgg engine
 global $CONFIG;
 
-gatekeeper();
+//gatekeeper();
 
 $body = "";
 
@@ -27,32 +27,35 @@ $client = elgg_etherpad_get_client();
 
 // MAIN CONTENT
 
-// Etherpad Lite User process
-// 1. Check we have an author, or create it
-// Portal maps the internal userid to an etherpad author
-$response = $client->createAuthorIfNotExistsFor($authorMapper, $name);
-$authorID = elgg_etherpad_get_response_data($response, 'authorID');
-$groupMapper = $authorMapper;
+// Create an user and its session if no exist
+if (elgg_is_logged_in()) {
+	// Etherpad Lite User process
+	// 1. Check we have an author, or create it
+	// Portal maps the internal userid to an etherpad author
+	$response = $client->createAuthorIfNotExistsFor($authorMapper, $name);
+	$authorID = elgg_etherpad_get_response_data($response, 'authorID');
+	$groupMapper = $authorMapper;
 
-// 2. Then create the associated group
-// Portal maps the internal userid to an etherpad group
-$response = $client->createGroupIfNotExistsFor($groupMapper);
-$groupID = elgg_etherpad_get_response_data($response, 'groupID');
+	// 2. Then create the associated group
+	// Portal maps the internal userid to an etherpad group
+	$response = $client->createGroupIfNotExistsFor($groupMapper);
+	$groupID = elgg_etherpad_get_response_data($response, 'groupID');
 
-// 3. Create a main pad for the user
-// Try to create a new (main) pad in the userGroup
-$padName = "main-" . $own->username;
-$text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
-$response = $client->createGroupPad($groupID, $padName, $text);
+	// 3. Create a main pad for the user
+	// Try to create a new (main) pad in the userGroup
+	$padName = "main-" . $own->username;
+	$text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
+	$response = $client->createGroupPad($groupID, $padName, $text);
 
-// 4. Open a session an link to that pad
-// Portal starts the session for the user on the group
-$validUntil = time() + 60*60*12;
-$response = $client->createSession($groupID, $authorID, $validUntil);
-$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
-// Set session cookie (only on same domain !)
-if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
-$cookie_set = setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain);
+	// 4. Open a session an link to that pad
+	// Portal starts the session for the user on the group
+	$validUntil = time() + 60*60*12;
+	$response = $client->createSession($groupID, $authorID, $validUntil);
+	$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
+	// Set session cookie (only on same domain !)
+	if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
+	$cookie_set = setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain);
+}
 
 // Open pad
 // Open asked pad, or default to own pad
@@ -63,8 +66,8 @@ $body .= '<iframe src="' . $server . '/p/' . $padID . '?userName=' . rawurlencod
 
 if (strpos($padID, '$')) {
 	$pad_name = explode('$', $padID);
-	$pad_name = $pad_name[1];
 	$group_id = $pad_name[0];
+	$pad_name = $pad_name[1];
 } else {
 	$pad_name = $padID;
 }

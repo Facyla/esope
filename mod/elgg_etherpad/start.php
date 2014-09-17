@@ -22,6 +22,12 @@ function elgg_etherpad_init() {
 	elgg_register_library('elgg:elgg_etherpad', elgg_get_plugins_path() . 'elgg_etherpad/lib/elgg_etherpad/elgg_etherpad.php');
 	elgg_load_library('elgg:elgg_etherpad');
 	
+	
+	$action_url = elgg_get_plugins_path() . 'elgg_etherpad/actions/elgg_etherpad';
+	elgg_register_action("elgg_etherpad/edit", "$action_url/edit.php");
+	
+	
+	
 	// Get a plugin setting
 	//$api_key = elgg_get_plugin_setting('api_key', 'elgg_etherpad');
 	

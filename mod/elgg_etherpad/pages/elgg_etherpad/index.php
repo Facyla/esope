@@ -69,10 +69,12 @@ $cookie_set = setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain
 
 
 // LIST PADS
+$body .= '<p><a href="' . $CONFIG->url . 'pad/edit" style="float:right;" class="elgg-button elgg-button-action">Créer ou modifier des Pads</a></p>';
+
 // Affichage du pad personnel
 $body .= '<h3>Votre pad personnel</h3>';
 $body .= '<iframe src="' . $server . '/p/' . $padID . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
-$body .= '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '" class="elgg-button elgg-button-action">Votre Pad personnel</a></p>';
+$body .= '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">Ouvrir votre Pad personnel dans une autre fenêtre</a></p>';
 
 
 // Now list all user's pads
@@ -90,10 +92,32 @@ $body .= '<h3>Tous les pads</h3>';
 $response = $client->listAllPads();
 $all_pads = elgg_etherpad_get_response_data($response, 'padIDs');
 foreach ($all_pads as $padID) {
-	// @TODO : sort by group
-	$body .= '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '" class="elgg-button elgg-button-action">Afficher "' . $padID . '"</a></p>';
+	if (strpos($padID, '$')) {
+		$pad_name = explode('$', $padID);
+		$group_id = $pad_name[0];
+		$pad_name = $pad_name[1];
+	} else {
+		$pad_name = $padID;
+		$group_id = false;
+	}
+	
+	// Sort by group
+	$pad_item = '<p>Afficher <a href="' . $CONFIG->url . 'pad/view/' . $padID . '">"' . $pad_name . '"</a></p>';
+	if ($group_id) $private_pads[$group_id][$pad_name] = $pad_item;
+	else $public_pads[$pad_name] = $pad_item;
 }
 
+$body .= '<div style="float:left; width:48%;">';
+$body .= '<h4>Pads publics</h4>';
+$body .= implode('', $public_pads);
+$body .= '</div>';
+$body .= '<div style="float:right; width:48%;">';
+$body .= '<h4>Pads en accès restreint</h4>';
+foreach ($private_pads as $groupID => $pads) {
+	$body .= '<h5>' . $groupID . '</h5>';
+	$body .= implode('', $pads);
+}
+$body .= '</div>';
 
 
 /*
@@ -169,8 +193,9 @@ $body .= '<div style="float:left; width:48%;">';
 $body .= elgg_etherpad_view_response($response);
 */
 
-elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
-elgg_push_breadcrumb($title);
+elgg_push_breadcrumb(elgg_echo('elgg_etherpad'));
+//elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
+//elgg_push_breadcrumb($title);
 
 
 $body = elgg_view_layout('one_column', array(

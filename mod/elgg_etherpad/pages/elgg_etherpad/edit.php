@@ -39,7 +39,7 @@ $groupMapper = $authorMapper;
 $response = $client->createGroupIfNotExistsFor($groupMapper);
 $groupID = elgg_etherpad_get_response_data($response, 'groupID');
 
-// 3. Open a session an link to that pad
+// 3. Open a session and link to that pad
 // Portal starts the session for the user on the group
 $validUntil = time() + 60*60*12;
 $response = $client->createSession($groupID, $authorID, $validUntil);
@@ -55,6 +55,13 @@ $action = get_input('action', false);
 
 
 // MODE 0 : Actions toujours disponibles
+
+$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:createpad') . '</h3>';
+$body .= elgg_view('forms/elgg_etherpad/createpad', array());
+$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:creategrouppad') . '</h3>';
+$body .= elgg_view('forms/elgg_etherpad/creategrouppad', array());
+
+
 $body .= '<p><a href="' . $CONFIG->url . 'pad/edit?action=createpad&padName=" class="elgg-button elgg-button-action">Créer un Pad public</a></p>';
 $body .= '<p><a href="' . $CONFIG->url . 'pad/edit?action=creategrouppad&padName=&groupName=" class="elgg-button elgg-button-action">Créer un Pad privé</a></p>';
 
@@ -67,21 +74,21 @@ if ($padID) {
 	$body .= '<p><strong>Adresse du Pad :</strong> ' . $CONFIG->url . '/pad/view/' . $padID . '</p>';
 	
 	$body .= '<p><strong>Visibilité :</strong> ';
-	if ($isPublic == 'true') {
+	if ($isPublic == 'yes') {
 		$body .= '<i class="fa fa-unlock"></i> PUBLIC ';
 		$body .= '<a href="' . $CONFIG->url . 'pad/edit/' . $padID . '?action=makeprivate"><i class="fa fa-lock"></i> Rendre privé</a> ';
-	} else if ($isPublic == 'false') {
+	} else if ($isPublic == 'no') {
 		$body .= '<i class="fa fa-lock"></i> NON PUBLIC ';
 		$body .= '<a href="' . $CONFIG->url . 'pad/edit/' . $padID . '?action=makepublic"><i class="fa fa-unlock"></i> Rendre public</a> ';
 	}
 	$body .= '</p>';
 	
 	$body .= '<p><strong>Mot de passe :</strong> ';
-	if ($isPasswordProtected == 'true') {
+	if ($isPasswordProtected == 'yes') {
 		$body .= '<i class="fa fa-key"></i> PROTEGE PAR MOT DE PASSE ';
 		$body .= '<a href="' . $CONFIG->url . 'pad/edit/' . $padID . '?action=changepassword"><i class="fa fa-key"></i> Modifier le mot de passe</a> ';
 		$body .= '<a href="' . $CONFIG->url . 'pad/edit/' . $padID . '?action=removepassword"><i class="fa fa-remove"></i> Supprimer le mot de passe</a> ';
-	} else if ($isPasswordProtected == 'false') {
+	} else if ($isPasswordProtected == 'no') {
 		$body .= '(SANS MOT DE PASSE) ';
 		$body .= '<a href="' . $CONFIG->url . 'pad/edit/' . $padID . '?action=changepassword"><i class="fa fa-key"></i> Ajouter un mot de passe</a> ';
 	}
@@ -130,10 +137,10 @@ if ($padID) {
 			$isPublic = elgg_etherpad_is_public($padID);
 			$body .= '<p>';
 			$body .= '<strong>"' . $padID . '" :</strong>';
-			if ($isPublic == 'true') $body .= ' &nbsp; <i class="fa fa-unlock"></i> Public';
-			else if ($isPublic == 'false') $body .= ' &nbsp; <i class="fa fa-lock"></i> Privé';
-			if ($isPasswordProtected == 'true') $body .= ' &nbsp; <i class="fa fa-key"></i> Avec mot de passe';
-			else if ($isPasswordProtected == 'false') $body .= ' &nbsp; <i class="fa fa-key"></i> (sans mot de passe)';
+			if ($isPublic == 'yes') $body .= ' &nbsp; <i class="fa fa-unlock"></i> Public';
+			else if ($isPublic == 'no') $body .= ' &nbsp; <i class="fa fa-lock"></i> Privé';
+			if ($isPasswordProtected == 'yes') $body .= ' &nbsp; <i class="fa fa-key"></i> Avec mot de passe';
+			else if ($isPasswordProtected == 'no') $body .= ' &nbsp; <i class="fa fa-key"></i> (sans mot de passe)';
 			$body .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/view/' . $padID . '"><i class="fa fa-eye"></i> Afficher</a> ';
 			$body .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/edit/' . $padID . '"><i class="fa fa-gear"></i> Modifier</a> ';
 			$body .= '</p>';
