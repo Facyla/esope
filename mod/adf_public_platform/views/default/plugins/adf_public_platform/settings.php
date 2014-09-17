@@ -383,7 +383,7 @@ $(function() {
 		<?php echo '<h4>' . elgg_echo('adf_platform:colors') . '</h4>'; ?>
 		<?php echo '<p><em>' . elgg_echo('adf_platform:colors:details') . '</em></p>'; ?>
 		<p><label><?php echo elgg_echo('adf_platform:settings:backgroundcolor'); ?></label> 
-			<?php echo elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor, 'js' => 'style="width:12ex;"')); ?>
+			<?php echo elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $vars['entity']->backgroundcolor)); ?>
 		</p>
 		<p><label><?php echo elgg_echo('adf_platform:title:color'); ?></label>
 			<?php echo elgg_view('input/color', array('name' => 'params[titlecolor]', 'value' => $vars['entity']->titlecolor)); ?>

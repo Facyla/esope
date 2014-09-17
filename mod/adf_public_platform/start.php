@@ -67,15 +67,27 @@ function esope_init() {
 	// @TODO : not functional yet
 	//elgg_register_js('elgg.messagesuserpicker', 'mod/adf_public_platform/vendors/ui.messagesuserpicker.js', 'head');
 	
+	
 	// register the color picker's JavaScript
+	/* Replaced by jquery colorpicker, which works and is full-featured
 	elgg_register_simplecache_view('js/input/color_picker');
 	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
 	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
-	
 	// register the color picker's CSS
 	elgg_register_simplecache_view('css/input/color_picker');
 	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
 	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
+	*/
+	// jquery colorpicker (fully featured color picker)
+	$jquery_colorpicker_base = 'mod/adf_public_platform/vendors/colorpicker/';
+	elgg_register_js('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.js', 'head');
+	elgg_register_js('jquery.colorpicker-i18n', $jquery_colorpicker_base . 'i18n/jquery.ui.colorpicker-fr.js', 'head');
+	elgg_register_js('jquery.colorpicker-pantone', $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-pantone.js', 'head');
+	elgg_register_js('jquery.colorpicker-rgbslider', $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-rgbslider.js', 'head');
+	elgg_register_js('jquery.colorpicker-memory', $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-memory.js', 'head');
+	elgg_register_js('jquery.colorpicker-cmyk', $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-parser.js', 'head');
+	elgg_register_js('jquery.colorpicker-cmyk-percentage', $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js', 'head');
+	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.css');
 	
 	
 	if (elgg_is_active_plugin('profile_manager')) {
