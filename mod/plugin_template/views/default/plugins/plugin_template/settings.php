@@ -16,6 +16,6 @@ echo '<p><label>Test select setting "setting_name"</label> ' . elgg_view('input/
 
 
 // Example text setting
-echo '<p><label>Text setting "setting_name2"</label> ' . elgg_view('input/dropdown', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</p>';
+echo '<p><label>Text setting "setting_name2"</label> ' . elgg_view('input/text', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</p>';
 
 
