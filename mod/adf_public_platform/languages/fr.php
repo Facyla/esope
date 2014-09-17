@@ -239,6 +239,9 @@ $fr = array(
 	
 	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
 	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'bookmarks:filter' => "Liens à afficher",
+	'bookmarks:mine' => "Les miens",
+	'bookmarks:mygroups' => "Dans mes groupes",
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",
@@ -394,6 +397,7 @@ $fr = array(
 	'esope:widget:freehtml:description' => "Permet d'intégrer un texte de votre choix, y compris HTML. Peut servir de mémo, ou pour intégrer tout type de contenu web.",
 	'esope:widget:searchresults' => "Recherche configurée",
 	'esope:widget:searchresults:description' => "Affiche les résultats d'une recherche par tag de votre choix.",
+	'esope:widgets:freehtml:title' => "Titre (après rechargement de la page)",
 	'esope:widgets:freehtml:content' => "Contenu (HTML)",
 	'esope:widgets:freehtml:no_content' => "Veuillez configurer ce widget pour afficher le contenu (HTML) de votre choix.",
 	'esope:widgets:searchresults:tags' => "Tag(s) (séparés par des virgules)",

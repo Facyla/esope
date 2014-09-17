@@ -21,7 +21,7 @@ if (!$guid && ($place == 'yes')) {
 	?>
 	<div>
 		<label><?php echo elgg_echo('esope:bookmarks:container'); ?></label><br />
-		<?php echo elgg_view('input/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'scope' => 'member', 'add_owner' => true)); ?>
+		<?php echo elgg_view('input/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'scope' => 'member', 'add_owner' => true, 'empty_value' => false, 'filter' => array('name' => 'bookmarks_enable', 'value' => 'yes'))); ?>
 	</div>
 	<?php
 } else {

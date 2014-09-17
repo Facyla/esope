@@ -239,6 +239,9 @@ $en = array(
 	
 	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
 	'bookmarks:widget:description' => "Displays your bookmarks list.",
+	'bookmarks:filter' => "Bookmarks to be displayed",
+	'bookmarks:mine' => "Mine",
+	'bookmarks:mygroups' => "In my groups",
 	'pages:widget:description' => "Displays your pages.",
 	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'event_calendar:num_display' => "Number of events to display",
@@ -395,6 +398,7 @@ $en = array(
 	'esope:widget:freehtml:description' => "Let's you integrate any text you want, including HTML.",
 	'esope:widget:searchresults' => "Tag search",
 	'esope:widget:searchresults:description' => "Displays the results of a search by tag.",
+	'esope:widgets:freehtml:title' => "Title (updates after page reload)",
 	'esope:widgets:freehtml:content' => "Content (HTML)",
 	'esope:widgets:freehtml:no_content' => "Please configure the widget with the desired content (HTML allowed).",
 	'esope:widgets:searchresults:tags' => "Tag(s) (comma separated)",

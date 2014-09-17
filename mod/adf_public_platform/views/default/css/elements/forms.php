@@ -165,7 +165,7 @@ section div.module form.elgg-form-widgets-save label {
 section div.module form.elgg-form-widgets-save select {
 	border: 1px solid #002e3e;
 	margin: 5px 0 10px;
-	float: left;
+	/* float: left; */
 }
 section div.module form.elgg-form-widgets-save * { max-width:100%; }
 

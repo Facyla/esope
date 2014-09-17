@@ -707,6 +707,10 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-menu-group-topmenu li a { color: white; opacity:0.8; padding: 1ex; }
 .elgg-menu-group-topmenu li a:hover, .elgg-menu-group-topmenu li a:active, .elgg-menu-group-topmenu li a:focus, .elgg-menu-group-topmenu li.elgg-state-selected a { text-decoration:none; opacity:1; }
 
+/* Color picker */
+.elgg-color-picker { max-width:45%; }
+
+
 
 <?php if (!$fixedwidth) { ?>
 /* SECTION RESPONSIVE DESIGN */

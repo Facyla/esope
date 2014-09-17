@@ -17,3 +17,5 @@ textarea, .elgg-input-rawtext { width:100%; }
 .elgg-form fieldset { border:1px solid #999; padding:1ex; margin:2ex 0ex; }
 .elgg-form fieldset legend { padding:0 0.5ex; }
 
+.elgg-color-picker { max-width:45%; }
+
