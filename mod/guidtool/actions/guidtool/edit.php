@@ -53,10 +53,10 @@ if ($entity) {
 					case 'time_updated':
 					case 'last_action':
 						$check = (is_int($new_value) OR is_float($new_value)) ? $new_value : (string) (int) $new_value;
-						if (($check === $timestamp) AND ( (int) $timestamp <=  PHP_INT_MAX) AND ( (int) $timestamp >= ~PHP_INT_MAX)) {
+						if (($check === $new_value) AND ( (int) $new_value <=  PHP_INT_MAX) AND ( (int) $new_value >= ~PHP_INT_MAX)) {
 							$entity->$field = $new_value;
 							$done = true;
-						} else register_error("Invalid timestamp");
+						} else register_error("Invalid timestamp : $check !== $timestamp");
 						break;
 					
 					// Has to be a valid owner/container
