@@ -19,6 +19,8 @@ if (in_array(elgg_get_logged_in_user_guid(), explode(',', elgg_get_plugin_settin
 	admin_gatekeeper();
 }
 
+global $CONFIG;
+
 // Cache to the session
 elgg_make_sticky_form('cmspages');
 
@@ -35,7 +37,7 @@ $tags = get_input('cmspage_tags');
 //$cmspage_guid = (int)get_input('cmspage_guid'); // not really used (pagetype are unique, as URL rely on them rather than GUID)
 $access = get_input('access_id', ACCESS_DEFAULT);
 // These are for future developments/features, such as page hierarchy, conditional display based on container
-$container_guid = get_input('container_guid');
+$container_guid = get_input('container_guid', $CONFIG->site->guid);
 $parent_guid = get_input('parent_guid');
 $sibling_guid = get_input('sibling_guid');
 // Externalblog/templating system integration
@@ -111,7 +113,8 @@ $cmspage->template = $template;
 $cmspage->css = $page_css;
 $cmspage->js = $page_js;
 // @todo unused yet
-$cmspage->container_guid = $CONFIG->site->guid;	// Set container to the current site (nothing personal, hey !)
+$cmspage->owner_guid = $CONFIG->site->guid;	// Set owner to the current site (nothing personal, hey !)
+$cmspage->container_guid = $container_guid;
 $cmspage->parent_guid = $parent_guid;
 $cmspage->sibling_guid = $sibling_guid;
 
