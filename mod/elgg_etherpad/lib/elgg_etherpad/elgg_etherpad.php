@@ -137,3 +137,45 @@ function elgg_etherpad_set_pad_password($padID, $password = null) {
 
 
 
+/* Save pad in an entity metadata
+ * $entity : the target entity
+ * $metadata : the target metadata
+ * $padID : the pad
+ */
+function elgg_etherpad_save_pad_content_to_entity($padID = false, $entity = false, $metadata = false) {
+	// Get pad content
+	$client = elgg_etherpad_get_client();
+	$response = $client->getHTML($padID);
+	if ($response->code > 0) return false;
+	//print_r($response);
+	
+	// @TODO : test locally before going live !!
+	// Save it to target entity
+	// Note : handle only subtypes we're sure of
+	$subtype = $entity->getSubtype();
+	switch($subtype) {
+		// Pages : annotation
+		case 'page':
+		case 'page_top':
+			//$object->annotate('page', $description, $object->access_id);
+			break;
+		
+		// Blog, bookmarks, file : description
+		case 'blog':
+			// @TODO : blog should keep history...
+			//$object->annotate('blog_revision', $object->description);
+		case 'bookmarks':
+		case 'file':
+			//$object->description = $description;
+			break;
+		
+		// Default : should we do anything if we're not sure ?
+		default:
+			return false;
+	}
+	
+	return true;
+}
+
+
+
