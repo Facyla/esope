@@ -239,6 +239,9 @@ $fr = array(
 	
 	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
 	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'bookmarks:filter' => "Liens à afficher",
+	'bookmarks:mine' => "Les miens",
+	'bookmarks:mygroups' => "Dans mes groupes",
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",

@@ -239,6 +239,9 @@ $en = array(
 	
 	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
 	'bookmarks:widget:description' => "Displays your bookmarks list.",
+	'bookmarks:filter' => "Bookmarks to be displayed",
+	'bookmarks:mine' => "Mine",
+	'bookmarks:mygroups' => "In my groups",
 	'pages:widget:description' => "Displays your pages.",
 	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'event_calendar:num_display' => "Number of events to display",

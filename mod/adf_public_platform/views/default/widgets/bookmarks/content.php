@@ -6,17 +6,37 @@
  */
 
 $max = (int) $vars['entity']->num_display;
+$filter = $vars['entity']->filter;
 
 $options = array(
 	'type' => 'object',
 	'subtype' => 'bookmarks',
-	//'container_guid' => $vars['entity']->owner_guid,
-	'owner_guid' => $vars['entity']->owner_guid,
 	'limit' => $max,
 	'full_view' => FALSE,
 	'pagination' => FALSE,
 );
-$content = elgg_list_entities($options);
+
+switch ($filter) {
+	case 'all':
+		$content = elgg_list_entities($options);
+		break;
+	case 'friends':
+		$content = list_user_friends_objects($vars['entity']->owner_guid, 'bookmarks', $max, false, false, false);
+		break;
+	case 'mygroups':
+		$mygroups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $vars['entity']->owner_guid, 'inverse_relationship' => false, 'limit' => false));
+		if ($mygroups) {
+			foreach ($mygroups as $ent) { $group_guids[] = $ent->guid; }
+			$options['container_guids'] = $group_guids;
+			$content = elgg_list_entities($options);
+		}
+		break;
+	case 'mine':
+	default:
+		$options['owner_guid'] = $vars['entity']->owner_guid;
+		$content = elgg_list_entities($options);
+}
+
 
 echo $content;
 
