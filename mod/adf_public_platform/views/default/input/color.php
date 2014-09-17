@@ -36,7 +36,7 @@ $(function() {
 		//showOn:         'both',
 		//buttonColorize: true,
 		showNoneButton: true,
-		altField: "elgg-colorpicker-<?php echo $id; ?>",
+		altField: "#elgg-colorpicker-<?php echo $id; ?>",
 		altProperties: 'background-color',
 		altAlpha: true,
 		init: function(event, color) {
