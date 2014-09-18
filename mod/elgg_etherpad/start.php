@@ -54,6 +54,9 @@ function elgg_etherpad_page_handler($page) {
 		case 'admin':
 			include "$base/admin.php";
 			break;
+		case 'test':
+			include "$base/test.php";
+			break;
 		case 'view':
 			set_input('padID', $page[1]);
 			include "$base/view.php";

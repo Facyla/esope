@@ -107,11 +107,10 @@ if ($padID) {
 
 
 
-
-
 $title = "Créer / modifier un Pad";
 if ($group_id) $title .= " (groupe $group_id)";
 
+elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
 elgg_push_breadcrumb(elgg_echo('elgg_etherpad:edit'), 'pad/edit');
 if ($pad_name) elgg_push_breadcrumb($pad_name);

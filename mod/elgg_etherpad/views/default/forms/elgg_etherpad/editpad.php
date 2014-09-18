@@ -23,8 +23,6 @@ if ($group_id) $form_body .= ' (groupe ' . $group_id . ')';
 $form_body .= '</h3>';
 
 $server = elgg_get_plugin_setting('server', 'elgg_etherpad');
-$public = elgg_etherpad_is_public($padID);
-$isPasswordProtected = elgg_etherpad_is_password_protected($padID);
 
 $form_body .= '<p><strong>Adresse du Pad :</strong> ' . $CONFIG->url . '/pad/view/' . $padID . '</p>';
 
@@ -37,6 +35,9 @@ $base_action_url = elgg_add_action_tokens_to_url($base_action_url);
 
 // Only for group pads
 if ($group_id) {
+	$public = elgg_etherpad_is_public($padID);
+	$isPasswordProtected = elgg_etherpad_is_password_protected($padID);
+	
 	$form_body .= '<p><em>' . elgg_echo('elgg_etherpad:forms:creategrouppad:details') . '</em></p>';
 	$form_body .= '<br />';
 	

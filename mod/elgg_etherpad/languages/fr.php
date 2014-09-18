@@ -21,6 +21,8 @@ $fr = array(
 	'elgg_etherpad:createpad' => "Créer le pad public",
 	'elgg_etherpad:creategrouppad' => "Créer le pad privé",
 	
+	'elgg_etherpad:pad:defaultcontent' => "Ce pad a été automatiquement créé pour vous et est en accès restreint. Vous pouvez l'utiliser tel quel, en modifier les autorisations d'accès, ou en créer d'autres.",
+	
 );
 
 add_translation("fr",$fr);

@@ -29,23 +29,14 @@ $client = elgg_etherpad_get_client();
 // Create an user and its session if no exist
 if (elgg_is_logged_in()) {
 	// Etherpad Lite User process
-	// 1. Check we have an author, or create it
-	// Portal maps the internal userid to an etherpad author
-	$response = $client->createAuthorIfNotExistsFor($authorMapper, $name);
-	$authorID = elgg_etherpad_get_response_data($response, 'authorID');
-	$groupMapper = $authorMapper;
+	// 1. Get or create the authorID
+	$authorID = elgg_etherpad_get_author_id($own);
 
-	// 2. Then create the associated group
-	// Portal maps the internal userid to an etherpad group
-	$response = $client->createGroupIfNotExistsFor($groupMapper);
-	$groupID = elgg_etherpad_get_response_data($response, 'groupID');
+	// 2. Get or create the associated groupID
+	$groupID = elgg_etherpad_get_entity_group_id($own);
 
-	// 3. Create a main pad for the user
-	// Try to create a new (main) pad in the userGroup
-	$padName = "main-" . $own->username;
-	$text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
-	$response = $client->createGroupPad($groupID, $padName, $text);
-	
+	// 3. Create a new pad ("home") in the userGroup
+	$padID = elgg_etherpad_create_pad("home", $own->guid, false, false, $text);
 	
 	// @TODO : access to pads should be determined based on Elgg criteria, and session set accordingly.
 	
@@ -63,17 +54,17 @@ if (elgg_is_logged_in()) {
 
 // Open pad
 // Open asked pad, or default to own pad
-$padID = get_input('padID', false);
-if (empty($padID)) $padID = $groupID . '$' . $padName;
-$body .= '<iframe src="' . $server . '/p/' . $padID . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
+$pad = get_input('padID', $padID);
+if (empty($pad)) $pad = $groupID . '$' . $padName;
+$body .= '<iframe src="' . $server . '/p/' . $pad . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
 
 
-if (strpos($padID, '$')) {
-	$pad_name = explode('$', $padID);
+if (strpos($pad, '$')) {
+	$pad_name = explode('$', $pad);
 	$group_id = $pad_name[0];
 	$pad_name = $pad_name[1];
 } else {
-	$pad_name = $padID;
+	$pad_name = $pad;
 }
 
 $title = "Afficher le pad \"$pad_name\"";
