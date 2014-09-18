@@ -246,12 +246,13 @@ function elgg_etherpad_create_session($groupID, $authorID, $validUntil = 43200) 
  */
 function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
-	if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
+	$site_url = elgg_get_site_url();
+	if (!$cookiedomain) $cookiedomain = parse_url($site_url, PHP_URL_HOST);
 	
-	error_log("Cookie domain $cookiedomain does not match site domain " . elgg_get_site_url());
+	error_log("Cookie domain $cookiedomain does not match site domain " . $site_url);
 	// Check domain validity : the cookie domain should be the same, or the top domain of current site (sub)domain
-	if (strpos(elgg_get_site_url(), $cookiedomain) === false) {
-		register_error("Cookie domain $cookiedomain does not match site domain " . elgg_get_site_url());
+	if (strpos($site_url, $cookiedomain) === false) {
+		register_error("Cookie domain $cookiedomain does not match site domain " . $site_url);
 		return false;
 	}
 
