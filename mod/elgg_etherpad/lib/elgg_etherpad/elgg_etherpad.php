@@ -249,16 +249,15 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	$site_url = elgg_get_site_url();
 	if (!$cookiedomain) $cookiedomain = parse_url($site_url, PHP_URL_HOST);
 	
-	error_log("Cookie domain $cookiedomain does not match site domain " . $site_url);
 	// Check domain validity : the cookie domain should be the same, or the top domain of current site (sub)domain
 	if (strpos($site_url, $cookiedomain) === false) {
-		register_error("Cookie domain $cookiedomain does not match site domain " . $site_url);
-		return false;
+		error_log("Cookie domain $cookiedomain does not match site domain $site_url");
+		//return false;
 	}
 
-	$sessions = array();
 	// Get existing sessions
 	if ($_COOKIE['sessionID']) { $sessions = explode(',', $_COOKIE['sessionID']); }
+	else $sessions = array();
 	error_log("Previous session : " . $_COOKIE['sessionID']);
 	
 	// Check if the session id is there, and add it if not
@@ -267,7 +266,7 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	} else {
 		$sessions[] = $sessionID;
 		$sessionIDs = implode(',', $sessions);
-		error_log("New session : $sessionIDs");
+		error_log("New session (adding $sessionID) : $sessionIDs");
 		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)) return true;
 	}
 	// If we got there, cookie could not be set..
