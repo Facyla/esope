@@ -42,6 +42,9 @@ function elgg_etherpad_init() {
 	// Register a page handler on "elgg_etherpad/"
 	elgg_register_page_handler('pad', 'elgg_etherpad_page_handler');
 	
+	// ENTITY MENU (edit with pad)
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'elgg_etherpad_entity_menu_setup', 200);
+	
 	
 }
 
@@ -53,9 +56,6 @@ function elgg_etherpad_page_handler($page) {
 	switch ($page[0]) {
 		case 'admin':
 			include "$base/admin.php";
-			break;
-		case 'test':
-			include "$base/test.php";
 			break;
 		case 'view':
 			set_input('padID', $page[1]);
@@ -77,13 +77,23 @@ function elgg_etherpad_page_handler($page) {
 }
 
 
-// Other useful functions
-// prefixed by plugin_name_
-/*
-function elgg_etherpad_function() {
-	
+
+// Add pin button to entity menu (close to end of the menu)
+function elgg_etherpad_entity_menu_setup($hook, $type, $return, $params) {
+	// Not in widgets, and for admin users only
+	if (elgg_in_context('widgets')) { return $return; }
+	if (!elgg_is_logged_in()) { return $return; }
+	$entity = $params['entity'];
+	if ($entity->getType() == 'object') {
+		global $CONFIG;
+		$subtype = $entity->getSubtype();
+		if (in_array($subtype, array('page', 'page_top', 'blog'))) {
+			$options = array('name' => 'elgg_etherpad', 'href' => $CONFIG->url . 'pad/editwithpad/' . $entity->guid, 'priority' => 200, 'text' => elgg_echo('elgg_etherpad:menu:editwithpad'));
+			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	return $return;
 }
-*/
 
 
 

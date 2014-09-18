@@ -30,23 +30,20 @@ $client = elgg_etherpad_get_client();
 // Etherpad Lite User process
 // 1. Check we have an author, or create it
 // Portal maps the internal userid to an etherpad author
-$response = $client->createAuthorIfNotExistsFor($authorMapper, $name);
-$authorID = elgg_etherpad_get_response_data($response, 'authorID');
+$authorID = elgg_etherpad_get_author_id($own);
 $groupMapper = $authorMapper;
 
 // 2. Then create the associated group
 // Portal maps the internal userid to an etherpad group
-$response = $client->createGroupIfNotExistsFor($groupMapper);
-$groupID = elgg_etherpad_get_response_data($response, 'groupID');
+$groupID = elgg_etherpad_get_entity_group_id($entity);
 
 // 3. Open a session and link to that pad
 // Portal starts the session for the user on the group
-$validUntil = time() + 60*60*12;
-$response = $client->createSession($groupID, $authorID, $validUntil);
-$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
+$sessionID = elgg_etherpad_create_session($groupID, $authorID);
+
 // Set session cookie (only on same domain !)
 $cookie_set = elgg_etherpad_update_session($sessionID);
-if (!$cookie_set) $body .= '<p>Cookie could not be set : you will probably not be able to access any protected pad.</p>';
+if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
 
 // Open pad
 // Open asked pad, or default to own pad
@@ -87,17 +84,8 @@ if ($padID) {
 	if ($pads) {
 		foreach ($pads as $padID) {
 			// @TODO : sort by group
-			$isPasswordProtected = elgg_etherpad_is_password_protected($padID);
-			$isPublic = elgg_etherpad_is_public($padID);
-			$body .= '<p>';
-			$body .= '<strong>"' . $padID . '" :</strong>';
-			if ($isPublic == 'yes') $body .= ' &nbsp; <i class="fa fa-unlock"></i> Public';
-			else if ($isPublic == 'no') $body .= ' &nbsp; <i class="fa fa-lock"></i> Privé';
-			if ($isPasswordProtected == 'yes') $body .= ' &nbsp; <i class="fa fa-key"></i> Avec mot de passe';
-			else if ($isPasswordProtected == 'no') $body .= ' &nbsp; <i class="fa fa-key"></i> (sans mot de passe)';
-			$body .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/view/' . $padID . '"><i class="fa fa-eye"></i> Afficher</a> ';
-			$body .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/edit/' . $padID . '"><i class="fa fa-gear"></i> Modifier</a> ';
-			$body .= '</p>';
+			
+			$body .= elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
 		}
 	} else {
 		$body .= '<p>Aucun Pad<p>';

@@ -147,8 +147,15 @@ function elgg_etherpad_create_pad($padName, $groupName = false, $public = null, 
 /* Set pad content (HTML) */
 function elgg_etherpad_set_pad_content($padID, $html) {
 	$client = elgg_etherpad_get_client();
+	
+	// Etherpad Lite requires that HTML content is wrapped into a <div>...</div>
+	// Otherwise it will break at first parapgraph (or closing tag)
+	// See https://github.com/ether/etherpad-lite/pull/204
+	$html = '<div>' . $html . '</div>';
+	
 	$response = $client->setHTML($padID, $html);
-	print_r($response);
+	//print_r($response);
+
 	if ($response->code > 0) return false;
 	return true;
 }
@@ -298,8 +305,15 @@ function elgg_etherpad_save_pad_content_to_entity($padID = false, $entity = fals
 	// Get pad content
 	$client = elgg_etherpad_get_client();
 	$response = $client->getHTML($padID);
-	if ($response->code > 0) return false;
 	//print_r($response);
+	if ($response->code > 0) return false;
+	$description = elgg_etherpad_get_response_data($response, 'html');
+	// Remove some added tags
+	$description = str_replace(array('<!DOCTYPE HTML>', '<html>', '<body>', '</body>', '</html>'), '', $description);
+	// Try to wrap paragraphs correctly
+	$description = '<p>' . str_replace('<br><br>', '</p><p>', $description) . '</p>';
+	// Remove ending <p></p>
+	$description = substr($description, 0, -7);
 	
 	// @TODO : test locally before going live !!
 	// Save it to target entity
@@ -309,18 +323,22 @@ function elgg_etherpad_save_pad_content_to_entity($padID = false, $entity = fals
 		// Pages : annotation
 		case 'page':
 		case 'page_top':
-			//$object->annotate('page', $description, $object->access_id);
+			// For pages, latest annotation AND description is the current content
+			$entity->description = $description;
+			$entity->annotate('page', $description, $entity->access_id);
+			$entity->save();
 			break;
 		
 		// Blog, bookmarks, file : description
 		case 'blog':
-			// @TODO : blog should keep history...
-			//$object->annotate('blog_revision', $object->description);
-		case 'bookmarks':
-		case 'file':
-			//$object->description = $description;
+			// For blogs, the annotation keeps track of previous description
+			$entity->annotate('blog_revision', $entity->description);
+			$entity->description = $description;
+			$entity->save();
 			break;
 		
+		case 'bookmarks':
+		case 'file':
 		// Default : should we do anything if we're not sure ?
 		default:
 			return false;

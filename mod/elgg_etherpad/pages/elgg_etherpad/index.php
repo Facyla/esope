@@ -65,7 +65,7 @@ $response = $client->createSession($groupID, $authorID, $validUntil);
 $sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 // Set session cookie (only on same domain !)
 $cookie_set = elgg_etherpad_update_session($sessionID);
-if (!$cookie_set) $body .= '<p>Cookie could not be set : you will probably not be able to access any protected pad.</p>';
+if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
 
 
 // LIST PADS

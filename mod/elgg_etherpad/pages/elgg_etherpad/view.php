@@ -42,14 +42,12 @@ if (elgg_is_logged_in()) {
 	
 	// 4. Open a session an link to that pad
 	// Portal starts the session for the user on the group
-	$validUntil = time() + 60*60*12;
-	$response = $client->createSession($groupID, $authorID, $validUntil);
-	$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
+	$sessionID = elgg_etherpad_create_session($groupID, $authorID);
 	// Set session cookie (only on same domain !)
 	// @TODO : we can store multiple sessions at once :
 	// Sessions can be created between a group and an author. This allows an author to access more than one group. The sessionID will be set as a cookie to the client and is valid until a certain date. The session cookie can also contain multiple comma-seperated sessionIDs, allowing a user to edit pads in different groups at the same time. Only users with a valid session for this group, can access group pads. You can create a session after you authenticated the user at your web application, to give them access to the pads. You should save the sessionID of this session and delete it after the user logged out.
 	$cookie_set = elgg_etherpad_update_session($sessionID);
-	if (!$cookie_set) $body .= '<p>Cookie could not be set : you will probably not be able to access any protected pad.</p>';
+	if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
 }
 
 // Open pad
