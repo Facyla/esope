@@ -234,6 +234,7 @@ function elgg_etherpad_set_pad_password($padID, $password = null) {
 function elgg_etherpad_create_session($groupID, $authorID, $validUntil = 43200) {
 	$client = elgg_etherpad_get_client();
 	$response = $client->createSession($groupID, $authorID, $validUntil);
+	error_log(print_r($response, true));
 	if ($response->code > 0) return false;
 	return elgg_etherpad_get_response_data($response, 'sessionID');
 }

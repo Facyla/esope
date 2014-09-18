@@ -71,7 +71,7 @@ if (elgg_instanceof($entity, 'object')) {
 		$authorID = elgg_etherpad_get_author_id($own);
 		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:authorid', array($authorID)) . '</p>';
 		$groupID = elgg_etherpad_get_entity_group_id($entity);
-		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:authorid', array($groupID)) . '</p>';
+		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:groupid', array($groupID)) . '</p>';
 		$padName = 'edit-'.$guid;
 		// Try to create pad first
 		$padID = elgg_etherpad_create_pad($padName, $guid, $public, $password, $entity_content);
