@@ -53,7 +53,7 @@ $groupID = elgg_etherpad_get_response_data($response, 'groupID');
 
 // 3. Create a main pad for the user
 // Try to create a new (main) pad in the userGroup
-$padName = "main-" . $own->username;
+$padName = "home";
 $text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
 $response = $client->createGroupPad($groupID, $padName, $text);
 $padID = $groupID . '$' . $padName;

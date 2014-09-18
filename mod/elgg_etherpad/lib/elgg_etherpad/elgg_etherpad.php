@@ -249,7 +249,10 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
 	
 	// Check domain validity : the cookie domain should be the same, or the top domain of current site (sub)domain
-	if (strpos(elgg_get_site_url(), $cookiedomain) === false) { return false; }
+	if (strpos(elgg_get_site_url(), $cookiedomain) === false) {
+		register_error("Cookie domain $cookiedomain does not match site domain " . elgg_get_site_url());
+		return false;
+	}
 
 	$sessions = array();
 	// Get existing sessions
