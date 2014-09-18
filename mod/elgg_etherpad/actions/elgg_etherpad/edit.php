@@ -10,10 +10,10 @@ $request = get_input('request', false);
 // padID is used for existing pad edit
 $padID = get_input('padID', false);
 // Public is the public status of the pad : can be set to 'true' (public), 'false' (not public), or null or empty (don't change)
-$public = get_input('public');
+$public = get_input('public', null);
 if ($public == 'yes') { $public = true; } else if ($public == 'no') { $public = false; } else { $public = null; }
 // Password is the password of the pad : can be set to a value (the password), 'no' (no password), or empty value (don't change)
-$password = get_input('password');
+$password = get_input('password', null);
 if ($password == 'no') { $password = false; } else if (empty($password)) { $password = null; }
 // Title is used for new pads, it's the full name for public pads, and the end of group pads name
 $title = get_input('title');
@@ -25,6 +25,7 @@ if ($request) {
 		
 		// CREATION DE NOUVEAU PAD EN ACCESS RESTREINT
 		case 'creategrouppad':
+			// Default access group is pad container (=creator/owner if no specific context)
 			if (empty($container_guid)) $container_guid = elgg_get_logged_in_user_guid();
 			if (!empty($title)) {
 				$padID = elgg_etherpad_create_pad($title, $container_guid, $public, $password);
@@ -53,9 +54,17 @@ if ($request) {
 				register_error('Nom du pad manquant : &padName=XXXX');
 			}
 			break;
+		
+		case 'editpad':
+			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad modified, please check that your changes have been properly updated.");
+			$forward = 'pad/edit/' . $padID;
+			break;
+		
 		// SUPPRESSION D'UN PAD
 		case 'delete':
-			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			//$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad $padID deleted status : $result");
 			$forward = 'pad/edit/' . $padID;
 			break;
 		
@@ -64,6 +73,7 @@ if ($request) {
 			$public = false;
 			$password = null;
 			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad $padID public status set to private : $result");
 			$forward = 'pad/edit/' . $padID;
 			break;
 		
@@ -71,12 +81,14 @@ if ($request) {
 			$public = true;
 			$password = null;
 			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad $padID public status set to public : $result");
 			$forward = 'pad/edit/' . $padID;
 			break;
 		
 		case 'changepassword':
 			$public = null;
 			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad $padID password set to $password : $result");
 			$forward = 'pad/edit/' . $padID;
 			break;
 		
@@ -84,6 +96,7 @@ if ($request) {
 			$public = null;
 			$password = false;
 			$result = elgg_etherpad_set_pad_access($padID, $public, $password);
+			system_message("Pad $padID password removed status : $result");
 			$forward = 'pad/edit/' . $padID;
 			break;
 		

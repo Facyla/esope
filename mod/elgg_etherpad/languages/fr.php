@@ -13,6 +13,7 @@ $fr = array(
 	'elgg_etherpad:forms:creategrouppad' => "Nouveau pad privé",
 	'elgg_etherpad:forms:creategrouppad:details' => "Les pads privés permettent de gérer un contrôle d'accès sur le pad. Privés par défaut, ils peuvent être rendus publics et protégés avec un mot de passe.",
 	
+	'elgg_etherpad:editpad' => "Modifier les réglages du pad",
 	'elgg_etherpad:title' => "Nom du pad",
 	'elgg_etherpad:public' => "Le pad peut-il être visible publiquement ?",
 	'elgg_etherpad:password' => "Mot de passe",

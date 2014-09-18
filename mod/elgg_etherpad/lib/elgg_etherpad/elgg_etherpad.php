@@ -85,11 +85,11 @@ function elgg_etherpad_set_pad_access($padID, $public = null, $password = null) 
 function elgg_etherpad_is_public($padID) {
 	$client = elgg_etherpad_get_client();
 	$response = $client->getPublicStatus($padID);
-	$publicStatus = elgg_etherpad_get_response_data($response, 'publicStatus');
+	$status = elgg_etherpad_get_response_data($response, 'publicStatus');
 	//print_r($response);
 	if ($response->code > 0) return false;
-	if (empty($publicStatus) || ($publicStatus == 'false')) return 'no';
-	return 'yes';
+	if (($status == 1) || ($status == 'true')) return 'yes';
+	return 'no';
 }
 
 /* Set pad access : visibility
@@ -101,8 +101,8 @@ function elgg_etherpad_set_pad_publicstatus($padID, $public = null) {
 	if ($public !== NULL) {
 		if ($public) $response = $client->setPublicStatus($padID, 'true');
 		else $response = $client->setPublicStatus($padID, 'false');
-		if ($response->code > 0) return false;
 		//print_r($response);
+		if ($response->code > 0) return false;
 	}
 	return true;
 }
@@ -116,7 +116,6 @@ function elgg_etherpad_is_password_protected($padID) {
 	$isPasswordProtected = elgg_etherpad_get_response_data($response, 'isPasswordProtected');
 	if ($response->code > 0) return false;
 	if (($isPasswordProtected == '1') || ($isPasswordProtected == 'true')) return 'yes';
-	//if (empty($isPasswordProtected)) return 'no';
 	return 'no';
 }
 
@@ -133,6 +132,35 @@ function elgg_etherpad_set_pad_password($padID, $password = null) {
 		//print_r($response);
 	}
 	return true;
+}
+
+
+/* Add a session to Etherpad session cookie for a given group
+ * Note that domain MUST be the same for the cookie to be set
+ * Also note that $validUntil param doesn't renew the sessions ! (which are set on Etherpad Lite side)
+ * But it must last at least as long as the longuest EPL session...
+ */
+function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
+	$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
+	if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
+	
+	// Check domain validity : the cookie domain should be the same, or the top domain of current site (sub)domain
+	if (strpos(elgg_get_site_url(), $cookiedomain) === false) { return false; }
+
+	$sessions = array();
+	// Get existing sessions
+	if ($_COOKIE['sessionID']) { $sessions = explode(',', $_COOKIE['sessionID']); }
+	
+	// Check if the session id is there, and add it if not
+	if (in_array($sessionID, $sessions)) {
+		return true;
+	} else {
+		$sessions[]= $sessionID;
+		$sessionIDs = implode(',', $sessions);
+		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)) return true;
+	}
+	// If we got there, cookie could not be set..
+	return false;
 }
 
 

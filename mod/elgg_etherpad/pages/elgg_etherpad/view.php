@@ -16,7 +16,6 @@ global $CONFIG;
 $body = "";
 
 $server = elgg_get_plugin_setting('server', 'elgg_etherpad');
-$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 $own = elgg_get_logged_in_user_entity();
 $authorMapper = $own->guid;
 $name = $own->name;
@@ -46,15 +45,20 @@ if (elgg_is_logged_in()) {
 	$padName = "main-" . $own->username;
 	$text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
 	$response = $client->createGroupPad($groupID, $padName, $text);
-
+	
+	
+	// @TODO : access to pads should be determined based on Elgg criteria, and session set accordingly.
+	
 	// 4. Open a session an link to that pad
 	// Portal starts the session for the user on the group
 	$validUntil = time() + 60*60*12;
 	$response = $client->createSession($groupID, $authorID, $validUntil);
 	$sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 	// Set session cookie (only on same domain !)
-	if (!$cookiedomain) $cookiedomain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
-	$cookie_set = setcookie('sessionID', $sessionID, $validUntil, '/', $cookiedomain);
+	// @TODO : we can store multiple sessions at once :
+	// Sessions can be created between a group and an author. This allows an author to access more than one group. The sessionID will be set as a cookie to the client and is valid until a certain date. The session cookie can also contain multiple comma-seperated sessionIDs, allowing a user to edit pads in different groups at the same time. Only users with a valid session for this group, can access group pads. You can create a session after you authenticated the user at your web application, to give them access to the pads. You should save the sessionID of this session and delete it after the user logged out.
+	$cookie_set = elgg_etherpad_update_session($sessionID);
+	if (!$cookie_set) $body .= '<p>Cookie could not be set : you will probably not be able to access any protected pad.</p>';
 }
 
 // Open pad

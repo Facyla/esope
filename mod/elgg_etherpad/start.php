@@ -62,6 +62,10 @@ function elgg_etherpad_page_handler($page) {
 			set_input('padID', $page[1]);
 			include "$base/edit.php";
 			break;
+		case 'editwithpad':
+			set_input('guid', $page[1]);
+			include "$base/editwithpad.php";
+			break;
 		case 'index':
 		default:
 			include "$base/index.php";
