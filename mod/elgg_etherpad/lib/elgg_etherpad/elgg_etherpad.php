@@ -258,7 +258,7 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	// Get existing sessions
 	if ($_COOKIE['sessionID']) { $sessions = explode(',', $_COOKIE['sessionID']); }
 	else $sessions = array();
-	error_log("Previous session : " . $_COOKIE['sessionID']);
+	//error_log("Previous session : " . $_COOKIE['sessionID']);
 	
 	// Check if the session id is there, and add it if not
 	if ((sizeof($sessions) > 0) && in_array($sessionID, $sessions)) {
@@ -266,7 +266,7 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	} else {
 		$sessions[] = $sessionID;
 		$sessionIDs = implode(',', $sessions);
-		error_log("New session (adding $sessionID) : $sessionIDs");
+		//error_log("New session (adding $sessionID) : $sessionIDs");
 		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)) return true;
 	}
 	// If we got there, cookie could not be set..

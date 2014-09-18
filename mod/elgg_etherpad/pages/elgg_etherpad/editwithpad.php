@@ -43,7 +43,7 @@ $guid = get_input('guid', false);
 $public = get_input('public', false);
 $password = get_input('password', false);
 
-$debug = false;
+$debug = get_input('debug', false);
 
 // Only work with valid entities
 $entity = get_entity($guid);
