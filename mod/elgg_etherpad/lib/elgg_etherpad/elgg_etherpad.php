@@ -247,6 +247,7 @@ function elgg_etherpad_create_session($groupID, $authorID, $validUntil = 43200) 
  * But it must last at least as long as the longuest EPL session...
  */
 function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
+	$validUntil = time() + $validUntil;
 	$cookiedomain = elgg_get_plugin_setting('cookiedomain', 'elgg_etherpad');
 	$site_url = elgg_get_site_url();
 	if (!$cookiedomain) $cookiedomain = parse_url($site_url, PHP_URL_HOST);
@@ -268,10 +269,10 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	} else {
 		$sessions[] = $sessionID;
 		$sessionIDs = implode(',', $sessions);
-		error_log("New session (adding $sessionID) : $sessionIDs");
-		error_log("setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)");
-		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', '.'.$cookiedomain, true)) return true;
-		error_log("Cookie not set");
+		//error_log("New session (adding $sessionID) : $sessionIDs");
+		//error_log("setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)");
+		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)) return true;
+		//error_log("Cookie not set");
 	}
 	// If we got there, cookie could not be set..
 	return false;
