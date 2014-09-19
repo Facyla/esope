@@ -268,8 +268,10 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 	} else {
 		$sessions[] = $sessionID;
 		$sessionIDs = implode(',', $sessions);
-		//error_log("New session (adding $sessionID) : $sessionIDs");
+		error_log("New session (adding $sessionID) : $sessionIDs");
+		error_log("setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)");
 		if (setcookie('sessionID', $sessionIDs, $validUntil, '/', $cookiedomain)) return true;
+		error_log("Cookie not set");
 	}
 	// If we got there, cookie could not be set..
 	return false;
