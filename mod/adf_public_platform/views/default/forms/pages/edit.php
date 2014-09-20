@@ -20,7 +20,8 @@ foreach ($variables as $name => $type) {
 	}
 	
 	// Enable pages reordering at any time only when allowed by settings
-	if (elgg_get_plugin_setting('pages_reorder', 'adf_public_platform') != 'yes') {
+	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'adf_public_platform');
+	if ($pages_reorder != 'yes') {
 		// don't show parent picker input for top or new pages.
 		if ($name == 'parent_guid' && (!$vars['parent_guid'] || !$vars['guid'])) {
 			continue;
@@ -69,11 +70,14 @@ echo elgg_view('input/hidden', array(
 	'name' => 'container_guid',
 	'value' => $vars['container_guid'],
 ));
-if (!$vars['guid']) {
-	echo elgg_view('input/hidden', array(
-		'name' => 'parent_guid',
-		'value' => $vars['parent_guid'],
-	));
+// Default field only if no pages reordering allowed
+if ($pages_reorder != 'yes') {
+	if (!$vars['guid']) {
+		echo elgg_view('input/hidden', array(
+			'name' => 'parent_guid',
+			'value' => $vars['parent_guid'],
+		));
+	}
 }
 
 if ($vars['guid']) echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no'));
