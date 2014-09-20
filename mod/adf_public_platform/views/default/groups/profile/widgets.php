@@ -37,6 +37,6 @@ echo "</ul>";
 
 // Add group activity or group content
 // ESOPE : add activity if asked
-echo elgg_view('groups/profile/activity', $vars);
+echo elgg_view('groups/profile/group_activity', $vars);
 
 

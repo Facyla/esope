@@ -1,6 +1,6 @@
 <?php
 /**
-* Profile widgets/tools
+* Group profile activity
 * 
 * @package ElggGroups
 */ 
