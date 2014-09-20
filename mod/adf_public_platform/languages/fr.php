@@ -361,6 +361,7 @@ $fr = array(
 	'adf_platform:settings:pages_list_subpages:user' => "Membres seulement",
 	'adf_platform:settings:pages_list_subpages:group' => "Groupes seulement (non recommandé)",
 	'adf_platform:settings:pages_list_subpages:all' => "Toujours",
+	'adf_platform:settings:pages_reorder' => "Permettre de réorganiser les pages",
 	'adf_platform:settings:advanced_pagination' => "Pagination avancée (choix du nombre de résultats)",
 	'adf_platform:advanced_pagination:perpage' => "par page",
 	'adf_platform:advanced_pagination:last' => "%s&nbsp;(dernière)", // "%s (dernière)"

@@ -203,6 +203,15 @@ function esope_init() {
 	// Manually reset login failure counter
 	elgg_register_action("admin/reset_login_failures", elgg_get_plugins_path() . 'adf_public_platform/actions/admin/reset_login_failures.php');
 	
+	// HTML export action
+	elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
+	
+	// Modified to make pages top_level / sub-pages
+	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'adf_public_platform');
+	if ($pages_reorder == 'yes') {
+		elgg_register_action("pages/edit", $action_url . "pages/edit.php");
+	}
+	
 	
 	// NEW & REWRITTEN PAGE HANDLERS
 	// Note : modification de pages de listing (non gérables par des vues)
