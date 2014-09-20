@@ -192,24 +192,25 @@ function esope_init() {
 	
 	
 	// NEW & REWRITTEN ACTIONS
+	$action_url = elgg_get_plugins_path() . 'adf_public_platform/actions/';
 	// Modification de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
 	// Permet notamment de forcer l'inscription
 	if (elgg_is_active_plugin('groups')) {
 		elgg_unregister_action('groups/invite');
-		elgg_register_action("groups/invite", elgg_get_plugins_path() . 'adf_public_platform/actions/groups/membership/invite.php');
+		elgg_register_action("groups/invite", $action_url . 'groups/membership/invite.php');
 	}
 	// ESOPE search endpoint
-	elgg_register_action("esope/esearch", elgg_get_plugins_path() . 'adf_public_platform/actions/esope/esearch.php');
+	elgg_register_action("esope/esearch", $action_url . 'esope/esearch.php');
 	// Manually reset login failure counter
-	elgg_register_action("admin/reset_login_failures", elgg_get_plugins_path() . 'adf_public_platform/actions/admin/reset_login_failures.php');
+	elgg_register_action("admin/reset_login_failures", $action_url . 'admin/reset_login_failures.php');
 	
 	// HTML export action
-	elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
+	elgg_register_action("pages/html_export", $action_url . 'pages/html_export.php', 'public');
 	
 	// Modified to make pages top_level / sub-pages
 	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'adf_public_platform');
 	if ($pages_reorder == 'yes') {
-		elgg_register_action("pages/edit", $action_url . "pages/edit.php");
+		elgg_register_action("pages/edit", $action_url . 'pages/edit.php');
 	}
 	
 	
