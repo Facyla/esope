@@ -6,5 +6,5 @@ echo '<p><label>' . elgg_echo("mobile_apps:settings:comment") . ' ' . elgg_view(
 */
 
 // OSM API key
-echo '<p><label>' . elgg_echo('leaflet:settings:osm:api_key') . ' ' . elgg_view('input/text', array('internalname' => 'params[osm_api_key]', 'value' => $vars['entity']->osm_api_key)) . '</label></p>';
+echo '<p><label>' . elgg_echo('leaflet:settings:osm:api_key') . ' ' . elgg_view('input/text', array('internalname' => 'params[osm_api_key]', 'value' => $vars['entity']->osm_api_key)) . '</label><br /><a href="http://developer.mapquest.com/" target="_blank">Get API key</a></p>';
 
