@@ -102,7 +102,7 @@ if (elgg_instanceof($entity, 'object')) {
 		
 		// Display edit pad
 		$pad_url = $server . '/p/' . $padID;
-		$share_url = '<a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . $pad_url . '</a>';
+		$share_url = '<a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . $CONFIG->url . 'pad/view/' . $padID . '</a>';
 		$public_share_url = '<a href="' . $pad_url . '">' . $pad_url . '</a>';
 		$body .= '<blockquote><p><em>' . elgg_echo('elgg_etherpad:vieweditpad:details', array($share_url, $public_share_url)) . '</em></p></blockquote>';
 		
