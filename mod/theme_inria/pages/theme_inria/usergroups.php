@@ -99,7 +99,7 @@ if (elgg_instanceof($user, 'user')) {
 				$content .= '<br />';
 				elgg_pop_context();
 
-				$content .= '<p><a href="' . $CONFIG->url . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
+				$content .= '<p><a href="' . $CONFIG->url . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus-circle"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
 			}
 			
 		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
