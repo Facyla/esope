@@ -55,9 +55,7 @@ if (!$owner) {
 
 	<div class="groups-profile-fields elgg-body">
 		<?php echo elgg_view('groups/profile/fields', $vars); ?>
-		<?php echo elgg_view('group/elements/group_admins', $vars); ?>
 	</div>
 </div>
-<?php
-?>
+
 
