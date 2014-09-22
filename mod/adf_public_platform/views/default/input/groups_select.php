@@ -34,6 +34,7 @@ if ($filter) {
 }
 
 // Allow to add other attributes, such as : multiple, required, disable, autofocus, size="5"
+// Note : mutiple won't work correctly, as only one selection will appear - so do not use it !
 $attributes = $vars["attributes"];
 
 // Compose select
