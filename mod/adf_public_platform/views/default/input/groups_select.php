@@ -33,8 +33,11 @@ if ($filter) {
 	$groups = $filtered_groups;
 }
 
+// Allow to add other attributes, such as : multiple, required, disable, autofocus, size="5"
+$attributes = $vars["attributes"];
+
 // Compose select
-$content .= '<select name="' . $vars['name'] . '" id="' . $vars['name'] . '" class="elgg-input-dropdown elgg-input-groups_select ' . $vars['class'] . '" ' . $vars['js'] . '>';
+$content .= '<select name="' . $vars['name'] . '" id="' . $vars['name'] . '" class="elgg-input-dropdown elgg-input-groups_select ' . $vars['class'] . '" ' . $vars['js'] . ' ' . $attributes . '>';
 
 // Add empty value option
 if ($vars["empty_value"] || !isset($vars["empty_value"])) {
