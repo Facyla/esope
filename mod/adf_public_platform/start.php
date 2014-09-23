@@ -1476,7 +1476,6 @@ function esope_get_input_array($input = false) {
 }
 
 
-
 /* Build options suitable array from settings
  * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
  * Accepts key::value and list of keys
@@ -1503,6 +1502,88 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
 		}
 	}
 	return $options_values;
+}
+
+/* Reverse function of esope_build_options
+ * Converts an options_values array to a setting string
+ */
+function esope_build_options_string($options, $prefix = 'option') {
+	$options_string = '';
+	if ($options) foreach ($options as $key => $value) {
+		if (!empty($options_string)) $options_string .= ' | ';
+		$options_string .= $key . '::' . $value;
+	}
+	return $options_string;
+}
+
+/* Build multi-level array from string syntax
+ * $input : the settings string
+ * $separators : separators definition for each level (arrays allowed for each level)
+ */
+function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ',')) {
+	$return_array = array();
+	$input = trim($input);
+	
+	// Note : we always break on "\n", but use replacement to do it recusively
+	$options = str_replace($separators[0], "\n", $input);
+	$options = explode("\n", $options);
+	
+	// Dont make arrays from basic values...
+	if (sizeof($options) == 1) { return $input; }
+	
+	foreach ($options as $option) {
+		$option = trim($option);
+		if (empty($option)) continue;
+		
+		if ($separators[1]) {
+			// Potential sublevel
+			$new_separators = array_slice($separators, 2);
+			
+			// check for sub-level config
+			if (is_array($separators[1])) {
+				foreach ($separators[1] as $sep) {
+					$pos = strpos($option, $sep);
+					if ($pos !== false) break;
+				}
+			} else {
+				$sep = $separators[1];
+				$pos = strpos($option, $sep);
+			}
+			
+			// Get nested array if any
+			if ($pos !== false) {
+				$key = trim(substr($option, 0, $pos));
+				$value = substr($option, $pos + strlen($sep));
+				$return_array[$key] = esope_get_input_recursive_array($value, $new_separators);
+			} else {
+				$return_array[$option] = true;
+			}
+		} else {
+			// No sublevel : add option
+			// Note : we need to have value set because we're looking for rights with in_array (which looks for values, bot keys)
+			$return_array[$option] = true;
+		}
+	}
+	return $return_array;
+}
+
+/* Build string syntax from multi-level array
+ * $array : the settings array
+ * $separators : separators definition for each level (only 1 separator per level)
+ */
+function esope_set_input_recursive_array($array, $separators = array("|", '::', ',')) {
+	$return_string = '';
+	if ($array) foreach ($array as $key => $value) {
+		if (!empty($return_string)) $return_string .= $separators[0];
+		if (is_array($value)) {
+			// Need some recursitivity
+			$new_separators = array_slice($separators, 2);
+			$return_string .= $key . $separators[1] . esope_set_input_recursive_array($value, $new_separators);
+		} else {
+			$return_string .= $key;
+		}
+	}
+	return $return_string;
 }
 
 
