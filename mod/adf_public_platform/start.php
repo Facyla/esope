@@ -1476,6 +1476,36 @@ function esope_get_input_array($input = false) {
 }
 
 
+
+/* Build options suitable array from settings
+ * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
+ * Accepts key::value and list of keys
+ * e.g. val1 | val2, or val1::Name 1 | val2::Name 2
+ * $input : the settings string
+ * $addempty : add empty option
+ * prefix : translation key prefix
+ */
+function esope_build_options($input, $addempty = true, $prefix = 'option') {
+	$options = str_replace(array("\r", "\t", "|"), "\n", $input);
+	$options = explode("\n", $options);
+	$options_values = array();
+	if ($addempty) $options_values[''] = "";
+	foreach($options as $option) {
+		$option = trim($option);
+		if (!empty($option)) {
+			if (strpos($option, '::')) {
+				$value = explode('::', $option);
+				$key = trim($value[0]);
+				$options_values[$key] = trim($value[1]);
+			} else {
+				$options_values[$option] = elgg_echo("$prefix:$option");
+			}
+		}
+	}
+	return $options_values;
+}
+
+
 /* Renvoie un array de groupes selon les critères featured et open membership
  *
  * string $mode : types de groupes = (default), ou featured

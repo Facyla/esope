@@ -180,6 +180,7 @@ $batch = new ElggBatch('elgg_get_annotations', array(
 	'wheres' => array("te.subtype = $tidypics_album_subtype_id"),
 	'limit' => false
 ));
+$batch->setIncrementOffset(false);
 foreach ($batch as $album_comment) {
 	$river_entry_count = elgg_get_river(array(
 		'type' => 'object',
@@ -203,6 +204,7 @@ $batch = new ElggBatch('elgg_get_annotations', array(
 	'wheres' => array("te.subtype = $tidypics_batch_subtype_id"),
 	'limit' => false
 ));
+$batch->setIncrementOffset(false);
 foreach ($batch as $like_entry) {
 	// Get the batch entity
 	$tidypics_batch = get_entity($like_entry->entity_guid);
