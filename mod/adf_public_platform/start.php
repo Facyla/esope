@@ -1704,3 +1704,99 @@ function esope_extract_first_image($html, $full_tag = true) {
 
 
 
+// @TODO : make this more robust and fail-safe
+// Add file to an entity (using a specific folder in datastore)
+function esope_add_file_to_entity($entity, $input_name = 'file') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		/*
+		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
+		
+			// use same filename on the disk - ensures thumbnails are overwritten
+			$filestorename = $file->getFilename();
+			$filestorename = elgg_substr($filestorename, elgg_strlen($prefix));
+		} else {
+			$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
+		}
+
+		$file->setFilename($prefix . $filestorename);
+		$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+	
+			// hack for Microsoft zipped formats
+		$info = pathinfo($_FILES['upload']['name']);
+		$office_formats = array('docx', 'xlsx', 'pptx');
+		if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+			switch ($info['extension']) {
+				case 'docx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					break;
+				case 'xlsx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					break;
+				case 'pptx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					break;
+			}
+		}
+
+		// check for bad ppt detection
+		if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+			$mime_type = "application/vnd.ms-powerpoint";
+		}
+
+		$file->setMimeType($mime_type);
+		$file->originalfilename = $_FILES['upload']['name'];
+		$file->simpletype = file_get_simple_type($mime_type);
+
+		// Open the file to guarantee the directory exists
+		$file->open("write");
+		$file->close();
+		move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
+		*/
+	
+		$filename = $_FILES[$input_name]['name'];
+		if ($uploaded_file = get_uploaded_file($input_name)) {
+			// Remove previous file, if any
+			// @TODO not tested... check it's working as expected
+			if (!empty($entity->{$input_name})) {
+				if (file_exists($filename)) { unlink($filename); }
+			}
+
+			// Create new file
+			$prefix = "knowledge_database/{$input_name}/";
+			$filehandler = new ElggFile();
+			$filehandler->owner_guid = $entity->guid;
+			$filehandler->setFilename($prefix . $filename);
+			if ($filehandler->open("write")){
+				$filehandler->write($uploaded_file);
+				$filehandler->close();
+			}
+			$filename = $filehandler->getFilenameOnFilestore();
+			$entity->{$input_name} = $filename;
+			return true;
+		}
+	}
+	return false;
+}
+
+// Remove existing file
+function esope_remove_file_from_entity($entity, $input_name = 'file') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		if (!empty($entity->{$input_name})){
+			$filehandler = new ElggFile();
+			$filehandler->owner_guid = $entity->guid;
+			$filehandler->setFilename($entity->{$input_name});
+			if ($filehandler->exists()) {
+				$filehandler->delete();
+			}
+			unset($entity->{$input_name});
+			return true;
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+
