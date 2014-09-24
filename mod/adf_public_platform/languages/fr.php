@@ -631,6 +631,15 @@ $fr = array(
 	'esope:tinymce:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
 	'esope:tinymce:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur TinyMCE.<br />IMPORTANT : ce réglage définit uniquement le comportement de TinyMCE, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
 	
+	// Htmlawed settings
+	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permetttent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE, veuillez également les vérifier !",
+	'esope:htmlawed:safe' => "Activer le mode sécurisé",
+	'esope:htmlawed:safe:details' => "Ce mode applique un filtrage très aggressif sur les saisies, bloquant pratiquement tout contenu riche. Veuillez lire attentivement <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6\">la documentation du \safe mode\"</a> avant d'activer ce réglage.<br />Réglage recommandé : NON.",
+	'esope:htmlawed:elements' => "Eléments et propriétés HTML",
+	'esope:htmlawed:elements:details' => "Ceci vous permet de définir les éléments et propriétés HTML autorisés ou interdits, en utilsant des listes et caractères de remplacement (wildcards). Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3\">lire la documentation sur elements</a> pour les syntaxes autorisées.<br />Un exemple de syntaxe valide peut être : \"* -script\" (bloque seulement l'élément script)",
+	'esope:htmlawed:deny_attribute' => "List des attributs interdits",
+	'esope:htmlawed:deny_attribute:details' => "Ceci vous permet de bloquer certains attributs non souhiatés, en utilisant des caractères de remplacement (wildcards). Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.4\">lire la documentation sur deny_attribute</a> pour les syntaxes autoriséses.<br />Une valeur recommandée peut être : \"on*\" (bloque tous les attributs JS : onClick, onHover, etc.)",
+	
 	// Newsletter additions
 	'newsletter:embed:templates' => "Modèle à insérer",
 	'newsletter:embed:template:default' => "Basique",
