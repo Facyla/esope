@@ -12,6 +12,43 @@ Lire [README.txt](README.txt)
 * Mise à jour : [UPGRADE.txt](UPGRADE.txt)
 
 
+## A propos d'ESOPE
+A l'origine, ESOPE est issue du projet partenarial "Departements en réseaux" initié par l'Assemblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International, qui visait à construire une plateforme collaborative opensource, francisée et acsessible.
+Un travail spécifique d'accessibilité a également été mené avec l'appui de la société Urbilog.
+Ce projet a donné lieu au site Departements-en-reseaux.fr, plateforme collaborative opensource proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
+
+
+
+ESOPE est constituée :
+* d'une base d'Elgg générique (core),
+* d'un plugin générique en surcouche, qui permet de modifier l'apparence et le comportement du site,
+* et d'une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages d'organisations souhaitant disposer d'une plateforme collaborative interne, publique ou mixte.
+
+La distribution ESOPE offre de très nombreux réglages et possibilités de personnalisation qui permettent d'ajuster l'apparence et le comportement d'Elgg à une large gamme d'usages collaboratifs ou sociaux. Ces réglages sont directelent accessibles aux administrateurs, sans nécessiter de développement ni d'intervention plus technique.
+
+ESOPE est également adaptée pour fournir une base sur laquelle construire des thèmes légers.
+
+
+### Version
+ESOPE suit de près les évolutions du "core" d'Elgg, et s'appuie actuellement sur Elgg 1.8.20
+
+
+### Conception et maintenance
+* Florian DANIEL aka Facyla / ITEMS International
+
+
+### Principaux contributeurs
+* ITEMS International
+* Conseil Général de l'Essonne
+* Assemblée des Départements de France (ADF)
+* Fondation Internet Nouvelle Génération (FING)
+* Agence Nationale de Lutte Contre l'Illetrisme (ANLCI)
+* Région Rhône-Alpes (via le projet FormaVia)
+* Inria
+* Cartier International
+
+
+
 ## Installation d'ESOPE
 ### PRE-REQUIS : http://docs.elgg.org/wiki/Installation/Requirements
 - Serveur Web (Apache...)
@@ -37,60 +74,38 @@ Lire [README.txt](README.txt)
 
 Note : Si vous n'avez accès qu'à la racine web (par ex. sur un hébergement mutualisé), vous pouvez créer le dossier "data" dans ce répertoire et ajouter dans data/ un fichier .htaccess avec pour contenu : deny from all
 
+
 ### Sécurisation
 De nombreuses mesures peuvent être prises du côté du serveur, notamment via la mise en place d'une connexion HTTPS (nécesite un certificat valide) et diverses options de configuration d'Apache.
 
 Quelques pistes d'ajouts complémentaires à intégrer aux fichiers .htaccess. Attention : certaines de ces instructions peuvent bloquer l'intégration de contenus tiers -embed- voire bloquer le foncitonnement de certaines scripts ; veuillez les tester soigneusement avant de les utiliser en production :
 
-# Secure cookies
-<IfModule php5_module>
-	# Set cookie to use HTTPOnly (can't be used in any script - such as JS)
-	php_flag session.cookie_httponly on
-	# Allow cookie session over secure channel only
-	php_value session.cookie_secure 1
-</IfModule>
+	# Secure cookies
+	<IfModule php5_module>
+		# Set cookie to use HTTPOnly (can't be used in any script - such as JS)
+		php_flag session.cookie_httponly on
+		# Allow cookie session over secure channel only
+		php_value session.cookie_secure 1
+	</IfModule>
 
-# No Multiviews
-Options -Multiviews
+	# No Multiviews
+	Options -Multiviews
 
-# XSS protection and various other security settings
-<IfModule mod_headers.c>
-	#Header add TimeGenerated "It took %D microseconds to serve this request."
-	Header add Strict-Transport-Security "max-age=157680000"
-	Header unset ETag
-	Header set X-Frame-Options: sameorigin
-	Header set X-XSS-Protection: "1; mode=block"
-	Header set X-Content-Type-Options: nosniff
-	Header set X-Content-Security-Policy: "allow 'self'"
-	Header set X-WebKit-CSP: "allow 'self'"
-	Header set X-Permitted-Cross-Domain-Policies: "master-only"
-	Header unset X-Powered-By
-</IfModule>
-ServerSignature Off
+	# XSS protection and various other security settings
+	<IfModule mod_headers.c>
+		#Header add TimeGenerated "It took %D microseconds to serve this request."
+		Header add Strict-Transport-Security "max-age=157680000"
+		Header unset ETag
+		Header set X-Frame-Options: sameorigin
+		Header set X-XSS-Protection: "1; mode=block"
+		Header set X-Content-Type-Options: nosniff
+		Header set X-Content-Security-Policy: "allow 'self'"
+		Header set X-WebKit-CSP: "allow 'self'"
+		Header set X-Permitted-Cross-Domain-Policies: "master-only"
+		Header unset X-Powered-By
+	</IfModule>
+	ServerSignature Off
 
-
-
-
-## Présentation d'ESOPE
-ESOPE est le nom du projet partenarial initié par l'Assemblée des Départements de France, le Conseil Général de l'Essonne, et ITEMS International, et qui a donné lieu au site "Departements en réseaux".
-Departements-en-reseaux.fr est une plateforme collaborative proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
-Elle consiste en une collection cohérente de plugins communautaires et spécifiques, adaptés aux usages des collectivités territoriales, ou plus généralement d'organisations souhaitant disposer d'une plateforme collaborative interne, tout en réservant la possibilité de publier des contenus publics.
-Crédits
-* la version originelle et les adaptations graphiques initiales de Départements en réseaux ont été réalisés grâce au soutien du Conseil Général de l'Essonne, par ITEMS International (intégration et développement) et Urbilog (graphisme et accessibilité)
-
-
-## Conception et maintenance d'ESOPE
-* Florian DANIEL - Facyla / ITEMS International
-
-
-## Principaux contributeurs
-* Conseil Général de l'Essonne
-* Assemblée des Départements de France (ADF)
-* ITEMS International
-* Agence Nationale de Lutte Contre l'Illetrisme (ANLCI)
-* Région Rhône-Alpes (via le projet FormaVia)
-* Inria
-* Cartier International
 
 
 ## Contenu de la plateforme
@@ -134,6 +149,7 @@ Crédits
 * twitter_api
 * uservalidationbyemail
 * zaudio
+
 
 ### ESOPE core (plugins spécifiques à ESOPE)
 * adf_public_platform (Acc'Essonne, ESOPE) : thème accessible et configurable - le coeur de cette distribution
