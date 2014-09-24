@@ -1798,5 +1798,20 @@ function esope_remove_file_from_entity($entity, $input_name = 'file') {
 }
 
 
+/* Return the best translation for a given metadata
+ * We prefer a direct translation
+ * Then a translated string
+ * And finally the name itself
+ */
+function esope_get_best_translation_for_metadata($name, $prefix = '', $translation = false) {
+	// Real translation doesn't need any transformation
+	if (!empty($translation) && ($translation != "$prefix:$name") && ($translation != $name)) return $translation;
+	// Try translation system
+	$translation = elgg_echo("$prefix:$name");
+	// If translation is the translation key itself, use the key itself
+	if ($translation == "$prefix:$name") $translation = ucfirst($name);
+	return $translation;
+}
+
 
 
