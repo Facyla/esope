@@ -2,7 +2,7 @@
 // Main KDB view, for inner group + public interface
 
 $fields = elgg_extract('fields', $vars);
-$container_guid = elgg_extract('container_guid', $vars);
+$container_guid = elgg_extract('container_guid', $vars, false);
 $publish_guid = elgg_extract('publish_guid', $vars);
 
 
@@ -22,14 +22,8 @@ foreach ($registered_subtypes as $type => $subtypes) {
 	}
 }
 */
-$subtypes = elgg_get_plugin_setting('kdb_subtypes', 'knowledge_database');
-$subtypes = esope_get_input_array($subtypes);
-$subtypes_opt[''] = elgg_echo('knowledge_database:subtype:all');
-if ($subtypes) foreach ($subtypes as $subtype) {
-	$subtypes_opt[$subtype] = elgg_echo("knowledge_database:subtype:$subtype");
-}
-
-
+$tools = knowledge_database_get_allowed_tools($container_guid);
+$subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
 
 
 
@@ -82,7 +76,11 @@ if ($fields) foreach ($fields as $name) {
 	// Selectors options
 	$config = knowledge_database_get_field_config($name);
 	$selectors[$name] = $config['params']['options_values'];
-	if ($selectors[$name]) array_unshift($selectors[$name], ''); // Ajoute une option vide au début du tableau
+	if ($selectors[$name]) {
+		// Ajoute une option vide au début du tableau
+		//array_unshift($selectors[$name], ''); // Attention : inserts a "0" value !!
+		$selectors[$name] = array_merge(array('' => ''), $selectors[$name]);
+	}
 	
 	$title = esope_get_best_translation_for_metadata($name, 'knowledge_database:metadata', $config['title']);
 	
@@ -137,7 +135,8 @@ if ($container_guid) $params['container_guid'] = $container_guid;
 $content_latest = elgg_view('knowledge_database/random_ressources', $params);
 
 // Add ressources block
-$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'subtypes' => array('file', 'bookmarks', 'blog')));
+$tools = knowledge_database_get_allowed_tools($container_guid);
+$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'tools' => $tools));
 
 
 

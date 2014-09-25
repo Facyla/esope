@@ -10,6 +10,7 @@ $english = array (
 	'knowledge_database:addbookmark' => 'Publish a link to an online ressource',
 	'knowledge_database:addblog' => 'Publish text',
 	'knowledge_database:kdbgrouperror' => "Something's wrong with the Knowledge Database group, please contact the site administrator !",
+	'knowledge_database:error:sitedisabled' => "Knowledge Database is not enabled for the whole site.",
 	'knowledge_database:contribute' => "To contribute to the Knowledge Database, please <a href=\"" . $CONFIG->url . "login\">login on the website</a> (you may need to register first).",
 	
 	'knowledge_database:publish:warning' => "<i class=\"fa fa-warning\"></i> When publishing content, please check that you actually have the right to publish it. You have this right if you are the author or publisher of a document, or if its license grants the right to publish it. If not, you should ask the author or publisher for its authorisation.<br />If publication is not allowed, please note that you can still publish a Web link to an online ressource instead.",

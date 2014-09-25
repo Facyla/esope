@@ -6,11 +6,15 @@
  * @subpackage Core
  */
 
+$user = elgg_get_page_owner_entity();
 
+// Force setting
 if ($user->language != 'fr') { $user->language = 'fr'; }
+// Feed the settings with something so it doesn't complain when not set at all
+echo elgg_view("input/hidden", array('name' => 'language', 'value' => $user->language);
+
 /*
 // English (default) only
-$user = elgg_get_page_owner_entity();
 
 if ($user) {
 ?>

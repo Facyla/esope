@@ -937,26 +937,78 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 }
 
-
+/* Returns the wanted value based on both params and inputs
+ * If $params is set (to whatever except false, but including ), it will be used
+ * If not set, we'll use GET inputs
+ * If still nothing, we'll use default value
+ */
+function esope_extract($key, $params = array(), $default = null, $sanitise = true) {
+	// Try using params only if set : we want to get only defined values, so use strict mode, and no default yet
+	$value = elgg_extract($key, $params, false, true);
+	// Try get_input only if nothing was set in params
+	if ($value === false) { $value = get_input($key, false); }
+	// If there is neither $params not input, use default (but don't if anything was set, event empty !)
+	if ($value === false) { $value = $default; }
+	// Sanitise string
+	if ($sanitise && is_string($value)) $value = sanitise_string($value);
+	return $value;
+}
 
 /* Esope search function : 
  * Just call echo esope_esearch() for a listing
  * Get entities with $results_ents = esope_esearch(array('returntype' => 'entities'));
- * Params :
+ * Basic use with few config will use GET inputs as parameters
+ * $params :
  	- q : full search query
  	- entity_type : site | object | user | group
  	- entity_subtype : usually an object subtype
  	- owner_guid : owner of entity
  	- container_guid : container of entity
  	- metadata : list of metadata and values
+   Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
+   Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
+ * $defaults : sets the defaults for any input value
+ * max_results : let's override the max number of displayed results. 
+   Note that a pagination should be implemented by any plugin using this function
  */
-function esope_esearch($params = array()) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;
-	$max_results = 500;
-	$debug = get_input("debug", false);
-	$q = sanitize_string(get_input("q"));
-	$type = sanitize_string(get_input("entity_type"));
-	$subtype = sanitize_string(get_input("entity_subtype"));
+	$debug = esope_extract('debug', $params, false);
+	
+	// Set defaults
+	$esearch_defaults = array(
+		'entity_type' => 'object', 
+		'entity_subtype' => null, 
+		'limit' => 0,
+		'offset' => 0,
+		'metadata_case_sensitive' => false,
+		'metadata_name_value_pairs_operator' => 'AND',
+		'count' => false,
+	);
+	$defaults = array_merge($esearch_defaults, $defaults);
+	
+	$q = esope_extract('q', $params, '');
+	// Note : we use entity_type and entity_subtype for consistency with regular search
+	$type = esope_extract('entity_type', $params, $defaults['entity_type']);
+	$subtype = esope_extract('entity_subtype', $params, $defaults['entity_subtype']);
+	$owner_guid = esope_extract('owner_guid', $params, $defaults['owner_guid']);
+	$container_guid = esope_extract('container_guid', $params, $defaults['container_guid']);
+	$limit = (int) esope_extract('limit', $params, $defaults['limit']);
+	$offset = (int) esope_extract('offset', $params, $defaults['offset']);
+	$sort = esope_extract('sort', $params, $defaults['sort']);
+	$order = esope_extract('order', $params, $defaults['order']);
+	// Metadata search : $metadata[name]=value
+	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
+	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
+	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
+	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
+	$count = esope_extract('count', $params, $defaults['count']);
+	
+	/*
+	$q = esope_extract('q', $params);
+	$type = esope_extract('entity_type', $params, $default['types']);
+	$subtype = esope_extract('entity_subtype', $params, $default['subtypes']);
+	
 	$owner_guid = get_input("owner_guid");
 	$container_guid = get_input("container_guid");
 	$limit = (int) get_input("limit", 0);
@@ -968,22 +1020,14 @@ function esope_esearch($params = array()) {
 	$metadata_case_sensitive = get_input("metadata_case_sensitive", false);
 	$metadata_name_value_pairs_operator = get_input("metadata_name_value_pairs_operator", 'AND');
 	$order_by_metadata = get_input('order_by_metadata');
-	
-	// Some cleanup on types and subtypes
-	if (empty($type)) $type = 'object';
-	if (!empty($subtype) && ($type != 'object')) $subtype = null;
-	if (empty($subtype) && ($type == 'object')) {
-		$registered = get_registered_entity_types(); // Returns all subtypes, even non-objects
-		foreach ($registered as $registered_type => $registered_subtypes) {
-			foreach ($registered_subtypes as $registered_subtype) {
-				$subtype[] = $registered_subtype;
-			}
-		}
-	}
+	*/
 	
 	$result = array();
-	if ($debug) echo "Search : $q $type " . print_r($subtype, true) . " ($owner_guid/$container_guid) $limit $offset $sort $order<br />";
-	if ($debug) echo "Metadata : " . print_r($metadata, true) . "<br />";
+	if ($debug) {
+		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . '<br />';
+		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset sort=$sort order=$order<br />";
+		echo "Metadata : " . print_r($metadata, true) . "<br />";
+	}
 	// show hidden (unvalidated) users
 	//$hidden = access_get_show_hidden_status();
 	//access_show_hidden_entities(true);
@@ -1038,8 +1082,10 @@ function esope_esearch($params = array()) {
 	
 	// Perform search results count
 	$search_params['count'] = true;
-	$count = elgg_get_entities_from_metadata($search_params);
-	if ($count > $max_results) {
+	$return_count = elgg_get_entities_from_metadata($search_params);
+	if ($count) return $return_count;
+	
+	if ($return_count > $max_results) {
 		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
 	}
 	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
@@ -1049,6 +1095,7 @@ function esope_esearch($params = array()) {
 	// Limit to something that can be handled
 	if (is_array($entities)) $entities = array_slice($entities, 0, $max_results);
 	
+	// Return array or listing
 	if ($params['returntype'] == 'entities') {
 		return $entities;
 	} else {
@@ -1058,8 +1105,8 @@ function esope_esearch($params = array()) {
 		elgg_push_context('search');
 		elgg_push_context('widgets');
 		$return = '';
-		if ($params['count']) {
-			if ($count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($count)) . '</span>';
+		if ($params['add_count']) {
+			if ($return_count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
 			else $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
 		}
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);

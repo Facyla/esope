@@ -203,7 +203,13 @@ function knowledge_database_get_field_config($name = false) {
 // @TODO : add more details on fields
 function knowledge_database_define_field_config($key) {
 	global $CONFIG;
+	
+	$config = knowledge_database_get_field_config($key);
+	
 	$edit_link = '<strong>' . $key . '</strong>';
+	$name = $config['title'];
+	if (empty($name)) { $name = elgg_echo("knowledge_database:field:$key"); }
+	if ($name && ($name != "knowledge_database:field:$key")) $edit_link .= ' (' . $name . ')';
 	
 	$params = array(
 			'text' => '<i class="fa fa-cog"></i> ' . elgg_echo('edit') . ' ' . $key, 
@@ -212,17 +218,8 @@ function knowledge_database_define_field_config($key) {
 			'class' => 'elgg-lightbox', 
 			'href' => $CONFIG->url  . 'kdb/define_field/' . $key,
 		);
-	$config = knowledge_database_get_field_config($name);
-	
-	if (empty($name)) {
-		$name = $config['title'];
-		if (empty($name)) {
-			$name = elgg_echo("knowledge_database:field:$key");
-		}
-	}
-	if ($name && ($name != "knowledge_database:field:$key")) $edit_link .= ' (' . $name . ')';
 	$edit_link .= ' &nbsp; [' . $config['type'] . ']';
-	$edit_link .= ' &nbsp; ' . elgg_view('output/url', $params) . '';
+	$edit_link .= ' &nbsp; ' . elgg_view('output/url', $params);
 	
 	return '<p class="knowledge_database-field">' . $edit_link . '</p>';
 }
@@ -399,65 +396,124 @@ function knowledge_database_remove_file_from_entity($entity, $input_name = 'file
 function knowledge_database_get_kdb_fields($owner = false, $context = false) {
 	if (!$owner) $owner = elgg_get_page_owner_entity();
 	if (!$context) $context = elgg_get_context();
+	// Note : no fields or any other where KDB doesn't apply returns false
+	$fields = false;
 	
 	// Enabled anywhere content is published in : site, group, user
 	if (elgg_instanceof($owner, 'group') || elgg_instanceof($owner, 'user') || elgg_instanceof($owner, 'site')) {
-	
-		// Is site KDB enabled globally ?
-		$kdb_site = false;
-		if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') {
-			$kdb_site = true;
-			$site_fields = elgg_get_plugin_setting('site_fields', 'knowledge_database');
-		}
-	
-		// Is a group KDB enabled in this particular group (or entity..) ?
-		$kdb_group = false;
-		$kdb_enable_groups = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
-		$kdb_group_guids = esope_get_input_array($kdb_enable_groups);
-		if (in_array($owner->guid, $kdb_group_guids)) {
-			$kdb_group = true;
-			$group_fields = elgg_get_plugin_setting('group_fields_' . $owner->guid, 'knowledge_database');
-		}
-	
-		// Keep going if we have a KDB enabled
-		if ($kdb_site || $kdb_group) {
 		
-			// Finally check that we only apply this to wanted objects, so make it context-aware
-			$kdb_subtypes = elgg_get_plugin_setting('kdb_subtypes', 'knowledge_database');
-			$kdb_subtypes = esope_get_input_array($kdb_subtypes);
-			if (in_array($context, $kdb_subtypes)) {
-				
-				// Get used fields names
-				if ($kdb_site && $kdb_group) {
-					if (elgg_get_plugin_setting('enable_merge', 'knowledge_database') == 'yes') {
-						$all_fields = $site_fields . ', ' . $group_fields;
-					} else $all_fields = $group_fields;
-				} else if ($kdb_site) {
-					$all_fields = $site_fields;
-				} else if ($kdb_group) {
-					$all_fields = $group_fields;
+		// Check that we are in the right context to apply this only to wanted objects
+		// Note : we must not filter for the container here ! (not necessarly a group)
+		$kdb_tools = knowledge_database_get_allowed_tools();
+		if (in_array($context, $kdb_tools)) {
+			
+			// Is site KDB enabled globally ?
+			$kdb_site = false;
+			if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') { $kdb_site = true; }
+			
+			// Is a KDB enabled for this particular group (or entity..) ?
+			$kdb_group = false;
+			$kdb_enable_groups = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
+			$kdb_enable_groups = esope_get_input_array($kdb_enable_groups);
+			if (in_array($owner->guid, $kdb_enable_groups)) { $kdb_group = true; }
+			
+			// Get used fields names
+			if ($kdb_group) {
+				// Group fields + optional site fields
+				if ($kdb_site && elgg_get_plugin_setting('enable_merge', 'knowledge_database') == 'yes') {
+					$fields = knowledge_database_get_group_kdb_fields($owner->guid, true);
+				} else {
+					// Group fields only
+					$fields = knowledge_database_get_group_kdb_fields($owner->guid, false);
 				}
-				
-				// Return fields that can be used in this context
-				return esope_get_input_array($all_fields);
-				
+			} else if ($kdb_site) {
+				// Site fields only
+				$fields = knowledge_database_get_site_kdb_fields();
+			}
+			
+		}
+	}
+	// Return fields that can be used in this context
+	return $fields;
+}
+
+// Returns allowed KDB subtypes
+function knowledge_database_get_allowed_tools($group_guid = false) {
+	// Check group filter
+	if ($group_guid) {
+		$group = get_entity($group_guid);
+		if (!elgg_instanceof($group, 'group')) { $group_guid = false; }
+	}
+	
+	$tools = elgg_get_plugin_setting('kdb_subtypes', 'knowledge_database');
+	$tools = esope_get_input_array($tools);
+	$filtered_tools = array();
+	if ($tools) foreach ($tools as $tool) {
+		// Exclude disabled plugin
+		if (!elgg_is_active_plugin($tool)) { continue; }
+		// Exclude disabled group tool
+		if ($group_guid && ($group->{$tool . '_enable'} != 'yes')) { continue; }
+		// Add to tools list
+		$filtered_tools[] = $tool;
+	}
+	
+	return $filtered_tools;
+}
+
+/* Returns an array of allowed subtypes, for use in a elgg_get_ function
+ * $options_values : if true prepares the array for a dropdown view, if false for get functions
+ * $tools : the array of tools, as provided e.g. by knowledge_database_get_allowed_tools
+ */
+function knowledge_database_get_allowed_subtypes($options_values = false, $tools = false) {
+	$subtypes = null;
+	if (!$tools) $tools = knowledge_database_get_allowed_tools();
+	if ($options_values) {
+		// Note : we will always return a no-filter option for dropdowns
+		$subtypes[''] = elgg_echo('knowledge_database:subtype:all');
+		if ($tools) foreach ($tools as $tool) {
+			if ($tool == 'pages') {
+				$subtypes['page_top'] = elgg_echo("knowledge_database:subtype:$tool");
+				$subtypes['page'] = elgg_echo("knowledge_database:subtype:$tool");
+			} else {
+				$subtypes[$tool] = elgg_echo("knowledge_database:subtype:$tool");
+			}
+		}
+	} else {
+		if ($tools) foreach ($tools as $tool) {
+			if ($tool == 'pages') {
+				$subtypes[] = 'page_top';
+				$subtypes[] = 'page';
+			} else {
+				$subtypes[] = $tool;
 			}
 		}
 	}
-	// Any other case KDB doesn't apply so there is no need to display anything
-	return false;
+	return $subtypes;
 }
 
-// Returns all defined fields
+// Returns all defined fields (site + all groups)
 function knowledge_database_get_all_kdb_fields() {
-	$all_fields = elgg_get_plugin_setting('all_fields', 'knowledge_database');
-	return esope_get_input_array($all_fields);
+	$fields = elgg_get_plugin_setting('all_fields', 'knowledge_database');
+	return esope_get_input_array($fields);
+}
+
+// Returns site fields
+function knowledge_database_get_site_kdb_fields() {
+	$fields = elgg_get_plugin_setting('site_fields', 'knowledge_database');
+	return esope_get_input_array($fields);
 }
 
 // Returns fields for a specific group
-function knowledge_database_get_group_kdb_fields($guid) {
-	$all_fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
-	return esope_get_input_array($all_fields);
+// Optionnaly adds site fields
+function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
+	$fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
+	if ($include_site) {
+		if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') {
+			if (!empty($fields)) $fields .= ', ';
+			$fields .= elgg_get_plugin_setting('site_fields', 'knowledge_database');
+		}
+	}
+	return esope_get_input_array($fields);
 }
 
 

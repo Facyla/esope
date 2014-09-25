@@ -3,7 +3,11 @@
 //echo esope_esearch(array('count' => true));
 
 // Manual mode (more control over results display)
-$results = esope_esearch(array('count' => true, 'returntype' => 'entities'));
+
+// Limit to some subtypes
+$subtypes = knowledge_database_get_allowed_subtypes();
+
+$results = esope_esearch(array('add_count' => true, 'returntype' => 'entities', 'entity_subtype' => $subtypes));
 
 // Count results
 $count = sizeof($results);

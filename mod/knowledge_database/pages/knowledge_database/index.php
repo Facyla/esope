@@ -12,42 +12,60 @@ $content = '';
 //elgg_push_breadcrumb(elgg_echo('search'));
 
 
+$enable_merge = false;
+$globalsearch = false;
 
-// All KDB fields
-$fields = knowledge_database_get_all_kdb_fields();
-
-// KDB group
+// Should we use a specific container ? (site host group or KDB group or publishing group)
 $container_guid = get_input('container_guid', false);
-if ($container_guid) {
-	if ($container = get_entity($container_guid)) {
-		// We are asked to render in, or at least for a specific group
-		$publish_guid = $container_guid;
-		// default : act as if we want site KDB (if enabled), and keep guid for publishing only
-		// Check if it corresponds to an existing KDB group
-			$kdb_group_guids = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
-			if ($kdb_group_guids) {
-				$kdb_group_guids = esope_get_input_array($kdb_group_guids);
-				if (in_array($container_guid, $kdb_group_guids)) {
-					// If we are in a real KDB group, adapt filters and content
-					$container_guid = $publish_guid;
-					// Do we want group fields *only* ?
-					if (elgg_get_plugin_setting('enable_merge', 'knowledge_database') != 'yes') {
-						$fields = knowledge_database_get_group_kdb_fields($container_guid);
-					}
-				} else $container_guid = false;
-			} else $container_guid = false;
+// Check we have a valid container
+$container = get_entity($container_guid);
+if (!elgg_instanceof($container, 'group') && !elgg_instanceof($container, 'user') && !elgg_instanceof($container, 'site')) { $container_guid = false; }
+// (valid) Container is at least used to publish in it, so keep it anyway
+if ($container_guid) $publish_guid = $container_guid;
+
+// Is site KDB enabled ?
+$enable_site = elgg_get_plugin_setting('enable_site', 'knowledge_database');
+if ($enable_site == 'yes') {
+	
+	// Check merge setting
+	$enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
+	if ($enable_merge == 'yes') $enable_merge = true;
+	
+	// Check global search setting
+	$globalsearch = elgg_get_plugin_setting('globalsearch', 'knowledge_database');
+	if ($globalsearch == 'yes') {
+		$fields = knowledge_database_get_all_kdb_fields();
 	} else {
+		$fields = knowledge_database_get_site_kdb_fields();
+	}
+}
+
+// Are KBD groups enabled ?
+$kdb_group_guids = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
+$kdb_group_guids = esope_get_input_array($kdb_group_guids);
+if ($kdb_group_guids) { $container_guid = false; }
+
+
+// If we are in a KDB group : merge fields if both enabled (and if asked to), use only group fields otherwise
+if ($container_guid && $kdb_group_guids) {
+	// Check if it corresponds to an existing KDB group
+	if (in_array($container_guid, $kdb_group_guids)) {
+		// Do we want group fields *only* ?
+		$fields = knowledge_database_get_group_kdb_fields($container_guid, $enable_merge);
+	} else {
+		// Use site KDB so don't filter results
 		$container_guid = false;
 	}
 }
 
-// No container : check that site KDB is enabled
+// No valid container : display site KDB if enabled
 if (!$container_guid) {
 	// Is site KDB enabled ?
-	if (elgg_get_plugin_setting('enable_site', 'knowledge_database') != 'yes') {
-		register_error("Knowledge Database is not enabled for the whole site.");
+	if ($enable_site != 'yes') {
+		register_error(elgg_echo('knowledge_database:error:sitedisabled'));
 		forward();
 	}
+	// Get publishing group
 	$publish_guid = elgg_get_plugin_setting('kdb_group', 'knowledge_database');
 }
 

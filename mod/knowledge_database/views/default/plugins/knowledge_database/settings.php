@@ -13,9 +13,9 @@ $all_metadatas = array();
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
 $no_yes_opt = array_reverse($yes_no_opt, true);
 
-//$kdb_subtypes_opt = array('blog', 'page', 'page_top', 'bookmarks', 'event_calendar', 'file');
-$kdb_subtypes_opt = "blog, pages, bookmarks, event_calendar, file";
-if (!isset($vars['entity']->kdb_subtypes)) $vars['entity']->kdb_subtypes = $kdb_inputs_opt;
+// Note we don't want to apply this to anithing : only some main data types that are made for structure (and not discussion)
+$kdb_tools_opt = "blog, bookmarks, pages, file, event_calendar, announcements";
+if (!isset($vars['entity']->kdb_subtypes)) $vars['entity']->kdb_subtypes = $kdb_tools_opt;
 
 $kdb_inputs_opt = "text, longtext, plaintext, dropdown, multiselect, date, tags, color, email, file";
 if (!empty($vars['entity']->kdb_inputs)) $vars['entity']->kdb_inputs = $kdb_inputs_opt;
@@ -65,13 +65,16 @@ echo '<div>';
 
 
 	// Enable merge (when both site + group activated)
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:merge') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[enable_merge]', 'value' => $vars['entity']->enable_merge, 'options_values' => $yes_no_opt)) . '</label></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:merge') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[enable_merge]', 'value' => $vars['entity']->enable_merge, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:mode:merge:details') . '</em></p>';
+
+	// Enable global serach (when both site + group activated)
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:globalsearch') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[globalsearch]', 'value' => $vars['entity']->globalsearch, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:globalsearch:details') . '</em></p>';
 
 	// Valid subtypes for KDB objects edit forms + search
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:subtypes') . '&nbsp;: ' . elgg_view('input/text', array( 'name' => 'params[kdb_subtypes]', 'value' => $vars['entity']->kdb_subtypes)) . '</label><br /><strong>' . elgg_echo('knowledge_database:settings:default') . '&nbsp;:</strong> <em>' . $kdb_subtypes_opt . '</em></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:subtypes') . '&nbsp;: ' . elgg_view('input/text', array( 'name' => 'params[kdb_subtypes]', 'value' => $vars['entity']->kdb_subtypes)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:subtypes:details') . '</em><br /><strong>' . elgg_echo('knowledge_database:settings:default') . '&nbsp;:</strong> <em>' . $kdb_tools_opt . '</em></p>';
 
 	// Valid subtypes for KDB objects edit forms + search
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:inputs') . '&nbsp;: ' . elgg_view('input/text', array( 'name' => 'params[kdb_inputs]', 'value' => $vars['entity']->kdb_inputs)) . '</label><br /><strong>' . elgg_echo('knowledge_database:settings:default') . '&nbsp;:</strong> <em>' . $kdb_inputs_opt . '</em></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:inputs') . '&nbsp;: ' . elgg_view('input/text', array( 'name' => 'params[kdb_inputs]', 'value' => $vars['entity']->kdb_inputs)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:inputs:details') . '</em><br /><strong>' . elgg_echo('knowledge_database:settings:default') . '&nbsp;:</strong> <em>' . $kdb_inputs_opt . '</em></p>';
 
 echo '</div>';
 
@@ -87,7 +90,7 @@ if ($vars['entity']->enable_site == 'yes') {
 	
 	
 	// Define site fields
-	echo '<p><label>' . elgg_echo("knowledge_database:settings:fields") . ' ' . elgg_view('input/plaintext', array( 'name' => "params[site_fields]", 'value' => $vars['entity']->site_fields)) . '</label><br />' . elgg_echo('knowledge_database:settings:fields:details') . '</p>';
+	echo '<p><label>' . elgg_echo("knowledge_database:settings:fields") . ' ' . elgg_view('input/plaintext', array( 'name' => "params[site_fields]", 'value' => $vars['entity']->site_fields)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:fields:details') . '</em></p>';
 	
 	// Add fields to fields config
 	$metadatas = esope_get_input_array($vars['entity']->site_fields);
@@ -112,7 +115,7 @@ if ($vars['entity']->enable_groups) {
 			echo '<div>';
 				
 				$group_setting_name = 'group_fields_' . $guid;
-				echo '<p><label>' . elgg_echo("knowledge_database:settings:fields") . ' ' . elgg_view('input/plaintext', array( 'name' => "params[$group_setting_name]", 'value' => $vars['entity']->$group_setting_name)) . '</label><br />' . elgg_echo('knowledge_database:settings:fields:details') . '</p>';
+				echo '<p><label>' . elgg_echo("knowledge_database:settings:fields") . ' ' . elgg_view('input/plaintext', array( 'name' => "params[$group_setting_name]", 'value' => $vars['entity']->$group_setting_name)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:fields:details') . '</em></p>';
 				
 				// Define groupe fields
 				$group_metadatas = esope_get_input_array($vars['entity']->$group_setting_name);
@@ -136,7 +139,7 @@ echo '<div>';
 	echo '<p><blockquote>' . elgg_echo('knowledge_database:settings:fields:config') . '</blockquote></p>';
 	
 	// Set up all metadata fields config (globally)
-	foreach ($all_metadatas as $meta_key => $meta_name) {
+	foreach ($all_metadatas as $meta_key) {
 		echo knowledge_database_define_field_config($meta_key);
 	}
 	

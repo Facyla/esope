@@ -4,10 +4,16 @@ $french = array (
 	'knowledge_database:homepage' => 'Base de connaissances',
 	
 	'knowledge_database:addressource' => 'Ajouter une nouvelle ressource',
-	'knowledge_database:addfile' => 'Publier un fichier',
-	'knowledge_database:addbookmark' => 'Publier un lien vers une ressource web',
-	'knowledge_database:addblog' => 'Publier un article',
+	'knowledge_database:addfile' => '<i class="fa fa-file"></i><br />Publier un fichier',
+	'knowledge_database:addbookmarks' => '<i class="fa fa-link"></i><br />Publier un lien vers une ressource web',
+	'knowledge_database:addblog' => '<i class="fa fa-file-text-o"></i><br />Publier un article',
+	'knowledge_database:addevent_calendar' => '<i class="fa fa-calendar"></i><br />Publier un événement',
+	'knowledge_database:addpages' => '<i class="fa fa-file-text-o"></i><br />Publier une page wiki',
+	'knowledge_database:addannouncements' => '<i class="fa fa-file-text-o"></i><br />Publier une annonce',
+	
+	// Errors
 	'knowledge_database:kdbgrouperror' => "Groupe de la Knowledge Database non défini, veuillez contacter l'administrateur du site !",
+	'knowledge_database:error:sitedisabled' => "La base de connaissances du site n'est pas activée.",
 	'knowledge_database:contribute' => "enregistrer.",
 	'knowledge_database:contribute' => "Pour contribuer à la Base de connaissance, veuillez vous <a href=\"" . $CONFIG->url . "login\">identifier sur le site</a> (vous pouvez avoir besoin de vous enregistrer d'abord).",
 	
@@ -57,7 +63,11 @@ $french = array (
 	'knowledge_database:settings:kdb_group' => "Associer un groupe précis à la base de connaissance du site ?",
 	'knowledge_database:settings:mode:pergroup' => "Activer une base de connaissance dans certains groupes ?",
 	'knowledge_database:settings:mode:merge' => "Ajouter les champs du site à ceux du groupe (si les 2 sont activés) ?",
+	'knowledge_database:settings:mode:merge:details' => "Si NON, seuls les champs du groupe seront utilisés pour publier et rechercher dans la base de connaissance de ce groupe. Si OUI, les champs du groupe et du site seront utilisés.",
+	'knowledge_database:settings:globalsearch' => "Utiliser tous les champs dans la recherche globale (site + groupes) ?",
+	'knowledge_database:settings:globalsearch:details' => "Si NON, seuls les champs du site seront utilisés. Si OUI, tous les champs définis dans tous les groupes seront utilisés pour rechercher dans la base de connaissance globale.",
 	'knowledge_database:settings:inputs' => "Types champs de saisie utilisables",
+	'knowledge_database:settings:inputs:details' => "Il s'agit des champs de saisie autorisés, soit les vues input/*. Ces vues doivent exister dans le système, et si possible une vue output/* correspondante également.",
 	'knowledge_database:settings:subtypes' => "Types de publications concernées",
 	'knowledge_database:settings:subtypes:details' => "Attention : il s'agit des contextes et non des subtypes ! (par ex. pages et non page et page_top).",
 	'knowledge_database:settings:default' => "Par défaut",
@@ -66,6 +76,9 @@ $french = array (
 	'knowledge_database:subtype:bookmarks' => "Liens web",
 	'knowledge_database:subtype:file' => "Document téléchargeable",
 	'knowledge_database:subtype:blog' => "Article",
+	'knowledge_database:subtype:pages' => "Page wiki",
+	'knowledge_database:subtype:evnet_calendar' => "Evénement",
+	'knowledge_database:subtype:announcements' => "Annonce",
 	
 	'knowledge_database:settings:keytitle' => "Options pour la métadonnée \"%s\"",
 	'knowledge_database:settings:fields:notice' => "<strong>ATTENTION, IMPORTANT :</strong><ul>
