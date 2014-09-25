@@ -23,7 +23,7 @@
 
 /* Search results */
 #esope-search-results .elgg-image { height: 60px; width: 100px; text-align: center; }
-#esope-search-results .elgg-image img { max-height: 100px; width: auto; text-align: center; }
+#esope-search-results .elgg-image img { max-height: 60px; width: auto; text-align: center; }
 #esope-search-results .elgg-image .fa { font-size:50px; margin-top: 10px; }
 
 .kdb-featured { width:33%; float:left; border-right: 1px solid grey; }
