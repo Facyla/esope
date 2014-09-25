@@ -72,7 +72,7 @@ $slider = elgg_view('slider/slider', $slider_vars);
 $home_pins = '';
 $i = 0;
 // Note : limit should be set to nb_exclude+nb_todisplay, so N+3
-$pin_max = 8;
+$pin_max = 6;
 $pin_limit = count($pin_exclude) + $pin_max;
 $params = array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $pin_limit);
 $recent_pins = elgg_get_entities_from_metadata($params);
@@ -162,7 +162,7 @@ $content .= '<div style="width:70%; float:right;"><div style="padding:1ex;">';
 				$content .= '<div class="clearfloat"></div><br />';
 			}
 		$content .= '</div>';
-		$content .= '<p><strong><a href="' . $CONFIG->url . 'mod/pin/index.php">Tous les articles choisis</a></strong></p>';
+		$content .= '<p><strong><a href="' . $CONFIG->url . 'pin">Tous les articles choisis</a></strong></p>';
 		$content .= '<div class="clearfloat"></div>';
 		$content .= '<br />';
 		
