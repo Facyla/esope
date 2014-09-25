@@ -9,7 +9,8 @@ global $CONFIG;
 gatekeeper();
 
 // Liste manuelle.. ou metadata spécifique ?
-$allowed = false;
+//$allowed = false;
+$allowed = true; // @TODO : add some real conditions...
 if (elgg_is_admin_logged_in()) { $allowed = true; }
 // @TODO need to define an intermediary role...
 if (in_array($_SESSION['username'], explode(',', elgg_get_plugin_setting('editors', 'adf_public_platform')))) { $allowed = true; }
