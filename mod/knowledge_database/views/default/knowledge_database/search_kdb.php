@@ -131,47 +131,13 @@ $search_form .= '</form><br />';
 
 
 
-// @TODO make it a view !
-// Random database ressources
-$content_latest .= '<h3>' . elgg_echo("knowledge_database:latestressources") . '</h3>';
-$params = array('type' => 'object', 'limit' => 0);
+// Random ressources block
+$params = array('type' => 'object', 'limit' => 0, 'max' => 3);
 if ($container_guid) $params['container_guid'] = $container_guid;
-$latest = elgg_get_entities($params);
-shuffle($latest);
-$latest = array_slice($latest, 0, 3);
-foreach($latest as $ent) {
-	$icon = knowledge_database_get_icon($ent, 'medium');
-	$content_latest .= '<div class="kdb-featured">
-			<div class="kdb-featured-content">
-				<div class="kdb-featured-header">
-					<a href="' . $ent->getURL() . '">
-						<div class="image-block">' . $icon . '</div>
-						<h4>' . $ent->title . '</h4></a>
-				</div>
-				<p>' . elgg_view('output/tags', array('tags' => $ent->tags)) . '</p>
-				<p>' . elgg_get_excerpt($ent->description, 150) . '</p>
-			</div>
-		</div>';
-}
-$content_latest .= '<div class="clearfloat"></div><br /><br />';
+$content_latest = elgg_view('knowledge_database/random_ressources', $params);
 
-
-
-// @TODO make it a view
-// Add content block
-$content_add = '<h3>' . elgg_echo('knowledge_database:addressource') . '</h3>';
-if (elgg_is_logged_in()) {
-	$content_add .= '<ul id="maghrenov-kdb-add">';
-	$content_add .= '<li><a href="' . $CONFIG->url . 'file/add/' . $publish_guid . '"><i class="fa fa-file"></i><br />' . elgg_echo('knowledge_database:addfile') . '</a></li>';
-	$content_add .= '<li><a href="' . $CONFIG->url . 'bookmarks/add/' . $publish_guid . '"><i class="fa fa-link"></i><br />' . elgg_echo('knowledge_database:addbookmark') . '</a></li>';
-	//$content_add .= '<li><a href="' . $CONFIG->url . 'event_calendar/add/' . $publish_guid . '"><i class="fa fa-calendar"></i><br />Announce an event in the calendar</a></li>';
-	$content_add .= '<li><a href="' . $CONFIG->url . 'blog/add/' . $publish_guid . '"><i class="fa fa-file-text-o"></i><br />' . elgg_echo('knowledge_database:addblog') . '</a></li>';
-	$content_add .= '</ul>';
-} else {
-	$content_add = '<h3>' . elgg_echo('knowledge_database:contribute') . '</h3>';
-}
-$content_add .= '<div class="clearfloat"></div><br /><br />';
-
+// Add ressources block
+$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'subtypes' => array('file', 'bookmarks', 'blog')));
 
 
 
