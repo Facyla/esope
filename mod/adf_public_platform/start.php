@@ -129,20 +129,20 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'elgg_river_menu_setup');
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
-	// Remplacement page d'accueil
+	// Page d'accueil
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
-		// PARAM : Désactivé si vide, activé avec paramètre de config si non vide
+		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
 		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-		if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
+		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
-		// PARAM : Désactivé si vide, activé avec paramètre de config si non vide
-		$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
-		if (!$CONFIG->walled_garden) {
-			if ($replace_public_home != 'no') {
-				elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
-			}
+		if ($CONFIG->walled_garden) {
+			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
+		} else {
+			// PARAM : Désactivé si 'no', ou activé avec paramètre de config
+			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
+			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 		}
 	}
 	
@@ -252,17 +252,22 @@ function esope_init() {
 	// Pour les messages
 	elgg_unregister_page_handler('messages', 'messages_page_handler');
 	elgg_register_page_handler('messages', 'adf_platform_messages_page_handler');
+	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
+	
+	// Esope page handler : all tools
+	elgg_register_page_handler('esope', 'esope_page_handler');
+	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not
 	if (elgg_is_active_plugin('file_tools') && elgg_is_logged_in()) {
-		elgg_register_page_handler('folders','maghrenov_folder_handler');
+		elgg_register_page_handler('folders','esope_folder_handler');
 	}
 	*/
 	
 	// MODIFICATION DES WIDGETS : (DES)ACTIVATION ET TITRES
-	require_once(dirname(__FILE__) . '/lib/adf_public_platform/widgets.php');
+	require_once(dirname(__FILE__) . '/lib/esope/widgets.php');
 	
 	
 	// Group tools priority - see credits in group_tools_priority/settings view
@@ -279,8 +284,8 @@ function esope_init() {
 
 
 // Include hooks & page_handlers functions (lightens this file)
-require_once(dirname(__FILE__) . '/lib/adf_public_platform/page_handlers.php');
-require_once(dirname(__FILE__) . '/lib/adf_public_platform/hooks.php');
+require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
+require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
 
 
 
@@ -454,47 +459,6 @@ function adf_platform_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 		}
 }
 */
-
-
-// Remplace l'index par un tableau de bord légèrement modifié
-function adf_platform_index() {
-	/* Pour remplacer par une page spécifique
-	$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-	if ($replace_home != 'yes') {
-		$homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
-		if ($homepage_test) {
-			fclose($$homepage_test);
-			forward($CONFIG->url . $replace_home);
-		}
-	} else {}
-	*/
-	include(dirname(__FILE__) . '/pages/adf_platform/homepage.php');
-	return true;
-}
-
-
-// Remplace la page d'accueil publique par une page spécifique : le mieux reste de retravailler le layout "default" ou "walled_garden"
-function adf_platform_public_index() {
-	global $CONFIG;
-	/*
-	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-	$homepage_test = @fopen($CONFIG->url . $replace_public_home, 'r'); 
-	if ($homepage_test) {
-		fclose($homepage_test);
-		include($CONFIG->url . $replace_public_home);
-	}
-	*/
-	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-	switch($replace_public_home) {
-		case 'cmspages':
-			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
-			break;
-		case 'default':
-		default:
-			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
-	}
-	return true;
-}
 
 
 /*
@@ -974,12 +938,6 @@ if (elgg_is_active_plugin('profile_manager')) {
 }
 
 
-// Esope search page handler
-function esope_esearch_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/adf_platform';
-	require_once "$base/esearch.php";
-	return true;
-}
 
 /* Esope search function : 
  * Just call echo esope_esearch() for a listing

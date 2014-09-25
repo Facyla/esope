@@ -21,6 +21,7 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
 
+$replace_homepage_opt = $no_yes_opt;
 $replace_public_homepage_opt = array('default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
 
 $groups_discussion_opt = $yes_no_opt;
@@ -250,7 +251,7 @@ $(function() {
 	<div>
 		<?php
 		echo '<p><label>' . elgg_echo('adf_platform:settings:replace_home') . '</label>';
-			echo elgg_view('input/dropdown', array('name' => 'params[replace_home]', 'options_values' => array('' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->replace_home));
+			echo elgg_view('input/dropdown', array('name' => 'params[replace_home]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->replace_home));
 		echo '</p><br />';
 		
 		// Remplacement de la Home (activité) par un tableau de bord configurable

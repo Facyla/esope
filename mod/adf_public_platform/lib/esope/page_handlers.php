@@ -1,5 +1,27 @@
 <?php
 
+function esope_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/esope';
+	switch ($page[0]) {
+		case 'statistics':
+			include "$base/statistics.php";
+			break;
+		default:
+	}
+}
+
+
+
+// Esope search page handler
+function esope_esearch_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/adf_platform';
+	require_once "$base/esearch.php";
+	return true;
+}
+
+
+
+/* Modification members */
 function adf_platform_members_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'members/pages/members';
 	$alt_base = elgg_get_plugins_path() . 'adf_public_platform/pages/members';
