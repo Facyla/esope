@@ -5,6 +5,9 @@ $content = '';
 
 $max = elgg_extract('max', $vars, 3);
 
+// Set default allowed list
+if (empty($vars['subtypes'])) $vars['subtypes'] = knowledge_database_get_allowed_subtypes();
+
 $content = '<div class="knowledge_database-random-ressources">';
 
 // Random database ressources

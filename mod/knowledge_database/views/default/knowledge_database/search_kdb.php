@@ -23,6 +23,7 @@ foreach ($registered_subtypes as $type => $subtypes) {
 }
 */
 $tools = knowledge_database_get_allowed_tools($container_guid);
+$subtypes = knowledge_database_get_allowed_subtypes();
 $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
 
 
@@ -130,12 +131,11 @@ $search_form .= '</form><br />';
 
 
 // Random ressources block
-$params = array('type' => 'object', 'limit' => 0, 'max' => 3);
+$params = array('type' => 'object', 'subtypes' => $subtypes, 'limit' => 0, 'max' => 3);
 if ($container_guid) $params['container_guid'] = $container_guid;
 $content_latest = elgg_view('knowledge_database/random_ressources', $params);
 
 // Add ressources block
-$tools = knowledge_database_get_allowed_tools($container_guid);
 $content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'tools' => $tools));
 
 
