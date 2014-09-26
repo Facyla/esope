@@ -137,12 +137,13 @@ function esope_init() {
 		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
+		//if (isset($CONFIG->site) && ($CONFIG->site instanceof ElggSite) && $CONFIG->site->checkWalledGarden()) {
 		if ($CONFIG->walled_garden) {
 			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
 		} else {
 			// PARAM : Désactivé si 'no', ou activé avec paramètre de config
 			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
-			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_public_index'); }
 		}
 	}
 	
