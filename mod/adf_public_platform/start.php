@@ -971,6 +971,11 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  * $defaults : sets the defaults for any input value
  * max_results : let's override the max number of displayed results. 
    Note that a pagination should be implemented by any plugin using this function
+ * TODO :
+   - fulltext search in tags
+   - fulltext search in comments
+   - allow fulltext search in any metadata ? (warning !)
+   - integrate (if search plugin active) search_highlight_words($words, $string)
  */
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;
