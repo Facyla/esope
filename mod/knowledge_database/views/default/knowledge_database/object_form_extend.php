@@ -3,7 +3,6 @@
 $fields = knowledge_database_get_kdb_fields();
 if (!$fields) return;
 
-
 // Get edited entity
 $entity = get_entity(get_input('guid'));
 
@@ -14,7 +13,6 @@ foreach ($fields as $key) {
 	$field_config = unserialize($field_config);
 	$fields_config[$key] = $field_config;
 }
-
 
 //echo knowledge_database_render_fields($fields_config, array('entity' => $entity, 'role' => 'user', 'mode' => 'edit'));
 echo knowledge_database_render_fields($fields_config, array('entity' => $entity));

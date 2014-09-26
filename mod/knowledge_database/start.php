@@ -258,6 +258,7 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 	$entity = elgg_extract('entity', $params, false);
 	$role = elgg_extract('role', $params, 'public');
 	$mode = elgg_extract('mode', $params, 'edit');
+	if ($entity instanceof ElggEntity) $entity = false;
 	
 	// Build rendering fields
 	$fieldset_fields = array();
@@ -277,13 +278,13 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		$output_params = $field['params'];
 		$output_params['name'] = $name;
 		// Set default if not set
-		if (isset($entity->{$name})) {
+		if ($entity && isset($entity->{$name})) {
 			$output_params['value'] = $entity->{$name};
 		} else {
 			$output_params['value'] = $field['default'];
 		}
 		// Add autocomplete script
-		if (($view == 'input') && $field['params']['autocomplete']) {
+		if (($view == 'input') && ($field['type'] == 'text') && $field['params']['autocomplete']) {
 			$field_content .= elgg_view('input/add_autocomplete', array('name' => $name, 'autocomplete-data' => esope_get_meta_values($name)));
 		}
 		// Switch dropdown input to multiselect if multiple enabled
@@ -297,14 +298,23 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		if ($title == "knowledge_database:field:$name") $title = $name;
 		$field_content .= '<p>';
 		$field_content .= '<strong>' . $title . '&nbsp;:</strong> ';
-		$field_content .= elgg_view("$view/{$field['type']}", $output_params);
+		if ($field['type'] == 'tags') {
+			register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
+			continue;
+		}
+		if (elgg_view_exists("$view/{$field['type']}")) {
+			$field_content .= elgg_view("$view/{$field['type']}", $output_params);
+		} else {
+			register_error("View $view/{$field['type']} does not exist. Please ask an admin to correct the Knowledge Database configuration !");
+			continue;
+		}
 		$field_help = elgg_echo("knowledge_database:field:$name:details");
 		if ($field_help != "knowledge_database:field:$name:details") $field_content .= '<br /><em>' . $field_help . '</em>';
 		$field_content .= '</p>';
 		// Content renderer depends on field type
 		switch($field['type']) {
 			case 'file':
-				if (!empty($entity->{$name})) {
+				if ($entity && !empty($entity->{$name})) {
 					$filename = explode('/', $entity->{$name});
 					$filename = end($filename);
 					if ($name == 'icon') {
