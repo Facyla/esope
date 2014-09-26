@@ -30,11 +30,11 @@ function theme_fing_init(){
 	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
-		elgg_unregister_plugin_hook_handler('index','system','esope_index');
+		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
 		elgg_register_plugin_hook_handler('index','system','theme_fing_index');
 	} else {
 		if (!$CONFIG->walled_garden) {
-			elgg_unregister_plugin_hook_handler('index','system','esope_public_index');
+			elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
 			elgg_register_plugin_hook_handler('index','system','theme_fing_public_index');
 		}
 	}
@@ -42,7 +42,7 @@ function theme_fing_init(){
 	elgg_register_page_handler("fing", "fing_page_handler");
 	
 	// Remplacement du modèle d'event_calendar
-	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
+	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
 	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {

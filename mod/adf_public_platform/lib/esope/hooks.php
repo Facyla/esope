@@ -2,7 +2,8 @@
 
 
 // Remplace la page d'accueil selon les demandes
-function esope_public_index() {
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function adf_platform_public_index() {
 	// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
 	// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
 	global $CONFIG;
@@ -20,7 +21,8 @@ function esope_public_index() {
 
 
 // Remplace la page d'accueil connectée selon les demandes
-function esope_index() {
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function adf_platform_index() {
 	/* Pour remplacer par une page spécifique
 	$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
 	if ($replace_home != 'yes') {
