@@ -42,7 +42,7 @@ function theme_fing_init(){
 	elgg_register_page_handler("fing", "fing_page_handler");
 	
 	// Remplacement du modèle d'event_calendar
-	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
+	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
 	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {
