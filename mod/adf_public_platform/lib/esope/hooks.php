@@ -15,7 +15,7 @@ function esope_index() {
 		} else {}
 		*/
 		// Remplace l'index par un tableau de bord légèrement modifié
-		include(dirname(__FILE__) . '/pages/esope/homepage.php');
+		include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/homepage.php');
 		return true;
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
@@ -24,11 +24,11 @@ function esope_index() {
 		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
 		switch($replace_public_home) {
 			case 'cmspages':
-				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
+				include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/public_homepage.php');
 				break;
 			case 'default':
 			default:
-				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
+				include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/public_homepage.php');
 		}
 		return true;
 	}
