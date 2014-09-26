@@ -129,20 +129,20 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'elgg_river_menu_setup');
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
-	// Remplacement page d'accueil
+	// Page d'accueil
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
-		// PARAM : Désactivé si vide, activé avec paramètre de config si non vide
+		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
 		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-		if (!empty($replace_home)) { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
+		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
-		// PARAM : Désactivé si vide, activé avec paramètre de config si non vide
-		$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
-		if (!$CONFIG->walled_garden) {
-			if ($replace_public_home != 'no') {
-				elgg_register_plugin_hook_handler('index','system','adf_platform_public_index');
-			}
+		if ($CONFIG->walled_garden) {
+			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
+		} else {
+			// PARAM : Désactivé si 'no', ou activé avec paramètre de config
+			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
+			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 		}
 	}
 	
@@ -192,16 +192,26 @@ function esope_init() {
 	
 	
 	// NEW & REWRITTEN ACTIONS
+	$action_url = elgg_get_plugins_path() . 'adf_public_platform/actions/';
 	// Modification de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
 	// Permet notamment de forcer l'inscription
 	if (elgg_is_active_plugin('groups')) {
 		elgg_unregister_action('groups/invite');
-		elgg_register_action("groups/invite", elgg_get_plugins_path() . 'adf_public_platform/actions/groups/membership/invite.php');
+		elgg_register_action("groups/invite", $action_url . 'groups/membership/invite.php');
 	}
 	// ESOPE search endpoint
-	elgg_register_action("esope/esearch", elgg_get_plugins_path() . 'adf_public_platform/actions/esope/esearch.php');
+	elgg_register_action("esope/esearch", $action_url . 'esope/esearch.php');
 	// Manually reset login failure counter
-	elgg_register_action("admin/reset_login_failures", elgg_get_plugins_path() . 'adf_public_platform/actions/admin/reset_login_failures.php');
+	elgg_register_action("admin/reset_login_failures", $action_url . 'admin/reset_login_failures.php');
+	
+	// HTML export action
+	elgg_register_action("pages/html_export", $action_url . 'pages/html_export.php', 'public');
+	
+	// Modified to make pages top_level / sub-pages
+	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'adf_public_platform');
+	if ($pages_reorder == 'yes') {
+		elgg_register_action("pages/edit", $action_url . 'pages/edit.php');
+	}
 	
 	
 	// NEW & REWRITTEN PAGE HANDLERS
@@ -242,17 +252,22 @@ function esope_init() {
 	// Pour les messages
 	elgg_unregister_page_handler('messages', 'messages_page_handler');
 	elgg_register_page_handler('messages', 'adf_platform_messages_page_handler');
+	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
+	
+	// Esope page handler : all tools
+	elgg_register_page_handler('esope', 'esope_page_handler');
+	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not
 	if (elgg_is_active_plugin('file_tools') && elgg_is_logged_in()) {
-		elgg_register_page_handler('folders','maghrenov_folder_handler');
+		elgg_register_page_handler('folders','esope_folder_handler');
 	}
 	*/
 	
 	// MODIFICATION DES WIDGETS : (DES)ACTIVATION ET TITRES
-	require_once(dirname(__FILE__) . '/lib/adf_public_platform/widgets.php');
+	require_once(dirname(__FILE__) . '/lib/esope/widgets.php');
 	
 	
 	// Group tools priority - see credits in group_tools_priority/settings view
@@ -269,8 +284,8 @@ function esope_init() {
 
 
 // Include hooks & page_handlers functions (lightens this file)
-require_once(dirname(__FILE__) . '/lib/adf_public_platform/page_handlers.php');
-require_once(dirname(__FILE__) . '/lib/adf_public_platform/hooks.php');
+require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
+require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
 
 
 
@@ -444,47 +459,6 @@ function adf_platform_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 		}
 }
 */
-
-
-// Remplace l'index par un tableau de bord légèrement modifié
-function adf_platform_index() {
-	/* Pour remplacer par une page spécifique
-	$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-	if ($replace_home != 'yes') {
-		$homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
-		if ($homepage_test) {
-			fclose($$homepage_test);
-			forward($CONFIG->url . $replace_home);
-		}
-	} else {}
-	*/
-	include(dirname(__FILE__) . '/pages/adf_platform/homepage.php');
-	return true;
-}
-
-
-// Remplace la page d'accueil publique par une page spécifique : le mieux reste de retravailler le layout "default" ou "walled_garden"
-function adf_platform_public_index() {
-	global $CONFIG;
-	/*
-	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-	$homepage_test = @fopen($CONFIG->url . $replace_public_home, 'r'); 
-	if ($homepage_test) {
-		fclose($homepage_test);
-		include($CONFIG->url . $replace_public_home);
-	}
-	*/
-	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-	switch($replace_public_home) {
-		case 'cmspages':
-			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
-			break;
-		case 'default':
-		default:
-			include(dirname(__FILE__) . '/pages/adf_platform/public_homepage.php');
-	}
-	return true;
-}
 
 
 /*
@@ -963,32 +937,78 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 }
 
-
-// Esope search page handler
-function esope_esearch_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/adf_platform';
-	require_once "$base/esearch.php";
-	return true;
+/* Returns the wanted value based on both params and inputs
+ * If $params is set (to whatever except false, but including ), it will be used
+ * If not set, we'll use GET inputs
+ * If still nothing, we'll use default value
+ */
+function esope_extract($key, $params = array(), $default = null, $sanitise = true) {
+	// Try using params only if set : we want to get only defined values, so use strict mode, and no default yet
+	$value = elgg_extract($key, $params, false, true);
+	// Try get_input only if nothing was set in params
+	if ($value === false) { $value = get_input($key, false); }
+	// If there is neither $params not input, use default (but don't if anything was set, event empty !)
+	if ($value === false) { $value = $default; }
+	// Sanitise string
+	if ($sanitise && is_string($value)) $value = sanitise_string($value);
+	return $value;
 }
 
 /* Esope search function : 
  * Just call echo esope_esearch() for a listing
  * Get entities with $results_ents = esope_esearch(array('returntype' => 'entities'));
- * Params :
+ * Basic use with few config will use GET inputs as parameters
+ * $params :
  	- q : full search query
  	- entity_type : site | object | user | group
  	- entity_subtype : usually an object subtype
  	- owner_guid : owner of entity
  	- container_guid : container of entity
  	- metadata : list of metadata and values
+   Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
+   Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
+ * $defaults : sets the defaults for any input value
+ * max_results : let's override the max number of displayed results. 
+   Note that a pagination should be implemented by any plugin using this function
  */
-function esope_esearch($params = array()) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;
-	$max_results = 500;
-	$debug = get_input("debug", false);
-	$q = sanitize_string(get_input("q"));
-	$type = sanitize_string(get_input("entity_type"));
-	$subtype = sanitize_string(get_input("entity_subtype"));
+	$debug = esope_extract('debug', $params, false);
+	
+	// Set defaults
+	$esearch_defaults = array(
+		'entity_type' => 'object', 
+		'entity_subtype' => null, 
+		'limit' => 0,
+		'offset' => 0,
+		'metadata_case_sensitive' => false,
+		'metadata_name_value_pairs_operator' => 'AND',
+		'count' => false,
+	);
+	$defaults = array_merge($esearch_defaults, $defaults);
+	
+	$q = esope_extract('q', $params, '');
+	// Note : we use entity_type and entity_subtype for consistency with regular search
+	$type = esope_extract('entity_type', $params, $defaults['entity_type']);
+	$subtype = esope_extract('entity_subtype', $params, $defaults['entity_subtype']);
+	$owner_guid = esope_extract('owner_guid', $params, $defaults['owner_guid']);
+	$container_guid = esope_extract('container_guid', $params, $defaults['container_guid']);
+	$limit = (int) esope_extract('limit', $params, $defaults['limit']);
+	$offset = (int) esope_extract('offset', $params, $defaults['offset']);
+	$sort = esope_extract('sort', $params, $defaults['sort']);
+	$order = esope_extract('order', $params, $defaults['order']);
+	// Metadata search : $metadata[name]=value
+	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
+	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
+	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
+	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
+	$count = esope_extract('count', $params, $defaults['count']);
+	
+	/*
+	$q = esope_extract('q', $params);
+	$type = esope_extract('entity_type', $params, $default['types']);
+	$subtype = esope_extract('entity_subtype', $params, $default['subtypes']);
+	
 	$owner_guid = get_input("owner_guid");
 	$container_guid = get_input("container_guid");
 	$limit = (int) get_input("limit", 0);
@@ -1000,22 +1020,14 @@ function esope_esearch($params = array()) {
 	$metadata_case_sensitive = get_input("metadata_case_sensitive", false);
 	$metadata_name_value_pairs_operator = get_input("metadata_name_value_pairs_operator", 'AND');
 	$order_by_metadata = get_input('order_by_metadata');
-	
-	// Some cleanup on types and subtypes
-	if (empty($type)) $type = 'object';
-	if (!empty($subtype) && ($type != 'object')) $subtype = null;
-	if (empty($subtype) && ($type == 'object')) {
-		$registered = get_registered_entity_types(); // Returns all subtypes, even non-objects
-		foreach ($registered as $registered_type => $registered_subtypes) {
-			foreach ($registered_subtypes as $registered_subtype) {
-				$subtype[] = $registered_subtype;
-			}
-		}
-	}
+	*/
 	
 	$result = array();
-	if ($debug) echo "Search : $q $type " . print_r($subtype, true) . " ($owner_guid/$container_guid) $limit $offset $sort $order<br />";
-	if ($debug) echo "Metadata : " . print_r($metadata, true) . "<br />";
+	if ($debug) {
+		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . '<br />';
+		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset sort=$sort order=$order<br />";
+		echo "Metadata : " . print_r($metadata, true) . "<br />";
+	}
 	// show hidden (unvalidated) users
 	//$hidden = access_get_show_hidden_status();
 	//access_show_hidden_entities(true);
@@ -1070,8 +1082,10 @@ function esope_esearch($params = array()) {
 	
 	// Perform search results count
 	$search_params['count'] = true;
-	$count = elgg_get_entities_from_metadata($search_params);
-	if ($count > $max_results) {
+	$return_count = elgg_get_entities_from_metadata($search_params);
+	if ($count) return $return_count;
+	
+	if ($return_count > $max_results) {
 		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
 	}
 	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
@@ -1081,6 +1095,7 @@ function esope_esearch($params = array()) {
 	// Limit to something that can be handled
 	if (is_array($entities)) $entities = array_slice($entities, 0, $max_results);
 	
+	// Return array or listing
 	if ($params['returntype'] == 'entities') {
 		return $entities;
 	} else {
@@ -1090,8 +1105,8 @@ function esope_esearch($params = array()) {
 		elgg_push_context('search');
 		elgg_push_context('widgets');
 		$return = '';
-		if ($params['count']) {
-			if ($count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($count)) . '</span>';
+		if ($params['add_count']) {
+			if ($return_count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
 			else $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
 		}
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
@@ -1466,6 +1481,117 @@ function esope_get_input_array($input = false) {
 }
 
 
+/* Build options suitable array from settings
+ * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
+ * Accepts key::value and list of keys
+ * e.g. val1 | val2, or val1::Name 1 | val2::Name 2
+ * $input : the settings string
+ * $addempty : add empty option
+ * prefix : translation key prefix
+ */
+function esope_build_options($input, $addempty = true, $prefix = 'option') {
+	$options = str_replace(array("\r", "\t", "|"), "\n", $input);
+	$options = explode("\n", $options);
+	$options_values = array();
+	if ($addempty) $options_values[''] = "";
+	foreach($options as $option) {
+		$option = trim($option);
+		if (!empty($option)) {
+			if (strpos($option, '::')) {
+				$value = explode('::', $option);
+				$key = trim($value[0]);
+				$options_values[$key] = trim($value[1]);
+			} else {
+				$options_values[$option] = elgg_echo("$prefix:$option");
+			}
+		}
+	}
+	return $options_values;
+}
+
+/* Reverse function of esope_build_options
+ * Converts an options_values array to a setting string
+ */
+function esope_build_options_string($options, $prefix = 'option') {
+	$options_string = '';
+	if ($options) foreach ($options as $key => $value) {
+		if (!empty($options_string)) $options_string .= ' | ';
+		$options_string .= $key . '::' . $value;
+	}
+	return $options_string;
+}
+
+/* Build multi-level array from string syntax
+ * $input : the settings string
+ * $separators : separators definition for each level (arrays allowed for each level)
+ */
+function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ',')) {
+	$return_array = array();
+	$input = trim($input);
+	
+	// Note : we always break on "\n", but use replacement to do it recusively
+	$options = str_replace($separators[0], "\n", $input);
+	$options = explode("\n", $options);
+	
+	// Dont make arrays from basic values...
+	if (sizeof($options) == 1) { return $input; }
+	
+	foreach ($options as $option) {
+		$option = trim($option);
+		if (empty($option)) continue;
+		
+		if ($separators[1]) {
+			// Potential sublevel
+			$new_separators = array_slice($separators, 2);
+			
+			// check for sub-level config
+			if (is_array($separators[1])) {
+				foreach ($separators[1] as $sep) {
+					$pos = strpos($option, $sep);
+					if ($pos !== false) break;
+				}
+			} else {
+				$sep = $separators[1];
+				$pos = strpos($option, $sep);
+			}
+			
+			// Get nested array if any
+			if ($pos !== false) {
+				$key = trim(substr($option, 0, $pos));
+				$value = substr($option, $pos + strlen($sep));
+				$return_array[$key] = esope_get_input_recursive_array($value, $new_separators);
+			} else {
+				$return_array[$option] = true;
+			}
+		} else {
+			// No sublevel : add option
+			// Note : we need to have value set because we're looking for rights with in_array (which looks for values, bot keys)
+			$return_array[$option] = true;
+		}
+	}
+	return $return_array;
+}
+
+/* Build string syntax from multi-level array
+ * $array : the settings array
+ * $separators : separators definition for each level (only 1 separator per level)
+ */
+function esope_set_input_recursive_array($array, $separators = array("|", '::', ',')) {
+	$return_string = '';
+	if ($array) foreach ($array as $key => $value) {
+		if (!empty($return_string)) $return_string .= $separators[0];
+		if (is_array($value)) {
+			// Need some recursitivity
+			$new_separators = array_slice($separators, 2);
+			$return_string .= $key . $separators[1] . esope_set_input_recursive_array($value, $new_separators);
+		} else {
+			$return_string .= $key;
+		}
+	}
+	return $return_string;
+}
+
+
 /* Renvoie un array de groupes selon les critères featured et open membership
  *
  * string $mode : types de groupes = (default), ou featured
@@ -1579,6 +1705,117 @@ function esope_extract_images($html, $full_tag = true) {
 function esope_extract_first_image($html, $full_tag = true) {
 	$images = esope_extract_images($html, $full_tag);
 	return $images[0];
+}
+
+
+
+// @TODO : make this more robust and fail-safe
+// Add file to an entity (using a specific folder in datastore)
+function esope_add_file_to_entity($entity, $input_name = 'file') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		/*
+		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
+		
+			// use same filename on the disk - ensures thumbnails are overwritten
+			$filestorename = $file->getFilename();
+			$filestorename = elgg_substr($filestorename, elgg_strlen($prefix));
+		} else {
+			$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
+		}
+
+		$file->setFilename($prefix . $filestorename);
+		$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+	
+			// hack for Microsoft zipped formats
+		$info = pathinfo($_FILES['upload']['name']);
+		$office_formats = array('docx', 'xlsx', 'pptx');
+		if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+			switch ($info['extension']) {
+				case 'docx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					break;
+				case 'xlsx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					break;
+				case 'pptx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					break;
+			}
+		}
+
+		// check for bad ppt detection
+		if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+			$mime_type = "application/vnd.ms-powerpoint";
+		}
+
+		$file->setMimeType($mime_type);
+		$file->originalfilename = $_FILES['upload']['name'];
+		$file->simpletype = file_get_simple_type($mime_type);
+
+		// Open the file to guarantee the directory exists
+		$file->open("write");
+		$file->close();
+		move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
+		*/
+	
+		$filename = $_FILES[$input_name]['name'];
+		if ($uploaded_file = get_uploaded_file($input_name)) {
+			// Remove previous file, if any
+			// @TODO not tested... check it's working as expected
+			if (!empty($entity->{$input_name})) {
+				if (file_exists($filename)) { unlink($filename); }
+			}
+
+			// Create new file
+			$prefix = "knowledge_database/{$input_name}/";
+			$filehandler = new ElggFile();
+			$filehandler->owner_guid = $entity->guid;
+			$filehandler->setFilename($prefix . $filename);
+			if ($filehandler->open("write")){
+				$filehandler->write($uploaded_file);
+				$filehandler->close();
+			}
+			$filename = $filehandler->getFilenameOnFilestore();
+			$entity->{$input_name} = $filename;
+			return true;
+		}
+	}
+	return false;
+}
+
+// Remove existing file
+function esope_remove_file_from_entity($entity, $input_name = 'file') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		if (!empty($entity->{$input_name})){
+			$filehandler = new ElggFile();
+			$filehandler->owner_guid = $entity->guid;
+			$filehandler->setFilename($entity->{$input_name});
+			if ($filehandler->exists()) {
+				$filehandler->delete();
+			}
+			unset($entity->{$input_name});
+			return true;
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+/* Return the best translation for a given metadata
+ * We prefer a direct translation
+ * Then a translated string
+ * And finally the name itself
+ */
+function esope_get_best_translation_for_metadata($name, $prefix = '', $translation = false) {
+	// Real translation doesn't need any transformation
+	if (!empty($translation) && ($translation != "$prefix:$name") && ($translation != $name)) return $translation;
+	// Try translation system
+	$translation = elgg_echo("$prefix:$name");
+	// If translation is the translation key itself, use the key itself
+	if ($translation == "$prefix:$name") $translation = ucfirst($name);
+	return $translation;
 }
 
 

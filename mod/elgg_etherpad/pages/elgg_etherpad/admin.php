@@ -122,6 +122,8 @@ $body .= '</div>';
 
 $body .= '<div style="float:right; width:48%;">' . elgg_view('output/longtext', array('value' => $documentation)) . '</div>';
 
+elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
+elgg_push_breadcrumb(elgg_echo('API'));
 
 // Render the page
 echo elgg_view_page($title, $body);

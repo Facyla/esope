@@ -21,6 +21,7 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
 
+$replace_homepage_opt = $no_yes_opt;
 $replace_public_homepage_opt = array('default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
 
 $groups_discussion_opt = $yes_no_opt;
@@ -250,7 +251,7 @@ $(function() {
 	<div>
 		<?php
 		echo '<p><label>' . elgg_echo('adf_platform:settings:replace_home') . '</label>';
-			echo elgg_view('input/dropdown', array('name' => 'params[replace_home]', 'options_values' => array('' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ), 'value' => $vars['entity']->replace_home));
+			echo elgg_view('input/dropdown', array('name' => 'params[replace_home]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->replace_home));
 		echo '</p><br />';
 		
 		// Remplacement de la Home (activité) par un tableau de bord configurable
@@ -507,6 +508,7 @@ $(function() {
 		if (elgg_is_active_plugin('pages')) {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall)) . '</p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages)) . '</p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_reorder') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[pages_reorder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_reorder)) . '</p>';
 		}
 		// Add limit links to navigation
 			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination)) . '</p>';

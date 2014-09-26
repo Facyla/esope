@@ -162,7 +162,7 @@ $content .= '<div style="width:70%; float:right;"><div style="padding:1ex;">';
 				$content .= '<div class="clearfloat"></div><br />';
 			}
 		$content .= '</div>';
-		$content .= '<p><strong><a href="' . $CONFIG->url . 'mod/pin/index.php">Tous les articles choisis</a></strong></p>';
+		$content .= '<p><strong><a href="' . $CONFIG->url . 'pin">Tous les articles choisis</a></strong></p>';
 		$content .= '<div class="clearfloat"></div>';
 		$content .= '<br />';
 		

@@ -34,7 +34,7 @@ class EtherpadLiteClient {
 		return $this->call($function, $arguments, 'POST');
 	}
 	
-	protected function call($function, array $arguments = array(), $method = 'GET'){
+	protected function call($function, array $arguments = array(), $method = 'POST'){
 		$arguments['apikey'] = $this->apiKey;
 		$arguments = http_build_query($arguments, '', '&');
 		$url = $this->url."/".self::API_VERSION."/".$function;
@@ -98,7 +98,8 @@ class EtherpadLiteClient {
 	public function __call($method, $args = array()) {
 		if (!in_array($method, array_keys(self::getMethods()))) { throw new UnsupportedMethodException(); }
 		$args = self::getParams($method, $args);
-		return $this->get($method, $args);
+		// Important : don't use GET because it doesn't handle well html content...
+		return $this->post($method, $args);
 	}
 
 	/**

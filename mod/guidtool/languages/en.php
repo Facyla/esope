@@ -28,7 +28,10 @@ $english = array(
 	'guidtool:regularview' => "View entity (regular view)",
 	'guidtool:regularedit' => "Edit entity (regular view)",
 	
-	'guidtool:editguid:warning' => "<strong>WARNING : though it includes somes preliminary checks and protections against common errors while directly editing GUIDs, this tool should be considered as dangerous if not used with deep comprehension of Elgg data model.</strong><br />It provides an high-level facility to change some properties that are usually accessible only by direct database editing, and are usually not accessible even to admin users. From a usage point of view, this tool facilitates ownership and container changes, entity enabling/disabling, timestamp manipulation, etc.<br /><strong>It can be useful sometimes, but remember with great powers comes great responsability : handle with care !!</strong><br />",
+	'guidtool:editguid:warning' => "<strong>WARNING : though it includes somes preliminary checks and protections against common errors while directly editing GUIDs, this tool should be considered as dangerous if not used with deep comprehension of Elgg data model.</strong><br />It provides an high-level facility to change some properties that are usually accessible only by direct database editing, and are usually not accessible even to admin users. From a usage point of view, this tool facilitates ownership and container changes, entity enabling/disabling, timestamp manipulation, etc.<br /><blockquote><strong>It can be very useful sometimes, but remember with great powers comes great responsability : handle with care !!</strong></blockquote><br />",
+	
+	'guidtool:edit:fields' => "Edit fields",
+	'guidtool:edit:fields:details' => "By default, no field value will be changed : you need to manually set here which fields will be updated once you save the form. Please separate fields by commas. Extra space are allowed.",
 	
 	'guidtool:deleted' => 'GUID %d deleted',
 	'guidtool:notdeleted' => 'GUID %d not deleted',

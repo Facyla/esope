@@ -1,6 +1,40 @@
 <?php
 
 
+// Remplace la page d'accueil selon les demandes
+function esope_index() {
+	if (elgg_is_logged_in()) {
+		/* Pour remplacer par une page spécifique
+		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
+		if ($replace_home != 'yes') {
+			$homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
+			if ($homepage_test) {
+				fclose($$homepage_test);
+				forward($CONFIG->url . $replace_home);
+			}
+		} else {}
+		*/
+		// Remplace l'index par un tableau de bord légèrement modifié
+		include(dirname(__FILE__) . '/pages/esope/homepage.php');
+		return true;
+	} else {
+		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
+		// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
+		global $CONFIG;
+		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+		switch($replace_public_home) {
+			case 'cmspages':
+				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
+				break;
+			case 'default':
+			default:
+				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
+		}
+		return true;
+	}
+	return false;
+}
+
 
 /* Filtrage via le page_handler
  * 
@@ -92,31 +126,53 @@ function adf_platform_public_profile_hook($hook, $type, $return, $params){
 function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 	$var = $result;
 	elgg_load_library('htmlawed');
-	$htmlawed_config = array(
-			// seems to handle about everything we need.
-			// /!\ Liste blanche des balises autorisées
-			//'elements' => 'iframe,embed,object,param,video,script,style',
-			//'elements' => "* -script", // Blocks <script> elements (only)
-			'safe' => false, // true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
-			// Attributs interdits
-			'deny_attribute' => 'on*',
-			// Filtrage supplémentaires des attributs autorisés (cf. start de htmLawed) : 
-			// bloque tous les styles non explicitement autorisé
-			//'hook_tag' => 'htmlawed_tag_post_processor',
-			
-			'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
-			// apparent this doesn't work.
-			// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
-		);
+	
+	// Get plugin settings
+	$safe = elgg_get_plugin_setting('safe', 'htmlawed');
+	if ($safe == 'yes') $safe = true; else $safe = false;
+	$elements = elgg_get_plugin_setting('elements', 'htmlawed');
+	$deny_attribute = elgg_get_plugin_setting('deny_attribute', 'htmlawed');
+	if ($deny_attribute === false) $deny_attribute = 'on*';
+	
+	// seems to handle about everything we need.
+	$htmlawed_config = array();
+	
+	/* /!\ Liste blanche des balises autorisées
+	 * Accepte des syntaxes positives : 'iframe,embed,object,param,video,script,style'
+	 * Ou avec filtre : "* -script"   => bloque <script> seulement
+	 * DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3
+	 */
+	if (!empty($elements)) $htmlawed_config['elements'] = $elements;
+	
+	// true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
+	// DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6
+	$htmlawed_config['safe'] = $safe;
+	
+	// Attributs interdits
+	// DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.4
+	$htmlawed_config['deny_attribute'] = $deny_attribute;
+	
+	// Filtrage supplémentaires des attributs autorisés (cf. start de htmLawed) : 
+	// bloque tous les styles non explicitement autorisé
+	//$htmlawed_config['hook_tag'] = 'htmlawed_tag_post_processor';
+	
+	$htmlawed_config['schemes'] = '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto';
+	
+	// apparent this doesn't work.
+	// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
+	
 	// add nofollow to all links on output
 	if (!elgg_in_context('input')) { $htmlawed_config['anti_link_spam'] = array('/./', ''); }
+	
 	$htmlawed_config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $htmlawed_config);
+	
 	if (!is_array($var)) {
 		$result = htmLawed($var, $htmlawed_config);
 	} else {
 		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
 		$result = $var;
 	}
+	
 	return $result;
 }
 

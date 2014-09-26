@@ -1,6 +1,6 @@
 Tidypics plugin for Elgg 1.8
-Latest Version: 1.8.1beta14
-Released: 2014-06-09
+Latest Version: 1.8.2
+Released: 2014-09-06
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
 Copyright: (c) iionly 2013-2014, (C) Cash Costello 2011-2014
@@ -32,7 +32,7 @@ Todo:
 
 - Get watermarking fully working (original uploaded image file gets not yet watermarked but only the resized image files),
 - Add option to remove the original uploaded image after resized thumbnail images have been created,
-- Replace PiclensLite slideshow with Galleria slideshow (no flash required, responsive).
+- Replace PiclensLite slideshow with Galleria slideshow (no flash required, responsive). Replace it even more so because PiclensLite does not work on Elgg 1.9 anymore.
 
 
 
@@ -47,6 +47,25 @@ IMPORTANT: If you have a previous version of the tidypics plugin installed, firs
 
 
 Changelog:
+
+Changes for release 1.8.2 (by iionly):
+- No longer beta! Apart from the things mentioned in the ToDo section everything should work. If not, please tell me.
+- Rework of river activity settings (check the settings and make adjustments if necessary):
+  * new option to set preview image size for all kind of Tidypics' river entries,
+  * click on preview image in river now opens full size version of the image in a lightbox popup.
+
+
+Changes for release 1.8.1beta16 (by iionly):
+
+- Fix in latest upgrade script that might resulted in not all database entries having been updated successfully (new "Upgrade" run necessary to complete),
+- Fix for HTML5 uploader to correctly disable/enable the "Add files" button if the maximum number of allowed photos (or more) had been selected for upload,
+- Using ElggBatch for image deletion when deleting an album (and its possibly numberous images) to avoid memory issues.
+
+
+Changes for release 1.8.1beta15 (by iionly):
+
+- Fix of limitation to 10 images to be uploaded in one batch when using Plupload HTML5/HTML4 uploader.
+
 
 Changes for release 1.8.1beta14 (by iionly, YaNoo and Joaquín):
 

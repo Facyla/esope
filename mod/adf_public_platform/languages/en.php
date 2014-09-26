@@ -362,6 +362,7 @@ $en = array(
 	'adf_platform:settings:pages_list_subpages:user' => "Members only",
 	'adf_platform:settings:pages_list_subpages:group' => "Groups only (not recommended)",
 	'adf_platform:settings:pages_list_subpages:all' => "All",
+	'adf_platform:settings:pages_reorder' => "Allow pages reordering",
 	'adf_platform:settings:advanced_pagination' => "Advanced pagination (limits links)",
 	'adf_platform:advanced_pagination:perpage' => "per page",
 	'adf_platform:advanced_pagination:last' => "%s (last)",
@@ -630,6 +631,15 @@ $en = array(
 	'esope:tinymce:templates:guids:details' => "Set the templates based on existing objects: GUID and template title, one template per line.<br />Full syntax: GUID::Template title::Template description<br />Note that only the description of the object will be used as a template.",
 	'esope:tinymce:extended_valid_elements' => "List of allowed HTML tags and properties",
 	'esope:tinymce:extended_valid_elements:details' => "Lets you control precisely the allowed HTML tags and properties in the TinyMCE editor.<br />IMPORTANT: this setting defines solely what is allowed in the TinyMCE editor, and NOT what will be further filtered by HTMLawed, or by any other filtering function that is enabled on the site. Also note that the editor can be disabled. If you wish to enable/disable specific tags, please also set HTMLawed config (or any other filter) accordingly!",
+	
+	// Htmlawed settings
+	'esope:htmlawed:settings:details' => "Htmlawed settings are very powerful to let you define in details which are the allowed or denied HTML elements. The used syntax is very strict, and the effects can be very wide, as this affects all user input filtering on the platform, before saving content.<br />Please <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">read the Documentation</a>, and double-check your settings before goind live !<br />Note : these setting go along with TinyMCE plugin settings, from a user point of view, please also check them !",
+	'esope:htmlawed:safe' => "Enable safe mode",
+	'esope:htmlawed:safe:details' => "Safe mode applies the most aggressive filtering on inputs, and basically block any rich content. Please read carefully the <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6\">safe mode documentation</a> before enabling this.<br />Recommended setting : NO.",
+	'esope:htmlawed:elements' => "HTML tags and properties",
+	'esope:htmlawed:elements:details' => "This lets you define HTML tags that are allowed or disallowed, using lists and wildcards. Please read the <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3\">elements setting documentation</a> for detailed allowed syntax.<br />Valid syntax may be : \"* -script\" (blocks only script tag)",
+	'esope:htmlawed:deny_attribute' => "Denied attributes list",
+	'esope:htmlawed:deny_attribute:details' => "This lets you block some unwanted attributes, also using wildcards. Please read the <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.4\">deny_attribute setting documentation</a> for detailed allowed syntax.<br />Recommended value is : \"on*\" (blocks all JS events : onClick, onHover, etc.)",
 	
 	// Newsletter additions
 	'newsletter:embed:templates' => "Choose content template",

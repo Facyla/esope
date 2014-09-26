@@ -11,6 +11,7 @@ if (empty($advanced_buttons2)) $advanced_buttons2 = "visualaid,|,code,|,pastetex
 $advanced_buttons3 = strip_tags(elgg_get_plugin_setting('advanced_buttons3', 'tinymce'));
 if (empty($advanced_buttons3)) $advanced_buttons3 = "image,|,tablecontrols,|,undo,redo,|,spellchecker";
 $advanced_buttons4 = strip_tags(elgg_get_plugin_setting('advanced_buttons4', 'tinymce'));
+
 // Templates
 $enable_templates = strip_tags(elgg_get_plugin_setting('enable_templates', 'tinymce'));
 if ($enable_templates == "yes") {
@@ -23,9 +24,12 @@ if ($enable_templates == "yes") {
 	if (!empty($templates_htmlfiles)) $templates .= esope_tinymce_prepare_templates($templates_htmlfiles, 'url');
 	if (!empty($templates_guids)) $templates .= esope_tinymce_prepare_templates($templates_guids, 'guid');
 }
+
 // Editor-based filtering
 $extended_valid_elements = strip_tags(elgg_get_plugin_setting('extended_valid_elements', 'tinymce'));
-if (empty($extended_valid_elements)) $extended_valid_elements = "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value]";
+if (empty($extended_valid_elements)) $extended_valid_elements = "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value],video[src|preload|autoplay|mediagroup|loop|muted|controls|poster|width|height],audio[src|preload|autoplay|mediagroup|loop|muted|controls],source[src|type|media],track[kind|src|srclang|label|default]";
+
+$expert_settings = strip_tags(elgg_get_plugin_setting('extended_valid_elements', 'tinymce'));
 
 ?>
 
@@ -67,28 +71,41 @@ elgg.tinymce.init = function() {
 	
 	// Regular, advanced configuration editor
 	tinyMCE.init({
-		language : "<?php echo tinymce_get_site_language(); ?>",
-		table_inline_editing : true,
+		theme : "advanced",
 		mode : "specific_textareas",
 		editor_selector : "elgg-input-longtext",
 		editor_deselector : "elgg-input-rawtext",
-		theme : "advanced",
+		
+		language : "<?php echo tinymce_get_site_language(); ?>",
 		gecko_spellcheck : true,
 		browser_spellcheck : true,
 		spellchecker_languages : "+French=fr,English=en",
-		//relative_urls : false,
+		
+		table_inline_editing : true,
 		//document_base_url : elgg.config.wwwroot,
+		//relative_urls : false,
 		convert_urls : false,
+		
+		// Doesn't check the HTML at all..
+		//verify_html : false,
+		// Allow custom elements
+		//custom_elements : "",
+		// Note extended actually extends the default list http://www.tinymce.com/wiki.php/Configuration3x:extended_valid_elements
+		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
+		
+		
 		<?php /* SOME INLINE DOC
 		All available plugins :
 		  pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template
-		All available buttons :
+		All available buttons :<p>&nbsp;</p>
+<p>Your browser does not support the video tag or the file format of this video. <a href="http://www.supportduweb.com/">http://www.supportduweb.com/</a></p>
 		  theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
       theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
       theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
       theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,spellchecker",
 		*/ ?>
 		plugins : "<?php echo $plugins; ?>",
+		
 		theme_advanced_buttons1 : "<?php echo $advanced_buttons1; ?>",
 		// Si des modèles sont configurés, ajouter ",template" avant "image" pour les intégrer
 		theme_advanced_buttons2 : "<?php echo $advanced_buttons2; ?>",
@@ -102,7 +119,7 @@ elgg.tinymce.init = function() {
 		theme_advanced_path : true,
 		width : "100%",
 		//height: "200px",
-		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
+		
 		setup : function(ed) {
 			// show the number of words at startup
 			ed.onLoadContent.add(function(ed, o) {
@@ -128,8 +145,10 @@ elgg.tinymce.init = function() {
 				}
 			});
 		},
+		
 		content_css: elgg.config.wwwroot + 'mod/tinymce/css/elgg_tinymce.css',
 		
+		// Templates
 		<?php if ($templates) { ?>
 			template_templates : [ <?php echo $templates; ?> ],
 		<?php } ?>
@@ -140,6 +159,7 @@ elgg.tinymce.init = function() {
 		mode : "specific_textareas",
 		editor_selector : "simple-editor",
 		theme : "simple",
+		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
 	});
 	
 	

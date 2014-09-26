@@ -41,6 +41,7 @@ foreach ($users as $ent) {
 			marker = L.marker([$lat, $long], {icon: onlineUsersMarker, title: $name});
 			marker.bindPopup($description);
 			onlineUsersMarkers.addLayer(marker);
+			bounds.extend(marker.getLatLng());
 			";
 	}
 }
@@ -56,6 +57,7 @@ var onlineUsersMarkers = new L.MarkerClusterGroup();
 <?php echo $members_map; ?>
 
 map.addLayer(onlineUsersMarkers);
+map.fitBounds(bounds, {padding: [20,20]});
 </script>
 
 <div id="onlineUsers"></div>
