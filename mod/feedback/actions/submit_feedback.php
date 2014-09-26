@@ -21,7 +21,6 @@
  */
 
 global $CONFIG;
-action_gatekeeper();
 
 // check if captcha functions are loaded (only necessary when logged out)
 if (!elgg_is_logged_in()) {
@@ -89,14 +88,17 @@ if ($feedback->save()) {
 	echo '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
 }
 
-elgg_set_ignore_access($ia);
-
-// now email if required - note: we'll email anyway, on success or error
+// Get feedback text info now, before we potentially lose access to entity (public mode)
+$feedback_url = $feedback->getURL();
 $details = $feedback->about;
 if (!empty($details)) $details .= ', ';
 $details .= $feedback->mood;
 if (!empty($details)) $details = " ($details)";
 $feedback_title = $feedback->title . $details;
+
+elgg_set_ignore_access($ia);
+
+// now email if required - note: we'll email anyway, on success or error
 $user_guids = array();
 // Notify up to 5 configured users
 for ( $idx=1; $idx<=5; $idx++ ) {
@@ -112,7 +114,7 @@ if (count($user_guids) > 0) {
 			$user_guids, 
 			$CONFIG->site->guid, 
 			elgg_echo('feedback:email:subject', array($feedback_title)), 
-			elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback->getURL())), 
+			elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback_url)), 
 			null, 
 			'email'
 		);
