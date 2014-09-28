@@ -23,14 +23,13 @@ if (!elgg_instanceof($container, 'group') && !elgg_instanceof($container, 'user'
 // (valid) Container is at least used to publish in it, so keep it anyway
 if ($container_guid) $publish_guid = $container_guid;
 
+// Check merge setting
+$enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
+if ($enable_merge == 'yes') $enable_merge = true;
+
 // Is site KDB enabled ?
 $enable_site = elgg_get_plugin_setting('enable_site', 'knowledge_database');
 if ($enable_site == 'yes') {
-	
-	// Check merge setting
-	$enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
-	if ($enable_merge == 'yes') $enable_merge = true;
-	
 	// Check global search setting
 	$globalsearch = elgg_get_plugin_setting('globalsearch', 'knowledge_database');
 	if ($globalsearch == 'yes') {
@@ -43,7 +42,7 @@ if ($enable_site == 'yes') {
 // Are KBD groups enabled ?
 $kdb_group_guids = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
 $kdb_group_guids = esope_get_input_array($kdb_group_guids);
-if ($kdb_group_guids) { $container_guid = false; }
+if (empty($kdb_group_guids)) { $container_guid = false; }
 
 
 // If we are in a KDB group : merge fields if both enabled (and if asked to), use only group fields otherwise

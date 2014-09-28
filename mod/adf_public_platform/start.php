@@ -134,15 +134,16 @@ function esope_init() {
 		// Remplacement page d'accueil par tableau de bord personnel
 		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
 		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','adf_platform_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
+		//if (isset($CONFIG->site) && ($CONFIG->site instanceof ElggSite) && $CONFIG->site->checkWalledGarden()) {
 		if ($CONFIG->walled_garden) {
 			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
 		} else {
 			// PARAM : Désactivé si 'no', ou activé avec paramètre de config
 			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'adf_public_platform');
-			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','adf_platform_public_index'); }
 		}
 	}
 	
@@ -970,6 +971,11 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  * $defaults : sets the defaults for any input value
  * max_results : let's override the max number of displayed results. 
    Note that a pagination should be implemented by any plugin using this function
+ * TODO :
+   - fulltext search in tags
+   - fulltext search in comments
+   - allow fulltext search in any metadata ? (warning !)
+   - integrate (if search plugin active) search_highlight_words($words, $string)
  */
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;

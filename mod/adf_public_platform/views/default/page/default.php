@@ -11,6 +11,13 @@
  * @uses $vars['sysmessages'] A 2d array of various message registers, passed from system_messages()
  */
 
+// Set the content type
+header("Content-type: text/html; charset=UTF-8");
+
+// Allow external embed (hack)
+if (function_exists('header_remove')) { header_remove('X-Frame-Options'); } else { header('X-Frame-Options: GOFORIT'); }
+
+
 // backward compatability support for plugins that are not using the new approach
 // of routing through admin. See reportedcontent plugin for a simple example.
 if (elgg_get_context() == 'admin') {
@@ -32,14 +39,6 @@ $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmess
 $header = elgg_view('adf_platform/adf_header', $vars);
 $body = elgg_view('page/elements/body', $vars);
 $footer = elgg_view('page/elements/footer', $vars);
-
-// Set the content type
-header("Content-type: text/html; charset=UTF-8");
-
-// Allow external embed (hack)
-if (function_exists('header_remove')) { header_remove('X-Frame-Options'); } 
-else { header('X-Frame-Options: GOFORIT'); }
-
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

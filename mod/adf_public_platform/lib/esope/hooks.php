@@ -2,37 +2,40 @@
 
 
 // Remplace la page d'accueil selon les demandes
-function esope_index() {
-	if (elgg_is_logged_in()) {
-		/* Pour remplacer par une page spécifique
-		$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
-		if ($replace_home != 'yes') {
-			$homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
-			if ($homepage_test) {
-				fclose($$homepage_test);
-				forward($CONFIG->url . $replace_home);
-			}
-		} else {}
-		*/
-		// Remplace l'index par un tableau de bord légèrement modifié
-		include(dirname(__FILE__) . '/pages/esope/homepage.php');
-		return true;
-	} else {
-		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
-		// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
-		global $CONFIG;
-		$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
-		switch($replace_public_home) {
-			case 'cmspages':
-				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
-				break;
-			case 'default':
-			default:
-				include(dirname(__FILE__) . '/pages/esope/public_homepage.php');
-		}
-		return true;
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function adf_platform_public_index() {
+	// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
+	// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
+	global $CONFIG;
+	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'adf_public_platform');
+	switch($replace_public_home) {
+		case 'cmspages':
+			include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/public_homepage.php');
+			break;
+		case 'default':
+		default:
+			include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/public_homepage.php');
 	}
-	return false;
+	return true;
+}
+
+
+// Remplace la page d'accueil connectée selon les demandes
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function adf_platform_index() {
+	/* Pour remplacer par une page spécifique
+	$replace_home = elgg_get_plugin_setting('replace_home', 'adf_public_platform');
+	if ($replace_home != 'yes') {
+		$homepage_test = @fopen($CONFIG->url . $replace_home, 'r'); 
+		if ($homepage_test) {
+			fclose($$homepage_test);
+			forward($CONFIG->url . $replace_home);
+		}
+	} else {}
+	*/
+	// Remplace l'index par un tableau de bord légèrement modifié
+	include(elgg_get_plugins_path() . 'adf_public_platform/pages/esope/homepage.php');
+	return true;
 }
 
 

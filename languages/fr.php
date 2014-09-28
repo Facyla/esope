@@ -509,7 +509,7 @@ $french = array(
 	'user:password:fail:tooshort' => "Le mot de passe est trop court !",
 	'user:password:fail:incorrect_current_password' => "Le mot de passe actuel entré est incorrect.",
 	'user:resetpassword:unknown_user' => "Utilisateur inconnu.",
-	'user:resetpassword:reset_password_confirm' => "Après réinitialisation de votre mot de passe, celui-ci vous sera envoyé à votre adresse email.",
+	'user:resetpassword:reset_password_confirm' => "Pour recevoir un nouveau mot de passe, cliquez sur le bouton \"Réinitialiser le mot de passe\". Votre nouveau mot de âsse vous sera envoyé à votre adresse email.",
 
 	'user:set:language' => "Langue",
 	'user:language:label' => "Votre langue",
@@ -519,10 +519,10 @@ $french = array(
 	'user:username:notfound' => "Nom d'utilisateur %s non trouvé.",
 
 	'user:password:lost' => "Mot de passe perdu ?",
-	'user:password:resetreq:success' => "Vous avez demandé un nouveau mot de passe, un email vous a été envoyé",
+	'user:password:resetreq:success' => "Vous avez demandé un nouveau mot de passe, veuillez cliquer sur le lien de confirmation dans l'email qui vient de vous être envoyé",
 	'user:password:resetreq:fail' => "Impossible de demander un nouveau mot de passe.",
 
-	'user:password:text' => "Pour générer un nouveau mot de passe, entrez votre adresse de courrier électronique ci-dessous (celle utilisée lors de l'inscription). Vous recevrez un message avec un lien sur lequel vous devez cliquer pour confirmer votre demande, et recevrez dans les minutes qui suivent un second message avec votre nouveau mot de passe.",
+	'user:password:text' => "Pour générer un nouveau mot de passe, entrez votre adresse de courrier électronique ci-dessous (celle utilisée lors de l'inscription). Vous recevrez par email un lien de confirmation. Vous pourrez alors confirmer votre demande, et recevrez alors un second email avec votre nouveau mot de passe.",
 
 //	'user:persistent' => "Se souvenir de moi",
 //	'user:persistent' => "Rester connecté (jusqu'à la fermeture de mon navigateur)",
@@ -1039,7 +1039,7 @@ Votre nouveau mot de passe est : %s",
 
 Quelqu'un (avec l'adresse IP %s) a demandé un nouveau mot de passe pour votre compte.
 
-Si c'est bien vous qui avez demandé ce changement, veuillez cliquer sur le lien ci-dessous, sinon ignorez cet email.
+Si vous souhaitez effectivement modifier votre mot de passe, veuillez cliquer sur le lien ci-dessous. Sinon vous pouvez ignorer cet email.
 
 %s
 ",
