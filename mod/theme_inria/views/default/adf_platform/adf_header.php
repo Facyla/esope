@@ -8,6 +8,8 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $prev_q = get_input('q', '');
 
+$lang = get_language();
+
 if (elgg_is_logged_in()) {
 	$own = $_SESSION['user'];
 	$ownguid = $own->guid;
@@ -225,7 +227,8 @@ if (elgg_is_logged_in()) {
 										<ul class="hidden">
 											<?php
 											for ($i = 1; $i <= $main_menu_help_count; $i++) {
-												$main_menu_item = elgg_get_plugin_setting('help_menu_'.$i, 'theme_inria');
+												if ($lang == 'en') $main_menu_item = elgg_get_plugin_setting('help_menu_'.$i.'_en', 'theme_inria');
+												else $main_menu_item = elgg_get_plugin_setting('help_menu_'.$i, 'theme_inria');
 												if (!empty($main_menu_item)) {
 													$main_menu_item = explode('::', $main_menu_item);
 													$menu_item_url = $main_menu_item[0];

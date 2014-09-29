@@ -24,7 +24,9 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('pages:none') . '</p>';
 }
 
-echo '<strong>' . $title . '</strong>' . $content;
+//echo '<strong>' . $title . '</strong>';
+echo $content;
+
 
 ?><?php //@todo JS 1.8: no ?>
 <script type="text/javascript">
