@@ -2,7 +2,7 @@
 /**
 * Elgg theme_fing plugin language pack
 * 
-* @package theme_cocon
+* @package theme_fing
 **/
 
 $french = array(

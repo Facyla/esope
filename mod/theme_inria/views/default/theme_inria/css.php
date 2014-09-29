@@ -393,3 +393,11 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; font-size: 14px; }
 
 
+/* Folders (masquer réglage) */
+#file_tools_structure_management_enable, label[for="file_tools_structure_management_enable"] { display: none; }
+
+#profile_manager_profile_edit_tabs { clear:left; }
+
+
+
+
