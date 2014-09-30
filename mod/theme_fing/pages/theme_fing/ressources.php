@@ -41,19 +41,24 @@ if ($group = get_entity($group_guid)) {
 		$subtypes[] = 'file';
 		$comments_subtypes[] = 'file';
 	}
-	$params = array('types' => 'object', 'subtypes' => $subtypes, 'container_guid' => $group->guid, 'limit' => 0);
-	$ressources = elgg_get_entities($params);
-	$ressources_content = '';
-	foreach ($ressources as $ent) {
-		$excerpt = $ent->excerpt;
-		if (empty($excerpt)) $excerpt = elgg_get_excerpt($ent->description, 250);
-		$ressources_content .= '<div style="clear:both; margin:1ex 0 2ex 0;"><a href="' . $ent->getURL() . '">' . $ent->title . '</a> (' . elgg_echo('esope:subtype:'.$ent->getSubtype()) . ') ';
-		//$ressources_content .= elgg_get_friendly_time($ent->time_created);
-		$ressources_content .= '<span style="float:right; margin-left:2ex;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
-		//$ressources_content .= '<br />' . $excerpt;
-		$ressources_content .= '<div class="clearfloat"></div></div>';
+	// List ressources (files and bookmarks)
+	if (!empty($subtypes)) {
+		$params = array('types' => 'object', 'subtypes' => $subtypes, 'container_guid' => $group->guid, 'limit' => 0);
+		$ressources = elgg_get_entities($params);
+		$ressources_content = '';
+		foreach ($ressources as $ent) {
+			$excerpt = $ent->excerpt;
+			if (empty($excerpt)) $excerpt = elgg_get_excerpt($ent->description, 250);
+			$ressources_content .= '<div style="clear:both; margin:1ex 0 2ex 0;"><a href="' . $ent->getURL() . '">' . $ent->title . '</a> (' . elgg_echo('esope:subtype:'.$ent->getSubtype()) . ') ';
+			//$ressources_content .= elgg_get_friendly_time($ent->time_created);
+			$ressources_content .= '<span style="float:right; margin-left:2ex;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
+			//$ressources_content .= '<br />' . $excerpt;
+			$ressources_content .= '<div class="clearfloat"></div></div>';
+		}
 	}
 	
+	
+	// Compose main page content
 	if ($pages_content && $ressources_content) {
 		$content .= '<div style="width:66%; float:left;">' . $ressources_content . '</div><div style="width:30%; float:right;">' . $pages_content . '</div>';
 	} else if ($pages_content) {
