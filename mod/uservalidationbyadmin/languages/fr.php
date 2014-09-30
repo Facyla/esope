@@ -10,7 +10,7 @@ $fr = array(
 	'admin:users:unvalidated' => 'Non validés',
 	
 	'email:validate:subject' => "%s demande la validation de son compte pour %s !",
-	'email:validate:body' => "Bonjour %s,
+	'email:validate:body' => "Bonjour,
 
 Un membre nommé %s vous demande la validation de son compte. 
 

@@ -10,7 +10,7 @@ $english = array(
 	'admin:users:unvalidated' => 'Unvalidated',
 	
 	'email:validate:subject' => "%s is requesting validation of account for %s!",
-	'email:validate:body' => "Hello %s,
+	'email:validate:body' => "Hello,
 
 A user named %s is requesting validation of their account by you. 
 
