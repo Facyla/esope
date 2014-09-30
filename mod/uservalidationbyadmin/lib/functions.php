@@ -5,16 +5,34 @@
  * @package Elgg.Core.Plugin
  * @subpackage uservalidationbyadmin
  */
+
 /**
  * Get the admin user (returns the first admin user)
  * There is no API in elgg 1.8.5 to get the admin user
 */
-function get_admin_user_details(){
+function uservalidationbyadmin_get_main_admin(){
 	global $CONFIG;
 	$query = "SELECT * FROM {$CONFIG->dbprefix}users_entity as e WHERE ( e.admin = 'yes')"; 
 	$info = get_data($query);
 	return $info[0];
-}	
+}
+
+/* Get configured admins */
+function uservalidationbyadmin_get_notified_admins() {
+	$admins = array();
+	// Notify up to 5 configured users
+	for ( $i=1; $i<=5; $i++ ) {
+		$name = elgg_get_plugin_setting( 'user'.$i, 'uservalidationbyadmin' );
+		if (!empty($name)) {
+			if ($user = get_user_by_username($name)) {
+				$admins[] = $user;
+			}
+		}
+	}
+	if (empty($admins)) $admins[] = uservalidationbyadmin_get_main_admin();
+	return $admins;
+}
+
 /**
  * Generate an email activation code.
  *
@@ -56,9 +74,11 @@ function uservalidationbyadmin_request_validation($user_guid, $admin_requested =
 		return $result;
 	}
 */
-	//notify admin
+	//ESOPE : Notify admins
 	if (($user) && ($user instanceof ElggUser)) {
-		$admin = get_admin_user_details();
+		//$admin = uservalidationbyadmin_get_main_admin();
+		$admins = uservalidationbyadmin_get_notified_admins();
+		
 		// Work out validate link
 		$code = uservalidationbyadmin_generate_code($user_guid, $user->email);
 		$link = "{$site->url}uservalidationbyadmin/confirm?u=$user_guid&c=$code";
@@ -74,8 +94,10 @@ function uservalidationbyadmin_request_validation($user_guid, $admin_requested =
 		
 		// Send validation email
 		$subject = elgg_echo('email:validate:subject', array($user->name, $site->name));
-		$body = elgg_echo('email:validate:body', array($admin->name, $user->name,  $ip_address, $geostring, $link, $site->name, $site->url));
-		$result = notify_user($admin->guid, $site->guid, $subject, $body, NULL, 'email');
+		if ($admins) foreach ($admins as $admin) {
+			$body = elgg_echo('email:validate:body', array($admin->name, $user->name,  $ip_address, $geostring, $link, $site->name, $site->url));
+			$result = notify_user($admin_guids, $site->guid, $subject, $body, NULL, 'email');
+		}
 		if ($result && !$admin_requested) {
 			system_message(elgg_echo('uservalidationbyadmin:registerok'));
 		}
@@ -133,3 +155,4 @@ function uservalidationbyadmin_get_unvalidated_users_sql_where() {
 
 	return $wheres;
 }
+

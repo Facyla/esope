@@ -34,6 +34,7 @@ foreach ($user_guids as $guid) {
 
 access_show_hidden_entities($access);
 
+
 if (count($user_guids) == 1) {
 	$message_txt = elgg_echo('uservalidationbyadmin:messages:deleted_user');
 	$error_txt = elgg_echo('uservalidationbyadmin:errors:could_not_delete_user');
@@ -42,10 +43,7 @@ if (count($user_guids) == 1) {
 	$error_txt = elgg_echo('uservalidationbyadmin:errors:could_not_delete_users');
 }
 
-if ($error) {
-	register_error($error_txt);
-} else {
-	system_message($message_txt);
-}
+if ($error) { register_error($error_txt); } else { system_message($message_txt); }
 
 forward(REFERRER);
+

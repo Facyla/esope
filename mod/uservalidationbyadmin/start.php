@@ -64,20 +64,14 @@ function uservalidationbyadmin_disable_new_user($hook, $type, $value, $params) {
 	$user = elgg_extract('user', $params);
 
 	// no clue what's going on, so don't react.
-	if (!$user instanceof ElggUser) {
-		return;
-	}
+	if (!$user instanceof ElggUser) { return; }
 
 	// another plugin is requesting that registration be terminated
 	// no need for uservalidationbyadmin
-	if (!$value) {
-		return $value;
-	}
+	if (!$value) { return $value; }
 
 	// has the user already been validated?
-	if (elgg_get_user_validation_status($user->guid) == true) {
-		return $value;
-	}
+	if (elgg_get_user_validation_status($user->guid) == true) { return $value; }
 
 	// disable user to prevent showing up on the site
 	// set context so our canEdit() override works
@@ -101,6 +95,7 @@ function uservalidationbyadmin_disable_new_user($hook, $type, $value, $params) {
 	return $value;
 }
 
+
 /**
  * Override the canEdit() call for if we're in the context of registering a new user.
  *
@@ -115,17 +110,14 @@ function uservalidationbyadmin_allow_new_user_can_edit($hook, $type, $value, $pa
 	// we want the entity to check, which is a user.
 	$user = elgg_extract('entity', $params);
 
-	if (!($user instanceof ElggUser)) {
-		return;
-	}
+	if (!($user instanceof ElggUser)) { return; }
 
 	$context = elgg_get_context();
-	if ($context == 'uservalidationbyadmin_new_user' || $context == 'uservalidationbyadmin_validate_user') {
-		return TRUE;
-	}
+	if ($context == 'uservalidationbyadmin_new_user' || $context == 'uservalidationbyadmin_validate_user') { return TRUE; }
 
 	return;
 }
+
 
 /**
  * Checks if an account is validated
@@ -135,9 +127,7 @@ function uservalidationbyadmin_allow_new_user_can_edit($hook, $type, $value, $pa
  */
 function uservalidationbyadmin_check_auth_attempt($credentials) {
 
-	if (!isset($credentials['username'])) {
-		return;
-	}
+	if (!isset($credentials['username'])) { return; }
 
 	$username = $credentials['username'];
 
@@ -155,6 +145,7 @@ function uservalidationbyadmin_check_auth_attempt($credentials) {
 
 	access_show_hidden_entities($access_status);
 }
+
 
 /**
  * Checks sent passed validation code and user guids and validates the user.
@@ -181,7 +172,7 @@ function uservalidationbyadmin_page_handler($page) {
 				$site = elgg_get_site_entity();
 				$subject = elgg_echo('user:validate:subject', array($user->name));
 				$body = elgg_echo('user:validate:body', array($user->name, $site->name, $user->username, $site->name, $site->url));
-				$result = notify_user($user->guid, $site->guid, $subject, $body, NULL, 'email');	
+				$result = notify_user($user->guid, $site->guid, $subject, $body, NULL, 'email');
 			//	login($user);
 			} else {
 				register_error(elgg_echo('email:confirm:fail'));
@@ -197,6 +188,7 @@ function uservalidationbyadmin_page_handler($page) {
 	forward('');
 }
 
+
 /**
  * Make sure any admin users are automatically validated
  *
@@ -210,6 +202,7 @@ function uservalidationbyadmin_validate_new_admin_user($event, $type, $user) {
 	}
 }
 
+
 /**
  * Registers public pages to allow in the case walled garden has been enabled.
  */
@@ -217,6 +210,7 @@ function uservalidationbyadmin_public_pages($hook, $type, $return_value, $params
 	$return_value[] = 'uservalidationbyadmin/confirm';
 	return $return_value;
 }
+
 
 /**
  * Prevent a manual code login with login().
@@ -237,3 +231,5 @@ function uservalidationbyadmin_check_manual_login($event, $type, $user) {
 
 	return $return;
 }
+
+
