@@ -17,21 +17,24 @@ if ($event->description) {
 } else {
 	$description = '';
 }
+// Timezone info
+$tzid = ";TZID=" . date('e');
+
 ?>
 BEGIN:VEVENT
 UID:<?php echo elgg_get_site_url().'event_calendar/view/'.$event->guid; ?>
 
 URL:<?php echo elgg_get_site_url().'event_calendar/view/'.$event->guid; ?>
 
-DTSTAMP:<?php echo date("Ymd\THis\Z", $event->time_updated)?>
+DTSTAMP<?php echo $tzid; ?>:<?php echo date("Ymd\THis", $event->time_updated)?>
 
-CREATED:<?php echo date("Ymd\THis\Z", $event->time_created)?>
+CREATED<?php echo $tzid; ?>:<?php echo date("Ymd\THis", $event->time_created)?>
 
-LAST-MODIFIED:<?php echo date("Ymd\THis\Z", $event->time_updated)  ?>
+LAST-MODIFIED<?php echo $tzid; ?>:<?php echo date("Ymd\THis", $event->time_updated)  ?>
 
-DTSTART;VALUE=DATE:<?php echo date("Ymd\THis\Z", $event->start_date);  ?>
+DTSTART;VALUE=DATE-TIME<?php echo $tzid; ?>:<?php echo date("Ymd\THis", $event->start_date);  ?>
 
-DTEND;VALUE=DATE:<?php echo date("Ymd\THis\Z", $event->real_end_time);  ?>
+DTEND;VALUE=DATE-TIME<?php echo $tzid; ?>:<?php echo date("Ymd\THis", $event->real_end_time);  ?>
 
 SUMMARY:<?php echo $event->title;  ?>
 
