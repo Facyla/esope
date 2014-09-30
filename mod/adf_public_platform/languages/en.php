@@ -344,6 +344,7 @@ $en = array(
 	'adf_platform:settings:firststeps' => "Firsts steps page GUID",
 	'adf_platform:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
 	'adf_platform:settings:footer' => "Footer content",
+	'adf_platform:settings:analytics' => "Analytics code",
 	'adf_platform:settings:headerimg' => "Header image (default: 85px height)",
 	'adf_platform:settings:headerimg:help' => "Set relative URL of an image which will be positionned at the center of the header, right under the top level menu, and will be repeated horizontally if needed. Please use a 85px height image, large enough to avoid repetition on large screens (2000px minimum advised). For other dimensions, please add corresponding CSS declarations in the custom CSS below (change height according to your needs) : <em>header { height:115px; }</em>",
 	'adf_platform:settings:helplink' => "Help page",

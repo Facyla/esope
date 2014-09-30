@@ -341,6 +341,10 @@ $(function() {
 			<?php echo elgg_view('input/longtext', array('name' => 'params[footer]', 'value' => $vars['entity']->footer)); ?>
 		</p><br />
 
+		<p><label><?php echo elgg_echo('adf_platform:settings:analytics'); ?></label>
+			<?php echo elgg_view('input/plaintext', array('name' => 'params[analytics]', 'value' => $vars['entity']->analytics)); ?>
+		</p><br />
+
 		<p><label><?php echo elgg_echo('adf_platform:settings:publicpages'); ?></label><br />
 			<?php echo elgg_echo('adf_platform:settings:publicpages:help'); ?>
 			<?php // un nom de pages par ligne demandé (plus clair), mais on acceptera aussi séparé par virgules et point-virgule en pratique
