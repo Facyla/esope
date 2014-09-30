@@ -721,6 +721,14 @@ $en = array(
 	'esope:subtype:file' => "file",
 	'esope:subtype:event_calendar' => "event",
 	
+	// Icons
+	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
+	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
+	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
+	'esope:subtype:blog:icon' => '<i class="fa fa-file-text-o"></i>',
+	'esope:subtype:file:icon' => '<i class="fa fa-file"></i>',
+	'esope:subtype:event_calendar:icon' => '<i class="fa fa-calendar"></i>',
+	
 );
 
 add_translation('en', $en);

@@ -49,7 +49,7 @@ if ($group = get_entity($group_guid)) {
 		foreach ($ressources as $ent) {
 			$excerpt = $ent->excerpt;
 			if (empty($excerpt)) $excerpt = elgg_get_excerpt($ent->description, 250);
-			$ressources_content .= '<div style="clear:both; margin:1ex 0 2ex 0;"><a href="' . $ent->getURL() . '">' . $ent->title . '</a> (' . elgg_echo('esope:subtype:'.$ent->getSubtype()) . ') ';
+			$ressources_content .= '<div style="clear:both; margin:1ex 0 2ex 0;"><a href="' . $ent->getURL() . '">' . elgg_echo('esope:subtype:'.$ent->getSubtype().':icon') . ' ' . $ent->title . '</a> ';
 			//$ressources_content .= elgg_get_friendly_time($ent->time_created);
 			$ressources_content .= '<span style="float:right; margin-left:2ex;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
 			//$ressources_content .= '<br />' . $excerpt;
