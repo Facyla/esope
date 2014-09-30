@@ -728,6 +728,9 @@ $en = array(
 	'esope:subtype:blog:icon' => '<i class="fa fa-file-text-o"></i>',
 	'esope:subtype:file:icon' => '<i class="fa fa-file"></i>',
 	'esope:subtype:event_calendar:icon' => '<i class="fa fa-calendar"></i>',
+	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
+	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
+	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
 	
 );
 
