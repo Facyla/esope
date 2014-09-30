@@ -35,12 +35,13 @@ foreach ($user_guids as $guid) {
 		$site = elgg_get_site_entity();
 		$subject = elgg_echo('user:validate:subject', array($user->name));
 		$body = elgg_echo('user:validate:body', array($user->name, $site->name, $user->username, $site->name, $site->url));
-		$result = notify_user($user->guid, $site->guid, $subject, $body, NULL, 'email');	
+		$result = notify_user($user->guid, $site->guid, $subject, $body, NULL, 'email');
 	}
 }
 
 access_show_hidden_entities($access);
 
+// Validation report
 if (count($user_guids) == 1) {
 	$message_txt = elgg_echo('uservalidationbyadmin:messages:validated_user');
 	$error_txt = elgg_echo('uservalidationbyadmin:errors:could_not_validate_user');
@@ -49,10 +50,7 @@ if (count($user_guids) == 1) {
 	$error_txt = elgg_echo('uservalidationbyadmin:errors:could_not_validate_users');
 }
 
-if ($error) {
-	register_error($error_txt);
-} else {
-	system_message($message_txt);
-}
+if ($error) { register_error($error_txt); } else { system_message($message_txt); }
 
 forward(REFERRER);
+

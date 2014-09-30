@@ -10,7 +10,7 @@ $fr = array(
 	'admin:users:unvalidated' => 'Non validés',
 	
 	'email:validate:subject' => "%s demande la validation de son compte pour %s !",
-	'email:validate:body' => "Bonjour %s,
+	'email:validate:body' => "Bonjour,
 
 Un membre nommé %s vous demande la validation de son compte. 
 
@@ -76,7 +76,10 @@ Mot de passe : celui que vous avez indiqué lors de l'inscription
 	'uservalidationbyadmin:messages:deleted_user' => 'Compte utilisateur supprimé.',
 	'uservalidationbyadmin:messages:deleted_users' => 'Tous les comptes utilisateurs sélectionnés ont été supprimés.',
 	'uservalidationbyadmin:messages:resent_validation' => 'Demande de validation envoyée à nouveau.',
-	'uservalidationbyadmin:messages:resent_validations' => 'Demandes de validation envoyées à nouveau à chacun des comptes utilisateurs sélectionnés.'
+	'uservalidationbyadmin:messages:resent_validations' => 'Demandes de validation envoyées à nouveau à chacun des comptes utilisateurs sélectionnés.',
+	
+	'uservalidationbyadmin:settings:usernames' => "Nom d'utilisateur des membres à prévenir (doivent être admin)",
+	'uservalidationbyadmin:user' => "Nom d'utilisateur n°%s",
 
 );
 

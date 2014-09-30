@@ -112,7 +112,7 @@ if ($full) {
 
 	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
 	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
-	$wiki_nav = '<div class="full-width-pages-nav"><a href="#full-width-pages-nav-content" rel="toggle"><i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'). '</a><div id="full-width-pages-nav-content" style="display:none;">' . elgg_view('pages/sidebar/full-width-navigation') . '</div></div>';
+	$wiki_nav = '<div class="full-width-pages-nav"><a href="#full-width-pages-nav-content" rel="toggle"><i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'). '</a><div id="full-width-pages-nav-content" style="display:none;">' . elgg_view('pages/top-summary', array('entity' => $page)) . '</div></div>';
 	echo $wiki_nav;
 	
 	echo elgg_view('object/elements/full', array(
@@ -122,6 +122,8 @@ if ($full) {
 		'summary' => $summary,
 		'body' => $body,
 	));
+	
+	echo elgg_view('pages/sub-pages', array('entity' => $page));
 	
 } else {
 	// brief view

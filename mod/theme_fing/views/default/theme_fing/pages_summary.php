@@ -8,7 +8,7 @@
 // add the jquery treeview files for navigation
 elgg_load_js('jquery-treeview');
 elgg_load_css('jquery-treeview');
-
+elgg_load_library('elgg:pages');
 
 $selected_page = elgg_extract('page', $vars, false);
 if ($selected_page) {
@@ -24,15 +24,17 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('pages:none') . '</p>';
 }
 
-echo '<strong>' . $title . '</strong>' . $content;
+//echo '<strong>' . $title . '</strong>';
+echo $content;
+
 
 ?><?php //@todo JS 1.8: no ?>
 <script type="text/javascript">
 $(document).ready(function() {
 	$(".pages-nav").treeview({
 		persist: "location",
-		collapsed: true,
-		unique: true
+		collapsed: false,
+		unique: false,
 	});
 
 	<?php

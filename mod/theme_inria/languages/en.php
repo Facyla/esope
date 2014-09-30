@@ -323,6 +323,7 @@ Here is the new profile page : %s
 ",
 	
 	'theme_inria:pages:summarytoggle' => "Wiki navigation (show/hide)",
+	'theme_inria:subpages' => "Sub-pages",
 	
 	'theme_inria:ldapprofile:updatelink' => "Out of date ? Please <a href=\"http://dsi.inria.fr/services/support/index_html#SMI\">contact your center SIC</a>",
 	
@@ -346,6 +347,8 @@ Here is the new profile page : %s
 	'theme_inria:unarchiveuser:error' => "User could not be un-archived",
 	
 	'theme_inria:option:nofilter' => "(no filter)",
+	
+	'theme_inria:group:oldactivity' => "There has been no activity in this group since %s.",
 	
 	
 );

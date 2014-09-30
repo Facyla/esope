@@ -8,6 +8,12 @@ $user = elgg_extract("user", $vars, elgg_get_logged_in_user_entity());
 $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
 
+/*
+// Only for subtype filtering
+$subtype_id = get_subtype_id('object', 'thewire');
+$dbprefix = get_config("dbprefix");
+*/
+
 $river_options = array(
 	"relationship" => "friend",
 	"relationship_guid" => $user->getGUID(),
@@ -16,6 +22,11 @@ $river_options = array(
 	"posted_time_upper" => $ts_upper,
 	"pagination" => false,
 	'types' => array('group', 'user'),
+	/*
+	// This is for subtype filtering only, can be removed if no filtering
+	"joins" => array("INNER JOIN " . $dbprefix . "entities AS e ON rv.object_guid = e.guid"),
+	"wheres" => array("e.subtype != " . $subtype_id), // filter some subtypes
+	*/
 );
 
 $river_items = elgg_list_river($river_options);

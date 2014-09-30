@@ -1825,4 +1825,18 @@ function esope_get_best_translation_for_metadata($name, $prefix = '', $translati
 }
 
 
+// Prepare date for iCal
+/* Note : we'll see what we exactly need : adjust time, add TZID to data, etc.
+// Important : pour ical, soit la date est avec un Z final et est en UTC, soit elle comporte le TZID="Europe/Paris" puis la date sans le Z final
+function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
+	// Add imezone info
+	$tzid = ";TZID=" . date_default_timezone_get();
+	// Use TZ correction to adjust UTC stamp
+	$tsUTC = $ts + ($tzone * 3600);       
+	$ts  = date("Ymd\THis\Z", $tsUTC);
+	return $ts;
+} 
+*/
+
+
 

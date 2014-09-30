@@ -322,6 +322,7 @@ Voici l'adresse du nouveau compte créé : %s
 ",
 	
 	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",
+	'theme_inria:subpages' => "Sous-pages",
 	
 	'theme_inria:ldapprofile:updatelink' => "Plus à jour ? Veuillez contacter le <a href=\"http://dsi.inria.fr/services/support/index_html#SMI\">SIC de votre centre</a>",
 	
@@ -345,6 +346,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
 	'theme_inria:option:nofilter' => "(aucun filtre)",
+	
+	'theme_inria:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	
 );
 

@@ -27,6 +27,8 @@ foreach ($groups as $group) {
 	$sql .= " INNER JOIN " . $dbprefix . "entities AS e ON r.object_guid = e.guid"; // river event -> object
 	$sql .= " WHERE (e.container_guid = $group_guid OR r.object_guid = $group_guid)"; // filter by group
 	$sql .= " AND r.posted BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
+	$sql .= " AND e.owner_guid != " . $user->guid; // filter own content from entities
+	$sql .= " AND r.subject_guid != " . $user->guid; // filter own actions
 	$sql .= " AND " . get_access_sql_suffix("e"); // filter access
 	$sql .= " ORDER BY posted DESC";
 	$sql .= " LIMIT " . $offset . "," . $limit;
