@@ -1,10 +1,10 @@
 <?php
-
 	/**
 	* Shows the latests thewires in the Digest
 	*
 	*/
 	
+	$user = elgg_extract("user", $vars, elgg_get_logged_in_user_entity());
 	$ts_lower = (int) elgg_extract("ts_lower", $vars);
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
 
@@ -17,10 +17,11 @@
 		"limit" => 5,
 		"created_time_lower" => $ts_lower,
 		"created_time_upper" => $ts_upper,
+		"wheres" => "e.owner_guid != " . $user->guid, // filter own content
 	);
 
 	if($thewires = elgg_get_entities($thewire_options)){
-		$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:thewire"), "href" => "thewire/all" ));
+		$title = elgg_view("output/url", array("text" => elgg_echo("thewire"), "href" => "thewire/all" ));
 		
 		$latest_thewires = "";
 		
