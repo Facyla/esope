@@ -1,3 +1,3 @@
 <?php
-// Remove lastest blog digest element
+// Remove latest river elements
 
