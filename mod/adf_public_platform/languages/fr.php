@@ -710,6 +710,26 @@ $fr = array(
 	
 	'readmore' => "Lire la suite",
 	
+	// Subtypes
+	'esope:subtype:pages' => "wiki",
+	'esope:subtype:page' => "page wiki",
+	'esope:subtype:page_top' => "wiki",
+	'esope:subtype:bookmarks' => "lien web",
+	'esope:subtype:blog' => "article",
+	'esope:subtype:file' => "fichier",
+	'esope:subtype:event_calendar' => "événement",
+	
+	// Icons
+	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
+	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
+	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
+	'esope:subtype:blog:icon' => '<i class="fa fa-file-text-o"></i>',
+	'esope:subtype:file:icon' => '<i class="fa fa-file"></i>',
+	'esope:subtype:event_calendar:icon' => '<i class="fa fa-calendar"></i>',
+	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
+	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
+	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
+	
 );
 
 add_translation('fr', $fr);

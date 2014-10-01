@@ -35,6 +35,9 @@ $french = array(
 	
 	'theme_fing:digest:pin' => "Contenus sélectionnés",
 	
+	'theme_fing:ressources' => "Ressources",
+	'theme_fing:ressources:group' => "Ressources du groupe %s",
+	
 );
 
 add_translation("fr",$french);
