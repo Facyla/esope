@@ -2,16 +2,13 @@
 // Articles les plus likés
 // This view is meant to render liked content, using various criteria, such as popularity, normal or reverse order, and by using a timeframe
 
-// @TODO
-
 $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
 $order = elgg_extract('order', $vars, 'ASC');
-// @TODO : Remove container if not site/group/user ?
-if ($container_guid) { $options['annotation_owner_guids'] = $container_guid; }
 
 // Set selection criteria
 $options['annotation_names'] = array('likes');
+$options['limit'] = 5;
 
 $dbprefix = elgg_get_config('dbprefix');
 $likes_metastring = get_metastring_id('likes');
