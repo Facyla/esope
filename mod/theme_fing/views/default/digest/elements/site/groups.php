@@ -8,13 +8,15 @@ $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
 
 $group_options = array(
-	"type" => "group",
-	"limit" => 0,
+	'type' => 'group',
+	'limit' => 10,
 	"created_time_lower" => $ts_lower,
-	"created_time_upper" => $ts_upper
+	"created_time_upper" => $ts_upper,
+	'metadata_name' => 'featured_group',
+	'metadata_value' => 'yes',
 );
 
-if($newest_groups = elgg_get_entities($group_options)){
+if($newest_groups = elgg_get_entities_from_metadata($group_options)){
 	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:groups"), "href" => "groups/all"));
 	
 	$group_items = "<div class='digest-groups'>";
@@ -38,4 +40,4 @@ if($newest_groups = elgg_get_entities($group_options)){
 	
 	echo elgg_view_module("digest", $title, $group_items);
 }
-
+chahnaiQu2EemaeZ
