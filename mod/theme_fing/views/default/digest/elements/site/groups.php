@@ -40,4 +40,4 @@ if($newest_groups = elgg_get_entities_from_metadata($group_options)){
 	
 	echo elgg_view_module("digest", $title, $group_items);
 }
-chahnaiQu2EemaeZ
+
