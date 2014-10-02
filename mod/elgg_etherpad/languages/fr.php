@@ -52,6 +52,15 @@ $fr = array(
 	'elgg_etherpad:vieweditentity' => "Publication à éditer collaborativement",
 	'elgg_etherpad:vieweditentity:details' => "Voici la publication à éditer. Vous pouvez synchroniser son contenu vers le pad, ou récupérer le contenu du pad pour remplacer celui-ci.",
 	
+	'elgg_etherpad:pad:url' => "Adresse du Pad",
+	'elgg_etherpad:pad:publicurl' => "Adresse publique du Pad",
+	'elgg_etherpad:public' => "<i class=\"fa fa-unlock\"></i> PUBLIC",
+	'elgg_etherpad:private' => "<i class=\"fa fa-lock\"></i> NON PUBLIC",
+	'elgg_etherpad:access:current' => "Etat actuel",
+	'elgg_etherpad:passwordprotected' => "<i class=\"fa fa-key\"></i> PROTEGE PAR MOT DE PASSE",
+	'elgg_etherpad:nopassword' => "(SANS MOT DE PASSE)",
+	'elgg_etherpad:publiconly' => "Ce pad a été créé comme \"pad public\" (hors groupe), et ne peut pas être rendu privé ni protégé par un mot de passe.",
+	'elgg_etherpad:viewpad' => "<i class=\"fa fa-eye\"></i> Afficher la page de visualisation du pad",
 	
 );
 

@@ -348,6 +348,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:option:nofilter' => "(aucun filtre)",
 	
 	'theme_inria:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
+	'theme_inria:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
 	
 );
 

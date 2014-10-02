@@ -24,7 +24,10 @@ $form_body .= '</h3>';
 
 $server = elgg_get_plugin_setting('server', 'elgg_etherpad');
 
-$form_body .= '<p><strong>Adresse du Pad :</strong> ' . $CONFIG->url . '/pad/view/' . $padID . '</p>';
+$pad_url = $CONFIG->url . 'pad/view/' . $padID;
+$public_pad_url = $server . '/p/' . $padID;
+
+$form_body .= '<p><strong>' . elgg_echo('elgg_etherpad:pad:url') . '&nbsp;:</strong> <a href="' . $pad_url . '" target="_blank">' . $pad_url . '</a></p>';
 
 /*
 // Base action url for a given pad - can be used to delete pad
@@ -38,15 +41,17 @@ if ($group_id) {
 	$public = elgg_etherpad_is_public($padID);
 	$isPasswordProtected = elgg_etherpad_is_password_protected($padID);
 	
+	if ($public == 'yes') { $form_body .= '<p><strong>' . elgg_echo('elgg_etherpad:pad:publicurl') . '&nbsp;:</strong> <a href="' . $public_pad_url . '" target="_blank">' . $public_pad_url . '</a></p>'; }
+	
 	$form_body .= '<p><em>' . elgg_echo('elgg_etherpad:forms:creategrouppad:details') . '</em></p>';
 	$form_body .= '<br />';
 	
 	$form_body .= '<p><label>' . elgg_echo('elgg_etherpad:public') . ' ' . elgg_view('input/dropdown', array('name' => 'public', 'value' => $public, 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
-	$form_body .= 'Etat actuel : ';
+	$form_body .= elgg_echo('elgg_etherpad:access:current') . '&nbsp;: ';
 	if ($public == 'yes') {
-		$form_body .= '<i class="fa fa-unlock"></i> PUBLIC ';
+		$form_body .= elgg_echo('elgg_etherpad:private') . ' ';
 	} else if ($public == 'no') {
-		$form_body .= '<i class="fa fa-lock"></i> NON PUBLIC ';
+		$form_body .= elgg_echo('elgg_etherpad:private') . ' ';
 	}
 	$form_body .= '</p>';
 	$form_body .= '<br />';
@@ -55,15 +60,15 @@ if ($group_id) {
 	$form_body .= '<p><label>' . elgg_echo('elgg_etherpad:password') . ' ' . elgg_view('input/text', array('name' => 'password', 'value' => '', 'style' => "width:20ex;")) . '</label> &nbsp; ';
 	$form_body .= 'Etat actuel : ';
 	if ($isPasswordProtected == 'yes') {
-		$form_body .= '<i class="fa fa-key"></i> PROTEGE PAR MOT DE PASSE ';
+		$form_body .= elgg_echo('elgg_etherpad:passwordprotected') . ' ';
 	} else if ($isPasswordProtected == 'no') {
-		$form_body .= '(SANS MOT DE PASSE) ';
+		$form_body .= elgg_echo('elgg_etherpad:nopassword') . ' ';
 	}
 	$form_body .= '<br /><em>' . elgg_echo('elgg_etherpad:password:details') . '</em></p>';
 	$form_body .= '<br />';
 	
 } else {
-	$form_body .= '<p><em>Ce pad a été créé comme "pas public", et ne peut pas être rendu privé ni protégé par un mot de passe.</em></p>';
+	$form_body .= '<p><em>' . elgg_echo('elgg_etherpad:publiconly') . '</em></p>';
 }
 
 
@@ -79,8 +84,8 @@ $form_body .= elgg_view('input/submit', array('value' => elgg_echo("elgg_etherpa
 
 echo elgg_view('input/form', array('action' => $vars['url'] . "action/elgg_etherpad/edit", 'body' => $form_body));
 
-echo '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '"><i class="fa fa-eye"></i> Afficher la page de visualisation du pad</a></p>';
+echo '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . elgg_echo('elgg_etherpad:viewpad') . '</a></p>';
 
-echo '<iframe src="' . $server . '/p/' . $padID . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
+echo '<iframe src="' . $public_pad_url . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
 
 

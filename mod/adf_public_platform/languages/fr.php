@@ -730,6 +730,9 @@ $fr = array(
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
 	
+	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
+	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
+	
 );
 
 add_translation('fr', $fr);
