@@ -16,6 +16,7 @@ if ($container_guid) { $options['annotation_owner_guids'] = $container_guid; }
 $options['annotation_names'] = array('likes');
 
 // @TODO : Add timesframe filtering, but let's check first if we have this information !! (we should check when it has been liked, not the publication date...)
+// Note : les likes concervent la date et l'auteur du like
 // $sql .= " AND r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 
 if ($sortby == 'popular') {

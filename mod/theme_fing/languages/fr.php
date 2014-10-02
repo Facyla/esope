@@ -34,6 +34,9 @@ $french = array(
 	'profile:types:adherents' => "Adhérents",
 	
 	'theme_fing:digest:pin' => "Contenus sélectionnés",
+	'theme_fing:digest:likes' => "Contenus les plus appréciés",
+	'theme_fing:userlikedthis' => "%s membre a particulièrement apprécié",
+	'theme_fing:userslikedthis' => "%s membres ont particulièrement apprécié",
 	
 	'theme_fing:ressources' => "Ressources",
 	'theme_fing:ressources:group' => "Ressources du groupe %s",

@@ -19,7 +19,7 @@ if (!empty($pins)) {
 	foreach ($pins as $ent) {
 		$ent_url = $ent->getURL();
 		
-		$latest_pins .= "<div class='digest-blog'>";
+		$latest_pins .= '<div class="digest-blog">';
 		
 		$image_url = '';
 		if ($ent->icontime) { $image_url = $ent->getIconURL("small"); }
@@ -29,11 +29,11 @@ if (!empty($pins)) {
 		}
 		
 		$latest_pins .= "<a href='" . $ent_url . "'><img src='" . $image_url . "' /></a>";
-		$latest_pins .= "<span>";
+		$latest_pins .= '<span>';
 		$latest_pins .= "<h4><a href='" . $ent_url . "'>" . $ent->title . "</a></h4>";
 		$latest_pins .= elgg_get_excerpt($ent->description);
-		$latest_pins .= "</span>";
-		$latest_pins .= "</div>";
+		$latest_pins .= '</span>';
+		$latest_pins .= '</div>';
 	}
 	
 	echo elgg_view_module("digest", $title, $latest_pins);
