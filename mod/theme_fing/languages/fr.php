@@ -37,6 +37,8 @@ $french = array(
 	'theme_fing:digest:likes' => "Quelques contenus les plus appréciés",
 	'theme_fing:userlikedthis' => "%s membre a particulièrement apprécié",
 	'theme_fing:userslikedthis' => "%s membres ont particulièrement apprécié",
+	'theme_fing:digest:message:title:site' => "Votre revue %s du %s",
+	'theme_fing:digest:message:title:group' => "Votre revue %s de % - %s",
 	
 	'theme_fing:ressources' => "Ressources",
 	'theme_fing:ressources:group' => "Ressources du groupe %s",
