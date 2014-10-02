@@ -160,6 +160,7 @@ elgg.tinymce.init = function() {
 		editor_selector : "simple-editor",
 		theme : "simple",
 		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
+		convert_urls : false,
 	});
 	
 	
