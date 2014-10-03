@@ -29,7 +29,7 @@ if($newest_groups = elgg_get_entities_from_metadata($group_options)){
 			$group_items .= '<div style="float:right;  width:420px;">';
 				$group_items .= '<h4><a href="' . $group->getURL() . '">' . $group->name . '</a></h4>';
 				$group_items .= '<p><em>' . $group->briefdescription . '</em></p>';
-				if ($group->interests) $group_items .= '<p>#' . implode(' &nbsp; #', $group->interests) . '</p>';
+				if (!empty($group->interests)) $group_items .= '<p>#' . implode(' &nbsp; #', $group->interests) . '</p>';
 			$group_items .= '</div>';
 			$group_items .= '<div style="clear:both;"></div>';
 			$group_items .= '<p>' . elgg_get_excerpt($group->description, 500) . '</p>';
