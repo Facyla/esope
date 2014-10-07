@@ -79,7 +79,7 @@ function rssimport_blog_import($item, $rssimport){
 	$parse_rss_url = parse_url($rssimport->description);
 	// Tags extraits du contenu filtré, s'il y a lieu
 	$extracted_tags = rssimport_filter_content($blogbody, $parse_rss_url['host'], true);
-	$blogbody = rssimport_filter_content($blogbody, $parse_rss_url['host']);
+	$blogbody .= rssimport_filter_content($blogbody, $parse_rss_url['host']);
 	$blogbody .= "<br><br>";
 	$blogbody .= "<hr><br>";
 	$blogbody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br>";
@@ -148,7 +148,7 @@ function rssimport_bookmarks_import($item, $rssimport){
 		$parse_rss_url = parse_url($rssimport->description);
 		// Tags extraits du contenu filtré, s'il y a lieu
 		$extracted_tags = rssimport_filter_content($bookmarkbody, $parse_rss_url['host'], true);
-		$bookmarkbody = rssimport_filter_content($bookmarkbody, $parse_rss_url['host']);
+		$bookmarkbody .= rssimport_filter_content($bookmarkbody, $parse_rss_url['host']);
 		// ESOPE : add real data source, if defined
 		$bookmarkbody .= rssimport_add_source($item);
 		$bookmark->description = $bookmarkbody;
@@ -561,7 +561,7 @@ function rssimport_page_import($item, $rssimport){
 		$pagebody .= elgg_echo('rssimport:by') . ": " . $author->get_name() . "<br>";
 	}
 	// ESOPE : add real data source, if defined
-	$pagebody = rssimport_add_source($item);
+	$pagebody .= rssimport_add_source($item);
 	//$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
 	$date_format = elgg_echo('rssimport:date:format');
 	$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date($date_format);
