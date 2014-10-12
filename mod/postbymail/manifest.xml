@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Post by email</name>
+	<author>Facyla</author>
+	<version>0.6</version>
+	<blurb>Reply to notifications + Post by email</blurb>
+	<description>Publication par email de commentaires et de nouveaux contenus.</description>
+	<website>http://items.fr/</website>
+	<copyright>(C) Items International 2010-2014</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<requires>
+		<type>elgg_version</type>
+		<version>1.8</version>
+	</requires>
+
+	<requires>
+		<type>plugin</type>
+		<name>html_email_handler</name>
+	</requires>
+
+	<category>email</category>
+	<category>publication</category>
+	<category>cron</category>
+	<category>content</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
+
+<!--
+IMPORTANT : les réponses par mail automatiques peuvent avoir des effets potentiellement désastreux si ça boucle !  cas de figure à éviter (milite pour le lien de réponse plutôt que d'indiquer l'adresse de réponse comme expéditeur)...)
+
+@TODO : handle direct messages by email !!
+
+
+0.6 - 20140729
+  - new reply button
+  - main function rewrite
+  - hook rewrites and cleanup
+  - new settings to set reply behaviour (reply button vs sender mail reply)
+  - some refactoring (code, settings)
+  - handle forum replies and CLI mode (used by advanced_notifications)
+  - handles direct messages support
+  - better cron simulation
+
+0.5 - 20140725
+  - version 1.8
+  - internationalisation complète
+ - integrate back fork devs from 0.3.5 - 20120708 & 0.3.6 - 20120731 :
+  - implement posting by mail for groups and users
+  - use new parameters :
+    * a posting "key", associated to the container group or user. this key should be unique, and add some protection against spamming. We need both
+    * a "subtype" parameter, to allow various content
+  - posting by mail for groups and/or users functional
+  - "access" parameter
+  - @todo : check tools eligibility in groups and users (activated ?) + error messagerie
+  - @todo : filter depending on some senders (configurable ?) => Diigo first (@todo : extract Diigo mail markers)
+
+
+0.4.5 - 20130820
+  - debug usersettings : allow to delete empty mails
+
+0.4.4 - 20130504
+  - debug alternate email addresses
+
+0.4.3 - 20130311
+  - allow to reply by mail to a private message
+
+0.4.2 - 20121128
+  - avoid looping by replying to automatic messages :
+    * add headers to tell it's an automatic notification
+    * check headers to tell if it's a valid mail or an automatic reply
+  - support publishing in container other than groups only (user & site)
+
+0.4.1 - 201211
+  - add guid to reply mail
+
+0.4 - 20120703
+  - adaptation to Elgg 1.8.6
+
+0.3 - 20120524 :
+  - allow the use of alternate email addresses to determine the posting member
+  - this system checks that the email is not used before adding, as a member email and in other plugin private usersettings
+  - also checks that the addresses are valid (technically only, no confirmation mail send)
+  - doesn't hook into registration system : alternate addresses can be used to register a new account and will take precedence on alternate emails
+
+0.2.4 - 20120523 :
+  - add alternate email addresses in plugin usersettings
+
+0.2.3 - 20120522 : 
+  - modification des messages de notification
+  - mini-modif des settings, pour URL cron et URL admin
+
+0.2.2 - 20120504 : 
+  - debug : redirections intempestives dues au cron : la page ne fait plus rien seule
+
+0.2.1 - 20120425 : 
+  - changement du test ->isMember pour autoriser aussi les admins, et surtout le responsable du groupe
+
+0.2 - 20120419 : 
+  - ajout et prise en compte des paramétrages : messagerie et plugin
+
+0.1 - 20120418 : premier packaging en plugin du script de publication par mail
+  - séparation des pages et fonctions
+  - dossiers lib/ et pages/ pour anticiper sur une évolution en 1.8.x
+
+//-->
+
