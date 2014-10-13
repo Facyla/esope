@@ -15,7 +15,7 @@ $fr = array(
 	
 	'elgg_etherpad:editpad' => "Modifier les réglages du pad",
 	'elgg_etherpad:title' => "Nom du pad",
-	'elgg_etherpad:public' => "Le pad peut-il être visible publiquement ?",
+	'elgg_etherpad:ispublic' => "Le pad peut-il être visible publiquement ?",
 	'elgg_etherpad:password' => "Mot de passe",
 	'elgg_etherpad:password:details' => "Indiquer le mot de passe pour restreindre l'accès au pad. Laisser vide pour ne pas modifier. Ecrire \"no\" pour supprimer un mot de passe précédemment défini.",
 	'elgg_etherpad:createpad' => "Créer le pad public",
@@ -26,7 +26,7 @@ $fr = array(
 	'elgg_etherpad:setcookie:error' => "Impossible de créer le cookie de session vers Etherpad Lite : vous ne pourrez accéder qu'aux pads publics !",
 	
 	// Entity editing
-	'elgg_etherpad:entityedit:warning' => "Important : veuillez rafraîchir la page avant de copier le texte depuis ou vers le pad, car le contenu de la publicaiton n'est pas mis à jour en temps réel et peut avoir changé !",
+	'elgg_etherpad:entityedit:warning' => "Important : veuillez rafraîchir la page avant de copier le texte depuis ou vers le pad, car le contenu de la publication n'est pas mis à jour en temps réel et peut avoir changé !",
 	'elgg_etherpad:pushtoentity' => "Copier le contenu du pad vers la publication",
 	'elgg_etherpad:pushtoentity:success' => "Le contenu de la publication a été mis à jour",
 	'elgg_etherpad:pushtoentity:error' => "Le contenu de la publication n'a pas pu être mis à jour",

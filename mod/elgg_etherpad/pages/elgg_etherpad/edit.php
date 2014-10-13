@@ -51,25 +51,25 @@ $padID = get_input('padID', false);
 $action = get_input('action', false);
 
 
-// Actions toujours disponibles
-$body .= '<div style="float:left; width:48%;">';
-	$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:creategrouppad') . '</h3>';
-	$body .= elgg_view('forms/elgg_etherpad/creategrouppad', array());
-$body .= '</div>';
-$body .= '<div style="float:right; width:48%;">';
-	$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:createpad') . '</h3>';
-	$body .= elgg_view('forms/elgg_etherpad/createpad', array());
-$body .= '</div>';
-$body .= '<div class="clearfloat"></div><br />';
-
-
 
 // Avec un pad défini : édition d'un pad précis
 if ($padID) {
 	
+	//$body .= elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
 	$body .= elgg_view('forms/elgg_etherpad/editpad', array('padID' => $padID));
 	
 } else {
+	
+	// Création de nouveaux pads
+	$body .= '<div style="float:left; width:48%;">';
+		$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:creategrouppad') . '</h3>';
+		$body .= elgg_view('forms/elgg_etherpad/creategrouppad', array());
+	$body .= '</div>';
+	$body .= '<div style="float:right; width:48%;">';
+		$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:createpad') . '</h3>';
+		$body .= elgg_view('forms/elgg_etherpad/createpad', array());
+	$body .= '</div>';
+	$body .= '<div class="clearfloat"></div><br />';
 	
 	// Liste des tous les pads modifiables
 	if (elgg_is_admin_logged_in()) {
@@ -135,7 +135,13 @@ if ($padID) {
 
 
 
-$title = "Créer / modifier un Pad";
+if ($padID) {
+	$title = "Modifier le Pad $padID";
+	$inner_title = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+} else {
+	$title = "Créer / modifier un Pad";
+	$inner_title = $title;
+}
 if ($group_id) $title .= " (groupe $group_id)";
 
 elgg_pop_breadcrumb();
@@ -145,7 +151,7 @@ if ($pad_name) elgg_push_breadcrumb($pad_name);
 
 
 $body = elgg_view_layout('one_column', array(
-		'title' => $title,
+		'title' => $inner_title,
 		'content' => $body,
 	));
 

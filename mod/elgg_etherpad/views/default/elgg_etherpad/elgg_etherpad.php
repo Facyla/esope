@@ -8,11 +8,18 @@
  */
 
 $padID = elgg_extract('padID', $vars, false);
-$server = elgg_get_plugin_setting('server', 'elgg_etherpad');
 
 $body = '';
 
 if (!$padID) { return; }
+
+// Only display pads we can view...
+if (!elgg_etherpad_can_read_pad($padID)) {
+	echo "(No access to $padID)";
+	return;
+}
+
+$server = elgg_get_plugin_setting('server', 'elgg_etherpad');
 
 if (strpos($padID, '$')) {
 	$pad_name = explode('$', $padID);
@@ -59,7 +66,9 @@ if ($group_id) {
 	
 	//$body .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/view/' . $padID . '"><i class="fa fa-eye"></i> Afficher le pad</a> ';
 	
-	$pad_edit .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/edit/' . $padID . '" title="Configurer le pad (visibilité, mot de passe)"><i class="fa fa-gear"></i></a> ';
+	if (elgg_etherpad_can_edit_pad($padID)) {
+		$pad_edit .= ' &nbsp; <a href="' . $CONFIG->url . 'pad/edit/' . $padID . '" title="Configurer le pad (visibilité, mot de passe)"><i class="fa fa-gear"></i></a> ';
+	}
 }
 
 // Ssi pad public ou en accès public (avec ou sans mot de passe)
@@ -68,7 +77,6 @@ $pad_extlink = '';
 if (!$group_id || ($isPublic == 'yes')) {
 	$pad_extlink .= '&nbsp; <a href="' . $server . '/p/' . $padID . '" title="Ouvrir et utiliser le pad (adresse publique)" target="_blank"><i class="fa fa-external-link"></i></a>';
 }
-
 
 $body = '<p>' . $pad_type . $pad_access . '&nbsp; ' . $pad_title . $pad_extlink . $pad_edit . '</p>';
 
