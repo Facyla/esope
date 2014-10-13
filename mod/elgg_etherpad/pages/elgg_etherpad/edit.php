@@ -82,18 +82,18 @@ if ($padID) {
 	$pads = elgg_etherpad_get_response_data($response, 'padIDs');
 	
 	if ($pads) {
-		foreach ($pads as $padID) {
-			if (strpos($padID, '$')) {
-				$pad_name = explode('$', $padID);
+		foreach ($pads as $pad_id) {
+			if (strpos($pad_id, '$')) {
+				$pad_name = explode('$', $pad_id);
 				$group_id = $pad_name[0];
 				$pad_name = $pad_name[1];
 			} else {
-				$pad_name = $padID;
+				$pad_name = $pad_id;
 				$group_id = false;
 			}
 	
 			// Sort by group, personal and public pads
-			$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+			$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $pad_id));
 			if ($group_id) {
 				// Can be either own or other private/group pad
 				if ($group_id == $own_group_id) {
@@ -111,20 +111,20 @@ if ($padID) {
 			$body .= '<h4>Pads personnels</h4>';
 			$body .= implode('', $personal_pads);
 		$body .= '</div>';
-
+		
 		$body .= '<div style="float:left; width:32%;">';
-			$body .= '<h4>Pads publics</h4>';
-			$body .= '<p><em>Ces pads sont ouverts à tous (y compris sans compte)</em></p>';
-			$body .= implode('', $public_pads);
-		$body .= '</div>';
-
-		$body .= '<div style="float:right; width:32%;">';
 			$body .= '<h4>Pads en accès restreint</h4>';
 			$body .= '<p><em>Note : les accès peuvent différer pour chacun de ces pads</em></p>';
 			foreach ($private_pads as $groupID => $pads) {
 				$body .= '<h5>' . $groupID . '</h5>';
 				$body .= implode('', $pads);
 			}
+		$body .= '</div>';
+		
+		$body .= '<div style="float:right; width:32%;">';
+			$body .= '<h4>Pads publics</h4>';
+			$body .= '<p><em>Ces pads sont ouverts à tous (y compris sans compte)</em></p>';
+			$body .= implode('', $public_pads);
 		$body .= '</div>';
 		
 	} else {
@@ -138,11 +138,11 @@ if ($padID) {
 if ($padID) {
 	$title = "Modifier le Pad $padID";
 	$inner_title = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+	if ($group_id) $title .= " (groupe $group_id)";
 } else {
 	$title = "Créer / modifier un Pad";
 	$inner_title = $title;
 }
-if ($group_id) $title .= " (groupe $group_id)";
 
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');

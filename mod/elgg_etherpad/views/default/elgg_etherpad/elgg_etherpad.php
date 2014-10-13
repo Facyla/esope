@@ -11,7 +11,7 @@ $padID = elgg_extract('padID', $vars, false);
 
 $body = '';
 
-if (!$padID) { return; }
+if (empty($padID)) { return; }
 
 // Only display pads we can view...
 if (!elgg_etherpad_can_read_pad($padID)) {

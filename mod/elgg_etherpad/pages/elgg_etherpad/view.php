@@ -68,7 +68,11 @@ if (strpos($padID, '$')) {
 }
 
 // If we want to display a private pad, we need to add a specific session cookie for that pad !
-if ($group_id && elgg_is_logged_in()) $sessionID = elgg_etherpad_create_session($group_id, $authorID);
+if ($group_id && elgg_is_logged_in()) {
+	$sessionID = elgg_etherpad_create_session($group_id, $authorID);
+	$cookie_set = elgg_etherpad_update_session($sessionID);
+	if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
+}
 
 // Display some details on pad visibility
 $title = "Pad \"$pad_name\"";
