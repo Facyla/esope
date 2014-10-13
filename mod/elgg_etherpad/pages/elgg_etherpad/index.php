@@ -49,19 +49,19 @@ $groupMapper = $authorMapper;
 // 2. Then create the associated group
 // Portal maps the internal userid to an etherpad group
 $response = $client->createGroupIfNotExistsFor($groupMapper);
-$groupID = elgg_etherpad_get_response_data($response, 'groupID');
+$own_groupID = elgg_etherpad_get_response_data($response, 'groupID');
 
 // 3. Create a main pad for the user
 // Try to create a new (main) pad in the userGroup
 $padName = "home";
 $text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
-$response = $client->createGroupPad($groupID, $padName, $text);
-$padID = $groupID . '$' . $padName;
+$response = $client->createGroupPad($own_groupID, $padName, $text);
+$padID = $own_groupID . '$' . $padName;
 
 // 4. Open a session an link to that pad
 // Portal starts the session for the user on the group
 $validUntil = time() + 60*60*12;
-$response = $client->createSession($groupID, $authorID, $validUntil);
+$response = $client->createSession($own_groupID, $authorID, $validUntil);
 $sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 // Set session cookie (only on same domain !)
 $cookie_set = elgg_etherpad_update_session($sessionID);
@@ -118,7 +118,7 @@ foreach ($all_pads as $padID) {
 	$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
 	if ($group_id) {
 		// Can be either own or other private/group pad
-		if ($group_id == $own_group_id) {
+		if ($group_id == $own_groupID) {
 			$personal_pads[$pad_name] = $pad_item;
 		} else {
 			$private_pads[$group_id][$pad_name] = $pad_item;

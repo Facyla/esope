@@ -35,11 +35,11 @@ $groupMapper = $authorMapper;
 
 // 2. Then create the associated group
 // Portal maps the internal userid to an etherpad group
-$groupID = elgg_etherpad_get_entity_group_id($entity);
+$own_groupID = elgg_etherpad_get_entity_group_id($entity);
 
 // 3. Open a session and link to that pad
 // Portal starts the session for the user on the group
-$sessionID = elgg_etherpad_create_session($groupID, $authorID);
+$sessionID = elgg_etherpad_create_session($own_groupID, $authorID);
 
 // Set session cookie (only on same domain !)
 $cookie_set = elgg_etherpad_update_session($sessionID);
@@ -96,7 +96,7 @@ if ($padID) {
 			$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $pad_id));
 			if ($group_id) {
 				// Can be either own or other private/group pad
-				if ($group_id == $own_group_id) {
+				if ($group_id == $own_groupID) {
 					$personal_pads[$pad_name] = $pad_item;
 				} else {
 					$private_pads[$group_id][$pad_name] = $pad_item;
