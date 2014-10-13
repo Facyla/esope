@@ -17,7 +17,7 @@ if ($republication_subtypes) {
 } else {
 	$subtypes = array('page', 'page_top', 'blog', 'groupforumtopic');
 }
-if (empty($subtypes)) continue;
+if (empty($subtypes)) return;
 
 $group_content = elgg_get_entities(array('types' => 'object', 'subtypes' => $subtypes, 'container_guid' => $group->guid));
 // Sort by GUID so we can check doubles
