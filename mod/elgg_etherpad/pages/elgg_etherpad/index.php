@@ -140,7 +140,7 @@ $body .= '<div style="float:left; width:32%;">';
 	$body .= '<p><em>Note : les accès peuvent différer pour chacun de ces pads</em></p>';
 	foreach ($private_pads as $groupID => $pads) {
 		$test = elgg_etherpad_get_entity_from_group_id($groupID);
-		echo print_r($test, true);
+		$body .= "$groupID => " . print_r($test, true);
 		$body .= '<h5>' . $groupID . '</h5>';
 		$body .= implode('', $pads);
 	}
