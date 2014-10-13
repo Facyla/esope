@@ -114,6 +114,32 @@ function elgg_etherpad_get_entity_from_group_id($groupID = '') {
 	return false;
 }
 
+
+/* Get Elgg entity details from groupID
+ * Returns details about the entity associated to a specific groupID, if any
+ */
+function elgg_etherpad_get_entity_details_from_group_id($groupID = '') {
+	$entity = elgg_etherpad_get_entity_from_group_id($groupID);
+	$default_return = "? ($groupID)";
+	if ($entity) {
+		$type = $entity->getType();
+		switch($type) {
+			case 'site':
+			case 'user':
+			case 'group':
+				$title = $entity->name;
+				break;
+			case 'object':
+				$title = $entity->title;
+				break;
+			default:
+				return $default_return;
+		}
+		return '<a href="' . $entity->getURL() . '" target="_blank">' . $title . ' (' . $type . ')</a>';
+	}
+	return $default_return;
+}
+
 /* Get the groupID from groupName */
 function elgg_etherpad_get_group_id($groupName, $update = false) {
 	$client = elgg_etherpad_get_client();
