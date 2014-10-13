@@ -17,6 +17,7 @@ if ($republication_subtypes) {
 } else {
 	$subtypes = array('page', 'page_top', 'blog', 'groupforumtopic');
 }
+if (empty($subtypes)) continue;
 
 $group_content = elgg_get_entities(array('types' => 'object', 'subtypes' => $subtypes, 'container_guid' => $group->guid));
 // Sort by GUID so we can check doubles
@@ -42,36 +43,38 @@ if ($group_tags) {
 	
 }
 
-// Sort by creation date, in reverse order (latest first)
-usort($publications, create_function('$a,$b', 'return strcmp($b->time_created,$a->time_created);'));
-$count = count($publications);
-$offset = get_input('offset', 0);
-$limit = get_input('limit', 5);
-$publications = array_slice($publications, $offset, $limit, true);
-foreach ($publications as $guid => $ent) {
-	echo '<br />';
-	//echo '<span style="float:right;">' . elgg_view('socialshare/entity_menu_extend', array('entity' => $ent)) . '</span>';
-	echo elgg_view_menu('entity', array('entity' => $ent, 'class' => 'elgg-menu-hz'));
-	echo '<h2><a href="' . $ent->getURL() . '">' . $ent->title . '</a></h2>';
-	// Article republié : on indique d'où il vient
-	if ($ent->container_guid != $group->guid) {
-		$container = get_entity($ent->container_guid);
-		echo '<div class="elgg-output-container">' . elgg_echo('esope:container:publishedin') . '&nbsp;: <a href="' . $container->getURL() . '">' . $container->name . '</a></div>';
+if ($publications) {
+	// Sort by creation date, in reverse order (latest first)
+	usort($publications, create_function('$a,$b', 'return strcmp($b->time_created,$a->time_created);'));
+	$count = count($publications);
+	$offset = get_input('offset', 0);
+	$limit = get_input('limit', 5);
+	$publications = array_slice($publications, $offset, $limit, true);
+	foreach ($publications as $guid => $ent) {
+		echo '<br />';
+		//echo '<span style="float:right;">' . elgg_view('socialshare/entity_menu_extend', array('entity' => $ent)) . '</span>';
+		echo elgg_view_menu('entity', array('entity' => $ent, 'class' => 'elgg-menu-hz'));
+		echo '<h2><a href="' . $ent->getURL() . '">' . $ent->title . '</a></h2>';
+		// Article republié : on indique d'où il vient
+		if ($ent->container_guid != $group->guid) {
+			$container = get_entity($ent->container_guid);
+			echo '<div class="elgg-output-container">' . elgg_echo('esope:container:publishedin') . '&nbsp;: <a href="' . $container->getURL() . '">' . $container->name . '</a></div>';
+		}
+		echo elgg_view('output/longtext', array('value' => $ent->description));
+		// Commentaires
+		echo elgg_view('comments/public_notice');
+		echo '<div class="clearfloat"></div><br />';
+		echo '<hr /><br />';
 	}
-	echo elgg_view('output/longtext', array('value' => $ent->description));
-	// Commentaires
-	echo elgg_view('comments/public_notice');
-	echo '<div class="clearfloat"></div><br />';
-	echo '<hr /><br />';
+	// Add pagination
+	echo elgg_view('navigation/pagination', array(
+		'base_url' => $group->getURL(),
+		'offset' => $offset,
+		'count' => $count,
+		'limit' => $limit,
+		'offset_key' => 'offset',
+	));
 }
-// Add pagination
-echo elgg_view('navigation/pagination', array(
-	'base_url' => $group->getURL(),
-	'offset' => $offset,
-	'count' => $count,
-	'limit' => $limit,
-	'offset_key' => 'offset',
-));
 
 // Render group content
 //echo elgg_view_entity_list($publications, array('full_view' => true, 'count' => $count, 'limit' => $limit));

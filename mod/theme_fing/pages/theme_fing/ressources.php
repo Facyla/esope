@@ -70,13 +70,16 @@ if ($group = get_entity($group_guid)) {
 	
 	// SIDEBAR
 	// Add latest comments in sidebar
+	$db_prefix = elgg_get_config('dbprefix');
 	$options = array(
 		"list_class" => "elgg-list-river elgg-river",
 		"pagination" => false,
 		'action_types' => 'comment',
 		'limit' => 4,
-		'container_guid' => $group->guid,
 		'subtypes' => $comments_subtypes,
+		// Filter by container
+		'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
+		'wheres' => array("(e1.container_guid = $group_guid)"),
 	);
 	$sidebar .= '<h3>' . elgg_echo('comments') . '</h3>' . elgg_list_river($options);
 } else forward(REFERER);
