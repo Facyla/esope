@@ -36,6 +36,7 @@ See https://github.com/0x46616c6b/etherpad-lite-client
 	- add read/edit checks
 	- cluster pads into personal / group / public
 	- more detailed and compact listing view
+	- add view cookies according to Elgg access rights
 
 0.4 : 201409.18
 	- edit entity with pad (pages and blog)
