@@ -102,7 +102,7 @@ function elgg_etherpad_get_entity_group_id($entity, $update = false) {
 function elgg_etherpad_get_entity_from_group_id($groupID = '') {
 	if (!empty($groupID)) {
 		// Apply some filtering, just in case...
-		$groupID = elgg_get_friendly_title($groupID);
+		//$groupID = elgg_get_friendly_title($groupID);
 		$entities = elgg_get_entities_from_metadata(array('types' => array('site', 'user', 'group', 'object'), 'metadata_name_value_pairs' => array('name' => 'etherpad_groupID', 'value' => $groupID)));
 		if ($entities) {
 			if (sizeof($entities > 1)) {
