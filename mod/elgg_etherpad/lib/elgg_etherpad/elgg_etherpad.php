@@ -95,6 +95,25 @@ function elgg_etherpad_get_entity_group_id($entity, $update = false) {
 	return false;
 }
 
+/* Get Elgg entity from groupID
+ * Returns the entity associated to a specific groupID, if any
+ * Note : should match only 1 Elgg entity, because a groupID (access) is created for each entity (and not for its container)
+ */
+function elgg_etherpad_get_entity_from_group_id($groupID = '') {
+	if (!empty($groupID)) {
+		// Apply some filtering, just in case...
+		$groupID = elgg_get_friendly_title($groupID);
+		$entities = elgg_get_entities_from_metadata(array('types' => array('site', 'user', 'group', 'object'), 'metadata_name_value_pairs' => array('name' => 'etherpad_groupID', 'value' => $groupID)));
+		if ($entities) {
+			if (sizeof($entities > 1)) {
+				error_log("Elgg Etherpad LIB : multiple matching entities found for groupID $groupID");
+			}
+			return $entities[0];
+		}
+	}
+	return false;
+}
+
 /* Get the groupID from groupName */
 function elgg_etherpad_get_group_id($groupName, $update = false) {
 	$client = elgg_etherpad_get_client();
@@ -348,6 +367,7 @@ function elgg_etherpad_save_pad_content_to_entity($padID = false, $entity = fals
 			$entity->save();
 			break;
 		
+		// Other subtypes : we do not want to handle them (no history)
 		case 'bookmarks':
 		case 'file':
 		// Default : should we do anything if we're not sure ?

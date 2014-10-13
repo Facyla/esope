@@ -53,12 +53,12 @@ $action = get_input('action', false);
 
 // Actions toujours disponibles
 $body .= '<div style="float:left; width:48%;">';
-	$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:createpad') . '</h3>';
-	$body .= elgg_view('forms/elgg_etherpad/createpad', array());
-$body .= '</div>';
-$body .= '<div style="float:right; width:48%;">';
 	$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:creategrouppad') . '</h3>';
 	$body .= elgg_view('forms/elgg_etherpad/creategrouppad', array());
+$body .= '</div>';
+$body .= '<div style="float:right; width:48%;">';
+	$body .= '<h3>' . elgg_echo('elgg_etherpad:forms:createpad') . '</h3>';
+	$body .= elgg_view('forms/elgg_etherpad/createpad', array());
 $body .= '</div>';
 $body .= '<div class="clearfloat"></div><br />';
 
@@ -83,10 +83,50 @@ if ($padID) {
 	
 	if ($pads) {
 		foreach ($pads as $padID) {
-			// @TODO : sort by group
-			
-			$body .= elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+			if (strpos($padID, '$')) {
+				$pad_name = explode('$', $padID);
+				$group_id = $pad_name[0];
+				$pad_name = $pad_name[1];
+			} else {
+				$pad_name = $padID;
+				$group_id = false;
+			}
+	
+			// Sort by group, personal and public pads
+			$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+			if ($group_id) {
+				// Can be either own or other private/group pad
+				if ($group_id == $own_group_id) {
+					$personal_pads[$pad_name] = $pad_item;
+				} else {
+					$private_pads[$group_id][$pad_name] = $pad_item;
+				}
+			} else {
+				$public_pads[$pad_name] = $pad_item;
+			}
 		}
+		
+		// Render pads listings
+		$body .= '<div style="float:left; width:32%; margin-right:2%;">';
+			$body .= '<h4>Pads personnels</h4>';
+			$body .= implode('', $personal_pads);
+		$body .= '</div>';
+
+		$body .= '<div style="float:left; width:32%;">';
+			$body .= '<h4>Pads publics</h4>';
+			$body .= '<p><em>Ces pads sont ouverts à tous (y compris sans compte)</em></p>';
+			$body .= implode('', $public_pads);
+		$body .= '</div>';
+
+		$body .= '<div style="float:right; width:32%;">';
+			$body .= '<h4>Pads en accès restreint</h4>';
+			$body .= '<p><em>Note : les accès peuvent différer pour chacun de ces pads</em></p>';
+			foreach ($private_pads as $groupID => $pads) {
+				$body .= '<h5>' . $groupID . '</h5>';
+				$body .= implode('', $pads);
+			}
+		$body .= '</div>';
+		
 	} else {
 		$body .= '<p>Aucun Pad<p>';
 	}

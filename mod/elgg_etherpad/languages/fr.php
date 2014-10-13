@@ -9,9 +9,9 @@ $fr = array(
 	'elgg_etherpad:view' => "Affichage",
 	
 	'elgg_etherpad:forms:createpad' => "Nouveau pad public",
-	'elgg_etherpad:forms:createpad:details' => "Les pads publics ne sont soumis à aucun contrôle d'accès : ils sont ouverts publiquement à tous et le resteront toujours.",
-	'elgg_etherpad:forms:creategrouppad' => "Nouveau pad privé",
-	'elgg_etherpad:forms:creategrouppad:details' => "Les pads privés permettent de gérer un contrôle d'accès sur le pad. Privés par défaut, ils peuvent être rendus publics et protégés avec un mot de passe.",
+	'elgg_etherpad:forms:createpad:details' => "Les pads publics ne sont soumis à aucun contrôle d'accès : ils sont ouverts publiquement à tous. Attention : une fois créés, les pads publics ne peuvent pas être modifiés pour les rendre privés !",
+	'elgg_etherpad:forms:creategrouppad' => "Nouveau pad personnel",
+	'elgg_etherpad:forms:creategrouppad:details' => "Les pads personnels vous permettent de gérer un contrôle d'accès sur le pad. Privés par défaut, ils peuvent être rendus publics et protégés avec un mot de passe.",
 	
 	'elgg_etherpad:editpad' => "Modifier les réglages du pad",
 	'elgg_etherpad:title' => "Nom du pad",

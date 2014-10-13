@@ -84,6 +84,7 @@ $form_body .= elgg_view('input/submit', array('value' => elgg_echo("elgg_etherpa
 
 echo elgg_view('input/form', array('action' => $vars['url'] . "action/elgg_etherpad/edit", 'body' => $form_body));
 
+echo '<div class="clearfloat"></div>';
 echo '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . elgg_echo('elgg_etherpad:viewpad') . '</a></p>';
 
 echo '<iframe src="' . $public_pad_url . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';

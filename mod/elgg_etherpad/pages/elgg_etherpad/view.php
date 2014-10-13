@@ -65,8 +65,10 @@ if (strpos($pad, '$')) {
 	$pad_name = $pad;
 }
 
-$title = "Afficher le pad \"$pad_name\"";
-if ($group_id) $title .= " (groupe $group_id)";
+//$title = "Afficher le pad \"$pad_name\"";
+// Display some details on pad visibility
+$title = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $pad));
+//if ($group_id) $title .= " (groupe $group_id)";
 
 elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
 elgg_push_breadcrumb($pad_name);
