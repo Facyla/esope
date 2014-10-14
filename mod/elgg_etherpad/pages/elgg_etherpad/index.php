@@ -49,19 +49,19 @@ $groupMapper = $authorMapper;
 // 2. Then create the associated group
 // Portal maps the internal userid to an etherpad group
 $response = $client->createGroupIfNotExistsFor($groupMapper);
-$groupID = elgg_etherpad_get_response_data($response, 'groupID');
+$own_groupID = elgg_etherpad_get_response_data($response, 'groupID');
 
 // 3. Create a main pad for the user
 // Try to create a new (main) pad in the userGroup
 $padName = "home";
 $text = "Ce pad a été automatiquement créé pour vous. Vous pouvez l'utiliser ou en créer d'autres.";
-$response = $client->createGroupPad($groupID, $padName, $text);
-$padID = $groupID . '$' . $padName;
+$response = $client->createGroupPad($own_groupID, $padName, $text);
+$padID = $own_groupID . '$' . $padName;
 
 // 4. Open a session an link to that pad
 // Portal starts the session for the user on the group
 $validUntil = time() + 60*60*12;
-$response = $client->createSession($groupID, $authorID, $validUntil);
+$response = $client->createSession($own_groupID, $authorID, $validUntil);
 $sessionID = elgg_etherpad_get_response_data($response, 'sessionID');
 // Set session cookie (only on same domain !)
 $cookie_set = elgg_etherpad_update_session($sessionID);
@@ -69,16 +69,25 @@ if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '
 
 
 // LIST PADS
-$body .= '<p><a href="' . $CONFIG->url . 'pad/edit" style="float:right;" class="elgg-button elgg-button-action">Créer ou modifier des Pads</a></p>';
+$body .= '<p><a href="' . $CONFIG->url . 'pad/edit" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau Pad</a></p>';
+
+// Explications
+$body .= "<p>Les Pads sont des documents texte, qui peuvent être <strong>édités à plusieurs</strong>, <strong>simultanément</strong>.</p>
+<p>Ils peuvent être en accès <strong>public</strong>, et éventuellement <strong>protégés par un mot de passe</strong>.</p>
+	<p>Sur ce site, les Pads peuvent être associés à une personne ou à un groupe, ce qui permet de restreindre son accès à cette personne ou aux membres de ce groupe.</p>
+	<p>Ils peuvent également être associés à une publication existante, ce qui permet par exemple d'utiliser un page pour modifier le contenu d'ue page page wiki ou d'un article de blog.</p>";
 
 // Affichage du pad personnel
+/*
 if ($cookie_set) {
 	$body .= '<h3>Votre pad personnel</h3>';
-	$body .= '<iframe src="' . $server . '/p/' . $padID . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
+	//$body .= '<iframe src="' . $server . '/p/' . $padID . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
 	$body .= '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">Ouvrir votre Pad personnel dans une autre fenêtre</a></p>';
 }
+*/
 
 
+/*
 // Now list all user's pads
 $response = $client->listPadsOfAuthor($authorID);
 $own_pads = elgg_etherpad_get_response_data($response, 'padIDs');
@@ -86,10 +95,12 @@ foreach ($own_pads as $padID) {
 	$pad_name = explode('$', $padID);
 	$own_group_id = $pad_name[0];
 	$pad_name = $pad_name[1];
-	$personal_pads[$pad_name] = '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">Afficher "' . $pad_name . '"</a></p>';
+	//$personal_pads[$pad_name] = '<p><a href="' . $CONFIG->url . 'pad/view/' . $padID . '">Afficher "' . $pad_name . '"</a></p>';
+	$personal_pads[$pad_name] = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
 }
+*/
 
-// All pads
+// All pads : list and sort
 $response = $client->listAllPads();
 $all_pads = elgg_etherpad_get_response_data($response, 'padIDs');
 foreach ($all_pads as $padID) {
@@ -97,36 +108,46 @@ foreach ($all_pads as $padID) {
 		$pad_name = explode('$', $padID);
 		$group_id = $pad_name[0];
 		$pad_name = $pad_name[1];
-		// Skip own pads
-		if ($group_id == $own_group_id) continue;
 	} else {
 		$pad_name = $padID;
 		$group_id = false;
 	}
 	
 	// Sort by group
-	$pad_item = '<p>Afficher <a href="' . $CONFIG->url . 'pad/view/' . $padID . '">"' . $pad_name . '"</a></p>';
-	if ($group_id) $private_pads[$group_id][$pad_name] = $pad_item;
-	else $public_pads[$pad_name] = $pad_item;
+	//$pad_item = '<p>Afficher <a href="' . $CONFIG->url . 'pad/view/' . $padID . '">"' . $pad_name . '"</a></p>';
+	$pad_item = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+	if ($group_id) {
+		// Can be either own or other private/group pad
+		if ($group_id == $own_groupID) {
+			$personal_pads[$pad_name] = $pad_item;
+		} else {
+			$private_pads[$group_id][$pad_name] = $pad_item;
+		}
+	} else {
+		$public_pads[$pad_name] = $pad_item;
+	}
 }
 
 $body .= '<br />';
+
 $body .= '<div style="float:left; width:32%; margin-right:2%;">';
-$body .= '<h4>Vos Pads</h4>';
-$body .= implode('', $personal_pads);
+	$body .= '<h4>Pads personnels</h4>';
+	$body .= implode('', $personal_pads);
 $body .= '</div>';
+
 $body .= '<div style="float:left; width:32%;">';
-$body .= '<h4>Pads publics</h4>';
-$body .= '<p><em>Ces pads sont ouverts à tous (y compris sans compte)</em></p>';
-$body .= implode('', $public_pads);
+	$body .= '<h4>Pads en accès restreint</h4>';
+	$body .= '<p><em>Note : les accès peuvent différer pour chacun de ces pads</em></p>';
+	foreach ($private_pads as $groupID => $pads) {
+		$body .= '<h5>' . elgg_etherpad_get_entity_details_from_group_id($groupID) . '</h5>';
+		$body .= implode('', $pads);
+	}
 $body .= '</div>';
+
 $body .= '<div style="float:right; width:32%;">';
-$body .= '<h4>Pads en accès restreint</h4>';
-$body .= '<p><em>Selon les cas, vous n\'avez pas forcément accès à ces pads</em></p>';
-foreach ($private_pads as $groupID => $pads) {
-	$body .= '<h5>' . $groupID . '</h5>';
-	$body .= implode('', $pads);
-}
+	$body .= '<h4>Pads publics</h4>';
+	$body .= '<p><em>Ces pads sont ouverts à tous (y compris sans compte)</em></p>';
+	$body .= implode('', $public_pads);
 $body .= '</div>';
 
 

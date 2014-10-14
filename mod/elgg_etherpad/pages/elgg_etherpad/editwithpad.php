@@ -49,85 +49,92 @@ $debug = get_input('debug', false);
 $entity = get_entity($guid);
 if (elgg_instanceof($entity, 'object')) {
 	
+	
 	// Only work with some subtypes : page, page_top and blog (which have history)
 	$subtype = $entity->getSubtype();
 	if (in_array($subtype, array('page', 'page_top', 'blog'))) {
 		
-		// Display entity
-		$entity_content = $entity->description;
-		$body .= '<h3>' . elgg_echo('elgg_etherpad:vieweditentity') . '</h3>';
-		$body .= '<blockquote><p><em>' . elgg_echo('elgg_etherpad:vieweditentity:details', array($share_url, $public_share_url)) . '</em></p></blockquote>';
-		$body .= elgg_view_entity($entity, array('full_view' => true)) . '</p>';
-		$body .= '<hr /><br />';
-		$body .= '<blockquote><p>' . elgg_echo('elgg_etherpad:entityedit:warning') . '</p></blockquote>';
-		$body .= '<p><a href="?request=pushtopad" class="elgg-button elgg-button-action">' . elgg_echo('elgg_etherpad:pushtopad') . '</a></p>';
-		$body .= '<div class="clearfloat"></div><br /><br />';
+		// We actually need to be able to edit the associated entity to edit it with a pad !
+		if ($entity->canEdit()) {
+			
+			// Display entity
+			$entity_content = $entity->description;
+			$body .= '<h3>' . elgg_echo('elgg_etherpad:vieweditentity') . '</h3>';
+			$body .= '<blockquote><p><em>' . elgg_echo('elgg_etherpad:vieweditentity:details', array($share_url, $public_share_url)) . '</em></p></blockquote>';
+			$body .= elgg_view_entity($entity, array('full_view' => true)) . '</p>';
+			$body .= '<hr /><br />';
+			$body .= '<blockquote><p>' . elgg_echo('elgg_etherpad:entityedit:warning') . '</p></blockquote>';
+			$body .= '<p><a href="?request=pushtopad" class="elgg-button elgg-button-action">' . elgg_echo('elgg_etherpad:pushtopad') . '</a></p>';
+			$body .= '<div class="clearfloat"></div><br /><br />';
+	
+	
+			// Display edition pad
+			$body .= '<h3>' . elgg_echo('elgg_etherpad:vieweditpad') . '</h3>';
+	
+			// Note : we need at least the padID before we perform any action on it
+			$authorID = elgg_etherpad_get_author_id($own);
+			if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:authorid', array($authorID)) . '</p>';
+			$groupID = elgg_etherpad_get_entity_group_id($entity);
+			if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:groupid', array($groupID)) . '</p>';
+			$padName = 'edit-'.$guid;
+			// Try to create pad first
+			$padID = elgg_etherpad_create_pad($padName, $guid, $public, $password, $entity_content);
+			// If failed, get the existing pad
+			if (empty($padID)) { $padID = $groupID . '$' .$padName; }
 		
 		
-		// Display edition pad
-		$body .= '<h3>' . elgg_echo('elgg_etherpad:vieweditpad') . '</h3>';
+			// Handle sync actions
+			$request = get_input('request', false);
+			switch ($request) {
+				// Update entity content
+				case 'pushtoentity':
+					if (elgg_etherpad_save_pad_content_to_entity($padID, $entity, 'description')) {
+						system_message(elgg_echo('elgg_etherpad:pushtoentity:success'));
+					} else { register_error(elgg_echo('elgg_etherpad:pushtoentity:error')); }
+					forward("pad/editwithpad/$guid");
+					break;
+				// Update pad content
+				case 'pushtopad':
+					if (elgg_etherpad_set_pad_content($padID, $entity_content)) {
+						system_message(elgg_echo('elgg_etherpad:pushtopad:success'));
+					} else { register_error(elgg_echo('elgg_etherpad:pushtopad:error')); }
+					forward("pad/editwithpad/$guid");
+					break;
+				default:
+			}
 		
-		// Note : we need at least the padID before we perform any action on it
-		$authorID = elgg_etherpad_get_author_id($own);
-		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:authorid', array($authorID)) . '</p>';
-		$groupID = elgg_etherpad_get_entity_group_id($entity);
-		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:groupid', array($groupID)) . '</p>';
-		$padName = 'edit-'.$guid;
-		// Try to create pad first
-		$padID = elgg_etherpad_create_pad($padName, $guid, $public, $password, $entity_content);
-		// If failed, get the existing pad
-		if (empty($padID)) { $padID = $groupID . '$' .$padName; }
+		
+			// Display edit pad
+			$pad_url = $server . '/p/' . $padID;
+			$share_url = '<a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . $CONFIG->url . 'pad/view/' . $padID . '</a>';
+			$public_share_url = '<a href="' . $pad_url . '">' . $pad_url . '</a>';
+			$body .= '<blockquote><p><em>' . elgg_echo('elgg_etherpad:vieweditpad:details', array($share_url, $public_share_url)) . '</em></p></blockquote>';
+		
+			// Display some info about pad
+			$body .= elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+		
+			// Create session for user
+			if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:padid', array($padID)) . '</p>';
+			$sessionID = elgg_etherpad_create_session($groupID, $authorID);
+			if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:sessionid', array($sessionID)) . '</p>';
+			$cookie_set = elgg_etherpad_update_session($sessionID);
+			if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
+		
+			// Display actual editing pad
+			$body .= '<iframe src="' . $pad_url . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
 		
 		
-		// Handle sync actions
-		$request = get_input('request', false);
-		switch ($request) {
-			// Update entity content
-			case 'pushtoentity':
-				if (elgg_etherpad_save_pad_content_to_entity($padID, $entity, 'description')) {
-					system_message(elgg_echo('elgg_etherpad:pushtoentity:success'));
-				} else { register_error(elgg_echo('elgg_etherpad:pushtoentity:error')); }
-				forward("pad/editwithpad/$guid");
-				break;
-			// Update pad content
-			case 'pushtopad':
-				if (elgg_etherpad_set_pad_content($padID, $entity_content)) {
-					system_message(elgg_echo('elgg_etherpad:pushtopad:success'));
-				} else { register_error(elgg_echo('elgg_etherpad:pushtopad:error')); }
-				forward("pad/editwithpad/$guid");
-				break;
-			default:
+			// Sync actions
+			$body .= '<br />';
+			$body .= '<blockquote><p>' . elgg_echo('elgg_etherpad:entityedit:warning') . '</p></blockquote>';
+			$body .= '<p><a href="?request=pushtoentity" class="elgg-button elgg-button-action">' . elgg_echo('elgg_etherpad:pushtoentity') . '</a></p>';
+		
+		
+			$title =  elgg_echo('elgg_etherpad:editwithpad', array($entity->title));
+		
+		} else {
+			register_error(elgg_echo('elgg_etherpad:error:cannoteditentity'));
 		}
-		
-		
-		// Display edit pad
-		$pad_url = $server . '/p/' . $padID;
-		$share_url = '<a href="' . $CONFIG->url . 'pad/view/' . $padID . '">' . $CONFIG->url . 'pad/view/' . $padID . '</a>';
-		$public_share_url = '<a href="' . $pad_url . '">' . $pad_url . '</a>';
-		$body .= '<blockquote><p><em>' . elgg_echo('elgg_etherpad:vieweditpad:details', array($share_url, $public_share_url)) . '</em></p></blockquote>';
-		
-		// Display some info about pad
-		$body .= elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
-		
-		// Create session for user
-		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:padid', array($padID)) . '</p>';
-		$sessionID = elgg_etherpad_create_session($groupID, $authorID);
-		if ($debug) $body .= '<p>' . elgg_echo('elgg_etherpad:editwithpad:sessionid', array($sessionID)) . '</p>';
-		$cookie_set = elgg_etherpad_update_session($sessionID);
-		if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
-		
-		// Display actual editing pad
-		$body .= '<iframe src="' . $pad_url . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
-		
-		
-		// Sync actions
-		$body .= '<br />';
-		$body .= '<blockquote><p>' . elgg_echo('elgg_etherpad:entityedit:warning') . '</p></blockquote>';
-		$body .= '<p><a href="?request=pushtoentity" class="elgg-button elgg-button-action">' . elgg_echo('elgg_etherpad:pushtoentity') . '</a></p>';
-		
-		
-		$title =  elgg_echo('elgg_etherpad:editwithpad', array($entity->title));
-		
 	} else {
 		register_error(elgg_echo('elgg_etherpad:editwithpad:invalidsubtype', array($subtype)));
 	}

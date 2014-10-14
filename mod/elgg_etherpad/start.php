@@ -14,6 +14,8 @@ elgg_register_event_handler('init', 'system', 'elgg_etherpad_init');
 function elgg_etherpad_init() {
 	global $CONFIG; // All site useful vars
 	
+	elgg_extend_view('css', 'elgg_etherpad/css');
+	
 	// Register PHP library - use with : elgg_load_library('elgg:plugin_template');
 	// Note this library was partly derived from https://github.com/0x46616c6b/etherpad-lite-client 
 	// but i just didn't want to load thousands of dependency files 
@@ -88,8 +90,11 @@ function elgg_etherpad_entity_menu_setup($hook, $type, $return, $params) {
 		global $CONFIG;
 		$subtype = $entity->getSubtype();
 		if (in_array($subtype, array('page', 'page_top', 'blog'))) {
-			$options = array('name' => 'elgg_etherpad', 'href' => $CONFIG->url . 'pad/editwithpad/' . $entity->guid, 'priority' => 200, 'text' => elgg_echo('elgg_etherpad:menu:editwithpad'));
-			$return[] = ElggMenuItem::factory($options);
+			// We need to be able to edit the entity to edit it with a pad...
+			if ($entity->canEdit()) {
+				$options = array('name' => 'elgg_etherpad', 'href' => $CONFIG->url . 'pad/editwithpad/' . $entity->guid, 'priority' => 200, 'text' => elgg_echo('elgg_etherpad:menu:editwithpad'));
+				$return[] = ElggMenuItem::factory($options);
+			}
 		}
 	}
 	return $return;

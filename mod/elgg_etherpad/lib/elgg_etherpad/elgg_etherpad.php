@@ -95,6 +95,51 @@ function elgg_etherpad_get_entity_group_id($entity, $update = false) {
 	return false;
 }
 
+/* Get Elgg entity from groupID
+ * Returns the entity associated to a specific groupID, if any
+ * Note : should match only 1 Elgg entity, because a groupID (access) is created for each entity (and not for its container)
+ */
+function elgg_etherpad_get_entity_from_group_id($groupID = '') {
+	if (!empty($groupID)) {
+		// Apply some filtering, just in case...
+		//$groupID = elgg_get_friendly_title($groupID);
+		$entities = elgg_get_entities_from_metadata(array('types' => array('site', 'user', 'group', 'object'), 'metadata_name_value_pairs' => array('name' => 'etherpad_groupID', 'value' => $groupID)));
+		if ($entities) {
+			if (sizeof($entities > 1)) {
+				error_log("Elgg Etherpad LIB : multiple matching entities found for groupID $groupID");
+			}
+			return $entities[0];
+		}
+	}
+	return false;
+}
+
+
+/* Get Elgg entity details from groupID
+ * Returns details about the entity associated to a specific groupID, if any
+ */
+function elgg_etherpad_get_entity_details_from_group_id($groupID = '') {
+	$entity = elgg_etherpad_get_entity_from_group_id($groupID);
+	$default_return = "? ($groupID)";
+	if ($entity) {
+		$type = $entity->getType();
+		switch($type) {
+			case 'site':
+			case 'user':
+			case 'group':
+				$title = $entity->name;
+				break;
+			case 'object':
+				$title = $entity->title;
+				break;
+			default:
+				return $default_return;
+		}
+		return '<a href="' . $entity->getURL() . '" target="_blank">' . $title . ' (' . $type . ')</a>';
+	}
+	return $default_return;
+}
+
 /* Get the groupID from groupName */
 function elgg_etherpad_get_group_id($groupName, $update = false) {
 	$client = elgg_etherpad_get_client();
@@ -279,22 +324,64 @@ function elgg_etherpad_update_session($sessionID, $validUntil = 43200) {
 }
 
 
-/* Has access to pad ?
+/* Has access to pad ? This determines if we can read and contribute to a pad (not edit its settings !)
  * A user has access to a pad if :
  * - pad is public status
  * - user is pad owner (user group <=> pad group)
  * - user has access to container group (group or object group <=> pad group)
- * - user is admin (bypass)
+ * - user is admin (bypass) ?
  */
-function elgg_etherpad_has_access_pad($padID, $user, $entity) {
+function elgg_etherpad_can_read_pad($padID, $user = false, $entity = false) {
+	if (empty($padID)) return false;
+	
+	// Is it a Public Pad ?
+	if (!strpos($padID, '$')) return true;
+	
+	// Now we're only dealing with group pads
+	
+	// Is the Pad in public access ?
 	if (elgg_etherpad_is_public($padID) == 'yes') return true;
-	//if (elgg_etherpad_is_public($padID) == 'yes') return true;
-	//if (elgg_etherpad_is_public($padID) == 'yes') return true;
+	
+	// Now we're getting into detailed access rights...
+	$pad_name = explode('$', $padID);
+	$groupID = $pad_name[0];
+	// It's time to convoke the user...
+	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if (!elgg_instanceof($user, 'user')) return false;
+	
+	// Is user the pad owner ?
+	if ($groupID == $user->etherpad_groupID) return true;
+	
+	// Does this user have an admin bypass ?
+	if (elgg_is_admin_logged_in($user)) return true;
+	
+	// If no entity set, it's time to get it...
+	$entity = elgg_etherpad_get_entity_from_group_id($groupID);
+	// Wrong entity will lead to an error, something went wrong
+	if (!$entity) return false;
+	
+	// Does user have write access to associated entity ?
+	if ($entity->canEdit($user)) return true;
+	
+	// Does user have access to container ?
+	// Note we don't want to allow editing other user's pads only because we can view their profile
+	// This should work only for group and site pads, which 
+	if (elgg_instanceof($entity, 'object')) {
+		$container = $entity->getContainerEntity();
+		if ($container && $container->isMember($user)) return true;
+	} else if (elgg_instanceof($entity, 'site')) {
+		if (has_access_to_entity($entity, $user)) return true;
+	} else if (elgg_instanceof($entity, 'group')) {
+		if ($entity->isMember($user)) return true;
+	}
+	
+	// If we cannot allow access at this step, forget it
 	return false;
 }
 
 
 /* Can user edit a pad (settings) ?
+ * It's like reading it, but requires a little more control (need to be able to edit associated entities)
  * A user can edit a pad if :
  * - user is pad owner (user group <=> pad group)
  * - user can edit container group (group or object group <=> pad group)
@@ -302,7 +389,46 @@ function elgg_etherpad_has_access_pad($padID, $user, $entity) {
  * Notes :
  * - users CANNOT edit public pads because anyone could modify them (create private pads and open them if access controls needed)
  */
-function elgg_etherpad_can_edit_pad($padID, $user, $entity) {
+function elgg_etherpad_can_edit_pad($padID, $user = false, $entity = false) {
+	if (empty($padID)) return false;
+	
+	// Is it a Public Pad ? 
+	// @TODO well, how can we determine who should be able to edit public pads ?  the same people who can create them...
+	if (!strpos($padID, '$')) return true;
+	
+	// Now we're only dealing with group pads
+	
+	// Is the Pad in public access ? this is not a valid criteria for editing pads settings (we're talking about ownership)
+	//if (elgg_etherpad_is_public($padID) == 'yes') return true;
+	
+	// Now we're getting into detailed access rights...
+	$pad_name = explode('$', $padID);
+	$groupID = $pad_name[0];
+	// It's time to convoke the user...
+	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if (!elgg_instanceof($user, 'user')) return false;
+	
+	// Is user the pad owner ?
+	if ($groupID == $user->etherpad_groupID) return true;
+	
+	// Does this user have an admin bypass ?
+	if (elgg_is_admin_logged_in($user)) return true;
+	
+	// If no entity set, it's time to get it...
+	$entity = elgg_etherpad_get_entity_from_group_id($groupID);
+	// If we can't tell which entity is associated with this pad, we won't allow editing rights
+	if (!$entity) return false;
+	
+	// Does user have write access to associated entity ?
+	if ($entity->canEdit($user)) return true;
+	
+	// Does user have write access to container ? (group or site owner)
+	if (elgg_instanceof($entity, 'object')) {
+		$container = $entity->getContainerEntity();
+		if ($container && $container->canEdit($user)) return true;
+	}
+	
+	// If we cannot allow access at this step, forget it
 	return false;
 }
 
@@ -348,6 +474,7 @@ function elgg_etherpad_save_pad_content_to_entity($padID = false, $entity = fals
 			$entity->save();
 			break;
 		
+		// Other subtypes : we do not want to handle them (no history)
 		case 'bookmarks':
 		case 'file':
 		// Default : should we do anything if we're not sure ?

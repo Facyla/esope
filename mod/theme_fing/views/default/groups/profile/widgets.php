@@ -36,7 +36,7 @@ echo "</ul>";
 
 
 // Add blog-like homepage
-echo elgg_view('groups/profile/group_home_tag_publications', $vars);
+//echo elgg_view('groups/profile/group_home_tag_publications', $vars);
 
 
 // Add group activity or group content

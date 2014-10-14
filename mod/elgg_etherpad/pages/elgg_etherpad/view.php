@@ -22,8 +22,6 @@ $name = $own->name;
 
 $client = elgg_etherpad_get_client();
 
-
-
 // MAIN CONTENT
 
 // Create an user and its session if no exist
@@ -36,7 +34,7 @@ if (elgg_is_logged_in()) {
 	$groupID = elgg_etherpad_get_entity_group_id($own);
 
 	// 3. Create a new pad ("home") in the userGroup
-	$padID = elgg_etherpad_create_pad("home", $own->guid, false, false, $text);
+	$own_padID = elgg_etherpad_create_pad("home", $own->guid, false, false, $text);
 	
 	// @TODO : access to pads should be determined based on Elgg criteria, and session set accordingly.
 	
@@ -52,28 +50,41 @@ if (elgg_is_logged_in()) {
 
 // Open pad
 // Open asked pad, or default to own pad
-$pad = get_input('padID', $padID);
-if (empty($pad)) $pad = $groupID . '$' . $padName;
-$body .= '<iframe src="' . $server . '/p/' . $pad . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
+$padID = get_input('padID', $own_padID);
+if (empty($padID)) $padID = $groupID . '$' . $padName;
+$body .= '<iframe src="' . $server . '/p/' . $padID . '?userName=' . rawurlencode($own->name) . '" style="height:400px; width:100%; border:1px inset black;"></iframe>';
 
+if (!elgg_etherpad_can_read_pad($padID)) {
+	register_error("Vous n'avez pas accès à ce pad.");
+	forward('pad');
+}
 
-if (strpos($pad, '$')) {
-	$pad_name = explode('$', $pad);
+if (strpos($padID, '$')) {
+	$pad_name = explode('$', $padID);
 	$group_id = $pad_name[0];
 	$pad_name = $pad_name[1];
 } else {
-	$pad_name = $pad;
+	$pad_name = $padID;
 }
 
-$title = "Afficher le pad \"$pad_name\"";
-if ($group_id) $title .= " (groupe $group_id)";
+// If we want to display a private pad, we need to add a specific session cookie for that pad !
+if ($group_id && elgg_is_logged_in()) {
+	$sessionID = elgg_etherpad_create_session($group_id, $authorID);
+	$cookie_set = elgg_etherpad_update_session($sessionID);
+	if (!$cookie_set) $body .= '<p>' . elgg_echo('elgg_etherpad:setcookie:error'). '</p>';
+}
+
+// Display some details on pad visibility
+$title = "Pad \"$pad_name\"";
+$inner_title = elgg_view('elgg_etherpad/elgg_etherpad', array('padID' => $padID));
+//if ($group_id) $title .= " (groupe $group_id)";
 
 elgg_push_breadcrumb(elgg_echo('elgg_etherpad'), 'pad');
 elgg_push_breadcrumb($pad_name);
 
 
 $body = elgg_view_layout('one_column', array(
-		'title' => $title,
+		'title' => $inner_title,
 		'content' => $body,
 	));
 
