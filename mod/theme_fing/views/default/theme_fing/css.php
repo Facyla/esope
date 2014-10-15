@@ -151,6 +151,13 @@ ul.elgg-list li.elgg-item div.elgg-image .elgg-avatar-tiny a img { margin-right:
 #group-top-block img { float:left; height:100px; margin-right:1ex; }
 .elgg-public .elgg-context-group_profile .elgg-main .elgg-head { display: none; }
 
+/* Menu des groupes */
+.elgg-menu-group-topmenu { padding: 0 1.5ex; }
+.elgg-menu-group-topmenu li { margin-right:1px; }
+.elgg-menu-group-topmenu li a { padding: 1ex 2ex; font-size: 16px; }
+.elgg-menu-group-topmenu li a:hover, .elgg-menu-group-topmenu li a:active, .elgg-menu-group-topmenu li a:focus, .elgg-menu-group-topmenu li.elgg-state-selected a { background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5); }
+
+
 
 
 /* Slider */
