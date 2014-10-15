@@ -214,6 +214,9 @@ function esope_init() {
 		elgg_register_action("pages/edit", $action_url . 'pages/edit.php');
 	}
 	
+	// Allow to remove completely an email address for a user
+	elgg_register_action("remove_user_email", $action_url . "esope/remove_user_email.php", "logged_in");
+	
 	
 	// NEW & REWRITTEN PAGE HANDLERS
 	// Note : modification de pages de listing (non gérables par des vues)
