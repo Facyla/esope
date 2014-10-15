@@ -89,23 +89,29 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 //Affichage actus du site si demandé
 $homesite_index = elgg_get_plugin_setting('homesite_index', 'adf_public_platform');
 if ($homesite_index == 'yes') {
-	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
+	$left_side .= '<h3>' . elgg_echo('adf_platform:site:activity') . '</h3>';
 	// Activité du site
-	elgg_push_context('widgets');
+	//elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
-	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'types' => array('object'), 'action_types' => array('create', 'comment', 'reply')));
-	elgg_pop_context();
+	// Pour un filtre très fin : 'type_subtype_pairs' => array('object' => array('blog', 'event_calendar', 'page', 'page_top', 'bookmarks'), 'group' => null)
+	//$left_side .= elgg_list_river(array('limit' => 40, 'pagination' => false, 'types' => array('object', 'group'), 'action_types' => array('create', 'comment', 'reply')));
+	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'type_subtype_pairs' => array('object' => array('blog', 'event_calendar', 'page', 'page_top', 'bookmarks', 'groupforumtopic'), 'group' => null), 'action_types' => array('create', 'comment', 'reply')));
+	$left_side .= '<p><a href="' . $CONFIG->url . 'activity">&raquo;&nbsp;Découvrez toute l\'activité</a></p>';
+	//elgg_pop_context();
 }
+
 // BLOC CENTRAL
 // The Wire
 $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	// Show/hide version
 	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('adf_platform:thewire:togglelink') . '</a><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
-	$thewire .= '<h3><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
+	$thewire .= '<h3>' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</h3>';
 	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
 	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+	$thewire .= '<p><a href="' . $CONFIG->url . 'thewire/all">&raquo;&nbsp;Remontez tout le fil</a></p>';
 }
+
 // BLOC DROITE
 // Groupes en Une et connectés
 $index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
