@@ -132,7 +132,17 @@ if (elgg_is_active_plugin('members')) {
 		$right_side .= '<br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
 	}
 }
-
+// Derniers contenus likés
+if (elgg_is_active_plugin('likes')) {
+	if (!empty($right_side)) $right_side .= '<br />';
+	$right_side .= '<br /><div class="home-static">';
+	$right_side .= '<h3>Publications appréciées</h3>';
+	elgg_push_context('widgets');
+	$right_side .= elgg_view('likes/liked_content');
+	elgg_pop_context();
+	$right_side .= '<p><a href="' . $CONFIG->url . 'likes">&raquo;&nbsp;Tous les contenus appréciés</a></p>';
+	$right_side .= '</div>';
+}
 
 // Slider
 $slider_params = array(

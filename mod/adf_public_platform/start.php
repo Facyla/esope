@@ -274,6 +274,11 @@ function esope_init() {
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
 	
+	// Esope liked content
+	if (elgg_is_active_plugin('likes')) {
+		elgg_register_page_handler('likes', 'esope_likes_page_handler');
+	}
+	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not
 	if (elgg_is_active_plugin('file_tools') && elgg_is_logged_in()) {
