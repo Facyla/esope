@@ -7,7 +7,7 @@
 $ts_lower = (int) elgg_extract("ts_lower", $vars, false);
 $ts_upper = (int) elgg_extract("ts_upper", $vars, false);
 $sortby = elgg_extract('sortby', $vars, 'latest');
-$order = elgg_extract('order', $vars, 'ASC');
+$order = elgg_extract('order', $vars, 'DESC');
 $full = elgg_extract('full_view', $vars, false);
 $container_guid = elgg_extract('container_guid', $vars, false);
 
@@ -29,11 +29,11 @@ if ($sortby == 'popular') {
 	$dbprefix = elgg_get_config('dbprefix');
 	$likes_metastring = get_metastring_id('likes');
 	$options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
-	$options['order_by'] = 'likes ASC';
-	if ($order == 'DESC') $options['order_by'] = 'likes DESC';
+	$options['order_by'] = 'likes DESC';
+	if ($order == 'DESC') $options['order_by'] = 'likes ASC';
 } else if ($sortby == 'latest') {
-	$options['order_by'] = 'time_created ASC';
-	if ($order == 'DESC') $options['order_by'] = 'time_created DESC';
+	$options['order_by'] = 'time_created DESC';
+	if ($order == 'ASC') $options['order_by'] = 'time_created ASC';
 }
 
 

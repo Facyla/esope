@@ -40,7 +40,8 @@ elgg.newsletter.init = function() {
 		// ESOPE : add subtype and template support
 		var subtype = $(this).find("[name='subtype']").val();
 		var template = $(this).find("[name='template']").val();
-		var url = $(this).attr("action") + "?q=" + query + "&subtype=" + subtype + "&template=" + template;
+		var display = $(this).find("[name='display']").val();
+		var url = $(this).attr("action") + "?q=" + query + "&subtype=" + subtype + "&template=" + template + "&display=" + display;
 		
 		$(this).parent().load(url);
 	});

@@ -95,7 +95,7 @@ if ($homesite_index == 'yes') {
 	$db_prefix = elgg_get_config('dbprefix');
 	// Pour un filtre très fin : 'type_subtype_pairs' => array('object' => array('blog', 'event_calendar', 'page', 'page_top', 'bookmarks'), 'group' => null)
 	//$left_side .= elgg_list_river(array('limit' => 40, 'pagination' => false, 'types' => array('object', 'group'), 'action_types' => array('create', 'comment', 'reply')));
-	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'type_subtype_pairs' => array('object' => array('blog', 'event_calendar', 'page', 'page_top', 'bookmarks', 'groupforumtopic'), 'group' => null), 'action_types' => array('create', 'comment', 'reply')));
+	$left_side .= elgg_list_river(array('limit' => 5, 'pagination' => false, 'type_subtype_pairs' => array('object' => array('blog', 'event_calendar', 'page', 'page_top', 'bookmarks', 'groupforumtopic'), 'group' => null), 'action_types' => array('create', 'comment', 'reply')));
 	$left_side .= '<p><a href="' . $CONFIG->url . 'activity">&raquo;&nbsp;Découvrez toute l\'activité</a></p>';
 	//elgg_pop_context();
 }
@@ -108,7 +108,7 @@ if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('adf_platform:thewire:togglelink') . '</a><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
 	$thewire .= '<h3>Le Fil, vous et la Fing</h3>';
 	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
-	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
+	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 5, 'pagination' => false));
 	$thewire .= '<p><a href="' . $CONFIG->url . 'thewire/all">&raquo;&nbsp;Remontez tout le fil</a></p>';
 }
 
@@ -136,9 +136,9 @@ if (elgg_is_active_plugin('members')) {
 if (elgg_is_active_plugin('likes')) {
 	if (!empty($right_side)) $right_side .= '<br />';
 	$right_side .= '<br /><div class="home-static">';
-	$right_side .= '<h3>Publications appréciées</h3>';
+	$right_side .= '<h3>' . elgg_echo('esope:likes') . '</h3>';
 	elgg_push_context('widgets');
-	$right_side .= elgg_view('likes/liked_content');
+	$right_side .= elgg_view('theme_fing/liked_content', array('limit' => 5));
 	elgg_pop_context();
 	$right_side .= '<p><a href="' . $CONFIG->url . 'likes">&raquo;&nbsp;Tous les contenus appréciés</a></p>';
 	$right_side .= '</div>';

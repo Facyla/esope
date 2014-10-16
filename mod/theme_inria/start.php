@@ -31,6 +31,7 @@ function theme_inria_init(){
 	elgg_extend_view('css', 'theme_inria/css');
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
+	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
 	// Extend group owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
