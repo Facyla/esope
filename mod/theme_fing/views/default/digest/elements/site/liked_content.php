@@ -18,7 +18,7 @@ $options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annota
 // Note : les likes conservent la date et l'auteur du like
 $sql .= " AND l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 
-$options['order_by'] = 'l.time_created DESC';
+$options['order_by'] = 'likes DESC';
 
 $likes = elgg_get_entities_from_annotations($options);
 if ($likes) {
@@ -42,15 +42,18 @@ if ($likes) {
 		$image_url = '';
 		if ($ent->icontime) { $image_url = $ent->getIconURL("small"); }
 		if (empty($image_url) || strpos($image_url, 'graphics/icons/default')) {
-			$container = $ent->getOwnerEntity();
-			$image_url = $container->getIconURL('small');
+			if ($container = $ent->getOwnerEntity()) $image_url = $container->getIconURL('small');
 		}
 		
 		$latest_likes .=  '<span style="">' . $likes_string . '</span>';
 		
 		$latest_likes .= "<a href='" . $ent_url . "'><img src='" . $image_url . "' /></a>";
 		$latest_likes .= "<span>";
-		$latest_likes .= "<h4><a href='" . $ent_url . "'>" . $ent->title . "</a></h4>";
+		
+		$ent_title = $ent->title;
+		if (empty($ent_title)) $ent_title = $ent->name;
+		if (empty($ent_title)) $ent_title = $ent->description;
+		$latest_likes .= "<h4><a href='" . $ent_url . "'>" . $ent_title . "</a></h4>";
 		$latest_likes .= elgg_get_excerpt($ent->description);
 		$latest_likes .= '</span>';
 		

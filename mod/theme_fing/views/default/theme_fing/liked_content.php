@@ -26,21 +26,21 @@ if ($container_guid) { $options['annotation_owner_guids'] = $container_guid; }
 // $sql .= " AND r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 // 'wheres' => "l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 
+$dbprefix = elgg_get_config('dbprefix');
+$likes_metastring = get_metastring_id('likes');
 if ($sortby == 'popular') {
-	$dbprefix = elgg_get_config('dbprefix');
-	$likes_metastring = get_metastring_id('likes');
 	$options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
 	$options['order_by'] = 'likes DESC';
 	if ($order == 'DESC') $options['order_by'] = 'likes ASC';
 } else if ($sortby == 'latest') {
-	$options['order_by'] = 'time_created DESC';
-	if ($order == 'ASC') $options['order_by'] = 'time_created ASC';
+	$options['joins'] = "JOIN {$dbprefix}annotations as l on l.entity_guid = e.guid";
+	$options['order_by'] = 'l.time_created DESC';
+	if ($order == 'ASC') $options['order_by'] = 'l.time_created ASC';
 }
 
 
 $likes = elgg_get_entities_from_annotations($options);
 if ($likes) {
-	
 	$content .= '<ul class="elgg-list elgg-list-river elgg-river">';
 	
 	foreach ($likes as $ent) {
@@ -58,20 +58,21 @@ if ($likes) {
 		$image_url = '';
 		if ($ent->icontime) { $image_url = $ent->getIconURL("small"); }
 		if (empty($image_url) || strpos($image_url, 'graphics/icons/default')) {
-			$container = $ent->getOwnerEntity();
-			$image_url = $container->getIconURL('small');
+			if ($container = $ent->getOwnerEntity()) $image_url = $container->getIconURL('small');
 		}
 		$image = "<a href='" . $ent_url . "'><img src='" . $image_url . "' /></a>";
 		
-		$body .= "<p><strong><a href='" . $ent_url . "'>" . $ent->title . "</a></strong></p>";
-		$body .= '<em>' . $likes_string . '</em>';
+		$ent_title = $ent->title;
+		if (empty($ent_title)) $ent_title = $ent->name;
+		if (empty($ent_title)) $ent_title = $ent->description;
+		$body .= "<strong><a href='" . $ent_url . "'>" . $ent_title . "</a></strong>";
+		$body .= '<div class="elgg-subtext"><em>' . $likes_string . '</em></div>';
 		//$body .= elgg_get_excerpt($ent->description);
 		
 		$content .= '<li class="elgg-item">' . elgg_view_image_block($image, $body) . '</li>';
 	}
 	
 	$content .= '</ul>';
-	
 }
 
 echo $content;
