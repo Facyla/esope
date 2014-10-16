@@ -4,11 +4,11 @@
  *
  */
 
-elgg_push_breadcrumb(elgg_echo('likes'), "likes");
+elgg_push_breadcrumb(elgg_echo('esope:likes'), "likes");
 
 $limit = get_input('limit', 20);
 
-$title = elgg_echo('likes');
+$title = elgg_echo('esope:likes');
 
 $content = '';
 $content .= elgg_view('likes/liked_content', array('limit' => $limit, 'pagination' => true));
