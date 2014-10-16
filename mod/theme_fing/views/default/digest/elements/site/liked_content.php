@@ -15,7 +15,7 @@ $likes_metastring = get_metastring_id('likes');
 $options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
 
 // Add timesframe filtering : we check when it has been liked, not the publication date...
-// Note : les likes concervent la date et l'auteur du like
+// Note : les likes conservent la date et l'auteur du like
 $sql .= " AND l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 
 $options['order_by'] = 'likes DESC';

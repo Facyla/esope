@@ -19,7 +19,7 @@ $fr = array(
 	'au_subgroups:setting:display_alphabetically' => "Afficher la liste des groupes des membres dans l'ordre alphabétique ?",
 	'au_subgroups:setting:display_subgroups' => 'Afficher les sous-groupes dans la liste des groupes ?',
 	'au_subgroups:setting:display_featured' => 'Afficher les groupes en Une dans la barre latérale de la liste des groupes des membres ?',
-	'au_subgroups:error:invite' => "L'action a été annulée - les membres suivants ne sont pas membres du groupe parent et ne peuvent pas être invités/ajoutés.",
+	'au_subgroups:error:invite' => "Les membres suivants ne sont pas membres du groupe parent et ne peuvent pas être invités/ajoutés.",
 	'au_subgroups:option:parent:members' => "Membres du groupe parent",
 	'au_subgroups:subgroups:more' => "Afficher tous les sous-groupes",
 	

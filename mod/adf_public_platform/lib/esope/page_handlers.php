@@ -14,8 +14,17 @@ function esope_page_handler($page) {
 
 // Esope search page handler
 function esope_esearch_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/adf_platform';
+	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/esope';
 	require_once "$base/esearch.php";
+	return true;
+}
+
+
+
+// Esope liked content page handler
+function esope_likes_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/likes';
+	require_once "$base/liked_content.php";
 	return true;
 }
 

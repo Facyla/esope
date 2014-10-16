@@ -150,14 +150,25 @@ function esope_init() {
 	// Modification des menus standards des widgets
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
+	
 	// Modification des menus des groupes
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'adf_platform_owner_block_menu', 1000);
+	
 	// Modification de la page de listing des sous-groupes
 	if (elgg_is_active_plugin('au_subgroups')) {
 		// route some urls that go through 'groups' handler
 		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
 		elgg_register_plugin_hook_handler('route', 'groups', 'adf_platform_subgroups_groups_router', 499);
+		
+		/* au_subgroups prevents users from being invited to subgroups they can't join
+		 * BUT this breaks the process for all invited users even if only one of them cannot join...
+		 * SO esope approach is to disable the original hook 
+		 * AND handle the au_subgroup case by filtering the passed GUID to in the invite action
+		 *    which avoids breaking the whole process for some users (especially if we register them directly into the group)
+		 */
+		elgg_unregister_plugin_hook_handler('action', 'groups/invite', 'au_subgroups_group_invite');
+		elgg_register_plugin_hook_handler('action', 'groups/invite', 'esope_au_subgroups_group_invite');
 	}
 	
 	// Sélection du menu messages (lorsque filtre unread utilisé)
@@ -214,6 +225,9 @@ function esope_init() {
 		elgg_register_action("pages/edit", $action_url . 'pages/edit.php');
 	}
 	
+	// Allow to remove completely an email address for a user
+	elgg_register_action("remove_user_email", $action_url . "esope/remove_user_email.php", "logged_in");
+	
 	
 	// NEW & REWRITTEN PAGE HANDLERS
 	// Note : modification de pages de listing (non gérables par des vues)
@@ -259,6 +273,11 @@ function esope_init() {
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
+	
+	// Esope liked content
+	if (elgg_is_active_plugin('likes')) {
+		elgg_register_page_handler('likes', 'esope_likes_page_handler');
+	}
 	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not

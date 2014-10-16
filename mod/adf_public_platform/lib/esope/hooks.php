@@ -142,7 +142,7 @@ function adf_platform_htmlawed_filter_tags($hook, $type, $result, $params) {
 	
 	/* /!\ Liste blanche des balises autorisées
 	 * Accepte des syntaxes positives : 'iframe,embed,object,param,video,script,style'
-	 * Ou avec filtre : "* -script"   => bloque <script> seulement
+	 * Ou avec filtre : "* -script"	 => bloque <script> seulement
 	 * DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3
 	 */
 	if (!empty($elements)) $htmlawed_config['elements'] = $elements;
@@ -478,5 +478,56 @@ function esope_friendly_time_hook($hook, $type, $return, $params) {
 	return $date;
 }
 
+
+
+/** Esope version : don't break the whole process for some users
+ * by filtering the invited users
+ * @TODO : allow direct registration through recursive group join ? not sure it's a good thing for non-global admins...
+ * Note : this hook is enabled only if au_subgroups is enabled !
+ */
+function esope_au_subgroups_group_invite($hook, $type, $return, $params) {
+	$user_guid = get_input('user_guid'); // Can be an array
+	$group_guid = get_input('group_guid');
+	$group = get_entity($group_guid);
+	
+	$parent = au_subgroups_get_parent_group($group);
+	
+	// if $parent, then this is a subgroup they're being invited to
+	// make sure they're a member of the parent
+	if ($parent) {
+		if (!is_array($user_guid)) { $user_guid = array($user_guid); }
+		
+		/* Invite type check : probably bad idea to allow subgroup owners to register directly to the parent groups...
+		$allowregister = elgg_get_plugin_setting('allowregister', 'adf_public_platform');
+		if ($allowregister == 'yes') { $group_register = get_input('group_register', false); }
+		*/
+		
+		$invalid_users = array();
+		foreach($user_guid as $guid) {
+			// Use less intensive DB check with GUID and not entities...
+			if (is_group_member($parent->guid, $guid)) {
+				$valid_user_guid[] = $guid;
+			} else {
+				// We'll need the entity here for proper error display
+				if ($user = get_user($guid)) { $invalid_users[] = $user; }
+			}
+		}
+		
+		if (count($invalid_users)) {
+			// Set new valid list
+			set_input('user_guid', $valid_user_guid);
+			
+			// Explain what went wrong with who..
+			$error_suffix = "<ul>";
+			foreach($invalid_users as $user) { $error_suffix .= "<li>{$user->name}</li>"; }
+			$error_suffix .= "</ul>";
+			register_error(elgg_echo('au_subgroups:error:invite') . $error_suffix);
+			// Do NOT break the invite process (for the valid ones)
+			//return false;
+		}
+	}
+	// No need to return anything
+	//return $return;
+}
 
 
