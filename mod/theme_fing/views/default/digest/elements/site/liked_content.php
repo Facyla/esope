@@ -18,7 +18,7 @@ $options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annota
 // Note : les likes conservent la date et l'auteur du like
 $sql .= " AND l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
 
-$options['order_by'] = 'likes DESC';
+$options['order_by'] = 'l.time_created DESC';
 
 $likes = elgg_get_entities_from_annotations($options);
 if ($likes) {
