@@ -55,7 +55,10 @@
 		</label>
 	</div>
 	
-	<?php echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no')); ?>
+	<?php
+	// Prevent multiple notifications
+	echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no'));
+	?>
 	
 	<div class="elgg-foot">
 		<?php 
