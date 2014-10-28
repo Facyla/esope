@@ -49,9 +49,9 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	
 	// Replace jQuery lib
-	elgg_register_js('jquery', '/mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
+	elgg_register_js('jquery', 'mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI
-	elgg_register_js('jquery-ui', '/mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
+	elgg_register_js('jquery-ui', 'mod/adf_public_platform/vendors/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js', 'head');
 	// Theme-specific JS (accessible menu)
 	elgg_register_simplecache_view('js/adf_platform_theme');
 	$theme_js = elgg_get_simplecache_url('js', 'adf_platform_theme');

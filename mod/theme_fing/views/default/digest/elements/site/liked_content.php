@@ -4,7 +4,7 @@
 
 $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
-$order = elgg_extract('order', $vars, 'ASC');
+$order = elgg_extract('order', $vars, 'DESC');
 
 // Set selection criteria
 $options['annotation_names'] = array('likes');
@@ -12,13 +12,24 @@ $options['limit'] = 5;
 
 $dbprefix = elgg_get_config('dbprefix');
 $likes_metastring = get_metastring_id('likes');
-$options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
 
+// Most recently liked content
+$options['joins'] = "JOIN {$dbprefix}annotations as l on l.entity_guid = e.guid";
+$options['order_by'] = 'l.time_created DESC';
+if ($order == 'ASC') $options['order_by'] = 'l.time_created ASC';
 // Add timesframe filtering : we check when it has been liked, not the publication date...
 // Note : les likes conservent la date et l'auteur du like
-$sql .= " AND l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper; // filter interval
+$options['wheres'] = array("l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper); // filter interval
 
+
+/* Most popular content
+$options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
+// Add timesframe filtering : we check when it has been liked, not the publication date...
+// Note : les likes conservent la date et l'auteur du like
+$options['wheres'] = array(" AND l.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper); // filter interval
 $options['order_by'] = 'likes DESC';
+*/
+
 
 $likes = elgg_get_entities_from_annotations($options);
 if ($likes) {
