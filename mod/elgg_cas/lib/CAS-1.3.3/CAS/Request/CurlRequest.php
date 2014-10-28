@@ -165,6 +165,9 @@ implements CAS_Request_RequestInterface
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $this->postBody);
         }
+        
+        // Facyla : uncomment to force TLS, and ban SSL
+        //curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
 
         return $ch;
     }
