@@ -19,6 +19,7 @@ $fr = array(
 	'elgg_cas:settings:casregister' => "Création de compte automatique",
 	'elgg_cas:settings:casregister:details' => "Si la création de comptes via CAS est activée, tout compte valide dans CAS et n'existant pas encore sur la plateforme sera automatiquement créé à la première tentative de connexion.",
 	'elgg_cas:settings:enable_webservice' => "Activer l'authentification CAS auth pour les webservices",
+	'elgg_cas:settings:cas_library' => "Choix de la bibliothèque CAS",
 	
 	'elgg_cas:cas_host' => "URL de l'hôte CAS, par ex: cas.example.com",
 	'elgg_cas:cas_context' => "CAS context, par ex: /cas",

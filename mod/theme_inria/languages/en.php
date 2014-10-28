@@ -350,6 +350,8 @@ Here is the new profile page : %s
 	
 	'theme_inria:group:oldactivity' => "There has been no activity in this group since %s.",
 	
+	'theme_inria:login:details' => "If you have a valid Inria access, please use CAS connection. If your Iris account doesn't exist yet, it will be created at your first login attempt.<br />If you don't have any Inria account or if it isn't valid anymore, please use login/pass regular login below.",
+	
 	
 );
 

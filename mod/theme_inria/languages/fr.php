@@ -350,6 +350,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	'theme_inria:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
 	
+	'theme_inria:login:details' => "Personnel Inria, veuillez utiliser la connexion CAS. Si votre compte Iris n'existe pas encore, il sera créé lors de votre première connexion.<br />Si vous ne disposez pas de compte Inria ou si celui-ci n'est plus actif, veuillez utiliser la connexion par identifiant / mot de passe",
+	
 );
 
 add_translation("fr",$french);

@@ -23,7 +23,12 @@ function elgg_cas_init() {
 	elgg_extend_view('forms/login', 'elgg_cas/login_extend', 300);
 	
 	// Add CAS library
-	elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php');
+	$cas_library = elgg_get_plugin_setting('cas_library', 'elgg_cas');
+	if ($cas_library == 'CAS-1.3.3') {
+		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.3/CAS.php');
+	} else {
+		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php');
+	}
 	
 	// CAS page handler
 	elgg_register_page_handler('cas_auth', 'elgg_cas_page_handler');

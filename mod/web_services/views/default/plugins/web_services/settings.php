@@ -5,6 +5,11 @@
 
 
 echo '<div>';
+echo elgg_view('output/longtext', array('value' => elgg_echo('web_services:settings:api_information')));
+$api_url = $vars['url'] . 'services/api/rest/xml/?method=system.api.list&api_key=&auth_token=';
+echo '<p>' . elgg_view('output/url', array('href' => $api_url, 'text' => $api_url)) . '</p>';
+echo '<br />';
+
 echo elgg_echo('web_services:settings_description');
 echo elgg_view("input/checkboxes", array(
 			'name' => 'params[enabled_webservices]',
