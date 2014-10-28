@@ -17,6 +17,9 @@
 
 
 <!--
+
+20141028 : added group.get_icon method and some doc in plugin settings
+
 Plugin reviewed and updated by George ROSCA (Inria) and Florian DANIEL (ITEMS International)
 
 //-->

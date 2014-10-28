@@ -248,6 +248,8 @@ expose_function('group.leave',
 	true,
 	true);
 
+
+/* Save group */
 function group_save($groupid, $username){
 	if(!$username){
 		$user = elgg_get_logged_in_user_entity();
@@ -710,4 +712,47 @@ expose_function('group.activity',
 	'GET',
 	true,
 	true);
+
+
+/* Get a group icon
+ * @param int $guid - the guid of the group
+ * @param string $size default 'medium' - the size of the wanted icon
+ */
+function group_get_icon($guid, $size = 'medium') {
+	$group = get_entity($guid);
+	if (!elgg_instanceof($group, 'group')) {
+		header("HTTP/1.1 404 Not Found");
+		exit;
+	}
+	$size = strtolower($size);
+	if (!in_array($size, array('large', 'medium', 'small', 'tiny', 'master', 'topbar'))) { $size = "medium"; }
+	$success = false;
+	$filehandler = new ElggFile();
+	$filehandler->owner_guid = $group->owner_guid;
+	$filehandler->setFilename("groups/" . $group->guid . $size . ".jpg");
+	if ($filehandler->open("read")) {
+		if ($contents = $filehandler->read($filehandler->size())) { $success = true; }
+	}
+	// Use default if not found
+	if (!$success) {
+		$location = elgg_get_plugins_path() . "groups/graphics/default{$size}.gif";
+		$contents = @file_get_contents($location);
+	}
+	// Send image
+	$return['content'] = base64_encode($contents);
+	return $return;
+}
+
+expose_function('group.get_icon',
+	"group_get_icon",
+	array(
+		'guid' => array ('type'=> 'int', 'required'=>true),
+		'size' => array ('type'=> 'string', 'required'=>false, 'default' =>'medium'),
+		),
+	elgg_echo('web_services:group:get_icon'),
+	'GET',
+	false,
+	false
+);
+
 

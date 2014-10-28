@@ -28,6 +28,16 @@ $french = array(
 	'web_services:likes' => 'Likes',
 	'likes:notallowed' => 'Non autorisé à "liker"',
 	
+	'web_services:settings:api_information' => "Tout web service activé peut être appelé via l'URL :<br />
+		<pre>&lt;URL du site&gt;/services/api/rest/&lt;format&gt;/?method=&lt;nom méthode&gt;</pre><br />
+		Avec <ul>
+			<li>&lt;URL du site&gt; : la racine du site Elgg</li>
+			<li>&lt;format&gt; : json ou xml</li>
+			<li>&lt;nom méthode&gt; : le nom de la méthode que vous souhaitez appeler</li>
+		</ul>
+		<p>Les paramètres optionels sont <strong>api_key=APIKEY</strong> et <strong>auth_token=USER_TOKEN</strong></p>
+		<p>Les autres paramètres dépendent du webservice utilisé</p>",
+	
 	// A resolution to json convertion error (for river)
 	'river:update:user:default' => ' a mis à jour son profil ',
 	
@@ -70,6 +80,8 @@ $french = array(
 	'web_services:group:save_reply' => "Publier une réponse à un sujet de forum",
 	'web_services:group:delete_reply' => "Supprimer une réponse à un sujet de forum",
 	'web_services:group:activity' => "Récupérer le fil d'activité d'un groupe",
+	'web_services:group:notfound' => "Groupe non trouvé ou inaccessible",
+	'web_services:group:get_icon' => "Récupérer l'icone de profil d'un groupe",
 	
 	// The Wire webservice
 	'web_services:wire:save_post' => "Publier un message sur le Fil",

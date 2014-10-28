@@ -28,7 +28,17 @@ $english = array(
 	'web_services:likes' => 'Likes',
 	'likes:notallowed' => 'Not allowed to like',
 	
-	//A resolution to json convertion error (for river)
+	'web_services:settings:api_information' => "Any call to the web services can be made by calling the URL :<br />
+		<pre>&lt;site URL&gt;/services/api/rest/&lt;outpput type&gt;/?method=&lt;method name&gt;</pre>
+		Where <ul>
+			<li>&lt;site URL&gt; : the path of root directory of Elgg website</li>
+			<li>&lt;outpput type> : json or xml</li>
+			<li>&lt;method name> : the name of the remote method you want to call</li>
+		</ul>
+		<p>Optional parameters are <strong>api_key=APIKEY</strong> and <strong>auth_token=USER_TOKEN</strong></p>
+		<p>Les autres paramètres dépendent du webservice utilisé</p>",
+	
+	// A resolution to json convertion error (for river)
 	'river:update:user:default' => ' updated their profile ',
 	
 	// Core webservice
@@ -70,6 +80,8 @@ $english = array(
 	'web_services:group:save_reply' => "Post a reply to a group forum topic",
 	'web_services:group:delete_reply' => "Delete a reply from a group forum topic",
 	'web_services:group:activity' => "Get the activity feed for a group",
+	'web_services:group:notfound' => "Group not found or no access to group",
+	'web_services:group:get_icon' => "Get group profile icon",
 	
 	// The Wire webservice
 	'web_services:wire:save_post' => "Post a wire post",
