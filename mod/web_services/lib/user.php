@@ -27,7 +27,8 @@ expose_function('user.get_profile_fields',
 	elgg_echo('web_services:user:get_profile_fields'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -64,7 +65,6 @@ function user_get_profile($username) {
 		}
 	}
 	
-	
 	$core['name'] = $user->name;
 	$core['username'] = $user->username;
 	
@@ -81,7 +81,8 @@ expose_function('user.get_profile',
 	elgg_echo('web_services:user:get_profile'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -171,7 +172,8 @@ expose_function('user.save_profile',
 	elgg_echo('web_services:user:save_profile'),
 	'POST',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -203,7 +205,8 @@ expose_function('user.get_user_by_email',
 	elgg_echo('web_services:user:get_user_by_email'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -230,7 +233,8 @@ expose_function('user.check_username_availability',
 	elgg_echo('web_services:user:check_username_availability'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -270,7 +274,8 @@ expose_function('user.register',
 	elgg_echo('web_services:user:register'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -323,7 +328,8 @@ expose_function('user.friend.add',
 	elgg_echo('web_services:user:friend:add'),
 	'POST',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -374,7 +380,8 @@ expose_function('user.friend.remove',
 	elgg_echo('web_services:user:friend:remove'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -560,7 +567,7 @@ expose_function('user.accept_friend_request',
 	true,
 	true
 );
-			
+
 
 /**
  * Web service to get friend requests and group join requests
@@ -637,7 +644,6 @@ expose_function('user.get_user_requests',
 );
 
 
-
 /**
  * Web service to get friends of a user
  *
@@ -682,7 +688,8 @@ expose_function('user.friend.get_friends',
 	elgg_echo('web_services:user:get_friends'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -729,7 +736,8 @@ expose_function('user.friend.get_friends_of',
 	elgg_echo('web_services:user:friend:get_friends_of'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -792,7 +800,8 @@ expose_function('user.get_messageboard',
 	elgg_echo('web_services:user:get_messageboard'),
 	'GET',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -842,7 +851,8 @@ expose_function('user.post_messageboard',
 	elgg_echo('web_services:user:post_messageboard'),
 	'POST',
 	true,
-	true);
+	true
+);
 
 
 /**
@@ -884,8 +894,8 @@ expose_function('user.activity',
 	elgg_echo('web_services:user:activity'),
 	'GET',
 	true,
-	true);
-
+	true
+);
 
 
 // Get a user GUID from username (or email)
@@ -935,4 +945,50 @@ expose_function(
 	true,
 	false
 );
+
+
+/* Get a user icon
+ * @param int $guid - the guid of the user
+ * @param string $size default 'medium' - the size of the wanted icon
+ */
+function user_get_icon($guid, $size = 'medium') {
+	$user = get_entity($guid);
+	if (!elgg_instanceof($user, 'user')) {
+		header("HTTP/1.1 404 Not Found");
+		exit;
+	}
+	$size = strtolower($size);
+	if (!in_array($size, array('large', 'medium', 'small', 'tiny', 'master', 'topbar'))) { $size = "medium"; }
+	$success = false;
+	$data_root = elgg_get_data_path();
+	$join_date = $user->time_created;
+	$user_path = date('Y/m/d/', $join_date) . $guid;
+	$filename = "$data_root$user_path/profile/{$guid}{$size}.jpg";
+	$filesize = @filesize($filename);
+	if ($filesize) {
+		if ($contents = file_get_contents($filename)) { $success = true; }
+	}
+	// Use default if not found
+	if (!$success) {
+		$location = elgg_get_site_url() . "_graphics/icons/user/default{$size}.gif";
+		$contents = @file_get_contents($location);
+	}
+	// Send image
+	$return['content'] = base64_encode($contents);
+	return $return;
+}
+
+expose_function('user.get_icon',
+	"user_get_icon",
+	array(
+		'guid' => array ('type'=> 'int', 'required'=>true),
+		'size' => array ('type'=> 'string', 'required'=>false, 'default' =>'medium'),
+		),
+	elgg_echo('web_services:user:get_icon'),
+	'GET',
+	true,
+	true
+);
+
+
 

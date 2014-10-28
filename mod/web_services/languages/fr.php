@@ -109,7 +109,9 @@ $french = array(
 	'web_services:user:friend_request:remove' => "Supprimer une demande de contact",
 	'web_services:user:friend_request:accept' => "Accepter une demande de contact",
 	'web_services:user:requests:list' => "Récupérer les demandes de contacts et invitations dans des groupes",
-		
+	'web_services:user:get_icon' => "Récupérer l'image de profil d'un membre",
+	
+	
 	// Message webservice
 	'web_services:message:read' => "Lire un message",
 	'web_services:message:count' => "Récupérer le nombre de messages non lus",

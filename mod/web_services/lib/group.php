@@ -750,9 +750,9 @@ expose_function('group.get_icon',
 		'size' => array ('type'=> 'string', 'required'=>false, 'default' =>'medium'),
 		),
 	elgg_echo('web_services:group:get_icon'),
-	'GET',
-	false,
-	false
+	'POST',
+	true,
+	true
 );
 
 

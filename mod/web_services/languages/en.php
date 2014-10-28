@@ -109,7 +109,8 @@ $english = array(
 	'web_services:user:friend_request:remove' => "remove user friend request",
 	'web_services:user:friend_request:accept' => "accept user friend request",
 	'web_services:user:requests:list' => "Get user friendship and groups requests",
-
+	'web_services:user:get_icon' => "Get user profile icon",
+	
 	
 	// Message webservice
 	'web_services:message:read' => "Read a single message",
