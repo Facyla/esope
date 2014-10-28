@@ -985,7 +985,7 @@ expose_function('user.get_icon',
 		'size' => array ('type'=> 'string', 'required'=>false, 'default' =>'medium'),
 		),
 	elgg_echo('web_services:user:get_icon'),
-	'GET',
+	'POST',
 	true,
 	true
 );
