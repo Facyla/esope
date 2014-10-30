@@ -1,4 +1,4 @@
 <?php 
-echo esope_esearch(array('count' => true));
+echo esope_esearch(array('add_count' => true));
 exit;
 
