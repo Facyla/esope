@@ -17,10 +17,10 @@ $all_content = '';
 $groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => false));
 foreach ($groups as $group) {
 	$group_guid = $group->getGUID();
-
+	
 	$offset = 0;
 	$limit = 3;
-
+	
 	// retrieve recent group activity
 	$sql = "SELECT r.*";
 	$sql .= " FROM " . $dbprefix . "river r";
@@ -30,6 +30,7 @@ foreach ($groups as $group) {
 	$sql .= " AND e.owner_guid != " . $user->guid; // filter own content
 	$sql .= " AND r.subject_guid != " . $user->guid; // filter own actions
 	$sql .= " AND r.type = \"object\""; // filter own actions
+	$sql .= " AND r.subtype != \"file\""; // filter own actions
 	$sql .= " AND " . get_access_sql_suffix("e"); // filter access
 	$sql .= " ORDER BY posted DESC";
 	$sql .= " LIMIT " . $offset . "," . $limit;
