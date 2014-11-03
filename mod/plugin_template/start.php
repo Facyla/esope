@@ -2,6 +2,10 @@
 /**
  * plugin_template plugin
  *
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @author Florian DANIEL aka Facyla
+ * @copyright Facyla 2010-2014
+ * @link http://id.facyla.fr/
  */
 
 // Init plugin
