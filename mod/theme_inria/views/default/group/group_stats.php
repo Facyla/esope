@@ -27,7 +27,7 @@ if ($group->time_created < $timeframe) {
 		echo '<div class="inria-group-oldactivity">';
 		$latest_action = elgg_view_friendly_time($latest_river[0]->posted);
 		if ($latest_river[0]->posted > 0) echo '<i class="fa fa-warning"></i> ' . elgg_echo('theme_inria:group:oldactivity', array($latest_action));
-		else  echo '<i class="fa fa-warning"></i> ' . elgg_echo('theme_inria:group:norecentactivity');
+		else echo '<i class="fa fa-warning"></i> ' . elgg_echo('theme_inria:group:norecentactivity');
 		//echo elgg_get_friendly_time($latest_river[0]->posted);
 		echo '</div>';
 	}
