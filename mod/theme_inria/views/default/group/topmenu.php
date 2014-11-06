@@ -160,5 +160,5 @@ echo elgg_view_menu('group_filter', array('sort_by' => 'priority', 'class' => 'e
 echo '</div>';
 
 // Display group stats
-echo elgg_view('group/group-stats', array('entity' => $group));
+echo elgg_view('group/group_stats', array('entity' => $group, 'full_view' => true));
 

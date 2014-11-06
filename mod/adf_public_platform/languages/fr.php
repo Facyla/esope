@@ -732,6 +732,8 @@ $fr = array(
 	
 	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
+	'esope:group:inactive' => "INACTIF",
+	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	
 	'esope:likes' => "Contenus appréciés",
 	

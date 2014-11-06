@@ -171,6 +171,7 @@ form input#adf-search-submit-button:hover, form input#adf-search-submit-button:a
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 .au_subgroups_group_icon span.au_subgroup { display: none; }
+.au_subgroup.au_subgroup_icon-tiny { font-size:4px; padding:3px 0px; }
 
 /* Flux RSS des groupes */
 .elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }
@@ -254,6 +255,11 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 /* Anciens groupes */
 .inria-group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex;; margin: 1ex 0; text-align:center; }
+.group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
+.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
+
 
 /* Messages */
 .elgg-page-messages .elgg-system-messages { top: 110px; left: auto; right: 20px; }

@@ -325,7 +325,7 @@ Here is the new profile page : %s
 	'theme_inria:pages:summarytoggle' => "Wiki navigation (show/hide)",
 	'theme_inria:subpages' => "Sub-pages",
 	
-	'theme_inria:ldapprofile:updatelink' => "Out of date ? Please <a href=\"http://dsi.inria.fr/services/support/index_html#SMI\">contact your center SIC</a>",
+	'theme_inria:ldapprofile:updatelink' => "Out of date ? Please <a href=\"https://intranet.inria.fr/Vie-pratique/Outils-et-services-numeriques/Assistance/Demande-d-assistance\">contact your center SIC</a>",
 	
 	'theme_inria:print' => "Print page",
 	

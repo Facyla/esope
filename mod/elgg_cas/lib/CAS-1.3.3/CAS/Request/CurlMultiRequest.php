@@ -126,7 +126,7 @@ implements CAS_Request_MultiRequestInterface
             curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
             
             // Facyla : uncomment to force TLS, and ban SSL
-            //curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
+            curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
             
             $handles[$i] = $handle;
             curl_multi_add_handle($multiHandle, $handle);
