@@ -4,7 +4,7 @@
 	<author>Author name</author>
 	<version>0.1</version>
 	<blurb>Plugin long name</blurb>
- <description>Plugins description</description>
+	<description>Plugins description</description>
 	<website>http://id.facyla.net/</website>
 	<copyright>Copyright</copyright>
 	<license>GNU Public License version 2</license>

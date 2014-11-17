@@ -18,6 +18,9 @@ elgg_register_event_handler('init', 'system', 'plugin_template_init');
 function plugin_template_init() {
 	global $CONFIG; // All site useful vars
 	
+	
+	elgg_extend_view('css', 'plugin_template/css')
+	
 	/*
 	// Register PHP library - use with : elgg_load_library('elgg:plugin_template');
 	elgg_register_library('elgg:plugin_template', elgg_get_plugins_path() . 'plugin_template/plugin_template.php');
@@ -55,7 +58,7 @@ function plugin_template_page_handler($page) {
 			include "$base/example_page.php";
 			break;
 		default:
-			include "$base/example_page.php";
+			include "$base/index.php";
 	}
 	return true;
 }

@@ -1475,15 +1475,76 @@ function esope_get_users_from_setting($setting) {
 // Return distinct metadata values for a given metadata name
 // @TODO : we could get it more quickly with a direct SQL query
 function esope_get_meta_values($meta_name) {
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT ms.string FROM `" . $dbprefix . "metadata` as md 
+		JOIN `" . $dbprefix . "metastrings` as ms ON md.value_id = ms.id 
+		WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
+	$rows = get_data($query);
+	foreach ($rows as $row) { $results[] = $row->string; }
+	return $results;
+	// Previous version is slower, and not so much clearer
+	/*
 	$meta_opt = array();
-	$metadatas = elgg_get_metadata(array('metadata_names' => $meta_name));
+	$metadatas = elgg_get_metadata(array('metadata_names' => $meta_name, 'limit' => 0));
 	if ($metadatas) {
 		foreach($metadatas as $meta) {
 			if (!in_array($meta->value, $meta_opt)) { $meta_opt[] = $meta->value; }
 		}
 	}
 	return $meta_opt;
+	*/
 }
+
+// http://reference.elgg.org/1.8/engine_2lib_2metadata_8php.html#a1614d620ec0b0d0b9531c68070ffb33c
+// The "metadata_calculation" option causes this function to return the result of performing 
+// a mathematical calculation on all metadata that match the query instead of returning
+// SQL calculation functions : COUNT, MAX, MIN, AVG, SUM
+// Returns the max value for a given metadata
+function esope_get_meta_max($name = '', $subtype = '', $type = 'object') {
+	if (!empty($name)) return elgg_get_metadata(array('types' => $type, 'subtypes' => $subtype, 'metadata_names' => $name, 'metadata_calculation' => "MAX"));
+	return false;
+}
+// Returns the min value for a given metadata
+function esope_get_meta_min($name = '', $subtype = '', $type = 'object') {
+	if (!empty($name)) return elgg_get_metadata(array('types' => $type, 'subtypes' => $subtype, 'metadata_names' => $name, 'metadata_calculation' => "MIN"));
+	return false;
+}
+
+
+/* Filter values by metadata query iterations
+ * $values : list of GUIDs
+ * $md_filter : metdata array, as in metadata_name_value_pairs
+ */
+function esope_filter_entity_guid_by_metadata(array $values, array $md_filter) {
+	$values = implode(', ', $values);
+	if (empty($values)) { return false; }
+	$dbprefix = elgg_get_config('dbprefix');
+	$select = "SELECT DISTINCT md.entity_guid FROM {$dbprefix}metadata as md ";
+	$join .= "JOIN {$dbprefix}metastrings as msn ON md.name_id=msn.id ";
+	$join .= "JOIN {$dbprefix}metastrings as msv ON md.value_id=msv.id ";
+	switch($md_filter['operand']) {
+		case '=':
+		case '':
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string = '{$md_filter['value']}'";
+			break;
+		case 'LIKE':
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string {$md_filter['operand']} '{$md_filter['value']}'";
+			break;
+		default:
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string {$md_filter['operand']} {$md_filter['value']}";
+	}
+	
+	//$search_results .= 'Filter MD query : <pre>' . $query . '</pre>';
+	
+	$results = get_data("$select $join WHERE $where AND md.entity_guid IN ($values);");
+	if ($results) {
+		$guids = array();
+		foreach ($results as $row) { $guids[] = $row->entity_guid; }
+		return $guids;
+	}
+	return false;
+}
+
 
 
 /* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
