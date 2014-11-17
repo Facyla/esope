@@ -128,7 +128,7 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 .cas-login { float:left; }
 .basic-login { float:right; }
 .basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:right; color:<?php echo $linkcolor; ?>; }
-
+.elgg-context-login .elgg-module-aside { float: right; width: 50%; }
 
 /* Main menu */
 #transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
