@@ -37,8 +37,10 @@ $all_link = elgg_view('output/url', array('href' => "groups/activity/$group->gui
 
 elgg_push_context('widgets');
 $db_prefix = elgg_get_config('dbprefix');
+$limit = get_input('limit', 10);
+$offset = get_input('offset', 0);
 $activity = elgg_list_river(array(
-	'limit' => 10, 'pagination' => true,
+	'limit' => $limit, 'offset' => $offset, 'pagination' => true,
 	'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
 	'wheres' => array("(e1.container_guid = $group->guid)"),
 ));
