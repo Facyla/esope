@@ -401,6 +401,7 @@ $fr = array(
 	'esope:widget:searchresults:description' => "Affiche les résultats d'une recherche par tag de votre choix.",
 	'esope:widgets:freehtml:title' => "Titre (après rechargement de la page)",
 	'esope:widgets:freehtml:content' => "Contenu (HTML)",
+	'esope:widgets:freehtml:bgcolor' => "Code couleur de fond",
 	'esope:widgets:freehtml:no_content' => "Veuillez configurer ce widget pour afficher le contenu (HTML) de votre choix.",
 	'esope:widgets:searchresults:tags' => "Tag(s) (séparés par des virgules)",
 	'esope:widgets:searchresults:tags_option' => "Comment utiliser les tags",
