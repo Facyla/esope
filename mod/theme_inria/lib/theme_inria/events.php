@@ -86,6 +86,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		// Default values
 		$is_inria = false;
 		$account_status = 'active';
+		$memberreason = 'undefined';
 		
 		// Attention, la vérification LDAP ne fonctionne que si ldap_auth est activé !
 		if (elgg_is_active_plugin('ldap_auth')) {
@@ -95,7 +96,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Update LDAP data
 			ldap_auth_check_profile($user);
 			
-			// Vérification du type de compte : si existe dans le LDAP => Inria et actif
+			// Vérification du type de compte : si existe + valide dans le LDAP => Inria et actif
 			// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 			if (ldap_user_exists($user->username)) {
 				if (ldap_auth_is_active($user->username)) {
@@ -154,7 +155,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
 			
 		}
-		//error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+		error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
 		
 		// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
 		// Compte externe par défaut (si on n'a pas eu d'info du LDAP)
