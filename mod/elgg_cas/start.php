@@ -24,7 +24,7 @@ function elgg_cas_init() {
 	
 	// Add CAS library
 	$cas_library = elgg_get_plugin_setting('cas_library', 'elgg_cas');
-	if ($cas_library == 'CAS-1.3.3') {
+	if ($cas_library == '1.3.3') {
 		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.3/CAS.php');
 	} else {
 		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php');
