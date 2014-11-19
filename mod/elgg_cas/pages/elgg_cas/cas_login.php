@@ -65,7 +65,12 @@ if (elgg_is_logged_in()) {
 // Patch : must be applied in Request/CurlRequest and CurlMultiRequest :
 // => add curl_setopt($ch, CURLOPT_SSLVERSION,3); before calling curl
 //curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
-phpCAS::forceAuthentication();
+try{
+	phpCAS::forceAuthentication();
+} catch(Exception $e){
+	echo print_r($e, true);
+	exit;
+}
 
 // at this step, the user has been authenticated by the CAS server
 // and the user's login name can be read with phpCAS::getUser().
