@@ -68,7 +68,9 @@ if (elgg_is_logged_in()) {
 try{
 	phpCAS::forceAuthentication();
 } catch(Exception $e){
-	echo print_r($e, true);
+	$debug =  print_r($e, true);
+	//echo '<pre>' . print_r($e, true) . '</pre>';
+	echo "<p>An authentication error has occured. Despites the message above, you should probably be authenticated, but something went wrong while checking your credentials on server side.<br />This error is probably caused by some configuration or communication error, and should be reported to the site admin.<br />Please try another login method, if available.</p>";
 	exit;
 }
 

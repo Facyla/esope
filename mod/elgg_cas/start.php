@@ -22,12 +22,17 @@ function elgg_cas_init() {
 	// Extend login form
 	elgg_extend_view('forms/login', 'elgg_cas/login_extend', 300);
 	
-	// Add CAS library
+	// Add CAS library (default to latest)
+	/* Note : when used with openssl 0.9.8k, please choose lib 1.3.2 and apply patch
+	 * The patch is laready made in 1.3.2, in CAS/Request/ CurlRequest and CurlMultiRequest
+	 * Since SSL3 security issues, you may want to update it to (requires testing) :
+	 *    curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
+	 */
 	$cas_library = elgg_get_plugin_setting('cas_library', 'elgg_cas');
-	if ($cas_library == '1.3.3') {
-		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.3/CAS.php');
-	} else {
+	if ($cas_library == '1.3.2') {
 		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.2/CAS.php');
+	} else {
+		elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/lib/CAS-1.3.3/CAS.php');
 	}
 	
 	// CAS page handler
