@@ -29,16 +29,19 @@ img {
 	border: none;
 }
 h1, h2, h3, h4 {
-	color: #EF783E;
+	color: #6D2D4F;
 	margin: 0;
+}
+h2 {
+	color: #EF783E;
 }
 
 h1 {
-	font-size: 18px;
+	font-size: 20px;
 }
 
 h2 {
-	font-size: 16px;
+	font-size: 18px;
 }
 
 h3 {
