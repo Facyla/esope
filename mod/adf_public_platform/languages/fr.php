@@ -702,6 +702,7 @@ $fr = array(
 	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
 	'esope:digest:groups' => "Nouveaux groupes",
 	'esope:digest:members' => "Nouveaux membres",
+	'esope:digest:groupactivity' => "Activité récente dans vos groupes",
 	
 	// Join groups at registration
 	'esope:settings:register:joingroups' => "Permettre de rejoindre des groupes dès l'inscription",

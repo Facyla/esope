@@ -704,6 +704,7 @@ $en = array(
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	'esope:digest:groups' => "New groups",
 	'esope:digest:members' => "New members",
+	'esope:digest:groupactivity' => "Recent activity in your groups",
 	
 	// Join groups at registration
 	'esope:settings:register:joingroup' => "Allow to join groups at registration",
