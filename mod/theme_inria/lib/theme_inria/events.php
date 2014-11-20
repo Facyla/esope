@@ -161,9 +161,9 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				if ($profiletype_guid != $external_profiletype_guid) { $user->custom_profile_type = $external_profiletype_guid; }
 			}
 			// Statut du compte
-			if ($user->memberstatus != $memberstatus) { $user->memberstatus = $memberstatus; }
+			if (!empty($memberstatus) && ($user->memberstatus != $memberstatus)) { $user->memberstatus = $memberstatus; }
 			// Motif de validité
-			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
+			if (!empty($memberreason) && ($user->memberreason != $memberreason)) { $user->memberreason = $memberreason; }
 			
 		}
 		if ($debug) error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
