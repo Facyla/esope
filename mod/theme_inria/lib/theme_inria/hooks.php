@@ -262,7 +262,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	return $result;
 }
 
-// Hook principal pour gérer la MAJ des infos du profil
+// Hook principal pour gérer la MAJ des infos du profil à partir des données LDAP
 function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	$debug = false;
 	$user = $params['user'];
@@ -337,7 +337,7 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	if (true || $infos) {
 		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
 		// Note : cannot use config fields here because office and phone do not have a unique name
-		foreach ($infos[0] as $key => $val) {
+		if ($infos[0]) foreach ($infos[0] as $key => $val) {
 			$val = $infos[0][$key];
 			$elgg_field = $fields[$key];
 			// We don't want to update some fields that were processed in auth

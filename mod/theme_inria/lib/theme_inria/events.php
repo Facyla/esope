@@ -81,7 +81,8 @@ function theme_inria_setup_menu() {
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
 	if ( ($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user')) {
-		//error_log("Inria : profile update : $event, $object_type, " . $user->guid);
+		$debug = false;
+		if ($debug) error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 		
 		// Default values
 		$is_inria = false;
@@ -104,7 +105,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 					$account_status = 'active';
 					// Le motif de validité d'un compte Inria actif est toujours que le compte LDAP est actif !
 					$memberreason = 'validldap';
-					//error_log("Valid LDAP account");
+					if ($debug) error_log("Valid LDAP account");
 				}
 			}
 			
@@ -118,19 +119,22 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Statut du compte
 			// Si compte non-Inria = externe
 			if (!$is_inria) {
-				//error_log("NO valid LDAP account");
+				if ($debug) error_log("NO valid LDAP account");
 				// External access has some restrictions : if account was not used for more than 1 year => disable
 				// Skip unused accounts (just created ones...)
 				if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
 					$account_status = 'closed';
 					$memberreason = 'inactive';
+					if ($debug) error_log("Not logged in since more than a year : closing account");
 				}
 				
-				// Si le compte LDAP vient d'être fermé, et qu'on n'a pas de nouveau motif, il est archivé
-				// Càd que si l'ancien statut était un LDAP valide => désactivation du compte
-				if (($user->membertype == 'inria') && ($user->memberreason == 'validldap')) {
+				// Si le compte LDAP est fermé, et qu'on n'a pas de nouveau motif de le garder actif, il est archivé
+				// Càd que si l'ancien statut était un compte Inria ou était justifié par un LDAP valide
+				// => désactivation du compte
+				if (($user->membertype == 'inria') || ($user->memberreason == 'validldap')) {
 					$account_status = 'closed';
 					$memberreason = 'invalidldap';
+					if ($debug) error_log("Previously valid Inria has become invalid : closing account");
 				}
 			}
 			
@@ -155,7 +159,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			if ($user->memberreason != $memberreason) { $user->memberreason = $memberreason; }
 			
 		}
-		error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
+		if ($debug) error_log("Account update : after = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
 		
 		// Vérification rétro-active pour les comptes qui n'ont pas encore de type de profil défini
 		// Compte externe par défaut (si on n'a pas eu d'info du LDAP)
