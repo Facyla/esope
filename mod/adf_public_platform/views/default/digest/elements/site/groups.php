@@ -14,12 +14,12 @@ $group_options = array(
 	"created_time_upper" => $ts_upper
 );
 
-if($newest_groups = elgg_get_entities($group_options)){
+if($new_groups = elgg_get_entities($group_options)){
 	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:groups"), "href" => "groups/all"));
 	
 	$group_items = "<div class='digest-groups'>";
 	
-	foreach($newest_groups as $index => $group){
+	foreach($new_groups as $key => $group){
 		$group_items .= '<div class="table-item">';
 		$group_items .= elgg_view_entity_icon($group, "medium");
 		$group_items .= '<a href="' . $group->getURL() . '">' . $group->name . '</a>';

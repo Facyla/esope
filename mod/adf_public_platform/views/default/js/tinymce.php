@@ -104,10 +104,10 @@ elgg.tinymce.init = function() {
       theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
       theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,spellchecker",
 		*/ ?>
+		// Pour intégrer des modèles configurés, ajouter le plugin et le bouton "template"
 		plugins : "<?php echo $plugins; ?>",
 		
 		theme_advanced_buttons1 : "<?php echo $advanced_buttons1; ?>",
-		// Si des modèles sont configurés, ajouter ",template" avant "image" pour les intégrer
 		theme_advanced_buttons2 : "<?php echo $advanced_buttons2; ?>",
 		theme_advanced_buttons3 : "<?php echo $advanced_buttons3; ?>",
 		theme_advanced_buttons4 : "<?php echo $advanced_buttons4; ?>",
@@ -154,14 +154,23 @@ elgg.tinymce.init = function() {
 		<?php } ?>
 	});
 	
+	/* This seems to cause problems with translation strings
+	// Doc : http://www.tinymce.com/tryit/3_x/multiple_configs.php
 	// Setup a new, basic config
 	tinyMCE.init({
 		mode : "specific_textareas",
-		editor_selector : "simple-editor",
-		theme : "simple",
+		editor_selector : "elgg-input-simpletext",
+		theme : "advanced",
 		extended_valid_elements : "<?php echo $extended_valid_elements; ?>",
+		
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,anchor,|,undo,redo,|,cleanup,|,bullist,numlist",
+		theme_advanced_buttons2 : "",
+		theme_advanced_buttons3 : "",
+		theme_advanced_buttons4 : "",
+		
 		convert_urls : false,
 	});
+	*/
 	
 	
 	// work around for IE/TinyMCE bug where TinyMCE loses insert carot

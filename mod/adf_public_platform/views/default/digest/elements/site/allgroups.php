@@ -11,16 +11,16 @@ $ts_upper = (int) elgg_extract("ts_upper", $vars);
 
 $dbprefix = get_config("dbprefix");
 
-$all_content = '';
+$content = '';
+$limit = 3; // Content limit (not groups, should return all user groups)
+$offset = 0;
 
 // Get all groups a user is member of, or has created
-$groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => false));
+$groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => 0));
 foreach ($groups as $group) {
-	$group_guid = $group->getGUID();
-
-	$offset = 0;
-	$limit = 3;
-
+	$group_guid = $group->guid;
+	$items = null;
+	
 	// retrieve recent group activity
 	$sql = "SELECT r.*";
 	$sql .= " FROM " . $dbprefix . "river r";
@@ -32,27 +32,20 @@ foreach ($groups as $group) {
 	$sql .= " AND " . get_access_sql_suffix("e"); // filter access
 	$sql .= " ORDER BY posted DESC";
 	$sql .= " LIMIT " . $offset . "," . $limit;
-
 	$items = get_data($sql, "elgg_row_to_elgg_river_item");
 
 	if (!empty($items)) {
-		$title = elgg_view("output/url", array("text" => $group->name, "href" => $group->getURL()));
-
 		$options = array(
-			"list_class" => "elgg-list-river elgg-river",
 			"items" => $items,
-			"pagination" => false
+			"pagination" => false,
+			"list_class" => "elgg-list-river elgg-river",
 		);
-
-		$content = elgg_view("page/components/list", $options);
-
-		$all_content .= '<h4>' . $title . '</h4>' . $content . '<br /><br />';
+		$content .= '<h4>' . elgg_view("output/url", array("text" => $group->name, "href" => $group->getURL())) . '</h4>' . elgg_view("page/components/list", $options) . '<br /><br />';
 	}
-
-	unset($items);
 }
 
-if (!empty($all_content)) {
-	echo elgg_view_module("digest", "Activité récente dans vos groupes", $all_content);
+if (!empty($content)) {
+	$title = elgg_echo('esope:digest:groupactivity');
+	echo elgg_view_module("digest", $title, $content);
 }
 

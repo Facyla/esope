@@ -5,43 +5,40 @@ $content = '';
 // Allow to forward to asked URL after successful login, or last forwward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
-global $cas_client_loaded;
-
 elgg_load_library('elgg:elgg_cas');
-//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
-$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
-$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
-$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas');
 
-
-
-// Use CAS functions only if we have enough parameters
-//if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {}
 
 // Initialize phpCAS
+global $cas_client_loaded;
 if (!$cas_client_loaded) {
 	// Uncomment to enable debugging
-	phpCAS::setDebug();
+	//phpCAS::setDebug();
+	
+	//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+	$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
+	$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
+	$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
+	$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas');
+	
+	// Use CAS functions only if we have enough parameters
+	//if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {}
 	phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-	$cas_client_loaded = true;
 	// For production use set the CA certificate that is the issuer of the cert
 	// For quick testing you can disable SSL validation of the CAS server.
-	// Certificat : le plus flexible = activé ssi configuré seulement
+	// Certificat : le plus flexible = activé ssi configuré
 	if (!empty($cas_server_ca_cert_path)) {
 		phpCAS::setCasServerCACert($cas_server_ca_cert_path);
 	} else {
 		phpCAS::setNoCasServerValidation();
 	}
+	$cas_client_loaded = true;
 }
 
 
-// logout if desired
-if (isset($_REQUEST['logout'])) {
-	phpCAS::logout();
-}
+// logout from CAS if asked to
+if (isset($_REQUEST['logout'])) { phpCAS::logout(); }
 
-
+// Break if already logged in in Elgg
 if (elgg_is_logged_in()) {
 	// Si on est déjà identifié sans CAS, inutile de se re-logguer
 	$logged = elgg_get_logged_in_user_entity();
@@ -67,7 +64,15 @@ if (elgg_is_logged_in()) {
 // Note : will fail with OpenSSL v0.9.8
 // Patch : must be applied in Request/CurlRequest and CurlMultiRequest :
 // => add curl_setopt($ch, CURLOPT_SSLVERSION,3); before calling curl
-phpCAS::forceAuthentication();
+//curl_setopt($handle, CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
+try{
+	phpCAS::forceAuthentication();
+} catch(Exception $e){
+	$debug =  print_r($e, true);
+	//echo '<pre>' . print_r($e, true) . '</pre>';
+	echo "<p>An authentication error has occured. Despites the message above, you should probably be authenticated, but something went wrong while checking your credentials on server side.<br />This error is probably caused by some configuration or communication error, and should be reported to the site admin.<br />Please try another login method, if available.</p>";
+	exit;
+}
 
 // at this step, the user has been authenticated by the CAS server
 // and the user's login name can be read with phpCAS::getUser().

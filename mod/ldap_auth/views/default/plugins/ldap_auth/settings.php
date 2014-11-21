@@ -7,8 +7,8 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 $yes_no_opt = array_reverse($no_yes_opt);
 
 if (empty($vars['entity']->username_field_name)) $vars['entity']->username_field_name = 'inriaLogin';
-if (empty($vars['entity']->mail_field_name)) $vars['entity']->mail_field_name = 'inriaMail';
-if (empty($vars['entity']->status_field_name)) $vars['entity']->status_field_name = 'inriaentrystatus';
+if (empty($vars['entity']->mail_field_name)) $vars['entity']->mail_field_name = 'mail';
+if (empty($vars['entity']->status_field_name)) $vars['entity']->status_field_name = 'inriaEntrystatus';
 if (empty($vars['entity']->generic_register_email)) $vars['entity']->generic_register_email = 'noreply@inria.fr';
 
 // Default required settings

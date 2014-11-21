@@ -52,7 +52,7 @@ if (empty($vars['entity']->cas_context)) $vars['entity']->cas_context = '/cas';
 		<?php echo elgg_view('input/dropdown', array('name' => 'params[enable_ws_auth]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->enable_ws_auth )); ?><br/>
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:cas_library'); ?></label><br/>
-		<?php echo elgg_view('input/dropdown', array('name' => 'params[cas_library]', 'options_values' => array('CAS-1.3.2', 'CAS-1.3.3'), 'value' => $vars['entity']->cas_library)); ?><br/>
+		<?php echo elgg_view('input/dropdown', array('name' => 'params[cas_library]', 'options_values' => array('1.3.2' => 'CAS-1.3.2', '1.3.3' => 'CAS-1.3.3'), 'value' => $vars['entity']->cas_library)); ?><br/>
 		
 	</fieldset>
 </p>

@@ -401,6 +401,7 @@ $fr = array(
 	'esope:widget:searchresults:description' => "Affiche les résultats d'une recherche par tag de votre choix.",
 	'esope:widgets:freehtml:title' => "Titre (après rechargement de la page)",
 	'esope:widgets:freehtml:content' => "Contenu (HTML)",
+	'esope:widgets:freehtml:bgcolor' => "Code couleur de fond",
 	'esope:widgets:freehtml:no_content' => "Veuillez configurer ce widget pour afficher le contenu (HTML) de votre choix.",
 	'esope:widgets:searchresults:tags' => "Tag(s) (séparés par des virgules)",
 	'esope:widgets:searchresults:tags_option' => "Comment utiliser les tags",
@@ -701,6 +702,7 @@ $fr = array(
 	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
 	'esope:digest:groups' => "Nouveaux groupes",
 	'esope:digest:members' => "Nouveaux membres",
+	'esope:digest:groupactivity' => "Activité récente dans vos groupes",
 	
 	// Join groups at registration
 	'esope:settings:register:joingroups' => "Permettre de rejoindre des groupes dès l'inscription",
