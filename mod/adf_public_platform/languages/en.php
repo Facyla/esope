@@ -741,6 +741,8 @@ $en = array(
 	
 	'esope:likes' => "Liked content",
 	
+	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
+	
 );
 
 add_translation('en', $en);

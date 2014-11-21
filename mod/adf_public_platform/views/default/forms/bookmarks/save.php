@@ -54,7 +54,26 @@ if ($categories) {
 ?>
 <div>
 	<label><?php echo elgg_echo('access'); ?></label><br />
-	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?>
+	<?php
+	if (!$guid && ($place == 'yes')) {
+		$options_values = get_write_access_array();
+		// Note : we cannot define no value because it would mean "do not change", 
+		// but we also need to put something that is valid and numeric, in case the bookmarks/save action is overridden
+		// and also default marker cannot be used because it is transformed to a real value
+		// So : we will use a value that always remain valid, but can be differenciated at save time <=> "00"
+		$options_values["00"] = elgg_echo('esope:access_id:restricttocontainer');
+		if ($container_guid && ($container = get_entity($container_guid)) && elgg_instanceof($container, 'group')) {
+			unset($options_values[$container->group_acl]);
+			// Force when using default access, because it applies to groups, which we override in this case
+			// And of course also force if group access level has been set (i wonder how), because the option has been removed and replaced
+			if (($access_id == ACCESS_DEFAULT) || ($access_id == $container->group_acl)) { $access_id = "00"; }
+		}
+		$params = array('name' => 'access_id', 'value' => $access_id, 'options_values' => $options_values);
+		echo elgg_view('input/access', $params);
+	} else {
+		echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id));
+	}
+	?>
 </div>
 <div class="elgg-foot">
 <?php
