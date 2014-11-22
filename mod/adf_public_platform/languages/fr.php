@@ -739,6 +739,8 @@ $fr = array(
 	
 	'esope:likes' => "Contenus appréciés",
 	
+	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
+	
 );
 
 add_translation('fr', $fr);

@@ -8,6 +8,7 @@
  * @uses $vars['name']					 The name of the input field
  * @uses $vars['entity']				 Optional. The entity for this access control (uses access_id)
  * @uses $vars['class']					Additional CSS class
+ * @TODO : add options to add/remove other options ?
  */
 
 // Exclude some access levels

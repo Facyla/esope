@@ -211,6 +211,11 @@ function esope_init() {
 		elgg_unregister_action('groups/invite');
 		elgg_register_action("groups/invite", $action_url . 'groups/membership/invite.php');
 	}
+	// Replace bookmarks action (allow access level change when using alternate container)
+	if (elgg_is_active_plugin('bookmarks')) {
+		elgg_unregister_action('bookmarks/save');
+		elgg_register_action("bookmarks/save", $action_url . 'bookmarks/save.php');
+	}
 	// ESOPE search endpoint
 	elgg_register_action("esope/esearch", $action_url . 'esope/esearch.php');
 	// Manually reset login failure counter

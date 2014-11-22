@@ -3,7 +3,7 @@
 $french = array(
 	// general
 	'item:object:newsletter' => "Lettre d'information",
-	'item:object:newsletter_template' => "Modèle de lettre d'information",
+	'item:object:newsletter_template' => "Gabarit de lettre d'information",
 	'item:object:newsletter_subscription' => "Abonnement à la lettre d'information",
 	'newsletter:add' => "Nouvelle lettre d'information",
 	'newsletter:subscribe' => "S'abonner",
@@ -37,11 +37,11 @@ $french = array(
 	'newsletter:menu:filter:sending' => "Envoi en cours",
 	
 	// steps menu
-	'newsletter:menu:steps:entity' => "Basique",
-	'newsletter:menu:steps:content' => "Contenu",
-	'newsletter:menu:steps:template' => "Modèle",
+	'newsletter:menu:steps:entity' => "Informations générales",
+	'newsletter:menu:steps:template' => "Gabarit de l'email",
+	'newsletter:menu:steps:content' => "Contenu de la Lettre",
 	'newsletter:menu:steps:recipients' => "Destinataires",
-	'newsletter:menu:steps:schedule' => "Programmation",
+	'newsletter:menu:steps:schedule' => "Programmation de l'envoi",
 		
 	// long text menu
 	'newsletter:menu:longtext:embed_blog' => "Intégrer une publication",
@@ -82,16 +82,16 @@ $french = array(
 				
 	// template
 	'newsletter:edit:template:description' => "Vous pouvez choisir ici la mise en page de la lettre d'information en changeant le code HTML et la feuille de style via les CSS. N'oubliez pas de prévisualiser votre lettre d'information pour vérifier qu'elle a bien l'apparence souhaitée.",
-	'newsletter:edit:template:copy_to_custom' => "Copier vers les modèles personnalisés",
-	'newsletter:edit:template:copy_to_custom:confirm' => "Cette action va rempalcer le modèle personnalisé actuel. Etes-vous sûr de vouloir copier ce modèle vers le modèle personnalisé pour cette lettre d'information ?",
-	'newsletter:edit:template:select' => "Sélectionnez un modèle",
-	'newsletter:edit:template:select:default' => "Modèle par défaut",
-	'newsletter:edit:template:select:default2' => "Modèle par défaut (avec barre latérale)",
-	'newsletter:edit:template:select:custom' => "Modèle personnalisé",
+	'newsletter:edit:template:copy_to_custom' => "Copier vers les gabarits personnalisés",
+	'newsletter:edit:template:copy_to_custom:confirm' => "Cette action va remplacer le gabarit personnalisé actuel. Etes-vous sûr de vouloir copier ce gabarit vers le gabarit personnalisé pour cette lettre d'information ?",
+	'newsletter:edit:template:select' => "Sélectionnez un gabarit",
+	'newsletter:edit:template:select:default' => "Gabarit par défaut",
+	'newsletter:edit:template:select:default2' => "Gabarit par défaut (avec barre latérale)",
+	'newsletter:edit:template:select:custom' => "Gabarit personnalisé",
 	'newsletter:edit:template:html' => "HTML",
 	'newsletter:edit:template:css' => "CSS",
-	'newsletter:edit:template:name' => "Nom du nouveau modèle (nécessaire uniquement pour sauvegarder le modèle)",
-	'newsletter:edit:template:save_as' => "Sauvegarder comme modèle",
+	'newsletter:edit:template:name' => "Nom du nouveau gabarit (nécessaire uniquement pour sauvegarder le gabarit)",
+	'newsletter:edit:template:save_as' => "Sauvegarder comme gabarit",
 	'newsletter:edit:template:error:save_as' => "Veuillez vérifier les champs marqués comme obligatoires",
 		
 	// default template body
@@ -110,11 +110,11 @@ $french = array(
 
 	// recipients
 	'newsletter:recipients:title' => "Sélectionner les destinataires",
-	'newsletter:recipients:description' => "Below you can configure who you want to receive the newsletter.",
+	'newsletter:recipients:description' => "Vous pouvez choisir ci-dessous les destinataires de cette lettre d'information.",
 	'newsletter:recipients:csv' => "Envoyer un fichier CSV avec les adresses email de destinataires",
-	'newsletter:recipients:csv:description' => "Vous pouvez envoyer un fichier contenant les adresses email des destinataires. Le délimiteur de texte doit être \" (guillemet double), et le délimiteur de colonnes doit être un ; (point-virgule). Le système détectera automatiquement la colonne des adresses email enr recherchant parmi les 2 premières colonnes.",
+	'newsletter:recipients:csv:description' => "Vous pouvez envoyer un fichier contenant les adresses email des destinataires. Le délimiteur de texte doit être \" (guillemet double), et le délimiteur de colonnes doit être un ; (point-virgule). Le système détectera automatiquement la colonne des adresses email en recherchant parmi les 2 premières colonnes.",
 	'newsletter:recipients:recipient' => "Rechercher un destinataire",
-	'newsletter:recipients:recipient:description' => "Vous pouvez faire une recherche par nom, email et nom d'utilisateur. Veuillez sélectionner une entrée de la liste pour l'ajouter aux destinataires.",
+	'newsletter:recipients:recipient:description' => "Vous pouvez faire une recherche par nom, par email ou par nom d'utilisateur. Veuillez sélectionner une entrée de la liste pour l'ajouter aux destinataires.",
 	'newsletter:recipients' => "Destinataires",
 	'newsletter:recipients:subscribers' => "A tous les abonnés",
 	'newsletter:recipients:members' => "A tous les membres",
@@ -233,10 +233,10 @@ Pour afficher cette lettre d'information, cliquez sur :
 	'newsletter:action:content:success' => "Contenu enregistré",
 	
 	// template
-	'newsletter:action:template:success' => "Modèle sauvegardé",
+	'newsletter:action:template:success' => "Gabarit sauvegardé",
 
 	// template to custom
-	'newsletter:action:template_to_custom:success' => "Modèle copié vers les modèles personnalisés",
+	'newsletter:action:template_to_custom:success' => "Gabarit copié vers les gabarits personnalisés",
 	
 	// subscribe
 	'newsletter:action:subscribe:error:subscribe' => "Une erreur s'est produite lors de l'abonnement, veuillez ré-essayer",
@@ -256,11 +256,11 @@ Pour afficher cette lettre d'information, cliquez sur :
 	'newsletter:action:duplicate:success' => "La lettre d'information a été dupliquée",
 	
 	// template - edit
-	'newsletter:action:template:edit:error' => "Une erreur inconnue s'est produite lors de la sauvegarde du modèle",
-	'newsletter:action:template:edit:success' => "Le modèle a été sauvegardé",
+	'newsletter:action:template:edit:error' => "Une erreur inconnue s'est produite lors de la sauvegarde du gabarit",
+	'newsletter:action:template:edit:success' => "Le gabarit a été sauvegardé",
 	
 	// template - delete
-	'newsletter:action:template:delete:error:delete' => "Une erreur inconnue s'est produite lors de la suppression du modèle de lettre d'informaiton, veuillez ré-essayer",
+	'newsletter:action:template:delete:error:delete' => "Une erreur inconnue s'est produite lors de la suppression du gabarit de lettre d'informaiton, veuillez ré-essayer",
 	'newsletter:action:template:delete:success' => "La lettre d'information a été supprimée",
 	
 	// preview mail
