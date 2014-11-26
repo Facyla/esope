@@ -10,6 +10,8 @@ if (!empty($timeframe) && is_int($timeframe)) {
 	$timeframe =  time() - (180 * 24 * 60 * 60);
 }
 
+$ia = elgg_get_ignore_access();
+elgg_set_ignore_access(true);
 $latest_river = elgg_get_river(array(
 		'limit' => 1,
 		'joins' => array("JOIN {$dbprefix}entities e1 ON e1.guid = rv.object_guid"),
@@ -33,4 +35,5 @@ if ($group->time_created < $timeframe) {
 	}
 }
 
+elgg_set_ignore_access($ia);
 

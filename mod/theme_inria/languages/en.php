@@ -149,6 +149,15 @@ $english = array(
 	'theme_inria:digest:members' => "New Iris members",
 	'theme_inria:digest:thewire' => "Inria the Wire",
 	
+	// Newsletter
+	'theme_inria:newsletter:edit:title' => "Newsletter title",
+	'theme_inria:newsletter:edit:title:details' => "This title will be used as an internal name for your newsletter.",
+	'theme_inria:newsletter:edit:subject' => "Email  title",
+	'theme_inria:newsletter:edit:subject:details' => "This fields lets you define the exact email subject that the recipients will receive.",
+	'theme_inria:newsletter:edit:description' => "Newsletter description",
+	'theme_inria:newsletter:edit:description:details' => "This field lets you describe the newsletter : what are its recipients, what it is about, etc. The content itself will be defined in step 3.",
+	
+	
 	// Traductions
 	'theme_inria:login' => "Log in",
 	'members:online' => "Online members",

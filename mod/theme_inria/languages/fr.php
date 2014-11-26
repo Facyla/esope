@@ -149,6 +149,15 @@ $french = array(
 	'theme_inria:digest:members' => "Nouveaux membres d'Iris",
 	'theme_inria:digest:thewire' => "Sur le fil",
 	
+	// Newsletter
+	'theme_inria:newsletter:edit:title' => "Titre de la lettre",
+	'theme_inria:newsletter:edit:title:details' => "Ce titre sera utilisé pour identifier la lettre sur le site.",
+	'theme_inria:newsletter:edit:subject' => "Sujet de l'email",
+	'theme_inria:newsletter:edit:subject:details' => "Ce champ vous permet de définir le sujet exact de l'email tel qu'il' sera reçu par les destinataires de la Lettre.",
+	'theme_inria:newsletter:edit:description' => "Description de la Lettre",
+	'theme_inria:newsletter:edit:description:details' => "Ce champ vous permet de décrire le contenu de la Lettre : à qui elle s'adresse, sa ligne éditoriale, etc. Le contenu de la Lettre elle-même sera défini à l'étape n°3.",
+	
+	
 	// Traductions
 	'theme_inria:login' => "Connexion",
 	'members:online' => "Membres connectés",
