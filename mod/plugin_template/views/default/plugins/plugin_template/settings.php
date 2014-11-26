@@ -8,7 +8,7 @@ $yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option
 
 
 // Set default value
-if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name == 'default'; }
+if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name = 'default'; }
 
 
 // Example yes/no setting
