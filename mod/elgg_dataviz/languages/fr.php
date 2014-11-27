@@ -5,9 +5,9 @@
 global $CONFIG;
 
 $fr = array(
-	'elgg_d3js' => "Interface d3js",
-	'elgg_d3js:title' => "Interface d3js",
-	'elgg_d3js:everyone' => "Toutes les visualisations",
+	'elgg_dataviz' => "Data-visualisation",
+	'elgg_dataviz:title' => "Data-visualisation",
+	'elgg_dataviz:index' => "Accueil des data-visualisations",
 	
 	
 );

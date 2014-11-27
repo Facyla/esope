@@ -17,6 +17,12 @@ function elgg_dataviz(){
 	
 	// Register datavisualisation libraries
 	elgg_register_js('elgg:dataviz:D3', '/mod/elgg_dataviz/vendors/d3/d3.min.js', 'head');
+	elgg_register_js('elgg:dataviz:dygraphs', '/mod/elgg_dataviz/vendors/dygraphs/dygraph-combined.js', 'head');
+	elgg_register_js('elgg:dataviz:vega', '/mod/elgg_dataviz/vendors/vega/vega.min.js', 'head');
+	elgg_register_js('elgg:dataviz:crossfilter', '/mod/elgg_dataviz/vendors/crossfilter/crossfilter.min.js', 'head');
+	elgg_register_js('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.js', 'head');
+	elgg_register_css('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.css', 'head');
+	
 /*
 	elgg_register_js('elgg_dataviz:dialog', '/mod/elgg_dataviz/vendors/d3js/soap/include/dialog.js');
 	elgg_load_js('elgg_dataviz:dialog');
@@ -26,7 +32,7 @@ function elgg_dataviz(){
 	elgg_register_widget_type('elgg_dataviz_mine', elgg_echo('elgg_dataviz:widget:d3js_mine'), elgg_echo('elgg_dataviz:widget:d3js_mine:details'), 'dashboard', false);
 */	
 	// d3js page handler
-	elgg_register_page_handler('d3js', 'elgg_dataviz_page_handler');
+	elgg_register_page_handler('dataviz', 'elgg_dataviz_page_handler');
 
 }
 
@@ -46,6 +52,7 @@ function elgg_dataviz_page_handler($page) {
 			if (!include_once "$base/edit.php") return false;
 			break;
 		default:
+			if (isset($page[1])) set_input('library', $page[1]);
 			if (!include_once "$base/index.php") return false;
 	}
 	return true;
