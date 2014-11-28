@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Datavisualization</name>
+	<author>Alexandre ROBERT ~2014</author>
+	<version>0.1</version>
+	<blurb>Datavisualization plugin</blurb>
+	<description>Datavisualization</description>
+	<website>http://items.fr</website>
+	<copyright>LX001</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<category>visualization</category>
+	<category>data</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>adf_public_platform</name>
+	</suggests>
+	
+</plugin_manifest>
+
+<!--
+WARNING : 
+
+
+0.1 : 20140724 - initial version
+//-->
+
