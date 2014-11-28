@@ -11,18 +11,22 @@
 // Load Elgg engine
 global $CONFIG;
 
-elgg_load_js('impress.js');
-elgg_load_js('impress-audio');
+
+$editor = get_input('editor');
+
+//elgg_load_js('impress.js');
+//elgg_load_js('impress-audio');
 
 //elgg_register_css('impress_css', '/mod/impress_js/vendors/impress.js/css/impress-demo.css');
 //elgg_load_css('impress_css');
 
 
-$title = "Impress.js";
+$title = "Impress.js editors";
 
 $content = '';
 
 // Presentation content
+/*
 $content .= '<div id="impress">';
 
 $content .= '<div id="bored" class="step slide" data-x="-1000" data-y="-1500"><q>Aren \'t you just <b>bored</b> with all those slides-based presentations?</q></div>';
@@ -69,16 +73,126 @@ $content .= '<div id="overview" class="step" data-x="3000" data-y="1500" data-sc
 $content .= '<div class="hint"><p>Use a spacebar or arrow keys to navigate</p></div>';
 
 $content .= '</div>';
+*/
 
 
-// JS scripts
-$content .= '<script>
-if ("ontouchstart" in document.documentElement) { 
-	document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+if ($editor == 'strut') {
+	$title = "Strut Impress.js editor";
+	
+	$base_strut = $CONFIG->url . '/mod/impress_js/vendors/Strut/';
+	elgg_load_js('swfobject.js');
+	
+	// JS scripts
+	$content = '<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="max-age=0">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="Expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+		<meta http-equiv="Pragma" content="no-cache">
+		<title>Strut - Beta</title>';
+	$content .= '<link rel="stylesheet" href="' . $base_strut . 'styles/main.css">';
+	$content .= '<link rel="stylesheet" href="' . $base_strut . 'preview_export/reveal/css/theme/default.css">';
+	$content .= '<link rel="stylesheet" type="text/css" href="' . $base_strut . 'styles/built.css">';
+	$content .= '<script type="text/javascript" src="' . $base_strut . 'preview_export/download_assist/swfobject.js"></script>';
+	$content .= '</head>';
+	$content .= '<body class="bg-default">';
+	$content .= <<< HTML
+<script>
+		window.isOptimized = true;
+		if (!Function.prototype.bind) {
+		  Function.prototype.bind = function (oThis) {
+		    if (typeof this !== "function") {
+		      // closest thing possible to the ECMAScript 5 internal IsCallable function
+		      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+		    }
+
+		    var aArgs = Array.prototype.slice.call(arguments, 1), 
+		        fToBind = this, 
+		        fNOP = function () {},
+		        fBound = function () {
+		          return fToBind.apply(this instanceof fNOP && oThis
+		                                 ? this
+		                                 : oThis,
+		                               aArgs.concat(Array.prototype.slice.call(arguments)));
+		        };
+
+		    fNOP.prototype = this.prototype;
+		    fBound.prototype = new fNOP();
+
+		    return fBound;
+		  };
+		}
+
+		if (!Array.prototype.some) {
+		  Array.prototype.some = function(fun /*, thisp */) {
+		    'use strict';
+
+		    if (this == null) {
+		      throw new TypeError();
+		    }
+
+		    var thisp, i,
+		        t = Object(this),
+		        len = t.length >>> 0;
+		    if (typeof fun !== 'function') {
+		      throw new TypeError();
+		    }
+
+		    thisp = arguments[1];
+		    for (i = 0; i < len; i++) {
+		      if (i in t && fun.call(thisp, t[i], i, t)) {
+		        return true;
+		      }
+		    }
+
+		    return false;
+		  };
+		}
+
+		if (!Array.prototype.forEach) {
+		    Array.prototype.forEach = function (fn, scope) {
+		        'use strict';
+		        var i, len;
+		        for (i = 0, len = this.length; i < len; ++i) {
+		            if (i in this) {
+		                fn.call(scope, this[i], i, this);
+		            }
+		        }
+		    };
+		}
+
+		var head = document.getElementsByTagName('head')[0];
+		function appendScript(src) {
+			var s = document.createElement("script");
+    		s.type = "text/javascript";
+    		s.src = src;
+    		head.appendChild(s);
+		}
+
+		if (window.location.href.indexOf("preview=true") == -1) {
+			window.dlSupported = 'download' in document.createElement('a');
+			window.hasFlash = swfobject.hasFlashPlayerVersion(9);
+			if (!dlSupported && window.hasFlash) {
+				appendScript('{$base_strut}preview_export/download_assist/downloadify.min.js');
+			}
+		}
+		</script>
+HTML;
+	
+	$content .= '<script data-main="' . $base_strut . 'scripts/amd-app" src="' . $base_strut . 'scripts/libs/require.js"></script>';
+	$content .= '<div id="modals"></div>';
+	$content .= '</body>';
+	$content .= '</html>';
+	// Displays the editor fullscreen
+	echo elgg_render_embed_content($content,$title, 'inner');
+	exit;
 }
-</script>';
-$content .= '<script>$( document ).ready(function() { impress().init(); });</script>';
 
+
+$content .= '<p><a href="?editor=strut" target="_blank" class="elgg-button elgg-button-action">Open Strut editor (new window)</a></p>';
 
 
 $sidebar = "Contenu de la sidebar";
@@ -86,7 +200,8 @@ $sidebar = "Contenu de la sidebar";
 
 
 // Render the page
-$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 echo elgg_view_page($title, $body);
+
 
 

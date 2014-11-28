@@ -26,6 +26,14 @@ function impress_js_init() {
 	// Add audio plugin
 	elgg_register_js('impress-audio', '/mod/impress_js/vendors/impress-audio/js/impress-audio.js', 'footer');
 	
+	// Editors
+	// Strut
+	elgg_register_js('swfobject.js', '/mod/impress_js/vendors/Strut/preview_export/download_assist/swfobject.js', 'head');
+	// Note : Strut js has to be loaded using a specific property
+	//elgg_register_js('impress.strut', '/mod/impress_js/vendors/Strut/scripts/libs/require.js', 'footer');
+	
+	
+	
 	/*
 	// Register PHP library - use with : elgg_load_library('elgg:impress_js');
 	elgg_register_library('elgg:impress_js', elgg_get_plugins_path() . 'impress_js/lib/impress_js.php');
