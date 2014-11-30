@@ -56,7 +56,7 @@ function impress_js_init() {
 	*/
 	
 	// Register a page handler on "impress_js/"
-	elgg_register_page_handler('impress_js', 'impress_js_page_handler');
+	elgg_register_page_handler('impress', 'impress_js_page_handler');
 	
 	
 }
@@ -66,11 +66,23 @@ function impress_js_init() {
 // Loads pages located in impress_js/pages/impress_js/
 function impress_js_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'impress_js/pages/impress_js';
+	global $CONFIG;
+	$webbase_strut = $CONFIG->url . 'mod/impress_js/vendors/Strut/preview_export/';
+	$base_strut = elgg_get_plugins_path() . 'impress_js/vendors/Strut/';
 	switch ($page[0]) {
 		case 'view':
 			include "$base/view.php";
 			break;
 		case 'edit':
+			if (!empty($page[1])) set_input('editor', $page[1]);
+			/*
+			if (!empty($page[2])) {
+				$params = array_slice($page, 2);
+				$params = implode('/', $params);
+				forward($webbase_strut . $params);
+				include($base_strut . $params);
+			} else {
+			*/
 			include "$base/edit.php";
 			break;
 		default:
