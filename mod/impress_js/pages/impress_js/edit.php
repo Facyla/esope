@@ -75,11 +75,13 @@ $content .= '<div class="hint"><p>Use a spacebar or arrow keys to navigate</p></
 $content .= '</div>';
 */
 
+$base_strut = $CONFIG->url . 'mod/impress_js/vendors/Strut/';
+$base_impressionist = $CONFIG->url . 'mod/impress_js/vendors/Impressionist/';
+$base_builder4impress = $CONFIG->url . 'mod/impress_js/vendors/builder4impress/';
 
 if ($editor == 'strut') {
 	$title = "Strut Impress.js editor";
 	
-	$base_strut = $CONFIG->url . '/mod/impress_js/vendors/Strut/';
 	elgg_load_js('swfobject.js');
 	
 	// JS scripts
@@ -192,15 +194,72 @@ HTML;
 }
 
 
-$content .= '<p><a href="?editor=strut" target="_blank" class="elgg-button elgg-button-action">Open Strut editor (new window)</a></p>';
+$content .= '<p><em>While you may directly edit HTML files to use them with Impress.js, there are also several Impress.js editors which facilitates this tasks. Each of them has its own functionnalities and limitations, but i\'ve tried to include here the most complete and usable ones.</em</p>';
 
 
-$sidebar = "Contenu de la sidebar";
+$content .= '<h3>Strut editor</h3>';
+$content .= '<p><em>Strut is a complete editor with slides editor, transition editor and viewer. It lets you add Text, Images, Videos, Web sites and Shapes to your presentation, and to use background images or colors. The resulting slides can be arranged using scale and orientation, including 3D). Presentations are saved locally, and can also be exported as a JSON file, or saved as a fully functionnal HTML page.</em</p>';
+
+$content .= '<div class="elgg-output">Presentations are currently saved only locally on <em>this</em> browser. Please save them in another place if you wish to use them from another computer.<br />To load one of these, please open Strut editor, then load the saved presentation.<ul>';
+$content .= '<script>
+function listStrutSavedPresentations(){  
+	for (i=0; i<=localStorage.length-1; i++) {
+		key = localStorage.key(i);
+		if (key.substr(0, 6) == \'strut-\') {
+			var localStrutImpressJSON = localStorage.getItem(key);
+			//document.write(\'<p>\' + localStrutImpressJSON + \'</p>\');
+			var localStrutImpress = $.parseJSON(localStrutImpressJSON);
+			document.write(\'<li>\' + localStrutImpress[\'fileName\'] + \'</li>\');
+		}
+	}
+}
+listStrutSavedPresentations();
+</script>';
+$content .= '</ul></div>';
+
+// Using rewritten URL causes multiple dependencies errors (files not found, etc.)
+//$content .= '<p><a href="?editor=strut" target="_blank" class="elgg-button elgg-button-action">Open Strut editor (new window)</a></p>';
+// So better use direct, real path
+$content .= '<p><a href="' . $base_strut . 'index.html" target="_blank" class="elgg-button elgg-button-action">Open Strut editor (new window)</a></p>';
 
 
+
+$content .= '<h3>Impressionist editor</h3>';
+// Impressionist decks are saved under impressionist_decks localStorage
+$content .= '<p><em>Impressionist is less complete than Strut in terms of types of embeddable content, but might be pretty more straight-forward to create text + images slides, and arrange them. It also features a few style presets, and lets you save your presentations locally.<br />It lets you easily export the HTML snippet that fits for Impress.js, but previewing doesn\'t work as expected.</em</p>';
+$content .= '<div class="elgg-output">Presentations are currently saved only locally on <em>this</em> browser. Please save them in another place if you wish to use them from another computer.<br />To load one of these, please open Impressionist editor, then load the saved presentation and export it.<ul>';
+$content .= '<script>
+function listImpressionistSavedPresentations(){  
+	for (i=0; i<=localStorage.length-1; i++) {
+		key = localStorage.key(i);
+		if (key == \'impressionist_decks\') {
+			var localImpressionistJSON = localStorage.getItem(key);
+			//document.write(\'<p>\' + localImpressionistJSON + \'</p>\');
+			var localImpressionist = $.parseJSON(localImpressionistJSON);
+			$.each(localImpressionist, function(index, value) {
+				document.write(\'<li>\' + value[\'title\'] + \' (\' + value[\'description\'] + \')</li>\');
+			});
+		}
+	}
+}
+listImpressionistSavedPresentations();
+</script>';
+$content .= '</ul></div>';
+$content .= '<p><a href="' . $base_impressionist . 'app.html" target="_blank" class="elgg-button elgg-button-action">Open Impressionist editor (new window)</a></p>';
+
+
+
+$content .= '<h3>Builder4Impress editor</h3>';
+$content .= '<p><em>This is the most "textful" of these editors, but it allows to use raw HTML inside the slides. Also, it allows tu use Impress-presentation while editing. BUT saving doesn\'t work so you should not invest too much time in editing !</em</p>';
+$content .= '<p><a href="' . $base_builder4impress . 'index.html" target="_blank" class="elgg-button elgg-button-action">Open Builder4Impress editor (new window)</a></p>';
+
+
+
+
+$sidebar = elgg_view('impress_js/sidebar');
 
 // Render the page
-$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
+$body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 echo elgg_view_page($title, $body);
 
 

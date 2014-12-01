@@ -15,10 +15,10 @@ $title = "Titre";
 
 $content = "Plugin_template page content";
 
-$sidebar = "Contenu de la sidebar";
+$sidebar = elgg_view('impress_js/sidebar');
 
 // Render the page
-$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+$body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 echo elgg_view_page($title, $body);
 
 

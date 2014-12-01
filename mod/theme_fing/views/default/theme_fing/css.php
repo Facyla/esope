@@ -213,3 +213,8 @@ span.arrow { width: 40px; height: 40px; border-radius: 20px; line-height: 40px; 
 #bande { display:none; }
 
 
+.public-comments-notice { font-size: 1.2em; padding: 1ex 2ex; border: 1px solid red; }
+.public-comments-notice .fa { color: red;  float: left; font-size: 2em; margin-right: 1ex; }
+
+
+
