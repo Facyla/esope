@@ -359,10 +359,7 @@ function cmspages_public_pages($hook, $type, $return_value, $params) {
 	$ignore_access = elgg_get_ignore_access();
 	elgg_set_ignore_access(true);
 	
-	$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true);
-	$cmspages_count = elgg_get_entities($params);
-	$params['limit'] = $cmspages_count;
-	$params['count'] = false;
+	$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
 	$cmspages = elgg_get_entities($params);
 	foreach ($cmspages as $ent) {
 		// Pages publiques seulement si le niveau d'accès est public = 2 (on vérifie car override d'accès)
