@@ -7,7 +7,7 @@
 
 /*
 elgg_pop_breadcrumb();
-elgg_push_breadcrumb(elgg_echo('d3js'));
+elgg_push_breadcrumb(elgg_echo('dataviz'));
 */
 global $CONFIG;
 $view_url = $CONFIG->url . 'dataviz/view/';
@@ -17,6 +17,16 @@ $library = get_input('library');
 $title = elgg_echo('elgg_dataviz:index');
 
 $content = '';
+
+$content .= '<h3>' . 'Bibliothèques de visualisation' . '</h3>';
+
+$content .= '<p><a href="?library=d3" class="elgg-button elgg-button-action">D3</a> : generic visualisation library</p>';
+$content .= '<p><a href="?library=nvd3" class="elgg-button elgg-button-action">NVD3</a>: reusable charts based on D3. http://nvd3.org/</p>';
+$content .= '<p><a href="?library=vega" class="elgg-button elgg-button-action">Vega</a> : visualisation grammar. "Vega provides a higher-level visualization specification language on top of D3". https://github.com/trifacta/vega/wiki/</p>';
+$content .= '<p><a href="?library=datawrapper" class="elgg-button elgg-button-action">DataWrapper</a> : visualisation tool (process)</p>';
+$content .= '<p><a href="?library=dygraphs" class="elgg-button elgg-button-action">Dygraphs</a> : charting library http://dygraphs.com/</p>';
+$content .= '<p><a href="?library=crossfilter" class="elgg-button elgg-button-action">Crossfilter</a> : Fast Multidimensional Filtering for Coordinated Views</p>';
+
 
 
 switch($library) {

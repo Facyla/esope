@@ -17,10 +17,14 @@ function elgg_dataviz(){
 	
 	// Register datavisualisation libraries
 	elgg_register_js('elgg:dataviz:d3', '/mod/elgg_dataviz/vendors/d3/d3.min.js', 'head');
-	elgg_register_js('elgg:dataviz:dygraphs', '/mod/elgg_dataviz/vendors/dygraphs/dygraph-combined.js', 'head');
-	elgg_register_js('elgg:dataviz:vega', '/mod/elgg_dataviz/vendors/vega/vega.min.js', 'head');
-	elgg_register_js('elgg:dataviz:crossfilter', '/mod/elgg_dataviz/vendors/crossfilter/crossfilter.min.js', 'head');
+	elgg_register_js('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.js', 'head');
 	elgg_register_css('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.css', 'head');
+	elgg_register_js('elgg:dataviz:vega', '/mod/elgg_dataviz/vendors/vega/vega.min.js', 'head');
+	elgg_register_js('elgg:dataviz:dygraphs', '/mod/elgg_dataviz/vendors/dygraphs/dygraph-combined.js', 'head');
+	elgg_register_js('elgg:dataviz:crossfilter', '/mod/elgg_dataviz/vendors/crossfilter/crossfilter.min.js', 'head');
+	// jquery data tables plugin
+	elgg_register_js('jquery.datatables', '/mod/elgg_dataviz/vendors/jquery_datatables/media/js/jquery.dataTables.min.js', 'head');
+	elgg_register_css('jquery.datatables', '/mod/elgg_dataviz/vendors/jquery_datatables/media/css/jquery.dataTables.min.css', 'head');
 	
 /*
 	elgg_register_js('elgg_dataviz:dialog', '/mod/elgg_dataviz/vendors/d3js/soap/include/dialog.js');
