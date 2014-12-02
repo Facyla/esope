@@ -7,6 +7,10 @@ This plugin adds visualisation libraries to Esope https://github.com/Facyla/esop
  - Dygraphs
  - Vega
  - Crossfilter
+ - DataTables (jQuery plugin)
+
+See also DataWrapper, which is an interesting, but standalone app (not included)
+
 
 It uses these libraries to enable data visualisations as reusable Elgg views.
 
