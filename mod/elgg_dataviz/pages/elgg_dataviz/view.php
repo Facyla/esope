@@ -1,10 +1,10 @@
 <?php
 /**
- * View a bookmark
+ * View a dataviz
  *
- * @package ElggBookmarks
  */
  global $CONFIG;
+$library = get_input('library');
 $viztype = get_input('viztype',''); 
 
 // Set data root URLs

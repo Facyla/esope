@@ -16,11 +16,10 @@ function elgg_dataviz(){
 	elgg_extend_view('css', 'elgg_dataviz/css');
 	
 	// Register datavisualisation libraries
-	elgg_register_js('elgg:dataviz:D3', '/mod/elgg_dataviz/vendors/d3/d3.min.js', 'head');
+	elgg_register_js('elgg:dataviz:d3', '/mod/elgg_dataviz/vendors/d3/d3.min.js', 'head');
 	elgg_register_js('elgg:dataviz:dygraphs', '/mod/elgg_dataviz/vendors/dygraphs/dygraph-combined.js', 'head');
 	elgg_register_js('elgg:dataviz:vega', '/mod/elgg_dataviz/vendors/vega/vega.min.js', 'head');
 	elgg_register_js('elgg:dataviz:crossfilter', '/mod/elgg_dataviz/vendors/crossfilter/crossfilter.min.js', 'head');
-	elgg_register_js('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.js', 'head');
 	elgg_register_css('elgg:dataviz:nvd3', '/mod/elgg_dataviz/vendors/nvd3/nv.d3.min.css', 'head');
 	
 /*
@@ -41,11 +40,13 @@ function elgg_dataviz_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_dataviz/pages/elgg_dataviz';
 	switch($page[0]) {
 		case 'data':
-			if (isset($page[1])) set_input('viztype', $page[1]);
+			if (isset($page[1])) set_input('library', $page[1]);
+			if (isset($page[2])) set_input('viztype', $page[2]);
 			if (!include_once "$base/data.php") return false;
 			break;
 		case 'view':
-			if (isset($page[1])) set_input('viztype', $page[1]);
+			if (isset($page[1])) set_input('library', $page[1]);
+			if (isset($page[2])) set_input('viztype', $page[2]);
 			if (!include_once "$base/view.php") return false;
 			break;
 		case 'edit':
