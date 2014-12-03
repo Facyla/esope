@@ -93,9 +93,10 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		// Connection error (bad config)
 		$body .= elgg_echo('postbymail:badpluginconfig');
 		$imap_errors = imap_errors();
-		$body .= "IMAP errors : " . print_r($imap_errors, true);
+		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$mailbox, $username, PASSWORD);</p>";
+		$body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
 		$imap_alerts = imap_alerts();
-		$body .= "IMAP alerts : " . print_r($imap_alerts, true);
+		$body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
 	} else {
 		$body .= elgg_echo('postbymail:connectionok');
 		
