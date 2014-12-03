@@ -40,7 +40,8 @@ $protocol = elgg_get_plugin_setting('protocol', 'postbymail');
 
 /* Name of the mailbox to open. */
 // Boîte de réception = toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
-$mailbox = "INBOX";
+//$mailbox = "INBOX";
+$mailbox = elgg_get_plugin_setting('inboxfolder', 'postbymail');
 //if (empty($mailbox)) $mailbox = elgg_get_plugin_setting('mailbox', 'postbymail');
 
 /* Mailbox username. */
