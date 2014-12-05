@@ -395,7 +395,7 @@ $en = array(
 	'adf_platform:settings:widget:profile_completeness' => "Allow widget : Profile completion",
 	'adf_platform:settings:widget:profile_completeness:help' => "This widget can be enabled/disabled in Profile Manager plugin configuration",
 	'adf_platform:settings:widget:freehtml' => "Allow widget : Free text (HTML)",
-	'adf_platform:settings:widget:search_results' => "Allow widget : Configured search",
+	'adf_platform:settings:widget:searchresults' => "Allow widget : Configured search",
 	'esope:widget:freehtml' => "Free text (HTML)",
 	'esope:widget:freehtml:description' => "Let's you integrate any text you want, including HTML.",
 	'esope:widget:searchresults' => "Tag search",
@@ -707,7 +707,7 @@ $en = array(
 	'esope:digest:groupactivity' => "Recent activity in your groups",
 	
 	// Join groups at registration
-	'esope:settings:register:joingroup' => "Allow to join groups at registration",
+	'esope:settings:register:joingroups' => "Allow to join groups at registration",
 	'esope:register:joingroups' => "Join groups",
 	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
 	'esope:register:morejoingroups' => "Display more groups",
