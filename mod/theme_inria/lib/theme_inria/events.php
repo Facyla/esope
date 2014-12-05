@@ -142,6 +142,9 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				if (($user->membertype == 'inria') || ($user->memberreason == 'validldap') || $force_archive) {
 					$memberstatus = 'closed';
 					$memberreason = 'invalidldap';
+					$user->oldemail = $user->email;
+					$user->email = '';
+					$user->save();
 					if ($debug) error_log("Previously valid Inria has become invalid : closing account");
 				}
 			}

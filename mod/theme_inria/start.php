@@ -158,6 +158,12 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
 	}
 	
+	// Allow to intercept and block email sending under some conditions (disabled account mainly)
+	// Note : this would work if hook was not used by html_email_handler
+	//        but it uses same hook and sends email in the process
+	//elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 1);
+	
+	
 }
 
 // Include Inria functions
