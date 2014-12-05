@@ -747,13 +747,13 @@ $fr = array(
 	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
 	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
 	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Agenda",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
 	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers du groupe",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
 	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information de groupe",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
 	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
-
+	
 	
 	
 );

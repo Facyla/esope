@@ -743,6 +743,20 @@ $en = array(
 	
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
 	
+	// Group tools FA icons *override* - please update CSS accordingly
+	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Announcements",
+	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Bookmarks",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Brainstorm",
+	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendar",
+	'file:group' => "<i class=\"fa fa-file-o\"></i> Files",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Folders",
+	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activity",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Pages",
+	
+	
 );
 
 add_translation('en', $en);
