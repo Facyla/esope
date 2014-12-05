@@ -744,6 +744,7 @@ $en = array(
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
 	
 	// Group tools FA icons *override* - please update CSS accordingly
+	/* @TODO
 	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Announcements",
 	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Bookmarks",
@@ -755,6 +756,7 @@ $en = array(
 	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activity",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
 	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Pages",
+	*/
 	
 	
 );
