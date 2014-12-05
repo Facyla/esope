@@ -459,7 +459,7 @@ function esope_friendly_time_hook($hook, $type, $return, $params) {
 	
 	if (!isset($esope_friendly_time_months)) {
 		$$esope_friendly_time_months = array();
-		for ($i=0; $i<12; $i++) {
+		for ($i=1; $i<=12; $i++) {
 			$esope_friendly_time_months[$i] = elgg_echo("date:month:$i");
 		}
 	}

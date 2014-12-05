@@ -213,6 +213,9 @@ Pour afficher cette lettre d'information, cliquez sur :
 	'newsletter:group:error:not_enabled' => "Les lettres d'information ne sont pas activées pour ce groupe",
 	'newsletter:group:title' => "Lettres d'information de %s",
 	
+		// widget
+		'newsletter:widget:subscribe:description' => "Afficher un widget d'inscription rapide à la lettre d'information",
+	
 	// actions
 	// edit
 	'newsletter:action:edit:error:title' => "Veuillez donner un titre à la lettre d'information",
