@@ -156,6 +156,9 @@ $english = array(
 	'theme_inria:newsletter:edit:subject:details' => "This fields lets you define the exact email subject that the recipients will receive.",
 	'theme_inria:newsletter:edit:description' => "Newsletter description",
 	'theme_inria:newsletter:edit:description:details' => "This field lets you describe the newsletter : what are its recipients, what it is about, etc. The content itself will be defined in step 3.",
+	'theme_inria:newsletter:edit:access' => "Members read access",
+	'theme_inria:newsletter:edit:access:details' => "This field determines the access to the newsletter for site members. It doesn't have any effect on the newsletter's recipients.",
+	'theme_inria:newsletter:confirmlink' => "Have you saved your changes before previewing ?",
 	
 	
 	// Traductions

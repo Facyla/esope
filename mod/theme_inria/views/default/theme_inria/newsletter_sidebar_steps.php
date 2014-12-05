@@ -3,6 +3,6 @@
 $guid = $vars['entity']->guid;
 
 if ($guid) {
-	echo '<a target="_blank" href="' . $vars['url'] . 'newsletter/preview/' . $guid . '" class="elgg-button elgg-button-action">' . elgg_echo("preview") . '</a>';
+	echo elgg_view('output/confirmlink', array('href' => $vars['url'] . 'newsletter/preview/' . $guid, 'text' => elgg_echo("preview"), 'target' => "_blank", 'class' => 'elgg-button elgg-button-action', 'confirm' => elgg_echo('theme_inria:newsletter:confirmlink')));
 }
 
