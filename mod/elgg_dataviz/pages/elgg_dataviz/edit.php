@@ -1,25 +1,26 @@
 <?php
 /**
- * Add bookmark page
+ * Add dataviz page
  *
- * @package ElggBookmarks
+ * @package Elggdataviz
  */
 
-$bookmark_guid = get_input('guid');
-$bookmark = get_entity($bookmark_guid);
+$library = get_input('library');
 
-if (!elgg_instanceof($bookmark, 'object', 'bookmarks') || !$bookmark->canEdit()) {
-	register_error(elgg_echo('bookmarks:unknown_bookmark'));
+$dataviz_guid = get_input('guid');
+$dataviz = get_entity($dataviz_guid);
+
+if (!elgg_instanceof($dataviz, 'object', 'dataviz') || !$dataviz->canEdit()) {
+	register_error(elgg_echo('dataviz:unknown_dataviz'));
 	forward(REFERRER);
 }
 
 $page_owner = elgg_get_page_owner_entity();
 
-$title = elgg_echo('bookmarks:edit');
+$title = elgg_echo('dataviz:edit');
 elgg_push_breadcrumb($title);
 
-$vars = bookmarks_prepare_form_vars($bookmark);
-$content = elgg_view_form('bookmarks/save', array(), $vars);
+$content = elgg_view_form('dataviz/save', array(), $vars);
 
 $body = elgg_view_layout('content', array(
 	'filter' => '',
@@ -28,3 +29,4 @@ $body = elgg_view_layout('content', array(
 ));
 
 echo elgg_view_page($title, $body);
+

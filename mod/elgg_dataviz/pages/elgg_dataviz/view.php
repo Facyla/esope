@@ -1,51 +1,71 @@
 <?php
 /**
- * View a bookmark
+ * View a dataviz
  *
- * @package ElggBookmarks
  */
  global $CONFIG;
+$library = get_input('library');
 $viztype = get_input('viztype',''); 
 
 // Set data root URLs
-$data_url = $CONFIG->url . 'mod/elgg_d3js/data/';
-$dataurl = $CONFIG->url . 'd3js/data/' . $viztype;
+$data_url = $CONFIG->url . 'mod/elgg_dataviz/data/';
+$dataurl = $CONFIG->url . 'dataviz/data/' . $viztype;
 
-elgg_push_breadcrumb(elgg_echo('elgg_d3js'), '/d3js');
+elgg_push_breadcrumb(elgg_echo('elgg_dataviz'), '/dataviz');
+elgg_push_breadcrumb(elgg_echo("elgg_dataviz:library:$library"), "/dataviz/view/$library");
 if (!empty($viztype)) elgg_push_breadcrumb(elgg_echo($viztype));
 
-// Load D3 lib
-elgg_load_js('elgg:elgg_d3js');
-
+switch($library) {
+	case 'dygraphs':
+		elgg_load_js('elgg:dataviz:dygraphs');
+		break;
+	
+	case 'vega':
+		elgg_load_js('elgg:dataviz:vega');
+		break;
+	
+	case 'crossfilter':
+		elgg_load_js('elgg:dataviz:crossfilter');
+		break;
+	
+	case 'nvd3':
+		elgg_load_js('elgg:dataviz:nvd3');
+		break;
+	
+	default:
+	case 'd3':
+		elgg_load_js('elgg:dataviz:d3');
+		break;
+}
 
 // Call a view corresponding to a visualisation
 switch($viztype) {
 	
 	case 'd3js_cfl' :
-		$content = elgg_view('elgg_d3js/collapsible_force_layout',array('dataurl' => $dataurl));
+		$content = elgg_view('elgg_dataviz/collapsible_force_layout',array('dataurl' => $dataurl));
 		break;
 	
 	case 'd3js_bubble' :
-		$content = elgg_view('elgg_d3js/bubble_chart',array('dataurl' => $dataurl));
+		$content = elgg_view('elgg_dataviz/bubble_chart',array('dataurl' => $dataurl));
 		break;
 	
 	case 'd3js_circle' :
-		$content = elgg_view('elgg_d3js/circle_packing',array('dataurl' => $dataurl));
+		$content = elgg_view('elgg_dataviz/circle_packing',array('dataurl' => $dataurl));
 		break;
 	
 	case 'd3js_scatter' :
 		$data_url .= 'data.tsv';
-		$content = elgg_view('elgg_d3js/scatter_plot',array('dataurl' => $data_url));
+		$content = elgg_view('elgg_dataviz/scatter_plot',array('dataurl' => $data_url));
 		break;
 	
 	case 'd3js_line' :
 		$data_url .= 'data2.tsv';
-		$content = elgg_view('elgg_d3js/line_chart',array('dataurl' => $data_url));
+		$content = elgg_view('elgg_dataviz/line_chart',array('dataurl' => $data_url));
 		break;
 	
 	case 'd3js_sdg' :
 		$data_url .= 'SDGdata.js';
-		$content = elgg_view('elgg_d3js/stack_density_graph',array('dataurl' => $data_url));
+		$content = elgg_view('elgg_dataviz/stack_density_graph',array('dataurl' => $data_url));
 		break;
 	
 	case 'd3js_radar' :
@@ -80,14 +100,14 @@ switch($viztype) {
 
 		//Legend
 		$description = "Nombre de membres par groupe :";
-		$content = elgg_view('elgg_d3js/radar_chart', array('data' => $data,'objects' => $objects,'description' => $description, 'size' => 0.5));
+		$content = elgg_view('elgg_dataviz/radar_chart', array('data' => $data,'objects' => $objects,'description' => $description, 'size' => 0.5));
 		$description2 = "Radar générique multi-critères :";
-		$content .= elgg_view('elgg_d3js/radar_chart', array('data' => $data2,'objects' => $objects2,'description' => $description2, 'size' => 0.5));
+		$content .= elgg_view('elgg_dataviz/radar_chart', array('data' => $data2,'objects' => $objects2,'description' => $description2, 'size' => 0.5));
 		break;
 	
 	case 'd3js_pie' :
-		$content = elgg_view('elgg_d3js/pie_chart', array('dataurl' => $dataurl));
-		$content .= elgg_view('elgg_d3js/pie_chart', array('dataurl' => $dataurl));
+		$content = elgg_view('elgg_dataviz/pie_chart', array('dataurl' => $dataurl));
+		$content .= elgg_view('elgg_dataviz/pie_chart', array('dataurl' => $dataurl));
 		break;
 	
 	default :

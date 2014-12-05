@@ -88,7 +88,16 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 	
 	
 	// CONNEXION AU SERVEUR IMAP ET TRAITEMENT DES EMAILS
-	if ($conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password)) {
+	$conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password);
+	if (!$conn) {
+		// Connection error (bad config)
+		$body .= elgg_echo('postbymail:badpluginconfig');
+		$imap_errors = imap_errors();
+		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$mailbox, $username, PASSWORD);</p>";
+		$body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
+		$imap_alerts = imap_alerts();
+		$body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
+	} else {
 		$body .= elgg_echo('postbymail:connectionok');
 		
 		// Création des dossiers s'ils n'existent pas
@@ -747,10 +756,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		} else {
 			imap_close($conn);
 		}
-		
-	} else {
-		// Connection error (bad config)
-		$body .= elgg_echo('postbymail:badpluginconfig');
 	} // END IMAP CONNECT CHECK
 	
 	

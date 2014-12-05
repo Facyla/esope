@@ -14,7 +14,7 @@ admin_gatekeeper();
 
 // This is quite dangerous, so block by default.
 // Sys admin, comment when you need it, and uncomment again once done !
-exit;
+exit; // @TODO : uncomment to proceed
 
 global $CONFIG;
 
@@ -56,7 +56,18 @@ switch($action) {
 				$content .= "$ent->guid $ent->username ($ent->name) : $ent->email => ";
 				if (!empty($ent->email)) {
 					$domain = explode('@', $ent->email);
-					if (in_array($domain[1], $matches)) $content .= "DELETE";
+					// Mode exact
+					if (in_array($domain[1], $matches)) {
+						$content .= "DELETE";
+						//$ent->delete(); // @TODO : uncomment to proceed
+					}
+					// Mode par recherche de la présence d'une chaîne
+					foreach ($matches as $match) {
+						if (strpos($domain[1], $match) !== false) {
+							$content .= "DELETE";
+							//$ent->delete(); // @TODO : uncomment to proceed
+						}
+					}
 				}
 				$content .= "<br />";
 			}
@@ -68,8 +79,11 @@ switch($action) {
 // Form
 $content .= '<form action="' . full_url() . '" method="POST">';
 $content .= '<p><label>ACTION : ' . elgg_view('input/text', array('name' => 'action', 'value' => $action)) . '</label></p>';
+$content .= '<p><em>delete_by_guid, delete_by_email_match</em></p>';
+
 $content .= '<p><label>GUIDs à supprimer : ' . elgg_view('input/plaintext', array('name' => 'delete_guids', 'value' => $delete_guids)) . '</label></p>';
 $content .= '<p><label>Noms de domaines à supprimer : ' . elgg_view('input/plaintext', array('name' => 'email_match', 'value' => $email_match)) . '</label></p>';
+
 $content .= elgg_view('input/submit');
 $content .= '</form>';
 

@@ -1,4 +1,5 @@
 <?php
+$library = get_input('library');
 $viztype = get_input('viztype','');
 
 switch($viztype){

@@ -26,10 +26,13 @@ $content .= '<fieldset style="border:1px solid #333; padding:1ex; margin:2ex 0;"
 			$content .= '<label><input type="checkbox" name="join_groups[]" value="' . $ent->guid . '" />';
 			$content .= '<img src="' . $ent->getIcon('tiny') . '" /> ' . $ent->name . '</label><br />';
 		}
+		/* More groups disabled until we have a setting for this
 		// Toggle more groups
 		$content .= '<div class="clearfloat"></div><br />';
 		$content .= '<p><a href="javascript:void(0);" onclick="$(\'#register_groups_featured\').toggle();$(\'#register_groups_full\').toggle();">' . elgg_echo('esope:register:morejoingroups') . '</a></p>';
+		*/
 	$content .= '</div>';
+	/* More groups disabled until we have a setting for this
 	// All open & public groups
 	$content .= '<div id="register_groups_full" style="display:none;">';
 		$groups = esope_get_joingroups('', 'open');
@@ -39,6 +42,7 @@ $content .= '<fieldset style="border:1px solid #333; padding:1ex; margin:2ex 0;"
 			$content .= '<img src="' . $ent->getIcon('tiny') . '" /> ' . $ent->name . '</label><br />';
 		}
 	$content .= '</div>';
+	*/
 $content .= '</div>';
 
 echo $content;
