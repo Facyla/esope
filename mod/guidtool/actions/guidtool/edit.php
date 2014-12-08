@@ -12,6 +12,7 @@ if ($entity) {
 	
 	// Some useful lists for entity editing
 	$non_editable = array('guid', 'type', 'subtype', 'tables_split', 'tables_loaded');
+	$special_fields = array('enabled', 'time_created', 'time_updated', 'last_action', 'owner_guid', 'container_guid', 'access_id');
 	
 	// Define the fields that one want to edit
 	$edit_fields = get_input('guidtool_edit_fields', false);
@@ -19,9 +20,36 @@ if ($entity) {
 	$edit_fields = str_replace(';', ',', $edit_fields);
 	if (!empty($edit_fields)) $edit_fields = explode(',', $edit_fields);
 	
+	
+	// New fields support
+	$new_metadata = get_input('new_metadata', false);
+	$new_metadata = str_replace(array("\n", "\r", "\t"), "\n", $new_metadata);
+	$new_metadata = explode("\n", $new_metadata);
+	foreach ($new_metadata as $new_field) {
+		$new_field = explode("=", $new_field);
+		$field = trim($new_field[0]);
+		$new_value = trim($new_field[1]);
+		if (!empty($field) && !empty($new_value)) {
+			// Edit only manually added values
+			if (!in_array($field, $edit_fields)) {
+				register_error("Field not set in edit fields field : $field");
+				continue;
+			}
+			if (in_array($field, $non_editable)) {
+				register_error("Non-editable field : $field");
+				continue;
+			}
+			if (in_array($field, $special_fields)) {
+				register_error("Special field : $field");
+				continue;
+			}
+			$entity->$field = $new_value;
+		}
+	}
+	
+	
 	// Update only explicitely asked fields
 	if ($edit_fields) foreach ($edit_fields as $field) {
-		
 		// Some fields cannot be edited in any case.
 		// Or at least not that way : use DB queries if you really need to change type, subtype or  guid...
 		if (in_array($field, $non_editable)) {

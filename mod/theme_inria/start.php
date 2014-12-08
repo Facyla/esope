@@ -159,9 +159,7 @@ function theme_inria_init(){
 	}
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
-	// Note : this would work if hook was not used by html_email_handler
-	//        but it uses same hook and sends email in the process
-	//elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 1);
+	elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 0);
 	
 	
 }

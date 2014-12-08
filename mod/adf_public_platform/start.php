@@ -19,6 +19,8 @@ elgg_register_event_handler("pagesetup", "system", "adf_platform_pagesetup"); //
  */
 function esope_init() {
 	global $CONFIG;
+	global $ESOPE;
+	if (!isset($ESOPE)) { $ESOPE = new stdClass; }
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
@@ -201,6 +203,32 @@ function esope_init() {
 	}
 	// Hook pour ne pas rediriger sur un site externe
 	elgg_register_plugin_hook_handler('forward', 'all', 'adf_platform_forward_hook', 600);
+	
+	
+	// Email blocking interception system :
+	// * triggers a blocking hook that enables email blocking based on any property from email sender or recipient
+	// * requires to add the hook trigger to the email notification handler
+	// Wrap notification handler into custom function so we can intercept the sending process
+	global $NOTIFICATION_HANDLERS;
+	$ESOPE->notification_handler_email = $NOTIFICATION_HANDLERS['email']->handler;
+	register_notification_handler("email", "esope_notification_handler");
+	/* Usage note : block email by registering an early hook to email,system hook : any non numm return will block email sending
+	 * add in start.php : elgg_register_plugin_hook_handler("email", "system", "esope_email_hook", 0);
+	 * add to hook functions :
+			// Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
+			function esope_email_hook($hook, $type, $return, $params) {
+				$to = $params['to'];
+				// Note : check under which conditions email should not be sent
+				if (elgg_instanceof($to, 'user')) {
+					if (false) {
+						// Block email sending
+						return true;
+					}
+				}
+				// Do not change behaviour otherwise (= send email)
+				return $return;
+			}
+	*/
 	
 	
 	// NEW & REWRITTEN ACTIONS
@@ -1922,6 +1950,23 @@ function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
 	return $ts;
 } 
 */
+
+
+
+
+// Email blocking : triggers the email,system hook to enable email blocking based on any property from email sender or recipient
+function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $body, array $params = NULL) {
+	error_log("ESOPE EMAIL : handler active");
+	// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
+	$result = elgg_trigger_plugin_hook('email', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), NULL);
+	if ($result !== NULL) { return $result; }
+	// If no blocking return received, continue regular process
+	global $ESOPE;
+	$func = $ESOPE->notification_handler_email;
+	return $func($from, $to, $subject, $message, $params);
+}
+
+
 
 
 

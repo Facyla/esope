@@ -58,8 +58,9 @@ echo '<p class="margin-none"><label>' . elgg_echo('guidtool:edit:fields') . '&nb
 echo '<input type="hidden" name="guid" value="' . $entity_guid . '" />';
 
 
-echo '<div>';
-echo '<h2>' . elgg_echo('Entity') . '</h2>';
+// Column 1 : Entity properties & metadata
+echo '<div style="width:48%; float:left;">';
+	echo '<h2>' . elgg_echo('Entity') . '</h2>';
 	foreach ($entity as $k => $v) {
 		if ((in_array($k, $exportable_values)) || (elgg_is_admin_logged_in())) {
 			if (in_array($k, $non_editable_fields)) {
@@ -77,20 +78,46 @@ echo '<h2>' . elgg_echo('Entity') . '</h2>';
 			}
 		}
 	}
-echo '</div><br />';
+echo '</div>';
 
 
-if ($metadata) {
-	echo '<div id="metadata" class="mtm">';
-	echo '<h2>' . elgg_echo('metadata') . '</h2>';
-	foreach ($metadata as $m) {
-		// @TODO : we can edit metadata only if we merge the "arrays" before
-		// but metadata can accept content like commas, so must be very careful with separators
-		echo '<p class="margin-none"><b>' . $m->name . '&nbsp;: </b>' .$m->value . '</p>';
-	}
+// Column 2 : metadata and relations
+echo '<div style="width:48%; float:left;">';
+	// New metadata
+	echo '<h2>' . elgg_echo('Add new metadata') . '</h2>';
+	echo '<div id="new-metadata" class="mtm">';
+	echo '<p>Use following syntax to add new metadata, one per line (supports only unique values, no multiline, no array, no equality sign) :<br />';
+	echo '<pre>meta_name=meta value</pre><br />';
+	//echo '<pre>or for arrays : meta_array_name[]=meta array value</pre></p>';
+	echo '<p class="margin-none">' . elgg_view('input/plaintext', array('name' => 'new_metadata')) . '</p>';
 	echo '</div><br />';
-}
+	
+	// Existing metadata
+	if ($metadata) {
+		echo '<div id="metadata" class="mtm">';
+		echo '<h2>' . elgg_echo('metadata') . '</h2>';
+		foreach ($metadata as $m) {
+			// @TODO : we can edit metadata only if we merge the "arrays" before
+			// but metadata can accept content like commas, so must be very careful with separators
+			echo '<p class="margin-none"><b>' . $m->name . '&nbsp;: </b>' .$m->value . '</p>';
+		}
+		echo '</div><br />';
+	}
+	
+	// Relations
+	if ($relationships) {
+		echo '<div id="relationship" class="mtm">';
+		echo '<h2>' . elgg_echo('relationships') . '</h2>';
+		foreach ($relationships as $r) {
+			echo '<p class="margin-none"><b>' .$r->relationship . '&nbsp;: </b>' .$r->guid_two . '</p>';
+		}
+		echo '</div><br />';
+	}
+echo '</div><br />';
+echo '<div class="clearfloat"></div>';
 
+
+// Full column 3 : annotations
 if ($annotations) {
 	echo '<div id="annotations" class="mtm">';
 	echo '<h2>' . elgg_echo('annotations') . '</h2>';
@@ -100,14 +127,7 @@ if ($annotations) {
 	echo '</div><br />';
 }
 
-if ($relationships) {
-	echo '<div id="relationship" class="mtm">';
-	echo '<h2>' . elgg_echo('relationships') . '</h2>';
-	foreach ($relationships as $r) {
-		echo '<p class="margin-none"><b>' .$r->relationship . '&nbsp;: </b>' .$r->guid_two . '</p>';
-	}
-	echo '</div><br />';
-}
+
 echo '</div>';
 
 

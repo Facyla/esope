@@ -270,3 +270,4 @@ if (elgg_is_logged_in()) {
 				</div>
 			<?php } ?>
 			
+
