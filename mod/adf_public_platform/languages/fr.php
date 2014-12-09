@@ -741,6 +741,22 @@ $fr = array(
 	
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
 	
+	// Group tools FA icons *override* - please update CSS accordingly
+	/* @TODO
+	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",
+	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
+	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
+	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
+	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
+	*/
+	
+	
 );
 
 add_translation('fr', $fr);

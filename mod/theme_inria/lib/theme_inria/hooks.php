@@ -419,5 +419,19 @@ function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
 	//return $result;
 }
 
+// Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
+function theme_inria_block_email($hook, $type, $return, $params) {
+	$to = $params['to'];
+	// Closed accounts should not receive email at all
+	if (elgg_instanceof($to, 'user')) {
+		if ($to->memberstatus == 'closed') {
+			// Block email sending
+			return true;
+		}
+	}
+	// Do not change behaviour otherwise (= send email)
+	return $return;
+}
+
 
 

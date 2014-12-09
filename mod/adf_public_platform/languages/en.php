@@ -395,7 +395,7 @@ $en = array(
 	'adf_platform:settings:widget:profile_completeness' => "Allow widget : Profile completion",
 	'adf_platform:settings:widget:profile_completeness:help' => "This widget can be enabled/disabled in Profile Manager plugin configuration",
 	'adf_platform:settings:widget:freehtml' => "Allow widget : Free text (HTML)",
-	'adf_platform:settings:widget:search_results' => "Allow widget : Configured search",
+	'adf_platform:settings:widget:searchresults' => "Allow widget : Configured search",
 	'esope:widget:freehtml' => "Free text (HTML)",
 	'esope:widget:freehtml:description' => "Let's you integrate any text you want, including HTML.",
 	'esope:widget:searchresults' => "Tag search",
@@ -707,7 +707,7 @@ $en = array(
 	'esope:digest:groupactivity' => "Recent activity in your groups",
 	
 	// Join groups at registration
-	'esope:settings:register:joingroup' => "Allow to join groups at registration",
+	'esope:settings:register:joingroups' => "Allow to join groups at registration",
 	'esope:register:joingroups' => "Join groups",
 	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
 	'esope:register:morejoingroups' => "Display more groups",
@@ -742,6 +742,22 @@ $en = array(
 	'esope:likes' => "Liked content",
 	
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
+	
+	// Group tools FA icons *override* - please update CSS accordingly
+	/* @TODO
+	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Announcements",
+	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Bookmarks",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Brainstorm",
+	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendar",
+	'file:group' => "<i class=\"fa fa-file-o\"></i> Files",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Folders",
+	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activity",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Pages",
+	*/
+	
 	
 );
 

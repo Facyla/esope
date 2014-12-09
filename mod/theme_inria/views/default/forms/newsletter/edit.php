@@ -48,7 +48,8 @@ echo elgg_view("input/tags", array("name" => "tags", "value" => $tags, "id" => "
 echo "</div>";
 
 echo "<div>";
-echo "<label for='newsletter-access-id'>" . elgg_echo("access") . "</label>";
+echo "<label for='newsletter-access-id'>" . elgg_echo("theme_inria:newsletter:edit:access") . "</label>";
+echo "<br /><em>" . elgg_echo("theme_inria:newsletter:edit:access:details") . "</em><br />";
 echo elgg_view("input/access", array("name" => "access_id", "value" => $access_id, "id" => "newsletter-access-id", "class" => "mls"));
 echo "</div>";
 
