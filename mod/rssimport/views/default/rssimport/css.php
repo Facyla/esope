@@ -165,3 +165,11 @@ a.rssimport_deletelisting {
 .rssimport-excerpt-toggle {
   cursor: pointer;
 }
+
+
+
+/* ESOPE additions */
+.rssimport_blog_title { clear: both; }
+
+
+
