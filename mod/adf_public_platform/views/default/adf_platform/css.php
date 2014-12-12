@@ -717,6 +717,10 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-sidebar .elgg-module-aside .elgg-body ul.elgg-menu-newsletter-steps li { clear:left; width:100%; text-indent:4ex; }
 
 
+/* Group tools homepage publication */
+#group-tool-tabs {  }
+#group-tool-tabs .group-tool-tab { display:inline-block; padding: 0.5ex 2ex; }
+#group-tool-tabs .group-tool-tab.elgg-state-selected, #group-tool-tabs .group-tool-tab:hover { background-color:rgba(0,0,0,0.3); }
 
 
 
