@@ -159,7 +159,9 @@ function theme_inria_init(){
 	}
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
-	elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 0);
+	// The hook is triggered when using default elgg email handler, 
+	// and is added and triggered by ESOPE when using plugins that replace it
+	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
 	
 	
 }
