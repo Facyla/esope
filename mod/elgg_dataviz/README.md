@@ -8,6 +8,7 @@ This plugin adds visualisation libraries to Esope https://github.com/Facyla/esop
  - Vega
  - Crossfilter
  - DataTables (jQuery plugin)
+ - Raphaël (SVG)
 
 See also DataWrapper, which is an interesting, but standalone app (not included)
 

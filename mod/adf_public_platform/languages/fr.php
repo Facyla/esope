@@ -742,6 +742,28 @@ $fr = array(
 	
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
 	
+	/* Esope FA icons - generic usage */
+	// Tools
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o\"></i>",
+	// Sprites icons
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt\"></i>",
+	
+	
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO
 	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",

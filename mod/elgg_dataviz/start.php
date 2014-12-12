@@ -22,6 +22,7 @@ function elgg_dataviz(){
 	elgg_register_js('elgg:dataviz:vega', '/mod/elgg_dataviz/vendors/vega/vega.min.js', 'head');
 	elgg_register_js('elgg:dataviz:dygraphs', '/mod/elgg_dataviz/vendors/dygraphs/dygraph-combined.js', 'head');
 	elgg_register_js('elgg:dataviz:crossfilter', '/mod/elgg_dataviz/vendors/crossfilter/crossfilter.min.js', 'head');
+	elgg_register_js('elgg:dataviz:raphael', '/mod/elgg_dataviz/vendors/raphael/raphael-min.js', 'head');
 	// jquery data tables plugin
 	elgg_register_js('jquery.datatables', '/mod/elgg_dataviz/vendors/jquery_datatables/media/js/jquery.dataTables.min.js', 'head');
 	elgg_register_css('jquery.datatables', '/mod/elgg_dataviz/vendors/jquery_datatables/media/css/jquery.dataTables.min.css', 'head');
