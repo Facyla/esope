@@ -7,6 +7,8 @@
 
 $group = $vars['entity'];
 
+// @TODO : dev en cours, vérifier si les outils existent, mise en page, icônes, formulaires spécifiques plus courts...
+
 // ESOPE : add publication tools if asked
 if (elgg_get_plugin_setting('groups_add_publish_tools', 'adf_public_platform') == 'yes') {
 	$tools = array('discussion' => 'discussion/save', 'file' => 'file/upload', 'bookmarks' => 'bookmarks/save', 'event_calendar' => 'event_calendar/edit');
