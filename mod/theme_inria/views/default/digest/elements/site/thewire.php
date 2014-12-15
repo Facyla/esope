@@ -33,7 +33,7 @@
 			$owner = $thewire->getOwnerEntity();
 			$latest_thewires .= "<a href='" . $thewire_url. "'><img src='". $owner->getIconURL("small") . "' style='border-radius: 5px; padding: 0; margin: 0 5px 0 0;' /></a>";
 			$latest_thewires .= "<span>";
-			$latest_thewires .= "<a href='" . $thewire_url. "'>&laquo;&nbsp;" . $thewire->description . "&nbsp;&laquo;</a>";
+			$latest_thewires .= "<a href='" . $thewire_url. "'>&laquo;&nbsp;" . $thewire->description . "&nbsp;&raquo;</a>";
 			$latest_thewires .= "</span>";
 			$latest_thewires .= "</div>";
 		}
