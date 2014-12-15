@@ -13,6 +13,7 @@ global $CONFIG;
 $view_url = $CONFIG->url . 'dataviz/view/';
 
 $library = get_input('library');
+$viztype = get_input('viztype');
 
 $title = elgg_echo('elgg_dataviz:index');
 
@@ -117,7 +118,10 @@ switch($library) {
 		elgg_load_js('elgg:dataviz:d3');
 		elgg_load_css('elgg:dataviz:nvd3');
 		elgg_load_js('elgg:dataviz:nvd3');
-		$content .= elgg_view('elgg_dataviz/nvd3/pie_chart', array(''));
+		switch ($viztype) {
+			case 'bar': $content .= elgg_view('elgg_dataviz/nvd3/bar_chart', array('')); break;
+			default: $content .= elgg_view('elgg_dataviz/nvd3/pie_chart', array('')); break;
+		}
 		break;
 	
 	case 'd3':
