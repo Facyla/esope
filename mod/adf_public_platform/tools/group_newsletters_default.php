@@ -22,6 +22,7 @@ $content .= "<p>Le site comporte actuellement  " . count($all_groups) . " groupe
 $content .= '<p><a href="?newsletter_force=disable" class="elgg-button elgg-button-action">Désactiver les newsletters des groupes (si non défini)</a></p>';
 
 
+$newsletter_force = get_input('newsletter_force');
 set_time_limit(0);
 foreach ($all_groups as $ent) {
 	$content .= '<a href="' . $CONFIG->url . 'groups/edit/' . $ent->guid . '" target="_blank" title="Ouvrir les réglages du groupe dans un nouvel onglet">' . $ent->name . '</a>&nbsp;: ';
@@ -31,8 +32,7 @@ foreach ($all_groups as $ent) {
 		default: $content .= '(non défini)'; break;
 	}
 	// Force update only if asked to
-	$newsletter_force = get_input('newsletter_force');
-	if ($newsletter_force == 'disable')) {
+	if ($newsletter_force == 'disable') {
 		if (empty($ent->newsletter_enable)) {
 			$ent->newsletter_enable = 'no';
 			$content .= ' => désactivé';

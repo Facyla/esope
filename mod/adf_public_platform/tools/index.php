@@ -18,7 +18,7 @@ $content .= "<p>Ces outils ne sont à utiliser que dans des cas particuliers, et
 
 $content .= "<p>Veuillez consulter leur code source avant de les utiliser.</p>";
 
-$content .= "<p><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</p>";
+$content .= "<p><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</strong></p>";
 
 $content .= "<p>group_admins : listes les administrateurs des groupes, et surtout les co-admins.</p>";
 $content .= "<p>group_newsletters_default : définit le réglage des newsletters des groupes sur 'no', lorsque aucun réglage n'est encore défini.</p>";
