@@ -64,5 +64,19 @@ function elgg_dataviz_page_handler($page) {
 	return true;
 }
 
+/* Generate a unique id to use as a div id
+ * Note that the id must contain valid id for both CSS and JS, ie. no '-'
+ */
+function dataviz_id($prefix = 'dataviz_') {
+	if (function_exists('esope_unique_id')) {
+		$id = esope_unique_id('dataviz_');
+	} else {
+		$id = esope_unique_id('dataviz_nvd3');
+	}
+	$id = elgg_get_friendly_title($id);
+	// Ensure valid id for JS
+	$id = str_replace('-', '_', $id);
+	return $id;
+}
 
 
