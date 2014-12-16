@@ -26,7 +26,6 @@ $content = '<div id="' . $id . '"></div>
 <script type="text/javascript">
 // Creates canvas width=320 × height=200 at x=200, y=300
 var paper = Raphael(200, 300, 320, 200);
-paper.attr("fill", "#00f");
 
 // Creates circle at x = 200, y = 100, with radius 80
 var circle = paper.circle(200, 100, 80);
@@ -43,7 +42,7 @@ window.onload = function () {
 
 	(btn.onclick = function () {
 		paper.clear();
-		paper.rect(0, 0, 640, 480, 10).attr({fill: "#fff", stroke: "none"});
+		paper.rect(0, 0, 640, 480, 10).attr({fill: "#ccf", stroke: "none"});
 		try {
 			(new Function("paper", "window", "document", cd.value)).call(paper, paper);
 		} catch (e) {
