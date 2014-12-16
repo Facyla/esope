@@ -44,21 +44,23 @@ function elgg_dataviz(){
 function elgg_dataviz_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_dataviz/pages/elgg_dataviz';
 	switch($page[0]) {
+		/* Data endpoint : should be able to format various data types into several data structures, 
+		 * and particularly JSON
+		 * Should also be able to parse and transform other data structures, such as CSV, or XML
+		 */
 		case 'data':
 			if (isset($page[1])) set_input('library', $page[1]);
 			if (isset($page[2])) set_input('viztype', $page[2]);
 			if (!include_once "$base/data.php") return false;
 			break;
+		
 		case 'view':
 			if (isset($page[1])) set_input('library', $page[1]);
 			if (isset($page[2])) set_input('viztype', $page[2]);
 			if (!include_once "$base/view.php") return false;
 			break;
-		case 'edit':
-			if (!include_once "$base/edit.php") return false;
-			break;
+		
 		default:
-			if (isset($page[1])) set_input('library', $page[1]);
 			if (!include_once "$base/index.php") return false;
 	}
 	return true;
