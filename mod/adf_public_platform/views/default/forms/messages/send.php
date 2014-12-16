@@ -12,6 +12,7 @@ $body = elgg_extract('body', $vars, '');
 
 $recipients_options = array();
 $recipients_options[] = ''; // Add empty recipient (default)
+// @TODO : use a user picker once we have one that gets only 1 single user at once
 // Override default limit (50)
 //$vars['friends'] = $page_owner->getFriends('', false);
 foreach ($vars['friends'] as $friend) {

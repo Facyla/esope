@@ -4,9 +4,15 @@
 
 <?php
 global $CONFIG;
+$imgurl = $CONFIG->url . 'mod/theme_fing/graphics/';
 $fonturl = $CONFIG->url . 'mod/theme_fing/fonts/';
 $font_neris = $fonturl . 'neris/';
 ?>
+
+/* Replace main icons sprite */
+.elgg-icon { background-image: url(<?php echo $imgurl; ?>elgg_sprites_fing.png); }
+
+
 /* Add some fonts */
 @font-face {
 	font-family: 'neris'; font-weight: 100; font-style: normal;

@@ -43,47 +43,7 @@ $otheruser = get_user($otheruser_guid);
 
 $content = '';
 
-// 1. RECUPERATION DES MESSAGES DE LA CONVERSATION
-
-// Message envoyés par l'autre membre à l'auteur = messages reçus
-if (in_array($filter, array('inbox', 'all'))) {
-	$messages_inbox = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'messages', 'metadata_names' => 'fromId', 'metadata_values' => $otheruser->guid, 'owner_guid' => $ownuser_guid, 'limit' => false));
-	foreach ($messages_inbox as $ent) { $messages[$ent->time_created] = $ent; }
-}
-// Message envoyés par l'auteur à l'autre membre = messages envoyés
-if (in_array($filter, array('sent', 'all'))) {
-	$messages_sent = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'messages', 'metadata_names' => 'toId', 'metadata_values' => $otheruser_guid, 'owner_guid' => $ownuser_guid, 'limit' => false));
-	foreach ($messages_sent as $ent) { $messages[$ent->time_created] = $ent; }
-}
-// Add asked message at the end - just in case there could be another message at the exact same timestamp
-$messages[$message->time_created] = $message;
-
-
-// 2. TRI ET AFFICHAGE
-krsort($messages);
-$content .= '<ul class="elgg-list elgg-list-entity">';
-foreach ($messages as $timestamp => $ent) {
-	$ent_title = str_replace('RE: ', '', $ent->title);
-	// Similarités et affichage d'une "conversation" : pas plus de 6 carac de diff, sachant qu'on enlève les "RE : " avant...
-	if (($conversation != 'user') && levenshtein($message->title, $ent_title) > 6) continue;
-	if ($ent->fromId == $ownuser_guid) $class = 'message-sent'; else $class = 'message-inbox';
-	// Différenciation du message sur lequel on est
-	if ($ent->guid == $message->guid) {
-		$selected = ' selected-message';
-		$toggle = '';
-	} else {
-		$toggle = '<a href="javascript:void(0);" onClick="$(\'#elgg-message-'.$ent->guid.'\').toggle(); $(this).hide();" class="message-item-toggle"><p>' . elgg_view_friendly_time($timestamp) . '</p></a>';
-		$selected = '';
-	}
-	$content .= '<li id="elgg-object-'.$ent->guid.'" class="elgg-item elgg-item-message '.$class.$selected.'">' . $toggle;
-	$content .= '<div id="elgg-message-'.$ent->guid.'" class="message-content '.$selected.'">';
-	$content .= elgg_view_entity($ent, array('full_view' => true));
-	$content .= '</div>';
-	$content .= '</li>';
-}
-$content .= '</ul>';
-
-//$content = elgg_view_entity($message, array('full_view' => true));
+// Form de réponse : différenciation selon qu'on réponde au message de son interlocuteur, à l'un de ses propres messages
 if ($is_inbox_msg) {
 	$form_params = array('id' => 'messages-reply-form', 'class' => 'hidden mtl', 'action' => 'action/messages/send');
 	$body_params = array('message' => $message);
@@ -109,6 +69,52 @@ if ($is_inbox_msg) {
 		));
 	}
 }
+
+
+// 1. RECUPERATION DES MESSAGES DE LA CONVERSATION
+
+// Message envoyés par l'autre membre à l'auteur = messages reçus
+if (in_array($filter, array('inbox', 'all'))) {
+	$messages_inbox = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'messages', 'metadata_names' => 'fromId', 'metadata_values' => $otheruser->guid, 'owner_guid' => $ownuser_guid, 'limit' => false));
+	foreach ($messages_inbox as $ent) { $messages[$ent->time_created] = $ent; }
+}
+// Message envoyés par l'auteur à l'autre membre = messages envoyés
+if (in_array($filter, array('sent', 'all'))) {
+	$messages_sent = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'messages', 'metadata_names' => 'toId', 'metadata_values' => $otheruser_guid, 'owner_guid' => $ownuser_guid, 'limit' => false));
+	foreach ($messages_sent as $ent) { $messages[$ent->time_created] = $ent; }
+}
+// Add asked message at the end - just in case there could be another message at the exact same timestamp
+$messages[$message->time_created] = $message;
+
+
+// 2. TRI ET AFFICHAGE
+krsort($messages);
+$content .= '<ul class="elgg-list elgg-list-entity">';
+foreach ($messages as $timestamp => $ent) {
+	$ent_title = str_replace('RE: ', '', $ent->title);
+	// Similarités et affichage d'une "conversation" : pas plus de 6 carac de diff, sachant qu'on enlève les "RE : " avant...
+	//if (($conversation != 'user') && levenshtein($message->title, $ent_title) > 6) continue;
+	// Note : un titre exact est plus précis, à moins de vouloir relier des sujets proches...
+	if (($conversation != 'user') && ($message->title != $ent_title)) continue;
+	if ($ent->fromId == $ownuser_guid) $class = 'message-sent'; else $class = 'message-inbox';
+	// Différenciation du message sur lequel on est
+	if ($ent->guid == $message->guid) {
+		$selected = ' selected-message';
+		$toggle = '';
+	} else {
+		$toggle = '<a href="javascript:void(0);" onClick="$(\'#elgg-message-'.$ent->guid.'\').toggle(); $(this).hide();" class="message-item-toggle"><p>' . elgg_view_friendly_time($timestamp) . '</p></a>';
+		$selected = '';
+	}
+	$content .= '<li id="elgg-object-'.$ent->guid.'" class="elgg-item elgg-item-message '.$class.$selected.'">' . $toggle;
+	$content .= '<div id="elgg-message-'.$ent->guid.'" class="message-content '.$selected.'">';
+	$content .= elgg_view_entity($ent, array('full_view' => true));
+	$content .= '</div>';
+	$content .= '</li>';
+}
+$content .= '</ul>';
+
+//$content = elgg_view_entity($message, array('full_view' => true));
+
 
 $body = elgg_view_layout('content', array('content' => $content, 'title' => $title, 'filter' => ''));
 

@@ -7,7 +7,6 @@
 
 $group = $vars['entity'];
 
-
 // Add group activity or group content
 // ESOPE : add activity if asked
 if (elgg_get_plugin_setting('groups_add_activity', 'adf_public_platform') == 'yes') {

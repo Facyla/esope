@@ -35,7 +35,9 @@ if ($right || $left) {
 echo "</ul>";
 
 
-// Add group activity or group content
+// ESOPE : add publication tools if asked
+echo elgg_view('groups/profile/group_publish_tools', $vars);
+
 // ESOPE : add activity if asked
 echo elgg_view('groups/profile/group_activity', $vars);
 

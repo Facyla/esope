@@ -1,5 +1,8 @@
 <?php
 // @TODO : not functional yet
+// Would require to select only ONE user, not a list, because messages can handle only 1 at once
+// And also sending to more people than 1 person is no more a DM, and should be done through a forum
+
 /**
  * User Picker.  Sends an array of user guids.
  *

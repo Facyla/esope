@@ -21,6 +21,11 @@ $users = elgg_get_entities(array('types' => 'user', 'limit' => 0));
 //set_time_limit(0); // Firts processing can be quite long, as we need to geocode each user account...
 foreach ($users as $ent) {
 	if (empty($ent->location)) continue; // Quick and dirty bypass - @TODO need to use some cron task instead for first geocoding pass
+	/* Retro-convert tags to text content, if location was previously set as tags...
+	 * If location field was set to "tags", please change it first to "text"
+	 * Then move next line out of comment block and display the map once to convert, then move it back here
+	$location = implode(', ', $ent->location); $ent->location = $location;
+	*/
 	$lat = $ent->getLatitude();
 	$long = $ent->getLongitude();
 	if (!$lat || !$long) {
