@@ -48,6 +48,7 @@ switch($library) {
 	case 'raphael':
 		elgg_load_js('elgg:dataviz:raphael');
 		switch ($viztype) {
+			case 'sample_clock': $content .= elgg_view('elgg_dataviz/raphael/sample_clock', array('')); break;
 			case 'sample':
 			default: $content .= elgg_view('elgg_dataviz/raphael/sample', array('')); break;
 		}
