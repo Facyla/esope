@@ -223,4 +223,7 @@ span.arrow { width: 40px; height: 40px; border-radius: 20px; line-height: 40px; 
 .public-comments-notice .fa { color: red;  float: left; font-size: 2em; margin-right: 1ex; }
 
 
+.socialshare-links-menu a { color: #800080; font-size: 2em; }
+.socialshare-links-menu a { color: #800080; font-size: 2em; }
+.socialshare-links-menu a:hover, .socialshare-links-menu a:active, .socialshare-links-menu a:focus { color: black; }
 
