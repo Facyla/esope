@@ -717,6 +717,11 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-sidebar .elgg-module-aside .elgg-body ul.elgg-menu-newsletter-steps li { clear:left; width:100%; text-indent:4ex; }
 
 
+/* Group tools homepage publication */
+#group-tool-tabs { margin-bottom:2ex; }
+#group-tool-tabs .group-tool-tab { display:inline-block; text-align: center; padding: 0.5ex 3ex; color:<?php echo $linkcolor; ?>; }
+#group-tool-tabs .group-tool-tab .fa { font-size: 3em; }
+#group-tool-tabs .group-tool-tab.elgg-state-selected, #group-tool-tabs .group-tool-tab:hover { background-color:<?php echo $linkcolor; ?>; color:white; }
 
 
 

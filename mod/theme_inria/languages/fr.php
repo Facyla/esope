@@ -156,7 +156,9 @@ $french = array(
 	'theme_inria:newsletter:edit:subject:details' => "Ce champ vous permet de définir le sujet exact de l'email tel qu'il' sera reçu par les destinataires de la Lettre.",
 	'theme_inria:newsletter:edit:description' => "Description de la Lettre",
 	'theme_inria:newsletter:edit:description:details' => "Ce champ vous permet de décrire le contenu de la Lettre : à qui elle s'adresse, sa ligne éditoriale, etc. Le contenu de la Lettre elle-même sera défini à l'étape n°3.",
-	
+	'theme_inria:newsletter:edit:access' => "Accès par les membres",
+	'theme_inria:newsletter:edit:access:details' => "Ce champ détermine l'accès à la lettre d'information pour les membres du site, mais il n'a aucune d'effet sur les destinataires.",
+	'theme_inria:newsletter:confirmlink' => "Avez-vous bien enregistré vos modifications avant de prévisualiser ?",
 	
 	// Traductions
 	'theme_inria:login' => "Connexion",

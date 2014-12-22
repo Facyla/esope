@@ -3,7 +3,7 @@
  * Add autocomplete support to an existing field
  * This view is meant to be added next to an existing input field, or to extend it
  * ESOPE : we add here 2 autocomplete modes to the default input/autocomplete view
- * - default autocomplete mod (same as default autocomplete view)
+ * - default autocomplete mod (same as default autocomplete view) - requires elgg-autocomplete class
  * - direct autocomplete with a defined set of values
  * - custom autocomplete endpoint (because livesearch returns only user/group/site)
  *

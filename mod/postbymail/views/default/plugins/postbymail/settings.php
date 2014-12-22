@@ -35,6 +35,8 @@ $mailpost_options = array(
 if (empty($vars['entity']->separator)) $vars['entity']->separator = elgg_echo('postbymail:default:separator');
 if (empty($vars['entity']->separatordetails)) $vars['entity']->separatordetails = elgg_echo('postbymail:default:separatordetails');
 if (empty($vars['entity']->cron)) $vars['entity']->cron = 'fiveminute';
+// INBOX is default but we should allow empty value depending on the server
+if (!isset($vars['entity']->inboxfolder)) $vars['entity']->inboxfolder = 'INBOX';
 
 
 
@@ -130,6 +132,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// password
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:password') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[password]', 'style' => 'width:94%;', 'value' => $vars['entity']->password));
+	echo '</label><p/>';
+
+	// password
+	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:inboxfolder') . ' ';
+	echo elgg_view('input/text', array('name' => 'params[inboxfolder]', 'style' => 'width:94%;', 'value' => $vars['entity']->inboxfolder));
 	echo '</label><p/>';
 
 echo '</fieldset>';

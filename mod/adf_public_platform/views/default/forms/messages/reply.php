@@ -15,13 +15,16 @@ if ($vars['send_to_sender']) $recipient_guid = $vars['message']->toId;
 
 echo elgg_view('input/hidden', array('name' => 'recipient_guid', 'value' => $recipient_guid));
 echo elgg_view('input/hidden', array('name' => 'reply', 'value' => $vars['message']->guid));
-?>
 
+/* Hide subject, and force conversations
 <div>
 	<label for="subject"><?php echo elgg_echo("messages:title"); ?><br /></label>
-	<?php echo elgg_view('input/text', array('name' => 'subject', 'value' => $reply_title));
 	?>
 </div>
+*/
+echo elgg_view('input/hidden', array('name' => 'subject', 'value' => $reply_title));
+?>
+
 <div>
 	<label for="body"><?php echo elgg_echo("messages:message"); ?></label>
 	<?php echo elgg_view("input/longtext", array('name' => 'body', 'value' => ''));

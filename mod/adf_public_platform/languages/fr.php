@@ -665,6 +665,7 @@ $fr = array(
 	'adf_platform:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'adf_platform:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'adf_platform:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
+	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
 	'esope:groups:disable_widgets:loggedin' => "Seulement si connecté",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
@@ -740,6 +741,44 @@ $fr = array(
 	'esope:likes' => "Contenus appréciés",
 	
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
+	
+	/* Esope FA icons - generic usage */
+	// Tools
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o\"></i>",
+	// Sprites icons
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt\"></i>",
+	
+	
+	// Group tools FA icons *override* - please update CSS accordingly
+	/* @TODO
+	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",
+	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
+	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
+	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
+	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
+	*/
+	
 	
 );
 

@@ -89,7 +89,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 //Affichage actus du site si demandé
 $homesite_index = elgg_get_plugin_setting('homesite_index', 'adf_public_platform');
 if ($homesite_index == 'yes') {
-	$left_side .= '<h3>' . elgg_echo('adf_platform:site:activity') . '</h3>';
+	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('adf_platform:site:activity') . '</a></h3>';
 	// Activité du site
 	//elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
@@ -106,7 +106,8 @@ $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	// Show/hide version
 	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('adf_platform:thewire:togglelink') . '</a><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
-	$thewire .= '<h3>Le Fil, vous et la Fing</h3>';
+	//$thewire .= '<h3>Le Fil, vous et la Fing</h3>';
+	$thewire .= '<h3><a href="' . $CONFIG->url . 'thewire/all">Le Fil, vous et la Fing</a></h3>';
 	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
 	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 5, 'pagination' => false));
 	$thewire .= '<p><a href="' . $CONFIG->url . 'thewire/all">&raquo;&nbsp;Remontez tout le fil</a></p>';
