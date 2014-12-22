@@ -746,18 +746,27 @@ $en = array(
 	
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO
-	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Announcements",
+	*/
 	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Bookmarks",
-	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Brainstorm",
 	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendar",
 	'file:group' => "<i class=\"fa fa-file-o\"></i> Files",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Folders",
 	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activity",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
 	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Pages",
-	*/
+	// Plugins tools
+	'au_sets:group' => "<i class=\"fa fa-thumb-tack\"></i> Pinboards",
+	'announcements:group' => "<i class=\"fa fa-info-circle\"></i> Announcements",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Brainstorm",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendar",
+	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar\"></i> Events",
+	'feedback:group' => "<i class=\"fa fa-bullhorn\"></i> Feedbacks",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Folders",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up\"></i> Liked content",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
+	// Group actions and infos
+	'group_operators:manage' => "<i class=\"fa fa-users\"></i> Manage group admins",
+	'groups:my_status:group_owner' => "<i class=\"fa fa-user\"></i> Group owner",
+	'groups:subscribed' => "<i class=\"fa fa-envelope-o\"></i> Notifications enabled",
 	
 	
 	// Actions
