@@ -830,7 +830,7 @@ EOT;
 
 /* Note : this replaces the above with FA icons - update translations accordingly if needed
  */
-.elgg-menu-owner-block li a { padding-left: 10px; }
+.elgg-menu-owner-block li a { padding-left: 1ex; }
 .elgg-sidebar li .fa { display: inline-block; min-width: 3ex; }
 
 
