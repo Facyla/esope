@@ -765,8 +765,11 @@ $en = array(
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
 	// Group actions and infos
 	'group_operators:manage' => "<i class=\"fa fa-users\"></i> Manage group admins",
+	'groups:join' => "<i class=\"fa fa-user\"></i> Join group",
 	'groups:my_status:group_owner' => "<i class=\"fa fa-user\"></i> Group owner",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user\"></i> Group member",
 	'groups:subscribed' => "<i class=\"fa fa-envelope-o\"></i> Notifications enabled",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x\"></i><i class=\"fa fa-ban fa-stack-2x\"></i></span> Notifications disabled",
 	
 	
 	// Actions

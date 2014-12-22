@@ -786,8 +786,11 @@ $fr = array(
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
 	// Group actions and infos
 	'group_operators:manage' => "<i class=\"fa fa-users\"></i> Gérer les responsables du groupe",
+	'groups:join' => "<i class=\"fa fa-user\"></i> Propriétaire du groupe",
 	'groups:my_status:group_owner' => "<i class=\"fa fa-user\"></i> Propriétaire du groupe",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user\"></i> Membre du groupe",
 	'groups:subscribed' => "<i class=\"fa fa-envelope-o\"></i> Notifications activées",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x\"></i><i class=\"fa fa-ban fa-stack-2x\"></i></span> Notifications désactivées",
 	
 	
 	// Actions
