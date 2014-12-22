@@ -263,7 +263,7 @@ function esope_init() {
 	}
 	
 	// Allow to remove completely an email address for a user
-	elgg_register_action("remove_user_email", $action_url . "esope/remove_user_email.php", "logged_in");
+	elgg_register_action("admin/remove_user_email", $action_url . "esope/remove_user_email.php", "logged_in");
 	
 	
 	// NEW & REWRITTEN PAGE HANDLERS
