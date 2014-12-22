@@ -277,6 +277,10 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	$widget = $params['entity'];
 	$show_edit = elgg_extract('show_edit', $params, true);
 	
+	$is_fa_enabled = false;
+	if (elgg_get_plugin_setting('awesomefont', 'adf_public_platform') == 'yes') { $is_fa_enabled = true; }
+	
+	// Use icon, but override with FontAwesome if available
 	$widget_title = $widget->getTitle();
 	$collapse = array(
 			'name' => 'collapse',
@@ -286,7 +290,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 			'rel' => 'toggle',
 			'priority' => 900
 		);
-	if (elgg_get_plugin_setting('awesomefont') == 'yes') $collapse['text'] = '<button aria-label="' . elgg_echo('widget:toggle', array($widget_title)) . '"><i class="fa fa-caret-square-o-down"></i></button>';
+	if ($is_fa_enabled) $collapse['text'] = '<button aria-label="' . elgg_echo('widget:toggle', array($widget_title)) . '"><i class="fa fa-caret-square-o-down"></i></button>';
 	$return[] = ElggMenuItem::factory($collapse);
 	
 	if ($widget->canEdit()) {
@@ -299,7 +303,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 				'id' => "elgg-widget-delete-button-$widget->guid",
 				'priority' => 900
 			);
-		if (elgg_get_plugin_setting('awesomefont') == 'yes') $delete['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
+		if ($is_fa_enabled) $delete['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
 		$return[] = ElggMenuItem::factory($delete);
 
 		if ($show_edit) {
@@ -311,7 +315,7 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
-			if (elgg_get_plugin_setting('awesomefont') == 'yes') $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-gear"></i></button>';
+			if ($is_fa_enabled) $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-gear"></i></button>';
 			$return[] = ElggMenuItem::factory($edit);
 		}
 	}
@@ -321,7 +325,8 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 
 
 if (elgg_is_active_plugin('au_subgroups')) {
-		/**
+	
+	/**
 	 * re/routes some urls that go through the groups handler
 	 */
 	function adf_platform_subgroups_groups_router($hook, $type, $return, $params) {
@@ -378,6 +383,59 @@ if (elgg_is_active_plugin('au_subgroups')) {
 			}
 		}
 	}
+	
+	
+	/** Esope version : don't break the whole process for some users
+	 * by filtering the invited users
+	 * @TODO : allow direct registration through recursive group join ? 
+	 * not sure it's a good thing for non-global admins...
+	 * Note : this hook is enabled only if au_subgroups is enabled !
+	 */
+	function esope_au_subgroups_group_invite($hook, $type, $return, $params) {
+		$user_guid = get_input('user_guid'); // Can be an array
+		$group_guid = get_input('group_guid');
+		$group = get_entity($group_guid);
+	
+		$parent = au_subgroups_get_parent_group($group);
+	
+		// if $parent, then this is a subgroup they're being invited to
+		// make sure they're a member of the parent
+		if ($parent) {
+			if (!is_array($user_guid)) { $user_guid = array($user_guid); }
+		
+			/* Invite type check : probably bad idea to allow subgroup owners to register directly to the parent groups...
+			$allowregister = elgg_get_plugin_setting('allowregister', 'adf_public_platform');
+			if ($allowregister == 'yes') { $group_register = get_input('group_register', false); }
+			*/
+		
+			$invalid_users = array();
+			foreach($user_guid as $guid) {
+				// Use less intensive DB check with GUID and not entities...
+				if (is_group_member($parent->guid, $guid)) {
+					$valid_user_guid[] = $guid;
+				} else {
+					// We'll need the entity here for proper error display
+					if ($user = get_user($guid)) { $invalid_users[] = $user; }
+				}
+			}
+		
+			if (count($invalid_users)) {
+				// Set new valid list
+				set_input('user_guid', $valid_user_guid);
+			
+				// Explain what went wrong with who..
+				$error_suffix = "<ul>";
+				foreach($invalid_users as $user) { $error_suffix .= "<li>{$user->name}</li>"; }
+				$error_suffix .= "</ul>";
+				register_error(elgg_echo('au_subgroups:error:invite') . $error_suffix);
+				// Do NOT break the invite process (for the valid ones)
+				//return false;
+			}
+		}
+		// No need to return anything
+		//return $return;
+	}
+	
 }
 
 
@@ -480,54 +538,28 @@ function esope_friendly_time_hook($hook, $type, $return, $params) {
 
 
 
-/** Esope version : don't break the whole process for some users
- * by filtering the invited users
- * @TODO : allow direct registration through recursive group join ? not sure it's a good thing for non-global admins...
- * Note : this hook is enabled only if au_subgroups is enabled !
- */
-function esope_au_subgroups_group_invite($hook, $type, $return, $params) {
-	$user_guid = get_input('user_guid'); // Can be an array
-	$group_guid = get_input('group_guid');
-	$group = get_entity($group_guid);
+
+// Menu that appears on hovering over a user profile icon
+function esope_user_hover_menu($hook, $type, $return, $params) {
+	$user = $params['entity'];
 	
-	$parent = au_subgroups_get_parent_group($group);
-	
-	// if $parent, then this is a subgroup they're being invited to
-	// make sure they're a member of the parent
-	if ($parent) {
-		if (!is_array($user_guid)) { $user_guid = array($user_guid); }
-		
-		/* Invite type check : probably bad idea to allow subgroup owners to register directly to the parent groups...
-		$allowregister = elgg_get_plugin_setting('allowregister', 'adf_public_platform');
-		if ($allowregister == 'yes') { $group_register = get_input('group_register', false); }
-		*/
-		
-		$invalid_users = array();
-		foreach($user_guid as $guid) {
-			// Use less intensive DB check with GUID and not entities...
-			if (is_group_member($parent->guid, $guid)) {
-				$valid_user_guid[] = $guid;
-			} else {
-				// We'll need the entity here for proper error display
-				if ($user = get_user($guid)) { $invalid_users[] = $user; }
+	// Allow admins to perform some new actions, except only to other admins
+	if (elgg_is_admin_logged_in()) {
+		if (!($user->isAdmin())) {
+			// Email removal is limited to non-valid LDAP users, only if they have a non-empty email
+			if (!empty($user->email)){
+				$url = "action/admin/remove_user_email?guid=" . $user->getGUID();
+				$title = elgg_echo("esope:action:remove_user_email");
+				$item = new ElggMenuItem('remove_user_email', $title, $url);
+				$item->setSection('admin');
+				$item->setConfirmText(elgg_echo("esope:removeemail:areyousure", array($user->email)));
+				$return[] = $item;
 			}
+			// @TODO : Archive user can only apply if not archived yet
+			// @TODO : Un-archive can be useful too
 		}
-		
-		if (count($invalid_users)) {
-			// Set new valid list
-			set_input('user_guid', $valid_user_guid);
-			
-			// Explain what went wrong with who..
-			$error_suffix = "<ul>";
-			foreach($invalid_users as $user) { $error_suffix .= "<li>{$user->name}</li>"; }
-			$error_suffix .= "</ul>";
-			register_error(elgg_echo('au_subgroups:error:invite') . $error_suffix);
-			// Do NOT break the invite process (for the valid ones)
-			//return false;
-		}
+		return $return;
 	}
-	// No need to return anything
-	//return $return;
 }
 
 

@@ -760,6 +760,19 @@ $en = array(
 	*/
 	
 	
+	// Actions
+	'esope:action:remove_user_email' => "Remove user email",
+	'esope:removeemail:areyousure' => "Warning, removing an email address cannot be undone. It is only recommended for deprecated emails. Do you confirm you want to remove %s ?",
+	'esope:removeemail:ok' => "User email successfully removed",
+	'esope:removeemail:error' => "User email could not be removed",
+	'esope:action:archive_user' => "Archive account",
+	'esope:action:unarchive_user' => "Un-archive account",
+	'esope:archiveuser:ok' => "User successfully archived",
+	'esope:archiveuser:error' => "User could not be archived",
+	'esope:unarchiveuser:ok' => "User successfully un-archived",
+	'esope:unarchiveuser:error' => "User could not be un-archived",
+	
+	
 );
 
 add_translation('en', $en);

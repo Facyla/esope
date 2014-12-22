@@ -149,6 +149,9 @@ function esope_init() {
 		}
 	}
 	
+	// Modification du menu des membres
+	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
+	
 	// Modification des menus standards des widgets
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');

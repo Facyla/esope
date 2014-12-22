@@ -780,6 +780,19 @@ $fr = array(
 	*/
 	
 	
+	// Actions
+	'esope:action:remove_user_email' => "Supprimer l'email",
+	'esope:removeemail:areyousure' => "Attention, cette suppression est irréversible, et recommandée uniquement pour une adresse invalide. Confirmez-vous vouloir supprimer %s ?",
+	'esope:removeemail:ok' => "Email du compte supprimé",
+	'esope:removeemail:error' => "L'email du compte n'a pas pu être supprimé",
+	'esope:action:archive_user' => "Archiver le compte",
+	'esope:action:unarchive_user' => "Dé-archiver le compte",
+	'esope:archiveuser:ok' => "Compte utilisateur archivé",
+	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
+	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
+	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
+	
+	
 );
 
 add_translation('fr', $fr);
