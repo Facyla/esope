@@ -766,18 +766,44 @@ $fr = array(
 	
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO
-	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",
+	*/
+	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
-	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
 	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
 	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
 	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
 	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
-	*/
+	// Plugins tools
+	'au_sets:group' => "<i class=\"fa fa-thumb-tack\"></i> Pinboards",
+	'announcements:group' => "<i class=\"fa fa-info-circle\"></i> Annonces",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
+	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar\"></i> Evénements",
+	'feedback:group' => "<i class=\"fa fa-bullhorn\"></i> Feedbacks",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up\"></i> Liked content",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
+	// Group actions and infos
+	'group_operators:manage' => "<i class=\"fa fa-users\"></i> Gérer les responsables du groupe",
+	'groups:join' => "<i class=\"fa fa-user\"></i> Propriétaire du groupe",
+	'groups:my_status:group_owner' => "<i class=\"fa fa-user\"></i> Propriétaire du groupe",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user\"></i> Membre du groupe",
+	'groups:subscribed' => "<i class=\"fa fa-envelope-o\"></i> Notifications activées",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x\"></i><i class=\"fa fa-ban fa-stack-2x\"></i></span> Notifications désactivées",
+	
+	
+	// Actions
+	'esope:action:remove_user_email' => "Supprimer l'email",
+	'esope:removeemail:areyousure' => "Attention, cette suppression est irréversible, et recommandée uniquement pour une adresse invalide. Confirmez-vous vouloir supprimer %s ?",
+	'esope:removeemail:ok' => "Email du compte supprimé",
+	'esope:removeemail:error' => "L'email du compte n'a pas pu être supprimé",
+	'esope:action:archive_user' => "Archiver le compte",
+	'esope:action:unarchive_user' => "Dé-archiver le compte",
+	'esope:archiveuser:ok' => "Compte utilisateur archivé",
+	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
+	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
+	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
 	
 );

@@ -779,9 +779,6 @@ header nav ul li a:active { color: #ddd; }
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 <?php // Keep this block just in case some clients prefer old way but we should use new icons by default (vector)
 <<< EOT
-EOT;
-?>
-
 /* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
@@ -816,12 +813,6 @@ EOT;
 .elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
 
-/* Note : this replaces the above with FA icons - update translations accordingly if needed
-.elgg-menu-owner-block li a { padding-left: 10px; }
-.elgg-menu-owner-block li a i { display: inline-block; margin-right: 6px; }
- */
-
-
 /* More group tools and info icons */
 /* Group membership */
 .elgg-menu-item-membership-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px 5px #FFFFFF !important; }
@@ -834,6 +825,14 @@ background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px -19px
 
 /* Group listing menu */
 .elgg-menu-item-members { background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
+EOT;
+?>
+
+/* Note : this replaces the above with FA icons - update translations accordingly if needed
+ */
+.elgg-menu-owner-block li a { padding-left: 10px; }
+.elgg-sidebar li .fa { display: inline-block; min-width: 3ex; }
+
 
 
 /* ***************************************
