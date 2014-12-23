@@ -20,6 +20,6 @@ textarea, .elgg-input-rawtext { width:100%; }
 .elgg-color-picker { max-width:45%; }
 
 .elgg-page-admin .elgg-module-widget li { margin: 0; }
-.elgg-module-widget button { padding: 0; border: 0; margin: 0; }
+.elgg-module-widget button { padding: 0; border: 0; margin: 0; background: transparent; }
 
 
