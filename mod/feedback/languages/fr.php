@@ -97,10 +97,10 @@ $french = array(
 	'feedback:list:status:closed' => "Fermé",
 	'feedback:status:closed' => "Feedbacks fermés",
 	'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer la fermeture ?",
-	'feedback:close:success' => "Feedback marqué comme fermé.",
+	'feedback:close:success' => "Feedback marqué comme résolu / déjà traité.",
 	'feedback:close:error' => "Impossible de fermer ce feedback",
-	'feedback:reopenconfirm' => "Un feedback ouvert est considéré comme à traiter et le sujet comme actif, confirmer la réouverture ?",
-	'feedback:reopen:success' => "Feedback marqué comme ouvert.",
+	'feedback:reopenconfirm' => "Ce feedback est considéré comme déjà traité. Souhaitez-vous le marquer comme actif et confirmer la réouverture ?",
+	'feedback:reopen:success' => "Feedback marqué comme en cours / non résolu.",
 	'feedback:reopen:error' => "Impossible de rouvrir ce feedback",
 	
 	// About - feedback types

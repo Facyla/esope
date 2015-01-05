@@ -34,6 +34,8 @@ $fr = array(
 	'elgg_dataviz:viztype:radar' => "Radar",
 	'elgg_dataviz:viztype:circle_packing' => "Regroupement par cercles",
 	'elgg_dataviz:viztype:bubble_chart' => "Regroupement par bulles",
+	'elgg_dataviz:viztype:sample' => "Demo",
+	'elgg_dataviz:viztype:sample_clock' => "Demo Horloge",
 	
 	
 );

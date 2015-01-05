@@ -744,40 +744,66 @@ $fr = array(
 	
 	/* Esope FA icons - generic usage */
 	// Tools
-	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn\"></i>",
-	'esope:icon:blog' => "<i class=\"fa fa-file-text-o\"></i>",
-	'esope:icon:bookmarks' => "<i class=\"fa fa-link\"></i>",
-	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o\"></i>",
-	'esope:icon:discussion' => "<i class=\"fa fa-comments-o\"></i>",
-	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o\"></i>",
-	'esope:icon:file' => "<i class=\"fa fa-file-o\"></i>",
-	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o\"></i>",
-	'esope:icon:group_activity' => "<i class=\"fa fa-flash\"></i>",
-	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o\"></i>",
-	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o\"></i>",
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o fa-fw\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o fa-fw\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
 	// Sprites icons
-	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up\"></i>",
-	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up\"></i>",
-	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down\"></i>",
-	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down\"></i>",
-	'esope:icon:lock' => "<i class=\"fa fa-lock\"></i>",
-	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt\"></i>",
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down fa-fw\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
 	
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO
-	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",
-	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
-	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
-	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
-	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
-	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
-	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
-	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
 	*/
+	// Core tools
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'discussion:group' => "<i class=\"fa fa-comments-o fa-fw\"></i> Forum",
+	'file:group' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'groups:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	// Plugins tools
+	'au_sets:group' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'announcements:group' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
+	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
+	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	// Group actions and infos
+	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
+	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
+	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Membre du groupe",
+	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
+	
+	
+	// Actions
+	'esope:action:remove_user_email' => "Supprimer l'email",
+	'esope:removeemail:areyousure' => "Attention, cette suppression est irréversible, et recommandée uniquement pour une adresse invalide. Confirmez-vous vouloir supprimer %s ?",
+	'esope:removeemail:ok' => "Email du compte supprimé",
+	'esope:removeemail:error' => "L'email du compte n'a pas pu être supprimé",
+	'esope:action:archive_user' => "Archiver le compte",
+	'esope:action:unarchive_user' => "Dé-archiver le compte",
+	'esope:archiveuser:ok' => "Compte utilisateur archivé",
+	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
+	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
+	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
 	
 );

@@ -1,6 +1,6 @@
 .elgg-page-admin header h2 { display:inline; }
 .elgg-page-admin header ul { display:inline; float:right; }
-.elgg-page-admin header ul li { marginl-left:6px; }
+.elgg-page-admin header ul li { margin-left:6px; }
 
 /* Feuilles de style jquery UI */
 /* Pour la config du plugin de thème */
@@ -18,4 +18,8 @@ textarea, .elgg-input-rawtext { width:100%; }
 .elgg-form fieldset legend { padding:0 0.5ex; }
 
 .elgg-color-picker { max-width:45%; }
+
+.elgg-page-admin .elgg-module-widget li { margin: 0; }
+.elgg-module-widget button { padding: 0; border: 0; margin: 0; background: transparent; }
+
 

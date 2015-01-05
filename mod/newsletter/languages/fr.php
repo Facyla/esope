@@ -203,7 +203,7 @@ Pour afficher cette lettre d'information, cliquez sur :
 	'newsletter:log:general:starttime' => "Heure de démarrage",
 	'newsletter:log:general:endtime' => "Traitement terminé",
 	
-	'newsletter:log:no_contents' => "Aucun fichier de journal trouvé, êtes-vous sûr que cette lettre d'information a déjà été envoyée ?",
+	'newsletter:log:no_contents' => "Aucun fichier de journal trouvé, êtes-vous sûr que cette lettre d'information a déjà été envoyée ? L'une des causes possibles est qu'aucun destinataire n'a été défini pour cet envoi.",
 	'newsletter:log:no_recipients' => "Aucun destinataire pour cette lettre d'information",
 	'newsletter:log:emails:no_recipients' => "Il n'y avait aucune adresse email individuelle lors du traitement de la lettre d'information. Si vous aviez sélectionné des adresses email, les personnes ont pu se désinscrire de la lettre d'information.",
 	'newsletter:log:users:no_recipients' => "Il n'y avait aucun membre enregistré lors du traitement de la lettre d'information. Si vous aviez sélectionné des membres, ils ont pu se désinscrire de la lettre d'information.",

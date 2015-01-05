@@ -23,22 +23,13 @@ if ($data) {
 
 //$content = '<div id="' . $id . '" style="height:' . $height . '; width:' . $width . ';"></div>
 $content = '<div id="' . $id . '"></div>
+<div><textarea id="' . $id . '_code">paper.circle(320, 240, 60).animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);</textarea></div>
+<div><button id="' . $id . '_run" type="button">Run</button></div>
 <script type="text/javascript">
-// Creates canvas width=320 × height=200 at x=200, y=300
-var paper = Raphael(200, 300, 320, 200);
-
-// Creates circle at x = 200, y = 100, with radius 80
-var circle = paper.circle(200, 100, 80);
-// Sets the fill attribute of the circle to red (#f00)
-circle.attr("fill", "#f00");
-
-// Sets the stroke attribute of the circle to white
-circle.attr("stroke", "#fff");
-
 window.onload = function () {
 	var paper = Raphael("' . $id . '", 640, 480),
-		btn = document.getElementById("run"),
-		cd = document.getElementById("code");
+		btn = document.getElementById("' . $id . '_run"),
+		cd = document.getElementById("' . $id . '_code");
 
 	(btn.onclick = function () {
 		paper.clear();

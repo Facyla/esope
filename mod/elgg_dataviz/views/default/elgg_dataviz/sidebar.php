@@ -15,7 +15,7 @@ $libraries = array(
 	'vega' => array('bar_chart'), 
 	'dygraphs' => array('line_chart'), 
 	'crossfilter' => array(), 
-	'raphael' => array(), 
+	'raphael' => array('sample', 'sample_clock'), 
 );
 
 $content .= '<ul>';

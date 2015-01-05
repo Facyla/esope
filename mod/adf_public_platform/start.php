@@ -149,6 +149,9 @@ function esope_init() {
 		}
 	}
 	
+	// Modification du menu des membres
+	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
+	
 	// Modification des menus standards des widgets
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
@@ -260,7 +263,7 @@ function esope_init() {
 	}
 	
 	// Allow to remove completely an email address for a user
-	elgg_register_action("remove_user_email", $action_url . "esope/remove_user_email.php", "logged_in");
+	elgg_register_action("admin/remove_user_email", $action_url . "admin/remove_user_email.php", "logged_in");
 	
 	
 	// NEW & REWRITTEN PAGE HANDLERS

@@ -27,6 +27,7 @@ $members = elgg_get_entities(array('types' => 'user', 'limit' => $limit, 'offset
 
 $i = 0;
 foreach ($members as $ent) {
+	if (empty($ent->location)) { continue; }
 	$geo_location = elgg_geocode_location($ent->getLocation());
 	$lat = (float)$geo_location['lat'];
 	$lon = (float)$geo_location['long'];
