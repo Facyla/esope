@@ -320,6 +320,8 @@ function group_forum_save_post($groupid, $title, $desc, $tags, $status, $access_
 	if (!$result) {
 		$return['message'] = elgg_echo('discussion:error:notsaved');
 	} else {
+		// Add to river
+		add_to_river('river/object/groupforumtopic/create', 'create', elgg_get_logged_in_user_guid(), $topic->guid);
 		$return['success'] = true;
 		$return['message'] = elgg_echo('discussion:topic:created');
 	}
