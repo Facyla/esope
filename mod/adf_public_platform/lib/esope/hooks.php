@@ -198,12 +198,6 @@ function adf_public_platform_public_pages($hook, $type, $return, $params) {
 	foreach ($publicpages as $publicpage) {
 		if (!empty($publicpage)) $return[] = $publicpage;
 	}
-	/* Pages publiques ADF au 27 juillet 2012
-	$return[] = 'pages/view/3792/charte-de-dpartements-en-rseaux';
-	$return[] = 'pages/view/3819/mentions-lgales';
-	$return[] = 'pages/view/3827/a-propos-de-dpartements-en-rseaux';
-	$return[] = 'pages/group/3519/all';
-	*/
 	/* Les pages à rendre accessibles doivent correspondre	à l'URL complète
 	$return[] = '';
 	*/

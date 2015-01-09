@@ -11,7 +11,9 @@
 */
 
 $cmspage = $vars['entity']; // we can use directly the entity
-$pagetype = elgg_get_friendly_title($vars['pagetype']); // or get the page type - used as a user-friendly guid
+// or get the page type - used as a user-friendly guid
+// @TODO : this concept could be extend to provide custom URL for any given GUID...
+$pagetype = elgg_get_friendly_title($vars['pagetype']);
 
 
 // Form selects options_values
