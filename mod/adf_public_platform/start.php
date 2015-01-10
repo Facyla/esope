@@ -1459,10 +1459,14 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 		if (!empty($template)) {
 			$template = explode('::', $template);
 			$source = trim($template[0]);
-			$title = trim($template[1]);
-			$description = trim($template[2]);
+			// Escape double quotes for display text elements (which would break JS)
+			// Note that json_encode result is wrapped into double quotes so it must be used directly in JS
+			$title = json_encode(trim($template[1]));
+			$description = json_encode(trim($template[2]));
 			switch($type) {
 				case 'cmspage':
+					// Cmspages always respectfriendly title formatting
+					$source = elgg_get_friendly_title($source);
 					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
 					break;
 				case 'guid':
@@ -1477,14 +1481,14 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 					break;
 				case 'url':
 				default:
-					$source = trim($template[0]);
+					// Nothing yet
 			}
 			// Allow some failsafe behaviour
 			if (empty($source)) continue;
 			if (empty($title)) $title = $source;
 			if (empty($description)) $description = $title;
 			// Add config line to templates config
-			$js_templates .= '{ title : "' . $title . '", src : "' . $source . '", description : "' . $description . '" }, ' . "\n";
+			$js_templates .= '{ title : ' . $title . ', src : "' . $source . '", description : ' . $description . ' }, ' . "\n";
 		}
 	}
 	return $js_templates;
