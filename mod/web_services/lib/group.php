@@ -771,13 +771,13 @@ expose_function('group.get_icon',
 
 
 /**
- * Web service get number of likes
+ * Web service count number of likes
  *
  * @param string $postid   GUID of post
  *
  * @return int
  */
-function group_forum_get_likes($postid) {
+function group_forum_count_likes($postid) {
 	$topic = get_entity($postid);
 	if (!$topic) {
 		$msg = elgg_echo('grouppost:nopost');
@@ -788,12 +788,12 @@ function group_forum_get_likes($postid) {
 	return $return;
 }
 
-expose_function('group.forum.get_likes',
-	"group_forum_get_likes",
+expose_function('group.forum.count_likes',
+	"group_forum_count_likes",
 	array(
 		'postid' => array ('type' => 'string'),
 	),
-	elgg_echo('web_services:group:get_likes'),
+	elgg_echo('web_services:group:count_likes'),
 	'POST',
 	true,
 	true);
