@@ -1,6 +1,5 @@
 <?php
 $al = new AnnotationLike(get_input('id'));
-
 if (!$al->isValid()){
 	register_error(elgg_echo('annotations:annotation:notfound'));
 	forward(REFERER);

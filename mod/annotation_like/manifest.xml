@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
-	<field key="author" value="akkunchoi" />
+	<field key="author" value="Facyla (based on akkunchoi work for Elgg 1.7)" />
 	<field key="version" value="0.2" />
-	<field key="description" value="This plugin provides the 'like' function to annotations" />
+	<field key="description" value="This plugin provides the 'like' function to annotations : forum replies and generic comments" />
 	<field key="website" value="https://github.com/akkunchoi/elgg-annotation-like" />
 	<field key="copyright" value="akkunchoi" />
 	<field key="licence" value="GNU Public License version 2" />

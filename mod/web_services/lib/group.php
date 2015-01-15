@@ -85,7 +85,7 @@ expose_function('group.get_groups',
  */
 function get_group($guid) {
 	$group = get_entity($guid);
-	if(!$group){
+	if (!$group) {
 		throw new InvalidParameterException('groups:notfound');
 	}
 	$owner = $group->getOwnerEntity();
@@ -770,126 +770,5 @@ expose_function('group.get_icon',
 );
 
 
-/**
- * Web service count number of likes
- *
- * @param string $postid   GUID of post
- *
- * @return int
- */
-function group_forum_count_likes($postid) {
-	$topic = get_entity($postid);
-	if (!$topic) {
-		$msg = elgg_echo('grouppost:nopost');
-		throw new InvalidParameterException($msg);
-	}
-	$return['count'] = likes_count($topic);
-	$return['success'] = true;
-	return $return;
-}
-
-expose_function('group.forum.count_likes',
-	"group_forum_count_likes",
-	array(
-		'postid' => array ('type' => 'string'),
-	),
-	elgg_echo('web_services:group:count_likes'),
-	'POST',
-	true,
-	true);
-
-
-/**
- * Web service like a forum post or reply
- *
- * @param string $username username
- * @param string $postid   GUID of post
- *
- * @return bool
- */
-function group_forum_add_like($postid, $username) {
-	$return['success'] = false;
-	$topic = get_entity($postid);
-	if (!$topic) {
-		$msg = elgg_echo('grouppost:nopost');
-		throw new InvalidParameterException($msg);
-	}
-	if(!$username){
-		$user = elgg_get_logged_in_user_entity();
-	} else {
-		$user = get_user_by_username($username);
-	}
-	if (!$user) { throw new InvalidParameterException('registration:usernamenotvalid'); }
-	
-	if (elgg_annotation_exists($postid, 'likes', $user->guid)) { throw new InvalidParameterException("likes:alreadyliked"); }
-	if (!$topic->canAnnotate(0, 'likes')) { throw new InvalidParameterException("likes:failure"); }
-	
-	$annotation = create_annotation($postid, 'likes', "likes", "", $user->guid, $topic->access_id);
-	// tell user annotation didn't work if that is the case
-	if (!$annotation) { throw new InvalidParameterException("likes:failure"); }
-	
-	if ($topic->owner_guid != $user->guid) { likes_notify_user($topic->getOwnerEntity(), $user, $topic); }
-	$return['success'] = true;
-	return $return;
-}
-
-expose_function('group.forum.add_like',
-	"group_forum_add_like",
-	array(
-		'postid' => array ('type' => 'string'),
-		'username' => array ('type' => 'string', 'required'=>false),
-	),
-	elgg_echo('web_services:group:add_like'),
-	'POST',
-	true,
-	true);
-
-
-/**
- * Web service remove like on a forum post or reply
- *
- * @param string $username username
- * @param string $postid   GUID of post
- *
- * @return bool
- */
-function group_forum_remove_like($postid, $username) {
-	$return['success'] = false;
-	$topic = get_entity($postid);
-	if (!$topic) {
-		$msg = elgg_echo('grouppost:nopost');
-		throw new InvalidParameterException($msg);
-	}
-	
-	if(!$username){
-		$user = elgg_get_logged_in_user_entity();
-	} else {
-		$user = get_user_by_username($username);
-	}
-	if (!$user) { throw new InvalidParameterException('registration:usernamenotvalid'); }
-	
-	if (!elgg_annotation_exists($postid, 'likes', $user->guid)) { throw new InvalidParameterException("likes:alreadyunliked"); }
-	
-	$likes = elgg_get_annotations(array('guid' => $postid, 'annotation_owner_guid' => $user->guid, 'annotation_name' => 'likes'));
-	$like = $likes[0];
-	
-	if ($like && $like->canEdit($user->guid)) {
-		$like->delete();
-		$return['success'] = true;
-	}
-	
-	return $return;
-}
-
-expose_function('group.forum.remove_like',
-	"group_forum_remove_like",
-	array(
-		'postid' => array ('type' => 'string'),
-		'username' => array ('type' => 'string', 'required'=>false),
-	),
-	elgg_echo('web_services:group:remove_like'),
-	'POST',
-	true,
-	true);
 
 

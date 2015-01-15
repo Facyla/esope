@@ -1,3 +1,16 @@
+// Note : these scripts are not used, because older script did not work and update was not mandatory when updating the plugin
+
+/*
+function annotation_like(){
+	//$("body").addClass("esope-search-wait");
+	formdata = $("#esope-search-form").serialize();
+	$.post("' . $esope_search_url . '", formdata, function(data){
+		$("#esope-search-results").html(data);
+		//$("body").removeClass("esope-search-wait");
+	});
+}
+*/
+
 jQuery(function($){
 	$('.annotation-like').each(function(){
 		var self = $(this);
@@ -9,6 +22,7 @@ jQuery(function($){
 					return false;
 				}
 				handler.addClass('working')
+				
 				$.post(handler.attr('href'), {}, function(res){
 					
 					if (parseInt(res)){

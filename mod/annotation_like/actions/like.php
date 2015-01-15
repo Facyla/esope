@@ -18,3 +18,4 @@ if ($al->like($userid)){
 }
 
 forward($al->getAnnotation()->getEntity()->getURL());
+

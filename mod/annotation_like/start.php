@@ -11,16 +11,10 @@ elgg_register_event_handler('init','system','annotation_like_init');
 elgg_register_action("annotation_like/like", elgg_get_plugins_path() . "annotation_like/actions/like.php");
 elgg_register_action("annotation_like/cancel", elgg_get_plugins_path() . "annotation_like/actions/cancel_like.php");
 
-// Enable ajax request
-define('ANNOTATION_LIKE_XHR', 1);
 
 function annotation_like_init(){
 	
-	if (ANNOTATION_LIKE_XHR){
-		//elgg_extend_view("js/initialise_elgg", "annotation/javascript");
-		elgg_extend_view("js/initialise_elgg", "annotation/js");
-		elgg_register_plugin_hook_handler('forward', 'system', 'annotation_like_xhr_forwarder');
-	}
+	//elgg_extend_view("js/initialise_elgg", "annotation/js");
 	
 	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('notifications')){
 		// Group forum notify any annotation on create.
@@ -30,40 +24,20 @@ function annotation_like_init(){
 		
 	}
 	
+	// Likable annotations menu
 	elgg_register_plugin_hook_handler('register', 'menu:annotation', 'annotation_like_annotation_menu_setup', 400);
 	
 	// TODO like notification
 	// register_elgg_event_handler('create', 'annotation', 'annotation_like_create_handler');
+	
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'annotation_like_unittest');
 }
 
 
-function annotation_like_xhr_forwarder($hook, $entity_type, $returnvalue, $params){
-	if (isset($params['current_url'])){
-		if (!preg_match('/annotation_like/', $params['current_url'])){
-			return $returnvalue;
-		}
-	}
-		
-	$xhr = false;
-	if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'){
-		$xhr = true;
-	}
-	
-	if ($xhr === false) { return $returnvalue; }
-	
-	if (count_messages('errors') > 0) { echo 0; } else { echo 1; }
-	// clear messages
-	$_SESSION['msg'] = array();
-	return '';
-}
-
-
+// Block notifications
 function annotation_like_notification_intercept($hook, $entity_type, $returnvalue, $params) {
-	if (AnnotationLike::changed()){
-		// true means to cancel notification
-		return true;
-	}
+	// Returning true means "cancel notification"
+	if (AnnotationLike::changed()) { return true; }
 	return null;
 }
 
@@ -77,7 +51,7 @@ function annotation_like_unittest($hook, $type, $value, $params) {
 
 
 /**
- * Add likes to annotation menu at end of the menu
+ * Add annotation_like and counter to annotation menu at end of the menu
  */
 function annotation_like_annotation_menu_setup($hook, $type, $return, $params) {
 	if (elgg_in_context('widgets')) { return $return; }
@@ -135,4 +109,6 @@ function annotation_like_annotation_menu_setup($hook, $type, $return, $params) {
 	
 	return $return;
 }
+
+
 
