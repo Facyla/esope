@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest>
+	<field key="author" value="akkunchoi" />
+	<field key="version" value="0.2" />
+	<field key="description" value="This plugin provides the 'like' function to annotations" />
+	<field key="website" value="https://github.com/akkunchoi/elgg-annotation-like" />
+	<field key="copyright" value="akkunchoi" />
+	<field key="licence" value="GNU Public License version 2" />
+	<field key="elgg_version" value="2010030101" />
+</plugin_manifest>
+
+<!--
+20150115 : Facyla update to Elgg 1.8
+
+//-->
+
