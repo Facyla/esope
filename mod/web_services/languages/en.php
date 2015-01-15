@@ -31,10 +31,10 @@ $english = array(
 	'web_services:likes:delete' => "Delete like",
 	'web_services:likes:count' => "Count number of likes",
 	'web_services:likes:getusers' => "Get users who liked an entity",
-	'web_services:annotation_likes:add' => "Add an annotation like",
-	'web_services:annotation_likes:delete' => "Delete annotation like",
-	'web_services:annotation_likes:count' => "Count number of annotation likes",
-	'web_services:annotation_likes:getusers' => "Get users who liked an annotation",
+	'web_services:likes_annotation:add' => "Add an annotation like",
+	'web_services:likes_annotation:delete' => "Delete annotation like",
+	'web_services:likes_annotation:count' => "Count number of annotation likes",
+	'web_services:likes_annotation:getusers' => "Get users who liked an annotation",
 	
 	'web_services:settings:api_information' => "Any call to the web services can be made by calling the URL :<br />
 		<pre>&lt;site URL&gt;/services/api/rest/&lt;outpput type&gt;/?method=&lt;method name&gt;</pre>

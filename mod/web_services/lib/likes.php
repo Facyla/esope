@@ -185,18 +185,18 @@ expose_function('likes.getusers',
 // Web Services depending of annotation_like plugin (implements annotation likes for forum replies and comments)
 if (elgg_is_active_plugin('annotation_like')) {
 	
-	function annotation_likes_add($an_id, $username = false) {
+	function likes_annotation_add($an_id, $username = false) {
 		$return['success'] = false;
 		$annotation = elgg_get_annotation_from_id($an_id);
 		// Limit to group replies, and generic comments
 		$valid_annotations = array('group_topic_post', 'generic_comment');
 		if (!in_array($annotation->name, $valid_annotations)) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotation');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotation');
 			throw new InvalidParameterException($msg);
 		}
 		$al = new AnnotationLike($an_id);
 		if (!$al->isValid()) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotationLike');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotationLike');
 			throw new InvalidParameterException($msg);
 		}
 		if (!$username) {
@@ -213,30 +213,30 @@ if (elgg_is_active_plugin('annotation_like')) {
 		return $return;
 	}
 	
-	expose_function('annotation_likes.add',
-		"annotation_likes_add",
+	expose_function('likes_annotation.add',
+		"likes_annotation_add",
 		array(
 			'annotation_id' => array ('type' => 'int'),
 			'username' => array ('type' => 'string', 'required'=>false),
 		),
-		elgg_echo('web_services:annotation_likes:add'),
+		elgg_echo('web_services:likes_annotation:add'),
 		'POST',
 		true,
 		true);
 	
 	
-	function annotation_likes_delete($an_id, $username = false) {
+	function likes_annotation_delete($an_id, $username = false) {
 		$return['success'] = false;
 		$annotation = elgg_get_annotation_from_id($an_id);
 		// Limit to group replies, and generic comments
 		$valid_annotations = array('group_topic_post', 'generic_comment');
 		if (!in_array($annotation->name, $valid_annotations)) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotation');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotation');
 			throw new InvalidParameterException($msg);
 		}
 		$al = new AnnotationLike($an_id);
 		if (!$al->isValid()) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotationLike');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotationLike');
 			throw new InvalidParameterException($msg);
 		}
 		if (!$username) {
@@ -253,30 +253,30 @@ if (elgg_is_active_plugin('annotation_like')) {
 		return $return;
 	}
 	
-	expose_function('annotation_likes.delete',
-		"annotation_likes_delete",
+	expose_function('likes_annotation.delete',
+		"likes_annotation_delete",
 		array(
 			'annotation_id' => array ('type' => 'int'),
 			'username' => array ('type' => 'string', 'required'=>false),
 		),
-		elgg_echo('web_services:annotation_likes:delete'),
+		elgg_echo('web_services:likes_annotation:delete'),
 		'POST',
 		true,
 		true);
 	
 	
-	function annotation_likes_count_number_of_likes($an_id) {
+	function likes_annotation_count_number_of_likes($an_id) {
 		$return['success'] = false;
 		$annotation = elgg_get_annotation_from_id($an_id);
 		// Limit to group replies, and generic comments
 		$valid_annotations = array('group_topic_post', 'generic_comment');
 		if (!in_array($annotation->name, $valid_annotations)) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotation');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotation');
 			throw new InvalidParameterException($msg);
 		}
 		$al = new AnnotationLike($an_id);
 		if (!$al->isValid()) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotationLike');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotationLike');
 			throw new InvalidParameterException($msg);
 		}
 		
@@ -291,27 +291,27 @@ if (elgg_is_active_plugin('annotation_like')) {
 		return $return;
 	}
 	
-	expose_function('annotation_likes.count',
-		"annotation_likes_count_number_of_likes",
+	expose_function('likes_annotation.count',
+		"likes_annotation_count_number_of_likes",
 		array('annotation_id' => array ('type' => 'int')),
-		elgg_echo('web_services:annotation_likes:count'),
+		elgg_echo('web_services:likes_annotation:count'),
 		'POST',
 		true,
 		true);
 	
 	
-	function annotation_likes_getusers($an_id) {
+	function likes_annotation_getusers($an_id) {
 		$return['success'] = false;
 		$annotation = elgg_get_annotation_from_id($an_id);
 		// Limit to group replies, and generic comments
 		$valid_annotations = array('group_topic_post', 'generic_comment');
 		if (!in_array($annotation->name, $valid_annotations)) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotation');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotation');
 			throw new InvalidParameterException($msg);
 		}
 		$al = new AnnotationLike($an_id);
 		if (!$al->isValid()) {
-			$msg = elgg_echo('web_services:annotation_likes:invalidAnnotationLike');
+			$msg = elgg_echo('web_services:likes_annotation:invalidAnnotationLike');
 			throw new InvalidParameterException($msg);
 		}
 		
@@ -331,10 +331,10 @@ if (elgg_is_active_plugin('annotation_like')) {
 		return $return;
 	}
 	
-	expose_function('annotation_likes.getusers',
-		"annotation_likes_getusers",
+	expose_function('likes_annotation.getusers',
+		"likes_annotation_getusers",
 		array('annotation_id' => array ('type' => 'int')),
-		elgg_echo('web_services:annotation_likes:getusers'),
+		elgg_echo('web_services:likes_annotation:getusers'),
 		'POST',
 		true,
 		true);

@@ -31,10 +31,10 @@ $french = array(
 	'web_services:likes:delete' => "Retirer une appréciation",
 	'web_services:likes:count' => "Compter le nombre d'appréciations",
 	'web_services:likes:getusers' => "Récupérer les membres qui ont apprécié une publication",
-	'web_services:annotation_likes:add' => "Ajouter une appréciation sur une réponse ou un commentaire",
-	'web_services:annotation_likes:delete' => "Retirer une appréciation sur une réponse ou un commentaire",
-	'web_services:annotation_likes:count' => "Compter le nombre d'appréciations sur une réponse ou un commentaire",
-	'web_services:annotation_likes:getusers' => "Récupérer les membres qui ont apprécié une réponse ou un commentaire",
+	'web_services:likes_annotation:add' => "Ajouter une appréciation sur une réponse ou un commentaire",
+	'web_services:likes_annotation:delete' => "Retirer une appréciation sur une réponse ou un commentaire",
+	'web_services:likes_annotation:count' => "Compter le nombre d'appréciations sur une réponse ou un commentaire",
+	'web_services:likes_annotation:getusers' => "Récupérer les membres qui ont apprécié une réponse ou un commentaire",
 	
 	'web_services:settings:api_information' => "Tout web service activé peut être appelé via l'URL :<br />
 		<pre>&lt;URL du site&gt;/services/api/rest/&lt;format&gt;/?method=&lt;nom méthode&gt;</pre><br />
