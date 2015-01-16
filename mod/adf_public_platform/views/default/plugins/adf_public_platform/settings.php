@@ -558,6 +558,8 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</p>';
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_publish_tools') . ' </label> ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_publish_tools)) . '</p>';
+			// Discussion auto-refresh (using parameter ?autorefresh=auto)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion_autorefresh') . '</label> ' . elgg_view('input/dropdown', array('name' => 'params[discussion_autorefresh]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->discussion_autorefresh)) . '</p>';
 			echo '<br />';
 			
 			echo '<h4>' . elgg_echo('adf_platform:config:groupinvites') . '</h4>';

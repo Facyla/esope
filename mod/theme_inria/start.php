@@ -33,8 +33,6 @@ function theme_inria_init(){
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
-	elgg_extend_view('object/groupforumtopic', 'theme_inria/forum_autorefresh');
-	
 	// Extend group owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
 	
@@ -198,11 +196,6 @@ function inria_page_handler($page){
 			break;
 		case "animation":
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
-			break;
-		case "forum_refresh":
-			if (isset($page[1])) set_input('guid', $page[1]);
-			if (isset($page[2])) set_input('lower_ts', $page[2]);
-			include(dirname(__FILE__) . '/pages/theme_inria/forum_refresh.php');
 			break;
 		default:
 			include(dirname(__FILE__) . '/pages/theme_inria/index.php');
