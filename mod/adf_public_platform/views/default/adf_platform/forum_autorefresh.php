@@ -9,6 +9,10 @@ if (!is_int($auto_refresh_rate) || ($auto_refresh_rate < 10)) { $auto_refresh_ra
 $auto_refresh_rate = $auto_refresh_rate * 1000;
 
 $refresh_url = elgg_get_site_url() . 'esope/forum_refresh/' . $vars['entity']->guid;
+$ts = time();
+$token = generate_action_token($ts);
+$action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
+
 // echo '<a href="javascript:void(0);" onclick="forum_refresh();">Refresh</a>';
 // echo "Load URL : $refresh_url";
 ?>
@@ -21,16 +25,16 @@ function forum_refresh() {
 	//$('#annotations-loading').fadeOut('slow');
 	if (annotation_latest > 0) {
 		$.ajax({
-			url: '<?php echo $refresh_url; ?>/' + annotation_latest,
+			url: '<?php echo $refresh_url; ?>/' + annotation_latest + '<?php echo $action_token; ?>',
 			success: function(data) {
 				$('#group-replies .elgg-annotation-list').prepend(data);
 			}
 		});
 	} else {
-		$('#group-replies .elgg-annotation-list').load('<?php echo $refresh_url; ?>').fadeIn("slow");
+		$('#group-replies .elgg-annotation-list').load('<?php echo $refresh_url . $action_token; ?>').fadeIn("slow");
 		/*
 		$.ajax({
-			url: '<?php echo $refresh_url; ?>',
+			url: '<?php echo $refresh_url . $action_token; ?>',
 			success: function(data) {
 				$('#group-replies .elgg-annotation-list').html(data).fadeIn("slow");
 			}
