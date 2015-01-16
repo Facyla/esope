@@ -5,10 +5,7 @@ $lower_ts = get_input('lower_ts', 0);
 
 /* @var ElggGroup $group */
 $entity = get_entity($guid);
-if (!elgg_instanceof($entity, 'object')) {
-	echo '0';
-	exit;
-}
+if (!elgg_instanceof($entity, 'object')) { exit; }
 
 $options = array(
 	'guid' => $guid,
