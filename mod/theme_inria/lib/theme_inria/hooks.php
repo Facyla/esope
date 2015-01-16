@@ -113,7 +113,8 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 	return $return;
 }
 
-// Add Etherpad (and iframes) Etherpad (and iframes) soft integration (embed)
+
+// Add Etherpad (and iframes) soft integration (embed)
 function theme_inria_select_tab($hook, $type, $items, $vars) {
 	$items[] = ElggMenuItem::factory(array(
 		'name' => 'etherpad',

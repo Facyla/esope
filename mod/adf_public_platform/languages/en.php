@@ -668,6 +668,7 @@ $en = array(
 	'adf_platform:settings:groups:disable_widgets' => "Remove tools widgets on group home",
 	'adf_platform:settings:groups:add_activity' => "Add group activity on group home",
 	'adf_platform:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
+	'adf_platform:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",
 	'esope:groups:disable_widgets:loggedin' => "Only when logged in",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",

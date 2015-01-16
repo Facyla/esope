@@ -30,7 +30,8 @@ ESOPE est également adaptée pour fournir une base sur laquelle construire des 
 
 
 ### Version
-ESOPE suit de près les évolutions du "core" d'Elgg, et s'appuie actuellement sur Elgg 1.8.20
+ESOPE suit de près les évolutions du "core" d'Elgg.
+La version de production actuelle s'appuie sur Elgg 1.8.20 et correspond à la branche "master".
 
 
 ### Conception et maintenance

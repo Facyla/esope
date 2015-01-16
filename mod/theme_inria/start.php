@@ -105,6 +105,7 @@ function theme_inria_init(){
 	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	
+	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {
 		elgg_unregister_action('thewire/add');

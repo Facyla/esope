@@ -50,6 +50,11 @@ function esope_init() {
 	
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	
+	$forum_autorefresh = elgg_get_plugin_setting('discussion_autorefresh', 'adf_public_platform');
+	if ($forum_autorefresh == 'yes') {
+		elgg_extend_view('object/groupforumtopic', 'adf_platform/forum_autorefresh');
+	}
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', 'mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI

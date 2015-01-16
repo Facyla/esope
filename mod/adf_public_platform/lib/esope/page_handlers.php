@@ -6,8 +6,14 @@ function esope_page_handler($page) {
 		case 'statistics':
 			include "$base/statistics.php";
 			break;
+		case 'forum_refresh':
+			if (isset($page[1])) set_input('guid', $page[1]);
+			if (isset($page[2])) set_input('lower_ts', $page[2]);
+			include "$base/forum_refresh.php";
+			break;
 		default:
 	}
+	return true;
 }
 
 

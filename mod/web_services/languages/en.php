@@ -27,6 +27,14 @@ $english = array(
 	'web_services:tests:run' => 'Run tests',
 	'web_services:likes' => 'Likes',
 	'likes:notallowed' => 'Not allowed to like',
+	'web_services:likes:add' => "Add a like",
+	'web_services:likes:delete' => "Delete like",
+	'web_services:likes:count' => "Count number of likes",
+	'web_services:likes:getusers' => "Get users who liked an entity",
+	'web_services:likes_annotation:add' => "Add an annotation like",
+	'web_services:likes_annotation:delete' => "Delete annotation like",
+	'web_services:likes_annotation:count' => "Count number of annotation likes",
+	'web_services:likes_annotation:getusers' => "Get users who liked an annotation",
 	
 	'web_services:settings:api_information' => "Any call to the web services can be made by calling the URL :<br />
 		<pre>&lt;site URL&gt;/services/api/rest/&lt;outpput type&gt;/?method=&lt;method name&gt;</pre>
