@@ -804,7 +804,7 @@ $fr = array(
 	// Plugins tools
 	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
 	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
-	'brainstorm:user' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
+	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
 	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
 	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
 	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
