@@ -264,6 +264,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-discussion .elgg-widget-more { background-color: #f43930; color: white; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
+<?php <<<CSS
 /* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $sidecolor; ?> !important; }
@@ -297,6 +298,8 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 /* Pages */
 .elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $sideicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $sideicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $sidecolor; ?> !important; }
+CSS;
+?>
 
 /* More group tools and info icons */
 /* Group membership */
