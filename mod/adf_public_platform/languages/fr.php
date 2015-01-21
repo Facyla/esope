@@ -795,11 +795,12 @@ $fr = array(
 	
 	// User tools FA icons *override* (owner block)
 	// Core tools
-	'blog:user' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
-	'bookmarks:user' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
-	'file:user' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
-	'pages:user' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	// Plugins tools
 	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
 	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
