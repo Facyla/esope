@@ -298,8 +298,6 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 /* Pages */
 .elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $sideicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $sideicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $sidecolor; ?> !important; }
-CSS;
-?>
 
 /* More group tools and info icons */
 /* Group membership */
@@ -313,6 +311,8 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 
 /* Group listing menu */
 .elgg-menu-item-members { background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
+CSS;
+?>
 
 /* File tree */
 #file_tools_list_tree_container div.elgg-body { padding: 6px; }

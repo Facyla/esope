@@ -748,6 +748,7 @@ $en = array(
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO
 	*/
+	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
 	'discussion:group' => "<i class=\"fa fa-comments-o fa-fw\"></i> Forum",
@@ -771,6 +772,27 @@ $en = array(
 	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Group member",
 	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
 	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
+	
+	// User tools FA icons *override* (owner block)
+	// Core tools
+	'blog:user' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks:user' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'file:user' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activity",
+	'pages:user' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	// Plugins tools
+	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
+	'brainstorm:user' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Events",
+	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	// User actions and infos
+	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
+	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
 	
 	
 	// Actions
