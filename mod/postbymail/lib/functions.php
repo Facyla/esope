@@ -643,10 +643,15 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				
 				// 2. Envoi des notifications / send notifications
+				$site_name = $CONFIG->site->name;
+				// Protect the name with quotations if it contains a comma
+				if (strstr($site_name, ",")) { $site_name = '"' . $site_name . '"'; }
+				$site_name = "=?UTF-8?B?" . base64_encode($site_name) . "?="; // Encode the name. If may content nos ASCII chars.
+				
 				// Headers communs
-				$headers = "From: Publication par mail {$CONFIG->site->name} <{$CONFIG->site->email}>\n";
+				$headers = "From: Publication par mail {$site_name} <{$CONFIG->site->email}>\n";
 				$headers .= "Return-Path: <{$CONFIG->site->email}>\n";
-				$headers .= "X-Sender: <{$CONFIG->site->name}>\n";
+				$headers .= "X-Sender: <{$site_name}>\n";
 				$headers .= "X-auth-smtp-user: {$CONFIG->site->email} \n";
 				$headers .= "X-abuse-contact: {$CONFIG->site->email} \n";
 				$headers .= "X-Mailer: PHP\n";
