@@ -264,6 +264,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-discussion .elgg-widget-more { background-color: #f43930; color: white; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
+<?php <<<CSS
 /* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $sidecolor; ?> !important; }
@@ -310,6 +311,8 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 
 /* Group listing menu */
 .elgg-menu-item-members { background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
+CSS;
+?>
 
 /* File tree */
 #file_tools_list_tree_container div.elgg-body { padding: 6px; }

@@ -13,6 +13,8 @@ if (!$idea) {
 	return;
 }
 
+elgg_load_library('brainstorm:utilities');
+
 $owner = $idea->getOwnerEntity();
 $owner_icon = elgg_view_entity_icon($owner, 'small');
 $container = $idea->getContainerEntity();
@@ -21,11 +23,11 @@ $categories = elgg_view('output/categories', $vars);
 
 $description = elgg_view('output/longtext', array('value' => $idea->description, 'class' => 'pbl'));
 
-$params = array(
+$title_link = elgg_view('output/url', array(
 	'text' => $idea->title,
 	'href' => $idea->getURL(),
-);
-$title_link = elgg_view('output/url', $params);
+	'class' => 'mrs'
+));
 
 $owner_link = elgg_view('output/url', array(
 	'href' => "brainstorm/owner/$owner->username",
@@ -82,58 +84,43 @@ $params = array(
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
 
-$sum = elgg_get_annotations(array(
-	'guids' => $idea->guid,
-	'annotation_names' => array('point', 'close'),
-	'annotation_calculation' => 'sum',
-	'limit' => 0
-));
-if ( $sum == '' ) $sum = 0;
+$ideaPoints = brainstorm_idea_get_points($idea->getGUID());
 
-$userVote = elgg_get_annotations(array(
-	'guids' => $idea->guid,
-	'annotation_names' => array('point', 'close'),
-	'annotation_calculation' => 'sum',
-	'annotation_owner_guids' => $user_guid,
-	'limit' => 0
-));
+if ( $ideaPoints['total'] == '' ) $ideaPoints['total'] = 0;
 
-$userVoteLeft = elgg_get_annotations(array(
-	'container_guid' => $container->guid,
-	'annotation_names' => 'point',
-	'annotation_calculation' => 'sum',
-	'annotation_owner_guids' => $user_guid,
-	'limit' => 0
-));
-$userVoteLeft = 10 - $userVoteLeft;
+$ideaPoints['userPoints'] = $ideaPoints['userPoints'];
 
-$voteString = $userVote;
-if ( $userVote == '' || $userVote == '0' ) $voteString = $userVote = 'vote';
-if ( $userVoteLeft <= 0 && $userVote == 'vote' ) $userVote = '0';
+$userPointsLeft = brainstorm_user_points_left($container->getGUID());
+
+$voteString = $ideaPoints['userPoints'];
+if ( $ideaPoints['userPoints'] == '' || $ideaPoints['userPoints'] == '0' ) $voteString = $ideaPoints['userPoints'] = 'vote';
+if ( $userPointsLeft <= 0 && $ideaPoints['userPoints'] == 'vote' ) $ideaPoints['userPoints'] = '0';
 
 if ( !$container->canWriteToContainer($user) ) {
-	$vote = "<div class='idea-points mbs'>$sum</div>";
+	$vote = "<div class='idea-points mbs'>{$ideaPoints['total']}</div>";
 } elseif ( $idea->status == 'completed' || $idea->status == 'declined' ) {
-	$vote = "<div class='idea-points mbs'>$sum</div>" .
+	$vote = "<div class='idea-points mbs'>{$ideaPoints['total']}</div>" .
 	"<div class='idea-rate-button idea-status'>$voteString</div>";
 } else {
-	$vote = "<div class='idea-points mbs'>$sum</div>" .
-		"<a class='idea-rate-button idea-value-$userVote' rel='popup' href='#vote-popup-{$idea->guid}'>$voteString</a>" .
-		"<div id='vote-popup-{$idea->guid}' class='elgg-module-popup brainstorm-vote-popup'>" .
-			"<div class='triangle gris'></div><div class='triangle blanc'></div>" .
+	$vote = "<div class='idea-points mbs'>{$ideaPoints['total']}</div>" .
+		"<a class=\"idea-rate-button idea-value-{$ideaPoints['userPoints']}\" rel=\"popup\" href=\"#vote-popup-{$idea->guid}\">$voteString</a>" .
+		"<div id=\"vote-popup-{$idea->guid}\" class=\"elgg-module-popup brainstorm-vote-popup\">" .
+			'<div class="triangle gris"></div><div class="triangle blanc"></div>' .
 			elgg_view_form('brainstorm/vote_popup') .
 		"</div>";
 }
 
 $status = $idea->status;
+$status_array = unserialize($container->brainstorm_status);
+$status_string = $status_array[$status] ? $status_array[$status] : elgg_echo('brainstorm:'.$status);
 
 if ($full == 'full' && !elgg_in_context('gallery')) {
 
 	$idea_info = elgg_view_image_block($owner_icon, $list_body, array('class' => 'mbs'));
 
-	if ($idea->status_info || $status == 'completed' || $status == 'declined') {
+	if ( $status != 'open') {
 		$status_info = "<div class='mts'>" . elgg_view('output/longtext', array('value' => $idea->status_info)) . '</div>';
-		$idea_status = "<div class='idea-status pam mtl'><strong>" . elgg_echo('brainstorm:state') . "</strong><span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>$status_info</div>";
+		$idea_status = "<div class='idea-status pam mtl'><strong>" . elgg_echo('brainstorm:state') . "</strong><span class='status mls $status'>" . $status_string . "</span>$status_info</div>";
 	}
 
 	echo <<<HTML
@@ -148,9 +135,12 @@ if ($full == 'full' && !elgg_in_context('gallery')) {
 HTML;
 
 } elseif ($full == 'sidebar') {
-
+	if ($status != 'open') {
+		$tooltip = 'tooltip e';
+		$tooltip_title = $status_string;
+	}
 	echo <<<HTML
-<div class="mrs idea-value-$userVote $status">$userVote</div>
+<div class="mrs $tooltip e idea-value-{$ideaPoints['userPoints']} $status" title="$tooltip_title">{$ideaPoints['userPoints']}</div>
 <h3>$title_link</h3>
 HTML;
 
@@ -158,11 +148,11 @@ HTML;
 	$content = elgg_get_excerpt($idea->description);
 
 	if ( $status != 'open') {
-		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+		$idea_status = "<span class='status $status'>" . $status_string . "</span>";
 	}
 
 	echo <<<HTML
-<div class="idea-left-column mts mbs"><div class="idea-points mbs">$sum</div></div>
+<div class="idea-left-column mts mbs"><div class="idea-points mbs">{$ideaPoints['total']}</div></div>
 <div class="idea-content mts">
 	<h3>$title_link</h3>
 	<div class="elgg-subtext">$subtitle</div>
@@ -174,11 +164,11 @@ HTML;
 	$content = elgg_get_excerpt($idea->description);
 
 	if ( $status != 'open') {
-		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+		$idea_status = "<span class='status $status'>" . $status_string . "</span>";
 	}
 
 	echo <<<HTML
-<div class="idea-left-column mts mbs"><div class="idea-points mbs">$sum</div></div>
+<div class="idea-left-column mts mbs"><div class="idea-points mbs">{$ideaPoints['total']}</div></div>
 <div class="idea-content mts">
 	<h3>$title_link $idea_status</h3>
 	<div class="elgg-subtext">$subtitle</div>
@@ -201,7 +191,7 @@ HTML;
 	}
 
 	if ( $status != 'open') {
-		$idea_status = "<span class='status mls $status'>" . elgg_echo('brainstorm:'.$status) . "</span>";
+		$idea_status = "<span class='status $status'>" . $status_string . "</span>";
 	}
 
 
