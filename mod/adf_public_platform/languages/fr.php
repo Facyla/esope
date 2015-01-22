@@ -685,6 +685,10 @@ $fr = array(
 	'groups:hint:customtab7' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'esope:autorefresh' => "Rafraîchissement automatique de la discussion",
+	'esope:autorefresh:no' => "Désactivé (par défaut)",
+	'esope:autorefresh:latest' => "Dernières publications",
+	'esope:autorefresh:likes' => "Nombre de Likes",
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
@@ -783,7 +787,7 @@ $fr = array(
 	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
 	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
 	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
-	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
 	// Group actions and infos
 	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
@@ -802,7 +806,8 @@ $fr = array(
 	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	// Plugins tools
-	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
 	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
 	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
 	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",

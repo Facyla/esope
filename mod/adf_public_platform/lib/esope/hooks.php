@@ -266,6 +266,7 @@ function adf_platform_owner_block_menu($hook, $type, $return, $params) {
 }
 
 // Tri alphabétique des entrées du menu
+// Note : il n'y a normalement qu'un seul menu 'default'
 function adf_platform_sort_menu_alpha($hook, $type, $return, $params) {
 	foreach ($return as $key => $menu) {
 		usort($return[$key], 'esope_menu_alpha_cmp');

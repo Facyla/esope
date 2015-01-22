@@ -55,6 +55,10 @@ function esope_init() {
 		elgg_extend_view('object/groupforumtopic', 'adf_platform/forum_autorefresh');
 	}
 	
+	// Ajout interface de chargement
+	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
+	//elgg_extend_view('page/elements/footer', 'adf_platform/loader');
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', 'mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI
@@ -1999,15 +2003,28 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 }
 
 // Callback function to be used when comparing 2 menu items
+// It is used to compare menu elements that include FontAwesome icons and/or starting spaces
 function esope_menu_alpha_cmp($a, $b) {
-	$a = strip_tags($a->getText());
-	$b = strip_tags($b->getText());
+	$a = trim(strip_tags($a->getText()));
+	$b = trim(strip_tags($b->getText()));
 	if ($a == $b) { return 0; }
 	//return strcmp($a,$b);
 	// Comparaison insensible à la case
 	return strcasecmp($a,$b);
 }
 
+
+// Callback function to be used when comparing 2 annotations likes count
+function esope_annotation_likes_cmp($a, $b) {
+	$al = new AnnotationLike($a->id);
+	$bl = new AnnotationLike($b->id);
+	if (!$al->isValid() || !$bl->isValid()) { return 0; }
+	$ac = $al->count();
+	$bc = $bl->count();
+	if ($ac == $bc) return 0;
+	// Use reverse order : max on top
+	return strcmp($bc, $ac);
+}
 
 
 

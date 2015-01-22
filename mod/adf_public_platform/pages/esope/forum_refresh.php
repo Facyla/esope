@@ -3,6 +3,8 @@
 $guid = get_input('guid', false);
 $lower_ts = get_input('lower_ts', 0);
 
+$sort = get_input('sort', false);
+
 /* @var ElggGroup $group */
 $entity = get_entity($guid);
 if (!elgg_instanceof($entity, 'object')) { exit; }
@@ -17,12 +19,17 @@ if ($lower_ts > 0) { $options['annotation_created_time_lower'] = $lower_ts; }
 
 // Pour éviter les doubles tirets de séparation
 // Cleaner listing : remove enclosing <ul class="elgg-list elgg-list-annotation elgg-annotation-list">...</ul>
-$annotations = elgg_list_annotations($options);
+$annotations = elgg_get_annotations($options);
+
+// Tri par nombre de likes
+if ($sort == 'likes') { usort($annotations, 'esope_annotation_likes_cmp'); }
+
+$return = elgg_view_annotation_list($annotations, array());
 $start_delimiter = '<ul class="elgg-list elgg-list-annotation elgg-annotation-list">';
 $end_delimiter = '</ul>';
-$start = strpos($annotations, $start_delimiter) + strlen($start_delimiter);
-$end = strrpos($annotations, '</ul>') - $start;
-$annotations = substr($annotations, $start, $end);
+$start = strpos($return, $start_delimiter) + strlen($start_delimiter);
+$end = strrpos($return, '</ul>') - $start;
+$annotations = substr($return, $start, $end);
 
 echo $annotations;
 

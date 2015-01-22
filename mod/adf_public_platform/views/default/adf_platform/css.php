@@ -723,6 +723,12 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #group-tool-tabs .group-tool-tab .fa { font-size: 3em; }
 #group-tool-tabs .group-tool-tab.elgg-state-selected, #group-tool-tabs .group-tool-tab:hover { background-color:<?php echo $linkcolor; ?>; color:white; }
 
+#autorefresh-menu { margin: 0.5ex 0; padding: 1ex 3ex; border: 1px dotted; background: #efefef; }
+#loader { position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: 10000;
+	background: rgba(0,0,0,0.2); color: #FFF; text-shadow: 0px 1px 2px #000;
+	text-align: center; font-size: 10ex; padding-top:5ex;
+}
+
 
 
 <?php if (!$fixedwidth) { ?>
