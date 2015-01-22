@@ -101,6 +101,17 @@ $english = array(
 	'feedback:reopen:success' => "Feedback marked as open.",
 	'feedback:reopen:error' => "Unable to re-open this feedback",
 	
+	// Feedbacks menu
+	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:open' => "%s opened",
+	'feedback:menu:closed' => "%s closed",
+	'feedback:menu:content' => "%s reports",
+	'feedback:menu:bug' => "%s bugs",
+	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:question' => "%s questions",
+	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:other' => "%s other / unsorted",
+	
 	// About - feedback types
 	'feedback:about' => "of type",
 	'feedback:about:question' => "Question",

@@ -10,7 +10,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && elgg_is_logged_in()) {
 				echo '<div class="elgg-module elgg-module-group elgg-module-group-feedback elgg-module-info">';
 					echo '<div class="elgg-head">';
 						echo '<span class="groups-widget-viewall"><a rel="nofollow" title="' . elgg_echo('feedback:admin:title') . ', ' . elgg_echo('viewall') . '" href="' . $vars['url'] . 'feedback/group/' . $page_owner->guid . '">' . elgg_echo('link:view:all') . '</a></span>';
-						echo '<h3>' . elgg_echo('feedback:admin:title') . '</h3>';
+						echo '<h3><i class="fa fa-bullhorn"></i> ' . elgg_echo('feedback:admin:title') . '</h3>';
 					echo '</div>';
 					echo '<div class="elgg-body">';
 						echo elgg_view('feedback/list_feedbacks', array());
