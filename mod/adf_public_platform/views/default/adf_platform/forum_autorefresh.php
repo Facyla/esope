@@ -1,6 +1,6 @@
 <?php
 // Display only in full view mode
-if (elgg_in_context('listing') || elgg_in_context('widget')) { return; }
+if (!$vars['full_view']) { return; }
 
 $refresh = get_input('refresh');
 $refresh_sort = get_input('refresh_sort', 'latest');
