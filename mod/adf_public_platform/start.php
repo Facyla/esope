@@ -161,9 +161,11 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
 	
-	// Modification des menus des groupes
+	// Modification des menus des groupes et membres (ajout/suppression)
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'adf_platform_owner_block_menu', 1000);
+	// Tri avant affichage des menus des groupes et membres
+	elgg_register_plugin_hook_handler('prepare', 'menu:owner_block', 'adf_platform_sort_menu_alpha');
 	
 	// Modification de la page de listing des sous-groupes
 	if (elgg_is_active_plugin('au_subgroups')) {
@@ -1996,6 +1998,15 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 	return $handler($from, $to, $subject, $body, $params);
 }
 
+// Callback function to be used when comparing 2 menu items
+function esope_menu_alpha_cmp($a, $b) {
+	$a = strip_tags($a->getText());
+	$b = strip_tags($b->getText());
+	if ($a == $b) { return 0; }
+	//return strcmp($a,$b);
+	// Comparaison insensible à la case
+	return strcasecmp($a,$b);
+}
 
 
 

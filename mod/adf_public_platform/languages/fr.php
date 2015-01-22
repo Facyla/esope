@@ -828,6 +828,7 @@ $fr = array(
 	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
+	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
 );
 
