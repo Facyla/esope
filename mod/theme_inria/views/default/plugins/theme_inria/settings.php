@@ -2,11 +2,13 @@
 
 $plugin = $vars["entity"];
 
-$no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
+$no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
+$yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 $count_opt = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
 
 $site_email = elgg_get_site_entity()->email;
 
+echo '<fieldset><legend>Gestion du menu "Aide"</legend>';
 echo '<p><label>Nombre de liens dans le menu Aide</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[help_menu_count]', 'options_values' => $count_opt, 'value' => $vars['entity']->help_menu_count )) . '</p>';
 
 if ($vars['entity']->help_menu_count > 0) {
@@ -24,15 +26,17 @@ if ($vars['entity']->help_menu_count > 0) {
 	}
 	echo '</p>';
 }
+echo '</fieldset>';
 
-echo '<h3>Notification de création des comptes</h3>';
 
+echo '<fieldset><legend>Notification de création des comptes</legend>';
 echo '<p>';
 echo "Vous pouvez définir jusqu'à 3 personnes qui seront prévenues par mail de la création de tout nouveau compte par des membres Inria</p>";
 echo '<label>Identifiant 1 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify1]', 'value' => $vars['entity']->{'useradd_notify1'} )) . '<br />';
 echo '<label>Identifiant 2 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify2]', 'value' => $vars['entity']->{'useradd_notify2'} )) . '<br />';
 echo '<label>Identifiant 3 </label> ' . elgg_view('input/text', array( 'name' => 'params[useradd_notify3]', 'value' => $vars['entity']->{'useradd_notify3'} ));
 echo '</p>';
+echo '</fieldset>';
 
 
 echo '<fieldset><legend>Gestion des inscriptions</legend>';
@@ -49,7 +53,6 @@ echo "<p>Vous pouvez choisir de ne pas activer les comptes, et requérir une val
 
 echo '<p><label>Validation manuelle des comptes par un admin</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[admin_validation]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->admin_validation )) . '</p>';
 
-
 /*
 echo "<div>";
 echo elgg_echo("html_email_handler:settings:notifications");
@@ -57,8 +60,17 @@ echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notification
 echo "<div class='elgg-subtext'>" . elgg_echo("html_email_handler:settings:notifications:subtext") . "</div>";
 echo "</div>";
 */
+echo '</fieldset>';
+
+
+echo '<fieldset><legend>Blocage des notifications des Discussions dans certains groupes</legend>';
+echo "<p>Ceci permet de bloquer totalement l'envoi de notifications dans certains groupes, quels que soient les réglages de notifications définis dans ce groupe. L'intérêt est d'éviter de recevoir des flots d'email lors de l'utilisation d'applications mobiles ou de systèmes d'actualisation des discussions en temps réel.</p>";
+echo '<p><label>GUID des groupes (guid1, guid2, etc.) </label> ' . elgg_view('input/text', array( 'name' => 'params[block_notif_forum_groups]', 'value' => $vars['entity']->{'block_notif_forum_groups'} )) . '</p>';
+echo '<p><label>Bloquer les notifications lors de la création de nouveaux sujets</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[block_notif_forum_groups_object]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_object)) . '</p>';
+echo '<p><label>Bloquer les notifications des réponses</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[block_notif_forum_groups_replies]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_replies)) . '</p>';
 
 echo '</fieldset>';
+
 
 echo "</div>";
 
