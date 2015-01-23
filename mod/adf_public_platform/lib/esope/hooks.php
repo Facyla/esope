@@ -249,18 +249,31 @@ function adf_platform_owner_block_menu($hook, $type, $return, $params) {
 			if ($return) foreach ($return as $key => $item) {
 				$name = $item->getName();
 				//echo $name . ","; // debug: helps finding name if you don't want to look into each plugin hook
-				if (in_array($name, $remove_user_tools)) unset($return[$key]);
-				else if (elgg_in_context($name)) $item->setSelected();
+				if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+				else if (elgg_in_context($name)) { $item->setSelected(); }
 			}
 		}
 	} else {
 		if ($return) foreach ($return as $key => $item) {
-			if (elgg_in_context($item->getName())) $item->setSelected();
+			if (elgg_in_context($item->name)) { $item->setSelected(); }
 		}
 	}
 	
+	// Tri alphabétique des entrées du menu
+	//usort($return, 'esope_menu_alpha_cmp'); 
+	
 	return $return;
 }
+
+// Tri alphabétique des entrées du menu
+// Note : il n'y a normalement qu'un seul menu 'default'
+function adf_platform_sort_menu_alpha($hook, $type, $return, $params) {
+	foreach ($return as $key => $menu) {
+		usort($return[$key], 'esope_menu_alpha_cmp');
+	}
+	return $return;
+}
+
 
 /* Boutons des widgets */
 // @TODO : make this a view, for easier theming..

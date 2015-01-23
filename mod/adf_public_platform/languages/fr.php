@@ -666,7 +666,7 @@ $fr = array(
 	'adf_platform:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'adf_platform:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
-	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes (activer avec le paramètre d'URL ?autorefresh=auto)",
+	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
 	'esope:groups:disable_widgets:loggedin' => "Seulement si connecté",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
@@ -685,6 +685,12 @@ $fr = array(
 	'groups:hint:customtab7' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'esope:autorefresh' => "Rafraîchissement automatique",
+	'esope:autorefresh:no' => "Non",
+	'esope:autorefresh:yes' => "Oui",
+	'esope:autorefresh:sortby' => "tri par",
+	'esope:autorefresh:latest' => "Date",
+	'esope:autorefresh:likes' => "Likes",
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
@@ -783,7 +789,7 @@ $fr = array(
 	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
 	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
 	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
-	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
 	// Group actions and infos
 	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
@@ -802,7 +808,8 @@ $fr = array(
 	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	// Plugins tools
-	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
 	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
 	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
 	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
@@ -828,6 +835,7 @@ $fr = array(
 	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
+	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
 );
 

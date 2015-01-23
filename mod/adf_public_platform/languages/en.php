@@ -687,6 +687,12 @@ $en = array(
 	'groups:hint:customtab7' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab8' => "Custom tab n°8 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'esope:autorefresh' => "Automatic discussion refresh",
+	'esope:autorefresh:no' => "No",
+	'esope:autorefresh:yes' => "Yes",
+	'esope:autorefresh:sortby' => "sort by",
+	'esope:autorefresh:latest' => "Latest",
+	'esope:autorefresh:likes' => "Likes",
 	
 	'esope:bookmarks:container' => "Publish in...",
 	'esope:container:option:own' => "%s (own)",
@@ -782,7 +788,8 @@ $en = array(
 	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
 	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
 	// Plugins tools
-	'au_sets:user' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
 	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
 	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
 	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",

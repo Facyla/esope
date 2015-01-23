@@ -92,6 +92,8 @@ $font6 = $css['font6'];
 	font-weight: normal;
 	padding: 4px 0 5px 30px;
 }
+/* Inner elements same color as header */
+.elgg-module-info > .elgg-head h3 * { color: <?php echo $color14; ?>; }
 .elgg-module-info > .elgg-body {
 	padding:7px 10px 0;
 	/* background: white url("<?php echo $urlicon; ?>bottom-module.png") 50% bottom no-repeat scroll; */
@@ -371,10 +373,13 @@ section div.module footer a:active { text-decoration: none; }
 
 
 /* Icônes dans les entêtes des modules des groupes */
+
 .elgg-module-group .elgg-head h3 {
 	background-position: left 0px; background-color: transparent; background-repeat: no-repeat;
-	min-height: 20px; padding-left: 36px; margin: 5px 0 3px 5px;
+	min-height: 20px; margin: 5px 0 3px 5px; padding-left: 0px;
 }
+/*
+.elgg-module-group .elgg-head h3 { padding-left: 36px; }
 .elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>activity-module.png"); }
 .elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>event_calendar-module.png"); }
 .elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>announcements-module.png"); }
@@ -384,12 +389,13 @@ section div.module footer a:active { text-decoration: none; }
 .elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>brainstorm-module.png"); }
 .elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>bookmarks-module.png"); }
 .elgg-module-group-pages .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>pages-module.png"); }
+*/
 
 
 /* à vérifier pour effets sur diverses pages */
 .elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.9em; }
 .groups-widget-viewall { margin:10px 6px 0 0; }
-.elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 1em; }
+.elgg-module span.groups-widget-viewall a, .elgg-module span.groups-widget-viewall a * { color: <?php echo $color14; ?>; font-size: 1em; }
 .elgg-module-info > .elgg-body { padding: 7px 0 0; }
 .elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
 .elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }
