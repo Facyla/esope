@@ -4,6 +4,8 @@ $guid = get_input('guid', false);
 $lower_ts = get_input('lower_ts', 0);
 
 $sort = get_input('sort', false);
+$order = get_input('order', 'asc');
+if ($order != 'desc') { $order = 'asc'; }
 
 /* @var ElggGroup $group */
 $entity = get_entity($guid);
@@ -13,7 +15,7 @@ $options = array(
 	'guid' => $guid,
 	'annotation_name' => 'group_topic_post',
 	'limit' => 0,
-	'order_by' => 'time_created desc',
+	'order_by' => "time_created $order",
 );
 if ($lower_ts > 0) { $options['annotation_created_time_lower'] = $lower_ts; }
 

@@ -17,5 +17,7 @@ if ($al->like($userid)){
 	system_message(elgg_echo('annotations:error'));
 }
 
-forward($al->getAnnotation()->getEntity()->getURL());
+//forward($al->getAnnotation()->getEntity()->getURL());
+// Back to the same exact page as before action !
+forward(REFERER);
 

@@ -688,7 +688,9 @@ $en = array(
 	'groups:customtab8' => "Custom tab n°8 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'esope:autorefresh' => "Automatic discussion refresh",
-	'esope:autorefresh:no' => "Disabled (regular)",
+	'esope:autorefresh:no' => "No",
+	'esope:autorefresh:yes' => "Yes",
+	'esope:autorefresh:sortby' => "sort by",
 	'esope:autorefresh:latest' => "Latest",
 	'esope:autorefresh:likes' => "Likes",
 	

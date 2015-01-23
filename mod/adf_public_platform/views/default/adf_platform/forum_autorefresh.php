@@ -10,9 +10,22 @@ echo '<div id="autorefresh-menu">';
 echo elgg_echo('esope:autorefresh') . ' : ';
 if ($refresh == 'auto') {
 	echo '<a href="' . $vars['entity']->getURL() . '">' . elgg_echo('esope:autorefresh:no') . '</a> &nbsp; ';
+	echo '<strong>' . elgg_echo('esope:autorefresh:yes') . '</strong>';
+	echo '<span style="float:right;">' . elgg_echo('esope:autorefresh:sortby') . ' ';
+		if ($refresh_sort == 'likes') {
+			echo '<a href="' . $vars['entity']->getURL() . '?refresh=auto">' . elgg_echo('esope:autorefresh:latest') . '</a> &nbsp; ';
+			echo '<strong>' . elgg_echo('esope:autorefresh:likes') . '</strong>';
+		} else {
+			echo '<strong>' . elgg_echo('esope:autorefresh:latest') . '</strong> &nbsp; ';
+			echo '<a href="' . $vars['entity']->getURL() . '?refresh=auto&refresh_sort=likes">' . elgg_echo('esope:autorefresh:likes') . '</a>';
+		}
+	echo '</span>';
 } else {
 	echo '<strong>' . elgg_echo('esope:autorefresh:no') . '</strong> &nbsp; ';
+	echo '<a href="' . $vars['entity']->getURL() . '?refresh=auto">' . elgg_echo('esope:autorefresh:yes') . '</a> &nbsp; ';
 }
+
+/*
 if (($refresh == 'auto') && ($refresh_sort != 'likes')) {
 	echo elgg_echo('esope:autorefresh:latest') . ' &nbsp; ';
 } else {
@@ -23,6 +36,7 @@ if (($refresh == 'auto') && ($refresh_sort == 'likes')) {
 } else {
 	echo '<a href="' . $vars['entity']->getURL() . '?refresh=auto&refresh_sort=likes">' . elgg_echo('esope:autorefresh:likes') . '</a>';
 }
+*/
 echo '</div>';
 
 // Stop here if autorefresh is disabled
