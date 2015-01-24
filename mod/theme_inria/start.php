@@ -164,6 +164,16 @@ function theme_inria_init(){
 	// and is added and triggered by ESOPE when using plugins that replace it
 	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
 	
+	// Hook pour bloquer les notifications si on a demandé à les désactiver
+	// Note : load at first, because we want to block the process early, if it needs to be blocked
+	// See html_email_handler :
+	// Facyla : warning, if a plugin hook returned "true" (e.g. for blocking notification process), this won't be handled, so we should check it before going through the whole process !!
+	elgg_register_plugin_hook_handler('object:notifications', 'all', 'theme_inria_object_notifications_block', 1);
+	// Block annotations : use hook on notify:annotation:message => return false
+	// @TODO  : non opérationnel car pas de moyen de bloquer à temps les notifications, envoyées via divers plugins qui s'appuient des events...
+	//elgg_register_plugin_hook_handler('notify:annotation:message', 'group_topic_post', 'theme_inria_annotation_notifications_block', 1000);
+	//elgg_register_event_handler('create','annotation','theme_inria_annotation_notifications_event_block', 1);
+	
 	
 }
 

@@ -792,7 +792,8 @@ $fr = array(
 	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
 	// Group actions and infos
-	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
+	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Gérer les responsables du groupe",
+	'groups:membershiprequests:pending' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
 	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
 	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
 	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Membre du groupe",

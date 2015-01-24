@@ -772,7 +772,8 @@ $en = array(
 	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
 	// Group actions and infos
-	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Manage group admins",
+	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Manage group admins",
+	'groups:membershiprequests:pending' => "<i class=\"fa fa-users fa-fw\"></i> Group invitations (%s)",
 	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Join group",
 	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Group owner",
 	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Group member",
