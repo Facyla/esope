@@ -8,6 +8,7 @@ $padding_left = '0';
 /* Adds a placeholder before text so there is no icon overlap */
 .access-icon-placeholder { display: inline-block; width: 18px; }
 
+.elgg_access { display: inline-block; }
 .elgg-access a { display: inline-block; margin-left: -<?php echo $padding_left; ?>; padding-left: <?php echo $padding_left; ?>; min-height: 16px; min-width:16px; text-decoration:none; }
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
 .elgg-list-access { float:right; font-size:12px; margin-left: 15px; margin-top: 6px; }
