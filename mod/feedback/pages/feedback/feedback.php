@@ -85,9 +85,9 @@ $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-ca
 if (full_url() == $base_url) $selected = ' class="elgg-state-selected"'; else $selected = '';
 $sidebar .= '<li' . $selected . '><a href="'.$base_url.'feedback">' . elgg_echo('feedback:menu:total', array($all_feedback_count)) . '</a></li>';
 if (full_url() == $base_url . 'status/open') $selected = ' class="elgg-state-selected"'; else $selected = '';
-$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/open">' . elgg_echo('feedback:menu:total', array($feedback_open)) . '</a></li>';
+$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/open">' . elgg_echo('feedback:menu:open', array($feedback_open)) . '</a></li>';
 if (full_url() == $base_url . 'status/closed') $selected = ' class="elgg-state-selected"'; else $selected = '';
-$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/closed">' . elgg_echo('feedback:menu:total', array($feedback_closed)) . '</a></li>';
+$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/closed">' . elgg_echo('feedback:menu:closed', array($feedback_closed)) . '</a></li>';
 $sidebar .= '</ul>';
 $sidebar .= '<h2>' . elgg_echo('feedback:status:open'). '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
