@@ -437,11 +437,12 @@ function theme_inria_block_email($hook, $type, $return, $params) {
 
 // Block sending notification in some groups' discussions (new topic object only)
 // Return true to block sending
+// See also event function theme_inria_annotation_notifications_event_block
 function theme_inria_object_notifications_block($hook, $entity_type, $returnvalue, $params) {
 	$subtype = $params['object']->getSubtype();
 	$block_o = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
 	$block_r = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
-	error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$params['object']->container_guid}");
+	//error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$params['object']->container_guid}");
 	if ($subtype == 'groupforumtopic') {
 		$block = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
 		if ($block == 'yes') {
@@ -455,56 +456,5 @@ function theme_inria_object_notifications_block($hook, $entity_type, $returnvalu
 	// Don't change default behaviour
 	return $returnvalue;
 }
-
-// Block sending notification in some groups' discussions (replies only)
-// Return false to block sending
-// @TODO : n'est pas activé lors de l'utilisation de plugins de gestion des notifications sur les annotations (commen_tracker...)
-function theme_inria_annotation_notifications_block($hook, $entity_type, $returnvalue, $params) {
-$annotation = $params['annotation'];
-$entity = $annotation->getEntity();
-$test = print_r($annotation, true);
-error_log("DEBUG notif annotation block : $entity->getType() // $test");
-	$block = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
-	if ($block == 'yes') {
-		// Get blocked groups setting
-		$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
-		$blocked_guids = esope_get_input_array($blocked_guids);
-		$group_guid = $params['object']->getContainerGUID();
-		if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { 
-error_log("  => A BLOQUER");
-			//return false;
-			return false;
-		}
-	}
-	// Don't change default behaviour
-	return $returnvalue;
-}
-
-// Intercepts create,annotation event early and block sending messages
-// @TODO : how to block effectively notification sending ?  by unregistering other events handlers ?
-function theme_inria_annotation_notifications_event_block($event, $type, $annotation) {
-	if (($type == 'annotation') && ($annotation->name == "group_topic_post")) {
-		$block = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
-		if ($block == 'yes') {
-			// Get blocked groups setting
-			$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
-			$blocked_guids = esope_get_input_array($blocked_guids);
-			$group_guid = $annotation->getEntity()->getContainerGUID();
-			if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { 
-				error_log("  => A BLOQUER");
-				/*
-				global $CONFIG;
-				$CONFIG->events['create']['annotation'] = null;
-				error_log("  => A BLOQUER");
-				
-				elgg_unregister_event_handler("create", "annotation", "comment_tracker_notifications");
-				elgg_unregister_event_handler("create", "annotation", "advanced_notifications_create_annotation_event_handler");
-				*/
-			}
-		}
-	}
-}
-
-
 
 
