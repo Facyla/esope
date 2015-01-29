@@ -24,6 +24,10 @@ $french = array(
 	'theme_cocon:login' => "Connexion",
 	'theme_cocon:menu:live' => "Visioconférence",
 	
+	'cocon_etablissement' => "Etablissement",
+	'cocon_discipline' => "Discipline",
+	'cocon_fonction' => "Fonction",
+	
 	'theme_cocon:field:etablissement' => "Etablissement",
 	'theme_cocon:field:discipline' => "Discipline",
 	'theme_cocon:field:fonction' => "Fonction",
