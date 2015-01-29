@@ -38,6 +38,7 @@
 		mkdir("../_tmp/".$gid);
 	}
 	
+	error_log("../_files/".$file.".".$format);
 	$content = file_get_contents("../_files/".$file.".".$format);
 	file_put_contents("../_tmp/".$gid."/".$file.".".$format, $content);
 	

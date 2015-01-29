@@ -4,6 +4,9 @@
  */
 
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))) . '/engine/start.php';
+// Return information only to loggedin users
+if (!elgg_is_logged_in()) { exit; }
+
 /*
 session_start();
 
@@ -47,9 +50,9 @@ if($_server == 'prod'){
 
 // Intégration Cocon Méthode : chemins et BDD
 global $CONFIG;
-$root_path = $CONFIG->url . 'cocon_methode/vendors/cocon_methode';
+$root_path = elgg_get_root_path() . 'cocon_methode/vendors/cocon_methode';
 $inc_path = $root_path . '/php/inc';
-$url_base = $CONFIG->url;
+$url_base = elgg_get_site_url() . 'mod/cocon_methode/vendors/cocon_methode';
 $dbhost = $CONFIG->dbhost;
 $dbuser = $CONFIG->dbuser;
 $dbpass = $CONFIG->dbpass;
@@ -75,7 +78,10 @@ define('EMAIL_SENDER', $email_sender); // Expéditeur de message email
 	$gid est une chaine contenant l'ID du groupe cocon demandé
 */
 function getConfiguration($gid){
-
+	$cocon_url = elgg_get_site_url();
+	$cocon_url = rtrim($cocon_url, '/');
+	$methode_url = $cocon_url . '/mod/cocon_methode/vendors/cocon_methode';
+	
 	$config = array(
 		"error" => false,
 		"error_string" => "",
@@ -84,7 +90,9 @@ function getConfiguration($gid){
 		"group_name" => "", // Nom du groupe CoCon associé au visiteur
 		"user_id" => "", // ID du visiteur
 		"user_name" => "", // Nom et prénom du visiteur
-		"user_role" => -1 // Role du visiteur
+		"user_role" => -1, // Role du visiteur
+		"cocon_url" => $cocon_url, // Base URL for Cocon site
+		"methode_url" => $methode_url, // Base URL for Méthode plugin
 	);
 
 	// Récupère le cycle en cours du groupe CoCon
@@ -144,39 +152,22 @@ function getEnseignantsInfos($gid){
 	*/
 	/*
 	$infos = array(
-	
+		
 		array(
-			'user_id' => 'bbideaux',
-			'user_name' => 'Baptiste Bideaux',
-			'user_email' => 'baptiste.bideaux@fr.pwc.com'
-		),
-
-		array(
-			'user_id' => 'obaudry',
-			'user_name' => 'Olivier Baudry',
-			'user_email' => 'obaudry@bebetterandco.com'
-		),
-
-		array(
-			'user_id' => 'acrouchette',
-			'user_name' => 'Anne-Cécile Rouchette',
-			'user_email' => 'anne-cecile.rouchette@alenium.com'
+			'user_id' => 'user_id',
+			'user_name' => 'User Name',
+			'user_email' => 'user_email@domain.tld'
 		),
 		
 		array(
-			'user_id' => 'hghariani',
-			'user_name' => 'Héla Ghariani',
-			'user_email' => 'hela.ghariani@modernisation.gouv.fr'
+			'user_id' => 'user2_id',
+			'user_name' => 'User2 Name',
+			'user_email' => 'user2_email@domain.tld'
 		),
-
-		array(
-			'user_id' => 'mmontaner',
-			'user_name' => 'Michael Montaner',
-			'user_email' => 'michael.montaner@fr.pwc.com'
-		)
+		
 	);
 	*/
 	
 	return $infos;
 }
-?>
+

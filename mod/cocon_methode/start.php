@@ -31,14 +31,51 @@ function cocon_methode_get_user_group($user_guid = false) {
 	}
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
-	// @TODO : déterminer le groupe associé à l'utilisateur - a priori celui de l'établissement correspondant
-	// Peut dépendre aussi du rôle de l'utilisateur
-	/*
-	$user_group = elgg_get_entities_from_metdata(array('type' => 'group', 'metadata_name_pair_values' => array('metadata_name' => 'code_etablissement', 'metadata_value' => $user->code_etablissement)));
-	*/
+	// Create group is it doesn't exist yet
+	if (empty($user->cocon_etablissement)) { return false; }
 	
+	// Détermine le groupe associé à l'utilisateur - a priori celui de l'établissement correspondant
+	$user_group = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'cocon_etablissement', 'value' => $user->cocon_etablissement)));
+	$group = $user_group[0];
+	
+	
+	// Create group is it does not exist
+	if (!elgg_instanceof($group, 'group')) {
+		$group = cocon_create_group($user->cocon_etablissement);
+		$group->join($user);
+		error_log("COCON : group did not exist. Created : {$group->guid}");
+		// Refresh page
+		//forward('methode');
+	}
+	
+	// Join group is not member yet
+	if (elgg_instanceof($group, 'group')) {
+		if (!$group->isMember($user)) {
+			$group->join($user);
+			register_error("Vous avez été inscrit dans le groupe de votre établissement : {$group->name}");
+			//error_log("COCON : group joined");
+		}
+	}
+	
+	// @TODO Update group role if not done yet
+	$user_role = cocon_methode_get_user_role();
+	switch($user_role) {
+		case "0":
+			// Direction : admin groupe
+			break;
+		case "1":
+			// Equipe
+			break;
+		case "2":
+		default:
+			// Autre
+	}
+	
+	/*
 	$user_groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => 0));
 	$group = $user_groups[0];
+	*/
+	
 	return $group->guid;
 }
 
@@ -47,7 +84,7 @@ function cocon_methode_get_user_role($user = false) {
 	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
-	switch($user->fonction_etab) {
+	switch($user->cocon_fonction) {
 		case 'principal':
 		case 'direction':
 			$role = 0;
@@ -55,9 +92,57 @@ function cocon_methode_get_user_role($user = false) {
 		case 'equipe':
 			$role = 1;
 			break;
+		case 'autre':
 		default:
 			$role = 2;
 	}
 	return $role;
 }
+
+
+function cocon_create_group($code = false) {
+	global $CONFIG;
+	if (!$code) { return false; }
+	
+	// Avoid duplicates
+	$user_group = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'cocon_etablissement', 'value' => $code)));
+	$group = $user_group[0];
+	if (elgg_instanceof($group, 'group')) { return $group; }
+	
+	// Liste des établissements
+	$etablissements = esope_build_options($values, true);
+	//$etablissement_name = $etablissements["$code"];
+	$etablissement_name = "Etablissement $code";
+	
+	// Create new group
+	$group = new ElggGroup();
+	$group->access_id = ACCESS_PUBLIC; // Public first, private after ACL created
+	$group->owner_guid = $CONFIG->site->guid;
+	$group->name = $etablissement_name;
+	$group->membership = $is_public_membership ? ACCESS_PUBLIC : ACCESS_PRIVATE;
+	$group->save();
+	
+	// Set ACL and access
+	$visibility = $group->group_acl;
+	$group->access_id = $visibility;
+	$group->save();
+	
+	// Set main metadata for Kit Méthode Cocon
+	$group->cocon_etablissement = $code;
+	
+	// Set group tool options : disable all, enable discussions
+	$tool_options = elgg_get_config('group_tool_options');
+	if ($tool_options) {
+		foreach ($tool_options as $group_option) {
+			$option_toggle_name = $group_option->name . "_enable";
+			$group->$option_toggle_name = 'no';
+			//error_log("Group tool : $option_toggle_name");
+		}
+	}
+	// Enable discussions
+	$group->forum_enable = 'yes';
+	
+	return $group;
+}
+
 

@@ -29,4 +29,15 @@ echo "<div class='elgg-subtext'>" . elgg_echo("html_email_handler:settings:notif
 echo "</div>";
 */
 
+echo '<fieldset><legend>Configuration des champs de profil</legend>';
+echo '<p><em>Ces champs sont utilisés par le Kit Méthode Cocon</em></p>';
+
+echo "<p><label>Liste des établissements, par issue d'un fichier CSV. Une entrée par ligne, sous la forme : Nom,RNE,Académie,Département,Ville,Adresse postale,adresse courriel fonctionnelle" . elgg_view('input/plaintext', array( 'name' => 'params[etablissements]', 'value' => $vars['entity']->etablissements )) . '</label></p>';
+
+echo "<p><label>Liste des fonctions, une par ligne, sous la forme : identifiant::valeur" . elgg_view('input/plaintext', array( 'name' => 'params[fonctions]', 'value' => $vars['entity']->fonctions )) . '</label></p>';
+
+echo "<p><label>Liste des disciplines, une par ligne, sous la forme :  identifiant::valeur" . elgg_view('input/plaintext', array( 'name' => 'params[disciplines]', 'value' => $vars['entity']->disciplines )) . '</label></p>';
+
+echo '</fieldset>';
+
 

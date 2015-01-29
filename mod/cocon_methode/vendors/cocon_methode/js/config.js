@@ -30,7 +30,9 @@ var config = {
 	"group_name" : "", // Nom du groupe CoCon associé au visiteur
 	"user_id" : "", // ID du visiteur
 	"user_name" : "", // Nom et prénom du visiteur
-	"user_role" : -1 // Role du visiteur
+	"user_role" : -1, // Role du visiteur
+	"cocon_url" : "", // Base URL for Cocon site
+	"methode_url" : "" // Base URL for Méthode plugin
 };
 
 // Méthodes javascript
@@ -66,5 +68,21 @@ function loadConfig__response(_response){
 	}
 		
 	config = _response;
+	
+	
+	// Intégration Méthode : MAJ des variables pour les liens vers les outils Cocon
+	cocon_url = config.cocon_url;
+	group_url = cocon_url + "/groups/profile/" + config.group_id;
+	activite_group_url = cocon_url + "/groups/activity/" + config.group_id;
+	agenda_group_url = cocon_url + "/event_calendar/group/" + config.group_id;
+	annonces_group_url = cocon_url + "/announcements/group/" + config.group_id + "/all";
+	blog_group_url = cocon_url + "/blog/group/" + config.group_id + "/all";
+	boite_a_idees_group_url = cocon_url + "/brainstorm/group/" + config.group_id + "/top";
+	fichiers_group_url = cocon_url + "/file/group/" + config.group_id + "/all";
+	forum_group_url = cocon_url + "/discussion/owner/" + config.group_id;
+	liens_web_group_url = cocon_url + "/bookmarks/group/" + config.group_id + "/all";
+	wiki_group_url = cocon_url + "/pages/group/" + config.group_id + "/all";
+	annuaire_url = cocon_url + "/members";
+	
 	loadPage("presentation", "temps_0");
 }

@@ -854,6 +854,19 @@ if (elgg_is_active_plugin('profile_manager')) {
 		add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
 		// Percentage - interval=10
 		add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
+		
+		/* Profile fields : 
+		// registering profile field types
+		$profile_options = array(
+				"show_on_register" => true,
+				"mandatory" => true,
+				"user_editable" => true,
+				"output_as_tags" => true,
+				"admin_only" => true,
+				"count_for_completeness" => true
+			);
+		add_custom_field_type("custom_group_field_types", ...
+		*/
 	}
 	
 	/* Renvoie une autorisation d'accéder ou non

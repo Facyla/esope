@@ -3,6 +3,42 @@
 require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/engine/start.php");
 global $CONFIG;
 
+
+/*
+$own = elgg_get_logged_in_user_entity();
+$user_group = elgg_get_entities(array('type' => 'group', 'limit' => 0));
+foreach($user_group as $ent) {
+	if ($ent->name == $own->cocon_etablissement) {
+		error_log("Group {$ent->guid} {$ent->name} deleted");
+		$ent->delete();
+	}
+}
+exit;
+*/
+
+
+// Refuse non logged in users.
+gatekeeper();
+// Verrouillage des accès à l'application : groupe valide doit exister
+$own = elgg_get_logged_in_user_entity();
+$user_role = cocon_methode_get_user_role();
+// Ensure group exists and user is member, or create it if conditions are valid
+$gid = cocon_methode_get_user_group();
+
+// If we do not have a valid group, exit
+$group = get_entity($gid);
+if (!elgg_instanceof($group, 'group')) {
+	//error_log("COCON : $gid INVALIDE");
+	register_error("Pour utiliser ce kit, votre compte doit être rattaché à un établissement.");
+	forward();
+}
+
+//error_log("COCON : {$own->name}, role $user_role, membre du groupe $gid {$group->name}");
+
+// Load Cocon Kit Méthode config
+require_once(dirname(__FILE__) . "/php/inc/config.inc.php");
+
+
 $vars = array();
 
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));

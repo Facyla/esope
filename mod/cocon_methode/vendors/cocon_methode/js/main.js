@@ -8,9 +8,12 @@ jQuery.fn.center = function () {
 }
 
 $(document).ready(function(){
+/* Intégration : pas cohérent avec design Cocon
 	$(window).scroll(function(){
 		updateMenusTop();
 	});
+*/
+/* Intégration : doublon
 	$('li.home').hover(function(){
 		$('li.home ul.hidden').css('display', 'block');
 	}, function(){
@@ -34,13 +37,16 @@ $(document).ready(function(){
 	}, function(){
 		$('li.help ul.hidden').css('display', 'none');
 	});
+*/
 	
 	loadConfig();
 });
 
+/*
 function updateMenusTop(){
 	$('#menus_panel').css('top', $(window).scrollTop() + 'px');
 }
+*/
 
 function loadPage(_page, _menu){
 	if(_topic == 'temps_4'){
@@ -51,7 +57,7 @@ function loadPage(_page, _menu){
 	$("#app_content").load("php/html.php?page=" + _page + "&forced=" + Math.random());
 	_topic = _menu;
 	$(window).scrollTop(0);
-	updateMenusTop();
+	//updateMenusTop();
 }
 
 function loadFloatWin(_page){
