@@ -2,6 +2,9 @@
 /**
  * Liste des variables pr&eacute;-d&eacute;finies
  */
+
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))) . '/engine/start.php';
+/*
 session_start();
 
 $_server = 'local';
@@ -40,6 +43,31 @@ if($_server == 'prod'){
 	define('EMAIL_SENDER', 'Equipe CoCon<equipe@concon.fr>'); // Expéditeur de message email
 	define("URL_BASE", "https://pwcgloballearning.pwc.fr/sgmap");
 }
+*/
+
+// Intégration Cocon Méthode : chemins et BDD
+global $CONFIG;
+$root_path = $CONFIG->url . 'cocon_methode/vendors/cocon_methode';
+$inc_path = $root_path . '/php/inc';
+$url_base = $CONFIG->url;
+$dbhost = $CONFIG->dbhost;
+$dbuser = $CONFIG->dbuser;
+$dbpass = $CONFIG->dbpass;
+$dbname = $CONFIG->dbname . '_methode';
+$email_sender = "=?UTF-8?B?" . base64_encode($CONFIG->site->name) . "?=" . ' <' . $CONFIG->site->email . '>';
+// Chemins d'accès
+define("ROOT", $root_path);
+define("INC", $inc_path);
+define("URL_BASE", $url_base);
+// Infos base de données
+define('TYPE_SGDB','MYSQL'); // Type de base de donn&eacute;es ('MYSQL', 'PGSQL' ou 'ODBC')
+define('SGDB_SERVER', $dbhost);// Adresse du serveur de base de donn&eacute;es
+define('SGDB_PORT', '3306');// port de com du serveur de base de donn&eacute;es
+define('SGDB_USER', $dbuser);// Utilisateur de connexion au serveur de base de donn&eacute;es
+define('SGDB_PASSWORD', $dbpass);// Mot de passe de connexion au serveur de base de donn&eacute;es
+define('SGDB_DATABASE', $dbname);// Nom de la base de donn&eacute;es &agrave; utiliser
+define('EMAIL_SENDER', $email_sender); // Expéditeur de message email
+
 
 /**
 	Retourne un tableau de valeurs contenant la configuration
@@ -72,10 +100,21 @@ function getConfiguration($gid){
 	$config['cycle_id'] = $cid;
 	
 	//POUR TEST, il faudra que Florian adapte le code lors du branchement pour récupérer toutes ces valeurs depuis CoCon
+	/*
 	$config['group_name'] = 'Collège de test';
 	$config['user_id'] = 'abcd';
 	$config['user_name'] = 'Principal de test';
 	$config['user_role'] = 0;
+	*/
+	// Intégration Cocon Méthode
+	$own = elgg_get_logged_in_user_entity();
+	$group = get_entity($gid);
+	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
+	if (!$group->isMember($own->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
+	$config['group_name'] = $group->name;
+	$config['user_id'] = $user->guid;
+	$config['user_name'] = $user->name;
+	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
 	return $config;
 }
@@ -85,10 +124,25 @@ function getConfiguration($gid){
 	$gid est une chaine contenant l'ID du groupe cocon demandé
 */
 function getEnseignantsInfos($gid){
-
+	
+	// Intégration Cocon Méthode
+	$group = get_entity($gid);
+	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
+	
+	$members = $group->getMembers();
+	$infos = array();
+	foreach($members as $ent) {
+		$infos[] = array(
+				'user_id' => $ent->guid,
+				'user_name' => $ent->name,
+				'user_email' => $ent->email,
+			);
+	}
+	
 	/**
 		POUR TEST : Devra être renseigné par Florian est récupérant les données depuis la base CoCon.
 	*/
+	/*
 	$infos = array(
 	
 		array(
@@ -121,6 +175,7 @@ function getEnseignantsInfos($gid){
 			'user_email' => 'michael.montaner@fr.pwc.com'
 		)
 	);
+	*/
 	
 	return $infos;
 }

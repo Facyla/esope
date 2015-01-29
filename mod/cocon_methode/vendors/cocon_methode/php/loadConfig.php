@@ -10,7 +10,9 @@
 	header('Content-type: application/json');	
 	
 	$cid = '';
-	$gid = 'abcd'; // POUR TEST : A modifier par Florian pour alimenter la variable avec le bon ID de groupe CoCon
+	//$gid = 'abcd'; // POUR TEST : A modifier par Florian pour alimenter la variable avec le bon ID de groupe CoCon
+	// Intégration Cocon Méthode
+	$gid = cocon_methode_get_user_group();
 	
 	$config = array(
 		"error" => false,
