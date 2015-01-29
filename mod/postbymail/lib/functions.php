@@ -669,7 +669,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					$sender_subject = elgg_echo('postbymail:sender:notpublished');
 					$sender_reply = elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
 					$sender_reply = elgg_echo('postbymail:sender:debuginfo', array($sender_subject, $report, $sender_reply));
-					if (($member instanceof ElggUser) && is_email_address($member->email)) {
+					if (elgg_instanceof($member, 'user') && is_email_address($member->email)) {
 						// Si c'est le membre, on le prévient (son compte peut avoir été piraté donc on le prévient de préférence)
 						mail($member->email, $sender_subject, $sender_reply, $headers);
 					} else if (is_email_address($sendermail)) {
@@ -918,7 +918,7 @@ function postbymail_checkeligible_reply($entity, $member, $post_body, $email_hea
 	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
-	if ($entity && ($entity instanceof ElggObject)) {
+	if ($entity && elgg_instanceof($entity, 'object')) {
 		$report .= elgg_echo('postbymail:validobject', array($entity->title));
 		// Container
 		if ($group_entity = get_entity($entity->container_guid)) {
