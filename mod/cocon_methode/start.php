@@ -57,18 +57,28 @@ function cocon_methode_get_user_group($user_guid = false) {
 		}
 	}
 	
-	// @TODO Update group role if not done yet
+	// Update group role according to user role
 	$user_role = cocon_methode_get_user_role();
 	switch($user_role) {
 		case "0":
 			// Direction : admin groupe
+			if (!check_entity_relationship($user->guid, 'operator', $group->guid)) {
+				add_entity_relationship($user->guid, 'operator', $group->guid);
+				register_error("En tant que membre de la Direction, vous êtes désormais l'un des responsables du groupe de votre établissement.");
+			}
 			break;
 		case "1":
-			// Equipe
+			// Equipe : simple membre
+			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
+				remove_entity_relationship($user->guid, 'operator', $group->guid);
+			}
 			break;
 		case "2":
 		default:
-			// Autre
+			// Autre : simple membre aussi ? ou rien du tout ?
+			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
+				remove_entity_relationship($user->guid, 'operator', $group->guid);
+			}
 	}
 	
 	/*
