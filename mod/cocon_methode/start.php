@@ -96,13 +96,18 @@ function cocon_methode_get_user_role($user = false) {
 	
 	switch($user->cocon_fonction) {
 		case 'principal':
+		case 'chef':
+		case 'chefadjoint':
 		case 'direction':
 			$role = 0;
 			break;
+		case 'cpe':
 		case 'equipe':
+		case 'projet':
+		case 'enseignant':
+		case 'autre':
 			$role = 1;
 			break;
-		case 'autre':
 		default:
 			$role = 2;
 	}
