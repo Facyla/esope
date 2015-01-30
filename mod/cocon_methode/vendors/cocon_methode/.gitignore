@@ -1,13 +1,12 @@
 /bilan/
-#/css/
+/css/
 /_files/
 /fmap/
-#/fonts/
+/fonts/
 /_html/
 #/js/
-#/php/
+/php/
 /sql/
 /survey/
-#/_tmp/
-index.html
+/_tmp/
 
