@@ -854,6 +854,19 @@ if (elgg_is_active_plugin('profile_manager')) {
 		add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
 		// Percentage - interval=10
 		add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
+		
+		/* Profile fields : 
+		// registering profile field types
+		$profile_options = array(
+				"show_on_register" => true,
+				"mandatory" => true,
+				"user_editable" => true,
+				"output_as_tags" => true,
+				"admin_only" => true,
+				"count_for_completeness" => true
+			);
+		add_custom_field_type("custom_group_field_types", ...
+		*/
 	}
 	
 	/* Renvoie une autorisation d'accéder ou non
@@ -1662,8 +1675,12 @@ function esope_build_options_string($options, $prefix = 'option') {
 /* Build multi-level array from string syntax
  * $input : the settings string
  * $separators : separators definition for each level (arrays allowed for each level)
+ * Note : by default this will build a key => value(s) array, but will not eg. parse CSV-like format
+ * $nokeys : do not use key:value mode, so it will split on 2nd separator level instead of trying to find keys
+ *   Eg. will produce [] => "Some content" instead of "Some content" => true
+ *   This allows CSV parsing, eg
  */
-function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ',')) {
+function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ','), $nokeys = false) {
 	$return_array = array();
 	$input = trim($input);
 	
@@ -1680,31 +1697,58 @@ function esope_get_input_recursive_array($input, $separators = array(array("|", 
 		
 		if ($separators[1]) {
 			// Potential sublevel
-			$new_separators = array_slice($separators, 2);
 			
-			// check for sub-level config
-			if (is_array($separators[1])) {
-				foreach ($separators[1] as $sep) {
+			// No key mode : check if 2nd level separator is used, otherwise add to array
+			if ($nokeys) {
+				$new_separators = array_slice($separators, 1);
+				
+				// check for sub-level config
+				if (is_array($new_separators)) {
+					foreach ($separators[1] as $sep) {
+						$pos = strpos($option, $sep);
+						if ($pos !== false) break;
+					}
+				} else {
+					$sep = $separators[1];
 					$pos = strpos($option, $sep);
-					if ($pos !== false) break;
 				}
+				// If we have a sub-level, get nested array
+				if ($pos !== false) {
+					$return_array[] = esope_get_input_recursive_array($option, $new_separators, $nokeys);
+				} else {
+					$return_array[] = $option;
+				}
+				
 			} else {
-				$sep = $separators[1];
-				$pos = strpos($option, $sep);
+				$new_separators = array_slice($separators, 2);
+			
+				// check for sub-level config
+				if (is_array($separators[1])) {
+					foreach ($separators[1] as $sep) {
+						$pos = strpos($option, $sep);
+						if ($pos !== false) break;
+					}
+				} else {
+					$sep = $separators[1];
+					$pos = strpos($option, $sep);
+				}
+				
+				// Get nested array if any
+				if ($pos !== false) {
+					$key = trim(substr($option, 0, $pos));
+					$value = substr($option, $pos + strlen($sep));
+					$return_array[$key] = esope_get_input_recursive_array($value, $new_separators, $nokeys);
+				} else {
+					$return_array[$option] = true;
+				}
 			}
 			
-			// Get nested array if any
-			if ($pos !== false) {
-				$key = trim(substr($option, 0, $pos));
-				$value = substr($option, $pos + strlen($sep));
-				$return_array[$key] = esope_get_input_recursive_array($value, $new_separators);
-			} else {
-				$return_array[$option] = true;
-			}
 		} else {
 			// No sublevel : add option
-			// Note : we need to have value set because we're looking for rights with in_array (which looks for values, bot keys)
-			$return_array[$option] = true;
+			// Note : if using keys, we need to have value set because we're looking for rights with in_array
+			// (which looks for values, not keys)
+			if ($nokeys) $return_array[] = $option;
+			else $return_array[$option] = true;
 		}
 	}
 	return $return_array;

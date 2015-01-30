@@ -164,16 +164,30 @@ function theme_inria_init(){
 	// and is added and triggered by ESOPE when using plugins that replace it
 	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
 	
-	// Hook pour bloquer les notifications si on a demandé à les désactiver
+	// Hook pour bloquer les notifications dans certains groups si on a demandé à les désactiver
+	// 1) Blocage pour les nouveaux objets
 	// Note : load at first, because we want to block the process early, if it needs to be blocked
-	// See html_email_handler :
-	// Facyla : warning, if a plugin hook returned "true" (e.g. for blocking notification process), this won't be handled, so we should check it before going through the whole process !!
+	// if a plugin hook send mails before and returns "true" this would be too late
 	elgg_register_plugin_hook_handler('object:notifications', 'all', 'theme_inria_object_notifications_block', 1);
+	/* 2) Blocage pour les réponses (annotations)
+	 * Process : 
+	 		action discussion/replies/save exécute un ->annotate('group_topic_post',...)
+	 		create_annotation lance un event (qui peut exécuter des choses mais ne change pas le comportement)
+	 		puis ajoute l'annotation, et lance un event create,annotation
+	 		qui exécute, notamment, l'envoi d'email par comment_tracker et advanced_notifications
+	 		Moyens de blocage dans comment_tracker : les users sont récupérés via leurs préférences d'abonnement
+ 			ce qui permet de spécifier un désabonnement au préalable, de manière à ne pas abonner à chaque commentaire
+	 */
+	// See html_email_handler :
 	// Block annotations : use hook on notify:annotation:message => return false
 	// @TODO  : non opérationnel car pas de moyen de bloquer à temps les notifications, envoyées via divers plugins qui s'appuient des events...
 	//elgg_register_plugin_hook_handler('notify:annotation:message', 'group_topic_post', 'theme_inria_annotation_notifications_block', 1000);
-	//elgg_register_event_handler('create','annotation','theme_inria_annotation_notifications_event_block', 1);
-	
+	elgg_register_event_handler('create','annotation','theme_inria_annotation_notifications_event_block', 1);
+	// Unregister advanced notification event to avoid sending reply twice
+	// @TODO : move to ESOPE ?
+	if (elgg_is_active_plugin('comment_tracker') && elgg_is_active_plugin('advanced_notifications')) {
+		elgg_unregister_event_handler("create", "annotation", "advanced_notifications_create_annotation_event_handler");
+	}
 	
 }
 

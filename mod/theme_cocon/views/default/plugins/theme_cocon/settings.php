@@ -7,6 +7,32 @@ $count_opt = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
 
 $site_email = elgg_get_site_entity()->email;
 
+if (empty($vars['entity']->fonctions)) {
+	$vars['entity']->fonctions = "chef::Chef d'établissement
+chefadjoint::Chef d'établissement adjoint
+cpe::CPE
+direction::Equipe de direction
+projet::Equipe de projet
+enseignant::Enseignant
+autre::Autre";
+}
+
+
+if (empty($vars['entity']->disciplines)) {
+	$vars['entity']->disciplines = "francais::Français
+maths::Mathématiques
+histgeo::Histoire-Géographie
+langues::Langues vivantes
+physique::Sciences Physiques
+svt::Sciences de la Vie et de la Terre
+technologie::Technologie
+musique::Education Musicale
+artplastique::Arts Plastiques
+eps::Education Physique et Sportive
+autre::Autres";
+}
+
+
 /*
 echo '<p><label>Nombre de liens dans le menu Aide</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[help_menu_count]', 'options_values' => $count_opt, 'value' => $vars['entity']->help_menu_count )) . '</p>';
 
@@ -28,5 +54,17 @@ echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notification
 echo "<div class='elgg-subtext'>" . elgg_echo("html_email_handler:settings:notifications:subtext") . "</div>";
 echo "</div>";
 */
+
+echo '<fieldset><legend>Configuration des champs de profil</legend>';
+	echo '<p><em>Ces champs sont utilisés par le Kit Méthode Cocon</em></p>';
+
+	echo "<p><label>Liste des fonctions, une par ligne, sous la forme : identifiant::valeur" . elgg_view('input/plaintext', array( 'name' => 'params[fonctions]', 'value' => $vars['entity']->fonctions )) . '</label></p>';
+
+	echo "<p><label>Liste des disciplines, une par ligne, sous la forme :  identifiant::valeur" . elgg_view('input/plaintext', array( 'name' => 'params[disciplines]', 'value' => $vars['entity']->disciplines )) . '</label></p>';
+
+	// @TODO : accepter liste CSV avec structure simple : 1/ligne, sép=,
+	// Champs = Nom,RNE,Académie,Département,Ville,Adresse postale,adresse courriel fonctionnelle
+	echo "<p><label>Liste des établissements<br />Format : Nom;Académie;UAI;Département;Adresse;mail<br />Attention : une entrée par ligne, et pas de ligne de titre !" . elgg_view('input/plaintext', array( 'name' => 'params[etablissements]', 'value' => $vars['entity']->etablissements )) . '</label></p>';
+echo '</fieldset>';
 
 

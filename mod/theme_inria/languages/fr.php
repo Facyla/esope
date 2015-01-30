@@ -247,7 +247,7 @@ $french = array(
 	'theme_inria:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	
 	// Group creation specific fields and tooltips
-	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
+	'groups:cmisfolder' => "URL du dossier Partage (URL::Titre::Infobulle)",
 	'groups:hint:cmisfolder' => "Pour afficher le contenu du dossier, collez ici l'adresse complète du dossier dans Partage",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",

@@ -113,7 +113,19 @@ if (!empty($group->customtab5)) {
 // Partage folder
 if (!empty($group->cmisfolder)) {
 	$tabinfo = explode('::', $group->cmisfolder);
-	// Forme d'une URL de partage : share/page/folder-details?nodeRef=workspace://SpacesStore/ + identifiant Alfresco
+	/* Forme d'une URL de partage : share/page/folder-details?nodeRef=workspace://SpacesStore/ + identifiant Alfresco
+	 * https://partage.inria.fr/share/page/repository#filter=path|%2FLigne%20Com
+	 * https://partage.inria.fr/share/page/repository#filter=path|%2FLigne%2520Com%2FPOLE%2520DIGITAL|&page=1
+	 */
+	if (!empty($tabinfo[0])) {
+		if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('elgg_cmis:widget:cmis_folder'); }
+		$tabs['cmisfolder'] = array(
+			'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
+			'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		);
+		if (esope_is_external_link($tabinfo[0])) $tabs['cmisfolder']['target'] = '_blank';
+	}
+	/*
 	$needle = 'SpacesStore/';
 	// Keep only useful info if full URL was provided
 	if (strrpos($tabinfo[0], $needle) !== false) {
@@ -129,6 +141,7 @@ if (!empty($group->cmisfolder)) {
 			if (esope_is_external_link($tabinfo[0])) $tabs['cmisfolder']['target'] = '_blank';
 		}
 	}
+	*/
 }
 
 

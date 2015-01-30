@@ -7,6 +7,7 @@ $english = array(
 	
 	'cmspages:pagetype' => "Page URL name",
 	'cmspages:cmspage_url' => "Published page URL :",
+	'cmspages:cmspage_view' => "Display the content view :",
 	'cmspages:pageselect' => "Choose which page to edit",
 	
 	'cmspages:new' => "OK",
