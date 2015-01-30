@@ -4,9 +4,9 @@
 /fmap/
 /fonts/
 /_html/
-#/js/
+/js/
 /php/
 /sql/
 /survey/
 /_tmp/
-
+/test/
