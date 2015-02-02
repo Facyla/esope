@@ -1,4 +1,6 @@
 <?php
+// Renvoie les réponses à un sujet de forum
+// Utile pour actualiser automatiquement une discussion dans un forum
 
 $guid = get_input('guid', false);
 $lower_ts = get_input('lower_ts', 0);
