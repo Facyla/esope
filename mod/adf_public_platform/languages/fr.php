@@ -839,6 +839,26 @@ $fr = array(
 	
 	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
+	// ESOPE tools
+	'esope:tools:intro' => "Ces outils ne sont à utiliser que dans des cas particuliers, et nécessitent souvent un double accès administrateur et au code source pour être utilisés, du fait de leurs effets potentiels.",
+	'esope:tools:warning' => "Veuillez consulter leur code source avant de les utiliser.<br /><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</strong>",
+	'esope:tools:tool:group_admins' => "Admin groupes",
+	'esope:tools:tool:group_admins:details' => "Liste les administrateurs des groupes, et surtout les co-admins.",
+	'esope:tools:tool:users_email_search' => "Recherche membres par email",
+	'esope:tools:tool:users_email_search:details' => "Permet de retrouver le compte associé à une adresse email connue",
+	'esope:tools:tool:group_newsletters_default' => "Initialisation newsletters",
+	'esope:tools:tool:group_newsletters_default:details' => "Définit le réglage des newsletters des groupes sur 'no', lorsque aucun réglage n'avait encore été défini (plugin activé a posteriori)",
+	'esope:tools:tool:group_updates' => "MAJ champs groupmenu",
+	'esope:tools:tool:group_updates:details' => "(1.6 => 1.8) Modifie les champs ->groupmenu1 et ->groupmenu2 utilisés dans certaines versions d'Elgg 1.6 pour définir de nouveaux champs ->customtab1 et ->customtab2. Passage nécessaire par le code source pour activation",
+	'esope:tools:tool:spam_users_list' => "Antispam (nettoyage)",
+	'esope:tools:tool:spam_users_list:details' => "Outil très puissant, mais encore plus dangereux, pour supprimer massivement des comptes de spam, sur la base de divers critères, notamment structure de l'email. Activation et réglages via le code. Backup préalable impératif.",
+	'esope:tools:tool:test_mail_notifications' => "Test email de notification",
+	'esope:tools:tool:test_mail_notifications:details' => "Envoie un mail de notification à chaque consultation de la page. Pratique pour tester le design des notifications en direct",
+	'esope:tools:tool:threads_disable' => "Désactivation Threads",
+	'esope:tools:tool:threads_disable:details' => "A utiliser avant désactivation du plugin threads, si l'on souhaite ne plus utiliser celui-ci (qui pose divers problèmes)",
+	'esope:tools:tool:user_updates' => "Suppression widgets dashboard",
+	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
+	
 );
 
 add_translation('fr', $fr);

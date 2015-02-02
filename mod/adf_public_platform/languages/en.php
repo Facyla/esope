@@ -817,6 +817,29 @@ $en = array(
 	'esope:unarchiveuser:ok' => "User successfully un-archived",
 	'esope:unarchiveuser:error' => "User could not be un-archived",
 	
+	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
+	
+	
+	// ESOPE tools
+	'esope:tools:intro' => "These tools should be used only in some particular cases, or only once, and often require a combined code+administration action.",
+	'esope:tools:warning' => "Please read carefully the source code for each of these before enabling.<br /><strong>It is strongly advised to perform a full backup before using some of these tools (antispam, widgets, fields updates)</strong>",
+	'esope:tools:tool:group_admins' => "Group admins",
+	'esope:tools:tool:group_admins:details' => "Lists all group administrators, including operators.",
+	'esope:tools:tool:users_email_search' => "Search user by email",
+	'esope:tools:tool:users_email_search:details' => "Find users by registration email address",
+	'esope:tools:tool:group_newsletters_default' => "Group newsletters init",
+	'esope:tools:tool:group_newsletters_default:details' => "Sets the default group newsletters setting to 'no', when no setting has been set yet (usually when plugin was enabled afterwards)",
+	'esope:tools:tool:group_updates' => "groupmenu fields update",
+	'esope:tools:tool:group_updates:details' => "(1.6 => 1.8) Updates group fields ->groupmenu1 and ->groupmenu2 that were used in some Elgg 1.6 Esope themes to define the new ->customtab1 and ->customtab2 settings. Enable through code",
+	'esope:tools:tool:spam_users_list' => "Antispam (cleanup)",
+	'esope:tools:tool:spam_users_list:details' => "Very powerful, and even more dangerous batch tool to cleanup user accounts based on various criteria, mainly email structure. Enable and tweak behaviour through code. Backup is mandatory.",
+	'esope:tools:tool:test_mail_notifications' => "Test notification email",
+	'esope:tools:tool:test_mail_notifications:details' => "Sends a sample notification email at each page view. Useful to live test the notification design.",
+	'esope:tools:tool:threads_disable' => "Threads disable",
+	'esope:tools:tool:threads_disable:details' => "This tools allows administrators to convert 'threads' comments to regular comments, before disabling threads plugin",
+	'esope:tools:tool:user_updates' => "Remove dashboard widgets",
+	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
+	
 	
 );
 
