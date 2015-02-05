@@ -3,6 +3,7 @@ global $CONFIG;
 
 $slidercontent = elgg_get_plugin_setting('content', 'slider');
 
+// Contenu défini dans la config du slider
 if (!empty($slidercontent)) {
 	// Si on a un <ul> ou <ol> au début et </ul> ou </ol> à la fin de la liste
 	$start_list = substr($slidercontent, 0, 4);
