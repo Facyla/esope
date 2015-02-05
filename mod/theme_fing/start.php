@@ -101,11 +101,17 @@ function theme_fing_public_index() {
 
 
 // Get pins for homepage
-function theme_fing_get_pin_entities($selection = 'latest', $limit = 6) {
+function theme_fing_get_pin_entities($selection = 'manual', $limit = 6) {
 	if (elgg_is_active_plugin('pin')) {
 		
 		switch($selection) {
+			case 'latest':
+				// Return latest pins
+				$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
+				break;
+			
 			case 'manual':
+			default:
 				// Use custom selection (not all are public, so limit is not useful here)
 				$ent_guid = elgg_get_plugin_setting('homehighlight1', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
 				$ent_guid = elgg_get_plugin_setting('homehighlight2', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
@@ -114,12 +120,6 @@ function theme_fing_get_pin_entities($selection = 'latest', $limit = 6) {
 				$ent_guid = elgg_get_plugin_setting('homehighlight5', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
 				$ent_guid = elgg_get_plugin_setting('homehighlight6', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
 				$ent_guid = elgg_get_plugin_setting('homehighlight7', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-				break;
-			
-			case 'latest':
-			default:
-				// Return latest pins
-				$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
 		}
 		
 		return $ents;
