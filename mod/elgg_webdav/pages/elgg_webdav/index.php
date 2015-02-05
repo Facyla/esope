@@ -19,6 +19,19 @@ $content = '';
 $content .= '<h3>' . $title . '</h3>';
 
 //$content .= '<p><a href="' . $view_url . 'd3" class="elgg-button elgg-button-action">D3</a> generic visualisation library</p>';
+$webdav_url = parse_url($CONFIG->url . 'webdav/server');
+$webdav_root = $webdav_url['path'];
+
+$content .= "<p>Utilisation : ajoutez un partage réseau avec les informations suivantes : 
+	<ul>
+		<li>Type de partage : WebDAV (HTTP)</li>
+		<li>Port : 80</li>
+		<li>Serveur : " . $webdav_url['path'] . "</li>
+		<li>" . $webdav_url['host'] . "</li>
+		<li>Nom d'utilisateur : votre nom d'utilisateur sur le site (ou votre email d'inscription)</li>
+		<li>Mot de passe : votre mot de passe sur le site</li>
+	</ul>
+	</p>";
 
 $content .= '<br />';
 $content .= '<br />';
