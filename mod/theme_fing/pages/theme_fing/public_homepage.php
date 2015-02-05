@@ -26,6 +26,7 @@ if (!empty($slidercontent)) {
 $selected_articles = theme_fing_get_pin_entities();
 $pin_exclude = array(); // Liste les articles à ne pas reprendre dans l'autre listing des articles en Une
 $i = 0;
+$max = 4;
 foreach ($selected_articles as $ent) {
 	$pin_exclude[] = $ent->guid;
 	$i++;
@@ -56,7 +57,7 @@ foreach ($selected_articles as $ent) {
 	$slidercontent .= '<td style="width:50%; text-align: center; height: 200px; vertical-align: middle;">' . $image . '</td>';
 	$slidercontent .= '<td style="width:50%;"><div class="textSlide"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 16px;">' . $excerpt . '</div></div></td>';
 	$slidercontent .= '</tr></table></div></li>';
-	if ($i >= 3) { break; }
+	if ($i >= $max) { break; }
 }
 $slider_vars = array(
 	'slidercontent' => $slidercontent,

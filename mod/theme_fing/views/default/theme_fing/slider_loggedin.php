@@ -20,6 +20,7 @@ $articles = theme_fing_get_pin_entities();
 $max = 3;
 $i = 0;
 foreach ($articles as $ent) {
+	$i++;
 	$title = $ent->title;
 	if (empty($title)) $title = $ent->name;
 	// Image
@@ -47,7 +48,7 @@ foreach ($articles as $ent) {
 	$slidercontent .= '<td style="width:50%; text-align: center; height: 200px; vertical-align: middle;">' . $image . '</td>';
 	$slidercontent .= '<td style="width:50%;"><div class="textSlide"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 16px;">' . $excerpt . '</div></div></td>';
 	$slidercontent .= '</tr></table></div></li>';
-	if ($i >= $max) { break; }
+	//if ($i >= $max) { break; }
 }
 
 $vars['slidercontent'] = $slidercontent;
