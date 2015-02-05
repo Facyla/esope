@@ -1703,7 +1703,7 @@ function esope_get_input_recursive_array($input, $separators = array(array("|", 
 				$new_separators = array_slice($separators, 1);
 				
 				// check for sub-level config
-				if (is_array($new_separators)) {
+				if (is_array($separators[1])) {
 					foreach ($separators[1] as $sep) {
 						$pos = strpos($option, $sep);
 						if ($pos !== false) break;
