@@ -24,10 +24,14 @@ $webdav_root = $webdav_url['path'];
 
 $content .= "<p>Utilisation : ajoutez un partage réseau avec les informations suivantes : 
 	<ul>
-		<li>Type de partage : WebDAV (HTTP)</li>
-		<li>Port : 80</li>
-		<li>Serveur : " . $webdav_url['path'] . "</li>
-		<li>" . $webdav_url['host'] . "</li>
+		<li>Adresse du serveur : " . $CONFIG->url . 'webdav/server' . "</li>
+		<li>Ou :
+			<ul>
+				<li>Type de partage : WebDAV (HTTP)</li>
+				<li>Port : 80</li>
+				<li>Serveur : " . $webdav_url['host'] . "</li>
+		<li>Dossier : " . $webdav_url['path'] . "</li>
+			</ul>
 		<li>Nom d'utilisateur : votre nom d'utilisateur sur le site (ou votre email d'inscription)</li>
 		<li>Mot de passe : votre mot de passe sur le site</li>
 	</ul>
