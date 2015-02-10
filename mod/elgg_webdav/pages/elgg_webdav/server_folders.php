@@ -1,16 +1,15 @@
 <?php
 /**
- * Elgg WebDAV home page
+ * Elgg WebDAV folders
+ * Based on file and folders plugins
  *
  * @package ElggWebDAV
  */
 
-/* @TODO
- * Piste intéressante : proposer plusieurzs endpoint virtuels à partir de /server, 
- *   de manière à avoir des accès différenciés, sur filesystems réels ou virtuels
- * - mine : RW sur dossier personnel
- * - shared : RW sur dossiers partagés (groupe ?)
- * - public : R-only sur fichiers publiquement accessibles (virtuel) ?
+
+/* @TODO : implements virtual folders support :
+ * Structure : user / group / site ->  container -> folders* -> files
+ * @TODO : implement ACL for read/write access to folders and files
  */
 
 // Set up default paths

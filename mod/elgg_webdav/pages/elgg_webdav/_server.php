@@ -5,13 +5,6 @@
  * @package ElggWebDAV
  */
 
-/* @TODO
- * Piste intéressante : proposer plusieurzs endpoint virtuels à partir de /server, 
- *   de manière à avoir des accès différenciés, sur filesystems réels ou virtuels
- * - mine : RW sur dossier personnel
- * - shared : RW sur dossiers partagés (groupe ?)
- * - public : R-only sur fichiers publiquement accessibles (virtuel) ?
- */
 
 // Set up default paths
 global $CONFIG;
@@ -27,17 +20,6 @@ if (!file_exists($public_path)) { mkdir($public_path, 0777); }
 if (!file_exists($data_path)) { mkdir($data_path, 0777); }
 if (!file_exists($locks_path)) { mkdir($locks_path, 0777); }
 
-// Set paths accordingly to user settings :
-// @TODO : note access is the same for all users
-if (elgg_is_logged_in()) {
-	$own = elgg_get_logged_in_user_entity();
-		// Create custom paths if needed
-		$base_path = elgg_get_data_path() . 'webdav';
-		$public_path = $base_path . '/public/' . $own->guid;
-		$locks_path = $base_path . '/data/locks/' . $own->guid;
-		if (!file_exists($public_path)) { mkdir($public_path, 0770); }
-		if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
-}
 
 
 // Configure and launch WebDAV server
@@ -88,20 +70,12 @@ $server->addPlugin($authPlugin);
 // @TODO : note access is the same for all users
 if (elgg_is_logged_in()) {
 	$own = elgg_get_logged_in_user_entity();
-	// Create custom paths if needed
-	$base_path = elgg_get_data_path() . 'webdav';
-	$public_path = $base_path . '/public/' . $own->guid;
-	$locks_path = $base_path . '/data/locks/' . $own->guid;
-	if (!file_exists($public_path)) { mkdir($public_path, 0770); }
-	if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
-	
-	
-	// Now we're changing root directory
-	$rootDirectory = new DAV\FS\Directory($public_path);
-	// The server object is responsible for making sense out of the WebDAV protocol
-	$server = new DAV\Server($rootDirectory);
-	// Add authentication
-	$server->addPlugin($authPlugin);
+		// Create custom paths if needed
+		$base_path = elgg_get_data_path() . 'webdav';
+		$public_path = $base_path . '/public/' . $own->guid;
+		$locks_path = $base_path . '/data/locks/' . $own->guid;
+		if (!file_exists($public_path)) { mkdir($public_path, 0770); }
+		if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
 }
 
 

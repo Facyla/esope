@@ -4,13 +4,13 @@
  */
 global $CONFIG;
 
-$fr = array(
+$en = array(
 	'elgg_webdav' => "WebDAV",
 	'elgg_webdav:title' => "Serveur WebDAV",
 	'elgg_webdav:index' => "Utilisation du serveur WebDAV",
 	
-	'elgg_webdav:user' => "Dossier personnel de %s",
-	'elgg_webdav:group' => "Dossier du groupe %s",
+	'elgg_webdav:user' => "Membre %s",
+	'elgg_webdav:group' => "Groupe %s",
 	'elgg_webdav:member' => "Membres du site",
 	'elgg_webdav:public' => "Public",
 	
@@ -38,7 +38,7 @@ $fr = array(
 	'elgg_webdav:types:proxy-read' => "Proxy-Read",
 	'elgg_webdav:types:outbox' => "Outbox",
 	'elgg_webdav:types:inbox' => "Inbox",
-	'elgg_webdav:types:calendar' => "Calendrier",
+	'elgg_webdav:types:calendar' => "Calendar",
 	'elgg_webdav:types:shared-owner' => "Shared",
 	'elgg_webdav:types:subscribed' => "Subscription",
 	'elgg_webdav:types:directory' => "Directory",
@@ -48,5 +48,5 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);
+add_translation('en', $en);
 

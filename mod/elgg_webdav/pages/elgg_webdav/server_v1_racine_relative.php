@@ -5,13 +5,6 @@
  * @package ElggWebDAV
  */
 
-/* @TODO
- * Piste intéressante : proposer plusieurzs endpoint virtuels à partir de /server, 
- *   de manière à avoir des accès différenciés, sur filesystems réels ou virtuels
- * - mine : RW sur dossier personnel
- * - shared : RW sur dossiers partagés (groupe ?)
- * - public : R-only sur fichiers publiquement accessibles (virtuel) ?
- */
 
 // Set up default paths
 global $CONFIG;
@@ -27,18 +20,6 @@ if (!file_exists($public_path)) { mkdir($public_path, 0777); }
 if (!file_exists($data_path)) { mkdir($data_path, 0777); }
 if (!file_exists($locks_path)) { mkdir($locks_path, 0777); }
 
-// Set paths accordingly to user settings :
-// @TODO : note access is the same for all users
-if (elgg_is_logged_in()) {
-	$own = elgg_get_logged_in_user_entity();
-		// Create custom paths if needed
-		$base_path = elgg_get_data_path() . 'webdav';
-		$public_path = $base_path . '/public/' . $own->guid;
-		$locks_path = $base_path . '/data/locks/' . $own->guid;
-		if (!file_exists($public_path)) { mkdir($public_path, 0770); }
-		if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
-}
-
 
 // Configure and launch WebDAV server
 use Sabre\DAV;
@@ -49,13 +30,13 @@ elgg_load_library('elgg:webdav:sabreDAV');
 use Sabre\DAV\Auth;
 $authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($username, $password) {
 	$debug = true;
-	
+
 	// Return result quickly if already logged in
 	if (elgg_is_logged_in()) {
 		if ($debug) error_log("WebDAV : $username authenticated");
 		return true;
 	}
-	
+
 	// check the username and password here, and then just return true or false.
 	error_log("WebDAV : authenticating $username");
 	// check if logging in with email address
@@ -76,34 +57,39 @@ $authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($username, $pas
 });
 $authPlugin = new Sabre\DAV\Auth\Plugin($authBackend, '');
 
-// Now we're creating a whole bunch of objects
-$rootDirectory = new DAV\FS\Directory($public_path);
-// The server object is responsible for making sense out of the WebDAV protocol
-$server = new DAV\Server($rootDirectory);
-// Add authentication
-$server->addPlugin($authPlugin);
 
-
-// Set paths accordingly to user settings :
-// @TODO : note access is the same for all users
-if (elgg_is_logged_in()) {
-	$own = elgg_get_logged_in_user_entity();
-	// Create custom paths if needed
-	$base_path = elgg_get_data_path() . 'webdav';
-	$public_path = $base_path . '/public/' . $own->guid;
-	$locks_path = $base_path . '/data/locks/' . $own->guid;
-	if (!file_exists($public_path)) { mkdir($public_path, 0770); }
-	if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
-	
-	
-	// Now we're changing root directory
+// Perform auth first and reload page
+if (!elgg_is_logged_in()) {
+	// Now we're creating a whole bunch of objects
 	$rootDirectory = new DAV\FS\Directory($public_path);
 	// The server object is responsible for making sense out of the WebDAV protocol
 	$server = new DAV\Server($rootDirectory);
 	// Add authentication
 	$server->addPlugin($authPlugin);
+	// Reload page
+	forward('webdav/server');
+	exit;
 }
 
+
+// Now assume we're logged in
+
+// Set paths accordingly to user settings :
+$own = elgg_get_logged_in_user_entity();
+// Update paths to logged in user logic
+$base_path = elgg_get_data_path() . 'webdav';
+$public_path = $base_path . '/public/' . $own->guid;
+$locks_path = $base_path . '/data/locks/' . $own->guid;
+if (!file_exists($public_path)) { mkdir($public_path, 0770); }
+if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
+
+
+// Now create the server
+$rootDirectory = new DAV\FS\Directory($public_path);
+// The server object is responsible for making sense out of the WebDAV protocol
+$server = new DAV\Server($rootDirectory);
+// Add authentication
+$server->addPlugin($authPlugin);
 
 // If your server is not on your webroot, make sure the following line has the correct information
 $server->setBaseUri($base_uri);

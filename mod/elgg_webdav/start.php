@@ -29,14 +29,34 @@ function elgg_webdav(){
 }
 
 
+/* WebDAV home page and endpoints */
 function elgg_webdav_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_webdav/pages/elgg_webdav';
 	switch($page[0]) {
-		/* WebDAV endpoint
-		 */
 		case 'endpoint':
 		case 'server':
 			if (!include_once "$base/server.php") return false;
+			break;
+		
+		case 'public':
+			// Read-only filesystem
+			if (!include_once "$base/server_public.php") return false;
+			break;
+		
+		case 'member':
+			if (!include_once "$base/server_member.php") return false;
+			break;
+		
+		case 'user':
+			// GUID is mandatory to provide better security and RESTful URI
+			if (!empty($page[1])) set_input($guid, $page[1]);
+			if (!include_once "$base/server_user.php") return false;
+			break;
+		
+		case 'group':
+			// GUID is mandatory to provide better security and RESTful URI
+			if (!empty($page[1])) set_input($guid, $page[1]);
+			if (!include_once "$base/server_group.php") return false;
 			break;
 		
 		default:
