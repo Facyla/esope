@@ -12,20 +12,24 @@ $fr = array(
 	'email:validate:subject' => "%s demande la validation de son compte pour %s !",
 	'email:validate:body' => "Bonjour,
 
-Un membre nommé %s vous demande la validation de son compte. 
+\"%1\$s\" vous demande la validation de son compte. 
 
-Les informations géographiques de l'utilisateur sont 
-Adresse IP : %s
-Emplacement probable : %s
+Les informations de l'utilisateur sont :
+Identifiant : %8\$s
+Email : %7\$s
+Adresse IP : %2\$s
+Emplacement probable : %3\$s
 
-Vous pouvez valider son compte en cliquant sur le lien ci-dessous :
+Vous pouvez valider directement son compte en cliquant sur le lien ci-dessous :
+%4\$s
 
-%s
+Ou accéder à la liste des comptes non validés :
+%6\$sadmin/users/unvalidated
 
 Si vous ne pouvez pas cliquer sur le lien, veuillez le copier-coller dans votre navigateur.
 
-%s
-%s
+%5\$s
+%6\$s
 ",
 
 	'user:validate:subject' => "Bonjour %s ! Votre compte est activé",

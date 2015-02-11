@@ -12,6 +12,11 @@ $title = "Rétablissement du fonctionnement sans threads";
 
 $content .= "<p>Ce script va convertir tous vos sujets de type 'thread' (commentaires arborescents, ajoutés par le plugin 'threads') en commentaires 'normaux'. Si vous arrêtez d'utiliser le plugin 'threads', cela vous permet de convertir et récupérer les commentaires qui autrement deviendraient invisibles.</p><p>ATTENTION : cette action est sans danger, mais irréversible ! assurez-vous bien que vous ne souhaitez plus utiliser les commentaires arborescents avant de l'utiliser, et veuillez bien noter que l'arborescence des commentaires existant sera définitivement perdue !</p>";
 
+$content .= "<p>This tool is for sites which used the 'threads' plugin, and now do not want to use it anymore. 
+Symptoms : all previous comments created while 'threads' was active become invisible when disabling the plugin. Tech tip : they are in fact object entities, and not annotations, and are not handled by Elgg display views...
+=> This tools allows administrators to convert 'threads' comments to regular comments. 
+Note : comment tree is lost, as topicreply objects and relations are converted into plain annotations. Former objects are deleted only if annotation was created.</p>";
+
 $options = array('types' => 'object', 'subtypes' => 'topicreply', 'limit' => false);
 
 $threads_replies = elgg_get_entities($options);
