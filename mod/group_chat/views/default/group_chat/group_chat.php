@@ -1,33 +1,30 @@
 <?php
-$group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
+// Checks access and embeds the group chat on the page (JS + chat itself)
+// requires a valid ElggGroup entity
 
+// Check that group chat is enabled and available
+$group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
 if ( !elgg_is_logged_in() 
-	|| !(elgg_get_page_owner_entity() instanceof ElggGroup)
+	|| !(elgg_instanceof($vars['entity'], 'group'))
 	|| ($group_chat == 'no') 
 	|| (($group_chat == 'groupoption') && ($vars['entity']->group_chat_enable != 'yes')) 
 	) { return; }
+
 ?>
 
-<script>
-$(document).ready(function(){
-	var wh = $(window).height();
-	var dH = wh -385;
-	$('#gCMd').offset({top:dH});
-	$(window).resize(function(){
-		var wh = $(window).height();
-		var dH = wh - 390;
-		if(dH < 0) $('#gCMd').offset({top:0});
-		else $('#gCMd').offset({top:dH});
-	});
-
-	// Go to end of div content
-	$('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
-});
-</script>
 <div id="group-sitechat-container">
-		<?php
+	<?php
+	// Check access to chat content
+	if ($vars['entity']->isMember()) {
+		// Embeds the chat content and interface
+		echo elgg_view('group_chat/js_scrolldown', array());
 		echo elgg_view('group_chat/chat_process_engine', array());
-		echo elgg_view('group_chat/groupchat_window', $vars);
-		?>
+		// Force chat id to the wanted group, in case we' haven't defined it yet
+		$vars['chat_id'] = $vars['entity']->guid;
+		echo elgg_view('group_chat/chat_window', $vars);
+	} else {
+		echo '<div class="floatLeft joinGroup">' . elgg_echo('group_chat:joingrouptochat') . '</div>';
+	}
+	?>
 </div>
 

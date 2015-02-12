@@ -1,4 +1,6 @@
 <?php
+// Adds a link to group chat on the page
+
 $group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
 if ( !elgg_is_logged_in() 
 	|| !(elgg_get_page_owner_entity() instanceof ElggGroup)

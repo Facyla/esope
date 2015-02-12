@@ -15,12 +15,18 @@ $french = array(
 	'groupchat:active' => "",
 	'group_chat:youare' => "Vous êtes : ",
 	'group_chat:joingrouptochat' => "Vous devez être membre du groupe pour chatter avec ses membres.",
-	'group_chat:group_option' => "Activer le chat dans les groupes ?",
+	'group_chat:joinsitetochat' => "Vous devez être membre du site pour chatter avec ses membres.",
+	'group_chat:noaccesstoprivatechat' => "Vous n'avez pas accès à ce chat privé",
+	'group_chat:invalidchatid' => "Indentifiant du chat non valide",
 	
 	/* Settings */
-	'group_chat:setting' => "Historique du chat (nombre de jours affichés ; 2 jours par défaut)",
 	'group_chat:settings:group_chat' => "Chat de groupe",
+	'group_chat:history:group' => "Historique du chat (nombre de jours affichés ; 2 jours par défaut)",
 	'group_chat:settings:site_chat' => "Chat global du site",
+	'group_chat:history:site' => "Historique du chat (nombre de jours affichés ; 2 jours par défaut)",
+	'group_chat:settings:user_chat' => "Chat personnel (entre membres)",
+	'group_chat:history:user' => "Historique du chat (nombre de jours affichés ; 2 jours par défaut)",
+	'group_chat:settings:notifications' => "Activer les notifications",
 	// Settings values
 	'group_chat:no' => "Désactivé",
 	'group_chat:yes' => "Activé",

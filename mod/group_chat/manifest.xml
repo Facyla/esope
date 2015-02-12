@@ -1,48 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Group Chat</name>
-	<author>Mitesh Chavda + Facyla</author>
-	<version>1.8.3</version>
+	<author>Facyla, Mitesh Chavda</author>
+	<version>1.8.4</version>
 	<blurb>Group Chat plugin</blurb>
-	<description>Adds simple group chat capabilities to your Elgg installation.</description>
-	<website>http://www.miteshchavda.com/</website>
+	<description>Adds simple text chat for site, groups, users.</description>
+	<website>http://items.fr/</website>
+	<copyright>ITEMS International</copyright>
 	<license>GNU Public License version 2</license>
+	
+	<category>communication</category>
+	<category>chat</category>
+	
 	<requires>
-		<type>elgg_version</type>
-		<version>2010030101</version>
+		<type>elgg_release</type>
+		<version>1.8</version>
 	</requires>
+	
 	<activate_on_install>false</activate_on_install>
 </plugin_manifest>
 
 <!--
 TODO :
-- site chat support (better view & integration needed)
 - per entity chat support ?
 - more global settings
 - moderate server load by adjusting refresh rate depending on posting rate and when chat is hidden
 
+1.8.5 :
+	- TODO users chat support
+	- TODO chat popup notification
+
+1.8.4 :
+	- site chat support (better view & integration needed)
+	- separate chat window (better impact on server load)
 
 20130412 : 
-  - unclosed div debug
-  - dont display chat when not in a group (page owner not a group)
-  - no chat when not logged in
+	- unclosed div debug
+	- dont display chat when not in a group (page owner not a group)
+	- no chat when not logged in
 
 20121128 : 1.8.2 - Improvements
-  - autohide on startup + scroll down to end of chat
-  - use name instead of username
-  - group option
-  - settings for site and group chat
-  - replaced hardcoded strings with translation strings
-  - change time format (24 hours)
+	- autohide on startup + scroll down to end of chat
+	- use name instead of username
+	- group option
+	- settings for site and group chat
+	- replaced hardcoded strings with translation strings
+	- change time format (24 hours)
 
 20121127 : 1.8.1 - Initial Facyla changes
-  - UTF-8 support
-  - added french translation
-  - doesn't use jquery plugin library anymore (already available in core JS)
-  - some views reordering
-  - forget group_chat lib (unused)
-  - extend group/default to implement in all group pages
-  - added site chat page handler
+	- UTF-8 support
+	- added french translation
+	- doesn't use jquery plugin library anymore (already available in core JS)
+	- some views reordering
+	- forget group_chat lib (unused)
+	- extend group/default to implement in all group pages
+	- added site chat page handler
 
 //-->
 

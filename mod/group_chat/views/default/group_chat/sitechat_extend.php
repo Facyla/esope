@@ -1,4 +1,6 @@
 <?php
+// Adds a link to site chat on the page
+
 $site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
 if ( !elgg_is_logged_in() || ($site_chat != 'yes') ) { return; }
 
@@ -11,7 +13,7 @@ $chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 
 $popup_id = 'groupchat_site';
 
-// Check content - uncomment to use, but can cause much calls
+// Check if we have some recent content - uncomment to use
 /*
 $guid = elgg_get_page_owner_guid();
 elgg_set_page_owner_guid($CONFIG->site->guid);

@@ -1,21 +1,16 @@
 <?php 
 global $CONFIG;
-$baseUrl = $CONFIG->url;
-$ts = time();
-$token = generate_action_token($ts);
-$guid =	elgg_get_page_owner_guid();
+$baseUrl = elgg_get_site_url();
+
+$chat_id = elgg_get_page_owner_guid();
+//$chat_id = elgg_get_page_owner_guid();
 ?>
+
 <script type="text/javascript" language="javascript">
-/* 
-Created by: Mitesh Chavda
-
-Name: Chat Engine
-*/
-
 var instanse = false;
 var state;
 var mes;
-var file;
+var groupchat_url = elgg.security.addToken("<?php echo $baseUrl;?>action/group_chat/process");
 
 function chat(){
 	updateChat();
@@ -30,13 +25,10 @@ function getStateOfChat(){
 		instanse = true;
 		$.ajax({
 			type: "GET",
-			url: "<?php echo $baseUrl;?>action/group_chat/process",
+			url: groupchat_url,
 			data: {
 				'function': 'getState',
-				'file': file,
-				'__elgg_ts':'<?php echo $ts;?>',
-				'__elgg_token':'<?php echo $token; ?>',
-				'groupEntityId':'<?php echo $guid; ?>'
+				'container':'<?php echo $chat_id; ?>'
 			},
 			dataType: "json",
 			success: function(data){
@@ -51,17 +43,14 @@ function getStateOfChat(){
 function updateChat(){
 	//alert('updateChat');
 	if(!instanse){
-	instanse = true;
+		instanse = true;
 		$.ajax({
 			type: "GET",
-			url: "<?php echo $baseUrl;?>action/group_chat/process",
+			url: groupchat_url,
 			data: {
 				'function': 'update',
 				'state': state,
-				'file': file,
-				'__elgg_ts':'<?php echo $ts;?>',
-				'__elgg_token':'<?php echo $token; ?>',
-				'groupEntityId':'<?php echo $guid; ?>'
+				'container':'<?php echo $chat_id; ?>'
 			},
 			dataType: "json",
 			success: function(data){
@@ -82,20 +71,15 @@ function updateChat(){
 }
 
 //send the message
-function sendChat(message, nickname, profilePic) {
+function sendChat(message) {
 	updateChat();
 	$.ajax({
-		type: "GET",
-		url: "<?php echo $baseUrl;?>action/group_chat/process",
+		type: "POST",
+		url: groupchat_url,
 		data: {
 			'function': 'send',
 			'message': message,
-			'nickname': nickname,
-			'profilePic':profilePic,
-			'file': file,
-			'__elgg_ts':'<?php echo $ts;?>',
-			'__elgg_token':'<?php echo $token; ?>',
-			'groupEntityId':'<?php echo $guid; ?>'
+			'container':'<?php echo $chat_id; ?>'
 		},
 		dataType: "json",
 		success: function(data){
