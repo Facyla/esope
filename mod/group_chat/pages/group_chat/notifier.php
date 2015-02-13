@@ -26,7 +26,7 @@ if ($own->group_chat_unread_group) {
 } else $log['notification']['group'] = '';
 
 // User : check list of unread user chats
-error_log($own->guid . ': ' . print_r($own->group_chat_unread_user, true));
+//error_log($own->guid . ': ' . print_r($own->group_chat_unread_user, true));
 if ($own->group_chat_unread_user) {
 	$unread_user_chat = '';
 	$unread = $own->group_chat_unread_user;

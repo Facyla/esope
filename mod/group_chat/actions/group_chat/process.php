@@ -114,18 +114,24 @@ switch($function) {
 					.'</div><div class="clear padTop5"><div style="float:left"><a href="'.$profileUrl.'" target="_blank"><img src="'.$profilePic.'" title="title" width="25" height="25" /></a></div><div class="floatLeft txtDiv"><a href="'.$profileUrl.'" target="_blank"><strong>'.htmlentities(ucfirst($nickname)).':</strong></a>&nbsp;<span style="color:#666666">'.$messageStr.'</span></div></div><div class="clear"></div></li>';
 				fwrite(fopen($filePath, 'a'), $message. "\n");
 				
-				// Let recipients know there is a message for them
+				// Let recipients know there is a message unread for them
 				if ($chat_container_type == 'site') {
+					// Site vs user TS comparison
 					$chat_container = get_entity($chat_id);
 					$chat_container->group_chat_unread = time();
+					// Update own user to avoid any notification
+					$own->group_chat_unread_site = time();
 				} else if ($chat_container_type == 'group') {
 					$chat_container = get_entity($chat_id);
 					$chat_container->group_chat_unread = time();
 				} else if ($chat_container_type == 'user') {
+					// Personnal list of unread chat ids
 					// Add unread mark to each user
 					$ia = elgg_get_ignore_access();
 					elgg_set_ignore_access(true);
 					foreach($chat_user_guids as $guid) {
+						// Skip own user
+						if ($guid == $own->guid) continue;
 						$recipient = get_entity($guid);
 						if (elgg_instanceof($recipient, 'user')) {
 							$user_unread = $recipient->group_chat_unread_user;

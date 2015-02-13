@@ -161,13 +161,9 @@ function group_chat_user_hover_menu($hook, $type, $return, $params) {
 		if ($user->guid != $ownguid) {
 			$chat_id = $ownguid . '-' . $user->guid;
 			$url = elgg_get_site_url() . "chat/user/" . $chat_id;
-			//$url = 'javascript:group_chat_openwindow(this.href, \'' . $ownguid . '-' . $user->guid . '\'); return false;';
-			//$url = "javascript:window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500');";
 			$title = '<i class="fa fa-comments-o"></i> ' . elgg_echo("groupchat:user:openlink:ownwindow");
 			$item = new ElggMenuItem('group_chat_user', $title, $url);
 			//$item->setSection('admin');
-			//$item->setData('onclick', 'window_'.$ownguid . '-' . $user->guid.'(this.href); return false;');
-			//$item->onClick = 'group_chat_openwindow(this.href, \'' . $ownguid . '-' . $user->guid . '\'); return false;';
 			$item->onClick = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
 			$return[] = $item;
 		}
@@ -175,7 +171,7 @@ function group_chat_user_hover_menu($hook, $type, $return, $params) {
 	return $return;
 }
 
-
+// Tells which chat type it is (site / group / user)
 function group_chat_container_type($chat_id) {
 	// Check which container we are using : site / group / user(s)
 	if (strpos($chat_id, '-')) {
@@ -198,6 +194,7 @@ function group_chat_container_type($chat_id) {
 }
 
 
+// Remove unread chat messages markers (for a given chat)
 function group_chat_update_marker($chat_id) {
 	global $CONFIG;
 	// Update marker so we know we're up-to-date
@@ -210,30 +207,15 @@ function group_chat_update_marker($chat_id) {
 			break;
 		case 'group':
 			// Update list of unread group chats
-			$user_unread = $recipient->group_chat_unread_group;
-			if (!is_array($user_unread)) {
-				if (empty($user_unread)) $user_unread = array();
-				else $user_unread = array($user_unread);
-			}
-			if(($key = array_search($chat_id, $user_unread)) !== false) {
-				unset($user_unread[$key]);
-				$recipient->group_chat_unread_group = $user_unread;
-			}
+			return esope_remove_from_meta_array($own, 'group_chat_unread_group', $chat_id);
 			break;
 		case 'user':
 			// Update list of unread user chats
-			$user_unread = $recipient->group_chat_unread_user;
-			if (!is_array($user_unread)) {
-				if (empty($user_unread)) $user_unread = array();
-				else $user_unread = array($user_unread);
-			}
-			if(($key = array_search($chat_id, $user_unread)) !== false) {
-				unset($user_unread[$key]);
-				$recipient->group_chat_unread_user = $user_unread;
-			}
+			return esope_remove_from_meta_array($own, 'group_chat_unread_user', $chat_id);
 			break;
 	}
 }
+
 
 // Convert text smileys to images
 function group_chat_convert_smileys($message = '') {
@@ -304,6 +286,66 @@ function group_chat_smileys_list() {
 	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'heart.gif" data-value="heart" class="smileyCon" title="Eeart"/></div>';
 	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'devil.gif" data-value="X)" class="smileyCon" title="Devil"/></div>';
 	return $content;
+}
+
+
+
+/* Add useful ESOPE functions, if not available */
+if (!elgg_is_active_plugin('esope') && !elgg_is_active_plugin('adf_public_platform')) {
+	// Double check in case these were included from somewhere else..
+	if (!function_exists('esope_add_to_meta_array')) {
+		/* Ajoute des valeurs dans un array de metadata (sans doublon)
+		 * $entity : the source/target entity
+		 * $meta : metadata to be updated
+		 * $add : value(s) to be added
+		 */
+		function esope_add_to_meta_array($entity, $meta = '', $add = array()) {
+			if (!($entity instanceof ElggEntity) || empty($meta) || empty($add)) { return false; }
+			$values = $entity->{$meta};
+			// Make it an array, even empty
+			if (!is_array($values)) {
+				if (!empty($values)) $values = array($values);
+				else $values = array();
+			}
+			// Allow multiple values to be added in one pass
+			if (!is_array($add)) $add = array($add);
+			foreach ($add as $new_value) {
+				if (!in_array($new_value, $values)) { $values[] = $new_value; }
+			}
+			// Ensure unique values
+			$values = array_unique($values);
+			// Update entity
+			if ($entity->{$meta} = $values) { return true; }
+			return false;
+		}
+	}
+
+	// Double check in case these were included from somewhere else..
+	if (!function_exists('esope_remove_from_meta_array')) {
+		/* Retire des valeurs d'un array de metadata (sans doublon)
+		 * $entity : the source/target entity
+		 * $meta : metadata to be updated
+		 * $remove : value(s) to be removed
+		 */
+		function esope_remove_from_meta_array($entity, $meta = '', $remove = array()) {
+			if (!($entity instanceof ElggEntity) || empty($meta) || empty($remove)) { return false; }
+			$values = $entity->{$meta};
+			// Make it an array, even empty
+			if (!is_array($values)) {
+				if (!empty($values)) { $values = array($values); } else { $values = array(); }
+			}
+			// Allow multiple values to be removed in one pass
+			if (!is_array($remove)) $remove = array($remove);
+			foreach ($values as $key => $value) {
+				if (in_array($value, $remove)) { unset($values[$key]); }
+			}
+			// Ensure unique values
+			$values = array_unique($values);
+			// Update entity
+			if ($entity->{$meta} = $values) { return true; }
+			return false;
+		}
+	}
 }
 
 

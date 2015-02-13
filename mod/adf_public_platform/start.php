@@ -1632,6 +1632,56 @@ function esope_get_input_array($input = false) {
 }
 
 
+/* Ajoute des valeurs dans un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $add : value(s) to be added
+ */
+function esope_add_to_meta_array($entity, $meta = '', $add = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($add)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) $values = array($values);
+		else $values = array();
+	}
+	// Allow multiple values to be added in one pass
+	if (!is_array($add)) $add = array($add);
+	foreach ($add as $new_value) {
+		if (!in_array($new_value, $values)) { $values[] = $new_value; }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
+}
+
+/* Retire des valeurs d'un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $remove : value(s) to be removed
+ */
+function esope_remove_from_meta_array($entity, $meta = '', $remove = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($remove)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) { $values = array($values); } else { $values = array(); }
+	}
+	// Allow multiple values to be removed in one pass
+	if (!is_array($remove)) $remove = array($remove);
+	foreach ($values as $key => $value) {
+		if (in_array($value, $remove)) { unset($values[$key]); }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
+}
+
+
 /* Build options suitable array from settings
  * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
  * Accepts key::value and list of keys
