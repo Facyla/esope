@@ -1,4 +1,6 @@
 <?php
+// Adds a link to group chat on the page
+
 $group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
 if ( !elgg_is_logged_in() 
 	|| !(elgg_get_page_owner_entity() instanceof ElggGroup)
@@ -7,19 +9,15 @@ if ( !elgg_is_logged_in()
 	) { return; }
 
 
-global $CONFIG;
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-
 $group = elgg_get_page_owner_entity();
-$open_group_chat_url = $CONFIG->url . 'chat/group/' . $group->guid;
+$open_group_chat_url = elgg_get_site_url() . 'chat/group/' . $group->guid;
 //$chat_icon = '<span class="elgg-icon elgg-icon-speech-bubble-alt"></span>';
 $chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 
 $class = '';
 $active = '';
-// Mark chat as active if there are recent messages !
-$chat_content = get_chat_content();
+// Mark chat as active if there are recent messages (today) !
+$chat_content = group_chat_get_chat_content($group->guid, 1);
 if ($chat_content) {
 	$class = 'chat-active';
 	$chat_icon = '<i class="fa fa-comments"></i> &nbsp; ';

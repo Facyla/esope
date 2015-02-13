@@ -14,13 +14,19 @@ $english = array(
 	
 	'groupchat:active' => "",
 	'group_chat:youare' => "You are: ",
-	'group_chat:joingrouptochat' => "Join group in order to chat with group member.",
-	'group_chat:group_option' => "Enable group chat ?",
+	'group_chat:joingrouptochat' => "Join group in order to chat with its members.",
+	'group_chat:joinsitetochat' => "Join site in order to chat with its members.",
+	'group_chat:noaccesstoprivatechat' => "You do not have access to this private chat.",
+	'group_chat:invalidchatid' => "Invalid chat identifier.",
 	
 	/* Settings */
-	'group_chat:setting' => "Number of day's history",
 	'group_chat:settings:group_chat' => "Group chat",
+	'group_chat:history:group' => "Number of day's history",
 	'group_chat:settings:site_chat' => "Site global chat",
+	'group_chat:history:site' => "Number of day's history",
+	'group_chat:settings:user_chat' => "Users chat",
+	'group_chat:history:user' => "Number of day's history",
+	'group_chat:settings:notifications' => "Enable notifications",
 	// Settings values
 	'group_chat:no' => "Disabled",
 	'group_chat:yes' => "Enabled",
@@ -35,6 +41,11 @@ $english = array(
 	'groupchat:group:openlink' => "Open group chat",
 	'groupchat:group:openlink:ownwindow' => "Open group chat (new window)",
 	'groupchat:group:openlink:ownwindow:theme' => "Open group chat",
+	
+	// User chat
+	'groupchat:user:openlink' => "Display private chat",
+	'groupchat:user:openlink:ownwindow' => "Private chat",
+	'groupchat:user:openlink:ownwindow:theme' => "Open private chat",
 	
 );
 
