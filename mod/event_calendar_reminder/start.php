@@ -80,7 +80,7 @@ function event_calendar_reminder_cron_notify_subscribers($event, $getter, $optio
 		
 		// @TODO : update subject and message
 		$subject = 'Event reminder : ' . $event->title;
-		$message = 'Your event ' . $event->title . ' will start on ' . elgg_get_friendly_time($event->start_time) . '.
+		$message = 'Your event ' . $event->title . ' will start on ' . elgg_get_friendly_time($event->start_date) . '.
 		
 		' . $event->brief_description . '
 		
