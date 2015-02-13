@@ -18,7 +18,7 @@ if ( !elgg_is_logged_in()
 	if ($vars['entity']->isMember()) {
 		// Embeds the chat content and interface
 		echo elgg_view('group_chat/js_scrolldown', array());
-		echo elgg_view('group_chat/chat_process_engine', array());
+		echo elgg_view('group_chat/chat_process_engine', $vars);
 		// Force chat id to the wanted group, in case we' haven't defined it yet
 		$vars['chat_id'] = $vars['entity']->guid;
 		echo elgg_view('group_chat/chat_window', $vars);

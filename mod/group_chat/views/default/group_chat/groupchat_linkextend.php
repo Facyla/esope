@@ -9,11 +9,7 @@ if ( !elgg_is_logged_in()
 	) { return; }
 
 
-global $CONFIG;
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-
-$open_group_chat_url = $CONFIG->url . 'chat/group/' . elgg_get_page_owner_guid();
+$open_group_chat_url = elgg_get_site_url() . 'chat/group/' . elgg_get_page_owner_guid();
 $chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 $text = '<i class="fa fa-external-link"></i> &nbsp; ' . elgg_echo('groupchat:group:openlink:ownwindow:theme');
 

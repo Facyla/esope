@@ -117,13 +117,23 @@ function group_chat_page_handler($page) {
 	if (!isset($page[0])) { $page[0] = 'site'; }
 	
 	switch ($page[0]) {
+		case "notifier":
+			require_once "$base/notifier.php";
+			break;
+			
 		case "group":
 			if (isset($page[1])) { set_input('group_guid', $page[1]); }
 			require_once "$base/group_chat.php";
 			break;
 			
+		case "user":
+			if (isset($page[1])) { set_input('chat_id', $page[1]); }
+			require_once "$base/user_chat.php";
+			break;
+			
 		case "site":
 		default:
+			if (isset($page[1])) { set_input('site_guid', $page[1]); }
 			require_once "$base/site_chat.php";
 	}
 	
@@ -132,21 +142,98 @@ function group_chat_page_handler($page) {
 
 
 // Menu that appears on hovering over a user profile icon
+function group_chat_normalise_chat_id($chat_id = '') {
+	$chat_id = elgg_get_friendly_title($chat_id);
+	$chat_user_guids = explode('-', $chat_id);
+	// Sort guids
+	sort($chat_user_guids);
+	$chat_id = implode('-', $chat_user_guids);
+	return $chat_id;
+}
+
+
+// Menu that appears on hovering over a user profile icon
 function group_chat_user_hover_menu($hook, $type, $return, $params) {
 	$user = $params['entity'];
-	
 	// Allow Add menu for logged in users only, and not on self profile
-	$ownguid = $elgg_get_logged_in_user_guid();
-	if (elgg_is_logged_in() && ($user->guid != $ownguid)) {
-		$url = "group_chat/user/" . $ownguid . '-' . $user->getGUID();
-		$title = elgg_echo("group_chat:user_chat:open");
-		$item = new ElggMenuItem('group_chat_user', $title, $url);
-		//$item->setSection('admin');
-		$return[] = $item;
+	if (elgg_is_logged_in()) {
+		$ownguid = elgg_get_logged_in_user_guid();
+		if ($user->guid != $ownguid) {
+			$chat_id = $ownguid . '-' . $user->guid;
+			$url = elgg_get_site_url() . "chat/user/" . $chat_id;
+			//$url = 'javascript:group_chat_openwindow(this.href, \'' . $ownguid . '-' . $user->guid . '\'); return false;';
+			//$url = "javascript:window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500');";
+			$title = '<i class="fa fa-comments-o"></i> ' . elgg_echo("groupchat:user:openlink:ownwindow");
+			$item = new ElggMenuItem('group_chat_user', $title, $url);
+			//$item->setSection('admin');
+			//$item->setData('onclick', 'window_'.$ownguid . '-' . $user->guid.'(this.href); return false;');
+			//$item->onClick = 'group_chat_openwindow(this.href, \'' . $ownguid . '-' . $user->guid . '\'); return false;';
+			$item->onClick = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
+			$return[] = $item;
+		}
 	}
 	return $return;
 }
 
+
+function group_chat_container_type($chat_id) {
+	// Check which container we are using : site / group / user(s)
+	if (strpos($chat_id, '-')) {
+		return 'user';
+	} else {
+		$chat_container = get_entity($chat_id);
+		if (elgg_instanceof($chat_container, 'site')) {
+			return 'site';
+		} else if (elgg_instanceof($chat_container, 'group')) {
+			return 'group';
+		} else if (elgg_instanceof($chat_container, 'object')) {
+			// Per-entity chat is not handled yet, though it would be an easy one
+			return 'object';
+		} else if (elgg_instanceof($chat_container, 'user')) {
+			return 'user';
+		}
+	}
+	// Other types are not handled
+	return false;
+}
+
+
+function group_chat_update_marker($chat_id) {
+	global $CONFIG;
+	// Update marker so we know we're up-to-date
+	$own = elgg_get_logged_in_user_entity();
+	$container_type = group_chat_container_type($chat_id);
+	switch($container_type) {
+		case 'site':
+			// Update ts to latest read message
+			$own->group_chat_unread_site = $CONFIG->site->group_chat_unread;
+			break;
+		case 'group':
+			// Update list of unread group chats
+			$user_unread = $recipient->group_chat_unread_group;
+			if (!is_array($user_unread)) {
+				if (empty($user_unread)) $user_unread = array();
+				else $user_unread = array($user_unread);
+			}
+			if(($key = array_search($chat_id, $user_unread)) !== false) {
+				unset($user_unread[$key]);
+				$recipient->group_chat_unread_group = $user_unread;
+			}
+			break;
+		case 'user':
+			// Update list of unread user chats
+			$user_unread = $recipient->group_chat_unread_user;
+			if (!is_array($user_unread)) {
+				if (empty($user_unread)) $user_unread = array();
+				else $user_unread = array($user_unread);
+			}
+			if(($key = array_search($chat_id, $user_unread)) !== false) {
+				unset($user_unread[$key]);
+				$recipient->group_chat_unread_user = $user_unread;
+			}
+			break;
+	}
+}
 
 // Convert text smileys to images
 function group_chat_convert_smileys($message = '') {

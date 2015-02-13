@@ -1,9 +1,15 @@
 <?php
 // Common part for all chats
+global $CONFIG;
 
-$chat_id = elgg_extract('chat_id', array());
+$chat_id = elgg_extract('chat_id', $vars);
 $chat_content = get_chat_content($chat_id);
 $smiley_url = elgg_get_site_url() . 'mod/group_chat/graphics/smiley/';
+
+
+// Update marker so we know we're up-to-date
+group_chat_update_marker($chat_id);
+
 
 ?>
 <script type="text/javascript">
@@ -16,7 +22,8 @@ $smiley_url = elgg_get_site_url() . 'mod/group_chat/graphics/smiley/';
 		$("#sendie").keyup(function(a){if(a.keyCode==13){var b=$(this).val();var c=$(this).attr("maxlength");var d=b.length;if(d<=c+1){sendChat(b);$(this).val("")}else{$(this).val(b.substring(0,c))}}});
 		
 		updateChat();
-		var refresh_rate = 100;
+		// This may produce much logs
+		var refresh_rate = 300;
 		// @todo : auto-adjust update rate to real activity : 
 		// lowering when new updates, and delaying when no activity
 		setInterval('updateChat()', refresh_rate);

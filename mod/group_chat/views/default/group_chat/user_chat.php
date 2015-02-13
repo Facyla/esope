@@ -9,29 +9,25 @@ if (!elgg_is_logged_in() || ($user_chat != 'yes')) {
 }
 
 // Get chat in case we' haven't defined it yet
-if (empty($vars['chat_id'])) {
-	$vars['chat_id'] = get_input('chat_id');
-}
+if (empty($vars['chat_id'])) { $vars['chat_id'] = get_input('chat_id'); }
 // Stop here if there is no valid chat
 if (empty($vars['chat_id'])) {
 	echo '<div class="floatLeft joinGroup">' . elgg_echo('group_chat:invalidchatid') . '</div>';
 	return;
 }
-
-$own = elgg_get_logged_in_user_entity();
-
-// Checks chat validity
-$vars['chat_id'] = elgg_get_friendly_title($vars['chat_id']);
-$guids = explode('-', $vars['chat_id']);
 ?>
 
 <div id="userchat-container">
 	<?php
 	// Check access to chat content
+	$own = elgg_get_logged_in_user_entity();
+	$vars['chat_id'] = group_chat_normalise_chat_id($vars['chat_id']);
+	$guids = explode('-', $vars['chat_id']);
 	if (in_array($own->guid, $guids)) {
 		// Embeds the chat content and interface
 		echo elgg_view('group_chat/js_scrolldown', array());
-		echo elgg_view('group_chat/chat_process_engine', array());
+		echo elgg_view('group_chat/chat_process_engine', $vars);
+		echo elgg_view('group_chat/chat_window', $vars);
 	} else {
 		echo '<div class="floatLeft joinGroup">' . elgg_echo('group_chat:noaccesstoprivatechat') . '</div>';
 	}

@@ -2,21 +2,16 @@
 global $CONFIG;
 $baseUrl = elgg_get_site_url();
 
-$chat_id = elgg_get_page_owner_guid();
-//$chat_id = elgg_get_page_owner_guid();
+// At this step, we assume we should have a valid chat_id
+if (empty($vars['chat_id'])) { return; }
 ?>
 
 <script type="text/javascript" language="javascript">
 var instanse = false;
 var state;
-var mes;
 var groupchat_url = elgg.security.addToken("<?php echo $baseUrl;?>action/group_chat/process");
+var chat_id = '<?php echo $vars['chat_id']; ?>';
 
-function chat(){
-	updateChat();
-	sendChat();
-	getStateOfChat();
-}
 
 //gets the state of the chat
 function getStateOfChat(){
@@ -24,11 +19,11 @@ function getStateOfChat(){
 	if(!instanse){
 		instanse = true;
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: groupchat_url,
 			data: {
 				'function': 'getState',
-				'container':'<?php echo $chat_id; ?>'
+				'container': chat_id
 			},
 			dataType: "json",
 			success: function(data){
@@ -45,12 +40,12 @@ function updateChat(){
 	if(!instanse){
 		instanse = true;
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: groupchat_url,
 			data: {
 				'function': 'update',
 				'state': state,
-				'container':'<?php echo $chat_id; ?>'
+				'container': chat_id
 			},
 			dataType: "json",
 			success: function(data){
@@ -79,7 +74,7 @@ function sendChat(message) {
 		data: {
 			'function': 'send',
 			'message': message,
-			'container':'<?php echo $chat_id; ?>'
+			'container': chat_id
 		},
 		dataType: "json",
 		success: function(data){

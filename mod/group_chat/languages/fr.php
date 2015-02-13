@@ -17,7 +17,7 @@ $french = array(
 	'group_chat:joingrouptochat' => "Vous devez être membre du groupe pour chatter avec ses membres.",
 	'group_chat:joinsitetochat' => "Vous devez être membre du site pour chatter avec ses membres.",
 	'group_chat:noaccesstoprivatechat' => "Vous n'avez pas accès à ce chat privé",
-	'group_chat:invalidchatid' => "Indentifiant du chat non valide",
+	'group_chat:invalidchatid' => "Identifiant du chat non valide",
 	
 	/* Settings */
 	'group_chat:settings:group_chat' => "Chat de groupe",
@@ -41,6 +41,17 @@ $french = array(
 	'groupchat:group:openlink' => "Afficher le chat de groupe",
 	'groupchat:group:openlink:ownwindow' => "Afficher le chat du groupe (nouvelle fenêtre)",
 	'groupchat:group:openlink:ownwindow:theme' => "Ouvrir le chat du groupe",
+	
+	// User chat
+	'groupchat:user:openlink' => "Afficher le chat privé",
+	'groupchat:user:openlink:ownwindow' => "Chat privé",
+	'groupchat:user:openlink:ownwindow:theme' => "Ouvrir le chat privé",
+	
+	// Notifications
+	'group_chat:notification:site' => "Nouveau message sur le chat du site",
+	'group_chat:notification:group' => "Nouveau message sur le chat du groupe %s",
+	'group_chat:notification:user' => "Nouveau message sur le chat privé %s",
+	
 	
 );
 

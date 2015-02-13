@@ -42,6 +42,11 @@ $english = array(
 	'groupchat:group:openlink:ownwindow' => "Open group chat (new window)",
 	'groupchat:group:openlink:ownwindow:theme' => "Open group chat",
 	
+	// User chat
+	'groupchat:user:openlink' => "Display private chat",
+	'groupchat:user:openlink:ownwindow' => "Private chat",
+	'groupchat:user:openlink:ownwindow:theme' => "Open private chat",
+	
 );
 
 add_translation('en', $english);

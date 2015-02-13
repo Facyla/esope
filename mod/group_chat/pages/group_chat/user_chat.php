@@ -7,12 +7,12 @@ gatekeeper();
 $own = elgg_get_logged_in_user_entity();
 elgg_set_page_owner_guid($own->guid);
 
-$chat_guid = get_input('chat_id');
-
 $title = elgg_echo('group_chat:user_chat');
 $vars['title'] = $title;
 $content = '';
-$content .= elgg_view('group_chat/user_chat', array('chat_id' => $chat_guid)));
+
+$chat_id = get_input('chat_id');
+$content .= elgg_view('group_chat/user_chat', array('chat_id' => $chat_id));
 
 // Render pure content (for popup, lightbox or embed/iframe use)
 header('Content-Type: text/html; charset=utf-8');

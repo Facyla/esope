@@ -18,7 +18,7 @@ $site = $CONFIG->site;
 	$vars['chat_id'] = $site->guid;
 	// Embeds the chat content and interface
 	echo elgg_view('group_chat/js_scrolldown', array());
-	echo elgg_view('group_chat/chat_process_engine', array());
+	echo elgg_view('group_chat/chat_process_engine', $vars);
 	echo elgg_view('group_chat/chat_window', $vars);
 	?>
 </div>
