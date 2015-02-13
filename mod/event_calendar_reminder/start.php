@@ -71,20 +71,17 @@ function event_calendar_reminder_cron_notify_subscribers($event, $getter, $optio
 	$users = event_calendar_get_users_for_event($event->guid,0,0,false);
 	
 	// Debug
-	echo '<p>' . $event->guid . ' : ' . $event->title . ' ' . date('d m Y', $event->start_date) . ' => ' . count($users) . '</p>';
+	//echo '<p>' . $event->guid . ' : ' . $event->title . ' ' . date('d m Y', $event->start_date) . ' => ' . count($users) . '</p>';
 	
 	// Remove those who do not want notifications
 	foreach ($users as $user) {
 		// @TODO : add blocking usersetting (if admin setting enabled)
 		if (false) continue;
 		
-		// @TODO : update subject and message
-		$subject = 'Event reminder : ' . $event->title;
-		$message = 'Your event ' . $event->title . ' will start on ' . elgg_get_friendly_time($event->start_date) . '.
-		
-		' . $event->brief_description . '
-		
-		Please check full information and venue on ' . $event->getURL() . '.';
+		// @TODO : check subject and message
+		$subject = elgg_echo('event_calendar_reminder:subject', array($event->title));
+		$time_bit = date('d', $event->start_date) . ' ' . elgg_echo('date:month:' . date('m', $event->start_date), array(date('Y', $event->start_date)));
+		$message = elgg_echo('event_calendar_reminder:message', array($event->title, $time_bit, $event->brief_description, $event->getURL()));
 		notify_user($user->guid, $CONFIG->site->guid, $subject, $message, NULL, 'email');
 		
 		/*
