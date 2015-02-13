@@ -42,7 +42,6 @@ function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params
 	
 	$reminders = elgg_get_plugin_setting('reminder_days', 'event_calendar_reminder');
 	$reminders = explode(',', $reminders);
-	echo "Reminders days : " . print_r($reminders, true);
 	foreach ($reminders as $days) {
 		// Get events that start N day from now (1 day means at least 1 day, and at most 1+1 days)
 		// $days must be an int, and cannot be < 1
@@ -57,27 +56,29 @@ function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params
 					array('name' => 'start_date', 'value' => time() + $end_ts, 'operand' => '<='), 
 				), 
 			);
-		//$batch = new ElggBatch('elgg_get_entities_from_metadata', $events_options, 'event_calendar_reminder_cron_notify_subscribers', 1);
-		
-		// Debug
-		$events = elgg_get_entities_from_metadata($events_options);
-		foreach ($events as $ent) {
-			echo '<p>' . $ent->guid . ' : ' . $ent->title . ' ' . date('d m Y', $ent->start_date) . '</p>';
-		}
+		$batch = new ElggBatch('elgg_get_entities_from_metadata', $events_options, 'event_calendar_reminder_cron_notify_subscribers', 1);
 	}
-	echo "Event calendar reminder cron : done.";
+	
+	echo "Event calendar email reminder cron : done.";
 }
 
 // CRON : Send reminder email for obsoletes offers
 function event_calendar_reminder_cron_notify_subscribers($event, $getter, $options) {
 	global $CONFIG;
+	elgg_load_library('elgg:event_calendar');
 	
 	// Get subscribers list
 	$users = event_calendar_get_users_for_event($event->guid,0,0,false);
 	
+	// Debug
+	echo '<p>' . $event->guid . ' : ' . $event->title . ' ' . date('d m Y', $event->start_date) . ' => ' . count($users) . '</p>';
+	
 	// Remove those who do not want notifications
 	foreach ($users as $user) {
+		// @TODO : add blocking usersetting (if admin setting enabled)
 		if (false) continue;
+		
+		// @TODO : update subject and message
 		$subject = 'Event reminder : ' . $event->title;
 		$message = 'Your event ' . $event->title . ' will start on ' . elgg_get_friendly_time($event->start_time) . '.
 		
