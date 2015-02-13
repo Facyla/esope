@@ -1,23 +1,26 @@
 <?php
 // Adds a link to site chat on the page
 
-$site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
-if ( !elgg_is_logged_in() || ($site_chat != 'yes') ) { return; }
-
-global $CONFIG;
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-
-$open_site_chat_url = $CONFIG->url . 'chat/site';
-$chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
-
 $popup_id = 'groupchat_site';
+$site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
+
+if (!elgg_is_logged_in() || ($site_chat != 'yes')) {
+	// Close open window
+	echo '<script type="text/javascript">
+	groupchat_site.close();
+	</script>';
+	return;
+}
+
+$open_site_chat_url = elgg_get_site_url() . 'chat/site';
+$chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 
 // Check if we have some recent content - uncomment to use
 /*
+global $CONFIG;
 $guid = elgg_get_page_owner_guid();
 elgg_set_page_owner_guid($CONFIG->site->guid);
-$chat_content = get_chat_content();
+$chat_content = group_chat_get_chat_content($CONFIG->site->guid);
 if ($chat_content) {
 	$class .= ' chat-active-theme';
 	$chat_icon = '<i class="fa fa-comments"></i> &nbsp; ';

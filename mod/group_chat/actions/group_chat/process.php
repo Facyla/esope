@@ -1,4 +1,5 @@
 <?php
+// Process chat requests : read, writes
 
 // Add some security
 gatekeeper();
@@ -48,22 +49,32 @@ $chat_id = group_chat_normalise_chat_id($chat_id);
 global $CONFIG;
 $log = array();
 
+// Trigger paths upgrade - Detect new structure and update paths (once) before doing anything else
+if (!is_dir($groupchat_dataroot.'/site')) { group_chat_update_paths(); }
+
 // Create chat folders and file
 // Check group chat directory
-$dataroot = $CONFIG->dataroot;
-if(!is_dir($dataroot.'group_chat')){
-	mkdir($dataroot.'group_chat', 0777);
-	chmod($dataroot.'group_chat', 0777);
+$groupchat_dataroot = elgg_get_data_path() . 'group_chat';
+if (!is_dir($groupchat_dataroot)) {
+	mkdir($groupchat_dataroot, 0777);
+	chmod($groupchat_dataroot, 0777);
+}
+// Now we can use new directory structure, using chat types
+$groupchat_dataroot .= '/' . $chat_container_type;
+// Create some structure for chat types
+if (!is_dir($groupchat_dataroot)){
+	mkdir($groupchat_dataroot, 0777);
+	chmod($groupchat_dataroot, 0777);
 }
 // Create chat container directory
-if(!is_dir($dataroot.'group_chat'.'/'.$chat_id)){
-	mkdir($dataroot.'group_chat'.'/'.$chat_id, 0777);
-	chmod($dataroot.'group_chat'.'/'.$chat_id, 0777);
+$groupchat_dataroot .= '/' . $chat_id;
+if (!is_dir($groupchat_dataroot)){
+	mkdir($groupchat_dataroot, 0777);
+	chmod($groupchat_dataroot, 0777);
 }
-$chatLogDir = $dataroot.'group_chat'.'/'.$chat_id.'/';
 // Store log in 1 file per day
-$dayWiseChatLog = date('mdY').'.txt';
-$filePath = $chatLogDir.$dayWiseChatLog;
+//$filePath = $groupchat_dataroot . '/' . date('mdY').'.txt'; // Old version
+$filePath = $groupchat_dataroot . '/' . date('Ymd').'.txt';
 
 
 // Chat actions
@@ -98,8 +109,7 @@ switch($function) {
 		$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
 		if (($message) != "\n") {
 			// Process message
-			// Parse URL
-			// Note  we're not using "parse_urls" because we need target="_blank"
+			// Parse URL - Note  we're not using "parse_urls" because we need target="_blank"
 			if(preg_match($reg_exUrl, $message, $url)) {
 				$message = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $message);
 			}
@@ -121,29 +131,25 @@ switch($function) {
 					$chat_container->group_chat_unread = time();
 					// Update own user to avoid any notification
 					$own->group_chat_unread_site = time();
+					
 				} else if ($chat_container_type == 'group') {
 					$chat_container = get_entity($chat_id);
 					$chat_container->group_chat_unread = time();
+					// Add site-wide marker for quick checking of updates
+					elgg_get_site_entity()->group_chat_unread_group = time();
+					
 				} else if ($chat_container_type == 'user') {
 					// Personnal list of unread chat ids
-					// Add unread mark to each user
+					// Note : we need to allow any user to update some other users meta
 					$ia = elgg_get_ignore_access();
 					elgg_set_ignore_access(true);
+					// Add unread mark to each user
 					foreach($chat_user_guids as $guid) {
 						// Skip own user
 						if ($guid == $own->guid) continue;
 						$recipient = get_entity($guid);
 						if (elgg_instanceof($recipient, 'user')) {
-							$user_unread = $recipient->group_chat_unread_user;
-							if (!is_array($user_unread)) {
-								if (empty($user_unread)) $user_unread = array();
-								else $user_unread = array($user_unread);
-							}
-							if (!in_array($chat_id, $user_unread)) { $user_unread[] = $chat_id; }
-							//$user_unread[] = '55-56';
-							//$user_unread[] = '123-231-342';
-							$user_unread = array_unique($user_unread);
-							$recipient->group_chat_unread_user = $user_unread;
+							esope_add_to_meta_array($recipient, 'group_chat_unread_user', $chat_id);
 						}
 					}
 					elgg_set_ignore_access($ia);
@@ -156,7 +162,7 @@ switch($function) {
 		break;
 	
 }
-$log['dataroot'] = $dataroot;
+//$log['status'] = 1;
 echo json_encode($log);
 
 

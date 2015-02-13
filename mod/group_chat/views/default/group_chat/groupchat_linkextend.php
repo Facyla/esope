@@ -2,21 +2,20 @@
 // This view is an alternate launcher for group chat, better tailored to fit as a link in a menu or elsewhere
 
 $group_chat = elgg_get_plugin_setting('group_chat', 'group_chat');
-if ( !elgg_is_logged_in() 
-	|| !(elgg_get_page_owner_entity() instanceof ElggGroup)
-	|| ($group_chat == 'no') 
-	|| (($group_chat == 'groupoption') && (elgg_get_page_owner_entity()->group_chat_enable != 'yes')) 
-	) { return; }
+if (!elgg_is_logged_in() || ($group_chat == 'no')) { return; }
 
+$group = elgg_get_page_owner_entity();
+if (!elgg_instanceof($group, 'group') || (($group_chat == 'groupoption') && ($group->group_chat_enable != 'yes'))) { return; }
 
-$open_group_chat_url = elgg_get_site_url() . 'chat/group/' . elgg_get_page_owner_guid();
+$chat_id = $group->guid;
+$open_group_chat_url = elgg_get_site_url() . 'chat/group/' . $chat_id;
 $chat_icon = '<i class="fa fa-comments-o"></i> &nbsp; ';
 $text = '<i class="fa fa-external-link"></i> &nbsp; ' . elgg_echo('groupchat:group:openlink:ownwindow:theme');
 
 $class = 'groupchat-grouplink-theme';
 $active = '';
 // Mark chat as active if there are recent messages !
-$chat_content = get_chat_content();
+$chat_content = group_chat_get_chat_content($chat_id);
 if ($chat_content) {
 	$class .= ' chat-active-theme';
 	$chat_icon = '<i class="fa fa-comments"></i> &nbsp; ';
@@ -26,7 +25,7 @@ if ($chat_content) {
 	$text .= ' ' . $chat_icon;
 }
 
-$popup_id = 'groupchat_group_' . elgg_get_page_owner_guid();
+$popup_id = 'groupchat_group_' . $chat_id;
 
 echo '<script type="text/javascript">
 var '.$popup_id.';

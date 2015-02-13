@@ -7,7 +7,7 @@ $user = elgg_get_logged_in_user_entity();
 
 $smiley_url = $CONFIG->url . 'mod/group_chat/graphics/smiley/';
 
-$chat_content = get_chat_content();
+$chat_content = group_chat_get_chat_content();
 ?>
 <script type="text/javascript">
 	$(document).ready(function() {

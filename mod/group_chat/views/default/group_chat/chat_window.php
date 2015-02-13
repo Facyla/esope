@@ -3,7 +3,8 @@
 global $CONFIG;
 
 $chat_id = elgg_extract('chat_id', $vars);
-$chat_content = get_chat_content($chat_id);
+$chat_days = elgg_extract('days', $vars, false);
+$chat_content = group_chat_get_chat_content($chat_id, $chat_days);
 $smiley_url = elgg_get_site_url() . 'mod/group_chat/graphics/smiley/';
 
 

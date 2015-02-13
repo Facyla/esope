@@ -128,3 +128,117 @@ border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px
 
 #groupchat-grouplink.chat-active { bottom: 20px; border: 1px solid #000099; box-shadow:0 0 20px 0 #000099;  }
 
+
+
+/* Notifications */
+#group_chat-notification { position: fixed; z-index:101; position: fixed; bottom: 0; left: 0; }
+#group_chat-notification .elgg-message { border-radius: 0; }
+#group_chat-notification-content { font-weight:normal; }
+#group_chat-notification-content a {  }
+
+
+.group_chat-notification-alert {
+	float: right; z-index: 102; margin: -1ex -1.5ex 1ex 1.5ex;
+	font-size: 5ex; color: gold; text-shadow: 2px 2px 3px black;
+	padding: 5px 10px; /* background: rgba(0,0,0,0.8); */ border-radius: 5ex;
+}
+
+
+/* group_chat-blinking effect - http://visualidiot.com/files/real-world.css */
+.group_chat-blink {
+	-webkit-animation: group_chat-blink .75s linear infinite alternate;
+	-moz-animation: group_chat-blink .75s linear infinite;
+	-ms-animation: group_chat-blink .75s linear infinite;
+	-o-animation: group_chat-blink .75s linear infinite;
+	animation: group_chat-blink .75s linear infinite alternate;
+}
+@-webkit-keyframes group_chat-blink {
+	0% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
+@-moz-keyframes group_chat-blink {
+	0% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
+@-ms-keyframes group_chat-blink {
+	0% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
+@-o-keyframes group_chat-blink {
+	0% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
+@keyframes group_chat-blink {
+	0% { opacity: 1; }
+	100% { opacity: 0.5; }
+}
+
+
+/* Wobble effect - http://visualidiot.com/files/real-world.css */
+.group_chat-wobble {
+	position: relative;
+	display: inline-block;
+	-webkit-animation: group_chat-wobble .75s linear infinite;
+	-moz-animation: group_chat-wobble .75s linear infinite;
+	-ms-animation: group_chat-wobble .75s linear infinite;
+	-o-animation: group_chat-wobble .75s linear infinite;
+	animation: group_chat-wobble .75s linear infinite;
+}
+
+@-webkit-keyframes group_chat-wobble {
+	0% { -webkit-transform: rotate(-2deg); }
+	20% { -webkit-transform: rotate(4deg); }
+	30% { -webkit-transform: rotate(1deg); }
+	40% { -webkit-transform: rotate(3deg); }
+	55% { -webkit-transform: rotate(0deg); }
+	70% { -webkit-transform: rotate(-4deg); }
+	80% { -webkit-transform: rotate(2deg); }
+	90% { -webkit-transform: rotate(-2deg); }
+	90% { -webkit-transform: rotate(3deg); }
+}
+@-moz-keyframes group_chat-wobble {
+	0% { -moz-transform: rotate(-2deg); }
+	20% { -moz-transform: rotate(4deg); }
+	30% { -moz-transform: rotate(1deg); }
+	40% { -moz-transform: rotate(3deg); }
+	55% { -moz-transform: rotate(0deg); }
+	70% { -moz-transform: rotate(-4deg); }
+	80% { -moz-transform: rotate(2deg); }
+	90% { -moz-transform: rotate(-2deg); }
+	90% { -moz-transform: rotate(3deg); }
+}
+@-ms-keyframes group_chat-wobble {
+	0% { -ms-transform: rotate(-2deg); }
+	20% { -ms-transform: rotate(4deg); }
+	30% { -ms-transform: rotate(1deg); }
+	40% { -ms-transform: rotate(3deg); }
+	55% { -ms-transform: rotate(0deg); }
+	70% { -ms-transform: rotate(-4deg); }
+	80% { -ms-transform: rotate(2deg); }
+	90% { -ms-transform: rotate(-2deg); }
+	90% { -ms-transform: rotate(3deg); }
+}
+@-o-keyframes group_chat-wobble {
+	0% { -o-transform: rotate(-2deg); }
+	20% { -o-transform: rotate(4deg); }
+	30% { -o-transform: rotate(1deg); }
+	40% { -o-transform: rotate(3deg); }
+	55% { -o-transform: rotate(0deg); }
+	70% { -o-transform: rotate(-4deg); }
+	80% { -o-transform: rotate(2deg); }
+	90% { -o-transform: rotate(-2deg); }
+	90% { -o-transform: rotate(3deg); }
+}
+@keyframes group_chat-wobble {
+	0% { transform: rotate(-2deg); }
+	20% { transform: rotate(4deg); }
+	30% { transform: rotate(1deg); }
+	40% { transform: rotate(3deg); }
+	55% { transform: rotate(0deg); }
+	70% { transform: rotate(-4deg); }
+	80% { transform: rotate(2deg); }
+	90% { transform: rotate(-2deg); }
+	90% { transform: rotate(3deg); }
+}
+
+

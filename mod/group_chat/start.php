@@ -62,39 +62,104 @@ function group_chat_init() {
 	}
 	
 	// Chat notifications
-	$notifications = elgg_get_plugin_setting('notifications', 'group_chat');
-	elgg_extend_view('adf_platform/adf_header', 'group_chat/js_extend', 1000);
-	
+	elgg_extend_view('adf_platform/adf_header', 'group_chat/js_notifications', 1000);
 	
 	// Register action
 	$action_base = elgg_get_plugins_path() . 'group_chat/actions/group_chat';
 	elgg_register_action("group_chat/process","$action_base/process.php", 'public');
 	//elgg_register_action("group_chat/discussion","$action_base/discussion.php", 'public');
 	
-	
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'group_chat_user_hover_menu');
 	
 }
 
+// Update old paths - should be only run 
+function group_chat_update_paths() {
+	$plugin = elgg_get_plugin_from_id('group_chat');
+	//$version = $plugin->getManifest()->getVersion();
+	$version = $plugin->version_ugrade;
+	if (empty($version) || version_compare($version, '1.8.5', '<')) {
+		$groupchat_dataroot = elgg_get_data_path() . 'group_chat/';
+		if (is_dir($groupchat_dataroot)) {
+			$entries = scandir($groupchat_dataroot);
+			// Traitement des dossiers
+			foreach($entries as $entry) {
+				if (in_array($entry, array('.', '..', 'site', 'user', 'group', 'object'))) continue;
+				// Process only folders
+				if (!is_dir($groupchat_dataroot.$entry)) continue;
+				// Process only valid chat folders
+				$chat_type = group_chat_container_type($entry);
+				if (!$chat_type) continue;
+				// Renommage des fichiers .txt (mdY => Ymd)
+				foreach(scandir($groupchat_dataroot.$entry) as $filename) {
+					if (in_array($entry, array('.', '..'))) continue;
+					if (substr($filename, -4) != '.txt') continue;
+					$new_filename = substr($filename, 4, 4).substr($filename, 0, 2).substr($filename, 2, 2).substr($filename, 8);
+					rename($groupchat_dataroot.$entry.'/'.$filename, $groupchat_dataroot.$entry.'/'.$new_filename);
+				}
+				// Create the new parent directory
+				if(!is_dir($groupchat_dataroot.$chat_type)){
+					mkdir($groupchat_dataroot.$chat_type, 0777);
+					chmod($groupchat_dataroot.$chat_type, 0777);
+				}
+				// Now rename the directory itself
+				rename($groupchat_dataroot.$entry, $groupchat_dataroot.$chat_type . '/' . $entry);
+			}
+		}
+		// Set upgrade as done up to this version
+		$plugin->version_ugrade = '1.8.5';
+	}
+	return true;
+}
+
+
+
 
 // Return chat content, using the defined timeframe
-function get_chat_content($guid = false, $days = false){
-	if (!$guid) $guid = elgg_get_page_owner_guid();
-	if (!$days) $days = elgg_get_plugin_setting('group_chat_days', 'group_chat');
+function group_chat_get_chat_content($chat_id = false, $days = false) {
+	// Try auto-discovery (if site/group/object chat only)
+	if (!$chat_id) {
+		$page_owner = elgg_get_page_owner_entity();
+		if (elgg_instanceof($page_owner, 'site') || elgg_instanceof($page_owner, 'group') || elgg_instanceof($page_owner, 'object')) {
+			$chat_id = elgg_get_page_owner_guid();
+		} else return false;
+	}
+	
+	// Get chat type
+	$chat_type = group_chat_container_type($chat_id);
+	
+	// Define default timeframe
+	if (!$days) {
+		switch($chat_type) {
+			case 'site':
+			default:
+				$days = elgg_get_plugin_setting('site_chat_days', 'group_chat');
+				break;
+			case 'user':
+			default:
+				$days = elgg_get_plugin_setting('user_chat_days', 'group_chat');
+				break;
+			case 'group':
+			default:
+				$days = elgg_get_plugin_setting('group_chat_days', 'group_chat');
+		}
+	}
+	
 	global $CONFIG;
 	$fileContent = '';
 	$days = ($days)?$days:2;
 	// Get history for wanted days
 	for ($i=$days; $i>=0; $i--) {
-		$filename = date('mdY', strtotime('-'.$i.' Days')).'.txt';
-		$filepath = $CONFIG->dataroot.'/group_chat/'.$guid.'/'.$filename;
+		//$filename = date('mdY', strtotime('-'.$i.' Days')).'.txt'; // Old version
+		$filename = date('Ymd', strtotime('-'.$i.' Days')).'.txt';
+		$filepath = elgg_get_data_path()."/group_chat/$chat_type/$chat_id/$filename";
 		if (file_exists($filepath)) {
 			$content = file_get_contents($filepath);
-			if($content) {
+			if ($content) {
 				$ts = strtotime('-'.$i.' Days');
 				if (empty($date_format)) $date_format = 'D, F d, Y';
-				if ($CONFIG->language == 'en') {
+				if (get_language() == 'en') {
 					$date_format = 'D, F d, Y';
 					$fileContent .= '<li class="dateD" >'.date($date_format, $ts).'<li>';
 				} else {
@@ -115,7 +180,6 @@ function group_chat_page_handler($page) {
 	global $CONFIG;
 	$base = elgg_get_plugins_path() . 'group_chat/pages/group_chat';
 	if (!isset($page[0])) { $page[0] = 'site'; }
-	
 	switch ($page[0]) {
 		case "notifier":
 			require_once "$base/notifier.php";
@@ -136,7 +200,6 @@ function group_chat_page_handler($page) {
 			if (isset($page[1])) { set_input('site_guid', $page[1]); }
 			require_once "$base/site_chat.php";
 	}
-	
 	return true;
 }
 
@@ -163,7 +226,6 @@ function group_chat_user_hover_menu($hook, $type, $return, $params) {
 			$url = elgg_get_site_url() . "chat/user/" . $chat_id;
 			$title = '<i class="fa fa-comments-o"></i> ' . elgg_echo("groupchat:user:openlink:ownwindow");
 			$item = new ElggMenuItem('group_chat_user', $title, $url);
-			//$item->setSection('admin');
 			$item->onClick = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
 			$return[] = $item;
 		}
