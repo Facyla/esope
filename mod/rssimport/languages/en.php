@@ -97,12 +97,24 @@
 	'rssimport:allow:cron:weekly' => "Weekly",
 	'rssimport:cron:frequency' => "Allowed Import Frequencies",
 	'rssimport:cron:frequency:explanation' => 'If all import frequencies are disallowed imports can still be achieved manually. These settings only affect automatic scheduled imports.',
+	'rssimport:grouptools' => "Tools enabled for group import",
 	'rssimport:setting:adminonly' => "Restrict importing rss feeds to administrators only",
 	
 	/* common curl errors */
 	'rssimport:curl:error:default' => 'There was an issue getting your feed.  Please make sure all settings are correct.',
 	'rssimport:curl:error:6' => 'Could not find a valid feed at this location.  Please double-check the url.',
 	'rssimport:curl:error:7' => 'Cannot connect to the destination network.  Ensure that the location you provided is correct.  If the location uses a non-default protocol (eg. https) it may be due to firewall restrictions on your server.',
+	
+	// Fing additions
+	'rssimport:ownership' => "Imported content ownership",
+	'rssimport:ownership:explanation' => "Content can be published in the name of the member who set up the import, or to the container of the content, which means the container group when importing into a group.",
+	'rssimport:ownership:container' => "Container : group or member",
+	'rssimport:ownership:owner' => "Owner of import",
+	'rssimport:roles' => "Access to import tools",
+	'rssimport:roles:explanation' => "Lets you define who has access to the import tool : everyone, group admins ou administrators",
+	'rssimport:role:user' => "All members",
+	'rssimport:role:groupadmin' => "Groups admins",
+	'rssimport:role:admin' => "Administrators only",
 	
 	// ESOPE : internationalize date string
 	'rssimport:date:format' => 'F j, Y, g:i a',
