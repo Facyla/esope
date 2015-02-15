@@ -1,21 +1,22 @@
 <?php
-global $CONFIG;
 
-$url = $vars['url'];
+$reminder_days = elgg_get_plugin_setting('reminder_days', 'event_calendar_reminder');
+$reminder_days = explode(',', $reminder_days);
+$reminder_days = implode(', ', $reminder_days);
 
-// Define dropdown options
-$yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
+echo '<p>' . elgg_echo('event_calendar_reminder:usersettings:reminder_days', array($reminder_days)) . '</p>';
 
+$enable_usersettings = elgg_get_plugin_setting('enable_usersettings', 'event_calendar_reminder');
+if ($enable_usersettings == 'yes') {
+	
+	// Define dropdown options
+	$no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
 
-// Set default value
-if (!isset($vars['entity']->user_plugin_setting)) { $vars['entity']->user_plugin_setting == 'default'; }
-
-
-// Example yes/no setting
-echo '<p><label>Test select setting "user_plugin_setting"</label> ' . elgg_view('input/dropdown', array('name' => 'params[user_plugin_setting]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->user_plugin_setting)) . '</p>';
-
-
-// Example text setting
-echo '<p><label>Text setting "user_plugin_setting2"</label> ' . elgg_view('input/dropdown', array('name' => 'params[user_plugin_setting2]', 'value' => $vars['entity']->user_plugin_setting2)) . '</p>';
-
+	// Set default values
+	if (!isset($vars['entity']->block_reminder)) { $vars['entity']->block_reminder = 'no'; }
+	
+	// Enable usersettings
+	echo '<p><label>' . elgg_echo('event_calendar_reminder:usersettings:block_reminder') . ' ' . elgg_view('input/dropdown', array('name' => 'params[block_reminder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->block_reminder)) . '</label></p>';
+	
+}
 

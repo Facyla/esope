@@ -4,7 +4,7 @@
  *
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Florian DANIEL aka Facyla
- * @copyright Facyla 2010-2014
+ * @copyright Facyla 2015
  * @link http://id.facyla.fr/
  */
 
@@ -16,7 +16,6 @@ elgg_register_event_handler('init', 'system', 'event_calendar_reminder_init');
  * Init event_calendar_reminder plugin.
  */
 function event_calendar_reminder_init() {
-	
 	// Register cron hook
 	elgg_register_plugin_hook_handler('cron', 'daily', 'event_calendar_reminder_cron');
 	
@@ -24,7 +23,7 @@ function event_calendar_reminder_init() {
 
 
 /* Cron tasks
- * Check upcoming events and send emails to registreed users
+ * Check upcoming events and send emails to registered users
  */
 function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params) {
 	global $CONFIG;
@@ -40,7 +39,9 @@ function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params
 	$from = $from_name . ' <' . $CONFIG->site->email . '>';
 	define('event_calendar_reminder_EMAIL_FROM', $from);
 	
+	// Admin reminder setting
 	$reminders = elgg_get_plugin_setting('reminder_days', 'event_calendar_reminder');
+	
 	$reminders = explode(',', $reminders);
 	foreach ($reminders as $days) {
 		// Get events that start N day from now (1 day means at least 1 day, and at most 1+1 days)
@@ -59,12 +60,14 @@ function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params
 		$batch = new ElggBatch('elgg_get_entities_from_metadata', $events_options, 'event_calendar_reminder_cron_notify_subscribers', 1);
 	}
 	
-	echo "Event calendar email reminder cron : done.";
+	echo elgg_echo('event_calendar_reminder:cron:done');
 }
 
-// CRON : Send reminder email for obsoletes offers
+// CRON : Send reminder email
 function event_calendar_reminder_cron_notify_subscribers($event, $getter, $options) {
 	global $CONFIG;
+	$enable_usersettings = elgg_get_plugin_setting('enable_usersettings', 'event_calendar_reminder');
+	
 	elgg_load_library('elgg:event_calendar');
 	
 	// Get subscribers list
@@ -75,31 +78,19 @@ function event_calendar_reminder_cron_notify_subscribers($event, $getter, $optio
 	
 	// Remove those who do not want notifications
 	foreach ($users as $user) {
-		// @TODO : add blocking usersetting (if admin setting enabled)
-		if (false) continue;
+		// Block sending if user wants (if admin setting enabled)
+		if ($enable_usersettings == 'yes') {
+			$user_block = elgg_get_plugin_user_setting('block_reminder', $user->guid, 'event_calendar_reminder');
+			if ($user_block == 'yes') { continue; }
+		}
 		
-		// @TODO : check subject and message
+		// Define event subject and message, and send it
 		$subject = elgg_echo('event_calendar_reminder:subject', array($event->title));
 		$time_bit = date('d', $event->start_date) . ' ' . elgg_echo('date:month:' . date('m', $event->start_date), array(date('Y', $event->start_date)));
 		$message = elgg_echo('event_calendar_reminder:message', array($event->title, $time_bit, $event->brief_description, $event->getURL()));
 		notify_user($user->guid, $CONFIG->site->guid, $subject, $message, NULL, 'email');
-		
-		/*
-		// Encode the name. If may content nos ASCII chars.
-		$to_name = "=?UTF-8?B?" . base64_encode($event->managername) . "?=";
-		$to = $to_name . ' <' . $event->manageremail . '>';
-		$html_message = html_email_handler_make_html_body($subject, $message);
-		html_email_handler_send_email(array('from' => event_calendar_reminder_EMAIL_FROM, 'to' => $to, 'subject' => $subject, 'plaintext_message' => $message, 'html_message' => $html_message));
-		*/
 	}
 	
 }
-
-// CRON : Archive old offers
-function event_calendar_reminder_cron_archive($event, $getter, $options) {
-	$event->followstate = 'archive';
-	event_calendar_reminder_state_change($event, 'published');
-}
-
 
 
