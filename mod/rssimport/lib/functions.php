@@ -3,7 +3,7 @@
 /* This function returns an array of all imports for the logged in user */
 function get_user_rssimports($user = NULL, $options = array()){
 	if (!$user) { return false; }
- 
+	
 	$defaults = array(
 			'types' => array('object'),
 			'subtypes' => array('rssimport'),
@@ -13,7 +13,7 @@ function get_user_rssimports($user = NULL, $options = array()){
 	);
 	
 	$options = array_merge($defaults, $options);
- 
+	
 	return elgg_get_entities_from_metadata($options);
 }
 
@@ -49,7 +49,7 @@ function rssimport_already_imported($item, $rssimport){
 }
 
 
-/* This function saves a blog post from an rss item */
+/* BLOG IMPORT - This function saves a blog post from an rss item */
 function rssimport_blog_import($item, $rssimport) {
 	$blog = new ElggBlog();
 	$blog->subtype = "blog";
@@ -113,7 +113,8 @@ function rssimport_blog_import($item, $rssimport) {
 	return $blog->guid;
 }
 
-/* Imports a feed item into a bookmark */
+
+/* BOOKMARK IMPORT - Imports a feed item into a bookmark */
 function rssimport_bookmarks_import($item, $rssimport){
 	// flag to prevent saving if there are issues
 	$error = false;
@@ -165,6 +166,102 @@ function rssimport_bookmarks_import($item, $rssimport){
 	}
 }
 
+
+/* PAGE IMPORT - Imports an RSS item into a page object */
+function rssimport_page_import($item, $rssimport){
+	//check if we have a parent page yet
+	$options = array();
+	$options['type_subtype_pairs'] = array('object' => 'page_top');
+	$options['container_guids'] = array($rssimport->container_guid);
+	$options['metadata_name_value_pairs'] = array(array('name' => 'rssimport_feedpage', 'value' => $rssimport->title), array('name' => 'rssimport_url', 'value' => $rssimport->description));
+	$testpage = elgg_get_entities_from_metadata($options);
+	
+	if (!$testpage) {
+		//create our parent page
+		$parent = new ElggObject();
+		$parent->subtype = 'page_top';
+		$parent->container_guid = $rssimport->container_guid;
+		//$parent->owner_guid = $rssimport->owner_guid;
+		$parent->owner_guid = rssimport_get_owner_guid($rssimport);
+		$parent->access_id = $rssimport->defaultaccess;
+		$parent->parent_guid = 0;
+		$parent->write_access_id = ACCESS_PRIVATE;
+		$parent->title = $rssimport->title;
+		$parent->description = $rssimport->description;
+		//set default tags
+		$tagarray = string_to_tag_array($rssimport->defaulttags);
+		$parent->tags = $tagarray;
+		$parent->save();
+		
+		$parent->annotate('page', $parent->description, $parent->access_id, $parent->owner_guid);
+		
+		$parent_guid = $parent->guid;
+		
+		//add our identifying metadata
+		$parent->rssimport_feedpage = $rssimport->title;
+		$parent->rssimport_url = $rssimport->description;
+	} else{
+		$parent_guid = $testpage[0]->guid;
+	}
+	
+	//initiate our object
+	$page = new ElggObject();
+	$page->subtype = 'page';
+	$page->container_guid = $rssimport->container_guid;
+	//$page->owner_guid = $rssimport->owner_guid;
+	$page->owner_guid = rssimport_get_owner_guid($rssimport);
+	$page->access_id = $rssimport->defaultaccess;
+	$page->parent_guid = $parent_guid;
+	$page->write_access_id = ACCESS_PRIVATE;
+	$page->title = $item->get_title();
+	$author = $item->get_author();
+	// Page content
+	$content = $item->get_content();
+	// Filter content
+	$parse_permalink = parse_url($item->get_permalink());
+	$parse_rss_url = parse_url($rssimport->description);
+	$pagebody = rssimport_filter_content($content, $parse_rss_url['host']);
+	// Tags extraits du contenu filtré, s'il y a lieu
+	$extracted_tags = rssimport_filter_content($content, $parse_rss_url['host'], true);
+	$pagebody .= "<br /><br />";
+	$pagebody .= "<hr><br />";
+	$pagebody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br />";
+	if (is_object($author)) {
+		$pagebody .= elgg_echo('rssimport:by') . ": " . $author->get_name() . "<br />";
+	}
+	// ESOPE : add real data source, if defined
+	$pagebody .= rssimport_add_source($item);
+	//$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
+	$date_format = elgg_echo('rssimport:date:format');
+	$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date($date_format);
+	
+	$page->description = $pagebody;
+	
+	//set default tags
+	$tagarray = string_to_tag_array($rssimport->defaulttags);
+	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
+	foreach ($item->get_categories() as $category) { $tagarray[] = $category->get_label(); }
+	$tagarray = array_unique($tagarray);
+	$tagarray = array_filter($tagarray); // Remove empty values
+	$tagarray = array_values($tagarray);
+
+	// Now let's add tags. We can pass an array directly to the object property! Easy.
+	if (is_array($tagarray)) { $page->tags = $tagarray; }
+	
+	$page->save();
+	
+	$page->annotate('page', $page->description, $page->access_id, $page->owner_guid);
+	
+	//add our identifying metadata
+	$token = rssimport_create_comparison_token($item);
+	$page->rssimport_token = $token;
+	$page->rssimport_id = $item->get_id();
+	$page->rssimport_permalink = $item->get_permalink();
+	$page->time_created = strtotime($item->get_date()) ? strtotime($item->get_date()) : time();
+	$page->save(); // save again to set proper time_created
+	
+	return $page->guid;
+}
 
 /* Checks if a blog post exists for a user that matches a feed item
  * Return true if there is a match
@@ -287,6 +384,7 @@ function rssimport_cron($hook, $entity_type, $returnvalue, $params){
 	elgg_set_context($context);
 }
 
+
 /* Returns an array of groups that a user is a member of
  * and can post content to
  * returns false if there are no groups the user can post to
@@ -294,6 +392,7 @@ function rssimport_cron($hook, $entity_type, $returnvalue, $params){
 function rssimport_get_postable_groups($user) {
 	return $user->getGroups('', 0, 0);
 }
+
 
 /* this function parses the URL to figure out what context and owner it belongs to, so we can generate
  * a return URL 
@@ -330,6 +429,7 @@ function rssimport_get_return_url(){
 	$linktext = elgg_echo('rssimport:back:to:' . $parts[2]);
 	return array($linktext, $backurl);
 }
+
 
 /**
  * returns true/false whether rssimport is allowed for a given group
@@ -411,6 +511,7 @@ function rssimport_include_simplepie() {
 	}
 }
 
+
 // returns true if the item has been blacklisted by the current user
 function rssimport_is_blacklisted($item, $rssimport) {
 	$options = array(
@@ -422,6 +523,17 @@ function rssimport_is_blacklisted($item, $rssimport) {
 	return (bool) elgg_get_annotations($options);
 }
 
+/* this function removes an item from the blacklist */
+function rssimport_remove_from_blacklist($items, $rssimport){
+	$options = array(
+			'annotation_names' => array('rssimport_blacklist'),
+			'annotation_values' => $items,
+			'guids' => $rssimport->guid
+		);
+	
+	$annotations = elgg_get_annotations($options);
+	foreach ($annotations as $annotation) { $annotation->delete(); }
+}
 
 /* removes a single item from an array
  * resets keys
@@ -436,120 +548,9 @@ function rssimport_removeFromArray($value, $array) {
 			$array = array_values($array);
 		}
 	}
-	
 	return $array;
 }
 
-/* this function removes an item from the blacklist */
-function rssimport_remove_from_blacklist($items, $rssimport){
-	$options = array(
-			'annotation_names' => array('rssimport_blacklist'),
-			'annotation_values' => $items,
-			'guids' => $rssimport->guid
-		);
-	
-	$annotations = elgg_get_annotations($options);
-	
-	foreach ($annotations as $annotation) { $annotation->delete(); }
-}
-
-
-
-/* Imports an RSS item into a page object */
-function rssimport_page_import($item, $rssimport){
-	//check if we have a parent page yet
-	$options = array();
-	$options['type_subtype_pairs'] = array('object' => 'page_top');
-	$options['container_guids'] = array($rssimport->container_guid);
-	$options['metadata_name_value_pairs'] = array(array('name' => 'rssimport_feedpage', 'value' => $rssimport->title), array('name' => 'rssimport_url', 'value' => $rssimport->description));
-	$testpage = elgg_get_entities_from_metadata($options);
-	
-	if (!$testpage) {
-		//create our parent page
-		$parent = new ElggObject();
-		$parent->subtype = 'page_top';
-		$parent->container_guid = $rssimport->container_guid;
-		//$parent->owner_guid = $rssimport->owner_guid;
-		$parent->owner_guid = rssimport_get_owner_guid($rssimport);
-		$parent->access_id = $rssimport->defaultaccess;
-		$parent->parent_guid = 0;
-		$parent->write_access_id = ACCESS_PRIVATE;
-		$parent->title = $rssimport->title;
-		$parent->description = $rssimport->description;
-		//set default tags
-		$tagarray = string_to_tag_array($rssimport->defaulttags);
-		$parent->tags = $tagarray;
-		$parent->save();
-		
-		$parent->annotate('page', $parent->description, $parent->access_id, $parent->owner_guid);
-		
-		$parent_guid = $parent->guid;
-		
-		//add our identifying metadata
-		$parent->rssimport_feedpage = $rssimport->title;
-		$parent->rssimport_url = $rssimport->description;
-	} else{
-		$parent_guid = $testpage[0]->guid;
-	}
-	
-	//initiate our object
-	$page = new ElggObject();
-	$page->subtype = 'page';
-	$page->container_guid = $rssimport->container_guid;
-	//$page->owner_guid = $rssimport->owner_guid;
-	$page->owner_guid = rssimport_get_owner_guid($rssimport);
-	$page->access_id = $rssimport->defaultaccess;
-	$page->parent_guid = $parent_guid;
-	$page->write_access_id = ACCESS_PRIVATE;
-	$page->title = $item->get_title();
-	$author = $item->get_author();
-	// Page content
-	$content = $item->get_content();
-	// Filter content
-	$parse_permalink = parse_url($item->get_permalink());
-	$parse_rss_url = parse_url($rssimport->description);
-	$pagebody = rssimport_filter_content($content, $parse_rss_url['host']);
-	// Tags extraits du contenu filtré, s'il y a lieu
-	$extracted_tags = rssimport_filter_content($content, $parse_rss_url['host'], true);
-	$pagebody .= "<br /><br />";
-	$pagebody .= "<hr><br />";
-	$pagebody .= elgg_echo('rssimport:original') . ": <a href=\"" . $item->get_permalink() . "\">" . $item->get_permalink() . "</a> <br />";
-	if (is_object($author)) {
-		$pagebody .= elgg_echo('rssimport:by') . ": " . $author->get_name() . "<br />";
-	}
-	// ESOPE : add real data source, if defined
-	$pagebody .= rssimport_add_source($item);
-	//$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date('F j, Y, g:i a');
-	$date_format = elgg_echo('rssimport:date:format');
-	$pagebody .= elgg_echo('rssimport:posted') . ": " . $item->get_date($date_format);
-	
-	$page->description = $pagebody;
-	
-	//set default tags
-	$tagarray = string_to_tag_array($rssimport->defaulttags);
-	$tagarray = array_merge($tagarray, $extracted_tags); // N'accepte que des array, pas de null
-	foreach ($item->get_categories() as $category) { $tagarray[] = $category->get_label(); }
-	$tagarray = array_unique($tagarray);
-	$tagarray = array_filter($tagarray); // Remove empty values
-	$tagarray = array_values($tagarray);
-
-	// Now let's add tags. We can pass an array directly to the object property! Easy.
-	if (is_array($tagarray)) { $page->tags = $tagarray; }
-	
-	$page->save();
-	
-	$page->annotate('page', $page->description, $page->access_id, $page->owner_guid);
-	
-	//add our identifying metadata
-	$token = rssimport_create_comparison_token($item);
-	$page->rssimport_token = $token;
-	$page->rssimport_id = $item->get_id();
-	$page->rssimport_permalink = $item->get_permalink();
-	$page->time_created = strtotime($item->get_date()) ? strtotime($item->get_date()) : time();
-	$page->save(); // save again to set proper time_created
-	
-	return $page->guid;
-}
 
 // allows write permissions when we are adding metadata to an object
 function rssimport_permissions_check($hook, $type, $return, $params){
@@ -645,6 +646,7 @@ function rssimport_get_source($item) {
 	return false;
 }
 
+
 /* Convenient function to add the source if it is defined */
 function rssimport_add_source($item) {
 	$item_source = rssimport_get_source($item);
@@ -709,7 +711,7 @@ function rssimport_filter_content($content, $filter = 'auto', $extract_tags = fa
 		}
 		return $tags;
 	}
-	// Returned filterd content
+	// Returned filtered content
 	return $content;
 }
 

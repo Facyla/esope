@@ -10,7 +10,7 @@ $rssimport = get_entity($rssimport_id);
 
 // make sure we're the owner if selecting a feed
 if ($rssimport instanceof ElggObject && elgg_get_logged_in_user_guid() != $rssimport->owner_guid) {
-  register_error(elgg_echo('rssimport:not:owner'));
+	register_error(elgg_echo('rssimport:not:owner'));
 	forward(REFERRER);
 }
 
@@ -27,44 +27,44 @@ $container = get_entity($container_guid);
 $maincontent .= "<h2>" . elgg_echo("rssimport:import:title", array($container->name, elgg_echo($import_into))) . "</h2>";
 
 $maincontent .= elgg_view_form('rssimport/add',
-        array(),
-        array(
-            'entity' => $rssimport,
-            'import_into' => $import_into,
-            'container_guid' => $container_guid
-            )
-        );
+		array(),
+		array(
+			'entity' => $rssimport,
+			'import_into' => $import_into,
+			'container_guid' => $container_guid
+		)
+	);
 
 
 $maincontent .= "<hr><br>";
 	
-if ($rssimport) {	
+if ($rssimport) {
 	// Begin showing our feed
-  $feed = rssimport_simplepie_feed($rssimport->description);
+	$feed = rssimport_simplepie_feed($rssimport->description);
 	
-  $maincontent .= elgg_view('rssimport/feedcontrol', array('entity' => $rssimport, 'feed' => $feed));
+	$maincontent .= elgg_view('rssimport/feedcontrol', array('entity' => $rssimport, 'feed' => $feed));
 	
 	//Display each item
 	$importablecount = 0;
 	foreach ($feed->get_items() as $item) {
 		if (!rssimport_already_imported($item, $rssimport)) {
-      $importablecount++;
-      
-      if ($blacklisted = rssimport_is_blacklisted($item, $rssimport)) {
-        $importablecount--;
-      }
-      
-      $maincontent .= elgg_view('rssimport/feeditem', array(
-          'entity' => $rssimport,
-          'blacklisted' => $blacklisted,
-          'item' => $item
-          ));
+			$importablecount++;
+			
+			if ($blacklisted = rssimport_is_blacklisted($item, $rssimport)) {
+				$importablecount--;
+			}
+			
+			$maincontent .= elgg_view('rssimport/feeditem', array(
+					'entity' => $rssimport,
+					'blacklisted' => $blacklisted,
+					'item' => $item
+				));
 		}
-  }
-		
-$maincontent .= "</div><!-- rssimport_feedwrapper -->";
+	}
 	
-}	
+	$maincontent .= "</div><!-- rssimport_feedwrapper -->";
+	
+}
 
 $maincontent .= "</div>";
 
@@ -85,3 +85,4 @@ $body = elgg_view_layout('one_sidebar', array('content' => $maincontent, 'sideba
 
 // display the page
 echo elgg_view_page($title, $body);
+
