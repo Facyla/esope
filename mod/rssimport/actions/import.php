@@ -19,8 +19,8 @@ if (empty($itemidstring)) {
 }
 
 if (!rssimport_content_importable($rssimport)) {
-  register_error(elgg_echo('rssimport:invalid:content:type', array(elgg_echo($rssimport->import_into))));
-  forward(REFERRER);
+	register_error(elgg_echo('rssimport:invalid:content:type', array(elgg_echo($rssimport->import_into))));
+	forward(REFERRER);
 }
 
 // get our feed
@@ -33,7 +33,7 @@ elgg_set_context('rssimport_cron');
 foreach ($feed->get_items() as $item) {
 	if (in_array($item->get_id(true), $items)) {
 		if (!rssimport_check_for_duplicates($item, $rssimport)) {
-      // not a duplicate, selected for import - let's do it
+			// not a duplicate, selected for import - let's do it
 			$history[] = rssimport_import_item($item, $rssimport);
 		}
 	}
@@ -44,3 +44,4 @@ rssimport_add_to_history($history, $rssimport);
 
 system_message(elgg_echo('rssimport:imported'));
 forward(REFERRER);
+

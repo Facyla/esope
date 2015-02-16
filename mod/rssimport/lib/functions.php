@@ -3,7 +3,7 @@
 /* This function returns an array of all imports for the logged in user */
 function get_user_rssimports($user = NULL, $options = array()){
 	if (!$user) { return false; }
- 
+	
 	$defaults = array(
 			'types' => array('object'),
 			'subtypes' => array('rssimport'),
@@ -13,7 +13,7 @@ function get_user_rssimports($user = NULL, $options = array()){
 	);
 	
 	$options = array_merge($defaults, $options);
- 
+	
 	return elgg_get_entities_from_metadata($options);
 }
 
@@ -49,7 +49,7 @@ function rssimport_already_imported($item, $rssimport){
 }
 
 
-/* This function saves a blog post from an rss item */
+/* BLOG IMPORT - This function saves a blog post from an rss item */
 function rssimport_blog_import($item, $rssimport) {
 	$blog = new ElggBlog();
 	$blog->subtype = "blog";
@@ -113,7 +113,8 @@ function rssimport_blog_import($item, $rssimport) {
 	return $blog->guid;
 }
 
-/* Imports a feed item into a bookmark */
+
+/* BOOKMARK IMPORT - Imports a feed item into a bookmark */
 function rssimport_bookmarks_import($item, $rssimport){
 	// flag to prevent saving if there are issues
 	$error = false;
@@ -166,296 +167,7 @@ function rssimport_bookmarks_import($item, $rssimport){
 }
 
 
-/* Checks if a blog post exists for a user that matches a feed item
- * Return true if there is a match
- */
-function rssimport_check_for_duplicates($item, $rssimport){
-	// normalize subtype for pages
-	$subtype = $rssimport->import_into;
-	if ($subtype == 'pages') { $subtype = 'page'; }
-	
-	// look for id first - less resource intensive
-	// this will filter out anything that has already been imported
-	$options = array();
-	$options['container_guids'] = $rssimport->container_guid;
-	$options['type_subtype_pairs'] = array('object' => $subtype);
-	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_id', 'value' => $item->get_id());
-	$blogs = elgg_get_entities_from_metadata($options);
-	if (!empty($blogs)) { return true; }
-	
-	// look for permalink
-	// this will filter out anything that has already been imported
-	$options = array();
-	$options['container_guids'] = $rssimport->container_guid;
-	$options['type_subtype_pairs'] = array('object' => $subtype);
-	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_permalink', 'value' => $item->get_permalink());
-	$blogs = elgg_get_entities_from_metadata($options);
-	if (!empty($blogs)) { return true; }
-	
-	//check by token - this will filter out anything that was a repost on the feed
-	$token = rssimport_create_comparison_token($item);
-	$options = array();
-	$options['container_guids'] = $rssimport->container_guid;
-	$options['type_subtype_pairs'] = array('object' => $subtype);
-	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_token', 'value' => $token);
-	$blogs = elgg_get_entities_from_metadata($options);
-	if (!empty($blogs)) { return true; }
-	
-	return false;
-}
-
-
-/**
- * 	Creates a hash of various feed item variables for
- * 	easy comparison to feed created blogs
- */
-function rssimport_create_comparison_token($item){
-	$author = $item->get_author();
-	$pretoken = $item->get_title();
-	$pretoken .= $item->get_content();
-	if (is_object($author)) { $pretoken .= $author->get_name(); }
-	
-	return md5($pretoken);
-}
-
-/**
- * Convenience function to tell if a feed can be imported to a content type
- * 
- * @staticvar type $blog_enabled
- * @staticvar type $bookmarks_enabled
- * @staticvar type $pages_enabled
- * @param type $rssimport
- * @return boolean 
- */
-function rssimport_content_importable($rssimport) {
-	/* ESOPE : Replaced by function that tells if import is allowed for each tool
-	// this will be called multiple times, remember which plugins are enabled
-	static $blog_enabled;
-	static $bookmarks_enabled;
-	static $pages_enabled;
-	
-	// use static vars so we only have to call elgg_is_active_plugin once
-	if ($blog_enabled === NULL) {
-		$blog_enabled = elgg_is_active_plugin('blog');
-	}
-	if ($bookmarks_enabled === NULL) {
-		$bookmarks_enabled = elgg_is_active_plugin('bookmarks');
-	}
-	if ($pages_enabled === NULL) {
-		$pages_enabled = elgg_is_active_plugin('pages');
-	}
-	*/
-	$blog_enabled = rssimport_tool_enabled('blog');
-	$bookmarks_enabled = rssimport_tool_enabled('bookmarks');
-	$pages_enabled = rssimport_tool_enabled('pages');
-	
-	// only import if the receiving content type's plugin is active
-	if (!($rssimport->import_into == 'blog' && $blog_enabled)
-		&& !($rssimport->import_into == 'bookmarks' && $bookmarks_enabled)
-		&& !($rssimport->import_into == 'pages' && $pages_enabled)
-		) {
-		return false;
-	}
-	return true;
-}
-
-
-/**
- * Trigger imports
- *	use $params['period'] to find out which we are on
- *	eg; $params['period'] = 'hourly'
- */
-function rssimport_cron($hook, $entity_type, $returnvalue, $params){
-	// change context for permissions
-	$context = elgg_get_context();
-	elgg_set_context('rssimport_cron');
-	elgg_set_ignore_access(TRUE);
-	
-	// get array of imports we need to look at
-	$options = array(
-			'types' => array('object'),
-			'subtypes' => array('rssimport'),
-			'limit' => 0,
-			'metadata_name_value_pairs' => array('name' => 'cron', 'value' => $params['period'])
-		);
-	
-	// using ElggBatch because there may be many, many groups in teh installation
-	// try to avoid oom errors
-	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options, 'rssimport_import_feeds', 25);
-	
-	elgg_set_ignore_access(FALSE);
-	elgg_set_context($context);
-}
-
-/* Returns an array of groups that a user is a member of
- * and can post content to
- * returns false if there are no groups the user can post to
- */
-function rssimport_get_postable_groups($user) {
-	return $user->getGroups('', 0, 0);
-}
-
-/* this function parses the URL to figure out what context and owner it belongs to, so we can generate
- * a return URL 
- * 
- * URL is in the form of <baseurl>/rssimport/<container_guid>/<context> where context is "blog", "bookmarks", or "page"
- * Generate a url of <baseurl>/<context>/owner/<owner_name> for personal stuff
- * <baseurl>/<context>/group/<guid>/all for group stuff
- */
-function rssimport_get_return_url(){
-	
-	$base_path = parse_url(elgg_get_site_url(), PHP_URL_PATH);
-	$current_path = parse_url(current_page_url(), PHP_URL_PATH);
-	if ($base_path != '/') {
-		$current_path = str_replace($base_path, '', $current_path);
-	} else {
-		$current_path = substr($current_path, 1);
-	}
-	$parts = explode('/', $current_path);
-	
-	// get our owner entity
-	$entity = get_entity($parts[1]);
-			
-	if ($entity instanceof ElggGroup) {
-		$owner_type = 'group';
-		$username = $entity->guid . '/all';
-	} elseif ($entity instanceof ElggUser) {
-		$owner_type = 'owner';
-		$username = $entity->username;
-	}
-	
-	$backurl = elgg_get_site_url() . $parts[2] . '/' . $owner_type . '/' . $username;
-	
-	//return array of link text and url
-	$linktext = elgg_echo('rssimport:back:to:' . $parts[2]);
-	return array($linktext, $backurl);
-}
-
-/**
- * returns true/false whether rssimport is allowed for a given group
- * default - forwards with error message if not allowed
- * 
- * @param ElggGroup $group
- * @param bool $forward
- * @param string $import_into
- * @return bool
- */
-function rssimport_group_gatekeeper($group, $import_into, $forward = TRUE) {
-	if (!elgg_instanceof($group, 'group')) {
-		return TRUE;
-	}
-	
-	$attribute = 'rssimport_' . $import_into . '_enable';
-	if ($group->$attribute != 'no') {
-		return TRUE;
-	}
-	
-	// it's disabled, forward if necessary, otherwise return false
-	if ($forward) {
-		register_error(elgg_echo('rssimport:group:disabled'));
-		forward($group->getURL());
-	}
-	
-	return FALSE;
-}
-
-
-/* Imports full feeds - called on cron */
-function rssimport_import_feeds($rssimport, $getter, $options){
-	if (!rssimport_content_importable($rssimport)) { return; }
-	
-	if (!rssimport_group_gatekeeper($rssimport->getContainerEntity(), $rssimport->import_into, FALSE)) { return; }
-	
-	//get the feed
-	$feed = rssimport_simplepie_feed($rssimport->description);
-	
-	$history = array();
-	foreach ($feed->get_items(0,0) as $item) {
-		if (!rssimport_check_for_duplicates($item, $rssimport) && !rssimport_is_blacklisted($item, $rssimport)) {
-			$history[] = rssimport_import_item($item, $rssimport);
-		}
-	}
-	
-	rssimport_add_to_history($history, $rssimport);
-}
-
-
-/* Imports a single item of a feed
- * returns the guid of
- */
-function rssimport_import_item($item, $rssimport) { 
-	switch ($rssimport->import_into) {
-		case "blog":
-			$history = rssimport_blog_import($item, $rssimport);
-			break;
-		case "pages":
-			$history = rssimport_page_import($item, $rssimport);
-			break;
-		case "bookmarks":
-			$history = rssimport_bookmarks_import($item, $rssimport);
-			break;
-		default:	// when in doubt, send to a blog
-			$history = rssimport_blog_import($item, $rssimport);
-			break;
-	}
-	
-	return $history;
-}
-
-
-
-/* this function includes the simplepie class if it doesn't exist */
-function rssimport_include_simplepie() {
-	if (!class_exists('SimplePie')) {
-		require_once elgg_get_plugins_path() . 'rssimport/lib/simplepie-1.3.php';
-	}
-}
-
-// returns true if the item has been blacklisted by the current user
-function rssimport_is_blacklisted($item, $rssimport) {
-	$options = array(
-		'annotation_names' => array('rssimport_blacklist'),
-		'annotation_values' => array($item->get_id(true)),
-		'guids' => $rssimport->guid
-	);
-	
-	return (bool) elgg_get_annotations($options);
-}
-
-
-/* removes a single item from an array
- * resets keys
- */
-function rssimport_removeFromArray($value, $array) {
-	if (!is_array($array)) { return $array; }
-	if (!in_array($value, $array)) { return $array; }
-	
-	for ($i=0; $i<count($array); $i++) {
-		if ($value == $array[$i]) {
-			unset($array[$i]);
-			$array = array_values($array);
-		}
-	}
-	
-	return $array;
-}
-
-/* this function removes an item from the blacklist */
-function rssimport_remove_from_blacklist($items, $rssimport){
-	$options = array(
-			'annotation_names' => array('rssimport_blacklist'),
-			'annotation_values' => $items,
-			'guids' => $rssimport->guid
-		);
-	
-	$annotations = elgg_get_annotations($options);
-	
-	foreach ($annotations as $annotation) { $annotation->delete(); }
-}
-
-
-
-/* Imports an RSS item into a page object */
+/* PAGE IMPORT - Imports an RSS item into a page object */
 function rssimport_page_import($item, $rssimport){
 	//check if we have a parent page yet
 	$options = array();
@@ -551,6 +263,294 @@ function rssimport_page_import($item, $rssimport){
 	return $page->guid;
 }
 
+/* Checks if a blog post exists for a user that matches a feed item
+ * Return true if there is a match
+ */
+function rssimport_check_for_duplicates($item, $rssimport){
+	// normalize subtype for pages
+	$subtype = $rssimport->import_into;
+	if ($subtype == 'pages') { $subtype = 'page'; }
+	
+	// look for id first - less resource intensive
+	// this will filter out anything that has already been imported
+	$options = array();
+	$options['container_guids'] = $rssimport->container_guid;
+	$options['type_subtype_pairs'] = array('object' => $subtype);
+	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_id', 'value' => $item->get_id());
+	$blogs = elgg_get_entities_from_metadata($options);
+	if (!empty($blogs)) { return true; }
+	
+	// look for permalink
+	// this will filter out anything that has already been imported
+	$options = array();
+	$options['container_guids'] = $rssimport->container_guid;
+	$options['type_subtype_pairs'] = array('object' => $subtype);
+	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_permalink', 'value' => $item->get_permalink());
+	$blogs = elgg_get_entities_from_metadata($options);
+	if (!empty($blogs)) { return true; }
+	
+	//check by token - this will filter out anything that was a repost on the feed
+	$token = rssimport_create_comparison_token($item);
+	$options = array();
+	$options['container_guids'] = $rssimport->container_guid;
+	$options['type_subtype_pairs'] = array('object' => $subtype);
+	$options['metadata_name_value_pairs'] = array('name' => 'rssimport_token', 'value' => $token);
+	$blogs = elgg_get_entities_from_metadata($options);
+	if (!empty($blogs)) { return true; }
+	
+	return false;
+}
+
+
+/**
+ * 	Creates a hash of various feed item variables for
+ * 	easy comparison to feed created blogs
+ */
+function rssimport_create_comparison_token($item){
+	$author = $item->get_author();
+	$pretoken = $item->get_title();
+	$pretoken .= $item->get_content();
+	if (is_object($author)) { $pretoken .= $author->get_name(); }
+	return md5($pretoken);
+}
+
+/**
+ * Convenience function to tell if a feed can be imported to a content type
+ * 
+ * @staticvar type $blog_enabled
+ * @staticvar type $bookmarks_enabled
+ * @staticvar type $pages_enabled
+ * @param type $rssimport
+ * @return boolean 
+ */
+function rssimport_content_importable($rssimport) {
+	/* ESOPE : Replaced by function that tells if import is allowed for each tool
+	// this will be called multiple times, remember which plugins are enabled
+	static $blog_enabled;
+	static $bookmarks_enabled;
+	static $pages_enabled;
+	
+	// use static vars so we only have to call elgg_is_active_plugin once
+	if ($blog_enabled === NULL) {
+		$blog_enabled = elgg_is_active_plugin('blog');
+	}
+	if ($bookmarks_enabled === NULL) {
+		$bookmarks_enabled = elgg_is_active_plugin('bookmarks');
+	}
+	if ($pages_enabled === NULL) {
+		$pages_enabled = elgg_is_active_plugin('pages');
+	}
+	*/
+	$blog_enabled = rssimport_tool_enabled('blog');
+	$bookmarks_enabled = rssimport_tool_enabled('bookmarks');
+	$pages_enabled = rssimport_tool_enabled('pages');
+	
+	// only import if the receiving content type's plugin is active
+	if (!($rssimport->import_into == 'blog' && $blog_enabled)
+		&& !($rssimport->import_into == 'bookmarks' && $bookmarks_enabled)
+		&& !($rssimport->import_into == 'pages' && $pages_enabled)
+		) {
+		return false;
+	}
+	return true;
+}
+
+
+/**
+ * Trigger imports
+ *	use $params['period'] to find out which we are on
+ *	eg; $params['period'] = 'hourly'
+ */
+function rssimport_cron($hook, $entity_type, $returnvalue, $params){
+	// change context for permissions
+	$context = elgg_get_context();
+	elgg_set_context('rssimport_cron');
+	elgg_set_ignore_access(TRUE);
+	
+	// get array of imports we need to look at
+	$options = array(
+			'types' => array('object'),
+			'subtypes' => array('rssimport'),
+			'limit' => 0,
+			'metadata_name_value_pairs' => array('name' => 'cron', 'value' => $params['period'])
+		);
+	
+	// using ElggBatch because there may be many, many groups in teh installation
+	// try to avoid oom errors
+	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options, 'rssimport_import_feeds', 25);
+	
+	elgg_set_ignore_access(FALSE);
+	elgg_set_context($context);
+}
+
+
+/* Returns an array of groups that a user is a member of
+ * and can post content to
+ * returns false if there are no groups the user can post to
+ */
+function rssimport_get_postable_groups($user) {
+	return $user->getGroups('', 0, 0);
+}
+
+
+/* this function parses the URL to figure out what context and owner it belongs to, so we can generate
+ * a return URL 
+ * 
+ * URL is in the form of <baseurl>/rssimport/<container_guid>/<context> where context is "blog", "bookmarks", or "page"
+ * Generate a url of <baseurl>/<context>/owner/<owner_name> for personal stuff
+ * <baseurl>/<context>/group/<guid>/all for group stuff
+ */
+function rssimport_get_return_url(){
+	
+	$base_path = parse_url(elgg_get_site_url(), PHP_URL_PATH);
+	$current_path = parse_url(current_page_url(), PHP_URL_PATH);
+	if ($base_path != '/') {
+		$current_path = str_replace($base_path, '', $current_path);
+	} else {
+		$current_path = substr($current_path, 1);
+	}
+	$parts = explode('/', $current_path);
+	
+	// get our owner entity
+	$entity = get_entity($parts[1]);
+			
+	if ($entity instanceof ElggGroup) {
+		$owner_type = 'group';
+		$username = $entity->guid . '/all';
+	} elseif ($entity instanceof ElggUser) {
+		$owner_type = 'owner';
+		$username = $entity->username;
+	}
+	
+	$backurl = elgg_get_site_url() . $parts[2] . '/' . $owner_type . '/' . $username;
+	
+	//return array of link text and url
+	$linktext = elgg_echo('rssimport:back:to:' . $parts[2]);
+	return array($linktext, $backurl);
+}
+
+
+/**
+ * returns true/false whether rssimport is allowed for a given group
+ * default - forwards with error message if not allowed
+ * 
+ * @param ElggGroup $group
+ * @param bool $forward
+ * @param string $import_into
+ * @return bool
+ */
+function rssimport_group_gatekeeper($group, $import_into, $forward = TRUE) {
+	if (!elgg_instanceof($group, 'group')) {
+		return TRUE;
+	}
+	
+	$attribute = 'rssimport_' . $import_into . '_enable';
+	if ($group->$attribute != 'no') {
+		return TRUE;
+	}
+	
+	// it's disabled, forward if necessary, otherwise return false
+	if ($forward) {
+		register_error(elgg_echo('rssimport:group:disabled'));
+		forward($group->getURL());
+	}
+	
+	return FALSE;
+}
+
+
+/* Imports full feeds - called on cron */
+function rssimport_import_feeds($rssimport, $getter, $options){
+	if (!rssimport_content_importable($rssimport)) { return; }
+	
+	if (!rssimport_group_gatekeeper($rssimport->getContainerEntity(), $rssimport->import_into, FALSE)) { return; }
+	
+	//get the feed
+	$feed = rssimport_simplepie_feed($rssimport->description);
+	
+	$history = array();
+	foreach ($feed->get_items(0,0) as $item) {
+		if (!rssimport_check_for_duplicates($item, $rssimport) && !rssimport_is_blacklisted($item, $rssimport)) {
+			$history[] = rssimport_import_item($item, $rssimport);
+		}
+	}
+	
+	rssimport_add_to_history($history, $rssimport);
+}
+
+
+/* Imports a single item of a feed
+ * returns the guid of
+ */
+function rssimport_import_item($item, $rssimport) { 
+	switch ($rssimport->import_into) {
+		case "blog":
+			$history = rssimport_blog_import($item, $rssimport);
+			break;
+		case "pages":
+			$history = rssimport_page_import($item, $rssimport);
+			break;
+		case "bookmarks":
+			$history = rssimport_bookmarks_import($item, $rssimport);
+			break;
+		default:	// when in doubt, send to a blog
+			$history = rssimport_blog_import($item, $rssimport);
+			break;
+	}
+	
+	return $history;
+}
+
+
+
+/* this function includes the simplepie class if it doesn't exist */
+function rssimport_include_simplepie() {
+	if (!class_exists('SimplePie')) {
+		require_once elgg_get_plugins_path() . 'rssimport/lib/simplepie-1.3.1.php';
+	}
+}
+
+
+// returns true if the item has been blacklisted by the current user
+function rssimport_is_blacklisted($item, $rssimport) {
+	$options = array(
+		'annotation_names' => array('rssimport_blacklist'),
+		'annotation_values' => array($item->get_id(true)),
+		'guids' => $rssimport->guid
+	);
+	
+	return (bool) elgg_get_annotations($options);
+}
+
+/* this function removes an item from the blacklist */
+function rssimport_remove_from_blacklist($items, $rssimport){
+	$options = array(
+			'annotation_names' => array('rssimport_blacklist'),
+			'annotation_values' => $items,
+			'guids' => $rssimport->guid
+		);
+	
+	$annotations = elgg_get_annotations($options);
+	foreach ($annotations as $annotation) { $annotation->delete(); }
+}
+
+/* removes a single item from an array
+ * resets keys
+ */
+function rssimport_removeFromArray($value, $array) {
+	if (!is_array($array)) { return $array; }
+	if (!in_array($value, $array)) { return $array; }
+	
+	for ($i=0; $i<count($array); $i++) {
+		if ($value == $array[$i]) {
+			unset($array[$i]);
+			$array = array_values($array);
+		}
+	}
+	return $array;
+}
+
+
 // allows write permissions when we are adding metadata to an object
 function rssimport_permissions_check($hook, $type, $return, $params){
 	if (elgg_get_context() == 'rssimport_cron') { return true; }
@@ -645,6 +645,7 @@ function rssimport_get_source($item) {
 	return false;
 }
 
+
 /* Convenient function to add the source if it is defined */
 function rssimport_add_source($item) {
 	$item_source = rssimport_get_source($item);
@@ -709,7 +710,7 @@ function rssimport_filter_content($content, $filter = 'auto', $extract_tags = fa
 		}
 		return $tags;
 	}
-	// Returned filterd content
+	// Returned filtered content
 	return $content;
 }
 
