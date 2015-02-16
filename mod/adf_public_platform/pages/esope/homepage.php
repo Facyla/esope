@@ -135,7 +135,7 @@ $static = '';
 if ($thewire && $left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left; margin-right:3%;">' . $left_side . '</div>';
 	$static .= '<div class="home-static" style="width:40%; float:left;">' . $thewire . '</div>';
-	$static .= '<div style="width:20%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static-container" style="width:20%; float:right;">' . $right_side . '</div>';
 } else if ($thewire && $left_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left;">' . $left_side . '</div>';
 	$static .= '<div class="home-static" style="width:64%; float:right;">' . $thewire . '</div>';
@@ -144,7 +144,7 @@ if ($thewire && $left_side && $right_side) {
 	$static .= '<div style="width:24%; float:right;">' . $right_side . '</div>';
 } else if ($left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:68%; float:left;">' . $left_side . '</div>';
-	$static .= '<div style="width:28%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static-container" style="width:28%; float:right;">' . $right_side . '</div>';
 } else {
 	$static .=	$left_side . $thewire . $right_side;
 }

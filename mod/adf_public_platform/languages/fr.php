@@ -859,6 +859,12 @@ $fr = array(
 	'esope:tools:tool:user_updates' => "Suppression widgets dashboard",
 	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
 	
+	// Menus
+	'esope:menu:topbar' => "Mon compte",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	
+	
 );
 
 add_translation('fr', $fr);
