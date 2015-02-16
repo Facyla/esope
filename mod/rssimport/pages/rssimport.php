@@ -42,7 +42,7 @@ $maincontent .= elgg_view_form('rssimport/add',
 
 
 $maincontent .= "<hr><br>";
-	
+
 if ($rssimport) {
 	// Begin showing our feed
 	$feed = rssimport_simplepie_feed($rssimport->description);

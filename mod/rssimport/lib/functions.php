@@ -311,7 +311,6 @@ function rssimport_create_comparison_token($item){
 	$pretoken = $item->get_title();
 	$pretoken .= $item->get_content();
 	if (is_object($author)) { $pretoken .= $author->get_name(); }
-	
 	return md5($pretoken);
 }
 
@@ -507,7 +506,7 @@ function rssimport_import_item($item, $rssimport) {
 /* this function includes the simplepie class if it doesn't exist */
 function rssimport_include_simplepie() {
 	if (!class_exists('SimplePie')) {
-		require_once elgg_get_plugins_path() . 'rssimport/lib/simplepie-1.3.php';
+		require_once elgg_get_plugins_path() . 'rssimport/lib/simplepie-1.3.1.php';
 	}
 }
 
