@@ -669,7 +669,7 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 .esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
-header nav .fa { margin-right: 0.5em; }
+header nav ul .fa { margin-right: 0.5em; }
 header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
 
 
@@ -731,9 +731,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 }
 
 /* Responsive menu */
-.menu-topbar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size: large; }
-.menu-navigation-toggle { display:none; font-weight:bold; padding: 0.5ex; width:100%; }
-.menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size: large; text-align: right; }
+.menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:24px; }
+.menu-sidebar-toggle { text-align: right; }
 
 
 
@@ -772,49 +771,49 @@ section div.module footer { background-size: 100%; }
 	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }
 }
 
-/* Top menu toggler */
-@media (max-width:600px) {
+
+
+@media (max-width:700px) {
+	
+	/* Top menu toggler */
 	header { min-height:3ex; height:auto; }
+	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
 	header nav { float:none; width:100%; position:initial; }
 	header .adf-profil { position:initial; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
-	header nav ul#menu-topbar { padding-left:30px; }
-	header nav ul#menu-topbar li, header nav ul#menu-topbar li li { width:100%; display:inline-block; margin-left:0; font-size: initial; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	header nav ul#menu-topbar { padding-left:30px; font-size:initial; }
+	header nav ul#menu-topbar li, header nav ul#menu-topbar li li { width:100%; display:inline-block; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
 	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; padding-left:0; padding-right:0;  }
 	header nav #menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0.5ex 0 !important; text-align: center; display: inline; text-indent: 0; }
 	header nav #menu-topbar li.invites a { padding: 0; }
-	
-	#transverse nav ul#menu-navigation li ul { width: 100% !important; position:initial; top:0; left:0; }
 	.menu-enabled #menu-topbar { display:block; }
-}
-
-/* Navigation menu toggler */
-@media (max-width:600px) {
-	#transverse .interne { max-width:100%: margin:0; }
+	
+	
+	/* Navigation menu toggler */
+	#transverse .interne { max-width:100%; margin:0; }
 	#transverse .interne nav { float:none; width:100%; }
 	.menu-navigation-toggle { display:inline-block; }
 	#menu-navigation { display:none; }
-	#transverse nav ul#menu-navigation { padding-left:30px; }
-	#transverse nav ul#menu-navigation li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size: large; }
+	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
+	#transverse nav ul#menu-navigation li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
 	#transverse nav #menu-navigation li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
-	#transverse nav ul#menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size: initial; text-indent: 3ex; }
+	#transverse nav ul#menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
 	#transverse nav #menu-navigation li li a { width:100%; padding-left:0; padding-right:0;  }
-	
 	#transverse nav ul#menu-navigation li ul { width: 100% !important; position:initial; top:0; left:0; }
 	.menu-enabled #menu-navigation { display:block; }
-}
-
-/* Top menu toggler */
-@media (max-width:600px) {
+	
+	/* Sidebar toggler */
 	.menu-sidebar-toggle { display:inline-block; }
 	.elgg-sidebar { display:none; }
 	.elgg-sidebar * { min-width:0; }
 	.elgg-sidebar.sidebar-enabled { display:block; }
-}
-
-@media (max-width:600px) {
+	
+	/* Layout  and generic rules */
+	body { font-size:120%; }
+	.floating { position: initial !important; }
+	
 	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
 	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
@@ -831,7 +830,7 @@ section div.module footer { background-size: 100%; }
 
 
 /*
-@media (max-width:600px) {
+@media (max-width:700px) {
 	.elgg-page-default { min-width:200px; max-width:100%; }
 	.elgg-sidebar { width: 100%; margin:0 0 0 0; }
 	.elgg-sidebar { height: 70px; overflow: hidden; border-bottom: 3px solid black; }
