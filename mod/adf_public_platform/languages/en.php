@@ -840,6 +840,11 @@ $en = array(
 	'esope:tools:tool:user_updates' => "Remove dashboard widgets",
 	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
 	
+	// Menus
+	'esope:menu:topbar' => "My account",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	
 	
 );
 

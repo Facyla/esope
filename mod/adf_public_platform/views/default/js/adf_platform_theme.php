@@ -46,6 +46,8 @@ $(document).ready(function() {
 	});
 });
 
+
+// Fonction de gestion des menus
 function menu(leMenu) {
 	$(leMenu+" ul ul").hide();
 	var timeout;
@@ -102,5 +104,47 @@ function menu(leMenu) {
 }
 
 $("#transverse nav ul ul").hide(); // Plus rapide pour masquer les sous-menus
+
+
+
+/**
+ * Topbar menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var nav = $('header nav'), button, menu;
+	if (!nav) return;
+	button = nav.find('.menu-topbar-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	menu = nav.find('#menu-topbar');
+	if (!menu || !menu.children().length) { button.hide(); return; }
+	$('.menu-topbar-toggle').on('click', function() { nav.toggleClass('menu-enabled'); });
+});
+
+/**
+ * Navigation menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var nav = $('#transverse nav'), button, menu;
+	if (!nav) return;
+	button = nav.find('.menu-navigation-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	menu = nav.find('#menu-navigation');
+	if (!menu || !menu.children().length) { button.hide(); return; }
+	$('.menu-navigation-toggle').on('click', function() { nav.toggleClass('menu-enabled'); });
+});
+
+/**
+ * Sidebar menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var button = $('.menu-sidebar-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	var sidebar = $('.elgg-sidebar');
+	if (!sidebar) { button.hide(); return; }
+	$('.menu-sidebar-toggle').on('click', function() { sidebar.toggleClass('sidebar-enabled'); });
+});
 
 
