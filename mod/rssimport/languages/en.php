@@ -31,9 +31,9 @@
 	'rssimport:cron:weekly' => "Weekly",
 	'rssimport:empty:copyright' => "You must acknowledge your understanding and acceptance of the copyright issues involved in importing external content",
 	'rssimport:empty:field' => "Please fill out all fields",
-	'rssimport:enableblog' => "Enable RSS importing into blogs?",
-	'rssimport:enablebookmarks' => "Enable RSS importing into bookmarks?",
-	'rssimport:enablepages' => "Enable RSS importing into pages?",
+	'rssimport:enableblog' => "RSS import: enable into blogs?",
+	'rssimport:enablebookmarks' => "RSS import: enable into bookmarks?",
+	'rssimport:enablepages' => "RSS import: enable into pages?",
 	'rssimport:defaultaccess:0' => "Private",
 	'rssimport:defaultaccess:1' => "Logged In",
 	'rssimport:defaultaccess:2' => "Public",
@@ -97,12 +97,26 @@
 	'rssimport:allow:cron:weekly' => "Weekly",
 	'rssimport:cron:frequency' => "Allowed Import Frequencies",
 	'rssimport:cron:frequency:explanation' => 'If all import frequencies are disallowed imports can still be achieved manually. These settings only affect automatic scheduled imports.',
+	'rssimport:grouptools' => "Tools enabled for group import",
 	'rssimport:setting:adminonly' => "Restrict importing rss feeds to administrators only",
 	
 	/* common curl errors */
 	'rssimport:curl:error:default' => 'There was an issue getting your feed.  Please make sure all settings are correct.',
 	'rssimport:curl:error:6' => 'Could not find a valid feed at this location.  Please double-check the url.',
 	'rssimport:curl:error:7' => 'Cannot connect to the destination network.  Ensure that the location you provided is correct.  If the location uses a non-default protocol (eg. https) it may be due to firewall restrictions on your server.',
+	
+	// Fing additions
+	'rssimport:ownership' => "Imported content ownership",
+	'rssimport:ownership:explanation' => "Content can be published in the name of the member who set up the import, or to the container of the content, which means the container group when importing into a group.",
+	'rssimport:ownership:container' => "Container : group or member",
+	'rssimport:ownership:owner' => "Owner of import",
+	'rssimport:group_role' => "Access to group import tools",
+	'rssimport:group_role:explanation' => "Lets you define who has access to the import tool : everyone, group admins, or administrators",
+	'rssimport:user_role' => "Enable personnal import tools",
+	'rssimport:user_role:explanation' => "Allows to define if members can use import tools for their personnal content",
+	'rssimport:role:user' => "All members",
+	'rssimport:role:groupadmin' => "Groups admins",
+	'rssimport:role:admin' => "Administrators only",
 	
 	// ESOPE : internationalize date string
 	'rssimport:date:format' => 'F j, Y, g:i a',

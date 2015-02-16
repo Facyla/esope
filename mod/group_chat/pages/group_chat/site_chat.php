@@ -1,14 +1,18 @@
 <?php
-global $CONFIG;
+// Displays the site chat in standalone page
+// Note : chat access control should be done in the view
 
+global $CONFIG;
 gatekeeper();
-$site = $CONFIG->site;
-$guid = $CONFIG->site_guid;
+
 $title = elgg_echo('group_chat:site_chat');
 $vars['title'] = $title;
-elgg_set_page_owner_guid($guid);
 $content = '';
-$content .= elgg_view('group_chat/site_chat', array('entity' => $site));
+
+$site = $CONFIG->site;
+$site_guid = $site->guid;
+elgg_set_page_owner_guid($site_guid);
+$content .= elgg_view('group_chat/site_chat', array('entity' => $site, 'chat_id' => $site_guid));
 
 // Render pure content (for popup, lightbox or embed/iframe use)
 header('Content-Type: text/html; charset=utf-8');

@@ -120,6 +120,9 @@ $params = array(
 	'modified_time_upper' => $modified_time_upper,
 );
 
+
+
+/* SIDEBAR */
 $types = get_registered_entity_types();
 $custom_types = elgg_trigger_plugin_hook('search_types', 'get_types', $params, array());
 
@@ -185,6 +188,10 @@ foreach ($custom_types as $type) {
 	$data = htmlspecialchars(http_build_query(array(
 		'q' => $query,
 		'search_type' => $type,
+		// Esope : Add owner and container filtering
+		'owner_guid' => $owner_guid,
+		'container_guid' => $container_guid,
+		'friends' => $friends
 	)));
 
 	$url = elgg_get_site_url()."search?$data";
@@ -193,6 +200,9 @@ foreach ($custom_types as $type) {
 	elgg_register_menu_item('page', $menu_item);
 }
 
+
+
+/* SEARCH */
 // start the actual search
 $results_html = '';
 
@@ -265,6 +275,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	}
 }
 
+
 // call custom searches
 if ($search_type != 'entities' || $search_type == 'all') {
 	if (is_array($custom_types)) {
@@ -295,6 +306,7 @@ if ($search_type != 'entities' || $search_type == 'all') {
 	}
 }
 
+
 // highlight search terms
 if ($search_type == 'tags') {
 	$searched_words = array($display_query);
@@ -315,11 +327,13 @@ if ($advancedsearch == 'yes') {
 }
 
 
+// No result : say it !
 if (!$results_html) {
 	$body .= elgg_view('search/no_results');
 } else {
 	$body .= $results_html;
 }
+
 
 // this is passed the original params because we don't care what actually
 // matched (which is out of date now anyway).

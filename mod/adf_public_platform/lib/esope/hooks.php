@@ -548,10 +548,10 @@ function esope_friendly_time_hook($hook, $type, $return, $params) {
 
 // Menu that appears on hovering over a user profile icon
 function esope_user_hover_menu($hook, $type, $return, $params) {
-	$user = $params['entity'];
-	
-	// Allow admins to perform some new actions, except only to other admins
+	// Allow admins to perform some new actions
 	if (elgg_is_admin_logged_in()) {
+		$user = $params['entity'];
+		// Avoid removing other admins email
 		if (!($user->isAdmin())) {
 			// Email removal is limited to non-valid LDAP users, only if they have a non-empty email
 			if (!empty($user->email)){
@@ -565,8 +565,8 @@ function esope_user_hover_menu($hook, $type, $return, $params) {
 			// @TODO : Archive user can only apply if not archived yet
 			// @TODO : Un-archive can be useful too
 		}
-		return $return;
 	}
+	return $return;
 }
 
 

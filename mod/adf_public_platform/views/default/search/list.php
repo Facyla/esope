@@ -31,6 +31,10 @@ $query = http_build_query(
 		'offset' => $vars['params']['offset'],
 		'search_type' => $vars['params']['search_type'],
 	//@todo include vars for sorting, order, and friend-only.
+		// Esope : Add owner and container filtering
+		'owner_guid' => $vars['params']['owner_guid'],
+		'container_guid' => $vars['params']['container_guid'],
+		'friends' => $vars['params']['friends'],
 	)
 );
 
