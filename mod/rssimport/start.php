@@ -6,12 +6,11 @@ elgg_register_event_handler('init','system','rssimport_init');
 
 // our init function
 function rssimport_init() {
-	
 	include_once 'lib/functions.php';
 	
-	if (!rssimport_can_use()) {
-		return;
-	}
+	// Top-level access control : feature is not loaded at all if we do not have the rights
+	// but we might not have all infos for that yet...
+	if (!rssimport_can_use()) { return; }
 
 	// Extend system CSS with our own styles
 	elgg_extend_view('css/elgg', 'rssimport/css');
@@ -41,37 +40,36 @@ function rssimport_init() {
 
 	// create import urls
 	elgg_register_entity_url_handler('object', 'rssimport', 'rssimport_url_handler');
-
-	// add group configurations
+	
+	// add group configurations for enabled tools
 	$types = array('blog', 'bookmarks', 'pages');
 	foreach ($types as $type) {
-		if (elgg_is_active_plugin($type)) {
+		$tool_enabled = elgg_get_plugin_setting($type . '_enable', 'rssimport');
+		if (($tool_enabled == 'yes') && elgg_is_active_plugin($type)) {
 			add_group_tool_option('rssimport_' . $type, elgg_echo('rssimport:enable'.$type), true);
 		}
 	}
-
+	
 	elgg_register_event_handler('pagesetup','system','rssimport_pagesetup');
 }
 
 
 // page structure for imports <url>/rssimport/<container_guid>/<context>/<rssimport_guid>
-// history: <url>/pg/rssimport/<container_guid>/<context>/<rssimport_guid>/history
+// history: <url>/rssimport/<container_guid>/<context>/<rssimport_guid>/history
 function rssimport_page_handler($page){
 	gatekeeper();
-
+	
+	// Container GUID
 	if(is_numeric($page[0])){
 		$container = get_entity($page[0]);
-		if (!$container) {
-			return FALSE;
-		}
+		if (!$container) { return FALSE; }
 		elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 		
 		// set up breadcrumbs
 		if (elgg_instanceof($container, 'user')) {
 			$urlsuffix = 'owner/' . $container->username;
 			$name = $container->username;
-		}
-		elseif (elgg_instanceof($container, 'group')) {
+		} elseif (elgg_instanceof($container, 'group')) {
 			rssimport_group_gatekeeper($container, $page[1]);
 			$urlsuffix = 'group/' . $container->guid . '/all';
 			$name = $container->name;
@@ -83,36 +81,27 @@ function rssimport_page_handler($page){
 		
 		// push import
 		elgg_push_breadcrumb(elgg_echo('rssimport:import'), elgg_get_site_url() . "rssimport/{$page[0]}/{$page[1]}");
-	
-
-		// we have an rssimport id, set breadcrumbs and page owner
+		
+		
+		// rssimport guid, set breadcrumbs and page owner
 		if ($page[2]) {
 			$url = '';
-			if (!$rssimport = get_entity($page[2])) {
-				return FALSE;
-			}
+			if (!$rssimport = get_entity($page[2])) { return FALSE; }
 			$name = $rssimport->title;
 			
-			
+			// Calls history (any value does)
 			if ($page[3]) {
 				$url = elgg_get_site_url() . "rssimport/{$page[0]}/{$page[1]}/{$page[2]}";
 				elgg_push_breadcrumb($name, $url);
 				elgg_push_breadcrumb(elgg_echo('rssimport:history'));
-				
-				if (!$rssimport->canEdit()) {
-					return FALSE;
-				}
+				if (!$rssimport->canEdit()) { return FALSE; }
 				
 				// we're checking history
 				set_input('rssimport_guid', $page[2]);
 				elgg_set_context('rssimport_history');
-				if(!include dirname(__FILE__) . '/pages/history.php'){
-					return FALSE;
-				}
-			
+				if(!include dirname(__FILE__) . '/pages/history.php'){ return FALSE; }
 				return TRUE;
-			}
-			else {
+			} else {
 				elgg_push_breadcrumb($name, $url);
 			}
 		}
@@ -121,19 +110,15 @@ function rssimport_page_handler($page){
 		set_input('container_guid', $page[0]);
 		set_input('import_into', $page[1]);
 		set_input('rssimport_guid', $page[2]);
-		if(!include dirname(__FILE__) . '/pages/rssimport.php'){
-			return FALSE;
-		}
-		
+		if(!include dirname(__FILE__) . '/pages/rssimport.php'){ return FALSE; }
 		return TRUE;
 	}
-
+	
 	return FALSE;
 }
 
 // add links to submenus
 function rssimport_pagesetup() {
-
 	// Get the page owner entity
 	$createlink = false;
 	$page_owner = elgg_get_page_owner_entity();
@@ -152,13 +137,14 @@ function rssimport_pagesetup() {
 		// if we're on a group page, check that the user is a member of the group
 		if (elgg_instanceof($page_owner, 'group', '', 'ElggGroup')) {
 			if ($page_owner->isMember() && rssimport_group_gatekeeper($page_owner, $context, FALSE)) {
-				$createlink = true;
+				// Check if restricted to group admins
+				if (rssimport_can_use($page_owner)) { $createlink = true; }
 			}
-		}
-		else {
+		} else {
+			// Check if personnal import is allowed
 			// if we are the owner
-			if ($page_owner->guid == elgg_get_logged_in_user_guid() ) {
-				$createlink = true;
+			if (rssimport_can_use($page_owner)) {
+				if ($page_owner->guid == elgg_get_logged_in_user_guid() ) { $createlink = true; }
 			}
 		}
 	}
@@ -201,28 +187,40 @@ function rssimport_pagesetup() {
 // get url for an import
 function rssimport_url_handler($rssimport) {
 	$container = $rssimport->getContainerEntity();
-	
 	return elgg_get_site_url() . "rssimport/{$container->guid}/{$rssimport->import_into}/{$rssimport->guid}";
 }
 
 
 // determine if the logged in user can use rssimport
-function rssimport_can_use() {
+// $container : optionnal container for use
+function rssimport_can_use($container = false) {
 	// admin can always use it
-	if (elgg_is_admin_logged_in()) {
-		return true;
-	}
-
+	if (elgg_is_admin_logged_in()) { return true; }
+	
 	// is this a cron call?
-	if (elgg_get_context() == 'cron') {
-		return true;
-	}
-
-	// are we restricting to admin only?
-	if (elgg_get_plugin_setting('adminonly', 'rssimport') == 'yes') {
+	if (elgg_get_context() == 'cron') { return true; }
+	
+	// Group container : control import in groups (members / groupadmins / admins)
+	if (elgg_instanceof($container, 'group')) {
+		$group_role = elgg_get_plugin_setting('group_role', 'rssimport');
+		if ($group_role == 'admin') {
+			return false;
+		} else if ($group_role == 'groupadmin') {
+			if ($container->canEdit()) return true;
+		} else {
+			if ($container->isMember()) return true;
+		}
 		return false;
 	}
 	
+	if (elgg_instanceof($container, 'user')) {
+		// Other (user) container : do we allow personnal import tools?
+		$user_role = elgg_get_plugin_setting('user_role', 'rssimport');
+		if ($user_role == 'no') { return false; }
+	}
+	
+	// Allow in other cases ? (or should we block and check if not logged in ?)
 	return true;
 }
+
 

@@ -8,10 +8,15 @@ $import_into = get_input('import_into');
 $rssimport_id = get_input('rssimport_guid');
 $rssimport = get_entity($rssimport_id);
 
-// make sure we're the owner if selecting a feed
-if ($rssimport instanceof ElggObject && elgg_get_logged_in_user_guid() != $rssimport->owner_guid) {
-	register_error(elgg_echo('rssimport:not:owner'));
-	forward(REFERRER);
+
+// Check that we are allowed to import into this container
+$container = get_entity($container_guid);
+if (!rssimport_can_use($container)) {
+	// We still may be the owner of that particular feed (rights changes ?)...
+	if (!(elgg_instanceof($rssimport, 'object', 'rssimport') && (elgg_get_logged_in_user_guid() != $rssimport->owner_guid)) {
+		register_error(elgg_echo('rssimport:not:owner'));
+		forward(REFERRER);
+	}
 }
 
 // set the title
