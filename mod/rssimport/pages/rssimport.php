@@ -13,7 +13,7 @@ $rssimport = get_entity($rssimport_id);
 $container = get_entity($container_guid);
 if (!rssimport_can_use($container)) {
 	// We still may be the owner of that particular feed (rights changes ?)...
-	if (!(elgg_instanceof($rssimport, 'object', 'rssimport') && (elgg_get_logged_in_user_guid() != $rssimport->owner_guid)) {
+	if (!(elgg_instanceof($rssimport, 'object', 'rssimport') && (elgg_get_logged_in_user_guid() != $rssimport->owner_guid))) {
 		register_error(elgg_echo('rssimport:not:owner'));
 		forward(REFERRER);
 	}
