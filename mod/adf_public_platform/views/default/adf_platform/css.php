@@ -825,9 +825,10 @@ section div.module footer { background-size: 100%; }
 	
 	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
 	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
-	.timeline-event { width: 100%; }
+	.timeline-event, .home-timeline .timeline-event { width: 100%; }
 	
-	#site-footer ul li { clear: both; width: 100%; margin: 0; padding: 0.5ex 1ex; background: none; font-size: initial; }
+	#site-footer ul li { clear: both; width: 100%; margin-top: 0; background: none; font-size: initial; }
+	#site-footer ul li a { padding: 1ex 1ex; }
 	div.credits p { float: none; }
 	
 	
