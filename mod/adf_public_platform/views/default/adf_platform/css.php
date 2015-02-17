@@ -822,7 +822,7 @@ section div.module footer { background-size: 100%; }
 	.twitter-timeline { width: 100% !important; }
 	
 	/* Recherche */
-	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; box-shadow: none; }
+	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
 	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
 	#main-search #adf-search-submit-button { border-radius: 0; }
 	
