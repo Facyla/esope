@@ -357,7 +357,7 @@ function rssimport_content_importable($rssimport) {
 
 
 /**
- * Trigger imports
+ * Cron : Trigger imports
  *	use $params['period'] to find out which we are on
  *	eg; $params['period'] = 'hourly'
  */
@@ -589,7 +589,13 @@ function rssimport_simplepie_feed($url) {
 
 /* prevent notifications from being sent during an import */
 function rssimport_prevent_notification($hook, $type, $return, $params) {
-	if (elgg_get_context() == 'rssimport_cron') { return TRUE; }
+	if (elgg_get_context() == 'rssimport_cron') {
+		$notify = elgg_get_plugin_setting('notifications', 'rssimport');
+		// True blocks notification process
+		if ($notify == 'no') { return TRUE; }
+	}
+	// Don't change default behaviour
+	return $return;
 }
 
 

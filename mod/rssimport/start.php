@@ -117,7 +117,8 @@ function rssimport_page_handler($page){
 	return FALSE;
 }
 
-// add links to submenus
+
+// Add import links to submenus
 function rssimport_pagesetup() {
 	// Get the page owner entity
 	$createlink = false;
@@ -184,7 +185,7 @@ function rssimport_pagesetup() {
 }
 
 
-// get url for an import
+// Import URL
 function rssimport_url_handler($rssimport) {
 	$container = $rssimport->getContainerEntity();
 	return elgg_get_site_url() . "rssimport/{$container->guid}/{$rssimport->import_into}/{$rssimport->guid}";
@@ -192,7 +193,7 @@ function rssimport_url_handler($rssimport) {
 
 
 // determine if the logged in user can use rssimport
-// $container : optionnal container for use
+// $container : optional container for use
 function rssimport_can_use($container = false) {
 	// admin can always use it
 	if (elgg_is_admin_logged_in()) { return true; }
@@ -214,7 +215,7 @@ function rssimport_can_use($container = false) {
 	}
 	
 	if (elgg_instanceof($container, 'user')) {
-		// Other (user) container : do we allow personnal import tools?
+		// Other (user) container : do we allow personal import tools?
 		$user_role = elgg_get_plugin_setting('user_role', 'rssimport');
 		if ($user_role == 'no') { return false; }
 	}
