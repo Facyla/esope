@@ -814,8 +814,11 @@ section div.module footer { background-size: 100%; }
 	body { font-size:120%; }
 	.floating { position: initial !important; }
 	.elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; }
-	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
 	.elgg-button { font-size: large; }
+	
+	/* Common tools */
+	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
+	#groupchat-sitelink { position:initial; display: inline-block; border-radius: 0; padding: 1ex; border: 0; }
 	
 	/* Layout */
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
@@ -832,8 +835,8 @@ section div.module footer { background-size: 100%; }
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
 	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; }
-	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; }
-	div.credits p { none !important; }
+	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
+	div.credits p { float:none !important; }
 	
 	
 }
