@@ -6,7 +6,6 @@ $urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
 // Configurable elements and default values
 
 $fixedwidth = elgg_get_plugin_setting('fixedwidth', 'adf_public_platform');
-if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 
 // Image de fond configurable
 $headbackground = elgg_get_plugin_setting('headbackground', 'adf_public_platform');
@@ -738,7 +737,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 
-<?php if (!$fixedwidth) { ?>
+<?php if ($fixedwidth != 'yes') { ?>
 /* SECTION RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
@@ -784,10 +783,11 @@ section div.module footer { background-size: 100%; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
 	header nav ul#menu-topbar { padding-left:30px; font-size:initial; }
-	header nav ul#menu-topbar li, header nav ul#menu-topbar li li { width:100%; display:inline-block; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	header nav ul li, header nav ul li li { width:100%; display:inline-block; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	header nav ul li a, header nav ul li li a,
 	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; padding-left:0; padding-right:0;  }
-	header nav #menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0.5ex 0 !important; text-align: center; display: inline; text-indent: 0; }
-	header nav #menu-topbar li.invites a { padding: 0; }
+	header nav ul li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0.5ex 0 !important; text-align: center; display: inline; text-indent: 0; }
+	header nav ul li.invites a { padding: 0; }
 	.menu-enabled #menu-topbar { display:block; }
 	
 	
@@ -797,11 +797,11 @@ section div.module footer { background-size: 100%; }
 	.menu-navigation-toggle { display:inline-block; }
 	#menu-navigation { display:none; }
 	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
-	#transverse nav ul#menu-navigation li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
-	#transverse nav #menu-navigation li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
-	#transverse nav ul#menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
-	#transverse nav #menu-navigation li li a { width:100%; padding-left:0; padding-right:0;  }
-	#transverse nav ul#menu-navigation li ul { width: 100% !important; position:initial; top:0; left:0; }
+	#transverse nav ul li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
+	#transverse nav ul li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
+	#transverse nav ul li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
+	#transverse nav ul li li a { width:100%; padding-left:0; padding-right:0;  }
+	#transverse nav ul li ul { width: 100% !important; position:initial; top:0; left:0; }
 	.menu-enabled #menu-navigation { display:block; }
 	
 	/* Sidebar toggler */
@@ -813,18 +813,23 @@ section div.module footer { background-size: 100%; }
 	/* Layout  and generic rules */
 	body { font-size:120%; }
 	.floating { position: initial !important; }
-	
-	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
-	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
-	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
-	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
+	.elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; }
+	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
+	.elgg-button { font-size: large; }
 	
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	
-	.elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; }
+	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
+	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
 	
-	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
+	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
+	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.timeline-event { width: 100%; }
+	
+	#site-footer ul li { clear: both; width: 100%; margin: 0; padding: 0.5ex 1ex; background: none; font-size: initial; }
+	div.credits p { float: none; }
+	
 	
 }
 
