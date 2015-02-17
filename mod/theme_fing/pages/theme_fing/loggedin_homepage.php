@@ -187,30 +187,30 @@ if (elgg_is_active_plugin('event_calendar')) {
 // Composition de la ligne
 $body .= '<div class="clearfloat"></div>';
 $body .= '
-	<div style="width:76%; float:left;">
+	<div class="home-static-container" style="width:76%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
 		
-			<div style="width:100%;" class="fing-slider">'
+			<div class="home-static-container" style="width:100%;" class="fing-slider">'
 				. $slider
 				//. elgg_view('cmspages', array('pagetype' => 'fing-accueil-connecte'))
 			. '</div>
 			<div class="clearfloat"></div><br /><br />
 		
-			<div style="width:40%; float:left;">
+			<div class="home-static-container" style="width:40%; float:left;">
 				<div class="home-box home-activity">' . $left_side . '</div>
 			</div>
-			<div style="width:57%; float:right;">
+			<div class="home-static-container" style="width:57%; float:right;">
 				<div class="home-box home-wire">' . $thewire . '</div>
 			</div>
 	
 		</div>
 	</div>
 	
-	<div style="width:22%; float:right;">' . $right_side . '</div>
+	<div class="home-static-container" style="width:22%; float:right;">' . $right_side . '</div>
 	
 	<div class="clearfloat"></div>';
 
-$body .= '<br /><div class="home-timeline">' . $timeline . '</div>';
+$body .= '<br /><div class="home-timeline home-static-container">' . $timeline . '</div>';
 
 /* Widgets + wrap intro message in a div
  * @uses $vars['content']					Optional display box at the top of layout
