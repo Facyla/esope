@@ -97,7 +97,7 @@
 	'rssimport:allow:cron:weekly' => "Weekly",
 	'rssimport:cron:frequency' => "Allowed Import Frequencies",
 	'rssimport:cron:frequency:explanation' => 'If all import frequencies are disallowed imports can still be achieved manually. These settings only affect automatic scheduled imports.',
-	'rssimport:grouptools' => "Tools enabled for group import",
+	'rssimport:grouptools' => "Tools enabled for import",
 	'rssimport:setting:adminonly' => "Restrict importing rss feeds to administrators only",
 	
 	/* common curl errors */
@@ -106,10 +106,14 @@
 	'rssimport:curl:error:7' => 'Cannot connect to the destination network.  Ensure that the location you provided is correct.  If the location uses a non-default protocol (eg. https) it may be due to firewall restrictions on your server.',
 	
 	// Fing additions
-	'rssimport:ownership' => "Imported content ownership",
+	'rssimport:settings:access' => "Access to import tools",
+	'rssimport:settings:general' => "Ownership and notifications",
+	'rssimport:notifications' => "Notification emails",
+	'rssimport:notifications:details' => "By default, new publications generate email notifications. You can block these notifications for RSS import.",
+	'rssimport:ownership' => "Imported content ownership (in groups)",
 	'rssimport:ownership:explanation' => "Content can be published in the name of the member who set up the import, or to the container of the content, which means the container group when importing into a group.",
-	'rssimport:ownership:container' => "Container : group or member",
-	'rssimport:ownership:owner' => "Owner of import",
+	'rssimport:ownership:container' => "Group",
+	'rssimport:ownership:owner' => "Member",
 	'rssimport:group_role' => "Access to group import tools",
 	'rssimport:group_role:explanation' => "Lets you define who has access to the import tool : everyone, group admins, or administrators",
 	'rssimport:user_role' => "Enable personnal import tools",

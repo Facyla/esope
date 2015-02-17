@@ -105,9 +105,9 @@ $french = array(
 	'rssimport:allow:cron:hourly' => "Horaire",
 	'rssimport:allow:cron:daily' => "Quotidien",
 	'rssimport:allow:cron:weekly' => "Hebdomadaire",
-	'rssimport:cron:frequency' => "Fréquences d'import autorisées",
-	'rssimport:cron:frequency:explanation' => "Si toutes les fréquences d'imports sont désactivées, il reste possible de faire des imports manuels. Ces paramètres n'affectent que les imports programmés automatiques.",
-	'rssimport:grouptools' => "Choix des outils autorisés pour l'import dans les groupes",
+	'rssimport:cron:frequency' => "Fréquences d'import automatiques",
+	'rssimport:cron:frequency:explanation' => "Ces paramètres n'affectent que les imports programmés automatiques. Si toutes les fréquences d'imports sont désactivées, il reste possible de faire des imports manuels.",
+	'rssimport:grouptools' => "Outils d'import",
 	'rssimport:setting:adminonly' => "Restreindre l'import de flux RSS aux administrateurs seulements",
 	
 	/* common curl errors */
@@ -116,9 +116,13 @@ $french = array(
 	'rssimport:curl:error:7' => "Impossible de se connecter au réseau de destination. Vérifiez que l'emplacement que vous avez défini est correct. Si l'emplacement utilise un protocole non-standard (par ex. https) cela peut être dû aux restrictions du firewall de votre serveur.",
 	
 	// Fing additions
-	'rssimport:ownership' => "Auteur des publications",
-	'rssimport:ownership:explanation' => "Les publications peuvent être publiées au nom de la personne qui a configuré le flux, ou au nom du conteneur de la publication, c'est-à-dire le groupe dans lequel elles sont publiées.",
-	'rssimport:ownership:container' => "Container : groupe ou portfolio personnel",
+	'rssimport:settings:access' => "Accès aux outils d'import",
+	'rssimport:settings:general' => "Auteur et notifications",
+	'rssimport:notifications' => "Emails de notification",
+	'rssimport:notifications:details' => "Par défaut les nouvelles publications génèrent des notifications ; vous pouvez désactiver ces envois de notifications pour les imports RSS.",
+	'rssimport:ownership' => "Auteur des publications (dans les groupes)",
+	'rssimport:ownership:explanation' => "Les publications peuvent être publiées au nom de la personne qui a configuré le flux, ou au nom du conteneur de la publication (c'est-à-dire le groupe dans lequel elles sont publiées).",
+	'rssimport:ownership:container' => "Groupe de l'import",
 	'rssimport:ownership:owner' => "Auteur de l'import",
 	'rssimport:group_role' => "Accès aux outils d'import dans les groupes",
 	'rssimport:group_role:explanation' => "Permet de choisir qui a accès à cet outil : tous, les responsables de groupes, ou les administrateurs",

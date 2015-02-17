@@ -357,7 +357,7 @@ function rssimport_content_importable($rssimport) {
 
 
 /**
- * Trigger imports
+ * Cron : Trigger imports
  *	use $params['period'] to find out which we are on
  *	eg; $params['period'] = 'hourly'
  */
@@ -589,7 +589,13 @@ function rssimport_simplepie_feed($url) {
 
 /* prevent notifications from being sent during an import */
 function rssimport_prevent_notification($hook, $type, $return, $params) {
-	if (elgg_get_context() == 'rssimport_cron') { return TRUE; }
+	if (elgg_get_context() == 'rssimport_cron') {
+		$notify = elgg_get_plugin_setting('notifications', 'rssimport');
+		// True blocks notification process
+		if ($notify == 'no') { return TRUE; }
+	}
+	// Don't change default behaviour
+	return $return;
 }
 
 
@@ -660,8 +666,20 @@ function rssimport_add_source($item) {
  * $content : content to be filtered
  * $filter : filter name or full domain name of imported RSS feed
  * $extract_tags : return only extracted tags
- µ*/
+ */
 function rssimport_filter_content($content, $filter = 'auto', $extract_tags = false) {
+	if ($extract_tags) {
+		return rssimport_filter_extract_tags($content, $params = array('filter' => $filter));
+	} else {
+		return rssimport_filter_extract_content($content, $params = array('filter' => $filter));
+	}
+}
+
+/* Returns filtered content depending on source
+ * $content : content to be filtered
+ * $filter : filter name or full domain name of imported RSS feed
+ */
+function rssimport_filter_extract_content($content, $params = array('filter' => 'auto')) {
 	switch($filter) {
 		case 'diigo':
 		case 'www.diigo.com':
@@ -672,46 +690,66 @@ function rssimport_filter_content($content, $filter = 'auto', $extract_tags = fa
 			 1. on coupe sur le séparateur des tags	// <p><strong>Tags:</strong>
 			 2. pour avoir le contenu, partie 0, on enlève le début et les autres parties inutiles (sur Diigo on n'est censé avoir qu'un paragraphe)
 				 // <p><strong>Comments:</strong>	// <ul><li>	// </li></ul>	// </p>
-			 3. pour avoir les tags, partie 1, on coupe au premier <p>, séparateur de fin des tags	// </p>
-			 4. on enlève toutes les balises HTML de ce qui reste (partie 0), après avoir préparé et nettoyé la chaîne
-			 5. on explode sur ',' pour avoir un array de tags
 			*/
 			$parts = explode('<p><strong>Tags:</strong>', $content);
 			$content = str_replace(array('<p><strong>Comments:</strong>', '<ul><li>', '</li></ul>', '</p>'), '', $parts[0]);
-			if ($extract_tags) {
-				//error_log("DEBUG rssimport lib : part1 = " . print_r($parts, true));
-				$tags_parts = explode('</p>', $parts[1]);
-				// On remplace les fins de liens par des marqueurs pour couper de manière certaine chacun des tags
-				// + un peu de nettoyage
-				$tags_string = str_replace(array('</a>', "\t", "\n", "\r"), array(',', '', '', ''), $tags_parts[0]);
-				// On enlève les restes de balises (<a> non fermés)
-				$tags_string = strip_tags($tags_string);
-				// On enlève tabulations et retours à la ligne
-				$tags_string = str_replace(array('\t', '\n', '\r'), '', $tags_string);
-				$tags = explode(',', $tags_string);
-				$tags = array_map("trim", $tags);
-				//error_log("DEBUG rssimport lib : TAGS = " . implode(',', $tags));
-			}
 			break;
 		case 'scoop.it':
 		case 'www.scoop.it':
-			break;
 		case 'auto':
 		default:
 			// nothing yet..
 			// @TODO trigger filtering hook
-	}
-	// Return tags only ?
-	if ($extract_tags) {
-		if (!$tags) {
-			$tags = array();
-		} else if (!is_array($tags)) {
-			$tags = array($tags);
-		}
-		return $tags;
+			return elgg_trigger_plugin_hook('filter:content', 'rssimport', $params, $content);
 	}
 	// Returned filtered content
 	return $content;
+}
+
+/* Returns filtered tags depending on source
+ * $content : content to be filtered
+ * $filter : filter name or full domain name of imported RSS feed
+ */
+function rssimport_filter_extract_tags($content, $filter = 'auto') {
+	switch($filter) {
+		case 'diigo':
+		case 'www.diigo.com':
+		case 'groups.diigo.com':
+			//error_log("DEBUG rssimport lib : DIIGO");
+			/* Process pour Diigo :
+			 * Notes : on n'a pas toujours la liste ni l'auteur, d'où découpe un peu complexe..
+			 1. on coupe sur le séparateur des tags	// <p><strong>Tags:</strong>
+			 2. pour avoir les tags, partie 1, on coupe au premier <p>, séparateur de fin des tags	// </p>
+			 3. on enlève toutes les balises HTML de ce qui reste (partie 0), après avoir préparé et nettoyé la chaîne
+			 4. on explode sur ',' pour avoir un array de tags
+			*/
+			$parts = explode('<p><strong>Tags:</strong>', $content);
+			//error_log("DEBUG rssimport lib : part1 = " . print_r($parts, true));
+			$tags_parts = explode('</p>', $parts[1]);
+			// On remplace les fins de liens par des marqueurs pour couper de manière certaine chacun des tags
+			// + un peu de nettoyage
+			$tags_string = str_replace(array('</a>', "\t", "\n", "\r"), array(',', '', '', ''), $tags_parts[0]);
+			// On enlève les restes de balises (<a> non fermés)
+			$tags_string = strip_tags($tags_string);
+			// On enlève tabulations et retours à la ligne
+			$tags_string = str_replace(array('\t', '\n', '\r'), '', $tags_string);
+			$tags = explode(',', $tags_string);
+			$tags = array_map("trim", $tags);
+			//error_log("DEBUG rssimport lib : TAGS = " . implode(',', $tags));
+			break;
+		case 'scoop.it':
+		case 'www.scoop.it':
+		case 'auto':
+		default:
+			// Trigger filtering hook (no extracted tag by default)
+			return elgg_trigger_plugin_hook('filter:tags', 'rssimport', $params, false);
+	}
+	if (!$tags) {
+		$tags = array();
+	} else if (!is_array($tags)) {
+		$tags = array($tags);
+	}
+	return $tags;
 }
 
 
