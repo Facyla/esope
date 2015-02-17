@@ -778,7 +778,7 @@ section div.module footer { background-size: 100%; }
 	header { min-height:3ex; height:auto; }
 	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
-	header nav { float:none; width:100%; position:initial; }
+	header nav { float:none; width:100%; position:initial; display:inline-block; }
 	header .adf-profil { position:initial; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
@@ -793,7 +793,7 @@ section div.module footer { background-size: 100%; }
 	
 	/* Navigation menu */
 	#transverse .interne { max-width:100%; margin:0; }
-	#transverse .interne nav { float:none; width:100%; }
+	#transverse .interne nav { float:none; width:100%; display:inline-block; }
 	.menu-navigation-toggle { display:inline-block; }
 	#menu-navigation { display:none; }
 	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
@@ -823,7 +823,7 @@ section div.module footer { background-size: 100%; }
 	
 	/* Layout */
 	#main-search { float: none; }
-	header, #transverse, section, footer, #bande { float: none; clear: both; margin: 1ex 0; }
+	header, #transverse, section, footer, #bande { float: none; clear: both; margin: 1ex 0; display: inline-block; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	
