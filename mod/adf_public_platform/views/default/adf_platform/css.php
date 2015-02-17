@@ -822,7 +822,7 @@ section div.module footer { background-size: 100%; }
 	.twitter-timeline { width: 100% !important; }
 	
 	/* Layout */
-	#main-search { float: none; }
+	#main-search { float: none; display: inline-block; margin: 1ex 0; }
 	header, #transverse, section, footer, #bande { float: none; clear: both; margin: 1ex 0; display: inline-block; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
