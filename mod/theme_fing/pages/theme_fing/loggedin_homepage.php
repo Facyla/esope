@@ -190,7 +190,7 @@ $body .= '
 	<div class="home-static-container" style="width:76%; float:left;">
 		<div style="padding: 0 26px 26px 13px;">
 		
-			<div class="home-static-container" style="width:100%;" class="fing-slider">'
+			<div style="width:100%;" class="fing-slider">'
 				. $slider
 				//. elgg_view('cmspages', array('pagetype' => 'fing-accueil-connecte'))
 			. '</div>
