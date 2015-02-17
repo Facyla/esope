@@ -813,12 +813,13 @@ section div.module footer { background-size: 100%; }
 	/* Generic rules */
 	body { font-size:120%; }
 	.floating { position: initial !important; }
-	.elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; }
+	.elgg-page .elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; display: inline-block; top:0; left:0; }
 	.elgg-button { font-size: large; }
 	
 	/* Common tools */
 	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
-	#groupchat-sitelink { position:initial; display: inline-block; border-radius: 0; padding: 1ex; border: 0; }
+	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 1ex; border: 0; width:100%; }
+	.twitter-timeline { width: 100% !important; }
 	
 	/* Layout */
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
