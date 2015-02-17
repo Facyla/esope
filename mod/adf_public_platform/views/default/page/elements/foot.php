@@ -9,7 +9,7 @@ foreach ($js as $script) { ?>
 }
 
 $analytics = elgg_get_plugin_setting('analytics', 'adf_public_platform');
-if (!empty($analytics)) echo '<script type="text/javascript"">' . $analytics . '</script>';
+if (!empty($analytics)) echo '<script type="text/javascript">' . $analytics . '</script>';
 
 
 // Pure CSS menu integration : a piece of CSS in header + a deferred JS script for IE6
