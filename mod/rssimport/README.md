@@ -44,6 +44,7 @@ back by clicking the 'undo import' link in the history.
 This version is now fully supported by ESOPE, with several changes:
  - new handy functions added
  - add content filtering : enable to extract tags, filter the content based on custom rules
+ - added filter hooks to enable extendingcontent/tags extraction
  - get source URL : adds a link to the site the article originates from
  - setting to switch author in group : can be set to container instead of member
  - setting : block email notifications
