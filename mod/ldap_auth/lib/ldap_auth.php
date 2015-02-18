@@ -312,7 +312,7 @@ function ldap_auth_update_profile(ElggUser $user, $ldap_auth = array(), $ldap_in
 	
 	// Get some config
 	$mail_field = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
-	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth's);
+	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
 	$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
 	$mainpropchange = false;
 	
