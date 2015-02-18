@@ -327,7 +327,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	$location = $rooms = $phones = $secretary = array();
 	// Extract some hidden data from infos fields
 	if ($ldap_infos && $ldap_infos[0]) {
-		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
+		if ($debug) error_log("LDAP hook : update_profile : processing INFOS branch (contacts) fields");
 		// Note : cannot use config fields here because office and phone do not have a unique name
 		foreach ($ldap_infos[0] as $key => $val) {
 			// We don't want to update some fields that were processed in auth
@@ -437,6 +437,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	
 	// Some changes require saving entity
 	if ($mainpropchange) $user->save();
+	if ($debug) error_log("ldap_auth_update_profile (theme_inria) : DONE");
 	
 	// Tell update has been successfully done
 	return true;
