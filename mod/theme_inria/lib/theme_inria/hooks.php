@@ -390,7 +390,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			// EPI ou service : "ou", branche contacts uniquement
 			case 'epi_ou_service':
 				if ($ldap_infos[0]['ou'][0]) {
-					$new = $ldap_infos[0]['ou'][0];
+					$new = $ldap_infos[0]['ou'];
 					$new = implode(', ', $new);
 				}
 				if ($user->epi_ou_service != $new) $user->epi_ou_service = $new;
@@ -436,7 +436,13 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	}
 	
 	// Some changes require saving entity
-	if ($mainpropchange) $user->save();
+	if ($mainpropchange) {
+		if ($user->save() {
+			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : saved");
+		} else {
+			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : NOT SAVED");
+		}
+	}
 	if ($debug) error_log("ldap_auth_update_profile (theme_inria) : DONE");
 	
 	// Tell update has been successfully done
