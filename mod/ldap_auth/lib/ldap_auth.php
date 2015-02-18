@@ -37,8 +37,8 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
  * Eviter d'utiliser stripslashes (supprime les antislashs si ceux-ci sont utilisés)
 */
 function ldap_auth_login($username, $password) {
-	static $updateprofile = elgg_get_plugin_setting('updateprofile', 'ldap_auth');
-	static $allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth');
+	$updateprofile = elgg_get_plugin_setting('updateprofile', 'ldap_auth');
+	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth');
 	
 	// User can be logged in or created only if not closed
 	if (ldap_auth_is_active($username)) {
@@ -68,7 +68,7 @@ function ldap_auth_login($username, $password) {
  * @access private
  */
 function ldap_user_exists($username) {
-	static $username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($username_field_name));
 	if ($result) { return true; }
 	// Error or not found : same as doesn't exist
@@ -78,8 +78,8 @@ function ldap_user_exists($username) {
 
 /* Return user email from username */
 function ldap_get_email($username) {
-	static $username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
-	static $mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	// Check LDAP server data
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array($mail_field_name));
 	if ($result) { return $result[0][$mail_field_name][0]; }
@@ -128,8 +128,8 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
  * @access private
  */
 function ldap_auth_is_active($username) {
-	static $status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaEntryStatus');
-	static $username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$status_field_name = elgg_get_plugin_setting('status_field_name', 'ldap_auth', 'inriaEntryStatus');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	
 	// No status field set means any account is considered as active
 	if (empty($status_field_name)) { return true; }
@@ -158,7 +158,7 @@ function ldap_auth_is_active($username) {
 function ldap_auth_is_valid($username, $password) {
 	// Search for rdn - we need to bind anonymously to do search for rdn
 	// Le RDN de toto est rdn:uid=toto, son DN est dn:uid=toto,ou=people,dc=example,dc=org.
-	static $username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	
 	$result = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array());
 	if ($result && count($result) == 1) {
@@ -300,9 +300,9 @@ function ldap_auth_update_profile(ElggUser $user, Array $ldap_auth, Array $ldap_
 	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'auth' => $ldap_auth, 'fields' => $fields), "keepgoing");
 	if ($hook_result !== "keepgoing") return $hook_result;
 	
-	static $mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
-	static $username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	static $updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
+	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
 	$mainpropchange = false;
 	
 	if (count($ldap_infos) == 1 && count($ldap_auth) == 1) {
