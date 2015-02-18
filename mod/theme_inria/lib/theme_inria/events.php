@@ -83,7 +83,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 	// Note : return true to avoid blocking access if we are not in the right context
 	if (!(($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user'))) { return true; }
 	
-	$debug = true;
+	$debug = false;
 	if ($debug) error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ($debug) error_log("Account update : before = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
 	
@@ -100,12 +100,12 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		// Vérification du type de compte : si existe + valide dans le LDAP => Inria et actif
 		// Sinon devient compte externe, et désactivé (sauf si une raison de le garder actif)
 		if (ldap_user_exists($user->username)) {
+			if ($debug) error_log("Existing LDAP account");
 			// Update LDAP data
 			ldap_auth_check_profile($user);
 			
 			// Force archive for non-inria if member reason was not set
 			if (empty($user->memberreason) || ($user->memberreason == 'undefined')) { $force_archive = true; }
-			if ($debug) error_log("Existing LDAP account");
 			if (ldap_auth_is_active($user->username)) {
 				$is_inria = true;
 				$memberstatus = 'active';

@@ -257,7 +257,7 @@ function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
 // Note : this deprecates the "update_profile" hook
 // Note 2 : always prefer data from contacts branch
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
-	$debug = true;
+	$debug = false;
 	if ($debug) error_log("LDAP hook : check_profile");
 	$mainpropchange = false;
 	$user = $params['user'];
