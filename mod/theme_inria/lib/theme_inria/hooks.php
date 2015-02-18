@@ -437,7 +437,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	
 	// Some changes require saving entity
 	if ($mainpropchange) {
-		if ($user->save() {
+		if ($user->save()) {
 			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : saved");
 		} else {
 			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : NOT SAVED");
