@@ -134,7 +134,7 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$result = ldap_get_search_infos('objectClass=locality', $info_settings, array('*'));
 	if ($result) {
 		foreach($result as $num => $locality) {echo "{$locality['l'][0]} => {$locality['description'][0]}<br />"; }
-		echo print_r($result, true);
+		//echo print_r($result, true);
 	}
 	echo '</p>';
 
