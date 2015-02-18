@@ -389,7 +389,10 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			
 			// EPI ou service : "ou", branche contacts uniquement
 			case 'epi_ou_service':
-				if ($ldap_infos[0]['ou'][0]) { $new = $ldap_infos[0]['ou'][0]; }
+				if ($ldap_infos[0]['ou'][0]) {
+					$new = $ldap_infos[0]['ou'][0];
+					$new = implode(', ', $new);
+				}
 				if ($user->{$field} != $new) $user->{$field} = $new;
 				break;
 			
