@@ -17,7 +17,7 @@ header('Content-type: text/html; charset=utf-8');
 echo '<form method="POST">
 	<input type="text" name="username" placeholder="username" value="' . $username . '">
 	<input type="text" name="password" placeholder="password" value="' . $password . '">
-	<input type="submit" value="Tester avec ces valeurs">
+	<input type="submit" value="Tester vec ces valeurs">
 	</form>';
 
 echo "<h2>User info for $username</h2>";

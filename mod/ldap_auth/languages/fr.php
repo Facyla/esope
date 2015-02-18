@@ -56,6 +56,8 @@ $fr = array(
 	'ldap_auth:no_register' => "Votre compte n'a pas pu être créé - veuillez contacter l'administrateur.",
 	'ldap_auth:invalid:password' => 'LDAP : votre mot de passe est incorrect',
 	'ldap_auth:invalid:username' => 'LDAP : votre login est inconnu (attention à la casse)',
+	'ldap_auth:error:alreadyexists' => "Un compte est déjà associé à votre adresse email %s : veuillez contacter l'administrateur du site à l'adresse %s pour que votre identifiant de connexion corresponde à votre identifiant LDAP.",
+	'ldap_auth:error:cannotupdate' => "LDAP : impossible de mettre à jour le profil %s lors de l'inscription.",
 	
 	
 );

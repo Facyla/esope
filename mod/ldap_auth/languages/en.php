@@ -57,7 +57,8 @@ $en = array(
 	'ldap_auth:no_register' => 'An account could not get created for you - please contact the system administrator.',
 	'ldap_auth:invalid:password' => 'LDAP : incorrect password',
 	'ldap_auth:invalid:username' => 'LDAP : unknown login (check your username)',
-	
+	'ldap_auth:error:alreadyexists' => "User(s) already exist, registered with your email %s : please contact site administrator at %s so your site login matches LDAP login.",
+	'ldap_auth:error:cannotupdate' => "LDAP_auth : cannot update profile %s on registration",
 	
 );
 
