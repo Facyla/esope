@@ -262,9 +262,9 @@ function ldap_auth_check_profile(ElggUser $user) {
 	$updateprofile = elgg_get_plugin_setting('updateprofile', 'ldap_auth');
 	if ($updateprofile != 'yes') { return false; }
 	
-	// Hook : return "keepgoing" to continue after hooks
+	// Hook : return "keepgoing" to continue after hooks (requires strict check !==)
 	$hook_result = elgg_trigger_plugin_hook("check_profile", "ldap_auth", array("user" => $user), "keepgoing");
-	if ($hook_result != "keepgoing") { return $hook_result; }
+	if ($hook_result !== "keepgoing") { return $hook_result; }
 	
 	$mail_field = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
 	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
@@ -306,9 +306,9 @@ function ldap_auth_check_profile(ElggUser $user) {
 function ldap_auth_update_profile(ElggUser $user, $ldap_auth = array(), $ldap_infos = array(), $fields = array()) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
-	// Hook : return "keepgoing" to continue after hooks
+	// Hook : return "keepgoing" to continue after hooks (requires strict check !==)
 	$hook_result = elgg_trigger_plugin_hook("update_profile", "ldap_auth", array("user" => $user, 'infos' => $ldap_infos, 'auth' => $ldap_auth, 'fields' => $fields), "keepgoing");
-	if ($hook_result != "keepgoing") { return $hook_result; }
+	if ($hook_result !== "keepgoing") { return $hook_result; }
 	
 	// Get some config
 	$mail_field = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
@@ -381,9 +381,9 @@ function ldap_auth_clean_group_name(array $infos) {
 	elgg_error('Deprecated function : LDAP_auth ldap_auth_clean_group_name - please remove from your code (does nothing to passed var).');
 	return $infos;
 	/*
-	// Hook : return "keepgoing" to continue after hooks
+	// Hook : return "keepgoing" to continue after hooks (requires strict check !==)
 	$hook_result = elgg_trigger_plugin_hook("clean_group_name", "ldap_auth", array("infos" => $infos), "keepgoing");
-	if ($hook_result != "keepgoing") { return $hook_result; }
+	if ($hook_result !== "keepgoing") { return $hook_result; }
 	
 	$res = $infos;
 	$cn = explode(',',$infos[0]['inriagroupmemberof'][0],2);

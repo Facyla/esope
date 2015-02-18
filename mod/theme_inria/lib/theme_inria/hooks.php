@@ -257,7 +257,7 @@ function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
 // Note : this deprecates the "update_profile" hook
 // Note 2 : always prefer data from contacts branch
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
-	$debug = true;
+	$debug = false;
 	if ($debug) error_log("LDAP hook : check_profile");
 	$mainpropchange = false;
 	$user = $params['user'];
@@ -278,8 +278,6 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 	$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
 	
-	$ia = elgg_set_ignore_access(true);
-	
 	// Get user email
 	$user_mail = ldap_get_email($user->username);
 	// Get all available data from auth branch (people)
@@ -289,7 +287,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	
 	// Update email if we got one from LDAP
 	if (!empty($user_mail) && ($user->email != $user_mail)) {
-		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $user_mail");
+		if ($debug) error_log("LDAP hook : update_profile : updating email from {$user->email} to $user_mail");
 		$user->email = $user_mail;
 		$mainpropchange = true;
 	}
@@ -446,7 +444,6 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 		}
 	}
 	if ($debug) error_log("ldap_auth_update_profile (theme_inria) : DONE");
-	elgg_set_ignore_access($ia);
 	
 	// Tell update has been successfully done
 	return true;
