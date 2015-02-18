@@ -218,7 +218,7 @@ function ldap_auth_create_profile($username, $password) {
 	//while (strlen($new_username) < 4) { $new_username .= '0'; }
 
 	// Note : local password cannot be used because ldap_auth is called before other authentication methods
-	// @TODO : get LDAP email / name first, then check for existing account, and optionnaly update
+	// Get LDAP email / name first, then check for existing account, and optionally update
 	$user_email = ldap_get_email($username);
 	if (is_email_address($user_email)) {
 		// Avoid using existing email
