@@ -257,7 +257,7 @@ function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
 // Note : this deprecates the "update_profile" hook
 // Note 2 : always prefer data from contacts branch
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
-	$debug = false;
+	$debug = true;
 	if ($debug) error_log("LDAP hook : check_profile");
 	$mainpropchange = false;
 	$user = $params['user'];
@@ -354,7 +354,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	// Note : empty values are valid (updated in LDAP)
 	$profile_fields = inria_get_profile_ldap_fields();
 	foreach($profile_fields as $field) {
-		$new = ''; // Inria prefers empty field to null fields
+		$new = ''; // Inria prefers empty field to null field
 		// Update only fields that were not already handled
 		// And postpone those which are computed based on other values
 		if (in_array($field, array('cn', 'sn', 'givenName', 'displayName', 'email'))) { continue; }
@@ -367,7 +367,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 					$new = $ldap_auth[0]['ou'][0];
 					$new = str_replace('UR-', '', $new);
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->inria_location_main != $new) $user->inria_location_main = $new;
 				break;
 			
 			// Localisation
@@ -384,7 +384,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 						$new = str_replace('UR-', '', $new);
 					}
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->inria_location != $new) $user->inria_location = $new;
 				break;
 			
 			// EPI ou service : "ou", branche contacts uniquement
@@ -393,7 +393,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 					$new = $ldap_infos[0]['ou'][0];
 					$new = implode(', ', $new);
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->epi_ou_service != $new) $user->epi_ou_service = $new;
 				break;
 			
 			// Bureau
@@ -402,7 +402,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 					$new = array_unique($rooms);
 					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->inria_room != $new) $user->inria_room = $new;
 				break;
 			
 			// Téléphone
@@ -411,7 +411,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 					$new = array_unique($phones);
 					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->inria_phone != $new) $user->inria_phone = $new;
 				break;
 			
 			// Secrétariat
@@ -421,7 +421,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 					$new = array_unique($secretary);
 					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->{$field} != $new) $user->{$field} = $new;
+				if ($user->inria_secretary != $new) $user->inria_secretary = $new;
 				break;
 			
 			default:
