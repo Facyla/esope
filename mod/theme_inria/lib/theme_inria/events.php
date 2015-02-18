@@ -81,7 +81,7 @@ function theme_inria_setup_menu() {
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
 	// Note : return true to avoid blocking access if we are not in the right context
-	if (!($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user'))) { return true; }
+	if (!(($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user'))) { return true; }
 	
 	$debug = false;
 	if ($debug) error_log("Inria : profile update : $event, $object_type, " . $user->guid);
