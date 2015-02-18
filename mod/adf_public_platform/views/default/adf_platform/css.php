@@ -775,10 +775,11 @@ section div.module footer { background-size: 100%; }
 @media (max-width:700px) {
 	
 	/* Top menu */
-	header { min-height:3ex; height:auto; }
+	header { min-height:3ex; height:auto !important; background: #333; }
 	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
 	header nav { float:none; width:100%; position:initial; display:inline-block; }
+	header .profile-link { display:inline-block; }
 	header .adf-profil { position:initial; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
