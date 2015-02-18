@@ -53,7 +53,6 @@ $french = array(
 	'group_chat:notification:group' => "Nouveau message sur le chat du groupe \"%s\" : %s",
 	'group_chat:notification:user' => "Nouveau message sur le chat privé \"%s\" : %s",
 	
-	
 );
 
 add_translation('fr', $french);

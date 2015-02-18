@@ -778,7 +778,7 @@ section div.module footer { background-size: 100%; }
 	header { min-height:3ex; height:auto; }
 	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
-	header nav { float:none; width:100%; position:initial; }
+	header nav { float:none; width:100%; position:initial; display:inline-block; }
 	header .adf-profil { position:initial; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
@@ -793,7 +793,7 @@ section div.module footer { background-size: 100%; }
 	
 	/* Navigation menu */
 	#transverse .interne { max-width:100%; margin:0; }
-	#transverse .interne nav { float:none; width:100%; }
+	#transverse .interne nav { float:none; width:100%; display:inline-block; }
 	.menu-navigation-toggle { display:inline-block; }
 	#menu-navigation { display:none; }
 	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
@@ -813,14 +813,21 @@ section div.module footer { background-size: 100%; }
 	/* Generic rules */
 	body { font-size:120%; }
 	.floating { position: initial !important; }
-	.elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; }
+	.elgg-page .elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; display: inline-block; top:0; left:0; }
 	.elgg-button { font-size: large; }
 	
 	/* Common tools */
 	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
-	#groupchat-sitelink { position:initial; display: inline-block; border-radius: 0; padding: 1ex; border: 0; }
+	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 1ex; border: 0; width:100%; }
+	.twitter-timeline { width: 100% !important; }
+	
+	/* Recherche */
+	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
+	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
+	#main-search #adf-search-submit-button { border-radius: 0; }
 	
 	/* Layout */
+	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	
