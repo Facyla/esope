@@ -102,7 +102,7 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 	global $ldap_auth_search_data;
 	
 	// Use caching
-	$data_key = implode(';', $criteria) . "+" . implode(';', $ldap_server) . "+" . implode(';', $attributes);
+	$data_key = $criteria . "+" . implode(';', $ldap_server) . "+" . implode(';', $attributes);
 	$data_key = md5($data_key);
 	if (isset($ldap_auth_search_data[$data_key])) {
 		//error_log("LDAP : using cache $data_key = " . $ldap_auth_search_data[$data_key]);
