@@ -22,8 +22,8 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
  * @package Elgg.ldap_auth
  */
 
-/**
- * Login process using LDAP
+
+/** Login process using LDAP
  *
  * @param string $username the LDAP login.
  * @param string $password the coresponding LDAP password.
@@ -39,14 +39,19 @@ if (!include_once dirname(dirname(__FILE__)) . '/settings.php') {
 function ldap_auth_login($username, $password) {
 	// User can be logged in or created only if not closed
 	if (ldap_auth_is_active($username)) {
-		// Login requires valid username/pass
+		// Check valid LDAP login (username/pass)
 		if (ldap_auth_is_valid($username, $password)) {
 			if ($user = get_user_by_username($username)) {
+				// Update profile based on LDAP info
 				ldap_auth_check_profile($user);
 				return login($user);
 			}
-			if ($user = ldap_auth_create_profile($username, $password)) {
-				return login($user);
+			$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', true);
+			if ($allow_registration == 'yes') {
+				// Create profile (uses setting to )
+				if ($user = ldap_auth_create_profile($username, $password)) {
+					return login($user);
+				}
 			}
 		}
 	}
@@ -116,8 +121,7 @@ function ldap_get_search_infos($criteria, $ldap_server, $attributes) {
 	return false;
 }
 
-/**
- * Check if LDAP account is valid/closed
+/** Check if LDAP account exists and is not closed
  *
  * @param string $username the LDAP login.
  * 
@@ -139,8 +143,7 @@ function ldap_auth_is_active($username) {
 }
 
 
-/**
- * Check if LDAP credentials are valid
+/** Check if LDAP credentials are valid
  *
  * @param string $username the LDAP login.
  * @param string $password the coresponding LDAP password.
@@ -150,33 +153,25 @@ function ldap_auth_is_active($username) {
  * @access private
  */
 function ldap_auth_is_valid($username, $password) {
-	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	
-	//we need to bind anonymously to do search for rdn
+	// Search for rdn - we need to bind anonymously to do search for rdn
 	//$rdn = ldap_get_search_infos("$username_field_name=$username", ldap_auth_settings_auth(), array());
 	$auth = new LdapServer(ldap_auth_settings_auth());
 	if ($auth->bind()) {
-		//we need the rdn to perform a bind with password
+		// We need the rdn to perform a bind with password
+		$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
 		$rdn = $auth->search("$username_field_name=$username");
 		if ($rdn && count($rdn) == 1) {
-			//we check if credentials are valid
-			if ($auth->bind($rdn[0], $password)) {
-				return true;
-			} else {
-				return false;
-				//throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
-			}
-		} else {
-			return false;
-			//throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+			// Check if credentials are valid
+			if ($auth->bind($rdn[0], $password)) { return true; }
+			//throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
 		}
+		//throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
 	}
 	return false;
 }
 
 
-/**
- * Create user by username - requires active LDAP access
+/** Create user by username - requires active LDAP access
  *
  * @param string $username The user's username
  *
@@ -186,7 +181,7 @@ function ldap_auth_create_profile($username, $password) {
 	global $CONFIG;
 	// Registration is allowed only if set in plugin
 	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', true);
-	if ($allow_registration) {
+	if ($allow_registration != 'no') {
 		$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth', "noreply@inria.fr");
 		$new_username = $username;
 		/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
@@ -228,8 +223,7 @@ function ldap_auth_create_profile($username, $password) {
 }
 
 
-/**
- * Search for user info in LDAP directories and update Elgg profile
+/** Search for user info in LDAP directories and update Elgg profile
  *
  * @param ElggUser $user The user
  *

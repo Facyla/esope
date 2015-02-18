@@ -7,9 +7,13 @@
  * @author Florian DANIEL <facyla@gmail.com>
  */
 
-/**
- *  Parameters for LdapServer construct.
- *  Authenticate server : should be able to return at least username + email
+/* @TODO Instructions
+ * Search for "ToBeCompleted" and replace with your installation values
+ * You may change and/or add new fields in the .._fields() functions
+ */
+
+/** Parameters for LdapServer construct.
+ *  Authentication server : should be able to return at least username + email
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
@@ -23,9 +27,8 @@ function ldap_auth_settings_auth() {
 }
 
 
-/**
- *  Parameters for LdapServer construct.
- *	Info server : should return detailed user fields (optional)
+/** Parameters for LdapServer construct.
+ * Info server : should return detailed user fields (optional)
  * 
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
@@ -40,9 +43,7 @@ function ldap_auth_settings_info() {
 
 
 
-/**
- *  matching between LDAP fields and Elgg ones.
- *  Authenticate server
+/** Authenticate server: matching between LDAP fields and Elgg ones.
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
@@ -51,12 +52,11 @@ function ldap_auth_settings_auth_fields() {
 		'cn' => 'name',
 		'inriagroupmemberof' => 'ToBeCompleted',
 		'ou' => 'location',
+		// ToBeCompleted
 	);
 }
 
-/**
- *  matching between LDAP fields and Elgg ones.
- *  Info server
+/** Info server: matching between LDAP fields and Elgg ones.
  *
  * @return array Options ('host', 'port', 'version', 'basedn')
  */
@@ -67,6 +67,7 @@ function ldap_auth_settings_info_fields() {
 		'l' => 'location',
 		'roomNumber' => 'room',
 		'telephoneNumber' => 'phone',
+		// ToBeCompleted
 	);
 }
 
