@@ -525,14 +525,16 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 
 // CRON : LDAP user check
 function theme_inria_cron_ldap_check($user, $getter, $options) {
-	// Process only non-banned, enabled accounts
-	if (!$user->isbanned() && !$user->enabled) {
-		//$debug_0 = microtime(TRUE);
-		// Check LDAP data
-		inria_check_and_update_user_status('login', 'user', $user);
-		//$debug_1 = microtime(TRUE);
-		//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
-	}
+	// Skip not-yet-enabled accounts
+	if (!$user->isEnabled()) return;
+	// Skip banned accounts
+	if ($user->isbanned()) return;
+	
+	//$debug_0 = microtime(TRUE);
+	// Check LDAP data
+	inria_check_and_update_user_status('login', 'user', $user);
+	//$debug_1 = microtime(TRUE);
+	//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
 	
 }
 
