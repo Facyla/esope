@@ -366,7 +366,7 @@ Here is the new profile page : %s
 	
 	// Cron
 	'theme_inria:cron:ldap:done' => "Daily CRON Inria LDAP done",
-	'theme_inria:cron:ldap:done' => "Daily CRON Inria done",
+	'theme_inria:cron:done' => "Daily CRON Inria done",
 	
 	
 );

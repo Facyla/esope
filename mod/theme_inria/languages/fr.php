@@ -365,7 +365,7 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Cron
 	'theme_inria:cron:ldap:done' => "CRON quotidien Inria LDAP...OK",
-	'theme_inria:cron:ldap:done' => "CRON quotidien Inria...OK",
+	'theme_inria:cron:done' => "CRON quotidien Inria...OK",
 	
 );
 
