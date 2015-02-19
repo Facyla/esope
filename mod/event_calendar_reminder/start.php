@@ -29,7 +29,7 @@ function event_calendar_reminder_cron($hook, $entity_type, $returnvalue, $params
 	global $CONFIG;
 	elgg_set_context('cron');
 	
-	// Avoid any time limit while processing offers
+	// Avoid any time limit while processing
 	set_time_limit(0);
 	access_show_hidden_entities(true);
 	elgg_set_ignore_access(true);

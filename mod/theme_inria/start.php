@@ -55,7 +55,7 @@ function theme_inria_init(){
 	//elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
-	// Supprimer le suivi de l'activité (toujours activé)
+	// Supprimer le suivi de l'activité (car toujours activé sur home du groupe)
 	remove_group_tool_option('activity');
 	
 	// Add CMIS folder option
@@ -161,6 +161,9 @@ function theme_inria_init(){
 		//elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
 		//elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
 	}
+	
+	// Register cron hook
+	elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
 	// The hook is triggered when using default elgg email handler, 
