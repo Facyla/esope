@@ -65,7 +65,9 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 			// Some actions are removed for archived users, too
 			foreach ($return as $key => $item) {
 				if ($item->getName() == 'send') unset($return[$key]);
-				if ($item->getName() == 'group_chat-user') unset($return[$key]);
+				if ($item->getName() == 'group_chat_user') unset($return[$key]);
+				if ($item->getName() == 'add_friend') unset($return[$key]);
+				if ($item->getName() == 'remove_friend') unset($return[$key]);
 			}
 		}
 		
