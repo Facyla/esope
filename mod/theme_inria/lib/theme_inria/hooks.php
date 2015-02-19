@@ -517,10 +517,10 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
 		$debug_1 = microtime(TRUE);
 		error_log("CRON : LDAP end " . date('Ymd H:i:s') . " => " . round($debug_1-$debug_0, 4) . " secondes");
-		echo elgg_echo('theme_inria:cron:ldap:done');
+		echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
 	}
 	
-	echo elgg_echo('theme_inria:cron:done');
+	echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
 }
 
 // CRON : LDAP user check
