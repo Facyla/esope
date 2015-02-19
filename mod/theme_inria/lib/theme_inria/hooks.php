@@ -517,7 +517,7 @@ $debug_0 = microtime(TRUE);
 		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
 $debug_1 = microtime(TRUE);
 error_log("CRON : LDAP end " . date('Ymd H:i:s'));
-$search_results .= "=> Temps total : " . round($debug_1-$debug_0, 4);
+error_log("=> Temps total : " . round($debug_1-$debug_0, 4));
 		echo elgg_echo('theme_inria:cron:ldap:done');
 	}
 	
@@ -531,7 +531,7 @@ $debug_0 = microtime(TRUE);
 	// Check LDAP data
 	inria_check_and_update_user_status('login', 'user', $user);
 $debug_1 = microtime(TRUE);
-$search_results .= "  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4);
+error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
 	
 }
 
