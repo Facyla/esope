@@ -44,7 +44,7 @@ $fr = array(
 	'survey:settings:allow_open_survey:title' => "Permettre de créer des sondages ouverts ? (les sondages ouverts montrent les réponses de chacun des membres ; si cette option est activée, les administrateurs peuvent voir qui a voté quoi sur tous les sondages)",
 	'survey:none' => "Aucun sondage.",
 	'survey:permission_error' => "Vous n'avez pas la permission de modifier ce sondage.",
-	'survey:response' => "Répondre",
+	'survey:respond' => "Répondre",
 	'survey:login' => "Veuillez vous connecter pour répondre à ce sondage.",
 	'group:survey:empty' => "Aucun sondage",
 	'survey:settings:site_access:title' => "Qui peut créer des sondages pour l'ensemble du site ?",
@@ -122,7 +122,7 @@ Afficher le sondage et y répondre :
 	'survey:responded' => "Merci d'avoir répondu, vos réponses ont été enregistrées.",
 	'survey:deleted' => "Votre sondage a été supprimé.",
 	'survey:totalresponses' => "Nombre total de réponses : ",
-	'survey:responded' => "Votre réponse a été enregistré pour ce sondage. Merci d'avoir voté pour ce sondage.",
+	'survey:responded' => "Votre réponse a été enregistrée. Merci d'avoir répondu à ce sondage.",
 
 	/**
 	 * Error messages
@@ -130,7 +130,15 @@ Afficher le sondage et y répondre :
 	'survey:blank' => "Désolé : vous devez compléter la question et ajouter au moins un choix avant de pouvoir enregistrer le sondage.",
 	'survey:noresponse' => "Désolé : vous devez choisir une réponse pour participer à ce sondage.",
 	'survey:notfound' => "Désolé : impossible de trouver le sondage demandé.",
-	'survey:notdeleted' => "Désolé : impossible de supprimer ce sondage."
+	'survey:notdeleted' => "Désolé : impossible de supprimer ce sondage.",
+	
+	
+	// New survey strings
+	'survey:questions' => "Questions",
+	'survey:add_question' => "Ajouter une question",
+	'survey:title' => "Titre du sondage",
+	
+	
 );
 
 add_translation("fr",$fr);

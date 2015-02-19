@@ -1,7 +1,7 @@
 <?php
-elgg_load_library('elgg:poll');
+elgg_load_library('elgg:survey');
 
-$poll = elgg_extract('entity', $vars);
+$survey = elgg_extract('entity', $vars);
 
 if($msg = elgg_extract('msg', $vars)) {
 	echo '<p>'.$msg.'</p>';
@@ -9,53 +9,53 @@ if($msg = elgg_extract('msg', $vars)) {
 
 if (elgg_is_logged_in()) {
 	$user = elgg_get_logged_in_user_entity();
-	$can_vote = !$poll->hasVoted($user);
+	$can_respond = !$survey->hasResponded($user);
 
-	//if user has voted, show the results
-	if (!$can_vote) {
+	//if user has responded, show the results
+	if (!$can_respond) {
 		$results_display = "block";
-		$show_text = elgg_echo('poll:show_poll');
-		$voted_text = elgg_echo("poll:voted");
+		$show_text = elgg_echo('survey:show_survey');
+		$responded_text = elgg_echo("survey:responded");
 	} else {
-		$allow_close_date = elgg_get_plugin_setting('allow_close_date','poll');
+		$allow_close_date = elgg_get_plugin_setting('allow_close_date','survey');
 
-		if ($allow_close_date == 'yes' && !$poll->isOpen()) {
+		if ($allow_close_date == 'yes' && !$survey->isOpen()) {
 			$results_display = "block";
-			$show_text = elgg_echo('poll:show_poll');
-			$date_day = date('j', $poll->close_date);
-			$date_month = date('m', $poll->close_date);
-			$date_year = date('Y', $poll->close_date);
-			$friendly_time = $date_day . '. ' . elgg_echo("poll:month:$date_month") . ' ' . $date_year;
-			$voted_text = elgg_echo("poll:voting_ended", array($friendly_time));
-			$can_vote = false;
+			$show_text = elgg_echo('survey:show_survey');
+			$date_day = date('j', $survey->close_date);
+			$date_month = date('m', $survey->close_date);
+			$date_year = date('Y', $survey->close_date);
+			$friendly_time = $date_day . '. ' . elgg_echo("survey:month:$date_month") . ' ' . $date_year;
+			$responded_text = elgg_echo("survey:voting_ended", array($friendly_time));
+			$can_respond = false;
 		} else {
 			$results_display = "none";
-			$show_text = elgg_echo('poll:show_results');
+			$show_text = elgg_echo('survey:show_results');
 		}
 	}
 } else {
 	$results_display = "block";
-	$show_text = elgg_echo('poll:show_poll');
-	$voted_text = elgg_echo('poll:login');
-	$can_vote = false;
+	$show_text = elgg_echo('survey:show_survey');
+	$responded_text = elgg_echo('survey:login');
+	$can_respond = false;
 }
 ?>
 
-<div id="poll-post-body-<?php echo $poll->guid; ?>" class="poll_post_body" style="display:<?php echo $results_display ?>;">
-	<?php if (!$can_vote) {echo '<p>'.$voted_text.'</p>';}?>
-	<?php echo elgg_view('poll/results_for_widget', array('entity' => $poll)); ?>
+<div id="survey-post-body-<?php echo $survey->guid; ?>" class="survey_post_body" style="display:<?php echo $results_display ?>;">
+	<?php if (!$can_respond) {echo '<p>'.$responded_text.'</p>';}?>
+	<?php echo elgg_view('survey/results_for_widget', array('entity' => $survey)); ?>
 </div>
 
 <?php
 
-if ($can_vote) {
-	echo elgg_view_form('poll/vote', array('id' => "poll-vote-form-{$poll->guid}"), array('entity' => $poll, 'callback' => 1));
+if ($can_respond) {
+	echo elgg_view_form('survey/response', array('id' => "survey-response-form-{$survey->guid}"), array('entity' => $survey, 'callback' => 1));
 
 	$toggle = elgg_view('output/url', array(
 		'text' => $show_text,
 		'href' => '',
-		'data-guid' => $poll->guid,
-		'class' => 'poll-show-link',
+		'data-guid' => $survey->guid,
+		'class' => 'survey-show-link',
 	));
 
 	echo "<p class=\"center\">$toggle</p>";

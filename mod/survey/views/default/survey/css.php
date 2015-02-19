@@ -1,7 +1,7 @@
 <?php
 /**
- * Elgg Poll plugin
- * @package Elggpoll
+ * Elgg Survey plugin
+ * @package Elggsurvey
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @Original author John Mellberg
  * website http://www.syslogicinc.com
@@ -10,44 +10,45 @@
  */
 ?>
 
-.poll_post h3 {
+.survey_post h3 {
 	font-size: 150%;
 	margin:0 0 10px 0;
 	padding:0;
 }
-.poll_post h3 a {
+.survey_post h3 a {
 	text-decoration: none;
 }
-.poll_post p {
+.survey_post p {
 	margin: 0 0 5px 0;
 }
-.poll_input-poll-choice {
+.survey_input-survey-choice {
 	width: 90%;
 }
-.poll-result {
+.survey-result {
 	margin: 15px 0;
 }
-.poll-progress {
+.survey-progress {
 	height: 12px;
 	border: 1px #00B0E4 solid;
 	margin: 5px 0;
 }
-.poll-progress-filled {
+.survey-progress-filled {
 	background-color: #00B0E4;
 	height: 12px;
 }
-.poll_widget-title {
+.survey_widget-title {
 	margin-bottom: 10px;
 }
-.poll_closing-date-open {
+.survey_closing-date-open {
 	color: green;
 }
-.poll_closing-date-closed {
+.survey_closing-date-closed {
 	color: red;
 }
-.poll_vote-label {
+.survey_response-label {
 	cursor: pointer;
 }
-.poll_vote-label:hover {
+.survey_response-label:hover {
 	color: red;
 }
+

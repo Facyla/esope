@@ -1,32 +1,32 @@
 <?php
 
-// TODO: add ability to reorder poll questions?
-$poll = elgg_extract('poll', $vars);
+// TODO: add ability to reorder survey questions?
+$survey = elgg_extract('survey', $vars);
 
-//elgg_require_js('elgg/poll/edit'); // Elgg 1.10
-elgg_load_js('elgg.poll.edit');
+//elgg_require_js('elgg/survey/edit'); // Elgg 1.10
+elgg_load_js('elgg.survey.edit');
 
 $body = '';
 $i = 0;
 
-if ($poll) {
-	$choices = $poll->getChoices();
+if ($survey) {
+	$choices = $survey->getChoices();
 
 	foreach ($choices as $choice) {
 		$text_input = elgg_view('input/text', array(
 			'name' => "choice_text_{$i}",
 			'value' => $choice->text,
-			'class' => 'poll_input-poll-choice'
+			'class' => 'survey_input-survey-choice'
 		));
 
 		$delete_icon = elgg_view('output/img', array(
-			'src' => 'mod/poll/graphics/16-em-cross.png'
+			'src' => 'mod/survey/graphics/16-em-cross.png'
 		));
 
 		$delete_link = elgg_view('output/url', array(
 			'href' => '#',
 			'text' => $delete_icon,
-			'title' => elgg_echo('poll:delete_choice'),
+			'title' => elgg_echo('survey:delete_choice'),
 			'class' => 'delete-choice',
 			'data-id' => $i,
 		));
@@ -41,7 +41,7 @@ $body .= '<div id="new-choices-area"></div>';
 
 $body .= elgg_view('input/button', array(
 	'id' => 'add-choice',
-	'value' => elgg_echo('poll:add_choice'),
+	'value' => elgg_echo('survey:add_choice'),
 	'class' => 'elgg-button elgg-button-action',
 ));
 
@@ -52,3 +52,4 @@ $body .= elgg_view('input/hidden', array(
 ));
 
 echo $body;
+

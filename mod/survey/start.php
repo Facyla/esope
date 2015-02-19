@@ -11,7 +11,7 @@ elgg_register_event_handler('init','system','survey_init');
 
 function survey_init() {
 
-	elgg_register_library('elgg:survey', elgg_get_plugins_path() . 'survey/models/model.php');
+	elgg_register_library('elgg:survey', elgg_get_plugins_path() . 'survey/lib/survey/functions.php');
 
 	// Set up menu
 	elgg_register_menu_item('site', array(
@@ -49,11 +49,11 @@ function survey_init() {
 	elgg_register_entity_type('object','survey');
 
 	// register the JavaScript (autoloaded in 1.10)
-	$js = elgg_get_simplecache_url('js', 'elgg/survey/edit');
-	elgg_register_simplecache_view('js/elgg/survey/edit');
+	$js = elgg_get_simplecache_url('js', 'survey/survey');
+	elgg_register_simplecache_view('js/survey/survey');
 	elgg_register_js('elgg.survey.survey', $js);
-	$js = elgg_get_simplecache_url('js', 'elgg/survey/edit');
-	elgg_register_simplecache_view('js/elgg/survey/edit');
+	$js = elgg_get_simplecache_url('js', 'survey/edit');
+	elgg_register_simplecache_view('js/survey/edit');
 	elgg_register_js('elgg.survey.edit', $js);
 
 	// add group widget

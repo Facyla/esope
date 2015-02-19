@@ -46,7 +46,8 @@ class Survey extends ElggObject {
 			return false;
 		}
 	}
-
+	
+	
 	/**
 	 * Get choice objects
 	 *
@@ -61,11 +62,7 @@ class Survey extends ElggObject {
 				'direction' => 'ASC'
 			),
 		));
-
-		if (!$choices) {
-			$choices = array();
-		}
-
+		if (!$choices) { $choices = array(); }
 		return $choices;
 	}
 
@@ -73,9 +70,7 @@ class Survey extends ElggObject {
 	 * Delete all choices associated with this survey
 	 */
 	public function deleteChoices() {
-		foreach ($this->getChoices() as $choice) {
-			$choice->delete();
-		}
+		foreach ($this->getChoices() as $choice) { $choice->delete(); }
 	}
 
 	/**
@@ -84,12 +79,8 @@ class Survey extends ElggObject {
 	 * @param array $choices
 	 */
 	public function setChoices(array $choices) {
-		if (empty($choices)) {
-			return false;
-		}
-
+		if (empty($choices)) { return false; }
 		$this->deleteChoices();
-
 		$i = 0;
 		foreach ($choices as $choice) {
 			$survey_choice = new ElggObject();
@@ -105,6 +96,62 @@ class Survey extends ElggObject {
 			$i += 1;
 		}
 	}
+
+	
+	// @TODO : duplicate same logic for "questions" instead of questions
+	/**
+	 * Get questions objects
+	 *
+	 * @return ElggObject[] $questions
+	 */
+	public function getQuestions() {
+		$questions = $this->getEntitiesFromRelationship(array(
+			'relationship' => 'survey_question', 'inverse_relationship' => true,
+			'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
+		));
+		if (!$questions) { $questions = array(); }
+		return $questions;
+	}
+
+	/**
+	 * Delete all questions associated with this survey
+	 */
+	public function deleteQuestions() {
+		foreach ($this->getQuestions() as $question) { $question->delete(); }
+	}
+
+	/**
+	 * Adds or updates survey questions
+	 *
+	 * @param array $questions
+	 */
+	public function setQuestions(array $questions) {
+		if (empty($questions)) { return false; }
+		$this->deleteQuestions();
+		$i = 0;
+		foreach ($questions as $question) {
+			$survey_question = new ElggObject();
+			$survey_question->owner_guid = $this->owner_guid;
+			$survey_question->container_guid = $this->container_guid;
+			$survey_question->subtype = "survey_question";
+			
+			$survey_question->title = $question; // @TODO
+			$survey_question->description = $question; // @TODO
+			$survey_question->input_type = $question; // @TODO
+			$survey_question->options = $question; // @TODO
+			$survey_question->empty_value = $question; // @TODO
+			$survey_question->required = $question; // @TODO
+			
+			$survey_question->display_order = $i*10;
+			$survey_question->access_id = $this->access_id;
+			$survey_question->save();
+
+			add_entity_relationship($survey_question->guid, 'survey_question', $this->guid);
+			$i += 1;
+		}
+	}
+
+
 
 	/**
 	 * Is the survey open for new responses?
@@ -125,6 +172,9 @@ class Survey extends ElggObject {
 		return $deadline > $now;
 	}
 
+
+	// @TODO : attention à modifier l logique de comptage pour permettre d'inclure les questions, ayant elle-même diverses options et réponses
+	
 	/**
 	 * Fetch and cache amount of responses for each choice
 	 *

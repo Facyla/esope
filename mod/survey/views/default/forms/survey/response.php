@@ -3,23 +3,23 @@
  * Poll voting form
  */
 
-$poll = $vars['entity'];
+$survey = $vars['entity'];
 
 $response_input = elgg_view('input/radio', array(
 	'name' => 'response',
-	'options' => poll_get_choice_array($poll),
+	'options' => survey_get_choice_array($survey),
 ));
 
 $submit_input = elgg_view('input/submit', array(
-	'name' => 'submit_vote',
-	'value' => elgg_echo('poll:vote'),
-	'class' => 'elgg-button-submit poll-vote-button',
-	'rel' => $poll->guid,
+	'name' => 'submit_response',
+	'value' => elgg_echo('survey:respond'),
+	'class' => 'elgg-button-submit survey-response-button',
+	'rel' => $survey->guid,
 ));
 
 $guid_input = elgg_view('input/hidden', array(
 	'name' => 'guid',
-	'value' => $poll->guid,
+	'value' => $survey->guid,
 ));
 
 $callback_input = elgg_view('input/hidden', array(

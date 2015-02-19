@@ -1,7 +1,18 @@
-= Survey plugin for Elgg 1.8 =
-This plugin is based on Poll plugin 1.10.2, but aims to provide survey features such as multiple questions, free text questions, and generally and extend set of available question types.
+Survey plugin for Elgg 1.8
+==========================
+
+This plugin is forked from Poll plugin 1.10.2.
+Some of the implementation ideas come from knowledge_database plugin from Facyla, completed by Evan Winslow proposal at https://github.com/Elgg/Elgg/issues/6808
+
+This plugin has a different aim than "poll", and is not backward-compatible. In fact, both plugin can be enabled together to provide polls and surveys.
+Survey plugin wants to provide survey features such as :
+ - multiple questions,
+ - extended set of available question types (notation, free text, multiple choices, etc.)
+It is not intended at any member, but rather to admins and optionally group admins.
 
 
+
+## Poll readme
 Poll plugin for Elgg 1.10
 Latest Version: 1.10.2
 Released: 2015-02-15
@@ -18,7 +29,7 @@ With this new release I've tried to merge the two classes of the poll(s) plugin 
 
 
 
-== Installation ==
+### Installation
 
 (0. If you have a previous version of the poll plugin installed, first disable the poll plugin and remove the poll plugin folder of the old version from your mod folder,)
 1. Copy the poll plugin folder into you mod folder,
@@ -27,7 +38,7 @@ With this new release I've tried to merge the two classes of the poll(s) plugin 
 
 
 
-== Changelog ==
+### Changelog
 
 1.10.2:
 
@@ -71,7 +82,7 @@ With this new release I've tried to merge the two classes of the poll(s) plugin 
 
 
 
-== Contributors / History ==
+### Contributors / History
 
 The original Elgg 1.x Poll plugin was written by John Mellberg
 (http://www.syslogicinc.com) and modified by Team Webgalli (www.webgalli.com)

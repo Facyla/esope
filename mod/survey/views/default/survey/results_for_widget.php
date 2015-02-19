@@ -1,41 +1,41 @@
 <?php
 /**
- * Poll result view
+ * Survey result view
  */
 
-$poll = elgg_extract('entity', $vars);
+$survey = elgg_extract('entity', $vars);
 
 // Get array of possible responses
-$choices = poll_get_choice_array($poll);
+$choices = survey_get_choice_array($survey);
 
-$total = $poll->getResponseCount();
+$total = $survey->getResponseCount();
 
-$allow_open_poll = elgg_get_plugin_setting('allow_open_poll', 'poll');
-if ($allow_open_poll) {
-	$open_poll = ($poll->open_poll == 1);
+$allow_open_survey = elgg_get_plugin_setting('allow_open_survey', 'survey');
+if ($allow_open_survey) {
+	$open_survey = ($survey->open_survey == 1);
 } else {
-	$open_poll = false;
+	$open_survey = false;
 }
 
-$vote_id = 0;
+$response_id = 0;
 
 foreach ($choices as $choice) {
-	$response_count = $poll->getResponseCountForChoice((string)$choice);
+	$response_count = $survey->getResponseCountForChoice((string)$choice);
 
-	$response_label = elgg_echo ('poll:result:label', array($choice, $response_count));
+	$response_label = elgg_echo ('survey:result:label', array($choice, $response_count));
 
-	$voted_users = '';
+	$responded_users = '';
 
-	// Show members if this poll is an open poll or if an admin is logged in
-	// (in the latter case open polls must be enabled in plugin settings)
-	if ($open_poll || ($allow_open_poll && elgg_is_admin_logged_in())) {
-		$vote_id++;
+	// Show members if this survey is an open survey or if an admin is logged in
+	// (in the latter case open surveys must be enabled in plugin settings)
+	if ($open_survey || ($allow_open_survey && elgg_is_admin_logged_in())) {
+		$response_id++;
 
 		// TODO Would it be possible to use elgg_list_annotations() with
 		// custom view that displays only annotation owner icons?
 		$response_annotations = elgg_get_annotations(array(
-			'guid' => $poll->guid,
-			'annotation_name' => 'vote',
+			'guid' => $survey->guid,
+			'annotation_name' => 'response',
 			'annotation_value' => $choice,
 		));
 
@@ -45,8 +45,8 @@ foreach ($choices as $choice) {
 		}
 
 		if ($user_guids) {
-			// Gallery of voters
-			$voted_users = elgg_list_entities(array(
+			// Gallery of responders
+			$responded_users = elgg_list_entities(array(
 				'guids' => $user_guids,
 				'pagination' => false,
 				'list_type' => 'users',
@@ -57,15 +57,15 @@ foreach ($choices as $choice) {
 		// Display as link that toggles the user icon gallery
 		$response_label = elgg_view('output/url', array(
 			'text' => $response_label,
-			'href' => "#poll-users-vote-{$vote_id}",
+			'href' => "#survey-users-response-{$response_id}",
 			'rel' => 'toggle',
 		));
 
-		// Hide voter list of closed poll by default (admins can toggle it)
-		$hidden = $open_poll ? '' : 'hidden';
+		// Hide responder list of closed survey by default (admins can toggle it)
+		$hidden = $open_survey ? '' : 'hidden';
 	}
 
-	$response_title = elgg_echo("poll:show_voters");
+	$response_title = elgg_echo("survey:show_responders");
 
 	if ($response_count == 0) {
 		$percentage = 0;
@@ -74,16 +74,16 @@ foreach ($choices as $choice) {
 	}
 
 	echo <<<HTML
-	<div class="poll-result">
+	<div class="survey-result">
 		<label title="$response_title">$response_label</label>
-		<div class="poll-progress">
-			<div class="poll-progress-filled" style="width: {$percentage}%"></div>
+		<div class="survey-progress">
+			<div class="survey-progress-filled" style="width: {$percentage}%"></div>
 		</div>
-		<div $hidden id=poll-users-vote-{$vote_id}>$voted_users</div>
+		<div $hidden id=survey-users-response-{$response_id}>$responded_users</div>
 	</div>
 HTML;
 }
 
 ?>
 
-<p><?php echo elgg_echo('poll:totalvotes', array($total)); ?></p>
+<p><?php echo elgg_echo('survey:totalresponses', array($total)); ?></p>

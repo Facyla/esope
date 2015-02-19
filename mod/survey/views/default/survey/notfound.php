@@ -1,7 +1,7 @@
 <?php
 /**
- * Elgg Poll plugin
- * @package Elggpoll
+ * Elgg Survey plugin
+ * @package Elggsurvey
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @Original author John Mellberg
  * website http://www.syslogicinc.com
@@ -12,6 +12,6 @@
 
 <p>
 	<?php
-		echo elgg_echo("poll:notfound");
+		echo elgg_echo("survey:notfound");
 	?>
 </p>
