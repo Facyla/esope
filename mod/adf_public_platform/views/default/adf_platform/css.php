@@ -734,6 +734,10 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .menu-sidebar-toggle { text-align: right; }
 
 
+/* Font Awesome */
+.fa-stack-half { font-size: 0.5em; }
+.fa:hover, a:hover .fa { transform: rotateZ(360deg); transition-duration: 0.5s; }
+
 
 
 
