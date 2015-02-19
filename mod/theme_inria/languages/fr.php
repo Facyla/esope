@@ -363,6 +363,10 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'theme_inria:login:details' => "Personnel Inria, veuillez utiliser la connexion CAS. Si votre compte Iris n'existe pas encore, il sera créé lors de votre première connexion.<br />Si vous ne disposez pas de compte Inria ou si celui-ci n'est plus actif, veuillez utiliser la connexion par identifiant / mot de passe",
 	
+	// Cron
+	'theme_inria:cron:ldap:done' => "CRON quotidien Inria LDAP terminé",
+	'theme_inria:cron:ldap:done' => "CRON quotidien Inria terminé",
+	
 );
 
 add_translation("fr",$french);
