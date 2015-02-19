@@ -61,7 +61,14 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 			$item->setSection('admin');
 			$item->setConfirmText(elgg_echo("question:areyousure"));
 			$return[] = $item;
+			
+			// Some actions are removed for archived users, too
+			foreach ($return as $key => $item) {
+				if ($item->getName() == 'send') unset($return[$key]);
+				if ($item->getName() == 'group_chat-user') unset($return[$key]);
+			}
 		}
+		
 		return $return;
 	}
 }
