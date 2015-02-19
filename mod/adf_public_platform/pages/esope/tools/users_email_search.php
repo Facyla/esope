@@ -20,7 +20,9 @@ if (!empty($email)) {
 	$users = get_user_by_email($email);
 	if ($users) {
 		foreach ($users as $ent) {
-			$content .= '<p><a href="' . $ent->getURL() . '">' . $ent->email . ' => GUID&nbsp;: ' . $ent->guid . ', Username&nbsp;: ' . $ent->username . ', Nom&nbsp;: ' . $ent->name . '</a></p>';
+			$icon = elgg_view_entity_icon($ent, 'tiny');
+			$text = $ent->name . ' : <a href="' . $ent->getURL() . '">' . $ent->username . ' (GUID ' . $ent->guid . ')</a>';
+			$content .= elgg_view_image_block($icon, $text);
 		}
 	} else {
 		$content .= "<p>Aucun résultat</p>";
