@@ -736,7 +736,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 /* Font Awesome */
 .fa-stack-half { font-size: 0.5em; }
-.fa:hover, a:hover .fa { transform: rotateZ(360deg); transition-duration: 0.5s; }
+/* Quick effect on hover */
+.fa:hover, a:hover .fa { transform: rotateY(360deg); transition-duration: 0.3s; }
 
 
 
