@@ -162,8 +162,8 @@ function theme_inria_init(){
 		//elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
 	}
 	
-	// Register cron hook
-	elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
+	// Register cron hook @TODO attendre le GO de la DSI avant activation !
+	//elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
 	// The hook is triggered when using default elgg email handler, 
