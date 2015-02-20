@@ -9,7 +9,7 @@ $question = elgg_extract('question', $vars);
 $i = elgg_extract('i', $vars);
 
 $question_types_opt = array('text' => elgg_echo('survey:type:text'), 'longtext' => elgg_echo('survey:type:longtext'), 'dropdown' => elgg_echo('survey:type:dropdown'), 'checkboxes' => elgg_echo('survey:type:checkboxes'), 'multiselect' => elgg_echo('survey:type:multiselect'), 'rating' => elgg_echo('survey:type:rating'), 'date' => elgg_echo('survey:type:date'));
-$yes_no_opt = array('yes' => elgg_echo('survey:yes'), 'no' => elgg_echo('survey:no'));
+$yes_no_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
 
 // Modèle de question et paramètres
 // Question object meta : title, description, input_type, options, empty_value, required
