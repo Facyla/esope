@@ -734,6 +734,11 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .menu-sidebar-toggle { text-align: right; }
 
 
+/* Font Awesome */
+.fa-stack-half { font-size: 0.5em; }
+/* Quick effect on hover */
+.fa:hover, a:hover .fa { transform: rotateY(360deg); transition-duration: 0.5s; }
+
 
 
 
@@ -775,19 +780,20 @@ section div.module footer { background-size: 100%; }
 @media (max-width:700px) {
 	
 	/* Top menu */
-	header { min-height:3ex; height:auto; }
+	header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
 	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
 	header nav { float:none; width:100%; position:initial; display:inline-block; }
+	header .profile-link { display:inline-block; }
 	header .adf-profil { position:initial; }
 	.menu-topbar-toggle { display:inline-block; }
 	#menu-topbar { display:none; }
 	header nav ul#menu-topbar { padding-left:30px; font-size:initial; }
 	header nav ul li, header nav ul li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
 	header nav ul li a, header nav ul li li a,
-	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0;  }
-	header nav ul li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0.5ex 0 !important; text-align: center; display: inline; text-indent: 0; }
-	header nav ul li.invites a { padding: 0; }
+	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
+	header nav ul li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	header nav ul li.invites a { padding: 0; margin: 2px 0; }
 	.menu-enabled #menu-topbar { display:block; }
 	
 	

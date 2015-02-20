@@ -818,8 +818,12 @@ $fr = array(
 	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
 	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
 	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
-	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
 	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
+	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
 	// User actions and infos
 	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
 	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",

@@ -3,7 +3,6 @@
  * 
  */
 
-
 // INDEX PAGES
 
 // Theme inria logged in index page
@@ -61,7 +60,16 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 			$item->setSection('admin');
 			$item->setConfirmText(elgg_echo("question:areyousure"));
 			$return[] = $item;
+			
+			// Some actions are removed for archived users, too
+			foreach ($return as $key => $item) {
+				if ($item->getName() == 'send') unset($return[$key]);
+				if ($item->getName() == 'group_chat_user') unset($return[$key]);
+				if ($item->getName() == 'add_friend') unset($return[$key]);
+				if ($item->getName() == 'remove_friend') unset($return[$key]);
+			}
 		}
+		
 		return $return;
 	}
 }
@@ -246,179 +254,211 @@ function theme_inria_htmlawed_filter_tags($hook, $type, $result, $params) {
 
 // Modify cleaning group name function
 function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
-	$infos = $params['infos'];
+	//$infos = $params['infos'];
 	//error_log("LDAP hook : clean_group_name");
 	return $result;
 }
 
-// Modify check_profile behaviour to add a validity check
+// Modify check_profile behaviour
+// Add an "active account" validity check
+// Then use own functions to directly check and update profile
+// Note : this deprecates the "update_profile" hook
+// Note 2 : always prefer data from contacts branch
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
-	//error_log("LDAP hook : check_profile");
+	$debug = false;
+	if ($debug) error_log("LDAP hook : check_profile");
+	$mainpropchange = false;
 	$user = $params['user'];
 	
 	// Do not update accounts that do not have an active LDAP account 
-	// (because we might want to update their email - which can be invalid if account has been disabled)
+	// because they are now "out of Inria", and we do not want to update their email
+	// Anyway, Inria directory information are not displayed anymore if people are not active anymore
 	if (!ldap_auth_is_active($user->username)) return false;
 	
-	return $result;
-}
-
-// Hook principal pour gérer la MAJ des infos du profil à partir des données LDAP
-function theme_inria_ldap_update_profile($hook, $type, $result, $params) {
-	$debug = false;
-	$user = $params['user'];
-	$auth = $params['auth'];
-	$infos = $params['infos'];
-	$fields = $params['fields'];
+	// Check that user at least exists in auth branch
+	$auth_result = ldap_user_exists($user->username);
+	if (!$auth_result) { return false; }
+	
 	if ($debug) error_log("LDAP hook : update_profile (theme_inria)");
 	
-	$mail_field_name = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
-	$username_field_name = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
-	$ldap_mail = ldap_get_email($user->username);
-	$infos = ldap_get_search_infos("$mail_field_name=$ldap_mail", ldap_auth_settings_info(), array('*'));
-	$mainpropchange = false;
+	// Get some config
+	$mail_field = elgg_get_plugin_setting('mail_field_name', 'ldap_auth', 'mail');
+	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth', 'inriaLogin');
+	$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
 	
-	// Update using auth fields first
-	$auth_fields = ldap_auth_settings_auth_fields();
-	// Also update using infos fields (so empty values are updated)
-	$fields = ldap_auth_settings_info_fields();
+	// Get user email
+	$user_mail = ldap_get_email($user->username);
+	// Get all available data from auth branch (people)
+	$ldap_auth = ldap_get_search_infos("$username_field={$user->username}", ldap_auth_settings_auth(), array('*'));
+	// Get all available data from infos branch (contacts)
+	$ldap_infos = ldap_get_search_infos("$mail_field=$user_mail", ldap_auth_settings_info(), array('*'));
 	
-	// Update email
-	if (!empty($ldap_mail) && ($user->email != $ldap_mail)) {
-		if ($debug) error_log("LDAP hook : update_profile : updated email from {$user->email} to $ldap_mail");
-		$user->email = $ldap_mail;
+	// Update email if we got one from LDAP
+	if (!empty($user_mail) && ($user->email != $user_mail)) {
+		if ($debug) error_log("LDAP hook : update_profile : updating email from {$user->email} to $user_mail");
+		$user->email = $user_mail;
 		$mainpropchange = true;
 	}
-	// Some data are only in auth branch
-	if ($auth) {
-		if ($debug) error_log("LDAP hook : update_profile : processing PEOPLE branch fields");
-		foreach ($auth_fields as $key => $elgg_field) {
-			$val = $auth[0][$key];
-			if ($debug) error_log("$key => $elgg_field = $val[0]");
-			if ($key == 'cn') {
-				$fullname = $val[0];
-			} else if ($key == 'sn') {
-				$lastname = $val[0];
-			} else if ($key == 'givenName') {
-				$firstname = $val[0];
-			} else if ($key == 'ou') {
-				// Note : "we want to use only contacts branch for the 'ou' field
-				// But here it can be used for the location
-				// $ou[] = $val[0];
-				//$location_ou = $val[0];
-				// Latest update : used for main location (centre de rattachement)
-				if ($user->inria_location_main != $val[0]) {
-					$user->inria_location_main = $val[0];
-				}
-			} else {
-				// Update only defined metadata
-				if (empty($elgg_field)) continue;
-				// Value : empty value is a valid value (updated in LDAP to empty)
-				$new = $val[0];
-				$current = $user->$elgg_field;
-				if ($current != $new) {
-					$user->$elgg_field = $new;
-				}
-			}
+	
+	// Update name
+	// ..if asked to, but also if empty name, or if name is equal to username (which means account was just created)
+	if (($updatename == 'yes') || empty($user->name) || ($user->name == $user->username)) {
+		// Get name data
+		if ($ldap_infos) {
+			$firstname = $ldap_infos[0]['givenName'][0];
+			$lastname = $ldap_infos[0]['sn'][0];
+			$fullname = $ldap_infos[0]['displayName'][0];
+			if (empty($fullname)) $fullname = $ldap_infos[0]['cn'][0];
 		}
-		// Finally update displayed name : if asked, or empty name, or name is username (which means it was just created)
-		$updatename = elgg_get_plugin_setting('updatename', 'ldap_auth', false);
-		if (($updatename == 'yes') || empty($user->name) || ($user->name == $user->username)) {
-			$mainpropchange = true;
-			// MAJ du nom : NOM Prénom, ssi on dispose des 2 infos
-			if (!empty($firstname) && !empty($lastname)) {
+		// Fallback : try auth branch (people)
+		if (empty($firstname)) { $firstname = $ldap_auth[0]['givenName'][0]; }
+		if (empty($lastname)) { $lastname = $ldap_auth[0]['sn'][0]; }
+		if (empty($fullname)) { $fullname = $ldap_auth[0]['cn'][0]; }
+		
+		// MAJ du nom à partir des infos disponibles
+		if (!empty($firstname) && !empty($lastname)) {
+			// NOM Prénom, ssi on dispose des 2 infos
+			if (function_exists('esope_uppercase_name')) {
 				$user->name = strtoupper($lastname) . ' ' . esope_uppercase_name($firstname);
-			} else if (!empty($fullname)) {
-				$user->name = $fullname;
+			} else {
+				$user->name = strtoupper($lastname) . ' ' . $firstname;
+			}
+			$mainpropchange = true;
+		} else if (!empty($fullname)) {
+			// Nom complet sinon
+			$user->name = $fullname;
+			$mainpropchange = true;
+		}
+	}
+	
+	// Process other profile fields : extract data, them process wanted fields
+	$location = $rooms = $phones = $secretary = array();
+	// Extract some hidden data from infos fields
+	if ($ldap_infos && $ldap_infos[0]) {
+		if ($debug) error_log("LDAP hook : update_profile : processing INFOS branch (contacts) fields");
+		// Note : cannot use config fields here because office and phone do not have a unique name
+		foreach ($ldap_infos[0] as $key => $val) {
+			// We don't want to update some fields that were processed in auth
+			if (in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) { continue; }
+			
+			// Extraction de la localisation
+			if (strpos($key, 'x-location-')) {
+				$find_loc = explode('x-location-', $key);
+				$location[] = $find_loc[1];
+				if ($debug) error_log("ldap_auth_update_profile (theme_inria) : found location from $key = {$find_loc[1]}");
+			}
+			
+			// Extraction Bureau, Téléphone et Secrétariat
+			if (substr($key, 0, 10) == 'roomNumber') {
+				$rooms[] = $val[0];
+			} else if (substr($key, 0, 15) == 'telephoneNumber') {
+				$phones[] = $val[0];
+			} else if (substr($key, 0, 9) == 'secretary') {
+				$secretary[] = $val[0];
 			}
 		}
 	}
 	
-	// Then Update using infos fields (contacts branch - optional)
-	if (true || $infos) {
-		if ($debug) error_log("LDAP hook : update_profile : processing CONTACTS branch fields");
-		// Note : cannot use config fields here because office and phone do not have a unique name
-		if ($infos[0]) foreach ($infos[0] as $key => $val) {
-			$val = $infos[0][$key];
-			$elgg_field = $fields[$key];
-			// We don't want to update some fields that were processed in auth
-			if (!in_array($key, array('cn', 'sn', 'givenName', 'displayName', 'email'))) {
-				// Extraction de la localisation
-				if (strpos($key, 'x-location-')) {
-					$find_loc = explode('x-location-', $key);
-					$location[] = $find_loc[1];
-					if ($debug) error_log("ldap_auth_update_profile (theme_inria) : found location from $key = {$find_loc[1]}");
+	// Note : empty values are valid (updated in LDAP)
+	$profile_fields = inria_get_profile_ldap_fields();
+	foreach($profile_fields as $field) {
+		$new = ''; // Inria prefers empty field to null field
+		// Update only fields that were not already handled
+		// And postpone those which are computed based on other values
+		if (in_array($field, array('cn', 'sn', 'givenName', 'displayName', 'email'))) { continue; }
+		
+		// Almost each field is specific...
+		switch($field) {
+			// Centre de rattachement : "ou", branche people uniquement
+			case 'inria_location_main':
+				if ($ldap_auth[0]['ou'][0]) {
+					$new = $ldap_auth[0]['ou'][0];
+					$new = str_replace('UR-', '', $new);
 				}
-				// Traitement des données
-				if (substr($key, 0, 10) == 'roomNumber') {
-					$roomNumber[] = $val[0];
-				} else if (substr($key, 0, 15) == 'telephoneNumber') {
-					$telephoneNumber[] = $val[0];
-				} else if (substr($key, 0, 9) == 'secretary') {
-					$secretary[] = $val[0];
-				} else if ($key == 'ou') {
-					//$ou[] = $val[0];
+				if ($user->inria_location_main != $new) $user->inria_location_main = $new;
+				break;
+			
+			// Localisation
+			case 'inria_location':
+				// Process localisation : déduit des contacts tél et room
+				if ($location) {
+					$location = array_unique($location);
+					$new = theme_inria_ldap_convert_locality($location);
+					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				} else {
-					// Update only defined metadata
-					if (empty($elgg_field)) continue;
-					// Value : empty value is a valid value (updated in LDAP to empty)
-					$new = $val[0];
-					$current = $user->$elgg_field;
-					if ($current != $new) {
-						$user->$elgg_field = $new;
+					// Si pas d'info, renseigner avec la résidence administrative (champ ou de la branche people), en supprimant "UR-"
+					if ($ldap_auth[0]['ou'][0]) {
+						$new = $ldap_auth[0]['ou'][0];
+						$new = str_replace('UR-', '', $new);
 					}
 				}
-			}
-		}
-	}
-	
-	// Clean configured entries that are not defined anymore in contact branch
-	foreach ($fields as $key => $elgg_field) {
-		if (empty($infos[0][$key])) $user->$elggfield = null;
-	}
-	
-	// Process special fields (arrays, multiple keys, etc.)
-	$special_fields = array('roomNumber', 'telephoneNumber', 'secretary', 'ou');
-	foreach ($special_fields as $special_field) {
-		if ($$special_field) {
-			$$special_field = array_unique($$special_field);
-			$meta_name = $fields[$special_field];
-			// Update only defined metadata
-			if (empty($meta_name)) continue;
-			$new = implode(', ', $$special_field);
-			$current = $user->$meta_name;
-			if ($current != $new) {
-				$user->$meta_name = $new;
-				/*
-				if (!create_metadata($user->guid, $meta_name, $new, 'text', $user->getOwner(), ACCESS_LOGGED_IN)) {
-					error_log("ldap_auth_update_profile (theme_inria) : failed create_metadata for guid " . $user->guid . " name=$meta_name, val: " . $new);
+				if ($user->inria_location != $new) $user->inria_location = $new;
+				break;
+			
+			// EPI ou service : "ou", branche contacts uniquement
+			case 'epi_ou_service':
+				if ($ldap_infos[0]['ou'][0]) {
+					$new = $ldap_infos[0]['ou'];
+					$new = implode(', ', $new);
 				}
-				*/
-			}
+				if ($user->epi_ou_service != $new) $user->epi_ou_service = $new;
+				break;
+			
+			// Bureau
+			case 'inria_room':
+				if ($rooms) {
+					$new = array_unique($rooms);
+					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+				}
+				if ($user->inria_room != $new) $user->inria_room = $new;
+				break;
+			
+			// Téléphone
+			case 'inria_phone':
+				if ($phones) {
+					$new = array_unique($phones);
+					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+				}
+				if ($user->inria_phone != $new) $user->inria_phone = $new;
+				break;
+			
+			// Secrétariat
+			case 'secretary':
+			case 'inria_secretary':
+				if ($secretary) {
+					$new = array_unique($secretary);
+					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+				}
+				if ($user->inria_secretary != $new) $user->inria_secretary = $new;
+				break;
+			
+			default:
+				// In case it happens, use a prefix to avoid any conflict
+				if (isset($ldap_infos[0][$field][0])) {
+					$new = $ldap_infos[0][$field][0];
+				} else if (isset($ldap_infos[0][$field][0])) {
+					$new = $ldap_auth[0][$field][0];
+				}
+				if ($user->{"ldap_$field"} != $new) $user->{"ldap_$field"} = $new;
 		}
-	}
-	
-	// Cas très particulier de la localisation : déduit des contacts tél et room
-	if ($location) {
-		$location = array_unique($location);
-		$location = theme_inria_ldap_convert_locality($location);
-		// Add the other location field from people branch if it exists
-		//if (!empty($loation_ou)) $location[] = $location_ou;
-		$new = implode(', ', $location);
-		$current = $user->inria_location;
-		if ($current != $new) { $user->inria_location = $new; }
-	} else {
-		if (!empty($user->inria_location)) $user->inria_location = null;
 	}
 	
 	// Some changes require saving entity
-	if ($mainpropchange) $user->save();
+	if ($mainpropchange) {
+		if ($user->save()) {
+			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : saved");
+		} else {
+			if ($debug) error_log("ldap_auth_update_profile (theme_inria) : NOT SAVED");
+		}
+	}
+	if ($debug) error_log("ldap_auth_update_profile (theme_inria) : DONE");
 	
 	// Tell update has been successfully done
 	return true;
 	// Not updated : keep going
 	//return $result;
 }
+
 
 // Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
 function theme_inria_block_email($hook, $type, $return, $params) {
@@ -456,5 +496,47 @@ function theme_inria_object_notifications_block($hook, $entity_type, $returnvalu
 	// Don't change default behaviour
 	return $returnvalue;
 }
+
+
+/* Cron (daily) tasks
+ * Perfom some checks and cleanup
+ */
+function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
+	elgg_set_context('cron');
+	
+	// Avoid any time limit while processing
+	set_time_limit(0);
+	access_show_hidden_entities(true);
+	elgg_set_ignore_access(true);
+	
+	// LDAP accounts check : check LDAP validity
+	if (elgg_is_active_plugin('ldap_auth')) {
+		error_log("CRON : LDAP start " . date('Ymd H:i:s'));
+		$debug_0 = microtime(TRUE);
+		$users_options = array('types' => 'user', 'limit' => 0);
+		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
+		$debug_1 = microtime(TRUE);
+		error_log("CRON : LDAP end " . date('Ymd H:i:s') . " => " . round($debug_1-$debug_0, 4) . " secondes");
+		echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
+	}
+	
+	echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
+}
+
+// CRON : LDAP user check
+function theme_inria_cron_ldap_check($user, $getter, $options) {
+	// Skip not-yet-enabled accounts
+	if (!$user->isEnabled()) return;
+	// Skip banned accounts
+	if ($user->isbanned()) return;
+	
+	//$debug_0 = microtime(TRUE);
+	// Check LDAP data
+	inria_check_and_update_user_status('login', 'user', $user);
+	//$debug_1 = microtime(TRUE);
+	//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
+	
+}
+
 
 

@@ -55,7 +55,7 @@ function theme_inria_init(){
 	//elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
-	// Supprimer le suivi de l'activité (toujours activé)
+	// Supprimer le suivi de l'activité (car toujours activé sur home du groupe)
 	remove_group_tool_option('activity');
 	
 	// Add CMIS folder option
@@ -153,11 +153,17 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
+	// Use a custom method to get and update profile data
 	if (elgg_is_active_plugin('ldap_auth')) {
+		// Note that Inria uses settings only for server config
+		// Fields config is not a simple mapping and is hard-coded
 		elgg_register_plugin_hook_handler('check_profile', 'ldap_auth', 'theme_inria_ldap_check_profile');
-		elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
-		elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
+		//elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
+		//elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
 	}
+	
+	// Register cron hook @TODO attendre le GO de la DSI avant activation !
+	//elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
 	// The hook is triggered when using default elgg email handler, 
@@ -242,6 +248,20 @@ function inria_ressources_page_handler($page) {
 			return false;
 	}
 	return true;
+}
+
+
+
+// Returns Elgg fields coming from LDAP
+function inria_get_profile_ldap_fields() {
+	$ldap_fields = array(
+			'inria_location_main', // Centre de rattachement
+			'inria_location', // Localisation
+			'epi_ou_service', // EPI ou service
+			'inria_room', // Bureau
+			'inria_phone', // Téléphone
+		);
+	return $ldap_fields;
 }
 
 

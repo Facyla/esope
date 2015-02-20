@@ -17,7 +17,7 @@ header('Content-type: text/html; charset=utf-8');
 echo '<form method="POST">
 	<input type="text" name="username" placeholder="username" value="' . $username . '">
 	<input type="text" name="password" placeholder="password" value="' . $password . '">
-	<input type="submit" value="Tester vec ces valeurs">
+	<input type="submit" value="Tester avec ces valeurs">
 	</form>';
 
 echo "<h2>User info for $username</h2>";
@@ -134,7 +134,7 @@ if (elgg_is_active_plugin('ldap_auth') || function_exists('ldap_auth_login')) {
 	$result = ldap_get_search_infos('objectClass=locality', $info_settings, array('*'));
 	if ($result) {
 		foreach($result as $num => $locality) {echo "{$locality['l'][0]} => {$locality['description'][0]}<br />"; }
-		echo print_r($result, true);
+		//echo print_r($result, true);
 	}
 	echo '</p>';
 

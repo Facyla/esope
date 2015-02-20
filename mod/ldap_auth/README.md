@@ -6,7 +6,7 @@ This plugin lets user connect, or even register, to an Elgg instance with a vali
  * Duplicate settings_dist.php as settings.php
  * Edit settings.php file with LDAP servers info and matching fields between LDAP and Elgg
  * Activate plugin
- * Configure plugin with desired behaviour
+ * Configure plugin with desired settings and behaviour
  * (developpers) optionnaly use provided hook to define own behaviour (see lib file for hook details) :
    * 'check_profile', 'ldap_auth'
    * 'update_profile', 'ldap_auth'
