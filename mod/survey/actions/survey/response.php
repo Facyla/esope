@@ -5,7 +5,7 @@
  */
 
 // Get input data
-$response = get_input('response');
+$responses = get_input('response');
 $guid = get_input('guid');
 
 //get the survey entity
@@ -17,7 +17,7 @@ if (!$survey instanceof Survey) {
 }
 
 // Make sure the response isn't blank
-if (empty($response)) {
+if (empty($responses)) {
 	register_error(elgg_echo("survey:noresponse"));
 	forward(REFERER);
 }
@@ -30,18 +30,30 @@ if ($survey->hasResponded($user)) {
 	forward(REFERER);
 }
 
-// add response as an annotation
-$survey->annotate('response', $response, $survey->access_id);
+foreach ($responses as $question_guid => $response) {
+	// add response as an annotation
+	//$survey->annotate("response_$question_guid", $response, $survey->access_id);
+	// @TODO should we annotate the question itself instead, so we coul use a single annotation name
+	$question = get_entity($question_guid);
+	if (elgg_instanceof($question, 'survey_question')) {
+		$question->annotate("response", $response, $survey->access_id);
+	}
+}
+// Anotate also the survey so we can know we have answered (and when)
+$survey->annotate("response", time(), $survey->access_id);
 
 // Add to river
 $survey_response_in_river = elgg_get_plugin_setting('response_in_river', 'survey');
-if ($survey_response_in_river != 'no') {
+if ($survey_response_in_river == 'yes') {
+	add_to_river('river/object/survey/response', 'response' , $user->guid, $survey->guid);
+	/* Elgg 1.10
 	elgg_create_river_item(array(
 		'view' => 'river/object/survey/response',
 		'action_type' => 'response',
 		'subject_guid' => $user->guid,
 		'object_guid' => $survey->guid,
 	));
+	*/
 }
 
 if (get_input('callback')) {

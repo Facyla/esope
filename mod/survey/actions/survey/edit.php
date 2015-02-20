@@ -11,9 +11,8 @@ elgg_load_library('elgg:survey');
 elgg_make_sticky_form('survey');
 
 // Get input data
-$question = get_input('question');
+$title = get_input('title');
 $description = get_input('description');
-$number_of_choices = (int) get_input('number_of_choices', 0);
 $front_page = get_input('front_page');
 $close_date = get_input('close_date');
 $open_survey = (int)get_input('open_survey');
@@ -21,22 +20,40 @@ $tags = get_input('tags');
 $access_id = get_input('access_id');
 $container_guid = get_input('container_guid');
 $guid = get_input('guid');
+$number_of_questions = (int) get_input('number_of_questions', 0);
 
-//get response choices
+// Get questions data
+// Question object meta : title, description, input_type, options, empty_value, required
 $count = 0;
-$new_choices = array();
-if ($number_of_choices) {
-	for($i=0; $i<$number_of_choices; $i++) {
-		$text = get_input('choice_text_'.$i,'');
-		if ($text) {
-			$new_choices[] = $text;
+$new_questions = array();
+if ($number_of_questions) {
+	for($i=0; $i<$number_of_questions; $i++) {
+		$q_title = get_input('question_title_'.$i, '');
+		$q_description = get_input('question_description_'.$i, '');
+		$q_input_type = get_input('question_input_type_'.$i, 'text');
+		$q_options = get_input('question_options_'.$i, '');
+		$q_empty_value = get_input('question_empty_value_'.$i, 'yes');
+		$q_required = get_input('question_required_'.$i, 'no');
+error_log("Loading question $i data : $q_title / $q_input_type / $q_empty_value / $q_required");
+		// Title is the only required value for questions (default on text input)
+		if ($q_title) {
+			$new_questions[] = array(
+					'title' => $q_title,
+					'description' => $q_description,
+					'input_type' => $q_input_type,
+					'options' => $q_options,
+					'empty_value' => $q_empty_value,
+					'required' => $q_required,
+				);
 			$count ++;
 		}
 	}
 }
 
 // Make sure the question and the response options aren't empty
-if (empty($question) || ($count == 0)) {
+// Or we may have less valid questions than attended ?
+//if (empty($count == 0) || ($count < $number_of_questions)) {
+if ($count == 0) {
 	register_error(elgg_echo("survey:blank"));
 	forward(REFERER);
 }
@@ -91,8 +108,7 @@ if ($guid) {
 }
 
 $survey->access_id = $access_id;
-$survey->question = $question;
-$survey->title = $question;
+$survey->title = $title;
 $survey->description = $description;
 $survey->open_survey = $open_survey ? 1 : 0;
 $survey->close_date = empty($close_date) ? null : $close_date;
@@ -103,7 +119,7 @@ if (!$survey->save()) {
 	forward(REFERER);
 }
 
-$survey->setChoices($new_choices);
+$survey->setQuestions($new_questions);
 
 survey_manage_front_page($survey, $front_page);
 
@@ -112,13 +128,16 @@ elgg_clear_sticky_form('survey');
 if ($new) {
 	$survey_create_in_river = elgg_get_plugin_setting('create_in_river', 'survey');
 
-	if ($survey_create_in_river != 'no') {
+	if ($survey_create_in_river == 'yes') {
+		add_to_river('river/object/survey/create', 'create' , $user->guid, $survey->guid);
+		/* Elgg 1.10
 		elgg_create_river_item(array(
 			'view' => 'river/object/survey/create',
 			'action_type' => 'create',
 			'subject_guid' => $user->guid,
 			'object_guid' => $survey->guid,
 		));
+		*/
 	}
 }
 

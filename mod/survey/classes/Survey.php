@@ -6,9 +6,9 @@ class Survey extends ElggObject {
 	const SUBTYPE = "survey";
 
 	/**
-	 * @var array $responses Cache for number of responses for each voting choice
+	 * @var array $responses Cache for number of responses for each voting question
 	 */
-	private $responses_by_choice = array();
+	private $responses_by_question = array();
 
 	/**
 	 * @var int $response_count Total amount of responses
@@ -49,66 +49,24 @@ class Survey extends ElggObject {
 	
 	
 	/**
-	 * Get choice objects
-	 *
-	 * @return ElggObject[] $choices
-	 */
-	public function getChoices() {
-		$choices = $this->getEntitiesFromRelationship(array(
-			'relationship' => 'survey_choice',
-			'inverse_relationship' => true,
-			'order_by_metadata' => array(
-				'name' => 'display_order',
-				'direction' => 'ASC'
-			),
-		));
-		if (!$choices) { $choices = array(); }
-		return $choices;
-	}
-
-	/**
-	 * Delete all choices associated with this survey
-	 */
-	public function deleteChoices() {
-		foreach ($this->getChoices() as $choice) { $choice->delete(); }
-	}
-
-	/**
-	 * Adds or updates survey choices
-	 *
-	 * @param array $choices
-	 */
-	public function setChoices(array $choices) {
-		if (empty($choices)) { return false; }
-		$this->deleteChoices();
-		$i = 0;
-		foreach ($choices as $choice) {
-			$survey_choice = new ElggObject();
-			$survey_choice->owner_guid = $this->owner_guid;
-			$survey_choice->container_guid = $this->container_guid;
-			$survey_choice->subtype = "survey_choice";
-			$survey_choice->text = $choice;
-			$survey_choice->display_order = $i*10;
-			$survey_choice->access_id = $this->access_id;
-			$survey_choice->save();
-
-			add_entity_relationship($survey_choice->guid, 'survey_choice', $this->guid);
-			$i += 1;
-		}
-	}
-
-	
-	// @TODO : duplicate same logic for "questions" instead of questions
-	/**
 	 * Get questions objects
 	 *
 	 * @return ElggObject[] $questions
 	 */
 	public function getQuestions() {
+		/* Elgg 1.10
 		$questions = $this->getEntitiesFromRelationship(array(
+			//'type' => 'object', 'subtype' => 'survey_question', 
 			'relationship' => 'survey_question', 'inverse_relationship' => true,
-			'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
+			//'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
 		));
+		*/
+		//$questions = $this->getEntitiesFromRelationship('survey_question', true, 0);
+		$questions = elgg_get_entities_from_relationship(array(
+				'relationship_guid' => $this->guid,
+				'relationship' => 'survey_question', 'inverse_relationship' => true,
+				'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
+			));
 		if (!$questions) { $questions = array(); }
 		return $questions;
 	}
@@ -135,12 +93,13 @@ class Survey extends ElggObject {
 			$survey_question->container_guid = $this->container_guid;
 			$survey_question->subtype = "survey_question";
 			
-			$survey_question->title = $question; // @TODO
-			$survey_question->description = $question; // @TODO
-			$survey_question->input_type = $question; // @TODO
-			$survey_question->options = $question; // @TODO
-			$survey_question->empty_value = $question; // @TODO
-			$survey_question->required = $question; // @TODO
+			// Question object meta : title, description, input_type, options, empty_value, required
+			$survey_question->title = $question['title'];
+			$survey_question->description = $question['description'];
+			$survey_question->input_type = $question['input_type'];
+			$survey_question->options = $question['options'];
+			$survey_question->empty_value = $question['empty_value'];
+			$survey_question->required = $question['required'];
 			
 			$survey_question->display_order = $i*10;
 			$survey_question->access_id = $this->access_id;
@@ -186,42 +145,39 @@ class Survey extends ElggObject {
 	 *     )
 	 */
 	private function fetchResponses() {
-		if ($this->responses_by_choice) {
-			return;
-		}
+		if ($this->responses_by_question) { return; }
 
-		// Make sure choices without responses are included in the result
-		foreach ($this->getChoices() as $choice) {
-			$this->responses_by_choice[$choice->text] = 0;
-		}
-
-		// Get responses
-		$responses = new ElggBatch('elgg_get_annotations', array(
-			'guid' => $this->guid,
-			'annotation_name' => 'response',
-			'limit' => false,
-		));
-
-		// Cache the amount of results for each choice
-		foreach ($responses as $response) {
-			$this->responses_by_choice[$response->value] += 1;
+		// Make sure questions without responses are included in the result
+		foreach ($this->getQuestions() as $question) {
+			$this->responses_by_question[$question->guid] = 0;
+			
+			// Get responses
+			$responses = new ElggBatch('elgg_get_annotations', array(
+				'guid' => $question->guid,
+				'annotation_name' => 'response',
+				'limit' => false,
+			));
+			
+			// Cache the amount of results for each question
+			foreach ($responses as $response) {
+				$this->responses_by_question[$question->guid][$response->value] += 1;
+			}
 		}
 
 		// Cache the total amount of responses
-		$this->response_count = array_sum($this->responses_by_choice);
+		$this->response_count = array_sum($this->responses_by_question);
 	}
 
 	/**
-	 * Get amount of responses for the given choice
+	 * Get amount of responses for the given question
 	 *
-	 * @param string $choice
+	 * @param string $question
 	 * @return int Response count
 	 */
-	public function getResponseCountForChoice($choice) {
+	public function getResponseCountForQuestion($question) {
 		// Make sure the values have been populated
 		$this->fetchResponses();
-
-		return $this->responses_by_choice[$choice];
+		return $this->responses_by_question[$question->guid];
 	}
 
 	/**
@@ -234,7 +190,6 @@ class Survey extends ElggObject {
 	public function getResponseCount() {
 		// Make sure the values have been populated
 		$this->fetchResponses();
-
 		return $this->response_count;
 	}
 }

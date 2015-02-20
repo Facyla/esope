@@ -137,6 +137,26 @@ Afficher le sondage et y répondre :
 	'survey:questions' => "Questions",
 	'survey:add_question' => "Ajouter une question",
 	'survey:title' => "Titre du sondage",
+	'survey:option:yes' => "oui",
+	'survey:option:no' => "non",
+	// Question fields
+	'survey:question:title' => "Intitulé de la question",
+	'survey:question:description' => "(facultatif) Aide ou précisions sur la question",
+	'survey:question:input_type' => "Type de question",
+	'survey:question:options' => "(facultatif) Options",
+	'survey:question:empty_value' => "(si options) Option vide",
+	'survey:question:required' => "Réponse obligatoire",
+	// Input types
+	'survey:type:text' => "Texte court",
+	'survey:type:longtext' => "Texte de paragraphe (avec éditeur)",
+	'survey:type:plaintext' => "Texte de paragraphe (sans éditeur)",
+	'survey:type:dropdown' => "Choix dans une liste",
+	'survey:type:checkboxes' => "Cases à cocher",
+	'survey:type:multiselect' => "Sélection multiple",
+	'survey:type:rating' => "Echelle d'évaluation",
+	'survey:type:date' => "Date",
+	// Responses
+	'survey:result:label' => "\"%s\" (%s réponses)",
 	
 	
 );

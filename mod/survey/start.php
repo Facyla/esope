@@ -69,6 +69,8 @@ function survey_init() {
 	}
 
 	//add widgets
+	// @TODO
+	/*
 	elgg_register_widget_type('survey', elgg_echo('survey:my_widget_title'), elgg_echo('survey:my_widget_description'));
 	elgg_register_widget_type('latestsurvey', elgg_echo('survey:latest_widget_title'), elgg_echo('survey:latest_widget_description'), array("dashboard"));
 	$survey_front_page = elgg_get_plugin_setting('front_page','survey');
@@ -88,13 +90,13 @@ function survey_init() {
 		elgg_register_plugin_hook_handler('widget_url', 'widget_manager', "survey_widget_urls", 499);
 		//elgg_register_plugin_hook_handler("entity:url", "object", "survey_widget_urls"); // Elgg 1.10
 	}
+	*/
 
 	// Register actions
 	$action_path = elgg_get_plugins_path() . 'survey/actions/survey';
 	elgg_register_action("survey/edit","$action_path/edit.php");
 	elgg_register_action("survey/delete","$action_path/delete.php");
-	elgg_register_action("survey/vote","$action_path/vote.php");
-	elgg_register_action("survey/convert","$action_path/convert.php", "admin");
+	elgg_register_action("survey/response","$action_path/response.php");
 }
 
 
@@ -121,9 +123,7 @@ function survey_page_handler($page) {
 		case "add":
 		case "edit":
 			$container = null;
-			if(isset($page[1])){
-				$container = $page[1];
-			}
+			if (isset($page[1])){ $container = $page[1]; }
 			echo survey_get_page_edit($page_type, $container);
 			break;
 		case "friends":
@@ -164,22 +164,23 @@ function survey_page_handler($page) {
 /**
  * Return the url for survey objects
  */
-function survey_url($hook, $type, $url, $params) {
+function survey_url($survey) {
 	$title = elgg_get_friendly_title($survey->title);
 	return  "survey/view/" . $survey->guid . "/" . $title;
-	/* Elgg 1.10
+}
+/* Elgg 1.10
+function survey_url($hook, $type, $url, $params) {
 	$survey = $params['entity'];
 	if ($survey instanceof Survey) {
 		if (!$survey->getOwnerEntity()) {
 			// default to a standard view if no owner.
 			return false;
 		}
-
 		$title = elgg_get_friendly_title($survey->title);
 		return "survey/view/" . $survey->guid . "/" . $title;
 	}
-	*/
 }
+*/
 
 /**
  * Add a menu item to an owner block

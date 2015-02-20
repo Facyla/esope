@@ -6,7 +6,7 @@
 $survey = elgg_extract('entity', $vars);
 
 // Get array of possible responses
-$choices = survey_get_choice_array($survey);
+$questions = survey_get_question_array($survey);
 
 $total = $survey->getResponseCount();
 
@@ -19,10 +19,10 @@ if ($allow_open_survey) {
 
 $response_id = 0;
 
-foreach ($choices as $choice) {
-	$response_count = $survey->getResponseCountForChoice((string)$choice);
+foreach ($questions as $question) {
+	$response_count = $survey->getResponseCountForQuestion($question);
 
-	$response_label = elgg_echo ('survey:result:label', array($choice, $response_count));
+	$response_label = elgg_echo ('survey:result:label', array($question->title, $response_count));
 
 	$responded_users = '';
 
@@ -36,7 +36,7 @@ foreach ($choices as $choice) {
 		$response_annotations = elgg_get_annotations(array(
 			'guid' => $survey->guid,
 			'annotation_name' => 'response',
-			'annotation_value' => $choice,
+			'annotation_value' => $question->guid,
 		));
 
 		$user_guids = array();

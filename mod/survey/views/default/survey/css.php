@@ -10,6 +10,9 @@
  */
 ?>
 
+/* Edit form */
+#survey-edit-form fieldset { border:1px solid; padding:1ex; margin:1ex 0 2ex 0; }
+
 .survey_post h3 {
 	font-size: 150%;
 	margin:0 0 10px 0;
@@ -21,7 +24,7 @@
 .survey_post p {
 	margin: 0 0 5px 0;
 }
-.survey_input-survey-choice {
+.survey_input-question {
 	width: 90%;
 }
 .survey-result {
@@ -50,5 +53,11 @@
 }
 .survey_response-label:hover {
 	color: red;
+}
+
+/* Response form */
+.survey-question-reply {
+	padding:1ex 0 3ex 0;
+	border-bottom:1px solid #fff;
 }
 
