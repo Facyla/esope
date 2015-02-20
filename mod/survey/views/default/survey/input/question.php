@@ -51,7 +51,6 @@ if ($question) {
 				{$question_content}
 			</fieldset>
 		</div>";
-	}
 }
 
 echo $body;
