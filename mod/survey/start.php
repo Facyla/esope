@@ -198,7 +198,6 @@ function survey_owner_block_menu($hook, $type, $return, $params) {
 			$return[] = $item;
 		}
 	}
-
 	return $return;
 }
 
