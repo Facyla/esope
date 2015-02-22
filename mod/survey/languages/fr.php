@@ -147,7 +147,7 @@ Afficher le sondage et y répondre :
 	'survey:question:input_type' => "Type de question",
 	'survey:question:options' => "Options",
 	'survey:question:empty_value' => "Ajouter une option vide",
-	'survey:question:required' => "Réponse obligatoire",
+	'survey:question:required' => "Obligatoire",
 	'survey:question:toggle' => "Montrer/masquer",
 	// Input types
 	'survey:type:text' => "Texte court",

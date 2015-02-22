@@ -35,7 +35,7 @@ $question_content .= '<p class="question_options_' . $i . '"><label>' . elgg_ech
 if (empty($description)) { $hide = 'display:none;'; } else { $hide = ''; }
 $question_content .= '<p class="question_descripion_' . $i . '"><a href="#" class="survey_input-toggle" data-id="question_description_' . $i . '">' . elgg_echo('survey:question:toggle') . '</a> <label>' . elgg_echo('survey:question:description') . ' ' . elgg_view('input/plaintext', array('name' => "question_description_{$i}", 'value' => $description, 'class' => 'survey_input-question-description', 'style' => $hide)) . '</label></p>';
 
-$question_content .= '<p class="question_required_' . $i . '"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/dropdown', array('name' => "question_required_{$i}", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey_input-question-required')) . '</label></p>';
+$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/dropdown', array('name' => "question_required_{$i}", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey_input-question-required')) . '</label></p>';
 
 $question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/dropdown', array('name' => "question_input_type_{$i}", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey_input-question-input-type')) . '</label></p>';
 
