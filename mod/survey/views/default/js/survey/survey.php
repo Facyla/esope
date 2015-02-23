@@ -6,7 +6,6 @@ elgg.survey.survey.init = function() {
 
 	$('.survey-response-button').live('click', function(e) {
 		var guid = $(this).attr("rel");
-
 		// submit the response and display the response when it arrives
 		elgg.action('action/survey/response', {
 			data: $('#survey-response-form-' + guid).serialize(),
@@ -16,7 +15,6 @@ elgg.survey.survey.init = function() {
 				}
 			}
 		});
-
 		e.preventDefault();
 	});
 };

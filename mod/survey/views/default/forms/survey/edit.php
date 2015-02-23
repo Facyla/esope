@@ -27,37 +27,37 @@ $access_id = $vars['fd']['access_id'];
 
 
 <div>
-	<label><?php echo elgg_echo('survey:title'); ?></label>
-	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?>
+	<label><?php echo elgg_echo('survey:title'); ?> 
+	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?></label>
 </div>
 
 <div>
-	<label><?php echo elgg_echo('survey:description'); ?></label>
-	<?php echo elgg_view('input/longtext', array('name' => 'description', 'value' => $description)); ?>
+	<label for="survey_description"><?php echo elgg_echo('survey:description'); ?></label> 
+	<?php echo elgg_view('input/longtext', array('name' => 'description', 'id' => 'survey_description', 'value' => $description)); ?>
 </div>
 
 <div>
-	<label><?php echo elgg_echo('tags'); ?></label>
-	<?php echo  elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
+	<label><?php echo elgg_echo('tags'); ?> 
+	<?php echo  elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?></label>
 </div>
 
 <?php if ($allow_close_date == 'yes') { ?>
 	<div>
-		<label><?php echo elgg_echo('survey:close_date'); ?></label>
-		<?php echo  elgg_view('input/date', array('name' => 'close_date', 'timestamp' => true, 'value' => $close_date)); ?>
+		<label><?php echo elgg_echo('survey:close_date'); ?> 
+		<?php echo  elgg_view('input/date', array('name' => 'close_date', 'timestamp' => true, 'value' => $close_date)); ?></label>
 	</div>
 <?php } ?>
 
 <?php
 if($allow_open_survey == 'yes') {
-	$open_survey_input = '<p>';
+	$open_survey_input = '<p><label>';
 	if ($vars['fd']['open_survey']) {
 		$open_survey_input .= elgg_view('input/checkbox', array('name' => 'open_survey','value' => 1, 'checked' => 'checked'));
 	} else {
 		$open_survey_input .= elgg_view('input/checkbox', array('name' => 'open_survey','value' => 1));
 	}
 	$open_survey_input .= elgg_echo('survey:open_survey_label');
-	$open_survey_input .= '</p>';
+	$open_survey_input .= '</label></p>';
 }
 echo $open_survey_input;
 ?>
@@ -71,12 +71,12 @@ if (elgg_is_admin_logged_in() && ($survey_front_page == 'yes')) {
 	}
 	$front_page_input .= elgg_echo('survey:front_page_label');
 }
-echo '<div><p>' . $front_page_input . '</p></div>';
+echo '<div><p><label>' . $front_page_input . '</label></p></div>';
 ?>
 
 <div>
-	<label><?php echo elgg_echo('access'); ?></label>
-	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?>
+	<label><?php echo elgg_echo('access'); ?>
+	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?></label>
 </div>
 
 <br />

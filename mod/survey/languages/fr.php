@@ -122,8 +122,9 @@ Afficher le sondage et y répondre :
 	'survey:edited' => "Votre sondage a été enregistré.",
 	'survey:responded' => "Merci d'avoir répondu, vos réponses ont été enregistrées.",
 	'survey:deleted' => "Votre sondage a été supprimé.",
-	'survey:totalresponses' => "Nombre total de réponses : ",
-	'survey:responded' => "Votre réponse a été enregistrée. Merci d'avoir répondu à ce sondage.",
+	'survey:totalresponses' => "Nombre total de réponses : %s",
+	'survey:alreadyresponded' => "Vous avez déjà répondu à ce sondage.",
+	'survey:responded' => "Merci d'avoir répondu à ce sondage.",
 
 	/**
 	 * Error messages
@@ -151,13 +152,21 @@ Afficher le sondage et y répondre :
 	'survey:question:toggle' => "Montrer/masquer",
 	// Input types
 	'survey:type:text' => "Texte court",
-	'survey:type:longtext' => "Texte de paragraphe (avec éditeur)",
-	'survey:type:plaintext' => "Texte de paragraphe (sans éditeur)",
-	'survey:type:dropdown' => "Choix dans une liste",
+	'survey:type:text:details' => "Pour une réponse très courte, sur une seule ligne : de un à quelques mots.",
+	'survey:type:longtext' => "Texte de paragraphe",
+	'survey:type:longtext:details' => "Pour une réponse détaillée, sur plusieurs lignes : de un à quelques paragraphes.",
+	'survey:type:plaintext' => "Texte de paragraphe",
+	'survey:type:plaintext:details' => "Pour une réponse détaillée, sur plusieurs lignes : de un à quelques paragraphes.",
+	'survey:type:pulldown' => "Choix dans une liste",
+	'survey:type:pulldown:details' => "Pour une réponse parmi une liste de choix à définir ci-dessous. Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
 	'survey:type:checkboxes' => "Cases à cocher",
+	'survey:type:checkboxes:details' => "Pour plusieurs réponses sous forme de liste, parmi une liste de choix à définir ci-dessous.",
 	'survey:type:multiselect' => "Sélection multiple",
+	'survey:type:multiselect:details' => "Pour plusieurs réponses sous forme de cases à cocher, parmi une liste de choix à définir ci-dessous.",
 	'survey:type:rating' => "Echelle d'évaluation",
+	'survey:type:rating:details' => "Pour une seule réponse parmi une liste de choix, présentés sur une seule ligne. Cette option est plus appropriée pour une échelle d'évaluation ou de notation, en indiquant par exemple des options de 0 à 5, ou  une liste d'appréciations qualitative (de pas du tout à tout à fait). Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
 	'survey:type:date' => "Date",
+	'survey:type:date:details' => "Pour une date à choisir dans un calendrier",
 	// Responses
 	'survey:result:label' => "\"%s\" (%s réponses)",
 	

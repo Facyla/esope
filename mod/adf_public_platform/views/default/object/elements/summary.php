@@ -20,7 +20,8 @@
 $entity = $vars['entity'];
 
 $title_link = elgg_extract('title', $vars, '');
-if (empty($title_link)) {
+if (empty($title_link) && ($title_link !== false)) {
+	// Use default title if not set
 	if (isset($entity->title)) {
 		$text = $entity->title;
 	} else {

@@ -2,7 +2,6 @@
 
 function survey_get_question_array($survey) {
 	$responses = array();
-
 	foreach($survey->getQuestions() as $question) {
 		$responses[$question->guid] = $question;
 		/*
@@ -16,7 +15,6 @@ function survey_get_question_array($survey) {
 			);
 		*/
 	}
-
 	return $responses;
 }
 
@@ -44,7 +42,6 @@ function survey_can_add_to_group($group, $user = null) {
 
 function survey_get_page_edit($page_type, $guid = 0) {
 	gatekeeper();
-
 	$form_vars = array('id' => 'survey-edit-form');
 
 	// Get the post, if it exists
@@ -62,7 +59,6 @@ function survey_get_page_edit($page_type, $guid = 0) {
 		}
 
 		$container = $survey->getContainerEntity();
-
 		elgg_set_page_owner_guid($container->guid);
 
 		$title = elgg_echo('survey:editpost', array($survey->title));
@@ -75,9 +71,9 @@ function survey_get_page_edit($page_type, $guid = 0) {
 		if ($container instanceof ElggGroup) {
 			elgg_push_breadcrumb($container->name, 'survey/group/' . $container->guid);
 		} else {
+			// Do not show owner for site surveys ?
 			elgg_push_breadcrumb($container->name, 'survey/owner/' . $container->username);
 		}
-
 		elgg_push_breadcrumb(elgg_echo("survey:edit"));
 	} else {
 		if ($guid) {
@@ -108,7 +104,8 @@ function survey_get_page_edit($page_type, $guid = 0) {
 		'filter' => ''
 	);
 
-	$body = elgg_view_layout('content', $params);
+	//$body = elgg_view_layout('content', $params);
+	$body = elgg_view_layout('one_column', $params);
 
 	// Display page
 	return elgg_view_page($title, $body);
