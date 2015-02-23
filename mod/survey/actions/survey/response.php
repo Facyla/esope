@@ -11,7 +11,7 @@ $guid = get_input('guid');
 //get the survey entity
 $survey = get_entity($guid);
 
-if (!$survey instanceof Survey) {
+if (!elgg_instanceof($survey, 'object', 'survey')) {
 	register_error(elgg_echo('survey:notfound'));
 	forward(REFERER);
 }
@@ -25,18 +25,31 @@ if (empty($responses)) {
 $user = elgg_get_logged_in_user_entity();
 
 // Check if user has already responded
+/*
 if ($survey->hasResponded($user)) {
 	register_error(elgg_echo('survey:alreadyresponded'));
 	forward(REFERER);
 }
+*/
 
 foreach ($responses as $question_guid => $response) {
+	//error_log("Response : q $question_guid => $response");
 	// add response as an annotation
 	//$survey->annotate("response_$question_guid", $response, $survey->access_id);
-	// @TODO should we annotate the question itself instead, so we coul use a single annotation name
+	// Annotate the question itself instead, so we can use a single annotation name
 	$question = get_entity($question_guid);
-	if (elgg_instanceof($question, 'survey_question')) {
-		$question->annotate("response", $response, $survey->access_id);
+	if (elgg_instanceof($question, 'object', 'survey_question')) {
+		if (is_array($response)) {
+			foreach($response as $response_item) {
+				if (!empty($response_item || ($question->empty_value == 'yes'))) {
+					$question->annotate("response", $response_item, $survey->access_id);
+				}
+			}
+		} else {
+			if (!empty($response_item || ($question->empty_value == 'yes'))) {
+				$question->annotate("response", $response, $survey->access_id);
+			}
+		}
 	}
 }
 // Anotate also the survey so we can know we have answered (and when)
@@ -57,7 +70,7 @@ if ($survey_response_in_river == 'yes') {
 }
 
 if (get_input('callback')) {
-	echo elgg_view('survey/survey_widget_content', array('entity' => $survey));
+	echo elgg_view('survey/survey_content', array('entity' => $survey, 'nowrapper' => true));
 }
 
 // Success message

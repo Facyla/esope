@@ -14,11 +14,7 @@ $allow_close_date = elgg_get_plugin_setting('allow_close_date','survey');
 $survey = $vars['entity'];
 $owner = $survey->getOwnerEntity();
 $friendlytime = elgg_get_friendly_time($survey->time_created);
-$owner_link = elgg_view('output/url', array(
-				'href' => "survey/owner/$owner->username",
-				'text' => $owner->name,
-				'is_trusted' => true,
-	));
+$owner_link = elgg_view('output/url', array('text' => $owner->name, 'href' => "survey/owner/$owner->username", 'is_trusted' => true));
 $author_text = elgg_echo('byline', array($owner_link));
 
 $tags = elgg_view('output/tags', array('tags' => $survey->tags));
@@ -36,38 +32,25 @@ if (($allow_close_date == 'yes') && (isset($survey->close_date))) {
 }
 
 // TODO: support comments off
+$comments_link = '';
 // The "on" status changes for comments, so best to check for !Off
 if ($survey->comments_on != 'Off') {
 	$comments_count = $survey->countComments();
 	//only display if there are commments
 	if ($comments_count != 0) {
 		$text = elgg_echo("comments") . " ($comments_count)";
-		$comments_link = elgg_view('output/url', array(
-			'href' => $survey->getURL() . '#survey-comments',
-			'text' => $text,
-			'is_trusted' => true
-		));
-	} else {
-		$comments_link = '';
+		$comments_link = elgg_view('output/url', array('text' => $text, 'href' => $survey->getURL() . '#survey-comments', 'is_trusted' => true));
 	}
-} else {
-	$comments_link = '';
 }
 
 ?>
 
-<h3><?php echo "<a href=\"{$survey->getURL()}\">{$survey->question}</a>"; ?></h3>
-
+<h3><?php echo "<a href=\"{$survey->getURL()}\">{$survey->title}</a>"; ?></h3>
 <?php
-if ($show_close_date) {
-	echo $closing_date;
-}
-
+if ($show_close_date) { echo $closing_date; }
 echo "<div class=\"elgg-subtext\">{$author_text} {$friendlytime} {$comments_link}</div>";
-
 echo $tags;
 
-?>
-<div id="survey-container-<?php echo $survey->guid; ?>" class="survey_post">
-	<?php echo elgg_view('survey/survey_widget_content', $vars); ?>
-</div>
+echo elgg_view('survey/survey_content', $vars); ?>
+
+

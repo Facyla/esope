@@ -12,16 +12,16 @@ elgg.survey.edit.init = function() {
 	// See http://api.jquery.com/live/ for details
 	//$('#add-question').live('click', elgg.survey.edit.addQuestion);
 	//$('.delete-question').live('click', elgg.survey.edit.deleteQuestion);
-	//$('.survey_input-toggle').live('click', elgg.survey.edit.toggleInput);
+	//$('.survey-input-toggle').live('click', elgg.survey.edit.toggleInput);
 	
 	// Add/remove question
 	$(document).on('click', '#add-question', elgg.survey.edit.addQuestion);
 	$(document).on('click', '.delete-question', elgg.survey.edit.deleteQuestion);
 	qnum = parseInt($('#number-of-questions').val());
 	// Hide/show some question edit form options
-	$(document).on('click', '.survey_input-toggle', elgg.survey.edit.toggleInput);
+	$(document).on('click', '.survey-input-toggle', elgg.survey.edit.toggleInput);
 	// Show optional fields
-	$(document).on('change', '.survey_input-question-input-type', elgg.survey.edit.showOptions);
+	$(document).on('change', '.survey-input-question-input-type', elgg.survey.edit.showOptions);
 };
 
 
@@ -34,44 +34,45 @@ elgg.survey.edit.addQuestion = function(e) {
 	// Create a new question fieldset elements, rewritten as JS to include qnum param
 	// Question object meta : title, description, input_type, options, empty_value, required
 	
-	var q_title = '<p class="question_title_' + qnum + '"><label>' + elgg.echo('survey:question:title') + ' <input type="text" class="survey_input-question-title" name="question_title_' + qnum + '" /></label></p>';
+	var q_title = '<p class="question_title_' + qnum + '"><label>' + elgg.echo('survey:question:title') + ' <input type="text" class="survey-input-question-title" name="question_title_' + qnum + '" /></label></p>';
 	
-	var q_description = '<p class="question_description_' + qnum + '"><a href="#" class="survey_input-toggle" data-id="question_description_' + qnum + '">' + elgg.echo('survey:question:toggle') + '</a> <label>' + elgg.echo('survey:question:description') + ' <textarea class="survey_input-question-description" name="question_description_' + qnum + '" style="display:none;"></textarea>';
+	var q_description = '<p class="question_description_' + qnum + '"><a href="#" class="survey-input-toggle" data-id="question_description_' + qnum + '">' + elgg.echo('survey:question:toggle') + '</a> <label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description_' + qnum + '" style="display:none;"></textarea>';
 	
-	var q_required = '<p class="question_required_' + qnum + '" style="float:right;"><label>' + elgg.echo('survey:question:required') + ' <select class="survey_input-question-required" name="question_required_' + qnum + '">' 
+	var q_required = '<p class="question_required_' + qnum + '" style="float:right;"><label>' + elgg.echo('survey:question:required') + ' <select class="survey-input-question-required" name="question_required_' + qnum + '">' 
 			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 			+ '<option value="no">' + elgg.echo('survey:option:no') + '</option>' 
 		+ '</select></label></p>';
 	
-	var q_input_type = '<p class="question_input_type_' + qnum + '"><label>' + elgg.echo('survey:question:input_type') + ' <select class="survey_input-question-input-type" name="question_input_type_' + qnum + '" data-id="' + qnum + '">' 
+	var q_input_type = '<p class="question_input_type_' + qnum + '"><label>' + elgg.echo('survey:question:input_type') + ' <select class="survey-input-question-input-type" name="question_input_type_' + qnum + '" data-id="' + qnum + '">' 
 			+ '<option value="text">' + elgg.echo('survey:type:text') + '</option>' 
 			+ '<option value="plaintext">' + elgg.echo('survey:type:plaintext') + '</option>' 
-			+ '<option value="dropdown">' + elgg.echo('survey:type:dropdown') + '</option>' 
+			+ '<option value="pulldown">' + elgg.echo('survey:type:pulldown') + '</option>' 
 			+ '<option value="checkboxes">' + elgg.echo('survey:type:checkboxes') + '</option>' 
 			+ '<option value="multiselect">' + elgg.echo('survey:type:multiselect') + '</option>' 
 			+ '<option value="rating">' + elgg.echo('survey:type:rating') + '</option>' 
 			+ '<option value="date">' + elgg.echo('survey:type:date') + '</option>' 
 		+ '</select></label></p>';
 	
-	var q_empty_value = '<p class="question_empty_value_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:empty_value') + ' <select class="survey_input-question-empty-value" name="question_empty_value_' + qnum + '">' 
-			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
+	var q_options = '<p class="question_options_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:options') + ' <textarea class="survey-input-question-options" name="question_options_' + qnum + '"></textarea></label></p>';
+	
+	var q_empty_value = '<p class="question_empty_value_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:empty_value') + ' <select class="survey-input-question-empty-value" name="question_empty_value_' + qnum + '">' 
 			+ '<option value="no">' + elgg.echo('survey:option:no') + '</option>' 
+			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 		+ '</select></label></p>';
 	
-	var q_options = '<p class="question_options_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:options') + ' <textarea class="survey_input-question-options" name="question_options_' + qnum + '"></textarea></label></p>';
-	
-	var deleteIcon = '<img src="' + elgg.get_site_url() + 'mod/survey/graphics/16-em-cross.png">';
-	var deleteLink = '<a href="#" class="delete-question" title="' + elgg.echo('survey:delete_question') + '" data-id="' + qnum + '">' + deleteIcon + '</a>';
+	//var deleteIcon = '<img src="' + elgg.get_site_url() + 'mod/survey/graphics/16-em-cross.png">';
+	var deleteLink = '<a href="#" class="delete-question" title="' + elgg.echo('survey:delete_question') + '" data-id="' + qnum + '"><i class="fa fa-trash"></i></a>';
 	
 	var container = '<div id="question-container-' + qnum + '">' 
-			+ '<fieldset class="survey_input-question">' 
+			+ '<fieldset class="survey-input-question">' 
 				+ '<span style="float:right">' + deleteLink + '</span>' 
 				+ q_title 
 				+ q_description 
 				+ q_required 
 				+ q_input_type 
-				+ q_empty_value 
+				+ <?php echo json_encode(elgg_view('survey/input/question_type_help')); ?> 
 				+ q_options 
+				+ q_empty_value 
 			+ '</fieldset>' 
 		+ '</div>';
 	
@@ -107,18 +108,21 @@ elgg.survey.edit.toggleInput = function(e) {
  * @param {Object} e The change event
  */
 elgg.survey.edit.showOptions = function(e) {
-	/*
-	*/
 	var select = $(event.target);
 	var val = select.val();
 	var id = $(this).data('id');
-	if ((val == "dropdown") || (val == "checkboxes") || (val == "multiselect") || (val == "rating")) {
+	// Show/hide appropriate optional fields
+	$('.question_options_' + id).hide();
+	$('.question_empty_value_' + id).hide();
+	if ((val == "dropdown") || (val == "pulldown") || (val == "checkboxes") || (val == "multiselect") || (val == "rating")) {
 		$('.question_options_' + id).show();
-		$('.question_empty_value_' + id).show();
-	} else {
-		$('.question_options_' + id).hide();
-		$('.question_empty_value_' + id).hide();
+		if ((val == "dropdown") || (val == "pulldown") || (val == "rating")) {
+			$('.question_empty_value_' + id).show();
+		}
 	}
+	// Show/hide appropriate help text
+	$('#question-container-' + id + ' .question-help').hide();
+	$('#question-container-' + id + ' .question-' + val).show();
 	//return true;
 	//e.preventDefault();
 }
