@@ -15,6 +15,10 @@ if ($survey) {
 		$body .= elgg_view('survey/input/question', array('question' => $question, 'i' => $i));
 		$i++;
 	}
+} else {
+	// Add an empty question
+	$body .= elgg_view('survey/input/question', array('i' => $i));
+	$i++;
 }
 
 $body .= '<div id="new-questions-area"></div>';

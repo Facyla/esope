@@ -5,10 +5,11 @@ $fr = array(
 	/**
 	 * Menu items and titles
 	 */
-	'survey' => "Sondages",
-	'survey:add' => "Nouveau sondage",
-	'survey:group_survey' => "Sondages",
+	'survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
+	//'survey:site_survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
+	'survey:group_survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
 	'survey:group_survey:listing:title' => "Sondages de %s",
+	'survey:add' => "Nouveau sondage",
 	'survey:your' => "Vos sondages",
 	'survey:not_me' => "Sondages de %s",
 	'survey:friends' => "Sondages des contacts",
@@ -136,16 +137,18 @@ Afficher le sondage et y répondre :
 	// New survey strings
 	'survey:questions' => "Questions",
 	'survey:add_question' => "Ajouter une question",
+	'survey:delete_question' => "Supprimer cette question",
 	'survey:title' => "Titre du sondage",
 	'survey:option:yes' => "oui",
 	'survey:option:no' => "non",
 	// Question fields
 	'survey:question:title' => "Intitulé de la question",
-	'survey:question:description' => "(facultatif) Aide ou précisions sur la question",
+	'survey:question:description' => "Aide ou précisions sur la question (facultatif)",
 	'survey:question:input_type' => "Type de question",
-	'survey:question:options' => "(facultatif) Options",
-	'survey:question:empty_value' => "(si options) Option vide",
-	'survey:question:required' => "Réponse obligatoire",
+	'survey:question:options' => "Options",
+	'survey:question:empty_value' => "Ajouter une option vide",
+	'survey:question:required' => "Obligatoire",
+	'survey:question:toggle' => "Montrer/masquer",
 	// Input types
 	'survey:type:text' => "Texte court",
 	'survey:type:longtext' => "Texte de paragraphe (avec éditeur)",
