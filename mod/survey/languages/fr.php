@@ -168,7 +168,10 @@ Afficher le sondage et y répondre :
 	'survey:type:date' => "Date",
 	'survey:type:date:details' => "Pour une date à choisir dans un calendrier",
 	// Responses
+	'survey:results' => "Résultats du sondage",
 	'survey:result:label' => "\"%s\" (%s réponses)",
+	'survey:results:summary' => "Résumé des résultats",
+	'survey:results:full' => "Résultats détaillés",
 	
 	
 );

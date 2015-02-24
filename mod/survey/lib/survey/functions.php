@@ -152,6 +152,40 @@ function survey_prepare_edit_body_vars($survey = null) {
 	return $values;
 }
 
+// Display results page
+function survey_get_page_results($guid = false, $filter = false, $filter_guid = false) {
+	gatekeeper();
+	$user = elgg_get_logged_in_user_entity();
+	
+	$survey = get_entity($guid);
+	if (!elgg_instanceof($survey, 'object', 'survey')) {
+		elgg_echo('survey:invalid');
+		forward(REFERER);
+	}
+	
+	// Access control
+	if (!$survey->canEdit($user) && !elgg_is_admin_logged_in()) {
+		elgg_echo('survey:no_access');
+		forward(REFERER);
+	}
+	
+	$body = '';
+	$body .= '<h3>' . elgg_echo('survey:results:summary') . '</h3>';
+	$body .= elgg_view('survey/survey_results', array('entity' => $survey));
+	$body .= '<h3>' . elgg_echo('survey:results:full') . '</h3>';
+	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid));
+	
+	$params = array(
+			'title' => elgg_echo('survey:results'),
+			'content' => $body,
+		);
+	
+	$body = elgg_view_layout("one_column", $params);
+	return elgg_view_page($params['title'], $body);
+	
+}
+
+
 function survey_get_page_list($page_type, $container_guid = null) {
 	global $autofeed;
 	$autofeed = true;

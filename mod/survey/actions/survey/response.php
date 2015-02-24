@@ -25,12 +25,10 @@ if (empty($responses)) {
 $user = elgg_get_logged_in_user_entity();
 
 // Check if user has already responded
-/*
 if ($survey->hasResponded($user)) {
 	register_error(elgg_echo('survey:alreadyresponded'));
 	forward(REFERER);
 }
-*/
 
 foreach ($responses as $question_guid => $response) {
 	//error_log("Response : q $question_guid => $response");
@@ -41,12 +39,12 @@ foreach ($responses as $question_guid => $response) {
 	if (elgg_instanceof($question, 'object', 'survey_question')) {
 		if (is_array($response)) {
 			foreach($response as $response_item) {
-				if (!empty($response_item || ($question->empty_value == 'yes'))) {
+				if (!empty($response_item) || ($question->empty_value == 'yes')) {
 					$question->annotate("response", $response_item, $survey->access_id);
 				}
 			}
 		} else {
-			if (!empty($response_item || ($question->empty_value == 'yes'))) {
+			if (!empty($response) || ($question->empty_value == 'yes')) {
 				$question->annotate("response", $response, $survey->access_id);
 			}
 		}
