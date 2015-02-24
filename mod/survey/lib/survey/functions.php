@@ -153,7 +153,7 @@ function survey_prepare_edit_body_vars($survey = null) {
 }
 
 // Display results page
-survey_get_page_results($guid = false) {
+function survey_get_page_results($guid = false, $filter = false, $filter_guid = false) {
 	gatekeeper();
 	$user = elgg_get_logged_in_user_entity();
 	
@@ -170,11 +170,14 @@ survey_get_page_results($guid = false) {
 	}
 	
 	$body = '';
+	$body .= '<h3>' . elgg_echo('survey:results:summary') . '</h3>';
 	$body .= elgg_view('survey/survey_results', array('entity' => $survey));
-	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey));
+	$body .= '<h3>' . elgg_echo('survey:results:full') . '</h3>';
+	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid));
 	
 	$params = array(
-			'title' => elgg_echo('survey:results');
+			'title' => elgg_echo('survey:results'),
+			'content' => $body,
 		);
 	
 	$body = elgg_view_layout("one_column", $params);

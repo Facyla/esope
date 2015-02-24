@@ -125,9 +125,11 @@ function survey_page_handler($page) {
 			echo survey_get_page_edit($page_type, $container);
 			break;
 		case "results":
-			$guid = false;
+			$guid = $filter = $filter_guid = false;
 			if (isset($page[1])){ $guid = $page[1]; }
-			echo survey_get_page_results($guid);
+			if (isset($page[2])){ $filter = $page[2]; }
+			if (isset($page[3])){ $filter_guid = $page[3]; }
+			echo survey_get_page_results($guid, $filter, $filter_guid);
 			break;
 		case "friends":
 		case "owner":
