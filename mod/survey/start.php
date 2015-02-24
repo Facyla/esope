@@ -108,9 +108,7 @@ function survey_init() {
  */
 function survey_page_handler($page) {
 	elgg_load_library('elgg:survey');
-
 	elgg_push_breadcrumb(elgg_echo('item:object:survey'), "survey/all");
-
 	$page_type = $page[0];
 	if (empty($page_type)) $page_type = 'all';
 	switch($page_type) {
@@ -125,6 +123,11 @@ function survey_page_handler($page) {
 			$container = null;
 			if (isset($page[1])){ $container = $page[1]; }
 			echo survey_get_page_edit($page_type, $container);
+			break;
+		case "results":
+			$guid = false;
+			if (isset($page[1])){ $guid = $page[1]; }
+			echo survey_get_page_results($guid);
 			break;
 		case "friends":
 		case "owner":

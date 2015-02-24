@@ -152,6 +152,37 @@ function survey_prepare_edit_body_vars($survey = null) {
 	return $values;
 }
 
+// Display results page
+survey_get_page_results($guid = false) {
+	gatekeeper();
+	$user = elgg_get_logged_in_user_entity();
+	
+	$survey = get_entity($guid);
+	if (!elgg_instanceof($survey, 'object', 'survey')) {
+		elgg_echo('survey:invalid');
+		forward(REFERER);
+	}
+	
+	// Access control
+	if (!$survey->canEdit($user) && !elgg_is_admin_logged_in()) {
+		elgg_echo('survey:no_access');
+		forward(REFERER);
+	}
+	
+	$body = '';
+	$body .= elgg_view('survey/survey_results', array('entity' => $survey));
+	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey));
+	
+	$params = array(
+			'title' => elgg_echo('survey:results');
+		);
+	
+	$body = elgg_view_layout("one_column", $params);
+	return elgg_view_page($params['title'], $body);
+	
+}
+
+
 function survey_get_page_list($page_type, $container_guid = null) {
 	global $autofeed;
 	$autofeed = true;
