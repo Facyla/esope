@@ -253,7 +253,7 @@ class Survey extends ElggObject {
 		if (in_array($question->input_type, array('test', 'plaintext', 'longtext', 'date'))) {
 			// Free text or value
 			foreach($responses as $response) {
-				$values[] = $response;
+				$values[] = $response->value;
 			}
 		} else {
 			// Closed list values
@@ -262,7 +262,7 @@ class Survey extends ElggObject {
 			// @TODO add empty value
 			//$question->empty_value
 			foreach($responses as $response) {
-				$values[] = $response;
+				$values[] = $response->value;
 			}
 		}
 		return $values;
