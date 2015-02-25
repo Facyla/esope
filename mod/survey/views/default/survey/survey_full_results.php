@@ -34,7 +34,6 @@ switch($filter) {
 		// List all questions with some basic stats and responders
 		foreach ($questions as $question) {
 			$user_details = '';
-			$user_details .= elgg_echo('survey:results:user_details');
 			$response_count = $survey->getResponseCountForQuestion($question);
 			$response_label = elgg_echo ('survey:result:label', array($question->title, $response_count));
 			// Show members if this survey
@@ -42,7 +41,7 @@ switch($filter) {
 			$percentage = 0;
 			if ($response_count > 0) { $percentage = round($response_count / $total * 100); }
 			
-			//Rresponses for this user
+			// @TODO Responses for this user
 			$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'owner_guid' => $question->getOwnerGUID(), 'annotation_name' => 'response', 'limit' => 0));
 			foreach($responses as $response) {
 				$user_details .= '<p>' . $response->value . '</p>';
