@@ -4,6 +4,7 @@
  * Enable full view, and filtered results : by user or by question
  */
 
+
 $survey = elgg_extract('entity', $vars);
 $filter = elgg_extract('filter', $vars);
 $filter_guid = elgg_extract('filter_guid', $vars);
@@ -14,6 +15,9 @@ $total = $survey->getResponseCount();
 $all_responders = '';
 $response_id = 0;
 
+elgg_push_breadcrumb($survey->title, $survey->getURL());
+elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid);
+
 if ($filter) {
 	$filter_entity = get_entity($filter_guid);
 	if (($filter == 'user') && !elgg_instanceof($filter_entity, 'user')) {
@@ -23,6 +27,7 @@ if ($filter) {
 		echo elgg_echo('survey:filter:invalid');
 		return;
 	}
+	elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
 }
 
 switch($filter) {
@@ -43,9 +48,12 @@ switch($filter) {
 			
 			// @TODO Responses for this user
 			$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'owner_guid' => $question->getOwnerGUID(), 'annotation_name' => 'response', 'limit' => 0));
+			$user_details .= '<br /><h5>' . elgg_echo('survey:results:values') . '</h5>';
+			$user_details .= '<blockquote>';
 			foreach($responses as $response) {
 				$user_details .= '<p>' . $response->value . '</p>';
 			}
+			$user_details .= '</blockquote>';
 			
 			$question_details_link = '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '/question/' . $question->guid . '" target="_blank">' . elgg_echo('survey:results:question_details') . '</a>';
 			
@@ -70,7 +78,7 @@ HTML;
 		$responded_users = '';
 		// Show members if this survey
 		$response_id++;
-		$responded_users = '<h4>' . elgg_echo('survey:results:users') . '</h4>';
+		$responded_users = '<br /><h5>' . elgg_echo('survey:results:users') . '</h5>';
 		$user_guids = $survey->getRespondersForQuestion($question);
 		if ($user_guids) {
 			// Gallery of responders
@@ -78,9 +86,9 @@ HTML;
 		}
 		
 		// Values
-		$responded_values = '<h4>' . elgg_echo('survey:results:values') . '</h4>';
+		$responded_values = '<br /><h5>' . elgg_echo('survey:results:values') . '</h5>';
 		$response_values = $survey->getValuesForQuestion($question);
-		if ($response_values) { $responded_values .= implode('<hr />', $response_values); }
+		if ($response_values) { $responded_values .= implode('<br />', $response_values); }
 		
 		// Percentage bar
 		$percentage = 0;
@@ -88,9 +96,10 @@ HTML;
 		
 		// Détail des réponses
 		/*
+		*/
 		$response_details = '';
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
-		$response_details .= '<h4>' . elgg_echo('survey:results:question_details:title') . '</h4>';
+		$response_details .= '<br /><h5>' . elgg_echo('survey:results:question_details:title') . '</h5>';
 		foreach($responses as $response) {
 			$icon = elgg_view_entity_icon($response->getOwnerEntity(), 'tiny');
 			$text = $response->value;
@@ -98,10 +107,9 @@ HTML;
 			$response_details .= elgg_view_image_block($icon, $text);
 			$response_details .= '</div>';
 		}
-		*/
 		echo <<<HTML
 		<div class="survey-result">
-			<label title="$response_title">$response_label</label>
+			<h4 title="$response_title">$response_label</h4>
 			<div class="survey-progress">
 				<div class="survey-progress-filled" style="width: {$percentage}%"></div>
 			</div>
@@ -154,6 +162,7 @@ if ($user_guids) {
 	// Gallery of responders
 	$responders = elgg_get_entities(array('guids' => $user_guids, 'list_type' => 'users', 'size' => 'tiny', 'pagination' => false));
 }
+$all_responders .= '<br /><h4>' . elgg_echo('survey:results:users') . '</h4>';
 foreach($responders as $ent) {
 	$icon = elgg_view_entity_icon($ent, 'tiny');
 	$text = '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '/user/' . $ent->guid . '" target="_blank">' . elgg_echo('survey:results:user_details') . '</a>';

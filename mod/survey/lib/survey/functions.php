@@ -172,6 +172,7 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 	$body = '';
 	$body .= '<h3>' . elgg_echo('survey:results:summary') . '</h3>';
 	$body .= elgg_view('survey/survey_results', array('entity' => $survey));
+	$body .= '<br />';
 	$body .= '<h3>' . elgg_echo('survey:results:full') . '</h3>';
 	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid));
 	
