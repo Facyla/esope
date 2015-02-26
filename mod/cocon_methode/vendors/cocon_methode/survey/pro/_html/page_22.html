@@ -1,0 +1,75 @@
+<table width="100%">
+	<tr>
+		<td colspan="4" class="app_title">Profil reconnu</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">
+			<br><center>
+				<div style="width:200px;height:17px;background-color:#eeeeee">
+					<div style="width: 98%;background-color:#0088ff;height:17px;float:left"></div>
+				</div>
+			</center>98%<br>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:100%;background-color:#eeeeee;text-align:left;padding-left:10px;vertical-align:middle; color:#000000;height: 32px;">Parmi ces profils, lequel semble vous correspondre le mieux ?</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+	<tr>
+		<td colspan="4" class="app_label" style="width:100%">
+			<table style="width:60%;margin-left:auto;margin-right:auto;">
+				<tr>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;">
+						<input type="radio" name="l1" value="1" />&nbsp;Profil 1
+					</td>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#ffdd00;border:2px #ffffff solid;">
+						<input type="radio" name="l1" value="2" />&nbsp;Profil 2
+					</td>
+				</tr>
+				<tr>
+					<td style="width:50%;height:100px;margin:4px;padding:10px;background-color:#f8f8f8;border:2px #ffffff solid;font-size:13px;">
+						En classe, en présence de mes élèves, je ne suis pas nécessairement très à l'aise
+						avec les équipements et contenus numériques à ma disposition.<br><br> 
+						J'échange et collabore dès que je peux avec mes pairs au sein de mon collège voire au-delà.</td>
+					<td style="width:50%;height:100px;margin:4px;padding:10px;background-color:#f8f8f8;border:2px #ffffff solid;font-size:13px;">
+						En classe, en présence de mes élèves, je suis très à l'aise avec les équipements et contenus numériques à ma disposition.<br><br>
+						J'échange et collabore dès que je peux avec mes pairs au sein de mon collège voire au-delà.
+					</td>
+				</tr>
+				<tr>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#ff0000;border:2px #ffffff solid;">
+						<input type="radio" name="l1" value="3" />&nbsp;Profil 3
+					</td>
+					<td style="width:50%;height:21px;padding:4px;background-color:#aaff00;border:2px #ffffff solid;">
+						<input type="radio" name="l1" value="4" />&nbsp;Profil 4
+					</td>
+				</tr>
+				<tr>
+					<td style="width:50%;height:100px;margin:4px;padding:10px;background-color:#eeeeee;border:2px #ffffff solid;font-size:13px;">
+						En classe, en présence de mes élèves, je ne suis pas nécessairement très à l'aise avec les équipements et contenus numériques à ma disposition.<br><br>
+						En dépit d'une possible envie,le fait est que j'échange et collabore peu avec mes pairs au sein de mon collège.
+					</td>
+					<td style="width:50%;height:100px;margin:4px;padding:10px;background-color:#eeeeee;border:2px #ffffff solid;font-size:13px;">
+						En classe, en présence de mes élèves, je suis très à l'aise avec tout ou partie des équipements et contenus numériques à ma disposition.<br><br>
+						J'échange et collabore peu avec mes pairs au sein de mon collège.
+					</td>
+				</tr>
+			</table>
+		</td>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+</table>
+<script type="text/javascript">
+
+	function loadQuestion(){
+		$("input:radio[name='l1'][value='" + survey.profil_rec + "']").prop("checked", true);
+	}
+
+	function validateQuestion(){
+		survey.profil_rec = $("input:radio[name='l1']:checked").val();
+	}
+	
+</script>
