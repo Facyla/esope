@@ -128,7 +128,9 @@ if (elgg_is_logged_in()) {
 								</ul>
 							</nav>
 						<?php } else {
-							echo '<nav><ul><li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('adf_platform:loginregister') . '</a></li></ul></nav>';
+							echo '<nav><ul>';
+							echo '<li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('adf_platform:loginregister') . '</a></li>';
+							echo '</ul></nav>';
 						} ?>
 					</div>
 				</div>
