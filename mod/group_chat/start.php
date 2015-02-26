@@ -70,7 +70,9 @@ function group_chat_init() {
 	//elgg_register_action("group_chat/discussion","$action_base/discussion.php", 'public');
 	
 	// Modification du menu des membres
-	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'group_chat_user_hover_menu');
+	if ($user_chat == 'yes') {
+		elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'group_chat_user_hover_menu');
+	}
 	
 }
 
