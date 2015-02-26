@@ -1,0 +1,136 @@
+<table style="width:100%">
+	<tr>
+		<td class="app_title">Résultat du test : profil théorique contre profil reconnu</td>
+	</tr>
+	<tr>
+		<td class="app_title" style="background-color:#ffffff;border:none;">
+			<br><center>
+				<div style="width:200px;height:17px;background-color:#eeeeee">
+					<div style="width: 100%;background-color:#0088ff;height:17px;float:left"></div>
+				</div>
+			</center>100%<br>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:100%;background-color:#ff0000;text-align:center;padding-left:10px;vertical-align:middle; color:#ffffff;height: 32px;" id="profil_title">Le profil théorique est le profil qui resort suite à vos réponses.</td>
+	</tr>
+	<tr>
+		<td class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+	<tr id="block_1" style="display:none">
+		<td class="app_label" style="width:100%;background-color:#ffffff;position:relative;width:60%;margin-left:auto;margin-right:auto;">
+			<table style="position:relative;width:60%;margin-left:auto;margin-right:auto;">
+				<tr>
+					<td id="block_1_title" style="height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;color:#ffffff"></td>
+				</tr>
+				<tr>
+					<td id="block_1_text" style="margin:4px;padding:10px;background-color:#f8f8f8;border:2px #ffffff solid;font-size:11px;"></td>						
+				</tr>
+				<tr>
+					<td style="height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;font-size:12px;">
+						Quelles sont les caractéristiques de ce profil dans lesquels vous vous reconnaissez le plus et celles dans lesquelles vous vous reconnaissez le moins ?
+					</td>
+				</tr>
+				<tr>
+					<td style="height:21px;margin:4px;padding:4px;background-color:#f8f8f8;border:2px #ffffff solid;">
+						<textarea id="comment1" value="" style="width:100%; height: 96px;"></textarea> 
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+	<tr id="block_2" style="display:none">
+		<td class="app_label" style="width:100%">
+			<table style="width:60%;margin-left:auto;margin-right:auto;">
+				<tr>
+					<td id="block_2_title1" style="width:50%;height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;color:#ffffff"></td>
+					<td id="block_2_title2" style="width:50%;height:21px;margin:4px;padding:4px;background-color:#ffdd00;border:2px #ffffff solid;color:#ffffff"></td>
+				</tr>
+				<tr>
+					<td id="block_2_text1" style="width:50%;margin:4px;padding:10px;background-color:#f8f8f8;border:2px #ffffff solid;font-size:11px;"></td>
+					<td id="block_2_text2" style="width:50%;margin:4px;padding:10px;background-color:#f8f8f8;border:2px #ffffff solid;font-size:11px;"></td>
+				</tr>
+				<tr>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;font-size:12px;">
+						Quelles sont les caractéristiques de ce profil dans lesquels vous vous reconnaissez le plus et celles dans lesquelles vous vous reconnaissez le moins ?
+					</td>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#dddddd;border:2px #ffffff solid;font-size:12px;">
+						Quelles sont les caractéristiques de ce profil dans lesquels vous vous reconnaissez le plus et celles dans lesquelles vous vous reconnaissez le moins ?
+					</td>
+				</tr>
+				<tr>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#f8f8f8;border:2px #ffffff solid;">
+						<textarea id="comment1b" value="" style="width:100%; height: 96px;"></textarea> 
+					</td>
+					<td style="width:50%;height:21px;margin:4px;padding:4px;background-color:#f8f8f8;border:2px #ffffff solid;">
+						<textarea id="comment2" value="" style="width:100%; height: 96px;"></textarea> 
+					</td>
+				</tr>				
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+</table>
+
+<script type="text/javascript">
+
+	var profil_data = {
+		"1" : {
+			"title" : "Profil 1",
+			"bgcolor" : "#dddddd",
+			"text" : "<ul style=\"list-style-type: square;margin-left:40px;margin-right:16px;\"><li>J'aime échanger avec les collègues, partager sur mes enseignements.</li><li>Mes collègues et moi avons collectivement conscience des apports du numérique et sommes sensibles aux propositions et discours institutionnels qui prescrivent l'usage du numérique.</li><li>Je suis d'ailleurs prêt à utiliser davantage le numérique si les moyens mis à ma disposition sont à la hauteur.</li><li>Je suis plutôt en confiance lorsque j'utilise les équipements et contenus numériques.</li><li>Je suis moins à l'aise en cas de dysfonctionnements qui constituent une perte de temps lorsque mis en regard avec la densité de nos programmes.</li><li>Je considère que le numérique reste très chronophage et qu'il est difficile de préparer ses cours de manière satisfaisante tant il est difficile de faire son choix parmi les nombreuses ressources numériques disponibles sur internet.</li><li>En fait, je suis en attente de démonstration et attends d'être convaincu(e) : nos objectifs pédagogiques étant atteints sans numérique, quelle est concrètement sa plus-value ?</li></ul>"
+		},
+		"2" : {
+			"title" : "Profil 2",
+			"bgcolor" : "#ffdd00",
+			"text" : "<ul style=\"list-style-type: square;margin-left:40px;margin-right:16px;\"><li>Je suis très à l'aise avec le numérique. J'ai une appétence personnelle et professionnelle pour le numérique.</li><li>Je suis volontaire pour découvrir de nouveaux outils et de nouvelles ressources.</li><li>Je me sens très proche de mes collègues au sein ou en dehors du collège avec qui j'échange sur le sujet du numérique.</li><li>J'utilise le numérique pour faire évoluer en continu ma pédagogie et mes cours.</li><li>Je me rends sur des sites collaboratifs pour télécharger des cours, des applicatifs, des logiciels que je n'hésite pas à tester pour moi et pour les autres.</li><li>Je me suis adapté(e) à la nouvelle donne numérique qui change les conditions dans lesquelles je prépare et fais cours.</li><li>Le tout numérique n'est toutefois pas souhaitable : il ne faut pas oublier le papier notamment parce que nous ne sommes pas à l'abri de problèmes techniques.</li><li>Pour autant, je suis confiant : le numérique constitue une réelle opportunité pour les élèves tout autant que pour les enseignants.</li></ul>"
+		},
+		"3" : {
+			"title" : "Profil 3",
+			"bgcolor" : "#ff0000",
+			"text" : "<ul style=\"list-style-type: square;margin-left:40px;margin-right:16px;\"><li>Je ne suis pas très à l'aise avec les équipements et autres ressources numériques que j'utilise ponctuellement quand l'intérêt pédagogique pour les élèves est démontré.</li><li>Je ne me sens pas au niveau de certaines élèves ou enseignants qui maîtrisent ces outils.</li><li>Je ne suis pas totalement convaincu(e) par les apports du numérique qui me pose davantage de difficultés qu'il ne m'apporte de l'aide.</li><li>Je passerai au numérique quand je l'aurai décidé ou quand l'opportunité et un réel soutien me seront donnés.</li><li>Je considère que le support papier ou que l'oralité apportent beaucoup à ma discipline et à mes élèves.</li><li>Malgré tout, je ne souhaite pas continuer à travailler \"à l'ancienne\" : je me sens bousculé(e) par le numérique.</li><li>Sur le plan pédagogique, j'échange avec un nombre restreint d'enseignants dont je me sens proche.</li></ul>"
+		},
+		"4" : {
+			"title" : "Profil 4",
+			"bgcolor" : "#aaff00",
+			"text" : "<ul style=\"list-style-type: square;margin-left:40px;margin-right:16px;\"><li>Mes usages du numérique sont multiples mais je ne suis pas forcément à l'aise avec tous les outils.</li><li>J'ai clairement conscience de mes limites en la matière et gagnerais à échanger davantage avec d'autres enseignants au sein ou en dehors de mon collège.</li><li>C'est d'ailleurs comme cela que j'ai appris : sur le tas et au contact d'enseignants plus débrouillards que moi.</li><li>Aujourd'hui, mes utilisations du numérique sont circonscrites au cadre de mon cours et adaptées à mes besoins.</li><li>Les outils numériques m'apportent beaucoup, notamment sur le plan pédagogique.</li><li> Le numérique me permet d'être plus performant, de proposer des contenus plus lisibles tout en réalisant des gains de temps.</li><li>Je peux difficilement me passer d'utiliser des contenus ou des équipements numériques car mes cours s'appuient sur eux.</li><li>Le numérique me prend du temps, y compris personnel, notamment pour préparer mes cours.</li><li>Je suis pour le numérique mais pas nécessairement pour le tout numérique.</li></ul>"
+		}
+	}
+
+	function loadQuestion(){
+		if(survey.profil_rec != '' + survey.profil_theo){
+			$('#profil_title').html('Votre profil théorique et votre profil reconnu ne coïncident pas.');
+			$('#profil_title').html('Le profil théorique qui ressort suite à vos réponses correspond à celui que vous avez choisi.');
+			$('#block_2_title1').html("Profil reconnu : " + profil_data[survey.profil_rec].title);
+			$('#block_2_title1').css("background-color", profil_data[survey.profil_rec].bgcolor);
+			$('#block_2_text1').html(profil_data[survey.profil_rec].text);
+			$('#block_2_title2').html("Profil théorique : " + profil_data[survey.profil_theo].title);
+			$('#block_2_title2').css("background-color", profil_data[survey.profil_theo].bgcolor);
+			$('#block_2_text2').html(profil_data[survey.profil_theo].text);
+			$('#block_2').css('display', 'block');
+		}else{
+			$('#profil_title').css('background-color', '#00cc00');
+			$('#profil_title').html('Votre profil théorique et votre profil reconnu coïncident.');
+			$('#block_1_title').html(profil_data[survey.profil_theo].title);
+			$('#block_1_title').css("background-color", profil_data[survey.profil_theo].bgcolor);
+			$('#block_1_text').html(profil_data[survey.profil_theo].text);
+			$('#block_1').css('display', 'block');
+		}
+		$("#comment1").val(survey.comment_1);
+		$("#comment1b").val(survey.comment_1);
+		$("#comment2").val(survey.comment_2);
+	}
+
+	function validateQuestion(){
+		if(survey.profil_rec != '' + survey.profil_theo){
+			survey.comment_1 = $("#comment1b").val();	
+		}else{
+			survey.comment_1 = $("#comment1").val();	
+		}
+		survey.comment_2 = $("#comment2").val();
+	}
+	
+</script>

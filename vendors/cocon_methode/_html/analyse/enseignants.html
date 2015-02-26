@@ -1,0 +1,34 @@
+<script type="text/javascript">
+	function initFloatWin(){
+		$("#float_win").css("width", "680px");
+		$("#float_win").css("height", "230px");
+	}
+</script>
+<table width="100%">
+	<tr>
+		<td colspan="3" class="app_title" style="background-color:#02658e; color:white">
+		Analyse des résultats enseignants
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="app_title" style="color:black">
+		Veuillez cliquez sur le format de document que vous souhaitez télécharger.
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;<br>
+			<center><a href="javascript:generateFile('odp');">Open Document (ODP)</a><br><font style="font-size:10px">(nécessite <a href="https://www.openoffice.org/fr/" target="_new">OpenOffice</a> ou <a href="https://fr.libreoffice.org/" target="_new">LibreOffice</a>)</font><br><br><a href="javascript:generateFile('pdf');">Document PDF</a><br><font style="font-size:10px">(nécessite <a href="http://get.adobe.com/fr/reader/" target="_new">Adobe Acrobat Reader</a>)</font></center>
+			&nbsp;<br>
+			<div class="cadre_boutons">
+				<button style="width: 160px" onclick="javascript:closeFloatWin();">Fermer</button>
+			</div>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	function generateFile(_format){
+		window.open('#?gid=' + group_id + '&format=' + _format, '_self');
+	}
+</script>	
