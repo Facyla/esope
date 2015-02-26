@@ -14,8 +14,9 @@ elgg_register_event_handler('init', 'system', 'theme_template_init');
 function theme_template_init() {
 	global $CONFIG; // All site useful vars
 	
-	// Get a plugin setting
-	$setting = elgg_get_plugin_setting('setting_name', 'theme_template');
+	// Extend CSS with custom styles
+	elgg_extend_view('css', 'theme_template/css');
+	elgg_extend_view('css/admin', 'theme_template/admin_css');
 	
 	// HOMEPAGE - Replace public and loggedin homepage
 	/*
@@ -30,6 +31,8 @@ function theme_template_init() {
 	}
 	*/
 	
+	// Get a plugin setting
+	$setting = elgg_get_plugin_setting('setting_name', 'theme_template');
 	// Get a user plugin setting (makes sense only if logged in)
 	if (elgg_is_logged_in()) {
 		$user_guid = elgg_get_logged_in_user_guid();
