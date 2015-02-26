@@ -64,7 +64,7 @@ function cocon_methode_get_user_group($user_guid = false) {
 			// Direction : admin groupe
 			if (!check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				add_entity_relationship($user->guid, 'operator', $group->guid);
-				register_error("En tant que membre de la Direction, vous êtes désormais l'un des responsables du groupe de votre établissement.");
+				system_message("En tant que membre de la Direction, vous êtes désormais l'un des responsables du groupe de votre établissement.");
 			}
 			break;
 		case "1":
@@ -115,6 +115,7 @@ function cocon_methode_get_user_role($user = false) {
 }
 
 
+// Permet de créer un groupe pour un établissement
 function cocon_create_group($code = false) {
 	global $CONFIG;
 	if (!$code) { return false; }
@@ -125,9 +126,22 @@ function cocon_create_group($code = false) {
 	if (elgg_instanceof($group, 'group')) { return $group; }
 	
 	// Liste des établissements
-	$etablissements = esope_build_options($values, true);
-	//$etablissement_name = $etablissements["$code"];
-	$etablissement_name = "Etablissement $code";
+	$values = elgg_get_plugin_setting("etablissements", 'theme_cocon');
+	// CSV = Recursive array : split on \n, then ;
+	$etablissements_csv = esope_get_input_recursive_array($values, array(array("|", "\r", "\t"), ';'), true);
+	//echo '<pre>' . print_r($etablissements, true) . '</pre>';
+	// Build array as code => array('Nom', 'Académie', 'UAI code', 'Département', 'Adresse', 'mail')
+	$etablissements = array();
+	foreach ($etablissements_csv as $etablissement) {
+		// Structure : Nom (0) ; Académie (1) ; UAI (2) ; Département (3) ; Adresse (4) ; mail (5)
+		$etablissements["{$etablissement[2]}"] = $etablissement;
+	}
+	
+	$etablissement_name = $etablissements["$code"][0];
+	$etablissement_academie = $etablissements["$code"][1];
+	$etablissement_departement = $etablissements["$code"][3];
+	$etablissement_adresse = $etablissements["$code"][4];
+	$etablissement_mail = $etablissements["$code"][5];
 	
 	// Create new group
 	$group = new ElggGroup();
@@ -144,6 +158,11 @@ function cocon_create_group($code = false) {
 	
 	// Set main metadata for Kit Méthode Cocon
 	$group->cocon_etablissement = $code;
+	// Add also some useful metadata
+	$group->cocon_academie = $etablissement_academie;
+	$group->cocon_departement = $etablissement_departement;
+	$group->cocon_adresse = $etablissement_adresse;
+	$group->cocon_mail = $etablissement_mail;
 	
 	// Set group tool options : disable all, enable discussions
 	$tool_options = elgg_get_config('group_tool_options');
