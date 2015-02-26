@@ -1,0 +1,265 @@
+<table width="100%">
+	<tr>
+		<td colspan="2" class="app_title" style="background-color:#02658e; color:white">Ensemble d'outils</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">OBJECTIFS</font></b><br>&nbsp;<br>
+			Cet outil va vous permettre d'extraire 1 ou plusieurs documents outils, comme les fiches méthodes, les modèles de fiches.... Sélectionnez les documents que vous souhaitez extraire, ainsi que le format et cliquez sur Télécharger.<br><br>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">DOCUMENTS A EXTRAIRE</font></b><br>&nbsp;<br>
+			<input type="checkbox" name="massive" onclick="javascript:massiveSelect()" />&nbsp;<span style="font-size:12px; color:#888888">Sélectionner tous / Déselectionner tous</span><br>
+			<input type="checkbox" name="demarche" />&nbsp;Présentation de la démarche<br>
+			<input type="checkbox" name="feuille"/>&nbsp;Feuille de route - Préconisations<br>
+			<input type="checkbox" name="feuille2"/>&nbsp;Feuille de route<br>
+			<input type="checkbox" name="temps1"/>&nbsp;Méthode du Temps 1 - Etats des lieux<br>
+			<input type="checkbox" name="pro" />&nbsp;Mode d'emploi du questionnaire Enseignants<br>
+			<input type="checkbox" name="famille" />&nbsp;Questionnaire destiné aux familles<br>
+			<input type="checkbox" name="famille2" />&nbsp;Préconisation d'analyse du questionnaire destiné aux familles<br>
+			<input type="checkbox" name="temps2" />&nbsp;Méthode de Temps 2 - Echanges d'idées et usages</br>
+			<input type="checkbox" name="journal" />&nbsp;Journal de bord</br>
+			<input type="checkbox" name="outils" />&nbsp;Kit d'aide à la logistique</br>
+			<input type="checkbox" name="temps3" />&nbsp;Méthode du Temps 3 - Mise en pratique<br>
+			<input type="checkbox" name="fiche_mep" />&nbsp;Modèle de fiche de mise en pratique<br>
+			<input type="checkbox" name="beaumarchais" />&nbsp;Illustration d'expérimentations réalisées au collège Beaumarchais (Paris 11)<br>
+			<input type="checkbox" name="beaumarchais_videos" />&nbsp;Les 4 vidéos de l'expérimentation Beaumarchais (au format MPEG4)<br>
+			<input type="checkbox" name="bilan" />&nbsp;Bilan - Les étapes de mise en oeuvre<br>
+			<input type="checkbox" name="bilan2"/>&nbsp;Modèle de fiche Bilan<br>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">FORMAT DES DOCUMENTS</font></b><br>&nbsp;<br>
+			<input type="radio" value="odp" name="format" checked="true" />&nbsp;Open Document (ODP)</a>&nbsp;<font style="font-size:10px">(vous pouvez utiliser <a href="https://www.openoffice.org/fr/" target="_new">OpenOffice</a> ou <a href="https://fr.libreoffice.org/" target="_new">LibreOffice</a>)</font><br>
+			<input type="radio" value="pdf" name="format" />&nbsp;Document PDF</a>&nbsp;<font style="font-size:10px">(vous pouvez utiliser <a href="http://get.adobe.com/fr/reader/" target="_new">Adobe Acrobat Reader</a>)</font>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<button onclick="javascript:downloadResults();" id="btn" style="display:block;">Télécharger</button><p align="center" id="limg" style="display:none;">Création de l'archive ZIP. Patientez s.v.p...<br><img src="css/images/loader.gif"/></p>
+		</td>
+	</tr>
+	
+</table>
+<script type="text/javascript">
+	
+	var _urls = new Array();
+	var _index_file = 0;
+	var _files = '';
+	
+	function massiveSelect(){
+		_sel = $("input:checkbox[name='massive']:checked").val();
+		if(_sel == 'on'){
+			_sel = true;
+		}else{
+			_sel = false;
+		}
+		
+		$("input:checkbox").each(function(){
+			this.checked = _sel; 
+		});
+	}
+	
+	function downloadResults(){
+		_urls = new Array();
+		_index_file = 0;
+		_files = "";
+		
+		_demarche = "";
+		_feuille = "";
+		_feuille2 = "";
+		_temps1 = "";
+		_pro = "";
+		_famille = "";
+		_famille2 = "";
+		_temps2 = "";
+		_journal = "";
+		_outils = "";
+		_temps3 = "";
+		_fiche_mep = "";
+		_beaumarchais = "";
+		_beaumarchais_videos = "";
+		_bilan = "";
+		_bilan2 = "";
+		_format = "odp"
+
+		_demarche = $("input:checkbox[name='demarche']:checked").val();
+		_feuille = $("input:checkbox[name='feuille']:checked").val();
+		_feuille2 = $("input:checkbox[name='feuille2']:checked").val();
+		_temps1 = $("input:checkbox[name='temps1']:checked").val();
+		_pro = $("input:checkbox[name='pro']:checked").val();
+		_famille = $("input:checkbox[name='famille']:checked").val();
+		_famille2 = $("input:checkbox[name='famille2']:checked").val();
+		_temps2 = $("input:checkbox[name='temps2']:checked").val();
+		_journal = $("input:checkbox[name='journal']:checked").val();
+		_outils = $("input:checkbox[name='outils']:checked").val();
+		_temps3 = $("input:checkbox[name='temps3']:checked").val();
+		_fiche_mep = $("input:checkbox[name='fiche_mep']:checked").val();
+		_beaumarchais = $("input:checkbox[name='beaumarchais']:checked").val();
+		_beaumarchais_videos = $("input:checkbox[name='beaumarchais_videos']:checked").val();
+		_bilan = $("input:checkbox[name='bilan']:checked").val();
+		_bilan2 = $("input:checkbox[name='bilan2']:checked").val();
+
+		_format = $("input:radio[name='format']:checked").val();
+		
+		if(_demarche == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=synthese_demarche_contenu" + "&format=" + _format);
+			_files += 'synthese_demarche_contenu.' + _format + ';';
+		}
+
+		if(_feuille == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=feuille_de_route_preco" + "&format=" + _format);
+			_files += 'feuille_de_route_preco.' + _format + ';';
+		}
+		
+		if(_feuille2 == "on"){
+			_urls.push("php/feuille_route/generateFeuille.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&format=" + _format + "&zip=1");
+			_files = 'feuille_de_route.' + _format + ';';
+		}
+
+		if(_temps1 == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_methode_temps1" + "&format=" + _format);
+			_files += 'fiche_methode_temps1.' + _format + ';';
+		}
+		
+		if(_pro == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=questionnaire_enseignants_methodo" + "&format=" + _format);
+			_files += 'questionnaire_enseignants_methodo.' + _format + ';';
+		}
+
+		if(_famille == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=questionnaire_famille" + "&format=" + _format);
+			_files += 'questionnaire_famille.' + _format + ';';
+		}
+
+		if(_famille2 == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=questionnaire_famille_preco" + "&format=" + _format);
+			_files += 'questionnaire_famille_preco.' + _format + ';';
+		}
+		
+		if(_temps2 == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_methode_temps2" + "&format=" + _format);
+			_files += 'fiche_methode_temps2.' + _format + ';';
+		}
+		
+		if(_journal == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=journal_de_bord" + "&format=" + _format);
+			_files += 'journal_de_bord.' + _format + ';';
+		}
+
+		if(_outils == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=kit_logistique" + "&format=" + _format);
+			_files += 'kit_logistique.' + _format + ';';
+		}
+
+		if(_temps3 == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_methode_temps3" + "&format=" + _format);
+			_files += 'fiche_methode_temps3.' + _format + ';';
+		}
+
+		if(_fiche_mep == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_mise_en_pratique" + "&format=" + _format);
+			_files += 'fiche_mise_en_pratique.' + _format + ';';
+		}
+
+		if(_beaumarchais == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=beaumarchais" + "&format=" + _format);
+			_files += 'beaumarchais.' + _format + ';';
+		}
+
+		if(_beaumarchais_videos == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=beaumarchais_video1" + "&format=mp4");
+			_files += 'beaumarchais_video1.mp4;';
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=beaumarchais_video2" + "&format=mp4");
+			_files += 'beaumarchais_video2.mp4;';
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=beaumarchais_video3" + "&format=mp4");
+			_files += 'beaumarchais_video3.mp4;';
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=beaumarchais_video4" + "&format=mp4");
+			_files += 'beaumarchais_video4.mp4;';
+			
+			if(_urls.length > 4){
+				alert("Il n'est pas recommandé d'extraire les vidéos de l'expérimentation Beaumarchais en même temps que les documents.");
+				return;
+			}
+			
+		}
+
+		if(_bilan == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_methode_bilan" + "&format=" + _format);
+			_files += 'fiche_methode_bilan.' + _format + ';';
+		}
+
+		if(_bilan2 == "on"){
+			_urls.push("php/copyFile.php?cid=" + config.cycle_id + "&gid=" + config.group_id + "&file=fiche_bilan" + "&format=" + _format);
+			_files += 'fiche_bilan.' + _format + ';';
+		}
+
+		if(_files == '' || _urls.length == 0){
+			alert('Vous devez sélectionner vos documents.');
+			return;
+		}
+		
+		$('#btn').css('display', 'none');
+		$('#limg').css('display', 'block');
+		
+		generateFile();
+	}
+	
+	function generateFile(){
+		
+		$.ajax({
+			type: 'GET',
+			url: _urls[_index_file],
+			dataType: 'json',
+			success : generateFile__response
+		});
+		
+	}
+	
+	function generateFile__response(_r){
+		if(_r.error){
+			$('#btn').css('display', 'block');
+			$('#limg').css('display', 'none');		
+			alert("Erreur lors du téléchargement.");
+		}else{
+		
+			_index_file++;
+
+			if(_index_file == _urls.length){
+				$('#btn').css('display', 'block');
+				$('#limg').css('display', 'none');
+
+				if(_urls.length == 0){
+					alert("Aucun document à extraire.");
+					return;
+				}else{
+					window.open('php/getZIP.php?cid=' + config.cycle_id + '&gid=' + config.group_id + '&files=' + _files + '&zip=outils.zip', '_new');
+					return;
+				}
+			}else{
+				generateFile();
+			}
+		}
+		return;
+	}
+	
+</script>
