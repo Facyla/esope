@@ -34,27 +34,25 @@ function cocon_methode_get_user_group($user_guid = false) {
 	// Create group is it doesn't exist yet
 	if (empty($user->cocon_etablissement)) { return false; }
 	
+	// Ignore access during creation process
+	$ia = elgg_set_ignore_access(true);
+	
 	// Détermine le groupe associé à l'utilisateur - a priori celui de l'établissement correspondant
 	$user_group = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'cocon_etablissement', 'value' => $user->cocon_etablissement)));
 	$group = $user_group[0];
 	
-	
-	// Create group is it does not exist
+	// Create group if it does not exist
 	if (!elgg_instanceof($group, 'group')) {
 		$group = cocon_create_group($user->cocon_etablissement);
-		$group->join($user);
-		error_log("COCON : group did not exist. Created : {$group->guid}");
-		// Refresh page
-		//forward('methode');
+		error_log("COCON : group for {$user->cocon_etablissement} did not exist. Created as {$group->guid}.");
 	}
 	
-	// Join group is not member yet
-	if (elgg_instanceof($group, 'group')) {
-		if (!$group->isMember($user)) {
-			$group->join($user);
-			register_error("Vous avez été inscrit dans le groupe de votre établissement : {$group->name}");
-			//error_log("COCON : group joined");
-		}
+	// Join group if not member yet
+	if (elgg_instanceof($group, 'group') && !$group->isMember($user)) {
+		groups_join_group($group, $user);
+		// add_user_to_access_collection($user->guid, $acl); // Force access collection
+		system_message("Vous avez été inscrit dans le groupe de votre établissement : {$group->name}");
+		error_log("COCON : group joined");
 	}
 	
 	// Update group role according to user role
@@ -85,6 +83,9 @@ function cocon_methode_get_user_group($user_guid = false) {
 	$user_groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => 0));
 	$group = $user_groups[0];
 	*/
+	
+	// Restore original access
+	elgg_set_ignore_access($ia);
 	
 	return $group->guid;
 }
@@ -119,6 +120,9 @@ function cocon_methode_get_user_role($user = false) {
 function cocon_create_group($code = false) {
 	global $CONFIG;
 	if (!$code) { return false; }
+	
+	// Ignore access during creation process
+	$ia = elgg_set_ignore_access(true);
 	
 	// Avoid duplicates
 	$user_group = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'cocon_etablissement', 'value' => $code)));
@@ -175,6 +179,9 @@ function cocon_create_group($code = false) {
 	}
 	// Enable discussions
 	$group->forum_enable = 'yes';
+	
+	// Restore original access
+	elgg_set_ignore_access($ia);
 	
 	return $group;
 }
