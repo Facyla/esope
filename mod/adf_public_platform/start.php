@@ -1695,7 +1695,7 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
 	$options = explode("\n", $options);
 	$options_values = array();
 	if ($addempty) $options_values[''] = "";
-	foreach($options as $option) {
+	if (is_array($options)) foreach($options as $option) {
 		$option = trim($option);
 		if (!empty($option)) {
 			if (strpos($option, '::')) {
@@ -1715,7 +1715,7 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
  */
 function esope_build_options_string($options, $prefix = 'option') {
 	$options_string = '';
-	if ($options) foreach ($options as $key => $value) {
+	if (is_array($options)) foreach ($options as $key => $value) {
 		if (!empty($options_string)) $options_string .= ' | ';
 		$options_string .= $key . '::' . $value;
 	}
