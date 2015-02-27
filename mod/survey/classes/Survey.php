@@ -237,5 +237,36 @@ class Survey extends ElggObject {
 		return $guids;
 	}
 	
+	/** Get response values for the given question
+	 *
+	 * @param string $question
+	 * @return array Values => count
+	 */
+	public function getValuesForQuestion($question) {
+		$values = array();
+		// Make sure the values have been populated
+		//$this->fetchResponses();
+		// @TODO add count stats for question values
+		
+		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
+		
+		if (in_array($question->input_type, array('test', 'plaintext', 'longtext', 'date'))) {
+			// Free text or value
+			foreach($responses as $response) {
+				$values[] = $response->value;
+			}
+		} else {
+			// Closed list values
+			// @TODO clean option list (add function for that)
+			//$question->options
+			// @TODO add empty value
+			//$question->empty_value
+			foreach($responses as $response) {
+				$values[] = $response->value;
+			}
+		}
+		return $values;
+	}
+	
 }
 

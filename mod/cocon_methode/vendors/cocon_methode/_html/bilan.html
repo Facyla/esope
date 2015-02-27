@@ -1,0 +1,164 @@
+<table width="100%">
+	<tr>
+		<td colspan="2" class="app_title" style="background-color:#02658e; color:white">Bilan</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">OBJECTIFS</font></b><br>&nbsp;<br>
+			Ce temps de bilan consiste principalement en un temps d’échange entre l’équipe projet et les différentes parties prenantes
+			qui ont participé à la démarche. Les membres du projet pourront ainsi faire le point sur la mise en place de pratiques numériques
+			et sur la création des dynamiques collectives au sein de la communauté enseignante. Cette étape doit également permettre de définir
+			et de partager les prochaines étapes à mettre en œuvre.<br><br>
+			<a href="_files/fiche_methode_bilan.pdf" target="_new">Télécharger la fiche méthode du bilan.</a>			
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">A FAIRE SUR CE TEMPS</font></b><br>&nbsp;<br>
+			<ul style="list-style-type: none;margin-left:40px;margin-right:16px;">
+				<li>Analyser les fiches actions remplies par les enseignants suite
+				à leur mise en pratique.</li>
+				<li>Compiler les besoins exprimés par les enseignants pour poursuivre le
+				développement de leurs pratiques numériques.</li>
+				<li>Prévoir éventuellement de faire passer un questionnaire de satisfaction
+				auprès des enseignants ayant participés à la démarche.</li>
+				<li>Organiser un temps de parole permettant de revenir sur les enseignements de la démarche, les résultats obtenus notamment en termes
+				de mises en pratique et de définir les prochaines étapes en fonction de ces observations</li>
+				<li>Actualiser le volet numérique du projet d’établissement au vu de ces premiers résultats et prochaines étapes.</li>
+				<li>Capitaliser sur ces résultats en pensant notamment à exporter tous les documents produits au cours de la démarche.</li>
+			</ul>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">BILAN DE LA DEMARCHE</font></b><br>&nbsp;<br>
+			<table style="width:100%">
+				<tr>
+					<td style="width:25%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:docBilan();"><img src="css/images/pdf.png" border="0" /></a><br>Télécharger le modèle de fiche Bilan
+					</td>						
+					<td style="width:25%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:loadFloatWin('dialog/fiches_explorer');"><img src="css/images/save_all.png" border="0" /></a><br>Analyser les fiches actions
+					</td>
+					<td style="width:25%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:loadBilan();"><img src="css/images/fiche.png" border="0" /></a><br>Remplir la fiche Bilan
+					</td>
+					<td style="width:25%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:_docType='bilan'; _dlgTitle='T&eacute;l&eacute;charger la fiche Bilan'; loadFloatWin('dialog/doc_format');"><img src="css/images/pdf.png" border="0" /></a><br>Télécharger votre fiche Bilan
+					</td>						
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<hr>
+		</td>
+	</tr>	
+	<tr>
+		<td colspan="2" style="padding:4px;padding-left:16px;color:#000000;font-size:13px;">
+			<b><font color="#02658e">QUESTIONNAIRE DE SATISFACTION</font></b><br>&nbsp;<br>
+			<table style="width:100%">
+				<tr>
+					<td style="width:33%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:inviterSatisfaction();"><img src="css/images/fiche.png" border="0" /></a><br>Inviter les enseignants
+					</td>
+					<td style="width:33%;text-align:center;font-size: 12px;color:#02658e">
+						<a href="javascript:_docType='satisf'; _dlgTitle='Enqu&ecirc;te de satisfaction'; loadFloatWin('dialog/doc_format');"><img src="css/images/analyze.png" border="0" /></a><br>Résultats
+					</td>
+					<td style="width:33%;text-align:center;font-size: 12px;color:#02658e">&nbsp;</td>						
+				</tr>
+			</table>
+			<br>&nbsp;
+		</td>
+	</tr>
+	
+</table>
+<script type="text/javascript">
+
+	var _docType = '';
+	var _dlgTitle = '';
+	var _txtEmail = '';
+	var _typeEmail = '';
+	
+	function inviterSatisfaction(){
+		_dlgTitle = 'Inviter &agrave; remplir le questionnaire de satisfaction';
+		_typeEmail = 'satisfaction';
+		_txtEmail = 'email_questionnaire_satisfaction';
+		loadFloatWin('dialog/envoi_email');		
+	}
+	
+	function envoyerMessage(){
+		r = confirm("Ce message sera envoy\351 à tous les enseignants inscrits au groupe CoCon de votre collège. Continuer ?");
+
+		if(r){
+			_email = {
+				"email" : $('textarea#text_email').val()
+			}
+			$.ajax({
+				url: 'php/envoyerEmail.php',
+				type : 'POST',
+				data :'cid=' + config.cycle_id + '&gid=' + config.group_id + '&type=' + _typeEmail + '&json=' + JSON.stringify(_email),
+				dataType : 'json',
+				success : envoyerMessage__response
+			});
+		}
+	}
+	
+	function envoyerMessage__response(_response){
+	
+		if(_response.error){
+			alert(_response.error_string);
+		}else{
+			alert('Le message a \351t\351 envoy\351.');
+			closeFloatWin();
+		}
+	
+	}
+	
+	function showPInfos(_pid){
+		if($('#' + _pid).css('display') == 'block'){
+			$('#' + _pid).css('display', 'none');
+		}else{
+			$('#' + _pid).css('display', 'block');
+		}
+	}
+
+	function docBilan(){
+		_docType = "doc_bilan";
+		_dlgTitle = 'Modèle de fiche Bilan';
+		loadFloatWin('dialog/doc_format');		
+	}	
+	
+	function loadBilan(){
+		window.open('bilan/index.html?cid=' + config.cycle_id + '&gid=' + config.group_id, '_new');
+	}
+	
+	function generateFile(_format){
+		closeFloatWin();
+		if(_docType == 'doc_bilan'){
+			window.open('_files/bilan.' + _format, '_new');
+		}
+
+		if(_docType == 'bilan'){
+			window.open('php/bilan/generateBilan.php?cid=' + config.cycle_id + '&gid=' + config.group_id + '&format=' + _format, '_new');
+		}
+		
+		if(_docType == 'satisf'){
+			window.open('php/survey/satisfaction/generate.php?cid=' + config.cycle_id + '&gid=' + config.group_id + '&format=' + _format, '_new');
+		}
+	}
+	
+</script>

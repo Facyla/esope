@@ -397,9 +397,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 
 
 /* WIDGETS */
-.elgg-module-widget:hover, 
-.elgg-module-widget:focus, 
-.elgg-module-widget:active { background-color: transparent; }
+.elgg-module-widget:hover, .elgg-module-widget:focus, .elgg-module-widget:active { background-color: transparent; }
 /* Widgets - à corriger pour utiliser les classes du framework Elgg */
 section div.module {
 	background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent;
@@ -425,15 +423,17 @@ section div.module header {
 	-webkit-border-radius: 10px 10px 0 0;
 	-o-border-radius: 10px 10px 0 0;
 	border-top: 0 none;
-min-height: 33px;
+	min-height: 33px;
 }
 section div.module header h2 {
 	color: <?php echo $color14; ?>;
-	float: left;
+	/* float: left; */
 	font-family: <?php echo $font1; ?>;
 	font-size: 1.25em;
 	text-transform: uppercase;
 	font-weight: normal;
+	max-width:none;
+	float:none;
 }
 /* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
 a.elgg-widget-collapse-button,

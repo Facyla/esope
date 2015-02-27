@@ -168,7 +168,17 @@ Afficher le sondage et y répondre :
 	'survey:type:date' => "Date",
 	'survey:type:date:details' => "Pour une date à choisir dans un calendrier",
 	// Responses
+	'survey:results' => "Résultats du sondage",
 	'survey:result:label' => "\"%s\" (%s réponses)",
+	'survey:results:summary' => "Résumé des résultats",
+	'survey:results:full' => "Résultats détaillés",
+	'survey:results:user_details' => "Voir le détail pour ce répondant",
+	'survey:results:user_details:title' => "Détail des réponses par répondant",
+	'survey:results:question_details' => "Voir le détail pour cette question",
+	'survey:results:question_details:title' => "Détail des réponses par répondant",
+	'survey:results:questions' => "Liste des questions",
+	'survey:results:users' => "Liste des répondants",
+	'survey:results:values' => "Liste des réponses",
 	
 	
 );

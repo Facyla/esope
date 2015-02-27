@@ -1,0 +1,117 @@
+<table width="100%" align="left" valign="top">
+	<tr>
+		<td style="width:33%;">
+			&nbsp;<br>
+			<div class="cadre_reponses">
+				<div class="cadre_titre">
+					Invitations au questionnaire
+					<span>10</span>
+				</div>
+				<div class="cadre_item">
+					R&eacute;ponses compl&egrave;tes
+					<span>2</span>
+				</div>
+				<div class="cadre_item">
+					R&eacute;ponses en cours
+					<span>3</span>
+				</div>
+				<div class="cadre_item">
+					R&eacute;ponses en attente
+					<span>5</span>
+				</div>
+				<div class="cadre_boutons">
+					<button style="width: 160px" onclick="javascript:sendInvitation();">Inviter au questionnaire</button>
+				</div>
+			</div>
+			&nbsp;<br>
+			<div class="cadre_reponses">
+				<div class="cadre_titre">
+					Documents de restitution
+				</div>
+				<div class="cadre_item">
+					Matrice de positionnement
+					<span>
+						<a href="mailto:contact@domain.com"><img src="css/images/email.png" alt="Envoyer par email" title="Envoyer par email" border="0" /></a>
+						<img src="css/images/download.png" alt="T&eacute;l&eacute;charger la restitution" title="T&eacute;l&eacute;charger la restitution" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					R&eacute;sultat &agrave; plat
+					<span>
+						<a href="mailto:contact@domain.com"><img src="css/images/email.png" alt="Envoyer par email" title="Envoyer par email" border="0" /></a>
+						<img src="css/images/download.png" alt="T&eacute;l&eacute;charger la restitution" title="T&eacute;l&eacute;charger la restitution" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					R&eacute;sultat par th&eacute;matique
+					<span>
+						<a href="mailto:contact@domain.com"><img src="css/images/email.png" alt="Envoyer par email" title="Envoyer par email" border="0" /></a>
+						<img src="css/images/download.png" alt="T&eacute;l&eacute;charger la restitution" title="T&eacute;l&eacute;charger la restitution" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					Cartographie des profils
+					<span>
+						<a href="mailto:contact@domain.com"><img src="css/images/email.png" alt="Envoyer par email" title="Envoyer par email" border="0" /></a>
+						<img src="css/images/download.png" alt="T&eacute;l&eacute;charger la restitution" title="T&eacute;l&eacute;charger la restitution" />
+					</span>
+				<br>&nbsp;
+				</div>
+			</div>
+		</td>
+		<td style="width:66%;">
+			&nbsp;<br>
+			<div class="cadre_reponses">
+				<div class="cadre_titre" style="width:99%">
+					Cartographie des profils d'enseignants
+				</div>
+				<div class="cadre_item" style="vertical-align:middle">
+					UTILISATEUR ATTENTIF
+					<span>
+					45%&nbsp;
+					<img src="css/images/bar_blue.gif" width="90px" height="15px" />
+					<img src="css/images/bar_cyan.gif" width="110px" height="15px" />
+					<img src="css/images/info.png" alt="Infos sur le profil" title="Infos sur le profil" onclick="javascript:loadProfil('utilisateur_attentif')" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					UTILISATEUR CATALYSEUR
+					<span>
+					25%&nbsp;
+					<img src="css/images/bar_blue.gif" width="50px" height="15px" />
+					<img src="css/images/bar_cyan.gif" width="150px" height="15px" />
+					<img src="css/images/info.png" alt="Infos sur le profil" title="Infos sur le profil" onclick="javascript:loadProfil('utilisateur_catalyseur')" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					UTILISATEUR SOLITAIRE
+					<span>
+					15%&nbsp;
+					<img src="css/images/bar_blue.gif" width="30px" height="15px" />
+					<img src="css/images/bar_cyan.gif" width="170px" height="15px" />
+					<img src="css/images/info.png" alt="Infos sur le profil" title="Infos sur le profil" onclick="javascript:loadProfil('utilisateur_solitaire')" />
+					</span>
+				</div>
+				<div class="cadre_item">
+					NON-UTILISATEUR REVENDIQUE
+					<span>
+					15%&nbsp;
+					<img src="css/images/bar_blue.gif" width="30px" height="15px" />
+					<img src="css/images/bar_cyan.gif" width="170px" height="15px" />
+					<img src="css/images/info.png" alt="Infos sur le profil" title="Infos sur le profil" onclick="javascript:loadProfil('non_utilisateur_revendique')" />
+					</span>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+&nbsp;<br>
+
+<script type="text/javascript">
+	function loadEtat(){
+	}
+	
+	function sendInvitation(){
+		alert("L'invitation a été transmise aux enseignants de votre collège.");
+	}
+</script>

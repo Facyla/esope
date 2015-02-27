@@ -98,9 +98,10 @@ if (elgg_is_logged_in()) {
 						//'<span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>';
 						?></a></h1>
 						<?php if (elgg_is_logged_in()) { ?>
-							<a href="<?php echo $url . 'profile/' . $ownusername; ?>"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></span></a>
+							<a href="<?php echo $url . 'profile/' . $ownusername; ?>" class="profile-link"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></span></a>
 							<nav>
-								<ul>
+								<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+								<ul id="menu-topbar">
 									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
 									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('friends'); ?></a></li>
@@ -127,10 +128,10 @@ if (elgg_is_logged_in()) {
 								</ul>
 							</nav>
 						<?php } else {
-							echo '<nav><ul>
-								<li><a href="' . $url . 'login"><i class="fa fa-circle-o"></i>' . elgg_echo('login') . '</a></li>
-								<li><a href="' . $url . 'register"><i class="fa fa-sign-in"></i>' . elgg_echo('register') . '</a></li>
-								</ul></nav>';
+							echo '<nav><ul>';
+							echo '<li><a href="' . $url . 'login"><i class="fa fa-circle-o"></i>' . elgg_echo('login') . '</a></li>';
+							echo '<li><a href="' . $url . 'register"><i class="fa fa-sign-in"></i>' . elgg_echo('register') . '</a></li>';
+							echo '</ul></nav>';
 						} ?>
 						<?php echo elgg_view('page/elements/social_presence'); ?>
 					</div>
@@ -140,7 +141,8 @@ if (elgg_is_logged_in()) {
 			<div id="transverse" class="nois-floatable">
 				<div class="interne">
 					<nav>
-						<ul>
+							<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
+							<ul id="menu-navigation">
 							<li class="home"><a href="<?php echo $url; ?>" <?php if ((full_url() == $url) || (full_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('adf_platform:homepage'); ?></a>
 								<?php if (elgg_is_logged_in()) { ?>
 									<?php if (elgg_is_active_plugin('dashboard')) { ?>
@@ -205,7 +207,7 @@ if (elgg_is_logged_in()) {
 					</nav>
 					
 					<?php if (elgg_is_active_plugin('search')) { ?>
-						<form action="<?php echo $url . 'search'; ?>" method="get">
+						<form id="main-search" action="<?php echo $url . 'search'; ?>" method="get">
 							<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 							<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
 							<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>

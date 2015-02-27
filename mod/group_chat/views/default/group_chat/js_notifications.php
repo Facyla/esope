@@ -2,8 +2,11 @@
 // Adds a new chat messages notifier
 // Note : does not add link in interface, as these are added through profile dropdown menu
 
-$user_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
+/*
+$user_chat = elgg_get_plugin_setting('user_chat', 'group_chat');
 if (!elgg_is_logged_in() || ($user_chat != 'yes')) { return; }
+*/
+if (!elgg_is_logged_in()) { return; }
 $own = elgg_get_logged_in_user_entity();
 
 // Check enabled notifications
@@ -12,7 +15,7 @@ $site_notification = elgg_get_plugin_setting('site_notification', 'group_chat');
 $user_notification = elgg_get_plugin_setting('user_notification', 'group_chat');
 
 // Break if we don't use any
-if (($group_notification != 'yes') || ($site_notification != 'yes') || ($user_notification != 'yes')) return;
+if (($group_notification != 'yes') && ($site_notification != 'yes') && ($user_notification != 'yes')) return;
 ?>
 
 <script type="text/javascript">

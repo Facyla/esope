@@ -1,0 +1,100 @@
+<style type="text/css">
+	td.app_label{
+		text-align:center;
+	}
+	
+	#app_content textarea{
+		width:95%;
+		height: 96px;
+	}
+</style>
+<table width="100%">
+	<tr>
+		<td colspan="4" class="app_title">Fiche de mise en pratique</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;text-align:center;">
+		<br><center>
+				<div style="width:200px;height:17px;background-color:#eeeeee">
+					<div style="width: 20%;background-color:#0088ff;height:17px;float:left"></div>
+				</div>
+			</center>25%<br>
+		</td>
+	</tr>
+	<tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Objectifs pédagogiques poursuivis par les séquences repensées, à mettre en pratique</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea id="zone1" maxlength="2000"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Niveau concerné et connaissances / compétences travaillées</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea  id="zone2" maxlength="2000"></textarea>
+		</td>
+	</tr>			
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Equipement(s) mobilisé(s)</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea  id="zone3" maxlength="2000"></textarea>
+		</td>
+	</tr>			
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Ressource(s) envisagée(s)</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea  id="zone4" maxlength="2000"></textarea>
+		</td>
+	</tr>			
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Production finale prévue</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea  id="zone5" maxlength="2000"></textarea>
+		</td>
+	</tr>			
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+</table>
+
+<script type="text/javascript">
+	
+	function loadFields(){
+		$("#zone1").val(fiche.zone1);
+		$("#zone2").val(fiche.zone2);
+		$("#zone3").val(fiche.zone3);
+		$("#zone4").val(fiche.zone4);
+		$("#zone5").val(fiche.zone5);
+	}
+
+	function validateFields(){
+		fiche.zone1 = $("#zone1").val();
+		fiche.zone2 = $("#zone2").val();
+		fiche.zone3 = $("#zone3").val();
+		fiche.zone4 = $("#zone4").val();
+		fiche.zone5 = $("#zone5").val();
+	}
+	
+</script>

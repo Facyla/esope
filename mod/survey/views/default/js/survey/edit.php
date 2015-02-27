@@ -39,8 +39,8 @@ elgg.survey.edit.addQuestion = function(e) {
 	var q_description = '<p class="question_description_' + qnum + '"><a href="#" class="survey-input-toggle" data-id="question_description_' + qnum + '">' + elgg.echo('survey:question:toggle') + '</a> <label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description_' + qnum + '" style="display:none;"></textarea>';
 	
 	var q_required = '<p class="question_required_' + qnum + '" style="float:right;"><label>' + elgg.echo('survey:question:required') + ' <select class="survey-input-question-required" name="question_required_' + qnum + '">' 
-			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 			+ '<option value="no">' + elgg.echo('survey:option:no') + '</option>' 
+			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 		+ '</select></label></p>';
 	
 	var q_input_type = '<p class="question_input_type_' + qnum + '"><label>' + elgg.echo('survey:question:input_type') + ' <select class="survey-input-question-input-type" name="question_input_type_' + qnum + '" data-id="' + qnum + '">' 
