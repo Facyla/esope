@@ -28,8 +28,8 @@ Il n'est pas prévu pour être utilisé hors de cet environnement.
 ## Installation
 
 1. Ce plugin nécessite une base de données indépendante de celle d'Elgg : 
-	1. Créer une base de données, du même nom que celle d'Elgg, avec la terminaison "_methode", par ex. DB_NAME => DB_NAME_methode
-	2. Importer le script SQL dans la nouvelle base : script disponible dans cocon_methode/vendors/cocon_methode/sql/base.sql
+	1. Créer une base de données, du même nom que celle d'Elgg, avec la terminaison "_methode", par ex. DB_NAME => DB_NAME_methode : **CREATE DATABASE cocon_methode;**
+	2. Importer le script SQL dans la nouvelle base : script disponible dans cocon_methode/vendors/cocon_methode/sql/base.sql : **mysql -u DB_USER -p cocon_methode < base.sql**
 2. Vérifier que le serveur peut bien lire et écrire dans le dossier mod/cocon_methode/vendors/cocon_methode/_tmp/ (fichiers temporaires)
 3. Activer le plugin "Méthode" + Vérifier que le plugin "Thème Cocon" est activé
 4. Créer (via profile_manager) les champs de profil suivants :
