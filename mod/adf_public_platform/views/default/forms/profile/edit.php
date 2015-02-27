@@ -219,11 +219,13 @@
 					$field_result .= "</div>";
 				}
 				
-				$field_result .= elgg_view('input/access', array('name' => 'accesslevel[' . $metadata_name . ']', 'value' => $access_id)); 
+				// Esope : updated to allow per-field access style + label
+				$field_result .= '<span class="elgg-input-field-access"><label>' . elgg_echo('esope:access:userfield') . elgg_view('input/access', array('name' => 'accesslevel[' . $metadata_name . ']', 'value' => $access_id)) . '</label></span>';
 				$field_result .= "</div>";
 				
-				$tab_content .= $field_result;
-				$list_content .= $field_result;
+				// Esope : add class for styling
+				$tab_content .= '<span class="form-profile-field">' . $field_result . '</span>';
+				$list_content .= '<span class="form-profile-field">' . $field_result . '</span>';
 			}
 			
 			$tab_content .= "</div>\n";
@@ -276,7 +278,7 @@
 			}
 		</script>
 		<style type="text/css">
-			.elgg-input-access {
+			.elgg-input-access, .elgg-input-field-access {
 				display: none;
 			}
 			.simple_access_control {

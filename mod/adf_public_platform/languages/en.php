@@ -750,6 +750,7 @@ $en = array(
 	'esope:likes' => "Liked content",
 	
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
+	'esope:access:userfield' => "Viewable by...",
 	
 	// Group tools FA icons *override* - please update CSS accordingly
 	/* @TODO

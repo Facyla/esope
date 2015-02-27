@@ -7,7 +7,7 @@ elgg_register_event_handler('init','system','cocon_methode_init');
 /* Initialise the theme */
 function cocon_methode_init(){
 	
-	// Gives access to the module at SITE_URL/cocon_methode/
+	// Gives access to the module at SITE_URL/methode/
 	elgg_register_page_handler("methode", "cocon_methode_page_handler");
 	
 }
@@ -44,15 +44,18 @@ function cocon_methode_get_user_group($user_guid = false) {
 	// Create group if it does not exist
 	if (!elgg_instanceof($group, 'group')) {
 		$group = cocon_create_group($user->cocon_etablissement);
-		error_log("COCON : group for {$user->cocon_etablissement} did not exist. Created as {$group->guid}.");
+		$msg = elgg_echo('cocon_methode:group:created');
+		system_message($msg);
+		//error_log("COCON : group for {$user->cocon_etablissement} did not exist. Created as {$group->guid}.");
 	}
 	
 	// Join group if not member yet
 	if (elgg_instanceof($group, 'group') && !$group->isMember($user)) {
 		groups_join_group($group, $user);
 		// add_user_to_access_collection($user->guid, $acl); // Force access collection
-		system_message("Vous avez été inscrit dans le groupe de votre établissement : {$group->name}");
-		error_log("COCON : group joined");
+		$msg = elgg_echo('cocon_methode:group:joined', array($group->name));
+		system_message($msg);
+		//error_log("COCON : group joined");
 	}
 	
 	// Update group role according to user role
@@ -62,13 +65,16 @@ function cocon_methode_get_user_group($user_guid = false) {
 			// Direction : admin groupe
 			if (!check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				add_entity_relationship($user->guid, 'operator', $group->guid);
-				system_message("En tant que membre de la Direction, vous êtes désormais l'un des responsables du groupe de votre établissement.");
+				$msg = elgg_echo('cocon_methode:group:admin', array($group->name));
+				system_message($msg);
 			}
 			break;
 		case "1":
 			// Equipe : simple membre
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
+				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
+				system_message($msg);
 			}
 			break;
 		case "2":
@@ -76,6 +82,8 @@ function cocon_methode_get_user_group($user_guid = false) {
 			// Autre : simple membre aussi ? ou rien du tout ?
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
+				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
+				system_message($msg);
 			}
 	}
 	
