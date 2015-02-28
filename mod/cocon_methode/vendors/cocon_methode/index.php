@@ -29,8 +29,11 @@ $gid = cocon_methode_get_user_group();
 $group = get_entity($gid);
 if (!elgg_instanceof($group, 'group')) {
 	//error_log("COCON : $gid INVALIDE");
-	register_error("Pour utiliser ce kit, votre compte doit être rattaché à un établissement.");
-	forward();
+	$msg = elgg_echo('cocon_methode:error:requiredetab');
+	register_error($msg);
+	$msg = elgg_echo('cocon_methode:editprofile');
+	register_error($msg);
+	forward("profile/{$own->username}/edit");
 }
 
 //error_log("COCON : {$own->name}, role $user_role, membre du groupe $gid {$group->name}");

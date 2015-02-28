@@ -748,6 +748,7 @@ $fr = array(
 	'esope:likes' => "Contenus appréciés",
 	
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
+	'esope:access:userfield' => "Visible par...",
 	
 	/* Esope FA icons - generic usage */
 	// Tools

@@ -612,6 +612,9 @@ textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100% !importan
 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
+/* Sélecteur de visibilité des champs du profil */
+.elgg-input-field-access { margin-bottom: 1ex; margin-left: 0.5ex; display: inline-block; }
+form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 
 /* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
