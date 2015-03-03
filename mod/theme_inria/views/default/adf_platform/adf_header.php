@@ -218,8 +218,9 @@ if (elgg_is_logged_in()) {
 										</ul>
 									</li>
 								<?php } ?>
-
+								
 								<?php
+								// Custom menu
 								$main_menu_help_count = elgg_get_plugin_setting('help_menu_count', 'theme_inria');
 								if (!empty($main_menu_help_count)) {
 									?>
