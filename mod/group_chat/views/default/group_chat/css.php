@@ -1,26 +1,22 @@
-#page-wrap { width: 333px; margin: 0px auto; background-color:#FFFFFF; float:right}
+/* Chat layout and main styles */
 
-#chat-wrap { margin:0px; }
-#chat-area  { height: 280px; overflow: auto; padding: 10px; background: white; }
-#chat-area span { color: #D6D6D6; margin: 18px 5px 0 0; background-color:#FFFFFF; font-family: "Lucida Grande", Sans-Serif; width:60px; font-size:11px; }
+#page-wrap { width: 333px; margin: 0px auto; background-color:#FFFFFF; float:right}
+#chat-wrap { margin:0; }
+#chat-area { height: 280px; overflow: auto; padding: 0 10px 10px 10px; background: white; }
+#chat-area span { color: #D6D6D6; margin: 18px 5px 0 0; background-color:#FFFFFF; font-family: "Lucida Grande", Sans-Serif; min-width:60px; font-size:11px; }
 #chat-area p { padding: 1px 0; border-bottom: 1px solid #ccc; margin:4px; }
+
 
 #name-area { position: absolute; top: 12px; right: 0; color: white; font: 11px  "Lucida Grande", Sans-Serif; text-align: right; }   
 #name-area span { color: #fa9f00; }
 
+/* Message editor */
 #send-message-area p { float: left; color: white; padding-top: 27px; font-size: 14px; }
-#sendie {
-	width: 304px; padding: 10px;
-	font: 11px "Lucida Grande", Sans-Serif; float:right; 
-	height:40px; border-radius:0px;  border:1px solid #FFFFFF;
-}
+#sendie { padding: 6px; font: 11px "Lucida Grande", Sans-Serif; float:right;  height:70px; border-radius:0px;  border:1px solid #FFFFFF; }
 
 .clearfloat textarea {height:70px; width:710px; }
 #chat-wrap ol { margin: 0; }
-.timeChat {
-	/*border:1px solid #FF0000;
-	display:none;*/
-}
+.timeChat { /* border:1px solid #FF0000; display:none; */ }
 /*.chatTime { position:absolute; display:block; background-color:white; }*/
 .outSide {
 	width:330px; 
@@ -34,12 +30,11 @@
 #groups-tools > li:nth-child(2n+1) { margin-right: 2%; }
 #groups-tools li { margin-left:5px; }
 
-.chatTxt { clear:both; margin-top:5px; font-size: 12px; border-top:1px solid #F7F7F7; }
+.chatTxt, .group_chat-text { clear:both; margin-top:5px; font-size: 12px; border-top:1px solid #F7F7F7; }
 
 .padTop5 { padding-top:5px; }
 
 .clear { clear:both; }
-
 .floatLeft { float:left; }
 .floatRight { float:right; }
 .txtDiv { text-align:justify; width:254px; margin-left:5px }
@@ -80,7 +75,7 @@
 
 .smileyCon:hover { cursor:pointer; }
 .closeIcon {
-	font-size:10px;
+	/* font-size:10px; */
 	text-decoration:none;
 	cursor:pointer;
 }
@@ -102,16 +97,13 @@
 
 
 /* Site chat styles */
-.site-outSide {
-	border-top:1px solid #CCCCCC; 
-	background-color:#FFFFFF;
-}
-.site-sendieDiv { border-top:1px solid #CCCCCC; position:absolute; width:99%; bottom:2px; }
-#sitechat-compose { width:85%; }
-#sitechat-helpers { float:right; width:15%; text-align:right; }
+.site-outSide { border-top:1px solid #CCCCCC; background-color:#FFFFFF; }
+.site-sendieDiv { border-top:1px solid #CCCCCC; position:absolute; width:98%; bottom:2px; margin: 0 auto; }
+#sitechat-compose { width:90%; }
+#sitechat-helpers { float:right; width:10%; text-align:right; }
 #sitechat-page-wrap #sendie { width:100%; }
-#sitechat-page-wrap #smileyGroup { clear:both; width:100%; position:relative; }
-#sitechat-page-wrap #chat-area  { height: auto; position: fixed; top: 0; bottom: 80px; left: 0; right: 0; }
+#sitechat-page-wrap #smileyGroup { clear:both; width:100%; /* position:relative; */ box-shadow: 1px 1px 3px 1px; padding: 1ex 0; }
+#sitechat-page-wrap #chat-area  { height: auto; position: fixed; top: 20px; bottom: 80px; left: 0; right: 0; }
 
 /* Site chat button */
 #groupchat-sitelink { position:fixed; right:0; top: 3px; background:white; border: 1px solid black;
@@ -143,6 +135,19 @@ border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px
 	font-size: 5ex; color: gold; text-shadow: 2px 2px 3px black;
 	padding: 5px 10px; /* background: rgba(0,0,0,0.8); */ border-radius: 5ex;
 }
+
+
+/* Replace old classes and hardcoded styles with more cleaner and integrated ones */
+.chat-title { background: black; color: white; font-size: 12px; height: 18px; line-height: 20px; padding: 0 6px; overflow:hidden; text-transform: uppercase; }
+.chat-title a { color: white; }
+.group_chat-text { clear:both; margin-top:5px; font-size: 12px; border-top:1px solid #F7F7F7; padding-top:5px; color:white; }
+.group_chat-text:hover { color:#CCCCCC; }
+.group_chat-time { font-size:9px; float: right; }
+.group_chat-image { float:left; margin-right:5px; margin-bottom:1px; }
+#chat-area .group_chat-message { color:#666666; }
+#smileyGroup img { line-height:20px; margin-left:5px; }
+
+
 
 
 /* group_chat-blinking effect - http://visualidiot.com/files/real-world.css */

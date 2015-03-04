@@ -6,10 +6,10 @@
 
 $french = array(
 	'group_chat' => "Chat du groupe",
-	'group_chat:group_chat' => "Chat du groupe %s",
+	'group_chat:group_chat' => "Chat du groupe",
 	'group_chat:site_chat' => "Chat du site",
 	'group_chat:object_chat' => "Chat de la page",
-	'group_chat:user_chat' => "Chat entre membres",
+	'group_chat:user_chat' => "Chat privé",
 	'group_chat:group_option' => "Activer le chat du groupe ?",
 	
 	'groupchat:active' => "",
@@ -52,6 +52,9 @@ $french = array(
 	'group_chat:notification:site' => "Nouveau message sur le chat du site",
 	'group_chat:notification:group' => "Nouveau message sur le chat du groupe \"%s\"",
 	'group_chat:notification:user' => "Nouveau message sur le chat privé \"%s\"",
+	
+	// Chat form
+	'group_chat:placeholder' => "Ecrivez votre message ici puis appuyez sur ENTRÉE pour l'envoyer.",
 	
 );
 

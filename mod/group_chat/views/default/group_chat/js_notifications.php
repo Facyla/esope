@@ -61,7 +61,7 @@ function group_chat_notifier() {
 }
 </script>
 
-<div id="group_chat-notification" class="elgg-messages" style="display:none;">
+<div id="group_chat-notification" style="display:none;">
 	<!-- FA icons : bell, bell-o, comments-o //-->
 	<div class="group_chat-notification-alert group_chat-wobble"><i class="fa fa-bell"></i></div>
 	<div id="group_chat-notification-content"></div>

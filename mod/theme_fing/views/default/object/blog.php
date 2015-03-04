@@ -109,7 +109,7 @@
 		$summary = elgg_view('object/elements/summary', $params);
 
 		echo elgg_view("object/elements/full", array(
-			"summary" => $summary,
+			"summary" => $header.$summary,
 			"icon" => $owner_icon,
 			"body" => $blog_icon . $body,
 		));
