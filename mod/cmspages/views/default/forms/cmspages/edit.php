@@ -101,7 +101,7 @@ if ($display_form) {
 	//	$form_body .= '<legend>' . elgg_echo('cmspages:fieldset:main') . '</legend>';
 	
 		// Nom de la page : non éditable (= identifiant de la page)
-		$form_body .= '<p><label>' . elgg_echo('cmspages:pagetype') . ' ' . elgg_view('input/text', array('value' => $pagetype, 'disabled' => "disabled", 'style' => "width:40ex;")) . '</label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype)) . '</label>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:pagetype') . ' ' . elgg_view('input/text', array('value' => $pagetype, 'readonly' => "readonly", 'style' => "width:40ex;")) . '</label>' . elgg_view('input/hidden', array('name' => 'pagetype', 'value' => $pagetype)) . '</label>';
 		$form_body .= '</p>';
 	
 		// Type de contenu : HTML ou module => définit les champs affichés

@@ -2122,3 +2122,28 @@ function esope_annotation_likes_cmp($a, $b) {
 
 
 
+/* @TODO : Build menu list from flat config file (without enclosing <ul>)
+ * IMPORTANT : define top level entries first
+ * Config syntax : name::url::class::parent_name
+ * Translation string : esope:menu[:<parent_name>]:<name>
+ * $menu = array(
+ *    'entry_name' => array(
+ *        'href' => 'URL',
+ *        'class' => 'css class',
+ *        'submenu' => array(),   // <= menu array
+ *      ),
+ *  )
+ */
+/*
+function esope_build_menu($a, $b) {
+	$menu = array();
+	$entries = array();
+	foreach ($entries as $name => $entry) {
+		$menu[$name] = array(),
+	}
+	return $menu;
+}
+*/
+
+
+
