@@ -15,8 +15,7 @@
 	height:40px; border-radius:0px;  border:1px solid #FFFFFF;
 }
 
-#clear_both {clear:both;}
-#clear_both textarea {height:70px; width:710px}
+.clearfloat textarea {height:70px; width:710px; }
 #chat-wrap ol { margin: 0; }
 .timeChat {
 	/*border:1px solid #FF0000;
@@ -135,6 +134,8 @@ border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px
 #group_chat-notification .elgg-message { border-radius: 0; }
 #group_chat-notification-content { font-weight:normal; }
 #group_chat-notification-content a {  }
+.group-chat-notification { display: block; background: white; color: #333; padding: 1.5ex 2.5ex; border-top: 1px solid black; border-right: 1px solid black; }
+.group-chat-notification:hover, .group-chat-notification:active, .group-chat-notification:focus { text-decoration:none; color:black; font-weight:bold; background:#DEDEDE; transition-duration:0.5s; }
 
 
 .group_chat-notification-alert {

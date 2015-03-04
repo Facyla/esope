@@ -49,9 +49,9 @@ $english = array(
 	
 	// Notifications
 	'group_chat:notification' => "Vous have new unread chat messages",
-	'group_chat:notification:site' => "New message on site chat: %s",
-	'group_chat:notification:group' => "New message on group chat \"%s\": %s",
-	'group_chat:notification:user' => "New message on private chat \"%s\": %s",
+	'group_chat:notification:site' => "New message on site chat",
+	'group_chat:notification:group' => "New message on group chat \"%s\"",
+	'group_chat:notification:user' => "New message on private chat \"%s\"",
 	
 );
 

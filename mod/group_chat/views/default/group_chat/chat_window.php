@@ -71,7 +71,7 @@ group_chat_update_marker($chat_id);
 			</div>
 		</div>
 	</div>
-	<div id="clear_both"></div>
+	<div class="clearfloat"></div>
 </div>
 
 

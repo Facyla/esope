@@ -24,8 +24,7 @@ if (elgg_is_logged_in()) {
 		if ($CONFIG->site->group_chat_unread > $own->group_chat_unread_site) {
 			$url = elgg_get_site_url() . "chat/site";
 			$js_link = "window.open('$url', 'groupchat_site', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
-			$unread_site_link = '<a href="' . elgg_get_site_url() . 'chat/user' . $chat_id . '" onClick="' . $js_link . '">' . elgg_echo('groupchat:site:openlink') . '</a>';
-			$unread_site_chat = '<p>' . elgg_echo('group_chat:notification:site', array($unread_site_link)) . '</p>';
+			$unread_site_chat = '<a class="group-chat-notification group-chat-notification-site" href="' . elgg_get_site_url() . 'chat/user' . $chat_id . '" onClick="' . $js_link . '" title="' . elgg_echo('groupchat:site:openlink:ownwindow:theme') . '">' . elgg_echo('group_chat:notification:site') . '</a>';
 		}
 	}
 	$log['notification']['site'] = $unread_site_chat;
@@ -66,8 +65,7 @@ if (elgg_is_logged_in()) {
 				foreach($unread as $chat_id) {
 					$url = elgg_get_site_url() . "chat/group/" . $chat_id;
 					$js_link = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
-					$unread_group_link = '<a href="' . $url . '" onClick="' . $js_link . '">' . elgg_echo('groupchat:group:openlink', array($chat_id)) . '</a>';
-					$unread_group_chat .= '<p>' . elgg_echo('group_chat:notification:group', array($chat_id, $unread_group_link)) . '</p>';
+					$unread_group_chat .= '<a class="group-chat-notification group-chat-notification-group" href="' . $url . '" onClick="' . $js_link . '" title="' . elgg_echo('groupchat:group:openlink:ownwindow:theme') . '">' . elgg_echo('group_chat:notification:group', array($chat_id)) . '</a>';
 				}
 			}
 		}
@@ -86,8 +84,7 @@ if (elgg_is_logged_in()) {
 				foreach($unread as $chat_id) {
 					$url = elgg_get_site_url() . "chat/user/" . $chat_id;
 					$js_link = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
-					$unread_user_link = '<a href="' . $url . '" onClick="' . $js_link . '">' . elgg_echo('groupchat:user:openlink', array($chat_id)) . '</a>';
-					$unread_user_chat .= '<p>' . elgg_echo('group_chat:notification:user', array($chat_id, $unread_user_link)) . '</p>';
+					$unread_user_chat .= '<a class="group-chat-notification group-chat-notification-user" href="' . $url . '" onClick="' . $js_link . '" title="' . elgg_echo('groupchat:user:openlink:ownwindow:theme') . '">' . elgg_echo('group_chat:notification:user', array($chat_id)) . '</a>';
 				}
 			}
 		}
