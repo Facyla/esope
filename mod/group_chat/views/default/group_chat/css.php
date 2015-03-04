@@ -138,7 +138,7 @@ border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px
 
 
 /* Replace old classes and hardcoded styles with more cleaner and integrated ones */
-.chat-title { background: black; color: white; font-size: 12px; height: 18px; line-height: 20px; padding: 0 6px; overflow:hidden; text-transform: uppercase; }
+.chat-title { background: black; color: white; font-size: 10px; height: 18px; padding: 3px 5px; overflow:hidden; text-transform: uppercase; }
 .chat-title a { color: white; }
 .group_chat-text { clear:both; margin-top:5px; font-size: 12px; border-top:1px solid #F7F7F7; padding-top:5px; color:white; }
 .group_chat-text:hover { color:#CCCCCC; }
