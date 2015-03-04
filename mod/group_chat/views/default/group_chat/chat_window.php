@@ -40,22 +40,24 @@ group_chat_update_marker($chat_id);
 		
 	});
 	
-	function chatCall(a){$(".chatTime").hide();$(a).children(".chatTime").show()}
+	// Replaced by CSS hover effect
+	//function chatCall(a){$(".chatTime").hide();$(a).children(".chatTime").show()}
 </script>
 
 <div id="sitechat-page-wrap">
 	<div id="chat-wrap">
 		<div class="chatWrapper">
 			<div class='site-outSide'>
+				<div class="chat-title"><?php echo group_chat_friendly_title($chat_id, true, true); ?></div>
 				<ol id="chat-area">
 					<?php if ($chat_content) { echo $chat_content; } ?>
 				</ol>
 			</div>
 
-			<div class="clear site-sendieDiv">
+			<div class="clearfloat site-sendieDiv">
 				<div id="sitechat-compose" class="floatLeft">
 					<form id="send-message-area">
-						<textarea id="sendie" maxlength = '300'	 ></textarea>
+						<textarea id="sendie" maxlength='300' placeholder="<?php echo elgg_echo('group_chat:placeholder'); ?>"></textarea>
 					</form>
 				</div>
 
@@ -64,14 +66,14 @@ group_chat_update_marker($chat_id);
 				</div>
 				<div id="smileyGroup">
 					<?php echo group_chat_smileys_list(); ?>
-					<div class="floatRight pad5"><a class="closeIcon">x</a></div>
-					<div class="clear"></div>
+					<div class="floatRight pad5"><a class="closeIcon"><i class="fa fa-close"></i></a></div>
+					<div class="clearfloat"></div>
 				</div>
-				<div class="clear"></div>
+				<div class="clearfloat"></div>
 			</div>
 		</div>
 	</div>
-	<div id="clear_both"></div>
+	<div class="clearfloat"></div>
 </div>
 
 

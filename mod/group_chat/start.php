@@ -206,7 +206,7 @@ function group_chat_page_handler($page) {
 }
 
 
-// Menu that appears on hovering over a user profile icon
+// Sort chat ids so they are normalized
 function group_chat_normalise_chat_id($chat_id = '') {
 	$chat_id = elgg_get_friendly_title($chat_id);
 	$chat_user_guids = explode('-', $chat_id);
@@ -214,6 +214,64 @@ function group_chat_normalise_chat_id($chat_id = '') {
 	sort($chat_user_guids);
 	$chat_id = implode('-', $chat_user_guids);
 	return $chat_id;
+}
+
+
+/* Get a friendly chat title
+ * $chat_id : the chat identifier
+ * $add_link : add link(s) to the chat container, or particpating users
+ * $add_chat_type : prefixes the title with a chat type (site/group/user...)
+ * Note : own user is not listed in user chat
+ */
+function group_chat_friendly_title($chat_id = false, $add_link = false, $add_chat_type = false) {
+	if (!$chat_id) return false;
+	$chat_title = '';
+	$chat_type = '';
+		// Check which container we are using : site / group / user(s)
+	if (strpos($chat_id, '-')) {
+		// User chat
+		$chat_user_guids = explode('-', $chat_id);
+		foreach($chat_user_guids as $guid) {
+			$ent = get_entity($guid);
+			if (elgg_instanceof($ent, 'user')) {
+				// Skip own name in user chat
+				if ($ent->guid == elgg_get_logged_in_user_guid()) { continue; }
+				if ($add_link) {
+					$chat_users[] = '<a href="' . $ent->getURL() . '" target="_blank">' . $ent->name . '</a>';
+				} else {
+					$chat_users[] = $ent->name;
+				}
+			}
+		}
+		if ($chat_users) {
+			$chat_type = elgg_echo('group_chat:user_chat');
+			$chat_title .= implode(', ', $chat_users);
+		}
+	} else {
+		// "Container" chats
+		$chat_container = get_entity($chat_id);
+		if (elgg_instanceof($chat_container, 'site')) {
+			$chat_title .= $chat_container->name;
+			$chat_type = elgg_echo('group_chat:site_chat');
+		} else if (elgg_instanceof($chat_container, 'group')) {
+			$chat_title .= $chat_container->name;
+			$chat_type = elgg_echo('group_chat:group_chat');
+		} else if (elgg_instanceof($chat_container, 'object')) {
+			// Per-entity chat is not handled yet, though it would be an easy one
+			$chat_title .= $chat_container->title;
+			$chat_type = elgg_echo('group_chat:object_chat');
+		} else if (elgg_instanceof($chat_container, 'user')) {
+			$chat_title .= $chat_container->name;
+			$chat_type = elgg_echo('group_chat:user_chat');
+		}
+		// Add link to chat container
+		if ($add_link && ($chat_container instanceof ElggEntity)) {
+			$chat_title = '<a href="' . $chat_container->getURL() . '" target="_blank">' . $chat_title . '</a>';
+		}
+	}
+	
+	if ($add_chat_type && !empty($chat_type)) { $chat_title = $chat_type . ' &laquo;&nbsp;' . $chat_title . '&nbsp;&raquo;'; }
+	return $chat_title;
 }
 
 
@@ -228,7 +286,7 @@ function group_chat_user_hover_menu($hook, $type, $return, $params) {
 			$url = elgg_get_site_url() . "chat/user/" . $chat_id;
 			$title = '<i class="fa fa-comments-o"></i> ' . elgg_echo("groupchat:user:openlink:ownwindow");
 			$item = new ElggMenuItem('group_chat_user', $title, $url);
-			$item->onClick = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500').focus(); return false;";
+			$item->onClick = "window.open('$url', '$chat_id', 'menubar=no, status=no, scrollbars=no, location=no, copyhistory=no, width=400, height=500').focus(); return false;";
 			$return[] = $item;
 		}
 	}
@@ -327,28 +385,28 @@ function group_chat_convert_smileys($message = '') {
 function group_chat_smileys_list() {
 	$content = '';
 	$smiley_url = elgg_get_site_url() . 'mod/group_chat/graphics/smiley/';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'smile.gif" data-value=":)" class="smileyCon" title="Smile"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'frown.gif" data-value=":(" class="smileyCon" title="Frown"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'gasp.gif" data-value=":0" class="smileyCon" title="Gasp"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'angel.gif" data-value="O:-)" class="smileyCon" title="Angel"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'colonthree.gif" data-value=":3" class="smileyCon" title="Colon Three"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'confused.gif" data-value="o.O" class="smileyCon" title="Confused"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'cry.gif" data-value=":\'(" class="smileyCon" title="Cry"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'devil.gif" data-value="3:-)" class="smileyCon" title="Devil"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'gasp.gif" data-value=":o" class="smileyCon" title="Gasp"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'glasses.gif" data-value="B-)" class="smileyCon" title="Glasses"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'grin.gif" data-value=":D" class="smileyCon" title="Grin"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'grumpy.gif" data-value="-.-" class="smileyCon" title="Grumpy"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'kiki.gif" data-value="^_^" class="smileyCon" title="Kiki"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'kiss.gif" data-value=":-*" class="smileyCon" title="Kiss" /></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'pacman.gif" data-value=":v" class="smileyCon" title="Pacman"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'squint.gif" data-value="-_-" class="smileyCon" title="Squint"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'sunglasses.gif" data-value="8|" class="smileyCon" title="Sunglasses"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'tongue.gif" data-value=":p" class="smileyCon" title="Tongue"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'unsure.gif" data-value=":-/" class="smileyCon" title="Unsure"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'upset.gif" data-value="-_-" class="smileyCon" title="Upset"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'heart.gif" data-value="heart" class="smileyCon" title="Eeart"/></div>';
-	$content .= '<div class="floatLeft pad5"><img src="' . $smiley_url . 'devil.gif" data-value="X)" class="smileyCon" title="Devil"/></div>';
+	$content .= '<img src="' . $smiley_url . 'smile.gif" data-value=":)" class="smileyCon" title="Smile" />';
+	$content .= '<img src="' . $smiley_url . 'frown.gif" data-value=":(" class="smileyCon" title="Frown" />';
+	$content .= '<img src="' . $smiley_url . 'gasp.gif" data-value=":0" class="smileyCon" title="Gasp" />';
+	$content .= '<img src="' . $smiley_url . 'angel.gif" data-value="O:-)" class="smileyCon" title="Angel" />';
+	$content .= '<img src="' . $smiley_url . 'colonthree.gif" data-value=":3" class="smileyCon" title="Colon Three" />';
+	$content .= '<img src="' . $smiley_url . 'confused.gif" data-value="o.O" class="smileyCon" title="Confused" />';
+	$content .= '<img src="' . $smiley_url . 'cry.gif" data-value=":\'(" class="smileyCon" title="Cry" />';
+	$content .= '<img src="' . $smiley_url . 'devil.gif" data-value="3:-)" class="smileyCon" title="Devil" />';
+	$content .= '<img src="' . $smiley_url . 'gasp.gif" data-value=":o" class="smileyCon" title="Gasp" />';
+	$content .= '<img src="' . $smiley_url . 'glasses.gif" data-value="B-)" class="smileyCon" title="Glasses" />';
+	$content .= '<img src="' . $smiley_url . 'grin.gif" data-value=":D" class="smileyCon" title="Grin" />';
+	$content .= '<img src="' . $smiley_url . 'grumpy.gif" data-value="-.-" class="smileyCon" title="Grumpy" />';
+	$content .= '<img src="' . $smiley_url . 'kiki.gif" data-value="^_^" class="smileyCon" title="Kiki" />';
+	$content .= '<img src="' . $smiley_url . 'kiss.gif" data-value=":-*" class="smileyCon" title="Kiss"  />';
+	$content .= '<img src="' . $smiley_url . 'pacman.gif" data-value=":v" class="smileyCon" title="Pacman" />';
+	$content .= '<img src="' . $smiley_url . 'squint.gif" data-value="-_-" class="smileyCon" title="Squint" />';
+	$content .= '<img src="' . $smiley_url . 'sunglasses.gif" data-value="8|" class="smileyCon" title="Sunglasses" />';
+	$content .= '<img src="' . $smiley_url . 'tongue.gif" data-value=":p" class="smileyCon" title="Tongue" />';
+	$content .= '<img src="' . $smiley_url . 'unsure.gif" data-value=":-/" class="smileyCon" title="Unsure" />';
+	$content .= '<img src="' . $smiley_url . 'upset.gif" data-value="-_-" class="smileyCon" title="Upset" />';
+	$content .= '<img src="' . $smiley_url . 'heart.gif" data-value="heart" class="smileyCon" title="Eeart" />';
+	$content .= '<img src="' . $smiley_url . 'devil.gif" data-value="X)" class="smileyCon" title="Devil" />';
 	return $content;
 }
 

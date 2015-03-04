@@ -118,10 +118,20 @@ switch($function) {
 			// Remove newlines
 			$messageStr = str_replace("\n", " ", $message);
 			if (trim($messageStr) != '') {
+				/*
 				$message = '<li class="chatTxt" id="chat" onmouseover="chatCall(this);"><div class="chatTime">'
 					//.date('h:i a')
 					.date('H:i') // 24 hours format
 					.'</div><div class="clear padTop5"><div style="float:left"><a href="'.$profileUrl.'" target="_blank"><img src="'.$profilePic.'" title="title" width="25" height="25" /></a></div><div class="floatLeft txtDiv"><a href="'.$profileUrl.'" target="_blank"><strong>'.htmlentities(ucfirst($nickname)).':</strong></a>&nbsp;<span style="color:#666666">'.$messageStr.'</span></div></div><div class="clear"></div></li>';
+				*/
+				$img = '<a href="'.$profileUrl.'" target="_blank"><img src="' . $profilePic . '" title="title" width="25" height="25" /></a>';
+				$txt = '<a href="'.$profileUrl.'" target="_blank"><strong>' . htmlentities(ucfirst($nickname)) . '&nbsp;:</strong></a> <span class="group_chat-message">' . $messageStr . '</span>';
+				$message = '<li class="group_chat-text" id="chat">';
+						$message .= '<div class="group_chat-time">' . date('H:i') . '</div>';
+						$message .= '<div class="group_chat-image">' . $img . '</div>';
+						$message .= $txt;
+					$message .= '<div class="clearfloat"></div>';
+				$message .= '</li>';
 				fwrite(fopen($filePath, 'a'), $message. "\n");
 				
 				// Let recipients know there is a message unread for them

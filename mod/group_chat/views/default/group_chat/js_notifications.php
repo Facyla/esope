@@ -20,6 +20,7 @@ if (($group_notification != 'yes') && ($site_notification != 'yes') && ($user_no
 
 <script type="text/javascript">
 $(document).ready(function() {
+	group_chat_notifier();
 	var refresh_rate = 10000;
 	setInterval('group_chat_notifier()', refresh_rate);
 });
@@ -60,9 +61,9 @@ function group_chat_notifier() {
 }
 </script>
 
-<div id="group_chat-notification" class="elgg-messages" style="display:none;">
+<div id="group_chat-notification" style="display:none;">
 	<!-- FA icons : bell, bell-o, comments-o //-->
 	<div class="group_chat-notification-alert group_chat-wobble"><i class="fa fa-bell"></i></div>
-	<div class="elgg-message elgg-state-success"><div id="group_chat-notification-content"></div></div>
+	<div id="group_chat-notification-content"></div>
 	</div>
 

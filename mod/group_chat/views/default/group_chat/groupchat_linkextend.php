@@ -34,7 +34,7 @@ function window_'.$popup_id.'(url) {
 	if('.$popup_id.' && !'.$popup_id.'.closed){
 		'.$popup_id.'.focus();
 	} else {
-		'.$popup_id.' =  window.open(url, "' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '", "menubar=no, status=no, scrollbars=no, menubar=no, copyhistory=no, width=400, height=500");
+		'.$popup_id.' =  window.open(url, "' . elgg_echo('group_chat:group_chat') . ' ' . elgg_get_page_owner_entity()->name . '", "menubar=no, status=no, scrollbars=no, location=no, copyhistory=no, width=400, height=500");
 		'.$popup_id.'.focus();
 	}
 }
