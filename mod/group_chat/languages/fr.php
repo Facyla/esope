@@ -50,8 +50,8 @@ $french = array(
 	// Notifications
 	'group_chat:notification' => "Vous avez de nouveaux messages non lus",
 	'group_chat:notification:site' => "Nouveau message sur le chat du site",
-	'group_chat:notification:group' => "Nouveau message sur le chat du groupe \"%s\"",
-	'group_chat:notification:user' => "Nouveau message sur le chat privé \"%s\"",
+	'group_chat:notification:group' => "Nouveau message sur le chat du groupe &laquo;&nbsp;%s&nbsp;&raquo;",
+	'group_chat:notification:user' => "Nouveau message sur le chat privé avec&nbsp;: %s",
 	
 	// Chat form
 	'group_chat:placeholder' => "Ecrivez votre message ici puis appuyez sur ENTRÉE pour l'envoyer.",

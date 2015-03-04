@@ -233,6 +233,7 @@ function group_chat_friendly_title($chat_id = false, $add_link = false, $add_cha
 		foreach($chat_user_guids as $guid) {
 			$ent = get_entity($guid);
 			if (elgg_instanceof($ent, 'user')) {
+				if ($ent->guid == elgg_get_logged_in_user_guid()) continue;
 				if ($add_link) {
 					$chat_users[] = '<a href="' . $ent->getURL() . '" target="_blank">' . $ent->name . '</a>';
 				} else {
