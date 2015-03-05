@@ -23,6 +23,7 @@ $french = array(
 	'theme_cocon:thewire:charleft' => "max",
 	'theme_cocon:login' => "Connexion",
 	'theme_cocon:menu:live' => "Visio",
+	'theme_cocon:menu:kits' => "Kits",
 	
 	'cocon_etablissement' => "Etablissement",
 	'cocon_discipline' => "Discipline",

@@ -184,7 +184,7 @@ if (elgg_is_logged_in()) {
 								</li>
 								
 								<?php if (elgg_is_active_plugin('cocon_methode')) { ?>
-								<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_cocon:menu:live'); ?> <i class="fa fa-caret-down"></i></a>
+								<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_cocon:menu:kits'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li><a href="<?php echo $url; ?>methode">Kit Méthode</a></li>
 									</ul>
