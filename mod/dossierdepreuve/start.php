@@ -414,7 +414,7 @@ function dossierdepreuve_list_members_by_profiletype($profiletype = 'learner', $
 function dossierdepreuve_get_group_profiletype($group = false, $profiletype = 'learner') {
 	if (!elgg_instanceof($group, 'group')) return false;
 	$returnvalue = array();
-	$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+	$ia = elgg_set_ignore_access(true);
 	// Membres du groupe, et filtrage des apprenants
 	//$group_members_count = get_group_members($group->guid, 10, 0, 0, true);
 	//$group_members = get_group_members($group->guid, $group_members_count, 0, 0, false);
@@ -424,7 +424,7 @@ function dossierdepreuve_get_group_profiletype($group = false, $profiletype = 'l
 		$profile_type = dossierdepreuve_get_user_profile_type($ent);
 		if ($profile_type == $profiletype) { $returnvalue[$ent->guid] = $ent; }
 	}
-	elgg_set_ignore_access($ignore_access);
+	elgg_set_ignore_access($ia);
 	return $returnvalue;
 }
 
@@ -446,7 +446,7 @@ function dossierdepreuve_get_group_tutors($group = false) {
 function dossierdepreuve_get_group_dossiers($group = false, $typedossier = 'b2iadultes') {
 	if (!elgg_instanceof($group, 'group')) return false;
 	$returnvalue = false;
-	$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+	$ia = elgg_set_ignore_access(true);
 	// Apprenants du groupe
 	$learners = dossierdepreuve_get_group_learners($group, $typedossier);
 	if ($learners) foreach ($learners as $user) {
@@ -455,7 +455,7 @@ function dossierdepreuve_get_group_dossiers($group = false, $typedossier = 'b2ia
 			$returnvalue[$ent->guid] = $ent;
 		}
 	}
-	elgg_set_ignore_access($ignore_access);
+	elgg_set_ignore_access($ia);
 	return $returnvalue;
 }
 

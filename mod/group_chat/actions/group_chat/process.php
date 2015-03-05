@@ -151,8 +151,7 @@ switch($function) {
 				} else if ($chat_container_type == 'user') {
 					// Personnal list of unread chat ids
 					// Note : we need to allow any user to update some other users meta
-					$ia = elgg_get_ignore_access();
-					elgg_set_ignore_access(true);
+					$ia = elgg_set_ignore_access(true);
 					// Add unread mark to each user
 					foreach($chat_user_guids as $guid) {
 						// Skip own user
