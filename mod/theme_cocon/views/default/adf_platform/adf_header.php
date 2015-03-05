@@ -157,9 +157,9 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('categories')) { ?>
-									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?> <i class="fa fa-caret-down"></i></a>
+									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('theme_cocon:categories'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('adf_platform:categories:all'); ?></a></li>
+											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('theme_cocon:categories:all'); ?></a></li>
 											<?php echo $categories; ?>
 										</ul>
 									</li>
@@ -182,6 +182,14 @@ if (elgg_is_logged_in()) {
 										<li><a href="<?php echo $url; ?>cmspages/read/visio5">Salle n°5</a></li>
 									</ul>
 								</li>
+								
+								<?php if (elgg_is_active_plugin('cocon_methode')) { ?>
+								<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_cocon:menu:live'); ?> <i class="fa fa-caret-down"></i></a>
+									<ul class="hidden">
+										<li><a href="<?php echo $url; ?>methode">Kit Méthode</a></li>
+									</ul>
+								</li>
+								<?php } ?>
 								
 							</ul>
 						</nav>
