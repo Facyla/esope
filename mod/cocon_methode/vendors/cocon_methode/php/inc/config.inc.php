@@ -124,6 +124,8 @@ function getConfiguration($gid){
 	$config['user_name'] = $user->name;
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
+	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
+	
 	return $config;
 }
 

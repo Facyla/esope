@@ -15,7 +15,7 @@ $language = array (
 	
 	%1\$s a indiqué avoir pour fonction \"%3\$s\" dans le collège \"%2\$s\", et dispose désormais du rôle d'administrateur du groupe \"%2\$s\" sur Cocon - en tant que membre de l'équipe de Direction.
 	
-	Si cette information est erronnée ou n'est plus à jour, veuillez le signaler à l'équipe du site :  %s\$s
+	Si cette information est erronnée ou n'est plus à jour, veuillez le signaler à l'équipe du site :  %s\5$s
 	
 	Pour accéder au réseau Cocon : %4\$s",
 	
