@@ -23,16 +23,19 @@ if (elgg_is_active_plugin('elgg_cmis')) {
 		$usersettings = array('cmis_login', 'cmis_password', 'cmis_password2', 'user_cmis_url');
 		$users_options = array('types' => 'user', 'limit' => 0, 'usersettings' => $usersettings);
 		$batch = new ElggBatch('elgg_get_entities', $users_options, 'esope_clear_elgg_cmis_usersettings', 10);
+		$content .= '<p>Suppression des paramètres personnels CMIS terminée.</p>';
 	} else {
 		$content .= '<a class="elgg-button elgg-button-action" href="' . full_url() . '?clear_cmis_credentials=yes">Supprimer tous les paramètres personnels associés au plugin elgg_cmis</a><br />Attention, cette action est irréversible.';
 	}
 }
 
-// Function that is used to clear previoulsy set usersettings
+// Function that is used to clear previously set usersettings
 function esope_clear_elgg_cmis_usersettings($user, $getter, $options) {
 	$usersettings = $options['usersettings'];
+	$ps = get_all_private_settings($user->guid);
+	//echo "$user->name : " . print_r($ps, true);
 	foreach($usersettings as $setting) {
-		remove_private_setting($user->guid, $setting);
+		remove_private_setting($user->guid, "plugin:user_setting:elgg_cmis:$setting");
 	}
 }
 
