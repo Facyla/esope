@@ -80,7 +80,7 @@ function cocon_methode_get_user_group($user_guid = false) {
 				if ($from && $to) {
 					$subject = elgg_echo('cocon_methode:groupadmin:subject', array($user->name, $group->name));
 					$body = elgg_echo('cocon_methode:groupadmin:body', array($user->name, $group->name, $user->cocon_fonction, $site->url, $site->email));
-					elgg_send_email($from, $to, $subject, $body, NULL)
+					elgg_send_email($from, $to, $subject, $body, NULL);
 				}
 				
 			}

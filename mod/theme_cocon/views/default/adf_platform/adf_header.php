@@ -89,16 +89,22 @@ if (elgg_is_logged_in()) {
 	}
 	
 }
+
+// Header
+$header_content = elgg_get_plugin_setting('header', 'adf_public_platform');
+$header_content = trim($header_content);
+// Use default value if header not set
+if (empty($header_content)) {
+	$header_title = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+	$header_content = '<a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '">' . $headertitle . '</a>';
+	// Default styles syntax : <span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>;
+}
 ?>
 
 			<header>
 				<div class="">
 					<div class="interne">
-						<h1>
-							<img class="ministere" src="<?php echo $urlimg; ?>header_ministere.jpg" />
-							<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><img class="cocon" src="<?php echo $urlimg; ?>header_cocon.png" style="margin-left:14px;" /></a>
-							<img class="cartouche" src="<?php echo $urlimg; ?>cartouche_strategie_numerique.png" />
-						</h1>
+						<h1><?php echo $header_content; ?></h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>

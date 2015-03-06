@@ -1,5 +1,4 @@
 <?php 
-
 $plugin = $vars["entity"];
 
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
@@ -31,6 +30,15 @@ artplastique::Arts Plastiques
 eps::Education Physique et Sportive
 autre::Autres";
 }
+
+
+// Cocon default header
+$url = elgg_get_site_url();
+$urlimg = $url . 'mod/theme_cocon/graphics/';
+$header_content = '<img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" />';
+echo "Configuration du bandeau : pour le bandeau Cocon \"standard\", copiez-collez le code suivant dans la configuration du thème : ";
+echo '<textarea readonly="readonly">' . $header_content . '</textarea>';
+
 
 
 /*
