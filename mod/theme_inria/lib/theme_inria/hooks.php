@@ -530,6 +530,8 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 	if (!$user->isEnabled()) return;
 	// Skip banned accounts
 	if ($user->isbanned()) return;
+	// Skip archived accounts
+	if ($user->memberstatus == 'closed') return;
 	
 	//$debug_0 = microtime(TRUE);
 	// Check LDAP data
