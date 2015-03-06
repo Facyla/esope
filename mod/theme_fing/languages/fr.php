@@ -43,6 +43,9 @@ $french = array(
 	'theme_fing:ressources' => "Ressources",
 	'theme_fing:ressources:group' => "Ressources du groupe %s",
 	
+	'theme_fing:qntransitions' => "Questions Numériques - Transitions",
+	
+	
 );
 
 add_translation("fr",$french);

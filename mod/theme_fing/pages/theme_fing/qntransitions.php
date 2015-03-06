@@ -42,13 +42,18 @@ $body = elgg_view_layout('content', array(
 	'sidebar' => $sidebar,
 	'title' => $title,
 ));
-*/
 
 $body = elgg_view_layout('one_column', array(
 	'content' => $content,
-	'title' => $title,
+	//'title' => $title,
+	'title' => false,
 ));
 
 
 echo elgg_view_page($title, $body);
+*/
+
+$headers = '';
+echo elgg_render_embed_content($content, $title, 'iframe', $headers);
+
 
