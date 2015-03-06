@@ -7,11 +7,6 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))
 // Return information only to loggedin users
 if (!elgg_is_logged_in()) { exit; }
 
-// Load potentiel dependencies
-require_once "database.inc.php";
-require_once "utils.inc.php";
-require_once "cycle.inc.php";
-
 /*
 session_start();
 
