@@ -40,6 +40,10 @@ if (!elgg_instanceof($group, 'group')) {
 
 // Load Cocon Kit Méthode config
 require_once(dirname(__FILE__) . "/php/inc/config.inc.php");
+// Update token
+$cid = getCurrentCycleID($gid);
+if (!empty($gid) && !empty($cid)) { $_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']); }
+
 
 
 $vars = array();

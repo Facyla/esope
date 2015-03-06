@@ -7,6 +7,11 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))
 // Return information only to loggedin users
 if (!elgg_is_logged_in()) { exit; }
 
+// Load potentiel dependencies
+require_once "database.inc.php";
+require_once "utils.inc.php";
+require_once "cycle.inc.php";
+
 /*
 session_start();
 
@@ -64,11 +69,11 @@ define("INC", $inc_path);
 define("URL_BASE", $url_base);
 // Infos base de données
 define('TYPE_SGDB','MYSQL'); // Type de base de donn&eacute;es ('MYSQL', 'PGSQL' ou 'ODBC')
-define('SGDB_SERVER', $dbhost);// Adresse du serveur de base de donn&eacute;es
-define('SGDB_PORT', '3306');// port de com du serveur de base de donn&eacute;es
-define('SGDB_USER', $dbuser);// Utilisateur de connexion au serveur de base de donn&eacute;es
-define('SGDB_PASSWORD', $dbpass);// Mot de passe de connexion au serveur de base de donn&eacute;es
-define('SGDB_DATABASE', $dbname);// Nom de la base de donn&eacute;es &agrave; utiliser
+define('SGDB_SERVER', $dbhost);// Adresse du serveur de base de données
+define('SGDB_PORT', '3306');// port de com du serveur de base de données
+define('SGDB_USER', $dbuser);// Utilisateur de connexion au serveur de base de données
+define('SGDB_PASSWORD', $dbpass);// Mot de passe de connexion au serveur de base de données
+define('SGDB_DATABASE', $dbname);// Nom de la base de données à utiliser
 define('EMAIL_SENDER', $email_sender); // Expéditeur de message email
 
 
@@ -81,7 +86,7 @@ function getConfiguration($gid){
 	$cocon_url = elgg_get_site_url();
 	$cocon_url = rtrim($cocon_url, '/');
 	$methode_url = $cocon_url . '/mod/cocon_methode/vendors/cocon_methode';
-
+	
 	$config = array(
 		"error" => false,
 		"error_string" => "",
@@ -108,7 +113,7 @@ function getConfiguration($gid){
 	}
 	$config['cycle_id'] = $cid;
 	
-	//POUR TEST, il faudra que Florian adapte le code lors du branchement pour récupérer toutes ces valeurs depuis CoCon
+	// Récupérer toutes ces valeurs depuis CoCon
 	/*
 	$config['group_name'] = 'Collège de test';
 	$config['user_id'] = 'abcd';
@@ -125,17 +130,20 @@ function getConfiguration($gid){
 	$config['user_name'] = $user->name;
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
+	// Update token
+	//$_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
+	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	
 	return $config;
 }
+
 
 /**
 	Retourne un tableau de valeur contenant les infos de base des enseignants associés au groupe CoCon
 	$gid est une chaine contenant l'ID du groupe cocon demandé
 */
 function getEnseignantsInfos($gid){
-	
 	// Intégration Cocon Méthode
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
@@ -150,24 +158,18 @@ function getEnseignantsInfos($gid){
 			);
 	}
 	
-	/**
-		POUR TEST : Devra être renseigné par Florian est récupérant les données depuis la base CoCon.
-	*/
-	/*
+	/** POUR TEST : Devra être renseigné par Florian est récupérant les données depuis la base CoCon.
 	$infos = array(
-	
 		array(
 			'user_id' => 'user_id',
 			'user_name' => 'User Name',
 			'user_email' => 'user_email@domain.tld'
 		),
-
 		array(
 			'user_id' => 'user2_id',
 			'user_name' => 'User2 Name',
 			'user_email' => 'user2_email@domain.tld'
 		),
-
 	);
 	*/
 	

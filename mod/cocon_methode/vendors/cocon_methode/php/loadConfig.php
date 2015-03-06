@@ -2,10 +2,10 @@
 /**
 	SCRIPT PHP POUR LE CHARGEMENT DE LA CONFIGURATION
 */
-include "inc/config.inc.php";
-include "inc/database.inc.php";
-include "inc/utils.inc.php";
-include "inc/cycle.inc.php";
+require_once "inc/config.inc.php";
+require_once "inc/database.inc.php";
+require_once "inc/utils.inc.php";
+require_once "inc/cycle.inc.php";
 
 header('Content-type: application/json');
 

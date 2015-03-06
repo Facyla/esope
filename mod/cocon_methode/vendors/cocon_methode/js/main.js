@@ -57,7 +57,7 @@ function loadPage(_page, _menu){
 	$("#app_content").load("php/html.php?page=" + _page + "&forced=" + Math.random());
 	_topic = _menu;
 	$(window).scrollTop(0);
-	updateMenusTop();
+	//updateMenusTop();
 }
 
 function loadFloatWin(_page){
