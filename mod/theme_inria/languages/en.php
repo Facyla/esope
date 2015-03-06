@@ -251,6 +251,8 @@ $english = array(
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
 	'groups:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
+	'theme_inria:cmis_folder' => "Folder on Partage",
+	'theme_inria:cmis_folder:details' => "A folder's content on Partage",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",

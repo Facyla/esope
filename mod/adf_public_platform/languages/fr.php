@@ -867,6 +867,8 @@ $fr = array(
 	'esope:tools:tool:threads_disable:details' => "A utiliser avant désactivation du plugin threads, si l'on souhaite ne plus utiliser celui-ci (qui pose divers problèmes)",
 	'esope:tools:tool:user_updates' => "Suppression widgets dashboard",
 	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
+	'esope:tools:tool:clear_cmis_credentials' => "Suppression des paramètres CMIS personnels",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Cet outil permet de supprimer les paramètres personnels associés au plugin elgg_cmis.",
 	
 	// Menus
 	'esope:menu:topbar' => "Mon compte",

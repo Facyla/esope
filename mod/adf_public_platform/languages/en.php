@@ -848,6 +848,8 @@ $en = array(
 	'esope:tools:tool:threads_disable:details' => "This tools allows administrators to convert 'threads' comments to regular comments, before disabling threads plugin",
 	'esope:tools:tool:user_updates' => "Remove dashboard widgets",
 	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
+	'esope:tools:tool:clear_cmis_credentials' => "Clear users CMIS credentials",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Removes all personnal settings that were set up for elgg_cmis plugin.",
 	
 	// Menus
 	'esope:menu:topbar' => "My account",
