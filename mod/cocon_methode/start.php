@@ -81,7 +81,7 @@ function cocon_methode_get_user_group($user_guid = false) {
 					// Lists all existing functions
 					$fonctions = elgg_get_plugin_setting("fonctions", 'theme_cocon');
 					$fonctions = esope_build_options($fonctions, true);
-					$fonction = $fonctions[$user->cocon_fonction]
+					$fonction = $fonctions[$user->cocon_fonction];
 					$subject = elgg_echo('cocon_methode:groupadmin:subject', array($user->name, $group->name));
 					$body = elgg_echo('cocon_methode:groupadmin:body', array($user->name, $group->name, $fonction, $site->url, $site->email));
 					elgg_send_email($from, $to, $subject, $body, NULL);

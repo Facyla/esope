@@ -100,6 +100,7 @@ function getConfiguration($gid){
 	if(!$cid){
 		$cid = createCycle($gid);
 		if(!$cid){
+			$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 			$config['error'] = true;
 			$config['error_string'] = 'Cycle introuvable.\n-> '.mysql_error();
 			return $config;
@@ -134,7 +135,7 @@ function getConfiguration($gid){
 	$gid est une chaine contenant l'ID du groupe cocon demandé
 */
 function getEnseignantsInfos($gid){
-
+	
 	// Intégration Cocon Méthode
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }

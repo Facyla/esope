@@ -68,6 +68,7 @@ function loadConfig__response(_response){
 	}
 		
 	config = _response;
+	//alert(config.user_role); // Check defined user role
 	
 	
 	// Intégration Méthode : MAJ des variables pour les liens vers les outils Cocon
@@ -86,3 +87,4 @@ function loadConfig__response(_response){
 	
 	loadPage("presentation", "temps_0");
 }
+
