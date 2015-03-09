@@ -12,7 +12,7 @@ $title = "Liste des entités selon leurs métadonnées";
 $content = '';
 $sidebar = '';
 
-$types = get_input('types', 'object');
+$types = get_input('types', 'group');
 $subtypes = get_input('subtypes', false);
 $metadata = get_input('metadata', false);
 
@@ -34,14 +34,23 @@ $options['types'] = explode(',', $types);
 if (!empty($subtypes)) $options['subtypes'] = explode(',', $subtypes);
 if (!empty($metadata) && !in_array($metadata, array('title', 'name', 'guid', 'description', 'briefdescription'))) $options['metadata_names'] = $metadata;
 $options['limit'] = 0;
+$options['count'] = true;
 
 
+if ($options['metadata_names']) {
+	$count_all_ents = elgg_get_entities_from_metadata($options);
+} else {
+	$count_all_ents = elgg_get_entities($options);
+}
+if ($count_all_ents > 500) $options['limit'] = 500;
+$options['count'] = false;
 if ($options['metadata_names']) {
 	$all_ents = elgg_get_entities_from_metadata($options);
 } else {
 	$all_ents = elgg_get_entities($options);
 }
-$content .= "Le site comporte actuellement  " . count($all_ents);
+
+$content .= "Le site comporte actuellement $count_all_ents";
 if ($options['types']) $content .= ' "' . implode(', ', $options['types']) . '"';
 if ($options['subtypes']) $content .= " / " . implode(', ', $options['subtypes']);
 if ($metadata) $content .= " avec la propriété/métadonnée \"" . $metadata . '"';
