@@ -54,7 +54,7 @@ if ($group->isMember(elgg_get_logged_in_user_entity())) {
 		$class .= 'is-group-owner ';
 	}
 } elseif (elgg_is_logged_in()) {
-	// @todo : ne pas afficher dans la sidebar
+	// @TODO : ne pas afficher dans la sidebar
 	if (!elgg_in_context('owner_block') && !elgg_in_context('widgets')) {
 		// join - admins can always join.
 		$url = elgg_get_site_url() . "action/groups/join?group_guid={$group->getGUID()}";

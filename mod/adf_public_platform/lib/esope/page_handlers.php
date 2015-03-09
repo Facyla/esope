@@ -9,7 +9,7 @@ function esope_page_handler($page) {
 			
 			// Note : allowed tools must be checked before any inclusion...
 			// @TODO : when adding new tools, synchronize with pages/esope/tools list
-			$allowed_tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials');
+			$allowed_tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields');
 			if (!empty($page[1]) && in_array($page[1], $allowed_tools)) {
 				include "$base/tools/{$page[1]}.php";
 			} else {

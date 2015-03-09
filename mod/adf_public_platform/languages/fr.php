@@ -869,6 +869,8 @@ $fr = array(
 	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
 	'esope:tools:tool:clear_cmis_credentials' => "Suppression des paramètres CMIS personnels",
 	'esope:tools:tool:clear_cmis_credentials:details' => "Cet outil permet de supprimer les paramètres personnels associés au plugin elgg_cmis.",
+	'esope:tools:tool:entity_fields' => "Recherche d'entités",
+	'esope:tools:tool:entity_fields:details' => "Recherche d'entités de divers types/subtypes par propriété ou métadonnée",
 	
 	// Menus
 	'esope:menu:topbar' => "Mon compte",
