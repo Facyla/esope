@@ -105,8 +105,8 @@ function notification_messages_notify_subject($hook, $entity_type, $returnvalue,
 		// Build new subject
 		$returnvalue = notification_messages_build_subject($entity);
 		
-		// Encode in UTF-8 so we have best subject title support ? @TODO : not working at all !
-		//$returnvalue = '=?utf-8?B?'.base64_encode($returnvalue).'?=';
+		// Encode in UTF-8 so we have best subject title support ? @TODO : check before enabling !
+		//$returnvalue = '=?UTF-8?B?'.base64_encode($returnvalue).'?=';
 	}
 	
 	// Return default or updated subject
@@ -148,7 +148,9 @@ function notification_messages_build_subject($entity) {
 		if (empty($msg_title)) { $msg_title = elgg_get_excerpt($entity->description, 25); }
 		// If still nothing, fail-safe to untitled
 		if (empty($msg_title)) { $msg_title = elgg_echo('notification_messages:untitled'); }
-	
+		// Strip optional tags or spaces
+		$msg_title = trim(strip_tags($msg_title));
+		
 		if (empty($msg_container)) {
 			return elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title));
 		} else {
