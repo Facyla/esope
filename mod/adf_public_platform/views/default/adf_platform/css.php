@@ -641,6 +641,20 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 .groups-members-count { float: right; }
 
+/* Anciens groupes */
+.group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
+.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
+
+.group-archive { border:1px dotted black; background:rgba(0,0,0,0.8); color:white; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-archive { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:white; }
+.group-archive-tiny { background: rgba(0,0,0,1); color:white; font-size: 6px; padding: 2px 0px; }
+.group-archive-small { background: rgba(0,0,0,1); color:white; font-size: 8px; padding: 3px 1px; }
+.group-archive-medium { background: rgba(0,0,0,1); color:white; font-size: 10px; padding: 3px 1px; }
+
+
 
 /* Generic useful classes */
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }

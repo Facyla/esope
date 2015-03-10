@@ -1,11 +1,7 @@
 <?php
-// Note : also add view to icon/group/default to update profile icon
-// Inria : add old group marker
-//$span .= elgg_view('group/group_oldactivity', array('entity' => $entity, 'size' => $vars['size']));
-
-
 $group = $vars['entity'];
-if (!elgg_instanceof($group, 'group')) { return; }
+
+$full = elgg_extract('full_view', $vars, false);
 
 $dbprefix = elgg_get_config("dbprefix");
 // Get timeframe in seconds
@@ -29,21 +25,21 @@ $latest_river = elgg_get_river(array(
 
 // Ssi le groupe a été manuellement archivé
 if ($group->status == 'archive') {
-	echo '<div class="group-archive">';
-	echo '<i class="fa fa-warning"></i> ' . elgg_echo('esope:group:archive');
-	echo '</div>';
+	echo '<span class="group-archive group-archive-' . $vars['size']. '" title="' . elgg_echo('esope:group:archive:details') . '">';
+	echo elgg_echo('esope:group:archive');
+	echo '</span>';
 }
+
 
 // Ssi le groupe a déjà un certain temps d'existence
 if ($group->time_created < $timeframe) {
 	// Si pas de contenu ou si le dernier contenu est plus ancien qu'un certain temps => on prévient...
 	if (!$latest_river || ($latest_river[0]->posted < $timeframe)) {
-		echo '<div class="group-oldactivity">';
-		$latest_action = elgg_view_friendly_time($latest_river[0]->posted);
-		if ($latest_river[0]->posted > 0) echo '<i class="fa fa-warning"></i> ' . elgg_echo('esope:group:oldactivity', array($latest_action));
-		else  echo '<i class="fa fa-warning"></i> ' . elgg_echo('esope:group:norecentactivity');
-		//echo elgg_get_friendly_time($latest_river[0]->posted);
-		echo '</div>';
+		$days_frame = ceil($timeframe / 3600*24);
+		echo '<span class="group-oldactivity group-oldactivity-' . $vars['size']. '" title="' . elgg_echo('esope:group:inactive:details', array($days_frame)) . '">';
+		//echo '<i class="fa fa-warning"></i> ';
+		echo elgg_echo('esope:group:inactive');
+		echo '</span>';
 	}
 }
 
