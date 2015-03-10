@@ -27,7 +27,9 @@ if ($filter) {
 		echo elgg_echo('survey:filter:invalid');
 		return;
 	}
-	elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
+	if (in_array($filter, array('user', 'question'))) {
+		elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
+	}
 }
 
 switch($filter) {
@@ -75,12 +77,17 @@ HTML;
 		$question = $filter_entity;
 		$response_count = $survey->getResponseCountForQuestion($question);
 		$response_label = elgg_echo ('survey:result:label', array($question->title, $response_count));
-		$responded_users = '';
 		// Show members if this survey
 		$response_id++;
-		$responded_users = '<br /><h5>' . elgg_echo('survey:results:users') . '</h5>';
+		// Percentage bar
+		$percentage = 0;
+		if ($response_count > 0) { $percentage = round($response_count / $total * 100); }
+		
+		$responded_users = '';
+		/*
 		$user_guids = $survey->getRespondersForQuestion($question);
 		if ($user_guids) {
+			$responded_users = '<br /><h5>' . elgg_echo('survey:results:users') . '</h5>';
 			// Gallery of responders
 			$responded_users .= elgg_list_entities(array('guids' => $user_guids, 'list_type' => 'users', 'size' => 'tiny', 'pagination' => false));
 		}
@@ -89,14 +96,9 @@ HTML;
 		$responded_values = '<br /><h5>' . elgg_echo('survey:results:values') . '</h5>';
 		$response_values = $survey->getValuesForQuestion($question);
 		if ($response_values) { $responded_values .= implode('<br />', $response_values); }
-		
-		// Percentage bar
-		$percentage = 0;
-		if ($response_count > 0) { $percentage = round($response_count / $total * 100); }
+		*/
 		
 		// Détail des réponses
-		/*
-		*/
 		$response_details = '';
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 		$response_details .= '<br /><h5>' . elgg_echo('survey:results:question_details:title') . '</h5>';

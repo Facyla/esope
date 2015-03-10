@@ -67,6 +67,26 @@ function cocon_methode_get_user_group($user_guid = false) {
 				add_entity_relationship($user->guid, 'operator', $group->guid);
 				$msg = elgg_echo('cocon_methode:group:admin', array($group->name));
 				system_message($msg);
+				// Notification du mail de contact du collège
+				$site = elgg_get_site_entity();
+				// Set From and default To
+				if (is_email_address($site->email)) {
+					$from = $site->email;
+					$to = $group->cocon_mail;
+				}
+				// Use wanted to if valid (failsafe to site email so someone is notified)
+				if (is_email_address($group->cocon_mail)) { $to = $group->cocon_mail; }
+				// Send notification
+				if ($from && $to) {
+					// Lists all existing functions
+					$fonctions = elgg_get_plugin_setting("fonctions", 'theme_cocon');
+					$fonctions = esope_build_options($fonctions, true);
+					$fonction = $fonctions[$user->cocon_fonction];
+					$subject = elgg_echo('cocon_methode:groupadmin:subject', array($user->name, $group->name));
+					$body = elgg_echo('cocon_methode:groupadmin:body', array($user->name, $group->name, $fonction, $site->url, $site->email));
+					elgg_send_email($from, $to, $subject, $body, NULL);
+				}
+				
 			}
 			break;
 		case "1":

@@ -39,7 +39,10 @@ function theme_fing_init(){
 		}
 	}
 	
+	// Page handlers
 	elgg_register_page_handler("fing", "fing_page_handler");
+	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
+	
 	
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
@@ -144,6 +147,14 @@ function fing_page_handler($page){
 		default:
 			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
+	return true;
+}
+
+
+function qntransitions_page_handler($page){
+	$page[0] = strtolower($page[0]);
+	if (!empty($page[1])) set_input('rubrique', $page[1]);
+	include(dirname(__FILE__) . '/pages/theme_fing/qntransitions.php');
 	return true;
 }
 

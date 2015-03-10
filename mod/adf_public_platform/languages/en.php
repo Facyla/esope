@@ -274,7 +274,7 @@ $en = array(
 	'adf_platform:index_members' => "Display online members",
 	'adf_platform:index_recent_members' => "Display newly registered members",
 	'adf_platform:homegroup_guid' => "Choose main group / help group",
-	'adf_platform:homegroup_index' => "Display latest group activity ?",
+	'adf_platform:homegroup_index' => "Display latest main group activity ?",
 	'adf_platform:homesite_index' => "Display latest site activity ?",
 	'adf_platform:homegroup_autojoin' => "Auto-register new members in this group ? (if forced, will also register anyone who left the group)",
 	
@@ -342,7 +342,9 @@ $en = array(
 	'adf_platform:cmspages:notactivated' => "Caution : cmspages plugin not activated. Please activate or change theme settings.",
 	'adf_platform:settings:replace_home' => "Replace default logged in homepage by a user dashboard",
 	'adf_platform:settings:firststeps' => "Firsts steps page GUID",
-	'adf_platform:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
+	'adf_platform:settings:firststeps:help' => "This page will display the first month for new users. The page GUID is the number that is in the page address: <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/first-steps</em>. Note: must be a 'page' subtype.",
+	'adf_platform:settings:header' => "Header content",
+	'adf_platform:settings:header:help' => "If defined, the header defined here replaces the site title. The header will display between the top menu and the navigation menu.",
 	'adf_platform:settings:footer' => "Footer content",
 	'adf_platform:settings:analytics' => "Analytics code",
 	'adf_platform:settings:headerimg' => "Header image (default: 85px height)",
@@ -706,8 +708,10 @@ $en = array(
 	'esope:html_email_handler:css' => "Notifications custom CSS",
 	'esope:html_email_handler:css:help' => "If set, this CSS will replace default CSS (in html_email_handler/notification/body).",
 	'esope:html_email_handler:wrapper:help' => "If you want to edit the notification wrapper, please copy and edit the default wrapper in your theme (html_email_handler/notification/body).",
+	'esope:digest:css' => "Digest CSS",
 	'esope:digest:css:help' => "If you want to edit the digest CSS, please copy and edit the default CSS in your theme (css/digest/*).",
 	'esope:digest:wrapper:help' => "If you want to edit the digest wrapper, please copy and edit the default wrapper in your theme (page/layouts/digest).<br />To edit the inner elements content and wrappers, please read the Digest documentation for more detailed instructions. The views are located in digest/elements/* but you'll need to register elements to add them to the digests.",
+	'esope:newsletter:css' => "Newsletter default CSS",
 	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	'esope:digest:groups' => "New groups",
@@ -746,6 +750,8 @@ $en = array(
 	'esope:group:norecentactivity' => "There was no recent activity in this group.",
 	'esope:group:inactive' => "INACTIVE",
 	'esope:group:inactive:details' => "No activity since %s days",
+	'esope:group:archive' => "ARCHIVE",
+	'esope:group:inactive:details' => "This group was archived",
 	
 	'esope:likes' => "Liked content",
 	
@@ -844,6 +850,8 @@ $en = array(
 	'esope:tools:tool:threads_disable:details' => "This tools allows administrators to convert 'threads' comments to regular comments, before disabling threads plugin",
 	'esope:tools:tool:user_updates' => "Remove dashboard widgets",
 	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
+	'esope:tools:tool:clear_cmis_credentials' => "Clear users CMIS credentials",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Removes all personnal settings that were set up for elgg_cmis plugin.",
 	
 	// Menus
 	'esope:menu:topbar' => "My account",

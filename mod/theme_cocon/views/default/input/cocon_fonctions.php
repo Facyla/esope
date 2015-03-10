@@ -1,5 +1,5 @@
 <?php
-// Lists all existing profile types and allows a multi select in the list
+// Lists all existing functions
 $values = elgg_get_plugin_setting("fonctions", 'theme_cocon');
 $vars['options_values'] = esope_build_options($values, true);
 

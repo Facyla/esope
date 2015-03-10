@@ -507,7 +507,7 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 	// Avoid any time limit while processing
 	set_time_limit(0);
 	access_show_hidden_entities(true);
-	elgg_set_ignore_access(true);
+	$ia = elgg_set_ignore_access(true);
 	
 	// LDAP accounts check : check LDAP validity
 	if (elgg_is_active_plugin('ldap_auth')) {
@@ -520,6 +520,7 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 		echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
 	}
 	
+	elgg_set_ignore_access($ia);
 	echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
 }
 
@@ -529,6 +530,8 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 	if (!$user->isEnabled()) return;
 	// Skip banned accounts
 	if ($user->isbanned()) return;
+	// Skip archived accounts
+	if ($user->memberstatus == 'closed') return;
 	
 	//$debug_0 = microtime(TRUE);
 	// Check LDAP data

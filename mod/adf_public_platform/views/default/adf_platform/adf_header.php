@@ -88,20 +88,30 @@ if (elgg_is_logged_in()) {
 	}
 	
 }
+
+// Header
+$header_content = elgg_get_plugin_setting('header', 'adf_public_platform');
+$header_content = trim($header_content);
+// Use default value if header not set
+if (empty($header_content)) {
+	$header_title = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+	$header_content = '<a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '">' . $headertitle . '</a>';
+	// Default styles syntax : <span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>;
+}
 ?>
 
 			<header>
 				<div class="is-floatable">
 					<div class="interne">
-						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><?php
-						echo elgg_get_plugin_setting('headertitle', 'adf_public_platform');
-						//'<span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>';
-						?></a></h1>
+						<h1><?php echo $header_content; ?></h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<a href="<?php echo $url . 'profile/' . $ownusername; ?>" class="profile-link"><span id="adf-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></span></a>
 							<nav>
 								<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 								<ul id="menu-topbar">
+									<!--
+									<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" class="profile-link"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
+									//-->
 									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
 									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('friends'); ?></a></li>

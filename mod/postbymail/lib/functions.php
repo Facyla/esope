@@ -29,8 +29,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 	global $sender_reply;
 	global $admin_reply;
 	
-	$restore_access_override = elgg_get_ignore_access();
-	elgg_set_ignore_access(true);
+	$ia = elgg_set_ignore_access(true);
 	$debug = true;
 	$use_attachments = false;
 	// @TODO : vérifier si on doit faire un check has_acces_to_entity => normalement plus besoin en 1.8
@@ -61,7 +60,10 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		case 'comments': break;
 	}
 	// Si ni les réponses, ni les publications ne sont autorisées => pas de publication par mail du tout : on ne notifie pas non plus et on peut sortir de suite sans parcourir les messages..
-	if (!$mailpost && !$mailreply) { return false; }
+	if (!$mailpost && !$mailreply) {
+		elgg_set_ignore_access($ia);
+		return false;
+	}
 	
 	// Liste des admins à notifier
 	$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
@@ -772,7 +774,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 	}
 	
 	// Rétablissement des droits originaux
-	elgg_set_ignore_access($restore_access_override);
+	elgg_set_ignore_access($ia);
 	
 	return $body;
 }

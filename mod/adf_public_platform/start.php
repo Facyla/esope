@@ -302,6 +302,7 @@ function esope_init() {
 	// Pour pouvoir lister tous les articles d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('blog', 'blog_page_handler');
 	elgg_register_page_handler('blog', 'adf_platform_blog_page_handler');
+	// Remplacement fonctions du blog
 	elgg_register_library('elgg:blog', elgg_get_plugins_path() . 'adf_public_platform/lib/blog.php');
 	// Pour pouvoir lister tous les bookmarks d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('bookmarks', 'bookmarks_page_handler');
@@ -1833,10 +1834,7 @@ function esope_set_input_recursive_array($array, $separators = array("|", '::', 
 */
 function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	// Admin : on ne tient pas compte des accès
-	if ($bypass) {
-		$ia = elgg_get_ignore_access();
-		elgg_set_ignore_access(true);
-	}
+	if ($bypass) { $ia = elgg_set_ignore_access(true); }
 	switch($mode) {
 		case 'featured':
 			// Groupes en Une

@@ -12,8 +12,7 @@ gatekeeper();
 // @TODO : qui peut éditer ?
 
 // Give access to all users, data, etc.
-$ignore_access = elgg_get_ignore_access();
-elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 
 global $CONFIG;
 $content = '';
@@ -232,7 +231,7 @@ if ($view_all || $view_learners) {
 elgg_set_context('dossierdepreuve');
 elgg_push_context('gestion_apprenants');
 
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 
 // Composition de la page

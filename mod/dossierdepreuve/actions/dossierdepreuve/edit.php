@@ -69,8 +69,7 @@ if ($action == "create") {
 }
 
 // Override access rights
-$ignore_access = elgg_get_ignore_access();
-elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 
 if ($dossier_owner = get_entity($owner_guid)) {} else {
 	register_error("Membre non valide - test : $owner_guid / $container_guid");
@@ -197,7 +196,7 @@ if ($dossierdepreuve->save()) {
   }
 } else { register_error(elgg_echo("dossierdepreuve:savefailed")); }
 
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 
 forward($dossierdepreuve->getURL());

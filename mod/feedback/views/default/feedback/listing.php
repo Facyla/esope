@@ -61,7 +61,7 @@ if (elgg_is_admin_logged_in) {
 $class = 'feedback-mood-' . $vars['entity']->mood . ' feedback-about-' . $vars['entity']->about . ' feedback-status-' . $status;
 
 $page = elgg_echo('feedback:page:unknown');
-if ( !empty($vars['entity']->page) ) {
+if (!empty($vars['entity']->page)) {
 	$page = $vars['entity']->page;
 	$page = "<a href='" . $page . "'>" . $page . "</a>";
 }
@@ -80,6 +80,7 @@ $info .= '<br /><blockquote>' . nl2br($vars['entity']->txt) . '</blockquote>';
 $comment = elgg_get_plugin_setting("comment", "feedback");
 if (elgg_in_context('admin')) $full = false;
 if ($comment == 'yes') {
+	$ia = elgg_set_ignore_access(true);
 	if (!$full) {
 		$num_comments_feedback = $vars['entity']->countComments();
 		$info .= '<div class="clearfloat"></div>';
@@ -89,6 +90,7 @@ if ($comment == 'yes') {
 	$info .= '<div id="feedback_' . $vars['entity']->guid . '"';
 	if (!$full) $info .= ' style="display:none;"';
 	$info .= '>' . elgg_view_comments($vars['entity']) . '</div>';
+	elgg_set_ignore_access($ia);
 }
 
 

@@ -1,5 +1,7 @@
 <?php
-	session_start();
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '/engine/start.php';
+
+	//session_start();
 	header("content-type: json/application;charset=utf-8");
 	
 	if(!isset($_SESSION['check_id'])){

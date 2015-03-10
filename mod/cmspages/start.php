@@ -356,8 +356,7 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 function cmspages_public_pages($hook, $type, $return_value, $params) {
 	global $CONFIG;
 	
-	$ignore_access = elgg_get_ignore_access();
-	elgg_set_ignore_access(true);
+	$ia = elgg_set_ignore_access(true);
 	
 	$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
 	$cmspages = elgg_get_entities($params);
@@ -373,7 +372,7 @@ function cmspages_public_pages($hook, $type, $return_value, $params) {
 	// $return_value[] = 'cmspages/embed'; // URL pour les embed externes
 	*/
 	
-	elgg_set_ignore_access($ignore_access);
+	elgg_set_ignore_access($ia);
 	
 	return $return_value;
 }

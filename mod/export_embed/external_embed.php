@@ -82,8 +82,7 @@ switch ($embedtype) {
 	// Activité d'un groupe
 	case 'group_activity':
 		// Ignore access only to get the group !
-		$ignore_access = elgg_get_ignore_access();
-		elgg_set_ignore_access(true);
+		$ignore_access = elgg_set_ignore_access(true);
 		$group = get_entity($group_guid);
 		// Restore initial access before getting the content
 		elgg_set_ignore_access($ignore_access);

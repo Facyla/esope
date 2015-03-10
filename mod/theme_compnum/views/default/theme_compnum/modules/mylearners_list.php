@@ -37,7 +37,7 @@ $(function() {
 </div>
 */
 
-$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 
 // Pour chacun des groupes dont on est admin...
 if ($myadmin_groups) {
@@ -82,7 +82,7 @@ if ($myadmin_groups) {
 			echo '</div>';
 		}
 }
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 echo '<div class="clearfloat"></div><br />';
 
