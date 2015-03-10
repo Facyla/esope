@@ -37,3 +37,10 @@
 .survey_response-label:hover { color: red; }
 .survey-question-reply { padding:1ex 0 3ex 0; border-bottom:1px solid #fff; }
 
+/* Results */
+#survey-results-questions table th, #survey-results-questions table td { padding:0.5ex; border-bottom:1px solid #CCC; border-right:1px solid #CCC; }
+#survey-results-questions table th:first-of-type, #survey-results-questions table td:first-of-type { border-left:1px solid #CCC; }
+#survey-results-questions table .survey-progress { width: 60%; display: inline-block; margin:0; float:right; }
+
+
+

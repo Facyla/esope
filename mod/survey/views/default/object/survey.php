@@ -60,6 +60,9 @@ if (isset($vars['entity'])) {
 	// Full view
 	if ($full) {
 		$subtitle = "$closing_date $author_text $date $comments_link $categories";
+		if ($survey->canEdit()) {
+			$subtitle .= '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('survey:results') . '</a>';
+		}
 		$params = array(
 			'entity' => $survey,
 			'title' => false,
@@ -79,14 +82,17 @@ if (isset($vars['entity'])) {
 
 	} else {
 		// Brief view
-		$responses = $survey->countAnnotations('response');
-		if ($responses == 1) {
+		$responses_count = $survey->getResponseCount();
+		if ($responses_count == 1) {
 			$noun = elgg_echo('survey:noun_response');
 		} else {
 			$noun = elgg_echo('survey:noun_responses');
 		}
-		$responses = "<div>" . $responses . " " . $noun . "</div>";
-		$subtitle = "$closing_date $responses $author_text $date $comments_link $categories";
+		$responses_count = "<div>" . $responses_count . " " . $noun . "</div>";
+		$subtitle = "$closing_date $responses_count $author_text $date $comments_link $categories";
+		if ($survey->canEdit()) {
+			$subtitle .= '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('survey:results') . '</a>';
+		}
 		$params = array(
 			'entity' => $survey,
 			'title' => '<a href="' . $survey->getURL() . '">' . $survey->title . '</a>',
@@ -95,7 +101,7 @@ if (isset($vars['entity'])) {
 			'tags' => $tags
 		);
 		$params = $params + $vars;
-		$list_body = elgg_view('object/elements/summary', $params);
+		$list_body .= elgg_view('object/elements/summary', $params);
 		echo elgg_view_image_block($owner_icon, $list_body);
 	}
 	
