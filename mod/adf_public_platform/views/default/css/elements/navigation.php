@@ -777,7 +777,7 @@ header nav ul li a:active { color: #ddd; }
 }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
-<?php // Keep this block just in case some clients prefer old way but we should use new icons by default (vector)
+<?php // Keep this block just in case some people prefer the old way, but we should now use new icons by default (vector)
 <<< EOT
 /* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }

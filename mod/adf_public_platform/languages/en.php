@@ -161,19 +161,6 @@ $en = array(
 	'adf_platform:members:newest' => "Newest members",
 	'adf_platform:groups:featured' => "Featured groups",
 	
-	// Widgets
-	'adf_platform:widget:bookmark:title' => 'Bookmarks',
-	'adf_platform:widget:brainstorm:title' => 'Brainstorm ideas',
-	'adf_platform:widget:blog:title' => 'Blog articles',
-	'adf_platform:widget:event_calendar:title' => 'Calendar',
-	'adf_platform:widget:file:title' => 'Files',
-	'adf_platform:widget:file_folder:title' => 'File Folders',
-	'adf_platform:widget:group:title' => 'Groups',
-	'adf_platform:widget:page:title' => 'Pages',
-	'adf_platform:widget:user_activity:title' => 'Site activity',
-	'adf_platform:widget:user_activity:description' => 'Display the latest user activities',
-	'adf_platform:widget:site_activity:title' => 'Recent activity',
-	'adf_platform:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
 	
 	'accessibility:sidebar:title' => "Secondary menu",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -237,16 +224,10 @@ $en = array(
 	
 	'adf_platform:access:public' => "Public (accessible to non-loggedin visitors)",
 	
-	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
-	'bookmarks:widget:description' => "Displays your bookmarks list.",
 	'bookmarks:filter' => "Bookmarks to be displayed",
 	'bookmarks:mine' => "Mine",
 	'bookmarks:mygroups' => "In my groups",
-	'pages:widget:description' => "Displays your pages.",
-	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'event_calendar:num_display' => "Number of events to display",
-	'messages:widget:title' => "Unread messages",
-	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
 	
 	
@@ -398,9 +379,7 @@ $en = array(
 	'adf_platform:settings:widget:profile_completeness:help' => "This widget can be enabled/disabled in Profile Manager plugin configuration",
 	'adf_platform:settings:widget:freehtml' => "Allow widget : Free text (HTML)",
 	'adf_platform:settings:widget:searchresults' => "Allow widget : Configured search",
-	'esope:widget:freehtml' => "Free text (HTML)",
 	'esope:widget:freehtml:description' => "Let's you integrate any text you want, including HTML.",
-	'esope:widget:searchresults' => "Tag search",
 	'esope:widget:searchresults:description' => "Displays the results of a search by tag.",
 	'esope:widgets:freehtml:title' => "Title (updates after page reload)",
 	'esope:widgets:freehtml:content' => "Content (HTML)",
@@ -420,9 +399,15 @@ $en = array(
 	'esope:widgets:searchresults:highlight_first' => "Number of highlighted items (slim only)",
 	'webprofiles' => "Online profiles",
 	'webprofiles:description' => "Profiles on a bunch of big social networks, plus websites URLs and email addresses",
-	'webprofiles:widget:title' => "Online profiles",
-	'webprofiles:widget:description' => "Displays a block with links to your profiles, identities and online contacts : : video, facebook, linkedin, twitter, doyoubuzz, web sites and email addresses, etc.",
 	'webprofiles:widget:help' => "Set your profiles on various services to display the service icon with a link to your profile. You can also add websites email addresses and RSS feeds.",
+	'webprofiles:widget:description' => "Displays a block with links to your profiles, identities and online contacts : : video, facebook, linkedin, twitter, doyoubuzz, web sites and email addresses, etc.",
+	'adf_platform:widget:user_activity:description' => 'Display the latest user activities',
+	'adf_platform:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
+	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
+	'bookmarks:widget:description' => "Displays your bookmarks list.",
+	'pages:widget:description' => "Displays your pages.",
+	'event_calendar:widget:description' => "Displays your upcoming events.",
+	'messages:widget:description' => "Displays your latest unread messages.",
 	
 	'adf_platform:settings:filters:friends' => "Remove \"Friends\" tab in listings ? (default : No)",
 	'adf_platform:settings:filters:mine' => "Remove \"Mine\" tab in listings ? (default : No)",
@@ -735,7 +720,23 @@ $en = array(
 	'esope:subtype:file' => "file",
 	'esope:subtype:event_calendar' => "event",
 	
-	// Icons
+	'esope:likes' => "Liked content",
+	
+	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
+	'esope:access:userfield' => "Viewable by...",
+	
+	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
+	'esope:group:norecentactivity' => "There was no recent activity in this group.",
+	'esope:group:inactive' => "INACTIVE",
+	'esope:group:inactive:details' => "No activity since %s days",
+	'esope:group:archive' => "ARCHIVE",
+	'esope:group:inactive:details' => "This group was archived",
+	
+	
+	
+	/**********************/
+	/* Font Awesome ICONS */
+	/**********************/
 	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
@@ -745,22 +746,28 @@ $en = array(
 	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
+	/* Esope FA icons - generic usage */
+	// Tools
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o fa-fw\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o fa-fw\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
+	// Sprites icons
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down fa-fw\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
-	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
-	'esope:group:norecentactivity' => "There was no recent activity in this group.",
-	'esope:group:inactive' => "INACTIVE",
-	'esope:group:inactive:details' => "No activity since %s days",
-	'esope:group:archive' => "ARCHIVE",
-	'esope:group:inactive:details' => "This group was archived",
-	
-	'esope:likes' => "Liked content",
-	
-	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
-	'esope:access:userfield' => "Viewable by...",
-	
-	// Group tools FA icons *override* - please update CSS accordingly
-	/* @TODO
-	*/
+	// Group tools : side menu entries and module titles - *override* - please update CSS accordingly
 	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
@@ -778,6 +785,8 @@ $en = array(
 	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
 	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'photos:group' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'photos:group_albums' => "<i class=\"fa fa-photo fa-fw\"></i> Photos Albums",
 	// Group actions and infos
 	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Manage group admins",
 	'groups:membershiprequests' => "<i class=\"fa fa-users fa-fw\"></i> Manage join requests",
@@ -787,6 +796,10 @@ $en = array(
 	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Group member",
 	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
 	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
+	// Group modules
+	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sub-groups",
+	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Most recent images",
+	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Most recent albums",
 	
 	// User tools FA icons *override* (owner block)
 	// Core tools
@@ -808,12 +821,39 @@ $en = array(
 	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
 	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
 	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
-	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
 	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
 	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Polls",
 	// User actions and infos
 	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
 	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
+	
+	/* Widgets */
+	'adf_platform:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Bookmarks',
+	'adf_platform:widget:brainstorm:title' => '<i class=\"fa fa-lightbulb fa-fw\"></i> Brainstorm ideas',
+	'adf_platform:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Blog articles',
+	'adf_platform:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Calendar',
+	'adf_platform:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Files',
+	'adf_platform:widget:file_folder:title' => '<i class="fa fa-folder-o fa-fw"></i> File Folders',
+	'adf_platform:widget:group:title' => '<i class="fa fa-users fa-fw"></i> Groups',
+	'adf_platform:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Pages',
+	'adf_platform:widget:user_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Site activity",
+	'adf_platform:widget:site_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Recent activity",
+	'dashboard:widget:group:title' => "<i class=\"fa fa-flash fa-fw\"></i> Group activity",
+	'messages:widget:title' => "<i class=\"fa fa-envelope-o mail outline icon\"></i> Unread messages",
+	'webprofiles:widget:title' => "<i class=\"fa fa-user fa-fw\"></i> Online profiles",
+	'export_embed:widget:title' => "<i class=\"fa fa-code fa-fw\"></i> Embeddable widgets",
+	'widgets:profile_completeness:title' => "<i class=\"fa fa-user fa-fw\"></i> My profile",
+	'widgets:file_tree:title' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders", // ou : sitemap ?
+	'simplepie:widget' => "<i class=\"fa fa-rss fa-fw\"></i> RSS feed",
+	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Map", // ou : globe ?
+	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Tag search",
+	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Free text (HTML)",
+	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
+	
+	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
+	
 	
 	
 	// Actions
@@ -827,9 +867,6 @@ $en = array(
 	'esope:archiveuser:error' => "User could not be archived",
 	'esope:unarchiveuser:ok' => "User successfully un-archived",
 	'esope:unarchiveuser:error' => "User could not be un-archived",
-	
-	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
-	
 	
 	// ESOPE tools
 	'esope:tools:intro' => "These tools should be used only in some particular cases, or only once, and often require a combined code+administration action.",

@@ -5,9 +5,9 @@ $no_yes_opt = array('no' => elgg_echo('group_chat:no'), 'yes' => elgg_echo('grou
 if (!isset($vars['entity']->group_chat)) $vars['entity']->group_chat = 'yes';
 if (!isset($vars['entity']->group_chat_days)) $vars['entity']->group_chat_days = 2;
 if (!isset($vars['entity']->site_chat)) $vars['entity']->site_chat = 'no';
-if (!isset($vars['entity']->site_chat_days)) $vars['entity']->group_chat_days = 2;
-if (!isset($vars['entity']->site_chat)) $vars['entity']->user_chat = 'no';
-if (!isset($vars['entity']->user_chat_days)) $vars['entity']->group_chat_days = 2;
+if (!isset($vars['entity']->site_chat_days)) $vars['entity']->site_chat_days = 2;
+if (!isset($vars['entity']->user_chat)) $vars['entity']->user_chat = 'no';
+if (!isset($vars['entity']->user_chat_days)) $vars['entity']->user_chat_days = 2;
 
 
 // Group chat

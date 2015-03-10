@@ -435,6 +435,7 @@ section div.module header h2 {
 	max-width:none;
 	float:none;
 }
+
 /* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
 a.elgg-widget-collapse-button,
 a.elgg-widget-collapse-button:hover,

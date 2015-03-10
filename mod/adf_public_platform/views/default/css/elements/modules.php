@@ -410,9 +410,8 @@ section .elgg-layout-one-column div.module footer { background: none; height:0; 
 /* Icônes pour les widgets */
 section div.module header h2 {
 	padding: 5px 0 5px 30px; margin:0 0 0 4px; max-width: 190px; min-height:24px;
-	/* padding: 5px 0 5px 30px; margin:0 75px 0 4px; min-height:24px; */
 }
-
+/*
 section div.elgg-widget-instance-a_users_groups header h2 {
 	background: url("<?php echo $urlicon; ?>a_users_groups-widget.png") no-repeat scroll 0 2px transparent;
 }
@@ -470,6 +469,9 @@ section div.elgg-widget-instance-thewire header h2 {
 section div.elgg-widget-instance-twitter header h2 {
 	background: url("<?php echo $urlicon; ?>twitter-widget.png") no-repeat scroll 0 2px transparent;
 }
+*/
+/* No need for special background and padding if using FA icons */
+section div.module header h2 { padding-left: 0; background: transparent; }
 
 
 
