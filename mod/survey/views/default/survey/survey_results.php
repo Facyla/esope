@@ -58,8 +58,8 @@ foreach ($questions as $question) {
 		<div class="survey-progress">
 			<div class="survey-progress-filled" style="width: {$percentage}%"></div>
 		</div>
-		<div $hidden id=survey-users-response-{$response_id}>$responded_users</div>
-		<div $hidden id=survey-values-response-{$response_id}>$responded_values</div>
+		<div $hidden id="survey-users-response-{$response_id}">$responded_users</div>
+		<div $hidden id="survey-values-response-{$response_id}">$responded_values</div>
 	</div>
 HTML;
 }

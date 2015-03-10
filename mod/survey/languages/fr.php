@@ -135,7 +135,7 @@ Afficher le sondage et y répondre :
 	'survey:notdeleted' => "Désolé : impossible de supprimer ce sondage.",
 	
 	
-	// New survey strings
+	// ESOPE : New survey strings
 	'survey:questions' => "Questions",
 	'survey:add_question' => "Ajouter une question",
 	'survey:delete_question' => "Supprimer cette question",
@@ -164,22 +164,41 @@ Afficher le sondage et y répondre :
 	'survey:type:multiselect' => "Sélection multiple",
 	'survey:type:multiselect:details' => "Pour plusieurs réponses sous forme de cases à cocher, parmi une liste de choix à définir ci-dessous.",
 	'survey:type:rating' => "Echelle d'évaluation",
-	'survey:type:rating:details' => "Pour une seule réponse parmi une liste de choix, présentés sur une seule ligne. Cette option est plus appropriée pour une échelle d'évaluation ou de notation, en indiquant par exemple des options de 0 à 5, ou  une liste d'appréciations qualitative (de pas du tout à tout à fait). Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
+	'survey:type:rating:details' => "Pour une seule réponse parmi une liste de choix, présentés sur une seule ligne. Cette option est plus appropriée pour une échelle d'évaluation ou de notation, en indiquant par exemple des options de 0 à 5, ou une liste d'appréciations qualitative (de pas du tout à tout à fait). Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
 	'survey:type:date' => "Date",
-	'survey:type:date:details' => "Pour une date à choisir dans un calendrier",
+	'survey:type:date:details' => "Pour une date à choisir dans un calendrier.",
 	// Responses
 	'survey:results' => "Résultats du sondage",
+	'survey:results:question' => "Par question",
+	'survey:results:user' => "Par répondant",
 	'survey:result:label' => "\"%s\" (%s réponses)",
 	'survey:results:summary' => "Résumé des résultats",
 	'survey:results:full' => "Résultats détaillés",
 	'survey:results:user_details' => "Voir le détail pour ce répondant",
-	'survey:results:user_details:title' => "Détail des réponses par répondant",
-	'survey:results:question_details' => "Voir le détail pour cette question",
-	'survey:results:question_details:title' => "Détail des réponses par répondant",
+	'survey:results:user_details:title' => "Détail des réponses de ce répondant",
+	'survey:results:question_details' => "Voir les réponses",
+	'survey:results:question_details:title' => "Détail des réponses pour cette question",
+	'survey:results:question_details:responses' => "Réponse(s) par répondant",
+	'survey:results:question_details:values' => "Nombre de mentions des choix pour chaque valeur de réponse",
 	'survey:results:questions' => "Liste des questions",
 	'survey:results:users' => "Liste des répondants",
 	'survey:results:values' => "Liste des réponses",
-	
+	'survey:results:questionscount' => "<strong>%s</strong> questions",
+	'survey:results:responderscount' => "<strong>%s</strong> répondants",
+	'survey:results:stats' => "Statistiques globales",
+	'survey:results:responsesbyquestion' => "Nombre de réponses par question",
+	'survey:results:userdetails' => "Détail des réponses de &laquo;&nbsp;%s&nbsp;&raquo;",
+	'survey:results:questiondetails' => "Détail des réponses à &laquo;&nbsp;%s&nbsp;&raquo;",
+	'survey:results:question:counts' => "%s répondants sur %s ont répondu à cette question (%s%%)",
+	'survey:results:responders' => "Répondants",
+	'survey:results:inputtype' => "Type de champ",
+	'survey:results:nbresponses' => "Nb réponses",
+	'survey:results:percresponses' => "% réponses",
+	'survey:results:moredetails' => "Plus de détails",
+	'survey:results:guid' => "GUID",
+	'survey:results:name' => "Nom du répondant",
+	'survey:results:value' => "Valeur de la réponse",
+	'survey:results:count' => "Nombre de mentions",
 	
 );
 
