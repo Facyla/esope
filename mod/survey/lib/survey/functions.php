@@ -128,6 +128,7 @@ function survey_prepare_edit_body_vars($survey = null) {
 		'open_survey' => null,
 		'tags' => null,
 		'front_page' => null,
+		'comments_on' => null,
 		'access_id' => ACCESS_DEFAULT,
 		'guid' => null
 	);
@@ -307,7 +308,7 @@ function survey_get_page_view($guid) {
 		$title =  $survey->title;
 		$content = elgg_view_entity($survey, array('full_view' => true));
 		//check to see if comments are on
-		if ($survey->comments_on != 'Off') {
+		if ($survey->comments_on == 'yes') {
 			$content .= elgg_view_comments($survey);
 		}
 

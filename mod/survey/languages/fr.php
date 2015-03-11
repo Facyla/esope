@@ -169,8 +169,8 @@ Afficher le sondage et y répondre :
 	'survey:type:date:details' => "Pour une date à choisir dans un calendrier.",
 	// Responses
 	'survey:results' => "Résultats du sondage",
-	'survey:results:question' => "Par question",
-	'survey:results:user' => "Par répondant",
+	'survey:results:question' => "Question",
+	'survey:results:user' => "Répondant",
 	'survey:result:label' => "\"%s\" (%s réponses)",
 	'survey:results:summary' => "Résumé des résultats",
 	'survey:results:full' => "Résultats détaillés",
@@ -199,6 +199,19 @@ Afficher le sondage et y répondre :
 	'survey:results:name' => "Nom du répondant",
 	'survey:results:value' => "Valeur de la réponse",
 	'survey:results:count' => "Nombre de mentions",
+	
+	
+	// ESOPE : not translated into English yet
+	'survey:results:created' => "Date de création : %s",
+	'survey:results:updated' => "Dernière mise à jour : %s",
+	'survey:results:featured' => "Sondage mis en avant : %s",
+	'survey:results:open' => "Etat du sondage : %s",
+	'survey:results:closing' => "Date de clôture : %s",
+	'survey:results:access' => "Visibilité : %s",
+	'survey:comments_on' => "Activer les commentaires",
+	'survey:question:comment_on' => "Commentaires",
+	'survey:question:display_order' => "Ordre d'affichage",
+	
 	
 );
 

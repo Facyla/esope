@@ -172,8 +172,8 @@ View and vote on the poll:
 	'survey:type:date:details' => "Lets responders select a date in a calendar.",
 	// Responses
 	'survey:results' => "Survey results",
-	'survey:results:question' => "By question",
-	'survey:results:user' => "By responder",
+	'survey:results:question' => "Question",
+	'survey:results:user' => "Responder",
 	'survey:result:label' => "\"%s\" (%s responses)",
 	'survey:results:summary' => "Results summary",
 	'survey:results:full' => "Detailed results",

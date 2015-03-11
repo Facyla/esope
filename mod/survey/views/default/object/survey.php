@@ -32,7 +32,7 @@ if (isset($vars['entity'])) {
 	// TODO: support comments off
 	// The "on" status changes for comments, so best to check for !Off
 	$comments_link = '';
-	if ($survey->comments_on != 'Off') {
+	if ($survey->comments_on == 'yes') {
 		$comments_count = $survey->countComments();
 		//only display if there are commments
 		if ($comments_count != 0) {
