@@ -4,6 +4,7 @@
  */
 
 $survey = elgg_extract('entity', $vars);
+elgg_push_context('survey-results');
 
 // Get array of possible responses
 $questions = survey_get_question_array($survey);
@@ -74,7 +75,7 @@ foreach ($questions as $question) {
 		// Display nice results !
 		echo $question_title;
 		echo '<div ' . $hidden . ' id="survey-response-' . $response_id . '">';
-		echo elgg_view('survey/output/response', array('question' => $question, 'survey' => $survey, 'i' => $response_id));
+		echo elgg_view('survey/output/response', array('question' => $question, 'survey' => $survey));
 		echo '</div>';
 		
 	} else {
@@ -92,7 +93,6 @@ foreach ($questions as $question) {
 		echo implode(' &nbsp; ', $own_responses);
 		echo '</p>';
 	}
-	
 	
 	echo '</div>';
 }

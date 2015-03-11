@@ -140,6 +140,8 @@ switch($filter) {
 		$survey_questions .= '</li>';
 		$survey_questions .= '</ul>';
 		
+		$survey_questions .= elgg_view('survey/output/response', array('question' => $question, 'survey' => $survey));
+		
 		// Détail des réponses par répondant
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 		$count_values = array();
