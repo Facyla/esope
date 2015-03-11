@@ -82,7 +82,7 @@ if (in_array($input_type, array('text'))) {
 	}
 } else if (in_array($input_type, array('date'))) {
 	foreach($count_values as $hash => $details) {
-		$survey_questions .= '<p>' . date('d/m/Y H:i', $details['value']) . ' &nbsp; (' . $details['count'] . ')</p>';
+		$survey_questions .= '<p>' . $details['value'] . ' &nbsp; (' . $details['count'] . ')</p>';
 	}
 } else if (in_array($input_type, array('pulldown', 'checkboxes', 'multiselect', 'rating'))) {
 	// @TODO List original options (+empty value) in a table...
