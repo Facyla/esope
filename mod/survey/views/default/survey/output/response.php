@@ -52,11 +52,13 @@ if (!empty($description)) $content_question .= '<p>' . elgg_echo('survey:questio
 
 
 // Responders - répondants
+/*
 if ($responders_guids) {
 	// Gallery of responders
 	//$content_responders = "<strong>Répondants ($responders_count)&nbsp;:</strong> ";
 	$content_responders .= elgg_list_entities(array('guids' => $responders_guids, 'list_type' => 'users', 'size' => 'tiny', 'pagination' => true, 'limit' => 100));
 }
+*/
 
 
 
