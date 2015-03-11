@@ -250,7 +250,7 @@ class Survey extends ElggObject {
 		
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 		
-		if (in_array($question->input_type, array('test', 'plaintext', 'longtext', 'date'))) {
+		if (in_array($question->input_type, array('text', 'plaintext', 'longtext', 'date'))) {
 			// Free text or value
 			foreach($responses as $response) {
 				$values[] = $response->value;

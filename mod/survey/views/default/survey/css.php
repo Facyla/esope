@@ -21,8 +21,6 @@
 .survey_post h3 a { text-decoration: none; }
 .survey_post p { margin: 0 0 5px 0; }
 
-.survey-result { margin: 15px 0; }
-
 .survey-progress { height: 12px; border: 1px #00B0E4 solid; margin: 5px 0; }
 .survey-progress-filled { background-color: #00B0E4; height: 12px; }
 
@@ -41,6 +39,12 @@
 #survey-results-questions table th, #survey-results-questions table td { padding:0.5ex; border-bottom:1px solid #CCC; border-right:1px solid #CCC; }
 #survey-results-questions table th:first-of-type, #survey-results-questions table td:first-of-type { border-left:1px solid #CCC; }
 #survey-results-questions table .survey-progress { width: 60%; display: inline-block; margin:0; float:right; }
+
+.survey-result { margin: 1ex 0 3ex 0; }
+.survey-result h3 { margin-bottom: 0; }
+.survey-result q, .survey-result blockquote { background: #e5e7f5; margin: 0px 12px 2px 0px; padding: 1px 3px; }
+.survey-result table th, .survey-result table td { padding:0.5ex; border-bottom:1px solid #CCC; border-right:1px solid #CCC; }
+.survey-result table th:first-of-type, .survey-result table td:first-of-type { border-left:1px solid #CCC; }
 
 
 

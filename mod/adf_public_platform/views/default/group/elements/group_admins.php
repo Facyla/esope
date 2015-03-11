@@ -18,7 +18,7 @@ $groupowner = $entity->getOwnerEntity();
 echo '<strong>' . elgg_echo('group_operators:operators') . '</strong><br />';
 echo '<span style="float:left;" title="' . elgg_echo('group_operators:owner') . '">' . elgg_view_entity_icon($groupowner, 'tiny') . '</span>';
 // Avec suppression du doublon potentiel dans le cas où la propriété du groupe a été transférée
-echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' => 'operator', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny', 'wheres' => "e.guid != {$groupowner->guid}"));
+echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' => 'operator', 'relationship_guid' => $entity->guid, 'inverse_relationship' => TRUE, 'order_by' => 'r.time_created DESC', "list_type" => "gallery", "gallery_class" => "elgg-gallery-users", "pagination" => false, 'size' => 'tiny', 'wheres' => "e.guid != {$groupowner->guid}", 'limit' => 0));
 echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
 /*

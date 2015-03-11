@@ -18,6 +18,35 @@ function survey_get_question_array($survey) {
 	return $responses;
 }
 
+/* Get options and formats them in a suitable array for input views
+ * @param $question : the question object
+ * @param $reverse : reverse return array key <=> values order
+ * Notes : we do not need to reverse order, as we use no keys here (will be numerical)
+           use regular options_values (option=>value) for : dropdown, pulldown, multiselect
+           use reverse options for : checkboxes, radio, rating
+ */
+function survey_get_question_choices_array($question) {
+	$choices = explode("\n", $question->options);
+	if (is_array($choices)) {
+		$choices = array_map('trim', $choices);
+		// Remove empty values
+		$choices = array_filter($choices);
+		$choices = array_unique($choices);
+	}
+	// Build clean array with choices both as key and value
+	$options = array();
+	foreach($choices as $option) { $options["$option"] = $option; }
+	// Add optional empty option
+	if ($question->empty_value == 'yes') { array_unshift($options, ''); }
+	return $options;
+}
+
+// Format date for display
+function survey_format_date($ts) {
+	$format = "d/m/Y";
+	return date($format, $ts);
+}
+
 function survey_activated_for_group($group) {
 	$group_survey = elgg_get_plugin_setting('group_survey', 'survey');
 	if ($group && ($group_survey != 'no')) {
@@ -304,7 +333,11 @@ function survey_get_page_view($guid) {
 	if ($survey instanceof Survey) {
 		// Set the page owner
 		$page_owner = $survey->getContainerEntity();
-		elgg_set_page_owner_guid($page_owner->guid);
+		if (elgg_instanceof($page_owner, 'group')) {
+			elgg_set_page_owner_guid($page_owner->guid);
+		} else {
+			elgg_set_page_owner_guid(elgg_get_site_entity()->guid);
+		}
 		$title =  $survey->title;
 		$content = elgg_view_entity($survey, array('full_view' => true));
 		//check to see if comments are on
@@ -312,10 +345,10 @@ function survey_get_page_view($guid) {
 			$content .= elgg_view_comments($survey);
 		}
 
-		if (elgg_instanceof($page_owner,'user')) {
-			elgg_push_breadcrumb($page_owner->name, "survey/owner/{$page_owner->username}");
-		} else {
+		if (elgg_instanceof($page_owner,'group')) {
 			elgg_push_breadcrumb($page_owner->name, "survey/group/{$page_owner->guid}");
+		} else {
+			//elgg_push_breadcrumb($page_owner->name, "survey/owner/{$page_owner->username}");
 		}
 		elgg_push_breadcrumb($survey->title);
 	} else {
@@ -325,9 +358,11 @@ function survey_get_page_view($guid) {
 		elgg_push_breadcrumb($title);
 	}
 
-	$params = array('title' =>$title, 'content' => $content, 'filter' => '');
-	$body = elgg_view_layout('content', $params);
-
+	if (elgg_instanceof($page_owner, 'group')) {
+		$body = elgg_view_layout('content', array('title' =>$title, 'content' => $content, 'filter' => ''));
+	} else {
+		$body = elgg_view_layout('one_column', array('title' =>$title, 'content' => $content, 'filter' => ''));
+	}
 	// Display page
 	return elgg_view_page($title, $body);
 }
@@ -361,3 +396,5 @@ function survey_manage_front_page($survey, $front_page) {
 		}
 	}
 }
+
+

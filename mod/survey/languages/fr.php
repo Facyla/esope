@@ -123,7 +123,7 @@ Afficher le sondage et y répondre :
 	'survey:responded' => "Merci d'avoir répondu, vos réponses ont été enregistrées.",
 	'survey:deleted' => "Votre sondage a été supprimé.",
 	'survey:totalresponses' => "Nombre total de réponses : %s",
-	'survey:alreadyresponded' => "Vous avez déjà répondu à ce sondage.",
+	'survey:alreadyresponded' => "Vous avez répondu à ce sondage.",
 	'survey:responded' => "Merci d'avoir répondu à ce sondage.",
 
 	/**
@@ -211,6 +211,8 @@ Afficher le sondage et y répondre :
 	'survey:comments_on' => "Activer les commentaires",
 	'survey:question:comment_on' => "Commentaires",
 	'survey:question:display_order' => "Ordre d'affichage",
+	'survey:question:notrequired' => "facultatif",
+	'survey:results:yourresponse' => "Votre réponse",
 	
 	
 );
