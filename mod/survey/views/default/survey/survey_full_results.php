@@ -35,9 +35,22 @@ $responders_guid = $survey->getResponders();
 $survey_stats .= '<ul>';
 $survey_stats .= '<li>' . elgg_echo('survey:results:questionscount', array($questions_count)) . '</li>';
 $survey_stats .= '<li>' . elgg_echo('survey:results:responderscount', array($total_responses_count)) . '</li>';
+// Sondage actif ou non
+$survey_state = $survey->isOpen() ? 'open' : 'closed';
+$survey_stats .= '<li>' . elgg_echo('survey:results:open', array($survey_state)) . '</li>';
+// Date de création
+$survey_stats .= '<li>' . elgg_echo('survey:results:created', array(date('d/m/Y', $survey->time_created))) . '</li>';
+// Date de dernière MAJ
+$survey_stats .= '<li>' . elgg_echo('survey:results:updated', array(date('d/m/Y', $survey->time_updated))) . '</li>';
+// Date de clôture
+$survey_stats .= '<li>' . elgg_echo('survey:results:closing', array(date('d/m/Y', $survey->close_date))) . '</li>';
+// Niveau d'accès
+$survey_stats .= '<li>' . elgg_echo('survey:results:access', array(elgg_view('output/access', array('entity' => $survey)))) . '</li>';
+// Sondage mis en Une ?
+//$survey_stats .= '<li>' . elgg_echo('survey:results:featured', array(date('d/m/Y', $survey->))) . '</li>';
 $survey_stats .= '</ul>';
 
-
+// @TODO diagramme de répartition des réponses
 
 // Check filter validity - forward to results page if error
 if ($filter) {
@@ -127,11 +140,13 @@ switch($filter) {
 		$survey_questions .= '</li>';
 		$survey_questions .= '</ul>';
 		
+		$survey_questions .= elgg_view('survey/output/response', array('question' => $question, 'survey' => $survey));
+		
 		// Détail des réponses par répondant
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 		$count_values = array();
 		$responders_values = array();
-		// @TODO : count each value for dropdown/radio, etc.
+		// Count each value for dropdown/radio, etc.
 		foreach($responses as $response) {
 			// Regroupe les réponses par répondant
 			$responders_values[$response->owner_guid][] = $response->value;

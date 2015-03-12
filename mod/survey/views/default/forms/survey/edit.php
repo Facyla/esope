@@ -18,12 +18,14 @@ $title = $vars['fd']['title'];
 $description = $vars['fd']['description'];
 $tags = $vars['fd']['tags'];
 if ($allow_close_date == 'yes') { $close_date = $vars['fd']['close_date']; }
+$comments_on = $vars['fd']['comments_on'];
 $open_survey_input = '';
 $front_page_input = '';
 $access_id = $vars['fd']['access_id'];
-?>
 
-<p>@TODO Possibilité de réordonner les questions</p>
+// @TODO Possibilité de réordonner les questions "display_order"
+
+?>
 
 
 <div>
@@ -60,9 +62,9 @@ if($allow_open_survey == 'yes') {
 	$open_survey_input .= '</label></p>';
 }
 echo $open_survey_input;
-?>
 
-<?php
+
+
 if (elgg_is_admin_logged_in() && ($survey_front_page == 'yes')) {
 	if ($vars['fd']['front_page']) {
 		$front_page_input .= elgg_view('input/checkbox', array('name' => 'front_page','value' => 1, 'checked' => 'checked'));
@@ -72,20 +74,24 @@ if (elgg_is_admin_logged_in() && ($survey_front_page == 'yes')) {
 	$front_page_input .= elgg_echo('survey:front_page_label');
 }
 echo '<div><p><label>' . $front_page_input . '</label></p></div>';
+
+$yn_options = array(elgg_echo('survey:settings:yes') => 'yes', elgg_echo('survey:settings:no') => 'no');
+echo '<div><label>' . elgg_echo('survey:comments_on') . '</label>';
+echo elgg_view('input/radio', array('name' => 'params[comments_on]', 'value' => $comments_on, 'options' => $yn_options));
+echo '</div>';
+
 ?>
 
 <div>
 	<label><?php echo elgg_echo('access'); ?>
 	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?></label>
 </div>
-
 <br />
 
 <div>
 	<h3><?php echo elgg_echo('survey:questions'); ?></h3>
 	<?php echo elgg_view('survey/input/questions', array('survey' => $survey)); ?>
 </div>
-
 <br />
 
 <?php

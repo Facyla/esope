@@ -85,6 +85,7 @@ class Survey extends ElggObject {
 		// Process new questions
 		$i = 0;
 		foreach ($questions as $question) {
+			$i++;
 			$survey_question = get_entity($question['guid']);
 			// Load and edit existing question, if any
 			if (!elgg_instanceof($survey_question, 'object', 'survey_question')) { $survey_question = false; }
@@ -113,7 +114,6 @@ class Survey extends ElggObject {
 			add_entity_relationship($survey_question->guid, 'survey_question', $this->guid);
 			// Add to "new questions" list
 			$new_questions[] = $survey_question->guid;
-			$i++;
 		}
 		
 		// Now clean removed questions
@@ -145,7 +145,7 @@ class Survey extends ElggObject {
 	// @TODO : attention à modifier la logique de comptage pour permettre d'inclure les questions, ayant elle-même diverses options et réponses
 	
 	/**
-	 * Fetch and cache amount of responses (users who rsponded) for each question
+	 * Fetch and cache amount of responses (users who responded) for each question
 	 *
 	 * Caches the data in form:
 	 *     array(
@@ -250,7 +250,7 @@ class Survey extends ElggObject {
 		
 		$responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 		
-		if (in_array($question->input_type, array('test', 'plaintext', 'longtext', 'date'))) {
+		if (in_array($question->input_type, array('text', 'plaintext', 'longtext', 'date'))) {
 			// Free text or value
 			foreach($responses as $response) {
 				$values[] = $response->value;

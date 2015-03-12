@@ -14,11 +14,7 @@ function survey_init() {
 	elgg_register_library('elgg:survey', elgg_get_plugins_path() . 'survey/lib/survey/functions.php');
 
 	// Set up menu
-	elgg_register_menu_item('site', array(
-		'name' => 'survey',
-		'text' => elgg_echo('survey'),
-		'href' => 'survey/all'
-	));
+	elgg_register_menu_item('site', array('name' => 'survey', 'href' => 'survey/all', 'text' => elgg_echo('survey')));
 
 	// Extend system CSS with our own styles, which are defined in the survey/css view
 	elgg_extend_view('css/elgg','survey/css');
@@ -235,18 +231,15 @@ function survey_prepare_notification($hook, $type, $notification, $params) {
 }
 */
 function survey_prepare_notification($hook, $type, $notification, $params) {
-
 	$entity = $params['entity'];
 	$to_entity = $params['to_entity'];
 	$method = $params['method'];
-
 	if (elgg_instanceof($entity, 'object', 'survey')) {
 		$user = elgg_get_logged_in_user_entity();
 		if (!$user) {
 			$user = $entity->getOwnerEntity();
 		}
 		return elgg_echo('survey:notify:body', array($user->name, $entity->title, $entity->getURL()));
-
 	}
 	return null;
 }
@@ -282,3 +275,5 @@ function survey_widget_urls($hook_name, $entity_type, $return_value, $params){
 	}
 	return $result;
 }
+
+

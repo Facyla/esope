@@ -12,6 +12,7 @@ $id = dataviz_id('dataviz_');
 
 
 $js_data = '';
+// $data = array('key1' => 'val1', 'key2' => 'val2');
 if ($data) {
 	foreach ($data as $key => $val) {
 		$js_data[] = '{"label": "' . $key . '", "value" : ' . $val . '}';
@@ -42,12 +43,13 @@ nv.addGraph(function() {
 	var chart = nv.models.pieChart()
 		.x(function(d) { return d.label })
 		.y(function(d) { return d.value })
-		.showLabels(true);
+	// Add labels on the pie chart
+		.showLabels(false);
 	
 	d3.select("#' . $id . ' svg")
 		.datum(data_' . $id . '())
 		.transition().duration(350)
-	.call(chart);
+		.call(chart);
 	return chart;
 });
 
