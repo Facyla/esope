@@ -133,7 +133,7 @@ View and respond to the survey:
 	 */
 	'survey:blank' => "Sorry: you need to fill in both the question and add at least one response choice before you can create the survey.",
 	'survey:noresponse' => "Sorry: you need to choose an option to respond in this survey.",
-	'survey:alreadyresponded' => "Sorry: you can response only once.",
+	'survey:alreadyresponded' => "You have responded to this survey.",
 	'survey:notfound' => "Sorry: we could not find the specified survey.",
 	'survey:notdeleted' => "Sorry: we could not delete this survey.",
 	

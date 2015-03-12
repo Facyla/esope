@@ -42,7 +42,7 @@ foreach($questions as $question) {
 			break;
 		
 		case 'date':
-			$input_params['timestamp'] = true;
+			//$input_params['timestamp'] = true; // Note : cannot use it for some reason - no value passed to the action
 			$response_input .= elgg_view('input/date', $input_params);
 			break;
 		

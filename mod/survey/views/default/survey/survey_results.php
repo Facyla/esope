@@ -34,7 +34,15 @@ foreach ($questions as $question) {
 	if (elgg_is_logged_in()) {
 		$responses = elgg_get_annotations(array('guid' => $question->guid, 'annotation_owner_guid' => elgg_get_logged_in_user_guid(), 'annotation_name' => 'response', 'limit' => 0));
 		$own_responses = array();
-		foreach($responses as $response) { $own_responses[] = $response->value; }
+		foreach($responses as $response) {
+			switch($question->input_type) {
+				case 'date':
+					$own_responses[] = date('d/m/Y', $response->value);
+					break;
+				default:
+					$own_responses[] = $response->value;
+			}
+		}
 		if (!empty($own_responses)) {
 			$own_response .= '<p>' . elgg_echo('survey:results:yourresponse') . '&nbsp;: <q>' . implode('</q><q>', $own_responses) . '</q></p>';
 		}
