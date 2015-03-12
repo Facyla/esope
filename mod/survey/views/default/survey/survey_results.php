@@ -60,6 +60,8 @@ foreach ($questions as $question) {
 			// Hide details if not an open survey
 			if (!$open_survey) {
 				$hidden = 'hidden';
+				// Note : do not hide when using dataviz plugin (svg requires to be displayed, and can be hidden afterwards only)
+				if (elgg_is_active_plugin('elgg_dataviz')) { $hidden = ''; }
 				// Display as link that toggles the question response details
 				$question_title = elgg_view('output/url', array('text' => '<h4>'.$response_label.'</h4>', 'href' => "#survey-response-{$response_id}", 'rel' => 'toggle'));
 			}

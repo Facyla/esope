@@ -54,6 +54,11 @@
 .survey-result table th, .survey-result table td { padding:0.5ex 1ex; border-bottom:1px solid #CCC; border-right:1px solid #CCC; }
 .survey-result table th:first-of-type, .survey-result table td:first-of-type { border-left:1px solid #CCC; vertical-align: middle; }
 
+.survey-result svg {
+  min-width: 200px;
+  max-width: 100%;
+}
+
 /* Detailed results */
 #survey-results { padding:3ex 0 1ex 0; }
 
