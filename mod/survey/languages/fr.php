@@ -150,7 +150,7 @@ Afficher le sondage et y répondre :
 	'survey:question:description:placeholder' => "Ce texte permet d'aider à répondre à la question, ou à donner des informations complémentaires.",
 	'survey:question:input_type' => "Type de question",
 	'survey:question:options' => "Options",
-	'survey:question:options:placeholder' => "Option 1\nOption 2\nOption 3\netc.",
+	'survey:question:options:placeholder' => "Une option par ligne \nOption 1 \nOption 2 \nOption 3 \netc.",
 	'survey:question:empty_value' => "Ajouter une option vide",
 	'survey:question:required' => "Question obligatoire",
 	'survey:question:toggle' => "<i class=\"fa fa-toggle-down\"></i> Montrer/masquer",

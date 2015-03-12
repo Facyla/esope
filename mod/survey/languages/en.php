@@ -153,7 +153,7 @@ View and respond to the survey:
 	'survey:question:description:placeholder' => "This paragraph lets you provide additional information, or tips on how to answer the question.",
 	'survey:question:input_type' => "Question type",
 	'survey:question:options' => "Options",
-	'survey:question:options:placeholder' => "Option 1\nOption 2\nOption 3\netc.",
+	'survey:question:options:placeholder' => "One option per line \nOption 1 \nOption 2 \nOption 3 \netc.",
 	'survey:question:empty_value' => "Add an empty option",
 	'survey:question:required' => "Mandatory",
 	'survey:question:toggle' => "<i class=\"fa fa-toggle-down\"></i> Show/hide",
