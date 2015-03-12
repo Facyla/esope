@@ -97,7 +97,7 @@ $body .= '<fieldset><legend>' . elgg_echo('survey:settings:options') . '</legend
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= '<label>' . elgg_echo('survey:settings:allow_open_survey:title');
+	$body .= '<label>' . elgg_echo('survey:settings:allow_open_survey:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[allow_open_survey]', 'value' => $allow_open_survey, 'options' => $yn_options));
 	$body .= '</p>';
