@@ -32,14 +32,19 @@ if ($number_of_questions) {
 	//$q_display_order = get_input('question_display_order');
 	$q_title = get_input('question_title');
 	$q_description = get_input('question_description');
-	$q_input_type = get_input('question_input_type', 'text');
+	$q_input_type = get_input('question_input_type');
 	$q_options = get_input('question_options');
-	$q_empty_value = get_input('question_empty_value', 'yes');
-	$q_required = get_input('question_required', 'no');
+	$q_empty_value = get_input('question_empty_value');
+	$q_required = get_input('question_required');
 	//error_log("Loading question $i data : $q_title / $q_input_type / $q_empty_value / $q_required"); // debug
 	// Title is the only required value for questions (default on text input)
 	for($i=0; $i<$number_of_questions; $i++) {
 		if ($q_title[$i]) {
+			// Set defaults
+			if (empty($q_input_type[$i])) { $q_input_type[$i] = 'text'; }
+			if (empty($q_empty_value[$i])) { $q_empty_value[$i] = 'yes'; }
+			if (empty($q_required[$i])) { $q_required[$i] = 'no'; }
+			// Add/update question
 			$new_questions[] = array(
 					'guid' => $q_guid[$i],
 					// Adjust display order to received order
