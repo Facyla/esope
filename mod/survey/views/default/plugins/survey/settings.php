@@ -41,63 +41,63 @@ if (!$allow_open_survey) { $allow_open_survey = 'no'; }
 
 
 
-$body .= '<fieldset><legend>Notifications</legend>';
+$body .= '<fieldset><legend>' . elgg_echo('survey:settings:notifications') . '</legend>';
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:send_notification:title');
+	$body .= '<label>' . elgg_echo('survey:settings:send_notification:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[send_notification]', 'value' => $survey_send_notification, 'options' => $yn_options));
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:create_in_river:title');
+	$body .= '<label>' . elgg_echo('survey:settings:create_in_river:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[create_in_river]', 'value' => $survey_create_in_river, 'options' => $yn_options));
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:response_in_river:title');
+	$body .= '<label>' . elgg_echo('survey:settings:response_in_river:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[response_in_river]', 'value' => $survey_response_in_river, 'options' => $yn_options));
 	$body .= '</p>';
 $body .= '</fieldset>';
 
 
-$body .= '<fieldset><legend>Survey edition rights</legend>';
+$body .= '<fieldset><legend>' . elgg_echo('survey:settings:access') . '</legend>';
  	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:group:title');
+	$body .= '<label>' . elgg_echo('survey:settings:group:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[group_survey]', 'value' => $survey_group_survey, 'options' => $group_options));
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:group_access:title');
+	$body .= '<label>' . elgg_echo('survey:settings:group_access:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[group_access]', 'value' => $survey_group_access, 'options' => $survey_group_access_options));
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:site_access:title');
+	$body .= '<label>' . elgg_echo('survey:settings:site_access:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[site_access]', 'value' => $survey_site_access, 'options' => $survey_site_access_options));
 	$body .= '</p>';
 	
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:front_page:title');
+	$body .= '<label>' . elgg_echo('survey:settings:front_page:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[front_page]', 'value' => $survey_front_page, 'options' => $yn_options));
 	$body .= '</p>';
 $body .= '</fieldset>';
 
 
-$body .= '<fieldset><legend>Survey options</legend>';
+$body .= '<fieldset><legend>' . elgg_echo('survey:settings:options') . '</legend>';
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:allow_close_date:title');
+	$body .= '<label>' . elgg_echo('survey:settings:allow_close_date:title') . '</label>';
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[allow_close_date]', 'value' => $allow_close_date, 'options' => $yn_options));
 	$body .= '</p>';
 
 	$body .= '<p>';
-	$body .= elgg_echo('survey:settings:allow_open_survey:title');
+	$body .= '<label>' . elgg_echo('survey:settings:allow_open_survey:title');
 	$body .= '<br />';
 	$body .= elgg_view('input/radio', array('name' => 'params[allow_open_survey]', 'value' => $allow_open_survey, 'options' => $yn_options));
 	$body .= '</p>';

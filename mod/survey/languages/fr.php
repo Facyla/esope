@@ -56,6 +56,9 @@ $fr = array(
 	'survey:front_page_label' => "Faire de ce sondage le nouveau \"Sondage du jour\" du site",
 	'survey:open_survey_label' => "Afficher dans les résultats les réponses des membres (sondage ouvert)",
 	'survey:show_responders' => "Montrer les répondants",
+	'survey:settings:notifications' => "Notifications",
+	'survey:settings:access' => "Accès aux sondages",
+	'survey:settings:options' => "Options des sondages",
 
 	/**
 	 * Poll widget

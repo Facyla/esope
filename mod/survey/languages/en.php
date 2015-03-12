@@ -117,6 +117,9 @@ View and respond to the survey:
 	'river:create:object:survey' => '%s created a survey %s',
 	'river:response:object:survey' => '%s responded on the survey %s',
 	'river:comment:object:survey' => '%s commented on the survey %s',
+	'survey:settings:notifications' => "Notifications",
+	'survey:settings:access' => "Survey edition rights",
+	'survey:settings:options' => "Survey options",
 
 	/**
 	 * Status messages
