@@ -118,7 +118,7 @@ if (!empty($group->cmisfolder)) {
 	 * https://partage.inria.fr/share/page/repository#filter=path|%2FLigne%2520Com%2FPOLE%2520DIGITAL|&page=1
 	 */
 	if (!empty($tabinfo[0])) {
-		if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('elgg_cmis:widget:cmis_folder'); }
+		if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('theme_inria:cmis_folder'); }
 		$tabs['cmisfolder'] = array(
 			'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
 			'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
@@ -133,7 +133,7 @@ if (!empty($group->cmisfolder)) {
 		$folder = end($folder_parts);
 		// We have a valid URL : now determine title, and finally add new tab
 		if (!empty($folder)) {
-			if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('elgg_cmis:widget:cmis_folder'); }
+			if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('theme_inria:cmis_folder'); }
 			$tabs['cmisfolder'] = array(
 				'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
 				'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
