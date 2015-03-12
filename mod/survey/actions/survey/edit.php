@@ -39,6 +39,7 @@ if ($number_of_questions) {
 	//error_log("Loading question $i data : $q_title / $q_input_type / $q_empty_value / $q_required"); // debug
 	// Title is the only required value for questions (default on text input)
 	for($i=0; $i<$number_of_questions; $i++) {
+		echo $i . " => " . $q_title[$i] . '<br />';
 		if ($q_title[$i]) {
 			$new_questions[] = array(
 					'guid' => $q_guid[$i],
@@ -55,7 +56,9 @@ if ($number_of_questions) {
 		}
 	}
 }
-
+echo $number_of_questions . '<pre>' . print_r($q_title, true) . '</pre>';
+echo $number_of_questions . '<pre>' . print_r($new_questions, true) . '</pre>';
+exit;
 
 // Make sure the question and the response options aren't empty
 // Or we may have less valid questions than attended ?

@@ -34,19 +34,19 @@ elgg.survey.edit.addQuestion = function(e) {
 	// Create a new question fieldset elements, rewritten as JS to include qnum param
 	// Question object meta : title, description, input_type, options, empty_value, required
 	
-	var q_title = '<p class="question_title_' + qnum + '"><label>' + elgg.echo('survey:question:title') + ' <input type="text" class="survey-input-question-title" name="question_title_' + qnum + '" placeholder="' + elgg.echo('survey:question:title:placeholder') + '" /></label></p>';
+	var q_title = '<p class="question_title_' + qnum + '"><label>' + elgg.echo('survey:question:title') + ' <input type="text" class="survey-input-question-title" name="question_title[]" placeholder="' + elgg.echo('survey:question:title:placeholder') + '" /></label></p>';
 	
 	/*
-	var q_description = '<p class="question_description_' + qnum + '"><a href="#" class="survey-input-toggle" data-id="question_description_' + qnum + '">' + elgg.echo('survey:question:toggle') + '</a> <label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description_' + qnum + '" style="display:none;"></textarea>';
+	var q_description = '<p class="question_description_' + qnum + '"><a href="#" class="survey-input-toggle" data-id="question_description_' + qnum + '">' + elgg.echo('survey:question:toggle') + '</a> <label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description[]" style="display:none;"></textarea>';
 	*/
-	var q_description = '<p class="question_description_' + qnum + '"><label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description_' + qnum + '" placeholder="' + elgg.echo('survey:question:description:placeholder') + '"></textarea>';
+	var q_description = '<p class="question_description_' + qnum + '"><label>' + elgg.echo('survey:question:description') + ' <textarea class="survey-input-question-description" name="question_description[]" placeholder="' + elgg.echo('survey:question:description:placeholder') + '"></textarea>';
 	
-	var q_required = '<p class="question_required_' + qnum + '" style="float:right;"><label>' + elgg.echo('survey:question:required') + ' <select class="survey-input-question-required" name="question_required_' + qnum + '">' 
+	var q_required = '<p class="question_required_' + qnum + '" style="float:right;"><label>' + elgg.echo('survey:question:required') + ' <select class="survey-input-question-required" name="question_required">' 
 			+ '<option value="no">' + elgg.echo('survey:option:no') + '</option>' 
 			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 		+ '</select></label></p>';
 	
-	var q_input_type = '<p class="question_input_type_' + qnum + '"><label>' + elgg.echo('survey:question:input_type') + ' <select class="survey-input-question-input-type" name="question_input_type_' + qnum + '" data-id="' + qnum + '">' 
+	var q_input_type = '<p class="question_input_type_' + qnum + '"><label>' + elgg.echo('survey:question:input_type') + ' <select class="survey-input-question-input-type" name="question_input_type[]" data-id="' + qnum + '">' 
 			+ '<option value="text">' + elgg.echo('survey:type:text') + '</option>' 
 			+ '<option value="plaintext">' + elgg.echo('survey:type:plaintext') + '</option>' 
 			+ '<option value="pulldown">' + elgg.echo('survey:type:pulldown') + '</option>' 
@@ -58,9 +58,9 @@ elgg.survey.edit.addQuestion = function(e) {
 		+ <?php echo json_encode(elgg_view('survey/input/question_type_help')); ?>
 		+ '</p>';
 	
-	var q_options = '<p class="question_options_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:options') + ' <textarea class="survey-input-question-options" name="question_options_' + qnum + '" placeholder="' + elgg.echo('survey:question:options:placeholder') + '"></textarea></label></p>';
+	var q_options = '<p class="question_options_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:options') + ' <textarea class="survey-input-question-options" name="question_options[]" placeholder="' + elgg.echo('survey:question:options:placeholder') + '"></textarea></label></p>';
 	
-	var q_empty_value = '<p class="question_empty_value_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:empty_value') + ' <select class="survey-input-question-empty-value" name="question_empty_value_' + qnum + '">' 
+	var q_empty_value = '<p class="question_empty_value_' + qnum + '" style="display:none;"><label>' + elgg.echo('survey:question:empty_value') + ' <select class="survey-input-question-empty-value" name="question_empty_value[]">' 
 			+ '<option value="no">' + elgg.echo('survey:option:no') + '</option>' 
 			+ '<option value="yes">' + elgg.echo('survey:option:yes') + '</option>' 
 		+ '</select></label></p>';
