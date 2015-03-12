@@ -195,13 +195,31 @@ View and vote on the poll:
 	'survey:results:question:counts' => "%s responders on %s have replied to this question (%s%%)",
 	'survey:results:responders' => "Responders",
 	'survey:results:inputtype' => "Field type",
-	'survey:results:nbresponses' => "Nb responses",
+	'survey:results:nbresponses' => "Number of responses",
 	'survey:results:percresponses' => "% responses",
 	'survey:results:moredetails' => "More details",
 	'survey:results:guid' => "GUID",
 	'survey:results:name' => "Responder's name",
 	'survey:results:value' => "Response value",
 	'survey:results:count' => "Number of mentions",
+	
+	
+	'survey:results:numquestions' => "Number of questions",
+	'survey:results:numresponders' => "Number of responders",
+	'survey:results:created' => "Creation date",
+	'survey:results:updated' => "Latest update",
+	'survey:results:featured' => "Featured survey",
+	'survey:results:open' => "Survey state",
+	'survey:results:closing' => "Closing date",
+	'survey:results:access' => "Access",
+	'survey:comments_on' => "Enable comments",
+	'survey:question:comment_on' => "Comments",
+	'survey:question:display_order' => "Display order",
+	'survey:question:guid' => "GUID",
+	'survey:response:notrequired' => "Optional question",
+	'survey:response:required' => "Mandatory question",
+	'survey:results:yourresponse' => "Your response",
+	
 	
 );
 

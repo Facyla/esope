@@ -40,12 +40,12 @@ if (!$nowrapper) {
 	echo '<div id="survey-container-' . $survey->guid . '" class="survey_post">';
 }
 
-if ($msg = elgg_extract('msg', $vars)) { echo '<br /><blockquote class="survey-message">'.$msg.'</blockquote>'; }
+if ($msg = elgg_extract('msg', $vars)) { echo '<blockquote class="survey-message">'.$msg.'</blockquote>'; }
 ?>
 
 <div id="survey-post-body-<?php echo $survey->guid; ?>" class="survey_post_body" style="display:<?php echo $results_display ?>;">
 	<?php
-	if (!$can_respond) { echo '<br /><blockquote class="survey-responded">'.$responded_text.'</blockquote>'; }
+	if (!$can_respond) { echo '<blockquote class="survey-responded">'.$responded_text.'</blockquote>'; }
 	echo elgg_view('survey/survey_results', array('entity' => $survey));
 	?>
 </div>

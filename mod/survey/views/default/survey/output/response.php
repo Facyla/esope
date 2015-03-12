@@ -34,23 +34,6 @@ $responders_guids = $survey->getRespondersForQuestion($question);
 $responders_count = sizeof($responders_guids);
 
 
-$yes_no_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
-$question_types_opt = array('text' => elgg_echo('survey:type:text'), 'longtext' => elgg_echo('survey:type:longtext'), 'pulldown' => elgg_echo('survey:type:pulldown'), 'checkboxes' => elgg_echo('survey:type:checkboxes'), 'multiselect' => elgg_echo('survey:type:multiselect'), 'rating' => elgg_echo('survey:type:rating'), 'date' => elgg_echo('survey:type:date'));
-
-
-
-// Plus d'infos sur la question
-$content_question = '<p><em>' . $question_types_opt[$input_type];
-if ($required == 'yes') { $content_question .= ', ' . elgg_echo('survey:question:required'); } else  { $content_question .= ', ' . elgg_echo('survey:question:notrequired'); }
-$content_question .= ', ' . $response_count . ' réponses';
-//$content_question .= ', GUID ' . $guid . ', ' . $display_order;
-$content_question .= '</em></p>';
-//$content_question .= '<h3>' . elgg_echo('survey:result:label', array($title, $question_types_opt[$input_type] . ', ' . $response_count)) . '</h3>';
-//$content_question .= '<h3>' . $title . '</h3>';
-if (!empty($description)) $content_question .= '<p>' . elgg_echo('survey:question:description') . '&nbsp;: ' . $description . '</p>';
-
-
-
 // Responders - répondants
 /*
 if ($responders_guids) {
@@ -65,7 +48,7 @@ if ($responders_guids) {
 // Détail des réponses
 $responses = new ElggBatch('elgg_get_annotations', array('guid' => $question->guid, 'annotation_name' => 'response', 'limit' => 0));
 
-// Responses stats
+// Responses stats & graphs
 switch($input_type) {
 	case 'text':
 		foreach($responses as $response) { $content_responses .= '<q>' . $response->value . '</q>'; }
@@ -93,20 +76,21 @@ switch($input_type) {
 			if (!isset($options_results["{$response->value}"])) { $response->value = $options_keys[$response->value]; }
 			$options_results["{$response->value}"] = $options_results["{$response->value}"] + 1;
 		}
+		// Add graph if enabled : pie is only for single choice, bars (and percentages) are more appropriate for multiple choices
+		if ($add_graph) {
+			if (in_array($input_type, array('pulldown', 'dropdown', 'rating', 'radio'))) {
+				$content_responses .= elgg_view('elgg_dataviz/nvd3/pie_chart', array('data' => $options_results, 'width' => '100%', 'height' => '200px'));
+			} else {
+				$content_responses .= elgg_view('elgg_dataviz/nvd3/bar_chart', array('data' => array("{$question->guid}" => $options_results), 'width' => '100%', 'height' => '200px'));
+			}
+		}
+		// Table of results
 		$content_responses .= '<table style="width:100%;"><thead><tr>
 			<th>' . elgg_echo('survey:results:value') . '</th>
 			<th>' . elgg_echo('survey:results:count') . '</th>
 			</tr></thead><tbody>';
 		foreach($options_results as $choice => $count) { $content_responses .= '<tr><td>' . $choice . '</td><td>' . $count . '</td></tr>'; }
 		$content_responses .= '</tbody></table>';
-		// Add graph if enabled : pie is only for single choice, bars (and percentages) are more appropriate for multiple choices
-		if ($add_graph) {
-			if (in_array($input_type, array('pulldown', 'dropdown'))) {
-				$content_responses .= elgg_view('elgg_dataviz/nvd3/pie_chart', array('data' => $options_results, 'width' => '100%', 'height' => '200px'));
-			} else {
-				$content_responses .= elgg_view('elgg_dataviz/nvd3/bar_chart', array('data' => array("{$question->guid}" => $options_results), 'width' => '100%', 'height' => '200px'));
-			}
-		}
 		break;
 	
 	case 'date':
@@ -118,16 +102,7 @@ switch($input_type) {
 			if (!isset($options_results["{$response->value}"])) { $options_results["{$response->value}"] = 0; }
 			$options_results["{$response->value}"] = $options_results["{$response->value}"] + 1;
 		}
-		// Display dates + counter
-		$content_responses .= '<table style="width:100%;"><thead><tr><th>' . elgg_echo('survey:results:value') . '</th><th>' . elgg_echo('survey:results:count') . '</th></tr></thead><tbody>';
-		// Sort by asscending date
-		ksort($options_results);
-		foreach($options_results as $choice => $count) {
-			// Convert timestamps to readable date
-			$content_responses .= '<tr><td>' . date("d/m/Y", $choice) . '</td><td>' . $count . '</td></tr>';
-		}
-		$content_responses .= '</tbody></table>';
-		
+		// Add graph if enabled : dates use bars rather than pie because axis order matters when dealing with dates
 		if ($add_graph) {
 			// Build a more readable array for graph
 			$graph_data = array();
@@ -135,9 +110,17 @@ switch($input_type) {
 				$choice = date("d/m/Y", $choice);
 				$graph_data["$choice"] = $count;
 			}
-			// Note : bars because we have order matters when dealing with dates
 			$content_responses .= elgg_view('elgg_dataviz/nvd3/bar_chart', array('data' => array("{$question->guid}" => $graph_data), 'width' => '100%', 'height' => '200px'));
 		}
+		// Results table : display dates + counter
+		$content_responses .= '<table style="width:100%;"><thead><tr><th>' . elgg_echo('survey:results:value') . '</th><th>' . elgg_echo('survey:results:count') . '</th></tr></thead><tbody>';
+		// Sort by asscending date
+		ksort($options_results);
+		foreach($options_results as $choice => $count) {
+			// Convert timestamps to readable date
+			$content_responses .= '<tr><td><q>' . date("d/m/Y", $choice) . '</q></td><td style="text-align:right;">' . $count . '</td></tr>';
+		}
+		$content_responses .= '</tbody></table>';
 		break;
 	
 	default:

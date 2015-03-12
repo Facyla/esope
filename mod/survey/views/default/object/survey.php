@@ -60,9 +60,6 @@ if (isset($vars['entity'])) {
 	// Full view
 	if ($full) {
 		$subtitle = "$closing_date $author_text $date $comments_link $categories";
-		if ($survey->canEdit()) {
-			$subtitle .= '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('survey:results') . '</a>';
-		}
 		$params = array(
 			'entity' => $survey,
 			'title' => false,
@@ -79,6 +76,9 @@ if (isset($vars['entity'])) {
 		
 		// Add survey content : response form, or response message and optionally responses
 		echo elgg_view('survey/survey_content', $vars);
+		if ($survey->canEdit()) {
+			echo '<a href="' . elgg_get_site_url() . 'survey/results/' . $survey->guid . '" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('survey:results') . '</a>';
+		}
 
 	} else {
 		// Brief view
