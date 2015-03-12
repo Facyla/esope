@@ -11,6 +11,9 @@ foreach($questions as $question) {
 	$i++;
 	// Common params
 	$response_input .= '<div class="survey-question-reply"><label for="response_' . $i . '">' . $question->title . '</label> ';
+	// Add some more text/tips/help
+	if (!empty($question->description)) { $response_input .= '<p><em><i class="fa fa-info-circle"></i> ' . $question->description . '</em></p>'; }
+	
 	$input_params = array('name' => "response[{$question->guid}]", 'id' => "response_$i");
 	if ($question->required == 'yes') { $input_params['required'] = 'required'; }
 	
