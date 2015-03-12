@@ -114,7 +114,7 @@ elgg.survey.edit.toggleInput = function(e) {
  * @param {Object} e The change event
  */
 elgg.survey.edit.showOptions = function(e) {
-	var select = $(event.target);
+	var select = $(e.target);
 	var val = select.val();
 	var id = $(this).data('id');
 	// Show/hide appropriate optional fields
