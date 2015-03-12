@@ -144,12 +144,16 @@ Afficher le sondage et y répondre :
 	'survey:option:no' => "non",
 	// Question fields
 	'survey:question:title' => "Intitulé de la question",
+	'survey:question:title:placeholder' => "Titre de la question",
 	'survey:question:description' => "Aide ou précisions sur la question (facultatif)",
+	'survey:question:description:placeholder' => "Ce texte permet d'aider à répondre à la question, ou à donner des informations complémentaires.",
 	'survey:question:input_type' => "Type de question",
 	'survey:question:options' => "Options",
+	'survey:question:options:placeholder' => "Option 1\nOption 2\nOption 3\netc.",
 	'survey:question:empty_value' => "Ajouter une option vide",
 	'survey:question:required' => "Question obligatoire",
-	'survey:question:toggle' => "Montrer/masquer",
+	'survey:question:toggle' => "<i class=\"fa fa-toggle-down\"></i> Montrer/masquer",
+	'survey:question:toggle:details' => "<i class=\"fa fa-eye-slash\"></i> Montrer/masquer les options des questions",
 	// Input types
 	'survey:type:text' => "<i class=\"fa fa-font\"></i> Texte court",
 	'survey:type:text:details' => "Pour une réponse très courte, sur une seule ligne : de un à quelques mots.",
@@ -216,6 +220,7 @@ Afficher le sondage et y répondre :
 	'survey:response:notrequired' => "Question facultative",
 	'survey:response:required' => "Question obligatoire",
 	'survey:results:yourresponse' => "Votre réponse",
+	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> Vous pouvez modifier l'ordre des questions en les cliquant-déplaçant sur la page."
 	
 	
 );

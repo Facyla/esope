@@ -21,38 +21,41 @@ $access_id = get_input('access_id');
 $container_guid = get_input('container_guid');
 $guid = get_input('guid');
 $number_of_questions = (int) get_input('number_of_questions', 0);
+$comments_on = get_input('comments_on', 'no');
 
 // Get questions data
 // Question object meta : title, description, input_type, options, empty_value, required
 $count = 0;
 $new_questions = array();
 if ($number_of_questions) {
+	$q_guid = get_input('question_guid');
+	//$q_display_order = get_input('question_display_order');
+	$q_title = get_input('question_title');
+	$q_description = get_input('question_description');
+	$q_input_type = get_input('question_input_type', 'text');
+	$q_options = get_input('question_options');
+	$q_empty_value = get_input('question_empty_value', 'yes');
+	$q_required = get_input('question_required', 'no');
+	//error_log("Loading question $i data : $q_title / $q_input_type / $q_empty_value / $q_required"); // debug
+	// Title is the only required value for questions (default on text input)
 	for($i=0; $i<$number_of_questions; $i++) {
-		$q_guid = get_input('question_guid_'.$i, '');
-		$q_display_order = get_input('question_display_order_'.$i, '');
-		$q_title = get_input('question_title_'.$i, '');
-		$q_description = get_input('question_description_'.$i, '');
-		$q_input_type = get_input('question_input_type_'.$i, 'text');
-		$q_options = get_input('question_options_'.$i, '');
-		$q_empty_value = get_input('question_empty_value_'.$i, 'yes');
-		$q_required = get_input('question_required_'.$i, 'no');
-		//error_log("Loading question $i data : $q_title / $q_input_type / $q_empty_value / $q_required"); // debug
-		// Title is the only required value for questions (default on text input)
-		if ($q_title) {
+		if ($q_title[$i]) {
 			$new_questions[] = array(
-					'guid' => $q_guid,
-					'display_order' => $q_display_order,
-					'title' => $q_title,
-					'description' => $q_description,
-					'input_type' => $q_input_type,
-					'options' => $q_options,
-					'empty_value' => $q_empty_value,
-					'required' => $q_required,
+					'guid' => $q_guid[$i],
+					// Adjust display order to received order
+					'display_order' => ($count + 1) * 10,
+					'title' => $q_title[$i],
+					'description' => $q_description[$i],
+					'input_type' => $q_input_type[$i],
+					'options' => $q_options[$i],
+					'empty_value' => $q_empty_value[$i],
+					'required' => $q_required[$i],
 				);
-			$count ++;
+			$count++;
 		}
 	}
 }
+
 
 // Make sure the question and the response options aren't empty
 // Or we may have less valid questions than attended ?
@@ -115,6 +118,7 @@ $survey->description = $description;
 $survey->open_survey = $open_survey ? 1 : 0;
 $survey->close_date = empty($close_date) ? null : $close_date;
 $survey->tags = string_to_tag_array($tags);
+$survey->comments_on = $comments_on;
 
 if (!$survey->save()) {
 	register_error(elgg_echo("survey:error"));

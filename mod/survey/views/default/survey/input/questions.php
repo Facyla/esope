@@ -35,5 +35,5 @@ $body .= elgg_view('input/hidden', array(
 	'value' => $i,
 ));
 
-echo $body;
+echo '<div id="survey-questions">' . $body . '</div>';
 

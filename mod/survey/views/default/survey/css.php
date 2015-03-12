@@ -13,7 +13,9 @@
 /* Edit form */
 #survey-edit-form fieldset { border:1px solid; padding:1ex; margin:1ex 0 2ex 0; }
 .question-help { font-size: 90%; font-style: italic; }
+/*
 .survey-input-question { width: 90%; }
+*/
 .survey-input-question .delete-question { font-size: 100%; padding: 0 1ex 0.5ex 0; color:darkred; }
 .survey-input-question .delete-question:hover { font-size: 200%; padding: 0 0.5ex 0.25ex 0; color:red; }
 
@@ -30,10 +32,17 @@
 .survey_closing-date-closed { color: red; }
 
 
+/* Edit form */
+.survey-sort-highlight { border:1px dashed; background:#FAFAFA; height:50px; }
+#survey-questions textarea { height: 60px; }
+
+
 /* Response form */
+
 .survey_response-label { cursor: pointer; }
 .survey_response-label:hover { color: red; }
 .survey-question-reply { padding:1ex 0 3ex 0; border-bottom:1px solid #fff; }
+
 
 
 /* Results */

@@ -147,12 +147,16 @@ View and vote on the poll:
 	'survey:option:no' => "no",
 	// Question fields
 	'survey:question:title' => "Question title",
+	'survey:question:title:placeholder' => "Title of the question",
 	'survey:question:description' => "Help or details on this question (optional)",
+	'survey:question:description:placeholder' => "This paragraph lets you provide additional information, or tips on how to answer the question.",
 	'survey:question:input_type' => "Question type",
 	'survey:question:options' => "Options",
+	'survey:question:options:placeholder' => "Option 1\nOption 2\nOption 3\netc.",
 	'survey:question:empty_value' => "Add an empty option",
 	'survey:question:required' => "Mandatory",
-	'survey:question:toggle' => "Show/hide",
+	'survey:question:toggle' => "<i class=\"fa fa-toggle-down\"></i> Show/hide",
+	'survey:question:toggle:details' => "<i class=\"fa fa-eye-slash\"></i> Show/hide question options",
 	// Input types
 	'survey:type:text' => "Short text",
 	'survey:type:text:details' => "For a very quick answer : one to a few words.",
@@ -219,6 +223,7 @@ View and vote on the poll:
 	'survey:response:notrequired' => "Optional question",
 	'survey:response:required' => "Mandatory question",
 	'survey:results:yourresponse' => "Your response",
+	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> You may reorder the questions by drag'n'dropping them on the page."
 	
 	
 );
