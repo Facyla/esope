@@ -1,7 +1,8 @@
 <?php
 
 $en = array(
-
+	'item:object:survey' => "Survey",
+	
 	/**
 	 * Menu items and titles
 	 */

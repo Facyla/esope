@@ -1,7 +1,8 @@
 <?php
 
 $fr = array(
-
+	'item:object:survey' => "Sondage",
+	
 	/**
 	 * Menu items and titles
 	 */
