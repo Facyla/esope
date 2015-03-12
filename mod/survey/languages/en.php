@@ -20,19 +20,19 @@ $en = array(
 	'item:object:survey_choice' => "Survey choices",
 	'survey:question' => "Survey question",
 	'survey:description' => "Description (optional)",
-	'survey:responses' => "Vote choices",
+	'survey:responses' => "Response choices",
 	'survey:result:label' => "%s (%s)",
 	'survey:show_results' => "Show results",
 	'survey:show_survey' => "Show survey",
-	'survey:add_choice' => "Add vote choice",
+	'survey:add_choice' => "Add choice",
 	'survey:delete_choice' => "Delete this choice",
 	'survey:close_date' => "Survey closing date (optional)",
 	'survey:voting_ended' => "Voting for this survey ended on %s.",
 	'survey:survey_closing_date' => "(Survey closing date: %s)",
 
-	'survey:convert:description' => 'ATTENTION: there were %s existing surveys found that still have the old vote choices data structure. These surveys won\'t work correctly on this version of the survey plugin.',
+	'survey:convert:description' => 'ATTENTION: there were %s existing surveys found that still have the old survey data structure. These surveys won\'t work correctly on this version of the survey plugin.',
 	'survey:convert' => 'Update existing surveys now',
-	'survey:convert:confirm' => 'The update is irreversible. Are you sure you want to convert the survey vote choices data structure?',
+	'survey:convert:confirm' => 'The update is irreversible. Are you sure you want to convert the survey data structure?',
 
 	'survey:settings:group:title' => "Allow group surveys?",
 	'survey:settings:group_survey_default' => "yes, on by default",
@@ -43,20 +43,20 @@ $en = array(
 	'survey:settings:group_access:members' => "any group member",
 	'survey:settings:front_page:title' => "Admins can make a single survey at a time the site's \"Survey of the day\"? (Widget Manager plugin required for adding the corresponding widget to the index page)",
 	'survey:settings:allow_close_date:title' => "Allow setting a closing date for surveys? (afterwards the results can still be viewed but voting is no longer permitted)",
-	'survey:settings:allow_open_survey:title' => "Allow open surveys? (open surveys show which user voted for which survey choice; if this option is enabled, admins can see who voted what on any surveys)",
-	'survey:none' => "No surveys found.",
+	'survey:settings:allow_open_survey:title' => "Allow open surveys? (open surveys show which user responded for which survey choice; if this option is enabled, admins can see who responded what on any surveys)",
+	'survey:none' => "No survey found.",
 	'survey:not_found' => "The survey was not found.",
 	'survey:permission_error' => "You do not have permission to edit this survey.",
-	'survey:vote' => "Vote",
-	'survey:login' => "Please login if you would like to vote in this survey.",
-	'group:survey:empty' => "No surveys",
+	'survey:respond' => "Respond",
+	'survey:login' => "Please login if you would like to respond to this survey.",
+	'group:survey:empty' => "No survey",
 	'survey:settings:site_access:title' => "Who can create site-wide surveys?",
 	'survey:settings:site_access:admins' => "admins only",
 	'survey:settings:site_access:all' => "any logged-in user",
 	'survey:can_not_create' => "You do not have permission to create surveys.",
 	'survey:front_page_label' => "Make this survey the site's new \"Survey of the day\"",
-	'survey:open_survey_label' => "Show in results which members voted for which choice (open survey)",
-	'survey:show_voters' => "Show voters",
+	'survey:open_survey_label' => "Show in results which members responded for which choice (open survey)",
+	'survey:show_responders' => "Show responders",
 
 	/**
 	 * Survey widget
@@ -74,8 +74,8 @@ $en = array(
 	'survey:widget:nonefound' => "No surveys found.",
 	'survey:widget:think' => "Let %s know what you think!",
 	'survey:enable_survey' => "Enable surveys",
-	'survey:noun_response' => "vote",
-	'survey:noun_responses' => "votes",
+	'survey:noun_response' => "response",
+	'survey:noun_responses' => "responses",
 	'survey:settings:yes' => "yes",
 	'survey:settings:no' => "no",
 
@@ -104,7 +104,7 @@ $en = array(
 
 %s
 
-View and vote on the survey:
+View and respond to the survey:
 %s
 ',
 
@@ -112,10 +112,10 @@ View and vote on the survey:
 	 * Survey river
 	 **/
 	'survey:settings:create_in_river:title' => "Show survey creation in activity river?",
-	'survey:settings:vote_in_river:title' => "Show survey voting in activity river?",
+	'survey:settings:response_in_river:title' => "Show survey response in activity river?",
 	'survey:settings:send_notification:title' => "Send notification when a survey is created? (Members will only receive notifications if their are friend with the creator of the survey or a member of the group the survey was added to. Additionally, notifications will only be sent to members who configured Elgg's notification settings accordingly)",
 	'river:create:object:survey' => '%s created a survey %s',
-	'river:vote:object:survey' => '%s voted on the survey %s',
+	'river:response:object:survey' => '%s responded on the survey %s',
 	'river:comment:object:survey' => '%s commented on the survey %s',
 
 	/**
@@ -123,17 +123,17 @@ View and vote on the survey:
 	 */
 	'survey:added' => "Your survey was created.",
 	'survey:edited' => "Your survey was saved.",
-	'survey:responded' => "Thank you for responding, your vote was recorded.",
+	'survey:responded' => "Thank you for responding, your response was recorded.",
 	'survey:deleted' => "Your survey was successfully deleted.",
-	'survey:totalvotes' => "Total number of votes: %s",
-	'survey:voted' => "Your vote has been cast for this survey. Thank you for voting on this survey.",
+	'survey:totalresponses' => "Total number of responses: %s",
+	'survey:responded' => "Your response has been cast for this survey. Thank you for voting on this survey.",
 
 	/**
 	 * Error messages
 	 */
-	'survey:blank' => "Sorry: you need to fill in both the question and add at least one vote choice before you can create the survey.",
-	'survey:novote' => "Sorry: you need to choose an option to vote in this survey.",
-	'survey:alreadyvoted' => "Sorry: you can vote only once.",
+	'survey:blank' => "Sorry: you need to fill in both the question and add at least one response choice before you can create the survey.",
+	'survey:noresponse' => "Sorry: you need to choose an option to respond in this survey.",
+	'survey:alreadyresponded' => "Sorry: you can response only once.",
 	'survey:notfound' => "Sorry: we could not find the specified survey.",
 	'survey:notdeleted' => "Sorry: we could not delete this survey.",
 	

@@ -107,7 +107,7 @@ Afficher le sondage et y répondre :
 ',
 
 	/**
-	 * Poll river
+	 * Survey river
 	 **/
 	'survey:settings:create_in_river:title' => "Montrer la création de sondages dans la fil d'activité ?",
 	'survey:settings:response_in_river:title' => "Montrer les réponses aux sondages dans le fil d'activité ?",
