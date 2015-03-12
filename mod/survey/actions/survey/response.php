@@ -37,6 +37,8 @@ foreach ($responses as $question_guid => $response) {
 	// Annotate the question itself instead, so we can use a single annotation name
 	$question = get_entity($question_guid);
 	if (elgg_instanceof($question, 'object', 'survey_question')) {
+		// Convert dates to timestamp
+		if (($question->input_type == "date") && strpos($response, '-')) { $response = strtotime($response); }
 		if (is_array($response)) {
 			foreach($response as $response_item) {
 				if (!empty($response_item) || ($question->empty_value == 'yes')) {

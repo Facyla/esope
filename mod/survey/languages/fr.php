@@ -1,7 +1,8 @@
 <?php
 
 $fr = array(
-
+	'item:object:survey' => "Sondage",
+	
 	/**
 	 * Menu items and titles
 	 */
@@ -106,7 +107,7 @@ Afficher le sondage et y répondre :
 ',
 
 	/**
-	 * Poll river
+	 * Survey river
 	 **/
 	'survey:settings:create_in_river:title' => "Montrer la création de sondages dans la fil d'activité ?",
 	'survey:settings:response_in_river:title' => "Montrer les réponses aux sondages dans le fil d'activité ?",
@@ -144,28 +145,32 @@ Afficher le sondage et y répondre :
 	'survey:option:no' => "non",
 	// Question fields
 	'survey:question:title' => "Intitulé de la question",
+	'survey:question:title:placeholder' => "Titre de la question",
 	'survey:question:description' => "Aide ou précisions sur la question (facultatif)",
+	'survey:question:description:placeholder' => "Ce texte permet d'aider à répondre à la question, ou à donner des informations complémentaires.",
 	'survey:question:input_type' => "Type de question",
 	'survey:question:options' => "Options",
+	'survey:question:options:placeholder' => "Une option par ligne \nOption 1 \nOption 2 \nOption 3 \netc.",
 	'survey:question:empty_value' => "Ajouter une option vide",
-	'survey:question:required' => "Obligatoire",
-	'survey:question:toggle' => "Montrer/masquer",
+	'survey:question:required' => "Question obligatoire",
+	'survey:question:toggle' => "<i class=\"fa fa-toggle-down\"></i> Montrer/masquer",
+	'survey:question:toggle:details' => "<i class=\"fa fa-eye-slash\"></i> Montrer/masquer les options des questions",
 	// Input types
-	'survey:type:text' => "Texte court",
+	'survey:type:text' => "<i class=\"fa fa-font\"></i> Texte court",
 	'survey:type:text:details' => "Pour une réponse très courte, sur une seule ligne : de un à quelques mots.",
-	'survey:type:longtext' => "Texte de paragraphe",
+	'survey:type:longtext' => "<i class=\"fa fa-paragraph\"></i> Texte de paragraphe",
 	'survey:type:longtext:details' => "Pour une réponse détaillée, sur plusieurs lignes : de un à quelques paragraphes.",
-	'survey:type:plaintext' => "Texte de paragraphe",
+	'survey:type:plaintext' => "<i class=\"fa fa-paragraph\"></i> Texte de paragraphe",
 	'survey:type:plaintext:details' => "Pour une réponse détaillée, sur plusieurs lignes : de un à quelques paragraphes.",
-	'survey:type:pulldown' => "Choix dans une liste",
+	'survey:type:pulldown' => "<i class=\"fa fa-list\"></i> Choix dans une liste",
 	'survey:type:pulldown:details' => "Pour une réponse parmi une liste de choix à définir ci-dessous. Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
-	'survey:type:checkboxes' => "Cases à cocher",
+	'survey:type:checkboxes' => "<i class=\"fa fa-check-square-o\"></i> Cases à cocher",
 	'survey:type:checkboxes:details' => "Pour plusieurs réponses sous forme de liste, parmi une liste de choix à définir ci-dessous.",
-	'survey:type:multiselect' => "Sélection multiple",
+	'survey:type:multiselect' => "<i class=\"fa fa-check-square-o\"></i> Sélection multiple",
 	'survey:type:multiselect:details' => "Pour plusieurs réponses sous forme de cases à cocher, parmi une liste de choix à définir ci-dessous.",
-	'survey:type:rating' => "Echelle d'évaluation",
+	'survey:type:rating' => "<i class=\"fa fa-signal\"></i> Echelle d'évaluation",
 	'survey:type:rating:details' => "Pour une seule réponse parmi une liste de choix, présentés sur une seule ligne. Cette option est plus appropriée pour une échelle d'évaluation ou de notation, en indiquant par exemple des options de 0 à 5, ou une liste d'appréciations qualitative (de pas du tout à tout à fait). Vous pouvez également ajouter une option \"vide\" qui permet de ne pas imposer de choisir une réponse.",
-	'survey:type:date' => "Date",
+	'survey:type:date' => "<i class=\"fa fa-calendar-o\"></i> Date",
 	'survey:type:date:details' => "Pour une date à choisir dans un calendrier.",
 	// Responses
 	'survey:results' => "Résultats du sondage",
@@ -176,7 +181,7 @@ Afficher le sondage et y répondre :
 	'survey:results:full' => "Résultats détaillés",
 	'survey:results:user_details' => "Voir le détail pour ce répondant",
 	'survey:results:user_details:title' => "Détail des réponses de ce répondant",
-	'survey:results:question_details' => "Voir les réponses",
+	'survey:results:question_details' => "Voir le détail pour cette question",
 	'survey:results:question_details:title' => "Détail des réponses pour cette question",
 	'survey:results:question_details:responses' => "Réponse(s) par répondant",
 	'survey:results:question_details:values' => "Nombre de mentions des choix pour chaque valeur de réponse",
@@ -192,7 +197,7 @@ Afficher le sondage et y répondre :
 	'survey:results:question:counts' => "%s répondants sur %s ont répondu à cette question (%s%%)",
 	'survey:results:responders' => "Répondants",
 	'survey:results:inputtype' => "Type de champ",
-	'survey:results:nbresponses' => "Nb réponses",
+	'survey:results:nbresponses' => "Nombre de réponses",
 	'survey:results:percresponses' => "% réponses",
 	'survey:results:moredetails' => "Plus de détails",
 	'survey:results:guid' => "GUID",
@@ -201,18 +206,22 @@ Afficher le sondage et y répondre :
 	'survey:results:count' => "Nombre de mentions",
 	
 	
-	// ESOPE : not translated into English yet
-	'survey:results:created' => "Date de création : %s",
-	'survey:results:updated' => "Dernière mise à jour : %s",
-	'survey:results:featured' => "Sondage mis en avant : %s",
-	'survey:results:open' => "Etat du sondage : %s",
-	'survey:results:closing' => "Date de clôture : %s",
-	'survey:results:access' => "Visibilité : %s",
+	'survey:results:numquestions' => "Nombre de questions",
+	'survey:results:numresponders' => "Nombre de répondants",
+	'survey:results:created' => "Date de création",
+	'survey:results:updated' => "Dernière mise à jour",
+	'survey:results:featured' => "Sondage mis en avant",
+	'survey:results:open' => "Etat du sondage",
+	'survey:results:closing' => "Date de clôture",
+	'survey:results:access' => "Visibilité",
 	'survey:comments_on' => "Activer les commentaires",
 	'survey:question:comment_on' => "Commentaires",
 	'survey:question:display_order' => "Ordre d'affichage",
-	'survey:question:notrequired' => "facultatif",
+	'survey:question:guid' => "GUID",
+	'survey:response:notrequired' => "Question facultative",
+	'survey:response:required' => "Question obligatoire",
 	'survey:results:yourresponse' => "Votre réponse",
+	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> Vous pouvez modifier l'ordre des questions en les cliquant-déplaçant sur la page."
 	
 	
 );

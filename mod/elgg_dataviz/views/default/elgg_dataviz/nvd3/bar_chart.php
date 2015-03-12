@@ -48,7 +48,7 @@ if (empty($js_data)) {
 }
 
 
-$content = '<div id="' . $id . '"><svg style="height:' . $height . '; width:' . $width . ';"></svg></div>
+$content = '<div id="' . $id . '" style="height:' . $height . '; width:' . $width . ';"><svg style="height:' . $height . '; width:' . $width . ';"></svg></div>
 <script type="text/javascript">
 nv.addGraph(function() {
 	// x, y : Specify the data accessors.

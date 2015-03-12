@@ -36,32 +36,40 @@ $no_yes_opt = array('no' => elgg_echo('survey:option:no'), 'yes' => elgg_echo('s
 $question_content = '';
 
 // Load GUID, if entity exists
-if (!empty($guid)) $question_content .= elgg_view('input/hidden', array('name' => 'question_guid_' . $i, 'value' => $guid));
+if (!empty($guid)) $question_content .= elgg_view('input/hidden', array('name' => 'question_guid[]', 'value' => $guid));
 // Set display order
-$question_content .= elgg_view('input/hidden', array('name' => 'question_display_order_' . $i, 'value' => $display_order));
+//$question_content .= elgg_view('input/hidden', array('name' => 'question_display_order_' . $i, 'value' => $display_order));
 
-$question_content .= '<p class="question_title_' . $i . '"><label>' . elgg_echo('survey:question:title') . ' ' . elgg_view('input/text', array('name' => "question_title_{$i}", 'value' => $title, 'class' => 'survey-input-question-title')) . '</label></p>';
+$question_content .= '<p class="question_title_' . $i . '"><label>' . elgg_echo('survey:question:title') . ' ' . elgg_view('input/text', array('name' => "question_title[]", 'value' => $title, 'class' => 'survey-input-question-title', 'placeholder' => elgg_echo('survey:question:title:placeholder'))) . '</label></p>';
 
-if (empty($description)) { $hide = 'display:none;'; } else { $hide = ''; }
-$question_content .= '<p class="question_description_' . $i . '"><a href="#" class="survey-input-toggle" data-id="question_description_' . $i . '">' . elgg_echo('survey:question:toggle') . '</a> <label>' . elgg_echo('survey:question:description') . ' ' . elgg_view('input/plaintext', array('name' => "question_description_{$i}", 'value' => $description, 'class' => 'survey-input-question-description', 'style' => $hide)) . '</label></p>';
+// Group all other input elements to we can hide them on-demand
+$question_content .= '<div class="survey-input-question-details">';
+	
+	$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/pulldown', array('name' => "question_required[]", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
 
-$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/pulldown', array('name' => "question_required_{$i}", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
+	$question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/pulldown', array('name' => "question_input_type[]", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey-input-question-input-type', 'data-id' => $i)) . '</label>';
+	// Add some help for each input type
+	$question_content .= elgg_view('survey/input/question_type_help', array('input_type' => $input_type));
+	$question_content .= '</p>';
 
-$question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/pulldown', array('name' => "question_input_type_{$i}", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey-input-question-input-type', 'data-id' => $i)) . '</label>';
-// Add some help for each input type
-$question_content .= elgg_view('survey/input/question_type_help', array('input_type' => $input_type));
-$question_content .= '</p>';
+	// Hide conditionnal elements
+	if (!in_array($input_type, array('dropdown', 'pulldown', 'checkboxes', 'multiselect', 'rating'))) { $hide = 'display:none;'; } else { $hide = ''; }
+	$question_content .= '<p class="question_options_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:options') . ' ' . elgg_view('input/plaintext', array('name' => "question_options[]", 'value' => $options, 'class' => 'survey-input-question-options', 'placeholder' => elgg_echo('survey:question:options:placeholder'))) . '</label></p>';
 
-// Hide conditionnal elements
-if (!in_array($input_type, array('dropdown', 'pulldown', 'checkboxes', 'multiselect', 'rating'))) { $hide = 'display:none;'; } else { $hide = ''; }
-$question_content .= '<p class="question_options_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:options') . ' ' . elgg_view('input/plaintext', array('name' => "question_options_{$i}", 'value' => $options, 'class' => 'survey-input-question-options')) . '</label></p>';
+	// Hide conditionnal elements
+	if (!in_array($input_type, array('dropdown', 'pulldown', 'rating'))) { $hide = 'display:none;'; } else { $hide = ''; }
+	$question_content .= '<p class="question_empty_value_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:empty_value') . ' ' . elgg_view('input/pulldown', array('name' => "question_empty_value[]", 'value' => $empty_value, 'options_values' => $no_yes_opt, 'class' => 'survey-input-question-empty-value')) . '</label></p>';
 
-// Hide conditionnal elements
-if (!in_array($input_type, array('dropdown', 'pulldown', 'rating'))) { $hide = 'display:none;'; } else { $hide = ''; }
-$question_content .= '<p class="question_empty_value_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:empty_value') . ' ' . elgg_view('input/pulldown', array('name' => "question_empty_value_{$i}", 'value' => $empty_value, 'options_values' => $no_yes_opt, 'class' => 'survey-input-question-empty-value')) . '</label></p>';
-
-// @TODO later : allow to define questions dependencies : based on non-empty, or specific value(s) ?
-//$question_content .= '<p><label>Dépendances ' . elgg_view('input/text', array('name' => "question_dependency_{$i}", 'value' => $question->dependency, 'class' => 'survey-input-question-dependency')) . '</label></p>';
+	// @TODO later : allow to define questions dependencies : based on non-empty, or specific value(s) ?
+	//$question_content .= '<p><label>Dépendances ' . elgg_view('input/text', array('name' => "question_dependency[]", 'value' => $question->dependency, 'class' => 'survey-input-question-dependency')) . '</label></p>';
+	
+	/*
+	if (empty($description)) { $hide = 'display:none;'; } else { $hide = ''; }
+	$question_content .= '<p class="question_description_' . $i . '"><a href="#" class="survey-input-toggle" data-id="question_description_' . $i . '">' . elgg_echo('survey:question:toggle') . '</a> <label>' . elgg_echo('survey:question:description') . ' ' . elgg_view('input/plaintext', array('name' => "question_description[]", 'value' => $description, 'class' => 'survey-input-question-description', 'style' => $hide)) . '</label></p>';
+	*/
+	$question_content .= '<p class="question_description_' . $i . '"><label>' . elgg_echo('survey:question:description') . ' ' . elgg_view('input/plaintext', array('name' => "question_description[]", 'value' => $description, 'class' => 'survey-input-question-description', 'placeholder' => elgg_echo('survey:question:description:placeholder'))) . '</label></p>';
+	
+$question_content .= '</div>';
 
 
 //$delete_icon = elgg_view('output/img', array('src' => 'mod/survey/graphics/16-em-cross.png'));

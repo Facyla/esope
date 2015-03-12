@@ -11,9 +11,8 @@ if (!$user) {
 	return TRUE;
 }
 
-
-// Check data on the fly
-inria_check_and_update_user_status('login', 'user', $user);
+// Check and update user data from LDAP on the fly
+//inria_check_and_update_user_status('login', 'user', $user);
 
 $icon = elgg_view_entity_icon($user, 'large', array(
 	'use_hover' => false,

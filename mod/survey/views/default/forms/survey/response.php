@@ -11,6 +11,9 @@ foreach($questions as $question) {
 	$i++;
 	// Common params
 	$response_input .= '<div class="survey-question-reply"><label for="response_' . $i . '">' . $question->title . '</label> ';
+	// Add some more text/tips/help
+	if (!empty($question->description)) { $response_input .= '<p><em><i class="fa fa-info-circle"></i> ' . $question->description . '</em></p>'; }
+	
 	$input_params = array('name' => "response[{$question->guid}]", 'id' => "response_$i");
 	if ($question->required == 'yes') { $input_params['required'] = 'required'; }
 	
@@ -39,7 +42,7 @@ foreach($questions as $question) {
 			break;
 		
 		case 'date':
-			$input_params['timestamp'] = true;
+			//$input_params['timestamp'] = true; // Note : cannot use it for some reason - no value passed to the action
 			$response_input .= elgg_view('input/date', $input_params);
 			break;
 		

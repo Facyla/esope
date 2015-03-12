@@ -89,10 +89,21 @@ echo '</div>';
 <br />
 
 <div>
+	<span style=float:right;"><a href="javascript:void(0);" onclick="$('.survey-input-question-details').toggle();"><?php echo elgg_echo('survey:question:toggle:details'); ?></a></span>
 	<h3><?php echo elgg_echo('survey:questions'); ?></h3>
+	<p><em><?php echo elgg_echo('survey:questions:reorder'); ?></em></p>
 	<?php echo elgg_view('survey/input/questions', array('survey' => $survey)); ?>
 </div>
 <br />
+
+<script>
+$(document).ready(function(){
+	$("#survey-questions").sortable({ // initialisation de Sortable sur le container parent
+		placeholder: 'survey-sort-highlight', // classe du placeholder ajouté lors du déplacement
+	});
+});
+</script>
+
 
 <?php
 $entity_hidden = '';

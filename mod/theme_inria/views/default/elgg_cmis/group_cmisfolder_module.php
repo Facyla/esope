@@ -25,7 +25,7 @@ $folder = $group->cmisfolder;
 if (empty($contenttype)) $contenttype = 'document';
 if (empty($recursive)) $recursive = 'true';
 
-$title = elgg_echo('elgg_cmis:widget:cmis_folder');
+$title = elgg_echo('theme_inria:cmis_folder');
 
 // Forme d'une URL de partage : share/page/folder-details?nodeRef=workspace://SpacesStore/ + identifiant Alfresco
 $needle = 'SpacesStore/';

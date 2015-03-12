@@ -50,8 +50,7 @@ class Survey extends ElggObject {
 		*/
 		//$questions = $this->getEntitiesFromRelationship('survey_question', true, 0);
 		$questions = elgg_get_entities_from_relationship(array(
-				'relationship_guid' => $this->guid,
-				'relationship' => 'survey_question', 'inverse_relationship' => true,
+				'relationship' => 'survey_question', 'relationship_guid' => $this->guid, 'inverse_relationship' => true,
 				'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
 			));
 		if (!$questions) { $questions = array(); }
