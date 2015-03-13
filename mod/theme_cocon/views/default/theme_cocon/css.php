@@ -126,6 +126,8 @@ span.groups-widget-viewall { margin-top: 12px; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
 .home-box h2, .home-box h3, .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
 .sidebarBox h3, #sidebar-featured-groups h3 { background: #c5dc1c; min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
+.home-box h2 .fa { font-size:130%; }
+.home-box h2 { min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
 .home-box h2 img { float:left; margin-right:10px; }
 /* Activity */
 .home-box.home-activity { background:white; }
@@ -201,7 +203,6 @@ section div.module header h2 { background-repeat: no-repeat; }
 /* Now use only FA icons */
 section div.module header h2 { min-height: 30px; background-image: none !important; padding: 4px 0; }
 section div.module header h2 .fa { font-size: 130%; }
-.home-box h2 .fa { font-size:130%; }
 
 
 /* Bloc more des widgets
