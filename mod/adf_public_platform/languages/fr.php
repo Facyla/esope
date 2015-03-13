@@ -829,8 +829,8 @@ $fr = array(
 	
 	/* Widgets */
 	'adf_platform:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Liens web',
-	'adf_platform:widget:brainstorm:title' => '<i class="fa fa-lightbulb fa-fw"></i> Idées',
-	'brainstorm:widget:points_left:title' => '<i class="fa fa-lightbulb fa-fw"></i> Votes restants',
+	'adf_platform:widget:brainstorm:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Idées',
+	'brainstorm:widget:points_left:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Votes restants',
 	'adf_platform:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Articles',
 	'adf_platform:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Agenda',
 	'adf_platform:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Fichiers',
