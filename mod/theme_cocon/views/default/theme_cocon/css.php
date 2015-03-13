@@ -94,7 +94,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button.elgg-state-disabled { color: #333; box-shadow: 0px 1px 3px 0 #666 !important; }
 /* View all button */
 .home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 20px 7px 0 0; background: white; color: #00668e; font-size: 8px; }
-.home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
+.home-box .viewall a, .elgg-module span.groups-widget-viewall a, .elgg-module span.groups-widget-viewall a * { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
 .home-box .viewall a:hover, .home-box .viewall a:focus, .home-box .viewall a:active, module span.groups-widget-viewall a:hover, .elgg-module span.groups-widget-viewall a:focus, .elgg-module span.groups-widget-viewall a:active {  }
 
 
