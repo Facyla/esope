@@ -108,7 +108,7 @@ if (empty($header_content)) {
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo elgg_echo('friends'); ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo strip_tags(elgg_echo('friends')); ?>" /></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo strip_tags(elgg_echo('friends')); ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo strip_tags(elgg_echo('friends')); ?>" /></a></li>
 									<?php echo $friendrequests; ?>
 									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><img src="<?php echo $urlpictos; ?>mail.png" alt="<?php echo elgg_echo('messages'); ?>" /></a></li>
 									<?php if ($messages) { echo $messages; } ?>
