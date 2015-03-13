@@ -831,6 +831,7 @@ $en = array(
 	/* Widgets */
 	'adf_platform:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Bookmarks',
 	'adf_platform:widget:brainstorm:title' => '<i class=\"fa fa-lightbulb fa-fw\"></i> Brainstorm ideas',
+	'brainstorm:votesleft' => '<i class="fa fa-lightbulb fa-fw"></i> Brainstorm votes left',
 	'adf_platform:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Blog articles',
 	'adf_platform:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Calendar',
 	'adf_platform:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Files',
