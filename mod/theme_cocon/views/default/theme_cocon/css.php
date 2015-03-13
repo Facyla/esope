@@ -195,6 +195,13 @@ section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?p
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
 section div.elgg-widget-instance-points_left header h2 { background: url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px #eace6d; }
 
+/* Now use only FA icons */
+section div.module header h2 { background-repeat: no-repeat; }
+/* Now use only FA icons */
+/*
+section div.module header h2 { min-height: 24px; background-image: none !important; padding: 4px 0; }
+*/
+
 
 /* Bloc more des widgets
  * @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
