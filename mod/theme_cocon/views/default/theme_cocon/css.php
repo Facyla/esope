@@ -136,7 +136,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 0px; width: 100%; line-height:40px; min-height: 45px; }
+.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 10px; width: 100%; line-height:40px; min-height: 45px; }
 .home-box.home-wire .elgg-item { padding: 0 10px; }
 
 /* Widgets */
@@ -195,11 +195,13 @@ section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?p
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
 section div.elgg-widget-instance-points_left header h2 { background: url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px #eace6d; }
 
-/* Now use only FA icons */
+/* Do not repeat background image, if any */
 section div.module header h2 { background-repeat: no-repeat; }
 /* Now use only FA icons */
-section div.module header h2 { min-height: 24px; background-image: none !important; padding: 4px 0; }
-section div.module header h2 .fa { font-size: 150%; }
+section div.module header h2 { min-height: 30px; background-image: none !important; padding: 4px 0; }
+section div.module header h2 .fa { font-size: 130%; }
+.home-box h2 .fa { font-size:130%; }
+
 
 /* Bloc more des widgets
  * @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
@@ -244,6 +246,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); }
 /* Now use only FA icons */
 .elgg-module-group .elgg-head h3 { background-image: none !important; padding: 4px 0 0 0; }
+.elgg-module-group .elgg-head h3 .fa { font-size: 130%; }
 .home-box .viewall, span.groups-widget-viewall { margin-top: 10px; }
 
 /* Bordures des modules des groupes */
