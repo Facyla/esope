@@ -111,6 +111,8 @@ function theme_cocon_widget_menu_setup($hook, $type, $return, $params) {
 	$urlicon = $CONFIG->url . 'mod/theme_cocon/graphics/';
 	
 	$widget = $params['entity'];
+	// Remove any icon
+	$widget->title = strip_tags($widget->title);
 	$show_edit = elgg_extract('show_edit', $params, true);
 	
 	$widget_title = $widget->getTitle();
