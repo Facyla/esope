@@ -395,7 +395,10 @@ section div.module footer a:active { text-decoration: none; }
 /* à vérifier pour effets sur diverses pages */
 .elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.9em; }
 .groups-widget-viewall { margin:10px 6px 0 0; }
-.elgg-module span.groups-widget-viewall a, .elgg-module span.groups-widget-viewall * { color: <?php echo $color14; ?>; font-size: 1em; }
+.elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 1em; }
+/*
+.elgg-module span.groups-widget-viewall a * { color: <?php echo $color14; ?>; font-size: 1em; }
+*/
 .elgg-module-info > .elgg-body { padding: 7px 0 0; }
 .elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
 .elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }
