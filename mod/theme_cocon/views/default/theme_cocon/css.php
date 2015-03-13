@@ -129,6 +129,8 @@ span.groups-widget-viewall { margin-top: 12px; }
 .home-box h2 .fa { font-size:130%; }
 .home-box h2 { min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
 .home-box h2 img { float:left; margin-right:10px; }
+.home-box .viewall { margin-top:12px; }
+
 /* Activity */
 .home-box.home-activity { background:white; }
 .home-box.home-activity h2 { padding: 12px 4 0 10px; line-height:1.2; min-height: 35px; background:#98519d; }
