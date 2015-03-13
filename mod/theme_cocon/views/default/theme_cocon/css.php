@@ -199,7 +199,7 @@ section div.elgg-widget-instance-points_left header h2 { background: url("<?php 
 section div.module header h2 { background-repeat: no-repeat; }
 /* Now use only FA icons */
 section div.module header h2 { min-height: 24px; background-image: none !important; padding: 4px 0; }
-
+section div.module header h2 .fa { font-size: 150%; }
 
 /* Bloc more des widgets
  * @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
@@ -242,6 +242,9 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
 .elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>announcements.png");}
 .elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); }
+/* Now use only FA icons */
+.elgg-module-group .elgg-head h3 { background-image: none !important; padding: 4px 0 0 0; }
+.home-box .viewall, span.groups-widget-viewall { margin-top: 10px; }
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
