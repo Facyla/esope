@@ -198,9 +198,7 @@ section div.elgg-widget-instance-points_left header h2 { background: url("<?php 
 /* Now use only FA icons */
 section div.module header h2 { background-repeat: no-repeat; }
 /* Now use only FA icons */
-/*
 section div.module header h2 { min-height: 24px; background-image: none !important; padding: 4px 0; }
-*/
 
 
 /* Bloc more des widgets
