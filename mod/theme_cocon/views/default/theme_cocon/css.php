@@ -122,13 +122,14 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-context-dashboard span.forward { right: 20px; content: ">"; }
 
 .home-box { background:white; }
+span.groups-widget-viewall { margin-top: 12px; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
 .home-box h2, .home-box h3, .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
 .sidebarBox h3, #sidebar-featured-groups h3 { background: #c5dc1c; min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
 .home-box h2 img { float:left; margin-right:10px; }
 /* Activity */
 .home-box.home-activity { background:white; }
-.home-box.home-activity h2 { padding: 8px 10px; line-height:40px; background:#98519d; min-height: 45px; }
+.home-box.home-activity h2 { padding: 12px 4 0 10px; line-height:1.2; min-height: 35px; background:#98519d; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
 /* Members */
@@ -136,7 +137,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 10px; width: 100%; line-height:40px; min-height: 45px; }
+.home-box.home-wire h2 { background: #e45833; padding: 12px 4 0 10px; line-height:1.2; min-height: 35px; }
 .home-box.home-wire .elgg-item { padding: 0 10px; }
 
 /* Widgets */
@@ -247,7 +248,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 /* Now use only FA icons */
 .elgg-module-group .elgg-head h3 { background-image: none !important; padding: 4px 0 0 0; }
 .elgg-module-group .elgg-head h3 .fa { font-size: 130%; }
-.home-box .viewall, span.groups-widget-viewall { margin-top: 10px; }
+span.groups-widget-viewall { margin-top: 10px; }
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
