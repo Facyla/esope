@@ -30,15 +30,13 @@ if (isset($vars['text'])) {
 	$text = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
 }
 
+// Remove any HTML in title, and replace double quotes to avoid breaking HTML
+if (!empty($vars['title'])) {
+	$vars['title'] = str_replace('"', "'", strip_tags($vars['title']));
+}
 // Accessibilité : "mieux vaut rien qu'identique au titre"
-/* 
-if (!empty($text) && empty($vars['title'])) {
-  $vars['title'] = strip_tags($text);
-}
-*/
-if (strip_tags($text) == strip_tags($vars['title'])) {
-  $vars['title'] = '';
-}
+//if (!empty($text) && empty($vars['title'])) { $vars['title'] = strip_tags($text); }
+if (strip_tags($text) == $vars['title']) { $vars['title'] = ''; }
 
 unset($vars['encode_text']);
 

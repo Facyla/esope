@@ -85,7 +85,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 	$widget_title = $widget->getTitle();
 	$collapse = array(
 			'name' => 'collapse',
-			'text' => '<img src="' . $urlicon . 'widget_hide.png" alt="' . elgg_echo('widget:toggle', array($widget_title)) . '" />',
+			'text' => '<img src="' . $urlicon . 'widget_hide.png" alt="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '" />',
 			'href' => "#elgg-widget-content-$widget->guid",
 			'class' => 'masquer',
 			'rel' => 'toggle',
@@ -96,7 +96,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 	if ($widget->canEdit()) {
 		$delete = array(
 				'name' => 'delete',
-				'text' => '<img src="' . $urlicon . 'widget_delete.png" alt="' . elgg_echo('widget:delete', array($widget_title)) . '" />',
+				'text' => '<img src="' . $urlicon . 'widget_delete.png" alt="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '" />',
 				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
 				'is_action' => true,
 				'class' => 'elgg-widget-delete-button suppr',
@@ -108,7 +108,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 		if ($show_edit) {
 			$edit = array(
 					'name' => 'settings',
-					'text' => '<img src="' . $urlicon . 'widget_config.png" alt="' . elgg_echo('widget:editmodule', array($widget_title)) . '" />',
+					'text' => '<img src="' . $urlicon . 'widget_config.png" alt="' . strip_tags(elgg_echo('widget:editmodule', array($widget_title))) . '" />',
 					'href' => "#widget-edit-$widget->guid",
 					'class' => "elgg-widget-edit-button config",
 					'rel' => 'toggle',

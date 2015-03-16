@@ -8,7 +8,8 @@ This plugin has a different aim than "poll", and is not backward-compatible. In 
 Survey plugin wants to provide survey features such as :
  - multiple questions,
  - extended set of available question types (notation, free text, multiple choices, etc.)
-It is not intended at any member, but rather to admins and optionally group admins.
+ - nice results views, and results filtering, per question and per responder
+It is rather intended to admins and optionally group admins.
 
 
 
