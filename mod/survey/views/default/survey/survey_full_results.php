@@ -273,6 +273,9 @@ switch($filter) {
 
 // Compose final results content
 echo '<div id="survey-results" class="elgg-output">';
+if (elgg_get_plugin_setting('results_export', 'survey') == 'yes') {
+	echo '<p><a href="' . elgg_get_site_url() . 'survey/export/' . $survey->guid . '" class="elgg-button elgg-button-action survey-results-export">' . elgg_echo('survey:results:export') . '</a></p>';
+}
 echo '<div id="survey-results-stats">' . $survey_stats . '</div>';
 echo '<div id="survey-results-questions">' . $survey_questions . '</div>';
 if ($survey_responders) { echo '<div id="survey-results-users">' . $survey_responders . '</div>'; }

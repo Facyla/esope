@@ -16,6 +16,12 @@ elgg_load_js('elgg.survey.survey');
 $group = elgg_get_page_owner_entity();
 
 if (survey_activated_for_group($group)) {
+	
+	if (elgg_get_plugin_setting('show_active_only', 'survey') == 'yes') {
+		$active_surveys = '';
+		if (false) return;
+	}
+	
 	elgg_push_context('widgets');
 	$all_link = elgg_view('output/url', array(
 		'href' => "survey/group/$group->guid/all",
@@ -36,10 +42,12 @@ if (survey_activated_for_group($group)) {
 		}
 	}
 	elgg_pop_context();
+	
+	// No content : say it
 	if (!$content) {
-	  $content = '<p>'.elgg_echo("group:survey:empty").'</p>';
+		$content = '<p>'.elgg_echo("group:survey:empty").'</p>';
 	}
-
+	
 	echo elgg_view('groups/profile/module', array(
 		'title' => elgg_echo('survey:group_survey'),
 		'content' => $content,

@@ -127,6 +127,11 @@ function survey_page_handler($page) {
 			if (isset($page[3])){ $filter_guid = $page[3]; }
 			echo survey_get_page_results($guid, $filter, $filter_guid);
 			break;
+		case "export":
+			$guid = false;
+			if (isset($page[1])){ $guid = $page[1]; }
+			echo survey_get_page_export($guid);
+			break;
 		case "friends":
 		case "owner":
 			$username = $page[1];

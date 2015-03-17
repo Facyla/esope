@@ -1,7 +1,7 @@
 <?php
 
 $fr = array(
-	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondage",
+	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
 	
 	/**
 	 * Menu items and titles
@@ -40,9 +40,12 @@ $fr = array(
 	'survey:settings:group_access:title' => "Si les sondages de groupe sont activés, qui peut créer les sondages ?",
 	'survey:settings:group_access:admins' => "responsables du groupe et administrateurs seulement",
 	'survey:settings:group_access:members' => "tout membre du groupe",
-	'survey:settings:front_page:title' => "Les administrateurs peuvent-ils faire d'un sondage le \"Sondage du jour\" du site ? (le plugin Widget Manager requis pour ajouter le widget correspondant sur la page d'accueil)",
-	'survey:settings:allow_close_date:title' => "Permettre de définir une date de clôture pour les sondages ? (après cette date les résultats pourront toujours être consultés, mais il ne sera plus possible de répondre)",
-	'survey:settings:allow_open_survey:title' => "Permettre de créer des sondages ouverts ? (les sondages ouverts montrent les réponses de chacun des membres ; si cette option est activée, les administrateurs peuvent voir qui a voté quoi sur tous les sondages)",
+	'survey:settings:front_page:title' => "Activer le \"Sondage du jour\" du site ?",
+	'survey:settings:front_page:details' => "Les administrateurs peuvent-ils faire d'un sondage le \"Sondage du jour\" du site ? Le plugin Widget Manager est requis pour ajouter le widget correspondant sur la page d'accueil, ou la vue correspondante doit être intégrée via le plugin de thème.",
+	'survey:settings:allow_close_date:title' => "Permettre de définir une date de clôture pour les sondages ?",
+	'survey:settings:allow_close_date:details' => "Après cette date les résultats pourront toujours être consultés, mais il ne sera plus possible de répondre.",
+	'survey:settings:allow_open_survey:title' => "Permettre de créer des sondages ouverts ?",
+	'survey:settings:allow_open_survey:details' => "Les sondages ouverts montrent les réponses de chacun des membres ; si cette option est activée, les administrateurs peuvent voir qui a voté quoi sur tous les sondages.",
 	'survey:none' => "Aucun sondage.",
 	'survey:permission_error' => "Vous n'avez pas la permission de modifier ce sondage.",
 	'survey:respond' => "Répondre",
@@ -58,6 +61,7 @@ $fr = array(
 	'survey:settings:notifications' => "Notifications",
 	'survey:settings:access' => "Accès aux sondages",
 	'survey:settings:options' => "Options des sondages",
+	'survey:settings:show_active_only' => "Masquer le bloc des sondages de groupe si aucun sondage actif",
 
 	/**
 	 * Poll widget
@@ -113,7 +117,8 @@ Afficher le sondage et y répondre :
 	 **/
 	'survey:settings:create_in_river:title' => "Montrer la création de sondages dans la fil d'activité ?",
 	'survey:settings:response_in_river:title' => "Montrer les réponses aux sondages dans le fil d'activité ?",
-	'survey:settings:send_notification:title' => "Envoyer des notifications lorsqu'un sondage est créé ? (Les membres ne recevront des notifications que s'ils sont en contact avec l'auteur, ou membre du groupe dans lequel le sondage a été créé. De plus, les notifications ne seront envoyées qu'aux membres qui ont activé leurs notifications)",
+	'survey:settings:send_notification:title' => "Envoyer des notifications lorsqu'un sondage est créé ?",
+	'survey:settings:send_notification:details' => "Les membres ne recevront des notifications que s'ils sont en contact avec l'auteur, ou membre du groupe dans lequel le sondage a été créé. De plus, les notifications ne seront envoyées qu'aux membres qui ont activé leurs notifications.",
 	'river:create:object:survey' => '%s a créé un sondage %s',
 	'river:response:object:survey' => '%s a répondu au sondage %s',
 	'river:comment:object:survey' => '%s a commenté le sondage %s',
@@ -178,6 +183,7 @@ Afficher le sondage et y répondre :
 	'survey:results' => "Résultats du sondage",
 	'survey:results:question' => "Question",
 	'survey:results:user' => "Répondant",
+	'survey:results:export' => "Export des données",
 	'survey:result:label' => "\"%s\" (%s réponses)",
 	'survey:results:summary' => "Résumé des résultats",
 	'survey:results:full' => "Résultats détaillés",
@@ -223,7 +229,10 @@ Afficher le sondage et y répondre :
 	'survey:response:notrequired' => "Question facultative",
 	'survey:response:required' => "Question obligatoire",
 	'survey:results:yourresponse' => "Votre réponse",
-	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> Vous pouvez modifier l'ordre des questions en les cliquant-déplaçant sur la page."
+	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> Vous pouvez modifier l'ordre des questions en les cliquant-déplaçant sur la page.",
+	
+	'survey:results:export' => "Exporter les résultats",
+	'survey:settings:results_export' => "Permettre d'exporter les résultats en CSV",
 	
 	
 );

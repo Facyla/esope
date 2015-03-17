@@ -34,7 +34,8 @@ if (($allow_close_date == 'yes') && (isset($survey->close_date))) {
 
 // TODO: support comments off
 // The "on" status changes for comments, so best to check for !Off
-if ($survey->comments_on != 'Off') {
+$comments_link = '';
+if ($survey->comments_on == 'yes') {
 	$comments_count = $survey->countComments();
 	//only display if there are commments
 	if ($comments_count != 0) {
@@ -44,15 +45,17 @@ if ($survey->comments_on != 'Off') {
 			'text' => $text,
 			'is_trusted' => true
 		));
-	} else {
-		$comments_link = '';
 	}
-} else {
-	$comments_link = '';
 }
 
+/*
 $icon = '<img src="'.elgg_get_site_url().'mod/survey/graphics/survey.png" />';
-$info = "<a href=\"{$survey->getURL()}\">{$survey->question}</a><br>";
+$owner = $survey->getOwnerEntity();
+//$icon = '<img src="'.elgg_get_site_url().'mod/survey/graphics/survey.png" />';
+$icon = elgg_view_entity_icon($owner, 'tiny');
+*/
+
+$info = "<h4><a href=\"{$survey->getURL()}\">{$survey->title}</a></h4>";
 if ($responses == 1) {
 	$noun = elgg_echo('survey:noun_response');
 } else {
@@ -63,4 +66,11 @@ $info .= "$responses $noun<br>";
 $info .= "<div class=\"elgg-subtext\">{$author_text} {$friendlytime} {$comments_link}</div>";
 $info .= $tags;
 
+// Bouton de réponse si en cours et pas déjà répondu
+if ($survey->isOpen() && !$survey->hasResponded()) {
+	$info .= '<a href="' . $survey->getURL() . '" class="elgg-button elgg-button-action">' . elgg_echo('survey:respond') . '</a>';
+}
+
 echo elgg_view_image_block($icon, $info);
+//echo $info;
+

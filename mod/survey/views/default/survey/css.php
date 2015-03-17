@@ -62,7 +62,7 @@
 /* Detailed results */
 #survey-results { padding:3ex 0 1ex 0; }
 
-#survey-results q, #survey-results-questions blockquote { background: #e5e7f5; margin: 0px 12px 2px 0px; padding: 1px 3px; }
+#survey-results q, #survey-results-questions blockquote { background: #e5e7f5; margin: 0px 12px 2px 0px; padding: 1px 3px 3px 3px; display: inline-block; }
 #survey-results table { border:1px solid #999; }
 #survey-results table th, #survey-results table td { padding:0.5ex; border-bottom:1px solid #CCC; border-right:1px solid #CCC; }
 #survey-results table th:first-of-type, #survey-results table td:first-of-type { border-left:1px solid #CCC; }
