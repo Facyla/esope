@@ -260,7 +260,7 @@ function survey_get_page_export($guid = false) {
 	$i = 0;
 	foreach ($questions as $question) {
 		$i++;
-		$headings[] = $i+1 . " " . $question->title;
+		$headings[] = $i . " " . $question->title;
 	}
 	fputcsv($output, $headings, $delimiter);
 	
