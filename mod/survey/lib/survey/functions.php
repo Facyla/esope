@@ -294,7 +294,7 @@ function survey_get_page_export($guid = false) {
 	$responders_guid = $survey->getResponders();
 	foreach ($responders_guid as $guid) {
 		if ($user = get_entity($guid)) {
-			$row_array = array($user->name);
+			$row_array = array("{$user->name} ({$user->guid})");
 			foreach ($questions as $i => $question) {
 				$values = array();
 				$responses = elgg_get_annotations(array('guid' => $question->guid, 'annotation_owner_guids' => $user->guid, 'annotation_name' => 'response', 'limit' => 0));
