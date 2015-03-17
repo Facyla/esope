@@ -8,36 +8,16 @@
 $survey = elgg_extract('entity', $vars);
 $filter = elgg_extract('filter', $vars);
 $filter_guid = elgg_extract('filter_guid', $vars);
+$filter_entity = elgg_extract('filter_entity', $vars);
 $own = elgg_get_logged_in_user_entity();
 
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 
-elgg_push_breadcrumb($survey->title, $survey->getURL());
-elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid);
-
 $survey_stats = '';
 $survey_responders = '';
 $survey_questions = '';
 $response_id = 0;
-
-
-// Check filter validity - forward to results page if error
-if ($filter) {
-	$filter_entity = get_entity($filter_guid);
-	if (($filter == 'user') && !elgg_instanceof($filter_entity, 'user')) {
-		register_error(elgg_echo('survey:filter:invalid'));
-		forward('survey/results/' . $survey->guid);
-	}
-	if (($filter == 'question') && !elgg_instanceof($filter_entity, 'object', 'survey_question')) {
-		register_error(elgg_echo('survey:filter:invalid'));
-		forward('survey/results/' . $survey->guid);
-	}
-	if (in_array($filter, array('user', 'question'))) {
-		//elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
-		elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter));
-	}
-}
 
 
 // Get some stats on survey

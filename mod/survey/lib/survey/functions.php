@@ -199,6 +199,28 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 		forward(REFERER);
 	}
 	
+	elgg_push_breadcrumb($survey->title, $survey->getURL());
+	elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid);
+	
+	$title = elgg_echo('survey:results');
+	// Check filter validity - forward to results page if error
+	if ($filter) {
+		$filter_entity = get_entity($filter_guid);
+		if (($filter == 'user') && !elgg_instanceof($filter_entity, 'user')) {
+			register_error(elgg_echo('survey:filter:invalid'));
+			forward('survey/results/' . $survey->guid);
+		}
+		if (($filter == 'question') && !elgg_instanceof($filter_entity, 'object', 'survey_question')) {
+			register_error(elgg_echo('survey:filter:invalid'));
+			forward('survey/results/' . $survey->guid);
+		}
+		if (in_array($filter, array('user', 'question'))) {
+			//elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
+			$title = elgg_echo('survey:results:' . $filter);
+			elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter));
+		}
+	}
+	
 	$body = '';
 	/*
 	$body .= '<h3>' . elgg_echo('survey:results:summary') . '</h3>';
@@ -206,10 +228,10 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 	$body .= '<br />';
 	$body .= '<h3>' . elgg_echo('survey:results:full') . '</h3>';
 	*/
-	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid));
+	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid, 'filter_entity' => $filter_entity));
 	
 	$params = array(
-			'title' => elgg_echo('survey:results'),
+			'title' => $title,
 			'content' => $body,
 		);
 	

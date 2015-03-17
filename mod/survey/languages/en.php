@@ -234,7 +234,7 @@ View and respond to the survey:
 	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> You may reorder the questions by drag'n'dropping them on the page.",
 	'survey:settings:show_active_only' => "Hide group surveys module if none active",
 	
-	'survey:results:export' => "Export survey results",
+	'survey:results:export' => "Export the survey results",
 	'survey:settings:results_export' => "Enable survey results CSV export",
 	
 	

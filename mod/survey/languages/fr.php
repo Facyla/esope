@@ -231,7 +231,7 @@ Afficher le sondage et y répondre :
 	'survey:results:yourresponse' => "Votre réponse",
 	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> Vous pouvez modifier l'ordre des questions en les cliquant-déplaçant sur la page.",
 	
-	'survey:results:export' => "Exporter les résultats",
+	'survey:results:export' => "Exporter les résultats du sondage",
 	'survey:settings:results_export' => "Permettre d'exporter les résultats en CSV",
 	
 	
