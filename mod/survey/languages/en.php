@@ -36,7 +36,6 @@ $en = array(
 	'survey:settings:group:title' => "Allow group surveys?",
 	'survey:settings:group_survey_default' => "yes, on by default",
 	'survey:settings:group_survey_not_default' => "yes, off by default",
-	'survey:settings:no' => "no",
 	'survey:settings:group_access:title' => "If group surveys are activated, who gets to create surveys?",
 	'survey:settings:group_access:admins' => "group owners and admins only",
 	'survey:settings:group_access:members' => "any group member",
@@ -236,6 +235,9 @@ View and respond to the survey:
 	
 	'survey:results:export' => "Export the survey results",
 	'survey:settings:results_export' => "Enable survey results CSV export",
+	
+	'survey:state:open' => "Open survey",
+	'survey:state:closed' => "Survey is closed",
 	
 	
 );

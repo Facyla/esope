@@ -36,7 +36,6 @@ $fr = array(
 	'survey:settings:group:title' => "Activer les sondages du groupe ?",
 	'survey:settings:group_survey_default' => "oui, activé par défaut",
 	'survey:settings:group_survey_not_default' => "oui, désactivé par défaut",
-	'survey:settings:no' => "non",
 	'survey:settings:group_access:title' => "Si les sondages de groupe sont activés, qui peut créer les sondages ?",
 	'survey:settings:group_access:admins' => "responsables du groupe et administrateurs seulement",
 	'survey:settings:group_access:members' => "tout membre du groupe",
@@ -233,6 +232,9 @@ Afficher le sondage et y répondre :
 	
 	'survey:results:export' => "Exporter les résultats du sondage",
 	'survey:settings:results_export' => "Permettre d'exporter les résultats en CSV",
+	
+	'survey:state:open' => "Sondage en cours",
+	'survey:state:closed' => "Sondage terminé",
 	
 	
 );

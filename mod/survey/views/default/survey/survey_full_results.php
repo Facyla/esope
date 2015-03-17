@@ -37,6 +37,7 @@ $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:numquestions') .
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:numresponders') . '</strong></td><td>' . $total_responses_count . '</td></tr>';
 // Sondage actif ou non
 $survey_state = $survey->isOpen() ? 'open' : 'closed';
+$survey_state = elgg_echo('survey:state:' . $survey_state);
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:open') . '</strong></td><td>' . $survey_state . '</td></tr>';
 // Date de création
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:created') . '</strong></td><td>' . date('d/m/Y', $survey->time_created) . '</td></tr>';

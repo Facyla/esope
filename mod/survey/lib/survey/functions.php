@@ -216,7 +216,11 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 		}
 		if (in_array($filter, array('user', 'question'))) {
 			//elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
-			$title = elgg_echo('survey:results:' . $filter);
+			if ($filter == 'question') {
+				$title = elgg_echo('survey:results:questiondetails', array($filter_entity->title));
+			} else if ($filter == 'user') {
+				$title = elgg_echo('survey:results:userdetails', array($filter_entity->name));
+			}
 			elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter));
 		}
 	}
