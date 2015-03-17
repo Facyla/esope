@@ -17,9 +17,23 @@ $group = elgg_get_page_owner_entity();
 
 if (survey_activated_for_group($group)) {
 	
+	// Check if there is any valid open survey to be displayed in this group
+	$active_only = false;
 	if (elgg_get_plugin_setting('show_active_only', 'survey') == 'yes') {
-		$active_surveys = '';
-		if (false) return;
+		$active_only = true; }
+		// Find and sort all group surveys
+		$options = array('type' => 'object', 'subtype'=>'survey', 'limit' => 0, 'container_guid' => elgg_get_page_owner_guid());
+		if ($all_surveys = elgg_get_entities($options)) {
+			foreach ($all_surveys as $survey) {
+				if ($survey->isOpen()) {
+					$open_surveys[$survey->guid] = $survey;
+				} else {
+					$closed_surveys[$survey->guid] = $survey;
+				}
+			}
+		}
+		// Quit now if none open survey found
+		if (empty($open_surveys)) { return };
 	}
 	
 	elgg_push_context('widgets');
@@ -33,10 +47,17 @@ if (survey_activated_for_group($group)) {
 		'text' => elgg_echo('survey:addpost'),
 		'is_trusted' => true
 	));
-
-	$options = array('type' => 'object', 'subtype'=>'survey', 'limit' => 4, 'container_guid' => elgg_get_page_owner_guid());
+	
+	
 	$content = '';
-	if ($survey_found = elgg_get_entities($options)) {
+	if ($active_only) {
+		// Do not get them twice...
+		$survey_found = array_slice($all_surveys, 0, 4);
+	} else {
+		$options = array('type' => 'object', 'subtype'=>'survey', 'limit' => 4, 'container_guid' => elgg_get_page_owner_guid());
+		$survey_found = elgg_get_entities($options);
+	}
+	if ($survey_found) {
 		foreach ($survey_found as $survey) {
 			$content .= elgg_view('survey/widget', array('entity' => $survey));
 		}

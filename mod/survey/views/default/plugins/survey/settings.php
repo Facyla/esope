@@ -47,8 +47,8 @@ if (!$survey_site_access) { $survey_site_access = 'all'; }
 if (!$survey_front_page) { $survey_front_page = 'no'; }
 if (!$allow_close_date) { $allow_close_date = 'no'; }
 if (!$allow_open_survey) { $allow_open_survey = 'no'; }
-if (!$survey_show_active_only) { $survey_show_active_only = 'no'; }
-if (!$survey_results_export) { $survey_results_export = 'no'; }
+if (!$survey_show_active_only) { $survey_show_active_only = 'yes'; }
+if (!$survey_results_export) { $survey_results_export = 'yes'; }
 
 
 
