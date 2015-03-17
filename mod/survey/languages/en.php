@@ -1,22 +1,21 @@
 <?php
 
 $en = array(
-	'item:object:survey' => "Survey",
+	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Survey",
 	
 	/**
 	 * Menu items and titles
 	 */
-	'survey' => "Surveys",
-	'survey:add' => "New Survey",
-	'survey:group_survey' => "Group surveys",
+	'survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Surveys",
+	'survey:group_survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Group surveys",
 	'survey:group_survey:listing:title' => "%s's surveys",
+	'survey:add' => "New Survey",
 	'survey:your' => "Your surveys",
 	'survey:not_me' => "%s's surveys",
 	'survey:friends' => "Friends' surveys",
 	'survey:addpost' => "Create a survey",
 	'survey:editpost' => "Edit a survey: %s",
 	'survey:edit' => "Edit a survey",
-	'item:object:survey' => 'Surveys',
 	'item:object:survey_choice' => "Survey choices",
 	'survey:question' => "Survey question",
 	'survey:description' => "Description (optional)",

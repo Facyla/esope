@@ -1,7 +1,7 @@
 <?php
 
 $fr = array(
-	'item:object:survey' => "Sondage",
+	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondage",
 	
 	/**
 	 * Menu items and titles
@@ -17,7 +17,6 @@ $fr = array(
 	'survey:addpost' => "Créer un sondage",
 	'survey:editpost' => "Modifier un sondage : %s",
 	'survey:edit' => "Modifier un sondage",
-	'item:object:survey' => 'Sondages',
 	'item:object:survey_choice' => "Options du sondage",
 	'survey:question' => "Question du sondage",
 	'survey:description' => "Description (facultatif)",
