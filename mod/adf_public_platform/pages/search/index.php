@@ -149,6 +149,7 @@ foreach ($types as $type => $subtypes) {
 	// Add (always) type menu first
 		$label = "item:$type";
 		$current_params = $search_params;
+		$current_params['type'] = $type;
 		$current_params['subtype'] = null;
 		$current_params['search_type'] = 'entities';
 		$data = htmlspecialchars(http_build_query($current_params));
