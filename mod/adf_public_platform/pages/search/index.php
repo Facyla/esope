@@ -149,8 +149,8 @@ foreach ($types as $type => $subtypes) {
 	// Add (always) type menu first
 		$label = "item:$type";
 		$current_params = $search_params;
-		$current_params['type'] = $type;
-		$current_params['subtype'] = null;
+		$current_params['entity_type'] = $type;
+		$current_params['entity_subtype'] = null;
 		$current_params['search_type'] = 'entities';
 		$data = htmlspecialchars(http_build_query($current_params));
 		$url = elgg_get_site_url() . "search?$data";
@@ -162,7 +162,7 @@ foreach ($types as $type => $subtypes) {
 	if (is_array($subtypes) && count($subtypes)) {
 		foreach ($subtypes as $subtype) {
 			$label = "item:$type:$subtype";
-			$current_params['subtype'] = $subtype;
+			$current_params['entity_subtype'] = $subtype;
 			$data = htmlspecialchars(http_build_query($current_params));
 			$url = elgg_get_site_url()."search?$data";
 			$menu_item = new ElggMenuItem($label, " &nbsp; &nbsp; ".elgg_echo($label), $url);
