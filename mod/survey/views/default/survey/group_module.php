@@ -33,7 +33,7 @@ if (survey_activated_for_group($group)) {
 			}
 		}
 		// Quit now if none open survey found
-		if (empty($open_surveys)) { return };
+		if (empty($open_surveys)) { return; };
 	}
 	
 	elgg_push_context('widgets');
