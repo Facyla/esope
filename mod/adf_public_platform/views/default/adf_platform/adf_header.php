@@ -198,7 +198,10 @@ if (empty($header_content)) {
 								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
 								<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
 								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
+								<!--
 								<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
+								//-->
+								<button type="submit" id="adf-search-submit-button" value="<?php echo elgg_echo('adf_platform:search'); ?>" class="fa-search" />
 							</form>
 						<?php } ?>
 					</div>
