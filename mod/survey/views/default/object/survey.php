@@ -72,7 +72,7 @@ if (isset($vars['entity'])) {
 		echo elgg_view('object/elements/full', array('summary' => $summary, 'icon' => $owner_icon));
 		
 		// Add detailed description
-		if (!empty($survey->description)) { echo elgg_view('output/longtext', array('value' => $survey->description)); }
+		if (!empty($survey->description)) { echo elgg_view('output/longtext', array('value' => $survey->description)) . '<br />'; }
 		
 		// Add survey content : response form, or response message and optionally responses
 		echo elgg_view('survey/survey_content', $vars);

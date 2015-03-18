@@ -8,36 +8,16 @@
 $survey = elgg_extract('entity', $vars);
 $filter = elgg_extract('filter', $vars);
 $filter_guid = elgg_extract('filter_guid', $vars);
+$filter_entity = elgg_extract('filter_entity', $vars);
 $own = elgg_get_logged_in_user_entity();
 
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 
-elgg_push_breadcrumb($survey->title, $survey->getURL());
-elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid);
-
 $survey_stats = '';
 $survey_responders = '';
 $survey_questions = '';
 $response_id = 0;
-
-
-// Check filter validity - forward to results page if error
-if ($filter) {
-	$filter_entity = get_entity($filter_guid);
-	if (($filter == 'user') && !elgg_instanceof($filter_entity, 'user')) {
-		register_error(elgg_echo('survey:filter:invalid'));
-		forward('survey/results/' . $survey->guid);
-	}
-	if (($filter == 'question') && !elgg_instanceof($filter_entity, 'object', 'survey_question')) {
-		register_error(elgg_echo('survey:filter:invalid'));
-		forward('survey/results/' . $survey->guid);
-	}
-	if (in_array($filter, array('user', 'question'))) {
-		//elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
-		elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter));
-	}
-}
 
 
 // Get some stats on survey
@@ -57,6 +37,7 @@ $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:numquestions') .
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:numresponders') . '</strong></td><td>' . $total_responses_count . '</td></tr>';
 // Sondage actif ou non
 $survey_state = $survey->isOpen() ? 'open' : 'closed';
+$survey_state = elgg_echo('survey:state:' . $survey_state);
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:open') . '</strong></td><td>' . $survey_state . '</td></tr>';
 // Date de création
 $survey_stats .= '<tr><td><strong>' . elgg_echo('survey:results:created') . '</strong></td><td>' . date('d/m/Y', $survey->time_created) . '</td></tr>';
@@ -273,6 +254,9 @@ switch($filter) {
 
 // Compose final results content
 echo '<div id="survey-results" class="elgg-output">';
+if (elgg_get_plugin_setting('results_export', 'survey') == 'yes') {
+	echo '<p><a href="' . elgg_get_site_url() . 'survey/export/' . $survey->guid . '" class="elgg-button elgg-button-action survey-results-export">' . elgg_echo('survey:results:export') . '</a></p>';
+}
 echo '<div id="survey-results-stats">' . $survey_stats . '</div>';
 echo '<div id="survey-results-questions">' . $survey_questions . '</div>';
 if ($survey_responders) { echo '<div id="survey-results-users">' . $survey_responders . '</div>'; }

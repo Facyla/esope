@@ -1,22 +1,21 @@
 <?php
 
 $en = array(
-	'item:object:survey' => "Survey",
+	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Surveys",
 	
 	/**
 	 * Menu items and titles
 	 */
-	'survey' => "Surveys",
-	'survey:add' => "New Survey",
-	'survey:group_survey' => "Group surveys",
+	'survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Surveys",
+	'survey:group_survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Group surveys",
 	'survey:group_survey:listing:title' => "%s's surveys",
+	'survey:add' => "New Survey",
 	'survey:your' => "Your surveys",
 	'survey:not_me' => "%s's surveys",
 	'survey:friends' => "Friends' surveys",
 	'survey:addpost' => "Create a survey",
 	'survey:editpost' => "Edit a survey: %s",
 	'survey:edit' => "Edit a survey",
-	'item:object:survey' => 'Surveys',
 	'item:object:survey_choice' => "Survey choices",
 	'survey:question' => "Survey question",
 	'survey:description' => "Description (optional)",
@@ -37,13 +36,15 @@ $en = array(
 	'survey:settings:group:title' => "Allow group surveys?",
 	'survey:settings:group_survey_default' => "yes, on by default",
 	'survey:settings:group_survey_not_default' => "yes, off by default",
-	'survey:settings:no' => "no",
 	'survey:settings:group_access:title' => "If group surveys are activated, who gets to create surveys?",
 	'survey:settings:group_access:admins' => "group owners and admins only",
 	'survey:settings:group_access:members' => "any group member",
-	'survey:settings:front_page:title' => "Admins can make a single survey at a time the site's \"Survey of the day\"? (Widget Manager plugin required for adding the corresponding widget to the index page)",
-	'survey:settings:allow_close_date:title' => "Allow setting a closing date for surveys? (afterwards the results can still be viewed but voting is no longer permitted)",
-	'survey:settings:allow_open_survey:title' => "Allow open surveys? (open surveys show which user responded for which survey choice; if this option is enabled, admins can see who responded what on any surveys)",
+	'survey:settings:front_page:title' => "Enable the site's \"Survey of the day\"?",
+	'survey:settings:front_page:details' => "Admins can make a single survey at a time the site's \"Survey of the day\"? Widget Manager plugin required for adding the corresponding widget to the index page, or the corresponding view must be integrated into the theme plugin.",
+	'survey:settings:allow_close_date:title' => "Allow setting a closing date for surveys?",
+	'survey:settings:allow_close_date:details' => "Afterwards the results can still be viewed but voting is no longer permitted.",
+	'survey:settings:allow_open_survey:title' => "Allow open surveys?",
+	'survey:settings:allow_open_survey:details' => "Open surveys show which user responded for which survey choice; if this option is enabled, admins can see who responded what on any surveys.",
 	'survey:none' => "No survey found.",
 	'survey:not_found' => "The survey was not found.",
 	'survey:permission_error' => "You do not have permission to edit this survey.",
@@ -113,7 +114,8 @@ View and respond to the survey:
 	 **/
 	'survey:settings:create_in_river:title' => "Show survey creation in activity river?",
 	'survey:settings:response_in_river:title' => "Show survey response in activity river?",
-	'survey:settings:send_notification:title' => "Send notification when a survey is created? (Members will only receive notifications if their are friend with the creator of the survey or a member of the group the survey was added to. Additionally, notifications will only be sent to members who configured Elgg's notification settings accordingly)",
+	'survey:settings:send_notification:title' => "Send notification when a survey is created?",
+	'survey:settings:send_notification:details' => "Members will only receive notifications if their are friend with the creator of the survey or a member of the group the survey was added to. Additionally, notifications will only be sent to members who configured Elgg's notification settings accordingly.",
 	'river:create:object:survey' => '%s created a survey %s',
 	'river:response:object:survey' => '%s responded on the survey %s',
 	'river:comment:object:survey' => '%s commented on the survey %s',
@@ -169,7 +171,7 @@ View and respond to the survey:
 	'survey:type:plaintext' => "Long text",
 	'survey:type:plaintext:details' => "For a detailed answer : one or more paragraphs.",
 	'survey:type:pulldown' => "Choice in a list",
-	'survey:type:pulldown:details' => "Lets select one response from a closed list of pre-defined choices. See below for settings ; you may allow an empty option so people are not forced to chosse a response.",
+	'survey:type:pulldown:details' => "Lets select one response from a closed list of pre-defined choices. See below for settings ; you may allow an empty option so people are not forced to choose a response.",
 	'survey:type:checkboxes' => "Check boxes",
 	'survey:type:checkboxes:details' => "Lets select several responses from a closed list of pre-defined choices.",
 	'survey:type:multiselect' => "Multiple selection",
@@ -182,11 +184,12 @@ View and respond to the survey:
 	'survey:results' => "Survey results",
 	'survey:results:question' => "Question",
 	'survey:results:user' => "Responder",
+	'survey:results:export' => "Data export",
 	'survey:result:label' => "\"%s\" (%s responses)",
 	'survey:results:summary' => "Results summary",
 	'survey:results:full' => "Detailed results",
-	'survey:results:user_details' => "Show details from this responder",
-	'survey:results:user_details:title' => "Detailed responses from this répondant",
+	'survey:results:user_details' => "Show details for this responder",
+	'survey:results:user_details:title' => "Detailed responses from this responder",
 	'survey:results:question_details' => "Show responses",
 	'survey:results:question_details:title' => "Detailed responses for this question",
 	'survey:results:question_details:responses' => "Response(s) by responder",
@@ -227,7 +230,14 @@ View and respond to the survey:
 	'survey:response:notrequired' => "Optional question",
 	'survey:response:required' => "Mandatory question",
 	'survey:results:yourresponse' => "Your response",
-	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> You may reorder the questions by drag'n'dropping them on the page."
+	'survey:questions:reorder' => "<i class=\"fa fa-info-circle\"></i> You may reorder the questions by drag'n'dropping them on the page.",
+	'survey:settings:show_active_only' => "Hide group surveys module if none active",
+	
+	'survey:results:export' => "Export the survey results",
+	'survey:settings:results_export' => "Enable survey results CSV export",
+	
+	'survey:state:open' => "Open survey",
+	'survey:state:closed' => "Survey is closed",
 	
 	
 );

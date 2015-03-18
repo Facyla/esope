@@ -37,6 +37,7 @@ foreach ($questions as $question) {
 		foreach($responses as $response) {
 			switch($question->input_type) {
 				case 'date':
+					if (strpos($response->value, '-')) { $response->value = strtotime($response->value); }
 					$own_responses[] = date('d/m/Y', $response->value);
 					break;
 				default:

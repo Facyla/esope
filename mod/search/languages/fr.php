@@ -8,7 +8,7 @@ $french = array(
 	'search:no_query' => "Veuillez entrer une requête de recherche.",
 	'search:search_error' => "Erreur",
 
-	'search:more' => "+%s résultats %s",
+	'search:more' => "+%s autres résultats %s",
 
 	'search_types:tags' => "Tags",
 

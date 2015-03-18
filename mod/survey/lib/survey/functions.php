@@ -199,6 +199,32 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 		forward(REFERER);
 	}
 	
+	elgg_push_breadcrumb($survey->title, $survey->getURL());
+	elgg_push_breadcrumb(elgg_echo('survey:results'), 'survey/results/' . $survey->guid);
+	
+	$title = elgg_echo('survey:results');
+	// Check filter validity - forward to results page if error
+	if ($filter) {
+		$filter_entity = get_entity($filter_guid);
+		if (($filter == 'user') && !elgg_instanceof($filter_entity, 'user')) {
+			register_error(elgg_echo('survey:filter:invalid'));
+			forward('survey/results/' . $survey->guid);
+		}
+		if (($filter == 'question') && !elgg_instanceof($filter_entity, 'object', 'survey_question')) {
+			register_error(elgg_echo('survey:filter:invalid'));
+			forward('survey/results/' . $survey->guid);
+		}
+		if (in_array($filter, array('user', 'question'))) {
+			//elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter), 'survey/results/' . $survey->guid . '/' . $filter . '/' . $filter_guid);
+			if ($filter == 'question') {
+				$title = elgg_echo('survey:results:questiondetails', array($filter_entity->title));
+			} else if ($filter == 'user') {
+				$title = elgg_echo('survey:results:userdetails', array($filter_entity->name));
+			}
+			elgg_push_breadcrumb(elgg_echo('survey:results:' . $filter));
+		}
+	}
+	
 	$body = '';
 	/*
 	$body .= '<h3>' . elgg_echo('survey:results:summary') . '</h3>';
@@ -206,16 +232,86 @@ function survey_get_page_results($guid = false, $filter = false, $filter_guid = 
 	$body .= '<br />';
 	$body .= '<h3>' . elgg_echo('survey:results:full') . '</h3>';
 	*/
-	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid));
+	$body .= elgg_view('survey/survey_full_results', array('entity' => $survey, 'filter' => $filter, 'filter_guid' => $filter_guid, 'filter_entity' => $filter_entity));
 	
 	$params = array(
-			'title' => elgg_echo('survey:results'),
+			'title' => $title,
 			'content' => $body,
 		);
 	
 	$body = elgg_view_layout("one_column", $params);
 	return elgg_view_page($params['title'], $body);
 	
+}
+
+
+/* Export survey data as CSV
+ * Header : - | Q1  | Q2  | Q3  | etc.
+ * Rows : Responder | R1  | R2  | R3  | etc.
+ */
+function survey_get_page_export($guid = false) {
+	gatekeeper();
+	$user = elgg_get_logged_in_user_entity();
+	
+	$survey = get_entity($guid);
+	if (!elgg_instanceof($survey, 'object', 'survey')) {
+		elgg_echo('survey:invalid');
+		forward(REFERER);
+	}
+	
+	// Access control
+	if (!$survey->canEdit($user) && !elgg_is_admin_logged_in()) {
+		elgg_echo('survey:no_access');
+		forward(REFERER);
+	}
+	
+	// CSV EXPORT
+	set_time_limit(0);
+	$ia = elgg_set_ignore_access(true);
+	$filename = 'survey_' . $survey->guid . '_' . date('Y-m-d-H-i-s') . '.csv';
+	$delimiter = ";";
+
+	// Send file using headers for download
+	header('Content-Type: text/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename=' . $filename);
+
+	// create a file pointer connected to the output stream
+	$output = fopen('php://output', 'w');
+	// output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
+	//$output = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
+
+	// Add Headings : Question titles
+	$questions = survey_get_question_array($survey);
+	$headings[] = elgg_echo('survey:results:name');
+	$i = 0;
+	foreach ($questions as $question) {
+		$i++;
+		$headings[] = $i . " " . $question->title;
+	}
+	fputcsv($output, $headings, $delimiter);
+	
+	// Output the CSV responses row for each responder
+	$responders_guid = $survey->getResponders();
+	foreach ($responders_guid as $guid) {
+		if ($user = get_entity($guid)) {
+			$row_array = array("{$user->name} ({$user->guid})");
+			foreach ($questions as $i => $question) {
+				$values = array();
+				$responses = elgg_get_annotations(array('guid' => $question->guid, 'annotation_owner_guids' => $user->guid, 'annotation_name' => 'response', 'limit' => 0));
+				foreach($responses as $response) { $values[] = $response->value; }
+				$row_array[] = implode("\n", $values);
+			}
+			fputcsv($output, $row_array, $delimiter);
+		} else {
+			fputcsv($output, array('Error'), $delimiter);
+		}
+	}
+	
+	elgg_set_ignore_access($ia);
+	// Note : page handlers should return true.. but it would add an extra "1" in exported CSV, 
+	// so end earlier, as we will anyway not display any page
+	exit;
+	return true;
 }
 
 

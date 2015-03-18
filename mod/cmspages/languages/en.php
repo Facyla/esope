@@ -2,8 +2,8 @@
 $english = array(
 
 	'cmspages' => "Static pages (CMS)",
-	'item:object:cmspage' => 'Static page',
-	'item:object:cmspages' => 'Static pages',
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> Static page',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i> Static pages',
 	
 	'cmspages:pagetype' => "Page URL name",
 	'cmspages:cmspage_url' => "Published page URL :",
@@ -115,10 +115,10 @@ $english = array(
 	'cmspages:module:entity' => "Entity", 
 	'cmspages:module:view' => "Configurable view", 
 	/* @TODO : missing translations
-	'cmspages:' => "Lien connexe", 
-	'cmspages:' => "<kbd>[&nbsp;Modifier%s&nbsp;]</kbd>", 
-	'cmspages:' => "Pour éditer les pages CMS, rendez-vous sur", 
-	'cmspages:' => "Vue non configurée.",
+	'cmspages:' => "Sibling link", 
+	'cmspages:' => "<kbd>[&nbsp;Edit%s&nbsp;]</kbd>", 
+	'cmspages:' => "To edit static pages, please go to", 
+	'cmspages:' => "Not set view.",
 	*/
 	
 );

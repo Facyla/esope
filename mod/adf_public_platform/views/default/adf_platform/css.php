@@ -753,11 +753,29 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 /* Font Awesome */
+/* Use FA without i or other empty tags
+ - see http://dusted.codes/making-font-awesome-awesome-using-icons-without-i-tags
+ - and also the class*= tip from http://www.weloveiconfonts.com/
+ Note : this method allows to strip off all "fa" class, 
+        but take care to fa-fw which should become fa-fw::before to avoid any problem with containing block
+ */
+.icon::before, [class*="fa-"]:before {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	margin-right: .5em;
+	transform: translate(0, 0);
+}
+/* Extra class for easier scale 1 stacking */
 .fa-stack-half { font-size: 0.5em; }
 /* Quick effect on hover */
-.fa:hover, a:hover .fa { transform: rotateY(360deg); transition-duration: 0.5s; }
+.fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; }
 
-
+#main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; /* background-color:<?php echo $linkcolor; ?>; */ }
+#main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
 
 
 <?php if ($fixedwidth != 'yes') { ?>
@@ -857,6 +875,9 @@ section div.module footer { background-size: 100%; }
 	
 	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
 	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
+	
+	/* Groups */
+	.groups-profile-fields { width: 100%; }
 	
 	/* Home */
 	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }

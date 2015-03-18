@@ -767,6 +767,59 @@ $en = array(
 	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
 	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
+	// User tools FA icons *override* (owner block)
+	// Core tools
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activity",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	// Plugins tools
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
+	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
+	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Events",
+	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
+	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Polls",
+	
+	/* Main objects and search menus */
+	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groups",
+	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Users",
+	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Objects",
+	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Comments",
+	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	//'all' => "",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
+	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Announcements',
+	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
+	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Discussion topics",
+	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Top-level pages",
+	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Events",
+	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
+	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'item:object:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinar",
+	/*
+	'item:object:faq' => "<i class=\"fa fa- fa-fw\"></i> FAQs",
+	'item:object:dossierdepreuve' => "<i class=\"fa fa- fa-fw\"></i> Proof file",
+	'item:object:cmspage' => "<i class=\"fa fa- fa-fw\"></i> Static page",
+	*/
+	
 	// Group tools : side menu entries and module titles - *override* - please update CSS accordingly
 	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
@@ -798,32 +851,9 @@ $en = array(
 	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
 	// Group modules
 	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sub-groups",
-	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Most recent images",
+	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Most recent photos",
 	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Most recent albums",
 	
-	// User tools FA icons *override* (owner block)
-	// Core tools
-	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
-	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
-	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
-	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activity",
-	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
-	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
-	// Plugins tools
-	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
-	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
-	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
-	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
-	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
-	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Events",
-	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
-	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
-	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
-	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
-	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
-	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
-	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
-	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Polls",
 	// User actions and infos
 	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
 	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",

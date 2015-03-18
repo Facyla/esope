@@ -1,8 +1,8 @@
 <?php
 $fr = array(
 	'cmspages' => "Pages statiques (CMS)",
-	'item:object:cmspage' => 'Page statique',
-	'item:object:cmspages' => 'Pages statiques',
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> Page statique',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i> Pages statiques',
 	
 	'cmspages:pagetype' => "Nom de la page (pour l'URL)",
 	'cmspages:cmspage_url' => "URL de la page publiée :",
