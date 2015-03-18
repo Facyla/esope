@@ -774,7 +774,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 /* Quick effect on hover */
 .fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; }
 
-#main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; }
+#main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; background-color:<?php echo $linkcolor; ?>; }
+#main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
 
 
 <?php if ($fixedwidth != 'yes') { ?>
