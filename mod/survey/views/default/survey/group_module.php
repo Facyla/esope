@@ -20,7 +20,7 @@ if (survey_activated_for_group($group)) {
 	// Check if there is any valid open survey to be displayed in this group
 	$active_only = false;
 	if (elgg_get_plugin_setting('show_active_only', 'survey') == 'yes') {
-		$active_only = true; }
+		$active_only = true;
 		// Find and sort all group surveys
 		$options = array('type' => 'object', 'subtype'=>'survey', 'limit' => 0, 'container_guid' => elgg_get_page_owner_guid());
 		if ($all_surveys = elgg_get_entities($options)) {
@@ -33,7 +33,7 @@ if (survey_activated_for_group($group)) {
 			}
 		}
 		// Quit now if none open survey found
-		if (empty($open_surveys)) { return };
+		if (empty($open_surveys)) { return; };
 	}
 	
 	elgg_push_context('widgets');
