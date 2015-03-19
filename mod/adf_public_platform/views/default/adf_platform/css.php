@@ -686,7 +686,6 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 .esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
-header nav ul .fa { margin-right: 0.5em; }
 header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
 
 
@@ -769,6 +768,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	margin-right: .5em;
 	transform: translate(0, 0);
 }
+/* No more useful 
+header nav ul .fa { margin-right: 0.5em; }
+*/
 /* Extra class for easier scale 1 stacking */
 .fa-stack-half { font-size: 0.5em; }
 /* Quick effect on hover */
