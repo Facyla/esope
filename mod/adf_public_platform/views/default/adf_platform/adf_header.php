@@ -1,6 +1,7 @@
 <?php
+// ESOPE theme top menu, header and navigation menu
 
-$url = $vars['url'];
+$url = elgg_get_site_url();
 $urlicon = $url . 'mod/adf_public_platform/img/theme/';
 
 $site = elgg_get_site_entity();

@@ -867,6 +867,7 @@ section div.module footer { background-size: 100%; }
 	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
 	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
 	#main-search #adf-search-submit-button { border-radius: 0; }
+	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
 	
 	/* Layout */
 	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; }
