@@ -322,6 +322,7 @@ function esope_init() {
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
+	// @TODO page handlers for downloadable and SEO-friendly images/ and files/
 	
 	// Esope liked content
 	if (elgg_is_active_plugin('likes')) {
@@ -1990,6 +1991,7 @@ function esope_add_file_to_entity($entity, $input_name = 'file') {
 	
 		$filename = $_FILES[$input_name]['name'];
 		if ($uploaded_file = get_uploaded_file($input_name)) {
+error_log("#3");
 			// Remove previous file, if any
 			// @TODO not tested... check it's working as expected
 			if (!empty($entity->{$input_name})) {
@@ -1997,7 +1999,7 @@ function esope_add_file_to_entity($entity, $input_name = 'file') {
 			}
 
 			// Create new file
-			$prefix = "knowledge_database/{$input_name}/";
+			$prefix = "esope_files/{$input_name}/";
 			$filehandler = new ElggFile();
 			$filehandler->owner_guid = $entity->guid;
 			$filehandler->setFilename($prefix . $filename);

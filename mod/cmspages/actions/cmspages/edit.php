@@ -1,6 +1,6 @@
 <?php
 /**
- * Elgg external pages: add/edit
+ * Elgg external pages: add/edit action
  * 
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -41,7 +41,7 @@ $container_guid = get_input('container_guid', $site_guid);
 $parent_guid = get_input('parent_guid');
 $sibling_guid = get_input('sibling_guid');
 $categories = get_input('categories');
-$featured_image = get_input('featured_image');
+//$featured_image = get_input('featured_image');
 $slurl = get_input('slurl');
 // Externalblog/templating system integration
 $content_type = get_input('content_type');
@@ -63,7 +63,7 @@ $_SESSION['cmspage_container_guid'] = $container_guid;
 $_SESSION['cmspage_parent_guid'] = $parent_guid;
 $_SESSION['cmspage_sibling_guid'] = $sibling_guid;
 $_SESSION['cmspage_categories'] = $categories;
-$_SESSION['cmspage_featured_image'] = $featured_image;
+//$_SESSION['cmspage_featured_image'] = $featured_image;
 $_SESSION['cmspage_slurl'] = $slurl;
 $_SESSION['cmspage_content_type'] = $content_type;
 $_SESSION['cmspage_contexts'] = $contexts;
@@ -120,7 +120,8 @@ $cmspage->container_guid = $container_guid;
 $cmspage->parent_guid = $parent_guid;
 $cmspage->sibling_guid = $sibling_guid;
 $cmspage->categories = $categories;
-if ($featured_image && esope_add_file_to_entity($cmspage, 'featured_image')) $cmspage->featured_image = $featured_image;
+// Function will add the filename if upload is OK
+if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
 $cmspage->slurl = $slurl;
 
 

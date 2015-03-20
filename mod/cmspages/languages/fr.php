@@ -120,6 +120,10 @@ $fr = array(
 	'cmspages:' => "Vue non configurée.",
 	*/
 	
+	'cmspages:categories' => "Rubrique(s)",
+	'cmspages:slurl' => "Permalien",
+	'cmspages:featured_image' => "Image en Une",
+	
 	
 );
 

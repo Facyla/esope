@@ -37,7 +37,9 @@ function cmspages_init() {
 	// Register a URL handler for CMS pages
 	elgg_register_entity_url_handler('object', 'cmspage', 'cmspage_url');
 	
-	elgg_register_page_handler('cmspages', 'cmspages_page_handler'); // Register a page handler, so we can have nice URLs
+	// Register main page handler
+	elgg_register_page_handler('cmspages', 'cmspages_page_handler');
+	// @TODO Enable multiple page handlers
 	
 	// PUBLIC PAGES - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'cmspages_public_pages');
