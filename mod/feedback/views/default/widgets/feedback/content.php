@@ -9,14 +9,15 @@
  * List the latest feedback entries
  */
 
+// @TODO list only open ones ?
 $list = elgg_list_entities(array(
-        'types' => 'object',
-        'subtypes' => 'feedback',
-        'limit' => $vars['entity']->num_display,
-        'pagination' => false
-));
+		'types' => 'object',
+		'subtypes' => 'feedback',
+		'limit' => $vars['entity']->num_display,
+		'pagination' => false
+	));
 if (!$list) {
-    $list = '<p class="mtm">' . elgg_echo('feedback:list:nofeedback') . '</p>';
+	$list = '<p class="mtm">' . elgg_echo('feedback:list:nofeedback') . '</p>';
 }
 
 echo $list;

@@ -57,11 +57,11 @@ function notification_messages_init() {
 
 // Guess best subtype title depending on defined translation strings
 function notification_messages_readable_subtype($subtype) {
-	$msg_subtype = elgg_echo('item:object:'.$subtype);
-	if ($msg_subtype == 'item:object:'.$subtype) {
+	$msg_subtype = elgg_echo("item:object:$subtype");
+	if ($msg_subtype == "item:object:$subtype") {
 		$msg_subtype = elgg_echo($subtype);
 	}
-	return $msg_subtype;
+	return strip_tags($msg_subtype);
 }
 
 

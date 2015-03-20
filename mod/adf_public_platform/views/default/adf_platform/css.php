@@ -686,7 +686,6 @@ i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 .esope-alpha-char a { font-family: <?php echo $font3; ?>; text-decoration: none; margin: 0 0.2em; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
-header nav ul .fa { margin-right: 0.5em; }
 header nav ul li#msg a, header nav ul li#man a { background:transparent; padding:0; }
 
 
@@ -769,6 +768,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	margin-right: .5em;
 	transform: translate(0, 0);
 }
+/* No more useful 
+header nav ul .fa { margin-right: 0.5em; }
+*/
 /* Extra class for easier scale 1 stacking */
 .fa-stack-half { font-size: 0.5em; }
 /* Quick effect on hover */
@@ -867,6 +869,7 @@ section div.module footer { background-size: 100%; }
 	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
 	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
 	#main-search #adf-search-submit-button { border-radius: 0; }
+	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
 	
 	/* Layout */
 	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; }
