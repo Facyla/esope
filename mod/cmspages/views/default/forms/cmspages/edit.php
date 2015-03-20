@@ -73,6 +73,8 @@ if ($display_form) {
 		$container_guid = $cmspage->container_guid;
 		$parent_guid = $cmspage->parent_guid;
 		$sibling_guid = $cmspage->sibling_guid;
+		$categories = $cmspage->categories;
+		$featured_image = $cmspage->featured_image;
 		// This if for a closer integration with externalblog, as a generic edition tool
 		$content_type = $cmspage->content_type; // Default : use editor, rawhtml = no wysiwyg, module (php ?)
 		$contexts = $cmspage->contexts; // Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou all)
@@ -211,6 +213,14 @@ if ($display_form) {
 			$form_body .= '</div>';
 		$form_body .= '</div>';
 		$form_body .= '<div class="clearfloat"></div>';
+		
+		// @TODO Categories should work like a custom menu
+		$form_body .= "<p><label>" . elgg_echo('cmspages:categories') . " " . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		// @TODO Images embeddding should work with site as owner (shared library)
+		// @TODO Featured image should work by linking an image to the cmspage entity
+		$form_body .= "<p><label>" . elgg_echo('cmspages:image') . " " . elgg_view('input/file', array('name' => 'featured_image', 'value' => $featured_image)) . '</label></p>';
+		// @TODO : content embedding : embed any type of content into the page
+		// @TODO : content linking : add relationships to any other entity types
 	
 	$form_body .= '</fieldset><br />';
 	
