@@ -7,7 +7,8 @@ $site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
 if (!elgg_is_logged_in() || ($site_chat != 'yes')) {
 	// Close open window
 	echo '<script type="text/javascript">
-	groupchat_site.close();
+	var '.$popup_id.';
+	if('.$popup_id.' && !'.$popup_id.'.closed){ groupchat_site.close(); }
 	</script>';
 	return;
 }
