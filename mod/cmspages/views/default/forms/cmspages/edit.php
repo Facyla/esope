@@ -1,6 +1,6 @@
 <?php
 /**
- * Elgg cmspages edit
+ * Elgg cmspages edit form
  *
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -73,6 +73,9 @@ if ($display_form) {
 		$container_guid = $cmspage->container_guid;
 		$parent_guid = $cmspage->parent_guid;
 		$sibling_guid = $cmspage->sibling_guid;
+		$categories = $cmspage->categories;
+		$featured_image = $cmspage->featured_image;
+		$slurl = $cmspage->slurl;
 		// This if for a closer integration with externalblog, as a generic edition tool
 		$content_type = $cmspage->content_type; // Default : use editor, rawhtml = no wysiwyg, module (php ?)
 		$contexts = $cmspage->contexts; // Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou all)
@@ -108,7 +111,7 @@ if ($display_form) {
 		// This if for a closer integration with externalblog, as a generic edition tool
 		//$content_type_input = "Type de contenu : par défaut = HTML avec éditeur, rawhtml = HTML sans éditeur<br />" . elgg_view('input/text', array('name' => 'content_type', 'value' => $content_type)) . '<br />';
 		// elgg_view('input/dropdown', array('name' => 'content_type', 'value' => $content_type, 'options_values' => $content_type_opts)) . '</label></p>';
-		$form_body .= "<p><label>" . elgg_echo('cmspages:content_type') . "&nbsp; ";
+		$form_body .= '<p><label>' . elgg_echo('cmspages:content_type') . "&nbsp; ";
 		$form_body .= '<select onchange="javascript:$(\'.toggle_detail\').hide(); $(\'.toggle_detail.field_\'+this.value).show();" name="content_type">';
 		foreach ($content_type_opts as $val => $text) {
 			if ($val == $content_type) $form_body .= '<option value="' . $val . '" selected="selected">' . $text . '</option>';
@@ -122,7 +125,7 @@ if ($display_form) {
 		}
 	
 		// Titre de la page
-		$form_body .= '<p><label>' . elgg_echo('title') . " " . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"')) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'js' => ' style="width:500px;"')) . '</label></p>';
 	
 		// Blocs conditionnels : masqué si module, affiché si HTML ou template
 		$hideifmodule = '';
@@ -150,7 +153,7 @@ if ($display_form) {
 			//$cmspage_input = elgg_view('input/hidden', array('name' => 'cmspage_guid', 'value' => $cmspage_guid));
 		
 			// Tags
-			$form_body .= '<p><label>' . elgg_echo('tags') . " " . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'js' => ' style="width:70%;"')) . '</label></p>';
+			$form_body .= '<p><label>' . elgg_echo('tags') . ' ' . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'js' => ' style="width:70%;"')) . '</label></p>';
 		
 		$form_body .= '</div>';
 		
@@ -203,14 +206,27 @@ if ($display_form) {
 		// Bloc conditionnel : masqué si module, affiché si HTML ou template
 		$form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
 			$form_body .= '<div style="float:left; width:32%; margin-right:2%;">';
-			$form_body .= "<p><label>" . elgg_echo('cmspages:container_guid') . " " . elgg_view('input/text', array('name' => 'container_guid', 'value' => $container_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
+			$form_body .= '<p><label>' . elgg_echo('cmspages:container_guid') . ' ' . elgg_view('input/text', array('name' => 'container_guid', 'value' => $container_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
 			$form_body .= '</div><div style="float:left; width:32%; margin-right:2%;">';
-			$form_body .= "<p><label>" . elgg_echo('cmspages:parent_guid') . " " . elgg_view('input/text', array('name' => 'parent_guid', 'value' => $parent_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
+			$form_body .= '<p><label>' . elgg_echo('cmspages:parent_guid') . ' ' . elgg_view('input/text', array('name' => 'parent_guid', 'value' => $parent_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
 			$form_body .= '</div><div style="float:right; width:32%;">';
-			$form_body .= "<label>" . elgg_echo('cmspages:sibling_guid') . " " . elgg_view('input/text', array('name' => 'sibling_guid', 'value' => $sibling_guid, 'js' => ' style="width:10ex;"')) . '</label><br />';
+			$form_body .= "<label>" . elgg_echo('cmspages:sibling_guid') . ' ' . elgg_view('input/text', array('name' => 'sibling_guid', 'value' => $sibling_guid, 'js' => ' style="width:10ex;"')) . '</label><br />';
 			$form_body .= '</div>';
 		$form_body .= '</div>';
 		$form_body .= '<div class="clearfloat"></div>';
+		
+		// @TODO Categories should work like a custom menu
+		$form_body .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:slurl') . ' ' . elgg_view('input/text', array('name' => 'slurl', 'value' => $slurl, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		// @TODO Images embeddding should work with site as owner (shared library)
+		// @TODO Featured image should work by linking an image to the cmspage entity
+		$form_body .= '<p>';
+		if ($featured_image) $form_body .= '<img src="' . $featured_image . '" style="float:right; max-width:30%; max-height:100px; " />';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:featured_image') . ' ' . elgg_view('input/file', array('name' => 'featured_image', 'value' => $featured_image)) . '</label></p>';
+		// @TODO : content embedding : embed any type of content into the page
+		// @TODO : content linking : add relationships to any other entity types
+		
+		// @TODO : add metatags fields
 	
 	$form_body .= '</fieldset><br />';
 	
@@ -234,7 +250,7 @@ if ($display_form) {
 	}
 	
 	// Display the form - Affichage du formulaire
-	echo elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/edit", 'body' => $form_body, 'id' => "cmspages-edit-form"));
+	echo elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/edit", 'body' => $form_body, 'id' => "cmspages-edit-form", 'enctype' => 'multipart/form-data'));
 }
 
 

@@ -96,7 +96,7 @@ echo '</div>';
 </div>
 <br />
 
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
 	$("#survey-questions").sortable({ // initialisation de Sortable sur le container parent
 		placeholder: 'survey-sort-highlight', // classe du placeholder ajouté lors du déplacement

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Elgg menus</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.1</version>
+	<blurb>Menus editor</blurb>
+	<description>This plugin enables the editing of menus</description>
+	<website>http://id.facyla.net/</website>
+	<copyright>ITEMS International 2015</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/plugin_ss1.png</path>
+	</screenshot>
+
+	<category>admin</category>
+	<category>interface</category>
+	<category>appearance</category>
+	<category>menu</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>adf_plugin_platform</name>
+	</suggests>
+
+	
+</plugin_manifest>
+
+<!--
+COMMENTS - HISTORY
+
+
+//-->
+
