@@ -13,6 +13,7 @@
 // elgg_view('cmspages/view',array('pagetype'=>"maghrenov-public-template", 'customvar1' => 'whatever'))
 
 // Hooks
+// ACCESS - Write permission plugin hooks
 elgg_register_plugin_hook_handler('permissions_check', 'object', 'cmspages_permissions_check');
 
 // Initialise log browser
@@ -93,7 +94,9 @@ function cmspages_pagesetup() {
 	return true;
 }
 
-/* Permissions for the cmspages context */
+/* Permissions for the cmspages context : determines canEdit()
+ * Extends permissions checking to allow editors
+ */
 function cmspages_permissions_check($hook, $type, $returnval, $params) {
 	// Handle only cmspages !!
 	if (elgg_instanceof($params['entity'], 'object', 'cmspage')) {

@@ -91,8 +91,8 @@ if (strlen($pagetype)>0) {
 
 // Check existing object, or create a new one
 if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
-	$cmspage = new ElggObject;
-	$cmspage->subtype = 'cmspage';
+	$cmspage = new CMSPage;
+	//$cmspage->subtype = 'cmspage';
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
 	$cmspage->pagetype = $pagetype;
 	$cmspage->save();
