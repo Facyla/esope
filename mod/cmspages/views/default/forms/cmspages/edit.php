@@ -221,8 +221,15 @@ if ($display_form) {
 		// @TODO Images embeddding should work with site as owner (shared library)
 		// @TODO Featured image should work by linking an image to the cmspage entity
 		$form_body .= '<p>';
-		if ($featured_image) $form_body .= '<img src="' . $featured_image . '" style="float:right; max-width:30%; max-height:100px; " />';
-		$form_body .= '<p><label>' . elgg_echo('cmspages:featured_image') . ' ' . elgg_view('input/file', array('name' => 'featured_image', 'value' => $featured_image)) . '</label></p>';
+		if ($featured_image) {
+			$form_body .= elgg_view('output/url', array(
+					'text' => elgg_echo('cmspages:featured_image:view'), 'href' => '#cmspage-featured-image',
+					'class' => 'elgg-lightbox', 'style' => 'float:right;',
+				));
+			$form_body .= '<div class="hidden">' . elgg_view_module('aside', elgg_echo('cmspages:featured_image'), '<img src="' . elgg_get_site_url() . 'esope/download_entity_file/' . $cmspage->guid . '/featured_image" style="max-width:100%; max-height:100%; " />', array('id' => 'cmspage-featured-image')) . '</div>';
+			//$form_body .= '<img src="' . elgg_get_site_url() . 'esope/download_entity_file/' . $cmspage->guid . '/featured_image" style="float:right; max-width:30%; max-height:100px; " />';
+		}
+		$form_body .= '<label>' . elgg_echo('cmspages:featured_image') . '<br />' . elgg_view('input/file', array('name' => 'featured_image', 'value' => $featured_image, 'style' => 'width:auto;')) . '</label></p>';
 		// @TODO : content embedding : embed any type of content into the page
 		// @TODO : content linking : add relationships to any other entity types
 		

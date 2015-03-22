@@ -124,6 +124,7 @@ $fr = array(
 	'cmspages:slurl' => "Permalien",
 	'cmspages:shorturl' => "URL courte",
 	'cmspages:featured_image' => "Image en Une",
+	'cmspages:featured_image:view' => "Afficher l'image en Une",
 	
 	
 );
