@@ -58,8 +58,9 @@ if ($vars['pagetype']) {
 	}
 	
 	
-	// Set page title
-	$title = $cmspage->pagetype;
+	// Set page title : readable title or none
+	$title = '';
+	//$title = $cmspage->pagetype;
 	if (!empty($cmspage->pagetitle)) $title = $cmspage->pagetitle;
 	$content = '';
 	
@@ -140,7 +141,7 @@ if ($vars['pagetype']) {
 	} else {
 		elgg_pop_breadcrumb(); // Removes main cmspages link
 	}
-	elgg_push_breadcrumb($title); // Fil d'Ariane revu : Adds page title
+	//elgg_push_breadcrumb($title); // Fil d'Ariane revu : Adds page title
 	
 	// LAYOUT - Display through the correct canvas area
 	// @TODO : we should be able to define the other layout areas (sidebar, sidebar2, etc.)
@@ -152,7 +153,12 @@ if ($vars['pagetype']) {
 
 
 //echo elgg_view_layout($layout, elgg_view_title($title) . $content);
-$params = array('content' => elgg_view_title($title).$content, 'sidebar' => '');
+$params = array(
+	'title' => false,
+	'content' => $content, 
+	'sidebar' => ''
+	);
+if (!empty($title)) $params['title'] = $title;
 echo elgg_view_layout($layout, $params);
 
 
