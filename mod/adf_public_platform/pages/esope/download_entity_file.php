@@ -18,7 +18,7 @@ if ($entity_guid) {
 //if (!($entity instanceof ElggEntity)) {
 if (!elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'user') && !elgg_instanceof($entity, 'group') && !elgg_instanceof($entity, 'site')) {
 	register_error("Invalid entity.");
-	forward(REFERRER);
+	//forward(REFERRER);
 }
 
 
@@ -28,7 +28,7 @@ if (!elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'user') && 
 
 if (!has_access_to_entity($entity)) {
 	register_error("No access");
-	forward(REFERRER);
+	//forward(REFERRER);
 }
 
 $inline = get_input("inline", false);
