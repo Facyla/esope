@@ -246,7 +246,9 @@ if ($display_form) {
 	if (elgg_instanceof($cmspage, 'object')) {
 		echo '<blockquote>' . elgg_echo('cmspages:cmspage_url') . ' <a href="' . $vars['url'] . 'cmspages/read/' . $pagetype . '" target="_new" >' . $vars['url'] . 'cmspages/read/' . $pagetype . '</a><br />';
 		echo elgg_echo('cmspages:cmspage_view') . ' ' . elgg_view('input/text', array('value' => 'elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"))', 'disabled' => "disabled", 'style' => "width:70ex"));
-		echo elgg_echo('cmspages:shorturl') . ' ' . elgg_get_site_url() . $cmspage->guid;
+		if (elgg_is_admin_logged_in()) {
+			echo elgg_echo('cmspages:shorturl') . ' ' . elgg_get_site_url() . $cmspage->guid;
+		}
 		echo '</blockquote>';
 	}
 	

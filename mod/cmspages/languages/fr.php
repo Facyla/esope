@@ -122,6 +122,7 @@ $fr = array(
 	
 	'cmspages:categories' => "Rubrique(s)",
 	'cmspages:slurl' => "Permalien",
+	'cmspages:shorturl' => "URL courte",
 	'cmspages:featured_image' => "Image en Une",
 	
 	
