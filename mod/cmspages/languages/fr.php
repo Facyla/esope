@@ -54,11 +54,11 @@ $fr = array(
 	
 	/* Settings */
 	'cmspages:settings:layout' => "Choix de la mise en page par défaut",
-	'cmspages:settings:layout:help' => "Ce paramètre permet d'utiliser la configuraiton d'externalblog, si le plugin est activé. Si vous ne savez pas quoi choisir, laissez le choix par défaut.",
+	'cmspages:settings:layout:help' => "Ce paramètre permet d'utiliser la configuration d'externalblog, si le plugin est activé. Si vous ne savez pas quoi choisir, laissez le choix par défaut.",
 	'cmspages:settings:layout:default' => "Par défaut",
 	'cmspages:settings:layout:externalblog' => "Utiliser la config d'externalblog",
-	'cmspages:settings:editors' => "Editeurs ayant accès à cet outil",
-	'cmspages:settings:editors:help' => "Liste des GUID des utilisateurs ayant accès au CMS, séparés par des virgules. Notez que ces éditeurs s'ajoutent aux administrateurs.",
+	'cmspages:settings:editors' => "Liste des éditeurs supplémentaires",
+	'cmspages:settings:editors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les éditeurs ont un accès en lecture et écriture à l'ensemble des pages CMS. Ces éditeurs s'ajoutent aux administrateurs.<br />Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
 	
 	'cmspages:chosenentity' => "Entité choisie (GUID)",
 	'cmspages:configuredview' => "Vue configurée",
@@ -95,8 +95,8 @@ $fr = array(
 	'cmspages:module:config' => "Configuration du module (param=value&amp;param2=value2...)",
 	'cmspages:contexts' => "Filtre des contextes autorisés (liste, ou rien)",
 	'cmspages:contexts:details' => "Si défini, le bloc ne s'affichera que dans ces contextes d'utilisation (par défaut : aucun filtre)",
-	'cmspages:display' => "Affichage autonome", 
-	'cmspages:display:details' => "vide = oui (par défaut), 'no' pour non (élément d'interface seulement), 'noview' exclusif (page seulement, pas élément d'interface), nom du layout pour utiliser un layout spécifique",
+	'cmspages:display' => "Layout / Affichage autonome", 
+	'cmspages:display:details' => "(vide) = layout par défaut (one_column), 'no' = élément d'interface seulement, 'noview' = page seulement, '[layout]' = layout à utiliser pour le rendu de la page",
 	'cmspages:template:use' => "Utiliser un template",
 	'cmspages:template:details' => "Vide = non (par défaut), ou nom du template cmspages pour utiliser un template spécifique",
 	//'cmspages:settings:unused' => "Note : These settings are not used yet (future developments)",
@@ -125,6 +125,15 @@ $fr = array(
 	'cmspages:shorturl' => "URL courte",
 	'cmspages:featured_image' => "Image en Une",
 	'cmspages:featured_image:view' => "Afficher l'image en Une",
+	'cmspages:notexist:create' => "Cette page n'existe pas. Vous avez pu faire une erreur dans l'URL (attention aux '_', remplacés par des '-'), sinon vous pouvez cliquer sur le lien ci-dessous pour créer une nouvelle page à cette adresse.",
+	'cmspages:edit' => "[&nbsp;Modifier %s&nbsp;]",
+	'cmspages:create' => "[&nbsp;Créer %s&nbsp;]",
+	'cmspages:templates:parameters' => "Paramètres de contenu",
+	'cmspages:templates:shortcodes' => "Shortcodes",
+	'cmspages:templates:views' => "Vues",
+	'cmspages:editors:list' => "Liste des éditeurs",
+	'cmspages:authors:list' => "Liste des Auteurs",
+	'cmspages:editurl' => "Pour éditer les pages CMS, rendez-vous sur",
 	
 	
 );

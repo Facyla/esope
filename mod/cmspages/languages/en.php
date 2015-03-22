@@ -121,6 +121,19 @@ $english = array(
 	'cmspages:' => "Not set view.",
 	*/
 	
+	'cmspages:categories' => "Category(ies)",
+	'cmspages:slurl' => "Permalink",
+	'cmspages:shorturl' => "Short URL",
+	'cmspages:featured_image' => "Featured image",
+	'cmspages:featured_image:view' => "Display Featured image",
+	'cmspages:notexist:create' => "This page does not exist. You may have mistyped the URL (care to '_', which are replaced by '-'), or you can click on this link to create a new page.",
+	'cmspages:edit' => "[&nbsp;Edit %s&nbsp;]",
+	'cmspages:create' => "[&nbsp;Create %s&nbsp;]",
+	'cmspages:templates:parameters' => "Content parameters",
+	'cmspages:templates:shortcodes' => "Shortcodes",
+	'cmspages:templates:views' => "Views",
+	
+	
 );
 
 add_translation("en",$english);

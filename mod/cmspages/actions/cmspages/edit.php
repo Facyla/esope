@@ -5,7 +5,7 @@
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Facyla
- * @copyright Facyla 2010-2014
+ * @copyright Facyla 2010-2015
  * @link http://id.facyla.net/
  */
 
@@ -14,10 +14,13 @@ gatekeeper();
 // Facyla : this tool is rather for local admins and webmasters than main admins, so we use also custom access rights
 // OK if custom rights match, or use default behaviour
 // Check if allowed user = admin or GUID in editors list
+/*
 if (in_array(elgg_get_logged_in_user_guid(), explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) {
 } else {
 	admin_gatekeeper();
 }
+*/
+if (!cmspage_is_editor()) { forward(); }
 
 $site_guid = elgg_get_site_entity()->guid;
 
@@ -91,7 +94,7 @@ if (strlen($pagetype)>0) {
 
 // Check existing object, or create a new one
 if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
-	$cmspage = new CMSPage;
+	$cmspage = new CMSPage();
 	//$cmspage->subtype = 'cmspage';
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
 	$cmspage->pagetype = $pagetype;

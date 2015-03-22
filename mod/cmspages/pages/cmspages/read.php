@@ -16,28 +16,35 @@ global $CONFIG;
 
 //gatekeeper();
 
-$pagetype = get_input('pagetype');
+$pagetype = get_input('pagetype', false);
 $embed = get_input('embed', false);
 
+if (!$pagetype) {
+	// $body = elgg_echo('cmspages:notset');
+	register_error(elgg_echo('cmspages:notset'));
+	forward();
+}
+	
+// Get entity
+$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
+$cmspages = elgg_get_entities_from_metadata($options);
+if ($cmspages) $cmspage = $cmspages[0];
 
-if ($pagetype) {
+// Set title
+$title = $pagetype;
+if ($cmspage->pagetitle) { $title = $cmspage->pagetitle; }
+$page_title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
+$vars['title'] = $page_title;
+
+
+// Return full embed, for external use (we need CSS as well then)
+if ($embed) {
+	// Page headers : tell at least it's UTF-8
+	header('Content-Type: text/html; charset=utf-8');
+	$content = elgg_view('cmspages/view', array('pagetype' => $pagetype, 'entity' => $cmspage));
 	
-	// Get entity
-	$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
-	$cmspages = elgg_get_entities_from_metadata($options);
-	if ($cmspages) $cmspage = $cmspages[0];
-	
-	// Set title
-	if ($cmspage->title) $title = $cmspage->title; else $title = $pagetype;
-	$page_title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
-	$vars['title'] = $page_title;
-	
-	
-	// Return full embed, for external use (we need CSS as well then)
+	// Full embed, for external use (so we need CSS as well then)
 	if ($embed == 'full') {
-		// Display page
-		// Send page headers : tell at least it's UTF-8
-		header('Content-Type: text/html; charset=utf-8');
 		?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -50,7 +57,7 @@ if ($pagetype) {
 		</head>
 		<body>
 			<div style="padding:0 4px;">
-				<?php echo elgg_view('cmspages/view', array('pagetype' => $pagetype, 'entity' => $cmspage)); ?>
+				<?php echo $content; ?>
 			</div>
 		</body>
 		</html>
@@ -59,31 +66,24 @@ if ($pagetype) {
 	}
 	
 	// Other embed = for use in Elgg (lightbox...)
-	if ($embed) {
-		header('Content-Type: text/html; charset=utf-8');
-		echo elgg_view('cmspages/view', array('pagetype' => $pagetype, 'entity' => $cmspage));
-		exit;
-	}
-	
-	// Full page mode
-	// cmspages/view view should return description only (and other elements should be hidden), as it's designed for inclusion into other views
-	// Make breadcrumb clickable only if admin
-	if (elgg_is_admin_logged_in()) {
-		elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
-	} else {
-		elgg_push_breadcrumb(elgg_echo('cmspages'));
-	}
-	elgg_push_breadcrumb($title);
-	// cmspages/read may render more content
-	$body = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
-	// Note : plugins like metatags rely on a defined title, so we need to set it
-	$CONFIG->title = $page_title;
-	
-} else {
-	// $body = elgg_echo('cmspages:notset');
-	register_error(elgg_echo('cmspages:notset'));
-	forward();
+	echo $content;
+	exit;
 }
+
+// Full page mode : read view
+// Note : cmspages/view view should return description only (and other elements should be hidden), 
+// as it's designed for inclusion into other views
+// Make breadcrumb clickable only if admin
+if (elgg_is_admin_logged_in()) {
+	elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
+} else {
+	elgg_push_breadcrumb(elgg_echo('cmspages'));
+}
+elgg_push_breadcrumb($title);
+// cmspages/read may render more content
+$body = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
+// Note : some plugins (such as metatags) rely on a defined title, so we need to set it
+$CONFIG->title = $page_title;
 
 
 // Display page
