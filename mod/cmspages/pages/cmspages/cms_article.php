@@ -1,31 +1,38 @@
 <?php
 /**
-* Elgg CMS page read page - Displays CMSPage content into site interface
+* Elgg CMS page article page - Displays CMSPage in an convenient interface and URLs for a custom site interface
 * 
 * @package Elggcmspages
 * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
 * @author Facyla
-* @copyright Facyla 2010-2015
+* @copyright Facyla 2010-2014
 * @link http://id.facyla.fr/
 */
 
 // Load Elgg engine
+//require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 define('cmspage', true);
 global $CONFIG;
 
-//gatekeeper();
-
 $pagetype = get_input('pagetype', false);
-$embed = get_input('embed', false);
 
 if (!$pagetype) {
-	// $content = elgg_echo('cmspages:notset');
 	register_error(elgg_echo('cmspages:notset'));
 	forward();
 }
 
 // Get entity
 $cmspage = cmspages_get_entity($pagetype);
+// Display only valid pages - except for editors
+if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
+	register_error('cmspages:notset');
+	forward();
+}
+
+
+// Get layout params
+$layout = elgg_get_plugin_setting('layout', 'cmspages');
+$pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
 
 // Set outer title (page title)
 $title = $pagetype;
@@ -34,17 +41,15 @@ $page_title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
 $vars['title'] = $page_title;
 
 
-// Full page mode : read view
-// Note : cmspages/view view should return description only (and other elements should be hidden), 
-// as it's designed for inclusion into other views
-
-
-// BREADCRUMBS - Make main cmspages breadcrumb clickable only if editor
+/* BREADCRUMBS
+ * Logic : 
+ * - Articles : p/seo-friendly-article-title
+ * - Categories : r/seo-friendly-category-title
+ * - Tags : t/seo-friendly-tag
+ */
 //if (elgg_is_admin_logged_in()) {
 if (cmspage_is_editor()) {
 	elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
-} else {
-	//elgg_push_breadcrumb(elgg_echo('cmspages'));
 }
 elgg_push_breadcrumb($title);
 
@@ -55,8 +60,10 @@ $content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' =>
 $CONFIG->title = $page_title;
 
 
+/*
 // EMBED MODE - Determine pageshell depending on optional embed type
 // Note : inner mode remains default embed mode for BC reasons, but embedding content should use full mode to render styles
+$pageshell = 'default';
 if ($embed) {
 	// Inner mode : for use in Elgg (lightbox...)
 	$pageshell = 'inner';
@@ -66,6 +73,8 @@ if ($embed) {
 	echo elgg_view_page($title, $content, $pageshell);
 	exit;
 }
+*/
+
 
 
 // FULL PAGE MODE - use also layout
@@ -88,11 +97,43 @@ if (!empty($title)) $params['title'] = $title;
 $content = elgg_view_layout($layout, $params);
 */
 
-// Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('content' => $content));
+$params = array('content' => $content, 'title' => false, 'header' => false, 'nav' => false, 'footer' => false, 'sidebar' => false, 'sidebar_alt' => false);
+switch ($layout) {
+	case 'custom':
+		// Wrap into custom layout (apply only if exists)
+		if (cmspages_exists('cms-layout')) {
+			$content = elgg_view('cmspages/view', array('pagetype' => 'cms-layout', 'body' => $content));
+		}
+		break;
+	
+	case 'two_sidebar':
+		$params['sidebar_alt'] = elgg_view('cmspages/view', array('pagetype' => 'cms-layout-sidebar-alt'));
+	case 'one_sidebar':
+		$params['sidebar'] = elgg_view('cmspages/view', array('pagetype' => 'cms-layout-sidebar'));
+	case 'one_column':
+		$content = elgg_view_layout($layout, $params);
+		break;
+	
+	default:
+		$content = elgg_view_layout('one_column', $params);
+}
+
+
+switch ($pageshell) {
+	case 'custom':
+		// @TODO wrap into custom pageshell
+		// @TODO wrap into custom layout (apply only if exists)
+		if (cmspages_exists('cms-pageshell')) {
+			$content = elgg_view('cmspages/view', array('pagetype' => 'cms-pageshell', 'body' => $content));
+		}
+		$pageshell = 'inner';
+		break;
+	
+	default:
+}
 
 
 // Display page (using default pageshell)
-echo elgg_view_page($title, $content);
+echo elgg_view_page($title, $content, $pageshell);
 
 

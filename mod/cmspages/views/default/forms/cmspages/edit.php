@@ -75,7 +75,7 @@ if ($display_form) {
 		$sibling_guid = $cmspage->sibling_guid;
 		$categories = $cmspage->categories;
 		$featured_image = $cmspage->featured_image;
-		$slurl = $cmspage->slurl;
+		//$slurl = $cmspage->slurl;
 		// This if for a closer integration with externalblog, as a generic edition tool
 		$content_type = $cmspage->content_type; // Default : use editor, rawhtml = no wysiwyg, module (php ?)
 		$contexts = $cmspage->contexts; // Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou all)
@@ -117,8 +117,9 @@ if ($display_form) {
 			if ($val == $content_type) $form_body .= '<option value="' . $val . '" selected="selected">' . $text . '</option>';
 			else $form_body .= '<option value="' . $val . '">' . $text . '</option>';
 		}
-		$form_body .= '</select></label></p>';
-	
+		$form_body .= '</select></label><br /><em>' . elgg_echo('cmspages:content_type:details') . '</em></p>';
+		// When using templates, allow to define sub-categories : pageshells, wrappers (content templates), blocks (content using templates)
+		
 		// More infos on chosen content type
 		if ($content_type == 'template') {
 			$form_body .= '<p>' . elgg_echo('cmspages:content_type:template:details') . '</p>';
@@ -188,12 +189,15 @@ if ($display_form) {
 		// Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou tous si aucun filtre défini)
 		$form_body .= '<p><label>' . elgg_echo('cmspages:contexts') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts, 'js' => ' style="width:400px;"')) . '</label><br /><em>' . elgg_echo('cmspages:contexts:details') . '</em></p>';
 		
+		// Use custom template for rendering
+		//$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/pulldown', array('name' => 'template', 'value' => $display, 'options_values' => cmspages_templates_opts())) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
+		
 		// Affichage autonome et choix du layout personnalisé (si autonome)
 		// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
-		$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
-		
-		// Use custom template for rendering
-		$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
+		//$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/pulldown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts())) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
+		// @TODO afficher des champs supplémentaires selon les layouts (pour définir ce qu'on met dedans = des vues a priori)
 		
 	$form_body .= '</fieldset><br />';
 	$form_body .= '<br />';
@@ -215,9 +219,10 @@ if ($display_form) {
 		$form_body .= '</div>';
 		$form_body .= '<div class="clearfloat"></div>';
 		
-		// @TODO Categories should work like a custom menu
+		// @TODO Categories should work like a custom menu - and may be edited by that tool
 		$form_body .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'js' => ' style="width:10ex;"')) . '</label></p>';
-		$form_body .= '<p><label>' . elgg_echo('cmspages:slurl') . ' ' . elgg_view('input/text', array('name' => 'slurl', 'value' => $slurl, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		// Slurl support ? isn't it pagetype already ?
+		//$form_body .= '<p><label>' . elgg_echo('cmspages:slurl') . ' ' . elgg_view('input/text', array('name' => 'slurl', 'value' => $slurl, 'js' => ' style="width:10ex;"')) . '</label></p>';
 		// @TODO Images embeddding should work with site as owner (shared library)
 		// @TODO Featured image should work by linking an image to the cmspage entity
 		$form_body .= '<p>';

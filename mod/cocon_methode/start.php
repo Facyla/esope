@@ -16,13 +16,15 @@ function cocon_methode_init(){
 		mkdir($tmp_dir, 0777);
 	}
 	
-	// Include Methode libs
-	$path = elgg_get_plugins_path() . 'cocon_methode/vendors/cocon_methode/php/inc';
-	$libs = array("$path/config.inc.php", "$path/database.inc.php", "$path/utils.inc.php", "$path/mail.inc.php", "$path/xml.inc.php", "$path/cycle.inc.php");
-	foreach ($libs as $lib) { require_once($lib); }
+	// Tout le Kit Méthode n'est accessible qu'aux membres connectés
+	// Certaines lib interrompent l'exécution si non connecté
+	if (elgg_is_logged_in()) {
+		// Include Methode libs
+		$path = elgg_get_plugins_path() . 'cocon_methode/vendors/cocon_methode/php/inc';
+		$libs = array("$path/config.inc.php", "$path/database.inc.php", "$path/utils.inc.php", "$path/mail.inc.php", "$path/xml.inc.php", "$path/cycle.inc.php");
+		foreach ($libs as $lib) { require_once($lib); }
 	
 	// Set secret for Methode app actionsMay be updated afterwards, if cycle of group changed
-	if (elgg_is_logged_in()) {
 		$gid = cocon_methode_get_user_group();
 		$cid = getCurrentCycleID($gid);
 		$_SESSION['check_id'] = md5($gid.'_'.$cid);
