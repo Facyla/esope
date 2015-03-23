@@ -58,8 +58,9 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	}
 
 	if(!file_exists("../_tmp/".$gid) || !is_dir("../_tmp/".$gid)){
-		error_log("COCON METHODE : TMP dir does not exist. Trying to create it.");
-		mkdir("../_tmp/".$gid);
+		//error_log("COCON METHODE : TMP dir does not exist. Trying to create it.");
+		error_log("COCON METHODE : TMP dir does not exist. Trying to create it." . dirname(__FILE__));
+		mkdir("../_tmp/$gid", 0777);
 	}
 	
 	//error_log("../_files/".$file.".".$format);

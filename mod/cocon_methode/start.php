@@ -10,6 +10,12 @@ function cocon_methode_init(){
 	// Gives access to the module at SITE_URL/methode/
 	elgg_register_page_handler("methode", "cocon_methode_page_handler");
 	
+	
+	$tmp_dir = elgg_get_plugins_path() . 'cocon_methode/vendors/cocon_methode/_tmp';
+	if (!file_exists($tmp_dir) || !is_dir($tmp_dir)) {
+		mkdir($tmp_dir, 0777);
+	}
+	
 	// Include Methode libs
 	$path = elgg_get_plugins_path() . 'cocon_methode/vendors/cocon_methode/php/inc';
 	$libs = array("$path/config.inc.php", "$path/database.inc.php", "$path/utils.inc.php", "$path/mail.inc.php", "$path/xml.inc.php", "$path/cycle.inc.php");
