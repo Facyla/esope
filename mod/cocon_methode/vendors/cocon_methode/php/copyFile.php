@@ -5,7 +5,7 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	header("content-type: json/application;charset=utf-8");
 	
 	if(!isset($_SESSION['check_id'])){
-		die(json_encode(array("error" => true)));
+		die(json_encode(array("error" => true, "msg" => "nocheck")));
 	}
 	
 	// Récupère l'ID de goupe CoCon(collège)
@@ -16,7 +16,7 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	
 	// Erreur si l'ID groupe CoCon(Collège) n'a pas été indiqué
 	if ($gid == ''){
-		die(json_encode(array("error" => true)));
+		die(json_encode(array("error" => true, "msg" => "nogroup")));
 	}
 	
 	// Récupère l'ID du cycle
@@ -27,11 +27,12 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	
 	// Erreur si l'ID du cycle n'a pas été indiqué
 	if ($cid == ''){
-		die(json_encode(array("error" => true)));
+		die(json_encode(array("error" => true, "msg" => "nocid")));
 	}
 
 	if($_SESSION['check_id'] != md5($gid.'_'.$cid)){
-		die(json_encode(array("error" => true)));
+		//die(json_encode(array("error" => true, "msg" => "wrongid {$_SESSION['check_id']} = $gid - $cid => " . md5($gid.'_'.$cid))));
+		die(json_encode(array("error" => true, "msg" => "wrongid")));
 	}
 	
 	// Récupère le format du fichier
@@ -42,7 +43,7 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	
 	// Erreur si l'ID groupe CoCon(Collège) n'a pas été indiqué
 	if ($format == ''){
-		die(json_encode(array("error" => true)));
+		die(json_encode(array("error" => true, "msg" => "noformat")));
 	}
 
 	// Récupère le fichier à copier
@@ -51,12 +52,13 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 		$file = $_GET['file'];
 	}
 	
-	// Erreur si aucun fichier n'a pas été indiqué
+	// Erreur si aucun fichier n'a été indiqué
 	if ($file == ''){
-		die(json_encode(array("error" => true)));
+		die(json_encode(array("error" => true, "msg" => "nofile")));
 	}
 
 	if(!file_exists("../_tmp/".$gid) || !is_dir("../_tmp/".$gid)){
+		error_log("COCON METHODE : TMP dir does not exist. Trying to create it.");
 		mkdir("../_tmp/".$gid);
 	}
 	
@@ -66,4 +68,4 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '
 	
 	die(json_encode(array("error" => false)));
 	
-?>
+
