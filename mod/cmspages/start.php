@@ -58,7 +58,7 @@ function cmspage_url($cmspage) {
 /* Determines if user has global editing rights
 * ie can create a new cmspage, or can edit any cmspage
  */
-function cmspage_is_editor($user) {
+function cmspage_is_editor($user = false) {
 	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
 	if (elgg_is_admin_logged_in()) return true;
 	if (elgg_in_context('cmspages_admin')) return true;
