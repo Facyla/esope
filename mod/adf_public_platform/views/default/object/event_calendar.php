@@ -51,9 +51,9 @@ if ($full) {
 	echo $list_body;
 	echo $body;
 	if ($event->long_description) {
-		echo elgg_view('output/longtext', array('value' => $event->long_description) . '</p>';
+		echo elgg_view('output/longtext', array('value' => $event->long_description)) . '</p>';
 	} else {
-		echo elgg_view('output/longtext', array('value' => $event->description) . '</p>';
+		echo elgg_view('output/longtext', array('value' => $event->description)) . '</p>';
 	}
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
 		echo elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
