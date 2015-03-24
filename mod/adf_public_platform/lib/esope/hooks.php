@@ -198,8 +198,10 @@ function adf_public_platform_public_pages($hook, $type, $return, $params) {
 	foreach ($publicpages as $publicpage) {
 		if (!empty($publicpage)) $return[] = $publicpage;
 	}
-	/* Les pages à rendre accessibles doivent correspondre	à l'URL complète
-	$return[] = '';
+	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
+	$return[] = 'page-publique';
+	$return[] = 'page-avec-params.*';
+	$return[] = 'rubrique-publique/.*';
 	*/
 	return $return;
 }

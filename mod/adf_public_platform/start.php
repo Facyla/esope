@@ -770,7 +770,7 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 	$lang = $CONFIG->language;
 
 	// Set default title
-	if (empty($title)) $title = $CONFIG->sitename . ' (';
+	if (empty($title)) $title = $CONFIG->sitename;
 	$vars['title'] = $title;
 	
 	switch ($embed_mode) {

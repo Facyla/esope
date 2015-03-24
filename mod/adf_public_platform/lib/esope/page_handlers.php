@@ -22,6 +22,12 @@ function esope_page_handler($page) {
 			include "$base/statistics.php";
 			break;
 		
+		case 'download_entity_file':
+			if (!empty($page[1])) set_input('guid', $page[1]);
+			if (!empty($page[2])) set_input('metadata', $page[2]);
+			include "$base/download_entity_file.php";
+			break;
+		
 		case 'forum_refresh':
 			// API : Renvoie les réponses à un sujet de forum (actualisation auto)
 			if (isset($page[1])) set_input('guid', $page[1]);

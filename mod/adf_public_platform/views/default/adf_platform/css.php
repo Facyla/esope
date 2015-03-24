@@ -108,6 +108,7 @@ section #profil img { float: right; margin-left: 10px; }
 /* Pour tous les éléments du menu : .elgg-menu-owner-block .elgg-menu-item-NOM_SUBTYPE */
 #wrapper_header {}
 header, #transverse, section, footer, #bande { width: 100%; float: left; }
+.elgg-layout-two-sidebar { background-image:none; }
 
 /* Styles des modules page d'accueil et profil */
 section { padding-top: 25px; }
@@ -780,14 +781,20 @@ header nav ul .fa { margin-right: 0.5em; }
 #main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
 
 
+
+
 <?php if ($fixedwidth != 'yes') { ?>
 /* SECTION RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
-.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 0; padding:1.5%; }
+.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
+.elgg-sidebar-alt { width: 24%; min-width: 211px; margin:0 1% 0 0; padding:0; }
+.elgg-layout-two-sidebar .elgg-main { width: 48%; padding:13px 1%; }
+.elgg-layout-two-sidebar .elgg-sidebar {  }
+.elgg-layout-two-sidebar .elgg-sidebar_alt {  }
 /* Menus */
 #transverse nav ul { width:auto; }
 /* Largeur de page standard */

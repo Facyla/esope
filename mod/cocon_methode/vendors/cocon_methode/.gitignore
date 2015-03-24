@@ -8,5 +8,6 @@
 #/php/
 #/sql/
 #/survey/
-/_tmp/
+/_tmp/*
+!/_tmp/.htaccess
 

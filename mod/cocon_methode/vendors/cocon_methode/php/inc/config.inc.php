@@ -97,16 +97,18 @@ function getConfiguration($gid){
 
 	// Récupère le cycle en cours du groupe CoCon
 	$cid = getCurrentCycleID($gid);
-	if(!$cid){
+	if (!$cid) {
 		$cid = createCycle($gid);
-		if(!$cid){
-			$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
-			$config['error'] = true;
-			$config['error_string'] = 'Cycle introuvable.\n-> '.mysql_error();
-			return $config;
-		}
 	}
 	$config['cycle_id'] = $cid;
+	
+	// Si toujours pas de cycle => erreur
+	if (!$cid) {
+		$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
+		$config['error'] = true;
+		$config['error_string'] = 'Cycle introuvable.\n-> '.mysql_error();
+		return $config;
+	}
 	
 	// Récupérer toutes ces valeurs depuis CoCon
 	/*
@@ -126,7 +128,7 @@ function getConfiguration($gid){
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
 	// Update token
-	//$_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
+	$_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
 	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	

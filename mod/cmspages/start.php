@@ -12,19 +12,9 @@
 // TODO : permettre d'utiliser une cmspage existante comme moteur de template en passant des params côté code cette fois : 
 // elgg_view('cmspages/view',array('pagetype'=>"maghrenov-public-template", 'customvar1' => 'whatever'))
 
-// Hooks
-elgg_register_plugin_hook_handler('permissions_check', 'object', 'cmspages_permissions_check');
-
 // Initialise log browser
 elgg_register_event_handler('init','system','cmspages_init');
 elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
-
-// Register actions
-global $CONFIG;
-$actions_path = elgg_get_plugins_path() . 'cmspages/actions/cmspages/';
-elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
-elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
-
 
 
 function cmspages_init() {
@@ -39,28 +29,73 @@ function cmspages_init() {
 	
 	// Register main page handler
 	elgg_register_page_handler('cmspages', 'cmspages_page_handler');
-	// @TODO Enable multiple page handlers
+	
+	// CMS mode
+	$cms_mode = elgg_get_plugin_setting('cms_mode', 'cmspages');
+	if ($cms_mode == 'yes') {
+		// CMS main page handlers (externalblogs can define new ones if we want multisite)
+		elgg_register_page_handler('p', 'cmspages_cms_article_page_handler'); // Articles
+		elgg_register_page_handler('r', 'cmspages_cms_category_page_handler'); // Categories
+		elgg_register_page_handler('t', 'cmspages_cms_tag_page_handler'); // Tags
+	}
 	
 	// PUBLIC PAGES - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'cmspages_public_pages');
 	
+	// Hooks
+	// ACCESS - Write permission plugin hooks
+	elgg_register_plugin_hook_handler('permissions_check', 'object', 'cmspages_permissions_check');
+	
+	
+	// Register actions
+	$actions_path = elgg_get_plugins_path() . 'cmspages/actions/cmspages/';
+	elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
+	elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
+	
 }
 
 
-/* Populates the ->getUrl() method for cmspage objects */
-function cmspage_url($cmspage) {
-	global $CONFIG;
-	return $CONFIG->url . "cmspages/read/" . $cmspage->pagetype;
+/* Gets the cmspage entity for a given pagetype (= slURL)
+ * ElggEntity / false
+ */
+function cmspages_get_entity($pagetype = '') {
+	$cmspage = false;
+	if (!empty($pagetype)) {
+		$cmspages = elgg_get_entities_from_metadata(array(
+				'types' => 'object', 'subtypes' => 'cmspage', 
+				'metadata_name_value_pairs' => array('name' => 'pagetype', 'value' => $pagetype), 
+				'limit' => 1, 
+			));
+		if ($cmspages) $cmspage = $cmspages[0];
+	}
+	return $cmspage;
 }
 
 
+/* Gets the cmspage entity for a given pagetype (= slURL)
+ * ElggEntity / false
+ */
+function cmspages_exists($pagetype = '') {
+	$ia = elgg_set_ignore_access(true);
+	if (!empty($pagetype)) {
+		$cmspage = cmspages_get_entity($pagetype);
+		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+			elgg_set_ignore_access($ia);
+			return true;
+		}
+	}
+	elgg_set_ignore_access($ia);
+	return false;
+}
+
+/* Main tool page handler */
 function cmspages_page_handler($page) {
 	global $CONFIG;
-	$include_path = $CONFIG->pluginspath . 'cmspages/pages/cmspages/';
-	if (!isset($page[0])) { $page[0] = 'admin'; }
-	if ($page[1]) { set_input('pagetype', $page[1]); }
+	$include_path = elgg_get_plugins_path() . 'cmspages/pages/cmspages/';
+	if (empty($page[0])) { $page[0] = 'edit'; }
 	switch ($page[0]) {
 		case "read":
+			if ($page[1]) { set_input('pagetype', $page[1]); }
 			if (!include($include_path . 'read.php')) return false;
 			break;
 			
@@ -73,39 +108,203 @@ function cmspages_page_handler($page) {
 			break;
 		*/
 		case 'admin':
-		default:
+		case 'edit':
+			if (!empty($page[1])) set_input('pagetype', $page[1]);
 			if (!include($include_path . 'index.php')) return false;
+			break;
+		
+		default:
+			forward('cmspages/edit/' . $page[0]);
 	}
 	return true;
 }
+
+/* Public site page handler
+ * /p/article
+ */
+function cmspages_cms_article_page_handler($page) {
+	set_input('pagetype', $page[0]);
+	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_article.php')) return true;
+	return false;
+}
+
+/* Public site categories page handler
+ * /r/rubrique
+ */
+function cmspages_cms_category_page_handler($page) {
+	set_input('category', $page[0]);
+	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_category.php')) return true;
+	return false;
+}
+
+/* Public site tags page handler
+ * /t/tag
+ */
+function cmspages_cms_tag_page_handler($page) {
+	set_input('tag', $page[0]);
+	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_tag.php')) return true;
+	return false;
+}
+
+
+/* Populates the ->getUrl() method for cmspage objects */
+function cmspage_url($cmspage) {
+	global $CONFIG;
+	return elgg_get_site_url() . "cmspages/read/" . $cmspage->pagetype;
+}
+
 
 /* Page setup. Adds admin controls */
 function cmspages_pagesetup() {
 	global $CONFIG;
 	// Facyla: allow main & local admins to use this tool
 	// and also a custom editor list
-	if ( (elgg_in_context('admin') || elgg_is_admin_logged_in())
-		|| ((elgg_in_context('cmspages_admin')) && in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))))
-		) {
+	// if ( (elgg_in_context('admin') || elgg_is_admin_logged_in()) || ((elgg_in_context('cmspages_admin')) && in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) ) {
+	if (cmspage_is_editor()) {
 		$item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/');
 		elgg_register_menu_item('topbar', $item);
 	}
 	return true;
 }
 
-/* Permissions for the cmspages context */
+
+/* ACCESS and PERMISSIONS */
+
+/* Determines if user has global editing rights
+* ie can create a new cmspage, or can edit any cmspage
+ */
+function cmspage_is_editor($user = false) {
+	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
+	if (elgg_is_admin_logged_in()) return true;
+	if (elgg_in_context('cmspages_admin')) return true;
+	$editors = explode(',', elgg_get_plugin_setting('editors', 'cmspages'));
+	if (in_array($user->guid, $editors)) return true;
+	return false;
+}
+
+/* Determines if user has limited editing rights
+* ie can create new author cmspage, or can edit own cmspage
+ */
+function cmspage_is_author($user) {
+	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
+	if (elgg_is_admin_logged_in()) return true;
+	if (elgg_in_context('cmspages_admin')) return true;
+	$authors = explode(',', elgg_get_plugin_setting('authors', 'cmspages'));
+	if (in_array($user->guid, $authors)) return true;
+	return false;
+}
+
+/* Permissions for the cmspages context : determines canEdit()
+ * Extends permissions checking to allow editors and other roles
+ */
 function cmspages_permissions_check($hook, $type, $returnval, $params) {
-	// Handle only cmspages !!
 	if (elgg_instanceof($params['entity'], 'object', 'cmspage')) {
-		if (elgg_in_context('admin') && elgg_is_admin_logged_in()) { return true; }
-		if (elgg_in_context('localmultisite')) { return true; }
-		if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) ) { return true; }
-		// Add a hook for special CMS pages edition rules - let's other plugins define an extended set of editors
-		// based on a custom or permission rules
-		return elgg_trigger_plugin_hook('cmspages:edit', 'cmspage', $params, $returnval);
+		if (cmspage_is_editor()) { return true; }
+		//if (elgg_in_context('admin') && elgg_is_admin_logged_in()) { return true; }
+		//if ( (elgg_in_context('cmspages_admin')) || in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages'))) ) { return true; }
+		
+		// Add a hook to allow other plugins handle other CMS pages edition rules
+		// ie. define an extended set of editors, based on a custom rules
+		$returnval = elgg_trigger_plugin_hook('cmspages:edit', 'cmspage', $params, $returnval);
 	}
 	return $returnval;
 }
+
+// Permet l'accès aux pages CMS en mode "walled garden"
+// Allows public visibility of public cmspages which allow fullview page rendering
+function cmspages_public_pages($hook, $type, $return_value, $params) {
+	
+	// CMS Mode : enable custom URLs
+	$cms_mode = elgg_get_plugin_setting('cms_mode', 'cmspages');
+	if ($cms_mode == 'yes') {
+		// Globally allow all pages matching p/, r/ and t/
+		$return_value[] = 'p/.*';
+		$return_value[] = 'r/.*';
+		$return_value[] = 't/.*';
+	}
+	
+	$ia = elgg_set_ignore_access(true);
+	
+	// Get pages that are public, and can be displayed as a full page
+	$cmspages = cmspages_get_public_pages();
+	//$options = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
+	//$cmspages = elgg_get_entities($options);
+	if ($cmspages) foreach ($cmspages as $ent) {
+		$return_value[] = 'cmspages/read/' . $ent->pagetype;
+	}
+	
+	elgg_set_ignore_access($ia);
+	return $return_value;
+}
+
+
+/* PAGES GETTERS */
+
+/* Returns all public pages
+ * Ssi le niveau d'accès est public = 2 (on vérifie car override d'accès)
+ * Et autorisé en pleine page
+ */
+function cmspages_get_public_pages() {
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array('name' => 'display', 'value' => 'no', 'operand' => '<>'),
+			'wheres' => array("(e.access_id = 2)"),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+/* Returns all templates cmspages
+ */
+function cmspages_get_templates_pages() {
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array('name' => 'content_type', 'value' => 'template'),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+/* Returns templates as pulldown options */
+function cmspages_templates_opts() {
+	$cmspages = cmspages_get_templates_pages();
+	$options = array('' => '');
+	if ($cmspages) foreach ($cmspages as $cmspage) {
+		$options[$cmspage->pagetype] = $cmspage->pagetype . ' (' . $cmspage->pagetitle . ')';
+	}
+	return $options;
+}
+
+/* Returns layouts and config
+ * Eg. layout params tu be used
+ * Note only templates should use this as it defines a full interface
+ */
+function cmspages_display_opts() {
+	// Zones : nav defaults to breadcrumb
+	//$all_zones = array('title', 'header', 'nav', 'content', 'footer', 'sidebar', 'sidebar-alt');
+	$display_opts = array(
+			'' => 'Autorisé (par défaut)',
+			'no' => "Interdit (élément d'interface uniquement)",
+			'noview' => "Exclusif (pleine page uniquement)",
+			//'default' => '', // deprecated
+			//'one_column' => "Pleine page",
+			//'one_sidebar' => "Barre latérale droite",
+			//'two_sidebar' => "2 barres latérales",
+			/*
+			'one_column' => array('name' => 'Full width', 'zones' => array('header', 'nav', 'footer')),
+			'one_sidebar' => array('name' => 'Right sidebar', 'zones' => array('header', 'nav', 'footer', 'sidebar')),
+			'two_sidebar' => array('name' => '2 sidebars', 'zones' => array('header', 'nav', 'footer', 'sidebar', 'sidebar_alt')),
+			*/
+		);
+	// @TODO : Permettre d'ajouter d'autres layouts via config ?
+	return $display_opts;
+}
+
+
+
+/* CONTENT RENDERING FUNCTIONS */
 
 // Renvoie un tableau de configuration du module à partir d'une chaîne de configuration
 // 2 utilisation : soit avec module_name?param1=xx&param2=yy, soit avec (module_name, param1=xx&param2=yy)
@@ -228,6 +427,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 	return $return;
 }
 
+
 /* Utilisation d'un template : remplacement (non récursif ?) des blocs par les pages correspondantes
  * $template : texte ou code HTML à utiliser comme template
  * $content : éléments de contenu ou variables - array($varname => $value)
@@ -290,7 +490,8 @@ function cmspages_render_template($template, $content = null) {
 	return $rendered_template;
 }
 
-/* Recherche des templates dans une page */
+
+/* Recherche des templates dans un contenu texte */
 function cmspages_list_subtemplates($content, $recursive = true) {
 	global $CONFIG;
 	$return = '';
@@ -304,10 +505,12 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 		foreach ($templates[0] as $template) {
 			$first_letter = substr($template, 0, 1);
 			switch($first_letter) {
+				// Vars replacement
 				case '%':
 					$content_vars .= '<li>\'' . str_replace('%', '', strtolower($template)) . '\'</li>';
 					break;
-					
+				
+				// Views
 				case ':':
 					$view_param = explode('|', substr($template, 1));
 					$params = array();
@@ -321,21 +524,22 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 					if (!empty($params)) $views .= ', array(' . implode(', ', $params) . ')';
 					$views .= ')</li>';
 					break;
-					
+				
+				// Shortcodes
 				case '[':
 					$shortcodes .= '<li>' . strtolower($template) . '</li>';
 					break;
-					
+				
+				// CMSPages
 				default:
 					$return .= '<li>';
-					$return .= '<a href="' . $CONFIG->url . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+					$return .= '<a href="' . elgg_get_site_url() . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+					// Get and check recursively cmspages for sub-templates
 					if ($recursive) {
-							$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
-							$cmspages = elgg_get_entities_from_metadata($options);
-							if ($cmspages) {
-								$cmspage = $cmspages[0];
-								$return .= cmspages_list_subtemplates($cmspage->description, $recursive);
-							}
+						$cmspage = cmspages_get_entity($template);
+						if ($cmspage) {
+							$return .= cmspages_list_subtemplates($cmspage->description, true);
+						}
 					}
 					$return .= '</li>';
 			}
@@ -344,39 +548,14 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 	}
 	
 	// List content vars
-	if ($content_vars) { $return .= '<br />Content parameters<ul>' . $content_vars . '</ul>'; }
+	if ($content_vars) { $return .= '<br />' . elgg_echo('cmspages:templates:parameters') . '<ul>' . $content_vars . '</ul>'; }
 	// List shortcodes
-	if ($shortcodes) { $return .= '<br />Shortcodes<ul>' . $shortcodes . '</ul>'; }
+	if ($shortcodes) { $return .= '<br />' . elgg_echo('cmspages:templates:shortcodes') . '<ul>' . $shortcodes . '</ul>'; }
 	// List views
-	if ($views) { $return .= '<br />Views<ul>' . $views . '</ul>'; }
+	if ($views) { $return .= '<br />' . elgg_echo('cmspages:templates:views') . '<ul>' . $views . '</ul>'; }
 	
 	return $return;
 }
 
-// Permet l'accès aux pages des blogs en mode "walled garden"
-// Allows public visibility of public cmspages which allow fullview page rendering
-function cmspages_public_pages($hook, $type, $return_value, $params) {
-	global $CONFIG;
-	
-	$ia = elgg_set_ignore_access(true);
-	
-	$params = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
-	$cmspages = elgg_get_entities($params);
-	foreach ($cmspages as $ent) {
-		// Pages publiques seulement si le niveau d'accès est public = 2 (on vérifie car override d'accès)
-		// Et autorisé en pleine page
-		if (($ent->access_id == 2) && ($ent->display != 'no')) {
-			$return_value[] = 'cmspages/read/' . $ent->pagetype;
-		}
-	}
-	
-	/* Export embeddable content : was a test, now use a specific plugin instead
-	// $return_value[] = 'cmspages/embed'; // URL pour les embed externes
-	*/
-	
-	elgg_set_ignore_access($ia);
-	
-	return $return_value;
-}
 
 

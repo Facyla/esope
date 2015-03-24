@@ -14,34 +14,22 @@
 gatekeeper();
 global $CONFIG;
 
-// Facyla : this tool is admins but also webmasters, so use custom access rights
+// Facyla : this tool is for admins but also webmasters and authors, so use custom access rights
 // OK if custom rights match, or use default behaviour
-if (in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) {
-} else {
-	admin_gatekeeper();
-}
+if (!cmspage_is_editor()) { forward(); }
 
 $pagetype = elgg_get_friendly_title(get_input('pagetype')); // the pagetype e.g about, terms, etc. - default to "mainpage"
-$tooshort = (strlen($pagetype)<3) ? true : false;
 
 $content = '';
 $sidebar = '';
 $cmspage_infos = '';
 
-// Check wether we can display a form or not
+// Check wether we can display an editing form or not
 $display_form = true;
 // Empty pagetype or very short pagetypes are not allowed - we don't need the form in these cases
-if (empty($pagetype)) { $display_form = false; }
-if ($tooshort) {
+if (empty($pagetype) || (strlen($pagetype) < 1)) {
 	register_error(elgg_echo('cmspages:unsettooshort'));
 	$display_form = false;
-}
-// Get current page, if it exists
-if ($display_form) {
-	$options = array('metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
-	$cmspages = elgg_get_entities_from_metadata($options);
-	// Page already exists : load data
-	if ($cmspages) { $cmspage = $cmspages[0]; }
 }
 
 
@@ -50,13 +38,15 @@ $title = elgg_echo('cmspages');
 //elgg_set_page_owner_guid($_SESSION['guid']); // Set admin user for owner block
 elgg_set_page_owner_guid($CONFIG->site->guid);
 
+// Total pages
 $cmspages_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true));
 $title .= ' ~ ' . elgg_echo('cmspages:pagescreated', array($cmspages_count));
 
 
+// Get current page, if it exists
+if ($display_form) { $cmspage = cmspages_get_entity($pagetype); }
 
-if (elgg_instanceof($cmspage, 'object')) {
-	
+if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	// Useful infos
 	if (empty($cmspage->pagetitle)) $cmspage_details = ''; else $cmspage_details = $cmspage->pagetitle . ', ';
 	$cmspage_details .= $cmspage->content_type . ', access = ' . $cmspage->access_id;
@@ -69,7 +59,7 @@ if (elgg_instanceof($cmspage, 'object')) {
 	// Delete link
 	$delete_link .= '<span style="float:right; font-weight:bold; color:red;" class="delete">';
 	$delete_form_body = '<input type="hidden" name="cmspage_guid" value="' . $cmspage->guid . '" /><input type="submit" name="delete" value="' . elgg_echo('cmspages:delete') . '" onclick="javascript:return confirm(\'' . elgg_echo('cmspages:deletewarning') . '\');" style="border:0; font-weight:bold; color:red;" class="elgg-button delete" />';
-	$delete_link .= '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body, 'js' => ' style="background:transparent;"')) . '</div>';
+	$delete_link .= '<div style="float:right;" id="delete_group_option">' . elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/delete", 'body' => $delete_form_body, 'style' => "background:transparent;")) . '</div>';
 	$delete_link .= '</span>';
 }
 
@@ -84,10 +74,9 @@ $sidebar .= $cmspage_infos;
 // Existing pages will use the entity - new ones the pagetype
 if ($display_form) {
 	$content .= $delete_link;
-	$content .= '<h3><a href="' . $url . '">' . $cmspage_title . '</a></h3>';
+	$content .= '<h3>' . $cmspage_title . '</h3>';
 	$content .= elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype, 'entity' => $cmspage));
 }
-
 
 
 //$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
