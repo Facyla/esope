@@ -124,6 +124,10 @@
 		<type>plugin</type>
 		<name>event_calendar</name>
 	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>deleted_user_content</name>
+	</suggests>
 	
 </plugin_manifest>
 

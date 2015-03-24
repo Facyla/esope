@@ -60,7 +60,7 @@ if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
 	foreach ($allowed_contexts as $context) {
 		if (elgg_in_context(trim($context))) $exit = false;
 	}
-	if ($exit) { register_error('cmspages:wrongcontext'); forward(); }
+	if ($exit) { register_error('cmspages:wrongcontext'); return; }
 }
 
 

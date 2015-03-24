@@ -13,6 +13,15 @@ if (empty($vars['title'])) {
 	$title = elgg_get_config('sitename') . ": " . $vars['title'];
 }
 
+// SEO META
+if (!empty($vars['seo_title'])) { $title = $vars['seo_title']; }
+$seo_meta = '';
+if (!empty($vars['meta_description'])) { $seo_meta .= '<meta name="description" content="' . $vars['meta_description'] . '" />'; }
+if (!empty($vars['meta_keywords'])) { $seo_meta .= '<meta name="keywords" content="' . $vars['meta_keywords'] . '" />'; }
+if (!empty($vars['meta_robots'])) { $seo_meta .= '<meta name="robots" content="' . $vars['meta_robots'] . '" />'; }
+if (!empty($vars['canonical_url'])) { $seo_meta .= '<link rel="canonical" href="' . $vars['canonical_url'] . '" />'; }
+
+
 // Set RSS feed
 global $autofeed;
 $feedref = "";
@@ -46,6 +55,8 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo $title; ?></title>
+	<?php echo $seo_meta; ?>
+	
 	<?php
 	echo elgg_view('page/elements/shortcut_icon', $vars);
 	

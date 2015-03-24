@@ -14,12 +14,6 @@ gatekeeper();
 // Facyla : this tool is rather for local admins and webmasters than main admins, so we use also custom access rights
 // OK if custom rights match, or use default behaviour
 // Check if allowed user = admin or GUID in editors list
-/*
-if (in_array(elgg_get_logged_in_user_guid(), explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) {
-} else {
-	admin_gatekeeper();
-}
-*/
 if (!cmspage_is_editor()) { forward(); }
 
 $site_guid = elgg_get_site_entity()->guid;
@@ -55,6 +49,11 @@ $display = get_input('display');
 $template = get_input('template');
 $page_css = get_input('page_css');
 $page_js = get_input('page_js');
+// SEO
+$seo_title = get_input('seo_title');
+$seo_description = get_input('seo_description');
+$seo_index = get_input('seo_index');
+$seo_follow = get_input('seo_follow');
 
 // Cache to the session - @todo handle by sticky form
 $_SESSION['cmspage_title'] = $cmspage_title;
@@ -80,17 +79,28 @@ $_SESSION['cmspage_page_js'] = $page_js;
 // Facyla 20110214 : following bypass is necessary when using Private access level, which causes objects not to be saved correctly (+doubles), depending on author
 elgg_set_ignore_access(true);
 
-// Get existing object, or create it
+// Get existing object corresponding to wanted pagetype
 $cmspage = NULL;
 if (strlen($pagetype)>0) {
-	//$cmspages = get_entities_from_metadata('pagetype', $pagetype, "object", "cmspage", 0, 1, 0, "", 0, false); // 1.6
-	$options = array(
-			'metadata_names' => 'pagetype', 'metadata_values' => $pagetype, 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1
-			//'owner_guid' => 0, 'site_guid' => 0, 
-		);
-	$cmspages = elgg_get_entities_from_metadata($options);
-	$cmspage = $cmspages[0];
+	$cmspage = cmspages_get_entity($pagetype);
 }
+// @TODO alternate method using GUID, so we can update the pagetype (but only if it not already used)
+/*
+$guid = get_input('guid', false);
+if (!empty($guid)) {
+	// Get our cmspage (the real one, for sure)
+	$original_cmspage = get_entity($guid);
+	if ($original_cmspage && $cmspage && ($original_cmspage->guid != $cmspage->guid)) {
+		// We've got a problem : asking for an existing pagetype, cannot update, but save the rest
+		register_error('cmspages:alreadyexists' . "  $original_cmspage->guid != $cmspage->guid");
+		// Update the edited object
+		$cmspage = $original_cmspage;
+		// Revert to original pagetype
+		$pagetype = $original_cmspage->pagetype;
+	}
+}
+*/
+
 
 // Check existing object, or create a new one
 if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
@@ -103,6 +113,7 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
 
 
 // Edition de l'objet existant ou nouvellement créé
+$cmspage->pagetype = $pagetype; // Allow to update pagetype
 $cmspage->pagetitle = $cmspage_title;
 $cmspage->description = $contents;
 $cmspage->access_id = $access;
@@ -125,7 +136,10 @@ $cmspage->sibling_guid = $sibling_guid;
 $cmspage->categories = $categories;
 // Function will add the filename if upload is OK
 if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
-$cmspage->slurl = $slurl;
+$cmspage->seo_title = $seo_title;
+$cmspage->seo_description = $seo_description;
+$cmspage->seo_index = $seo_index;
+$cmspage->seo_follow = $seo_follow;
 
 
 

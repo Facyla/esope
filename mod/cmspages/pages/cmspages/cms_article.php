@@ -31,6 +31,7 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
 
 
 // Get layout params
+$embed = get_input('embed', false);
 $layout = elgg_get_plugin_setting('layout', 'cmspages');
 $pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
 
@@ -54,30 +55,59 @@ if (cmspage_is_editor()) {
 elgg_push_breadcrumb($title);
 
 
+// Forbid strongly any attempt to access a blocked display page
+if ($cmspage) {
+	if ($cmspage->display == 'no') {
+		register_error(elgg_echo('cmspages:error:nodisplay'));
+		forward();
+	}
+}
+
 // cmspages/read may render more content
 $content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
 $CONFIG->title = $page_title;
 
 
-/*
-// EMBED MODE - Determine pageshell depending on optional embed type
+// SET SEO META
+if ($cmspage) {
+	// Update page title
+	if (!empty($cmspage->seo_title)) $title = $cmspage->seo_title;
+	// Set META description
+	if (!empty($cmspage->seo_description)) $vars['meta_description'] = strip_tags($cmspage->seo_description);
+	// Set META keywords
+	if (!empty($cmspage->tags)) $vars['meta_keywords'] = implode(', ', $cmspage->tags);
+	// Set robots information : index/noindex, follow,nofollow  => all / none
+	if ($cmspage->seo_index == 'no') $robots = 'noindex,'; else $robots = 'index,';
+	if ($cmspage->seo_follow == 'no') $robots .= 'nofollow'; else $robots .= 'index,';
+	$vars['meta_robots'] = $robots;
+	// Set canonical URL
+	$vars['canonical_url'] = $cmspage->getURL();
+}
+
+
+
+// EMBED MODE - Display earlier, without any wrapper.
+// Determine pageshell depending on embed type
 // Note : inner mode remains default embed mode for BC reasons, but embedding content should use full mode to render styles
-$pageshell = 'default';
 if ($embed) {
-	// Inner mode : for use in Elgg (lightbox...)
-	$pageshell = 'inner';
-	// Full embed, for external use (so we need CSS as well then)
-	if ($embed == 'full') { $pageshell = 'iframe'; }
+	switch($embed) {
+		// Full embed, for external use (so we need CSS as well then)
+		case 'full':
+			$pageshell = 'iframe';
+			break;
+		// Default and Inner mode : for use in Elgg (lightbox...)
+		default:
+		$pageshell = 'inner';
+	}
 	// Display page, using wanted pageshell
-	echo elgg_view_page($title, $content, $pageshell);
+	echo elgg_view_page($title, $content, $pageshell, $vars);
 	exit;
 }
-*/
 
 
 
-// FULL PAGE MODE - use also layout
+// FULL PAGE MODE - use also customisable layout and pageshell
 
 // LAYOUT - Render through the correct canvas area
 // @TODO : in a CMS mode, we should be able to define the other layout areas (sidebar, sidebar2, etc.)
@@ -130,10 +160,12 @@ switch ($pageshell) {
 		break;
 	
 	default:
+		// Use wanted pageshell if exists
+		if (empty($pageshell) || elgg_view_exists($pageshell)) $pageshell = 'default';
 }
 
 
 // Display page (using default pageshell)
-echo elgg_view_page($title, $content, $pageshell);
+echo elgg_view_page($title, $content, $pageshell, $vars);
 
 

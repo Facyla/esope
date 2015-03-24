@@ -4,7 +4,7 @@ $fr = array(
 	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> Page statique',
 	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i> Pages statiques',
 	
-	'cmspages:pagetype' => "Adresse de la page (slURL)",
+	'cmspages:pagetype' => "Permalien",
 	'cmspages:cmspage_url' => "URL de la page publiée :",
 	'cmspages:cmspage_view' => "Affichage de la vue :",
 	'cmspages:pageselect' => "Choix de la page à éditer",
@@ -13,13 +13,13 @@ $fr = array(
 	'cmspages:newpage' => "Créer la page \"%s\"",
 	'cmspages:createmenu' => "Création d'une nouvelle page",
 	'cmspages:addnewpage' => "+ Créer une nouvelle page",
-	'cmspages:newtitle' => "Cliquer pour choisir le titre de la nouvelle page, puis indiquer l\'identifiant de la page tel qu\'il apparaitra dns l\'URL, et appuyer sur Entrée", // Use as title : use escaping \'
+	'cmspages:newtitle' => "Cliquer pour choisir le titre de la nouvelle page, puis indiquer l\'identifiant de la page tel qu\'il apparaîtra dans l\'URL, et appuyer sur Entrée", // Use as title : use escaping \'
 	'cmspages:settitle' => "Cliquer pour modifier le titre",
 	'cmspages:create' => "Créer la page !",
 	'cmspages:save' => "Mettre à jour la page",
 	'cmspages:preview' => "Aperçu",
 	'cmspages:delete' => "Détruire la page",
-	'cmspages:deletewarning' => "Attention : la destruction d\'une page est irréversible. Vous pouvez également annuler et la rendre privée pour supprimer l\'accès à cette page en perdre le contenu.", // Penser aux antislashs ici ! (JS)
+	'cmspages:deletewarning' => "Attention : la destruction d'une page est irréversible. Si vous souhaitez seulement la dé-publier, vous pouvez modifier son niveau d'accès sans en perdre le contenu.",
 	'cmspages:showinstructions' => "Afficher les explications détaillées",
 	'cmspages:instructions' => "Utilisation des pages statiques :<ul>
 			<li>ces pages sont accessibles via une URL spécifique (par ex. mainpage)</li>
@@ -99,10 +99,10 @@ $fr = array(
 	'cmspages:display' => "Affichage pleine page", 
 	'cmspages:display:details' => "Permet de choisir comment afficher cette page de manière autonome (avec une URL propre). Par défaut la page peut être utilisée comme élément d'interface ou comme page autonome. Les options permettent d'interdire l'affichage pleine page (no), ou de n'autoriser que l'affichage pleine page pour une utilisation comme élément d'interface uniquement (noview).",
 	//'cmspages:layout:details' => "Permet de choisir le layout pour afficher cette page de manière autonome (avec une URL propre). Les options permettent de choisir le layout à utiliser pour le rendu de la page, de ne permettre que l'affichage pleine page avec le layout par défaut (noview), ou d'interdire l'affichage pleine page (no), pour une utilisation comme élément d'intrerface uniquement.<br />Important : lors d'un \"embed\" de la page, le layout n'est pas utilisé.",
-	'cmspages:template:use' => "Utiliser un template",
-	'cmspages:template:details' => "Permet d'injecter le contenu de cette page dans un template (prédéfini avec cmspages). Laisser vide pour afficher simplement le contenu de cette page. Pour créer un nouveau template, créer une page de type \"template\".",
+	'cmspages:template:use' => "Format d'affichage (template)",
+	'cmspages:template:details' => "Permet d'utiliser un format d'affichage prédéfini, en injecter le contenu de cette page dans un template prédéfini avec cmspages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau template, créer une page de type \"template\".",
 	//'cmspages:settings:unused' => "Note : These settings are not used yet (future developments)",
-	'cmspages:fieldset:unused' => "Note : les paramètres suivants ne sont pas utilisés pour le moment (développements futurs)",
+	'cmspages:fieldset:unused' => "DEV : NON UTILISE (développements futurs)",
 	'cmspages:container_guid' => "GUID du container", 
 	'cmspages:parent_guid' => "GUID du parent", 
 	'cmspages:sibling_guid' => "GUID du frère", 
@@ -147,6 +147,30 @@ $fr = array(
 	'cmspages:layout:sidebar' => "Editer la colonne droite",
 	'cmspages:layout:sidebar_alt' => "Editer la colonne gauche",
 	'cmspages:editpageshell' => "Définir/modifier le pageshell personnalisé",
+	
+	'cmspages:fieldset:seo' => "Options SEO",
+	'cmspages:seo:title' => "Titre",
+	'cmspages:seo:title:details' => "Maximum 60 caractères. Si vide, le titre de la page sera utilisé.",
+	'cmspages:seo:description' => "META Description",
+	'cmspages:seo:description:details' => "La plupart des moteurs prendront en compte un maximum de 160 caractères.",
+	'cmspages:seo:tags' => "META Tags",
+	'cmspages:seo:tags:details' => "Veuillez saisir une liste des mots-clefs les plus importants pour décrire cette page dans le champ \"Mots-clefs\". Pour un meilleur référencement, il est utile que ces termes figurent dans le texte de la page.",
+	'cmspages:seo:index' => "Robots : index",
+	'cmspages:seo:index:details' => "Indique aux robots d'indexer ou de ne pas indexer cette page",
+	'cmspages:seo:follow' => "Robots : follow",
+	'cmspages:seo:follow:details' => "Indique aux robots de suivre ou de ne pas suivre les liens présents sur cette page",
+	'cmspages:seo:canonical' => "Lien canonique",
+	'cmspages:seo:canonical:details' => "Si cette page est accessible via plusieurs URL, indique l'URL de la page \"principale\". Par défaut, l'URL canonique indiquée est celle du permalien.",
+	
+	'cmspages:edit:title' => "Edition de la page \"%s\"",
+	'cmspages:alreadyexists' => "Cette adresse existe déjà, veuillez en choisir une autre",
+	
+	'cmspages:fieldset:rendering' => "Modes de rendu",
+	'cmspages:fieldset:publication' => "Publication",
+	'cmspages:fieldset:categories' => "Rubriquage",
+	'cmspages:access:current' => "Accès actuel",
+	
+	'cmspages:error:nodisplay' => "Vous n'avez pas l'autorisation d'accéder à cette page.",
 	
 	
 );
