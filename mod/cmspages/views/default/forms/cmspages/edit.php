@@ -17,6 +17,7 @@ $pagetype = elgg_get_friendly_title($vars['pagetype']);
 
 
 // Form selects options_values
+$yesno_opts = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 $module_opts = array(
 	'' => elgg_echo('cmspages:module:'), 
 	'title' => elgg_echo('cmspages:module:title'), 
@@ -191,38 +192,38 @@ if ($display_form) {
 		
 		// Use custom template for rendering
 		//$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
-		$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/pulldown', array('name' => 'template', 'value' => $display, 'options_values' => cmspages_templates_opts())) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $display, 'options_values' => cmspages_templates_opts())) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
 		
 		// Affichage autonome et choix du layout personnalisé (si autonome)
 		// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
 		//$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'js' => ' style="width:200px;"')) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
-		$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/pulldown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts())) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts())) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
 		// @TODO afficher des champs supplémentaires selon les layouts (pour définir ce qu'on met dedans = des vues a priori)
 		
 	$form_body .= '</fieldset><br />';
 	$form_body .= '<br />';
 	
 	
-	// NON UTILISE
+	// EXPERIMENTAL FIELDS - NON UTILISE
 	$form_body .= '<fieldset ' . $hideifmodule . '>';
 		$form_body .= '<legend>' . elgg_echo('cmspages:fieldset:unused') . '</legend>';
 		
 		// Bloc conditionnel : masqué si module, affiché si HTML ou template
 		$form_body .= '<div ' . $hideifmodule . 'class="toggle_detail field_ field_rawhtml field_template">';
 			$form_body .= '<div style="float:left; width:32%; margin-right:2%;">';
-			$form_body .= '<p><label>' . elgg_echo('cmspages:container_guid') . ' ' . elgg_view('input/text', array('name' => 'container_guid', 'value' => $container_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
+			$form_body .= '<p><label>' . elgg_echo('cmspages:container_guid') . ' ' . elgg_view('input/text', array('name' => 'container_guid', 'value' => $container_guid, 'style' => "width:10ex;")) . '</label></p>';
 			$form_body .= '</div><div style="float:left; width:32%; margin-right:2%;">';
-			$form_body .= '<p><label>' . elgg_echo('cmspages:parent_guid') . ' ' . elgg_view('input/text', array('name' => 'parent_guid', 'value' => $parent_guid, 'js' => ' style="width:10ex;"')) . '</label></p>';
+			$form_body .= '<p><label>' . elgg_echo('cmspages:parent_guid') . ' ' . elgg_view('input/text', array('name' => 'parent_guid', 'value' => $parent_guid, 'style' => "width:10ex;")) . '</label></p>';
 			$form_body .= '</div><div style="float:right; width:32%;">';
-			$form_body .= "<label>" . elgg_echo('cmspages:sibling_guid') . ' ' . elgg_view('input/text', array('name' => 'sibling_guid', 'value' => $sibling_guid, 'js' => ' style="width:10ex;"')) . '</label><br />';
+			$form_body .= "<label>" . elgg_echo('cmspages:sibling_guid') . ' ' . elgg_view('input/text', array('name' => 'sibling_guid', 'value' => $sibling_guid, 'style' => "width:10ex;")) . '</label><br />';
 			$form_body .= '</div>';
 		$form_body .= '</div>';
 		$form_body .= '<div class="clearfloat"></div>';
 		
 		// @TODO Categories should work like a custom menu - and may be edited by that tool
-		$form_body .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'style' => "width:10ex;")) . '</label></p>';
 		// Slurl support ? isn't it pagetype already ?
-		//$form_body .= '<p><label>' . elgg_echo('cmspages:slurl') . ' ' . elgg_view('input/text', array('name' => 'slurl', 'value' => $slurl, 'js' => ' style="width:10ex;"')) . '</label></p>';
+		//$form_body .= '<p><label>' . elgg_echo('cmspages:slurl') . ' ' . elgg_view('input/text', array('name' => 'slurl', 'value' => $slurl, 'style' => "width:10ex;")) . '</label></p>';
 		// @TODO Images embeddding should work with site as owner (shared library)
 		// @TODO Featured image should work by linking an image to the cmspage entity
 		$form_body .= '<p>';
@@ -243,8 +244,23 @@ if ($display_form) {
 	$form_body .= '</fieldset><br />';
 	
 	
+	$form_body .= '<fieldset>';
+		$form_body .= '<legend>' . elgg_echo('cmspages:fieldset:seo') . '</legend>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:seo:title') . ' ' . elgg_view('input/text', array('name' => 'seo_title', 'value' => $cmspage->seo_title)) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:seo:description') . ' ' . elgg_view('input/text', array('name' => 'seo_description', 'value' => $cmspage->seo_description)) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:seo:tags') . ' ' . elgg_view('input/text', array('name' => 'seo_tags', 'value' => $cmspage->seo_tags)) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:seo:index') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_index', 'value' => $cmspage->seo_index, 'options_values' => $yesno_opts)) . '</label></p>';
+		$form_body .= '<p><label>' . elgg_echo('cmspages:seo:follow') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_follow', 'value' => $cmspage->seo_follow, 'options_values' => $yesno_opts)) . '</label></p>';
+	$form_body .= '</fieldset><br />';
+	/*
+	description : <meta name=”description” content=”155 characters of message matching text with a call to action goes here”>
+	tags : 
+	robots : <meta name=”robots” content=”index,follow”> // index/noindex, follow,nofollow  => all / none
+	*/
+	
+	
 	// Bouton d'envoi
-	if ($cmspage instanceof ElggObject) {
+	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 		$form_body .= elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:save')));
 	} else {
 		$form_body .= elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:create')));

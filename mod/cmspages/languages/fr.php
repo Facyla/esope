@@ -148,6 +148,19 @@ $fr = array(
 	'cmspages:layout:sidebar_alt' => "Editer la colonne gauche",
 	'cmspages:editpageshell' => "Définir/modifier le pageshell personnalisé",
 	
+	'cmspages:seo' => "Options SEO",
+	'cmspages:seo:title' => "Titre",
+	'cmspages:seo:title:details' => "Maximum 60 caractères. Si vide, le titre de la page sera utilisé.",
+	'cmspages:seo:description' => "META Description",
+	'cmspages:seo:description:details' => "La plupart des moteurs prendront en compte un maximum de 160 caractères.",
+	'cmspages:seo:tags' => "META Tags",
+	'cmspages:seo:tags:details' => "Une liste des mots-clefs les plus importants pour décrire cette page. Si vide, les tags de la page seront utilisé.",
+	'cmspages:seo:index' => "Robots : index",
+	'cmspages:seo:index:details' => "Indique aux robots d'indexer ou de ne pas indexer cette page",
+	'cmspages:seo:follow' => "Robots : follow",
+	'cmspages:seo:follow:details' => "Indique aux robotos de suivre ou de ne pas suivre les liens présents sur cette page",
+	'cmspages:seo:canonical' => "Lien canonique",
+	'cmspages:seo:canonical:details' => "Si cette page est accessible via plusieurs URL, indique l'URL de la page \"principale\". Par défaut, l'URL canonique indiquée est celle du permalien.",
 	
 );
 
