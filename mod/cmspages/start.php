@@ -29,15 +29,10 @@ function cmspages_init() {
 	
 	// Register main page handler
 	elgg_register_page_handler('cmspages', 'cmspages_page_handler');
-	
-	// CMS mode
-	$cms_mode = elgg_get_plugin_setting('cms_mode', 'cmspages');
-	if ($cms_mode == 'yes') {
-		// CMS main page handlers (externalblogs can define new ones if we want multisite)
-		elgg_register_page_handler('p', 'cmspages_cms_article_page_handler'); // Articles
-		elgg_register_page_handler('r', 'cmspages_cms_category_page_handler'); // Categories
-		elgg_register_page_handler('t', 'cmspages_cms_tag_page_handler'); // Tags
-	}
+	// CMS main page handlers (externalblogs can define new ones if we want multisite)
+	elgg_register_page_handler('p', 'cmspages_cms_article_page_handler'); // Articles
+	elgg_register_page_handler('r', 'cmspages_cms_category_page_handler'); // Categories
+	elgg_register_page_handler('t', 'cmspages_cms_tag_page_handler'); // Tags
 	
 	// PUBLIC PAGES - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'cmspages_public_pages');
@@ -95,6 +90,9 @@ function cmspages_page_handler($page) {
 	if (empty($page[0])) { $page[0] = 'edit'; }
 	switch ($page[0]) {
 		case "read":
+			// Tell it's a permanent redirection
+			header("Status: 301 Moved Permanently", false, 301);
+			forward("p/$page[1]");
 			if ($page[1]) { set_input('pagetype', $page[1]); }
 			if (!include($include_path . 'read.php')) return false;
 			break;
@@ -119,27 +117,21 @@ function cmspages_page_handler($page) {
 	return true;
 }
 
-/* Public site page handler
- * /p/article
- */
+/* Public site page handler /p/article */
 function cmspages_cms_article_page_handler($page) {
 	set_input('pagetype', $page[0]);
 	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_article.php')) return true;
 	return false;
 }
 
-/* Public site categories page handler
- * /r/rubrique
- */
+/* Public site categories page handler /r/rubrique */
 function cmspages_cms_category_page_handler($page) {
 	set_input('category', $page[0]);
 	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_category.php')) return true;
 	return false;
 }
 
-/* Public site tags page handler
- * /t/tag
- */
+/* Public site tags page handler : /t/tag */
 function cmspages_cms_tag_page_handler($page) {
 	set_input('tag', $page[0]);
 	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_tag.php')) return true;
@@ -149,8 +141,8 @@ function cmspages_cms_tag_page_handler($page) {
 
 /* Populates the ->getUrl() method for cmspage objects */
 function cmspage_url($cmspage) {
-	global $CONFIG;
-	return elgg_get_site_url() . "cmspages/read/" . $cmspage->pagetype;
+	//return elgg_get_site_url() . "cmspages/read/" . $cmspage->pagetype;
+	return elgg_get_site_url() . "p/" . $cmspage->pagetype;
 }
 
 

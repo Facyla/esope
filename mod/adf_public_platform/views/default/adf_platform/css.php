@@ -86,6 +86,7 @@ $font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
+pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
 .elgg-river-comments-tab { color:#cd9928; }
 .elgg-input-rawtext { width:99%; }

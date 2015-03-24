@@ -17,28 +17,45 @@ elgg_register_event_handler('init', 'system', 'shorturls_init');
  */
 function shorturls_init() {
 	
-	// Register a page handler for "shorturls/"
+	// Register a page handler for shorturls
 	elgg_register_page_handler('s', 'shorturls_page_handler');
-	
 	
 }
 
 
-/* Page handler
- * Loads pages located in shorturls/pages/shorturls/
- * s/sHortUrLc0d3 => shortened URL
- * s/g/GUID => short link to ElggEntities
+/* Page handler : redirects to canonical entity URL
+ * s/GUID => short link to ElggEntities
+ * @TODO : generate shorter codes using base convert ? eg. sHortUrLc0d3
  */
 function shorturls_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'shorturls/pages/shorturls';
-	switch ($page[0]) {
-		case 'view':
-			set_input('guid', $page[1]);
-			include "$base/view.php";
-			break;
-		default:
-			include "$base/index.php";
+	$url = '';
+	
+	// GUID mode
+	if (!empty($page[0])) {
+		$ent = get_entity($page[0]);
+		if (elgg_instanceof($ent)) {
+			$url = $ent->getURL();
+		} else {
+			if (elgg_is_logged_in()) register_error(elgg_echo('shorturls:invalid:loggedin'));
+			else register_error(elgg_echo('shorturls:invalid'));
+		}
+	} else {
+		register_error(elgg_echo('shorturls:noid'));
 	}
+	
+	// @TODO Shortest mode ?  should be used to reference stored external links
+	/*
+	if (!empty($page[0])) {
+		$guid = shorturls_code_to_guid( $page[0]);
+		if ($ent = get_entity($guid)) {
+			$url = $ent->getURL();
+			if (!empty())
+		}
+		return true;
+	}
+	*/
+	
+	forward($url);
 	return true;
 }
 
@@ -52,7 +69,7 @@ function shorturls_guid_to_code($num) {
 	$q = floor($num/$b);
 	while ($q) {
 		$r = $q % $b;
-		$q =floor($q/$b);
+		$q = floor($q/$b);
 		$res = $base[$r].$res;
 	}
 	return $res;
@@ -63,8 +80,8 @@ function shorturls_code_to_guid( $num) {
 	$base = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	$b = strlen($base);
 	$limit = strlen($num);
-	$res=strpos($base,$num[0]);
-	for($i=1;$i<$limit;$i++) {
+	$res = strpos($base,$num[0]);
+	for ($i=1;$i<$limit;$i++) {
 		$res = $b * $res + strpos($base,$num[$i]);
 	}
 	return $res;
