@@ -273,20 +273,20 @@ function cmspages_permissions_check($hook, $type, $returnval, $params) {
 }
 
 // Permet l'accès aux pages CMS en mode "walled garden"
-// Allows public visibility of public cmspages which allow fullview page rendering
+// Allows public visibility of public cmspages which allows fullview page rendering
 function cmspages_public_pages($hook, $type, $return_value, $params) {
 	
-	// CMS Mode : enable custom URLs
-	$cms_mode = elgg_get_plugin_setting('cms_mode', 'cmspages');
-	if ($cms_mode == 'yes') {
-		// Globally allow all pages matching p/, r/ and t/
-		$return_value[] = 'p/.*';
-		$return_value[] = 'r/.*';
-		$return_value[] = 't/.*';
-	}
+	// Globally allow all pages matching p/, r/ and t/
+	$return_value[] = 'p/.*';
+	$return_value[] = 'r/.*';
+	$return_value[] = 't/.*';
 	
+	// No need to get into details for each cmspage : 
+	// gatekeeper is applied on the page itself anyway, so we can use a wildcard match
+	$return_value[] = 'cmspages/read/.*';
+	return $return_value;
+	/*
 	$ia = elgg_set_ignore_access(true);
-	
 	// Get pages that are public, and can be displayed as a full page
 	$cmspages = cmspages_get_public_pages();
 	//$options = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
@@ -294,8 +294,9 @@ function cmspages_public_pages($hook, $type, $return_value, $params) {
 	if ($cmspages) foreach ($cmspages as $ent) {
 		$return_value[] = 'cmspages/read/' . $ent->pagetype;
 	}
-	
 	elgg_set_ignore_access($ia);
+	*/
+	
 	return $return_value;
 }
 

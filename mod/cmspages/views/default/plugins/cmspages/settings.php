@@ -8,7 +8,7 @@ $pageshell_opts = array('default' => 'default', 'iframe' => 'iframe', 'custom' =
 
 
 // Set defaults
-if (!isset($plugin->cms_mode)) $plugin->cms_mode = 'no';
+//if (!isset($plugin->cms_mode)) $plugin->cms_mode = 'no';
 if (!isset($plugin->layout)) $plugin->layout = 'one_column';
 if (!isset($plugin->pageshell)) $plugin->pageshell = 'default';
 
@@ -76,12 +76,14 @@ echo '</p>';
 	- permet de définir les layouts à utiliser (par défaut avec interface du site, ou layout personnalisé)
 	- si layout personnalisé, définition des zones
 */
-echo '<fieldset><legend>' . elgg_echo('cmspages:cms_mode') . '</legend>';
+//echo '<fieldset><legend>' . elgg_echo('cmspages:cms_mode') . '</legend>';
 	
+	/* Unused : let's use it by default
 	echo '<p><label>' . elgg_echo('cmspages:settings:cms_mode') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[cms_mode]', 'value' => $plugin->cms_mode, 'options_values' => $yn_opts));
 	echo '</label><br />' . elgg_echo('cmspages:settings:cms_mode:details');
 	echo '</p>';
+	*/
 	
 	// Default layout : existing, or custom
 	echo '<p><label>' . elgg_echo('cmspages:settings:layout') . ' ';
@@ -99,6 +101,6 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:cms_mode') . '</legend>';
 	echo '<br />' . elgg_echo('cmspages:settings:pageshell:details');
 	echo '</p>';
 	
-echo '</fieldset>';
+//echo '</fieldset>';
 
 
