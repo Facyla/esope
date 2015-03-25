@@ -21,6 +21,7 @@ $pagetype = elgg_get_friendly_title(get_input('pagetype'));
 // Fallback on page title, if provided (new page)
 $newpage_title = get_input('title');
 if (empty($pagetype) && !empty($newpage_title)) { $pagetype = elgg_get_friendly_title($newpage_title); }
+if (empty($newpage_title) && !empty($pagetype)) { $newpage_title = $pagetype; }
 
 // Check wether we can display an editing form or not
 if (empty($pagetype)) {
@@ -53,6 +54,8 @@ if ($cmspage) {
 		$title = elgg_echo('cmspages:edit:title', array($pagetype));
 	}
 	elgg_push_breadcrumb($title);
+} else if (!empty($newpage_title)) {
+	elgg_push_breadcrumb(elgg_echo('cmspages:createmenu') . '&nbsp;: ' . $newpage_title);
 }
 
 

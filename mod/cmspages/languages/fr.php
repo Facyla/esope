@@ -179,6 +179,7 @@ $fr = array(
 	'cmspages:type:module' => "Module",
 	'cmspages:type:template' => "Template",
 	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
+	'cmspages:pageselect:filter' => "Filtres de recherche",
 	
 );
 

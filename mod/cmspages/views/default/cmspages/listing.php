@@ -10,11 +10,22 @@
 * 
 */
 
+$access_opt = array(
+	ACCESS_PUBLIC => elgg_echo('PUBLIC'), 
+	ACCESS_LOGGED_IN => elgg_echo('LOGGED_IN'), 
+	ACCESS_PRIVATE => elgg_echo('PRIVATE'), 
+	//ACCESS_DEFAULT => elgg_echo('default_access:label'), //("accès par défaut")
+);
+
+
 // Get cmspages
 $cmspages = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0));
 
 if ($cmspages) {
 	$url = elgg_get_site_url() . 'cmspages/edit/';
+	
+	// @TODO Filtrer par content_type, access_id, et regrouper par rubrique le cas échéant + organiser page parentes/enfant
+	
 	
 	// Tri alphabétique des pages (sur la base du pagetype)
 	usort($cmspages, create_function('$a,$b', 'return strcmp($a->pagetype,$b->pagetype);'));
@@ -31,20 +42,20 @@ if ($cmspages) {
 		//$ent->delete(); // DEBUG/TEST : uncomment and run cmspages menu once to clean delete all cmspages (appears on page reload) - don't forget to comment again !
 	
 		// Useful infos
-		$page_options .= '<li class="cmspages-item cmspages-item-' . $ent->content_type . '" id="cmspages-' . $ent->guid . '">';
+		$content .= '<li class="cmspages-item cmspages-item-' . $ent->content_type . '" id="cmspages-' . $ent->guid . '">';
 		
-		$page_options .= '<span style="float:right;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
+		$content .= '<span style="float:right;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
 		
-		$page_options .= '<span class="cmspages-content_type">' . elgg_echo('cmspages:type:' . $ent->content_type) . '</span>';
+		$content .= '<span class="cmspages-content_type">' . elgg_echo('cmspages:type:' . $ent->content_type) . '</span>';
 		
-		$page_options .= '<a href="' . $url . $ent->pagetype . '">';
-		if (!empty($ent->pagetitle)) $page_options .= $ent->pagetitle . ' (' . $ent->pagetype . ')';
-		else $page_options .= '(' . $ent->pagetype . ')';
-		$page_options .= '</a>';
+		$content .= '<a href="' . $url . $ent->pagetype . '">';
+		if (!empty($ent->pagetitle)) $content .= $ent->pagetitle . ' (' . $ent->pagetype . ')';
+		else $content .= '(' . $ent->pagetype . ')';
+		$content .= '</a>';
 		
-		if (!empty($ent->display)) $page_options .= ', display = ' . $ent->display;
+		if (!empty($ent->display)) $content .= ', display = ' . $ent->display;
 		
-		$page_options .= '</li>';
+		$content .= '</li>';
 	}
 }
 ?>
@@ -58,14 +69,33 @@ if ($cmspages) {
 
 <form action="<?php echo elgg_get_site_url() . 'cmspages/edit/';?>" name="new_cmspage" id="cmspages-form-new">
 	<label>
-		<?php echo elgg_echo('cmspages:newtitle'); ?> <input type="text" name="title" placeholder="<?php echo elgg_echo('cmspages:pageselect'); ?>" value="" />
+		<?php echo elgg_echo('cmspages:newtitle'); ?> <input type="text" name="title" placeholder="<?php echo elgg_echo('cmspages:pageselect'); ?>" value="" style="width:30ex; max-width:100%;" />
 	</label> 
 	<input type="submit" class="elgg-button elgg-button-submit" value="<?php echo elgg_echo('create'); ?>" />
 </form>
 <div class="clearfloat"></div><br />
 <br />
 
-<ul><?php echo $page_options; ?><ul>
+
+<h3><?php echo elgg_echo('cmspages:pageselect:filter'); ?></h3>
+
+<form name="cmspage-search" id="cmspages-form-search">
+	DEV - A VENIR
+	<label>Type de page
+		<?php echo elgg_echo('cmspages:content_type'); ?> <input type="text" name="content_type" value="" style="width:30ex; max-width:100%;" />
+	</label> 
+	<label>Visibilité
+		<?php
+		echo '<p><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => "", 'options' => $access_opt)) . '</label>';
+		echo '</p>';
+		?>
+	</label> 
+	<input type="submit" class="elgg-button elgg-button-submit" value="<?php echo elgg_echo('search'); ?>" />
+</form>
+<div class="clearfloat"></div><br />
+<br />
+
+<ul><?php echo $content; ?><ul>
 <br />
 
 
