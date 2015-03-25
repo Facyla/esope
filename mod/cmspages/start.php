@@ -177,7 +177,7 @@ function cmspage_is_editor($user = false) {
 		if (!elgg_is_logged_in()) return false;
 		$user = elgg_get_logged_in_user_entity();
 	}
-	if (elgg_is_admin_user($user)) return true;
+	if (elgg_is_admin_user($user->guid)) return true;
 	//if (elgg_in_context('cmspages_admin')) return true;
 	$editors = explode(',', elgg_get_plugin_setting('editors', 'cmspages'));
 	if (in_array($user->guid, $editors)) return true;
