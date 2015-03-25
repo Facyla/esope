@@ -35,5 +35,12 @@ pre, code { word-break:break-all; }
 .elgg-context-cmspages_admin { padding: 0 2ex; }
 .elgg-context-cmspages_admin .elgg-menu.elgg-breadcrumbs { display: inline-block; padding: 2ex 0 0 3ex; }
 #cmspages-edit-form label { font-size: 120%; }
+.cmspages-field { margin-bottom:2ex; }
+.cmspages-types-tips {  }
+.cmspages-unpublished { font-weight:bold; color:#A00; }
+.cmspages-published { font-weight:bold; color:#0A0; }
 
+/* Password protection */
+.cmspage-password-form { display:inline-block; background:transparent; }
+.cmspage-password-form input { max-width:20ex; margin-left:1ex; }
 

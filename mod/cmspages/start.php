@@ -20,6 +20,7 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 function cmspages_init() {
 	global $CONFIG;
 	elgg_extend_view('css','cmspages/css');
+	if (!elgg_is_active_plugin('adf_public_platform')) elgg_extend_view('page/elements/head','cmspages/head_extend');
 	
 	// Register entity type
 	elgg_register_entity_type('object', 'cmspage');
@@ -82,6 +83,7 @@ function cmspages_exists($pagetype = '') {
 	elgg_set_ignore_access($ia);
 	return false;
 }
+
 
 /* Main tool page handler */
 function cmspages_page_handler($page) {
@@ -171,11 +173,15 @@ function cmspages_pagesetup() {
 * ie can create a new cmspage, or can edit any cmspage
  */
 function cmspage_is_editor($user = false) {
-	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
-	if (elgg_is_admin_logged_in()) return true;
-	if (elgg_in_context('cmspages_admin')) return true;
+	if (!$user) {
+		if (!elgg_is_logged_in()) return false;
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if (elgg_is_admin_user($user)) return true;
+	//if (elgg_in_context('cmspages_admin')) return true;
 	$editors = explode(',', elgg_get_plugin_setting('editors', 'cmspages'));
 	if (in_array($user->guid, $editors)) return true;
+	// Not an editor
 	return false;
 }
 
@@ -188,6 +194,65 @@ function cmspage_is_author($user) {
 	if (elgg_in_context('cmspages_admin')) return true;
 	$authors = explode(',', elgg_get_plugin_setting('authors', 'cmspages'));
 	if (in_array($user->guid, $authors)) return true;
+	return false;
+}
+
+/* Checks if a given user has provided the right password to access cmspage (or is an editor)
+ * Optionally display the authorisation form
+ * Return : true : user authorised / no password / valid password
+ *          false : not authorised
+ */
+function cmspages_check_password($cmspage, $display_form = true) {
+	if (!elgg_instanceof($cmspage, 'object', 'cmspage')) return false;
+	
+	// Y a-t-il un mot de passe ?
+	if (empty($cmspage->password)) { return true; }
+	
+	// Authorisation end command - remove password authorisations
+	$logout = get_input('cmspages_logout', false);
+	if (!empty($logout)) {
+		if ($logout == 'all') {
+			unset($_SESSION['cmspages']);
+			system_message(elgg_echo('cmspage:password:cleared'));
+		} else {
+			$guids = explode($logout);
+			// Per-GUID close
+			foreach ($guids as $guid) {
+				unset($_SESSION['cmspages'][$guid]['passhash']);
+			}
+			system_message(elgg_echo('cmspage:password:cleared:page'));
+		}
+	}
+	
+	// Contrôle du mot de passe
+	// Editors are always allowed
+	if (cmspage_is_editor()) { return true; }
+	
+	// Generate hash that authenticates the user
+	$pass_hash = md5(get_site_secret() . $cmspage->password);
+	
+	// Already validated
+	if ($_SESSION['cmspages'][$cmspage->guid]['pass_hash'] == $pass_hash) { return true; }
+	
+	// Need to authenticate using provided information, and store that information
+	$input_pass = get_input('cmspage_password_' . $cmspage->guid);
+	if (!empty($input_pass)) {
+		$input_pass_hash = md5(get_site_secret() . $input_pass);
+		if ($input_pass && ($input_pass_hash == $pass_hash)) {
+			$_SESSION['cmspages'][$cmspage->guid]['pass_hash'] = $pass_hash;
+			return true;
+		}
+	}
+	
+	// Not validated at this step => display form (using unique ids to avoid conflicts)
+	if ($display_form) {
+		echo '<form method="POST" class="cmspage-password-form" id="cmspage-password-' . $cmspage->guid . '">';
+		echo elgg_echo('cmspages:password:form');
+		echo elgg_view('input/password', array('name' => 'cmspage_password_' . $cmspage->guid));
+		echo elgg_view('input/submit', array('value' => elgg_echo('cmspages:password:submit'), 'class' => "elgg-button elgg-button-submit"));
+		echo '</form>';
+	}
+	// Tell we do not have access to the page content
 	return false;
 }
 
@@ -283,8 +348,8 @@ function cmspages_display_opts() {
 	//$all_zones = array('title', 'header', 'nav', 'content', 'footer', 'sidebar', 'sidebar-alt');
 	$display_opts = array(
 			'' => 'Autorisé (par défaut)',
-			'no' => "Interdit (élément d'interface uniquement)",
 			'noview' => "Exclusif (pleine page uniquement)",
+			'no' => "Interdit (élément d'interface uniquement)",
 			//'default' => '', // deprecated
 			//'one_column' => "Pleine page",
 			//'one_sidebar' => "Barre latérale droite",

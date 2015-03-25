@@ -35,11 +35,11 @@ $embed = get_input('embed', false);
 $layout = elgg_get_plugin_setting('layout', 'cmspages');
 $pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
 
-// Set outer title (page title)
+// Set inner and outer title (page title and breadcrumbs)
 $title = $pagetype;
 if ($cmspage->pagetitle) { $title = $cmspage->pagetitle; }
-$page_title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
-$vars['title'] = $page_title;
+// Note : some plugins (such as metatags) rely on a defined title, so we need to set it
+$CONFIG->title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
 
 
 /* BREADCRUMBS
@@ -49,9 +49,7 @@ $vars['title'] = $page_title;
  * - Tags : t/seo-friendly-tag
  */
 //if (elgg_is_admin_logged_in()) {
-if (cmspage_is_editor()) {
-	elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
-}
+if (cmspage_is_editor()) { elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages'); }
 elgg_push_breadcrumb($title);
 
 
@@ -65,13 +63,11 @@ if ($cmspage) {
 
 // cmspages/read may render more content
 $content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
-// Note : some plugins (such as metatags) rely on a defined title, so we need to set it
-$CONFIG->title = $page_title;
 
 
 // SET SEO META
 if ($cmspage) {
-	// Update page title
+	// Update page outer title
 	if (!empty($cmspage->seo_title)) $title = $cmspage->seo_title;
 	// Set META description
 	if (!empty($cmspage->seo_description)) $vars['meta_description'] = strip_tags($cmspage->seo_description);

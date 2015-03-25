@@ -1,12 +1,14 @@
 <?php
 $fr = array(
 	'cmspages' => "Pages statiques (CMS)",
-	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> Page statique',
-	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i> Pages statiques',
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page statique',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages statiques',
 	
-	'cmspages:pagetype' => "Permalien",
-	'cmspages:cmspage_url' => "URL de la page publiée :",
-	'cmspages:cmspage_view' => "Affichage de la vue :",
+	'cmspages:pagetype' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)", // link ou anchor
+	'cmspages:cmspage_url' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)",
+	'cmspages:cmspage_view' => "<i class=\"fa fa-plug\"></i>Intégration dans Elgg",
+	'cmspages:cmspage_embed' => "<i class=\"fa fa-code\"></i>Code d'embarquement HTML",
+	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Utilisation dans un  gabarit",
 	'cmspages:pageselect' => "Choix de la page à éditer",
 	
 	'cmspages:new' => "OK",
@@ -72,21 +74,15 @@ $fr = array(
 	'cmspages:fieldset:main' => "Principaux paramètres",
 	'cmspages:fieldset:advanced' => "Paramètres avancés",
 	'cmspages:content_type' => "Type de contenu",
-	'cmspages:content_type:details' => "Les pages CMS peuvent être de divers types : les 2 premiers sont à utiliser pour afficher simplement du contenu. Les \"modules\" permettent de définir des blocs de contenu dynamique. Les \"templates\" servent à définir des gabarits qui peuvent être utilisés pour l'affichage d'autres pages CMS, ou pour des mises en pages complexes.",
-	'cmspages:content_type:editor' => "HTML (avec éditeur de texte)",
-	'cmspages:content_type:rawhtml' => "HTML (ne pas charger l'éditeur)",
-	'cmspages:content_type:module' => "Module configurable",
-	'cmspages:content_type:template' => "Template (agencement de pages et modules CMS)",
-	'cmspages:content_type:template:details' => "Utilisation des templates :<ul>
-		<li>{{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype'</li>
-		<li>{{%CONTENT%}} : insère le contenu chargé dans la vue par un outil tiers via le paramètre 'content'</li>
-		<li>{{[shortcode]}} : insère le shortcode 'shortcode' (si le plugin elgg_shortcode est activé)</li>
-		<li>{{:forms/register|username=admin}} : insère la vue forms/register en lui passant le paramètres 'username' => 'admin'</li>
-		</ul>",
+	'cmspages:content_type:details' => "Les pages CMS peuvent être de divers types : les 2 premiers sont à utiliser pour afficher simplement du contenu. Les \"modules\" permettent de définir des blocs de contenu dynamique. Les \"gabarits\" servent à définir des modèles d'affichage qui peuvent être utilisés pour l'affichage de contenus, et des mises en pages complexes, faisant appels à divers autres pages CMS et éléments de contenu.",
+	'cmspages:content_type:editor' => "Contenu (HTML avec éditeur visuel)",
+	'cmspages:content_type:rawhtml' => "Code source (HTML sans éditeur)",
+	'cmspages:content_type:module' => "Module (configurable)",
+	'cmspages:content_type:template' => "Gabarit (simple ou dynamique)",
 	'cmspages:content:rawhtml' => "Contenu de la page ou du bloc (code HTML)",
 	'cmspages:content:template' => "Structure ou contenu du template",
 	'cmspages:content:' => "Contenu de la page ou du bloc",
-	'cmspages:templates:list' => "Templates utilisés",
+	'cmspages:templates:list' => "Eléments utilisés",
 	'cmspages:css' => "Styles personnalisés",
 	'cmspages:css:details' => "Les feuilles de style CSS définies ici seront ajoutées lors de l'affichage de cette page.",
 	'cmspages:js' => "JS personnalisé",
@@ -123,8 +119,7 @@ $fr = array(
 	*/
 	
 	'cmspages:categories' => "Rubrique(s)",
-	'cmspages:slurl' => "Permalien",
-	'cmspages:shorturl' => "URL courte",
+	'cmspages:shorturl' => "<i class=\"fa fa-external-link\"></i>URL courte", // link, compress, retweet, quote-left, external-link
 	'cmspages:featured_image' => "Image en Une",
 	'cmspages:featured_image:view' => "Afficher l'image en Une",
 	'cmspages:notexist:create' => "Cette page n'existe pas. Vous avez pu faire une erreur dans l'URL (attention aux '_', remplacés par des '-'), sinon vous pouvez cliquer sur le lien ci-dessous pour créer une nouvelle page à cette adresse.",
@@ -167,8 +162,9 @@ $fr = array(
 	
 	'cmspages:fieldset:rendering' => "Modes de rendu",
 	'cmspages:fieldset:publication' => "Publication",
+	'cmspages:fieldset:information' => "Informations utiles",
 	'cmspages:fieldset:categories' => "Rubriquage",
-	'cmspages:access:current' => "Accès actuel",
+	'cmspages:access:current' => "Visibilité",
 	
 	'cmspages:error:nodisplay' => "Vous n'avez pas l'autorisation d'accéder à cette page.",
 	'cmspages:notice:changedurl' => "L'adresse de cette page a changé, veuillez mettre à jour vos marque-pages.",
@@ -180,6 +176,43 @@ $fr = array(
 	'cmspages:type:template' => "Template",
 	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
 	'cmspages:pageselect:filter' => "Filtres de recherche",
+	
+	/* Modes d'emploi */
+	'cmspages:content_type:template:details' => "<i class=\"fa fa-info-circle\"></i>Les gabarits servent pour 2 types d'utilisations principales&nbsp;:
+		<ol>
+			<li>pour définir des gabarits qui vont servir de \"modèle\" pour l'affichage d'autres contenus : le contenu pourra être \"injecté\" dans le gabarit, à l'emplacement indiqué par {{%CONTENT%}}&nbsp;;</li>
+			<li>pour définir un contenu complexe, qui fasse appel à divers éléments dynamiques : le contenu de la page sera alors généré en faisant appel à divers types de blocs de contenus (variables, shortcodes, vues Elgg), ou à d'autres pages CMS (contenu, code source, module, mais aussi d'autres gabarits). Lors de l'utilisation d'autres gabarits, ceux-ci peuvent également faire appel à d'autres gabarits, etc.</li>
+		</ol>
+		Pour cela, les gabarits doivent être édités directement en HTML, dans lequel vous pouvez également intégrer les codes suivants :
+		<ul>
+			<li>PAGE CMS : {{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype' (contenut, code source, module ou gabarit)</li>
+			<li>VARIABLE : {{%CONTENT%}} : insère le contenu chargé dans la vue par un outil tiers via le paramètre 'content'</li>
+			<li>SHORTCODE : {{[shortcode]}} : insère le shortcode 'shortcode' (si le plugin elgg_shortcode est activé)</li>
+			<li>VUE ELGG : {{:forms/register|username=admin}} : insère la vue forms/register en lui passant le paramètres 'username' => 'admin'</li>
+		</ul>",
+	'cmspages:content_type:module:details' => "<i class=\"fa fa-info-circle\"></i>Les modules permettent de sélectionner et d'afficher divers types de contenus, selon des critères précis. Pour cela, chaque module doit être configuré avec des paramètres précis :
+		<ol>
+			<li>Choisir le module : par exemple une Liste d'entités</li>
+			<li>Renseigner les paramètres : par ex. type d'entité 'object', type de contenu 'bookmarks', affichage limité à '5', et 'pagination' activée'</li>
+			<li>Choisir éventuellement d'autres réglages généraux : contextes autorisés, niveaux d'accès, etc.</li>
+			<li>Une fois le module enregistré, il peut être utilisé sous forme de vue, ou appelé par une page de type 'template'.</li>
+		</ol>",
+	'cmspages:content_type:rawhtml:details' => "<i class=\"fa fa-info-circle\"></i>Ce type de contenu est recommandé si vous souhaitez utiliser du code HTML \"brut\", sans filtrage ni modification. Il est notamment adapté pour intégrer des codes d'intégration de contenus riches comme un widget Twitter ou une vidéo, ou tout type de contenu dont le code source supporte mal les filtrages et corrections apportés par les éditeurs visuels.<br />
+		Il est quasiment identique à \"Contenu (HTML avec éditeur visuel)\", mais permet d'éditer la page sans le filtrage et les modifications du code apportées par l'éditeur visuel, notamment les JavaScript ainsi que divers éléments HTML.",
+	'cmspages:content_type:editor:details' => "<i class=\"fa fa-info-circle\"></i>Ce type de contenu est recommandé si vous souhaitez rédiger une page de contenu de manière visuelle, par ex. un texte illustré, travailler la mise en forme de la page, etc.<br />
+		Si vous avez besoin d'un contrôle direct sur le code source de la page, veuillez utiliser \"Code source (HTML sans éditeur)\".",
+	
+	'cmspages:status' => "Statut",
+	'cmspages:status:published' => "Publié",
+	'cmspages:status:notpublished' => "Brouillon (non publié)",
+	
+	'cmspages:password' => "Protection par mot de passe",
+	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention : cette option ne s'applique que pour un affichage en pleine page.",
+	'cmspage:password:cleared' => "Déconnexion des pages réussies.",
+	'cmspage:password:cleared:page' => "Déconnexion de la page réussie",
+	'cmspages:password:submit' => "Accéder",
+	'cmspages:password:form' => "Accès protégé par mot de passe",
+	
 	
 );
 

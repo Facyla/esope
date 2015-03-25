@@ -53,6 +53,10 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
 // Check if full page display is allowed - Exit si pas d'affichage pleine page autorisé
 if ($cmspage->display == 'no') { return; }
 
+// Check if using a password, and if user has access, or display auth form
+// If form is displayed, user does not have access so return right after form
+if ($cmspage && !cmspages_check_password($cmspage)) { return; }
+
 // Check allowed contexts - Exit si contexte non autorisé
 if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
 	$exit = true;
