@@ -4,8 +4,8 @@
  * 
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @author Facyla
- * @copyright Facyla 2008-2011
+ * @author Florian DANIEL aka Facyla
+ * @copyright Facyla 2008-2015
  * @link http://id.facyla.net/
 */
 
@@ -87,14 +87,14 @@ function cmspages_exists($pagetype = '') {
 function cmspages_page_handler($page) {
 	global $CONFIG;
 	$include_path = elgg_get_plugins_path() . 'cmspages/pages/cmspages/';
-	if (empty($page[0])) { $page[0] = 'edit'; }
+	if (empty($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
 		case "read":
 			// Tell it's a permanent redirection
 			header("Status: 301 Moved Permanently", false, 301);
 			forward("p/$page[1]");
 			if ($page[1]) { set_input('pagetype', $page[1]); }
-			if (!include($include_path . 'read.php')) return false;
+			if (!include($include_path . 'read.php')) { return false; }
 			break;
 			
 		/* It was a test, better in a specific plugin instead (export_embed)
@@ -107,8 +107,13 @@ function cmspages_page_handler($page) {
 		*/
 		case 'admin':
 		case 'edit':
-			if (!empty($page[1])) set_input('pagetype', $page[1]);
-			if (!include($include_path . 'index.php')) return false;
+			if (!empty($page[1])) { set_input('pagetype', $page[1]); }
+			set_input('pagetype', $page[1]);
+			if (!include($include_path . 'edit.php')) { return false; }
+			break;
+		
+		case 'index':
+			if (!include($include_path . 'index.php')) { return false; }
 			break;
 		
 		default:

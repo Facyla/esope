@@ -13,7 +13,7 @@ $fr = array(
 	'cmspages:newpage' => "Créer la page \"%s\"",
 	'cmspages:createmenu' => "Création d'une nouvelle page",
 	'cmspages:addnewpage' => "+ Créer une nouvelle page",
-	'cmspages:newtitle' => "Cliquer pour choisir le titre de la nouvelle page, puis indiquer l\'identifiant de la page tel qu\'il apparaîtra dans l\'URL, et appuyer sur Entrée", // Use as title : use escaping \'
+	'cmspages:newtitle' => "Indiquer le nom de la nouvelle page, puis appuyer sur Entrée", // Use as title : use escaping \'
 	'cmspages:settitle' => "Cliquer pour modifier le titre",
 	'cmspages:create' => "Créer la page !",
 	'cmspages:save' => "Mettre à jour la page",
@@ -48,7 +48,7 @@ $fr = array(
 	'cmspages:notset' => "Cette page n'existe pas, ou vous devez vous connecter pour pouvoir y accéder.",
 	'cmspages:delete:fail' => "Un problème est survenu lors de la suppression de la page",
 	'cmspages:error' => "Une erreur est survenue, merci de réessayer, ou de contacter l'administrateur si le problème persiste",
-	'cmspages:unsettooshort' => "Nom (pour l'URL) de la page non défini ou trop court (minimum : 2 caractères)",
+	'cmspages:unsettooshort' => "Nom (pour l'URL) de la page non défini ou trop court (au moins 1 caractère)",
 	
 	'cmspages:pagescreated' => "%s pages créées",
 	
@@ -100,7 +100,7 @@ $fr = array(
 	'cmspages:display:details' => "Permet de choisir comment afficher cette page de manière autonome (avec une URL propre). Par défaut la page peut être utilisée comme élément d'interface ou comme page autonome. Les options permettent d'interdire l'affichage pleine page (no), ou de n'autoriser que l'affichage pleine page pour une utilisation comme élément d'interface uniquement (noview).",
 	//'cmspages:layout:details' => "Permet de choisir le layout pour afficher cette page de manière autonome (avec une URL propre). Les options permettent de choisir le layout à utiliser pour le rendu de la page, de ne permettre que l'affichage pleine page avec le layout par défaut (noview), ou d'interdire l'affichage pleine page (no), pour une utilisation comme élément d'intrerface uniquement.<br />Important : lors d'un \"embed\" de la page, le layout n'est pas utilisé.",
 	'cmspages:template:use' => "Format d'affichage (template)",
-	'cmspages:template:details' => "Permet d'utiliser un format d'affichage prédéfini, en injecter le contenu de cette page dans un template prédéfini avec cmspages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau template, créer une page de type \"template\".",
+	'cmspages:template:details' => "Permet d'utiliser un format d'affichage prédéfini, en injectant le contenu de cette page dans un template HTML créé avec cmspages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau template, créez une page de type \"template\".",
 	//'cmspages:settings:unused' => "Note : These settings are not used yet (future developments)",
 	'cmspages:fieldset:unused' => "DEV : NON UTILISE (développements futurs)",
 	'cmspages:container_guid' => "GUID du container", 
@@ -171,7 +171,14 @@ $fr = array(
 	'cmspages:access:current' => "Accès actuel",
 	
 	'cmspages:error:nodisplay' => "Vous n'avez pas l'autorisation d'accéder à cette page.",
+	'cmspages:notice:changedurl' => "L'adresse de cette page a changé, veuillez mettre à jour vos marque-pages.",
 	
+	'cmspages:type:' => "HTML",
+	'cmspages:type:editor' => "HTML",
+	'cmspages:type:rawhtml' => "HTML",
+	'cmspages:type:module' => "Module",
+	'cmspages:type:template' => "Template",
+	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
 	
 );
 

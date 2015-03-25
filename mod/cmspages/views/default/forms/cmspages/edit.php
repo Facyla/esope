@@ -13,7 +13,10 @@
 $cmspage = $vars['entity']; // we can use directly the entity
 // or get the page type - used as a user-friendly guid
 // @TODO : this concept could be extend to provide custom URL for any given GUID...
-$pagetype = elgg_get_friendly_title($vars['pagetype']);
+$pagetype = elgg_get_friendly_title(get_input('pagetype'));
+// Fallback on page title, if provided (new page)
+$newpage_title = get_input('title');
+if (empty($pagetype) && !empty($newpage_title)) { $pagetype = elgg_get_friendly_title($newpage_title); }
 
 // If entity not set, use the pagetype instead
 if (!$cmspage && $pagetype) { $cmspage = cmspages_get_entity($pagetype); }
@@ -84,7 +87,9 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	$js = $cmspage->js;
 } else {
 	// New page : set only default access
+	$title = $newpage_title; // Set it from pagetype only at creation, never later (would override title)
 	$access = (defined("ACCESS_DEFAULT")) ? ACCESS_DEFAULT : ACCESS_PUBLIC;
+	$newpage_notice = elgg_echo('cmspages:notice:newpage');
 }
 
 
@@ -100,7 +105,7 @@ $sidebar = '';
 // This if for a closer integration with externalblog, as a generic edition tool
 //$content_type_input = "Type de contenu : par défaut = HTML avec éditeur, rawhtml = HTML sans éditeur<br />" . elgg_view('input/text', array('name' => 'content_type', 'value' => $content_type)) . '<br />';
 // elgg_view('input/dropdown', array('name' => 'content_type', 'value' => $content_type, 'options_values' => $content_type_opts)) . '</label></p>';
-$sidebar .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:content_type:details'))) . '<label>' . elgg_echo('cmspages:content_type') . "&nbsp; ";
+$sidebar .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:content_type:details'))) . '<p><label>' . elgg_echo('cmspages:content_type') . "&nbsp; ";
 $sidebar .= '<select onchange="javascript:$(\'.toggle_detail\').hide(); $(\'.toggle_detail.field_\'+this.value).show();" name="content_type">';
 foreach ($content_type_opts as $val => $text) {
 	if ($val == $content_type) $sidebar .= '<option value="' . $val . '" selected="selected">' . $text . '</option>';
@@ -121,7 +126,7 @@ $sidebar .= '<fieldset><legend>' . elgg_echo('cmspages:fieldset:publication') . 
 	$sidebar .= '</p>';
 	
 	// Contexte d'utilisation : ne s'affiche que si dans ces contextes (ou tous si aucun filtre défini)
-	$sidebar .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:contexts:details'))) . '<label>' . elgg_echo('cmspages:contexts') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts)) . '</label></p>';
+	$sidebar .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:contexts:details'))) . '<p><label>' . elgg_echo('cmspages:contexts') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'contexts', 'value' => $contexts)) . '</label></p>';
 	
 	// Informations utiles : URL de la page + vue à utiliser pour charger la page
 	if ($cmspage) {
@@ -150,12 +155,12 @@ $sidebar .= '</fieldset>';
 $sidebar .= '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend>';
 	// Use custom template for rendering
 	//$content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
-	$sidebar .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $display, 'options_values' => cmspages_templates_opts())) . '</p>';
+	$sidebar .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $display, 'options_values' => cmspages_templates_opts())) . '</p>';
 	
 	// Affichage autonome et choix du layout personnalisé (si autonome)
 	// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
 	//$content .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
-	$sidebar .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts())) . '</p>';
+	$sidebar .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts())) . '</p>';
 $sidebar .= '</fieldset>';
 
 
@@ -236,10 +241,10 @@ $content .= '<br />';
 $content .= '<fieldset>';
 	$content .= '<legend>' . elgg_echo('cmspages:fieldset:advanced') . '</legend>';
 	// CSS
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:css:details'))) . '<label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '</p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:css:details'))) . '<p><label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '</p>';
 	
 	// JS
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:js:details'))) . '<label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '</p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:js:details'))) . '<p><label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '</p>';
 $content .= '</fieldset><br />';
 $content .= '<br />';
 
@@ -248,12 +253,12 @@ $content .= '<br />';
 // SEO and METATAGS FIELDS
 $content .= '<fieldset>';
 	$content .= '<legend>' . elgg_echo('cmspages:fieldset:seo') . '</legend>';
-	//$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:tags:details'))) . '<label>' . elgg_echo('cmspages:seo:tags') . '</label></p>';
+	//$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:tags:details'))) . '<p><label>' . elgg_echo('cmspages:seo:tags') . '</label></p>';
 	$content .= '<p><strong>' . elgg_echo('cmspages:seo:tags') . '</strong> ' . elgg_echo('cmspages:seo:tags:details') . '</p>';
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:title:details'))) . '<label>' . elgg_echo('cmspages:seo:title') . ' ' . elgg_view('input/text', array('name' => 'seo_title', 'value' => $cmspage->seo_title)) . '</label></p>';
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:description:details'))) . '<label>' . elgg_echo('cmspages:seo:description') . ' ' . elgg_view('input/text', array('name' => 'seo_description', 'value' => $cmspage->seo_description)) . '</label></p>';
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:index:details'))) . '<label>' . elgg_echo('cmspages:seo:index') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_index', 'value' => $cmspage->seo_index, 'options_values' => $yesno_opts)) . '</label></p>';
-	$content .= '<p>' . elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:follow:details'))) . '<label>' . elgg_echo('cmspages:seo:follow') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_follow', 'value' => $cmspage->seo_follow, 'options_values' => $yesno_opts)) . '</label></p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:title:details'))) . '<p><label>' . elgg_echo('cmspages:seo:title') . ' ' . elgg_view('input/text', array('name' => 'seo_title', 'value' => $cmspage->seo_title)) . '</label></p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:description:details'))) . '<p><label>' . elgg_echo('cmspages:seo:description') . ' ' . elgg_view('input/text', array('name' => 'seo_description', 'value' => $cmspage->seo_description)) . '</label></p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:index:details'))) . '<p><label>' . elgg_echo('cmspages:seo:index') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_index', 'value' => $cmspage->seo_index, 'options_values' => $yesno_opts)) . '</label></p>';
+	$content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:follow:details'))) . '<p><label>' . elgg_echo('cmspages:seo:follow') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_follow', 'value' => $cmspage->seo_follow, 'options_values' => $yesno_opts)) . '</label></p>';
 $content .= '</fieldset><br />';
 
 
@@ -300,9 +305,6 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 
 
 /* AFFICHAGE DU CONTENU DE LA PAGE */
-
-
-
 
 // Use a 2 column layout for better readability
 $content = '<div style="float:right; width:30%;">' . $sidebar . '</div><div style="float:left; width:66%;">' . $content . '</div><div class="clearfloat"></div>';
