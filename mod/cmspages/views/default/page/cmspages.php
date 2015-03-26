@@ -1,8 +1,8 @@
 <?php
 /**
- * Elgg pageshell
- * The standard HTML page shell that everything else fits into
- *************Changed for Theme****************
+ * CMSPages standard pageshell :
+ * Full-width pageshell (from one_column)
+ * 
  * @package Elgg
  * @subpackage Core
  *

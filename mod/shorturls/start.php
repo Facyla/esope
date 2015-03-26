@@ -20,6 +20,9 @@ function shorturls_init() {
 	// Register a page handler for shorturls
 	elgg_register_page_handler('s', 'shorturls_page_handler');
 	
+	// PUBLIC PAGES - les pages auxquelles on peut accéder hors connexion
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'shorturls_public_pages');
+	
 }
 
 
@@ -55,8 +58,17 @@ function shorturls_page_handler($page) {
 	}
 	*/
 	
-	forward($url);
-	return true;
+	header("Status: 301 Moved Permanently", false, 301);
+	header("Location: {$url}");
+	//forward($url); // Not working in walled garden mode
+	return false;
+}
+
+
+// Permet l'accès à la fonctionnalité quel que soit le statut "walled garden"
+function shorturls_public_pages($hook, $type, $return_value, $params) {
+	$return_value[] = 's/.*';
+	return $return_value;
 }
 
 

@@ -4,8 +4,8 @@
  * 
  * @package Elggcmspages
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @author Facyla
- * @copyright Facyla 2008-2011
+ * @author Florian DANIEL aka Facyla
+ * @copyright Facyla 2008-2015
  * @link http://id.facyla.net/
 */
 
@@ -20,6 +20,7 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 function cmspages_init() {
 	global $CONFIG;
 	elgg_extend_view('css','cmspages/css');
+	if (!elgg_is_active_plugin('adf_public_platform')) elgg_extend_view('page/elements/head','cmspages/head_extend');
 	
 	// Register entity type
 	elgg_register_entity_type('object', 'cmspage');
@@ -83,18 +84,19 @@ function cmspages_exists($pagetype = '') {
 	return false;
 }
 
+
 /* Main tool page handler */
 function cmspages_page_handler($page) {
 	global $CONFIG;
 	$include_path = elgg_get_plugins_path() . 'cmspages/pages/cmspages/';
-	if (empty($page[0])) { $page[0] = 'edit'; }
+	if (empty($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
 		case "read":
 			// Tell it's a permanent redirection
 			header("Status: 301 Moved Permanently", false, 301);
 			forward("p/$page[1]");
 			if ($page[1]) { set_input('pagetype', $page[1]); }
-			if (!include($include_path . 'read.php')) return false;
+			if (!include($include_path . 'read.php')) { return false; }
 			break;
 			
 		/* It was a test, better in a specific plugin instead (export_embed)
@@ -107,8 +109,13 @@ function cmspages_page_handler($page) {
 		*/
 		case 'admin':
 		case 'edit':
-			if (!empty($page[1])) set_input('pagetype', $page[1]);
-			if (!include($include_path . 'index.php')) return false;
+			if (!empty($page[1])) { set_input('pagetype', $page[1]); }
+			set_input('pagetype', $page[1]);
+			if (!include($include_path . 'edit.php')) { return false; }
+			break;
+		
+		case 'index':
+			if (!include($include_path . 'index.php')) { return false; }
 			break;
 		
 		default:
@@ -156,6 +163,10 @@ function cmspages_pagesetup() {
 		$item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/');
 		elgg_register_menu_item('topbar', $item);
 	}
+	
+	// Init custom CMS menu based on categories
+	//cmspages_set_categories_menu();
+	
 	return true;
 }
 
@@ -166,11 +177,15 @@ function cmspages_pagesetup() {
 * ie can create a new cmspage, or can edit any cmspage
  */
 function cmspage_is_editor($user = false) {
-	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
-	if (elgg_is_admin_logged_in()) return true;
-	if (elgg_in_context('cmspages_admin')) return true;
+	if (!$user) {
+		if (!elgg_is_logged_in()) return false;
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if (elgg_is_admin_user($user->guid)) return true;
+	//if (elgg_in_context('cmspages_admin')) return true;
 	$editors = explode(',', elgg_get_plugin_setting('editors', 'cmspages'));
 	if (in_array($user->guid, $editors)) return true;
+	// Not an editor
 	return false;
 }
 
@@ -183,6 +198,65 @@ function cmspage_is_author($user) {
 	if (elgg_in_context('cmspages_admin')) return true;
 	$authors = explode(',', elgg_get_plugin_setting('authors', 'cmspages'));
 	if (in_array($user->guid, $authors)) return true;
+	return false;
+}
+
+/* Checks if a given user has provided the right password to access cmspage (or is an editor)
+ * Optionally display the authorisation form
+ * Return : true : user authorised / no password / valid password
+ *          false : not authorised
+ */
+function cmspages_check_password($cmspage, $display_form = true) {
+	if (!elgg_instanceof($cmspage, 'object', 'cmspage')) return false;
+	
+	// Y a-t-il un mot de passe ?
+	if (empty($cmspage->password)) { return true; }
+	
+	// Authorisation end command - remove password authorisations
+	$logout = get_input('cmspages_logout', false);
+	if (!empty($logout)) {
+		if ($logout == 'all') {
+			unset($_SESSION['cmspages']);
+			system_message(elgg_echo('cmspage:password:cleared'));
+		} else {
+			$guids = explode($logout);
+			// Per-GUID close
+			foreach ($guids as $guid) {
+				unset($_SESSION['cmspages'][$guid]['passhash']);
+			}
+			system_message(elgg_echo('cmspage:password:cleared:page'));
+		}
+	}
+	
+	// Contrôle du mot de passe
+	// Editors are always allowed
+	if (cmspage_is_editor()) { return true; }
+	
+	// Generate hash that authenticates the user
+	$pass_hash = md5(get_site_secret() . $cmspage->password);
+	
+	// Already validated
+	if ($_SESSION['cmspages'][$cmspage->guid]['pass_hash'] == $pass_hash) { return true; }
+	
+	// Need to authenticate using provided information, and store that information
+	$input_pass = get_input('cmspage_password_' . $cmspage->guid);
+	if (!empty($input_pass)) {
+		$input_pass_hash = md5(get_site_secret() . $input_pass);
+		if ($input_pass && ($input_pass_hash == $pass_hash)) {
+			$_SESSION['cmspages'][$cmspage->guid]['pass_hash'] = $pass_hash;
+			return true;
+		}
+	}
+	
+	// Not validated at this step => display form (using unique ids to avoid conflicts)
+	if ($display_form) {
+		echo '<form method="POST" class="cmspage-password-form" id="cmspage-password-' . $cmspage->guid . '">';
+		echo elgg_echo('cmspages:password:form');
+		echo elgg_view('input/password', array('name' => 'cmspage_password_' . $cmspage->guid));
+		echo elgg_view('input/submit', array('value' => elgg_echo('cmspages:password:submit'), 'class' => "elgg-button elgg-button-submit"));
+		echo '</form>';
+	}
+	// Tell we do not have access to the page content
 	return false;
 }
 
@@ -203,20 +277,20 @@ function cmspages_permissions_check($hook, $type, $returnval, $params) {
 }
 
 // Permet l'accès aux pages CMS en mode "walled garden"
-// Allows public visibility of public cmspages which allow fullview page rendering
+// Allows public visibility of public cmspages which allows fullview page rendering
 function cmspages_public_pages($hook, $type, $return_value, $params) {
 	
-	// CMS Mode : enable custom URLs
-	$cms_mode = elgg_get_plugin_setting('cms_mode', 'cmspages');
-	if ($cms_mode == 'yes') {
-		// Globally allow all pages matching p/, r/ and t/
-		$return_value[] = 'p/.*';
-		$return_value[] = 'r/.*';
-		$return_value[] = 't/.*';
-	}
+	// Globally allow all pages matching p/, r/ and t/
+	$return_value[] = 'p/.*';
+	$return_value[] = 'r/.*';
+	$return_value[] = 't/.*';
 	
+	// No need to get into details for each cmspage : 
+	// gatekeeper is applied on the page itself anyway, so we can use a wildcard match
+	$return_value[] = 'cmspages/read/.*';
+	return $return_value;
+	/*
 	$ia = elgg_set_ignore_access(true);
-	
 	// Get pages that are public, and can be displayed as a full page
 	$cmspages = cmspages_get_public_pages();
 	//$options = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0);
@@ -224,8 +298,9 @@ function cmspages_public_pages($hook, $type, $return_value, $params) {
 	if ($cmspages) foreach ($cmspages as $ent) {
 		$return_value[] = 'cmspages/read/' . $ent->pagetype;
 	}
-	
 	elgg_set_ignore_access($ia);
+	*/
+	
 	return $return_value;
 }
 
@@ -269,17 +344,16 @@ function cmspages_templates_opts() {
 	return $options;
 }
 
-/* Returns layouts and config
- * Eg. layout params tu be used
- * Note only templates should use this as it defines a full interface
+/* Returns display options
+ * Eg. display params tu be used
  */
 function cmspages_display_opts() {
 	// Zones : nav defaults to breadcrumb
 	//$all_zones = array('title', 'header', 'nav', 'content', 'footer', 'sidebar', 'sidebar-alt');
 	$display_opts = array(
 			'' => 'Autorisé (par défaut)',
-			'no' => "Interdit (élément d'interface uniquement)",
 			'noview' => "Exclusif (pleine page uniquement)",
+			'no' => "Interdit (élément d'interface uniquement)",
 			//'default' => '', // deprecated
 			//'one_column' => "Pleine page",
 			//'one_sidebar' => "Barre latérale droite",
@@ -291,6 +365,40 @@ function cmspages_display_opts() {
 			*/
 		);
 	// @TODO : Permettre d'ajouter d'autres layouts via config ?
+	return $display_opts;
+}
+
+
+/* Returns layouts and config
+ * Eg. layout params tu be used
+ * Note only templates should use this as it defines a full interface
+ */
+function cmspages_layout_opts() {
+	$display_opts = array(
+			'one_column' => "1 colonne (par défaut)",
+			'one_sidebar' => "2 colonnes (menu droit)",
+			'two_sidebar' => '3 colonnes (menu gauche + droit)', 
+			'custom' => 'Layout personnalisé',
+		);
+	// @TODO : Permettre d'ajouter d'autres layouts via config ?
+	return $display_opts;
+}
+
+
+/* Returns layouts and config
+ * Eg. layout params tu be used
+ * Note only templates should use this as it defines a full interface
+ */
+function cmspages_pageshell_opts() {
+	$display_opts = array(
+			'default' => "Site (par défaut)",
+			'cmspages' => 'Site pleine largeur (sans marge)', 
+			'cmspages_cms' => 'Site pleine largeur + menu CMS', 
+			'iframe' => "Iframe (sans interface)",
+			'inner' => "Contenu brut (pour AJAX)",
+			'custom' => 'Pageshell personnalisé',
+		);
+	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
 	return $display_opts;
 }
 
@@ -549,5 +657,59 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 	return $return;
 }
 
+
+
+/* Returns all read cmspages by category
+ */
+function cmspages_get_pages_by_category($category) {
+	if (empty($category)) return false;
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array(
+				array('name' => 'categories', 'value' => $category),
+				array('name' => 'display', 'value' => 'no', 'operand' => '<>'),
+			),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+/* Returns all read cmspages by tag
+ * string|array $tags   optionally use an array of tags (IN clause)
+ */
+function cmspages_get_pages_by_tag($tags) {
+	if (empty($tags)) return false;
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array(
+				array('name' => 'tags', 'value' => $tags),
+				array('name' => 'display', 'value' => 'no', 'operand' => '<>'),
+			),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+
+/* Registers an Elgg tree menu from categories config
+ */
+function cmspages_set_categories_menu() {
+	// List tree categories
+	// For each entry, add parent if level > 0
+	$tree_categories = elgg_get_plugin_setting('menu_categories');
+	$tree_categories = unserialize($tree_categories);
+	foreach ($tree_categories as $cat) {
+		$item = new ElggMenuItem($cat['name'], $cat['title'], "r/{$cat['name']}");
+		if (!empty($cat['parent'])) $item->setParentName($cat['parent']);
+		elgg_register_menu_item('cmspages_categories', $item);
+	}
+	
+	// Render menu
+	//elgg_view_menu('cmspages_categories');
+	
+	return true;
+}
 
 

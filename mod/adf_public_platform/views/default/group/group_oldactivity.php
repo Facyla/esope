@@ -1,5 +1,6 @@
 <?php
 $group = $vars['entity'];
+if (!elgg_instanceof($group, 'group')) return;
 
 $full = elgg_extract('full_view', $vars, false);
 
@@ -13,14 +14,16 @@ if (!empty($timeframe) && is_int($timeframe)) {
 }
 
 $ia = elgg_set_ignore_access(true);
-$latest_river = elgg_get_river(array(
-		'limit' => 1,
-		'joins' => array("JOIN {$dbprefix}entities e1 ON e1.guid = rv.object_guid"),
-		'wheres' => array(
-				"(e1.container_guid = $group->guid)",
-				//"rv.posted <= $timeframe",
-			),
-	));
+if (!empty($group->guid)) {
+	$latest_river = elgg_get_river(array(
+			'limit' => 1,
+			'joins' => array("JOIN {$dbprefix}entities e1 ON e1.guid = rv.object_guid"),
+			'wheres' => array(
+					"(e1.container_guid = {$group->guid})",
+					//"rv.posted <= $timeframe",
+				),
+		));
+}
 
 
 // Ssi le groupe a été manuellement archivé

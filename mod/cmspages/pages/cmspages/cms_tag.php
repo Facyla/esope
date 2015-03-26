@@ -14,56 +14,36 @@
 define('cmspage', true);
 global $CONFIG;
 
-$pagetype = get_input('pagetype', false);
 
-if (!$pagetype) {
-	register_error(elgg_echo('cmspages:notset'));
-	forward();
-}
+$content = '';
+$title = elgg_echo('cmspages:tags');
 
-// Get entity
-$cmspage = cmspages_get_entity($pagetype);
-// Display only valid pages - except for editors
-if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
-	register_error('cmspages:notset');
-	forward();
-}
+$tag = get_input('tag');
+if (empty($tag)) { forward(); }
+$title = $tag;
+elgg_push_breadcrumb($title);
+
+$tag_url = elgg_get_site_url() . 't/';
 
 // Get rendering params
 $embed = get_input('embed', false);
 $layout = elgg_get_plugin_setting('layout', 'cmspages');
 $pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
 
-// Set inner and outer title (page title and breadcrumbs)
-$title = $pagetype;
-if ($cmspage->pagetitle) { $title = $cmspage->pagetitle; }
-// Note : some plugins (such as metatags) rely on a defined title, so we need to set it
-$CONFIG->title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
 
-
-/* BREADCRUMBS
- * Logic : 
- * - Articles : p/seo-friendly-article-title
- * - Categories : r/seo-friendly-category-title
- * - Tags : t/seo-friendly-tag
- */
-//if (elgg_is_admin_logged_in()) {
-if (cmspage_is_editor()) { elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages'); }
-elgg_push_breadcrumb($title);
-
-
-// Forbid strongly any attempt to access a blocked display page
-if ($cmspage) {
-	if ($cmspage->display == 'no') {
-		register_error(elgg_echo('cmspages:error:nodisplay'));
-		forward();
-	}
+$cmspages = cmspages_get_pages_by_tag($tag);
+foreach ($cmspages as $ent) {
+	$content .= '<div class="cmspages-tag cmspages-tag-' . $tag . '">';
+	$content .= '<h2><a href="' . $ent->getURL() . '">';
+	if (!empty($ent->pagetitle)) $content .= $ent->pagetitle; else $content .= $ent->pagetype;
+	$content .= '</a></h2>';
+	$content .= elgg_view('cmspages/read', array('entity' => $ent));
+	$content .= '</div>';
 }
 
-// cmspages/read may render more content
-$content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
 
 
+/*
 // SET SEO META
 if ($cmspage) {
 	// Update page outer title
@@ -72,7 +52,7 @@ if ($cmspage) {
 	if (!empty($cmspage->seo_description)) $vars['meta_description'] = strip_tags($cmspage->seo_description);
 	// Set META keywords
 	if (!empty($cmspage->tags)) {
-		if (is_array($cmspage->tags)) $vars['meta_keywords'] = implode(', ', $cmspage->tags);
+		if ($is_array($cmspage->tags)) $vars['meta_keywords'] = implode(', ', $cmspage->tags);
 		else $vars['meta_keywords'] = $cmspage->tags;
 	}
 	// Set robots information : index/noindex, follow,nofollow  => all / none
@@ -82,6 +62,7 @@ if ($cmspage) {
 	// Set canonical URL
 	$vars['canonical_url'] = $cmspage->getURL();
 }
+*/
 
 
 
@@ -125,10 +106,7 @@ if (!empty($title)) $params['title'] = $title;
 $content = elgg_view_layout($layout, $params);
 */
 
-//$params = array('content' => $content, 'title' => false, 'header' => false, 'nav' => false, 'footer' => false, 'sidebar' => false, 'sidebar_alt' => false);
-$params = array('content' => $content);
-if ($cmspage->pagetitle) $params['title'] = $cmspage->pagetitle; else $params['title'] = $pagetype;
-
+$params = array('content' => $content, 'title' => $title);
 switch ($layout) {
 	case 'custom':
 		// Wrap into custom layout (apply only if exists)

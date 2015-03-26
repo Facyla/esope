@@ -33,6 +33,7 @@ if (empty($pagetype) || strlen($pagetype) < 3 ) {
 $tags = get_input('cmspage_tags');
 //$cmspage_guid = (int)get_input('cmspage_guid'); // not really used (pagetype are unique, as URL rely on them rather than GUID)
 $access = get_input('access_id', ACCESS_DEFAULT);
+$password = get_input('password');
 // These are for future developments/features, such as page hierarchy, conditional display based on container
 $container_guid = get_input('container_guid', $site_guid);
 $parent_guid = get_input('parent_guid');
@@ -117,6 +118,7 @@ $cmspage->pagetype = $pagetype; // Allow to update pagetype
 $cmspage->pagetitle = $cmspage_title;
 $cmspage->description = $contents;
 $cmspage->access_id = $access;
+$cmspage->password = $password;
 // Modules & templates integration
 $cmspage->content_type = $content_type;
 $cmspage->module = $module;
@@ -133,6 +135,7 @@ $cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing per
 $cmspage->container_guid = $container_guid;
 $cmspage->parent_guid = $parent_guid;
 $cmspage->sibling_guid = $sibling_guid;
+//$categories = string_to_tag_array($categories);
 $cmspage->categories = $categories;
 // Function will add the filename if upload is OK
 if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
@@ -160,5 +163,5 @@ if ($cmspage->save()) {
 elgg_set_ignore_access(false);
 
 // Forward back to the page
-forward("cmspages?pagetype=$pagetype");
+forward("cmspages/edit/$pagetype");
 

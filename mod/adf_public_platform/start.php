@@ -1616,13 +1616,20 @@ function esope_filter_entity_guid_by_metadata(array $values, array $md_filter) {
 
 /* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
  * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
+ * string $input
+ * string|array('string') $separators (\n will always be a separator)
+ * Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, etc.
  * Return : Tableau filtré, ou false
  */
-function esope_get_input_array($input = false) {
+function esope_get_input_array($input = false, $separators = array("\n", "\r", "\t", ",", ";", "|")) {
 	if ($input) {
-		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-		$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
-		$input = explode("\n", $input);
+		if (is_array($separators)) {
+			$main_sep = array_shift($separators);
+			$input = str_replace($separators, $main_sep, $input);
+			$input = explode($main_sep, $input);
+		} else {
+			$input = explode($separators, $input);
+		}
 		// Suppression des espaces
 		$input = array_map('trim', $input);
 		// Suppression des doublons

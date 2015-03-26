@@ -44,6 +44,16 @@ Version History
 ======================
 
 
+0.9.9.0 (2015.03.25)
+  - new SEO-friendly page handlers for articles (+ categories and tags later)
+  - page selection and edit design
+  - control over CMS mode layout and pageshell
+  - featured image
+  - SEO META fields
+  - password protected pages
+  - better breadcrumbs
+  - more infos on existing pages
+
 0.9.8 (2013.11.19)
   - list used templates for a given cmspage
   - templates can also add the visual editor (disabled by default)

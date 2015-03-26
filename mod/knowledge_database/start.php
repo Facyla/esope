@@ -29,11 +29,13 @@ function knowledge_database_init() {
 	elgg_extend_view('css/elgg', 'knowledge_database/css');
 	elgg_extend_view('css/admin', 'knowledge_database/css');
 	
-	// Ajout bloc spécifique
+	// Ajout bloc spécifique dans les groupes
 	elgg_extend_view('groups/profile/summary', 'knowledge_database/group_extend');
 	
-	// Add extra fields to create/edit form (below tags)
+	// Add extra fields to objects create/edit form (below tags)
 	elgg_extend_view('input/tags', 'knowledge_database/object_form_extend', 800);
+	// @TODO add setting to enable/disable extension
+	elgg_extend_view('object/elements/full', 'knowledge_database/object_extend', 800);
 	
 	// Intercept create/edit event to update metadata on objects
 	elgg_register_event_handler("create", "object", "knowledge_database_object_handler_event");
@@ -73,6 +75,8 @@ function knowledge_database_page_handler($page) {
 		case 'public':
 		case 'search':
 		case 'index':
+		case 'user':
+		case 'group':
 		default:
 			if ($page[1]) set_input('container_guid', $page[1]);
 			if (include($include_path . 'index.php')) return true;
@@ -129,7 +133,8 @@ function knowledge_database_build_options($source, $addempty = true, $prefix = '
 
 
 /* KDB object create/update event handler
- * Adds the custom fields to the edited entities
+ * Saves the custom fields to the edited entities
+ * @TODO make it actually work...
  */
 function knowledge_database_object_handler_event($event, $type, $object) {
 	// KDB fields apply only for objects (at least for now)
