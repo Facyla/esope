@@ -132,9 +132,7 @@ if ($plugin->categories) {
 			// Correction auto des sous-niveaux utilisant trop de tirets (saut de 3 à 5 par ex.)
 			// eg. level = 3 avec sizeof(parent) = 1 (soit niveau 0) => level corrigé à 1
 			// Note : pour la première entrée, on aura toujours level == 0
-			echo $level;
 			if ($level > sizeof($parents)) { $level = sizeof($parents); }
-			echo $level;
 			// Gestion des nouvelles entrées et sous-niveaux, après la 1ère entrée
 			if (sizeof($parents) > 0) {
 				// Niveau supérieur : 
