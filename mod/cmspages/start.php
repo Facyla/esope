@@ -656,3 +656,23 @@ function cmspages_get_pages_by_tag($tags) {
 }
 
 
+/* Registers an Elgg menu from categories config
+ */
+function cmspages_set_categories_menu() {
+	// @TODO List categories
+	// For each entry, add parent if level > 0
+	$tree_categories = elgg_get_plugin_setting('menu_categories');
+	$tree_categories = unserialize($tree_categories);
+	foreach ($tree_categories as $cat) {
+		$item = new ElggMenuItem($cat['name'], $cat['title'], "r/{$cat['name']}");
+		if (!empty($cat['parent'])) $item->setParentName($cat['parent']);
+		elgg_register_menu_item('cmspages_categories', $item);
+	}
+	
+	// Render menu
+	//elgg_view_menu('cmspages_categories');
+	
+	return true;
+}
+
+

@@ -104,13 +104,61 @@ echo '</p>';
 	
 //echo '</fieldset>';
 	
-	// Categories : syntax name::title::parent_name
-	echo '<p><label>' . elgg_echo('cmspages:settings:categories') . ' ';
-	echo elgg_view('input/plaintext', array('name' => 'params[categories]', 'value' => $plugin->categories));
-	echo '</label>';
-	echo '<br /><em>' . elgg_echo('cmspages:settings:categories:details') . '</em>';
-	echo '</p>';
-	
-//echo '</fieldset>';
 
+echo '<p><label>' . elgg_echo('cmspages:settings:categories') . ' ';
+echo elgg_view('input/plaintext', array('name' => 'params[categories]', 'value' => $plugin->categories));
+echo '</label>';
+echo '<br /><em>' . elgg_echo('cmspages:settings:categories:details') . '</em>';
+echo '</p>';
+
+// Categories : arborescence par indentation avec des tirets...
+// @TODO Traiter le contenu et générer un array PHP qu'on va stocker (sérialisé), 
+// au lieu de devoir tout reconstruire à chaque appel
+// Prévoir un array qui soit pr^et pour construire un menu <=> array d'entrées avec un parent_name
+if ($plugin->categories) {
+	$menu_categories = array();
+	$menu_cats = esope_get_input_array($plugin->categories, "\n");
+	if (count($menu_cats) > 0) {
+		$parents = array(); // dernier parent pour chaque niveau de l'arborescence
+		foreach ($menu_cats as $key => $cat) {
+			// Niveau dans l'arborescence
+			$level = 0;
+			while($cat[0] == '-') {
+				$cat = substr($cat, 1);
+				$level++;
+			}
+			// Correction auto des sous-niveaux utilisant trop de tirets (saut de 3 à 5 par ex.)
+			// eg. level = 3 avec sizeof(parent) = 1 (soit niveau 0) => level corrigé à 1
+			// Note : pour la première entrée, on aura toujours level == 0
+			if ($level > sizeof($parents)) { $level = sizeof($parents); }
+			
+			// Gestion des nouvelles entrées et sous-niveaux, après la 1ère entrée
+			if (sizeof($parents) > 0) {
+				// Niveau supérieur : 
+				while((sizeof($parents) > 1) && ($level < (sizeof($parents) - 1))) {
+					// Suppression du dernier sous-niveau
+					array_pop($parents);
+				}
+				// Ouverture d'un nouveau sous-menu
+				if ($level > (sizeof($parents) - 1)) { echo '<ul><li>'; }
+			}
+			// Dernier parent connu pour le niveau courant
+			$parents[$level] = $name;
+			
+			$name = elgg_get_friendly_title($cat);
+			
+			$menu_cat = array('name' => $name, 'title' => $cat);
+			// Get immediate parent
+			if ($level > 0) {
+				$parent_name = $parents[$level-1];
+				$menu_cat['parent'] = $parent_name;
+			}
+			$menu_categories[] = $menu_cat;
+		}
+	}
+	$plugin->menu_categories = serialize($menu_categories);
+}
+//echo '<pre>' . print_r($menu_categories, true) . '</pre>';
+cmspages_set_categories_menu();
+echo elgg_view_menu('cmspages_categories', array('sort_by' => 'weight'));
 
