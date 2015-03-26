@@ -25,6 +25,10 @@ elgg_push_breadcrumb($title);
 
 $tag_url = elgg_get_site_url() . 't/';
 
+// Get rendering params
+$embed = get_input('embed', false);
+$layout = elgg_get_plugin_setting('layout', 'cmspages');
+$pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
 
 
 $cmspages = cmspages_get_pages_by_tag($tag);

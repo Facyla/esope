@@ -1,7 +1,7 @@
 <?php
 /**
- * CMSPages standard pageshell :
- * Full-width pageshell (from one_column)
+ * CMSPages pageshell :
+ * Full-width pageshell (from one_column) + cmspages navigation menu
  * 
  * @package Elgg
  * @subpackage Core
@@ -36,7 +36,8 @@ if (elgg_is_logged_in()) $loggedin_class = 'elgg-loggedin';
 
 // render content before head so that JavaScript and CSS can be loaded. See #4032
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
-$header = elgg_view('adf_platform/adf_header', $vars);
+//$header = elgg_view('adf_platform/adf_header', $vars);
+$header = elgg_view('cmspages/cms_header', $vars);
 $body = elgg_view('page/elements/body', $vars);
 $footer = elgg_view('page/elements/footer', $vars);
 

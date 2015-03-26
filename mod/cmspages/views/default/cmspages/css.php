@@ -46,3 +46,10 @@ pre, code { word-break:break-all; }
 .cmspage-password-form { display:inline-block; background:transparent; }
 .cmspage-password-form input { max-width:20ex; margin-left:1ex; }
 
+
+/* Categories menu */
+.elgg-menu-cmspages-categories {  }
+.elgg-menu-cmspages-categories .elgg-child-menu { display:none; }
+.elgg-menu-cmspages-categories li:hover .elgg-child-menu { display: block; }
+
+

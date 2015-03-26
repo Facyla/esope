@@ -3,8 +3,10 @@ $plugin = $vars['entity'];
 
 // Set options
 $yn_opts = array('yes' => elgg_echo('survey:settings:yes'), 'no' => elgg_echo('survey:settings:no'));
-$layout_opts = array('one_column' => '1 colonne', 'one_sidebar' => '2 colonnes', 'two_sidebar' => '3 colonnes', 'cmspages' => 'Pleine largeur (sans marge)', 'custom' => 'Layout personnalisé');
-$pageshell_opts = array('default' => 'Par défaut', 'iframe' => 'iframe', 'custom' => 'Personnsalisé');
+$layout_opts = array('one_column' => '1 colonne', 'one_sidebar' => '2 colonnes', 'two_sidebar' => '3 colonnes', 'custom' => 'Layout personnalisé');
+$layout_opts = cmspages_layout_opts();
+$pageshell_opts = array('default' => 'Site (par défaut)', 'cmspages' => 'Site pleine largeur (sans marge)', 'iframe' => 'iframe', 'custom' => 'Personnalisé');
+$pageshell_opts = cmspages_pageshell_opts();
 
 
 // Set defaults
@@ -103,7 +105,7 @@ echo '</p>';
 	echo '</p>';
 	
 //echo '</fieldset>';
-	
+
 
 echo '<p><label>' . elgg_echo('cmspages:settings:categories') . ' ';
 echo elgg_view('input/plaintext', array('name' => 'params[categories]', 'value' => $plugin->categories));
@@ -112,9 +114,9 @@ echo '<br /><em>' . elgg_echo('cmspages:settings:categories:details') . '</em>';
 echo '</p>';
 
 // Categories : arborescence par indentation avec des tirets...
-// @TODO Traiter le contenu et générer un array PHP qu'on va stocker (sérialisé), 
+// On pré-traite le contenu pour générer un array PHP qu'on va stocker (sérialisé), 
 // au lieu de devoir tout reconstruire à chaque appel
-// Prévoir un array qui soit pr^et pour construire un menu <=> array d'entrées avec un parent_name
+// Returns : array prêt pour construire un menu <=> array d'entrées avec un parent_name
 if ($plugin->categories) {
 	$menu_categories = array();
 	$menu_cats = esope_get_input_array($plugin->categories, "\n");
@@ -130,8 +132,9 @@ if ($plugin->categories) {
 			// Correction auto des sous-niveaux utilisant trop de tirets (saut de 3 à 5 par ex.)
 			// eg. level = 3 avec sizeof(parent) = 1 (soit niveau 0) => level corrigé à 1
 			// Note : pour la première entrée, on aura toujours level == 0
+			echo $level;
 			if ($level > sizeof($parents)) { $level = sizeof($parents); }
-			
+			echo $level;
 			// Gestion des nouvelles entrées et sous-niveaux, après la 1ère entrée
 			if (sizeof($parents) > 0) {
 				// Niveau supérieur : 
@@ -139,18 +142,15 @@ if ($plugin->categories) {
 					// Suppression du dernier sous-niveau
 					array_pop($parents);
 				}
-				// Ouverture d'un nouveau sous-menu
-				if ($level > (sizeof($parents) - 1)) { echo '<ul><li>'; }
 			}
 			// Dernier parent connu pour le niveau courant
-			$parents[$level] = $name;
-			
 			$name = elgg_get_friendly_title($cat);
+			$parents["$level"] = $name;
 			
 			$menu_cat = array('name' => $name, 'title' => $cat);
 			// Get immediate parent
 			if ($level > 0) {
-				$parent_name = $parents[$level-1];
+				$parent_name = $parents[(int) ($level-1)];
 				$menu_cat['parent'] = $parent_name;
 			}
 			$menu_categories[] = $menu_cat;

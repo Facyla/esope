@@ -29,8 +29,7 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
 	forward();
 }
 
-
-// Get layout params
+// Get rendering params
 $embed = get_input('embed', false);
 $layout = elgg_get_plugin_setting('layout', 'cmspages');
 $pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');

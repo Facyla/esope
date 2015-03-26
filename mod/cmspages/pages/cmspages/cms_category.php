@@ -24,6 +24,12 @@ if (!empty($category)) { $title = $category; }
 
 $cat_url = elgg_get_site_url() . 'r/';
 
+// Get rendering params
+$embed = get_input('embed', false);
+$layout = elgg_get_plugin_setting('layout', 'cmspages');
+$pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
+
+
 // Get tree categories
 $categories_opt = array();
 $categories = elgg_get_plugin_setting('categories', 'cmspages');

@@ -163,6 +163,10 @@ function cmspages_pagesetup() {
 		$item = new ElggMenuItem('cmspages', elgg_echo('cmspages'), 'cmspages/');
 		elgg_register_menu_item('topbar', $item);
 	}
+	
+	// Init custom CMS menu based on categories
+	//cmspages_set_categories_menu();
+	
 	return true;
 }
 
@@ -340,9 +344,8 @@ function cmspages_templates_opts() {
 	return $options;
 }
 
-/* Returns layouts and config
- * Eg. layout params tu be used
- * Note only templates should use this as it defines a full interface
+/* Returns display options
+ * Eg. display params tu be used
  */
 function cmspages_display_opts() {
 	// Zones : nav defaults to breadcrumb
@@ -362,6 +365,40 @@ function cmspages_display_opts() {
 			*/
 		);
 	// @TODO : Permettre d'ajouter d'autres layouts via config ?
+	return $display_opts;
+}
+
+
+/* Returns layouts and config
+ * Eg. layout params tu be used
+ * Note only templates should use this as it defines a full interface
+ */
+function cmspages_layout_opts() {
+	$display_opts = array(
+			'one_column' => "1 colonne (par défaut)",
+			'one_sidebar' => "2 colonnes (menu droit)",
+			'two_sidebar' => '3 colonnes (menu gauche + droit)', 
+			'custom' => 'Layout personnalisé',
+		);
+	// @TODO : Permettre d'ajouter d'autres layouts via config ?
+	return $display_opts;
+}
+
+
+/* Returns layouts and config
+ * Eg. layout params tu be used
+ * Note only templates should use this as it defines a full interface
+ */
+function cmspages_pageshell_opts() {
+	$display_opts = array(
+			'default' => "Site (par défaut)",
+			'cmspages' => 'Site pleine largeur (sans marge)', 
+			'cmspages_cms' => 'Site pleine largeur + menu CMS', 
+			'iframe' => "Iframe (sans interface)",
+			'inner' => "Contenu brut (pour AJAX)",
+			'custom' => 'Pageshell personnalisé',
+		);
+	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
 	return $display_opts;
 }
 
@@ -656,10 +693,10 @@ function cmspages_get_pages_by_tag($tags) {
 }
 
 
-/* Registers an Elgg menu from categories config
+/* Registers an Elgg tree menu from categories config
  */
 function cmspages_set_categories_menu() {
-	// @TODO List categories
+	// List tree categories
 	// For each entry, add parent if level > 0
 	$tree_categories = elgg_get_plugin_setting('menu_categories');
 	$tree_categories = unserialize($tree_categories);
