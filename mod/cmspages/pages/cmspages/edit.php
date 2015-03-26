@@ -40,7 +40,6 @@ elgg_set_context('cmspages_admin');
 
 // Build the page content
 $content = '';
-$menu = '';
 
 // Page title
 $title = elgg_echo('cmspages');
@@ -63,9 +62,7 @@ if ($cmspage) {
 // Existing pages will use the entity - new ones the pagetype
 $content .= elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype, 'entity' => $cmspage));
 
+$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
-//$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $menu));
-$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $menu . $content));
-
-echo elgg_view_page($title, $page, 'cms_admin');
+echo elgg_view_page($title, $page, 'cmspages');
 

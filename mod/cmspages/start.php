@@ -622,3 +622,37 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 
 
 
+/* Returns all read cmspages by category
+ */
+function cmspages_get_pages_by_category($category) {
+	if (empty($category)) return false;
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array(
+				array('name' => 'categories', 'value' => $category),
+				array('name' => 'display', 'value' => 'no', 'operand' => '<>'),
+			),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+/* Returns all read cmspages by tag
+ * string|array $tags   optionally use an array of tags (IN clause)
+ */
+function cmspages_get_pages_by_tag($tags) {
+	if (empty($tags)) return false;
+	$options = array(
+			'types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 
+			'metadata_name_value_pairs' => array(
+				array('name' => 'tags', 'value' => $tags),
+				array('name' => 'display', 'value' => 'no', 'operand' => '<>'),
+			),
+			'limit' => 0, 
+		);
+	$cmspages = elgg_get_entities_from_metadata($options);
+	return $cmspages;
+}
+
+

@@ -52,5 +52,5 @@ $content .= elgg_view('cmspages/listing');
 //$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $content));
 $page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
-echo elgg_view_page($title, $page, 'cms_admin');
+echo elgg_view_page($title, $page, 'cmspages');
 

@@ -39,6 +39,8 @@ pre, code { word-break:break-all; }
 .cmspages-types-tips {  }
 .cmspages-unpublished { font-weight:bold; color:#A00; }
 .cmspages-published { font-weight:bold; color:#0A0; }
+#cmspages-edit-form .cmspages-categories ul, .cmspages-categories ul { list-style-type: none; margin-left: 0; }
+#cmspages-edit-form .cmspages-categories ul ul, .cmspages-categories ul ul { margin-left: 3ex; }
 
 /* Password protection */
 .cmspage-password-form { display:inline-block; background:transparent; }

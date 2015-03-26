@@ -60,7 +60,7 @@ $fr = array(
 	'cmspages:settings:layout:default' => "Par défaut",
 	'cmspages:settings:layout:externalblog' => "Utiliser la config d'externalblog",
 	'cmspages:settings:editors' => "Liste des éditeurs supplémentaires",
-	'cmspages:settings:editors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les éditeurs ont un accès en lecture et écriture à l'ensemble des pages CMS. Ces éditeurs s'ajoutent aux administrateurs.<br />Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
+	'cmspages:settings:editors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les éditeurs ont un accès en lecture et écriture à l'ensemble des pages CMS.<br />Tous les administrateurs sont éditeurs, mais vous pouvez ajouter d'autres éditeurs qui auront un accès total aux pages CMS, à l'exception de cette page de configuration.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
 	
 	'cmspages:chosenentity' => "Entité choisie (GUID)",
 	'cmspages:configuredview' => "Vue configurée",
@@ -135,9 +135,9 @@ $fr = array(
 	'cmspages:cms_mode' => "Mode CMS",
 	'cmspages:settings:cms_mode' => "Activer le mode CMS",
 	'cmspages:settings:cms_mode:details' => "Ce mode permet d'utiliser CMSPages pour gérer les pages d'un site. Il propose des adresses de pages optimisées pour le SEO, et des options plus avancées de gestion du rendu.",
-	'cmspages:settings:layout:details' => "Permet de choisir l'agencement du contenu dans la page. Par défaut la page s'affiche en pleine largeur, mais vous pouvez également choisir un gabarit à 1 ou 2 colonnes, ou définir un gabarit personnalisé.",
+	'cmspages:settings:layout:details' => "Par défaut, les pages CMS s'affichent avec le layout \"one_column\" (1 seule colonne), mais vous pouvez choisir de les afficher en utilisant un autre layout (modèle d'agencement du contenu dans la page), par ex. un layout à 2 ou 3 colonnes, ou définir un gabarit personnalisé pour une personnalisation maximale.",
 	'cmspages:settings:pageshell' => "Coquille HTML",
-	'cmspages:settings:pageshell:details' => "Permet de choisir la structure HTML du site. Par défaut la page sera affichée au sein de l'interface habituelle du site (entête, menu, pied de page), mais vous pouvez également définir une structure personnalisée.",
+	'cmspages:settings:pageshell:details' => "Pour un contrôle total sur la structure HTML du site, vous pouvez utiliser d'autres \"pageshells\" (coquille HTML). Par défaut la page sera affichée dans l'interface habituelle du site (avec entête, menu, pied de page), mais vous pouvez également utiliser le pageshell \"iframe\" (qui conserve les styles mais pas l'interface), ou définir un pageshell personnalisé pour un contrôle total sur le rendu.",
 	'cmspages:editlayout' => "Editer le layout personnalisé",
 	'cmspages:layout:sidebar' => "Editer la colonne droite",
 	'cmspages:layout:sidebar_alt' => "Editer la colonne gauche",
@@ -213,6 +213,8 @@ $fr = array(
 	'cmspages:password:submit' => "Accéder",
 	'cmspages:password:form' => "Accès protégé par mot de passe",
 	
+	'cmspages:settings:categories' => "Rubriques",
+	'cmspages:settings:categories:details' => "Pour définir des rubriques, indiquez un titre de rubrique par ligne.<br />Pour définir une arborescence, vous pouvez indenter la liste en utilisant des tirets (plusieurs sous-niveaux possibles).",
 	
 );
 

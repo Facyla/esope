@@ -164,7 +164,8 @@ $pub_content .= '</fieldset>';
 
 $cat_content = '<fieldset class="cmspages-categories"><legend>' . elgg_echo('cmspages:fieldset:categories') . '</legend>';
 	// @TODO Categories should work like a custom menu - and may be edited by that tool
-	$cat_content .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'style' => "width:70%;")) . '</label></p>';
+	//$cat_content .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'style' => "width:70%;")) . '</label></p>';
+	$cat_content .= '<p>' . elgg_view('input/cmspages_categories', array('name' => 'categories', 'value' => $categories, 'style' => "max-width:50%;")) . '</p>';
 	// Tags
 	$cat_content .= '<p><label>' . elgg_echo('tags') . ' ' . elgg_view('input/tags', array('name' => 'cmspage_tags', 'value' => $tags, 'style' => "width:70%;")) . '</label></p>';
 $cat_content .= '</fieldset>';

@@ -3,8 +3,8 @@ $plugin = $vars['entity'];
 
 // Set options
 $yn_opts = array('yes' => elgg_echo('survey:settings:yes'), 'no' => elgg_echo('survey:settings:no'));
-$layout_opts = array('one_column' => 'one_column', 'one_sidebar' => 'one_sidebar', 'two_sidebar' => 'two_sidebar', 'custom' => 'custom');
-$pageshell_opts = array('default' => 'default', 'iframe' => 'iframe', 'custom' => 'custom');
+$layout_opts = array('one_column' => '1 colonne', 'one_sidebar' => '2 colonnes', 'two_sidebar' => '3 colonnes', 'cmspages' => 'Pleine largeur (sans marge)', 'custom' => 'Layout personnalisé');
+$pageshell_opts = array('default' => 'Par défaut', 'iframe' => 'iframe', 'custom' => 'Personnsalisé');
 
 
 // Set defaults
@@ -37,7 +37,7 @@ echo '<p>' . elgg_echo('cmspages:editurl') . ' <a href="' . $vars['url'] . 'cmsp
 
 echo '<p><label style="clear:left;">' . elgg_echo('cmspages:settings:editors') . '</label>';
 echo elgg_view('input/text', array('name' => 'params[editors]', 'value' => $plugin->editors)) . '<br />';
-echo elgg_echo('cmspages:settings:editors:help');
+echo '<em>' . elgg_echo('cmspages:settings:editors:help') . '</em>';
 $editors = explode(',', $plugin->editors);
 // Affichage des éditeurs actuels
 $users_count = elgg_get_entities(array('types' => 'user', 'guids' => $editors, 'count' => true));
@@ -86,19 +86,29 @@ echo '</p>';
 	*/
 	
 	// Default layout : existing, or custom
+	// @TODO allow to use arbitrary layout ?  eg. template selector instead of 1 predefined template name ?
 	echo '<p><label>' . elgg_echo('cmspages:settings:layout') . ' ';
-	echo elgg_view('input/dropdown', array('name' => 'params[layout]', 'value' => $plugin->layout, 'options_values' => $layout_opts));
-	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank">' . elgg_echo('cmspages:editlayout') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank">' . elgg_echo('cmspages:layout:sidebar') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank">' . elgg_echo('cmspages:layout:sidebar_alt') . '</a>';
-	echo '<br />' . elgg_echo('cmspages:settings:layout:details');
+	echo elgg_view('input/dropdown', array('name' => 'params[layout]', 'value' => $plugin->layout, 'options_values' => $layout_opts)) . '</label>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar_alt') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:editlayout') . '</a>';
+	echo '<br /><em>' . elgg_echo('cmspages:settings:layout:details') . '</em>';
 	echo '</p>';
 	
 	// Default pageshell : default / iframe (no Elgg interface) / or custom
 	echo '<p><label>' . elgg_echo('cmspages:settings:pageshell') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[pageshell]', 'value' => $plugin->pageshell, 'options_values' => $pageshell_opts));
-	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank">' . elgg_echo('cmspages:editpageshell') . '</a>';
-	echo '<br />' . elgg_echo('cmspages:settings:pageshell:details');
+	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:editpageshell') . '</a>';
+	echo '<br /><em>' . elgg_echo('cmspages:settings:pageshell:details') . '</em>';
+	echo '</p>';
+	
+//echo '</fieldset>';
+	
+	// Categories : syntax name::title::parent_name
+	echo '<p><label>' . elgg_echo('cmspages:settings:categories') . ' ';
+	echo elgg_view('input/plaintext', array('name' => 'params[categories]', 'value' => $plugin->categories));
+	echo '</label>';
+	echo '<br /><em>' . elgg_echo('cmspages:settings:categories:details') . '</em>';
 	echo '</p>';
 	
 //echo '</fieldset>';
