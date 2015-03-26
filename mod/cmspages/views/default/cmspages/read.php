@@ -106,7 +106,8 @@ switch ($cmspage->content_type) {
 	// Basically render cmspage raw content (text or HTML)
 	case 'rawhtml':
 	default:
-		$content .= elgg_view('output/tags', array('tags' => $cmspage->tags));
+		$content .= elgg_view('output/cmspages_tags', array('tags' => $cmspage->tags));
+		$content .= elgg_view('output/cmspages_categories', array('categories' => $cmspage->categories));
 		//$content .= $cmspage->description;
 		// we need elgg-output class for lists, also added a custom class for finer output control
 		// Can't use output/longtext view because of filtering
