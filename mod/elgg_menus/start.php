@@ -40,8 +40,27 @@ function elgg_menus_init() {
 	
 	elgg_register_admin_menu_item('configure', 'menus', 'appearance');
 	
+	elgg_register_page_handler('elgg_menus', 'elgg_menus_page_handler');
+	
+	// register the JavaScript (autoloaded in 1.10)
+	elgg_register_simplecache_view('js/elgg_menus/edit');
+	$js = elgg_get_simplecache_url('js', 'elgg_menus/edit');
+	elgg_register_js('elgg.elgg_menus.edit', $js);
+	
 }
 
+
+/* Public site page handler /p/article */
+function elgg_menus_page_handler($page) {
+	if (!empty($page[0])) $page[0] = 'preview';
+	set_input('menu', $page[1]);
+	switch($page[0]) {
+		case 'preview':
+		default:
+			if (include(elgg_get_plugins_path() . 'elgg_menus/pages/elgg_menus/preview.php')) return true;
+	}
+	return false;
+}
 
 /*
 function elgg_menus_function() {

@@ -703,6 +703,7 @@ function cmspages_set_categories_menu() {
 	foreach ($tree_categories as $cat) {
 		$item = new ElggMenuItem($cat['name'], $cat['title'], "r/{$cat['name']}");
 		if (!empty($cat['parent'])) $item->setParentName($cat['parent']);
+		// Note : alternative is to pass an array instead of an ElggMenuItem
 		elgg_register_menu_item('cmspages_categories', $item);
 	}
 	

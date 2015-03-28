@@ -432,7 +432,7 @@ function adf_platform_pagesetup(){
 		
 		// Admin menus
 		if(elgg_in_context("admin") && elgg_is_admin_logged_in()){
-			// Remove menu builder (unused)
+			// Remove menu builder (too basic + not used)
 			elgg_unregister_menu_item("page", "appearance:menu_items");
 			// Add to Admin > appearance menu
 			elgg_register_admin_menu_item('configure', 'main_theme_config', 'appearance');

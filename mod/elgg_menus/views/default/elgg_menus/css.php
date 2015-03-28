@@ -10,5 +10,5 @@
 .menu-editor-highlight { margin-bottom: 1ex; border:1px dashed grey; padding:0.5ex 1ex; height:5ex; }
 .menu-editor-item label { display:inline-block; padding:0.5ex 1ex; }
 .menu-editor-item label .elgg-input-text { width: 200px; }
-.menu-editor-item-content { display:none; }
+.menu-editor-item-content {  }
 

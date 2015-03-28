@@ -44,7 +44,21 @@ if ($cmspages) {
 		// Useful infos
 		$content .= '<li class="cmspages-item cmspages-item-' . $ent->content_type . '" id="cmspages-' . $ent->guid . '">';
 		
-		$content .= '<span style="float:right;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
+		// Statut et visibilité
+		//$content .= '<span style="float:right;">' . elgg_view('output/access', array('entity' => $ent)) . '</span>';
+		$content .= '<span style="float:right; min-width:20ex;">';
+			$content .= elgg_view('output/access', array('entity' => $ent, 'hide_text' => true)) . $access_opt[$ent->access_id];
+		$content .= '</span>';
+		// Statut = Publié ou Brouillon
+		$content .= '<span style="float:right; margin-right:2ex;">';
+			if ($cmspage->access_id === 0) {
+				$content .= '<span class="cmspages-unpublished">' . elgg_echo('cmspages:status:notpublished') . '</span>';
+			} else {
+				$content .= '<span class="cmspages-published">' . elgg_echo('cmspages:status:published') . '</span>';
+			}
+		$content .= '</span>';
+		
+		
 		
 		$content .= '<span class="cmspages-content_type">' . elgg_echo('cmspages:type:' . $ent->content_type) . '</span>';
 		
@@ -81,12 +95,10 @@ if ($cmspages) {
 
 <form name="cmspage-search" id="cmspages-form-search">
 	DEV - A VENIR
-	<label>Type de page
-		<?php echo elgg_echo('cmspages:content_type'); ?> <input type="text" name="content_type" value="" style="width:30ex; max-width:100%;" />
-	</label> 
-	<label>Visibilité
+	<label><?php echo elgg_echo('cmspages:content_type'); ?> <input type="text" name="content_type" value="" style="width:30ex; max-width:100%;" /></label> 
+	<label>
 		<?php
-		echo '<p><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => "", 'options' => $access_opt)) . '</label>';
+		echo '<p><label>Visibilité' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => "", 'options' => $access_opt)) . '</label>';
 		echo '</p>';
 		?>
 	</label> 
