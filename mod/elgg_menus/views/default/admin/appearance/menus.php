@@ -82,11 +82,64 @@ switch ($action) {
 	case 'view':
 	default:
 		if ($menu_name) {
-			$content .= '<form id="menu-editor-form-edit">';
-			$content .= elgg_view('input/submit', array('value' => elgg_echo('save')));
-			$content .= '<h2>' . elgg_echo('elgg_menus:edit:title') . '&nbsp;: ' . $menu_name . '</h2>';
 			
-			$content .= '<div id="menu-editor-preview">';
+			// @TODO PROCESS POST form data
+			$number_of_items = get_input('number_of_items');
+			$count = 0;
+			$new_items = array();
+			if ($number_of_items) {
+				$new_name = get_input('name');
+				$new_href = get_input('href');
+				$new_text = get_input('text');
+				$new_title = get_input('title');
+				$new_confirm = get_input('confirm');
+				$new_item_class = get_input('item_class');
+				$new_link_class = get_input('link_class');
+				$new_section = get_input('section');
+				$new_priority = get_input('priority');
+				$new_contexts = get_input('contexts');
+				$new_selected = get_input('selected');
+				$new_parent_name = get_input('parent_name');
+				//error_log("Loading item $i data : $new_title / $new_input_type / $new_empty_value / $new_required"); // debug
+				// Title is the only required value for items (default on text input)
+				for($i=0; $i<$number_of_items; $i++) {
+					if ($new_name[$i]) {
+						// Set defaults
+						if (empty($new_priority[$i])) { $new_priority[$i] = '100'; }
+						// Add/update item
+						$new_items[] = array(
+								'name' => $new_name[$i],
+								'href' => $new_href[$i],
+								'text' => $new_text[$i],
+								'title' => $new_title[$i],
+								'confirm' => $new_confirm[$i],
+								'item_class' => $new_item_class[$i],
+								'link_class' => $new_link_class[$i],
+								'section' => $new_section[$i],
+								'priority' => $new_priority[$i],
+								'contexts' => $new_contexts[$i],
+								'selected' => $new_selected[$i],
+								'parent_name' => $new_parent_name[$i],
+								// Adjust display order to received order
+								//'display_order' => ($count + 1) * 10,
+							);
+						$count++;
+					}
+				}
+			}
+			
+			// Save menu configuration
+			$content .= '<pre>' . print_r($new_items, true) . '</pre>';
+			$menu_config = serialize($new_items);
+			$custom_menus = elgg_set_plugin_setting("menu-$menu_name", $menu_config, 'elgg_menus');
+			
+			// @TODO : get generated menu (from config)
+			//elgg_menus_get_custom_menu($menu_name, $replace = true);
+			// Avec mode de gestion si menu pré-existant : replace, ou merge sinon
+			
+			
+			// Display current menu
+			$content .= '<div id="menu-editor-preview" style="float:right;">';
 			$content .= elgg_view('output/url', array(
 					'text' => elgg_echo('elgg_menus:preview', array($menu_name)), 
 					'href' => elgg_get_site_url() . "elgg_menus/preview/$menu_name?embed=inner",
@@ -94,11 +147,21 @@ switch ($action) {
 				));
 			$content .= '</div>';
 			
+			$content .= '<form id="menu-editor-form-edit">';
+			$content .= elgg_view('input/hidden', array('name' => "action", 'value' => "edit"));
+			
+			//$content .= elgg_view('input/submit', array('value' => elgg_echo('save')));
+			$content .= '<h2>' . elgg_echo('elgg_menus:edit:title') . '&nbsp;: ' . $menu_name . '</h2>';
+			
 			// Edition du titre du menu, si nom non réservé
 			$content .= '<div class="clearfloat"></div>';
 			if (!in_array($menu_name, $reserved_menus)) {
 				$content .= '<label>' . elgg_echo('elgg_menus:name') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name)) . '</label>';
+			} else {
+				$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
 			}
+			
+			// Options générales du menu
 			
 			// Structure the menu (section group + tree + order)
 			$menu = $menus[$menu_name];
@@ -132,14 +195,11 @@ switch ($action) {
 			}
 			
 			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
-
-			$content .= elgg_view('input/hidden', array(
-					'name' => 'number_of_items',
-					'id' => 'menu-editor-numitems',
-					'value' => $i,
-				));
+			$content .= elgg_view('input/hidden', array('name' => 'number_of_items', 'id' => 'menu-editor-numitems', 'value' => $i));
 			
+			$content .= elgg_view('input/submit', array('value' => elgg_echo('save')));
 			$content .= '</form>';
+			$content .= '<div class="clearfloat"></div>';
 			
 			// Ajout entrée de menu
 			$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
