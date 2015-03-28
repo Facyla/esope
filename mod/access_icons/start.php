@@ -14,6 +14,7 @@ elgg_register_event_handler('init', 'system', 'access_icons_init');
 function access_icons_init() {
 	
 	elgg_extend_view('css', 'access_icons/css');
+	elgg_extend_view('css/admin', 'access_icons/css');
 	
 	// It's pointless to tell not loggedin users that what they see is public...
 	if (elgg_is_logged_in()) {

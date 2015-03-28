@@ -44,6 +44,11 @@ Version History
 ======================
 
 
+
+0.9.9.1 (2015.03.28)
+  - admin interface
+
+
 0.9.9.0 (2015.03.25)
   - new SEO-friendly page handlers for articles (+ categories and tags later)
   - page selection and edit design

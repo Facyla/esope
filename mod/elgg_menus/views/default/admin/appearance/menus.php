@@ -26,14 +26,6 @@ $item = array('name', 'text', 'href', 'section', 'link_class', 'item_class', 'pa
 
 $content = '';
 
-/*
-// get site menu items
-$menu = $menu['site'];
-$builder = new ElggMenuBuilder($menu);
-$menu = $builder->getMenu('name');
-$menu_items = $menu['default'];
-*/
-
 $action = get_input('action', 'edit');
 
 $menu_name = get_input('menu_name', false);
@@ -44,6 +36,13 @@ elgg_load_js('elgg.elgg_menus.edit');
 
 // Tous les menus...
 $menus = elgg_get_config('menus');
+/*
+// get site menu items
+$menu = $menu['site'];
+$builder = new ElggMenuBuilder($menu);
+$menu = $builder->getMenu('name');
+*/
+
 
 // Site reserved menus
 $reserved_menus = array('topbar', 'page', 'site', 'extras', 'embed', 'footer', 'filter', 'admin', 'title', 'admin_title');
@@ -105,7 +104,9 @@ switch ($action) {
 				for($i=0; $i<$number_of_items; $i++) {
 					if ($new_name[$i]) {
 						// Set defaults
+						if (empty($new_section[$i])) { $new_section[$i] = 'default'; }
 						if (empty($new_priority[$i])) { $new_priority[$i] = '100'; }
+						if (empty($new_contexts[$i])) { $new_contexts[$i] = array('all'); }
 						// Add/update item
 						$new_items[] = array(
 								'name' => $new_name[$i],
@@ -126,19 +127,42 @@ switch ($action) {
 						$count++;
 					}
 				}
+			
+				// Save updated menu configuration
+				//$content .= '<pre>' . print_r($new_items, true) . '</pre>';
+				$menu_config = array('name' => $menu_name, 'mode' => 'replace', 'items' => $new_items);
+				$menu_config_data = serialize($menu_config);
+				$custom_menus = elgg_set_plugin_setting("menu-$menu_name", $menu_config_data, 'elgg_menus');
 			}
 			
-			// Save menu configuration
-			$content .= '<pre>' . print_r($new_items, true) . '</pre>';
-			$menu_config = serialize($new_items);
-			$custom_menus = elgg_set_plugin_setting("menu-$menu_name", $menu_config, 'elgg_menus');
+			// Load custom menu configuration
+			$menu_config = elgg_get_plugin_setting("menu-$menu_name", $menu_config_data, 'elgg_menus');
+			if ($menu_config) {
+				$menu_config_data = unserialize($menu_config);
 			
-			// @TODO : get generated menu (from config)
-			//elgg_menus_get_custom_menu($menu_name, $replace = true);
-			// Avec mode de gestion si menu pré-existant : replace, ou merge sinon
+				//elgg_menus_get_custom_menu($menu_name, $replace = true);
+				
+				// Avec mode de gestion si menu pré-existant : replace, ou merge sinon
+				// Clean previous menu
+				if ($menu_config['mode'] == 'replace') {
+					$menus[$menu_name] = array();
+					$menus = elgg_set_config('menus', $menus);
+				}
+				
+				// @TODO : 
+				// Set up new menu (from config)
+				foreach ($menu_config['items'] as $item) {
+					// Function also acccepts an array instead of an ElggMenuItem
+					elgg_register_menu_item($menu_name, $item);
+				}
+				
+				// Get new menu
+				$menus = elgg_get_config('menus');
+				//$content .= '<pre>' . print_r($menus[$menu_name], true) . '</pre>';
+			}
 			
 			
-			// Display current menu
+			// Display current menu (= updated or replaced)
 			$content .= '<div id="menu-editor-preview" style="float:right;">';
 			$content .= elgg_view('output/url', array(
 					'text' => elgg_echo('elgg_menus:preview', array($menu_name)), 
@@ -147,7 +171,8 @@ switch ($action) {
 				));
 			$content .= '</div>';
 			
-			$content .= '<form id="menu-editor-form-edit">';
+			// Menu editor form
+			$content .= '<form id="menu-editor-form-edit" method="POST">';
 			$content .= elgg_view('input/hidden', array('name' => "action", 'value' => "edit"));
 			
 			//$content .= elgg_view('input/submit', array('value' => elgg_echo('save')));
@@ -167,7 +192,7 @@ switch ($action) {
 			$menu = $menus[$menu_name];
 			/* Structured menu
 			*/
-			$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
+			//$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
 			$sort_by = elgg_extract('sort_by', $vars, 'priority'); // text, name, priority, register, ou callback php
 			$builder = new ElggMenuBuilder($menu);
 			$menu = $builder->getMenu($sort_by);

@@ -18,8 +18,8 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 
 
 function cmspages_init() {
-	global $CONFIG;
 	elgg_extend_view('css','cmspages/css');
+	elgg_extend_view('css/admin','cmspages/css');
 	if (!elgg_is_active_plugin('adf_public_platform')) elgg_extend_view('page/elements/head','cmspages/head_extend');
 	
 	// Register entity type
@@ -87,7 +87,6 @@ function cmspages_exists($pagetype = '') {
 
 /* Main tool page handler */
 function cmspages_page_handler($page) {
-	global $CONFIG;
 	$include_path = elgg_get_plugins_path() . 'cmspages/pages/cmspages/';
 	if (empty($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
@@ -155,7 +154,6 @@ function cmspage_url($cmspage) {
 
 /* Page setup. Adds admin controls */
 function cmspages_pagesetup() {
-	global $CONFIG;
 	// Facyla: allow main & local admins to use this tool
 	// and also a custom editor list
 	// if ( (elgg_in_context('admin') || elgg_is_admin_logged_in()) || ((elgg_in_context('cmspages_admin')) && in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) ) {
@@ -593,7 +591,6 @@ function cmspages_render_template($template, $content = null) {
 
 /* Recherche des templates dans un contenu texte */
 function cmspages_list_subtemplates($content, $recursive = true) {
-	global $CONFIG;
 	$return = '';
 	// List all template types = everything between {{ and }}
 	$motif = "#(?<=\{{)(.*?)(?=\}})#";

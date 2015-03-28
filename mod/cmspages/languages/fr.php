@@ -1,15 +1,17 @@
 <?php
 $fr = array(
-	'cmspages' => "Pages statiques (CMS)",
-	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page statique',
-	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages statiques',
+	'cmspages' => "Pages CMS",
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page CMS',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages CMS',
 	
 	'cmspages:pagetype' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)", // link ou anchor
 	'cmspages:cmspage_url' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)",
 	'cmspages:cmspage_view' => "<i class=\"fa fa-plug\"></i>Intégration dans Elgg",
 	'cmspages:cmspage_embed' => "<i class=\"fa fa-code\"></i>Code d'embarquement HTML",
 	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Utilisation dans un  gabarit",
-	'cmspages:pageselect' => "Choix de la page à éditer",
+	'cmspages:pageselect' => "Editer une page",
+	'cmspages:page:new' => "Créer une page",
+	'cmspages:page:new:name' => "Indiquer ici le nom de la nouvelle page",
 	
 	'cmspages:new' => "OK",
 	'cmspages:newpage' => "Créer la page \"%s\"",
@@ -22,8 +24,8 @@ $fr = array(
 	'cmspages:preview' => "Aperçu",
 	'cmspages:delete' => "Détruire la page",
 	'cmspages:deletewarning' => "Attention : la destruction d'une page est irréversible. Si vous souhaitez seulement la dé-publier, vous pouvez modifier son niveau d'accès sans en perdre le contenu.",
-	'cmspages:showinstructions' => "Afficher les explications détaillées",
-	'cmspages:instructions' => "Utilisation des pages statiques :<ul>
+	'cmspages:showinstructions' => "Mode d'emploi &nbsp; <i class=\"fa fa-toggle-down\"></i>",
+	'cmspages:instructions' => "<ul>
 			<li>ces pages sont accessibles via une URL spécifique (par ex. mainpage)</li>
 			<li>elles sont éditables par tout administrateur du site (global et local)</li>
 			<li>elles peuvent être intégrées à l'interface du site (lien depuis le menu, le pied de page, etc.)</li>
@@ -42,8 +44,8 @@ $fr = array(
 		</ul>",
 	
 	/* Status messages */
-	'cmspages:posted' => "La page statique a bien été mise à jour.",
-	'cmspages:deleted' => "La page statique a bien été supprimée.",
+	'cmspages:posted' => "La page CMS a bien été mise à jour.",
+	'cmspages:deleted' => "La page CMS a bien été supprimée.",
 	
 	/* Error messages */
 	'cmspages:nopreview' => "Aucun aperçu disponible pour le moment",
@@ -143,7 +145,7 @@ $fr = array(
 	'cmspages:layout:sidebar_alt' => "Editer la colonne gauche",
 	'cmspages:editpageshell' => "Définir/modifier le pageshell personnalisé",
 	
-	'cmspages:fieldset:seo' => "Options SEO",
+	'cmspages:fieldset:seo' => "Référencement",
 	'cmspages:seo:title' => "Titre",
 	'cmspages:seo:title:details' => "Maximum 60 caractères. Si vide, le titre de la page sera utilisé.",
 	'cmspages:seo:description' => "META Description",
@@ -162,7 +164,7 @@ $fr = array(
 	
 	'cmspages:fieldset:rendering' => "Modes de rendu",
 	'cmspages:fieldset:publication' => "Publication",
-	'cmspages:fieldset:information' => "Informations utiles",
+	'cmspages:fieldset:information' => "Informations utiles &nbsp; <i class=\"fa fa-toggle-down\"></i>",
 	'cmspages:fieldset:categories' => "Rubriquage",
 	'cmspages:access:current' => "Visibilité",
 	
@@ -175,7 +177,21 @@ $fr = array(
 	'cmspages:type:module' => "Module",
 	'cmspages:type:template' => "Template",
 	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
-	'cmspages:pageselect:filter' => "Filtres de recherche",
+	'cmspages:pageselect:filter' => "Rechercher une page",
+	'cmspages:search:title' => "Titre de la page",
+	'cmspages:search:filter' => "Filtres",
+	'cmspages:filter:all' => "Toutes",
+	'cmspages:access_id:none' => "",
+	'cmspages:status:none' => "",
+	'cmspages:content_type:none' => "",
+	'cmspages:sort:none' => "",
+	'cmspages:filter:access_id' => "Visibilité",
+	'cmspages:filter:status' => "En ligne",
+	'cmspages:filter:content_type' => "Type de page",
+	'cmspages:filter:sort' => "Trier par",
+	'cmspages:sort:latest' => "Date",
+	'cmspages:sort:alpha' => "Alphabétique",
+	'cmspages:search:nameortitle' => "Titre de la page",
 	
 	/* Modes d'emploi */
 	'cmspages:content_type:template:details' => "<i class=\"fa fa-info-circle\"></i>Les gabarits servent pour 2 types d'utilisations principales&nbsp;:
@@ -203,11 +219,11 @@ $fr = array(
 		Si vous avez besoin d'un contrôle direct sur le code source de la page, veuillez utiliser \"Code source (HTML sans éditeur)\".",
 	
 	'cmspages:status' => "Statut",
-	'cmspages:status:published' => "Publié",
-	'cmspages:status:notpublished' => "Brouillon (non publié)",
+	'cmspages:status:published' => "En ligne",
+	'cmspages:status:notpublished' => "Hors ligne",
 	
 	'cmspages:password' => "Protection par mot de passe",
-	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention : cette option ne s'applique que pour un affichage en pleine page.",
+	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention 1 : cette option ne s'applique que pour un affichage en pleine page. <br />Attention 2 : ajouter un mot de passe ne change pas la visbilité de la page.",
 	'cmspage:password:cleared' => "Déconnexion des pages réussies.",
 	'cmspage:password:cleared:page' => "Déconnexion de la page réussie",
 	'cmspages:password:submit' => "Accéder",

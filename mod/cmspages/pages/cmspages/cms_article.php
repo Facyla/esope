@@ -70,10 +70,12 @@ if ($cmspage) {
 	if (!empty($cmspage->seo_title)) $title = $cmspage->seo_title;
 	// Set META description
 	if (!empty($cmspage->seo_description)) $vars['meta_description'] = strip_tags($cmspage->seo_description);
-	// Set META keywords
-	if (!empty($cmspage->tags)) {
-		if (is_array($cmspage->tags)) $vars['meta_keywords'] = implode(', ', $cmspage->tags);
-		else $vars['meta_keywords'] = $cmspage->tags;
+	// Set META keywords : tags + optional SEO tags
+	$tags = (array)$cmspage->tags + (array)$cmspage->seo_tags;
+	array_unique($tags);
+	if (!empty($tags)) {
+		if (is_array($tags)) $vars['meta_keywords'] = implode(', ', $tags);
+		else $vars['meta_keywords'] = $tags;
 	}
 	// Set robots information : index/noindex, follow,nofollow  => all / none
 	if ($cmspage->seo_index == 'no') $robots = 'noindex,'; else $robots = 'index,';
