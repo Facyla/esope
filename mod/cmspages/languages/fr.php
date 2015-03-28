@@ -232,6 +232,11 @@ $fr = array(
 	'cmspages:settings:categories' => "Rubriques",
 	'cmspages:settings:categories:details' => "Pour définir des rubriques, indiquez un titre de rubrique par ligne.<br />Pour définir une arborescence, vous pouvez indenter la liste en utilisant des tirets (plusieurs sous-niveaux possibles).",
 	
+	'admin:cms' => "CMS",
+	'admin:cms:cmspages' => "Pages CMS",
+	'cmspages:configredirect' => "Pour gérer les pages CMS, vous pouvez utiliser directement la page " . elgg_get_site_url() . "cmspages",
+	
+	
 );
 
 add_translation("fr",$fr);

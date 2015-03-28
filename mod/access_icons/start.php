@@ -32,6 +32,8 @@ function access_icons_init() {
 		//elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
 	}
 	
+	elgg_register_admin_menu_item('administer', 'cmspages', 'cms');
+	
 }
 
 
