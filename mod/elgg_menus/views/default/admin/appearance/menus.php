@@ -173,64 +173,66 @@ if ($menu_name) {
 	} else {
 		$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
 	}
+	$content .= '<div class="clearfloat"></div>';
 	
 	// Options générales du menu
-	// Type de comportement : replace/merge (default merge for reserved/unset menus)
-	$menu_mode = "merge";
-	if ($menu_config) $menu_mode = $menu_config['mode'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:mode') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:mode:details') . '</em></p>';
+	$content .= '<div style="float:left; width:45%;">';
+		// Type de comportement : replace/merge (default merge for reserved/unset menus)
+		$menu_mode = "merge";
+		if ($menu_config) $menu_mode = $menu_config['mode'];
+		$content .= '<p><label>' . elgg_echo('elgg_menus:mode') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:mode:details') . '</em></p>';
+		
+		// URL handler
+		$menu_handler = '';
+		if ($menu_config) $menu_handler = $menu_config['handler'];
+		$content .= '<p><label>' . elgg_echo('elgg_menus:menu_handler') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_handler:details') . '</em></p>';
+		
+	$content .= '</div>';
 	
-	$menu_class = '';
-	if ($menu_config) $menu_class = $menu_config['class'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:40ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_class:details') . '</em></p>';
+	$content .= '<div style="float:right; width:45%;">';
+		// CSS class
+		$menu_class = '';
+		if ($menu_config) $menu_class = $menu_config['class'];
+		$content .= '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:30ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_class:details') . '</em></p>';
+		
+		// Sort by
+		$menu_sort_by = 'priority';
+		if ($menu_config) $menu_sort_by = $menu_config['sort_by'];
+		$content .= '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_sort_by:details') . '</em></p>';
 	
-	$menu_sort_by = 'priority';
-	if ($menu_config) $menu_sort_by = $menu_config['sort_by'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_sort_by:details') . '</em></p>';
-	
-	$menu_handler = '';
-	if ($menu_config) $menu_handler = $menu_config['handler'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_handler') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_handler:details') . '</em></p>';
-	
-	$menu_show_section_headers = 'no';
-	if ($menu_config) $menu_show_section_headers = $menu_config['show_section_headers'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . '&nbsp;: ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_show_section_headers:details') . '</em></p>';
+		// Show section header
+		$menu_show_section_headers = 'no';
+		if ($menu_config) $menu_show_section_headers = $menu_config['show_section_headers'];
+		$content .= '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . '&nbsp;: ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_show_section_headers:details') . '</em></p>';
+		
+	$content .= '</div>';
+	$content .= '<div class="clearfloat"></div>';
 	
 	
 	// Structure the menu (section group + tree + order)
 	$menu = $menus[$menu_name];
-	/* Structured menu
-	*/
+	/* Structured menu */
 	//$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
 	$sort_by = elgg_extract('sort_by', $vars, 'priority'); // text, name, priority, register, ou callback php
 	$builder = new ElggMenuBuilder($menu);
 	$menu = $builder->getMenu($sort_by);
-	//foreach ($menus[$menu_name] as $i => $menu_item) {
-	/* Uncomment for Structured menu
-	*/
 	foreach ($menu as $section_name => $section_items) {
 		$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
 		$content .= '<div class="menu-editor-items">';
-		/* Uncomment for unstructured menu
-		$content .= '<div class="menu-editor-items">';
-		foreach ($menu as $menu_item) {
-		*/
 		foreach ($section_items as $menu_item) {
 			if (!($menu_item instanceof ElggMenuItem)) continue;
 			$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item));
 		}
-		//$content .= '</div>';
-	/* Uncomment for Structured menu
-	*/
 		$content .= '</div>';
 		$content .= '</fieldset>';
 	}
-	
 	$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 	
-	// Ajout entrée de menu
+	// Entrée par défaut si aucune n'existe encore
+	if (empty($menu)) $content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => false, 'id' => 'menu-editor-newitem'));
+	
+	// Ajout nouvelle entrée de menu
 	$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
-	//$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => false, 'id' => 'menu-editor-newitem'));
 	$content .= elgg_view('input/button', array(
 			'id' => 'menu-editor-add-item',
 			'value' => elgg_echo('elgg_menus:edit:newitem'),

@@ -37,18 +37,23 @@ $content .= '<div class="menu-editor-item">';
 	}
 	
 	// Nommage des entrées : permettre de récupérer toute la liste sans devoir compter => variable[]
-	$content .= '<label>' . elgg_echo('elgg_menus:item:name') . ' ' . elgg_view('input/text', array('name' => "name[]", 'value' => $name, 'style' => "width:20ex;")) . '</label>';
-	$content .= '<label>' . elgg_echo('elgg_menus:item:href') . ' ' . elgg_view('input/text', array('name' => "href[]", 'value' => $href, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:name') . ' ' . elgg_view('input/text', array('name' => "name[]", 'value' => $name, 'style' => "width:12ex;", 'required' => 'required')) . '</label>';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:text') . ' ' . elgg_view('input/text', array('name' => "text[]", 'value' => $text, 'style' => "width:20ex;")) . '</label>';
-	$content .= '<label>' . elgg_echo('elgg_menus:item:title') . ' ' . elgg_view('input/text', array('name' => "title[]", 'value' => $title, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:title') . ' ' . elgg_view('input/text', array('name' => "title[]", 'value' => $title, 'style' => "width:30ex;")) . '</label>';
+	$content .= '<br />';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:href') . ' ' . elgg_view('input/text', array('name' => "href[]", 'value' => $href, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<br />';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:confirm') . ' ' . elgg_view('input/text', array('name' => "confirm[]", 'value' => $confirm, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<br />';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:contexts') . ' ' . elgg_view('input/text', array('name' => "contexts[]", 'value' => $contexts, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<br />';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:item_class') . ' ' . elgg_view('input/text', array('name' => "item_class[]", 'value' => $item_class, 'style' => "width:20ex;")) . '</label>';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:link_class') . ' ' . elgg_view('input/text', array('name' => "link_class[]", 'value' => $link_class, 'style' => "width:20ex;")) . '</label>';
+	$content .= '<br />';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:section') . ' ' . elgg_view('input/text', array('name' => "section[]", 'value' => $section, 'style' => "width:12ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:parent_name') . ' ' . elgg_view('input/text', array('name' => "parent_name[]", 'value' => $parent_name, 'style' => "width:20ex;")) . '</label>';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:priority') . ' ' . elgg_view('input/text', array('name' => "priority[]", 'value' => $priority, 'style' => "width:6ex;")) . '</label>';
-	$content .= '<label>' . elgg_echo('elgg_menus:item:contexts') . ' ' . elgg_view('input/text', array('name' => "contexts[]", 'value' => $contexts, 'style' => "width:40ex;")) . '</label>';
 	$content .= '<label>' . elgg_echo('elgg_menus:item:selected') . ' ' . elgg_view('input/dropdown', array('name' => "selected[]", 'value' => $selected, 'options_values' => $ny_opt)) . '</label>';
-	$content .= '<label>' . elgg_echo('elgg_menus:item:parent_name') . 'Parent name ' . elgg_view('input/text', array('name' => "parent_name[]", 'value' => $parent_name, 'style' => "width:20ex;")) . '</label>';
 	
 	$content .= '</div>';
 $content .= '</div>';
