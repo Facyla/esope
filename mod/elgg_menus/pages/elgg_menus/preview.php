@@ -43,6 +43,8 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
 
 
+
+
 // Render the page
 //$content = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 if ($embed) {
