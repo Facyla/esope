@@ -31,7 +31,7 @@ $content .= '<div class="menu-editor-item" id="' . $id . '">';
 	if ($menu_item) {
 		$content .= '<a href="javascript:void(0);" onClick="$(\'#' . $id . ' .menu-editor-item-content\').toggle();" style="float:right; margin-left: 2ex;"><i class="fa fa-cog"></i>' . elgg_echo('elgg_menus:item:edit') . '</a>';
 		//$content .= '<pre>' . print_r($menu_item, true) . '</pre>' . '</label>';
-		$content .= '<strong>' . $priority . ' - ' . $name . ' : ' . $href . '</strong>';
+		$content .= '<strong>' . $priority . ' - ' . $name . ' : ' . $text . ' => ' . $href . '</strong>';
 		//$content .= elgg_view('navigation/menu/elements/item', array('item' => $menu_item));
 		$content .= '<div class="menu-editor-item-content hidden">';
 	} else {

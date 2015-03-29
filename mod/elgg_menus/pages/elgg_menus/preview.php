@@ -20,17 +20,18 @@ $content = "";
 $name = get_input('menu', 'topbar');
 $embed = get_input('embed');
 
+$content .= '<div style="width:980px; max-width:100%; min-height:100px; background:white;">';
+
+/*
 $menus = elgg_get_config('menus');
 $builder = new ElggMenuBuilder($menus[$name]);
 $menu = $builder->getMenu($name);
-
-$content .= '<div style="width:980px; max-width:100%; min-height:100px; background:white;">';
-/*
 $params = array('name' => $name, 'menu' => $menu);
 $content .= elgg_view('navigation/menu/default', $params);
 */
-// Besoin de lancer l'affichage pour avoir le menu complet
-$dummy = elgg_view_menu($name);
+
+// Besoin de lancer l'affichage (n'importe quel elgg_view) pour avoir le menu complet (passage de pagesetup)
+$dummy = elgg_view('dummy');
 $content .= elgg_view_menu($name);
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div>';

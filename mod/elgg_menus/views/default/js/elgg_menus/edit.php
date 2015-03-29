@@ -30,7 +30,7 @@ elgg.elgg_menus.edit.addMenuItem = function(e) {
 	
 	// Increment total number of menu_items
 	numitems++;
-	$('#number-of-menu_items').val(numitems);
+	$('#menu-editor-numitems').val(numitems);
 	
 	// Create a new menu_item fieldset elements, rewritten as JS to include numitems param
 	// MenuItem object meta : title, description, input_type, options, empty_value, required

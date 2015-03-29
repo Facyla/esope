@@ -20,7 +20,7 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 function cmspages_init() {
 	elgg_extend_view('css','cmspages/css');
 	elgg_extend_view('css/admin','cmspages/css');
-	if (!elgg_is_active_plugin('adf_public_platform')) elgg_extend_view('page/elements/head','cmspages/head_extend');
+	if (!elgg_is_active_plugin('adf_public_platform')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
 	
 	// Register entity type
 	elgg_register_entity_type('object', 'cmspage');
@@ -163,7 +163,7 @@ function cmspages_pagesetup() {
 	}
 	
 	// Init custom CMS menu based on categories
-	//cmspages_set_categories_menu();
+	cmspages_set_categories_menu();
 	
 	return true;
 }
