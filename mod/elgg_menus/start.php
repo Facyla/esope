@@ -34,6 +34,8 @@ function elgg_menus_init() {
 	// Set up menus at last - so we can override
 	elgg_register_event_handler('pagesetup','system','elgg_menus_pagesetup', 1000);
 	
+	// @TODO hook sur prepare:menu avec poids 1000 pour pouvoir remplacer un menu système en dernier
+	//elgg_register_plugin_hook_handler(); // 'prepare', "menu:$menu_name"
 	
 }
 
@@ -91,7 +93,12 @@ function elgg_menus_setup_menu($menu_name) {
 }
 
 
-/* Menus prédéfinis ou définis par d'autres plugins */
+/* Menus prédéfinis ou définis par d'autres plugins
+ * Note : que faire des menus type 'entity' qui sont très contextuels ? 
+ *  => liste des menu_name à retirer
+ *  => merge/replace
+ *  => menu personnalisé
+ */
 function elgg_menus_get_system_menus() {
 	$system_menus = array();
 	// Registered menus at that time

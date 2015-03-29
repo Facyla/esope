@@ -9,6 +9,6 @@
 .menu-editor-item { margin-bottom: 1ex; min-height:2ex; border:1px solid #ccc; padding:0.5ex 1ex; border-radius: 6px; }
 .menu-editor-highlight { margin-bottom: 1ex; border:1px dashed grey; padding:0.5ex 1ex; height:5ex; }
 .menu-editor-item label { display:inline-block; padding:0.5ex 1ex; }
-.menu-editor-item label .elgg-input-text { width: 200px; }
+.menu-editor-item label .elgg-input-text { max-width: 100%; }
 .menu-editor-item-content {  }
 

@@ -35,6 +35,7 @@ elgg_load_js('elgg.elgg_menus.edit');
 // Tous les menus actuels (y compris personnalisés)...
 $menus = elgg_get_config('menus');
 
+$ny_opt = array('no' => elgg_echo('survey:settings:no'), 'yes' => elgg_echo('survey:settings:yes'));
 // System menus
 $system_menus = elgg_menus_get_system_menus();
 // Custom menus
@@ -64,6 +65,8 @@ if ($menu_name) {
 	$new_name = get_input('name');
 	//merge or replace mode
 	$menu_mode = get_input('menu_mode', 'merge');
+	// Entrées à retirer d'un menu pré-existant (si merge)
+	$menu_remove = get_input('menu_remove');
 	//class: string the class for the entire menu.
 	$menu_class = get_input('menu_class');
 	//sort_by => string or php callback string options: 'name', 'priority', 'title' (default), 'register' (registration order) or a php callback (a compare function for usort)
@@ -74,9 +77,7 @@ if ($menu_name) {
 	$menu_show_section_headers = get_input('menu_show_section_headers', 'no');
 	
 	// Count menu items from received items count
-	$number_of_items = get_input('elgg_menus_num_items');
-	if (count($new_name) > $number_of_items) $number_of_items = count($new_name);
-	
+	$number_of_items = count($new_name);
 	$count = 0;
 	$new_items = array();
 	if ($number_of_items) {
@@ -96,7 +97,7 @@ if ($menu_name) {
 			if ($new_name[$i]) {
 				// Set defaults
 				if (empty($new_section[$i])) { $new_section[$i] = 'default'; }
-				if (empty($new_priority[$i])) { $new_priority[$i] = 100 + $i; }
+				if (empty($new_priority[$i])) { $new_priority[$i] = 100; }
 				if (empty($new_contexts[$i])) { $new_contexts[$i] = array('all'); }
 				if (!empty($new_item_class[$i])) {
 					$new_item_class[$i] = explode(' ', $new_item_class[$i]);
@@ -166,8 +167,9 @@ if ($menu_name) {
 	
 	// Edition du titre du menu, si non réservé
 	$content .= '<div class="clearfloat"></div>';
-	if (!in_array($menu_name, $system_menus)) {
-		$content .= '<label>' . elgg_echo('elgg_menus:name') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name)) . '</label>';
+	//if (!in_array($menu_name, $system_menus)) {
+	if (in_array($menu_name, $custom_menus)) {
+		$content .= '<label>' . elgg_echo('elgg_menus:name') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => "max-width:20ex;")) . '</label>';
 	} else {
 		$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
 	}
@@ -176,23 +178,23 @@ if ($menu_name) {
 	// Type de comportement : replace/merge (default merge for reserved/unset menus)
 	$menu_mode = "merge";
 	if ($menu_config) $menu_mode = $menu_config['mode'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:mode') . '&nbsp;: ' . elgg_view('input/dropdown', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:mode:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('elgg_menus:mode') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:mode:details') . '</em></p>';
 	
 	$menu_class = '';
 	if ($menu_config) $menu_class = $menu_config['class'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_class') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_class:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:40ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_class:details') . '</em></p>';
 	
 	$menu_sort_by = 'priority';
 	if ($menu_config) $menu_sort_by = $menu_config['sort_by'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_sort_by', 'value' => $menu_sort_by)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_sort_by:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_sort_by:details') . '</em></p>';
 	
 	$menu_handler = '';
 	if ($menu_config) $menu_handler = $menu_config['handler'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_handler') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_handler:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_handler') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler, 'style' => "max-width:12ex;")) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_handler:details') . '</em></p>';
 	
 	$menu_show_section_headers = 'no';
 	if ($menu_config) $menu_show_section_headers = $menu_config['show_section_headers'];
-	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . '&nbsp;: ' . elgg_view('input/text', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_show_section_headers:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . '&nbsp;: ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label><br /><em>' . elgg_echo('elgg_menus:menu_show_section_headers:details') . '</em></p>';
 	
 	
 	// Structure the menu (section group + tree + order)
@@ -203,7 +205,6 @@ if ($menu_name) {
 	$sort_by = elgg_extract('sort_by', $vars, 'priority'); // text, name, priority, register, ou callback php
 	$builder = new ElggMenuBuilder($menu);
 	$menu = $builder->getMenu($sort_by);
-	$i = 0;
 	//foreach ($menus[$menu_name] as $i => $menu_item) {
 	/* Uncomment for Structured menu
 	*/
@@ -216,8 +217,7 @@ if ($menu_name) {
 		*/
 		foreach ($section_items as $menu_item) {
 			if (!($menu_item instanceof ElggMenuItem)) continue;
-			$i++;
-			$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item, 'id' => 'menu-editor-item-' . $i));
+			$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item));
 		}
 		//$content .= '</div>';
 	/* Uncomment for Structured menu
@@ -227,7 +227,6 @@ if ($menu_name) {
 	}
 	
 	$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
-	$content .= elgg_view('input/hidden', array('name' => 'elgg_menus_num_items', 'id' => 'menu-editor-numitems', 'value' => $i));
 	
 	// Ajout entrée de menu
 	$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
@@ -264,6 +263,15 @@ $(document).ready(function(){
 		connectWith: '.menu-editor-items', 
 		// Custom callback function
 		update: function(event, ui) {
+			/*
+			var priority = ui.item.val();
+			var section = ui.item.children('input[name*="section"]').val();
+			alert("Priority="+priority+" - Section="+section);
+			ui.item.children('input[name*="priority"]').val("500");
+			ui.item.children('input[name*="section"]').val("default");
+			*/
+			console.log(ui.item);
+			//console.log(event);
 			//ui.item
 			// Changement d'ordre : priorité entre celle des entrées suivante et précédente 
 			// (au moins identique à celle entrée précédente, car l'ordre sera conservé, de facto si on enregistre dans l'ordre)

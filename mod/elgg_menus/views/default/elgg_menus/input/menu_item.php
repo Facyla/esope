@@ -1,10 +1,8 @@
 <?php
 
-$yes_no_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
+$yn_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
+$ny_opt = array('no' => elgg_echo('survey:option:no'), 'yes' => elgg_echo('survey:option:yes'));
 
-
-
-$id = elgg_extract('id', $vars);
 $menu_item = elgg_extract('menu_item', $vars);
 
 $name = $text = $href = $section = $link_class = $item_class = $parent_name = $contexts = $title = $selected = $confirm = $data = $priority = '';
@@ -24,12 +22,12 @@ if ($menu_item instanceof ElggMenuItem) {
 	$priority = $menu_item->getPriority();
 }
 
-$content .= '<div class="menu-editor-item" id="' . $id . '">';
+$content .= '<div class="menu-editor-item">';
 	
-	$content .= '<span style="float:right; margin-left: 2ex;"><a href="javascript:void(0);" class="menu-editor-delete-item" title="' . elgg_echo('elgg_menus:delete') . '" data-id="' . $id . '"><i class="fa fa-trash"></i></a></span>';
+	$content .= '<a href="javascript:void(0);" class="menu-editor-delete-item" title="' . elgg_echo('elgg_menus:delete') . '" style="float:right; margin-left: 2ex;"><i class="fa fa-trash"></i></a>';
 	
+	$content .= '<a href="javascript:void(0);" class="menu-editor-toggle-options" style="float:right; margin-left: 2ex;"><i class="fa fa-cog"></i>' . elgg_echo('elgg_menus:item:edit') . '</a>';
 	if ($menu_item) {
-		$content .= '<a href="javascript:void(0);" onClick="$(\'#' . $id . ' .menu-editor-item-content\').toggle();" style="float:right; margin-left: 2ex;"><i class="fa fa-cog"></i>' . elgg_echo('elgg_menus:item:edit') . '</a>';
 		//$content .= '<pre>' . print_r($menu_item, true) . '</pre>' . '</label>';
 		$content .= '<strong>' . $priority . ' - ' . $name . ' : ' . $text . ' => ' . $href . '</strong>';
 		//$content .= elgg_view('navigation/menu/elements/item', array('item' => $menu_item));
@@ -39,18 +37,18 @@ $content .= '<div class="menu-editor-item" id="' . $id . '">';
 	}
 	
 	// Nommage des entrées : permettre de récupérer toute la liste sans devoir compter => variable[]
-	$content .= '<label>Name ' . elgg_view('input/text', array('name' => "name[]", 'value' => $name)) . '</label>';
-	$content .= '<label>URL ' . elgg_view('input/text', array('name' => "href[]", 'value' => $href)) . '</label>';
-	$content .= '<label>Text ' . elgg_view('input/text', array('name' => "text[]", 'value' => $text)) . '</label>';
-	$content .= '<label>Tooltip ' . elgg_view('input/text', array('name' => "title[]", 'value' => $title)) . '</label>';
-	$content .= '<label>Confirm ' . elgg_view('input/text', array('name' => "confirm[]", 'value' => $confirm)) . '</label>';
-	$content .= '<label>Item class ' . elgg_view('input/text', array('name' => "item_class[]", 'value' => $item_class)) . '</label>';
-	$content .= '<label>Link class ' . elgg_view('input/text', array('name' => "link_class[]", 'value' => $link_class)) . '</label>';
-	$content .= '<label>Section ' . elgg_view('input/text', array('name' => "section[]", 'value' => $section)) . '</label>';
-	$content .= '<label>Priority ' . elgg_view('input/text', array('name' => "priority[]", 'value' => $priority)) . '</label>';
-	$content .= '<label>Context ' . elgg_view('input/text', array('name' => "contexts[]", 'value' => $contexts)) . '</label>';
-	$content .= '<label>Selected ' . elgg_view('input/text', array('name' => "selected[]", 'value' => $selected)) . '</label>';
-	$content .= '<label>Parent name ' . elgg_view('input/text', array('name' => "parent_name[]", 'value' => $parent_name)) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:name') . ' ' . elgg_view('input/text', array('name' => "name[]", 'value' => $name, 'style' => "width:20ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:href') . ' ' . elgg_view('input/text', array('name' => "href[]", 'value' => $href, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:text') . ' ' . elgg_view('input/text', array('name' => "text[]", 'value' => $text, 'style' => "width:20ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:title') . ' ' . elgg_view('input/text', array('name' => "title[]", 'value' => $title, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:confirm') . ' ' . elgg_view('input/text', array('name' => "confirm[]", 'value' => $confirm, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:item_class') . ' ' . elgg_view('input/text', array('name' => "item_class[]", 'value' => $item_class, 'style' => "width:20ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:link_class') . ' ' . elgg_view('input/text', array('name' => "link_class[]", 'value' => $link_class, 'style' => "width:20ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:section') . ' ' . elgg_view('input/text', array('name' => "section[]", 'value' => $section, 'style' => "width:12ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:priority') . ' ' . elgg_view('input/text', array('name' => "priority[]", 'value' => $priority, 'style' => "width:6ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:contexts') . ' ' . elgg_view('input/text', array('name' => "contexts[]", 'value' => $contexts, 'style' => "width:40ex;")) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:selected') . ' ' . elgg_view('input/dropdown', array('name' => "selected[]", 'value' => $selected, 'options_values' => $ny_opt)) . '</label>';
+	$content .= '<label>' . elgg_echo('elgg_menus:item:parent_name') . 'Parent name ' . elgg_view('input/text', array('name' => "parent_name[]", 'value' => $parent_name, 'style' => "width:20ex;")) . '</label>';
 	
 	$content .= '</div>';
 $content .= '</div>';
@@ -63,7 +61,7 @@ $question_content .= '<p class="question_title_' . $i . '"><label>' . elgg_echo(
 // Group all other input elements to we can hide them on-demand
 $question_content .= '<div class="survey-input-question-details">';
 	
-	$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/pulldown', array('name' => "question_required[]", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
+	$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/pulldown', array('name' => "question_required[]", 'value' => $required, 'options_values' => $yn_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
 
 	$question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/pulldown', array('name' => "question_input_type[]", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey-input-question-input-type', 'data-id' => $i)) . '</label>';
 	// Add some help for each input type
