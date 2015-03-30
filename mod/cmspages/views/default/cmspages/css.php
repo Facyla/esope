@@ -21,7 +21,7 @@ pre, code { word-break:break-all; }
 
 /* CMS Pages */
 .elgg-context-cmspages_admin .elgg-output ul { list-style-type:disc; margin-left:3ex; }
-.elgg-context-cmspages_admin .elgg-module-popup { background: white; border: 1px solid; padding: 1ex; }
+.elgg-module-popup.cmspages-popup { background: white; border: 1px solid; padding: 1ex; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs { float: left; margin-right: 2ex; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs li { float: left; margin-right: 1ex; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs li:before { content:">"; margin-right:1ex; }
@@ -62,5 +62,6 @@ pre, code { word-break:break-all; }
 .elgg-menu-cmspages-categories {  }
 .elgg-menu-cmspages-categories .elgg-child-menu { display:none; }
 .elgg-menu-cmspages-categories li:hover .elgg-child-menu { display: block; }
+.elgg-context-cmspages_admin .elgg-menu-cmspages-categories .elgg-child-menu { position: absolute; }
 
 

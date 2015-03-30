@@ -368,36 +368,35 @@ function cmspages_display_opts() {
 
 
 /* Returns layouts and config
- * Eg. layout params tu be used
- * Note only templates should use this as it defines a full interface
+ * Eg. layout params to be used
  */
-function cmspages_layout_opts() {
-	$display_opts = array(
-			'one_column' => "1 colonne (par défaut)",
-			'one_sidebar' => "2 colonnes (menu droit)",
-			'two_sidebar' => '3 colonnes (menu gauche + droit)', 
-			'custom' => 'Layout personnalisé',
+function cmspages_layouts_opts($add_default = true) {
+	$layout_opts = array(
+			'one_column' => elgg_echo('cmspages:layout:one_column'),
+			'one_sidebar' => elgg_echo('cmspages:layout:one_sidebar'),
+			'two_sidebar' => elgg_echo('cmspages:layout:two_sidebar'), 
+			'custom' => elgg_echo('cmspages:layout:custom'),
 		);
+	if ($add_default) $layout_opts[""] = elgg_echo('cmspages:layout:');
 	// @TODO : Permettre d'ajouter d'autres layouts via config ?
-	return $display_opts;
+	return $layout_opts;
 }
 
-
-/* Returns layouts and config
- * Eg. layout params tu be used
- * Note only templates should use this as it defines a full interface
+/* Returns pageshells and config
+ * Eg. pageshell params to be used
  */
-function cmspages_pageshell_opts() {
-	$display_opts = array(
-			'default' => "Site (par défaut)",
-			'cmspages' => 'Site pleine largeur (sans marge)', 
-			'cmspages_cms' => 'Site pleine largeur + menu CMS', 
-			'iframe' => "Iframe (sans interface)",
-			'inner' => "Contenu brut (pour AJAX)",
-			'custom' => 'Pageshell personnalisé',
+function cmspages_pageshells_opts($add_default = true) {
+	$pageshell_opts = array(
+			'default' => elgg_echo('cmspages:pageshell:default'),
+			'cmspages' => elgg_echo('cmspages:pageshell:cmspages'),
+			'cmspages_cms' => elgg_echo('cmspages:pageshell:cmspages_cms'), 
+			'iframe' => elgg_echo('cmspages:pageshell:iframe'),
+			'inner' => elgg_echo('cmspages:pageshell:inner'),
+			'custom' => elgg_echo('cmspages:pageshell:custom'),
 		);
+	if ($add_default) $pageshell_opts[""] = elgg_echo('cmspages:pageshell:');
 	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
-	return $display_opts;
+	return $pageshell_opts;
 }
 
 
@@ -690,20 +689,17 @@ function cmspages_get_pages_by_tag($tags) {
 }
 
 
-/* Registers an Elgg tree menu from categories config
- */
+/* Registers an Elgg menu from categories config */
 function cmspages_set_categories_menu() {
-	// List tree categories
-	// For each entry, add parent if level > 0
+	// List categories - For each entry, add parent if set
 	$tree_categories = elgg_get_plugin_setting('menu_categories');
 	$tree_categories = unserialize($tree_categories);
-	foreach ($tree_categories as $cat) {
-		$item = new ElggMenuItem($cat['name'], $cat['title'], "r/{$cat['name']}");
+	if (is_array($tree_categories)) foreach ($tree_categories as $cat) {
+		$item = new ElggMenuItem($cat['name'], $cat['title'], 'r/'.$cat['name']);
 		if (!empty($cat['parent'])) $item->setParentName($cat['parent']);
 		// Note : alternative is to pass an array instead of an ElggMenuItem
 		elgg_register_menu_item('cmspages_categories', $item);
 	}
-	
 	// Render menu
 	//elgg_view_menu('cmspages_categories');
 	

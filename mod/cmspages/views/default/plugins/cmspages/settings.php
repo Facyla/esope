@@ -3,10 +3,8 @@ $plugin = $vars['entity'];
 
 // Set options
 $yn_opts = array('yes' => elgg_echo('survey:settings:yes'), 'no' => elgg_echo('survey:settings:no'));
-$layout_opts = array('one_column' => '1 colonne', 'one_sidebar' => '2 colonnes', 'two_sidebar' => '3 colonnes', 'custom' => 'Layout personnalisé');
-$layout_opts = cmspages_layout_opts();
-$pageshell_opts = array('default' => 'Site (par défaut)', 'cmspages' => 'Site pleine largeur (sans marge)', 'iframe' => 'iframe', 'custom' => 'Personnalisé');
-$pageshell_opts = cmspages_pageshell_opts();
+$layout_opts = cmspages_layouts_opts(false);
+$pageshell_opts = cmspages_pageshells_opts(false);
 
 
 // Set defaults
@@ -91,18 +89,30 @@ echo '</p>';
 	// @TODO allow to use arbitrary layout ?  eg. template selector instead of 1 predefined template name ?
 	echo '<p><label>' . elgg_echo('cmspages:settings:layout') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[layout]', 'value' => $plugin->layout, 'options_values' => $layout_opts)) . '</label>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar_alt') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:editlayout') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar:edit') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar_alt:edit') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:custom:edit') . '</a>';
 	echo '<br /><em>' . elgg_echo('cmspages:settings:layout:details') . '</em>';
 	echo '</p>';
 	
 	// Default pageshell : default / iframe (no Elgg interface) / or custom
 	echo '<p><label>' . elgg_echo('cmspages:settings:pageshell') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[pageshell]', 'value' => $plugin->pageshell, 'options_values' => $pageshell_opts));
-	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:editpageshell') . '</a>';
+	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:pageshell:edit') . '</a>';
 	echo '<br /><em>' . elgg_echo('cmspages:settings:pageshell:details') . '</em>';
 	echo '</p>';
+	
+	// Menu CMS : categories ?  ou menu personnalisé
+	if (elgg_is_active_plugin('elgg_menus')) {
+		if (function_exists('elgg_menus_menus_opts')) {
+			$cms_menus_opt = elgg_menus_menus_opts();
+			$cms_menus_opt[''] = elgg_echo('cmspages:settings:cms_menu:cmspages_categories');
+			echo '<p><label>' . elgg_echo('cmspages:settings:cms_menu') . ' ';
+			echo elgg_view('input/dropdown', array('name' => 'params[cms_menu]', 'value' => $plugin->cms_menu, 'options_values' => $cms_menus_opt));
+			echo '</label><br /><em>' . elgg_echo('cmspages:settings:cms_menu:details') . '</em>';
+			echo '</p>';
+		}
+	}
 	
 //echo '</fieldset>';
 
@@ -154,9 +164,10 @@ if ($plugin->categories) {
 			$menu_categories[] = $menu_cat;
 		}
 	}
-	$plugin->menu_categories = serialize($menu_categories);
+	$menu_categories_data = serialize($menu_categories);
+	elgg_set_plugin_setting('menu_categories', menu_categories_data, 'cmspages');
 }
 //echo '<pre>' . print_r($menu_categories, true) . '</pre>';
 cmspages_set_categories_menu();
-echo elgg_view_menu('cmspages_categories', array('sort_by' => 'weight'));
+echo elgg_view_menu('cmspages_categories', array('sort_by' => 'weight', 'class' => "elgg-menu-hz"));
 

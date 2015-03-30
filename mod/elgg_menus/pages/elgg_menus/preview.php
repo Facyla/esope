@@ -17,31 +17,30 @@ $title = "Prévisualisation des menus";
 
 $content = "";
 
-$name = get_input('menu', 'topbar');
+$menu_name = get_input('menu', 'topbar');
 $embed = get_input('embed');
 
-$content .= '<div style="width:980px; max-width:100%; min-height:100px; background:white;">';
 
-/*
-$menus = elgg_get_config('menus');
-$builder = new ElggMenuBuilder($menus[$name]);
-$menu = $builder->getMenu($name);
-$params = array('name' => $name, 'menu' => $menu);
-$content .= elgg_view('navigation/menu/default', $params);
-*/
+// Pass menu name to the view
+$vars['menu_name'] = $menu_name;
+
+
+//$content .= "CONFIG : {$vars['sort_by']} / {$vars['class']} / {$vars['item_class']} / {$vars['show_section_headers']}<br />";
 
 // Besoin de lancer l'affichage (n'importe quel elgg_view) pour avoir le menu complet (passage de pagesetup)
 $dummy = elgg_view('dummy');
-$content .= elgg_view_menu($name);
+
+// Sur fond blanc
+$content .= '<div style="width:980px; max-width:100%; min-height:100px; background:white;">';
+$content .= elgg_view('elgg_menus/menu', $vars);
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
 
 // Idem sur fond noir
 $content .= '<div style="width:980px; max-width:100%; min-height:100px; background:black;">';
-$content .= elgg_view_menu($name);
+$content .= elgg_view('elgg_menus/menu', $vars);
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
-
 
 
 

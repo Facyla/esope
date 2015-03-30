@@ -82,8 +82,10 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 		$module = $module_change[0];
 		$module_config = $module_change[1];
 	}
-	$display = $cmspage->display; // Can it be displayed in its own page ? ('no' => no, empty or not set => default layout, other value => use custom layout $value)
+	$display = $cmspage->display; // Can it be displayed in its own page ? empty = all allowed, no = view only, noview = page only
 	$template = $cmspage->template; // This page will use the custom cmspage template
+	$layout = $cmspage->layout; // Use a custom layout ?
+	$pageshell = $cmspage->pageshell; // Use a custom pageshell ?
 	$css = $cmspage->css;
 	$js = $cmspage->js;
 } else {
@@ -181,7 +183,13 @@ $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering'
 	// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</p>';
+	
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</p>';
+		
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
+	
 $render_content .= '</fieldset>';
+
 
 
 // Featured image

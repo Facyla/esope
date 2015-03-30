@@ -48,6 +48,8 @@ $module = get_input('module');
 $module_config = get_input('module_config');
 $display = get_input('display');
 $template = get_input('template');
+$layout = get_input('layout');
+$pageshell = get_input('pageshell');
 $page_css = get_input('page_css');
 $page_js = get_input('page_js');
 // SEO
@@ -129,6 +131,8 @@ $cmspage->tags = $tagarray;
 $cmspage->contexts = $contexts;
 $cmspage->display = $display;
 $cmspage->template = $template;
+$cmspage->layout = $layout;
+$cmspage->pageshell = $pageshell;
 $cmspage->css = $page_css;
 $cmspage->js = $page_js;
 // @todo unused yet

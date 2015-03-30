@@ -34,15 +34,17 @@ function elgg_menus_init() {
 	// Set up menus at last - so we can override
 	elgg_register_event_handler('pagesetup','system','elgg_menus_pagesetup', 1000);
 	
-	// MERGE MODE ONLY
+	/* Register menu hook : register,menu-menu_name
 	// @TODO hook sur register:menu avec poids 1000 pour pouvoir ajouter et retirer items d'un menu construit en dernier
 	//elgg_register_plugin_hook_handler(); // 'prepare', "menu:$menu_name"
+	 */
 	elgg_register_plugin_hook_handler('register', 'all', 'elgg_menus_register_menu_hook');
 	
-	// REPLACE MODE ONLY
-	// @TODO hook sur prepare:menu avec poids 1000 pour pouvoir remplacer un menu système en dernier
-	//elgg_register_plugin_hook_handler(); // 'prepare', "menu:$menu_name"
-	elgg_register_plugin_hook_handler('prepare', 'all', 'elgg_menus_prepare_menu_hook');
+	/* Latest menu hook : prepare,menu-menu_name
+	 * Note : hook a priori non nécessaire sauf si on veut vraiment être sûr que plus rien ne puisse être modifié par la suite
+	 *  @TODO hook sur prepare:menu avec poids 1000 pour pouvoir remplacer un menu système en dernier
+	 */
+	//elgg_register_plugin_hook_handler('prepare', 'all', 'elgg_menus_prepare_menu_hook');
 	
 }
 
@@ -60,62 +62,6 @@ function elgg_menus_page_handler($page) {
 }
 
 
-/* Add custom items to menu, and/or remove items */
-function elgg_menus_register_menu_hook($hook, $type, $return, $params) {
-	if (substr($type, 0, 5) != 'menu:') { return $return; }
-	
-	// Filter : 'menu-$menu_name'
-	$menu_name = substr($type, 5);
-	$menu_config = elgg_menus_get_menu_config($menu_name);
-	
-	/*
-	global $CONFIG;
-	// Ne s'applique que pour le mode 'merge'
-	if ($menu_config['mode'] == 'merge') {
-		error_log("register MENU : MERGE $menu_name => OK");
-		// Set up new entries
-		elgg_menus_setup_menu($menu_name);
-	} else if ($menu_config['mode'] == 'replace') {
-		// Ne s'applique que pour le mode 'replace'
-		error_log("register MENU : REPLACE $menu_name => OK");
-		$CONFIG->menus[$menu_name] = array();
-		elgg_menus_setup_menu($menu_name);
-	}
-	$return = $CONFIG->menus[$menu_name];
-	*/
-	
-	return $return;
-}
-
-
-/* Replace menu with custom one at latest
- * Note : on ne devrait pas avoir besoin d'intervenir aussi en aval : hook register maxi, voire pagesetup devrait suffire
- */
-function elgg_menus_prepare_menu_hook($hook, $type, $return, $params) {
-	if (substr($type, 0, 5) != 'menu:') { return $return; }
-	
-	// Filter : 'menu-$menu_name'
-	$menu_name = substr($type, 5);
-	$menu_config = elgg_menus_get_menu_config($menu_name);
-	error_log("prepare MENU : $menu_name");
-	
-	/*
-	// Ne s'applique que pour le mode 'replace'
-	if ($menu_config['mode'] != 'replace') { return $return; }
-	
-	error_log("prepare MENU : $menu_name => OK ({$menu_config['mode']})");
-	
-	// Clear current values
-	$return = array();
-	
-	// @TODO Setup new menu
-	//elgg_menus_setup_menu($menu_name);
-	$menu = $CONFIG->menus[$menu_name];
-	*/
-	
-	return $return;
-}
-
 /* Page setup : loads custom menus */
 function elgg_menus_pagesetup() {
 	// Get custom menus names
@@ -125,6 +71,85 @@ function elgg_menus_pagesetup() {
 	foreach ($custom_menus as $menu_name) { elgg_menus_setup_menu($menu_name); }
 	return true;
 }
+
+
+/* Add custom items to menu, and/or remove items */
+function elgg_menus_register_menu_hook($hook, $type, $return, $params) {
+	if (substr($type, 0, 5) != 'menu:') { return $return; }
+	
+	// Filter : 'menu-$menu_name'
+	$menu_name = substr($type, 5);
+	$menu_config = elgg_menus_get_menu_config($menu_name);
+	global $CONFIG;
+	
+	switch($menu_config['mode']) {
+		// Do not change menu
+		case 'disabled':
+			break;
+		
+		// No menu at all
+		case 'clear':
+			$return = array();
+			break;
+		
+		// Nettoyage du menu précédent si demandé : replace (ou merge sinon)
+		case 'replace':
+			$CONFIG->menus[$menu_name] = array();
+			elgg_menus_setup_menu($menu_name);
+			/* Alternative menu creation method
+			$return = array();
+			foreach($menu_config['items'] as $menu_item) { $return[] = $item = \ElggMenuItem::factory($menu_item); }
+			$CONFIG->menus[$menu_name] = $return;
+			*/
+			$return = $CONFIG->menus[$menu_name];
+			break;
+			
+		// Set up new items and remove unnwanted ones
+		case 'merge':
+		default:
+			// New items already added in pagesetup
+			//elgg_menus_setup_menu($menu_name);
+			// Remove unwanted menu items
+			if (!empty($menu_config['remove'])) {
+				foreach ($return as $k => $menu_item) {
+					// error_log("$k => {$menu_item->getName()}"); // debug
+					if (in_array($menu_item->getName(), $menu_config['remove'])) {
+						unset($return[$k]);
+					}
+				}
+			}
+	}
+	// Update menus
+	$CONFIG->menus[$menu_name] = $return;
+	return $return;
+}
+
+
+/* Replace menu with custom one at latest
+ * Note : on ne devrait pas avoir besoin d'intervenir aussi en aval : 
+ * hook register maxi, voire pagesetup devrait suffire
+ */
+/*
+function elgg_menus_prepare_menu_hook($hook, $type, $return, $params) {
+	if (substr($type, 0, 5) != 'menu:') { return $return; }
+	
+	// Filter : 'menu-$menu_name'
+	$menu_name = substr($type, 5);
+	$menu_config = elgg_menus_get_menu_config($menu_name);
+	
+	// Ne s'applique que pour le mode 'replace'
+	if ($menu_config['mode'] != 'replace') { return $return; }
+	//error_log("prepare MENU : $menu_name => OK ({$menu_config['mode']})");
+	
+	//$return = array(); // Clear current values
+	// @TODO Setup new menu
+	//elgg_menus_setup_menu($menu_name);
+	//$menu = $CONFIG->menus[$menu_name];
+	
+	return $return;
+}
+*/
+
 
 /* Récupère la configuration d'un menu
  * $menu_name : nom du menu
@@ -144,21 +169,37 @@ function elgg_menus_get_menu_config($menu_name, $key = false) {
 
 /* Récupère et prépare le menu : ajoute ou remplace ses éléments
  * $menu_name : nom du menu à préparer
+ * Modes : merge = ajoute les items, replace = vide et remplace le menu pré-existant, disabled = menu personnalisé désactivé, clear = vide le menu pré-existant
  */
 function elgg_menus_setup_menu($menu_name) {
 	// GET AND SET CUSTOM MENU CONFIGURATION
 	$menu_config = elgg_menus_get_menu_config($menu_name);
 	if (!$menu_config) { return false; }
 	
-	// Nettoyage du menu précédent si demandé : replace (ou merge sinon)
-	if ($menu_config['mode'] == 'replace') {
-		// Clean previous menu
-		global $CONFIG;
-		$CONFIG->menus[$menu_name] = array();
-	}
+	// Force to replace when editing custom menu( otherwise we may lose changes)
+	if (elgg_in_context('elgg_menus_admin')) { $menu_config['mode'] = 'replace'; }
 	
-	// Set up new menu items : function also acccepts an array instead of an ElggMenuItem
-	foreach ($menu_config['items'] as $item) { elgg_register_menu_item($menu_name, $item); }
+	global $CONFIG;
+	switch($menu_config['mode']) {
+		case 'disabled':
+			return true;
+			break;
+		
+		// No menu at all
+		case 'clear':
+			$CONFIG->menus[$menu_name] = array();
+			return true;
+			break;
+		
+		// Nettoyage du menu précédent si demandé : replace (ou merge sinon)
+		case 'replace':
+			$CONFIG->menus[$menu_name] = array();
+		case 'merge':
+		default:
+			// Set up new menu items
+			// function also acccepts an array instead of an ElggMenuItem
+			foreach ($menu_config['items'] as $item) { elgg_register_menu_item($menu_name, $item); }
+	}
 	
 	return true;
 }
@@ -181,7 +222,7 @@ function elgg_menus_get_system_menus() {
 	return $system_menus;
 }
 
-/* Menus personnalisés */
+/* Menus personnalisés (nouveaux menus ou menus modifiés) */
 function elgg_menus_get_custom_menus() {
 	$custom_menus_data = elgg_get_plugin_setting('menus', 'elgg_menus');
 	$custom_menus = explode(',', $custom_menus_data);
