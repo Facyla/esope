@@ -93,7 +93,15 @@ if ($menu_name) {
 		$new_parent_name = get_input('parent_name');
 		// Process each menu item
 		for($i=0; $i<$number_of_items; $i++) {
-			if ($new_name[$i]) {
+			$new_name_clean = $new_name[$i];
+			// Try to guess name from text, if no name (should not happen)
+			if (empty($new_name_clean) && !empty($new_text[$i])) { $new_name_clean = elgg_get_friendly_title($new_name[$i]); }
+			// Ensure proper name formatting
+			$new_name_clean = elgg_get_friendly_title($new_name_clean);
+			// Avoid name duplicates by incrementing duplicate names with index
+			if (isset($new_items[$new_name_clean])) { $new_name_clean .= $i; }
+			// Set up new menu item
+			if ($new_name_clean) {
 				// Set defaults
 				if (empty($new_section[$i])) { $new_section[$i] = 'default'; }
 				if (empty($new_priority[$i])) { $new_priority[$i] = 100; }
@@ -104,7 +112,7 @@ if ($menu_name) {
 					$new_item_class[$i] = implode(' ', $new_item_class[$i]);
 				}
 				// Add/update item
-				$new_items[] = array(
+				$new_items[$new_name_clean] = array(
 						'name' => $new_name[$i],
 						'href' => $new_href[$i],
 						'text' => $new_text[$i],
@@ -330,6 +338,15 @@ if ($menu_name) {
 echo '<div id="menu-editor-admin">';
 echo $content;
 echo '</div>';
+
+
+/* @TODO Enable parent/children structure and reordering */
+
+/* @TODO Enable direct menu item form fields update after reordering :
+ * - update section
+ * - update weight
+ * - parent_name
+ */
 ?>
 
 <script type="text/javascript">

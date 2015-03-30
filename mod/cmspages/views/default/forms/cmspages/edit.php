@@ -395,7 +395,7 @@ $content .= $help_content;
 $content .= '<p><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'style' => "width:500px;")) . '</label></p>';
 
 // Nom du permalien de la page : non éditable (= identifiant de la page)
-$content .= '<p><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label> ' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';
+$content .= '<p><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label><br />' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';
 
 $content .= $editor_content;
 $content .= $module_content;
