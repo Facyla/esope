@@ -131,6 +131,11 @@ $content = elgg_view_layout($layout, $params);
 $params = array('content' => $content);
 if ($cmspage->pagetitle) $params['title'] = $cmspage->pagetitle; else $params['title'] = $pagetype;
 
+
+
+// Give cmspages a chance to use custom layout
+if (!empty($cmspage->layout)) { $layout = $cmspage->layout; }
+
 switch ($layout) {
 	case 'custom':
 		// Wrap into custom layout (apply only if exists)
@@ -152,6 +157,9 @@ switch ($layout) {
 }
 
 
+// Give cmspages a chance to use custom pageshell
+if (!empty($cmspage->pageshell)) { $pageshell = $cmspage->pageshell; }
+
 switch ($pageshell) {
 	case 'custom':
 		// @TODO wrap into custom pageshell
@@ -167,8 +175,7 @@ switch ($pageshell) {
 		if (empty($pageshell) || elgg_view_exists($pageshell)) $pageshell = 'default';
 }
 
-
-// Display page (using default pageshell)
+// Display page (using default or custom pageshell)
 echo elgg_view_page($title, $content, $pageshell, $vars);
 
 
