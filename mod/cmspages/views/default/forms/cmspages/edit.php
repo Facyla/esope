@@ -183,9 +183,8 @@ $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering'
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</p>';
 	
-	// Affichage autonome et choix du layout personnalisé (si autonome)
-	// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
-	//$render_content .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
+	// Affichage autonome
+	// Allow own page or not ('no' => no, empty or not set => default, 'noview' => full page only
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</p>';
 	
 	$hidden = ($display == 'no') ? 'hidden' : '';
@@ -194,9 +193,21 @@ $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering'
 	$render_content .= '</span>';
 	
 	$hidden = ($display == 'no') ? 'hidden' : '';
-	$render_content .= '<span class="cmspages-layout ' . $hidden . '">';
+	$render_content .= '<span class="cmspages-pageshell ' . $hidden . '">';
 		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
 	$render_content .= '</span>';
+	
+	/* @TODO : if using cmspages_cms pageshell, also allow to override menu and footer with custom menu and cmspage
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-menu ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:menu:details'))) . '<p><label>' . elgg_echo('cmspages:menu:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'menu', 'value' => $menu, 'options_values' => cmspages_menus_opts())) . '</p>';
+	$render_content .= '</span>';
+	
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-footer ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:footer:details'))) . '<p><label>' . elgg_echo('cmspages:footer:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'footer', 'value' => $footer, 'options_values' => cmspages_footers_opts())) . '</p>';
+	$render_content .= '</span>';
+	*/
 	
 $render_content .= '</fieldset>';
 
