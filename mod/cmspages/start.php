@@ -395,9 +395,25 @@ function cmspages_pageshells_opts($add_default = true) {
 			'custom' => elgg_echo('cmspages:pageshell:custom'),
 		);
 	if ($add_default) $pageshell_opts[""] = elgg_echo('cmspages:pageshell:');
+
 	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
 	return $pageshell_opts;
 }
+
+/* Returns footer
+ * Eg. footer cmspage to be used
+ */
+function cmspages_footers_opts($add_default = true) {
+	$footer_opts = array(
+			'' => elgg_echo('cmspages:cms_footer:default'),
+			'cms-footer' => elgg_echo('cmspages:cms_footer:custom'),
+		);
+	if ($add_default) $footer_opts[""] = elgg_echo('cmspages:footer:');
+
+	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
+	return $footer_opts;
+}
+
 
 
 

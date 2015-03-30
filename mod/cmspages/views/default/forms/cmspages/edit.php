@@ -123,10 +123,14 @@ function cmspages_toggle_display(val) {
 		$(".cmspages-seo").hide();
 		//$(".cmspages-categories").hide();
 		$(".cmspages-featured-image").hide();
+		$(".cmspages-layout").hide();
+		$(".cmspages-pageshell").hide();
 	} else {
 		$(".cmspages-seo").show();
 		//$(".cmspages-categories").show();
 		$(".cmspages-featured-image").show();
+		$(".cmspages-layout").show();
+		$(".cmspages-pageshell").show();
 	}
 }
 </script>';
@@ -184,9 +188,15 @@ $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering'
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</p>';
 	
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</p>';
-		
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-layout ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</p>';
+	$render_content .= '</span>';
+	
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-layout ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
+	$render_content .= '</span>';
 	
 $render_content .= '</fieldset>';
 
@@ -195,7 +205,8 @@ $render_content .= '</fieldset>';
 // Featured image
 // @TODO Images embeddding should work with site as owner (shared library)
 // @TODO : create a site-wide image gallery ? or better : a wider access to published content + no-owner publication tool for admins
-$image_content = '<fieldset class="cmspages-featured-image"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
+$hidden = ($display == 'no') ? 'hidden' : '';
+$image_content = '<fieldset class="cmspages-featured-image ' . $hidden . '"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
 	// Featured image is linked to the cmspage entity
 	$image_content .= '<p>';
 	if (!empty($featured_image)) {
@@ -273,7 +284,8 @@ $jscss_content .= '<br />';
 
 
 // SEO and METATAGS FIELDS
-$seo_content = '<fieldset class="cmspages-seo">';
+$hidden = ($display == 'no') ? 'hidden' : '';
+$seo_content = '<fieldset class="cmspages-seo ' . $hidden . '">';
 	$seo_content .= '<legend>' . elgg_echo('cmspages:fieldset:seo') . '</legend>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:title:details'))) . '<p><label>' . elgg_echo('cmspages:seo:title') . ' ' . elgg_view('input/text', array('name' => 'seo_title', 'value' => $cmspage->seo_title)) . '</label></p>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:description:details'))) . '<p><label>' . elgg_echo('cmspages:seo:description') . ' ' . elgg_view('input/text', array('name' => 'seo_description', 'value' => $cmspage->seo_description)) . '</label></p>';

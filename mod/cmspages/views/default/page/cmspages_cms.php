@@ -39,7 +39,7 @@ $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmess
 //$header = elgg_view('adf_platform/adf_header', $vars);
 $header = elgg_view('cmspages/cms_header', $vars);
 $body = elgg_view('page/elements/body', $vars);
-$footer = elgg_view('page/elements/footer', $vars);
+$footer = elgg_view('cmspages/cms_footer', $vars);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

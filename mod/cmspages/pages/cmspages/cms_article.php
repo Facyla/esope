@@ -64,8 +64,15 @@ if ($cmspage) {
 $content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
 
 
-// SET SEO META
+// Set some useful vars for pageshell
 if ($cmspage) {
+	// Override some interface blocks on-demand
+	//$vars['entity'] = $cmspage;
+	if (!empty($cmspage->header)) $vars['header'] = $cmspage->header;
+	if (!empty($cmspage->menu)) $vars['menu'] = $cmspage->menu;
+	if (!empty($cmspage->footer)) $vars['footer'] = $cmspage->footer;
+	
+	// SET SEO META
 	// Update page outer title
 	if (!empty($cmspage->seo_title)) $title = $cmspage->seo_title;
 	// Set META description

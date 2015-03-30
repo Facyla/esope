@@ -63,6 +63,8 @@ $fr = array(
 	'cmspages:settings:layout:externalblog' => "Utiliser la config d'externalblog",
 	'cmspages:settings:editors' => "Liste des éditeurs supplémentaires",
 	'cmspages:settings:editors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les éditeurs ont un accès en lecture et écriture à l'ensemble des pages CMS.<br />Tous les administrateurs sont éditeurs, mais vous pouvez ajouter d'autres éditeurs qui auront un accès total aux pages CMS, à l'exception de cette page de configuration.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
+	'cmspages:settings:authors' => "Liste des auteurs supplémentaires",
+	'cmspages:settings:authors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les auteurs ont un accès limité à leurs propres articles.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit:authors', 'cmspage'.",
 	
 	'cmspages:chosenentity' => "Entité choisie (GUID)",
 	'cmspages:configuredview' => "Vue configurée",
@@ -147,7 +149,7 @@ $fr = array(
 	'cmspages:layout:custom:edit' => "Editer le layout personnalisé",
 	'cmspages:layout:sidebar:edit' => "Editer la colonne droite",
 	'cmspages:layout:sidebar_alt:edit' => "Editer la colonne gauche",
-	'cmspages:pageshell:edit' => "Définir/modifier le pageshell personnalisé",
+	'cmspages:pageshell:edit' => "Editer le pageshell personnalisé",
 	'cmspages:layout:one_column' => "1 colonne",
 	'cmspages:layout:one_sidebar' => "2 colonnes (menu droit)",
 	'cmspages:layout:two_sidebar' => "3 colonnes (menu gauche + droit)",
@@ -249,10 +251,20 @@ $fr = array(
 	'cmspages:settings:cms_menu:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut, le menu des catégories des pages CMS sera affiché. Si vous le souhaitez, vous pouvez remplacer ce menu par un menu personnalisé, défini avec le plugin \"elgg_menus\". Pour rétablir le menu des catégories, choisissez \"cmspages_categories\".",
 	'cmspages:settings:categories' => "Rubriques",
 	'cmspages:settings:categories:details' => "Pour définir des rubriques, indiquez un titre de rubrique par ligne.<br />Pour définir une arborescence, vous pouvez indenter la liste en utilisant des tirets (plusieurs sous-niveaux possibles).",
+	'cmspages:settings:cms_footer' => "Pied de page",
+	'cmspages:settings:cms_footer:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut le pied de page du site sera affiché. Si vous le souhaitez, vous pouvez le remplacer par une page CMS personalisée.",
+	'cmspages:cms_footer:edit' => "Editer le pied de page personnalisé",
+	'cmspages:cms_footer:default' => "[ Identique au site ]",
+	'cmspages:cms_footer:custom' => "Personnalisé (cms-footer)",
 	
 	'admin:cms' => "CMS",
 	'admin:cms:cmspages' => "Pages CMS",
 	'cmspages:configredirect' => "Pour gérer les pages CMS, vous pouvez utiliser directement la page " . elgg_get_site_url() . "cmspages",
+	
+	'cmspages:fieldset:access' => "Gestion des rôles",
+	'cmspages:fieldset:categories' => "Rubriques",
+	'cmspages:fieldset:rendering' => "Options de rendu",
+	
 	
 	
 );
