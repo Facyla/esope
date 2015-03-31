@@ -265,6 +265,8 @@ $fr = array(
 	'cmspages:fieldset:categories' => "Rubriques",
 	'cmspages:fieldset:rendering' => "Options de rendu",
 	
+	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
+	
 	
 	
 );

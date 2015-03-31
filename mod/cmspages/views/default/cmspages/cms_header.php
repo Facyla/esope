@@ -1,6 +1,6 @@
 <?php
 // Init custom CMS menu based on categories
-cmspages_set_categories_menu();
+//cmspages_set_categories_menu();
 
 echo elgg_view('cmspages/view', array('pagetype' => 'cms-header'));
 

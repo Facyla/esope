@@ -37,6 +37,7 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:access') . '</legend>';
 	/* Auteurs */
 	echo '<p><label style="clear:left;">DEV - NON OPERATIONNEL ' . elgg_echo('cmspages:settings:authors') . '</label>';
 	echo elgg_view('input/text', array('name' => 'params[authors]', 'value' => $plugin->authors)) . '<br />';
+	//echo elgg_view('input/userpicker', array('name' => 'params[authors]', 'id' => 'cmspages-authors', 'value' => $plugin->authors));
 	$authors = explode(',', $plugin->authors);
 	echo elgg_echo('cmspages:settings:authors:help');
 	// Affichage des auteurs actuels
@@ -73,7 +74,9 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:categories') . '</legen
 		$menu_cats = esope_get_input_array($plugin->categories, "\n");
 		if (count($menu_cats) > 0) {
 			$parents = array(); // dernier parent pour chaque niveau de l'arborescence
+			$i = 0; // Used to avoid duplicates
 			foreach ($menu_cats as $key => $cat) {
+				$i++;
 				// Niveau dans l'arborescence
 				$level = 0;
 				while($cat[0] == '-') {
@@ -92,24 +95,30 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:categories') . '</legen
 						array_pop($parents);
 					}
 				}
-				// Dernier parent connu pour le niveau courant
+				// Vérification du nom
 				$name = elgg_get_friendly_title($cat);
+				// Limitation des doublons
+				if (isset($menu_categories[$name])) {
+					$name .= $i;
+					register_error(elgg_echo('cmspages:error:duplicate'));
+				}
+				// Dernier parent connu pour le niveau courant
 				$parents["$level"] = $name;
-			
+				
 				$menu_cat = array('name' => $name, 'title' => $cat);
 				// Get immediate parent
 				if ($level > 0) {
 					$parent_name = $parents[(int) ($level-1)];
 					$menu_cat['parent'] = $parent_name;
 				}
-				$menu_categories[] = $menu_cat;
+				$menu_categories[$name] = $menu_cat;
 			}
 		}
 		$menu_categories_data = serialize($menu_categories);
 		elgg_set_plugin_setting('menu_categories', $menu_categories_data, 'cmspages');
 	}
 	//echo '<pre>' . print_r($menu_categories, true) . '</pre>';
-	cmspages_set_categories_menu();
+	//cmspages_set_categories_menu();
 	echo elgg_view_menu('cmspages_categories', array('sort_by' => 'weight', 'class' => "elgg-menu-hz"));
 
 echo '</fieldset>';

@@ -60,8 +60,8 @@ pre, code { word-break:break-all; }
 
 /* Categories menu */
 .elgg-menu-cmspages-categories {  }
-.elgg-menu-cmspages-categories .elgg-child-menu { display:none; }
-.elgg-menu-cmspages-categories li:hover .elgg-child-menu { display: block; }
-.elgg-context-cmspages_admin .elgg-menu-cmspages-categories .elgg-child-menu { position: absolute; }
+#cmspages-settings .elgg-menu-cmspages-categories .elgg-child-menu { display:none; }
+#cmspages-settings .elgg-menu-cmspages-categories li:hover > .elgg-child-menu { display: block; background:white; padding:0.5ex; box-shadow:1px 1px 3px black; }
+#cmspages-settings .elgg-menu-cmspages-categories > .elgg-child-menu { position: absolute; }
 
 
