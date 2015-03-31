@@ -143,16 +143,16 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend
 	// @TODO allow to use arbitrary layout ?  eg. template selector instead of 1 predefined template name ?
 	echo '<p><label>' . elgg_echo('cmspages:settings:layout') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[layout]', 'value' => $plugin->layout, 'options_values' => $layout_opts)) . '</label>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar:edit') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:sidebar_alt:edit') . '</a>';
-	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:layout:custom:edit') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar" target="_blank" class="elgg-button">' . elgg_echo('cmspages:layout:sidebar:edit') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout-sidebar-alt" target="_blank" class="elgg-button">' . elgg_echo('cmspages:layout:sidebar_alt:edit') . '</a>';
+	echo ' &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-layout" target="_blank" class="elgg-button">' . elgg_echo('cmspages:layout:custom:edit') . '</a>';
 	echo '<br /><em>' . elgg_echo('cmspages:settings:layout:details') . '</em>';
 	echo '</p>';
 	
 	// Default pageshell : default / iframe (no Elgg interface) / or custom
 	echo '<p><label>' . elgg_echo('cmspages:settings:pageshell') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[pageshell]', 'value' => $plugin->pageshell, 'options_values' => $pageshell_opts));
-	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:pageshell:edit') . '</a>';
+	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-pageshell" target="_blank" class="elgg-button">' . elgg_echo('cmspages:pageshell:edit') . '</a>';
 	echo '<br /><em>' . elgg_echo('cmspages:settings:pageshell:details') . '</em>';
 	echo '</p>';
 	
@@ -171,7 +171,7 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend
 	// Default footer : default, or custom cmspage
 	echo '<p><label>' . elgg_echo('cmspages:settings:cms_footer') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[cms_footer]', 'value' => $plugin->cms_footer, 'options_values' => $footer_opts));
-	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-footer" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('cmspages:cms_footer:edit') . '</a>';
+	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-footer" target="_blank" class="elgg-button">' . elgg_echo('cmspages:cms_footer:edit') . '</a>';
 	echo '<br /><em>' . elgg_echo('cmspages:settings:cms_footer:details') . '</em>';
 	echo '</p>';
 	
