@@ -36,6 +36,7 @@ $cmspage = cmspages_get_entity($pagetype);
 // Set owner to site, for all "global" cmspages
 elgg_set_page_owner_guid($CONFIG->site->guid);
 elgg_set_context('cmspages_admin');
+elgg_push_context('admin');
 
 
 // Build the page content
@@ -45,6 +46,7 @@ $content = '';
 $title = elgg_echo('cmspages');
 
 // Breadcrumbs
+elgg_push_breadcrumb(elgg_echo('admin'), 'admin');
 elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
 if ($cmspage) {
 	if (!empty($cmspage->pagetitle)) {

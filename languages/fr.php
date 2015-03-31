@@ -258,11 +258,11 @@ $french = array(
  * Access
  */
 
-	'PRIVATE' => "Privé / brouillon",
+	'PRIVATE' => "Privé",
 	'LOGGED_IN' => "Membres du site",
 	'PUBLIC' => "Public",
 	'access:friends:label' => "Contacts seulement",
-	'access' => "Accès",
+	'access' => "Visibilité",
 
 /**
  * Dashboard and modules

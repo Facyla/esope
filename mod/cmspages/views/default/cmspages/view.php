@@ -52,30 +52,41 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	if (!$is_editor) { return; }
 }
 
-
 if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-	// Check if allowed display (if not : no display) - Exit si pas d'affichage comme vue
-	if ($cmspage->display == 'noview') { exit; }
+	// Check if view display is allowed - contenu vide si pas autorisé
+	if ($cmspage->display == 'noview') { return; }
+
+// Check if using a password, and if user has access, or display auth form
+// If form is displayed, user does not have access so return right after form
+if ($cmspage && !cmspages_check_password($cmspage)) { return; }
 	
 	// Check allowed contexts - Exit si contexte non autorisé
 	if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
 		$exit = true;
 		$allowed_contexts = explode(',', $cmspage->contexts);
 		foreach ($allowed_contexts as $context) {
-			if (elgg_in_context(trim($context))) $exit = false;
+			if (elgg_in_context(trim($context))) {
+				$exit = false;
+				break;
+			}
 		}
-		if ($exit) return;
+		if ($exit) { return; }
 	}
 	
+
 	// Contexte spécifique
 	elgg_push_context('cmspages');
 	elgg_push_context('cmspages:pagetype:' . $pagetype);
 	
+
+
+/* Start composing content */
 	$content = '';
 	$title = $cmspage->pagetitle;
 	switch ($cmspage->content_type) {
+	
+	// Load a specific module
 		case 'module':
-			// Load a specific module
 			if (!empty($cmspage->module)) {
 				$module_config = cmspages_extract_module_config($cmspage->module, $cmspage->module_config);
 				foreach ($module_config as $module_name => $config) {
@@ -84,16 +95,22 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 			}
 			break;
 		
+	/* Use as a templating system
+	 * see cmspages_render_template() for allowed template syntax
+	 * Replace tags : {{pagetype}}, {{:view}}, {{:view|param=value}}, {{%VARS%}}, {{[shortcode]}}
+	 */
 		case 'template':
 			// Replace wildcards with values.. {{pagetype}}
 			$content .= cmspages_render_template($cmspage->description, $vars['body']);
 			break;
 		
+	// Basically render cmspage raw content (text or HTML)
 		case 'rawhtml':
 		default:
 			/*
 			$content .= '<span style="display:none;">';
-			$content .= elgg_view('output/tags', array('tags' => $cmspage->tags));
+			$content .= elgg_view('output/cmspages_tags', array('tags' => $cmspage->tags));
+			$content .= elgg_view('output/cmspages_categories', array('categories' => $cmspage->categories));
 			$content .= '</span>';
 			*/
 			//$content .= $cmspage->description;
@@ -126,6 +143,7 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	elgg_pop_context();
 	elgg_pop_context();
 }
+
 
 // Admin links : direct edit link fr users who can edit this
 if ($is_editor) {

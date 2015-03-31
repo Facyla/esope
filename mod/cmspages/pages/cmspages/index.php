@@ -23,34 +23,39 @@ if (!empty($pagetype)) {
 	forward("cmspages/edit/$pagetype");
 }
 
-
 // Set owner to site, for all "global" cmspages
 elgg_set_page_owner_guid($CONFIG->site->guid);
 elgg_set_context('cmspages_admin');
-
+elgg_push_context('admin');
 
 // Build the page content
-$content = '';
 $content = '';
 
 // Page title
 $title = elgg_echo('cmspages');
 
 // Breadcrumbs
-elgg_push_breadcrumb(elgg_echo('cmspages'), 'cmspages');
+elgg_push_breadcrumb(elgg_echo('admin'), 'admin');
+elgg_push_breadcrumb(elgg_echo('cmspages'));
 
 // Count Total pages
 $cmspages_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'count' => true));
+$title .= " ($cmspages_count)";
 
 // MENU : cmspages selector
 $content .= '<div class="clearfloat"></div>';
-$content .= elgg_echo('cmspages:pagescreated', array($cmspages_count));
+//$content .= elgg_echo('cmspages:pagescreated', array($cmspages_count));
 //$content .= elgg_view('cmspages/menu', array('pagetype' => $pagetype));
+$content .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">
+		<strong><a href="javascript:void(0);" class="inline_toggler" onclick="$(\'#cmspages_instructions\').toggle();">' . elgg_echo('cmspages:showinstructions') . '</a></strong>
+		<div id="cmspages_instructions" class="elgg-output hidden">' . elgg_echo('cmspages:instructions') . '</div>
+	</blockquote>';
+
 $content .= elgg_view('cmspages/listing');
 
 
-//$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $content));
+//$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 $page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
-echo elgg_view_page($title, $page, 'cmspages');
+echo elgg_view_page($title, $page);
 

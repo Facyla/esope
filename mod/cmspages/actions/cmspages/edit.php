@@ -48,10 +48,13 @@ $module = get_input('module');
 $module_config = get_input('module_config');
 $display = get_input('display');
 $template = get_input('template');
+$layout = get_input('layout');
+$pageshell = get_input('pageshell');
 $page_css = get_input('page_css');
 $page_js = get_input('page_js');
 // SEO
 $seo_title = get_input('seo_title');
+$seo_tags = get_input('seo_tags');
 $seo_description = get_input('seo_description');
 $seo_index = get_input('seo_index');
 $seo_follow = get_input('seo_follow');
@@ -128,6 +131,8 @@ $cmspage->tags = $tagarray;
 $cmspage->contexts = $contexts;
 $cmspage->display = $display;
 $cmspage->template = $template;
+$cmspage->layout = $layout;
+$cmspage->pageshell = $pageshell;
 $cmspage->css = $page_css;
 $cmspage->js = $page_js;
 // @todo unused yet
@@ -140,6 +145,7 @@ $cmspage->categories = $categories;
 // Function will add the filename if upload is OK
 if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
 $cmspage->seo_title = $seo_title;
+$cmspage->seo_tags = $seo_tags;
 $cmspage->seo_description = $seo_description;
 $cmspage->seo_index = $seo_index;
 $cmspage->seo_follow = $seo_follow;

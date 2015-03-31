@@ -1,15 +1,17 @@
 <?php
 $fr = array(
-	'cmspages' => "Pages statiques (CMS)",
-	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page statique',
-	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages statiques',
+	'cmspages' => "Pages CMS",
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page CMS',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages CMS',
 	
 	'cmspages:pagetype' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)", // link ou anchor
 	'cmspages:cmspage_url' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)",
 	'cmspages:cmspage_view' => "<i class=\"fa fa-plug\"></i>Intégration dans Elgg",
 	'cmspages:cmspage_embed' => "<i class=\"fa fa-code\"></i>Code d'embarquement HTML",
 	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Utilisation dans un  gabarit",
-	'cmspages:pageselect' => "Choix de la page à éditer",
+	'cmspages:pageselect' => "Editer une page",
+	'cmspages:page:new' => "Créer une page",
+	'cmspages:page:new:name' => "Indiquer ici le nom de la nouvelle page",
 	
 	'cmspages:new' => "OK",
 	'cmspages:newpage' => "Créer la page \"%s\"",
@@ -22,8 +24,8 @@ $fr = array(
 	'cmspages:preview' => "Aperçu",
 	'cmspages:delete' => "Détruire la page",
 	'cmspages:deletewarning' => "Attention : la destruction d'une page est irréversible. Si vous souhaitez seulement la dé-publier, vous pouvez modifier son niveau d'accès sans en perdre le contenu.",
-	'cmspages:showinstructions' => "Afficher les explications détaillées",
-	'cmspages:instructions' => "Utilisation des pages statiques :<ul>
+	'cmspages:showinstructions' => "Mode d'emploi &nbsp; <i class=\"fa fa-toggle-down\"></i>",
+	'cmspages:instructions' => "<ul>
 			<li>ces pages sont accessibles via une URL spécifique (par ex. mainpage)</li>
 			<li>elles sont éditables par tout administrateur du site (global et local)</li>
 			<li>elles peuvent être intégrées à l'interface du site (lien depuis le menu, le pied de page, etc.)</li>
@@ -42,8 +44,8 @@ $fr = array(
 		</ul>",
 	
 	/* Status messages */
-	'cmspages:posted' => "La page statique a bien été mise à jour.",
-	'cmspages:deleted' => "La page statique a bien été supprimée.",
+	'cmspages:posted' => "La page CMS a bien été mise à jour.",
+	'cmspages:deleted' => "La page CMS a bien été supprimée.",
 	
 	/* Error messages */
 	'cmspages:nopreview' => "Aucun aperçu disponible pour le moment",
@@ -61,6 +63,8 @@ $fr = array(
 	'cmspages:settings:layout:externalblog' => "Utiliser la config d'externalblog",
 	'cmspages:settings:editors' => "Liste des éditeurs supplémentaires",
 	'cmspages:settings:editors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les éditeurs ont un accès en lecture et écriture à l'ensemble des pages CMS.<br />Tous les administrateurs sont éditeurs, mais vous pouvez ajouter d'autres éditeurs qui auront un accès total aux pages CMS, à l'exception de cette page de configuration.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
+	'cmspages:settings:authors' => "Liste des auteurs supplémentaires",
+	'cmspages:settings:authors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les auteurs ont un accès limité à leurs propres articles.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit:authors', 'cmspage'.",
 	
 	'cmspages:chosenentity' => "Entité choisie (GUID)",
 	'cmspages:configuredview' => "Vue configurée",
@@ -97,6 +101,10 @@ $fr = array(
 	//'cmspages:layout:details' => "Permet de choisir le layout pour afficher cette page de manière autonome (avec une URL propre). Les options permettent de choisir le layout à utiliser pour le rendu de la page, de ne permettre que l'affichage pleine page avec le layout par défaut (noview), ou d'interdire l'affichage pleine page (no), pour une utilisation comme élément d'intrerface uniquement.<br />Important : lors d'un \"embed\" de la page, le layout n'est pas utilisé.",
 	'cmspages:template:use' => "Format d'affichage (template)",
 	'cmspages:template:details' => "Permet d'utiliser un format d'affichage prédéfini, en injectant le contenu de cette page dans un template HTML créé avec cmspages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau template, créez une page de type \"template\".",
+	'cmspages:layout:use' => "Mise en page (layout)",
+	'cmspages:layout:details' => "Affichage pleine page seulement. Permet de modifier la mise en page interne de la page (nombre de colonnes)",
+	'cmspages:pageshell:use' => "Coquille HTML (pageshell)",
+	'cmspages:pageshell:details' => "Affichage pleine page seulement. Permet de modifier la coquille HTML de la page (organisation des blocs dans la page).",
 	//'cmspages:settings:unused' => "Note : These settings are not used yet (future developments)",
 	'cmspages:fieldset:unused' => "DEV : NON UTILISE (développements futurs)",
 	'cmspages:container_guid' => "GUID du container", 
@@ -138,12 +146,23 @@ $fr = array(
 	'cmspages:settings:layout:details' => "Par défaut, les pages CMS s'affichent avec le layout \"one_column\" (1 seule colonne), mais vous pouvez choisir de les afficher en utilisant un autre layout (modèle d'agencement du contenu dans la page), par ex. un layout à 2 ou 3 colonnes, ou définir un gabarit personnalisé pour une personnalisation maximale.",
 	'cmspages:settings:pageshell' => "Coquille HTML",
 	'cmspages:settings:pageshell:details' => "Pour un contrôle total sur la structure HTML du site, vous pouvez utiliser d'autres \"pageshells\" (coquille HTML). Par défaut la page sera affichée dans l'interface habituelle du site (avec entête, menu, pied de page), mais vous pouvez également utiliser le pageshell \"iframe\" (qui conserve les styles mais pas l'interface), ou définir un pageshell personnalisé pour un contrôle total sur le rendu.",
-	'cmspages:editlayout' => "Editer le layout personnalisé",
-	'cmspages:layout:sidebar' => "Editer la colonne droite",
-	'cmspages:layout:sidebar_alt' => "Editer la colonne gauche",
-	'cmspages:editpageshell' => "Définir/modifier le pageshell personnalisé",
-	
-	'cmspages:fieldset:seo' => "Options SEO",
+	'cmspages:layout:custom:edit' => "Editer le layout personnalisé",
+	'cmspages:layout:sidebar:edit' => "Editer la colonne droite",
+	'cmspages:layout:sidebar_alt:edit' => "Editer la colonne gauche",
+	'cmspages:pageshell:edit' => "Editer le pageshell personnalisé",
+	'cmspages:layout:one_column' => "1 colonne",
+	'cmspages:layout:one_sidebar' => "2 colonnes (menu droit)",
+	'cmspages:layout:two_sidebar' => "3 colonnes (menu gauche + droit)",
+	'cmspages:layout:custom' => "Personnalisé (cms-layout)",
+	'cmspages:layout:' => "Par défaut (identique au site)",
+	'cmspages:pageshell:default' => "Site (par défaut)",
+	'cmspages:pageshell:cmspages' => "Site pleine largeur (sans marge)", 
+	'cmspages:pageshell:cmspages_cms' => "Site pleine largeur + menu CMS", 
+	'cmspages:pageshell:iframe' => "Iframe (sans interface)",
+	'cmspages:pageshell:inner' => "Contenu brut (pour AJAX)",
+	'cmspages:pageshell:custom' => "Personnalisé (cms-pageshell)",
+	'cmspages:pageshell:' => "Par défaut (identique au site)",
+	'cmspages:fieldset:seo' => "Référencement",
 	'cmspages:seo:title' => "Titre",
 	'cmspages:seo:title:details' => "Maximum 60 caractères. Si vide, le titre de la page sera utilisé.",
 	'cmspages:seo:description' => "META Description",
@@ -162,7 +181,7 @@ $fr = array(
 	
 	'cmspages:fieldset:rendering' => "Modes de rendu",
 	'cmspages:fieldset:publication' => "Publication",
-	'cmspages:fieldset:information' => "Informations utiles",
+	'cmspages:fieldset:information' => "Informations utiles &nbsp; <i class=\"fa fa-toggle-down\"></i>",
 	'cmspages:fieldset:categories' => "Rubriquage",
 	'cmspages:access:current' => "Visibilité",
 	
@@ -175,7 +194,21 @@ $fr = array(
 	'cmspages:type:module' => "Module",
 	'cmspages:type:template' => "Template",
 	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
-	'cmspages:pageselect:filter' => "Filtres de recherche",
+	'cmspages:pageselect:filter' => "Rechercher une page",
+	'cmspages:search:title' => "Titre de la page",
+	'cmspages:search:filter' => "Filtres",
+	'cmspages:filter:all' => "Toutes",
+	'cmspages:access_id:none' => "",
+	'cmspages:status:none' => "",
+	'cmspages:content_type:none' => "",
+	'cmspages:sort:none' => "",
+	'cmspages:filter:access_id' => "Visibilité",
+	'cmspages:filter:status' => "En ligne",
+	'cmspages:filter:content_type' => "Type de page",
+	'cmspages:filter:sort' => "Trier par",
+	'cmspages:sort:latest' => "Date",
+	'cmspages:sort:alpha' => "Alphabétique",
+	'cmspages:search:nameortitle' => "Titre de la page",
 	
 	/* Modes d'emploi */
 	'cmspages:content_type:template:details' => "<i class=\"fa fa-info-circle\"></i>Les gabarits servent pour 2 types d'utilisations principales&nbsp;:
@@ -203,18 +236,38 @@ $fr = array(
 		Si vous avez besoin d'un contrôle direct sur le code source de la page, veuillez utiliser \"Code source (HTML sans éditeur)\".",
 	
 	'cmspages:status' => "Statut",
-	'cmspages:status:published' => "Publié",
-	'cmspages:status:notpublished' => "Brouillon (non publié)",
+	'cmspages:status:published' => "En ligne",
+	'cmspages:status:notpublished' => "Hors ligne",
 	
 	'cmspages:password' => "Protection par mot de passe",
-	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention : cette option ne s'applique que pour un affichage en pleine page.",
+	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention 1 : cette option ne s'applique que pour un affichage en pleine page. <br />Attention 2 : ajouter un mot de passe ne change pas la visbilité de la page.",
 	'cmspage:password:cleared' => "Déconnexion des pages réussies.",
 	'cmspage:password:cleared:page' => "Déconnexion de la page réussie",
 	'cmspages:password:submit' => "Accéder",
 	'cmspages:password:form' => "Accès protégé par mot de passe",
 	
+	'cmspages:settings:cms_menu' => "Menu à afficher",
+	'cmspages:settings:cms_menu:cmspages_categories' => "Menu des Rubriques CMS (automatique)",
+	'cmspages:settings:cms_menu:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut, le menu des catégories des pages CMS sera affiché. Si vous le souhaitez, vous pouvez remplacer ce menu par un menu personnalisé, défini avec le plugin \"elgg_menus\". Pour rétablir le menu des catégories, choisissez \"cmspages_categories\".",
 	'cmspages:settings:categories' => "Rubriques",
 	'cmspages:settings:categories:details' => "Pour définir des rubriques, indiquez un titre de rubrique par ligne.<br />Pour définir une arborescence, vous pouvez indenter la liste en utilisant des tirets (plusieurs sous-niveaux possibles).",
+	'cmspages:settings:cms_footer' => "Pied de page",
+	'cmspages:settings:cms_footer:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut le pied de page du site sera affiché. Si vous le souhaitez, vous pouvez le remplacer par une page CMS personalisée.",
+	'cmspages:cms_footer:edit' => "Editer le pied de page personnalisé",
+	'cmspages:cms_footer:default' => "[ Identique au site ]",
+	'cmspages:cms_footer:custom' => "Personnalisé (cms-footer)",
+	
+	'admin:cms' => "CMS",
+	'admin:cms:cmspages' => "Pages CMS",
+	'cmspages:configredirect' => "Pour gérer les pages CMS, vous pouvez utiliser directement la page " . elgg_get_site_url() . "cmspages",
+	
+	'cmspages:fieldset:access' => "Gestion des rôles",
+	'cmspages:fieldset:categories' => "Rubriques",
+	'cmspages:fieldset:rendering' => "Options de rendu",
+	
+	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
+	
+	
 	
 );
 

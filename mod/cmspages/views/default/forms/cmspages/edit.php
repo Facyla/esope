@@ -82,8 +82,10 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 		$module = $module_change[0];
 		$module_config = $module_change[1];
 	}
-	$display = $cmspage->display; // Can it be displayed in its own page ? ('no' => no, empty or not set => default layout, other value => use custom layout $value)
+	$display = $cmspage->display; // Can it be displayed in its own page ? empty = all allowed, no = view only, noview = page only
 	$template = $cmspage->template; // This page will use the custom cmspage template
+	$layout = $cmspage->layout; // Use a custom layout ?
+	$pageshell = $cmspage->pageshell; // Use a custom pageshell ?
 	$css = $cmspage->css;
 	$js = $cmspage->js;
 } else {
@@ -121,10 +123,14 @@ function cmspages_toggle_display(val) {
 		$(".cmspages-seo").hide();
 		//$(".cmspages-categories").hide();
 		$(".cmspages-featured-image").hide();
+		$(".cmspages-layout").hide();
+		$(".cmspages-pageshell").hide();
 	} else {
 		$(".cmspages-seo").show();
 		//$(".cmspages-categories").show();
 		$(".cmspages-featured-image").show();
+		$(".cmspages-layout").show();
+		$(".cmspages-pageshell").show();
 	}
 }
 </script>';
@@ -150,7 +156,7 @@ $type_content .= '</select></label></p>';
 // Accès et visibilité
 $pub_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:publication') . '</legend>';
 	// Accès à la page ou au module
-	$pub_content .= '<p><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access, 'options' => $access_opt)) . '</label>';
+	$pub_content .= '<p><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access, 'options_values' => $access_opt)) . '</label>';
 	//if ($cmspage) $pub_content .= '<br />' . elgg_echo('cmspages:access:current') . ' : ' . elgg_view('output/access', array('entity' => $cmspage));
 	$pub_content .= '</p>';
 	
@@ -177,17 +183,41 @@ $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering'
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</p>';
 	
-	// Affichage autonome et choix du layout personnalisé (si autonome)
-	// Allow own page or not ('no' => no, empty or not set => default layout, other value => use display value as layout)
-	//$render_content .= '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/text', array('name' => 'display', 'value' => $display, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:display:details') . '</em></p>';
+	// Affichage autonome
+	// Allow own page or not ('no' => no, empty or not set => default, 'noview' => full page only
 	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</p>';
+	
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-layout ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</p>';
+	$render_content .= '</span>';
+	
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-pageshell ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
+	$render_content .= '</span>';
+	
+	/* @TODO : if using cmspages_cms pageshell, also allow to override menu and footer with custom menu and cmspage
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-menu ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:menu:details'))) . '<p><label>' . elgg_echo('cmspages:menu:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'menu', 'value' => $menu, 'options_values' => cmspages_menus_opts())) . '</p>';
+	$render_content .= '</span>';
+	
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-footer ' . $hidden . '">';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:footer:details'))) . '<p><label>' . elgg_echo('cmspages:footer:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'footer', 'value' => $footer, 'options_values' => cmspages_footers_opts())) . '</p>';
+	$render_content .= '</span>';
+	*/
+	
 $render_content .= '</fieldset>';
+
 
 
 // Featured image
 // @TODO Images embeddding should work with site as owner (shared library)
 // @TODO : create a site-wide image gallery ? or better : a wider access to published content + no-owner publication tool for admins
-$image_content = '<fieldset class="cmspages-featured-image"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
+$hidden = ($display == 'no') ? 'hidden' : '';
+$image_content = '<fieldset class="cmspages-featured-image ' . $hidden . '"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
 	// Featured image is linked to the cmspage entity
 	$image_content .= '<p>';
 	if (!empty($featured_image)) {
@@ -265,12 +295,13 @@ $jscss_content .= '<br />';
 
 
 // SEO and METATAGS FIELDS
-$seo_content = '<fieldset class="cmspages-seo">';
+$hidden = ($display == 'no') ? 'hidden' : '';
+$seo_content = '<fieldset class="cmspages-seo ' . $hidden . '">';
 	$seo_content .= '<legend>' . elgg_echo('cmspages:fieldset:seo') . '</legend>';
-	//$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:tags:details'))) . '<p><label>' . elgg_echo('cmspages:seo:tags') . '</label></p>';
-	$seo_content .= '<p><strong>' . elgg_echo('cmspages:seo:tags') . '</strong> ' . elgg_echo('cmspages:seo:tags:details') . '</p>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:title:details'))) . '<p><label>' . elgg_echo('cmspages:seo:title') . ' ' . elgg_view('input/text', array('name' => 'seo_title', 'value' => $cmspage->seo_title)) . '</label></p>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:description:details'))) . '<p><label>' . elgg_echo('cmspages:seo:description') . ' ' . elgg_view('input/text', array('name' => 'seo_description', 'value' => $cmspage->seo_description)) . '</label></p>';
+	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:tags:details'))) . '<p><label>' . elgg_echo('cmspages:seo:tags') . ' ' . elgg_view('input/tags', array('name' => 'seo_tags', 'value' => $cmspage->seo_tags)) . '</label></p>';
+	//$seo_content .= '<p><strong>' . elgg_echo('cmspages:seo:tags') . '</strong> ' . elgg_echo('cmspages:seo:tags:details') . '</p>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:index:details'))) . '<p><label>' . elgg_echo('cmspages:seo:index') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_index', 'value' => $cmspage->seo_index, 'options_values' => $yesno_opts)) . '</label></p>';
 	$seo_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:seo:follow:details'))) . '<p><label>' . elgg_echo('cmspages:seo:follow') . ' ' . elgg_view('input/dropdown', array('name' => 'seo_follow', 'value' => $cmspage->seo_follow, 'options_values' => $yesno_opts)) . '</label></p>';
 $seo_content .= '</fieldset>';
@@ -303,24 +334,30 @@ $submit_button = elgg_view('input/submit', array('name' => 'submit', 'value' => 
 
 if ($cmspage) {
 	// Informations utiles : URL de la page + vue à utiliser pour charger la page
-	$info_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:information') . '</legend>';
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:status') . '&nbsp;</strong>: ';
+	//$info_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:information') . '</legend>';
+	$info_content = '<blockquote style="padding: 6px 12px; margin-top:2ex;"><strong><a href="javascript:void(0);" onClick="javascript:$(\'#cmspages-information\').toggle()">' . elgg_echo('cmspages:fieldset:information') . '</a></strong>';
+	$info_content .= '<div id="cmspages-information" class="elgg-output hidden">';
+		$info_content .= '<ul>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:status') . '&nbsp;</strong>: ';
 		if ($cmspage->access_id === 0) {
 			$info_content .= '<span class="cmspages-unpublished">' . elgg_echo('cmspages:status:notpublished') . '</span>';
 		} else {
 			$info_content .= '<span class="cmspages-published">' . elgg_echo('cmspages:status:published') . '</span>';
 		}
-		$info_content .= '</span></p>';
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:access:current') . '&nbsp;:</strong> ' . elgg_view('output/access', array('entity' => $cmspage, 'hide_text' => true)) . $access_opt[$cmspage->access_id] . '</p>';
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:cmspage_url') . '&nbsp;:</strong> <code><a href="' . $cmspage->getURL() . '" target="_blank" >' . $cmspage->getURL() . '</a></code></p>';
+		$info_content .= '</span></li>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:access:current') . '&nbsp;:</strong> ' . elgg_view('output/access', array('entity' => $cmspage, 'hide_text' => true)) . $access_opt[$cmspage->access_id] . '</li>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_url') . '&nbsp;:</strong> <code><a href="' . $cmspage->getURL() . '" target="_blank" >' . $cmspage->getURL() . '</a></code></li>';
 		if (elgg_is_active_plugin('shorturls')) {
-			$info_content .= '<p><strong>' . elgg_echo('cmspages:shorturl') . '&nbsp;:</strong> <code>' . elgg_get_site_url() . 's/' . $cmspage->guid . '</code></p>';
+			$info_content .= '<li><strong>' . elgg_echo('cmspages:shorturl') . '&nbsp;:</strong> <code>' . elgg_get_site_url() . 's/' . $cmspage->guid . '</code></li>';
 		}
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:cmspage_template') . '&nbsp;:</strong> <code>{{$pagetype}}</code>';
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:cmspage_embed') . '&nbsp;:</strong> <code>&lt;iframe src="' . $cmspage->getURL() . '?embed=full"&gt;&lt;/iframe&gt;</code>';
-		$info_content .= '<p><strong>' . elgg_echo('cmspages:cmspage_view') . '&nbsp;:</strong> <code>echo elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"));</code>';
-		$info_content .= '</p>';
-	$info_content .= '</fieldset>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_template') . '&nbsp;:</strong> <code>{{$pagetype}}</code></li>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_embed') . '&nbsp;:</strong> <code>&lt;iframe src="' . $cmspage->getURL() . '?embed=full"&gt;&lt;/iframe&gt;</code></li>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_view') . '&nbsp;:</strong> <code>echo elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"));</code>';
+		$info_content .= '</li>';
+		$info_content .= '</ul>';
+	$info_content .= '</div>';
+	$info_content .= '</blockquote>';
+	$info_content .= '<div class="clearfloat"></div><br />';
 	
 	
 	// Boutons de suppression et d'enregistrement
@@ -358,7 +395,7 @@ $content .= $help_content;
 $content .= '<p><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'style' => "width:500px;")) . '</label></p>';
 
 // Nom du permalien de la page : non éditable (= identifiant de la page)
-$content .= '<p><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label> ' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';
+$content .= '<p><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label><br />' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';
 
 $content .= $editor_content;
 $content .= $module_content;

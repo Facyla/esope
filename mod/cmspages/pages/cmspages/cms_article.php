@@ -64,16 +64,25 @@ if ($cmspage) {
 $content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
 
 
-// SET SEO META
+// Set some useful vars for pageshell
 if ($cmspage) {
+	// Override some interface blocks on-demand
+	//$vars['entity'] = $cmspage;
+	if (!empty($cmspage->header)) $vars['header'] = $cmspage->header;
+	if (!empty($cmspage->menu)) $vars['menu'] = $cmspage->menu;
+	if (!empty($cmspage->footer)) $vars['footer'] = $cmspage->footer;
+	
+	// SET SEO META
 	// Update page outer title
 	if (!empty($cmspage->seo_title)) $title = $cmspage->seo_title;
 	// Set META description
 	if (!empty($cmspage->seo_description)) $vars['meta_description'] = strip_tags($cmspage->seo_description);
-	// Set META keywords
-	if (!empty($cmspage->tags)) {
-		if (is_array($cmspage->tags)) $vars['meta_keywords'] = implode(', ', $cmspage->tags);
-		else $vars['meta_keywords'] = $cmspage->tags;
+	// Set META keywords : tags + optional SEO tags
+	$tags = (array)$cmspage->tags + (array)$cmspage->seo_tags;
+	array_unique($tags);
+	if (!empty($tags)) {
+		if (is_array($tags)) $vars['meta_keywords'] = implode(', ', $tags);
+		else $vars['meta_keywords'] = $tags;
 	}
 	// Set robots information : index/noindex, follow,nofollow  => all / none
 	if ($cmspage->seo_index == 'no') $robots = 'noindex,'; else $robots = 'index,';
@@ -129,6 +138,11 @@ $content = elgg_view_layout($layout, $params);
 $params = array('content' => $content);
 if ($cmspage->pagetitle) $params['title'] = $cmspage->pagetitle; else $params['title'] = $pagetype;
 
+
+
+// Give cmspages a chance to use custom layout
+if (!empty($cmspage->layout)) { $layout = $cmspage->layout; }
+
 switch ($layout) {
 	case 'custom':
 		// Wrap into custom layout (apply only if exists)
@@ -150,6 +164,9 @@ switch ($layout) {
 }
 
 
+// Give cmspages a chance to use custom pageshell
+if (!empty($cmspage->pageshell)) { $pageshell = $cmspage->pageshell; }
+
 switch ($pageshell) {
 	case 'custom':
 		// @TODO wrap into custom pageshell
@@ -165,8 +182,7 @@ switch ($pageshell) {
 		if (empty($pageshell) || elgg_view_exists($pageshell)) $pageshell = 'default';
 }
 
-
-// Display page (using default pageshell)
+// Display page (using default or custom pageshell)
 echo elgg_view_page($title, $content, $pageshell, $vars);
 
 

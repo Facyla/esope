@@ -14,6 +14,7 @@ elgg_register_event_handler('init', 'system', 'access_icons_init');
 function access_icons_init() {
 	
 	elgg_extend_view('css', 'access_icons/css');
+	elgg_extend_view('css/admin', 'access_icons/css');
 	
 	// It's pointless to tell not loggedin users that what they see is public...
 	if (elgg_is_logged_in()) {
@@ -30,6 +31,8 @@ function access_icons_init() {
 		// et notamment dans les listes et widgets (ce qui est le choix privilégié sur adf_public_platform)
 		//elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
 	}
+	
+	elgg_register_admin_menu_item('administer', 'cmspages', 'cms');
 	
 }
 

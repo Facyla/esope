@@ -6,7 +6,7 @@
 * @author Facyla
 * @copyright Facyla 2011
 * @link http://id.facyla.fr/
-* Note : This view may render more than the pure content (description), as it's used 
+* Note : This view is designed to provide a full interface to CMS Pages viewing
 */
 
 /*
@@ -62,7 +62,10 @@ if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
 	$exit = true;
 	$allowed_contexts = explode(',', $cmspage->contexts);
 	foreach ($allowed_contexts as $context) {
-		if (elgg_in_context(trim($context))) $exit = false;
+			if (elgg_in_context(trim($context))) {
+				$exit = false;
+				break;
+			}
 	}
 	if ($exit) { register_error('cmspages:wrongcontext'); return; }
 }
@@ -100,6 +103,7 @@ switch ($cmspage->content_type) {
 	 * Replace tags : {{pagetype}}, {{:view}}, {{:view|param=value}}, {{%VARS%}}, {{[shortcode]}}
 	 */
 	case 'template':
+		// Replace wildcards with values.. {{pagetype}}
 		$content .= cmspages_render_template($cmspage->description);
 		break;
 	
@@ -127,8 +131,10 @@ switch ($cmspage->content_type) {
 	
 }
 
-// CSS - Ajout des feuilles de style personnalisées
-$content .= "\n<style>" . $cmspage->css . "</style>\n";
+	// Ajout des feuilles de style personnalisées
+	if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
+	// Ajout des JS personnalisés
+	if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
 
 // TEMPLATE - Use another cmspage as wrapper template
 // Do we use a custom cmspages template ? : not for templates (recursive risks)

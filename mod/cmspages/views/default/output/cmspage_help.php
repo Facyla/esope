@@ -9,7 +9,7 @@ if ($content) {
 	// Popup content
 	echo elgg_view_module('popup', false, $content, array(
 			'id' => $uniqid,
-			'class' => 'hidden clearfix developers-content-thin',
+			'class' => 'hidden clearfix developers-content-thin cmspages-popup',
 		));
 	
 	// Build toggle link
