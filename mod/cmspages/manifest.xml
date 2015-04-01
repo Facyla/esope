@@ -68,8 +68,9 @@ Version History
 ======================
 
 
-0.9.9.2 (2015.04.01)
+0.9.9.2 RC0 (2015.04.01) - This version is a release candidate
   - Integration with elgg_menus (allows to override categories menu with a custom menu)
+  - Full control over pages header, menu and footer
 
 0.9.9.1 (2015.03.28)
   - admin interface
