@@ -155,6 +155,7 @@ if ($menu_name) {
 	
 	// Use custom menu if exists, else use system menu
 	$menu = $CONFIG->menus[$menu_name];
+	//$content .= '<pre>' . print_r($menu, true) . '</pre>'; // debug
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
@@ -199,17 +200,17 @@ if ($menu_name) {
 			$builder = new ElggMenuBuilder($menu);
 			$menu = $builder->getMenu($sort_by);
 			foreach ($menu as $section_name => $section_items) {
-				$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
+				$content .= '<fieldset class="elgg-menus-section" data-section="' . $section_name . '"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
 					$content .= '<div class="menu-editor-items">';
 					foreach ($section_items as $menu_item) {
 						if (!($menu_item instanceof ElggMenuItem)) continue;
 						$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item));
 					}
 					$content .= '</div>';
-					// Placeholder for new items
-					$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 				$content .= '</fieldset>';
 			}
+			// Placeholder for new items (after the existing sections)
+			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		} else {
 			// Default section + new menu item
 			$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: default</legend>';
@@ -278,20 +279,48 @@ $(document).ready(function(){
 		connectWith: '.menu-editor-items', 
 		// Custom callback function
 		update: function(event, ui) {
-			/*
-			var priority = ui.item.val();
-			var section = ui.item.children('input[name*="section"]').val();
-			alert("Priority="+priority+" - Section="+section);
-			ui.item.children('input[name*="priority"]').val("500");
-			ui.item.children('input[name*="section"]').val("default");
-			*/
-			console.log(ui.item);
-			//console.log(event);
-			//ui.item
-			// Changement d'ordre : priorité entre celle des entrées suivante et précédente 
-			// (au moins identique à celle entrée précédente, car l'ordre sera conservé, de facto si on enregistre dans l'ordre)
+			// Get parent section name and set section to parent section name, or default
+			var new_section = ui.item.parents('fieldset').attr('data-section');
+			var section = ui.item.find('input[name^="section"]')[0];
+			if (new_section) section.value=new_section;
+			else section.value='default';
 			
-			// Changement de contexte : default si default ou vide
+			// @TODO Get parent item name, and set parent_name = empty, or parent name
+			//var new_parent_name = ui.item.parent('.menu-editor-items').parent('.menu-editor-item').find('input[name^="parent_name"]');
+			/*
+			var prev_parent_name = ui.item.prev().find('input[name^="parent_name"]');
+			var next_parent_name = ui.item.next().find('input[name^="parent_name"]');
+			var parent_name = ui.item.find('input[name^="parent_name"]')[0];
+			console.log(prev_parent_name);
+			console.log(next_parent_name);
+			console.log(parent_name.value);
+			*/
+			/*
+			if (new_parent_name !== undefined) parent_name.value=new_parent_name;
+			else parent_name.value='';
+			*/
+			
+			/* @TODO Get siblings item priority and set priority = same as previous item, or 100
+			 * Changement d'ordre : priorité entre celle des entrées suivante et précédente 
+			 *  - identique à celle entrée précédente, car l'ordre sera conservé de facto si on enregistre dans l'ordre)
+			 *  - si pas d'entrée précédente, égal ou inférieur à l'entrée suivante
+			 */  - sinon 100
+			/*
+			var new_priority = ui.item.parent('.menu-editor-items').find('input[name^="priority"]')[0];
+			var priority = ui.item.find('input[name^="priority"]')[0];
+			console.log(new_priority);
+			console.log(priority.value);
+			*/
+			/*
+			if (new_priority) priority.value=new_priority;
+			else priority.value='100';
+			*/
+			
+			//$(this).toggle(); // Efface le bloc parent
+			//$(ui.item).toggle(); // rien ?
+			//console.log("section : " + section.value + " => " + new_section);
+			//console.log("parent_name : " + parent_name.value + " => " + new_parent_name);
+			//console.log("priority : " + priority.value + " => " + new_priority);
 		}
 	});
 });
