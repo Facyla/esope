@@ -36,6 +36,9 @@
 <!--
 COMMENTS - HISTORY
 
+TODO : split admin/appaearance/menus into MVC model
+
+
 0.3 : 2015.04.01
  - Backup : export/import custom menus
 

@@ -15,13 +15,19 @@ $fr = array(
 	'elgg_menus:edit:title' => "Edition du menu",
 	'elgg_menus:preview' => "Prévisualiser le menu \"%s\"",
 	'elgg_menus:preview:details' => "Seules les modifications déjà enregistrées seront affichées.",
+	// Edit
 	'elgg_menus:item:edit' => "Edition",
 	'elgg_menus:edit:newitem' => "Nouvel item",
 	'elgg_menus:add:newitem' => "Ajouter un nouvel item",
 	'elgg_menus:edit:newsection' => "Nouvelle section de menu",
 	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, indiquez le nom de cette section pour l'item souhaité, puis enregistrez vos modifications : la nouvelle section apparaîtra.",
+	'elgg_menus:edit:message' => "Le menu personnalisé \"%s\" a bien été enregistré.",
+	'elgg_menus:edit:error:empty' => "Erreur : aucun menu spécifié.",
+	// Delete
 	'elgg_menus:delete' => "Supprimer cet item",
 	'elgg_menus:delete:confirm' => "Confirmez-vous la suppression de cet item ?",
+	'elgg_menus:delete:message' => "Le menu personnalisé \"%s\" a bien été supprimé.",
+	'elgg_menus:delete:error:empty' => "Erreur : aucun menu spécifié.",
 	'elgg_menus:system' => "par défaut",
 	'elgg_menus:custom' => "personnalisé",
 	'elgg_menus:mode' => "Mode de fonctionnement du menu",
@@ -79,10 +85,11 @@ $fr = array(
 	'elgg_menus:menu:create' => "Créer ce menu",
 	'elgg_menus:menu:select' => "Afficher ce menu",
 	'elgg_menus:menu:save' => "Enregistrer les modifications",
-	'elgg_menus:menu:delete' => "Supprimer le menu personnalisé",
+	'elgg_menus:menu:delete' => "Supprimer le menu personnalisé \"%s\"",
 	'elgg_menus:backups' => "Sauvegarde et restauration",
 	'elgg_menus:backups:toggle' => "Cliquez pour afficher les options",
 	// Import
+	'elgg_menus:import' => "Importer",
 	'elgg_menus:import:title' => "Importer la configuration personnalisée",
 	'elgg_menus:import:title:details' => "Vous pouvez restaurer une configuration précédemment enregistrée. Les menus présents dans la sauvegarde s'ajouteront aux menus existants, ou les remplaceront s'ils existent déjà. Les menus personnalisés non présents dans la sauvegarde ne seront pas modifiés.",
 	'elgg_menus:import:backup_file' => "Fichier de sauvegarde",
@@ -90,10 +97,13 @@ $fr = array(
 	'elgg_menus:import:filter:details' => "Si vide, importe tous les menus de la sauvegarde. Si un nom de menu est indiqué, seul ce menu sera importé.",
 	'elgg_menus:imported:menu' => "Import du menu \"%s\" réussi.",
 	// Export
+	'elgg_menus:export' => "Exporter",
 	'elgg_menus:export:title' => "Exporter la configuration personnalisée",
-	'elgg_menus:export:title:details' => "Vous pouvez exporter la configuration actuelle du menu sélectionné, ou de l'ensemble des menus, en cliquant sur l'un des liens suivants. En cas de besoin, vous pourrez les utiliser pour restaurer tous les menus personnalisés, ou seulement certains d'entre eux.",
-	'elgg_menus:export:all_menus' => "Exporter tous les menus",
-	'elgg_menus:export:menu' => "Exporter le menu \"%s\"",
+	'elgg_menus:export:title:details' => "Vous pouvez exporter la configuration actuelle du menu sélectionné, ou de l'ensemble des menus, en cliquant sur l'un des liens suivants. En cas de besoin, vous pourrez les utiliser pour restaurer tous les menus personnalisés, ou l'un d'entre eux séparemment.<br />Attention, seules les modifications enregistrées seront exportées !",
+	'elgg_menus:export:all_menus' => "Exporter tous les menus personnalisés",
+	'elgg_menus:export:menu' => "Exporter le menu personnalisé \"%s\"",
+	'elgg_menus:export:message' => "Les %s menus personnalisés ont bien été exportés. Conservez le fichier %s pour pouvoir les importer ultérieurement.",
+	'elgg_menus:export:error:nomenu' => "Erreur : aucun menu personnalisé à exporter",
 	
 	
 );
