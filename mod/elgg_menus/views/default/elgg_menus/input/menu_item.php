@@ -1,4 +1,20 @@
 <?php
+/* Available menu vars :
+name => STR Menu item identifier (required)
+text => STR Menu item display text as HTML (required)
+href => STR Menu item URL (required) (false for non-links.
+section => STR Menu section identifier 
+link_class => STR A class or classes for the tag 
+item_class => STR A class or classes for the tag 
+parent_name => STR Identifier of the parent menu item 
+contexts => ARR Page context strings 
+title => STR Menu item tooltip 
+selected => BOOL Is this menu item currently selected? 
+confirm => STR If set, the link will be drawn with the output/confirmlink view instead of output/url. 
+data => ARR Custom attributes stored in the menu item.
+$item = array('name', 'text', 'href', 'section', 'link_class', 'item_class', 'parent_name', 'contexts', 'title', 'selected', 'confirm', 'data');
+*/
+
 
 $yn_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
 $ny_opt = array('no' => elgg_echo('survey:option:no'), 'yes' => elgg_echo('survey:option:yes'));

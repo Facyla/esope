@@ -1,31 +1,15 @@
 <?php
 /**
-* Elgg menus
-* 
-* Menus editor page
-* New menus : any menu except reserved ones
-* Reserved menus : custom menu + behavior = full replacement (by a new menu) OR Add items, + Remove items (remove listed names)
-* 
-*/
+ * Menus editor page
+ * 
+ * New menus : any menu (behaviour with existing ones can be specified)
+ * Default menus : full replacement (by a new menu) OR Add items, + Remove items (remove listed names)
+ * Export / Import menu(s)
+ * 
+ */
 
 global $CONFIG;
 elgg_push_context('elgg_menus_admin');
-
-/* Available menu vars :
-name => STR Menu item identifier (required)
-text => STR Menu item display text as HTML (required)
-href => STR Menu item URL (required) (false for non-links.
-section => STR Menu section identifier 
-link_class => STR A class or classes for the tag 
-item_class => STR A class or classes for the tag 
-parent_name => STR Identifier of the parent menu item 
-contexts => ARR Page context strings 
-title => STR Menu item tooltip 
-selected => BOOL Is this menu item currently selected? 
-confirm => STR If set, the link will be drawn with the output/confirmlink view instead of output/url. 
-data => ARR Custom attributes stored in the menu item.
-$item = array('name', 'text', 'href', 'section', 'link_class', 'item_class', 'parent_name', 'contexts', 'title', 'selected', 'confirm', 'data');
-*/
 
 $content = '';
 
@@ -54,7 +38,63 @@ $menu_opts = elgg_menus_menus_opts($menu_name);
 //$content .= "CUSTOM $menu_name : " . elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
 
 
+
 // PROCESS MENU FORMS FIRST : EDIT MENUS, REMOVE MENU
+
+// IMPORT MENU(s) CONFIG : menu_name::serialized_config (one per line)
+// Note : import *adds and replaces* menus, but will not erase menus that are not in the backup
+if ($menus_action == 'import') {
+	$import_data = get_uploaded_file('backup_file');
+	if ($import_data) {
+		$import_data = explode("\n", $import_data);
+		foreach ($import_data as $import_line) {
+			if (empty($import_line)) continue;
+			$pos = strpos($import_line, '::');
+			$import_name = substr($import_line, 0, $pos);
+			$import_config = substr($import_line, $pos + 2);
+			if (empty($import_name) || empty($import_config)) continue;
+			// Save menu config (optionally only selected one)
+			if (empty($menu_name) || ($import_name == $menu_name)) {
+				//$content .= "$import_name : <pre>$import_config</pre> vs <pre>" . elgg_get_plugin_setting("menu-$import_name", 'elgg_menus') . "</pre>";
+				elgg_set_plugin_setting("menu-$import_name", $import_config, 'elgg_menus');
+				if (!in_array($menu_name, $custom_menus)) { $custom_menus[] = $menu_name; }
+				system_message(elgg_echo('elgg_menus:imported:menu', array($import_name)));
+			}
+		}
+		// Save updated custom menus list
+		array_filter($custom_menus);
+		$custom_menus_data = implode(',', $custom_menus);
+		elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
+	}
+}
+
+// SAVE / EXPORT menu : menu_name::serialized_config (one per line)
+if ($menus_action == 'export') {
+	$export = '';
+	// Export custom menu config
+	if ($menu_name) {
+		$export_names = array($menu_name);
+		$export_filename = $menu_name;
+	} else {
+		// Export all custom menus config
+		$export_names = elgg_menus_get_custom_menus();
+		$export_filename = 'all-menus';
+	}
+	foreach ($export_names as $export_name) {
+		$export .= $export_name . '::';
+		$export .= elgg_get_plugin_setting("menu-$export_name", 'elgg_menus');
+		$export .= "\n";
+	}
+	// Export filename
+	$export_filename = 'elgg_menus_' . $export_filename . '_' . date('Y-m-d-H-i-s') . '.backup';
+	// Send file using headers for download
+	header('Content-Type: text/plain; charset=utf-8');
+	header('Content-Disposition: attachment; filename=' . $export_filename);
+	echo $export;
+	exit;
+}
+
+// EDIT and DELETE : $menu_name
 if ($menu_name) {
 	
 	/* Custom menu edit form */
@@ -151,6 +191,16 @@ if ($menu_name) {
 			$custom_menus_data = implode(',', $custom_menus);
 			elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
 		}
+	} else {
+		// If no form sent, get saved menu main config options
+		$menu_config_data = elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
+		$menu_config = unserialize($menu_config_data);
+		$menu_mode = $menu_config['mode'];
+		$menu_remove = $menu_config['remove'];
+		$menu_class = $menu_config['class'];
+		$menu_sort_by = $menu_config['sort_by'];
+		$menu_handler = $menu_config['handler'];
+		$menu_show_section_headers = $menu_config['show_section_headers'];
 	}
 	
 	// Delete custom menu and update custom menus list
@@ -164,7 +214,6 @@ if ($menu_name) {
 		elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
 	}
 	
-	
 	// Get custom menu only, for editing (if menu already exists as custom, replace system menu with custom)
 	if (in_array($menu_name, $custom_menus)) {
 		// Clear system menu so we can edit additions only
@@ -175,26 +224,58 @@ if ($menu_name) {
 	
 	// Update menu selector
 	$menu_opts = elgg_menus_menus_opts($menu_name);
-	
 }
+
 
 
 
 // MAIN FORMS : SELECT, ADD, EDIT, REMOVE
 
-// New menu form
+// NEW MENU form
 $content .= '<form style="float:right;" id="menu-editor-form-new">';
 $content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
 $content .= '</form>';
 
-// Existing menu select form
+// SELECT existing menu form
 $content .= '<form id="menu-editor-form-select">';
 //$content .= '<a href="?new_menu=yes" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau menu</a>';
 $content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/pulldown', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:select'), 'style' => 'float:none;'));
 $content .= '</form>';
-$content .= '<div class="clearfloat"></div><hr />';
+
+$content .= '<div class="clearfloat"></div><br />';
+
+
+// BACKUP OPTIONS : hide/show options
+$content .= '<p><label><a href="javascript:void(0);" onClick="$(\'#elgg-menus-backups\').toggle();">' . elgg_echo('elgg_menus:backups') . ' &nbsp; <i class="fa fa-toggle-down"></i></a></label></p>';
+$content .= '<div id="elgg-menus-backups" class="hidden">';
+	
+	// IMPORT menu(s) config form : text backup file, with menu_name::serialized_config (one per line)
+	// Display import form
+	$import_form .= '<h3>' . elgg_echo('elgg_menus:import:title') . '</h3>';
+	$import_form .= '<p><em>' . elgg_echo('elgg_menus:import:title:details') . '</em></p>';
+	$import_form .= '<form action="?menus_action=import" enctype="multipart/form-data" method="POST">';
+	$import_form .= elgg_view('input/securitytoken');
+	$import_form .= '<label>' . elgg_echo('elgg_menus:import:backup_file') . elgg_view('input/file', array('name' => 'backup_file')) . '</label>';
+	$import_form .= ' &nbsp; ';
+	$import_form .= '<label>' . elgg_echo('elgg_menus:import:filter') . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => 'width:20ex;')) . '</label><br /><em>' . elgg_echo('elgg_menus:import:filter:details') . '</em>';
+	$import_form .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => 'import'));
+	/// Display submit button
+	$import_form .= elgg_view('input/submit', array('value' => elgg_echo('import')));
+	$import_form .= '</form>';
+	$content .= $import_form;
+	$content .= '<div class="clearfloat"></div>';
+	
+	// SAVE / EXPORT menu form (links)
+	$content .= '<h3>' . elgg_echo('elgg_menus:export:title') . '</h3>';
+	$content .= '<p><em>' . elgg_echo('elgg_menus:export:title:details') . '</em></p>';
+	if ($menu_name) $content .= '<a href="?menus_action=export&menu_name=' . $menu_name . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:export:menu', array($menu_name)) . '</a>';
+	$content .= '<a href="?menus_action=export" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:export:all_menus') . '</a>';
+	$content .= '<div class="clearfloat"></div>';
+	
+$content .= '</div></fieldset>';
+$content .= '<hr />';
 
 
 
@@ -222,18 +303,11 @@ if ($menu_name) {
 	
 	// Edition du titre du menu, si menu personnalisé
 	$content .= '<div class="clearfloat"></div>';
-	$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'name')) . '<p><label>' . elgg_echo('elgg_menus:name') . ' ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => "max-width:20ex;")) . '</label></p>';
-	/*
-	if (in_array($menu_name, $custom_menus)) {
-	} else {
-		$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
-	}
-	*/
+	$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'name')) . '<p><label>' . elgg_echo('elgg_menus:name') . ' ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => "width:20ex;")) . '</label></p>';
 	$content .= '<div class="clearfloat"></div>';
 	
 	// Use custom menu if exists, else use system menu
 	$menu = $CONFIG->menus[$menu_name];
-	
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';

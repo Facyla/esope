@@ -2,18 +2,13 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Elgg menus</name>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>0.1</version>
+	<version>0.3</version>
 	<blurb>Menus editor</blurb>
-	<description>This plugin enables the editing of menus</description>
+	<description>This plugin lets admins edit existing menus, and create new ones.</description>
 	<website>http://id.facyla.net/</website>
 	<copyright>ITEMS International 2015</copyright>
 	<license>GNU Public License version 2</license>
 	
-	<screenshot>
-		<description>An example screenshot</description>
-		<path>graphics/plugin_ss1.png</path>
-	</screenshot>
-
 	<category>admin</category>
 	<category>interface</category>
 	<category>appearance</category>
@@ -30,13 +25,25 @@
 		<type>plugin</type>
 		<name>adf_plugin_platform</name>
 	</suggests>
-
+	
+	<suggests>
+		<type>plugin</type>
+		<name>cmspages</name>
+	</suggests>
 	
 </plugin_manifest>
 
 <!--
 COMMENTS - HISTORY
 
+0.3 : 2015.04.01
+ - Backup : export/import custom menus
 
+0.2 : 2015.03.30 - Full working release
+ - custom menu edit
+ - preview menu
+ - hooks to enable various behaviours for custom menus against default menus : merge|replace|remove|disabled
+
+0.1 : 2015.03.21 - first plugin structure
 //-->
 
