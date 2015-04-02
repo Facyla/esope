@@ -46,6 +46,11 @@ function elgg_menus_init() {
 	 */
 	//elgg_register_plugin_hook_handler('prepare', 'all', 'elgg_menus_prepare_menu_hook');
 	
+	
+	// Register actions
+	$actions_path = elgg_get_plugins_path() . 'elgg_menus/actions/elgg_menus/';
+	elgg_register_action("elgg_menus/edit", $actions_path . 'edit.php');
+	
 }
 
 
@@ -169,15 +174,16 @@ function elgg_menus_get_menu_config($menu_name, $key = false) {
 
 /* Récupère et prépare le menu : ajoute ou remplace ses éléments
  * $menu_name : nom du menu à préparer
+ * $mode : force un mode particulier (utile notamment pour éditer un menu, ou lors de la prévisualisation)
  * Modes : merge = ajoute les items, replace = vide et remplace le menu pré-existant, disabled = menu personnalisé désactivé, clear = vide le menu pré-existant
  */
-function elgg_menus_setup_menu($menu_name) {
+function elgg_menus_setup_menu($menu_name, $mode = false) {
 	// GET AND SET CUSTOM MENU CONFIGURATION
 	$menu_config = elgg_menus_get_menu_config($menu_name);
 	if (!$menu_config) { return false; }
 	
-	// Force to replace when editing custom menu( otherwise we may lose changes)
-	if (elgg_in_context('elgg_menus_admin')) { $menu_config['mode'] = 'replace'; }
+	// Force to replace when editing custom menu (otherwise we may lose changes)
+	if ($mode) { $menu_config['mode'] = $mode; }
 	
 	global $CONFIG;
 	switch($menu_config['mode']) {

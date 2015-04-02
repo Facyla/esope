@@ -50,6 +50,9 @@ $display = get_input('display');
 $template = get_input('template');
 $layout = get_input('layout');
 $pageshell = get_input('pageshell');
+$header = get_input('header');
+$menu = get_input('menu');
+$footer = get_input('footer');
 $page_css = get_input('page_css');
 $page_js = get_input('page_js');
 // SEO
@@ -107,9 +110,17 @@ if (!empty($guid)) {
 
 
 // Check existing object, or create a new one
-if (!elgg_instanceof($cmspage, 'object', 'cmspage')) {
+if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+	// Keep some history from previous content and settings
+	// Save previous description as an annotation
+	if ($cmspage->description != $description) { $cmspage->annotate('description', $description, 0); }
+	// Save previous description as an annotation
+	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
+		$cmspage->annotate('module', $cmspage->module, 0);
+		$cmspage->annotate('module_config', $cmspage->module_config, 0);
+	}
+} else {
 	$cmspage = new CMSPage();
-	//$cmspage->subtype = 'cmspage';
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
 	$cmspage->pagetype = $pagetype;
 	$cmspage->save();
@@ -133,6 +144,9 @@ $cmspage->display = $display;
 $cmspage->template = $template;
 $cmspage->layout = $layout;
 $cmspage->pageshell = $pageshell;
+$cmspage->header = $header;
+$cmspage->menu = $menu;
+$cmspage->footer = $footer;
 $cmspage->css = $page_css;
 $cmspage->js = $page_js;
 // @todo unused yet
@@ -149,7 +163,6 @@ $cmspage->seo_tags = $seo_tags;
 $cmspage->seo_description = $seo_description;
 $cmspage->seo_index = $seo_index;
 $cmspage->seo_follow = $seo_follow;
-
 
 
 // Save new/updated content

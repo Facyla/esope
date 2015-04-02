@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest>
-  <field key="author" value="Facyla" />
-  <field key="version" value="0.9.8 (1.8)" />
-  <field key="description" value="Static and dynamic pages and reusable views, templates and modules editor for use in interface-building and pages management (flexible CMS tool for Elgg)" />
-  <field key="website" value="http://id.facyla.net/" />
-  <field key="copyright" value="(C) Facyla 2011-2013" />
-  <field key="licence" value="GNU Public License version 2" />
-  <field key="elgg_version" value="2009030702" />
+	<name>CMS Pages</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.9.8 (1.8)</version>
+	<blurb>CMS Pages editor</blurb>
+	<description>CMSPages is flexible CMS tool for Elgg, and turns Elgg into a full CMS, enabling it to act as a website. It provides Static and dynamic pages, but also reusable views, templates and modules editor that can be used into interface-building and pages management.</description>
+	<website>http://id.facyla.net/</website>
+	<copyright>(c) Florian DANIEL aka Facyla 2011-2015</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<category>admin</category>
+	<category>interface</category>
+	<category>appearance</category>
+	<category>content</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>adf_plugin_platform</name>
+	</suggests>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>elgg_menus</name>
+	</suggests>
+	
 </plugin_manifest>
 
 <!-- 
@@ -44,10 +68,13 @@ Version History
 ======================
 
 
+0.9.9.2 RC0 (2015.04.01) - This version is a release candidate
+  - Integration with elgg_menus (allows to override categories menu with a custom menu)
+  - Full control over pages header, menu and footer
 
 0.9.9.1 (2015.03.28)
   - admin interface
-
+  - enable password access for any page or view
 
 0.9.9.0 (2015.03.25)
   - new SEO-friendly page handlers for articles (+ categories and tags later)

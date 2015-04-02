@@ -400,16 +400,47 @@ function cmspages_pageshells_opts($add_default = true) {
 	return $pageshell_opts;
 }
 
-/* Returns footer
+/* Returns header cmspage
+ * Eg. header cmspage to be used
+ */
+function cmspages_headers_opts($add_default_config = true) {
+	$header_opts = array(
+			'initial' => elgg_echo('cmspages:cms_header:initial'),
+			'no' => elgg_echo('cmspages:cms_header:no'),
+			'cms-header' => elgg_echo('cmspages:cms_header:custom'),
+		);
+	if ($add_default_config) $header_opts[""] = elgg_echo('cmspages:cms_header:default');
+	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
+	return $header_opts;
+}
+
+/* Returns menu name
+ * Eg. menu to be used
+ */
+function cmspages_menus_opts($add_default_config = true) {
+	$menu_opts = array();
+	if (elgg_is_active_plugin('elgg_menus')) {
+		if (function_exists('elgg_menus_menus_opts')) {
+			$menu_opts = elgg_menus_menus_opts();
+		}
+	}
+	$menu_opts['cmspages_categories'] = elgg_echo('cmspages:settings:cms_menu:cmspages_categories');
+	$menu_opts[''] = elgg_echo('cmspages:settings:cms_menu:default');
+	$menu_opts['no'] = elgg_echo('cmspages:settings:cms_menu:no');
+	return $menu_opts;
+}
+
+
+/* Returns footer cmspage
  * Eg. footer cmspage to be used
  */
-function cmspages_footers_opts($add_default = true) {
+function cmspages_footers_opts($add_default_config = true) {
 	$footer_opts = array(
-			'' => elgg_echo('cmspages:cms_footer:default'),
+			'initial' => elgg_echo('cmspages:cms_footer:initial'), // default footer
+			'no' => elgg_echo('cmspages:cms_footer:no'), // no footer
 			'cms-footer' => elgg_echo('cmspages:cms_footer:custom'),
 		);
-	if ($add_default) $footer_opts[""] = elgg_echo('cmspages:footer:');
-
+	if ($add_default_config) $footer_opts[""] = elgg_echo('cmspages:cms_footer:default');
 	// @TODO : Permettre d'ajouter d'autres pageshells via config ?
 	return $footer_opts;
 }

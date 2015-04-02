@@ -5,12 +5,17 @@ $plugin = $vars['entity'];
 $yn_opts = array('yes' => elgg_echo('survey:settings:yes'), 'no' => elgg_echo('survey:settings:no'));
 $layout_opts = cmspages_layouts_opts(false);
 $pageshell_opts = cmspages_pageshells_opts(false);
+$header_opts = cmspages_headers_opts(false);
+$cms_menus_opt = cmspages_menus_opts(false);
 $footer_opts = cmspages_footers_opts(false);
 
 // Set defaults
 //if (!isset($plugin->cms_mode)) $plugin->cms_mode = 'no';
 if (!isset($plugin->layout)) $plugin->layout = 'one_column';
 if (!isset($plugin->pageshell)) $plugin->pageshell = 'default';
+if (!isset($plugin->cms_menu)) $plugin->cms_menu = 'cmspages_categories';
+if (!isset($plugin->cms_header)) $plugin->cms_header = 'initial';
+if (!isset($plugin->cms_footer)) $plugin->cms_footer = 'initial';
 
 
 
@@ -156,16 +161,19 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend
 	echo '<br /><em>' . elgg_echo('cmspages:settings:pageshell:details') . '</em>';
 	echo '</p>';
 	
+	// Default header : default, or custom cmspage
+	echo '<p><label>' . elgg_echo('cmspages:settings:cms_header') . ' ';
+	echo elgg_view('input/dropdown', array('name' => 'params[cms_header]', 'value' => $plugin->cms_header, 'options_values' => $header_opts));
+	echo '</label> &nbsp; <a href="' . $vars['url'] . 'cmspages/cms-header" target="_blank" class="elgg-button">' . elgg_echo('cmspages:cms_header:edit') . '</a>';
+	echo '<br /><em>' . elgg_echo('cmspages:settings:cms_header:details') . '</em>';
+	echo '</p>';
+	
 	// Menu CMS : categories ?  ou menu personnalisé
 	if (elgg_is_active_plugin('elgg_menus')) {
-		if (function_exists('elgg_menus_menus_opts')) {
-			$cms_menus_opt = elgg_menus_menus_opts();
-			$cms_menus_opt[''] = elgg_echo('cmspages:settings:cms_menu:cmspages_categories');
-			echo '<p><label>' . elgg_echo('cmspages:settings:cms_menu') . ' ';
-			echo elgg_view('input/dropdown', array('name' => 'params[cms_menu]', 'value' => $plugin->cms_menu, 'options_values' => $cms_menus_opt));
-			echo '</label><br /><em>' . elgg_echo('cmspages:settings:cms_menu:details') . '</em>';
-			echo '</p>';
-		}
+		echo '<p><label>' . elgg_echo('cmspages:settings:cms_menu') . ' ';
+		echo elgg_view('input/dropdown', array('name' => 'params[cms_menu]', 'value' => $plugin->cms_menu, 'options_values' => $cms_menus_opt));
+		echo '</label><br /><em>' . elgg_echo('cmspages:settings:cms_menu:details') . '</em>';
+		echo '</p>';
 	}
 	
 	// Default footer : default, or custom cmspage

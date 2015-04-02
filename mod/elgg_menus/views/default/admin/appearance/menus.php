@@ -1,33 +1,19 @@
 <?php
 /**
-* Elgg menus
-* 
-* Menus editor page
-* New menus : any menu except reserved ones
-* Reserved menus : custom menu + behavior = full replacement (by a new menu) OR Add items, + Remove items (remove listed names)
-* 
-*/
+ * Menus editor page
+ * 
+ * New menus : any menu (behaviour with existing ones can be specified)
+ * Default menus : full replacement (by a new menu) OR Add items, + Remove items (remove listed names)
+ * Export / Import menu(s)
+ * 
+ */
 
 global $CONFIG;
-elgg_push_context('elgg_menus_admin');
-
-/* Available menu vars :
-name => STR Menu item identifier (required)
-text => STR Menu item display text as HTML (required)
-href => STR Menu item URL (required) (false for non-links.
-section => STR Menu section identifier 
-link_class => STR A class or classes for the tag 
-item_class => STR A class or classes for the tag 
-parent_name => STR Identifier of the parent menu item 
-contexts => ARR Page context strings 
-title => STR Menu item tooltip 
-selected => BOOL Is this menu item currently selected? 
-confirm => STR If set, the link will be drawn with the output/confirmlink view instead of output/url. 
-data => ARR Custom attributes stored in the menu item.
-$item = array('name', 'text', 'href', 'section', 'link_class', 'item_class', 'parent_name', 'contexts', 'title', 'selected', 'confirm', 'data');
-*/
 
 $content = '';
+
+$action_url = '';
+$action_url = elgg_get_site_url() . 'action/elgg_menus/edit';
 
 // Main action to be performed (edit|delete)
 // Note : edit only when sending form, otherwise custom content will be erased
@@ -54,147 +40,88 @@ $menu_opts = elgg_menus_menus_opts($menu_name);
 //$content .= "CUSTOM $menu_name : " . elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
 
 
-// PROCESS MENU FORMS FIRST : EDIT MENUS, REMOVE MENU
+
+/* PROCESS MENU FORMS FIRST : EDIT MENUS, REMOVE MENU => see 'edit' action
+ * IMPORT MENU(s) CONFIG : action OK
+ * SAVE / EXPORT menu : action OK
+ * EDIT $menu_name : action OK
+ * DELETE $menu_name : action OK
+ */
+
+
+// Load menu config
 if ($menu_name) {
+	// If no form sent, get custom menu main config options
+	$menu_config_data = elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
+	$menu_config = unserialize($menu_config_data);
+	$menu_mode = $menu_config['mode'];
+	$menu_remove = $menu_config['remove'];
+	$menu_class = $menu_config['class'];
+	$menu_sort_by = $menu_config['sort_by'];
+	$menu_handler = $menu_config['handler'];
+	$menu_show_section_headers = $menu_config['show_section_headers'];
 	
-	/* Custom menu edit form */
-	if ($menus_action == 'edit') {
-		// These vars should be kept "as sent" (they are used in the menu edit form)
-		//merge or replace mode
-		$menu_mode = get_input('menu_mode', 'merge');
-		// Entrées à retirer d'un menu pré-existant (si merge)
-		// Remove dynamic items (merge mode only) => set up array from list
-		$menu_remove = get_input('menu_remove');
-		//class: string the class for the entire menu.
-		$menu_class = get_input('menu_class');
-		//sort_by => string or php callback string options: 'name', 'priority', 'title' (default), 'register' (registration order) or a php callback (a compare function for usort)
-		$menu_sort_by = get_input('menu_sort_by', 'priority');
-		//handler: string the page handler to build action URLs entity: to use to build action URLs
-		$menu_handler = get_input('menu_handler');
-		//show_section_headers: bool show headers before menu sections.
-		$menu_show_section_headers = get_input('menu_show_section_headers', 'no');
-		
-		// Menu items names array (used to count items)
-		$new_name = get_input('name');
-		// Count menu items from received items count (item name is the only required value for items)
-		$number_of_items = count($new_name);
-		// Other items parameters
-		$new_items = array();
-		$new_href = get_input('href');
-		$new_text = get_input('text');
-		$new_title = get_input('title');
-		$new_confirm = get_input('confirm');
-		$new_item_class = get_input('item_class');
-		$new_link_class = get_input('link_class');
-		$new_section = get_input('section');
-		$new_priority = get_input('priority');
-		$new_contexts = get_input('contexts');
-		$new_selected = get_input('selected');
-		$new_parent_name = get_input('parent_name');
-		// Process each menu item
-		for($i=0; $i<$number_of_items; $i++) {
-			$new_name_clean = $new_name[$i];
-			// Try to guess name from text, if no name (should not happen)
-			if (empty($new_name_clean) && !empty($new_text[$i])) { $new_name_clean = elgg_get_friendly_title($new_name[$i]); }
-			// Ensure proper name formatting
-			$new_name_clean = elgg_get_friendly_title($new_name_clean);
-			// Avoid name duplicates by incrementing duplicate names with index
-			if (isset($new_items[$new_name_clean])) { $new_name_clean .= $i; }
-			// Set up new menu item
-			if ($new_name_clean) {
-				// Set defaults
-				if (empty($new_section[$i])) { $new_section[$i] = 'default'; }
-				if (empty($new_priority[$i])) { $new_priority[$i] = 100; }
-				if (empty($new_contexts[$i])) { $new_contexts[$i] = array('all'); }
-				if (!empty($new_item_class[$i])) {
-					$new_item_class[$i] = explode(' ', $new_item_class[$i]);
-					$new_item_class[$i] = array_unique($new_item_class[$i]);
-					$new_item_class[$i] = implode(' ', $new_item_class[$i]);
-				}
-				// Add/update item
-				$new_items[$new_name_clean] = array(
-						'name' => $new_name[$i],
-						'href' => $new_href[$i],
-						'text' => $new_text[$i],
-						'title' => $new_title[$i],
-						'confirm' => $new_confirm[$i],
-						'item_class' => $new_item_class[$i],
-						'link_class' => $new_link_class[$i],
-						'section' => $new_section[$i],
-						'priority' => $new_priority[$i],
-						'contexts' => $new_contexts[$i],
-						'selected' => $new_selected[$i],
-						'parent_name' => $new_parent_name[$i],
-					);
-			}
-		}
-		//$content .= '<pre>' . print_r($new_items, true) . '</pre>'; // debug
-		
-		// Define custom menu configuration
-		$menu_config = array('name' => $menu_name, 'items' => $new_items, 'mode' => $menu_mode, 'class' => $menu_class, 'sort_by' => $menu_sort_by, 'handler' => $menu_handler, 'show_section_headers' => $menu_show_section_headers, 'remove' => $menu_remove);
-		// Transform some values we want more directly usable
-		if ($menu_config['remove']) {
-			$menu_config['remove'] = explode(',', $menu_config['remove']);
-			$menu_config['remove'] = array_map('trim', $menu_config['remove']);
-		}
-		if ($menu_config['show_section_headers'] == 'yes') { $menu_config['show_section_headers'] = true; } else { $menu_config['show_section_headers'] = false; }
-		// Save menu configuration data
-		$menu_config_data = serialize($menu_config);
-		elgg_set_plugin_setting("menu-$menu_name", $menu_config_data, 'elgg_menus');
-		//$content .= "CONFIG $menu_name : $menu_config_data<br />";
-		//$content .= "CUSTOM $menu_name : " . elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus') . '<br />';
-		
-		// Update custom menu list (add menu)
-		if (!in_array($menu_name, $custom_menus)) {
-			$custom_menus[] = $menu_name;
-			array_filter($custom_menus);
-			$custom_menus_data = implode(',', $custom_menus);
-			elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
-		}
-	}
-	
-	// Delete custom menu and update custom menus list
-	if ($menus_action == 'delete') {
-		// Remove custom menu config
-		elgg_unset_plugin_setting("menu-$menu_name", 'elgg_menus');
-		// Remove from custom menu list
-		$custom_menus = array_diff($custom_menus, array($menu_name));
-		// Save updated list
-		$custom_menus_data = implode(',', $custom_menus);
-		elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
-	}
-	
-	
-	// Get custom menu only, for editing (if menu already exists as custom, replace system menu with custom)
+	// Get custom menu only, for editing (if menu already exists as custom, replace system menu with custom to avoid duplicates)
 	if (in_array($menu_name, $custom_menus)) {
 		// Clear system menu so we can edit additions only
 		$CONFIG->menus[$menu_name] = array();
 		// Set up new menu
-		elgg_menus_setup_menu($menu_name);
+		elgg_menus_setup_menu($menu_name, 'replace');
 	}
-	
-	// Update menu selector
-	$menu_opts = elgg_menus_menus_opts($menu_name);
-	
 }
-
 
 
 // MAIN FORMS : SELECT, ADD, EDIT, REMOVE
 
-// New menu form
-$content .= '<form style="float:right;" id="menu-editor-form-new">';
+// NEW MENU form
+$content .= '<form style="float:right;" id="menu-editor-form-new" method="GET">';
 $content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
 $content .= '</form>';
 
-// Existing menu select form
-$content .= '<form id="menu-editor-form-select">';
+// SELECT existing menu form
+$content .= '<form id="menu-editor-form-select" method="GET">';
 //$content .= '<a href="?new_menu=yes" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau menu</a>';
 $content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/pulldown', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:select'), 'style' => 'float:none;'));
 $content .= '</form>';
-$content .= '<div class="clearfloat"></div><hr />';
+
+$content .= '<div class="clearfloat"></div><br />';
+
+
+// BACKUP OPTIONS : hide/show options
+$content .= '<p><label><a href="javascript:void(0);" onClick="$(\'#elgg-menus-backups\').toggle();">' . elgg_echo('elgg_menus:backups') . ' &nbsp; <i class="fa fa-toggle-down"></i></a></label></p>';
+$content .= '<div id="elgg-menus-backups" class="hidden">';
+	
+	// IMPORT menu(s) config form : text backup file, with menu_name::serialized_config (one per line)
+	// Display import form
+	$import_form .= '<h3>' . elgg_echo('elgg_menus:import:title') . '</h3>';
+	$import_form .= '<p><em>' . elgg_echo('elgg_menus:import:title:details') . '</em></p>';
+	$import_form .= '<form action="' . $action_url . '?menus_action=import" enctype="multipart/form-data" method="POST">';
+	$import_form .= elgg_view('input/securitytoken');
+	$import_form .= '<label>' . elgg_echo('elgg_menus:import:backup_file') . elgg_view('input/file', array('name' => 'backup_file')) . '</label>';
+	$import_form .= ' &nbsp; ';
+	$import_form .= '<label>' . elgg_echo('elgg_menus:import:filter') . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => 'width:20ex;')) . '</label><br /><em>' . elgg_echo('elgg_menus:import:filter:details') . '</em>';
+	$import_form .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => 'import'));
+	/// Display submit button
+	$import_form .= elgg_view('input/submit', array('value' => elgg_echo('import')));
+	$import_form .= '</form>';
+	$content .= $import_form;
+	$content .= '<div class="clearfloat"></div>';
+	
+	// SAVE / EXPORT menu form (links)
+	$content .= '<h3>' . elgg_echo('elgg_menus:export:title') . '</h3>';
+	$content .= '<p><em>' . elgg_echo('elgg_menus:export:title:details') . '</em></p>';
+	$export_url = elgg_add_action_tokens_to_url($action_url) . '&menus_action=export';
+	$content .= '<a href="' . $export_url . '" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:export:all_menus') . '</a>';
+	if ($menu_name) {
+		$export_url .= elgg_add_action_tokens_to_url($action_url) . '&menu_name=' . $menu_name;
+		$content .= '<a href="' . $export_url . '" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:export:menu', array($menu_name)) . '</a>';
+	}
+	$content .= '<div class="clearfloat"></div>';
+	
+$content .= '</div></fieldset>';
+$content .= '<hr />';
 
 
 
@@ -214,7 +141,8 @@ if ($menu_name) {
 	
 	
 	// MENU EDITOR FORM
-	$content .= '<form id="menu-editor-form-edit" method="POST">';
+	$content .= '<form action="' . $action_url . '" id="menu-editor-form-edit" method="POST">';
+	$content .= elgg_view('input/securitytoken');
 	$content .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => 'edit'));
 	
 	//$content .= elgg_view('input/submit', array('value' => elgg_echo('save')));
@@ -222,18 +150,12 @@ if ($menu_name) {
 	
 	// Edition du titre du menu, si menu personnalisé
 	$content .= '<div class="clearfloat"></div>';
-	$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'name')) . '<p><label>' . elgg_echo('elgg_menus:name') . ' ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => "max-width:20ex;")) . '</label></p>';
-	/*
-	if (in_array($menu_name, $custom_menus)) {
-	} else {
-		$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
-	}
-	*/
+	$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'name')) . '<p><label>' . elgg_echo('elgg_menus:name') . ' ' . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => "width:20ex;")) . '</label></p>';
 	$content .= '<div class="clearfloat"></div>';
 	
 	// Use custom menu if exists, else use system menu
 	$menu = $CONFIG->menus[$menu_name];
-	
+	//$content .= '<pre>' . print_r($menu, true) . '</pre>'; // debug
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
@@ -273,22 +195,22 @@ if ($menu_name) {
 			$content .= '<p><blockquote>' . elgg_echo('elgg_menus:edit:system_menu:details') . '</blockquote></p>';
 		}
 		
-		//$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
-		$builder = new ElggMenuBuilder($menu);
-		$menu = $builder->getMenu($sort_by);
 		if ($menu) {
+			//$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
+			$builder = new ElggMenuBuilder($menu);
+			$menu = $builder->getMenu($sort_by);
 			foreach ($menu as $section_name => $section_items) {
-				$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
+				$content .= '<fieldset class="elgg-menus-section" data-section="' . $section_name . '"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
 					$content .= '<div class="menu-editor-items">';
 					foreach ($section_items as $menu_item) {
 						if (!($menu_item instanceof ElggMenuItem)) continue;
 						$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item));
 					}
 					$content .= '</div>';
-					// Placeholder for new items
-					$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 				$content .= '</fieldset>';
 			}
+			// Placeholder for new items (after the existing sections)
+			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		} else {
 			// Default section + new menu item
 			$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: default</legend>';
@@ -325,19 +247,15 @@ if ($menu_name) {
 	
 	
 	// Custom menu delete form
-	$content .= '<form id="menu-editor-form-delete" method="POST">';
+	$content .= '<form action="' . $action_url . '" id="menu-editor-form-delete" method="POST">';
+		$content .= elgg_view('input/securitytoken');
 		$content .= elgg_view('input/hidden', array('name' => 'menu_name', 'value' => $menu_name));
 		$content .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => "delete"));
-		$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:delete'), 'class' => "elgg-button elgg-button-delete"));
+		$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:delete', array($menu_name)), 'class' => "elgg-button elgg-button-delete"));
 	$content .= '</form>';
 	
 }
 
-
-
-echo '<div id="menu-editor-admin">';
-echo $content;
-echo '</div>';
 
 
 /* @TODO Enable parent/children structure and reordering */
@@ -347,6 +265,11 @@ echo '</div>';
  * - update weight
  * - parent_name
  */
+
+
+echo '<div id="menu-editor-admin">';
+echo $content;
+echo '</div>';
 ?>
 
 <script type="text/javascript">
@@ -356,20 +279,48 @@ $(document).ready(function(){
 		connectWith: '.menu-editor-items', 
 		// Custom callback function
 		update: function(event, ui) {
-			/*
-			var priority = ui.item.val();
-			var section = ui.item.children('input[name*="section"]').val();
-			alert("Priority="+priority+" - Section="+section);
-			ui.item.children('input[name*="priority"]').val("500");
-			ui.item.children('input[name*="section"]').val("default");
-			*/
-			console.log(ui.item);
-			//console.log(event);
-			//ui.item
-			// Changement d'ordre : priorité entre celle des entrées suivante et précédente 
-			// (au moins identique à celle entrée précédente, car l'ordre sera conservé, de facto si on enregistre dans l'ordre)
+			// Get parent section name and set section to parent section name, or default
+			var new_section = ui.item.parents('fieldset').attr('data-section');
+			var section = ui.item.find('input[name^="section"]')[0];
+			if (new_section) section.value=new_section;
+			else section.value='default';
 			
-			// Changement de contexte : default si default ou vide
+			// @TODO Get parent item name, and set parent_name = empty, or parent name
+			//var new_parent_name = ui.item.parent('.menu-editor-items').parent('.menu-editor-item').find('input[name^="parent_name"]');
+			/*
+			var prev_parent_name = ui.item.prev().find('input[name^="parent_name"]');
+			var next_parent_name = ui.item.next().find('input[name^="parent_name"]');
+			var parent_name = ui.item.find('input[name^="parent_name"]')[0];
+			console.log(prev_parent_name);
+			console.log(next_parent_name);
+			console.log(parent_name.value);
+			*/
+			/*
+			if (new_parent_name !== undefined) parent_name.value=new_parent_name;
+			else parent_name.value='';
+			*/
+			
+			/* @TODO Get siblings item priority and set priority = same as previous item, or 100
+			 * Changement d'ordre : priorité entre celle des entrées suivante et précédente 
+			 *  - identique à celle entrée précédente, car l'ordre sera conservé de facto si on enregistre dans l'ordre)
+			 *  - si pas d'entrée précédente, égal ou inférieur à l'entrée suivante
+			 */  - sinon 100
+			/*
+			var new_priority = ui.item.parent('.menu-editor-items').find('input[name^="priority"]')[0];
+			var priority = ui.item.find('input[name^="priority"]')[0];
+			console.log(new_priority);
+			console.log(priority.value);
+			*/
+			/*
+			if (new_priority) priority.value=new_priority;
+			else priority.value='100';
+			*/
+			
+			//$(this).toggle(); // Efface le bloc parent
+			//$(ui.item).toggle(); // rien ?
+			//console.log("section : " + section.value + " => " + new_section);
+			//console.log("parent_name : " + parent_name.value + " => " + new_parent_name);
+			//console.log("priority : " + priority.value + " => " + new_priority);
 		}
 	});
 });

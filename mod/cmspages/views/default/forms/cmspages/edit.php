@@ -86,6 +86,9 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	$template = $cmspage->template; // This page will use the custom cmspage template
 	$layout = $cmspage->layout; // Use a custom layout ?
 	$pageshell = $cmspage->pageshell; // Use a custom pageshell ?
+	$header = $cmspage->header; // Use a custom header ?
+	$menu = $cmspage->menu; // Use a custom menu ?
+	$footer = $cmspage->footer; // Use a custom footer ?
 	$css = $cmspage->css;
 	$js = $cmspage->js;
 } else {
@@ -125,12 +128,18 @@ function cmspages_toggle_display(val) {
 		$(".cmspages-featured-image").hide();
 		$(".cmspages-layout").hide();
 		$(".cmspages-pageshell").hide();
+		$(".cmspages-header").hide();
+		$(".cmspages-menu").hide();
+		$(".cmspages-footer").hide();
 	} else {
 		$(".cmspages-seo").show();
 		//$(".cmspages-categories").show();
 		$(".cmspages-featured-image").show();
 		$(".cmspages-layout").show();
 		$(".cmspages-pageshell").show();
+		$(".cmspages-header").show();
+		$(".cmspages-menu").show();
+		$(".cmspages-footer").show();
 	}
 }
 </script>';
@@ -169,7 +178,7 @@ $pub_content .= '</fieldset>';
 
 
 $cat_content = '<fieldset class="cmspages-categories"><legend>' . elgg_echo('cmspages:fieldset:categories') . '</legend>';
-	// @TODO Categories should work like a custom menu - and may be edited by that tool
+	// Categories work like a custom menu + tags
 	//$cat_content .= '<p><label>' . elgg_echo('cmspages:categories') . ' ' . elgg_view('input/text', array('name' => 'categories', 'value' => $categories, 'style' => "width:70%;")) . '</label></p>';
 	$cat_content .= '<p>' . elgg_view('input/cmspages_categories', array('name' => 'categories', 'value' => $categories, 'style' => "max-width:50%;")) . '</p>';
 	// Tags
@@ -181,33 +190,41 @@ $cat_content .= '</fieldset>';
 $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend>';
 	// Use custom template for rendering
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . ' ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</label></p>';
 	
 	// Affichage autonome
 	// Allow own page or not ('no' => no, empty or not set => default, 'noview' => full page only
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:display:details'))) . '<p><label>' . elgg_echo('cmspages:display') . ' ' . elgg_view('input/dropdown', array('name' => 'display', 'value' => $display, 'options_values' => cmspages_display_opts(), 'onchange' => "javascript:cmspages_toggle_display(this.value);")) . '</label></p>';
 	
+	// Layout
 	$hidden = ($display == 'no') ? 'hidden' : '';
 	$render_content .= '<span class="cmspages-layout ' . $hidden . '">';
-		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</p>';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:layout:details'))) . '<p><label>' . elgg_echo('cmspages:layout:use') . ' ' . elgg_view('input/dropdown', array('name' => 'layout', 'value' => $layout, 'options_values' => cmspages_layouts_opts())) . '</label></p>';
 	$render_content .= '</span>';
 	
+	// Pageshell
 	$hidden = ($display == 'no') ? 'hidden' : '';
 	$render_content .= '<span class="cmspages-pageshell ' . $hidden . '">';
-		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</p>';
+		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:pageshell:details'))) . '<p><label>' . elgg_echo('cmspages:pageshell:use') . ' ' . elgg_view('input/dropdown', array('name' => 'pageshell', 'value' => $pageshell, 'options_values' => cmspages_pageshells_opts())) . '</label></p>';
 	$render_content .= '</span>';
 	
-	/* @TODO : if using cmspages_cms pageshell, also allow to override menu and footer with custom menu and cmspage
+	// Header
+	$hidden = ($display == 'no') ? 'hidden' : '';
+	$render_content .= '<span class="cmspages-header ' . $hidden . '">';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:cms_header:details'))) . '<p><label>' . elgg_echo('cmspages:settings:cms_header') . ' ' . elgg_view('input/dropdown', array('name' => 'header', 'value' => $header, 'options_values' => cmspages_headers_opts())) . '</label></p>';
+	$render_content .= '</span>';
+	
+	// Menu CMS : categories ?  ou menu personnalisé
 	$hidden = ($display == 'no') ? 'hidden' : '';
 	$render_content .= '<span class="cmspages-menu ' . $hidden . '">';
-		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:menu:details'))) . '<p><label>' . elgg_echo('cmspages:menu:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'menu', 'value' => $menu, 'options_values' => cmspages_menus_opts())) . '</p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:cms_menu:details'))) . '<p><label>' . elgg_echo('cmspages:settings:cms_menu') . ' ' . elgg_view('input/dropdown', array('name' => 'menu', 'value' => $menu, 'options_values' => cmspages_menus_opts())) . '</label></p>';
 	$render_content .= '</span>';
 	
+	// Footer
 	$hidden = ($display == 'no') ? 'hidden' : '';
 	$render_content .= '<span class="cmspages-footer ' . $hidden . '">';
-		$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:footer:details'))) . '<p><label>' . elgg_echo('cmspages:footer:use') . '&nbsp;:</label> ' . elgg_view('input/dropdown', array('name' => 'footer', 'value' => $footer, 'options_values' => cmspages_footers_opts())) . '</p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:cms_footer:details'))) . '<p><label>' . elgg_echo('cmspages:settings:cms_footer') . ' ' . elgg_view('input/dropdown', array('name' => 'footer', 'value' => $footer, 'options_values' => cmspages_footers_opts())) . '</label></p>';
 	$render_content .= '</span>';
-	*/
 	
 $render_content .= '</fieldset>';
 
@@ -366,7 +383,10 @@ if ($cmspage) {
 			'href' => elgg_get_site_url() . 'action/cmspages/delete?guid=' . $cmspage->guid,
 			'text' => '<i class="fa fa-trash"></i>' . elgg_echo('cmspages:delete'),
 			//'title' => elgg_echo('cmspages:delete:details'),
-			'class' => 'elgg-button elgg-button-delete',
+			'class' => 'elgg-button elgg-button-action elgg-button-delete',
+			'title' => '',
+			'rel' => '',
+			'style' => 'background-color:#A00;',
 			'confirm' => elgg_echo('cmspages:deletewarning'),
 		));
 	// Update submit link
