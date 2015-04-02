@@ -36,7 +36,13 @@
 <!--
 COMMENTS - HISTORY
 
-TODO : split admin/appaearance/menus into MVC model
+TODO : 
+	- JS : edition item => si saisie nom seul et name vide, mettre le Text en Name
+
+
+0.4 : 
+ - split admin/appaearance/menus into MVC model
+ - JS section change
 
 
 0.3 : 2015.04.01

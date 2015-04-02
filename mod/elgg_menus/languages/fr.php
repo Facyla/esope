@@ -28,6 +28,9 @@ $fr = array(
 	'elgg_menus:delete:confirm' => "Confirmez-vous la suppression de cet item ?",
 	'elgg_menus:delete:message' => "Le menu personnalisé \"%s\" a bien été supprimé.",
 	'elgg_menus:delete:error:empty' => "Erreur : aucun menu spécifié.",
+	// Edit form
+	'elgg_menus:settings:yes' => "Oui",
+	'elgg_menus:settings:no' => "Non",
 	'elgg_menus:system' => "par défaut",
 	'elgg_menus:custom' => "personnalisé",
 	'elgg_menus:mode' => "Mode de fonctionnement du menu",
@@ -42,12 +45,12 @@ $fr = array(
 	'elgg_menus:menu_class' => "Classe(s) CSS",
 	'elgg_menus:menu_class:details' => "Permet de spécifier des classes CSS précises pour ce menu.<br />Vous pouvez notamment ajouter <strong>elgg-menu-hz</strong> pour obtenir un menu horizontal.",
 	'elgg_menus:menu_sort_by' => "Tri du menu",
-	'elgg_menus:menu_sort_by:details' => "Permet de préciser l'ordre d'affichage des items du menu : les options possibles sont <b>name</b>, <b>priority</b>, <b>title</b>, <b>register' (ordre d'ajout au menu), ou le <b>nom d'un callback PHP</b> (une fonction de comparaison pour usort()).",
+	'elgg_menus:menu_sort_by:details' => "Permet de préciser l'ordre d'affichage des items du menu : les options possibles sont <b>name</b>, <b>priority</b>, <b>title</b>, <b>register</b> (ordre d'ajout au menu), ou le <b>nom d'un callback PHP</b> (une fonction de comparaison pour usort()).",
 	'elgg_menus:menu_handler' => "Page handler des actions",
 	'elgg_menus:menu_handler:details' => "Le page handler pour construire les URLs des actions",
 	'elgg_menus:menu_show_section_headers' => "Montrer les sections",
 	'elgg_menus:menu_show_section_headers:details' => "Désactivé par défaut. Affiche les entêtes des sections du menu.",
-	
+	// Menu item
 	'elgg_menus:item:name' => "Identifiant",
 	'elgg_menus:item:name:details' => "L'identifiant est une chaine de caractères unique pour un menu donné.",
 	'elgg_menus:item:text' => "Titre",

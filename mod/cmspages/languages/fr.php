@@ -192,7 +192,7 @@ $fr = array(
 	'cmspages:type:editor' => "HTML",
 	'cmspages:type:rawhtml' => "HTML",
 	'cmspages:type:module' => "Module",
-	'cmspages:type:template' => "Template",
+	'cmspages:type:template' => "Gabarit",
 	'cmspages:notice:newpage' => "Création d'une nouvelle page.",
 	'cmspages:pageselect:filter' => "Rechercher une page",
 	'cmspages:search:title' => "Titre de la page",
@@ -240,7 +240,7 @@ $fr = array(
 	'cmspages:status:notpublished' => "Hors ligne",
 	
 	'cmspages:password' => "Protection par mot de passe",
-	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention 1 : cette option ne s'applique que pour un affichage en pleine page. <br />Attention 2 : ajouter un mot de passe ne change pas la visbilité de la page.",
+	'cmspages:password:details' => "Si un mot de passe est indiqué, il devra être renseigné pour pouvoir accéder au contenu de la page. <br />Attention : ajouter un mot de passe ne change pas la visibilité de la page.",
 	'cmspage:password:cleared' => "Déconnexion des pages réussies.",
 	'cmspage:password:cleared:page' => "Déconnexion de la page réussie",
 	'cmspages:password:submit' => "Accéder",

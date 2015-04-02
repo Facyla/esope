@@ -25,7 +25,7 @@ $menu_name = elgg_get_friendly_title($menu_name);
 
 elgg_load_js('elgg.elgg_menus.edit');
 
-$ny_opt = array('no' => elgg_echo('survey:settings:no'), 'yes' => elgg_echo('survey:settings:yes'));
+$ny_opt = array('no' => elgg_echo('elgg_menus:settings:no'), 'yes' => elgg_echo('elgg_menus:settings:yes'));
 // Modes du menu personnalisé
 $menu_mode_opt = array('merge' => elgg_echo('elgg_menus:mode:merge'), 'replace' => elgg_echo('elgg_menus:mode:replace'), 'disabled' => elgg_echo('elgg_menus:mode:disabled'), 'clear' => elgg_echo('elgg_menus:mode:clear'));
 
@@ -159,7 +159,7 @@ if ($menu_name) {
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
-		$content .= '<div style="float:left; width:45%; margin:0;"';
+		$content .= '<div style="float:left; width:45%; margin:0;">';
 			// CSS class
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_class')) . '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:30ex;")) . '</label></p>';
 			// URL handler
@@ -304,7 +304,8 @@ $(document).ready(function(){
 			 * Changement d'ordre : priorité entre celle des entrées suivante et précédente 
 			 *  - identique à celle entrée précédente, car l'ordre sera conservé de facto si on enregistre dans l'ordre)
 			 *  - si pas d'entrée précédente, égal ou inférieur à l'entrée suivante
-			 */  - sinon 100
+			 *  - sinon 100
+			 */
 			/*
 			var new_priority = ui.item.parent('.menu-editor-items').find('input[name^="priority"]')[0];
 			var priority = ui.item.find('input[name^="priority"]')[0];
