@@ -14,6 +14,7 @@ pre, code { word-break:break-all; }
 #cmspages-edit-form legend { margin:0 1ex; padding:0.5ex 1ex; border: 1px solid; font-weight:bold;}
 #cmspages-edit-form ul { list-style-type: square; margin-left: 3ex; }
 #cmspages-edit-form input, #cmspages-edit-form select { max-width:100%; }
+#cmspages-edit-form select { max-width:28ex; }
  
 #cmspages-form-select { display:inline-block; }
 #cmspages-form-new {  }

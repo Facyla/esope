@@ -243,8 +243,8 @@ $english = array(
 		Si vous avez besoin d'un contrôle direct sur le code source de la page, veuillez utiliser \"Code source (HTML sans éditeur)\".",
 	
 	'cmspages:status' => "Status",
-	'cmspages:status:published' => "Offline",
-	'cmspages:status:notpublished' => "Online",
+	'cmspages:status:published' => "Online",
+	'cmspages:status:notpublished' => "Offline",
 	
 	'cmspages:password' => "Password protection",
 	'cmspages:password:details' => "If a password is set, it will be asked prior accessing to this page content. <br />Warning: adding a password does not change the page visibility.",

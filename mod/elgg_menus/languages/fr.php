@@ -28,6 +28,9 @@ $fr = array(
 	'elgg_menus:delete:confirm' => "Confirmez-vous la suppression de cet item ?",
 	'elgg_menus:delete:message' => "Le menu personnalisé \"%s\" a bien été supprimé.",
 	'elgg_menus:delete:error:empty' => "Erreur : aucun menu spécifié.",
+	// Edit form
+	'elgg_menus:settings:yes' => "Oui",
+	'elgg_menus:settings:no' => "Non",
 	'elgg_menus:system' => "par défaut",
 	'elgg_menus:custom' => "personnalisé",
 	'elgg_menus:mode' => "Mode de fonctionnement du menu",
@@ -47,7 +50,7 @@ $fr = array(
 	'elgg_menus:menu_handler:details' => "Le page handler pour construire les URLs des actions",
 	'elgg_menus:menu_show_section_headers' => "Montrer les sections",
 	'elgg_menus:menu_show_section_headers:details' => "Désactivé par défaut. Affiche les entêtes des sections du menu.",
-	
+	// Menu item
 	'elgg_menus:item:name' => "Identifiant",
 	'elgg_menus:item:name:details' => "L'identifiant est une chaine de caractères unique pour un menu donné.",
 	'elgg_menus:item:text' => "Titre",

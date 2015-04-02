@@ -93,7 +93,7 @@ function cmspages_page_handler($page) {
 		case "read":
 			// Tell it's a permanent redirection
 			header("Status: 301 Moved Permanently", false, 301);
-			forward("p/$page[1]");
+			forward("p/{$page[1]}");
 			if ($page[1]) { set_input('pagetype', $page[1]); }
 			if (!include($include_path . 'read.php')) { return false; }
 			break;
