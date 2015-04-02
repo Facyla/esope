@@ -159,7 +159,7 @@ if ($menu_name) {
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
-		$content .= '<div style="float:left; width:45%; margin:0;"';
+		$content .= '<div style="float:left; width:45%; margin:0;">';
 			// CSS class
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_class')) . '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:30ex;")) . '</label></p>';
 			// URL handler
