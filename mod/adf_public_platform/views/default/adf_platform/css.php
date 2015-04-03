@@ -263,7 +263,7 @@ div.credits a { color: #333333; text-decoration:underline; }
 /* MENUS & NAVIGATION */
 .elgg-menu-item-report-this { margin-left:10px; margin-top:5px; }
 /* Eviter les recouvrements par le menu des entités */
-.elgg-menu-entity { height:auto; text-align: center; }
+.elgg-menu-entity { height:auto; text-align: center; max-width: 70%; }
 nav ul li, #transverse ul li { list-style-type: none; }
 ul.elgg-list li.elgg-item ul.elgg-menu { font-size: 0.75em; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-one { width: 40px; }
