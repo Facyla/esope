@@ -177,6 +177,7 @@ foreach ($custom_types as $type) {
 	$current_params = $search_params;
 	$current_params['type'] = null;
 	$current_params['subtype'] = null;
+	$current_params['search_type'] = $type;
 	$data = htmlspecialchars(http_build_query($current_params));
 	$url = elgg_get_site_url()."search?$data";
 	$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
