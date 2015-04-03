@@ -172,16 +172,46 @@ foreach ($types as $type => $subtypes) {
 }
 
 // add sidebar for custom searches
+// Propose unfiltered custom search, but also filtered custom search (using type/subtype filters)
+// 2 modes : using current filters, or without any filter
 foreach ($custom_types as $type) {
+	// Filtered search
 	$label = "search_types:$type";
 	$current_params = $search_params;
 	$current_params['type'] = null;
 	$current_params['subtype'] = null;
+	// Clear filters ?
+	//$current_params['entity_type'] = null;
+	//$current_params['entity_subtype'] = null;
 	$current_params['search_type'] = $type;
 	$data = htmlspecialchars(http_build_query($current_params));
-	$url = elgg_get_site_url()."search?$data";
-	$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
-	elgg_register_menu_item('page', $menu_item);
+	$url_filtered = elgg_get_site_url()."search?$data";
+	$filtered = '';
+	if (!empty($entity_type)) {
+		$filter_label = elgg_echo("item:$entity_type");
+		if (!empty($entity_subtype)) {
+			$filter_label = elgg_echo("item:$entity_type:$entity_subtype");
+		}
+		$filter_label = strip_tags(elgg_echo($filter_label));
+		$filtered = elgg_echo('esope:search:filtered', array($filter_label));
+	}
+	
+	// Same again, but without filters
+	$current_params = array('search_type' => $type, 'q' => $q);
+	$data = htmlspecialchars(http_build_query($current_params));
+	$url_unfiltered = elgg_get_site_url()."search?$data";
+	$unfiltered = elgg_echo('esope:search:unfiltered');
+	
+	if ($url_unfiltered != $url_filtered) {
+		$menu_item_nofilter = new ElggMenuItem($label, elgg_echo($label).$unfiltered, $url_unfiltered);
+		$menu_item_filtered = new ElggMenuItem($label.'-filtered', " &nbsp; &nbsp; ".elgg_echo($label).$filtered, $url_filtered);
+		elgg_register_menu_item('page', $menu_item_nofilter);
+		elgg_register_menu_item('page', $menu_item_filtered);
+	} else {
+		$menu_item = new ElggMenuItem($label, elgg_echo($label), $url_unfiltered);
+		elgg_register_menu_item('page', $menu_item);
+	}
+	
 }
 
 

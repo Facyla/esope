@@ -102,7 +102,7 @@ th { font-weight:bold; background:#CCCCCC; }
 .minuscule { text-transform: lowercase; }
 img { border: 0 none; overflow:hidden; }
 section #profil img { float: right; margin-left: 10px; }
-
+.esope-more { float: right; font-size: 70%; line-height: 1.6; }
 
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */

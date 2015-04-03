@@ -796,6 +796,8 @@ $en = array(
 	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Objects",
 	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Comments",
 	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'esope:search:filtered' => " (%s)",
+	'esope:search:unfiltered' => " (all)",
 	//'all' => "",
 	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
 	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Announcements',
