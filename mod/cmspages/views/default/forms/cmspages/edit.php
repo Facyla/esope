@@ -349,8 +349,9 @@ $rel_content .= '</fieldset>';
 // Submit button
 $submit_button = elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('cmspages:create')));
 
+
+// Informations utiles : URL de la page + vue à utiliser pour charger la page
 if ($cmspage) {
-	// Informations utiles : URL de la page + vue à utiliser pour charger la page
 	//$info_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:information') . '</legend>';
 	$info_content = '<blockquote style="padding: 6px 12px; margin-top:2ex;"><strong><a href="javascript:void(0);" onClick="javascript:$(\'#cmspages-information\').toggle()">' . elgg_echo('cmspages:fieldset:information') . '</a></strong>';
 	$info_content .= '<div id="cmspages-information" class="elgg-output hidden">';
@@ -367,7 +368,7 @@ if ($cmspage) {
 		if (elgg_is_active_plugin('shorturls')) {
 			$info_content .= '<li><strong>' . elgg_echo('cmspages:shorturl') . '&nbsp;:</strong> <code>' . elgg_get_site_url() . 's/' . $cmspage->guid . '</code></li>';
 		}
-		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_template') . '&nbsp;:</strong> <code>{{$pagetype}}</code></li>';
+		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_template') . '&nbsp;:</strong> <code>{{' . $pagetype . '}}</code></li>';
 		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_embed') . '&nbsp;:</strong> <code>&lt;iframe src="' . $cmspage->getURL() . '?embed=full"&gt;&lt;/iframe&gt;</code></li>';
 		$info_content .= '<li><strong>' . elgg_echo('cmspages:cmspage_view') . '&nbsp;:</strong> <code>echo elgg_view(\'cmspages/view\',array(\'pagetype\'=>"' . $pagetype . '"));</code>';
 		$info_content .= '</li>';
