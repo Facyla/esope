@@ -21,6 +21,8 @@ function download_counter_init() {
 	elgg_extend_view('css', 'download_counter/css');
 	
 	// @TODO plugin hook on page handler, as there is not necessarly an action...
+	// Route => return not false pour poursuivre : $request = array('handler' => $handler, 'segments' => $page);
+	// elgg_register_plugin_hook('route')
 	
 	// Get a plugin setting
 	//$setting = elgg_get_plugin_setting('setting_name', 'download_counter');
