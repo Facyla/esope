@@ -22,7 +22,7 @@ function download_counter_init() {
 	
 	// @TODO plugin hook on page handler, as there is not necessarly an action...
 	// Route => return not false pour poursuivre : $request = array('handler' => $handler, 'segments' => $page);
-	// elgg_register_plugin_hook('route')
+	// elgg_register_plugin_hook('route', 'download_counter_route')
 	
 	// Get a plugin setting
 	//$setting = elgg_get_plugin_setting('setting_name', 'download_counter');
