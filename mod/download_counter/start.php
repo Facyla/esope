@@ -54,7 +54,7 @@ function download_counter_route($hook, $type, $return, $params) {
 	$segments = $return['segments'];
 	// Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
 	//echo print_r($segments, true); // debug
-	//error_log('DEBUG externalmembers ROUTE : ' . $handler . ' => ' . print_r($segments, true));
+	//error_log('DEBUG download_counter ROUTE : ' . $handler . ' => ' . print_r($segments, true));
 	
 	if (($handler == 'file') && ($segments[0] == 'download')) {
 		$guid = $segments[1];
