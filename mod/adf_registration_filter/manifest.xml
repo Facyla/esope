@@ -4,11 +4,11 @@
 	<author>Facyla ~ Items International</author>
 	<version>0.2.2</version>
 	<blurb>Inscript-Essonne - Filtrage des inscriptions</blurb>
-	<description>Plateforme ADF-Essonne - Filtrage des adresses autorisées à créer un compte.</description>
+	<description>Filtrage des adresses autorisées à créer un compte. Activez ce plugin si vous souhaitez restreindre l'inscription exclusivement aux adresses email d'un ou de plusieurs noms de domaines.</description>
 	<website>http://departements-en-reseaux.fr/</website>
-	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla), Urbilog</copyright>
+	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla)</copyright>
 	<license>GNU Public License version 2</license>
-
+	
 	<requires>
 		<type>elgg_release</type>
 		<version>1.8</version>
@@ -19,7 +19,7 @@
 	<category>filter</category>
 	
 	<activate_on_install>false</activate_on_install>
-
+	
 </plugin_manifest>
 
 
