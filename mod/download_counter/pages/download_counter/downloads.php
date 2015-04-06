@@ -10,11 +10,12 @@ admin_gatekeeper();
 
 $content = '';
 
+// @TODO : order by metadata value
 $files = elgg_get_entities_from_metadata(array(
 	'type' => 'object',
 	'subtype' => 'file',
 	'metadata_name' => array('name' => 'download_counter'),
-	'sort_by' => 'download_counter',
+	'order_by_metadata' => 'download_counter',
 	'limit' => 0,
 ));
 
