@@ -29,19 +29,26 @@ function download_counter_init() {
 	
 	
 	// Register a page handler on "download_counter/"
-	//elgg_register_page_handler('download_counter', 'download_counter_page_handler');
+	elgg_register_page_handler('download_counter', 'download_counter_page_handler');
 	
 	
 }
 
 
-// Other useful functions
-// prefixed by plugin_name_
-/*
-function download_counter_function() {
-	
+
+// Page handler
+function download_counter_page_handler($page) {
+	if (!isset($page[0])) { $page[0] = 'admin'; }
+	$url = elgg_get_plugins_path() . 'download_counter/pages/download_counter/';
+	switch($page[0]) {
+		case 'admin':
+		default:
+			if (include_once($url . 'downloads.php')) return true;
+	}
+	return false;
 }
-*/
+
+
 
 /* Interception pour comptage des téléchargements
  * 
