@@ -20,6 +20,9 @@ function download_counter_init() {
 	
 	elgg_extend_view('css', 'download_counter/css');
 	
+	// @TODO : extend entity view so we can use regular listing functions
+	// ..but display only in certain context (file, et selon si admin ou pas..)
+	
 	// @TODO plugin hook on page handler, as there is not necessarly an action...
 	// Route => return not false pour poursuivre : $request = array('handler' => $handler, 'segments' => $page);
 	elgg_register_plugin_hook_handler('route', 'all', 'download_counter_route');

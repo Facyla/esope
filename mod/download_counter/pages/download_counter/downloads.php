@@ -15,11 +15,13 @@ $files = elgg_get_entities_from_metadata(array(
 	'subtype' => 'file',
 	'metadata_name' => array('name' => 'download_counter'),
 	'sort_by' => 'download_counter',
+	'limit' => 0,
 ));
 
 
 $content .= '<div id="download-counter-admin">';
 
+// @TODO : add pagination
 elgg_push_context('widget');
 foreach($files as $ent) {
 	$content .= '<div class="" style="">';
