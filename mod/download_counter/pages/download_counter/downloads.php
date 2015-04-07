@@ -25,8 +25,7 @@ $content .= '<div id="download-counter-admin">';
 // @TODO : add pagination
 elgg_push_context('widget');
 foreach($files as $ent) {
-	$content .= '<div class="" style="">';
-	$content .= '<span class="" style="">' . elgg_echo('download_counter:count', array($ent->download_counter)) . '</span>';
+	$content .= '<div class="download_counter-item" style="">';
 	$content .= elgg_view_entity($ent);
 	$content .= '</div>';
 }

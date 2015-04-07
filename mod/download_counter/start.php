@@ -22,21 +22,17 @@ function download_counter_init() {
 	
 	// @TODO : extend entity view so we can use regular listing functions
 	// ..but display only in certain context (file, et selon si admin ou pas..)
+	// ENTITY MENU (select/unselect)
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'download_counter_entity_menu_setup', 600);
 	
-	// @TODO plugin hook on page handler, as there is not necessarly an action...
+	// Plugin hook on page handler, as there is not necessarly an action, but we know download has to pass through this...
 	// Route => return not false pour poursuivre : $request = array('handler' => $handler, 'segments' => $page);
 	elgg_register_plugin_hook_handler('route', 'all', 'download_counter_route');
-	
-	// Get a plugin setting
-	//$setting = elgg_get_plugin_setting('setting_name', 'download_counter');
-	
 	
 	// Register a page handler on "download_counter/"
 	elgg_register_page_handler('download_counter', 'download_counter_page_handler');
 	
-	
 }
-
 
 
 // Page handler
@@ -50,7 +46,6 @@ function download_counter_page_handler($page) {
 	}
 	return false;
 }
-
 
 
 /* Interception pour comptage des téléchargements
@@ -80,7 +75,6 @@ function download_counter_route($hook, $type, $return, $params) {
 		}
 	}
 	
-	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
 	 * return $params; // Laisse le fonctionnement habituel se poursuivre
@@ -88,5 +82,24 @@ function download_counter_route($hook, $type, $return, $params) {
 	// Par défaut on ne fait rien du tout
 	return $params;
 }
+
+
+
+
+// Bouton de publication dans les blogs - Add externalblogs to entity menu at end of the menu
+function download_counter_entity_menu_setup($hook, $type, $return, $params) {
+	if (elgg_in_context('widgets')) { return $return; }
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'file')) {
+		$display_counter = elgg_get_plugin_setting('display_counter', 'download_counter');
+		if (($display_counter == 'yes') || elgg_is_admin_logged_in()) {
+			$text = elgg_echo('download_counter:count', array($entity->download_counter));
+			$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
+			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	return $return;
+}
+
 
 
