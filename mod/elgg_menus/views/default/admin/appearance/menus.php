@@ -209,10 +209,12 @@ if ($menu_name) {
 					$content .= '</div>';
 				$content .= '</fieldset>';
 			}
+			// Placeholder for new sections
+			$content .= '<div id="menu-editor-newsections"></div>';
 			// Placeholder for new items (after the existing sections)
 			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		} else {
-			// Default section + new menu item
+			// NO MENU YET : Default section + new menu item
 			$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: default</legend>';
 				$content .= '<div class="menu-editor-items">';
 				// Entrée par défaut si aucune n'existe encore et que le menu n'existe pas déjà
@@ -220,16 +222,27 @@ if ($menu_name) {
 					$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => false, 'id' => 'menu-editor-newitem'));
 				}
 				$content .= '</div>';
-				// Placeholder for new items
-				$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 			$content .= '</fieldset>';
+			// Placeholder for new sections
+			$content .= '<div id="menu-editor-newsections"></div>';
+			// Placeholder for new items
+			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		}
-	
-		// Ajout de section : pas forcément utile car déterminé via champ texte...
+		
+		
+		// @TODO Ajout de section : pas forcément utile car déterminé via champ texte...
 		// Ou alors on créé les sections avant et on drop dans la bonne section...?
+		// dans ce cas il faut pouvoir donner un nom à cette section
 		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newsection') . '</h3>';
-		$content .= '<p>' . elgg_echo('elgg_menus:edit:newsection:details') . '</p.>';
-		//$content .= '<p><a href="javascript:void(0)," onClick="$(\'#menu-editor-form-edit\').append(\'<fieldset><legend>TEST</legend></fieldset>\');" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:edit:newsection') . '</a></p>';
+		$content .= '<p>' . elgg_echo('elgg_menus:edit:newsection:details') . '</p>';
+		/*
+		$new_fieldset_prompt = str_replace("'", "\'", elgg_echo('elgg_menus:edit:newsection:prompt'));
+		$content .= elgg_view('input/button', array(
+				'id' => 'menu-editor-add-section',
+				'value' => elgg_echo('elgg_menus:edit:newsection'),
+				'class' => 'elgg-button elgg-button-action',
+			));
+		*/
 		
 		// Ajout nouvelle entrée de menu
 		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
@@ -258,72 +271,16 @@ if ($menu_name) {
 
 
 
-/* @TODO Enable parent/children structure and reordering */
-
-/* @TODO Enable direct menu item form fields update after reordering :
- * - update section
- * - update weight
- * - parent_name
- */
+/* Add parent/children structure and reordering */
 
 
-echo '<div id="menu-editor-admin">';
-echo $content;
-echo '</div>';
 ?>
 
+<div id="menu-editor-admin">
+	<?php echo $content; ?>
+</div>
+
 <script type="text/javascript">
-$(document).ready(function(){
-	$(".menu-editor-items").sortable({ // initialisation de Sortable sur le container parent
-		placeholder: 'menu-editor-highlight', // classe du placeholder ajouté lors du déplacement
-		connectWith: '.menu-editor-items', 
-		// Custom callback function
-		update: function(event, ui) {
-			// Get parent section name and set section to parent section name, or default
-			var new_section = ui.item.parents('fieldset').attr('data-section');
-			var section = ui.item.find('input[name^="section"]')[0];
-			if (new_section) section.value=new_section;
-			else section.value='default';
-			
-			// @TODO Get parent item name, and set parent_name = empty, or parent name
-			//var new_parent_name = ui.item.parent('.menu-editor-items').parent('.menu-editor-item').find('input[name^="parent_name"]');
-			/*
-			var prev_parent_name = ui.item.prev().find('input[name^="parent_name"]');
-			var next_parent_name = ui.item.next().find('input[name^="parent_name"]');
-			var parent_name = ui.item.find('input[name^="parent_name"]')[0];
-			console.log(prev_parent_name);
-			console.log(next_parent_name);
-			console.log(parent_name.value);
-			*/
-			/*
-			if (new_parent_name !== undefined) parent_name.value=new_parent_name;
-			else parent_name.value='';
-			*/
-			
-			/* @TODO Get siblings item priority and set priority = same as previous item, or 100
-			 * Changement d'ordre : priorité entre celle des entrées suivante et précédente 
-			 *  - identique à celle entrée précédente, car l'ordre sera conservé de facto si on enregistre dans l'ordre)
-			 *  - si pas d'entrée précédente, égal ou inférieur à l'entrée suivante
-			 *  - sinon 100
-			 */
-			/*
-			var new_priority = ui.item.parent('.menu-editor-items').find('input[name^="priority"]')[0];
-			var priority = ui.item.find('input[name^="priority"]')[0];
-			console.log(new_priority);
-			console.log(priority.value);
-			*/
-			/*
-			if (new_priority) priority.value=new_priority;
-			else priority.value='100';
-			*/
-			
-			//$(this).toggle(); // Efface le bloc parent
-			//$(ui.item).toggle(); // rien ?
-			//console.log("section : " + section.value + " => " + new_section);
-			//console.log("parent_name : " + parent_name.value + " => " + new_parent_name);
-			//console.log("priority : " + priority.value + " => " + new_priority);
-		}
-	});
-});
+
 </script>
 

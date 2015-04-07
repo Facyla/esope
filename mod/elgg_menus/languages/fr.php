@@ -20,7 +20,7 @@ $fr = array(
 	'elgg_menus:edit:newitem' => "Nouvel item",
 	'elgg_menus:add:newitem' => "Ajouter un nouvel item",
 	'elgg_menus:edit:newsection' => "Nouvelle section de menu",
-	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, indiquez le nom de cette section pour l'item souhaité, puis enregistrez vos modifications : la nouvelle section apparaîtra.",
+	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, indiquez son nom puis faites glisser des items dedans. Vous pouvez également modifier directement le nom de cette section pour l'item souhaité, puis enregistrer vos modifications : la nouvelle section apparaîtra.",
 	'elgg_menus:edit:message' => "Le menu personnalisé \"%s\" a bien été enregistré.",
 	'elgg_menus:edit:error:empty' => "Erreur : aucun menu spécifié.",
 	// Delete
@@ -107,6 +107,8 @@ $fr = array(
 	'elgg_menus:export:menu' => "Exporter le menu personnalisé \"%s\"",
 	'elgg_menus:export:message' => "Les %s menus personnalisés ont bien été exportés. Conservez le fichier %s pour pouvoir les importer ultérieurement.",
 	'elgg_menus:export:error:nomenu' => "Erreur : aucun menu personnalisé à exporter",
+	
+	'elgg_menus:edit:newsection:prompt' => "Nom de la nouvelle section",
 	
 	
 );
