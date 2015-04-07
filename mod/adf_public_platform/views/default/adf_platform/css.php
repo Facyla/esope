@@ -895,6 +895,11 @@ section div.module footer { background-size: 100%; }
 	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.timeline-event, .home-timeline .timeline-event { width: 100%; }
 	
+	/* Public Home */
+	#adf-homepage #adf-public-col1, #adf-homepage #adf-public-col2 { float: none; width: 100%; }
+	#adf-public-col2 { padding-top: 3ex; clear: both; }
+	#adf-homepage input[type='text'], #adf-homepage input[type='password'], #adf-homepage select { min-width: 0; }
+	
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
 	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; }
