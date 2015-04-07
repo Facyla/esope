@@ -4,9 +4,13 @@
  * 
  */
 
+
+// Make sure the profile initialisation function is called on initialisation
+elgg_register_event_handler('init','system','qrcode_init');
+
+
+
 function qrcode_init() {
-	global $CONFIG;
-	
 	elgg_extend_view('css', 'qrcode/css');
 	
 	// give us a link up top
@@ -17,7 +21,7 @@ function qrcode_init() {
 	
 	// Add QR code menu in sidebar
 	$popup_title = elgg_echo('qrcode:page:title');
-	$icon = $CONFIG->wwwroot . 'mod/qrcode/image/qrcode.png';
+	$icon = elgg_get_site_url() . 'mod/qrcode/image/qrcode.png';
 	$link_text = '<img src="' . $icon . '" title="' . $popup_title . '" />';
 	elgg_register_menu_item('extras', array(
 			'name' => 'qrcode-page', 'text' => $link_text, 'title' => $popup_title,
@@ -30,8 +34,7 @@ function qrcode_init() {
 
 
 function qrcode_page_handler($page) {
-	global $CONFIG;
-	$page_url = $CONFIG->pluginspath . 'qrcode/pages/qrcode/';
+	$page_url = elgg_get_plugins_path() . 'qrcode/pages/qrcode/';
 	if (!isset($page[0])) { $page[0] = ''; }
 	switch($page[0]) {
 		case 'qr_img':
@@ -46,7 +49,4 @@ function qrcode_page_handler($page) {
 	return true;
 }
 
-
-// Make sure the profile initialisation function is called on initialisation
-elgg_register_event_handler('init','system','qrcode_init');
 

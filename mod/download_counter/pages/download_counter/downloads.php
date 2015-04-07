@@ -10,28 +10,19 @@ admin_gatekeeper();
 
 $content = '';
 
-// @TODO : order by metadata value
-$files = elgg_get_entities_from_metadata(array(
-	'type' => 'object',
-	'subtype' => 'file',
-	'metadata_name' => array('name' => 'download_counter'),
-	'order_by_metadata' => 'download_counter',
-	'limit' => 0,
-));
+// List ordered by metadata value
+$files = elgg_list_entities_from_metadata(array(
+		'type' => 'object',
+		'subtype' => 'file',
+		'metadata_name' => array('name' => 'download_counter'),
+		'order_by_metadata' => array('name' => 'download_counter', 'direction' => 'DESC'),
+		'limit' => 50,
+		'pagination' => true,
+		'full_view' => false,
+	));
 
 
-$content .= '<div id="download-counter-admin">';
-
-// @TODO : add pagination
-elgg_push_context('widget');
-foreach($files as $ent) {
-	$content .= '<div class="download_counter-item" style="">';
-	$content .= elgg_view_entity($ent);
-	$content .= '</div>';
-}
-elgg_pop_context();
-
-$content .= '</div>';
+$content .= '<div id="download-counter-admin">' . $files . '</div>';
 
 
 $body = elgg_view_layout('content', array(

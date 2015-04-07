@@ -79,10 +79,8 @@
   // Load Elgg engine
 //require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 
-global $CONFIG;
-
-$path = $CONFIG->pluginspath . 'qrcode/data';
-$image_path = $CONFIG->pluginspath . 'qrcode/image';
+$path = elgg_get_plugins_path() . 'qrcode/data';
+$image_path = elgg_get_plugins_path() . 'qrcode/image';
 
 $version_ul = 40;
 

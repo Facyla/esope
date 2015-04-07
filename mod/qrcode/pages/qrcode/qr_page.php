@@ -1,10 +1,9 @@
 <?php
-global $CONFIG;
 $d = get_input('d');
 $height = get_input('height');
 $width = get_input('width');
 
-$img = $CONFIG->wwwroot . "qrcode/qr_img?d=$d&height=$height&width=$width";
+$img = elgg_get_site_url() . "qrcode/qr_img?d=$d&height=$height&width=$width";
 $dl = $img . '&download=true';
 
 ?>
