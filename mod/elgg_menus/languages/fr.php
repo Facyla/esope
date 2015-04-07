@@ -61,9 +61,9 @@ $fr = array(
 	'elgg_menus:item:title:details' => "Si un titre est défini, le lien comportera une propriété <b>title</b>, permettant d'afficher une infobulle au survol.",
 	'elgg_menus:item:confirm' => "Confirmation",
 	'elgg_menus:item:confirm:details' => "Facultatif. Si un message de confirmation est défini, il sera affiché lors du clic sur le lien, avec la possibilité d'annuler. Utile principalement pour des actions.",
-	'elgg_menus:item:item_class' => "Classe(s) CSS de l'item",
+	'elgg_menus:item:item_class' => "Class CSS de l'item",
 	'elgg_menus:item:item_class:details' => "Classes à ajouter à l'item du menu (sur la balise <b>&lt;li&gt;</b>).",
-	'elgg_menus:item:link_class' => "Classe(s) CSS du lien",
+	'elgg_menus:item:link_class' => "Class CSS du lien",
 	'elgg_menus:item:link_class:details' => "Classes à ajouter au lien de l'item du menu (sur la balise <b>&lt;a&gt;</b>).",
 	'elgg_menus:item:section' => "Section",
 	'elgg_menus:item:section:details' => "Les items peuvent être regroupés dans plusieurs sections. La section par défaut est appelée 'default'.",
@@ -110,6 +110,12 @@ $fr = array(
 	
 	'elgg_menus:edit:newsection:prompt' => "Nom de la nouvelle section",
 	
+	'elgg_menus:sortby:text' => "Par titre",
+	'elgg_menus:sortby:name' => "Par identifiant",
+	'elgg_menus:sortby:priority' => "Par priorité",
+	'elgg_menus:sortby:register' => "Par ordre d'ajout",
+	'elgg_menus:sortby:customcallback' => "Callback => ",
+	'elgg_menus:sortby:customcallback:placeholder' => "Fonction pour usort",
 	
 );
 

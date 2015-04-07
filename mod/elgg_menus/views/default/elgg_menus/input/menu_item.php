@@ -44,13 +44,13 @@ $content .= '<div class="menu-editor-item">';
 
 $content .= '<a href="javascript:void(0);" class="menu-editor-delete-item" title="' . elgg_echo('elgg_menus:delete') . '" style="float:right; margin-left: 2ex;"><i class="fa fa-trash"></i></a>';
 
-$content .= '<a href="javascript:void(0);" class="menu-editor-toggle-options" style="float:right; margin-left: 2ex;"><i class="fa fa-cog"></i>' . elgg_echo('elgg_menus:item:edit') . '</a>';
+$content .= '<a href="javascript:void(0);" class="menu-editor-toggle-details"><i class="fa fa-cog"></i>' . elgg_echo('elgg_menus:item:edit') . '</a>';
 if ($menu_item) {
-	//$content .= '<pre>' . print_r($menu_item, true) . '</pre>' . '</label>';
-	$content .= '<strong>' . $priority . ' - ' . $name . ' : ' . $text . ' => ' . $href . '</strong>';
-	//$content .= elgg_view('navigation/menu/elements/item', array('item' => $menu_item));
+	//$content .= '<strong class="menu-editor-item-title">' . $text . ' (' . $name . ', ' . $priority . ') => ' . $href . '</strong>';
+	$content .= '<strong class="menu-editor-item-title">' . $text . ' (' . $name . ') => ' . $href . '</strong>';
 	$content .= '<div class="menu-editor-item-content hidden">';
 } else {
+	$content .= '<strong class="menu-editor-item-title"></strong>';
 	$content .= '<div class="menu-editor-item-content">';
 }
 

@@ -70,7 +70,6 @@ function elgg_menus_page_handler($page) {
 /* Page setup : loads custom menus */
 function elgg_menus_pagesetup() {
 	// Get custom menus names
-	$custom_menus = elgg_get_plugin_setting('menus', 'elgg_menus');
 	$custom_menus = elgg_menus_get_custom_menus();
 	// Set up menus
 	foreach ($custom_menus as $menu_name) { elgg_menus_setup_menu($menu_name); }

@@ -121,8 +121,13 @@ switch ($menus_action) {
 			$menu_remove = get_input('menu_remove');
 			//class: string the class for the entire menu.
 			$menu_class = get_input('menu_class');
-			//sort_by => string or php callback string options: 'name', 'priority', 'title' (default), 'register' (registration order) or a php callback (a compare function for usort)
+			//sort_by => string or php callback string options: 'name', 'priority', 'text' (default), 'register' (registration order) or a php callback (a compare function for usort)
 			$menu_sort_by = get_input('menu_sort_by', 'priority');
+			if ($menu_sort_by == 'callback') {
+				$menu_sort_by = '';
+				$menu_sort_by_callback = get_input('menu_sort_by_callback');
+				if (!empty($menu_sort_by_callback)) $menu_sort_by = $menu_sort_by_callback;
+			}
 			//handler: string the page handler to build action URLs entity: to use to build action URLs
 			$menu_handler = get_input('menu_handler');
 			//show_section_headers: bool show headers before menu sections.
@@ -149,7 +154,7 @@ switch ($menus_action) {
 			for($i=0; $i<$number_of_items; $i++) {
 				$new_name_clean = $new_name[$i];
 				// Try to guess name from text, if no name (should not happen)
-				if (empty($new_name_clean) && !empty($new_text[$i])) { $new_name_clean = elgg_get_friendly_title($new_name[$i]); }
+				if (empty($new_name_clean) && !empty($new_text[$i])) { $new_name_clean = $new_text[$i]; }
 				// Ensure proper name formatting
 				$new_name_clean = elgg_get_friendly_title($new_name_clean);
 				// Avoid name duplicates by incrementing duplicate names with index
@@ -160,6 +165,9 @@ switch ($menus_action) {
 					if (empty($new_section[$i])) { $new_section[$i] = 'default'; }
 					if (empty($new_priority[$i])) { $new_priority[$i] = 100; }
 					if (empty($new_contexts[$i])) { $new_contexts[$i] = array('all'); }
+					// Cleanup some inputs
+					if (!empty($new_section[$i])) $new_section[$i] = elgg_get_friendly_title($new_section[$i]);
+					if (!empty($new_parent_name[$i])) $new_parent_name[$i] = elgg_get_friendly_title($new_parent_name[$i]);
 					if (!empty($new_item_class[$i])) {
 						$new_item_class[$i] = explode(' ', $new_item_class[$i]);
 						$new_item_class[$i] = array_unique($new_item_class[$i]);

@@ -10,12 +10,73 @@ elgg.elgg_menus.edit.init = function() {
 	$(document).on('click', '.menu-editor-delete-item', elgg.elgg_menus.edit.deleteMenuItem);
 	
 	// Hide/show some menu_item edit form options
-	$(document).on('click', '.menu-editor-toggle-options', elgg.elgg_menus.edit.showOptions);
+	$(document).on('click', '.menu-editor-toggle-details', elgg.elgg_menus.edit.showDetails);
 	
 	// Add menu section
 	$(document).on('click', '#menu-editor-add-section', elgg.elgg_menus.edit.addMenuSection);
 	
 	
+	elgg.elgg_menus.edit.addSortable();
+	
+};
+
+
+/** Removes a menu item
+ * @param {Object} e The click event
+ */
+elgg.elgg_menus.edit.deleteMenuItem = function(e) {
+	var menu_item = $(this).parent();
+	if (confirm(elgg.echo('elgg_menus:delete:confirm'))) { menu_item.remove(); }
+	e.preventDefault();
+}
+
+
+/** Toggles an item settings input
+ * @param {Object} e The click event
+ */
+elgg.elgg_menus.edit.showDetails = function(e) {
+	$(this).parent().children('.menu-editor-item-content').toggle();
+	// Updates the menu item title (so that we can see what we sort)
+	var new_item_title = $(this).parent().find('input[name^="text"]')[0].value + " (" + $(this).parent().find('input[name^="name"]')[0].value + ") => " + $(this).parent().find('input[name^="href"]')[0].value;
+	$(this).parent().children('.menu-editor-item-title').html(new_item_title);
+	e.preventDefault();
+}
+
+/* Add a new empty menu item to the form
+ * @param {Object} e The click event
+ */
+elgg.elgg_menus.edit.addMenuItem = function(e) {
+	// Create a new menu_item element
+	// MenuItem object meta : title, description, input_type, options, empty_value, required
+	var new_item = <?php echo json_encode(elgg_view('elgg_menus/input/menu_item')); ?>;
+	$('#menu-editor-newitems').append(new_item);
+	// Refresh the sortable items to be able to sort into the new section
+	elgg.elgg_menus.edit.addSortable();
+	e.preventDefault();
+};
+
+
+/* Add a new empty menu section to the form
+ * @param {Object} e The click event
+ */
+elgg.elgg_menus.edit.addMenuSection = function(e) {
+	// Create a new section element
+	<?php $new_section_prompt = str_replace("'", "\'", elgg_echo('elgg_menus:edit:newsection:prompt')); ?>
+	var new_section=prompt(<?php echo json_encode($new_section_prompt); ?>);
+	if (new_section) {
+		$('#menu-editor-newsections').append('<fieldset class="elgg-menus-section" data-section="' + new_section + '"><legend>' + new_section + '</legend><div class="menu-editor-items"></div></fieldset>');
+		// Refresh the sortable items to be able to sort into the new section
+		elgg.elgg_menus.edit.addSortable();
+	}
+	e.preventDefault();
+};
+
+
+
+/* Sortable init function
+ * @param {Object} e The click event
+ */
+elgg.elgg_menus.edit.addSortable = function() {
 	// initialisation de Sortable sur le container parent
 	$(".menu-editor-items").sortable({
 		placeholder: 'menu-editor-highlight', // classe du placeholder ajouté lors du déplacement
@@ -47,56 +108,6 @@ elgg.elgg_menus.edit.init = function() {
 			//else priority.value='100';
 		}
 	});
-	
-};
-
-
-/** Removes a menu item
- * @param {Object} e The click event
- */
-elgg.elgg_menus.edit.deleteMenuItem = function(e) {
-	var menu_item = $(this).parent();
-	if (confirm(elgg.echo('elgg_menus:delete:confirm'))) { menu_item.remove(); }
-	e.preventDefault();
-}
-
-
-/** Toggles an item settings input
- * @param {Object} e The click event
- */
-elgg.elgg_menus.edit.showOptions = function(e) {
-	$(this).parent().children('.menu-editor-item-content').toggle();
-	e.preventDefault();
-}
-
-/* Add a new empty menu item to the form
- * @param {Object} e The click event
- */
-elgg.elgg_menus.edit.addMenuItem = function(e) {
-	// Create a new menu_item element
-	// MenuItem object meta : title, description, input_type, options, empty_value, required
-	var new_item = <?php echo json_encode(elgg_view('elgg_menus/input/menu_item')); ?>;
-	
-	$('#menu-editor-newitems').append(new_item);
-	e.preventDefault();
-};
-
-
-/* Add a new empty menu section to the form
- * @param {Object} e The click event
- */
-elgg.elgg_menus.edit.addMenuSection = function(e) {
-	// Create a new section element
-	<?php
-	$new_section_prompt = str_replace("'", "\'", elgg_echo('elgg_menus:edit:newsection:prompt'));
-	?>
-	var new_section=prompt(<?php echo json_encode($new_section_prompt); ?>);
-	$('#menu-editor-newsections').append('<fieldset class="elgg-menus-section" data-section="' + new_section + '"><legend>' + new_section + '</legend><div class="menu-editor-items"></div></fieldset>');
-	
-	// @TODO Needs to refresh the items to be able to sort into the new section
-	//$(".menu-editor-items").sortable("refresh");
-	
-	e.preventDefault();
 };
 
 
