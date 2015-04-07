@@ -902,7 +902,7 @@ section div.module footer { background-size: 100%; }
 	
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
-	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; }
+	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; padding-left:0; }
 	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
 	div.credits p { float:none !important; }
 	
