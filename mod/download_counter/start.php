@@ -93,9 +93,18 @@ function download_counter_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_instanceof($entity, 'object', 'file')) {
 		$display_counter = elgg_get_plugin_setting('display_counter', 'download_counter');
 		if (($display_counter == 'yes') || elgg_is_admin_logged_in()) {
-			$text = elgg_echo('download_counter:count', array($entity->download_counter));
-			$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
-			$return[] = ElggMenuItem::factory($options);
+			// Display only if count > 0
+			if (isset($entity->download_counter)) {
+				if ($entity->download_counter > 1) {
+					$text = elgg_echo('download_counter:count', array($entity->download_counter));
+					$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
+					$return[] = ElggMenuItem::factory($options);
+				} else {
+					$text = elgg_echo('download_counter:count:singular', array($entity->download_counter));
+					$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
+					$return[] = ElggMenuItem::factory($options);
+				}
+			}
 		}
 	}
 	return $return;
