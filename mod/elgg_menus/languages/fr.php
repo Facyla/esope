@@ -18,9 +18,10 @@ $fr = array(
 	// Edit
 	'elgg_menus:item:edit' => "Edition",
 	'elgg_menus:edit:newitem' => "Nouvel item",
+	'elgg_menus:edit:newitem:details' => "Pour ajouter un nouvel item au menu, cliquez sur le bouton ci-dessous. Une fois l'item créé, définissez son identifiant et/son titre, puis déplacez-le dans la section souhaitée.",
 	'elgg_menus:add:newitem' => "Ajouter un nouvel item",
 	'elgg_menus:edit:newsection' => "Nouvelle section de menu",
-	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, indiquez le nom de cette section pour l'item souhaité, puis enregistrez vos modifications : la nouvelle section apparaîtra.",
+	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, cliquez sur le bouton ci-dessous et indiquez le nom (identifiant) de la section. Une fois la section créée, faites glisser des items du menu dedans. <br />Vous pouvez également modifier directement le nom de la section d'un item souhaité, puis enregistrer vos modifications&nbsp;: l'item apparaîtra dans la nouvelle section.",
 	'elgg_menus:edit:message' => "Le menu personnalisé \"%s\" a bien été enregistré.",
 	'elgg_menus:edit:error:empty' => "Erreur : aucun menu spécifié.",
 	// Delete
@@ -45,7 +46,7 @@ $fr = array(
 	'elgg_menus:menu_class' => "Classe(s) CSS",
 	'elgg_menus:menu_class:details' => "Permet de spécifier des classes CSS précises pour ce menu.<br />Vous pouvez notamment ajouter <strong>elgg-menu-hz</strong> pour obtenir un menu horizontal.",
 	'elgg_menus:menu_sort_by' => "Tri du menu",
-	'elgg_menus:menu_sort_by:details' => "Permet de préciser l'ordre d'affichage des items du menu : les options possibles sont <b>name</b>, <b>priority</b>, <b>title</b>, <b>register</b> (ordre d'ajout au menu), ou le <b>nom d'un callback PHP</b> (une fonction de comparaison pour usort()).",
+	'elgg_menus:menu_sort_by:details' => "La méthode de tri du menu permet de définir dans quel ordre afficher les items du menu : les options possibles sont <b>par identifiant (name)</b>, <b>par priorité (priority)</b>, <b>par titre (title)</b>, ou par <b>ordre d'enregistrement (register)</b>. Vous pouvez également utiliser une <b> fonction de callback PHP</b>, qui doit être une fonction de comparaison valide pour usort().",
 	'elgg_menus:menu_handler' => "Page handler des actions",
 	'elgg_menus:menu_handler:details' => "Le page handler pour construire les URLs des actions",
 	'elgg_menus:menu_show_section_headers' => "Montrer les sections",
@@ -61,9 +62,9 @@ $fr = array(
 	'elgg_menus:item:title:details' => "Si un titre est défini, le lien comportera une propriété <b>title</b>, permettant d'afficher une infobulle au survol.",
 	'elgg_menus:item:confirm' => "Confirmation",
 	'elgg_menus:item:confirm:details' => "Facultatif. Si un message de confirmation est défini, il sera affiché lors du clic sur le lien, avec la possibilité d'annuler. Utile principalement pour des actions.",
-	'elgg_menus:item:item_class' => "Classe(s) CSS de l'item",
+	'elgg_menus:item:item_class' => "Class CSS de l'item",
 	'elgg_menus:item:item_class:details' => "Classes à ajouter à l'item du menu (sur la balise <b>&lt;li&gt;</b>).",
-	'elgg_menus:item:link_class' => "Classe(s) CSS du lien",
+	'elgg_menus:item:link_class' => "Class CSS du lien",
 	'elgg_menus:item:link_class:details' => "Classes à ajouter au lien de l'item du menu (sur la balise <b>&lt;a&gt;</b>).",
 	'elgg_menus:item:section' => "Section",
 	'elgg_menus:item:section:details' => "Les items peuvent être regroupés dans plusieurs sections. La section par défaut est appelée 'default'.",
@@ -78,7 +79,7 @@ $fr = array(
 	'elgg_menus:menu_remove' => "Items à supprimer (mode \"Fusion\")",
 	'elgg_menus:menu_remove:details' => "Si le menu est en mode \"fusion\", vous pouvez définir ici une liste d'items qui seront retirés du menu par défaut. Il s'agit généralement d'items dynamiques (définis par une vue) que vous ne souhaitez pas voir appraître. Cela peut être particulièrement utile si vous ne souhaitez pas remplacer intégralement un menu, mais seulement retirer certains de ses items.",
 	'elgg_menus:fieldset:menu_options' => "Paramètres généraux du menu",
-	'elgg_menus:fieldset:menu_options:details' => "Ces options s'appliquent avant tout aux menus personnalisés.<br />Elles ne pourront notamment pas être appliquées lorsque vous appelez un menu par la fonction elgg_view_menu(nom_du_menu).<br />A contrario, elles s'appliquent si vous utilisez la vue elgg_menus/menu",
+	'elgg_menus:fieldset:menu_options:details' => "Ces options s'appliquent principalement aux menus personnalisés.<br />Elles s'appliquent si vous utilisez la vue <strong>elgg_menus/menu</strong>, mais pas lorsque les menus sont appelés par la fonction elgg_view_menu(nom_du_menu).",
 	'elgg_menus:fieldset:menu_items' => "Gestion des items du menu",
 	'elgg_menus:edit:items' => "Items du menu",
 	'elgg_menus:edit:items:details' => "Selon le mode choisi, ces items seront soit ajoutés au menu par défaut (fusion), soit remplacent ce menu.",
@@ -108,6 +109,14 @@ $fr = array(
 	'elgg_menus:export:message' => "Les %s menus personnalisés ont bien été exportés. Conservez le fichier %s pour pouvoir les importer ultérieurement.",
 	'elgg_menus:export:error:nomenu' => "Erreur : aucun menu personnalisé à exporter",
 	
+	'elgg_menus:edit:newsection:prompt' => "Nom de la nouvelle section",
+	
+	'elgg_menus:sortby:text' => "Par titre",
+	'elgg_menus:sortby:name' => "Par identifiant",
+	'elgg_menus:sortby:priority' => "Par priorité",
+	'elgg_menus:sortby:register' => "Par ordre d'ajout",
+	'elgg_menus:sortby:customcallback' => "Callback => ",
+	'elgg_menus:sortby:customcallback:placeholder' => "Fonction pour usort",
 	
 );
 

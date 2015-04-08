@@ -1,14 +1,12 @@
 <?php
-global $CONFIG;
-
 $title = elgg_echo('qrcode:page:title');
 $uri = full_url();
 // Id utile seulement si plusieurs QR codes par page - pas ici
 //$id = substr(md5($uri), 0, 8);
 
-//$qrcode = $CONFIG->wwwroot . 'qrcode/qr_page/?d=' . urlencode($uri) . '&height=300&width=300';
+//$qrcode = elgg_get_site_url() . 'qrcode/qr_page/?d=' . urlencode($uri) . '&height=300&width=300';
 
-$icon = $CONFIG->wwwroot . 'mod/qrcode/image/qrcode.png';
+$icon = elgg_get_site_url() . 'mod/qrcode/image/qrcode.png';
 $link_text = '<img src="' . $icon . '" title="' . $title . '" />';
 $link = elgg_view('output/url', array('text' => $link_text, 'href' => "#elgg-popup-qrcode-page", 'rel' => 'popup'));
 

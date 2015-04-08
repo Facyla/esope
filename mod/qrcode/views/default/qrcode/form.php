@@ -1,9 +1,6 @@
 <?php
-global $CONFIG;
-
-$img = $CONFIG->wwwroot . 'qrcode/qr_img/?d=';
+$img = elgg_get_site_url() . 'qrcode/qr_img/?d=';
 $dl = $img . '&download=true';
-
 
 ?>
 <div>

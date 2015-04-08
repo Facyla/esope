@@ -4,9 +4,9 @@
 	<author>Florian DANIEL aka Facyla ~ Items International 2011-2014</author>
 	<version>0.5</version>
 	<blurb>ESOPE - AccEssonne ~  Thème accessible et configurable</blurb>
-<description>Né d'une collaboration entre le Département de l'Essonne et l'Assemblée des Départements de France, ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit une base de thème accessible et offre de nombreuses options et possibilités de configuration. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. Les plugins de la distribution ESOPE peut être utilisés sans utiliser ce plugin.</description>
+<description>Ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Public Elgg). La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. Ce plugin fournit une base de thème accessible et personnalisable, et offre de nombreuses options et possibilités de configuration du comportement du réseau. Activez ce plugin si vous souhaitez disposer rapidement d'un site opérationnel. Les plugins compris dans la distribution ESOPE peuvent également être utilisés sans activer ce plugin.</description>
 	<website>http://departements-en-reseaux.fr/</website>
-	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla), Urbilog, Datawyz (Florian DANIEL)</copyright>
+	<copyright>Items International (Florian DANIEL aka Facyla), Conseil Général de l'Essonne, Assemblée des Départements de France, Urbilog, Datawyz (Florian DANIEL)</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<screenshot>
@@ -127,6 +127,14 @@
 	<suggests>
 		<type>plugin</type>
 		<name>deleted_user_content</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>cmspages</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>elgg_menus</name>
 	</suggests>
 	
 </plugin_manifest>

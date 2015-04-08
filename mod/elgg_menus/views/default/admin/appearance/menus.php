@@ -29,6 +29,8 @@ $ny_opt = array('no' => elgg_echo('elgg_menus:settings:no'), 'yes' => elgg_echo(
 // Modes du menu personnalisé
 $menu_mode_opt = array('merge' => elgg_echo('elgg_menus:mode:merge'), 'replace' => elgg_echo('elgg_menus:mode:replace'), 'disabled' => elgg_echo('elgg_menus:mode:disabled'), 'clear' => elgg_echo('elgg_menus:mode:clear'));
 
+$sort_by_opts = array('text' => elgg_echo('elgg_menus:sortby:text'), 'name' => elgg_echo('elgg_menus:sortby:name'), 'priority' => elgg_echo('elgg_menus:sortby:priority'), 'register' => elgg_echo('elgg_menus:sortby:register'), 'callback' => elgg_echo('elgg_menus:sortby:customcallback'));
+
 // System menus
 $system_menus = elgg_menus_get_system_menus();
 // Custom menus
@@ -58,6 +60,11 @@ if ($menu_name) {
 	$menu_remove = $menu_config['remove'];
 	$menu_class = $menu_config['class'];
 	$menu_sort_by = $menu_config['sort_by'];
+	if (!isset($sort_by_opts[$menu_sort_by])) {
+		$menu_sort_by_callback = $menu_sort_by;
+		$menu_sort_by = 'callback';
+	}
+	$menu_sort_by_callback = $menu_config['sort_by_callback'];
 	$menu_handler = $menu_config['handler'];
 	$menu_show_section_headers = $menu_config['show_section_headers'];
 	
@@ -159,16 +166,17 @@ if ($menu_name) {
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
-		$content .= '<div style="float:left; width:45%; margin:0;">';
+	$content .= '<p><em>' . elgg_echo('elgg_menus:fieldset:menu_options:details') . '</em></p>';
+		$content .= '<div style="float:left; width:46%; margin:0;">';
 			// CSS class
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_class')) . '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:30ex;")) . '</label></p>';
 			// URL handler
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_handler')) . '<p><label>' . elgg_echo('elgg_menus:menu_handler') . ' ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler, 'style' => "max-width:12ex;")) . '</label></p>';
 		$content .= '</div>';
 	
-		$content .= '<div style="float:right; width:45%; margin:0;">';
-			// Sort by
-			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/text', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'style' => "max-width:12ex;")) . '</label></p>';
+		$content .= '<div style="float:right; width:46%; margin:0;">';
+			// Sort by : use select + alternate text function
+			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:12ex;")) . ' ' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'style' => "max-width:12ex;", 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
 			// Show section header
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_show_section_headers')) . '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label></p>';
 		$content .= '</div>';
@@ -198,7 +206,7 @@ if ($menu_name) {
 		if ($menu) {
 			//$menu = elgg_trigger_plugin_hook('register', "menu:$menu_name", $vars, $menus[$menu_name]);
 			$builder = new ElggMenuBuilder($menu);
-			$menu = $builder->getMenu($sort_by);
+			$menu = $builder->getMenu($menu_sort_by);
 			foreach ($menu as $section_name => $section_items) {
 				$content .= '<fieldset class="elgg-menus-section" data-section="' . $section_name . '"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
 					$content .= '<div class="menu-editor-items">';
@@ -209,10 +217,12 @@ if ($menu_name) {
 					$content .= '</div>';
 				$content .= '</fieldset>';
 			}
+			// Placeholder for new sections
+			$content .= '<div id="menu-editor-newsections"></div>';
 			// Placeholder for new items (after the existing sections)
 			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		} else {
-			// Default section + new menu item
+			// NO MENU YET : Default section + new menu item
 			$content .= '<fieldset class="elgg-menus-section"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: default</legend>';
 				$content .= '<div class="menu-editor-items">';
 				// Entrée par défaut si aucune n'existe encore et que le menu n'existe pas déjà
@@ -220,24 +230,39 @@ if ($menu_name) {
 					$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => false, 'id' => 'menu-editor-newitem'));
 				}
 				$content .= '</div>';
-				// Placeholder for new items
-				$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 			$content .= '</fieldset>';
+			// Placeholder for new sections
+			$content .= '<div id="menu-editor-newsections"></div>';
+			// Placeholder for new items
+			$content .= '<div id="menu-editor-newitems" class="menu-editor-items"></div>';
 		}
-	
-		// Ajout de section : pas forcément utile car déterminé via champ texte...
-		// Ou alors on créé les sections avant et on drop dans la bonne section...?
-		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newsection') . '</h3>';
-		$content .= '<p>' . elgg_echo('elgg_menus:edit:newsection:details') . '</p.>';
-		//$content .= '<p><a href="javascript:void(0)," onClick="$(\'#menu-editor-form-edit\').append(\'<fieldset><legend>TEST</legend></fieldset>\');" class="elgg-button elgg-button-action">' . elgg_echo('elgg_menus:edit:newsection') . '</a></p>';
+		
 		
 		// Ajout nouvelle entrée de menu
+		$content .= '<div style="width:46%; float:left;">';
 		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
+		$content .= '<em>' . elgg_echo('elgg_menus:edit:newitem:details') . '</em><br />';
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-item',
 				'value' => elgg_echo('elgg_menus:edit:newitem'),
 				'class' => 'elgg-button elgg-button-action',
 			));
+		$content .= '</div>';
+		
+		$content .= '<div style="width:46%; float:right;">';
+		// Ajout de section : pas forcément utile car déterminé via champ texte...
+		// Ou alors on créé les sections avant et on drop dans la bonne section...?
+		// dans ce cas il faut pouvoir donner un nom à cette section
+		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newsection') . '</h3>';
+		$content .= '<em>' . elgg_echo('elgg_menus:edit:newsection:details') . '</em><br />';
+		$new_fieldset_prompt = str_replace("'", "\'", elgg_echo('elgg_menus:edit:newsection:prompt'));
+		$content .= elgg_view('input/button', array(
+				'id' => 'menu-editor-add-section',
+				'value' => elgg_echo('elgg_menus:edit:newsection'),
+				'class' => 'elgg-button elgg-button-action',
+			));
+		$content .= '</div>';
+		
 		
 	$content .= '</fieldset>';
 	
@@ -256,74 +281,11 @@ if ($menu_name) {
 	
 }
 
-
-
-/* @TODO Enable parent/children structure and reordering */
-
-/* @TODO Enable direct menu item form fields update after reordering :
- * - update section
- * - update weight
- * - parent_name
- */
-
-
-echo '<div id="menu-editor-admin">';
-echo $content;
-echo '</div>';
+// Add parent/children structure and reordering : see menu edit JS
 ?>
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".menu-editor-items").sortable({ // initialisation de Sortable sur le container parent
-		placeholder: 'menu-editor-highlight', // classe du placeholder ajouté lors du déplacement
-		connectWith: '.menu-editor-items', 
-		// Custom callback function
-		update: function(event, ui) {
-			// Get parent section name and set section to parent section name, or default
-			var new_section = ui.item.parents('fieldset').attr('data-section');
-			var section = ui.item.find('input[name^="section"]')[0];
-			if (new_section) section.value=new_section;
-			else section.value='default';
-			
-			// @TODO Get parent item name, and set parent_name = empty, or parent name
-			//var new_parent_name = ui.item.parent('.menu-editor-items').parent('.menu-editor-item').find('input[name^="parent_name"]');
-			/*
-			var prev_parent_name = ui.item.prev().find('input[name^="parent_name"]');
-			var next_parent_name = ui.item.next().find('input[name^="parent_name"]');
-			var parent_name = ui.item.find('input[name^="parent_name"]')[0];
-			console.log(prev_parent_name);
-			console.log(next_parent_name);
-			console.log(parent_name.value);
-			*/
-			/*
-			if (new_parent_name !== undefined) parent_name.value=new_parent_name;
-			else parent_name.value='';
-			*/
-			
-			/* @TODO Get siblings item priority and set priority = same as previous item, or 100
-			 * Changement d'ordre : priorité entre celle des entrées suivante et précédente 
-			 *  - identique à celle entrée précédente, car l'ordre sera conservé de facto si on enregistre dans l'ordre)
-			 *  - si pas d'entrée précédente, égal ou inférieur à l'entrée suivante
-			 *  - sinon 100
-			 */
-			/*
-			var new_priority = ui.item.parent('.menu-editor-items').find('input[name^="priority"]')[0];
-			var priority = ui.item.find('input[name^="priority"]')[0];
-			console.log(new_priority);
-			console.log(priority.value);
-			*/
-			/*
-			if (new_priority) priority.value=new_priority;
-			else priority.value='100';
-			*/
-			
-			//$(this).toggle(); // Efface le bloc parent
-			//$(ui.item).toggle(); // rien ?
-			//console.log("section : " + section.value + " => " + new_section);
-			//console.log("parent_name : " + parent_name.value + " => " + new_parent_name);
-			//console.log("priority : " + priority.value + " => " + new_priority);
-		}
-	});
-});
-</script>
+<div id="menu-editor-admin">
+	<?php echo $content; ?>
+</div>
+
 

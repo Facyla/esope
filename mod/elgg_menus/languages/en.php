@@ -106,8 +106,9 @@ $en = array(
 	'elgg_menus:export:all_menus' => "Exporter tous les menus personnalisés",
 	'elgg_menus:export:menu' => "Exporter le menu personnalisé \"%s\"",
 	'elgg_menus:export:message' => "Les %s menus personnalisés ont bien été exportés. Conservez le fichier %s pour pouvoir les importer ultérieurement.",
-	'elgg_menus:export:error:nomenu' => "Erreur : aucun menu personnalisé à exporter",
+	'elgg_menus:export:error:nomenu' => "Error : no menu to export",
 	
+	'elgg_menus:edit:newsection:prompt' => "New section name",
 	
 );
 

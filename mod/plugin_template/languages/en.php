@@ -1,6 +1,6 @@
 <?php
 /**
- * French strings
+ * English strings
  */
 global $CONFIG;
 

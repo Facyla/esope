@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>QR Code Generator</name>
-	<author>Justin Richer, Facyla ~ Florian DANIEL</author>
-	<version>1.8.1</version>
-	<category>QR code</category>
-	<category>Image</category>
-	<category>Social</category>
+	<author>Florian DANIEL aka Facyla, based on original work by Justin Richer</author>
+	<version>1.8.20</version>
 	<description>Displays a QR Code for any Elgg page</description>
 	<website>http://id.facyla.net//</website>
-	<copyright>MITRE corporation 2010, Facyla ~ Florian DANIEL 2013</copyright>
+	<copyright>Facyla ~ Florian DANIEL 2013-2015, MITRE corporation 2010</copyright>
 	<license>GNU General Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
 		<version>1.8</version>
 	</requires>
+	
+	<category>QR code</category>
+	<category>Image</category>
+	<category>Social</category>
+	
 	<activate_on_install>false</activate_on_install>
+	
 </plugin_manifest>
 
 
@@ -22,6 +25,8 @@
 <!--
 QR Code generator, based on initial plugin for Elgg 1.7 by Justin Richer
 http://community.elgg.org/plugins/475144/0.2/qr-code-generator
+
+1.8.20 : 20150407 - Some cleanup
 
 1.8.1 : 20130623 - New version by Facyla
 	- updated for Elgg 1.8

@@ -7,6 +7,7 @@ $(document).ready(function() {
 	//menu("header nav"); // Pour le menu supérieur, si utilisé
 
 	//recherche
+	/*
 	var valueSearch = $("form input#adf-search-input").attr("value");
 	$("form input#adf-search-input").focus(function() {
 		if (($(this).attr("value") != "") || ($(this).attr("value") == valueSearch)) {
@@ -21,6 +22,7 @@ $(document).ready(function() {
 	$("form input#adf-search-input").blur(function() {
 		if ($(this).attr("value") == "") { $(this).attr("value", valueSearch); }
 	});
+	*/
 	
 	//ouverture élément module
 	$(".plus").hide();

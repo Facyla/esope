@@ -4,7 +4,7 @@
 	<author>Facyla</author>
 	<version>0.1</version>
 	<blurb>Access icons</blurb>
-	<description>Adds icons to access levels, and provides an explanation page.</description>
+	<description>Enable this plugin if you wish to add icons representing access levels to entities, and provides an explanation page.</description>
 	<website>http://lereseausocial.fr/</website>
 	<license>GNU Public License version 2</license>
 	<requires>

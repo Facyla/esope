@@ -39,6 +39,8 @@ COMMENTS - HISTORY
 TODO : 
 	- JS : edition item => si saisie nom seul et name vide, mettre le Text en Name
 
+0.5 : 
+ - Enable parent/children structure and reordering (section, priority, parent_name)
 
 0.4 : 
  - split admin/appaearance/menus into MVC model

@@ -1,6 +1,5 @@
 <?php
-
-global $CONFIG, $SESSION;
+//global $CONFIG, $SESSION;
 
 $title = elgg_echo('qrcode:title');
 $content = '';

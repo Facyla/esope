@@ -102,7 +102,7 @@ th { font-weight:bold; background:#CCCCCC; }
 .minuscule { text-transform: lowercase; }
 img { border: 0 none; overflow:hidden; }
 section #profil img { float: right; margin-left: 10px; }
-
+.esope-more { float: right; font-size: 70%; line-height: 1.6; }
 
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
@@ -263,7 +263,7 @@ div.credits a { color: #333333; text-decoration:underline; }
 /* MENUS & NAVIGATION */
 .elgg-menu-item-report-this { margin-left:10px; margin-top:5px; }
 /* Eviter les recouvrements par le menu des entités */
-.elgg-menu-entity { height:auto; text-align: center; }
+.elgg-menu-entity { height:auto; text-align: center; max-width: 70%; }
 nav ul li, #transverse ul li { list-style-type: none; }
 ul.elgg-list li.elgg-item ul.elgg-menu { font-size: 0.75em; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-one { width: 40px; }
@@ -895,9 +895,14 @@ section div.module footer { background-size: 100%; }
 	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.timeline-event, .home-timeline .timeline-event { width: 100%; }
 	
+	/* Public Home */
+	#adf-homepage #adf-public-col1, #adf-homepage #adf-public-col2 { float: none; width: 100%; }
+	#adf-public-col2 { padding-top: 3ex; clear: both; }
+	#adf-homepage input[type='text'], #adf-homepage input[type='password'], #adf-homepage select { min-width: 0; }
+	
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
-	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; }
+	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; padding-left:0; }
 	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
 	div.credits p { float:none !important; }
 	
