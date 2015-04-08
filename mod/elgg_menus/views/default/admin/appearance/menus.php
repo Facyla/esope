@@ -60,7 +60,7 @@ if ($menu_name) {
 	$menu_remove = $menu_config['remove'];
 	$menu_class = $menu_config['class'];
 	$menu_sort_by = $menu_config['sort_by'];
-	if (empty($menu_sort_by)) $menu_sort_by = 'register';
+	if (empty($menu_sort_by)) $menu_sort_by = 'priority';
 	if (!isset($sort_by_opts[$menu_sort_by])) {
 		$menu_sort_by_callback = $menu_sort_by;
 		$menu_sort_by = 'callback';
