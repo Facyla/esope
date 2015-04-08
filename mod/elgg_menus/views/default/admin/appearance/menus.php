@@ -166,14 +166,15 @@ if ($menu_name) {
 	
 	/* Options générales du menu */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_options') . '</legend>';
-		$content .= '<div style="float:left; width:45%; margin:0;">';
+	$content .= '<p><em>' . elgg_echo('elgg_menus:fieldset:menu_options:details') . '</em></p>';
+		$content .= '<div style="float:left; width:46%; margin:0;">';
 			// CSS class
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_class')) . '<p><label>' . elgg_echo('elgg_menus:menu_class') . ' ' . elgg_view('input/text', array('name' => 'menu_class', 'value' => $menu_class, 'style' => "max-width:30ex;")) . '</label></p>';
 			// URL handler
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_handler')) . '<p><label>' . elgg_echo('elgg_menus:menu_handler') . ' ' . elgg_view('input/text', array('name' => 'menu_handler', 'value' => $menu_handler, 'style' => "max-width:12ex;")) . '</label></p>';
 		$content .= '</div>';
 	
-		$content .= '<div style="float:right; width:45%; margin:0;">';
+		$content .= '<div style="float:right; width:46%; margin:0;">';
 			// Sort by : use select + alternate text function
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:12ex;")) . ' ' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'style' => "max-width:12ex;", 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
 			// Show section header
@@ -238,13 +239,17 @@ if ($menu_name) {
 		
 		
 		// Ajout nouvelle entrée de menu
+		$content .= '<div style="width:46%; float:left;">';
 		$content .= '<h3>' . elgg_echo('elgg_menus:edit:newitem') . '</h3>';
+		$content .= '<em>' . elgg_echo('elgg_menus:edit:newitem:details') . '</em><br />';
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-item',
 				'value' => elgg_echo('elgg_menus:edit:newitem'),
 				'class' => 'elgg-button elgg-button-action',
 			));
+		$content .= '</div>';
 		
+		$content .= '<div style="width:46%; float:right;">';
 		// Ajout de section : pas forcément utile car déterminé via champ texte...
 		// Ou alors on créé les sections avant et on drop dans la bonne section...?
 		// dans ce cas il faut pouvoir donner un nom à cette section
@@ -256,6 +261,7 @@ if ($menu_name) {
 				'value' => elgg_echo('elgg_menus:edit:newsection'),
 				'class' => 'elgg-button elgg-button-action',
 			));
+		$content .= '</div>';
 		
 		
 	$content .= '</fieldset>';
