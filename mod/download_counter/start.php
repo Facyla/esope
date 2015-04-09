@@ -86,7 +86,7 @@ function download_counter_route($hook, $type, $return, $params) {
 
 
 
-// Bouton de publication dans les blogs - Add externalblogs to entity menu at end of the menu
+// Bouton de publication dans les blogs - Add externalblogs to entity menu, at end of the menu
 function download_counter_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_in_context('widgets')) { return $return; }
 	$entity = $params['entity'];
@@ -104,6 +104,11 @@ function download_counter_entity_menu_setup($hook, $type, $return, $params) {
 					$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
 					$return[] = ElggMenuItem::factory($options);
 				}
+			} else {
+				//$text = elgg_echo('download_counter:count:singular', array("0"));
+				//$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => $text);
+				$options = array('name' => 'download_counter', 'href' => false, 'priority' => 900, 'text' => '');
+				$return[] = ElggMenuItem::factory($options);
 			}
 		}
 	}

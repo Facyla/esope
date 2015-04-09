@@ -17,11 +17,11 @@ $fr = array(
 	'elgg_menus:preview:details' => "Seules les modifications déjà enregistrées seront affichées.",
 	// Edit
 	'elgg_menus:item:edit' => "Edition",
-	'elgg_menus:edit:newitem' => "Nouvel item",
-	'elgg_menus:edit:newitem:details' => "Pour ajouter un nouvel item au menu, cliquez sur le bouton ci-dessous. Une fois l'item créé, définissez son identifiant et/son titre, puis déplacez-le dans la section souhaitée.",
+	'elgg_menus:edit:newitem' => "Nouvel item de menu",
+	'elgg_menus:edit:newitem:details' => "Pour ajouter un nouvel item au menu, cliquez sur le bouton ci-dessous.<br />Définissez son identifiant (unique) et son titre, ainsi que les autres paramètres éventuels, puis déplacez-le dans la section souhaitée.",
 	'elgg_menus:add:newitem' => "Ajouter un nouvel item",
 	'elgg_menus:edit:newsection' => "Nouvelle section de menu",
-	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, cliquez sur le bouton ci-dessous et indiquez le nom (identifiant) de la section. Une fois la section créée, faites glisser des items du menu dedans. <br />Vous pouvez également modifier directement le nom de la section d'un item souhaité, puis enregistrer vos modifications&nbsp;: l'item apparaîtra dans la nouvelle section.",
+	'elgg_menus:edit:newsection:details' => "Pour ajouter une section, cliquez sur le bouton ci-dessous et indiquez le nom (identifiant) de la section. <br />Vous pouvez également modifier directement le nom de la section d'un item souhaité, puis enregistrer vos modifications.",
 	'elgg_menus:edit:message' => "Le menu personnalisé \"%s\" a bien été enregistré.",
 	'elgg_menus:edit:error:empty' => "Erreur : aucun menu spécifié.",
 	// Delete
@@ -38,6 +38,8 @@ $fr = array(
 	'elgg_menus:mode:details' => "Les menus personnalisés peuvent fonctionner de 2 manières :<br />
 		 - \"Fusion\" = les items configurés ci-dessous sont ajoutés au menu existant. Ceci est le mode recommandé, car il permet à d'autres plugins d'ajouter ou d'enlever des éléments du menu, mais vous permet également de retirer certains de ces items du menu si vous le souhiatez (avec les \"Items à supprimer\")<br />
 		  - \"Remplacement\" = les items du menu remplacent et annulent le menu par défaut. A n'utiliser que pour des menus statiques, ou lorsque vous souhaitez contrôler totalement les items du menu. Attention, plus aucun plugin ne pourra enregistrer d'item dans ce menu.<br />
+		  - \"Par défaut\" = le menu d'origine est utilisé tel quel, le menu personnalisé ne sera pas utilisé.<br />
+		  - \"Désactivation\" = aucun menu ne sera affiché.<br />
 		  ATTENTION : le remplacement du menu risque de ne pas fonctionner correctement avec les menus par défaut (ceux du système ou générés par d'autres plugins), car ceux-ci ne sont pas tous définis lors de l'initialisation des plugins.",
 	'elgg_menus:mode:merge' => "Fusion (ajoute les items)",
 	'elgg_menus:mode:replace' => "Remplacement (remplace le menu)",
@@ -71,7 +73,7 @@ $fr = array(
 	'elgg_menus:item:priority' => "Priorité",
 	'elgg_menus:item:priority:details' => "Une priorité, de 1 à 1000. Les entrées seront affichées par ordre de priorité croissante.",
 	'elgg_menus:item:contexts' => "Contexte(s)",
-	'elgg_menus:item:contexts:details' => "Les contextes dans lesquels cet item sera affiché. Pour tous, indiquer 'all'. Pour plusieurs contextes, indiquer : 'blog,groups,friends...'",
+	'elgg_menus:item:contexts:details' => "Les contextes dans lesquels cet item sera affiché. Pour tous, indiquer 'all'. Pour plusieurs contextes, indiquer&nbsp;: 'blog,groups,friends...'",
 	'elgg_menus:item:parent_name' => "Identifiant du parent",
 	'elgg_menus:item:parent_name:details' => "Si cet item est un sous-menu, indiquer ici l'identifiant de l'item parent. SI le parent est lui-même un sous-menu, plusieurs niveaux imbriqués seront créés.",
 	'elgg_menus:item:selected' => "Sélectionné ?",
