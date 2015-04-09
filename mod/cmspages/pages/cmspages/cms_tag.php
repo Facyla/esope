@@ -127,11 +127,9 @@ switch ($layout) {
 		$content = elgg_view_layout('one_column', $params);
 }
 
-
+// Wrap into custom pageshell (apply only if exists)
 switch ($pageshell) {
 	case 'custom':
-		// @TODO wrap into custom pageshell
-		// @TODO wrap into custom layout (apply only if exists)
 		if (cmspages_exists('cms-pageshell')) {
 			$content = elgg_view('cmspages/view', array('pagetype' => 'cms-pageshell', 'body' => $content));
 		}
@@ -140,7 +138,7 @@ switch ($pageshell) {
 	
 	default:
 		// Use wanted pageshell if exists
-		if (empty($pageshell) || elgg_view_exists($pageshell)) $pageshell = 'default';
+		if (empty($pageshell) || !elgg_view_exists($pageshell)) $pageshell = 'default';
 }
 
 
