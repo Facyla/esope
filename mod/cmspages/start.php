@@ -68,8 +68,8 @@ function cmspages_get_entity($pagetype = '') {
 }
 
 
-/* Gets the cmspage entity for a given pagetype (= slURL)
- * ElggEntity / false
+/* Checks if a cmspage entity exists for a given pagetype (= slURL)
+ * true / false
  */
 function cmspages_exists($pagetype = '') {
 	$ia = elgg_set_ignore_access(true);

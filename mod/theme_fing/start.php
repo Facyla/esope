@@ -152,8 +152,7 @@ function fing_page_handler($page){
 
 
 function qntransitions_page_handler($page){
-	$page[0] = strtolower($page[0]);
-	if (!empty($page[1])) set_input('rubrique', $page[1]);
+	if (!empty($page[0])) set_input('pagetype', $page[0]);
 	include(dirname(__FILE__) . '/pages/theme_fing/qntransitions.php');
 	return true;
 }

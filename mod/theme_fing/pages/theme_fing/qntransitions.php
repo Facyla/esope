@@ -12,7 +12,7 @@ $sidebar = '';
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb($title, 'qntransitions');
 
-$pagetype = elgg_get_friendly_title(get_input('rubrique'));
+$pagetype = elgg_get_friendly_title(get_input('pagetype'));
 if (empty($pagetype)) { $pagetype = 'accueil'; }
 
 // Display only existing pages
