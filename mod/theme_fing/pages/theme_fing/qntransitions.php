@@ -24,7 +24,8 @@ $cmspage = cmspages_get_entity($pagetype);
 
 // Add 2nd level breadcrumb
 if ($pagetype != 'qntransitions-accueil') {
-	$title = elgg_echo("theme_fing:qntransitions:$pagetype");
+	//$title = elgg_echo("theme_fing:qntransitions:$pagetype");
+	$title = $cmspage->title;
 	elgg_push_breadcrumb($title);
 }
 
