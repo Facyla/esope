@@ -7,6 +7,7 @@ global $CONFIG;
 $imgurl = $CONFIG->url . 'mod/theme_fing/graphics/';
 $fonturl = $CONFIG->url . 'mod/theme_fing/fonts/';
 $font_neris = $fonturl . 'neris/';
+$font_lettergothic = $fonturl . 'LetterGothicStd/';
 ?>
 
 /* Replace main icons sprite */
@@ -76,15 +77,15 @@ $font_neris = $fonturl . 'neris/';
 /* LETTER GOTHIC STD */
 @font-face {
 	font-family: 'LetterGothic'; font-weight:normal; font-style: normal;
-	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd.otf") format("opentype");
 }
 @font-face {
 	font-family: 'LetterGothic'; font-weight:bold; font-style: normal;
-	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd-Bold.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-Bold.otf") format("opentype");
 }
 @font-face {
 	font-family: 'LetterGothic'; font-weight:bold; font-style: italic;
-	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd-BoldSlanted.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-BoldSlanted.otf") format("opentype");
 }
 
 
