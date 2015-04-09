@@ -167,10 +167,9 @@ switch ($layout) {
 // Give cmspages a chance to use custom pageshell
 if (!empty($cmspage->pageshell)) { $pageshell = $cmspage->pageshell; }
 
+// Wrap into custom pageshell (apply only if exists)
 switch ($pageshell) {
 	case 'custom':
-		// @TODO wrap into custom pageshell
-		// @TODO wrap into custom layout (apply only if exists)
 		if (cmspages_exists('cms-pageshell')) {
 			$content = elgg_view('cmspages/view', array('pagetype' => 'cms-pageshell', 'body' => $content));
 		}
