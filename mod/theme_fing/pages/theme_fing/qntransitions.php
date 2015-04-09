@@ -5,34 +5,33 @@
  * @package ElggPages
  */
 
-$rubrique = strtolower(get_input('rubrique'));
 
 $title = elgg_echo('theme_fing:qntransitions');
 $sidebar = '';
 
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb($title, 'qntransitions');
-if (!empty($rubrique)) {
-	if (in_array($rubrique, array('jeu', 'cahier'))) {
-		$title = elgg_echo("theme_fing:qntransitions:$rubrique");
-		elgg_push_breadcrumb($title);
-	} else {
-		$rubrique = false;
-	}
+
+$pagetype = elgg_get_friendly_title(get_input('rubrique'));
+if (empty($pagetype)) { $pagetype = 'accueil'; }
+
+// Display only existing pages
+$pagetype = 'qntransitions-' . $pagetype;
+if (!cmspages_exists($pagetype)) { $pagetype = 'qntransitions-accueil'; }
+
+// Get the page
+$cmspage = cmspages_get_entity($pagetype);
+
+// Add 2nd level breadcrumb
+if ($pagetype != 'qntransitions-accueil') {
+	$title = elgg_echo("theme_fing:qntransitions:$pagetype");
+	elgg_push_breadcrumb($title);
 }
 
-switch($rubrique) {
-	case 'jeu':
-		$content .= elgg_view('cmspages/view', array('pagetype' => "qntransitions-jeu"));
-		break;
-	
-	case 'cahier':
-		$content .= elgg_view('cmspages/view', array('pagetype' => "qntransitions-cahier"));
-		break;
-	
-	default:
-		$content .= elgg_view('cmspages/view', array('pagetype' => "qntransitions-accueil"));
-}
+
+//$content .= elgg_view('cmspages/view', array('pagetype' => "qntransitions-$pagetype"));
+$content .= elgg_view('cmspages/view', array('entity' => $cmspage));
+
 
 
 /* @TODO : use other layouts for inner pages ? (summary?)
