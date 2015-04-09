@@ -276,8 +276,8 @@ $fr = array(
 	
 	'cmspages:fieldset:access' => "Gestion des rôles",
 	'cmspages:fieldset:categories' => "Rubriques",
-	'cmspages:fieldset:categories:details' => "Rubriques",
-	'cmspages:fieldset:rendering' => "Les rubriques permettent de gérer la publication des pages CMS dans des catégories éditoriales plus structurées que les mots-clefs. Si la coquille HTML le permet, ces rubriques peuvent constituer un menu.",
+	'cmspages:fieldset:categories:details' => "Les rubriques permettent de gérer la publication des pages CMS dans des catégories éditoriales plus structurées que les mots-clefs. Si la coquille HTML le permet, ces rubriques peuvent constituer un menu.",
+	'cmspages:fieldset:rendering' => "Rendu",
 	'cmspages:fieldset:rendering:details' => "Ces options avancées permettent de contrôler plus finement le rendu de votre page. Certaines options ne s'appliquent que dans des contextes bien précis, et n'ont pas forcément d'effet dans tous les cas.",
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",

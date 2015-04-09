@@ -92,10 +92,15 @@ function cmspages_page_handler($page) {
 	switch ($page[0]) {
 		case "read":
 			// Tell it's a permanent redirection
+			$new_url = elgg_get_site_url() . 'p/' . $page[1];
 			header("Status: 301 Moved Permanently", false, 301);
+			header('Location: '.$new_url);
+			//header("Status: 301 Moved Permanently", false, 301);
+			/*
 			forward("p/{$page[1]}");
 			if ($page[1]) { set_input('pagetype', $page[1]); }
 			if (!include($include_path . 'read.php')) { return false; }
+			*/
 			break;
 			
 		/* It was a test, better in a specific plugin instead (export_embed)
@@ -126,22 +131,22 @@ function cmspages_page_handler($page) {
 /* Public site page handler /p/article */
 function cmspages_cms_article_page_handler($page) {
 	set_input('pagetype', $page[0]);
-	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_article.php')) return true;
-	return false;
+	if (!include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_article.php')) { return false; };
+	return true;
 }
 
 /* Public site categories page handler /r/rubrique */
 function cmspages_cms_category_page_handler($page) {
 	set_input('category', $page[0]);
-	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_category.php')) return true;
-	return false;
+	if (!include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_category.php')) { return false; };
+	return true;
 }
 
 /* Public site tags page handler : /t/tag */
 function cmspages_cms_tag_page_handler($page) {
 	set_input('tag', $page[0]);
-	if (include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_tag.php')) return true;
-	return false;
+	if (!include(elgg_get_plugins_path() . 'cmspages/pages/cmspages/cms_tag.php')) { return false; };
+	return true;
 }
 
 
