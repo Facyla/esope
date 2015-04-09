@@ -140,6 +140,8 @@ if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $c
 // Do we use a custom cmspages template ? : not for templates (recursive risks)
 // If yes, we'll fetch the rendered content into the template cmspage before sending it to the display rendering
 // Content will be passed to the template as 'CONTENT'
+	// @TODO permettre d'inclure des templates dans d'autres, mais avec un stack pour cesser si l'on rencontre un template déjà utilisé
+	// @TODO fonction de rendu du contenu, avec 2 modes 'read' et 'view'
 if ($cmspage->content_type != 'template') {
 	if (!empty($cmspage->template)) {
 		$template_options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($cmspage->template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
