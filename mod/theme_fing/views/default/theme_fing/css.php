@@ -77,15 +77,15 @@ $font_lettergothic = $fonturl . 'LetterGothicStd/';
 /* LETTER GOTHIC STD */
 @font-face {
 	font-family: 'LetterGothic'; font-weight:normal; font-style: normal;
-	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd.otf') format("opentype");
 }
 @font-face {
 	font-family: 'LetterGothic'; font-weight:bold; font-style: normal;
-	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-Bold.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-Bold.otf') format("opentype");
 }
 @font-face {
 	font-family: 'LetterGothic'; font-weight:bold; font-style: italic;
-	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-BoldSlanted.otf") format("opentype");
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-BoldSlanted.otf') format("opentype");
 }
 
 
