@@ -14,6 +14,8 @@ $font_neris = $fonturl . 'neris/';
 
 
 /* Add some fonts */
+
+/* NERIS FONT */
 @font-face {
 	font-family: 'neris'; font-weight: 100; font-style: normal;
 	src: url('<?php echo $font_neris; ?>neris_thin/Neris-Thin-webfont.eot');
@@ -69,6 +71,20 @@ $font_neris = $fonturl . 'neris/';
 		url('<?php echo $font_neris; ?>neris_bolditalic/Neris-BoldItalic-webfont.woff') format('woff'),
 		url('<?php echo $font_neris; ?>neris_bolditalic/Neris-BoldItalic-webfont.ttf') format('truetype'),
 		url('<?php echo $font_neris; ?>neris_bolditalic/Neris-BoldItalic-webfont.svg#neristhin') format('svg');
+}
+
+/* LETTER GOTHIC STD */
+@font-face {
+	font-family: 'LetterGothic'; font-weight:normal; font-style: normal;
+	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd.otf") format("opentype");
+}
+@font-face {
+	font-family: 'LetterGothic'; font-weight:bold; font-style: normal;
+	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd-Bold.otf") format("opentype");
+}
+@font-face {
+	font-family: 'LetterGothic'; font-weight:bold; font-style: italic;
+	src: url('<?php echo $font_neris; ?>LetterGothicStd/LetterGothicStd-BoldSlanted.otf") format("opentype");
 }
 
 
