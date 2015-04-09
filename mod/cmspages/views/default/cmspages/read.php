@@ -131,10 +131,10 @@ switch ($cmspage->content_type) {
 	
 }
 
-	// Ajout des feuilles de style personnalisées
-	if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
-	// Ajout des JS personnalisés
-	if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
+// Ajout des feuilles de style personnalisées
+if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
+// Ajout des JS personnalisés
+if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
 
 // TEMPLATE - Use another cmspage as wrapper template
 // Do we use a custom cmspages template ? : not for templates (recursive risks)

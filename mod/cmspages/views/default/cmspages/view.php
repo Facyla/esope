@@ -139,6 +139,19 @@ if ($cmspage && !cmspages_check_password($cmspage)) { return; }
 	// Ajout des JS personnalisés
 	if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
 	
+	// TEMPLATE - Use another cmspage as wrapper template
+	// Do we use a custom cmspages template ? : not for templates (recursive risks)
+	// If yes, we'll fetch the rendered content into the template cmspage before sending it to the display rendering
+	// Content will be passed to the template as 'CONTENT'
+	if ($cmspage->content_type != 'template') {
+		if (!empty($cmspage->template)) {
+			$template_options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($cmspage->template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
+			$templates = elgg_get_entities_from_metadata($options);
+			if ($templates) { $template = $templates[0]; }
+			$content = elgg_view('cmspages/view', array('pagetype' => $cmspage->template, 'body' => $content));
+		}
+	}
+	
 	// On retire les contextes spécifiques à ce bloc
 	elgg_pop_context();
 	elgg_pop_context();
