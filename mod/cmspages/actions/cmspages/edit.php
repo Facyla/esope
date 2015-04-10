@@ -87,26 +87,36 @@ $_SESSION['cmspage_page_js'] = $page_js;
 elgg_set_ignore_access(true);
 
 // Get existing object corresponding to wanted pagetype
+// Note : this may be another page, but pagetype selection is kept for BC reasons
 $cmspage = NULL;
 if (strlen($pagetype)>0) {
 	$cmspage = cmspages_get_entity($pagetype);
 }
-// @TODO alternate method using GUID, so we can update the pagetype (but only if it not already used)
-/*
+
+// Also check entity through GUID, so we can update the pagetype
+// This is used only to update pagetype
 $guid = get_input('guid', false);
-if (!empty($guid)) {
-	// Get our cmspage (the real one, for sure)
+if ($guid) {
+	// Get our original cmspage (the real one, for sure)
 	$original_cmspage = get_entity($guid);
-	if ($original_cmspage && $cmspage && ($original_cmspage->guid != $cmspage->guid)) {
-		// We've got a problem : asking for an existing pagetype, cannot update, but save the rest
-		register_error('cmspages:alreadyexists' . "  $original_cmspage->guid != $cmspage->guid");
-		// Update the edited object
+	// Applies only when the page already exists (from known guid)
+	if (elgg_instanceof($original_cmspage, 'object', 'cmspage')) {
+		// Check if pagetype has changed
+		if ($original_cmspage->pagetype != $pagetype) {
+			// Check if a page already exists with this pagetype
+			// We can proceed if it does not exist
+			if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+				// Page already exists
+				// Cannot update, so revert to original pagetype
+				register_error(elgg_echo('cmspages:alreadyexists', array($pagetype)));
+				$pagetype = $original_cmspage->pagetype;
+			}
+		}
+		// Always edit original page if it exists
 		$cmspage = $original_cmspage;
-		// Revert to original pagetype
-		$pagetype = $original_cmspage->pagetype;
 	}
+	
 }
-*/
 
 
 // Check existing object, or create a new one

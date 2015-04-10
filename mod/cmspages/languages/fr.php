@@ -177,7 +177,7 @@ $fr = array(
 	'cmspages:seo:canonical:details' => "Si cette page est accessible via plusieurs URL, indique l'URL de la page \"principale\". Par défaut, l'URL canonique indiquée est celle du permalien.",
 	
 	'cmspages:edit:title' => "Edition de la page \"%s\"",
-	'cmspages:alreadyexists' => "Cette adresse existe déjà, veuillez en choisir une autre",
+	'cmspages:alreadyexists' => "Une page existe déjà avec ce permalien (\"%s\")&nbsp;: veuillez réessayer avec un autre.",
 	
 	'cmspages:fieldset:rendering' => "Modes de rendu",
 	'cmspages:fieldset:publication' => "Publication",
