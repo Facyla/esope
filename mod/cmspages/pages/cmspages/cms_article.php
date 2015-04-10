@@ -181,7 +181,7 @@ switch ($pageshell) {
 	
 	default:
 		// Use wanted pageshell if exists
-		if (empty($pageshell) || !elgg_view_exists($pageshell)) $pageshell = 'default';
+		if (empty($pageshell) || !elgg_view_exists('page/'.$pageshell)) $pageshell = 'default';
 }
 
 // Display page (using default or custom pageshell)
