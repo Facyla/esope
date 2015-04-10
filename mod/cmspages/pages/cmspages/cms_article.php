@@ -93,6 +93,9 @@ if ($cmspage) {
 }
 
 
+// Always add plugin CSS : some are used
+$content .= "\n<style>" . elgg_view('cmspages/css') . "</style>\n";
+
 
 // EMBED MODE - Display earlier, without any wrapper.
 // Determine pageshell depending on embed type
