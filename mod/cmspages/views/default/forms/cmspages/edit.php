@@ -190,7 +190,9 @@ $cat_content .= '</fieldset>';
 $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend>';
 	// Use custom template for rendering
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . ' ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</label></p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . ' ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</label>';
+	if (!empty($template)) $render_content .= ' &nbsp; <a href="' . elgg_get_site_url() . 'cmspages/edit/' . $template . '" target="_blank">' . $template . '</a>';
+	$render_content .= '</p>';
 	
 	// Affichage autonome
 	// Allow own page or not ('no' => no, empty or not set => default, 'noview' => full page only
