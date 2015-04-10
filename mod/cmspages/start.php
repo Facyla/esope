@@ -583,7 +583,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  * $vars : content vars and data to be passed to the views (used by the page)
  * $mode : view/read
  *    - view : certaines infos sont masquées en mode 'view' (titre, tags...) + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
- * $edit_links : allow non-defined pages rendering (and edit links)
+ * $add_edit_link : allow non-defined pages rendering (and edit links)
  * STEPS :
  * 1. Check validity, access, contexts (can we display that page ?)
  * 2. Render cmspage "own" content
@@ -591,7 +591,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  * 4. Wrap into containing content block .cmspages-output
  * 5. Render content into optional template
  */
-function cmspages_view($cmspage, $params = array('mode' => 'view', 'edit_links' => true), $vars = array()) {
+function cmspages_view($cmspage, $params = array('mode' => 'view', 'add_edit_link' => true), $vars = array()) {
 	
 	// Determine if we have an entity or a pagetype, and get both vars
 	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
@@ -604,7 +604,7 @@ function cmspages_view($cmspage, $params = array('mode' => 'view', 'edit_links' 
 	}
 	
 	$mode = $params['mode'];
-	$edit_links = $params['edit_links'];
+	$add_edit_link = $params['add_edit_link'];
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
@@ -735,13 +735,13 @@ function cmspages_view($cmspage, $params = array('mode' => 'view', 'edit_links' 
 	/* 3. Add optional edit block */
 	// Admin links : direct edit link for users who can edit this
 	$edit_link = '';
-	if ($is_editor) {
+	if ($add_edit_link && $is_editor) {
 		$edit_link .= '<i class="fa fa-edit"></i>';
 		if ($cmspage) {
-			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
 		} else {
 			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
-			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
 		}
 	}
 	
