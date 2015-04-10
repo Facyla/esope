@@ -608,6 +608,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$add_edit_link = true;
 	if (isset($params['mode'])) $mode = $params['mode'];
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
+	if (!isset($params['recursion'])) $params['recursion'] = array();
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
@@ -739,12 +740,14 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	// Admin links : direct edit link for users who can edit this
 	$edit_link = '';
 	if ($add_edit_link && $is_editor) {
+		$edit_level = count($params['recursion']);
 		$edit_link .= '<i class="fa fa-edit"></i>';
+		$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
 		if ($cmspage) {
-			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
 		} else {
 			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
-			$edit_link .= '<a class="cmspages-admin-link" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
 		}
 	}
 	

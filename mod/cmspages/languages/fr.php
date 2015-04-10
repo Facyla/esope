@@ -282,6 +282,7 @@ $fr = array(
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
 	
+	'cmspages:nestedlevel' => "Edition de la page de niveau %s (le contenu est généralement au niveau 0).",
 	
 	
 );
