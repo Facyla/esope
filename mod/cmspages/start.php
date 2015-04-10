@@ -604,7 +604,9 @@ function cmspages_view($cmspage, $params = array('mode' => 'view', 'add_edit_lin
 	}
 	
 	$mode = $params['mode'];
+	if (empty($mode)) $mode = 'view';
 	$add_edit_link = $params['add_edit_link'];
+	if (empty($add_edit_link)) $add_edit_link = true;
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
