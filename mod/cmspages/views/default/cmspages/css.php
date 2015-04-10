@@ -66,3 +66,15 @@ pre, code { word-break:break-all; }
 #cmspages-settings .elgg-menu-cmspages-categories > .elgg-child-menu { position: absolute; }
 
 
+/* Admin edit link */
+.cmspages-admin-link {  }
+.cmspages-admin-link p { font-size:small; text-align:right; }
+.cmspages-admin-link blockquote {  }
+
+.cmspages-admin-link { display: none; }
+*:hover > .cmspages-admin-link { display: block; }
+.cmspages-admin-link a { background:white; border: 1px solid; text-decoration:none; padding: 1ex 2ex; box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.5); z-index: 10001; /* border-radius: 2ex; */ }
+*:hover > .cmspages-admin-link a {  }
+
+
+

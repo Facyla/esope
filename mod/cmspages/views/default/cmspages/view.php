@@ -162,12 +162,14 @@ if ($cmspage && !cmspages_check_password($cmspage)) { return; }
 
 // Admin links : direct edit link fr users who can edit this
 if ($is_editor) {
+	$content .= '<i class="fa fa-edit"></i><div class="cmspages-admin-link">';
 	if ($cmspage) {
-		$content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a></p></small>';
+		$content .= '<a href="' . $vars['url'] . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
 	} else {
-		$content .= '<p><blockquote>' . elgg_echo('cmspages:notexist:create') . '</blockquote></p>';
-		$content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a></p></small>';
+		$content .= '<blockquote>' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
+		$content .= '<a href="' . $vars['url'] . 'cmspages?pagetype=' . $pagetype . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
 	}
+	$content .= '</div>';
 }
 
 
