@@ -741,9 +741,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$edit_link = '';
 	if ($add_edit_link && $is_editor) {
 		$edit_level = count($params['recursion']);
-		$edit_link .= '<i class="fa fa-edit"></i>';
+		$edit_link = '<i class="fa fa-edit"></i>';
 		if ($edit_level > 0) {
-			$edit_link .= '<i class="fa fa-edit">' . $edit_level . '</i>';
+			$edit_link = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
 			$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
 		}
 		if ($cmspage) {
