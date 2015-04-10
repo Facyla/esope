@@ -70,7 +70,7 @@ pre, code { word-break:break-all; }
 
 /* Admin edit link */
 .cmspages-admin-notexist {  }
-.cmspages-admin-link { font-size:small; background:white; border: 1px solid; text-decoration:none; padding: 1ex 2ex; box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.5); z-index: 10001; /* border-radius: 2ex; */ }
+.cmspages-admin-link { font-size:small; background:white; border: 1px solid; text-decoration:none; padding: 1ex 2ex; box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.5); position:absolute; z-index: 10001; /* border-radius: 2ex; */ }
 .cmspages-admin-link:hover { text-decoration:none; }
 
 /* Edit link on editable block hover */

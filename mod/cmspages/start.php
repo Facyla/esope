@@ -591,7 +591,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  * 4. Wrap into containing content block .cmspages-output
  * 5. Render content into optional template
  */
-function cmspages_view($cmspage, $params = array('mode' => 'view', 'add_edit_link' => true), $vars = array()) {
+function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	
 	// Determine if we have an entity or a pagetype, and get both vars
 	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
@@ -603,10 +603,11 @@ function cmspages_view($cmspage, $params = array('mode' => 'view', 'add_edit_lin
 		$cmspage = cmspages_get_entity($pagetype);
 	}
 	
-	$mode = $params['mode'];
-	if (empty($mode)) $mode = 'view';
-	$add_edit_link = $params['add_edit_link'];
-	if (empty($add_edit_link)) $add_edit_link = true;
+	// Set defaults and custom params
+	$mode = 'view';
+	$add_edit_link = true;
+	if (isset($params['mode'])) $mode = $params['mode'];
+	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
