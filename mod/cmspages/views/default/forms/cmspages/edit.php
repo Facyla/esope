@@ -303,7 +303,7 @@ $editor_content = '<fieldset>';
 							'href' => '#cmspage-history-description-' . $annotation->id,
 							'class' => 'elgg-lightbox',
 						));
-					$editor_content .= '<div class="hidden">' . elgg_view_module('aside', $version_details, '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
+					$editor_content .= '<div class="hidden">' . elgg_view_module('aside', strip_tags($version_details), '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
 					$editor_content .= '</li>';
 				}
 				$editor_content .= '</ol>';
