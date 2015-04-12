@@ -33,7 +33,7 @@ $menu = $builder->getMenu($sort_by);
 
 
 // @TODO : add a mobile toggle if we have more than 1 menu entry
-// <div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+// echo '<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:topbar') . '</div>';
 
 // Render menu
 //echo '<div class="elgg-menu elgg-menu-' . $name . ' elgg-menu-' . $name . '-' . $section . ' ' . $class . '">';
