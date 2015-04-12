@@ -121,14 +121,20 @@ if ($guid) {
 
 // Check existing object, or create a new one
 if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+	// History
 	// Keep some history from previous content and settings
+	
 	// Save previous description as an annotation
-	if (!empty($description) && ($cmspage->description != $description)) { $cmspage->annotate('description', $cmspage->description, 0); }
+	if (!empty($cmspage->description) && ($cmspage->description != $description)) {
+		$cmspage->annotate('description', $cmspage->description, 0);
+	}
+	
 	// Save previous description as an annotation
 	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
 		$cmspage->annotate('module', $cmspage->module, 0);
 		$cmspage->annotate('module_config', $cmspage->module_config, 0);
 	}
+	
 } else {
 	$cmspage = new CMSPage();
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
