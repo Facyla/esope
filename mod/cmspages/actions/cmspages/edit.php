@@ -22,7 +22,7 @@ $site_guid = elgg_get_site_entity()->guid;
 elgg_make_sticky_form('cmspages');
 
 /* Get input data */
-$contents = get_input('cmspage_content', '', false); // We do *not want to filter HTML
+$description = get_input('cmspage_content', '', false); // We do *not want to filter HTML
 $cmspage_title = get_input('cmspage_title');
 $pagetype = elgg_get_friendly_title(get_input('pagetype')); // Needs to be URL-friendly
 // Empty or very short pagetypes are not allowed
@@ -64,7 +64,7 @@ $seo_follow = get_input('seo_follow');
 
 // Cache to the session - @todo handle by sticky form
 $_SESSION['cmspage_title'] = $cmspage_title;
-$_SESSION['cmspage_content'] = $contents;
+$_SESSION['cmspage_content'] = $description;
 $_SESSION['cmspage_pagetype'] = $pagetype;
 $_SESSION['cmspage_tags'] = $tags;
 $_SESSION['cmspage_access'] = $access;
@@ -123,7 +123,7 @@ if ($guid) {
 if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	// Keep some history from previous content and settings
 	// Save previous description as an annotation
-	if ($cmspage->description != $description) { $cmspage->annotate('description', $description, 0); }
+	if (!empty($description) && ($cmspage->description != $description)) { $cmspage->annotate('description', $cmspage->description, 0); }
 	// Save previous description as an annotation
 	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
 		$cmspage->annotate('module', $cmspage->module, 0);
@@ -140,7 +140,7 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 // Edition de l'objet existant ou nouvellement créé
 $cmspage->pagetype = $pagetype; // Allow to update pagetype
 $cmspage->pagetitle = $cmspage_title;
-$cmspage->description = $contents;
+$cmspage->description = $description;
 $cmspage->access_id = $access;
 $cmspage->password = $password;
 // Modules & templates integration

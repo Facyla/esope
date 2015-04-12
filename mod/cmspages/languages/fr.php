@@ -284,6 +284,10 @@ $fr = array(
 	
 	'cmspages:nestedlevel' => "Edition de la page de niveau %s (le contenu est généralement au niveau 0).",
 	
+	'cmspages:fieldset:editor' => "Contenu de la page",
+	'cmspages:history' => "Historique des versions précédentes",
+	'cmspages:history:version' => "<i class=\"fa fa-history\"></i>Version enregistrée par %s %s",
+	
 	
 );
 

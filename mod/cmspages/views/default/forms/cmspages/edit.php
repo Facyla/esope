@@ -233,7 +233,7 @@ $render_content .= '</fieldset>';
 
 
 // Featured image
-// @TODO Images embeddding should work with site as owner (shared library)
+// @TODO Images embeddding should work with site as owner (shared library) => that's another plugin ((shared_)image_gallery)
 // @TODO : create a site-wide image gallery ? or better : a wider access to published content + no-owner publication tool for admins
 $hidden = ($display == 'no') ? 'hidden' : '';
 $image_content = '<fieldset class="cmspages-featured-image ' . $hidden . '"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
@@ -271,21 +271,51 @@ $help_content .= '</div>';
 
 
 // CONTENT EDITOR - Bloc conditionnel : tout sauf module
-$hide = ($content_type != 'module') ? '' : 'hidden';
-$editor_content = '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
-	// Contenu du bloc / de la page
-	if (in_array($content_type, array('rawhtml'))) {
-		$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
-	} else if ($content_type == 'template') {
-		$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:template') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
-	} else {
-		//$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:') . "</label>";
-		$editor_content .= elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
-	}
-	// Templates utilisés par le contenu
-	if ($content_type == 'template') { $editor_content .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
-	$editor_content .= '<div class="clearfloat"></div><br />';
-$editor_content .= '</div>';
+$editor_content = '<fieldset>';
+	$editor_content .= '<legend>' . elgg_echo('cmspages:fieldset:editor') . '</legend>';
+	$hide = ($content_type != 'module') ? '' : 'hidden';
+	$editor_content = '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
+		// Contenu du bloc / de la page
+		if (in_array($content_type, array('rawhtml'))) {
+			$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
+		} else if ($content_type == 'template') {
+			$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:template') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
+		} else {
+			//$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:') . "</label>";
+			$editor_content .= elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
+		}
+		// @TODO list history and ability to browse and restore content
+		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+			$description_history = $cmspage->getAnnotations('description', 0, 0, 'desc');
+			if ($description_history) {
+				$editor_content .= '<div class="cmspages-history">';
+				$editor_content .= '<strong>' . elgg_echo('cmspages:history') . '</strong>';
+				$editor_content .= '<ol>';
+				foreach ($description_history as $annotation) {
+				if (empty($annotation->value)) continue;
+					$editor_content .= '<li class="cmspages-history-item">';
+					//$editor_content .= elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+					//$editor_content .= '<div class="cmspages-history-value"><textarea>' . $annotation->value . '</textarea></div>';
+					//$editor_content .= '<pre>' . print_r($annotation, true) . '</pre>';
+					$version_details = elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+					$editor_content .= elgg_view('output/url', array(
+							'text' => $version_details, 
+							'href' => '#cmspage-history-description-' . $annotation->id,
+							'class' => 'elgg-lightbox',
+						));
+					$editor_content .= '<div class="hidden">' . elgg_view_module('aside', $version_details, '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
+					$editor_content .= '</li>';
+				}
+				$editor_content .= '<ol>';
+				$editor_content .= '</div>';
+			}
+		}
+	
+		// Templates utilisés par le contenu
+		if ($content_type == 'template') { $editor_content .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
+		$editor_content .= '<div class="clearfloat"></div><br />';
+	$editor_content .= '</div>';
+$editor_content .= '</fieldset>';
 
 
 // MODULE - Bloc conditionnel : seulement si module
