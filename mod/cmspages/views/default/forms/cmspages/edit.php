@@ -300,7 +300,7 @@ $editor_content = '<fieldset>';
 					$version_details = elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
 					$editor_content .= elgg_view('output/url', array(
 							'text' => $version_details, 
-							'href' => '#cmspage-history-description-' . $annotation->id,
+							'href' => '#cmspage-history-item-' . $annotation->id,
 							'class' => 'elgg-lightbox',
 						));
 					$editor_content .= '<div class="hidden">' . elgg_view_module('aside', strip_tags($version_details), '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
