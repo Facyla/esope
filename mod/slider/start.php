@@ -8,6 +8,8 @@
  * @link http://id.facyla.net/
  */
 
+elgg_register_event_handler('init','system','slider_plugin_init');
+
 function slider_plugin_init() {
 	global $CONFIG;
 
@@ -37,8 +39,49 @@ function slider_plugin_init() {
 	<link rel="stylesheet" href="css/theme-construction.css">
 	<link rel="stylesheet" href="css/theme-cs-portfolio.css">
 	*/
+	
+	// Register main page handler
+	elgg_register_page_handler('slider', 'slider_page_handler');
+	
 }
 
 
-elgg_register_event_handler('init','system','slider_plugin_init');
+
+
+/* Main tool page handler */
+function slider_page_handler($page) {
+	$include_path = elgg_get_plugins_path() . 'slider/pages/slider/';
+	if (empty($page[0])) { $page[0] = 'index'; }
+	switch ($page[0]) {
+		case "view":
+			// @TODO display slider in one_column layout, or iframe mode ?
+			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			if (include($include_path . 'view.php')) { return true; }
+			break;
+			
+		case "add":
+			if (!empty($page[1])) { set_input('container_guid', $page[1]); }
+			// @TODO display slider in one_column layout, or iframe mode ?
+			if (include($include_path . 'edit.php')) { return true; }
+			break;
+		
+		case "edit":
+			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			// @TODO display slider in one_column layout, or iframe mode ?
+			if (include($include_path . 'edit.php')) { return true; }
+			break;
+			
+		case 'admin':
+			// @TODO Forward to plugin settings
+			forward('admin/plugin_settings/slider');
+			break;
+		
+		case 'index':
+		default:
+			if (include($include_path . 'index.php')) { return true; }
+	}
+	return false;
+}
+
+
 
