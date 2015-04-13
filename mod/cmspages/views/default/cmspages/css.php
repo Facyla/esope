@@ -18,7 +18,7 @@ pre, code { word-break:break-all; }
  
 #cmspages-form-select { display:inline-block; }
 #cmspages-form-new {  }
-.cmspages-history { padding: 1ex 0 3ex 0; }
+.cmspages-history { padding: 1ex 0 3ex 0; max-height:20ex; overflow:auto; }
 
 
 /* CMS Pages */

@@ -126,14 +126,23 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	
 	// Save previous description as an annotation
 	if (!empty($cmspage->description) && ($cmspage->description != $description)) {
-		$cmspage->annotate('description', $cmspage->description, 0);
+		$cmspage->annotate('history_description', $cmspage->description, 0);
+	}
+	// Save previous module config as an annotation
+	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
+		$cmspage->annotate('history_module', $cmspage->module, 0);
+		$cmspage->annotate('history_module_config', $cmspage->module_config, 0);
 	}
 	
-	// Save previous description as an annotation
-	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
-		$cmspage->annotate('module', $cmspage->module, 0);
-		$cmspage->annotate('module_config', $cmspage->module_config, 0);
+	// Save previous css as an annotation
+	if (!empty($cmspage->css) && ($cmspage->css != $page_css)) {
+		$cmspage->annotate('history_css', $cmspage->css, 0);
 	}
+	// Save previous js as an annotation
+	if (!empty($cmspage->js) && ($cmspage->js != $page_js)) {
+		$cmspage->annotate('history_js', $cmspage->js, 0);
+	}
+	
 	
 } else {
 	$cmspage = new CMSPage();

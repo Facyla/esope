@@ -984,3 +984,40 @@ function cmspages_set_categories_menu() {
 }
 
 
+/* Registers an Elgg menu from categories config */
+function cmspages_history_list($cmspage, $metadata_name, $limit = false, $offset = false) {
+	// Page metadata history
+	// @TODO ability to browse and restore content
+	if (elgg_instanceof($cmspage, 'object', 'cmspage') && !empty($metadata_name)) {
+		if (!$limit) $limit = get_input('limit', 50);
+		if (!$offset) $offset = get_input('offset', 0);
+		$history = $cmspage->getAnnotations('history_' . $metadata_name, $limit, $offset, 'desc');
+		if ($history) {
+			$content .= '<div class="cmspages-history">';
+			$content .= '<strong><a href="javascript:void(0);" onClick="$(\'#cmspages-history-' . $metadata_name . '\').toggle();"><i class="fa fa-toggle-down"></i>' . elgg_echo('cmspages:history') . '</a></strong>';
+			$content .= '<ol id="cmspages-history-' . $metadata_name . '" style="display:none;">';
+			foreach ($history as $annotation) {
+			if (empty($annotation->value)) continue;
+				$content .= '<li class="cmspages-history-item">';
+				//$editor_content .= elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+				//$editor_content .= '<div class="cmspages-history-value"><textarea>' . $annotation->value . '</textarea></div>';
+				//$editor_content .= '<pre>' . print_r($annotation, true) . '</pre>';
+				$version_details = elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+				$content .= elgg_view('output/url', array(
+						'text' => $version_details, 
+						'href' => '#cmspage-history-item-' . $annotation->id,
+						'class' => 'elgg-lightbox',
+					));
+				$content .= '<div class="hidden">' . elgg_view_module('aside', strip_tags($version_details), '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
+				$content .= '</li>';
+			}
+			$content .= '</ol>';
+			$content .= '</div>';
+		} else return false;
+	}
+	return $content;
+}
+
+
+
+

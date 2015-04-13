@@ -284,32 +284,8 @@ $editor_content = '<fieldset>';
 			//$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:') . "</label>";
 			$editor_content .= elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
 		}
-		// @TODO list history and ability to browse and restore content
-		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-			$description_history = $cmspage->getAnnotations('description', 0, 0, 'desc');
-			if ($description_history) {
-				$editor_content .= '<div class="cmspages-history">';
-				$editor_content .= '<strong>' . elgg_echo('cmspages:history') . '</strong>';
-				$editor_content .= '<ol>';
-				foreach ($description_history as $annotation) {
-				if (empty($annotation->value)) continue;
-					$editor_content .= '<li class="cmspages-history-item">';
-					//$editor_content .= elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
-					//$editor_content .= '<div class="cmspages-history-value"><textarea>' . $annotation->value . '</textarea></div>';
-					//$editor_content .= '<pre>' . print_r($annotation, true) . '</pre>';
-					$version_details = elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
-					$editor_content .= elgg_view('output/url', array(
-							'text' => $version_details, 
-							'href' => '#cmspage-history-item-' . $annotation->id,
-							'class' => 'elgg-lightbox',
-						));
-					$editor_content .= '<div class="hidden">' . elgg_view_module('aside', strip_tags($version_details), '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
-					$editor_content .= '</li>';
-				}
-				$editor_content .= '</ol>';
-				$editor_content .= '</div>';
-			}
-		}
+		// Page content history
+		$editor_content .= cmspages_history_list($cmspage, 'description');
 	
 		// Templates utilisés par le contenu
 		if ($content_type == 'template') { $editor_content .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
@@ -323,10 +299,12 @@ $hide = ($content_type == 'module') ? '' : 'hidden';
 $module_content = '<div class="cmspages-field cmspages-field-module ' . $hide . '">';
 	// Load other content as a configurable module
 	$module_content .= '<p><label>' . elgg_echo('cmspages:module') . '&nbsp; ' . elgg_view('input/dropdown', array('name' => 'module', 'value' => $module, 'options_values' => $module_opts)) . '</label></p>';
+	$module_content .= cmspages_history_list($cmspage, 'module');
 	// Infos
 	$module_content .= '<p>' . elgg_echo('cmspages:module:infos') . '</p>';
 	// Config du module
 	$module_content .= '<p><label>' . elgg_echo('cmspages:module:config') . '<br />' . elgg_view('input/text', array('name' => 'module_config', 'value' => $module_config)) . '</label></p>';
+	$module_content .= cmspages_history_list($cmspage, 'module_config');
 $module_content .= '</div>';
 $module_content .= '<br />';
 
@@ -336,9 +314,11 @@ $jscss_content = '<fieldset>';
 	$jscss_content .= '<legend>' . elgg_echo('cmspages:fieldset:advanced') . '</legend>';
 	// CSS
 	$jscss_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:css:details'))) . '<p><label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '</p>';
+	$jscss_content .= cmspages_history_list($cmspage, 'js');
 	
 	// JS
 	$jscss_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:js:details'))) . '<p><label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '</p>';
+	$jscss_content .= cmspages_history_list($cmspage, 'css');
 $jscss_content .= '</fieldset>';
 $jscss_content .= '<br />';
 
