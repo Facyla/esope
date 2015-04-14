@@ -50,7 +50,7 @@ $french = array(
 	
 	'slider:shortcode:slider' => "Slider (déjà configuré)",
 	'slider:shortcode:instructions' => "Pour insérer ce slider dans une publication (blog, page wiki, etc.), utilisez le shortcode suivant&nbsp;: <strong>[slider id=\"%s\"]</strong>",
-	'slider:cmspages:instructions' => "Pour insérer ce slider dans un template CMSPage, utilisez le code suivant&nbsp;: <strong>{{:slider/view|id=%s}}</strong>",
+	'slider:cmspages:instructions' => "Pour insérer ce slider dans un template CMSPage, utilisez le code suivant&nbsp;: <strong>{{:slider/view|guid=%s}}</strong>",
 	'slider:cmspages:instructions:shortcode' => "Vous pouvez également insérer ce slider dans une CMSPage en utilisant un shortcode, avec le code suivant&nbsp;: <strong>{{[slider id=\"%s\"]}}</strong>",
 	
 );
