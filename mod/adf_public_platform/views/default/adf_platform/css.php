@@ -889,6 +889,7 @@ section div.module footer { background-size: 100%; }
 	
 	/* Groups */
 	.groups-profile-fields { width: 100%; }
+	ul#groups-tools > li { width: 100% !important; max-width: 100% !important; float: none; }
 	
 	/* Home */
 	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }

@@ -22,7 +22,7 @@ $site_guid = elgg_get_site_entity()->guid;
 elgg_make_sticky_form('cmspages');
 
 /* Get input data */
-$contents = get_input('cmspage_content', '', false); // We do *not want to filter HTML
+$description = get_input('cmspage_content', '', false); // We do *not want to filter HTML
 $cmspage_title = get_input('cmspage_title');
 $pagetype = elgg_get_friendly_title(get_input('pagetype')); // Needs to be URL-friendly
 // Empty or very short pagetypes are not allowed
@@ -64,7 +64,7 @@ $seo_follow = get_input('seo_follow');
 
 // Cache to the session - @todo handle by sticky form
 $_SESSION['cmspage_title'] = $cmspage_title;
-$_SESSION['cmspage_content'] = $contents;
+$_SESSION['cmspage_content'] = $description;
 $_SESSION['cmspage_pagetype'] = $pagetype;
 $_SESSION['cmspage_tags'] = $tags;
 $_SESSION['cmspage_access'] = $access;
@@ -87,38 +87,63 @@ $_SESSION['cmspage_page_js'] = $page_js;
 elgg_set_ignore_access(true);
 
 // Get existing object corresponding to wanted pagetype
+// Note : this may be another page, but pagetype selection is kept for BC reasons
 $cmspage = NULL;
 if (strlen($pagetype)>0) {
 	$cmspage = cmspages_get_entity($pagetype);
 }
-// @TODO alternate method using GUID, so we can update the pagetype (but only if it not already used)
-/*
+
+// Also check entity through GUID, so we can update the pagetype
+// This is used only to update pagetype
 $guid = get_input('guid', false);
-if (!empty($guid)) {
-	// Get our cmspage (the real one, for sure)
+if ($guid) {
+	// Get our original cmspage (the real one, for sure)
 	$original_cmspage = get_entity($guid);
-	if ($original_cmspage && $cmspage && ($original_cmspage->guid != $cmspage->guid)) {
-		// We've got a problem : asking for an existing pagetype, cannot update, but save the rest
-		register_error('cmspages:alreadyexists' . "  $original_cmspage->guid != $cmspage->guid");
-		// Update the edited object
+	// Applies only when the page already exists (from known guid)
+	if (elgg_instanceof($original_cmspage, 'object', 'cmspage')) {
+		// Check if pagetype has changed
+		if ($original_cmspage->pagetype != $pagetype) {
+			// Check if a page already exists with this pagetype
+			// We can proceed if it does not exist
+			if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+				// Page already exists
+				// Cannot update, so revert to original pagetype
+				register_error(elgg_echo('cmspages:alreadyexists', array($pagetype)));
+				$pagetype = $original_cmspage->pagetype;
+			}
+		}
+		// Always edit original page if it exists
 		$cmspage = $original_cmspage;
-		// Revert to original pagetype
-		$pagetype = $original_cmspage->pagetype;
 	}
+	
 }
-*/
 
 
 // Check existing object, or create a new one
 if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+	// History
 	// Keep some history from previous content and settings
+	
 	// Save previous description as an annotation
-	if ($cmspage->description != $description) { $cmspage->annotate('description', $description, 0); }
-	// Save previous description as an annotation
-	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
-		$cmspage->annotate('module', $cmspage->module, 0);
-		$cmspage->annotate('module_config', $cmspage->module_config, 0);
+	if (!empty($cmspage->description) && ($cmspage->description != $description)) {
+		$cmspage->annotate('history_description', $cmspage->description, 0);
 	}
+	// Save previous module config as an annotation
+	if (($cmspage->module != $module) || ($cmspage->module_config != $module_config)) {
+		$cmspage->annotate('history_module', $cmspage->module, 0);
+		$cmspage->annotate('history_module_config', $cmspage->module_config, 0);
+	}
+	
+	// Save previous css as an annotation
+	if (!empty($cmspage->css) && ($cmspage->css != $page_css)) {
+		$cmspage->annotate('history_css', $cmspage->css, 0);
+	}
+	// Save previous js as an annotation
+	if (!empty($cmspage->js) && ($cmspage->js != $page_js)) {
+		$cmspage->annotate('history_js', $cmspage->js, 0);
+	}
+	
+	
 } else {
 	$cmspage = new CMSPage();
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
@@ -130,7 +155,7 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 // Edition de l'objet existant ou nouvellement créé
 $cmspage->pagetype = $pagetype; // Allow to update pagetype
 $cmspage->pagetitle = $cmspage_title;
-$cmspage->description = $contents;
+$cmspage->description = $description;
 $cmspage->access_id = $access;
 $cmspage->password = $password;
 // Modules & templates integration

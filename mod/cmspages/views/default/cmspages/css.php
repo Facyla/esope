@@ -18,6 +18,7 @@ pre, code { word-break:break-all; }
  
 #cmspages-form-select { display:inline-block; }
 #cmspages-form-new {  }
+.cmspages-history { padding: 1ex 0 3ex 0; max-height:20ex; overflow:auto; }
 
 
 /* CMS Pages */
@@ -27,6 +28,8 @@ pre, code { word-break:break-all; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs li { float: left; margin-right: 1ex; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs li:before { content:">"; margin-right:1ex; }
 .elgg-context-cmspages_admin .elgg-breadcrumbs li:first-of-type:before { content:""; margin-right:0; }
+.elgg-cmspages-output { /* margin-top:0; */ }
+
 
 /* CMS Pages admin listing */
 .cmspages-item { display:block; margin:0px 0 1ex 0; padding:0.5ex 1ex; border:1px solid; border-radius:6px; }
@@ -64,5 +67,18 @@ pre, code { word-break:break-all; }
 #cmspages-settings .elgg-menu-cmspages-categories .elgg-child-menu { display:none; }
 #cmspages-settings .elgg-menu-cmspages-categories li:hover > .elgg-child-menu { display: block; background:white; padding:0.5ex; box-shadow:1px 1px 3px black; }
 #cmspages-settings .elgg-menu-cmspages-categories > .elgg-child-menu { position: absolute; }
+
+
+/* Admin edit link */
+.cmspages-admin-notexist {  }
+.cmspages-admin-link { font-size:small; background:white; border: 1px solid; text-decoration:none; padding: 1ex 2ex; box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.5); position:relative; z-index: 10001; /* border-radius: 2ex; */ }
+.cmspages-admin-link:hover { text-decoration:none; }
+
+/* Edit link on editable block hover */
+.cmspages-admin-link { display: none; }
+*:hover > .cmspages-admin-link { display: inline-block; }
+.cmspages-editable:hover { border: 2px dashed; padding: 0.5ex; background: rgba(220,220,255,0.3); display: block; }
+*:hover > .cmspages-admin-link a {  }
+
 
 

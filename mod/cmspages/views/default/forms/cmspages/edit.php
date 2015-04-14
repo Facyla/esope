@@ -190,7 +190,9 @@ $cat_content .= '</fieldset>';
 $render_content = '<fieldset><legend>' . elgg_echo('cmspages:fieldset:rendering') . '</legend>';
 	// Use custom template for rendering
 	//$render_content .= '<p><label>' . elgg_echo('cmspages:template:use') . '</label> ' . elgg_view('input/text', array('name' => 'template', 'value' => $template, 'style' => "width:200px;")) . '<br /><em>' . elgg_echo('cmspages:template:details') . '</em></p>';
-	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . ' ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</label></p>';
+	$render_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:template:details'))) . '<p><label>' . elgg_echo('cmspages:template:use') . ' ' . elgg_view('input/dropdown', array('name' => 'template', 'value' => $template, 'options_values' => cmspages_templates_opts())) . '</label>';
+	if (!empty($template)) $render_content .= ' &nbsp; <a href="' . elgg_get_site_url() . 'cmspages/edit/' . $template . '" target="_blank">' . $template . '</a>';
+	$render_content .= '</p>';
 	
 	// Affichage autonome
 	// Allow own page or not ('no' => no, empty or not set => default, 'noview' => full page only
@@ -231,7 +233,7 @@ $render_content .= '</fieldset>';
 
 
 // Featured image
-// @TODO Images embeddding should work with site as owner (shared library)
+// @TODO Images embeddding should work with site as owner (shared library) => that's another plugin ((shared_)image_gallery)
 // @TODO : create a site-wide image gallery ? or better : a wider access to published content + no-owner publication tool for admins
 $hidden = ($display == 'no') ? 'hidden' : '';
 $image_content = '<fieldset class="cmspages-featured-image ' . $hidden . '"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
@@ -269,21 +271,27 @@ $help_content .= '</div>';
 
 
 // CONTENT EDITOR - Bloc conditionnel : tout sauf module
-$hide = ($content_type != 'module') ? '' : 'hidden';
-$editor_content = '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
-	// Contenu du bloc / de la page
-	if (in_array($content_type, array('rawhtml'))) {
-		$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
-	} else if ($content_type == 'template') {
-		$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:template') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
-	} else {
-		//$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:') . "</label>";
-		$editor_content .= elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
-	}
-	// Templates utilisés par le contenu
-	if ($content_type == 'template') { $editor_content .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
-	$editor_content .= '<div class="clearfloat"></div><br />';
-$editor_content .= '</div>';
+$editor_content = '<fieldset>';
+	$editor_content .= '<legend>' . elgg_echo('cmspages:fieldset:editor') . '</legend>';
+	$hide = ($content_type != 'module') ? '' : 'hidden';
+	$editor_content = '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
+		// Contenu du bloc / de la page
+		if (in_array($content_type, array('rawhtml'))) {
+			$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
+		} else if ($content_type == 'template') {
+			$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:template') . "</label>" . elgg_view('input/longtext', array('name' => 'cmspage_content', 'value' => $description, 'class' => 'elgg-input-rawtext'));
+		} else {
+			//$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:') . "</label>";
+			$editor_content .= elgg_view('input/longtext', array('name' => 'cmspage_content', 'id' => 'cmspage_content', 'value' => $description));
+		}
+		// Page content history
+		$editor_content .= cmspages_history_list($cmspage, 'description');
+	
+		// Templates utilisés par le contenu
+		if ($content_type == 'template') { $editor_content .= elgg_echo('cmspages:templates:list') . '&nbsp;:<br />' . cmspages_list_subtemplates($cmspage->description); }
+		$editor_content .= '<div class="clearfloat"></div><br />';
+	$editor_content .= '</div>';
+$editor_content .= '</fieldset>';
 
 
 // MODULE - Bloc conditionnel : seulement si module
@@ -291,10 +299,12 @@ $hide = ($content_type == 'module') ? '' : 'hidden';
 $module_content = '<div class="cmspages-field cmspages-field-module ' . $hide . '">';
 	// Load other content as a configurable module
 	$module_content .= '<p><label>' . elgg_echo('cmspages:module') . '&nbsp; ' . elgg_view('input/dropdown', array('name' => 'module', 'value' => $module, 'options_values' => $module_opts)) . '</label></p>';
+	$module_content .= cmspages_history_list($cmspage, 'module');
 	// Infos
 	$module_content .= '<p>' . elgg_echo('cmspages:module:infos') . '</p>';
 	// Config du module
 	$module_content .= '<p><label>' . elgg_echo('cmspages:module:config') . '<br />' . elgg_view('input/text', array('name' => 'module_config', 'value' => $module_config)) . '</label></p>';
+	$module_content .= cmspages_history_list($cmspage, 'module_config');
 $module_content .= '</div>';
 $module_content .= '<br />';
 
@@ -304,9 +314,11 @@ $jscss_content = '<fieldset>';
 	$jscss_content .= '<legend>' . elgg_echo('cmspages:fieldset:advanced') . '</legend>';
 	// CSS
 	$jscss_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:css:details'))) . '<p><label>' . elgg_echo('cmspages:css') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_css', 'value' => $css)) . '</label>' . '</p>';
+	$jscss_content .= cmspages_history_list($cmspage, 'js');
 	
 	// JS
 	$jscss_content .= elgg_view('output/cmspage_help', array('content' => elgg_echo('cmspages:js:details'))) . '<p><label>' . elgg_echo('cmspages:js') . '<br/>' . elgg_view('input/plaintext', array('name' => 'page_js', 'value' => $js)) . '</label>' . '</p>';
+	$jscss_content .= cmspages_history_list($cmspage, 'css');
 $jscss_content .= '</fieldset>';
 $jscss_content .= '<br />';
 

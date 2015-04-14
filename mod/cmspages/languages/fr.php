@@ -8,7 +8,7 @@ $fr = array(
 	'cmspages:cmspage_url' => "<i class=\"fa fa-link\"></i>URL de la page (permalien)",
 	'cmspages:cmspage_view' => "<i class=\"fa fa-plug\"></i>Intégration dans Elgg",
 	'cmspages:cmspage_embed' => "<i class=\"fa fa-code\"></i>Code d'embarquement HTML",
-	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Utilisation dans un  gabarit",
+	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Utilisation dans un gabarit",
 	'cmspages:pageselect' => "Editer une page",
 	'cmspages:page:new' => "Créer une page",
 	'cmspages:page:new:name' => "Indiquer ici le nom de la nouvelle page",
@@ -100,7 +100,7 @@ $fr = array(
 	'cmspages:display:details' => "Permet de choisir comment afficher cette page de manière autonome (avec une URL propre). Par défaut la page peut être utilisée comme élément d'interface ou comme page autonome. Les options permettent d'interdire l'affichage pleine page (no), ou de n'autoriser que l'affichage pleine page pour une utilisation comme élément d'interface uniquement (noview).",
 	//'cmspages:layout:details' => "Permet de choisir le layout pour afficher cette page de manière autonome (avec une URL propre). Les options permettent de choisir le layout à utiliser pour le rendu de la page, de ne permettre que l'affichage pleine page avec le layout par défaut (noview), ou d'interdire l'affichage pleine page (no), pour une utilisation comme élément d'intrerface uniquement.<br />Important : lors d'un \"embed\" de la page, le layout n'est pas utilisé.",
 	'cmspages:template:use' => "Gabarit (template)",
-	'cmspages:template:details' => "Permet d'utiliser un gabarit d'affichage prédéfini, en injectant le contenu de cette page dans le gabarit HTML créé avec CMSPages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau gabarit, créez une page de type \"gabarit\".",
+	'cmspages:template:details' => "Permet d'utiliser un gabarit d'affichage prédéfini, en injectant le contenu de cette page dans le gabarit HTML créé avec CMSPages. Laisser vide pour afficher tel quel le contenu de cette page. Pour créer un nouveau gabarit, créez une page de type \"gabarit\".<br />Attention : les pages de type gabarit ne peuvent pas spécifier de gabarit d'affichage.",
 	'cmspages:layout:use' => "Mise en page (layout)",
 	'cmspages:layout:details' => "Affichage pleine page seulement. Permet de modifier la mise en page interne de la page (nombre de colonnes)",
 	'cmspages:pageshell:use' => "Coquille HTML (pageshell)",
@@ -177,7 +177,7 @@ $fr = array(
 	'cmspages:seo:canonical:details' => "Si cette page est accessible via plusieurs URL, indique l'URL de la page \"principale\". Par défaut, l'URL canonique indiquée est celle du permalien.",
 	
 	'cmspages:edit:title' => "Edition de la page \"%s\"",
-	'cmspages:alreadyexists' => "Cette adresse existe déjà, veuillez en choisir une autre",
+	'cmspages:alreadyexists' => "Une page existe déjà avec ce permalien (\"%s\")&nbsp;: veuillez réessayer avec un autre.",
 	
 	'cmspages:fieldset:rendering' => "Modes de rendu",
 	'cmspages:fieldset:publication' => "Publication",
@@ -282,6 +282,11 @@ $fr = array(
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
 	
+	'cmspages:nestedlevel' => "Edition de la page de niveau %s (le contenu est généralement au niveau 0).",
+	
+	'cmspages:fieldset:editor' => "Contenu de la page",
+	'cmspages:history' => "Historique des versions précédentes",
+	'cmspages:history:version' => "<i class=\"fa fa-history\"></i>Version enregistrée par %s %s",
 	
 	
 );

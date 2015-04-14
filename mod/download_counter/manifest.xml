@@ -6,7 +6,7 @@
 	<blurb>Dowload counter</blurb>
 	<description>Counts file downloads. You should enable this plugin if you need to count how many times a given file was downloaded. If you need further statistics data, such as by who it was downloaded, views count, download dates, or unique visitors, you should use a views counter plugin instead.</description>
 	<website>http://id.facyla.net/</website>
-	<copyright>Florian DANIEL aka Facyla</copyright>
+	<copyright>ITEMS International 2015</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<category>file</category>

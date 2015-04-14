@@ -19,6 +19,21 @@ $french = array(
 	'slider:settings:css' => "Feuille de style en surcharge pour le slider",
 	'slider:settings:css:help' => "Feuille de style en surcharge pour le slider : il s'agit cette fois des CSS complètes à ajouter en surcharge après les styles par défaut.<br />Laisser vide pour récupérer les valeurs par défaut.",
 	
+	
+	// NEW
+	'slider:showinstructions' => "Afficher le mode d'emploi",
+	'slider:instructions' => "Les sliders peuvent être définis ici, puis insérés dans les articles via un shortcode <q>[slider id=\"12345\"]</q>",
+	'slider:add' => "Créer un nouveau slider",
+	'slider:edit' => "Edition du slider",
+	'slider:edit:title' => "Titre",
+	'slider:edit:description' => "Description",
+	'slider:edit:content' => "Contenu",
+	'slider:edit:config' => "Configuration JS",
+	'slider:edit:css' => "CSS",
+	'slider:edit:height' => "Hauteur",
+	'slider:edit:width' => "Largeur",
+	'slider:edit:preview' => "Prévisualisation",
+	
 );
 
 add_translation("fr",$french);

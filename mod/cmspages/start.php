@@ -68,8 +68,8 @@ function cmspages_get_entity($pagetype = '') {
 }
 
 
-/* Gets the cmspage entity for a given pagetype (= slURL)
- * ElggEntity / false
+/* Checks if a cmspage entity exists for a given pagetype (= slURL)
+ * true / false
  */
 function cmspages_exists($pagetype = '') {
 	$ia = elgg_set_ignore_access(true);
@@ -577,7 +577,232 @@ function cmspages_compose_module($module_name, $module_config = false) {
 }
 
 
-/* Utilisation d'un template : remplacement (non récursif ?) des blocs par les pages correspondantes
+
+/* Affichage d'une page cms de tout type
+ * $params : rendering parameters (which does not depend of page content)
+ * $vars : content vars and data to be passed to the views (used by the page)
+ * $mode : view/read
+ *    - view : certaines infos sont masquées en mode 'view' (titre, tags...) + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
+ * $add_edit_link : allow non-defined pages rendering (and edit links)
+ * STEPS :
+ * 1. Check validity, access, contexts (can we display that page ?)
+ * 2. Render cmspage "own" content
+ * 3. Add optional edit block
+ * 4. Wrap into containing content block .cmspages-output
+ * 5. Render content into optional template
+ */
+function cmspages_view($cmspage, $params = array(), $vars = array()) {
+	
+	// Determine if we have an entity or a pagetype, and get both vars
+	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+		// Get pagetype from entity
+		$pagetype = $cmspage->pagetype;
+	} else if (!empty($cmspage)) {
+		$pagetype = $cmspage;
+		// Or optional entity from pagetype
+		$cmspage = cmspages_get_entity($pagetype);
+	}
+	
+	// Set defaults and custom params
+	$mode = 'view';
+	$add_edit_link = true;
+	if (isset($params['mode'])) $mode = $params['mode'];
+	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
+	if (!isset($params['recursion'])) $params['recursion'] = array();
+	
+	
+	/* 1. Check validity, access, contexts (can we display that page ?) */
+	// Access rights : is viewer a page editor ?
+	$is_editor = false;
+	if (cmspage_is_editor()) {
+		$is_editor = true;
+		// Editors can also edit any cmspage - including private ones
+		$ia = elgg_set_ignore_access(true);
+	}
+	
+	// Page inexistante ? Seuls les éditeurs peuvent rester (ils pourront créer la page)
+	if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !$is_editor) { return; }
+	
+	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+		
+		// Check if read/view display is allowed - contenu vide si pas autorisé
+		// Note : pages should allow view mode to be used as templates
+		if ($mode == 'view') {
+			if ($cmspage->display == 'noview') { return; }
+		} else {
+			// Read mode : check if full page display is allowed
+			if ($cmspage->display == 'no') { return; }
+		}
+		
+		// Check if using a password, and if user has access, or display auth form
+		// If form is displayed, user does not have access so return right after form
+		if ($cmspage && !cmspages_check_password($cmspage)) { return; }
+		
+		// Check allowed contexts - Exit si contexte non autorisé
+		if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
+			$exit = true;
+			$allowed_contexts = explode(',', $cmspage->contexts);
+			foreach ($allowed_contexts as $context) {
+				if (elgg_in_context(trim($context))) { $exit = false; break; }
+			}
+			if ($exit) {
+				if ($mode != 'view') {
+					register_error('cmspages:wrongcontext');
+					//forward(REFERER);
+				}
+				return;
+			}
+		}
+	}
+	
+	
+	/* 2. Render cmspage "own" content */
+	$content = '';
+	// Contexte spécifique
+	elgg_push_context('cmspages');
+	elgg_push_context('cmspages:pagetype:' . $pagetype);
+	
+	// Start composing content
+	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+		$title = $cmspage->pagetitle;
+		
+		switch ($cmspage->content_type) {
+			// Load a specific module
+			case 'module':
+				if (!empty($cmspage->module)) {
+					$module_config = cmspages_extract_module_config($cmspage->module, $cmspage->module_config);
+					foreach ($module_config as $module_name => $config) {
+						$content .= cmspages_compose_module($module_name, $config);
+					}
+				}
+				break;
+			
+			/* Use as a templating system
+			 * see cmspages_render_template() for allowed template syntax
+			 * Replace tags : {{pagetype}}, {{:view}}, {{:view|param=value}}, {{%VARS%}}, {{[shortcode]}}
+			 */
+			case 'template':
+				// Replace wildcards with values.. {{pagetype}}
+				$content .= cmspages_render_template($cmspage->description, $vars['body']);
+				break;
+		
+			// Render cmspage raw content (unfiltered text / HTML)
+			case 'rawhtml':
+			default:
+				// Display tags
+				if ($mode != 'view') {
+					$content .= elgg_view('output/cmspages_tags', array('tags' => $cmspage->tags));
+					$content .= elgg_view('output/cmspages_categories', array('categories' => $cmspage->categories));
+				}
+				
+				// Display page actual content
+				// Always use a containing div, because we need elgg-output class for lists (for pure content only !), plus a custom class for finer output control
+				// Note : cannot use output/longtext view because of filtering
+				// So shortcodes are not applied, if used
+				if (($mode == 'view') && $vars['rawcontent']) {
+					$content .= $cmspage->description;
+				} else {
+					$content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '<div class="clearfloat"></div></div>';
+				}
+				
+				if ($mode != 'view') {
+					// Set container as page_owner
+					// useful mainly when displayed as a full page
+					// @TODO use also in view mode ? => need to set it back to previous owner afterwards
+					if (!empty($cmspage->container_guid)) { elgg_set_page_owner_guid($cmspage->container_guid); }
+					
+					// Ajout de la page parente
+					// Use parent entity as hierarchical navigation link
+					if (!empty($cmspage->parent_guid)) {
+						$parent = get_entity($cmspage->parent_guid);
+						$content .= '<br /><a href="' . $parent->getURl() . '">Parent : ' . $parent->title . $parent->name . '</a>';
+					}
+					
+					// Ajout page liée
+					// Use sibling entity as horizontal navigation link
+					if (!empty($cmspage->sibling_guid)) {
+						$sibling = get_entity($cmspage->sibling_guid);
+						$content .= '<br /><a href="' . $sibling->getURl() . '">Lien connexe : ' . $sibling->title . $sibling->name . '</a>';
+					}
+				}
+		}
+		
+		// Ajout des feuilles de style personnalisées
+		if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
+		
+		// Ajout des JS personnalisés
+		if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
+		
+	}
+	
+	
+	/* 3. Add optional edit block */
+	// Admin links : direct edit link for users who can edit this
+	$edit_link = '';
+	if ($add_edit_link && $is_editor) {
+		$edit_level = count($params['recursion']);
+		$edit_link = '<i class="fa fa-edit"></i>';
+		if ($edit_level > 0) {
+			$edit_link = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
+			$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
+		}
+		if ($cmspage) {
+			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+		} else {
+			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
+			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+		}
+	}
+	
+	if ($mode == 'view') {
+		// On retire les contextes spécifiques à ce bloc
+		elgg_pop_context();
+		elgg_pop_context();
+	}
+	
+	
+	/* 4. Wrap into container (.cmspages-output) */
+	// Add enclosing span for custom styles + optional editable class and edit link
+	if ($is_editor) {
+		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
+	} else {
+		$content = '<span class="cmspages-output">' . $content . '</span>';
+	}
+	
+	
+	/* 5. Render content into optional template */
+	// TEMPLATE - Use another cmspage as a wrapper template
+	// Note : we can use recursive templates too, ie. templates that will call display templates. But in that case, we keep track of template stack, and will no use templates recursively, to avoid looping.
+	// Content is passed to the template as 'CONTENT'
+	//if ($cmspage->content_type != 'template') {
+	if (!empty($cmspage->template)) {
+		// Allow unset pages edit link to be displayed too
+		$template = cmspages_get_entity($cmspage->template);
+		//$content = elgg_view('cmspages/view', array('pagetype' => $cmspage->template, 'body' => $content));
+		
+		// Set some params for template
+		// Set template content
+		$vars['body'] = $content;
+		// Add current pagetype to recursion stack
+		$params['recursion'][] = $cmspage->pagetype;
+		// Force recursive call to view mode (no breaking because of sub-content)
+		$params['mode'] = 'view';
+		
+		// Display content in template (if it doesn't exist, link will be displayed to admin, otherwise nothing will be displayed)
+		// Block loop recursion (if some template uses an inner template, or calls itself)
+		if (!in_array($cmspage->template, $params['recursion'])) {
+			$content = cmspages_view($cmspage->template, $params, $vars);
+		}
+	}
+	//}
+	
+	elgg_set_ignore_access($ia);
+	
+	return $content;
+}
+
+
+/* Utilisation d'un template : remplacement (récursif) des blocs par les pages correspondantes
  * $template : texte ou code HTML à utiliser comme template
  * $content : éléments de contenu ou variables - array($varname => $value)
  * {{pagetype}} => HTML ou template ou module
@@ -757,5 +982,42 @@ function cmspages_set_categories_menu() {
 	
 	return true;
 }
+
+
+/* Registers an Elgg menu from categories config */
+function cmspages_history_list($cmspage, $metadata_name, $limit = false, $offset = false) {
+	// Page metadata history
+	// @TODO ability to browse and restore content
+	if (elgg_instanceof($cmspage, 'object', 'cmspage') && !empty($metadata_name)) {
+		if (!$limit) $limit = get_input('limit', 50);
+		if (!$offset) $offset = get_input('offset', 0);
+		$history = $cmspage->getAnnotations('history_' . $metadata_name, $limit, $offset, 'desc');
+		if ($history) {
+			$content .= '<div class="cmspages-history">';
+			$content .= '<strong><a href="javascript:void(0);" onClick="$(\'#cmspages-history-' . $metadata_name . '\').toggle();"><i class="fa fa-toggle-down"></i>' . elgg_echo('cmspages:history') . '</a></strong>';
+			$content .= '<ol id="cmspages-history-' . $metadata_name . '" style="display:none;">';
+			foreach ($history as $annotation) {
+			if (empty($annotation->value)) continue;
+				$content .= '<li class="cmspages-history-item">';
+				//$editor_content .= elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+				//$editor_content .= '<div class="cmspages-history-value"><textarea>' . $annotation->value . '</textarea></div>';
+				//$editor_content .= '<pre>' . print_r($annotation, true) . '</pre>';
+				$version_details = elgg_echo('cmspages:history:version', array($annotation->getOwnerEntity()->name, elgg_view_friendly_time($annotation->time_created)));
+				$content .= elgg_view('output/url', array(
+						'text' => $version_details, 
+						'href' => '#cmspage-history-item-' . $annotation->id,
+						'class' => 'elgg-lightbox',
+					));
+				$content .= '<div class="hidden">' . elgg_view_module('aside', strip_tags($version_details), '<textarea>' . $annotation->value . '</textarea>', array('id' => 'cmspage-history-item-' . $annotation->id)) . '</div>';
+				$content .= '</li>';
+			}
+			$content .= '</ol>';
+			$content .= '</div>';
+		} else return false;
+	}
+	return $content;
+}
+
+
 
 

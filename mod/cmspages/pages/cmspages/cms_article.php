@@ -93,6 +93,9 @@ if ($cmspage) {
 }
 
 
+// Always add plugin CSS : some are used
+$content .= "\n<style>" . elgg_view('cmspages/css') . "</style>\n";
+
 
 // EMBED MODE - Display earlier, without any wrapper.
 // Determine pageshell depending on embed type
@@ -167,10 +170,9 @@ switch ($layout) {
 // Give cmspages a chance to use custom pageshell
 if (!empty($cmspage->pageshell)) { $pageshell = $cmspage->pageshell; }
 
+// Wrap into custom pageshell (apply only if exists)
 switch ($pageshell) {
 	case 'custom':
-		// @TODO wrap into custom pageshell
-		// @TODO wrap into custom layout (apply only if exists)
 		if (cmspages_exists('cms-pageshell')) {
 			$content = elgg_view('cmspages/view', array('pagetype' => 'cms-pageshell', 'body' => $content));
 		}
@@ -179,7 +181,7 @@ switch ($pageshell) {
 	
 	default:
 		// Use wanted pageshell if exists
-		if (empty($pageshell) || elgg_view_exists($pageshell)) $pageshell = 'default';
+		if (empty($pageshell) || !elgg_view_exists('page/'.$pageshell)) $pageshell = 'default';
 }
 
 // Display page (using default or custom pageshell)

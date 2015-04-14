@@ -68,6 +68,13 @@ NOTES
 Version History
 ======================
 
+@TODO :
+  - import export cmspage(s)
+  - presets and models
+  - add ids on each cmspage
+  - auto adjust editor size to content length
+
+
 
 0.9.9.2 RC0 (2015.04.01) - This version is a release candidate
   - Integration with elgg_menus (allows to override categories menu with a custom menu)
