@@ -42,17 +42,8 @@ $vars['title'] = $page_title;
 // as it's designed for inclusion into other views
 
 
-// BREADCRUMBS - Make main slider breadcrumb clickable only if editor
-//if (elgg_is_admin_logged_in()) {
-/*
-if (cmspage_is_editor()) {
-	elgg_push_breadcrumb(elgg_echo('slider'), 'slider');
-} else {
-	//elgg_push_breadcrumb(elgg_echo('slider'));
-}
-elgg_push_breadcrumb($title);
-*/
-
+// BREADCRUMBS - Add main slider breadcrumb
+elgg_push_breadcrumb(elgg_echo('slider'), 'slider');
 
 // slider/read may render more content
 $slider = get_entity($guid);
