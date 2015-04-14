@@ -56,7 +56,7 @@ if ($cmspage) {
 	}
 	elgg_push_breadcrumb($title);
 } else if (!empty($newpage_title)) {
-	elgg_push_breadcrumb(elgg_echo('cmspages:createmenu') . '&nbsp;: ' . $newpage_title);
+	elgg_push_breadcrumb(elgg_echo('cmspages:createmenu', $newpage_title));
 }
 
 

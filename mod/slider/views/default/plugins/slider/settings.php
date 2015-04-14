@@ -7,7 +7,7 @@
  *
 */
 
-$url = $vars['url'];
+$url = elgg_get_site_url();
 $vendor_url = $url . 'mod/slider/vendors/anythingslider/';
 
 // Valeurs (et de réinitialisation) des paramètres
@@ -22,129 +22,77 @@ if (empty($vars['entity']->css)) {
 }
 
 if (empty($vars['entity']->jsparams)) {
-	$vars['entity']->jsparams = "theme : 'metallic', autoPlay : true, mode : 'f',
-			//easing : 'linear',
-			//navigationSize : 3,     // Set this to the maximum number of visible navigation tabs; false to disable
-			/* 
-			// Noms des slides (hover sur les points pour naviguer)
-			navigationFormatter : function(index, panel){
-				return ['Slab', 'Parking Lot', 'Drive', 'Glorius Dawn', 'Bjork?', 'Traffic Circle'][index - 1];
-			},
-			onSlideBegin: function(e,slider) {
-				// keep the current navigation tab in view
-				slider.navWindow( slider.targetPage );
-			},
-			onSlideComplete : function(slider){
-				// alert('Welcome to Slide #' + slider.currentPage);
-			},
-			*/
-		";
+	$vars['entity']->jsparams = "
+theme : 'cs-portfolio',
+autoPlay : true,
+mode : 'f',
+resizeContents : true,
+expand : true,
+buildNavigation : true,
+buildStartStop : false,
+toggleControls : true,
+toggleArrows : true,
+hashTags : false,
+delay : 5000,
+//easing : 'linear',
+//navigationSize : 3,     // Set this to the maximum number of visible navigation tabs; false to disable
+/* 
+// Noms des slides (hover sur les points pour naviguer)
+navigationFormatter : function(index, panel){
+	return ['Slab', 'Parking Lot', 'Drive', 'Glorius Dawn', 'Bjork?', 'Traffic Circle'][index - 1];
+},
+onSlideBegin: function(e,slider) {
+	// keep the current navigation tab in view
+	slider.navWindow( slider.targetPage );
+},
+onSlideComplete : function(slider){
+	// alert('Welcome to Slide #' + slider.currentPage);
+},
+*/
+";
 }
 
 if (empty($vars['entity']->content)) {
 	$vars['entity']->content = '<ul>
-	<li>
-		<div class="textSlide">
-			<h3>Prototype de la plateforme Compétences Numériques</h3>
-			<div>
-				<p>
-				Ce projet est à l\'initiave des membres de la <a href="http://b2i.formavia.fr/">communauté de pratiques et de projet B2i Adultes de FormaVia</a>.</p>
-				<p>Cette Communauté de Pratique lancée en mars 2012 s\'est donné pour objet de travailler et d\'échanger autour du B2i Adultes.</p>
-				<p>Le Brevet informatique et internet certifie des compétences numériques acquises professionnellement ou personnellement. Réservé initialement aux collégiens, il se généralise aux adultes.</p>
-				<p>Les Organismes de Formation et les Espaces Publics Numériques peuvent dispenser ce brevet auprès de leurs publics, en faisant une demande d\'agrément à la DAFCO dont ils relèvent.</p>
-			</div>
-		</div>
-	</li>
-	
-	<li><iframe frameborder="0" width="300" height="160" src="http://www.dailymotion.com/embed/video/xrz93q"></iframe></li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Une co-construction en cours</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-civil-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>
-					La plateforme est actuellement en construction. Vous pouvez la tester avec un compte apprenant :<ul>
-						<li>identifiant : proto</li>
-						<li>mot de passe : prototype</li>
-					</ul>
-				</p>
-				<p>
-					Les formateurs et animateurs engagés dans le projet sont invités à demander leurs accès personnels à l\'équipe d\'animation de FormaVia via l\'adresse de contact <a href="mailto:contact@formavia.fr&subject=Demande%20de%20compte%20sur%20la%20Plateforme%20Compétences%20Numériques">contact@formavia.fr</a>.
-				</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Charte de la plateforme Compétences Numériques</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Cette plateforme est un projet collectif, et s\'appuie sur une <a href="' . $url . 'cmspages/read/charte">Charte de la plateforme Compétences Numériques</a> rédigées par les initiateurs de ce projet.</p>
-				<p>Consultez-la pour connaître les quelques règles et principes de bonne utilisation de la Plateforme, et en savoir plus sur ce projet et ses valeurs.</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Rendez-vous ici-même très bientôt !</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Le chantier avance à grands pas, à travers des réunions de conception et d\'ajustement hebdomadaires.</p>
-				<p>Renseignez-vous dans l\'espace <a href="http://b2i.formavia.fr/">B2i Adultes de FormaVia</a> pour y participer.</p>
-				<p>Vous pouvez revenir ici régulièrement pour suivre l\'avancement de la plateforme, et contribuer à son amélioration.</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Autotest B2i Adultes</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Un <a href="' . $url . 'dossierdepreuve/autopositionnement">Test d\'autopositionnement</a> permettra de se positionner vis-à-vis du B2i Adultes.</p>
-				<p>Il pourra être utilisé par les apprenants en début de parcours, ou pour faire un point sur leur avancement.</p>
-				<p>Ce test sera aussi disponible en libre accès par toute personne qui souhaite savoir où elle en est par rapport au B2i Adultes.</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Rechercher un lieu de formation</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Une <a href="' . $url . 'cmspages/read/rechercher-un-lieu-pour-votre-formation">page de recherche de votre lieu de formation</a> sera bientôt disponible.</p>
-				<p>Composée d\'une liste d \'Organismes de Formation (OF) et d \'Espaces Publics Numériques (EPN), et d\'une carte, elle vous permettra d \'identifier rapidement quel est le lieu le plus pratique pour votre formation&nbsp;: proche de chez vous, de votre lieu de travail, d\'un itinéraire que vous prenez souvent...</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Des ressources en libre accès pour tous !</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Diverses ressources de formation peuvent être consultées sur le site du réseau FormaVia.</p>
-				<p>N\'hésitez pas à visionner les <a href="http://id.formavia.fr/pg/event_calendar/type/conference?mode=all">Microconférences</a> déjà disponibles et, pourquoi pas, à proposer les vôtres !</p>
-				<p>Toutes les contributions sont bienvenues&nbsp;: si cela vous intéresse d\'y contribuer, contactez l\'équipe d\'animation de FormaVia via <a href="mailto:contact@formavia.fr&subject=Proposition%20de%20ressources%20pour%20les%20Microconférences">contact@formavia.fr</a>.</p>
-			</div>
-		</div>
-	</li>
-	
-	<li>
-		<div class="textSlide">
-			<h3>Consultez les Blogs de la plateforme !</h3>
-			<div>
-				<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
-				<p>Plusieurs participants, apprenants ou formateurs, ont souhaité rendre publics les articles de blog écrits dans le cadre de leur formation, ou comme ressources pédagogiques.</p>
-				<p>Retrouvez-les via <a href="' . $url . 'blog">les Blogs des Compétences Numériques</a>&nbsp;: vous y trouverez de nombreuses informations intéressantes, et cela vous donnera peut-être envie de créer le vôtre ?</p>
-			</div>
-		</div>
-	</li>
-	</ul>';
+<li>
+<div class="textSlide">
+	<h3>Fusce dictum nisi eu convallis luctus.</h3>
+	<div>
+		<p>
+		Integer scelerisque augue id libero scelerisque imperdiet. Nam in tempor metus, ut bibendum nisi.</p>
+		<p>Cras suscipit dui et erat placerat, a laoreet turpis egestas. Fusce hendrerit posuere elit vitae tempor. Ut convallis tellus eget libero rhoncus, ut iaculis ante mattis. Suspendisse potenti.</p>
+		<p>Nulla luctus dignissim leo sed iaculis. Cras quis orci vulputate, egestas lacus dictum, luctus elit. Etiam maximus sit amet justo a suscipit. Fusce eleifend magna quam, non vehicula ex sodales a. In vitae tempor massa, eu maximus ex.</p>
+		<p>Sed sed commodo dolor. Ut aliquet fermentum dictum. Nullam eu faucibus nisi. Vestibulum eu convallis dolor. Praesent ornare nulla non orci facilisis placerat.</p>
+	</div>
+</div>
+</li>
+
+<li><iframe frameborder="0" width="300" height="160" src="http://www.dailymotion.com/embed/video/xrz93q"></iframe></li>
+
+<li>
+<div class="textSlide">
+	<h3>Nulla feugiat nunc eget interdum venenatis</h3>
+	<div>
+		<img src="' . $vendor_url . 'demos/images/slide-civil-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
+		<p>Suspendisse in erat hendrerit, auctor nibh id, facilisis ipsum. Maecenas dictum mi lorem, quis fermentum dolor dictum sed. Pellentesque condimentum erat sit amet pellentesque condimentum. Fusce malesuada viverra magna, aliquet elementum tellus facilisis in. Suspendisse potenti. Cras varius semper mi. Vivamus eu erat non risus mollis maximus vel et arcu. Sed tincidunt neque sed turpis suscipit ornare.</p>
+		<p>Suspendisse malesuada velit quis mauris ultricies, a congue nibh vehicula. Donec eu felis lacus. Praesent non venenatis libero. Fusce mattis nibh auctor, malesuada odio fermentum, blandit turpis. Pellentesque accumsan vehicula tellus nec ornare. Maecenas feugiat viverra risus sit amet tempor. Fusce congue, risus vitae euismod ullamcorper, ante lectus porta urna, eu ornare odio dui non turpis. Donec ac urna in mauris tempor eleifend.</p>
+	</div>
+</div>
+</li>
+
+<li>
+<div class="textSlide">
+	<h3>Donec eu eleifend tellus !</h3>
+	<div>
+		<img src="' . $vendor_url . 'demos/images/slide-env-2.jpg" alt="" style="float:right; width:300px; height:auto; margin:0 0 6px 12px;" />
+		<p>Donec vitae cursus massa, vitae venenatis ligula. Quisque gravida diam eget volutpat tempor. Proin felis nisi, finibus sed feugiat id, auctor sit amet urna.</p>
+		<p>Praesent nibh libero, molestie et sollicitudin ut, tincidunt ac dolor. Etiam eu ipsum non lacus interdum pharetra ac in massa.</p>
+		<p>Praesent condimentum tortor pellentesque, lobortis nisi ut, luctus libero. Suspendisse sed ante vel orci accumsan dapibus. Sed mattis porta elementum.</p>
+	</div>
+</div>
+</li>
+
+</ul>';
 }
 
 ?>

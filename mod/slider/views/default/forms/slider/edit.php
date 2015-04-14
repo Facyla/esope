@@ -1,8 +1,11 @@
 <?php
+
+elgg_load_js('elgg.slider.edit');
+
 global $CONFIG;
 global $anythingSliderUniqueID;
 
-$vendor_url = $CONFIG->url . 'mod/slider/vendors/anythingslider/';
+$vendor_url = elgg_get_site_url() . 'mod/slider/vendors/anythingslider/';
 
 // Use unique ID to include scripts once, and allow multiple sliders into a sinngle page..
 if (!isset($anythingSliderUniqueID)) {
@@ -19,56 +22,38 @@ if (!isset($anythingSliderUniqueID)) {
 }
 
 
+
+// Get current slider (if exists)
+$guid = get_input('guid', false);
+$slider = get_entity($guid);
+
 // Get slider vars
 if (elgg_instanceof($slider, 'object', 'slider')) {
 	$slider_title = $slider->title; // Slider title, for easier listing
 	$slider_description = $slider->description; // Clear description of what this slider is for
-	$slider_content = $slider->slides; // Complete slider content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual slides
+	$slider_slides = $slider->slides; // Complete slider content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual slides
 	$slider_config = $slider->config; // JS additional parameters
 	$slider_css = $slider->css; // CSS
 	//$slidercss_textslide = ''; // CSS for li .textslide
 	//$container_style = '';
 	$slider_height = $slider->height; // Slider container height
 	$slider_width = $slider->width; // Slider container width
+	$slider_access = $slider->access_id; // Default access level
+	
+	// Compute some usseful vars
+	// Add inner div to support rich content slides ? <div >class="textSlide">...</div>
+	$slidercontent = '<li>' . implode('</li><li>', $slider_slides) . '</li>'; // Content without enclosing <ul> (we need id)
 	
 } else {
 	// Set default slider using main config
 	$slidercontent = $vars['slidercontent']; // Complete content - except the first-level <ul> tag (we could use an array instead..)
-	$sliderparams = $vars['sliderparams']; // JS additional parameters
+	$slider_config = $vars['sliderparams']; // JS additional parameters
+	$slider_height = $vars['height']; // Slider container height
+	$slider_width = $vars['width']; // Slider container width
+	$slider_access = get_default_access(); // Default access level
+	
 	$slidercss_main = $vars['slidercss_main']; // CSS for main ul tag
 	$slidercss_textslide = $vars['slidercss_textslide']; // CSS for li .textslide
-	$height = $vars['height']; // Slider container height
-	$width = $vars['width']; // Slider container width
-	$container_style = '';
-	if ($height) $container_style .= "height:$height; ";
-	if ($width) $container_style .= "width:$width; ";
-
-	if (empty($slidercss_main)) {
-		$slidercss_main = elgg_get_plugin_setting('css_main', 'slider');
-	}
-	if (empty($slidercss_textslide)) {
-		$slidercss_textslide = elgg_get_plugin_setting('css_textslide', 'slider');
-	}
-
-	if (empty($slidercontent)) { $slidercontent = elgg_get_plugin_setting('content', 'slider'); }
-	if (!empty($slidercontent)) {
-		// Si on a un <ul> ou <ol> au début et </ul> ou </ol> à la fin de la liste
-		if (in_array(substr($slidercontent, 0, 4), array('<ol>', '<ul>'))) {
-			$slidercontent = substr($slidercontent, 4);
-			// Note : this technique avoids errors when an extra line was added after the list..
-			if ($start_list == '<ul>') { $end_pos = strripos($slidercontent, '</ul>'); } else { $end_pos = strripos($slidercontent, '</ol>'); }
-			if ($end_pos !== false) { $slidercontent = substr($slidercontent, 0, $end_pos); }
-		}
-		/*
-		if (in_array(substr($slidercontent, -5), array('</ol>', '</ul>'))) {
-			$slidercontent = substr($slidercontent, 0, -5);
-		}
-		*/
-	}
-
-	if (empty($sliderparams)) {
-		$sliderparams = elgg_get_plugin_setting('jsparams', 'slider');
-	}
 	
 }
 
@@ -76,33 +61,53 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 // Edit form
 // Param vars
 $content = '';
+if ($slider) $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>';
 $content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title)) . '</label><br /><em></em></p>';
 $content .= '<p><label>' . elgg_echo('slider:edit:description') . ' ' . elgg_view('input/plaintext', array('name' => 'description', 'value' => $slider_description)) . '</label><br /><em></em></p>';
 
 // @TODO Add sortable blocks
 // @TODO Add JS new blocks
-if (is_array($slider_content)) {
-	foreach($slider_content as $slide_content) {
-		$content .= '<p><label>' . elgg_echo('slider:edit:content') . ' ' . elgg_view('input/plaintext', array('name' => 'slides[]', 'value' => $slide_content)) . '</label><br /><em></em></p>';
+$content .= '<div class="slider-edit-slides">';
+$content .= '<em>' . elgg_echo('slider:edit:content:details') . '</em><br />';
+if (!empty($slider_slides) && !is_array($slider_slides)) { $slider_slides = array($slider_slides); }
+if (is_array($slider_slides)) {
+	foreach($slider_slides as $slide_content) {
+		$content .= elgg_view('slider/input/slide', array('value' => $slide_content));
 	}
 } else {
-	$content .= '<p><label>' . elgg_echo('slider:edit:content') . ' ' . elgg_view('input/plaintext', array('name' => 'content', 'value' => $slider_content)) . '</label><br /><em></em></p>';
+	$content .= elgg_view('slider/input/slide');
 }
+$content .= '</div>';
+$content .= elgg_view('input/button', array(
+		'id' => 'slider-edit-add-slide',
+		'value' => elgg_echo('slider:edit:addslide'),
+		'class' => 'elgg-button elgg-button-action',
+	));
+$content .= '<div class="clearfloat"></div><br />';
 
-
-$content .= '<p><label>' . elgg_echo('slider:edit:config') . ' ' . elgg_view('input/text', array('name' => 'config', 'value' => $slider_config)) . '</label><br /><em></em></p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/text', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em></em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:config') . ' ' . elgg_view('input/plaintext', array('name' => 'config', 'value' => $slider_config)) . '</label><br /><em></em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/plaintext', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em></em></p>';
 $content .= '<p><label>' . elgg_echo('slider:edit:height') . ' ' . elgg_view('input/text', array('name' => 'height', 'value' => $slider_height)) . '</label><br /><em></em></p>';
 $content .= '<p><label>' . elgg_echo('slider:edit:width') . ' ' . elgg_view('input/text', array('name' => 'width', 'value' => $slider_width)) . '</label><br /><em></em></p>';
 
-echo $content;
-echo '<hr />';
-echo '<h3>' . elgg_echo('slider:edit:preview') . '</h3>';
+$content .= '<p><label>' . elgg_echo('slider:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $slider_access)) . '</label><br /><em></em></p>';
+$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('slider:edit:submit'))) . '</p>';
 
 
+// AFFICHAGE DU formulaire
+// Display the form - Affichage du formulaire
+echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/slider/edit", 'body' => $content, 'id' => "slider-edit-form", 'enctype' => 'multipart/form-data'));
 
 
-/* Documentation complète
+// Prévisualisation
+if ($slider) {
+	echo '<div class="clearfloat"></div><br /><br />';
+	echo '<hr />';
+	echo '<h3>' . elgg_echo('slider:edit:preview') . '</h3>';
+	echo elgg_view('slider/view', array('entity' => $slider));
+}
+
+/* Documentation complète de Anythingslider
 $('#slider').anythingSlider({
   // Appearance
   theme               : "default", // Theme name
@@ -184,37 +189,5 @@ $('#slider').anythingSlider({
   isVideoPlaying      : function(base){ return false; } // return true if video is playing or false if not - used by video extension
 });
 */
-?>
 
-<script>
-// Set up Slider
-// *************
-$(function(){
-	$('#slider<?php echo $anythingSliderUniqueID; ?>').anythingSlider({
-		theme : 'metallic',
-		autoPlay : true,
-		mode : 'f',   // fade mode,
-		hashTags : false,
-		<?php echo $sliderparams; ?>
-	});
-});
-</script>
-
-
-<!-- AnythingSlider #slider<?php echo $anythingSliderUniqueID; ?> -->
-<style>
-#slider<?php echo $anythingSliderUniqueID; ?> { list-style: none; background:white; <?php echo $slidercss_main; ?> }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide { <?php echo $slidercss_textslide; ?> }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide h3 { font-size: 1.4em; margin: 4px 0 16px 0; }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide a { font-weight:bold; }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide div { margin: 20px 36px 0 12px; }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide div * { font-size: 16px; }
-#slider<?php echo $anythingSliderUniqueID; ?>  img { max-width: 100% !important; max-height: 100% !important; }
-#slider<?php echo $anythingSliderUniqueID; ?> .textSlide img { width: auto !important; height: auto !important; }
-</style>
-
-<ul id="slider<?php echo $anythingSliderUniqueID; ?>" style="<?php echo $container_style; ?>">
-	<?php echo $slidercontent; ?>
-</ul>
-<!-- END AnythingSlider #1 -->
 

@@ -14,29 +14,9 @@ global $CONFIG;
 
 //gatekeeper();
 
-$name = get_input('name', false);
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 
-/*
-if (!$pagetype) {
-	// $content = elgg_echo('slider:notset');
-	register_error(elgg_echo('slider:notset'));
-	forward();
-}
-*/
-
-
-/*
-// Get entity
-$slider = slider_get_entity($pagetype);
-
-// Set outer title (page title)
-$title = $pagetype;
-if ($slider->pagetitle) { $title = $slider->pagetitle; }
-$page_title = $CONFIG->sitename . ' (' . $CONFIG->url . ') - ' . $title;
-$vars['title'] = $page_title;
-*/
 
 // Full page mode : read view
 // Note : slider/view view should return description only (and other elements should be hidden), 
@@ -53,6 +33,17 @@ if (cmspage_is_editor()) {
 }
 elgg_push_breadcrumb($title);
 */
+
+
+// BREADCRUMBS - Add main slider breadcrumb
+elgg_push_breadcrumb(elgg_echo('slider'), 'slider');
+
+// slider/read may render more content
+$slider = get_entity($guid);
+if (elgg_instanceof($slider, 'object', 'slider')) {
+	$page_title = $slider->title;
+	elgg_push_breadcrumb($page_title);
+}
 
 
 // slider/read may render more content

@@ -14,7 +14,6 @@ global $CONFIG;
 
 //gatekeeper();
 
-$name = get_input('name', false);
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 
@@ -43,20 +42,16 @@ $vars['title'] = $page_title;
 // as it's designed for inclusion into other views
 
 
-// BREADCRUMBS - Make main slider breadcrumb clickable only if editor
-//if (elgg_is_admin_logged_in()) {
-/*
-if (cmspage_is_editor()) {
-	elgg_push_breadcrumb(elgg_echo('slider'), 'slider');
-} else {
-	//elgg_push_breadcrumb(elgg_echo('slider'));
-}
-elgg_push_breadcrumb($title);
-*/
-
+// BREADCRUMBS - Add main slider breadcrumb
+elgg_push_breadcrumb(elgg_echo('slider'), 'slider');
 
 // slider/read may render more content
-$content = elgg_view('slider/view', array('entity' => $slider));
+$slider = get_entity($guid);
+if (elgg_instanceof($slider, 'object', 'slider')) {
+	$content = elgg_view('slider/view', array('entity' => $slider));
+	$page_title = $slider->title;
+	elgg_push_breadcrumb($page_title);
+}
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
 $CONFIG->title = $page_title;
 

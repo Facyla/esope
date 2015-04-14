@@ -43,8 +43,26 @@ function slider_plugin_init() {
 	// Register main page handler
 	elgg_register_page_handler('slider', 'slider_page_handler');
 	
+	// Register actions
+	$actions_path = elgg_get_plugins_path() . 'slider/actions/slider/';
+	elgg_register_action("slider/edit", $actions_path . 'edit.php');
+	elgg_register_action("slider/delete", $actions_path . 'delete.php');
+	
+		// register the JavaScript (autoloaded in 1.10)
+	elgg_register_simplecache_view('js/slider/edit');
+	$js = elgg_get_simplecache_url('js', 'slider/edit');
+	elgg_register_js('elgg.slider.edit', $js);
+	
+	// Register a URL handler for CMS pages
+	elgg_register_entity_url_handler('object', 'slider', 'slider_url');
+	
 }
 
+
+/* Populates the ->getUrl() method for cmspage objects */
+function slider_url($slider) {
+	return elgg_get_site_url() . "slider/view/" . $slider->guid;
+}
 
 
 
