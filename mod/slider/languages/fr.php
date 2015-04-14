@@ -28,7 +28,7 @@ $french = array(
 	'slider:edit:title' => "Titre",
 	'slider:edit:title:details' => "Le titre permet d'identifier aisément le slider. Il n'est pas utilisé dans l'affichage.",
 	'slider:edit:description' => "Description",
-	'slider:edit:description:details' => "La description permet de décrire à quoi sert le slider. ELle n'est pas affichée par ailleurs.",
+	'slider:edit:description:details' => "La description permet de décrire à quoi sert le slider. Elle n'est pas affichée par ailleurs.",
 	'slider:edit:content' => "Diapositives",
 	'slider:edit:content:details' => "Ajoutez de nouvelles diapositives, et réorganisez-les à votre convenance.",
 	'slider:edit:slide' => "Diapositive",
@@ -36,7 +36,7 @@ $french = array(
 	'slider:edit:deleteslide' => "Supprimer cette diapositive",
 	'slider:edit:deleteslide:confirm' => "ATTENTION, il n'est pas possible de récupérer le contenu d'une diapositive supprimée. La supprimer tout de même ?",
 	'slider:edit:config' => "Configuration JS",
-	'slider:edit:config:details' => "Paramètres de configuraiton JavaScript du slider (AnythingSlider).",
+	'slider:edit:config:details' => "Paramètres de configuration JavaScript du slider (AnythingSlider).",
 	'slider:edit:css' => "CSS",
 	'slider:edit:css:details' => "Feuille de style CSS à ajouter lors de l'affichage de ce slider.",
 	'slider:edit:height' => "Hauteur",
@@ -49,7 +49,9 @@ $french = array(
 	'slider:edit:preview' => "Prévisualisation",
 	
 	'slider:shortcode:slider' => "Slider (déjà configuré)",
-	'slider:shortcode:instructions' => "Pour insérer ce slider dans un contenu, utilisez le shortcode suivant&nbsp;: <strong>[slider id=\"%s\"]</strong>",
+	'slider:shortcode:instructions' => "Pour insérer ce slider dans une publication (blog, page wiki, etc.), utilisez le shortcode suivant&nbsp;: <strong>[slider id=\"%s\"]</strong>",
+	'slider:cmspages:instructions' => "Pour insérer ce slider dans un template CMSPage, utilisez le code suivant&nbsp;: <strong>{{:slider/view|id=%s}}</strong>",
+	'slider:cmspages:instructions:shortcode' => "Vous pouvez également insérer ce slider dans une CMSPage en utilisant un shortcode, avec le code suivant&nbsp;: <strong>{{[slider id=\"%s\"]}}</strong>",
 	
 );
 

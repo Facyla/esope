@@ -95,6 +95,11 @@ if (empty($vars['entity']->content)) {
 </ul>';
 }
 
+
+/* @TODO 
+ * - enable/disable editing by members, or admins only ?
+ */
+
 ?>
 <p>
 	<em>

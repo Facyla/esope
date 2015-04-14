@@ -96,7 +96,15 @@ $content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('slider
 
 
 
-if ($slider && elgg_is_active_plugin('shortcodes')) { echo '<p><blockquote>' . elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '</blockquote></p>'; }
+$instructions = '';
+if ($slider) {
+	if (elgg_is_active_plugin('shortcodes')) { $instructions .= elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '<br />'; }
+	if (elgg_is_active_plugin('cmspages')) {
+		$instructions .= elgg_echo('slider:cmspages:instructions', array($slider->guid)) . '<br />';
+		if (elgg_is_active_plugin('shortcodes')) { $instructions .= elgg_echo('slider:cmspages:instructions:shortcode', array($slider->guid)) . '<br />'; }
+	}
+	if (!empty($instructions)) echo '<p><blockquote>' . $instructions . '</blockquote></p>';
+}
 
 // AFFICHAGE DU formulaire
 // Display the form - Affichage du formulaire
