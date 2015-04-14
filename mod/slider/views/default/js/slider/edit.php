@@ -33,7 +33,7 @@ elgg.slider.edit.addSlide = function(e) {
  */
 elgg.slider.edit.deleteSlide = function(e) {
 	var slide = $(this).parent();
-	if (confirm(elgg.echo('slider:delete:confirm'))) { slide.remove(); }
+	if (confirm(elgg.echo('slider:edit:deleteslide:confirm'))) { slide.remove(); }
 	e.preventDefault();
 }
 

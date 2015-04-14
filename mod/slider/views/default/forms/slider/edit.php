@@ -61,9 +61,10 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 // Edit form
 // Param vars
 $content = '';
-if ($slider) $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title)) . '</label><br /><em></em></p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:description') . ' ' . elgg_view('input/plaintext', array('name' => 'description', 'value' => $slider_description)) . '</label><br /><em></em></p>';
+if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
+
+$content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title)) . '</label><br /><em>' . elgg_echo('slider:edit:title:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:description') . ' ' . elgg_view('input/plaintext', array('name' => 'description', 'value' => $slider_description)) . '</label><br /><em>' . elgg_echo('slider:edit:description:details') . '</em></p>';
 
 // @TODO Add sortable blocks
 // @TODO Add JS new blocks
@@ -85,14 +86,17 @@ $content .= elgg_view('input/button', array(
 	));
 $content .= '<div class="clearfloat"></div><br />';
 
-$content .= '<p><label>' . elgg_echo('slider:edit:config') . ' ' . elgg_view('input/plaintext', array('name' => 'config', 'value' => $slider_config)) . '</label><br /><em></em></p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/plaintext', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em></em></p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:height') . ' ' . elgg_view('input/text', array('name' => 'height', 'value' => $slider_height)) . '</label><br /><em></em></p>';
-$content .= '<p><label>' . elgg_echo('slider:edit:width') . ' ' . elgg_view('input/text', array('name' => 'width', 'value' => $slider_width)) . '</label><br /><em></em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:config') . ' ' . elgg_view('input/plaintext', array('name' => 'config', 'value' => $slider_config)) . '</label><br /><em>' . elgg_echo('slider:edit:config:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/plaintext', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em>' . elgg_echo('slider:edit:css:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:height') . ' ' . elgg_view('input/text', array('name' => 'height', 'value' => $slider_height)) . '</label><br /><em>' . elgg_echo('slider:edit:height:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('slider:edit:width') . ' ' . elgg_view('input/text', array('name' => 'width', 'value' => $slider_width)) . '</label><br /><em>' . elgg_echo('slider:edit:width:details') . '</em></p>';
 
 $content .= '<p><label>' . elgg_echo('slider:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $slider_access)) . '</label><br /><em></em></p>';
 $content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('slider:edit:submit'))) . '</p>';
 
+
+
+if ($slider) { echo '<p><blockquote>' . elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '</blockquote></p>'; }
 
 // AFFICHAGE DU formulaire
 // Display the form - Affichage du formulaire
