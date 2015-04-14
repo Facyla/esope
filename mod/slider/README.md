@@ -15,3 +15,5 @@ More sliders can be edited by users, and included using a shortcode.
 - Responsive Slides : Responsive & light weight
 - Coin Slider : 4 transition effects
 
+
+  

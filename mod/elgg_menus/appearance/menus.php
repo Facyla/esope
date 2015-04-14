@@ -246,7 +246,7 @@ if ($menu_name) {
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-item',
 				'value' => elgg_echo('elgg_menus:edit:newitem'),
-				'class' => 'elgg-button-action',
+				'class' => 'elgg-button elgg-button-action',
 			));
 		$content .= '</div>';
 		
@@ -260,7 +260,7 @@ if ($menu_name) {
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-section',
 				'value' => elgg_echo('elgg_menus:edit:newsection'),
-				'class' => 'elgg-button-action',
+				'class' => 'elgg-button elgg-button-action',
 			));
 		$content .= '</div>';
 		

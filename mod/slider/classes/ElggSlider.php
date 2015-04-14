@@ -2,7 +2,7 @@
 /**
  * Class that represents an object of subtype survey
  */
-class Slider extends ElggObject {
+class ElggSlider extends ElggObject {
 	const SUBTYPE = "slider";
 
 	private $slides = array();

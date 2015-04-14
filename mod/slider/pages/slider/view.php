@@ -14,7 +14,6 @@ global $CONFIG;
 
 //gatekeeper();
 
-$name = get_input('name', false);
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 
@@ -56,7 +55,11 @@ elgg_push_breadcrumb($title);
 
 
 // slider/read may render more content
-$content = elgg_view('slider/view', array('entity' => $slider));
+$slider = get_entity($guid);
+if (elgg_instanceof($slider, 'object', 'slider')) {
+	$content = elgg_view('slider/view', array('entity' => $slider));
+	$page_title = $slider->title;
+}
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
 $CONFIG->title = $page_title;
 

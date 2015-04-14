@@ -29,12 +29,8 @@ $container_style = '';
 if ($height) $container_style .= "height:$height; ";
 if ($width) $container_style .= "width:$width; ";
 
-if (empty($slidercss_main)) {
-	$slidercss_main = elgg_get_plugin_setting('css_main', 'slider');
-}
-if (empty($slidercss_textslide)) {
-	$slidercss_textslide = elgg_get_plugin_setting('css_textslide', 'slider');
-}
+if (empty($slidercss_main)) { $slidercss_main = elgg_get_plugin_setting('css_main', 'slider'); }
+if (empty($slidercss_textslide)) { $slidercss_textslide = elgg_get_plugin_setting('css_textslide', 'slider'); }
 
 if (empty($slidercontent)) { $slidercontent = elgg_get_plugin_setting('content', 'slider'); }
 if (!empty($slidercontent)) {
@@ -52,9 +48,7 @@ if (!empty($slidercontent)) {
 	*/
 }
 
-if (empty($sliderparams)) {
-	$sliderparams = elgg_get_plugin_setting('jsparams', 'slider');
-}
+if (empty($sliderparams)) { $sliderparams = elgg_get_plugin_setting('jsparams', 'slider'); }
 
 /* Documentation complète
 $('#slider').anythingSlider({
@@ -170,5 +164,5 @@ $(function(){
 <ul id="slider<?php echo $anythingSliderUniqueID; ?>" style="<?php echo $container_style; ?>">
 	<?php echo $slidercontent; ?>
 </ul>
-<!-- END AnythingSlider #1 -->
+<!-- END AnythingSlider #<?php echo $anythingSliderUniqueID; ?> -->
 

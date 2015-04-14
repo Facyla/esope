@@ -29,7 +29,7 @@ if ($full) {
 			$even_odd = ( 'odd' != $even_odd ) ? 'odd' : 'even';
 			$body .= "<p class=\"{$even_odd}\"><b>";
 			$body .= $item->title.':</b> ';
-			$body .= $item->value;
+			$body .= html_entity_decode($item->value);
 		}
 	}
 	$metadata = elgg_view_menu('entity', array(
@@ -105,7 +105,7 @@ if ($full) {
 	);
 	$list_body = elgg_view('object/elements/summary', $params);
 	
-	echo '<h3><a href="'.$event->getURL().'">' . $event->title . '</a></h3>' . '<br class="clearfloat" />' . elgg_view_image_block($icon, $list_body);
+	echo '<h3><a href="'.$event->getURL().'">' . html_entity_decode($event->title) . '</a></h3>' . '<br class="clearfloat" />' . elgg_view_image_block($icon, $list_body);
 }
 
 

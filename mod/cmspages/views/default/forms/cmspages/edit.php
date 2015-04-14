@@ -444,6 +444,6 @@ $content = $info_content . '<div style="float:right; width:30%;">' . $sidebar . 
 
 /* AFFICHAGE DU CONTENU DE LA PAGE */
 // Display the form - Affichage du formulaire
-echo elgg_view('input/form', array('action' => $vars['url'] . "action/cmspages/edit", 'body' => $content, 'id' => "cmspages-edit-form", 'enctype' => 'multipart/form-data'));
+echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/cmspages/edit", 'body' => $content, 'id' => "cmspages-edit-form", 'enctype' => 'multipart/form-data'));
 
 
