@@ -56,6 +56,14 @@ elgg_push_breadcrumb($title);
 
 
 // slider/read may render more content
+$slider = get_entity($guid);
+if (elgg_instanceof($slider, 'object', 'slider')) {
+	$page_title = $slider->title;
+	elgg_push_breadcrumb($page_title);
+}
+
+
+// slider/read may render more content
 $content .= elgg_view('forms/slider/edit', array('entity' => $slider));
 
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it

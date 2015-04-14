@@ -53,8 +53,16 @@ function slider_plugin_init() {
 	$js = elgg_get_simplecache_url('js', 'slider/edit');
 	elgg_register_js('elgg.slider.edit', $js);
 	
+	// Register a URL handler for CMS pages
+	elgg_register_entity_url_handler('object', 'slider', 'slider_url');
+	
 }
 
+
+/* Populates the ->getUrl() method for cmspage objects */
+function slider_url($slider) {
+	return elgg_get_site_url() . "slider/view/" . $slider->guid;
+}
 
 
 
