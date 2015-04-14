@@ -96,7 +96,7 @@ $content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('slider
 
 
 
-if ($slider) { echo '<p><blockquote>' . elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '</blockquote></p>'; }
+if ($slider && elgg_is_active_plugin('shortcodes')) { echo '<p><blockquote>' . elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '</blockquote></p>'; }
 
 // AFFICHAGE DU formulaire
 // Display the form - Affichage du formulaire
