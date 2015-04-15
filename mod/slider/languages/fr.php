@@ -18,6 +18,10 @@ $french = array(
 	'slider:settings:css_textslide:help' => "Propriétés CSS spécifiques aux slides utilisant la classe .textSlide : n'indiquer que les propriétés, par exemple : color:#333;<br />Laisser vide pour récupérer les valeurs par défaut.",
 	'slider:settings:css' => "Feuille de style en surcharge pour le slider",
 	'slider:settings:css:help' => "Feuille de style en surcharge pour le slider : il s'agit cette fois des CSS complètes à ajouter en surcharge après les styles par défaut.<br />Laisser vide pour récupérer les valeurs par défaut.",
+	'slider:settings:slider_access' => "Permettre aux membres d'éditer des sliders",
+	'slider:settings:slider_access:details' => "Par défaut, l'accès à l'édition des sliders est réservée aux administrateurs. Vous pouvez autoriser les membrs du site à y accéder en choisissant \"Oui\"",
+	'slider:option:yes' => "Oui",
+	'slider:option:no' => "Non",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",

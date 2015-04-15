@@ -18,6 +18,10 @@ $en = array(
 	'slider:settings:css_textslide:help' => "Specific CSS properties for slides using the .textSlide class : add only properties, e.g.: color:#333;<br />Leave empty to get default values back.",
 	'slider:settings:css' => "CSS override for ythe slider",
 	'slider:settings:css:help' => "Override stylesheet for the slider : these are the complete CSS that should be added for the slider after the default styles.<br />Leave empty to get default values back.",
+	'slider:settings:slider_access' => "Allow members to edit sliders",
+	'slider:settings:slider_access:details' => "By default, the access to the slider editing tool is reserved to administrators. You can also allow site members to use it by choosing \"Yes\"",
+	'slider:option:yes' => "Yes",
+	'slider:option:no' => "No",
 	
 	
 'slider:showinstructions' => "Display instructions",
