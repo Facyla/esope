@@ -633,6 +633,13 @@ IE8 AND OLDER STYLING
 }
 
 
+
+/* Slider evolutions */
+.anythingControls { position: absolute; bottom: 10%; }
+.anythingControls ul { list-style-type:none; padding:0; margin:0; }
+.anythingControls ul li a { display:inline-block; }
+
+
 <?php
 // Include transitions CSS lib
 include($include_url . 'css/animate.css');
