@@ -23,5 +23,8 @@ $slider_params = array(
 		'width' => $width,
 	);
 
-echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="slider-' . $slider->guid . '">' . elgg_view('slider/slider', $slider_params) . '</div>';
+echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="slider-' . $slider->guid . '">
+	<style>' . $slider->css . '</style>
+	' . elgg_view('slider/slider', $slider_params) . '
+</div>';
 
