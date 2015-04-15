@@ -19,6 +19,40 @@ $en = array(
 	'slider:settings:css' => "CSS override for ythe slider",
 	'slider:settings:css:help' => "Override stylesheet for the slider : these are the complete CSS that should be added for the slider after the default styles.<br />Leave empty to get default values back.",
 	
+	
+'slider:showinstructions' => "Display instructions",
+	'slider:instructions' => "The sliders can be created here, and then inserted into articles and other publications through a shortcode <q>[slider id=\"12345\"]</q>",
+	'slider:add' => "Create a new slider",
+	'slider:edit' => "Slider edit",
+	'slider:edit:title' => "Title",
+	'slider:edit:title:details' => "The title is a readable identification for the slider. It is not otherwise used when displaying it.",
+	'slider:edit:description' => "Description",
+	'slider:edit:description:details' => "The description lets you define some additionnal information about this slider. It is not displayed either.",
+	'slider:edit:content' => "Slides",
+	'slider:edit:content:details' => "Add new slides, and reorder them to your convenience.",
+	'slider:edit:slide' => "Slide",
+	'slider:edit:addslide' => "Add a slide",
+	'slider:edit:deleteslide' => "Delete this slide",
+	'slider:edit:deleteslide:confirm' => "WARNING, deleted slides will be lost and cannot be restored. Delete anyway ?",
+	'slider:edit:config' => "Slider JS parameters",
+	'slider:edit:config:details' => "JavaScript slider configuration parameters (AnythingSlider).",
+	'slider:edit:css' => "CSS",
+	'slider:edit:css:details' => "CSS elements to be added while displaying this slider.",
+	'slider:edit:height' => "Height",
+	'slider:edit:height:details' => "The slider dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"height\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
+	'slider:edit:width' => "Width",
+	'slider:edit:width:details' => "The slider dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"width\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
+	'slider:edit:access' => "Visibility",
+	'slider:edit:submit' => "Save",
+	'slider:saved' => "Your changes have been saved",
+	'slider:edit:preview' => "Preview",
+	
+	'slider:shortcode:slider' => "Slider (already defined)",
+	'slider:shortcode:instructions' => "To insert a previously configured slider into a publication (blog, page, etc.), use the following shortcode: <strong>[slider id=\"%s\"]</strong>",
+	'slider:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display sliders! You may need to update page type to display it.",
+	'slider:cmspages:instructions' => "To insert a previously configured slider into a template CMSPage, use the following code: <strong>{{:slider/view|guid=%s}}</strong>",
+	'slider:cmspages:instructions:shortcode' => "You may also use a shortcode to insert the slider into a template CMSPage, using following code: <strong>{{[slider id=\"%s\"]}}</strong>",
+	
 );
 
 add_translation("en",$en);
