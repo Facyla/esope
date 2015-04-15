@@ -12,7 +12,7 @@ include($include_url . 'css/animate.css');
 ?>
 
 <?php
-//include($include_url . 'css/anythingslider.css');
+include($include_url . 'css/anythingslider.css');
 ?>
 
 /* Main plugin styles (editor) */
