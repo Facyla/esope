@@ -5,14 +5,14 @@
 
 $imgroot = elgg_get_site_url() . 'mod/slider/graphics/';
 $include_url = dirname(dirname(dirname(dirname(__FILE__)))) . '/vendors/anythingslider/';
-$vendor_url =elgg_get_site_url() . 'mod/slider/vendors/anythingslider/';
+$vendor_url = elgg_get_site_url() . 'mod/slider/vendors/anythingslider/';
 
-// Vendor CSS are directly added below because relative URLs won't match otherwise...
 include($include_url . 'css/animate.css');
 ?>
 
 <?php
-include($include_url . 'css/anythingslider.css');
+// Vendor CSS cannot be included and are directly added below because relative URLs for images won't match otherwise...
+//include($include_url . 'css/anythingslider.css');
 ?>
 
 /* Main plugin styles (editor) */
@@ -631,6 +631,11 @@ IE8 AND OLDER STYLING
 	-moz-transition-duration: 0;
 	-webkit-transition-duration: 0;
 }
+
+
+<?php
+// Include transitions CSS lib
+include($include_url . 'css/animate.css');
 
 
 
