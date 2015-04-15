@@ -13,8 +13,10 @@ elgg_register_event_handler('pagesetup','system','slider_pagesetup');
 
 function slider_plugin_init() {
 	global $CONFIG;
-
-	elgg_extend_view('css','slider/css');
+	
+	// Note : CSS are not included with Elgg, as we will anyway output them directly into the view
+	// so we can embed sliders on other sites
+	//elgg_extend_view('css','slider/css');
 	
 	elgg_extend_view('shortcodes/embed/extend', 'slider/extend_shortcodes_embed');
 	

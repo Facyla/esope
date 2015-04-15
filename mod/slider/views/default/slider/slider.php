@@ -14,6 +14,8 @@ if (!isset($anythingSliderUniqueID)) {
 	echo '<script src="' . $vendor_url . 'js/swfobject.js"></script>';
 	// AnythingSlider video extension; optional, but needed to control video pause/play
 	echo '<script src="' . $vendor_url . 'js/jquery.anythingslider.video.js"></script>';
+	// Add style so we can also cleanly embed the slider on other sites where Elgg CSS are not loaded
+	echo '<style>' . elgg_view('slider/css') . '</style>';
 } else {
 	$anythingSliderUniqueID++;
 }
