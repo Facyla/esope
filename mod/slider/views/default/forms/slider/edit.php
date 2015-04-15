@@ -21,8 +21,6 @@ if (!isset($anythingSliderUniqueID)) {
 	$anythingSliderUniqueID++;
 }
 
-
-
 // Get current slider (if exists)
 $guid = get_input('guid', false);
 $slider = get_entity($guid);
