@@ -186,7 +186,7 @@ $content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('slider
 if ($slider) {
 	echo '<strong>' . elgg_echo('slider:embed:instructions') . '</strong><br />';
 	echo '<p><blockquote>';
-	echo elgg_echo('slider:embed:instructions', array($slider->guid)) . '<br />';
+	echo elgg_echo('slider:iframe:instructions', array($slider->guid)) . '<br />';
 	if (elgg_is_active_plugin('shortcodes')) { echo elgg_echo('slider:shortcode:instructions', array($slider->guid)) . '<br />'; }
 	if (elgg_is_active_plugin('cmspages')) {
 		echo elgg_echo('slider:cmspages:instructions', array($slider->guid)) . '<br />';

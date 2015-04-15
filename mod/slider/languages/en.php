@@ -50,11 +50,11 @@ $en = array(
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
 	'slider:embed:instructions' => "How to embed this slider ?",
-	'slider:shortcode:instructions' => "To insert this slider into a publication (blog, page, etc.), use the following shortcode: <strong>[slider id=\"%s\"]</strong>",
+	'slider:shortcode:instructions' => " - with a shortcode, into a publication (blog, page, etc.): <strong>[slider id=\"%s\"]</strong>",
+	'slider:cmspages:instructions' => " - with a template code, into a template CMSPage: <strong>{{:slider/view|guid=%s}}</strong>",
+	'slider:cmspages:instructions:shortcode' => " - with a template short, alternatively, into a template CMSPage: <strong>{{[slider id=\"%s\"]}}</strong>",
 	'slider:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display sliders! You may need to update page type to display it.",
-	'slider:cmspages:instructions' => "To insert this slider into a template CMSPage, use the following code: <strong>{{:slider/view|guid=%s}}</strong>",
-	'slider:cmspages:instructions:shortcode' => "You may also use a shortcode to insert this slider into a template CMSPage, using following code: <strong>{{[slider id=\"%s\"]}}</strong>",
-	'slider:iframe:instructions' => "To embed this slider on other sites, you can use the following embed code: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
+	'slider:iframe:instructions' => " - with an embed code, on any other sites: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
 );
 
