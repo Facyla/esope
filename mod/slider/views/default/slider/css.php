@@ -634,6 +634,9 @@ IE8 AND OLDER STYLING
 
 
 <?php
+// @TODO dynamically add themes styles
+
+
 // Include transitions CSS lib
 include($include_url . 'css/animate.css');
 
