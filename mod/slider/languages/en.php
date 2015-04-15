@@ -36,8 +36,9 @@ $en = array(
 	'slider:edit:deleteslide:confirm' => "WARNING, deleted slides will be lost and cannot be restored. Delete anyway ?",
 	'slider:edit:config' => "Slider JS parameters",
 	'slider:edit:config:details' => "JavaScript slider configuration parameters (AnythingSlider).",
+	'slider:edit:config:toggledocumentation' => "<i class=\"fa fa-toggle-down\"></i>Display full parameters documentation",
 	'slider:edit:css' => "CSS",
-	'slider:edit:css:details' => "CSS elements to be added while displaying this slider.",
+	'slider:edit:css:details' => "CSS elements to be added while displaying this slider.<br /> Note: to select this slider, please use the following selector: <strong>#slider-%s</strong>",
 	'slider:edit:height' => "Height",
 	'slider:edit:height:details' => "The slider dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"height\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
 	'slider:edit:width' => "Width",
@@ -48,10 +49,12 @@ $en = array(
 	'slider:edit:preview' => "Preview",
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
-	'slider:shortcode:instructions' => "To insert a previously configured slider into a publication (blog, page, etc.), use the following shortcode: <strong>[slider id=\"%s\"]</strong>",
+	'slider:embed:instructions' => "How to embed this slider ?",
+	'slider:shortcode:instructions' => "To insert this slider into a publication (blog, page, etc.), use the following shortcode: <strong>[slider id=\"%s\"]</strong>",
 	'slider:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display sliders! You may need to update page type to display it.",
-	'slider:cmspages:instructions' => "To insert a previously configured slider into a template CMSPage, use the following code: <strong>{{:slider/view|guid=%s}}</strong>",
-	'slider:cmspages:instructions:shortcode' => "You may also use a shortcode to insert the slider into a template CMSPage, using following code: <strong>{{[slider id=\"%s\"]}}</strong>",
+	'slider:cmspages:instructions' => "To insert this slider into a template CMSPage, use the following code: <strong>{{:slider/view|guid=%s}}</strong>",
+	'slider:cmspages:instructions:shortcode' => "You may also use a shortcode to insert this slider into a template CMSPage, using following code: <strong>{{[slider id=\"%s\"]}}</strong>",
+	'slider:iframe:instructions' => "To embed this slider on other sites, you can use the following embed code: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
 );
 

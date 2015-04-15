@@ -36,8 +36,9 @@ $french = array(
 	'slider:edit:deleteslide:confirm' => "ATTENTION, il n'est pas possible de récupérer le contenu d'une diapositive supprimée. La supprimer tout de même ?",
 	'slider:edit:config' => "Configuration JS",
 	'slider:edit:config:details' => "Paramètres de configuration JavaScript du slider (AnythingSlider).",
+	'slider:edit:config:toggledocumentation' => "<i class=\"fa fa-toggle-down\"></i>Afficher tous les paramètres de configuration disponibles",
 	'slider:edit:css' => "CSS",
-	'slider:edit:css:details' => "Feuille de style CSS à ajouter lors de l'affichage de ce slider.",
+	'slider:edit:css:details' => "Feuille de style CSS à ajouter lors de l'affichage de ce slider.<br /> Note&nbsp;: pour cibler précisément ce slider, ciblez les éléments en utilisant le sélecteur suivant&nbsp;: <strong>#slider-%s</strong>",
 	'slider:edit:height' => "Hauteur",
 	'slider:edit:height:details' => "Les dimensions du slider sont déterminées par le bloc parent. Pour forcer les dimensions de ce bloc parent, précisez ici ses dimensions.<br /> Note&nbsp;: toutes les valeurs de la propriété CSS \"height\" sont acceptées, en px, en %, et autres unités, y compris \"auto\".",
 	'slider:edit:width' => "Largeur",
@@ -48,10 +49,12 @@ $french = array(
 	'slider:edit:preview' => "Prévisualisation",
 	
 	'slider:shortcode:slider' => "Slider (déjà configuré)",
+	'slider:embed:instructions' => "Comment intégrer ce slider ?",
 	'slider:shortcode:instructions' => "Pour insérer ce slider dans une publication (blog, page wiki, etc.), utilisez le shortcode suivant&nbsp;: <strong>[slider id=\"%s\"]</strong>",
 	'slider:cmspages:notice' => "IMPORTANT&nbsp;: seules les pages CMS de type \"Gabarit\" permettent d'afficher des sliders ! Il vous sera peut-être nécessaire de mettre à jour le type de page.",
 	'slider:cmspages:instructions' => "Pour insérer ce slider dans un gabarit CMSPage, utilisez le code suivant&nbsp;: <strong>{{:slider/view|guid=%s}}</strong>",
 	'slider:cmspages:instructions:shortcode' => "Vous pouvez également insérer ce slider dans un gabarit CMSPage via un shortcode, avec le code suivant&nbsp;: <strong>{{[slider id=\"%s\"]}}</strong>",
+	'slider:iframe:instructions' => "Pour intégrer ce slider sur d'autres sites, vous pouvez utiliser le code d'embarquement suivant&nbsp;: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
 );
 

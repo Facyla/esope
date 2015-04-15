@@ -9,8 +9,8 @@ if (!$slider) {
 if (!elgg_instanceof($slider, 'object', 'slider')) return;
 
 $slider_content = '<li>' . implode('</li><li>', $slider->slides) . '</li>'; // Content without enclosing <ul> (we need id)
-$height = 'auto';
-$width = 'auto';
+$height = '100%';
+$width = '100%';
 if (!empty($slider->height)) $height = $slider->height;
 if (!empty($slider->width)) $width = $slider->width;
 
@@ -23,5 +23,5 @@ $slider_params = array(
 		'width' => $width,
 	);
 
-echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;">' . elgg_view('slider/slider', $slider_params) . '</div>';
+echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="slider-' . $slider->guid . '">' . elgg_view('slider/slider', $slider_params) . '</div>';
 

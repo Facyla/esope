@@ -4,7 +4,7 @@ global $anythingSliderUniqueID;
 
 $vendor_url = $CONFIG->url . 'mod/slider/vendors/anythingslider/';
 
-// Use unique ID to include scripts once, and allow multiple sliders into a sinngle page..
+// Use unique ID to include scripts once, and allow multiple sliders into a single page..
 if (!isset($anythingSliderUniqueID)) {
 	$anythingSliderUniqueID = 1;
 	echo '<script src="' . $vendor_url . 'js/jquery.anythingslider.js"></script>';
