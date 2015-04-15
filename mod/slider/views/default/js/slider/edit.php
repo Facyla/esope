@@ -19,8 +19,8 @@ elgg.slider.edit.init = function() {
  * @param {Object} e The click event
  */
 elgg.slider.edit.addSlide = function(e) {
-	// Create a new slide element
-	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide', array('dynamic' => true))); ?>;
+	// Create a new slide element (without editor)
+	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide', array($editor = 'plaintext'))); ?>;
 	$('.slider-edit-slides').append(new_slide);
 	// Refresh the sortable items to be able to sort into the new section
 	elgg.slider.edit.addSortable();

@@ -1,11 +1,18 @@
 <?php
 
-// Use rawtext input if available (longtext with wysiwyg editor disabled at startup)
-$longtext_input = 'input/plaintext';
-if (elgg_view_exists('input/rawtext')) { $longtext_input = 'input/rawtext'; }
-// Note : 'dynamic' param is used to avoid adding tinymce editor with the same id, 
-// which would break editor toggle feature
-if ($vars['dynamic']) { $longtext_input = 'input/plaintext'; }
+// Use prefered editor if set, rawtext if available, and plaintext otherwise
+// Prefered editor
+if (!empty($vars['editor']) && elgg_view_exists('input/' . $vars['editor'])) {
+	$longtext_input = 'input/' . $vars['editor'];
+} else if (elgg_view_exists('input/rawtext')) {
+	// Default editor, if available (longtext with wysiwyg editor disabled at startup)
+	$longtext_input = 'input/rawtext';
+} else {
+	// Failsafe editor
+	$longtext_input = 'input/plaintext';
+	// Note : plain text editing should be used when adding new slides, 
+	// to avoid adding tinymce editor with the same id (which would break editor toggle feature)
+}
 
 // Set default content
 if (empty($vars['value'])) { $vars['value'] = '<div class="textSlide">' . "\n\n" . '</div>'; }

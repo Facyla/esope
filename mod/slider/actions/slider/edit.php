@@ -23,6 +23,7 @@ $slider_css = get_input('css', '', false); // We do *not want to filter HTML
 $slider_height = get_input('height');
 $slider_width = get_input('width');
 $slider_access = get_input('access_id');
+$slider_editor = get_input('editor');
 
 
 // Get slider entity, if it exists
@@ -47,6 +48,7 @@ $slider->config = $slider_config;
 $slider->css = $slider_css;
 $slider->height = $slider_height;
 $slider->width = $slider_width;
+$slider->editor = $slider_editor;
 
 
 // Save new/updated content

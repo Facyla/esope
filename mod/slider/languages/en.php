@@ -48,9 +48,16 @@ $en = array(
 	'slider:edit:width' => "Width",
 	'slider:edit:width:details' => "The slider dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"width\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
 	'slider:edit:access' => "Visibility",
+	'slider:edit:access:details' => "Determines who will be allowed to view this slider.",
 	'slider:edit:submit' => "Save",
 	'slider:saved' => "Your changes have been saved",
 	'slider:edit:preview' => "Preview",
+	'slider:edit:view' => "View slider",
+	'slider:edit:editor' => "Always enable visual editor for slide editing",
+	'slider:edit:editor:details' => "The visual editor facilitates the content edition, but it also may strip some HTML code. This setting lets you choose whether the editor should be enabled by default when editing slides. Recommended setting is to leave it disabled if you use raw HTML (you still may enable it manually on a particular slide if needed).",
+	'slider:editor:yes' => "Yes (HTML filter)",
+	'slider:editor:no' => "No (can be enabled on-demand)",
+	
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
 	'slider:embed:instructions' => "How to embed this slider ?",
