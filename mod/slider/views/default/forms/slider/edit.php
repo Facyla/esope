@@ -70,7 +70,7 @@ if (is_array($slider_slides)) {
 		$content .= elgg_view('slider/input/slide', array('value' => $slide_content));
 	}
 } else {
-	$content .= elgg_view('slider/input/slide', array('dynamic' => true));
+	$content .= elgg_view('slider/input/slide');
 }
 $content .= '</div>';
 $content .= elgg_view('input/button', array(

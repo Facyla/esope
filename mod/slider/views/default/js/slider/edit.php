@@ -20,7 +20,7 @@ elgg.slider.edit.init = function() {
  */
 elgg.slider.edit.addSlide = function(e) {
 	// Create a new slide element
-	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide')); ?>;
+	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide', array('dynamic' => true))); ?>;
 	$('.slider-edit-slides').append(new_slide);
 	// Refresh the sortable items to be able to sort into the new section
 	elgg.slider.edit.addSortable();

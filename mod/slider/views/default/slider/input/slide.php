@@ -2,9 +2,10 @@
 
 // Use rawtext input if available (longtext with wysiwyg editor disabled at startup)
 $longtext_input = 'input/plaintext';
-// Note : 'dynamic' param is used to avoid adding tinymce editor to editors using the same id, 
+if (elgg_view_exists('input/rawtext')) { $longtext_input = 'input/rawtext'; }
+// Note : 'dynamic' param is used to avoid adding tinymce editor with the same id, 
 // which would break editor toggle feature
-if (elgg_view_exists('input/rawtext') && !$vars['dynamic']) { $longtext_input = 'input/rawtext'; }
+if ($vars['dynamic']) { $longtext_input = 'input/plaintext'; }
 
 // Set default content
 if (empty($vars['value'])) { $vars['value'] = '<div class="textSlide">' . "\n\n" . '</div>'; }
