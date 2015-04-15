@@ -68,9 +68,27 @@ $content .= '<div style="width:48%; float:left;">';
 	$content .= '<p><label>' . elgg_echo('slider:edit:config') . ' ' . elgg_view('input/plaintext', array('name' => 'config', 'value' => $slider_config)) . '</label><br /><em>' . elgg_echo('slider:edit:config:details') . '</em></p>';
 	// Documentation block
 	$content .= '<p><a href="javascript:void(0);" onClick="$(\'#slider-config-documentation\').toggle();">' . elgg_echo('slider:edit:config:toggledocumentation') . '</a></p>';
-	$content .= '<div id="slider-config-documentation" class="hidden">';
-	$content .= '<pre>';
-	$content .= '<strong>Anything Slider configuration parameters:</strong>
+$content .= '</div>';
+
+$content .= '<div style="width:48%; float:right;">';
+	// Access
+	$content .= '<p><label>' . elgg_echo('slider:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $slider_access)) . '</label><br /><em>' . elgg_echo('slider:edit:access:details') . '</em></p>';
+	
+	// Container height
+	$content .= '<p><label>' . elgg_echo('slider:edit:height') . ' ' . elgg_view('input/text', array('name' => 'height', 'value' => $slider_height, 'style' => "width: 10ex;")) . '</label><br /><em>' . elgg_echo('slider:edit:height:details') . '</em></p>';
+	// Container width
+	$content .= '<p><label>' . elgg_echo('slider:edit:width') . ' ' . elgg_view('input/text', array('name' => 'width', 'value' => $slider_width, 'style' => "width: 10ex;")) . '</label><br /><em>' . elgg_echo('slider:edit:width:details') . '</em></p>';
+	
+	// CSS
+	$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/plaintext', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em>' . elgg_echo('slider:edit:css:details', array($slider->guid)) . '</em></p>';
+$content .= '</div>';
+
+$content .= '<div class="clearfloat"></div>';
+
+// Documentation block
+$content .= '<div id="slider-config-documentation" class="hidden">';
+$content .= '<pre>';
+$content .= '<strong>Anything Slider configuration parameters:</strong>
 
 theme               : "default", // Theme name : default | cs-portfolio | metallic | construction | minimalist-round | minimalist-square
 mode                : "horiz",   // Set mode to "horizontal", "vertical" or "fade" (only first letter needed); replaces vertical option
@@ -149,24 +167,8 @@ resumeOnVideoEnd    : true,      // If true & the slideshow is active & a suppor
 resumeOnVisible     : true,      // If true the video will resume playing (if previously paused, except for YouTube iframe - known issue); if false, the video remains paused.
 addWmodeToObject    : "opaque",  // If your slider has an embedded object, the script will automatically add a wmode parameter with this setting
 isVideoPlaying      : function(base){ return false; } // return true if video is playing or false if not - used by video extension';
-	$content .= '<pre>';
-	$content .= '</div>';
+$content .= '<pre>';
 $content .= '</div>';
-
-$content .= '<div style="width:48%; float:right;">';
-	// Access
-	$content .= '<p><label>' . elgg_echo('slider:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $slider_access)) . '</label><br /><em>' . elgg_echo('slider:edit:access:details') . '</em></p>';
-	
-	// Container height
-	$content .= '<p><label>' . elgg_echo('slider:edit:height') . ' ' . elgg_view('input/text', array('name' => 'height', 'value' => $slider_height, 'style' => "width: 10ex;")) . '</label><br /><em>' . elgg_echo('slider:edit:height:details') . '</em></p>';
-	// Container width
-	$content .= '<p><label>' . elgg_echo('slider:edit:width') . ' ' . elgg_view('input/text', array('name' => 'width', 'value' => $slider_width, 'style' => "width: 10ex;")) . '</label><br /><em>' . elgg_echo('slider:edit:width:details') . '</em></p>';
-	
-	// CSS
-	$content .= '<p><label>' . elgg_echo('slider:edit:css') . ' ' . elgg_view('input/plaintext', array('name' => 'css', 'value' => $slider_css)) . '</label><br /><em>' . elgg_echo('slider:edit:css:details', array($slider->guid)) . '</em></p>';
-$content .= '</div>';
-
-$content .= '<div class="clearfloat"></div>';
 
 
 // SLIDES
