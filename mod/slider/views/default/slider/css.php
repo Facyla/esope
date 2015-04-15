@@ -1,12 +1,11 @@
 <?php
-/* Note : Custom CSS are dynamically loaded, as they should NOT rely on cache ('cause this would break per-view settings)
+/* Note : Custom CSS are dynamically loaded, as they should NOT rely on cache (this would break per-view settings)
  * This view can be cached
 */
 
-global $CONFIG;
-$imgroot = $CONFIG->url . 'mod/slider/graphics/';
+$imgroot = elgg_get_site_url() . 'mod/slider/graphics/';
 $include_url = dirname(dirname(dirname(dirname(__FILE__)))) . '/vendors/anythingslider/';
-$vendor_url = $CONFIG->url . 'mod/slider/vendors/anythingslider/';
+$vendor_url =elgg_get_site_url() . 'mod/slider/vendors/anythingslider/';
 
 // Vendor CSS are directly added below because relative URLs won't match otherwise...
 include($include_url . 'css/animate.css');
