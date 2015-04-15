@@ -695,14 +695,13 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 					$content .= elgg_view('output/cmspages_categories', array('categories' => $cmspage->categories));
 				}
 				
-				// Display page actual content
+				// Display page actual content, with custom markers rendering (and shortcodes)
 				// Always use a containing div, because we need elgg-output class for lists (for pure content only !), plus a custom class for finer output control
-				// Note : cannot use output/longtext view because of filtering
-				// So shortcodes are not applied, if used
+				// Note : cannot use output/longtext view because of tags filtering
 				if (($mode == 'view') && $vars['rawcontent']) {
-					$content .= $cmspage->description;
+					$content .= cmspages_render_template($cmspage->description);
 				} else {
-					$content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '<div class="clearfloat"></div></div>';
+					$content .= '<div class="elgg-output elgg-cmspage-output">' . cmspages_render_template($cmspage->description) . '<div class="clearfloat"></div></div>';
 				}
 				
 				if ($mode != 'view') {
@@ -802,7 +801,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 }
 
 
-/* Utilisation d'un template : remplacement (récursif) des blocs par les pages correspondantes
+/* Rendu d'un template : remplacement (récursif) des blocs par les pages correspondantes
  * $template : texte ou code HTML à utiliser comme template
  * $content : éléments de contenu ou variables - array($varname => $value)
  * {{pagetype}} => HTML ou template ou module
@@ -814,9 +813,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
  		- {{%VARS%}} : infos issues d'Elgg, listings configurables, etc.
  		- {{[shortcode]}} : shortcodes
 */
-function cmspages_render_template($template, $content = null) {
+function cmspages_render_template($template, $content_vars = null) {
 	// Compatibilité : accepte une simple valeur au lieu d'un array()
-	if (!empty($content) && !is_array($content)) $content = array('content' => $content);
+	if (!empty($content_vars) && !is_array($content_vars)) $content_vars = array('content' => $content_vars);
 	$temp1 = explode('}}', $template);
 	foreach ($temp1 as $temp) {
 		$temp2 = explode('{{', $temp);
@@ -829,7 +828,7 @@ function cmspages_render_template($template, $content = null) {
 				// Vars replacement
 				case '%':
 					$marker = strtolower(substr($marker, 1, -1));
-					$rendered_template .= $content[$marker];
+					$rendered_template .= $content_vars[$marker];
 					break;
 				
 				// Elgg view replacement
