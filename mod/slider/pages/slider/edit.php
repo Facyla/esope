@@ -12,7 +12,13 @@
 // Load Elgg engine
 global $CONFIG;
 
-//gatekeeper();
+// Allow access to members ? or admins only..
+$slider_access = elgg_get_plugin_setting('slider_access', 'slider');
+if ($slider_access != 'yes') {
+	admin_gatekeeper();
+} else {
+	gatekeeper();
+}
 
 $guid = get_input('guid', false);
 

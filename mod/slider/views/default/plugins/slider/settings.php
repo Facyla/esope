@@ -10,7 +10,11 @@
 $url = elgg_get_site_url();
 $vendor_url = $url . 'mod/slider/vendors/anythingslider/';
 
-// Valeurs (et de réinitialisation) des paramètres
+// Define options
+$yn_opts = array('yes' => elgg_echo('slider:option:yes'), 'no' => elgg_echo('slider:option:no'));
+
+
+// Set defaults - Valeurs des paramètres (et de réinitialisation)
 if (empty($vars['entity']->css_main)) { $vars['entity']->css_main = 'width:100%; height:300px;'; }
 if (empty($vars['entity']->css_textslide)) { $vars['entity']->css_textslide = 'padding: 6px 12px;'; }
 if (empty($vars['entity']->css)) { 	$vars['entity']->css = ''; }
@@ -90,11 +94,13 @@ if (empty($vars['entity']->content)) {
 }
 
 
-/* @TODO 
- * - enable/disable editing by members, or admins only ?
- */
-
+// Enable/disable editing by members, or admins only ?
+echo '<p><label>' . elgg_echo('slider:settings:slider_access') . ' ';
+echo elgg_view('input/pulldown', array('name' => 'params[slider_access]', 'value' => $vars['entity']->slider_access, 'options_values' => $yn_opts));
+echo '</label><br />' . elgg_echo('slider:settings:slider_access:details');
+echo '</p>';
 ?>
+
 <p>
 	<em>
 		<h3><?php echo elgg_echo('slider:settings:defaultslider'); ?></h3>
