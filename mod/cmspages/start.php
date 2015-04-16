@@ -611,9 +611,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$add_edit_link = true;
 	if (isset($params['mode'])) $mode = $params['mode'];
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
-	if (!isset($params['recursion'])) $params['recursion'] = array();
-	if (!empty($params['embed'])) $embed = $params['embed'];
 	if (isset($params['noedit']) && ($params['noedit'] == 'true')) $add_edit_link = false;
+	if (!empty($params['embed'])) $embed = $params['embed'];
+	if (!isset($params['recursion'])) $params['recursion'] = array();
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
@@ -767,7 +767,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
-	if ($is_editor) {
+	if ($add_edit_link && $is_editor) {
 		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
