@@ -611,7 +611,8 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$add_edit_link = true;
 	if (isset($params['mode'])) $mode = $params['mode'];
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
-	if (isset($params['noedit']) && ($params['noedit'] == 'true')) $add_edit_link = false;
+	if ($params['noedit'] == 'true') $add_edit_link = false;
+	echo "TEST : " . $params['noedit'];
 	if (!empty($params['embed'])) $embed = $params['embed'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
 	
