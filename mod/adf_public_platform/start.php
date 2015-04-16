@@ -1493,7 +1493,7 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 				case 'cmspage':
 					// Cmspages always respectfriendly title formatting
 					$source = elgg_get_friendly_title($source);
-					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
+					$source = $CONFIG->url . 'p/' . $source . '?embed=true';
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
