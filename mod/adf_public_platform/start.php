@@ -394,14 +394,14 @@ function adf_platform_pagesetup(){
 			
 			// Ajoute lien vers l'annuaire
 			elgg_register_menu_item("page", array(
-					'name' => 'members', 'href' => $CONFIG->url . 'members', 
+					'name' => 'members', 'href' => elgg_get_site_url() . 'members', 
 					'text' => elgg_echo('adf_platform:directory'), 
 					"section" => "directory",
 				));
 			
 			// Ajoute lien vers les contacts
 			elgg_register_menu_item("page", array(
-					'name' => 'friends', 'href' => $CONFIG->url . 'friends/' . $own->username, 
+					'name' => 'friends', 'href' => elgg_get_site_url() . 'friends/' . $own->username, 
 					'text' => elgg_echo('friends'), 
 					'contexts' => array('members'), 
 				));
@@ -409,7 +409,7 @@ function adf_platform_pagesetup(){
 			// Ajoute lien vers les invitations
 			if (elgg_is_active_plugin('invitefriends')) {
 				$params = array(
-					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => $CONFIG->url . 'invite',
+					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => elgg_get_site_url() . 'invite',
 					'contexts' => array('members'), // Uniquement members pour ne pas overrider le comportement normal
 				);
 				elgg_register_menu_item('page', $params);
@@ -479,36 +479,36 @@ function adf_platform_pagesetup(){
 				}
 			
 				if (!elgg_in_context('groups')) {
-					$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
+					$group_url = elgg_get_site_url() . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
 					array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
 			} else if ($page_owner instanceof ElggUser) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
-				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
-				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members') );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => elgg_get_site_url() . 'profile/' . $page_owner->username) );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members') );
 			}
 			
 			// Insert home link in all cases
-			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url));
+			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:homepage'), 'link' => elgg_get_site_url()));
 			
 		} else {
-			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $CONFIG->url);
-			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url);
+			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => elgg_get_site_url());
+			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:homepage'), 'link' => elgg_get_site_url());
 			
 			// Corrections selon le contexte
 			if (elgg_in_context('profile')) {
 				// Annuaire => Nom du membre
 				$page_owner = elgg_get_page_owner_entity();
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members');
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members');
 				$CONFIG->breadcrumbs[] = array('title' => $page_owner->name);
 			} else if (elgg_in_context('members')) {
 				// Membres => Annuaire
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'));
 			} else {
 				// Par défaut : contexte
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $CONFIG->url . $context);
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => elgg_get_site_url() . $context);
 			}
 		}
 	}
@@ -546,7 +546,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
+	if (!empty($loginredirect)) { forward(elgg_get_site_url() . $loginredirect); }
 	forward();
 }
 
@@ -557,7 +557,7 @@ function adf_platform_public_forward_login_hook($hook_name, $reason, $location, 
 		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 		// Si jamais la valeur de retour n'est pas définie, on le fait
 		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-		return $CONFIG->url . 'login';
+		return elgg_get_site_url() . 'login';
 	}
 	return null;
 }
@@ -1320,7 +1320,7 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 function esope_is_external_link($url) {
 	global $CONFIG;
 	$elements = parse_url($url);
-	$base_elements = parse_url($CONFIG->url);
+	$base_elements = parse_url(elgg_get_site_url());
 	if ($elements['host'] != $base_elements['host']) return true;
 	return false;
 }
@@ -1337,7 +1337,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		$folder_description = '';
 		$files_content = '';
 		// Folder link
-		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+		$folder_title_link = '<a href="' . elgg_get_site_url() . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
 		// Folder description
 		if (!empty($folder['folder']->description)) $folder_description .= ' <em>' . $folder['folder']->description . '</em>';
 		
@@ -1491,16 +1491,16 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			$description = json_encode(trim($template[2]));
 			switch($type) {
 				case 'cmspage':
-					// Cmspages always respectfriendly title formatting
+					// Cmspages always respect friendly title formatting
 					$source = elgg_get_friendly_title($source);
-					$source = $CONFIG->url . 'p/' . $source . '?embed=true';
+					$source = elgg_get_site_url() . 'p/' . $source . '?embed=true';
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
 						// @TODO : provide a REST URL access to an entity description (with access rights)
 						// Best we can get now would be exported JSON
 						// Export description only : export/default/1073/attr/description/
-						$source = $CONFIG->url . 'export/default/' . $source . '/attr/description/';
+						$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
 						if (empty($title)) $title = $ent->title;
 						else if (empty($description)) $description = $ent->title;
 					} else $source = false;
