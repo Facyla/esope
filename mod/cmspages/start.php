@@ -758,19 +758,19 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 		}
 	}
 	
-	if ($mode == 'view') {
-		// On retire les contextes spécifiques à ce bloc
-		elgg_pop_context();
-		elgg_pop_context();
-	}
-	
-	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
 	if ($add_edit_link && $is_editor) {
 		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
+	}
+	
+	
+	// On retire les contextes spécifiques à ce bloc pour laisser le système dans l'état initial
+	if ($mode == 'view') {
+		elgg_pop_context();
+		elgg_pop_context();
 	}
 	
 	
