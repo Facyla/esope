@@ -613,6 +613,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
 	if (!empty($params['embed'])) $embed = $params['embed'];
+	if (isset($params['noedit']) && ($params['noedit'] == 'true')) $add_edit_link = false;
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */

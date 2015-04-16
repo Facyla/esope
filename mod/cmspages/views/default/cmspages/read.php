@@ -50,7 +50,6 @@ if ($cmspage->display == 'no') { return; }
 //if ($cmspage->display == 'no') { forward(REFERER); }
 
 // Allow to remove admin links (useful for tinymce templates and content embedding)
-$params = array('mode' => 'read', 'embed' => $embed);
-if ($noedit == 'yes') { $params['add_edit_link'] = false; }
+$params = array('mode' => 'read', 'embed' => $embed, 'noedit' => $noedit);
 echo cmspages_view($pagetype, $params, $vars);
 
