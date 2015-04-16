@@ -25,6 +25,8 @@ $content .= $cmspage->display; // Allow to use own page (not concerned in a view
 
 $pagetype = elgg_extract('pagetype', $vars);
 $cmspage = elgg_extract('entity', $vars);
+$embed = elgg_extract('embed', $vars);
+$noedit = elgg_extract('noedit', $vars);
 
 // We need at least entity or pagetype
 if (!$pagetype && !$cmspage) { return; }
@@ -47,7 +49,8 @@ if (!$cmspage) { $cmspage = cmspages_get_entity($pagetype); }
 if ($cmspage->display == 'no') { return; }
 //if ($cmspage->display == 'no') { forward(REFERER); }
 
-
-
-echo cmspages_view($pagetype, array('mode' => 'read'), $vars);
+// Allow to remove admin links (useful for tinymce templates and content embedding)
+$params = array('mode' => 'read', 'embed' => $embed);
+if ($noedit == 'yes') { $params['add_edit_link'] = false; }
+echo cmspages_view($pagetype, $params, $vars);
 

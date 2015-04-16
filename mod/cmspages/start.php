@@ -581,9 +581,12 @@ function cmspages_compose_module($module_name, $module_config = false) {
 /* Affichage d'une page cms de tout type
  * $params : rendering parameters (which does not depend of page content)
  * $vars : content vars and data to be passed to the views (used by the page)
- * $mode : view/read
- *    - view : certaines infos sont masquées en mode 'view' (titre, tags...) + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
- * $add_edit_link : allow non-defined pages rendering (and edit links)
+ *   - 'mode' : view/read (onlmy first level can be in mode 'read')
+ *        Certaines infos sont masquées en mode 'view' (titre, tags...) 
+ *        + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
+ *   - 'embed' : can be passed to change some rendering elements based on read embed
+ *   - 'add_edit_link' : allow non-defined pages rendering (and edit links)
+ *        Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
  * STEPS :
  * 1. Check validity, access, contexts (can we display that page ?)
  * 2. Render cmspage "own" content
@@ -609,6 +612,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	if (isset($params['mode'])) $mode = $params['mode'];
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
+	if (!empty($params['embed'])) $embed = $params['embed'];
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
