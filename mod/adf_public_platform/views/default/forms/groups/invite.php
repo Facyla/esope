@@ -37,6 +37,12 @@ if ($users_count > 0) {
 			// Note : userpicker uses always 'members[]' name, so the actions must be updated too
 			// Action is properly overriden in esope, but care to themes !
 			echo elgg_view('input/userpicker', array('name' => 'user_guid'));
+			// Force friends only selector (will apply anyway in the action)
+			if ($invite_anyone != 'yes') {
+				echo elgg_view('input/userpicker', array());
+			} else {
+				echo elgg_view('input/userpicker', array('friends_only' => 'yes_force'));
+			}
 			break;
 		
 		default:

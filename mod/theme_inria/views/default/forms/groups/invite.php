@@ -38,9 +38,10 @@ if ($users_count > 0) {
 			echo '<p>' . elgg_echo('theme_inria:invitegroups:help') . '</p>';
 			// Force friends only selector (will apply anyway in the action)
 			if ($invite_anyone != 'yes') {
-				
+				echo elgg_view('input/userpicker', array());
+			} else {
+				echo elgg_view('input/userpicker', array('friends_only' => 'yes_force'));
 			}
-			echo elgg_view('input/userpicker', array('name' => 'user_guid'));
 			break;
 		
 		default:
