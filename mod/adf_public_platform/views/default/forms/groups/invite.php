@@ -27,7 +27,7 @@ if ($invite_anyone != 'yes') {
 }
 
 // Selon le nombre de personnes, on peut forcer un sélecteur plus léger en mémoire
-if ($users > 200) { $invite_picker = 'userpicker'; }
+if ($users_count > 200) { $invite_picker = 'userpicker'; }
 
 if ($users_count > 0) {
 	
