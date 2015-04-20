@@ -419,6 +419,7 @@ $fr = array(
 	'adf_platform:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
 	'adf_platform:invite_picker:userpicker' => "Auto-complétion",
 	'adf_platform:groups:allowregister' => "Inscrire dans le groupe",
+	'adf_platform:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'adf_platform:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'adf_platform:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",

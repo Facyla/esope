@@ -370,7 +370,6 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:cron:done' => "CRON quotidien Inria...OK",
 	
 	// Groups invites
-	'theme_inria:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'userpicker:only_friends' => "Afficher seulement les contacts",
 	
 );

@@ -27,20 +27,19 @@ if ($invite_anyone != 'yes') {
 }
 
 // Selon le nombre de personnes, on peut forcer un sélecteur plus léger en mémoire
-if ($users_count > 200) { $invite_picker = 'userpicker'; }
+if ($users_count > 500) { $invite_picker = 'userpicker'; }
 
 if ($users_count > 0) {
-	
 	// Use prefered or memory-friendly picker depending on custom setting and users number
 	switch($invite_picker) {
 		case 'userpicker':
 			// Note : userpicker uses always 'members[]' name, so the actions must be updated too
 			// Action is properly overriden in esope, but care to themes !
-			echo elgg_view('input/userpicker', array('name' => 'user_guid'));
-			// Force friends only selector (will apply anyway in the action)
+			echo '<p>' . elgg_echo('adf_platform:invitegroups:help') . '</p>';
 			if ($invite_anyone != 'yes') {
 				echo elgg_view('input/userpicker', array());
 			} else {
+				// Force friends only selector (will apply anyway in the action)
 				echo elgg_view('input/userpicker', array('friends_only' => 'yes_force'));
 			}
 			break;

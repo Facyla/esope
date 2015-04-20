@@ -417,6 +417,7 @@ $en = array(
 	'adf_platform:settings:groups:invite_picker:details' => "Note: above a fixed number of persons, the picker will automatically switch to Autocomplete (to avoid memrory overflow).",
 	'adf_platform:invite_picker:friendspicker' => "Alphabetical picker",
 	'adf_platform:invite_picker:userpicker' => "Autocomplete",
+	'adf_platform:invitegroups:help' => "Please input at least 3 letters of the searched person's name.",
 	'adf_platform:groups:allowregister' => "Register in the group",
 	'adf_platform:settings:groups:allowregister' => "Allows group admins to register members in the group, instead of only inviting them.",
 	'adf_platform:settings:members:onesearch' => "Keep only general member search ? (default : No)",
