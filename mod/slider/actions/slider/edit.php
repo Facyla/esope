@@ -59,7 +59,7 @@ if ($slider->save()) {
 	register_error(elgg_echo("slider:error"));
 }
 
-elgg_set_ignore_access(false);
+//elgg_set_ignore_access(false);
 
 // Forward back to the page
 forward('slider/edit/' . $slider->guid);

@@ -53,3 +53,7 @@ if ($cmspage->display == 'no') { return; }
 $params = array('mode' => 'read', 'embed' => $embed, 'noedit' => $noedit);
 echo cmspages_view($pagetype, $params, $vars);
 
+// Restore original rights
+if ($is_editor) { elgg_set_ignore_access($ia); }
+
+
