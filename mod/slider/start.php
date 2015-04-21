@@ -9,11 +9,16 @@
  */
 
 elgg_register_event_handler('init','system','slider_plugin_init');
+elgg_register_event_handler('pagesetup','system','slider_pagesetup');
 
 function slider_plugin_init() {
 	global $CONFIG;
-
+	
+	// Note : CSS we will be output anyway directly into the view, so we can embed sliders on other sites
 	elgg_extend_view('css','slider/css');
+	
+	elgg_extend_view('shortcodes/embed/extend', 'slider/extend_shortcodes_embed');
+	
 	/*
 	<!-- Anything Slider optional plugins -->
 	<script src="js/jquery.easing.1.2.js"></script>
@@ -101,5 +106,36 @@ function slider_page_handler($page) {
 	return false;
 }
 
+
+
+// Foncitons à exécuter après le chargement de tous les plugins
+function slider_pagesetup() {
+	
+	// Add slider shortcode for easier embedding of sliders
+	if (elgg_is_active_plugin('shortcodes')) {
+		elgg_load_library('elgg:shortcode');
+		/**
+		 * Slider shortcode
+		 * [slider id="GUID"]
+		 */
+		function slider_shortcode_function($atts, $content='') {
+			$slider_content = '';
+			extract(elgg_shortcode_atts(array(
+					'width' => '100%',
+					'height' => '300px',
+					'id' => '',
+				), $atts));
+			if (!empty($id)) {
+				$slider = get_entity($id);
+				if (elgg_instanceof($slider, 'object', 'slider')) {
+					$content = elgg_view('slider/view', array('entity' => $slider));
+				}
+			}
+			return $content;
+		}
+		elgg_add_shortcode('slider', 'slider_shortcode_function');
+	}
+	
+}
 
 

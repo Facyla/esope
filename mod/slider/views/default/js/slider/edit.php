@@ -19,8 +19,8 @@ elgg.slider.edit.init = function() {
  * @param {Object} e The click event
  */
 elgg.slider.edit.addSlide = function(e) {
-	// Create a new slide element
-	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide')); ?>;
+	// Create a new slide element (without editor)
+	var new_slide = <?php echo json_encode(elgg_view('slider/input/slide', array($editor = 'plaintext'))); ?>;
 	$('.slider-edit-slides').append(new_slide);
 	// Refresh the sortable items to be able to sort into the new section
 	elgg.slider.edit.addSortable();
@@ -33,7 +33,7 @@ elgg.slider.edit.addSlide = function(e) {
  */
 elgg.slider.edit.deleteSlide = function(e) {
 	var slide = $(this).parent();
-	if (confirm(elgg.echo('slider:delete:confirm'))) { slide.remove(); }
+	if (confirm(elgg.echo('slider:edit:deleteslide:confirm'))) { slide.remove(); }
 	e.preventDefault();
 }
 

@@ -33,6 +33,8 @@ if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
 $embed = get_input('embed', false);
 $layout = elgg_get_plugin_setting('layout', 'cmspages');
 $pageshell = elgg_get_plugin_setting('pageshell', 'cmspages');
+// Enables admin links removal (page will look the same for regular readers and editors)
+$noedit = get_input('noedit', false);
 
 // Set inner and outer title (page title and breadcrumbs)
 $title = $pagetype;
@@ -61,7 +63,7 @@ if ($cmspage) {
 }
 
 // cmspages/read may render more content
-$content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage));
+$content = elgg_view('cmspages/read', array('pagetype' => $pagetype, 'entity' => $cmspage, 'embed' => $embed, 'noedit' => $noedit));
 
 
 // Set some useful vars for pageshell

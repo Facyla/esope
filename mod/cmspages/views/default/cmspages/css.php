@@ -79,6 +79,7 @@ pre, code { word-break:break-all; }
 *:hover > .cmspages-admin-link { display: inline-block; }
 .cmspages-editable:hover { border: 2px dashed; padding: 0.5ex; background: rgba(220,220,255,0.3); display: block; }
 *:hover > .cmspages-admin-link a {  }
+.cmspages-editable .fa.fa-edit { color: black; text-shadow: -1px 1px 0px white; }
 
 
 

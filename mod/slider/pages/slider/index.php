@@ -12,6 +12,13 @@
 gatekeeper();
 global $CONFIG;
 
+// Allow access to members ? or admins only..
+$slider_access = elgg_get_plugin_setting('slider_access', 'slider');
+if ($slider_access != 'yes') {
+	admin_gatekeeper();
+} else {
+	gatekeeper();
+}
 
 
 // Build the page content
@@ -42,7 +49,7 @@ $content .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">
 $content .= '<p><a href="' . elgg_get_site_url() . 'slider/edit" class="elgg-button elgg-button-action">' . elgg_echo('slider:add') . '</a></p>';
 
 if ($slider_count > 0) {
-	$content = elgg_list_entities(array('types' => 'object', 'subtypes' => 'slider', 'order_by' => 'time_created desc', 'limit' => 50));
+	$content .= elgg_list_entities(array('types' => 'object', 'subtypes' => 'slider', 'order_by' => 'time_created desc', 'limit' => 50));
 	//$content .= elgg_view('slider/listing');
 }
 

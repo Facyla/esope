@@ -370,6 +370,8 @@ Here is the new profile page : %s
 	'theme_inria:cron:ldap:done' => "Daily CRON Inria LDAP done",
 	'theme_inria:cron:done' => "Daily CRON Inria done",
 	
+	// Groups invites
+	'userpicker:only_friends' => "Display friends only",
 	
 );
 

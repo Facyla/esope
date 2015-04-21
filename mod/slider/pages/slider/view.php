@@ -12,6 +12,7 @@
 // Load Elgg engine
 global $CONFIG;
 
+// Allow public display ?  required for external embed
 //gatekeeper();
 
 $guid = get_input('guid', false);

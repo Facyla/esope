@@ -48,7 +48,9 @@ if (!$pagetype) { $pagetype = $cmspage->pagetype; }
 if (!$cmspage) { $cmspage = cmspages_get_entity($pagetype); }
 
 
-
 echo cmspages_view($pagetype, array('mode' => 'view'), $vars);
+
+// Restore original rights
+if ($is_editor) { elgg_set_ignore_access($ia); }
 
 

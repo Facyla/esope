@@ -50,6 +50,10 @@ $group_groupjoin_enablenotif_opt = array(
 		'no' => elgg_echo('option:notify:no'),
 	);
 
+$invite_picker_opt = array(
+		'friendspicker' => elgg_echo('adf_platform:invite_picker:friendspicker'),
+		'userpicker' => elgg_echo('adf_platform:invite_picker:userpicker'),
+	);
 
 // SET DEFAULT VALUES
 
@@ -583,6 +587,7 @@ $(function() {
 			
 			echo '<h4>' . elgg_echo('adf_platform:config:groupinvites') . '</h4>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:inviteanyone') . ' ' . elgg_view('input/dropdown', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->invite_anyone)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:invite_picker') . ' ' . elgg_view('input/dropdown', array('name' => 'params[invite_picker]', 'options_values' => $invite_picker_opt, 'value' => $vars['entity']->invite_picker)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:groups:invite_picker:details') . '</em></p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:allowregister') . ' ' . elgg_view('input/dropdown', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->allowregister)) . '</label></p>';
 			echo '<br />';
 			

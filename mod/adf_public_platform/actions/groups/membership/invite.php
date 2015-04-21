@@ -8,6 +8,8 @@
 $logged_in_user = elgg_get_logged_in_user_entity();
 
 $user_guids = get_input('user_guid');
+// Note : use alternate input name, as the userpicker method only accepts 'members[]' (if view + JS not rewritten)
+if (empty($user_guids)) $user_guids = get_input('members');
 if (!is_array($user_guids)) { $user_guids = array($user_guids); }
 $group_guid = get_input('group_guid');
 $group = get_entity($group_guid);

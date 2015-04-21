@@ -581,9 +581,12 @@ function cmspages_compose_module($module_name, $module_config = false) {
 /* Affichage d'une page cms de tout type
  * $params : rendering parameters (which does not depend of page content)
  * $vars : content vars and data to be passed to the views (used by the page)
- * $mode : view/read
- *    - view : certaines infos sont masquées en mode 'view' (titre, tags...) + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
- * $add_edit_link : allow non-defined pages rendering (and edit links)
+ *   - 'mode' : view/read (onlmy first level can be in mode 'read')
+ *        Certaines infos sont masquées en mode 'view' (titre, tags...) 
+ *        + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
+ *   - 'embed' : can be passed to change some rendering elements based on read embed
+ *   - 'add_edit_link' : allow non-defined pages rendering (and edit links)
+ *        Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
  * STEPS :
  * 1. Check validity, access, contexts (can we display that page ?)
  * 2. Render cmspage "own" content
@@ -608,6 +611,8 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$add_edit_link = true;
 	if (isset($params['mode'])) $mode = $params['mode'];
 	if (isset($params['add_edit_link'])) $add_edit_link = $params['add_edit_link'];
+	if ($params['noedit'] == 'true') $add_edit_link = false;
+	if (!empty($params['embed'])) $embed = $params['embed'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
 	
 	
@@ -695,14 +700,13 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 					$content .= elgg_view('output/cmspages_categories', array('categories' => $cmspage->categories));
 				}
 				
-				// Display page actual content
+				// Display page actual content, with custom markers rendering (and shortcodes)
 				// Always use a containing div, because we need elgg-output class for lists (for pure content only !), plus a custom class for finer output control
-				// Note : cannot use output/longtext view because of filtering
-				// So shortcodes are not applied, if used
+				// Note : cannot use output/longtext view because of tags filtering
 				if (($mode == 'view') && $vars['rawcontent']) {
-					$content .= $cmspage->description;
+					$content .= cmspages_render_template($cmspage->description);
 				} else {
-					$content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '<div class="clearfloat"></div></div>';
+					$content .= '<div class="elgg-output elgg-cmspage-output">' . cmspages_render_template($cmspage->description) . '<div class="clearfloat"></div></div>';
 				}
 				
 				if ($mode != 'view') {
@@ -754,19 +758,19 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 		}
 	}
 	
-	if ($mode == 'view') {
-		// On retire les contextes spécifiques à ce bloc
-		elgg_pop_context();
-		elgg_pop_context();
-	}
-	
-	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
-	if ($is_editor) {
+	if ($add_edit_link && $is_editor) {
 		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
+	}
+	
+	
+	// On retire les contextes spécifiques à ce bloc pour laisser le système dans l'état initial
+	if ($mode == 'view') {
+		elgg_pop_context();
+		elgg_pop_context();
 	}
 	
 	
@@ -802,7 +806,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 }
 
 
-/* Utilisation d'un template : remplacement (récursif) des blocs par les pages correspondantes
+/* Rendu d'un template : remplacement (récursif) des blocs par les pages correspondantes
  * $template : texte ou code HTML à utiliser comme template
  * $content : éléments de contenu ou variables - array($varname => $value)
  * {{pagetype}} => HTML ou template ou module
@@ -814,9 +818,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
  		- {{%VARS%}} : infos issues d'Elgg, listings configurables, etc.
  		- {{[shortcode]}} : shortcodes
 */
-function cmspages_render_template($template, $content = null) {
+function cmspages_render_template($template, $content_vars = null) {
 	// Compatibilité : accepte une simple valeur au lieu d'un array()
-	if (!empty($content) && !is_array($content)) $content = array('content' => $content);
+	if (!empty($content_vars) && !is_array($content_vars)) $content_vars = array('content' => $content_vars);
 	$temp1 = explode('}}', $template);
 	foreach ($temp1 as $temp) {
 		$temp2 = explode('{{', $temp);
@@ -829,7 +833,7 @@ function cmspages_render_template($template, $content = null) {
 				// Vars replacement
 				case '%':
 					$marker = strtolower(substr($marker, 1, -1));
-					$rendered_template .= $content[$marker];
+					$rendered_template .= $content_vars[$marker];
 					break;
 				
 				// Elgg view replacement
