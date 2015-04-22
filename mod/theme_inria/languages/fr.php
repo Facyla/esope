@@ -28,6 +28,8 @@ $french = array(
 	'theme_inria:home:information' => "Informations",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Edito",
+	'theme_inria:friends' => "Contacts",
+	'theme_inria:friends:collections' => "Listes de contacts",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",

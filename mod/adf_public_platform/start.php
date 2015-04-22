@@ -512,7 +512,7 @@ function adf_platform_pagesetup(){
 			}
 		}
 		
-		// Remove any HTML in breadcrumb title
+		// Remove any HTML in breadcrumb title (and especially FA icons)
 		foreach ($CONFIG->breadcrumbs as $k => $v) {
 			$CONFIG->breadcrumbs[$k]['title'] = strip_tags($CONFIG->breadcrumbs[$k]['title']);
 		}

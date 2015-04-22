@@ -28,6 +28,8 @@ $english = array(
 	'theme_inria:home:information' => "Information",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Headline",
+	'theme_inria:friends' => "Friends",
+	'theme_inria:friends:collections' => "Friends collections",
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
