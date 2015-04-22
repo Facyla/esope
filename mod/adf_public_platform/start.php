@@ -484,7 +484,7 @@ function adf_platform_pagesetup(){
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
-			} else if ($page_owner instanceof ElggUser) {
+			} else if (elgg_instanceof($page_owner, 'user')) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
 				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => elgg_get_site_url() . 'profile/' . $page_owner->username) );
 				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members') );
@@ -510,6 +510,11 @@ function adf_platform_pagesetup(){
 				// Par défaut : contexte
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => elgg_get_site_url() . $context);
 			}
+		}
+		
+		// Remove any HTML in breadcrumb title
+		foreach ($CONFIG->breadcrumbs as $k => $v) {
+			$CONFIG->breadcrumbs[$k]['title'] = strip_tags($CONFIG->breadcrumbs[$k]['title']);
 		}
 	}
 	
