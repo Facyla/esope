@@ -37,10 +37,10 @@ if ($users_count > 0) {
 			// Action is properly overriden in esope, but care to themes !
 			echo '<p>' . elgg_echo('adf_platform:invitegroups:help') . '</p>';
 			if ($invite_anyone != 'yes') {
-				echo elgg_view('input/userpicker', array());
-			} else {
 				// Force friends only selector (will apply anyway in the action)
 				echo elgg_view('input/userpicker', array('friends_only' => 'yes_force'));
+			} else {
+				echo elgg_view('input/userpicker', array('friends_only' => 'no'));
 			}
 			break;
 		
