@@ -13,9 +13,8 @@ $title = "Outils d'administration spécifiques";
 $content = '';
 $sidebar = '';
 
-// Liste des outils Esope : 'page_handler' => "Description"
-// @TODO : when adding new tools, synchronize with lib/page_handlers tools list
-$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields');
+// Liste des outils Esope : nom du page_handler, clef de traduction et nom du fichier dans pages/esope/tools
+$tools = esope_admin_tools_list();
 
 // Composition de la page
 $content .=  '<p>' . elgg_echo("esope:tools:intro") . '</p>';

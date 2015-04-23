@@ -927,6 +927,8 @@ $en = array(
 	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
 	'esope:tools:tool:clear_cmis_credentials' => "Clear users CMIS credentials",
 	'esope:tools:tool:clear_cmis_credentials:details' => "Removes all personnal settings that were set up for elgg_cmis plugin.",
+	'esope:tools:tool:users_stats' => "Users stats",
+	'esope:tools:tool:users_stats:details' => "Some stats about users. Not much currently besides groups count.",
 	
 	// Menus
 	'esope:menu:topbar' => "My account",
