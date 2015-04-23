@@ -1011,6 +1011,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
+			// Auto-discover valid values
+			/*
+			$options = esope_get_meta_values($metadata);
+			$valtype = 'dropdown';
+			*/
 			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
 			// Multiple option become select or radio
 			if ($options) {
