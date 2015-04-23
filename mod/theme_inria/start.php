@@ -164,7 +164,7 @@ function theme_inria_init(){
 	
 	// Register cron hook
 	// @TODO attendre le GO de la DSI avant activation !
-	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'adf_public_platform');
+	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'theme_inria');
 	if ($ldap_cron == 'yes') {
 		elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	}
