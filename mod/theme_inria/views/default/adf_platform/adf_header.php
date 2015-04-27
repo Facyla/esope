@@ -192,8 +192,8 @@ if (elgg_is_logged_in()) {
 								<?php if (elgg_is_active_plugin('members')) { ?>
 									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>?limit=30"><?php echo elgg_echo('friends'); ?></a></li>
-											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('friends:collections'); ?></a></li>
+											<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>?limit=30"><?php echo elgg_echo('theme_inria:friends'); ?></a></li>
+											<li><a href="<?php echo $url . 'collections/' . $ownusername; ?>"><?php echo elgg_echo('theme_inria:friends:collections'); ?></a></li>
 											<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
 											<?php echo $friendrequests_li; ?>
 											<?php

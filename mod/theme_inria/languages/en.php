@@ -28,6 +28,8 @@ $english = array(
 	'theme_inria:home:information' => "Information",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Headline",
+	'theme_inria:friends' => "Friends",
+	'theme_inria:friends:collections' => "Friends collections",
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
@@ -181,7 +183,9 @@ $english = array(
 	'theme_inria:userprofile:irisopen' => "Open Iris",
 	'theme_inria:userprofile:irislogin' => "Log in to Iris",
 	'theme_inria:userprofile:status' => "Status",
-	'inria_location' => "Inria entity (CRI or headquarters)",
+	//'inria_location' => "Inria entity (CRI or headquarters)",
+	'inria_location' => "Location",
+	'inria_location_main' => "Affiliation center",
 	'epi_ou_service' => "Inria project team or service",
 	'interests' => "Tags",
 	'skills' => "Skills",

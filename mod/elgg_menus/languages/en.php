@@ -5,7 +5,7 @@
 global $CONFIG;
 
 $en = array(
-	'admin:appearance:menus' => "Customp Menus Editor",
+	'admin:appearance:menus' => "Custom Menus Editor",
 	
 	'elgg_menus:new' => "New menu",
 	'elgg_menus:name' => "Menu name",

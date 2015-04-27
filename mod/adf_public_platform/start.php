@@ -484,7 +484,7 @@ function adf_platform_pagesetup(){
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
-			} else if ($page_owner instanceof ElggUser) {
+			} else if (elgg_instanceof($page_owner, 'user')) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
 				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => elgg_get_site_url() . 'profile/' . $page_owner->username) );
 				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members') );
@@ -510,6 +510,11 @@ function adf_platform_pagesetup(){
 				// Par défaut : contexte
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => elgg_get_site_url() . $context);
 			}
+		}
+		
+		// Remove any HTML in breadcrumb title (and especially FA icons)
+		foreach ($CONFIG->breadcrumbs as $k => $v) {
+			$CONFIG->breadcrumbs[$k]['title'] = strip_tags($CONFIG->breadcrumbs[$k]['title']);
 		}
 	}
 	
@@ -1006,6 +1011,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
+			// Auto-discover valid values
+			/*
+			$options = esope_get_meta_values($metadata);
+			$valtype = 'dropdown';
+			*/
 			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
 			// Multiple option become select or radio
 			if ($options) {
@@ -2151,6 +2161,13 @@ function esope_build_menu($a, $b) {
 	return $menu;
 }
 */
+
+
+// Returns a list of admin tools (used in esope/tools)
+function esope_admin_tools_list() {
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats');
+	return $tools;
+}
 
 
 

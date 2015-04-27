@@ -164,7 +164,7 @@ function theme_inria_init(){
 	
 	// Register cron hook
 	// @TODO attendre le GO de la DSI avant activation !
-	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'adf_public_platform');
+	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'theme_inria');
 	if ($ldap_cron == 'yes') {
 		elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	}
@@ -230,6 +230,11 @@ function inria_page_handler($page){
 			break;
 		case "animation":
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
+			break;
+		case 'admin_cron':
+			if (elgg_is_admin_logged_in()) {
+				theme_inria_daily_cron('cron', 'daily', '', '');
+			}
 			break;
 		default:
 			include(dirname(__FILE__) . '/pages/theme_inria/index.php');

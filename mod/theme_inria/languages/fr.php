@@ -28,6 +28,8 @@ $french = array(
 	'theme_inria:home:information' => "Informations",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Edito",
+	'theme_inria:friends' => "Contacts",
+	'theme_inria:friends:collections' => "Listes de contacts",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -180,7 +182,9 @@ $french = array(
 	'theme_inria:userprofile:irisopen' => "Accéder à Iris",
 	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
 	'theme_inria:userprofile:status' => "Statut",
-	'inria_location' => "Entité Inria (CRI ou siège)",
+	//'inria_location' => "Entité Inria (CRI ou siège)",
+	'inria_location' => "Localisation",
+	'inria_location_main' => "Centre de rattachement",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'interests' => "Mots clés",
 	'skills' => "Compétences",
