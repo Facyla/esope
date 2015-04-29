@@ -32,10 +32,10 @@ $title = elgg_echo('postbymail:title');
 
 // Allow configuration file inclusion
 if (include_once elgg_get_plugins_path() . 'postbymail/settings.php') {
-	$body .= elgg_echo('postbymail:settings:loadedfromfile');
+	$body .= '<p>' . elgg_echo('postbymail:settings:loadedfromfile') . '</p>';
 	//$body .= "DEBUG : $server $protocol $mailbox $username $password $markSeen $bodyMaxLength $separator";
 } else {
-	$body .= elgg_echo('postbymail:settings:loadedfromadmin');
+	$body .= '<p>' . elgg_echo('postbymail:settings:loadedfromadmin') . '</p>';
 }
 
 // Use custom admin settings for settings that were not set in config file (no set = variable not defined, eg. can be empty)
