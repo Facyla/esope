@@ -6,8 +6,8 @@
  * containing the messages in the mailbox. See the MailFeed website at
  * http://wonko.com/software/mailfeed/ for details.
  *
-TODO
 
+TODO
 Marqueurs de réponse : les adresses email avec param ne passent pas dans la plupart des messageries texte (gmail sur mobile...)
 
 Autres pistes de développements :
@@ -17,10 +17,8 @@ Autres pistes de développements :
 */
 
 //require_once(dirname(dirname(dirname(dirname(__FILE__)))) . "/engine/start.php");
-global $CONFIG;
 
 // require custom libraries
-//require_once "{$CONFIG->pluginspath}postbymail/lib/postbymail_functions.php";
 elgg_load_library('elgg:postbymail');
 
 
@@ -31,38 +29,61 @@ $title = elgg_echo('postbymail:title');
 #################
 
 /* POP3/IMAP/NNTP server to connect to, with optional port. */
+
+// Allow configuration file inclusion
+if (include_once elgg_get_plugins_path() . 'postbymail/settings.php') {
+	$body .= '<p>' . elgg_echo('postbymail:settings:loadedfromfile') . '</p>';
+	//$body .= "DEBUG : $server $protocol $mailbox $username $password $markSeen $bodyMaxLength $separator";
+} else {
+	$body .= '<p>' . elgg_echo('postbymail:settings:loadedfromadmin') . '</p>';
+}
+
+// Use custom admin settings for settings that were not set in config file (no set = variable not defined, eg. can be empty)
+
 //$server = "localhost:143";
-$server = elgg_get_plugin_setting('server', 'postbymail');
+if (!isset($server)) $server = elgg_get_plugin_setting('server', 'postbymail');
 
 /* Protocol specification (optional) */
 //$protocol = "/notls";
-$protocol = elgg_get_plugin_setting('protocol', 'postbymail');
+if (!isset($protocol)) $protocol = elgg_get_plugin_setting('protocol', 'postbymail');
 
 /* Name of the mailbox to open. */
 // Boîte de réception = presque toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
-$mailbox = elgg_get_plugin_setting('inboxfolder', 'postbymail');
+if (!isset($mailbox)) $mailbox = elgg_get_plugin_setting('inboxfolder', 'postbymail');
 
 /* Mailbox username. */
-$username = elgg_get_plugin_setting('username', 'postbymail');
+if (!isset($username)) $username = elgg_get_plugin_setting('username', 'postbymail');
 
 /* Mailbox password. */
-$password = elgg_get_plugin_setting('password', 'postbymail');
+if (!isset($password)) $password = elgg_get_plugin_setting('password', 'postbymail');
 
 /* Whether or not to mark retrieved messages as seen. */
-$markSeen = false;
+if (!isset($markSeen)) $markSeen = false;
 //if (empty($markSeen)) $markSeen = elgg_get_plugin_setting('markSeen', 'postbymail');
 
 /* If the message body is longer than this number of bytes, it will be trimmed. Set to 0 for no limit. */
 //$bodyMaxLength = 0; //$bodyMaxLength = 4096;
 // This (65536) is actually default MySQL configuration for Elgg's description fields
 // (set appropriate field to longtext in your database if you want to ovveride that limit)
-$bodyMaxLength = 65536;
+if (!isset($bodyMaxLength)) $bodyMaxLength = 65536;
 //if (empty($bodyMaxLength)) $bodyMaxLength = elgg_get_plugin_setting('bodymaxlength', 'postbymail');
 
 // Séparateurs du message
-$separator = elgg_get_plugin_setting('separator', 'postbymail');
+if (!isset($separator)) $separator = elgg_get_plugin_setting('separator', 'postbymail');
+// Force a default separator, just because we need it
 if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
-$body .= "SEPARATEUR : $separator<br /><hr />";
+
+
+
+// Check settings
+if (empty($server) || empty($username) || empty($password)) {
+	$body .= '<p>' . elgg_echo('postbymail:settings:error:missingrequired') . '</p>';
+}
+
+$body .= '<p>' . elgg_echo('postbymail:settings:separator') . '&nbsp;: ' . $separator . '</p>';
+
+$body .= '<hr />';
+
 
 #################################
 # End of User-Editable Settings #
@@ -96,11 +117,11 @@ $body .= postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 
 if (!elgg_is_admin_logged_in()) {
 /* On ne fait rien du tout : équivalent d'un appel cron donc traitement mais sans aucun affichage
-  //system_message("Traitement des mails en attente effectué.");
-  system_message("La page de contrôle de publication par mail est accessible seulement à un administrateur du site");
-  // Pas de problème pour accéder à la page (et traiter la file d'attente) mais on ne montre rien sauf aux admins
-  forward();
-  $body = "Fonctionnalité en cours de développement et de test ; page réservée à un administrateur du site.<br /><br /><br />";
+	//system_message("Traitement des mails en attente effectué.");
+	system_message("La page de contrôle de publication par mail est accessible seulement à un administrateur du site");
+	// Pas de problème pour accéder à la page (et traiter la file d'attente) mais on ne montre rien sauf aux admins
+	forward();
+	$body = "Fonctionnalité en cours de développement et de test ; page réservée à un administrateur du site.<br /><br /><br />";
 */
 }
 
@@ -113,6 +134,6 @@ $body = elgg_view_layout('one_column', array('title' => $title, 'content' => $bo
 // Exception si on veut une page de contrôle - à différencier
 $display = get_input('display', false);
 if (elgg_is_admin_logged_in() && ($display == "yes")) {
-  echo elgg_view_page($title, $body);
+	echo elgg_view_page($title, $body);
 }
 
