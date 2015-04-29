@@ -216,8 +216,8 @@ function postbymail_add_to_message($message) {
 	
 	// Prepare reply url
 	$url_param = '+guid=' . $postbymail_guid;
-	$email_username = elgg_get_plugin_setting('username', 'postbymail');
-	$email_parts = explode('@', $email_username);
+	$email_address = postbymail_reply_email_address();
+	$email_parts = explode('@', $email_address);
 	$reply_email = $email_parts[0] . $url_param . '@' . $email_parts[1];
 	$reply_email_link = '<a href="mailto:' . $reply_email . '">' . $reply_email . '</a>';
 	
@@ -290,7 +290,7 @@ if (elgg_is_active_plugin('html_email_handler')) {
 
 		// FROM : sender name <email>
 		// Sender email : use sender mail, then site email, then inexisting noreply address (never use personal user email)
-		if (!($from instanceof ElggUser) && !empty($from->email)) {
+		if (!elgg_instanceof($from, 'user') && !empty($from->email)) {
 			$msg_from = $from->email;
 		} elseif ($site && !empty($site->email)) {
 			// Use email address of current site if we cannot use sender's email
@@ -314,7 +314,7 @@ if (elgg_is_active_plugin('html_email_handler')) {
 		$html_message = postbymail_add_to_message($html_message);
 		
 		// Adresse email d'expédition ou de réponse - à affiner selon le contexte d'utilisation
-		$postbymail_email = elgg_get_plugin_setting('username', 'postbymail');
+		$postbymail_email = postbymail_reply_email_address();
 		// Si l'adresse existe (configurée), on l'utilise à la place de l'adresse définie plus tôt, 
 		// mais on garde le nom d'expéditeur
 		if (!empty($postbymail_email) && is_email_address($postbymail_email)) {
@@ -344,9 +344,9 @@ if (elgg_is_active_plugin('html_email_handler')) {
 	// Adaptations en ce sens pour n'utiliser que le nom d'expéditeur mais pas son adresse email perso
 	function postbymail_email_notify_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL) {
 		$site = elgg_get_site_entity();
-		if (!($from instanceof ElggEntity)) { throw new NotificationException(sprintf(elgg_echo('NotificationException:MissingParameter'), 'from')); }
-		if (!elgg_instanceof($to, 'user')) { throw new NotificationException(sprintf(elgg_echo('NotificationException:MissingParameter'), 'to')); }
-		if ($to->email=="") { throw new NotificationException(sprintf(elgg_echo('NotificationException:NoEmailAddress'), $to->guid)); }
+		if (!($from instanceof ElggEntity)) { throw new NotificationException(elgg_echo('NotificationException:MissingParameter', array('from'))); }
+		if (!elgg_instanceof($to, 'user')) { throw new NotificationException(elgg_echo('NotificationException:MissingParameter', array('to'))); }
+		if ($to->email=="") { throw new NotificationException(elgg_echo('NotificationException:NoEmailAddress', array($to->guid))); }
 		$params = array();
 		
 		// FROM : sender name <email>
@@ -365,19 +365,18 @@ if (elgg_is_active_plugin('html_email_handler')) {
 			$params['from'] = 'noreply@' . get_site_domain($site->guid);
 		}
 		// Sender name : best is user, then site, then none
-		if ($from instanceof ElggUser) {
+		$params['from_name'] = '';
+		if (elgg_instanceof($from, 'user')) {
 			$params['from_name'] = $from->name . ' via ' . $site->name;
-		} else if ($from instanceof ElggGroup && $site && $site->email) {
+		} else if (elgg_instanceof($from, 'group') && $site && $site->email) {
 			// Attention : $from->guid n'est pas le guid de l'objet notifié mais de l'expéditeur...
 			$params['from_name'] = '[' . $from->name. ']';
 		} else if ($site) {
 			$params['from_name'] = $site->name;
-		} else {
-			$params['from_name'] = '';
 		}
 		
 		// Adresse email d'expédition et/ou de réponse - à déterminer
-		$postbymail_email = elgg_get_plugin_setting('username', 'postbymail');
+		$postbymail_email = postbymail_reply_email_address();
 		// Si l'adresse existe (configurée), on l'utilise à la place de l'adresse définie plus tôt, 
 		// mais on garde le nom d'expéditeur
 		if (!empty($postbymail_email) && is_email_address($postbymail_email)) {
@@ -401,5 +400,18 @@ if (elgg_is_active_plugin('html_email_handler')) {
 }
 
 
+/* Get publication email address
+ * Determines which address should be used : username or email address
+ * Use email first, and username if no email set
+ */
+function postbymail_reply_email_address() {
+	$email = elgg_get_plugin_setting('email', 'postbymail');
+	$email = trim($email);
+	if (empty($email)) {
+		$email = elgg_get_plugin_setting('username', 'postbymail');
+		$email = trim($email);
+	}
+	return $email;
+}
 
 

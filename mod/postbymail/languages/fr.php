@@ -13,6 +13,9 @@ $french = array(
 	'postbymail:title' => "Publication par mail",
 	
 	/* Settings */
+	'postbymail:settings:error:missingrequired' => "Des paramètres de configuration requis sont manquants (serveur et port, nom d'utilisateur du compte de messagerie et/ou mot de passe)",
+	'postbymail:settings:loadedfromfile' => "Paramètres chargés depuis le fichier de configuration (settings.php)",
+	'postbymail:settings:loadedfromadmin' => "Paramètres définis via l'interface d'administration",
 	'postbymail:settings:admin' => "Paramètres généraux",
 	'postbymail:settings:replybymail' => "Réponses par email",
 	'postbymail:settings:replybymail:details' => "Cette fonctionnalité permet de répondre à des notifications par email.",

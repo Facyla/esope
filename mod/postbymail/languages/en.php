@@ -13,6 +13,9 @@ $en = array(
 	'postbymail:title' => "Post by email",
 	
 	/* Settings */
+	'postbymail:settings:error:missingrequired' => "Missing required settings (server and port, username and/or password)",
+	'postbymail:settings:loadedfromfile' => "Settings loaded from configuration file (settings.php)",
+	'postbymail:settings:loadedfromadmin' => "Settings loaded from administration interface",
 	'postbymail:settings:admin' => "Global settings",
 	'postbymail:settings:replybymail' => "Replies by email",
 	'postbymail:settings:replybymail:details' => "This functionnality enables replying by email to site notifications.",

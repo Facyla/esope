@@ -6,7 +6,7 @@ Il peut également permettre de publier sur le réseau via une adresse email sp�
 # Installation
 1. Ce plugin nécessite l'utilisation d'un compte email accessible en IMAP, et acceptant les paramètres dans l'adresse email, par exemple : username+param=truc@domain.tld
 2. Créer dans cette boîte mail deux dossiers : Published et Errors. Note : si ces dossiers ne sont pas créés, seul le statut "non lu" des messages permettra de déterminer s'ils ont été traités par el plugin."
-3. Configurer le plugin dans avec les paramètres mail. Note : si vous ne souhaitez pas que ces informations soient "en clair" dans l'interface d'administration, vous pouvez également définir directement ces paramètres dans le fichier pages/checkandpost.php
+3. Configurer le plugin dans avec les paramètres mail. Note : si vous ne souhaitez pas que ces informations soient "en clair" dans l'interface d'administration, vous pouvez également définir directement ces paramètres dans le fichier settings.php (cf. modèle de fichier settings_dist.php)
 
 
 # Intégration
