@@ -6,8 +6,8 @@
  * containing the messages in the mailbox. See the MailFeed website at
  * http://wonko.com/software/mailfeed/ for details.
  *
-TODO
 
+TODO
 Marqueurs de réponse : les adresses email avec param ne passent pas dans la plupart des messageries texte (gmail sur mobile...)
 
 Autres pistes de développements :
@@ -17,10 +17,8 @@ Autres pistes de développements :
 */
 
 //require_once(dirname(dirname(dirname(dirname(__FILE__)))) . "/engine/start.php");
-global $CONFIG;
 
 // require custom libraries
-//require_once "{$CONFIG->pluginspath}postbymail/lib/postbymail_functions.php";
 elgg_load_library('elgg:postbymail');
 
 
@@ -96,11 +94,11 @@ $body .= postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 
 if (!elgg_is_admin_logged_in()) {
 /* On ne fait rien du tout : équivalent d'un appel cron donc traitement mais sans aucun affichage
-  //system_message("Traitement des mails en attente effectué.");
-  system_message("La page de contrôle de publication par mail est accessible seulement à un administrateur du site");
-  // Pas de problème pour accéder à la page (et traiter la file d'attente) mais on ne montre rien sauf aux admins
-  forward();
-  $body = "Fonctionnalité en cours de développement et de test ; page réservée à un administrateur du site.<br /><br /><br />";
+	//system_message("Traitement des mails en attente effectué.");
+	system_message("La page de contrôle de publication par mail est accessible seulement à un administrateur du site");
+	// Pas de problème pour accéder à la page (et traiter la file d'attente) mais on ne montre rien sauf aux admins
+	forward();
+	$body = "Fonctionnalité en cours de développement et de test ; page réservée à un administrateur du site.<br /><br /><br />";
 */
 }
 
@@ -113,6 +111,6 @@ $body = elgg_view_layout('one_column', array('title' => $title, 'content' => $bo
 // Exception si on veut une page de contrôle - à différencier
 $display = get_input('display', false);
 if (elgg_is_admin_logged_in() && ($display == "yes")) {
-  echo elgg_view_page($title, $body);
+	echo elgg_view_page($title, $body);
 }
 
