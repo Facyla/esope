@@ -128,6 +128,10 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:username') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[username]', 'style' => 'width:94%;', 'value' => $vars['entity']->username));
 	echo '</label><p/>';
+	// post by email address
+	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:email') . ' ';
+	echo elgg_view('input/text', array('name' => 'params[username]', 'style' => 'width:94%;', 'value' => $vars['entity']->email));
+	echo '</label><p/>';
 
 	// password
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:password') . ' ';

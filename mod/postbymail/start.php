@@ -2,19 +2,17 @@
 /**
  * Post by mail plugin
  *
- * Author: Facyla
+ * Author: Florian DANIEL aka Facyla
  * 
- * This plugin allows users to reply by email to a forum thread, or to any publication in an Elgg site
+ * This plugin allows users to reply by email to a forum thread, or to any publication in an Elgg site, or even post new content
  *
- * This plugin is meant to be integrated within your notification system, please read carefully the documentation (within code) for instructions
+ * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionanally within code) for instructions
  * 
 */
 
 elgg_register_event_handler('init','system','postbymail_init');
 
 function postbymail_init() {
-	global $CONFIG;
-
 	// Register and load postbymail libraries
 	elgg_register_library('elgg:postbymail', elgg_get_plugins_path() . 'postbymail/lib/functions.php');
 	elgg_load_library('elgg:postbymail');
@@ -24,7 +22,7 @@ function postbymail_init() {
 	
 	// Register cron
 	$cron_freq = elgg_get_plugin_setting('cron', 'postbymail');
-	if (!in_array($cron_freq, array('minute', 'fiveminute', 'fifteenmin', 'halfhour', 'hourly', 'daily', 'weekly'))) $cron_freq = 'fiveminute';
+	if (!in_array($cron_freq, array('minute', 'fiveminute', 'fifteenmin', 'halfhour', 'hourly', 'daily', 'weekly'))) { $cron_freq = 'fiveminute'; }
 	elgg_register_plugin_hook_handler('cron', $cron_freq, 'postbymail_cron_handler');
 	
 	// Pass entity GUID
@@ -61,7 +59,7 @@ function postbymail_init() {
 
 
 function postbymail_pagehandler($page) {
-	if (include dirname(__FILE__) . '/pages/checkandpost.php') return true;
+	if (include elgg_get_plugins_path() . 'postbymail/pages/checkandpost.php') { return true; }
 	return false;
 }
 
@@ -69,11 +67,10 @@ function postbymail_pagehandler($page) {
 // Postbymail CRON : check mails and publish...
 function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
 	//error_log("MARQUEUR DU CRON DU START.PHP DE POSTBYMAIL");
-	global $CONFIG;
 	// require libraries
 	elgg_load_library('elgg:postbymail');
 	
-	require_once($CONFIG->pluginspath . 'postbymail/pages/checkandpost.php');
+	require_once(elgg_get_plugins_path() . 'postbymail/pages/checkandpost.php');
 	$resulttext = elgg_echo("postbymail:mailprocessed");
 	return $returnvalue . $resulttext;
 }
@@ -90,8 +87,8 @@ function postbymail_object_notifications_handler($hook, $entity_type, $returnval
 }
 
 
-// Permet de définir le GUID de l'objet commenté s'il ne l'est pas 
-// Nécessaire car object_notifications n'est pas appelé ou pas à temps pour certains cas
+// Permet de définir le GUID de l'objet commenté s'il ne l'a pas déjà été
+// Nécessaire car object_notifications n'est pas appelé ou pas à temps dans certains cas
 function postbymail_annotate_event_notifications($event, $object_type, $object) {
 	if (is_callable('object_notifications')) {
 		global $postbymail_guid;
@@ -107,18 +104,19 @@ function postbymail_annotate_event_notifications($event, $object_type, $object) 
 // Réécriture des messages envoyés
 /*
 unregister_plugin_hook('notify:entity:message', 'object', 'groupforumtopic_notify_message');
-unregister_plugin_hook('notify:entity:message', 'object', 'blog_notify_message');
-unregister_plugin_hook('notify:entity:message', 'object', 'page_notify_message');
-unregister_plugin_hook('notify:entity:message', 'object', 'bookmarks_notify_message');
-unregister_plugin_hook('notify:entity:message', 'object', 'file_notify_message');
-*/
+register_plugin_hook('notify:entity:message', 'object', 'groupforumtopic_notify_message_postbymail');
 
-/*
-register_plugin_hook('notify:entity:message', 'object', 'groupforumtopic_notify_message_inria');
-register_plugin_hook('notify:entity:message', 'object', 'blog_notify_message_inria');
-register_plugin_hook('notify:entity:message', 'object', 'page_notify_message_inria');
-register_plugin_hook('notify:entity:message', 'object', 'file_notify_message_inria');
-register_plugin_hook('notify:entity:message', 'object', 'bookmarks_notify_message_inria');
+unregister_plugin_hook('notify:entity:message', 'object', 'blog_notify_message');
+register_plugin_hook('notify:entity:message', 'object', 'blog_notify_message_postbymail');
+
+unregister_plugin_hook('notify:entity:message', 'object', 'page_notify_message');
+register_plugin_hook('notify:entity:message', 'object', 'page_notify_message_postbymail');
+
+unregister_plugin_hook('notify:entity:message', 'object', 'bookmarks_notify_message');
+register_plugin_hook('notify:entity:message', 'object', 'file_notify_message_postbymail');
+
+unregister_plugin_hook('notify:entity:message', 'object', 'file_notify_message');
+register_plugin_hook('notify:entity:message', 'object', 'bookmarks_notify_message_postbymail');
 */
 
 
@@ -209,7 +207,6 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
  * Ajoute le séparateur pour réponse au message
  */
 function postbymail_add_to_message($message) {
-	global $CONFIG;
 	global $postbymail_guid;
 	
 	$separator = elgg_get_plugin_setting('separator', 'postbymail');
@@ -271,7 +268,7 @@ function postbymail_add_to_message($message) {
 if (elgg_is_active_plugin('html_email_handler')) {
 	// Si html_email_handler est activé, on utilise ce handler à la place, sinon l'autre n'est pas chargé
 	function postbymail_email_notify_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL){
-		global $CONFIG;
+		$site = elgg_get_site_entity();
 
 		// Check missing vars
 		if (!$from) {
@@ -295,18 +292,18 @@ if (elgg_is_active_plugin('html_email_handler')) {
 		// Sender email : use sender mail, then site email, then inexisting noreply address (never use personal user email)
 		if (!($from instanceof ElggUser) && !empty($from->email)) {
 			$msg_from = $from->email;
-		} elseif ($CONFIG->site && !empty($CONFIG->site->email)) {
+		} elseif ($site && !empty($site->email)) {
 			// Use email address of current site if we cannot use sender's email
-			$msg_from = $CONFIG->site->email;
+			$msg_from = $site->email;
 		} else {
 			// If all else fails, use the domain of the site.
-			$msg_from = "noreply@" . get_site_domain($CONFIG->site_guid);
+			$msg_from = "noreply@" . get_site_domain($site->guid);
 		}
 		// Sender name : best is user, then site, then none
 		if (empty($from->name)) {
-			$msg_from_name = $from->name . ' via ' . $CONFIG->site->name;
-		} else if (!empty($CONFIG->site->name)) {
-			$msg_from_name = $CONFIG->site->name;
+			$msg_from_name = $from->name . ' via ' . $site->name;
+		} else if (!empty($site->name)) {
+			$msg_from_name = $site->name;
 		} else {
 			$msg_from_name = false;
 		}
@@ -346,19 +343,17 @@ if (elgg_is_active_plugin('html_email_handler')) {
 	// Fonction de Simon (Inria) revue : on utilise le nom du membre comme expéditeur, mais pas son mail (email générique ou celui de réponse par mail)
 	// Adaptations en ce sens pour n'utiliser que le nom d'expéditeur mais pas son adresse email perso
 	function postbymail_email_notify_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL) {
-		global $CONFIG;
+		$site = elgg_get_site_entity();
 		if (!($from instanceof ElggEntity)) { throw new NotificationException(sprintf(elgg_echo('NotificationException:MissingParameter'), 'from')); }
-		if (!($to instanceof ElggUser)) { throw new NotificationException(sprintf(elgg_echo('NotificationException:MissingParameter'), 'to')); }
+		if (!elgg_instanceof($to, 'user')) { throw new NotificationException(sprintf(elgg_echo('NotificationException:MissingParameter'), 'to')); }
 		if ($to->email=="") { throw new NotificationException(sprintf(elgg_echo('NotificationException:NoEmailAddress'), $to->guid)); }
 		$params = array();
-		$site = get_entity($CONFIG->site_guid);
-	
-
+		
 		// FROM : sender name <email>
 		// Sender email : use sender mail, then site email, then inexisting noreply address (never use personal user email)
-		if (!($from instanceof ElggUser) && !empty($from->email)) {
+		if (!elgg_instanceof($from, 'user') && !empty($from->email)) {
 			$params['from'] = $from->email;
-		} else if ($from instanceof ElggGroup && $site && $site->email) {
+		} else if (elgg_instanceof($from, 'group') && $site && $site->email) {
 			// Use email address of current site if we cannot use sender's email
 			// Attention : $from->guid n'est pas le guid de l'objet notifié mais de l'expéditeur...
 			$params['from'] = $site->email . "+" . $from->guid;
@@ -367,7 +362,7 @@ if (elgg_is_active_plugin('html_email_handler')) {
 			$params['from'] = $site->email;
 		} else {
 			// If all else fails, use the domain of the site.
-			$params['from'] = 'noreply@' . get_site_domain($CONFIG->site_guid);
+			$params['from'] = 'noreply@' . get_site_domain($site->guid);
 		}
 		// Sender name : best is user, then site, then none
 		if ($from instanceof ElggUser) {

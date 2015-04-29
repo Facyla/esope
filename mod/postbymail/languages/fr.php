@@ -34,6 +34,7 @@ $french = array(
 	'postbymail:settings:protocol' => "Protocole à utiliser, si nécessaire (par ex.: /notls ou /imap/ssl, parfois ajouter aussi /novalidate-cert et /norsh)", 
 	'postbymail:settings:mailbox' => "Boîte à utiliser (généralement INBOX, nom générique de la boîte de réception)", 
 	'postbymail:settings:username' => "Nom d'utilisateur du compte de messagerie (par ex.: user@domain.tld)", 
+	'postbymail:settings:email' => "Adresse email pour la publication (facultatif, uniquement si différent du compte de messagerie)", 
 	'postbymail:settings:password' => "Mot de passe du compte de messagerie", 
 	'postbymail:settings:inboxfolder' => "Dossier à vérifier (par défaut : INBOX)", 
 	'postbymail:settings:markSeen' => "Marquer les messages traités comme lus (qu'ils soient publiés ou non) ; OUI sauf bonne raison", 
