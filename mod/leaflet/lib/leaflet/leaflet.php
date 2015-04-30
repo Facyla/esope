@@ -1,41 +1,5 @@
 <?php
 
-/* Cron (daily) tasks
- * Geocode all registered members locations
- */
-function leaflet_cron_geocode_all_members($hook, $entity_type, $returnvalue, $params) {
-	error_log("LEAFLET : geocode cron batch triggered");
-	// Block cron task if we do not have the required parameters
-	$api_key = elgg_get_plugin_setting('osm_api_key', 'leaflet');
-	if (empty($api_key)) $api_key = elgg_get_plugin_setting('api_key', 'osm_maps');
-	if (empty($api_key)) {
-		error_log(elgg_echo('leaflet:error:missingapikey'));
-		return false;
-	}
-	
-	// Ensure that we have this required parameter before going into a long task
-	if (!empty($api_key)) {
-		elgg_set_context('cron');
-	
-		// Avoid any time limit while processing
-		set_time_limit(0);
-		access_show_hidden_entities(true);
-		$ia = elgg_set_ignore_access(true);
-	
-		// Geocoding batch
-		error_log("LEAFLET GEOCODE BATCH : started at " . date('Ymd H:i:s'));
-		$debug_0 = microtime(TRUE);
-		$users_options = array('types' => 'user', 'limit' => 0);
-		$batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_geocode_member', 10);
-		$debug_1 = microtime(TRUE);
-		error_log("LEAFLET GEOCODE BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
-		echo '<p>' . elgg_echo('leaflet:cron:geocode:allmembers:done') . '</p>';
-	
-		elgg_set_ignore_access($ia);
-		echo '<p>' . elgg_echo('leaflet:cron:done') . '</p>';
-	}
-}
-
 
 
 /* Batch function - Geocodes member coordinates
