@@ -8,17 +8,6 @@
  - user position timeout
 */
 
-gatekeeper();
-
-$user = elgg_get_logged_in_user_entity();
-$username = $user->username . '_' . $user->guid;
-
-$members_map = '';
-
-// Use batch
-// @TODO use cron to avoid waiting time
-// @TODO also add some caching for huge results
-
 echo '<script type="text/javascript">
 // Create a custom marker for users
 var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
@@ -30,7 +19,7 @@ var onlineUsersMarkers = new L.MarkerClusterGroup();
 // Geocoding batch
 $debug_0 = microtime(TRUE);
 $users_options = array('types' => 'user', 'limit' => 0);
-$batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_add_member_marker', 10);
+$batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_add_member_marker', 50);
 $debug_1 = microtime(TRUE);
 error_log("LEAFLET BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
 

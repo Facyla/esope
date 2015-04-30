@@ -31,6 +31,7 @@ function leaflet_init() {
 	// Register geocoder
 	elgg_register_plugin_hook_handler('geocode', 'location', 'leaflet_geocode');
 	
+	// Cron handler (batch geoconding...)
 	elgg_register_plugin_hook_handler('cron', 'daily', 'leaflet_cron_geocode_all_members');
 	
 }
@@ -282,5 +283,59 @@ function leaflet_cron_geocode_all_members($hook, $entity_type, $returnvalue, $pa
 	}
 }
 
+
+// Cache some data (usually large query results)
+function leaflet_cache_data($key, $content = '') {
+	// Data root path (used for caching results of large requests)
+	$leaflet_dataroot = elgg_get_data_path() . 'leaflet_cache/';
+	if (!is_dir($leaflet_dataroot)) {
+		mkdir($leaflet_dataroot, 0777);
+		chmod($leaflet_dataroot, 0777);
+	}
+	
+	if (!$key) { return false; }
+	
+	$filePath = $leaflet_dataroot . $key;
+	if (fwrite(fopen($filePath, 'w'), $content)) {
+		error_log("LEAFLET : wrote new cache for $key");
+		return true;
+	}
+	
+	error_log("LEAFLET : could not write new cache for $key");
+	return false;
+}
+
+
+
+// Get cached data
+function leaflet_get_cached_data($key, $cache_validity = 3600) {
+	// Data root path (used for caching results of large requests)
+	$leaflet_dataroot = elgg_get_data_path() . 'leaflet_cache/';
+	if (!is_dir($leaflet_dataroot)) {
+		mkdir($leaflet_dataroot, 0777);
+		chmod($leaflet_dataroot, 0777);
+	}
+	
+	if (!$key) { return false; }
+	
+	$filePath = $leaflet_dataroot . $key;
+	// Check that file exists
+	if (file_exists($filePath)) {
+		// Check that is is still valid (time diff < $cache_validity)
+		$lastupdate = filemtime($filePath);
+		if ((time() - $lastupdate) < $cache_validity) {
+			error_log("LEAFLET : found recent cache for $key < $cache_validity");
+			// Return latest cache
+			$f = fopen($path . $filePath, 'r');
+			$data = stream_get_contents($f, -1, 0);
+			fclose($f);
+			return $data;
+		}
+	}
+	
+	// Could not find recently updated cache
+	error_log("LEAFLET : no recent cache found for $key < $cache_validity");
+	return false;
+}
 
 
