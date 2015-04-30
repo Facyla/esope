@@ -22,6 +22,9 @@ function leaflet_init() {
 	// Register JS scripts and CSS
 	leaflet_register_libraries();
 	
+	// Register PHP libraries
+	elgg_register_library('leaflet', elgg_get_plugins_path() . 'leaflet/lib/leaflet/leaflet.php');
+	
 	// @TODO extend later, using another method, because it may break JS otherwise
 	//elgg_extend_view("page/elements/head", "leaflet/extend_head");
 	
@@ -136,8 +139,8 @@ function leaflet_load_libraries() {
  */
 function leaflet_page_handler($page) {
 	// Load registered libraries
-	//elgg_load_js('leaflet');
 	leaflet_load_libraries();
+	elgg_load_library('leaflet');
 	
 	$leaflet_root = dirname(__FILE__) . '/pages/leaflet/';
 	
@@ -164,8 +167,8 @@ function leaflet_page_handler($page) {
 /* Geocoding service */
 function leaflet_geocode($hook, $entity_type, $returnvalue, $params) { 
 	if (isset($params['location'])) {
+		/* GOOGLE API */
 		/* 
-		// GOOGLE API
 		$google_api = get_plugin_setting('google_api', 'googlegeocoder');
 		// Desired address
 		$address = "http://maps.google.com/maps/geo?q=".urlencode($params['location'])."&output=json&key=" . $google_api;
@@ -175,7 +178,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$obj = $obj->Placemark[0]->Point->coordinates;
 		*/
 		
-		// Mapquest API
+		/* Mapquest API */
 		$api_key = elgg_get_plugin_setting('osm_api_key', 'leaflet');
 		if (empty($api_key)) $api_key = elgg_get_plugin_setting('api_key', 'osm_maps');
 		if (empty($api_key)) {
@@ -189,6 +192,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$location = urlencode($params['location']);
 
 		// Desired address
+		// Documentation : http://open.mapquestapi.com/geocoding/
 		//$address = "http://open.mapquestapi.com/geocoding/v1/address?key=$api_key&callback=$callback&inFormat=$inFormat&outFormat=$outFormat&location=$location&maxResults=$maxResults";
 		$address = "http://open.mapquestapi.com/geocoding/v1/address?key=$api_key&inFormat=$inFormat&outFormat=$outFormat&location=$location&maxResults=$maxResults";
 		// Retrieve the URL contents

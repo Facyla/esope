@@ -15,6 +15,10 @@ $fr = array(
 	'leaflet:lat' => "Latitude",
 	'leaflet:lng' => "Longitude",
 	
+	'leaflet:index' => "Accueil cartographique",
+	'leaflet:world' => "Carte globale",
+	'leaflet:map' => "Carte",
+	'leaflet:search' => "Recherche cartographique",
 	
 	
 	// Messages pour JS : attention aux guillemets (doubles interdits dans le texte) et aux variables JS à passer !

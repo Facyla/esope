@@ -20,9 +20,7 @@
 	provide map URL (with access code)
 */
 
-global $CONFIG;
-
-$title = 'Leaflet map';
+$title = elgg_echo('leaflet:index');
 $content = '';
 
 // BUILD MAP
