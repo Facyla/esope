@@ -11,6 +11,7 @@ $fr = array(
 	'leaflet' => "Cartographie",
 	
 	'leaflet:settings:osm:api_key' => "Clef d'API OSM",
+	'leaflet:error:missingapikey' => "Clef d'API manquante pour le géocodage. Impossible de géocoder.",
 	
 	'leaflet:lat' => "Latitude",
 	'leaflet:lng' => "Longitude",

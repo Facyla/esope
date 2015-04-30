@@ -34,6 +34,8 @@ function leaflet_init() {
 	// Register geocoder
 	elgg_register_plugin_hook_handler('geocode', 'location', 'leaflet_geocode');
 	
+	elgg_register_plugin_hook_handler('cron', 'daily', 'leaflet_cron_geocode_all_members');
+	
 }
 
 
@@ -182,7 +184,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$api_key = elgg_get_plugin_setting('osm_api_key', 'leaflet');
 		if (empty($api_key)) $api_key = elgg_get_plugin_setting('api_key', 'osm_maps');
 		if (empty($api_key)) {
-			error_log("LEAFLET : missing API key. Cannot geocode.");
+			error_log(elgg_echo('leaflet:error:missingapikey'));
 			return false;
 		}
 		//$callback = get_input('callback', 'renderOptions');
@@ -209,7 +211,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		}
 	}
 	
-	// Don't save geocoded address if wrong result
+	// Don't save geocoded address if wrong result or no location
 	return false;
 }
 

@@ -30,7 +30,7 @@ var onlineUsersMarkers = new L.MarkerClusterGroup();
 // Geocoding batch
 $debug_0 = microtime(TRUE);
 $users_options = array('types' => 'user', 'limit' => 0);
-$batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_all_members_markers', 10);
+$batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_add_member_marker', 10);
 $debug_1 = microtime(TRUE);
 error_log("LEAFLET BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
 
