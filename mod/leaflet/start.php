@@ -11,47 +11,21 @@ elgg_register_event_handler('init', 'system', 'leaflet_init'); // Init
  * Init adf_leaflet plugin.
  */
 function leaflet_init() {
-	global $CONFIG;
 	
 	elgg_extend_view('css', 'leaflet/css');
-	elgg_extend_view("js/elgg", "leaflet/js");
-	
-	elgg_extend_view("page/elements/head", "leaflet/extend_head");
-	
-	/* @TODO : intégrer ces scripts sous forme de JS lib
-	elgg_register_js('togetherjs', 'https://togetherjs.com/togetherjs.js', 'head');
-	global $CONFIG;
-	$vendors_url = $CONFIG->url . 'mod/leaflet/vendors/';
-	$awesomefont = $vendors_url . 'Leaflet_awesome_markers/';
-	$providers = $vendors_url . 'Leaflet_providers/';
-	$geosearch = $vendors_url . 'Leaflet_GeoSearch/';
-	$routing = $vendors_url . 'Leaflet_routing_machine/';
-	$markercluster = $vendors_url . 'Leaflet_markercluster/';
-
-		<!--
-		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
-		//-->
-		<link rel="stylesheet" href="<?php echo $vendors_url; ?>Leaflet/leaflet.css" />
-		<link rel="stylesheet" href="<?php echo $awesomefont; ?>leaflet.awesome-markers.css">
-		<link rel="stylesheet" href="<?php echo $providers; ?>css/gh-fork-ribbon.css">
-		<link rel="stylesheet" href="<?php echo $geosearch; ?>src/css/l.geosearch.css">
-		<link rel="stylesheet" href="<?php echo $routing; ?>leaflet-routing-machine.css" />
-		<link rel="stylesheet" href="<?php echo $markercluster; ?>MarkerCluster.css" />
-		<link rel="stylesheet" href="<?php echo $markercluster; ?>MarkerCluster.Default.css" />
-
-		<!--
-		<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-		//-->
-		<script src="<?php echo $vendors_url; ?>Leaflet/leaflet.js"></script>
-		<script src="<?php echo $awesomefont; ?>leaflet.awesome-markers.js"></script>
-		<script src="<?php echo $providers; ?>leaflet-providers.js"></script>
-		<script src="<?php echo $geosearch; ?>src/js/l.control.geosearch.js"></script>
-		<script src="<?php echo $geosearch; ?>src/js/l.geosearch.provider.openstreetmap.js"></script>
-		<script src="<?php echo $routing; ?>leaflet-routing-machine.min.js"></script>
-		<script src="<?php echo $markercluster; ?>leaflet.markercluster.js"></script>
+	/*
+	elgg_register_simplecache_view('leaflet/js');
+	$leaflet_js = elgg_get_simplecache_url('js', 'leaflet');
+	elgg_register_js('leaflet', $leaflet_js, 'head');
 	*/
 	
-	// Register a page handler
+	// Register JS scripts and CSS
+	leaflet_register_libraries();
+	
+	// @TODO extend later, using another method, because it may break JS otherwise
+	//elgg_extend_view("page/elements/head", "leaflet/extend_head");
+	
+	// Register leaflet page handler
 	elgg_register_page_handler('leaflet','leaflet_page_handler');
 	
 	// Register geocoder
@@ -59,6 +33,99 @@ function leaflet_init() {
 	
 }
 
+
+/* Get libraries and extensions configuration
+ * lib_name => array(
+ *     array('type' => 'css|js', 'url' => 'lib_file_path'),
+ *   )
+ */
+function leaflet_get_libraries_config() {
+	$vendors_url = elgg_get_site_url() . 'mod/leaflet/vendors/';
+	// <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+	// <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+	
+	$libraries_config = array(
+			'leaflet' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet/leaflet.js'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet/leaflet.css'),
+				),
+			'leaflet.awesomemarkers' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_awesome_markers/leaflet.awesome-markers.js'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_awesome_markers/leaflet.awesome-markers.css'),
+				),
+			'leaflet.providers' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_providers/leaflet-providers.js'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_providers/css/gh-fork-ribbon.css'),
+				),
+			'leaflet.geosearch' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_GeoSearch/src/js/l.control.geosearch.js'),
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_GeoSearch/src/js/l.geosearch.provider.openstreetmap.js', 'name' => 'leaflet.geosearch.openstreetmap'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_GeoSearch/src/css/l.geosearch.css'),
+				),
+			'leaflet.routing' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_routing_machine/leaflet-routing-machine.min.js'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_routing_machine/leaflet-routing-machine.css'),
+				),
+			'leaflet.markercluster' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'Leaflet_markercluster/leaflet.markercluster.js'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_markercluster/MarkerCluster.css'),
+					array('type' => 'css', 'url' => $vendors_url . 'Leaflet_markercluster/MarkerCluster.Default.css', 'name' => 'leaflet.markercluster.default'),
+				),
+		);
+	return $libraries_config;
+}
+
+
+// Check enabled libraries and register the corresponding scripts and CSS
+function leaflet_register_libraries() {
+	// List available libraries
+	$libraries_config = leaflet_get_libraries_config();
+	
+	// @TODO enable only wanted plugins
+	
+	global $leaflet_registered_libs;
+	$leaflet_registered_libs = array('js' => array(), 'css' => array());
+	
+	// Register JS scripts and CSS files
+	foreach ($libraries_config as $name => $lib_config) {
+		foreach ($lib_config as $config) {
+			switch($config['type']) {
+				case 'js':
+					$libname = $name;
+					if (isset($config['name'])) $libname = $config['name'];
+					$location = 'head';
+					if (isset($config['location'])) $libname = $config['location'];
+					elgg_register_js($libname, $config['url'], $location);
+					$leaflet_registered_libs['js'][] = $libname;
+					break;
+				case 'css':
+					$libname = $name;
+					if (isset($config['name'])) $libname = $config['name'];
+					elgg_register_css($libname, $config['url']);
+					$leaflet_registered_libs['css'][] = $libname;
+					break;
+			}
+		}
+	}
+	
+}
+
+
+// Load registered JS and CSS libraries
+function leaflet_load_libraries() {
+	global $leaflet_registered_libs;
+	// Load registered libs
+	foreach ($leaflet_registered_libs as $type => $libraries) {
+		switch($type) {
+			case 'js':
+				foreach ($libraries as $name) { elgg_load_js($name); }
+				break;
+			case 'css':
+				foreach ($libraries as $name) { elgg_load_css($name); }
+				break;
+		}
+	}
+}
 
 
 /** leaflet page handler
@@ -68,10 +135,13 @@ function leaflet_init() {
  * world/ => global admin page
  */
 function leaflet_page_handler($page) {
-	global $CONFIG;
-	$leaflet_root = dirname(__FILE__) . '/pages/leaflet/';
-	if (empty($page[0])) $page[0] = 'index';
+	// Load registered libraries
+	//elgg_load_js('leaflet');
+	leaflet_load_libraries();
 	
+	$leaflet_root = dirname(__FILE__) . '/pages/leaflet/';
+	
+	if (empty($page[0])) $page[0] = 'index';
 	switch($page[0]) {
 		
 		// All these have same name than script
@@ -138,8 +208,6 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 	// Don't save geocoded address if wrong result
 	return false;
 }
-
-
 
 
 /* Renvoie un tableau avec les coordonnées des personnes positionnées sur la carte

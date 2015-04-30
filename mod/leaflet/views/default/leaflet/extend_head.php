@@ -1,8 +1,7 @@
 <?php
 /* Leaflet requisites and plugins */
 
-global $CONFIG;
-$vendors_url = $CONFIG->url . 'mod/leaflet/vendors/';
+$vendors_url = elgg_get_site_url() . 'mod/leaflet/vendors/';
 $awesomefont = $vendors_url . 'Leaflet_awesome_markers/';
 $providers = $vendors_url . 'Leaflet_providers/';
 $geosearch = $vendors_url . 'Leaflet_GeoSearch/';

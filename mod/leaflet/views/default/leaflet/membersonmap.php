@@ -19,6 +19,8 @@ $username = $user->username . '_' . $user->guid;
 $members_map = '';
 $users = elgg_get_entities(array('types' => 'user', 'limit' => 0));
 set_time_limit(300); // First processing can be quite long, as we need to geocode each user account...
+// @TODO use batch + cron to avoid waiting time
+// @TODO also add some caching for huge results
 foreach ($users as $ent) {
 	if (empty($ent->location)) continue; // Quick and dirty bypass - @TODO need to use some cron task instead for first geocoding pass
 	/* Retro-convert tags to text content, if location was previously set as tags...
