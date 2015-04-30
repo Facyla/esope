@@ -280,6 +280,10 @@ function leaflet_cron_geocode_all_members($hook, $entity_type, $returnvalue, $pa
 	
 		elgg_set_ignore_access($ia);
 		echo '<p>' . elgg_echo('leaflet:cron:done') . '</p>';
+		
+		// Now cache results for quicker map display
+		$all_members_map = elgg_view('leaflet/data/all_members_map');
+		leaflet_cache_data('all_members_map', $all_members_map);
 	}
 }
 

@@ -34,6 +34,7 @@ $content .= elgg_view('leaflet/locateonmap');
 //$content .= elgg_view('leaflet/membersonmap');
 $all_members_map = leaflet_get_cached_data('all_members_map', 86400);
 if (!$all_members_map) {
+	// @TODO display warning message with no map, and a message to reload in a few minutes ?
 	$all_members_map = elgg_view('leaflet/data/all_members_map');
 	leaflet_cache_data('all_members_map', $all_members_map);
 }
