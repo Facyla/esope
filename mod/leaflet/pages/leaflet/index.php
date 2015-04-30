@@ -23,6 +23,8 @@
 $title = elgg_echo('leaflet:index');
 $content = '';
 
+set_time_limit(300);
+
 // BUILD MAP
 $content .= '<div id="leaflet-container">';
 $content .= elgg_view('leaflet/basemap', array('map_id' => 'leaflet-main-map'));

@@ -24,15 +24,15 @@ function leaflet_batch_all_members_markers($user, $getter, $options) {
 	
 	// Geocoding, if needed or required
 	if (!$lat || !$long || $forceupdate) {
-		//error_log("Geocoding location... for $user->username"); // debug
+		// Remember latest geocoded location (to avoid geocoding it again if it didn't change
+		// ..whether it succeeded or failed it would be useless to do it again
+		$user->prev_location = $user->location;
+		
+		//error_log("Geocoding location... for $user->username : $user->location"); // debug
 		$geo_location = elgg_geocode_location($user->getLocation());
 		if ($geo_location) {
 			$lat = (float)$geo_location['lat'];
 			$long = (float)$geo_location['long'];
-			
-			// Remember latest geocoding (to avoid geocoding it again if it didn't change, wether it succeeded or failed)
-			$user->prev_location = $user->location;
-			
 			// Save successfully geocoded location
 			if ($lat && $long) { $user->setLatLong($lat, $long); }
 		}
