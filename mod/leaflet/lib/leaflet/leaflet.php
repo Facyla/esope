@@ -4,6 +4,7 @@
  * Geocode all registered members locations
  */
 function leaflet_cron_geocode_all_members($hook, $entity_type, $returnvalue, $params) {
+	error_log("LEAFLET : geocode cron batch triggered");
 	// Block cron task if we do not have the required parameters
 	$api_key = elgg_get_plugin_setting('osm_api_key', 'leaflet');
 	if (empty($api_key)) $api_key = elgg_get_plugin_setting('api_key', 'osm_maps');
