@@ -26,7 +26,6 @@
 
 <!--
 TODO
-	- add cron for heavy tasks
 
 
 HISTORY
@@ -35,6 +34,7 @@ HISTORY
 	- better libraries loading
 	- updating to Leaflet 0.7.3
 	- add batch geocoding and tweaks for lesser load
+	- add members geocoding daily cron
 
 0.1 : 20140912 - Initial testing version
 	- plugin structure : page handlers, wrappers, etc.

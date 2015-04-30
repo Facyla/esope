@@ -81,11 +81,11 @@ function leaflet_batch_geocode_member($user, $getter, $options) {
 /* Batch function - Outputs members markers
  */
 function leaflet_batch_add_member_marker($user, $getter, $options) {
-	$location = $user->getLocation();
+	$location = trim($user->getLocation());
 	$forceupdate = false;
 	
 	// Geocode only members locations that are set...
-	if (!empty(trim($location))) {
+	if (!empty($location)) {
 		/* Retro-convert tags to text content, if location was previously set as tags...
 		 * If location field was set to "tags", please change it first to "text"
 		 * Then move next line out of comment block and display the map once to convert, then move it back here

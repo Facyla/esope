@@ -19,14 +19,11 @@ function leaflet_init() {
 	elgg_register_js('leaflet', $leaflet_js, 'head');
 	*/
 	
-	// Register JS scripts and CSS
-	leaflet_register_libraries();
-	
 	// Register PHP libraries
 	elgg_register_library('leaflet', elgg_get_plugins_path() . 'leaflet/lib/leaflet/leaflet.php');
 	
-	// @TODO extend later, using another method, because it may break JS otherwise
-	//elgg_extend_view("page/elements/head", "leaflet/extend_head");
+	// Register JS scripts and CSS
+	leaflet_register_libraries();
 	
 	// Register leaflet page handler
 	elgg_register_page_handler('leaflet','leaflet_page_handler');
