@@ -17,25 +17,23 @@ $params = array(
 		'value' => $vars['entity']->num_display,
 		'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 	);
-$dropdown = elgg_view('input/dropdown', $params);
+$num_dropdown = elgg_view('input/dropdown', $params);
 
-?>
-<div>
-	<?php echo elgg_echo('feedback:numbertodisplay'); ?>:
-	<?php echo $dropdown; ?>
-</div>
-
-<?php
 $params = array(
 		'name' => 'params[status]',
 		'value' => $vars['entity']->status,
 		'options' => array('' => elgg_echo('feedback:admin:title'), 'open' => elgg_echo('feedback:status:open'), 'closed' => elgg_echo('feedback:status:closed')),
 	);
-$dropdown = elgg_view('input/dropdown', $params);
-
+$status_dropdown = elgg_view('input/dropdown', $params);
 ?>
+
 <div>
-	<?php echo elgg_echo('feedback:status'); ?>:
-	<?php echo $dropdown; ?>
+	<label><?php echo elgg_echo('feedback:numbertodisplay') . ' ' . $num_dropdown; ?></label>
 </div>
+
+<div>
+	<label><?php echo elgg_echo('feedback:status') . ' ' . $status_dropdown; ?></label>
+</div>
+
+<div class="clearfloat"></div>
 
