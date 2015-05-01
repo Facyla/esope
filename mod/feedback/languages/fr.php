@@ -58,7 +58,8 @@ $french = array(
 	'feedback:list:about' => 'A propos de',
 	'feedback:list:page' => 'URL du feedback',
 	'feedback:list:from' => 'De',
-	'feedback:list:nofeedback' => 'Aucun feedback à ce jour.',
+	'feedback:list:nofeedback' => 'Aucun feedback.',
+	'feedback:list:noopenfeedback' => 'Aucun feedback ouvert pour le moment.',
 
 	'feedback:user_1' => "Identifiant 1 : ",
 	'feedback:user_2' => "Identifiant 2 : ",

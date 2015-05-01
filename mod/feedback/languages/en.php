@@ -56,7 +56,8 @@ $english = array(
 	'feedback:list:about' => 'About',
 	'feedback:list:page' => 'Submit Page',
 	'feedback:list:from' => 'From',
-	'feedback:list:nofeedback' => 'Currently there\'s no feedback from site members available.',
+	'feedback:list:nofeedback' => "No feedback yet.",
+	'feedback:list:noopenfeedback' => "No open feedback at this time.",
 
 	'feedback:user_1' => "User Name 1: ",
 	'feedback:user_2' => "User Name 2: ",
