@@ -93,6 +93,7 @@ $french = array(
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
 	
 	// Feedback status
+	'feedback:status' => "Statut des feedbacks",
 	'feedback:list:status:open' => "Ouvert",
 	'feedback:status:open' => "Feedbacks ouverts",
 	'feedback:list:status:closed' => "Résolu",

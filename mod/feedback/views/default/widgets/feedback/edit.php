@@ -35,7 +35,7 @@ $dropdown = elgg_view('input/dropdown', $params);
 
 ?>
 <div>
-	<?php echo elgg_echo('feedback:numbertodisplay'); ?>:
+	<?php echo elgg_echo('feedback:status'); ?>:
 	<?php echo $dropdown; ?>
 </div>
 

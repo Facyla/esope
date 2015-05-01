@@ -91,6 +91,7 @@ $english = array(
 	'feedback:settings:feedbackgroup' => "Associate feedbacks to one or multiple groups ?",
 	
 	// Feedback status
+	'feedback:status' => "Feedbacks status",
 	'feedback:list:status:open' => "Open",
 	'feedback:status:open' => "Open feedbacks",
 	'feedback:list:status:closed' => "Closed",
