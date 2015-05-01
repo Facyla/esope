@@ -11,8 +11,9 @@
 
 $num = $vars['entity']->num_display;
 
-elgg_push_context('widget');
+elgg_push_context('widgets');
 
+// @TODO filter doesn't work as expected yet
 switch($vars['entity']->status) {
 	case 'open':
 		$list = elgg_list_entities_from_metadata(array('types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => array('name' => 'status', 'value' => 'open'), 'limit' => $num, 'pagination' => false));
