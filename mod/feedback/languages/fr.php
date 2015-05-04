@@ -58,7 +58,8 @@ $french = array(
 	'feedback:list:about' => 'A propos de',
 	'feedback:list:page' => 'URL du feedback',
 	'feedback:list:from' => 'De',
-	'feedback:list:nofeedback' => 'Aucun feedback à ce jour.',
+	'feedback:list:nofeedback' => 'Aucun feedback.',
+	'feedback:list:noopenfeedback' => 'Aucun feedback ouvert pour le moment.',
 
 	'feedback:user_1' => "Identifiant 1 : ",
 	'feedback:user_2' => "Identifiant 2 : ",
@@ -92,6 +93,7 @@ $french = array(
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
 	
 	// Feedback status
+	'feedback:status' => "Statut des feedbacks",
 	'feedback:list:status:open' => "Ouvert",
 	'feedback:status:open' => "Feedbacks ouverts",
 	'feedback:list:status:closed' => "Résolu",

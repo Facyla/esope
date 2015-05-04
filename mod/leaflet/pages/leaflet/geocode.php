@@ -1,7 +1,6 @@
 <?php
-global $CONFIG;
-
-echo "Le geocoding est implémenté directement via le hook du core, voir dans le start.php (ou lib/) du plugin. Décommenter cette ligne pour des tests."; exit;
+echo "Le geocoding est implémenté directement via le hook du core, voir dans le start.php (ou lib/) du plugin. Commenter la ligne suivante pour des tests ou proposer une interface de geocoding manuelle.";
+exit;
 
 $content = '';
 

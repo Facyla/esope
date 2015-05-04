@@ -1107,7 +1107,8 @@ Ne répondez pas à cet email.",
 /**
  * Action gatekeeper
  */
-	'actiongatekeeper:missingfields' => "Il manque les champs __token ou __ts dans le formulaire.",
+	//'actiongatekeeper:missingfields' => "Il manque les champs __token ou __ts dans le formulaire.",
+	'actiongatekeeper:missingfields' => "Votre session de connexion n'est plus valide, veuillez recharger la page et ré-essayer (session ou jetons de sécurité __token ou __ts manquants).",
 	'actiongatekeeper:tokeninvalid' => "Une erreur est survenue. Cela veut probablement dire que la page que vous utilisiez a expirée. Merci de réessayer",
 	'actiongatekeeper:timeerror' => "La page a expiré, rafraichissez et recommencez à nouveau.",
 	'actiongatekeeper:pluginprevents' => "Une extension a empêché ce formulaire d'être envoyé",

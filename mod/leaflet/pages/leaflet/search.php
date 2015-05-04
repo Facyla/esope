@@ -1,11 +1,12 @@
 <?php
 //require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/engine/start.php');
-global $CONFIG;
+
+$title = elgg_echo('leaflet:search');
 
 $iconSize = '32,32';
 $iconOffset = '0,-32';
 //$popupSize = '200,80';
-$iconUrl = $CONFIG->url . 'mod/leaflet/graphics/alerte-48.png';
+$iconUrl = elgg_get_site_url() . 'mod/leaflet/graphics/alerte-48.png';
 
 
 $format = get_input('format', 'openlayers');

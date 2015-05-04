@@ -20,13 +20,13 @@
 	provide map URL (with access code)
 */
 
-global $CONFIG;
+$title = elgg_echo('leaflet:world');
 
 $guid = get_input('id', false);
 
 
 // Add cache manifest without bothering dynamic pages
-$body = '<iframe src="' . $CONFIG->url . 'appcache" style="width:0; height:0; position:absolute; left:-1000px;"></iframe>';
+//$body = '<iframe src="' . elgg_get_site_url() . 'appcache" style="width:0; height:0; position:absolute; left:-1000px;"></iframe>';
 
 $body .= '<div id="map"></div>
 	

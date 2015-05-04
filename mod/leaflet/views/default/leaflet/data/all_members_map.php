@@ -1,12 +1,8 @@
 <?php
-/* Display & update other users location on map */
-/* Required data :
- - user name (or anonymous)
- - user position
- - user radius
- - user position timestamp
- - user position timeout
-*/
+/* Display all geolocated members on map
+ * Result data should be cached for quick display
+ */
+$debug = elgg_extract('debug', $vars, false);
 
 echo '<script type="text/javascript">
 // Create a custom marker for users
@@ -17,12 +13,13 @@ var onlineUsersMarkers = new L.MarkerClusterGroup();
 ';
 
 // Geocoding batch
-$debug_0 = microtime(TRUE);
+if ($debug) $debug_0 = microtime(TRUE);
 $users_options = array('types' => 'user', 'limit' => 0);
 $batch = new ElggBatch('elgg_get_entities', $users_options, 'leaflet_batch_add_member_marker', 50);
-$debug_1 = microtime(TRUE);
-error_log("LEAFLET BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
-
+if ($debug) {
+	$debug_1 = microtime(TRUE);
+	error_log("LEAFLET BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
+}
 
 echo 'map.addLayer(onlineUsersMarkers);
 map.fitBounds(bounds, {padding: [20,20]});

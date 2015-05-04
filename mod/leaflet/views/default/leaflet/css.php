@@ -23,6 +23,11 @@
 #loading i { position: absolute; bottom: 50%; }
 
 
+/* Font Awesome icons style */
+.leaflet-map-pane [class*="fa-"]:before { margin:0; padding:0; }
+
+
+
 /* ROUTING */
 /* @TODO Workaround pour modifier rendu mais pas top...
 */
