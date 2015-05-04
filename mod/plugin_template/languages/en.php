@@ -2,7 +2,6 @@
 /**
  * English strings
  */
-global $CONFIG;
 
 $en = array(
 	'plugin_template' => "Plugin template",

@@ -2,7 +2,6 @@
 /**
  * French strings
  */
-global $CONFIG;
 
 $fr = array(
 	'plugin_template' => "Canevas de plugin",
