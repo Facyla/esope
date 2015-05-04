@@ -44,19 +44,28 @@ function groups_archive_init() {
 	*/
 	
 	// Register a page handler on "groups_archive/"
-	elgg_register_page_handler('groups_archive', 'groups_archive_page_handler');
+	elgg_register_page_handler('groups-archive', 'groups_archive_page_handler');
 	
 	
 }
 
 
-// Other useful functions
-// prefixed by plugin_name_
-/*
-function groups_archive_function() {
-	
+
+// Page handler
+// Loads pages located in plugin_template/pages/plugin_template/
+function groups_archive_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'groups_archive/pages/groups_archive';
+	switch ($page[0]) {
+		case 'view':
+			set_input('guid', $page[1]);
+			include "$base/view.php";
+			break;
+		default:
+			include "$base/index.php";
+	}
+	return true;
 }
-*/
+
 
 
 

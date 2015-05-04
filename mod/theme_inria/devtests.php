@@ -11,9 +11,9 @@ if (!in_array($enabled, array('yes', 'no'))) { $enabled = 'yes'; }
 header('Content-type: text/html; charset=utf-8');
 
 echo '<form method="POST">';
-echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location', 'name' => $name))
-echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location_main', 'name' => $name))
-echo esope_make_search_field_from_profile_field(array('metadata' => 'epi_ou_service', 'name' => $name))
+echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location', 'name' => "Localisation"));
+echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location_main', 'name' => "Centre de rattachement"));
+echo esope_make_search_field_from_profile_field(array('metadata' => 'epi_ou_service', 'name' => "EPI ou service"));
 echo '<input type="submit" value="Envoyer"></form>';
 
 
