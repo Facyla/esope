@@ -4,7 +4,7 @@
  */
 
 $en = array(
-	'plugin_template' => "Plugin template",
+	'groups_archive' => "Groups archive",
 	
 );
 

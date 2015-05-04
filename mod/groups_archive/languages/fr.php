@@ -4,7 +4,7 @@
  */
 
 $fr = array(
-	'plugin_template' => "Canevas de plugin",
+	'groups_archive' => "Archivage des groupes",
 	
 );
 
