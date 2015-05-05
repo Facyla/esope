@@ -88,7 +88,7 @@ function groups_archive_entity_menu_setup($hook, $type, $return, $params) {
 			'text' => $wording,
 			'href' => $url,
 			'class' => 'elgg-button elgg-button-delete',
-			'priority' => 300,
+			'priority' => 800,
 			'is_action' => true,
 			'confirm' => elgg_echo('groups_archive:confirm'),
 		);
