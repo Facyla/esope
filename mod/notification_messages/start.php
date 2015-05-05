@@ -152,9 +152,11 @@ function notification_messages_build_subject($entity) {
 		$msg_title = trim(strip_tags($msg_title));
 		
 		if (empty($msg_container)) {
-			return elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title));
+			$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title));
+			return strip_tags($subject);
 		} else {
-			return elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title));
+			$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title));
+			return strip_tags($subject);
 		}
 	}
 	return false;
