@@ -12,7 +12,7 @@ admin_gatekeeper();
 
 access_show_hidden_entities(true);
 
-$yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
+$enable_opts = array('' => '', 'yes' => elgg_echo('groups_archive:option:enabled'), 'no' => elgg_echo('groups_archive:option:disabled') );
 
 $title = elgg_echo('groups_archive:index');
 
@@ -21,11 +21,16 @@ $sidebar = "";
 
 
 
-// Process form, or set form defaults based on group status
+// Used vars
 $guid = get_input('guid', false);
-$enabled = get_input('enabled', false);
+$enabled = get_input('enabled', '');
+$limit = get_input('limit', 10);
+$offset = get_input('offset', 0);
+$base_url = elgg_get_site_url() . 'groups-archive';
+
+
+// Process form, or set form defaults based on group status
 if ($guid && $enabled) {
-	access_show_hidden_entities(true);
 	
 	$group = get_entity($guid);
 	switch($enabled) {
@@ -46,37 +51,60 @@ if ($guid && $enabled) {
 	
 }
 
+
+
 // FORMULAIRE DE DESACTIVATION D'UN GROUPE ET DE SES CONTENUS
-$sidebar .= '<h2></h2>';
-$sidebar .= '<form method="POST" class="elgg-form">
-	<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/text', array('name' => "guid", 'value' => $guid, 'placeholder' => elgg_echo('groups_archive:groupguid'))) . '</label></p>
-	<p><label>' . elgg_echo('groups_archive:grouparchive') . ' ' . elgg_view('input/dropdown', array('name' => 'enabled', 'options_values' => $yes_no_opt, 'value' => $enabled)) . '</label></p>
-	<p>' . elgg_view('input/submit', array('value' => elgg_echo('groups_archive:proceed'), 'class' => "elgg-button elgg-button-submit")) . '</p>
-	</form>';
+$sidebar .= '<p><em>' . elgg_echo('groups_archive:information') . '</em></p>';
+
+$sidebar .= '<h3>' . elgg_echo('groups_archive:form:title') . '</h3>';
+$sidebar .= '<form method="POST" class="elgg-form" id="groups-archive-form">';
+//$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/text', array('name' => "guid", 'value' => $guid, 'placeholder' => elgg_echo('groups_archive:groupguid'))) . '</label></p>';
+$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/groups_select', array('name' => "guid", 'value' => $guid, 'style' => "max-width:90%;")) . '</label></p>';
+$sidebar .= '<p><label>' . elgg_echo('groups_archive:grouparchive') . ' ' . elgg_view('input/dropdown', array('name' => 'enabled', 'options_values' => $enable_opts, 'value' => $enabled)) . '</label></p>';
+$sidebar .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('groups_archive:proceed'), 'class' => "elgg-button elgg-button-submit")) . '</p>';
+$sidebar .= '</form>';
 
 
-$disabled_groups_param = array(
-		'types' => "group", 
-		'wheres' => array("e.enabled = 'no'"),
-	);
-$disabled_groups = elgg_get_entities($disabled_groups_param);
 
-$content .= '<div>';
-$content .= '<ul>';
-foreach($disabled_groups as $group) {
-	$content .= '<li class="elgg-list group-disabled"><h3>' . $group->name . ' (GUID ' . $group->guid . ')</h3>Contenus du groups (archivés)&nbsp;:';
-	$objects = $group->getObjects('', 0);
-	if ($objects) {
-		$content .= '<ul class="elgg-output">';
-		foreach ($objects as $ent) {
-			$content .= "<li>" . $ent->guid . ' (' . $ent->getSubtype() . ')&nbsp;: ' . $ent->title . $ent->name . '</li>';
-		}
-		$content .= '</ul>';
+// Main content
+$disabled_groups_count = groups_archive_get_disabled_groups(array('count' => true));
+$disabled_groups = groups_archive_get_disabled_groups(array('limit' => $limit, 'offset' => $offset));
+
+$content .= '<p>' . elgg_echo('groups_archive:index:details') . '</p>';
+if ($disabled_groups_count > 0) {
+	$title .= " ($disabled_groups_count)";
+	if ($disabled_groups_count > $limit) {
+		$nav = elgg_view('navigation/pagination', array(
+			'baseurl' => $base_url,
+			'offset' => $offset,
+			'count' => $disabled_groups_count,
+			'limit' => $limit,
+			'offset_key' => 'offset',
+		));
 	}
-	$content .= '</li>';
+	
+	// Group listing
+	$content .= '<ul>';
+	foreach($disabled_groups as $group) {
+		$content .= '<li class="elgg-output elgg-list group-disabled">';
+		$content .= '<a href="' . $base_url . '?guid=' . $group->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('groups_archive:unarchive') . '</a>';
+		$content .= '<a href="' . $base_url . '/view/' . $group->guid . '"><h3>' . $group->name . ' (GUID ' . $group->guid . ')</a></h3>';
+		// Group content listing (preview)
+		$objects_count = groups_archive_get_groups_content($group, array('count' => true));
+		$objects = groups_archive_get_groups_content($group); // Get only 10, that's already much if we have many groups...
+		if ($objects) {
+			$content .= elgg_echo('groups_archive:content:count', array($objects_count));
+			$content .= '<ul class="">';
+			foreach ($objects as $ent) {
+				$content .= '<li>' . $ent->title . $ent->name . ' (' . $ent->getSubtype() . ', ' . $ent->guid . ')&nbsp;: <span class="elgg-subtext">' . elgg_get_excerpt($ent->description) . '</span></li>';
+			}
+			$content .= '</ul>';
+		}
+		$content .= '</li>';
+	}
+	$content .= '</ul>';
+	$content .= $nav;
 }
-$content .= '</ul>';
-$content .= '</div>';
 
 
 // Render the page
