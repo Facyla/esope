@@ -30,25 +30,34 @@ $base_url = elgg_get_site_url() . 'groups-archive';
 
 
 // Process form, or set form defaults based on group status
-if ($guid && $enabled) {
-	
+if ($guid) {
 	$group = get_entity($guid);
-	switch($enabled) {
-		// Disable group
-		case 'no':
-			$group->disable();
-			break;
+	if (elgg_instanceof($group, 'group')) {
 		
-		// Enable group
-		case 'yes':
-			$group->enable();
-			break;
-		
-		default:
+		if (in_array($enabled, array('yes', 'no'))) {
+			// Disable group
+			if ($enabled == 'no') {
+				if ($group->disable()) {
+					system_message(elgg_echo(''));
+				} else {
+					register_error(elgg_echo(''));
+				}
+			} else if ($enabled == 'yes') {
+				// Enable group
+				if ($group->enable()) {
+					system_message(elgg_echo('groups_archive:enable:success'));
+				} else {
+					register_error(elgg_echo('groups_archive:enable:error'));
+				}
+			}
+			// Clear form fields
+			forward($base_url . '?guid=' . $guid);
+		} else {
 			// Set default form value
 			//if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
+		}
+		
 	}
-	
 }
 
 

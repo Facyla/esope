@@ -77,11 +77,8 @@ if (elgg_instanceof($entity, 'object')) {
 	if ($objects) {
 		if ($objects_count > $limit) {
 			$nav = elgg_view('navigation/pagination', array(
-				'baseurl' => $base_nav_url,
-				'offset' => $offset,
-				'count' => $objects_count,
-				'limit' => $limit,
-				'offset_key' => 'offset',
+				'baseurl' => $base_nav_url, 'count' => $objects_count,
+				'limit' => $limit, 'offset' => $offset, 'offset_key' => 'offset',
 			));
 		}
 		
