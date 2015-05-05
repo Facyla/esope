@@ -19,8 +19,8 @@ $fr = array(
 	'groups_archive:form:title' => "Archiver un groupe",
 	'groups_archive:archive' => "Archiver ce groupe",
 	'groups_archive:unarchive' => "Désarchiver ce groupe",
-	'groups_archive:option:enabled' => "Désarchiver (actif)",
-	'groups_archive:option:disabled' => "Archiver (désactivé)",
+	'groups_archive:option:enabled' => "Désarchiver le groupe",
+	'groups_archive:option:disabled' => "Archiver le groupe",
 	'groups_archive:proceed' => "Procéder à l'archivage",
 	
 	

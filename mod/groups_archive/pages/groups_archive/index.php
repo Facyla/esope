@@ -44,9 +44,9 @@ if ($guid && $enabled) {
 			$group->enable();
 			break;
 		
-		// Set default form value
 		default:
-			if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
+			// Set default form value
+			//if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
 	}
 	
 }
