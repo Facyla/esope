@@ -38,9 +38,9 @@ if ($guid) {
 			// Disable group
 			if ($enabled == 'no') {
 				if ($group->disable()) {
-					system_message(elgg_echo(''));
+					system_message(elgg_echo('groups_archive:disable:success'));
 				} else {
-					register_error(elgg_echo(''));
+					register_error(elgg_echo('groups_archive:disable:success'));
 				}
 			} else if ($enabled == 'yes') {
 				// Enable group
@@ -108,6 +108,8 @@ if ($disabled_groups_count > 0) {
 				$content .= '<li>' . $ent->title . $ent->name . ' (' . $ent->getSubtype() . ', ' . $ent->guid . ')&nbsp;: <span class="elgg-subtext">' . elgg_get_excerpt($ent->description) . '</span></li>';
 			}
 			$content .= '</ul>';
+		} else {
+			$content .= '<p>' . elgg_echo('groups_archive:nocontent') . '</p>';
 		}
 		$content .= '</li>';
 	}
