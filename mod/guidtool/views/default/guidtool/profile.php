@@ -18,7 +18,7 @@ if (elgg_instanceof($entity)) {
 		//echo '<p>' . elgg_echo('guidtool:entity:enabled') . '</p>';
 		// @TODO disable it ?
 	} else {
-		// Entity is not enabled (hidden)
+		// Entity is not enabled (ie. it is hidden)
 		echo '<p>' . elgg_echo('guidtool:entity:disabled') . '</p>';
 		// @TODO enable it ?
 	}

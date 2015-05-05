@@ -56,7 +56,7 @@ if ($guid) {
 		} else {
 			// Set default form value
 			//if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
-			register_error(elgg_echo('groups_archive:error:noaction'));
+			//register_error(elgg_echo('groups_archive:error:noaction'));
 		}
 		
 	}
