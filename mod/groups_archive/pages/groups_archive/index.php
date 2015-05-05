@@ -11,6 +11,7 @@
 admin_gatekeeper();
 
 access_show_hidden_entities(true);
+$ia = elgg_set_ignore_access(true);
 
 $enable_opts = array('' => '', 'yes' => elgg_echo('groups_archive:option:enabled'), 'no' => elgg_echo('groups_archive:option:disabled') );
 
@@ -38,16 +39,16 @@ if ($guid) {
 			// Disable group
 			if ($enabled == 'no') {
 				if ($group->disable()) {
-					system_message(elgg_echo('groups_archive:disable:success'));
+					system_message(elgg_echo('groups_archive:disable:success'), array($group->name));
 				} else {
-					register_error(elgg_echo('groups_archive:disable:success'));
+					register_error(elgg_echo('groups_archive:disable:success'), array($group->name));
 				}
 			} else if ($enabled == 'yes') {
 				// Enable group
 				if ($group->enable()) {
-					system_message(elgg_echo('groups_archive:enable:success'));
+					system_message(elgg_echo('groups_archive:enable:success'), array($group->name));
 				} else {
-					register_error(elgg_echo('groups_archive:enable:error'));
+					register_error(elgg_echo('groups_archive:enable:error'), array($group->name));
 				}
 			}
 			// Clear form fields
@@ -55,6 +56,7 @@ if ($guid) {
 		} else {
 			// Set default form value
 			//if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
+			register_error(elgg_echo('groups_archive:error:noaction'));
 		}
 		
 	}
@@ -118,8 +120,11 @@ if ($disabled_groups_count > 0) {
 }
 
 
-// Render the page
 $body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+
+elgg_set_ignore_access($ia);
+
+// Render the page
 echo elgg_view_page($title, $body);
 
 

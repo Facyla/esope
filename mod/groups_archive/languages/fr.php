@@ -21,7 +21,7 @@ $fr = array(
 	'groups_archive:unarchive' => "Désarchiver ce groupe",
 	'groups_archive:option:enabled' => "Désarchiver le groupe",
 	'groups_archive:option:disabled' => "Archiver le groupe",
-	'groups_archive:proceed' => "Procéder à l'archivage/désarchivage",
+	'groups_archive:proceed' => "Procéder",
 	
 	
 	// Disabled content view page
@@ -37,10 +37,11 @@ $fr = array(
 	'groups_archive:error:invalidentity' => "Groupe ou publication invalide",
 	'groups_archive:notice:previewonly' => "Attention&nbsp;: cette page permet seulement de prévisualiser les groupes et publicaitons désactivés. Divers éléments de contenu peuvent ne pas apparaître correctement, et les liens de navigation internes ne seront probablement pas fonctionnels, selon les contenus affichés.",
 	'groups_archive:confirm' => "Attention, ceci rendra le groupe et tous ses contenus inaccessibles pour tous les membres (et administrateurs) !",
+	'groups_archive:error:noaction' => "Aucune action demandée",
 	'groups_archive:enable:success' => "Le groupe \"%s\" a bien été désarchivé.",
 	'groups_archive:disable:success' => "Le groupe \"%s\" a bien été archivé. Le groupe et ses contenus ne sont plus visibles des membres.",
 	'groups_archive:enable:error' => "Une erreur s'est produite lors du désarchivage du groupe \"%s\".",
-	'groups_archive:disable:error' => "Une erreur s'est produite lors du désarchivage du groupe \"%s\".",
+	'groups_archive:disable:error' => "Une erreur s'est produite lors de l'archivage du groupe \"%s\".",
 	
 	
 );
