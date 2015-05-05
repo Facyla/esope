@@ -67,5 +67,36 @@ function groups_archive_page_handler($page) {
 }
 
 
+// Return all disabled groups
+function groups_archive_get_disabled_groups($params = array()) {
+	access_show_hidden_entities(true);
+	$ia = elgg_set_ignore_access(true);
+	$groups_params = array('types' => "group", 'wheres' => array("e.enabled = 'no'"));
+	// Merge custom params (limit, etc.)
+	if (is_array($params)) $groups_params = array_merge($params, $groups_params);
+	
+	$groups = elgg_get_entities($groups_params);
+	
+	elgg_set_ignore_access($ia);
+	return $groups;
+}
+
+
+// Return disabled group content
+function groups_archive_get_groups_content($group, $params = array()) {
+	access_show_hidden_entities(true);
+	$ia = elgg_set_ignore_access(true);
+	
+	if (!elgg_instanceof($group, 'group')) return false;
+	
+	$objects_params = array('types' => "object", 'container_guid' => $group->guid);
+	// Merge custom params (limit, count, etc.)
+	if (is_array($params)) $objects_params = array_merge($params, $objects_params);
+	
+	$objects = elgg_get_entities($objects_params);
+	
+	elgg_set_ignore_access($ia);
+	return $objects;
+}
 
 
