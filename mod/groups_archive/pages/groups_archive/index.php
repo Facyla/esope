@@ -57,7 +57,7 @@ if ($guid && $enabled) {
 $sidebar .= '<p><em>' . elgg_echo('groups_archive:information') . '</em></p>';
 
 $sidebar .= '<h3>' . elgg_echo('groups_archive:form:title') . '</h3>';
-$sidebar .= '<form method="POST" class="elgg-form">';
+$sidebar .= '<form method="POST" class="elgg-form" id="groups-archive-form">';
 //$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/text', array('name' => "guid", 'value' => $guid, 'placeholder' => elgg_echo('groups_archive:groupguid'))) . '</label></p>';
 $sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/groups_select', array('name' => "guid", 'value' => $guid, 'style' => "max-width:90%;")) . '</label></p>';
 $sidebar .= '<p><label>' . elgg_echo('groups_archive:grouparchive') . ' ' . elgg_view('input/dropdown', array('name' => 'enabled', 'options_values' => $enable_opts, 'value' => $enabled)) . '</label></p>';

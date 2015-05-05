@@ -35,6 +35,7 @@ $fr = array(
 	// Errors and messages
 	'groups_archive:error:invalidentity' => "Groupe ou publication invalide",
 	'groups_archive:notice:previewonly' => "Attention&nbsp;: cette page permet seulement de prévisualiser les groupes et publicaitons désactivés. Divers éléments de contenu peuvent ne pas apparaître correctement, et les liens de navigation internes ne seront probablement pas fonctionnels, selon les contenus affichés.",
+	'groups_archive:confirm' => "Attention, ceci rendra le groupe et tous ses contenus inaccessibles pour tous les membres et administrateurs !",
 	
 	
 );

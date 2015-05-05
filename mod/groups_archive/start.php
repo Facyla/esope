@@ -46,6 +46,8 @@ function groups_archive_init() {
 	// Register a page handler on "groups_archive/"
 	elgg_register_page_handler('groups-archive', 'groups_archive_page_handler');
 	
+	// group entity menu
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'groups_archive_entity_menu_setup');
 	
 }
 
@@ -64,6 +66,35 @@ function groups_archive_page_handler($page) {
 			include "$base/index.php";
 	}
 	return true;
+}
+
+
+/**
+ * Add links/info to entity menu particular to group entities
+ */
+function groups_archive_entity_menu_setup($hook, $type, $return, $params) {
+	if (elgg_in_context('widgets')) { return $return; }
+	
+	$entity = $params['entity'];
+	$handler = elgg_extract('handler', $params, false);
+	if ($handler != 'groups') { return $return; }
+	
+	// feature link
+	if (elgg_is_admin_logged_in()) {
+		$url = elgg_get_site_url() . "groups-archive?guid={$entity->guid}&enabled=no";
+		$wording = elgg_echo('groups_archive:archive');
+		$options = array(
+			'name' => 'groups-archive',
+			'text' => $wording,
+			'href' => $url,
+			'class' => 'elgg-button elgg-button-delete',
+			'priority' => 300,
+			'is_action' => true,
+			'confirm' => elgg_echo('groups_archive:confirm'),
+		);
+		$return[] = ElggMenuItem::factory($options);
+	}
+	return $return;
 }
 
 
