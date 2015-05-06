@@ -32,8 +32,9 @@ if (elgg_is_active_plugin('groups')) {
 $guid = get_input('guid', '');
 $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
-$base_view_url = elgg_get_site_url() . 'groups-archive/view/';
-$base_url = $base_view_url . $guid;
+$base_url = elgg_get_site_url() . 'groups-archive';
+$base_view_url = $base_url . '/view/';
+$base_nav_url = $base_view_url . $guid;
 
 
 // Process form, or set form defaults based on group status
@@ -60,7 +61,7 @@ if (elgg_instanceof($entity, 'object')) {
 } else if (elgg_instanceof($entity, 'group')) {
 	$title = elgg_echo('groups_archive:view:group');
 	
-	$content .= '<a href="' . elgg_get_site_url() . '?guid=' . $entity->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('groups_archive:unarchive') . '</a>';
+	$content .= '<a href="' . $base_url . '?guid=' . $entity->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('groups_archive:unarchive') . '</a>';
 	$content .= '<h3>' . $entity->name . ' (GUID ' . $entity->guid . ')</h3>';
 	
 	// Full entity view
@@ -76,11 +77,8 @@ if (elgg_instanceof($entity, 'object')) {
 	if ($objects) {
 		if ($objects_count > $limit) {
 			$nav = elgg_view('navigation/pagination', array(
-				'baseurl' => $base_url,
-				'offset' => $offset,
-				'count' => $objects_count,
-				'limit' => $limit,
-				'offset_key' => 'offset',
+				'baseurl' => $base_nav_url, 'count' => $objects_count,
+				'limit' => $limit, 'offset' => $offset, 'offset_key' => 'offset',
 			));
 		}
 		
