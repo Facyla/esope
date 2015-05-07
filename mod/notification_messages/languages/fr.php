@@ -15,7 +15,7 @@ $french = array(
 	'notification_messages:update' => "a mis à jour",
 	
 	// Settings
-	'notification_messages:settings:objects' => "Nouvelles publications (objets)",
+	'notification_messages:settings:objects' => "Sujet des nouvelles publications (objets)",
 	'notification_messages:settings:details' => "En activant les messages de notification détaillés pour chacun des types de contenus suivants, vous pouvez remplacer le titre du mail par défaut par un titre explicite composé sous la forme : [Type de publication Nom du groupe ou du membre] Titre du contenu<br />Cette forme facilite également l'identification de conversations par les messageries.",
 	'notification_messages:object:subtype' => "Type d'objet",
 	'notification_messages:setting' => "Réglage",
@@ -25,7 +25,7 @@ $french = array(
 	'notification_messages:message:default' => "Message par défaut",
 	'notification_messages:message:allow' => "Message amélioré",
 	'notification_messages:settings:group_topic_post' => "Activer pour les réponses dans les forums",
-	'notification_messages:settings:comments' => "Commentaires",
+	'notification_messages:settings:comments' => "Sujet des commentaires",
 	'notification_messages:settings:messages' => "Messages",
 	'notification_messages:settings:comments:details' => "Si vous avez activé ce plugin, vous souhaitez probablement activer ce réglage, de manière à utiliser le même titre pour les commentaires que pour les nouvelles publications.",
 	'notification_messages:settings:generic_comment' => "Activer pour les commentaires génériques",

@@ -15,7 +15,7 @@ $english = array(
 	'notification_messages:update' => "has updated",
 	
 	// Settings
-	'notification_messages:settings:objects' => "New content (registered objects)",
+	'notification_messages:settings:objects' => "Subject for new content (registered objects)",
 	'notification_messages:settings:details' => "By activating detailed notification messages for each of these content types, you can replace the default mail title by a more meaningful subject, composed in this form: [Publication type Group or member name] Content title<br />This facilitates the identification of conversations by email clients.",
 	'notification_messages:object:subtype' => "Object type",
 	'notification_messages:setting' => "Setting",
@@ -25,7 +25,7 @@ $english = array(
 	'notification_messages:message:default' => "Default message",
 	'notification_messages:message:allow' => "Improved message",
 	'notification_messages:settings:group_topic_post' => "Enable for group topic replies",
-	'notification_messages:settings:comments' => "Comments",
+	'notification_messages:settings:comments' => "Subject for comments",
 	'notification_messages:settings:messages' => "Messages",
 	'notification_messages:settings:comments:details' => "If you have enabled this plugin, you probably wish to enable this setting, so all comments will use the same subject as the new content.",
 	'notification_messages:settings:generic_comment' => "Enable for all generic comments",
