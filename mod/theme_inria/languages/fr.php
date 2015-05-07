@@ -377,6 +377,14 @@ Voici l'adresse du nouveau compte créé : %s
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
 	
+	
+	
+	
+	// Translation override
+	'members:searchtag' => "Chercher des membres par mot-clé",
+	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
+	'search_types:tags' => "Mots-clés",
+	
 );
 
 add_translation("fr",$french);
