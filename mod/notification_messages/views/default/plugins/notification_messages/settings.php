@@ -11,8 +11,8 @@ $notify_subject_opt = array(
 );
 
 $notify_message_opt = array(
-	'default' => elgg_echo('notification_messages:subject:default'), 
-	'allow' => elgg_echo('notification_messages:subject:allow'), 
+	'default' => elgg_echo('notification_messages:message:default'), 
+	'allow' => elgg_echo('notification_messages:message:allow'), 
 	//'deny' => elgg_echo('notification_messages:subject:deny'), 
 );
 
