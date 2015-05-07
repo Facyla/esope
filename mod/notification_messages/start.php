@@ -20,10 +20,12 @@ function notification_messages_init() {
 		elgg_register_action("messages/send", "$action_path/send.php");
 	}
 	
+	
+	/* NOTIFICATION SUBJECTS HOOKS */
+	
 	// REGULAR OBJECTS
 	// Handle new (registered) objects notification subjects
 	elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
-	
 	
 	// FORUM REPLIES
 	$groupforumtopic = elgg_get_plugin_setting('object_groupforumtopic', 'notification_messages');
@@ -38,7 +40,16 @@ function notification_messages_init() {
 	}
 	
 	
-	// GENERIC COMMENTS
+	/* NOTIFICATION MESSAGE HOOKS */
+	// @TODO add setting
+	$blog_message = elgg_get_plugin_setting('object_blog_message', 'notification_messages');
+	if ($blog_message == 'allow') {
+		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'blog_notify_message');
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'notification_messages_notify_message');
+	}
+	
+	
+	// GENERIC COMMENTS BEHAVIOUR
 	// Some advanced_notifications features are limiting flexibility, so unregister them first
 	if (elgg_is_active_plugin('advanced_notifications')) {
 		elgg_unregister_plugin_hook_handler("action", "comments/add", "advanced_notifications_comment_action_hook");
@@ -46,6 +57,8 @@ function notification_messages_init() {
 	// Handle generic comments notifications actions and notification
 	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook", 1000);
 	
+	
+	/* ENABLE ATTACHMENTS */
 	// register a hook to add a new hook that allows adding attachments and other params
 	// Note : enabled by default because it is required by notifications messages
 	if (elgg_get_plugin_setting("object_notifications_hook", "notification_messages") != "no"){
@@ -440,5 +453,36 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	$messagesendflag = 0;
 	return $success;
 }
+
+
+/**
+ * Set the notification message body : add content (with some tags filtering)
+ * 
+ * @param string $hook    Hook name
+ * @param string $type    Hook type
+ * @param string $message The current message body
+ * @param array  $params  Parameters about the blog posted
+ * @return string
+ */
+function notification_messages_notify_message($hook, $type, $message, $params) {
+	$entity = $params['entity'];
+	$to_entity = $params['to_entity'];
+	$method = $params['method'];
+	if (elgg_instanceof($entity, 'object', 'blog')) {
+		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code>';
+		$descr = '<p><strong>' . $entity->excerpt . '</strong></p>';
+		$descr .= strip_tags($entity->description, $allowed_tags);
+		$title = $entity->title;
+		$owner = $entity->getOwnerEntity();
+		return elgg_echo('blog:notification', array(
+			$owner->name,
+			$title,
+			$descr,
+			$entity->getURL()
+		));
+	}
+	return null;
+}
+
 
 

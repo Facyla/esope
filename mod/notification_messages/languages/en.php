@@ -22,6 +22,8 @@ $english = array(
 	'notification_messages:subject:default' => "Default subject",
 	'notification_messages:subject:allow' => "Improved subject",
 	'notification_messages:subject:deny' => "Blocked (no notification at all)",
+	'notification_messages:message:default' => "Default message",
+	'notification_messages:message:allow' => "Improved message",
 	'notification_messages:settings:group_topic_post' => "Enable for group topic replies",
 	'notification_messages:settings:comments' => "Comments",
 	'notification_messages:settings:messages' => "Messages",
@@ -31,6 +33,10 @@ $english = array(
 	'notification_messages:settings:notify_user:details' => "By default, the comment author is not notified. You can change thios behaviour, which can be particularly useful when using email reply.",
 	'notification_messages:settings:notify_user:comment_tracker' => "When comment_tracker plugin is enabled, this setting is not available and should be set directly in comment_tracker plugin settings.",
 	'notification_messages:settings:expert' => "Expert",
+	
+	// Notification message content
+	'notification_messages:settings:objects:message' => "Notification messages content",
+	'notification_messages:message:default:blog' => "By default, blog notification messages contains only the extract.",
 	
 	// Notification subject
 	'notification_messages:objects:subject' => "[%s | %s] %s",

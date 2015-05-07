@@ -22,6 +22,8 @@ $french = array(
 	'notification_messages:subject:default' => "Sujet par défaut",
 	'notification_messages:subject:allow' => "Sujet amélioré",
 	'notification_messages:subject:deny' => "Bloqué (pas de notification)",
+	'notification_messages:message:default' => "Message par défaut",
+	'notification_messages:message:allow' => "Message amélioré",
 	'notification_messages:settings:group_topic_post' => "Activer pour les réponses dans les forums",
 	'notification_messages:settings:comments' => "Commentaires",
 	'notification_messages:settings:messages' => "Messages",
@@ -31,6 +33,10 @@ $french = array(
 	'notification_messages:settings:notify_user:details' => "Par défaut l'auteur d'un commentaire n'est pas notifié. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
 	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la configuration de comment_tracker.",
 	'notification_messages:settings:expert' => "Expert",
+	
+	// Notification message content
+	'notification_messages:settings:objects:message' => "Contenu des messages de notification",
+	'notification_messages:message:default:blog' => "Par défaut les messages de notification des blogs ne contiennent que l'extrait.",
 	
 	// Notification subject
 	'notification_messages:objects:subject' => "[%s | %s] %s",
