@@ -384,6 +384,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'members:searchtag' => "Chercher des membres par mot-clé",
 	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
 	'search_types:tags' => "Mots-clés",
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
 	
 );
 
