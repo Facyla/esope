@@ -8,7 +8,7 @@ $inria_location = get_input('inria_location', false);
 $inria_location_main = get_input('inria_location_main', false);
 $epi_ou_service = get_input('epi_ou_service', false);
 
-$valid_ldap = '';
+$title = "Liste des membres selon divers critères issus du LDAP";
 
 
 // esope_get_meta_values($meta_name)
@@ -42,7 +42,7 @@ if ($inria_location || $inria_location_main || $epi_ou_service) {
 	$search_params['count'] = false;
 	$users = elgg_get_entities_from_metadata($search_params);
 
-	$content .= "<h2>{$count_users} comptes Iris trouvés</h2>";
+	$content .= "<h2>{$count_users} comptes Iris trouvés pour : $inria_location + $inria_location_main + $epi_ou_service</h2>";
 	$content .= "<p><em>100 comptes affichés au maximum</em></p>";
 
 	if ($users) {
