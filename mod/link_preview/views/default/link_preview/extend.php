@@ -30,10 +30,10 @@ $(".livepreview").livePreview({
 <script type="text/javascript">
 $(document).ready(function() {
 	var livePreviewConfig = {
-		trigger: 'click',
+		trigger: 'hover',
 		// Note : scale = viewWidth/targetWidth = viewHeight/targetHeight
 		// So adjust view and target width and height depending on wanted result
-		scale: '0.2', 
+		scale: '0.3', 
 		viewWidth: 300, 
 		viewHeight: 240, 
 		targetWidth: 1000, 
