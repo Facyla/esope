@@ -12,11 +12,14 @@ $valid_ldap = '';
 
 
 // esope_get_meta_values($meta_name)
+$inria_location_opt = array_merge(array(''), esope_get_meta_values('inria_location'));
+$inria_location_main_opt = array_merge(array(''), esope_get_meta_values('inria_location_main'));
+$epi_ou_service_opt = array_merge(array(''), esope_get_meta_values('epi_ou_service'));
 
 $content .= '<form method="POST">';
-$content .= '<p><label>Localisation géographique ' . elgg_view('input/dropdown', array('name' => "inria_location", 'value' => $inria_location, 'options_values' => esope_get_meta_values('inria_location'))) . '</label></p>';
-$content .= '<p><label>Entité de rattachement ' . elgg_view('input/dropdown', array('name' => "inria_location_main", 'value' => $inria_location_main, 'options_values' => esope_get_meta_values('inria_locatio_main'))) . '</label></p>';
-$content .= '<p><label>EPI ou service ' . elgg_view('input/dropdown', array('name' => "epi_ou_service", 'value' => $epi_ou_service, 'options_values' => esope_get_meta_values('epi_ou_service'))) . '</label></p>';
+$content .= '<p><label>Localisation géographique ' . elgg_view('input/dropdown', array('name' => "inria_location", 'value' => $inria_location, 'options_values' => $inria_location_opt)) . '</label></p>';
+$content .= '<p><label>Entité de rattachement ' . elgg_view('input/dropdown', array('name' => "inria_location_main", 'value' => $inria_location_main, 'options_values' => $inria_location_main_opt)) . '</label></p>';
+$content .= '<p><label>EPI ou service ' . elgg_view('input/dropdown', array('name' => "epi_ou_service", 'value' => $epi_ou_service, 'options_values' =>$epi_ou_service_opt)) . '</label></p>';
 /*
 $content .= '<input type="text" name="inria_location" placeholder="Localisation géographique" value="' . $inria_location . '">';
 $content .= '<input type="text" name="inria_location_main" placeholder="" value="' . $inria_location_main . '">';
