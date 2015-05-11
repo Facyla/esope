@@ -183,12 +183,13 @@ $french = array(
 	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
 	'theme_inria:userprofile:status' => "Statut",
 	//'inria_location' => "Entité Inria (CRI ou siège)",
-	'inria_location' => "Localisation",
-	'inria_location_main' => "Centre de rattachement",
+	'inria_location' => "Localisation géographique",
+	'inria_location_main' => "Entité de rattachement (siège ou CRI)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'interests' => "Mots clés",
 	'skills' => "Compétences",
-	'profile:inria_location' => "Localisation",
+	'profile:inria_location' => "Localisation géographique",
+	'profile:inria_location_main' => "Entité de rattachement",
 	'profile:epi_ou_service' => "EPI ou service",
 	'profile:inria_phone' => "Téléphone",
 	'profile:inria_room' => "Bureau",
@@ -375,6 +376,15 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
+	
+	
+	
+	
+	// Translation override
+	'members:searchtag' => "Chercher des membres par mot-clé",
+	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
+	'search_types:tags' => "Mots-clés",
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
 	
 );
 

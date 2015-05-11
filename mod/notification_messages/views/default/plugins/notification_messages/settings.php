@@ -10,6 +10,12 @@ $notify_subject_opt = array(
 	//'deny' => elgg_echo('notification_messages:subject:deny'), 
 );
 
+$notify_message_opt = array(
+	'default' => elgg_echo('notification_messages:message:default'), 
+	'allow' => elgg_echo('notification_messages:message:allow'), 
+	//'deny' => elgg_echo('notification_messages:subject:deny'), 
+);
+
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:objects') . '</legend>';
 
@@ -39,6 +45,7 @@ echo "<fieldset>";
 echo "</fieldset>";
 
 
+// Comment notification subject
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:comments') . '</legend>';
 	echo '<p>' . elgg_echo('notification_messages:settings:comments:details') . '</p>';
@@ -69,6 +76,23 @@ echo "<fieldset>";
 echo "</fieldset>";
 
 
+// Notification message content override
+echo "<fieldset>";
+	echo '<legend>' . elgg_echo('notification_messages:settings:objects:message') . '</legend>';
+	
+	$param = "object_blog_message";
+	$options = array(
+		'name' => "params[{$param}]",
+		'value' => $vars['entity']->$param ? $vars['entity']->$param : 'default',
+		'options_values' => $notify_message_opt,
+	);
+	
+	echo '<p><label>' . 'blog' . '&nbsp;: ' . elgg_view('input/dropdown', $options) . '</label> - ' . elgg_echo('notification_messages:message:default:blog') . '</p>';
+	
+echo "</fieldset>";
+
+
+// Direct messages in HTML
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:messages') . '</legend>';
 
@@ -79,6 +103,7 @@ echo "<fieldset>";
 echo "</fieldset>";
 
 
+// Advanced settings - for file attachments
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:expert') . '</legend>';
 

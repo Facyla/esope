@@ -127,6 +127,7 @@ $fr = array(
 	*/
 	
 	'cmspages:categories' => "Rubrique(s)",
+	'cmspages:slurl' => "Permalien",
 	'cmspages:shorturl' => "<i class=\"fa fa-external-link\"></i>URL courte", // link, compress, retweet, quote-left, external-link
 	'cmspages:featured_image' => "Image en Une",
 	'cmspages:featured_image:view' => "Afficher l'image en Une",

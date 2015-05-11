@@ -20,8 +20,8 @@ $french = array(
 	'slider:settings:css:help' => "Feuille de style en surcharge pour le diaporama : il s'agit cette fois des CSS complètes à ajouter en surcharge après les styles par défaut.<br />Laisser vide pour récupérer les valeurs par défaut.",
 	'slider:settings:slider_access' => "Permettre aux membres d'éditer des diaporamas",
 	'slider:settings:slider_access:details' => "Par défaut, l'accès à l'édition des diaporamas est réservée aux administrateurs. Vous pouvez autoriser les membres du site à y accéder en choisissant \"Oui\"",
-	'slider:editor:yes' => "Oui (filtre HTML)",
-	'slider:editor:no' => "Non (activable sur demande)",
+	'slider:option:yes' => "Oui",
+	'slider:option:no' => "Non",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",
@@ -55,6 +55,8 @@ $french = array(
 	'slider:edit:view' => "Afficher le diaporama",
 	'slider:edit:editor' => "Toujours activer l'éditeur visuel pour l'édition",
 	'slider:edit:editor:details' => "L'éditeur visuel facilite l'édition, mais il filtre également le code HTML utilisé. Cette option permet de choisir si l'éditeur doit être activé par défaut lorsque vous éditez ce diaporama. Il est conseillé de le désactiver si vous utilisez directement du code HTML (vous pourrez toujours l'activer manuellement sur une diapositive en cas de besoin).",
+	'slider:editor:yes' => "Oui (filtre HTML)",
+	'slider:editor:no' => "Non (activable sur demande)",
 	
 	'slider:shortcode:slider' => "Diaporama (déjà configuré)",
 	'slider:embed:instructions' => "Comment intégrer ce diaporama ?",
