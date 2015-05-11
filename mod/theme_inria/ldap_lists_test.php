@@ -36,6 +36,9 @@ $search_params = array('types' => "user", 'limit' => $max_results, 'count' => tr
 if ($inria_location) $search_params['metadata_name_value_pairs'][] = array('name' => 'inria_location', 'value' => $inria_location);
 if ($inria_location_main) $search_params['metadata_name_value_pairs'][] = array('name' => 'inria_location_main', 'value' => $inria_location_main);
 if ($epi_ou_service) $search_params['metadata_name_value_pairs'][] = array('name' => 'epi_ou_service', 'value' => $epi_ou_service);
+// @TODO : certains champs ont plusieurs valeurs : 
+//  => modifier à la source dans l'import depuis LDAP, 
+//  => ou recherche avec comparateur LIKE %...% ?
 
 if ($inria_location || $inria_location_main || $epi_ou_service) {
 	$count_users = elgg_get_entities_from_metadata($search_params);
