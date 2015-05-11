@@ -4,7 +4,7 @@
  *
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Florian DANIEL aka Facyla
- * @copyright FlorianDANIEL aka Facyla 2015
+ * @copyright Florian DANIEL aka Facyla 2015
  * @link http://id.facyla.fr/
  */
 
@@ -16,8 +16,6 @@ elgg_register_event_handler('init', 'system', 'plugin_template_init');
  * Init plugin_template plugin.
  */
 function plugin_template_init() {
-	global $CONFIG; // All site useful vars
-	
 	
 	elgg_extend_view('css', 'plugin_template/css');
 	
