@@ -31,8 +31,8 @@ $content .= '<input type="text" name="epi_ou_service" placeholder="" value="' . 
 $content .= '<input type="submit" value="Lister les comptes">';
 $content .= '</form>';
 
-
-$search_params = array('types' => "user", 'limit' => 100, 'count' => true, 'metadata_name_value_pairs' => array(array('name' => "membertype", 'value' => "inria")));
+$max_results = 0;
+$search_params = array('types' => "user", 'limit' => $max_results, 'count' => true, 'metadata_name_value_pairs' => array(array('name' => "membertype", 'value' => "inria")));
 if ($inria_location) $search_params['metadata_name_value_pairs'][] = array('name' => 'inria_location', 'value' => $inria_location);
 if ($inria_location_main) $search_params['metadata_name_value_pairs'][] = array('name' => 'inria_location_main', 'value' => $inria_location_main);
 if ($epi_ou_service) $search_params['metadata_name_value_pairs'][] = array('name' => 'epi_ou_service', 'value' => $epi_ou_service);
@@ -48,8 +48,8 @@ if ($inria_location || $inria_location_main || $epi_ou_service) {
 	if ($epi_ou_service) $title_filters[] = $epi_ou_service;
 	$title_filters = implode($title_filters, ' + ');
 	
-	$content .= "<h2>{$count_users} comptes Iris trouvés pour : </h2>";
-	$content .= "<p><em>100 comptes affichés au maximum</em></p>";
+	$content .= "<h2>{$count_users} comptes Iris trouvés pour : $title_filters</h2>";
+	if ($max_results > 0) $content .= "<p><em>$max_results comptes affichés au maximum</em></p>";
 
 	if ($users) {
 		foreach($users as $ent) {
