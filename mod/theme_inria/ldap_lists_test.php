@@ -54,7 +54,7 @@ if ($inria_location || $inria_location_main || $epi_ou_service) {
 	if ($users) {
 		foreach($users as $ent) {
 			//$content .= "{$ent->guid} {$ent->username} : {$ent->name} &nbsp; {$ent->email}" . '<br />';
-			$content .= "{$ent->guid} {$ent->username} : {$ent->name} ({$ent->inria_location}, {$ent->inria_location_main}, {$ent->epi_ou_service})<br />";
+			$content .= "{$ent->guid} {$ent->username} : {$ent->name} ({$ent->inria_location} / {$ent->inria_location_main} / {$ent->epi_ou_service})<br />";
 		}
 	}
 } else {
