@@ -41,14 +41,20 @@ if ($inria_location || $inria_location_main || $epi_ou_service) {
 	$count_users = elgg_get_entities_from_metadata($search_params);
 	$search_params['count'] = false;
 	$users = elgg_get_entities_from_metadata($search_params);
-
-	$content .= "<h2>{$count_users} comptes Iris trouvés pour : $inria_location + $inria_location_main + $epi_ou_service</h2>";
+	
+	$title_filters = array();
+	if ($inria_location) $title_filters[] = $inria_location;
+	if ($inria_location_main) $title_filters[] = $inria_location_main;
+	if ($epi_ou_service) $title_filters[] = $epi_ou_service;
+	$title_filters = implode($title_filters, ' + ');
+	
+	$content .= "<h2>{$count_users} comptes Iris trouvés pour : </h2>";
 	$content .= "<p><em>100 comptes affichés au maximum</em></p>";
 
 	if ($users) {
 		foreach($users as $ent) {
 			//$content .= "{$ent->guid} {$ent->username} : {$ent->name} &nbsp; {$ent->email}" . '<br />';
-			$content .= "{$ent->guid} {$ent->username} : {$ent->name}<br />";
+			$content .= "{$ent->guid} {$ent->username} : {$ent->name} ({$ent->inria_location}, {$ent->inria_location_main}, {$ent->epi_ou_service})<br />";
 		}
 	}
 } else {
