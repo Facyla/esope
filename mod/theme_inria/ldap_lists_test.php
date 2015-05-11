@@ -13,8 +13,11 @@ $valid_ldap = '';
 
 // esope_get_meta_values($meta_name)
 $inria_location_opt = array_merge(array(''), esope_get_meta_values('inria_location'));
+$inria_location_opt = array_combine($inria_location_opt, $inria_location_opt);
 $inria_location_main_opt = array_merge(array(''), esope_get_meta_values('inria_location_main'));
+$inria_location_main_opt = array_combine($inria_location_main_opt, $inria_location_main_opt);
 $epi_ou_service_opt = array_merge(array(''), esope_get_meta_values('epi_ou_service'));
+$epi_ou_service_opt = array_combine($epi_ou_service_opt, $epi_ou_service_opt);
 
 $content .= '<form method="POST">';
 $content .= '<p><label>Localisation géographique ' . elgg_view('input/dropdown', array('name' => "inria_location", 'value' => $inria_location, 'options_values' => $inria_location_opt)) . '</label></p>';
