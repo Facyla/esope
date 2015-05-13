@@ -10,6 +10,9 @@
 * 
 */
 
+$url = elgg_get_site_url() . 'cmspages';
+$full_url = full_url();
+
 $access_opt = array(
 	'none' => elgg_echo('cmspages:access_id:none'), 
 	ACCESS_PUBLIC => elgg_echo('PUBLIC'), 
@@ -35,7 +38,7 @@ $options = array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'ti
 if ($status == 'draft') {
 	$access_id = "0";
 } else if ($status == 'published') {
-	$options['wheres'][] = array("(e.access_id <> 0)");
+	$options['wheres'][] = "(e.access_id <> 0)";
 }
 if (!empty($access_id) && ($access_id != 'none')) { $options['wheres'][] = "(e.access_id = $access_id)"; }
 if (!empty($content_type)) {
@@ -54,7 +57,7 @@ if (!empty($options['metadata_name_value_pairs'])) $cmspages = elgg_get_entities
 else $cmspages = elgg_get_entities($options);
 
 if ($cmspages) {
-	$url = elgg_get_site_url() . 'cmspages/edit/';
+	$edit_url = elgg_get_site_url() . 'cmspages/edit/';
 	// @TODO Filtrer par content_type, access_id, et regrouper par rubrique le cas échéant + organiser page parentes/enfant
 	
 	// Tri des pages : dernières, alpha
@@ -98,15 +101,23 @@ if ($cmspages) {
 		
 		$cmspages_content .= '<span class="cmspages-content_type">' . elgg_echo('cmspages:type:' . $ent->content_type) . '</span>';
 		
-		$cmspages_content .= '<a href="' . $url . $ent->pagetype . '">';
+		$cmspages_content .= '<a href="' . $edit_url . $ent->pagetype . '">';
 		if (!empty($ent->pagetitle)) $cmspages_content .= $ent->pagetitle . ' (' . $ent->pagetype . ')';
 		else $cmspages_content .= '(' . $ent->pagetype . ')';
 		$cmspages_content .= '</a>';
 		
 		if (!empty($ent->display)) $cmspages_content .= ', display = ' . $ent->display;
 		
+		$cmspages_content .= '<span class="elgg-subtext">';
+		$cmspages_content .= ' &nbsp; ' . elgg_echo('cmspages:created', array(elgg_get_friendly_time($ent->time_created)));
+		if ($ent->time_updated - $ent->time_created > 3600) $cmspages_content .= ', ' . elgg_echo('cmspages:updated', array(elgg_get_friendly_time($ent->time_updated)));
+		$cmspages_content .= '</span>';
+		
 		$cmspages_content .= '</li>';
 	}
+	$cmspages_content = '<ul>' . $cmspages_content . '<ul>';
+} else {
+	$cmspages_content = '<p><em>' . elgg_echo('cmspages:none') . '</em></p>';
 }
 
 // New page add form
@@ -145,15 +156,39 @@ $search_content .= '<div class="clearfloat"></div><br />';
 $results_content = '';
 $results_content .= '<h3>' . elgg_echo('cmspages:pageselect') . '</h3>';
 $results_content .= '<div class="cmspages-search-filter">';
-$results_content .= '<a href="?">' . elgg_echo('cmspages:filter:all') . '</a>';
-$results_content .= '<a href="?status=published">' . elgg_echo('cmspages:status:published') . '</a>';
-$results_content .= '<a href="?sort=latest">' . elgg_echo('cmspages:sort:latest') . '</a>';
-$results_content .= '<a href="?content_type=page">' . elgg_echo('cmspages:type:editor') . '</a>';
-$results_content .= '<a href="?content_type=module">' . elgg_echo('cmspages:type:module') . '</a>';
-$results_content .= '<a href="?content_type=template">' . elgg_echo('cmspages:type:template') . '</a>';
+if (($full_url == "$url") || ($full_url == "$url?")) {
+	$results_content .= '<a href="?" class="elgg-selected">' . elgg_echo('cmspages:filter:all') . '</a>';
+} else {
+	$results_content .= '<a href="?">' . elgg_echo('cmspages:filter:all') . '</a>';
+}
+if ($full_url == "$url?status=published") {
+	$results_content .= '<a href="?status=published" class="elgg-selected">' . elgg_echo('cmspages:status:published') . '</a>';
+} else {
+	$results_content .= '<a href="?status=published">' . elgg_echo('cmspages:status:published') . '</a>';
+}
+if ($full_url == "$url?sort=latest") {
+	$results_content .= '<a href="?sort=latest" class="elgg-selected">' . elgg_echo('cmspages:sort:latest') . '</a>';
+} else {
+	$results_content .= '<a href="?sort=latest">' . elgg_echo('cmspages:sort:latest') . '</a>';
+}
+if ($full_url == "$url?content_type=page") {
+	$results_content .= '<a href="?content_type=page" class="elgg-selected">' . elgg_echo('cmspages:type:editor') . '</a>';
+} else {
+	$results_content .= '<a href="?content_type=page">' . elgg_echo('cmspages:type:editor') . '</a>';
+}
+if ($full_url == "$url?content_type=module") {
+	$results_content .= '<a href="?content_type=module" class="elgg-selected">' . elgg_echo('cmspages:type:module') . '</a>';
+} else {
+	$results_content .= '<a href="?content_type=module">' . elgg_echo('cmspages:type:module') . '</a>';
+}
+if ($full_url == "$url?content_type=template") {
+	$results_content .= '<a href="?content_type=template" class="elgg-selected">' . elgg_echo('cmspages:type:template') . '</a>';
+} else {
+	$results_content .= '<a href="?content_type=template">' . elgg_echo('cmspages:type:template') . '</a>';
+}
 $results_content .= '</div>';
 $results_content .= '<div class="clearfloat"></div><br />';
-$results_content .= '<ul>' . $cmspages_content . '<ul>';
+$results_content .= $cmspages_content;
 $results_content .= '<br />';
 
 

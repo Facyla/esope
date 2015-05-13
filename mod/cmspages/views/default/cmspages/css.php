@@ -43,7 +43,8 @@ pre, code { word-break:break-all; }
 .cmspages-item-template .cmspages-content_type { background:#006; }
 #cmspages-form-search input {  }
 #cmspages-form-search select { width:100%; }
-.cmspages-search-filter a { padding:2px 4px; background:#EEE; border-radius:4px; margin-right:4px; font-size: 90%; color: #333; }
+.cmspages-search-filter a { padding:2px 4px; background:#EEE; border-radius:4px; margin-right:4px; font-size: 90%; color: #333; text-decoration:none; }
+.cmspages-search-filter a:hover, .cmspages-search-filter a:focus, .cmspages-search-filter a:active, .cmspages-search-filter a.elgg-selected { background: #333; color: #eee; }
 
 /* CMS Pages edition interface */
 #cmspages-edit-form { background: transparent; }
