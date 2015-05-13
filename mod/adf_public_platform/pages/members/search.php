@@ -52,6 +52,7 @@ if (!empty($metadata_search_fields)) {
 $metadata_search = '';
 
 // Build metadata search fields
+// @TODO : allow to fetch existing values - autocomplete using existing values ? => esope_get_meta_values($meta_name)
 if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
 	foreach ($metadata_search_fields as $metadata) {

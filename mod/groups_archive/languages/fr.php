@@ -17,10 +17,10 @@ $fr = array(
 	'groups_archive:grouparchive' => "Action à effectuer",
 	'groups_archive:view' => "Afficher",
 	'groups_archive:form:title' => "Archiver un groupe",
-	'groups_archive:archive' => "Archiver ce groupe",
-	'groups_archive:unarchive' => "Désarchiver ce groupe",
-	'groups_archive:option:enabled' => "Désarchiver le groupe",
-	'groups_archive:option:disabled' => "Archiver le groupe",
+	'groups_archive:archive' => "Archiver",
+	'groups_archive:unarchive' => "Désarchiver",
+	'groups_archive:option:enabled' => "Désarchiver",
+	'groups_archive:option:disabled' => "Archiver",
 	'groups_archive:proceed' => "Procéder",
 	
 	
