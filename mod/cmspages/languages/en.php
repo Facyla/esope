@@ -289,6 +289,9 @@ $english = array(
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
 	
+	'cmspages:none' => "No CMS Page found.",
+	'cmspages:created' => "created %s",
+	'cmspages:updated' => "updated %s",
 	
 	
 );

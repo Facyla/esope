@@ -469,7 +469,7 @@ function notification_messages_notify_message($hook, $type, $message, $params) {
 	$to_entity = $params['to_entity'];
 	$method = $params['method'];
 	if (elgg_instanceof($entity, 'object', 'blog')) {
-		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code>';
+		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
 		$descr = '<p><em>' . $entity->excerpt . '</em></p>';
 		$descr .= strip_tags($entity->description, $allowed_tags);
 		$title = '<strong>' . $entity->title . '</strong>';

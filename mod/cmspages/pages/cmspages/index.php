@@ -10,7 +10,6 @@
 */
 
 gatekeeper();
-global $CONFIG;
 
 // Facyla : this tool is for admins but also webmasters and authors, so use custom access rights
 // OK if custom rights match, or use default behaviour
@@ -24,7 +23,7 @@ if (!empty($pagetype)) {
 }
 
 // Set owner to site, for all "global" cmspages
-elgg_set_page_owner_guid($CONFIG->site->guid);
+elgg_set_page_owner_guid(elgg_get_site_entity()->guid);
 elgg_set_context('cmspages_admin');
 elgg_push_context('admin');
 

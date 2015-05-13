@@ -289,6 +289,9 @@ $fr = array(
 	'cmspages:history' => "Historique des versions précédentes",
 	'cmspages:history:version' => "<i class=\"fa fa-history\"></i>Version enregistrée par %s %s",
 	
+	'cmspages:none' => "Aucune page CMS trouvée.",
+	'cmspages:created' => "créée %s",
+	'cmspages:updated' => "MAJ %s",
 	
 );
 
