@@ -4,9 +4,9 @@ $url = elgg_get_site_url();
 // Define dropdown options
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 
-$trigger_opt = array('hover' => elgg_echo('hover'), 'click' => elgg_echo('click'));
+$trigger_opt = array('hover' => elgg_echo('link_preview:trigger:hover'), 'click' => elgg_echo('link_preview:trigger:click'));
 $scale_opt = array('1' => "1 (original)", '0.75' => "0.75", '0.5' => "0.5", '0.3' => "0.3 (default)", '0.2' => "0.2", '0.1' => "0.1");
-$position_opt = array('right' => elgg_echo('right'), 'left' => elgg_echo('left'));
+$position_opt = array('right' => elgg_echo('link_preview:position:right'), 'left' => elgg_echo('link_preview:position:left'));
 
 // Set default value
 if (!isset($vars['entity']->trigger)) { $vars['entity']->trigger = 'hover'; }
