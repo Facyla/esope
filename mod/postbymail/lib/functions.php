@@ -520,11 +520,34 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 						// Ajout du hash aux publications déjà faites (peu importe de matcher hash et mail, ce qui importe c'est les doublons)
 						switch($subtype) {
 							case 'groupforumtopic':
-								if ($entity->annotate('group_topic_post', $post_body, $entity->access_id, $member->guid)) {
+								$annotation = $entity->annotate('group_topic_post', $post_body, $entity->access_id, $member->guid);
+								if ($annotation) {
 									//set_input('group_topic_post', $post_body);
 									$published = true;
 									$body .= elgg_echo("groupspost:success");
-									add_to_river('river/forum/create', 'create', $member->guid, $entity->guid);
+									// Add to river
+									//add_to_river('river/forum/create', 'create', $member->guid, $entity->guid);
+									add_to_river('river/annotation/group_topic_post/reply', 'reply', $member->guid, $entity->guid, "", 0, $annotation);
+									// @TODO notification
+									//elgg_trigger_event('create', 'annotation', $annotation);
+									//error_log("Annotation triggered : $subtype");
+									elgg_trigger_plugin_hook('action', 'discussion/reply/save', null, true);
+									error_log("Action triggered on $subtype : discussion/reply/save");
+									/*
+									// Add notification
+									notify_user($entity->owner_guid,
+										$member->guid,
+										elgg_echo('generic_comment:email:subject'),
+										elgg_echo('generic_comment:email:body', array(
+											$entity->title,
+											$member->name,
+											$post_body,
+											$entity->getURL(),
+											$member->name,
+											$member->getURL()
+										))
+									);
+									*/
 								}
 								break;
 							case 'messages':
@@ -546,8 +569,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 								break;
 							case 'thewire':
 								// Pas de commentaire !
-								// Doit être une nouvelle publication en réponse à la première (et même niveau d'accès)
+								// Doit être une nouvelle publication en réponse à la première, dont on doit avoir le guid (parent)
 								// TODO
+								/*
 								$new_post = new ElggObject;
 								$new_post->subtype = "thewire";
 								$new_post->owner_guid = $member->guid;
@@ -556,8 +580,15 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 								$new_post->description = $post_body;
 								$new_post->access_id = $entity->access_id;
 								if ($new_post->save()) {
+								*/
+								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
+								if ($thewire_guid) {
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
+									// @TODO River ?
+									// @TODO notification
+									// Send response to original poster if not already registered to receive notification
+									thewire_send_response_notification($thewire_guid, $entity->guid, $member);
 								}
 								break;
 							case 'blog':
@@ -572,10 +603,31 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 									$sender_reply = elgg_echo('postbymail:sender:error:forumonly', array($sender_reply));
 									break;
 								} else {
-									if ($entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid)) {
+									//if ($entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid)) {
+									$annotation = $entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid);
+									if ($annotation) {
 										$published = true;
 										$body .= elgg_echo("generic_comment:posted");
-										add_to_river('annotation/annotate','comment',$member->guid,$entity->guid);
+										// Add to river
+										//add_to_river('annotation/annotate','comment',$member->guid,$entity->guid); // @TODO update to latest structure
+										add_to_river('river/annotation/generic_comment/create', 'comment', $member->guid, $entity->guid, "", 0, $annotation);
+										// @TODO Add notification
+										elgg_trigger_plugin_hook('action', 'comments/add', null, true);
+										error_log("Action triggered on $subtype : comments/add");
+										/*
+										notify_user($entity->owner_guid,
+											$member->guid,
+											elgg_echo('generic_comment:email:subject'),
+											elgg_echo('generic_comment:email:body', array(
+												$entity->title,
+												$member->name,
+												$post_body,
+												$entity->getURL(),
+												$member->name,
+												$member->getURL()
+											))
+										);
+										*/
 									}
 								}
 						}
