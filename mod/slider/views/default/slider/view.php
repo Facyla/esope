@@ -23,7 +23,7 @@ $slider_params = array(
 		'width' => $width,
 	);
 
-echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="slider-' . $slider->guid . '">
+echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="slider-' . $slider->guid . ' ' . $slider->name . '">
 	<style>
 	' . $slider->css . '
 	</style>
