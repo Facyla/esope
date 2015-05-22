@@ -16,6 +16,7 @@ elgg_make_sticky_form('slider');
 
 /* Get input data */
 $slider_title = get_input('title');
+$slider_name = get_input('name');
 $slider_description = get_input('description');
 $slider_slides = get_input('slides', '', false); // We do *not want to filter HTML
 $slider_config = get_input('config', '', false); // We do *not want to filter HTML
@@ -24,11 +25,22 @@ $slider_height = get_input('height');
 $slider_width = get_input('width');
 $slider_access = get_input('access_id');
 $slider_editor = get_input('editor');
-
+// Set slider name if not defined + normalize it
+// @TODO : ensure it remains unique ?
+if (empty($slider_name)) { $slider_name = $slider_title; }
+$slider_name = elgg_get_friendly_title($slider_name);
 
 // Get slider entity, if it exists
 $guid = get_input('guid', false);
 $slider = get_entity($guid);
+
+// Check if slider name already exists (for another slider)
+$existing_slider = slider_get_entity_by_name($slider_name);
+if ($existing_slider && elgg_instanceof($slider, 'object', 'slider') && ($existing_slider->guid != $slider->guid)) {
+	register_error(elgg_echo('slider:error:alreadyexists'));
+	forward(REFERER);
+}
+
 
 // Check existing object, or create a new one
 if (elgg_instanceof($slider, 'object', 'slider')) {
@@ -42,6 +54,7 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 $slider->access_id = $slider_access;
 
 $slider->title = $slider_title;
+$slider->name = $slider_name;
 $slider->description = $slider_description;
 $slider->slides = $slider_slides;
 $slider->config = $slider_config;

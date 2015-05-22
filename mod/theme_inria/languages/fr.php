@@ -390,6 +390,46 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'esope:fulltextsearch' => "Recherche par nom ou prénom",
 	
+	
+	// Blog override (blog => article)
+	'blog' => "Articles",
+	'blog:blogs' => "Articles",
+	'blog:archives' => "Archives",
+	'blog:blog' => "Article",
+	'item:object:blog' => "Articles",
+
+	'blog:title:user_blogs' => "Articles de %s",
+	'blog:title:all_blogs' => "Tous les articles du site",
+	'blog:title:friends' => "Articles des contacts",
+
+	'blog:group' => "Articles",
+	'blog:enableblog' => "Activer les articles du groupe",
+	'blog:write' => "Écrire un article",
+	// river
+	'blog:river:create' => "Publier un article",
+	'river:commented:object:blog' => "l'article",
+	'river:create:object:blog' => "%s a publié un article %s",
+	'river:comment:object:blog' => "%s a commenté l'article %s",
+	// notifications
+	'blog:newpost' => 'Nouvel article',
+	// widget
+	'blog:widget:description' => "Ce widget affiche vos derniers articles.",
+	'blog:moreblogs' => "Plus d'articles",
+	'blog:numbertodisplay' => "Nombre d'articles à afficher",
+	'blog:noblogs' => "Aucun article",
+	'blog:notification' => "%s a écrit un nouvel article :
+
+%s
+
+%s
+
+Afficher et commenter le nouvel article :
+
+%s",
+	
+	
+	
+	
 );
 
 add_translation("fr",$french);
