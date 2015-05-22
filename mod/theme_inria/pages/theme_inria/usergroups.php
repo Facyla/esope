@@ -21,7 +21,7 @@ $content = '';
 $content .= '<style>
 html body { background: #EEEEEE !important; }
 h2, h3, a { color: #292A2E; }
-h2 { font-size:20px; font-weight:normal; }
+h3 { font-size:20px; font-weight:normal; }
 a { font-size:16px; }
 </style>';
 
