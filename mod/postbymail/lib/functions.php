@@ -531,8 +531,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 									// @TODO notification
 									//elgg_trigger_event('create', 'annotation', $annotation);
 									//error_log("Annotation triggered : $subtype");
-									elgg_trigger_plugin_hook('action', 'discussion/reply/save', null, true);
-									error_log("Action triggered on $subtype : discussion/reply/save");
+									//elgg_trigger_plugin_hook('action', 'discussion/reply/save', null, true); // breaks execution
+									//error_log("Action triggered on $subtype : discussion/reply/save");
 									/*
 									// Add notification
 									notify_user($entity->owner_guid,
@@ -612,8 +612,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										//add_to_river('annotation/annotate','comment',$member->guid,$entity->guid); // @TODO update to latest structure
 										add_to_river('river/annotation/generic_comment/create', 'comment', $member->guid, $entity->guid, "", 0, $annotation);
 										// @TODO Add notification
-										elgg_trigger_plugin_hook('action', 'comments/add', null, true);
-										error_log("Action triggered on $subtype : comments/add");
+										//elgg_trigger_plugin_hook('action', 'comments/add', null, true); // breaks execution
+										//error_log("Action triggered on $subtype : comments/add");
 										/*
 										notify_user($entity->owner_guid,
 											$member->guid,
