@@ -378,6 +378,19 @@ Here is the new profile page : %s
 	// Groups invites
 	'userpicker:only_friends' => "Display friends only",
 	
+	
+	
+	
+	// Translation override
+	'members:searchtag' => "Search members by tag",
+	'members:title:searchtag' => "Search members corresponding to the tag \"%s\"",
+	'search_types:tags' => "Tags",
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Charter excerpt:</strong> <em>any person or group of persons willing to create a group - under the condition <a href=\"mailto:iris@inria.fr\">to declare itself as animator to the site administrators</a>, will have administrator rights on this group, and commits to enforce the <a href=\"https://reseau-iris.inria.fr/p/charte\">terms of use and content creation of the « Iris : Le réseau interne d'Inria » network</a></em></div></blockquote>",
+	
+	'adf_platform:groups:allowregister' => "Force group registration",
+	
+	'esope:fulltextsearch' => "Search by name or first name",
+	
 );
 
 add_translation("en",$english);
