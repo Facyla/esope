@@ -163,12 +163,15 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				 *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
 				 *   utilisation et utiliser le traitement approprié.
 				*/
-				if (!empty($msgbody) && (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0)) {
-					// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
-					$msgbody = mb_convert_encoding($msgbody, "UTF-8");
-				} else {
-					// Cas standard
-					$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
+				if (!empty($msgbody)) {
+					// @TODO : mauvaise détection ISO-8859-1
+					if (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0) {
+						// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
+						$msgbody = mb_convert_encoding($msgbody, "UTF-8");
+					} else {
+						// Cas standard
+						$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
+					}
 				}
 				// Format the message to get the required data and content
 				if ($msgbody) {

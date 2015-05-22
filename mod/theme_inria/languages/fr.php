@@ -392,17 +392,17 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	
 	// Blog override (blog => article)
-	'blog' => "Articles",
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
 	'blog:blogs' => "Articles",
 	'blog:archives' => "Archives",
 	'blog:blog' => "Article",
-	'item:object:blog' => "Articles",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
 
 	'blog:title:user_blogs' => "Articles de %s",
 	'blog:title:all_blogs' => "Tous les articles du site",
 	'blog:title:friends' => "Articles des contacts",
 
-	'blog:group' => "Articles",
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
 	'blog:enableblog' => "Activer les articles du groupe",
 	'blog:write' => "Écrire un article",
 	// river
