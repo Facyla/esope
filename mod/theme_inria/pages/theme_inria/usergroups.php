@@ -19,7 +19,7 @@ $content = '';
 
 // Couleurs
 $content .= '<style>
-html body { background: #EEEEEE !important; }
+html, body, html body { background: #ECECEC !important; margin:0; padding:0; min-width:0; }
 h2, h3, a { color: #292A2E; }
 h3 { font-size:20px; font-weight:normal; }
 a { font-size:16px; }
