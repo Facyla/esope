@@ -22,6 +22,8 @@ $french = array(
 	'slider:settings:slider_access:details' => "Par défaut, l'accès à l'édition des diaporamas est réservée aux administrateurs. Vous pouvez autoriser les membres du site à y accéder en choisissant \"Oui\"",
 	'slider:option:yes' => "Oui",
 	'slider:option:no' => "Non",
+	'slider:error:multiple' => "Plusieurs sliders correspondent au nom demandé, impossible de déterminer lequel afficher",
+	'slider:error:alreadyexists' => "Un slider portant ce nom existe déjà, veuillez choisir un autre nom.",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",
@@ -30,6 +32,8 @@ $french = array(
 	'slider:edit' => "Edition du diaporama",
 	'slider:edit:title' => "Titre",
 	'slider:edit:title:details' => "Permet d'identifier aisément le diaporama. Le titre n'est pas affiché.",
+	'slider:edit:name' => "Identifiant",
+	'slider:edit:name:details' => "Identifiant unique du slider, permet de l'appeler sous une forme homogène (par ex. pour utilisation dans un thème).",
 	'slider:edit:description' => "Description",
 	'slider:edit:description:details' => "Permet de décrire à quoi sert le diaporama. La description n'est pas affichée.",
 	'slider:edit:content' => "Diapositives",

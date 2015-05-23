@@ -10,6 +10,10 @@ $editor_opts = array('rawtext' => elgg_echo('slider:editor:no'), 'longtext' => e
 // Get slider vars
 if (elgg_instanceof($slider, 'object', 'slider')) {
 	$slider_title = $slider->title; // Slider title, for easier listing
+	$slider_name = $slider->name; // Slider title, for easier listing
+	if (empty($slider_name) && !empty($slider_title)) {
+		$slider_name = elgg_get_friendly_title($slider_title);
+	}
 	$slider_description = $slider->description; // Clear description of what this slider is for
 	$slider_slides = $slider->slides; // Complete slider content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual slides
 	$slider_config = $slider->config; // JS additional parameters
@@ -42,6 +46,7 @@ if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'va
 
 $content .= '<div style="width:48%; float:left;">';
 	$content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('slider:edit:title:details') . '</em></p>';
+	$content .= '<p><label>' . elgg_echo('slider:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $slider_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('slider:edit:name:details') . '</em></p>';
 	$content .= '<p><label>' . elgg_echo('slider:edit:description') . ' ' . elgg_view('input/plaintext', array('name' => 'description', 'value' => $slider_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('slider:edit:description:details') . '</em></p>';
 
 	// JS config

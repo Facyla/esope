@@ -42,7 +42,7 @@ function postbymail_init() {
 	// Ajout pour les messages
 	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
-	// Replace sender email by postbymail reply email
+	// Replace sender email by postbymail reply email - NOT RECOMMENDED !
 	/* @TODO : modifier le reply-to pour insérer +guid=XXXXX
 	 * Possible via le hooks sur les params de notification_messages ?
 	 */

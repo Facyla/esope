@@ -71,6 +71,40 @@ function slider_url($slider) {
 
 
 
+/* Gets a slider by its name, allowing theming on different instances
+ * In case several sliders are found, only first match is displayed with an alert
+ */
+function slider_get_entity_by_name($name = '') {
+	if (!empty($name)) {
+		$sliders = elgg_get_entities_from_metadata(array(
+				'types' => 'object', 'subtypes' => 'slider', 
+				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 
+			));
+		if ($sliders) {
+			if (count($sliders) == 1) {
+				return $sliders[0];
+			} else {
+				register_error(elgg_echo('slider:error:multiple'));
+			}
+		}
+	}
+	return false;
+}
+
+/* Checks if a given name is already used by a slider */
+function slider_exists($name = '') {
+	$ia = elgg_set_ignore_access(true);
+	if (!empty($name)) {
+		$slider = slider_get_entity_by_name($name);
+		if (elgg_instanceof($slider, 'object', 'slider')) {
+			elgg_set_ignore_access($ia);
+			return true;
+		}
+	}
+	elgg_set_ignore_access($ia);
+	return false;
+}
+
 /* Main tool page handler */
 function slider_page_handler($page) {
 	$include_path = elgg_get_plugins_path() . 'slider/pages/slider/';

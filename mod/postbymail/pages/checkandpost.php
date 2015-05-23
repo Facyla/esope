@@ -31,7 +31,9 @@ $title = elgg_echo('postbymail:title');
 /* POP3/IMAP/NNTP server to connect to, with optional port. */
 
 // Allow configuration file inclusion
-if (include_once elgg_get_plugins_path() . 'postbymail/settings.php') {
+// @TODO : test si file_exists
+$settings_file = elgg_get_plugins_path() . 'postbymail/settings.php';
+if (file_exists($settings_file) && include_once($settings_file)) {
 	$body .= '<p>' . elgg_echo('postbymail:settings:loadedfromfile') . '</p>';
 	//$body .= "DEBUG : $server $protocol $mailbox $username $password $markSeen $bodyMaxLength $separator";
 } else {

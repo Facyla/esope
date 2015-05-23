@@ -30,6 +30,8 @@ $en = array(
 	'slider:edit' => "Slider edit",
 	'slider:edit:title' => "Title",
 	'slider:edit:title:details' => "The title is a readable identification for the slider. It is not otherwise used when displaying it.",
+	'slider:edit:name' => "Identifier",
+	'slider:edit:name:details' => "Unique identifier for this slider, allows to call it the same way on different sites, eg. for use within a theme.",
 	'slider:edit:description' => "Description",
 	'slider:edit:description:details' => "The description lets you define some additionnal information about this slider. It is not displayed either.",
 	'slider:edit:content' => "Slides",
@@ -57,6 +59,8 @@ $en = array(
 	'slider:edit:editor:details' => "The visual editor facilitates the content edition, but it also may strip some HTML code. This setting lets you choose whether the editor should be enabled by default when editing slides. Recommended setting is to leave it disabled if you use raw HTML (you still may enable it manually on a particular slide if needed).",
 	'slider:editor:yes' => "Yes (HTML filter)",
 	'slider:editor:no' => "No (can be enabled on-demand)",
+	'slider:error:multiple' => "Multiple sliders found for this name, cannot determine which to display.",
+	'slider:error:alreadyexists' => "A slider already exists with this name, please choose antoher one.",
 	
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
