@@ -8,9 +8,9 @@ $fr = array(
 	'registration_filter' => "Filtre d'inscription",
 	
 	'registration_filter:whitelist_enable' => "Activer le filtrage par liste blanche",
-	'registration_filter:whitelist_enable' => "If enabled, only emails from the defined list of domains will be allowed to register on the site.",
+	'registration_filter:whitelist_enable' => "Si ce filtre est activé, seuls des comptes avec un email correspondant à la liste des domaines explicitement autorisés pourront s'inscrire sur le site.",
 	'registration_filter:blacklist_enable' => "Activer le filtrage par liste noire",
-	'registration_filter:blacklist_enable' => "If enabled, emails matching the blacklist filter will not be allowed to register on the site.",
+	'registration_filter:blacklist_enable:details' => "Si ce filtre est activé, les comptes avec un email correspondant à la liste des domaines blacklistés ne seront pas autorisé à s'inscrire sur le site.",
 	'registration_filter:modes' => "Il est possible d'activer les deux modes de fonctionnement simultanément, cependant il est généralement inutile d'activer le filtrage par liste noire si le filtrage par liste blanche est déjà activé, dans la mesure ou seuls les emails correspondant aux domaines autorisés pourront s'inscrire.",
 	
 	'registration_filter:whitelist' => "Liste des noms de domaines acceptés pour la création des comptes.",

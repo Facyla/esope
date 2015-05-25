@@ -23,10 +23,10 @@ function adf_registration_filter($email = null) {
 		$whitelist = str_replace(array(';', ','), "\n", $whitelist);
 		$whitelist = explode("\n",$whitelist);
 		
-		// @TODO : enable wildcards ?
 		//error_log($email_a[1] . " = " . implode(", ", $whitelist)); // debug
-		// Email domain has to be in the list
+		// Exact match mode : email domain has to be in the list
 		if (!in_array($email_a[1], $whitelist)) { return false; }
+		// @TODO : enable wildcards ?
 	}
 	
 	/* Blacklist mode */
@@ -39,10 +39,21 @@ function adf_registration_filter($email = null) {
 		$blacklist = str_replace(array(';', ','), "\n", $blacklist);
 		$blacklist = explode("\n",$blacklist);
 		
-		// @TODO : enable wildcards (at least for subdomains)
 		//error_log($email_a[1] . " = " . implode(", ", $blacklist)); // debug
-		// Email domain has to be in the list
+		// Exact match mode : email domain has to be in the list
 		if (in_array($email_a[1], $blacklist)) { return false; }
+		// @TODO : enable wildcards mode (email domain terminal match)
+		/*
+		// @TODO : Allow wildcards : use ".*" as a wildcard (not "*"), and "\." for dots (not ".")
+		// @TODO : auto-replace * and . so we can use simply *.domain.tld
+		// @TODO : and also duplicate filter so we can have raw domain too => domain.tld)
+		foreach (array_merge($defaults, $plugins) as $public) {
+			$pattern = "`^{$CONFIG->url}$public/*$`i";
+			if (preg_match($pattern, $url)) {
+				return TRUE;
+			}
+		}
+		*/
 	}
 	
 	// If we've gotten so far.. it's OK !

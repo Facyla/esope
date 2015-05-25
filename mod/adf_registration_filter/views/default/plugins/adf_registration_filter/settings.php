@@ -9,7 +9,7 @@ if (!isset($vars['entity']->blacklist_enable)) { $vars['entity']->blacklist_enab
 
 
 // Note : only one of the modes should be chosen : if whitelist enable, blacklist is not useful
-echo '<p><em>' . elgg_echo('registration_filter:modes') . '</em></p>'
+echo '<p><em>' . elgg_echo('registration_filter:modes') . '</em></p>';
 
 // Enable whitelist : only matching domains are allowed
 echo '<p><label>' . elgg_echo('registration_filter:whitelist_enable') . ' ' . elgg_view('input/dropdown', array('name' => 'params[whitelist_enable]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->whitelist_enable)) . '</label><br /><em>' . elgg_echo('registration_filter:whitelist_enable:details') . '</em></p>';
