@@ -9,6 +9,8 @@
 		die("<b>404 - Not found</b>");
 	}
 	
+	$page = strip_tags(stripslashes($page));
+	
 	if(!file_exists("../_html/".$page.".html")){
 		die("<b>404 - Not found</b>");
 	}else{

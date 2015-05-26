@@ -1,8 +1,10 @@
 <?php
-	include "../../../php/inc/config.inc.php";
-	include "../../../php/inc/database.inc.php";
-	include "../../../php/inc/utils.inc.php";
-	include "../../../php/inc/cycle.inc.php";
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))))) . '/engine/start.php';
+	
+	//include "../../inc/config.inc.php";
+	//include "../../inc/database.inc.php";
+	//include "../../../php/inc/utils.inc.php";
+	//include "../../../php/inc/cycle.inc.php";
 	include "../../../php/inc/survey/pro/session.inc.php";
 
 	/**

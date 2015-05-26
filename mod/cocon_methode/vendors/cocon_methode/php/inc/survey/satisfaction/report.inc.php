@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))))) . '/engine/start.php';
 	/**
 		SCRIPT PHP POUR LES RESTITUTIONS DU QUESTIONNAIRE DE SATISFACTION
 	*/
