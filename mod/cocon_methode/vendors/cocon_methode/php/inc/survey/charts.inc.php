@@ -102,7 +102,7 @@
 		$chart->drawFilledCircle($layout["chart_left"] + 4,$layout["chart_top"] + 4, $layout["chart_size"],200,200,200);  
 
 		// Draw the pie chart  
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf",$layout["font_size"]);  
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf",$layout["font_size"]);  
 		$chart->drawTitle(7,24,$title,0,0,0, $layout['width'],$layout['font_size']);
 		$chart->drawBasicPieGraph($dataSet->GetData(), $dataSet->GetDataDescription(), $layout["chart_left"], $layout["chart_top"], $layout["chart_size"], PIE_PERCENTAGE, 255, 255, 255);  
 		$chart->drawPieLegend($layout["legend_left"], $layout["legend_top"], $dataSet->GetData(), $dataSet->GetDataDescription(), 250, 250, 250);  
@@ -183,7 +183,7 @@
 		$chart->drawFilledRoundedRectangle(7, 7, $layout["width"] - 7, $layout["height"] - 7, 5, 240, 240, 240);  
 		$chart->drawRoundedRectangle(5, 5,$layout["width"] - 5, $layout["height"] - 5, 5, 128,128,128);  
 		
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", $layout['font_size']);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", $layout['font_size']);
 		$chart->drawTitle(7,24,$title,0,0,0, $layout['width'],$layout['font_size']);
 		$height = round($layout["height"] / count($legends)) - 14;
 		$width = $layout["width"] - 14;
@@ -293,7 +293,7 @@
 		$chart->drawFilledRoundedRectangle(7, 7, $layout["width"] - 7, $layout["height"] - 7, 5, 240, 240, 240);  
 		$chart->drawRoundedRectangle(5, 5,$layout["width"] - 5, $layout["height"] - 5, 5, 128,128,128);  
 		
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", $layout['font_size']);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", $layout['font_size']);
 		$chart->drawTitle(7,24,$title,0,0,0, $layout['width'],$layout['font_size']);
 		$height = round($layout["height"] / count($legends)) - 14;
 		$width = $layout["width"] - 14;
@@ -552,7 +552,7 @@
 		$chart->drawFilledRoundedRectangle(7, 7, $layout["width"] - 7, $layout["height"] - 7, 5, 240, 240, 240);  
 		$chart->drawRoundedRectangle(5, 5,$layout["width"] - 5, $layout["height"] - 5, 5, 128,128,128);  
 		
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", $layout['font_size']);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", $layout['font_size']);
 		$chart->drawTitle(7,24,$title,0,0,0, $layout['width'],$layout['font_size']);
 		$height = round($layout["height"] / count($legends)) - 14;
 		$width = $layout["width"] - 14;
@@ -634,7 +634,7 @@
 		$chart->drawFilledRoundedRectangle(7, 7, $layout["width"] - 7, $layout["height"] - 7, 5, 240, 240, 240);  
 		$chart->drawRoundedRectangle(5, 5,$layout["width"] - 5, $layout["height"] - 5, 5, 128,128,128);  
 		
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", 8);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", 8);
 		$hstep = round(($layout['width']) / 9);
 		$vstep = round(($layout['height'] - 40) / 9);
 		
@@ -648,11 +648,11 @@
 			$chart->drawTextBox($x + ($i * $hstep) - 4, $y + 10, $x + ($i * $hstep) + 34, $y + 24, $i, 0, 0, 0, 0, ALIGN_LEFT,false);
 		}
 
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", 10);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", 10);
 		$chart->drawTextBox(25,660,0,0, "Ouverture ecosystème", 90, 64, 64, 64, ALIGN_LEFT,false);
 		$chart->drawTextBox(390,$layout['height'] + 460,0,0, "Utilisation du numérique", 0, 64, 64, 64, ALIGN_LEFT,false);
 
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", 14);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", 14);
 		$chart->drawTextBox(170,910,0,0, "Utilisateurs modérés", 0, 200, 0, 0, ALIGN_LEFT,false);
 		$chart->drawTextBox(590,910,0,0, "Utilisateurs solitaires", 0, 0, 64, 128, ALIGN_LEFT,false);
 		$chart->drawTextBox(690,250,0,0, "Utilisateurs catalyseurs ", 0, 0, 128, 64, ALIGN_LEFT,false);
@@ -715,7 +715,7 @@
 		$chart->drawFilledRoundedRectangle(7, 7, $layout["width"] - 7, $layout["height"] - 7, 5, 240, 240, 240);  
 		$chart->drawRoundedRectangle(5, 5,$layout["width"] - 5, $layout["height"] - 5, 5, 128,128,128);  
 		
-		$chart->setFontProperties("../../inc/pchart/fonts/tahoma.ttf", 8);
+		$chart->setFontProperties("../../inc/pchart/Fonts/tahoma.ttf", 8);
 		
 		$chart = drawHeaderCell($chart,"Enseignant", 10, 10, 415, 24);
 		$chart = drawHeaderCell($chart,"Ouverture ecosystème", 425, 10, 200, 24);		
