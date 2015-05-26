@@ -50,7 +50,8 @@ if($_server == 'prod'){
 
 // Intégration Cocon Méthode : chemins et BDD
 global $CONFIG;
-$root_path = elgg_get_root_path() . 'cocon_methode/vendors/cocon_methode';
+//$root_path = elgg_get_root_path() . 'cocon_methode/vendors/cocon_methode';
+$root_path = elgg_get_plugins_path() . 'cocon_methode/vendors/cocon_methode';
 $inc_path = $root_path . '/php/inc';
 $url_base = elgg_get_site_url() . 'mod/cocon_methode/vendors/cocon_methode';
 $dbhost = $CONFIG->dbhost;
