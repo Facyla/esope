@@ -2,7 +2,7 @@
 $url = elgg_get_site_url();
 
 // Define dropdown options
-$yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
+$yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 
 
 // Set default value
