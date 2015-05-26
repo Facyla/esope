@@ -3,10 +3,10 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 	/**
 		SCRIPT PHP POUR LES RESTITUTIONS DU QUESTIONNAIRE DE SATISFACTION
 	*/
-	//require_once "../../inc/config.inc.php";
-	//require_once "../../inc/database.inc.php";
-	//require_once "../../inc/utils.inc.php";
-	//require_once "../../inc/cycle.inc.php";
+	require_once "../../inc/config.inc.php";
+	require_once "../../inc/database.inc.php";
+	require_once "../../inc/utils.inc.php";
+	require_once "../../inc/cycle.inc.php";
 	require_once "../../inc/survey/satisfaction/session.inc.php";
 	require_once "../../inc/survey/satisfaction/calcul.inc.php";
 	require_once "../../inc/survey/charts.inc.php";
