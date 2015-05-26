@@ -1,6 +1,8 @@
 <?php
-	include "../../inc/config.inc.php";
-	include "../../inc/database.inc.php";
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))))) . '/engine/start.php';
+	
+	//include "../../inc/config.inc.php";
+	//include "../../inc/database.inc.php";
 	include_once('../../inc/tbs/tbs_class.php');
 	include_once('../../inc/tbs/opentbs/tbs_plugin_opentbs.php');
 	include_once('../../inc/survey/satisfaction/report.inc.php');
