@@ -823,7 +823,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 			// Calcul des taux
 			if($restitution['type'] == 'synth'){
 				for($i = 0; $i < count($v); $i++){
-					$tx = round(100 / $restitution['num_repondants']) * $v[$i];
+					$tx = 100;
+					if($restitution['num_repondants'] > 0) $tx = round(100 / $restitution['num_repondants']) * $v[$i];
 					if($tx > 100){
 						$tx = 100;
 					}
@@ -836,7 +837,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 					$tx = array(0,0,0,0);
 					
 					for($ii = 0; $ii < 4; $ii++){
-						$t = round((100 / $restitution['num_repondants']) * $v[$i][$ii]);
+						$t = 100;
+						if($restitution['num_repondants'] > 0) $t = round((100 / $restitution['num_repondants']) * $v[$i][$ii]);
 					
 						if ($t > 100){
 							$t = 100;
@@ -891,7 +893,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 			$v7 = $restitution['graph_7'];
 			$v72 = array();
 			for($i = 0; $i < count($v7); $i++){
-				$tx = round(100 / $restitution['num_repondants']) * $v7[$i];
+				$tx = 100;
+				if($restitution['num_repondants'] > 0) $tx = round(100 / $restitution['num_repondants']) * $v7[$i];
 				if($tx > 100){
 					$tx = 100;
 				}
@@ -901,7 +904,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 			$v8 = $restitution['graph_8'];
 			$v82 = array();
 			for($i = 0; $i < count($v8); $i++){
-				$tx = round(100 / $restitution['num_repondants']) * $v8[$i];
+				$tx = 100;
+				if($restitution['num_repondants'] > 0) $tx = round(100 / $restitution['num_repondants']) * $v8[$i];
 				if($tx > 100){
 					$tx = 100;
 				}
@@ -922,7 +926,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 			$v9 = $restitution['graph_9'];
 			$v92 = array();
 			for($i = 0; $i < count($v9); $i++){
-				$tx = round(100 / $restitution['num_repondants']) * $v9[$i];
+				$tx = 100;
+				if($restitution['num_repondants'] > 0) $tx = round(100 / $restitution['num_repondants']) * $v9[$i];
 				if($tx > 100){
 					$tx = 100;
 				}
@@ -932,7 +937,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dir
 			$v10 = $restitution['graph_10'];
 			$v102 = array();
 			for($i = 0; $i < count($v10); $i++){
-				$tx = round(100 / $restitution['num_repondants']) * $v10[$i];
+				$tx = 100;
+				if($restitution['num_repondants'] > 0) $tx = round(100 / $restitution['num_repondants']) * $v10[$i];
 				if($tx > 100){
 					$tx = 100;
 				}
