@@ -27,6 +27,13 @@ function adf_registration_filter($email = null) {
 		// Exact match mode : email domain has to be in the list
 		if (!in_array($email_a[1], $whitelist)) { return false; }
 		// @TODO : enable wildcards ?
+		/*
+		if ($whitelist) foreach ($whitelist as $pattern) {
+			$pattern = str_replace('.', '\.', $pattern);
+			$pattern = str_replace('*', '.*', $pattern);
+			if (preg_match($pattern, $url)) { return true; }
+		}
+		*/
 	}
 	
 	/* Blacklist mode */
@@ -47,11 +54,13 @@ function adf_registration_filter($email = null) {
 		// @TODO : Allow wildcards : use ".*" as a wildcard (not "*"), and "\." for dots (not ".")
 		// @TODO : auto-replace * and . so we can use simply *.domain.tld
 		// @TODO : and also duplicate filter so we can have raw domain too => domain.tld)
-		foreach (array_merge($defaults, $plugins) as $public) {
-			$pattern = "`^{$CONFIG->url}$public/*$`i";
-			if (preg_match($pattern, $url)) {
-				return TRUE;
-			}
+		if ($blacklist) foreach ($blacklist as $pattern) {
+			//@TODO tester en direct sur longueur dispo si * au début, sinon exact match - plus simple/rapide ?
+			//if (substr())
+			$pattern = str_replace('.', '\.', $pattern);
+			$pattern = str_replace('*', '.*', $pattern);
+			$pattern = "`^$pattern/*$`i";
+			if (preg_match($pattern, $url)) { return false; }
 		}
 		*/
 	}
