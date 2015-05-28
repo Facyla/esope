@@ -57,8 +57,9 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// Alternative : Modification de l'email d'expédition (pour réponse directe), avec séparateur en début de mail
 	echo '<p><label>' . elgg_echo('postbymail:settings:replymode') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[replymode]', 'options_values' => $replymode_opt, 'value' => $vars['entity']->replymode));
-	echo '</label><br />' . elgg_echo('postbymail:settings:replyaddtext:details') . '</p>';
+	echo '</label><br />' . elgg_echo('postbymail:settings:replymode:details') . '</p>';
 	
+	echo '<p><label>' . elgg_echo('postbymail:settings:replybuttonaddtext') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[replybuttonaddtext]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->replybuttonaddtext));
 	echo '</label><br />' . elgg_echo('postbymail:settings:replybuttonaddtext:details') . '</p>';
 	
