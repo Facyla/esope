@@ -44,6 +44,8 @@ function postbymail_init() {
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
 	
 	// @TODO : Ajout pour tous les commentaires
+	// @TODO vérifier qu'on a bien les infos pour répondre correctement
+	// Apparemment GUID de la réponse et non de l'objet commenté
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
 	//elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
 	
