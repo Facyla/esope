@@ -214,7 +214,7 @@ function postbymail_add_to_message($message) {
 	$separatordetails = elgg_get_plugin_setting('separatordetails', 'postbymail');
 	if (empty($separatordetails)) $separatordetails = elgg_echo('postbymail:default:separatordetails');
 	$addtextalternative = elgg_get_plugin_setting('replybuttonaddtext', 'postbymail');
-	if (empty($addtextalternative == 'no')) { $addtextalternative = false; } else { $addtextalternative = true; }
+	if ($addtextalternative == 'no') { $addtextalternative = false; } else { $addtextalternative = true; }
 	
 	// Prepare reply url
 	$url_param = '+guid=' . $postbymail_guid;
