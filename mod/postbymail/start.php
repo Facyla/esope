@@ -32,6 +32,9 @@ function postbymail_init() {
 	
 	
 	// Add reply block to email
+	
+	elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
+	
 	// Ajout du bloc de réponse au contenu à tous les messages de notification
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'postbymail_add_to_notify_message_hook', 1000);
 	elgg_register_plugin_hook_handler('notify:entity:message', 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
@@ -266,6 +269,7 @@ function postbymail_add_to_message($message) {
 
 
 
+// Note : cette fonction ne s'applique que dans le cas d'une réponse à l'email d'expédition (mode déconseillé)
 // Version en cours de modification sur la base des devs de Simon/Inria
 // @TODO : si on garde ça, le faire plus proprement pour meilleure intégration avec d'autres plugins
 // @TODO : modifier le handler de html_email_handler car celui-ci envoie réellement le message
