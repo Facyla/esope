@@ -42,6 +42,10 @@ function postbymail_init() {
 	// Note debug : en mode CLI (advanced_notifications) il n'y a aucune entrée dans error_log !
 	//  => mettre les infos de debug directement dans le mail envoyé pour avoir des infos sur ce qui se passe
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
+	
+	// Ajout pour les commentaires
+	elgg_register_plugin_hook_handler("notify:annotation:message", 'generic_comment', 'postbymail_add_to_notify_message_hook', 1000);
+	
 	// Ajout pour les messages
 	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
@@ -176,7 +180,8 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 }
 
 
-// Ce hook ajoute le bloc de notification aux messages
+// Ce hook ajoute le bloc de notification aux messages de tous types
+// Prend en charge : object, annotation
 function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
 	$entity = $params['entity'];
 	$annotation = $params['annotation'];

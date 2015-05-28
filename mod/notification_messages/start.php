@@ -502,12 +502,15 @@ if (elgg_is_active_plugin('comment_tracker')) {
 	
 	// ESOPE : la fonction doit être identique à celle d'origine, à l'exception de la fonction de notification utilisée
 	function notification_messages_comment_tracker_notifications($event, $type, $annotation) {
-		if ($type == 'annotation' && elgg_is_logged_in()) {
+		// ESOPE changes : need to determine user earlier, from annotation, and do not block if not logged in (cron)
+		//if ($type == 'annotation' && elgg_is_logged_in()) {
+		if ($type == 'annotation') {
 			if ($annotation->name == "generic_comment" || $annotation->name == "group_topic_post") {
-				notification_messages_comment_tracker_notify($annotation, elgg_get_logged_in_user_entity()); // ESOPE change
+				$user = get_user($annotation->owner_guid);
+				notification_messages_comment_tracker_notify($annotation, $user);
 			
 				// subscribe the commenter to the thread if they haven't specifically unsubscribed
-				$user = get_user($annotation->owner_guid);
+				//$user = get_user($annotation->owner_guid);
 				$entity = get_entity($annotation->entity_guid);
 			
 				$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $user->guid, 'comment_tracker');
@@ -670,6 +673,7 @@ if (elgg_is_active_plugin('comment_tracker')) {
 						if (!empty($new_subject)) { $subject = $new_subject; }
 						
 						// ESOPE : Custom message content : keep the one from comment_tracker (which is nice)
+						// @TODO : normalize message here with custom improvede content...
 						// Trigger a hook to provide better integration with other plugins
 						$new_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
 						// Failsafe backup if hook as returned empty content but not false (= stop)

@@ -74,9 +74,9 @@ Pour modifier vos préférences de notification, veuillez cliquer sur :
 	
 	'comment:notify:body:email:text' => "Bonjour %s,
 
-Un nouveau commentaire a été publié sur %s
-
+Un nouveau commentaire a été publié sur \"%s\"
 %s a écrit :
+
 %s
 
 %s
@@ -100,9 +100,9 @@ Pour modifier vos préférences de notification pour tous les messages de ce typ
 	
 	'comment:notify:group:body:email:text' => "Bonjour %s,
 
-Une nouvelle réponse a été publiée sur %s
-
+Une nouvelle réponse a été publiée sur \"%s\"
 %s a écrit :
+
 %s
 
 %s

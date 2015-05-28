@@ -31,12 +31,13 @@ if (!$annotation) {
 	forward(REFERER);
 }
 
-// notify if poster wasn't owner
+
+// Always notify if poster is not owner
 $notify = false;
 if ($entity->owner_guid != $user->guid) {
 	$notify = true;
 } else {
-	// Setting is synchronized between with comment_tracker's
+	// Setting is synchronized with comment_tracker's
 	if (elgg_is_active_plugin('comment_tracker')) {
 		$notify_user = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
 	} else {
