@@ -658,20 +658,33 @@ if (elgg_is_active_plugin('comment_tracker')) {
 						//elgg_log("Sending message to {$user->guid} using $method");
 						
 						// ESOPE : Custom message subject
-						// this is new, trigger a hook to make a custom subject
+						$new_subject = notification_messages_build_subject($entity);
+						/*
+						// Alternative : trigger a hook to make a custom subject ?  not really : we actually prefer to override here ?
 						$new_subject = elgg_trigger_plugin_hook("notify:entity:subject", $entity->getType(), array(
 							"entity" => $entity,
 							"to_entity" => $user,
 							"method" => $method), $subject);
 						// Keep new value only if correct subject
+						*/
 						if (!empty($new_subject)) { $subject = $new_subject; }
 						
 						// ESOPE : Custom message content
-						$new_message = elgg_trigger_plugin_hook('notify:entity:message', $entity->getType(), array(
-							'entity' => $entity,
-							'to_entity' => $user,
-							'method' => $method), $message);
+						
+						// Build message content (no change compared to core action)
+						$new_message = elgg_echo('generic_comment:email:body', array(
+									$entity->title,
+									$user->name,
+									$annotation->value,
+									$entity->getURL(),
+									$user->name,
+									$user->getURL(),
+								));
+						// Trigger a hook to provide better integration with other plugins
+						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+						// Failsafe backup if hook as returned empty content but not false (= stop)
 						if (!empty($new_message)) { $message = $new_message; }
+						
 	
 						// Trigger handler and retrieve result.
 						try {
