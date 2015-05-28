@@ -230,6 +230,8 @@ $fr = array(
 	'messages:num_display' => "Nombre de messages à afficher",
 	'messages:moremessages' => "Afficher tous les messages non lus",
 	'messages:togglecontent' => "Montrer/masquer le contenu",
+	'messages:widget:unreadcount' => '%s messages non lus',
+	'messages:widget:unreadcount:singular' => '1 message non lu',
 	
 	
 	// Layout settings

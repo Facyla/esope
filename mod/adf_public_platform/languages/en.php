@@ -231,6 +231,8 @@ $en = array(
 	'messages:num_display' => "Number of messages to display",
 	'messages:moremessages' => "Display all unread messages",
 	'messages:togglecontent' => "Show/hide content",
+	'messages:widget:unreadcount' => '%s unread messages',
+	'messages:widget:unreadcount:singular' => '1 unread message',
 	
 	
 	// Layout settings
