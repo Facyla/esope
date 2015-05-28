@@ -940,6 +940,21 @@ $en = array(
 	'esope:menu:sidebar' => "Menu",
 	
 	
+	// Comment notifications
+	'generic_comment:email:body' => "A new comment was published on \"%s\" by %s:
+
+
+%s
+
+
+To view the complete discussion, click here:
+%s
+
+To view %s's profile, click here:
+%s
+
+This is an automated notification, please do not reply to this email.",
+	
 );
 
 add_translation('en', $en);

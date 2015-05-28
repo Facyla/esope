@@ -669,19 +669,9 @@ if (elgg_is_active_plugin('comment_tracker')) {
 						*/
 						if (!empty($new_subject)) { $subject = $new_subject; }
 						
-						// ESOPE : Custom message content
-						
-						// Build message content (no change compared to core action)
-						$new_message = elgg_echo('generic_comment:email:body', array(
-									$entity->title,
-									$user->name,
-									$annotation->value,
-									$entity->getURL(),
-									$user->name,
-									$user->getURL(),
-								));
+						// ESOPE : Custom message content : keep the one from comment_tracker (which is nice)
 						// Trigger a hook to provide better integration with other plugins
-						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+						$new_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
 						// Failsafe backup if hook as returned empty content but not false (= stop)
 						if (!empty($new_message)) { $message = $new_message; }
 						

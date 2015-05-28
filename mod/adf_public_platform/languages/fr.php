@@ -3,6 +3,8 @@
  * French strings
  */
 
+global $CONFIG;
+
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
 $fr = array(
@@ -935,12 +937,29 @@ $fr = array(
 	'esope:tools:tool:entity_fields' => "Recherche d'entités",
 	'esope:tools:tool:entity_fields:details' => "Recherche d'entités de divers types/subtypes par propriété ou métadonnée",
 	'esope:tools:tool:users_stats' => "Statsitiques sur les utilisateurs",
-	'esope:tools:tool:users_stats:details' => "Quelques statsitiques sur les utilisateurs. Nombre de groupes pour le moment.",
+	'esope:tools:tool:users_stats:details' => "Quelques statistiques sur les utilisateurs. Nombre de groupes pour le moment.",
 	
 	// Menus
 	'esope:menu:topbar' => "Mon compte",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
+	
+	
+	// Comment notifications
+	'generic_comment:email:body' => "Un nouveau commentaire a été publié sur \"%s\" par %s :
+
+
+%s
+
+
+Pour afficher la conversation, suivez le lien :
+%s
+
+Pour voir le profil de %s :
+%s
+
+Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
+",
 	
 	
 );
