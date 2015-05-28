@@ -8,7 +8,7 @@ $en = array(
 	'registration_filter' => "Registration filter",
 	
 	'registration_filter:whitelist_enable' => "Enable whitelist mode",
-	'registration_filter:whitelist_enable' => "If enabled, only emails from the defined list of domains will be allowed to register on the site.",
+	'registration_filter:whitelist_enable:details' => "If enabled, only emails from the defined list of domains will be allowed to register on the site.",
 	'registration_filter:blacklist_enable' => "Enable blacklist mode",
 	'registration_filter:blacklist_enable:details' => "If enabled, emails matching the blacklist filter will not be allowed to register on the site.",
 	'registration_filter:modes' => "While both modes can be enabled at the same time, it is usually useless to enable the blacklist mode if whitelist mode is already enabled, as only allowed domains will be allowed to register.",

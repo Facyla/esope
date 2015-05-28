@@ -229,6 +229,8 @@ $en = array(
 	'bookmarks:mygroups' => "In my groups",
 	'event_calendar:num_display' => "Number of events to display",
 	'messages:num_display' => "Number of messages to display",
+	'messages:moremessages' => "Display all unread messages",
+	'messages:togglecontent' => "Show/hide content",
 	
 	
 	// Layout settings

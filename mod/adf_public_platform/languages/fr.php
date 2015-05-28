@@ -228,6 +228,8 @@ $fr = array(
 	'bookmarks:mygroups' => "Dans mes groupes",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",
 	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:moremessages' => "Afficher tous les messages non lus",
+	'messages:togglecontent' => "Montrer/masquer le contenu",
 	
 	
 	// Layout settings
