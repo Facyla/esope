@@ -43,7 +43,7 @@ function postbymail_init() {
 	//  => mettre les infos de debug directement dans le mail envoyé pour avoir des infos sur ce qui se passe
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
 	
-	// @TODO : Ajout pour les commentaires
+	// @TODO : Ajout pour tous les commentaires
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
 	//elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
 	
