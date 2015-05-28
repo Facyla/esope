@@ -1,4 +1,5 @@
 <?php
+global $CONFIG;
 // require external libraries if needed
 if (!class_exists('DecodeMessage')) {
 	require_once($CONFIG->pluginspath . 'postbymail/lib/mimeDecode.php');

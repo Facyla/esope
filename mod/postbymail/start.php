@@ -213,6 +213,8 @@ function postbymail_add_to_message($message) {
 	if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
 	$separatordetails = elgg_get_plugin_setting('separatordetails', 'postbymail');
 	if (empty($separatordetails)) $separatordetails = elgg_echo('postbymail:default:separatordetails');
+	$addtextalternative = elgg_get_plugin_setting('replybuttonaddtext', 'postbymail');
+	if (empty($addtextalternative == 'no')) { $addtextalternative = false; } else { $addtextalternative = true; }
 	
 	// Prepare reply url
 	$url_param = '+guid=' . $postbymail_guid;
@@ -252,7 +254,9 @@ function postbymail_add_to_message($message) {
 		$reply_block = '<div style="' . $wrapper_style . '">';
 		$reply_block .= '<p class="postbymail-reply-button"><a href="mailto:' . $reply_email . '?subject=' . $reply_subject . '&body=%0D%0A%0D%0A%0D%0A' . $separator . '%0D%0A' . $separatordetails . '" style="' . $button_style . '">' . $button_title . '<span style="color:transparent; font-size:0px;">' . date("Y-m-d G:i ") . microtime(true) . '</span></a></p>';
 		// Add failsafe block with clear email address, for text emails
-		$reply_block .= '<p><em>' . elgg_echo('postbymail:replybutton:failsafe', array($reply_email_link)) . '</em></p>';
+		if ($addtextalternative) {
+			$reply_block .= '<p><em>' . elgg_echo('postbymail:replybutton:failsafe', array($reply_email_link)) . '</em></p>';
+		}
 		$reply_block .= '</div>';
 		$reply_block .= $message;
 	}
