@@ -94,7 +94,7 @@ header h1 { font: normal 36px Lato,sans-serif; color: #3e3e3e; background: url('
 header h1 a { color: #333; float: right; text-decoration:none; margin-top: 24px; }
 header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-decoration:none; }
 
-#profile_manager_register_left, #profile_manager_register_right { width:48%; }
+.elgg-form-register #profile_manager_register_left, .elgg-form-register #profile_manager_register_right { width:48%; }
 @media (max-width:700px) {
 	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
 }
