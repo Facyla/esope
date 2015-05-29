@@ -646,7 +646,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										// Trigger a hook to provide better integration with other plugins
 										$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $notification_message);
 										// Failsafe backup if hook as returned empty content but not false (= stop)
-										if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
+										if (!empty($hook_message) && ($hook_message !== false)) { $notification_message = $hook_message; }
 										notify_user($entity->owner_guid,
 											$member->guid,
 											$notification_subject,
