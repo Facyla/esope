@@ -581,6 +581,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 								}
 								break;
 							case 'thewire':
+								// River OK + Notification OK
 								// Pas de commentaire !
 								// Doit être une nouvelle publication en réponse à la première, dont on doit avoir le guid (parent)
 								// TODO
@@ -598,8 +599,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 								if ($thewire_guid) {
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
-									// @TODO River ?
-									// @TODO notification
 									// Send response to original poster if not already registered to receive notification
 									thewire_send_response_notification($thewire_guid, $entity->guid, $member);
 								}
@@ -609,6 +608,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 							case 'page_top':
 							case 'event_calendar':
 							default:
+								// River OK + @TODO notification
 								//set_input('topic_post', $post_body);
 								// Les commentaires sont acceptés en fonctions des paramétrages aussi
 								if ($forumonly) {
@@ -628,6 +628,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										//elgg_trigger_plugin_hook('action', 'comments/add', null, true); // breaks execution
 										//error_log("Action triggered on $subtype : comments/add");
 										/*
+										*/
 										notify_user($entity->owner_guid,
 											$member->guid,
 											elgg_echo('generic_comment:email:subject'),
@@ -640,7 +641,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 												$member->getURL()
 											))
 										);
-										*/
 									}
 								}
 						}
