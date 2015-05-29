@@ -170,7 +170,11 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				*/
 				if (!empty($msgbody)) {
 					// @TODO : mauvaise détection ISO-8859-1
-					$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
+					// @TODO Encoding is explicit in headers, should get it from there rather than auto-detect
+					$original_encoding = mb_detect_encoding($msgbody);
+					if ($original_encoding != "UTF-8") {
+						$msgbody = mb_convert_encoding($msgbody, "UTF-8", $original_encoding);
+					}
 					/*
 					if (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0) {
 						// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
@@ -305,6 +309,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$admin_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
 				$admin_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
 				if ($use_attachments) $admin_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
+				$admin_reply .= sprintf(elgg_echo('postbymail:info:parameters'), $parameters);
 				if ($entity) {
 					$admin_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
 				} else {
@@ -325,9 +330,14 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				// Si les publications par mail sont activées, on vérifie qu'on a les paramètres requis
 				// We need : a posting "key" (unically associated to the container group or user), and a "subtype" parameter.
 				// Sender should be identified when possible, but the post is sent by the group or user itself if email can't be found.
+				// Use normalized array for vars passing
+				$pbm_params = array('post_key' => $post_key, 'member' => $member, 'post_subtype' => $post_subtype, 'post_access' => $post_access, 'hash' => $hash, 'entity' => $entity, 'post_body' => $post_body, 'headers' => $message->headers);
+				
 				if ($mailpost && !empty($post_key)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					$post_check = postbymail_checkeligible_post($post_key, $member, $post_subtype, $post_access, $hash);
+					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					//$post_check = postbymail_checkeligible_post($post_key, $member, $post_subtype, $post_access, $hash);
+					$post_check = postbymail_checkeligible_post($pbm_params);
 					$mailpost_check = $post_check['check']; // Ok pour publier ?
 					$post_owner = $post_check['member']; // Auteur effectif du post
 					$post_container = $post_check['container']; // Emplacement de publication
@@ -349,7 +359,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				// Si les réponses par mail sont activées, on vérifie qu'on a les paramètres requis
 				if ($mailreply && !empty($guid)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					$reply_check = postbymail_checkeligible_reply($entity, $member, $post_body, $message->headers, $hash);
+					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					//$reply_check = postbymail_checkeligible_reply($entity, $member, $post_body, $message->headers, $hash);
+					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
 					$member = $reply_check['member'];
 					$group_entity = $reply_check['group'];
@@ -856,17 +868,20 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		- a "subtype" parameter, to allow 
 		=> in both cases, sender should be identified when it's possible, but the post is sent by the group or user itself if email can't be found.
  */
-function postbymail_checkeligible_post($key, $member = false, $subtype = 'blog', $access = false, $hash = false) {
+function postbymail_checkeligible_post($params = array()) {
+	$defaults = array('key' => false, 'member' => false, 'subtype' => 'blog', 'access' => false, 'hash' => false);
+	$params = array_merge($defaults, $params);
+	
 	global $sender_reply;
 	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailpost_check = true;
 	
 	// KEY CHECK : doit exister et correspondre à celle d'un user ou d'un group
-	if (!empty($key)) {
+	if (!empty($params['key'])) {
 		// pour connaître le container autorisé, on coupe sur le 1er "k" et on prend ce qui précède comme GUID
-		$kpos = mb_strpos($key, 'k');
-		if ($kpos) $container_guid = mb_substr($key, 0, $kpos);
+		$kpos = mb_strpos($params['key'], 'k');
+		if ($kpos) $container_guid = mb_substr($params['key'], 0, $kpos);
 		
 		// Vérification du container
 		if ($container_guid && ($container = get_entity($container_guid))) {
@@ -885,12 +900,12 @@ function postbymail_checkeligible_post($key, $member = false, $subtype = 'blog',
 			}
 			
 			// Vérification de la clef (doit être identique pour cet user ou ce group)
-			if (!empty($container->pubkey) && ($container->pubkey == $key)) {
+			if (!empty($container->pubkey) && ($container->pubkey == $params['key'])) {
 				// Ok pour la clef : existe et valide
 				$report .= elgg_echo('postbymail:validkey');
 			} else {
 				// Clef invalide ou inexistante
-				$report .= elgg_echo('postbymail:error:invalidkey') . ' : ' . $key;
+				$report .= elgg_echo('postbymail:error:invalidkey') . ' : ' . $params['key'];
 				$mailpost_check = false;
 			}
 		} else {
@@ -903,103 +918,106 @@ function postbymail_checkeligible_post($key, $member = false, $subtype = 'blog',
 		$report .= elgg_echo('postbymail:error:emptykey');
 		$mailpost_check = false;
 	}
-	$report .= elgg_echo('postbymail:key') . ' : ' . $key;
+	$report .= elgg_echo('postbymail:key') . ' : ' . $params['key'];
 	
 	// SUBTYPE CHECK : on vérifie qu'il existe, sinon on en définit un par défaut
 	// Subtype par défaut : blog
-	if (empty($subtype)) { $subtype = 'blog'; }
+	if (empty($params['subtype'])) { $params['subtype'] = 'blog'; }
 	// On vérifie que le subtype est bien valide, et qu'il est activé pour ce conteneur, si c'est un groupe
 	// @TODO attention aux cas particulier où le nom diffère...
 	if (elgg_instanceof($container, 'group')) {
-		if ($container->{$subtype . '_enable'} == 'yes') {
-			$report .= "Subtype $subtype enabled in " . $container->name;
+		if ($container->{$params['subtype'] . '_enable'} == 'yes') {
+			$report .= "Subtype {$params['subtype']} enabled in " . $container->name;
 		} else {
-			$report .= "Subtype $subtype NOT enabled in " . $container->name;
+			$report .= "Subtype {$params['subtype']} NOT enabled in " . $container->name;
 			$mailpost_check = false;
 		}
 	} else {
 		if (!elgg_is_active_plugin($subtype)) {
-			$report .= "Plugin $subtype NOT active";
+			$report .= "Plugin {$params['subtype']} NOT active";
 			$mailpost_check = false;
 		}
 	}
-	$report .= elgg_echo('postbymail:subtype') . ' : ' . $subtype;
+	$report .= elgg_echo('postbymail:subtype') . ' : ' . $params['subtype'];
 	
 	// ACCESS INFO : soit défini, soit par défaut si c'est un ElggUser ou ElggSite, soit réservé au groupe si c'est un ElggGroup
 	// SI accès défini, on vérifie qu'il est valide
-	if ($access !== false) {
+	if ($params['access'] !== false) {
 		// @todo vérifier que l'access id est bien valide, pas valide => empty
-		if (($access >= -2) && ($access <= 2)) {
+		if (($params['access'] >= -2) && ($params['access'] <= 2)) {
 			// OK ça existe en standard
 		} else {
-			$acl = get_access_collection($access);
+			$acl = get_access_collection($params['access']);
 			if (empty($acl->owner_guid)) {
-				$report .= "Access id $access NOT valid";
+				$report .= "Access id {$params['access']} NOT valid";
 				// Invalid : use default value
-				$access = false;
+				$params['access'] = false;
 			}
 		}
 	}
 	// Use default access if not correctly defined
-	if (($access === false) || (strlen($access) == 0) || ($access === '')) {
+	if (($params['access'] === false) || (strlen($params['access']) == 0) || ($params['access'] === '')) {
 		// Privé pour un membre, limité aux membres du groupe pour un groupe
 		if (elgg_instanceof($container, 'user') || elgg_instanceof($container, 'site')) {
-			$access = get_default_access();
+			$params['access'] = get_default_access();
 		} else if (elgg_instanceof($container, 'group')) {
-			$access = $container->group_acl;
+			$params['access'] = $container->group_acl;
 		}
 	}
-	$report .= elgg_echo('postbymail:access', array($access));
+	$report .= elgg_echo('postbymail:access', array($params['access']));
 	
 	// MEMBER CHECK : soit celui identifié si c'est bien un ElggUser, sinon l'ElggUser ou l'ElggGroup qui sert de container
-	if (elgg_instanceof($member, 'user')) {
+	if (elgg_instanceof($params['member'], 'user')) {
 		$report .= elgg_echo('postbymail:member:validsender');
 	} else {
 		$report .= elgg_echo('postbymail:member:containerinstead');
-		$member = $container;
+		$params['member'] = $container;
 	}
-	$report .= elgg_echo('postbymail:member') . ' : ' . $member->name;
+	$report .= elgg_echo('postbymail:member') . ' : ' . $params['member']->name;
 	
 	// ANTI-DOUBLONS : Vérification supplémentaire des doublons via le hash stocké dans l'entité container de la publication 
 	// (donc pas l'auteur, mais plutôt le lieu de publication)
 	// Principe : on ne publie un message qu'une seule fois, sinon a priori c'est un autre message (ou l'original a été effacé)
-	if ($hash && isset($container->mail_post_hash)) {
+	if ($params['hash'] && isset($container->mail_post_hash)) {
 		$hash_arr = unserialize($container->mail_post_hash);
-		if (in_array($hash, $hash_arr)) {
+		if (in_array($params['hash'], $hash_arr)) {
 			$report .= elgg_echo('postbymail:error:alreadypublished');
 			$mailreply_check = false;
 		}
 	}
 	
-	return array('member' => $member, 'container' => $container, 'access' => $access, 'subtype' => $subtype, 'check' => $mailpost_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'container' => $container, 'access' => $params['access'], 'subtype' => $params['subtype'], 'check' => $mailpost_check, 'report' => $report, 'hash' => $hash_arr);
 }
 
 
 /* REPLY CHECK - Checks if all parameters are ok to publish a reply to a post
  * $checkhash	 false, or publication hash to use hash check (hashed message will be ignored and not published)
 */
-function postbymail_checkeligible_reply($entity, $member, $post_body, $email_headers, $hash = false) {
+function postbymail_checkeligible_reply($params) {
+	$defaults = array('entity' => false, 'member' => false, 'post_body' => false, 'email_headers' => false, 'hash' => false);
+	$params = array_merge($defaults, $params);
+	
 	global $sender_reply;
 	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
-	if ($entity && elgg_instanceof($entity, 'object')) {
-		$report .= elgg_echo('postbymail:validobject', array($entity->title));
+	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
+		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
 		// Container
-		if ($group_entity = get_entity($entity->container_guid)) {
+		if ($group_entity = get_entity($params['entity']->container_guid)) {
 			$report .= elgg_echo('postbymail:containerok');
 			// Membre
-			if (elgg_instanceof($member, 'user')) {
-				$report .= elgg_echo('postbymail:memberok', array($member->name));
+			if (elgg_instanceof($params['member'], 'user')) {
+				$report .= elgg_echo('postbymail:memberok', array($params['member']->name));
 				// Check the user is a group member, or if he is the group owner, or if he is an admin
 				if (elgg_instanceof($group_entity, 'group')) {
 					$report .= elgg_echo('postbymail:groupok', array($group_entity->name));
-					if (($group_entity->isMember($member))
-						|| ($group_entity->owner_guid == $member->guid)
-						|| $member->admin || $member->siteadmin ) {
-							$report .= elgg_echo('postbymail:ismember', array($member->name, $group_entity->name));
+					if (($group_entity->isMember($params['member']))
+						|| ($group_entity->owner_guid == $params['member']->guid)
+						|| $params['member']->admin || $params['member']->siteadmin ) {
+							$report .= elgg_echo('postbymail:ismember', array($params['member']->name, $group_entity->name));
 						} else {
-							$report .= elgg_echo('postbymail:error:nogroupmember', array($member->name, $group_entity->name));
+							$report .= elgg_echo('postbymail:error:nogroupmember', array($params['member']->name, $group_entity->name));
 							$mailreply_check = false;
 						}
 				} else if (elgg_instanceof($group_entity, 'user')) {
@@ -1015,7 +1033,7 @@ function postbymail_checkeligible_reply($entity, $member, $post_body, $email_hea
 				$mailreply_check = false;
 			}
 		} else {
-			$report .= elgg_echo('postbymail:error:nocontainer', array($entity->guid, $entity->container_guid));
+			$report .= elgg_echo('postbymail:error:nocontainer', array($params['entity']->guid, $params['entity']->container_guid));
 			$mailreply_check = false;
 		}
 	} else {
@@ -1024,16 +1042,16 @@ function postbymail_checkeligible_reply($entity, $member, $post_body, $email_hea
 	}
 	
 	// Si vide inutile de publier
-	if (empty($post_body)) {
+	if (empty($params['post_body'])) {
 		$report .= elgg_echo('postbymail:error:emptymessage');
 		$mailreply_check = false;
 	}
 	
 	// Vérification supplémentaire des doublons via le hash stocké dans l'entité commentée
 	// on ne publie un message qu'une seule fois, sinon a priori c'est un autre message (ou l'original a été effacé)...
-	if ($hash && isset($entity->mail_post_hash)) {
-		$hash_arr = unserialize($entity->mail_post_hash);
-		if (in_array($hash, $hash_arr)) {
+	if ($params['hash'] && isset($params['entity']->mail_post_hash)) {
+		$hash_arr = unserialize($params['entity']->mail_post_hash);
+		if (in_array($params['hash'], $hash_arr)) {
 			$report .= elgg_echo('postbymail:error:alreadypublished');
 			$mailreply_check = false;
 		}
@@ -1043,10 +1061,10 @@ function postbymail_checkeligible_reply($entity, $member, $post_body, $email_hea
 	// @TODO : Filter auto-responses (avoids loops !!!)
 	// Only send a response if the ‘Auto-submitted’ field is absent or set to ‘no’.
 	// Important : les noms des index doivent être en minuscules !
-	$email_header_autosubmitted = $email_headers['auto-submitted'];
-	$email_header_returnpath = $email_headers['return-path'];
-	$email_header_from = $email_headers['from'];
-	//error_log("Headers : $email_header_autosubmitted / $email_header_returnpath / $email_header_from / " . print_r($email_headers, true));
+	$email_header_autosubmitted = $params['email_headers']['auto-submitted'];
+	$email_header_returnpath = $params['email_headers']['return-path'];
+	$email_header_from = $params['email_headers']['from'];
+	//error_log("Headers : $email_header_autosubmitted / $email_header_returnpath / $email_header_from / " . print_r($params['email_headers'], true));
 	if (!empty($email_header_autosubmitted) && ($email_header_autosubmitted != 'no')) {
 		// Header signalant explicitement une réponse automatique => on ne publie pas !
 		$report .= elgg_echo('postbymail:error:automatic_reply');
@@ -1062,7 +1080,7 @@ function postbymail_checkeligible_reply($entity, $member, $post_body, $email_hea
 	}
 	//$report .= "Message headers array = " . print_r($message, true);
 	
-	return array('member' => $member, 'group' => $group, 'check' => $mailreply_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'group' => $group, 'check' => $mailreply_check, 'report' => $report, 'hash' => $hash_arr);
 }
 
 
