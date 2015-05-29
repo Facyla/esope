@@ -449,7 +449,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
 							$new_post->title = $message->headers['subject'];
-							$new_post->description = $post_body;uD71wT!-D23M
+							$new_post->description = $post_body;
 							$new_post->access_id = $post_access;
 							// @TODO choose write access or set to private or same as post ?
 							$new_post->write_access_id = $post_access;
