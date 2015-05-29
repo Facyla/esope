@@ -126,6 +126,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
 				error_log("Processing email $i => $msg_id");
+				// Reconnect @TODO : do we lose the connection after long processing ?
+				$conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password);
+				
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
