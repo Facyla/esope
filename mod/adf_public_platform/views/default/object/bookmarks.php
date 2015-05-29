@@ -16,7 +16,7 @@ $owner = $bookmark->getOwnerEntity();
 $owner = get_entity($bookmark->owner_guid);
 $container = $bookmark->getContainerEntity();
 if (!elgg_instanceof($owner)) $owner = $container;
-if (elgg_instance($owner)) $owner_icon = elgg_view_entity_icon($owner, 'tiny');
+if (elgg_instanceof($owner)) $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $categories = elgg_view('output/categories', $vars);
 
 $link = elgg_view('output/url', array('href' => $bookmark->address));
