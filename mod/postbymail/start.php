@@ -189,7 +189,7 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 // Ce hook ajoute le bloc de notification aux messages de tous types
 // Prend en charge : object, annotation
 function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
-	error_log(print_r($returnvalue));
+	if (!is_string($returnvalue)) return $returnvalue;
 	global $postbymail_guid;
 	$entity = $params['entity'];
 	$annotation = $params['annotation'];

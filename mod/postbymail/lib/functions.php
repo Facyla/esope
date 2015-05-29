@@ -624,15 +624,16 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										// Add to river
 										//add_to_river('annotation/annotate','comment',$member->guid,$entity->guid); // @TODO update to latest structure
 										add_to_river('river/annotation/generic_comment/create', 'comment', $member->guid, $entity->guid, "", 0, $annotation);
-										// @TODO Add notification
+										// @TODO Add owner notification
+										// @TODO Check subscribed users
 										//elgg_trigger_plugin_hook('action', 'comments/add', null, true); // breaks execution
 										//error_log("Action triggered on $subtype : comments/add");
 										/*
 										*/
+										$notification_subject = elgg_echo('generic_comment:email:subject');
 										if (function_exists('notification_messages_build_subject')) {
-											$notification_subject = notification_messages_build_subject($entity);
-										} else {
-											$notification_subject = elgg_echo('generic_comment:email:subject');
+											$new_notification_subject = notification_messages_build_subject($entity);
+											if (!empty($new_notification_subject)) { $notification_subject = $new_notification_subject; }
 										}
 										$notification_message = elgg_echo('generic_comment:email:body', array(
 												$entity->title,
