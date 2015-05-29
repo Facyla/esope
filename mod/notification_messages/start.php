@@ -243,8 +243,9 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 	// Get config data
 	global $CONFIG, $SESSION, $NOTIFICATION_HANDLERS;
 
-	// Facyla : warning, if a plugin hook returned "true" (e.g. for blocking notification process), 
-	// this wouldn't be handled, so we should check it before going through the whole process !!
+	// Facyla : warning, if a plugin hook returned "true" (e.g. for blocking notification process, 
+	// or because it already sent the message), this wouldn't be handled, 
+	// so we should check it before going through the whole process !!
 	if ($returnvalue === true) return true;
 
 	$event = $params['event'];
@@ -355,6 +356,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
+		error_log("No sender GUID $sender_guid => block ?");
 	}
 
 	// Initialise 2 new ElggObject
@@ -699,9 +701,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 function notification_messages_notify_owner() {
 	$notify = false;
 	
-	// @TODO : should we force to true if using postbymail ?
-	//if (elgg_is_active_plugin('postbymail')) { $notify = true; }
-	
 	// Setting is synchronized with comment_tracker's
 	if (elgg_is_active_plugin('comment_tracker')) {
 		$notify_owner = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
@@ -709,6 +708,10 @@ function notification_messages_notify_owner() {
 		$notify_owner = elgg_get_plugin_setting('notify_owner', 'notification_messages');
 	}
 	if ($notify_owner == 'yes') { $notify = true; }
+	
+	// @TODO : should we force to true if using postbymail ?
+	//if (elgg_is_active_plugin('postbymail')) { $notify = true; }
+	
 	return $notify;
 }
 
