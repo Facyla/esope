@@ -156,11 +156,12 @@ echo elgg_view('input/captcha');
 
 echo "</div>";
 
-echo '<hr class="adf-lightseparator" />';
-
 $extend_side = elgg_view("register/extend_side");
-if ($extend_side) echo '<div id="profile_manager_register_right">' . $extend_side . '</div><hr class="adf-lightseparator" />';
+if ($extend_side) {
+	echo '<div id="profile_manager_register_right">' . $extend_side . '</div><hr class="adf-lightseparator" />';
+}
 
+echo '<hr class="adf-lightseparator" />';
 
 echo "<div class='clearfloat'></div>";
 //echo '<br />';
