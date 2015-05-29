@@ -115,8 +115,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		// See if the mailbox contains any messages.
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
 		//$allmsgCount = imap_num_msg($conn); // Compte tous les messages de la boîte
-		//if ($unreadmessages = imap_search($conn,'UNSEEN')) {
-		if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
+		//if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
+		if ($unreadmessages = imap_search($conn,'UNSEEN')) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
 			// Loop through the messages.
@@ -126,9 +126,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
 				error_log("Processing email $i => $msg_id");
-				// Reconnect @TODO : do we lose the connection after long processing ?
-				$conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password);
-				
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
