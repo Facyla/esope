@@ -365,7 +365,7 @@ function rssimport_cron($hook, $entity_type, $returnvalue, $params){
 	// change context for permissions
 	$context = elgg_get_context();
 	elgg_set_context('rssimport_cron');
-	elgg_set_ignore_access(TRUE);
+	$ia = elgg_set_ignore_access(true);
 	
 	// get array of imports we need to look at
 	$options = array(
@@ -379,7 +379,7 @@ function rssimport_cron($hook, $entity_type, $returnvalue, $params){
 	// try to avoid oom errors
 	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options, 'rssimport_import_feeds', 25);
 	
-	elgg_set_ignore_access(FALSE);
+	elgg_set_ignore_access($ia);
 	elgg_set_context($context);
 }
 
