@@ -607,7 +607,7 @@ if (elgg_is_active_plugin('comment_tracker')) {
 					// Do not notify the author of comment if set to not notify self
 					if (!$notify_owner && ($user->guid == $ann_user->guid)) { continue; }
 					// Do not notify the owner of the entity being commented on ?  because always notified before (in comment action)
-					if ($user->guid == $entity->owner_guid)) { continue; }
+					if ($user->guid == $entity->owner_guid) { continue; }
 				
 					$notify_settings_link = elgg_get_site_url() . "notifications/personal/{$user->username}";
 				
