@@ -39,7 +39,7 @@ if ($entity->owner_guid != $user->guid) {
 } else {
 	$notify = notification_messages_notify_owner();
 }
-
+$notify = false; // This is handled by event hook
 
 if ($notify) {
 	// Build more explicit subject
