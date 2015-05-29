@@ -124,6 +124,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
+				error_log("TEST MSG : $i => $msg_id");
 				// Réinitialisation de la variable globale, pour permettre de traiter chaque envoi indépendament
 				global $postbymail_guid;
 				$postbymail_guid = false;
