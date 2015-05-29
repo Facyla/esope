@@ -13,10 +13,10 @@ if (!$bookmark) {
 }
 
 $owner = $bookmark->getOwnerEntity();
+$owner = get_entity($bookmark->owner_guid);
 $container = $bookmark->getContainerEntity();
-// Failsafe if invalid owner
 if (!elgg_instanceof($owner)) $owner = $container;
-$owner_icon = elgg_view_entity_icon($owner, 'tiny');
+if (elgg_instance($owner)) $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $categories = elgg_view('output/categories', $vars);
 
 $link = elgg_view('output/url', array('href' => $bookmark->address));
@@ -25,10 +25,13 @@ $description = elgg_view('output/longtext', array('value' => $bookmark->descript
 // Determine valid href depending on owner
 if (elgg_instanceof($owner, 'group')) {
 	$href = "bookmarks/group/$owner->guid/all";
+} else if (elgg_instanceof($owner)) {
+	$href = "bookmarks/group/$owner->guid/all";
 } else if (elgg_instanceof($owner, 'site')) {
 	$href = "bookmarks/all";
 } else {
-	$href = "bookmarks/group/$owner->guid/all";
+	// Default
+	$href = "bookmarks/all";
 }
 
 $owner_link = elgg_view('output/url', array(
