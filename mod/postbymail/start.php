@@ -202,7 +202,9 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 		// Only forum replies should use this
 		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
 		global $postbymail_guid;
-		if (!isset($postbymail_guid)) { $postbymail_guid = $annotation->entity_guid; }
+		//if (!isset($postbymail_guid)) {  }
+		// Note : always get commented entity from annotation
+		$postbymail_guid = $annotation->entity_guid;
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else {
@@ -219,6 +221,8 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
  */
 function postbymail_add_to_message($message) {
 	global $postbymail_guid;
+	
+	//if (empty($postbymail_guid)) { error_log("Cannot determine valid reply GUID"); }
 	
 	$separator = elgg_get_plugin_setting('separator', 'postbymail');
 	if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
