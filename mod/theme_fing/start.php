@@ -15,9 +15,9 @@ function theme_fing_init(){
 	elgg_extend_view('css', 'theme_fing/css');
 	elgg_extend_view('css/admin', 'theme_fing/admin_css');
 	
-	// Extend on top so we can place it on 2 columns
-	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups', 0);
-	elgg_extend_view('forms/register', 'forms/groups/register_join_groups', 0);
+	// Use 2 sides
+	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups');
+	elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
 	
 	// Extend groups sidebar (below owner_block and before search and members)
 	//if (elgg_is_active_plugin('search')) elgg_extend_view('groups/sidebar/search', 'groups/sidebar/group_news_extend', 100);
