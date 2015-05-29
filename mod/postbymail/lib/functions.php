@@ -629,17 +629,27 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										//error_log("Action triggered on $subtype : comments/add");
 										/*
 										*/
-										notify_user($entity->owner_guid,
-											$member->guid,
-											elgg_echo('generic_comment:email:subject'),
-											elgg_echo('generic_comment:email:body', array(
+										if (function_exists('notification_messages_build_subject')) {
+											$notification_subject = notification_messages_build_subject($entity);
+										} else {
+											$notification_subject = elgg_echo('generic_comment:email:subject');
+										}
+										$notification_message = elgg_echo('generic_comment:email:body', array(
 												$entity->title,
 												$member->name,
 												$post_body,
 												$entity->getURL(),
 												$member->name,
 												$member->getURL()
-											))
+											));
+										// Trigger a hook to provide better integration with other plugins
+										$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+										// Failsafe backup if hook as returned empty content but not false (= stop)
+										if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
+										notify_user($entity->owner_guid,
+											$member->guid,
+											$notification_subject,
+											$notification_message
 										);
 									}
 								}

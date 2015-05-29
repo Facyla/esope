@@ -43,6 +43,7 @@ if ($entity->owner_guid != $user->guid) {
 
 if ($notify) {
 	// Build more explicit subject
+	// @TODO use subject and message hooks
 	$default_subject = elgg_echo('generic_comment:email:subject');
 	$subject = notification_messages_build_subject($entity);
 	if (empty($subject)) { $subject = $default_subject; }
