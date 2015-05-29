@@ -36,8 +36,10 @@ if (!$annotation) {
 $notify = false;
 if ($entity->owner_guid != $user->guid) {
 	$notify = true;
+error_log("NOTIF participant");
 } else {
 	$notify = notification_messages_notify_owner();
+error_log("NOTIF setting  $notify");
 }
 
 

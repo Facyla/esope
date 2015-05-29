@@ -601,12 +601,13 @@ if (elgg_is_active_plugin('comment_tracker')) {
 			$result = array();
 			foreach ($users as $user) {
 				// Make sure user is real
-				// Do not notify the author of comment
-				if (elgg_instanceof($user, 'user') && ($user->guid != $ann_user->guid)) {
-					if (($user->guid == $entity->owner_guid) && !$notify_owner) {
-						// user is the owner of the entity being commented on
-						continue;
-					}
+				// ESOPE : check if we should notify the comment author or not
+				//if (elgg_instanceof($user, 'user') && ($user->guid != $ann_user->guid)) {
+				if (elgg_instanceof($user, 'user')) {
+					// Do not notify the author of comment if set to not notify self
+					if (!$notify_owner && ($user->guid == $ann_user->guid)) { continue; }
+					// Do not notify the owner of the entity being commented on ?  because always notified before (in comment action)
+					if ($user->guid == $entity->owner_guid)) { continue; }
 				
 					$notify_settings_link = elgg_get_site_url() . "notifications/personal/{$user->username}";
 				
