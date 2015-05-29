@@ -90,7 +90,7 @@ function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
 function postbymail_object_notifications_handler($hook, $entity_type, $returnvalue, $params) {
 	if (elgg_instanceof($params['object'], 'object')) {
 		global $postbymail_guid;
-		if (empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
+		if (!$postbymail_guid || empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
 	}
 	// pas de modification du comportement (défini par ailleurs)
 	return $returnvalue;
@@ -105,7 +105,7 @@ function postbymail_annotate_event_notifications($event, $object_type, $object) 
 		// @TODO : pb = risque de redéfinition si envoi d'un message (qui a son propre GUID), 
 		// cependant on doit aussi réinitialiser le guid dans le cas d'un cron
 		// => fait dans la boucle de traitement des mails
-		if (empty($postbymail_guid)) {
+		if (!$postbymail_guid || empty($postbymail_guid)) {
 			if (elgg_instanceof($object, 'object')) {
 				$postbymail_guid = $object->guid;
 			}

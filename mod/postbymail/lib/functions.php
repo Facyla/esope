@@ -1,11 +1,11 @@
 <?php
-global $CONFIG;
+
 // require external libraries if needed
 if (!class_exists('DecodeMessage')) {
-	require_once($CONFIG->pluginspath . 'postbymail/lib/mimeDecode.php');
+	require_once(elgg_get_plugins_path() . 'postbymail/lib/mimeDecode.php');
 }
 if (!class_exists('Mail_mimeDecode')) {
-	require_once($CONFIG->pluginspath . 'postbymail/lib/Mail_mimeDecode.php');
+	require_once(elgg_get_plugins_path() . 'postbymail/lib/Mail_mimeDecode.php');
 }
 
 /* Post by mail functions */
@@ -26,14 +26,15 @@ if (!class_exists('Mail_mimeDecode')) {
 	*
 */
 function postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
-	global $CONFIG;
 	global $sender_reply;
 	global $admin_reply;
+	
+	$site = elgg_get_site_entity();
 	
 	$ia = elgg_set_ignore_access(true);
 	$debug = true;
 	$use_attachments = false;
-	// @TODO : vérifier si on doit faire un check has_acces_to_entity => normalement plus besoin en 1.8
+	// @TODO : vérifier si on doit faire un check has_access_to_entity => normalement plus besoin en 1.8
 	
 	$body = ''; $pub_counter = 0;
 	
@@ -125,7 +126,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			foreach ($unreadmessages as $i => $msg_id) {
 				// Réinitialisation de la variable globale, pour permettre de traiter chaque envoi indépendament
 				global $postbymail_guid;
-				$postbymail_guid = '';
+				$postbymail_guid = false;
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i+1), $msg_id));
 				// Get the message header.
@@ -582,19 +583,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 								break;
 							case 'thewire':
 								// River OK + Notification OK
-								// Pas de commentaire !
-								// Doit être une nouvelle publication en réponse à la première, dont on doit avoir le guid (parent)
-								// TODO
-								/*
-								$new_post = new ElggObject;
-								$new_post->subtype = "thewire";
-								$new_post->owner_guid = $member->guid;
-								$new_post->container_guid = $member->guid;
-								$new_post->wire_thread = $entity->guid;
-								$new_post->description = $post_body;
-								$new_post->access_id = $entity->access_id;
-								if ($new_post->save()) {
-								*/
+								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
 								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
 								if ($thewire_guid) {
 									$published = true;
@@ -624,12 +613,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 										// Add to river
 										//add_to_river('annotation/annotate','comment',$member->guid,$entity->guid); // @TODO update to latest structure
 										add_to_river('river/annotation/generic_comment/create', 'comment', $member->guid, $entity->guid, "", 0, $annotation);
-										// @Owner notification OK
+										// @Owner notification OK (usually happens in action), but here we need to notify the author too
 										// @TODO Check subscribed users notifications
-										//elgg_trigger_plugin_hook('action', 'comments/add', null, true); // breaks execution
-										//error_log("Action triggered on $subtype : comments/add");
-										/*
-										*/
 										$notification_subject = elgg_echo('generic_comment:email:subject');
 										if (function_exists('notification_messages_build_subject')) {
 											$new_notification_subject = notification_messages_build_subject($entity);
@@ -728,17 +713,17 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				
 				// 2. Envoi des notifications / send notifications
-				$site_name = $CONFIG->site->name;
+				$site_name = $site->name;
 				// Protect the name with quotations if it contains a comma
 				if (strstr($site_name, ",")) { $site_name = '"' . $site_name . '"'; }
 				$site_name = "=?UTF-8?B?" . base64_encode($site_name) . "?="; // Encode the name. If may content nos ASCII chars.
 				
 				// Headers communs
-				$headers = "From: Publication par mail {$site_name} <{$CONFIG->site->email}>\n";
-				$headers .= "Return-Path: <{$CONFIG->site->email}>\n";
+				$headers = "From: Publication par mail {$site_name} <{$site->email}>\n";
+				$headers .= "Return-Path: <{$site->email}>\n";
 				$headers .= "X-Sender: <{$site_name}>\n";
-				$headers .= "X-auth-smtp-user: {$CONFIG->site->email} \n";
-				$headers .= "X-abuse-contact: {$CONFIG->site->email} \n";
+				$headers .= "X-auth-smtp-user: {$site->email} \n";
+				$headers .= "X-abuse-contact: {$site->email} \n";
 				$headers .= "X-Mailer: PHP\n";
 				// Auto-Submitted and X-Auto-Response-Suppress helps avoiding automatic replies, 
 				// and reduce loop risks - see also incoming mails headers filtering
@@ -785,14 +770,14 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					//mail($admin_email, $admin_subject, $admin_reply, $headers);
 					$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
 					if ($notified_users = explode(',', trim($notifylist)) ) {
-						//notify_user($notified_users, $CONFIG->site->guid, $admin_subject, $admin_reply, NULL, 'email');
+						//notify_user($notified_users, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						foreach($notified_users as $notified_user) {
 							$admin_ent = get_entity($notified_user);
 							$admin_email = $admin_ent->email;
 							// Envoi par mail (mieux en HTML mais expéditeur à améliorer), sinon on passe par les moyens habituels (mais en texte brut)
 							if (mail($admin_email, $admin_subject, $admin_reply, $headers)) {
 							} else {
-								notify_user($notified_user, $CONFIG->site->guid, $admin_subject, $admin_reply, NULL, 'email');
+								notify_user($notified_user, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 							}
 						}
 					}
@@ -806,7 +791,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($groupowner = get_entity($group_entity->owner_guid)) {
 						if (($admin_email = $groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
 						} else {
-							notify_user($groupowner->guid, $CONFIG->site->guid, $admin_subject, $admin_reply, NULL, 'email');
+							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						}
 					}
 				}
@@ -1159,9 +1144,9 @@ function postbymail_extract_email($email_header) {
  * Puis via les adresses email alternatives
  */
 function postbymail_find_sender($email_headers) {
-	global $CONFIG;
 	global $sender_reply;
 	global $admin_reply;
+	$dbprefix = elgg_get_config('dbprefix');
 	
 	// Check "official" email From
 	$sendermail = postbymail_extract_email($email_headers['from']);
@@ -1187,8 +1172,8 @@ function postbymail_find_sender($email_headers) {
 	// On regarde finalement dans les adresses email alternatives des membres, configurées via leurs paramètres personnels
 	//error_log("DEBUG POSTBYMAIL : pas de mail OK, recherche parmi les alternatives");
 	// @TODO : use core function ? smthg like $results = elgg_get_plugin_user_setting('alternatemail', '', 'postbymail')
-	//error_log("DEBUG POSTBYMAIL : " . "SELECT * from {$CONFIG->dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'");
-	if ($results = get_data("SELECT * from {$CONFIG->dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'")) {
+	//error_log("DEBUG POSTBYMAIL : " . "SELECT * from {$dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'");
+	if ($results = get_data("SELECT * from {$dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'")) {
 		//error_log("DEBUG POSTBYMAIL : RESULTS = " . print_r($results, true));
 		foreach ($results as $r) {
 			$emails = $r->value;
