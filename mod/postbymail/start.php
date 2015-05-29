@@ -191,7 +191,7 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 	$annotation = $params['annotation'];
 	//$to_entity = $params['to_entity'];
 	//$method = $params['method'];
-	error_log("POSTBYMAIL : $hook, $entity_type, $returnvalue, " . print_r($params, true));
+	error_log("POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
 	
 	if (elgg_instanceof($entity, 'object')) {
 		// Note : all new content and comments use this, and also the messages
