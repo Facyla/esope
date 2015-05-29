@@ -39,11 +39,10 @@ if ($entity->owner_guid != $user->guid) {
 } else {
 	$notify = notification_messages_notify_owner();
 }
-$notify = false; // This is handled by event hook
+
 
 if ($notify) {
 	// Build more explicit subject
-	// @TODO use subject and message hooks
 	$default_subject = elgg_echo('generic_comment:email:subject');
 	$subject = notification_messages_build_subject($entity);
 	if (empty($subject)) { $subject = $default_subject; }
@@ -56,7 +55,7 @@ if ($notify) {
 				$user->name,
 				$user->getURL(),
 			));
-	// Trigger a hook to provide better integration with other plugins
+	// Trigger a hook to enable integration with other plugins
 	$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
 	// Failsafe backup if hook as returned empty content but not false (= stop)
 	if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
