@@ -46,8 +46,8 @@ function postbymail_init() {
 	// @TODO : Ajout pour tous les commentaires
 	// @TODO vérifier qu'on a bien les infos pour répondre correctement
 	// Apparemment GUID de la réponse et non de l'objet commenté
-	elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
-	//elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
+	//elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
+	elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
 	
 	// Ajout pour les messages
 	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
@@ -186,15 +186,15 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 // Ce hook ajoute le bloc de notification aux messages de tous types
 // Prend en charge : object, annotation
 function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
+	global $postbymail_guid;
 	$entity = $params['entity'];
 	$annotation = $params['annotation'];
 	//$to_entity = $params['to_entity'];
 	//$method = $params['method'];
-	
+	error_log("POSTBYMAIL : $hook, $entity_type, $returnvalue, " . print_r($params, true));
 	
 	if (elgg_instanceof($entity, 'object')) {
 		// Note : all new content and comments use this, and also the messages
-		global $postbymail_guid;
 		if (!isset($postbymail_guid)) { $postbymail_guid = $entity->guid; }
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
@@ -202,9 +202,10 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 		// Only forum replies should use this
 		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
 		global $postbymail_guid;
-		//if (!isset($postbymail_guid)) {  }
-		// Note : always get commented entity from annotation
-		$postbymail_guid = $annotation->entity_guid;
+		// Note : always get commented entity from annotation ?
+		if (!isset($postbymail_guid)) {
+			$postbymail_guid = $annotation->entity_guid;
+		}
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else {
