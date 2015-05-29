@@ -123,6 +123,10 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
+				// Réinitialisation de la variable globale, pour permettre de traiter chaque envoi indépendament
+				global $postbymail_guid;
+				$postbymail_guid = '';
+				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i+1), $msg_id));
 				// Get the message header.
 				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT);

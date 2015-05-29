@@ -90,7 +90,7 @@ function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
 function postbymail_object_notifications_handler($hook, $entity_type, $returnvalue, $params) {
 	if (elgg_instanceof($params['object'], 'object')) {
 		global $postbymail_guid;
-		$postbymail_guid = $params['object']->guid;
+		if (empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
 	}
 	// pas de modification du comportement (défini par ailleurs)
 	return $returnvalue;
@@ -102,6 +102,9 @@ function postbymail_object_notifications_handler($hook, $entity_type, $returnval
 function postbymail_annotate_event_notifications($event, $object_type, $object) {
 	if (is_callable('object_notifications')) {
 		global $postbymail_guid;
+		// @TODO : pb = risque de redéfinition si envoi d'un message (qui a son propre GUID), 
+		// cependant on doit aussi réinitialiser le guid dans le cas d'un cron
+		// => fait dans la boucle de traitement des mails
 		if (empty($postbymail_guid)) {
 			if (elgg_instanceof($object, 'object')) {
 				$postbymail_guid = $object->guid;
@@ -195,7 +198,7 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 	
 	if (elgg_instanceof($entity, 'object')) {
 		// Note : all new content and comments use this, and also the messages
-		if (!isset($postbymail_guid)) { $postbymail_guid = $entity->guid; }
+		if (empty($postbymail_guid)) { $postbymail_guid = $entity->guid; }
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else if ($annotation instanceof ElggAnnotation) {
@@ -203,14 +206,14 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
 		global $postbymail_guid;
 		// Note : always get commented entity from annotation ?
-		if (!isset($postbymail_guid)) {
+		if (empty($postbymail_guid)) {
 			$postbymail_guid = $annotation->entity_guid;
 		}
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else {
 		// On ne peut ajouter le lien que si on a l'info sur l'entité concernée...
-		if (isset($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }
+		if (!empty($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }
 	}
 	
 	return $returnvalue;
