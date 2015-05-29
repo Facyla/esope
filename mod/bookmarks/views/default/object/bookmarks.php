@@ -14,6 +14,7 @@ if (!$bookmark) {
 
 $owner = $bookmark->getOwnerEntity();
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
+error_log("Owner : $bookmark->guid $bookmark->owner_guid " . print_r($owner, true));
 $container = $bookmark->getContainerEntity();
 $categories = elgg_view('output/categories', $vars);
 
