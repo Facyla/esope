@@ -146,6 +146,8 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:inboxfolder') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[inboxfolder]', 'style' => 'width:94%;', 'value' => $vars['entity']->inboxfolder));
 	echo '</label><p/>';
+	
+	// @TODO ? Notification scope error|success|groupadmin
 
 echo '</fieldset>';
 

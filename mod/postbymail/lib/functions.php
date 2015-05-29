@@ -309,7 +309,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$admin_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
 				$admin_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
 				if ($use_attachments) $admin_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:parameters'), $parameters);
+				$admin_reply .= $parameters;
 				if ($entity) {
 					$admin_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
 				} else {
@@ -330,8 +330,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				// Si les publications par mail sont activées, on vérifie qu'on a les paramètres requis
 				// We need : a posting "key" (unically associated to the container group or user), and a "subtype" parameter.
 				// Sender should be identified when possible, but the post is sent by the group or user itself if email can't be found.
-				// Use normalized array for vars passing
-				$pbm_params = array('post_key' => $post_key, 'member' => $member, 'post_subtype' => $post_subtype, 'post_access' => $post_access, 'hash' => $hash, 'entity' => $entity, 'post_body' => $post_body, 'headers' => $message->headers);
+				// @TODO Use normalized array for easier vars passing
+				$pbm_params = array('post_key' => $post_key, 'member' => $member, 'post_subtype' => $post_subtype, 'post_access' => $post_access, 'hash' => $hash, 'entity' => $entity, 'post_body' => $post_body, 'email_headers' => $message->headers);
 				
 				if ($mailpost && !empty($post_key)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
@@ -513,10 +513,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 						$admin_reply = elgg_echo('postbymail:error:lastminutedebug', array($admin_reply));
 					}
 					
-				} else {
-					// Pas publiable
-					$admin_reply .= elgg_echo('postbymail:admin:reportmessage:error', array($cutat, $post_body, $msgbody));
-					$sender_reply .= elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
 				}
 				$body .= '<div class="clearfloat"></div>';
 				
@@ -524,7 +520,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*************************************/
 				/* PUBLICATION DU MESSAGE DE REPONSE */
 				/*************************************/
-				if ($mailreply && $mailreply_check) {
+				if ($mailreply)  && $mailreply_check) {
 					$body .= elgg_echo('postbymail:info:usefulcontent', array($post_body));
 					$sent = false;
 					// Vérification du subtype, pour utiliser le bon type de publication
@@ -674,13 +670,17 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 						$notify_admin = true;
 						$admin_reply = elgg_echo('postbymail:error:lastminutedebug', array($admin_reply));
 					}
-					
-				} else {
+				}
+				$body .= '<div class="clearfloat"></div>';
+				
+				if (!$published) {
 					// Pas publiable
 					$admin_reply .= elgg_echo('postbymail:admin:reportmessage:error', array($cutat, $post_body, $msgbody));
 					$sender_reply .= elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
+					$body .= '<div class="clearfloat"></div>';
 				}
-				$body .= '<div class="clearfloat"></div>';
+				
+				
 				/*
 				$errorlog_message = "DEBUG POSTBYMAIL functions : editor = {$member->guid}, subtype = $subtype, guid = {$entity->guid}, check = $forum_post_check, body = " . print_r($entity, true);
 				error_log($errorlog_message);
