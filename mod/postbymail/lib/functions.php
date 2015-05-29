@@ -115,21 +115,22 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		// See if the mailbox contains any messages.
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
 		//$allmsgCount = imap_num_msg($conn); // Compte tous les messages de la boîte
-		if ($unreadmessages = imap_search($conn,'UNSEEN')) {
+		//if ($unreadmessages = imap_search($conn,'UNSEEN')) {
+		if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
 			// Loop through the messages.
 			// Pour chaque message à traiter : on vérifie d'abord quelques pré-requis (messages systèmes)
-				// Puis on vérifie les paramètres et on poste si tout est OK
+			// Puis on vérifie les paramètres et on poste si tout est OK
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
 				//error_log("TEST MSG : $i => $msg_id");
-				// @TODO : imap_body(): Bad message number => process only 1 message per cron ?
+				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
-				// Réinitialisation de la variable globale, pour permettre de traiter chaque envoi de notifications indépendament
+				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
 				global $postbymail_guid;
-				$postbymail_guid = false;
+				$postbymail_guid = '';
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i+1), $msg_id));
 				// Get the message header.
