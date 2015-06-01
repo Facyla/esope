@@ -102,7 +102,7 @@ header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-dec
 }
 
 #fing-register {  }
-h2.fing-register-title { font-size:3em; }
+h2.fing-register-title { font-size:3em; text-align:center; }
 h3.fing-register-title { font-size:2em; font-weight:normal; }
 .fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; margin-bottom:2ex; }
 .fing-register-groups {  }
@@ -110,7 +110,9 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #fing-register .elgg-form-register { background: transparent; }
 #register_joingroups fieldset { border:0 !important; padding:0; }
 #register_joingroups legend { display: none; }
+#register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
 
+label[for="register-name"] { width: 30%; }
 
 
 #fing-homepage {
