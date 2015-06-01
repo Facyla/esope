@@ -5,7 +5,7 @@
 	$challenge = vazco_text_captcha::getCaptchaChallenge();
 	list($challenge_id, $challenge_question, $challenge_answer) = $challenge;  
 ?>
-<div class="fing-register-captcha">
+<div class="fing-register-captcha mandatory">
 	<input type="hidden" name="captcha_token" value="<?php echo $challenge_id; ?>" />
 	<label><?php echo $challenge_question; ?></label>
 	

@@ -125,6 +125,11 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 			<div class="clearfloat"></div>
 		</div>
 	
+	<?php
+	// Enable newsletter and digest by default
+	echo elgg_view("input/hidden", array("name" => "digest_site", "value" => "yes"));
+	echo elgg_view("input/hidden", array("name" => "newsletter_subscription", "value" => "1"));
+	?>
 	
 	</fieldset>
 

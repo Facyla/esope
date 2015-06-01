@@ -115,8 +115,10 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
 #fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
 
+#fing-register form input[type=text] { width: 100%; font-size: 1.5em; background: aliceblue; border: 2px solid black; }
+
 #fing-register .elgg-foot { float: right; width: 58%; }
-.fing-register-submit { border-radius:0; font-size: 2em; width: 60%; }
+.fing-register-submit { border-radius:0; font-size: 1.5em; width: 100%; }
 
 
 #fing-homepage {
