@@ -103,7 +103,7 @@ header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-dec
 .fing-register-title { text-align:center; }
 h2.fing-register-title { font-size:2.5em; }
 h3.fing-register-title { font-size:2em; font-weight:normal; }
-.fing-register-title em { font-weight:bold; font-style:normal; }
+.fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; }
 .fing-register-groups {  }
 .fing-register-instructions { text-align:center; margin: 2ex 0 1ex 0; }
 
