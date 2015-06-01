@@ -96,8 +96,8 @@ header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-dec
 
 .profile_manager_register_category { padding-top: 2ex; }
 .elgg-form-register .captcha { padding-top: 2ex; }
-.elgg-form-register #profile_manager_register_left { width:55%; }
-.elgg-form-register #profile_manager_register_right { width:41%; }
+.elgg-form-register #profile_manager_register_left { width:50%; }
+.elgg-form-register #profile_manager_register_right { width:44%; }
 @media (max-width:700px) {
 	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
 }
