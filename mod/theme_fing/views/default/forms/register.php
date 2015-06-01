@@ -118,7 +118,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 				<span class='custom_fields_more_info' id='more_info_username'></span>
 				<span class='custom_fields_more_info_text' id='text_more_info_username'><?php echo elgg_echo("profile_manager:register:hints:username")?></span>
 			<?php } ?>
-			<div class='profile_manager_register_input_container'>
+			<div class="profile_manager_register_input_container">
 				<?php echo elgg_view('input/text', array('id' => 'register-username', 'name' => 'username', 'value' => $username, 'required' => 'required')); ?>
 				<div class="elgg-icon profile_manager_validate_icon"></div>
 			</div>
@@ -141,7 +141,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 		echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
 		echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));
 		echo '<p>' . $terms . '</p>';
-		echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register'), 'class' => "fing-register-submit"));
+		echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register'), 'class' => "elgg-button elgg-button-submit fing-register-submit"));
 		//echo "<div class='elgg-subtext mtm'>" . elgg_echo("profile_manager:register:mandatory") . "</div>";
 	echo "</div>";
 

@@ -111,11 +111,12 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #register_joingroups fieldset { border:0 !important; padding:0; }
 #register_joingroups legend { display: none; }
 #register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
-.fing-register-submit { border-radius:0; font-size: 2em; width: 60%; }
 
-label[for="register-name"] { width: 30%; }
 #fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
 #fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
+
+#fing-register .elgg-foot { float: right; width: 58%; }
+.fing-register-submit { border-radius:0; font-size: 2em; width: 60%; }
 
 
 #fing-homepage {
