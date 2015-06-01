@@ -664,6 +664,7 @@ if (!function_exists('messages_get_unread')) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		$db_prefix = elgg_get_config('dbprefix');
+		$offset = 0;
 		
 		// denormalize the md to speed things up.
 		// seriously, 10 joins if you don't.
@@ -673,6 +674,7 @@ if (!function_exists('messages_get_unread')) {
 			$id = get_metastring_id($string);
 			$map[$string] = $id;
 		}
+		//echo '<pre>' . print_r($map, true) . '</pre>';
 
 		$options = array(
 	//		'metadata_name_value_pairs' => array(

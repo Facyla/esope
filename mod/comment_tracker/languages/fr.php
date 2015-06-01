@@ -37,7 +37,7 @@ $french = array(
 	'comment:unsubscribe:entity:not:access' => "Désolé, la publication n'a pas pu être trouvée.",
 	'comment_tracker:setting:show_button' => "Afficher le bouton d'abonnement/désabonnement au-dessus des commentaires ? ",
 	'comment_tracker:item' => "élément",
-'comment_tracker:setting:notify_owner' => "Laisser comment_tracker notifier également le propriétaire ?",
+'comment_tracker:setting:notify_owner' => "Laisser comment_tracker gérer également les notifications de l'auteur ?",
 	
 	'comment:notify:subject:groupforumtopic' => "%s a commenté %s dans le groupe %s",
 	'comment:notify:subject:comment' => "%s a commenté %s \"%s\"",
@@ -74,9 +74,9 @@ Pour modifier vos préférences de notification, veuillez cliquer sur :
 	
 	'comment:notify:body:email:text' => "Bonjour %s,
 
-Un nouveau commentaire a été publié sur %s
-
+Un nouveau commentaire a été publié sur \"%s\"
 %s a écrit :
+
 %s
 
 %s
@@ -100,9 +100,9 @@ Pour modifier vos préférences de notification pour tous les messages de ce typ
 	
 	'comment:notify:group:body:email:text' => "Bonjour %s,
 
-Une nouvelle réponse a été publiée sur %s
-
+Une nouvelle réponse a été publiée sur \"%s\"
 %s a écrit :
+
 %s
 
 %s

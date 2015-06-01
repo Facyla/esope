@@ -119,7 +119,7 @@ $french = array(
 %s
 %s
 
-Afficher et commenter la nouvelle page :
+Afficher et commenter cette page en ligne :
 %s",
 	'pages:parent_guid' => "Page parente",
 	

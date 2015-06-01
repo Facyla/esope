@@ -3,9 +3,8 @@
  */
 
 <?php
-global $CONFIG;
-$imgurl = $CONFIG->url . 'mod/theme_fing/graphics/';
-$fonturl = $CONFIG->url . 'mod/theme_fing/fonts/';
+$imgurl = elgg_get_site_url() . 'mod/theme_fing/graphics/';
+$fonturl = elgg_get_site_url() . 'mod/theme_fing/fonts/';
 $font_neris = $fonturl . 'neris/';
 $font_lettergothic = $fonturl . 'LetterGothicStd/';
 ?>
@@ -94,6 +93,13 @@ header { height:94px; }
 header h1 { font: normal 36px Lato,sans-serif; color: #3e3e3e; background: url('<?php echo $vars['url']; ?>mod/theme_fing/graphics/fing/accueil_fing.png') no-repeat; width:804px; height:94px; margin-top:0px; }
 header h1 a { color: #333; float: right; text-decoration:none; margin-top: 24px; }
 header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-decoration:none; }
+
+.profile_manager_register_category { padding-top: 2ex; }
+.elgg-form-register .captcha { padding-top: 2ex; }
+.elgg-form-register #profile_manager_register_left, .elgg-form-register #profile_manager_register_right { width:48%; }
+@media (max-width:700px) {
+	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
+}
 
 
 #fing-homepage {

@@ -32,6 +32,9 @@ function postbymail_init() {
 	
 	
 	// Add reply block to email
+	
+	elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
+	
 	// Ajout du bloc de réponse au contenu à tous les messages de notification
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'postbymail_add_to_notify_message_hook', 1000);
 	elgg_register_plugin_hook_handler('notify:entity:message', 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
@@ -39,6 +42,13 @@ function postbymail_init() {
 	// Note debug : en mode CLI (advanced_notifications) il n'y a aucune entrée dans error_log !
 	//  => mettre les infos de debug directement dans le mail envoyé pour avoir des infos sur ce qui se passe
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
+	
+	// @TODO : Ajout pour tous les commentaires
+	// @TODO vérifier qu'on a bien les infos pour répondre correctement
+	// Apparemment GUID de la réponse et non de l'objet commenté
+	//elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
+	elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
+	
 	// Ajout pour les messages
 	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
@@ -80,7 +90,7 @@ function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
 function postbymail_object_notifications_handler($hook, $entity_type, $returnvalue, $params) {
 	if (elgg_instanceof($params['object'], 'object')) {
 		global $postbymail_guid;
-		$postbymail_guid = $params['object']->guid;
+		if (!$postbymail_guid || empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
 	}
 	// pas de modification du comportement (défini par ailleurs)
 	return $returnvalue;
@@ -92,7 +102,10 @@ function postbymail_object_notifications_handler($hook, $entity_type, $returnval
 function postbymail_annotate_event_notifications($event, $object_type, $object) {
 	if (is_callable('object_notifications')) {
 		global $postbymail_guid;
-		if (empty($postbymail_guid)) {
+		// @TODO : pb = risque de redéfinition si envoi d'un message (qui a son propre GUID), 
+		// cependant on doit aussi réinitialiser le guid dans le cas d'un cron
+		// => fait dans la boucle de traitement des mails
+		if (!$postbymail_guid || empty($postbymail_guid)) {
 			if (elgg_instanceof($object, 'object')) {
 				$postbymail_guid = $object->guid;
 			}
@@ -173,30 +186,34 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 }
 
 
-// Ce hook ajoute le bloc de notification aux messages
+// Ce hook ajoute le bloc de notification aux messages de tous types
+// Prend en charge : object, annotation
 function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
+	global $postbymail_guid;
 	$entity = $params['entity'];
 	$annotation = $params['annotation'];
 	//$to_entity = $params['to_entity'];
 	//$method = $params['method'];
-	
+	//error_log("DEBUG POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
 	
 	if (elgg_instanceof($entity, 'object')) {
 		// Note : all new content and comments use this, and also the messages
-		global $postbymail_guid;
-		if (!isset($postbymail_guid)) { $postbymail_guid = $entity->guid; }
+		if (empty($postbymail_guid)) { $postbymail_guid = $entity->guid; }
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else if ($annotation instanceof ElggAnnotation) {
 		// Only forum replies should use this
 		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
 		global $postbymail_guid;
-		if (!isset($postbymail_guid)) { $postbymail_guid = $annotation->entity_guid; }
+		// Note : always get commented entity from annotation ?
+		if (empty($postbymail_guid)) {
+			$postbymail_guid = $annotation->entity_guid;
+		}
 		$returnvalue = postbymail_add_to_message($returnvalue);
 		
 	} else {
 		// On ne peut ajouter le lien que si on a l'info sur l'entité concernée...
-		if (isset($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }
+		if (!empty($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }
 	}
 	
 	return $returnvalue;
@@ -209,10 +226,14 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 function postbymail_add_to_message($message) {
 	global $postbymail_guid;
 	
+	//if (empty($postbymail_guid)) { error_log("Cannot determine valid reply GUID"); }
+	
 	$separator = elgg_get_plugin_setting('separator', 'postbymail');
 	if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
 	$separatordetails = elgg_get_plugin_setting('separatordetails', 'postbymail');
 	if (empty($separatordetails)) $separatordetails = elgg_echo('postbymail:default:separatordetails');
+	$replybuttonaddtext = elgg_get_plugin_setting('replybuttonaddtext', 'postbymail');
+	if ($replybuttonaddtext == 'no') { $replybuttonaddtext = false; } else { $replybuttonaddtext = true; }
 	
 	// Prepare reply url
 	$url_param = '+guid=' . $postbymail_guid;
@@ -252,7 +273,9 @@ function postbymail_add_to_message($message) {
 		$reply_block = '<div style="' . $wrapper_style . '">';
 		$reply_block .= '<p class="postbymail-reply-button"><a href="mailto:' . $reply_email . '?subject=' . $reply_subject . '&body=%0D%0A%0D%0A%0D%0A' . $separator . '%0D%0A' . $separatordetails . '" style="' . $button_style . '">' . $button_title . '<span style="color:transparent; font-size:0px;">' . date("Y-m-d G:i ") . microtime(true) . '</span></a></p>';
 		// Add failsafe block with clear email address, for text emails
-		$reply_block .= '<p><em>' . elgg_echo('postbymail:replybutton:failsafe', array($reply_email_link)) . '</em></p>';
+		if ($replybuttonaddtext) {
+			$reply_block .= '<p><em>' . elgg_echo('postbymail:replybutton:failsafe', array($reply_email_link)) . '</em></p>';
+		}
 		$reply_block .= '</div>';
 		$reply_block .= $message;
 	}
@@ -262,6 +285,7 @@ function postbymail_add_to_message($message) {
 
 
 
+// Note : cette fonction ne s'applique que dans le cas d'une réponse à l'email d'expédition (mode déconseillé)
 // Version en cours de modification sur la base des devs de Simon/Inria
 // @TODO : si on garde ça, le faire plus proprement pour meilleure intégration avec d'autres plugins
 // @TODO : modifier le handler de html_email_handler car celui-ci envoie réellement le message

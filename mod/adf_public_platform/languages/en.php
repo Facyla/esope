@@ -229,6 +229,10 @@ $en = array(
 	'bookmarks:mygroups' => "In my groups",
 	'event_calendar:num_display' => "Number of events to display",
 	'messages:num_display' => "Number of messages to display",
+	'messages:moremessages' => "Display all unread messages",
+	'messages:togglecontent' => "Show/hide content",
+	'messages:widget:unreadcount' => '%s unread messages',
+	'messages:widget:unreadcount:singular' => '1 unread message',
 	
 	
 	// Layout settings
@@ -935,6 +939,21 @@ $en = array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	
+	
+	// Comment notifications
+	'generic_comment:email:body' => "A new comment was published on \"%s\" by %s:
+
+
+%s
+
+
+To view the complete discussion, click here:
+%s
+
+To view %s's profile, click here:
+%s
+
+This is an automated notification, please do not reply to this email.",
 	
 );
 
