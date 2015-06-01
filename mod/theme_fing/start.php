@@ -15,9 +15,11 @@ function theme_fing_init(){
 	elgg_extend_view('css', 'theme_fing/css');
 	elgg_extend_view('css/admin', 'theme_fing/admin_css');
 	
-	// Use 2 sides
+	// Re-define registration page and block (use 2 sides)
 	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups');
-	elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
+	elgg_unextend_view('forms/register', 'hybridauth/register');
+	//elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
+	elgg_register_page_handler("register", "fing_register_page_handler");
 	
 	// Extend groups sidebar (below owner_block and before search and members)
 	//if (elgg_is_active_plugin('search')) elgg_extend_view('groups/sidebar/search', 'groups/sidebar/group_news_extend', 100);
@@ -133,6 +135,13 @@ function theme_fing_get_pin_entities($selection = 'manual', $limit = 6) {
 	}
 	return false;
 }
+
+
+function fing_register_page_handler($page){
+	include(dirname(__FILE__) . '/pages/theme_fing/register.php');
+	return true;
+}
+
 
 
 function fing_page_handler($page){

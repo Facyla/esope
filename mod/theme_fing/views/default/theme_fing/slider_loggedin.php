@@ -19,7 +19,7 @@ if (!empty($slidercontent)) {
 $articles = theme_fing_get_pin_entities();
 $max = 3;
 $i = 0;
-foreach ($articles as $ent) {
+if ($articles) foreach ($articles as $ent) {
 	$i++;
 	$title = $ent->title;
 	if (empty($title)) $title = $ent->name;
