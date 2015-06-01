@@ -112,6 +112,8 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #register_joingroups legend { display: none; }
 #register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
 
+#fing-register .hybridauth-provider { float: none; }
+
 #fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
 #fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
 
