@@ -30,10 +30,11 @@ if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manage
 }
 
 
-echo "<div id='profile_manager_register_left'>";
+echo '<div id="profile_manager_register_left" class="home-static-container">';
 echo '<h3 class="fing-register-title">' . elgg_echo('theme_fing:register:3minutes') . '</h3>';
 
-echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p>';
+echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p
+>';
 
 echo elgg_view('hybridauth/register', $vars);
 
@@ -162,7 +163,7 @@ echo "</div>";
 
 
 // Right column
-echo '<div id="profile_manager_register_right" class="fing-register-groups">' .elgg_view("register/extend_side");
+echo '<div id="profile_manager_register_right" class="fing-register-groups home-static-container">' .elgg_view("register/extend_side");
 	echo '<h3 class="fing-register-title">' . elgg_echo('theme_fing:register:discoverwork') . '</h3>';
 	
 	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:choosegroups') . '</p>';

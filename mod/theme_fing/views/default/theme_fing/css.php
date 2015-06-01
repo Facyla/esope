@@ -100,12 +100,18 @@ header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-dec
 @media (max-width:700px) {
 	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
 }
-.fing-register-title { text-align:center; }
-h2.fing-register-title { font-size:2.5em; }
+
+#fing-register {  }
+h2.fing-register-title { font-size:3em; }
 h3.fing-register-title { font-size:2em; font-weight:normal; }
-.fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; }
+.fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; margin-bottom:2ex; }
 .fing-register-groups {  }
 .fing-register-instructions { text-align:center; margin: 2ex 0 1ex 0; }
+#fing-register .elgg-form-register { background: transparent; }
+#register_joingroups fieldset { border:0 !important; padding:0; }
+#register_joingroups legend { display: none; }
+
+
 
 #fing-homepage {
 	background: white !important;

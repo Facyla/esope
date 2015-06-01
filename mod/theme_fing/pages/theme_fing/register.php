@@ -32,7 +32,7 @@ $title = elgg_echo("theme_fing:register:create");
 $content = '<div id="fing-register">';
 
 	$content .= '<h2 class="fing-register-title">' . $title . '</h2>';
-	$content .= '<em>' . elgg_echo('theme_fing:register:participate') . '</em>';
+	$content .= '<p class="fing-register-subtitle">' . elgg_echo('theme_fing:register:participate') . '</p>';
 
 	// create the registration url - including switching to https if configured
 	$register_url = elgg_get_site_url() . 'action/register';
