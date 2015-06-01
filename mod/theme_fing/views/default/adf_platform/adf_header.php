@@ -1,14 +1,19 @@
 <?php
 
-$url = $vars['url'];
+$url = elgg_get_site_url();
+$full_url = full_url();
 $urlicon = $url . 'mod/adf_public_platform/img/theme/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
 $prev_q = get_input('q', '');
 
+// Do not display Nav bar on registration + login page
+$show_nav = true;
+if (($full_url == $url.'register') || ($full_url == $url.'login')) { $show_nav = false; }
+
 if (elgg_is_logged_in()) {
-	$own = $_SESSION['user'];
+	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
@@ -138,6 +143,7 @@ if (elgg_is_logged_in()) {
 				</div>
 			</header>
 			
+			<?php if ($show_nav) { ?>
 			<div id="transverse" class="nois-floatable">
 				<div class="interne">
 					<nav>
@@ -216,4 +222,5 @@ if (elgg_is_logged_in()) {
 					<?php } ?>
 				</div>
 			</div>
+			<?php } ?>
 			
