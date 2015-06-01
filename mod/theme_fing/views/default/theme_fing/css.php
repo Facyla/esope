@@ -114,6 +114,8 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 .fing-register-submit { border-radius:0; font-size: 2em; width: 60%; }
 
 label[for="register-name"] { width: 30%; }
+#fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
+#fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
 
 
 #fing-homepage {
