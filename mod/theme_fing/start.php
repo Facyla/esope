@@ -18,8 +18,8 @@ function theme_fing_init(){
 	// Re-define registration page and block (use 2 sides)
 	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups');
 	elgg_unextend_view('forms/register', 'hybridauth/register');
-	elgg_unextend_view('forms/register', 'digest/register');
-	elgg_unextend_view('forms/register', 'newsletter/register');
+	elgg_unextend_view('register/extend', 'digest/register');
+	elgg_unextend_view('register/extend', 'newsletter/register');
 	//elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
 	// Override registration page
 	elgg_register_page_handler("register", "theme_fing_register_page_handler");

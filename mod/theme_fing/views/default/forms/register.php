@@ -43,9 +43,8 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 	echo '<center>';
 	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p
 	>';
-	echo '</center>';
-
 	echo elgg_view('hybridauth/register', $vars);
+	echo '</center>';
 
 	echo '<hr class="adf-lightseparator" />';
 
@@ -76,7 +75,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 				<span class='custom_fields_more_info_text' id='text_more_info_email'><?php echo elgg_echo("profile_manager:register:hints:email")?></span>
 			<?php } ?>
 		
-			<div class='profile_manager_register_input_container'>
+			<div class="profile_manager_register_input_container">
 				<?php echo elgg_view('input/text', array('id' => 'register-email', 'name' => 'email', 'value' => $email, 'required' => 'required')); ?>
 				<span class="elgg-icon profile_manager_validate_icon"></span>
 			</div>
@@ -90,7 +89,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 				<span class='custom_fields_more_info_text' id='text_more_info_password'><?php echo elgg_echo("profile_manager:register:hints:password")?></span>
 			<?php } ?>
 		
-			<div class='profile_manager_register_input_container'>
+			<div class="profile_manager_register_input_container">
 				<?php echo elgg_view('input/password', array('id' => 'register-password', 'name' => 'password', 'value' => $password, 'required' => 'required')); ?>
 				<span class="elgg-icon profile_manager_validate_icon"></span>
 			</div>
