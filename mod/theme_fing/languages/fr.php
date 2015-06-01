@@ -4,6 +4,7 @@
 * 
 * @package theme_fing
 **/
+$url = elgg_get_site_url();
 
 $french = array(
 	'theme_fing:title' => "Thème Fing",
@@ -44,6 +45,19 @@ $french = array(
 	'theme_fing:ressources:group' => "Ressources du groupe %s",
 	
 	'theme_fing:qntransitions' => "Questions Numériques - Transitions",
+	
+	'theme_fing:register:create' => "Créez votre compte", 
+	'theme_fing:register:participate' => "et participez aux projets et recherche de la Fing", 
+	'theme_fing:register:3minutes'=> "3 minutes pour ouvrir un compte",
+	'theme_fing:register:prefill' => "Pré-remplissez votre inscription avec :",
+	'theme_fing:register:createwithmail' => "Ou inscrivez-vous avec votre email :",
+	'theme_fing:register:discoverwork' => "Découvrez nos travaux en cours",
+	'theme_fing:register:usernameurl' => "Username pour personnaliser l'url de votre profil",
+	'theme_fing:register:yoururl' => "reseau.fing.org/votreusername",
+	'theme_fing:register:choosegroups' => "Cochez les cases des travaux que vous souhaitez rejoindre dès l'inscription",
+	'theme_fing:register:email' => "Email",
+	'theme_fing:register:terms' => "En vous inscrivant sur le réseau Fing vous acceptez <a href=\"" . $url . "p/charte-sociale\" target=\"_blank\">la Charte d'utilisation</a> et <a href=\"" . $url . "/p/mentions-legales\" target=\"_blank\">les mentions légales</a>",
+	'esope:register:joingroups:help' => "",
 	
 	
 );

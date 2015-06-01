@@ -96,10 +96,32 @@ header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-dec
 
 .profile_manager_register_category { padding-top: 2ex; }
 .elgg-form-register .captcha { padding-top: 2ex; }
-.elgg-form-register #profile_manager_register_left, .elgg-form-register #profile_manager_register_right { width:48%; }
+.elgg-form-register #profile_manager_register_left { width:50%; }
+.elgg-form-register #profile_manager_register_right { width:44%; }
 @media (max-width:700px) {
 	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
 }
+
+#fing-register {  }
+h2.fing-register-title { font-size:3em; text-align:center; }
+h3.fing-register-title { font-size:2em; font-weight:normal; }
+.fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; margin-bottom:2ex; }
+.fing-register-groups {  }
+.fing-register-instructions { text-align:center; margin: 2ex 0 1ex 0; }
+#fing-register .elgg-form-register { background: transparent; }
+#register_joingroups fieldset { border:0 !important; padding:0; }
+#register_joingroups legend { display: none; }
+#register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
+
+#fing-register .hybridauth-provider { float: none; }
+
+#fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
+#fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
+
+#fing-register form input[type=text], #fing-register form input[type=password] { width: 100%; font-size: 1.5em; background: aliceblue; border: 2px solid black; }
+
+#fing-register .elgg-foot { float: right; width: 58%; }
+.fing-register-submit { border-radius:0; font-size: 1.5em; width: 100%; }
 
 
 #fing-homepage {

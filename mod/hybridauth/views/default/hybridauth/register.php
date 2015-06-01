@@ -1,6 +1,5 @@
 <?php
-global $CONFIG;
-
+$url = elgg_get_site_url();
 $content = '';
 
 // @TODO : list enabled identity providers
@@ -16,9 +15,9 @@ if ($providers) {
 		// Add provider only if activated
 		if (elgg_get_plugin_setting($key.'_enable', 'hybridauth') == 'yes') {
 			if (elgg_is_logged_in()) {
-				$content .= '<a href="' . $CONFIG->url . 'hybridauth/' . $key . '" style="float:left; margin-right:0.5ex;" title="' . elgg_echo('hybridauth:configureassociation', array($name)) . '"><img src="' . $CONFIG->url . 'mod/hybridauth/graphics/' . $key . '.png" alt="' . $name . '" /></a>';
+				$content .= '<a href="' . $url . 'hybridauth/' . $key . '" class="hybridauth-provider" title="' . elgg_echo('hybridauth:configureassociation', array($name)) . '"><img src="' . $url . 'mod/hybridauth/graphics/' . $key . '.png" alt="' . $name . '" /></a>';
 			} else {
-				$content .= '<a href="' . $CONFIG->url . 'hybridauth/' . $key . '" style="float:left; margin-right:0.5ex;" title="' . elgg_echo('hybridauth:registerwith', array($name)) . '"><img src="' . $CONFIG->url . 'mod/hybridauth/graphics/' . $key . '.png" alt="' . $name . '" /></a>';
+				$content .= '<a href="' . $url . 'hybridauth/' . $key . '" class="hybridauth-provider" title="' . elgg_echo('hybridauth:registerwith', array($name)) . '"><img src="' . $url . 'mod/hybridauth/graphics/' . $key . '.png" alt="' . $name . '" /></a>';
 			}
 		}
 	}
