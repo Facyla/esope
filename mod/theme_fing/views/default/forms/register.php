@@ -31,7 +31,7 @@ if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manage
 }
 */
 
-$terms .= elgg_get_plugin_setting("registration_free_text", "profile_manager")
+$terms .= elgg_get_plugin_setting("registration_free_text", "profile_manager");
 //$terms .= elgg_echo("theme_fing:register:terms");
 
 
