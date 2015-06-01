@@ -154,7 +154,8 @@ echo "</div>";
 
 
 // Right column
-echo '<div id="profile_manager_register_right" class="fing-register-groups home-static-container">' .elgg_view("register/extend_side");
+echo '<div id="profile_manager_register_right" class="fing-register-groups home-static-container">';
+	//echo elgg_view("register/extend_side");
 	echo '<h3 class="fing-register-title">' . elgg_echo('theme_fing:register:discoverwork') . '</h3>';
 	
 	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:choosegroups') . '</p>';
