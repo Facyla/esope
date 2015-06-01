@@ -31,16 +31,23 @@ if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manage
 }
 */
 
-$terms .= elgg_echo("theme_fing:register:terms");
+$terms .= elgg_get_plugin_setting("registration_free_text", "profile_manager")
+//$terms .= elgg_echo("theme_fing:register:terms");
+
+
 
 
 echo '<div id="profile_manager_register_left" class="home-static-container">';
 echo '<h3 class="fing-register-title">' . elgg_echo('theme_fing:register:3minutes') . '</h3>';
 
+echo '<center>';
 echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p
 >';
+echo '</center>';
 
 echo elgg_view('hybridauth/register', $vars);
+
+echo '<hr class="adf-lightseparator" />';
 
 echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:createwithmail') . '</p>';
 
@@ -87,6 +94,7 @@ $show_hints = false;
 		</div>
 	</div>
 	
+	<?php /*
 	<div class="mandatory">
 		<label for='register-password2'><?php echo elgg_echo('passwordagain'); ?></label>
 		
@@ -99,6 +107,7 @@ $show_hints = false;
 			<span class="elgg-icon profile_manager_validate_icon"></span>
 		</div>
 	</div>
+	*/ ?>
 	
 	<div class="mandatory">
 		<label for='register-username'><?php echo elgg_echo('theme_fing:register:usernameurl'); ?></label>
@@ -123,6 +132,14 @@ echo elgg_view('register/extend');
 // Add captcha hook
 echo elgg_view('input/captcha');
 
+echo "<div class='clearfloat'></div>";
+//echo '<br />';
+echo "<div class='elgg-foot'>";
+echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
+echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));
+echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register'), 'class' => "fing-register-submit"));
+//echo "<div class='elgg-subtext mtm'>" . elgg_echo("profile_manager:register:mandatory") . "</div>";
+
 echo "</div>";
 
 
@@ -132,21 +149,12 @@ echo '<div id="profile_manager_register_right" class="fing-register-groups home-
 	
 	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:choosegroups') . '</p>';
 	
-	echo '<center>';
 	echo elgg_view('forms/groups/register_join_groups', $vars);
-	echo '</center>';
 echo '</div>';
 
 
-echo '<hr class="adf-lightseparator" />';
+//echo '<hr class="adf-lightseparator" />';
 
-echo "<div class='clearfloat'></div>";
-//echo '<br />';
-echo "<div class='elgg-foot'>";
-echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
-echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));
-echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register')));
-echo "<div class='elgg-subtext mtm'>" . elgg_echo("profile_manager:register:mandatory") . "</div>";
 echo "</div>";
 ?>
 

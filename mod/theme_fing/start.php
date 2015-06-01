@@ -19,7 +19,10 @@ function theme_fing_init(){
 	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups');
 	elgg_unextend_view('forms/register', 'hybridauth/register');
 	//elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
-	elgg_register_page_handler("register", "fing_register_page_handler");
+	// Override registration page
+	elgg_register_page_handler("register", "theme_fing_register_page_handler");
+	// Override registration action
+	elgg_register_plugin_hook_handler("action", "register", "theme_fing_register_action_hook",0);
 	
 	// Extend groups sidebar (below owner_block and before search and members)
 	//if (elgg_is_active_plugin('search')) elgg_extend_view('groups/sidebar/search', 'groups/sidebar/group_news_extend', 100);
@@ -137,7 +140,14 @@ function theme_fing_get_pin_entities($selection = 'manual', $limit = 6) {
 }
 
 
-function fing_register_page_handler($page){
+// Bypass password verification
+function theme_fing_register_action_hook($hook, $entity_type, $returnvalue, $params) {
+	$password = get_input('password');
+	set_input('password2', $password);
+	return $returnvalue;
+}
+
+function theme_fing_register_page_handler($page){
 	include(dirname(__FILE__) . '/pages/theme_fing/register.php');
 	return true;
 }

@@ -111,6 +111,7 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #register_joingroups fieldset { border:0 !important; padding:0; }
 #register_joingroups legend { display: none; }
 #register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
+.fing-register-submit { border-radius:0; font-size: 2em; width: 60%; }
 
 label[for="register-name"] { width: 30%; }
 
