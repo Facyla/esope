@@ -106,10 +106,6 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 		$body .= elgg_echo('postbymail:connectionok');
 		
 		// Création des dossiers s'ils n'existent pas
-		/* @todo : marche pas..
-		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Published"))) { $body .= "Boîte 'Published' créée"; }
-		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Errors"))) { $body .= "Boîte 'Errors' créée"; }
-		*/
 		postbymail_checkboxes($server, $protocol, $mailbox);
 		$purge = false;
 		
@@ -1328,15 +1324,20 @@ function postbymail_is_utf8($string) {
 
 // Check that required mail boxes exist, and create them if needed
 function postbymail_checkboxes($server, $protocol, $mailbox) {
-	$mailboxes = array("Published", "Errors", "Test Auto");
+	$mailboxes = array("Published", "Errors");
 	foreach ($mailboxes as $mailbox_name) {
 		$mailbox_name = imap_utf7_encode($mailbox_name);
 		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
-		$body .= "Le dossier \"$mailbox_name\" a pour statut : <pre>" . print_r($status, true) . '</pre><br />';
 		if (!$status) {
-			$body .= "Création du dossier \"$mailbox_name\" :<br />";
-			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) { $body .= "Dossier \"$mailbox_name\" créé<br />"; }
-			else { $body .= "<b>Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement</b>"; }
+			echo "Création du dossier \"$mailbox_name\" :<br />";
+			error_log("Création du dossier \"$mailbox_name\"");
+			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) {
+				echo "Dossier \"$mailbox_name\" créé<br />";
+				error_log("Dossier \"$mailbox_name\" créé");
+			} else {
+				echo "<b>Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement</b>";
+				error_log("Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement");
+			}
 		}
 	}
 }
