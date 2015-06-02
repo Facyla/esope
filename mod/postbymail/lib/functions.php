@@ -28,6 +28,7 @@ if (!class_exists('Mail_mimeDecode')) {
 function postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
 	global $sender_reply;
 	global $admin_reply;
+	global $postbymail_guid;
 	
 	$site = elgg_get_site_entity();
 	
@@ -129,10 +130,11 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
-				global $postbymail_guid;
 				$postbymail_guid = '';
+				$sender_reply = '';
+				$admin_reply = '';
 				
-				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i+1), $msg_id));
+				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $msg_id));
 				// Get the message header.
 				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT);
 				// Set the message as read if told to
@@ -143,6 +145,12 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				
 				// Some mail servers and clients use special messages for holding mailbox data; ignore that message if it exists.
 				if ($message->headers['subject'] == "DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA") { continue; }
+				
+				// Ensure we had no error 
+				if (!$header || !$msgbody) {
+					error_log("Error processing email, keep going to avoid further errors. We will process it later.");
+					continue;
+				}
 				
 				// A partir d'ici on a un message "traitable" et on peut notifier expéditeur et admin
 				
@@ -768,9 +776,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				// Notification responsable du groupe
 				if ($notify_groupadmin) {
-					// @todo : notifier l'admin du groupe
+					// @TODO : notifier l'admin du groupe
 					if ($groupowner = get_entity($group_entity->owner_guid)) {
-						if (($admin_email = $groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
+						if (is_email_address($groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
 						} else {
 							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						}
@@ -843,11 +851,12 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		=> in both cases, sender should be identified when it's possible, but the post is sent by the group or user itself if email can't be found.
  */
 function postbymail_checkeligible_post($params = array()) {
+	global $sender_reply;
+	global $admin_reply;
+	
 	$defaults = array('key' => false, 'member' => false, 'subtype' => 'blog', 'access' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
 	
-	global $sender_reply;
-	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailpost_check = true;
 	
@@ -968,11 +977,12 @@ function postbymail_checkeligible_post($params = array()) {
  * $checkhash	 false, or publication hash to use hash check (hashed message will be ignored and not published)
 */
 function postbymail_checkeligible_reply($params) {
+	global $sender_reply;
+	global $admin_reply;
+	
 	$defaults = array('entity' => false, 'member' => false, 'post_body' => false, 'email_headers' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
 	
-	global $sender_reply;
-	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
