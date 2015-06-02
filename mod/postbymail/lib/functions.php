@@ -1200,6 +1200,7 @@ echo "..after conversion : $msgbody<br />"; // @debug
 */
 function postbymail_convert_to_utf8($body = '', $charset = '') {
 echo "Detect and convert : original charset=$charset // $body<br />";
+echo "utf8_encode " . utf8_encode($body) . '<br />';
 echo "HTMLentities " . htmlentities($body, ENT_QUOTES, "UTF-8") . '<br />';
 echo "mb_convert_encoding " . mb_convert_encoding($body, "UTF-8") . '<br />';
 echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", $charset) . '<br />';
@@ -1215,7 +1216,7 @@ echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", 
 			$return = $body;
 			break;
 		case 'iso-8859-1':
-			$content = utf8_encode($body);
+			$return = utf8_encode($body);
 			break;
 		default:
 			// Additional test for better handling of erroneous encoding
@@ -1225,6 +1226,15 @@ echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", 
 			} else {
 				$return = mb_convert_encoding($body, "UTF-8", $charset);
 			}
+	}
+	// Failsafe method
+	if (empty($return)) {
+		$return = mb_convert_encoding($body, "UTF-8", $charset);
+echo "...ERROR : using failsafe conversion<br />";
+	}
+	if (empty($return)) {
+		$return = $body;
+echo "...ERROR : reverting to original content<br />";
 	}
 echo "...converted : charset=$charset // $return<hr />";
 	return $return;
