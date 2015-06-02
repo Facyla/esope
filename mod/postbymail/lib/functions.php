@@ -14,7 +14,7 @@ if (!class_exists('Mail_mimeDecode')) {
  * 
  * $server = "localhost:143";	 POP3/IMAP/NNTP server to connect to, with optional port.
  * $protocol = "/notls";	 Protocol specification (optional)
- * $mailbox = "INBOX";	 Name of the mailbox to open. - Boîte de réception = toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
+ * $inbox_name = "INBOX";	 Name of the mailbox to open. - Boîte de réception = toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
  * $username = "user@domain.tld";	 Mailbox username.
  * $password = "********";	 Mailbox password.
  * $markSeen = false;	 Whether or not to mark retrieved messages as seen.
@@ -25,7 +25,7 @@ if (!class_exists('Mail_mimeDecode')) {
  * $separator = elgg_echo('postbymail:default:separator');	 Séparateur du message (pour retirer la signature, les messages joints intégrés dans la réponse..)
 	*
 */
-function postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
+function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
 	global $sender_reply;
 	global $admin_reply;
 	global $postbymail_guid;
@@ -93,12 +93,12 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 	
 	
 	// CONNEXION AU SERVEUR IMAP ET TRAITEMENT DES EMAILS
-	$conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password);
-	if (!$conn) {
+	$mailbox = imap_open('{'.$server.$protocol.'}'.$inbox_name, $username, $password);
+	if (!$mailbox) {
 		// Connection error (bad config)
 		$body .= elgg_echo('postbymail:badpluginconfig');
 		$imap_errors = imap_errors();
-		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$mailbox, $username, PASSWORD);</p>";
+		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$inbox_name, $username, PASSWORD);</p>";
 		$body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
 		$imap_alerts = imap_alerts();
 		$body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
@@ -107,20 +107,29 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		
 		// Création des dossiers s'ils n'existent pas
 		/* @todo : marche pas..
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.Published"))) { $body .= "Boîte 'Published' créée"; }
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.Errors"))) { $body .= "Boîte 'Errors' créée"; }
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.TESTS"))) { $body .= "Boîte 'TEST' créée"; }
+		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Published"))) { $body .= "Boîte 'Published' créée"; }
+		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Errors"))) { $body .= "Boîte 'Errors' créée"; }
 		*/
+		$status = imap_status($mailbox, "{".$server.$protocol."}$inbox_name.$new_box", SA_ALL);
+		$body .= "La boîte TESTS a pour statut : <pre>" . print_r($status) . '</pre><br />';
+		if (!$status) {
+			$body .= "Création de la boîte TESTS<br />";
+			$new_box = "TESTS";
+			$new_box = imap_utf7_encode($new_box);
+			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$inbox_name.$new_box")) { $body .= "Boîte '$new_box' créée"; }
+		}
 		$purge = false;
 		
 		// See if the mailbox contains any messages.
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
-		//$allmsgCount = imap_num_msg($conn); // Compte tous les messages de la boîte
-		//if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
-		//if ($unreadmessages = imap_search($conn,'UNSEEN')) {
-		// Use UID instead of sequence number (because we will move emails)
-		// IMPORTANT : si on utilise SE_UID ici, il faut faire attention à ajouter les options appropriées sur toutes les fonctions qui utilisent $uid
-		if ($unreadmessages = imap_search($conn,'UNSEEN', SE_UID)) {
+		//$allmsgCount = imap_num_msg($mailbox); // Compte tous les messages de la boîte
+		//if ($unreadmessages = imap_sort($mailbox, SORTARRIVAL, 0, null, 'UNSEEN')) {
+		//if ($unreadmessages = imap_search($mailbox,'UNSEEN')) {
+		/* Use UID instead of sequence number (because we will move emails)
+		 * IMPORTANT : si on utilise SE_UID ici (liste les UID a lieu du numéro dans la boîte), 
+		 * il faut faire attention à ajouter les options appropriées sur toutes les fonctions qui utilisent $uid
+		 */
+		if ($unreadmessages = imap_search($mailbox,'UNSEEN', SE_UID)) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
 			// Loop through the messages.
@@ -139,7 +148,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
-				$header = imap_fetchheader($conn, $uid, FT_UID | FT_PREFETCHTEXT);
+				$header = imap_fetchheader($mailbox, $uid, FT_UID | FT_PREFETCHTEXT);
 				
 				// Ensure we had no error checking email
 				// Note : we have to check this before we mark the message as read
@@ -149,7 +158,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($conn, $uid, FT_UID); } else { $msgbody = imap_body($conn, $uid, FT_UID | FT_PEEK); }
+				if ($markSeen) { $msgbody = imap_body($mailbox, $uid, FT_UID); } else { $msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK); }
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
@@ -299,7 +308,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$admin_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
 				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
 				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
-				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($mailbox));
+				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
 				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
 				$admin_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
 				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
@@ -491,8 +500,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
-						if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// @todo : Enregistrement du hash dans le container pour éviter un message exactement identique de la même personne..
 						// @todo voir si le même message est publié à une autre date ça pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -501,7 +510,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
+						if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// La publication n'a pas pu être faite alors qu'elle était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -641,8 +650,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
-						if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// Enregistrement du hash dans l'objet pour éviter un message exactement identique de la même personne..
 						// @TODO décider si le même message publié à une autre date pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -651,7 +660,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
+						if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// Le commentaire n'a pas pu être publié alors qu'il était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -797,18 +806,18 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*   IMAP : MARQUAGE DU MESSAGE   */
 				/**********************************/
 				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
-				//imap_setflag_full($conn, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
-				imap_setflag_full($conn, $uid, "\\Seen", ST_UID);
+				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
+				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
 				if ($published) {
-					imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
-					if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
+					imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+					if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 				} else {
 					// Si le message a été traité, on le range dans un dossier
-					if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
+					if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 					if ($notify_sender || $notify_admin) {
 						// Si le message fait l'objet d'une notification, on le marque en plus comme traité
-						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
 					}
 				}
 				
@@ -821,9 +830,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		
 		// Nettoie les messages effacés ou déplacés
 		if ($purge) {
-			imap_close($conn, CL_EXPUNGE); // semble effacer un peu trop ?? (si tentative de déplacement dans un dossier inexistant)
+			imap_close($mailbox, CL_EXPUNGE); // semble effacer un peu trop ?? (si tentative de déplacement dans un dossier inexistant)
 		} else {
-			imap_close($conn);
+			imap_close($mailbox);
 		}
 	} // END IMAP CONNECT CHECK
 	
