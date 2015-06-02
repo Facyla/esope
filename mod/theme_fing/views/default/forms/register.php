@@ -42,6 +42,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 
 		echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:createwithmail') . '</p>';
 	echo '</div>';
+	echo '<div class="clearfloat"></div>';
 
 	$show_hints = false;
 	//if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes") { $show_hints = true; }
