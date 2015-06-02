@@ -138,7 +138,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $msg_id));
 				// Get the message header.
-				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT|FT_UID);
+				$header = imap_fetchheader($conn, $msg_id, FT_UID | FT_PREFETCHTEXT);
 				
 				// Ensure we had no error checking email
 				// Note : we have to check this before we mark the message as read
@@ -147,11 +147,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					continue;
 				}
 				
-				continue; // @debug = do not process !!
-				
-				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($conn, $msg_id, FT_UID); } else { $msgbody = imap_body($conn, $msg_id, FT_PEEK|FT_UID); }
+				if ($markSeen) { $msgbody = imap_body($conn, $msg_id, FT_UID); } else { $msgbody = imap_body($conn, $msg_id, FT_UID | FT_PEEK); }
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
