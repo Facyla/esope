@@ -16,7 +16,6 @@ if (elgg_is_sticky_form('register')) {
 	elgg_clear_sticky_form('register');
 }
 
-/*
 // must accept terms
 if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manager")){
 	$link_begin = '<a target="_blank" href="' . $accept_terms . '">';
@@ -29,26 +28,20 @@ if($accept_terms = elgg_get_plugin_setting("registration_terms", "profile_manage
 	$terms .= '</label>';
 	$terms .= '</div>';
 }
-*/
-
-$terms .= elgg_get_plugin_setting("registration_free_text", "profile_manager");
-//$terms .= elgg_echo("theme_fing:register:terms");
-
 
 
 
 echo '<div id="profile_manager_register_left" class="home-static-container">';
 	echo '<h3 class="fing-register-title">' . elgg_echo('theme_fing:register:3minutes') . '</h3>';
+	
+	echo '<div class="profile_manager_register_input_container" style="text-align:center">';
+		echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p>';
+		echo elgg_view('hybridauth/register', $vars);
 
-	echo '<center>';
-	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:prefill') . '</p
-	>';
-	echo elgg_view('hybridauth/register', $vars);
-	echo '</center>';
+		echo '<hr class="adf-lightseparator" />';
 
-	echo '<hr class="adf-lightseparator" />';
-
-	echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:createwithmail') . '</p>';
+		echo '<p class="fing-register-instructions">' . elgg_echo('theme_fing:register:createwithmail') . '</p>';
+	echo '</div>';
 
 	$show_hints = false;
 	//if(elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes") { $show_hints = true; }
@@ -62,7 +55,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 				<span class='custom_fields_more_info_text' id='text_more_info_name'><?php echo elgg_echo("profile_manager:register:hints:name")?></span>
 			<?php } ?>
 		
-			<div class='profile_manager_register_input_container'>
+			<div class="profile_manager_register_input_container">
 			<?php echo elgg_view('input/text', array('id' => 'register-name', 'name' => 'name', 'value' => $name, 'class' => 'elgg-autofocus', 'required' => 'required')); ?>
 			</div>
 			<div class="clearfloat"></div>
@@ -104,7 +97,7 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 				<span class='custom_fields_more_info' id='more_info_passwordagain'></span>
 				<span class='custom_fields_more_info_text' id='text_more_info_passwordagain'><?php echo elgg_echo("profile_manager:register:hints:passwordagain")?></span>
 			<?php } ?>
-			<div class='profile_manager_register_input_container'>
+			<div class="profile_manager_register_input_container">
 				<?php echo elgg_view('input/password', array('id' => 'register-password2', 'name' => 'password2', 'value' => $password2, 'required' => 'required')); ?>
 				<span class="elgg-icon profile_manager_validate_icon"></span>
 			</div>
@@ -144,7 +137,11 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 	echo "<div class='elgg-foot'>";
 		echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
 		echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));
-		echo '<p>' . $terms . '</p>';
+		
+		// Submitting means accepting terms
+		$acceptterms .= elgg_get_plugin_setting("registration_free_text", "profile_manager");
+		//$acceptterms .= elgg_echo("theme_fing:register:terms");
+		echo '<p>' . $acceptterms . '</p>';
 		echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register'), 'class' => "elgg-button elgg-button-submit fing-register-submit"));
 		//echo "<div class='elgg-subtext mtm'>" . elgg_echo("profile_manager:register:mandatory") . "</div>";
 	echo "</div>";
