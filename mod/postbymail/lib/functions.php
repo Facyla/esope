@@ -110,14 +110,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Published"))) { $body .= "Boîte 'Published' créée"; }
 		if (imap_createmailbox($mailbox, imap_utf7_encode("{".$server.$protocol."}INBOX.Errors"))) { $body .= "Boîte 'Errors' créée"; }
 		*/
-		$status = imap_status($mailbox, "{".$server.$protocol."}$inbox_name.$new_box", SA_ALL);
-		$body .= "La boîte TESTS a pour statut : <pre>" . print_r($status) . '</pre><br />';
-		if (!$status) {
-			$body .= "Création de la boîte TESTS<br />";
-			$new_box = "TESTS";
-			$new_box = imap_utf7_encode($new_box);
-			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$inbox_name.$new_box")) { $body .= "Boîte '$new_box' créée"; }
-		}
+		postbymail_checkboxes($server, $protocol, $mailbox);
 		$purge = false;
 		
 		// See if the mailbox contains any messages.
@@ -1331,5 +1324,22 @@ function postbymail_is_utf8($string) {
 	)*$%xs', $string);
 }
 */
+
+
+// Check that required mail boxes exist, and create them if needed
+function postbymail_checkboxes($server, $protocol, $mailbox) {
+	$mailboxes = array("Published", "Errors");
+	foreach ($mailboxes as $mailbox_name) {
+		$mailbox_name = imap_utf7_encode($mailbox_name);
+		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
+		$body .= "Le dossier \"$mailbox_name\" a pour statut : <pre>" . print_r($status, true) . '</pre><br />';
+		if (!$status) {
+			$body .= "Création du dossier \"$mailbox_name\" :<br />";
+			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) { $body .= "Dossier \"$mailbox_name\" créé<br />"; }
+			else { $body .= "<b>Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement</b>"; }
+		}
+	}
+}
+
 
 
