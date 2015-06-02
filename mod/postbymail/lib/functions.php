@@ -1151,10 +1151,10 @@ function mailparts_extract_body($mailparts, $html = true) {
 			// We are only considering the first part, as we want the reply content only
 			$mailpart = $mailparts->parts[0];
 			$charset = $mailpart->ctype_parameters->charset;
-			switch(strtolower($mailpart->ctype_primary, $html)) {
+			switch(strtolower($mailpart->ctype_primary)) {
 				case 'message':
 				case 'multipart':
-					$msgbody = mailparts_extract_body($mailpart);
+					$msgbody = mailparts_extract_body($mailpart, $html);
 					break;
 				case 'text':
 					$msgbody = postbymail_convert_to_utf8($mailpart->body, $charset);
