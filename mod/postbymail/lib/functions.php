@@ -163,7 +163,6 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
 				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
 				
-				if (!empty($msgbody)) {
 					// @DEBUG testing encoding
 					$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
 					$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
@@ -176,6 +175,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					$body .= "################################################################";
 					continue;
 					
+				if (empty($msgbody)) {
 					// @TODO : mauvaise détection ISO-8859-1
 					// @TODO Encoding is explicit in headers, should get it from there rather than auto-detect
 					/* Note : coupure au premier accent si envoi avec Zimbra !!
