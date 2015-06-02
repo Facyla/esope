@@ -119,6 +119,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		//if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
 		//if ($unreadmessages = imap_search($conn,'UNSEEN')) {
 		// Use UID instead of sequence number (because we will move emails)
+		// IMPORTANT : si on utilise SE_UID ici, il faut faire attention à ajouter les options appropriées sur toutes les fonctions qui utilisent $uid
 		if ($unreadmessages = imap_search($conn,'UNSEEN', SE_UID)) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
@@ -127,8 +128,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// Puis on vérifie les paramètres et on poste si tout est OK
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
-			foreach ($unreadmessages as $i => $msg_id) {
-				error_log("Processing email $i : message uid = $msg_id");
+			foreach ($unreadmessages as $i => $uid) {
+				error_log("Processing email $i : message uid = $uid");
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
@@ -136,9 +137,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$sender_reply = '';
 				$admin_reply = '';
 				
-				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $msg_id));
+				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
-				$header = imap_fetchheader($conn, $msg_id, FT_UID | FT_PREFETCHTEXT);
+				$header = imap_fetchheader($conn, $uid, FT_UID | FT_PREFETCHTEXT);
 				
 				// Ensure we had no error checking email
 				// Note : we have to check this before we mark the message as read
@@ -148,7 +149,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($conn, $msg_id, FT_UID); } else { $msgbody = imap_body($conn, $msg_id, FT_UID | FT_PEEK); }
+				if ($markSeen) { $msgbody = imap_body($conn, $uid, FT_UID); } else { $msgbody = imap_body($conn, $uid, FT_UID | FT_PEEK); }
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
@@ -490,8 +491,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $msg_id, "\\Answered");
-						if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// @todo : Enregistrement du hash dans le container pour éviter un message exactement identique de la même personne..
 						// @todo voir si le même message est publié à une autre date ça pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -500,7 +501,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+						if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// La publication n'a pas pu être faite alors qu'elle était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -640,8 +641,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $msg_id, "\\Answered");
-						if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// Enregistrement du hash dans l'objet pour éviter un message exactement identique de la même personne..
 						// @TODO décider si le même message publié à une autre date pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -650,7 +651,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+						if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// Le commentaire n'a pas pu être publié alors qu'il était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -796,18 +797,18 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*   IMAP : MARQUAGE DU MESSAGE   */
 				/**********************************/
 				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
-				//imap_setflag_full($conn, $msg_id, "\\Seen \\Deleted");	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
-				imap_setflag_full($conn, $msg_id, "\\Seen");
+				//imap_setflag_full($conn, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
+				imap_setflag_full($conn, $uid, "\\Seen", ST_UID);
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
 				if ($published) {
-					imap_setflag_full($conn, $msg_id, "\\Answered");
-					if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+					imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
+					if (@imap_mail_move($conn, $uid, "Published", CP_UID)) { $purge = true; }
 				} else {
 					// Si le message a été traité, on le range dans un dossier
-					if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+					if (@imap_mail_move($conn, $uid, "Errors", CP_UID)) { $purge = true; }
 					if ($notify_sender || $notify_admin) {
 						// Si le message fait l'objet d'une notification, on le marque en plus comme traité
-						imap_setflag_full($conn, $msg_id, "\\Answered");
+						imap_setflag_full($conn, $uid, "\\Answered", ST_UID);
 					}
 				}
 				
