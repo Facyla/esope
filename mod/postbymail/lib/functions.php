@@ -231,6 +231,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/******************/
 				/*   EXPEDITEUR   */
 				/******************/
+				$sendermail = postbymail_extract_email($email_headers['from']);
+				$realsendermail = postbymail_extract_email($email_headers['sender']);
 				$member = postbymail_find_sender($message->headers);
 				
 				
