@@ -158,25 +158,17 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*   EXTRACT POST CONTENT   */
 				/****************************/
 				// Extract the message body from email content, in html or text if not available
-				$msgbody = mailparts_extract_content($message, true, true);
+				// Extraction function also ensures its encoded into UTF-8
+				$msgbody = mailparts_extract_body($message, true);
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
-				if (empty($msgbody)) { $msgbody = mailparts_extract_content($message, true, false); }
+				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
 				
-				/* Si le message contient des caractères invalides :
-				 * Par ex. message envoyé comme ISO-8859-1 mais en utilisant des caractères de Windows-1252
-				 * Lire les explications détaillées sur 
-				 *   http://forum.alsacreations.com/topic-17-6460-1-Encodage-caracteres-invalides-et-entites-HTML.html#p56012
-				 * Résumé : Les caractères "de contrôle" du jeu ISO-8859-1 (situés dans les intervalles 00-1F et 7F-9F) 
-				 *   ne sont généralement pas utilisés. Certaines entreprises ont créé d’autres jeux de caractères dans lesquels 
-				 *   les espaces alloués à ces caractères de contrôle (dans tous les charset ISO-*, pas seulement ISO-8859-1), 
-				 *   sont utilisés pour des caractères plus "utiles". L'utilisation de ces caractères invalides bloque le 
-				 *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
-				 *   utilisation et utiliser le traitement approprié.
-				*/
 				if (!empty($msgbody)) {
 					// @DEBUG testing encoding
 					$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
 					$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
+					$body .= "original body : " . $msgbody . '<hr />';
+					$body .= "original body encoded to utf8 : " . utf8_encode($msgbody) . '<hr />';
 					$body .= "original body : " . $msgbody . '<hr />';
 					$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
 					$body .= "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
@@ -1098,51 +1090,127 @@ function postbymail_checkeligible_reply($params) {
 
 
 /*
- * Mail content extraction function : extracts message content, and optionnaly attachements, in html or text format
+ * Mail content extraction function : extracts message elements, in html or text format
  * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
- * $firstbody	 boolean	 return only the message content (no attachment nor message parts)
  * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
  * returns : message value, or array with more details (attachements)
 */
-function mailparts_extract_content($mailparts, $firstbody = false, $html = true) {
-	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8) et content-transfer-encoding (par ex. quoted-printable)
-	if (strtolower($mailparts->ctype_primary) == "multipart") {
-		$attachment = '';
-		foreach ($mailparts->parts as $part) {
-			if ($firstbody) {
-				switch(strtolower($part->ctype_primary)) {
-					case 'multipart': return mailparts_extract_content($part, true); break;
-					case 'image': break;
-					case 'text':
-						if ($html) {
-							if ($part->ctype_secondary == 'html') { return trim($part->body); } else break;
-						} else { return nl2br(trim($part->body)); }
-				}
-			} else {
-				$msgbody .= elgg_echo('postbymail:message:elements', array($part->ctype_primary, $part->ctype_secondary, $part->ctype_parameters->charset));
-				switch(strtolower($part->ctype_primary)) {
-					case 'multipart':
-						$content = mailparts_extract_content($part);
-						$msgbody .= elgg_echo('postbymail:attachment:multipart', array($content['body']));
-						$attachment .= $content['attachment'];
-						break;
-					case 'image':
-						$attachment .= elgg_echo('postbymail:attachment:image', array(translateSize(mb_strlen($part->body))));
-						break;
-					case 'text':
-						$msgbody .= elgg_echo('postbymail:attachment:msgcontent', array($part->body));
-						break;
-					default: 
-						$attachment .= elgg_echo('postbymail:attachment:other', array(translateSize(mb_strlen($part->body))));
-				}
+function mailparts_extract_content($mailparts, $html = true) {
+	$msgbody = '';
+	$attachment = '';
+	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8)
+	// et content-transfer-encoding (par ex. quoted-printable)
+	$charset = $mailparts->ctype_parameters->charset;
+	$ctype_primary = strtolower($mailparts->ctype_primary);
+	if ($ctype_primary == "multipart") {
+		// Multipart message : requires to process each part
+		foreach ($mailparts->parts as $mailpart) {
+			$charset = $mailpart->ctype_parameters->charset;
+			$mailpart_ctype_primary = strtolower($mailpart->ctype_primary);
+			$msgbody .= elgg_echo('postbymail:message:elements', array($mailpart_ctype_primary, $mailpart->ctype_secondary, $charset));
+			switch($mailpart_ctype_primary) {
+				case 'text':
+					$mailpart_msgbody = postbymail_convert_to_utf8($mailpart->body, $charset);
+					$msgbody .= elgg_echo('postbymail:attachment:msgcontent', array($mailpart_msgbody));
+					break;
+				case 'message':
+				case 'multipart':
+					$partcontent = mailparts_extract_content($mailpart, $html);
+					$msgbody .= elgg_echo('postbymail:attachment:multipart', array($partcontent['body']));
+					$attachment .= $partcontent['attachment'];
+					break;
+				case 'image':
+					$attachment .= elgg_echo('postbymail:attachment:image', array(translateSize(mb_strlen($mailpart->body))));
+					break;
+				case 'audio':
+				case 'video':
+				case 'application':
+				default: // Other cases = audio, video, application
+					$attachment .= elgg_echo('postbymail:attachment:other', array(translateSize(mb_strlen($mailpart->body)))) . ' (' . $mailpart_ctype_primary . ')';
 			}
 		}
-		if (empty($attachement)) { $attachment = elgg_echo('postbymail:noattachment'); }
-		if ($firstbody) { return trim($msgbody); } else { return array('body' => trim($msgbody), 'attachment' => $attachment); }
 	} else {
-		if ($firstbody) return trim($mailparts->body); else return array('body' => trim($mailparts->body), 'attachment' => elgg_echo('postbymail:noattachment'));
+		$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
 	}
-	return false;
+	
+	if (empty($attachement)) { $attachment = elgg_echo('postbymail:noattachment'); }
+	return array('body' => trim($msgbody), 'attachment' => $attachment);
+}
+
+/*
+ * Mail body extraction function : extracts message content, in html or text format, and ensure it's encoded as UTF-8
+ * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
+ * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
+ * returns : message body value, in UTF-8
+*/
+function mailparts_extract_body($mailparts, $html = true) {
+	$charset = $mailparts->ctype_parameters->charset;
+	$ctype_primary = strtolower($mailparts->ctype_primary);
+	switch($ctype_primary) {
+		case 'message':
+		case 'multipart':
+			// We are only considering the first part, as we want the reply content only
+			$mailpart = $mailparts->parts[0];
+			$charset = $mailpart->ctype_parameters->charset;
+			switch(strtolower($mailpart->ctype_primary, $html)) {
+				case 'message':
+				case 'multipart':
+					$msgbody = mailparts_extract_body($mailpart);
+					break;
+				case 'text':
+					$msgbody = postbymail_convert_to_utf8($mailpart->body, $charset);
+					$msgbody = trim($msgbody);
+					// Convert plain text to HTML breaks, if not already HTML
+					if ($html && ($mailpart->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
+					break;
+				default: // Other cases = image, audio, video, application
+			}
+			break;
+		
+		case 'text':
+			$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
+			$msgbody = trim($msgbody);
+			// Convert plain text to HTML breaks, if not already HTML
+			if ($html && ($mailparts->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
+			break;
+		
+		default: // Other cases = image, audio, video, application
+	}
+	// Return result
+	return $msgbody;
+}
+
+
+/* Convertit tout texte en UTF-8, afin de normaliser l'encodage des contenus */
+/* Si le message contient des caractères invalides :
+ * Par ex. message envoyé comme ISO-8859-1 mais en utilisant des caractères de Windows-1252
+ * Lire les explications détaillées sur 
+ *   http://forum.alsacreations.com/topic-17-6460-1-Encodage-caracteres-invalides-et-entites-HTML.html#p56012
+ * Résumé : Les caractères "de contrôle" du jeu ISO-8859-1 (situés dans les intervalles 00-1F et 7F-9F) 
+ *   ne sont généralement pas utilisés. Certaines entreprises ont créé d’autres jeux de caractères dans lesquels 
+ *   les espaces alloués à ces caractères de contrôle (dans tous les charset ISO-*, pas seulement ISO-8859-1), 
+ *   sont utilisés pour des caractères plus "utiles". L'utilisation de ces caractères invalides bloque le 
+ *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
+ *   utilisation et utiliser le traitement approprié.
+*/
+function postbymail_convert_to_utf8($body = '', $charset = '') {
+	if (!empty($body)) {
+		// Auto-detect charset, if needed
+		if (empty($charset)) { $charset = mb_detect_encoding($body); }
+		// Normalise charset name
+		$charset = strtolower($charset);
+		// Convert encoding if needed
+		if ($charset != 'utf-8') {
+			// Additional test for better handling of erroneous encoding
+			if (mb_strlen(htmlentities($body, ENT_QUOTES, "UTF-8")) == 0) {
+				// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
+				$return = mb_convert_encoding($body, "UTF-8");
+			} else {
+				$return = mb_convert_encoding($body, "UTF-8", $charset);
+			}
+		}
+	} else { $return = $body; }
+	return $return;
 }
 
 
