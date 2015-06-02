@@ -1328,7 +1328,7 @@ function postbymail_is_utf8($string) {
 
 // Check that required mail boxes exist, and create them if needed
 function postbymail_checkboxes($server, $protocol, $mailbox) {
-	$mailboxes = array("Published", "Errors");
+	$mailboxes = array("Published", "Errors", "Test Auto");
 	foreach ($mailboxes as $mailbox_name) {
 		$mailbox_name = imap_utf7_encode($mailbox_name);
 		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
