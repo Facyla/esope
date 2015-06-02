@@ -175,15 +175,14 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				*/
 				if (!empty($msgbody)) {
 					// @DEBUG testing encoding
-					echo "content type : " . $message->headers['content_type'] . '<br />';
-					echo "headers : <pre>" . print_r($message->headers, true) . '</pre><br />';
-					echo "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
-					echo "original body : " . $msgbody . '<hr />';
-					echo "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
-					echo "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
-					echo "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
-					echo "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
-					echo "################################################################";
+					$body .= "content type : " . $message->headers['content_type'] . '<br />';
+					$body .= "headers : <pre>" . print_r($message->headers, true) . '</pre><br />';
+					$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
+					$body .= "original body : " . $msgbody . '<hr />';
+					$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
+					$body .= "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
+					$body .= "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
+					$body .= "################################################################";
 					continue;
 					
 					// @TODO : mauvaise détection ISO-8859-1
