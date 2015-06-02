@@ -175,8 +175,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				*/
 				if (!empty($msgbody)) {
 					// @DEBUG testing encoding
-					$body .= "content type : " . $message->headers['content_type'] . '<br />';
-					$body .= "headers : <pre>" . print_r($message->headers, true) . '</pre><br />';
+					$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
 					$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
 					$body .= "original body : " . $msgbody . '<hr />';
 					$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
