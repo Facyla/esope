@@ -1200,15 +1200,24 @@ echo "..after conversion : $msgbody<br />"; // @debug
 */
 function postbymail_convert_to_utf8($body = '', $charset = '') {
 echo "Detect and convert : original charset=$charset // $body<br />";
-echo "Quoted printable : " . quoted_printable_decode($body) . "<br />";
-echo "UTF8 encode : " . utf8_encode($body) . "<br />";
-	if (!empty($body)) {
-		// Auto-detect charset, if needed
-		if (empty($charset)) { $charset = mb_detect_encoding($body); }
-		// Normalise charset name
-		$charset = strtolower($charset);
-		// Convert encoding if needed
-		if ($charset != 'utf-8') {
+echo "HTMLentities " . htmlentities($body, ENT_QUOTES, "UTF-8") . '<br />';
+echo "mb_convert_encoding " . mb_convert_encoding($body, "UTF-8") . '<br />';
+echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", $charset) . '<br />';
+	if (empty($body)) { return ''; }
+	// Auto-detect charset, if needed
+	if (empty($charset)) { $charset = mb_detect_encoding($body, mb_detect_order(), true); }
+	//if (empty($charset)) { $charset = mb_detect_encoding($body); }
+	// Normalise charset name
+	$charset = strtolower($charset);
+	// Convert encoding if needed
+	switch($charset) {
+		case 'utf-8':
+			$return = $body;
+			break;
+		case 'iso-8859-1':
+			$content = utf8_encode($body);
+			break;
+		default:
 			// Additional test for better handling of erroneous encoding
 			if (mb_strlen(htmlentities($body, ENT_QUOTES, "UTF-8")) == 0) {
 				// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
@@ -1216,8 +1225,7 @@ echo "UTF8 encode : " . utf8_encode($body) . "<br />";
 			} else {
 				$return = mb_convert_encoding($body, "UTF-8", $charset);
 			}
-		}
-	} else { $return = $body; }
+	}
 echo "...converted : charset=$charset // $return<hr />";
 	return $return;
 }
