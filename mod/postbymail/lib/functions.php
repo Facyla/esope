@@ -157,40 +157,11 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/****************************/
 				/*   EXTRACT POST CONTENT   */
 				/****************************/
-// @DEBUG testing encoding
-$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
-$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
 				// Extract the message body from email content, in html or text if not available
 				// Extraction function also ensures its encoded into UTF-8
 				$msgbody = mailparts_extract_body($message, true);
-$body .= "original html body : " . $msgbody . '<hr />';
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
 				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
-$body .= "original text body : " . $msgbody . '<hr />';
-$body .= "original body encoded to utf8 : " . utf8_encode($msgbody) . '<hr />';
-$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
-$body .= "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
-$body .= "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
-$body .= "################################################################";
-continue;
-					
-				if (empty($msgbody)) {
-					// @TODO : mauvaise détection ISO-8859-1
-					// @TODO Encoding is explicit in headers, should get it from there rather than auto-detect
-					/* Note : coupure au premier accent si envoi avec Zimbra !!
-					$original_encoding = mb_detect_encoding($msgbody);
-					if ($original_encoding != "UTF-8") {
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8", $original_encoding);
-					}
-					*/
-					if (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0) {
-						// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8");
-					} else {
-						// Cas standard
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
-					}
-				}
 				
 				// Format the message to get the required data and content
 				if ($msgbody) {
@@ -1138,6 +1109,7 @@ function mailparts_extract_content($mailparts, $html = true) {
 
 /*
  * Mail body extraction function : extracts message content, in html or text format, and ensure it's encoded as UTF-8
+ * Note : Encoding is explicit in headers, so should get it from there first, rather than using auto-detect
  * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
  * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
  * returns : message body value, in UTF-8
@@ -1145,23 +1117,19 @@ function mailparts_extract_content($mailparts, $html = true) {
 function mailparts_extract_body($mailparts, $html = true) {
 	$charset = $mailparts->ctype_parameters['charset'];
 	$ctype_primary = strtolower($mailparts->ctype_primary);
-echo "Extract body : $ctype_primary $charset<br />"; // @debug
 	switch($ctype_primary) {
 		case 'message':
 		case 'multipart':
 			// We are only considering the first part, as we want the reply content only
 			$mailpart = $mailparts->parts[0];
 			$mailpart_charset = $mailpart->ctype_parameters['charset'];
-echo 'Part 0 : ' . $mailpart_charset . '<pre>' . print_r($mailpart, true) . '</pre>'; // @debug
 			switch(strtolower($mailpart->ctype_primary)) {
 				case 'message':
 				case 'multipart':
 					$msgbody = mailparts_extract_body($mailpart, $html);
 					break;
 				case 'text':
-echo "..before conversion : {$mailpart->body}<br />"; // @debug
 					$msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
-echo "..after conversion : $msgbody<br />"; // @debug
 					$msgbody = trim($msgbody);
 					// Convert plain text to HTML breaks, if not already HTML
 					if ($html && ($mailpart->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
@@ -1171,9 +1139,7 @@ echo "..after conversion : $msgbody<br />"; // @debug
 			break;
 		
 		case 'text':
-echo "..before conversion : {$mailparts->body}<br />"; // @debug
 			$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
-echo "..after conversion : $msgbody<br />"; // @debug
 			$msgbody = trim($msgbody);
 			// Convert plain text to HTML breaks, if not already HTML
 			if ($html && ($mailparts->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
@@ -1199,11 +1165,6 @@ echo "..after conversion : $msgbody<br />"; // @debug
  *   utilisation et utiliser le traitement approprié.
 */
 function postbymail_convert_to_utf8($body = '', $charset = '') {
-echo "Detect and convert : original charset=$charset // $body<br />";
-echo "utf8_encode " . utf8_encode($body) . '<br />';
-echo "HTMLentities " . htmlentities($body, ENT_QUOTES, "UTF-8") . '<br />';
-echo "mb_convert_encoding " . mb_convert_encoding($body, "UTF-8") . '<br />';
-echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", $charset) . '<br />';
 	if (empty($body)) { return ''; }
 	// Auto-detect charset, if needed
 	if (empty($charset)) { $charset = mb_detect_encoding($body, mb_detect_order(), true); }
@@ -1227,16 +1188,13 @@ echo "mb_convert_encoding using charset " . mb_convert_encoding($body, "UTF-8", 
 				$return = mb_convert_encoding($body, "UTF-8", $charset);
 			}
 	}
-	// Failsafe method
+	// Failsafe checks (should never happen)
 	if (empty($return)) {
 		$return = mb_convert_encoding($body, "UTF-8", $charset);
-echo "...ERROR : using failsafe conversion<br />";
 	}
 	if (empty($return)) {
 		$return = $body;
-echo "...ERROR : reverting to original content<br />";
 	}
-echo "...converted : charset=$charset // $return<hr />";
 	return $return;
 }
 
