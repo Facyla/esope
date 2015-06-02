@@ -174,13 +174,25 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				 *   utilisation et utiliser le traitement approprié.
 				*/
 				if (!empty($msgbody)) {
+					// @DEBUG testing encoding
+					echo "content type : " . $message->headers['content_type'] . '<br />';
+					echo "headers : <pre>" . print_r($message->headers, true) . '</pre><br />';
+					echo "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
+					echo "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8"); . '<hr />';
+					echo "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
+					echo "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
+					echo "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
+					echo "################################################################";
+					continue;
+					
 					// @TODO : mauvaise détection ISO-8859-1
 					// @TODO Encoding is explicit in headers, should get it from there rather than auto-detect
+					/* Note : coupure au premier accent si envoi avec Zimbra !!
 					$original_encoding = mb_detect_encoding($msgbody);
 					if ($original_encoding != "UTF-8") {
 						$msgbody = mb_convert_encoding($msgbody, "UTF-8", $original_encoding);
 					}
-					/*
+					*/
 					if (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0) {
 						// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
 						$msgbody = mb_convert_encoding($msgbody, "UTF-8");
@@ -188,8 +200,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 						// Cas standard
 						$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
 					}
-					*/
 				}
+				
 				// Format the message to get the required data and content
 				if ($msgbody) {
 					// On filtre de la même manière que depuis le site
