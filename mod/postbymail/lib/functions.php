@@ -147,6 +147,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					continue;
 				}
 				
+				continue; // @debug = do not process !!
+				
+				
 				// Set the message as read if told to
 				if ($markSeen) { $msgbody = imap_body($conn, $msg_id, FT_UID); } else { $msgbody = imap_body($conn, $msg_id, FT_PEEK|FT_UID); }
 				// Send the header and body through mimeDecode.
