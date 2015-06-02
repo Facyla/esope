@@ -1150,6 +1150,7 @@ function mailparts_extract_body($mailparts, $html = true) {
 		case 'multipart':
 			// We are only considering the first part, as we want the reply content only
 			$mailpart = $mailparts->parts[0];
+echo '<pre>' . print_r($mailpart, true) . '</pre>';
 			$charset = $mailpart->ctype_parameters->charset;
 			switch(strtolower($mailpart->ctype_primary)) {
 				case 'message':
