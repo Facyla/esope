@@ -157,23 +157,22 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/****************************/
 				/*   EXTRACT POST CONTENT   */
 				/****************************/
+// @DEBUG testing encoding
+$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
+$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
 				// Extract the message body from email content, in html or text if not available
 				// Extraction function also ensures its encoded into UTF-8
 				$msgbody = mailparts_extract_body($message, true);
+$body .= "original html body : " . $msgbody . '<hr />';
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
 				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
-				
-					// @DEBUG testing encoding
-					$body .= "Message info : <pre>" . print_r($message, true) . '</pre><br />';
-					$body .= "detected encoding : " . mb_detect_encoding($msgbody) . '<br />';
-					$body .= "original body : " . $msgbody . '<hr />';
-					$body .= "original body encoded to utf8 : " . utf8_encode($msgbody) . '<hr />';
-					$body .= "original body : " . $msgbody . '<hr />';
-					$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
-					$body .= "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
-					$body .= "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
-					$body .= "################################################################";
-					continue;
+$body .= "original text body : " . $msgbody . '<hr />';
+$body .= "original body encoded to utf8 : " . utf8_encode($msgbody) . '<hr />';
+$body .= "mb_convert_encoding : " . mb_convert_encoding($msgbody, "UTF-8") . '<hr />';
+$body .= "mb_convert_encoding autodetect : " . mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody)) . '<hr />';
+$body .= "htmlentities : " . htmlentities($msgbody, ENT_QUOTES, "UTF-8") . '<hr />';
+$body .= "################################################################";
+continue;
 					
 				if (empty($msgbody)) {
 					// @TODO : mauvaise détection ISO-8859-1
@@ -234,8 +233,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/******************/
 				/*   EXPEDITEUR   */
 				/******************/
-				$sendermail = postbymail_extract_email($email_headers['from']);
-				$realsendermail = postbymail_extract_email($email_headers['sender']);
+				$sendermail = postbymail_extract_email($message->headers['from']);
+				$realsendermail = postbymail_extract_email($message->headers['sender']);
 				$member = postbymail_find_sender($message->headers);
 				
 				
@@ -1194,6 +1193,7 @@ function mailparts_extract_body($mailparts, $html = true) {
  *   utilisation et utiliser le traitement approprié.
 */
 function postbymail_convert_to_utf8($body = '', $charset = '') {
+echo "Detect and convert : original charset=$charset // $body<br />";
 	if (!empty($body)) {
 		// Auto-detect charset, if needed
 		if (empty($charset)) { $charset = mb_detect_encoding($body); }
@@ -1210,6 +1210,7 @@ function postbymail_convert_to_utf8($body = '', $charset = '') {
 			}
 		}
 	} else { $return = $body; }
+echo "...converted : charset=$charset // $return<hr />";
 	return $return;
 }
 
