@@ -117,7 +117,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
 		//$allmsgCount = imap_num_msg($conn); // Compte tous les messages de la boîte
 		//if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
-		if ($unreadmessages = imap_search($conn,'UNSEEN')) {
+		//if ($unreadmessages = imap_search($conn,'UNSEEN')) {
+		// Use UID instead of sequence number (because we will move emails)
+		if ($unreadmessages = imap_search($conn,'UNSEEN', SE_UID)) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
 			// Loop through the messages.
@@ -126,7 +128,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $msg_id) {
-				error_log("Processing email $i => $msg_id");
+				error_log("Processing email $i : message uid = $msg_id");
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
@@ -136,21 +138,23 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $msg_id));
 				// Get the message header.
-				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT);
+				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT|FT_UID);
+				
+				// Ensure we had no error checking email
+				// Note : we have to check this before we mark the message as read
+				if (!$header) {
+					error_log("Error processing email, keep going to avoid further errors. We will process it later.");
+					continue;
+				}
+				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($conn, $msg_id); } else { $msgbody = imap_body($conn, $msg_id, FT_PEEK); }
+				if ($markSeen) { $msgbody = imap_body($conn, $msg_id, FT_UID); } else { $msgbody = imap_body($conn, $msg_id, FT_PEEK|FT_UID); }
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
 				
 				// Some mail servers and clients use special messages for holding mailbox data; ignore that message if it exists.
 				if ($message->headers['subject'] == "DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA") { continue; }
-				
-				// Ensure we had no error 
-				if (!$header || !$msgbody) {
-					error_log("Error processing email, keep going to avoid further errors. We will process it later.");
-					continue;
-				}
 				
 				// A partir d'ici on a un message "traitable" et on peut notifier expéditeur et admin
 				
