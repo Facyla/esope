@@ -1099,17 +1099,17 @@ function mailparts_extract_content($mailparts, $html = true) {
 	$attachment = '';
 	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8)
 	// et content-transfer-encoding (par ex. quoted-printable)
-	$charset = $mailparts->ctype_parameters->charset;
+	$charset = $mailparts->ctype_parameters['charset'];
 	$ctype_primary = strtolower($mailparts->ctype_primary);
 	if ($ctype_primary == "multipart") {
 		// Multipart message : requires to process each part
 		foreach ($mailparts->parts as $mailpart) {
-			$charset = $mailpart->ctype_parameters->charset;
+			$mailpart_charset = $mailpart->ctype_parameters['charset'];
 			$mailpart_ctype_primary = strtolower($mailpart->ctype_primary);
-			$msgbody .= elgg_echo('postbymail:message:elements', array($mailpart_ctype_primary, $mailpart->ctype_secondary, $charset));
+			$msgbody .= elgg_echo('postbymail:message:elements', array($mailpart_ctype_primary, $mailpart->ctype_secondary, $mailpart_charset));
 			switch($mailpart_ctype_primary) {
 				case 'text':
-					$mailpart_msgbody = postbymail_convert_to_utf8($mailpart->body, $charset);
+					$mailpart_msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
 					$msgbody .= elgg_echo('postbymail:attachment:msgcontent', array($mailpart_msgbody));
 					break;
 				case 'message':
@@ -1145,21 +1145,23 @@ function mailparts_extract_content($mailparts, $html = true) {
 function mailparts_extract_body($mailparts, $html = true) {
 	$charset = $mailparts->ctype_parameters['charset'];
 	$ctype_primary = strtolower($mailparts->ctype_primary);
-echo "Extract body : $ctype_primary $charset<br />";
+echo "Extract body : $ctype_primary $charset<br />"; // @debug
 	switch($ctype_primary) {
 		case 'message':
 		case 'multipart':
 			// We are only considering the first part, as we want the reply content only
 			$mailpart = $mailparts->parts[0];
 			$mailpart_charset = $mailpart->ctype_parameters['charset'];
-echo 'Part 0 : ' . $mailpart_charset . '<pre>' . print_r($mailpart, true) . '</pre>';
+echo 'Part 0 : ' . $mailpart_charset . '<pre>' . print_r($mailpart, true) . '</pre>'; // @debug
 			switch(strtolower($mailpart->ctype_primary)) {
 				case 'message':
 				case 'multipart':
 					$msgbody = mailparts_extract_body($mailpart, $html);
 					break;
 				case 'text':
+echo "..before conversion : {$mailpart->body}<br />"; // @debug
 					$msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
+echo "..after conversion : $msgbody<br />"; // @debug
 					$msgbody = trim($msgbody);
 					// Convert plain text to HTML breaks, if not already HTML
 					if ($html && ($mailpart->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
@@ -1169,7 +1171,9 @@ echo 'Part 0 : ' . $mailpart_charset . '<pre>' . print_r($mailpart, true) . '</p
 			break;
 		
 		case 'text':
+echo "..before conversion : {$mailparts->body}<br />"; // @debug
 			$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
+echo "..after conversion : $msgbody<br />"; // @debug
 			$msgbody = trim($msgbody);
 			// Convert plain text to HTML breaks, if not already HTML
 			if ($html && ($mailparts->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
@@ -1196,6 +1200,8 @@ echo 'Part 0 : ' . $mailpart_charset . '<pre>' . print_r($mailpart, true) . '</p
 */
 function postbymail_convert_to_utf8($body = '', $charset = '') {
 echo "Detect and convert : original charset=$charset // $body<br />";
+echo "Quoted printable : " . quoted_printable_decode($body) . "<br />";
+echo "UTF8 encode : " . utf8_encode($body) . "<br />";
 	if (!empty($body)) {
 		// Auto-detect charset, if needed
 		if (empty($charset)) { $charset = mb_detect_encoding($body); }
