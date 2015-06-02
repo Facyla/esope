@@ -293,30 +293,32 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$body .= '<br class="clearfloat" /><hr />';
 				
 				// Infos pour l'expéditeur
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:publicationmember'), $member->name);
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:postfullmail'), htmlentities($message->headers['to']));
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:mailtitle'), $message->headers['subject']);
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
-				if ($use_attachments) $sender_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
-				//$sender_reply .= sprintf(elgg_echo('postbymail:info:parameters'), $parameters);
+				$sender_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$sender_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$sender_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$sender_reply .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				//$sender_reply .= elgg_echo('postbymail:info:parameters', array($parameters));
 				if ($entity) {
-					$sender_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
+					$sender_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
 					$sender_reply .= elgg_echo('postbymail:info:badguid');
 				}
 				
 				// Infos pour l'admin
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:publicationmember'), $member->name);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:postfullmail'), htmlentities($message->headers['to']));
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:mailbox'), $mailbox);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:mailtitle'), $message->headers['subject']);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
-				if ($use_attachments) $admin_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
+				$admin_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($mailbox));
+				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$admin_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
 				$admin_reply .= $parameters;
 				if ($entity) {
-					$admin_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
+					$admin_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
 					$admin_reply .= elgg_echo('postbymail:info:badguid');
 				}
