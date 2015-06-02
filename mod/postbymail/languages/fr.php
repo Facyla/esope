@@ -10,6 +10,7 @@ $site_url = elgg_get_site_url();
 
 $french = array(
 	/* Main strings */
+	'postbymail' => "Publication par mail",
 	'postbymail:title' => "Publication par mail",
 	
 	/* Settings */

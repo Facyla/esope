@@ -10,6 +10,7 @@ $site_url = elgg_get_site_url();
 
 $en = array(
 	/* Main strings */
+	'postbymail' => "Post by email",
 	'postbymail:title' => "Post by email",
 	
 	/* Settings */

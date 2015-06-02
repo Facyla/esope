@@ -1329,14 +1329,14 @@ function postbymail_checkboxes($server, $protocol, $mailbox) {
 		$mailbox_name = imap_utf7_encode($mailbox_name);
 		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
 		if (!$status) {
-			echo "Création du dossier \"$mailbox_name\" :<br />";
-			error_log("Création du dossier \"$mailbox_name\"");
+			echo "Ajout du dossier \"$mailbox_name\" :<br />";
+			error_log("Ajout du dossier \"$mailbox_name\"");
 			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) {
-				echo "Dossier \"$mailbox_name\" créé<br />";
-				error_log("Dossier \"$mailbox_name\" créé");
+				echo "Ajout du dossier \"$mailbox_name\" OK<br />";
+				error_log("Ajout du dossier \"$mailbox_name\" OK");
 			} else {
-				echo "<b>Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement</b>";
-				error_log("Impossible de créer le dossier \"$mailbox_name\" : veuillez le créer manuellement");
+				echo "<b>Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement</b>";
+				error_log("Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement");
 			}
 		}
 	}
