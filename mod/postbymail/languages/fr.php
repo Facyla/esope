@@ -10,6 +10,7 @@ $site_url = elgg_get_site_url();
 
 $french = array(
 	/* Main strings */
+	'postbymail' => "Publication par mail",
 	'postbymail:title' => "Publication par mail",
 	
 	/* Settings */
@@ -140,6 +141,7 @@ $french = array(
 	'postbymail:info:usefulcontent' => "Contenu utile : &laquo;&nbsp;%s&nbsp;&raquo;",
 	'postbymail:info:memberandmail' => "<strong>Compte de membre associé à l'expéditeur annoncé :</strong> %s (mail annoncé : %s)<br />",
 	'postbymail:info:realmemberandmail' => "<strong>Compte de membre associé à l'expéditeur réel :</strong> %s (mail réel : %s)<br />",
+	'postbymail:info:emails' => "<strong>Email utilisé :</strong> %s (via %s)<br />",
 	'postbymail:info:alternativememberandmail' => "<strong>Compte de membre associé à une adresse alternative :</strong> %s (mail alternatif : %s)<br />",
 	'postbymail:info:publicationmember' => "<strong>Membre sélectionné pour publication :</strong> %s<br />",
 	

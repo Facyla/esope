@@ -13,11 +13,10 @@
  * iionly@gmx.de
  */
 
-global $CONFIG;
 if (elgg_get_context() == 'view') {
 	elgg_set_context('feedback');
 	elgg_pop_breadcrumb();
-	elgg_push_breadcrumb('feedback', $CONFIG->url . 'feedback');
+	elgg_push_breadcrumb('feedback', elgg_get_site_url() . 'feedback');
 }
 
 $about = $vars['entity']->about; if (empty($about)) { $about = "feedback"; }

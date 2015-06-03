@@ -4,21 +4,12 @@ Il peut également permettre de publier sur le réseau via une adresse email sp�
 
 
 # Installation
-1. Ce plugin nécessite l'utilisation d'un compte email accessible en IMAP, et acceptant les paramètres dans l'adresse email, par exemple : username+param=truc@domain.tld
-2. Créer dans cette boîte mail deux dossiers : Published et Errors. Note : si ces dossiers ne sont pas créés, seul le statut "non lu" des messages permettra de déterminer s'ils ont été traités par el plugin."
-3. Configurer le plugin dans avec les paramètres mail. Note : si vous ne souhaitez pas que ces informations soient "en clair" dans l'interface d'administration, vous pouvez également définir directement ces paramètres dans le fichier settings.php (cf. modèle de fichier settings_dist.php)
+1. Ce plugin nécessite l'utilisation d'un compte email accessible en IMAP, et acceptant les paramètres séparés par le caractère "+" dans l'adresse email, par exemple : username+guid=12345@domain.tld
+2. Configurer le plugin dans avec les paramètres mail. Note : si vous ne souhaitez pas que ces informations soient "en clair" dans l'interface d'administration, vous pouvez également définir directement ces paramètres dans le fichier settings.php (cf. modèle de fichier settings_dist.php)
+3. Vérifier que les paramètres sont OK en cliquant sur le lien de vérification en bas de la page de configuration du plugin. Si nécessaire, vous pouvez avoir besoin de créer manuellement deux dossiers dans votre boîte email : Published et Errors. Note : si ces dossiers ne sont pas créés, le plugin foncitonnera tout de même, mais seul le statut "non lu" des messages permettra de déterminer s'ils ont été traités ou non par le plugin.
 
 
-# Intégration
-TODO : modifier notification_messages pour inclure l'URL de réponse
-  $replyent_guid = '';
-  $replyemail = 'posttoformavia+guid=' . $replyent_guid . '@domain.tld'; // +guid=nnn&access=aaaa, etc.
-  $replysubject = urlencode();
-  $separator = 'VEUILLEZ REPONDRE AU-DESSUS DE CETTE LIGNE';
-  $reply_separator = urlencode($separator);
-  $reply_instructions = urlencode(elgg_echo('postbymail:default:separatordetails'));
-  // #: %23, <: %3C, <: %3E, saut de ligne: %0D%0A
-  echo '<a href="mailto:' . $replyemail . '?subject=' . $replysubject . '&body=%0D%0A%0D%0A%0D%0A' . $reply_separator . '%0D%0A' . $reply_instructions . '">Répondre par mail</a>
+
 
 
 # NOTES de développement

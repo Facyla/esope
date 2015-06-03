@@ -10,6 +10,7 @@ $site_url = elgg_get_site_url();
 
 $en = array(
 	/* Main strings */
+	'postbymail' => "Post by email",
 	'postbymail:title' => "Post by email",
 	
 	/* Settings */
@@ -140,6 +141,7 @@ $en = array(
 	'postbymail:info:usefulcontent' => "Useful content: &laquo;&nbsp;%s&nbsp;&raquo;",
 	'postbymail:info:memberandmail' => "<strong>Member account associated with the announced sender email:</strong> %s (From email: %s)<br />",
 	'postbymail:info:realmemberandmail' => "<strong>Member account associated with the real sender email:</strong> %s (real email: %s)<br />",
+	'postbymail:info:emails' => "<strong>Used email:</strong> %s (via %s)<br />",
 	'postbymail:info:alternativememberandmail' => "<strong>Member account associated with an alternative email address:</strong> %s (alternative email: %s)<br />",
 	'postbymail:info:publicationmember' => "<strong>Selected member for publication:</strong> %s<br />",
 	

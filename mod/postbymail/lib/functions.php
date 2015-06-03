@@ -14,7 +14,7 @@ if (!class_exists('Mail_mimeDecode')) {
  * 
  * $server = "localhost:143";	 POP3/IMAP/NNTP server to connect to, with optional port.
  * $protocol = "/notls";	 Protocol specification (optional)
- * $mailbox = "INBOX";	 Name of the mailbox to open. - Boîte de réception = toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
+ * $inbox_name = "INBOX";	 Name of the mailbox to open. - Boîte de réception = toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
  * $username = "user@domain.tld";	 Mailbox username.
  * $password = "********";	 Mailbox password.
  * $markSeen = false;	 Whether or not to mark retrieved messages as seen.
@@ -25,9 +25,10 @@ if (!class_exists('Mail_mimeDecode')) {
  * $separator = elgg_echo('postbymail:default:separator');	 Séparateur du message (pour retirer la signature, les messages joints intégrés dans la réponse..)
 	*
 */
-function postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
+function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
 	global $sender_reply;
 	global $admin_reply;
+	global $postbymail_guid;
 	
 	$site = elgg_get_site_entity();
 	
@@ -92,12 +93,12 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 	
 	
 	// CONNEXION AU SERVEUR IMAP ET TRAITEMENT DES EMAILS
-	$conn = imap_open('{'.$server.$protocol.'}'.$mailbox, $username, $password);
-	if (!$conn) {
+	$mailbox = imap_open('{'.$server.$protocol.'}'.$inbox_name, $username, $password);
+	if (!$mailbox) {
 		// Connection error (bad config)
 		$body .= elgg_echo('postbymail:badpluginconfig');
 		$imap_errors = imap_errors();
-		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$mailbox, $username, PASSWORD);</p>";
+		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$inbox_name, $username, PASSWORD);</p>";
 		$body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
 		$imap_alerts = imap_alerts();
 		$body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
@@ -105,18 +106,25 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		$body .= elgg_echo('postbymail:connectionok');
 		
 		// Création des dossiers s'ils n'existent pas
-		/* @todo : marche pas..
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.Published"))) { $body .= "Boîte 'Published' créée"; }
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.Errors"))) { $body .= "Boîte 'Errors' créée"; }
-		if (imap_createmailbox($conn, imap_utf7_encode("{".$server.$protocol."}INBOX.TESTS"))) { $body .= "Boîte 'TEST' créée"; }
-		*/
+		postbymail_checkboxes($server, $protocol, $mailbox);
 		$purge = false;
 		
 		// See if the mailbox contains any messages.
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
-		//$allmsgCount = imap_num_msg($conn); // Compte tous les messages de la boîte
-		//if ($unreadmessages = imap_sort($conn, SORTARRIVAL, 0, null, 'UNSEEN')) {
-		if ($unreadmessages = imap_search($conn,'UNSEEN')) {
+		//$allmsgCount = imap_num_msg($mailbox); // Compte tous les messages de la boîte
+		//if ($unreadmessages = imap_sort($mailbox, SORTARRIVAL, 0, null, 'UNSEEN')) {
+		//if ($unreadmessages = imap_search($mailbox,'UNSEEN')) {
+		/* Use UID instead of sequence number (because we will move emails)
+		 * IMPORTANT : si on utilise SE_UID ici (liste les UID a lieu du numéro dans la boîte), 
+		 * il faut faire attention à ajouter les options appropriées sur toutes les fonctions qui utilisent $uid
+		 * Note : pour plusieurs options, utiliser | (avec un espace)
+		 * imap_search : SE_UID
+		 * imap_fetchheader : FT_UID
+		 * imap_body : FT_UID
+		 * imap_mail_move : CP_UID
+		 * imap_setflag_full : ST_UID
+		 */
+		if ($unreadmessages = imap_search($mailbox,'UNSEEN', SE_UID)) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
 			// Loop through the messages.
@@ -124,19 +132,28 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 			// Puis on vérifie les paramètres et on poste si tout est OK
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
-			foreach ($unreadmessages as $i => $msg_id) {
-				error_log("Processing email $i => $msg_id");
+			foreach ($unreadmessages as $i => $uid) {
+				error_log("Processing email $i : message uid = $uid");
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
-				global $postbymail_guid;
 				$postbymail_guid = '';
+				$sender_reply = '';
+				$admin_reply = '';
 				
-				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i+1), $msg_id));
+				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
-				$header = imap_fetchheader($conn, $msg_id, FT_PREFETCHTEXT);
+				$header = imap_fetchheader($mailbox, $uid, FT_UID | FT_PREFETCHTEXT);
+				
+				// Ensure we had no error checking email
+				// Note : we have to check this before we mark the message as read
+				if (!$header) {
+					error_log("Error processing email, keep going to avoid further errors. We will process it later.");
+					continue;
+				}
+				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($conn, $msg_id); } else { $msgbody = imap_body($conn, $msg_id, FT_PEEK); }
+				if ($markSeen) { $msgbody = imap_body($mailbox, $uid, FT_UID); } else { $msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK); }
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
@@ -158,38 +175,11 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*   EXTRACT POST CONTENT   */
 				/****************************/
 				// Extract the message body from email content, in html or text if not available
-				$msgbody = mailparts_extract_content($message, true, true);
+				// Extraction function also ensures its encoded into UTF-8
+				$msgbody = mailparts_extract_body($message, true);
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
-				if (empty($msgbody)) { $msgbody = mailparts_extract_content($message, true, false); }
+				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
 				
-				/* Si le message contient des caractères invalides :
-				 * Par ex. message envoyé comme ISO-8859-1 mais en utilisant des caractères de Windows-1252
-				 * Lire les explications détaillées sur 
-				 *   http://forum.alsacreations.com/topic-17-6460-1-Encodage-caracteres-invalides-et-entites-HTML.html#p56012
-				 * Résumé : Les caractères "de contrôle" du jeu ISO-8859-1 (situés dans les intervalles 00-1F et 7F-9F) 
-				 *   ne sont généralement pas utilisés. Certaines entreprises ont créé d’autres jeux de caractères dans lesquels 
-				 *   les espaces alloués à ces caractères de contrôle (dans tous les charset ISO-*, pas seulement ISO-8859-1), 
-				 *   sont utilisés pour des caractères plus "utiles". L'utilisation de ces caractères invalides bloque le 
-				 *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
-				 *   utilisation et utiliser le traitement approprié.
-				*/
-				if (!empty($msgbody)) {
-					// @TODO : mauvaise détection ISO-8859-1
-					// @TODO Encoding is explicit in headers, should get it from there rather than auto-detect
-					$original_encoding = mb_detect_encoding($msgbody);
-					if ($original_encoding != "UTF-8") {
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8", $original_encoding);
-					}
-					/*
-					if (mb_strlen(htmlentities($msgbody, ENT_QUOTES, "UTF-8")) == 0) {
-						// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8");
-					} else {
-						// Cas standard
-						$msgbody = mb_convert_encoding($msgbody, "UTF-8", mb_detect_encoding($msgbody));
-					}
-					*/
-				}
 				// Format the message to get the required data and content
 				if ($msgbody) {
 					// On filtre de la même manière que depuis le site
@@ -231,6 +221,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/******************/
 				/*   EXPEDITEUR   */
 				/******************/
+				$sendermail = postbymail_extract_email($message->headers['from']);
+				$realsendermail = postbymail_extract_email($message->headers['sender']);
 				$member = postbymail_find_sender($message->headers);
 				
 				
@@ -293,30 +285,32 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				$body .= '<br class="clearfloat" /><hr />';
 				
 				// Infos pour l'expéditeur
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:publicationmember'), $member->name);
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:postfullmail'), htmlentities($message->headers['to']));
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:mailtitle'), $message->headers['subject']);
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
-				$sender_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
-				if ($use_attachments) $sender_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
-				//$sender_reply .= sprintf(elgg_echo('postbymail:info:parameters'), $parameters);
+				$sender_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$sender_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$sender_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$sender_reply .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				//$sender_reply .= elgg_echo('postbymail:info:parameters', array($parameters));
 				if ($entity) {
-					$sender_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
+					$sender_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
 					$sender_reply .= elgg_echo('postbymail:info:badguid');
 				}
 				
 				// Infos pour l'admin
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:publicationmember'), $member->name);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:postfullmail'), htmlentities($message->headers['to']));
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:mailbox'), $mailbox);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:mailtitle'), $message->headers['subject']);
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:maildate'), dateToFrenchFormat($message->headers['date']));
-				$admin_reply .= sprintf(elgg_echo('postbymail:info:hash'), $hash);
-				if ($use_attachments) $admin_reply .= sprintf(elgg_echo('postbymail:info:attachment'), $attachment);
+				$admin_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
+				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$admin_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
 				$admin_reply .= $parameters;
 				if ($entity) {
-					$admin_reply .= sprintf(elgg_echo('postbymail:info:objectok'), $entity->getURL(), $entity->title, htmlentities($guid));
+					$admin_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
 					$admin_reply .= elgg_echo('postbymail:info:badguid');
 				}
@@ -501,8 +495,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $msg_id, "\\Answered");
-						if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// @todo : Enregistrement du hash dans le container pour éviter un message exactement identique de la même personne..
 						// @todo voir si le même message est publié à une autre date ça pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -511,7 +505,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+						if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// La publication n'a pas pu être faite alors qu'elle était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -651,8 +645,8 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					if ($published) {
 						$pub_counter++;
 						// A ce stade on peut marquer le message
-						imap_setflag_full($conn, $msg_id, "\\Answered");
-						if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 						$body .= elgg_echo('postbymail:published');
 						// Enregistrement du hash dans l'objet pour éviter un message exactement identique de la même personne..
 						// @TODO décider si le même message publié à une autre date pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
@@ -661,7 +655,7 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
-						if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+						if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// Le commentaire n'a pas pu être publié alors qu'il était a priori valide : à vérifier par un admin
 						$notify_admin = true;
@@ -791,9 +785,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				}
 				// Notification responsable du groupe
 				if ($notify_groupadmin) {
-					// @todo : notifier l'admin du groupe
+					// @TODO : notifier l'admin du groupe
 					if ($groupowner = get_entity($group_entity->owner_guid)) {
-						if (($admin_email = $groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
+						if (is_email_address($groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
 						} else {
 							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						}
@@ -807,18 +801,18 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 				/*   IMAP : MARQUAGE DU MESSAGE   */
 				/**********************************/
 				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
-				//imap_setflag_full($conn, $msg_id, "\\Seen \\Deleted");	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
-				imap_setflag_full($conn, $msg_id, "\\Seen");
+				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
+				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
 				if ($published) {
-					imap_setflag_full($conn, $msg_id, "\\Answered");
-					if (@imap_mail_move($conn, $msg_id, "Published")) { $purge = true; }
+					imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
+					if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
 				} else {
 					// Si le message a été traité, on le range dans un dossier
-					if (@imap_mail_move($conn, $msg_id, "Errors")) { $purge = true; }
+					if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 					if ($notify_sender || $notify_admin) {
 						// Si le message fait l'objet d'une notification, on le marque en plus comme traité
-						imap_setflag_full($conn, $msg_id, "\\Answered");
+						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
 					}
 				}
 				
@@ -831,9 +825,9 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		
 		// Nettoie les messages effacés ou déplacés
 		if ($purge) {
-			imap_close($conn, CL_EXPUNGE); // semble effacer un peu trop ?? (si tentative de déplacement dans un dossier inexistant)
+			imap_close($mailbox, CL_EXPUNGE); // semble effacer un peu trop ?? (si tentative de déplacement dans un dossier inexistant)
 		} else {
-			imap_close($conn);
+			imap_close($mailbox);
 		}
 	} // END IMAP CONNECT CHECK
 	
@@ -866,11 +860,12 @@ function postbymail_checkandpost($server, $protocol, $mailbox, $username, $passw
 		=> in both cases, sender should be identified when it's possible, but the post is sent by the group or user itself if email can't be found.
  */
 function postbymail_checkeligible_post($params = array()) {
+	global $sender_reply;
+	global $admin_reply;
+	
 	$defaults = array('key' => false, 'member' => false, 'subtype' => 'blog', 'access' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
 	
-	global $sender_reply;
-	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailpost_check = true;
 	
@@ -991,11 +986,12 @@ function postbymail_checkeligible_post($params = array()) {
  * $checkhash	 false, or publication hash to use hash check (hashed message will be ignored and not published)
 */
 function postbymail_checkeligible_reply($params) {
+	global $sender_reply;
+	global $admin_reply;
+	
 	$defaults = array('entity' => false, 'member' => false, 'post_body' => false, 'email_headers' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
 	
-	global $sender_reply;
-	global $admin_reply;
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
@@ -1083,51 +1079,142 @@ function postbymail_checkeligible_reply($params) {
 
 
 /*
- * Mail content extraction function : extracts message content, and optionnaly attachements, in html or text format
+ * Mail content extraction function : extracts message elements, in html or text format
  * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
- * $firstbody	 boolean	 return only the message content (no attachment nor message parts)
  * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
  * returns : message value, or array with more details (attachements)
 */
-function mailparts_extract_content($mailparts, $firstbody = false, $html = true) {
-	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8) et content-transfer-encoding (par ex. quoted-printable)
-	if (strtolower($mailparts->ctype_primary) == "multipart") {
-		$attachment = '';
-		foreach ($mailparts->parts as $part) {
-			if ($firstbody) {
-				switch(strtolower($part->ctype_primary)) {
-					case 'multipart': return mailparts_extract_content($part, true); break;
-					case 'image': break;
-					case 'text':
-						if ($html) {
-							if ($part->ctype_secondary == 'html') { return trim($part->body); } else break;
-						} else { return nl2br(trim($part->body)); }
-				}
-			} else {
-				$msgbody .= elgg_echo('postbymail:message:elements', array($part->ctype_primary, $part->ctype_secondary, $part->ctype_parameters->charset));
-				switch(strtolower($part->ctype_primary)) {
-					case 'multipart':
-						$content = mailparts_extract_content($part);
-						$msgbody .= elgg_echo('postbymail:attachment:multipart', array($content['body']));
-						$attachment .= $content['attachment'];
-						break;
-					case 'image':
-						$attachment .= elgg_echo('postbymail:attachment:image', array(translateSize(mb_strlen($part->body))));
-						break;
-					case 'text':
-						$msgbody .= elgg_echo('postbymail:attachment:msgcontent', array($part->body));
-						break;
-					default: 
-						$attachment .= elgg_echo('postbymail:attachment:other', array(translateSize(mb_strlen($part->body))));
-				}
+function mailparts_extract_content($mailparts, $html = true) {
+	$msgbody = '';
+	$attachment = '';
+	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8)
+	// et content-transfer-encoding (par ex. quoted-printable)
+	$charset = $mailparts->ctype_parameters['charset'];
+	$ctype_primary = strtolower($mailparts->ctype_primary);
+	if ($ctype_primary == "multipart") {
+		// Multipart message : requires to process each part
+		foreach ($mailparts->parts as $mailpart) {
+			$mailpart_charset = $mailpart->ctype_parameters['charset'];
+			$mailpart_ctype_primary = strtolower($mailpart->ctype_primary);
+			$msgbody .= elgg_echo('postbymail:message:elements', array($mailpart_ctype_primary, $mailpart->ctype_secondary, $mailpart_charset));
+			switch($mailpart_ctype_primary) {
+				case 'text':
+					$mailpart_msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
+					$msgbody .= elgg_echo('postbymail:attachment:msgcontent', array($mailpart_msgbody));
+					break;
+				case 'message':
+				case 'multipart':
+					$partcontent = mailparts_extract_content($mailpart, $html);
+					$msgbody .= elgg_echo('postbymail:attachment:multipart', array($partcontent['body']));
+					$attachment .= $partcontent['attachment'];
+					break;
+				case 'image':
+					$attachment .= elgg_echo('postbymail:attachment:image', array(translateSize(mb_strlen($mailpart->body))));
+					break;
+				case 'audio':
+				case 'video':
+				case 'application':
+				default: // Other cases = audio, video, application
+					$attachment .= elgg_echo('postbymail:attachment:other', array(translateSize(mb_strlen($mailpart->body)))) . ' (' . $mailpart_ctype_primary . ')';
 			}
 		}
-		if (empty($attachement)) { $attachment = elgg_echo('postbymail:noattachment'); }
-		if ($firstbody) { return trim($msgbody); } else { return array('body' => trim($msgbody), 'attachment' => $attachment); }
 	} else {
-		if ($firstbody) return trim($mailparts->body); else return array('body' => trim($mailparts->body), 'attachment' => elgg_echo('postbymail:noattachment'));
+		$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
 	}
-	return false;
+	
+	if (empty($attachement)) { $attachment = elgg_echo('postbymail:noattachment'); }
+	return array('body' => trim($msgbody), 'attachment' => $attachment);
+}
+
+/*
+ * Mail body extraction function : extracts message content, in html or text format, and ensure it's encoded as UTF-8
+ * Note : Encoding is explicit in headers, so should get it from there first, rather than using auto-detect
+ * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
+ * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
+ * returns : message body value, in UTF-8
+*/
+function mailparts_extract_body($mailparts, $html = true) {
+	$charset = $mailparts->ctype_parameters['charset'];
+	$ctype_primary = strtolower($mailparts->ctype_primary);
+	switch($ctype_primary) {
+		case 'message':
+		case 'multipart':
+			// We are only considering the first part, as we want the reply content only
+			$mailpart = $mailparts->parts[0];
+			$mailpart_charset = $mailpart->ctype_parameters['charset'];
+			switch(strtolower($mailpart->ctype_primary)) {
+				case 'message':
+				case 'multipart':
+					$msgbody = mailparts_extract_body($mailpart, $html);
+					break;
+				case 'text':
+					$msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
+					$msgbody = trim($msgbody);
+					// Convert plain text to HTML breaks, if not already HTML
+					if ($html && ($mailpart->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
+					break;
+				default: // Other cases = image, audio, video, application
+			}
+			break;
+		
+		case 'text':
+			$msgbody = postbymail_convert_to_utf8($mailparts->body, $charset);
+			$msgbody = trim($msgbody);
+			// Convert plain text to HTML breaks, if not already HTML
+			if ($html && ($mailparts->ctype_secondary != 'html')) { $msgbody = nl2br($msgbody); }
+			break;
+		
+		default: // Other cases = image, audio, video, application
+	}
+	// Return result
+	return $msgbody;
+}
+
+
+/* Convertit tout texte en UTF-8, afin de normaliser l'encodage des contenus */
+/* Si le message contient des caractères invalides :
+ * Par ex. message envoyé comme ISO-8859-1 mais en utilisant des caractères de Windows-1252
+ * Lire les explications détaillées sur 
+ *   http://forum.alsacreations.com/topic-17-6460-1-Encodage-caracteres-invalides-et-entites-HTML.html#p56012
+ * Résumé : Les caractères "de contrôle" du jeu ISO-8859-1 (situés dans les intervalles 00-1F et 7F-9F) 
+ *   ne sont généralement pas utilisés. Certaines entreprises ont créé d’autres jeux de caractères dans lesquels 
+ *   les espaces alloués à ces caractères de contrôle (dans tous les charset ISO-*, pas seulement ISO-8859-1), 
+ *   sont utilisés pour des caractères plus "utiles". L'utilisation de ces caractères invalides bloque le 
+ *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
+ *   utilisation et utiliser le traitement approprié.
+*/
+function postbymail_convert_to_utf8($body = '', $charset = '') {
+	if (empty($body)) { return ''; }
+	// Auto-detect charset, if needed
+	if (empty($charset)) { $charset = mb_detect_encoding($body, mb_detect_order(), true); }
+	//if (empty($charset)) { $charset = mb_detect_encoding($body); }
+	// Normalise charset name
+	$charset = strtolower($charset);
+	// Convert encoding if needed
+	switch($charset) {
+		case 'utf-8':
+			$return = $body;
+			break;
+		case 'iso-8859-1':
+			$return = utf8_encode($body);
+			break;
+		default:
+			// Additional test for better handling of erroneous encoding
+			if (mb_strlen(htmlentities($body, ENT_QUOTES, "UTF-8")) == 0) {
+				// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
+				$return = mb_convert_encoding($body, "UTF-8");
+			} else {
+				$return = mb_convert_encoding($body, "UTF-8", $charset);
+			}
+	}
+	// Failsafe checks (should never happen)
+	if (empty($return)) {
+		$return = mb_convert_encoding($body, "UTF-8", $charset);
+	}
+	if (empty($return)) {
+		$return = $body;
+	}
+	return $return;
 }
 
 
@@ -1239,5 +1326,27 @@ function postbymail_is_utf8($string) {
 	)*$%xs', $string);
 }
 */
+
+
+// Check that required mail boxes exist, and create them if needed
+function postbymail_checkboxes($server, $protocol, $mailbox) {
+	$mailboxes = array("Published", "Errors");
+	foreach ($mailboxes as $mailbox_name) {
+		$mailbox_name = imap_utf7_encode($mailbox_name);
+		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
+		if (!$status) {
+			echo "Ajout du dossier \"$mailbox_name\" :<br />";
+			error_log("Ajout du dossier \"$mailbox_name\"");
+			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) {
+				echo "Ajout du dossier \"$mailbox_name\" OK<br />";
+				error_log("Ajout du dossier \"$mailbox_name\" OK");
+			} else {
+				echo "<b>Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement</b>";
+				error_log("Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement");
+			}
+		}
+	}
+}
+
 
 

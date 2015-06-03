@@ -72,17 +72,16 @@ Pour modifier vos préférences de notification, veuillez cliquer sur :
 </font>
 	",
 	
-	'comment:notify:body:email:text' => "Bonjour %s,
+	'comment:notify:body:email:text' => "Bonjour %1\$s,
 
-Un nouveau commentaire a été publié sur \"%s\"
-%s a écrit :
+%3\$s a publié un nouveau commentaire sur \"%2\$s\" :
 
-%s
+%4\$s
 
-%s
+Pour afficher la conversation : %5\$s
 
 
-%s
+%6\$s
 
 _________________________________________________________________________________
 <font color=\"#888888\" size=\"2\">
@@ -91,24 +90,20 @@ Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder �
 Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.
 
 Pour modifier vos préférences de notification, veuillez cliquer sur : 
-%s
-
-Pour modifier vos préférences de notification pour tous les messages de ce type, veuillez cliquer sur : 
-%s
+%7\$s
 </font>
 	",
 	
-	'comment:notify:group:body:email:text' => "Bonjour %s,
+	'comment:notify:group:body:email:text' => "Bonjour %1\$s,
 
-Une nouvelle réponse a été publiée sur \"%s\"
-%s a écrit :
+%3\$s a répondu sur \"%2\$s\"
 
-%s
+%4\$s
 
-%s
+%5\$s
 
 
-%s
+%6\$s
 
 _________________________________________________________________________________
 <font color=\"#888888\" size=\"2\">
@@ -117,45 +112,42 @@ Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder �
 Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.
 
 Pour modifier vos préférences de notification, veuillez cliquer sur : 
-%s
-
-Pour modifier vos préférences de notification pour tous les messages de ce type, veuillez cliquer sur : 
-%s
+%7\$s
 </font>
 	",
 	
 	'comment:notify:body:email:html' => "
 		<div>
-		<div>Bonjour %s,</div>
-		<div>Un nouveau commentaire a été publié sur %s</div>
-		<div>%s a écrit : %s</div>
-		<div>%s</div>
+		<div>Bonjour %1\$s,</div>
+		<div>%3\$s a publié un nouveau commentaire %2\$s</div>
+		<div>%4\$s</div>
+		<div>%5\$s</div>
 		<div>&nbsp;</div>
 		<div>&nbsp;</div></div>
-		<div>%s</div>
+		<div>%6\$s</div>
 		<div>&nbsp;</div>
 		<div style=\"border-top:1px solid #CCCCCC;color:#888888;\">
 			<div>Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.</div>
 			<div>Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.</div>
-			<div>Pour modifier vos préférences de notification pour tous les messages de ce type, veuillez cliquer sur : 
-			%s</div>
+			<div>Pour modifier vos préférences de notification, veuillez cliquer sur : 
+			%7\$s</div>
 		</div>
 		</div>",
 		
 	'comment:notify:group:body:email:html' => "
 	<div>
-	<div>Bonjour %s,</div>
-	<div>Une nouvelle réponse a été publiée sur %s</div>
-	<div>%s a écrit : %s</div>
-	<div>%s</div>
+	<div>Bonjour %1\$s,</div>
+	<div>%3\$s a publié une nouvelle réponse sur %2\$s</div>
+	<div>%4\$s</div>
+	<div>%5\$s</div>
 	<div>&nbsp;</div>
 	<div>&nbsp;</div>
-	<div>%s</div>
+	<div>%6\$s</div>
 	<div style=\"border-top:1px solid #CCCCCC;color:#888888;\">
 		<div>Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.</div>
 		<div>Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.</div>
-		<div>Pour modifier vos préférences de notification pour tous les messages de ce type, veuillez cliquer sur : 
-		%s</div>
+		<div>Pour modifier vos préférences de notification, veuillez cliquer sur : 
+		%7\$s</div>
 	</div>
 	</div>",
 
