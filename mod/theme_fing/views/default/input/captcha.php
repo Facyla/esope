@@ -9,7 +9,7 @@ list($challenge_id, $challenge_question, $challenge_answer) = $challenge;
 	<label><?php echo $challenge_question; ?><br /><small><?php echo elgg_echo('theme_fing:register:antispam'); ?></small></label>
 	
 	<div class="profile_manager_register_input_container">
-		<?php echo elgg_view('input/text', array('name' => 'captcha_input', 'class' => 'captcha-input-text')); ?>
+		<?php echo elgg_view('input/text', array('name' => 'captcha_input', 'class' => 'captcha-input-text', 'required' => 'required')); ?>
 	</div>
 	
 </div>
