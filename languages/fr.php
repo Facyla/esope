@@ -476,7 +476,7 @@ $french = array(
 	'tools' => "Outils",
 
 	'register' => "Créer un compte",
-	'registerok' => "Vous vous êtes enregistré avec succès sur %s.",
+	'registerok' => "Vous vous êtes bien enregistré sur %s.",
 	'registerbad' => "La création de votre compte n'a pas fonctionné pour une raison inconnue.",
 	'registerdisabled' => "La création de compte est désactivée sur ce site.",
 
@@ -485,18 +485,18 @@ $french = array(
 	'registration:usernametooshort' => "L'identifiant de connexion doit faire %u caractères au minimum.",
 	'registration:passwordtooshort' => "Le mot de passe doit faire %u caractères au minimum.",
 	'registration:dupeemail' => "Cette adresse email est déjà utilisée.",
-	'registration:invalidchars' => "Désolé, votre identifiant contient les caractères invalides suivants: %s. Tous ces caractères sont invalides: %s",
-	'registration:emailnotvalid' => "Désolé, l'adresse email que vous avez saisie est invalide sur ce site.",
-	'registration:passwordnotvalid' => "Désolé, le mot de passe que vous avez saisi est invalide sur ce site.",
-	'registration:usernamenotvalid' => "Désolé, l'identifiant de connexion que vous avez saisi est invalide sur ce site.",
+	'registration:invalidchars' => "Votre identifiant contient les caractères invalides suivants: %s. Tous ces caractères sont invalides: %s",
+	'registration:emailnotvalid' => "L'adresse email que vous avez saisie est invalide sur ce site.",
+	'registration:passwordnotvalid' => "Le mot de passe que vous avez saisi est invalide sur ce site.",
+	'registration:usernamenotvalid' => "L'identifiant de connexion que vous avez saisi est invalide sur ce site.",
 
 	'adduser' => "Créer un nouveau compte utilisateur",
-	'adduser:ok' => "Vous avez ajouté un nouvel utilisateur avec succès.",
+	'adduser:ok' => "Vous avez créé un nouveau compte utilisateur.",
 	'adduser:bad' => "Le nouveau compte utilisateur ne peut pas être créé.",
 
 	'user:set:name' => "Identifiant de connexion",
 	'user:name:label' => "Prénom et Nom",
-	'user:name:success' => "Votre identité a été modifiée avec succès.",
+	'user:name:success' => "Votre nom a bien été modifié.",
 	'user:name:fail' => "Impossible de modifier votre identité. Assurez-vous que votre nom n'est pas trop long et essayez à nouveau.",
 
 	'user:set:password' => "Mot de passe",
@@ -881,7 +881,7 @@ $french = array(
  * Input / output strings
  */
 
-	'deleteconfirm' => "Etes-vous sûr de vouloir supprimer cet élément ?",
+	'deleteconfirm' => "Confirmez-vous la suppression de cet élément ?",
 	'fileexists' => "Un fichier a déjà été chargé. Pour le remplacer sélectionnez un nouveau fichier ci-dessous :",
 
 /**

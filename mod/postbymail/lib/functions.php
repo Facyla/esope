@@ -117,6 +117,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 		/* Use UID instead of sequence number (because we will move emails)
 		 * IMPORTANT : si on utilise SE_UID ici (liste les UID a lieu du numéro dans la boîte), 
 		 * il faut faire attention à ajouter les options appropriées sur toutes les fonctions qui utilisent $uid
+		 * Note : pour plusieurs options, utiliser | (avec un espace)
+		 * imap_search : SE_UID
+		 * imap_fetchheader : FT_UID
+		 * imap_body : FT_UID
+		 * imap_mail_move : CP_UID
+		 * imap_setflag_full : ST_UID
 		 */
 		if ($unreadmessages = imap_search($mailbox,'UNSEEN', SE_UID)) {
 			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));

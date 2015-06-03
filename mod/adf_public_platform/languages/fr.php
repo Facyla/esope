@@ -946,17 +946,13 @@ $fr = array(
 	
 	
 	// Comment notifications
-	'generic_comment:email:body' => "Un nouveau commentaire a été publié sur \"%s\" par %s :
+	'generic_comment:email:body' => "%2\$s a publié un nouveau commentaire sur \"%1\$s\" :
 
+%3\$s
 
-%s
+Pour afficher la conversation : %4\$s
 
-
-Pour afficher la conversation, suivez le lien :
-%s
-
-Pour voir le profil de %s :
-%s
+Pour voir le profil de %s : %s
 
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
