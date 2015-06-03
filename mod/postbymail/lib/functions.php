@@ -752,7 +752,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					// @TODO : notifier l'admin du groupe
 					if ($groupowner = get_entity($group_entity->owner_guid)) {
 						if (is_email_address($groupowner->email)) {
-							mail($admin_email, $admin_subject, $admin_reply, $headers));
+							mail($admin_email, $admin_subject, $admin_reply, $headers);
 						} else {
 							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						}
