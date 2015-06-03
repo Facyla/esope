@@ -133,9 +133,9 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 	// Add captcha hook
 	echo elgg_view('input/captcha');
 
-	echo "<div class="clearfloat"></div>";
+	echo '<div class="clearfloat"></div>';
 	//echo '<br />';
-	echo "<div class="elgg-foot">";
+	echo '<div class="elgg-foot">';
 		echo elgg_view('input/hidden', array('name' => 'friend_guid', 'value' => $vars['friend_guid']));
 		echo elgg_view('input/hidden', array('name' => 'invitecode', 'value' => $vars['invitecode']));
 		
@@ -144,10 +144,10 @@ echo '<div id="profile_manager_register_left" class="home-static-container">';
 		//$acceptterms .= elgg_echo("theme_fing:register:terms");
 		echo '<p>' . $acceptterms . '</p>';
 		echo elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('register'), 'class' => "elgg-button elgg-button-submit fing-register-submit"));
-		//echo "<div class="elgg-subtext mtm">" . elgg_echo("profile_manager:register:mandatory") . "</div>";
-	echo "</div>";
+		//echo '<div class="elgg-subtext mtm">' . elgg_echo("profile_manager:register:mandatory") . '</div>';
+	echo '</div>';
 
-echo "</div>";
+echo '</div>';
 
 
 // Right column
