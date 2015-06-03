@@ -508,8 +508,9 @@ if (elgg_is_active_plugin('comment_tracker')) {
 		if ($type == 'annotation') {
 			if ($annotation->name == "generic_comment" || $annotation->name == "group_topic_post") {
 				$user = get_user($annotation->owner_guid);
-				notification_messages_comment_tracker_notify($annotation, $user);
-			
+				
+				// ESOPE : subscribe first so we can notify if self-notification is enabled
+				
 				// subscribe the commenter to the thread if they haven't specifically unsubscribed
 				//$user = get_user($annotation->owner_guid);
 				$entity = get_entity($annotation->entity_guid);
@@ -522,6 +523,8 @@ if (elgg_is_active_plugin('comment_tracker')) {
 							comment_tracker_subscribe($user->guid, $entity->guid);
 					}
 				}
+				
+				notification_messages_comment_tracker_notify($annotation, $user);
 			}
 		}
 		return TRUE;
