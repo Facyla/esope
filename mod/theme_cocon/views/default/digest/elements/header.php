@@ -17,10 +17,11 @@ $interval = elgg_extract("interval", $vars);
 $site = elgg_get_site_entity();
 
 $logo = elgg_get_plugin_setting('email_logo', 'theme_cocon');
-if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
+//if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
 
 echo '<h1 style="text-align:center;">';
-echo '<img src="' . $logo . '" alt="Cocon" align="absbottom" />';
+if (!empty($logo)) echo '<img src="' . $logo . '" alt="Cocon" align="absbottom" />';
+else $text = $site->name;
 /*
 if(!empty($group)){
 	echo elgg_echo("digest:message:title:group", array($site->name, $group->name, elgg_echo("digest:interval:" . $interval)));

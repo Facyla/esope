@@ -81,7 +81,8 @@ if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_co
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-				$text = '<img src="' . $logo . '" alt="' . $site->name . '">';
+				if (!empty($logo)) $text = '<img src="' . $logo . '" alt="' . $site->name . '">';
+				else $text = $site->name;
 				$site_url = elgg_view("output/url", array("href" => $site->url, "text" => $text));
 				echo $site_url;
 				?>
