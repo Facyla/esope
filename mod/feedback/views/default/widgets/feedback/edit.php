@@ -22,7 +22,7 @@ $num_dropdown = elgg_view('input/dropdown', $params);
 $params = array(
 		'name' => 'params[status]',
 		'value' => $vars['entity']->status,
-		'options' => array('' => elgg_echo('feedback:admin:title'), 'open' => elgg_echo('feedback:status:open'), 'closed' => elgg_echo('feedback:status:closed')),
+		'options' => array('all' => elgg_echo('feedback:admin:title'), 'open' => elgg_echo('feedback:status:open'), 'closed' => elgg_echo('feedback:status:closed')),
 	);
 $status_dropdown = elgg_view('input/dropdown', $params);
 ?>
