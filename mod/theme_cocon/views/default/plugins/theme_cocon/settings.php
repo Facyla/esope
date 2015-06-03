@@ -31,7 +31,7 @@ eps::Education Physique et Sportive
 autre::Autres";
 }
 
-if (!isset($vars['entity']->email_logo)) { $vars['entity']->email_logo$site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; } }
+if (!isset($vars['entity']->email_logo)) { $vars['entity']->email_logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
 
 
 
