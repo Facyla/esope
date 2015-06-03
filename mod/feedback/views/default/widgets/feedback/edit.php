@@ -11,6 +11,8 @@
 
 // set default value
 if (!isset($vars['entity']->num_display)) { $vars['entity']->num_display = 4; }
+if (!isset($vars['entity']->status)) { $vars['entity']->status = 'open'; }
+
 
 $params = array(
 		'name' => 'params[num_display]',
@@ -19,10 +21,15 @@ $params = array(
 	);
 $num_dropdown = elgg_view('input/dropdown', $params);
 
+$status_opt = array(
+	'open' => elgg_echo('feedback:status:open'), 
+	'closed' => elgg_echo('feedback:status:closed'),
+	'all' => elgg_echo('feedback:admin:title'), 
+	);
 $params = array(
 		'name' => 'params[status]',
 		'value' => $vars['entity']->status,
-		'options' => array('all' => elgg_echo('feedback:admin:title'), 'open' => elgg_echo('feedback:status:open'), 'closed' => elgg_echo('feedback:status:closed')),
+		'options_values' => $status_opt,
 	);
 $status_dropdown = elgg_view('input/dropdown', $params);
 ?>
