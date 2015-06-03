@@ -952,7 +952,7 @@ $fr = array(
 
 Pour afficher la conversation : %4\$s
 
-Pour voir le profil de %s : %s
+Pour voir le profil de %5\$s : %6\$s
 
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
