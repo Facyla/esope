@@ -5,7 +5,7 @@ $language = get_current_language();
 $site = elgg_get_site_entity();
 
 $logo = elgg_get_plugin_setting('email_logo', 'theme_cocon');
-if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
+//if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
