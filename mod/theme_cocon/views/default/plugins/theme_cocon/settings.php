@@ -76,3 +76,18 @@ echo '<fieldset><legend>Configuration des champs de profil</legend>';
 echo '</fieldset>';
 
 
+
+echo '<fieldset><legend>Configuration des notifications</legend>';
+	//echo '<p><em></em></p>';
+
+	echo "<p><label>Image à utiliser en entête des notification par email et des résumés périodiques d'activité" . elgg_view('input/plaintext', array( 'name' => 'params[email_logo]', 'value' => $vars['entity']->email_logo )) . '</label></p>';
+	if (!empty($vars['entity']->email_logo)) {
+		echo '<p>Image actuelle : <a href="' . $vars['entity']->email_logo . '" target="_blank">' . $vars['entity']->email_logo . '</a></p>';
+	} else {
+		echo '<p>Image actuelle : aucune (l\'image par défaut serra utilisée)</p>';
+	}
+
+echo '</fieldset>';
+
+
+

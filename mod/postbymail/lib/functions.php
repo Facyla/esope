@@ -31,6 +31,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 	global $postbymail_guid;
 	
 	$site = elgg_get_site_entity();
+	$site_name = $site->name;
 	
 	$ia = elgg_set_ignore_access(true);
 	$debug = true;
@@ -42,10 +43,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 	
 	// COLLECT BASE PARAMS AND VARS
 	
-	// Paramétrage du champ d'application des publications par mail
+	// Paramètres du champ d'application des publications par mail
 	$mailpost = elgg_get_plugin_setting('mailpost', 'postbymail');
+	$mailreply = elgg_get_plugin_setting('scope', 'postbymail');
 	$group_mailpost = false;
 	$user_mailpost = false;
+	$forumonly = false;
 	switch($mailpost) {
 		// Pas de publication par mail du tout : on ne notifie pas non plus et on peut sortir de suite sans parcourir les messages..
 		case 'none': $mailpost = false; break;
@@ -54,8 +57,6 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 		case 'userandgroup': $group_mailpost = $user_mailpost = true; break;
 	}
 	// Paramétrage du champ d'application des réponses par mail
-	$mailreply = elgg_get_plugin_setting('scope', 'postbymail');
-	$forumonly = false;
 	switch($mailreply) {
 		// Pas de réponse par mail du tout
 		case 'none': $mailreply = false; break;
@@ -68,28 +69,32 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 		return false;
 	}
 	
-	// Liste des admins à notifier
-	$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
-	$body .= elgg_echo('postbymail:notifiedadminslist', array($notifylist));
-	if ($notified_users = explode(',', trim($notifylist)) ) {
-		foreach($notified_users as $notified_user) {
-			$admin_ent = get_entity($notified_user);
-			if (!$admin_ent) $admin_ent = get_user_by_username($notified_user);
-			if (elgg_instanceof($admin_ent, 'user')) {
-				$admin_email = $admin_ent->email;
-				$body .= "{$admin_ent->name} ($admin_email), ";
-			}
-		}
-	}
-	$body .= "<hr />";
 	
-	// Niveau de notifications
+	// Options des notifications
 	$notify_scope = elgg_get_plugin_setting('notify_scope', 'postbymail');
 	if (empty($notify_scope)) { $notify_scope = 'error'; }
 	$notify_scope = explode(':', $notify_scope);
 	if (in_array('error', $notify_scope)) { $notify_admin_error = true; } else { $notify_admin_error = false; }
 	if (in_array('success', $notify_scope)) { $notify_admin_success = true; } else { $notify_admin_success = false; }
 	if (in_array('groupadmin', $notify_scope)) { $notify_groupadmin = true; } else { $notify_groupadmin = false; }
+	
+	// Liste des admins à notifier + construction tableau pour faciliter les envois
+	$admin_notifications = array();
+	$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
+	$body .= elgg_echo('postbymail:notifiedadminslist', array($notifylist));
+	$notified_users = explode(',', trim($notifylist));
+	if ($notified_users) {
+		foreach($notified_users as $notified_user) {
+			$admin_ent = get_entity($notified_user);
+			if (!$admin_ent) $admin_ent = get_user_by_username($notified_user);
+			if (elgg_instanceof($admin_ent, 'user')) {
+				$admin_email = $admin_ent->email;
+				$body .= "{$admin_ent->name} ($admin_email), ";
+				$admin_notifications[$admin_ent->guid] = $admin_email;
+			}
+		}
+	}
+	$body .= "<hr />";
 	
 	
 	// CONNEXION AU SERVEUR IMAP ET TRAITEMENT DES EMAILS
@@ -136,10 +141,11 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				error_log("Processing email $i : message uid = $uid");
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
-				// Réinitialisation de la variable globale, afin de traiter chaque envoi de notifications indépendament
+				// Réinitialisation des élements variables pour chaque message, afin de traiter chaque publication indépendament
 				$postbymail_guid = '';
 				$sender_reply = '';
 				$admin_reply = '';
+				$group_entity = false;
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
@@ -683,32 +689,25 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				}
 				
 				
-				/*
-				$errorlog_message = "DEBUG POSTBYMAIL functions : editor = {$member->guid}, subtype = $subtype, guid = {$entity->guid}, check = $forum_post_check, body = " . print_r($entity, true);
-				error_log($errorlog_message);
-				$admin_reply .= "<hr />$errorlog_message<hr />";
-				*/
-				
-				
 				
 				/*********************/
 				/*   NOTIFICATIONS   */
 				/*********************/
 				
 				// NOTIFICATIONS - notify anyone who should be after it's posted (or not)
+				$notify_sender = false;
+				$notify_admin = false;
+				
 				// 1. Check notification conditions first
-				$notify_sender = false; $notify_admin = false;
 				if ($published) {
-					// L'auteur n'a pas besoin de notification pour un message accepté
-					// En cas de publication, l'admin doit être prévenu pour pouvoir modérer
-					$admin_reply = elgg_echo('postbymail:adminmessage:success', array($admin_reply));
+					// Auteur : pas besoin de notification pour un message accepté
+					// Admin : l'admin doit être prévenu pour pouvoir modérer
 					if ($notify_admin_success) { $notify_admin = true; }
 				} else {
 					// NOTIFICATIONS AUTEUR
 					$sender_reply = elgg_echo('postbymail:sendermessage:error', array($sender_reply));
 					// On notifie dans tous les cas d'échec ? a priori oui..
 					$notify_sender = true;
-					
 					// NOTIFICATIONS ADMIN
 					if ($notify_sender) {
 						// @TODO à voir si on prévient quand même l'admin 
@@ -722,34 +721,17 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				}
 				
 				// 2. Envoi des notifications / send notifications
-				$site_name = $site->name;
-				// Protect the name with quotations if it contains a comma
-				if (strstr($site_name, ",")) { $site_name = '"' . $site_name . '"'; }
-				$site_name = "=?UTF-8?B?" . base64_encode($site_name) . "?="; // Encode the name. If may content nos ASCII chars.
-				
 				// Headers communs
-				$headers = "From: Publication par mail {$site_name} <{$site->email}>\n";
-				$headers .= "Return-Path: <{$site->email}>\n";
-				$headers .= "X-Sender: <{$site_name}>\n";
-				$headers .= "X-auth-smtp-user: {$site->email} \n";
-				$headers .= "X-abuse-contact: {$site->email} \n";
-				$headers .= "X-Mailer: PHP\n";
-				// Auto-Submitted and X-Auto-Response-Suppress helps avoiding automatic replies, 
-				// and reduce loop risks - see also incoming mails headers filtering
-				// This tells other systems that it's an automated mail, and they shouldn't answer it automatically
-				$headers .= "Auto-Submitted: notification\n";
-				$headers .= "X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply\n";
-				$headers .= "Date: ".date("D, j M Y G:i:s O")."\n";
-				$headers .= "MIME-Version: 1.0\n";
-				//$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"\r\n";
-				$headers .= "Content-type: text/html; charset=utf-8\r\n";
+				$headers = postbymail_service_notification_headers();
+				
 				// On vérifie aussi s'il n'y a pas eu une raison autre de ne pas notifier
+				// Notification de l'auteur de la réponse/publication
 				if ($notify_sender) {
 					$sender_subject = elgg_echo('postbymail:sender:notpublished');
 					$sender_reply = elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
 					$sender_reply = elgg_echo('postbymail:sender:debuginfo', array($sender_subject, $report, $sender_reply));
 					if (elgg_instanceof($member, 'user') && is_email_address($member->email)) {
-						// Si c'est le membre, on le prévient (son compte peut avoir été piraté donc on le prévient de préférence)
+						// Si c'est le membre, on le prévient (en cas d'usurpation d'identité d'une adresse elternative)
 						mail($member->email, $sender_subject, $sender_reply, $headers);
 					} else if (is_email_address($sendermail)) {
 						// Sinon on prend de préférence l'adresse email annoncée
@@ -765,28 +747,36 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				} else {
 					$body .= elgg_echo('postbymail:sender:notnotified');
 				}
+				// Notification responsable du groupe - ssi dans un groupe
+				if ($notify_groupadmin && elgg_instanceof($group_entity, 'group')) {
+					// @TODO : notifier l'admin du groupe
+					if ($groupowner = get_entity($group_entity->owner_guid)) {
+						if (is_email_address($groupowner->email)) {
+							mail($admin_email, $admin_subject, $admin_reply, $headers));
+						} else {
+							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
+						}
+					}
+				}
+				// Notification des admins configurés
 				if ($notify_admin) {
 					if ($published) {
 						$admin_subject = elgg_echo('postbymail:adminsubject:newpublication');
-						// Si c'est OK, on ne garde pas les messages de débuggage
+						// Pas besoin de conserver les messages de débuggage => on réécrit le contenu du message
 						$admin_reply = elgg_echo('postbymail:adminmessage:newpublication', array($member->name, $member->email, $entity->getURL(), $entity->title, $entity->getSubtype(), $post_body, $entity->getURL()));
 					} else {
+						// En cas d'erreur on intègre tous les messages de débogage
 						$admin_subject = elgg_echo('postbymail:admin:notpublished');
+						$admin_reply = elgg_echo('postbymail:adminmessage:success', array($admin_reply));
 						$admin_reply = elgg_echo('postbymail:admin:debuginfo', array($admin_subject, $report, $admin_reply));
 					}
-					//$subject = elgg_echo('postbymail:admin:subject', array());
-					//$message = elgg_echo('postbymail:admin:message', array());
-					//mail($admin_email, $admin_subject, $admin_reply, $headers);
 					$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
-					if ($notified_users = explode(',', trim($notifylist)) ) {
-						//notify_user($notified_users, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
-						foreach($notified_users as $notified_user) {
-							$admin_ent = get_entity($notified_user);
-							$admin_email = $admin_ent->email;
-							// Envoi par mail (mieux en HTML mais expéditeur à améliorer), sinon on passe par les moyens habituels (mais en texte brut)
-							if (mail($admin_email, $admin_subject, $admin_reply, $headers)) {
-							} else {
-								notify_user($notified_user, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
+					if ($admin_notifications) {
+						foreach($admin_notifications as $admin_guid => $admin_email) {
+							// Envoi par mail HTML de préférence (mais expéditeur à améliorer)
+							if (!mail($admin_email, $admin_subject, $admin_reply, $headers)) {
+								// En cas d'échec, on passe par les moyens habituels (mais en texte brut)
+								notify_user($admin_guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 							}
 						}
 					}
@@ -794,16 +784,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				} else {
 					$body .= elgg_echo('postbymail:admin:notnotified');
 				}
-				// Notification responsable du groupe
-				if ($notify_groupadmin) {
-					// @TODO : notifier l'admin du groupe
-					if ($groupowner = get_entity($group_entity->owner_guid)) {
-						if (is_email_address($groupowner->email) && mail($admin_email, $admin_subject, $admin_reply, $headers)) {
-						} else {
-							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
-						}
-					}
-				}
+				// Affichage des notifications envoyées, pour la page de contrôle admin
 				$body .= elgg_echo('postbymail:report:notificationmessages', array($sender_reply, $admin_reply));
 				
 				
@@ -827,20 +808,24 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					}
 				}
 				
+				
 			} // END foreach - MESSAGES LOOP
+			
 			
 		} else {
 			$body .= elgg_echo('postbymail:nonewmail');
 		} // END unread messages check - $unreadmessages
 		
 		
-		// Nettoie les messages effacés ou déplacés
+		// Fermeture de la connexion IMAP
 		if ($purge) {
-			imap_close($mailbox, CL_EXPUNGE); // semble effacer un peu trop ?? (si tentative de déplacement dans un dossier inexistant)
+			// Nettoie les messages effacés ou déplacés
+			// Attention : semble effacer un peu trop, si tentative de déplacement dans un dossier inexistant => effacé
+			imap_close($mailbox, CL_EXPUNGE);
 		} else {
 			imap_close($mailbox);
 		}
-	} // END IMAP CONNECT CHECK
+	} // END IMAP if
 	
 	
 	// Publication results
@@ -1360,4 +1345,32 @@ function postbymail_checkboxes($server, $protocol, $mailbox) {
 }
 
 
+/* Prepare headers for author/admins notifications
+ * This is for service notifications only, regular notifications are sent using regular Elgg notification functions
+ */
+function postbymail_service_notification_headers() {
+	$site = elgg_get_site_entity();
+	$site_name = $site->name;
+	// Protect the name with quotations if it contains a comma
+	if (strstr($site_name, ",")) { $site_name = '"' . $site_name . '"'; }
+	$site_name = "=?UTF-8?B?" . base64_encode($site_name) . "?="; // Encode the name. If may content non-ASCII chars.
+	
+	$headers = "From: Publication par mail {$site_name} <{$site->email}>\n";
+	$headers .= "Return-Path: <{$site->email}>\n";
+	$headers .= "X-Sender: <{$site_name}>\n";
+	$headers .= "X-auth-smtp-user: {$site->email} \n";
+	$headers .= "X-abuse-contact: {$site->email} \n";
+	$headers .= "X-Mailer: PHP\n";
+	// Auto-Submitted and X-Auto-Response-Suppress helps avoiding automatic replies, 
+	// and reduce loop risks - see also incoming mails headers filtering
+	// This tells other systems that it's an automated mail, and they shouldn't answer it automatically
+	$headers .= "Auto-Submitted: notification\n";
+	$headers .= "X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply\n";
+	$headers .= "Date: ".date("D, j M Y G:i:s O")."\n";
+	$headers .= "MIME-Version: 1.0\n";
+	//$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"\r\n";
+	$headers .= "Content-type: text/html; charset=utf-8\r\n";
+	
+	return $headers;
+}
 

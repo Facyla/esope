@@ -1,8 +1,12 @@
 <?php 
-	$title = $vars["title"];
-	$message = nl2br($vars["message"]);
-	$language = get_current_language();
-	
+$title = $vars["title"];
+$message = nl2br($vars["message"]);
+$language = get_current_language();
+$site = elgg_get_site_entity();
+
+$logo = elgg_get_plugin_setting('email_logo', 'theme_cocon');
+if (empty($logo)) { $logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $language; ?>" lang="<?php echo $language; ?>">
@@ -77,9 +81,9 @@
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png" alt="' . $vars["config"]->site->name . '">';
-					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $text));
-					echo $site_url;
+				$text = '<img src="' . $logo . '" alt="' . $site->name . '">';
+				$site_url = elgg_view("output/url", array("href" => $site->url, "text" => $text));
+				echo $site_url;
 				?>
 			</div>
 			<div id="notification_wrapper">
@@ -91,15 +95,14 @@
 			</div>
 			
 			<div id="notification_footer">
-				
 				<?php 
-					if(elgg_is_logged_in()){
-						$settings_url = $vars["url"] . "settings";
-						if(elgg_is_active_plugin("notifications")){
-							$settings_url = $vars["url"] . "notifications/personal";
-						}
-						echo elgg_echo("html_email_handler:notification:footer:settings", array("<a href='" . $settings_url . "'>", "</a>"));
+				if(elgg_is_logged_in()){
+					$settings_url = $vars["url"] . "settings";
+					if(elgg_is_active_plugin("notifications")){
+						$settings_url = $vars["url"] . "notifications/personal";
 					}
+					echo elgg_echo("html_email_handler:notification:footer:settings", array("<a href='" . $settings_url . "'>", "</a>"));
+				}
 				?>
 				<div class="clearfloat"></div>
 			</div>
