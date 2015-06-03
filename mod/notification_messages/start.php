@@ -339,19 +339,13 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
  */
 // Note : change is avoid to strip tags in sent message when html_email_handler is used
 function notification_messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
-	global $CONFIG;
-
 	// @todo remove globals
 	global $messagesendflag;
 	$messagesendflag = 1;
 
 	// @todo remove globals
 	global $messages_pm;
-	if ($notify) {
-		$messages_pm = 1;
-	} else {
-		$messages_pm = 0;
-	}
+	if ($notify) { $messages_pm = 1; } else { $messages_pm = 0; }
 
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
@@ -439,7 +433,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 		//$subject = elgg_echo('messages:email:subject');
 		$excerpt = $subject;
 		if (strlen($excerpt) > 12) $excerpt = elgg_get_excerpt($excerpt, 12) . '..';
-		$subject = elgg_echo('notification_messages:email:subject', array($CONFIG->site->name, $sender->name, $excerpt));
+		$subject = elgg_echo('notification_messages:email:subject', array(elgg_get_site_entity()->name, $sender->name, $excerpt));
 		$body = elgg_echo('messages:email:body', array(
 			$sender->name,
 			$message_contents,
@@ -510,7 +504,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 				$user = get_user($annotation->owner_guid);
 				
 				// ESOPE : subscribe first so we can notify if self-notification is enabled
-				
 				// subscribe the commenter to the thread if they haven't specifically unsubscribed
 				//$user = get_user($annotation->owner_guid);
 				$entity = get_entity($annotation->entity_guid);

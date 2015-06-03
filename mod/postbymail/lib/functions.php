@@ -632,6 +632,17 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 										if (!empty($hook_message) && ($hook_message !== false)) { $notification_message = $hook_message; }
 										// Notify owner
 										notify_user($entity->owner_guid, $member->guid, $notification_subject, $notification_message);
+										// Auto-subscribe comment author if comment tracker is enabled
+										if (elgg_is_active_plugin('comment_tracker')) {
+											$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $member->guid, 'comment_tracker');
+											if (!comment_tracker_is_unsubscribed($member, $entity) && $autosubscribe != 'no') {
+												// don't subscribe the owner of the entity
+												if ($entity->owner_guid != $member->guid) {
+													comment_tracker_subscribe($member->guid, $entity->guid);
+												}
+											}
+										}
+										
 									}
 								}
 						}
