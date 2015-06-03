@@ -21,7 +21,7 @@ $logo = elgg_get_plugin_setting('email_logo', 'theme_cocon');
 
 echo '<h1 style="text-align:center;">';
 if (!empty($logo)) echo '<img src="' . $logo . '" alt="Cocon" align="absbottom" />';
-else $text = $site->name;
+else echo $site->name;
 /*
 if(!empty($group)){
 	echo elgg_echo("digest:message:title:group", array($site->name, $group->name, elgg_echo("digest:interval:" . $interval)));
