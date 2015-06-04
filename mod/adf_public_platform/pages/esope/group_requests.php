@@ -12,6 +12,8 @@ $title = elgg_echo('groups:membershiprequests');
 
 $body = '';
 
+$base_group_requests_url = elgg_get_site_url() . 'groups/requests/';
+
 // Set to true to view actual requests, false to count
 $view_requests = get_input('view_requests', 'yes');
 $body .= '<p><em><a href="?view_requests=yes">View requests</a> &nbsp; <a href="?view_requests=no">Hide requests</a> &nbsp (' . $view_requests . ')</em></p>';
@@ -57,6 +59,24 @@ $body .= '<div class="clearfloat"></div><br />';
 // @TODO : toutes les demandes d'adhésion en attente
 if (elgg_is_admin_logged_in()) {
 	
+	// Nombre de groupes dans lesquels il y a des demandes en attente
+	$count = elgg_get_entities_from_relationship(array(
+		'type' => 'group',
+		'relationship' => 'membership_request',
+		'count' => true,
+	));
+	$body .= "<h3>Groupes dans lesquels il y a des demandes en attente : $count</h3>";
+	$groups = elgg_get_entities_from_relationship(array(
+		'type' => 'group',
+		'relationship' => 'membership_request',
+		'limit' => 0,
+	));
+	$body .= "<p>Nombre de demandes totales : " . count($groups) . "</p>";
+	foreach ($groups as $ent) {
+		$body .= '<a href="' . $base_group_requests_url . $ent->guid . '">' . $ent->name . '</a> &nbsp; ';
+	}
+	$body .= '<div class="clearfloat"></div><br />';
+	
 	// Nombre de membres ayant des demandes en attente
 	$count = elgg_get_entities_from_relationship(array(
 		'type' => 'user',
@@ -72,27 +92,9 @@ if (elgg_is_admin_logged_in()) {
 		'limit' => 0,
 	));
 	$body .= "<p>Nombre de demandes totales : " . count($users) . "</p>";
-	foreach ($users as $ent) {
-		$body .= '<a href="' . $ent->getURL() . '">' . $ent->name . '</a> &nbsp; ';
-	}
-	
-	// Nombre de groupes dans lesquels il y a des demandes en attente
-	$count = elgg_get_entities_from_relationship(array(
-		'type' => 'group',
-		'relationship' => 'membership_request',
-		'count' => true,
-	));
-	$body .= "<h3>Groupes dans lesquels il y a des demandes en attente : $count</h3>";
-	$groups = elgg_get_entities_from_relationship(array(
-		'type' => 'group',
-		'relationship' => 'membership_request',
-		'limit' => 0,
-	));
-	$body .= "<p>Nombre de demandes totales : " . count($groups) . "</p>";
-	foreach ($groups as $ent) {
-		$body .= '<a href="' . $ent->getURL() . '">' . $ent->name . '</a> &nbsp; ';
-	}
-	
+	// No use to add a link (cannot validate from profile)
+	foreach ($users as $ent) { $body .= '' . $ent->name . ' &nbsp; '; }
+	$body .= '<div class="clearfloat"></div><br />';
 	
 	
 	$body .= "<h3>Demandes d'adhésion dans tous les groupes (admin)</h3>";
@@ -135,7 +137,7 @@ $body .= '<div class="clearfloat"></div><br />';
 
 
 
-
+// @TODO use code from view to make a more usable global list
 /**
  * A group's member requests
  *
