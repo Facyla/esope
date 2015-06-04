@@ -7,7 +7,8 @@
 $url = elgg_get_site_url();
 
 $french = array(
-	'theme_fing:title' => "Thème Fing",
+	'theme_fing' => "Thème Réseau Fing",
+	'theme_fing:title' => "Thème Réseau Fing",
 	
 	// Home pins
 	'theme_fing:settings:homehighlight' => "Page d'accueil du site : contenus en Une",
@@ -52,12 +53,12 @@ $french = array(
 	'theme_fing:register:prefill' => "Pré-remplissez votre inscription avec :",
 	'theme_fing:register:createwithmail' => "Ou inscrivez-vous avec votre email :",
 	'theme_fing:register:discoverwork' => "Découvrez nos travaux en cours",
-	'theme_fing:register:usernameurl' => "Username pour personnaliser l'url de votre profil",
-	'theme_fing:register:yoururl' => "reseau.fing.org/votreusername",
+	'theme_fing:register:usernameurl' => "Username pour personnaliser l'url de votre profil<br /><small>reseau.fing.org/profile/<em>username</em></small>",
 	'theme_fing:register:choosegroups' => "Cochez les cases des travaux que vous souhaitez rejoindre dès l'inscription",
 	'theme_fing:register:email' => "Email",
 	'theme_fing:register:terms' => "En vous inscrivant sur le réseau Fing vous acceptez <a href=\"" . $url . "p/charte-sociale\" target=\"_blank\">la Charte d'utilisation</a> et <a href=\"" . $url . "/p/mentions-legales\" target=\"_blank\">les mentions légales</a>",
 	'esope:register:joingroups:help' => "",
+	'theme_fing:register:antispam' => "[&nbsp;Question anti-spam&nbsp;]",
 	
 	
 );

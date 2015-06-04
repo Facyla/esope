@@ -123,6 +123,7 @@ h3.fing-register-title { font-size:2em; font-weight:normal; }
 #fing-register .elgg-foot { float: right; width: 58%; }
 .fing-register-submit { border-radius:0; font-size: 1.5em; width: 100%; }
 
+.fing-register-captcha label small, label[for=register-username] small { font-size: 12px; font-weight: normal; }
 
 #fing-homepage {
 	background: white !important;

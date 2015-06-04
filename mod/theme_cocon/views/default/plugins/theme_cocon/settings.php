@@ -1,10 +1,10 @@
 <?php 
 $plugin = $vars["entity"];
+$site = elgg_get_site_entity();
+$site_email = $site->email;
 
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
 $count_opt = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
-
-$site_email = elgg_get_site_entity()->email;
 
 if (empty($vars['entity']->fonctions)) {
 	$vars['entity']->fonctions = "chef::Chef d'établissement
@@ -31,13 +31,27 @@ eps::Education Physique et Sportive
 autre::Autres";
 }
 
+if (!isset($vars['entity']->email_logo)) { $vars['entity']->email_logo = $site->url . 'mod/theme_cocon/graphics/email/logo_cocon.png'; }
 
-// Cocon default header
-$url = elgg_get_site_url();
-$urlimg = $url . 'mod/theme_cocon/graphics/';
-$header_content = '<img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" />';
-echo "Configuration du bandeau : pour le bandeau Cocon \"standard\", copiez-collez le code suivant dans la configuration du thème : ";
-echo '<textarea readonly="readonly">' . $header_content . '</textarea>';
+
+
+echo '<fieldset><legend>Eléments de configuration visuelle</legend>';
+	// Cocon default header
+	$url = elgg_get_site_url();
+	$urlimg = $url . 'mod/theme_cocon/graphics/';
+	$header_content = '<img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" />';
+	echo "Configuration du bandeau : pour le bandeau Cocon \"standard\", copiez-collez le code suivant dans la configuration du thème : ";
+	echo '<textarea readonly="readonly">' . $header_content . '</textarea>';
+	
+	
+	echo "<p><label>Image à utiliser en entête des notification par email et des résumés périodiques d'activité" . elgg_view('input/text', array( 'name' => 'params[email_logo]', 'value' => $vars['entity']->email_logo )) . '</label></p>';
+	if (!empty($vars['entity']->email_logo)) {
+		echo '<p>Image actuelle : <a href="' . $vars['entity']->email_logo . '" target="_blank">' . $vars['entity']->email_logo . '</a></p>';
+	} else {
+		echo '<p>Image actuelle : aucune (l\'image par défaut serra utilisée)</p>';
+	}
+
+echo '</fieldset>';
 
 
 
@@ -74,5 +88,6 @@ echo '<fieldset><legend>Configuration des champs de profil</legend>';
 	// Champs = Nom,RNE,Académie,Département,Ville,Adresse postale,adresse courriel fonctionnelle
 	echo "<p><label>Liste des établissements<br />Format : Nom;Académie;UAI;Département;Adresse;mail<br />Attention : une entrée par ligne, et pas de ligne de titre !" . elgg_view('input/plaintext', array( 'name' => 'params[etablissements]', 'value' => $vars['entity']->etablissements )) . '</label></p>';
 echo '</fieldset>';
+
 
 
