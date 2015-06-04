@@ -20,6 +20,11 @@ function esope_page_handler($page) {
 			include "$base/statistics.php";
 			break;
 		
+		case 'group_requests':
+			// Page de listing de requêtes en attente (pour rejoindre un groupe)
+			include "$base/group_requests.php";
+			break;
+		
 		case 'download_entity_file':
 			if (!empty($page[1])) set_input('guid', $page[1]);
 			if (!empty($page[2])) set_input('metadata', $page[2]);
