@@ -23,30 +23,11 @@ if (isset($vars['entity'])) {
 	$access = get_default_access();
 }
 
-// Define dropdown options
-$membership_opt = array(
-		ACCESS_PRIVATE => elgg_echo('groups:access:private'),
-		ACCESS_PUBLIC => elgg_echo('groups:access:public')
-	);
-$access_options = array(
-		ACCESS_PRIVATE => elgg_echo('groups:access:group'),
-		ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
-		ACCESS_PUBLIC => elgg_echo("PUBLIC")
-	);
-$yes_no_radio_opt = array(
-		elgg_echo('groups:yes') => 'yes',
-		elgg_echo('groups:no') => 'no',
-	);
-
-
-// Add custom disclaimer text
 if (!isset($vars['entity'])) {
 	$disclaimer = elgg_get_plugin_setting('groups_disclaimer', 'adf_public_platform');
 	if (empty($displaimer)) $dislaimer = '<p>' . elgg_echo('groups:newgroup:disclaimer') . '</p>';
 	echo $disclaimer;
 }
-
-// Now start the actual settings
 ?>
 
 <div>
@@ -55,25 +36,33 @@ if (!isset($vars['entity'])) {
 </div>
 <div>
 	<label for="name"><?php echo elgg_echo("groups:name"); ?></label><br />
-	<?php echo elgg_view("input/text", array('name' => 'name', 'value' => $vars['entity']->name)); ?>
+	<?php echo elgg_view("input/text", array(
+		'name' => 'name',
+		'value' => $vars['entity']->name,
+	));
+	?>
 </div>
 		
 <?php
 
-// Display custom group fields
 // retrieve group fields
 $group_fields = profile_manager_get_categorized_group_fields();
+
 if(count($group_fields["fields"]) > 0){
 	$group_fields = $group_fields["fields"];
 	
 	foreach($group_fields as $field) {
 		$metadata_name = $field->metadata_name;
+		
 		// get options
 		$options = $field->getOptions();
+		
 		// get type of field
 		$valtype = $field->metadata_type;
+		
 		// get title
 		$title = $field->getTitle();
+		
 		// get value
 		$value = '';
 		if($metadata = $vars['entity']->$metadata_name) {
@@ -85,66 +74,83 @@ if(count($group_fields["fields"]) > 0){
 			} else {
 				$value = $metadata;
 			}
-		}
+		}		
+		
 		$line_break = '<br />';
-		if ($valtype == 'longtext') { $line_break = ''; }
-		echo '<div><label for="'.$metadata_name.'">' . $title . '</label>';
+		if ($valtype == 'longtext') {
+			$line_break = '';
+		}
+		echo '<div><label for="'.$metadata_name.'">';
+		echo $title;
+		echo "</label>";
 		
 		if($hint = $field->getHint()){ 
 			?>
-			<span class='custom_fields_more_info' id='more_info_<?php echo $metadata_name; ?>'></span>
+			<span class='custom_fields_more_info' id='more_info_<?php echo $metadata_name; ?>'></span>		
 			<span class="custom_fields_more_info_text" id="text_more_info_<?php echo $metadata_name; ?>"><?php echo $hint;?></span>
 			<?php 
 		}
 		
 		echo $line_break;
-		echo elgg_view("input/{$valtype}", array('name' => $metadata_name, 'value' => $value, 'options' => $options));
+		echo elgg_view("input/{$valtype}", array(
+			'name' => $metadata_name,
+			'value' => $value,
+			'options' => $options
+		));
 		echo '</div>';
 	}
 }
 
-// Now display membership and access settings
 ?>
 <div>
 	<label for="membership">
 		<?php echo elgg_echo('groups:membership'); ?><br />
-		<?php echo elgg_view('input/access', array('name' => 'membership', 'value' => $membership, 'options_values' => $membership_opt)); ?>
+		<?php echo elgg_view('input/access', array(
+			'name' => 'membership',
+			'value' => $membership,
+			'options_values' => array(
+				ACCESS_PRIVATE => elgg_echo('groups:access:private'),
+				ACCESS_PUBLIC => elgg_echo('groups:access:public')
+			)
+		));
+		?>
 	</label>
 </div>
 
 <?php
 if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 	$this_owner = $vars['entity']->owner_guid;
-	if (!$this_owner) { $this_owner = elgg_get_logged_in_user_guid(); }
+	
+	if (!$this_owner) {
+		$this_owner = elgg_get_logged_in_user_guid();
+	}
+	$access_options = array(
+		ACCESS_PRIVATE => elgg_echo('groups:access:group'),
+		ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
+		ACCESS_PUBLIC => elgg_echo("PUBLIC")
+	);
+	
 	?>
+	
 	<div>
 		<label for="vis">
 				<?php echo elgg_echo('groups:visibility'); ?><br />
-				<?php echo elgg_view('input/access', array('name' => 'vis', 'value' =>  $access, 'options_values' => $access_options)); ?>
+				<?php echo elgg_view('input/access', array(
+					'name' => 'vis',
+					'value' =>  $access,
+					'options_values' => $access_options,
+				));
+				?>
 		</label>
 	</div>
-	<?php
+	
+	<?php 	
 }
 
-
-// Display group options (from various plugins)
 $tools = elgg_get_config('group_tool_options');
 if ($tools) {
-	// @TODO : enable alternate (custom) sort
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
-	
-	// Sort options using priority settings, rather that alpha
-	$group_options = array();
-	foreach ($tools as $k => $obj) {
-		$option_name = $obj->name;
-		$priority = elgg_get_plugin_setting("options:$option_name", 'groups');
-		if (!$priority) $priority = ($k + 1) * 10;
-		$group_options[$priority] = $obj;
-	}
-	ksort($group_options);
-	
-	//foreach ($tools as $group_option) {
-	foreach ($group_options as $group_option) {
+	foreach ($tools as $group_option) {
 		$group_option_toggle_name = $group_option->name . "_enable";
 		// Set all tools to some default value
 		$group_default_tools = elgg_get_plugin_setting('group_tools_default', 'adf_public_platform');
@@ -158,10 +164,10 @@ if ($tools) {
 			else { $group_option_default_value = 'no'; }
 		}
 		$value = $vars['entity']->$group_option_toggle_name ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
-		?>
+		?>	
 		<div>
 			<?php
-			// Add a hint, but only if it exists (== different from translation key)
+			// @TODO : Add a hint, but only if it exists
 			$hint = '';
 			if (elgg_echo('hint:' . $group_option->name) != 'hint'.$group_option->name) {
 				//echo '<span class="group-tool-hint">' . elgg_echo('hint:' . $group_option->name) . '</span>';
@@ -173,9 +179,14 @@ if ($tools) {
 			</label>
 			<?php 
 			echo elgg_view("input/radio", array(
-					'name' => $group_option_toggle_name, 'title' => $group_option->label, 
-					'value' => $value, 'options' => $yes_no_radio_opt
-				));
+				"name" => $group_option_toggle_name,
+				'title' => $group_option->label,
+				"value" => $value,
+				'options' => array(
+					elgg_echo('groups:yes') => 'yes',
+					elgg_echo('groups:no') => 'no',
+				)
+			));
 			/* Ce serait mieux de le faire comme ça à l'occasion, mais ça implique de revoir la manière 
 			// dont on gère l'activation des outils pour les groupes 
 			// = long, complexe, et maintenabilité du code compromise
@@ -270,14 +281,16 @@ if ($tools) {
 		echo '<div class="clearfloat"></div>';
 	}
 	*/
+	
 }
-
-// Display footer = save / delete links
 ?>
 <div class="elgg-foot">
 	<?php
 	if (isset($vars['entity'])) {
-		echo elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $vars['entity']->getGUID()));
+		echo elgg_view('input/hidden', array(
+			'name' => 'group_guid',
+			'value' => $vars['entity']->getGUID(),
+		));
 	}
 	
 	if (isset($vars['entity'])) {

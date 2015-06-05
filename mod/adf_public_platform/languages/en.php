@@ -570,7 +570,8 @@ $en = array(
 	/* ESOPE search */
 	'adf_platform:settings:groups:searchtab' => "Multi-criteria search tab",
 	'adf_platform:settings:groups:tags' => "Add tag cloud below search",
-	'adf_platform:grouptools:priority' => "Group tools priority",
+	'adf_platform:grouptools:priority' => "Group tools priority (owner menu)",
+	'adf_platform:groupoptions:priority' => "Group tools options priority (group edit form)",
 	'adf_platform:settings:members:searchtab' => "Multi-criteria search tab",
 	'esope:search:members:role' => 'Member status',
 	'esope:label:search' => "Search",
