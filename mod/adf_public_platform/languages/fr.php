@@ -573,7 +573,8 @@ $fr = array(
 	/* ESOPE search */
 	'adf_platform:settings:groups:searchtab' => "Onglet de recherche multi-critère",
 	'adf_platform:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
-	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
+	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes (menu)",
+	'adf_platform:groupoptions:priority' => "Ordre des options des outils des groupes (formulaire de configuration du groupe)",
 	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'esope:search:members:role' => 'Statut',
 	'members:label:search' => "Recherche",
