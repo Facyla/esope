@@ -80,7 +80,7 @@ echo '</div>';
 echo '<form method="GET" action="' . $vars['url'] . 'search" id="advanced-search-form">';
 echo '<fieldset>';
 echo '<legend>' . elgg_echo('adf_platform:advancedsearch'). '</legend>';
-echo elgg_view('input/securitytokens');
+echo elgg_view('input/securitytoken');
 echo elgg_view('input/hidden', array('name' => 'offset', 'value' => $vars['offset']));
 echo elgg_view('input/hidden', array('name' => 'limit', 'value' => $vars['limit']));
 
