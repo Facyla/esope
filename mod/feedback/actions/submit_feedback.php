@@ -15,7 +15,8 @@
  * 
  * Adaptations by Facyla ~ Florian DANIEL
  * facyla@gmail.com
- * Implement status, member view, access selector, property-based rendering, + french translation & various other adaptations
+ * Implement status, member view, access selector, property-based rendering, widgets, notifications
+ * + french translation & various other adaptations
  * http://lereseausocial.fr/
  * 
  */
@@ -115,7 +116,7 @@ if (count($user_guids) > 0) {
 	foreach ($user_guids as $user_guid => $user) {
 		$message = elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback_url));
 		// Trigger a hook to enable integration with other plugins
-		$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'feedback', array('entity' => $feedback, 'to_entity' => $user), $message);
+		$hook_message = elgg_trigger_plugin_hook('notify:entity:message', 'object', array('entity' => $feedback, 'to_entity' => $user), $message);
 		// Failsafe backup if hook as returned empty content but not false (= stop)
 		if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 		// Notify user

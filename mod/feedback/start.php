@@ -161,7 +161,7 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 					foreach ($user_guids as $user_guid => $user) {
 						$message = elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $comment_content, $entity->getURL()));
 						// Trigger a hook to enable integration with other plugins
-						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'feedback', array('entity' => $feedback, 'to_entity' => $user), $message);
+						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $feedback, 'to_entity' => $user), $message);
 						// Failsafe backup if hook as returned empty content but not false (= stop)
 						if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 						notify_user($user_guids, elgg_get_site_entity()->guid, $subject, $message, null, 'email');
