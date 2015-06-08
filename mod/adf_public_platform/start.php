@@ -1014,10 +1014,8 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
-			// Failsafe to auto-discover options if none found
-			if (empty($options)) {
-				$options = esope_get_meta_values($metadata);
-			}
+			// Failsafe to auto-discover options if none found ? - but would convert any text field to dropdown (not good)
+			//if (empty($options)) { $options = esope_get_meta_values($metadata); }
 			// Auto-discover valid values from existing metadata
 			if ($auto_options) {
 				$options = esope_get_meta_values($metadata);
@@ -1090,7 +1088,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		'metadata_name_value_pairs_operator' => 'AND',
 		'count' => false,
 	);
-	$defaults = array_merge($esearch_defaults, $defaults);
+	if (is_array($defaults)) $defaults = array_merge($esearch_defaults, $defaults);
+	else $defaults = $esearch_defaults;
 	
 	$q = esope_extract('q', $params, '');
 	// Note : we use entity_type and entity_subtype for consistency with regular search

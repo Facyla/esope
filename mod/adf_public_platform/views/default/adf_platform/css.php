@@ -705,6 +705,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #esope-search-form select { width: 7em; margin-left: 0.5em; }
 .esope-search-fulltext { width: 80%; float: left; }
 #esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.esope-search-metadata-select select { max-width: 100%; }
 .elgg-button-livesearch { float: right; }
 .esope-results-count { font-size: 0.8em; color: #808080; }
 

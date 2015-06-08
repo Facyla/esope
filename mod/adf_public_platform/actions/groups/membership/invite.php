@@ -27,17 +27,18 @@ if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdi
 		if (($allowregister == 'yes') && ($group_register == 'yes')) {
 			if (!$group->isMember($user)) {
 				if ($group->join($user)) system_message(elgg_echo("groups:join:success"));
-				else register_error(elgg_echo("groups:join:error"));
-			} else register_error(elgg_echo("groups:alreadymember"));
+				else register_error($user->name . ' - ' . elgg_echo("groups:join:error"));
+			} else register_error($user->name . ' - ' . elgg_echo("groups:alreadymember"));
 			
 		} else {
 			if (check_entity_relationship($group->guid, 'invited', $user->guid)) {
-				register_error(elgg_echo("groups:useralreadyinvited"));
+				register_error($user->name . ' - ' . elgg_echo("groups:useralreadyinvited"));
 				continue;
 			}
 
 			if (check_entity_relationship($user->guid, 'member', $group->guid)) {
 				// @todo add error message
+				register_error($user->name . ' - ' . elgg_echo("groups:alreadymember"));
 				continue;
 			}
 			
@@ -48,12 +49,7 @@ if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdi
 			$url = elgg_normalize_url("groups/invitations/$user->username");
 			$result = notify_user($user->getGUID(), $group->owner_guid,
 					elgg_echo('groups:invite:subject', array($user->name, $group->name)),
-					elgg_echo('groups:invite:body', array(
-						$user->name,
-						$logged_in_user->name,
-						$group->name,
-						$url,
-					)),
+					elgg_echo('groups:invite:body', array($user->name, $logged_in_user->name, $group->name, $url)),
 					NULL);
 			if ($result) {
 				system_message(elgg_echo("groups:userinvited"));

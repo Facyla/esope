@@ -901,6 +901,7 @@ $fr = array(
 	
 	
 	/* Other interface */
+	'select:all' => 'Tout sélectionner',
 	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
 	

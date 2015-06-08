@@ -897,6 +897,9 @@ $en = array(
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
 	
+	
+	/* Other interface */
+	'select:all' => 'Select all',
 	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
 	
 	
