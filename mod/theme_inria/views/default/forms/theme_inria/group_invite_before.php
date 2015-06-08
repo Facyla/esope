@@ -7,5 +7,5 @@
 
 //$group = $vars['entity'];
 
-echo "<h3>Méthode 1&nbsp;: Invitations personnelles</h3>";
+echo '<h3>' . elgg_echo('theme_inria:groupinvite:standard') . '</h3>';
 

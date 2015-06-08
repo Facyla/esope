@@ -14,7 +14,7 @@ $own = elgg_get_logged_in_user_entity();
 $ownguid = elgg_get_logged_in_user_guid();
 
 // Get input fields
-$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service', 'location');
+$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service');
 $meta_fields = get_input("metadata");
 foreach ($metadata_search_fields as $field) {
 	$$field = $meta_fields["$field"];
@@ -32,11 +32,11 @@ $content .= "</form>";
 
 $content .= '<form id="esope-search-form-invite-groups" method="POST" class="elgg-form elgg-form-groups-invite-search">';
 $content .= '<div class="blockform">';
-$content .= "<h3>Méthode 2&nbsp;: Recherche de membres à inviter</h3>";
+$content .= '<h3>' . elgg_echo('theme_inria:groupinvite:search') . '</h3>';
 
 
 // Step 1. Search form using LDAP fields
-$content .= "<h4>Etape 1 : faites une recherche avec les critères disponibles</h4>";
+$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:search:select') . '</h4>';
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 $metadata_search = '';
@@ -67,7 +67,7 @@ $content .= '<input type="submit" class="elgg-button elgg-button-submit" value="
 // Step 2. Handle search form and display results in the invite form
 // Formulaire d'invitation
 $content .= '<div class="clearfloat"></div><br />';
-$content .= "<h4>Etape 2 : sélectionnez les personnes à inviter ou inscrire</h4>";
+$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:search:invite') . '</h4>';
 // @TODO add selected results to .elgg-user-picker-list ? as : <input type="hidden" name="members[]" value="XXX">
 if (!empty($query)) {
 	$max_results = 500;
