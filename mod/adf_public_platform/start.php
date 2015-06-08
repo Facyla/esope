@@ -1006,6 +1006,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$empty = elgg_extract('empty', $params, true);
 		$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
 		$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+		$auto_options = elgg_extract('auto-options', $params, false);
 		$search_field = '';
 		
 		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
@@ -1013,13 +1014,17 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
-			// Auto-discover valid values
-			/*
-			$options = esope_get_meta_values($metadata);
-			$valtype = 'dropdown';
-			*/
-			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
-			// Multiple option become select or radio
+			// Failsafe to auto-discover options if none found
+			if (empty($options)) {
+				$options = esope_get_meta_values($metadata);
+			}
+			// Auto-discover valid values from existing metadata
+			if ($auto_options) {
+				$options = esope_get_meta_values($metadata);
+				$valtype = 'dropdown';
+			}
+			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) { $valtype = 'text'; }
+			// Multiple options become select or radio
 			if ($options) {
 				$valtype = 'dropdown';
 				if ($empty) $options['empty option'] = '';
