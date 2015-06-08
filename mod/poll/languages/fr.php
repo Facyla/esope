@@ -7,7 +7,7 @@ $fr = array(
 	 */
 	'poll' => "Sondages",
 	'poll:add' => "Nouveau sondage",
-	'poll:group_poll' => "Sondages",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
 	'poll:group_poll:listing:title' => "Sondages de %s",
 	'poll:your' => "Vos sondages",
 	'poll:not_me' => "Sondages de %s",
@@ -62,7 +62,7 @@ $fr = array(
 	'poll:latest_widget_description' => "Affiche les sondages les plus récents.",
 	'poll:latestgroup_widget_title' => "Derniers sondages du groupe",
 	'poll:latestgroup_widget_description' => "Affiche les derniers sondages du groupe.",
-	'poll:my_widget_title' => "Mes sondages",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> Mes sondages",
 	'poll:my_widget_description' => "Ce widget affiche vos propres sondages.",
 	'poll:widget:label:displaynum' => "Combien de sondages afficher ?",
 	'poll:individual' => "Sondage du jour",

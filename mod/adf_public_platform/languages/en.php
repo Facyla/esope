@@ -798,7 +798,9 @@ $en = array(
 	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
 	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
-	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Polls",
+	'poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> My Polls",
 	
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groups",

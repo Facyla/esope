@@ -776,7 +776,7 @@ header nav ul .fa { margin-right: 0.5em; }
 /* Extra class for easier scale 1 stacking */
 .fa-stack-half { font-size: 0.5em; }
 /* Quick effect on hover */
-.fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; }
+.fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; transition-property: transform; }
 
 #main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; /* background-color:<?php echo $linkcolor; ?>; */ }
 #main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
