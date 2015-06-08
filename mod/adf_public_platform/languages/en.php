@@ -939,6 +939,8 @@ $en = array(
 	'esope:tools:tool:clear_cmis_credentials:details' => "Removes all personnal settings that were set up for elgg_cmis plugin.",
 	'esope:tools:tool:users_stats' => "Users stats",
 	'esope:tools:tool:users_stats:details' => "Some stats about users. Not much currently besides groups count.",
+	'esope:tools:tool:group_publication_stats' => "Group publications stats",
+	'esope:tools:tool:group_publication_stats:details' => "Some stats about publications in a group, per member and per publication subtype.",
 	
 	// Menus
 	'esope:menu:topbar' => "My account",

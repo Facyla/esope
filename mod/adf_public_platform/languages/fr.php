@@ -940,8 +940,10 @@ $fr = array(
 	'esope:tools:tool:clear_cmis_credentials:details' => "Cet outil permet de supprimer les paramètres personnels associés au plugin elgg_cmis.",
 	'esope:tools:tool:entity_fields' => "Recherche d'entités",
 	'esope:tools:tool:entity_fields:details' => "Recherche d'entités de divers types/subtypes par propriété ou métadonnée",
-	'esope:tools:tool:users_stats' => "Statsitiques sur les utilisateurs",
+	'esope:tools:tool:users_stats' => "Statistiques sur les utilisateurs",
 	'esope:tools:tool:users_stats:details' => "Quelques statistiques sur les utilisateurs. Nombre de groupes pour le moment.",
+	'esope:tools:tool:group_publication_stats' => "Statistiques de publications dans les groupes",
+	'esope:tools:tool:group_publication_stats:details' => "Quelques statistiques sur les publications dans un groupe, par membre et par type de publication.",
 	
 	// Menus
 	'esope:menu:topbar' => "Mon compte",
