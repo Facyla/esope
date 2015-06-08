@@ -111,7 +111,7 @@ for ($idx=1; $idx<=5; $idx++) {
 	}
 }
 if (count($user_guids) > 0) {
-	$subject, elgg_echo('feedback:email:subject', array($feedback_title)), 
+	$subject = elgg_echo('feedback:email:subject', array($feedback_title));
 	foreach ($user_guids as $user_guid => $user) {
 		$message = elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback_url));
 		// Trigger a hook to enable integration with other plugins
