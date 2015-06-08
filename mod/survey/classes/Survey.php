@@ -49,11 +49,20 @@ class Survey extends ElggObject {
 		));
 		*/
 		//$questions = $this->getEntitiesFromRelationship('survey_question', true, 0);
-		$questions = elgg_get_entities_from_relationship(array(
+		$questions_ent = elgg_get_entities_from_relationship(array(
 				'relationship' => 'survey_question', 'relationship_guid' => $this->guid, 'inverse_relationship' => true,
 				'order_by_metadata' => array('name' => 'display_order', 'direction' => 'ASC'),
+				'limit' => 0,
 			));
-		if (!$questions) { $questions = array(); }
+		$questions = array();
+		// Sort by display_order (because otherwise we would get 20 after 100 : 1, 10, 11, 2, 3, etc.)
+		if ($questions_ent) {
+			foreach ($questions_ent as $question) {
+				$questions[$question->display_order] = $question;
+			}
+			ksort($questions);
+		}
+		
 		return $questions;
 	}
 
