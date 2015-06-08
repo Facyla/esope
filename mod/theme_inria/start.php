@@ -33,7 +33,12 @@ function theme_inria_init(){
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
-	// Extend group owner block
+	// Extend group invite form
+	// Requires to be placed at the end of the form, because we will end the form and start a new one...
+	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite_before', 100);
+	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite', 1000);
+	
+	// Extend user owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
 	
 	// Extend group owner block

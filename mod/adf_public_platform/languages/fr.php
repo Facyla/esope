@@ -800,7 +800,9 @@ $fr = array(
 	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
 	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
 	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
-	'poll' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
+	'poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> Mes sondages",
 	
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groupes",
@@ -899,6 +901,7 @@ $fr = array(
 	
 	
 	/* Other interface */
+	'select:all' => 'Tout sélectionner',
 	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
 	

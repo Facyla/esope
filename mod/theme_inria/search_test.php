@@ -42,7 +42,7 @@ function esope_search(){
 
 $search_action = "javascript:esope_search();";
 
-$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service');
+$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service', 'location');
 $metadata_search = '';
 
 // Build metadata search fields
@@ -51,7 +51,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
 		$meta_title = elgg_echo($metadata);
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'auto-options' => true)) . '</label></div>';
 	}
 } else {
 	// We'll rely on text inputs then

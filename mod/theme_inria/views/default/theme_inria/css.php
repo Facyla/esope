@@ -226,7 +226,7 @@ footer.footer-inria {
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
-/* Réduciton des contenus de la rivière : voir si home seule ou partout */
+/* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
 
 
@@ -290,6 +290,11 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .au-subgroups-non-parentable { display: none; }
 
 .elgg-context-groups .elgg-module-aside li .elgg-image-block > .elgg-body { border-bottom: 1px dotted #CCCCCC; }
+
+/* Group invites */
+form#invite_to_group .elgg-foot { border-top: 0; border-bottom: 1px solid #CCC; }
+form#esope-search-form-invite-groups, form#esope-search-form-invite-results { margin: 0; }
+
 
 
 /* Group tabs */

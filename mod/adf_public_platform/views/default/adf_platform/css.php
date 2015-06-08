@@ -705,6 +705,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #esope-search-form select { width: 7em; margin-left: 0.5em; }
 .esope-search-fulltext { width: 80%; float: left; }
 #esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.esope-search-metadata-select select { max-width: 100%; }
 .elgg-button-livesearch { float: right; }
 .esope-results-count { font-size: 0.8em; color: #808080; }
 
@@ -776,7 +777,7 @@ header nav ul .fa { margin-right: 0.5em; }
 /* Extra class for easier scale 1 stacking */
 .fa-stack-half { font-size: 0.5em; }
 /* Quick effect on hover */
-.fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; }
+.fa:hover, a:hover .fa, a:hover [class*="fa-"]:before, [class*="fa-"]:hover:before { transform: rotateY(360deg); transition-duration: 0.5s; transition-property: transform; }
 
 #main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; /* background-color:<?php echo $linkcolor; ?>; */ }
 #main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }

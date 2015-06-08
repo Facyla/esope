@@ -133,7 +133,6 @@ function feedback_owner_block_menu($hook, $type, $return, $params) {
 
 
 function feedback_create_annotation_event_handler($event, $type, $annotation){
-	global $CONFIG;
 	if(!empty($annotation) && ($annotation instanceof ElggAnnotation)){
 		// check if the entity isn't PRIVATE
 		if($entity = $annotation->getEntity()){
@@ -153,19 +152,20 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 					$name = elgg_get_plugin_setting( 'user_'.$idx, 'feedback' );
 					if ( !empty($name) ) {
 						if ( $user = get_user_by_username($name) ) {
-							$user_guids[] = $user->guid;
+							$user_guids[$user->guid] = $user;
 						}
 					}
 				}
 				if (count($user_guids) > 0) {
-					notify_user(
-							$user_guids, 
-							$CONFIG->site->guid, 
-							elgg_echo('feedback:email:reply:subject', array($feedback_title)), 
-							elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $comment_content, $entity->getURL())), 
-							null, 
-							'email'
-						);
+					$subject = elgg_echo('feedback:email:reply:subject', array($feedback_title));
+					foreach ($user_guids as $user_guid => $user) {
+						$message = elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $comment_content, $entity->getURL()));
+						// Trigger a hook to enable integration with other plugins
+						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'feedback', array('entity' => $feedback, 'to_entity' => $user), $message);
+						// Failsafe backup if hook as returned empty content but not false (= stop)
+						if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
+						notify_user($user_guids, elgg_get_site_entity()->guid, $subject, $message, null, 'email');
+					}
 				}
 				
 			}

@@ -377,6 +377,10 @@ Here is the new profile page : %s
 	
 	// Groups invites
 	'userpicker:only_friends' => "Display friends only",
+	'theme_inria:groupinvite:standard' => "Method 1: Personal invitations",
+	'theme_inria:groupinvite:search' => "Method 2: Search members to invite",
+	'theme_inria:groupinvite:search:select' => "Step 1: search using available criteria",
+	'theme_inria:groupinvite:search:invite' => "Step 2: select the members to invite or register",
 	
 	
 	
