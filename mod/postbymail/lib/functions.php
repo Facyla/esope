@@ -600,6 +600,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							case 'page':
 							case 'page_top':
 							case 'event_calendar':
+							case 'feedback':
 							default:
 								// River OK + @TODO notification
 								//set_input('topic_post', $post_body);
