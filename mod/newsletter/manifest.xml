@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Newsletter</name>
+	<id>newsletter</id>
 	<author>ColdTrick IT Solutions</author>
-	<version>1.1</version>
+	<version>2.0</version>
 	<description>Allows the creation and management of a newletter to site/group members</description>
 	<website>http://www.coldtrick.com/</website>
 	<repository>https://github.com/ColdTrick/newsletter</repository>
@@ -12,19 +13,18 @@
  	
  	<requires>
 		<type>elgg_release</type>
-		<version>1.8.15</version>
+		<version>1.9</version>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
 		<name>html_email_handler</name>
-		<version>2.5</version>
+		<version>3.0</version>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
-		<name>tinymce</name>
-		<version>1.8</version>
+		<name>ckeditor</name>
 	</requires>
 	
 	<requires>

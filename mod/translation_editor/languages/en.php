@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 	$english = array(
 		//'translation_editor' => "Translation Editor",
 	
 		// global
 		'translation_editor:language' => "Language",
+		'translation_editor:gatekeeper' => "You're not an authorized translation editor",
 		
 		// menu
 		'translation_editor:menu:title' => "Translation Editor",
@@ -49,7 +50,6 @@
 	
 		// actions
 		'translation_editor:action:translate:error:input' => "Incorrect input provided to add a translation",
-		'translation_editor:action:translate:no_changed_values' => "No translations needed to be added",
 		'translation_editor:action:translate:error:write' => "Error while writing the translations",
 		'translation_editor:action:translate:error:not_authorized' => "You are not authorized to translate",
 		'translation_editor:action:translate:success' => "Translations saved successfully",

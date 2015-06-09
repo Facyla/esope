@@ -1,5 +1,6 @@
 <?php
-$fr = array(
+
+return array(
 	'cmspages' => "Pages statiques (CMS)",
 	'item:object:cmspage' => 'Page statique',
 	'item:object:cmspages' => 'Pages statiques',
@@ -123,5 +124,4 @@ $fr = array(
 	
 );
 
-add_translation("fr",$fr);
 

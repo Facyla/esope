@@ -1,5 +1,5 @@
 <?php
-$de = array(
+return array(
 
 	'cmspages' => "Statische Seiten (CMS)",
 	'item:object:cmspages' => 'Statische Seiten',
@@ -62,6 +62,4 @@ $de = array(
 	'cmspages:or' => "oder",
 	
 );
- 
-add_translation("de",$de);
 

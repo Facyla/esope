@@ -21,7 +21,7 @@ function externalmember_init() {
 	    elgg_extend_view('css', 'externalmembers/css_extend');
 	    
 	    // 1. Redessiner la page d'accueil (pas de tableau de bord tant qu'on ne sait pas limiter les accès)
-		  elgg_unregister_plugin_hook_handler('index','system','adf_platform_index', 0);
+		  elgg_unregister_plugin_hook_handler('index','system','esope_index', 0);
 		  elgg_register_plugin_hook_handler('index','system','externalmember_index', 0);
 	
 	    // TODOS :
@@ -40,7 +40,7 @@ function externalmember_init() {
 	    elgg_register_plugin_hook_handler('route', 'all', 'externalmember_route');
 	    
 	    // 3. Changer les vues principales : on définit une autre racine et on reprend la même arborescence
-	    elgg_set_view_location('adf_platform/adf_header', $CONFIG->pluginspath . 'externalmembers/alternate_views/');
+	    elgg_set_view_location('esope/adf_header', $CONFIG->pluginspath . 'externalmembers/alternate_views/');
 	    // Plus radical : pas de 2e niveau de menu, et on reprend le principal pour ajouter les projets
 	    
 	    // 4. Quelques menus en moins

@@ -165,7 +165,7 @@
 					
 					// check if we need to disable site notifications
 					if (elgg_get_plugin_setting("replace_site_notifications", "advanced_notifications") == "yes") {
-						unregister_notification_handler("site");
+						elgg_unregister_notification_method("site");
 					}
 					
 					if(!empty($NOTIFICATION_HANDLERS) && is_array($NOTIFICATION_HANDLERS)){
@@ -285,7 +285,7 @@
 							
 							// check if we need to disable site notifications
 							if (elgg_get_plugin_setting("replace_site_notifications", "advanced_notifications") == "yes") {
-								unregister_notification_handler("site");
+								elgg_unregister_notification_method("site");
 							}
 							
 							if(!empty($NOTIFICATION_HANDLERS) && is_array($NOTIFICATION_HANDLERS)){

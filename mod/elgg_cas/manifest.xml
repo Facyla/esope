@@ -23,7 +23,7 @@
 	
 	<suggests>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 	</suggests>
 	
 	<suggests>

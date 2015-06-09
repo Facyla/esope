@@ -26,12 +26,11 @@ if (!$entity) {
 $user = elgg_get_logged_in_user_entity();
 
 $annotation = create_annotation($entity->guid,
-	'generic_comment',
-	$comment_text,
-	"",
-	$user->guid,
-	$entity->access_id
-);
+								'generic_comment',
+								$comment_text,
+								"",
+								$user->guid,
+								$entity->access_id);
 
 // tell user annotation posted
 if (!$annotation) {
