@@ -6,25 +6,18 @@
  * @uses get_input("guid") the guid of the newsletter to edit
  */
 
-gatekeeper();
+elgg_gatekeeper();
+
+elgg_require_js("newsletter/edit");
 
 $guid = (int) get_input("guid");
 $subpage = get_input("subpage");
 
 // validate input
-if (empty($guid)) {
-	register_error(elgg_echo("InvalidParameterException:MissingParameter"));
-	forward(REFERER);
-}
-
+elgg_entity_gatekeeper($guid, "object", Newsletter::SUBTYPE);
 $entity = get_entity($guid);
-if (empty($entity) || !$entity->canEdit()) {
-	register_error(elgg_echo("InvalidParameterException:NoEntityFound"));
-	forward(REFERER);
-}
-
-if (!elgg_instanceof($entity, "object", Newsletter::SUBTYPE)) {
-	register_error(elgg_echo("ClassException:ClassnameNotClass", array($guid, elgg_echo("item:object:" . Newsletter::SUBTYPE))));
+if (!$entity->canEdit()) {
+	register_error(elgg_echo("limited_access"));
 	forward(REFERER);
 }
 
@@ -56,17 +49,17 @@ if ($subpage) {
 		"id" => "newsletter-form-" . $subpage
 	);
 	
-	if ($subpage == "content" || $subpage == "template") {
-		if ($entity->content) {
-			// only show preview if content available
-			elgg_register_menu_item("title", ElggMenuItem::factory(array(
-					"name" => "preview",
-					"text" => elgg_echo("preview"),
-					"href" => "newsletter/preview/" . $guid,
-					"link_class" => "elgg-button elgg-button-action"
-			)));
-		}
-	} elseif ($subpage == "recipients") {
+	if ($entity->content) {
+		// only show preview if content available
+		elgg_register_menu_item("title", ElggMenuItem::factory(array(
+				"name" => "preview",
+				"text" => elgg_echo("preview"),
+				"href" => "newsletter/preview/" . $guid,
+				"link_class" => "elgg-button elgg-button-action"
+		)));
+	}
+		
+	if ($subpage == "recipients") {
 		$form_vars["enctype"] = "multipart/form-data";
 	}
 	
@@ -75,12 +68,17 @@ if ($subpage) {
 	$content = elgg_view("newsletter/edit", $vars);
 }
 
+$filter_tabs = elgg_view_menu("newsletter_steps", array(
+	"entity" => $entity,
+	"class" => "elgg-tabs",
+	"sort_by" => "register"
+));
+
 // build page
 $page_data = elgg_view_layout("content", array(
 	"title" => $title_text,
 	"content" => $content,
-	"sidebar" => elgg_view("newsletter/sidebar/steps", array("entity" => $entity)),
-	"filter" => ""
+	"filter" => $filter_tabs
 ));
 
 // draw page
