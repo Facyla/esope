@@ -1,130 +1,42 @@
 <?php
-/**
- * Elgg Web Services language pack.
- * 
- * @package Webservice
- * @author Florian Daniel - Facyla
- */
+return array(
+	'APIException:ApiResultUnknown' => "Le résultat de l'API est de type inconnu. Cela ne devrait jamais se produire. ",
+	'APIException:MissingParameterInMethod' => "Il manque un paramètre %s à la méthode %s",
+	'APIException:ParameterNotArray' => "%s ne semble pas être un tableau. ",
+	'APIException:UnrecognisedTypeCast' => "Type non reconnu dans le typage (cast) '%s' pour la variable '%s' dans la méthode '%s' ",
+	'APIException:InvalidParameter' => "Paramètre invalide trouvé pour '%s' dans la méthode '%s'. ",
+	'APIException:FunctionParseError' => "%s(%s) a une erreur d'analyse. ",
+	'APIException:FunctionNoReturn' => "%s(%s) n'a pas retourné de valeur.",
+	'APIException:APIAuthenticationFailed' => "L'appel de méthode à échoué lors de l'Authentification API",
+	'APIException:UserAuthenticationFailed' => "L'appel de méthode à échoué lors de l'Authentification Utilisateur",
+	'APIException:MethodCallNotImplemented' => "L'appel de méthode '%s' n'est pas implémenté.",
+	'APIException:FunctionDoesNotExist' => "La fonction de la méthode '%s' n'est pas appelable",
+	'APIException:AlgorithmNotSupported' => "L'algorithme '%s' n'est pas pris en charge ou a été désactivé.",
+	'APIException:NotGetOrPost' => "La méthode de la requête doit être GET ou POST",
+	'APIException:MissingAPIKey' => "Clé API manquante",
+	'APIException:BadAPIKey' => "Mauvaise clé API",
+	'APIException:MissingHmac' => "Entête X-Elgg-hmac manquant",
+	'APIException:MissingHmacAlgo' => "Entête X-Elgg-hmac-algo manquant",
+	'APIException:MissingTime' => "Entête X-Elgg-time manquant",
+	'APIException:MissingNonce' => "Entête X-Elgg-nonce manquant",
+	'APIException:TemporalDrift' => "X-Elgg-time est trop éloigné dans le passé ou le futur. Epoch a échoué.",
+	'APIException:NoQueryString' => "Aucune donnée dans la chaîne de la requête",
+	'APIException:MissingPOSTHash' => "Entête X-Elgg-posthash manquant",
+	'APIException:MissingPOSTAlgo' => "Entête X-Elgg-posthash_algo manquant",
+	'APIException:MissingContentType' => "Type de contenu manquant pour les données postées",
+	'SecurityException:APIAccessDenied' => "Désolé, l'accès à l'API a été désactivé par l'administrateur.",
+	'SecurityException:NoAuthMethods' => "Aucune méthode d'authentification n'a été trouvé qui pourrait authentifier cette demande à l'API.",
+	'SecurityException:authenticationfailed' => "L'utilisateur n'a pas pu être authentifié",
+	'InvalidParameterException:APIMethodOrFunctionNotSet' => "Méthode ou fonction non définie dans l'appel à expose_method()",
+	'InvalidParameterException:APIParametersArrayStructure' => "La structure des paramètres du tableau est incorrect pour l'appel à expose_method '%s'",
+	'InvalidParameterException:UnrecognisedHttpMethod' => "Méthode http %s non reconnue pour la méthode '%s' de l'API",
+	'SecurityException:AuthTokenExpired' => "Jeton d'authentification soit manquant, non valide ou périmé.",
+	'SecurityException:InvalidPostHash' => "Les données de hachage du POST sont incorrectes - %s attendu mais reçu %s.",
+	'SecurityException:DupePacket' => "La signature de paquet a déjà été reçue.",
+	'SecurityException:InvalidAPIKey' => "Clé API incorrecte ou manquante.",
+	'NotImplementedException:CallMethodNotImplemented' => "L'appel de la méthode '%s' n'est actuellement pas pris en charge.",
+	'CallException:InvalidCallMethod' => "%s doit être appelée en utilisant '%s'",
 
-$french = array(
-	'web_services:user' => "Utilisateur", 
-	'web_services:object' => "Publications", 
-	'web_services:blog' => "Blog", 
-	'web_services:wire' => "Le Fil", 
-	'web_services:core' => "Core", 
-	'web_services:group' => "Groupes",
-	'web_services:file' => "Fichiers",
-	'web_services:messages' => "Messages",
-	'web_services:settings_description' => "Sélectionnez ci-dessous les web services que vous souhaitez activer :",
-	'web_services:selectfeatures' => "Sélectionnez les fonctionnalités à activer",
-	'friends:alreadyadded' => "%s a déjà été ajouté comme contact",
-	'friends:remove:notfriend' => "%s n'est pas en contact avec vous",
-	'blog:message:notauthorized' => "Non autorisé à accomplir cette requête",
-	'blog:message:noposts' => "Aucun article de blog par utilisateur",
-
-	'admin:utilities:web_services' => 'Tests des Web Services',
-	'web_services:tests:instructions' => 'Lancer les tests unitaires pour le plugin des web services',
-	'web_services:tests:run' => 'Lancer les tests',
-	'web_services:likes' => 'Likes',
-	'likes:notallowed' => 'Non autorisé à "liker"',
-	
-	'web_services:settings:api_information' => "Tout web service activé peut être appelé via l'URL :<br />
-		<pre>&lt;URL du site&gt;/services/api/rest/&lt;format&gt;/?method=&lt;nom méthode&gt;</pre><br />
-		Avec <ul>
-			<li>&lt;URL du site&gt; : la racine du site Elgg</li>
-			<li>&lt;format&gt; : json ou xml</li>
-			<li>&lt;nom méthode&gt; : le nom de la méthode que vous souhaitez appeler</li>
-		</ul>
-		<p>Les paramètres optionels sont <strong>api_key=APIKEY</strong> et <strong>auth_token=USER_TOKEN</strong></p>
-		<p>Les autres paramètres dépendent du webservice utilisé</p>",
-	
-	// A resolution to json convertion error (for river)
-	'river:update:user:default' => ' a mis à jour son profil ',
-	
-	// Core webservice
-	'web_services:core:site_test' => "Webservice de test",
-	'web_services:core:site_test:response' => "Bonjour",
-	'web_services:core:getinfo' => "Récupérer les informations du site",
-	'web_services:core:oauthok' => "en fonctionnement",
-	'web_services:core:nooauth' => "non",
-	'web_services:core:river_feed' => "Récupérer la rivière d'activité",
-	'web_services:core:search' => "Effectuer une recherche",
-	'web_services:core:auth_renewtoken' => "Renouvellement du jeton d'API utilisateur",
-	'SecurityException:tokenrenewalfailed' => "Echec du renouvellement du jeton d'API : connexion perdue. Si vous aviez des modifications en cours, vous devriez les copier-coller avant de vous reconnecter.",
-	
-	// Blog webservice
-	'web_services:blog:get_posts' => "Récupérer la liste des articles de blog",
-	'web_services:blog:save_post' => "Publier un article de blog",
-	'web_services:blog:delete_post' => "Supprimer un article de blog",
-	'web_services:blog:get_post' => "Lire un article de blog",
-	'web_services:blog:get_comments' => "Récupérer les commentaires d'un article",
-	'web_services:blog:post_comment' => "Publier un commentaire sur un article",
-	
-	// File webservice
-	'web_services:file:get_files' => "Récupérer les fichiers envoyés par les utilisateurs",
-	'web_services:file:get_info' => "Récupérer les informations du fichier",
-	'web_services:file:get_content' => "Récupérer le contenu du fichier",
-	'web_services:file:not_found' => "Fichier non trouvé",
-	
-	// Group webservice
-	'web_services:group:get_groups' => "Récupérer les groupes dont l'utilisateur est membre",
-	'web_services:group:get' => "Récupérer un groupe",
-	'web_services:group:join' => "Rejoindre un groupe",
-	'web_services:group:leave' => "Quitter un groupe",
-	'web_services:group:save' => "Enregistrer un groupe",
-	'web_services:group:save_post' => "Publier un sujet dans un forum de groupe",
-	'web_services:group:delete_post' => "Supprimer un sujet d'un forum de groupe",
-	'web_services:group:get_posts' => "Récupérer les articles d'un groupe",
-	'web_services:group:get_post' => "Récupérer un sujet d'un forum de groupe",
-	'web_services:group:get_replies' => "Récupérer les réponses à un sujet de forum",
-	'web_services:group:save_reply' => "Publier une réponse à un sujet de forum",
-	'web_services:group:delete_reply' => "Supprimer une réponse à un sujet de forum",
-	'web_services:group:activity' => "Récupérer le fil d'activité d'un groupe",
-	'web_services:group:notfound' => "Groupe non trouvé ou inaccessible",
-	'web_services:group:get_icon' => "Récupérer l'icone de profil d'un groupe",
-	
-	// The Wire webservice
-	'web_services:wire:save_post' => "Publier un message sur le Fil",
-	'web_services:wire:get_posts' => "Lire les derniers messages du Fil",
-	'web_services:wire:delete_posts' => "Supprimer un message du Fil",
-	
-	// User webservice
-	'web_services:user:get_profile_fields' => "Récupérer les champs du profil d'un utilisateur",
-	'web_services:user:get_profile' => "Récupérer les informations du profil d'un utilisateur",
-	'web_services:user:save_profile' => "Enregistrer les informations du profil d'un utilisateur",
-	'web_services:user:get_user_by_email' => "Récupérer un (ou des) nom(s) d'utilisateur à partir d'un email",
-	'web_services:user:check_username_availability' => "Vérifier la disponibilité d'un nom d'utilisateur",
-	'web_services:user:register' => "Créer un compte utilisateur",
-	'web_services:user:friend:add' => "Ajouter un contact",
-	'web_services:user:friend:remove' => "Supprimer un contact",
-	'web_services:user:get_friends' => "Récupérer les contacts",
-	'web_services:user:friend:get_friends_of' => "Récupérer les membres dont le membre est un contact",
-	'web_services:user:get_messageboard' => "Récupérer le Mur d'un utilisateur",
-	'web_services:user:post_messageboard' => "Publier un message sur le Mur",
-	'web_services:user:activity' => "Récupérer le fil d'activité d'un membre",
-	'web_services:user:get_guid' => "Récupérer le GUID à partir d'un nom d'utilisateur",
-	'web_services:user:get_username' => "Récupérer le nom d'utilisateur à partir d'un GUID",
-	'web_services:user:group_join_request:remove' => "Supprimer une invitation à un groupe",
-	'web_services:user:group_join_request:accept' => "Accepter une invitation à un groupe",
-	'web_services:user:friend_request:remove' => "Supprimer une demande de contact",
-	'web_services:user:friend_request:accept' => "Accepter une demande de contact",
-	'web_services:user:requests:list' => "Récupérer les demandes de contacts et invitations dans des groupes",
-	'web_services:user:get_icon' => "Récupérer l'image de profil d'un membre",
-	
-	
-	// Message webservice
-	'web_services:message:read' => "Lire un message",
-	'web_services:message:count' => "Récupérer le nombre de messages non lus",
-	'web_services:message:inbox' => "Récupérer les messages reçus",
-	'web_services:message:sent' => "Récupérer les messages envoyés",
-	'web_services:message:send' => "Envoyer un message",
-	
-	// Object
-	'web_services:object:get_post' => "Lire une publication",
-	'object:error:post_not_found' => "Publication non trouvée",
-	
-	
+	'system.api.list' => "Liste de tous les appels API disponibles sur le système.",
+	'auth.gettoken' => "Cet appel à l'API permet à un utilisateur d'obtenir un jeton d'authentification d'utilisateur et qui peut être utilisé pour authentifier les futurs appels à l'API. Passez-le en tant que paramètre auth_token",
 );
-
-add_translation("fr", $french);
-

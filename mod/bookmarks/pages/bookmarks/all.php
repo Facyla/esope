@@ -15,11 +15,10 @@ $content = elgg_list_entities(array(
 	'subtype' => 'bookmarks',
 	'full_view' => false,
 	'view_toggle_type' => false,
+	'no_results' => elgg_echo('bookmarks:none'),
+	'preload_owners' => true,
+	'distinct' => false,
 ));
-
-if (!$content) {
-	$content = elgg_echo('bookmarks:none');
-}
 
 $title = elgg_echo('bookmarks:everyone');
 
