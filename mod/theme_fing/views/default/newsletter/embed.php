@@ -125,7 +125,7 @@ if ($count > 0) {
 				// Meta info
 				$embed_meta = '';
 				if ($entity->tags) $embed_meta .= elgg_echo('tags') . '&nbsp;: ' . implode(', ', $entity->tags) . '<br />';
-				$embed_meta .= '<em>' . elgg_echo('by') . ' ' . $author->name . ' ' . friendly_time($entity->time_created) . '</em><br />';
+				$embed_meta .= '<em>' . elgg_echo('by') . ' ' . $author->name . ' ' . elgg_view_friendly_time($entity->time_created) . '</em><br />';
 				// Number of comments
 				$comments = $entity->countComments();
 				if ($comments > 0) $embed_meta .= elgg_echo('comments:count', array($comments)) . '<br />';
