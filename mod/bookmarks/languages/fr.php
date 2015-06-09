@@ -1,95 +1,84 @@
 <?php
-/**
- * Bookmarks English language file
- */
-
-$french = array(
+return array(
 
 	/**
 	 * Menu items and titles
 	 */
-	'bookmarks' => "Liens web",
-	'bookmarks:add' => "Créer un nouveau lien web",
-	'bookmarks:edit' => "Modifier le lien web",
-	'bookmarks:owner' => "Les liens web de %s",
-	'bookmarks:friends' => "Liens web des contacts",
-	'bookmarks:everyone' => "Tous les liens web du site",
-	'bookmarks:this' => "Mettre cette page en lien web",
-	'bookmarks:this:group' => "Mettre en lien web dans %s",
+	'bookmarks' => "Signets",
+	'bookmarks:add' => "Ajouter un signet",
+	'bookmarks:edit' => "Modifier le signet",
+	'bookmarks:owner' => "Les signets de %s",
+	'bookmarks:friends' => "Signets des contacts",
+	'bookmarks:everyone' => "Tous les signets du site",
+	'bookmarks:this' => "Mettre cette page en signet",
+	'bookmarks:this:group' => "Mettre en signet dans %s",
 	'bookmarks:bookmarklet' => "Récupérer le 'bookmarklet'",
 	'bookmarks:bookmarklet:group' => "Récupérer le 'bookmarklet' du groupe",
-	'bookmarks:inbox' => "Boîte de réception des liens web",
-	'bookmarks:morebookmarks' => "plus",
-	'bookmarks:more' => "Plus de liens web",
+	'bookmarks:inbox' => "Boîte de réception des signets",
 	'bookmarks:with' => "Partager avec",
-	'bookmarks:new' => "Un nouveau lien web",
-	'bookmarks:via' => "via les liens web",
-	'bookmarks:address' => "Adresse de la page/ressource à ajouter à vos liens web",
-	'bookmarks:none' => "Aucun lien web",
+	'bookmarks:new' => "Un nouveau signet",
+	'bookmarks:address' => "Adresse de la ressource à ajouter à vos signets",
+	'bookmarks:none' => 'Aucun signet',
 
-	'bookmarks:delete:confirm' => "Etes-vous sûr(e) de vouloir supprimer ce lien web ?",
+	'bookmarks:notify:summary' => 'Nouveau signet nommé %s',
+	'bookmarks:notify:subject' => 'Nouveau signet: %s',
+	'bookmarks:notify:body' =>
+'%s a ajouté un nouveau signet: %s
 
-	'bookmarks:numbertodisplay' => "Nombre de liens web à afficher",
+Adresse: %s
 
-	'bookmarks:shared' => "Mis en lien web",
-	'bookmarks:visit' => "Voir la page",
-	'bookmarks:recent' => "Liens web récents",
+%s
 
+Voir et commenter ce signet: 
+%s
+',
 
-	'river:create:object:bookmarks' => '%s a mis en lien web %s',
-	'river:comment:object:bookmarks' => '%s a commenté le lien web %s',
-	'bookmarks:river:created' => "%s mis en lien web",
-	'bookmarks:river:annotate' => "a commenté ce lien web",
-	'bookmarks:river:item' => "une page",
-	'river:commented:object:bookmarks' => "un lien web",
+	'bookmarks:delete:confirm' => "Etes-vous sûr(e) de vouloir supprimer cette ressource ?",
 
-	'item:object:bookmarks' => "Liens web",
+	'bookmarks:numbertodisplay' => 'Nombre de signets à afficher',
 
-	'bookmarks:group' => "Liens web",
-	'bookmarks:enablebookmarks' => "Activer les liens web",
-	'bookmarks:nogroup' => "Ce groupe n'a pas encore de lien web",
-	'bookmarks:more' => "Plus de liens web",
+	'bookmarks:shared' => "Mis en signet",
+	'bookmarks:visit' => "Voir la ressource",
+	'bookmarks:recent' => "Signets récents",
 
-	'bookmarks:no_title' => "Pas de titre",
+	'river:create:object:bookmarks' => '%s mis en signet %s',
+	'river:comment:object:bookmarks' => '%s a commenté le signet %s',
+	'bookmarks:river:annotate' => 'a posté un commentaire sur ce signet',
+	'bookmarks:river:item' => 'un élément',
 
+	'item:object:bookmarks' => 'Eléments mis en signets',
+
+	'bookmarks:group' => 'Signets du groupe',
+	'bookmarks:enablebookmarks' => 'Activer les signets du groupe',
+	'bookmarks:nogroup' => 'Ce groupe n\'a pas encore de signets',
+	
 	/**
 	 * Widget and bookmarklet
 	 */
-	'bookmarks:widget:description' => "Ce module affiche vos derniers liens web.",
+	'bookmarks:widget:description' => "Ce widget affiche vos derniers signets.",
 
-	'bookmarks:bookmarklet:description' => "Le bookmarklet vous permez de partager ce que vous trouvez sur le web avec vos contacts, ou pour vous-même. Pour l'utiliser, glissez simplement le boutton ci-dessous dans la barre de liens de votre navigateur.",
+	'bookmarks:bookmarklet:description' =>
+			"Le bookmarklet vous permet de partager ce que vous trouvez sur le web avec vos contacts, ou pour vous-même. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",
 
 	'bookmarks:bookmarklet:descriptionie' =>
-			"Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
+			"Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez le dans vos favoris, puis dans votre barre de liens.",
 
 	'bookmarks:bookmarklet:description:conclusion' =>
-			"Vous pouvez mettre en lien web n'importe quelle page web à tout moment en cliquant sur le bookmarklet.",
+			"Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
 
 	/**
 	 * Status messages
 	 */
 
-	'bookmarks:save:success' => "Votre page a bien été mise en lien web.",
-	'bookmarks:delete:success' => "Votre lien web a bien été supprimé.",
+	'bookmarks:save:success' => "Votre élément a bien été mis en signet.",
+	'bookmarks:delete:success' => "Votre signet a bien été supprimé.",
 
 	/**
 	 * Error messages
 	 */
 
-	'bookmarks:save:failed' => "Votre page n'a pu être correctement mise en lien web. Vérifiez que le titre et le lien sont corrects et réessayez.",
-	'bookmarks:delete:failed' => "Votre lien web n'a pu être supprimé. Merci de réessayer.",
-	
-	'bookmarks:notification' => "%s a ajouté un nouveau lien web :
-
-%s - %s
-
-%s
-
-Afficher et commenter le nouveau lien web :
-%s",
-  'bookmarks:save:invalid' => "L'adresse de ce lien web est invalide et n'a pas pu être sauvegardée.",
-	
+	'bookmarks:save:failed' => "Votre signet n'a pas pu être enregistré. Vérifiez que le titre et le lien sont corrects et réessayez.",
+	'bookmarks:save:invalid' => "L’adresse du signet est invalide et ne peut donc pas être sauvegardée.",
+	'bookmarks:delete:failed' => "Votre signet n'a pas pu être supprimé. Merci de réessayer.",
+	'bookmarks:unknown_bookmark' => 'Impossible de trouver le signet spécifié',
 );
-
-add_translation("fr", $french);
-

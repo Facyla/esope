@@ -1,15 +1,12 @@
 <?php
-/**
- * External pages English language file
- */
-
-$english = array(
+return array(
 
 	/**
 	 * Menu items and titles
 	 */
 	'expages' => "Site pages",
 	'admin:appearance:expages' => "Site Pages",
+	'expages:edit:viewpage' => "View page on site",
 	'expages:about' => "About",
 	'expages:terms' => "Terms",
 	'expages:privacy' => "Privacy",
@@ -23,5 +20,3 @@ $english = array(
 	'expages:posted' => "Your page was successfully updated.",
 	'expages:error' => "Unable to save this page.",
 );
-
-add_translation("en", $english);
