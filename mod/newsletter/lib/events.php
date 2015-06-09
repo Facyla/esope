@@ -1,4 +1,5 @@
 <?php
+
 /**
  * All event handler functions can be found in this file
  */
@@ -45,8 +46,7 @@ function newsletter_upgrade_event_handler($event, $type, $object) {
 	
 	if (!empty($upgrade_scripts)) {
 		// get already run scripts
-		$upgrades = datalist_get("processed_upgrades");
-		$processed_upgrades = unserialize($upgrades);
+		$processed_upgrades = elgg_get_processed_upgrades();
 		if (!is_array($processed_upgrades)) {
 			$processed_upgrades = array();
 		}

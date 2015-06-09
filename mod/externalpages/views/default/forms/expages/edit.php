@@ -32,12 +32,6 @@ $submit_input = elgg_view('input/submit', array(
 	'name' => 'submit',
 	'value' => elgg_echo('save'),
 ));
-$view_page = elgg_view('output/url', array(
-	'text' => elgg_echo('expages:edit:viewpage'),
-	'href' => $type,
-	'target' => '_blank',
-	'class' => 'elgg-button elgg-button-action float-alt',
-));
 $hidden_type = elgg_view('input/hidden', array(
 	'name' => 'content_type',
 	'value' => $type,
@@ -58,7 +52,6 @@ echo <<<EOT
 <div class="elgg-foot">
 $hidden_guid
 $hidden_type
-$view_page
 $submit_input
 </div>
 EOT;

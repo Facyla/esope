@@ -1,0 +1,19 @@
+User-agent: *
+
+Allow: /
+
+Disallow: /_graph
+Disallow: /actio
+Disallow: /dat
+Disallow: /doc
+Disallow: /engi
+Disallow: /insta
+Disallow: /js
+Disallow: /lang
+Disallow: /log
+Disallow: /mod
+Disallow: /searc
+Disallow: /tag
+Disallow: /vend
+Disallow: /view
+

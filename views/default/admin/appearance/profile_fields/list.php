@@ -10,7 +10,7 @@ $n = 0;
 $loaded_defaults = array();
 $items = array();
 $fieldlist = elgg_get_config('profile_custom_fields');
-if ($fieldlist || $fieldlist === '0') {
+if ($fieldlist) {
 	$fieldlistarray = explode(',', $fieldlist);
 	foreach ($fieldlistarray as $listitem) {
 		$translation = elgg_get_config("admin_defined_profile_$listitem");
@@ -29,6 +29,9 @@ if ($fieldlist || $fieldlist === '0') {
 <ul id="elgg-profile-fields" class="mvm">
 <?php
 
+$save = elgg_echo('save');
+$cancel = elgg_echo('cancel');
+
 foreach ($items as $item) {
 	echo elgg_view("profile/", array('value' => $item->translation));
 
@@ -40,11 +43,10 @@ foreach ($items as $item) {
 		'is_trusted' => true,
 	));
 	$type = elgg_echo($item->type);
-	$drag_arrow = elgg_view_icon("drag-arrow", "elgg-state-draggable");
 	echo <<<HTML
 <li id="$item->shortname" class="clearfix">
-	$drag_arrow
-	<b><span id="elgg-profile-field-{$item->shortname}" class="elgg-state-editable">{$item->translation}</span></b> [$type] $url
+	<span class="elgg-icon elgg-icon-drag-arrow elgg-state-draggable"></span>
+	<b><span id="elgg-profile-field-{$item->shortname}" class="elgg-state-editable">$item->translation</span></b> [$type] $url
 </li>
 HTML;
 }

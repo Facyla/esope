@@ -1,5 +1,9 @@
 <?php
-return array(
+/**
+ * An english language definition file
+ */
+
+$english = array(
 	'twitter_api' => 'Twitter Services',
 
 	'twitter_api:requires_oauth' => 'Twitter Services requires the OAuth Libraries plugin to be enabled.',
@@ -54,3 +58,5 @@ return array(
 	'twitter_api:interstitial:cannot_save' => 'Cannot save account details.',
 	'twitter_api:interstitial:saved' => 'Account details saved!',
 );
+
+add_translation('en', $english);

@@ -3,10 +3,7 @@
  * Update profile river view
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
-
-$subject = $item->getSubjectEntity();
+$subject = $vars['item']->getSubjectEntity();
 
 $subject_link = elgg_view('output/url', array(
 	'href' => $subject->getURL(),
@@ -18,6 +15,6 @@ $subject_link = elgg_view('output/url', array(
 $string = elgg_echo('river:update:user:profile', array($subject_link));
 
 echo elgg_view('river/elements/layout', array(
-	'item' => $item,
+	'item' => $vars['item'],
 	'summary' => $string,
 ));

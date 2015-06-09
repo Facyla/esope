@@ -29,8 +29,12 @@ function newsletter_init() {
 	
 	// CSS & JS
 	elgg_extend_view("css/elgg", "css/newsletter/site");
+	elgg_extend_view("js/elgg", "js/newsletter/site");
 	
-	elgg_register_simplecache_view("js/newsletter/embed.js");
+	// register JS library
+	elgg_register_simplecache_view("js/newsletter/recipients");
+	$url = elgg_get_simplecache_url("js", "newsletter/recipients");
+	elgg_register_js("newsletter.recipients", $url);
 	
 	// extend views
 	elgg_extend_view("groups/sidebar/my_status", "newsletter/sidebar/subscribe");
@@ -42,11 +46,11 @@ function newsletter_init() {
 	}
 	
 	// widget
-	elgg_register_widget_type("newsletter_subscribe", elgg_echo("newsletter:sidebar:subscribe:title"), elgg_echo("newsletter:widget:subscribe:description"), array("index","groups"));
+	elgg_register_widget_type("newsletter_subscribe", elgg_echo("newsletter:sidebar:subscribe:title"), elgg_echo("newsletter:widget:subscribe:description"), "index,groups");
 	
 	// register plugin hooks
 	elgg_register_plugin_hook_handler("cron", "hourly", "newsletter_cron_handler");
-	elgg_register_plugin_hook_handler("access:collections:write", "all", "newsletter_write_access_handler", 600); // needs to be after groups
+	elgg_register_plugin_hook_handler("access:collections:write", "user", "newsletter_write_access_handler");
 	
 	elgg_register_plugin_hook_handler("register", "menu:page", "newsletter_register_page_menu_handler");
 	elgg_register_plugin_hook_handler("register", "menu:newsletter_steps", "newsletter_register_newsletter_steps_menu_handler");

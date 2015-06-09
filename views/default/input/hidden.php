@@ -8,6 +8,5 @@
  * @uses $vars['value'] The current value, if any
  */
 
-$vars['type'] = 'hidden';
-
-echo elgg_format_element('input', $vars);
+?>
+<input type="hidden" <?php echo elgg_format_attributes($vars); ?> />

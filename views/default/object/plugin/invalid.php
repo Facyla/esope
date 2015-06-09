@@ -10,7 +10,6 @@
  * @subpackage Plugins
  */
 
-/* @var ElggPlugin $plugin */
 $plugin = $vars['entity'];
 
 $id = $plugin->getID();

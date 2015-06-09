@@ -20,14 +20,18 @@ $user = get_entity($guid);
 if (($user instanceof ElggUser) && ($user->canEdit())) {
 	$password = generate_random_cleartext_password();
 
-	if (force_user_password_reset($user->guid, $password)) {
+	// Always reset the salt before generating the user password.
+	$user->salt = _elgg_generate_password_salt();
+	$user->password = generate_user_password($user, $password);
+
+	if ($user->save()) {
 		system_message(elgg_echo('admin:user:resetpassword:yes'));
 
 		notify_user($user->guid,
 			elgg_get_site_entity()->guid,
-			elgg_echo('email:resetpassword:subject', array(), $user->language),
-			elgg_echo('email:resetpassword:body', array($user->username, $password), $user->language),
-			array(),
+			elgg_echo('email:resetpassword:subject'),
+			elgg_echo('email:resetpassword:body', array($user->username, $password)),
+			NULL,
 			'email');
 	} else {
 		register_error(elgg_echo('admin:user:resetpassword:no'));

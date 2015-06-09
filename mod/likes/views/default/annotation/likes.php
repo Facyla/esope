@@ -10,14 +10,13 @@ if (!isset($vars['annotation'])) {
 }
 
 $like = $vars['annotation'];
-/* @var ElggAnnotation $like */
 
 $user = $like->getOwnerEntity();
 if (!$user) {
 	return true;
 }
 
-$user_icon = elgg_view_entity_icon($user, 'tiny', array('use_hover' => false));
+$user_icon = elgg_view_entity_icon($user, 'tiny');
 $user_link = elgg_view('output/url', array(
 	'href' => $user->getURL(),
 	'text' => $user->name,
@@ -28,11 +27,10 @@ $likes_string = elgg_echo('likes:this');
 
 $friendlytime = elgg_view_friendly_time($like->time_created);
 
-$delete_button = '';
 if ($like->canEdit()) {
-	$delete_button = elgg_view("output/url",array(
+	$delete_button = elgg_view("output/confirmlink",array(
     	'href' => "action/likes/delete?id={$like->id}",
-    	'text' => elgg_view_icon('delete', 'float-alt'),
+    	'text' => "<span class=\"elgg-icon elgg-icon-delete float-alt\"></span>",
     	'confirm' => elgg_echo('likes:delete:confirm'),
     	'encode_text' => false,
     ));

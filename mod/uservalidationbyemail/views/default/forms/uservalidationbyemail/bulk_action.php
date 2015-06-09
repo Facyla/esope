@@ -6,7 +6,7 @@
  * @subpackage UserValidationByEmail.Administration
  */
 
-$limit = get_input('limit', elgg_get_config('default_limit'));
+$limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
 
 // can't use elgg_list_entities() and friends because we don't use the default view for users.
@@ -46,7 +46,8 @@ $pagination = elgg_view('navigation/pagination',array(
 	'limit' => $limit,
 ));
 
-$bulk_actions_checkbox = '<label><input type="checkbox" id="uservalidationbyemail-checkall" />'	. elgg_echo('all') . '</label>';
+$bulk_actions_checkbox = '<label><input type="checkbox" id="uservalidationbyemail-checkall" />'
+	. elgg_echo('uservalidationbyemail:check_all') . '</label>';
 
 $validate = elgg_view('output/url', array(
 	'href' => 'action/uservalidationbyemail/validate/',
@@ -68,7 +69,7 @@ $resend_email = elgg_view('output/url', array(
 
 $delete = elgg_view('output/url', array(
 	'href' => 'action/uservalidationbyemail/delete/',
-	'text' => elgg_echo('delete'),
+	'text' => elgg_echo('uservalidationbyemail:admin:delete'),
 	'title' => elgg_echo('uservalidationbyemail:confirm_delete_checked'),
 	'class' => 'uservalidationbyemail-submit',
 	'is_action' => true,

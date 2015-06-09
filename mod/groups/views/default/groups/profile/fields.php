@@ -17,7 +17,7 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 		}
 
 		$value = $group->$key;
-		if (is_null($value)) {
+		if (empty($value)) {
 			continue;
 		}
 

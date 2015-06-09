@@ -12,7 +12,7 @@ interface Locatable {
 	 *
 	 * @param string $location Textual representation of location
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function setLocation($location);
 
@@ -22,7 +22,7 @@ interface Locatable {
 	 * @param float $lat  Latitude
 	 * @param float $long Longitude
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function setLatLong($lat, $long);
 

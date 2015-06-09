@@ -22,7 +22,7 @@ if (!empty($recipients)) {
 }
 
 elgg_load_js('jquery.ui.autocomplete.html');
-elgg_require_js('newsletter/recipients');
+elgg_load_js('newsletter.recipients');
 
 echo "<div>";
 echo elgg_view("output/longtext", array("value" => elgg_echo("newsletter:recipients:description")));
@@ -63,10 +63,9 @@ $member_count = 0;
 if (elgg_instanceof($container, "site")) {
 	$options = array(
 		"site_guids" => false,
-		"count" => true,
-		"type" => "user"
+		"count" => true
 	);
-	$member_count = $container->getEntities($options);
+	$member_count = $container->getMembers($options);
 	
 	$member_count .= " " . elgg_echo("newsletter:recipients:members:site");
 } elseif (elgg_instanceof($container, "group")) {
@@ -164,14 +163,7 @@ if (!empty($emails)) {
 
 $emails = elgg_view_module("newsletter-recipients", elgg_echo("newsletter:recipients:email") . "<span class='newsletter-counter mls'>" . $counter . "</span>", $email_content, array("class" => $class, "id" => "newsletter-recipients-emails"));
 
-$icon_options = array(
-	"class" => array("elgg-icon-info", "mlm"),
-	"title" => elgg_echo("newsletter:recipients:tooltip")
-);
-
-$wrapper_title = elgg_echo("newsletter:recipients") . elgg_view("output/icon", $icon_options);
-
-echo elgg_view_module("newsletter-recipients-wrapper", $wrapper_title, $checkboxes . $users . $groups . $emails, array("id" => "newsletter-recipients-wrapper"));
+echo elgg_view_module("newsletter-recipients-wrapper", elgg_echo("newsletter:recipients"), $checkboxes . $users . $groups . $emails, array("id" => "newsletter-recipients-wrapper"));
 
 echo "<div class='elgg-foot'>";
 echo elgg_view("input/hidden", array("name" => "guid", "value" => $entity->getGUID()));

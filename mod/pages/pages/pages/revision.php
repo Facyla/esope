@@ -12,17 +12,16 @@ if (!$annotation) {
 }
 
 $page = get_entity($annotation->entity_guid);
-if (!pages_is_page($page)) {
-	forward(REFERER);
+if (!$page) {
+	
 }
 
 elgg_set_page_owner_guid($page->getContainerGUID());
 
-elgg_group_gatekeeper();
+group_gatekeeper();
 
 $container = elgg_get_page_owner_entity();
 if (!$container) {
-	forward(REFERER);
 }
 
 $title = $page->title . ": " . elgg_echo('pages:revision');

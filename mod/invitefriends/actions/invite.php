@@ -6,13 +6,6 @@
  * @package ElggInviteFriends
  */
 
-elgg_make_sticky_form('invitefriends');
-
-if (!elgg_get_config('allow_registration')) {
-	register_error(elgg_echo('invitefriends:registration_disabled'));
-	forward(REFERER);
-}
-
 $site = elgg_get_site_entity();
 
 $emails = get_input('emails');
@@ -54,16 +47,14 @@ foreach ($emails as $email) {
 		continue;
 	}
 
-	$link = elgg_get_site_url() . 'register?' . http_build_query(array(
-		'friend_guid' => $current_user->guid,
-		'invitecode' => generate_invite_code($current_user->username),
-	));
+	$link = elgg_get_site_url() . 'register?friend_guid=' . $current_user->guid . '&invitecode=' . generate_invite_code($current_user->username);
 	$message = elgg_echo('invitefriends:email', array(
-		$site->name,
-		$current_user->name,
-		$emailmessage,
-		$link,
-	));
+					$site->name,
+					$current_user->name,
+					$emailmessage,
+					$link
+				)
+	);
 
 	$subject = elgg_echo('invitefriends:subject', array($site->name));
 
@@ -72,7 +63,7 @@ foreach ($emails as $email) {
 	if ($site && $site->email) {
 		$from = $site->email;
 	} else {
-		$from = 'noreply@' . $site->getDomain();
+		$from = 'noreply@' . get_site_domain($site->guid);
 	}
 
 	elgg_send_email($from, $email, $subject, $message);
@@ -91,7 +82,6 @@ if ($error) {
 	}
 
 } else {
-	elgg_clear_sticky_form('invitefriends');
 	system_message(elgg_echo('invitefriends:success'));
 }
 

@@ -16,25 +16,24 @@ if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
 	forward();
 }
 
-$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+global $NOTIFICATION_HANDLERS;
 $subscriptions = array();
-foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
+foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+	$subscriptions[$method] = get_input($method.'subscriptions');
 	$personal[$method] = get_input($method.'personal');
-	set_user_notification_setting($user->guid, $method, ($personal[$method] == '1') ? true : false);
-
 	$collections[$method] = get_input($method.'collections');
+
 	$metaname = 'collections_notifications_preferences_' . $method;
 	$user->$metaname = $collections[$method];
-
-	$subscriptions[$method] = get_input($method.'subscriptions');
+	set_user_notification_setting($user->guid, $method, ($personal[$method] == '1') ? true : false);
 	remove_entity_relationships($user->guid, 'notify' . $method, false, 'user');
 }
 
 // Add new ones
-foreach ($subscriptions as $method => $subscription) {
+foreach($subscriptions as $key => $subscription) {
 	if (is_array($subscription) && !empty($subscription)) {
-		foreach ($subscription as $subscriptionperson) {
-			elgg_add_subscription($user->guid, $method, $subscriptionperson);
+		foreach($subscription as $subscriptionperson) {
+			add_entity_relationship($user->guid, 'notify' . $key, $subscriptionperson);
 		}
 	}
 }

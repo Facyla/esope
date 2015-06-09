@@ -11,7 +11,6 @@
  * @uses string $_REQUEST['context']         An optional context of the widget. Used to return
  *                                           the correct output if widget content changes
  *                                           depending on context.
- * @uses string $_REQUEST['title']           Optional title for the widget
  *
  */
 
@@ -21,15 +20,9 @@ $guid = get_input('guid');
 $params = get_input('params');
 $default_widgets = get_input('default_widgets', 0);
 $context = get_input('context');
-$title = get_input('title');
 
 $widget = get_entity($guid);
 if ($widget && $widget->saveSettings($params)) {
-	if ($title && $title != $widget->title) {
-		$widget->title = $title;
-		$widget->save();
-	}
-
 	elgg_set_page_owner_guid($widget->getContainerGUID());
 	if ($context) {
 		elgg_push_context($context);

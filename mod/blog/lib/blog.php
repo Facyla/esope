@@ -16,16 +16,16 @@ function blog_get_page_content_read($guid = NULL) {
 
 	$return = array();
 
-	elgg_entity_gatekeeper($guid, 'object', 'blog');
-
 	$blog = get_entity($guid);
 
 	// no header or tabs for viewing an individual blog
 	$return['filter'] = '';
 
-	elgg_set_page_owner_guid($blog->container_guid);
-
-	elgg_group_gatekeeper();
+	if (!elgg_instanceof($blog, 'object', 'blog')) {
+		register_error(elgg_echo('noaccess'));
+		$_SESSION['last_forward_from'] = current_page_url();
+		forward('');
+	}
 
 	$return['title'] = $blog->title;
 
@@ -63,16 +63,13 @@ function blog_get_page_content_list($container_guid = NULL) {
 		'type' => 'object',
 		'subtype' => 'blog',
 		'full_view' => false,
-		'no_results' => elgg_echo('blog:none'),
-		'preload_owners' => true,
-		'distinct' => false,
 	);
 
 	$current_user = elgg_get_logged_in_user_entity();
 
 	if ($container_guid) {
 		// access check for closed groups
-		elgg_group_gatekeeper();
+		group_gatekeeper();
 
 		$options['container_guid'] = $container_guid;
 		$container = get_entity($container_guid);
@@ -93,7 +90,6 @@ function blog_get_page_content_list($container_guid = NULL) {
 			$return['filter_context'] = 'none';
 		}
 	} else {
-		$options['preload_containers'] = true;
 		$return['filter_context'] = 'all';
 		$return['title'] = elgg_echo('blog:title:all_blogs');
 		elgg_pop_breadcrumb();
@@ -102,7 +98,26 @@ function blog_get_page_content_list($container_guid = NULL) {
 
 	elgg_register_title_button();
 
-	$return['content'] = elgg_list_entities($options);
+	// show all posts for admin or users looking at their own blogs
+	// show only published posts for other users.
+	$show_only_published = true;
+	if ($current_user) {
+		if (($current_user->guid == $container_guid) || $current_user->isAdmin()) {
+			$show_only_published = false;
+		}
+	}
+	if ($show_only_published) {
+		$options['metadata_name_value_pairs'] = array(
+			array('name' => 'status', 'value' => 'published'),
+		);
+	}
+
+	$list = elgg_list_entities_from_metadata($options);
+	if (!$list) {
+		$return['content'] = elgg_echo('blog:none');
+	} else {
+		$return['content'] = $list;
+	}
 
 	return $return;
 }
@@ -131,19 +146,42 @@ function blog_get_page_content_friends($user_guid) {
 
 	elgg_register_title_button();
 
-	$options = array(
-		'type' => 'object',
-		'subtype' => 'blog',
-		'full_view' => false,
-		'relationship' => 'friend',
-		'relationship_guid' => $user_guid,
-		'relationship_join_on' => 'container_guid',
-		'no_results' => elgg_echo('blog:none'),
-		'preload_owners' => true,
-		'preload_containers' => true,
-	);
+	if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+		$return['content'] .= elgg_echo('friends:none:you');
+		return $return;
+	} else {
+		$options = array(
+			'type' => 'object',
+			'subtype' => 'blog',
+			'full_view' => FALSE,
+		);
 
-	$return['content'] = elgg_list_entities_from_relationship($options);
+		foreach ($friends as $friend) {
+			$options['container_guids'][] = $friend->getGUID();
+		}
+
+		// admin / owners can see any posts
+		// everyone else can only see published posts
+		$show_only_published = true;
+		$current_user = elgg_get_logged_in_user_entity();
+		if ($current_user) {
+			if (($user_guid == $current_user->guid) || $current_user->isAdmin()) {
+				$show_only_published = false;
+			}
+		}
+		if ($show_only_published) {
+			$options['metadata_name_value_pairs'][] = array(
+				array('name' => 'status', 'value' => 'published')
+			);
+		}
+
+		$list = elgg_list_entities_from_metadata($options);
+		if (!$list) {
+			$return['content'] = elgg_echo('blog:none');
+		} else {
+			$return['content'] = $list;
+		}
+	}
 
 	return $return;
 }
@@ -157,6 +195,8 @@ function blog_get_page_content_friends($user_guid) {
  * @return array
  */
 function blog_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
+
+	$now = time();
 
 	$owner = get_entity($owner_guid);
 	elgg_set_page_owner_guid($owner_guid);
@@ -181,14 +221,23 @@ function blog_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
 	$options = array(
 		'type' => 'object',
 		'subtype' => 'blog',
-		'full_view' => false,
-		'no_results' => elgg_echo('blog:none'),
-		'preload_owners' => true,
-		'distinct' => false,
+		'full_view' => FALSE,
 	);
 
 	if ($owner_guid) {
 		$options['container_guid'] = $owner_guid;
+	}
+
+	// admin / owners can see any posts
+	// everyone else can only see published posts
+	if (!(elgg_is_admin_logged_in() || (elgg_is_logged_in() && $owner_guid == elgg_get_logged_in_user_guid()))) {
+		if ($upper > $now) {
+			$upper = $now;
+		}
+
+		$options['metadata_name_value_pairs'] = array(
+			array('name' => 'status', 'value' => 'published')
+		);
 	}
 
 	if ($lower) {
@@ -199,7 +248,12 @@ function blog_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
 		$options['created_time_upper'] = $upper;
 	}
 
-	$content = elgg_list_entities($options);
+	$list = elgg_list_entities_from_metadata($options);
+	if (!$list) {
+		$content = elgg_echo('blog:none');
+	} else {
+		$content = $list;
+	}
 
 	$title = elgg_echo('date:month:' . date('m', $lower), array(date('Y', $lower)));
 
@@ -220,7 +274,7 @@ function blog_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
  */
 function blog_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 
-	elgg_require_js('elgg/blog/save_draft');
+	elgg_load_js('elgg.blog');
 
 	$return = array(
 		'filter' => '',
@@ -259,7 +313,7 @@ function blog_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 			elgg_push_breadcrumb($blog->title, $blog->getURL());
 			elgg_push_breadcrumb(elgg_echo('edit'));
 			
-			elgg_require_js('elgg/blog/save_draft');
+			elgg_load_js('elgg.blog');
 
 			$content = elgg_view_form('blog/save', $vars, $body_vars);
 			$sidebar = elgg_view('blog/sidebar/revisions', $vars);
@@ -277,7 +331,7 @@ function blog_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 	$return['title'] = $title;
 	$return['content'] = $content;
 	$return['sidebar'] = $sidebar;
-	return $return;
+	return $return;	
 }
 
 /**
@@ -336,11 +390,7 @@ function blog_prepare_form_vars($post = NULL, $revision = NULL) {
 
 	// display a notice if there's an autosaved annotation
 	// and we're not editing it.
-	$auto_save_annotations = $post->getAnnotations(array(
-		'annotation_name' => 'blog_auto_save',
-		'limit' => 1,
-	));
-	if ($auto_save_annotations) {
+	if ($auto_save_annotations = $post->getAnnotations('blog_auto_save', 1)) {
 		$auto_save = $auto_save_annotations[0];
 	} else {
 		$auto_save = false;
@@ -351,4 +401,78 @@ function blog_prepare_form_vars($post = NULL, $revision = NULL) {
 	}
 
 	return $values;
+}
+
+/**
+ * Forward to the new style of URLs
+ * 
+ * Pre-1.7.5
+ * Group blogs page: /blog/group:<container_guid>/
+ * Group blog view:  /blog/group:<container_guid>/read/<guid>/<title>
+ * 1.7.5-1.8
+ * Group blogs page: /blog/owner/group:<container_guid>/
+ * Group blog view:  /blog/read/<guid>
+ * 
+ *
+ * @param string $page
+ */
+function blog_url_forwarder($page) {
+
+	$viewtype = elgg_get_viewtype();
+	$qs = ($viewtype === 'default') ? "" : "?view=$viewtype";
+
+	$url = "blog/all";
+
+	// easier to work with & no notices
+	$page = array_pad($page, 4, "");
+
+	// group usernames
+	if (preg_match('~/group\:([0-9]+)/~', "/{$page[0]}/{$page[1]}/", $matches)) {
+		$guid = $matches[1];
+		$entity = get_entity($guid);
+		if (elgg_instanceof($entity, 'group')) {
+			if (!empty($page[2])) {
+				$url = "blog/view/$page[2]/";
+			} else {
+				$url = "blog/group/$guid/all";
+			}
+			register_error(elgg_echo("changebookmark"));
+			forward($url . $qs);
+		}
+	}
+
+	if (empty($page[0])) {
+		return;
+	}
+
+	// user usernames
+	$user = get_user_by_username($page[0]);
+	if (!$user) {
+		return;
+	}
+
+	if (empty($page[1])) {
+		$page[1] = 'owner';
+	}
+
+	switch ($page[1]) {
+		case "read":
+			$url = "blog/view/{$page[2]}/{$page[3]}";
+			break;
+		case "archive":
+			$url = "blog/archive/{$page[0]}/{$page[2]}/{$page[3]}";
+			break;
+		case "friends":
+			$url = "blog/friends/{$page[0]}";
+			break;
+		case "new":
+			$url = "blog/add/$user->guid";
+			break;
+		case "owner":
+			$url = "blog/owner/{$page[0]}";
+			break;
+	}
+
+	register_error(elgg_echo("changebookmark"));
+	forward($url . $qs);
 }

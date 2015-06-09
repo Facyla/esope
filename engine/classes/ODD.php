@@ -4,7 +4,6 @@
  *
  * @package    Elgg.Core
  * @subpackage ODD
- * @deprecated 1.9
  */
 abstract class ODD {
 	/**
@@ -57,7 +56,7 @@ abstract class ODD {
 			return $this->attributes[$key];
 		}
 
-		return null;
+		return NULL;
 	}
 
 	/**

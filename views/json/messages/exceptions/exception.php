@@ -1,6 +1,6 @@
 <?php
 /**
- * Elgg JSON exception
+ * Elgg exception
  * Displays a single exception
  *
  * @package Elgg
@@ -9,7 +9,7 @@
  * @uses $vars['object'] An exception
  */
 
-$exception = $vars['object'];
-$result = new stdClass();
-$result->error = get_class($exception);
-echo json_encode($result);
+$export = $vars['object'];
+
+global $jsonexport;
+$jsonexport['exceptions'][] = $export;

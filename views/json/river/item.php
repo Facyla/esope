@@ -5,10 +5,15 @@
  * @uses $vars['item']
  */
 
-$item = $vars['item'];
-$object = $item->toObject();
-if (elgg_view_exists($item->view, 'default')) {
-	$object->description = elgg_view('river/elements/summary', array('item' => $item), FALSE, FALSE, 'default');
+global $jsonexport;
+
+if (!isset($jsonexport['activity'])) {
+	$jsonexport['activity'] = array();
 }
 
-echo json_encode($object);
+$item = $vars['item'];
+if (elgg_view_exists($item->view, 'default')) {
+	$item->string = elgg_view('river/elements/summary', array('item' => $item), FALSE, FALSE, 'default');
+}
+
+$jsonexport['activity'][] = $vars['item'];

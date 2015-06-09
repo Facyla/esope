@@ -1,4 +1,79 @@
 <?php
+/**
+ * ***************************************************************************
+ * NOTE: If this is ever removed from Elgg, sites lose the ability to upgrade
+ * from 1.7.x and earlier to the latest version of Elgg without upgrading to
+ * 1.8 first.
+ * ***************************************************************************
+ *
+ * Upgrade the database schema in an ordered sequence.
+ *
+ * Executes all upgrade files in elgg/engine/schema/upgrades/ in sequential order.
+ * Upgrade files must be in the standard Elgg release format of YYYYMMDDII.sql
+ * where II is an incrementor starting from 01.
+ *
+ * Files that are < $version will be ignored.
+ *
+ * @warning Plugin authors should not call this function directly.
+ *
+ * @param int    $version The version you are upgrading from in the format YYYYMMDDII.
+ * @param string $fromdir Optional directory to load upgrades from. default: engine/schema/upgrades/
+ * @param bool   $quiet   If true, suppress all error messages. Only use for the upgrade from <=1.6.
+ *
+ * @return int The number of upgrades run.
+ * @see upgrade.php
+ * @see version.php
+ * @deprecated 1.8 Use PHP upgrades for sql changes.
+ */
+function db_upgrade($version, $fromdir = "", $quiet = FALSE) {
+	global $CONFIG;
+
+	elgg_deprecated_notice('db_upgrade() is deprecated by using PHP upgrades.', 1.8);
+
+	$version = (int) $version;
+
+	if (!$fromdir) {
+		$fromdir = $CONFIG->path . 'engine/schema/upgrades/';
+	}
+	
+	$i = 0;
+
+	if ($handle = opendir($fromdir)) {
+		$sqlupgrades = array();
+
+		while ($sqlfile = readdir($handle)) {
+			if (!is_dir($fromdir . $sqlfile)) {
+				if (preg_match('/^([0-9]{10})\.(sql)$/', $sqlfile, $matches)) {
+					$sql_version = (int) $matches[1];
+					if ($sql_version > $version) {
+						$sqlupgrades[] = $sqlfile;
+					}
+				}
+			}
+		}
+
+		asort($sqlupgrades);
+
+		if (sizeof($sqlupgrades) > 0) {
+			foreach ($sqlupgrades as $sqlfile) {
+
+				// hide all errors.
+				if ($quiet) {
+					try {
+						run_sql_script($fromdir . $sqlfile);
+					} catch (DatabaseException $e) {
+						error_log($e->getmessage());
+					}
+				} else {
+					run_sql_script($fromdir . $sqlfile);
+				}
+				$i++;
+			}
+		}
+	}
+
+	return $i;
+}
 
 /**
  * Lists entities from an access collection
@@ -155,7 +230,7 @@ function get_entities_from_annotations_calculate_x($sum = "sum", $entity_type = 
  * @param string $orderdir       Order of results
  * @param bool   $count          Return count or entities
  *
- * @return ElggEntity[]|int
+ * @return unknown
  */
 function get_entities_from_annotation_count($entity_type = "", $entity_subtype = "", $name = "", $mdname = '', $mdvalue = '', $owner_guid = 0, $limit = 10, $offset = 0, $orderdir = 'desc', $count = false) {
 
@@ -293,7 +368,7 @@ function add_to_register($register_name, $subregister_name, $subregister_value, 
 		$CONFIG->registers[$register_name] = array();
 	}
 
-	$subregister = new \stdClass;
+	$subregister = new stdClass;
 	$subregister->name = $subregister_name;
 	$subregister->value = $subregister_value;
 
@@ -358,13 +433,13 @@ function get_register($register_name) {
 	if ($register_name == 'menu') {
 		// backward compatible code for site menu
 		$menu = $CONFIG->menus['site'];
-		$builder = new \ElggMenuBuilder($menu);
+		$builder = new ElggMenuBuilder($menu);
 		$menu_items = $builder->getMenu('text');
 		$menu_items = $menu_items['default'];
 
 		$menu = array();
 		foreach ($menu_items as $item) {
-			$subregister = new \stdClass;
+			$subregister = new stdClass;
 			$subregister->name = $item->getText();
 			$subregister->value = $item->getHref();
 			$menu[$subregister->name] = $subregister;
@@ -677,14 +752,14 @@ function callpath_gatekeeper($path, $include_subdirs = true, $strict_mode = fals
  * @param string     $table       Entity table prefix as defined in SELECT...FROM entities $table
  * @param NULL|array $owner_guids Owner GUIDs
  *
- * @return string|false
+ * @return FALSE|str
  * @since 1.7.0
  * @access private
  */
 function elgg_get_entity_owner_where_sql($table, $owner_guids) {
 	elgg_deprecated_notice('elgg_get_entity_owner_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return _elgg_get_guid_based_where_sql("{$table}.owner_guid", $owner_guids);
+	return elgg_get_guid_based_where_sql("{$table}.owner_guid", $owner_guids);
 }
 
 /**
@@ -703,7 +778,7 @@ function elgg_get_entity_owner_where_sql($table, $owner_guids) {
 function elgg_get_entity_container_where_sql($table, $container_guids) {
 	elgg_deprecated_notice('elgg_get_entity_container_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return _elgg_get_guid_based_where_sql("{$table}.container_guid", $container_guids);
+	return elgg_get_guid_based_where_sql("{$table}.container_guid", $container_guids);
 }
 
 /**
@@ -721,7 +796,7 @@ function elgg_get_entity_container_where_sql($table, $container_guids) {
 function elgg_get_entity_site_where_sql($table, $site_guids) {
 	elgg_deprecated_notice('elgg_get_entity_site_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return _elgg_get_guid_based_where_sql("{$table}.site_guid", $site_guids);
+	return elgg_get_guid_based_where_sql("{$table}.site_guid", $site_guids);
 }
 
 /**
@@ -805,7 +880,7 @@ function get_objects_in_group($group_guid, $subtype = "", $owner_guid = 0, $site
 	}
 
 	// Add access controls
-	$query .= _elgg_get_access_where_sql();
+	$query .= get_access_sql_suffix('e');
 	if (!$count) {
 		$query .= " order by $order_by";
 
@@ -937,7 +1012,7 @@ function get_entities_from_metadata_groups($group_guid, $meta_name, $meta_value 
 	}
 
 	// Add access controls
-	$query .= _elgg_get_access_where_sql();
+	$query .= get_access_sql_suffix("e");
 
 	if (!$count) {
 		$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
@@ -964,7 +1039,7 @@ function get_entities_from_metadata_groups($group_guid, $meta_name, $meta_value 
  * @param int    $site_guid      Site GUID. 0 for current, -1 for any
  * @param bool   $count          Return count of entities instead of entities
  *
- * @return int|array List of \ElggEntities, or the total number if count is set to false
+ * @return int|array List of ElggEntities, or the total number if count is set to false
  * @deprecated 1.8 Use elgg_get_entities_from_metadata()
  */
 function get_entities_from_metadata_groups_multi($group_guid, $meta_array, $entity_type = "", $entity_subtype = "", $owner_guid = 0, $limit = 10, $offset = 0, $order_by = "", $site_guid = 0, $count = false) {
@@ -1043,7 +1118,7 @@ function get_entities_from_metadata_groups_multi($group_guid, $meta_array, $enti
 	foreach ($where as $w) {
 		$query .= " $w and ";
 	}
-	$query .= _elgg_get_access_where_sql();
+	$query .= get_access_sql_suffix("e"); // Add access controls
 
 	if (!$count) {
 		$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
@@ -1059,9 +1134,9 @@ function get_entities_from_metadata_groups_multi($group_guid, $meta_array, $enti
 /**
  * List items within a given geographic area.
  *
- * @param float  $lat            Latitude
- * @param float  $long           Longitude
- * @param float  $radius         The radius
+ * @param real   $lat            Latitude
+ * @param real   $long           Longitude
+ * @param real   $radius         The radius
  * @param string $type           The type of entity (eg "user", "object" etc)
  * @param string $subtype        The arbitrary subtype of the entity
  * @param int    $owner_guid     The GUID of the owning user
@@ -1274,7 +1349,7 @@ function list_entities_from_metadata($meta_name, $meta_value = "", $entity_type 
  * @param bool   $listtypetoggle Allow users to toggle to the gallery view. Default: true
  * @param bool   $pagination     Display pagination? Default: true
  *
- * @return string List of \ElggEntities suitable for display
+ * @return string List of ElggEntities suitable for display
  *
  * @deprecated 1.8 Use elgg_list_entities_from_metadata() instead
  */
@@ -1503,7 +1578,7 @@ function page_owner() {
  * Gets the owner entity for the current page.
  *
  * @deprecated 1.8  Use elgg_get_page_owner_entity()
- * @return \ElggEntity|false The current page owner or false if none.
+ * @return ElggEntity|false The current page owner or false if none.
  */
 function page_owner_entity() {
 	elgg_deprecated_notice('page_owner_entity() was deprecated by elgg_get_page_owner_entity().', 1.8);
@@ -1615,16 +1690,16 @@ function regenerate_plugin_list($pluginorder = FALSE) {
 
 	// they're probably trying to set it?
 	if ($pluginorder) {
-		if (_elgg_generate_plugin_entities()) {
+		if (elgg_generate_plugin_entities()) {
 			// sort the plugins by the index numerically since we used
 			// weird indexes in the old system.
 			ksort($pluginorder, SORT_NUMERIC);
-			return _elgg_set_plugin_priorities($pluginorder);
+			return elgg_set_plugin_priorities($pluginorder);
 		}
 		return false;
 	} else {
 		// they're probably trying to regenerate from disk?
-		return _elgg_generate_plugin_entities();
+		return elgg_generate_plugin_entities();
 	}
 }
 
@@ -1651,18 +1726,20 @@ function get_plugin_name($mainfilename = false) {
 /**
  * Load and parse a plugin manifest from a plugin XML file.
  *
- * @deprecated 1.8 Use \ElggPlugin->getManifest()
+ * @example plugins/manifest.xml Example 1.8-style manifest file.
+ *
+ * @deprecated 1.8 Use ElggPlugin->getManifest()
  *
  * @param string $plugin Plugin name.
  * @return array of values
  */
 function load_plugin_manifest($plugin) {
-	elgg_deprecated_notice('load_plugin_manifest() is deprecated by \ElggPlugin->getManifest()', 1.8);
+	elgg_deprecated_notice('load_plugin_manifest() is deprecated by ElggPlugin->getManifest()', 1.8);
 
 	$xml_file = elgg_get_plugins_path() . "$plugin/manifest.xml";
 
 	try {
-		$manifest = new \ElggPluginManifest($xml_file, $plugin);
+		$manifest = new ElggPluginManifest($xml_file, $plugin);
 	} catch(Exception $e) {
 		return false;
 	}
@@ -1674,15 +1751,15 @@ function load_plugin_manifest($plugin) {
  * This function checks a plugin manifest 'elgg_version' value against the current install
  * returning TRUE if the elgg_version is >= the current install's version.
  *
- * @deprecated 1.8 Use \ElggPlugin->canActivate()
+ * @deprecated 1.8 Use ElggPlugin->canActivate()
  *
  * @param string $manifest_elgg_version_string The build version (eg 2009010201).
  * @return bool
  */
 function check_plugin_compatibility($manifest_elgg_version_string) {
-	elgg_deprecated_notice('check_plugin_compatibility() is deprecated by \ElggPlugin->canActivate()', 1.8);
+	elgg_deprecated_notice('check_plugin_compatibility() is deprecated by ElggPlugin->canActivate()', 1.8);
 
-	$version = elgg_get_version();
+	$version = get_version();
 
 	if (strpos($manifest_elgg_version_string, '.') === false) {
 		// Using version
@@ -1767,7 +1844,7 @@ function get_installed_plugins($status = 'all') {
  * 		elgg_regenerate_simplecache();
  *		elgg_reset_system_cache();
  *
- * @deprecated 1.8 Use \ElggPlugin->activate()
+ * @deprecated 1.8 Use ElggPlugin->activate()
  *
  * @param string $plugin    The plugin name.
  * @param int    $site_guid The site id, if not specified then this is detected.
@@ -1776,7 +1853,7 @@ function get_installed_plugins($status = 'all') {
  * @throws InvalidClassException
  */
 function enable_plugin($plugin, $site_guid = null) {
-	elgg_deprecated_notice('enable_plugin() was deprecated by \ElggPlugin->activate()', 1.8);
+	elgg_deprecated_notice('enable_plugin() was deprecated by ElggPlugin->activate()', 1.8);
 
 	$plugin = sanitise_string($plugin);
 
@@ -1787,7 +1864,7 @@ function enable_plugin($plugin, $site_guid = null) {
 	}
 
 	try {
-		$plugin = new \ElggPlugin($plugin);
+		$plugin = new ElggPlugin($plugin);
 	} catch(Exception $e) {
 		return false;
 	}
@@ -1808,7 +1885,7 @@ function enable_plugin($plugin, $site_guid = null) {
  * 		elgg_regenerate_simplecache();
  *		elgg_reset_system_cache();
  *
- * @deprecated 1.8 Use \ElggPlugin->deactivate()
+ * @deprecated 1.8 Use ElggPlugin->deactivate()
  *
  * @param string $plugin    The plugin name.
  * @param int    $site_guid The site id, if not specified then this is detected.
@@ -1817,7 +1894,7 @@ function enable_plugin($plugin, $site_guid = null) {
  * @throws InvalidClassException
  */
 function disable_plugin($plugin, $site_guid = 0) {
-	elgg_deprecated_notice('disable_plugin() was deprecated by \ElggPlugin->deactivate()', 1.8);
+	elgg_deprecated_notice('disable_plugin() was deprecated by ElggPlugin->deactivate()', 1.8);
 
 	$plugin = sanitise_string($plugin);
 
@@ -1828,7 +1905,7 @@ function disable_plugin($plugin, $site_guid = 0) {
 	}
 
 	try {
-		$plugin = new \ElggPlugin($plugin);
+		$plugin = new ElggPlugin($plugin);
 	} catch(Exception $e) {
 		return false;
 	}
@@ -2456,7 +2533,7 @@ $owner_guid = "", $owner_relationship = "") {
 
 			$access = "";
 			if ($details['type'] != 'relationship') {
-				$access = " and " . _elgg_get_access_where_sql(array('table_alias' => 'sl'));
+				$access = " and " . get_access_sql_suffix('sl');
 			}
 
 			$obj_query .= "( sl.object_type='{$details['type']}'
@@ -2500,20 +2577,20 @@ $owner_guid = "", $owner_relationship = "") {
 
 /**
  * Perform standard authentication with a given username and password.
- * Returns an \ElggUser object for use with login.
+ * Returns an ElggUser object for use with login.
  *
  * @see login
  *
  * @param string $username The username, optionally (for standard logins)
  * @param string $password The password, optionally (for standard logins)
  *
- * @return \ElggUser|false The authenticated user object, or false on failure.
+ * @return ElggUser|false The authenticated user object, or false on failure.
  *
  * @deprecated 1.8 Use elgg_authenticate
  */
 function authenticate($username, $password) {
 	elgg_deprecated_notice('authenticate() has been deprecated for elgg_authenticate()', 1.8);
-	$pam = new \ElggPAM('user');
+	$pam = new ElggPAM('user');
 	$credentials = array('username' => $username, 'password' => $password);
 	$result = $pam->authenticate($credentials);
 	if ($result) {
@@ -2531,11 +2608,11 @@ function authenticate($username, $password) {
  * @param int $offset    Offset
  *
  * @return mixed
- * @deprecated 1.8 Use \ElggSite::getMembers()
+ * @deprecated 1.8 Use ElggSite::getMembers()
  */
 function get_site_members($site_guid, $limit = 10, $offset = 0) {
 	elgg_deprecated_notice("get_site_members() deprecated.
-		Use \ElggSite::getMembers()", 1.8);
+		Use ElggSite::getMembers()", 1.8);
 
 	$site = get_entity($site_guid);
 	if ($site) {
@@ -2553,11 +2630,11 @@ function get_site_members($site_guid, $limit = 10, $offset = 0) {
  * @param bool $fullview  Whether or not to display the full view (default: true)
  *
  * @return string A displayable list of members
- * @deprecated 1.8 Use \ElggSite::listMembers()
+ * @deprecated 1.8 Use ElggSite::listMembers()
  */
 function list_site_members($site_guid, $limit = 10, $fullview = true) {
 	elgg_deprecated_notice("list_site_members() deprecated.
-		Use \ElggSite::listMembers()", 1.8);
+		Use ElggSite::listMembers()", 1.8);
 
 	$options = array(
 		'limit' => $limit,
@@ -2755,7 +2832,7 @@ $entity_subtype = "", $owner_guid = "", $site_guid = -1, $start_ts = "", $end_ts
  * @param int    $timelower The earliest time the entity can have been created. Default: all
  * @param int    $timeupper The latest time the entity can have been created. Default: all
  *
- * @return false|array An array of \ElggObjects or false, depending on success
+ * @return false|array An array of ElggObjects or false, depending on success
  * @deprecated 1.8 Use elgg_get_entities() instead
  */
 function get_user_objects($user_guid, $subtype = ELGG_ENTITIES_ANY_VALUE, $limit = 10,
@@ -2840,7 +2917,7 @@ $fullview = true, $listtypetoggle = true, $pagination = true, $timelower = 0, $t
  * @param int    $limit     The number of results to return (default 10)
  * @param int    $offset    Indexing offset, if any
  *
- * @return false|array An array of \ElggObjects or false, depending on success
+ * @return false|array An array of ElggObjects or false, depending on success
  * @deprecated 1.8 Use elgg_get_entities_from_metadata() instead
  */
 function get_user_objects_by_metadata($user_guid, $subtype = "", $metadata = array(),
@@ -2876,7 +2953,7 @@ function request_user_validation($user_guid) {
 		Plugins should register for the 'register, user' plugin hook", 1.8);
 	$user = get_entity($user_guid);
 
-	if (($user) && ($user instanceof \ElggUser)) {
+	if (($user) && ($user instanceof ElggUser)) {
 		// invalidate any existing validations
 		set_user_validation_status($user_guid, false);
 
@@ -2954,13 +3031,13 @@ function elgg_view_listing($icon, $info) {
  *
  * @internal This is passed an entity rather than a guid to handle non-created entities.
  *
- * @param \ElggEntity $entity The entity
+ * @param ElggEntity $entity The entity
  * @param string     $size   Icon size
  *
  * @return string URL to the entity icon.
  * @deprecated 1.8 Use $entity->getIconURL()
  */
-function get_entity_icon_url(\ElggEntity $entity, $size = 'medium') {
+function get_entity_icon_url(ElggEntity $entity, $size = 'medium') {
 	elgg_deprecated_notice("get_entity_icon_url() deprecated for getIconURL()", 1.8);
 	global $CONFIG;
 
@@ -3030,7 +3107,7 @@ function get_entity_icon_url(\ElggEntity $entity, $size = 'medium') {
  * way to provide user details to the ACL system without touching the session.
  *
  * @deprecated 1.8 Use elgg_get_logged_in_user_entity()
- * @return \ElggUser|NULL
+ * @return ElggUser|NULL
  */
 function get_loggedin_user() {
 	elgg_deprecated_notice('get_loggedin_user() is deprecated by elgg_get_logged_in_user_entity()', 1.8);
@@ -3082,7 +3159,7 @@ function isadminloggedin() {
  */
 function load_plugins() {
 	elgg_deprecated_notice('load_plugins() is deprecated by elgg_load_plugins()', 1.8);
-	return _elgg_load_plugins();
+	return elgg_load_plugins();
 }
 
 /**
@@ -3091,7 +3168,7 @@ function load_plugins() {
  * @param string $plugin_id Plugin name.
  * @param int    $user_guid The guid who's settings to retrieve.
  *
- * @deprecated 1.8 Use elgg_get_all_plugin_user_settings() or \ElggPlugin->getAllUserSettings()
+ * @deprecated 1.8 Use elgg_get_all_plugin_user_settings() or ElggPlugin->getAllUserSettings()
  * @return StdClass Object with all user settings.
  */
 function find_plugin_usersettings($plugin_id = null, $user_guid = 0) {
@@ -3109,7 +3186,7 @@ function find_plugin_usersettings($plugin_id = null, $user_guid = 0) {
  *                          is detected from where you are calling from.
  *
  * @return bool
- * @deprecated 1.8 Use elgg_set_plugin_user_setting() or \ElggPlugin->setUserSetting()
+ * @deprecated 1.8 Use elgg_set_plugin_user_setting() or ElggPlugin->setUserSetting()
  */
 function set_plugin_usersetting($name, $value, $user_guid = 0, $plugin_id = "") {
 	elgg_deprecated_notice('find_plugin_usersettings() is deprecated by elgg_get_all_plugin_user_settings()', 1.8);
@@ -3119,11 +3196,11 @@ function set_plugin_usersetting($name, $value, $user_guid = 0, $plugin_id = "") 
 /**
  * Clears a user-specific plugin setting
  *
- * @param string $name      Name of the plugin setting
- * @param int    $user_guid Defaults to logged in user
- * @param string $plugin_id Defaults to contextual plugin name
+ * @param str $name      Name of the plugin setting
+ * @param int $user_guid Defaults to logged in user
+ * @param str $plugin_id Defaults to contextual plugin name
  *
- * @deprecated 1.8 Use elgg_unset_plugin_user_setting or \ElggPlugin->unsetUserSetting().
+ * @deprecated 1.8 Use elgg_unset_plugin_user_setting or ElggPlugin->unsetUserSetting().
  * @return bool Success
  */
 function clear_plugin_usersetting($name, $user_guid = 0, $plugin_id = '') {
@@ -3139,7 +3216,7 @@ function clear_plugin_usersetting($name, $user_guid = 0, $plugin_id = '') {
  * @param string $plugin_id Optional plugin name, if not specified
  *                          it is detected from where you are calling.
  *
- * @deprecated 1.8 Use elgg_get_plugin_user_setting() or \ElggPlugin->getUserSetting()
+ * @deprecated 1.8 Use elgg_get_plugin_user_setting() or ElggPlugin->getUserSetting()
  * @return mixed
  */
 function get_plugin_usersetting($name, $user_guid = 0, $plugin_id = "") {
@@ -3155,7 +3232,7 @@ function get_plugin_usersetting($name, $user_guid = 0, $plugin_id = "") {
  * @param string $plugin_id Optional plugin name, if not specified
  *                          then it is detected from where you are calling from.
  *
- * @deprecated 1.8 Use elgg_set_plugin_setting() or \ElggPlugin->setSetting()
+ * @deprecated 1.8 Use elgg_set_plugin_setting() or ElggPlugin->setSetting()
  * @return int|false
  */
 function set_plugin_setting($name, $value, $plugin_id = null) {
@@ -3170,7 +3247,7 @@ function set_plugin_setting($name, $value, $plugin_id = null) {
  * @param string $plugin_id Optional plugin name, if not specified
  *                          then it is detected from where you are calling from.
  *
- * @deprecated 1.8 Use elgg_get_plugin_setting() or \ElggPlugin->getSetting()
+ * @deprecated 1.8 Use elgg_get_plugin_setting() or ElggPlugin->getSetting()
  * @return mixed
  */
 function get_plugin_setting($name, $plugin_id = "") {
@@ -3185,7 +3262,7 @@ function get_plugin_setting($name, $plugin_id = "") {
  * @param string $plugin_id Optional plugin name, if not specified
  *                          then it is detected from where you are calling from.
  *
- * @deprecated 1.8 Use elgg_unset_plugin_setting() or \ElggPlugin->unsetSetting()
+ * @deprecated 1.8 Use elgg_unset_plugin_setting() or ElggPlugin->unsetSetting()
  * @return bool
  */
 function clear_plugin_setting($name, $plugin_id = "") {
@@ -3200,7 +3277,7 @@ function clear_plugin_setting($name, $plugin_id = "") {
  *                          then it is detected from where you are calling from.
  *
  * @return bool
- * @deprecated 1.8 Use elgg_unset_all_plugin_settings() or \ElggPlugin->unsetAllSettings()
+ * @deprecated 1.8 Use elgg_unset_all_plugin_settings() or ElggPlugin->unsetAllSettings()
  * @since 1.7.0
  */
 function clear_all_plugin_settings($plugin_id = "") {
@@ -3671,7 +3748,7 @@ function find_metadata($meta_name = "", $meta_value = "", $entity_type = "", $en
  * @param int    $entity_guid Entity GUID
  * @param string $meta_name   Metadata name
  *
- * @return ElggMetadata|ElggMetadata[]|false object, an array of \ElggMetadata or false.
+ * @return mixed ElggMetadata object, an array of ElggMetadata or false.
  * @deprecated 1.8 Use elgg_get_metadata()
  */
 function get_metadata_byname($entity_guid, $meta_name) {
@@ -3724,7 +3801,7 @@ function get_metadata_for_entity($entity_guid) {
  *
  * @param int $id The id of the metadata being retrieved.
  *
- * @return mixed False on failure or \ElggMetadata
+ * @return mixed False on failure or ElggMetadata
  * @deprecated 1.8 Use elgg_get_metadata_from_id()
  */
 function get_metadata($id) {
@@ -3816,7 +3893,7 @@ function remove_metadata($guid, $name, $value = "") {
  *
  * @param int $annotation_id Annotation ID
  *
- * @return \ElggAnnotation
+ * @return ElggAnnotation
  * @deprecated 1.8 Use elgg_get_annotation_from_id()
  */
 function get_annotation($annotation_id) {
@@ -4095,10 +4172,10 @@ function is_installed() {
  * @param string $policy - the policy type, default is "user"
  * @return bool true if authenticated, false if not.
  *
- * @deprecated 1.8 See {@link \ElggPAM}
+ * @deprecated 1.8 See {@link ElggPAM}
  */
 function pam_authenticate($credentials = NULL, $policy = "user") {
-	elgg_deprecated_notice('pam_authenticate has been deprecated for \ElggPAM', 1.8);
+	elgg_deprecated_notice('pam_authenticate has been deprecated for ElggPAM', 1.8);
 	global $_PAM_HANDLERS, $_PAM_HANDLERS_MSG;
 
 	$_PAM_HANDLERS_MSG = array();
@@ -4142,17 +4219,17 @@ function pam_authenticate($credentials = NULL, $policy = "user") {
  * When given a widget entity and a new requested location, saves the new location
  * and also provides a sensible ordering for all widgets in that column
  *
- * @param \ElggObject $widget The widget entity
+ * @param ElggObject $widget The widget entity
  * @param int        $order  The order within the column
  * @param int        $column The column (1, 2 or 3)
  *
  * @return bool Depending on success
- * @deprecated 1.8 use \ElggWidget::move()
+ * @deprecated 1.8 use ElggWidget::move()
  */
-function save_widget_location(\ElggObject $widget, $order, $column) {
+function save_widget_location(ElggObject $widget, $order, $column) {
 	elgg_deprecated_notice('save_widget_location() is deprecated', 1.8);
-	if ($widget instanceof \ElggObject) {
-		if ($widget->getSubtype() == "widget") {
+	if ($widget instanceof ElggObject) {
+		if ($widget->subtype == "widget") {
 			// If you can't move the widget, don't save a new location
 			if (!$widget->draggable) {
 				return false;
@@ -4194,7 +4271,7 @@ function save_widget_location(\ElggObject $widget, $order, $column) {
 
 			return true;
 		} else {
-			register_error($widget->getSubtype());
+			register_error($widget->subtype);
 		}
 
 	}
@@ -4209,7 +4286,7 @@ function save_widget_location(\ElggObject $widget, $order, $column) {
  * @param string $context   The context (profile, dashboard etc)
  * @param int    $column    The column (1 or 2)
  *
- * @return array|false An array of widget \ElggObjects, or false
+ * @return array|false An array of widget ElggObjects, or false
  * @deprecated 1.8 Use elgg_get_widgets()
  */
 function get_widgets($user_guid, $context, $column) {
@@ -4259,7 +4336,7 @@ function add_widget($entity_guid, $handler, $context, $order = 0, $column = 1, $
 	}
 
 	if ($entity = get_entity($entity_guid)) {
-		$widget = new \ElggWidget;
+		$widget = new ElggWidget;
 		$widget->owner_guid = $entity_guid;
 		$widget->container_guid = $entity_guid;
 		if (isset($access_id)) {
@@ -4270,7 +4347,7 @@ function add_widget($entity_guid, $handler, $context, $order = 0, $column = 1, $
 
 		$guid = $widget->save();
 
-		// private settings cannot be set until \ElggWidget saved
+		// private settings cannot be set until ElggWidget saved
 		$widget->handler = $handler;
 		$widget->context = $context;
 		$widget->column = $column;
@@ -4333,7 +4410,7 @@ function widget_type_exists($handler) {
 }
 
 /**
- * Returns an array of \stdClass objects representing the defined widget types
+ * Returns an array of stdClass objects representing the defined widget types
  *
  * @return array A list of types defined (if any)
  * @deprecated 1.8 Use elgg_get_widget_types
@@ -4380,7 +4457,7 @@ function save_widget_info($widget_guid, $params) {
 				))) {
 					if (is_array($value)) {
 						// @todo Handle arrays securely
-						$widget->setMetadata($name, $value, "", true);
+						$widget->setMetaData($name, $value, "", true);
 					} else {
 						$widget->$name = $value;
 					}
@@ -4403,9 +4480,9 @@ function save_widget_info($widget_guid, $params) {
 /**
  * Reorders the widgets from a widget panel
  *
- * @param string $panelstring1 String of guids of \ElggWidget objects separated by ::
- * @param string $panelstring2 String of guids of \ElggWidget objects separated by ::
- * @param string $panelstring3 String of guids of \ElggWidget objects separated by ::
+ * @param string $panelstring1 String of guids of ElggWidget objects separated by ::
+ * @param string $panelstring2 String of guids of ElggWidget objects separated by ::
+ * @param string $panelstring3 String of guids of ElggWidget objects separated by ::
  * @param string $context      Profile or dashboard
  * @param int    $owner        Owner guid
  *
@@ -4489,9 +4566,7 @@ function reorder_widgets_from_panel($panelstring1, $panelstring2, $panelstring3,
 						$return = false;
 					} else {
 						// Remove state cookie
-						$cookie = new \ElggCookie("widget$dbguid");
-						$cookie->value = NULL;
-						elgg_set_cookie($cookie);
+						setcookie('widget' + $dbguid, null);
 					}
 				}
 			}
@@ -4527,7 +4602,7 @@ function use_widgets($context) {
 	global $CONFIG;
 
 	if (!isset($CONFIG->widgets)) {
-		$CONFIG->widgets = new \stdClass;
+		$CONFIG->widgets = new stdClass;
 	}
 
 	if (!isset($CONFIG->widgets->contexts)) {
@@ -4562,12 +4637,12 @@ function using_widgets() {
 /**
  * Displays a particular widget
  *
- * @param \ElggObject $widget The widget to display
+ * @param ElggObject $widget The widget to display
  * @return string The HTML for the widget, including JavaScript wrapper
  * 
  * @deprecated 1.8 Use elgg_view_entity()
  */
-function display_widget(\ElggObject $widget) {
+function display_widget(ElggObject $widget) {
 	elgg_deprecated_notice("display_widget() was been deprecated. Use elgg_view_entity().", 1.8);
 	return elgg_view_entity($widget);
 }
@@ -4575,14 +4650,14 @@ function display_widget(\ElggObject $widget) {
 /**
  * Count the number of comments attached to an entity
  *
- * @param \ElggEntity $entity
+ * @param ElggEntity $entity
  * @return int Number of comments
- * @deprecated 1.8 Use \ElggEntity->countComments()
+ * @deprecated 1.8 Use ElggEntity->countComments()
  */
 function elgg_count_comments($entity) {
-	elgg_deprecated_notice('elgg_count_comments() is deprecated by \ElggEntity->countComments()', 1.8);
+	elgg_deprecated_notice('elgg_count_comments() is deprecated by ElggEntity->countComments()', 1.8);
 
-	if ($entity instanceof \ElggEntity) {
+	if ($entity instanceof ElggEntity) {
 		return $entity->countComments();
 	}
 
@@ -4703,13 +4778,13 @@ function invalidate_cache_for_entity($guid) {
  *
  * Stores an entity in $ENTITY_CACHE;
  *
- * @param \ElggEntity $entity Entity to cache
+ * @param ElggEntity $entity Entity to cache
  *
  * @return void
  * @access private
  * @deprecated 1.8
  */
-function cache_entity(\ElggEntity $entity) {
+function cache_entity(ElggEntity $entity) {
 	elgg_deprecated_notice('cache_entity() is a private function and should not be used.', 1.8);
 	_elgg_cache_entity($entity);
 }
@@ -4719,24 +4794,11 @@ function cache_entity(\ElggEntity $entity) {
  *
  * @param int $guid The guid
  *
- * @return \ElggEntity|bool false if entity not cached, or not fully loaded
+ * @return ElggEntity|bool false if entity not cached, or not fully loaded
  * @access private
  * @deprecated 1.8
  */
 function retrieve_cached_entity($guid) {
 	elgg_deprecated_notice('retrieve_cached_entity() is a private function and should not be used.', 1.8);
 	return _elgg_retrieve_cached_entity($guid);
-}
-
-/**
- * Returns the category of a file from its MIME type
- *
- * @param string $mime_type The MIME type
- *
- * @return string 'document', 'audio', 'video', or 'general' if the MIME type was unrecognized
- * @deprecated 1.8 Use elgg_get_file_simple_type()
- */
-function get_general_file_type($mime_type) {
-	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated. Use elgg_get_file_simple_type()', 1.8);
-	return elgg_get_file_simple_type($mime_type);
 }

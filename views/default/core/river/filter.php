@@ -33,6 +33,6 @@ $selector = $vars['selector'];
 if ($selector) {
 	$params['value'] = $selector;
 }
-echo elgg_view('input/select', $params);
+echo elgg_view('input/dropdown', $params);
 
 elgg_load_js('elgg.ui.river');

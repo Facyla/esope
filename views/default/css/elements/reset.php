@@ -6,7 +6,6 @@
  * @subpackage UI
  */
 ?>
-/* <style> /**/
 
 /* ***************************************
 	RESET CSS
@@ -22,6 +21,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	margin: 0;
 	padding: 0;
 	border: 0;
+	outline: 0;
 	font-weight: inherit;
 	font-style: inherit;
 	font-size: 100%;
@@ -40,10 +40,9 @@ img {
 	border-width:0;
 	border-color:transparent;
 }
-/* keep focus styles for a11y
 :focus {
 	outline: 0 none;
-}*/
+}
 ol, ul {
 	list-style: none;
 }
@@ -53,7 +52,7 @@ em, i {
 ins {
 	text-decoration:none;
 }
-strike, del {
+del {
 	text-decoration:line-through;
 }
 strong, b {
@@ -77,9 +76,4 @@ blockquote, q {
 }
 a {
 	text-decoration: none;
-}
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-	border: 0;
-	padding: 0;
 }

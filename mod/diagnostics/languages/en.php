@@ -1,9 +1,16 @@
 <?php
-return array(
+/**
+ * Elgg diagnostics language pack.
+ *
+ * @package ElggDiagnostics
+ */
+
+$english = array(
 	'admin:administer_utilities:diagnostics' => 'System Diagnostics',
 	'diagnostics' => 'System diagnostics',
 	'diagnostics:report' => 'Diagnostics Report',
 	'diagnostics:description' => 'The following diagnostic report can be useful for diagnosing problems with Elgg. The developers of Elgg may request that you attach it to a bug report.',
+	'diagnostics:download' => 'Download',
 	'diagnostics:header' => '========================================================================
 Elgg Diagnostic Report
 Generated %s by %s
@@ -34,3 +41,5 @@ Global variables:
 %s
 ------------------------------------------------------------------------',
 );
+
+add_translation("en", $english);

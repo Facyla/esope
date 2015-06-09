@@ -27,10 +27,13 @@ $options = array(
 	'limit' => 6,
 	'full_view' => false,
 	'pagination' => false,
-	'no_results' => elgg_echo('pages:none'),
 );
 $content = elgg_list_entities($options);
 elgg_pop_context();
+
+if (!$content) {
+	$content = '<p>' . elgg_echo('pages:none') . '</p>';
+}
 
 $new_link = elgg_view('output/url', array(
 	'href' => "pages/add/$group->guid",

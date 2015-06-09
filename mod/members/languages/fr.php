@@ -1,11 +1,16 @@
 <?php
-return array(
-	'members:label:online' => 'En ligne',
-	'members:search' => 'Rechercher des membres',
-	'members:title:search' => 'Recherche de membres pour %s',
-	'members:total' => 'Nombre total de membres: %s',
-	'members:title:newest' => 'Nouveaux membres',
-	'members:title:popular' => 'Membres les plus populaires',
-	'members:title:online' => 'Membres en ligne',
-	'members:list:popular:none' => 'Aucun membre n\'a d\'amis.',
+/**
+ * Members English language file
+ */
+
+$french = array(
+	'members:label:newest' => "Date d'inscription",
+	'members:label:popular' => "Nombre de contact",
+	'members:label:online' => "Actuellement en ligne",
+	'members:searchname' => "Chercher des membres par nom",
+	'members:searchtag' => "Chercher des membres par mot-clef",
+	'members:title:searchname' => "Recherche de membres correspondant à \"%s\"",
+	'members:title:searchtag' => "Recherche de membres correspondant au mot-clef \"%s\"",
 );
+
+add_translation("fr", $french);

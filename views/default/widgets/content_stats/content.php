@@ -3,16 +3,12 @@
  * Content stats widget
  */
 
-$num_display = sanitize_int($vars['entity']->num_display, false);
-// set default value for display number
-if (!$num_display) {
-	$num_display = 8;
-}
+$max = $vars['entity']->num_display;
 
 $entity_stats = get_entity_statistics();
-$object_stats = elgg_extract('object', $entity_stats);
+$object_stats = $entity_stats['object'];
 arsort($object_stats);
-$object_stats = array_slice($object_stats, 0, $num_display);
+$object_stats = array_slice($object_stats, 0, $max);
 
 echo '<table class="elgg-table-alt">';
 echo '<tr><th>' . elgg_echo('widget:content_stats:type') . '</th>';

@@ -93,7 +93,7 @@ function newsletter_page_handler($page) {
 			break;
 	}
 	
-	if (!empty($include_file)) {
+	if ($include_file) {
 		include($include_file);
 		return true;
 	}

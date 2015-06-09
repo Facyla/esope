@@ -4,7 +4,6 @@
  *
  * @package    Elgg.Core
  * @subpackage ODD
- * @deprecated 1.9
  */
 class ODDMetaData extends ODD {
 

@@ -19,11 +19,9 @@ if ($container_guid == 0) {
 
 elgg_make_sticky_form('file');
 
-// check if upload attempted and failed
+// check if upload failed
 if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
-	$error = elgg_get_friendly_upload_error($_FILES['upload']['error']);
-
-	register_error($error);
+	register_error(elgg_echo('file:cannotload'));
 	forward(REFERER);
 }
 
@@ -95,11 +93,33 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	}
 
 	$file->setFilename($prefix . $filestorename);
-	$file->originalfilename = $_FILES['upload']['name'];
-	$mime_type = $file->detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+	$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+
+	// hack for Microsoft zipped formats
+	$info = pathinfo($_FILES['upload']['name']);
+	$office_formats = array('docx', 'xlsx', 'pptx');
+	if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+		switch ($info['extension']) {
+			case 'docx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+				break;
+			case 'xlsx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+				break;
+			case 'pptx':
+				$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+				break;
+		}
+	}
+
+	// check for bad ppt detection
+	if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+		$mime_type = "application/vnd.ms-powerpoint";
+	}
 
 	$file->setMimeType($mime_type);
-	$file->simpletype = elgg_get_file_simple_type($mime_type);
+	$file->originalfilename = $_FILES['upload']['name'];
+	$file->simpletype = file_get_simple_type($mime_type);
 
 	// Open the file to guarantee the directory exists
 	$file->open("write");
@@ -177,12 +197,7 @@ if ($new_file) {
 	if ($guid) {
 		$message = elgg_echo("file:saved");
 		system_message($message);
-		elgg_create_river_item(array(
-			'view' => 'river/object/file/create',
-			'action_type' => 'create',
-			'subject_guid' => elgg_get_logged_in_user_guid(),
-			'object_guid' => $file->guid,
-		));
+		add_to_river('river/object/file/create', 'create', elgg_get_logged_in_user_guid(), $file->guid);
 	} else {
 		// failed to save file object - nothing we can do about this
 		$error = elgg_echo("file:uploadfailed");

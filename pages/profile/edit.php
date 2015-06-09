@@ -3,7 +3,7 @@
  * Edit profile page
  */
 
-elgg_gatekeeper();
+gatekeeper();
 
 $user = elgg_get_page_owner_entity();
 if (!$user) {
@@ -17,8 +17,7 @@ if (!$user->canEdit()) {
 	forward();
 }
 
-elgg_push_context('settings');
-elgg_push_context('profile_edit');
+elgg_set_context('profile_edit');
 
 $title = elgg_echo('profile:edit');
 

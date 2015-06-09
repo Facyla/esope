@@ -16,7 +16,7 @@ function notifications_plugin_init() {
 	elgg_register_event_handler('pagesetup', 'system', 'notifications_plugin_pagesetup');
 
 	// Unset the default notification settings
-	elgg_unregister_plugin_hook_handler('usersettings:save', 'user', '_elgg_save_notification_user_settings');
+	elgg_unregister_plugin_hook_handler('usersettings:save', 'user', 'notification_user_settings_save');
 	elgg_unextend_view('forms/account/settings', 'core/settings/account/notifications');
 
 	// update notifications based on relationships changing
@@ -40,7 +40,7 @@ function notifications_plugin_init() {
  */
 function notifications_page_handler($page) {
 
-	elgg_gatekeeper();
+	gatekeeper();
 	$current_user = elgg_get_logged_in_user_entity();
 
 	// default to personal notifications
@@ -77,7 +77,7 @@ function notifications_page_handler($page) {
  *
  */
 function notifications_plugin_pagesetup() {
-	if (elgg_in_context("settings") && elgg_get_logged_in_user_guid()) {
+	if (elgg_get_context() == "settings" && elgg_get_logged_in_user_guid()) {
 
 		$user = elgg_get_page_owner_entity();
 		if (!$user) {
@@ -88,7 +88,6 @@ function notifications_plugin_pagesetup() {
 			'name' => '2_a_user_notify',
 			'text' => elgg_echo('notifications:subscriptions:changesettings'),
 			'href' => "notifications/personal/{$user->username}",
-			'section' => "notifications",
 		);
 		elgg_register_menu_item('page', $params);
 		
@@ -97,7 +96,6 @@ function notifications_plugin_pagesetup() {
 				'name' => '2_group_notify',
 				'text' => elgg_echo('notifications:subscriptions:changesettings:groups'),
 				'href' => "notifications/group/{$user->username}",
-				'section' => "notifications",
 			);
 			elgg_register_menu_item('page', $params);
 		}
@@ -112,7 +110,7 @@ function notifications_plugin_pagesetup() {
  * @param object $relationship
  */
 function notifications_relationship_remove($event, $object_type, $relationship) {
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+	global $NOTIFICATION_HANDLERS;
 
 	$user_guid = $relationship->guid_one;
 	$object_guid = $relationship->guid_two;
@@ -131,7 +129,7 @@ function notifications_relationship_remove($event, $object_type, $relationship) 
  * @param object $relationship
  */
 function notifications_update_friend_notify($event, $object_type, $relationship) {
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+	global $NOTIFICATION_HANDLERS;
 
 	$user_guid = $relationship->guid_one;
 	$friend_guid = $relationship->guid_two;
@@ -167,7 +165,7 @@ function notifications_update_friend_notify($event, $object_type, $relationship)
  * @param array $params
  */
 function notifications_update_collection_notify($event, $object_type, $returnvalue, $params) {
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+	global $NOTIFICATION_HANDLERS;
 
 	// only update notifications for user owned collections
 	$collection_id = $params['collection_id'];

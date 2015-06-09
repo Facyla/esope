@@ -25,20 +25,20 @@ $options = array(
 	'limit' => false,
 );
 if ($groupmemberships = elgg_get_entities_from_relationship($options)) {
-	foreach ($groupmemberships as $groupmembership) {
+	foreach($groupmemberships as $groupmembership) {
 		$groups[] = $groupmembership->guid;
 	}
 }
 
 if (!empty($groups)) {
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+	global $NOTIFICATION_HANDLERS;
 	foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 		$subscriptions[$method] = get_input($method.'subscriptions', array());
 		foreach ($groups as $group) {
 			if (in_array($group, $subscriptions[$method])) {
-				elgg_add_subscription($user->guid, $method, $group);
+				add_entity_relationship($user->guid, 'notify'.$method, $group);
 			} else {
-				elgg_remove_subscription($user->guid, $method, $group);
+				remove_entity_relationship($user->guid, 'notify'.$method, $group);
 			}
 		}
 	}

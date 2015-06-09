@@ -22,13 +22,13 @@ $title = elgg_echo('notifications:subscriptions:changesettings:groups');
 elgg_push_breadcrumb(elgg_echo('settings'), "settings/user/$user->username");
 elgg_push_breadcrumb($title);
 
-$dbprefix = elgg_get_config('dbprefix');
+// Get the form
+$people = array();
+
 $groupmemberships = elgg_get_entities_from_relationship(array(
 	'relationship' => 'member',
 	'relationship_guid' => $user->guid,
 	'type' => 'group',
-	'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
-	'order_by' => 'ge.name ASC',
 	'limit' => false,
 ));
 

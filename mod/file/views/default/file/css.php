@@ -7,7 +7,7 @@
 ?>
 .file-photo {
 	text-align: center;
-	margin: 15px 0;
+	margin-bottom: 15px;
 }
 .file-gallery-item {
 	text-align: center;

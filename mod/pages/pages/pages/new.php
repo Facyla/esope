@@ -5,12 +5,12 @@
  * @package ElggPages
  */
 
-elgg_gatekeeper();
+gatekeeper();
 
 $container_guid = (int) get_input('guid');
 $container = get_entity($container_guid);
 if (!$container) {
-	forward(REFERER);
+
 }
 
 $parent_guid = 0;

@@ -1,17 +1,4 @@
-Version history
-===============
-
-x.x:
-
-- added: normalize all URL's in the outgoing mail
-- added: option to embed images directly in the outgoing e-mail #20
-- added: option to send the test page to email
-- changed: test page uses inline CSS, normalized urls and embedded images
-
-3.0 (2014-09-25):
-
-- changes for Elgg 1.9
-- updated the version of Emogrifier
+= Version history =
 
 2.6 (2014-07-01):
 

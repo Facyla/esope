@@ -20,17 +20,13 @@ if (($entity) && ($entity instanceof ElggGroup)) {
 	// delete group icons
 	$owner_guid = $entity->owner_guid;
 	$prefix = "groups/" . $entity->guid;
-	$imagenames = elgg_get_config('icon_sizes');
+	$imagenames = array('.jpg', 'tiny.jpg', 'small.jpg', 'medium.jpg', 'large.jpg');
 	$img = new ElggFile();
 	$img->owner_guid = $owner_guid;
-	foreach ($imagenames as $name => $value) {
-		$img->setFilename("{$prefix}{$name}.jpg");
+	foreach ($imagenames as $name) {
+		$img->setFilename($prefix . $name);
 		$img->delete();
 	}
-	
-	// delete original icon
-	$img->setFilename("{$prefix}.jpg");
-	$img->delete();
 
 	// delete group
 	if ($entity->delete()) {

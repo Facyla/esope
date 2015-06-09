@@ -7,7 +7,7 @@
 
 elgg_load_library('elgg:file');
 
-elgg_gatekeeper();
+gatekeeper();
 
 $file_guid = (int) get_input('guid');
 $file = new FilePluginFile($file_guid);

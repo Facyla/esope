@@ -16,10 +16,11 @@ register_metadata_as_independent('user');
  */
 function profile_init() {
 
-	// Register a URL handler for users
-	elgg_register_plugin_hook_handler('entity:url', 'user', 'profile_set_url');
+	// Register a URL handler for users - this means that profile_url()
+	// will dictate the URL for all ElggUser objects
+	elgg_register_entity_url_handler('user', 'all', 'profile_url');
 
-	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'profile_set_icon_url');
+	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'profile_override_avatar_url');
 	elgg_unregister_plugin_hook_handler('entity:icon:url', 'user', 'user_avatar_hook');
 
 
@@ -32,6 +33,7 @@ function profile_init() {
 
 	elgg_register_page_handler('profile', 'profile_page_handler');
 
+	elgg_extend_view('page/elements/head', 'profile/metatags');
 	elgg_extend_view('css/elgg', 'profile/css');
 	elgg_extend_view('js/elgg', 'profile/js');
 
@@ -40,8 +42,6 @@ function profile_init() {
 
 	// allow admins to set default widgets for users on profiles
 	elgg_register_plugin_hook_handler('get_list', 'default_widgets', 'profile_default_widgets_hook');
-	
-	elgg_register_event_handler('pagesetup', 'system', 'profile_pagesetup', 50);
 }
 
 /**
@@ -78,10 +78,14 @@ function profile_page_handler($page) {
 		return true;
 	}
 
-	$content = elgg_view('profile/layout', array('entity' => $user));
-	$body = elgg_view_layout('one_column', array(
-		'content' => $content
-	));
+	// main profile page
+	$params = array(
+		'content' => elgg_view('profile/wrapper'),
+		'num_columns' => 3,
+	);
+	$content = elgg_view_layout('widgets', $params);
+
+	$body = elgg_view_layout('one_column', array('content' => $content));
 	echo elgg_view_page($user->name, $body);
 	return true;
 }
@@ -89,41 +93,45 @@ function profile_page_handler($page) {
 /**
  * Profile URL generator for $user->getUrl();
  *
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
- * @return string
+ * @param ElggUser $user
+ * @return string User URL
  */
-function profile_set_url($hook, $type, $url, $params) {
-	$user = $params['entity'];
-	return "profile/" . $user->username;
+function profile_url($user) {
+	return elgg_get_site_url() . "profile/" . $user->username;
 }
 
 /**
  * Use a URL for avatars that avoids loading Elgg engine for better performance
  *
  * @param string $hook
- * @param string $type
- * @param string $url
+ * @param string $entity_type
+ * @param string $return_value
  * @param array  $params
  * @return string
  */
-function profile_set_icon_url($hook, $type, $url, $params) {
+function profile_override_avatar_url($hook, $entity_type, $return_value, $params) {
 
 	// if someone already set this, quit
-	if ($url) {
-		return;
+	if ($return_value) {
+		return null;
 	}
 
 	$user = $params['entity'];
 	$size = $params['size'];
+	
+	if (!elgg_instanceof($user, 'user')) {
+		return null;
+	}
 
 	$user_guid = $user->getGUID();
 	$icon_time = $user->icontime;
 
 	if (!$icon_time) {
 		return "_graphics/icons/user/default{$size}.gif";
+	}
+
+	if ($user->isBanned()) {
+		return null;
 	}
 
 	$filehandler = new ElggFile();
@@ -139,6 +147,8 @@ function profile_set_icon_url($hook, $type, $url, $params) {
 		elgg_log("Unable to get profile icon for user with GUID $user_guid", 'ERROR');
 		return "_graphics/icons/default/$size.png";
 	}
+
+	return null;
 }
 
 /**
@@ -175,31 +185,4 @@ function profile_default_widgets_hook($hook, $type, $return) {
 	);
 
 	return $return;
-}
-
-/**
- * Sets up user-related menu items
- *
- * @return void
- * @access private
- */
-function profile_pagesetup() {
-	$viewer = elgg_get_logged_in_user_entity();
-	if (!$viewer) {
-		 return;
-	}
-	
-	elgg_register_menu_item('topbar', array(
-		'name' => 'profile',
-		'href' => $viewer->getURL(),
-		'text' => elgg_view('output/img', array(
-			'src' => $viewer->getIconURL('topbar'),
-			'alt' => $viewer->name,
-			'title' => elgg_echo('profile'),
-			'class' => 'elgg-border-plain elgg-transition',
-		)),
-		'priority' => 100,
-		'link_class' => 'elgg-topbar-avatar',
-		'item_class' => 'elgg-avatar elgg-avatar-topbar',
-	));
 }

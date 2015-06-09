@@ -14,7 +14,6 @@
  *   * fluid gallery without using tables
  */
 ?>
-/* <style> /**/
 
 /* Clearfix */
 .clearfix:after,
@@ -26,7 +25,6 @@
 .elgg-head:after,
 .elgg-foot:after,
 .elgg-col:after,
-.elgg-col-alt:after,
 .elgg-image-block:after {
 	content: ".";
 	display: block;
@@ -42,6 +40,10 @@
 	width: auto;
 	word-wrap: break-word;
 	overflow: hidden;
+	
+	/* IE 6, 7 */
+	zoom:1;
+	*overflow:visible;
 }
 
 <?php

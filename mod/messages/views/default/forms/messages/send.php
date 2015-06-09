@@ -3,27 +3,35 @@
  * Compose message form
  *
  * @package ElggMessages
- * @uses $vars['$recipient_username']
- * @uses $vars['subject']
- * @uses $vars['body']
+ * @uses $vars['friends']
  */
 
-$recipient_username = elgg_extract('recipient_username', $vars, '');
+$recipient_guid = elgg_extract('recipient_guid', $vars, 0);
 $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');
 
-$recipient_autocomplete = elgg_view('input/autocomplete', array(
-	'name' => 'recipient_username',
-	'value' => $recipient_username,
-	'match_on' => array('friends'),
+$recipients_options = array();
+foreach ($vars['friends'] as $friend) {
+	$recipients_options[$friend->guid] = $friend->name;
+}
+
+if (!array_key_exists($recipient_guid, $recipients_options)) {
+	$recipient = get_entity($recipient_guid);
+	if (elgg_instanceof($recipient, 'user')) {
+		$recipients_options[$recipient_guid] = $recipient->name;
+	}
+}
+
+$recipient_drop_down = elgg_view('input/dropdown', array(
+	'name' => 'recipient_guid',
+	'value' => $recipient_guid,
+	'options_values' => $recipients_options,
 ));
 
 ?>
 <div>
-	<label><?php echo elgg_echo("email:to"); ?>: </label>
-	<?php echo $recipient_autocomplete; ?>
-	<span class="elgg-text-help"><?php echo elgg_echo("messages:to:help"); ?></span>
-	
+	<label><?php echo elgg_echo("messages:to"); ?>: </label>
+	<?php echo $recipient_drop_down; ?>
 </div>
 <div>
 	<label><?php echo elgg_echo("messages:title"); ?>: <br /></label>
@@ -42,5 +50,5 @@ $recipient_autocomplete = elgg_view('input/autocomplete', array(
 	?>
 </div>
 <div class="elgg-foot">
-	<?php echo elgg_view('input/submit', array('value' => elgg_echo('send'))); ?>
+	<?php echo elgg_view('input/submit', array('value' => elgg_echo('messages:send'))); ?>
 </div>

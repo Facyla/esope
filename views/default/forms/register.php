@@ -6,17 +6,15 @@
  * @subpackage Core
  */
 
-if (elgg_is_sticky_form('register')) {
-	$values = elgg_get_sticky_values('register');
-	elgg_clear_sticky_form('register');
-} else {
-	$values = array();
-}
-
 $password = $password2 = '';
-$username = elgg_extract('username', $values, get_input('u'));
-$email = elgg_extract('email', $values, get_input('e'));
-$name = elgg_extract('name', $values, get_input('n'));
+$username = get_input('u');
+$email = get_input('e');
+$name = get_input('n');
+
+if (elgg_is_sticky_form('register')) {
+	extract(elgg_get_sticky_values('register'));
+	elgg_clear_sticky_form('register');
+}
 
 ?>
 <div class="mtm">
@@ -25,7 +23,7 @@ $name = elgg_extract('name', $values, get_input('n'));
 	echo elgg_view('input/text', array(
 		'name' => 'name',
 		'value' => $name,
-		'autofocus' => true,
+		'class' => 'elgg-autofocus',
 	));
 	?>
 </div>

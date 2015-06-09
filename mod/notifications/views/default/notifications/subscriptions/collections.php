@@ -35,7 +35,7 @@ $user = $vars['user'];
 		<td>&nbsp;</td>
 <?php
 	$i = 0; 
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+	global $NOTIFICATION_HANDLERS;
 	foreach($NOTIFICATION_HANDLERS as $method => $foo) {
 		if ($i > 0) {
 			echo "<td class='spacercolumn'>&nbsp;</td>";
@@ -50,9 +50,8 @@ $user = $vars['user'];
 	</tr>
 <?php
 	$members = array();
-	$friends = $user->getFriends(array('limit' => 0));
-	if ($friends) {
-		foreach ($friends as $friend) {
+	if ($friends = get_user_friends($user->guid, '', 9999, 0)) {
+		foreach($friends as $friend) {
 			$members[] = $friend->guid;
 		}
 	}

@@ -24,22 +24,12 @@ if (isset($_COOKIE['elggperm'])) {
 	}
 }
 
-$_SESSION['login_as_original_user_guid'] = $original_user_guid;
-$_SESSION['login_as_original_persistent'] = $persistent;
-
-try {
-	login($user);
+if (login($user)) {
+	$_SESSION['login_as_original_user_guid'] = $original_user_guid;
+	$_SESSION['login_as_original_persistent'] = $persistent;
 	system_message(elgg_echo('login_as:logged_in_as_user', array($user->username)));
-} catch (Exception $exc) {
-	unset($_SESSION['login_as_original_user_guid']);
-	unset($_SESSION['login_as_original_persistent']);
+} else {
 	register_error(elgg_echo('login_as:could_not_login_as_user', array($user->username)));
-	
-	try {
-		login($original_user);
-	} catch (Exception $ex) {
-		// we can't log back in as ourselves?  just leave us logged out then...
-	}
 }
 
 forward(REFERER);

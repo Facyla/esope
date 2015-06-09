@@ -4,9 +4,8 @@
  *
  * @package    Elgg.Core
  * @subpackage ODD
- * @deprecated 1.9
  */
-class ODDDocument implements \Iterator {
+class ODDDocument implements Iterator {
 	/**
 	 * ODD Version
 	 *
@@ -31,7 +30,7 @@ class ODDDocument implements \Iterator {
 	 *
 	 * @return void
 	 */
-	public function __construct(array $elements = null) {
+	public function __construct(array $elements = NULL) {
 		if ($elements) {
 			if (is_array($elements)) {
 				$this->elements = $elements;
@@ -100,11 +99,11 @@ class ODDDocument implements \Iterator {
 	/**
 	 * Set an optional wrapper factory to optionally embed the ODD document in another format.
 	 *
-	 * @param \ODDWrapperFactory $factory The factory
+	 * @param ODDWrapperFactory $factory The factory
 	 *
 	 * @return void
 	 */
-	public function setWrapperFactory(\ODDWrapperFactory $factory) {
+	public function setWrapperFactory(ODDWrapperFactory $factory) {
 		$this->wrapperfactory = $factory;
 	}
 
@@ -144,7 +143,7 @@ class ODDDocument implements \Iterator {
 	 * Example: http://www.sitepoint.com/print/php5-standard-library
 	 */
 
-	private $valid = false;
+	private $valid = FALSE;
 
 	/**
 	 * Iterator interface
@@ -154,7 +153,7 @@ class ODDDocument implements \Iterator {
 	 * @return void
 	 */
 	function rewind() {
-		$this->valid = (false !== reset($this->elements));
+		$this->valid = (FALSE !== reset($this->elements));
 	}
 
 	/**
@@ -187,7 +186,7 @@ class ODDDocument implements \Iterator {
 	 * @return void
 	 */
 	function next() {
-		$this->valid = (false !== next($this->elements));
+		$this->valid = (FALSE !== next($this->elements));
 	}
 
 	/**

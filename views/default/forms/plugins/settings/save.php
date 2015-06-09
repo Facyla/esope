@@ -19,8 +19,9 @@ if ($type != 'user') {
 
 if (elgg_view_exists("plugins/$plugin_id/{$type}settings")) {
 	echo elgg_view("plugins/$plugin_id/{$type}settings", $vars);
-} else {
-	echo elgg_view_deprecated("{$type}settings/$plugin_id/edit", $vars, "Use the view plugins/$plugin_id/{$type}settings", 1.8);
+} elseif (elgg_view_exists("{$type}settings/$plugin_id/edit")) {
+	elgg_deprecated_notice("{$type}settings/$plugin_id/edit was deprecated in favor of plugins/$plugin_id/{$type}settings", 1.8);
+	echo elgg_view("{$type}settings/$plugin_id/edit", $vars);
 }
 
 echo '<div class="elgg-foot">';

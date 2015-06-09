@@ -8,22 +8,40 @@
  */
 
 /**
+ * Saves user settings.
+ *
+ * @todo this assumes settings are coming in on a GET/POST request
+ *
+ * @note This is a handler for the 'usersettings:save', 'user' plugin hook
+ *
+ * @return void
+ * @access private
+ */
+function users_settings_save() {
+	elgg_set_user_language();
+	elgg_set_user_password();
+	elgg_set_user_default_access();
+	elgg_set_user_name();
+	elgg_set_user_email();
+}
+
+/**
  * Set a user's password
  * 
  * @return bool
  * @since 1.8.0
  * @access private
  */
-function _elgg_set_user_password() {
+function elgg_set_user_password() {
 	$current_password = get_input('current_password', null, false);
 	$password = get_input('password', null, false);
 	$password2 = get_input('password2', null, false);
 	$user_guid = get_input('guid');
 
-	if ($user_guid) {
-		$user = get_user($user_guid);
-	} else {
+	if (!$user_guid) {
 		$user = elgg_get_logged_in_user_entity();
+	} else {
+		$user = get_entity($user_guid);
 	}
 
 	if ($user && $password) {
@@ -51,9 +69,17 @@ function _elgg_set_user_password() {
 
 		if ($result) {
 			if ($password == $password2) {
-				$user->setPassword($password);
-				_elgg_services()->persistentLogin->handlePasswordChange($user, elgg_get_logged_in_user_entity());
-
+				$user->salt = _elgg_generate_password_salt();
+				$user->password = generate_user_password($user, $password);
+				$user->code = '';
+				if ($user->guid == elgg_get_logged_in_user_guid() && !empty($_COOKIE['elggperm'])) {
+					// regenerate remember me code so no other user could
+					// use it to authenticate later
+					$code = _elgg_generate_remember_me_token();
+					$_SESSION['code'] = $code;
+					$user->code = md5($code);
+					setcookie("elggperm", $code, (time() + (86400 * 30)), "/");
+				}
 				if ($user->save()) {
 					system_message(elgg_echo('user:password:success'));
 					return true;
@@ -70,7 +96,7 @@ function _elgg_set_user_password() {
 		// no change
 		return null;
 	}
-
+	
 	return false;
 }
 
@@ -81,14 +107,14 @@ function _elgg_set_user_password() {
  * @since 1.8.0
  * @access private
  */
-function _elgg_set_user_name() {
+function elgg_set_user_name() {
 	$name = strip_tags(get_input('name'));
-	$user_guid = get_input('guid');
+	$user_id = get_input('guid');
 
-	if ($user_guid) {
-		$user = get_user($user_guid);
-	} else {
+	if (!$user_id) {
 		$user = elgg_get_logged_in_user_entity();
+	} else {
+		$user = get_entity($user_id);
 	}
 
 	if (elgg_strlen($name) > 50) {
@@ -96,7 +122,7 @@ function _elgg_set_user_name() {
 		return false;
 	}
 
-	if ($user && $user->canEdit() && $name) {
+	if (($user) && ($user->canEdit()) && ($name)) {
 		if ($name != $user->name) {
 			$user->name = $name;
 			if ($user->save()) {
@@ -122,17 +148,17 @@ function _elgg_set_user_name() {
  * @since 1.8.0
  * @access private
  */
-function _elgg_set_user_language() {
+function elgg_set_user_language() {
 	$language = get_input('language');
-	$user_guid = get_input('guid');
+	$user_id = get_input('guid');
 
-	if ($user_guid) {
-		$user = get_user($user_guid);
-	} else {
+	if (!$user_id) {
 		$user = elgg_get_logged_in_user_entity();
+	} else {
+		$user = get_entity($user_id);
 	}
 
-	if ($user && $language) {
+	if (($user) && ($language)) {
 		if (strcmp($language, $user->language) != 0) {
 			$user->language = $language;
 			if ($user->save()) {
@@ -158,14 +184,14 @@ function _elgg_set_user_language() {
  * @since 1.8.0
  * @access private
  */
-function _elgg_set_user_email() {
+function elgg_set_user_email() {
 	$email = get_input('email');
-	$user_guid = get_input('guid');
+	$user_id = get_input('guid');
 
-	if ($user_guid) {
-		$user = get_user($user_guid);
-	} else {
+	if (!$user_id) {
 		$user = elgg_get_logged_in_user_entity();
+	} else {
+		$user = get_entity($user_id);
 	}
 
 	if (!is_email_address($email)) {
@@ -206,19 +232,19 @@ function _elgg_set_user_email() {
  * @since 1.8.0
  * @access private
  */
-function _elgg_set_user_default_access() {
+function elgg_set_user_default_access() {
 
 	if (!elgg_get_config('allow_user_default_access')) {
 		return false;
 	}
 
 	$default_access = get_input('default_access');
-	$user_guid = get_input('guid');
+	$user_id = get_input('guid');
 
-	if ($user_guid) {
-		$user = get_user($user_guid);
-	} else {
+	if (!$user_id) {
 		$user = elgg_get_logged_in_user_entity();
+	} else {
+		$user = get_entity($user_id);
 	}
 
 	if ($user) {
@@ -228,14 +254,14 @@ function _elgg_set_user_default_access() {
 				system_message(elgg_echo('user:default_access:success'));
 				return true;
 			} else {
-				register_error(elgg_echo('user:default_access:failure'));
+				register_error(elgg_echo('user:default_access:fail'));
 			}
 		} else {
 			// no change
 			return null;
 		}
 	} else {
-		register_error(elgg_echo('user:default_access:failure'));
+		register_error(elgg_echo('user:default_access:fail'));
 	}
 
 	return false;
@@ -247,98 +273,29 @@ function _elgg_set_user_default_access() {
  * @return void
  * @access private
  */
-function _elgg_user_settings_menu_setup() {
+function usersettings_pagesetup() {
 	$user = elgg_get_page_owner_entity();
 
-	if (!$user) {
-		return;
+	if ($user && elgg_get_context() == "settings") {
+		$params = array(
+			'name' => '1_account',
+			'text' => elgg_echo('usersettings:user:opt:linktext'),
+			'href' => "settings/user/{$user->username}",
+		);
+		elgg_register_menu_item('page', $params);
+		$params = array(
+			'name' => '1_plugins',
+			'text' => elgg_echo('usersettings:plugins:opt:linktext'),
+			'href' => "settings/plugins/{$user->username}",
+		);
+		elgg_register_menu_item('page', $params);
+		$params = array(
+			'name' => '1_statistics',
+			'text' => elgg_echo('usersettings:statistics:opt:linktext'),
+			'href' => "settings/statistics/{$user->username}",
+		);
+		elgg_register_menu_item('page', $params);
 	}
-
-	if (!elgg_in_context("settings")) {
-		return;
-	}
-	
-	$params = array(
-		'name' => '1_account',
-		'text' => elgg_echo('usersettings:user:opt:linktext'),
-		'href' => "settings/user/{$user->username}",
-		'section' => 'configure',
-	);
-	elgg_register_menu_item('page', $params);
-	$params = array(
-		'name' => '1_plugins',
-		'text' => elgg_echo('usersettings:plugins:opt:linktext'),
-		'href' => '#',
-		'section' => 'configure',
-	);
-	elgg_register_menu_item('page', $params);
-	$params = array(
-		'name' => '1_statistics',
-		'text' => elgg_echo('usersettings:statistics:opt:linktext'),
-		'href' => "settings/statistics/{$user->username}",
-		'section' => 'configure',
-	);
-	elgg_register_menu_item('page', $params);
-	
-	// register plugin user settings menu items
-	$active_plugins = elgg_get_plugins();
-	
-	foreach ($active_plugins as $plugin) {
-		$plugin_id = $plugin->getID();
-		if (elgg_view_exists("usersettings/$plugin_id/edit") || elgg_view_exists("plugins/$plugin_id/usersettings")) {
-			$params = array(
-				'name' => $plugin_id,
-				'text' => $plugin->getFriendlyName(),
-				'href' => "settings/plugins/{$user->username}/$plugin_id",
-				'parent_name' => '1_plugins',
-				'section' => 'configure',
-			);
-			elgg_register_menu_item('page', $params);
-		}
-	}
-	
-	elgg_register_plugin_hook_handler("prepare", "menu:page", "_elgg_user_settings_menu_prepare");
-}
-
-/**
- * Prepares the page menu to strip out empty plugins menu item for user settings
- *
- * @param string $hook   prepare
- * @param string $type   menu:page
- * @param array  $value  array of menu items
- * @param array  $params menu related parameters
- *
- * @return array
- * @access private
- */
-function _elgg_user_settings_menu_prepare($hook, $type, $value, $params) {
-	if (empty($value)) {
-		return $value;
-	}
-	
-	if (!elgg_in_context("settings")) {
-		return $value;
-	}
-	
-	$configure = elgg_extract("configure", $value);
-	if (empty($configure)) {
-		return $value;
-	}	
-	
-	foreach ($configure as $index => $menu_item) {
-		if (!($menu_item instanceof ElggMenuItem)) {
-			continue;	
-		}
-		
-		if ($menu_item->getName() == "1_plugins") {
-			if (!$menu_item->getChildren()) {
-				// no need for this menu item if it has no children
-				unset($value["configure"][$index]);	
-			}
-		}
-	}
-	
-	return $value;
 }
 
 /**
@@ -349,7 +306,7 @@ function _elgg_user_settings_menu_prepare($hook, $type, $value, $params) {
  * @return bool
  * @access private
  */
-function _elgg_user_settings_page_handler($page) {
+function usersettings_page_handler($page) {
 	global $CONFIG;
 
 	if (!isset($page[0])) {
@@ -372,11 +329,8 @@ function _elgg_user_settings_page_handler($page) {
 			$path = $CONFIG->path . "pages/settings/statistics.php";
 			break;
 		case 'plugins':
-			if (isset($page[2])) {
-				set_input("plugin_id", $page[2]);
-				elgg_push_breadcrumb(elgg_echo('usersettings:plugins:opt:linktext'));
-				$path = $CONFIG->path . "pages/settings/tools.php";
-			}
+			elgg_push_breadcrumb(elgg_echo('usersettings:plugins:opt:linktext'));
+			$path = $CONFIG->path . "pages/settings/tools.php";
 			break;
 		case 'user':
 			$path = $CONFIG->path . "pages/settings/account.php";
@@ -396,17 +350,11 @@ function _elgg_user_settings_page_handler($page) {
  * @return void
  * @access private
  */
-function _elgg_user_settings_init() {
-	elgg_register_page_handler('settings', '_elgg_user_settings_page_handler');
+function usersettings_init() {
+	elgg_register_page_handler('settings', 'usersettings_page_handler');
 
-	elgg_register_event_handler('pagesetup', 'system', '_elgg_user_settings_menu_setup');
+	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'users_settings_save');
 
-	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_language');
-	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_password');
-	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_default_access');
-	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_name');
-	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_email');
-	
 	elgg_register_action("usersettings/save");
 
 	// extend the account settings form
@@ -417,6 +365,5 @@ function _elgg_user_settings_init() {
 	elgg_extend_view('forms/account/settings', 'core/settings/account/default_access', 100);
 }
 
-return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$events->registerHandler('init', 'system', '_elgg_user_settings_init');
-};
+elgg_register_event_handler('init', 'system', 'usersettings_init');
+elgg_register_event_handler('pagesetup', 'system', 'usersettings_pagesetup');

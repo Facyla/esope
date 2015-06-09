@@ -8,18 +8,25 @@
 
 // Get the GUID of the user to friend
 $friend_guid = get_input('friend');
-$friend = get_user($friend_guid);
+$friend = get_entity($friend_guid);
+$errors = false;
 
-if (!$friend) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
-}
-
-if (!elgg_get_logged_in_user_entity()->removeFriend($friend->guid)) {
+// Get the user
+try{
+	if ($friend instanceof ElggUser) {
+		elgg_get_logged_in_user_entity()->removeFriend($friend_guid);
+	} else {
+		register_error(elgg_echo("friends:remove:failure", array($friend->name)));
+		$errors = true;
+	}
+} catch (Exception $e) {
 	register_error(elgg_echo("friends:remove:failure", array($friend->name)));
-	forward(REFERER);
+	$errors = true;
 }
 
-system_message(elgg_echo("friends:remove:successful", array($friend->name)));
-forward(REFERER);
+if (!$errors) {
+	system_message(elgg_echo("friends:remove:successful", array($friend->name)));
+}
 
+// Forward back to the page you made the friend on
+forward(REFERER);

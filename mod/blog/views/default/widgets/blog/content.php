@@ -10,9 +10,8 @@ $options = array(
 	'subtype' => 'blog',
 	'container_guid' => $vars['entity']->owner_guid,
 	'limit' => $num,
-	'full_view' => false,
-	'pagination' => false,
-	'distinct' => false,
+	'full_view' => FALSE,
+	'pagination' => FALSE,
 );
 $content = elgg_list_entities($options);
 

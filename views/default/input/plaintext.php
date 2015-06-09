@@ -12,8 +12,11 @@
  * @uses $vars['disabled']
  */
 
-$vars['class'] = (array) elgg_extract('class', $vars, []);
-$vars['class'][] = 'elgg-input-plaintext';
+if (isset($vars['class'])) {
+	$vars['class'] = "elgg-input-plaintext {$vars['class']}";
+} else {
+	$vars['class'] = "elgg-input-plaintext";
+}
 
 $defaults = array(
 	'value' => '',
@@ -24,7 +27,11 @@ $defaults = array(
 
 $vars = array_merge($defaults, $vars);
 
-$value = htmlspecialchars($vars['value'], ENT_QUOTES, 'UTF-8');
+$value = $vars['value'];
 unset($vars['value']);
 
-echo elgg_format_element('textarea', $vars, $value);
+?>
+
+<textarea <?php echo elgg_format_attributes($vars); ?>>
+<?php echo htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false); ?>
+</textarea>

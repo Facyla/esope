@@ -24,19 +24,7 @@ if ($guid) {
 	$submit_label = elgg_echo('upload');
 }
 
-// Get post_max_size and upload_max_filesize
-$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
-$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
-
-// Determine the correct value
-$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
-
-$upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
-
 ?>
-<div class="mbm elgg-text-help">
-	<?php echo $upload_limit; ?>
-</div>
 <div>
 	<label><?php echo $file_label; ?></label><br />
 	<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
@@ -63,13 +51,7 @@ if ($categories) {
 ?>
 <div>
 	<label><?php echo elgg_echo('access'); ?></label><br />
-	<?php echo elgg_view('input/access', array(
-		'name' => 'access_id',
-		'value' => $access_id,
-		'entity' => get_entity($guid),
-		'entity_type' => 'object',
-		'entity_subtype' => 'file',
-	)); ?>
+	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?>
 </div>
 <div class="elgg-foot">
 <?php

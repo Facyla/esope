@@ -6,10 +6,14 @@
  */
 
 // fetch & display latest comments
-if ($vars['page'] != 'friends') {
+if ($vars['page'] == 'all') {
 	echo elgg_view('page/elements/comments_block', array(
 		'subtypes' => 'blog',
-		'container_guid' => elgg_get_page_owner_guid(),
+	));
+} elseif ($vars['page'] == 'owner') {
+	echo elgg_view('page/elements/comments_block', array(
+		'subtypes' => 'blog',
+		'owner_guid' => elgg_get_page_owner_guid(),
 	));
 }
 
@@ -21,6 +25,6 @@ if ($vars['page'] == 'owner' || $vars['page'] == 'group') {
 if ($vars['page'] != 'friends') {
 	echo elgg_view('page/elements/tagcloud_block', array(
 		'subtypes' => 'blog',
-		'container_guid' => elgg_get_page_owner_guid(),
+		'owner_guid' => elgg_get_page_owner_guid(),
 	));
 }

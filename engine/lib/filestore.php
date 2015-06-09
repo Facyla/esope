@@ -1,7 +1,8 @@
 <?php
 /**
  * Elgg filestore.
- * This file contains functions for saving and retrieving data from files.
+ * This file contains classes, interfaces and functions for
+ * saving and retrieving data to various file stores.
  *
  * @package Elgg.Core
  * @subpackage DataModel.FileStorage
@@ -10,26 +11,26 @@
 /**
  * Get the size of the specified directory.
  *
- * @param string $dir        The full path of the directory
- * @param int    $total_size Add to current dir size
+ * @param string $dir       The full path of the directory
+ * @param int    $totalsize Add to current dir size
  *
- * @return int The size of the directory in bytes
+ * @return int The size of the directory.
  */
-function get_dir_size($dir, $total_size = 0) {
+function get_dir_size($dir, $totalsize = 0) {
 	$handle = @opendir($dir);
 	while ($file = @readdir($handle)) {
-		if (in_array($file, array('.', '..'))) {
+		if (eregi("^\.{1,2}$", $file)) {
 			continue;
 		}
 		if (is_dir($dir . $file)) {
-			$total_size = get_dir_size($dir . $file . "/", $total_size);
+			$totalsize = get_dir_size($dir . $file . "/", $totalsize);
 		} else {
-			$total_size += filesize($dir . $file);
+			$totalsize += filesize($dir . $file);
 		}
 	}
 	@closedir($handle);
 
-	return($total_size);
+	return($totalsize);
 }
 
 /**
@@ -41,21 +42,11 @@ function get_dir_size($dir, $total_size = 0) {
  * @return mixed|false The contents of the file, or false on failure.
  */
 function get_uploaded_file($input_name) {
-	$files = _elgg_services()->request->files;
-	if (!$files->has($input_name)) {
-		return false;
+	// If the file exists ...
+	if (isset($_FILES[$input_name]) && $_FILES[$input_name]['error'] == 0) {
+		return file_get_contents($_FILES[$input_name]['tmp_name']);
 	}
-
-	$file = $files->get($input_name);
-	if (empty($file)) {
-		// a file input was provided but no file uploaded
-		return false;
-	}
-	if ($file->getError() !== 0) {
-		return false;
-	}
-
-	return file_get_contents($file->getPathname());
+	return false;
 }
 
 /**
@@ -74,22 +65,14 @@ function get_uploaded_file($input_name) {
  */
 function get_resized_image_from_uploaded_file($input_name, $maxwidth, $maxheight,
 $square = false, $upscale = false) {
-	$files = _elgg_services()->request->files;
-	if (!$files->has($input_name)) {
-		return false;
-	}
-	
-	$file = $files->get($input_name);
-	if (empty($file)) {
-		// a file input was provided but no file uploaded
-		return false;
-	}
-	if ($file->getError() !== 0) {
-		return false;
+
+	// If our file exists ...
+	if (isset($_FILES[$input_name]) && $_FILES[$input_name]['error'] == 0) {
+		return get_resized_image_from_existing_file($_FILES[$input_name]['tmp_name'], $maxwidth,
+			$maxheight, $square, 0, 0, 0, 0, $upscale);
 	}
 
-	return get_resized_image_from_existing_file($file->getPathname(), $maxwidth,
-		$maxheight, $square, 0, 0, 0, 0, $upscale);
+	return false;
 }
 
 /**
@@ -112,13 +95,13 @@ $square = false, $upscale = false) {
  *
  * @return false|mixed The contents of the resized image, or false on failure
  */
-function get_resized_image_from_existing_file($input_name, $maxwidth, $maxheight, $square = false,
-$x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
+function get_resized_image_from_existing_file($input_name, $maxwidth, $maxheight, $square = FALSE,
+$x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
 
 	// Get the size information from the image
 	$imgsizearray = getimagesize($input_name);
-	if ($imgsizearray == false) {
-		return false;
+	if ($imgsizearray == FALSE) {
+		return FALSE;
 	}
 
 	$width = $imgsizearray[0];
@@ -135,7 +118,7 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
 	// make sure the function is available
 	$load_function = "imagecreatefrom" . $accepted_formats[$imgsizearray['mime']];
 	if (!is_callable($load_function)) {
-		return false;
+		return FALSE;
 	}
 
 	// get the parameters for resizing the image
@@ -150,20 +133,20 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
 		'y2' => $y2,
 	);
 	$params = get_image_resize_parameters($width, $height, $options);
-	if ($params == false) {
-		return false;
+	if ($params == FALSE) {
+		return FALSE;
 	}
 
 	// load original image
-	$original_image = call_user_func($load_function, $input_name);
+	$original_image = $load_function($input_name);
 	if (!$original_image) {
-		return false;
+		return FALSE;
 	}
 
 	// allocate the new image
 	$new_image = imagecreatetruecolor($params['newwidth'], $params['newheight']);
 	if (!$new_image) {
-		return false;
+		return FALSE;
 	}
 
 	// color transparencies white (default is black)
@@ -183,12 +166,12 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
 									$params['selectionwidth'],
 									$params['selectionheight']);
 	if (!$rtn_code) {
-		return false;
+		return FALSE;
 	}
 
 	// grab a compressed jpeg version of the image
 	ob_start();
-	imagejpeg($new_image, null, 90);
+	imagejpeg($new_image, NULL, 90);
 	$jpeg = ob_get_clean();
 
 	imagedestroy($new_image);
@@ -204,7 +187,7 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
  * @param int   $height  Height of the original image
  * @param array $options See $defaults for the options
  *
- * @return array or false
+ * @return array or FALSE
  * @since 1.7.2
  */
 function get_image_resize_parameters($width, $height, $options) {
@@ -213,8 +196,8 @@ function get_image_resize_parameters($width, $height, $options) {
 		'maxwidth' => 100,
 		'maxheight' => 100,
 
-		'square' => false,
-		'upscale' => false,
+		'square' => FALSE,
+		'upscale' => FALSE,
 
 		'x1' => 0,
 		'y1' => 0,
@@ -224,20 +207,12 @@ function get_image_resize_parameters($width, $height, $options) {
 
 	$options = array_merge($defaults, $options);
 
-	// Avoiding extract() because it hurts static analysis
-	$maxwidth = $options['maxwidth'];
-	$maxheight = $options['maxheight'];
-	$square = $options['square'];
-	$upscale = $options['upscale'];
-	$x1 = $options['x1'];
-	$y1 = $options['y1'];
-	$x2 = $options['x2'];
-	$y2 = $options['y2'];
+	extract($options);
 
 	// crop image first?
-	$crop = true;
+	$crop = TRUE;
 	if ($x1 == 0 && $y1 == 0 && $x2 == 0 && $y2 == 0) {
-		$crop = false;
+		$crop = FALSE;
 	}
 
 	// how large a section of the image has been selected
@@ -255,8 +230,8 @@ function get_image_resize_parameters($width, $height, $options) {
 		// asking for a square image back
 
 		// detect case where someone is passing crop parameters that are not for a square
-		if ($crop == true && $selection_width != $selection_height) {
-			return false;
+		if ($crop == TRUE && $selection_width != $selection_height) {
+			return FALSE;
 		}
 
 		// size of the new square image
@@ -324,41 +299,83 @@ function get_image_resize_parameters($width, $height, $options) {
 }
 
 /**
- * Delete an \ElggFile file
+ * Delete an ElggFile file
  *
- * @param int $guid \ElggFile GUID
+ * @param int $guid ElggFile GUID
  *
  * @return bool
  */
 function file_delete($guid) {
-	$file = get_entity($guid);
-	if (!$file || !$file->canEdit()) {
-		return false;
+	if ($file = get_entity($guid)) {
+		if ($file->canEdit()) {
+			$thumbnail = $file->thumbnail;
+			$smallthumb = $file->smallthumb;
+			$largethumb = $file->largethumb;
+			if ($thumbnail) {
+				$delfile = new ElggFile();
+				$delfile->owner_guid = $file->owner_guid;
+				$delfile->setFilename($thumbnail);
+				$delfile->delete();
+			}
+			if ($smallthumb) {
+				$delfile = new ElggFile();
+				$delfile->owner_guid = $file->owner_guid;
+				$delfile->setFilename($smallthumb);
+				$delfile->delete();
+			}
+			if ($largethumb) {
+				$delfile = new ElggFile();
+				$delfile->owner_guid = $file->owner_guid;
+				$delfile->setFilename($largethumb);
+				$delfile->delete();
+			}
+
+			return $file->delete();
+		}
 	}
 
-	$thumbnail = $file->thumbnail;
-	$smallthumb = $file->smallthumb;
-	$largethumb = $file->largethumb;
-	if ($thumbnail) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($thumbnail);
-		$delfile->delete();
-	}
-	if ($smallthumb) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($smallthumb);
-		$delfile->delete();
-	}
-	if ($largethumb) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($largethumb);
-		$delfile->delete();
+	return false;
+}
+
+/**
+ * Returns an overall file type from the mimetype
+ *
+ * @param string $mimetype The MIME type
+ *
+ * @return string The overall type
+ */
+function file_get_general_file_type($mimetype) {
+	switch($mimetype) {
+
+		case "application/msword":
+			return "document";
+			break;
+		case "application/pdf":
+			return "document";
+			break;
 	}
 
-	return $file->delete();
+	if (substr_count($mimetype, 'text/')) {
+		return "document";
+	}
+
+	if (substr_count($mimetype, 'audio/')) {
+		return "audio";
+	}
+
+	if (substr_count($mimetype, 'image/')) {
+		return "image";
+	}
+
+	if (substr_count($mimetype, 'video/')) {
+		return "video";
+	}
+
+	if (substr_count($mimetype, 'opendocument')) {
+		return "document";
+	}
+
+	return "general";
 }
 
 /**
@@ -371,11 +388,11 @@ function file_delete($guid) {
 function delete_directory($directory) {
 	// sanity check: must be a directory
 	if (!$handle = opendir($directory)) {
-		return false;
+		return FALSE;
 	}
 
 	// loop through all files
-	while (($file = readdir($handle)) !== false) {
+	while (($file = readdir($handle)) !== FALSE) {
 		if (in_array($file, array('.', '..'))) {
 			continue;
 		}
@@ -384,7 +401,7 @@ function delete_directory($directory) {
 		if (is_dir($path)) {
 			// recurse down through directory
 			if (!delete_directory($path)) {
-				return false;
+				return FALSE;
 			}
 		} else {
 			// delete file
@@ -398,23 +415,20 @@ function delete_directory($directory) {
 }
 
 /**
- * Removes all entity files
+ * Removes all user files
  *
  * @warning This only deletes the physical files and not their entities.
  * This will result in FileExceptions being thrown.  Don't use this function.
  *
- * @warning This must be kept in sync with \ElggDiskFilestore.
- *
- * @todo Remove this when all files are entities.
- *
- * @param \ElggEntity $entity An \ElggEntity
+ * @param ElggUser $user And ElggUser
  *
  * @return void
- * @access private
  */
-function _elgg_clear_entity_files($entity) {
-	$dir = new \Elgg\EntityDirLocator($entity->guid);
-	$file_path = elgg_get_config('dataroot') . $dir;
+function clear_user_files($user) {
+	global $CONFIG;
+
+	$time_created = date('Y/m/d', (int)$user->time_created);
+	$file_path = "$CONFIG->dataroot$time_created/$user->guid";
 	if (file_exists($file_path)) {
 		delete_directory($file_path);
 	}
@@ -422,12 +436,12 @@ function _elgg_clear_entity_files($entity) {
 
 
 /// Variable holding the default datastore
-$DEFAULT_FILE_STORE = null;
+$DEFAULT_FILE_STORE = NULL;
 
 /**
  * Return the default filestore.
  *
- * @return \ElggFilestore
+ * @return ElggFilestore
  */
 function get_default_filestore() {
 	global $DEFAULT_FILE_STORE;
@@ -438,11 +452,11 @@ function get_default_filestore() {
 /**
  * Set the default filestore for the system.
  *
- * @param \ElggFilestore $filestore An \ElggFilestore object.
+ * @param ElggFilestore $filestore An ElggFilestore object.
  *
  * @return true
  */
-function set_default_filestore(\ElggFilestore $filestore) {
+function set_default_filestore(ElggFilestore $filestore) {
 	global $DEFAULT_FILE_STORE;
 
 	$DEFAULT_FILE_STORE = $filestore;
@@ -451,136 +465,56 @@ function set_default_filestore(\ElggFilestore $filestore) {
 }
 
 /**
- * Returns the category of a file from its MIME type
+ * Register entity type objects, subtype file as
+ * ElggFile.
  *
- * @param string $mime_type The MIME type
- *
- * @return string 'document', 'audio', 'video', or 'general' if the MIME type was unrecognized
- * @since 1.10
+ * @return void
+ * @access private
  */
-function elgg_get_file_simple_type($mime_type) {
-	$params = array('mime_type' => $mime_type);
-	return elgg_trigger_plugin_hook('simple_type', 'file', $params, 'general');
+function filestore_run_once() {
+	// Register a class
+	add_subtype("object", "file", "ElggFile");
 }
 
 /**
- * Initialize the file library.
+ * Initialise the file modules.
  * Listens to system init and configures the default filestore
  *
  * @return void
  * @access private
  */
-function _elgg_filestore_init() {
+function filestore_init() {
 	global $CONFIG;
 
 	// Now register a default filestore
 	if (isset($CONFIG->dataroot)) {
-		set_default_filestore(new \ElggDiskFilestore($CONFIG->dataroot));
+		set_default_filestore(new ElggDiskFilestore($CONFIG->dataroot));
 	}
-
-	// Fix MIME type detection for Microsoft zipped formats
-	elgg_register_plugin_hook_handler('mime_type', 'file', '_elgg_filestore_detect_mimetype');
 	
-	// Parse category of file from MIME type
-	elgg_register_plugin_hook_handler('simple_type', 'file', '_elgg_filestore_parse_simpletype');
-
-	// Unit testing
-	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_filestore_test');
-}
-
-/**
- * Fix MIME type detection for Microsoft zipped formats
- *
- * @param string $hook      "mime_type"
- * @param string $type      "file"
- * @param string $mime_type Detected MIME type
- * @param array  $params    Hook parameters
- *
- * @return string The MIME type
- * @access private
- */
-function _elgg_filestore_detect_mimetype($hook, $type, $mime_type, $params) {
-
-	$original_filename = elgg_extract('original_filename', $params);
-
-	$info = pathinfo($original_filename);
-
-	// hack for Microsoft zipped formats
-	$office_formats = array('docx', 'xlsx', 'pptx');
-	if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
-		switch ($info['extension']) {
-			case 'docx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-				break;
-			case 'xlsx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-				break;
-			case 'pptx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-				break;
-		}
-	}
-
-	// check for bad ppt detection
-	if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
-		$mime_type = "application/vnd.ms-powerpoint";
-	}
-
-	return $mime_type;
-}
-
-/**
- * Parse a file category of file from a MIME type
- *
- * @param string $hook        "simple_type"
- * @param string $type        "file"
- * @param string $simple_type The category of file
- * @param array  $params      Hook parameters
- *
- * @return string 'document', 'audio', 'video', or 'general' if the MIME type is unrecognized
- * @access private
- */
-function _elgg_filestore_parse_simpletype($hook, $type, $simple_type, $params) {
-
-	$mime_type = elgg_extract('mime_type', $params);
-
-	switch ($mime_type) {
-		case "application/msword":
-		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-		case "application/pdf":
-			return "document";
-
-		case "application/ogg":
-			return "audio";
-	}
-
-	if (preg_match('~^(audio|image|video)/~', $mime_type, $m)) {
-		return $m[1];
-	}
-	if (0 === strpos($mime_type, 'text/') || false !== strpos($mime_type, 'opendocument')) {
-		return "document";
-	}
-
-	// unrecognized MIME
-	return $simple_type;
+	// Now run this stuff, but only once
+	run_function_once("filestore_run_once");
 }
 
 /**
  * Unit tests for files
  *
- * @param string $hook   unit_test
+ * @param string  $hook   unit_test
  * @param string $type   system
  * @param mixed  $value  Array of tests
+ * @param mixed  $params Params
  *
  * @return array
  * @access private
  */
-function _elgg_filestore_test($hook, $type, $value) {
+function filestore_test($hook, $type, $value, $params) {
 	global $CONFIG;
-	$value[] = "{$CONFIG->path}engine/tests/ElggCoreFilestoreTest.php";
+	$value[] = "{$CONFIG->path}engine/tests/objects/filestore.php";
 	return $value;
 }
 
-return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$events->registerHandler('init', 'system', '_elgg_filestore_init', 100);
-};
+
+// Register a startup event
+elgg_register_event_handler('init', 'system', 'filestore_init', 100);
+
+// Unit testing
+elgg_register_plugin_hook_handler('unit_test', 'system', 'filestore_test');

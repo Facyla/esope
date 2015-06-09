@@ -50,6 +50,9 @@ class HtmLawedTest extends ElggCoreUnitTest {
 	 */
 	public function tearDown() {
 		global $CONFIG;
+		
+		// do not allow SimpleTest to interpret Elgg notices as exceptions
+		$this->swallowErrors();
 
 		$CONFIG->hooks['config']['htmlawed'] = $this->configHooks;
 		$CONFIG->hooks['allowed_styles']['htmlawed'] = $this->styleHooks;

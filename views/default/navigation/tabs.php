@@ -14,7 +14,7 @@
  * 	'link_id' => string, // ID to pass to the link
  * )
  */
-$options = _elgg_clean_vars($vars);
+$options = elgg_clean_vars($vars);
 
 $type = elgg_extract('type', $vars, 'horizontal');
 

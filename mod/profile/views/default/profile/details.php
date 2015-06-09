@@ -9,24 +9,9 @@ $user = elgg_get_page_owner_entity();
 $profile_fields = elgg_get_config('profile_fields');
 
 echo '<div id="profile-details" class="elgg-body pll">';
-echo "<span class=\"hidden nickname p-nickname\">{$user->username}</span>";
-echo "<h2 class=\"p-name fn\">{$user->name}</h2>";
-
-// the controller doesn't allow non-admins to view banned users' profiles
-if ($user->isBanned()) {
-	$title = elgg_echo('banned');
-	$reason = ($user->ban_reason === 'banned') ? '' : $user->ban_reason;
-	echo "<div class='profile-banned-user'><h4 class='mbs'>$title</h4>$reason</div>";
-}
+echo "<h2>{$user->name}</h2>";
 
 echo elgg_view("profile/status", array("entity" => $user));
-
-$microformats = array(
-	'mobile' => 'tel p-tel',
-	'phone' => 'tel p-tel',
-	'website' => 'url u-url',
-	'contactemail' => 'email u-email',
-);
 
 $even_odd = null;
 if (is_array($profile_fields) && sizeof($profile_fields) > 0) {
@@ -37,7 +22,7 @@ if (is_array($profile_fields) && sizeof($profile_fields) > 0) {
 		}
 		$value = $user->$shortname;
 
-		if (!is_null($value)) {
+		if (!empty($value)) {
 
 			// fix profile URLs populated by https://github.com/Elgg/Elgg/issues/5232
 			// @todo Replace with upgrade script, only need to alter users with last_update after 1.8.13
@@ -57,17 +42,7 @@ if (is_array($profile_fields) && sizeof($profile_fields) > 0) {
 			<div class="<?php echo $even_odd; ?>">
 				<b><?php echo elgg_echo("profile:{$shortname}"); ?>: </b>
 				<?php
-					$params = array(
-						'value' => $value
-					);
-					if (isset($microformats[$shortname])) {
-						$class = $microformats[$shortname];
-					} else {
-						$class = '';
-					}
-					echo "<span class=\"$class\">";
-					echo elgg_view("output/{$valtype}", $params);
-					echo "</span>";
+					echo elgg_view("output/{$valtype}", array('value' => $value));
 				?>
 			</div>
 			<?php
@@ -75,11 +50,19 @@ if (is_array($profile_fields) && sizeof($profile_fields) > 0) {
 	}
 }
 
-if ($user->description) {
-	echo "<p class='profile-aboutme-title'><b>" . elgg_echo("profile:aboutme") . "</b></p>";
-	echo "<div class='profile-aboutme-contents'>";
-	echo elgg_view('output/longtext', array('value' => $user->description, 'class' => 'mtn'));
-	echo "</div>";
+if (!elgg_get_config('profile_custom_fields')) {
+	if ($user->isBanned()) {
+		echo "<p class='profile-banned-user'>";
+		echo elgg_echo('banned');
+		echo "</p>";
+	} else {
+		if ($user->description) {
+			echo "<p class='profile-aboutme-title'><b>" . elgg_echo("profile:aboutme") . "</b></p>";
+			echo "<div class='profile-aboutme-contents'>";
+			echo elgg_view('output/longtext', array('value' => $user->description, 'class' => 'mtn'));
+			echo "</div>";
+		}
+	}
 }
 
 echo '</div>';

@@ -7,8 +7,11 @@
  * @uses $vars['class']  Additional CSS class
  */
 
-$vars['class'] = (array) elgg_extract('class', $vars, []);
-$vars['class'][] = 'elgg-input-location';
+if (isset($vars['class'])) {
+	$vars['class'] = "elgg-input-location {$vars['class']}";
+} else {
+	$vars['class'] = "elgg-input-location";
+}
 
 $defaults = array(
 	'disabled' => false,

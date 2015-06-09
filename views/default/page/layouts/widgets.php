@@ -23,8 +23,6 @@ elgg_push_context('widgets');
 
 $widgets = elgg_get_widgets($owner->guid, $context);
 
-echo '<div class="elgg-layout-widgets">';
-
 if (elgg_can_edit_widget_layout($context)) {
 	if ($show_add_widgets) {
 		echo elgg_view('page/layouts/widgets/add_button');
@@ -38,9 +36,7 @@ if (elgg_can_edit_widget_layout($context)) {
 	echo elgg_view('page/layouts/widgets/add_panel', $params);
 }
 
-if (isset($vars['content'])) {
-	echo $vars['content'];
-}
+echo $vars['content'];
 
 $widget_class = "elgg-col-1of{$num_columns}";
 for ($column_index = 1; $column_index <= $num_columns; $column_index++) {
@@ -64,5 +60,3 @@ for ($column_index = 1; $column_index <= $num_columns; $column_index++) {
 elgg_pop_context();
 
 echo elgg_view('graphics/ajax_loader', array('id' => 'elgg-widget-loader'));
-
-echo '</div>';

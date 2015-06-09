@@ -18,6 +18,32 @@ elgg.add_translation = function(lang, translations) {
 };
 
 /**
+ * Load the translations for the given language.
+ *
+ * If no language is specified, the default language is used.
+ * @param {string} language
+ * @return {XMLHttpRequest}
+ */
+elgg.reload_all_translations = function(language) {
+	var lang = language || elgg.get_language();
+
+	var url, options;
+	url = 'ajax/view/js/languages';
+	options = {data: {language: lang}};
+    if (elgg.config.simplecache_enabled) {
+        options.data.lc = elgg.config.lastcache;
+    }
+
+	options['success'] = function(json) {
+		elgg.add_translation(lang, json);
+		elgg.config.languageReady = true;
+		elgg.initWhenReady();
+	};
+
+	elgg.getJSON(url, options);
+};
+
+/**
  * Get the current language
  * @return {String}
  */
@@ -63,3 +89,8 @@ elgg.echo = function(key, argv, language) {
 	return key;
 };
 
+elgg.config.translations.init = function() {
+	elgg.reload_all_translations();
+};
+
+elgg.register_hook_handler('boot', 'system', elgg.config.translations.init);

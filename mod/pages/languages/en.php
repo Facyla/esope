@@ -1,5 +1,11 @@
 <?php
-return array(
+/**
+ * Pages languages
+ *
+ * @package ElggPages
+ */
+
+$english = array(
 
 	/**
 	 * Menu items and titles
@@ -14,7 +20,6 @@ return array(
 	'pages:group' => "Group pages",
 	'groups:enablepages' => 'Enable group pages',
 
-	'pages:new' => "A new page",
 	'pages:edit' => "Edit this page",
 	'pages:delete' => "Delete this page",
 	'pages:history' => "History",
@@ -24,15 +29,14 @@ return array(
 	'pages:revert' => "Revert",
 
 	'pages:navigation' => "Navigation",
-
-	'pages:notify:summary' => 'New page called %s',
-	'pages:notify:subject' => "A new page: %s",
-	'pages:notify:body' =>
-'%s added a new page: %s
+	'pages:new' => "A new page",
+	'pages:notification' =>
+'%s added a new page:
 
 %s
+%s
 
-View and comment on the page:
+View and comment on the new page:
 %s
 ',
 	'item:object:page_top' => 'Top-level pages',
@@ -111,3 +115,5 @@ View and comment on the page:
 	'pages:newchild' => "Create a sub-page",
 	'pages:backtoparent' => "Back to '%s'",
 );
+
+add_translation("en", $english);

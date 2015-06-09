@@ -5,15 +5,14 @@
  * @package ElggBookmarks
  */
 
-$guid = get_input('guid');
-
-elgg_entity_gatekeeper($guid, 'object', 'bookmarks');
-
-$bookmark = get_entity($guid);
+$bookmark = get_entity(get_input('guid'));
+if (!$bookmark) {
+	register_error(elgg_echo('noaccess'));
+	$_SESSION['last_forward_from'] = current_page_url();
+	forward('');
+}
 
 $page_owner = elgg_get_page_owner_entity();
-
-elgg_group_gatekeeper();
 
 $crumbs_title = $page_owner->name;
 

@@ -5,22 +5,20 @@
  * @package ElggPages
  */
 
-$guid = get_input('guid');
-
-elgg_entity_gatekeeper($guid, 'object');
-
-$page = get_entity($guid);
-if (!pages_is_page($page)) {
-	forward('', '404');
+$page_guid = get_input('guid');
+$page = get_entity($page_guid);
+if (!$page) {
+	register_error(elgg_echo('noaccess'));
+	$_SESSION['last_forward_from'] = current_page_url();
+	forward('');
 }
 
 elgg_set_page_owner_guid($page->getContainerGUID());
 
-elgg_group_gatekeeper();
+group_gatekeeper();
 
 $container = elgg_get_page_owner_entity();
 if (!$container) {
-	forward(REFERER);
 }
 
 $title = $page->title;

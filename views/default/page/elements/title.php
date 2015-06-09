@@ -6,10 +6,6 @@
  * @uses $vars['class'] Optional class for heading
  */
 
-if (!isset($vars['title'])) {
-	return;
-}
-
 $class= '';
 if (isset($vars['class'])) {
 	$class = " class=\"{$vars['class']}\"";

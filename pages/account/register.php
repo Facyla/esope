@@ -28,6 +28,8 @@ if (elgg_is_logged_in()) {
 
 $title = elgg_echo("register");
 
+$content = elgg_view_title($title);
+
 // create the registration url - including switching to https if configured
 $register_url = elgg_get_site_url() . 'action/register';
 if (elgg_get_config('https_login')) {
@@ -42,7 +44,7 @@ $body_params = array(
 	'friend_guid' => $friend_guid,
 	'invitecode' => $invitecode
 );
-$content = elgg_view_form('register', $form_params, $body_params);
+$content .= elgg_view_form('register', $form_params, $body_params);
 
 $content .= elgg_view('help/register');
 
@@ -51,9 +53,6 @@ if (elgg_get_config('walled_garden')) {
 	$body = elgg_view_layout('walled_garden', array('content' => $content));
 	echo elgg_view_page($title, $body, 'walled_garden');
 } else {
-	$body = elgg_view_layout('one_column', array(
-		'title' => $title,
-		'content' => $content,
-	));
+	$body = elgg_view_layout('one_column', array('content' => $content));
 	echo elgg_view_page($title, $body);
 }

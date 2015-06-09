@@ -6,9 +6,7 @@
  */
 
 $options = array(
-	'container_guid' => $vars['topic']->getGUID(),
-	'type' => 'object',
-	'subtype' => 'discussion_reply',
-	'distinct' => false,
+	'guid' => $vars['entity']->getGUID(),
+	'annotation_name' => 'group_topic_post',
 );
-echo elgg_list_entities($options);
+echo elgg_list_annotations($options);

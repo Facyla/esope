@@ -21,7 +21,5 @@ if (!elgg_instanceof($entity, "object", Newsletter::SUBTYPE)) {
 	forward(REFERER);
 }
 
-$newsletter_content = elgg_view_layout("newsletter", array("entity" => $entity));
-echo newsletter_apply_url_postfix($newsletter_content);
-
+echo elgg_view_layout("newsletter", array("entity" => $entity));
 echo elgg_view("newsletter/buttons", array("entity" => $entity, "type" => "preview"));

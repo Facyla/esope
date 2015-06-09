@@ -10,7 +10,7 @@
 /* @var ElggUser $user */
 $user = $vars['user'];
 
-$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+global $NOTIFICATION_HANDLERS;
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$subsbig[$method] = elgg_get_entities_from_relationship(array(
 		'relationship' => 'notify' . $method,

@@ -41,10 +41,15 @@ function messages_init() {
 	elgg_register_page_handler('messages', 'messages_page_handler');
 
 	// Register a URL handler
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'messages_set_url');
+	elgg_register_entity_url_handler('object', 'messages', 'messages_url');
 
 	// Extend avatar hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'messages_user_hover_menu');
+
+	// Register a notification handler for site messages
+	register_notification_handler("site", "messages_site_notify_handler");
+	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'messages_notification_msg');
+	register_notification_object('object', 'messages', elgg_echo('messages:new'));
 
 	// delete messages sent by a user when user is deleted
 	elgg_register_event_handler('delete', 'user', 'messages_purge');
@@ -75,7 +80,7 @@ function messages_page_handler($page) {
 	$current_user = elgg_get_logged_in_user_entity();
 	if (!$current_user) {
 		register_error(elgg_echo('noaccess'));
-		elgg_get_session()->set('last_forward_from', current_page_url());
+		$_SESSION['last_forward_from'] = current_page_url();
 		forward('');
 	}
 
@@ -128,7 +133,8 @@ function messages_page_handler($page) {
  */
 function messages_notifier() {
 	if (elgg_is_logged_in()) {
-		$text = elgg_view_icon("mail");
+		$class = "elgg-icon elgg-icon-mail";
+		$text = "<span class='$class'></span>";
 		$tooltip = elgg_echo("messages");
 		
 		// get unread messages
@@ -214,13 +220,13 @@ function messages_can_edit_container($hook_name, $entity_type, $return_value, $p
 /**
  * Send an internal message
  *
- * @param string $subject           The subject line of the message
- * @param string $body              The body of the mesage
- * @param int    $recipient_guid    The GUID of the user to send to
- * @param int    $sender_guid       Optionally, the GUID of the user to send from
- * @param int    $original_msg_guid The GUID of the message to reply from (default: none)
- * @param bool   $notify            Send a notification (default: true)
- * @param bool   $add_to_sent       If true (default), will add a message to the sender's 'sent' tray
+ * @param string $subject The subject line of the message
+ * @param string $body The body of the mesage
+ * @param int $recipient_guid The GUID of the user to send to
+ * @param int $sender_guid Optionally, the GUID of the user to send from
+ * @param int $original_msg_guid The GUID of the message to reply from (default: none)
+ * @param bool $notify Send a notification (default: true)
+ * @param bool $add_to_sent If true (default), will add a message to the sender's 'sent' tray
  * @return bool
  */
 function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
@@ -326,17 +332,12 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 /**
  * Message URL override
  *
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
+ * @param ElggObject $message
  * @return string
  */
-function messages_set_url($hook, $type, $url, $params) {
-	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'messages')) {
-		return 'messages/read/' . $entity->getGUID();
-	}
+function messages_url($message) {
+	$url = elgg_get_site_url() . 'messages/read/' . $message->getGUID();
+	return $url;
 }
 
 function count_unread_messages() {
@@ -345,20 +346,12 @@ function count_unread_messages() {
 }
 
 /**
- * Returns the unread messages in a user's inbox
+ * Count the unread messages in a user's inbox
  *
- * @param int  $user_guid GUID of user whose inbox we're counting (0 for logged in user)
- * @param int  $limit     Number of unread messages to return (default from settings)
- * @param int  $offset    Start at a defined offset (for listings)
- * @param bool $count     Switch between entities array or count mode
- *
- * @return array, int (if $count = true)
- * @since 1.9
+ * @return int
  */
-function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count = false) {
-	if (!$user_guid) {
-		$user_guid = elgg_get_logged_in_user_guid();
-	}
+function messages_count_unread() {
+	$user_guid = elgg_get_logged_in_user_guid();
 	$db_prefix = elgg_get_config('dbprefix');
 
 	// denormalize the md to speed things up.
@@ -366,21 +359,16 @@ function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count 
 	$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
 	$map = array();
 	foreach ($strings as $string) {
-		$id = elgg_get_metastring_id($string);
+		$id = get_metastring_id($string);
 		$map[$string] = $id;
 	}
 
-	if ($limit === null) {
-		$limit = elgg_get_config('default_limit');
-	}
-
 	$options = array(
-		// original options before denormalizing
-		// 'metadata_name_value_pairs' => array(
-		// 'toId' => elgg_get_logged_in_user_guid(),
-		// 'readYet' => 0,
-		// 'msg' => 1
-		// ),
+//		'metadata_name_value_pairs' => array(
+//			'toId' => elgg_get_logged_in_user_guid(),
+//			'readYet' => 0,
+//			'msg' => 1
+//		),
 		'joins' => array(
 			"JOIN {$db_prefix}metadata msg_toId on e.guid = msg_toId.entity_guid",
 			"JOIN {$db_prefix}metadata msg_readYet on e.guid = msg_readYet.entity_guid",
@@ -392,24 +380,38 @@ function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count 
 			"msg_msg.name_id='{$map['msg']}' AND msg_msg.value_id='{$map[1]}'",
 		),
 		'owner_guid' => $user_guid,
-		'limit' => $limit,
-		'offset' => $offset,
-		'count' => $count,
-		'distinct' => false,
+		'count' => true,
 	);
 
 	return elgg_get_entities_from_metadata($options);
 }
 
 /**
- * Count the unread messages in a user's inbox
+ * Notification handler
  *
- * @param int $user_guid GUID of user whose inbox we're counting (0 for logged in user)
- *
- * @return int
+ * @param ElggEntity $from
+ * @param ElggUser   $to
+ * @param string     $subject
+ * @param string     $message
+ * @param array      $params
+ * @return bool
  */
-function messages_count_unread($user_guid = 0) {
-	return messages_get_unread($user_guid, 10, 0, true);
+function messages_site_notify_handler(ElggEntity $from, ElggUser $to, $subject, $message, array $params = NULL) {
+
+	if (!$from) {
+		throw new NotificationException(elgg_echo('NotificationException:MissingParameter', array('from')));
+	}
+
+	if (!$to) {
+		throw new NotificationException(elgg_echo('NotificationException:MissingParameter', array('to')));
+	}
+
+	global $messages_pm;
+	if (!$messages_pm) {
+		return messages_send($subject, $message, $to->guid, $from->guid, 0, false, false);
+	}
+
+	return true;
 }
 
 /**
@@ -467,10 +469,8 @@ function messages_purge($event, $type, $user) {
  *
  * @param string $hook
  * @param string $entity_type
- * @param string $return_value
- * @param array  $params
- *
- * @return array
+ * @param array $return_value
+ * @param unknown_type $params
  */
 function messages_ecml_views_hook($hook, $entity_type, $return_value, $params) {
 	$return_value['messages/messages'] = elgg_echo('messages');

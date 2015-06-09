@@ -38,7 +38,8 @@ if ($email) {
 }
 
 if ($password_1) {
-	$user->setPassword($password_1);
+	$user->salt = _elgg_generate_password_salt();
+	$user->password = generate_user_password($user, $password_1);
 }
 
 if (!$user->save()) {

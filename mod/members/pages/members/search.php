@@ -4,29 +4,21 @@
  *
  */
 
-$query = get_input("member_query");
+if ($vars['search_type'] == 'tag') {
+	$tag = get_input('tag');
 
-if (empty($query)) {
-	forward("members");
-}
+	$display_query = _elgg_get_display_query($tag);
 
-$limit = get_input("limit");
-$offset = get_input("offset");
+	$title = elgg_echo('members:title:searchtag', array($display_query));
 
-$display_query = _elgg_get_display_query($query);
-$title = elgg_echo('members:title:search', array($display_query));
-
-$options = array();
-$options['query'] = $query;
-$options['type'] = "user";
-$options['offset'] = $offset;
-$options['limit'] = $limit;
-
-$results = elgg_trigger_plugin_hook('search', 'user', $options, array());
-$count = $results['count'];
-$users = $results['entities'];
-
-if (!empty($users)) {
+	$options = array();
+	$options['query'] = $tag;
+	$options['type'] = "user";
+	$options['offset'] = $offset;
+	$options['limit'] = $limit;
+	$results = elgg_trigger_plugin_hook('search', 'tags', $options, array());
+	$count = $results['count'];
+	$users = $results['entities'];
 	$content = elgg_view_entity_list($users, array(
 		'count' => $count,
 		'offset' => $offset,
@@ -36,7 +28,20 @@ if (!empty($users)) {
 		'pagination' => true,
 	));
 } else {
-	$content = elgg_echo("notfound");
+	$name = sanitize_string(get_input('name'));
+
+	$display_query = _elgg_get_display_query($name);
+
+	$title = elgg_echo('members:title:searchname', array($display_query));
+
+	$db_prefix = elgg_get_config('dbprefix');
+	$params = array(
+		'type' => 'user',
+		'full_view' => false,
+		'joins' => array("JOIN {$db_prefix}users_entity u ON e.guid=u.guid"),
+		'wheres' => array("(u.name LIKE \"%{$name}%\" OR u.username LIKE \"%{$name}%\")"),
+	);
+	$content .= elgg_list_entities($params);
 }
 
 $params = array(

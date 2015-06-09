@@ -7,7 +7,6 @@
 
 $full = elgg_extract('full_view', $vars, false);
 $message = elgg_extract('entity', $vars, false);
-$bulk_actions = (bool) elgg_extract('bulk_actions', $vars, false);
 
 if (!$message) {
 	return true;
@@ -15,7 +14,7 @@ if (!$message) {
 
 if ($message->toId == elgg_get_page_owner_guid()) {
 	// received
-	$user = get_user($message->fromId);
+	$user = get_entity($message->fromId);
 	if ($user) {
 		$icon = elgg_view_entity_icon($user, 'tiny');
 		$user_link = elgg_view('output/url', array(
@@ -36,7 +35,7 @@ if ($message->toId == elgg_get_page_owner_guid()) {
 
 } else {
 	// sent
-	$user = get_user($message->toId);
+	$user = get_entity($message->toId);
 
 	if ($user) {
 		$icon = elgg_view_entity_icon($user, 'tiny');
@@ -55,15 +54,19 @@ if ($message->toId == elgg_get_page_owner_guid()) {
 
 $timestamp = elgg_view_friendly_time($message->time_created);
 
-$subject_info = elgg_view('output/url', array(
+$subject_info = '';
+if (!$full) {
+	$subject_info .= "<input type='checkbox' name=\"message_id[]\" value=\"{$message->guid}\" />";
+}
+$subject_info .= elgg_view('output/url', array(
 	'href' => $message->getURL(),
 	'text' => $message->title,
 	'is_trusted' => true,
 ));
 
-$delete_link = elgg_view("output/url", array(
-						'href' => "action/messages/delete?guid=" . $message->getGUID() . "&full=$full",
-						'text' => elgg_view_icon('delete', 'float-alt'),
+$delete_link = elgg_view("output/confirmlink", array(
+						'href' => "action/messages/delete?guid=" . $message->getGUID(),
+						'text' => "<span class=\"elgg-icon elgg-icon-delete float-alt\"></span>",
 						'confirm' => elgg_echo('deleteconfirm'),
 						'encode_text' => false,
 					));
@@ -79,20 +82,5 @@ if ($full) {
 	echo elgg_view_image_block($icon, $body, array('class' => $class));
 	echo elgg_view('output/longtext', array('value' => $message->description));
 } else {
-	
-	$body .= elgg_view("output/longtext", array("value" => elgg_get_excerpt($message->description), "class" => "elgg-subtext clearfloat"));
-	
-	if ($bulk_actions) {
-		$checkbox = elgg_view('input/checkbox', array(
-			'name' => 'message_id[]',
-			'value' => $message->guid,
-			'default' => false
-		));
-	
-		$entity_listing = elgg_view_image_block($icon, $body, array('class' => $class));
-		
-		echo elgg_view_image_block($checkbox, $entity_listing);
-	} else {
-		echo elgg_view_image_block($icon, $body, array('class' => $class));
-	}
+	echo elgg_view_image_block($icon, $body, array('class' => $class));
 }

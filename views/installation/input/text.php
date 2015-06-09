@@ -1,11 +1,20 @@
 <?php
 /**
+ * Elgg text input
  * Displays a text input field
+ *
+ * @uses $vars['value'] The current value, if any
+ * @uses $vars['name']  The name of the input field
+ * @uses $vars['class'] CSS class
  */
 
-$vars['class'] = 'elgg-input-text';
-$vars['type'] = 'text';
+if (isset($vars['class'])) {
+	$class = "class=\"{$vars['class']}\"";
+} else {
+	$class = "elgg-input-text";
+}
 
-$attrs = elgg_format_attributes($vars);
+$value = htmlentities($vars['value'], ENT_QUOTES, 'UTF-8');
 
-echo "<input $attrs>";
+?>
+<input type="text" name="<?php echo $vars['name']; ?>" value="<?php echo $value; ?>" <?php echo $class; ?> />

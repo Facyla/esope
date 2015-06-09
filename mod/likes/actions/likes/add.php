@@ -25,7 +25,7 @@ if (!$entity->canAnnotate(0, 'likes')) {
 }
 
 $user = elgg_get_logged_in_user_entity();
-$annotation_id = create_annotation($entity->guid,
+$annotation = create_annotation($entity->guid,
 								'likes',
 								"likes",
 								"",
@@ -33,52 +33,15 @@ $annotation_id = create_annotation($entity->guid,
 								$entity->access_id);
 
 // tell user annotation didn't work if that is the case
-if (!$annotation_id) {
+if (!$annotation) {
 	register_error(elgg_echo("likes:failure"));
 	forward(REFERER);
 }
 
 // notify if poster wasn't owner
 if ($entity->owner_guid != $user->guid) {
-	$owner = $entity->getOwnerEntity();
 
-	$annotation = elgg_get_annotation_from_id($annotation_id);
-
-	$title_str = $entity->getDisplayName();
-	if (!$title_str) {
-		$title_str = elgg_get_excerpt($entity->description);
-	}
-
-	$site = elgg_get_site_entity();
-
-	$subject = elgg_echo('likes:notifications:subject', array(
-			$user->name,
-			$title_str
-		),
-		$owner->language
-	);
-
-	$body = elgg_echo('likes:notifications:body', array(
-			$owner->name,
-			$user->name,
-			$title_str,
-			$site->name,
-			$entity->getURL(),
-			$user->getURL()
-		),
-		$owner->language
-	);
-
-	notify_user(
-		$entity->owner_guid,
-		$user->guid,
-		$subject,
-		$body,
-		array(
-			'action' => 'create',
-			'object' => $annotation,
-		)
-	);
+	likes_notify_user($entity->getOwnerEntity(), $user, $entity);
 }
 
 system_message(elgg_echo("likes:likes"));

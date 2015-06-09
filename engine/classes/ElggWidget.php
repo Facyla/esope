@@ -1,19 +1,19 @@
 <?php
 
 /**
- * \ElggWidget
+ * ElggWidget
  *
- * Stores metadata in private settings rather than as \ElggMetadata
+ * Stores metadata in private settings rather than as ElggMetadata
  *
  * @package    Elgg.Core
  * @subpackage Widgets
  *
  * @property-read string $handler internal, do not use
- * @property-read string $column  internal, do not use
- * @property-read string $order   internal, do not use
+ * @property-read string $column internal, do not use
+ * @property-read string $order internal, do not use
  * @property-read string $context internal, do not use
  */
-class ElggWidget extends \ElggObject {
+class ElggWidget extends ElggObject {
 
 	/**
 	 * Set subtype to widget.
@@ -27,18 +27,18 @@ class ElggWidget extends \ElggObject {
 	}
 
 	/**
-	 * Get a value from attributes or private settings
-	 * 
-	 * @param string $name The name of the value
+	 * Override entity get and sets in order to save data to private data store.
+	 *
+	 * @param string $name Name
+	 *
 	 * @return mixed
 	 */
-	public function __get($name) {
+	public function get($name) {
 		// See if its in our base attribute
 		if (array_key_exists($name, $this->attributes)) {
 			return $this->attributes[$name];
 		}
 
-		// @todo clean up now that private settings return null
 		// No, so see if its in the private data store.
 		$meta = $this->getPrivateSetting($name);
 		if ($meta) {
@@ -52,46 +52,22 @@ class ElggWidget extends \ElggObject {
 	/**
 	 * Override entity get and sets in order to save data to private data store.
 	 *
-	 * @param string $name Name
-	 * @return mixed
-	 * @deprecated 1.9
+	 * @param string $name  Name
+	 * @param string $value Value
+	 *
+	 * @return bool
 	 */
-	public function get($name) {
-		elgg_deprecated_notice("Use -> instead of get()", 1.9);
-		return $this->__get($name);
-	}
-
-	/**
-	 * Set an attribute or private setting value
-	 * 
-	 * @param string $name  The name of the value to set
-	 * @param mixed  $value The value to set
-	 * @return void
-	 */
-	public function __set($name, $value) {
+	public function set($name, $value) {
 		if (array_key_exists($name, $this->attributes)) {
 			// Check that we're not trying to change the guid!
 			if ((array_key_exists('guid', $this->attributes)) && ($name == 'guid')) {
-				return;
+				return false;
 			}
 
 			$this->attributes[$name] = $value;
 		} else {
-			$this->setPrivateSetting($name, $value);
+			return $this->setPrivateSetting($name, $value);
 		}
-	}
-
-	/**
-	 * Override entity get and sets in order to save data to private data store.
-	 *
-	 * @param string $name  Name
-	 * @param string $value Value
-	 * @return bool
-	 * @deprecated 1.9
-	 */
-	public function set($name, $value) {
-		elgg_deprecated_notice("Use -> instead of set()", 1.9);
-		$this->__set($name, $value);
 
 		return true;
 	}
@@ -126,7 +102,8 @@ class ElggWidget extends \ElggObject {
 	public function getTitle() {
 		$title = $this->title;
 		if (!$title) {
-			$title = _elgg_services()->widgets->getNameByType($this->handler);
+			global $CONFIG;
+			$title = $CONFIG->widgets->handlers[$this->handler]->name;
 		}
 		return $title;
 	}
@@ -247,7 +224,7 @@ class ElggWidget extends \ElggObject {
 			'widget' => $this,
 			'params' => $params
 		);
-		if (_elgg_services()->hooks->trigger('widget_settings', $this->handler, $hook_params, false) == true) {
+		if (elgg_trigger_plugin_hook('widget_settings', $this->handler, $hook_params, false) == true) {
 			return true;
 		}
 

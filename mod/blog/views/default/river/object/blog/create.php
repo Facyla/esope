@@ -3,10 +3,7 @@
  * Blog river view.
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
-
-$object = $item->getObjectEntity();
+$object = $vars['item']->getObjectEntity();
 
 $excerpt = $object->excerpt ? $object->excerpt : $object->description;
 $excerpt = strip_tags($excerpt);

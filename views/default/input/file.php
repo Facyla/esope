@@ -14,14 +14,18 @@ if (!empty($vars['value'])) {
 	echo elgg_echo('fileexists') . "<br />";
 }
 
-$vars['class'] = (array) elgg_extract('class', $vars, []);
-$vars['class'][] = 'elgg-input-file';
+if (isset($vars['class'])) {
+	$vars['class'] = "elgg-input-file {$vars['class']}";
+} else {
+	$vars['class'] = "elgg-input-file";
+}
 
 $defaults = array(
 	'disabled' => false,
-	'type' => 'file'
+	'size' => 30,
 );
 
-$vars = array_merge($defaults, $vars);
+$attrs = array_merge($defaults, $vars);
 
-echo elgg_format_element('input', $vars);
+?>
+<input type="file" <?php echo elgg_format_attributes($attrs); ?> />

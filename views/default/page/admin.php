@@ -5,12 +5,10 @@
  * @package Elgg
  * @subpackage Core
  *
- * @uses $vars['head']        Parameters for the <head> element
+ * @uses $vars['title']       The page title
  * @uses $vars['body']        The main content of the page
  * @uses $vars['sysmessages'] A 2d array of various message registers, passed from system_messages()
  */
-
-// render content before head so that JavaScript and CSS can be loaded. See #4032
 
 $notices_html = '';
 $notices = elgg_get_admin_notices();
@@ -22,42 +20,47 @@ if ($notices) {
 	$notices_html = "<div class=\"elgg-admin-notices\">$notices_html</div>";
 }
 
-$header = elgg_view('admin/header', $vars);
-
+// render content before head so that JavaScript and CSS can be loaded. See #4032
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
-$messages .= $notices_html;
-
-$content = $vars["body"];
-
+$header = elgg_view('admin/header', $vars);
+$body = $vars['body'];
 $footer = elgg_view('admin/footer', $vars);
-			
-$body = <<<__BODY
-<div class="elgg-page elgg-page-admin">
-	<div class="elgg-inner">
-		<div class="elgg-page-header">
-			<div class="elgg-inner clearfix">
-				$header
+
+
+// Set the content type
+header("Content-type: text/html; charset=UTF-8");
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<?php echo elgg_view('page/elements/head', $vars); ?>
+</head>
+<body>
+	<div class="elgg-page elgg-page-admin">
+		<div class="elgg-inner">
+			<div class="elgg-page-header">
+				<div class="elgg-inner clearfix">
+					<?php echo $header; ?>
+				</div>
 			</div>
-		</div>
-		<div class="elgg-page-messages">
-			$messages
-		</div>
-		<div class="elgg-page-body">
-			<div class="elgg-inner">
-				$content
+			<div class="elgg-page-messages">
+				<?php echo $messages; ?>
+				<?php echo $notices_html; ?>
 			</div>
-		</div>
-		<div class="elgg-page-footer">
-			<div class="elgg-inner">
-				$footer
+			<div class="elgg-page-body">
+				<div class="elgg-inner">
+					<?php echo $body; ?>
+				</div>
+			</div>
+			<div class="elgg-page-footer">
+				<div class="elgg-inner">
+					<?php echo $footer; ?>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-__BODY;
+	<?php echo elgg_view('page/elements/foot'); ?>
+</body>
 
-$body .= elgg_view('page/elements/foot');
-
-$head = elgg_view('page/elements/head', $vars['head']);
-
-echo elgg_view("page/elements/html", array("head" => $head, "body" => $body));
+</html>

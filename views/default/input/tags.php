@@ -9,14 +9,15 @@
  * @uses $vars['entity']   Optional. Entity whose tags are being displayed (metadata ->tags)
  */
 
-$vars['class'] = (array) elgg_extract('class', $vars, []);
-$vars['class'][] = 'elgg-input-tags';
+if (isset($vars['class'])) {
+	$vars['class'] = "elgg-input-tags {$vars['class']}";
+} else {
+	$vars['class'] = "elgg-input-tags";
+}
 
 $defaults = array(
 	'value' => '',
 	'disabled' => false,
-	'autocapitalize' => 'off',
-	'type' => 'text'
 );
 
 if (isset($vars['entity'])) {
@@ -40,4 +41,5 @@ if (is_array($vars['value'])) {
 	$vars['value'] = implode(", ", $tags);
 }
 
-echo elgg_format_element('input', $vars);
+?>
+<input type="text" <?php echo elgg_format_attributes($vars); ?> />

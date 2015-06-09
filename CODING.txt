@@ -1,1 +1,1 @@
-See http://learn.elgg.org/en/stable/contribute/code.html
+See documentation/coding_standards/

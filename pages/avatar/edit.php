@@ -4,10 +4,9 @@
  */
 
 // Only logged in users
-elgg_gatekeeper();
+gatekeeper();
 
-elgg_push_context('settings');
-elgg_push_context('profile_edit');
+elgg_set_context('profile_edit');
 
 $title = elgg_echo('avatar:edit');
 

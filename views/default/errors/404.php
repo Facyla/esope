@@ -3,4 +3,6 @@
  * Page not found error
  */
 
-echo elgg_echo('error:404:content');
+$message = elgg_echo('error:404');
+
+echo "<h2>$message</h2>";

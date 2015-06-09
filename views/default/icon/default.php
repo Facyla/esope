@@ -14,13 +14,11 @@
 
 $entity = $vars['entity'];
 
-$icon_sizes = elgg_get_config('icon_sizes');
+$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
 // Get size
-$size = elgg_extract('size', $vars, 'medium');
-if (!array_key_exists($size, $icon_sizes)) {
-	$size = "medium";
+if (!in_array($vars['size'], $sizes)) {
+	$vars['size'] = "medium";
 }
-$vars['size'] = $size;
 
 $class = elgg_extract('img_class', $vars, '');
 
@@ -36,6 +34,9 @@ if (isset($vars['href'])) {
 	$url = $vars['href'];
 }
 
+$icon_sizes = elgg_get_config('icon_sizes');
+$size = $vars['size'];
+
 if (!isset($vars['width'])) {
 	$vars['width'] = $size != 'master' ? $icon_sizes[$size]['w'] : null;
 }
@@ -44,7 +45,7 @@ if (!isset($vars['height'])) {
 }
 
 $img_params = array(
-	'src' => $entity->getIconURL($size),
+	'src' => $entity->getIconURL($vars['size']),
 	'alt' => $title,	
 );
 

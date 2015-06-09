@@ -6,9 +6,7 @@
 /**
  * Prepare the add/edit form variables
  *
- * @param ElggObject     $page
- * @param int            $parent_guid
- * @param ElggAnnotation $revision
+ * @param ElggObject $page
  * @return array
  */
 function pages_prepare_form_vars($page = null, $parent_guid = 0, $revision = null) {
@@ -75,23 +73,23 @@ function pages_prepare_parent_breadcrumbs($page) {
  * Produce the navigation tree
  * 
  * @param ElggEntity $container Container entity for the pages
- *
- * @return array
  */
 function pages_get_navigation_tree($container) {
-	if (!elgg_instanceof($container)) {
+	if (!$container) {
 		return;
 	}
 
-	$top_pages = new ElggBatch('elgg_get_entities', array(
+	$top_pages = elgg_get_entities(array(
 		'type' => 'object',
 		'subtype' => 'page_top',
 		'container_guid' => $container->getGUID(),
-		'limit' => false,
+		'limit' => 0,
 	));
 
-	/* @var ElggBatch $top_pages Batch of top level pages */
-
+	if (!$top_pages) {
+		return;
+	}
+	
 	$tree = array();
 	$depths = array();
 
@@ -108,24 +106,26 @@ function pages_get_navigation_tree($container) {
 		array_push($stack, $page);
 		while (count($stack) > 0) {
 			$parent = array_pop($stack);
-			$children = new ElggBatch('elgg_get_entities_from_metadata', array(
+			$children = elgg_get_entities_from_metadata(array(
 				'type' => 'object',
 				'subtype' => 'page',
 				'metadata_name' => 'parent_guid',
 				'metadata_value' => $parent->getGUID(),
-				'limit' => false,
+				'limit' => 0,
 			));
 
-			foreach ($children as $child) {
-				$tree[] = array(
-					'guid' => $child->getGUID(),
-					'title' => $child->title,
-					'url' => $child->getURL(),
-					'parent_guid' => $parent->getGUID(),
-					'depth' => $depths[$parent->guid] + 1,
-				);
-				$depths[$child->guid] = $depths[$parent->guid] + 1;
-				array_push($stack, $child);
+			if ($children) {
+				foreach ($children as $child) {
+					$tree[] = array(
+						'guid' => $child->getGUID(),
+						'title' => $child->title,
+						'url' => $child->getURL(),
+						'parent_guid' => $parent->getGUID(),
+						'depth' => $depths[$parent->guid] + 1,
+					);
+					$depths[$child->guid] = $depths[$parent->guid] + 1;
+					array_push($stack, $child);
+				}
 			}
 		}
 	}
@@ -148,22 +148,5 @@ function pages_register_navigation_tree($container) {
 				'parent_name' => $page['parent_guid'],
 			));
 		}
-	}
-}
-
-/**
- * Function checking delete permission
- *
- * @package ElggPages
- * @param mixed $value
- *
- * @return bool
- */
-function pages_can_delete_page($page) {
-	if (! $page) {
-		return false;
-	} else {
-		$container = get_entity($page->container_guid);
-		return $container ? $container->canEdit() : false;
 	}
 }

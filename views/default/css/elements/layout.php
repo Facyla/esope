@@ -10,7 +10,6 @@
  * @subpackage UI
  */
 ?>
-/* <style> /**/
 
 /* ***************************************
 	PAGE LAYOUT
@@ -18,19 +17,19 @@
 /***** DEFAULT LAYOUT ******/
 <?php // the width is on the page rather than topbar to handle small viewports ?>
 .elgg-page-default {
-	min-width: 800px;
+	min-width: 998px;
 }
 .elgg-page-default .elgg-page-header > .elgg-inner {
-	max-width: 990px;
+	width: 990px;
 	margin: 0 auto;
 	height: 90px;
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {
-	max-width: 990px;
+	width: 990px;
 	margin: 0 auto;
 }
 .elgg-page-default .elgg-page-footer > .elgg-inner {
-	max-width: 990px;
+	width: 990px;
 	margin: 0 auto;
 	padding: 5px 0;
 	border-top: 1px solid #DEDEDE;
@@ -40,10 +39,12 @@
 .elgg-page-topbar {
 	background: #333333 url(<?php echo elgg_get_site_url(); ?>_graphics/toptoolbar_background.gif) repeat-x top left;
 	border-bottom: 1px solid #000000;
-	padding: 0 10px;
 	position: relative;
 	height: 24px;
 	z-index: 9000;
+}
+.elgg-page-topbar > .elgg-inner {
+	padding: 0 10px;
 }
 
 /***** PAGE MESSAGES ******/
@@ -63,7 +64,6 @@
 
 /***** PAGE HEADER ******/
 .elgg-page-header {
-	padding: 0 10px;
 	position: relative;
 	background: #4690D6 url(<?php echo elgg_get_site_url(); ?>_graphics/header_shadow.png) repeat-x bottom left;
 }
@@ -72,10 +72,6 @@
 }
 
 /***** PAGE BODY LAYOUT ******/
-.elgg-page-body {
-	padding: 0 10px;
-}
-
 .elgg-layout {
 	min-height: 360px;
 }
@@ -85,8 +81,8 @@
 .elgg-layout-two-sidebar {
 	background: transparent url(<?php echo elgg_get_site_url(); ?>_graphics/two_sidebar_background.gif) repeat-y right top;
 }
-.elgg-layout-widgets > .elgg-widgets {
-	float: right;
+.elgg-layout-error {
+	margin-top: 20px;
 }
 .elgg-sidebar {
 	position: relative;
@@ -115,11 +111,11 @@
 
 /***** PAGE FOOTER ******/
 .elgg-page-footer {
-	color: #999;
-	padding: 0 10px;
 	position: relative;
 }
-
+.elgg-page-footer {
+	color: #999;
+}
 .elgg-page-footer a:hover {
 	color: #666;
 }

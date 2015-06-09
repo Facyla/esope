@@ -25,102 +25,100 @@ function digest_site(ElggUser $user, $interval) {
 	
 	$result = false;
 	
-	if (empty($user) || !elgg_instanceof($user, "user", null, "ElggUser")) {
-		return $result;
-	}
-	
-	// remove some view extensions
-	digest_prepare_run();
-	
-	// set timestamps for interval
-	digest_set_interval_timestamps($interval);
-	
-	// store current user
-	$current_user = elgg_get_logged_in_user_entity();
-	
-	// impersonate new user
-	$SESSION["user"] = $user;
-	$SESSION["username"] = $user->username;
-	$SESSION["name"] = $user->name;
-	$SESSION["guid"] = $user->getGUID();
-	$SESSION["id"] = $user->getGUID();
-	
-	// prepare some vars for the different views
-	$vars = array(
-		"user" => $user,
-		"ts_lower" => $interval_ts_lower,
-		"ts_upper" => $interval_ts_upper,
-		"interval" => $interval
-	);
-	
-	// get data for user
-	$userdata = elgg_view("digest/elements/site", $vars);
-	
-	if (!empty($userdata)) {
-		// check if there are custom header/footer texts
-		if (!isset($custom_text_header)) {
-			$custom_text_header = "";
-			
-			$text = elgg_get_plugin_setting("custom_text_site_header", "digest");
-			if (!empty($text)) {
-				$custom_text_header = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
-			}
-		}
+	if (!empty($user) && elgg_instanceof($user, "user", null, "ElggUser")) {
+		// remove some view extensions
+		digest_prepare_run();
 		
-		if (!isset($custom_text_footer)) {
-			$custom_text_footer = "";
-			
-			$text = elgg_get_plugin_setting("custom_text_site_footer", "digest");
-			if (!empty($text)) {
-				$custom_text_footer = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
-			}
-		}
+		// set timestamps for interval
+		digest_set_interval_timestamps($interval);
 		
-		// there is content so send it to the user
-		$params = array(
-			"title" => elgg_get_site_entity()->name,
-			"content" => $custom_text_header . $userdata . $custom_text_footer,
-			"footer" => elgg_view("digest/elements/footer", $vars),
-			"digest_header" => elgg_view("digest/elements/header", $vars),
-			"digest_online" => elgg_view("digest/elements/online", $vars),
-			"digest_unsubscribe" => elgg_view("digest/elements/unsubscribe", $vars)
+		// store current user
+		$current_user = elgg_get_logged_in_user_entity();
+		
+		// impersonate new user
+		$SESSION["user"] = $user;
+		$SESSION["username"] = $user->username;
+		$SESSION["name"] = $user->name;
+		$SESSION["guid"] = $user->getGUID();
+		$SESSION["id"] = $user->getGUID();
+		
+		// prepare some vars for the different views
+		$vars = array(
+			"user" => $user,
+			"ts_lower" => $interval_ts_lower,
+			"ts_upper" => $interval_ts_upper,
+			"interval" => $interval
 		);
 		
-		// link to online view
-		$digest_online_url = digest_get_online_url($vars);
+		// get data for user
+		$userdata = elgg_view("digest/elements/site", $vars);
 		
-		// message_subject
-		$message_subject = elgg_echo("digest:message:title:site", array(elgg_get_site_entity()->name, elgg_echo("digest:interval:" . $interval)));
-		// message body
-		$message_body = elgg_view_layout("digest", $params);
+		if (!empty($userdata)) {
+			// check if there are custom header/footer texts
+			if (!isset($custom_text_header)) {
+				$custom_text_header = "";
+				
+				$text = elgg_get_plugin_setting("custom_text_site_header", "digest");
+				if (!empty($text)) {
+					$custom_text_header = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
+				}
+			}
+			
+			if (!isset($custom_text_footer)) {
+				$custom_text_footer = "";
+				
+				$text = elgg_get_plugin_setting("custom_text_site_footer", "digest");
+				if (!empty($text)) {
+					$custom_text_footer = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
+				}
+			}
+			
+			// there is content so send it to the user
+			$params = array(
+				"title" => elgg_get_site_entity()->name,
+				"content" => $custom_text_header . $userdata . $custom_text_footer,
+				"footer" => elgg_view("digest/elements/footer", $vars),
+				"digest_header" => elgg_view("digest/elements/header", $vars),
+				"digest_online" => elgg_view("digest/elements/online", $vars),
+				"digest_unsubscribe" => elgg_view("digest/elements/unsubscribe", $vars)
+			);
+			
+			// link to online view
+			$digest_online_url = digest_get_online_url($vars);
+			
+			// message_subject
+			$message_subject = elgg_echo("digest:message:title:site", array(elgg_get_site_entity()->name, elgg_echo("digest:interval:" . $interval)));
+			// message body
+			$message_body = elgg_view_layout("digest", $params);
+			
+			// send message
+			// if succesfull mail return true
+			$result = digest_send_mail($user, $message_subject, $message_body, $digest_online_url);
+		} else {
+			// no data is still succesful
+			$result = -1;
+		}
 		
-		// send message
-		// if succesfull mail return true
-		$result = digest_send_mail($user, $message_subject, $message_body, $digest_online_url);
-	} else {
-		// no data is still succesful
-		$result = -1;
+		// to save memory
+		unset($userdata);
+		
+		// restore current user
+		$SESSION["user"] = $current_user;
+		if (elgg_is_logged_in()) {
+			$SESSION["username"] = $current_user->username;
+			$SESSION["name"] = $current_user->name;
+			$SESSION["guid"] = $current_user->getGUID();
+			$SESSION["id"] = $current_user->getGUID();
+		} else {
+			unset($SESSION["username"]);
+			unset($SESSION["name"]);
+			unset($SESSION["guid"]);
+			unset($SESSION["id"]);
+		}
+		
+		// to save memory
+		unset($current_user);
 	}
-	
-	// to save memory
-	unset($userdata);
-	
-	// restore current user
-	$SESSION["user"] = $current_user;
-	if (elgg_is_logged_in()) {
-		$SESSION["username"] = $current_user->username;
-		$SESSION["name"] = $current_user->name;
-		$SESSION["guid"] = $current_user->getGUID();
-		$SESSION["id"] = $current_user->getGUID();
-	} else {
-		unset($SESSION["username"]);
-		unset($SESSION["name"]);
-		unset($SESSION["guid"]);
-		unset($SESSION["id"]);
-	}
-	
-	// to save memory
-	unset($current_user);
 	
 	return $result;
 }
@@ -146,108 +144,105 @@ function digest_group(ElggGroup $group, ElggUser $user, $interval) {
 	$result = false;
 	
 	// check if group digest is enabled
-	if (!digest_group_enabled()) {
-		return $result;
-	}
-	
-	// do we have a group and user
-	if (empty($group) || !elgg_instanceof($group, "group", null, "ElggGroup") || empty($user) || !elgg_instanceof($user, "user", null, "ElggUser")) {
-		return $result;
-	}
-	
-	// remove some view extensions
-	digest_prepare_run();
-	
-	// set timestamps for interval
-	digest_set_interval_timestamps($interval);
-	
-	// store current user
-	$current_user = elgg_get_logged_in_user_entity();
-	
-	// impersonate new user
-	$SESSION["user"] = $user;
-	$SESSION["username"] = $user->username;
-	$SESSION["name"] = $user->name;
-	$SESSION["guid"] = $user->getGUID();
-	$SESSION["id"] = $user->getGUID();
-	
-	// prepare some vars for the different views
-	$vars = array(
-		"user" => $user,
-		"group" => $group,
-		"ts_lower" => $interval_ts_lower,
-		"ts_upper" => $interval_ts_upper,
-		"interval" => $interval
-	);
-	
-	// get data for user
-	$userdata = elgg_view("digest/elements/group", $vars);
-	
-	if (!empty($userdata)) {
-		// check if there are custom header/footer texts
-		if (!isset($custom_text_header)) {
-			$custom_text_header = "";
+	if (digest_group_enabled()) {
+		
+		if (!empty($group) && elgg_instanceof($group, "group", null, "ElggGroup") && !empty($user) && elgg_instanceof($user, "user", null, "ElggUser")) {
 			
-			$text = elgg_get_plugin_setting("custom_text_group_header", "digest");
-			if (!empty($text)) {
-				$custom_text_header = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
-			}
-		}
-		
-		if (!isset($custom_text_footer)) {
-			$custom_text_footer = "";
+			// remove some view extensions
+			digest_prepare_run();
 			
-			$text = elgg_get_plugin_setting("custom_text_group_footer", "digest");
-			if (!empty($text)) {
-				$custom_text_footer = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
+			// set timestamps for interval
+			digest_set_interval_timestamps($interval);
+			
+			// store current user
+			$current_user = elgg_get_logged_in_user_entity();
+			
+			// impersonate new user
+			$SESSION["user"] = $user;
+			$SESSION["username"] = $user->username;
+			$SESSION["name"] = $user->name;
+			$SESSION["guid"] = $user->getGUID();
+			$SESSION["id"] = $user->getGUID();
+			
+			// prepare some vars for the different views
+			$vars = array(
+				"user" => $user,
+				"group" => $group,
+				"ts_lower" => $interval_ts_lower,
+				"ts_upper" => $interval_ts_upper,
+				"interval" => $interval
+			);
+			
+			// get data for user
+			$userdata = elgg_view("digest/elements/group", $vars);
+			
+			if (!empty($userdata)) {
+				// check if there are custom header/footer texts
+				if (!isset($custom_text_header)) {
+					$custom_text_header = "";
+					
+					$text = elgg_get_plugin_setting("custom_text_group_header", "digest");
+					if (!empty($text)) {
+						$custom_text_header = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
+					}
+				}
+				
+				if (!isset($custom_text_footer)) {
+					$custom_text_footer = "";
+					
+					$text = elgg_get_plugin_setting("custom_text_group_footer", "digest");
+					if (!empty($text)) {
+						$custom_text_footer = elgg_view_module("digest", "", "<div class='elgg-output'>" . $text . "</div>");
+					}
+				}
+				
+				// there is content so send it to the user
+				$params = array(
+					"title" => elgg_get_site_entity()->name,
+					"content" => $custom_text_header . $userdata . $custom_text_footer,
+					"footer" => elgg_view("digest/elements/footer", $vars),
+					"digest_header" => elgg_view("digest/elements/header", $vars),
+					"digest_online" => elgg_view("digest/elements/online", $vars),
+					"digest_unsubscribe" => elgg_view("digest/elements/unsubscribe", $vars)
+				);
+				
+				// link to online view
+				$digest_online_url = digest_get_online_url($vars);
+				
+				// message_subject
+				$message_subject = elgg_echo("digest:message:title:group", array(elgg_get_site_entity()->name, $group->name, elgg_echo("digest:interval:" . $interval)));
+				// message body
+				$message_body = elgg_view_layout("digest", $params);
+	
+				// send message
+				// if succesfull mail return true
+				$result = digest_send_mail($user, $message_subject, $message_body, $digest_online_url);
+			} else {
+				// no data is still succesful
+				$result = -1;
 			}
+			
+			// save memory
+			unset($userdata);
+			
+			// restore current user
+			$SESSION["user"] = $current_user;
+			if (elgg_is_logged_in()) {
+				$SESSION["username"] = $current_user->username;
+				$SESSION["name"] = $current_user->name;
+				$SESSION["guid"] = $current_user->getGUID();
+				$SESSION["id"] = $current_user->getGUID();
+			} else {
+				unset($SESSION["username"]);
+				unset($SESSION["name"]);
+				unset($SESSION["guid"]);
+				unset($SESSION["id"]);
+			}
+			
+			// save memory
+			unset($current_user);
 		}
-		
-		// there is content so send it to the user
-		$params = array(
-			"title" => elgg_get_site_entity()->name,
-			"content" => $custom_text_header . $userdata . $custom_text_footer,
-			"footer" => elgg_view("digest/elements/footer", $vars),
-			"digest_header" => elgg_view("digest/elements/header", $vars),
-			"digest_online" => elgg_view("digest/elements/online", $vars),
-			"digest_unsubscribe" => elgg_view("digest/elements/unsubscribe", $vars)
-		);
-		
-		// link to online view
-		$digest_online_url = digest_get_online_url($vars);
-		
-		// message_subject
-		$message_subject = elgg_echo("digest:message:title:group", array(elgg_get_site_entity()->name, $group->name, elgg_echo("digest:interval:" . $interval)));
-		// message body
-		$message_body = elgg_view_layout("digest", $params);
-
-		// send message
-		// if succesfull mail return true
-		$result = digest_send_mail($user, $message_subject, $message_body, $digest_online_url);
-	} else {
-		// no data is still succesful
-		$result = -1;
 	}
-	
-	// save memory
-	unset($userdata);
-	
-	// restore current user
-	$SESSION["user"] = $current_user;
-	if (elgg_is_logged_in()) {
-		$SESSION["username"] = $current_user->username;
-		$SESSION["name"] = $current_user->name;
-		$SESSION["guid"] = $current_user->getGUID();
-		$SESSION["id"] = $current_user->getGUID();
-	} else {
-		unset($SESSION["username"]);
-		unset($SESSION["name"]);
-		unset($SESSION["guid"]);
-		unset($SESSION["id"]);
-	}
-	
-	// save memory
-	unset($current_user);
 	
 	return $result;
 }
@@ -304,42 +299,39 @@ function digest_send_mail(ElggUser $user, $subject, $html_body, $plain_link = ""
 	
 	$result = false;
 	
-	// validate input
-	if (empty($user) || !elgg_instanceof($user, "user", null, "ElggUser") || empty($subject) || empty($html_body)) {
-		return $result;
-	}
-	
-	// convert css
-	$transform = html_email_handler_css_inliner($html_body);
-	if (!empty($transform)) {
-		$html_body = $transform;
-	}
-	
-	// email settings - prevent sending to any other address than the recipient personn
-	$to = html_email_handler_make_rfc822_address($user, false);
-	
-	$plaintext_message = "";
-	if (!empty($plain_link)) {
-		// make a plaintext message for non HTML users
-		$plaintext_message = elgg_echo("digest:mail:plaintext:description", array($plain_link));
-	}
-	
-	// send out the mail
-	$options = array(
-		"to" => $to,
-		"subject" => $subject,
-		"html_message" => $html_body,
-		"plaintext_message" => $plaintext_message
-	);
-	
-	if (html_email_handler_send_email($options)) {
-		if (empty($digest_mail_send)) {
-			$digest_mail_send = 1;
-		} else {
-			$digest_mail_send++;
+	if (!empty($user) && elgg_instanceof($user, "user", null, "ElggUser") && !empty($user->email) && !empty($subject) && !empty($html_body)) {
+		// convert css
+		$transform = html_email_handler_css_inliner($html_body);
+		if (!empty($transform)) {
+			$html_body = $transform;
 		}
 		
-		$result = true;
+		// email settings - prevent sending to any other address than the recipient personn
+		$to = html_email_handler_make_rfc822_address($user, false);
+		
+		$plaintext_message = "";
+		if (!empty($plain_link)) {
+			// make a plaintext message for non HTML users
+			$plaintext_message = elgg_echo("digest:mail:plaintext:description", array($plain_link));
+		}
+		
+		// send out the mail
+		$options = array(
+			"to" => $to,
+			"subject" => $subject,
+			"html_message" => $html_body,
+			"plaintext_message" => $plaintext_message
+		);
+		
+		if (html_email_handler_send_email($options)) {
+			if (empty($digest_mail_send)) {
+				$digest_mail_send = 1;
+			} else {
+				$digest_mail_send++;
+			}
+			
+			$result = true;
+		}
 	}
 	
 	return $result;
@@ -359,10 +351,24 @@ function digest_readable_bytes($value) {
 		$neg = ($value < 0);
 		$value = abs($value);
 		
-		$sizes = array(" B", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
-		
-		if ($value != 0) {
-			$result = (round($value / pow(1024, ($i = floor(log($value, 1024)))), 2) . $sizes[$i]);
+		if ($value > 1024) {
+			$value = round($value / 1024, 2);
+			
+			if ($value > 1024) {
+				$value = round($value / 1024, 2);
+				
+				if ($value > 1024) {
+					$value = round($value / 1024, 2);
+					
+					$result = $value . " GB";
+				} else {
+					$result = $value . " MB";
+				}
+			} else {
+				$result = $value . " KB";
+			}
+		} else {
+			$result = $value . " B";
 		}
 		
 		if ($neg) {
@@ -525,81 +531,69 @@ function digest_prepare_run($refresh = false) {
 	
 	static $run_once;
 	
-	if (isset($run_once) && ($refresh !== true)) {
-		return;
-	}
-	
-	// add views and css to digest handling
-	digest_message_css();
-	
-	// let other plugins know they need to add their views/css
-	elgg_trigger_event("prepare", "digest");
-	
-	// undo river_comments extensions
-	elgg_unregister_event_handler("pagesetup", "system", "river_comments_setup");
-	
-	// undo more extensions
-	// trigger pagesetup
-	elgg_view_title("dummy");
-	
-	// check for more extensions
-	if (isset($CONFIG->views->extensions)) {
-		foreach ($CONFIG->views->extensions as $view => $extensions) {
+	if (!isset($run_once) || ($refresh === true)) {
+		// add views and css to digest handling
+		digest_message_css();
+		
+		// let other plugins know they need to add their views/css
+		elgg_trigger_event("prepare", "digest");
+		
+		// undo likes extension
+		elgg_unregister_event_handler("pagesetup", "system", "likes_setup");
+		
+		// undo river_comments extensions
+		elgg_unregister_event_handler("pagesetup", "system", "river_comments_setup");
+		
+		// undo more extensions
+		// trigger pagesetup
+		elgg_view_title("dummy");
+		
+		// check for more extensions
+		if (isset($CONFIG->views->extensions)) {
+			foreach ($CONFIG->views->extensions as $view => $extensions) {
+				
+				if (stristr($view, "river/")) {
+					unset($CONFIG->views->extensions[$view]);
+				}
+			}
+		}
+		
+		// undo registrations on menu hooks
+		if (isset($CONFIG->hooks["register"])) {
+			if (isset($CONFIG->hooks["register"]["menu:user_hover"])) {
+				$CONFIG->hooks["register"]["menu:user_hover"] = array();
+			}
+		
+			if (isset($CONFIG->hooks["register"]["menu:river"])) {
+				$CONFIG->hooks["register"]["menu:river"] = array();
+			}
 			
-			if (stristr($view, "river/")) {
-				unset($CONFIG->views->extensions[$view]);
+			if (isset($CONFIG->hooks["register"]["menu:entity"])) {
+				$CONFIG->hooks["register"]["menu:entity"] = array();
 			}
 		}
-	}
-	
-	// undo registrations on menu hooks
-	$hooks = _elgg_services()->hooks->getAllHandlers();
-	if (!empty($hooks) && isset($hooks["register"])) {
-		if (isset($hooks["register"]["menu:user_hover"])) {
-			foreach ($hooks["register"]["menu:user_hover"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("register", "menu:user_hover", $callback);
+			
+		if (isset($CONFIG->hooks["prepare"])) {
+			if (isset($CONFIG->hooks["prepare"]["menu:user_hover"])) {
+				$CONFIG->hooks["prepare"]["menu:user_hover"] = array();
 			}
-		}
-	
-		if (isset($hooks["register"]["menu:river"])) {
-			foreach ($hooks["register"]["menu:river"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("register", "menu:river", $callback);
+		
+			if (isset($CONFIG->hooks["prepare"]["menu:river"])) {
+				$CONFIG->hooks["prepare"]["menu:river"] = array();
+			}
+			
+			if (isset($CONFIG->hooks["prepare"]["menu:entity"])) {
+				$CONFIG->hooks["prepare"]["menu:entity"] = array();
 			}
 		}
 		
-		if (isset($hooks["register"]["menu:entity"])) {
-			foreach ($hooks["register"]["menu:river"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("register", "menu:entity", $callback);
-			}
-		}
-	}
+		// set alternate view location for some views
+		elgg_set_view_location("icon/user/default", dirname(dirname(__FILE__)) . "/views_alt/", "default");
+		elgg_set_view_location("river/elements/body", dirname(dirname(__FILE__)) . "/views_alt/", "default");
 		
-	if (isset($hooks["prepare"])) {
-		if (isset($hooks["prepare"]["menu:user_hover"])) {
-			foreach ($hooks["prepare"]["menu:user_hover"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("prepare", "menu:user_hover", $callback);
-			}
-		}
-	
-		if (isset($hooks["prepare"]["menu:river"])) {
-			foreach ($hooks["prepare"]["menu:river"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("prepare", "menu:river", $callback);
-			}
-		}
-		
-		if (isset($hooks["prepare"]["menu:entity"])) {
-			foreach ($hooks["prepare"]["menu:entity"] as $prio => $callback) {
-				elgg_unregister_plugin_hook_handler("prepare", "menu:entity", $callback);
-			}
-		}
+		// only let this happen once
+		$run_once = true;
 	}
-	
-	// set alternate view location for some views
-	elgg_set_view_location("icon/user/default", dirname(dirname(__FILE__)) . "/views_alt/", "default");
-	elgg_set_view_location("river/elements/body", dirname(dirname(__FILE__)) . "/views_alt/", "default");
-	
-	// only let this happen once
-	$run_once = true;
 }
 
 /**
@@ -652,23 +646,23 @@ function digest_get_default_group_interval() {
 function digest_get_online_url($params = array()) {
 	$result = false;
 	
-	if (empty($params) || !is_array($params)) {
-		return $result;
+	if (!empty($params) && is_array($params)) {
+		$base_url = elgg_get_site_url() . "digest/show";
+		
+		$url_params = array(
+			"ts_lower" => $params["ts_lower"],
+			"ts_upper" => $params["ts_upper"],
+			"interval" => $params["interval"]
+		);
+		
+		if (!empty($params["group"])) {
+			$url_params["group_guid"] = $params["group"]->getGUID();
+		}
+		
+		$result = elgg_http_add_url_query_elements($base_url, $url_params);
 	}
 	
-	$base_url = elgg_get_site_url() . "digest/show";
-	
-	$url_params = array(
-		"ts_lower" => $params["ts_lower"],
-		"ts_upper" => $params["ts_upper"],
-		"interval" => $params["interval"]
-	);
-	
-	if (!empty($params["group"])) {
-		$url_params["group_guid"] = $params["group"]->getGUID();
-	}
-	
-	return elgg_http_add_url_query_elements($base_url, $url_params);
+	return $result;
 }
 
 /**
@@ -1318,10 +1312,6 @@ function digest_process($settings) {
 	// Make sending process safer by disabling max_execution_time (avoids breaks if set too low)
 	set_time_limit(0);
 	
-	// ElggBatch would disable the query cache automatically, but we cannot use it because
-	// we are not querying entities. Therefore the cache has to be disabled manually.
-	_elgg_services()->db->disableQueryCache();
-	
 	$interval_ts_upper = (int) elgg_extract("timestamp", $settings, time());
 	$fork_id = (int) elgg_extract("fork_id", $settings, 0);
 	
@@ -1360,6 +1350,8 @@ function digest_process($settings) {
 			// log selection time
 			$site_stats["general"]["mts_user_selection_done"] = microtime(true);
 				
+			// use a fair memory footprint
+			_elgg_invalidate_query_cache();
 			$stats_last_memory = memory_get_usage(false);
 				
 			// process users
@@ -1386,6 +1378,7 @@ function digest_process($settings) {
 	
 				// reset cache
 				$GLOBALS["ENTITY_CACHE"] = $entity_cache_backup;
+				_elgg_invalidate_query_cache();
 	
 				unset($user);
 	
@@ -1448,6 +1441,8 @@ function digest_process($settings) {
 			// log selection time
 			$group_stats["general"]["mts_group_selection_done"] = microtime(true);
 	
+			// use a fair memory footprint
+			_elgg_invalidate_query_cache();
 			$stats_last_group_memory = memory_get_usage(false);
 				
 			foreach ($group_guids as $group_guid) {
@@ -1480,6 +1475,8 @@ function digest_process($settings) {
 					// stats loggin
 					$group_stats["general"]["total_time_user_selection"] += (microtime(true) - $stats_begin_user_selection);
 						
+					// use a fair memory footprint
+					_elgg_invalidate_query_cache();
 					$stats_last_memory = memory_get_usage(false);
 						
 					// process users
@@ -1509,6 +1506,7 @@ function digest_process($settings) {
 	
 						// reset cache
 						$GLOBALS["ENTITY_CACHE"] = $entity_cache_backup;
+						_elgg_invalidate_query_cache();
 	
 						unset($user);
 	
@@ -1524,6 +1522,7 @@ function digest_process($settings) {
 	
 				// reset cache
 				$GLOBALS["ENTITY_CACHE"] = $entity_cache_backup;
+				_elgg_invalidate_query_cache();
 	
 				unset($group);
 	
@@ -1547,9 +1546,6 @@ function digest_process($settings) {
 		// save stats logging
 		digest_save_group_statistics($group_stats, $interval_ts_upper, $fork_id);
 	}
-
-	// Re-enable the query cache
-	_elgg_services()->db->enableQueryCache();
 }
 
 /**

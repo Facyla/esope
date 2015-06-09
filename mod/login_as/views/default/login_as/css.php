@@ -1,4 +1,8 @@
 
+.login-as-topbar {
+	height: 18px;
+}
+
 .login-as-arrow {
 	vertical-align: top;
 	color: white;

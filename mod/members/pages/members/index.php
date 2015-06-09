@@ -2,41 +2,33 @@
 /**
  * Members index
  *
- * @uses $vars['page'] The URL segment after members/
  */
 
-if (elgg_view_exists('members/nav')) {
-	// legacy non-bundled plugin
-	$suggestion = "Instead use the (members:config, tabs) plugin hook to register tabs.";
-	$vars = array(
-		'selected' => $vars['page'],
-	);
-	$filter = elgg_view_deprecated('members/nav', $vars, $suggestion, 1.9);
-} else {
-	$tabs = elgg_trigger_plugin_hook('members:config', 'tabs', null, array());
+$num_members = get_number_users();
 
-	foreach ($tabs as $type => $values) {
-		$tabs[$type]['selected'] = ($vars['page'] == $type);
-	}
-	$filter = elgg_view('navigation/tabs', array('tabs' => $tabs));
+$title = elgg_echo('members');
+
+$options = array('type' => 'user', 'full_view' => false);
+switch ($vars['page']) {
+	case 'popular':
+		$options['relationship'] = 'friend';
+		$options['inverse_relationship'] = false;
+		$content = elgg_list_entities_from_relationship_count($options);
+		break;
+	case 'online':
+		$content = get_online_users();
+		break;
+	case 'newest':
+	default:
+		$content = elgg_list_entities($options);
+		break;
 }
-
-$params = array(
-	'options' => array('type' => 'user', 'full_view' => false),
-);
-
-$content = elgg_trigger_plugin_hook('members:list', $vars['page'], $params, null);
-if ($content === null) {
-	forward('', '404');
-}
-
-$title = elgg_echo("members:title:{$vars['page']}");
 
 $params = array(
 	'content' => $content,
 	'sidebar' => elgg_view('members/sidebar'),
-	'title' => $title,
-	'filter' => $filter,
+	'title' => $title . " ($num_members)",
+	'filter_override' => elgg_view('members/nav', array('selected' => $vars['page'])),
 );
 
 $body = elgg_view_layout('content', $params);

@@ -26,20 +26,30 @@ function search_init() {
 	elgg_register_plugin_hook_handler('search_types', 'get_types', 'search_custom_types_tags_hook');
 	elgg_register_plugin_hook_handler('search', 'tags', 'search_tags_hook');
 
+	elgg_register_plugin_hook_handler('search_types', 'get_types', 'search_custom_types_comments_hook');
+	elgg_register_plugin_hook_handler('search', 'comments', 'search_comments_hook');
+
 	// get server min and max allowed chars for ft searching
 	$CONFIG->search_info = array();
 
-	$ft_min_max = search_get_ft_min_max();
-	$CONFIG->search_info['min_chars'] = $ft_min_max->min;
-	$CONFIG->search_info['max_chars'] = $ft_min_max->max;
+	// can't use get_data() here because some servers don't have these globals set,
+	// which throws a db exception.
+	$dblink = get_db_link('read');
+	$r = mysql_query('SELECT @@ft_min_word_len as min, @@ft_max_word_len as max', $dblink);
+	if ($r && ($word_lens = mysql_fetch_assoc($r))) {
+		$CONFIG->search_info['min_chars'] = $word_lens['min'];
+		$CONFIG->search_info['max_chars'] = $word_lens['max'];
+	} else {
+		// uhhh these are good numbers.
+		$CONFIG->search_info['min_chars'] = 4;
+		$CONFIG->search_info['max_chars'] = 90;
+	}
 
 	// add in CSS for search elements
 	elgg_extend_view('css/elgg', 'search/css');
 
 	// extend view for elgg topbar search box
 	elgg_extend_view('page/elements/header', 'search/header');
-
-	elgg_register_plugin_hook_handler('robots.txt', 'site', 'search_exclude_robots');
 }
 
 /**
@@ -303,9 +313,8 @@ function search_remove_ignored_words($query, $format = 'array') {
 	// don't worry about "s or boolean operators
 	//$query = str_replace(array('"', '-', '+', '~'), '', stripslashes(strip_tags($query)));
 	$query = stripslashes(strip_tags($query));
-	$query = trim($query);
 	
-	$words = preg_split('/\s+/', $query);
+	$words = explode(' ', $query);
 
 	$min_chars = $CONFIG->search_info['min_chars'];
 	// if > ft_min_word we're not running in literal mode.
@@ -490,59 +499,4 @@ function search_get_order_by_sql($entities_table, $type_table, $sort, $order) {
 	}
 
 	return $order_by;
-}
-
-/**
- * Exclude robots from indexing search pages
- *
- * This is good for performance since search is slow and there are many pages all
- * with the same content.
- *
- * @param string $hook Hook name
- * @param string $type Hook type
- * @param string $text robots.txt content for plugins
- * @return string
- */
-function search_exclude_robots($hook, $type, $text) {
-	$text .= <<<TEXT
-User-agent: *
-Disallow: /search/
-
-TEXT;
-
-	return $text;
-}
-
-/**
- * Returns minimum and maximum lengths of words for MySQL search
- * This function looks for stored config values, and, if none set,
- * queries the DB and saves them
- * @return stdClass An object with min and max properties
- */
-function search_get_ft_min_max() {
-
-	$min = (int) elgg_get_config('search_ft_min_word_len');
-	$max = (int) elgg_get_config('search_ft_max_word_len');
-
-	if (!$min || !$max) {
-		// defaults from MySQL on Ubuntu Linux
-		$min = 4;
-		$max = 90;
-		try {
-			$result = get_data_row('SELECT @@ft_min_word_len as min, @@ft_max_word_len as max');
-			$min = $result->min;
-			$max = $result->max;
-		} catch (DatabaseException $e) {
-			// some servers don't have these values set which leads to exception
-			// we ignore the exception
-		}
-		elgg_save_config('search_ft_min_word_len', $min);
-		elgg_save_config('search_ft_max_word_len', $max);
-	}
-
-	$ft = new stdClass();
-	$ft->min = $min;
-	$ft->max = $max;
-
-	return $ft;
 }

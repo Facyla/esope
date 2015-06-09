@@ -6,7 +6,6 @@
  * @subpackage UI
  */
 ?>
-/* <style> /**/
 
 /* ***************************************
 	Typography
@@ -22,7 +21,6 @@ a {
 }
 
 a:hover,
-a:focus,
 a.selected { <?php //@todo remove .selected ?>
 	color: #555555;
 	text-decoration: underline;
@@ -71,6 +69,9 @@ blockquote {
 	margin:0px 0 15px 0;
 	background:#EBF5FF;
 	border:none;
+	
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
 
@@ -86,23 +87,19 @@ h4 { font-size: 1.0em; }
 h5 { font-size: 0.9em; }
 h6 { font-size: 0.8em; }
 
-.elgg-heading-site,
-.elgg-heading-site:hover,
-.elgg-heading-site:focus {
+.elgg-heading-site, .elgg-heading-site:hover {
 	font-size: 2em;
 	line-height: 1.4em;
 	color: white;
 	font-style: italic;
 	font-family: Georgia, times, serif;
-	text-shadow: 1px 2px 4px #333;
+	text-shadow: 1px 2px 4px #333333;
 	text-decoration: none;
-}
-.elgg-heading-site:hover,
-.elgg-heading-site:focus {
-	text-shadow: 1px 2px 8px #000;
 }
 
 .elgg-heading-main {
+	float: left;
+	max-width: 530px;
 	margin-right: 10px;
 }
 .elgg-heading-basic {
@@ -151,8 +148,6 @@ h6 { font-size: 0.8em; }
 }
 .elgg-output ol {
 	list-style-type: decimal;
-	list-style-position: inside;
-	padding-left: .4em;
 }
 .elgg-output table {
 	border: 1px solid #ccc;

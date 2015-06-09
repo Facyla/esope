@@ -11,8 +11,8 @@ elgg_register_menu_item('admin_control_panel', array(
 	'link_class' => 'elgg-button elgg-button-action',
 ));
 
-$upgrader = new Elgg\UpgradeService();
-$is_locked = $upgrader->isUpgradeLocked();
+// @todo Move in this in ElggUpgradeManager::isLocked() when #4682 fixed
+$is_locked = _elgg_upgrade_is_locked();
 
 if (!$is_locked) {
 	elgg_register_menu_item('admin_control_panel', array(

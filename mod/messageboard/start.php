@@ -20,7 +20,7 @@ function messageboard_init() {
 	elgg_register_page_handler('messageboard', 'messageboard_page_handler');
 
 	// messageboard widget - only for profile for now
-	elgg_register_widget_type('messageboard', elgg_echo("messageboard:board"), elgg_echo("messageboard:desc"), array("profile"));
+	elgg_register_widget_type('messageboard', elgg_echo("messageboard:board"), elgg_echo("messageboard:desc"), "profile");
 
 	// actions
 	$action_path = dirname(__FILE__) . '/actions';
@@ -45,6 +45,14 @@ function messageboard_init() {
  * @return bool
  */
 function messageboard_page_handler($page) {
+	$new_section_one = array('owner', 'add', 'group');
+
+	// if the first part is a username, forward to new format
+	if (isset($page[0]) && !in_array($page[0], $new_section_one) && get_user_by_username($page[0])) {
+		register_error(elgg_echo("changebookmark"));
+		$url = "messageboard/owner/{$page[0]}";
+		forward($url);
+	}
 
 	$pages = dirname(__FILE__) . '/pages/messageboard';
 
@@ -71,7 +79,7 @@ function messageboard_page_handler($page) {
 			break;
 
 		case 'group':
-			elgg_group_gatekeeper();
+			group_gatekeeper();
 			$owner_guid = elgg_extract(1, $page);
 			set_input('page_owner_guid', $owner_guid);
 			include "$pages/owner.php";
@@ -93,38 +101,35 @@ function messageboard_page_handler($page) {
  * @return bool
  */
 function messageboard_add($poster, $owner, $message, $access_id = ACCESS_PUBLIC) {
-	$result_id = $owner->annotate('messageboard', $message, $access_id, $poster->guid);
+	$result = $owner->annotate('messageboard', $message, $access_id, $poster->guid);
 
-	if (!$result_id) {
+	if (!$result) {
 		return false;
 	}
 
-	elgg_create_river_item(array(
-		'view' => 'river/object/messageboard/create',
-		'action_type' => 'messageboard',
-		'subject_guid' => $poster->guid,
-		'object_guid' => $owner->guid,
-		'access_id' => $access_id,
-		'annotation_id' => $result_id,
-	));
+	add_to_river('river/object/messageboard/create',
+				'messageboard',
+				$poster->guid,
+				$owner->guid,
+				$access_id,
+				0,
+				$result);
 
-	// Send notification only if poster isn't the owner
+	// only send notification if not self
 	if ($poster->guid != $owner->guid) {
-
-		$subject = elgg_echo('messageboard:email:subject', array(), $owner->language);
-
+		$subject = elgg_echo('messageboard:email:subject');
 		$body = elgg_echo('messageboard:email:body', array(
-			$poster->name,
-			$message,
-			elgg_get_site_url() . "messageboard/owner/" . $owner->username,
-			$poster->name,
-			$poster->getURL()
-		), $owner->language);
+						$poster->name,
+						$message,
+						elgg_get_site_url() . "messageboard/" . $owner->username,
+						$poster->name,
+						$poster->getURL()
+						));
 
 		notify_user($owner->guid, $poster->guid, $subject, $body);
 	}
 
-	return $result_id;
+	return $result;
 }
 
 
@@ -145,7 +150,7 @@ function messageboard_annotation_menu_setup($hook, $type, $return, $params) {
 		$options = array(
 			'name' => 'delete',
 			'href' => $url,
-			'text' => elgg_view_icon('delete'),
+			'text' => "<span class=\"elgg-icon elgg-icon-delete\"></span>",
 			'confirm' => elgg_echo('deleteconfirm'),
 			'encode_text' => false
 		);

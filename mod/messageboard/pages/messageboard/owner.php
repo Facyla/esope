@@ -17,7 +17,6 @@ $options = array(
 	'annotations_name' => 'messageboard',
 	'guid' => $page_owner_guid,
 	'reverse_order_by' => true,
-	'preload_owners' => true,
 );
 
 if ($history_user) {

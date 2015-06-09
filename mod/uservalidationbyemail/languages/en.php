@@ -1,5 +1,12 @@
 <?php
-return array(
+/**
+ * Email user validation plugin language pack.
+ *
+ * @package Elgg.Core.Plugin
+ * @subpackage ElggUserValidationByEmail
+ */
+
+$english = array(
 	'admin:users:unvalidated' => 'Unvalidated',
 	
 	'email:validate:subject' => "%s please confirm your email address for %s!",
@@ -19,7 +26,6 @@ If you can't click on the link, copy and paste it to your browser manually.
 	'email:confirm:success' => "You have confirmed your email address!",
 	'email:confirm:fail' => "Your email address could not be verified...",
 
-	'uservalidationbyemail:emailsent' => "Email sent to <em>%s</em>",
 	'uservalidationbyemail:registerok' => "To activate your account, please confirm your email address by clicking on the link we just sent you.",
 	'uservalidationbyemail:login:fail' => "Your account is not validated so the log in attempt failed. Another validation email has been sent.",
 
@@ -29,13 +35,15 @@ If you can't click on the link, copy and paste it to your browser manually.
 	'uservalidationbyemail:admin:user_created' => 'Registered %s',
 	'uservalidationbyemail:admin:resend_validation' => 'Resend validation',
 	'uservalidationbyemail:admin:validate' => 'Validate',
+	'uservalidationbyemail:admin:delete' => 'Delete',
 	'uservalidationbyemail:confirm_validate_user' => 'Validate %s?',
 	'uservalidationbyemail:confirm_resend_validation' => 'Resend validation email to %s?',
 	'uservalidationbyemail:confirm_delete' => 'Delete %s?',
 	'uservalidationbyemail:confirm_validate_checked' => 'Validate checked users?',
 	'uservalidationbyemail:confirm_resend_validation_checked' => 'Resend validation to checked users?',
 	'uservalidationbyemail:confirm_delete_checked' => 'Delete checked users?',
-	
+	'uservalidationbyemail:check_all' => 'All',
+
 	'uservalidationbyemail:errors:unknown_users' => 'Unknown users',
 	'uservalidationbyemail:errors:could_not_validate_user' => 'Could not validate user.',
 	'uservalidationbyemail:errors:could_not_validate_users' => 'Could not validate all checked users.',
@@ -52,3 +60,5 @@ If you can't click on the link, copy and paste it to your browser manually.
 	'uservalidationbyemail:messages:resent_validations' => 'Validation requests resent to all checked users.'
 
 );
+
+add_translation("en", $english);

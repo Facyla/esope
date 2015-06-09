@@ -3,20 +3,20 @@
  * Group forum topic create river view.
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
-
-$object = $item->getObjectEntity();
+$object = $vars['item']->getObjectEntity();
 $excerpt = strip_tags($object->description);
 $excerpt = elgg_get_excerpt($excerpt);
 
 $responses = '';
-if (elgg_is_logged_in() && $object->canWriteToContainer()) {
-	$responses = elgg_view('river/elements/discussion_replies', array('topic' => $object));
+if (elgg_is_logged_in() && $object->canAnnotate(0, 'group_topic_post')) {
+	// inline comment form
+	$form_vars = array('id' => "groups-reply-{$object->getGUID()}", 'class' => 'hidden');
+	$body_vars = array('entity' => $object, 'inline' => true);
+	$responses = elgg_view_form('discussion/reply/save', $form_vars, $body_vars);
 }
 
 echo elgg_view('river/elements/layout', array(
-	'item' => $item,
+	'item' => $vars['item'],
 	'message' => $excerpt,
 	'responses' => $responses,
 ));

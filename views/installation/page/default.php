@@ -22,37 +22,36 @@ header("Cache-Control: no-cache, must-revalidate", TRUE);
 header('Expires: Fri, 05 Feb 1982 00:00:00 -0500', TRUE);
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<title><?php echo $title; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="SHORTCUT ICON" href="<?php echo elgg_get_site_url(); ?>_graphics/favicon.ico" />
 		<link rel="stylesheet" href="<?php echo elgg_get_site_url(); ?>install/css/install.css" type="text/css" />
-		<script type="text/javascript" src="<?php echo elgg_get_site_url(); ?>vendors/jquery/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="<?php echo elgg_get_site_url(); ?>vendors/jquery/jquery-1.6.4.min.js"></script>
 		<script type="text/javascript" src="<?php echo elgg_get_site_url(); ?>install/js/install.js"></script>
 	</head>
 	<body>
 		<div class="elgg-page">
-			<header class="elgg-page-header" role="banner">
+			<div class="elgg-page-header">
 				<?php echo elgg_view('page/elements/header', $vars); ?>
-			</header>
+			</div>
 			<div class="elgg-page-body">
 				<div class="elgg-layout">
-					<aside class="elgg-sidebar" role="complementary">
+					<div class="elgg-sidebar">
 						<?php echo elgg_view('page/elements/sidebar', $vars); ?>
-					</aside>
-					<main class="elgg-body" role="main">
-						<h1><?php echo $vars['title']; ?></h1>
+					</div>
+					<div class="elgg-body">
+						<h2><?php echo $vars['title']; ?></h2>
 						<?php echo elgg_view('page/elements/messages', array('object' => $vars['sysmessages'])); ?>
 						<?php echo $vars['body']; ?>
-					</main>
+					</div>
 				</div>
 			</div>
-			<footer class="elgg-page-footer" role="contentinfo">
+			<div class="elgg-page-footer">
 				<?php echo elgg_view('page/elements/footer'); ?>
-			</footer>
+			</div>
 		</div>
 	</body>
 </html>

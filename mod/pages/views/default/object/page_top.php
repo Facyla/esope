@@ -28,16 +28,9 @@ if ($page->write_access_id == ACCESS_PUBLIC) {
 if ($revision) {
 	$annotation = $revision;
 } else {
-	$annotation = $page->getAnnotations(array(
-		'annotation_name' => 'page',
-		'limit' => 1,
-		'reverse_order_by' => true,
-	));
+	$annotation = $page->getAnnotations('page', 1, 0, 'desc');
 	if ($annotation) {
 		$annotation = $annotation[0];
-	} else {
-		elgg_log("Failed to access annotation for page with GUID {$page->guid}", 'WARNING');
-		return;
 	}
 }
 
@@ -59,7 +52,7 @@ $comments_count = $page->countComments();
 if ($comments_count != 0 && !$revision) {
 	$text = elgg_echo("comments") . " ($comments_count)";
 	$comments_link = elgg_view('output/url', array(
-		'href' => $page->getURL() . '#comments',
+		'href' => $page->getURL() . '#page-comments',
 		'text' => $text,
 		'is_trusted' => true,
 	));

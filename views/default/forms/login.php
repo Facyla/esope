@@ -11,7 +11,7 @@
 	<label><?php echo elgg_echo('loginusername'); ?></label>
 	<?php echo elgg_view('input/text', array(
 		'name' => 'username',
-		'autofocus' => true,
+		'class' => 'elgg-autofocus',
 		));
 	?>
 </div>
@@ -36,10 +36,14 @@
 	}
 	?>
 
+	<ul class="elgg-menu elgg-menu-general mtm">
 	<?php
-	echo elgg_view_menu('login', array(
-		'sort_by' => 'priority',
-		'class' => 'elgg-menu-general elgg-menu-hz mtm',
-	));
+		if (elgg_get_config('allow_registration')) {
+			echo '<li><a class="registration_link" href="' . elgg_get_site_url() . 'register">' . elgg_echo('register') . '</a></li>';
+		}
 	?>
+		<li><a class="forgot_link" href="<?php echo elgg_get_site_url(); ?>forgotpassword">
+			<?php echo elgg_echo('user:password:lost'); ?>
+		</a></li>
+	</ul>
 </div>

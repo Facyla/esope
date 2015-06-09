@@ -7,14 +7,14 @@
  *
  */
 
+if (!elgg_in_context('admin')) {
+	forward('/', 403);
+}
+
 $plugin = $vars['entity'];
 
-if (!elgg_in_context('admin')) {
-	echo elgg_view('object/default', $vars);
+if (!$plugin->isValid()) {
+	echo elgg_view('object/plugin/invalid', $vars);
 } else {
-	if (!$plugin->isValid()) {
-		echo elgg_view('object/plugin/invalid', $vars);
-	} else {
-		echo elgg_view('object/plugin/full', $vars);
-	}
+	echo elgg_view('object/plugin/full', $vars);
 }

@@ -43,7 +43,7 @@ $log_entries = $vars['log_entries'];
 			$user_guid_link = $user_link = '&nbsp;';
 		}
 
-		$object = get_object_from_log_entry($entry);
+		$object = get_object_from_log_entry($entry->id);
 		if (is_callable(array($object, 'getURL'))) {
 			$object_link = elgg_view('output/url', array(
 				'href' => $object->getURL(),
@@ -85,6 +85,6 @@ $log_entries = $vars['log_entries'];
 </table>
 <?php
 if (!$log_entries) {
-	echo elgg_echo('notfound');
+	echo elgg_echo('logbrowser:no_result');
 	return true;
 }

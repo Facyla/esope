@@ -6,9 +6,7 @@
  * @uses elgg_get_page_owner_entity() the container in which to create the newsletter
  */
 
-elgg_gatekeeper();
-
-elgg_require_js("newsletter/edit");
+gatekeeper();
 
 $page_owner = elgg_get_page_owner_entity();
 $container_guid = 0;
@@ -47,16 +45,11 @@ $body_vars = array(
 );
 $form = elgg_view_form("newsletter/edit", array(), $body_vars);
 
-$filter_tabs = elgg_view_menu("newsletter_steps", array(
-	"class" => "elgg-tabs",
-	"sort_by" => "register"
-));
-
 // build page
 $page_data = elgg_view_layout("content", array(
 	"title" => $title_text,
 	"content" => $form,
-	"filter" => $filter_tabs
+	"filter" => ""
 ));
 
 // draw page

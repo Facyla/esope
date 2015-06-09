@@ -24,4 +24,3 @@ elgg.ui.likesPopupHandler = function(hook, type, params, options) {
 };
 
 elgg.register_hook_handler('getOptions', 'ui.popup', elgg.ui.likesPopupHandler);
-elgg.ui.registerTogglableMenuItems('likes', 'unlike');

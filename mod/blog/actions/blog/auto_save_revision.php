@@ -54,14 +54,10 @@ if ($title && $description) {
 		// we have to delete everything or the times are wrong.
 
 		// don't save if nothing changed
-		$auto_save_annotations = $blog->getAnnotations(array(
-			'annotation_name' => 'blog_auto_save',
-			'limit' => 1,
-		));
-		if ($auto_save_annotations) {
+		if ($auto_save_annotations = $blog->getAnnotations('blog_auto_save', 1)) {
 			$auto_save = $auto_save_annotations[0];
 		} else {
-			$auto_save = FALSE;
+			$auto_save == FALSE;
 		}
 
 		if (!$auto_save) {

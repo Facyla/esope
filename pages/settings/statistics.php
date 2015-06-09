@@ -7,7 +7,7 @@
  */
 
 // Only logged in users
-elgg_gatekeeper();
+gatekeeper();
 
 // Make sure we don't open a security hole ...
 if ((!elgg_get_page_owner_entity()) || (!elgg_get_page_owner_entity()->canEdit())) {

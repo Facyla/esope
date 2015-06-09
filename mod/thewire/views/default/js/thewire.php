@@ -2,21 +2,19 @@
 /**
  * The wire's JavaScript
  */
+
 ?>
 
 elgg.provide('elgg.thewire');
 
 elgg.thewire.init = function() {
 	var callback = function() {
-		var maxLength = $(this).data('max-length');
-		if (maxLength) {
-			elgg.thewire.textCounter(this, $("#thewire-characters-remaining span"), maxLength);
-		}
+		elgg.thewire.textCounter(this, $("#thewire-characters-remaining span"), 140);
 	};
 
 	$("#thewire-textarea").live({
-		input: callback,
-		onpropertychange: callback
+		keydown: callback,
+		keyup: callback
 	});
 
 	$(".thewire-previous").live('click', elgg.thewire.viewPrevious);
@@ -59,12 +57,12 @@ elgg.thewire.viewPrevious = function(event) {
 	var postGuid = $link.attr("href").split("/").pop();
 	var $previousDiv = $("#thewire-previous-" + postGuid);
 
-	if ($link.html() == elgg.echo('hide')) {
-		$link.html(elgg.echo('previous'));
+	if ($link.html() == elgg.echo('thewire:hide')) {
+		$link.html(elgg.echo('thewire:previous'));
 		$link.attr("title", elgg.echo('thewire:previous:help'));
 		$previousDiv.slideUp(400);
 	} else {
-		$link.html(elgg.echo('hide'));
+		$link.html(elgg.echo('thewire:hide'));
 		$link.attr("title", elgg.echo('thewire:hide:help'));
 
 		elgg.get({
