@@ -63,10 +63,14 @@ if ($full) {
 	
 	$time_bit = event_calendar_get_formatted_time($event);
 	//$icon = '<img src="'.elgg_view("icon/object/event_calendar/small").'" />';
-	$month = date('n', $event->start_date);
-	$month_translate = array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
-	//monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
-	$month = $month_translate[(int)$month-1];
+	if (get_language() == 'fr') {
+		$month = date('n', $event->start_date);
+		$month_translate = array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
+		//monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
+		$month = $month_translate[(int)$month-1];
+	} else {
+		$month = date('F', $event->start_date);
+	}
 	$day = date('d', $event->start_date);
 	$year = date('Y', $event->start_date);
 	$icon = '<p class="date">' . $month . ' <span>' . $day . '</span> ' . $year . '</p>';
