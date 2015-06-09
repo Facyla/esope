@@ -1,22 +1,29 @@
 <?php
 
+admin_gatekeeper();
+
 ini_set('max_execution_time', 0);
 
-$version = elgg_extract('version', $vars);
-$include_disabled_plugins = elgg_extract('include_disabled_plugins', $vars, false);
-$skipInactive = !$include_disabled_plugins;
+$options = new CodeReviewConfig();
+$options->parseInput($vars);
 
+/*
+ * Produce output
+ */
+echo '<pre>';
 $body = '';
-$body .= '<pre>';
 
 $mt = microtime(true);
 
-$analyzer = new CodeReviewAnalyzer();
-$analyzer->analyze(code_review::getPhpFilesIterator('/', $skipInactive), $version);
-$body .= $analyzer->ouptutReport($skipInactive);
+try {
+	$analyzer = new CodeReviewAnalyzer($options);
+	$analyzer->analyze();
+	$body .= $analyzer->outputReport();
+} catch (CodeReview_IOException $e) {
+	echo "*** Error: " . $e->getMessage() . " ***\n";
+}
 
 $body .= sprintf("Time taken: %.4fs\n", microtime(true) - $mt);
 
-$body .= '</pre>';
-
 echo $body;
+echo '</pre>';

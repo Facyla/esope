@@ -1,26 +1,31 @@
 <?php
 
-$language = get_input('language');
+$version = get_input('version');
 
+echo elgg_view('code_review/navigation');
+
+//analysis form
 $body = elgg_view_form('code_review/select', array(
 	'action' => '#',
+	'disable_security' => true,
 ), array(
-	'language' => $language,
+	'version' => $version,
 ));
 
-echo elgg_view_module('main', elgg_echo('code_review:form'), $body);
+echo elgg_view_module('main', elgg_echo('code_review:form'), $body, array(
+	'class' => 'mbs',
+));
 
-echo '<br>';
-
+//analysis result
 $body = '';
 $body .= elgg_view('graphics/ajax_loader', array(
 	'id' => 'code-review-loader'
 ));
 $body .= '<div id="code-review-result">';
 
-if ($language) {
+if ($version) {
 	$body .= elgg_view('code_review/analysis', array(
-		'language' => $language,
+		'version' => $version,
 	));
 } else {
 	$body .= elgg_echo('code_review:results:initial_stub');
@@ -28,5 +33,6 @@ if ($language) {
 
 $body .= '</div>';
 
-echo elgg_view_module('main', elgg_echo('code_review:results'), $body);
-
+echo elgg_view_module('main', elgg_echo('code_review:results'), $body, array(
+	'class' => 'mbl',
+));
