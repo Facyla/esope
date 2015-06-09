@@ -3,7 +3,7 @@
 	<id>esope</id>
 	<name>ESOPE - Thème configurable</name>
 	<author>Florian DANIEL aka Facyla ~ Items International 2011-2015</author>
-	<version>1.9.7.0</version>
+	<version>1.11.7.0</version>
 	<blurb>ESOPE - Thème configurable ~ Environnement Social Opensource Public Elgg</blurb>
 	<description>Né d'une collaboration entre le Département de l'Essonne et l'Assemblée des Départements de France, ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit une base de thème accessible et offre de nombreuses options et possibilités de configuration. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. Les plugins de la distribution ESOPE peut être utilisés sans utiliser ce plugin.</description>
 	<website>http://departements-en-reseaux.fr/</website>
@@ -23,7 +23,7 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.9.7</version>
+		<version>1.11.2</version>
 	</requires>
 
 	<conflicts>

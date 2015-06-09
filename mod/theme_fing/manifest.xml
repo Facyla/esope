@@ -16,7 +16,7 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.11</version>
 	</requires>
 	
 	<requires>
@@ -26,12 +26,12 @@
 	
 	<requires>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 		<priority>after</priority>
 	</requires>
 	

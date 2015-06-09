@@ -9,7 +9,7 @@
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8.14</version>
+		<version>1.11</version>
 	</requires>
 
 	<activate_on_install>false</activate_on_install>
@@ -33,7 +33,7 @@
 
 	<suggests>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 	</suggests>
 	<suggests>
 		<type>plugin</type>

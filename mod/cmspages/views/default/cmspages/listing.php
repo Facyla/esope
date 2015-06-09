@@ -11,7 +11,7 @@
 */
 
 $url = elgg_get_site_url() . 'cmspages';
-$full_url = full_url();
+$full_url = current_page_url();
 
 $access_opt = array(
 	'none' => elgg_echo('cmspages:access_id:none'), 

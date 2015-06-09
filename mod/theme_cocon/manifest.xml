@@ -17,12 +17,12 @@
    
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.11</version>
 	</requires>
    
 	<suggests>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 	</suggests>
    
 </plugin_manifest>

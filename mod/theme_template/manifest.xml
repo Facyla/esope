@@ -15,18 +15,18 @@
 	</screenshot>
 
 	<category>theme</category>
-	<category>category2</category>
+	<category>template</category>
 	
 	<activate_on_install>false</activate_on_install>
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.11</version>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
-		<name>adf_public_platform</name>
+		<name>esope</name>
 	</requires>
 	
 	<conflicts>

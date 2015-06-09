@@ -65,12 +65,14 @@ function esope_init() {
 	
 	// Update jQuery UI to 1.11.2, with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
+	/*
 	elgg_register_js('jquery.ui', 'mod/esope/vendors/jquery-ui/jquery-ui.min.js', 'head');
 	elgg_load_js('jquery.ui');
 	elgg_register_css('jquery.ui', 'mod/esope/vendors/jquery-ui/jquery-ui.min.css');
 	elgg_load_css('jquery.ui');
 	elgg_register_css('jquery.ui.theme', 'mod/esope/vendors/jquery-ui/jquery-ui.theme.min.css');
 	elgg_load_css('jquery.ui.theme');
+	*/
 	
 	// Passe le datepicker en français
 	elgg_register_js('jquery.datepicker.fr', 'mod/esope/vendors/ui.datepicker-fr.js', 'head');

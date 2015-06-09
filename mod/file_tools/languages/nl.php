@@ -1,5 +1,9 @@
 <?php
-$language = array (
+
+return array (
+  'file_tools:show_more' => 'Toon meer bestanden',
+  'file_tools:settings:list_length' => 'Hoeveel bestanden moeten er getoond worden in de lijst',
+  'file_tools:settings:list_length:unlimited' => 'Ongelimiteerd',
   'file_tools:upload:tabs:single' => 'Enkel bestand',
   'file_tools:upload:tabs:multi' => 'Meerdere bestanden',
   'file_tools:upload:tabs:zip' => 'Zip bestand',
@@ -103,4 +107,3 @@ $language = array (
   'file:type:text' => 'Bestand',
   'widgets:group_files:description' => 'Toon de laatste groep bestanden',
 );
-add_translation("nl", $language);
