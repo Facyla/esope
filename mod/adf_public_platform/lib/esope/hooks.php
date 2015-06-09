@@ -198,8 +198,10 @@ function adf_public_platform_public_pages($hook, $type, $return, $params) {
 	foreach ($publicpages as $publicpage) {
 		if (!empty($publicpage)) $return[] = $publicpage;
 	}
-	/* Les pages à rendre accessibles doivent correspondre	à l'URL complète
-	$return[] = '';
+	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
+	$return[] = 'page-publique';
+	$return[] = 'page-avec-params.*';
+	$return[] = 'rubrique-publique/.*';
 	*/
 	return $return;
 }
@@ -249,18 +251,31 @@ function adf_platform_owner_block_menu($hook, $type, $return, $params) {
 			if ($return) foreach ($return as $key => $item) {
 				$name = $item->getName();
 				//echo $name . ","; // debug: helps finding name if you don't want to look into each plugin hook
-				if (in_array($name, $remove_user_tools)) unset($return[$key]);
-				else if (elgg_in_context($name)) $item->setSelected();
+				if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+				else if (elgg_in_context($name)) { $item->setSelected(); }
 			}
 		}
 	} else {
 		if ($return) foreach ($return as $key => $item) {
-			if (elgg_in_context($item->getName())) $item->setSelected();
+			if (elgg_in_context($item->name)) { $item->setSelected(); }
 		}
 	}
 	
+	// Tri alphabétique des entrées du menu
+	//usort($return, 'esope_menu_alpha_cmp'); 
+	
 	return $return;
 }
+
+// Tri alphabétique des entrées du menu
+// Note : il n'y a normalement qu'un seul menu 'default'
+function adf_platform_sort_menu_alpha($hook, $type, $return, $params) {
+	foreach ($return as $key => $menu) {
+		usort($return[$key], 'esope_menu_alpha_cmp');
+	}
+	return $return;
+}
+
 
 /* Boutons des widgets */
 // @TODO : make this a view, for easier theming..
@@ -278,38 +293,38 @@ function adf_platform_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	$widget_title = $widget->getTitle();
 	$collapse = array(
 			'name' => 'collapse',
-			'text' => '<img src="' . $urlicon . 'masquer.png" alt="' . elgg_echo('widget:toggle', array($widget_title)) . '" />',
+			'text' => '<img src="' . $urlicon . 'masquer.png" alt="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '" />',
 			'href' => "#elgg-widget-content-$widget->guid",
 			'class' => 'masquer',
 			'rel' => 'toggle',
 			'priority' => 900
 		);
-	if ($is_fa_enabled) $collapse['text'] = '<button aria-label="' . elgg_echo('widget:toggle', array($widget_title)) . '"><i class="fa fa-caret-square-o-down"></i></button>';
+	if ($is_fa_enabled) $collapse['text'] = '<button aria-label="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '"><i class="fa fa-caret-square-o-down"></i></button>';
 	$return[] = ElggMenuItem::factory($collapse);
 	
 	if ($widget->canEdit()) {
 		$delete = array(
 				'name' => 'delete',
-				'text' => '<img src="' . $urlicon . 'suppr.png" alt="' . elgg_echo('widget:delete', array($widget_title)) . '" />',
+				'text' => '<img src="' . $urlicon . 'suppr.png" alt="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '" />',
 				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
 				'is_action' => true,
 				'class' => 'elgg-widget-delete-button suppr',
 				'id' => "elgg-widget-delete-button-$widget->guid",
 				'priority' => 900
 			);
-		if ($is_fa_enabled) $delete['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-times"></i></button>';
+		if ($is_fa_enabled) $delete['text'] = '<button aria-label="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '"><i class="fa fa-times"></i></button>';
 		$return[] = ElggMenuItem::factory($delete);
 
 		if ($show_edit) {
 			$edit = array(
 					'name' => 'settings',
-					'text' => '<img src="' . $urlicon . 'config.png" alt="' . elgg_echo('widget:editmodule', array($widget_title)) . '" />',
+					'text' => '<img src="' . $urlicon . 'config.png" alt="' . strip_tags(elgg_echo('widget:editmodule', array($widget_title))) . '" />',
 					'href' => "#widget-edit-$widget->guid",
 					'class' => "elgg-widget-edit-button config",
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
-			if ($is_fa_enabled) $edit['text'] = '<button aria-label="' . elgg_echo('widget:delete', array($widget_title)) . '"><i class="fa fa-gear"></i></button>';
+			if ($is_fa_enabled) $edit['text'] = '<button aria-label="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '"><i class="fa fa-gear"></i></button>';
 			$return[] = ElggMenuItem::factory($edit);
 		}
 	}
@@ -330,7 +345,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($return['segments'][0] == 'subgroups') {
 			elgg_load_library('elgg:groups');
 			$group = get_entity($return['segments'][2]);
-			echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
+			//echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
 			//if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
 			if (!elgg_instanceof($group, 'group') || (($group->subgroups_enable == 'no') && ($return['segments'][1] != "delete"))) {
 				return $return;
@@ -535,10 +550,10 @@ function esope_friendly_time_hook($hook, $type, $return, $params) {
 
 // Menu that appears on hovering over a user profile icon
 function esope_user_hover_menu($hook, $type, $return, $params) {
-	$user = $params['entity'];
-	
-	// Allow admins to perform some new actions, except only to other admins
+	// Allow admins to perform some new actions
 	if (elgg_is_admin_logged_in()) {
+		$user = $params['entity'];
+		// Avoid removing other admins email
 		if (!($user->isAdmin())) {
 			// Email removal is limited to non-valid LDAP users, only if they have a non-empty email
 			if (!empty($user->email)){
@@ -552,8 +567,8 @@ function esope_user_hover_menu($hook, $type, $return, $params) {
 			// @TODO : Archive user can only apply if not archived yet
 			// @TODO : Un-archive can be useful too
 		}
-		return $return;
 	}
+	return $return;
 }
 
 

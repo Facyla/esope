@@ -26,7 +26,7 @@ $sidecolor = "#00668c";
 
 /* Interface */
 html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-repeat; background-size: cover; background-attachment:fixed; border-top:0; }
-header { background: transparent; border-top:0; height:120px; }
+header { background: transparent; border-top:0; /* height:120px; */ height:auto; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
 header nav { background: #00668c; top: 0; padding: 4px 4px 1px 4px; border-radius: 0 0 12px 12px; }
@@ -94,7 +94,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-button.elgg-state-disabled { color: #333; box-shadow: 0px 1px 3px 0 #666 !important; }
 /* View all button */
 .home-box .viewall, span.groups-widget-viewall { border-radius: 20px; display: inline-block; padding: 3px 6px; text-align: center; text-transform: uppercase; margin: 20px 7px 0 0; background: white; color: #00668e; font-size: 8px; }
-.home-box .viewall a, .elgg-module span.groups-widget-viewall a { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
+.home-box .viewall a, .elgg-module span.groups-widget-viewall a, .elgg-module span.groups-widget-viewall a * { font-size: 8px; font-weight:bold; color:#00668e; text-decoration:none; }
 .home-box .viewall a:hover, .home-box .viewall a:focus, .home-box .viewall a:active, module span.groups-widget-viewall a:hover, .elgg-module span.groups-widget-viewall a:focus, .elgg-module span.groups-widget-viewall a:active {  }
 
 
@@ -122,13 +122,18 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 .elgg-context-dashboard span.forward { right: 20px; content: ">"; }
 
 .home-box { background:white; }
+span.groups-widget-viewall { margin-top: 12px; }
 .home-box .sidebarBox, .home-box #sidebar-featured-groups { margin: 0 0 30px 0; }
 .home-box h2, .home-box h3, .home-box h2 a, .home-box h3 a { color: white; text-decoration:none; font-family: Montserrat; font-weight: normal; font-size: 17px; }
 .sidebarBox h3, #sidebar-featured-groups h3 { background: #c5dc1c; min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
+.home-box h2 .fa { font-size:130%; }
+.home-box h2 { min-height: 35px; padding: 12px 4px 0 10px; line-height:1.2; }
 .home-box h2 img { float:left; margin-right:10px; }
+.home-box .viewall { margin-top:12px; }
+
 /* Activity */
 .home-box.home-activity { background:white; }
-.home-box.home-activity h2 { padding: 8px 10px; line-height:40px; background:#98519d; min-height: 45px; }
+.home-box.home-activity h2 { padding: 12px 4 0 10px; line-height:1.2; min-height: 35px; background:#98519d; }
 .home-box.home-activity .elgg-river-item { padding: 12px 10px; }
 .elgg-context-dashboard .elgg-list-river > li:hover { background-color: transparent; }
 /* Members */
@@ -136,7 +141,7 @@ footer.footer-cocon ul li { background: transparent url("<?php echo $imgurl; ?>p
 
 /* The Wire */
 .home-box.home-wire { background:white; }
-.home-box.home-wire h2 { background: #e45833; padding: 8px 0 0 0px; width: 100%; line-height:40px; min-height: 45px; }
+.home-box.home-wire h2 { background: #e45833; padding: 12px 4 0 10px; line-height:1.2; min-height: 35px; }
 .home-box.home-wire .elgg-item { padding: 0 10px; }
 
 /* Widgets */
@@ -195,6 +200,12 @@ section div.elgg-widget-instance-filerepo header h2 { background-image: url("<?p
 section div.elgg-widget-instance-friends header h2 { background-image: url("<?php echo $picto_module; ?>friends.png"); }
 section div.elgg-widget-instance-points_left header h2 { background: url("<?php echo $picto_module; ?>brainstorm.png") no-repeat scroll 0 2px #eace6d; }
 
+/* Do not repeat background image, if any */
+section div.module header h2 { background-repeat: no-repeat; }
+/* Now use only FA icons */
+section div.module header h2 { min-height: 30px; background-image: none !important; padding: 4px 0; }
+section div.module header h2 .fa { font-size: 130%; }
+
 
 /* Bloc more des widgets
  * @TODO : pour mettre un fond sur les blocs more, mais hack pas forcément très compatible :
@@ -237,6 +248,10 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>brainstorm.png"); }
 .elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>announcements.png");}
 .elgg-module-group-discussion .elgg-head h3 { background-image: url("<?php echo $picto_module; ?>discussion.png"); }
+/* Now use only FA icons */
+.elgg-module-group .elgg-head h3 { background-image: none !important; padding: 4px 0 0 0; }
+.elgg-module-group .elgg-head h3 .fa { font-size: 130%; }
+span.groups-widget-viewall { margin-top: 10px; }
 
 /* Bordures des modules des groupes */
 .elgg-module-group > .elgg-body { border-color: #00668c; }
@@ -264,6 +279,7 @@ div.elgg-widget-instance-points_left .elgg-widget-more { background-color: #c5dc
 .elgg-module-group-discussion .elgg-widget-more { background-color: #f43930; color: white; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
+<?php <<<CSS
 /* Group activity */
 .elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
 .elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $sideicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $sidecolor; ?> !important; }
@@ -310,6 +326,8 @@ background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll 9px -19p
 
 /* Group listing menu */
 .elgg-menu-item-members { background: url("<?php echo $sideicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
+CSS;
+?>
 
 /* File tree */
 #file_tools_list_tree_container div.elgg-body { padding: 6px; }

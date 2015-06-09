@@ -4,7 +4,7 @@ global $anythingSliderUniqueID;
 
 $vendor_url = $CONFIG->url . 'mod/slider/vendors/anythingslider/';
 
-// Use unique ID to include scripts once, and allow multiple sliders into a sinngle page..
+// Use unique ID to include scripts once, and allow multiple sliders into a single page..
 if (!isset($anythingSliderUniqueID)) {
 	$anythingSliderUniqueID = 1;
 	echo '<script src="' . $vendor_url . 'js/jquery.anythingslider.js"></script>';
@@ -14,6 +14,8 @@ if (!isset($anythingSliderUniqueID)) {
 	echo '<script src="' . $vendor_url . 'js/swfobject.js"></script>';
 	// AnythingSlider video extension; optional, but needed to control video pause/play
 	echo '<script src="' . $vendor_url . 'js/jquery.anythingslider.video.js"></script>';
+	// Add style so we can also cleanly embed the slider on other sites where Elgg CSS are not loaded
+	echo '<style>' . elgg_view('slider/css') . '</style>';
 } else {
 	$anythingSliderUniqueID++;
 }
@@ -29,12 +31,8 @@ $container_style = '';
 if ($height) $container_style .= "height:$height; ";
 if ($width) $container_style .= "width:$width; ";
 
-if (empty($slidercss_main)) {
-	$slidercss_main = elgg_get_plugin_setting('css_main', 'slider');
-}
-if (empty($slidercss_textslide)) {
-	$slidercss_textslide = elgg_get_plugin_setting('css_textslide', 'slider');
-}
+if (empty($slidercss_main)) { $slidercss_main = elgg_get_plugin_setting('css_main', 'slider'); }
+if (empty($slidercss_textslide)) { $slidercss_textslide = elgg_get_plugin_setting('css_textslide', 'slider'); }
 
 if (empty($slidercontent)) { $slidercontent = elgg_get_plugin_setting('content', 'slider'); }
 if (!empty($slidercontent)) {
@@ -52,9 +50,7 @@ if (!empty($slidercontent)) {
 	*/
 }
 
-if (empty($sliderparams)) {
-	$sliderparams = elgg_get_plugin_setting('jsparams', 'slider');
-}
+if (empty($sliderparams)) { $sliderparams = elgg_get_plugin_setting('jsparams', 'slider'); }
 
 /* Documentation complète
 $('#slider').anythingSlider({
@@ -170,5 +166,5 @@ $(function(){
 <ul id="slider<?php echo $anythingSliderUniqueID; ?>" style="<?php echo $container_style; ?>">
 	<?php echo $slidercontent; ?>
 </ul>
-<!-- END AnythingSlider #1 -->
+<!-- END AnythingSlider #<?php echo $anythingSliderUniqueID; ?> -->
 

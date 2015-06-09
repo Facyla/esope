@@ -53,6 +53,6 @@ foreach ($groups as $group) {
 }
 
 if (!empty($all_content)) {
-	echo elgg_view_module("digest", "Activité récente dans vos groupes", $all_content);
+	echo elgg_view_module("digest", elgg_echo('esope:digest:groupactivity'), $all_content);
 }
 

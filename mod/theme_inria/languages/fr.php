@@ -28,6 +28,8 @@ $french = array(
 	'theme_inria:home:information' => "Informations",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Edito",
+	'theme_inria:friends' => "Contacts",
+	'theme_inria:friends:collections' => "Listes de contacts",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -180,11 +182,14 @@ $french = array(
 	'theme_inria:userprofile:irisopen' => "Accéder à Iris",
 	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
 	'theme_inria:userprofile:status' => "Statut",
-	'inria_location' => "Entité Inria (CRI ou siège)",
+	//'inria_location' => "Entité Inria (CRI ou siège)",
+	'inria_location' => "Localisation géographique",
+	'inria_location_main' => "Entité de rattachement (siège ou CRI)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'interests' => "Mots clés",
 	'skills' => "Compétences",
-	'profile:inria_location' => "Localisation",
+	'profile:inria_location' => "Localisation géographique",
+	'profile:inria_location_main' => "Entité de rattachement",
 	'profile:epi_ou_service' => "EPI ou service",
 	'profile:inria_phone' => "Téléphone",
 	'profile:inria_room' => "Bureau",
@@ -247,8 +252,10 @@ $french = array(
 	'theme_inria:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	
 	// Group creation specific fields and tooltips
-	'groups:cmisfolder' => "URL complète d'un dossier de Partage (Alfresco)",
+	'groups:cmisfolder' => "URL du dossier Partage (URL::Titre::Infobulle)",
 	'groups:hint:cmisfolder' => "Pour afficher le contenu du dossier, collez ici l'adresse complète du dossier dans Partage",
+	'theme_inria:cmis_folder' => "Dossier sur Partage",
+	'theme_inria:cmis_folder:details' => "Le contenu d'un dossier sur Partage",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab1' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab2' => "Onglet configurable n°2 (URL::Titre onglet::Infobulle facultative)",
@@ -362,6 +369,70 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
 	
 	'theme_inria:login:details' => "Personnel Inria, veuillez utiliser la connexion CAS. Si votre compte Iris n'existe pas encore, il sera créé lors de votre première connexion.<br />Si vous ne disposez pas de compte Inria ou si celui-ci n'est plus actif, veuillez utiliser la connexion par identifiant / mot de passe",
+	
+	// Cron
+	'theme_inria:cron:ldap:done' => "CRON quotidien Inria LDAP...OK",
+	'theme_inria:cron:done' => "CRON quotidien Inria...OK",
+	
+	// Groups invites
+	'userpicker:only_friends' => "Afficher seulement les contacts",
+	'theme_inria:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
+	'theme_inria:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
+	'theme_inria:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
+	'theme_inria:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
+	
+	
+	
+	
+	// Translation override
+	'members:searchtag' => "Chercher des membres par mot-clé",
+	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
+	'search_types:tags' => "Mots-clés",
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/p/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
+	
+	'adf_platform:groups:allowregister' => "Forcer l'inscription dans le groupe",
+	
+	'esope:fulltextsearch' => "Recherche par nom ou prénom",
+	
+	
+	// Blog override (blog => article)
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
+	'blog:blogs' => "Articles",
+	'blog:archives' => "Archives",
+	'blog:blog' => "Article",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
+
+	'blog:title:user_blogs' => "Articles de %s",
+	'blog:title:all_blogs' => "Tous les articles du site",
+	'blog:title:friends' => "Articles des contacts",
+
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
+	'blog:enableblog' => "Activer les articles du groupe",
+	'blog:write' => "Écrire un article",
+	// river
+	'blog:river:create' => "Publier un article",
+	'river:commented:object:blog' => "l'article",
+	'river:create:object:blog' => "%s a publié un article %s",
+	'river:comment:object:blog' => "%s a commenté l'article %s",
+	// notifications
+	'blog:newpost' => 'Nouvel article',
+	// widget
+	'blog:widget:description' => "Ce widget affiche vos derniers articles.",
+	'blog:moreblogs' => "Plus d'articles",
+	'blog:numbertodisplay' => "Nombre d'articles à afficher",
+	'blog:noblogs' => "Aucun article",
+	'blog:notification' => "%s a écrit un nouvel article :
+
+%s
+
+%s
+
+Afficher et commenter le nouvel article :
+
+%s",
+	
+	
+	
 	
 );
 

@@ -1,0 +1,19 @@
+Intégration :
+
+1) Intégration d'index.html
+	le fichier index.php reprend index.html, mais dans l'environnement Elgg
+
+2) Modification de php/loadConfig.php
+	ajout uniquement de l'ID du groupe : les autres valeurs sont chargées via la fonction getConfiguration($gid)
+
+3) Modification de php/inc/config.inc.php :
+	modification des chemins (pour rendre cet élément de configuration automatique)
+	dans "getEnseignantsInfos" : liste des membres du groupe
+
+4) Modification de js/config.js :
+	récupération de la cofig et MAJ des chemins
+
+5) Modification de js/main.js :
+	suppression du flottement du menu
+
+

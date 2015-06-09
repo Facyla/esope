@@ -81,9 +81,7 @@ switch ($sort) {
 
 // Order
 $order = get_input('order', 'desc');
-if ($order != 'asc' && $order != 'desc') {
-	$order = 'desc';
-}
+if (!in_array($order, array('asc', 'desc'))) { $order = 'desc'; }
 
 // Dates filtering
 $created_time_lower = get_input('created_time_lower', null);
@@ -120,80 +118,105 @@ $params = array(
 	'modified_time_upper' => $modified_time_upper,
 );
 
+
+
+/* SIDEBAR : FILTERS */
+// Get available types and subtypes filters + custom search types
 $types = get_registered_entity_types();
 $custom_types = elgg_trigger_plugin_hook('search_types', 'get_types', $params, array());
 
+$search_params = array(
+		'q' => $query,
+		'entity_subtype' => $entity_subtype,
+		'entity_type' => $entity_type,
+		'owner_guid' => $owner_guid,
+		'container_guid' => $container_guid,
+		'search_type' => 'all',
+		'friends' => $friends
+	);
+
 // add sidebar items for all and native types
 // @todo should these maintain any existing type / subtype filters or reset?
-$data = htmlspecialchars(http_build_query(array(
-	'q' => $query,
-	'entity_subtype' => $entity_subtype,
-	'entity_type' => $entity_type,
-	'owner_guid' => $owner_guid,
-	'container_guid' => $container_guid,
-	'search_type' => 'all',
-	//'friends' => $friends
-)));
+$data = htmlspecialchars(http_build_query($search_params));
 $url = elgg_get_site_url() . "search?$data";
 $menu_item = new ElggMenuItem('all', elgg_echo('all'), $url);
-if ($search_type == 'all') $menu_item->setSelected(); // Facyla - set selected if no filter set
+// Facyla - set "All" selected if no filter set
+if ($search_type == 'all') $menu_item->setSelected();
 elgg_register_menu_item('page', $menu_item);
 
+// List types and subtypes filters
 foreach ($types as $type => $subtypes) {
+	// Add (always) type menu first
+		$label = "item:$type";
+		$current_params = $search_params;
+		$current_params['entity_type'] = $type;
+		$current_params['entity_subtype'] = null;
+		$current_params['search_type'] = 'entities';
+		$data = htmlspecialchars(http_build_query($current_params));
+		$url = elgg_get_site_url() . "search?$data";
+		$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
+		elgg_register_menu_item('page', $menu_item);
+		
+	// Now detail for each subtype
 	// @todo when using index table, can include result counts on each of these.
 	if (is_array($subtypes) && count($subtypes)) {
 		foreach ($subtypes as $subtype) {
 			$label = "item:$type:$subtype";
-
-			$data = htmlspecialchars(http_build_query(array(
-				'q' => $query,
-				'entity_subtype' => $subtype,
-				'entity_type' => $type,
-				'owner_guid' => $owner_guid,
-				'container_guid' => $container_guid,
-				'search_type' => 'entities',
-				'friends' => $friends
-			)));
-
+			$current_params['entity_subtype'] = $subtype;
+			$data = htmlspecialchars(http_build_query($current_params));
 			$url = elgg_get_site_url()."search?$data";
-			$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
+			$menu_item = new ElggMenuItem($label, " &nbsp; &nbsp; ".elgg_echo($label), $url);
 			elgg_register_menu_item('page', $menu_item);
 		}
-	} else {
-		$label = "item:$type";
-
-		$data = htmlspecialchars(http_build_query(array(
-			'q' => $query,
-			'entity_type' => $type,
-			'owner_guid' => $owner_guid,
-			'container_guid' => $container_guid,
-			'search_type' => 'entities',
-			'friends' => $friends
-		)));
-
-		$url = elgg_get_site_url() . "search?$data";
-
-		$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
-		elgg_register_menu_item('page', $menu_item);
 	}
 }
 
 // add sidebar for custom searches
+// Propose unfiltered custom search, but also filtered custom search (using type/subtype filters)
+// 2 modes : using current filters, or without any filter
 foreach ($custom_types as $type) {
+	// Filtered search
 	$label = "search_types:$type";
-
-	$data = htmlspecialchars(http_build_query(array(
-		'q' => $query,
-		'search_type' => $type,
-	)));
-
-	$url = elgg_get_site_url()."search?$data";
-
-	$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
-	elgg_register_menu_item('page', $menu_item);
+	$current_params = $search_params;
+	$current_params['type'] = null;
+	$current_params['subtype'] = null;
+	// Clear filters ?
+	//$current_params['entity_type'] = null;
+	//$current_params['entity_subtype'] = null;
+	$current_params['search_type'] = $type;
+	$data = htmlspecialchars(http_build_query($current_params));
+	$url_filtered = elgg_get_site_url()."search?$data";
+	$filtered = '';
+	if (!empty($entity_type)) {
+		$filter_label = elgg_echo("item:$entity_type");
+		if (!empty($entity_subtype)) {
+			$filter_label = elgg_echo("item:$entity_type:$entity_subtype");
+		}
+		$filter_label = strip_tags(elgg_echo($filter_label));
+		$filtered = elgg_echo('esope:search:filtered', array($filter_label));
+	}
+	
+	// Same again, but without filters
+	$current_params = array('search_type' => $type, 'q' => $q);
+	$data = htmlspecialchars(http_build_query($current_params));
+	$url_unfiltered = elgg_get_site_url()."search?$data";
+	$unfiltered = elgg_echo('esope:search:unfiltered');
+	
+	if ($url_unfiltered != $url_filtered) {
+		$menu_item_nofilter = new ElggMenuItem($label, elgg_echo($label).$unfiltered, $url_unfiltered);
+		$menu_item_filtered = new ElggMenuItem($label.'-filtered', " &nbsp; &nbsp; ".elgg_echo($label).$filtered, $url_filtered);
+		elgg_register_menu_item('page', $menu_item_nofilter);
+		elgg_register_menu_item('page', $menu_item_filtered);
+	} else {
+		$menu_item = new ElggMenuItem($label, elgg_echo($label), $url_unfiltered);
+		elgg_register_menu_item('page', $menu_item);
+	}
+	
 }
 
-// start the actual search
+
+
+/* SEARCH - start the actual search */
 $results_html = '';
 
 if ($search_type == 'all' || $search_type == 'entities') {
@@ -206,20 +229,16 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	// if a plugin returns NULL or '' for subtype, pass to generic type search function.
 	// if still NULL or '' or empty(array()) no results found. (== don't show??)
 	foreach ($types as $type => $subtypes) {
-		if ($search_type != 'all' && $entity_type != $type) {
-			continue;
-		}
-
+		if ($search_type != 'all' && $entity_type != $type) { continue; }
+		
 		if (is_array($subtypes) && count($subtypes)) {
 			foreach ($subtypes as $subtype) {
 				// no need to search if we're not interested in these results
 				// @todo when using index table, allow search to get full count.
-				if ($search_type != 'all' && $entity_subtype != $subtype) {
-					continue;
-				}
+				if ($search_type != 'all' && $entity_subtype != $subtype) { continue; }
+				
 				$current_params['subtype'] = $subtype;
 				$current_params['type'] = $type;
-
 				$results = elgg_trigger_plugin_hook('search', "$type:$subtype", $current_params, NULL);
 				if ($results === FALSE) {
 					// someone is saying not to display these types in searches.
@@ -232,68 +251,56 @@ if ($search_type == 'all' || $search_type == 'entities') {
 					// Will be passed to elgg_get_entities().
 					$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
 				}
-
 				if (is_array($results['entities']) && $results['count']) {
 					if ($view = search_get_search_view($current_params, 'list')) {
-						$results_html .= elgg_view($view, array(
-							'results' => $results,
-							'params' => $current_params,
-						));
+						$results_html .= elgg_view($view, array('results' => $results, 'params' => $current_params));
 					}
 				}
 			}
 		}
-
-		// pull in default type entities with no subtypes
+		
+		// Add default type entities with NO subtypes if any subtype is set (eg. "none"), 
+		// or ANY subtype if no subtype filter specified
 		$current_params['type'] = $type;
-		$current_params['subtype'] = ELGG_ENTITIES_NO_VALUE;
-
-		$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
-		if ($results === FALSE) {
-			// someone is saying not to display these types in searches.
-			continue;
+		if (empty($entity_subtype)) {
+			$current_params['subtype'] = ELGG_ENTITIES_ANY_VALUE;
+		} else {
+			$current_params['subtype'] = ELGG_ENTITIES_NO_VALUE;
 		}
-
+		$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
+		// someone is saying not to display these types in searches.
+		if ($results === FALSE) { continue; }
 		if (is_array($results['entities']) && $results['count']) {
 			if ($view = search_get_search_view($current_params, 'list')) {
-				$results_html .= elgg_view($view, array(
-					'results' => $results,
-					'params' => $current_params,
-				));
+				$results_html .= elgg_view($view, array('results' => $results, 'params' => $current_params));
 			}
 		}
 	}
 }
+
 
 // call custom searches
 if ($search_type != 'entities' || $search_type == 'all') {
 	if (is_array($custom_types)) {
 		foreach ($custom_types as $type) {
-			if ($search_type != 'all' && $search_type != $type) {
-				continue;
-			}
-
+			if ($search_type != 'all' && $search_type != $type) { continue; }
 			$current_params = $params;
 			$current_params['search_type'] = $type;
-
 			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
-
-			if ($results === FALSE) {
-				// someone is saying not to display these types in searches.
-				continue;
-			}
-
+			// someone is saying not to display these types in searches.
+			if ($results === FALSE) { continue; }
 			if (is_array($results['entities']) && $results['count']) {
 				if ($view = search_get_search_view($current_params, 'list')) {
-					$results_html .= elgg_view($view, array(
-						'results' => $results,
-						'params' => $current_params,
-					));
+					$results_html .= elgg_view($view, array('results' => $results, 'params' => $current_params));
 				}
 			}
 		}
 	}
 }
+
+
+
+// COMPOSE SEARCH RESULTS PAGE
 
 // highlight search terms
 if ($search_type == 'tags') {
@@ -303,23 +310,19 @@ if ($search_type == 'tags') {
 }
 $highlighted_query = search_highlight_words($searched_words, $display_query);
 
+// Page title
 $body = elgg_view_title(elgg_echo('search:results', array("\"$highlighted_query\"")));
-
 
 // Add advanced search & sorting tools - if enabled (don't break default behaviour/interface)
 $advancedsearch = elgg_get_plugin_setting('advancedsearch', 'adf_public_platform');
 $params['types_list'] = $types;
 $params['custom_types_list'] = $custom_types;
-if ($advancedsearch == 'yes') {
-	$body .= elgg_view('search/advanced_search_filter', $params);
-}
+if ($advancedsearch == 'yes') { $body .= elgg_view('search/advanced_search_filter', $params); }
 
+// Add results - No result: say it !
+$body .= $results_html;
+if (!$results_html) { $body .= elgg_view('search/no_results'); }
 
-if (!$results_html) {
-	$body .= elgg_view('search/no_results');
-} else {
-	$body .= $results_html;
-}
 
 // this is passed the original params because we don't care what actually
 // matched (which is out of date now anyway).

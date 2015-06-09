@@ -12,9 +12,24 @@ $fr = array(
 	
 	'leaflet:settings:osm:api_key' => "Clef d'API OSM",
 	
+	// Errors and warnings
+	'leaflet:error:missingapikey' => "Clef d'API manquante pour le géocodage. Impossible de géocoder.",
+	'leaflet:warning:cacheddata' => "Pour des raisons de performance, les données représentées ne sont actualisées que périodiquement : il se peut que des changements récents ne soient pas affichés.",
+	'leaflet:warning:cache:daily' => "Dernière mise à jour il y a moins d'un jour.",
+	'leaflet:warning:cache:hourly' => "Dernière mise à jour il y a moins d'une heure.",
+	
+	// Cron
+	'leaflet:cron:geocode:allmembers:done' => "Leaflet CRON geocoding : done",
+	'leaflet:cron:done' => "Leaflet CRON : done",
+	
 	'leaflet:lat' => "Latitude",
 	'leaflet:lng' => "Longitude",
 	
+	// Pages
+	'leaflet:index' => "Accueil cartographique",
+	'leaflet:world' => "Carte globale",
+	'leaflet:map' => "Carte",
+	'leaflet:search' => "Recherche cartographique",
 	
 	
 	// Messages pour JS : attention aux guillemets (doubles interdits dans le texte) et aux variables JS à passer !

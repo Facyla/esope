@@ -35,7 +35,7 @@ $content .= elgg_list_entities_from_metadata($params);
 if (elgg_is_logged_in()) {
 	$offset = get_input('offset', 0); 
 	$limit = get_input('limit', 10); 
-	$dbprefix = get_config("dbprefix");
+	$dbprefix = elgg_get_config("dbprefix");
 	$group_guids_in = implode(',', $group_guids);
 	$sql = "SELECT r.* FROM " . $dbprefix . "river r";
 	$sql .= " INNER JOIN " . $dbprefix . "entities AS e ON r.object_guid = e.guid"; // river event -> object

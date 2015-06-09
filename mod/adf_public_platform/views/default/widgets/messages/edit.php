@@ -15,12 +15,12 @@ $params = array(
 	'name' => 'params[num_display]',
 	'id' => 'num_display_'.$widget_id,
 	'value' => $vars['entity']->num_display,
-	'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+	'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30),
 );
 $dropdown = elgg_view('input/dropdown', $params);
 
 ?>
 <div>
-	<label for="num_display_<?php echo $widget_id; ?>"><?php echo elgg_echo('messages:numbertodisplay'); ?>:</label>
-	<?php echo $dropdown; ?>
+	<label for="num_display_<?php echo $widget_id; ?>"><?php echo elgg_echo('messages:num_display'); ?> 
+	<?php echo $dropdown; ?></label>
 </div>

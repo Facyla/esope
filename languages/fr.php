@@ -258,11 +258,11 @@ $french = array(
  * Access
  */
 
-	'PRIVATE' => "Privé / brouillon",
+	'PRIVATE' => "Privé",
 	'LOGGED_IN' => "Membres du site",
 	'PUBLIC' => "Public",
 	'access:friends:label' => "Contacts seulement",
-	'access' => "Accès",
+	'access' => "Visibilité",
 
 /**
  * Dashboard and modules
@@ -476,7 +476,7 @@ $french = array(
 	'tools' => "Outils",
 
 	'register' => "Créer un compte",
-	'registerok' => "Vous vous êtes enregistré avec succès sur %s.",
+	'registerok' => "Vous vous êtes bien enregistré sur %s.",
 	'registerbad' => "La création de votre compte n'a pas fonctionné pour une raison inconnue.",
 	'registerdisabled' => "La création de compte est désactivée sur ce site.",
 
@@ -485,18 +485,18 @@ $french = array(
 	'registration:usernametooshort' => "L'identifiant de connexion doit faire %u caractères au minimum.",
 	'registration:passwordtooshort' => "Le mot de passe doit faire %u caractères au minimum.",
 	'registration:dupeemail' => "Cette adresse email est déjà utilisée.",
-	'registration:invalidchars' => "Désolé, votre identifiant contient les caractères invalides suivants: %s. Tous ces caractères sont invalides: %s",
-	'registration:emailnotvalid' => "Désolé, l'adresse email que vous avez saisie est invalide sur ce site.",
-	'registration:passwordnotvalid' => "Désolé, le mot de passe que vous avez saisi est invalide sur ce site.",
-	'registration:usernamenotvalid' => "Désolé, l'identifiant de connexion que vous avez saisi est invalide sur ce site.",
+	'registration:invalidchars' => "Votre identifiant contient les caractères invalides suivants: %s. Tous ces caractères sont invalides: %s",
+	'registration:emailnotvalid' => "L'adresse email que vous avez saisie est invalide sur ce site.",
+	'registration:passwordnotvalid' => "Le mot de passe que vous avez saisi est invalide sur ce site.",
+	'registration:usernamenotvalid' => "L'identifiant de connexion que vous avez saisi est invalide sur ce site.",
 
 	'adduser' => "Créer un nouveau compte utilisateur",
-	'adduser:ok' => "Vous avez ajouté un nouvel utilisateur avec succès.",
+	'adduser:ok' => "Vous avez créé un nouveau compte utilisateur.",
 	'adduser:bad' => "Le nouveau compte utilisateur ne peut pas être créé.",
 
 	'user:set:name' => "Identifiant de connexion",
 	'user:name:label' => "Prénom et Nom",
-	'user:name:success' => "Votre identité a été modifiée avec succès.",
+	'user:name:success' => "Votre nom a bien été modifié.",
 	'user:name:fail' => "Impossible de modifier votre identité. Assurez-vous que votre nom n'est pas trop long et essayez à nouveau.",
 
 	'user:set:password' => "Mot de passe",
@@ -881,18 +881,18 @@ $french = array(
  * Input / output strings
  */
 
-	'deleteconfirm' => "Etes-vous sur de vouloir supprimer cet élément ?",
-	'fileexists' => "Un fichier a déjà été chargé. Pour le remplacer sélectionner le ci-dessous :",
+	'deleteconfirm' => "Confirmez-vous la suppression de cet élément ?",
+	'fileexists' => "Un fichier a déjà été chargé. Pour le remplacer sélectionnez un nouveau fichier ci-dessous :",
 
 /**
  * User add
  */
 
-	'useradd:subject' => "Compte de l'utilisateur créé",
+	'useradd:subject' => "Compte de membre créé",
 	'useradd:body' => "
 %s,
 
-Un compte utilisateur a été créé pour vous sur %s. Pour vous connecter, rendez-vous sur :
+Un compte a été créé pour vous sur %s. Pour vous connecter, rendez-vous sur :
 
 %s
 
@@ -914,7 +914,7 @@ Une fois que vous vous êtes connecté(e), vous pouvez changer votre mot de pass
 /**
  * Import / export
  */
-	'importsuccess' => "L'import des données a été réalisé avec succès",
+	'importsuccess' => "L'import des données a réussi.",
 	'importfail' => "L'import OpenDD des données a échoué.",
 
 /**
@@ -948,31 +948,31 @@ Une fois que vous vous êtes connecté(e), vous pouvez changer votre mot de pass
  * System settings
  */
 
-	'installation:sitename' => "Le nom de votre site (par exemple 'Mon site de réseau social') :",
+	'installation:sitename' => "Le nom de votre site (par exemple \"Mon site de réseau social\") :",
 	'installation:sitedescription' => "Brève description du site (facultatif) :",
-	'installation:wwwroot' => "L'URL du site, suivi de ' / ' :",
-	'installation:path' => "Chemin physique des fichiers sur le serveur, suivi par ' / ' :",
-	'installation:dataroot' => "Chemin complet où seront hébergés les fichiers uploadés par les utilisateurs, suivi de ' / ' :",
+	'installation:wwwroot' => "L'URL du site, suivi de \"/\" :",
+	'installation:path' => "Chemin du dossier d'installation, suivi par \"/\" :",
+	'installation:dataroot' => "Chemin du dossier des données, suivi de \"/\" :",
 	'installation:dataroot:warning' => "Vous devez créer ce répertoire manuellement. Il doit se situer dans un répertoire différent de votre installation de Elgg.",
 	'installation:sitepermissions' => "Les permissions d'accés par défaut :",
 	'installation:language' => "La langue par défaut de votre site :",
-	'installation:debug' => "Le mode de débogage permet de mettre en évidence certaines erreurs de fonctionnement, cependant il ralenti l'accès au site, il est à utiliser uniquement en cas de problème :",
-	'installation:debug:none' => "Désactive le mode debug (recommandé)",
-	'installation:debug:error' => "Afficher seulement les erreurs critiques",
-	'installation:debug:warning' => "Afficher les erreurs et les avertissements",
-	'installation:debug:notice' => "Log toutes les erreurs, les avertissements et les avis",
+	'installation:debug' => "Le mode de débogage permet de mettre en évidence certaines erreurs de fonctionnement, cependant il ralentit l'accès au site, et est à utiliser uniquement en cas de problème :",
+	'installation:debug:none' => "Désactiver le mode debug (recommandé)",
+	'installation:debug:error' => "Seulement les erreurs critiques",
+	'installation:debug:warning' => "Erreurs et les avertissements",
+	'installation:debug:notice' => "Toutes les erreurs, les avertissements et les avis",
 
 	// Walled Garden support
-	'installation:registration:description' => "L'enregistrement d'un utilisateur est activé par défaut. Désactivez cette option si vous ne voulez pas que de nouveaux utilisateurs soient en mesure de s'inscrire eux-mêmes.",
-	'installation:registration:label' => "Permettre à de nouveaux utilisateurs de s'enregistrer eux-mêmes",
-	'installation:walled_garden:description' => "Autoriser le site à fonctionner comme un réseau privé. Cela empêchera les utilisateurs non connectés d'afficher les pages du site autres que celles expressément spécifiées publiques.",
-	'installation:walled_garden:label' => "Restreindre les pages aux utilisateurs enregistrés",
+	'installation:registration:description' => "L'enregistrement de nouveaux comptes est activé par défaut. Désactivez cette option si vous ne voulez pas permettre de nouvelles inscriptions.",
+	'installation:registration:label' => "Permettre à de nouveaux membres de s'inscrire eux-mêmes",
+	'installation:walled_garden:description' => "Configurer le site comme un réseau privé. Cela empêchera l'accès à toutes les pages du site, sauf celles expressément définies comme publiques.",
+	'installation:walled_garden:label' => "Verrouiller l'accès aux pages aux membres",
 
 	'installation:httpslogin' => "Activer ceci afin que les utilisateurs puissent se connecter via le protocole https. Vous devez avoir https activé sur votre serveur afin que cela fonctionne.",
 	'installation:httpslogin:label' => "Activer les connexions HTTPS",
 	'installation:view' => "Entrer le nom de la vue qui sera utilisée automatiquement pour l'affichage du site (par exemple : 'mobile'), laissez par défaut en cas de doute :",
 
-	'installation:siteemail' => "L'adresse e-mail du site (utilisée lors d'envoi d'e-mail par le système)",
+	'installation:siteemail' => "L'adresse e-mail du site (utilisée lors des envois d'e-mail par le système)",
 
 	'installation:disableapi' => "Elgg fournit une API pour l'élaboration de services web qui permettent à des application distantes d'interagir avec votre site.",
 	'installation:disableapi:label' => "Activer les services web d'Elgg",
@@ -980,7 +980,7 @@ Une fois que vous vous êtes connecté(e), vous pouvez changer votre mot de pass
 	'installation:allow_user_default_access:description' => "Si coché, les utilisateurs pourront modifier leur niveau d'accés par défaut et pourront surpasser le niveau d'accés mis en place par défaut dans le système.",
 	'installation:allow_user_default_access:label' => "Autoriser un niveau d'accés par défaut pour l'utilisateur",
 
-	'installation:simplecache:description' => "Le cache simple augmente les performances en mettant en cache du contenu statique comme des CSS et des fichiers Javascripts. Normalement vous ne devriez pas avoir besoin de l'activer.",
+	'installation:simplecache:description' => "Le cache simple augmente les performances en mettant en cache du contenu statique comme des CSS et des fichiers Javascript. Il devrait être activé, sauf lorsque des développements sont en cours, ou lors de la migration d'un site.",
 	'installation:simplecache:label' => "Utiliser un cache simple (recommandé)",
 
 	'installation:viewpathcache:description' => "Le cache utilisé pour stocker les chemins vers les vues des greffons réduit le temps de chargement de ces derniers.",
@@ -990,7 +990,7 @@ Une fois que vous vous êtes connecté(e), vous pouvez changer votre mot de pass
 	'upgrade:db' => "Votre base de données a été mise à jour.",
 	'upgrade:core' => "Votre installation de Elgg a été mise à jour",
 	'upgrade:unable_to_upgrade' => "Impossible de mettre à jour.",
-	'upgrade:unable_to_upgrade_info' => "Cette installation ne peut pas être mise à jour car des vues personnalisées ont été détectées dans le dossier des vues du core d'Elgg. Ces vues ont été dépréciées et doivent être retirées pour qu'Elgg fonctionne correctement. Si vous n'avez fait aucune modification du core d'Elgg, vous pouvez simplement supprimer le dossier  des vues du core et le remplacer par celui de la dernière version d'Elgg téélchargeable à partir de <a href=\"http://elgg.org\">elgg.org</a>.<br /><br />
+	'upgrade:unable_to_upgrade_info' => "Cette installation ne peut pas être mise à jour car des vues personnalisées ont été détectées dans le dossier des vues du core d'Elgg. Ces vues ont été dépréciées et doivent être retirées pour qu'Elgg fonctionne correctement. Si vous n'avez fait aucune modification du core d'Elgg, vous pouvez simplement supprimer le dossier  des vues du core et le remplacer par celui de la dernière version d'Elgg téléchargeable à partir de <a href=\"http://elgg.org\">elgg.org</a>.<br /><br />
 
 		Pour des instructions détaillées, veuillez vous reporter à la <a href=\"http://docs.elgg.org/wiki/Upgrading_Elgg\">documentation sur la mise à jour d'Elgg</a>.  Si vous avez besoin d'aide, veuillez écrire dans les <a href=\"http://community.elgg.org/pg/groups/discussion/\">Forums d'aide de la communauté Elgg</a>.",
 
@@ -1107,7 +1107,8 @@ Ne répondez pas à cet email.",
 /**
  * Action gatekeeper
  */
-	'actiongatekeeper:missingfields' => "Il manque les champs __token ou __ts dans le formulaire.",
+	//'actiongatekeeper:missingfields' => "Il manque les champs __token ou __ts dans le formulaire.",
+	'actiongatekeeper:missingfields' => "Votre session de connexion n'est plus valide, veuillez recharger la page et ré-essayer (session ou jetons de sécurité __token ou __ts manquants).",
 	'actiongatekeeper:tokeninvalid' => "Une erreur est survenue. Cela veut probablement dire que la page que vous utilisiez a expirée. Merci de réessayer",
 	'actiongatekeeper:timeerror' => "La page a expiré, rafraichissez et recommencez à nouveau.",
 	'actiongatekeeper:pluginprevents' => "Une extension a empêché ce formulaire d'être envoyé",

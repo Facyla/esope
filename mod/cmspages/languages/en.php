@@ -2,12 +2,17 @@
 $english = array(
 
 	'cmspages' => "Static pages (CMS)",
-	'item:object:cmspage' => 'Static page',
-	'item:object:cmspages' => 'Static pages',
+	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> CMS page',
+	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i> CMS pages',
 	
 	'cmspages:pagetype' => "Page URL name",
-	'cmspages:cmspage_url' => "Published page URL :",
-	'cmspages:pageselect' => "Choose which page to edit",
+	'cmspages:cmspage_url' => "<i class=\"fa fa-link\"></i>Permalink",
+	'cmspages:cmspage_view' => "<i class=\"fa fa-plug\"></i>Elgg view",
+	'cmspages:cmspage_embed' => "<i class=\"fa fa-code\"></i>HTML embed code",
+	'cmspages:cmspage_template' => "<i class=\"fa fa-puzzle-piece\"></i>Use in a tempalte",
+	'cmspages:pageselect' => "Edit a page",
+	'cmspages:page:new' => "Create a new page",
+	'cmspages:page:new:name' => "New page title",
 	
 	'cmspages:new' => "OK",
 	'cmspages:newpage' => "Create page \"%s\"",
@@ -58,7 +63,9 @@ $english = array(
 	'cmspages:settings:layout:default' => "Default",
 	'cmspages:settings:layout:externalblog' => "Use externablog layout config",
 	'cmspages:settings:editors' => "Additional editors",
-	'cmspages:settings:editors:help' => "List of GUID, separated by commas. These editors are allowed to edit even if they're not admin, in addition to the admins (who have edit access on cmspages anyway).",
+	'cmspages:settings:editors:help' => "List of GUID, separated by commas.<br />These editors are allowed to read and edit any CMS Page<br />All admins are editors, and you can add more members with full access on cmspages (besides this plugin settings page).<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit', 'cmspage'.",
+'cmspages:settings:authors' => "Liste des auteurs supplémentaires",
+	'cmspages:settings:authors:help' => "Liste des GUID des membres, séparés par des virgules.<br />Les auteurs ont un accès limité à leurs propres articles.<br /><i class=\"fa fa-info-circle\"></i> Développeurs : pour définir les éditeurs selon des critères précis, veuilllez utiliser le hook 'cmspages:edit:authors', 'cmspage'.",
 	
 	'cmspages:chosenentity' => "Chosen entity (GUID)",
 	'cmspages:configuredview' => "Configured view",
@@ -72,6 +79,7 @@ $english = array(
 	'cmspages:fieldset:main' => "Main parameters",
 	'cmspages:fieldset:advanced' => "Advanced parameters",
 	'cmspages:content_type' => "Content type",
+	'cmspages:content_type:details' => "Les pages CMS peuvent être de divers types : les 2 premiers sont à utiliser pour afficher simplement du contenu. Les \"modules\" permettent de définir des blocs de contenu dynamique. Les \"gabarits\" servent à définir des modèles d'affichage qui peuvent être utilisés pour l'affichage de contenus, et des mises en pages complexes, faisant appels à divers autres pages CMS et éléments de contenu.",
 	'cmspages:content_type:editor' => "HTML (with editor)",
 	'cmspages:content_type:rawhtml' => "HTML (no editor)",
 	'cmspages:content_type:module' => "Configurable Module",
@@ -99,6 +107,10 @@ $english = array(
 	'cmspages:display:details' => "empty = yes (default), 'no' for disabled (can be only displayed as interface element / block), 'noview' exclusif (page only, not as block), or a layout name to use a specific layout",
 	'cmspages:template:use' => "Use a template",
 	'cmspages:template:details' => "Empty = no (default), or cmspages template name to use a specific template",
+	'cmspages:layout:use' => "Layout",
+	'cmspages:layout:details' => "Full page display only. Enables to choose the internal page layout (number of columns)",
+	'cmspages:pageshell:use' => "HTML Pageshell",
+	'cmspages:pageshell:details' => "Full page display only. Enables to choose the HTML pageshells (top-level structure of the site).",
 	//'cmspages:settings:unused' => "Note : These settings are not used yet (future developments)",
 	'cmspages:fieldset:unused' => "Note : the following parameters are not used yet (further developments)",
 	'cmspages:container_guid' => "Container GUID", 
@@ -114,11 +126,173 @@ $english = array(
 	'cmspages:module:entity' => "Entity", 
 	'cmspages:module:view' => "Configurable view", 
 	/* @TODO : missing translations
-	'cmspages:' => "Lien connexe", 
-	'cmspages:' => "<kbd>[&nbsp;Modifier%s&nbsp;]</kbd>", 
-	'cmspages:' => "Pour éditer les pages CMS, rendez-vous sur", 
-	'cmspages:' => "Vue non configurée.",
+	'cmspages:' => "Sibling link", 
+	'cmspages:' => "<kbd>[&nbsp;Edit%s&nbsp;]</kbd>", 
+	'cmspages:' => "To edit static pages, please go to", 
+	'cmspages:' => "Not set view.",
 	*/
+	
+	'cmspages:categories' => "Category(ies)",
+	'cmspages:slurl' => "Permalink",
+	'cmspages:shorturl' => "Short URL",
+	'cmspages:featured_image' => "Featured image",
+	'cmspages:featured_image:view' => "Display Featured image",
+	'cmspages:notexist:create' => "This page does not exist. You may have mistyped the URL (care to '_', which are replaced by '-'), or you can click on this link to create a new page.",
+	'cmspages:edit' => "[&nbsp;Edit %s&nbsp;]",
+	'cmspages:create' => "[&nbsp;Create %s&nbsp;]",
+	'cmspages:templates:parameters' => "Content parameters",
+	'cmspages:templates:shortcodes' => "Shortcodes",
+	'cmspages:templates:views' => "Views",
+	'cmspages:editors:list' => "Editors list",
+	'cmspages:authors:list' => "Authors list",
+	'cmspages:editurl' => "To edit CMS Pages, please go to",
+	
+	'cmspages:cms_mode' => "CMS mode",
+	'cmspages:settings:cms_mode' => "Enable CMS mode",
+	'cmspages:settings:cms_mode:details' => "Ce mode permet d'utiliser CMSPages pour gérer les pages d'un site. Il propose des adresses de pages optimisées pour le SEO, et des options plus avancées de gestion du rendu.",
+	'cmspages:settings:layout:details' => "Par défaut, les pages CMS s'affichent avec le layout \"one_column\" (1 seule colonne), mais vous pouvez choisir de les afficher en utilisant un autre layout (modèle d'agencement du contenu dans la page), par ex. un layout à 2 ou 3 colonnes, ou définir un gabarit personnalisé pour une personnalisation maximale.",
+	'cmspages:settings:pageshell' => "HTML Pageshell",
+	'cmspages:settings:pageshell:details' => "Pour un contrôle total sur la structure HTML du site, vous pouvez utiliser d'autres \"pageshells\" (coquille HTML). Par défaut la page sera affichée dans l'interface habituelle du site (avec entête, menu, pied de page), mais vous pouvez également utiliser le pageshell \"iframe\" (qui conserve les styles mais pas l'interface), ou définir un pageshell personnalisé pour un contrôle total sur le rendu.",
+	'cmspages:layout:custom:edit' => "Edit custom layout",
+	'cmspages:layout:sidebar:edit' => "Edit right sidebar",
+	'cmspages:layout:sidebar_alt:edit' => "Edit left sidebar",
+	'cmspages:pageshell:edit' => "Edit custom pageshel",
+	'cmspages:layout:one_column' => "1 column",
+	'cmspages:layout:one_sidebar' => "2 columns (right sidebar)",
+	'cmspages:layout:two_sidebar' => "3 columns (2 sidebars)",
+	'cmspages:layout:custom' => "Custom (cms-layout)",
+	'cmspages:layout:' => "Default (same as main site)",
+	'cmspages:pageshell:default' => "Site (default)",
+	'cmspages:pageshell:cmspages' => "Full width site (without margin)", 
+	'cmspages:pageshell:cmspages_cms' => "Full width site + CMS menu", 
+	'cmspages:pageshell:iframe' => "Iframe (without interface)",
+	'cmspages:pageshell:inner' => "Raw content (for AJAX)",
+	'cmspages:pageshell:custom' => "Custom (cms-pageshell)",
+	'cmspages:pageshell:' => "Default (same as main site)",
+	'cmspages:fieldset:seo' => "SEO Options",
+	'cmspages:seo:title' => "Title",
+	'cmspages:seo:title:details' => "Maximum 60 caracters. If empty, will fallback to page title.",
+	'cmspages:seo:description' => "META Description",
+	'cmspages:seo:description:details' => "Most search engine will take 160 caracters into account.",
+	'cmspages:seo:tags' => "META Tags",
+	'cmspages:seo:tags:details' => "Veuillez saisir une liste des mots-clefs les plus importants pour décrire cette page dans le champ \"Mots-clefs\". Pour un meilleur référencement, il est utile que ces termes figurent dans le texte de la page.",
+	'cmspages:seo:index' => "Robots: index",
+	'cmspages:seo:index:details' => "Tells robots to index this page or not",
+	'cmspages:seo:follow' => "Robots: follow",
+	'cmspages:seo:follow:details' => "Tells robots how to handle page links",
+	'cmspages:seo:canonical' => "Canonical link",
+	'cmspages:seo:canonical:details' => "If this page has several URLs, tells the \"main\" URL for the page. By default, canonical URL is the permalink.",
+	
+	'cmspages:edit:title' => "Edit page \"%s\"",
+	'cmspages:alreadyexists' => "This address already exists, please choose another one",
+	
+	'cmspages:fieldset:rendering' => "Rendering modes",
+	'cmspages:fieldset:publication' => "Publication",
+	'cmspages:fieldset:information' => "Useful information &nbsp; <i class=\"fa fa-toggle-down\"></i>",
+	'cmspages:fieldset:categories' => "Categories",
+	'cmspages:access:current' => "Visibility",
+	
+	'cmspages:error:nodisplay' => "You do not have the right to access this page.",
+	'cmspages:notice:changedurl' => "The address of this page has changed, please update your bookmarks.",
+	
+	'cmspages:type:' => "HTML",
+	'cmspages:type:editor' => "HTML",
+	'cmspages:type:rawhtml' => "HTML",
+	'cmspages:type:module' => "Module",
+	'cmspages:type:template' => "Template",
+	'cmspages:notice:newpage' => "Create a new page.",
+	'cmspages:pageselect:filter' => "Search a page",
+	'cmspages:search:title' => "Page title",
+	'cmspages:search:filter' => "Filters",
+	'cmspages:filter:all' => "All",
+	'cmspages:access_id:none' => "",
+	'cmspages:status:none' => "",
+	'cmspages:content_type:none' => "",
+	'cmspages:sort:none' => "",
+	'cmspages:filter:access_id' => "Visibility",
+	'cmspages:filter:status' => "Online",
+	'cmspages:filter:content_type' => "Page type",
+	'cmspages:filter:sort' => "Sort by",
+	'cmspages:sort:latest' => "Date",
+	'cmspages:sort:alpha' => "Alphabetical",
+	'cmspages:search:nameortitle' => "Page title",
+	
+	/* Modes d'emploi */
+	'cmspages:content_type:template:details' => "<i class=\"fa fa-info-circle\"></i>The templates have 2 main usages&nbsp;:
+		<ol>
+			<li>define templates which will be used as models for other content: the content can then be \"injected\" into the template, at the specified place {{%CONTENT%}}&nbsp;;</li>
+			<li>define a complex content, which uses several other elements or dynamic content: the page content will be generated by recursively calling various content block types (variables, shortcodes, Elgg views), or other CMS Pages (content, source code, module, and of course other templates). When using templates, these can also call other templates, etc.</li>
+		</ol>
+		Pour cela, les gabarits doivent être édités directement en HTML, dans lequel vous pouvez également intégrer les codes suivants :
+		<ul>
+			<li>CMS PAGE: {{cmspages-pagetype}} : insère le contenu de la page CMS 'cmspages-pagetype' (contenut, code source, module ou gabarit)</li>
+			<li>VARIABLE: {{%CONTENT%}} : insère le contenu chargé dans la vue par un outil tiers via le paramètre 'content'</li>
+			<li>SHORTCODE: {{[shortcode]}} : insère le shortcode 'shortcode' (si le plugin elgg_shortcode est activé)</li>
+			<li>ELGG VIEW: {{:forms/register|username=admin}} : insère la vue forms/register en lui passant le paramètres 'username' => 'admin'</li>
+		</ul>",
+	'cmspages:content_type:module:details' => "<i class=\"fa fa-info-circle\"></i>Les modules permettent de sélectionner et d'afficher divers types de contenus, selon des critères précis. Pour cela, chaque module doit être configuré avec des paramètres précis :
+		<ol>
+			<li>Choisir le module : par exemple une Liste d'entités</li>
+			<li>Renseigner les paramètres : par ex. type d'entité 'object', type de contenu 'bookmarks', affichage limité à '5', et 'pagination' activée'</li>
+			<li>Choisir éventuellement d'autres réglages généraux : contextes autorisés, niveaux d'accès, etc.</li>
+			<li>Une fois le module enregistré, il peut être utilisé sous forme de vue, ou appelé par une page de type 'template'.</li>
+		</ol>",
+	'cmspages:content_type:rawhtml:details' => "<i class=\"fa fa-info-circle\"></i>Ce type de contenu est recommandé si vous souhaitez utiliser du code HTML \"brut\", sans filtrage ni modification. Il est notamment adapté pour intégrer des codes d'intégration de contenus riches comme un widget Twitter ou une vidéo, ou tout type de contenu dont le code source supporte mal les filtrages et corrections apportés par les éditeurs visuels.<br />
+		Il est quasiment identique à \"Contenu (HTML avec éditeur visuel)\", mais permet d'éditer la page sans le filtrage et les modifications du code apportées par l'éditeur visuel, notamment les JavaScript ainsi que divers éléments HTML.",
+	'cmspages:content_type:editor:details' => "<i class=\"fa fa-info-circle\"></i>Ce type de contenu est recommandé si vous souhaitez rédiger une page de contenu de manière visuelle, par ex. un texte illustré, travailler la mise en forme de la page, etc.<br />
+		Si vous avez besoin d'un contrôle direct sur le code source de la page, veuillez utiliser \"Code source (HTML sans éditeur)\".",
+	
+	'cmspages:status' => "Status",
+	'cmspages:status:published' => "Online",
+	'cmspages:status:notpublished' => "Offline",
+	
+	'cmspages:password' => "Password protection",
+	'cmspages:password:details' => "If a password is set, it will be asked prior accessing to this page content. <br />Warning: adding a password does not change the page visibility.",
+	'cmspage:password:cleared' => "Logout from pages succeeded.",
+	'cmspage:password:cleared:page' => "Logout from page succeeded",
+	'cmspages:password:submit' => "Access",
+	'cmspages:password:form' => "Password-protected access",
+	
+	'cmspages:settings:cms_menu' => "Menu to be displayed",
+	'cmspages:settings:cms_menu:cmspages_categories' => "cmspages_categories (CMSPages categories)",
+	'cmspages:settings:cms_menu:default' => "[ Default ]",
+	'cmspages:settings:cms_menu:no' => "[ No menu ]",
+	'cmspages:settings:cms_menu:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut, le menu des catégories des pages CMS sera affiché. Si vous le souhaitez, vous pouvez remplacer ce menu par un menu personnalisé, défini avec le plugin \"elgg_menus\". Pour rétablir le menu des catégories, choisissez \"cmspages_categories\".",
+	'cmspages:settings:categories' => "Categories",
+	'cmspages:settings:categories:details' => "Pour définir des rubriques, indiquez un titre de rubrique par ligne.<br />Pour définir une arborescence, vous pouvez indenter la liste en utilisant des tirets (plusieurs sous-niveaux possibles).",
+	// Header
+	'cmspages:settings:cms_header' => "Header",
+	'cmspages:settings:cms_header:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut aucun entête ne sera affiché. Si vous le souhaitez, vous pouvez utiliser une page CMS pour ajouter un entête personnalisé avant le menu.",
+	'cmspages:cms_header:edit' => "Edit custom header",
+	'cmspages:cms_header:no' => "[ No header ]",
+	'cmspages:cms_header:custom' => "[ Custom ] (cms-header)",
+	'cmspages:cms_header:initial' => "[ Same as the main site ]",
+	'cmspages:cms_header:default' => "[ Default ]",
+	// Footer
+	'cmspages:settings:cms_footer' => "Footer",
+	'cmspages:settings:cms_footer:details' => "Pageshells ou layouts avec le \"menu CMS\" uniquement.<br />Par défaut le pied de page du site sera affiché. Si vous le souhaitez, vous pouvez le remplacer par une page CMS personalisée.",
+	'cmspages:cms_footer:edit' => "Edit custom footer",
+	'cmspages:cms_footer:no' => "[ No footer ]",
+	'cmspages:cms_footer:default' => "[ Default ]",
+	'cmspages:cms_footer:initial' => "[ Same as the main site ]",
+	'cmspages:cms_footer:custom' => "[ Custom ] (cms-footer)",
+	
+	'admin:cms' => "CMS",
+	'admin:cms:cmspages' => "CMS Pages",
+	'cmspages:configredirect' => "Pour gérer les pages CMS, vous pouvez utiliser directement la page " . elgg_get_site_url() . "cmspages",
+	
+	'cmspages:fieldset:access' => "Gestion des rôles",
+	'cmspages:fieldset:categories' => "Categories",
+	'cmspages:fieldset:categories:details' => "Categories",
+	'cmspages:fieldset:rendering' => "Les rubriques permettent de gérer la publication des pages CMS dans des catégories éditoriales plus structurées que les mots-clefs. Si la coquille HTML le permet, ces rubriques peuvent constituer un menu.",
+	'cmspages:fieldset:rendering:details' => "Ces options avancées permettent de contrôler plus finement le rendu de votre page. Certaines options ne s'appliquent que dans des contextes bien précis, et n'ont pas forcément d'effet dans tous les cas.",
+	
+	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
+	
+	'cmspages:none' => "No CMS Page found.",
+	'cmspages:created' => "created %s",
+	'cmspages:updated' => "updated %s",
+	
 	
 );
 

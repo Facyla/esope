@@ -33,6 +33,26 @@ function theme_cocon_init(){
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_cocon/lib/event_calendar/model.php');
 	
+	// Fonctions liées à Profile_manager
+	if (elgg_is_active_plugin('profile_manager')) {
+		$profile_options = array(
+				"show_on_register" => true,
+				"mandatory" => true,
+				"user_editable" => true,
+				"output_as_tags" => true,
+				"admin_only" => false,
+				"count_for_completeness" => true
+			);
+		// Nouveaux types de champs pour les profils
+		add_custom_field_type("custom_profile_field_types", 'cocon_etablissements', elgg_echo('theme_cocon:field:etablissements'), $profile_options);
+		add_custom_field_type("custom_profile_field_types", 'cocon_disciplines', elgg_echo('theme_cocon:field:disciplines'), $profile_options);
+		add_custom_field_type("custom_profile_field_types", 'cocon_fonctions', elgg_echo('theme_cocon:field:fonctions'), $profile_options);
+		
+		// Nouveaux types de champs pour les groupes (permet des corrections manuelles si nécessaire)
+		$group_options = array("output_as_tags" => true, "admin_only" => true);
+		add_custom_field_type("custom_group_field_types", 'cocon_etablissements', elgg_echo('theme_cocon:field:etablissements'), $group_options);
+	}
+	
 	// Modification des menus standards des widgets
 	/*
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');

@@ -3,10 +3,10 @@
  */
 
 <?php
-global $CONFIG;
-$imgurl = $CONFIG->url . 'mod/theme_fing/graphics/';
-$fonturl = $CONFIG->url . 'mod/theme_fing/fonts/';
+$imgurl = elgg_get_site_url() . 'mod/theme_fing/graphics/';
+$fonturl = elgg_get_site_url() . 'mod/theme_fing/fonts/';
 $font_neris = $fonturl . 'neris/';
+$font_lettergothic = $fonturl . 'LetterGothicStd/';
 ?>
 
 /* Replace main icons sprite */
@@ -14,6 +14,8 @@ $font_neris = $fonturl . 'neris/';
 
 
 /* Add some fonts */
+
+/* NERIS FONT */
 @font-face {
 	font-family: 'neris'; font-weight: 100; font-style: normal;
 	src: url('<?php echo $font_neris; ?>neris_thin/Neris-Thin-webfont.eot');
@@ -71,6 +73,20 @@ $font_neris = $fonturl . 'neris/';
 		url('<?php echo $font_neris; ?>neris_bolditalic/Neris-BoldItalic-webfont.svg#neristhin') format('svg');
 }
 
+/* LETTER GOTHIC STD */
+@font-face {
+	font-family: 'LetterGothic'; font-weight:normal; font-style: normal;
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd.otf') format("opentype");
+}
+@font-face {
+	font-family: 'LetterGothic'; font-weight:bold; font-style: normal;
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-Bold.otf') format("opentype");
+}
+@font-face {
+	font-family: 'LetterGothic'; font-weight:bold; font-style: italic;
+	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-BoldSlanted.otf') format("opentype");
+}
+
 
 body { border-top: 1px solid #333333; }
 header { height:94px; }
@@ -78,6 +94,36 @@ header h1 { font: normal 36px Lato,sans-serif; color: #3e3e3e; background: url('
 header h1 a { color: #333; float: right; text-decoration:none; margin-top: 24px; }
 header h1 a:hover, header h1 a:focus, header h1 a:active { color: #000; text-decoration:none; }
 
+.profile_manager_register_category { padding-top: 2ex; }
+.elgg-form-register .captcha { padding-top: 2ex; }
+.elgg-form-register #profile_manager_register_left { width:50%; }
+.elgg-form-register #profile_manager_register_right { width:44%; }
+@media (max-width:700px) {
+	#profile_manager_register_left, #profile_manager_register_right { width:100%; float:none; }
+}
+
+#fing-register {  }
+h2.fing-register-title { font-size:3em; text-align:center; }
+h3.fing-register-title { font-size:2em; font-weight:normal; }
+.fing-register-subtitle { text-align:center; font-weight:bold; font-style:normal; margin-bottom:2ex; }
+.fing-register-groups {  }
+.fing-register-instructions { text-align:center; margin: 2ex 0 1ex 0; }
+#fing-register .elgg-form-register { background: transparent; }
+#register_joingroups fieldset { border:0 !important; padding:0; }
+#register_joingroups legend { display: none; }
+#register_groups_featured label { font-size: 1.2em; margin-bottom: 1ex; display: inline-block; }
+
+#fing-register .hybridauth-provider { float: none; }
+
+#fing-register .mandatory label { float: left; width: 38%; margin: 0; padding: 0; }
+#fing-register .profile_manager_register_input_container { width: 58%; float: right; margin: 0; padding: 0; }
+
+#fing-register form input[type=text], #fing-register form input[type=password] { width: 100%; font-size: 1.5em; background: aliceblue; border: 2px solid black; }
+
+#fing-register .elgg-foot { float: right; width: 58%; }
+.fing-register-submit { border-radius:0; font-size: 1.5em; width: 100%; }
+
+.fing-register-captcha label small, label[for=register-username] small { font-size: 12px; font-weight: normal; }
 
 #fing-homepage {
 	background: white !important;

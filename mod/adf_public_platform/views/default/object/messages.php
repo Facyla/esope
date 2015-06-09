@@ -67,14 +67,15 @@ $subject_info = '';
 if (!$full) {
 	$subject_info .= "<input type='checkbox' name=\"message_id[]\" value=\"{$message->guid}\" />";
 }
-$subject_info .= elgg_view('output/url', array(
+$subject_url = elgg_view('output/url', array(
 		'href' => $message->getURL(),
 		'text' => $message->title,
 		'is_trusted' => true,
 	));
+$subject_info .= $subject_url;
 
 $delete_link = elgg_view("output/confirmlink", array(
-		'href' => "action/messages/delete?guid=" . $message->getGUID(),
+		'href' => "action/messages/delete?guid=" . $message->guid,
 		'text' => "<span class=\"elgg-icon elgg-icon-delete float-alt\"></span>",
 		'confirm' => elgg_echo('deleteconfirm'),
 		'encode_text' => false,
@@ -90,6 +91,17 @@ HTML;
 if ($full) {
 	echo elgg_view_image_block($icon, $body, array('class' => $class));
 	echo elgg_view('output/longtext', array('value' => $message->description));
+} else if (elgg_in_context('widgets')) {
+	echo '<h3>' . $subject_url . '</h3>';
+	echo '<div class="clearfloat"></div>';
+	echo elgg_view_image_block($icon, $user_link, array('class' => $class));
+	echo '<div class="clearfloat"></div>';
+	echo '<em>' . $timestamp . '</em><br />';
+	echo elgg_view('output/url', array('text' => elgg_echo('messages:togglecontent'), 'href' => '#message-content-' . $message->guid, 'rel' => 'toggle'));
+	echo '<div class="hidden" id="message-content-' . $message->guid . '">';
+	echo elgg_view('output/longtext', array('value' => $message->description));
+	echo '</div>';
+	echo '<div class="clearfloat"></div>';
 } else {
 	echo elgg_view_image_block($icon, $body, array('class' => $class));
 }

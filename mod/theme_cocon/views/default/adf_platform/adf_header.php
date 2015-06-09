@@ -89,20 +89,26 @@ if (elgg_is_logged_in()) {
 	}
 	
 }
+
+// Header
+$header_content = elgg_get_plugin_setting('header', 'adf_public_platform');
+$header_content = trim($header_content);
+// Use default value if header not set
+if (empty($header_content)) {
+	$header_title = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+	$header_content = '<a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '">' . $headertitle . '</a>';
+	// Default styles syntax : <span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>;
+}
 ?>
 
 			<header>
 				<div class="">
 					<div class="interne">
-						<h1>
-							<img class="ministere" src="<?php echo $urlimg; ?>header_ministere.jpg" />
-							<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>"><img class="cocon" src="<?php echo $urlimg; ?>header_cocon.png" style="margin-left:14px;" /></a>
-							<img class="cartouche" src="<?php echo $urlimg; ?>cartouche_strategie_numerique.png" />
-						</h1>
+						<h1><?php echo $header_content; ?></h1>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<ul>
-									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo elgg_echo('friends'); ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo elgg_echo('friends'); ?>" /></a></li>
+									<li id="man"><a href="<?php echo $url . 'friends/' . $ownusername; ?>" title="<?php echo strip_tags(elgg_echo('friends')); ?>"><img src="<?php echo $urlpictos; ?>contacts.png" alt="<?php echo strip_tags(elgg_echo('friends')); ?>" /></a></li>
 									<?php echo $friendrequests; ?>
 									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><img src="<?php echo $urlpictos; ?>mail.png" alt="<?php echo elgg_echo('messages'); ?>" /></a></li>
 									<?php if ($messages) { echo $messages; } ?>
@@ -157,9 +163,9 @@ if (elgg_is_logged_in()) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('categories')) { ?>
-									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?> <i class="fa fa-caret-down"></i></a>
+									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('theme_cocon:categories'); ?> <i class="fa fa-caret-down"></i></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('adf_platform:categories:all'); ?></a></li>
+											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('theme_cocon:categories:all'); ?></a></li>
 											<?php echo $categories; ?>
 										</ul>
 									</li>
@@ -182,6 +188,14 @@ if (elgg_is_logged_in()) {
 										<li><a href="<?php echo $url; ?>cmspages/read/visio5">Salle n°5</a></li>
 									</ul>
 								</li>
+								
+								<?php if (elgg_is_active_plugin('cocon_methode')) { ?>
+								<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_cocon:menu:kits'); ?> <i class="fa fa-caret-down"></i></a>
+									<ul class="hidden">
+										<li><a href="<?php echo $url; ?>methode">Kit Méthode</a></li>
+									</ul>
+								</li>
+								<?php } ?>
 								
 							</ul>
 						</nav>

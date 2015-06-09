@@ -68,7 +68,7 @@ $report = '';
 $error_report = '';
 $register_subject = "Votre compte utilisateur a été créé sur " . $sitename;
 // Ignore les accès pour pouvoir changer d'username même si c'est réservé aux admins
-$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 foreach ($emails as $email) {
 	$i++;
 	$error = false; $guid = false;
@@ -124,7 +124,7 @@ foreach ($emails as $email) {
 		$error_report[] = "$email : $error";
 	}
 }
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 
 // Rapport et messages d'erreur éventuels

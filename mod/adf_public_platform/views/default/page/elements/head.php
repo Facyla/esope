@@ -13,6 +13,33 @@ if (empty($vars['title'])) {
 	$title = elgg_get_config('sitename') . ": " . $vars['title'];
 }
 
+// SEO META
+$seo_meta = '';
+// Title override (if no way to set the proper 'title' var)
+if (!empty($vars['seo_title'])) { $title = $vars['seo_title']; }
+// Add some meta
+if (!empty($vars['meta_description'])) { $seo_meta .= '<meta name="description" content="' . $vars['meta_description'] . '" />'; }
+if (!empty($vars['meta_keywords'])) { $seo_meta .= '<meta name="keywords" content="' . $vars['meta_keywords'] . '" />'; }
+if (!empty($vars['meta_robots'])) {
+	$seo_meta .= '<meta name="robots" content="' . $vars['meta_robots'] . '" />';
+} else {
+	// @TODO Block search pages and other dynamic pages - note : already done in ESOPE's robots.txt
+	//$seo_meta .= '<meta name="robots" content="' . $vars['meta_robots'] . '" />';
+}
+// Tell permalink
+if (!empty($vars['canonical_url'])) {
+	$seo_meta .= '<link rel="canonical" href="' . $vars['canonical_url'] . '" />';
+	$seo_meta .= '<link rel="bookmark" href="' . $vars['canonical_url'] . '" />';
+} else {
+	/// @TODO Consider any RESTful URL base as a canonical URL, that can be bookmarked ?
+	// Strip URL parameters before setting canonical URL
+	$canonical_url = explode('?', full_url());
+	$canonical_url = $canonical_url[0];
+	$seo_meta .= '<link rel="canonical" href="' . $vars['canonical_url'] . '" />';
+	$seo_meta .= '<link rel="bookmark" href="' . $vars['canonical_url'] . '" />';
+}
+
+
 // Set RSS feed
 global $autofeed;
 $feedref = "";
@@ -44,7 +71,10 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo $title; ?></title>
+	<?php echo $seo_meta; ?>
+	
 	<?php
 	echo elgg_view('page/elements/shortcut_icon', $vars);
 	

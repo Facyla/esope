@@ -9,7 +9,7 @@ $french = array(
 	 * Menu items and titles
 	 */
 	'bookmarks' => "Liens web",
-	'bookmarks:add' => "Mettre une page web en lien web",
+	'bookmarks:add' => "Créer un nouveau lien web",
 	'bookmarks:edit' => "Modifier le lien web",
 	'bookmarks:owner' => "Les liens web de %s",
 	'bookmarks:friends' => "Liens web des contacts",
@@ -43,7 +43,7 @@ $french = array(
 	'bookmarks:river:item' => "une page",
 	'river:commented:object:bookmarks' => "un lien web",
 
-	'item:object:bookmarks' => "Pages web mises en liens web",
+	'item:object:bookmarks' => "Liens web",
 
 	'bookmarks:group' => "Liens web",
 	'bookmarks:enablebookmarks' => "Activer les liens web",

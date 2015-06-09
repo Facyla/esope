@@ -212,7 +212,7 @@ ou cliquez directement sur le lien ci-dessous pour confirmer son adhésion :
 	'groups:ecml:groupprofile' => 'Les profils de groupe',
 	
 	'groups:owned:user' => "Groupes dont %s est propriétaire ou responsable",
-	'groups:membershiprequests:pending' => "Gérer les demandes d'inscriptions (%s)",
+	'groups:membershiprequests:pending' => "Gérer les demandes d'adhésion (%s)",
 	'groups:invitations:pending' => "Invitations en attente (%s)",
 	'groups:my_status' => "Mon statut",
 	'groups:my_status:group_owner' => "Propriétaire du groupe",

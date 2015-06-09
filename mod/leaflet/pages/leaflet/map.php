@@ -20,10 +20,7 @@
 	provide map URL (with access code)
 */
 
-global $CONFIG;
-
-$head = elgg_view('leaflet/leaflet_head');
-
+$title = elgg_echo('leaflet:map');
 
 // BUILD MAP
 $body .= elgg_view('leaflet/basemap', array('map_id' => 'map'));
@@ -34,6 +31,6 @@ $body .= elgg_view('leaflet/searchonmap');
 
 
 // Compose page content
-echo elgg_view('pageshell', array('head' => $head, 'body' => $body));
+echo elgg_view('pageshell', array('head' => $head, 'body' => $body, 'title' => $title));
 
 

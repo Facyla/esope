@@ -7,15 +7,12 @@
 
 $entity = $vars['entity'];
 
-$title = $entity->title;
-if (!$title) {
-	$title = $entity->name;
-}
-
 // different entity types have different title attribute names.
 $title = isset($entity->name) ? $entity->name : $entity->title;
 // don't let it be too long
 $title = elgg_get_excerpt($title);
+
+$title .= '<span style="float:right;">' . elgg_view('output/access', array('entity' => $entity, 'hide_text' => true)) . '</span>';
 
 $owner = $entity->getOwnerEntity();
 if ($owner) {

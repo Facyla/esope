@@ -29,7 +29,7 @@ if ($full) {
 			$even_odd = ( 'odd' != $even_odd ) ? 'odd' : 'even';
 			$body .= "<p class=\"{$even_odd}\"><b>";
 			$body .= $item->title.':</b> ';
-			$body .= $item->value;
+			$body .= html_entity_decode($item->value);
 		}
 	}
 	$metadata = elgg_view_menu('entity', array(
@@ -51,9 +51,9 @@ if ($full) {
 	echo $list_body;
 	echo $body;
 	if ($event->long_description) {
-		echo '<p>'.$event->long_description.'</p>';
+		echo elgg_view('output/longtext', array('value' => $event->long_description)) . '</p>';
 	} else {
-		echo '<p>'.$event->description.'</p>';
+		echo elgg_view('output/longtext', array('value' => $event->description)) . '</p>';
 	}
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
 		echo elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
@@ -105,7 +105,7 @@ if ($full) {
 	);
 	$list_body = elgg_view('object/elements/summary', $params);
 	
-	echo '<h3><a href="'.$event->getURL().'">' . $event->title . '</a></h3>' . '<br class="clearfloat" />' . elgg_view_image_block($icon, $list_body);
+	echo '<h3><a href="'.$event->getURL().'">' . html_entity_decode($event->title) . '</a></h3>' . '<br class="clearfloat" />' . elgg_view_image_block($icon, $list_body);
 }
 
 

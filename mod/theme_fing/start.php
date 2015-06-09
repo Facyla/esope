@@ -15,6 +15,17 @@ function theme_fing_init(){
 	elgg_extend_view('css', 'theme_fing/css');
 	elgg_extend_view('css/admin', 'theme_fing/admin_css');
 	
+	// Re-define registration page and block (use 2 sides)
+	elgg_unextend_view('register/extend', 'forms/groups/register_join_groups');
+	elgg_unextend_view('forms/register', 'hybridauth/register');
+	elgg_unextend_view('register/extend', 'digest/register');
+	elgg_unextend_view('register/extend', 'newsletter/register');
+	//elgg_extend_view('register/extend_side', 'forms/groups/register_join_groups', 0);
+	// Override registration page
+	elgg_register_page_handler("register", "theme_fing_register_page_handler");
+	// Register hook to registration action
+	elgg_register_plugin_hook_handler("action", "register", "theme_fing_register_action_hook",0);
+	
 	// Extend groups sidebar (below owner_block and before search and members)
 	//if (elgg_is_active_plugin('search')) elgg_extend_view('groups/sidebar/search', 'groups/sidebar/group_news_extend', 100);
 	//else elgg_extend_view('groups/sidebar/members', 'groups/sidebar/group_news_extend', 100);
@@ -39,7 +50,10 @@ function theme_fing_init(){
 		}
 	}
 	
+	// Page handlers
 	elgg_register_page_handler("fing", "fing_page_handler");
+	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
+	
 	
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_fing/lib/event_calendar/model.php');
@@ -100,19 +114,46 @@ function theme_fing_public_index() {
 }
 
 
-
-function theme_fing_get_pin_entities() {
+// Get pins for homepage
+function theme_fing_get_pin_entities($selection = 'manual', $limit = 6) {
 	if (elgg_is_active_plugin('pin')) {
-		$ent_guid = elgg_get_plugin_setting('homehighlight1', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight2', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight3', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight4', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight5', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight6', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
-		$ent_guid = elgg_get_plugin_setting('homehighlight7', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+		
+		switch($selection) {
+			case 'latest':
+				// Return latest pins
+				$ents = elgg_get_entities_from_metadata(array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit));
+				break;
+			
+			case 'manual':
+			default:
+				// Use custom selection (not all are public, so limit is not useful here)
+				$ent_guid = elgg_get_plugin_setting('homehighlight1', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight2', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight3', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight4', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight5', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight6', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+				$ent_guid = elgg_get_plugin_setting('homehighlight7', 'theme_fing'); if ($ent = get_entity($ent_guid)) $ents[] = $ent;
+		}
+		
 		return $ents;
-	} else return false;
+	}
+	return false;
 }
+
+
+// Bypass password verification
+function theme_fing_register_action_hook($hook, $entity_type, $returnvalue, $params) {
+	$password = get_input('password');
+	set_input('password2', $password);
+	return $returnvalue;
+}
+
+function theme_fing_register_page_handler($page){
+	include(dirname(__FILE__) . '/pages/theme_fing/register.php');
+	return true;
+}
+
 
 
 function fing_page_handler($page){
@@ -131,6 +172,13 @@ function fing_page_handler($page){
 		default:
 			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
+	return true;
+}
+
+
+function qntransitions_page_handler($page){
+	if (!empty($page[0])) set_input('pagetype', $page[0]);
+	include(dirname(__FILE__) . '/pages/theme_fing/qntransitions.php');
 	return true;
 }
 

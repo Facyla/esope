@@ -31,18 +31,13 @@ if (!$annotation) {
 	forward(REFERER);
 }
 
-// notify if poster wasn't owner
+
+// Always notify if poster is not owner
 $notify = false;
 if ($entity->owner_guid != $user->guid) {
 	$notify = true;
 } else {
-	// Setting is synchronized between with comment_tracker's
-	if (elgg_is_active_plugin('comment_tracker')) {
-		$notify_user = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
-	} else {
-		$notify_user = elgg_get_plugin_setting('notify_owner', 'notification_messages');
-	}
-	if ($notify_user == 'yes') { $notify = true; }
+	$notify = notification_messages_notify_owner();
 }
 
 
@@ -60,7 +55,7 @@ if ($notify) {
 				$user->name,
 				$user->getURL(),
 			));
-	// Trigger a hook to provide better integration with other plugins
+	// Trigger a hook to enable integration with other plugins
 	$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
 	// Failsafe backup if hook as returned empty content but not false (= stop)
 	if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }

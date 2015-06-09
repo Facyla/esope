@@ -1,0 +1,48 @@
+<style type="text/css">
+	td.app_label{
+		text-align:center;
+	}
+	
+	#app_content textarea{
+		width:95%;
+		height: 256px;
+	}
+</style>
+<table width="100%">
+	<tr>
+		<td colspan="4" class="app_title">Fiche de mise en pratique</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;text-align:center;">
+		<br><center>
+				<div style="width:200px;height:17px;background-color:#eeeeee">
+					<div style="width: 100%;background-color:#0088ff;height:17px;float:left"></div>
+				</div>
+			</center>100%<br>
+		</td>
+	</tr>
+	<tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">Bilan / Autoévaluation</td>
+	</tr>
+	<tr>
+		<td class="app_label" colspan="4" style="width:100%">
+			<textarea id="zone11" maxlength="2000"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" class="app_title" style="background-color:#ffffff;border:none;">&nbsp;</td>
+	</tr>	
+</table>
+
+<script type="text/javascript">
+
+	function loadFields(){
+		$("#zone11").val(fiche.zone11);
+	}
+
+	function validateFields(){
+		fiche.zone11 = $("#zone11").val();
+	}
+	
+</script>

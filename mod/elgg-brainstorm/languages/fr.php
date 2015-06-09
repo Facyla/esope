@@ -13,30 +13,28 @@ $french = array(
 	'brainstorm:filter:hot' => "Hot",
 	'brainstorm:filter:new' => "Nouvelles",
 	'brainstorm:filter:accepted' => "Acceptées",
-	'brainstorm:filter:completed' => "Terminées",
+	'brainstorm:filter:finished' => "Terminées",
 
 	'item:object:idea' => 'Idées',
 	'river:create:object:idea' => "%s a soumis l'idée %s",
 	'river:comment:object:idea' => "%s a commenté l'idée %s",
 	'river:update:object:idea' => "%s a modifié l'idée %s",
 
-
-	'brainstorm' => "Boîte à idées",
-	'brainstorm:settings' => "Réglages Boîte à idées",
+	'brainstorm' => "Remue-méninges",
 	'brainstorm:add' => "Ajouter une idée",
-	'brainstorm:edit' => "Éditer une idée",
+	'brainstorm:edit' => "Éditer une ideé",
 	'brainstorm:new' => "Une nouvelle idée",
 
 	'brainstorm:all' => "Toutes les idées",
 	'brainstorm:owner' => "Idées de %s",
 	'brainstorm:friends' => "Idées des contacts",
-	'brainstorm:idea:edit' => "Éditer cette idée",
+	'brainstorm:idea:edit' => "Éditer cette ideé",
 	'brainstorm:idea:add' => "Ajouter cette idée",
 
-	'brainstorm:group:settings:title' => "Options de la boîte à idées du groupe %s",
-	'brainstorm:group_settings' => "Options de la boîte à idées",
-	'brainstorm:enablebrainstorm' => "Active la Boîte à idées",
-	'brainstorm:group' => 'Boîte à idées',
+	'brainstorm:group:settings:title' => "Options du remue-méninges du groupe %s",
+	'brainstorm:group_settings' => "Options du remue-méninges",
+	'brainstorm:enablebrainstorm' => "Active le remue-méninges",
+	'brainstorm:group' => 'Remue-méninges du groupe',
 	'brainstorm:group:idea' => 'Idées du groupe',
 	'brainstorm:same_group' => "Dans le même groupe :",
 	'brainstorm:view:all' => "Voir tout",
@@ -50,14 +48,17 @@ $french = array(
 	'brainstorm:status' => "Statut :",
 	'brainstorm:state' => "État :",
 	'brainstorm:status_info' => "Information sur le statut :",
-	'brainstorm:open' => 'ouvert',
-	'brainstorm:under_review' => "en cours d'évaluation",
-	'brainstorm:planned' => 'planifié',
-	'brainstorm:started' => 'commencé',
-	'brainstorm:completed' => 'terminé',
-	'brainstorm:declined' => 'décliné',
+	'brainstorm:open' => 'Ouverte',
+	'brainstorm:under_review' => "En cours d'évaluation",
+	'brainstorm:planned' => 'Planifiée',
+	'brainstorm:started' => 'Commencée',
+	'brainstorm:completed' => 'Terminée',
+	'brainstorm:declined' => 'Déclinée',
 	'brainstorm:minorchange' => "Changement mineur. Votre modification ne sera pas notifiée dans votre flux et celui du groupe, sauf si vous avez changé le statut de l'idée.",
 
+	'brainstorm:settings:status' => "Changer l'intitulé des statuts",
+	'brainstorm:settings:status:accepted' => "Avec ces statuts, les points sont dépensés.",
+	'brainstorm:settings:status:finished' => "Avec ces statuts, les points sont rendus.",
 
 	'brainstorm:none' => "Pas d'idée.",
 	'brainstorm:novoteleft' => "vote restant.",
@@ -77,7 +78,7 @@ $french = array(
 
 	'brainstorm:add' => "soumettez une nouvelle idée",
 
-	'brainstorm:settings:points' => "Nombre de points",
+	'brainstorm:settings:brainstorm_nbr_points' => "Nombre de points de vote permis",
 	'brainstorm:settings:question' => "Question",
 
 	/**
@@ -89,7 +90,7 @@ $french = array(
 	'brainstorm:numbertodisplay' => "Nombre d'idées à afficher ",
 	'brainstorm:typetodisplay' => "Afficher par ",
 	'brainstorm:widget:points_left:title' => "Votes restants",
-	'brainstorm:widget:points_left:description' => "Affiche vos votes restants dans les Boîte à idées des groupes dont vous êtes membre.",
+	'brainstorm:widget:points_left:description' => "Affiche vos votes restants dans les remue-méninges des groupes dont vous êtes membre.",
 
 	/**
 	 * Status messages
@@ -105,7 +106,11 @@ $french = array(
 	'brainstorm:group:settings:failed' => "Le groupe n'est pas défini ou vous n'êtes pas autorisé à éditer ce groupe.",
 	'brainstorm:group:settings:save:success' => "Les paramètres ont été enregistrées.",
 	'brainstorm:settings:brainstorm_submit_idea_without_point' => "Soumettre une idée sans avoir de point",
-	'brainstorm:settings:brainstorm_submit_idea_without_point_string' => "Cochez si vous souhaitez que les membres du groupe puissent soumettre une idée sans avoir de point. Attention, cela offre la possibilité à un utilisateur de soumettre beaucoup d'idée sans gage de qualité.",
+	'brainstorm:settings:brainstorm_submit_idea_without_point_string' => "Cochez si vous souhaitez que les membres du groupe puissent soumettre une idée sans avoir de point. Attention, cela offre la possibilité aux utilisateurs de soumettre beaucoup d'idée sans gage de qualité.",
+	'brainstorm:settings:separate_tabs' => "Séparer les onglets",
+	'brainstorm:settings:separate_tabs:info' => "Laisser vide un champ permet de ne pas utiliser et afficher un status.",
+	'brainstorm:settings:brainstorm_separate_accepted_tabs' => "Afficher les onglets des status \"En cours d'évaluation\", \"Planifiée\" et \"Commencée\" au lieu de les regrouper dans l'onglet \"Acceptées\".",
+	'brainstorm:settings:brainstorm_separate_finished_tabs' => "Afficher les onglets des status \"Terminée\" et \"Déclinée\" au lieu de les regrouper dans l'onglet \"Terminées\".",
 
 	/**
 	 * Error messages
@@ -120,7 +125,7 @@ $french = array(
 	 * Notify messages
 	 */
 	'brainstorm:notify:subject' => "Une idée à laquelle vous avez voté est %s.",
-	'brainstorm:notify:body' => "L'idée <a href=\"%s\">%s</a> est %s.<br><br>Vous avez récupéré les points que vous aviez mis à cette idée.<br><br><a href=\"%s\">Aller dans la boîte à idées du groupe %s</a>",
+	'brainstorm:notify:body' => "L'idée <a href=\"%s\">%s</a> est %s.<br><br>Vous avez récupéré les points que vous aviez mis à cette idée.<br><br><a href=\"%s\">Aller dans le remue-méniges du groupe %s</a>",
 
 );
 

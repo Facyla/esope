@@ -3,6 +3,8 @@
  * French strings
  */
 
+global $CONFIG;
+
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
 $fr = array(
@@ -117,8 +119,8 @@ $fr = array(
 	
 	// Overrides plugins translations
 	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
-  'river:comment:object:announcement' => "%s a commenté %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
+	'river:comment:object:announcement' => "%s a commenté %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
 	
 	'widget:toggle' => "Montrer/masquer le module %s",
 	'widget:editmodule' => "Configurer le module %s",
@@ -159,20 +161,6 @@ $fr = array(
 	'adf_platform:members:online' => "Membres connectés",
 	'adf_platform:members:newest' => "Derniers inscrits",
 	'adf_platform:groups:featured' => "Groupes à la Une",
-	
-	// Widgets
-	'adf_platform:widget:bookmark:title' => 'Liens web',
-	'adf_platform:widget:brainstorm:title' => 'Idées',
-	'adf_platform:widget:blog:title' => 'Articles',
-	'adf_platform:widget:event_calendar:title' => 'Agenda',
-	'adf_platform:widget:file:title' => 'Fichiers',
-	'adf_platform:widget:file_folder:title' => 'Dossiers de fichiers',
-	'adf_platform:widget:group:title' => 'Groupes',
-	'adf_platform:widget:page:title' => 'Wikis',
-	'adf_platform:widget:user_activity:title' => "Activité du site",
-	'adf_platform:widget:user_activity:description' => "Affiche vos dernières activités",
-	'adf_platform:widget:site_activity:title' => "Activité récente",
-	'adf_platform:widget:site_activity:description' => "Affiche les dernières activités du site",
 	
 	'accessibility:sidebar:title' => "Menu secondaire",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -215,8 +203,8 @@ $fr = array(
 	
 	// New group
 	// @TODO : Ce texte devrait être adapté à votre site !
-	// use $CONFIG->url for site install URL, $CONFIG->site->email for site email
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . $CONFIG->url . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
+	// use elgg_get_site_url() for site install URL, $CONFIG->site->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . elgg_get_site_url() . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
 	'groups:search:regular' => "Recherche de groupe",
 	'groups:regularsearch' => "Nom ou mot-clef",
 	'search:group:go' => "Rechercher un groupe",
@@ -237,17 +225,15 @@ $fr = array(
 	
 	'adf_platform:access:public' => "Public (accessible hors connexion)",
 	
-	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
-	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
 	'bookmarks:filter' => "Liens à afficher",
 	'bookmarks:mine' => "Les miens",
 	'bookmarks:mygroups' => "Dans mes groupes",
-	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
-	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",
-	'messages:widget:title' => "Messages non lus",
-	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:moremessages' => "Afficher tous les messages non lus",
+	'messages:togglecontent' => "Montrer/masquer le contenu",
+	'messages:widget:unreadcount' => '%s messages non lus',
+	'messages:widget:unreadcount:singular' => '1 message non lu',
 	
 	
 	// Layout settings
@@ -258,7 +244,7 @@ $fr = array(
 	'adf_platform:headertitle' => "Titre du site (cliquable, dans le bandeau)",
 	'adf_platform:headertitle:help' => "Pour agrandir certains caractères, encadrez-les de balises, et utilisez la classe 'minuscule' pour changer la casse&nbsp;: &lt;span&gt;T&lt;/span&gt;itre.&lt;span class=\"minuscule\"&gt;fr&lt;/span&gt;",
 	'adf_platform:header:content' => "Contenu de l'entête (code HTML libre). Pour retrouver la configuration initiale avec une image de logo configurable, remplacez le contenu par \"RAZ\" (en mode HTML).",
-	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . $CONFIG->url . '/mod/adf_public_platform/img/logo.gif" alt="Logo du site"  /></a></div>',
+	'adf_platform:header:default' => '<div id="easylogo"><a href="/"><img src="' . elgg_get_site_url() . 'mod/adf_public_platform/img/logo.gif" alt="Logo du site"  /></a></div>',
 	'adf_platform:header:height' => "Hauteur de l'entête du menu (identique à celle de l'image de fond utilisée - ou inférieure)",
 	'adf_platform:header:background' => "URL de l'image de fond de l'entête (apparaît également sous le menu)",
 	'adf_platform:footer:color' => "Couleur de fond du footer",
@@ -274,7 +260,7 @@ $fr = array(
 	'adf_platform:index_members' => "Afficher les membres connectés",
 	'adf_platform:index_recent_members' => "Afficher les derniers inscrits",
 	'adf_platform:homegroup_guid' => "Choisir le groupe principal / d'aide",
-	'adf_platform:homegroup_index' => "Afficher les actualités du groupe ?",
+	'adf_platform:homegroup_index' => "Afficher les actualités du groupe principal ?",
 	'adf_platform:homesite_index' => "Afficher les actualités du site ?",
 	'adf_platform:homegroup_autojoin' => "Inscrire automatiquement les nouveaux membres dans ce groupe ? (si forcé, réinscrit les membres désinscrits)",
 	
@@ -342,9 +328,11 @@ $fr = array(
 	'adf_platform:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
 	'adf_platform:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
 	'adf_platform:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
+	'adf_platform:settings:header' => "Contenu de l'entête",
+	'adf_platform:settings:header:help' => "Si défini, l'entête défini dans ce champs remplace le titre du site. L'entête s'affiche entre le menu supérieur et le menu de navigation.",
 	'adf_platform:settings:footer' => "Contenu du pied de page",
 	'adf_platform:settings:analytics' => "Code de suivi du trafic",
-	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (85px de haut par défaut)",
+	'adf_platform:settings:headerimg' => "Image du bandeau supérieur (hauteur par défaut : 85px)",
 	'adf_platform:settings:headerimg:help' => "Indiquez l'URL (relative) de l'image qui sera positionnée au centre du bandeau, sous le menu supérieur, et répétée si nécessaire horizontalement (motif). Utilisez une image de 85px de haut, et suffisamment large pour éviter d'être répétée sur un grand écran (2000px minimum). Pour des dimensions différentes, ajoutez dans les ci-dessous (en modifiant la hauteur) : <em>header { height:115px; }</em>",
 	'adf_platform:settings:helplink' => "Page d'aide",
 	'adf_platform:settings:helplink:help' => "Indiquez l'adresse de la page d'aide du site, correspondant au lien \"Aide\" du menu supérieur. Cette adresse doit être relative à celle du site (pas de lien externe).",
@@ -417,15 +405,27 @@ $fr = array(
 	'esope:widgets:searchresults:highlight_first' => "Nombre de résultats mis en avant (mode réduit seulement)",
 	'webprofiles' => "Profils en ligne",
 	'webprofiles:description' => "Profils sur divers grands réseaux sociaux, sites web et adresses mail",
-	'webprofiles:widget:title' => "Profils en ligne",
-	'webprofiles:widget:description' => "Affiche un bloc avec des liens vers vos profils, identités et contacts en ligne : vidadeo, facebook, linkedin, twitter, doyoubuzz, sites web et adresses mails, etc.",
 	'webprofiles:widget:help' => "Renseignez vos identifiants sur divers sites pour afficher l'icône du service avec un lien vers votre profil. Vous pouvez également ajouter des sites web, adresses mail et fils RSS.",
+	'webprofiles:widget:description' => "Affiche un bloc avec des liens vers vos profils, identités et contacts en ligne : vidadeo, facebook, linkedin, twitter, doyoubuzz, sites web et adresses mails, etc.",
+	'adf_platform:widget:user_activity:description' => "Affiche vos dernières activités",
+	'adf_platform:widget:site_activity:description' => "Affiche les dernières activités du site",
+	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
+	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
+	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
+	
 	
 	'adf_platform:settings:filters:friends' => "Supprimer l'onglet \"Contacts\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'adf_platform:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'adf_platform:settings:filters:all' => "Supprimer l'onglet \"Tous\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'adf_platform:settings:groups:inviteanyone' => "Permettre d'inviter tout membre dans les groupes ? (par défaut : non = contacts seulement)",
+	'adf_platform:settings:groups:invite_picker' => "Type de sélecteur",
+	'adf_platform:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
+	'adf_platform:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
+	'adf_platform:invite_picker:userpicker' => "Auto-complétion",
 	'adf_platform:groups:allowregister' => "Inscrire dans le groupe",
+	'adf_platform:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'adf_platform:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'adf_platform:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'adf_platform:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
@@ -573,7 +573,8 @@ $fr = array(
 	/* ESOPE search */
 	'adf_platform:settings:groups:searchtab' => "Onglet de recherche multi-critère",
 	'adf_platform:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
-	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes",
+	'adf_platform:grouptools:priority' => "Ordre des outils dans les groupes (menu)",
+	'adf_platform:groupoptions:priority' => "Ordre des options des outils des groupes (formulaire de configuration du groupe)",
 	'adf_platform:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'esope:search:members:role' => 'Statut',
 	'members:label:search' => "Recherche",
@@ -583,7 +584,7 @@ $fr = array(
 	'esope:membersearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de membres (meta1, meta2, etc.)",
 	'esope:groupsearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de groupes (meta1, meta2, etc.)",
 	'esope:search:details' => "Utiliser plusieurs critères pour affiner votre recherche",
-	'esope:fulltextsearch' => "Recherche libre",
+	'esope:fulltextsearch' => "Recherche plein texte",
 	'esope:search:type' => "Type de recherche",
 	'esope:search:subtype' => "Type de publication",
 	'esope:search:profile_type' => "Type de profil",
@@ -634,7 +635,7 @@ $fr = array(
 	'esope:tinymce:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur TinyMCE.<br />IMPORTANT : ce réglage définit uniquement le comportement de TinyMCE, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
 	
 	// Htmlawed settings
-	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permetttent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE, veuillez également les vérifier !",
+	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permettent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE, veuillez également les vérifier !",
 	'esope:htmlawed:safe' => "Activer le mode sécurisé",
 	'esope:htmlawed:safe:details' => "Ce mode applique un filtrage très aggressif sur les saisies, bloquant pratiquement tout contenu riche. Veuillez lire attentivement <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6\">la documentation du \safe mode\"</a> avant d'activer ce réglage.<br />Réglage recommandé : NON.",
 	'esope:htmlawed:elements' => "Eléments et propriétés HTML",
@@ -666,6 +667,7 @@ $fr = array(
 	'adf_platform:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'adf_platform:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
+	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
 	'esope:groups:disable_widgets:loggedin' => "Seulement si connecté",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
@@ -684,6 +686,12 @@ $fr = array(
 	'groups:hint:customtab7' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'esope:autorefresh' => "Rafraîchissement automatique",
+	'esope:autorefresh:no' => "Non",
+	'esope:autorefresh:yes' => "Oui",
+	'esope:autorefresh:sortby' => "tri par",
+	'esope:autorefresh:latest' => "Date",
+	'esope:autorefresh:likes' => "Likes",
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
@@ -697,8 +705,10 @@ $fr = array(
 	'esope:html_email_handler:css' => "CSS personnalisées des notifications",
 	'esope:html_email_handler:css:help' => "Si défini, cette feuille de style remplace celle par défaut définie dans la vue html_email_handler/notification/body.",
 	'esope:html_email_handler:wrapper:help' => "Si vous souhaitez éditer le modèle de page des notifications, veuillez copier et éditer la vue html_email_handler/notification/body dans votre plugin de thème.",
+	'esope:digest:css' => "Styles des résumés (digest)",
 	'esope:digest:css:help' => "Si vous souhaitez éditer les styles des résumés, veuillez copier et éditer les vues css/digest/* dans votre plugin de thème.",
 	'esope:digest:wrapper:help' => "Si vous souhaitez éditer le modèle de page des résumés, veuillez copier et éditer la vue page/layouts/digest dans votre plugin de thème.<br />Pour modifier les contenus et leur structure, veuillez consulter la documentation détaillée fournie avec le plugin Digest. Les vues utiles sont situées dans digest/elements/* mais vous devrez également définir les élements à intégrer aux résumés.",
+	'esope:newsletter:css' => "Styles des lettres d'information (newsletter)",
 	'esope:newsletter:css:help' => "Si vous souhaitez éditer les styles par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/css dans votre plugin de thème.",
 	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
 	'esope:digest:groups' => "Nouveaux groupes",
@@ -722,7 +732,23 @@ $fr = array(
 	'esope:subtype:file' => "fichier",
 	'esope:subtype:event_calendar' => "événement",
 	
-	// Icons
+	'esope:likes' => "Contenus appréciés",
+	
+	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
+	'esope:access:userfield' => "Visible par...",
+	
+	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
+	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
+	'esope:group:inactive' => "INACTIF",
+	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
+	'esope:group:archive' => "ARCHIVE",
+	'esope:group:inactive:details' => "Ce groupe a été archivé",
+	
+	
+	
+	/**********************/
+	/* Font Awesome ICONS */
+	/**********************/
 	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
@@ -732,16 +758,6 @@ $fr = array(
 	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
-	
-	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
-	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
-	'esope:group:inactive' => "INACTIF",
-	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
-	
-	'esope:likes' => "Contenus appréciés",
-	
-	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
-	
 	/* Esope FA icons - generic usage */
 	// Tools
 	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
@@ -763,10 +779,64 @@ $fr = array(
 	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
 	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
+	// User tools FA icons *override* (owner block)
+	// Core tools
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	// Plugins tools
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
+	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
+	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
+	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
+	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
+	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
+	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> Mes sondages",
+	
+	/* Main objects and search menus */
+	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groupes",
+	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Membres",
+	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Publications",
+	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Commentaires",
+	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'esope:search:filtered' => " (%s)",
+	'esope:search:unfiltered' => " (tout)",
+	//'all' => "",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Annonces',
+	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
+	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Sujets de discussion",
+	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
+	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Idées",
+	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'item:object:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinar",
+	/*
+	'item:object:faq' => "<i class=\"fa fa- fa-fw\"></i> FAQs",
+	'item:object:dossierdepreuve' => "<i class=\"fa fa- fa-fw\"></i> Dossier de preuve",
+	'item:object:cmspage' => "<i class=\"fa fa- fa-fw\"></i> Page statique",
+	*/
 	
 	// Group tools FA icons *override* - please update CSS accordingly
-	/* @TODO
-	*/
 	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
 	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
@@ -782,15 +852,57 @@ $fr = array(
 	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
 	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
 	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
-	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
 	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'photos:group' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'photos:group_albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	// Group actions and infos
-	'group_operators:manage' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les responsables du groupe",
-	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
+	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Gérer les responsables du groupe",
+	'groups:membershiprequests' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les demandes d'adhésion",
+	'groups:membershiprequests:pending' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les demandes d'adhésion (%s)",
+	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Rejoindre le groupe",
 	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
 	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Membre du groupe",
 	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
 	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
+	// Group modules
+	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sous-groupes",
+	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Images récentes",
+	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Albums récents",
+	
+	// User actions and infos
+	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
+	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
+	
+	/* Widgets */
+	'adf_platform:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Liens web',
+	'adf_platform:widget:brainstorm:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Idées',
+	'brainstorm:widget:points_left:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Votes restants',
+	'adf_platform:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Articles',
+	'adf_platform:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Agenda',
+	'adf_platform:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Fichiers',
+	'adf_platform:widget:file_folder:title' => '<i class="fa fa-folder-o fa-fw"></i> Dossiers de fichiers',
+	'adf_platform:widget:group:title' => '<i class="fa fa-users fa-fw"></i> Groupes',
+	'adf_platform:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Wikis',
+	'adf_platform:widget:user_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité du site",
+	'adf_platform:widget:site_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité récente",
+	'dashboard:widget:group:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité du groupe",
+	'messages:widget:title' => "<i class=\"fa fa-envelope-o mail outline icon\"></i> Messages non lus",
+	'webprofiles:widget:title' => "<i class=\"fa fa-user fa-fw\"></i> Profils en ligne",
+	'export_embed:widget:title' => "<i class=\"fa fa-code fa-fw\"></i> Widgets embarquables",
+	'widgets:profile_completeness:title' => "<i class=\"fa fa-user fa-fw\"></i> Mon profil",
+	'widgets:file_tree:title' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers", // ou : sitemap ?
+	'simplepie:widget' => "<i class=\"fa fa-rss fa-fw\"></i> Flux RSS",
+	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Carte", // ou : globe ?
+	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Recherche configurée",
+	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Texte libre",
+	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
+	
+	
+	/* Other interface */
+	'select:all' => 'Tout sélectionner',
+	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
 	
 	
 	// Actions
@@ -804,6 +916,52 @@ $fr = array(
 	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
 	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
+	
+	// ESOPE tools
+	'esope:tools:intro' => "Ces outils ne sont à utiliser que dans des cas particuliers, et nécessitent souvent un double accès administrateur et au code source pour être utilisés, du fait de leurs effets potentiels.",
+	'esope:tools:warning' => "Veuillez consulter leur code source avant de les utiliser.<br /><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</strong>",
+	'esope:tools:tool:group_admins' => "Admin groupes",
+	'esope:tools:tool:group_admins:details' => "Liste les administrateurs des groupes, et surtout les co-admins.",
+	'esope:tools:tool:users_email_search' => "Recherche membres par email",
+	'esope:tools:tool:users_email_search:details' => "Permet de retrouver le compte associé à une adresse email connue",
+	'esope:tools:tool:group_newsletters_default' => "Initialisation newsletters",
+	'esope:tools:tool:group_newsletters_default:details' => "Définit le réglage des newsletters des groupes sur 'no', lorsque aucun réglage n'avait encore été défini (plugin activé a posteriori)",
+	'esope:tools:tool:group_updates' => "MAJ champs groupmenu",
+	'esope:tools:tool:group_updates:details' => "(1.6 => 1.8) Modifie les champs ->groupmenu1 et ->groupmenu2 utilisés dans certaines versions d'Elgg 1.6 pour définir de nouveaux champs ->customtab1 et ->customtab2. Passage nécessaire par le code source pour activation",
+	'esope:tools:tool:spam_users_list' => "Antispam (nettoyage)",
+	'esope:tools:tool:spam_users_list:details' => "Outil très puissant, mais encore plus dangereux, pour supprimer massivement des comptes de spam, sur la base de divers critères, notamment structure de l'email. Activation et réglages via le code. Backup préalable impératif.",
+	'esope:tools:tool:test_mail_notifications' => "Test email de notification",
+	'esope:tools:tool:test_mail_notifications:details' => "Envoie un mail de notification à chaque consultation de la page. Pratique pour tester le design des notifications en direct",
+	'esope:tools:tool:threads_disable' => "Désactivation Threads",
+	'esope:tools:tool:threads_disable:details' => "A utiliser avant désactivation du plugin threads, si l'on souhaite ne plus utiliser celui-ci (qui pose divers problèmes)",
+	'esope:tools:tool:user_updates' => "Suppression widgets dashboard",
+	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
+	'esope:tools:tool:clear_cmis_credentials' => "Suppression des paramètres CMIS personnels",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Cet outil permet de supprimer les paramètres personnels associés au plugin elgg_cmis.",
+	'esope:tools:tool:entity_fields' => "Recherche d'entités",
+	'esope:tools:tool:entity_fields:details' => "Recherche d'entités de divers types/subtypes par propriété ou métadonnée",
+	'esope:tools:tool:users_stats' => "Statistiques sur les utilisateurs",
+	'esope:tools:tool:users_stats:details' => "Quelques statistiques sur les utilisateurs. Nombre de groupes pour le moment.",
+	'esope:tools:tool:group_publication_stats' => "Statistiques de publications dans les groupes",
+	'esope:tools:tool:group_publication_stats:details' => "Quelques statistiques sur les publications dans un groupe, par membre et par type de publication.",
+	
+	// Menus
+	'esope:menu:topbar' => "Mon compte",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	
+	
+	// Comment notifications
+	'generic_comment:email:body' => "%2\$s a publié un nouveau commentaire sur \"%1\$s\" :
+
+%3\$s
+
+Pour afficher la conversation : %4\$s
+
+Pour voir le profil de %5\$s : %6\$s
+
+Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
+",
 	
 	
 );

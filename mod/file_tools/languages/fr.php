@@ -19,7 +19,7 @@ $fr = array(
 	'file_tools:menu:group' => "Dossiers du groupe",
 	
 	// group tool option
-	'file_tools:group_tool_option:structure_management' => "Permettre aux membres de gérer les dossiers",
+	'file_tools:group_tool_option:structure_management' => "Dossiers : permettre aux membres de les gérer",
 	
 	// views
 

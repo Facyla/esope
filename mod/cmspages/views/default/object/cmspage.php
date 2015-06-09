@@ -37,9 +37,9 @@ $time_updated = $entity->time_created;
 
 $owner_guid = $entity->owner_guid;
 $owner = get_entity($owner_guid);
-$container_guid = $cmspage->container_guid;
-$parent_guid = $cmspage->parent_guid;
-$sibling_guid = $cmspage->sibling_guid;
+$container_guid = $entity->container_guid;
+$parent_guid = $entity->parent_guid;
+$sibling_guid = $entity->sibling_guid;
 
 //if (!empty($description)) $description = elgg_view('output/longtext', array('value' => $description));
 if (!empty($tags)) $tags = '<p class="tags">' . elgg_view('output/tags', array('tags' => $tags)) ; '</p>';

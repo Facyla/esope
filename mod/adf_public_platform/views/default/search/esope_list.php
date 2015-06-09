@@ -83,6 +83,7 @@ if (array_key_exists('search_type', $vars['params'])
 */
 
 if ($show_more) {
+	$type_str = strip_tags($type_str);
 	$more_str = elgg_echo('search:more', array($count, $type_str));
 	$more_url = elgg_http_remove_url_query_element($url, 'limit');
 	$more_link = "<li class='elgg-item'><a href=\"$more_url\">$more_str</a></li>";

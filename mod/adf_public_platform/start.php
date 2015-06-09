@@ -50,6 +50,15 @@ function esope_init() {
 	
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	
+	$forum_autorefresh = elgg_get_plugin_setting('discussion_autorefresh', 'adf_public_platform');
+	if ($forum_autorefresh == 'yes') {
+		elgg_extend_view('object/groupforumtopic', 'adf_platform/forum_autorefresh');
+	}
+	
+	// Ajout interface de chargement
+	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
+	//elgg_extend_view('page/elements/footer', 'adf_platform/loader');
+	
 	// Replace jQuery lib
 	elgg_register_js('jquery', 'mod/adf_public_platform/vendors/jquery-1.7.2.min.js', 'head');
 	// Add / Replace jQuery UI
@@ -156,9 +165,11 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
 	
-	// Modification des menus des groupes
+	// Modification des menus des groupes et membres (ajout/suppression)
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'adf_platform_owner_block_menu', 1000);
+	// Tri avant affichage des menus des groupes et membres
+	elgg_register_plugin_hook_handler('prepare', 'menu:owner_block', 'adf_platform_sort_menu_alpha');
 	
 	// Modification de la page de listing des sous-groupes
 	if (elgg_is_active_plugin('au_subgroups')) {
@@ -291,6 +302,7 @@ function esope_init() {
 	// Pour pouvoir lister tous les articles d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('blog', 'blog_page_handler');
 	elgg_register_page_handler('blog', 'adf_platform_blog_page_handler');
+	// Remplacement fonctions du blog
 	elgg_register_library('elgg:blog', elgg_get_plugins_path() . 'adf_public_platform/lib/blog.php');
 	// Pour pouvoir lister tous les bookmarks d'un membre (option du thème désactivée par défaut)
 	elgg_unregister_page_handler('bookmarks', 'bookmarks_page_handler');
@@ -310,6 +322,7 @@ function esope_init() {
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
+	// @TODO page handlers for downloadable and SEO-friendly images/ and files/
 	
 	// Esope liked content
 	if (elgg_is_active_plugin('likes')) {
@@ -381,14 +394,14 @@ function adf_platform_pagesetup(){
 			
 			// Ajoute lien vers l'annuaire
 			elgg_register_menu_item("page", array(
-					'name' => 'members', 'href' => $CONFIG->url . 'members', 
+					'name' => 'members', 'href' => elgg_get_site_url() . 'members', 
 					'text' => elgg_echo('adf_platform:directory'), 
 					"section" => "directory",
 				));
 			
 			// Ajoute lien vers les contacts
 			elgg_register_menu_item("page", array(
-					'name' => 'friends', 'href' => $CONFIG->url . 'friends/' . $own->username, 
+					'name' => 'friends', 'href' => elgg_get_site_url() . 'friends/' . $own->username, 
 					'text' => elgg_echo('friends'), 
 					'contexts' => array('members'), 
 				));
@@ -396,7 +409,7 @@ function adf_platform_pagesetup(){
 			// Ajoute lien vers les invitations
 			if (elgg_is_active_plugin('invitefriends')) {
 				$params = array(
-					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => $CONFIG->url . 'invite',
+					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => elgg_get_site_url() . 'invite',
 					'contexts' => array('members'), // Uniquement members pour ne pas overrider le comportement normal
 				);
 				elgg_register_menu_item('page', $params);
@@ -419,7 +432,7 @@ function adf_platform_pagesetup(){
 		
 		// Admin menus
 		if(elgg_in_context("admin") && elgg_is_admin_logged_in()){
-			// Remove menu builder (unused)
+			// Remove menu builder (too basic + not used)
 			elgg_unregister_menu_item("page", "appearance:menu_items");
 			// Add to Admin > appearance menu
 			elgg_register_admin_menu_item('configure', 'main_theme_config', 'appearance');
@@ -466,37 +479,42 @@ function adf_platform_pagesetup(){
 				}
 			
 				if (!elgg_in_context('groups')) {
-					$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
+					$group_url = elgg_get_site_url() . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
 					array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
-			} else if ($page_owner instanceof ElggUser) {
+			} else if (elgg_instanceof($page_owner, 'user')) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
-				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
-				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members') );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => elgg_get_site_url() . 'profile/' . $page_owner->username) );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members') );
 			}
 			
 			// Insert home link in all cases
-			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url));
+			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('adf_platform:homepage'), 'link' => elgg_get_site_url()));
 			
 		} else {
-			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $CONFIG->url);
-			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:homepage'), 'link' => $CONFIG->url);
+			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => elgg_get_site_url());
+			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:homepage'), 'link' => elgg_get_site_url());
 			
 			// Corrections selon le contexte
 			if (elgg_in_context('profile')) {
 				// Annuaire => Nom du membre
 				$page_owner = elgg_get_page_owner_entity();
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'), 'link' => $CONFIG->url . 'members');
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'), 'link' => elgg_get_site_url() . 'members');
 				$CONFIG->breadcrumbs[] = array('title' => $page_owner->name);
 			} else if (elgg_in_context('members')) {
 				// Membres => Annuaire
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('adf_platform:directory'));
 			} else {
 				// Par défaut : contexte
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $CONFIG->url . $context);
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => elgg_get_site_url() . $context);
 			}
+		}
+		
+		// Remove any HTML in breadcrumb title (and especially FA icons)
+		foreach ($CONFIG->breadcrumbs as $k => $v) {
+			$CONFIG->breadcrumbs[$k]['title'] = strip_tags($CONFIG->breadcrumbs[$k]['title']);
 		}
 	}
 	
@@ -533,7 +551,7 @@ function adf_platform_login_handler($event, $object_type, $object) {
 	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
 	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
 	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
+	if (!empty($loginredirect)) { forward(elgg_get_site_url() . $loginredirect); }
 	forward();
 }
 
@@ -544,7 +562,7 @@ function adf_platform_public_forward_login_hook($hook_name, $reason, $location, 
 		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 		// Si jamais la valeur de retour n'est pas définie, on le fait
 		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-		return $CONFIG->url . 'login';
+		return elgg_get_site_url() . 'login';
 	}
 	return null;
 }
@@ -646,6 +664,7 @@ if (!function_exists('messages_get_unread')) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
 		$db_prefix = elgg_get_config('dbprefix');
+		$offset = 0;
 		
 		// denormalize the md to speed things up.
 		// seriously, 10 joins if you don't.
@@ -655,6 +674,7 @@ if (!function_exists('messages_get_unread')) {
 			$id = get_metastring_id($string);
 			$map[$string] = $id;
 		}
+		//echo '<pre>' . print_r($map, true) . '</pre>';
 
 		$options = array(
 	//		'metadata_name_value_pairs' => array(
@@ -757,7 +777,7 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 	$lang = $CONFIG->language;
 
 	// Set default title
-	if (empty($title)) $title = $CONFIG->sitename . ' (';
+	if (empty($title)) $title = $CONFIG->sitename;
 	$vars['title'] = $title;
 	
 	switch ($embed_mode) {
@@ -843,6 +863,19 @@ if (elgg_is_active_plugin('profile_manager')) {
 		add_custom_field_type("custom_group_field_types", 'members_select', elgg_echo('profile:field:members_select'), $group_options);
 		// Percentage - interval=10
 		add_custom_field_type("custom_group_field_types", 'percentage', elgg_echo('profile:field:percentage'), $group_options);
+		
+		/* Profile fields : 
+		// registering profile field types
+		$profile_options = array(
+				"show_on_register" => true,
+				"mandatory" => true,
+				"user_editable" => true,
+				"output_as_tags" => true,
+				"admin_only" => true,
+				"count_for_completeness" => true
+			);
+		add_custom_field_type("custom_group_field_types", ...
+		*/
 	}
 	
 	/* Renvoie une autorisation d'accéder ou non
@@ -973,6 +1006,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$empty = elgg_extract('empty', $params, true);
 		$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
 		$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+		$auto_options = elgg_extract('auto-options', $params, false);
 		$search_field = '';
 		
 		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
@@ -980,8 +1014,15 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
-			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
-			// Multiple option become select or radio
+			// Failsafe to auto-discover options if none found ? - but would convert any text field to dropdown (not good)
+			//if (empty($options)) { $options = esope_get_meta_values($metadata); }
+			// Auto-discover valid values from existing metadata
+			if ($auto_options) {
+				$options = esope_get_meta_values($metadata);
+				$valtype = 'dropdown';
+			}
+			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) { $valtype = 'text'; }
+			// Multiple options become select or radio
 			if ($options) {
 				$valtype = 'dropdown';
 				if ($empty) $options['empty option'] = '';
@@ -1047,7 +1088,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		'metadata_name_value_pairs_operator' => 'AND',
 		'count' => false,
 	);
-	$defaults = array_merge($esearch_defaults, $defaults);
+	if (is_array($defaults)) $defaults = array_merge($esearch_defaults, $defaults);
+	else $defaults = $esearch_defaults;
 	
 	$q = esope_extract('q', $params, '');
 	// Note : we use entity_type and entity_subtype for consistency with regular search
@@ -1294,7 +1336,7 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 function esope_is_external_link($url) {
 	global $CONFIG;
 	$elements = parse_url($url);
-	$base_elements = parse_url($CONFIG->url);
+	$base_elements = parse_url(elgg_get_site_url());
 	if ($elements['host'] != $base_elements['host']) return true;
 	return false;
 }
@@ -1311,7 +1353,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		$folder_description = '';
 		$files_content = '';
 		// Folder link
-		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+		$folder_title_link = '<a href="' . elgg_get_site_url() . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
 		// Folder description
 		if (!empty($folder['folder']->description)) $folder_description .= ' <em>' . $folder['folder']->description . '</em>';
 		
@@ -1465,16 +1507,16 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			$description = json_encode(trim($template[2]));
 			switch($type) {
 				case 'cmspage':
-					// Cmspages always respectfriendly title formatting
+					// Cmspages always respect friendly title formatting
 					$source = elgg_get_friendly_title($source);
-					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
+					$source = elgg_get_site_url() . 'p/' . $source . '?embed=inner&noedit=true';
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
 						// @TODO : provide a REST URL access to an entity description (with access rights)
 						// Best we can get now would be exported JSON
 						// Export description only : export/default/1073/attr/description/
-						$source = $CONFIG->url . 'export/default/' . $source . '/attr/description/';
+						$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
 						if (empty($title)) $title = $ent->title;
 						else if (empty($description)) $description = $ent->title;
 					} else $source = false;
@@ -1590,13 +1632,20 @@ function esope_filter_entity_guid_by_metadata(array $values, array $md_filter) {
 
 /* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
  * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
+ * string $input
+ * string|array('string') $separators (\n will always be a separator)
+ * Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, etc.
  * Return : Tableau filtré, ou false
  */
-function esope_get_input_array($input = false) {
+function esope_get_input_array($input = false, $separators = array("\n", "\r", "\t", ",", ";", "|")) {
 	if ($input) {
-		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-		$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
-		$input = explode("\n", $input);
+		if (is_array($separators)) {
+			$main_sep = array_shift($separators);
+			$input = str_replace($separators, $main_sep, $input);
+			$input = explode($main_sep, $input);
+		} else {
+			$input = explode($separators, $input);
+		}
 		// Suppression des espaces
 		$input = array_map('trim', $input);
 		// Suppression des doublons
@@ -1605,6 +1654,56 @@ function esope_get_input_array($input = false) {
 		$input = array_filter($input);
 	}
 	return $input;
+}
+
+
+/* Ajoute des valeurs dans un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $add : value(s) to be added
+ */
+function esope_add_to_meta_array($entity, $meta = '', $add = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($add)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) $values = array($values);
+		else $values = array();
+	}
+	// Allow multiple values to be added in one pass
+	if (!is_array($add)) $add = array($add);
+	foreach ($add as $new_value) {
+		if (!in_array($new_value, $values)) { $values[] = $new_value; }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
+}
+
+/* Retire des valeurs d'un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $remove : value(s) to be removed
+ */
+function esope_remove_from_meta_array($entity, $meta = '', $remove = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($remove)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) { $values = array($values); } else { $values = array(); }
+	}
+	// Allow multiple values to be removed in one pass
+	if (!is_array($remove)) $remove = array($remove);
+	foreach ($values as $key => $value) {
+		if (in_array($value, $remove)) { unset($values[$key]); }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
 }
 
 
@@ -1621,7 +1720,7 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
 	$options = explode("\n", $options);
 	$options_values = array();
 	if ($addempty) $options_values[''] = "";
-	foreach($options as $option) {
+	if (is_array($options)) foreach($options as $option) {
 		$option = trim($option);
 		if (!empty($option)) {
 			if (strpos($option, '::')) {
@@ -1641,7 +1740,7 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
  */
 function esope_build_options_string($options, $prefix = 'option') {
 	$options_string = '';
-	if ($options) foreach ($options as $key => $value) {
+	if (is_array($options)) foreach ($options as $key => $value) {
 		if (!empty($options_string)) $options_string .= ' | ';
 		$options_string .= $key . '::' . $value;
 	}
@@ -1651,8 +1750,12 @@ function esope_build_options_string($options, $prefix = 'option') {
 /* Build multi-level array from string syntax
  * $input : the settings string
  * $separators : separators definition for each level (arrays allowed for each level)
+ * Note : by default this will build a key => value(s) array, but will not eg. parse CSV-like format
+ * $nokeys : do not use key:value mode, so it will split on 2nd separator level instead of trying to find keys
+ *   Eg. will produce [] => "Some content" instead of "Some content" => true
+ *   This allows CSV parsing, eg
  */
-function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ',')) {
+function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ','), $nokeys = false) {
 	$return_array = array();
 	$input = trim($input);
 	
@@ -1669,31 +1772,58 @@ function esope_get_input_recursive_array($input, $separators = array(array("|", 
 		
 		if ($separators[1]) {
 			// Potential sublevel
-			$new_separators = array_slice($separators, 2);
 			
-			// check for sub-level config
-			if (is_array($separators[1])) {
-				foreach ($separators[1] as $sep) {
+			// No key mode : check if 2nd level separator is used, otherwise add to array
+			if ($nokeys) {
+				$new_separators = array_slice($separators, 1);
+				
+				// check for sub-level config
+				if (is_array($separators[1])) {
+					foreach ($separators[1] as $sep) {
+						$pos = strpos($option, $sep);
+						if ($pos !== false) break;
+					}
+				} else {
+					$sep = $separators[1];
 					$pos = strpos($option, $sep);
-					if ($pos !== false) break;
 				}
+				// If we have a sub-level, get nested array
+				if ($pos !== false) {
+					$return_array[] = esope_get_input_recursive_array($option, $new_separators, $nokeys);
+				} else {
+					$return_array[] = $option;
+				}
+				
 			} else {
-				$sep = $separators[1];
-				$pos = strpos($option, $sep);
+				$new_separators = array_slice($separators, 2);
+			
+				// check for sub-level config
+				if (is_array($separators[1])) {
+					foreach ($separators[1] as $sep) {
+						$pos = strpos($option, $sep);
+						if ($pos !== false) break;
+					}
+				} else {
+					$sep = $separators[1];
+					$pos = strpos($option, $sep);
+				}
+				
+				// Get nested array if any
+				if ($pos !== false) {
+					$key = trim(substr($option, 0, $pos));
+					$value = substr($option, $pos + strlen($sep));
+					$return_array[$key] = esope_get_input_recursive_array($value, $new_separators, $nokeys);
+				} else {
+					$return_array[$option] = true;
+				}
 			}
 			
-			// Get nested array if any
-			if ($pos !== false) {
-				$key = trim(substr($option, 0, $pos));
-				$value = substr($option, $pos + strlen($sep));
-				$return_array[$key] = esope_get_input_recursive_array($value, $new_separators);
-			} else {
-				$return_array[$option] = true;
-			}
 		} else {
 			// No sublevel : add option
-			// Note : we need to have value set because we're looking for rights with in_array (which looks for values, bot keys)
-			$return_array[$option] = true;
+			// Note : if using keys, we need to have value set because we're looking for rights with in_array
+			// (which looks for values, not keys)
+			if ($nokeys) $return_array[] = $option;
+			else $return_array[$option] = true;
 		}
 	}
 	return $return_array;
@@ -1728,10 +1858,7 @@ function esope_set_input_recursive_array($array, $separators = array("|", '::', 
 */
 function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	// Admin : on ne tient pas compte des accès
-	if ($bypass) {
-		$ia = elgg_get_ignore_access();
-		elgg_set_ignore_access(true);
-	}
+	if ($bypass) { $ia = elgg_set_ignore_access(true); }
 	switch($mode) {
 		case 'featured':
 			// Groupes en Une
@@ -1887,6 +2014,7 @@ function esope_add_file_to_entity($entity, $input_name = 'file') {
 	
 		$filename = $_FILES[$input_name]['name'];
 		if ($uploaded_file = get_uploaded_file($input_name)) {
+error_log("#3");
 			// Remove previous file, if any
 			// @TODO not tested... check it's working as expected
 			if (!empty($entity->{$input_name})) {
@@ -1894,7 +2022,7 @@ function esope_add_file_to_entity($entity, $input_name = 'file') {
 			}
 
 			// Create new file
-			$prefix = "knowledge_database/{$input_name}/";
+			$prefix = "esope_files/{$input_name}/";
 			$filehandler = new ElggFile();
 			$filehandler->owner_guid = $entity->guid;
 			$filehandler->setFilename($prefix . $filename);
@@ -1991,7 +2119,61 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 	return $handler($from, $to, $subject, $body, $params);
 }
 
+// Callback function to be used when comparing 2 menu items
+// It is used to compare menu elements that include FontAwesome icons and/or starting spaces
+function esope_menu_alpha_cmp($a, $b) {
+	$a = trim(strip_tags($a->getText()));
+	$b = trim(strip_tags($b->getText()));
+	if ($a == $b) { return 0; }
+	//return strcmp($a,$b);
+	// Comparaison insensible à la case
+	return strcasecmp($a,$b);
+}
 
+
+// Callback function to be used when comparing 2 annotations likes count
+function esope_annotation_likes_cmp($a, $b) {
+	$al = new AnnotationLike($a->id);
+	$bl = new AnnotationLike($b->id);
+	if (!$al->isValid() || !$bl->isValid()) { return 0; }
+	$ac = $al->count();
+	$bc = $bl->count();
+	if ($ac == $bc) return 0;
+	// Use reverse order : max on top
+	return strcmp($bc, $ac);
+}
+
+
+
+/* @TODO : Build menu list from flat config file (without enclosing <ul>)
+ * IMPORTANT : define top level entries first
+ * Config syntax : name::url::class::parent_name
+ * Translation string : esope:menu[:<parent_name>]:<name>
+ * $menu = array(
+ *    'entry_name' => array(
+ *        'href' => 'URL',
+ *        'class' => 'css class',
+ *        'submenu' => array(),   // <= menu array
+ *      ),
+ *  )
+ */
+/*
+function esope_build_menu($a, $b) {
+	$menu = array();
+	$entries = array();
+	foreach ($entries as $name => $entry) {
+		$menu[$name] = array(),
+	}
+	return $menu;
+}
+*/
+
+
+// Returns a list of admin tools (used in esope/tools)
+function esope_admin_tools_list() {
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
+	return $tools;
+}
 
 
 

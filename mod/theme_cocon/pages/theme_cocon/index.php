@@ -1,6 +1,6 @@
 <?php
 /**
- * Inria base page
+ * Cocon base page
  */
 
 global $CONFIG;

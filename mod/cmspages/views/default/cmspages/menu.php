@@ -11,11 +11,11 @@
 */
 
 $pagetype = elgg_get_friendly_title($vars['pagetype']); // CMS Page type - used instead of GUIDs to select cmspage entities
-$url = $vars['url'] . "cmspages/?pagetype=$pagetype"; // Set the base url
+$url = elgg_get_site_url() . "cmspages/?pagetype=$pagetype"; // Set the base url
 $new_page = true;
 
 // Empty pagetype or very short pagetypes are not allowed
-$tooshort = (strlen($pagetype)<3) ? true : false;
+$tooshort = (empty($pagetype)) ? true : false;
 
 // Get cmspages
 $cmspages = elgg_get_entities(array('types' => 'object', 'subtypes' => 'cmspage', 'order_by' => 'time_created asc', 'limit' => 0));

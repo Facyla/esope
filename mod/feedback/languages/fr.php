@@ -58,7 +58,8 @@ $french = array(
 	'feedback:list:about' => 'A propos de',
 	'feedback:list:page' => 'URL du feedback',
 	'feedback:list:from' => 'De',
-	'feedback:list:nofeedback' => 'Aucun feedback à ce jour.',
+	'feedback:list:nofeedback' => 'Aucun feedback.',
+	'feedback:list:noopenfeedback' => 'Aucun feedback ouvert pour le moment.',
 
 	'feedback:user_1' => "Identifiant 1 : ",
 	'feedback:user_2' => "Identifiant 2 : ",
@@ -92,16 +93,29 @@ $french = array(
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
 	
 	// Feedback status
+	'feedback:status' => "Statut des feedbacks",
 	'feedback:list:status:open' => "Ouvert",
 	'feedback:status:open' => "Feedbacks ouverts",
-	'feedback:list:status:closed' => "Fermé",
-	'feedback:status:closed' => "Feedbacks fermés",
-	'feedback:closeconfirm' => "Un feedback fermé est considéré comme traité et le sujet comme clos, confirmer la fermeture ?",
+	'feedback:list:status:closed' => "Résolu",
+	'feedback:status:closed' => "Feedbacks résolus",
+	'feedback:closeconfirm' => "Marquer comme résolu ? Un feedback résolu est considéré comme traité et alimente la base de connaissances. Confirmer ?",
 	'feedback:close:success' => "Feedback marqué comme résolu / déjà traité.",
-	'feedback:close:error' => "Impossible de fermer ce feedback",
-	'feedback:reopenconfirm' => "Ce feedback est considéré comme déjà traité. Souhaitez-vous le marquer comme actif et confirmer la réouverture ?",
+	'feedback:close:error' => "Impossible de marquer ce feedback comme résolu",
+	'feedback:reopenconfirm' => "Ce feedback est considéré comme déjà résolu. Souhaitez-vous le rouvrir ?",
 	'feedback:reopen:success' => "Feedback marqué comme en cours / non résolu.",
 	'feedback:reopen:error' => "Impossible de rouvrir ce feedback",
+	
+	// Feedbacks menu
+	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:open' => "%s à traiter",
+	'feedback:menu:closed' => "%s résolus",
+	'feedback:menu:content' => "%s signalements",
+	'feedback:menu:bug' => "%s dysfonctionnements",
+	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:question' => "%s questions",
+	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:other' => "%s autres / non classés",
+	
 	
 	// About - feedback types
 	'feedback:about' => "de type",

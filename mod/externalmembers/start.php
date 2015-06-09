@@ -201,7 +201,7 @@ function externalmember_route($hook_name, $entity_type, $return_value, $paramete
         
 	    }
 	    //  @todo : Pour tous les autres cas => déterminer le handler et ajuster le comportement
-      register_error("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+      register_error("L'accès à ces pages n'est pas encore déterminé (les droits standards s'appliquent) : " . $handler . ' / ' . print_r($segments, true));
       error_log("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
 	  }
 	}
@@ -348,6 +348,7 @@ function externalmember_index() {
   // et c'est réglé pour les accès limités aux contenus dans les groupes
   $allowed_groups = explode(',', $user->external_groups);
   $switch = 'left';
+  //$ia = elgg_set_ignore_access(true);
   foreach ($allowed_groups as $group_guid) {
     $group = get_entity($group_guid);
     // On rejoint le groupe si ce n'est pas déjà le cas
@@ -371,6 +372,7 @@ function externalmember_index() {
     if ($switch == 'left') $switch = 'right'; else $switch = 'left';
     
   }
+  //elgg_set_ignore_access($ia);
 	if ($groups_content) { $content .= $groups_content; } else { $content .= elgg_echo('groups:none'); }
 	
 	

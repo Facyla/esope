@@ -28,6 +28,8 @@ $english = array(
 	'theme_inria:home:information' => "Information",
 	'theme_inria:home:widgets' => "Widgets",
 	'theme_inria:home:edito' => "Headline",
+	'theme_inria:friends' => "Friends",
+	'theme_inria:friends:collections' => "Friends collections",
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
@@ -181,12 +183,15 @@ $english = array(
 	'theme_inria:userprofile:irisopen' => "Open Iris",
 	'theme_inria:userprofile:irislogin' => "Log in to Iris",
 	'theme_inria:userprofile:status' => "Status",
-	'inria_location' => "Inria entity (CRI or headquarters)",
+	//'inria_location' => "Inria entity (CRI or headquarters)",
+	'inria_location' => "Geographical location",
+	'inria_location_main' => "Affiliation entity",
 	'epi_ou_service' => "Inria project team or service",
 	'interests' => "Tags",
 	'skills' => "Skills",
 	'profile:types:inria' => "Inria",
-	'profile:inria_location' => "Location",
+	'profile:inria_location' => "Geographical location",
+	'profile:inria_location_main' => "Affiliation entity",
 	'profile:epi_ou_service' => "EPI or service",
 	'profile:inria_phone' => "Phone",
 	'profile:inria_room' => "Office",
@@ -251,6 +256,8 @@ $english = array(
 	// Group creation specific fields and tooltips
 	'groups:cmisfolder' => "Full URL of a folder from Partage (Alfresco)",
 	'groups:hint:cmisfolder' => "To display the folder content, paste the full URL of Partage folder",
+	'theme_inria:cmis_folder' => "Folder on Partage",
+	'theme_inria:cmis_folder:details' => "A folder's content on Partage",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab1' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab2' => "Custom tab n°2 (URL::Tab title::Optional tooltip)",
@@ -364,6 +371,29 @@ Here is the new profile page : %s
 	
 	'theme_inria:login:details' => "If you have a valid Inria access, please use CAS connection. If your Iris account doesn't exist yet, it will be created at your first login attempt.<br />If you don't have any Inria account or if it isn't valid anymore, please use login/pass regular login below.",
 	
+	// Cron
+	'theme_inria:cron:ldap:done' => "Daily CRON Inria LDAP done",
+	'theme_inria:cron:done' => "Daily CRON Inria done",
+	
+	// Groups invites
+	'userpicker:only_friends' => "Display friends only",
+	'theme_inria:groupinvite:standard' => "Method 1: Personal invitations",
+	'theme_inria:groupinvite:search' => "Method 2: Search members to invite",
+	'theme_inria:groupinvite:search:select' => "Step 1: search using available criteria",
+	'theme_inria:groupinvite:search:invite' => "Step 2: select the members to invite or register",
+	
+	
+	
+	
+	// Translation override
+	'members:searchtag' => "Search members by tag",
+	'members:title:searchtag' => "Search members corresponding to the tag \"%s\"",
+	'search_types:tags' => "Tags",
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Charter excerpt:</strong> <em>any person or group of persons willing to create a group - under the condition <a href=\"mailto:iris@inria.fr\">to declare itself as animator to the site administrators</a>, will have administrator rights on this group, and commits to enforce the <a href=\"https://reseau-iris.inria.fr/p/charte\">terms of use and content creation of the « Iris : Le réseau interne d'Inria » network</a></em></div></blockquote>",
+	
+	'adf_platform:groups:allowregister' => "Force group registration",
+	
+	'esope:fulltextsearch' => "Search by name or first name",
 	
 );
 

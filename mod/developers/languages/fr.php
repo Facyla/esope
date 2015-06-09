@@ -14,7 +14,7 @@ $french = array(
 	'admin:developers:settings' => "Paramètres de développement",
 
 	// settings
-	'elgg_dev_tools:settings:explanation' => "Contrôlez vos paramètres de développement et de débuggage ci-dessous. Certains de ces paramètres sony également disponibles sur d'autres pages d'administration.",
+	'elgg_dev_tools:settings:explanation' => "Contrôlez vos paramètres de développement et de débogage ci-dessous. Certains de ces paramètres sont également disponibles sur d'autres pages d'administration.",
 	'developers:label:simple_cache' => "Utiliser le cache simple",
 	'developers:help:simple_cache' => "Désactiver le cache lors du développement. Autrement, les modifications des CSS et JavaScript seront ignorées.",
 	'developers:label:system_cache' => 'Utiliser le cache système',
@@ -47,7 +47,7 @@ $french = array(
 	
 	// theme preview
 	'theme_preview:general' => 'Introduction',
-	'theme_preview:breakout' => "Passer en plein écran( sortir de l'iframe)",
+	'theme_preview:breakout' => "Passer en plein écran (sortir de l'iframe)",
 	'theme_preview:buttons' => "Boutons",
 	'theme_preview:components' => "Composants",
 	'theme_preview:forms' => "Formulaires",

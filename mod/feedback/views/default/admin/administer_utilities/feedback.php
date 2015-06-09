@@ -15,8 +15,10 @@
  */
 
 $list = elgg_list_entities(array('types' => 'object', 'subtypes' => 'feedback'));
+//$list = elgg_list_entities_from_metadata(array('types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => array('name' => 'status', 'value' => 'closed', 'operand' => '<>')));
 if (!$list) {
-        $list = '<p class="mtm">' . elgg_echo('feedback:list:nofeedback') . '</p>';
+	$list = '<p class="mtm">' . elgg_echo('feedback:list:noopenfeedback') . '</p>';
 }
 
 echo $list;
+

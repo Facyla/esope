@@ -1,0 +1,29 @@
+<script type="text/javascript">
+	function initFloatWin(){
+		$("#float_win").css("width", "800px");
+		$("#float_win").css("height", "150px");
+	}
+</script>
+<table width="100%">
+	<tr>
+		<td colspan="3" class="app_title" style="background-color:#02658e; color:white">
+		Cr&eacute;er une nouvelle fiche
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;<br>
+			<div class="cadre_reponses">
+				<div class="cadre_titre" style="color:#000000">
+					<center>Nom de la nouvelle fiche<br>
+					<input type="text" name="nom" style="width: 85%" value="" maxlength="255" /></center>
+				</div>
+				<br>
+				<div class="cadre_boutons" style="text-align:center">
+					<button style="width: 160px" onclick="javascript:createFiche();">Cr&eacute;er</button>
+					<button style="width: 160px" onclick="javascript:closeFloatWin();">Annuler</button>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>	

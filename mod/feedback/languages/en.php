@@ -56,7 +56,8 @@ $english = array(
 	'feedback:list:about' => 'About',
 	'feedback:list:page' => 'Submit Page',
 	'feedback:list:from' => 'From',
-	'feedback:list:nofeedback' => 'Currently there\'s no feedback from site members available.',
+	'feedback:list:nofeedback' => "No feedback yet.",
+	'feedback:list:noopenfeedback' => "No open feedback at this time.",
 
 	'feedback:user_1' => "User Name 1: ",
 	'feedback:user_2' => "User Name 2: ",
@@ -90,6 +91,7 @@ $english = array(
 	'feedback:settings:feedbackgroup' => "Associate feedbacks to one or multiple groups ?",
 	
 	// Feedback status
+	'feedback:status' => "Feedbacks status",
 	'feedback:list:status:open' => "Open",
 	'feedback:status:open' => "Open feedbacks",
 	'feedback:list:status:closed' => "Closed",
@@ -100,6 +102,17 @@ $english = array(
 	'feedback:reopenconfirm' => "This feedback is marked as closed. Do you want to mark it as active and confirm re-opening ?",
 	'feedback:reopen:success' => "Feedback marked as open.",
 	'feedback:reopen:error' => "Unable to re-open this feedback",
+	
+	// Feedbacks menu
+	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:open' => "%s opened",
+	'feedback:menu:closed' => "%s closed",
+	'feedback:menu:content' => "%s reports",
+	'feedback:menu:bug' => "%s bugs",
+	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:question' => "%s questions",
+	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:other' => "%s other / unsorted",
 	
 	// About - feedback types
 	'feedback:about' => "of type",
