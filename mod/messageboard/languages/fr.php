@@ -1,55 +1,52 @@
 <?php
 
-$french = array(
+return array(
 
 	/**
 	 * Menu items and titles
 	 */
 
-	'messageboard:board' => "Mur",
-	'messageboard:messageboard' => "mur",
+	'messageboard:board' => "Forum",
+	'messageboard:messageboard' => "forum",
 	'messageboard:viewall' => "Voir tout",
-	'messageboard:postit' => "Publier ",
+	'messageboard:postit' => "Envoyer",
 	'messageboard:history:title' => "Historique",
-	'messageboard:none' => "Il n'y a encore rien sur ce Mur",
+	'messageboard:none' => "Il n'y a encore rien dans le forum",
 	'messageboard:num_display' => "Nombre de messages à afficher",
-	'messageboard:desc' => "Ceci est un Mur que vous pouvez ajouter sur votre profil, et où les autres membres peuvent laisser un message.",
+	'messageboard:desc' => "Ceci est un forum que vous pouvez ajouter sur votre profil, et où les autres utilisateurs peuvent laisse un message.",
 
-	'messageboard:user' => "Mur de %s",
+	'messageboard:user' => "forum de %s",
 
-	'messageboard:replyon' => "réponse sur",
+	'messageboard:replyon' => 'réponse sur',
 	'messageboard:history' => "historique",
 
-	'messageboard:owner' => "mur de %s",
-	'messageboard:owner_history' => "%s a envoyé un message sur le mur de %s",
+	'messageboard:owner' => 'forum de %s',
+	'messageboard:owner_history' => '%s a envoyé un message sur le forum de %s',
 
 	/**
 	 * Message board widget river
 	 */
-	'messageboard:river:added' => "a écrit sur",
-	'messageboard:river:user' => "de %s",
-	'messageboard:river:messageboard' => "mur",
-
+	'river:messageboard:user:default' => "%s a envoyé un message sur le forum de %s",
 
 	/**
 	 * Status messages
 	 */
 
-	'messageboard:posted' => "Votre message a bien été publié sur le mur.",
+	'messageboard:posted' => "Votre message a bien été envoyé sur le forum.",
 	'messageboard:deleted' => "Votre message a bien été supprimé.",
 
 	/**
 	 * Email messages
 	 */
 
-	'messageboard:email:subject' => "Vous avez un nouveau message sur votre mur !",
-	'messageboard:email:body' => "Vous avez reçu un nouveau message de %s sur votre mur :
+	'messageboard:email:subject' => 'Vous avez un nouveau message sur le forum !',
+	'messageboard:email:body' => "Vous avez reçu un nouveau message de %s sur votre forum. Il est écrit :
 
 
 %s
 
 
-Pour voir les messages sur votre mur, cliquez sur :
+Pour voir vos messages de forum, cliquez sur :
 
 	%s
 
@@ -65,13 +62,9 @@ Vous ne pouvez pas répondre à cet email.",
 
 	'messageboard:blank' => "Désolé, vous devez écrire quelque chose dans le corps du message avant de pouvoir l'enregistrer.",
 	'messageboard:notfound' => "Désolé, l'élément spécifié n'a pu être trouvé.",
-	'messageboard:notdeleted' => "Désolé, le message n'a pu être supprimé.",
-	'messageboard:somethingwentwrong' => "Une erreur s'est produite lors de l'enregistrement de votre message, veuillez vérifier que vous avez bien écrit un message.",
+	'messageboard:notdeleted' => "Désolé, ce message n'a pu être effacé.",
+	'messageboard:somethingwentwrong' => "Quelque chose a tourné court lors de l'enregistrement de votre message, veuillez vérifier que vous avez bien écrit un message.",
 
 	'messageboard:failure' => "Une erreur imprévue s'est produite lors de l'ajout de votre message. Veuillez réeessayer.",
-	'river:messageboard:user:default' => "%s a écrit sur le Mur de %s",
 
 );
-
-add_translation("fr", $french);
-

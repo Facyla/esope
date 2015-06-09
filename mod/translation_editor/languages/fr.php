@@ -22,7 +22,7 @@ $language = array (
 		'translation_editor:plugin_list:total' => 'Total des Clés',
 		'translation_editor:plugin_list:exists' => 'Traduit',
 		'translation_editor:plugin_list:custom' => 'Personnalisation',
-		'translation_editor:plugin_list:percentage' => 'Pourcentage de complétion',
+		'translation_editor:plugin_list:percentage' => 'Pourcentage de complètement',
 
 		'translation_editor:plugin_list:merge' => 'Fusionner au fichier langage PHP',
 		'translation_editor:plugin_list:delete' => 'Effacer une traduction',
@@ -31,7 +31,7 @@ $language = array (
 		// search
 		'translation_editor:search' => 'Cherche des résultats',
 		'translation_editor:forms:search:default' => 'Trouver une traduction',
-		'translation_editor:search_results:no_results' => 'Aucune traduction trouvée',
+		'translation_editor:search_results:no_results' => 'Aucune traduction trouvé',
 	
 		// custom key
 		'translation_editor:custom_keys:title' => 'Ajout d\'une clé langage personnalisé',
@@ -49,7 +49,6 @@ $language = array (
 	
 		// actions
 		'translation_editor:action:translate:error:input' => 'Une entrée incorrecte revient à ajouter une traduction',
-		'translation_editor:action:translate:no_changed_values' => 'Aucune traduction n\'a besoin d\'être ajoutée',
 		'translation_editor:action:translate:error:write' => 'Erreur pendant l\'écriture des traductions',
 		'translation_editor:action:translate:error:not_authorized' => 'Vous n\'êtes pas autorisé à traduire',
 		'translation_editor:action:translate:success' => 'Les traduction ont été sauvegardée avec succès',

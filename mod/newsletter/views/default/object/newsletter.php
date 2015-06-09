@@ -13,9 +13,7 @@ if (!elgg_in_context("widgets")) {
 	));
 }
 
-if ($full_view) {
-	// full view
-} else {
+if (!$full_view) {
 	// listing view
 	$icon = elgg_view_entity_icon($entity, "small");
 	
@@ -32,7 +30,7 @@ if ($full_view) {
 			break;
 		case "sent":
 			$subtitle = "<strong>" . elgg_echo("newsletter:entity:sent") . ":</strong> ";
-			$subtitle .= date(elgg_echo('friendlytime:date_format'), $entity->start_time);
+			$subtitle .= elgg_view_friendly_time($entity->start_time);
 			break;
 	}
 	

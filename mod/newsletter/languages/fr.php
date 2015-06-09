@@ -96,7 +96,7 @@ $french = array(
 		
 	// default template body
 	'newsletter:body:unsub' => "Cette lettre d'information est envoyée à partir de <a href='{site_url}' rel='nofollow'>{site_name}</a>. Cliquez <a href='{unsublink}'>ici pour vous désabonner</a> de cette lettre d'information.",
-	'newsletter:body:online' => "Si vous n'arrivez pas à lire correctement le contenu, veuillez le <a href='{newsletter_url}'>consulter en ligne</a>",
+	'newsletter:body:online' => "Si vous n'arrivez pas à lire cette lettre d'information, veuillez la <a href='{newsletter_url}'>consulter en ligne</a>",
 		
 
 	// schedule

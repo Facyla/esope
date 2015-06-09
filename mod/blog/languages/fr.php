@@ -1,82 +1,66 @@
 <?php
-/**
- * Blog French language file.
- *
- */
+return array(
+	'blog' => 'Blogs',
+	'blog:blogs' => 'Blogs',
+	'blog:revisions' => 'Révisions',
+	'blog:archives' => 'Archives',
+	'blog:blog' => 'Blog',
+	'item:object:blog' => 'Blogs',
 
-$french = array(
-	'blog' => "Blogs",
-	'blog:blogs' => "Blogs",
-	'blog:revisions' => "Révisions",
-	'blog:archives' => "Archives",
-	'blog:blog' => "Blog",
-	'item:object:blog' => "Blogs",
+	'blog:title:user_blogs' => 'Blogs de %s',
+	'blog:title:all_blogs' => 'Tous les blogs du site',
+	'blog:title:friends' => 'Blogs des contacts',
 
-	'blog:title:user_blogs' => "Blog de %s",
-	'blog:title:all_blogs' => "Tous les blogs du site",
-	'blog:title:friends' => "Blogs des contacts",
-
-	'blog:group' => "Blog",
-	'blog:enableblog' => "Activer le blog du groupe",
-	'blog:write' => "Écrire un article",
+	'blog:group' => 'Blog du groupe',
+	'blog:enableblog' => 'Activer le blog du groupe',
+	'blog:write' => 'Écrire un article de blog',
 
 	// Editing
-	'blog:add' => "Ajouter un article",
-	'blog:edit' => "Modifier l'article",
-	'blog:excerpt' => "Extrait",
-	'blog:body' => "Corps de l'article",
-	'blog:save_status' => "Dernier enregistrement :",
-	'blog:never' => "jamais",
-
-	// Statuses
-	'blog:status' => "Statut",
-	'blog:status:draft' => "Brouillon",
-	'blog:status:published' => "Publié",
-	'blog:status:unsaved_draft' => "Brouillon non enregistré",
-
-	'blog:revision' => "Révision",
-	'blog:auto_saved_revision' => "Révision enregistrée automatiquement",
+	'blog:add' => 'Ajouter un article de blog',
+	'blog:edit' => 'Modifier l\'article de blog',
+	'blog:excerpt' => 'Extrait',
+	'blog:body' => 'Corps de l\'article',
+	'blog:save_status' => 'Dernier enregistrement:',
+	
+	'blog:revision' => 'Révision',
+	'blog:auto_saved_revision' => 'Révision automatiquement enregistrée',
 
 	// messages
-	'blog:message:saved' => "Article enregistré.",
-	'blog:error:cannot_save' => ":Impossible d'enregistrer l'article.",
-	'blog:error:cannot_write_to_container' => "Accès insuffisant pour enregistrer l'article pour ce groupe.",
-	'blog:error:post_not_found' => "Cet article a été supprimé, est invalide, ou vous n'avez pas la permission de le voir.",
-	'blog:messages:warning:draft' => "Il y a un brouillon non enregistré pour cet article !",
-	'blog:edit_revision_notice' => "(Ancienne version)",
-	'blog:message:deleted_post' => "Article supprimé.",
-	'blog:error:cannot_delete_post' => "Impossible de supprimer l'article.",
-	'blog:none' => "Aucun article",
-	'blog:error:missing:title' => "Vous devez donner un titre à votre article !",
-	'blog:error:missing:description' => "Le corps de votre article est vide !",
-	'blog:error:cannot_edit_post' => "Cet article peut ne pas exister ou vous n'ayez pas les autorisations pour le modifier.",
-	'blog:error:revision_not_found' => "Impossible de trouvez cette révision.",
+	'blog:message:saved' => 'Article de blog enregistré.',
+	'blog:error:cannot_save' => 'Impossible d\'enregistrer l\'article de blog.',
+	'blog:error:cannot_auto_save' => 'Impossible de sauvegarder automatiquement l\'article de blog. ',
+	'blog:error:cannot_write_to_container' => 'Droits d\'accès insuffisants pour enregistrer l\'article pour ce groupe.',
+	'blog:messages:warning:draft' => 'Il y a un brouillon non enregistré de cet article !',
+	'blog:edit_revision_notice' => '(Ancienne version)',
+	'blog:message:deleted_post' => 'Article supprimé.',
+	'blog:error:cannot_delete_post' => 'Impossible de supprimer l\'article.',
+	'blog:none' => 'Aucun article de blog',
+	'blog:error:missing:title' => 'Vous devez donner un titre à votre article !',
+	'blog:error:missing:description' => 'Le corps de votre article est vide !',
+	'blog:error:cannot_edit_post' => 'Cet article peut ne pas exister ou vous n\'avez pas les autorisations pour le modifier.',
+	'blog:error:post_not_found' => 'Impossible de trouver l\'article de blog spécifié.',
+	'blog:error:revision_not_found' => 'Impossible de trouver cette révision.',
 
 	// river
-	'blog:river:create' => "Publier un article",
-	'river:commented:object:blog' => "le blog",
-	'river:create:object:blog' => "%s a publié un article de blog %s",
-	'river:comment:object:blog' => "%s a commenté l'article de blog %s",
+	'river:create:object:blog' => '%s a publié un article de blog %s',
+	'river:comment:object:blog' => '%s a commenté sur le blog %s',
 
 	// notifications
-	'blog:newpost' => 'Nouvel article de blog',
+	'blog:notify:summary' => 'Nouvel article de blog nommé %s',
+	'blog:notify:subject' => 'Nouvel article de blog: %s',
+	'blog:notify:body' =>
+'
+%s a publié un nouvel article de blog: %s
+
+%s
+
+Voir et commenter cet article de blog:
+%s
+',
 
 	// widget
-	'blog:widget:description' => "Ce widget affiche vos derniers articles de blog.",
-	'blog:moreblogs' => "Plus d'articles du blog",
-	'blog:numbertodisplay' => "Nombre d'articles du blog à afficher",
-	'blog:noblogs' => "Aucun blog",
-	
-	'blog:notification' => "%s a écrit un nouvel article de blog :
-
-%s
-
-%s
-
-Afficher et commenter le nouvel article :
-
-%s",
-	
+	'blog:widget:description' => 'Ce widget affiche vos derniers articles de blog',
+	'blog:moreblogs' => 'Plus d\'articles de blog',
+	'blog:numbertodisplay' => 'Nombre d\'articles de blog à afficher',
+	'blog:noblogs' => 'Aucun article de blog'
 );
-
-add_translation("fr", $french);

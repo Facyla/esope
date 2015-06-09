@@ -1,23 +1,38 @@
 <?php
 
-$entity = $vars["entity"];
+$newsletter = elgg_extract("entity", $vars);
 $offset = (int) max(get_input("offset", 0), 0);
-$limit = 10;
+$limit = 6;
 
 $query = get_input("q");
 $query = sanitise_string($query);
 
-$options = array(
-		"type" => "object",
-		"subtype" => "blog",
-		"full_view" => false,
-		"limit" => $limit,
-		"offset" => $offset,
-		"count" => true
-	);
+$show_all = (bool) get_input("show_all", false);
 
-if ($entity->getContainerEntity() instanceof ElggGroup) {
-	$options["container_guid"] = $entity->getContainerGUID();
+$subtypes = array();
+if (elgg_is_active_plugin("blog")) {
+	$subtypes[] = "blog";
+}
+if (elgg_is_active_plugin("static")) {
+	$subtypes[] = "static";
+}
+
+if (empty($subtypes)) {
+	return;
+}
+
+$options = array(
+	"type" => "object",
+	"subtypes" => $subtypes,
+	"full_view" => false,
+	"limit" => $limit,
+	"offset" => $offset,
+	"count" => true
+);
+
+$container = $newsletter->getContainerEntity();
+if (empty($show_all) && elgg_instanceof($container, "group")) {
+	$options["container_guid"] = $newsletter->getContainerGUID();
 }
 
 if (!empty($query)) {
@@ -27,44 +42,61 @@ if (!empty($query)) {
 }
 
 $count = elgg_get_entities($options);
-
 unset($options["count"]);
+
+// search form
+$form_data = elgg_view("input/text", array("name" => "q", "value" => $query));
+$form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
+
+if (elgg_instanceof($container, "group")) {
+	$form_data .= "<div class='mts'>";
+	$form_data .= elgg_view("input/checkbox", array(
+		"name" => "show_all",
+		"value" => "1",
+		"checked" => $show_all,
+		"default" => false
+	));
+	$form_data .= elgg_echo("newsletter:embed:show_all");
+	$form_data .= "</div>";
+}
+
+echo "<div id='newsletter-embed-wrapper'>";
+echo elgg_view("input/form", array(
+	"action" => "newsletter/embed/" . $newsletter->getGUID(),
+	"id" => "newsletter-embed-search",
+	"body" => $form_data,
+	"disable_security" => true
+));
 
 if ($count > 0) {
 	$entities = elgg_get_entities($options);
 	
-	$form_data = elgg_view("input/text", array("name" => "q", "value" => $query));
-	$form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
-	
-	echo elgg_view("input/form", array("action" => "newsletter/embed/" . $entity->getGUID(), "id" => "newsletter-embed-search", "body" => $form_data));
-	
 	echo "<ul id='newsletter-embed-list'>";
 	foreach ($entities as $entity) {
-		$description = $entity->description;
 		
-		echo "<li>";
-		echo "<div>";
-		echo "<strong>" . $entity->title . "</strong> ";
-		echo elgg_get_excerpt($description);
-		echo "</div>";
-		echo "<div class='newsletter-embed-item-content'>";
-		
-		echo "<strong>" . $entity->title . "</strong><br />";
-		
-		if ($entity->icontime) {
-			$description = elgg_view("output/img", array("src" => $entity->getIconURL("large"), "alt" => $entity->title, "style" => "float: left; margin: 5px;")) . $description;
-		}
-		
-		echo elgg_view("output/longtext", array("value" => $description));
-		
-		echo "</div></li>";
+		echo "<li class='newsletter-embed-item'>";
+		echo newsletter_view_embed_content($entity, array("newsletter" => $newsletter));
+		echo "</li>";
 	}
 	
 	echo "</ul>";
 	
 	echo "<div id='newsletter-embed-pagination'>";
-	echo elgg_view("navigation/pagination", array("offset" => $offset, "limit" => $limit, "count" => $count));
+	
+	$show_all_value = $show_all ? 1 : 0;
+	
+	echo elgg_view("navigation/pagination", array(
+		"base_url" => elgg_normalize_url("newsletter/embed/" . $newsletter->getGUID() . "?q=$query&show_all=$show_all_value"),
+		"offset" => $offset,
+		"limit" => $limit,
+		"count" => $count
+	));
 	echo "</div>";
 } else {
 	echo elgg_echo("notfound");
+}
+
+echo "</div>";
+if ($count > 0) {
+	echo elgg_view("newsletter/format");
 }
