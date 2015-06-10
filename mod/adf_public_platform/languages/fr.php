@@ -79,6 +79,8 @@ $fr = array(
 	'adf_platform:settings:groups:featured' => "Onglet liste à la Une",
 	'adf_platform:settings:groups:discussion' => "Onglet des discussions de forum",
 	'adf_platform:settings:groups:discussion:always' => "Toujours affiché (après la liste des groupes)",
+	'adf_platform:settings:groups:invite_metadata' => "Invitations par critères de recherche",
+	'adf_platform:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
 	'adf_platform:settings:groups:tools_default' => "Activer tous les outils des groupes lors de la création",
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (selon les plugins)",
 	'groups:alpha' => "Alphabétique",
@@ -115,6 +117,12 @@ $fr = array(
 		</ul>",
 	'adf_platform:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
 	'adf_platform:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production, et utilisez le code de désactivation lorsque c'est nécessaire.",
+	
+	// Groups invites
+	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
+	'esope:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
+	'esope:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
+	'esope:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
 	
 	
 	// Overrides plugins translations
@@ -590,8 +598,9 @@ $fr = array(
 	'esope:search:profile_type' => "Type de profil",
 	'esope:search:nbresults' => '%s résultats',
 	'object' => "Publication",
-	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
-	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
+	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos filtres de recherche.",
+	'esope:search:noresult' => "Aucun résultat : soit il n'y a pas assez de filtres, soit ceux-ci sont au contraire trop restrictifs.",
+	'esope:search:nosearch' => "Aucune recherche : veuillez choisir un(des) filtre(s) et cliquer sur Rechercher.",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",

@@ -376,12 +376,6 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
-	'theme_inria:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
-	'theme_inria:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
-	'theme_inria:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
-	'theme_inria:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
-	
-	
 	
 	
 	// Translation override

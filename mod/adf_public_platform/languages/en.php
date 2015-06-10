@@ -77,6 +77,8 @@ $en = array(
 	'adf_platform:settings:groups:featured' => "Use featured groups tab",
 	'adf_platform:settings:groups:discussion' => "Use discussion tab",
 	'adf_platform:settings:groups:discussion:always' => "Add discussions after the group listing",
+	'adf_platform:settings:groups:invite_metadata' => "Group invites by metadata search",
+	'adf_platform:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
 	'adf_platform:settings:groups:tools_default' => "Enable all group tools when creating a new group",
 	'adf_platform:settings:groups:tools_default:auto' => "Auto (depending on plugins)",
 	'groups:alpha' => "Alphabetic",
@@ -113,11 +115,18 @@ $en = array(
 	'adf_platform:config:framekiller' => "Add frame busting code (\"frame killer\")",
 	'adf_platform:config:framekiller:details' => "<em>Note : setting this to Yes will be the prefered choice in most cases.</em><br />Warning : by activating this code, you will not be able to embed the site into another site through an iframe (depending on used layouts). If you need to embed the site or some parts of it in iframes, please test carefully before activating on a production site !",
 	
+	// Group invites
+	'esope:groupinvite:standard' => "Method 1: Personal invitations",
+	'esope:groupinvite:search' => "Method 2: Search members to invite",
+	'esope:groupinvite:search:select' => "Step 1: search using available criteria",
+	'esope:groupinvite:search:invite' => "Step 2: select the members to invite or register",
+
+	
 	
 	// Overrides plugins translations
 	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
-  'river:comment:object:announcement' => "%s has commented %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
+	'river:comment:object:announcement' => "%s has commented %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
 	
 	'widget:toggle' => "Show/hide %s module",
 	'widget:editmodule' => "Configure %s module",
@@ -140,8 +149,8 @@ $en = array(
 	
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
-'adf_platform:groupinvite' => "pending group invite request",
- 	'adf_platform:groupinvites' => "pending groups invites requests",
+	'adf_platform:groupinvite' => "pending group invite request",
+	'adf_platform:groupinvites' => "pending groups invites requests",
 	'adf_platform:friendinvite' => "pending friendship request",
 	'adf_platform:friendinvites' => "pending friendship requests",
 	'adf_platform:gotohomepage' => "Go to home page",
@@ -588,7 +597,8 @@ $en = array(
 	'esope:search:nbresults' => '%s results',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
-	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
+	'esope:search:noresult' => "No result, please adjust your search filters (filter might be too or not enough restrictive, try adding or removing some of them).",
+	'esope:search:nosearch' => "No search, please select filter(s) and hit Search.",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "View your profile as",
