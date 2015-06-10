@@ -7,7 +7,7 @@
  */
 
 $invite_metadata = elgg_get_plugin_setting('groups_invite_metadata', 'adf_public_platform');
-if (empty(trim($invite_metadata))) { return; }
+if (empty($invite_metadata)) { return; }
 $metadata_search_fields = esope_get_input_array($invite_metadata);
 
 $group = $vars['entity'];
