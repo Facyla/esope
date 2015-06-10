@@ -3,7 +3,7 @@
  * Displays HTML for entity access levels.
  * Requires an entity because some special logic for containers is used.
  *
- * @uses int $vars['entity'] - The entity whose access ID to display.
+ * @uses int $entity - The entity whose access ID to display.
  */
 
 // Displaying access levels when we're logged out is a nonsense : it's always public...
@@ -11,19 +11,27 @@
 if (!elgg_is_logged_in()) { return; }
 
 //sort out the access level for display
-if (isset($vars['entity']) && elgg_instanceof($vars['entity'])) {
-	$access_id = $vars['entity']->access_id;
+$entity = elgg_extract('entity', $vars, false);
+
+// Default hide text in widgets context, except if forced
+if (elgg_in_context('widgets')) { $hide_text = true; }
+$hide_text = elgg_extract('hide_text', $vars, $hide_text);
+
+if (elgg_instanceof($entity)) {
+	$access_id = $entity->access_id;
 	$access_class = 'elgg-access';
-	if (!$vars['hide_text']) {
+	if (!$hide_text) {
 		$access_id_string = get_readable_access_level($access_id);
 		$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($access_id_string, ENT_QUOTES, 'UTF-8', false);
-	} else $access_id_string = '&nbsp;';
+	} else {
+		$access_id_string = '&nbsp;';
+	}
 
 	// if within a group or shared access collection display group name and open/closed membership status
 	// @todo have a better way to do this instead of checking against subtype / class.
-	$container = $vars['entity']->getContainerEntity();
+	$container = $entity->getContainerEntity();
 
-	if ($container && $container instanceof ElggGroup) {
+	if (elgg_instanceof($container, 'group')) {
 		// we decided to show that the item is in a group, rather than its actual access level
 		// not required. Group ACLs are prepended with "Group: " when written.
 		//$access_id_string = elgg_echo('groups:group') . $container->name;

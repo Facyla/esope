@@ -1,8 +1,9 @@
 <?php
-global $CONFIG;
-$iconurl = $CONFIG->url . 'mod/access_icons/graphics/';
-$english = array (
-	
+$url = elgg_get_site_url();
+$iconurl = $url . 'mod/access_icons/graphics/';
+
+return array(
+	'access_icons' => "Access rights icons",
 	'access_icons:title' => "Access rights information details.",
 	
 	// Settings
@@ -90,6 +91,4 @@ $english = array (
 	'access:2' => 'Public',
 	
 );
-
-add_translation("en",$english);
 

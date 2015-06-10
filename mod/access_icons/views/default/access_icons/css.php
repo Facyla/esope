@@ -1,6 +1,5 @@
 <?php
-global $CONFIG;
-$urlicon = $CONFIG->url . 'mod/access_icons/graphics/';
+$urlicon = elgg_get_site_url() . 'mod/access_icons/graphics/';
 //$padding_left = '18px';
 $padding_left = '0';
 ?>
@@ -11,10 +10,10 @@ $padding_left = '0';
 .elgg-access { display: inline-block; }
 .elgg-access a { display: inline-block; margin-left: -<?php echo $padding_left; ?>; padding-left: <?php echo $padding_left; ?>; min-height: 16px; min-width:16px; text-decoration:none; }
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
-.elgg-list-access { float:right; font-size:12px; margin-left: 15px; margin-top: 6px; }
+.access-icons { float:right; font-size:12px; margin-left: 15px; margin-top: 6px; }
 
 /* Hack : can't easily insert access info into listings, so this class lets us "insert" it it the listing item */
-.elgg-list-access.elgg-list-access-listing { /* margin-bottom: -21px; */ margin-top: 2px; }
+.access-icons.access-icons-listing { /* margin-bottom: -21px; */ margin-top: 2px; }
 
 .elgg-menu-item-access { /* margin-top: -8px; */ }
 
