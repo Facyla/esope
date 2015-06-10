@@ -782,6 +782,11 @@ header nav ul .fa { margin-right: 0.5em; }
 #main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; /* background-color:<?php echo $linkcolor; ?>; */ }
 #main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
 
+/* Group invites */
+/* Group invites */
+form#invite_to_group .elgg-foot { border-top: 0; border-bottom: 1px solid #CCC; }
+form#esope-search-form-invite-groups, form#esope-search-form-invite-results { margin: 0; }
+form#esope-search-form-invite-groups .esope-search-metadata { width: 26ex; }
 
 
 
