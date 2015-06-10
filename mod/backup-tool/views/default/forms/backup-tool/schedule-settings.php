@@ -54,7 +54,7 @@ echo elgg_view("forms/backup-tool/backup-options");
 ?>
 
 <div>
-    <h3><?= elgg_echo("backup-tool:schedule:ftp-settings") ?></h3>
+    <h3><?php echo elgg_echo("backup-tool:schedule:ftp-settings"); ?></h3>
     <p class='elgg-subtext'><?php echo elgg_echo("backup-tool:schedule:ftp-settings:text"); ?></p>
 </div>
 

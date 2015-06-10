@@ -4,7 +4,7 @@
  * Bakup Tool English language file.
  *
  */
-$english = array(
+return array(
     'admin:backups' => 'Backups',
     'admin:backups:list' => 'Latest backups',
     'admin:backups:schedule' => 'Schedule a backup',
@@ -61,6 +61,9 @@ $english = array(
     'backup-tool:options:data' => 'data folder (%s)',
     'backup-tool:options:db' => 'database dump',
     
+    'backup-tool:settings:backup_name' => 'Name of the backup file',
+    'backup-tool:restore:success' => 'Backup was restored successfully',
+    'backup-tool:restore' => 'Restore',
+    
 );
 
-add_translation('en', $english);

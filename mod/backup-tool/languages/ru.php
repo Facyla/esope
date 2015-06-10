@@ -4,7 +4,7 @@
  * Bakup Tool English language file.
  *
  */
-$russian = array(
+return  array(
     'admin:backups' => 'Резервное копирование',
     'admin:backups:list' => 'Последние копии',
     'admin:backups:schedule' => 'Автоматическое создание',
@@ -42,7 +42,9 @@ $russian = array(
     'admin:backups:settings' => 'Настройки плагина',
     'backuptool:schedule:button:apply'=>'Применить изменения',
     
-    'backup-tool:settings:error:backup_options' => 'Вы должны выбрать хотя бы один параметр из списка в настройках резервных копий'
+    'backup-tool:settings:error:backup_options' => 'Вы должны выбрать хотя бы один параметр из списка в настройках резервных копий',
+    'backup-tool:settings:backup_name' => 'Имя файла резервной копии',
+    'backup-tool:restore:success' => 'Резервная копия успешно восстановлена',
+    'backup-tool:restore' => 'Восстановить',
 );
 
-add_translation('ru', $russian);

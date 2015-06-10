@@ -1,6 +1,6 @@
 <?php
 // Validates the email against the admin-defined list of allowed email domains
-function adf_registration_filter($email = null) {
+function registration_filter($email = null) {
 	
 	// Quick test : email must at least be set, and can't be less than 6 cars long (ie. c@c.cc)
 	if (!isset($email) || (strlen($email) < 6)) { return false; }
@@ -10,13 +10,13 @@ function adf_registration_filter($email = null) {
 	if (strlen($email_a[1]) < 4) { return false; }
 	
 	// Check active filter
-	$whitelist_enable = elgg_get_plugin_setting('whitelist_enable', 'adf_registration_filter');
-	$blacklist_enable = elgg_get_plugin_setting('blacklist_enable', 'adf_registration_filter');
+	$whitelist_enable = elgg_get_plugin_setting('whitelist_enable', 'registration_filter');
+	$blacklist_enable = elgg_get_plugin_setting('blacklist_enable', 'registration_filter');
 	
 	/* Whitelist mode */
 	if ($whitelist_enable != 'no') {
 		// Get and prepare valid domain config array from plugin settings
-		$whitelist = elgg_get_plugin_setting('whitelist', 'adf_registration_filter');
+		$whitelist = elgg_get_plugin_setting('whitelist', 'registration_filter');
 		$whitelist = preg_replace('/\r\n|\r/', "\n", $whitelist);
 		// Add csv support - cut also on ";" and ","
 		$whitelist = str_replace(array(' ', '<p>', '</p>'), '', $whitelist); // Delete all white spaces
@@ -39,7 +39,7 @@ function adf_registration_filter($email = null) {
 	/* Blacklist mode */
 	if ($blacklist_enable == 'yes') {
 		// Get and prepare valid domain config array from plugin settings
-		$blacklist = elgg_get_plugin_setting('blacklist', 'adf_registration_filter');
+		$blacklist = elgg_get_plugin_setting('blacklist', 'registration_filter');
 		$blacklist = preg_replace('/\r\n|\r/', "\n", $blacklist);
 		// Add csv support - cut also on ";" and ","
 		$blacklist = str_replace(array(' ', '<p>', '</p>'), '', $blacklist); // Delete all white spaces

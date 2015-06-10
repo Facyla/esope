@@ -21,6 +21,8 @@
             ));
 
     echo elgg_view("input/checkboxes", $options);
+    
+    
     ?> 
 
 

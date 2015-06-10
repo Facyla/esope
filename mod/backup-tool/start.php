@@ -2,15 +2,21 @@
 
 function backup_tool_init() {
 
+    //REGISTER ACTIONS
 
     elgg_register_action("backup-tool/create", elgg_get_plugins_path() . "backup-tool/actions/create.php", "admin");
+    elgg_register_action("backup-tool/restore", elgg_get_plugins_path() . "backup-tool/actions/restore.php", "admin");
     elgg_register_action("backup-tool/download", elgg_get_plugins_path() . "backup-tool/actions/download.php", "admin");
     elgg_register_action("backup-tool/remove", elgg_get_plugins_path() . "backup-tool/actions/remove.php", "admin");
     elgg_register_action("backup-tool/ftp-test", elgg_get_plugins_path() . "backup-tool/actions/ftp-test.php", "admin");
 
     elgg_register_action("backup-tool/schedule-settings", elgg_get_plugins_path() . "backup-tool/actions/schedule-settings.php", "admin");
+    
+    //REGISTER LIBRARY
 
     elgg_register_library("backup_tool", elgg_get_plugins_path() . "backup-tool/lib/backup-tool.php");
+    
+    //EXTEND VIEW
 
     elgg_extend_view('js/elgg', 'backup-tool/js');
 

@@ -3,8 +3,7 @@
  * French strings
  */
 
-
-$fr = array(
+return array(
 	'registration_filter' => "Filtre d'inscription",
 	
 	'registration_filter:whitelist_enable' => "Activer le filtrage par liste blanche",
@@ -31,4 +30,3 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);

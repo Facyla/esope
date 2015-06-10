@@ -3,8 +3,7 @@
  * English strings
  */
 
-
-$en = array(
+return array(
 	'registration_filter' => "Registration filter",
 	
 	'registration_filter:whitelist_enable' => "Enable whitelist mode",
@@ -31,4 +30,3 @@ $en = array(
 	
 );
 
-add_translation('en', $en);

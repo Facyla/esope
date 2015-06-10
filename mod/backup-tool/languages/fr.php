@@ -1,9 +1,9 @@
 <?php
 /**
- * Bakup Tool French language file.
+ * Backup Tool French language file.
  *
  */
-$fr = array(
+return array(
 	'admin:backups' => 'Backups',
 	'admin:backups:list' => 'Derniers backups',
 	'admin:backups:schedule' => 'Planifier un backup',
@@ -61,6 +61,4 @@ $fr = array(
 	'backup-tool:options:db' => 'dump de la base de données',
 	
 );
-
-add_translation('fr', $fr);
 

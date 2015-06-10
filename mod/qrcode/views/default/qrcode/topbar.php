@@ -1,6 +1,6 @@
 <?php
 $title = elgg_echo('qrcode:page:title');
-$uri = full_url();
+$uri = current_page_url();
 // Id utile seulement si plusieurs QR codes par page - pas ici
 //$id = substr(md5($uri), 0, 8);
 

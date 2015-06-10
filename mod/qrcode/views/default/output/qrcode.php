@@ -1,6 +1,5 @@
 <?php
-
-$qrcode_url = $vars['qrcode_url'];
+$qrcode_url = elgg_extract('qrcode_url', $vars);
 /* Unused in image generation library
 $height = $vars['height'];
 $width = $vars['width'];
@@ -15,7 +14,7 @@ $dl = $img . '&download=true';
 	<a href="<?php echo $dl; ?>">
 		<img src="<?php echo $img; ?>" />
 		<br />
-		<small>Télécharger le QR Code</small>
+		<small><?php echo elgg_echo('qrcode:download'); ?></small>
 	</a>
 </div>
 
