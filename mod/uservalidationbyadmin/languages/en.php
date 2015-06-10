@@ -12,20 +12,24 @@ $english = array(
 	'email:validate:subject' => "%s is requesting validation of account for %s!",
 	'email:validate:body' => "Hello,
 
-A user named %s is requesting validation of their account by you. 
+\"%1\$s\" is requesting validation of their account 
 
-Geolocation details of the user is
-IP address: %s
-Probable location: %s
+Account details and geolocation are:
+Username : %8\$s
+Email : %7\$s
+IP address: %2\$s
+Probable location: %3\$s
 
-You can validate their account by clicking on the link below:
+You can validate their account by clicking on the link below: 
+%4\$s
 
-%s
+Or check the full list of un-validated accounts: 
+%6\$sadmin/users/unvalidated
 
 If you can't click on the link, copy and paste it to your browser manually.
 
-%s
-%s
+%5\$s
+%6\$s
 ",
 
 	'user:validate:subject' => "Congrats %s! Your account is activated",

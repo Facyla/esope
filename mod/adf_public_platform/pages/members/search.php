@@ -52,6 +52,7 @@ if (!empty($metadata_search_fields)) {
 $metadata_search = '';
 
 // Build metadata search fields
+// @TODO : allow to fetch existing values - autocomplete using existing values ? => esope_get_meta_values($meta_name)
 if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
 	foreach ($metadata_search_fields as $metadata) {
@@ -78,7 +79,7 @@ $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
 $search_form .= '<fieldset>';
 // Display role filter only if it has a meaning
-if (sizeof($profiletypes_opt > 2)) {
+if (sizeof($profiletypes_opt) > 2) {
 	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';

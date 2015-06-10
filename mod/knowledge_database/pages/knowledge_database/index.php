@@ -12,8 +12,6 @@ $content = '';
 //elgg_push_breadcrumb(elgg_echo('search'));
 
 
-$enable_merge = false;
-$globalsearch = false;
 
 // Should we use a specific container ? (site host group or KDB group or publishing group)
 $container_guid = get_input('container_guid', false);
@@ -25,7 +23,7 @@ if ($container_guid) $publish_guid = $container_guid;
 
 // Check merge setting
 $enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
-if ($enable_merge == 'yes') $enable_merge = true;
+if ($enable_merge == 'yes') $enable_merge = true; else $enable_merge = false;
 
 // Is site KDB enabled ?
 $enable_site = elgg_get_plugin_setting('enable_site', 'knowledge_database');

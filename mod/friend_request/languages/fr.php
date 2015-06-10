@@ -19,14 +19,14 @@ Assurez-vous d'être connecté sur le site web avant de cliquer sur le lien suiv
 	'friend_request:add:exists' => "Vous avez déjà demandé à être contact de %s.",
 	'friend_request:approve' => "Accepter",
 	'friend_request:approve:subject' => "%s a accepté votre demande de contact",
-	'friend_request:approve:message' => "Cher %s,
+	'friend_request:approve:message' => "Bonjour %s,
 
 %s a acccepté votre de demande de contact.",
 	'friend_request:approve:successful' => "%s est maintenant votre contact",
 	'friend_request:approve:fail' => "Erreur durant la création de la relation de contact avec %s",
 	'friend_request:decline' => "Décliner",
 	'friend_request:decline:subject' => "%s a refusé votre demande de contact",
-	'friend_request:decline:message' => "Cher %s,
+	'friend_request:decline:message' => "Bonjour %s,
 
 %s a décliné votre invitation pour devenir son contact.",
 	'friend_request:decline:success' => "Demande de contact refusée",

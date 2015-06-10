@@ -14,8 +14,9 @@ elgg_register_event_handler('init', 'system', 'theme_template_init');
 function theme_template_init() {
 	global $CONFIG; // All site useful vars
 	
-	// Get a plugin setting
-	$setting = elgg_get_plugin_setting('setting_name', 'theme_template');
+	// Extend CSS with custom styles
+	elgg_extend_view('css', 'theme_template/css');
+	elgg_extend_view('css/admin', 'theme_template/admin_css');
 	
 	// HOMEPAGE - Replace public and loggedin homepage
 	/*
@@ -30,6 +31,8 @@ function theme_template_init() {
 	}
 	*/
 	
+	// Get a plugin setting
+	$setting = elgg_get_plugin_setting('setting_name', 'theme_template');
 	// Get a user plugin setting (makes sense only if logged in)
 	if (elgg_is_logged_in()) {
 		$user_guid = elgg_get_logged_in_user_guid();
@@ -39,7 +42,6 @@ function theme_template_init() {
 	// Register a page handler on "theme_template/"
 	elgg_register_page_handler('theme_template', 'theme_template_page_handler');
 	
-	// @TODO add index page handlers
 	
 	
 }
@@ -71,14 +73,12 @@ function theme_template_function() {
 
 // Theme inria logged in index page
 function theme_template_index(){
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/loggedin_homepage.php');
 	return true;
 }
 
 // Theme inria public index page
 function theme_template_public_index() {
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/public_homepage.php');
 	return true;
 }

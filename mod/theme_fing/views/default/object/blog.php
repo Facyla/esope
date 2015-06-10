@@ -95,8 +95,10 @@
 			'value' => $blog->description,
 			'class' => 'blog-post',
 		));
-
-		$header = elgg_view_title($blog->title);
+		
+		// Note : title may appear in full view, even if some redundancy (but we need it in listings !)
+		//$header = elgg_view_title($blog->title);
+		$header = "<h3>" . elgg_view("output/url", array("text" => $blog->title, "href" => $blog->getURL())) . "</h3>";
 
 		$params = array(
 			'entity' => $blog,
@@ -109,7 +111,7 @@
 		$summary = elgg_view('object/elements/summary', $params);
 
 		echo elgg_view("object/elements/full", array(
-			"summary" => $summary,
+			"summary" => $header.$summary,
 			"icon" => $owner_icon,
 			"body" => $blog_icon . $body,
 		));

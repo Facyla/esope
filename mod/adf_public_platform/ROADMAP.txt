@@ -1,0 +1,26 @@
+- gestion de site public à la wordpress : intégration de contenus, gestion des menus et rubriques, gestion des métadonnées, et design
+- fully responsive
+
+
+
+Articulation pour faire d'Elgg un cms :
+
+- rédaction des articles : cmspages => 
+		rédaction de tous types de contenus, 
+		arborescence des contenus, 
+		multi-auteurs : propriété des pages cms à pouvoir associer à des auteurs
+		pages admin (propriété du site) => pages, pages avec auteur => articles
+		rôles : 
+			auteur : droits limités
+			éditeur : droits ouverts à toutes les pages
+			admin : admin global (droits sur config notamment)
+
+- gestion des menus : elgg_menus
+
+Pour aller plus loin :
+- gestion globale du rendu du site : externalblogs
+		des éléments de config, 
+		gestion des rubriques, 
+		de l'intégration des menus
+		des critères de sélection des contenus : intégration des pages cms, sélection par type de contenu, tag, catégorie (type ancien externalblog)
+

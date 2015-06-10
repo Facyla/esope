@@ -2,51 +2,56 @@
 /**
  * Elgg postbymail plugin language pack
  * 
- * @author Facyla
- * @copyright Facyla 2012
+ * @author Florian DANIEL aka Facyla
+ * @copyright Facyla 2012-2015
  */
 
-global $CONFIG;
-$site_url = $CONFIG->url;
+$site_url = elgg_get_site_url();
 
 $french = array(
 	/* Main strings */
+	'postbymail' => "Publication par mail",
 	'postbymail:title' => "Publication par mail",
 	
 	/* Settings */
+	'postbymail:settings:error:missingrequired' => "Des paramètres de configuration requis sont manquants (serveur et port, nom d'utilisateur du compte de messagerie et/ou mot de passe)",
+	'postbymail:settings:loadedfromfile' => "Paramètres chargés depuis le fichier de configuration (settings.php)",
+	'postbymail:settings:loadedfromadmin' => "Paramètres définis via l'interface d'administration",
 	'postbymail:settings:admin' => "Paramètres généraux",
 	'postbymail:settings:replybymail' => "Réponses par email",
 	'postbymail:settings:replybymail:details' => "Cette fonctionnalité permet de répondre à des notifications par email.",
 	'postbymail:settings:postbymail' => "Publication par email (EXPERIMENTAL)",
-	'postbymail:settings:postbymail:details' => "Cette fonctionnalité permet de publier de nouveaux contenus par email. Pour cela, une clef de publication unique peut être générée pour le groupe ou le membre, et sera utilisée pour publier en son nom. Si l'auteur est connu, son nom est utilisé dans un groupe. Les email d'envoi inconnus permettent de publier, mais l'auteur sera le conteneur lui-même (groupe ou personne). Les accès sont ceux du groupe ou par défaut. Les réglages de cette fonctionnalité sont incomplets et la prise en charge des contenus autres que blog très partiellement implémentée.",
+	'postbymail:settings:postbymail:details' => "Cette fonctionnalité permet de publier de nouveaux contenus par email. Pour cela, une clef de publication unique peut être générée pour le groupe ou le membre, et sera utilisée pour publier en son nom. Si l'auteur est connu, son nom est utilisé dans un groupe. Les email d'envoi inconnus permettent de publier, mais l'auteur sera le conteneur lui-même (groupe ou personne). Les accès sont ceux du groupe ou par défaut. Les réglages de cette fonctionnalité sont incomplets et la prise en charge des contenus autres que blog très partiellement implémentée. Si vous le souhaitez, vous pouvez contacter l'auteur pour financer cette fonctionnalité.",
 	'postbymail:settings:cron' => "Fréquence du cron",
-	'postbymail:settings:cron:help' => "Note : le cron doit être configuré sur le serveur, sinon il ne fonctionnera que lorsque le serveur sera sollicité (tout appel d'une URL du réseau Fing), via le plugin crontrigger qui permet de le remplacer.",
+	'postbymail:settings:cron:help' => "Note : le cron doit être configuré sur le serveur, sinon il ne fonctionnera que par intermittence, en fonciton des appels manuels au cron, ou via le plugin crontrigger qui permet de le remplacer en partie.",
 	'postbymail:settings:separator' => "Séparateur du message de réponse",
 	'postbymail:settings:separatordetails' => "Texte explicatif situé sous le séparateur, qui limite la publication des signatures et conversations complètes, ainsi que le risque de doublons.",
 	'postbymail:settings:scope' => "Types de réponses par mail autorisées", // forumonly, comments, allobjects
 	'postbymail:settings:notifylist' => "Liste des GUID ou username des membres à prévenir lors de la réussite ou de l'échec de nouvelles publications (note : l'admin est prévenu de tout nouveau message publié, ou échoué. L'auteur n'est prévenu qu'en cas d'erreur.", 
 	'postbymail:settings:replymode' => "Type de comportement pour la réponse par email",
-	'postbymail:settings:replymode:replybutton' => "Bouton de réponse",
+	'postbymail:settings:replymode:replybutton' => "Bouton de réponse (recommandé)",
 	'postbymail:settings:replymode:replyemail' => "Modification de l'email d'envoi",
-	'postbymail:settings:replymode:details' => "Le Bouton de réponse ajoute un bouton permettant de répondre par email au message reçu. Le message envoyé est plus propre et limite les risques d'envoi de données personnelles (signature), mais ne permet pas d'utiliser le bouton de réponse de sa messagerie.<br />L'autre méthode consiste à remplacer l'adresse email d'envoi utilisée par les notifications par l'adresse de réponse paramétrée. Elle permet ainsi de répondre directement à l'email pour publier une réponse, mais augmente le risque d'identification comme spam (ou de blocage par les systèmes de validation manuelle d'email). Elle augmente aussi le risque de publier des réponses automatiques, malgré le mécanisme intégré de filtrage des réponses automatisées. Lorsque ce ch oix est activé, le texte du séparateur est intégré au tout début du message de notification afin de limiter l'ajout de contenu non désiré au message.",
+	'postbymail:settings:replymode:details' => "Le Bouton de réponse ajoute un bouton permettant de répondre par email au message reçu. Le message envoyé est plus propre et limite les risques d'envoi de données personnelles (signature), mais ne permet pas d'utiliser le bouton de réponse de sa messagerie.<br />L'autre méthode consiste à remplacer l'adresse email d'envoi utilisée par les notifications par l'adresse de réponse paramétrée. Elle permet ainsi de répondre directement à l'email pour publier une réponse, mais augmente le risque d'identification comme spam (ou de blocage par les systèmes de validation manuelle d'email). Elle ajoute aussi le risque de publier des réponses automatiques, malgré le mécanisme intégré de filtrage des réponses automatisées. Lorsque ce choix est activé, le texte du séparateur est intégré au tout début du message de notification afin de limiter l'ajout de contenu non désiré au message.",
 	'postbymail:settings:addreplybutton' => "Ajoute un bouton de réponse par email",
 	'postbymail:settings:addreplybutton:details' => "Ce réglage est généralement inverse du précédent : il ajoute en entête de message un bouton permettant de répondre par email.",
+	'postbymail:settings:replybuttonaddtext' => "Ajouter une alternative texte",
+	'postbymail:settings:replybuttonaddtext:details' => "Cette option ajoute un message texte sous le bouton de réponse, afin que les personnes utilisant une messagerie qui ne prend pas en charge les messages en HTML puissent tout de même accéder à l'adresse email de réponse.",
 	'postbymail:settings:server' => "Serveur et port à utiliser, sous la forme : localhost:143 ou mail.domain.tld:995", 
-	'postbymail:settings:protocol' => "Protocole à utiliser, si nécessaire (par ex.: /notls ou /imap/ssl, parfois ajouter aussi /novalidate-cert et /norsh pour GMail )", 
+	'postbymail:settings:protocol' => "Protocole à utiliser, si nécessaire (par ex.: /notls ou /imap/ssl, parfois ajouter aussi /novalidate-cert et /norsh)", 
 	'postbymail:settings:mailbox' => "Boîte à utiliser (généralement INBOX, nom générique de la boîte de réception)", 
 	'postbymail:settings:username' => "Nom d'utilisateur du compte de messagerie (par ex.: user@domain.tld)", 
+	'postbymail:settings:email' => "Adresse email pour la publication (facultatif, uniquement si différent du compte de messagerie)", 
 	'postbymail:settings:password' => "Mot de passe du compte de messagerie", 
 	'postbymail:settings:inboxfolder' => "Dossier à vérifier (par défaut : INBOX)", 
 	'postbymail:settings:markSeen' => "Marquer les messages traités comme lus (qu'ils soient publiés ou non) ; OUI sauf bonne raison", 
 	'postbymail:settings:bodyMaxLength' => "Longueur maximale du texte publiable (max fixé par défaut à 65536, qui est la longueur du champ 'description' par défaut dans la base SQL d'Elgg)", 
 	'postbymail:settings:mailpost' => "Publication par mail",
-	'postbymail:settings:mailpost:help' => "Note : cette fonctionnalité permet de publier dans un groupe par mail, ou au nom d'un membre du réseau. Si l'auteur est connu, son nom est utilisé. Les email d'envoi inconnus permettent de publier, mais l'auteur sera le conteneur lui-même, groupe ou poersonne. Les accès sont ceux du groupe ou de la personne, sauf si cela est défini autrement.",
-	'postbymail:settings:email:title' => "Paramètres du compte de messagerie utilisé", 
+	'postbymail:settings:mailpost:help' => "Note : cette fonctionnalité permet de publier dans un groupe par mail, ou au nom d'un membre du réseau. Si l'auteur est connu, son nom est utilisé. Les email d'envoi inconnus permettent de publier, mais l'auteur sera le conteneur lui-même, groupe ou personne. Les accès sont ceux du groupe ou de la personne, sauf si cela est défini autrement.",
+	'postbymail:settings:email:title' => "Paramètres du compte de messagerie utilisé",
 	'postbymail:settings:email:details' => "Important : vous devez créer au préalable deux dossiers 'Published' et 'Errors' avant de publier par mail<br >Utilisez les paramètres du compte de messagerie utilisé pour configurer le plugin et lui permettre de récupérer les messages.", 
-	'postbymail:settings:cron:url' => "URL utilisée par le CRON", 
-	'postbymail:settings:cron:test' => "URL de test du plugin (admin seulement)", 
-
-
+	'postbymail:settings:cron:url' => "URL utilisée par le CRON",
+	'postbymail:settings:cron:test' => "URL de test du plugin (admin seulement)",
+	
 	
 	/* Settings values */
 	'postbymail:settings:disabled' => "Désactivé",
@@ -83,7 +88,7 @@ $french = array(
 	'postbymail:usersettings:alternatemail:list' => "Adresses email enregistrées avec votre compte.",
 	'postbymail:usersettings:alternatemail:none' => "Aucune adresse email supplémentaire enregistrée",
 	'postbymail:usersettings:alternatemail:add' => "Ajouter une nouvelle adresse email à votre compte",
-	'postbymail:usersettings:alternatemail:help' => "Lorsque vous publiez par mail, vous pouvez publier sur le réseau depuis chacune des adresses listées ici.<br />Vous pouvez renseigner autant d'adresses que vous le souhaitez, à condition que celle-ci ne soient pas utilisées par un autre membre.<br />Note : ces adresses ne permettent pas de se connecter au réseau, et ne recevoivent aucune notification du réseau.<br />Si vous souhaitez utiliser une autre adresse principale pour vous connecter et recevoir vos notifications, veuillez changer d'adresse principale via les paramètres de votre compte.",
+	'postbymail:usersettings:alternatemail:help' => "Lorsque vous répondez ou publiez par mail, vous pouvez le faire à partir de chacune des adresses listées ici.<br />Vous pouvez renseigner autant d'adresses que vous le souhaitez, à condition qu'elles ne soient pas utilisées par un autre membre.<br />Note : ces adresses ne permettent pas de se connecter au réseau, et ne recevoivent aucune notification du réseau.<br />Si vous souhaitez utiliser une autre adresse principale pour vous connecter et recevoir vos notifications, veuillez changer d'adresse principale via les paramètres de votre compte.",
 	'postbymail:usersettings:error:alreadyregistered' => "Vous avez déjà enregistré cette adresse email.",
 	'postbymail:usersettings:error:alreadyused' => "L'adresse email %s est déjà associée à un compte sur le site. Impossible de l'ajouter.",
 	'postbymail:usersettings:error:invalidemeail' => "Erreur : adresse email non valide !",
@@ -130,12 +135,13 @@ $french = array(
 	'postbymail:info:parameters' => "<strong>Paramètres associés au message : </strong> %s<br />",
 	'postbymail:info:paramwrap' => "<ul>%s</ul>",
 	'postbymail:info:paramvalue' => "<li><strong>%s :</strong> %s</li>",
-	'postbymail:info:objectok' => "<strong>Publication associée au message : </strong> &laquo;&nbsp;<a href=\"%s\">%s</a>&nbsp;&raquo; (%s)<br />",
+	'postbymail:info:objectok' => "<strong>Publication associée au message :</strong> &laquo;&nbsp;<a href=\"%s\">%s</a>&nbsp;&raquo; (%s)<br />",
 	'postbymail:info:badguid' => "<strong style=\"color:red;\"Pas de GUID fourni ou la publication associée n'est pas valide ou accessible !</strong><br />",
 	'postbymail:info:mailbox' => "<strong>Boîte mail vérifiée :</strong> %s<br />",
 	'postbymail:info:usefulcontent' => "Contenu utile : &laquo;&nbsp;%s&nbsp;&raquo;",
 	'postbymail:info:memberandmail' => "<strong>Compte de membre associé à l'expéditeur annoncé :</strong> %s (mail annoncé : %s)<br />",
 	'postbymail:info:realmemberandmail' => "<strong>Compte de membre associé à l'expéditeur réel :</strong> %s (mail réel : %s)<br />",
+	'postbymail:info:emails' => "<strong>Email utilisé :</strong> %s (via %s)<br />",
 	'postbymail:info:alternativememberandmail' => "<strong>Compte de membre associé à une adresse alternative :</strong> %s (mail alternatif : %s)<br />",
 	'postbymail:info:publicationmember' => "<strong>Membre sélectionné pour publication :</strong> %s<br />",
 	
@@ -162,17 +168,17 @@ $french = array(
 
 	// Lieu (container) de publication : groupe (à terme : user aussi ?)
 	'postbymail:containerok' => " - Le conteneur de cette publication existe et est valide (peut être un groupe ou un membre dans le cas de publications personnelles)<br />", 
-	'postbymail:error:nocontainer' => " - <b style=\"color:red;\">Erreur : Aucune conteneur correspondant à la publication &laquo;&nbsp;%s&nbsp;&raquo; (ID du conteneur : %s) : le groupe ou le profil correspondant à cette publication n'a pas été trouvé ; il s'agit d'une erreur technique, veuillez contacter un administrateur du site.</b><br />", 
-	'postbymail:error:badcontainer' => " - <b style=\"color:red;\">Erreur : Aucune conteneur correspondant à l'ID : %s) : le groupe ou le profil correspondant n'a pas été trouvé. Soit ce groupe n'existe pas, soit vous n'y avez pas accès. Si le groupe existe et que vous y avez accès, il s'agit d'une erreur technique, veuillez contacter un administrateur du site.</b><br />", 
-	'postbymail:error:unknowncontainer' => " - <b style=\"color:red;\">Erreur : Aucune conteneur correspondant à l'ID : %s) : le groupe ou le profil correspondant n'a pas été trouvé. Soit ce groupe n'existe pas, soit vous n'y avez pas accès. Si le groupe existe et que vous y avez accès, il s'agit d'une erreur technique, veuillez contacter un administrateur du site.</b><br />", 
+	'postbymail:error:nocontainer' => " - <b style=\"color:red;\">Erreur : Aucune conteneur correspondant à la publication &laquo;&nbsp;%s&nbsp;&raquo; (ID du conteneur : %s) : le groupe ou le profil correspondant à cette publication n'a pas été trouvé ; il s'agit d'une erreur technique, veuillez faire suivre ce message à un administrateur du site.</b><br />", 
+	'postbymail:error:badcontainer' => " - <b style=\"color:red;\">Erreur : aucun conteneur ne correspond à l'ID %s : le groupe ou le profil correspondant n'a pas été trouvé. Soit ce groupe n'existe pas, soit vous n'y avez pas accès. Si le groupe existe et que vous y avez accès, il s'agit d'une erreur technique, veuillez faire suivre ce message à un administrateur du site.</b><br />", 
+	'postbymail:error:unknowncontainer' => " - <b style=\"color:red;\">Erreur : aucun conteneur ne correspond à l'ID %s : le groupe ou le profil correspondant n'a pas été trouvé. Soit ce groupe n'existe pas, soit vous n'y avez pas accès. Si le groupe existe et que vous y avez accès, il s'agit d'une erreur technique, veuillez faire suivre ce message à un administrateur du site.</b><br />", 
 	// Conteneur : groupe
 	'postbymail:groupok' => " - Le groupe %s existe et est valide<br />", 
-	'postbymail:error:notingroup' => " - <b style=\"color:red;\">Erreur : La publication à commenter n'est pas dans un groupe : actuellement seules les publications dans les groupes peuvent être commentées. Il s'agit d'une erreur technique : veuillez contacter un administrateur du site.</b><br />", 
+	'postbymail:error:notingroup' => " - <b style=\"color:red;\">Erreur : La publication à commenter n'est pas dans un groupe : actuellement seules les publications dans les groupes peuvent être commentées. Il s'agit d'une erreur technique : veuillez faire suivre ce message à un administrateur du site.</b><br />", 
 	// Appartenance au groupe ou autorisations de publication
 	'postbymail:ismember' => " - %s est bien membre du groupe %s<br />", 
-	'postbymail:error:nogroupmember' => " - <b style=\"color:red;\">Erreur : %s n'est pas membre du groupe &laquo;&nbsp;%s&nbsp;&raquo;: votre compte (ou celui correspondant à votre adresse d'expéditeur email) n'appartient pas au groupe dans lequel est publié la publication à laquelle vous souhaitez répondre. Pour pouvoir répondre à cette publication, veuillez rejoindre le groupe en question, ou vérifier que vous utilisez la bonne adresse email d'expédition.</b><br />", 
+	'postbymail:error:nogroupmember' => " - <b style=\"color:red;\">Erreur : %s n'est pas membre du groupe &laquo;&nbsp;%s&nbsp;&raquo; : votre compte (ou celui correspondant à votre adresse d'expéditeur email) n'appartient pas au groupe dans lequel est publié la publication à laquelle vous souhaitez répondre. Pour pouvoir répondre à cette publication, veuillez rejoindre le groupe en question, ou vérifier que vous utilisez la bonne adresse email d'expédition.</b><br />", 
 	// Message vide ou déjà publié
-	'postbymail:error:emptymessage' => " - <b style=\"color:red;\">Erreur : Message vide. Les messages sans contenu ne peuvent pas être publéis. Veuillez vérifier que le séparateur utilisé pour séparer votre message de réponse des informations personnelles n'est pas situé au-dessus de votre message.</b><br />", 
+	'postbymail:error:emptymessage' => " - <b style=\"color:red;\">Erreur : Message vide. Les messages sans contenu ne peuvent pas être publiés. Veuillez vérifier que le séparateur utilisé pour séparer votre message de réponse des informations personnelles n'est pas situé au-dessus de votre message.</b><br />", 
 	'postbymail:error:alreadypublished' => " - <b style=\"color:red;\">Erreur : Publication déjà effectuée (= a déjà été publié par le même auteur à la même date). Si vous recevez cette erreur, il s'agit probablement d'une erreur survenue suite à des tests. Elle ne se produit que si l'on tente de publier à nouveau un message qui a déjà été publié (celui-ci peut avoir été modéré entretemps s'il n'apparaît pas dans la page de discussion).</b><br />", 
 	// Site & user container publishing messages
 	'postbymail:error:noaccesstoentity' => " - <b style=\"color:red;\">Le membre n'a pas accès à cette entité</b><br />",
@@ -180,11 +186,11 @@ $french = array(
 	'postbymail:userok' => "Le conteneur est un membre valide<br />",
 	'postbymail:siteok' => "Le conteneur est un site valide<br />",
 	'postbymail:error:automatic_reply' => " - <b style=\"color:red;\">Le message est certainement un message de réponse automatique (présence du header Auto-submitted)</b><br />",
-	'postbymail:error:probable_automatic_reply' => " - <b style=\"color:red;\">Le message est probablement un message de réponse automatique (par de From ni Return-Path)</b><br />",
+	'postbymail:error:probable_automatic_reply' => " - <b style=\"color:red;\">Le message est probablement un message de réponse automatique (pas de From ni de Return-Path)</b><br />",
 	
 	/* Messages communs d'info et de debug pour les expéditeurs et admins */
 	'postbymail:error:lastminutedebug' => "<b style=\"color:red;\">Publication impossible alors qu'a priori tout semblait OK : à vérifier pour débuggage</b>\n\n%s", 
-	'postbymail:admin:reportmessage:error' => "<br /><b style=\"color:red;\">Publication impossible : soit pour l'une des raisons précédentes, soit car le message est vide...</b>
+	'postbymail:admin:reportmessage:error' => "<br /><b style=\"color:red;\">Publication impossible : soit pour l'une des raisons précédentes (s'il y en a), soit parce que le message est vide...</b>
 			<br />Coupure via le séparateur effectuée à %s caractères<br />
 			<br /><b>Message non publié :</b><br />%s
 			<br /><b>Mail non publié (complet) :</b><br />%s",
@@ -227,7 +233,7 @@ $french = array(
 	'postbymail:subtype' => "<br />Type de publication",
 	'postbymail:access' => "<br />Niveau d'accès : %s",
 	'postbymail:member' => "<br />Membre valide",
-	'postbymail:member:usedcontainerinstead' => "<br />Le conteneur a été utilisé comme auteur (mail inconnu)",
+	'postbymail:member:usedcontainerinstead' => "<br />Le conteneur a été utilisé comme auteur (expéditeur inconnu)",
 	'postbymail:newpost:posted' => "Nouvelle publication réussie !",
 	
 	/* Messages privés */

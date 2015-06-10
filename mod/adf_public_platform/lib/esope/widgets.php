@@ -57,7 +57,7 @@ elgg_unregister_widget_type('file_tree');
 	}
 
 
-if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
+if ($widget_friends == 'no') { elgg_unregister_widget_type('friends'); }
 
 if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
 if ($widget_river_widget != 'no') {

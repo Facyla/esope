@@ -19,6 +19,17 @@ $content = '';
 // Contenu de la page => $vars['body']
 // @TODO : mieux gérer l'affichage si $vars['body'] est renseigné
 
+// Header
+$header_content = elgg_get_plugin_setting('header', 'adf_public_platform');
+$header_content = trim($header_content);
+// Use default value if header not set
+if (empty($header_content)) {
+	$header_title = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
+	$header_content = '<a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '">' . $headertitle . '</a>';
+	// Default styles syntax : <span>D</span>epartements-en-<span>R</span>eseaux.<span class="minuscule">fr</span>;
+}
+
+
 // Display reset password form if asked to
 $user_guid = get_input('u', false);
 $code = get_input('c', false);
@@ -31,7 +42,8 @@ if ($user_guid && $code) {
 	$params = array('guid' => $user_guid, 'code' => $code);
 	
 	$content .= '<header><div class="interne">';
-	$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
+	//$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
+	$content .= '<h1>' . $header_content . '</h1>';
 	$content .= '</div></header>';
 	$content .= '<div class="elgg-page-messages">';
 	$content .= elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
@@ -107,7 +119,8 @@ if (empty($content)) {
 		
 	} else {
 		$content .= '<header><div class="interne">';
-		$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
+		//$content .= '<h1><img class="ministere" src="' . $urlimg . 'header_ministere.jpg" /><a href="' . $url . '" title="' . elgg_echo('adf_platform:gotohomepage') . '"><img class="cocon" src="' . $urlimg . 'header_cocon.png" style="margin-left:14px;" /></a><img class="cartouche" src="' . $urlimg . 'cartouche_strategie_numerique.png" /></h1>';
+		$content .= '<h1>' . $header_content . '</h1>';
 		$content .= '</div></header>';
 
 		$content .= '<div class="elgg-page-messages">';

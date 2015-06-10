@@ -7,20 +7,26 @@
 $english = array(
 	'group_chat' => 'Group Chat',
 	'group_chat:site_chat' => "Site chat",
-	'group_chat:group_chat' => "%s's group chat",
+	'group_chat:group_chat' => "Group chat",
 	'group_chat:object_chat' => "Page chat",
-	'group_chat:user_chat' => "User chat",
+	'group_chat:user_chat' => "Private chat",
 	'group_chat:group_option' => "Enable group chat?",
 	
 	'groupchat:active' => "",
 	'group_chat:youare' => "You are: ",
-	'group_chat:joingrouptochat' => "Join group in order to chat with group member.",
-	'group_chat:group_option' => "Enable group chat ?",
+	'group_chat:joingrouptochat' => "Join group in order to chat with its members.",
+	'group_chat:joinsitetochat' => "Join site in order to chat with its members.",
+	'group_chat:noaccesstoprivatechat' => "You do not have access to this private chat.",
+	'group_chat:invalidchatid' => "Invalid chat identifier.",
 	
 	/* Settings */
-	'group_chat:setting' => "Number of day's history",
 	'group_chat:settings:group_chat' => "Group chat",
+	'group_chat:history:group' => "Number of day's history",
 	'group_chat:settings:site_chat' => "Site global chat",
+	'group_chat:history:site' => "Number of day's history",
+	'group_chat:settings:user_chat' => "Users chat",
+	'group_chat:history:user' => "Number of day's history",
+	'group_chat:settings:notifications' => "Enable notifications",
 	// Settings values
 	'group_chat:no' => "Disabled",
 	'group_chat:yes' => "Enabled",
@@ -35,6 +41,20 @@ $english = array(
 	'groupchat:group:openlink' => "Open group chat",
 	'groupchat:group:openlink:ownwindow' => "Open group chat (new window)",
 	'groupchat:group:openlink:ownwindow:theme' => "Open group chat",
+	
+	// User chat
+	'groupchat:user:openlink' => "Display private chat",
+	'groupchat:user:openlink:ownwindow' => "Private chat",
+	'groupchat:user:openlink:ownwindow:theme' => "Open private chat",
+	
+	// Notifications
+	'group_chat:notification' => "Vous have new unread chat messages",
+	'group_chat:notification:site' => "New message on site chat",
+	'group_chat:notification:group' => "New message on group chat &laquo;&nbsp;%s&nbsp;&raquo;",
+	'group_chat:notification:user' => "New message on private chat with&nbsp;: %s",
+	
+	// Chat form
+	'group_chat:placeholder' => "Write your message here? Press ENTER to send it.",
 	
 );
 

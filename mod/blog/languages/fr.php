@@ -67,7 +67,7 @@ $french = array(
 	'blog:numbertodisplay' => "Nombre d'articles du blog à afficher",
 	'blog:noblogs' => "Aucun blog",
 	
-	'blog:notification' => "	%s a écrit un nouvel article de blog.
+	'blog:notification' => "%s a écrit un nouvel article de blog :
 
 %s
 

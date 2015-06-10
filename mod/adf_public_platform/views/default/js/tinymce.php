@@ -83,7 +83,7 @@ elgg.tinymce.init = function() {
 		
 		table_inline_editing : true,
 		//document_base_url : elgg.config.wwwroot,
-		//relative_urls : false,
+		relative_urls : false,
 		convert_urls : false,
 		
 		// Doesn't check the HTML at all..

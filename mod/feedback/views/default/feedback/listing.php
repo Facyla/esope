@@ -13,11 +13,10 @@
  * iionly@gmx.de
  */
 
-global $CONFIG;
 if (elgg_get_context() == 'view') {
 	elgg_set_context('feedback');
 	elgg_pop_breadcrumb();
-	elgg_push_breadcrumb('feedback', $CONFIG->url . 'feedback');
+	elgg_push_breadcrumb('feedback', elgg_get_site_url() . 'feedback');
 }
 
 $about = $vars['entity']->about; if (empty($about)) { $about = "feedback"; }
@@ -30,9 +29,6 @@ $mood_mark = elgg_echo ( "feedback:mood:" . $mood );
 $about_mark = elgg_echo ( "feedback:about:" . $about );
 if ($full) $access_mark = elgg_view('output/access', array('entity' => $vars['entity']));
 
-
-
-$icon = elgg_view('icon/default', array('entity' => $vars['entity'], 'size' => 'small'));
 
 $controls = '';
 if ($full) $controls .= $access_mark;
@@ -52,7 +48,7 @@ switch ($status) {
 		// Only admins can close feedbacks
 		if (elgg_is_admin_logged_in) {
 			//$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
-			$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'text' => '<i class="fa fa-square"></i>'));
+			$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $vars['entity']->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'text' => '<i class="fa fa-square-o"></i>'));
 		}
 }
 // Only admins can delete feedbacks
@@ -64,7 +60,7 @@ if (elgg_is_admin_logged_in) {
 $class = 'feedback-mood-' . $vars['entity']->mood . ' feedback-about-' . $vars['entity']->about . ' feedback-status-' . $status;
 
 $page = elgg_echo('feedback:page:unknown');
-if ( !empty($vars['entity']->page) ) {
+if (!empty($vars['entity']->page)) {
 	$page = $vars['entity']->page;
 	$page = "<a href='" . $page . "'>" . $page . "</a>";
 }
@@ -83,6 +79,7 @@ $info .= '<br /><blockquote>' . nl2br($vars['entity']->txt) . '</blockquote>';
 $comment = elgg_get_plugin_setting("comment", "feedback");
 if (elgg_in_context('admin')) $full = false;
 if ($comment == 'yes') {
+	$ia = elgg_set_ignore_access(true);
 	if (!$full) {
 		$num_comments_feedback = $vars['entity']->countComments();
 		$info .= '<div class="clearfloat"></div>';
@@ -92,50 +89,18 @@ if ($comment == 'yes') {
 	$info .= '<div id="feedback_' . $vars['entity']->guid . '"';
 	if (!$full) $info .= ' style="display:none;"';
 	$info .= '>' . elgg_view_comments($vars['entity']) . '</div>';
+	elgg_set_ignore_access($ia);
 }
 
+
+// On n'affiche l'icône que si on n'a qqch de joli, inutile pour le moment
+//$icon = elgg_view('icon/default', array('entity' => $vars['entity'], 'size' => 'small'));
+$icon = elgg_view('icon/default', array('entity' => $vars['entity']->getOwnerEntity(), 'size' => 'small'));
 echo elgg_view('page/components/image_block', array('image' => $icon, 'body' => $info, 'class' => 'submitted-feedback ' . $class));
+//echo elgg_view('page/components/image_block', array('body' => $info, 'class' => 'submitted-feedback ' . $class));
 
 
-if (!elgg_in_context('search')) {
-} else {
-}
-// @TODO : revoir tout ce qui suit
-/*
 // Search listing view
-$feedbacklink = '<a href="'.$vars['entity']->getURL().'" title="Afficher ce feedback et la discussion associée en pleine page">';
-$icon = '<img src="'.$CONFIG->wwwroot.'mod/feedback/graphics/'.$section.'.png" />';
-$icon = $feedbacklink . $icon . '</a>';
-
-if (!empty($vars['entity']->section)) {
-	$section = elgg_echo("feedback:section:" . $vars['entity']->section);
-}
-if (!empty($vars['entity']->categorie)) {
-	$categorie 	= elgg_echo ( "feedback:categorie:" . $vars['entity']->categorie ); // Formavia 20120129 : more generic
-}
-
-// URL de la page concernée par le feedback
-$feedbackurl = elgg_echo('unknown');
-if (!empty($vars['entity']->page) ) {
-	$www_root = $_SERVER["HTTP_HOST"];	// Facyla : handle subdirectory install
-	// Suppression du slash final s'il y en a un
-	if (substr($www_root, -1) == '/') { $www_root = substr($www_root, 0, -1); }
-	$feedbackurl = 'http://' . $vars['entity']->page; // Facyla : correct URL (absolute)
-	$page = '<a href="' . $feedbackurl . '">' . $feedbackurl . '</a>';
-}
-
-// Bloc d'informations
-$info .= "$section concernant $page&nbsp;: ";
-//$info .= "<div style='float:left;width:30%'><strong>".elgg_echo('feedback:list:categorie').": </strong>" . $categorie . "</div>";; // Formavia 20111122 : Unused
-$txt = cut_string($vars['entity']->txt, 50, $needle = " ", true, true);
-$info .= '&laquo;&nbsp;' . parse_urls(trim($txt[0])) . '...&nbsp;&raquo;';
-$info .= '<p class="owner_timestamp">' . friendly_time($vars['entity']->time_created);
-if ($vars['entity']->state == 'closed') $info .= '<span style="float:right; font-weight:bold;">' . elgg_echo('feedback:closed') . '</span>';
-else $info .= '<span style="float:right; font-weight:bold;">' . elgg_echo('feedback:open') . '</span>';
-$info .= '</p>';
-
-// Affichage du feedback
-echo elgg_view_listing($icon,$info);
-*/
+//if (!elgg_in_context('search')) {} else {}
 
 

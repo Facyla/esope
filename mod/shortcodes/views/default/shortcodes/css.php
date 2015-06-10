@@ -13,3 +13,5 @@
 .diaporama .thumbNav li { float: left; list-style-type: none; }
 .diaporama .thumbNav li { display:none; }
 
+.elgg-item.embed-item { cursor: pointer; }
+

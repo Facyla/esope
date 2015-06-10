@@ -6,8 +6,12 @@
  */
 $page_owner = elgg_get_page_owner_entity();
 
+$status_array = unserialize($page_owner->brainstorm_status);
+$status_string = $status_array['completed'] ? $status_array['completed'] : elgg_echo('brainstorm:completed');
+$status_string = ucfirst($status_string);
+
 elgg_push_breadcrumb($page_owner->name);
-elgg_push_breadcrumb(elgg_echo('brainstorm:filter:completed'));
+elgg_push_breadcrumb($status_string);
 
 if ($page_owner->canEdit() || elgg_is_admin_logged_in()) {
 	elgg_register_menu_item('title', array(
@@ -26,7 +30,7 @@ $content = elgg_list_entities_from_metadata(array(
 	'subtype' => 'idea',
 	'container_guid' => $page_owner->guid,
 	'metadata_names' => 'status',
-	'metadata_values' => array ('completed', 'declined'),
+	'metadata_values' => 'completed',
 	'limit' => 0,
 	'offset' => $offset,
 	'pagination' => false,

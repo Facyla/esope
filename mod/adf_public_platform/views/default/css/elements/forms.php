@@ -223,7 +223,7 @@ form input#adf-search-submit-button {
 	-webkit-border-radius: 0 7px 7px 0;
 	-o-border-radius: 0 7px 7px 0;
 	float: right;
-	padding: 5px 7px 5px 8px;
+	padding: 5px 7px 6px 8px;
 	width:auto;
 }
 form input#adf-search-submit-button:hover, 

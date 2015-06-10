@@ -59,6 +59,10 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo elgg_view('input/dropdown', array('name' => 'params[replymode]', 'options_values' => $replymode_opt, 'value' => $vars['entity']->replymode));
 	echo '</label><br />' . elgg_echo('postbymail:settings:replymode:details') . '</p>';
 	
+	echo '<p><label>' . elgg_echo('postbymail:settings:replybuttonaddtext') . ' ';
+	echo elgg_view('input/dropdown', array('name' => 'params[replybuttonaddtext]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->replybuttonaddtext));
+	echo '</label><br />' . elgg_echo('postbymail:settings:replybuttonaddtext:details') . '</p>';
+	
 	// Séparateur message/signature
 	echo '<p><label>' . elgg_echo('postbymail:settings:separator');
 	echo elgg_view('input/text', array('name' => 'params[separator]', 'style' => 'width:94%;', 'value' => $vars['entity']->separator));
@@ -128,6 +132,10 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:username') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[username]', 'style' => 'width:94%;', 'value' => $vars['entity']->username));
 	echo '</label><p/>';
+	// post by email address
+	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:email') . ' ';
+	echo elgg_view('input/text', array('name' => 'params[email]', 'style' => 'width:94%;', 'value' => $vars['entity']->email));
+	echo '</label><p/>';
 
 	// password
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:password') . ' ';
@@ -138,7 +146,9 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:inboxfolder') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[inboxfolder]', 'style' => 'width:94%;', 'value' => $vars['entity']->inboxfolder));
 	echo '</label><p/>';
-
+	
+	// @TODO ? Notification scope error|success|groupadmin
+	
 echo '</fieldset>';
 
 /*

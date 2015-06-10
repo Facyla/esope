@@ -27,7 +27,7 @@ elgg_push_context('widgets');
 
 
 elgg_set_context('search');
-$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 
 // Liste des formateurs
 $tutors = dossierdepreuve_get_group_tutors($group);
@@ -89,7 +89,7 @@ foreach ($dossiers as $ent) {
 $content .= '</ul><br />';
 */
 
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 elgg_pop_context();
 

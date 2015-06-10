@@ -30,7 +30,7 @@ $dossiersdepreuves = '';
 elgg_set_context('search');
 
 
-$ignore_access = elgg_get_ignore_access(); elgg_set_ignore_access(true);
+$ia = elgg_set_ignore_access(true);
 $learners = dossierdepreuve_get_group_learners($group);
 // Les éléments du dossier
 foreach ($learners as $user) {
@@ -43,7 +43,7 @@ foreach ($learners as $user) {
 	} else $content .= '<p>' . elgg_echo('dossierdepreuve:nodossier') . '</p>';
 	$content .= '<hr />';
 }
-elgg_set_ignore_access($ignore_access);
+elgg_set_ignore_access($ia);
 
 
 elgg_push_context('dossierdepreuve');

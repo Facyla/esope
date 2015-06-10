@@ -33,7 +33,12 @@ function theme_inria_init(){
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
-	// Extend group owner block
+	// Extend group invite form
+	// Requires to be placed at the end of the form, because we will end the form and start a new one...
+	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite_before', 100);
+	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite', 1000);
+	
+	// Extend user owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
 	
 	// Extend group owner block
@@ -55,7 +60,7 @@ function theme_inria_init(){
 	//elgg_extend_view('groups/profile/summary', 'simplepie/group_simplepie_module', 501);
 	//elgg_extend_view('page/elements/sidebar', 'simplepie/sidebar_simplepie_module', 501);
 	
-	// Supprimer le suivi de l'activité (toujours activé)
+	// Supprimer le suivi de l'activité (car toujours activé sur home du groupe)
 	remove_group_tool_option('activity');
 	
 	// Add CMIS folder option
@@ -105,6 +110,7 @@ function theme_inria_init(){
 	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	
+	
 	// Ajout niveau d'accès sur TheWire
 	if (elgg_is_active_plugin('thewire')) {
 		elgg_unregister_action('thewire/add');
@@ -152,10 +158,20 @@ function theme_inria_init(){
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
+	// Use a custom method to get and update profile data
 	if (elgg_is_active_plugin('ldap_auth')) {
+		// Note that Inria uses settings only for server config
+		// Fields config is not a simple mapping and is hard-coded
 		elgg_register_plugin_hook_handler('check_profile', 'ldap_auth', 'theme_inria_ldap_check_profile');
-		elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
-		elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
+		//elgg_register_plugin_hook_handler('update_profile', 'ldap_auth', 'theme_inria_ldap_update_profile');
+		//elgg_register_plugin_hook_handler('clean_group_name', 'ldap_auth', 'theme_inria_ldap_clean_group_name');
+	}
+	
+	// Register cron hook
+	// @TODO attendre le GO de la DSI avant activation !
+	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'theme_inria');
+	if ($ldap_cron == 'yes') {
+		elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
 	}
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
@@ -163,6 +179,30 @@ function theme_inria_init(){
 	// and is added and triggered by ESOPE when using plugins that replace it
 	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
 	
+	// Hook pour bloquer les notifications dans certains groups si on a demandé à les désactiver
+	// 1) Blocage pour les nouveaux objets
+	// Note : load at first, because we want to block the process early, if it needs to be blocked
+	// if a plugin hook send mails before and returns "true" this would be too late
+	elgg_register_plugin_hook_handler('object:notifications', 'all', 'theme_inria_object_notifications_block', 1);
+	/* 2) Blocage pour les réponses (annotations)
+	 * Process : 
+	 		action discussion/replies/save exécute un ->annotate('group_topic_post',...)
+	 		create_annotation lance un event (qui peut exécuter des choses mais ne change pas le comportement)
+	 		puis ajoute l'annotation, et lance un event create,annotation
+	 		qui exécute, notamment, l'envoi d'email par comment_tracker et advanced_notifications
+	 		Moyens de blocage dans comment_tracker : les users sont récupérés via leurs préférences d'abonnement
+ 			ce qui permet de spécifier un désabonnement au préalable, de manière à ne pas abonner à chaque commentaire
+	 */
+	// See html_email_handler :
+	// Block annotations : use hook on notify:annotation:message => return false
+	// @TODO  : non opérationnel car pas de moyen de bloquer à temps les notifications, envoyées via divers plugins qui s'appuient des events...
+	//elgg_register_plugin_hook_handler('notify:annotation:message', 'group_topic_post', 'theme_inria_annotation_notifications_block', 1000);
+	elgg_register_event_handler('create','annotation','theme_inria_annotation_notifications_event_block', 1);
+	// Unregister advanced notification event to avoid sending reply twice
+	// @TODO : move to ESOPE ?
+	if (elgg_is_active_plugin('comment_tracker') && elgg_is_active_plugin('advanced_notifications')) {
+		elgg_unregister_event_handler("create", "annotation", "advanced_notifications_create_annotation_event_handler");
+	}
 	
 }
 
@@ -196,6 +236,11 @@ function inria_page_handler($page){
 		case "animation":
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
 			break;
+		case 'admin_cron':
+			if (elgg_is_admin_logged_in()) {
+				theme_inria_daily_cron('cron', 'daily', '', '');
+			}
+			break;
 		default:
 			include(dirname(__FILE__) . '/pages/theme_inria/index.php');
 	}
@@ -217,6 +262,20 @@ function inria_ressources_page_handler($page) {
 			return false;
 	}
 	return true;
+}
+
+
+
+// Returns Elgg fields coming from LDAP
+function inria_get_profile_ldap_fields() {
+	$ldap_fields = array(
+			'inria_location_main', // Centre de rattachement
+			'inria_location', // Localisation
+			'epi_ou_service', // EPI ou service
+			'inria_room', // Bureau
+			'inria_phone', // Téléphone
+		);
+	return $ldap_fields;
 }
 
 

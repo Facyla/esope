@@ -36,6 +36,8 @@ $french = array(
 	'guidtool:deleted' => 'GUID %d supprimé',
 	'guidtool:notdeleted' => 'GUID %d non supprimé',
 	
+	'guidtool:entity:invalid' => "Entité invalide",
+	
 	'guidtool:entity:enabled' => "Entité activée (visible)",
 	'guidtool:entity:disabled' => "Entité désactivée (cachée)",
 	'guidtool:entity:enable' => "Activer l'entité",

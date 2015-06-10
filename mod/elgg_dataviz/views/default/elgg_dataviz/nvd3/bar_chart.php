@@ -12,9 +12,17 @@ $id = dataviz_id('dataviz_');
 
 
 $js_data = '';
+// $data = array('serie_key' => array(key1' => 'val1', 'key2' => 'val2'));
 if ($data) {
-	foreach ($data as $key => $val) {
-		$js_data[] = '{"label": "' . $key . '", "value" : ' . $val . '}';
+	foreach ($data as $serie_key => $serie_data) {
+		$js_data_serie = array();
+		foreach ($serie_data as $key => $val) {
+			$js_data_serie[] = '{"label": "' . $key . '", "value" : ' . $val . '}';
+		}
+		$js_data[] = '{
+				key: "' . $serie_key . '",
+				values: [' . implode(', ', $js_data_serie) . ']
+			}';
 	}
 	$js_data = '[' . implode(', ', $js_data) . ']';
 } else {
@@ -40,20 +48,24 @@ if (empty($js_data)) {
 }
 
 
-$content = '<div id="' . $id . '" style="height:' . $height . '; width:' . $width . ';"><svg></svg></div>
+$content = '<div id="' . $id . '" style="height:' . $height . '; width:' . $width . ';"><svg style="height:' . $height . '; width:' . $width . ';"></svg></div>
 <script type="text/javascript">
 nv.addGraph(function() {
+	// x, y : Specify the data accessors.
+	// tooltips : Don\'t show tooltips
+	// staggerLabels : Too many bars and not enough room? Try staggering labels.
+	// showValues : ...instead, show the bar value right on top of each bar.
 	var chart = nv.models.discreteBarChart()
-		.x(function(d) { return d.label })    //Specify the data accessors.
+		.x(function(d) { return d.label })
 		.y(function(d) { return d.value })
-		.staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
-		.tooltips(false)        //Don\'t show tooltips
-		.showValues(true)       //...instead, show the bar value right on top of each bar.
-		.transitionDuration(350)
+		.staggerLabels(true)
+		.tooltips(true)
+		.showValues(true)
 		;
 	
 	d3.select("#' . $id . ' svg")
 		.datum(data_' . $id . '())
+		.transition().duration(350)
 		.call(chart);
 	
 	nv.utils.windowResize(chart.update);

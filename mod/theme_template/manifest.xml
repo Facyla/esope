@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Theme name</name>
-	<author>Author name</author>
+	<author>Florian DANIEL aka Facyla</author>
 	<version>0.1</version>
 	<blurb>Theme long name</blurb>
-<description>Theme description</description>
+	<description>Theme description</description>
 	<website>http://items.fr/</website>
 	<copyright>Copyright</copyright>
 	<license>GNU Public License version 2</license>
@@ -14,7 +14,7 @@
 		<path>graphics/plugin.png</path>
 	</screenshot>
 
-	<category>category1</category>
+	<category>theme</category>
 	<category>category2</category>
 	
 	<activate_on_install>false</activate_on_install>

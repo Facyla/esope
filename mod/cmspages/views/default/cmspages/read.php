@@ -6,7 +6,7 @@
 * @author Facyla
 * @copyright Facyla 2011
 * @link http://id.facyla.fr/
-* Note : This view may render more than the pure content (description), as it's used 
+* Note : This view is designed to provide a full interface to CMS Pages viewing
 */
 
 /*
@@ -23,116 +23,37 @@ $content .= $cmspage->module; // Load a specific module (use content as intro ? 
 $content .= $cmspage->display; // Allow to use own page (not concerned in a view)
 */
 
-if ($vars['pagetype']) {
-	$options = array(
-			'metadata_names' => array('pagetype'), 'metadata_values' => array($vars['pagetype']),
-			'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1
-		);
-	$cmspages = elgg_get_entities_from_metadata($options);
-	if ($cmspages) { $cmspage = $cmspages[0]; }
+$pagetype = elgg_extract('pagetype', $vars);
+$cmspage = elgg_extract('entity', $vars);
+$embed = elgg_extract('embed', $vars);
+$noedit = elgg_extract('noedit', $vars);
 
-	// Is viewer a page editor ?
-	$is_editor = false;
-	if ( (elgg_is_logged_in() && (in_array($_SESSION['guid'], explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) ) || elgg_is_admin_logged_in() ) { $is_editor = true; }
+// We need at least entity or pagetype
+if (!$pagetype && !$cmspage) { return; }
 
-	if ($cmspage) {
-		// Check if allowed context - Forward si pas d'affichage pleine page autorisé
-		if ($cmspage->display == 'no') { exit; }
-		// Check allowed contexts - Exit si contexte non autorisé
-		if (!empty($cmspage->contexts) && ($cmspage->contexts != 'all')) {
-			$exit = true;
-			$allowed_contexts = explode(',', $cmspage->contexts);
-			foreach ($allowed_contexts as $context) {
-				if (elgg_in_context(trim($context))) $exit = false;
-			}
-			if ($exit) { register_error('cmspages:wrongcontext'); forward(); }
-		}
-		
-		$title = $cmspage->pagetitle;
-		$content = '';
-		
-		// Contexte spécifique
-		elgg_push_context('cmspages');
-		elgg_push_context('cmspages:pagetype:' . $vars['pagetype']);
-		
-		switch ($cmspage->content_type) {
-			case 'module':
-				// Load a specific module
-				if (!empty($cmspage->module)) {
-					$module_config = cmspages_extract_module_config($cmspage->module, $cmspage->module_config);
-					foreach ($module_config as $module_name => $config) {
-						$content .= cmspages_compose_module($module_name, $config);
-					}
-				}
-				break;
-			case 'template':
-				// Replace wildcards with values.. {{pagetype}}
-				$content .= cmspages_render_template($cmspage->description);
-				break;
-			case 'rawhtml':
-			default:
-				$content .= elgg_view('output/tags', array('tags' => $cmspage->tags));
-				//$content .= $cmspage->description;
-				// we need elgg-output class for lists, also added a custom class for finer output control
-				// Can't use output/longtext view because of filtering
-				$content .= '<div class="elgg-output elgg-cmspage-output">' . $cmspage->description . '</div>';
-				// Set container as page_owner - useful mainly when displayed as a full page
-				if (!empty($cmspage->container_guid)) elgg_set_page_owner_guid($cmspage->container_guid);
-				// Use parent entity as hierarchical navigation link
-				if (!empty($cmspage->parent_guid)) {
-					$parent = get_entity($cmspage->parent_guid);
-					$content .= '<br /><a href="' . $parent->getURl() . '">Parent : ' . $parent->title . $parent->name . '</a>';
-				}
-				// Use sibling entity as horizontal navigation link
-				if (!empty($cmspage->sibling_guid)) {
-					$sibling = get_entity($cmspage->sibling_guid);
-					$content .= '<br /><a href="' . $sibling->getURl() . '">Lien connexe : ' . $sibling->title . $sibling->name . '</a>';
-				}
-		}
-		
-		// Ajout des feuilles de style personnalisées
-		$content .= "\n<style>" . $cmspage->css . "</style>\n";
-		
-		// TEMPLATE - Do we use a custom cmspages template ? : not for templates (recursive risks)
-		// If yes, we'll fetch the rendered content into the template cmspage before sending it to the display rendering
-		if ($cmspage->content_type != 'template') {
-			if (!empty($cmspage->template)) {
-				$template_options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($cmspage->template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1);
-				$tempaltes = elgg_get_entities_from_metadata($options);
-				if ($templates) { $template = $templates[0]; }
-				$content = elgg_view('cmspages/view', array('pagetype' => $cmspage->template, 'body' => $content));
-			}
-		}
-		
-	} else {
-		register_error(elgg_echo('cmspages:notset'));
-		// Les éditeurs peuvent rester.. ils pourront créer la page
-		if (!$is_editor) { forward(); }
-	}
-	
-	// Admin links : direct edit link fr users who can edit this
-	if ($is_editor) {
-		if ($cmspage) {
-			$content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'cmspages?pagetype=' . $vars['pagetype'] . '"><kbd>[&nbsp;Modifier ' . $vars['pagetype'] . '&nbsp;]</kbd></a></p></small>';
-		} else {
-			$content .= "<p><blockquote>Cette page n'existe pas. Vous avez pu faire une erreur dans l'URL (attention aux '_', remplacés par des '-'), sinon vous pouvez cliquer sur le lien ci-dessous pour créer une nouvelle page à cette adresse.</blockquote></p>";
-			$content .= '<small><p style="text-align:right;"><a href="' . $vars['url'] . 'cmspages?pagetype=' . $vars['pagetype'] . '"><kbd>[&nbsp;Créer ' . $vars['pagetype'] . '&nbsp;]</kbd></a></p></small>';
-		}
-	} else {
-		elgg_pop_breadcrumb(); // Removes main cmspages link
-	}
-	elgg_push_breadcrumb($title); // Fil d'Ariane revu : Adds page title
-	
-	// Display through the correct canvas area
-	//$content = elgg_view('page/elements/wrapper', array('body' => $content));
-	// Allow to use own page (not concerned in a view)
-	if (!empty($cmspage->display)) { $layout = $cmspage->display; }
-	else { $layout = 'one_column'; }
+// Is viewer a page editor ?
+$is_editor = false;
+if (cmspage_is_editor()) {
+	$is_editor = true;
+	// Editors can also edit any cmspage - including private ones
+	$ia = elgg_set_ignore_access(true);
 }
 
+// Get pagetype from entity
+if (!$pagetype) { $pagetype = $cmspage->pagetype; }
+// Or optional entity from pagetype
+if (!$cmspage) { $cmspage = cmspages_get_entity($pagetype); }
 
-//echo elgg_view_layout($layout, elgg_view_title($title) . $content);
-$params = array('content' => elgg_view_title($title).$content, 'sidebar' => '');
-echo elgg_view_layout($layout, $params);
+
+// Check if full page display is allowed - Exit si pas d'affichage pleine page autorisé
+if ($cmspage->display == 'no') { return; }
+//if ($cmspage->display == 'no') { forward(REFERER); }
+
+// Allow to remove admin links (useful for tinymce templates and content embedding)
+$params = array('mode' => 'read', 'embed' => $embed, 'noedit' => $noedit);
+echo cmspages_view($pagetype, $params, $vars);
+
+// Restore original rights
+if ($is_editor) { elgg_set_ignore_access($ia); }
 
 

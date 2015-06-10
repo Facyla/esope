@@ -1,0 +1,16 @@
+Ce kit contient des éléments sous diverses licences : 
+
+Pour le code du plugin Elgg : licence GPL2
+
+Pour le code du kit "Méthode" : licence GPL2 (sauf pour les élements qui spécifient une autre licence)
+ - contenu du dossier vendors/cocon_methode/
+
+Bibliothèque logicielles intégrées dans le Kit Méthode : licences MIT, GPL2 et/ou LGPL selon les cas
+ - la licence est précisée dans les fichiers de chacune des biblitohèques concernées
+ - bibliothèques utilisées : jQuery, FontAwesome, pChart, openTBS, fpdi
+
+Pour le contenu du kit : licence Creative Commons By-SA 3.0
+ - contenu du dossier vendors/cocon_methode/_files/
+
+
+

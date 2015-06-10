@@ -3,6 +3,13 @@
 > In english: Elgg Social Opensource Public Environment)
 
 
+## Quelle version choisir ?
+* esope_1.8 : RECOMMANDEE POUR LA PRODUCTION
+* esope_1.9 : branche intermédiaire - partiellement fonctionnelle
+* esope_1.10 : branche intermédiaire - non fonctionnelle
+* esope_1.11 : DEVELOPPEMENT - prochaine version majeure d'ESOPE
+
+
 ## A propos d'Elgg
 Lire [README.txt](README.txt)
 * Copyright :  [COPYRIGHT.txt](COPYRIGHT.txt)
@@ -30,7 +37,8 @@ ESOPE est également adaptée pour fournir une base sur laquelle construire des 
 
 
 ### Version
-ESOPE suit de près les évolutions du "core" d'Elgg, et s'appuie actuellement sur Elgg 1.8.20
+ESOPE suit de près les évolutions du "core" d'Elgg.
+La version de production actuelle s'appuie sur Elgg 1.8.20 et correspond à la branche "master".
 
 
 ### Conception et maintenance

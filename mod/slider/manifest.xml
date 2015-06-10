@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Slider</name>
-	<author>Florian DANIEL ~ Items International 2013</author>
-	<version>0.4</version>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.8</version>
 	<blurb>Slider plugin : custom slides for any content</blurb>
-	<description>Ce slider permet d'utiliser tout type de contenu : images, mais aussi texte, HTML, vidéos, etc.</description>
+	<description>Activez ce plugin si vous souhaitez disposer de sliders configurables, pour les administrateurs, et éventuellement pour les membres. Ce slider permet d'utiliser tout type de contenu : images, mais aussi texte, HTML, vidéos, etc.</description>
 	<website>http://formavia.fr/</website>
-	<copyright>(C) FormaVia 2013, Items International (Facyla)</copyright>
+	<copyright>Items International 2013-2015</copyright>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
@@ -15,12 +15,44 @@
 	
 	<category>admin</category>
 	<category>theme</category>
+	<category>content</category>
 	<category>slider</category>
+	
+	<suggests>
+		<type>plugin</type>
+		<version>cmspages</version>
+	</suggests>
+	
+	<suggests>
+		<type>plugin</type>
+		<version>shortcodes</version>
+	</suggests>
+	
+	<suggests>
+		<type>plugin</type>
+		<version>adf_public_platform</version>
+	</suggests>
 	
 	<activate_on_install>false</activate_on_install>
 </plugin_manifest>
 
 <!--
+
+0.8 : 20150522
+  - unique identifier (allows to call a slider by its name)
+
+0.7 : 20150415
+  - editor switch
+  - new form structure
+
+0.6 : 20150414 - slider editor
+  - fully functionnal slider editor (add/remove slides, reordering)
+  - add display view
+  - add slider shortcode
+
+0.5 : 20150414 - start slider editor
+  - add a bunch of slider libraries
+  - set basic editor structure
 
 0.4 : updated to Elgg 1.8
 	- new version for Elgg 1.8

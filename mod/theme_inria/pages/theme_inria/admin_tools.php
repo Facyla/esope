@@ -11,7 +11,6 @@ gatekeeper();
 
 // Liste manuelle.. ou metadata spécifique ?
 if (elgg_is_admin_logged_in() || in_array($_SESSION['username'], explode(',', elgg_get_plugin_setting('animators', 'theme_inria'))) ) {
-	
 } else {
 	forward();
 }

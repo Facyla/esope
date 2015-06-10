@@ -3,12 +3,12 @@ RSS Import
 
 Import RSS feed items into various Elgg content types
 
-Installation:
+== Installation ==
  - unzip the plugin to the mod directory of your elgg installation
  - enable the plugin through the administration interface
  - set allowable cron import schedules using the plugin settings
 
-Usage:
+== Usage ==
 This plugin allows rss items to be imported into blogs, bookmarks, or pages
 either manually or on a set schedule.  When adding a blog/bookmark/page or while
 viewing your own blogs/bookmarks/pages a new option will be presented in the
@@ -38,3 +38,18 @@ will get through.
 Each import, whether manual or scheduled, is logged in a history.  The history is
 accessible from the feed page via a link in the side bar.  Each import can be rolled
 back by clicking the 'undo import' link in the history.
+
+
+== ESOPE changes ==
+This version is now fully supported by ESOPE, with several changes:
+ - new handy functions added
+ - add content filtering : enable to extract tags, filter the content based on custom rules
+ - added filter hooks to enable extendingcontent/tags extraction
+ - get source URL : adds a link to the site the article originates from
+ - setting to switch author in group : can be set to container instead of member
+ - setting : block email notifications
+ - setting : enable import tools
+ - setting : define access to import tools (member/groupadmin/admin)
+ - setting : enable personal import tool
+
+

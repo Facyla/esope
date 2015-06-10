@@ -26,7 +26,8 @@ if (!empty($slidercontent)) {
 $selected_articles = theme_fing_get_pin_entities();
 $pin_exclude = array(); // Liste les articles à ne pas reprendre dans l'autre listing des articles en Une
 $i = 0;
-foreach ($selected_articles as $ent) {
+$max = 4;
+if ($selected_articles) foreach ($selected_articles as $ent) {
 	$pin_exclude[] = $ent->guid;
 	$i++;
 	
@@ -56,7 +57,7 @@ foreach ($selected_articles as $ent) {
 	$slidercontent .= '<td style="width:50%; text-align: center; height: 200px; vertical-align: middle;">' . $image . '</td>';
 	$slidercontent .= '<td style="width:50%;"><div class="textSlide"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 16px;">' . $excerpt . '</div></div></td>';
 	$slidercontent .= '</tr></table></div></li>';
-	if ($i >= 3) { break; }
+	if ($i >= $max) { break; }
 }
 $slider_vars = array(
 	'slidercontent' => $slidercontent,
@@ -127,15 +128,17 @@ $content .= '<div style="width:28%; float:left;"><div style="padding:1ex;">';
 		$content .= '<div>';
 			$content .= '<h2>Participer à nos Travaux</h2>';
 			$groups = elgg_get_entities_from_metadata(array('types' => 'group', 'limit' => 0, 'metadata_name_value_pairs' => array('name' => 'featured_group', 'value' => 'yes')));
-			shuffle($groups);
-			foreach ($groups as $group) {
-				$content .= '<a href="' . $group->getURL() . '">';
-				$content .= '<h3>' . $group->name . '</h3>';
-				$content .= '<div style="float:left; clear:left; padding-bottom:16px; width:100%;">';
-				$content .= '<img src="' . $group->getIconURL('small') . '" style="float:left; margin:0 6px 4px 0;"/>';
-				$content .= '<p style="font-size:11px;">' . $group->publicdescription . '</p>';
-				$content .= '</div>';
-				$content .= '</a>';
+			if ($groups) {
+				shuffle($groups);
+				foreach ($groups as $group) {
+					$content .= '<a href="' . $group->getURL() . '">';
+					$content .= '<h3>' . $group->name . '</h3>';
+					$content .= '<div style="float:left; clear:left; padding-bottom:16px; width:100%;">';
+					$content .= '<img src="' . $group->getIconURL('small') . '" style="float:left; margin:0 6px 4px 0;"/>';
+					$content .= '<p style="font-size:11px;">' . $group->publicdescription . '</p>';
+					$content .= '</div>';
+					$content .= '</a>';
+				}
 			}
 		$content .= '</div>';
 		
@@ -199,7 +202,7 @@ if (elgg_is_active_plugin('event_calendar')) {
 	// Timeline = 5 derniers events taggués "timeline"
 	$timeline_events = array_slice($timeline_events, 0, 5);
 	$timeline .= '<h2>Timeline</h2>';
-	foreach ($timeline_events as $ent) {
+	if ($timeline_events) foreach ($timeline_events as $ent) {
 		$timeline .= elgg_view("object/timeline_event_calendar",array('entity' => $ent));
 	}
 	$timeline .= '<div class="clearfloat"></div>';

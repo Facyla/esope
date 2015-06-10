@@ -3,11 +3,44 @@
 function esope_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'adf_public_platform/pages/esope';
 	switch ($page[0]) {
+		case 'tools':
+			// Index des outils (principalement admin)
+			// These tools are handy for administrators and allow them to perform some exceptional tasks.
+			// Note : allowed tools must be checked before any inclusion...
+			$allowed_tools = esope_admin_tools_list();
+			if (!empty($page[1]) && in_array($page[1], $allowed_tools)) {
+				include "$base/tools/{$page[1]}.php";
+			} else {
+				include "$base/tools.php";
+			}
+			break;
+		
 		case 'statistics':
+			// Page de statistiques à destination des admins, mais avec divers éléments accessibles à d'autres personnes (configurables)
 			include "$base/statistics.php";
 			break;
+		
+		case 'group_requests':
+			// Page de listing de requêtes en attente (pour rejoindre un groupe)
+			include "$base/group_requests.php";
+			break;
+		
+		case 'download_entity_file':
+			if (!empty($page[1])) set_input('guid', $page[1]);
+			if (!empty($page[2])) set_input('metadata', $page[2]);
+			include "$base/download_entity_file.php";
+			break;
+		
+		case 'forum_refresh':
+			// API : Renvoie les réponses à un sujet de forum (actualisation auto)
+			if (isset($page[1])) set_input('guid', $page[1]);
+			if (isset($page[2])) set_input('lower_ts', $page[2]);
+			include "$base/forum_refresh.php";
+			break;
+		
 		default:
 	}
+	return true;
 }
 
 

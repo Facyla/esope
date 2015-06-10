@@ -5,20 +5,19 @@
  * @package Elgg
  * @subpackage cmspage
  * @author Facyla 2010-2014
- * @license 	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
 */
 
-$cmspage_guid = (int) get_input('cmspage_guid');
+$guid = (int) get_input('guid');
+// BC : now deprecated, use GUID instead
+if (!$guid) { $guid = (int) get_input('cmspage_guid'); }
 
 gatekeeper();
 
 // Check if allowed user = admin or GUID in editors list
-if (in_array(elgg_get_logged_in_user_guid(), explode(',', elgg_get_plugin_setting('editors', 'cmspages')))) {
-} else {
-	admin_gatekeeper();
-}
+if (!cmspage_is_editor()) { forward(); }
 
-if ($cmspage = get_entity($cmspage_guid)) {
+if ($cmspage = get_entity($guid)) {
 	//$container_guid = $cmspage->getContainer();
 	if ($cmspage->canEdit()) {
 		if ($cmspage->getSubtype() == "cmspage") {
