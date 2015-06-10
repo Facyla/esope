@@ -23,9 +23,11 @@ $display_query = _elgg_get_display_query($query);
 if (!$query) {
 	$title = sprintf(elgg_echo('search:results'), "\"$display_query\"");
 	
-	$body  = elgg_view_title(elgg_echo('search:search_error'));
-	$body .= elgg_echo('search:no_query');
-	$layout = elgg_view_layout('one_sidebar', array('content' => $body));
+	$body = elgg_echo('search:no_query');
+	$layout = elgg_view_layout('one_sidebar', array(
+		'title' => elgg_echo('search:search_error'),
+		'content' => $body
+	));
 	echo elgg_view_page($title, $layout);
 
 	return;
@@ -33,7 +35,7 @@ if (!$query) {
 
 // get limit and offset.  override if on search dashboard, where only 2
 // of each most recent entity types will be shown.
-$limit = ($search_type == 'all') ? 2 : get_input('limit', 10);
+$limit = ($search_type == 'all') ? 2 : get_input('limit', elgg_get_config('default_limit'));
 $offset = ($search_type == 'all') ? 0 : get_input('offset', 0);
 
 $entity_type = get_input('entity_type', ELGG_ENTITIES_ANY_VALUE);
@@ -78,14 +80,13 @@ $params = array(
 );
 
 $types = get_registered_entity_types();
+$types = elgg_trigger_plugin_hook('search_types', 'get_queries', $params, $types);
+
 $custom_types = elgg_trigger_plugin_hook('search_types', 'get_types', $params, array());
 
 // add sidebar items for all and native types
-// @todo should these maintain any existing type / subtype filters or reset?
 $data = htmlspecialchars(http_build_query(array(
 	'q' => $query,
-	'entity_subtype' => $entity_subtype,
-	'entity_type' => $entity_type,
 	'owner_guid' => $owner_guid,
 	'search_type' => 'all',
 	//'friends' => $friends
@@ -256,19 +257,19 @@ if ($search_type == 'tags') {
 }
 $highlighted_query = search_highlight_words($searched_words, $display_query);
 
-$body = elgg_view_title(elgg_echo('search:results', array("\"$highlighted_query\"")));
+$highlighted_title = elgg_echo('search:results', array("\"$highlighted_query\""));
 
 if (!$results_html) {
-	$body .= elgg_view('search/no_results');
+	$body = elgg_view('search/no_results');
 } else {
-	$body .= $results_html;
+	$body = $results_html;
 }
 
 // this is passed the original params because we don't care what actually
 // matched (which is out of date now anyway).
 // we want to know what search type it is.
 $layout_view = search_get_search_view($params, 'layout');
-$layout = elgg_view($layout_view, array('params' => $params, 'body' => $body));
+$layout = elgg_view($layout_view, array('params' => $params, 'body' => $body, 'title' => $highlighted_title));
 
 $title = elgg_echo('search:results', array("\"$display_query\""));
 

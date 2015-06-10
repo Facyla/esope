@@ -26,6 +26,13 @@ function newsletter_start_commandline_sending(Newsletter $entity) {
 			$settings["https"] = $_SERVER["HTTPS"];
 		}
 		
+		// ini settings
+		$ini_param = "";
+		$ini_file = php_ini_loaded_file();
+		if (!empty($ini_file)) {
+			$ini_param = "-c " . $ini_file . " ";
+		}
+		
 		// which script to run
 		$script_location = dirname(dirname(__FILE__)) . "/procedures/cli.php";
 		
@@ -34,9 +41,9 @@ function newsletter_start_commandline_sending(Newsletter $entity) {
 		
 		// start the correct commandline
 		if (PHP_OS === "WINNT") {
-			pclose(popen("start /B php " . $script_location . " " . $query_string, "r"));
+			pclose(popen("start /B php " . $ini_param . $script_location . " " . $query_string, "r"));
 		} else {
-			exec("php " . $script_location . " " . $query_string . " > /dev/null &");
+			exec("php " . $ini_param . $script_location . " " . $query_string . " > /dev/null &");
 		}
 	}
 }
@@ -338,8 +345,17 @@ function newsletter_process($entity_guid) {
 			// =======================
 			// proccess all recipients
 			// =======================
+			if (newsletter_custom_from_enabled() && !empty($entity->from)) {
+				// from is validated to a valid email address in the newsletter save action
+				$from = $entity->from;
+			} else {
+				// default to the container email address
+				$from = html_email_handler_make_rfc822_address($container);
+			}
+			
+			// set default send options
 			$send_options = array(
-				"from" => html_email_handler_make_rfc822_address($container),
+				"from" => $from,
 				"subject" => $message_subject,
 				"plaintext_message" => $message_plaintext_content
 			);
@@ -379,6 +395,9 @@ function newsletter_process($entity_guid) {
 							
 							$message_html_content_user = str_ireplace($online_link, $new_online_link, $message_html_content_user);
 						}
+						
+						// add URL postfix to all internal links
+						$message_html_content_user = newsletter_apply_url_postfix($message_html_content_user);
 						
 						// =========
 						// send mail
@@ -1268,7 +1287,11 @@ function newsletter_get_available_templates($container_guid) {
 	unset($result["custom"]); // make sure custom is last in the list (shouldn't be provided by a plugin/theme)
 	$result["custom"] = elgg_echo("newsletter:edit:template:select:custom");
 	
-	return $result;
+	$params = array(
+		"container_guid" => $container_guid
+	);
+	
+	return elgg_trigger_plugin_hook("templates", "newsletter", $params, $result);
 }
 
 /**
@@ -1295,7 +1318,7 @@ function newsletter_process_csv_upload(array $recipients) {
 			// try to find an email column (in the first 2 rows)
 			for ($i = 0; $i < 2; $i++) {
 				$row = fgetcsv($fh, null, ";", "\"");
-				if ($row) {
+				if (!empty($row)) {
 					foreach ($row as $index => $field) {
 						if (newsletter_is_email_address($field)) {
 							$email_column = $index;
@@ -1371,4 +1394,208 @@ function newsletter_process_csv_upload(array $recipients) {
 	}
 	
 	return $recipients;
+}
+
+/**
+ * Get the plugin settings for URL postfix
+ *
+ * @return bool|array
+ */
+function newsletter_get_url_postfix() {
+	static $result;
+	
+	if (!isset($result)) {
+		$result = false;
+		
+		$url_postfix_name = elgg_get_plugin_setting("url_postfix_name", "newsletter");
+		$url_postfix_value = elgg_get_plugin_setting("url_postfix_value", "newsletter");
+		
+		if (!is_null($url_postfix_name) && ($url_postfix_name !== false) && !is_null($url_postfix_value) && ($url_postfix_value !== false)) {
+			$result = array($url_postfix_name => $url_postfix_value);
+		}
+	}
+	
+	return $result;
+}
+
+/**
+ * Add the URL postfix to all url's in the newsletter content
+ *
+ * @param string $html_content the content of the newletter
+ *
+ * @return string
+ */
+function newsletter_apply_url_postfix($html_content) {
+	static $pattern;
+	
+	// get the postfix settings
+	$url_postfix_settings = newsletter_get_url_postfix();
+	if (empty($url_postfix_settings)) {
+		return $html_content;
+	}
+	
+	// build the pattern once
+	if (!isset($pattern)) {
+		// convert site url to preg friendly version
+		$preg_site_url = elgg_get_site_url();
+		$preg_site_url = substr($preg_site_url, 0, -1);
+		$preg_site_url = str_replace("/", "\\/", $preg_site_url);
+		$preg_site_url = str_replace(".", "\\.", $preg_site_url);
+		
+		$pattern = '/\shref=([\'"]' . $preg_site_url . '[^\'"]*[\'"])/i';
+	}
+	
+	// find all matches
+	$matches = array();
+	preg_match_all($pattern, $html_content, $matches);
+	
+	if (empty($matches) || !isset($matches[1])) {
+		return $html_content;
+	}
+	
+	// go through all the matches
+	$urls = $matches[1];
+	$urls = array_unique($urls);
+	
+	foreach ($urls as $url) {
+		// remove wrapping quotes from the url
+		$real_url = substr($url, 1, -1);
+		// add the postfix params
+		$new_url = elgg_http_add_url_query_elements($real_url, $url_postfix_settings);
+		// make the correct replacement string
+		$replacement = str_replace($real_url, $new_url, $url);
+		
+		// replace the url in the content
+		$html_content = str_replace($url, $replacement, $html_content);
+	}
+	
+	return $html_content;
+}
+
+/**
+ * Check if embed functionality is availble for Newslettes
+ *
+ * Eg require blog or static
+ *
+ * @return bool
+ */
+function newsletter_embed_available() {
+	static $result;
+	
+	if (!isset($result)) {
+		$result = false;
+		
+		if (elgg_is_active_plugin("blog")) {
+			$result = true;
+		}
+		
+		if (!$result && elgg_is_active_plugin("static")) {
+			$result = true;
+		}
+	}
+	
+	return $result;
+}
+
+/**
+ * Display conten in the correct layout for embedding in Newsletter
+ *
+ * @param ElggEntity $entity the entity to embed
+ * @param array      $vars   optional variables to pass to the embed view
+ *
+ * @return bool|string
+ */
+function newsletter_view_embed_content(ElggEntity $entity, $vars = array()) {
+	
+	if (empty($entity) || !elgg_instanceof($entity)) {
+		return false;
+	}
+	
+	if (!is_array($vars)) {
+		$vars = array();
+	}
+	
+	$vars["entity"] = $entity;
+	
+	$type = $entity->getType();
+	$subtype = $entity->getSubtype();
+	
+	if (!empty($subtype) && elgg_view_exists("newsletter/embed/" . $type . "/" . $subtype)) {
+		return elgg_view("newsletter/embed/" . $type . "/" . $subtype, $vars);
+	} elseif (elgg_view_exists("newsletter/embed/" . $type . "/default")) {
+		return elgg_view("newsletter/embed/" . $type . "/default", $vars);
+	} elseif (elgg_view_exists("newsletter/embed/default")) {
+		return elgg_view("newsletter/embed/default", $vars);
+	}
+	
+	return false;
+}
+
+/**
+ * Check the plugin setting for custom from addresses
+ *
+ * @return bool
+ */
+function newsletter_custom_from_enabled() {
+	static $result;
+	
+	if (!isset($result)) {
+		$result = false;
+		
+		$plugin_setting = elgg_get_plugin_setting("custom_from", "newsletter");
+		if ($plugin_setting === "yes") {
+			$result = true;
+		}
+	}
+	
+	return $result;
+}
+
+/**
+ * Validate the custom from email address
+ *
+ * This also triggers a plugin hook 'from_email', 'newsletter' for other plugins to hook into
+ * Supplied params:
+ * - email: the email address to validate
+ *
+ * @param string $from_email the email address to check
+ *
+ * @return bool
+ */
+function newsletter_validate_custom_from($from_email) {
+	
+	if (empty($from_email)) {
+		// empty is allowed, sending will fallback to container
+		return true;
+	}
+	
+	if (!newsletter_is_email_address($from_email)) {
+		// not an email address, always fail
+		return false;
+	}
+	
+	$result = true;
+	
+	// check plugin settings domain limitations
+	$plugin_setting = elgg_get_plugin_setting("custom_from_domains", "newsletter");
+	if (!empty($plugin_setting)) {
+		$result = false;
+		$plugin_setting = string_to_tag_array($plugin_setting);
+		
+		list(, $domain) = explode("@", $from_email);
+		foreach ($plugin_setting as $allowed_domain) {
+			if ($domain === $allowed_domain) {
+				// custom from is from an allowed domain
+				$result = true;
+				break;
+			}
+		}
+	}
+	
+	// trigger a plugin hook so others are allowed to validate
+	$params = array(
+		"email" => $from_email
+	);
+	
+	return (bool) elgg_trigger_plugin_hook("from_email", "newsletter", $params, $result);
 }

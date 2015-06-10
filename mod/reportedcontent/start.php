@@ -25,13 +25,13 @@ function reportedcontent_init() {
 		$href .= "+'?address='+encodeURIComponent(location.href)";
 		$href .= "+'&title='+encodeURIComponent(document.title));";
 		
-		elgg_register_menu_item('footer', array(
+		elgg_register_menu_item('extras', array(
 			'name' => 'report_this',
 			'href' => $href,
 			'title' => elgg_echo('reportedcontent:this:tooltip'),
-			'text' => elgg_view_icon('report-this') . elgg_echo('reportedcontent:this'),
+			'text' => elgg_view_icon('report-this'),
 			'priority' => 500,
-			'section' => 'alt',
+			'section' => 'default',
 		));
 	}
 
@@ -45,7 +45,7 @@ function reportedcontent_init() {
 			'reportedcontent',
 			elgg_echo('reportedcontent'),
 			elgg_echo('reportedcontent:widget:description'),
-			'admin');
+			array('admin'));
 
 	// Register actions
 	$action_path = elgg_get_plugins_path() . "reportedcontent/actions/reportedcontent";
@@ -64,19 +64,21 @@ function reportedcontent_init() {
  */
 function reportedcontent_page_handler($page) {
 	// only logged in users can report things
-	gatekeeper();
+	elgg_gatekeeper();
 
-	$content .= elgg_view_title(elgg_echo('reportedcontent:this'));
-	$content .= elgg_view_form('reportedcontent/add');
+	$title = elgg_echo('reportedcontent:this');
+	
+	$content = elgg_view_form('reportedcontent/add');
 	$sidebar = elgg_echo('reportedcontent:instructions');
 
 	$params = array(
+		'title' => $title,
 		'content' => $content,
 		'sidebar' => $sidebar,
 	);
 	$body = elgg_view_layout('one_sidebar', $params);
 
-	echo elgg_view_page(elgg_echo('reportedcontent:this'), $body);
+	echo elgg_view_page($title, $body);
 	return true;
 }
 
