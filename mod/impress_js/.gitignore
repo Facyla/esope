@@ -1,0 +1,20 @@
+# Azexo composer : requires some lighter integration ; more a webpage editor than a presentation tool. Promising but not so open.
+/vendors/Azexo-Composer/
+
+# Dyapos seems nice but is a Python project - can't be used as an Elgg plugin as is
+/vendors/dyapos/
+
+# Impressify seems too mush like a one-shot project
+/vendors/Impressify/
+
+
+
+# Builder4impress is pretty basic, but it works
+# /vendors/builder4impress/
+
+# Impressionnist has not much evolved since 2013 and has some bugs, but works quite nicely
+# /vendors/Impressionnist/
+
+# Strut : use git repo to build a client-side dist
+# /vendors/Strut/
+
