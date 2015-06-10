@@ -27,7 +27,7 @@ function access_icons_init() {
 		// Rewrite entity menu in listing view : add classes + access level
 		// NOTE : this is not useful anymore because access is now added directly by /engine/lib/navigation.php
 		// Note : on modifie tout de même page/components/list si on veut avoir l'accès sur tous types de contenus, 
-		// et notamment dans les listes et widgets (ce qui est le choix privilégié sur adf_public_platform)
+		// et notamment dans les listes et widgets (ce qui est le choix privilégié sur esope)
 		//elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
 	}
 	

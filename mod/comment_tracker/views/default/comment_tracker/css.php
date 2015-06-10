@@ -10,7 +10,6 @@
  */
 ?>
 .comment_trackerWrapper {
-	margin-top: 25px;
-	margin-bottom: -15px;
+    margin-top: 25px;
+    margin-bottom: -15px;
 }
-

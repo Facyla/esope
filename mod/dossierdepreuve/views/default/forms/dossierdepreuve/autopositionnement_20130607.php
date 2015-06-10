@@ -44,8 +44,8 @@ $container_guid = $owner_guid;
 $typedossier = 'b2iadultes';
 
 // Other useful vars
-$activecolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
-$defaultcolor = elgg_get_plugin_setting('linkhovercolor', 'adf_public_platform');
+$activecolor = elgg_get_plugin_setting('linkcolor', 'esope');
+$defaultcolor = elgg_get_plugin_setting('linkhovercolor', 'esope');
 $inactivecolor = '#CCC';
 
 

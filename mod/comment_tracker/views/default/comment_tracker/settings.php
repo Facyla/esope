@@ -1,17 +1,12 @@
 <?php
 /**
  * Notification settings for comment tracker view
- * 
- * @package ElggCommentTracker
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @copyright Copyright (c) 2007-2011 Cubet Technologies. (http://cubettechnologies.com)
- * @version 1.0
- * @author Akhilesh @ Cubet Technologies
- * 
- * updated to 1.8 by Matt Beckett
  */
 
-global $NOTIFICATION_HANDLERS, $CONFIG;
+global $CONFIG;
+
+$notification_handlers = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+
 $user = $vars['user'];
 $view_all_link = elgg_view('output/url', array(
 		'text' => elgg_echo('comment:notification:settings:linktext'),
@@ -41,9 +36,11 @@ echo elgg_view_module('info', elgg_echo('comment:notification:settings'), $body)
 				<tr>
 					<td>&nbsp;</td>
 				<?php
-				$i = 0; 
-				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-					if ($i > 0) {
+				$i = 0;
+				foreach($notification_handlers as $method => $foo)
+				{
+					if ($i > 0)
+					{
 						echo "<td class=\"spacercolumn\">&nbsp;</td>";
 					}
 				?>
@@ -54,20 +51,24 @@ echo elgg_view_module('info', elgg_echo('comment:notification:settings'), $body)
 				?>
 					<td>&nbsp;</td>
 				</tr>
-			<?php	
+			<?php
 			$fields = '';
 			$i = 0;
-			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-				if (!check_entity_relationship($user->guid, 'block_comment_notify' . $method, $CONFIG->site_guid)) {
+			foreach($notification_handlers as $method => $foo)
+			{
+				if (!check_entity_relationship($user->guid, 'block_comment_notify' . $method, $CONFIG->site_guid))
+				{
 					$checked[$method] = 'checked="checked"';
-				} else {
+				}
+				else
+				{
 					$checked[$method] = '';
 				}
-				
+
 				if ($i > 0) {
 					$fields .= "<td class=\"spacercolumn\">&nbsp;</td>";
 				}
-				
+
 				$fields .= <<< END
 					<td class="{$method}togglefield">
 					<a border="0" id="comment{$method}" class="{$method}toggleOff" onclick="adjust{$method}_alt('comment{$method}');">
@@ -86,4 +87,3 @@ END;
 				<td>&nbsp;</td>
 			</tr>
 		</table>
-		

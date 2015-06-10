@@ -1,6 +1,6 @@
 <?php
 
-$fr = array(
+return array(
 	'blog_tools' => "Outils pour les articles de blogs",
 	
 	'blog_tools:toggle:feature' => "Sélectionner",
@@ -100,6 +100,4 @@ Vous pouvez cependant y accéder ici :
 	'blog_tools:widgets:index_blog:view_mode:slider' => "Diaporama",
 	'blog_tools:widgets:index_blog:view_mode:simple' => "Simple",
 );
-
-add_translation("fr", $fr);
 

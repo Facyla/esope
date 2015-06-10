@@ -20,7 +20,6 @@ elgg_register_event_handler('init','system','cmspages_init');
 elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 
 // Register actions
-global $CONFIG;
 $actions_path = elgg_get_plugins_path() . 'cmspages/actions/cmspages/';
 elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
 elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
@@ -28,14 +27,13 @@ elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
 
 
 function cmspages_init() {
-	global $CONFIG;
 	elgg_extend_view('css','cmspages/css');
 	
 	// Register entity type
 	elgg_register_entity_type('object', 'cmspage');
 	
 	// Register a URL handler for CMS pages
-	elgg_register_entity_url_handler('object', 'cmspage', 'cmspage_url');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspages_url_handler');
 	
 	elgg_register_page_handler('cmspages', 'cmspages_page_handler'); // Register a page handler, so we can have nice URLs
 	
@@ -46,15 +44,14 @@ function cmspages_init() {
 
 
 /* Populates the ->getUrl() method for cmspage objects */
-function cmspage_url($cmspage) {
-	global $CONFIG;
-	return $CONFIG->url . "cmspages/read/" . $cmspage->pagetype;
+function cmspages_url_handler($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	return elgg_get_site_url() . "cmspages/read/" . $entity->pagetype;
 }
 
 
 function cmspages_page_handler($page) {
-	global $CONFIG;
-	$include_path = $CONFIG->pluginspath . 'cmspages/pages/cmspages/';
+	$include_path = elgg_get_plugins_path() . 'cmspages/pages/cmspages/';
 	if (!isset($page[0])) { $page[0] = 'admin'; }
 	if ($page[1]) { set_input('pagetype', $page[1]); }
 	switch ($page[0]) {
@@ -79,7 +76,6 @@ function cmspages_page_handler($page) {
 
 /* Page setup. Adds admin controls */
 function cmspages_pagesetup() {
-	global $CONFIG;
 	// Facyla: allow main & local admins to use this tool
 	// and also a custom editor list
 	if ( (elgg_in_context('admin') || elgg_is_admin_logged_in())
@@ -290,7 +286,6 @@ function cmspages_render_template($template, $content = null) {
 
 /* Recherche des templates dans une page */
 function cmspages_list_subtemplates($content, $recursive = true) {
-	global $CONFIG;
 	$return = '';
 	// List all template types = everything between {{ and }}
 	$motif = "#(?<=\{{)(.*?)(?=\}})#";
@@ -326,7 +321,7 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 					
 				default:
 					$return .= '<li>';
-					$return .= '<a href="' . $CONFIG->url . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
+					$return .= '<a href="' . elgg_get_site_url() . 'cmspages/?pagetype=' . $template . '" target="_new">' . $template . '</a>';
 					if ($recursive) {
 							$options = array('metadata_names' => array('pagetype'), 'metadata_values' => array($template), 'types' => 'object', 'subtypes' => 'cmspage', 'limit' => 1, 'offset' => 0, 'order_by' => '', 'count' => false);
 							$cmspages = elgg_get_entities_from_metadata($options);
@@ -354,8 +349,6 @@ function cmspages_list_subtemplates($content, $recursive = true) {
 // Permet l'accès aux pages des blogs en mode "walled garden"
 // Allows public visibility of public cmspages which allow fullview page rendering
 function cmspages_public_pages($hook, $type, $return_value, $params) {
-	global $CONFIG;
-	
 	$ignore_access = elgg_get_ignore_access();
 	elgg_set_ignore_access(true);
 	

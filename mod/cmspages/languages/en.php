@@ -1,5 +1,5 @@
 <?php
-$english = array(
+return array(
 
 	'cmspages' => "Static pages (CMS)",
 	'item:object:cmspage' => 'Static page',
@@ -121,6 +121,4 @@ $english = array(
 	*/
 	
 );
-
-add_translation("en",$english);
 

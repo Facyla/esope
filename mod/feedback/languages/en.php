@@ -97,7 +97,7 @@ $english = array(
 	'feedback:closeconfirm' => "A closed feedback is considered as solved, confirm closing feedback ?",
 	'feedback:close:success' => "Feedback marked as closed.",
 	'feedback:close:error' => "Unable to close this feedback",
-	'feedback:reopenconfirm' => "This feedback is marked as closed. Do you want to mark it as active and confirm re-opening ?",
+	'feedback:reopenconfirm' => "An open feedback is considered as active and to be replied to, confirm re-opening ?",
 	'feedback:reopen:success' => "Feedback marked as open.",
 	'feedback:reopen:error' => "Unable to re-open this feedback",
 	

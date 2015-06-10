@@ -22,6 +22,7 @@
  * @return bool
  */
 function html_email_handler_send_email(array $options = null) {
+	static $limit_subject;
 	$result = false;
 	
 	$site = elgg_get_site_entity();
@@ -45,6 +46,14 @@ function html_email_handler_send_email(array $options = null) {
 	}
 	
 	$sendmail_options = html_email_handler_get_sendmail_options();
+	
+	if (!isset($limit_subject)) {
+		$limit_subject = false;
+		
+		if (elgg_get_plugin_setting("limit_subject", "html_email_handler") == "yes") {
+			$limit_subject = true;
+		}
+	}
 	
 	// set default options
 	$default_options = array(
@@ -77,7 +86,7 @@ function html_email_handler_send_email(array $options = null) {
 		// start preparing
 		// Facyla : better without spaces and special chars
 		//$boundary = uniqid($site->name);
-		$boundary = uniqid(friendly_title($site->name));
+		$boundary = uniqid(elgg_get_friendly_title($site->name));
 		
 		// start building headers
 		$headers = "";
@@ -86,25 +95,25 @@ function html_email_handler_send_email(array $options = null) {
 		} else {
 			$headers .= "From: " . $site_from . PHP_EOL;
 		}
-
+		
 		// check CC mail
 		if (!empty($options["cc"])) {
 			$headers .= "Cc: " . implode(", ", $options["cc"]) . PHP_EOL;
 		}
-
+		
 		// check BCC mail
 		if (!empty($options["bcc"])) {
 			$headers .= "Bcc: " . implode(", ", $options["bcc"]) . PHP_EOL;
 		}
-
+		
 		// add a date header
 		if (!empty($options["date"])) {
 			$headers .= "Date: " . date("r", $options["date"]) . PHP_EOL;
 		}
-
+		
 		$headers .= "X-Mailer: PHP/" . phpversion() . PHP_EOL;
 		$headers .= "MIME-Version: 1.0" . PHP_EOL;
-
+		
 		// Facyla : try to add attchments if set
 		// Allow to add single or multiple attachments
 		if (!empty($options["attachments"])) {
@@ -120,15 +129,15 @@ function html_email_handler_send_email(array $options = null) {
 				if (empty($attachment["content"]) && !empty($attachment["filepath"])) {
 					$attachment["content"] = chunk_split(base64_encode(file_get_contents($attachment["filepath"])));
 				}
-			
+				
 				// Cannot attach an empty file in any case..
 				if (empty($attachment["content"])) {
 					continue;
 				}
-			
+				
 				// Count valid attachments
 				$attachment_counter++;
-			
+				
 				// Use defaults for other less critical settings
 				if (empty($attachment["mimetype"])) {
 					$attachment["mimetype"] = "application/octet-stream";
@@ -136,7 +145,7 @@ function html_email_handler_send_email(array $options = null) {
 				if (empty($attachment["filename"])) {
 					$attachment["filename"] = "file_" . $attachment_counter;
 				}
-			
+				
 				$attachments .= "Content-Type: {" . $attachment["mimetype"] . "};" . PHP_EOL . " name=\"" . $attachment["filename"] . "\"" . PHP_EOL;
 				$attachments .= "Content-Disposition: attachment;" . PHP_EOL . " filename=\"" . $attachment["filename"] . "\"" . PHP_EOL;
 				$attachments .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
@@ -151,10 +160,10 @@ function html_email_handler_send_email(array $options = null) {
 		} else {
 			$headers .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
 		}
-
+		
 		// start building the message
 		$message = "";
-
+		
 		// TEXT part of message
 		if (!empty($options["plaintext_message"])) {
 			$message .= "--" . $boundary . PHP_EOL;
@@ -163,7 +172,7 @@ function html_email_handler_send_email(array $options = null) {
 
 			$message .= chunk_split(base64_encode($options["plaintext_message"])) . PHP_EOL . PHP_EOL;
 		}
-
+		
 		// HTML part of message
 		if (!empty($options["html_message"])) {
 			$message .= "--" . $boundary . PHP_EOL;
@@ -172,10 +181,10 @@ function html_email_handler_send_email(array $options = null) {
 
 			$message .= chunk_split(base64_encode($options["html_message"])) . PHP_EOL;
 		}
-
+		
 		// Final boundry
 		$message .= "--" . $boundary . "--" . PHP_EOL;
-
+		
 		// Facyla : FILE part of message
 		if (!empty($attachments)) {
 			// Build strings that will be added before TEXT/HTML message
@@ -188,16 +197,20 @@ function html_email_handler_send_email(array $options = null) {
 			// Wrap TEXT/HTML message into mixed message content
 			$message = $before_message . PHP_EOL . $message . PHP_EOL . $after_message;
 		}
-
+		
 		// convert to to correct format
 		$to = implode(", ", $options["to"]);
 		
 		// encode subject to handle special chars
-		$subject = "=?UTF-8?B?" . base64_encode($options["subject"]) . "?=";
-			
+		$subject = $options["subject"];
+		if ($limit_subject) {
+			$subject = elgg_get_excerpt($subject, 175);
+		}
+		$subject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
+		
 		$result = mail($to, $subject, $message, $headers, $sendmail_options);
 	}
-
+	
 	return $result;
 }
 
@@ -210,48 +223,65 @@ function html_email_handler_send_email(array $options = null) {
  */
 function html_email_handler_css_inliner($html_text) {
 	$result = false;
-
+	
 	if (!empty($html_text) && defined("XML_DOCUMENT_NODE")) {
 		$css = "";
-
+		
 		// set custom error handling
 		libxml_use_internal_errors(true);
-
+		
 		$dom = new DOMDocument();
 		$dom->loadHTML($html_text);
-
+		
 		$styles = $dom->getElementsByTagName("style");
-
+		
 		if (!empty($styles)) {
 			$style_count = $styles->length;
-
+			
 			for ($i = 0; $i < $style_count; $i++) {
 				$css .= $styles->item($i)->nodeValue;
 			}
 		}
-
+		
 		// clear error log
 		libxml_clear_errors();
-
+		
 		elgg_load_library("emogrifier");
-
-		$emo = new Emogrifier($html_text, $css);
+		
+		$emo = new Pelago\Emogrifier($html_text, $css);
 		$result = $emo->emogrify();
 	}
-
+	
 	return $result;
 }
 
 /**
- * Make the HTML body from a $subjec and $body
+ * Make the HTML body from a $options array
  *
- * @param string $subject the message subject
+ * @param array  $options the options
  * @param string $body    the message body
  *
  * @return string
  */
-function html_email_handler_make_html_body($subject = "", $body = "") {
+function html_email_handler_make_html_body($options = "", $body = "") {
 	global $CONFIG;
+	
+	if (!is_array($options)) {
+		elgg_deprecated_notice("html_email_handler_make_html_body now takes an array as param, please update you're code", "1.9");
+		
+		$options = array(
+			"subject" => $options,
+			"body" => $body
+		);
+	}
+	
+	$defaults = array(
+		"subject" => "",
+		"body" => "",
+		"language" => get_current_language()
+	);
+	
+	$options = array_merge($defaults, $options);
 	
 	// in some cases when pagesetup isn't done yet this can cause problems
 	// so manualy set is to done
@@ -262,8 +292,8 @@ function html_email_handler_make_html_body($subject = "", $body = "") {
 	}
 	
 	// generate HTML mail body
-	$result = elgg_view("html_email_handler/notification/body", array("title" => $subject, "message" => parse_urls($body)));
-
+	$result = elgg_view("html_email_handler/notification/body", $options);
+	
 	// do we need to restore pagesetup
 	if ($unset) {
 		unset($CONFIG->pagesetupdone);
@@ -274,7 +304,7 @@ function html_email_handler_make_html_body($subject = "", $body = "") {
 			$result = $transform;
 		}
 	}
-
+	
 	return $result;
 }
 
@@ -285,16 +315,16 @@ function html_email_handler_make_html_body($subject = "", $body = "") {
  */
 function html_email_handler_get_sendmail_options() {
 	static $result;
-
+	
 	if (!isset($result)) {
 		$result = "";
-
+		
 		$setting = elgg_get_plugin_setting("sendmail_options", "html_email_handler");
 		if (!empty($setting)) {
 			$result = $setting;
 		}
 	}
-
+	
 	return $result;
 }
 

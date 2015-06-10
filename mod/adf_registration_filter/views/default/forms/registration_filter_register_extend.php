@@ -8,8 +8,8 @@ $whitelist = str_replace(array(';'), ", ", $whitelist);
 $whitelist_intro = substr($whitelist, 0, 185);
 $whitelist_end = substr($whitelist, 185);
 if (!empty($whitelist_end)) {
-	$whitelist_end = '<a href="javascript:void(0);" onclick="$(\'#adf-register-whitelist\').toggle(); this.innerHTML=\'\';">.. ' . elgg_echo('readmore') . '</a>';
-	$whitelist_end .= '<span id="adf-register-whitelist" style="display:none;">' . substr($whitelist, 185) . '</span>';
+	$whitelist_end = '<a href="javascript:void(0);" onclick="$(\'#esope-register-whitelist\').toggle(); this.innerHTML=\'\';">.. ' . elgg_echo('readmore') . '</a>';
+	$whitelist_end .= '<span id="esope-register-whitelist" style="display:none;">' . substr($whitelist, 185) . '</span>';
 }
 
 ?>
@@ -17,5 +17,5 @@ if (!empty($whitelist_end)) {
 	<i class="fa fa-info-circle"></i> <?php echo elgg_echo('registration_filter:register:whitelist') . $whitelist_intro; ?>
 	<?php echo $whitelist_end; ?>
 </div>
-<hr class="adf-strongseparator" />
+<hr class="esope-strongseparator" />
 

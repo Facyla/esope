@@ -1,14 +1,14 @@
 <?php
 $event = $vars['event'];
 $event_id = $vars['event_id'];
-$event_calendar_times = get_plugin_setting('times', 'event_calendar');
-$event_calendar_region_display = get_plugin_setting('region_display', 'event_calendar');
-$event_calendar_type_display = get_plugin_setting('type_display', 'event_calendar');
-$event_calendar_spots_display = get_plugin_setting('spots_display', 'event_calendar');
-$event_calendar_add_users = get_plugin_setting('add_users', 'event_calendar');
-$event_calendar_hide_access = get_plugin_setting('hide_access', 'event_calendar');
-$event_calendar_hide_end = get_plugin_setting('hide_end', 'event_calendar');
-$event_calendar_more_required = get_plugin_setting('more_required', 'event_calendar');
+$event_calendar_times = elgg_get_plugin_setting('times', 'event_calendar');
+$event_calendar_region_display = elgg_get_plugin_setting('region_display', 'event_calendar');
+$event_calendar_type_display = elgg_get_plugin_setting('type_display', 'event_calendar');
+$event_calendar_spots_display = elgg_get_plugin_setting('spots_display', 'event_calendar');
+$event_calendar_add_users = elgg_get_plugin_setting('add_users', 'event_calendar');
+$event_calendar_hide_access = elgg_get_plugin_setting('hide_access', 'event_calendar');
+$event_calendar_hide_end = elgg_get_plugin_setting('hide_end', 'event_calendar');
+$event_calendar_more_required = elgg_get_plugin_setting('more_required', 'event_calendar');
 
 if ($event_calendar_more_required == 'yes') {
 	$required_fields = array('title','venue','start_date','start_time',
@@ -238,7 +238,7 @@ $body .= '</label></p>';
 $body .= '<p class="description">'.$prefix['long_description'].elgg_echo('event_calendar:long_description_description').'</p>';
 
 if($event_calendar_hide_access == 'yes') {
-	$event_calendar_default_access = get_plugin_setting('default_access', 'event_calendar');
+	$event_calendar_default_access = elgg_get_plugin_setting('default_access', 'event_calendar');
 	if($event_calendar_default_access) {
 		$body .= elgg_view("input/hidden",array('internalname' => 'access','value'=>$event_calendar_default_access));
 	} else {

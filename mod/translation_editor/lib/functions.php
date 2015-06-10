@@ -32,7 +32,10 @@ function translation_editor_get_plugins($current_language) {
 		$plugin_language = $CONFIG->path . "languages" . DIRECTORY_SEPARATOR . "en.php";
 		
 		if (file_exists($plugin_language)) {
-			include($plugin_language);
+			$core_language_array = include($plugin_language);
+			if (is_array($core_language_array)) {
+				add_translation("en", $core_language_array);
+			}
 			
 			unset($CONFIG->translations["en"][""]);
 			
@@ -63,7 +66,10 @@ function translation_editor_get_plugins($current_language) {
 		$custom_keys_original = $CONFIG->dataroot . "translation_editor" . DIRECTORY_SEPARATOR . "custom_keys" . DIRECTORY_SEPARATOR . "en.php";
 		
 		if (file_exists($custom_keys_original)) {
-			include($custom_keys_original);
+			$custom_language_array = include($custom_keys_original);
+			if (is_array($custom_language_array)) {
+				add_translation("en", $custom_language_array);
+			}
 			
 			unset($CONFIG->translations["en"][""]);
 			
@@ -102,8 +108,10 @@ function translation_editor_get_plugins($current_language) {
 			$plugin_language = $plugin->getPath() . DIRECTORY_SEPARATOR . "languages" . DIRECTORY_SEPARATOR . "en.php";
 			
 			if (file_exists($plugin_language)) {
-				
-				include($plugin_language);
+				$plugin_language_array = include($plugin_language);
+				if (is_array($plugin_language_array)) {
+					add_translation("en", $plugin_language_array);
+				}
 				
 				unset($CONFIG->translations["en"][""]);
 				
@@ -178,7 +186,10 @@ function translation_editor_get_plugin($current_language, $plugin) {
 		
 		// Fetch translations
 		if (file_exists($plugin_language)) {
-			include($plugin_language);
+			$plugin_language_array = include($plugin_language);
+			if (is_array($plugin_language_array)) {
+				add_translation("en", $plugin_language_array);
+			}
 			
 			unset($CONFIG->translations["en"][""]);
 			
@@ -379,16 +390,31 @@ function translation_editor_reload_all_translations() {
 	if (isset($run_once)) {
 		$CONFIG->translations = $run_once;
 	} else {
-	
+		
+		$CONFIG->translations = array();
+		
+		if ($CONFIG->i18n_loaded_from_cache) {
+			// make sure all plugins have registered their paths
+			$plugins = elgg_get_plugins();
+			if (!empty($plugins)) {
+				foreach ($plugins as $plugin) {
+					$plugin->start(ELGG_PLUGIN_REGISTER_LANGUAGES);
+				}
+			}
+		}
+		
 		// include all languages in the configured paths
 		foreach ($CONFIG->language_paths as $path => $dummy) {
 			$handle = opendir($path);
 			if (!empty($handle)) {
 				// proccess all files
-				while ($language = readdir($handle)) {
+				while (($language = readdir($handle)) !== false) {
 					// do we have a file (not a directory)
 					if (is_file($path . $language)) {
-						include($path . $language);
+						$result = include($path . $language);
+						if (is_array($result)) {
+							add_translation(basename($language, '.php'), $result);
+						}
 					}
 				}
 				
@@ -504,8 +530,8 @@ function translation_editor_is_translation_editor($user_guid = 0) {
 		if (!isset($editors_cache)) {
 			$editors_cache = array();
 			
-			$translation_editor_id = add_metastring("translation_editor");
-			$true_id = add_metastring(true);
+			$translation_editor_id = elgg_get_metastring_id("translation_editor");
+			$true_id = elgg_get_metastring_id(true);
 			
 			$options = array(
 				"type" => "user",
@@ -579,7 +605,7 @@ function translation_editor_search_translation($query, $language = "en") {
 		
 		foreach ($plugins as $plugin => $data) {
 			$translations = translation_editor_get_plugin($language, $plugin);
-			if (!empty($translations)) {
+			if (!empty($translations) && elgg_extract("total", $translations)) {
 				foreach ($translations["en"] as $key => $value) {
 					if (stristr($key, $query) || stristr($value, $query) || (array_key_exists($key, $translations["current_language"]) && stristr($translations["current_language"][$key], $query))) {
 						if (!array_key_exists($plugin, $found)) {
@@ -663,6 +689,10 @@ function translation_editor_merge_translations($language = "", $update = false) 
 	}
 	
 	if ($result) {
+		// clear system cache
+		$cache = elgg_get_system_cache();
+		$cache->delete($language . ".lang");
+		
 		// let others know this happend
 		elgg_trigger_event("language:merge", "translation_editor", $language);
 	}
@@ -735,4 +765,46 @@ function translation_editor_get_disabled_languages() {
  */
 function translation_editor_guid_only($row) {
 	return (int) $row->guid;
+}
+
+/**
+ * Reset the site timestamp that tracks the merged translation status.
+ *
+ * This will recreate the translation editor cache
+ *
+ * @param int $site_guid which site to invalidate (defaults to current site)
+ *
+ * @return void
+ */
+function translation_editor_invalidate_site_cache($site_guid = 0) {
+	
+	$site_guid = sanitize_int($site_guid, false);
+	
+	// make sure we have all translations
+	translation_editor_reload_all_translations();
+	
+	$languages = get_installed_translations();
+	if (!empty($languages) && is_array($languages)) {
+		$site = elgg_get_site_entity($site_guid);
+		
+		if (!empty($site)) {
+			foreach ($languages as $key => $desc) {
+				remove_private_setting($site->getGUID(), "te_last_update_" . $key);
+			}
+		}
+	}
+}
+
+/**
+ * Protect pages for only translation editor
+ *
+ * @return void
+ */
+function translation_editor_gatekeeper() {
+	gatekeeper();
+	
+	if (!translation_editor_is_translation_editor()) {
+		register_error(elgg_echo("translation_editor:gatekeeper"));
+		forward();
+	}
 }

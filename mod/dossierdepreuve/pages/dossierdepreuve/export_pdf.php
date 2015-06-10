@@ -54,7 +54,7 @@ $gen_date_format = 'd/m/Y à H:i';
 $css = '';
 $css_files = elgg_get_loaded_css();
 foreach ($css_files as $css_file) { $css .= file_get_contents($css_file) . "\n"; }
-$css .= elgg_get_plugin_setting('css', 'adf_public_platform');
+$css .= elgg_get_plugin_setting('css', 'esope');
 
 
 // Titre du PDF

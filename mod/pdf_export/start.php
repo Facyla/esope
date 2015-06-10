@@ -56,7 +56,7 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 			$pdf_export_menu = new ElggMenuItem('pdf_export', $text, $link_url);
 			$pdf_export_menu->addLinkClass('pdf_export');
 			$pdf_export_menu->setTooltip($title);
-			$pdf_export_menu->setPriority(900);
+			$pdf_export_menu->setPriority(1000);
 			$return[] = $pdf_export_menu;
 		}
 	}

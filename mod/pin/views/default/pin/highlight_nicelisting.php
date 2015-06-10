@@ -35,7 +35,7 @@ foreach ($ents as $ent) {
 	$owner = get_entity($ent->owner_guid);
 	$info = '<a href="' . $ent->getURL() . '">' . $linktext . '</a><br />
 		<p class="owner_timestamp"><a href="' . $owner->getURL() . '">' . $owner->name . '</a> ' 
-		. friendly_time($ent->time_created);
+		. elgg_view_friendly_time($ent->time_created);
 	if ($ent_for_icon->guid != $owner->guid) {
 		$info .= ' <i>in</i> <a href="' . $ent_for_icon->getURL() . '">' . $ent_for_icon->name . '</a>';
 	}

@@ -32,7 +32,6 @@ if (!empty($title)) {
 		$entity->owner_guid = $container_guid;
 		$entity->container_guid = $container_guid;
 		
-		$entity->access_id = $access_id;
 		$entity->status = "concept";
 		
 		$new_entity = true;

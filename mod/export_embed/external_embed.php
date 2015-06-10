@@ -136,7 +136,7 @@ switch ($embedtype) {
 		if (elgg_instanceof($user, 'user')) {
 			elgg_set_page_owner_guid($user->guid);
 			$title = $user->name;
-			$body = elgg_view('adf_platform/profile/profile_card', array('user' => $user));
+			$body = elgg_view('esope/profile/profile_card', array('user' => $user));
 		}
 		break;
 	
