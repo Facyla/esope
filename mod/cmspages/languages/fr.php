@@ -1,5 +1,5 @@
 <?php
-$fr = array(
+return array(
 	'cmspages' => "Pages CMS",
 	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i>Page CMS',
 	'item:object:cmspages' => '<i class="fa fa-file-code-o fa-fw"></i>Pages CMS',
@@ -294,6 +294,4 @@ $fr = array(
 	'cmspages:updated' => "MAJ %s",
 	
 );
-
-add_translation("fr",$fr);
 

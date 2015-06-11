@@ -26,7 +26,9 @@ function cmspages_init() {
 	elgg_register_entity_type('object', 'cmspage');
 	
 	// Register a URL handler for CMS pages
-	elgg_register_entity_url_handler('object', 'cmspage', 'cmspage_url');
+	// override the default url to view a blog object
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspage_set_url');
+
 	
 	// Register main page handler
 	elgg_register_page_handler('cmspages', 'cmspages_page_handler');
@@ -150,10 +152,20 @@ function cmspages_cms_tag_page_handler($page) {
 }
 
 
-/* Populates the ->getUrl() method for cmspage objects */
-function cmspage_url($cmspage) {
-	//return elgg_get_site_url() . "cmspages/read/" . $cmspage->pagetype;
-	return elgg_get_site_url() . "p/" . $cmspage->pagetype;
+/**
+ * Format and return the URL for cmspage.
+ *
+ * @param string $hook
+ * @param string $type
+ * @param string $url
+ * @param array  $params
+ * @return string URL of blog.
+ */
+function cmspage_set_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'cmspage')) {
+		return elgg_get_site_url() . "p/" . $cmspage->pagetype;
+	}
 }
 
 
@@ -995,7 +1007,7 @@ function cmspages_history_list($cmspage, $metadata_name, $limit = false, $offset
 	if (elgg_instanceof($cmspage, 'object', 'cmspage') && !empty($metadata_name)) {
 		if (!$limit) $limit = get_input('limit', 50);
 		if (!$offset) $offset = get_input('offset', 0);
-		$history = $cmspage->getAnnotations('history_' . $metadata_name, $limit, $offset, 'desc');
+		$history = $cmspage->getAnnotations(array('annotation_names' => 'history_' . $metadata_name, 'limit' => $limit, 'offset' => $offset, 'order_by' => 'n_table.time_created desc'));
 		if ($history) {
 			$content .= '<div class="cmspages-history">';
 			$content .= '<strong><a href="javascript:void(0);" onClick="$(\'#cmspages-history-' . $metadata_name . '\').toggle();"><i class="fa fa-toggle-down"></i>' . elgg_echo('cmspages:history') . '</a></strong>';
@@ -1023,5 +1035,20 @@ function cmspages_history_list($cmspage, $metadata_name, $limit = false, $offset
 }
 
 
-
+if (!elgg_is_active_plugin('esope')) {
+	function esope_get_input_array($input = false) {
+		if ($input) {
+			// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
+			$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+			$input = explode("\n", $input);
+			// Suppression des espaces
+			$input = array_map('trim', $input);
+			// Suppression des doublons
+			$input = array_unique($input);
+			// Supression valeurs vides
+			$input = array_filter($input);
+		}
+		return $input;
+	}
+}
 

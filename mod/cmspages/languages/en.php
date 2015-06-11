@@ -1,5 +1,5 @@
 <?php
-$english = array(
+return array(
 
 	'cmspages' => "Static pages (CMS)",
 	'item:object:cmspage' => '<i class="fa fa-file-code-o fa-fw"></i> CMS page',
@@ -295,6 +295,4 @@ $english = array(
 	
 	
 );
-
-add_translation("en",$english);
 
