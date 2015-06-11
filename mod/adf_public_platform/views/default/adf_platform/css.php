@@ -85,6 +85,7 @@ $font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>
 
 /* https://css-tricks.com/box-sizing/ */
+/* @TODO : use later, as it requires to rewrite most of the menus and main blocks
 html {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -95,6 +96,8 @@ html {
 	-moz-box-sizing: inherit;
 	box-sizing: inherit;
 }
+*/
+
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 pre, code { word-break:break-all; }
