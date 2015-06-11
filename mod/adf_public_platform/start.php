@@ -1083,7 +1083,6 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;
 	$debug = esope_extract('debug', $params, false);
-	$debug = true;
 	
 	// Set defaults
 	$esearch_defaults = array(
@@ -1193,6 +1192,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	
 	// Perform search results count
 	$search_params['count'] = true;
+	if ($debug) echo '<pre>' . print_r($search_params, true) . '</pre>';
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) return $return_count;
 	
