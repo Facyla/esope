@@ -368,8 +368,9 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 		if (in_array($field, array('cn', 'sn', 'givenName', 'displayName', 'email'))) { continue; }
 		
 		// Almost each field is specific...
+		// Note : 201506 now handling multiple values as array, as it is used in selects and searches
 		switch($field) {
-			// Centre de rattachement : "ou", branche people uniquement
+			// Centre de rattachement : "ou", branche people uniquement - valeur unique
 			case 'inria_location_main':
 				if ($ldap_auth[0]['ou'][0]) {
 					$new = $ldap_auth[0]['ou'][0];
@@ -380,11 +381,11 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			
 			// Localisation
 			case 'inria_location':
-				// Process localisation : déduit des contacts tél et room
+				// Process localisation : déduit des contacts tél et room - peut être un array
 				if ($location) {
 					$location = array_unique($location);
 					$new = theme_inria_ldap_convert_locality($location);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				} else {
 					// Si pas d'info, renseigner avec la résidence administrative (champ ou de la branche people), en supprimant "UR-"
 					if ($ldap_auth[0]['ou'][0]) {
@@ -392,34 +393,38 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 						$new = str_replace('UR-', '', $new);
 					}
 				}
-				if ($user->inria_location != $new) $user->inria_location = $new;
+				//if ($user->inria_location != $new) 
+				$user->inria_location = $new;
 				break;
 			
-			// EPI ou service : "ou", branche contacts uniquement
+			// EPI ou service : "ou", branche contacts uniquement - peut être un array
 			case 'epi_ou_service':
 				if ($ldap_infos[0]['ou'][0]) {
 					$new = $ldap_infos[0]['ou'];
-					$new = implode(', ', $new);
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->epi_ou_service != $new) $user->epi_ou_service = $new;
+				//if ($user->epi_ou_service != $new) 
+				$user->epi_ou_service = $new;
 				break;
 			
-			// Bureau
+			// Bureau - peut être un array
 			case 'inria_room':
 				if ($rooms) {
 					$new = array_unique($rooms);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_room != $new) $user->inria_room = $new;
+				//if ($user->inria_room != $new) 
+				$user->inria_room = $new;
 				break;
 			
-			// Téléphone
+			// Téléphone - peut être un array
 			case 'inria_phone':
 				if ($phones) {
 					$new = array_unique($phones);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_phone != $new) $user->inria_phone = $new;
+				//if ($user->inria_phone != $new) 
+				$user->inria_phone = $new;
 				break;
 			
 			// Secrétariat
@@ -427,9 +432,10 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			case 'inria_secretary':
 				if ($secretary) {
 					$new = array_unique($secretary);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_secretary != $new) $user->inria_secretary = $new;
+				//if ($user->inria_secretary != $new) 
+				$user->inria_secretary = $new;
 				break;
 			
 			default:
