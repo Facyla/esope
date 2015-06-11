@@ -42,6 +42,7 @@ $content .= '<h3>' . elgg_echo('esope:groupinvite:search') . '</h3>';
 
 // Step 1. Search form using LDAP fields
 $content .= '<h4>' . elgg_echo('esope:groupinvite:search:select') . '</h4>';
+$content .= '<br />';
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 $metadata_search = '';
