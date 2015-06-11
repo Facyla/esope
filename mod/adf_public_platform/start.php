@@ -1083,6 +1083,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
 	global $CONFIG;
 	$debug = esope_extract('debug', $params, false);
+	$debug = true;
 	
 	// Set defaults
 	$esearch_defaults = array(

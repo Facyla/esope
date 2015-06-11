@@ -202,7 +202,7 @@ if (empty($header_content)) {
 								<!--
 								<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
 								//-->
-								<button type="submit" id="adf-search-submit-button" value="<?php echo elgg_echo('adf_platform:search'); ?>" class="fa-search" />
+								<button type="submit" id="adf-search-submit-button" value="<?php echo elgg_echo('adf_platform:search'); ?>" class="fa-search"></button>
 							</form>
 						<?php } ?>
 					</div>
