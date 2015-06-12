@@ -12,11 +12,12 @@ elgg_register_event_handler('init', 'system', 'theme_futuringcities_init');
  * Init theme_futuringcities plugin.
  */
 function theme_futuringcities_init() {
+	global $CONFIG;
+	
 	// Extend CSS with custom styles
 	elgg_extend_view('css', 'theme_futuringcities/css');
 	
 	// HOMEPAGE - Replace public and loggedin homepage
-	/*
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
 		elgg_register_plugin_hook_handler('index','system','theme_futuringcities_index');
@@ -26,7 +27,6 @@ function theme_futuringcities_init() {
 			elgg_register_plugin_hook_handler('index','system','theme_futuringcities_public_index');
 		}
 	}
-	*/
 	
 	// Get a plugin setting
 	/*
@@ -63,14 +63,6 @@ function theme_futuringcities_page_handler($page) {
 }
 */
 
-
-// Other useful functions
-// prefixed by plugin_name_
-/*
-function theme_futuringcities_function() {
-	
-}
-*/
 
 // Theme inria logged in index page
 function theme_futuringcities_index(){

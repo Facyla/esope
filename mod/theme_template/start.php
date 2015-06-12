@@ -12,6 +12,8 @@ elgg_register_event_handler('init', 'system', 'theme_template_init');
  * Init theme_template plugin.
  */
 function theme_template_init() {
+	global $CONFIG;
+	
 	// Extend CSS with custom styles
 	elgg_extend_view('css', 'theme_template/css');
 	elgg_extend_view('css/admin', 'theme_template/admin_css');
