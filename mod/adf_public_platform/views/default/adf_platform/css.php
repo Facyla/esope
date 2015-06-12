@@ -84,6 +84,20 @@ $font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
 $font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
 ?>
 
+/* https://css-tricks.com/box-sizing/ */
+/* @TODO : use later, as it requires to rewrite most of the menus and main blocks
+html {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	-webkit-box-sizing: inherit;
+	-moz-box-sizing: inherit;
+	box-sizing: inherit;
+}
+*/
+
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 pre, code { word-break:break-all; }
@@ -782,6 +796,11 @@ header nav ul .fa { margin-right: 0.5em; }
 #main-search button#adf-search-submit-button { height: 100%; border: 0; padding: 0 0.5ex 0 1ex; color: white; border-radius: 0 8px 8px 0; /* background-color:<?php echo $linkcolor; ?>; */ }
 #main-search button#adf-search-submit-button:hover, #main-search button#adf-search-submit-button:active, #main-search button#adf-search-submit-button:focus { color:white; background-color:<?php echo $linkhovercolor; ?>; }
 
+/* Group invites */
+/* Group invites */
+form#invite_to_group .elgg-foot { border-top: 0; border-bottom: 1px solid #CCC; }
+form#esope-search-form-invite-groups, form#esope-search-form-invite-results { margin: 0; }
+form#esope-search-form-invite-groups .esope-search-metadata { width: 26ex; }
 
 
 

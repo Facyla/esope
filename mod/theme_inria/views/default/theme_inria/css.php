@@ -291,10 +291,6 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 .elgg-context-groups .elgg-module-aside li .elgg-image-block > .elgg-body { border-bottom: 1px dotted #CCCCCC; }
 
-/* Group invites */
-form#invite_to_group .elgg-foot { border-top: 0; border-bottom: 1px solid #CCC; }
-form#esope-search-form-invite-groups, form#esope-search-form-invite-results { margin: 0; }
-
 
 
 /* Group tabs */

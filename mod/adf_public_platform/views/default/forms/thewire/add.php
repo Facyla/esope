@@ -47,7 +47,7 @@ echo '<div style="width:16%; float:right;">';
 
 	echo elgg_view('input/submit', array(
 		'value' => $text,
-		'id' => 'elgg-button elgg-button-action',
+		'class' => 'elgg-button elgg-button-action',
 		'style' => 'padding:0 12px; margin-top: 2px;',
 	));
 	echo '</div>';

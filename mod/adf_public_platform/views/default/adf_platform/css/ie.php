@@ -15,7 +15,7 @@ header {
 	background: #F6F6F6 url("<?php echo $urlicon; ?>fond-menu.jpg") left top repeat-x scroll;
 }
 #transverse form {
-	width: 215px;
+	min-width: 215px;
 }
 #transverse form input#search-input {
 	padding-top: 6px;

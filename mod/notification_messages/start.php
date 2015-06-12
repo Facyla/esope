@@ -175,11 +175,16 @@ function notification_messages_build_subject($entity) {
 		
 		if (empty($msg_container)) {
 			$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title));
-			return strip_tags($subject);
 		} else {
 			$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title));
-			return strip_tags($subject);
 		}
+		
+		// Allow apostrophes (single quotes) in mail subject
+		$subject = htmlspecialchars_decode($subject, ENT_QUOTES);
+		// Clean any remaining HTML...
+		$subject = strip_tags($subject);
+		
+		return $subject;
 	}
 	return false;
 }

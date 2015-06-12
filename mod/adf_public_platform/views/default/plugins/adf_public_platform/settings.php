@@ -608,6 +608,9 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:tags') . ' (BETA) ' . elgg_view('input/dropdown', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_tags)) . '</label></p>';
 			// Allow to remove discussion OR add it at page bottom
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion)) . '</label></p>';
+			
+			//$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform');
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $vars['entity']->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:groups:invite_metadata:details') . '</em></p>';
 			?>
 		</div>
 	<?php } ?>

@@ -3,7 +3,8 @@
 
 $content ='';
 $scope = $vars["scope"]; // default = all, member
-if (!elgg_instanceof($vars["entity"], 'group')) { $scope = 'all'; }
+$group = elgg_extract('entity', $vars);
+if (!elgg_instanceof($group, 'group')) { $scope = 'all'; }
 
 switch($scope) {
 	case 'member':
@@ -20,7 +21,7 @@ switch($scope) {
 
 // Allow to filter by metadata : array('name' => $metaname, 'value' => $metavalue)
 // Note : typical use is checking that a group tool is enabled by setting 'filter' => array('name' => 'bookmarks_enable', 'value' => 'yes')
-$filter = $vars["filter"];
+$filter = elgg_extract('filter', $vars);
 if ($filter) {
 	$metaname = $filter['name'];
 	$metavalue = $filter['value'];
@@ -57,18 +58,18 @@ if ($vars['add_owner']) {
 	$content .= '<option value="' . $own->guid . '">' .  elgg_echo('esope:container:option:own', array($own->name)) .'</option>';
 }
 // Add container group option
-if ($vars["entity"] instanceof ElggGroup) {
+if (elgg_instanceof($group, 'group')) {
 	$content .= "<optgroup label='" .elgg_echo("groups:container"). "'>\n";
-	$content .= "<option value='" . $vars["entity"]->guid . "'>" . $vars["entity"]->name . "</option>\n";
+	$content .= "<option value='" . $group->guid . "'>" . $group->name . "</option>\n";
 	$content .= "</optgroup>\n";
 }
 if (!empty($groups)) {
 	$add_groups = false;
 	$groups_block .= "<optgroup label='" . elgg_echo("groups") . "'>\n";
-	foreach ($groups as $group) {
-		if ( !($vars["entity"] instanceof ElggGroup) || ($vars['entity']->guid != $group->guid) ) {
+	foreach ($groups as $ent) {
+		if (!elgg_instanceof($group, 'group') || ($group->guid != $ent->guid)) {
 			$add_groups = true;
-			if ($vars['value'] != $group->guid) $groups_block .= "<option value='" . $group->guid . "'>" . $group->name . "</option>\n";
+			if ($vars['value'] != $ent->guid) $groups_block .= "<option value='" . $ent->guid . "'>" . $ent->name . "</option>\n";
 		}
 	}
 	$groups_block .= "</optgroup>\n";
