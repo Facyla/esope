@@ -1028,11 +1028,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$valtype = 'dropdown';
 			}
 			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) { $valtype = 'text'; }
-			// Multiple options become select or radio
+			// Multiple options become select (if radio, should also invert keys and values)
 			if ($options) {
 				$valtype = 'dropdown';
-				if ($empty) $options['empty option'] = '';
-				$options = array_reverse($options);
+				// Add empty entry at the beginning of the array
+				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
 		}
@@ -1192,6 +1192,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	
 	// Perform search results count
 	$search_params['count'] = true;
+	if ($debug) echo '<pre>' . print_r($search_params, true) . '</pre>';
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) return $return_count;
 	
@@ -1561,16 +1562,21 @@ function esope_get_users_from_setting($setting) {
 }
 
 
-// Return distinct metadata values for a given metadata name
-// @TODO : we could get it more quickly with a direct SQL query
-function esope_get_meta_values($meta_name) {
+/* Return distinct metadata values for a given metadata name
+ * Quickest method uses a direct SQL query
+ * Also default sort alphabetically
+ */
+function esope_get_meta_values($meta_name, $sort = true) {
 	$dbprefix = elgg_get_config('dbprefix');
 	$query = "SELECT DISTINCT ms.string FROM `" . $dbprefix . "metadata` as md 
 		JOIN `" . $dbprefix . "metastrings` as ms ON md.value_id = ms.id 
-		WHERE md.name_id IN (SELECT DISTINCT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
+		WHERE md.name_id IN (SELECT DISTINCT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name')";
+	if ($sort) { $query .= ' ORDER BY ms.string ASC;'; }
+	$query .= ';';
 		//WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
 	$rows = get_data($query);
 	foreach ($rows as $row) { $results[] = $row->string; }
+	
 	return $results;
 	// Previous version is slower, and not so much clearer
 	/*

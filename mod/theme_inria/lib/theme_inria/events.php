@@ -112,6 +112,11 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				// Ce motif de validité d'un compte Inria indique que le compte LDAP existe et est actif
 				$memberreason = 'validldap';
 				if ($debug) error_log("Active LDAP account");
+			} else {
+				// Clean up Inria fields for accounts that are not active anymore
+				foreach(inria_get_profile_ldap_fields() as $field) {
+					$user->{$field} = null;
+				}
 			}
 		} else {
 			// Clean up Inria fields for accounts that do not have a LDAP entry

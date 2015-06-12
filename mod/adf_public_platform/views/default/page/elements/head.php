@@ -4,7 +4,6 @@
  *
  * @uses $vars['title'] The page title
  */
-global $CONFIG;
 
 // Set title
 if (empty($vars['title'])) {
@@ -55,7 +54,7 @@ $js = elgg_get_loaded_js('head');
 $css = elgg_get_loaded_css();
 
 // Get ESOPE config
-$theme_url = $CONFIG->url . 'mod/adf_public_platform/';
+$theme_url = elgg_get_site_url() . 'mod/adf_public_platform/';
 $config_awesomefont = elgg_get_plugin_setting('awesomefont', 'adf_public_platform');
 $config_semanticui = elgg_get_plugin_setting('semanticui', 'adf_public_platform');
 $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
@@ -105,8 +104,8 @@ $config_css = elgg_get_plugin_setting('css', 'adf_public_platform');
 		<style type="text/css">#menu li { width:164px; }</style>
 	<![endif]-->
 	<!--[if lt IE 9]>
-		<script type="text/javascript" src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/views/default/adf_platform/js/html5-ie.php"></script>
-		<script src="<?php echo $CONFIG->url; ?>mod/adf_public_platform/vendors/html5shiv.js"></script>
+		<script type="text/javascript" src="<?php echo elgg_get_site_url(); ?>mod/adf_public_platform/views/default/adf_platform/js/html5-ie.php"></script>
+		<script src="<?php echo elgg_get_site_url(); ?>mod/adf_public_platform/vendors/html5shiv.js"></script>
 	<![endif]-->
 	<?php
 	if ($config_awesomefont == 'yes') {
