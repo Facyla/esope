@@ -652,7 +652,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 			}
 			if ($exit) {
 				if ($mode != 'view') {
-					register_error('cmspages:wrongcontext');
+					register_error(elgg_echo('cmspages:wrongcontext'));
 					//forward(REFERER);
 				}
 				return;
@@ -665,7 +665,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$content = '';
 	// Contexte spécifique
 	elgg_push_context('cmspages');
-	elgg_push_context('cmspages:pagetype:' . $pagetype);
+	elgg_push_context('cmspages-pagetype-' . $pagetype);
 	
 	// Start composing content
 	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
