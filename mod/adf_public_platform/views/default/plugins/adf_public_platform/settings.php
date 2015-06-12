@@ -55,6 +55,7 @@ $invite_picker_opt = array(
 		'userpicker' => elgg_echo('adf_platform:invite_picker:userpicker'),
 	);
 
+
 // SET DEFAULT VALUES
 
 /* Unused since new theme w/ Urbilog
@@ -137,6 +138,9 @@ if (empty($vars['entity']->opengroups_defaultaccess)) { $vars['entity']->opengro
 if (empty($vars['entity']->closedgroups_defaultaccess)) { $vars['entity']->closedgroups_defaultaccess = 'group'; }
 if (empty($vars['entity']->awesomefont)) $vars['entity']->awesomefont = 'yes';
 if (empty($vars['entity']->fixedwidth)) $vars['entity']->fixedwidth = 'no';
+
+// Set default Wire access
+if (empty($vars['entity']->thewire_default_access)) { $vars['entity']->thewire_default_access = 'default'; }
 
 // Hide by default some profile fields that are known to be used for configuration but should not be displayed
 if (!isset($vars['entity']->group_hide_profile_field)) { $vars['entity']->group_hide_profile_field = 'customcss, cmisfolder, feed_url, customtab1, customtab2, customtab3, customtab4, customtab5, customtab6, customtab7, customtab8'; }
@@ -536,6 +540,10 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_user_listall') . ' ' . elgg_view('input/dropdown', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_user_listall)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_list_subpages') . ' ' . elgg_view('input/dropdown', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $vars['entity']->pages_list_subpages)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('adf_platform:settings:pages_reorder') . ' ' . elgg_view('input/dropdown', array('name' => 'params[pages_reorder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->pages_reorder)) . '</label></p>';
+		}
+		
+		if (elgg_is_active_plugin('thewire')) {
+			echo '<p><label>' . elgg_echo('adf_platform:settings:thewire_default_access') . ' ' . elgg_view('input/text', array('name' => 'params[thewire_default_access]', 'value' => $vars['entity']->thewire_default_access)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:thewire_default_access:details') . '</em></p>';
 		}
 		// Add limit links to navigation
 			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . ' ' . elgg_view('input/dropdown', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination)) . '</label></p>';
