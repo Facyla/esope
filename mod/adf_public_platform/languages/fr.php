@@ -359,6 +359,8 @@ $fr = array(
 	'adf_platform:settings:pages_list_subpages:group' => "Groupes seulement (non recommandé)",
 	'adf_platform:settings:pages_list_subpages:all' => "Toujours",
 	'adf_platform:settings:pages_reorder' => "Permettre de réorganiser les pages",
+	'adf_platform:settings:thewire_default_access' => "Accès par défaut du Fil",
+	'adf_platform:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglég de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
 	'adf_platform:settings:advanced_pagination' => "Pagination avancée (choix du nombre de résultats)",
 	'adf_platform:advanced_pagination:perpage' => "par page",
 	'adf_platform:advanced_pagination:last' => "%s&nbsp;(dernière)", // "%s (dernière)"
