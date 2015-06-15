@@ -192,7 +192,7 @@ if (empty($header_content)) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('group_chat')) { ?>
-									<li class="group-chat"><a href="<?php echo $url . 'chat/site'; ?>" target="_blank" title="<?php echo elgg_echo('Ouvrir le chat du site'); ?>"><?php echo elgg_echo('group_chat:site_chat'); ?></a></li>
+									<li class="group-chat"><a href="<?php echo $url . 'chat/site'; ?>" target="_blank" onclick="window_groupchat_site(this.href); return false;" title="<?php echo elgg_echo('Ouvrir le chat du site'); ?>"><?php echo elgg_echo('group_chat:site_chat'); ?></a></li>
 								<?php } ?>
 								
 							</ul>
