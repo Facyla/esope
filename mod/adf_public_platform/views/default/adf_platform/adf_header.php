@@ -9,7 +9,7 @@ $title = $site->name;
 $prev_q = get_input('q', '');
 
 if (elgg_is_logged_in()) {
-	$own = $_SESSION['user'];
+	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
