@@ -59,7 +59,7 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 			$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'adf_public_platform');
 			if (empty($defaultaccess)) $defaultaccess = 'groupvis';
 		} else {
-			$closedgroups_defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'adf_public_platform');
+			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'adf_public_platform');
 			if (empty($defaultaccess)) $defaultaccess = 'group';
 		}
 		switch($defaultaccess) {
