@@ -22,6 +22,9 @@ function theme_futuringcities_init() {
 	elgg_unextend_view('digest/elements/site', 'digest/elements/site/profile');
 	elgg_extend_view('css/digest/core', 'css/digest/extend_core', 100);
 	
+	// Newsletter
+	elgg_extend_view('css/newsletter/site', 'css/newsletter/extend_site', 100);
+	
 	// HOMEPAGE - Replace public and loggedin homepage
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
