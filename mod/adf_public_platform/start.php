@@ -715,7 +715,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
 		$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
-		$if ($display_alphabetically != 'no') {
+		if ($display_alphabetically != 'no') {
 			$children = au_subgroups_get_subgroups($group, 0, true);
 		} else {
 			$children = au_subgroups_get_subgroups($group, 0, false);
