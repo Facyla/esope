@@ -392,6 +392,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #adf-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
 .profile_manager_register_input_container { display:inline-block; }
+#profile_manager_profile_edit_tabs { clear: both; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 
 /* FORMULAIRES - FORMS */

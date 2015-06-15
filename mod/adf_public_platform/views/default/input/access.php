@@ -54,12 +54,20 @@ if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_case
 if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 	$page_owner = elgg_get_page_owner_entity();
 	if (elgg_instanceof($page_owner, 'group') && in_array($vars['name'], $content_cases)) {
+		// Add parent group access id (all parent groups)
+		$group = $page_owner;
+		while($parent = au_subgroups_get_parent_group($group)) {
+			$vars['options_values'][$parent->group_acl] = $parent->name;
+			$group = $parent;
+		}
+		
+		
 		// Default group access
 		if ($page_owner->membership == 2) {
 			$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'adf_public_platform');
 			if (empty($defaultaccess)) $defaultaccess = 'groupvis';
 		} else {
-			$closedgroups_defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'adf_public_platform');
+			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'adf_public_platform');
 			if (empty($defaultaccess)) $defaultaccess = 'group';
 		}
 		switch($defaultaccess) {

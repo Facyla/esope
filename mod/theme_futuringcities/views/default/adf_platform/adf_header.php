@@ -9,7 +9,7 @@ $title = $site->name;
 $prev_q = get_input('q', '');
 
 if (elgg_is_logged_in()) {
-	$own = $_SESSION['user'];
+	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
@@ -189,6 +189,10 @@ if (empty($header_content)) {
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
 									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?></a></li>
+								<?php } ?>
+								
+								<?php if (elgg_is_active_plugin('group_chat')) { ?>
+									<li class="group-chat"><a href="<?php echo $url . 'chat/site'; ?>" target="_blank" onclick="window_groupchat_site(this.href); return false;" title="<?php echo elgg_echo('Ouvrir le chat du site'); ?>"><?php echo elgg_echo('group_chat:site_chat'); ?></a></li>
 								<?php } ?>
 								
 							</ul>
