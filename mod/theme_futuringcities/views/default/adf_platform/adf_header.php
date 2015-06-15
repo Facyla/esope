@@ -191,6 +191,10 @@ if (empty($header_content)) {
 									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('adf_platform:event_calendar'); ?></a></li>
 								<?php } ?>
 								
+								<?php if (elgg_is_active_plugin('group_chat')) { ?>
+									<li class="group-chat"><a href="<?php echo $url . 'site/chat'; ?>" title="<?php echo elgg_echo('Ouvrir le chat du site'); ?>"><?php echo elgg_echo('group_chat:site_chat'); ?></a></li>
+								<?php } ?>
+								
 							</ul>
 						</nav>
 						
