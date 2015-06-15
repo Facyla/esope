@@ -35,12 +35,12 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 
 //$all_feedback_count = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
 //$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count));
-$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
+$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => 0));
 $feedbacks = array();
 $feedback_open = 0; $feedback_closed = 0;
 $feedback_content = 0; $feedback_bug = 0; $feedback_suggestion = 0; $feedback_question = 0;
 $feedback_other = 0; // Non défini
-$all_feedback_count = count($all_feedback);
+$all_feedback_count = sizeof($all_feedback);
 
 foreach ($all_feedback as $ent) {
 	// Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
