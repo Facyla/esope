@@ -56,8 +56,10 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 	if (elgg_instanceof($page_owner, 'group') && in_array($vars['name'], $content_cases)) {
 		// Add parent group access id (all parent groups)
 		$group = $page_owner;
+			echo "TEST {$group->name} / ";
 		while($parent = au_subgroups_get_parent_group($group)) {
 			$vars['options_values'][$parent->group_acl] = $group->name;
+			echo "{$group->name} / ";
 			$group = $parent;
 		}
 		
