@@ -57,8 +57,7 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 		// Add parent group access id (all parent groups)
 		$group = $page_owner;
 		while($parent = au_subgroups_get_parent_group($group)) {
-			$vars['options_values'][$parent->group_acl] = $group->name;
-			echo "{$parent->name} / ";
+			$vars['options_values'][$parent->group_acl] = $parent->name;
 			$group = $parent;
 		}
 		
