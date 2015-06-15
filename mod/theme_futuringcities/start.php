@@ -17,6 +17,10 @@ function theme_futuringcities_init() {
 	// Extend CSS with custom styles
 	elgg_extend_view('css', 'theme_futuringcities/css');
 	
+	// Digest
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	elgg_unextend_view('digest/elements/site', 'digest/elements/site/members');
+	
 	// HOMEPAGE - Replace public and loggedin homepage
 	if (elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');

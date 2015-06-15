@@ -39,7 +39,7 @@ $fr = array(
 	 */
 
 	'upload_users:error:file_open_error' => "Erreur lors de l'ouverture du fichier",
-	'upload_users:error:wrong_csv_format' => "Fichier CSV mal formatté",
+	'upload_users:error:wrong_csv_format' => "Fichier CSV mal formaté",
 
 
 	/*
