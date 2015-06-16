@@ -62,7 +62,7 @@ if ($responses) {
 }
 
 $use_hide_block = elgg_get_plugin_setting('river_hide_block', 'adf_public_platform');
-if ($use_hide_block != 'no') {
+if ($use_hide_block == 'yes') {
 	// Toutes ces infos habituellement affichées sont regroupées sous forme de bloc dépliable
 	$urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
 	//$object = get_entity($item->object_guid);

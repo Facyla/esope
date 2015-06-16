@@ -362,6 +362,8 @@ $en = array(
 	'adf_platform:settings:pages_list_subpages:group' => "Groups only (not recommended)",
 	'adf_platform:settings:pages_list_subpages:all' => "All",
 	'adf_platform:settings:pages_reorder' => "Allow pages reordering",
+	'adf_platform:settings:river_hide_block' => "Use show/hide block in river modules",
+	'adf_platform:settings:river_hide_block:details' => "If yes, some information of the river (attachments and responses) will be displayed into a toggable block, when the river is displayed in a widget or on a group homepage. If not, this information will be always visible.",
 	'adf_platform:settings:advanced_pagination' => "Advanced pagination (limits links)",
 	'adf_platform:settings:thewire_default_access' => "Default Wire access",
 	'adf_platform:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
