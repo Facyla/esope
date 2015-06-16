@@ -126,15 +126,16 @@ function adf_public_platform_group_leave($event, $object_type, $relationship) {
 /* TheWire create event handler 
  * Changes access level of wire object
  * Adds a container information and updates access level if wire object is published in a group
+ * Inherits parent container and access by default if post is a reply
  */
 function esope_thewire_handler_event($event, $type, $object) {
 	//if (!empty($object) && elgg_instanceof($object, "object", "thewire") && elgg_is_active_plugin('thewire')) {
 	if (!empty($object) && elgg_instanceof($object, "object", "thewire")) {
+		$parent_guid = get_input('parent_guid', false);
 		$access_id = get_input('access_id', false);
 		$container_guid = get_input('container_guid', false);
 		
 		// If replying to a previous post, default to parent container and access
-		$parent_guid = get_input('parent_guid', false);
 		if ($parent_guid) {
 			$parent_post = get_entity($parent_guid);
 			if (elgg_instanceof($parent_post, 'object', 'thewire')) {
