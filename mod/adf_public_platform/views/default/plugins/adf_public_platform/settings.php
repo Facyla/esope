@@ -677,7 +677,7 @@ $(function() {
 		
 			// Advanced search tool (alpha version, structure changes may happen)
 			$esope_membersearch_url = $url . 'members/search';
-			echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $vars['entity']->metadata_membersearch_fields)) . '</label><br /><em>' . elgg_echo('esope:membersearch:setting:metadata:details') . '</em><br /><a href="'.$esope_membersearch_url.'" target="_new"><i class="fa fa-external-link"></i> '.$esope_membersearch_url.'</a></p>';
+			echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . ' ' . elgg_view('input/rawtext', array('name' => 'params[metadata_membersearch_fields]', 'value' => $vars['entity']->metadata_membersearch_fields, 'style' => "width:100%; height:5ex;")) . '</label><br /><em>' . elgg_echo('esope:membersearch:setting:metadata:details') . '</em><br /><a href="'.$esope_membersearch_url.'" target="_new"><i class="fa fa-external-link"></i> '.$esope_membersearch_url.'</a></p>';
 		
 			// Replace search by main search (more efficient)
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch)) . '</label></p>';
