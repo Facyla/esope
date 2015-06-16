@@ -134,6 +134,18 @@ function esope_init() {
 	// Ajoute la possibilité de modifier accès et container pour TheWire
 	elgg_register_event_handler("create", "object", "esope_thewire_handler_event");
 	
+	
+	// Modify message and add attachments to event notifications
+	// @TODO à implémenter avec réglage
+	/*
+	if (elgg_is_active_plugin('event_calendar') && elgg_is_active_plugin('html_email_handler')) {
+		// Modify default events notification message
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'esope_event_calendar_ics_notify_message');
+		// Use hook to add attachments
+		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'esope__calendar_ics_notify_attachment');
+	}
+	*/
+	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
