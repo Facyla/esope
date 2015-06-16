@@ -144,8 +144,8 @@ function esope_thewire_handler_event($event, $type, $object) {
 		}
 		
 		// Default to previous access if none defined
-		if ($access_id ) {
-			update_entity($object->guid, $object->owner_guid, $object->access_id, $object->container_guid);
+		if ($access_id) {
+			update_entity($object->guid, $object->owner_guid, $access_id, $object->container_guid);
 		}
 		
 	}
