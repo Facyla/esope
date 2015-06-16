@@ -54,11 +54,13 @@ if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_case
 if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 	$page_owner = elgg_get_page_owner_entity();
 	if (elgg_instanceof($page_owner, 'group') && in_array($vars['name'], $content_cases)) {
-		// Add parent group access id (all parent groups)
-		$group = $page_owner;
-		while($parent = au_subgroups_get_parent_group($group)) {
-			$vars['options_values'][$parent->group_acl] = $parent->name;
-			$group = $parent;
+		if (elgg_is_active_plugin('au_subgroups')) {
+			// Add parent group access id (all parent groups)
+			$group = $page_owner;
+			while($parent = au_subgroups_get_parent_group($group)) {
+				$vars['options_values'][$parent->group_acl] = $parent->name;
+				$group = $parent;
+			}
 		}
 		
 		
