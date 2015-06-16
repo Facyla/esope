@@ -133,6 +133,16 @@ function esope_thewire_handler_event($event, $type, $object) {
 		$access_id = get_input('access_id', false);
 		$container_guid = get_input('container_guid', false);
 		
+		// If replying to a previous post, default to parent container and access
+		$parent_guid = get_input('parent_guid', false);
+		if ($parent_guid) {
+			$parent_post = get_entity($parent_guid);
+			if (elgg_instanceof($parent_post, 'object', 'thewire')) {
+				if (!$access_id) { $access_id = $parent_post->access_id; }
+				if (!$container_guid) { $container_guid = $parent_post->container_guid; }
+			}
+		}
+		
 		// Define Wire container (if valid)
 		if ($container_guid) {
 			$container = get_entity($container_guid);
