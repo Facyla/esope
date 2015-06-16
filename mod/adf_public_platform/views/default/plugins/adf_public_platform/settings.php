@@ -10,9 +10,8 @@
  * - éléments de la page d'accueil : afficher les stats
  *
 */
-global $CONFIG;
 
-$url = $vars['url'];
+$url = elgg_get_site_url();
 
 // Define dropdown options
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
@@ -249,7 +248,7 @@ $(function() {
 			<?php
 		} else if ($vars['entity']->replace_public_homepage == 'cmspages') {
 			if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('adf_platform:cmspages:notactivated')); }
-			echo '<a href="' . $CONFIG->url . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('adf_platform:homepage:cmspages:editlink') . '</a>';
+			echo '<a href="' . $url . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('adf_platform:homepage:cmspages:editlink') . '</a>';
 		}
 		?>
 	</div>
@@ -610,6 +609,10 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:featured') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_featured)) . '</label></p>';
 			// Allow to add a new group tab search
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:searchtab') . ' (BETA) ' . elgg_view('input/dropdown', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_searchtab)) . '</label></p>';
+			// Advanced group search tool (alpha version, structure changes may happen)
+			$esope_groupsearch_url = $url . 'groups/groupsearch';
+			echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $vars['entity']->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
+			
 			// Allow to add a new friends groups tab
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:friends') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_friendstab)) . '</label></p>';
 			// Add groups tags below search (or replaces search if search tab enabled)
@@ -617,8 +620,11 @@ $(function() {
 			// Allow to remove discussion OR add it at page bottom
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:discussion') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $vars['entity']->groups_discussion)) . '</label></p>';
 			
-			//$framekiller = elgg_get_plugin_setting('framekiller', 'adf_public_platform');
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $vars['entity']->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:groups:invite_metadata:details') . '</em></p>';
+			
+			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
+		echo '<p><label>' . elgg_echo('adf_platform:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $vars['entity']->group_hide_profile_field)) . '</label></p>';
+			
 			?>
 		</div>
 	<?php } ?>
@@ -653,8 +659,8 @@ $(function() {
 			<?php echo elgg_view('input/dropdown', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->custom_profile_layout)); ?></label>
 		</p>
 		<br />
-		<h4><?php echo elgg_echo('adf_platform:config:memberssearch'); ?></h4>
 		<?php
+		echo '<h4>' . elgg_echo('adf_platform:config:memberssearch') . '</h4>';
 		if (elgg_is_active_plugin('members')) {
 			// Allow to add alpha sort
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:alpha') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_alpha)) . '</label></p>';
@@ -668,13 +674,34 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:profiletypes') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_profiletypes]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_profiletypes)) . '</label></p>';
 			// Allow to add a new tab search
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:searchtab') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_searchtab)) . '</label></p>';
+		
+			// Advanced search tool (alpha version, structure changes may happen)
+			$esope_membersearch_url = $url . 'members/search';
+			echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $vars['entity']->metadata_membersearch_fields)) . '</label><br /><em>' . elgg_echo('esope:membersearch:setting:metadata:details') . '</em><br /><a href="'.$esope_membersearch_url.'" target="_new"><i class="fa fa-external-link"></i> '.$esope_membersearch_url.'</a></p>';
+		
 			// Replace search by main search (more efficient)
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:onesearch') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_onesearch)) . '</label></p>';
 			// Add online members
 			echo '<p><label>' . elgg_echo('adf_platform:settings:members:online') . ' ' . elgg_view('input/dropdown', array('name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->members_online)) . '</label></p>';
 		}
 		
+		
+		// Remove friends collections
 		echo '<p><label>' . elgg_echo('adf_platform:settings:remove_collections') . ' ' . elgg_view('input/dropdown', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->remove_collections)) . '</label></p>';
+		
+		// Suppression des menus de l'utilisateur
+		echo '<p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:removeusermenutools:details') . '</em></p>';
+	
+		// Suppression des outils personnels (lien de création) de l'utilisateur
+		echo '<p><label>' . elgg_echo('adf_platform:settings:removeusertools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:removeusertools:details') . '<br />' . implode(',', $registered_objects) . '</em></p>';
+		// Note : la suppression de filtres dans les listings est un réglage général à part, 
+		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+	
+		// Suppression des niveaux d'accès pour les membres
+		echo '<p><label>' . elgg_echo('adf_platform:settings:user_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $vars['entity']->user_exclude_access)) . '</label></p>';
+	
+		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
+		echo '<p><label>' . elgg_echo('adf_platform:settings:admin_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $vars['entity']->admin_exclude_access)) . '</label></p>';
 		
 		?>
 	</div>
@@ -777,33 +804,8 @@ $(function() {
 	<div>
 		<?php
 		// Advanced search tool (alpha version, structure changes may happen)
-		$esope_search_url = $CONFIG->url . 'esearch';
+		$esope_search_url = $url . 'esearch';
 		echo '<p><label>' . elgg_echo('esope:search:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_search_fields]', 'value' => $vars['entity']->metadata_search_fields)) . '</label><br /><a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
-		
-		// Advanced search tool (alpha version, structure changes may happen)
-		$esope_membersearch_url = $CONFIG->url . 'members/search';
-		echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $vars['entity']->metadata_membersearch_fields)) . '</label><br /><a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
-		
-		// Advanced group search tool (alpha version, structure changes may happen)
-		$esope_groupsearch_url = $CONFIG->url . 'groups/groupsearch';
-		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $vars['entity']->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
-		
-		// Suppression des menus de l'utilisateur
-		echo '<p><label>' . elgg_echo('adf_platform:settings:removeusermenutools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $vars['entity']->remove_user_menutools)) . '</label></p>';
-		
-		// Suppression des outils personnels (lien de création) de l'utilisateur
-		echo '<p><label>' . elgg_echo('adf_platform:settings:removeusertools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $vars['entity']->remove_user_tools)) . '</label><em>' . implode(',', $registered_objects) . '</em></p>';
-		// Note : la suppression de filtres dans les listings est un réglage général à part, 
-		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
-		
-		// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
-		echo '<p><label>' . elgg_echo('adf_platform:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $vars['entity']->group_hide_profile_field)) . '</label></p>';
-		
-		// Suppression des niveaux d'accès pour les membres
-		echo '<p><label>' . elgg_echo('adf_platform:settings:user_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $vars['entity']->user_exclude_access)) . '</label></p>';
-		
-		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
-		echo '<p><label>' . elgg_echo('adf_platform:settings:admin_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $vars['entity']->admin_exclude_access)) . '</label></p>';
 		?>
 	</div>
 

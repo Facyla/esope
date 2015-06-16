@@ -1040,10 +1040,45 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
+		} else {
+			// Metadata is not defined through profile_manager : use regular field instead
+			if ($auto_options) {
+				$search_field .= esope_make_dropdown_from_metadata($params);
+			} else {
+				$search_field .= '<input type="text" name="' . $name . '" value="' . $value . '" />';
+			}
+			
 		}
 		return $search_field;
 	}
 	
+}
+
+
+/* Return a selector for a given metadata
+ * That's for use in a multi-criteria search form
+ * Params :
+   - metadata : meta name
+   - name : field name
+   - value : set a specific value
+   - empty : add empty value in options
+   - 
+ */
+function esope_make_dropdown_from_metadata($params) {
+	$metadata = trim($params['metadata']);
+	if (empty($metadata)) { return false; }
+	$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+	$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
+	$empty = elgg_extract('empty', $params, true);
+	$search_field = '';
+	
+	// Auto-discover valid values from existing metadata
+	$options = esope_get_meta_values($metadata);
+	
+	// Add empty entry at the beginning of the array
+	if ($empty) $options = array('empty option' => '') + $options;
+	
+	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
 }
 
 /* Returns the wanted value based on both params and inputs
