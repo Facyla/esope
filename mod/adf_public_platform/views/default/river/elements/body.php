@@ -18,6 +18,7 @@ $menu = elgg_view_menu('river', array(
 ));
 
 // river item header
+// Use that function to trigger the hook
 $timestamp = elgg_get_friendly_time($item->getPostedTime());
 
 // Esope : User profile gatekeeper block
@@ -60,22 +61,28 @@ if ($responses) {
 	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
 }
 
-// Toutes ces infos habituellement affichées sont regroupées sous forme de bloc dépliable
-$urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
-$object = get_entity($item->object_guid);
-if (elgg_in_context('widgets')) {
-	$plus_content = $message . $attachments . $responses;
-	$plus_textcontent = strip_tags($plus_content);
-	if (!empty($plus_textcontent)) {
-		$message = '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
+$use_hide_block = elgg_get_plugin_setting('river_hide_block', 'adf_public_platform');
+if ($use_hide_block == 'yes') {
+	// Toutes ces infos habituellement affichées sont regroupées sous forme de bloc dépliable
+	$urlicon = $vars['url'] . 'mod/adf_public_platform/img/theme/';
+	//$object = get_entity($item->object_guid);
+	if (elgg_in_context('widgets')) {
+		$plus_content = $message . $attachments . $responses;
+		$plus_textcontent = strip_tags($plus_content);
+		if (!empty($plus_textcontent)) {
+			$message = '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
+		}
+	} else {
+		$message = $message . $attachments;
+		$plus_content = $responses;
+		$plus_textcontent = strip_tags($plus_content);
+		if (!empty($plus_textcontent)) {
+			$message .= '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
+		}
 	}
 } else {
-	$message = $message . $attachments;
-	$plus_content = $responses;
-	$plus_textcontent = strip_tags($plus_content);
-	if (!empty($plus_textcontent)) {
-		$message .= '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
-	}
+	// Regular view
+	$message .= $attachments . $responses;
 }
 
 $group_string = '';

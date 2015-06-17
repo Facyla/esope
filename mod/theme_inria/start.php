@@ -42,6 +42,11 @@ function theme_inria_init(){
 	elgg_extend_view('groups/sidebar/search', 'au_subgroups/sidebar/subgroups', 300);
 	//elgg_extend_view('groups/sidebar/search', 'theme_inria/extend_group_my_status', 600);
 	
+	// Add group Wire support
+	// Note : also uses esope's event handler ("create", "object")
+	elgg_extend_view('groups/profile/widgets', 'theme_inria/extend_group_thewire', 100);
+	
+	
 	// Rewritten in a more specific way for Iris theme
 	elgg_unextend_view('forms/login', 'elgg_cas/login_extend');
 	
@@ -106,11 +111,13 @@ function theme_inria_init(){
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	
 	
-	// Ajout niveau d'accès sur TheWire
+	// Ajout niveau d'accès sur TheWire : désormais intégré dans Esope (ainsi que possibilité de définir un container)
+	/*
 	if (elgg_is_active_plugin('thewire')) {
 		elgg_unregister_action('thewire/add');
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
+	*/
 	
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');

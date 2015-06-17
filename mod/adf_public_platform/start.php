@@ -131,6 +131,21 @@ function esope_init() {
 	// Gestion des actions post-login
 	elgg_register_event_handler('login','user','esope_login_user_action', 800);
 	
+	// Ajoute la possibilité de modifier accès et container pour TheWire
+	elgg_register_event_handler("create", "object", "esope_thewire_handler_event");
+	
+	
+	// Modify message and add attachments to event notifications
+	// @TODO à implémenter avec réglage
+	/*
+	if (elgg_is_active_plugin('event_calendar') && elgg_is_active_plugin('html_email_handler')) {
+		// Modify default events notification message
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'esope_event_calendar_ics_notify_message');
+		// Use hook to add attachments
+		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'esope__calendar_ics_notify_attachment');
+	}
+	*/
+	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
@@ -362,6 +377,7 @@ function esope_init() {
 // Include hooks & page_handlers functions (lightens this file)
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
+require_once(dirname(__FILE__) . '/lib/esope/events.php');
 
 
 
@@ -542,25 +558,6 @@ function adf_platform_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 */
 
 
-/*
- * Forwards to internal referrer, if set
- * Otherwise redirects to home after login
-*/
-function adf_platform_login_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Si on vient d'une page particulière, retour à cette page
-	$back_to_last = $_SESSION['last_forward_from'];
-	if(!empty($back_to_last)) {
-		//register_error("Redirection vers $back_to_last");
-		forward($back_to_last);
-	}
-	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
-	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
-	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward(elgg_get_site_url() . $loginredirect); }
-	forward();
-}
-
 // Redirection après login
 function adf_platform_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
 	if (!elgg_is_logged_in()) {
@@ -586,64 +583,6 @@ function adf_platform_forward_hook($hook_name, $reason, $location, $parameters) 
 		}
 	}
 	return null;
-}
-
-/* Performs some actions after registration */
-function adf_platform_register_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Groupe principal (à partir du GUID de ce groupe)
-	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
-	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'adf_public_platform');
-	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
-		$user = elgg_get_logged_in_user_entity();
-		// Si pas déjà fait, on l'inscrit
-		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
-	}
-}
-
-
-
-// Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
-function adf_public_platform_group_join($event, $object_type, $relationship) {
-	if (elgg_is_logged_in()) {
-		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
-			global $NOTIFICATION_HANDLERS;
-			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'adf_public_platform');
-			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
-				switch($groupjoin_enablenotif) {
-					case 'site':
-						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
-						break;
-					case 'all':
-						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-						}
-						break;
-					case 'email':
-					default:
-						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
-				}
-			} else if ($groupjoin_enablenotif == 'no') {
-				// loop through all notification types
-				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-				}
-			}
-		}
-	}
-	return true;
-}
-
-// Retire les notifications lorsqu'on quitte un groupe
-function adf_public_platform_group_leave($event, $object_type, $relationship) {
-	global $NOTIFICATION_HANDLERS;
-	if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
-		// loop through all notification types
-		foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-			remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-		}
-	}
-	return true;
 }
 
 
@@ -1040,10 +979,45 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
+		} else {
+			// Metadata is not defined through profile_manager : use regular field instead
+			if ($auto_options) {
+				$search_field .= esope_make_dropdown_from_metadata($params);
+			} else {
+				$search_field .= '<input type="text" name="' . $name . '" value="' . $value . '" />';
+			}
+			
 		}
 		return $search_field;
 	}
 	
+}
+
+
+/* Return a selector for a given metadata
+ * That's for use in a multi-criteria search form
+ * Params :
+   - metadata : meta name
+   - name : field name
+   - value : set a specific value
+   - empty : add empty value in options
+   - 
+ */
+function esope_make_dropdown_from_metadata($params) {
+	$metadata = trim($params['metadata']);
+	if (empty($metadata)) { return false; }
+	$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+	$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
+	$empty = elgg_extract('empty', $params, true);
+	$search_field = '';
+	
+	// Auto-discover valid values from existing metadata
+	$options = esope_get_meta_values($metadata);
+	
+	// Add empty entry at the beginning of the array
+	if ($empty) $options = array('empty option' => '') + $options;
+	
+	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
 }
 
 /* Returns the wanted value based on both params and inputs
@@ -1895,48 +1869,6 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	if ($bypass) { elgg_set_ignore_access($ia); }
 	usort($groups, create_function('$a,$b', 'return strcmp($a->name,$b->name);')); 
 	return $groups;
-}
-
-
-// Perform some post-login actions (join groups, etc.)
-function esope_login_user_action($event, $type, $user) {
-	if (elgg_instanceof($user, "user")) {
-		if (!$user->isBanned()) {
-			// Try to join groups asked at registration
-			if ($user->join_groups) {
-				foreach($user->join_groups as $group_guid) {
-					if ($group = get_entity($group_guid)) {
-						// Process only groups that haven't been joined yet
-						if (!$group->isMember($user)) {
-							if (!$group->join($user)) {
-								// Handle subgroups cases
-								if (elgg_is_active_plugin('au_subgroups')) {
-									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
-									while ($parent = au_subgroups_get_parent_group($group)) {
-										//  Join only if parent group is public membership or if we have a join pending
-										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
-											// Join group, or add to join list
-											if (!$parent->join($user)) { $join_children[] = $parent->guid; }
-										}
-									}
-									// Start joining from upper parents if needed
-									if ($join_children) {
-										$join_children = array_reverse($join_children);
-										foreach($join_children as $children) { $children->join($user); }
-									}
-									// Try to join group again
-									if ($group->join($user)) {}
-								}
-							}
-						}
-					}
-				}
-				// Update waiting list
-				$user->join_groups = null;
-			}
-		}
-	}
-	return null;
 }
 
 

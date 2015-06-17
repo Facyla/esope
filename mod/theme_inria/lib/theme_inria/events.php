@@ -250,3 +250,4 @@ function theme_inria_annotation_notifications_event_block($event, $type, $annota
 
 
 
+
