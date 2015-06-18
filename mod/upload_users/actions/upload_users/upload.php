@@ -1,57 +1,75 @@
 <?php
 
 /**
- * Upload users. Processes the uploaded file and prints a report of the cerated files.
+ * Process an uploaded CSV file
  *
  * @package upload_users
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jaakko Naakka / Mediamaisteri Group
+ * @author Ismayil Khayredinov / Arck Interactive
  * @copyright Mediamaisteri Group 2009
+ * @copyright ArckInteractive 2013
  * @link http://www.mediamaisteri.com/
+ * @link http://arckinteractive.com/
  */
-$upload = new UploadUsers();
 
-elgg_push_context('admin');
-
-/// Get the input from the form or hidden fields
-$encoding = get_input('encoding');
-$delimiter = get_input('delimiter');
-$notification = get_input('notification');
-$confirm = get_input('confirm', false);
-
-/// Set the parameters
-$upload->setEncoding($encoding);
-$upload->setDelimiter($delimiter);
-$upload->setNotification($notification);
-
-
-if (!$confirm) {
-	/// Open the file
-	if (!$upload->openFile('csvfile')) {
-		forward("admin/users/upload");
-	}
-
-	/// Process the file
-	if (!$upload->processFile()) {
-		forward("admin/users/upload");
-	}
-
-	/// Check the users
-	$upload->checkUsers();
-	/// Print the processed users for confirmation
-	$body = $upload->getConfirmationReport();
-	$title = elgg_view_title(elgg_echo('upload_users:process_report'));
-/// Create the users and print the report
-} else {
-	/// Create the users
-	$upload->createUsers($_POST);
-	/// Everything was fine -> Display the creation report
-	$body = $upload->getCreationReport();
-	$title = elgg_view_title(elgg_echo('upload_users:creation_report'));
+// Process uploaded file
+if (isset($_FILES['csvfile']) && $_FILES['csvfile']['error'] == 0) {
+	$contents = file_get_contents($_FILES['csvfile']['tmp_name']);
 }
 
-elgg_pop_context();
+if (!$contents) {
+	register_error(elgg_echo('upload_users:error:cannot_open_file'));
+	forward(REFERER);
+}
 
-header('Content-type: text/html');
-print $body;
-exit;
+// Modify encoding if not UTF-8
+$encoding = get_input('encoding', 'UTF-8');
+if ($encoding != 'UTF-8') {
+	$contents = iconv($encoding, 'UTF-8//IGNORE', $contents);
+}
+
+$time = time();
+$name = $_FILES['csvfile']['name'];
+
+// Store uploaded file contents on Elgg's filestore and create a new upload_users_file entity
+$file = new UploadUsersFile();
+$file->owner_guid = elgg_get_logged_in_user_guid();
+$file->setFilename("upload_users/{$time}{$name}");
+$file->open("write");
+$file->write($contents);
+$file->close();
+
+// Attach metadata describing processing logic and parameter4es
+$file->setStatus('uploaded');
+
+$template = get_input('template', 'new');
+if ($template != 'new') {
+	$templates = unserialize(elgg_get_plugin_setting('templates', 'upload_users'));
+	$file->setHeaderMapping($templates[$template]);
+}
+
+$file->delimiter = get_input('delimiter', ',');
+$file->enclosure = get_input('enclosure', '"');
+$file->originalfilename = $name;
+
+$settings = array(
+	'notification',
+	'update_existing_users',
+	'fix_usernames',
+	'fix_passwords',
+);
+
+foreach ($settings as $setting) {
+	$file->$setting = (bool)get_input($setting, false);
+}
+
+if (!$file->parseCSVHeader() || !$file->save()) { // CSV can not be parsed or file can not be saved
+	$file->delete();
+	register_error(elgg_echo('upload_users:error:cannot_open_file'));
+	forward(REFERER);
+}
+
+$guid = $file->getGUID();
+
+forward("admin/users/upload?guid=$guid");
