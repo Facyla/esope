@@ -75,14 +75,15 @@ if ($categories) {
 	}
 	?>
 </div>
+
 <div class="elgg-foot">
-<?php
+  <?php
+  if (!$vars['entity']) echo elgg_view('prevent_notifications/prevent_form_extend', array());
 
-if ($guid) {
-	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
-}
+	if ($guid) {
+		echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
+	}
 
-echo elgg_view('input/submit', array('value' => elgg_echo("save")));
-
-?>
+	echo elgg_view('input/submit', array('value' => elgg_echo("save")));
+	?>
 </div>
