@@ -1,402 +1,590 @@
 <?php
 
 /**
- * upload_users Class.
+ * Upload users helper class
  *
  * @package upload_users
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jaakko Naakka / Mediamaisteri Group
+ * @author Ismayil Khayredinov / Arck Interactive
  * @copyright Mediamaisteri Group 2009
+ * @copyright ArckInteractive 2013
  * @link http://www.mediamaisteri.com/
+ * @link http://arckinteractive.com/
  */
 class UploadUsers {
 
-	var $encoding;
-	var $delimiter;
-	var $notification;
-	var $raw_data;
-	var $confirmation_report;
-	var $creation_report;
-	var $headers;
-	var $number_of_failed_users = 0;
-	var $users_to_confirm = NULL; /// An array containing user info from csv file
-	var $users_to_create = NULL; /// An array of users to create
+	var $records;
+	var $mapped_headers;
+	var $mapped_required_fields;
+	var $notification = false;
+	var $update_existing_users = false;
+	var $fix_usernames = false;
+	var $fix_passwords = false;
 
 	function __construct() {
-
+		$this->records = new stdClass();
 	}
 
 	/**
-	 * Set encoding of the CSV file
+	 * Set alternative mapping of CSV headers to Elgg metadata
 	 *
-	 * @param $encoding
+	 * @param $mapping array An array of $key => $value pairs, where $key is the CSV header and $value is an Elgg metadata mapped to it
 	 */
-	function setEncoding($encoding) {
-		$this->encoding = $encoding;
+	function setHeaderMapping($mapping) {
+		$this->mapped_headers = $mapping;
 	}
 
 	/**
-	 * Set delimiter of the CSV file
+	 * Set alternative mapping of required user entity attributes to CSV headers
 	 *
-	 * @param $delimiter
+	 * @param array $mapping An array of $key => $value pairs, where $key is username, name or email and $value is an array of CSV headers which will be used to concatinate the value
 	 */
-	function setDelimiter($delimiter) {
-		$this->delimiter = $delimiter;
+	function setRequiredFieldMapping($mapping) {
+		$this->mapped_required_fields = $mapping;
 	}
 
 	/**
-	 * Set wether to send user accounts on email or not
+	 * Send an email notification to new user accounts
 	 *
-	 * @param $notification boolean
+	 * @param $flag boolean
 	 */
-	function setNotification($notification) {
-		$this->notification = $notification;
+	function setNotificationFlag($flag) {
+		$this->notification = $flag;
 	}
 
 	/**
-	 * Process the file
+	 * Update user profile information if user account already exists
 	 *
-	 * @param $file
-	 * @return boolean
+	 * @param $flag boolean
 	 */
-	function openFile($file) {
-		if (!$contents = get_uploaded_file($file)) {
-			register_error(elgg_echo('upload_users:error:cannot_open_file'));
-			return false;
-		}
-
-		/// Check the encoding
-		if ($this->encoding == 'ISO-8859-1') {
-			$contents = utf8_encode($contents);
-		}
-
-		$this->raw_data = $contents;
-		return true;
+	function setUpdateExistingUsersFlag($flag) {
+		$this->update_existing_users = $flag;
 	}
 
 	/**
-	 * Process user accounts from the raw data from the file
+	 * Fix usernames to meet Elgg requirements
+	 *
+	 * @param $flag boolean
+	 */
+	function setFixUsernamesFlag($flag) {
+		$this->fix_usernames = $flag;
+	}
+
+	/**
+	 * Fix passwords to meet Elgg requirements
+	 *
+	 * @param $flag boolean
+	 */
+	function setFixPasswordsFlag($flag) {
+		$this->fix_passwords = $flag;
+	}
+
+	/**
+	 * Add unmapped user data
+	 *
+	 * @param array $data
+	 */
+	function setRecords($data) {
+		$this->records->source = $data;
+	}
+
+	/**
+	 * Map user records
 	 *
 	 * @param $data
 	 * @return boolean
 	 */
-	function processFile() {
-		/// Turn the string into an array
-		$rows = explode("\n", $this->raw_data);
+	function mapRecords($data = null) {
 
-		/// First row includes headers
-		$headers = $rows[0];
-		$headers = explode($this->delimiter, $headers);
-
-		/// Trim spaces from $headers
-		$headers = array_map('trim', $headers);
-
-		/// Check that there are no empty headers. This can happen if there are delimiters at the end of the file
-		foreach ($headers as $header) {
-			if (!empty($header)) {
-				$headers2[] = $header;
-			}
-		}
-		$headers = $headers2;
-
-		if (!in_array('password', $headers)) {
-			/// Add password column for generated passwords
-			$headers[] = 'password';
-		}
-		/// Add status column to the headers
-		$headers[] = 'status';
-
-
-		$this->headers = $headers;
-
-		/// Check that at least username, name and email are provided in the headers
-		if (!in_array('username', $headers) ||
-				!in_array('name', $headers) ||
-				!in_array('email', $headers)) {
-			register_error(elgg_echo('upload_users:error:wrong_csv_format'));
-			return false;
+		if (!$this->records->source) {
+			$this->setRecords($data);
 		}
 
-		/// Create a nicer array of users for processing
-		$users = array();
+		$this->records->mapped = array();
 
-		/// Go through the user rows
-		for ($i = 1; $i < count($rows); $i++) {
-			$rows[$i] = trim($rows[$i]);
-			if (empty($rows[$i])) {
-				continue;
-			}
-			$user_details = explode($this->delimiter, $rows[$i]);
-
-			$user = array();
-			$metadata = array();
-
-			/// Go through user information
-			foreach ($user_details as $key => $field) {
-				$fieldname = trim($headers[$key]); /// Remove whitespaces
-				$field = trim($field);   /// and other garbage.
-
-				if ($fieldname == 'username' ||
-						$fieldname == 'name' ||
-						$fieldname == 'email' ||
-						$fieldname == 'password') {
-					$user[$fieldname] = $field;
-				} else {
-					/// Add all other fields as metadata
-					$metadata[$fieldname] = $field;
-				}
-			}
-			$user['metadata'] = $metadata;
-			$users[] = $user;
+		foreach ($this->records->source as $record) {
+			$this->records->mapped[] = $this->mapRecord($record);
 		}
-
-		$this->users_to_confirm = $users;
-		return true;
 	}
 
-	function checkUsers() {
-		global $CONFIG;
-		$final_report = array(); /// Final report of the upload process
-		/// Check all the users from $users_to_confirm array
-		foreach ($this->users_to_confirm as $user) {
-			/// CHeck for password or generate a new one
-			if (empty($user['password'])) {
-				$user['password'] = $this->generatePassword();
+	/**
+	 * Map an individual user record
+	 *
+	 * @param array $record
+	 * @return array
+	 */
+	function mapRecord($record) {
+
+		// Set required keys
+		$mapped_record = array(
+			'__upload_users_status' => array(),
+			'__upload_users_messages' => array(),
+			'guid' => null,
+			'email' => '',
+			'username' => '',
+			'name' => '',
+			'password' => '',
+		);
+
+		// Map values
+		$headers = $this->mapped_headers;
+		if ($headers) {
+			foreach ($headers as $original_header => $new_header) {
+				if (is_array($new_header)) {
+					$new_header = $new_header['metadata_name'];
+				}
+				if (!isset($mapped_record[$new_header])) {
+					$mapped_record[$new_header] = $record[$original_header];
+				}
 			}
-
-			$report = array('username' => $user['username'],
-				'password' => $user['password'],
-				'name' => $user['name'],
-				'email' => $user['email'],
-				'status' => '',
-				'create_user' => true);
-
-			/// Check if the username has already been registered
-			if (get_user_by_username($user['username'])) {
-				$report['status'] .= '<span class="error">' . elgg_echo('registration:userexists') . '</span>';
-				$report['create_user'] = false;
+		} else {
+			foreach ($record as $key => $value) {
+				$mapped_record[$key] = $value;
 			}
+		}
 
-			/// Check if the email has already been registered
-			if (get_user_by_email($user['email'])) {
-				$report['status'] .= '<span class="error">' . elgg_echo('registration:dupeemail') . '</span>';
-				$report['create_user'] = false;
-			}
+		// Map required values
+		$mapped_record['username'] = $this->getUsername($record);
+		$mapped_record['name'] = $this->getName($record);
+		$mapped_record['email'] = $this->getEmail($record);
+		$mapped_record['password'] = $this->getPassword($record);
 
-			/// Check that the email is valid
-			try {
-				validate_email_address($user['email']);
-			} catch (RegistrationException $r) {
-				$report['status'] .= ' <span class="error">' . $r->getMessage() . '</span>';
-				$report['create_user'] = false;
-			}
+		return $mapped_record;
+	}
 
-			/// CHeck for valid password
-			try {
-				validate_password($user['password']);
-			} catch (RegistrationException $r) {
-				$report['status'] .= ' <span class="error">' . $r->getMessage() . '</span>';
-				$report['create_user'] = false;
-			}
+	/**
+	 * Validate records and create update and create queues
+	 *
+	 * @param mixed $data
+	 */
+	function queueRecords($data = null) {
 
+		if (!$this->records->mapped) {
+			$this->mapRecords($data);
+		}
 
-			/// Process metadata
-			foreach ($user['metadata'] as $key => $metadata) {
-				$report[$key] = $metadata;
-			}
+		$this->records->queue = array();
 
-			/// Add the user to the creation list if we can create the user
-			if ($report['status'] == '') {
-				$report['status'] = elgg_echo('upload_users:statusok'); /// Set status to ok
-				$this->users_to_create[] = $user;
+		foreach ($this->records->mapped as $record) {
+
+			$create = true;
+			$update = false;
+			$messages = array();
+
+			// First check if the user already exists
+			if ($record['guid']) {
+				$create = false;
+
+				$record_entity = get_entity($record['guid']);
+				if (elgg_instanceof($record_entity, 'user')) {
+					$messages[] = elgg_echo('upload_users:error:userexists');
+					if ($this->update_existing_users) {
+						$update = true;
+					}
+				} else if ($this->update_existing_users) {
+					$messages[] = elgg_echo('upload_users:error:invalid_guid');
+				}
 			} else {
-				$this->number_of_failed_users++;
-			}
 
-			$final_report[] = $report;
-		}
+				try {
+					validate_email_address($record['email']);
 
-		$this->confirmation_report = $final_report;
-		return true;
-	}
+					$record_by_username = get_user_by_username($record['username']);
+					$record_by_email = get_user_by_email($record['email']);
 
-	/**
-	 * createUsers Create the users in Elgg
-	 *
-	 * @return boolean
-	 */
-	function createUsers($post_data) {
-		global $CONFIG;
-		$final_report = array(); /// Final report of the creation process
-
-		foreach ($post_data['header'] as $header => $mapping) {
-			$metadata_name = $mapping['mapping'];
-			if ($metadata_name == 'custom') {
-				$metadata_name = $mapping['custom'];
-			}
-			$mapped_headers[$header] = $metadata_name;
-		}
-		$this->headers = $mapped_headers;
-
-		/// Create the users from the $users array
-		for ($i = 0; $i < $post_data['num_of_users']; $i++) {
-			$user = array();
-			/// Get the user details from POST data for all headers
-
-			foreach ($this->headers as $header => $metadata_name) {
-				if ($value = $post_data[$header][$i]) {
-					$user[$metadata_name] = $value;
-				} else {
-					unset($user[$metadata_name]);
+					if (elgg_instanceof($record_by_username, 'user') || elgg_instanceof($record_by_email[0], 'user')) {
+						$create = false;
+						if ($record_by_username->guid != $record_by_email[0]->guid) {
+							if ($this->fix_usernames && !$this->update_existing_users) {
+								$create = true;
+								while (get_user_by_username($record['username'])) {
+									$record['username'] = $record['username'] . rand(1000, 9999);
+								}
+							} else {
+								$messages[] = elgg_echo('upload_users:error:update_email_username_mismatch'); // username does not match with the email we have in the database
+							}
+						} else {
+							$messages[] = elgg_echo('upload_users:error:userexists');
+							if ($this->update_existing_users) {
+								$record['guid'] = $record_by_username->guid;
+								$update = true;
+							}
+						}
+					}
+				} catch (RegistrationException $r) {
+					$create = false;
+					$messages[] = $r->getMessage();
 				}
 			}
 
+			// No existing accounts found; validate details for registration
+			if ($create) {
+				if (!$record['name']) {
+					$create = false;
+					$messages[] = elgg_echo('upload_users:error:empty_name');
+				}
 
-			/// Add the basic fields to the report
-			$report = array('username' => $user['username'],
-				'password' => $user['password'],
-				'name' => $user['name'],
-				'email' => $user['email']);
+				try {
+					validate_username($record['username']);
+				} catch (RegistrationException $r) {
+					$create = false;
+					$messages[] = $r->getMessage();
+				}
 
-			/// Try to create the user
+				if ($record['password']) {
+					try {
+						validate_password($record['password']);
+					} catch (RegistrationException $r) {
+						$create = false;
+						$messages[] = $r->getMessage();
+					}
+				}
+			}
+
+			$record['__upload_users_messages'] = $messages;
+			$record['__upload_users_status'] = false;
+
+			if ($create || $update) {
+				$record['__upload_users_status'] = true;
+			}
+
+			$this->records->queue[] = $record;
+		}
+	}
+
+	/**
+	 * Process queue
+	 *
+	 * @param mixed $data
+	 */
+	function processRecords($data = null) {
+		if (!$this->records->queue) {
+			$this->queueRecords($data);
+		}
+
+		foreach ($this->records->queue as $record) {
+			if ($record['__upload_users_status']) {
+				$record = $this->uploadUser($record);
+			}
+
+			if ($record['__upload_users_status']) {
+				$record['__upload_users_status'] = 'complete';
+			} else {
+				$record['__upload_users_status'] = 'error';
+			}
+
+			$record['__upload_users_messages'] = implode("\n", $record["__upload_users_messages"]);
+
+			$this->record->uploaded[] = $record;
+		}
+
+		return $this->record->uploaded;
+	}
+
+	/**
+	 * Create a new user or update an existing user from record
+	 * 
+	 * @param array $record User record 
+	 * @return array User record with status report
+	 */
+	function uploadUser($record) {
+
+
+		if (!$record['guid']) {
+
+			// No user, try registering
 			try {
 
-				if ($guid = register_user($user['username'], $user['password'], $user['name'], $user['email'])) {
-					$new_user = get_entity($guid);
-
-					/// Validate the user.
-					set_user_validation_status($guid, true);
-
-					//$new_user->user_role = 'student';
-					/// Add all other fields as metadata
-					foreach ($this->headers as $header => $metadata_name) {
-						switch ($metadata_name) {
-							case 'username' :
-							case 'password' :
-							case 'name' :
-							case 'email' :
-								continue;
-								break;
-
-							default :
-								$hook_params = array(
-									'header' => $header,
-									'metadata_name' => $metadata_name,
-									'value' => $user[$metadata_name],
-									'user' => $new_user
-								);
-								if (elgg_trigger_plugin_hook('header:custom_method', 'upload_users', $hook_params, false)) {
-									continue;
-								}
-
-								/// Metadata could be a comma separated list if the delimiter is something else than a comma
-								if ($this->delimiter != ',' && strpos($user[$metadata_name], ',')) {
-									/// Multiple tags found
-									$tags = string_to_tag_array($user[$metadata_name]);
-									foreach ($tags as $tag) {
-										create_metadata($guid, $metadata_name, $tag, 'text', $guid, ACCESS_PRIVATE, true);
-									}
-								} else {
-									create_metadata($guid, $metadata_name, $user[$metadata_name], 'text', $guid);
-								}
-								break;
-						}
-						/// Add this metadata field to the report
-						$report[$metadata_name] = $user[$metadata_name];
-					}
-
-					/// Add status message to the report
-					$report['status'] = elgg_echo('upload_users:success');
-
-					/// Send an email to the user if this was needed
-					if ($this->notification) {
-						$subject = sprintf(elgg_echo('upload_users:email:subject'), $CONFIG->sitename);
-						$message = sprintf(elgg_echo('upload_users:email:message'), $user['name'], $CONFIG->sitename, $user['username'], $user['password'], $CONFIG->wwwroot);
-						notify_user($guid, 1, $subject, $message);
-					}
+				if (!$record['password']) {
+					$record['password'] = generate_random_cleartext_password();
 				}
-			} catch (RegistrationException $r) {
-				//register_error($r->getMessage());
-				$report['status'] = '<span class="error">' . $r->getMessage() . '</span>';
-				$report['password'] = ''; /// Reset password in failed cases
-				$this->number_of_failed_users++;
+
+				$record['guid'] = register_user($record['username'], $record['password'], $record['name'], $record['email']);
+
+				$user = get_entity($record['guid']);
+
+				set_user_validation_status($record['guid'], true, 'upload_users');
+
+				$hook_params = $record;
+				$hook_params['user'] = $user;
+
+				if (!elgg_trigger_plugin_hook('register', 'user', $hook_params, TRUE)) {
+					$ia = elgg_set_ignore_access(true);
+					$user->delete();
+					elgg_set_ignore_access($ia);
+					throw new RegistrationException(elgg_echo('registerbad'));
+				}
+
+				if ($this->notification) {
+					$subject = elgg_echo('upload_users:email:subject', elgg_get_config('sitename'));
+					$message = elgg_echo('upload_users:email:message', array($record['name'], elgg_get_config('sitename'), $record['username'], $record['password'], elgg_get_site_url()));
+					notify_user($record['guid'], elgg_get_site_entity()->guid, $subject, $message);
+				}
+			} catch (RegistrationException $e) {
+				$record['__upload_users_status'] = false;
+				$record['__upload_users_messages'][] = $e->getMessage();
 			}
-			$final_report[] = $report;
+		} else {
+			$user = get_entity($record['guid']);
 		}
-		$this->creation_report = $final_report;
-		return true;
+
+		if (!elgg_instanceof($user, 'user')) {
+			$record['__upload_users_status'] = false;
+			return $record;
+		}
+
+		foreach ($record as $metadata_name => $metadata_value) {
+
+			switch ($metadata_name) {
+
+				case '__upload_users_status' :
+				case '__upload_users_messages' :
+				case 'guid' :
+				case 'username' :
+				case 'password' :
+				case 'name' :
+				case 'email' :
+					continue;
+					break;
+
+				default :
+
+					$metadata_value = trim($metadata_value);
+
+					$header = $this->getHeaderForMetadataName($metadata_name);
+
+					$hook_params = array(
+						'header' => $header,
+						'metadata_name' => $metadata_name,
+						'value' => $metadata_value,
+						'record' => $record,
+						'user' => $user
+					);
+
+					$custom = array(
+						'messages' => array(),
+						'status' => false
+					);
+
+					$custom = elgg_trigger_plugin_hook('header:custom_method', 'upload_users', $hook_params, $custom);
+					if (isset($custom['messages'])) {
+						if (is_array($custom['messages'])) {
+							$record['__upload_users_messages'] = array_merge($record['__upload_users_messages'], $custom['messages']);
+						} else if (!empty($custom['messages'])) {
+							$record['__upload_users_messages'][] = $custom['messages'];
+						}
+					}
+					if ($custom === true || $custom['status'] === true) {
+						if (isset($custom['value'])) {
+							$record[$metadata_name] = $metadata_value;
+						}
+						continue;
+					}
+
+					$access_id = $this->getHeaderAccess($header);
+					$value_type = $this->getHeaderValueType($header);
+
+					switch ($value_type) {
+
+						default :
+						case 'text' :
+							// keep the value
+							break;
+
+						case 'tags' :
+							$metadata_value = string_to_tag_array($metadata_value);
+							break;
+
+						case 'timestamp' :
+							$metadata_value = strtotime($metadata_value);
+							break;
+					}
+
+					$md_report = array();
+
+					if (is_array($metadata_value)) {
+						foreach ($metadata_value as $value) {
+							$value = trim($value);
+							if (create_metadata($user->guid, $metadata_name, trim($value), '', $user->guid, $access_id, true)) {
+								$md_report[] = $value;
+							}
+						}
+					} else {
+						if (create_metadata($user->guid, $metadata_name, $metadata_value, '', $user->guid, $access_id)) {
+							$md_report[] = $metadata_value;
+						}
+					}
+
+					$metadata_value = implode(',', $md_report);
+
+					elgg_log("Upload users: creating $metadata_name with value $metadata_value (as $value_type) and access_id $access_id for user $user->guid");
+					$record[$metadata_name] = $metadata_value;
+
+					break;
+			}
+		}
+
+		return $record;
 	}
 
 	/**
-	 * Get a display friendly status report of the accounts creation
+	 * Reverse CSV header lookup
 	 *
-	 * @return unknown_type
+	 * @param string $metadata_name
+	 * @return string header name
 	 */
-	public function getCreationReport() {
-		$data = array('headers' => $this->headers, 'report' => $this->creation_report, 'num_of_failed' => $this->number_of_failed_users);
-
-		return elgg_view('upload_users/creation_report', $data);
+	function getHeaderForMetadataName($metadata_name) {
+		if ($this->mapped_headers) {
+			foreach ($this->mapped_headers as $mapped_header => $mapping) {
+				if ($mapping == $metadata_name || $mapping['metadata_name'] == $metadata_name) {
+					return $mapped_header;
+				}
+			}
+		}
+		return $metadata_name;
 	}
 
 	/**
-	 * Get a display friendly status report of the accounts creation
+	 * Get header access id from mapping
 	 *
-	 * @return unknown_type
+	 * @param string $header
+	 * @return int Access id
 	 */
-	public function getConfirmationReport() {
-		$data = array('headers' => $this->headers,
-			'report' => $this->confirmation_report,
-			'num_of_failed' => $this->number_of_failed_users,
-			'notification' => $this->notification,
-			'delimiter' => $this->delimiter,
-			'encoding' => $this->encoding);
-		$return = elgg_view('upload_users/confirmation_report', $data);
+	function getHeaderAccess($header) {
 
-		return $return;
+		$access_id = $this->mapped_headers[$header]['access_id'];
+		if (is_null($access_id)) {
+			$access_id = ACCESS_PRIVATE;
+		}
+
+		return $access_id;
 	}
 
 	/**
-	 * A function to generate a new random password
+	 * Get header value type
 	 *
-	 * @param $length Length of the password
+	 * @param string $header
+	 * @return boolean
+	 */
+	function getHeaderValueType($header) {
+
+		$value_type = $this->mapped_headers[$header]['value_type'];
+		return ($value_type) ? $value_type : 'text';
+	}
+
+	/**
+	 * Get username from mapping
+	 *
+	 * @param array $record
 	 * @return string
 	 */
-	private function generatePassword($length = 6) {
-		$possible = "ABCDEFGHIJKLMNOPQRSTYWXYZabcdefghijkmnopqrstuvwxyz023456789";
+	function getUsername($record) {
 
-		// start with a blank password
-		$password = "";
+		$required_fields = $this->mapped_required_fields;
+		$components = $required_fields['username'];
 
-		// set up a counter
-		$i = 0;
-
-		// add random characters to $password until $length is reached
-		while ($i < $length) {
-
-			// pick a random character from the possible ones
-			$char = substr($possible, mt_rand(0, strlen($possible) - 1), 1);
-
-			// we don't want this character if it's already in the password
-			if (!strstr($password, $char)) {
-				$password .= $char;
-				$i++;
-			}
+		if (!$required_fields || !is_array($components)) {
+			return $record['username'];
 		}
-		return $password;
+
+		$value = array();
+		foreach ($components as $header) {
+			$value[] = strtolower(trim($record[$header]));
+		}
+
+		$value = implode('.', $value);
+
+		if ($this->fix_usernames) {
+			$value = iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+			$blacklist = '/[\x{0080}-\x{009f}\x{00a0}\x{2000}-\x{200f}\x{2028}-\x{202f}\x{3000}\x{e000}-\x{f8ff}]/u';
+			$blacklist2 = array(' ', '\'', '/', '\\', '"', '*', '&', '?', '#', '%', '^', '(', ')', '{', '}', '[', ']', '~', '?', '<', '>', ';', '|', '¬', '`', '@', '-', '+', '=');
+			$value = preg_replace($blacklist, '', $value);
+			$value = str_replace($blacklist2, '.', $value);
+		}
+
+		return $value;
 	}
 
 	/**
-	 * Returns the upload form. Uses Elgg view to do this.
+	 * Get name from mapping
 	 *
-	 * @param $data
+	 * @param array $record
 	 * @return string
 	 */
-	function getUploadForm($data = NULL) {
-		return elgg_view_form('upload_users/upload', array(
-					'enctype' => 'multipart/form-data',
-					'method' => 'POST',
-					'id' => 'user-upload-admin-form'
-						), $data);
+	function getName($record) {
+
+		$required_fields = $this->mapped_required_fields;
+		$components = $required_fields['name'];
+
+		if (!$required_fields || !is_array($components)) {
+			return $record['name'];
+		}
+
+		$value = array();
+		foreach ($components as $header) {
+			$value[] = trim($record[$header]);
+		}
+
+		if (count($value) > 1) {
+			$value = implode(' ', $value);
+			$value = ucwords(strtolower($value));
+		} else {
+			$value = implode(' ', $value);
+		}
+		return $value;
+	}
+
+	/**
+	 * Get email from mapping
+	 *
+	 * @param array $record
+	 * @return string
+	 */
+	function getEmail($record) {
+
+		$required_fields = $this->mapped_required_fields;
+		$component = $required_fields['email'];
+
+		if (!$required_fields || !$component) {
+			return $record['email'];
+		}
+		if (is_array($component)) {
+			$component = $component[0];
+		}
+
+		return trim($record[$component]);
+	}
+
+	/**
+	 * Get password from mapping
+	 *
+	 * @param array $record
+	 * @return string
+	 */
+	function getPassword($record) {
+
+		$required_fields = $this->mapped_required_fields;
+		$component = $required_fields['password'];
+
+		if (!$required_fields || !is_array($component)) {
+			return $record['password'];
+		}
+		if (is_array($component)) {
+			$component = $component[0];
+		}
+
+		$value = trim($record[$component]);
+
+		if ($value && $this->fix_passwords) {
+			$minlength = elgg_get_config('min_password_length');
+			if (strlen($value) < $minlength) {
+				$value = '';
+			}
+		}
+
+		return $value;
 	}
 
 }
+
