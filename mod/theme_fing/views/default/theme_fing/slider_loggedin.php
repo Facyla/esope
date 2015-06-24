@@ -45,7 +45,7 @@ if ($articles) foreach ($articles as $ent) {
 	// Compose slider element
 	$slidercontent .= '<li>';
 	$slidercontent .= '<div class=""><table style="width: 100%;" style="border:0;"><tbody><tr>';
-	$slidercontent .= '<td style="width:50%; text-align: center; height: 200px; vertical-align: middle;">' . $image . '</td>';
+	$slidercontent .= '<td style="width:50%; max-width:50%; text-align: center; height: 200px; vertical-align: middle;">' . $image . '</td>';
 	$slidercontent .= '<td style="width:50%;"><div class="textSlide"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 16px;">' . $excerpt . '</div></div></td>';
 	$slidercontent .= '</tr></table></div></li>';
 	//if ($i >= $max) { break; }
