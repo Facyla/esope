@@ -5,8 +5,8 @@
 /* Batch function - Geocodes member coordinates
  */
 function leaflet_batch_geocode_member($user, $getter, $options) {
-	$location = $user->getLocation();
-	if (is_array($location)) $location = implode(', ', $location);
+	$location = $user->location;
+	if (is_array($location)) { $location = implode(', ', $location); }
 	$location = trim($location);
 	$forceupdate = false;
 	
@@ -23,11 +23,12 @@ function leaflet_batch_geocode_member($user, $getter, $options) {
 		$long = $user->getLongitude();
 		
 		// Add geolocation update check (using previous valid location)
+		// ie. Force geocoding if location has changed
 		if (!(empty($user->prev_location) && ($location != $user->prev_location))) { $forceupdate = true; }
 		
-		// Geocoding, if needed or required
+		// Geocoding, if needed (no valid coordinates) or required
 		if (!$lat || !$long || $forceupdate) {
-			// Remember latest geocoded location (to avoid geocoding it again if it didn't change
+			// Save latest geocoded location (to avoid geocoding it again if it didn't change
 			// ..whether it succeeded or failed it would be useless to do it again
 			$user->prev_location = $location;
 			
@@ -50,8 +51,7 @@ function leaflet_batch_geocode_member($user, $getter, $options) {
 function leaflet_batch_add_member_marker($user, $getter, $options) {
 	$location = $user->location;
 	// Geocode only members locations that are set...
-	if (empty($location)) { return; }
-	
+	if (!$location) { return; }
 	
 	// Get coordinates
 	$lat = $user->getLatitude();
@@ -76,6 +76,9 @@ function leaflet_batch_add_member_marker($user, $getter, $options) {
 	// Geocoding, if needed or required
 	if (!$lat || !$long || $forceupdate) {
 		leaflet_batch_geocode_member($user, '', array());
+		// Get coordinates
+		$lat = $user->getLatitude();
+		$long = $user->getLongitude();
 	}
 	
 	

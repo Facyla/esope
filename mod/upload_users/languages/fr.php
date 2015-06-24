@@ -1,55 +1,116 @@
 <?php
 /**
- * Elgg upload_users plugin language file
+ * Upload users language strings
+ * French
  *
  * @package upload_users
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jaakko Naakka / Mediamaisteri Group
- * @copyright Mediamaisteri Group 2008-2009
+ * @author Ismayil Khayredinov / Arck Interactive
+ * @translation Florian DANIEL aka Facyla 2015
+ * @copyright Mediamaisteri Group 2009
+ * @copyright ArckInteractive 2013
  * @link http://www.mediamaisteri.com/
+ * @link http://arckinteractive.com/
  */
-
 $fr = array(
+	/**
+	 * Admin Interface
+	 */
+	'admin:users:upload' => 'Import membres CSV',
+
+	'upload_users:error:cannot_open_file' => "Le fichier que vous avez envoyé ne semble pas être un fichier CSV valide, ou les paramètres que vous avez définis ne sont pas corrects",
 	
-	'admin:users:upload' => "Upload Users",
-	'upload_users:upload_users' => "Upload Users",
-	'upload_users:choose_file' => "Choisir un fichier",
-	'upload_users:encoding' => "Choisir l'encodage",
-	'upload_users:delimiter' => "Choisir le délimiteur",
-	'upload_users:send_email' => "Envoyer un email aux nouveaux membres",
-	'upload_users:yes' => "Oui",
-	'upload_users:no' => "Non",
+	'upload_users:incomplete' => 'Imports incomplets',
+	'upload_users:upload' => 'Charger un nouveau fichier',
+	'upload_users:instructions' => "Mode d'emploi",
+	'upload_users:mapping' => 'Correspondance des entêtes  CSV headers avec les champs de profil',
+	'upload_users:attributes' => 'Auto-générer les attributs obligatoires',
+	'upload_users:report' => 'Import terminé',
 
-	'upload_users:create_users' => "Créer des comptes utilisateurs",
-	'upload_users:success' => "Le compte utilisateur a bien été créé",
-	'upload_users:statusok' => "OK",
-	'upload_users:creation_report' => "Comptes utilisateurs créés",
-	'upload_users:process_report' => "Prévisualisation des comptes à créer",
-	'upload_users:no_created_users' => "Aucun compte utilisateur créé.",
-	'upload_users:number_of_accounts' => "Nombre total de comptes",
-	'upload_users:number_of_errors' => "Nombre total d'erreurs",
+	'upload_users:continue' => 'Suivant',
+	'upload_users:back' => 'Retour',
+	'upload_users:delete' => 'Supprimer le fichier',
 
-	'upload_users:submit' => "Envoyer",
+	'upload_users:choose_file' => 'Choisir un fichier',
 
-	'upload_users:upload_help' => "<p>Choisissez un fichier CSV et envoyez-le pour créer de nouveaux comptes utilisateurs. </p><p>La première ligne de ce fichier doit correspondre aux informations sur le contenu des colonnes (entêtes). Les champs obligatoires sont : username, name, email (les intitulés doivent être ceux des noms internes de ces données dans Elgg - en anglais - vous pouvez faire un export des utilisateurs existants pour obtenir la liste complète de ces champs).<br />Le champ 'password' est optionnel : s'il n'est pas défini, un mot de passe aléatoire sera généré. Si vous le souhaitez, vous pouvez envoyer automatiquement les informations de leur compte à chacun des nouveaux utilisateurs (conseillé). </p><p>Vous pouvez ajouter autant de champs supplémentaires que vous le souhaitez. Tous ces autres champs seront ajoutés aux informations du profil des membres. Si le délimiteur de votre fichier CSV est autre chose qu'une virgule ',' (conseillé), vous pouvez utiliser une virgule pour séparer les éléments d'une liste de tags</p><p>Voici un exemple de fichier CSV (attention, dans cet exemple la création du 1er compte ne fonctionnera pas car le mot de passe demandé est trop court ! minimum 6 caractères habituellement) :</p>",
+	'upload_users:encoding' => 'Encodage du fichier CSV',
 
-	/*
-	 * Error messages
-	 * 
+	'upload_users:delimiter' => 'Délimiteur',
+	'upload_users:delimiter:comma' => 'virgule (&#44;)',
+	'upload_users:delimiter:semicolon' => 'point-virguke (&#59;)',
+	'upload_users:delimiter:colon' => 'barre verticale (&#58;)',
+
+	'upload_users:enclosure' => "Séparateur de texte",
+	'upload_users:enclosure:doublequote' => 'guillemet double (&#34;)',
+	'upload_users:enclosure:singlequote' => 'guillemet simple (&#39;)',
+
+	'upload_users:mapping_template' => "Sélectionner un modèle de correspondance de l'entête existant",
+	'upload_users:new_template' => 'Nouveau modèle',
+
+	'upload_users:save_as_template' => "Entrer un nom pour enregistrer le modèle de correspondance de l'entête",
+	'upload_users:yes' => 'Oui',
+	'upload_users:no' => 'Non',
+
+	'upload_users:setting:notification' => 'Prévenir les membres par email lorsque leur compte est créé',
+	'upload_users:setting:update_existing_users' => 'Mettre à jour les informations du profil si le compte existe déjà',
+	'upload_users:setting:fix_usernames' => "Corriger les identifiants si la valeur ne correspond pas aux standards d'Elgg (par ex. si il contient des caractères spéciaux), et ajouter un numéro en suffixe si cet identifiant est déjà pris",
+	'upload_users:setting:fix_passwords' => "Générer de nouveaux mots de passe si la valeur ne correspond pas aux standards d'Elgg (par ex. s'il est trop court)",
+
+	'upload_users:create_users' => 'Créer les comptes des membres',
+	'upload_users:success' => 'Compte créé',
+	'upload_users:statusok' => 'Le compte peut être créé',
+	'upload_users:creation_report' => 'Comptes créés',
+	'upload_users:process_report' => 'Prévisualisation des comptes créés',
+	'upload_users:no_created_users' => 'Aucun compte créé.',
+	'upload_users:number_of_accounts' => 'Nombre total de comptes',
+	'upload_users:number_of_errors' => "Nombre d'erreurs",
+	'upload_users:submit' => 'Envoyer',
+	'upload_users:upload_help' => "
+		<p>Il est préféable d'inclure les colonnes suivantes dans votre fichier CSV :
+		<dl>
+			<dt><b>email</b></dt>
+			<dd>- ce champ est <b>obligatoire</b></dd>
+			<dt><b>username</b></dt>
+			<dd>identifiant - ce champ est optionnel, mais vivement conseillé</dd>
+			<dd>- s'il n'est pas présent, il vous sera demandé de sélectionner une série de champs dans votre fichier afin de pouvoir le générer automatiquement (par ex. à partir de l'email)</dd>
+			<dt><b>name</b></dt>
+			<dd>nom sur le site - ce champ est optionnel, mais fortement conseillé</dd>
+			<dd>- s'il n'est pas présent, il vous sera demandé de sélectionner une série de champs dans votre fichier afin de pouvoir le générer automatiquement (par ex. en ajoutant le nom et le prénom)</dd>
+			<dt><b>password</b></dt>
+			<dd>mot de passe - ce champ est optionnel</dd>
+			<dd>- s'il n'est pas présent, un mot de passe sera généré automatiquement</dd>
+		</dl>
+		</p>
+
+		<p>Pour de meilleurs résultats lors de l'import (ce n'est pas nécessaire, mais suggéré) utilisez la configuraiton suivante lors de la création de votre fichier CSV :
+		<dl>
+			<dt>Délimiteur</dt>
+			<dd>- virgule (&#44;)</dd>
+			<dt>Séparateur de texte</dt>
+			<dd>- guillemet double (&#34;)</dd>
+			<dt>Encodage des caractères</dt>
+			<dd>- UTF-8</dd>
+			<dt>Entêtes</dt>
+			<dd>- la première ligne de votre fichier CSV devrait correspondre aux entêtes (que vous pouvez faire correspondre à des champs de profil ou à des métadonnées personnalisées à l'étape suivante)</dd>
+			<dd>- utilisez des lettres en minuscule</dd>
+			<dd>- pas d'espace ni de caractère spécial</dd>
+		</dl>
+		</p>
+		
+
+		<p>Voici quelques exemples de fichiers CSV :</p>",
+	/**
+	 * Error Messages
 	 */
-
 	'upload_users:error:file_open_error' => "Erreur lors de l'ouverture du fichier",
-	'upload_users:error:wrong_csv_format' => "Fichier CSV mal formaté",
-
-
-	/*
-	 * emails
-	 * 
+	'upload_users:error:wrong_csv_format' => "Mauvais format du fichier CSV",
+	/**
+	 * Email Notifications
 	 */
+	'upload_users:email:message' => "Bonjour %s !
 
-	'upload_users:email:message' => "Bonjour %s!
-
-	Un compte utilisateur a été créé pour vous sur le site %s. Utilisez votre identifiant de connexion (ou votre email) et votre mot de passe pour vous identifier sur le site.
+	Un compte utilisateur a été créé pour vous sur %s. Utilisez votre identifiant de connexion (ou votre email) et votre mot de passe pour vous identifier sur le site.
 
 	Identifiant de connexion : %s
 	Mot de passe : %s
@@ -57,14 +118,51 @@ $fr = array(
 	Veuillez vous rendre sur %s pour vous identifier.
 
 	",
-	'upload_users:email:subject' => "Votre compte utilisateur pour %s",
+	'upload_users:email:subject' => "Votre compte sur %s",
+	/**
+	 * Miscellaneous
+	 */
+	'upload_users:random_cleartext_passowrd' => 'Mot de passe aléatoire',
+	'upload_users:mapping:instructions' => "Précisez la correspondance entre chaque entête du fichier CSV et les métadonnées et/ou les champs du profil du compte ; les listes déroulantes contiennent une liste des attributs et métadonnée du compte, ainsi que les champs de profils. Vous pouvez également sélectionner un nom de métadonnée personnalisé.",
+	'upload_users:mapping:instructions_required' => "Les attributs listés ci-dessous sont nécessaires pour créer des comptes et aucune correspondance avec un entête du fichier CSV n'a été définie. Veuillez préciser quels entêtes du fichier CSV doivent être utilisés pour ces champs (par ex. l'email) ou les éléments qui seront utilisés pour générer automatiquement ces champs (par ex. identifiant et nom)",
+	'upload_users:mapping:csv_header' => 'Entête CSV',
+	'upload_users:mapping:elgg_header' => 'Champ de profil ou nom de métadonnée correspondant',
+	'upload_users:mapping:access_id' => "Niveau d'accès",
+	'upload_users:mapping:value_type' => 'Type de valeur',
+	'upload_users:mapping:value_type:text' => 'Conserver comme texte',
+	'upload_users:mapping:value_type:tags' => 'Convertir en tags',
+	'upload_users:mapping:value_type:timestamp' => 'Convertir en date',
 
+	'upload_users:mapping:attribute' => 'Attribut',
+	'upload_users:mapping:components' => 'Eléments',
+	'upload_users:mapping:select' => 'sélection ...',
+	'upload_users:mapping:custom' => 'personnalisé ...',
+	'upload_users:mapping:guid' => 'GUID (seulement pour les mises à jour)',
+	'upload_users:mapping:username' => 'identifiant',
+	'upload_users:mapping:name' => 'nom',
+	'upload_users:mapping:email' => 'email',
+	'upload_users:mapping:password' => 'mot de passe',
+	'upload_users:mapping:user_upload_role' => 'nom du rôle',
 
-	/* MISC */
+	'upload_users:download_sample_help' => "Télécharger un exemple de fichier CSV avec les entêtes correspondant à l'ensemble des métadonnées actuellement présentes sur le site",
+	'upload_users:download_sample' => 'Télécharger',
 
-	'upload_users:mapping:custom' => "personnalisé ...",
+	'upload_users:status:mapping_pending' => '[Correspondance des champs requise]',
+	'upload_users:status:ready_for_import' => '[Prêt à importer]',
+	'upload_users:status:imported' => '[Importé]',
+
+	'upload_users:continue:map' => 'Définir la correspondance des champs',
+	'upload_users:continue:import' => 'Importer',
+	'upload_users:continue:import:warning' => "Les fichiers CSV de grande taille peuvent prendre plus de temps à importer. Veuillez ne pas rafraîchir après avoir validé l'import.",
+	'upload_users:continue:view_report' => 'Afficher le rapport',
+	'upload_users:continue:download_report' => 'Télécharger le rapport',
+
+	'upload_users:error:userexists' => 'Un compte existe déjà avec cet identifiant ou cet email',
+	'upload_users:error:empty_name' => "Le nom ne peut pas être vide",
+	'upload_users:error:invalid_guid' => "Aucun compte n'est associé à ce GUID",
+	'upload_users:error:update_email_username_mismatch' => "Impossible de mettre à jour le compte à cause d'une non-correspondance entre identifiant et email",
+	
 	
 );
 
 add_translation("fr",$fr);
-
