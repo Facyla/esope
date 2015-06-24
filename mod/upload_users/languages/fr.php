@@ -23,7 +23,7 @@ $fr = array(
 	
 	'upload_users:incomplete' => 'Imports incomplets',
 	'upload_users:upload' => 'Charger un nouveau fichier',
-	'upload_users:instructions' => "Mode d'emploi"
+	'upload_users:instructions' => "Mode d'emploi",
 	'upload_users:mapping' => 'Correspondance des entêtes  CSV headers avec les champs de profil',
 	'upload_users:attributes' => 'Auto-générer les attributs obligatoires',
 	'upload_users:report' => 'Import terminé',
