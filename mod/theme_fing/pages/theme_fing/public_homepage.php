@@ -120,7 +120,7 @@ $focus = elgg_view('cmspages/view',array('pagetype'=>"accueil-haut-milieu"));
 //$content .= elgg_view('cmspages/view',array('pagetype'=>"accueil-entete"));
 
 // COLONNE 1 : accueil gauche, agenda des groupes, groupes à la Une, nouveaux membres
-$content .= '<div style="width:28%; float:left;"><div style="padding:1ex;">';
+$content .= '<div style="width:28%; float:left;" class="home-static-container"><div style="padding:1ex;">';
 		$intro = elgg_view('cmspages/view',array('pagetype'=>"accueil-haut-gauche"));
 		if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div><br />';
 	
@@ -146,7 +146,7 @@ $content .= '</div></div>';
 
 
 // COLONNE PRINCIPALE : intro, focus, pins, activité ?
-$content .= '<div style="width:70%; float:right;"><div style="padding:1ex;">';
+$content .= '<div style="width:70%; float:right;" class="home-static-container"><div style="padding:1ex;">';
 		$intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
 		if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
 		
