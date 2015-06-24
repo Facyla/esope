@@ -33,13 +33,14 @@ $content .= elgg_view('leaflet/locateonmap');
 
 //$content .= elgg_view('leaflet/membersonmap');
 $all_members_map = leaflet_get_cached_data('all_members_map', 86400);
-if (!$all_members_map) {
+if ($all_members_map) {
+	$content .= '<p>' . elgg_echo('leaflet:warning:cacheddata') . '</p>';
+	$content .= '<p><em>' . elgg_echo('leaflet:warning:cache:daily') . '</em></p>';
+} else {
 	// @TODO display warning message with no map, and a message to reload in a few minutes ?
 	$all_members_map = elgg_view('leaflet/data/all_members_map');
 	leaflet_cache_data('all_members_map', $all_members_map);
 }
-$content .= '<p>' . elgg_echo('leaflet:warning:cacheddata') . '</p>';
-$content .= '<p><em>' . elgg_echo('leaflet:warning:cache:daily') . '</em></p>';
 $content .= $all_members_map;
 
 //$content .= elgg_view('leaflet/clickonmap');

@@ -5,8 +5,8 @@
 /* Batch function - Geocodes member coordinates
  */
 function leaflet_batch_geocode_member($user, $getter, $options) {
-	$location = $user->getLocation();
-	if (is_array($location)) $location = implode(', ', $location);
+	$location = $user->location;
+	if (is_array($location)) { $location = implode(', ', $location); }
 	$location = trim($location);
 	$forceupdate = false;
 	
@@ -50,7 +50,7 @@ function leaflet_batch_geocode_member($user, $getter, $options) {
 function leaflet_batch_add_member_marker($user, $getter, $options) {
 	$location = $user->location;
 	// Geocode only members locations that are set...
-	if (empty($location)) { return; }
+	if (!$location) { return; }
 	
 	
 	// Get coordinates
