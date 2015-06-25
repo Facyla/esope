@@ -35,6 +35,9 @@
 
 	@TODO Hook entity display to check if a given entity is a translation (and redirect to main entity)
 
+
+	@TODO Note on missing hook in elgg_view_entity : we may use the one in elgg_view, using its $params['vars'] to get the viewed entity...
+
 */
 
 // Init plugin
@@ -51,7 +54,10 @@ function multilingual_init() {
 	// Translate button to entities
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'multilingual_entity_menu_setup', 600);
 	
-	
+	// Intercept create/edit event to update metadata on objects
+	elgg_register_event_handler("create", "all", "multilingual_create_handler_event");
+	elgg_register_event_handler("update", "all", "multilingual_update_handler_event");
+	elgg_register_event_handler("delete", "all", "multilingual_delete_handler_event");
 	
 	/* Useful hooks to insert language links and provide the chosen translation version :
 	Note : we need to translate at least title + description
@@ -120,10 +126,63 @@ view, <view_name>
 // Page handler for custom URL
 function multilingual_page_handler($page) {
 	$include_path = elgg_get_plugins_path() . 'multilingual/pages/multilingual/';
-	// switch ($page[0]) {
-	if (isset($page[0])) set_input('guid', $page[0]);
-	if (include($include_path . 'multilingual.php')) { return true; }
+	if (isset($page[1])) set_input('guid', $page[1]);
+	if (isset($page[2])) set_input('locale', $page[2]);
+	switch ($page[0]) {
+		case 'translate':
+		case 'default':
+			if (include($include_path . 'translate.php')) { return true; }
+	}
 	
+	return false;
+}
+
+
+
+// Langues autorisées pour les traductions
+// Include main language or not in listing ?
+function multilingual_get_main_language() {
+	$main_lang = elgg_get_plugin_setting('main_locale', 'multilingual');
+	if (empty($main_lang)) {
+		global $CONFIG;
+		$main_lang = $CONFIG->language;
+	}
+	return $main_lang;
+}
+
+
+// Get entity locale
+function multilingual_get_entity_language($entity) {
+	if (!empty($entity->locale)) return $entity->locale;
+	
+	$main_lang = multilingual_get_main_language();
+	// Should we also set the default language ? this accelerates further checks
+	$entity->locale = $main_lang;
+	
+	return $main_lang;
+}
+
+
+
+// Langues autorisées pour les traductions
+// Include main language or not in listing ?
+function multilingual_available_languages($include_default = false) {
+	$main_lang = multilingual_get_main_language();
+	
+	$languages = elgg_get_plugin_setting('locales', 'multilingual');
+	$languages = str_replace(array(' ', "\n", "\r", ','), ',', $languages);
+	$languages = explode(',', $languages);
+	$languages = array_unique($languages);
+	$languages = array_filter($languages);
+	
+	if (is_array($languages)) {
+		$available_languages = array();
+		foreach ($languages as $code) {
+			if (!$include_default && ($code == $main_lang)) continue;
+			$available_languages[$code] = elgg_echo($code);
+		}
+		return $available_languages;
+	}
 	return false;
 }
 
@@ -136,11 +195,64 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 	//$entity_types = elgg_get_plugin_setting('types', 'multilingual');
 	//if (elgg_instanceof($entity, 'object')) {
 	if (elgg_instanceof($entity)) {
-		//$text = elgg_echo('multilingual:translations', array($entity->download_counter));
-		$text = "Traduire en EN";
-		$href = "multilingual?guid=" . $entity->guid;
-		$options = array('name' => 'multilingual', 'href' => $href, 'priority' => 500, 'text' => $text);
+		
+		$languages = multilingual_available_languages(true);
+		
+		$main_entity = multilingual_get_main_entity($entity);
+		$main_lang = multilingual_get_main_language();
+		$current_lang = multilingual_get_entity_language($entity);
+		
+		// Display current entity language
+		if ($entity->guid == $main_entity->guid) {
+			$title = elgg_echo('multilingual:menu:currentlocale', array($languages[$main_lang]));
+			$href = false;
+		} else {
+			$title = elgg_echo('multilingual:menu:viewinto', array($languages[$main_lang]));
+			$href = $main_entity->getURL();
+		}
+		$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $main_lang . '.gif" alt="' . $main_lang . '" title="' . $title . '" />';
+		$options = array('name' => 'multilingual-current', 'href' => $href, 'priority' => 118, 'text' => $text, 'title' => $title);
 		$return[] = ElggMenuItem::factory($options);
+		// Remove from new translations array
+		unset($languages[$main_lang]);
+		
+		// Display existing translations
+		$translations = multilingual_get_translations($main_entity);
+		if ($translations) {
+			foreach ($translations as $ent) {
+				if ($entity->guid == $ent->guid) {
+					$title = elgg_echo('multilingual:menu:currentlocale', array($languages[$ent->locale]));
+					$href = false;
+				} else {
+					$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->locale]));
+					$href = $ent->getURL() . '?locale=' . $ent->locale;
+				}
+				// <i class="fa fa-eye"></i>
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $ent->locale . '" title="' . $title . '" />';
+				$options = array('name' => 'multilingual-version-' . $ent->locale, 'href' => $href, 'priority' => 118, 'text' => $text, 'title' => $title);
+				$return[] = ElggMenuItem::factory($options);
+				// Remove from new translations array
+				unset($languages[$ent->locale]);
+			}
+		}
+		
+		// @TODO : use a different access rule for translations ?  then maybe a translator role could allow editing other languages versions (but alternative versions *only* - and not the main content)
+		if ($main_entity->canEdit()) {
+			foreach ($languages as $lang_code => $lang_name) {
+				if ($lang_code == $current_lang) { continue; }
+				$href = elgg_get_site_url() . 'multilingual/translate/' . $main_entity->guid . '/' . $lang_code;
+				// <i class="fa fa-plus"></i>
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $lang_code . '.gif" alt="' . $lang_code . '" />';
+				$title = elgg_echo('multilingual:menu:translateinto', array($languages[$lang_code]));
+				$options = array('name' => 'multilingual-version-' . $lang_code, 'href' => $href, 'priority' => 118, 'text' => $text, 'title' => $title, 'style' => "opacity:0.3;", 'is_action' => true, 'is_trusted' => true, 'confirm' => elgg_echo('multilingual:translate:confirm', array($lang_name)));
+				$return[] = ElggMenuItem::factory($options);
+			}
+		}
+		
+		/* Alternate version : single popup menu
+		$options = array('name' => 'multilingual-versions', 'href' => false, 'priority' => 900, 'text' => elgg_view('multilingual/menu/versions', array('entity' => $entity)));
+		$return[] = ElggMenuItem::factory($options);
+		*/
 	}
 	return $return;
 }
@@ -169,9 +281,9 @@ function multilingual_get_translation($entity, $lang_code = 'en'){
 			'relationship' => 'has_translation',
 			'relationship_guid' => $entity->guid,
 			'inverse_relationship' => false,
-			'metadata_name_value_pairs' => array('name' => 'lang', 'value' => $lang_code),
+			'metadata_name_value_pairs' => array('name' => 'locale', 'value' => $lang_code),
 			// Alternate version which supports regional variants
-			//'metadata_name_value_pairs' => array('name' => 'lang', 'value' => $lang_code . '%', 'operand' => 'LIKE'),
+			//'metadata_name_value_pairs' => array('name' => 'locale', 'value' => $lang_code . '%', 'operand' => 'LIKE'),
 		));
 	if ($translations) { return $translations[0]; }
 	return false;
@@ -181,7 +293,7 @@ function multilingual_get_translation($entity, $lang_code = 'en'){
 
 /* Return main entity for a given translation
  */
-function multilingual_get_translated_entity($translation){
+function multilingual_get_main_entity($translation){
 	// Get existing translated entity
 	$entities = elgg_get_entities_from_relationship(array(
 			'relationship' => 'translation_of',
@@ -189,7 +301,9 @@ function multilingual_get_translated_entity($translation){
 			'inverse_relationship' => false,
 		));
 	if ($entities) { return $entities[0]; }
-	return false;
+	
+	// If no translation found, we may consider it is the main entity ? or should we check ?
+	return $translation;
 }
 
 
@@ -202,10 +316,21 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 	
 	if (!elgg_instanceof($translation)) {
 		$translation = clone $entity;
-		$translation->owner_guid = $entity->guid;
+		// @TODO decide who is the owner..  it may be the original object (easy deletion + inheritance), or the original owner, or the current editor
+		//$translation->owner_guid = $entity->guid;
+		//$translation->owner_guid = elgg_get_logged_in_user_guid();
+		// @TODO : decide who is the container.. whether parent object or original container
 		$translation->container_guid = $entity->guid;
 		$translation->access_id = $entity->access_id;
-		$translation->lang = $lang_code;
+		$translation->locale = $lang_code;
+		
+		// Add a [to be translated] prefix to main known content properties
+		$lang_name = elgg_echo($lang_code);
+		$prefix = elgg_echo('multilingual:prefix:todo', array($lang_name));
+		$known_prop_and_meta = array('title', 'description', 'briefdescription', 'excerpt');
+		foreach($known_prop_and_meta as $meta) {
+			if (!empty($translation->{$meta})) { $translation->{$meta} = $prefix . $translation->{$meta}; }
+		}
 		
 		// Set a specific view so we can switch to main entity
 		$translation->view = 'entity/multilingual';
@@ -225,5 +350,32 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 }
 
 
+// Adds useful metadata for multilingual support
+function multilingual_create_handler_event($event, $type, $entity) {
+	if (elgg_instanceof($entity)) {
+		// Set language to main, if not set
+		if (empty($entity->locale)) $entity->locale = multilingual_get_main_language();
+		// Also set a multilingual view, so we can intercept the rendering (pseudo-hook)
+		if (empty($entity->view)) $entity->view = 'entity/multilingual';
+	}
+}
+
+// Adds metadata for multilingual support
+function multilingual_update_handler_event($event, $type, $entity) {
+	if (elgg_instanceof($entity)) {
+		// Update language to main, if not set
+		if (empty($entity->locale)) $entity->locale = multilingual_get_main_language();
+		// Also set a multilingual view, so we can intercept the rendering (pseudo-hook)
+		if (empty($entity->view)) $entity->view = 'entity/multilingual';
+	}
+}
+
+// Performs some cleaning tasks on entity removal
+function multilingual_delete_handler_event($event, $type, $entity) {
+	if (elgg_instanceof($entity)) {
+		// @TODO If it is a translation, forward to main entity !
+	}
+	
+}
 
 
