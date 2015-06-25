@@ -13,7 +13,7 @@ $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:
 //echo '<p><label>' . elgg_echo('plugin_template:settings:settingname'). ' ' . elgg_view('input/dropdown', array('name' => 'params[settingname]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->settingname)) . '</label><br /><em>' . elgg_echo('plugin_template:settings:settingname:details'). '</em></p>';
 
 
-// Example text setting
-//echo '<p><label>' . elgg_echo('plugin_template:settings:settingname'). ' ' . elgg_view('input/text', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</label><br /><em>' . elgg_echo('plugin_template:settings:settingname:details'). '</em></p>';
+// Avalaible languages
+echo '<p><label>' . elgg_echo('multilingual:settings:languages'). ' ' . elgg_view('input/rawtext', array('name' => 'params[languages]', 'value' => $vars['entity']->languages)) . '</label><br /><em>' . elgg_echo('multilingual:settings:languages:details'). '</em></p>';
 
 

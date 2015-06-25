@@ -120,10 +120,34 @@ view, <view_name>
 // Page handler for custom URL
 function multilingual_page_handler($page) {
 	$include_path = elgg_get_plugins_path() . 'multilingual/pages/multilingual/';
-	// switch ($page[0]) {
-	if (isset($page[0])) set_input('guid', $page[0]);
-	if (include($include_path . 'multilingual.php')) { return true; }
+	if (isset($page[1])) set_input('guid', $page[1]);
+	if (isset($page[2])) set_input('locale', $page[2]);
+	switch ($page[0]) {
+		case 'translate':
+		case 'default':
+			if (include($include_path . 'translate.php')) { return true; }
+	}
 	
+	return false;
+}
+
+
+
+// Langues autorisées pour les traductions
+function multilingual_available_languages() {
+	$languages = elgg_get_plugin_setting('languages', 'multilingual');
+	$languages = str_replace(array(' ', "\n", "\r", ','), ',', $languages);
+	$languages = explode(',', $languages);
+	$languages = array_unique($languages);
+	$languages = array_filter($languages);
+	
+	if (is_array($languages)) {
+		$available_languages = array();
+		foreach ($languages as $code) {
+			$available_languages[$code] = elgg_echo($code);
+		}
+		return $available_languages;
+	}
 	return false;
 }
 
@@ -136,11 +160,40 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 	//$entity_types = elgg_get_plugin_setting('types', 'multilingual');
 	//if (elgg_instanceof($entity, 'object')) {
 	if (elgg_instanceof($entity)) {
-		//$text = elgg_echo('multilingual:translations', array($entity->download_counter));
-		$text = "Traduire en EN";
-		$href = "multilingual?guid=" . $entity->guid;
-		$options = array('name' => 'multilingual', 'href' => $href, 'priority' => 500, 'text' => $text);
+		
+		$languages = multilingual_available_languages();
+		
+		$translations = multilingual_get_translations($entity);
+		// Existing translations
+		if ($translations) {
+			foreach ($translations as $ent) {
+				$href = $ent->getURL() . '?lang=' . $ent->lang;
+				// <i class="fa fa-eye"></i>
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->lang . '.gif" alt="' . $ent->lang . '" />';
+				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->lang]));
+				$options = array('name' => 'multilingual-version-' . $ent->lang, 'href' => $href, 'priority' => 500, 'text' => $text, 'title' => $title);
+				$return[] = ElggMenuItem::factory($options);
+				// Remove from new translations array
+				unset($languages[$ent->lang]);
+			}
+		}
+		
+		// @TODO : use a different access rule for translations ?  then maybe a translator role could allow editing other languages versions (but alternative versions *only* - and not the main content)
+		if ($entity->canEdit()) {
+			foreach ($languages as $lang_code => $lang_name) {
+				$href = elgg_get_site_url() . 'multilingual/translate/' . $entity->guid . '/' . $lang_code;
+				// <i class="fa fa-plus"></i>
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $lang_code . '.gif" alt="' . $lang_code . '" />';
+				$title = elgg_echo('multilingual:menu:translateinto', array($languages[$lang_code]));
+				$options = array('name' => 'multilingual-version-' . $lang_code, 'href' => $href, 'priority' => 501, 'text' => $text, 'title' => $title, 'style' => "opacity:0.3;", 'is_action' => true, 'is_trusted' => true, 'confirm' => elgg_echo('multilingual:translate:confirm'));
+				$return[] = ElggMenuItem::factory($options);
+			}
+		}
+		
+		/* Alternate version : single popup menu
+		$options = array('name' => 'multilingual-versions', 'href' => false, 'priority' => 900, 'text' => elgg_view('multilingual/menu/versions', array('entity' => $entity)));
 		$return[] = ElggMenuItem::factory($options);
+		*/
 	}
 	return $return;
 }

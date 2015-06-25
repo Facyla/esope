@@ -9,6 +9,8 @@ $fr = array(
 	'prevent_notifications:yes' => "Oui",
 	'prevent_notifications:no' => "Non",
 	'prevent_notifications:notsent' => "Aucune notification envoyée.",
+	'prevent_notifications:settings:notification_default' => "Réglage par défaut des notifications",
+	'prevent_notifications:settings:notification_default:details' => "Choisissez la valeur par défaut pour l'envoi des notifications. Sélectionnez Oui pour qu'elles soient activées par défaut (valeur par défaut), ou Non pour désactiver les notifications par défaut). Dans tous les cas, ce sera l'éditeur du contenu qui décide <i>in fine</i>, et ce réglage par défaut peut être surcharger par la vue du formulaire.",
 	
 	
 );
