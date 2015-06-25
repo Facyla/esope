@@ -56,8 +56,7 @@ function knowledge_database_init() {
 
 // Page handler for custom URL
 function knowledge_database_page_handler($page) {
-	global $CONFIG;
-	$include_path = $CONFIG->pluginspath . 'knowledge_database/pages/knowledge_database/';
+	$include_path = elgg_get_plugins_path() . 'knowledge_database/pages/knowledge_database/';
 	if (!isset($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
 		case 'define_field':
