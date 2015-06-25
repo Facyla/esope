@@ -135,7 +135,7 @@ function multilingual_page_handler($page) {
 
 // Langues autorisées pour les traductions
 function multilingual_available_languages() {
-	$languages = elgg_get_plugin_setting('languages', 'multilingual');
+	$languages = elgg_get_plugin_setting('locales', 'multilingual');
 	$languages = str_replace(array(' ', "\n", "\r", ','), ',', $languages);
 	$languages = explode(',', $languages);
 	$languages = array_unique($languages);
@@ -167,14 +167,14 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 		// Existing translations
 		if ($translations) {
 			foreach ($translations as $ent) {
-				$href = $ent->getURL() . '?lang=' . $ent->lang;
+				$href = $ent->getURL() . '?locale=' . $ent->locale;
 				// <i class="fa fa-eye"></i>
-				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->lang . '.gif" alt="' . $ent->lang . '" />';
-				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->lang]));
-				$options = array('name' => 'multilingual-version-' . $ent->lang, 'href' => $href, 'priority' => 500, 'text' => $text, 'title' => $title);
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $ent->locale . '" />';
+				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->locale]));
+				$options = array('name' => 'multilingual-version-' . $ent->locale, 'href' => $href, 'priority' => 500, 'text' => $text, 'title' => $title);
 				$return[] = ElggMenuItem::factory($options);
 				// Remove from new translations array
-				unset($languages[$ent->lang]);
+				unset($languages[$ent->locale]);
 			}
 		}
 		
@@ -222,9 +222,9 @@ function multilingual_get_translation($entity, $lang_code = 'en'){
 			'relationship' => 'has_translation',
 			'relationship_guid' => $entity->guid,
 			'inverse_relationship' => false,
-			'metadata_name_value_pairs' => array('name' => 'lang', 'value' => $lang_code),
+			'metadata_name_value_pairs' => array('name' => 'locale', 'value' => $lang_code),
 			// Alternate version which supports regional variants
-			//'metadata_name_value_pairs' => array('name' => 'lang', 'value' => $lang_code . '%', 'operand' => 'LIKE'),
+			//'metadata_name_value_pairs' => array('name' => 'locale', 'value' => $lang_code . '%', 'operand' => 'LIKE'),
 		));
 	if ($translations) { return $translations[0]; }
 	return false;
@@ -258,7 +258,7 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 		$translation->owner_guid = $entity->guid;
 		$translation->container_guid = $entity->guid;
 		$translation->access_id = $entity->access_id;
-		$translation->lang = $lang_code;
+		$translation->locale = $lang_code;
 		
 		// Set a specific view so we can switch to main entity
 		$translation->view = 'entity/multilingual';
