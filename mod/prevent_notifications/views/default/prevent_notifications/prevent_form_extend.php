@@ -1,5 +1,6 @@
 <?php
-$value = elgg_extract('value', $vars, 'yes');
+$default = elgg_get_plugin_setting('notification_default', 'prevent_notifications');
+$value = elgg_extract('value', $vars, $default);
 ?>
 <div id="prevent_notification">
 	<img src="<?php echo $vars['url']; ?>mod/prevent_notifications/graphics/notify.png" />

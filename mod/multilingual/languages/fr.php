@@ -21,7 +21,8 @@ $fr = array(
 	
 	// Notices and errors
 	'multilingual:translate:missingentity' => "Aucune entité à traduire.",
-	'multilingual:translate:alreadyexists' => "Translation already exists",
+	'multilingual:translate:alreadyexists' => "Cette version existe déjà.",
+	'multilingual:translate:newcreated' => "Une nouvelle version a été créée.",
 	
 	
 	
