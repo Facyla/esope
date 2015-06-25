@@ -35,7 +35,7 @@ if (elgg_instanceof($entity)) {
 	
 	$content .= '<h3>' . elgg_echo('multilingual:translate:version', array($lang_name)) . '</h3>';
 	$translation = multilingual_get_translation($entity, $lang);
-	$content .= elgg_view_entity($translation, array('locale' => $lang));
+	$content .= elgg_view_entity($translation, array('full_view' => true));
 	$content .= '<br />';
 	
 	

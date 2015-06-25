@@ -5,7 +5,7 @@
 
 $fr = array(
 	'multilingual' => "Support multilingue",
-	'multilingual:prefix:todo' => "[TODO %s] ",
+	'multilingual:prefix:todo' => "[A TRADUIRE EN %s] ",
 	
 	// Menus
 	'multilingual:menu:currentlocale' => "Langue : %s",
@@ -34,6 +34,7 @@ $fr = array(
 	'multilingual:translate:missingentity' => "Aucune entité à traduire.",
 	'multilingual:translate:newcreated' => "Une nouvelle version vient d'être créée.",
 	'multilingual:translate:alreadyexists' => "Une version dans cette langue existe déjà et a été chargée ci-dessous.",
+	'multilingual:error:cannotedit' => "Vous n'avez pas les droits pour modifier cette publication.",
 	
 	
 	

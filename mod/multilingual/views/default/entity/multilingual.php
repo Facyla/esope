@@ -8,18 +8,19 @@
 
 // Lang shoud be firstly set by views, because we might need multiple languages at the same time...
 $lang = elgg_extract('locale', $vars, false);
-if (!$lang) { $lang = get_input('lang'); }
-else unset($vars['locale']);
-$main_lang = multilingual_get_main_language();
+if (!$lang) { $lang = get_input('lang'); } else { unset($vars['locale']); }
+// Use prefered user language by default
+if (empty($lang)) { $lang = get_current_language(); }
+$main_lang = multilingual_get_main_language(); // Main site language
 
 $entity = elgg_extract('entity', $vars);
 
 
-// Get original entity
+// Get original entity - always useful
 $main_entity = multilingual_get_main_entity($entity);
 if (!$main_entity) {
 	error_log("Original content does not exist, updating translation.");
-	// @TODO : handle orphan entity (should not happen but has to be handled...)
+	// @TODO : handle orphan entity ? (should not happen but has to be handled...)
 	
 	// Quickest method : remove display view + relationship
 	/*
@@ -30,18 +31,32 @@ if (!$main_entity) {
 }
 
 
-// Select original entity if no language is set
-// Or the chosen translation if it is not already the good one
-/*
-if (empty($lang)) {
-	$entity = $main_entity;
-} else if ($translation->locale != $lang) {
-	$entity = multilingual_get_translation($main_entity, $lang);
-	// Default to main entity
-	if (!elgg_instanceof($entity)) { $entity = $main_entity; }
+// If it is a translation and we're not using the right URL, correct it
+if (($main_entity->guid != $entity->guid) && (full_url() == $entity->getURL())) {
+	$forward = $main_entity->getURL();
+	// Explicitely specify the wanted language if it not the default, or is user-specific
+	if (($lang != get_current_language()) || ($lang != $main_lang)) $forward .= '?locale=' . $entity->locale;
+	forward($forward);
 }
-*/
 
+// Select entity to be displayed
+// Main entity if no language is set
+// Or the chosen translation if it is not already the good one
+if (empty($lang) || ($main_entity->locale == $lang)) {
+	$entity = $main_entity;
+} else if ($entity->locale == $lang) {
+	// Keep passed entity
+} else if ($entity->locale != $lang) {
+	$entity = multilingual_get_translation($main_entity, $lang);
+}
+// Default to main entity if the chosen lang does not return any valid entity
+if (!elgg_instanceof($entity)) {
+	register_error("No content available, using original content.");
+	$entity = $main_entity;
+}
+
+// Update vars meta
+$vars['entity'] = $entity;
 
 /*
 if ($main_entity) {
@@ -86,6 +101,7 @@ if ($vars['full_view']) {
 	}
 }
 
-echo $contents;
+// @TODO : comments are attached to the page by the pages handler in each plugin - we need to force it if we want language-specific comments (or add some filtering ?)
 
+echo $contents;
 
