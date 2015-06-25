@@ -6,7 +6,10 @@
 
 
 // Set default value
-if (!isset($vars['entity']->main_locale)) { $vars['entity']->main_locale = get_current_language(); }
+if (!isset($vars['entity']->main_locale)) {
+	global $CONFIG;
+	$vars['entity']->main_locale = $CONFIG->language;
+}
 
 
 // Example yes/no setting

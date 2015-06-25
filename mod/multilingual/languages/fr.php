@@ -5,8 +5,10 @@
 
 $fr = array(
 	'multilingual' => "Support multilingue",
+	'multilingual:prefix:todo' => "[TODO %s] ",
 	
 	// Menus
+	'multilingual:menu:currentlocale' => "Langue : %s",
 	'multilingual:menu:versions' => "Versions",
 	'multilingual:menu:viewinto' => "Afficher en %s",
 	'multilingual:menu:translateinto' => "Créer une version en %s",
@@ -20,15 +22,18 @@ $fr = array(
 	
 	// Translation interface
 	'multilingual:translate' => "Créer une version dans une autre langue",
+	'multilingual:translate:instructions:title' => "Mode d'emploi",
+	'multilingual:translate:instructions' => "Pour éditer le contenu dans la nouvelle langue, veuillez éditer le contenu affiché ci-dessous. Les textes originaux ont été repris, il s'agit donc de les adapter pour les rendre disponible dans la langue choisie.",
 	'multilingual:translate:original' => "Version originale",
 	'multilingual:translate:version' => "Version en %s",
 	'multilingual:translate:otherversions' => "Autres versions",
 	'multilingual:translate:otherlanguages' => "Autre langues (non traduites)",
+	'multilingual:translate:currentediting' => "(en cours d'édition)",
 	
 	// Notices and errors
 	'multilingual:translate:missingentity' => "Aucune entité à traduire.",
 	'multilingual:translate:newcreated' => "Une nouvelle version vient d'être créée.",
-	'multilingual:translate:alreadyexists' => "Une version dans cette langue existe déjà.",
+	'multilingual:translate:alreadyexists' => "Une version dans cette langue existe déjà et a été chargée ci-dessous.",
 	
 	
 	

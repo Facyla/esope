@@ -21,38 +21,48 @@ if (elgg_instanceof($entity)) {
 	
 	$languages = multilingual_available_languages();
 	
-	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:original') . '</h3>';
-	$sidebar .= "<p>{$entity->guid} {$entity->title}</p>";
-	$sidebar .= '<br />';
-	
-	$content .= '<h3>' . elgg_echo('multilingual:translate:version', array($lang_name)) . '</h3>';
-	$translation = multilingual_get_translation($entity, $lang);
+	// Main content
 	if ($translation) {
-		system_message(elgg_echo('multilingual:translate:alreadyexists'));
+		$content .= '<blockquote>' . elgg_echo('multilingual:translate:alreadyexists') . '</blockquote>';
+		//system_message(elgg_echo('multilingual:translate:alreadyexists'));
 	} else {
 		$translation = multilingual_add_translation($entity, $lang);
 		//system_message(elgg_echo('multilingual:translate:newcreated'));
 		$content .= '<blockquote>' . elgg_echo('multilingual:translate:newcreated') . '</blockquote>';
 	}
-	$content .= "<p>{$translation->guid} {$translation->title}</p>";
-	$content .= elgg_view_entity($translation);
+	
+	$content .= elgg_view_module('info', elgg_echo('multilingual:translate:instructions:title'), '<div class="elgg-content">' . elgg_echo('multilingual:translate:instructions') . '</div>');
+	
+	$content .= '<h3>' . elgg_echo('multilingual:translate:version', array($lang_name)) . '</h3>';
+	$translation = multilingual_get_translation($entity, $lang);
+	$content .= elgg_view_entity($translation, array('locale' => $lang));
 	$content .= '<br />';
 	
+	
+	// Sidebar
+	$l_code = $ent->locale;
+	if (empty($l_code)) { $l_code = get_current_language(); }
+	$l_name = $languages[$l_code];
+	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:original') . '</h3>';
+	$sidebar .= '<p><a href="' . $base_url . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $l_code . '.gif" alt="' . $l_name . '" /> ' . $l_name . ' (' . $l_code . ') : ' . $entity->title . ' (' . $entity->guid . ')</a></p>';
+	$sidebar .= '<br />';
 	
 	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:otherversions') . '</h3>';
 	// Get all translations
 	$translations = multilingual_get_translations($entity);
 	foreach ($translations as $ent) {
 		if (!empty($ent->locale)) $l_name = elgg_echo($ent->locale);
-		$sidebar .= '<p><a href="' . $base_url . $ent->locale . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $l_name . '" /> ' . $l_name . ' (' . $ent->locale . ') : ' . $ent->title . ' (' . $ent->guid . ')</a></p>';
+		$sidebar .= '<p><a href="' . $base_url . $ent->locale . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $l_name . '" /> ' . $l_name . ' (' . $ent->locale . ') : ' . $ent->title . ' (' . $ent->guid . ')</a>';
+		if ($ent->locale == $lang) { $sidebar .= '<br /><em>' . elgg_echo('multilingual:translate:currentediting') . '</em>'; }
+		$sidebar .= '</p>';
 		// Remove from new translations array
 		unset($languages[$ent->locale]);
 	}
 	$sidebar .= '<br />';
 	
 	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:otherlanguages') . '</h3>';
-	foreach ($languages as $lang_code => $l_name) {
-		$sidebar .= '<p><a href="' . elgg_get_site_url() . 'multilingual/translate/' . $entity->guid . '/' . $lang_code . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $lang_code . '.gif" alt="' . $l_name . '" /> ' . elgg_echo('multilingual:menu:translateinto', array($languages[$lang_code])) . '</a></p>';
+	foreach ($languages as $l_code => $l_name) {
+		$sidebar .= '<p><a href="' . elgg_get_site_url() . 'multilingual/translate/' . $entity->guid . '/' . $l_code . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $l_code . '.gif" alt="' . $l_name . '" /> ' . elgg_echo('multilingual:menu:translateinto', array($languages[$l_code])) . '</a></p>';
 	}
 	$sidebar .= '<br />';
 	
