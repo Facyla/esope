@@ -99,7 +99,9 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 
 function elgg_cas_autologin() {
 	global $CONFIG;
-	if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
+	// Limit to homepage ?
+	//if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
+	if (elgg_get_viewtype() == 'default') {
 		// CAS autologin
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';

@@ -40,7 +40,7 @@ if (elgg_instanceof($entity)) {
 	
 	if (elgg_instanceof($translation)) {
 		$content .= '<h3>' . elgg_echo('multilingual:translate:version', array($lang_name)) . '</h3>';
-		$content .= elgg_view_entity($translation, array('full_view' => true));
+		$content .= elgg_view_entity($translation, array('full_view' => true, 'locale' => $lang));
 		$content .= '<br />';
 	}
 	
