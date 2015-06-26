@@ -431,6 +431,10 @@ function multilingual_create_handler_event($event, $type, $entity) {
 		if (empty($entity->locale)) $entity->locale = multilingual_get_main_language();
 		// Also set a multilingual view, so we can intercept the rendering (pseudo-hook)
 		if (empty($entity->view)) $entity->view = 'entity/multilingual';
+		
+		// @TODO If new entity is a translation, force owner and container to the original content 
+		// Note : different access id can be useful (draft)
+		
 	}
 }
 
@@ -441,13 +445,24 @@ function multilingual_update_handler_event($event, $type, $entity) {
 		if (empty($entity->locale)) $entity->locale = multilingual_get_main_language();
 		// Also set a multilingual view, so we can intercept the rendering (pseudo-hook)
 		if (empty($entity->view)) $entity->view = 'entity/multilingual';
+		
+		// @TODO If updated entity is a translation, force owner and container to the original content 
+		// Note : different access id can be useful (draft)
+		
+		// @TODO If it is the original content, updated translations accordingly
+		// Note : should access be synchronized
+		
 	}
 }
 
 // Performs some cleaning tasks on entity removal
 function multilingual_delete_handler_event($event, $type, $entity) {
 	if (elgg_instanceof($entity)) {
+		
 		// @TODO If it is a translation, forward to main entity !
+		
+		// @TODO If it is the original content, delete all translations
+		
 	}
 	
 }
