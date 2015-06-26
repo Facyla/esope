@@ -32,6 +32,7 @@ COMMENTS - HISTORY
  - plugin settings (main and availables languages)
  - plugins from language_selector (Coldtrick)
  - redirect to proper URL (for translations)
+ - add settings to define eligible object subtypes
 
 0.1 : 20150624 - Initial release
  - plugin structure

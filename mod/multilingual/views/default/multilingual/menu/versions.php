@@ -10,7 +10,7 @@ $content = '';
 $translations = multilingual_get_translations($entity);
 
 // @TODO : Add a single menu with both available languages and translate link ?
-$languages = multilingual_available_languages();
+$languages = multilingual_available_languages(false);
 
 
 $text = '<i class="fa fa-language"></i>Translations';
