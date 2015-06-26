@@ -90,11 +90,7 @@ if (is_array($recent_pins)) {
 		if ($ent_for_icon instanceof ElggEntity) { $icon = $ent_for_icon->getIcon("small"); }
 	
 		// Sous forme de vignettes avec extrait
-		if (elgg_is_logged_in()) {
-			$home_pins .= '<div class="home_pin search_listing" title="' . $ent->title . '">';
-		} else {
-			$home_pins .= '<div class="home_pin_public search_listing" title="' . $ent->title . '">';
-		}
+		$home_pins .= '<div class="home_pin_public search_listing" title="' . $ent->title . '">';
 		$home_pins .= '<div class="home_pin_content">';
 		$entitle = elgg_get_excerpt($ent->title, 60);
 		$home_pins .= '<a href="' . $ent->getURL() . '"><img src="'.$icon.'" class="groupthumb" style="float:left; margin-right:5px; width:40px; height:40px;" /><strong>' . $entitle . '</strong></a><br />';

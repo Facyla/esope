@@ -26,6 +26,11 @@
 	
 	<requires>
 		<type>plugin</type>
+		<name>vazco_text_captcha</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
 		<name>adf_public_platform</name>
 	</requires>
 	
