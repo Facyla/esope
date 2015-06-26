@@ -137,6 +137,9 @@ view, <view_name>
 	
 	elgg_register_page_handler('multilingual', 'multilingual_page_handler');
 	
+	// Ensure consistent URL for entities
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'multilingual_set_url');
+	
 }
 
 
@@ -156,6 +159,26 @@ function multilingual_page_handler($page) {
 	return false;
 }
 
+
+/**
+ * Format and return the URL for multilingual content
+ *
+ * @param string $hook
+ * @param string $type
+ * @param string $url
+ * @param array  $params
+ * @return string URL of entity.
+ */
+function multilingual_set_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity)) {
+		// Update URL only if entity is a translation
+		$main_entity = multilingual_get_main_entity($entity);
+		if ($main_entity->guid != $entity->guid) {
+			return $main_entity->getURL() . '?lang=' . $entity->locale;
+		}
+	}
+}
 
 
 // Langue principale et par défaut des entités
@@ -272,7 +295,8 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 						$class .= ' elgg-selected';
 					} else {
 						$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->locale]));
-						$href = $view_url . '?lang=' . $ent->locale;
+						//$href = $view_url . '?lang=' . $ent->locale;
+						$href = $ent->getURL();
 					}
 					$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $ent->locale . '" title="' . $title . '" />';
 					$return[] = ElggMenuItem::factory(array(
@@ -357,7 +381,7 @@ function multilingual_get_main_entity($translation){
 		));
 	if ($entities) { return $entities[0]; }
 	
-	// If no translation found, we may consider it is the main entity ? or should we check ?
+	// If no translation found, then it is the main entity
 	return $translation;
 }
 
