@@ -590,6 +590,10 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:disable_widgets') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $vars['entity']->groups_disable_widgets)) . '</label></p>';
 			// Add group activity
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</label></p>';
+			// Add group Wire
+			if (elgg_is_active_plugin('thewire')) {
+				echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_wire') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_wire]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_wire)) . '</label></p>';
+			}
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_publish_tools') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_publish_tools)) . '</label></p>';
 			// Discussion auto-refresh (using parameter ?autorefresh=auto)
