@@ -60,6 +60,10 @@ function esope_init() {
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
 	
+	// Add group Wire support (option)
+	// Note : also uses esope's event handler ("create", "object")
+	elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+	
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active

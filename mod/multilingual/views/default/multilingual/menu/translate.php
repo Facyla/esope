@@ -6,7 +6,7 @@ if (!$entity) { return true; }
 $guid = $entity->guid;
 $content = '';
 
-$languages = multilingual_available_languages();
+$languages = multilingual_available_languages(false);
 
 if ($languages) {
 	$text = '<i class="fa fa-language"></i>Translate !';

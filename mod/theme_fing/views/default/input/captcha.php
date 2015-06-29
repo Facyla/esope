@@ -1,6 +1,6 @@
 <?php
 // Generate a token which is then passed into the captcha algorithm for verification
-
+if (!elgg_is_active_plugin('vazco_text_captcha')) return;
 $challenge = vazco_text_captcha::getCaptchaChallenge();
 list($challenge_id, $challenge_question, $challenge_answer) = $challenge;  
 ?>

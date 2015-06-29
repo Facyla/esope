@@ -257,6 +257,10 @@ $en = array(
 	<b>%s</b><br />
 	Please check that your email contains only your reply (no signature, personnal information, former messages, etc.)",
 	
+	'postbymail:thewire:charlimitnotice' => "IMPORTANT NOTICE : when you reply to a Wire message, only the first 140 characters will be published!
+	
+	",
+	
 );
 
 add_translation("en", $en);

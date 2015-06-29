@@ -49,7 +49,7 @@ $french = array(
 	
 	'theme_fing:register:create' => "Créez votre compte", 
 	'theme_fing:register:participate' => "et participez aux projets et recherche de la Fing", 
-	'theme_fing:register:3minutes'=> "3 minutes pour ouvrir un compte",
+	'theme_fing:register:3minutes'=> "1 minute pour ouvrir un compte",
 	'theme_fing:register:prefill' => "Pré-remplissez votre inscription avec :",
 	'theme_fing:register:createwithmail' => "Ou inscrivez-vous avec votre email :",
 	'theme_fing:register:discoverwork' => "Découvrez nos travaux en cours",

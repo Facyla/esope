@@ -681,6 +681,7 @@ $en = array(
 	'adf_platform:settings:groups:topmenu:help' => "This menu lets you add up to 8 custom tabs, by adding customtab1 to customtab8 to groups (easiest is to use profile_manager groups fields config).",
 	'adf_platform:settings:groups:disable_widgets' => "Remove tools widgets on group home",
 	'adf_platform:settings:groups:add_activity' => "Add group activity on group home",
+	'adf_platform:settings:groups:add_wire' => "Add Wire form on group home",
 	'adf_platform:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",

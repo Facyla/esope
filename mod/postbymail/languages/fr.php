@@ -257,6 +257,10 @@ $french = array(
 	<b>%s</b><br />
 	Veuillez vérifier que votre email ne contient que le texte à publier (pas de signature...).",
 	
+	'postbymail:thewire:charlimitnotice' => "IMPORTANT : lorsque vous répondez à un message du Fil, seuls les 140 premiers caractères seront pris en compte et publiés !
+	
+	",
+	
 );
 
 add_translation("fr", $french);

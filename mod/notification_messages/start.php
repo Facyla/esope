@@ -11,8 +11,6 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
  * Init adf_notification_messages plugin.
  */
 function notification_messages_init() {
-	global $CONFIG;
-	
 	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
 	if ($messages_send != 'no') {
 		$action_path = elgg_get_plugins_path() . 'notification_messages/actions/messages';

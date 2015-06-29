@@ -1,6 +1,6 @@
 <?php
 /**
- * Wire add form body
+ * Wire add to group form body (access limited to group members)
  *
  * @uses $vars['post']
  */
