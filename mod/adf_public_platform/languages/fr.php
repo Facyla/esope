@@ -15,6 +15,7 @@ $fr = array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	'option:none' => "(aucune sélection)",
+	'option:groupoption' => "Option du groupe",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
@@ -683,6 +684,7 @@ $fr = array(
 	'adf_platform:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'adf_platform:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
 	'adf_platform:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
+	'esope:groups:enablethewire' => "Activer le Fil (accès réservé aux membres du groupe)",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",

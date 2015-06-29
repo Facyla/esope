@@ -63,6 +63,12 @@ function esope_init() {
 	// Add group Wire support (option)
 	// Note : also uses esope's event handler ("create", "object")
 	elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
+		$enable_thewire_group = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+		if ($enable_thewire_group == 'groupoption') {
+			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
+		}
+	}
 	
 	
 	// Ajout interface de chargement
@@ -894,7 +900,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	/* Returns translated label for a specific profile type (false if not found) */
 	function esope_get_profiletype_label($profiletype_guid) {
 		$profiletype = get_entity($profiletype_guid);
-		if (elgg_instanceof($profiletype, 'object')) {
+		if (elgg_instanceof($profiletype, 'object', CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE)) {
 			if (!empty($profiletype->metadata_label)) return $profiletype->metadata_label;
 			else return elgg_echo('profile:types:' . $profiletype);
 		}

@@ -11,6 +11,27 @@
 	
 	<category>content</category>
 	
+	<screenshot>
+		<description>An example post (in french)</description>
+		<path>graphics/screenshots/1_Original_post.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Add new English translation</description>
+		<path>graphics/screenshots/2_Translating_to_english.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Translation created, ready to edit</description>
+		<path>graphics/screenshots/3_Translation_created_ready_to_edit.png</path>
+	</screenshot>
+	<screenshot>
+		<description>English version edition</description>
+		<path>graphics/screenshots/4_Translation_edition.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Post in english version</description>
+		<path>graphics/screenshots/5_Translated_version.png</path>
+	</screenshot>
+
 	<activate_on_install>false</activate_on_install>
 	
 	<requires>
