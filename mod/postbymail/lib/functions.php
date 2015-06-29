@@ -160,6 +160,11 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				
 				// Set the message as read if told to
 				if ($markSeen) { $msgbody = imap_body($mailbox, $uid, FT_UID); } else { $msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK); }
+				// @TODO : hack temporaire pour les cas où les hooks et events bloquent l'exécution des actions post-traitement du message
+				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
+				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
+				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
+
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
@@ -795,7 +800,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				/**********************************/
 				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
 				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
-				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
+				//imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID); // => déplacé en haut de boucle pour éviter les multi-publications (en cas d'interruption de l'exécution avant marquage et déplacement du message)
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
 				if ($published) {
 					imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
