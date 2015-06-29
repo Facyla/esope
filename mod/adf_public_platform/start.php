@@ -881,11 +881,31 @@ if (elgg_is_active_plugin('profile_manager')) {
 		}
 		return false;
 	}
+	
+	/* Returns metadata name for a specific profile type (false if not found) */
+	function esope_get_profiletype_name($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object')) {
+			return strtolower($profiletype->metadata_name);
+		}
+		return false;
+	}
+	
+	/* Returns translated label for a specific profile type (false if not found) */
+	function esope_get_profiletype_label($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object')) {
+			if (!empty($profiletype->metadata_label)) return $profiletype->metadata_label;
+			else return elgg_echo('profile:types:' . $profiletype);
+		}
+		return false;
+	}
 
 	/* Returns all profile types as $profiletype_guid => $profiletype_name
 	 * Can also return translated name (for use in a dropdown input)
+	 * And also use metadata name as key (only when using translated name)
 	 */
-	function esope_get_profiletypes($use_translation = false) {
+	function esope_get_profiletypes($use_translation = false, $use_meta_key = false) {
 		$profile_types_options = array(
 				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
@@ -894,7 +914,13 @@ if (elgg_is_active_plugin('profile_manager')) {
 			foreach($custom_profile_types as $type) {
 				$profile_type = strtolower($type->metadata_name);
 				if ($use_translation) {
-					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
+					if (!empty($type->metadata_label)) $profile_type_name = $type->metadata_label;
+					else $profile_type_name = elgg_echo('profile:types:' . $profile_type);
+					if ($use_meta_key) {
+						$profiletypes[$profile_type] = $profile_type_name;
+					} else {
+						$profiletypes[$type->guid] = $profile_type_name;
+					}
 				} else {
 					$profiletypes[$type->guid] = $profile_type;
 				}

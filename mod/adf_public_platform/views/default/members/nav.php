@@ -17,10 +17,10 @@ if ($members_newest != 'no') $tabs['newest'] = array('title' => elgg_echo('membe
 if ($members_popular != 'no') $tabs['popular'] = array('title' => elgg_echo('members:label:popular'), 'url' => "members/popular", 'selected' => $vars['selected'] == 'popular');
 
 // List profile types
-if ($members_profiletypes == 'yes') {
-	$profiletypes = esope_get_profiletypes();
-	foreach ($profiletypes as $id => $profiletype) {
-		$tabs[$profiletype] = array('title' => elgg_echo('profile:types:' . $profiletype), 'url' => "members/$profiletype", 'selected' => $vars['selected'] == $profiletype);
+if (($members_profiletypes == 'yes') && elgg_is_active_plugin('profile_manager')) {
+	$profiletypes = esope_get_profiletypes(true, true);
+	foreach ($profiletypes as $profiletype => $profiletype_name) {
+		$tabs[$profiletype] = array('title' => $profiletype_name, 'url' => "members/$profiletype", 'selected' => $vars['selected'] == $profiletype);
 	}
 }
 
