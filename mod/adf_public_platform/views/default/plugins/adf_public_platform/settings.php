@@ -20,6 +20,9 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
 
+$no_yes_groupoption_opt = $no_yes_opt;
+$no_yes_groupoption_opt['groupoption'] = elgg_echo('option:groupoption');
+
 $replace_homepage_opt = $no_yes_opt;
 $replace_public_homepage_opt = array('default' => elgg_echo('adf_platform:replacehome:default'), 'cmspages' => elgg_echo('adf_platform:replacehome:cmspages'), 'no' => elgg_echo('adf_platform:replacehome:no') );
 
@@ -592,7 +595,7 @@ $(function() {
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_activity') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_activity)) . '</label></p>';
 			// Add group Wire
 			if (elgg_is_active_plugin('thewire')) {
-				echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_wire') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_wire]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_wire)) . '</label></p>';
+				echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_wire') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_wire]', 'options_values' => $no_yes_groupoption_opt, 'value' => $vars['entity']->groups_add_wire)) . '</label></p>';
 			}
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:add_publish_tools') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->groups_add_publish_tools)) . '</label></p>';

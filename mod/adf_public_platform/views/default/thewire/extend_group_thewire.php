@@ -3,7 +3,13 @@
 */
 
 $add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
-if ($add_wire != 'yes') { return; }
+switch ($add_wire) {
+	case 'yes': break; 
+	case 'groupoption':
+		if (elgg_get_page_owner_entity()->thewire_enable != 'yes') return;
+		break; 
+	default: return;
+}
 
 $action = elgg_get_site_url() . "action/thewire/add";
 
