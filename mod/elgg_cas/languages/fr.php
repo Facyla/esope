@@ -2,7 +2,6 @@
 /**
  * French strings
  */
-global $CONFIG;
 
 $fr = array(
 	'elgg_cas:title' => "Connexion avec CAS",
@@ -13,6 +12,7 @@ $fr = array(
 	'elgg_cas:login:validcas' => "Authentification CAS valide",
 	'elgg_cas:noaccountyet' => "Pas encore de compte créé",
 	'elgg_cas:login:details' => "Personnel Inria, veuillez utiliser la connexion CAS. Si votre compte Iris n'existe pas encore, il sera créé lors de votre première connexion.<br />Si vous ne disposez pas de compte Inria ou si celui-ci n'est plus actif, veuillez utiliser la connexion par identifiant / mot de passe",
+	'elgg_cas:user:clicktoregister' => "Cliquez ici pour créer votre compte",
 	
 	'elgg_cas:settings:autologin' => "Login CAS automatique.",
 	'elgg_cas:settings:autologin:details' => "Si l'identification automatique via CAS est activée, les membres seront connectés au réseau s'ils ont une authentification CAS active. Si elle n'est pas activée, il faut cliquer sur la connexion via CAS pour se connecter.",
@@ -33,9 +33,9 @@ $fr = array(
 	'elgg_cas:loginfailed' => "Echec de la connexion",
 	'elgg_cas:logged:nocas' => "Vous êtes actuellement connecté sans utiliser CAS.",
 	'elgg_cas:logged:cas' => "Vous êtes actuellement connecté via CAS avec le compte <b>%s</b>.",
-	'elgg_cas:confirmcaslogin' => 'Vous utilisez sur ce site le compte <b>%1$s</b> (%2$s). <br />Pour vous connecter avec votre compte CAS, veuillez d\'abord <a href="' . $CONFIG->url . 'action/logout">vous déconnecter</a>, puis vous identifier avec CAS.',
-	'elgg_cas:confirmchangecaslogin' => 'Vous utilisez sur ce site le compte <b>%1$s</b> (%2$s). <br />Pour vous connecter avec un autre compte CAS, veuillez d\'abord <a href="' . $CONFIG->url . 'action/logout">vous déconnecter du compte que vous utilisez</a>, puis vous identifier avec CAS.',
-	'elgg_cas:alreadylogged' => 'Vous utilisez actuellement le compte <b>%3$s</b> (%4$s), et tentez de vous connecter avec le compte CAS <b>%1$s</b> (%2$s). <br />Pour vous connecter avec votre compte CAS <b>%1$s</b>, veuillez d\'abord <a href="' . $CONFIG->url . 'action/logout">vous déconnecter du compte que vous utilisez</a>.',
+	'elgg_cas:confirmcaslogin' => 'Vous utilisez sur ce site le compte <b>%1$s</b> (%2$s). <br />Pour vous connecter avec votre compte CAS, veuillez d\'abord <a href="' . elgg_get_site_url() . 'action/logout">vous déconnecter</a>, puis vous identifier avec CAS.',
+	'elgg_cas:confirmchangecaslogin' => 'Vous utilisez sur ce site le compte <b>%1$s</b> (%2$s). <br />Pour vous connecter avec un autre compte CAS, veuillez d\'abord <a href="' . elgg_get_site_url() . 'action/logout">vous déconnecter du compte que vous utilisez</a>, puis vous identifier avec CAS.',
+	'elgg_cas:alreadylogged' => 'Vous utilisez actuellement le compte <b>%3$s</b> (%4$s), et tentez de vous connecter avec le compte CAS <b>%1$s</b> (%2$s). <br />Pour vous connecter avec votre compte CAS <b>%1$s</b>, veuillez d\'abord <a href="' . elgg_get_site_url() . 'action/logout">vous déconnecter du compte que vous utilisez</a>.',
 
 	
 );
