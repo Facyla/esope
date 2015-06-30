@@ -135,7 +135,7 @@ if (elgg_instanceof($user, 'user')) {
 					error_log("Not active account");
 				}
 		} else if (($casregister == 'yes') && !$register) {
-			$content .= '<a href"?register=yes" class="elgg-button elgg-button-action">' . elgg_echo('elgg_cas:user:clicktoregister') . '</a>';
+			$content .= '<a href="?register=yes" class="elgg-button elgg-button-action">' . elgg_echo('elgg_cas:user:clicktoregister') . '</a>';
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}
