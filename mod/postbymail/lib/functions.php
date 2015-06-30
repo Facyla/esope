@@ -345,7 +345,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				
 				if ($mailpost && !empty($post_key)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					// @TODO pass and retrieve arrays to avoid settings unique vars..
 					//$post_check = postbymail_checkeligible_post($post_key, $member, $post_subtype, $post_access, $hash);
 					$post_check = postbymail_checkeligible_post($pbm_params);
 					$mailpost_check = $post_check['check']; // Ok pour publier ?
@@ -357,6 +357,10 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					$report = $post_check['report'];
 					$body .= $report;
 					if ($debug) $admin_reply .= $report;
+					
+					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
+					global $SESSION;
+					if (elgg_instanceof($post_owner, 'user')) { $SESSION['user'] = $post_owner; }
 					//$sender_reply .= $report;
 				}
 				// Désactivation de l'autre fonction si la publication par clef est valide
@@ -369,7 +373,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				// Si les réponses par mail sont activées, on vérifie qu'on a les paramètres requis
 				if ($mailreply && !empty($guid)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					// @TODO pass and retrieve arrays to avoid settings unique vars..
 					//$reply_check = postbymail_checkeligible_reply($entity, $member, $post_body, $message->headers, $hash);
 					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
@@ -380,6 +384,10 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					$body .= $report;
 					//$admin_reply .= $report;
 					//$sender_reply .= $report;
+					
+					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
+					global $SESSION;
+					if (elgg_instanceof($member, 'user')) { $SESSION['user'] = $member; }
 				}
 				
 				

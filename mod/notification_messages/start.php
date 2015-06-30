@@ -504,12 +504,14 @@ if (elgg_is_active_plugin('comment_tracker')) {
 		//if ($type == 'annotation' && elgg_is_logged_in()) {
 		if ($type == 'annotation') {
 			if ($annotation->name == "generic_comment" || $annotation->name == "group_topic_post") {
-				$user = get_user($annotation->owner_guid);
+				//$user = get_user($annotation->owner_guid);
+				$user = $annotation->getOwnerEntity();
 				
 				// ESOPE : subscribe first so we can notify if self-notification is enabled
 				// subscribe the commenter to the thread if they haven't specifically unsubscribed
 				//$user = get_user($annotation->owner_guid);
-				$entity = get_entity($annotation->entity_guid);
+				//$entity = get_entity($annotation->entity_guid);
+				$entity = $annotation->getEntity();
 			
 				$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $user->guid, 'comment_tracker');
 			
@@ -539,7 +541,8 @@ if (elgg_is_active_plugin('comment_tracker')) {
 	
 		if ($entity instanceof ElggObject) {
 		
-			$container = get_entity($entity->container_guid);
+			//$container = get_entity($entity->container_guid);
+			$container = $entity->getContainerEntity();
 			$group_lang = '';
 			if (elgg_instanceof($container, 'group')) { $group_lang = 'group:'; }
 			if ($entity->getSubtype() == 'groupforumtopic') {
@@ -577,16 +580,8 @@ if (elgg_is_active_plugin('comment_tracker')) {
 				}
 			}
 			
-		
-			$entity_link = elgg_view('output/url', array(
-				'url' => $entity->getUrl(),
-				'text' => $entity->title,
-			));
-		
-			$commenter_link = elgg_view('output/url', array(
-				'url' => $ann_user->getUrl(),
-				'text' => $ann_user->name,
-			));
+			$entity_link = '<a href="' . $entity->getURL() . '">' . $entity->title . '</a>';
+			$commenter_link = '<a href="' . $ann_user->getURL() . '">' . $ann_user->name . '</a>';
 		
 			$options = array(
 				'relationship' => COMMENT_TRACKER_RELATIONSHIP,
