@@ -15,8 +15,8 @@ $en = array(
 	
 	'elgg_cas:settings:autologin' => "CAS autologin.",
 	'elgg_cas:settings:autologin:details' => "If activated, a valid CAS authentication will log the user in. If disabled, members need to connect through a login page.",
-	'elgg_cas:settings:casregister' => "Automatic account creation",
-	'elgg_cas:settings:casregister:details' => "If CAS account creation is enabled, an Elgg account will be created for any valid CAS account, as soon as the corresponding user tries to connect.",
+	'elgg_cas:settings:casregister' => "CAS account creation",
+	'elgg_cas:settings:casregister:details' => "If CAS account creation is enabled, an Elgg account will be created for any valid CAS account, as soon as the corresponding user tries to connect. Use Auto to create it from any page, and Yes to enable account creation through CAS (with a manuel confirmation).",
 	'elgg_cas:settings:enable_webservice' => "Enable CAS auth for webservices",
 	'elgg_cas:settings:cas_library' => "Choose CAS library",
 	
