@@ -14,7 +14,7 @@ function registration_filter($email = null) {
 	$blacklist_enable = elgg_get_plugin_setting('blacklist_enable', 'registration_filter');
 	
 	/* Whitelist mode */
-	if ($whitelist_enable != 'no') {
+	if ($whitelist_enable == 'yes') {
 		// Get and prepare valid domain config array from plugin settings
 		$whitelist = elgg_get_plugin_setting('whitelist', 'registration_filter');
 		$whitelist = preg_replace('/\r\n|\r/', "\n", $whitelist);
