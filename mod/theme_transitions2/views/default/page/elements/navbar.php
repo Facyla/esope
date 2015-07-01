@@ -20,6 +20,6 @@ echo elgg_view('core/account/login_dropdown');
 	// Transitions² : use custom site menu
 	$menu = elgg_get_plugin_setting('menu_site', 'theme_transitions2');
 	if (empty($menu)) $menu = 'site';
-	echo elgg_view_menu($menu, array('class' => "elgg-menu-site elgg-menu-site-default clearfix"));
+	echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-site elgg-menu-site-default clearfix"));
 	?>
 </div>

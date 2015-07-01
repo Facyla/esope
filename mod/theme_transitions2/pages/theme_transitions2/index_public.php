@@ -11,24 +11,34 @@ $autofeed = FALSE;
 */
 
 
-$content = 'Contenu public';
+$content = '';
 $title = 'Titre public';
 $sidebar = 'Sidebar publique';
 
-$content .= '<div>BLOC HEADER ET NAVIGATION</div>';
-$content .= '<div>';
+$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+
+$content .= 'BLOC HEADER ET NAVIGATION';
+$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+
 $content .= '<div class="" style="width:60%; float:left;">BLOC FOCUS / SLIDER</div>';
 $content .= '<div class="" style="width:36%; float:right;">BLOC CONTRIBUEZ</div>';
-$content .= '</div>';
+$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+
 $content .= '<div>BLOC RECHERCHE</div>';
+$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+
 $content .= '<div>BLOC CATALOGUE</div>';
+$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+
 $content .= '<div>BLOC FOOTER</div>';
 
 
-$body = elgg_view_layout('one_column', array(
+/*
+$content = elgg_view_layout('one_column', array(
 	'content' => $content,
 	'title' => $title,
 	'sidebar' => $sidebar,
 ));
+*/
 
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, $content);
