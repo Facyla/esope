@@ -39,7 +39,7 @@ function rssimport_init() {
 	elgg_register_plugin_hook_handler('object:notifications', 'all', 'rssimport_prevent_notification', 1);
 
 	// create import urls
-	elgg_register_entity_url_handler('object', 'rssimport', 'rssimport_url_handler');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'rssimport_url_handler');
 	
 	// add group configurations for enabled tools
 	$types = array('blog', 'bookmarks', 'pages');
@@ -186,9 +186,12 @@ function rssimport_pagesetup() {
 
 
 // Import URL
-function rssimport_url_handler($rssimport) {
-	$container = $rssimport->getContainerEntity();
-	return elgg_get_site_url() . "rssimport/{$container->guid}/{$rssimport->import_into}/{$rssimport->guid}";
+function rssimport_url_handler($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	$container = $entity->getContainerEntity();
+	if (elgg_instanceof($entity, 'object', 'rssimport')) {
+		return elgg_get_site_url() . "rssimport/{$container->guid}/{$entity->import_into}/{$entity->guid}";
+	}
 }
 
 
