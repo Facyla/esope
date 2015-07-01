@@ -12,25 +12,24 @@ $autofeed = FALSE;
 
 
 $content = '';
-$title = 'Titre public';
-$sidebar = 'Sidebar publique';
+$title = 'Transitions²';
+$sidebar = '';
 
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
-$content .= 'BLOC HEADER ET NAVIGATION';
+$slider = elgg_view('slider/slider');
+$content .= elgg_view_layout('one_sidebar', array('title' => false, 'content' => 'SLIDER / BLOC FOCUS<br />'.$slider, 'sidebar' => 'CONTRIBUEZ'));
+//$content .= '<div class="" style="width:60%; float:left;"> / SLIDER</div>';
+//$content .= '<div class="" style="width:36%; float:right;">BLOC CONTRIBUEZ</div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
-$content .= '<div class="" style="width:60%; float:left;">BLOC FOCUS / SLIDER</div>';
-$content .= '<div class="" style="width:36%; float:right;">BLOC CONTRIBUEZ</div>';
+$search = elgg_view('search/header');
+$content .= elgg_view_layout('one_column', array('title' => false, 'content' => 'BLOC RECHERCHE<br />'.$search));
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
-$content .= '<div>BLOC RECHERCHE</div>';
+$catalogue = elgg_list_entities(array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery'));
+$content .= elgg_view_layout('one_column', array('title' => false, 'content' => 'BLOC CATALOGUE<br />'.$catalogue));
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
-
-$content .= '<div>BLOC CATALOGUE</div>';
-$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
-
-$content .= '<div>BLOC FOOTER</div>';
 
 
 /*
