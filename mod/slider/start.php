@@ -58,17 +58,19 @@ function slider_plugin_init() {
 	$js = elgg_get_simplecache_url('js', 'slider/edit');
 	elgg_register_js('elgg.slider.edit', $js);
 	
-	// Register a URL handler for CMS pages
-	elgg_register_entity_url_handler('object', 'slider', 'slider_url');
+	// Register a URL handler for sliders
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'slider_url');
 	
 }
 
 
-/* Populates the ->getUrl() method for cmspage objects */
-function slider_url($slider) {
-	return elgg_get_site_url() . "slider/view/" . $slider->guid;
+/* Populates the ->getUrl() method for slider objects */
+function slider_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'slider')) {
+		return elgg_get_site_url() . 'slider/view/' . $entity->pagetype;
+	}
 }
-
 
 
 /* Gets a slider by its name, allowing theming on different instances

@@ -26,8 +26,7 @@ function survey_init() {
 	elgg_register_page_handler('survey','survey_page_handler');
 
 	// Register a URL handler for survey posts
-	elgg_register_entity_url_handler('object','survey','survey_url');
-	//elgg_register_plugin_hook_handler('entity:url', 'object', 'survey_url'); // Elgg 1.10
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'survey_url');
 
 	// notifications
 	$send_notification = elgg_get_plugin_setting('send_notification', 'survey');
@@ -170,23 +169,16 @@ function survey_page_handler($page) {
 /**
  * Return the url for survey objects
  */
-function survey_url($survey) {
-	$title = elgg_get_friendly_title($survey->title);
-	return  "survey/view/" . $survey->guid . "/" . $title;
-}
-/* Elgg 1.10
 function survey_url($hook, $type, $url, $params) {
 	$survey = $params['entity'];
-	if ($survey instanceof Survey) {
-		if (!$survey->getOwnerEntity()) {
-			// default to a standard view if no owner.
-			return false;
-		}
+	if (elgg_instanceof($entity, 'object', 'survey')) {
+		// default to a standard view if no owner.
+		if (!$survey->getOwnerEntity()) { return false; }
 		$title = elgg_get_friendly_title($survey->title);
 		return "survey/view/" . $survey->guid . "/" . $title;
 	}
 }
-*/
+
 
 /**
  * Add a menu item to an owner block
