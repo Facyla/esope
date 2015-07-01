@@ -22,9 +22,9 @@ if (elgg_instanceof($entity)) {
 		echo '<p>' . elgg_echo('guidtool:entity:disabled') . '</p>';
 		// @TODO enable it ?
 	}
+	echo elgg_view('export/entity', array('entity' => $entity));
 } else {
 	echo '<p>' . elgg_echo('guidtool:entity:invalid') . '</p>';
 }
 
-echo elgg_view('export/entity', array('entity' => $entity));
 
