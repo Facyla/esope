@@ -9,25 +9,40 @@
 	<website>http://items.fr</website>
 	<copyright>See COPYRIGHT.txt</copyright>
 	<license>GNU General Public License version 2</license>
+	
 	<requires>
 		<type>elgg_release</type>
 		<version>1.11</version>
 	</requires>
+	
 	<requires>
 		<type>priority</type>
 		<priority>after</priority>
 		<plugin>search</plugin>
 	</requires>
+	
 	<requires>
 		<type>priority</type>
 		<priority>after</priority>
 		<plugin>profile</plugin>
 	</requires>
+	
 	<requires>
-		<type>plugin</type>
+		<type>priority</type>
 		<priority>after</priority>
 		<plugin>aalborg_theme</plugin>
 	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<plugin>aalborg_theme</plugin>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<plugin>elgg_menus</plugin>
+	</requires>
+	
 	<activate_on_install>false</activate_on_install>
 </plugin_manifest>
 

@@ -16,8 +16,8 @@ $item = array('name', 'text', 'href', 'section', 'link_class', 'item_class', 'pa
 */
 
 
-$yn_opt = array('yes' => elgg_echo('survey:option:yes'), 'no' => elgg_echo('survey:option:no'));
-$ny_opt = array('no' => elgg_echo('survey:option:no'), 'yes' => elgg_echo('survey:option:yes'));
+$yn_opt = array('yes' => elgg_echo('elgg_menus:settings:yes'), 'no' => elgg_echo('elgg_menus:settings:no'));
+$ny_opt = array('no' => elgg_echo('elgg_menus:settings:no'), 'yes' => elgg_echo('elgg_menus:settings:yes'));
 
 $menu_item = elgg_extract('menu_item', $vars);
 //echo '<pre>' . print_r($menu_item, true) . '</pre>'; // debug
