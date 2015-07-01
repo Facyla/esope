@@ -32,7 +32,7 @@ function feedback_init() {
 	// create feedback page in admin section
 	elgg_register_admin_menu_item('administer', 'feedback', 'administer_utilities');
 	// Admin widget
-	elgg_register_widget_type('feedback', elgg_echo('feedback:admin:title'), elgg_echo('feedback:widget:description'), 'admin');
+	elgg_register_widget_type('feedback', elgg_echo('feedback:admin:title'), elgg_echo('feedback:widget:description'), array('admin'));
 	
 	// Give access to feedbacks in groups
 	$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
