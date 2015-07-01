@@ -132,6 +132,8 @@ function elgg_format_bytes($size, $precision = 2) {
  *
  * @note usually for HTML, but could be useful for XML too...
  *
+ * @note Key names containing "_" will be ignored unless they start with "data-"
+ *
  * @param array $attrs An associative array of attr => val pairs
  *
  * @return string HTML attributes to be inserted into a tag (e.g., <tag $attrs>)
@@ -141,20 +143,14 @@ function elgg_format_attributes(array $attrs = array()) {
 		return '';
 	}
 
-	$attrs = _elgg_clean_vars($attrs);
 	$attributes = array();
 
-	if (isset($attrs['js'])) {
-		elgg_deprecated_notice('Use associative array of attr => val pairs instead of $vars[\'js\']', 1.8);
-
-		if (!empty($attrs['js'])) {
-			$attributes[] = $attrs['js'];
+	foreach ($attrs as $attr => $val) {
+		if (0 !== strpos($attr, 'data-') && false !== strpos($attr, '_')) {
+			// this is probably a view $vars variable not meant for output
+			continue;
 		}
 
-		unset($attrs['js']);
-	}
-
-	foreach ($attrs as $attr => $val) {
 		$attr = strtolower($attr);
 
 		if ($val === true) {
@@ -246,51 +242,6 @@ function elgg_format_element($tag_name, array $attributes = array(), $text = '',
 	} else {
 		return "<{$tag_name}{$attrs}>$text</$tag_name>";
 	}
-}
-
-/**
- * Preps an associative array for use in {@link elgg_format_attributes()}.
- *
- * Removes all the junk that {@link elgg_view()} puts into $vars.
- * Maintains backward compatibility with attributes like 'internalname' and 'internalid'
- *
- * @note This function is called automatically by elgg_format_attributes(). No need to
- *       call it yourself before using elgg_format_attributes().
- *
- * @param array $vars The raw $vars array with all it's dirtiness (config, url, etc.)
- *
- * @return array The array, ready to be used in elgg_format_attributes().
- * @access private
- */
-function _elgg_clean_vars(array $vars = array()) {
-	unset($vars['config']);
-	unset($vars['url']);
-	unset($vars['user']);
-
-	// backwards compatibility code
-	if (isset($vars['internalname'])) {
-		if (!isset($vars['__ignoreInternalname'])) {
-			$vars['name'] = $vars['internalname'];
-		}
-		unset($vars['internalname']);
-	}
-
-	if (isset($vars['internalid'])) {
-		if (!isset($vars['__ignoreInternalid'])) {
-			$vars['id'] = $vars['internalid'];
-		}
-		unset($vars['internalid']);
-	}
-
-	if (isset($vars['__ignoreInternalid'])) {
-		unset($vars['__ignoreInternalid']);
-	}
-
-	if (isset($vars['__ignoreInternalname'])) {
-		unset($vars['__ignoreInternalname']);
-	}
-
-	return $vars;
 }
 
 /**

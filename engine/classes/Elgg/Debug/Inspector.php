@@ -37,9 +37,7 @@ class Inspector {
 	 * @return string[]
 	 */
 	public function getViewtypes() {
-		global $CONFIG;
-
-		return array_keys($CONFIG->views->locations);
+		return array_keys($this->getViewsData()['locations']);
 	}
 
 	/**
@@ -52,38 +50,22 @@ class Inspector {
 	public function getViews($viewtype = 'default') {
 		global $CONFIG;
 
-		$overrides = null;
-		if ($CONFIG->system_cache_enabled) {
-			$data = _elgg_services()->systemCache->load('view_overrides');
-			if ($data) {
-				$overrides = unserialize($data);
-			}
-		} else {
-			$overrides = _elgg_services()->views->getOverriddenLocations();
-		}
+		$view_data = $this->getViewsData();
 
 		// maps view name to array of ViewComponent[] with priority as keys
 		$views = array();
 
-		$location = "{$CONFIG->viewpath}{$viewtype}/";
-		$core_file_list = $this->recurseFileTree($location);
-
-		// setup views array before adding extensions and plugin views
-		foreach ($core_file_list as $path) {
-			$component = ViewComponent::fromPaths($path, $location);
-			$views[$component->view] = array(500 => $component);
-		}
-
 		// add plugins and handle overrides
-		foreach ($CONFIG->views->locations[$viewtype] as $view => $location) {
+		foreach ($view_data['locations'][$viewtype] as $view => $location) {
 			$component = new ViewComponent();
 			$component->view = $view;
-			$component->location = "{$location}{$viewtype}/";
-			$views[$view] = array(500 => $component);
+			$component->file = $location;
+
+			$views[$view] = [500 => $component];
 		}
 
 		// now extensions
-		foreach ($CONFIG->views->extensions as $view => $extensions) {
+		foreach ($view_data['extensions'] as $view => $extensions) {
 			$view_list = array();
 			foreach ($extensions as $priority => $ext_view) {
 				if (isset($views[$ext_view])) {
@@ -99,13 +81,14 @@ class Inspector {
 
 		// now overrides
 		foreach ($views as $view => $view_list) {
-			if (!empty($overrides[$viewtype][$view])) {
+			if (!empty($view_data['overrides'][$viewtype][$view])) {
 				$overrides_list = array();
-				foreach ($overrides[$viewtype][$view] as $i => $location) {
+				foreach ($view_data['overrides'][$viewtype][$view] as $i => $location) {
 					$component = new ViewComponent();
 					$component->overridden = true;
 					$component->view = $view;
-					$component->location = "{$location}{$viewtype}/";
+					$component->file = $location;
+
 					$overrides_list["o:$i"] = $component;
 				}
 				$views[$view] = $overrides_list + $view_list;
@@ -114,7 +97,6 @@ class Inspector {
 
 		// view handlers
 		$handlers = _elgg_services()->hooks->getAllHandlers();
-
 
 		$filtered_views = array();
 		if (!empty($handlers['view'])) {
@@ -344,7 +326,7 @@ class Inspector {
 		if (is_object($callable)) {
 			return "(" . get_class($callable) . ")->__invoke()";
 		}
-		return "(unknown)";
+		return print_r($callable, true);
 	}
 
 	/**
@@ -359,12 +341,15 @@ class Inspector {
 		$root = elgg_get_root_path();
 
 		foreach ($all_handlers as $hook => $types) {
-			foreach ($types as $type => $handlers) {
-				array_walk($handlers, function (&$callable, $priority) use ($root) {
-					$description = $this->describeCallable($callable, $root);
-					$callable = "$priority: $description";
-				});
-				$tree[$hook . ',' . $type] = $handlers;
+			foreach ($types as $type => $priorities) {
+				foreach ($priorities as $priority => $handlers) {
+
+					array_walk($handlers, function (&$callable) use ($root, $priority) {
+						$description = $this->describeCallable($callable, $root);
+						$callable = "$priority: $description";
+					});
+					$tree[$hook . ',' . $type] = $handlers;
+				}
 			}
 		}
 
@@ -374,29 +359,15 @@ class Inspector {
 	}
 
 	/**
-	 * Create array of all php files in directory and subdirectories
+	 * Get data from the Views service
 	 *
-	 * @param string $dir full path to directory to begin search
-	 * @return array of every php file in $dir or below in file tree
+	 * @return array
 	 */
-	protected function recurseFileTree($dir) {
-		$view_list = array();
-
-		$handle = opendir($dir);
-		while ($file = readdir($handle)) {
-			if ($file[0] == '.') {
-
-			} else if (is_dir($dir . $file)) {
-				$view_list = array_merge($view_list, $this->recurseFileTree($dir . $file . "/"));
-			} else {
-				$extension = strrchr(trim($file, "/"), '.');
-				if ($extension === ".php") {
-					$view_list[] = $dir . $file;
-				}
-			}
+	private function getViewsData() {
+		static $data;
+		if ($data === null) {
+			$data = _elgg_services()->views->getInspectorData();
 		}
-		closedir($handle);
-
-		return $view_list;
+		return $data;
 	}
 }

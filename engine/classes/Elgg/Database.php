@@ -1,6 +1,10 @@
 <?php
 namespace Elgg;
-use Elgg\Database\Config;
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
 
 /**
  * An object representing a single Elgg database.
@@ -14,13 +18,23 @@ use Elgg\Database\Config;
  */
 class Database {
 
-	/** @var string $tablePrefix Prefix for database tables */
+	const DELAYED_QUERY = 'q';
+	const DELAYED_TYPE = 't';
+	const DELAYED_HANDLER = 'h';
+
+	/**
+	 * @var string $tablePrefix Prefix for database tables
+	 */
 	private $tablePrefix;
 
-	/** @var resource[] $dbLinks Database connection resources */
-	private $dbLinks = array();
+	/**
+	 * @var Connection[]
+	 */
+	private $connections = [];
 
-	/** @var int $queryCount The number of queries made */
+	/**
+	 * @var int $queryCount The number of queries made
+	 */
 	private $queryCount = 0;
 
 	/**
@@ -42,29 +56,27 @@ class Database {
 	private $queryCacheSize = 50;
 
 	/**
-	 * Queries are saved to an array and executed using
-	 * a function registered by register_shutdown_function().
+	 * Queries are saved as an array with the DELAYED_* constants as keys.
 	 *
-	 * Queries are saved as an array in the format:
-	 * <code>
-	 * $this->delayedQueries[] = array(
-	 * 	'q' => string $query,
-	 * 	'l' => string $query_type,
-	 * 	'h' => string $handler // a callback function
-	 * );
-	 * </code>
+	 * @see registerDelayedQuery
 	 *
 	 * @var array $delayedQueries Queries to be run during shutdown
 	 */
 	private $delayedQueries = array();
 
-	/** @var bool $installed Is the database installed? */
+	/**
+	 * @var bool $installed Is the database installed?
+	 */
 	private $installed = false;
 
-	/** @var \Elgg\Database\Config $config Database configuration */
+	/**
+	 * @var \Elgg\Database\Config $config Database configuration
+	 */
 	private $config;
 
-	/** @var \Elgg\Logger $logger The logger */
+	/**
+	 * @var \Elgg\Logger $logger The logger
+	 */
 	private $logger;
 
 	/**
@@ -73,7 +85,7 @@ class Database {
 	 * @param \Elgg\Database\Config $config Database configuration
 	 * @param \Elgg\Logger          $logger The logger
 	 */
-	public function __construct(\Elgg\Database\Config $config, \Elgg\Logger $logger) {
+	public function __construct(\Elgg\Database\Config $config, \Elgg\Logger $logger = null) {
 
 		$this->logger = $logger;
 		$this->config = $config;
@@ -84,25 +96,31 @@ class Database {
 	}
 
 	/**
-	 * Gets (if required, also creates) a database link resource.
+	 * Set the logger object
 	 *
-	 * The database link resources are created by
-	 * {@link \Elgg\Database::setupConnections()}, which is called if no links exist.
+	 * @param \Elgg\Logger $logger The logger
+	 * @return void
+	 */
+	public function setLogger(\Elgg\Logger $logger) {
+		$this->logger = $logger;
+	}
+
+	/**
+	 * Gets (if required, also creates) a DB connection.
 	 *
 	 * @param string $type The type of link we want: "read", "write" or "readwrite".
 	 *
-	 * @return resource Database link
+	 * @return Connection
 	 * @throws \DatabaseException
-	 * @todo make protected once we get rid of get_db_link()
 	 */
-	public function getLink($type) {
-		if (isset($this->dbLinks[$type])) {
-			return $this->dbLinks[$type];
-		} else if (isset($this->dbLinks['readwrite'])) {
-			return $this->dbLinks['readwrite'];
+	protected function getConnection($type) {
+		if (isset($this->connections[$type])) {
+			return $this->connections[$type];
+		} else if (isset($this->connections['readwrite'])) {
+			return $this->connections['readwrite'];
 		} else {
 			$this->setupConnections();
-			return $this->getLink($type);
+			return $this->getConnection($type);
 		}
 	}
 
@@ -117,50 +135,56 @@ class Database {
 	 */
 	public function setupConnections() {
 		if ($this->config->isDatabaseSplit()) {
-			$this->establishLink('read');
-			$this->establishLink('write');
+			$this->connect('read');
+			$this->connect('write');
 		} else {
-			$this->establishLink('readwrite');
+			$this->connect('readwrite');
 		}
 	}
-
 
 	/**
 	 * Establish a connection to the database server
 	 *
 	 * Connect to the database server and use the Elgg database for a particular database link
 	 *
-	 * @param string $dblinkname The type of database connection. Used to identify the
-	 * resource: "read", "write", or "readwrite".
+	 * @param string $type The type of database connection. "read", "write", or "readwrite".
 	 *
 	 * @return void
 	 * @throws \DatabaseException
 	 */
-	public function establishLink($dblinkname = "readwrite") {
+	public function connect($type = "readwrite") {
+		$conf = $this->config->getConnectionConfig($type);
 
-		$conf = $this->config->getConnectionConfig($dblinkname);
+		$params = [
+			'dbname' => $conf['database'],
+			'user' => $conf['user'],
+			'password' => $conf['password'],
+			'host' => $conf['host'],
+			'charset' => 'utf8',
+			'driver' => 'pdo_mysql',
+		];
 
-		// Connect to database
-		$this->dbLinks[$dblinkname] = mysql_connect($conf['host'], $conf['user'], $conf['password'], true);
-		if (!$this->dbLinks[$dblinkname]) {
-			$msg = "Elgg couldn't connect to the database using the given credentials. Check the settings file.";
+		try {
+			$this->connections[$type] = DriverManager::getConnection($params);
+			$this->connections[$type]->setFetchMode(\PDO::FETCH_OBJ);
+
+		} catch (\PDOException $e) {
+			// @todo just allow PDO exceptions
+			// http://dev.mysql.com/doc/refman/5.1/en/error-messages-server.html
+			if ($e->getCode() == 1102 || $e->getCode() == 1049) {
+				$msg = "Elgg couldn't select the database '{$conf['database']}'. Please check that the database is created and you have access to it.";
+			} else {
+				$msg = "Elgg couldn't connect to the database using the given credentials. Check the settings file.";
+			}
 			throw new \DatabaseException($msg);
 		}
-
-		if (!mysql_select_db($conf['database'], $this->dbLinks[$dblinkname])) {
-			$msg = "Elgg couldn't select the database '{$conf['database']}'. Please check that the database is created and you have access to it.";
-			throw new \DatabaseException($msg);
-		}
-
-		// Set DB for UTF8
-		mysql_query("SET NAMES utf8", $this->dbLinks[$dblinkname]);
 	}
 
 	/**
 	 * Retrieve rows from the database.
 	 *
 	 * Queries are executed with {@link \Elgg\Database::executeQuery()} and results
-	 * are retrieved with {@link mysql_fetch_object()}.  If a callback
+	 * are retrieved with {@link \PDO::fetchObject()}.  If a callback
 	 * function $callback is defined, each row will be passed as a single
 	 * argument to $callback.  If no callback function is defined, the
 	 * entire result set is returned as an array.
@@ -206,17 +230,16 @@ class Database {
 	 */
 	public function insertData($query) {
 
-		$this->logger->log("DB query $query", \Elgg\Logger::INFO);
+		if ($this->logger) {
+			$this->logger->info("DB query $query");
+		}
 
-		$dblink = $this->getLink('write');
+		$connection = $this->getConnection('write');
 
 		$this->invalidateQueryCache();
 
-		if ($this->executeQuery("$query", $dblink)) {
-			return mysql_insert_id($dblink);
-		}
-
-		return false;
+		$this->executeQuery($query, $connection);
+		return (int)$connection->lastInsertId();
 	}
 
 	/**
@@ -232,21 +255,18 @@ class Database {
 	 */
 	public function updateData($query, $getNumRows = false) {
 
-		$this->logger->log("DB query $query", \Elgg\Logger::INFO);
-
-		$dblink = $this->getLink('write');
+		if ($this->logger) {
+			$this->logger->info("DB query $query");
+		}
 
 		$this->invalidateQueryCache();
 
-		if ($this->executeQuery("$query", $dblink)) {
-			if ($getNumRows) {
-				return mysql_affected_rows($dblink);
-			} else {
-				return true;
-			}
+		$stmt = $this->executeQuery($query, $this->getConnection('write'));
+		if ($getNumRows) {
+			return $stmt->rowCount();
+		} else {
+			return true;
 		}
-
-		return false;
 	}
 
 	/**
@@ -256,22 +276,21 @@ class Database {
 	 *
 	 * @param string $query The SQL query to run
 	 *
-	 * @return int|false The number of affected rows or false on failure
+	 * @return int The number of affected rows
 	 * @throws \DatabaseException
 	 */
 	public function deleteData($query) {
 
-		$this->logger->log("DB query $query", \Elgg\Logger::INFO);
+		if ($this->logger) {
+			$this->logger->info("DB query $query");
+		}
 
-		$dblink = $this->getLink('write');
+		$connection = $this->getConnection('write');
 
 		$this->invalidateQueryCache();
 
-		if ($this->executeQuery("$query", $dblink)) {
-			return mysql_affected_rows($dblink);
-		}
-
-		return false;
+		$stmt = $this->executeQuery("$query", $connection);
+		return (int)$stmt->rowCount();
 	}
 
 	/**
@@ -323,15 +342,11 @@ class Database {
 		// https://github.com/elgg/elgg/issues/4049
 		$query_id = (int)$single . $query . '|';
 		if ($callback) {
-			$is_callable = is_callable($callback);
-			if ($is_callable) {
-				$query_id .= $this->fingerprintCallback($callback);
-			} else {
-				// TODO do something about invalid callbacks
-				$callback = null;
+			if (!is_callable($callback)) {
+				$inspector = new \Elgg\Debug\Inspector();
+				throw new \RuntimeException('$callback must be a callable function. Given ' . $inspector->describeCallable($callback));
 			}
-		} else {
-			$is_callable = false;
+			$query_id .= $this->fingerprintCallback($callback);
 		}
 		// MD5 yields smaller mem usage for cache and cleaner logs
 		$hash = md5($query_id);
@@ -339,37 +354,35 @@ class Database {
 		// Is cached?
 		if ($this->queryCache) {
 			if (isset($this->queryCache[$hash])) {
-				$this->logger->log("DB query $query results returned from cache (hash: $hash)", \Elgg\Logger::INFO);
+				if ($this->logger) {
+					$this->logger->info("DB query $query results returned from cache (hash: $hash)");
+				}
 				return $this->queryCache[$hash];
 			}
 		}
 
-		$dblink = $this->getLink('read');
 		$return = array();
 
-		if ($result = $this->executeQuery("$query", $dblink)) {
-			while ($row = mysql_fetch_object($result)) {
-				if ($is_callable) {
-					$row = call_user_func($callback, $row);
-				}
-
-				if ($single) {
-					$return = $row;
-					break;
-				} else {
-					$return[] = $row;
-				}
+		$stmt = $this->executeQuery($query, $this->getConnection('read'));
+		while ($row = $stmt->fetch()) {
+			if ($callback) {
+				$row = call_user_func($callback, $row);
 			}
-		}
 
-		if (empty($return)) {
-			$this->logger->log("DB query $query returned no results.", \Elgg\Logger::INFO);
+			if ($single) {
+				$return = $row;
+				break;
+			} else {
+				$return[] = $row;
+			}
 		}
 
 		// Cache result
 		if ($this->queryCache) {
 			$this->queryCache[$hash] = $return;
-			$this->logger->log("DB query $query results cached (hash: $hash)", \Elgg\Logger::INFO);
+			if ($this->logger) {
+				$this->logger->info("DB query $query results cached (hash: $hash)");
+			}
 		}
 
 		return $return;
@@ -378,35 +391,27 @@ class Database {
 	/**
 	 * Execute a query.
 	 *
-	 * $query is executed via {@link mysql_query()}.  If there is an SQL error,
+	 * $query is executed via {@link Connection::query}. If there is an SQL error,
 	 * a {@link DatabaseException} is thrown.
 	 *
-	 * @param string   $query  The query
-	 * @param resource $dblink The DB link
+	 * @param string     $query      The query
+	 * @param Connection $connection The DB connection
 	 *
-	 * @return resource|bool The result of mysql_query()
+	 * @return Statement The result of the query
 	 * @throws \DatabaseException
-	 * @todo should this be public?
 	 */
-	public function executeQuery($query, $dblink) {
-
+	protected function executeQuery($query, Connection $connection) {
 		if ($query == null) {
 			throw new \DatabaseException("Query cannot be null");
 		}
 
-		if (!is_resource($dblink)) {
-			throw new \DatabaseException("Connection to database was lost.");
-		}
-
 		$this->queryCount++;
 
-		$result = mysql_query($query, $dblink);
-
-		if (mysql_errno($dblink)) {
-			throw new \DatabaseException(mysql_error($dblink) . "\n\n QUERY: $query");
+		try {
+			return $connection->query($query);
+		} catch (\Exception $e) {
+			throw new \DatabaseException($e->getMessage() . "\n\n QUERY: $query");
 		}
-
-		return $result;
 	}
 
 	/**
@@ -474,33 +479,28 @@ class Database {
 	/**
 	 * Queue a query for execution upon shutdown.
 	 *
-	 * You can specify a handler function if you care about the result. This function will accept
-	 * the raw result from {@link mysql_query()}.
+	 * You can specify a handler function if you care about the result. This function will always
+	 * be passed a \Doctrine\DBAL\Driver\Statement.
 	 *
 	 * @param string $query   The query to execute
 	 * @param string $type    The query type ('read' or 'write')
 	 * @param string $handler A callback function to pass the results array to
 	 *
 	 * @return boolean Whether registering was successful.
-	 * @todo deprecate passing resource for $type as that should not be part of public API
 	 */
 	public function registerDelayedQuery($query, $type, $handler = "") {
-
-		if (!is_resource($type) && $type != 'read' && $type != 'write') {
+		if ($type != 'read' && $type != 'write') {
 			return false;
 		}
 
-		// Construct delayed query
-		$delayed_query = array();
-		$delayed_query['q'] = $query;
-		$delayed_query['l'] = $type;
-		$delayed_query['h'] = $handler;
-
-		$this->delayedQueries[] = $delayed_query;
+		$this->delayedQueries[] = [
+			self::DELAYED_QUERY => $query,
+			self::DELAYED_TYPE => $type,
+			self::DELAYED_HANDLER => $handler,
+		];
 
 		return true;
 	}
-
 
 	/**
 	 * Trigger all queries that were registered as "delayed" queries. This is
@@ -512,25 +512,22 @@ class Database {
 	 */
 	public function executeDelayedQueries() {
 
-		foreach ($this->delayedQueries as $query_details) {
+		foreach ($this->delayedQueries as $set) {
+			$query = $set[self::DELAYED_QUERY];
+			$type = $set[self::DELAYED_TYPE];
+			$handler = $set[self::DELAYED_HANDLER];
+
 			try {
-				$link = $query_details['l'];
+				$stmt = $this->executeQuery($query, $this->getConnection($type));
 
-				if ($link == 'read' || $link == 'write') {
-					$link = $this->getLink($link);
-				} elseif (!is_resource($link)) {
-					$msg = "Link for delayed query not valid resource or db_link type. Query: {$query_details['q']}";
-					$this->logger->log($msg, \Elgg\Logger::WARNING);
+				if (is_callable($handler)) {
+					call_user_func($handler, $stmt);
 				}
-
-				$result = $this->executeQuery($query_details['q'], $link);
-
-				if ((isset($query_details['h'])) && (is_callable($query_details['h']))) {
-					$query_details['h']($result);
+			} catch (\Exception $e) {
+				if ($this->logger) {
+					// Suppress all exceptions since page already sent to requestor
+					$this->logger->error($e);
 				}
-			} catch (\DatabaseException $e) {
-				// Suppress all exceptions since page already sent to requestor
-				$this->logger->log($e, \Elgg\Logger::ERROR);
 			}
 		}
 	}
@@ -569,7 +566,9 @@ class Database {
 	protected function invalidateQueryCache() {
 		if ($this->queryCache) {
 			$this->queryCache->clear();
-			$this->logger->log("Query cache invalidated", \Elgg\Logger::INFO);
+			if ($this->logger) {
+				$this->logger->info("Query cache invalidated");
+			}
 		}
 	}
 
@@ -586,11 +585,8 @@ class Database {
 		}
 
 		try {
-			$dblink = $this->getLink('read');
-			mysql_query("SELECT value FROM {$this->tablePrefix}datalists WHERE name = 'installed'", $dblink);
-			if (mysql_errno($dblink) > 0) {
-				throw new \DatabaseException();
-			}
+			$sql = "SELECT value FROM {$this->tablePrefix}datalists WHERE name = 'installed'";
+			$this->getConnection('read')->query($sql);
 		} catch (\DatabaseException $e) {
 			throw new \InstallationException("Unable to handle this request. This site is not configured or the database is down.");
 		}
@@ -640,15 +636,14 @@ class Database {
 	 *
 	 * @param string $value Value to escape
 	 * @return string
+	 * @throws \DatabaseException
 	 */
 	public function sanitizeString($value) {
-
-		// use resource if established, but don't open a connection to do it.
-		if (isset($this->dbLinks['read'])) {
-			return mysql_real_escape_string($value, $this->dbLinks['read']);
+		$quoted = $this->getConnection('read')->quote($value);
+		if ($quoted[0] !== "'" || substr($quoted, -1) !== "'") {
+			throw new \DatabaseException("PDO::quote did not return surrounding single quotes.");
 		}
-
-		return mysql_real_escape_string($value);
+		return substr($quoted, 1, -1);
 	}
 
 	/**
@@ -656,10 +651,14 @@ class Database {
 	 *
 	 * @param string $type Connection type (Config constants, e.g. Config::READ_WRITE)
 	 *
-	 * @return string
+	 * @return string Empty if version cannot be determined
 	 */
 	public function getServerVersion($type) {
-		return mysql_get_server_info($this->getLink($type));
+		$driver = $this->getConnection($type)->getWrappedConnection();
+		if ($driver instanceof ServerInfoAwareConnection) {
+			return $driver->getServerVersion();
+		}
+
+		return null;
 	}
 }
-

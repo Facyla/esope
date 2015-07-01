@@ -12,7 +12,7 @@ elgg_register_event_handler('init', 'system', 'messages_init');
 function messages_init() {
 
 	// register a library of helper functions
-	elgg_register_library('elgg:messages', elgg_get_plugins_path() . 'messages/lib/messages.php');
+	elgg_register_library('elgg:messages', __DIR__ . '/lib/messages.php');
 
 	// add page menu items
 	if (elgg_is_logged_in()) {
@@ -34,8 +34,8 @@ function messages_init() {
 	elgg_register_event_handler('pagesetup', 'system', 'messages_notifier');
 
 	// Extend system CSS with our own styles, which are defined in the messages/css view
-	elgg_extend_view('css/elgg', 'messages/css');
-	elgg_extend_view('js/elgg', 'messages/js');
+	elgg_extend_view('elgg.css', 'messages/css');
+	elgg_extend_view('elgg.js', 'messages/js');
 	
 	// Register a page handler, so we can have nice URLs
 	elgg_register_page_handler('messages', 'messages_page_handler');
@@ -58,7 +58,7 @@ function messages_init() {
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'messages_can_edit_container');
 
 	// Register actions
-	$action_path = elgg_get_plugins_path() . 'messages/actions/messages';
+	$action_path = __DIR__ . '/actions/messages';
 	elgg_register_action("messages/send", "$action_path/send.php");
 	elgg_register_action("messages/delete", "$action_path/delete.php");
 	elgg_register_action("messages/process", "$action_path/process.php");
@@ -98,24 +98,22 @@ function messages_page_handler($page) {
 		$page[1] = $current_user->username;
 	}
 
-	$base_dir = elgg_get_plugins_path() . 'messages/pages/messages';
-
 	switch ($page[0]) {
 		case 'inbox':
 			set_input('username', $page[1]);
-			include("$base_dir/inbox.php");
+			echo elgg_view_resource('messages/inbox');
 			break;
 		case 'sent':
 			set_input('username', $page[1]);
-			include("$base_dir/sent.php");
+			echo elgg_view_resource('messages/sent');
 			break;
 		case 'read':
 			set_input('guid', $page[1]);
-			include("$base_dir/read.php");
+			echo elgg_view_resource('messages/read');
 			break;
 		case 'compose':
 		case 'add':
-			include("$base_dir/send.php");
+			echo elgg_view_resource('messages/send');
 			break;
 		default:
 			return false;
@@ -275,9 +273,6 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 	$message_sent->hiddenFrom = 0; // this is used when a user deletes a message in their sentbox, it is a flag
 	$message_sent->hiddenTo = 0; // this is used when a user deletes a message in their inbox
 
-	$message_to->msg = 1;
-	$message_sent->msg = 1;
-
 	// Save the copy of the message that goes to the recipient
 	$success = $message_to->save();
 
@@ -339,11 +334,6 @@ function messages_set_url($hook, $type, $url, $params) {
 	}
 }
 
-function count_unread_messages() {
-	elgg_deprecated_notice('Your theme is using count_unread_messages which has been deprecated for messages_count_unread()', 1.8);
-	return messages_count_unread();
-}
-
 /**
  * Returns the unread messages in a user's inbox
  *
@@ -363,7 +353,7 @@ function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count 
 
 	// denormalize the md to speed things up.
 	// seriously, 10 joins if you don't.
-	$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
+	$strings = array('toId', $user_guid, 'readYet', 0);
 	$map = array();
 	foreach ($strings as $string) {
 		$id = elgg_get_metastring_id($string);
@@ -384,12 +374,10 @@ function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count 
 		'joins' => array(
 			"JOIN {$db_prefix}metadata msg_toId on e.guid = msg_toId.entity_guid",
 			"JOIN {$db_prefix}metadata msg_readYet on e.guid = msg_readYet.entity_guid",
-			"JOIN {$db_prefix}metadata msg_msg on e.guid = msg_msg.entity_guid",
 		),
 		'wheres' => array(
 			"msg_toId.name_id='{$map['toId']}' AND msg_toId.value_id='{$map[$user_guid]}'",
 			"msg_readYet.name_id='{$map['readYet']}' AND msg_readYet.value_id='{$map[0]}'",
-			"msg_msg.name_id='{$map['msg']}' AND msg_msg.value_id='{$map[1]}'",
 		),
 		'owner_guid' => $user_guid,
 		'limit' => $limit,

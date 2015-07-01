@@ -15,21 +15,22 @@ class HooksRegistrationServiceTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	public function testCanRegisterHandlers() {
+		$f = function () {};
+
 		$this->assertTrue($this->mock->registerHandler('foo', 'bar', 'callback1'));
-		$this->assertTrue($this->mock->registerHandler('foo', 'bar', 'callback2'));
+		$this->assertTrue($this->mock->registerHandler('foo', 'bar', $f));
 		$this->assertTrue($this->mock->registerHandler('foo', 'baz', 'callback3', 100));
 
-		$expected = array(
-			'foo' => array(
-				'bar' => array(
-					500 => 'callback1',
-					501 => 'callback2'
-				),
-				'baz' => array(
-					100 => 'callback3'
-				)
-			)
-		);
+		$expected = [
+			'foo' => [
+				'bar' => [
+					500 => ['callback1', $f],
+				],
+				'baz' => [
+					100 => ['callback3'],
+				],
+			],
+		];
 
 		$this->assertSame($expected, $this->mock->getAllHandlers());
 
@@ -38,15 +39,59 @@ class HooksRegistrationServiceTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	public function testCanUnregisterHandlers() {
+		$o = new HooksRegistrationServiceTest_invokable();
+
 		$this->mock->registerHandler('foo', 'bar', 'callback1');
 		$this->mock->registerHandler('foo', 'bar', 'callback2', 100);
+		$this->mock->registerHandler('foo', 'bar', 'callback2', 150);
+		$this->mock->registerHandler('foo', 'bar', [$o, '__invoke'], 300);
+		$this->mock->registerHandler('foo', 'bar', [$o, '__invoke'], 300);
+		$this->mock->registerHandler('foo', 'bar', [$o, '__invoke'], 300);
 
-		$this->assertTrue($this->mock->unregisterHandler('foo', 'bar', 'callback2'));
+		$this->assertTrue($this->mock->unregisterHandler(
+			'foo', 'bar', 'callback2'));
+		$this->assertTrue($this->mock->unregisterHandler(
+			'foo', 'bar', HooksRegistrationServiceTest_invokable::KLASS . '::__invoke'));
+		$this->assertTrue($this->mock->unregisterHandler(
+			'foo', 'bar', [HooksRegistrationServiceTest_invokable::KLASS, '__invoke']));
+		$this->assertTrue($this->mock->unregisterHandler(
+			'foo', 'bar', [$o, '__invoke']));
 
-		$this->assertSame([500 => 'callback1'], $this->mock->getAllHandlers()['foo']['bar']);
+		$expected = [
+			'foo' => [
+				'bar' => [
+					500 => ['callback1'],
+
+					// only one removed
+					150 => ['callback2'],
+				]
+			]
+		];
+		$this->assertSame($expected, $this->mock->getAllHandlers());
 
 		// check unregistering things that aren't registered
 		$this->assertFalse($this->mock->unregisterHandler('foo', 'bar', 'not_valid'));
+	}
+	
+	public function testCanClearMultipleHandlersAtOnce() {
+		$o = new HooksRegistrationServiceTest_invokable();
+
+		$this->mock->registerHandler('foo', 'bar', 'callback1');
+		$this->mock->registerHandler('foo', 'baz', 'callback1', 10);
+		$this->mock->registerHandler('foo', 'bar', 'callback2', 100);
+		$this->mock->registerHandler('foo', 'bar', 'callback2', 150);
+		
+		$expected = [
+			'foo' => [
+				'baz' => [
+					10 => ['callback1'],
+				]
+			]
+		];
+		// clearHandlers should remove everything registrered for 'foo', 'bar', but not 'foo', 'baz'
+		$this->mock->clearHandlers('foo', 'bar');
+		
+		$this->assertSame($expected, $this->mock->getAllHandlers());
 	}
 
 	public function testOnlyOneHandlerUnregistered() {
@@ -55,24 +100,32 @@ class HooksRegistrationServiceTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertTrue($this->mock->unregisterHandler('foo', 'bar', 'callback'));
 
-		$this->assertSame([501 => 'callback'], $this->mock->getAllHandlers()['foo']['bar']);
+		$this->assertSame([500 => ['callback']], $this->mock->getAllHandlers()['foo']['bar']);
 	}
 
 	public function testGetOrderedHandlers() {
 		$this->mock->registerHandler('foo', 'bar', 'callback1');
 		$this->mock->registerHandler('foo', 'bar', 'callback2');
+		$this->mock->registerHandler('all', 'all', 'callback4', 100);
 		$this->mock->registerHandler('foo', 'baz', 'callback3', 100);
 
-		$expected_foo_bar = array(
+		$expected_foo_bar = [
+			'callback4', // first even though it's [all, all]
 			'callback1',
-			'callback2'
-		);
+			'callback2',
+		];
 
-		$expected_foo_baz = array(
-			'callback3'
-		);
+		$expected_foo_baz = [
+			'callback4', // first even though it's [all, all]
+			'callback3',
+		];
 
 		$this->assertSame($expected_foo_bar, $this->mock->getOrderedHandlers('foo', 'bar'));
 		$this->assertSame($expected_foo_baz, $this->mock->getOrderedHandlers('foo', 'baz'));
 	}
+}
+
+class HooksRegistrationServiceTest_invokable {
+	const KLASS = __CLASS__;
+	function __invoke() {}
 }

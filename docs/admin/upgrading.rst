@@ -37,6 +37,25 @@ Basic instructions
    Any modifications should have been written within plugins, so that they are not lost on overwriting.
    If this is not the case, take care to maintain your modifications. 
 
+From 1.x to 2.0
+===============
+
+IE-specific workarounds have been dropped
+-----------------------------------------
+
+Several views (``css/ie``, ``css/ie7``, ``css/ie8``, etc.) as well as conditional
+comments have been discarded now that IE10+ browsers are more standards-compliant.
+If you need browser support farther back than that, you will need to find or build
+a plugin that introduces its own compatibility layer or polyfills.
+
+Update your webserver config
+----------------------------
+
+URL paths like ``cache/*`` and ``rewrite.php`` now use the main front controller
+script. You **must** remove these rewrite rules from your webserver config (e.g. ``.htaccess``).
+
+Also remove the rules for paths like ``export/*``; these endpoints have been removed.
+
 From 1.10 to 1.11
 ========================
 

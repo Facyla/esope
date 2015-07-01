@@ -10,11 +10,11 @@
  * as the related row in the entities table as represented by the parent
  * \ElggEntity object.
  *
- * @internal Title and description are stored in the objects_entity table.
+ * @note Internal: Title and description are stored in the objects_entity table.
  *
  * @package    Elgg.Core
  * @subpackage DataModel.Object
- * 
+ *
  * @property string $title       The title, name, or summary of this object
  * @property string $description The body, description, or content of the object
  * @property array  $tags        Tags that describe the object (metadata)
@@ -68,9 +68,6 @@ class ElggObject extends \ElggEntity {
 	public function __construct($row = null) {
 		$this->initializeAttributes();
 
-		// compatibility for 1.7 api.
-		$this->initialise_attributes(false);
-
 		if (!empty($row)) {
 			// Is $row is a DB row from the entity table
 			if ($row instanceof \stdClass) {
@@ -78,12 +75,6 @@ class ElggObject extends \ElggEntity {
 				if (!$this->load($row)) {
 					$msg = "Failed to load new " . get_class() . " for GUID: " . $row->guid;
 					throw new \IOException($msg);
-				}
-			} else if ($row instanceof \ElggObject) {
-				// $row is an \ElggObject so this is a copy constructor
-				elgg_deprecated_notice('This type of usage of the \ElggObject constructor was deprecated. Please use the clone method.', 1.7);
-				foreach ($row->attributes as $key => $value) {
-					$this->attributes[$key] = $value;
 				}
 			} else if (is_numeric($row)) {
 				// $row is a GUID so load
@@ -182,44 +173,6 @@ class ElggObject extends \ElggEntity {
 	 */
 	public function setDisplayName($displayName) {
 		$this->title = $displayName;
-	}
-
-	/**
-	 * Return sites that this object is a member of
-	 *
-	 * Site membership is determined by relationships and not site_guid.
-	 *
-	 * @todo Moved to \ElggEntity so remove this in 2.0
-	 *
-	 * @param array $options Options array. Used to be $subtype
-	 * @param int   $limit   The number of results to return (deprecated)
-	 * @param int   $offset  Any indexing offset (deprecated)
-	 *
-	 * @return array
-	 */
-	public function getSites($options = "", $limit = 10, $offset = 0) {
-		if (is_string($options)) {
-			elgg_deprecated_notice('\ElggObject::getSites() takes an options array', 1.9);
-			return get_site_objects($this->getGUID(), $options, $limit, $offset);
-		}
-
-		return parent::getSites();
-	}
-
-	/**
-	 * Add this object to a site
-	 *
-	 * @param \ElggSite $site The site to add this object to. This used to be the
-	 *                       the site guid (still supported by deprecated)
-	 * @return bool
-	 */
-	public function addToSite($site) {
-		if (is_numeric($site)) {
-			elgg_deprecated_notice('\ElggObject::addToSite() takes a site entity', 1.9);
-			return add_site_object($site, $this->getGUID());
-		}
-
-		return parent::addToSite($site);
 	}
 
 	/**

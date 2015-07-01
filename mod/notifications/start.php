@@ -9,7 +9,7 @@ elgg_register_event_handler('init', 'system', 'notifications_plugin_init');
 
 function notifications_plugin_init() {
 
-	elgg_extend_view('css/elgg','notifications/css');
+	elgg_extend_view('elgg.css','notifications/css');
 
 	elgg_register_page_handler('notifications', 'notifications_page_handler');
 
@@ -27,7 +27,7 @@ function notifications_plugin_init() {
 	elgg_register_event_handler('create', 'friend', 'notifications_update_friend_notify');
 	elgg_register_plugin_hook_handler('access:collections:add_user', 'collection', 'notifications_update_collection_notify');
 
-	$actions_base = elgg_get_plugins_path() . 'notifications/actions';
+	$actions_base = __DIR__ . '/actions';
 	elgg_register_action("notificationsettings/save", "$actions_base/save.php");
 	elgg_register_action("notificationsettings/groupsave", "$actions_base/groupsave.php");
 }
@@ -51,20 +51,15 @@ function notifications_page_handler($page) {
 		forward("notifications/{$page[0]}/{$current_user->username}");
 	}
 
-	$user = get_user_by_username($page[1]);
-	if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
-		forward();
-	}
-
-	$base = elgg_get_plugins_path() . 'notifications';
+	set_input('username', $page[1]);
 
 	// note: $user passed in
 	switch ($page[0]) {
 		case 'group':
-			require "$base/groups.php";
+			echo elgg_view_resource('notifications/groups');
 			break;
 		case 'personal':
-			require "$base/index.php";
+			echo elgg_view_resource('notifications/index');
 			break;
 		default:
 			return false;

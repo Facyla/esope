@@ -16,8 +16,8 @@ function reportedcontent_init() {
 	elgg_register_page_handler('reportedcontent', 'reportedcontent_page_handler');
 	
 	// Extend CSS
-	elgg_extend_view('css/elgg', 'reportedcontent/css');
-	elgg_extend_view('css/admin', 'reportedcontent/admin_css');
+	elgg_extend_view('elgg.css', 'reportedcontent/css');
+	elgg_extend_view('admin.css', 'reportedcontent/admin_css');
 
 
 	if (elgg_is_logged_in()) {
@@ -48,7 +48,7 @@ function reportedcontent_init() {
 			array('admin'));
 
 	// Register actions
-	$action_path = elgg_get_plugins_path() . "reportedcontent/actions/reportedcontent";
+	$action_path = __DIR__ . "/actions/reportedcontent";
 	elgg_register_action('reportedcontent/add', "$action_path/add.php");
 	elgg_register_action('reportedcontent/delete', "$action_path/delete.php", 'admin');
 	elgg_register_action('reportedcontent/archive', "$action_path/archive.php", 'admin');
@@ -67,23 +67,11 @@ function reportedcontent_page_handler($page) {
 	elgg_gatekeeper();
 
 	if (elgg_extract(0, $page) === 'add' && elgg_is_xhr()) {
-		echo elgg_view('resources/reportedcontent/add_form');
+		echo elgg_view_resource('reportedcontent/add_form');
 		return true;
 	}
 
-	$title = elgg_echo('reportedcontent:this');
-	
-	$content = elgg_view_form('reportedcontent/add');
-	$sidebar = elgg_echo('reportedcontent:instructions');
-
-	$params = array(
-		'title' => $title,
-		'content' => $content,
-		'sidebar' => $sidebar,
-	);
-	$body = elgg_view_layout('one_sidebar', $params);
-
-	echo elgg_view_page($title, $body);
+	echo elgg_view_resource('reportedcontent/add');
 	return true;
 }
 

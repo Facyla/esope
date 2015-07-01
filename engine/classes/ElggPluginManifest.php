@@ -50,14 +50,14 @@ class ElggPluginManifest {
 	);
 
 	/*
-	 * The expected structure of elgg_version and elgg_release requires element
+	 * The expected structure of elgg_release requires element
 	 */
 	private $depsStructElgg = array(
 		'type' => '',
 		'version' => '',
 		'comparison' => 'ge'
 	);
-	
+
 	/**
 	 * The expected structure of a requires php_version dependency element
 	 */
@@ -113,7 +113,7 @@ class ElggPluginManifest {
 		'description' => '',
 		'path' => ''
 	);
-	
+
 	/**
 	 * The expected structure of a contributor element
 	 */
@@ -391,6 +391,7 @@ class ElggPluginManifest {
 			'dashboard',
 			'developers',
 			'diagnostics',
+			'discussions',
 			'embed',
 			'externalpages',
 			'file',
@@ -452,7 +453,7 @@ class ElggPluginManifest {
 
 		return $normalized;
 	}
-	
+
 	/**
 	 * Return the contributors listed.
 	 *
@@ -513,23 +514,7 @@ class ElggPluginManifest {
 	 * @return array
 	 */
 	public function getRequires() {
-		// rewrite the 1.7 style elgg_version as a real requires.
-		if ($this->apiVersion < 1.8) {
-			$elgg_version = $this->parser->getAttribute('elgg_version');
-			if ($elgg_version) {
-				$reqs = array(
-					array(
-						'type' => 'elgg_version',
-						'version' => $elgg_version,
-						'comparison' => 'ge'
-					)
-				);
-			} else {
-				$reqs = array();
-			}
-		} else {
-			$reqs = $this->parser->getAttribute('requires');
-		}
+		$reqs = $this->parser->getAttribute('requires');
 
 		if (!$reqs) {
 			$reqs = array();
@@ -572,7 +557,6 @@ class ElggPluginManifest {
 	 */
 	private function normalizeDep($dep) {
 		switch ($dep['type']) {
-			case 'elgg_version':
 			case 'elgg_release':
 				$struct = $this->depsStructElgg;
 				break;
@@ -588,7 +572,7 @@ class ElggPluginManifest {
 			case 'php_version':
 				$struct = $this->depsStructPhpVersion;
 				break;
-			
+
 			case 'php_extension':
 				$struct = $this->depsStructPhpExtension;
 				break;

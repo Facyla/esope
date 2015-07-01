@@ -12,8 +12,8 @@ elgg_register_event_handler('init', 'system', 'embed_init');
  * Init function
  */
 function embed_init() {
-	elgg_extend_view('css/elgg', 'embed/css');
-	elgg_extend_view('css/admin', 'embed/css');
+	elgg_extend_view('elgg.css', 'embed/css');
+	elgg_extend_view('admin.css', 'embed/css');
 
 	if (elgg_is_logged_in()) {
 		elgg_register_plugin_hook_handler('register', 'menu:longtext', 'embed_longtext_menu');
@@ -23,7 +23,7 @@ function embed_init() {
 	// Page handler for the modal media embed
 	elgg_register_page_handler('embed', 'embed_page_handler');
 	
-	$embed_js = elgg_get_simplecache_url('js', 'embed/embed');
+	$embed_js = elgg_get_simplecache_url('embed/embed.js');
 	elgg_register_js('elgg.embed', $embed_js, 'footer');
 }
 
@@ -59,7 +59,7 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 	// if loaded through ajax (like on /activity), pull in JS libs manually
 	// hack for #6422 because we haven't converted everything to amd yet
 	if (elgg_in_context('ajax')) {
-		$externals = elgg_get_config('externals_map');
+		$externals = $GLOBALS['_ELGG']->externals_map;
 		$embed = elgg_extract('elgg.embed', $externals['js']);
 		$lightbox_js = elgg_extract('lightbox', $externals['js']);
 		$lightbox_css = elgg_extract('lightbox', $externals['css']);
@@ -80,7 +80,10 @@ ___JS;
 
 	$items[] = ElggMenuItem::factory(array(
 		'name' => 'embed',
-		'href' => $url,
+		'href' => 'javascript:void()',
+		'data-colorbox-opts' => json_encode([
+			'href' => elgg_normalize_url($url),
+		]),
 		'text' => $text,
 		'rel' => "embed-lightbox-{$vars['id']}",
 		'link_class' => "elgg-longtext-control elgg-lightbox embed-control embed-control-{$vars['id']}",

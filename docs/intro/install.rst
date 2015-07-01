@@ -11,7 +11,7 @@ Requirements
 ============
 
 -  MySQL 5+
--  PHP 5.4+ with the following extensions:
+-  PHP 5.5+ with the following extensions:
 
    -  GD (for graphics processing)
    -  `Multibyte String support`_ (for i18n)
@@ -61,17 +61,31 @@ but provide a JavaScript polyfill for the browsers that need it.
 You may find that Elgg happens to work on unsupported browsers,
 but compatibility may break at any time, even during a bugfix release.
 
+
+
 Overview
 ========
 
 Upload Elgg
 -----------
 
+With Composer (recommended if comfortable with CLI):
+
+.. code:: shell
+
+    cd /path/to/wwwroot/
+    composer self-update
+    composer global require "fxp/composer-asset-plugin:~1.0"
+    composer create-project elgg/starter-project:dev-master .
+
+From pre-packaged zip (recommended if not comfortable with CLI):
+
 -  Download the `latest version of Elgg`_
 -  Upload the ZIP file with an FTP client to your server
--  Unzip the files in your domain's document root (/home/username/www).
+-  Unzip the files in your domain's document root.
 
-.. _latest version of Elgg: http://elgg.org/download.php
+.. _latest version of Elgg: https://elgg.org/download.php
+
 
 Create a data folder
 --------------------
@@ -134,8 +148,7 @@ A note on settings.php and .htaccess
 
 The Elgg installer will try to create two files for you:
 
--  engine/settings.php, which contains the database settings for your
-   installation
+-  settings.php, which contains local environment configuration for your installation
 -  .htaccess, which allows Elgg to generate dynamic URLs
 
 If these files can't be automatically generated, for example because the

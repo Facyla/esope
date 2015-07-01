@@ -100,57 +100,31 @@ function elgg_register_simplecache_view($view_name) {
 }
 
 /**
- * Get the URL for the cached file
+ * Get the URL for the cached view.
+ * 
+ * Recommended usage is to just pass the entire view name as the first and only arg:
+ *
+ * ```
+ * $blog_js = elgg_get_simplecache_url('elgg/blog/save_draft.js');
+ * $favicon = elgg_get_simplecache_url('favicon.ico');
+ * ```
+ * 
+ * For backwards compatibility with older versions of Elgg, this function supports
+ * "js" or "css" as the first arg, with the rest of the view name as the second arg:
+ *
+ * ```
+ * $blog_js = elgg_get_simplecache_url('js', 'elgg/blog/save_draft.js');
+ * ```
  * 
  * This automatically registers the view with Elgg's simplecache.
  * 
- * @example
- * 		$blog_js = elgg_get_simplecache_url('js', 'blog/save_draft');
- *		elgg_register_js('elgg.blog', $blog_js);
- *		elgg_load_js('elgg.blog');
- *
- * @param string $type The file type: css or js
- * @param string $view The view name after css/ or js/
+ * @param string $view    The full view name
+ * @param string $subview If the first arg is "css" or "js", the rest of the view name
  * @return string
  * @since 1.8.0
  */
-function elgg_get_simplecache_url($type, $view) {
-	return _elgg_services()->simpleCache->getUrl($type, $view);
-}
-
-
-/**
- * Get the base url for simple cache requests
- * 
- * @return string The simplecache root url for the current viewtype.
- * @access private
- */
-function _elgg_get_simplecache_root() {
-	return _elgg_services()->simpleCache->getRoot();
-}
-
-/**
- * Returns the type of output expected from the view.
- * 
- * css/* views always return "css"
- * js/* views always return "js"
- *
- * @todo why isn't this in the CacheHandler class? It is not used anywhere else.
- * 
- * @todo view/name.suffix returns "suffix"
- * 
- * Otherwise, returns "unknown"
- *
- * @param string $view The view name
- * @return string
- * @access private
- */
-function _elgg_get_view_filetype($view) {
-	if (preg_match('~(?:^|/)(css|js)(?:$|/)~', $view, $m)) {
-		return $m[1];
-	} else {
-		return 'unknown';
-	}
+function elgg_get_simplecache_url($view, $subview = '') {
+	return _elgg_services()->simpleCache->getUrl($view, $subview);
 }
 
 /**
@@ -192,11 +166,13 @@ function elgg_disable_simplecache() {
  * 
  * TODO(ewinslow): Move to filesystem package
  *
- * @param string $dir
+ * @param string $dir   The directory
+ * @param bool   $empty If true, we just empty the directory
+ *
  * @return boolean Whether the dir was successfully deleted.
  * @access private
  */
-function _elgg_rmdir($dir) {
+function _elgg_rmdir($dir, $empty = false) {
 	$files = array_diff(scandir($dir), array('.', '..'));
 	
 	foreach ($files as $file) {
@@ -205,6 +181,10 @@ function _elgg_rmdir($dir) {
 		} else {
 			unlink("$dir/$file");
 		}
+	}
+
+	if ($empty) {
+		return true;
 	}
 	
 	return rmdir($dir);
@@ -222,6 +202,16 @@ function elgg_invalidate_simplecache() {
 }
 
 /**
+ * Flush all the registered caches
+ * 
+ * @return void
+ * @since 1.11
+ */
+function elgg_flush_caches() {
+	_elgg_services()->events->trigger('cache:flush', 'system');
+}
+
+/**
  * Initializes the simplecache lastcache variable and creates system cache files
  * when appropriate.
  * 
@@ -234,4 +224,8 @@ function _elgg_cache_init() {
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('ready', 'system', '_elgg_cache_init');
+	
+	// register plugin hooks for cache reset
+	$events->registerHandler('cache:flush', 'system', 'elgg_reset_system_cache');
+	$events->registerHandler('cache:flush', 'system', 'elgg_invalidate_simplecache');
 };

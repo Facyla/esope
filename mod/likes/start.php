@@ -8,8 +8,8 @@ elgg_register_event_handler('init', 'system', 'likes_init');
 
 function likes_init() {
 
-	elgg_extend_view('css/elgg', 'likes/css');
-	elgg_extend_view('js/elgg', 'likes/js');
+	elgg_extend_view('elgg.css', 'likes/css');
+	elgg_extend_view('elgg.js', 'likes/js');
 
 	// used to preload likes data before rendering river
 	elgg_extend_view('page/components/list', 'likes/before_lists', 1);
@@ -19,7 +19,7 @@ function likes_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'likes_entity_menu_setup', 400);
 	elgg_register_plugin_hook_handler('permissions_check', 'annotation', 'likes_permissions_check');
 
-	$actions_base = elgg_get_plugins_path() . 'likes/actions/likes';
+	$actions_base = __DIR__ . '/actions/likes';
 	elgg_register_action('likes/add', "$actions_base/add.php");
 	elgg_register_action('likes/delete', "$actions_base/delete.php");
 	

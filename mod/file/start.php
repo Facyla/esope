@@ -13,14 +13,14 @@ elgg_register_event_handler('init', 'system', 'file_init');
 function file_init() {
 
 	// register a library of helper functions
-	elgg_register_library('elgg:file', elgg_get_plugins_path() . 'file/lib/file.php');
+	elgg_register_library('elgg:file', __DIR__ . '/lib/file.php');
 
 	// Site navigation
 	$item = new ElggMenuItem('file', elgg_echo('file'), 'file/all');
 	elgg_register_menu_item('site', $item);
 
 	// Extend CSS
-	elgg_extend_view('css/elgg', 'file/css');
+	elgg_extend_view('elgg.css', 'file/css');
 
 	// add enclosure to rss item
 	elgg_extend_view('extensions/item', 'file/enclosure');
@@ -52,11 +52,15 @@ function file_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'file_owner_block_menu');
 
 	// Register actions
-	$action_path = elgg_get_plugins_path() . 'file/actions/file';
+	$action_path = __DIR__ . '/actions/file';
 	elgg_register_action("file/upload", "$action_path/upload.php");
 	elgg_register_action("file/delete", "$action_path/delete.php");
 	// temporary - see #2010
 	elgg_register_action("file/download", "$action_path/download.php");
+
+	// cleanup thumbnails on delete. high priority because we want to try to make sure the
+	// deletion will actually occur before we go through with this.
+	elgg_register_event_handler('delete', 'object', 'file_handle_object_delete', 999);
 
 	// embed support
 	$item = ElggMenuItem::factory(array(
@@ -109,44 +113,42 @@ function file_page_handler($page) {
 		$page[0] = 'all';
 	}
 
-	$file_dir = elgg_get_plugins_path() . 'file/pages/file';
-
 	$page_type = $page[0];
 	switch ($page_type) {
 		case 'owner':
 			file_register_toggle();
-			include "$file_dir/owner.php";
+			echo elgg_view_resource('file/owner');
 			break;
 		case 'friends':
 			file_register_toggle();
-			include "$file_dir/friends.php";
+			echo elgg_view_resource('file/friends');
 			break;
 		case 'view':
 			set_input('guid', $page[1]);
-			include "$file_dir/view.php";
+			echo elgg_view_resource('file/view');
 			break;
 		case 'add':
-			include "$file_dir/upload.php";
+			echo elgg_view_resource('file/upload');
 			break;
 		case 'edit':
 			set_input('guid', $page[1]);
-			include "$file_dir/edit.php";
+			echo elgg_view_resource('file/edit');
 			break;
 		case 'search':
 			file_register_toggle();
-			include "$file_dir/search.php";
+			echo elgg_view_resource('file/search');
 			break;
 		case 'group':
 			file_register_toggle();
-			include "$file_dir/owner.php";
+			echo elgg_view_resource('file/owner');
 			break;
 		case 'all':
 			file_register_toggle();
-			include "$file_dir/world.php";
+			echo elgg_view_resource('file/world');
 			break;
 		case 'download':
 			set_input('guid', $page[1]);
-			include "$file_dir/download.php";
+			echo elgg_view_resource('file/download');
 			break;
 		default:
 			return false;
@@ -237,8 +239,8 @@ function file_owner_block_menu($hook, $type, $return, $params) {
 /**
  * Registers page menu items for file type filtering and returns a view
  *
- * @param int       $container_guid The GUID of the container of the files
- * @param bool      $friends        Whether we're looking at the container or the container's friends
+ * @param int  $container_guid The GUID of the container of the files
+ * @param bool $friends        Whether we're looking at the container or the container's friends
  * 
  * @return string The typecloud
  */
@@ -318,11 +320,6 @@ function file_type_cloud_get_url($type, $friends) {
 	}
 
 	return $url;
-}
-
-function get_filetype_cloud($owner_guid = "", $friends = false) {
-	elgg_deprecated_notice('Use file_get_type_cloud instead of get_filetype_cloud', 1.8);
-	return file_get_type_cloud($owner_guid, $friends);
 }
 
 /**
@@ -412,8 +409,36 @@ function file_set_icon_url($hook, $type, $url, $params) {
 			$ext = '';
 		}
 
-		$url = "mod/file/graphics/icons/{$type}{$ext}.gif";
+		$url = elgg_get_simplecache_url("file/icons/{$type}{$ext}.gif");
 		$url = elgg_trigger_plugin_hook('file:icon:url', 'override', $params, $url);
 		return $url;
+	}
+}
+
+/**
+ * Handle an object being deleted
+ *
+ * @param string     $event Event name
+ * @param string     $type  Event type
+ * @param ElggObject $file  The object deleted
+ * @return void
+ */
+function file_handle_object_delete($event, $type, ElggObject $file) {
+	if (!$file instanceof ElggFile) {
+		return;
+	}
+	if (!$file->guid) {
+		// this is an ElggFile used as temporary API
+		return;
+	}
+
+	$thumbnails = array($file->thumbnail, $file->smallthumb, $file->largethumb);
+	foreach ($thumbnails as $thumbnail) {
+		if ($thumbnail) {
+			$delfile = new ElggFile();
+			$delfile->owner_guid = $file->owner_guid;
+			$delfile->setFilename($thumbnail);
+			$delfile->delete();
+		}
 	}
 }

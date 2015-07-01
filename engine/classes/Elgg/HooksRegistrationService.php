@@ -3,18 +3,30 @@ namespace Elgg;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- * 
+ *
  * Use the elgg_* versions instead.
- * 
+ *
  * @access private
- * 
+ *
  * @package    Elgg.Core
  * @subpackage Hooks
  * @since      1.9.0
  */
 abstract class HooksRegistrationService {
-	
-	private $handlers = array();
+
+	const REG_KEY_PRIORITY = 0;
+	const REG_KEY_INDEX = 1;
+	const REG_KEY_HANDLER = 2;
+
+	/**
+	 * @var int
+	 */
+	private $next_index = 0;
+
+	/**
+	 * @var array [name][type][] = registration
+	 */
+	private $registrations = [];
 
 	/**
 	 * @var \Elgg\Logger
@@ -44,24 +56,17 @@ abstract class HooksRegistrationService {
 		if (empty($name) || empty($type) || !is_callable($callback, true)) {
 			return false;
 		}
-	
-		if (!isset($this->handlers[$name])) {
-			$this->handlers[$name] = array();
-		}
 		
-		if (!isset($this->handlers[$name][$type])) {
-			$this->handlers[$name][$type] = array();
+		if (($name == 'view' || $name == 'view_vars') && $type != 'all') {
+			$type = _elgg_services()->views->canonicalizeViewName($type);
 		}
-		
-		// Priority cannot be lower than 0
-		$priority = max((int) $priority, 0);
-	
-		while (isset($this->handlers[$name][$type][$priority])) {
-			$priority++;
-		}
-		
-		$this->handlers[$name][$type][$priority] = $callback;
-		ksort($this->handlers[$name][$type]);
+
+		$this->registrations[$name][$type][] = [
+			self::REG_KEY_PRIORITY => $priority,
+			self::REG_KEY_INDEX => $this->next_index,
+			self::REG_KEY_HANDLER => $callback,
+		];
+		$this->next_index++;
 
 		return true;
 	}
@@ -77,42 +82,86 @@ abstract class HooksRegistrationService {
 	 * @access private
 	 */
 	public function unregisterHandler($name, $type, $callback) {
-		if (isset($this->handlers[$name]) && isset($this->handlers[$name][$type])) {
-			foreach ($this->handlers[$name][$type] as $key => $name_callback) {
-				if ($name_callback == $callback) {
-					unset($this->handlers[$name][$type][$key]);
-					return true;
+		if (($name == 'view' || $name == 'view_vars') && $type != 'all') {
+			$type = _elgg_services()->views->canonicalizeViewName($type);
+		}
+
+		if (empty($this->registrations[$name][$type])) {
+			return false;
+		}
+
+		$matcher = $this->getMatcher($callback);
+
+		foreach ($this->registrations[$name][$type] as $i => $registration) {
+
+			if ($matcher) {
+				if (!$matcher->matches($registration[self::REG_KEY_HANDLER])) {
+					continue;
+				}
+			} else {
+				if ($registration[self::REG_KEY_HANDLER] != $callback) {
+					continue;
 				}
 			}
+
+			unset($this->registrations[$name][$type][$i]);
+			return true;
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Clears all handlers for a specific hook
+	 *
+	 * @param string   $name
+	 * @param string   $type
+	 *
+	 * @return void
+	 * @access private
+	 */
+	public function clearHandlers($name, $type) {
+		unset($this->registrations[$name][$type]);
 	}
 
 	/**
 	 * Returns all registered handlers as array(
 	 * $name => array(
 	 *     $type => array(
-	 *         $priority => callback, ...
+	 *         $priority => array(
+	 *             callback,
+	 *             callback,
+	 *         )
 	 *     )
 	 * )
-	 * 
+	 *
 	 * @access private
 	 * @return array
 	 */
 	public function getAllHandlers() {
-		return $this->handlers;
+		$ret = [];
+		foreach ($this->registrations as $name => $types) {
+			foreach ($types as $type => $registrations) {
+				foreach ($registrations as $registration) {
+					$priority = $registration[self::REG_KEY_PRIORITY];
+					$handler = $registration[self::REG_KEY_HANDLER];
+					$ret[$name][$type][$priority][] = $handler;
+				}
+			}
+		}
+
+		return $ret;
 	}
 
 	/**
 	 * Does the hook have a handler?
-	 * 
+	 *
 	 * @param string $name The name of the hook
 	 * @param string $type The type of the hook
 	 * @return boolean
 	 */
 	public function hasHandler($name, $type) {
-		return isset($this->handlers[$name][$type]);
+		return !empty($this->registrations[$name][$type]);
 	}
 
 	/**
@@ -126,27 +175,72 @@ abstract class HooksRegistrationService {
 	 * @access private
 	 */
 	public function getOrderedHandlers($name, $type) {
-		$handlers = array();
+		$registrations = [];
 		
-		if (isset($this->handlers[$name][$type])) {
-			if ($name != 'all' && $type != 'all') {
-				$handlers = array_merge($handlers, array_values($this->handlers[$name][$type]));
+		if (!empty($this->registrations[$name][$type])) {
+			if ($name !== 'all' && $type !== 'all') {
+				array_splice($registrations, count($registrations), 0, $this->registrations[$name][$type]);
 			}
 		}
-		if (isset($this->handlers['all'][$type])) {
-			if ($type != 'all') {
-				$handlers = array_merge($handlers, array_values($this->handlers['all'][$type]));
+		if (!empty($this->registrations['all'][$type])) {
+			if ($type !== 'all') {
+				array_splice($registrations, count($registrations), 0, $this->registrations['all'][$type]);
 			}
 		}
-		if (isset($this->handlers[$name]['all'])) {
-			if ($name != 'all') {
-				$handlers = array_merge($handlers, array_values($this->handlers[$name]['all']));
+		if (!empty($this->registrations[$name]['all'])) {
+			if ($name !== 'all') {
+				array_splice($registrations, count($registrations), 0, $this->registrations[$name]['all']);
 			}
 		}
-		if (isset($this->handlers['all']['all'])) {
-			$handlers = array_merge($handlers, array_values($this->handlers['all']['all']));
+		if (!empty($this->registrations['all']['all'])) {
+			array_splice($registrations, count($registrations), 0, $this->registrations['all']['all']);
+		}
+
+		usort($registrations, function ($a, $b) {
+			// priority first
+			if ($a[self::REG_KEY_PRIORITY] < $b[self::REG_KEY_PRIORITY]) {
+				return -1;
+			}
+			if ($a[self::REG_KEY_PRIORITY] > $b[self::REG_KEY_PRIORITY]) {
+				return 1;
+			}
+			// then insertion order
+			return ($a[self::REG_KEY_INDEX] < $b[self::REG_KEY_INDEX]) ? -1 : 1;
+		});
+
+		$handlers = [];
+		foreach ($registrations as $registration) {
+			$handlers[] = $registration[self::REG_KEY_HANDLER];
 		}
 
 		return $handlers;
+	}
+
+	/**
+	 * Create a matcher for the given callable (if it's for a static or dynamic method)
+	 *
+	 * @param callable $spec Callable we're creating a matcher for
+	 *
+	 * @return MethodMatcher|null
+	 */
+	protected function getMatcher($spec) {
+		if (is_string($spec) && false !== strpos($spec, '::')) {
+			list ($type, $method) = explode('::', $spec, 2);
+			return new MethodMatcher($type, $method);
+		}
+
+		if (!is_array($spec) || empty($spec[0]) || empty($spec[1]) || !is_string($spec[1])) {
+			return null;
+		}
+
+		if (is_object($spec[0])) {
+			$spec[0] = get_class($spec[0]);
+		}
+
+		if (!is_string($spec[0])) {
+			return null;
+		}
+
+		return new MethodMatcher($spec[0], $spec[1]);
 	}
 }

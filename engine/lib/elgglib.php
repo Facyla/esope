@@ -1,4 +1,8 @@
 <?php
+
+use Elgg\Filesystem\Directory;
+
+
 /**
  * Bootstrapping and helper procedural code available for use in Elgg core and plugins.
  *
@@ -6,6 +10,16 @@
  * @todo These functions can't be subpackaged because they cover a wide mix of
  * purposes and subsystems.  Many of them should be moved to more relevant files.
  */
+
+/**
+ * Get a reference to the global Application object
+ *
+ * @return Elgg\Application
+ * @since 2.0.0
+ */
+function elgg() {
+	return Elgg\Application::$_instance;
+}
 
 /**
  * Register a PHP file as a library.
@@ -116,6 +130,9 @@ function forward($location = "", $reason = 'system') {
  * The JavaScript files can be local to the server or remote (such as
  * Google's CDN).
  *
+ * @note Since 2.0, scripts with location "head" will also be output in the footer, but before
+ *       those with location "footer".
+ *
  * @param string $name     An identifier for the JavaScript library
  * @param string $url      URL of the JavaScript file
  * @param string $location Page location: head or footer. (default: head)
@@ -138,7 +155,7 @@ function elgg_register_js($name, $url, $location = 'head', $priority = null) {
  *
  * Use elgg_require_js($name) to load on the current page.
  *
- * Calling this function is not needed if your JS are in views named like `js/module/name.js`
+ * Calling this function is not needed if your JS are in views named like `module/name.js`
  * Instead, simply call elgg_require_js("module/name").
  *
  * @param string $name   The module name
@@ -395,7 +412,7 @@ function sanitise_filepath($path, $append_slash = true) {
  * {@link views/default/page/shells/default.php} and displays messages as
  * javascript popups.
  *
- * @internal Messages are stored as strings in the Elgg session as ['msg'][$register] array.
+ * @note Internal: Messages are stored as strings in the Elgg session as ['msg'][$register] array.
  *
  * @warning This function is used to both add to and clear the message
  * stack.  If $messages is null, $register will be returned and cleared.
@@ -501,7 +518,7 @@ function register_error($error) {
  *
  * @tip When referring to events, the preferred syntax is "event, type".
  *
- * @internal Events are stored in $CONFIG->events as:
+ * Internal note: Events are stored in $CONFIG->events as:
  * <code>
  * $CONFIG->events[$event][$type][$priority] = $callback;
  * </code>
@@ -525,7 +542,7 @@ function elgg_register_event_handler($event, $object_type, $callback, $priority 
  *
  * @param string $event       The event type
  * @param string $object_type The object type
- * @param string $callback    The callback
+ * @param string $callback    The callback. Since 1.11, static method callbacks will match dynamic methods
  *
  * @return bool true if a handler was found and removed
  * @since 1.7
@@ -554,10 +571,10 @@ function elgg_unregister_event_handler($event, $object_type, $callback) {
  *
  * @tip When referring to events, the preferred syntax is "event, type".
  *
- * @internal Only rarely should events be changed, added, or removed in core.
+ * @note Internal: Only rarely should events be changed, added, or removed in core.
  * When making changes to events, be sure to first create a ticket on Github.
  *
- * @internal @tip Think of $object_type as the primary namespace element, and
+ * @note Internal: @tip Think of $object_type as the primary namespace element, and
  * $event as the secondary namespace.
  *
  * @param string $event       The event type
@@ -589,7 +606,7 @@ function elgg_trigger_event($event, $object_type, $object = null) {
  * @see elgg_trigger_after_event
  */
 function elgg_trigger_before_event($event, $object_type, $object = null) {
-	return _elgg_services()->events->trigger("$event:before", $object_type, $object);
+	return _elgg_services()->events->triggerBefore($event, $object_type, $object);
 }
 
 /**
@@ -608,10 +625,7 @@ function elgg_trigger_before_event($event, $object_type, $object = null) {
  * @see elgg_trigger_before_event
  */
 function elgg_trigger_after_event($event, $object_type, $object = null) {
-	$options = array(
-		\Elgg\EventsService::OPTION_STOPPABLE => false,
-	);
-	return _elgg_services()->events->trigger("$event:after", $object_type, $object, $options);
+	return _elgg_services()->events->triggerAfter($event, $object_type, $object);
 }
 
 /**
@@ -628,11 +642,7 @@ function elgg_trigger_after_event($event, $object_type, $object = null) {
  * @see elgg_trigger_event
  */
 function elgg_trigger_deprecated_event($event, $object_type, $object = null, $message, $version) {
-	$options = array(
-		\Elgg\EventsService::OPTION_DEPRECATION_MESSAGE => $message,
-		\Elgg\EventsService::OPTION_DEPRECATION_VERSION => $version,
-	);
-	return _elgg_services()->events->trigger($event, $object_type, $object, $options);
+	return _elgg_services()->events->triggerDeprecated($event, $object_type, $object, $message, $version);
 }
 
 /**
@@ -661,7 +671,7 @@ function elgg_trigger_deprecated_event($event, $object_type, $object = null, $me
  *  - mixed $params An optional array of parameters.  Used to provide additional
  *  information to plugins.
  *
- * @internal Plugin hooks are stored in $CONFIG->hooks as:
+ * @note Internal: Plugin hooks are stored in $CONFIG->hooks as:
  * <code>
  * $CONFIG->hooks[$hook][$type][$priority] = $callback;
  * </code>
@@ -709,13 +719,27 @@ function elgg_register_plugin_hook_handler($hook, $type, $callback, $priority = 
  *
  * @param string   $hook        The name of the hook
  * @param string   $entity_type The name of the type of entity (eg "user", "object" etc)
- * @param callable $callback    The PHP callback to be removed
+ * @param callable $callback    The PHP callback to be removed. Since 1.11, static method
+ *                              callbacks will match dynamic methods
  *
  * @return void
  * @since 1.8.0
  */
 function elgg_unregister_plugin_hook_handler($hook, $entity_type, $callback) {
 	_elgg_services()->hooks->unregisterHandler($hook, $entity_type, $callback);
+}
+
+/**
+ * Clears all callback registrations for a plugin hook.
+ *
+ * @param string $hook The name of the hook
+ * @param string $type The type of the hook
+ *
+ * @return void
+ * @since 2.0
+ */
+function elgg_clear_plugin_hook_handlers($hook, $type) {
+	_elgg_services()->hooks->clearHandlers($hook, $type);
 }
 
 /**
@@ -747,7 +771,7 @@ function elgg_unregister_plugin_hook_handler($hook, $entity_type, $callback) {
  * @tip It's not possible for a plugin hook to change a non-null $returnvalue
  * to null.
  *
- * @internal The checks for $hook and/or $type not being equal to 'all' is to
+ * @note Internal: The checks for $hook and/or $type not being equal to 'all' is to
  * prevent a plugin hook being registered with an 'all' being called more than
  * once if the trigger occurs with an 'all'. An example in core of this is in
  * actions.php:
@@ -803,11 +827,10 @@ function _elgg_php_exception_handler($exception) {
 	// make sure the error isn't cached
 	header("Cache-Control: no-cache, must-revalidate", true);
 	header('Expires: Fri, 05 Feb 1982 00:00:00 -0500', true);
-	// @note Do not send a 500 header because it is not a server error
 
 	// we don't want the 'pagesetup', 'system' event to fire
 	global $CONFIG;
-	$CONFIG->pagesetupdone = true;
+	$GLOBALS['_ELGG']->pagesetupdone = true;
 
 	try {
 		// allow custom scripts to trigger on exception
@@ -826,28 +849,28 @@ function _elgg_php_exception_handler($exception) {
 			}
 		}
 
-		elgg_set_viewtype('failsafe');
+		if (elgg_is_xhr()) {
+			elgg_set_viewtype('json');
+			$response = new \Symfony\Component\HttpFoundation\JsonResponse(null, 500);
+		} else {
+			elgg_set_viewtype('failsafe');
+			$response = new \Symfony\Component\HttpFoundation\Response('', 500);
+		}
 
 		if (elgg_is_admin_logged_in()) {
-			if (!elgg_view_exists("messages/exceptions/admin_exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/admin_exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		} else {
-			if (!elgg_view_exists("messages/exceptions/exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		}
-		echo elgg_view_page(elgg_echo('exception:title'), $body);
+
+		$response->setContent(elgg_view_page(elgg_echo('exception:title'), $body));
+		$response->send();
 	} catch (Exception $e) {
 		$timestamp = time();
 		$message = $e->getMessage();
@@ -974,20 +997,15 @@ function elgg_dump($value, $to_screen = true) {
  * @since 1.9
  */
 function elgg_get_version($human_readable = false) {
-	global $CONFIG;
-
 	static $version, $release;
-
-	if (isset($CONFIG->path)) {
-		if (!isset($version) || !isset($release)) {
-			if (!include($CONFIG->path . "version.php")) {
-				return false;
-			}
+	
+	if (!isset($version) || !isset($release)) {
+		if (!include(\Elgg\Application::elggDir()->getPath('version.php'))) {
+			return false;
 		}
-		return $human_readable ? $release : $version;
 	}
-
-	return false;
+	
+	return $human_readable ? $release : $version;
 }
 
 /**
@@ -1451,28 +1469,33 @@ function _elgg_js_page_handler($page) {
 /**
  * Serve individual views for Ajax.
  *
- * /ajax/view/<name of view>?<key/value params>
+ * /ajax/view/<view_name>?<key/value params>
+ * /ajax/form/<action_name>?<key/value params>
  *
- * @param array $page Array of URL segements
+ * @param string[] $segments URL segments (not including "ajax")
  * @return bool
  *
  * @see elgg_register_ajax_view()
  * @elgg_pagehandler ajax
  * @access private
  */
-function _elgg_ajax_page_handler($page) {
-	// the ajax page handler should only be called from an xhr
-	if (!elgg_is_xhr()) {
-		register_error(_elgg_services()->translator->translate('ajax:not_is_xhr'));
-		forward(null, '400');
-	}
-	
-	if (is_array($page) && sizeof($page)) {
-		// throw away 'view' and form the view name
-		unset($page[0]);
-		$view = implode('/', $page);
+function _elgg_ajax_page_handler($segments) {
+	elgg_ajax_gatekeeper();
 
-		$allowed_views = elgg_get_config('allowed_ajax_views');
+	if (count($segments) < 2) {
+		return false;
+	}
+
+	if ($segments[0] === 'view' || $segments[0] === 'form') {
+		if ($segments[0] === 'view') {
+			// ignore 'view/'
+			$view = implode('/', array_slice($segments, 1));
+		} else {
+			// form views start with "forms", not "form"
+			$view = 'forms/' . implode('/', array_slice($segments, 1));
+		}
+
+		$allowed_views = $GLOBALS['_ELGG']->allowed_ajax_views;
 		if (!array_key_exists($view, $allowed_views)) {
 			header('HTTP/1.1 403 Forbidden');
 			exit;
@@ -1488,19 +1511,25 @@ function _elgg_ajax_page_handler($page) {
 			$vars['entity'] = get_entity($vars['guid']);
 		}
 
-		// Try to guess the mime-type
-		switch ($page[1]) {
-			case "js":
-				header("Content-Type: text/javascript");
-				break;
-			case "css":
-				header("Content-Type: text/css");
-				break;
-		}
+		if ($segments[0] === 'view') {
+			// Try to guess the mime-type
+			switch ($segments[1]) {
+				case "js":
+					header("Content-Type: text/javascript");
+					break;
+				case "css":
+					header("Content-Type: text/css");
+					break;
+			}
 
-		echo elgg_view($view, $vars);
+			echo elgg_view($view, $vars);
+		} else {
+			$action = implode('/', array_slice($segments, 1));
+			echo elgg_view_form($action, array(), $vars);
+		}
 		return true;
 	}
+
 	return false;
 }
 
@@ -1540,8 +1569,8 @@ function _elgg_favicon_page_handler($segments) {
 	header("Cache-Control: public", true);
 
 	// TODO in next 1.x send our default icon
-	//header('Content-Type: image/vnd.microsoft.icon');
-	//readfile(elgg_get_root_path() . '_graphics/favicon.ico');
+	//header('Content-Type: image/x-icon');
+	//echo elgg_view('favicon.ico');
 
 	return true;
 }
@@ -1738,20 +1767,7 @@ function _elgg_is_valid_options_for_batch_operation($options, $type) {
  * @access private
  */
 function _elgg_walled_garden_index() {
-
-	elgg_load_css('elgg.walled_garden');
-	elgg_load_js('elgg.walled_garden');
-	
-	$content = elgg_view('core/walled_garden/login');
-
-	$params = array(
-		'content' => $content,
-		'class' => 'elgg-walledgarden-double',
-		'id' => 'elgg-walledgarden-login',
-	);
-	$body = elgg_view_layout('walled_garden', $params);
-	echo elgg_view_page('', $body, 'walled_garden');
-
+	echo elgg_view_resource('walled_garden');
 	return true;
 }
 
@@ -1790,8 +1806,8 @@ function _elgg_walled_garden_ajax_handler($page) {
 function _elgg_walled_garden_init() {
 	global $CONFIG;
 
-	elgg_register_css('elgg.walled_garden', elgg_get_simplecache_url('css', 'walled_garden'));
-	elgg_register_js('elgg.walled_garden', elgg_get_simplecache_url('js', 'walled_garden'));
+	elgg_register_css('elgg.walled_garden', elgg_get_simplecache_url('walled_garden.css'));
+	elgg_register_js('elgg.walled_garden', elgg_get_simplecache_url('walled_garden.js'));
 
 	elgg_register_page_handler('walled_garden', '_elgg_walled_garden_ajax_handler');
 
@@ -1835,13 +1851,15 @@ function _elgg_engine_boot() {
 	set_error_handler('_elgg_php_error_handler');
 	set_exception_handler('_elgg_php_exception_handler');
 
-	_elgg_services()->db->setupConnections();
+	$db = _elgg_services()->db;
 
-	_elgg_services()->db->assertInstalled();
+	// we inject the logger here to allow use of DB without loading core
+	$db->setLogger(_elgg_services()->logger);
+
+	$db->setupConnections();
+	$db->assertInstalled();
 
 	_elgg_load_application_config();
-
-	_elgg_load_autoload_cache();
 
 	_elgg_load_site_config();
 
@@ -1889,36 +1907,8 @@ function _elgg_init() {
 		return $result;
 	});
 
-	elgg_register_js('elgg.autocomplete', 'js/lib/ui.autocomplete.js');
-	elgg_register_js('jquery.ui.autocomplete.html', 'vendors/jquery/jquery.ui.autocomplete.html.js');
-
-	elgg_define_js('jquery.ui.autocomplete.html', array(
-		'src' => '/vendors/jquery/jquery.ui.autocomplete.html.js',
-		'deps' => array('jquery.ui')
-	));
-	
-	elgg_register_external_view('js/elgg/UserPicker.js', true);
-
-	elgg_register_js('elgg.friendspicker', 'js/lib/ui.friends_picker.js');
-	elgg_register_js('elgg.avatar_cropper', 'js/lib/ui.avatar_cropper.js');
-	elgg_register_js('jquery.imgareaselect', 'vendors/jquery/jquery.imgareaselect/scripts/jquery.imgareaselect.min.js');
-	elgg_register_js('elgg.ui.river', 'js/lib/ui.river.js');
-
-	elgg_register_css('jquery.imgareaselect', 'vendors/jquery/jquery.imgareaselect/css/imgareaselect-deprecated.css');
-	
 	// Trigger the shutdown:system event upon PHP shutdown.
 	register_shutdown_function('_elgg_shutdown_hook');
-	
-	// Sets a blacklist of words in the current language.
-	// This is a comma separated list in word:blacklist.
-	// @todo possibly deprecate
-	$CONFIG->wordblacklist = array();
-	$list = explode(',', elgg_echo('word:blacklist'));
-	if ($list) {
-		foreach ($list as $l) {
-			$CONFIG->wordblacklist[] = trim($l);
-		}
-	}
 }
 
 /**

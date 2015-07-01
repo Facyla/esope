@@ -16,7 +16,7 @@ class ViewFilter {
 	/**
 	 * Given the view name, returns the AMD name.
 	 * 
-	 * @param string $name The name of the view (e.g., 'js/elgg/module.js')
+	 * @param string $name The name of the view (e.g., 'elgg/module.js')
 	 * 
 	 * @return string The AMD name (e.g., 'elgg/module'), or blank for no AMD name.
 	 */
@@ -45,7 +45,7 @@ class ViewFilter {
 		$amdName = $this->getAmdName($viewName);
 		
 		if (!empty($amdName)) {
-			$content = preg_replace('/^define\(([^\'"])/m', "define(\"$amdName\", \$1", $content, 1);
+			$content = preg_replace('/^(\s*)define\(([^\'"])/m', "\${1}define(\"$amdName\", \$2", $content, 1);
 		}
 		
 		return $content;

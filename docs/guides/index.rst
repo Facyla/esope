@@ -21,6 +21,8 @@ Customize Elgg's behavior with plugins.
    menus
    notifications
    pagehandler
+   routing
+   services
    page-owner
    permissions-check
    settings

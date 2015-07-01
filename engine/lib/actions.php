@@ -64,9 +64,9 @@ function action($action, $forwarder = "") {
  *
  * @tip Put action files under the actions/<plugin_name> directory of your plugin.
  *
- * @tip You don't need to include engine/start.php in your action files.
+ * @tip You don't need to use Elgg\Application in your action files.
  *
- * @internal Actions are saved in $CONFIG->actions as an array in the form:
+ * @note Internal: Actions are saved in $CONFIG->actions as an array in the form:
  * <code>
  * array(
  * 	'file' => '/location/to/file.php',
@@ -300,10 +300,10 @@ function actions_init() {
 	elgg_register_page_handler('action', '_elgg_action_handler');
 	elgg_register_page_handler('refresh_token', '_elgg_csrf_token_refresh');
 
-	elgg_register_simplecache_view('js/languages/en');
+	elgg_register_simplecache_view('languages/en.js');
 
-	elgg_register_plugin_hook_handler('action', 'all', 'ajax_action_hook');
-	elgg_register_plugin_hook_handler('forward', 'all', 'ajax_forward_hook');
+	elgg_register_plugin_hook_handler('action', 'all', 'ajax_action_hook', 600);
+	elgg_register_plugin_hook_handler('forward', 'all', 'ajax_forward_hook', 600);
 }
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {

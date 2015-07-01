@@ -21,7 +21,7 @@ function _elgg_comments_init() {
 	elgg_register_plugin_hook_handler('permissions_check', 'object', '_elgg_comments_permissions_override');
 	elgg_register_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
 	
-	elgg_register_event_handler('update:after', 'all', '_elgg_comments_access_sync');
+	elgg_register_event_handler('update:after', 'all', '_elgg_comments_access_sync', 600);
 
 	elgg_register_page_handler('comment', '_elgg_comments_page_handler');
 
@@ -31,57 +31,23 @@ function _elgg_comments_init() {
 /**
  * Page handler for generic comments manipulation.
  *
- * @param array $page
+ * @param array $segments
  * @return bool
  * @access private
  */
-function _elgg_comments_page_handler($page) {
+function _elgg_comments_page_handler($segments) {
 
-	switch ($page[0]) {
+	$page = elgg_extract(0, $segments);
+	switch ($page) {
 
 		case 'edit':
-			elgg_gatekeeper();
-
-			if (empty($page[1])) {
-				register_error(elgg_echo('generic_comment:notfound'));
-				forward(REFERER);
-			}
-			$comment = get_entity($page[1]);
-			if (!($comment instanceof \ElggComment) || !$comment->canEdit()) {
-				register_error(elgg_echo('generic_comment:notfound'));
-				forward(REFERER);
-			}
-
-			$target = $comment->getContainerEntity();
-			if (!($target instanceof \ElggEntity)) {
-				register_error(elgg_echo('generic_comment:notfound'));
-				forward(REFERER);
-			}
-
-			$title = elgg_echo('generic_comments:edit');
-			elgg_push_breadcrumb($target->getDisplayName(), $target->getURL());
-			elgg_push_breadcrumb($title);
-
-			$params = array(
-				'entity' => $target,
-				'comment' => $comment,
-				'is_edit_page' => true,
-			);
-			$content = elgg_view_form('comment/save', null, $params);
-
-			$params = array(
-				'content' => $content,
-				'title' => $title,
-				'filter' => '',
-			);
-			$body = elgg_view_layout('content', $params);
-			echo elgg_view_page($title, $body);
-
+			set_input('guid', elgg_extract(1, $segments));
+			echo elgg_view_resource('comments/edit');
 			return true;
 			break;
 
 		case 'view':
-			_elgg_comment_redirect(elgg_extract(1, $page), elgg_extract(2, $page));
+			_elgg_comment_redirect(elgg_extract(1, $segments), elgg_extract(2, $segments));
 			break;
 
 		default:
@@ -275,6 +241,10 @@ function _elgg_comments_permissions_override($hook, $type, $return, $params) {
  * @return array $returnvalue Modified mail parameters
  */
 function _elgg_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
+	if (!is_array($returnvalue)) {
+		// another hook handler returned a non-array, let's not override it
+		return;
+	}
 
 	/** @var Elgg\Notifications\Notification */
 	$notification = elgg_extract('notification', $returnvalue['params']);

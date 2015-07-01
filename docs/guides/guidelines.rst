@@ -1,7 +1,9 @@
 Plugin coding guidelines
 ========================
 
-In addition to the Elgg Coding Standards, these are guidelines for creating plugins. Core plugins are being updated to this format and all plugin authors should follow these guidelines in their own plugins.
+In addition to the Elgg Coding Standards, these are guidelines for creating plugins.
+Core plugins are being updated to this format and all plugin authors should follow
+these guidelines in their own plugins.
 
 .. seealso::
 
@@ -37,10 +39,10 @@ Use standardized routing with page handlers
    +---------------+-----------------------------------+
    | Group list    | page_handler/group/<guid>/owner   |
    +---------------+-----------------------------------+
-- Include page handler scripts from the page handler. Almost every page handler should have a page handler script. (Example: ``bookmarks/all`` => ``mod/bookmarks/pages/bookmarks/all.php``)
-- Call ``set_input()`` for entity guids in the page handler and use ``get_input()`` in the page handler scripts.
+- Include page handler scripts from the page handler. Almost every page handler should have a page handler script. (Example: ``bookmarks/all`` => ``mod/bookmarks/views/default/resources/bookmarks/all.php``)
+- Pass arguments like entity guids to the resource view via ``$vars`` in ``elgg_view_resource()``.
 - Call ``elgg_gatekeeper()`` and ``elgg_admin_gatekeeper()`` in the page handler function if required.
-- The group URL should use the ``pages/<handler>/owner.php`` script.
+- The group URL should use views like ``resources/groups/*.php`` to render pages.
 - Page handlers should not contain HTML.
 - If upgrading a 1.7 plugin, update the URLs throughout the plugin. (Don’t forget to remove ``/pg/``!)
 
@@ -48,7 +50,8 @@ Use standardized page handlers and scripts
 ------------------------------------------
 
 - Example: Bookmarks plugin
-- Store page handler scripts in ``mod/<plugin>/pages/<page_handler>/<page_name>``
+- Store page functionality in ``mod/<plugin>/views/default/resources/<page_handler>/<page_name>.php``
+- Use ``elgg_view_resource('<page_handler>/<page_name>')`` to render that.
 - Use the content page layout in page handler scripts: ``$content = elgg_view_layout('content', $options);``
 - Page handler scripts should not contain HTML
 - Call ``elgg_push_breadcrumb()`` in the page handler scripts.
@@ -59,8 +62,8 @@ The object/<subtype> view
 -------------------------
 
 - Example: Bookmarks plugin
-- Make sure there are views for ``$vars[‘full’] == true`` and ``$vars[‘full’] == false``
-- Check for the object in ``$vars[‘entity’]`` . Use ``elgg_instance_of()`` to make sure it’s the type entity you want. Return ``true`` to short circuit the view if the entity is missing or wrong.
+- Make sure there are views for ``$vars['full_view'] == true`` and ``$vars['full_view'] == false``
+- Check for the object in ``$vars['entity']`` . Use ``elgg_instance_of()`` to make sure it’s the type entity you want. Return ``true`` to short circuit the view if the entity is missing or wrong.
 - Use the new list body and list metadata views to help format. You should use almost no markup in these views.
 - Update action structure - Example: Bookmarks plugin.
 - Namespace action files and action names (example: ``mod/blog/actions/blog/save.php`` => ``action/blog/save``)
@@ -80,26 +83,18 @@ The object/<subtype> view
 Actions
 -------
 
-Actions are transient states to perform an action such as updating the database or sending a notification to a user. Used correctly, actions are secure and prevent against CSRF and XSS attacks.
+Actions are transient states to perform an action such as updating the database or sending a notification to a user. Used correctly, actions provide a level of access control and prevent against CSRF attacks.
 
-.. note::
+Actions require action (CSRF) tokens to be submitted via GET/POST, but these are added automatically by elgg_view_form() and by using the ``is_action`` argument of the ``output/url`` view.
 
-   As of Elgg 1.7 all actions require action tokens.
-   
 Action best practices
 ^^^^^^^^^^^^^^^^^^^^^
 
-Never call an action directly by saying:
-
-.. code:: html
-
-   ...href="/mod/mymod/actions/myaction.php"
-
-This circumvents the security systems in Elgg.
-
-There is no need to include the ``engine/start.php`` file in your actions. Actions should never be called directly, so the engine will be started automatically when called correctly.
+Action files are included within Elgg's action system; like views, they are *not* regular scripts executable by users. Do not boot the Elgg core in your file and direct users to load it directly.
 
 Because actions are time-sensitive they are not suitable for links in emails or other delayed notifications. An example of this would be invitations to join a group. The clean way to create an invitation link is to create a page handler for invitations and email that link to the user. It is then the page handler's responsibility to create the action links for a user to join or ignore the invitation request.
+
+Consider that actions may be submitted via XHR requests, not just links or form submissions.
 
 Directly calling a file
 -----------------------

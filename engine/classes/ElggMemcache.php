@@ -8,7 +8,7 @@
 class ElggMemcache extends \ElggSharedMemoryCache {
 	/**
 	 * Global Elgg configuration
-	 * 
+	 *
 	 * @var \stdClass
 	 */
 	private $CONFIG;
@@ -107,6 +107,9 @@ class ElggMemcache extends \ElggSharedMemoryCache {
 		if (isset($this->CONFIG->memcache_expires)) {
 			$this->expires = $this->CONFIG->memcache_expires;
 		}
+		
+		// make sure memcache is reset
+		_elgg_services()->events->registerHandler('cache:flush', 'system', array($this, 'clear'));
 	}
 
 	/**
@@ -200,16 +203,40 @@ class ElggMemcache extends \ElggSharedMemoryCache {
 	}
 
 	/**
-	 * Clears the entire cache?
-	 *
-	 * @todo write or remove.
+	 * Clears the entire cache
 	 *
 	 * @return true
 	 */
 	public function clear() {
-		// DISABLE clearing for now - you must use delete on a specific key.
-		return true;
+		$result = $this->memcache->flush();
+		if ($result === false) {
+			_elgg_services()->logger->info("MEMCACHE: failed to flush {$this->getNamespace()}");
+		} else {
+			sleep(1); // needed because http://php.net/manual/en/memcache.flush.php#81420
+			
+			_elgg_services()->logger->info("MEMCACHE: flushed {$this->getNamespace()}");
+		}
+		
+		return $result;
 
 		// @todo Namespaces as in #532
+	}
+	
+	/**
+	 * Set the namespace of this cache.
+	 *
+	 * This will also add the Memcache namespace prefix as defined in settings.php
+	 *
+	 * @param string $namespace Namespace for cache
+	 *
+	 * @return void
+	 */
+	public function setNamespace($namespace = "default") {
+		
+		if (isset($this->CONFIG->memcache_namespace_prefix)) {
+			$namespace = $this->CONFIG->memcache_namespace_prefix . $namespace;
+		}
+		
+		parent::setNamespace($namespace);
 	}
 }

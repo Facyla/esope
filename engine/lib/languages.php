@@ -159,15 +159,13 @@ function register_translations($path, $load_all = false) {
  * @return bool success
  */
 function _elgg_register_translations_for_language($path, $language) {
-	global $CONFIG;
-
 	$path = sanitise_filepath($path);
 
 	// Make a note of this path just in case we need to register this language later
-	if (!isset($CONFIG->language_paths)) {
-		$CONFIG->language_paths = array();
+	if (!isset($GLOBALS['_ELGG']->language_paths)) {
+		$GLOBALS['_ELGG']->language_paths = array();
 	}
-	$CONFIG->language_paths[$path] = true;
+	$GLOBALS['_ELGG']->language_paths[$path] = true;
 
 	$language_file = "{$path}{$language}.php";
 
@@ -259,10 +257,10 @@ function _elgg_translations_init() {
 	$translations = _elgg_services()->translator->getAllLanguageCodes();
 	foreach ($translations as $language_code) {
 		// make the js view available for each language
-		elgg_extend_view("js/languages/$language_code.js", "js/languages");
+		elgg_extend_view("languages/$language_code.js", "languages.js");
 	
 		// register the js view for use in simplecache
-		elgg_register_simplecache_view("js/languages/$language_code.js");
+		elgg_register_simplecache_view("languages/$language_code.js");
 	}
 }
 

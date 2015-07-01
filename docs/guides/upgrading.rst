@@ -3,11 +3,538 @@ Upgrading Plugins
 
 Prepare your plugin for the next version of Elgg.
 
-See the administator guides for :doc:`how to upgrade a live site </admin/upgrading>`.
+See the administrator guides for :doc:`how to upgrade a live site </admin/upgrading>`.
 
 .. contents:: Contents
    :local:
    :depth: 2
+
+From 1.x to 2.0
+===============
+
+Elgg can be now installed as a composer dependency instead of at document root
+------------------------------------------------------------------------------
+
+That means an Elgg site can look something like this:
+
+.. code::
+
+    settings.php
+    vendor/
+      elgg/
+        elgg/
+          engine/
+            start.php
+          _graphics/
+            elgg_sprites.png
+    mod/
+      blog
+      bookmarks
+      ...
+
+``elgg_get_root_path`` and ``$CONFIG->path`` will return the path to the application
+root directory (the one containing ``settings.php``), which is not necessarily the
+same as Elgg core's root directory (which in this case is ``vendor/elgg/elgg/``).
+
+Do not attempt to access the core Elgg from your plugin directly, since you cannot
+rely on its location on the filesystem.
+
+In particular, don't try load ``engine/start.php``.
+
+.. code:: php
+
+    // Don't do this!
+    dirname(__DIR__) . "/engine/start.php";
+    
+To boot Elgg manually, you can use the class ``Elgg\Application``.
+
+.. code:: php
+
+    // boot Elgg in mod/myplugin/foo.php
+    require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+    \Elgg\Application::start();
+
+However, use this approach sparingly. Prefer :doc:`routing` instead whenever possible
+as that keeps your public URLs and your filesystem layout decoupled.
+
+Also, don't try to access the ``_graphics`` files directly.
+
+.. code:: php
+
+    readfile(elgg_get_root_path() . "_graphics/elgg_sprites.png");
+    
+Use :doc:`views` instead:
+
+.. code:: php
+
+    echo elgg_view('elgg_sprites.png');
+    
+
+Cacheable views must have a file extension in their names
+---------------------------------------------------------
+
+This requirement makes it possibile for us to serve assets directly
+from disk for performance, instead of serving them through PHP.
+
+It also makes it much easier to explore the available cached resources
+by navigating to dataroot/views_simplecache and browsing around.
+
+ * Bad: ``my/cool/template``
+ * Good: ``my/cool/template.html``
+
+We now cache assets by ``"$viewtype/$view"``, not ``md5("$viewtype|$view")``,
+which can result in conflicts between cacheable views that don't have file extensions
+to disambiguate files from directories.
+
+
+Dropped ``jquery-migrate`` and upgraded ``jquery`` to ^2.1.4
+------------------------------------------------------------
+
+jQuery 2.x is API-compatible with 1.x, but drops support for IE8-, which Elgg
+hasn't supported for some time anyways.
+
+See http://jquery.com/upgrade-guide/1.9/ for how to move off jquery-migrate.
+
+If you'd prefer to just add it back, you can use this code in your plugin's init:
+
+.. code:: php
+
+    elgg_register_js('jquery-migrate', elgg_get_simplecache_url('jquery-migrate.js'), 'head');
+    elgg_load_js('jquery-migrate');
+
+
+Also, define a ``jquery-migrate.js`` view containing the contents of the script.
+
+JS and CSS views have been moved out of the js/ and css/ directories
+--------------------------------------------------------------------
+
+They also have been given .js and .css extensions respectively if they didn't
+already have them:
+
+================= =============
+Old view          New view
+================= =============
+``js/view``       ``view.js``
+``js/other.js``   ``other.js``
+``css/view``      ``view.css``
+``css/other.css`` ``other.css``
+``js/img.png``    ``img.png``
+================= =============
+
+The main benefit this brings is being able to co-locate related assets.
+So a template (``view.php``) can have its CSS/JS dependencies right next to it
+(``view.css``, ``view.js``).
+
+Care has been taken to make this change as backwards-compatible as possible,
+so you should not need to update any view references right away. However, you are
+certainly encouraged to move your JS and CSS views to their new, canonical
+locations.
+
+Practically speaking, this carries a few gotchas:
+
+The ``view_vars, $view_name`` and ``view, $view_name`` hooks will operate on the
+*canonical* view name:
+
+.. code:: php
+
+    elgg_register_plugin_hook_handler('view', 'css/elgg', function($hook, $view_name) {
+      assert($view_name == 'elgg.css') // not "css/elgg"
+    });
+    
+Using the ``view, all`` hook and checking for individual views may not work as intended:
+
+.. code:: php
+
+    elgg_register_plugin_hook_handler('view', 'all', function($hook, $view_name) {
+      // Won't work because "css/elgg" was aliased to "elgg.css"
+      if ($view_name == 'css/elgg') {
+        // Never executed...
+      }
+      
+      // Won't work because no canonical views start with css/* anymore
+      if (strpos($view_name, 'css/') === 0) {
+        // Never executed...
+      }
+    });
+
+Please let us know about any other BC issues this change causes.
+We'd like to fix as many as possible to make the transition smooth.
+
+``fxp/composer-asset-plugin`` is now required to install Elgg from source
+-------------------------------------------------------------------------
+
+We use ``fxp/composer-asset-plugin`` to manage our browser assets (js, css, html)
+with Composer, but it must be installed globally *before installing Elgg* in order
+for the ``bower-asset/*`` packages to be recognized. To install it, run:
+
+.. code:: shell
+
+    composer global require fxp/composer-asset-plugin
+
+If you don't do this before running ``composer install`` or ``composer create-project``,
+you will get an error message:
+
+.. code:: shell
+
+    [InvalidArgumentException]
+    Package fxp/composer-asset-plugin not found
+
+
+List of deprecated views and view arguments that have been removed
+------------------------------------------------------------------
+
+We dropped support for and/or removed the following views:
+
+ * canvas/layouts/*
+ * categories
+ * categories/view
+ * core/settings/tools
+ * embed/addcontentjs
+ * footer/analytics (Use page/elements/foot instead)
+ * groups/left_column
+ * groups/right_column
+ * groups/search/finishblurb
+ * groups/search/startblurb
+ * input/calendar (Use input/date instead)
+ * input/datepicker (Use input/date instead)
+ * input/pulldown (Use input/select instead)
+ * invitefriends/formitems
+ * js/initialise_elgg (Use AMD and ``elgg_require_js`` instead of extending JS views)
+ * members/nav
+ * metatags (Use the 'head', 'page' plugin hook instead)
+ * navigation/topbar_tools
+ * navigation/viewtype
+ * notifications/subscriptions/groupsform
+ * object/groupforumtopic
+ * output/calendar (Use output/date instead)
+ * output/confirmlink (Use output/url instead)
+ * page_elements/contentwrapper
+ * page/elements/shortcut_icon (Use the 'head', 'page' plugin hook instead)
+ * page/elements/wrapper
+ * profile/icon (Use ``elgg_get_entity_icon``)
+ * river/object/groupforumtopic/create
+ * settings/{plugin}/edit (Use plugins/{plugin}/settings instead)
+ * user/search/finishblurb
+ * user/search/startblurb
+ * usersettings/{plugin}/edit (Use plugins/{plugin}/usersettings instead)
+ * widgets/{handler}/view (Use widgets/{handler}/content instead)
+
+We also dropped the following arguments to views:
+
+ * "value" in output/iframe (Use "src" instead)
+ * "area2" and "area3" in page/elements/sidebar (Use "sidebar" or view extension instead)
+ * "js" in icon views (e.g. icon/user/default)
+ * "options" to input/radio and input/checkboxes which aren't key-value pairs
+   will no longer be acceptable.
+
+
+All scripts moved to bottom of page
+-----------------------------------
+
+You should test your plugin **with the JavaScript error console visible**. For performance reasons, Elgg no longer
+supports ``script`` elements in the ``head`` element or in HTML views. ``elgg_register_js`` will now load *all*
+scripts at the end of the ``body`` element.
+
+You must convert inline scripts to :doc:`AMD </guides/javascript>` or to external scripts loaded with
+``elgg_load_js``.
+
+Early in the page, Elgg provides a shim of the RequireJS ``require()`` function that simply queues code until
+the AMD ``elgg`` and ``jQuery`` modules are defined. This provides a straightforward way to convert many inline
+scripts to use ``require()``.
+
+Inline code which will fail because the stack is not yet loaded:
+
+.. code:: html
+
+    <script>
+    $(function () {
+        // code using $ and elgg
+    });
+    </script>
+
+This should work in Elgg 2.0:
+
+.. code:: html
+
+    <script>
+    require(['elgg', 'jquery'], function (elgg, $) {
+        $(function () {
+            // code using $ and elgg
+        });
+    });
+    </script>
+
+Attribute formatter removes keys with underscores
+-------------------------------------------------
+
+``elgg_format_attributes()`` (and all APIs that use it) now filter out attributes whose name contains an
+underscore. If the attribute begins with ``data-``, however, it will not be removed.
+
+Breadcrumbs
+-----------
+
+Breadcrumb display now removes the last item if it does not contain a link. To restore the previous behavior,
+replace the plugin hook handler ``elgg_prepare_breadcrumbs`` with your own:
+
+.. code:: php
+
+    elgg_unregister_plugin_hook_handler('prepare', 'breadcrumbs', 'elgg_prepare_breadcrumbs');
+    elgg_register_plugin_hook_handler('prepare', 'breadcrumbs', 'myplugin_prepare_breadcrumbs');
+
+    function myplugin_prepare_breadcrumbs($hook, $type, $breadcrumbs, $params) {
+        // just apply excerpt to titles
+        foreach (array_keys($breadcrumbs) as $i) {
+            $breadcrumbs[$i]['title'] = elgg_get_excerpt($breadcrumbs[$i]['title'], 100);
+        }
+        return $breadcrumbs;
+    }
+
+Callbacks in Queries
+--------------------
+
+Make sure to use only valid *callable* values for "callback" argument/options in the API.
+
+Querying functions will now will throw a ``RuntimeException`` if ``is_callable()`` returns ``false`` for the given
+callback value. This includes functions such as ``elgg_get_entities()``, ``get_data()``, and many more.
+
+Comments plugin hook
+--------------------
+
+Plugins can now return an empty string from ``'comments',$entity_type`` hook in order to override the default comments component view. To force the default comments component, your plugin must return ``false``. If you were using empty strings to force the default comments view, you need to update your hook handlers to return ``false``.
+
+Creating a relationship triggers only one event
+-----------------------------------------------
+
+Entity relationship creation no longer fires the legacy "create" event using the relationship name as the type. E.g. Listening for the ``"create", "member"`` event will no longer capture group membership additions. Use the ``"create", "relationship"`` event.
+
+Discussion feature has been pulled from groups into its own plugin
+-------------------------------------------------------------------
+
+The ``object, groupforumtopic`` subtype has been replaced with the
+``object, discussion`` subtype. If your plugin is using or altering
+the old discussion feature, you should upgrade it to use the new
+subtype.
+
+Nothing changes from the group owners' point of view. The discussion
+feature is still available as a group tool and all old discussions
+are intact.
+
+Dropped login-over-https feature
+--------------------------------
+
+For the best security and performance, serve all pages over HTTPS by switching
+the scheme in your site's wwwroot to ``https`` at http://yoursite.tld/admin/settings/advanced
+
+.. _migrated-to-pdo:
+
+Elgg has migrated from ext/mysql to PDO MySQL
+---------------------------------------------
+
+Elgg now uses a ``PDO_MYSQL`` connection and no longer uses any ext/mysql functions. If you use
+``mysql_*`` functions, implicitly relying on an open connection, these will fail.
+
+If your code uses one of the following functions, read below.
+
+- ``execute_delayed_write_query()``
+- ``execute_delayed_read_query()``
+
+If you provide a callable ``$handler`` to be called with the results, your handler will now receive a
+``\Doctrine\DBAL\Driver\Statement`` object. Formerly this was an ext/mysql ``result`` resource.
+
+
+Event/Hook calling order may change
+-----------------------------------
+
+When registering for events/hooks, the ``all`` keyword for wildcard matching no longer has any effect
+on the order that handlers are called. To ensure your handler is called last, you must give it the
+highest priority of all matching handlers, or to ensure your handler is called first, you must give
+it the lowest priority of all matching handlers.
+
+If handlers were registered with the same priority, these are called in the order they were registered.
+
+To emulate prior behavior, Elgg core handlers registered with the ``all`` keyword have been raised in
+priority. Some of these handlers will most likely be called in a different order.
+
+``export/`` URLs are no longer available
+----------------------------------------
+
+Elgg no longer provides this endpoint for exposing resource data.
+
+Introduced third-party library for sending email
+------------------------------------------------
+
+We are using the excellent ``Zend\Mail`` library to send emails in Elgg 2.0.
+There are likely edge cases that the library handles differently than Elgg 1.x.
+Take care to test your email notifications carefully when upgrading to 2.0.
+
+Label elements
+--------------
+
+The following views received ``label`` elements around some of the input fields. If your plugin/theme overrides these views please check for the new content.
+
+- views/default/core/river/filter.php
+- views/default/forms/admin/plugins/filter.php
+- views/default/forms/admin/plugins/sort.php
+- views/default/forms/login.php
+
+Plugin Messages
+---------------
+
+Messages will no longer get the metadata 'msg' for newly created messages. This means you can not rely on that metadata to exist.
+
+Removed Classes
+---------------
+
+ - ``ElggInspector``
+ - ``Notable``
+ - ``FilePluginFile``: replace with ``ElggFile`` (or load with ``get_entity()``)
+
+Removed keys available via ``elgg_get_config()``
+------------------------------------------------
+
+ - ``allowed_ajax_views``
+ - ``dataroot_in_settings``
+ - ``externals``
+ - ``externals_map``
+ - ``i18n_loaded_from_cache``
+ - ``language_paths``
+ - ``pagesetupdone``
+ - ``registered_tag_metadata_names``
+ - ``simplecache_enabled_in_settings``
+ - ``translations``
+ - ``viewpath``
+ - ``views``
+ - ``view_path``
+ - ``viewtype``
+ - ``wordblacklist``
+
+Also note that plugins should not be accessing the global ``$CONFIG`` variable except for in ``settings.php``.
+
+Removed Functions
+-----------------
+
+ - ``count_unread_messages()``
+ - ``delete_entities()``
+ - ``delete_object_entity()``
+ - ``delete_user_entity()``
+ - ``elgg_get_view_location()``
+ - ``elgg_validate_action_url()``
+ - ``execute_delayed_query()``
+ - ``extend_view()``
+ - ``get_db_error()``
+ - ``get_db_link()``
+ - ``get_entities()``
+ - ``get_entities_from_access_id()``
+ - ``get_entities_from_access_collection()``
+ - ``get_entities_from_annotations()``
+ - ``get_entities_from_metadata()``
+ - ``get_entities_from_metadata_multi()``
+ - ``get_entities_from_relationship()``
+ - ``get_filetype_cloud()``
+ - ``get_library_files()``
+ - ``get_views()``
+ - ``is_ip_in_array()``
+ - ``list_entities()``
+ - ``list_entities_from_annotations()``
+ - ``list_group_search()``
+ - ``list_registered_entities()``
+ - ``list_user_search()``
+ - ``load_plugins()``
+ - ``menu_item()``
+ - ``make_register_object()``
+ - ``mysql_*()``: Elgg :ref:`no longer uses ext/mysql<migrated-to-pdo>`
+ - ``remove_blacklist()``
+ - ``search_for_group()``
+ - ``search_for_object()``
+ - ``search_for_site()``
+ - ``search_for_user()``
+ - ``search_list_objects_by_name()``
+ - ``search_list_groups_by_name()``
+ - ``search_list_users_by_name()``
+ - ``set_template_handler()``
+ - ``test_ip()``
+
+Removed methods
+---------------
+
+ - ``ElggCache::set_variable()``
+ - ``ElggCache::get_variable()``
+ - ``ElggData::initialise_attributes()``
+ - ``ElggData::getObjectOwnerGUID()``
+ - ``ElggDiskFilestore::make_directory_root()``
+ - ``ElggDiskFilestore::make_file_matrix()``
+ - ``ElggDiskFilestore::user_file_matrix()``
+ - ``ElggDiskFilestore::mb_str_split()``
+ - ``ElggEntity::clearMetadata()``
+ - ``ElggEntity::clearRelationships()``
+ - ``ElggEntity::clearAnnotations()``
+ - ``ElggEntity::getOwner()``
+ - ``ElggEntity::setContainer()``
+ - ``ElggEntity::getContainer()``
+ - ``ElggEntity::getIcon()``
+ - ``ElggEntity::setIcon()``
+ - ``ElggExtender::getOwner()``
+ - ``ElggFileCache::create_file()``
+ - ``ElggObject::addToSite()``: parent function in ElggEntity still available
+ - ``ElggObject::getSites()``: parent function in ElggEntity still available
+ - ``ElggSite::getCollections()``
+ - ``ElggUser::addToSite()``: parent function in ElggEntity still available
+ - ``ElggUser::getCollections()``
+ - ``ElggUser::getOwner()``
+ - ``ElggUser::getSites()``: parent function in ElggEntity still available
+ - ``ElggUser::listFriends()``
+ - ``ElggUser::listGroups()``
+ - ``ElggUser::removeFromSite()``: parent function in ElggEntity still available
+
+The following arguments have also been dropped:
+
+ - ``ElggSite::getMembers()``
+   - 2: ``$offset``
+ - ``elgg_view_entity_list()``
+   - 3: ``$offset``
+   - 4: ``$limit``
+   - 5: ``$full_view``
+   - 6: ``$list_type_toggle``
+   - 7: ``$pagination``
+
+Removed Plugin Hooks
+--------------------
+
+ - ``[display, view]``: See the :ref:`new plugin hook<guides/views#altering-view-output>`.
+ 
+Removed Actions
+---------------
+
+ - ``widgets/upgrade``
+
+
+Removed View Variables
+----------------------
+
+During rendering, the view system no longer injects these into the scope:
+
+ - ``$vars['url']``: replace with ``elgg_get_site_url()``
+ - ``$vars['user']``: replace with ``elgg_get_logged_in_user_entity()``
+ - ``$vars['config']``: use ``elgg_get_config()`` and ``elgg_set_config()``
+ - ``$CONFIG``: use ``elgg_get_config()`` and ``elgg_set_config()``
+
+Also several workarounds for very old views are no longer performed. Make these changes:
+
+ - Set ``$vars['full_view']`` instead of ``$vars['full']``.
+ - Set ``$vars['name']`` instead of ``$vars['internalname']``.
+ - Set ``$vars['id']`` instead of ``$vars['internalid']``.
+
+Removed libraries
+-----------------
+
+ - ``elgg:markdown``: Elgg no longer provides a markdown implementation. You must provide your own.
+
+Specifying View via Properties
+------------------------------
+
+The metadata ``$entity->view`` no longer specifies the view used to render in ``elgg_view_entity()``.
+
+Similarly the property ``$annotation->view`` no longer has an effect within ``elgg_view_annotation()``.
 
 From 1.10 to 1.11
 =================
@@ -482,7 +1009,7 @@ Use standardized page handlers and scripts
 The ``object/:subtype`` view
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Make sure there are views for ``$vars['full_view'] == true`` and ``$vars['full_view'] == false``. ``$vars['full_view']`` replaced ``$vars['full]``.
-* Check for the object in ``$vars['entity']``. Use ``elgg_instance_of()`` to make sure it's the type of entity you want. 
+* Check for the object in ``$vars['entity']``. Use ``elgg_instance_of()`` to make sure it's the type of entity you want.
 * Return ``true`` to short circuit the view if the entity is missing or wrong.
 * Use ``elgg_view(‘object/elements/summary’, array(‘entity’ => $entity));`` and ``elgg_view_menu(‘entity’, array(‘entity’ => $entity));`` to help format. You should use very little markup in these views.
 
@@ -491,7 +1018,7 @@ Update action structure
 ~~~~~~~~~~~~~~~~~~~~~~~
 * Namespace action files and action names (example: ``mod/blog/actions/blog/save.php`` => ``action/blog/save``)
 * Use the following action URLs:
-  
+
   * Add: ``action/:plugin/save``
   * Edit: ``action/:plugin/save``
   * Delete: ``action/:plugin/delete``
@@ -502,11 +1029,8 @@ Update action structure
 Update deprecated functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Functions deprecated in 1.7 will produce visible errors in 1.8.
-  
-  * See ``/engine/lib/deprecated-1.7.php`` for the full list.
-
 * You can also update functions deprecated in 1.8.
-  
+
   * Many registration functions simply added an ``elgg_`` prefix for consistency, and should be easy to update.
   * See ``/engine/lib/deprecated-1.8.php`` for the full list.
   * You can set the debug level to “warning” to get visual reminders of deprecated functions.

@@ -137,19 +137,16 @@ function members_nav_online($hook, $type, $returnvalue, $params) {
  * @return bool
  */
 function members_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'members/pages/members';
-
 	if (empty($page[0])) {
 		$page[0] = 'newest';
 	}
 
-	$vars = array();
-	$vars['page'] = $page[0];
+	set_input('page', $page[0]);
 
 	if ($page[0] == 'search') {
-		require_once "$base/search.php";
+		echo elgg_view_resource('members/search');
 	} else {
-		require_once "$base/index.php";
+		echo elgg_view_resource('members/index');
 	}
 	return true;
 }

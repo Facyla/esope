@@ -39,7 +39,6 @@
  * @property       string $location       A location of the entity
  */
 abstract class ElggEntity extends \ElggData implements
-	Notable,   // Calendar interface (deprecated 1.9)
 	Locatable, // Geocoding interface
 	Importable // Allow import of data (deprecated 1.9)
 {
@@ -48,11 +47,6 @@ abstract class ElggEntity extends \ElggData implements
 	 * If set, overrides the value of getURL()
 	 */
 	protected $url_override;
-
-	/**
-	 * Icon override, overrides the value of getIcon().
-	 */
-	protected $icon_override;
 
 	/**
 	 * Holds metadata until entity is saved.  Once the entity is saved,
@@ -80,14 +74,14 @@ abstract class ElggEntity extends \ElggData implements
 	
 	/**
 	 * Tells how many tables are going to need to be searched in order to fully populate this object
-	 * 
+	 *
 	 * @var int
 	 */
 	protected $tables_split;
 	
 	/**
 	 * Tells how many tables describing object have been loaded thus far
-	 * 
+	 *
 	 * @var int
 	 */
 	protected $tables_loaded;
@@ -183,18 +177,22 @@ abstract class ElggEntity extends \ElggData implements
 
 	/**
 	 * Set an attribute or metadata value for this entity
-	 * 
+	 *
 	 * Anything that is not an attribute is saved as metadata.
-	 * 
-	 * @warning Metadata set this way will inherit the entity's owner and 
+	 *
+	 * @warning Metadata set this way will inherit the entity's owner and
 	 * access ID. If you want more control over metadata, use \ElggEntity::setMetadata()
-	 * 
+	 *
 	 * @param string $name  Name of the attribute or metadata
 	 * @param mixed  $value The value to be set
 	 * @return void
 	 * @see \ElggEntity::setMetadata()
 	 */
 	public function __set($name, $value) {
+		if ($this->$name === $value) {
+			// quick return if value is not changing
+			return;
+		}
 		if (array_key_exists($name, $this->attributes)) {
 			// Certain properties should not be manually changed!
 			switch ($name) {
@@ -239,13 +237,13 @@ abstract class ElggEntity extends \ElggData implements
 
 	/**
 	 * Get an attribute or metadata value
-	 * 
+	 *
 	 * If the name matches an attribute, the attribute is returned. If metadata
 	 * does not exist with that name, a null is returned.
 	 *
 	 * This only returns an array if there are multiple values for a particular
 	 * $name key.
-	 * 
+	 *
 	 * @param string $name Name of the attribute or metadata
 	 * @return mixed
 	 */
@@ -275,14 +273,14 @@ abstract class ElggEntity extends \ElggData implements
 
 	/**
 	 * Get the entity's display name
-	 * 
+	 *
 	 * @return string The title or name of this entity.
 	 */
 	abstract public function getDisplayName();
 
 	/**
 	 * Sets the title or name of this entity.
-	 * 
+	 *
 	 * @param string $displayName The title or name of this entity.
 	 * @return void
 	 */
@@ -504,20 +502,6 @@ abstract class ElggEntity extends \ElggData implements
 	}
 
 	/**
-	 * Remove metadata
-	 *
-	 * @warning Calling this with no or empty arguments will clear all metadata on the entity.
-	 *
-	 * @param string $name The name of the metadata to clear
-	 * @return mixed bool
-	 * @deprecated 1.8 Use deleteMetadata()
-	 */
-	public function clearMetadata($name = '') {
-		elgg_deprecated_notice('\ElggEntity->clearMetadata() is deprecated by ->deleteMetadata()', 1.8);
-		return $this->deleteMetadata($name);
-	}
-
-	/**
 	 * Disables metadata for this entity, optionally based on name.
 	 *
 	 * @param string $name An options name of metadata to disable.
@@ -609,19 +593,6 @@ abstract class ElggEntity extends \ElggData implements
 		$relationship = (string)$relationship;
 		$result = remove_entity_relationships($this->getGUID(), $relationship);
 		return $result && remove_entity_relationships($this->getGUID(), $relationship, true);
-	}
-
-	/**
-	 * Remove all relationships to and from this entity.
-	 *
-	 * @return bool
-	 * @see \ElggEntity::addRelationship()
-	 * @see \ElggEntity::removeRelationship()
-	 * @deprecated 1.8 Use \ElggEntity::deleteRelationships()
-	 */
-	public function clearRelationships() {
-		elgg_deprecated_notice('\ElggEntity->clearRelationships() is deprecated by ->deleteRelationships()', 1.8);
-		return $this->deleteRelationships();
 	}
 
 	/**
@@ -886,21 +857,6 @@ abstract class ElggEntity extends \ElggData implements
 	}
 
 	/**
-	 * Remove an annotation or all annotations for this entity.
-	 *
-	 * @warning Calling this method with no or an empty argument will remove
-	 * all annotations on the entity.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
-	 * @deprecated 1.8 Use ->deleteAnnotations()
-	 */
-	public function clearAnnotations($name = "") {
-		elgg_deprecated_notice('\ElggEntity->clearAnnotations() is deprecated by ->deleteAnnotations()', 1.8);
-		return $this->deleteAnnotations($name);
-	}
-
-	/**
 	 * Count annotations.
 	 *
 	 * @param string $name The type of annotation.
@@ -1100,7 +1056,7 @@ abstract class ElggEntity extends \ElggData implements
 			_elgg_services()->logger->warning($message);
 			
 			return false;
-		}		
+		}
 		
 		$return = $this->canEdit($user_guid);
 
@@ -1274,17 +1230,6 @@ abstract class ElggEntity extends \ElggData implements
 	}
 
 	/**
-	 * Return the guid of the entity's owner.
-	 *
-	 * @return int The owner GUID
-	 * @deprecated 1.8 Use getOwnerGUID()
-	 */
-	public function getOwner() {
-		elgg_deprecated_notice("\ElggEntity::getOwner deprecated for \ElggEntity::getOwnerGUID", 1.8);
-		return $this->getOwnerGUID();
-	}
-
-	/**
 	 * Gets the \ElggEntity that owns this entity.
 	 *
 	 * @return \ElggEntity The owning entity
@@ -1305,36 +1250,12 @@ abstract class ElggEntity extends \ElggData implements
 	}
 
 	/**
-	 * Set the container for this object.
-	 *
-	 * @param int $container_guid The ID of the container.
-	 *
-	 * @return bool
-	 * @deprecated 1.8 use setContainerGUID()
-	 */
-	public function setContainer($container_guid) {
-		elgg_deprecated_notice("\ElggObject::setContainer deprecated for \ElggEntity::setContainerGUID", 1.8);
-		return $this->setContainerGUID('container_guid', $container_guid);
-	}
-
-	/**
 	 * Gets the container GUID for this entity.
 	 *
 	 * @return int
 	 */
 	public function getContainerGUID() {
 		return (int)$this->container_guid;
-	}
-
-	/**
-	 * Gets the container GUID for this entity.
-	 *
-	 * @return int
-	 * @deprecated 1.8 Use getContainerGUID()
-	 */
-	public function getContainer() {
-		elgg_deprecated_notice("\ElggObject::getContainer deprecated for \ElggEntity::getContainerGUID", 1.8);
-		return $this->getContainerGUID();
 	}
 
 	/**
@@ -1435,16 +1356,11 @@ abstract class ElggEntity extends \ElggData implements
 	public function getIconURL($params = array()) {
 		if (is_array($params)) {
 			$size = elgg_extract('size', $params, 'medium');
-		} else {	
+		} else {
 			$size = is_string($params) ? $params : 'medium';
 			$params = array();
 		}
 		$size = elgg_strtolower($size);
-
-		if (isset($this->icon_override[$size])) {
-			elgg_deprecated_notice("icon_override on an individual entity is deprecated", 1.8);
-			return $this->icon_override[$size];
-		}
 
 		$params['entity'] = $this;
 		$params['size'] = $size;
@@ -1453,48 +1369,10 @@ abstract class ElggEntity extends \ElggData implements
 
 		$url = _elgg_services()->hooks->trigger('entity:icon:url', $type, $params, null);
 		if ($url == null) {
-			$url = "_graphics/icons/default/$size.png";
+			$url = elgg_get_simplecache_url("icons/default/$size.png");
 		}
 
 		return elgg_normalize_url($url);
-	}
-
-	/**
-	 * Returns a URL for the entity's icon.
-	 *
-	 * @param string $size Either 'large', 'medium', 'small' or 'tiny'
-	 *
-	 * @return string The url or false if no url could be worked out.
-	 * @deprecated 1.8 Use getIconURL()
-	 */
-	public function getIcon($size = 'medium') {
-		elgg_deprecated_notice("getIcon() deprecated by getIconURL()", 1.8);
-		return $this->getIconURL($size);
-	}
-
-	/**
-	 * Set an icon override for an icon and size.
-	 *
-	 * @warning This override exists only for the life of the object.
-	 *
-	 * @param string $url  The url of the icon.
-	 * @param string $size The size its for.
-	 *
-	 * @return bool
-	 * @deprecated 1.8 See getIconURL() for the plugin hook to use
-	 */
-	public function setIcon($url, $size = 'medium') {
-		elgg_deprecated_notice("icon_override on an individual entity is deprecated", 1.8);
-
-		$url = sanitise_string($url);
-		$size = sanitise_string($size);
-
-		if (!$this->icon_override) {
-			$this->icon_override = array();
-		}
-		$this->icon_override[$size] = $url;
-
-		return true;
 	}
 
 	/**
@@ -1830,7 +1708,7 @@ abstract class ElggEntity extends \ElggData implements
 
 	/**
 	 * Stores non-attributes from the loading of the entity as volatile data
-	 * 
+	 *
 	 * @param array $data Key value array
 	 * @return void
 	 */
@@ -1847,7 +1725,7 @@ abstract class ElggEntity extends \ElggData implements
 	 * @internal This is used when the same entity is selected twice during a
 	 * request in case different select clauses were used to load different data
 	 * into volatile data.
-	 * 
+	 *
 	 * @param \stdClass $row DB row with new entity data
 	 * @return bool
 	 * @access private
@@ -1870,7 +1748,7 @@ abstract class ElggEntity extends \ElggData implements
 	 *
 	 * You can ignore the disabled field by using {@link access_show_hidden_entities()}.
 	 *
-	 * @internal Disabling an entity sets the 'enabled' column to 'no'.
+	 * @note Internal: Disabling an entity sets the 'enabled' column to 'no'.
 	 *
 	 * @param string $reason    Optional reason
 	 * @param bool   $recursive Recursively disable all contained entities?
@@ -2035,7 +1913,7 @@ abstract class ElggEntity extends \ElggData implements
 		}
 		
 		// first check if we can delete this entity
-		// NOTE: in Elgg <= 1.10.3 this was after the delete event, 
+		// NOTE: in Elgg <= 1.10.3 this was after the delete event,
 		// which could potentially remove some content if the user didn't have access
 		if (!$this->canDelete()) {
 			return false;
@@ -2150,7 +2028,7 @@ abstract class ElggEntity extends \ElggData implements
 
 	/**
 	 * Prepare an object copy for toObject()
-	 * 
+	 *
 	 * @param \stdClass $object Object representation of the entity
 	 * @return \stdClass
 	 */
@@ -2224,62 +2102,6 @@ abstract class ElggEntity extends \ElggData implements
 	 */
 	public function getLongitude() {
 		return (float)$this->{"geo:long"};
-	}
-
-	/*
-	 * NOTABLE INTERFACE
-	 */
-
-	/**
-	 * Set the time and duration of an object
-	 *
-	 * @param int $hour     If ommitted, now is assumed.
-	 * @param int $minute   If ommitted, now is assumed.
-	 * @param int $second   If ommitted, now is assumed.
-	 * @param int $day      If ommitted, now is assumed.
-	 * @param int $month    If ommitted, now is assumed.
-	 * @param int $year     If ommitted, now is assumed.
-	 * @param int $duration Duration of event, remainder of the day is assumed.
-	 *
-	 * @return true
-	 * @deprecated 1.9
-	 */
-	public function setCalendarTimeAndDuration($hour = null, $minute = null, $second = null,
-	$day = null, $month = null, $year = null, $duration = null) {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated', 1.9);
-
-		$start = mktime($hour, $minute, $second, $month, $day, $year);
-		$end = $start + abs($duration);
-		if (!$duration) {
-			$end = get_day_end($day, $month, $year);
-		}
-
-		$this->calendar_start = $start;
-		$this->calendar_end = $end;
-
-		return true;
-	}
-
-	/**
-	 * Returns the start timestamp.
-	 *
-	 * @return int
-	 * @deprecated 1.9
-	 */
-	public function getCalendarStartTime() {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated', 1.9);
-		return (int)$this->calendar_start;
-	}
-
-	/**
-	 * Returns the end timestamp.
-	 * 
-	 * @return int
-	 * @deprecated 1.9
-	 */
-	public function getCalendarEndTime() {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated', 1.9);
-		return (int)$this->calendar_end;
 	}
 
 	/*
@@ -2520,7 +2342,7 @@ abstract class ElggEntity extends \ElggData implements
 	
 	/**
 	 * Remove all access collections owned by this entity
-	 * 
+	 *
 	 * @return bool
 	 * @since 1.11
 	 */

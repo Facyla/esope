@@ -191,7 +191,7 @@ Jasmine Tests
 -------------
 
 Test files must be named ``*Test.js`` and should go in either ``js/tests/`` or next
-to their source files in ``views/default/js``. Karma will automatically pick up
+to their source files in ``views/default/**.js``. Karma will automatically pick up
 on new ``*Test.js`` files and run those tests.
 
 Test boilerplate
@@ -281,6 +281,20 @@ Variable names
 Use self-documenting variable names.  ``$group_guids`` is better than ``$array``.
 
 Avoid double-negatives. Prefer ``$enable = true`` to ``$disable = false``.
+
+Interface names
+^^^^^^^^^^^^^^^
+
+Use the pattern `Elgg\{Namespace}\{Name}`.
+
+Do not include an `I` prefix or an `Interface` suffix.
+
+We do not include any prefix or suffix so that we're encouraged to:
+
+ * name implementation classes more descriptively (the "default" name is taken).
+ * type-hint on interfaces, because that is the shortest, easiest thing to do.
+
+Name implementations like `Elgg\{Namespace}\{Interface}\{Implementation}`.
 
 Functions
 ^^^^^^^^^
@@ -439,7 +453,8 @@ Miscellaneous
 
 For PHP requirements, see ``composer.json``.
 
-Do not use PHP shortcut tags (``<?`` or ``<?=`` or ``<%``).
+Do not use PHP shortcut tags ``<?`` or ``<%``.
+It is OK to use ``<?=`` since it is always enabled as of PHP 5.4.
 
 When creating strings with variables:
 

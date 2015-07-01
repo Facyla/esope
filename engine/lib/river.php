@@ -744,7 +744,7 @@ function _elgg_river_page_handler($page) {
 	}
 	set_input('page_type', $page_type);
 
-	require_once("{$CONFIG->path}pages/river.php");
+	echo elgg_view_resource("river");
 	return true;
 }
 
@@ -837,6 +837,6 @@ function _elgg_river_init() {
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_river_init');
-	$events->registerHandler('disable:after', 'all', '_elgg_river_disable');
-	$events->registerHandler('enable:after', 'all', '_elgg_river_enable');
+	$events->registerHandler('disable:after', 'all', '_elgg_river_disable', 600);
+	$events->registerHandler('enable:after', 'all', '_elgg_river_enable', 600);
 };

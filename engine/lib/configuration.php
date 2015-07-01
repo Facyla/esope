@@ -13,10 +13,9 @@
  * - engine/settings.php (See {@link settings.example.php})
  *
  * Upon system boot, all values in dbprefix_config are read into $CONFIG.
- *
- * @package Elgg.Core
- * @subpackage Configuration
  */
+
+use Elgg\Filesystem\Directory;
 
 /**
  * Get the URL for the current (or specified) site
@@ -51,12 +50,27 @@ function elgg_get_data_path() {
 
 /**
  * Get the root directory path for this installation
+ * 
+ * Note: This is not the same as the Elgg root! In the Elgg 1.x series, Elgg
+ * was always at the install root, but as of 2.0, Elgg can be installed as a
+ * composer dependency, so you cannot assume that it the install root anymore.
  *
  * @return string
  * @since 1.8.0
  */
 function elgg_get_root_path() {
-	return _elgg_services()->config->getRootPath();
+	return Directory\Local::root()->getPath('/');
+}
+
+/**
+ * /path/to/elgg/engine
+ * 
+ * No trailing slash
+ * 
+ * @return string
+ */
+function elgg_get_engine_path() {
+	return dirname(__DIR__);
 }
 
 /**
@@ -173,7 +187,7 @@ function run_function_once($functionname, $timelastupdatedcheck = 0) {
 /**
  * Removes a config setting.
  *
- * @internal These settings are stored in the dbprefix_config table and read 
+ * @note Internal: These settings are stored in the dbprefix_config table and read
  * during system boot into $CONFIG.
  *
  * @param string $name      The name of the field.
@@ -275,35 +289,14 @@ function _elgg_load_site_config() {
 }
 
 /**
- * Loads configuration related to Elgg as an application
+ * Set up CONFIG->cookies. (this is for unit testing)
  *
- * This runs on the engine boot and loads from the datalists database table.
- * 
- * @see _elgg_engine_boot()
- * 
+ * @see phpunit/bootstrap.php
+ *
+ * @param stdClass $CONFIG Elgg's config object
  * @access private
  */
-function _elgg_load_application_config() {
-	global $CONFIG;
-
-	$install_root = str_replace("\\", "/", dirname(dirname(dirname(__FILE__))));
-	$defaults = array(
-		'path' => "$install_root/",
-		'view_path' => "$install_root/views/",
-		'plugins_path' => "$install_root/mod/",
-		'language' => 'en',
-
-		// compatibility with old names for plugins not using elgg_get_config()
-		'viewpath' => "$install_root/views/",
-		'pluginspath' => "$install_root/mod/",
-	);
-
-	foreach ($defaults as $name => $value) {
-		if (empty($CONFIG->$name)) {
-			$CONFIG->$name = $value;
-		}
-	}
-
+function _elgg_configure_cookies($CONFIG) {
 	// set cookie values for session and remember me
 	if (!isset($CONFIG->cookies)) {
 		$CONFIG->cookies = array();
@@ -320,6 +313,41 @@ function _elgg_load_application_config() {
 	$session_defaults['name'] = 'elggperm';
 	$session_defaults['expire'] = strtotime("+30 days");
 	$CONFIG->cookies['remember_me'] = array_merge($session_defaults, $CONFIG->cookies['remember_me']);
+}
+
+/**
+ * Loads configuration related to Elgg as an application
+ *
+ * This runs on the engine boot and loads from the datalists database table.
+ * 
+ * @see _elgg_engine_boot()
+ * 
+ * @access private
+ */
+function _elgg_load_application_config() {
+	global $CONFIG;
+
+	$install_root = Directory\Local::root();
+	
+	$defaults = array(
+		'path' => $install_root->getPath("/"),
+		'plugins_path' => $install_root->getPath("mod") . "/",
+		'language' => 'en',
+
+		// compatibility with old names for plugins not using elgg_get_config()
+		'pluginspath' => $install_root->getPath("mod") . "/",
+	);
+	
+	foreach ($defaults as $name => $value) {
+		if (empty($CONFIG->$name)) {
+			$CONFIG->$name = $value;
+		}
+	}
+
+	$GLOBALS['_ELGG']->view_path = \Elgg\Application::elggDir()->getPath("/views/");
+
+	// set cookie values for session and remember me
+	_elgg_configure_cookies($CONFIG);
 
 	if (!is_memcache_available()) {
 		_elgg_services()->datalist->loadAll();
@@ -328,16 +356,16 @@ function _elgg_load_application_config() {
 	// allow sites to set dataroot and simplecache_enabled in settings.php
 	if (isset($CONFIG->dataroot)) {
 		$CONFIG->dataroot = sanitise_filepath($CONFIG->dataroot);
-		$CONFIG->dataroot_in_settings = true;
+		$GLOBALS['_ELGG']->dataroot_in_settings = true;
 	} else {
 		$dataroot = datalist_get('dataroot');
 		if (!empty($dataroot)) {
 			$CONFIG->dataroot = $dataroot;
 		}
-		$CONFIG->dataroot_in_settings = false;
+		$GLOBALS['_ELGG']->dataroot_in_settings = false;
 	}
 	if (isset($CONFIG->simplecache_enabled)) {
-		$CONFIG->simplecache_enabled_in_settings = true;
+		$GLOBALS['_ELGG']->simplecache_enabled_in_settings = true;
 	} else {
 		$simplecache_enabled = datalist_get('simplecache_enabled');
 		if ($simplecache_enabled !== false) {
@@ -345,7 +373,7 @@ function _elgg_load_application_config() {
 		} else {
 			$CONFIG->simplecache_enabled = 1;
 		}
-		$CONFIG->simplecache_enabled_in_settings = false;
+		$GLOBALS['_ELGG']->simplecache_enabled_in_settings = false;
 	}
 
 	$system_cache_enabled = datalist_get('system_cache_enabled');
@@ -358,7 +386,7 @@ function _elgg_load_application_config() {
 	// needs to be set before system, init for links in html head
 	$CONFIG->lastcache = (int)datalist_get("simplecache_lastupdate");
 
-	$CONFIG->i18n_loaded_from_cache = false;
+	$GLOBALS['_ELGG']->i18n_loaded_from_cache = false;
 
 	// this must be synced with the enum for the entities table
 	$CONFIG->entity_types = array('group', 'object', 'site', 'user');
@@ -368,8 +396,7 @@ function _elgg_load_application_config() {
  * @access private
  */
 function _elgg_config_test($hook, $type, $tests) {
-	global $CONFIG;
-	$tests[] = "{$CONFIG->path}engine/tests/ElggCoreConfigTest.php";
+	$tests[] = \Elgg\Application::elggDir()->getPath("engine/tests/ElggCoreConfigTest.php");
 	return $tests;
 }
 

@@ -21,7 +21,7 @@ class ViewsServiceTest extends \PHPUnit_Framework_TestCase {
 		$this->logger = $this->getMock('\Elgg\Logger', array(), array(), '', false);
 		
 		$this->views = new \Elgg\ViewsService($this->hooks, $this->logger);
-		$this->views->autoregisterViews('', "$this->viewsDir/default", "$this->viewsDir/", 'default');
+		$this->views->autoregisterViews('', "$this->viewsDir/default", 'default');
 
 		// supports deprecation wrapper for $vars['user'] 
 		_elgg_services()->setValue('session', \ElggSession::getMock());
@@ -60,11 +60,28 @@ class ViewsServiceTest extends \PHPUnit_Framework_TestCase {
 		$expected = file_get_contents("$this->viewsDir/default/js/static.js");
 		$this->assertEquals($expected, $this->views->renderView('js/static.js'));
 	}
-		
-	public function testStoresDirectoryForViewLocation() {
-		$this->assertEquals("$this->viewsDir/", $this->views->getViewLocation('js/interpreted.js', 'default'));
+
+	public function testCanSetViewPathsViaSpec() {
+		$this->views->mergeViewsSpec([
+			'default' => [
+				'hello.js' => __DIR__ . '/../test_files/views/default/js/static.js',
+				'hello/world.js' => 'engine/tests/phpunit/test_files/views/default/js/interpreted.js.php',
+			],
+		]);
+
+		$expected = file_get_contents("$this->viewsDir/default/js/static.js");
+		$this->assertEquals($expected, $this->views->renderView('hello.js'));
+
+		$this->assertEquals("// PHPin", $this->views->renderView('hello/world.js', array(
+			'in' => 'in',
+		)));
 	}
-	
+
+	public function testCanSetViewsDirs() {
+		$this->views->setViewDir('static.css', __DIR__ . '/../test_files/views2/');
+		$this->assertEquals('body{}', $this->views->renderView('static.css'));
+	}
+
 	public function testViewtypesCanFallBack() {
 		$this->views->registerViewtypeFallback('mobile');
 		$this->assertTrue($this->views->doesViewtypeFallBack('mobile'));
@@ -103,6 +120,50 @@ class ViewsServiceTest extends \PHPUnit_Framework_TestCase {
 		});
 
 		$this->assertEquals("// Hello", $this->views->renderView('js/interpreted.js'));
+	}
+	
+	public function testThrowsOnCircularAliases() {
+		$this->markTestIncomplete();
+	}
+	
+	public function testEmitsDeprecationWarningWhenOldViewNameIsReferenced() {
+		$this->markTestIncomplete();
+		// elgg_view
+		// elgg_extend_view
+		// elgg_unextend_view
+		// views/*
+		// views.php
+		// elgg_get_simplecache_url
+		// elgg_set_view_location
+		// elgg_get_view_location
+	}
+	
+	/**
+	 * @dataProvider getExampleNormalizedViews
+	 */
+	public function testDefaultNormalizeBehavior($canonical, $alias) {
+		$this->assertEquals($canonical, $this->views->canonicalizeViewName($alias));
+	}
+	
+	public function getExampleNormalizedViews() {
+		return [
+			// [canonical, alias]
+			
+			// js namespace should be removed and .js added to all JS views
+			['view.js', 'js/view'],
+			['view.js', 'js/view.js'],
+			['view.css', 'js/view.css'],
+			['view.png', 'js/view.png'],
+			
+			// ".form" in this case is not an extension, just a delimiter. Ignore.
+			['jquery.form.js', 'js/jquery.form'],
+			
+			// css namespace should be removed and .css added to all CSS views
+			['view.css', 'css/view'],
+			['view.css', 'css/view.css'],
+			['view.png', 'css/view.png'],
+			['view.jpg', 'css/view.jpg'],
+		];
 	}
 }
 

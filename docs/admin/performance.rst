@@ -83,6 +83,18 @@ It is recommended that you do this on your development platform if you are writi
 This cache is automatically flushed when a plugin is enabled, disabled or reordered,
 or when upgrade.php is executed.
 
+For best performance, you can also create a symlink from ``/cache/`` in your www
+root dir to the ``/views_simplecache/`` directory in the data directory you
+configured when you installed Elgg:
+
+.. code:: shell
+
+    cd /path/to/wwwroot/
+    ln -s /path/to/dataroot/views_simplecache/ cache
+
+If your webserver supports following symlinks, this will serve files straight off
+disk without booting up PHP each time.
+
 System cache
 ------------
 
@@ -142,12 +154,12 @@ Memcache is a generic caching technology developed by Brad Fitzpatrick for LiveJ
 
 Installation requirements:
 
-| ``   * php5-memcache``
-| ``   * memcached``
+- php5-memcache
+- memcached
 
 Configuration:
 
-Uncomment and populate the following sections in settings.php
+Uncomment and populate the following sections in `settings.php`
 
 .. code:: php
 
@@ -157,6 +169,13 @@ Uncomment and populate the following sections in settings.php
         array('server1', 11211),
         array('server2', 11211)
     );
+
+Optionaly if you run multiple Elgg installations but use ony one Memcache server, you may want 
+to add a namespace prefix. In order to do this, uncomment the following line
+
+.. code:: php
+
+	$CONFIG->memcache_namespace_prefix = '';
 
 Squid
 -----

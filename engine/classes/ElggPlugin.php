@@ -32,7 +32,7 @@ class ElggPlugin extends \ElggObject {
 	/**
 	 * Creates a new plugin from path
 	 *
-	 * @internal also supports database objects
+	 * @note Internal: also supports database objects
 	 *
 	 * @warning Unlike other \ElggEntity objects, you cannot null instantiate
 	 *          \ElggPlugin. You must provide the path to the plugin directory.
@@ -814,7 +814,19 @@ class ElggPlugin extends \ElggObject {
 	 * @return void
 	 */
 	protected function registerViews() {
-		if (!_elgg_services()->views->registerPluginViews($this->path, $failed_dir)) {
+		$views = _elgg_services()->views;
+
+		// Declared views first
+		$file = "{$this->path}/views.php";
+		if (is_file($file)) {
+			$spec = (include $file);
+			if (is_array($spec)) {
+				$views->mergeViewsSpec($spec);
+			}
+		}
+
+		// Allow /views directory files to override
+		if (!$views->registerPluginViews($this->path, $failed_dir)) {
 			$msg = _elgg_services()->translator->translate('ElggPlugin:Exception:CannotRegisterViews',
 				array($this->getID(), $this->guid, $failed_dir));
 			throw new \PluginException($msg);
@@ -828,21 +840,7 @@ class ElggPlugin extends \ElggObject {
 	 * @return true
 	 */
 	protected function registerLanguages() {
-		$languages_path = "$this->path/languages";
-
-		// don't need to have classes
-		if (!is_dir($languages_path)) {
-			return true;
-		}
-
-		// but need to have working ones.
-		if (!_elgg_services()->translator->registerTranslations($languages_path)) {
-			$msg = _elgg_services()->translator->translate('ElggPlugin:Exception:CannotRegisterLanguages',
-							array($this->getID(), $this->guid, $languages_path));
-			throw new \PluginException($msg);
-		}
-
-		return true;
+		return _elgg_services()->translator->registerPluginTranslations($this->path);
 	}
 
 	/**
@@ -868,14 +866,6 @@ class ElggPlugin extends \ElggObject {
 	 * @return mixed
 	 */
 	public function __get($name) {
-		// rewrite for old and inaccurate plugin:setting
-		if (strstr($name, 'plugin:setting:')) {
-			$msg = 'Direct access of user settings is deprecated. Use ElggPlugin->getUserSetting()';
-			elgg_deprecated_notice($msg, 1.8);
-			$name = str_replace('plugin:setting:', '', $name);
-			$name = _elgg_namespace_plugin_private_setting('user_setting', $name, $this->getID());
-		}
-
 		// See if its in our base attribute
 		if (array_key_exists($name, $this->attributes)) {
 			return $this->attributes[$name];

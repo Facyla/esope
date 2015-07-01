@@ -1,19 +1,16 @@
 <?php
 /**
  * Runs unit tests.
- *
- * @package Elgg
- * @subpackage Test
  */
 
-require_once(dirname( __FILE__ ) . '/../start.php');
+use Zend\Mail\Transport\InMemory as InMemoryTransport;
 
+require_once __DIR__ . '/../../autoloader.php';
 
-require_once(dirname( __FILE__ ) . '/../../vendor/autoload.php');
-$test_path = "$CONFIG->path/engine/tests";
+\Elgg\Application::start();
 
-require_once("$test_path/ElggCoreUnitTest.php");
-require_once("$test_path/ElggCoreGetEntitiesBaseTest.php");
+require_once __DIR__ . '/ElggCoreUnitTest.php';
+require_once __DIR__ . '/ElggCoreGetEntitiesBaseTest.php';
 
 // don't expect admin session for CLI
 if (!TextReporter::inCli()) {
@@ -24,6 +21,7 @@ if (!TextReporter::inCli()) {
 		echo "Failed to login as administrator.";
 		exit(1);
 	}
+	global $CONFIG;
 	$CONFIG->debug = 'NOTICE';
 }
 
@@ -39,6 +37,9 @@ foreach ($events as $type => $subtypes) {
 		$notifications->unregisterEvent($type, $subtype);
 	}
 }
+
+// disable emails
+_elgg_services()->setValue('mailer', new InMemoryTransport());
 
 // Disable maximum execution time.
 // Tests take a while...

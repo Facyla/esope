@@ -44,8 +44,8 @@ function uservalidationbyemail_init() {
 	// admin interface to manually validate users
 	elgg_register_admin_menu_item('administer', 'unvalidated', 'users');
 
-	elgg_extend_view('css/admin', 'uservalidationbyemail/css');
-	elgg_extend_view('js/elgg', 'uservalidationbyemail/js');
+	elgg_extend_view('admin.css', 'uservalidationbyemail/css');
+	elgg_extend_view('elgg.js', 'uservalidationbyemail/js');
 
 	$action_path = dirname(__FILE__) . '/actions';
 
@@ -195,14 +195,19 @@ function uservalidationbyemail_check_auth_attempt($credentials) {
  * @return bool
  */
 function uservalidationbyemail_page_handler($page) {
-	$valid_pages = array('emailsent', 'confirm');
-
-	if (empty($page[0]) || !in_array($page[0], $valid_pages)) {
-		forward('', '404');
+	switch ($page[0]) {
+		case 'confirm':
+			require __DIR__ . "/pages/confirm.php";
+			break;
+		case 'emailsent':
+			echo elgg_view_resource("uservalidationbyemail/emailsent");
+			break;
+		default:
+			forward('', '404');
+			return false;
 	}
 
 	// note, safe to include based on input because we validated above.
-	require dirname(__FILE__) . "/pages/{$page[0]}.php";
 	return true;
 }
 

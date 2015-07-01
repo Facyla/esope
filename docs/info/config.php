@@ -9,68 +9,11 @@
  */
 
 /**
- * Paths to scan for autoloading languages.
- *
- * Languages are automatically loaded for the site or
- * user's default language.  Plugins can extend or override strings.
- * language_paths is an array of paths to scan for PHP files matching
- * the default language.  The order of paths is determined by the plugin load order,
- * with later entries overriding earlier.  Language files within these paths are
- * named as the two-letter ISO 639-1 country codes for the language they represent.
- *
- * Language paths are stored as array keys in the format:
- * <code>
- * $CONFIG->language_paths[str $language_path] = true
- * </code>
- *
- * @link http://en.wikipedia.org/wiki/ISO_639-1
- * @see register_language()
- * @global array $CONFIG->language_paths
- */
-$CONFIG->language_paths;
-
-
-/**
- * String translations for the current language.
- *
- * Elgg uses a key-based system for string internationalization, which
- * is accessed with {@link elgg_echo()}.
- *
- * Translations are stored as an array in the following format:
- * <code>
- * $CONFIG->translations[str $language_code][str $string_key] = str 'Translated Language String';
- * </code>
- *
- * @see register_translation()
- * @see elgg_echo()
- * @global array $CONFIG->translations
- */
-$CONFIG->translations;
-
-/**
- * An array of metadata names to be used as tags.
- *
- * Because tags are simply names of meatdata, This is used
- * in search to prevent data exposure by searching on
- * arbitrary metadata.
- *
- * @global array $CONFIG->registered_tag_metadata_names
- */
-$CONFIG->registered_tag_metadata_names;
-
-/**
  * The full path where Elgg is installed.
  *
  * @global string $CONFIG->path;
  */
 $CONFIG->path;
-
-/**
- * The full path for core views.
- *
- * @global string $CONFIG->viewpath
- */
-$CONFIG->viewpath;
 
 /**
  * The full path where plugins are stored.
@@ -236,39 +179,6 @@ $CONFIG->menu_items_featured_urls;
 $CONFIG->menu_items_custom_items;
 
 /**
- * Holds information about views.
- *
- * @global object $CONFIG->views
- */
-$CONFIG->views;
-
-/**
- * A list of views to cache in the simple cache.
- *
- * @global object $CONFIG->views->simplecache
- */
-$CONFIG->views->simplecache;
-
-/**
- * A list of views and the top level views directory to search for the view in.
- *
- * @note Views are stored as the key and the top level view location is stored as the value.
- * The current viewtype {@link $CONFIG->view} is used to determin which directory under the entry
- * in $CONFIG->views->location to search.  View names are automatically appened a '.php' extension.
- *
- * @global object $CONFIG->views->locations
- */
-$CONFIG->views->locations;
-
-
-/**
- * A list of valid view types as discovered.
- *
- * @global array $CONFIG->view_types
- */
-$CONFIG->view_types;
-
-/**
  * A list of plugins and their load order
  *
  * @global string $CONFIG->pluginlistcache
@@ -303,14 +213,6 @@ $CONFIG->submenu_items;
  * @global array $CONFIG->servicehandler
  */
 $CONFIG->servicehandler;
-
-/**
- * A list of stop works for search.  Not currently used.
- *
- * @global array $CONFIG->wordblacklist
- * @todo currently unused.
- */
-$CONFIG->wordblacklist;
 
 /**
  * A list of menu contexts for menus registered with {@link add_menu()}.  Not currently used.
@@ -363,3 +265,71 @@ $CONFIG->lastcache;
  * @global string $CONFIG->exception_include
  */
 $CONFIG->exception_include = '';
+
+/**
+ * Paths to scan for autoloading languages.
+ *
+ * Languages are automatically loaded for the site or
+ * user's default language.  Plugins can extend or override strings.
+ * language_paths is an array of paths to scan for PHP files matching
+ * the default language.  The order of paths is determined by the plugin load order,
+ * with later entries overriding earlier.  Language files within these paths are
+ * named as the two-letter ISO 639-1 country codes for the language they represent.
+ *
+ * Language paths are stored as array keys in the format:
+ * <code>
+ * $_ELGG->language_paths[str $language_path] = true
+ * </code>
+ *
+ * @link http://en.wikipedia.org/wiki/ISO_639-1
+ * @see register_language()
+ * @global array $_ELGG->language_paths
+ * @access private
+ */
+$_ELGG->language_paths;
+
+/**
+ * String translations for the current language.
+ *
+ * Elgg uses a key-based system for string internationalization, which
+ * is accessed with {@link elgg_echo()}.
+ *
+ * Translations are stored as an array in the following format:
+ * <code>
+ * $_ELGG->translations[str $language_code][str $string_key] = str 'Translated Language String';
+ * </code>
+ *
+ * @see register_translation()
+ * @see elgg_echo()
+ * @global array $_ELGG->translations
+ * @access private
+ */
+$_ELGG->translations;
+
+/**
+ * An array of metadata names to be used as tags.
+ *
+ * Because tags are simply names of meatdata, This is used
+ * in search to prevent data exposure by searching on
+ * arbitrary metadata.
+ *
+ * @global array $_ELGG->registered_tag_metadata_names
+ * @access private
+ */
+$_ELGG->registered_tag_metadata_names;
+
+/**
+ * The full path for core views.
+ *
+ * @global string $_ELGG->view_path
+ * @access private
+ */
+$_ELGG->view_path;
+
+/**
+ * A list of valid view types as discovered.
+ *
+ * @global array $_ELGG->view_types
+ * @access private
+ */
+$_ELGG->view_types;

@@ -2,10 +2,10 @@
 /**
  * Elgg plugins library
  * Contains functions for managing plugins
- *
- * @package Elgg.Core
- * @subpackage Plugins
  */
+
+use Elgg\Filesystem\Directory;
+
 
 /**
  * Tells \ElggPlugin::start() to include the start.php file.
@@ -78,9 +78,9 @@ function _elgg_generate_plugin_entities() {
 
 /**
  * Cache a reference to this plugin by its ID
- * 
+ *
  * @param \ElggPlugin $plugin
- * 
+ *
  * @access private
  */
 function _elgg_cache_plugin_by_id(\ElggPlugin $plugin) {
@@ -134,21 +134,6 @@ function _elgg_get_max_plugin_priority() {
  */
 function elgg_is_active_plugin($plugin_id, $site_guid = null) {
 	return _elgg_services()->plugins->isActive($plugin_id, $site_guid);
-}
-
-/**
- * Loads all active plugins in the order specified in the tool admin panel.
- *
- * @note This is called on every page load. If a plugin is active and problematic, it
- * will be disabled and a visible error emitted. This does not check the deps system because
- * that was too slow.
- *
- * @return bool
- * @since 1.8.0
- * @access private
- */
-function _elgg_load_plugins() {
-	return _elgg_services()->plugins->load();
 }
 
 /**
@@ -236,7 +221,7 @@ function _elgg_get_plugins_provides($type = null, $name = null) {
 
 /**
  * Deletes all cached data on plugins being provided.
- * 
+ *
  * @return boolean
  * @since 1.9.0
  * @access private
@@ -505,6 +490,7 @@ function _elgg_plugins_init() {
 
 	if (elgg_is_admin_logged_in()) {
 		elgg_register_ajax_view('object/plugin/full');
+		elgg_register_ajax_view('object/plugin/details');
 	}
 
 	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_plugins_test');
@@ -529,8 +515,6 @@ function _elgg_plugins_init() {
 	elgg_register_action('admin/plugins/deactivate_all', '', 'admin');
 
 	elgg_register_action('admin/plugins/set_priority', '', 'admin');
-
-	elgg_register_library('elgg:markdown', elgg_get_root_path() . 'vendors/markdown/markdown.php');
 }
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {

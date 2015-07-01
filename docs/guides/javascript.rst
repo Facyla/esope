@@ -1,22 +1,42 @@
 JavaScript
 ##########
 
-As of Elgg 1.9, we encourage all developers to adopt the `AMD (Asynchronous Module
-Definition) <http://requirejs.org/docs/whyamd.html>`_ standard for writing JavaScript code in Elgg.
-The 1.8 version is still functional and is :ref:`described below<1.8-js>`.
-
 .. contents:: Contents
    :local:
    :depth: 2
 
+Third-party assets
+==================
+
+We recommend managing third-party scripts and styles with Composer.
+Elgg core uses ``fxp/composer-asset-plugin`` for this purpose.
+This plugin allows you to pull dependencies from the Bower or NPM package repositories,
+but using the Composer command-line tool.
+
+For example, to include jQuery, you could run the following Composer commands:
+
+.. code-block:: shell
+
+    composer global require fxp/composer-asset-plugin:~1.0
+    composer require bower-asset/jquery:~2.0
+
+.. note::
+
+    ``fxp/composer-asset-plugin`` must be installed globally!
+    See https://github.com/francoispluchino/composer-asset-plugin for more info.
+
 AMD
 ===
+
+As of Elgg 1.9, we encourage all developers to adopt the `AMD (Asynchronous Module
+Definition) <http://requirejs.org/docs/whyamd.html>`_ standard for writing JavaScript code in Elgg.
+The 1.8 version is still functional and is :ref:`described below<1.8-js>`.
 
 Here we'll describe making and executing AMD modules. The RequireJS documentation for
 `defining modules <http://requirejs.org/docs/api.html#define>`_ may also be of use.
 
 Executing a module in the current page
-======================================
+--------------------------------------
 
 Telling Elgg to load an existing module in the current page is easy:
 
@@ -29,13 +49,13 @@ On the client-side, this will asynchronously load the module, load any dependenc
 execute the module's definition function, if it has one.
 
 Defining the Module
-===================
+-------------------
 
 Here we define a basic module that alters the page, by passing a "definition function" to ``define()``:
 
 .. code-block:: javascript
 
-    // in views/default/js/myplugin/say_hello.js
+    // in views/default/myplugin/say_hello.js
 
     define(function(require) {
         var elgg = require("elgg");
@@ -44,8 +64,8 @@ Here we define a basic module that alters the page, by passing a "definition fun
         $('body').append(elgg.echo('hello_world'));
     });
 
-The module's name is determined by the view name, which here is ``js/myplugin/say_hello.js``.
-We strip the leading ``js/`` and the ``.js`` extension, leaving ``myplugin/say_hello``.
+The module's name is determined by the view name, which here is ``myplugin/say_hello.js``.
+We strip the ``.js`` extension, leaving ``myplugin/say_hello``.
 
 .. warning::
 
@@ -59,7 +79,7 @@ the greeting:
 
 .. code-block:: javascript
 
-    // in views/default/js/myplugin/hello.js
+    // in views/default/myplugin/hello.js
 
     define(function(require) {
         var elgg = require("elgg");
@@ -69,7 +89,7 @@ the greeting:
 
 .. code-block:: javascript
 
-    // in views/default/js/myplugin/say_hello.js
+    // in views/default/myplugin/say_hello.js
 
     define(function(require) {
         var $ = require("jquery");
@@ -79,10 +99,10 @@ the greeting:
     });
 
 Passing plugin/Elgg settings to modules
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------
 
 You can use a PHP-based module to pass values from the server. To make the module ``myplugin/settings``,
-create the view file ``views/default/js/myplugin/settings.js.php`` (note the double extension
+create the view file ``views/default/myplugin/settings.js.php`` (note the double extension
 ``.js.php``).
 
 .. code-block:: php
@@ -104,7 +124,7 @@ You must also manually register the view as an external resource:
 
     <?php
     // note the view name does not include ".php"
-    elgg_register_simplecache_view('js/myplugin/settings.js');
+    elgg_register_simplecache_view('myplugin/settings.js');
 
 .. note::
 
@@ -113,44 +133,52 @@ You must also manually register the view as an external resource:
 
 
 Setting the URL of a module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
-You may have a script outside your views you wish to make available as a module.
+You may have an AMD script outside your views you wish to make available as a module.
 
-In your PHP ``init, system`` event handler, you can use ``elgg_define_js()`` to do this:
+The best way to accomplish this is by configuring the path to the file using the
+``views.php`` file in the root of your plugin:
 
 .. code-block:: php
 
-    <?php
-    elgg_define_js('underscore', [
-        'src' => '/mod/myplugin/vendors/underscore/underscore-min.js',
-    ]);
+    <?php // views.php
+    return [
+      'underscore.js' => 'vendor/bower-asset/underscore/underscore.min.js',
+    ];
+    
+If you've copied the script directly into your plugin instead of managing it with Composer,
+you can use something like this instead:
 
-.. note::
+.. code-block:: php
 
-    The ``src`` option in ``elgg_define_js()`` is passed through ``elgg_normalize_url``, so you can use paths
-    relative to the site URL.
+    <?php // views.php
+    return [
+      'underscore.js' => __DIR__ . '/bower_components/underscore/underscore.min.js',
+    ];
+
+That's it! Elgg will now load this file whenever the "underscore" module is requested.
+
 
 Using traditional JS libraries as modules
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------------
 
-JavaScript libraries that define global resources can also be defined as AMD modules if you shim them by
-setting ``exports`` and optionally ``deps``:
+It's possible to support JavaScript libraries that do not declare themselves as AMD
+modules (i.e. they declare global variables instead) if you shim them by
+setting ``exports`` and ``deps`` in ``elgg_define_js``:
 
 .. code-block:: php
 
-    <?php
     // set the path, define its dependencies, and what value it returns
     elgg_define_js('jquery.form', [
-        'src' => '/mod/myplugin/vendors/jquery.form.js',
-        'deps' => array('jquery'),
+        'deps' => ['jquery'],
         'exports' => 'jQuery.fn.ajaxForm',
     ]);
 
 When this is requested client-side:
 
 #. The jQuery module is loaded, as it's marked as a dependency.
-#. ``http://example.org/elgg/mod/myplugin/vendors/jquery/jquery.form.js`` is loaded and executed.
+#. ``https://elgg.example.org/cache/125235034/views/default/jquery.form.js`` is loaded and executed.
 #. The value of ``window.jQuery.fn.ajaxForm`` is returned by the module.
 
 .. warning:: Calls to ``elgg_define_js()`` must be in an ``init, system`` event handler.
@@ -161,8 +189,7 @@ Some things to note
 #. Do not use ``elgg.provide()`` anymore nor other means to attach code to ``elgg`` or other
    global objects. Use modules.
 #. Return the value of the module instead of adding to a global variable.
-#. JS and CSS views (names starting with ``js/`` or ``css/``) as well as static (.js/.css) files
-   are automatically minified and cached by Elgg's simplecache system.
+#. Static (.js,.css,etc.) files are automatically minified and cached by Elgg's simplecache system.
 
 
 Migrating JS from Elgg 1.8 to AMD / 1.9
@@ -196,12 +223,13 @@ Load a library on the current page with ``elgg_load_js``:
 
 This will include and execute the linked code.
 
-.. tip::
+.. warning::
 
-   Using inline scripts is strongly discouraged because:
+   Using inline scripts is NOT SUPPORTED because:
     * They are not testable (maintainability)
     * They are not cacheable (performance)
-    * Doing so forces some scripts to be loaded in ``<head>`` (performance)
+    * They prevent use of Content-Security-Policy (security) 
+    * They prevent scripts from being loaded with ``defer`` or ``async`` (performance)
 
    Inline scripts in core or bundled plugins are considered legacy bugs.
 

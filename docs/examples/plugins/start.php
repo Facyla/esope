@@ -10,11 +10,11 @@ function my_plugin_init() {
 	// elgg_register_event_handler() call accordingly
 
 	// Register a script to handle (usually) a POST request (an action)
-	$base_dir = elgg_get_plugins_path() . 'my_plugin/actions/my_plugin';
+	$base_dir = __DIR__ . '/actions/my_plugin';
 	elgg_register_action('my_plugin', "$base_dir/my_action.php");
 
 	// Extend the main CSS file
-	elgg_extend_view('css/elgg', 'my_plugin/css');
+	elgg_extend_view('elgg.css', 'my_plugin.css');
 
 	// Add a menu item to the main site menu
 	$item = new ElggMenuItem('my_plugin', elgg_echo('my_plugin:menu'), 'my_url');

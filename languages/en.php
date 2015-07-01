@@ -605,11 +605,17 @@ three sections:
 	'admin:plugins:description' => "This admin panel allows you to control and configure tools installed on your site.",
 	'admin:plugins:opt:linktext' => "Configure tools...",
 	'admin:plugins:opt:description' => "Configure the tools installed on the site. ",
+	'admin:plugins:label:id' => "ID",
+	'admin:plugins:label:name' => "Name",
 	'admin:plugins:label:author' => "Author",
 	'admin:plugins:label:copyright' => "Copyright",
 	'admin:plugins:label:categories' => 'Categories',
 	'admin:plugins:label:licence' => "License",
 	'admin:plugins:label:website' => "URL",
+	'admin:plugins:label:info' => "Info",
+	'admin:plugins:label:files' => "Files",
+	'admin:plugins:label:resources' => "Resources",
+	'admin:plugins:label:screenshots' => "Screenshots",
 	'admin:plugins:label:repository' => "Code",
 	'admin:plugins:label:bugtracker' => "Report issue",
 	'admin:plugins:label:donate' => "Donate",
@@ -624,7 +630,6 @@ three sections:
 	'admin:plugins:label:contributors:description' => 'Description',
 	'admin:plugins:label:dependencies' => 'Dependencies',
 
-	'admin:plugins:warning:elgg_version_unknown' => 'This plugin uses a legacy manifest file and does not specify a compatible Elgg version. It probably will not work!',
 	'admin:plugins:warning:unmet_dependencies' => 'This plugin has unmet dependencies and cannot be activated. Check dependencies under more info.',
 	'admin:plugins:warning:invalid' => 'This plugin is invalid: %s',
 	'admin:plugins:warning:invalid:check_docs' => 'Check <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">the Elgg documentation</a> for troubleshooting tips.',
@@ -1065,8 +1070,6 @@ Once you have logged in, we highly recommend that you change your password.
 	'installation:walled_garden:description' => 'Enable this to prevent non-members from viewing the site except for web pages marked as public (such as login and registration).',
 	'installation:walled_garden:label' => 'Restrict pages to logged-in users',
 
-	'installation:httpslogin' => "Enable this to have user logins performed over HTTPS. This requires an HTTPS enabled web server!",
-	'installation:httpslogin:label' => "Enable HTTPS logins",
 	'installation:view' => "Enter the view which will be used as the default for your site or leave this blank for the default view (if in doubt, leave as default):",
 
 	'installation:siteemail' => "Site email address (used when sending system emails):",
@@ -1096,7 +1099,6 @@ Once you have logged in, we highly recommend that you change your password.
 	'admin:legend:debug' => 'Debugging and Logging',
 
 	'upgrading' => 'Upgrading...',
-	'upgrade:db' => 'Your database was upgraded.',
 	'upgrade:core' => 'Your Elgg installation was upgraded.',
 	'upgrade:unlock' => 'Unlock upgrade',
 	'upgrade:unlock:confirm' => "The database is locked for another upgrade. Running concurrent upgrades is dangerous. You should only continue if you know there is not another upgrade running. Unlock?",

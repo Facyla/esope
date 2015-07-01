@@ -14,7 +14,7 @@ elgg_register_event_handler('init', 'system', 'pages_init');
 function pages_init() {
 
 	// register a library of helper functions
-	elgg_register_library('elgg:pages', elgg_get_plugins_path() . 'pages/lib/pages.php');
+	elgg_register_library('elgg:pages', __DIR__ . '/lib/pages.php');
 
 	$item = new ElggMenuItem('pages', elgg_echo('pages'), 'pages/all');
 	elgg_register_menu_item('site', $item);
@@ -28,13 +28,13 @@ function pages_init() {
 	elgg_register_plugin_hook_handler('extender:url', 'annotation', 'pages_set_revision_url');
 
 	// Register some actions
-	$action_base = elgg_get_plugins_path() . 'pages/actions';
+	$action_base = __DIR__ . '/actions';
 	elgg_register_action("pages/edit", "$action_base/pages/edit.php");
 	elgg_register_action("pages/delete", "$action_base/pages/delete.php");
 	elgg_register_action("annotations/page/delete", "$action_base/annotations/page/delete.php");
 
 	// Extend the main css view
-	elgg_extend_view('css/elgg', 'pages/css');
+	elgg_extend_view('elgg.css', 'pages/css');
 
 	elgg_define_js('jquery.treeview', array(
 		'src' => '/mod/pages/vendors/jquery-treeview/jquery.treeview.min.js',
@@ -120,41 +120,39 @@ function pages_page_handler($page) {
 
 	elgg_push_breadcrumb(elgg_echo('pages'), 'pages/all');
 
-	$base_dir = elgg_get_plugins_path() . 'pages/pages/pages';
-
 	$page_type = $page[0];
 	switch ($page_type) {
 		case 'owner':
-			include "$base_dir/owner.php";
+			echo elgg_view_resource('pages/owner');
 			break;
 		case 'friends':
-			include "$base_dir/friends.php";
+			echo elgg_view_resource('pages/friends');
 			break;
 		case 'view':
 			set_input('guid', $page[1]);
-			include "$base_dir/view.php";
+			echo elgg_view_resource('pages/view');
 			break;
 		case 'add':
 			set_input('guid', $page[1]);
-			include "$base_dir/new.php";
+			echo elgg_view_resource('pages/new');
 			break;
 		case 'edit':
 			set_input('guid', $page[1]);
-			include "$base_dir/edit.php";
+			echo elgg_view_resource('pages/edit');
 			break;
 		case 'group':
-			include "$base_dir/owner.php";
+			echo elgg_view_resource('pages/owner');
 			break;
 		case 'history':
 			set_input('guid', $page[1]);
-			include "$base_dir/history.php";
+			echo elgg_view_resource('pages/history');
 			break;
 		case 'revision':
 			set_input('id', $page[1]);
-			include "$base_dir/revision.php";
+			echo elgg_view_resource('pages/revision');
 			break;
 		case 'all':
-			include "$base_dir/world.php";
+			echo elgg_view_resource('pages/world');
 			break;
 		default:
 			return false;
@@ -207,10 +205,10 @@ function pages_icon_url_override($hook, $type, $returnvalue, $params) {
 			case 'topbar':
 			case 'tiny':
 			case 'small':
-				return 'mod/pages/images/pages.gif';
+				return elgg_get_simplecache_url('pages/pages.gif');
 				break;
 			default:
-				return 'mod/pages/images/pages_lrg.gif';
+				return elgg_get_simplecache_url('pages/pages_lrg.gif');
 				break;
 		}
 	}

@@ -134,22 +134,17 @@ class SystemCache {
 	 * @access private
 	 */
 	function loadAll() {
-		
-	
 		$this->CONFIG->system_cache_loaded = false;
-	
-		$this->CONFIG->views = new \stdClass();
-		$data = $this->load('view_locations');
-		if (!is_string($data)) {
+
+		if (!_elgg_services()->views->configureFromCache($this)) {
 			return;
 		}
-		$this->CONFIG->views->locations = unserialize($data);
-		
+
 		$data = $this->load('view_types');
 		if (!is_string($data)) {
 			return;
 		}
-		$this->CONFIG->view_types = unserialize($data);
+		$GLOBALS['_ELGG']->view_types = unserialize($data);
 
 		// Note: We don't need view_overrides for operation. Inspector can pull this from the cache
 	
@@ -169,16 +164,16 @@ class SystemCache {
 
 		// cache system data if enabled and not loaded
 		if (!$this->CONFIG->system_cache_loaded) {
-			$this->save('view_locations', serialize($this->CONFIG->views->locations));
-			$this->save('view_types', serialize($this->CONFIG->view_types));
+			$this->save('view_types', serialize($GLOBALS['_ELGG']->view_types));
 
-			// this is saved just for the inspector and is not loaded in loadAll()
-			$this->save('view_overrides', serialize(_elgg_services()->views->getOverriddenLocations()));
+			_elgg_services()->views->cacheConfiguration($this);
 		}
 	
-		if (!$this->CONFIG->i18n_loaded_from_cache) {
+		if (!$GLOBALS['_ELGG']->i18n_loaded_from_cache) {
+
 			_elgg_services()->translator->reloadAllTranslations();
-			foreach ($this->CONFIG->translations as $lang => $map) {
+
+			foreach ($GLOBALS['_ELGG']->translations as $lang => $map) {
 				$this->save("$lang.lang", serialize($map));
 			}
 		}
