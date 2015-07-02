@@ -38,7 +38,7 @@ if ($guid) {
 	$revision_text = $transitions->description;
 	$new_post = $transitions->new_post;
 } else {
-	$transitions = new ElggBlog();
+	$transitions = new ElggTransitions();
 	$transitions->subtype = 'transitions';
 	$new_post = TRUE;
 }
@@ -54,6 +54,7 @@ $values = array(
 	'access_id' => ACCESS_DEFAULT,
 	'comments_on' => 'On',
 	'excerpt' => '',
+	'url' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
 );
@@ -128,6 +129,32 @@ if (!$error) {
 // only try to save base entity if no errors
 if (!$error) {
 	if ($transitions->save()) {
+		
+		// handle icon upload
+		if(get_input("remove_icon") == "yes"){
+			// remove existing icons
+			transitions_remove_icon($transitions);
+		} else {
+			//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
+			$icon_sizes = elgg_get_config("icon_sizes");
+			if ($icon_file = get_resized_image_from_uploaded_file("icon", 100, 100)) {
+				// create icon
+				$prefix = "transitions/" . $transitions->getGUID();
+				$fh = new ElggFile();
+				$fh->owner_guid = $transitions->getOwnerGUID();
+				foreach($icon_sizes as $icon_name => $icon_info){
+					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
+						$fh->setFilename($prefix . $icon_name . ".jpg");
+						if($fh->open("write")){
+							$fh->write($icon_file);
+							$fh->close();
+						}
+					}
+				}
+				$transitions->icontime = time();
+			}
+		}
+
 		// remove sticky form entries
 		elgg_clear_sticky_form('transitions');
 

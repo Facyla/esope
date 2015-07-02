@@ -57,6 +57,27 @@ $excerpt_input = elgg_view('input/text', array(
 	'value' => _elgg_html_decode($vars['excerpt'])
 ));
 
+$icon_input = "";
+$icon_remove_input = "";
+if($vars["guid"]){
+	$icon_label = elgg_echo("transitions:label:icon:exists");
+	
+	if($transitions->icontime){
+		$icon_remove_input = "<br /><img src='" . $transitions->getIconURL() . "' />";
+		$icon_remove_input .= "<br />";
+		$icon_remove_input .= elgg_view("input/checkbox", array(
+			"name" => "remove_icon",
+			"value" => "yes"
+		));
+		$icon_remove_input .= elgg_echo("transitions:label:icon:remove");
+	}
+} else {
+	$icon_label = elgg_echo("blog_tools:label:icon:new");
+}
+$icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
+$icon_input .= $icon_remove_input;
+
+
 $body_label = elgg_echo('transitions:body');
 $body_input = elgg_view('input/longtext', array(
 	'name' => 'description',
@@ -66,7 +87,6 @@ $body_input = elgg_view('input/longtext', array(
 
 $save_status = elgg_echo('transitions:save_status');
 if ($vars['guid']) {
-	$entity = get_entity($vars['guid']);
 	$saved = date('F j, Y @ H:i', $entity->time_created);
 } else {
 	$saved = elgg_echo('never');
@@ -89,6 +109,13 @@ $comments_input = elgg_view('input/select', array(
 	'id' => 'transitions_comments_on',
 	'value' => $vars['comments_on'],
 	'options_values' => array('On' => elgg_echo('on'), 'Off' => elgg_echo('off'))
+));
+
+$url_label = elgg_echo('url');
+$url_input = elgg_view('input/url', array(
+	'name' => 'url',
+	'id' => 'transitions_url',
+	'value' => $vars['url']
 ));
 
 $tags_label = elgg_echo('tags');
@@ -130,8 +157,18 @@ $draft_warning
 </div>
 
 <div>
+	<label for="transitions_icon">$icon_label</label>
+	$icon_input
+</div>
+
+<div>
 	<label for="transitions_description">$body_label</label>
 	$body_input
+</div>
+
+<div>
+	<label for="transitions_url">$url_label</label>
+	$url_input
 </div>
 
 <div>

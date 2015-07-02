@@ -1,6 +1,6 @@
 <?php
 /**
- * Transitionss
+ * Transitions
  *
  * @package Transitions
  *
@@ -22,7 +22,7 @@ function transitions_init() {
 	elgg_register_library('elgg:transitions', elgg_get_plugins_path() . 'transitions/lib/transitions.php');
 
 	// add a site navigation item
-	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitionss'), 'transitions/all');
+	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'transitions/all');
 	elgg_register_menu_item('site', $item);
 
 	elgg_register_event_handler('upgrade', 'upgrade', 'transitions_run_upgrades');
@@ -32,6 +32,9 @@ function transitions_init() {
 
 	// routing of urls
 	elgg_register_page_handler('transitions', 'transitions_page_handler');
+	
+	// Override icons
+	elgg_register_plugin_hook_handler("entity:icon:url", "object", "transitions_icon_hook");
 
 	// override the default url to view a transitions object
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'transitions_set_url');
@@ -73,8 +76,8 @@ function transitions_init() {
 /**
  * Dispatches transitions pages.
  * URLs take the form of
- *  All transitionss:       transitions/all
- *  User's transitionss:    transitions/owner/<username>
+ *  All transitions:       transitions/all
+ *  User's transitions:    transitions/owner/<username>
  *  Friends' transitions:   transitions/friends/<username>
  *  User's archives: transitions/archives/<username>/<time_start>/<time_stop>
  *  Transitions post:       transitions/view/<guid>/<title>
@@ -85,7 +88,7 @@ function transitions_init() {
  *
  * Title is ignored
  *
- * @todo no archives for all transitionss or friends
+ * @todo no archives for all transitions or friends
  *
  * @param array $page
  * @return bool
@@ -94,8 +97,8 @@ function transitions_page_handler($page) {
 
 	elgg_load_library('elgg:transitions');
 
-	// push all transitionss breadcrumb
-	elgg_push_breadcrumb(elgg_echo('transitions:transitionss'), "transitions/all");
+	// push all transitions breadcrumb
+	elgg_push_breadcrumb(elgg_echo('transitions:transitions'), "transitions/all");
 
 	if (!isset($page[0])) {
 		$page[0] = 'all';
@@ -146,6 +149,13 @@ function transitions_page_handler($page) {
 				$params = transitions_get_page_content_archive($page[1], $page[3], $page[4]);
 			}
 			break;
+		case 'icon':
+			// The username should be the file we're getting
+			if (isset($page[1])) { set_input("guid",$page[1]); }
+			if (isset($page[2])) { set_input("size",$page[2]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");
+			return true;
+			break;
 		case 'all':
 			$params = transitions_get_page_content_list();
 			break;
@@ -165,8 +175,10 @@ function transitions_page_handler($page) {
 	return true;
 }
 
+
+
 /**
- * Format and return the URL for transitionss.
+ * Format and return the URL for transitions.
  *
  * @param string $hook
  * @param string $type
@@ -265,10 +277,10 @@ function transitions_prepare_notification($hook, $type, $notification, $params) 
 }
 
 /**
- * Register transitionss with ECML.
+ * Register transitions with ECML.
  */
 function transitions_ecml_views_hook($hook, $entity_type, $return_value, $params) {
-	$return_value['object/transitions'] = elgg_echo('transitions:transitionss');
+	$return_value['object/transitions'] = elgg_echo('transitions:transitions');
 
 	return $return_value;
 }
@@ -277,7 +289,7 @@ function transitions_ecml_views_hook($hook, $entity_type, $return_value, $params
  * Upgrade from 1.7 to 1.8.
  */
 function transitions_run_upgrades($event, $type, $details) {
-	$transitions_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'transitionss');
+	$transitions_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'transitions');
 
 	if (!$transitions_upgrade_version) {
 		 // When upgrading, check if the ElggTransitions class has been registered as this
@@ -286,6 +298,32 @@ function transitions_run_upgrades($event, $type, $details) {
 			add_subtype('object', 'transitions', 'ElggTransitions');
 		}
 
-		elgg_set_plugin_setting('upgrade_version', 1, 'transitionss');
+		elgg_set_plugin_setting('upgrade_version', 1, 'transitions');
 	}
 }
+
+function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
+	
+	if (!empty($params) && is_array($params)) {
+		$entity = $params["entity"];
+		
+		if(elgg_instanceof($entity, "object", "transitions")){
+			$size = $params["size"];
+	
+			if ($icontime = $entity->icontime) {
+				$icontime = "{$icontime}";
+					
+				$filehandler = new ElggFile();
+				$filehandler->owner_guid = $entity->getOwnerGUID();
+				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
+	
+				if ($filehandler->exists()) {
+					$url = elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+						
+					return $url;
+				}
+			}
+		}
+	}
+}
+

@@ -229,6 +229,7 @@ function transitions_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 	$vars = array();
 	$vars['id'] = 'transitions-post-edit';
 	$vars['class'] = 'elgg-form-alt';
+	$vars["enctype"] = "multipart/form-data";
 
 	$sidebar = '';
 	if ($page == 'edit') {
@@ -352,3 +353,36 @@ function transitions_prepare_form_vars($post = NULL, $revision = NULL) {
 
 	return $values;
 }
+
+
+function transitions_remove_icon(ElggTransitions $transitions){
+	$result = false;
+	
+	if(!empty($transitions) && elgg_instanceof($transitions, "object", "transitions", "ElggTransitions")){
+		if(!empty($transitions->icontime)){
+			if($icon_sizes = elgg_get_config("icon_sizes")){
+				$fh = new ElggFile();
+				$fh->owner_guid = $transitions->getOwnerGUID();
+				
+				$prefix = "transitionss/" . $transitions->getGUID();
+				
+				foreach($icon_sizes as $name => $info){
+					$fh->setFilename($prefix . $name . ".jpg");
+					
+					if($fh->exists()){
+						$fh->delete();
+					}
+				}
+			}
+			
+			unset($transitions->icontime);
+			$result = true;
+		} else {
+			$result = true;
+		}
+	}
+	
+	return $result;
+}
+
+

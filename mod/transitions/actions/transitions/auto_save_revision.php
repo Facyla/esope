@@ -43,6 +43,11 @@ if ($title && $description) {
 		// river / revision logic in the real save action.
 		$transitions->new_post = TRUE;
 
+		$container_guid = (int)get_input('container_guid');
+		if($container_guid){
+			$transitions->container_guid = $container_guid;
+		}
+
 		if (!$transitions->save()) {
 			$error = elgg_echo('transitions:error:cannot_save');
 		}
