@@ -81,6 +81,37 @@ if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
+
+// @TODO add stats and actions blocks
+$stats = '<i class="fa fa-heart">Likes</i> <i class="fa fa-comments">Comments</i> <i class="fa fa-user">People</i> <i class="fa fa-tags">Tags</i>';
+$actions = '<i class="fa fa-thumbs-tack">Pin</i> <i class="fa fa-link">Link</i> <i class="fa fa-code">Embed</i>';
+
+// @TODO : add following meta display :
+$other_meta = '';
+$other_meta .= '<p>' . $transitions->url . '</p>';
+$other_meta .= '<p>' . $transitions->category . '</p>';
+$other_meta .= '<p>' . $transitions->resource_lang . '</p>';
+$other_meta .= '<p>' . $transitions->lang . '</p>';
+$other_meta .= '<p>' . $transitions->territory . '</p>';
+$other_meta .= '<p>' . $transitions->actor_type . '</p>';
+$other_meta .= '<p>' . $transitions->start_date . '</p>';
+$other_meta .= '<p>' . $transitions->end_date . '</p>';
+$other_meta .= '<p>' . $transitions->location . '</p>';
+/*
+'url' => '',
+'category' => '',
+'resource_lang' => '',
+'lang' => '',
+// ssi category "actor" : territory + geolocation, actor_type
+'territory' => '', // +geolocation
+'actor_type' => '',
+// ssi category "project" : territory + geolocation, start_date + relation to actors
+'start_date' => '',
+// ssi category "event" : start_date, end_date, territory + geolocation
+'end_date' => '',
+*/
+
+
 if ($full) {
 
 	$body = elgg_view('output/longtext', array(
@@ -111,7 +142,7 @@ if ($full) {
 			'entity' => $transitions,
 			'metadata' => $metadata,
 			'subtitle' => $subtitle,
-			'content' => $excerpt,
+			'content' => $transitions_icon . $excerpt,
 		);
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
@@ -124,7 +155,7 @@ if ($full) {
 			'is_trusted' => true,
 		);
 		$title_link = elgg_view('output/url', $params);
-
+		
 		echo '<div class="transitions-gallery-item">';
 			if ($metadata) { echo $metadata; }
 			if ($title_link) { echo "<h3>$title_link</h3>"; }
@@ -136,9 +167,16 @@ if ($full) {
 			echo '<div class="transitions-gallery-box">';
 				echo $transitions_icon;
 				echo '<div class="transitions-gallery-hover">';
+					// @TODO : nb likes, commentaires, objets liés, personnes et projets liés...
+					echo '<div class="elgg-content">' . $stats . '</div>';
 					echo '<div class="elgg-content">' . $excerpt . '</div>';
+					echo '<div class="elgg-content">' . $other_meta . '</div>';
 				echo '</div>';
 				echo '<div class="clearfloat"></div>';
+			echo '</div>';
+			// @TODO actions possibles : commenter, liker, ajouter une métadonnée/relation
+			echo '<div class="transitions-gallery-actions">';
+				echo $actions;
 			echo '</div>';
 		echo '</div>';
 	}

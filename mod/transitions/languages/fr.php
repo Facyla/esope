@@ -1,14 +1,14 @@
 <?php
 return array(
 	'transitions' => 'Contributions',
-	'transitions:transitionss' => 'Contributions',
+	'transitions:transitions' => 'Contributions',
 	'transitions:revisions' => 'Révisions',
 	'transitions:archives' => 'Archives',
 	'transitions:transitions' => 'Contribution',
 	'item:object:transitions' => 'Contributions',
 
-	'transitions:title:user_transitionss' => 'Contributions de %s',
-	'transitions:title:all_transitionss' => 'Tous les contributions du site',
+	'transitions:title:user_transitions' => 'Contributions de %s',
+	'transitions:title:all_transitions' => 'Tous les contributions du site',
 	'transitions:title:friends' => 'Contributions des contacts',
 
 	'transitions:group' => 'Contributions du groupe',
@@ -60,7 +60,43 @@ Voir et commenter cette contribution :
 
 	// widget
 	'transitions:widget:description' => 'Ce widget affiche vos dernières contributions',
-	'transitions:moretransitionss' => 'Plus de contributions',
+	'transitions:moretransitions' => 'Plus de contributions',
 	'transitions:numbertodisplay' => 'Nombre de contributions à afficher',
-	'transitions:notransitionss' => 'Aucune contribution'
+	'transitions:notransitions' => 'Aucune contribution',
+	
+	
+	// NEW STRINGS
+	'transitions:icon' => 'Illustration (vignette)',
+	'transitions:category' => 'Catégorie',
+	'transitions:url' => 'Lien web',
+	'transitions:resourcelang' => 'Langue de la ressource',
+	'transitions:lang' => 'Langue',
+	'transitions:territory' => 'Territoire',
+	'transitions:actortype' => "Type d'acteur",
+	'transitions:startdate' => 'Date de début',
+	'transitions:enddate' => 'Date de fin',
+	
+	// Select values
+	'transitions:lang:other' => "Autre langue",
+	
+	'transitions:actortype:individual' => "Individu",
+	'transitions:actortype:collective' => "Collectif",
+	'transitions:actortype:association' => "Association",
+	'transitions:actortype:enterprise' => "Entreprise",
+	'transitions:actortype:education' => "Etablissement d'enseignement ou de recherche",
+	'transitions:actortype:collectivity' => "Collectivité locale",
+	'transitions:actortype:administration' => "Administration publique",
+	'transitions:actortype:plurinational' => "Entité plurinationale",
+	'transitions:actortype:other' => "Autre",
+	
+	'transitions:category:knowledge' => "Connaissance",
+	'transitions:category:experience' => "Récit, expérience",
+	'transitions:category:imaginary' => "Imaginaire",
+	'transitions:category:tools' => "Outil et méthode",
+	'transitions:category:actor' => "Acteur",
+	'transitions:category:project' => "Projet",
+	'transitions:category:editorial' => "Produit éditorial",
+	'transitions:category:event' => "Evénement",
+	
+	
 );

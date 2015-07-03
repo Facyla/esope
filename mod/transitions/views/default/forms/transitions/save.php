@@ -111,12 +111,93 @@ $comments_input = elgg_view('input/select', array(
 	'options_values' => array('On' => elgg_echo('on'), 'Off' => elgg_echo('off'))
 ));
 
-$url_label = elgg_echo('url');
+$url_label = elgg_echo('transitions:url');
 $url_input = elgg_view('input/url', array(
 	'name' => 'url',
 	'id' => 'transitions_url',
 	'value' => $vars['url']
 ));
+
+$category_label = elgg_echo('transitions:category');
+$category_input = elgg_view('input/select', array(
+	'name' => 'category',
+	'id' => 'transitions_category',
+	'value' => $vars['category'],
+	'options_values' => array(
+			'' => '',
+			'knowledge' => elgg_echo('transitions:category:knowledge'), 
+			'experience' => elgg_echo('transitions:category:experience'), 
+			'imaginary' => elgg_echo('transitions:category:imaginary'), 
+			'tools' => elgg_echo('transitions:category:tools'), 
+			'actor' => elgg_echo('transitions:category:actor'), 
+			'project' => elgg_echo('transitions:category:project'), 
+			'editorial' => elgg_echo('transitions:category:editorial'), 
+			'event' => elgg_echo('transitions:category:event'), 
+		)
+));
+
+$lang_opts = array(
+		'' => '',
+		'fr' => elgg_echo('fr'), 
+		'en' => elgg_echo('en'), 
+		'other' => elgg_echo('transitions:lang:other'), 
+	);
+
+$resourcelang_label = elgg_echo('transitions:resourcelang');
+$resourcelang_input = elgg_view('input/select', array(
+	'name' => 'resourcelang',
+	'id' => 'transitions_resourcelang',
+	'value' => $vars['resourcelang'],
+	'options_values' => $lang_opts,
+));
+
+$lang_label = elgg_echo('transitions:lang');
+$lang_input = elgg_view('input/select', array(
+	'name' => 'lang',
+	'id' => 'transitions_lang',
+	'value' => $vars['lang'],
+	'options_values' => $lang_opts,
+));
+
+$territory_label = elgg_echo('transitions:territory');
+$territory_input = elgg_view('input/text', array(
+	'name' => 'territory',
+	'id' => 'transitions_territory',
+	'value' => _elgg_html_decode($vars['territory'])
+));
+
+$actortype_label = elgg_echo('transitions:actortype');
+$actortype_input = elgg_view('input/select', array(
+	'name' => 'actortype',
+	'id' => 'transitions_actortype',
+	'value' => $vars['actortype'],
+	'options_values' => array(
+			'' => elgg_echo('transitions:actortype:other'),
+			'individual' => elgg_echo('transitions:actortype:individual'), 
+			'collective' => elgg_echo('transitions:actortype:collective'), 
+			'association' => elgg_echo('transitions:actortype:association'), 
+			'enterprise' => elgg_echo('transitions:actortype:enterprise'), 
+			'education' => elgg_echo('transitions:actortype:education'), 
+			'collectivity' => elgg_echo('transitions:actortype:collectivity'), 
+			'administration' => elgg_echo('transitions:actortype:administration'), 
+			'plurinational' => elgg_echo('transitions:actortype:plurinational'),
+		),
+));
+
+$startdate_label = elgg_echo('transitions:startdate');
+$startdate_input = elgg_view('input/date', array(
+	'name' => 'startdate',
+	'id' => 'transitions_startdate',
+	'value' => _elgg_html_decode($vars['start_date'])
+));
+
+$enddate_label = elgg_echo('transitions:enddate');
+$enddate_input = elgg_view('input/date', array(
+	'name' => 'enddate',
+	'id' => 'transitions_enddate',
+	'value' => _elgg_html_decode($vars['end_date'])
+));
+
 
 $tags_label = elgg_echo('tags');
 $tags_input = elgg_view('input/tags', array(
@@ -172,8 +253,38 @@ $draft_warning
 </div>
 
 <div>
-	<label for="transitions_tags">$tags_label</label>
-	$tags_input
+	<label for="transitions_url">$category_label</label>
+	$category_input
+</div>
+
+<div>
+	<label for="transitions_url">$resourcelang_label</label>
+	$resourcelang_input
+</div>
+
+<div>
+	<label for="transitions_url">$lang_label</label>
+	$lang_input
+</div>
+
+<div>
+	<label for="transitions_url">$territory_label</label>
+	$territory_input
+</div>
+
+<div>
+	<label for="transitions_url">$actortype_label</label>
+	$actortype_input
+</div>
+
+<div>
+	<label for="transitions_url">$startdate_label</label>
+	$startdate_input
+</div>
+
+<div>
+	<label for="transitions_tags">$enddate_label</label>
+	$enddate_input
 </div>
 
 $categories_input

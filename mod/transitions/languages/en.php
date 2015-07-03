@@ -1,14 +1,14 @@
 <?php
 return array(
 	'transitions' => 'Contributions',
-	'transitions:transitionss' => 'Contributions',
+	'transitions:transitions' => 'Contributions',
 	'transitions:revisions' => 'Revisions',
 	'transitions:archives' => 'Archives',
 	'transitions:transitions' => 'Contribution',
 	'item:object:transitions' => 'Contributions',
 
-	'transitions:title:user_transitionss' => '%s\'s contributions',
-	'transitions:title:all_transitionss' => 'All site contributions',
+	'transitions:title:user_transitions' => '%s\'s contributions',
+	'transitions:title:all_transitions' => 'All site contributions',
 	'transitions:title:friends' => 'Friends\' contributions',
 
 	'transitions:group' => 'Group contributions',
@@ -60,7 +60,9 @@ View and comment on the contribution:
 
 	// widget
 	'transitions:widget:description' => 'Display your latest contributions',
-	'transitions:moretransitionss' => 'More contributions',
+	'transitions:moretransitions' => 'More contributions',
 	'transitions:numbertodisplay' => 'Number of contributions to display',
-	'transitions:notransitionss' => 'No contributions'
+	'transitions:notransitions' => 'No contribution',
+	
+	
 );

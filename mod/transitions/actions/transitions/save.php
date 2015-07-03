@@ -54,11 +54,21 @@ $values = array(
 	'access_id' => ACCESS_DEFAULT,
 	'comments_on' => 'On',
 	'excerpt' => '',
-	'url' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
+	'url' => '',
+	'category' => '',
+	'resource_lang' => '',
+	'lang' => '',
+	// ssi category "actor" : territory + geolocation, actor_type
+	'territory' => '', // +geolocation
+	'actor_type' => '',
+	// ssi category "project" : territory + geolocation, start_date + relation to actors
+	'start_date' => '',
+	// ssi category "event" : start_date, end_date, territory + geolocation
+	'end_date' => '',
 );
-
+ 
 // fail if a required entity isn't set
 $required = array('title', 'description');
 
@@ -137,6 +147,8 @@ if (!$error) {
 		} else {
 			//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
 			$icon_sizes = elgg_get_config("icon_sizes");
+			// @TODO définir d'autres dimensions, notamment recadrage pour les vignettes en dimensions suffisantes mais format carré 
+			// et pour affichage format article
 			if ($icon_file = get_resized_image_from_uploaded_file("icon", 100, 100)) {
 				// create icon
 				$prefix = "transitions/" . $transitions->getGUID();
