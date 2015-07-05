@@ -88,15 +88,15 @@ $actions = '<i class="fa fa-thumbs-tack">Pin</i> <i class="fa fa-link">Link</i> 
 
 // @TODO : add following meta display :
 $other_meta = '';
-$other_meta .= '<p>' . $transitions->url . '</p>';
-$other_meta .= '<p>' . $transitions->category . '</p>';
-$other_meta .= '<p>' . $transitions->resource_lang . '</p>';
-$other_meta .= '<p>' . $transitions->lang . '</p>';
-$other_meta .= '<p>' . $transitions->territory . '</p>';
-$other_meta .= '<p>' . $transitions->actor_type . '</p>';
-$other_meta .= '<p>' . $transitions->start_date . '</p>';
-$other_meta .= '<p>' . $transitions->end_date . '</p>';
-$other_meta .= '<p>' . $transitions->location . '</p>';
+$other_meta .= '<p>Catégorie : ' . $transitions->category . '</p>';
+if (!empty($transitions->url)) $other_meta .= '<p>Lien web : <a href="' . $transitions->url . '">' . $transitions->url . '</a></p>';
+$other_meta .= '<p>Langue de la ressource : ' . $transitions->resource_lang . '</p>';
+$other_meta .= '<p>Langue : ' . $transitions->lang . '</p>';
+if (!empty($transitions->territory)) $other_meta .= '<p>Territoire : ' . $transitions->territory . '</p>';
+if ($transitions->category == 'actor') $other_meta .= '<p>Type d\'acteur : ' . $transitions->actor_type . '</p>';
+if (!empty($transitions->start_date)) $other_meta .= '<p>Date de début : ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
+if (!empty($transitions->end_date)) $other_meta .= '<p>Date de début : ' . date('d M Y H:i:s', $transitions->end_date) . '</p>';
+$other_meta .= '<p>Carte : ' . $transitions->location . '</p>';
 /*
 'url' => '',
 'category' => '',

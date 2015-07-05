@@ -77,6 +77,22 @@ if($vars["guid"]){
 $icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
 $icon_input .= $icon_remove_input;
 
+$attachment_input = "";
+$attachment_remove_input = "";
+if($vars["guid"]){
+	$attachment_label = elgg_echo("transitions:label:attachment:exists");
+	if($transitions->attachment){
+		$attachment_remove_input = '<br /><a href="' . $transitions->getIconURL() . '" target="_new" />';
+		$attachment_remove_input .= "<br />";
+		$attachment_remove_input .= elgg_view("input/checkbox", array("name" => "remove_attachment", "value" => "yes"));
+		$attachment_remove_input .= elgg_echo("transitions:label:attachment:remove");
+	}
+} else {
+	$attachment_label = elgg_echo("blog_tools:label:attachment:new");
+}
+$attachment_input .= elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
+$attachment_input .= $attachment_remove_input;
+
 
 $body_label = elgg_echo('transitions:body');
 $body_input = elgg_view('input/longtext', array(
@@ -245,6 +261,11 @@ $draft_warning
 <div>
 	<label for="transitions_description">$body_label</label>
 	$body_input
+</div>
+
+<div>
+	<label for="transitions_attachment">$attachment_label</label>
+	$attachment_input
 </div>
 
 <div>
