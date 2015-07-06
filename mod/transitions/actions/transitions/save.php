@@ -181,6 +181,28 @@ if (!$error) {
 			}
 		}
 
+		// handle icon upload
+		if(get_input("remove_attachment") == "yes"){
+			// remove existing icons
+			transitions_remove_attachment($transitions);
+		} else {
+			if ($attachment_file = get_uploaded_file('attachment')) {
+				$attachment_ext = ''; // @TODO determine filetype extension ?
+				// create icon
+				$prefix = "transitions/" . $transitions->getGUID();
+				$fh = new ElggFile();
+				$fh->owner_guid = $transitions->getOwnerGUID();
+				$attachment_name = 'attachment_' . time() . $attachment_ext;
+				// Save original image ?  not for icon ?
+				$fh->setFilename($prefix . $attachment_name);
+				if($fh->open("write")){
+					$fh->write($attachment_file);
+					$fh->close();
+				}
+				$transitions->attachment = $attachment_name;
+			}
+		}
+
 		// remove sticky form entries
 		elgg_clear_sticky_form('transitions');
 
