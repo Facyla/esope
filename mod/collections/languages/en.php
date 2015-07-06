@@ -1,0 +1,76 @@
+<?php
+
+return array(
+	'collections' => "Collections",
+
+	/* Settings */
+	'collections:settings:description' => "Main collection settings",
+	'collections:settings:defaultcollection' => "Collection default content",
+	'collections:settings:defaultcollection:help' => "This plugin is mainly designed to give developpers a view that can be used in themes. For more commodity, a default collection content can be configured below, and called directement with the view 'collections/collection', without any configuration array.<br />",
+	
+	'collections:settings:content' => "Default collection content",
+	'collections:settings:content:help' => "The collection content is defined by a unordened list, each item defining a slide. A slide content can be an image, a video, or any rich media content combining these elements.<br />Leave empty to get default values back.",
+	'collections:settings:css_main' => "Collection global CSS properties (main &lt;ul&gt;)",
+	'collections:settings:css_main:help' => "Please set only properties, e.g.: : width:600px; height:280px;<br />Leave empty to get default values back.",
+	'collections:settings:jsparams' => "JS params of the collection",
+	'collections:settings:jsparams:help' => "Add here the collection JS params, as a list of parameters like this one : <strong>parameter : value,<br />parameter2 : value2,</strong><br />Leave empty to get default values back.",
+	'collections:settings:css_textslide' => "CSS properties for slides containing text",
+	'collections:settings:css_textslide:help' => "Specific CSS properties for slides using the .textSlide class : add only properties, e.g.: color:#333;<br />Leave empty to get default values back.",
+	'collections:settings:css' => "CSS override for ythe collection",
+	'collections:settings:css:help' => "Override stylesheet for the collection : these are the complete CSS that should be added for the collection after the default styles.<br />Leave empty to get default values back.",
+	'collections:settings:collection_access' => "Allow members to edit collections",
+	'collections:settings:collection_access:details' => "By default, the access to the collection editing tool is reserved to administrators. You can also allow site members to use it by choosing \"Yes\"",
+	'collections:option:yes' => "Yes",
+	'collections:option:no' => "No",
+	
+	
+'collections:showinstructions' => "Display instructions",
+	'collections:instructions' => "The collections can be created here, and then inserted into articles and other publications through a shortcode <q>[collection id=\"12345\"]</q>",
+	'collections:add' => "Create a new collection",
+	'collections:edit' => "Collection edit",
+	'collections:edit:title' => "Title",
+	'collections:edit:title:details' => "The title is a readable identification for the collection. It is not otherwise used when displaying it.",
+	'collections:edit:name' => "Identifier",
+	'collections:edit:name:details' => "Unique identifier for this collection, allows to call it the same way on different sites, eg. for use within a theme.",
+	'collections:edit:description' => "Description",
+	'collections:edit:description:details' => "The description lets you define some additionnal information about this collection. It is not displayed either.",
+	'collections:edit:content' => "Slides",
+	'collections:edit:content:details' => "Add new slides, and reorder them to your convenience. <br />Note: you will not be able to use the visual editor on new slides. Please save your collection to enable it.",
+	'collections:edit:slide' => "Slide",
+	'collections:edit:addslide' => "Add a slide",
+	'collections:edit:deleteslide' => "Delete this slide",
+	'collections:edit:deleteslide:confirm' => "WARNING, deleted slides will be lost and cannot be restored. Delete anyway ?",
+	'collections:edit:config' => "Collection JS parameters",
+	'collections:edit:config:details' => "JavaScript collection configuration parameters (AnythingCollection).",
+	'collections:edit:config:toggledocumentation' => "<i class=\"fa fa-toggle-down\"></i>Display full parameters documentation",
+	'collections:edit:css' => "CSS",
+	'collections:edit:css:details' => "CSS elements to be added while displaying this collection.<br /> Note: to select this collection, please use the following selector: <strong>#collection-%s</strong>",
+	'collections:edit:height' => "Height",
+	'collections:edit:height:details' => "The collection dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"height\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
+	'collections:edit:width' => "Width",
+	'collections:edit:width:details' => "The collection dimensions are determined by the parent block. To force specific dimensions, set its dimensions here.<br />Note: any valid \"width\" CSS property values are allowed, in px, %, and other units, including \"auto\".",
+	'collections:edit:access' => "Visibility",
+	'collections:edit:access:details' => "Determines who will be allowed to view this collection.",
+	'collections:edit:submit' => "Save",
+	'collections:saved' => "Your changes have been saved",
+	'collections:edit:preview' => "Preview",
+	'collections:edit:view' => "View collection",
+	'collections:edit:editor' => "Always enable visual editor for slide editing",
+	'collections:edit:editor:details' => "The visual editor facilitates the content edition, but it also may strip some HTML code. This setting lets you choose whether the editor should be enabled by default when editing slides. Recommended setting is to leave it disabled if you use raw HTML (you still may enable it manually on a particular slide if needed).",
+	'collections:editor:yes' => "Yes (HTML filter)",
+	'collections:editor:no' => "No (can be enabled on-demand)",
+	'collections:error:multiple' => "Multiple collections found for this name, cannot determine which to display.",
+	'collections:error:alreadyexists' => "A collection already exists with this name, please choose antoher one.",
+	
+	
+	'collections:shortcode:collection' => "Collection (already defined)",
+	'collections:embed:instructions' => "How to embed this collection ?",
+	'collections:shortcode:instructions' => " - with a shortcode, into a publication (blog, page, etc.): <strong>[collection id=\"%s\"]</strong>",
+	'collections:cmspages:instructions' => " - with a template code, into a template CMSPage: <strong>{{:collection/view|guid=%s}}</strong>",
+	'collections:cmspages:instructions:shortcode' => " - with a template short, alternatively, into a template CMSPage: <strong>{{[collection id=\"%s\"]}}</strong>",
+	'collections:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display collections! You may need to update page type to display it.",
+	'collections:iframe:instructions' => " - with an embed code, on any other sites: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "collection/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
+	
+);
+
+
