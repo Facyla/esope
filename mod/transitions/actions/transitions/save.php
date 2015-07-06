@@ -47,12 +47,13 @@ if ($guid) {
 $old_status = $transitions->status;
 
 // set defaults and required values.
+// Note : access is always public + comments are always enabled
 $values = array(
 	'title' => '',
 	'description' => '',
 	'status' => 'draft',
-	'access_id' => ACCESS_DEFAULT,
-	'comments_on' => 'On',
+	//'access_id' => ACCESS_PUBLIC,
+	//'comments_on' => 'On',
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
@@ -70,7 +71,7 @@ $values = array(
 	// ssi category "event" : start_date, end_date, territory + geolocation
 	'end_date' => '',
 );
- 
+
 // fail if a required entity isn't set
 $required = array('title', 'description');
 
@@ -120,6 +121,10 @@ foreach ($values as $name => $default) {
 	}
 }
 
+// Set some fixed values
+$values['access_id'] = ACCESS_PUBLIC;
+$values['comments_on'] = 'On';
+
 // if preview, force status to be draft
 if ($save == false) {
 	$values['status'] = 'draft';
@@ -148,14 +153,21 @@ if (!$error) {
 			transitions_remove_icon($transitions);
 		} else {
 			//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
+			// Autres dimensions, notamment recadrage pour les vignettes en format carré définies via le thème
 			$icon_sizes = elgg_get_config("icon_sizes");
-			// @TODO définir d'autres dimensions, notamment recadrage pour les vignettes en dimensions suffisantes mais format carré 
-			// et pour affichage format article
 			if ($icon_file = get_resized_image_from_uploaded_file("icon", 100, 100)) {
 				// create icon
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
 				$fh->owner_guid = $transitions->getOwnerGUID();
+				// Save original image ?  not for icon ?
+				/*
+				$fh->setFilename($prefix . 'original');
+				if($fh->open("write")){
+					$fh->write($icon_file);
+					$fh->close();
+				}
+				*/
 				foreach($icon_sizes as $icon_name => $icon_info){
 					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
 						$fh->setFilename($prefix . $icon_name . ".jpg");

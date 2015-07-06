@@ -6,6 +6,7 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 
 /* Generic styles */
 a { color: #223300; }
+img { max-width: 100%; }
 
 /* Header */
 .elgg-page-header { background: url(<?php echo $imgurl; ?>flickr/miuenski_miuenski_2311617707_33a63b3928_o.jpg) #223300 50% 50% no-repeat; background-size:cover; height:200px; }

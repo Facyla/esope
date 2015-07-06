@@ -22,7 +22,7 @@ if (!empty($entity) && elgg_instanceof($entity, "object", "transitions")) {
 		// which view
 		if ($full_view) {
 			// full view of a transitions
-			if (!$size) $size = "large";
+			if (!$size) $size = "master";
 			if (!$align) $align = "right";
 			
 			$href = false;
@@ -32,7 +32,7 @@ if (!empty($entity) && elgg_instanceof($entity, "object", "transitions")) {
 		} else {
 			// listing view of a transitions
 			// set listing defaults
-			if (!$size) $size = "small";
+			if (!$size) $size = "listing";
 			if (!$align) $align = "right";
 			
 			$image_params["src"] = $entity->getIconURL($size);

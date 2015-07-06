@@ -28,7 +28,7 @@ if ($vars['guid']) {
 	));
 }
 
-// published transitionss do not get the preview button
+// published transitions do not get the preview button
 if (!$vars['guid'] || ($transitions && $transitions->status != 'published')) {
 	$preview_button = elgg_view('input/submit', array(
 		'value' => elgg_echo('preview'),
@@ -60,19 +60,19 @@ $excerpt_input = elgg_view('input/text', array(
 $icon_input = "";
 $icon_remove_input = "";
 if($vars["guid"]){
-	$icon_label = elgg_echo("transitions:label:icon:exists");
+	$icon_label = elgg_echo("transitions:icon");
 	
 	if($transitions->icontime){
-		$icon_remove_input = "<br /><img src='" . $transitions->getIconURL() . "' />";
+		$icon_remove_input = "<br /><img src='" . $transitions->getIconURL('listing') . "' />";
 		$icon_remove_input .= "<br />";
 		$icon_remove_input .= elgg_view("input/checkbox", array(
 			"name" => "remove_icon",
 			"value" => "yes"
 		));
-		$icon_remove_input .= elgg_echo("transitions:label:icon:remove");
+		$icon_remove_input .= elgg_echo("transitions:icon:remove");
 	}
 } else {
-	$icon_label = elgg_echo("blog_tools:label:icon:new");
+	$icon_label = elgg_echo("transitions:icon:new");
 }
 $icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
 $icon_input .= $icon_remove_input;
@@ -80,15 +80,15 @@ $icon_input .= $icon_remove_input;
 $attachment_input = "";
 $attachment_remove_input = "";
 if($vars["guid"]){
-	$attachment_label = elgg_echo("transitions:label:attachment:exists");
+	$attachment_label = elgg_echo("transitions:attachment");
 	if($transitions->attachment){
 		$attachment_remove_input = '<br /><a href="' . $transitions->getIconURL() . '" target="_new" />';
 		$attachment_remove_input .= "<br />";
 		$attachment_remove_input .= elgg_view("input/checkbox", array("name" => "remove_attachment", "value" => "yes"));
-		$attachment_remove_input .= elgg_echo("transitions:label:attachment:remove");
+		$attachment_remove_input .= elgg_echo("transitions:attachment:remove");
 	}
 } else {
-	$attachment_label = elgg_echo("blog_tools:label:attachment:new");
+	$attachment_label = elgg_echo("transitions:attachment:new");
 }
 $attachment_input .= elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 $attachment_input .= $attachment_remove_input;
@@ -119,6 +119,7 @@ $status_input = elgg_view('input/select', array(
 	)
 ));
 
+/*
 $comments_label = elgg_echo('comments');
 $comments_input = elgg_view('input/select', array(
 	'name' => 'comments_on',
@@ -126,6 +127,7 @@ $comments_input = elgg_view('input/select', array(
 	'value' => $vars['comments_on'],
 	'options_values' => array('On' => elgg_echo('on'), 'Off' => elgg_echo('off'))
 ));
+*/
 
 $url_label = elgg_echo('transitions:url');
 $url_input = elgg_view('input/url', array(
@@ -179,12 +181,12 @@ $territory_label = elgg_echo('transitions:territory');
 $territory_input = elgg_view('input/text', array(
 	'name' => 'territory',
 	'id' => 'transitions_territory',
-	'value' => _elgg_html_decode($vars['territory'])
+	'value' => $vars['territory'], 
 ));
 
 $actortype_label = elgg_echo('transitions:actortype');
 $actortype_input = elgg_view('input/select', array(
-	'name' => 'actortype',
+	'name' => 'actor_type',
 	'id' => 'transitions_actortype',
 	'value' => $vars['actortype'],
 	'options_values' => array(
@@ -204,14 +206,14 @@ $startdate_label = elgg_echo('transitions:startdate');
 $startdate_input = elgg_view('input/date', array(
 	'name' => 'startdate',
 	'id' => 'transitions_startdate',
-	'value' => _elgg_html_decode($vars['start_date'])
+	'value' => $vars['start_date'],
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
 $enddate_input = elgg_view('input/date', array(
 	'name' => 'enddate',
 	'id' => 'transitions_enddate',
-	'value' => _elgg_html_decode($vars['end_date'])
+	'value' => $vars['end_date'],
 ));
 
 
@@ -222,6 +224,7 @@ $tags_input = elgg_view('input/tags', array(
 	'value' => $vars['tags']
 ));
 
+/* Access is always public
 $access_label = elgg_echo('access');
 $access_input = elgg_view('input/access', array(
 	'name' => 'access_id',
@@ -231,6 +234,7 @@ $access_input = elgg_view('input/access', array(
 	'entity_type' => 'object',
 	'entity_subtype' => 'transitions',
 ));
+*/
 
 $categories_input = elgg_view('input/categories', $vars);
 
@@ -309,16 +313,6 @@ $draft_warning
 </div>
 
 $categories_input
-
-<div>
-	<label for="transitions_comments_on">$comments_label</label>
-	$comments_input
-</div>
-
-<div>
-	<label for="transitions_access_id">$access_label</label>
-	$access_input
-</div>
 
 <div>
 	<label for="transitions_status">$status_label</label>

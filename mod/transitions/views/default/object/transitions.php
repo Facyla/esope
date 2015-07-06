@@ -56,16 +56,16 @@ if(!empty($transitions->icontime)) {
 		$params["align"] = 'left';
 	} else {
 		if (elgg_in_context("listing") || ($list_type != 'gallery')) {
-			$params["size"] = 'small';
+			$params["size"] = 'listing';
 			$params["align"] = 'right';
 		} else {
-			$params["size"] = 'large';
+			$params["size"] = 'gallery';
 			$params["align"] = 'none';
 		}
 	}
-	// Set size to non-existing value to get default (eg "dummy")
-	$transitions_icon = elgg_view_entity_icon($transitions, "large", $params);
 }
+// Set size to non-existing value to get default (eg "dummy")
+$transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
@@ -142,12 +142,13 @@ if ($full) {
 			'entity' => $transitions,
 			'metadata' => $metadata,
 			'subtitle' => $subtitle,
-			'content' => $transitions_icon . $excerpt,
+			'content' => $excerpt,
 		);
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
-
-		echo elgg_view_image_block($owner_icon, $list_body);
+		
+		echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+		
 	} else {
 		$params = array(
 			'text' => elgg_get_excerpt($transitions->title, 100),

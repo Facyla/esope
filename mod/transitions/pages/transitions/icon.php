@@ -2,7 +2,8 @@
 $guid = (int) get_input("guid");
 $size = strtolower(get_input("size"));
 
-if (!in_array($size,array("large","medium","small","tiny","master","topbar"))) {
+// Use some custom sizes too
+if (!in_array($size,array("large","medium","small","tiny","master","topbar", 'embed', 'listing', 'gallery', 'hres'))) {
 	$size = "medium";
 }
 
@@ -15,9 +16,7 @@ if($transitions = get_entity($guid)) {
 	$filehandler->setFilename("transitions/" . $transitions->getGUID(). $size . ".jpg");
 	
 	if ($filehandler->exists()) {
-		if ($contents = $filehandler->grabFile()) {
-			$success = true;
-		} 
+		if ($contents = $filehandler->grabFile()) { $success = true; }
 	}
 }
 

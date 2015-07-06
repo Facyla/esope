@@ -48,9 +48,9 @@ function transitions_get_page_content_read($guid = NULL) {
 }
 
 /**
- * Get page components to list a user's or all transitionss.
+ * Get page components to list a user's or all transitions.
  *
- * @param int $container_guid The GUID of the page owner or NULL for all transitionss
+ * @param int $container_guid The GUID of the page owner or NULL for all transitions
  * @return array
  */
 function transitions_get_page_content_list($container_guid = NULL) {
@@ -79,7 +79,7 @@ function transitions_get_page_content_list($container_guid = NULL) {
 		if (!$container) {
 
 		}
-		$return['title'] = elgg_echo('transitions:title:user_transitionss', array($container->name));
+		$return['title'] = elgg_echo('transitions:title:user_transitions', array($container->name));
 
 		$crumbs_title = $container->name;
 		elgg_push_breadcrumb($crumbs_title);
@@ -95,9 +95,9 @@ function transitions_get_page_content_list($container_guid = NULL) {
 	} else {
 		$options['preload_containers'] = true;
 		$return['filter_context'] = 'all';
-		$return['title'] = elgg_echo('transitions:title:all_transitionss');
+		$return['title'] = elgg_echo('transitions:title:all_transitions');
 		elgg_pop_breadcrumb();
-		elgg_push_breadcrumb(elgg_echo('transitions:transitionss'));
+		elgg_push_breadcrumb(elgg_echo('transitions:transitions'));
 	}
 
 	elgg_register_title_button();
@@ -149,7 +149,7 @@ function transitions_get_page_content_friends($user_guid) {
 }
 
 /**
- * Get page components to show transitionss with publish dates between $lower and $upper
+ * Get page components to show transitions with publish dates between $lower and $upper
  *
  * @param int $owner_guid The GUID of the owner of this page
  * @param int $lower      Unix timestamp
@@ -302,6 +302,16 @@ function transitions_prepare_form_vars($post = NULL, $revision = NULL) {
 		'container_guid' => NULL,
 		'guid' => NULL,
 		'draft_warning' => '',
+		// Transitions² specific fields
+		'attachment' => '',
+		'url' => '',
+		'category' => '',
+		'resource_lang' => '',
+		'lang' => '',
+		'territory' => '', // +geolocation
+		'actor_type' => '',
+		'start_date' => '',
+		'end_date' => '',
 	);
 
 	if ($post) {
@@ -360,18 +370,17 @@ function transitions_remove_icon(ElggTransitions $transitions){
 	
 	if(!empty($transitions) && elgg_instanceof($transitions, "object", "transitions", "ElggTransitions")){
 		if(!empty($transitions->icontime)){
-			if($icon_sizes = elgg_get_config("icon_sizes")){
+			if($icon_sizes = elgg_get_config('icon_sizes')){
 				$fh = new ElggFile();
 				$fh->owner_guid = $transitions->getOwnerGUID();
-				
-				$prefix = "transitionss/" . $transitions->getGUID();
-				
+				$prefix = "transitions/" . $transitions->getGUID();
+				// Remove original icon (if set)
+				$fh->setFilename($prefix . 'original');
+				if($fh->exists()){ $fh->delete(); }
+				// Remove custom sizes
 				foreach($icon_sizes as $name => $info){
 					$fh->setFilename($prefix . $name . ".jpg");
-					
-					if($fh->exists()){
-						$fh->delete();
-					}
+					if($fh->exists()){ $fh->delete(); }
 				}
 			}
 			

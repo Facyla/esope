@@ -66,7 +66,12 @@ Voir et commenter cette contribution :
 	
 	
 	// NEW STRINGS
-	'transitions:icon' => 'Illustration (vignette)',
+	'transitions:icon' => 'Vignette',
+	'transitions:icon:new' => "Ajouter une vignette",
+	'transitions:icon:remove' => "Supprimer la vignette",
+	'transitions:attachment' => 'Fichier joint',
+	'transitions:attachment:new' => "Joindre un fichier",
+	'transitions:attachment:remove' => "Supprimer le fichier joint",
 	'transitions:category' => 'Catégorie',
 	'transitions:url' => 'Lien web',
 	'transitions:resourcelang' => 'Langue de la ressource',

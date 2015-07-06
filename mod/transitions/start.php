@@ -303,27 +303,23 @@ function transitions_run_upgrades($event, $type, $details) {
 }
 
 function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
-	
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
-		
 		if(elgg_instanceof($entity, "object", "transitions")){
 			$size = $params["size"];
-	
 			if ($icontime = $entity->icontime) {
 				$icontime = "{$icontime}";
-					
 				$filehandler = new ElggFile();
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
-	
 				if ($filehandler->exists()) {
 					$url = elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
-						
 					return $url;
 				}
 			}
 		}
 	}
 }
+
+
 
