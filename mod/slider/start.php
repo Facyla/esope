@@ -12,7 +12,6 @@ elgg_register_event_handler('init','system','slider_plugin_init');
 elgg_register_event_handler('pagesetup','system','slider_pagesetup');
 
 function slider_plugin_init() {
-	global $CONFIG;
 	
 	// Note : CSS we will be output anyway directly into the view, so we can embed sliders on other sites
 	elgg_extend_view('css','slider/css');
@@ -155,7 +154,6 @@ function slider_pagesetup() {
 		 * [slider id="GUID"]
 		 */
 		function slider_shortcode_function($atts, $content='') {
-			$slider_content = '';
 			extract(elgg_shortcode_atts(array(
 					'width' => '100%',
 					'height' => '300px',
