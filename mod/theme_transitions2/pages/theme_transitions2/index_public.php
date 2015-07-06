@@ -27,8 +27,8 @@ $search = elgg_view('search/header');
 $content .= elgg_view_layout('one_column', array('title' => false, 'content' => 'BLOC RECHERCHE<br />'.$search));
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
-$catalogue = elgg_list_entities(array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery'));
-$content .= elgg_view_layout('one_column', array('title' => false, 'content' => 'BLOC CATALOGUE<br />'.$catalogue));
+$catalogue = elgg_list_entities(array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item'));
+$content .= elgg_view_layout('one_column', array('title' => false, 'content' => '<div id="transitions">BLOC CATALOGUE<br />'.$catalogue . '</div>'));
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
