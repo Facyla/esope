@@ -19,6 +19,12 @@
 		<name>html_email_handler</name>
 	</suggests>
 	
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>comment_tracker</plugin>
+	</requires>
+	
 	<conflicts>
 		<type>plugin</type>
 		<name>notification_subjects</name>

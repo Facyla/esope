@@ -133,7 +133,7 @@ function feedback_owner_block_menu($hook, $type, $return, $params) {
 
 
 function feedback_create_annotation_event_handler($event, $type, $annotation){
-	if(!empty($annotation) && ($annotation instanceof ElggAnnotation)){
+	if($annotation instanceof ElggAnnotation){
 		// check if the entity isn't PRIVATE
 		if($entity = $annotation->getEntity()){
 			if (elgg_instanceof($entity, 'object', 'feedback')) {

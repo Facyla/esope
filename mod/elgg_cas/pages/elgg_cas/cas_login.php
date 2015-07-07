@@ -2,6 +2,9 @@
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
+$register = get_input('register');
+if ($register == 'yes') { $register = true; } else { $register = false; }
+
 // Allow to forward to asked URL after successful login, or last forwward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
@@ -119,7 +122,7 @@ if (elgg_instanceof($user, 'user')) {
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
-		if ($casregister == 'yes') {
+		if (($casregister == 'auto') || (($casregister == 'yes') && $register)) {
 				elgg_load_library("elgg:ldap_auth");
 				if (ldap_auth_is_active($elgg_username)) {
 					$elgg_password = generate_random_cleartext_password();
@@ -131,6 +134,8 @@ if (elgg_instanceof($user, 'user')) {
 				} else {
 					error_log("Not active account");
 				}
+		} else if (($casregister == 'yes') && !$register) {
+			$content .= '<a href="?register=yes" class="elgg-button elgg-button-action">' . elgg_echo('elgg_cas:user:clicktoregister') . '</a>';
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}
