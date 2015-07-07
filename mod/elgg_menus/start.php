@@ -44,6 +44,9 @@ function elgg_menus_init() {
 	 * Note : hook a priori non nécessaire sauf si on veut vraiment être sûr que plus rien ne puisse être modifié par la suite
 	 *  @TODO hook sur prepare:menu avec poids 1000 pour pouvoir remplacer un menu système en dernier
 	 */
+	
+	// @TODO Enable menu replacement + translated menus
+	// @TODO Also support translated menus (using lang suffix ? or alternate language items ?)
 	//elgg_register_plugin_hook_handler('prepare', 'all', 'elgg_menus_prepare_menu_hook');
 	
 	

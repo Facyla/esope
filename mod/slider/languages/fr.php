@@ -1,6 +1,6 @@
 <?php
-$french = array(
-	
+
+return array(
 	'slider' => "Slider",
 
 	/* Settings */
@@ -71,6 +71,4 @@ $french = array(
 	'slider:iframe:instructions' => " - avec ce code d'embarquement, sur d'autres sites&nbsp;: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
 );
-
-add_translation("fr",$french);
 

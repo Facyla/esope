@@ -12,7 +12,6 @@ elgg_register_event_handler('init','system','slider_plugin_init');
 elgg_register_event_handler('pagesetup','system','slider_pagesetup');
 
 function slider_plugin_init() {
-	global $CONFIG;
 	
 	// Note : CSS we will be output anyway directly into the view, so we can embed sliders on other sites
 	elgg_extend_view('css','slider/css');
@@ -58,17 +57,19 @@ function slider_plugin_init() {
 	$js = elgg_get_simplecache_url('js', 'slider/edit');
 	elgg_register_js('elgg.slider.edit', $js);
 	
-	// Register a URL handler for CMS pages
-	elgg_register_entity_url_handler('object', 'slider', 'slider_url');
+	// Register a URL handler for sliders
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'slider_url');
 	
 }
 
 
-/* Populates the ->getUrl() method for cmspage objects */
-function slider_url($slider) {
-	return elgg_get_site_url() . "slider/view/" . $slider->guid;
+/* Populates the ->getUrl() method for slider objects */
+function slider_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'slider')) {
+		return elgg_get_site_url() . 'slider/view/' . $entity->pagetype;
+	}
 }
-
 
 
 /* Gets a slider by its name, allowing theming on different instances
@@ -153,7 +154,6 @@ function slider_pagesetup() {
 		 * [slider id="GUID"]
 		 */
 		function slider_shortcode_function($atts, $content='') {
-			$slider_content = '';
 			extract(elgg_shortcode_atts(array(
 					'width' => '100%',
 					'height' => '300px',

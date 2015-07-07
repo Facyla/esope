@@ -10,13 +10,11 @@
  * @copyright Prashant Juvekar
  * @link http://www.linkedin.com/in/prashantjuvekar
  *
- * for Elgg 1.8 by iionly
- * iionly@gmx.de
+ * for Elgg 1.8 by iionly iionly@gmx.de
+ * new features and rewrite by Facyla
  */
 
-global $CONFIG;
-
-$imgurl = $CONFIG->url.'mod/feedback/_graphics/';
+$imgurl = elgg_get_site_url() . 'mod/feedback/_graphics/';
 
 $user_ip = $_SERVER[REMOTE_ADDR];
 
@@ -28,7 +26,7 @@ if (elgg_is_logged_in()) {
 
 //$ts = time();
 //$token = generate_action_token($ts);
-$feedback_url = $vars['url'] . "action/feedback/submit_feedback"; //"?&__elgg_token=$token&__elgg_ts=$ts";
+$feedback_url = elgg_get_site_url() . "action/feedback/submit_feedback"; //"?&__elgg_token=$token&__elgg_ts=$ts";
 $feedback_url = elgg_add_action_tokens_to_url($feedback_url);
 
 $progress_img = '<img src="' . $imgurl . 'ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
@@ -135,7 +133,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 				
 				<?php if ($memberview) {
 					// Additional message if tool is for members (= link to feedback page)
-					echo '<p id="feedbackDisplay"><a href="' . $CONFIG->url . 'feedback" target="_blank">' . elgg_echo('feedback:linktofeedbacks') . '</a></p>';
+					echo '<p id="feedbackDisplay"><a href="' . elgg_get_site_url() . 'feedback" target="_blank">' . elgg_echo('feedback:linktofeedbacks') . '</a></p>';
 				} ?>
 				
 			</form>

@@ -3,9 +3,10 @@
  * English strings
  */
 
-$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
+$url = elgg_get_site_url();
+$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . $url . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
-$en = array(
+return array(
 	
 	'export_embed' => "Embeddable Widgets",
 	'export_embed:help' => "These widgets allow to access remote data from other Elgg sites. They are useful to embed Elgg content into a news agregator or custom dashboard.<br />They are accessible via a genric or custom URL, and can also be embedded on your desk, or in a website.",
@@ -24,7 +25,7 @@ $en = array(
 	'export_embed:widget:offset' => "Start at specific offset (default is 0)",
 	'export_embed:widget:offset:help' => "For lists, lets you start at o specific offset (= number of results to ignore).",
 	'export_embed:widget:group_guid' => "Group number (GUID) (if needed)",
-	'export_embed:widget:group_guid:help' => "Group \"GUID\" is the unique number that is displayed in the group URL. E.g. it is XXXXX in " . elgg_get_site_url() . "<em>groups/profile/<strong>XXXXX</strong>/group-name</em>.",
+	'export_embed:widget:group_guid:help' => "Group \"GUID\" is the unique number that is displayed in the group URL. E.g. it is XXXXX in " . $url . "<em>groups/profile/<strong>XXXXX</strong>/group-name</em>.",
 	'export_embed:widget:user_guid' => "Member number (GUID) (if needed)",
 	'export_embed:widget:user_guid:help' => "This number is quite harder to get as a basic user. It is mainly used by administrators who would wish to follow a specific user's activity.",
 	'export_embed:widget:params' => "Additional parameters (param1=value1&param2=value2... etc.)",
@@ -46,12 +47,12 @@ $en = array(
 		<p>
 			If you want to display this site's widgets on another site, please use following informations&nbsp;:
 			<ul>
-				<li>Site address&nbsp;: <strong>" . elgg_get_site_url() . "</strong></li>
+				<li>Site address&nbsp;: <strong>" . $url . "</strong></li>
 				<li>Then select the informations you wish to display in the dropdown menu.</li>
 				<li>To display a specific group activity, you need to set the GUID of that group : it is the number that displays in the group URL : <em>groups/profile/<strong>GUID</strong>/group-name</em></li>
 			</ul></p>",
 	'export_embed:nocontent' => "No content yet.",
-	'export_embed:notconnected' => "CAUTION, you're not logged on %s. Please <a href=\"" . elgg_get_site_url() . "\" target=\"_blank\">log in</a> to access content that is restricted to the site members",
+	'export_embed:notconnected' => "CAUTION, you're not logged on %s. Please <a href=\"" . $url . "\" target=\"_blank\">log in</a> to access content that is restricted to the site members",
 	'export_embed:openintab' => "Open %s in a new tab",
 	'export_embed:site_activity' => "%s's activity", 
 	'export_embed:site_activity:viewall' => "View all site activity", 
@@ -74,6 +75,4 @@ $en = array(
 	'export_embed:entities:noaccess' => "No access or invalid GUIDs", 
 	
 );
-
-add_translation('en', $en);
 

@@ -1,0 +1,37 @@
+<?php
+$url = elgg_get_site_url();
+$imgurl = $url . 'mod/theme_transitions2/graphics/';
+?>
+
+
+/* Generic styles */
+a { color: #223300; }
+img { max-width: 100%; }
+
+
+/* Main layout */
+.elgg-page-navbar { padding: 0 0px; }
+.elgg-page-default .elgg-page-navbar > .elgg-inner, 
+.elgg-page-default .elgg-page-body > .elgg-inner, 
+.elgg-page-default .elgg-page-footer > .elgg-inner { max-width:96%; }
+
+
+/* Header */
+.elgg-page-header { background: url(<?php echo $imgurl; ?>flickr/miuenski_miuenski_2311617707_33a63b3928_o.jpg) #223300 50% 50% no-repeat; background-size:cover; height:200px; }
+.elgg-page-header h1 img { max-width:100%; }
+
+/* Menu */
+/*
+.elgg-page-navbar { background: #223300; }
+.elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { background-color: #669900; }
+.elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; }
+.elgg-button-nav:hover { background-color: #669900; }
+*/
+.elgg-page-navbar { background: white; }
+.elgg-menu-site > a, .elgg-menu-site > li > a, .elgg-button-dropdown { color: #669900; background-color:white; }
+.elgg-menu-site > .elgg-state-selected > a { color: #223300; background-color:white; }
+.elgg-menu-site > li:hover > a { color: white; background-color:#669900; }
+.elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
+.elgg-button-nav:hover { background-color: #669900; }
+
+

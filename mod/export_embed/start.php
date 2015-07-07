@@ -26,7 +26,7 @@ function export_embed_init() {
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'export_embed_public_pages');
 	
 	// Widget : view an external Elgg widget
-	elgg_register_widget_type('export_embed', elgg_echo('export_embed:widget:title'), elgg_echo('export_embed:widget:description'), 'all', true);
+	elgg_register_widget_type('export_embed', elgg_echo('export_embed:widget:title'), elgg_echo('export_embed:widget:description'), array('all'), true);
 	
 }
 

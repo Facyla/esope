@@ -8,4 +8,7 @@
  *
  */
 
-echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+// Transitions² : use custom menu
+$menu = elgg_get_plugin_setting('menu_footer', 'theme_transitions2');
+if (empty($menu)) $menu = 'footer';
+echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-footer elgg-menu-footer-default clearfix elgg-menu-hz"));

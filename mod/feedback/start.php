@@ -32,7 +32,7 @@ function feedback_init() {
 	// create feedback page in admin section
 	elgg_register_admin_menu_item('administer', 'feedback', 'administer_utilities');
 	// Admin widget
-	elgg_register_widget_type('feedback', elgg_echo('feedback:admin:title'), elgg_echo('feedback:widget:description'), 'admin');
+	elgg_register_widget_type('feedback', elgg_echo('feedback:admin:title'), elgg_echo('feedback:widget:description'), array('admin'));
 	
 	// Give access to feedbacks in groups
 	$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
@@ -59,8 +59,8 @@ function feedback_init() {
 	// page handler
 	elgg_register_page_handler('feedback','feedback_page_handler');
 	
-		// Register a URL handler for bookmarks
-	elgg_register_entity_url_handler('object', 'feedback', 'feedback_url');
+		// Register a URL handler for feedbacks
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'feedback_url');
 	
 	// menu des groupes
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
@@ -102,17 +102,13 @@ function feedback_page_handler($page) {
 
 /**
  * Populates the ->getUrl() method for feedback objects
- *
- * @param ElggEntity $entity The feedback
- * @return string feedback item URL
  */
-function feedback_url($entity) {
-	global $CONFIG;
-	$title = $entity->title;
-	$title = elgg_get_friendly_title($title);
-	return $CONFIG->url . "feedback/view/" . $entity->getGUID() . "/" . $title;
+function feedback_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'slider')) {
+		return elgg_get_site_url() . 'feedback/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
+	}
 }
-
 
 // Feedback menu
 function feedback_owner_block_menu($hook, $type, $return, $params) {
