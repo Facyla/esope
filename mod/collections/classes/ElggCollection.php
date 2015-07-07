@@ -2,10 +2,11 @@
 /**
  * Class that represents an object of subtype survey
  */
-class ElggSlider extends ElggObject {
-	const SUBTYPE = "slider";
+class ElggCollection extends ElggObject {
+	const SUBTYPE = "collection";
 
-	private $slides = array();
+	private $entities = array();
+	private $entities_comment = array();
 
 	/** Set subtype */
 	protected function initializeAttributes() {

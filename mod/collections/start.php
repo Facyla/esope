@@ -1,12 +1,18 @@
 <?php
 /**
- * Slider
+ * Collections
  * 
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Facyla
  * @copyright Facyla 2013
  * @link http://id.facyla.net/
  */
+
+/* Modes de fonctionnement :
+ * Edition comme un slider : on crée la collection et on y ajoute des éléments
+ * Edition "en situation" : menu sur les publications, avec choix (select) des collections existantes, ou lien pour créer une nouvelle collection
+ */
+
 
 elgg_register_event_handler('init','system','collections_plugin_init');
 elgg_register_event_handler('pagesetup','system','collections_pagesetup');
@@ -31,6 +37,10 @@ function collections_plugin_init() {
 	elgg_register_simplecache_view('js/collections/edit');
 	$js = elgg_get_simplecache_url('js', 'collections/edit');
 	elgg_register_js('elgg.collections.edit', $js);
+	
+	elgg_register_simplecache_view("js/collections/embed");
+	$js = elgg_get_simplecache_url('js', 'collections/embed');
+	elgg_register_js('elgg.collections.embed', $js);
 	
 	// Register a URL handler for collectionss
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'collections_url');
@@ -88,20 +98,27 @@ function collections_page_handler($page) {
 	switch ($page[0]) {
 		case "view":
 			// @TODO display collections in one_column layout, or iframe mode ?
-			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			set_input("guid", elgg_extract("1", $page));
 			if (include($include_path . 'view.php')) { return true; }
 			break;
 			
 		case "add":
-			if (!empty($page[1])) { set_input('container_guid', $page[1]); }
+			set_input("container_guid", elgg_extract("1", $page));
+			set_input("add_guid", elgg_extract("2", $page)); // Direct content add (to new collection)
 			// @TODO display collections in one_column layout, or iframe mode ?
 			if (include($include_path . 'edit.php')) { return true; }
 			break;
 		
 		case "edit":
-			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			set_input("guid", elgg_extract("1", $page));
+			set_input("add_guid", elgg_extract("2", $page)); // Direct content add (to existing collection)
 			// @TODO display collections in one_column layout, or iframe mode ?
 			if (include($include_path . 'edit.php')) { return true; }
+			break;
+			
+		case "embed":
+			set_input("guid", elgg_extract("1", $page));
+			if (include($include_path . 'embed.php')) { return true; }
 			break;
 			
 		case 'index':

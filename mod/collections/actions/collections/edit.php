@@ -18,7 +18,8 @@ elgg_make_sticky_form('collection');
 $collection_title = get_input('title');
 $collection_name = get_input('name');
 $collection_description = get_input('description');
-$collection_slides = get_input('slides', '', false); // We do *not want to filter HTML
+$collection_entities = get_input('entities', '', false); // We do *not want to filter HTML
+$collection_entities_comment = get_input('entities_comment', '', false); // We do *not want to filter HTML
 $collection_access = get_input('access_id');
 // Set collection name if not defined + normalize it
 // @TODO : ensure it remains unique ?
@@ -51,7 +52,8 @@ $collection->access_id = $collection_access;
 $collection->title = $collection_title;
 $collection->name = $collection_name;
 $collection->description = $collection_description;
-$collection->slides = $collection_slides;
+$collection->entities = $collection_entities;
+$collection->entities_comment = $collection_entities_comment;
 
 
 // Save new/updated content

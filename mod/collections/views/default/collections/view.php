@@ -1,32 +1,25 @@
 <?php
 // Get collection
-$collection = $vars['entity'];
+$collection = elgg_extract('entity', $vars);
 // Alternate method (more friendly with cmspages)
 if (!$collection) {
-	$guid = $vars['guid'];
+	$guid = elgg_extract('guid', $vars);
 	$collection = get_entity($guid);
 }
 if (!elgg_instanceof($collection, 'object', 'collection')) return;
 
-$collection_content = '<li>' . implode('</li><li>', $collection->slides) . '</li>'; // Content without enclosing <ul> (we need id)
-$height = '100%';
-$width = '100%';
-if (!empty($collection->height)) $height = $collection->height;
-if (!empty($collection->width)) $width = $collection->width;
+foreach($collection->entities as $k => $entity_guid) {
+	$publication = get_entity($entity_guid);
+	$publication_comment = $collection['entities'][$k];
+	$collection_content .= '<li>' . $publication->title . '<br /><em>' . $publication_comment . '</em></li>'
+}
+
 
 $collection_params = array(
 		'collectioncontent' => $collection_content,
-		'collectionparams' => $collection->config,
-		'collectioncss_main' => "",
-		'collectioncss_textslide' => "",
-		'height' => $height,
-		'width' => $width,
 	);
 
 echo '<div style="height:' . $height . '; width:' . $width . '; overflow:hidden;" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
-	<style>
-	' . $collection->css . '
-	</style>
 	' . elgg_view('collection/collection', $collection_params) . '
 </div>';
 
