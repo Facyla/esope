@@ -20,14 +20,14 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 function cmspages_init() {
 	elgg_extend_view('css','cmspages/css');
 	elgg_extend_view('css/admin','cmspages/css');
-	if (!elgg_is_active_plugin('adf_public_platform')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
+	if (!elgg_is_active_plugin('esope')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
 	
 	// Register entity type
 	elgg_register_entity_type('object', 'cmspage');
 	
 	// Register a URL handler for CMS pages
 	// override the default url to view a blog object
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspage_set_url');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspage_url_handler');
 
 	
 	// Register main page handler
@@ -161,11 +161,12 @@ function cmspages_cms_tag_page_handler($page) {
  * @param array  $params
  * @return string URL of blog.
  */
-function cmspage_set_url($hook, $type, $url, $params) {
+function cmspage_url_handler($hook, $type, $url, $params) {
 	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'cmspage')) {
-		return elgg_get_site_url() . "p/" . $cmspage->pagetype;
-	}
+	
+	if ($entity->getSubtype() !== 'cmspage') { return; }
+	
+	return elgg_get_site_url() . "p/" . $entity->pagetype;
 }
 
 
