@@ -49,7 +49,7 @@ if (!($entity instanceof ElggEntity)) {
 
 
 // Main content
-$content .= '<p>' . elgg_echo('groups_archive:notice:previewonly') . '</p>';
+$content .= '<p><blockquote>' . elgg_echo('groups_archive:notice:previewonly') . '</blockquote></p>';
 $content .= '<div class="elgg-output">';
 
 // View entity (should be a group or object, but not user|site)
@@ -63,6 +63,9 @@ if (elgg_instanceof($entity, 'object')) {
 	
 	$content .= '<a href="' . $base_url . '?guid=' . $entity->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('groups_archive:unarchive') . '</a>';
 	$content .= '<h3>' . $entity->name . ' (GUID ' . $entity->guid . ')</h3>';
+	
+	$content .= '<div class="clearfloat"></div>';
+	$content .= '<hr />';
 	
 	// Full entity view
 	$content .= elgg_view_entity($entity, array('full_view' => true));

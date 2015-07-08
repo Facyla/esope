@@ -35,12 +35,27 @@
 	
 	<requires>
 		<type>plugin</type>
-		<plugin>aalborg_theme</plugin>
+		<name>aalborg_theme</name>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
-		<plugin>elgg_menus</plugin>
+		<name>elgg_menus</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>transitions</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>collections</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>disable_content</name>
 	</requires>
 	
 	<activate_on_install>false</activate_on_install>

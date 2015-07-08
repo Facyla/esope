@@ -32,7 +32,7 @@ if (elgg_is_active_plugin('groups')) {
 $guid = get_input('guid', '');
 $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
-$base_url = elgg_get_site_url() . 'groups-archive';
+$base_url = elgg_get_site_url() . 'disable_content';
 $base_view_url = $base_url . '/view/';
 $base_nav_url = $base_view_url . $guid;
 
@@ -41,7 +41,7 @@ $base_nav_url = $base_view_url . $guid;
 if ($guid) { $entity = get_entity($guid); }
 if (!($entity instanceof ElggEntity)) {
 	register_error('disable_content:error:invalidentity');
-	forward('groups-archive');
+	forward('disable_content');
 }
 
 
@@ -49,46 +49,21 @@ if (!($entity instanceof ElggEntity)) {
 
 
 // Main content
-$content .= '<p>' . elgg_echo('disable_content:notice:previewonly') . '</p>';
+$content .= '<p><blockquote>' . elgg_echo('disable_content:notice:previewonly') . '</blockquote></p>';
 $content .= '<div class="elgg-output">';
 
-// View entity (should be a group or object, but not user|site)
+// View entity (should be an object, but not user|group|site)
 if (elgg_instanceof($entity, 'object')) {
 	$title = elgg_echo('disable_content:view:object');
+	$content .= '<a href="' . $base_url . '?guid=' . $entity->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('disable_content:enable') . '</a>';
 	$content .= '<h3>' . $entity->title . ' (GUID ' . $entity->guid . ')</h3>';
-	// Full entity view
-	$content .= elgg_view_entity($entity, array('full_view' => true));
-} else if (elgg_instanceof($entity, 'group')) {
-	$title = elgg_echo('disable_content:view:group');
 	
-	$content .= '<a href="' . $base_url . '?guid=' . $entity->guid . '&enabled=yes" class="elgg-button elgg-button-action" style="float:right;">' . elgg_echo('disable_content:unarchive') . '</a>';
-	$content .= '<h3>' . $entity->name . ' (GUID ' . $entity->guid . ')</h3>';
+	$content .= '<div class="clearfloat"></div>';
+	//$content .= '<h2>' . elgg_echo('disable_content:preview') . '</h2>';
+	$content .= '<hr />';
 	
 	// Full entity view
 	$content .= elgg_view_entity($entity, array('full_view' => true));
-	
-	// Group members
-	$members_count = $entity->getMembers(10, 0, true);
-	$content .= '<br /><br /><h3>' . elgg_echo('disable_content:members:count', array($members_count)) . '</h3>';
-	
-	// Group content listing (preview)
-	$objects_count = disable_content_get_groups_content($entity, array('count' => true));
-	$objects = disable_content_get_groups_content($entity, array('limit' => $limit, 'offset' => $offset)); // Get only 10, that's already much if we have many groups...
-	if ($objects) {
-		if ($objects_count > $limit) {
-			$nav = elgg_view('navigation/pagination', array(
-				'baseurl' => $base_nav_url, 'count' => $objects_count,
-				'limit' => $limit, 'offset' => $offset, 'offset_key' => 'offset',
-			));
-		}
-		
-		$content .= '<br /><br /><h3>' . elgg_echo('disable_content:content:count', array($objects_count)) . '</h3>';
-		$content .= '<ul class="">';
-		foreach ($objects as $ent) {
-			$content .= '<li><a href="' . $base_view_url . $ent->guid . '">' . $ent->title . $ent->name . ' (' . $ent->getSubtype() . ', ' . $ent->guid . ')</a>&nbsp;: <span class="elgg-subtext">' . elgg_get_excerpt($ent->description) . '</span></li>';
-		}
-		$content .= '</ul>';
-	}
 }
 $content .= '</div>';
 

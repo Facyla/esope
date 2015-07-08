@@ -9,6 +9,9 @@ a { color: #223300; }
 img { max-width: 100%; }
 
 
+.flexible-block { float:left; }
+
+
 /* Main layout */
 .elgg-page-navbar { padding: 0 0px; }
 .elgg-page-default .elgg-page-navbar > .elgg-inner, 
@@ -33,5 +36,23 @@ img { max-width: 100%; }
 .elgg-menu-site > li:hover > a { color: white; background-color:#669900; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
 .elgg-button-nav:hover { background-color: #669900; }
+
+
+
+@media (max-width: 1030px) {
+}
+
+@media (max-width: 820px) {
+}
+
+@media (min-width: 767px) {
+}
+
+@media (max-width: 766px) {
+}
+
+@media (max-width: 600px) {
+	.flexible-block { float:none; margin:0 auto; width:auto; }
+}
 
 

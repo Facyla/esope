@@ -4,44 +4,39 @@
  */
 
 return array(
-	'disable_content' => "Archivage des groupes",
-	'groups-archive' => "Archivage des groupes",
+	'disable_content' => "Désactivation des publications",
 	
 	// Index page
-	'disable_content:index' => "Groupes archivés",
-	'disable_content:index:details' => "Cette page vous permet de consulter la liste des groupes archivés, d'avoir un aperçu de leur contenu, et de les réactiver.",
+	'disable_content:index' => "Publications désactivées",
+	'disable_content:index:details' => "Cette page vous permet de consulter la liste des publications désactivés, d'avoir un aperçu de leur contenu, et de les réactiver.",
 	
 	// Form
-	'disable_content:information' => "Les groupes archivés sont <strong>invisibles des membres et des administrateurs</strong>, n'apparaissent pas dans le moteur de recherche, et sont de fait considérés comme n'existant plus.<br /><br />Une fois réactivés, les groupes retrouvent leur adresse d'origine, ainsi que l'ensemble des contenus et informations associés&nbsp;: membres, contenus, niveaux d'accès, etc.",
-	'disable_content:groupguid' => "Choix du groupe",
-	'disable_content:grouparchive' => "Action à effectuer",
+	'disable_content:information' => "Les publications désactivées sont <strong>invisibles des membres et des administrateurs</strong>, n'apparaissent pas dans le moteur de recherche, et sont de fait considérées comme n'existant plus.<br /><br />Une fois réactivés, les publications retrouvent leur adresse d'origine, ainsi que l'ensemble des informations associés&nbsp;: membres, contenus, niveaux d'accès, etc.",
+	'disable_content:objectguid' => "Choix de la publication",
+	'disable_content:objectdisable' => "Action à effectuer",
 	'disable_content:view' => "Afficher",
-	'disable_content:form:title' => "Archiver un groupe",
-	'disable_content:archive' => "Archiver",
-	'disable_content:unarchive' => "Désarchiver",
-	'disable_content:option:enabled' => "Désarchiver",
-	'disable_content:option:disabled' => "Archiver",
+	'disable_content:form:title' => "Désactiver une publication",
+	'disable_content:disable' => "Désactiver",
+	'disable_content:enable' => "Activer",
+	'disable_content:option:enabled' => "Activé",
+	'disable_content:option:disabled' => "Désactivé",
 	'disable_content:proceed' => "Procéder",
+	'disable_content:preview' => "Prévisualisation",
 	
 	
 	// Disabled content view page
-	'disable_content:view' => "Groupe ou contenu archivé",
-	'disable_content:view:group' => "Prévisualisation d'un groupe archivé",
-	'disable_content:view:object' => "Prévisualisation d'un contenu archivé",
-	
-	'disable_content:content:count' => "Contenus du groupe&nbsp;: %s publication(s)",
-	'disable_content:nocontent' => "Aucune publication dans ce groupe",
-	'disable_content:members:count' => "Membres du groupe&nbsp;: %s personne(s)",
+	'disable_content:view' => "Publication désactivée",
+	'disable_content:view:object' => "Prévisualisation d'une publication désactivée",
 	
 	// Errors and messages
-	'disable_content:error:invalidentity' => "Groupe ou publication invalide",
-	'disable_content:notice:previewonly' => "Attention&nbsp;: cette page permet seulement de prévisualiser les groupes et publicaitons désactivés. Divers éléments de contenu peuvent ne pas apparaître correctement, et les liens de navigation internes ne seront probablement pas fonctionnels, selon les contenus affichés.",
-	'disable_content:confirm' => "Attention, ceci rendra le groupe et tous ses contenus inaccessibles pour tous les membres (et administrateurs) !",
+	'disable_content:error:invalidentity' => "Publication invalide",
+	'disable_content:notice:previewonly' => "Attention&nbsp;: cette page permet seulement de prévisualiser les publications désactivés. Divers éléments de contenu peuvent ne pas apparaître correctement, et les liens de navigation internes ne seront probablement pas fonctionnels.",
+	'disable_content:confirm' => "Attention, ceci rendra la publication et ses commentaires inaccessibles pour tous les membres (et administrateurs) !",
 	'disable_content:error:noaction' => "Aucune action demandée",
-	'disable_content:enable:success' => "Le groupe \"%s\" a bien été désarchivé.",
-	'disable_content:disable:success' => "Le groupe \"%s\" a bien été archivé. Le groupe et ses contenus ne sont plus visibles des membres.",
-	'disable_content:enable:error' => "Une erreur s'est produite lors du désarchivage du groupe \"%s\".",
-	'disable_content:disable:error' => "Une erreur s'est produite lors de l'archivage du groupe \"%s\".",
+	'disable_content:enable:success' => "La publication \"%s\" a bien été désactivée.",
+	'disable_content:disable:success' => "La publication \"%s\" a bien été désactivée. La publication n'est plus visible des membres.",
+	'disable_content:enable:error' => "Une erreur s'est produite lors du désactivage de la publication \"%s\".",
+	'disable_content:disable:error' => "Une erreur s'est produite lors de la désactivation de la publication \"%s\".",
 	
 	
 );
