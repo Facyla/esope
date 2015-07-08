@@ -1,3 +1,115 @@
+2015-07-07  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.11.4
+
+  	* docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, mod/blog/languages/eu_ES.php,
+  mod/categories/languages/zh-Hans.php, mod/ckeditor/languages/zh-Hans.php,
+  mod/custom_index/languages/zh-Hans.php, mod/embed/languages/zh-Hans.php,
+  mod/file/languages/zh-Hans.php, mod/likes/languages/zh-Hans.php,
+  mod/logrotate/languages/it.php, mod/members/languages/zh-Hans.php,
+  mod/messageboard/languages/eu_ES.php, mod/messages/languages/eu_ES.php,
+  mod/notifications/languages/eu_ES.php, mod/pages/languages/eu_ES.php,
+  mod/pages/languages/sr.php, mod/profile/languages/eu_ES.php,
+  mod/thewire/languages/eu_ES.php, mod/thewire/languages/sr.php: chore(i18n):
+  update translations
+
+2015-06-16  Steve Clay <steve@mrclay.org>
+
+  	* docs/examples/plugins/languages/en.php, docs/examples/plugins/start.php:
+  docs(misc): Miscellaneous docs fixes
+
+2015-06-16  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* mod/aalborg_theme/composer.json, mod/blog/composer.json,
+  mod/bookmarks/composer.json, mod/categories/composer.json,
+  mod/ckeditor/composer.json, mod/custom_index/composer.json,
+  mod/dashboard/composer.json, mod/developers/composer.json,
+  mod/diagnostics/composer.json, mod/embed/composer.json,
+  mod/externalpages/composer.json, mod/file/composer.json,
+  mod/garbagecollector/composer.json, mod/groups/composer.json,
+  mod/htmlawed/composer.json, mod/invitefriends/composer.json,
+  mod/legacy_urls/composer.json, mod/likes/composer.json,
+  mod/logbrowser/composer.json, mod/logrotate/composer.json,
+  mod/members/composer.json, mod/messageboard/composer.json,
+  mod/messages/composer.json, mod/notifications/composer.json,
+  mod/pages/composer.json, mod/profile/composer.json,
+  mod/reportedcontent/composer.json, mod/search/composer.json,
+  mod/site_notifications/composer.json, mod/tagcloud/composer.json,
+  mod/thewire/composer.json, mod/twitter_api/composer.json,
+  mod/uservalidationbyemail/composer.json, mod/web_services/composer.json,
+  mod/zaudio/composer.json: chore(composer): Add GPL-2.0 license to all
+  plugins' composer.json  Otherwise they show up on packagist as "Unknown
+  license"
+
+2015-06-14  Matt Beckett <beck24@gmail.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.11.3
+
+  	* docs/locale/de/LC_MESSAGES/index.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.mo, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.mo, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, mod/blog/languages/zh-Hans.php,
+  mod/bookmarks/languages/zh-Hans.php: chore(i18n): update translations
+
+2015-06-05  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* mod/aalborg_theme/composer.json, mod/blog/composer.json,
+  mod/bookmarks/composer.json, mod/categories/composer.json,
+  mod/ckeditor/composer.json, mod/custom_index/composer.json,
+  mod/dashboard/composer.json, mod/developers/composer.json,
+  mod/diagnostics/composer.json, mod/embed/composer.json,
+  mod/externalpages/composer.json, mod/file/composer.json,
+  mod/garbagecollector/composer.json, mod/groups/composer.json,
+  mod/htmlawed/composer.json, mod/invitefriends/composer.json,
+  mod/legacy_urls/composer.json, mod/likes/composer.json,
+  mod/logbrowser/composer.json, mod/logrotate/composer.json,
+  mod/members/composer.json, mod/messageboard/composer.json,
+  mod/messages/composer.json, mod/notifications/composer.json,
+  mod/pages/composer.json, mod/profile/composer.json,
+  mod/reportedcontent/composer.json, mod/search/composer.json,
+  mod/site_notifications/composer.json, mod/tagcloud/composer.json,
+  mod/thewire/composer.json, mod/twitter_api/composer.json,
+  mod/uservalidationbyemail/composer.json, mod/web_services/composer.json,
+  mod/zaudio/composer.json: chore(composer): Add minimal composer.json to all
+  bundled plugins  This allows us to push the plugin to a separate repo and
+  have that repo be the source for a composer package.  Refs #7721
+
+2015-05-22  Steve Clay <steve@mrclay.org>
+
+  	* js/tests/ElggSpinnerTest.js, js/tests/karma.conf.js, package.json:
+  chore(tests): Upgrades Jasmine and Karma  Updates karma & jasmine (2.x eases
+  async testing considerably), and reworks the spinner test for Jasmine 2.x
+
+2015-05-27  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Database/ConfigTable.php,
+  engine/classes/ElggAnnotation.php, engine/classes/ElggEntity.php,
+  engine/classes/ElggObject.php, engine/classes/ElggPlugin.php,
+  engine/classes/ElggSite.php, engine/lib/access.php, engine/lib/actions.php,
+  engine/lib/configuration.php, engine/lib/elgglib.php,
+  engine/lib/entities.php, engine/lib/private_settings.php,
+  engine/lib/views.php: fix(IDE): Public APIs no longer marked with @internal 
+  Even the inline @internal meant to add developer notes has the effect of
+  marking the function not a part of the public API, so, e.g. PHPStorm was
+  showing usages with a strikethrough.  Fixes #7714
+
+2015-05-25  Steve Clay <steve@mrclay.org>
+
+  	* js/tests/ElggSpinnerTest.js, views/default/js/elgg/spinner.js:
+  fix(spinner): elgg/spinner delays a bit before displaying  Requests served
+  from browser cache are near instantaneously, and in these cases the spinner
+  is a distraction. So we wait 20ms before showing it.  Fixes #8361
+
 2015-05-25  Juho Jaakkola <juho.jaakkola@mediamaisteri.com>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.11.2
@@ -81,6 +193,12 @@
   mod/aalborg_theme/views/default/css/elements/components.php:
   fix(aalborg_theme): removes unwanted margin from elgg-list-river items  Fixes
   #8124
+
+2015-04-24  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* mod/aalborg_theme/views/default/css/elements/modules.php,
+  views/default/css/elements/modules.php: fix(ui): prevent button jumping on
+  widget add panel toggle  fixes #7705
 
 2015-04-22  Juho Jaakkola <juho.jaakkola@mediamaisteri.com>
 

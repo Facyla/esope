@@ -1,3 +1,62 @@
+<a name="1.11.4"></a>
+### 1.11.4  (2015-07-07)
+
+#### Contributors
+
+* Ismayil Khayredinov (7)
+* Evan Winslow (5)
+* Miloš (4)
+* Steve Clay (4)
+* Jeroen Dalsem (1)
+
+#### Documentation
+
+* **misc:** Miscellaneous docs fixes ([06e3557c](https://github.com/Elgg/Elgg/commit/06e3557cd0046bfb601b3345f6f636cdbbb63de9))
+* **permissions:** Fix $params key name for permissions_check:annotate ([1af6e3a2](https://github.com/Elgg/Elgg/commit/1af6e3a250ad18b9c94c2d9048b04311e0fe29a2))
+* **web_security:** adds security warnings ([d47fc5ed](https://github.com/Elgg/Elgg/commit/d47fc5ed4cf7b53bd8bfd33190dc06fbf2ae1772))
+* **web_services:** document the use of parameters in method declarations ([750e31b9](https://github.com/Elgg/Elgg/commit/750e31b988131c53a90be987daa33229b1573f75))
+
+
+#### Bug Fixes
+
+* **legacy_urls:**
+  * adds missing forwarder for groups/forum/$guid ([2b555f88](https://github.com/Elgg/Elgg/commit/2b555f886cc4b348d38986c86bc1fb6ad041bac6), closes [#8493](https://github.com/Elgg/Elgg/issues/8493))
+  * unset __elgg_uri to prevent infinite loops ([0c7687ac](https://github.com/Elgg/Elgg/commit/0c7687acdf1f92066af0fc9cb32673e8da0f8859), closes [#8494](https://github.com/Elgg/Elgg/issues/8494))
+* **profile:** Avatar cropper again can be moved immediately after uploading image ([d8cf51b7](https://github.com/Elgg/Elgg/commit/d8cf51b7d4e718f8a67fa8d26a11e697851820bc), closes [#8449](https://github.com/Elgg/Elgg/issues/8449))
+* **relationships:** Invalid relationship names throw properly ([ac976e23](https://github.com/Elgg/Elgg/commit/ac976e23394f0dcba2f6b473b7f63a57082cf5d5))
+* **ui:** prevent button jumping on widget add panel toggle ([088de48d](https://github.com/Elgg/Elgg/commit/088de48dda3632cb57ba9fdc16f239c084cd0fee))
+* **web_services:** no longer uses deprecated export global ([3a818d2b](https://github.com/Elgg/Elgg/commit/3a818d2b6c70e170937854be42f43cb496449f62))
+
+
+<a name="1.11.3"></a>
+### 1.11.3  (2015-06-14)
+
+#### Contributors
+
+* Steve Clay (6)
+* Evan Winslow (4)
+* Juho Jaakkola (1)
+* Julien Boulen (1)
+* Marcus Povey (1)
+* Matt Beckett (1)
+
+#### Documentation
+
+* **code:** Permit use of `<?=` PHP shortcut since we're on 5.4+ ([453d8dcb](https://github.com/Elgg/Elgg/commit/453d8dcb9f90b0e210a7233aef1172b949133841))
+* **hooks:** Clarifies docs for the register, user hook ([b877f61d](https://github.com/Elgg/Elgg/commit/b877f61de13a293f1d32c9dc345cd3cc8a51121a), closes [#8377](https://github.com/Elgg/Elgg/issues/8377))
+* **install:** Update cloud9 install instructions ([616f2156](https://github.com/Elgg/Elgg/commit/616f21563dc92613e279bebc40419bf0a6339dde), closes [#8240](https://github.com/Elgg/Elgg/issues/8240))
+
+
+#### Bug Fixes
+
+* **IDE:** Public APIs no longer marked with @internal ([11ccf71c](https://github.com/Elgg/Elgg/commit/11ccf71c5bb9b7d64ba9e834568275da853c7e65), closes [#7714](https://github.com/Elgg/Elgg/issues/7714))
+* **db:** Will now validate invite codes that contain "-" characters. ([6667c05f](https://github.com/Elgg/Elgg/commit/6667c05f35c2dd33453c6e22b1709d10c9f52929))
+* **notification:** Removes warning handling the email, system hook ([91daee43](https://github.com/Elgg/Elgg/commit/91daee43b6a5cf388640d592117ef808ce838013), closes [#8333](https://github.com/Elgg/Elgg/issues/8333))
+* **relationships:** Restores functionality of `$inverse_relationship` argument for `get_entity_relationships` ([3cc06f11](https://github.com/Elgg/Elgg/commit/3cc06f11816a13dcb688c32ab7cd96054fa8d2a7))
+* **spinner:** elgg/spinner delays a bit before displaying ([70cfdd01](https://github.com/Elgg/Elgg/commit/70cfdd01e277915674c7c3bfbd32e1f3eb7c8de7), closes [#8361](https://github.com/Elgg/Elgg/issues/8361))
+* **users:** admins are again able to reset user's password ([2b4d599e](https://github.com/Elgg/Elgg/commit/2b4d599ec6bda474de61bde9eff70c1eadab5b0a))
+
+
 <a name="1.11.2"></a>
 ### 1.11.2  (2015-05-25)
 
