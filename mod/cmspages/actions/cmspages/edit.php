@@ -183,7 +183,7 @@ $cmspage->sibling_guid = $sibling_guid;
 $cmspage->categories = $categories;
 // Function will add the filename if upload is OK
 if (elgg_is_active_plugin('esope') || function_exists('esope_add_file_to_entity')) {
-	esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
+	if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
 }
 $cmspage->seo_title = $seo_title;
 $cmspage->seo_tags = $seo_tags;
