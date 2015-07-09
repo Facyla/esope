@@ -3,6 +3,19 @@
 #transitions-post-edit select { max-width: 16em; }
 
 
+/* Content category types */
+.transitions-knowledge { background-color:#66F; padding:0.5ex 1ex; }
+.transitions-experience { background-color:#CAC; padding:0.5ex 1ex; }
+.transitions-imaginary { background-color:#FAC; padding:0.5ex 1ex; }
+.transitions-tools { background-color:#CA0; padding:0.5ex 1ex; }
+.transitions-actor { background-color:#9F9; padding:0.5ex 1ex; }
+.transitions-project { background-color:#AAF; padding:0.5ex 1ex; }
+.transitions-event { background-color:#FC9; padding:0.5ex 1ex; }
+.transitions-editorial { background-color:#AAA; padding:0.5ex 1ex; }
+
+/* Search form */
+.transitions-search-menu .elgg-button { margin:2px 4px; }
+
 
 #transitions .elgg-gallery .elgg-item { width:300px; }
 .transitions-gallery-item { border: 1px solid black; border: 1px solid black; margin: 0 1.5ex 2ex 0; box-shadow: 1px 1px 1px #999; padding: 0.5ex 1ex; }

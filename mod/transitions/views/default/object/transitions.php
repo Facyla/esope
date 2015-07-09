@@ -1,3 +1,5 @@
+
+
 <?php
 /**
  * View for transitions objects
@@ -83,19 +85,27 @@ if (elgg_in_context('widgets')) {
 
 
 // @TODO add stats and actions blocks
-$stats = '<i class="fa fa-heart">Likes</i> <i class="fa fa-comments">Comments</i> <i class="fa fa-user">People</i> <i class="fa fa-tags">Tags</i>';
-$actions = '<i class="fa fa-thumbs-tack">Pin</i> <i class="fa fa-link">Link</i> <i class="fa fa-code">Embed</i>';
+$stats = '';
+$stats .= '<i class="fa fa-heart">Likes</i> ';
+$stats .= '<i class="fa fa-comments">Comments</i> ';
+$stats .= '<i class="fa fa-user">People</i> ';
+$stats .= '<i class="fa fa-tags">Tags</i>';
+$actions = '';
+$actions .= '<i class="fa fa-thumb-tack">Pin</i> ';
+$actions .= '<a href="' . $transitions->getURL() . '"<i class="fa fa-link"></i></a> ';
+$actions .= '<i class="fa fa-code">Embed</i>';
 
 // @TODO : add following meta display :
 $other_meta = '';
 $other_meta .= '<p>Catégorie : ' . $transitions->category . '</p>';
+if (!empty($transitions->attachment)) $other_meta .= '<p>Lien web : <a href="' . $transitions->attachment . '">' . $transitions->attachment . '</a></p>';
 if (!empty($transitions->url)) $other_meta .= '<p>Lien web : <a href="' . $transitions->url . '">' . $transitions->url . '</a></p>';
-$other_meta .= '<p>Langue de la ressource : ' . $transitions->resource_lang . '</p>';
 $other_meta .= '<p>Langue : ' . $transitions->lang . '</p>';
+$other_meta .= '<p>Langue de la ressource : ' . $transitions->resource_lang . '</p>';
 if (!empty($transitions->territory)) $other_meta .= '<p>Territoire : ' . $transitions->territory . '</p>';
 if ($transitions->category == 'actor') $other_meta .= '<p>Type d\'acteur : ' . $transitions->actor_type . '</p>';
-if (!empty($transitions->start_date)) $other_meta .= '<p>Date de début : ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
-if (!empty($transitions->end_date)) $other_meta .= '<p>Date de début : ' . date('d M Y H:i:s', $transitions->end_date) . '</p>';
+if (!empty($transitions->start_date)) $other_meta .= '<p>Depuis le ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
+if (!empty($transitions->end_date)) $other_meta .= '<p>Jusqu\'au ' . date('d M Y H:i:s', $transitions->end_date) . '</p>';
 $other_meta .= '<p>Carte : ' . $transitions->location . '</p>';
 /*
 'url' => '',
@@ -114,7 +124,24 @@ $other_meta .= '<p>Carte : ' . $transitions->location . '</p>';
 
 if ($full) {
 
-	$body = elgg_view('output/longtext', array(
+	$body = '';
+	if (!empty($transitions->excerpt)) $body .= '<p><strong><em>' . $transitions->excerpt . '</em></strong></p>';
+	
+	$body .= '<p>';
+	if (!empty($transitions->category)) $body .= '<span class="transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) $body .= ' (' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . ')';
+	$body .= '</p>';
+	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-bookmark"></i> <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
+	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> <a href="' . $transitions->attachment . '" target="_blank">' . $transitions->attachment . '</a></p>';
+	if (!empty($transitions->territory)) $body .= '<p><i class="fa fa-map-marker"></i> Territoire : ' . $transitions->territory . '</p>';
+	if (!empty($transitions->territory)) $body .= '<p><i class="fa fa-street-view"></i> Carte : ' . $transitions->location . '</p>';
+	if (!empty($transitions->start_date)) $body .= '<p><i class="fa fa-calendar-o"></i> Depuis le ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
+	if (!empty($transitions->end_date)) $body .= '<p>Jusqu\'au ' . date('d M Y H:i:s', $transitions->end_date) . '</p>';
+	if (!empty($transitions->lang)) $body .= '<p><i class="fa fa-flag"></i> Langue : ' . elgg_echo($transitions->lang) . '</p>';
+	if (!empty($transitions->resource_lang)) $body .= '<p><i class="fa fa-flag-o"></i> Langue de la ressource : ' . elgg_echo($transitions->resource_lang) . '</p>';
+	
+	
+	$body .= elgg_view('output/longtext', array(
 		'value' => $transitions->description,
 		'class' => 'transitions-post',
 	));

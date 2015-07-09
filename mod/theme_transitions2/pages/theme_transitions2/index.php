@@ -27,7 +27,7 @@ $content .= '</div>';
 $content .= '<div class="flexible-block" style="width:30%; float:right;">';
 $content .= '<p>Racontez-nous votre transition, partagez une ressource pour le catalogue !</p>';
 if (elgg_is_logged_in()) {
-	$content .= '<a href="' . elgg_get_site_url() . 'transitions/add/' . elgg_get_logged_in_user_guid() . '" class="elgg-button elgg-button-action">Contribuez</a>';
+	//$content .= '<a href="' . elgg_get_site_url() . 'transitions/add/' . elgg_get_logged_in_user_guid() . '" class="elgg-button elgg-button-action">Contribuez</a>';
 	// Quick contribution form
 	$content .= elgg_view_form('transitions/quickform');
 } else {
@@ -45,7 +45,7 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
 $catalogue = elgg_list_entities(array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item'));
-$content .= '<div id="transitions">BLOC CATALOGUE<br />'.$catalogue . '</div>';
+$content .= '<div id="transitions">'.$catalogue . '</div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
