@@ -16,7 +16,7 @@ foreach($categories as $name => $category) {
 
 echo '<form>';
 	echo '<p><label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt)) . '</label></p>';
-	echo '<p><label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt)) . '</label></p>';
+	echo '<p><label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt)) . '</label></p>';
 
 	echo elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;'));
 	

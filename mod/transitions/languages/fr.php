@@ -89,6 +89,16 @@ Voir et commenter cette contribution :
 	// Select values
 	'transitions:lang:other' => "Autre langue",
 	
+	'transitions:category:nofilter' => "Toutes",
+	'transitions:category:knowledge' => "Connaissance",
+	'transitions:category:experience' => "Récit, expérience",
+	'transitions:category:imaginary' => "Imaginaire",
+	'transitions:category:tools' => "Outil et méthode",
+	'transitions:category:actor' => "Acteur",
+	'transitions:category:project' => "Projet",
+	'transitions:category:editorial' => "Produit éditorial",
+	'transitions:category:event' => "Evénement",
+	
 	'transitions:actortype:individual' => "Individu",
 	'transitions:actortype:collective' => "Collectif",
 	'transitions:actortype:association' => "Association",
@@ -98,15 +108,6 @@ Voir et commenter cette contribution :
 	'transitions:actortype:administration' => "Administration publique",
 	'transitions:actortype:plurinational' => "Entité plurinationale",
 	'transitions:actortype:other' => "Autre",
-	
-	'transitions:category:knowledge' => "Connaissance",
-	'transitions:category:experience' => "Récit, expérience",
-	'transitions:category:imaginary' => "Imaginaire",
-	'transitions:category:tools' => "Outil et méthode",
-	'transitions:category:actor' => "Acteur",
-	'transitions:category:project' => "Projet",
-	'transitions:category:editorial' => "Produit éditorial",
-	'transitions:category:event' => "Evénement",
 	
 	
 );
