@@ -1,6 +1,6 @@
 
 /* Edit form */
-#transitions-post-edit select { max-width: 10em; }
+#transitions-post-edit select { max-width: 16em; }
 
 
 
