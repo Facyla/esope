@@ -205,7 +205,9 @@ if (!$error) {
 			// remove existing icons
 			transitions_remove_attachment($transitions);
 		} else {
-			if (($attachment_file = get_uploaded_file('attachment')) && ($_FILES['attachment']['size'] > 0)) {
+			//if ($attachment_file = get_uploaded_file('attachment')) {
+			//if (($attachment_file = get_uploaded_file('attachment')) && ($_FILES['attachment']['size'] > 0)) {
+			if (($attachment_file = get_uploaded_file('attachment')) && isset($_FILES['attachment']['name'] && !empty($_FILES['attachment']['name'])) {
 				// create file
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
