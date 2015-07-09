@@ -177,6 +177,8 @@ if ($full) {
 		echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
 		
 	} else {
+		// do not show the metadata and controls in gallery view
+		if (elgg_in_context('widgets')) { $metadata = ''; }
 		$params = array(
 			'text' => elgg_get_excerpt($transitions->title, 100),
 			'href' => $transitions->getURL(),
