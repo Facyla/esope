@@ -4,6 +4,7 @@
 
 
 /* Content category types */
+.transitions-all { background-color:#000; padding:0.5ex 1ex; }
 .transitions-knowledge { background-color:#66F; padding:0.5ex 1ex; }
 .transitions-experience { background-color:#CAC; padding:0.5ex 1ex; }
 .transitions-imaginary { background-color:#FAC; padding:0.5ex 1ex; }

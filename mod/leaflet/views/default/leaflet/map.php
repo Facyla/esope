@@ -4,6 +4,8 @@
 elgg_load_library('leaflet');
 leaflet_load_libraries();
 
+// TODO Add box size + separate markers from map
+
 echo elgg_view('leaflet/basemap', $vars);
 
 // Add marker

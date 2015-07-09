@@ -18,6 +18,7 @@ $title_label = elgg_echo('title');
 $title_input = elgg_view('input/text', array(
 	'name' => 'title',
 	'id' => 'transitions_title',
+	'required' => 'required',
 ));
 
 $category_opt = transitions_get_category_opt($vars['category'], true);
@@ -27,6 +28,7 @@ $category_input = elgg_view('input/select', array(
 	'id' => 'transitions_category',
 	'value' => $vars['category'],
 	'options_values' => $category_opt, 
+	'required' => 'required',
 ));
 
 $actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
@@ -41,6 +43,7 @@ $body_label = elgg_echo('transitions:body');
 $body_input = elgg_view('input/longtext', array(
 	'name' => 'description',
 	'id' => 'transitions_description',
+	'required' => 'required',
 ));
 
 $url_label = elgg_echo('transitions:url');
