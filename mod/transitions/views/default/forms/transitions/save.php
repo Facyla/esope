@@ -18,8 +18,8 @@ $delete_link = '';
 $preview_button = '';
 
 // Set some default values
-if (!empty($vars['lang'])) { $vars['lang'] = get_language(); }
-if (!empty($vars['resourcelang'])) { $vars['resourcelang'] = get_language(); }
+if (empty($vars['lang'])) { $vars['lang'] = get_language(); }
+if (empty($vars['resourcelang'])) { $vars['resourcelang'] = get_language(); }
 
 // Get select options
 $lang_opt = transitions_get_lang_opt($vars['lang'], true);
@@ -92,7 +92,7 @@ $attachment_remove_input = "";
 if($vars["guid"]){
 	$attachment_label = elgg_echo("transitions:attachment");
 	if($transitions->attachment){
-		$attachment_remove_input = '<br /><a href="' . $transitions->getIconURL() . '" target="_new" />';
+		$attachment_remove_input = '<br /><a href="' . $transitions->getAttachmentURL() . '" target="_new" />' . $transitions->getAttachmentName() . '</a>';
 		$attachment_remove_input .= "<br />";
 		$attachment_remove_input .= elgg_view("input/checkbox", array("name" => "remove_attachment", "value" => "yes"));
 		$attachment_remove_input .= elgg_echo("transitions:attachment:remove");
@@ -120,6 +120,7 @@ if ($vars['guid']) {
 }
 
 $status_label = elgg_echo('status');
+$status_value = $vars['status'];
 $status_input = elgg_view('input/select', array(
 	'name' => 'status',
 	'id' => 'transitions_status',
@@ -261,6 +262,12 @@ function transitions_toggle_fields() {
 echo <<<___HTML
 
 $draft_warning
+<div>
+	<blockquote class="$status_value">
+		<label for="transitions_status">$status_label</label>
+		$status_input
+	</blockquote>
+</div>
 
 <div>
 	<label for="transitions_title">$title_label</label>
@@ -343,10 +350,6 @@ $categories_input
 </div>
 <div class="clearfloat"></div>
 
-<div>
-	<label for="transitions_status">$status_label</label>
-	$status_input
-</div>
 
 <div class="elgg-foot">
 	<div class="elgg-subtext mbm">

@@ -54,4 +54,39 @@ class ElggTransitions extends ElggObject {
 		}
 	}
 
+	// Get attachment file URL
+	public function getAttachmentURL($name = 'attachment') {
+		if ($this->attachment) {
+			return elgg_get_site_url() . 'transitions/download/' . $this->guid . '/' . $name;
+		} else {
+			return false;
+		}
+	}
+	
+	// Get attachment file name
+	public function getAttachmentName($name = 'attachment') {
+		if ($this->{$name . '_name'}) {
+			return $this->{$name . '_name'};
+		} else if ($this->attachment) {
+			return $this->{$name};
+		} else {
+			return false;
+		}
+	}
+
+	// Get contributed tags
+	public function getUserTags() {
+		// @TODO
+		return;
+	}
+
+	// Get contributed tags
+	public function getUserLinks() {
+		// @TODO
+		return;
+	}
+
+
+
+
 }

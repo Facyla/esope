@@ -158,6 +158,13 @@ function transitions_page_handler($page) {
 			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");
 			return true;
 			break;
+		case 'download':
+			// The username should be the file we're getting
+			if (isset($page[1])) { set_input("guid",$page[1]); }
+			if (isset($page[2])) { set_input("name",$page[2]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/attachment.php");
+			return true;
+			break;
 		case 'all':
 			$params = transitions_get_page_content_list();
 			break;

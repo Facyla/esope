@@ -55,7 +55,7 @@ if(!empty($transitions->icontime)) {
 	$params = $vars;
 	if ($full) {
 		$params["size"] = 'large';
-		$params["align"] = 'right';
+		$params["align"] = 'left';
 	} else {
 		if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 			$params["size"] = 'listing';
@@ -98,7 +98,7 @@ $actions .= '<i class="fa fa-code">Embed</i>';
 // @TODO : add following meta display :
 $other_meta = '';
 $other_meta .= '<p>Catégorie : ' . $transitions->category . '</p>';
-if (!empty($transitions->attachment)) $other_meta .= '<p>Lien web : <a href="' . $transitions->attachment . '">' . $transitions->attachment . '</a></p>';
+if (!empty($transitions->attachment)) $other_meta .= '<p>Lien web : <a href="' . $transitions->getAttachmentURL() . '">' . $transitions->getAttachmentName() . '</a></p>';
 if (!empty($transitions->url)) $other_meta .= '<p>Lien web : <a href="' . $transitions->url . '">' . $transitions->url . '</a></p>';
 $other_meta .= '<p>Langue : ' . $transitions->lang . '</p>';
 $other_meta .= '<p>Langue de la ressource : ' . $transitions->resource_lang . '</p>';
@@ -128,13 +128,13 @@ if ($full) {
 	if (!empty($transitions->excerpt)) $body .= '<p><strong><em>' . $transitions->excerpt . '</em></strong></p>';
 	
 	$body .= '<p>';
-	if (!empty($transitions->category)) $body .= '<span class="transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
-	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) $body .= ' (' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . ')';
-	$body .= '</p>';
+	if (!empty($transitions->category)) $body .= '<span class="transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category);
+	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) $body .= '&nbsp;: ' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . '';
+	$body .= '</span></p>';
 	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-bookmark"></i> <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
-	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> <a href="' . $transitions->attachment . '" target="_blank">' . $transitions->attachment . '</a></p>';
+	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
 	if (!empty($transitions->territory)) $body .= '<p><i class="fa fa-map-marker"></i> Territoire : ' . $transitions->territory . '</p>';
-	if (!empty($transitions->territory)) $body .= '<p><i class="fa fa-street-view"></i> Carte : ' . $transitions->location . '</p>';
+	if (!empty($transitions->territory)) $body .= '<p><i class="fa fa-street-view"></i> Carte : ' . $transitions->getLatitude() . ' ' . $transitions->getLongitude() . '</p>' . elgg_view('leaflet/map', array('entity' => $transitions));
 	if (!empty($transitions->start_date)) $body .= '<p><i class="fa fa-calendar-o"></i> Depuis le ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
 	if (!empty($transitions->end_date)) $body .= '<p>Jusqu\'au ' . date('d M Y H:i:s', $transitions->end_date) . '</p>';
 	if (!empty($transitions->lang)) $body .= '<p><i class="fa fa-flag"></i> Langue : ' . elgg_echo($transitions->lang) . '</p>';
@@ -178,7 +178,7 @@ if ($full) {
 		
 	} else {
 		// do not show the metadata and controls in gallery view
-		if (elgg_in_context('widgets')) { $metadata = ''; }
+		$metadata = '';
 		$params = array(
 			'text' => elgg_get_excerpt($transitions->title, 100),
 			'href' => $transitions->getURL(),
@@ -187,12 +187,15 @@ if ($full) {
 		$title_link = elgg_view('output/url', $params);
 		
 		echo '<div class="transitions-gallery-item">';
-			if ($metadata) { echo $metadata; }
-			if ($title_link) { echo "<h3>$title_link</h3>"; }
-			echo '<div class="elgg-subtext">' . $subtitle . '</div>';
-			echo elgg_view('object/summary/extend', $vars);
-			echo elgg_view('output/tags', array('tags' => $transitions->tags));
-			//echo elgg_view_image_block($owner_icon, $list_body);
+			echo '<div class="transitions-gallery-head">';
+				if ($metadata) { echo $metadata; }
+				echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+				if ($title_link) { echo "<h3>$title_link</h3>"; }
+				echo '<div class="elgg-subtext">' . $subtitle . '</div>';
+				echo elgg_view('object/summary/extend', $vars);
+				echo elgg_view('output/tags', array('tags' => $transitions->tags));
+				//echo elgg_view_image_block($owner_icon, $list_body);
+			echo '</div>';
 		
 			echo '<div class="transitions-gallery-box">';
 				echo $transitions_icon;

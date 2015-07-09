@@ -17,14 +17,20 @@
 .transitions-search-menu .elgg-button { margin:2px 4px; }
 
 
+/* Full view */
+.transitions_image.float { margin: 0 1em 0.5em 0; }
+
+
+/* Gallery view */
 #transitions .elgg-gallery .elgg-item { width:300px; }
-.transitions-gallery-item { border: 1px solid black; border: 1px solid black; margin: 0 1.5ex 2ex 0; box-shadow: 1px 1px 1px #999; padding: 0.5ex 1ex; }
+.transitions-gallery-item { border: 0;margin: 0 1.5ex 2ex 0; padding: 0.5ex 1ex; }
+.transitions-gallery-item .transitions-gallery-head { min-height:4em; }
 .transitions-gallery-item .transitions-gallery-box { position:relative; }
 .transitions-gallery-item .transitions_image { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions_image img { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions-gallery-hover { position:absolute; top:0; left:0; width: 100%; height:100%; display:none; background:rgba(255,255,255,0.8); text-align:center; }
 .transitions-gallery-item:hover .transitions-gallery-hover { display:block; }
-
+.transitions-gallery-item .transitions-category { float:right; margin-left:0.5ex; }
 
 
 /* Responsive gallery grid */

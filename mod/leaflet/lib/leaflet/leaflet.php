@@ -32,7 +32,9 @@ function leaflet_batch_geocode_member($user, $getter, $options) {
 			$user->prev_location = $location;
 			
 			//error_log("Geocoding location... for $user->username : $user->location"); // debug
-			$geo_location = elgg_geocode_location($location);
+			//$geo_location = elgg_geocode_location($location);
+			$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
+			if (!$geo_location) $geo_location = elgg_geocode_location($location);
 			if ($geo_location) {
 				$lat = (float)$geo_location['lat'];
 				$long = (float)$geo_location['long'];
