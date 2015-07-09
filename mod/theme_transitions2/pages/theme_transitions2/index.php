@@ -26,7 +26,13 @@ $content .= elgg_view('cmspages/view', array('pagetype' => "homepage-slider"));
 $content .= '</div>';
 $content .= '<div class="flexible-block" style="width:30%; float:right;">';
 $content .= '<p>Racontez-nous votre transition, partagez une ressource pour le catalogue !</p>';
-$content .= '<a href="' . elgg_get_site_url() . 'transitions/add/' . elgg_get_logged_in_user_guid() . '" class="elgg-button elgg-button-action">Nouvelle contribution</a>';
+if (elgg_is_logged_in()) {
+	$content .= '<a href="' . elgg_get_site_url() . 'transitions/add/' . elgg_get_logged_in_user_guid() . '" class="elgg-button elgg-button-action">Contribuez</a>';
+	// Quick contribution form
+	$content .= elgg_view_form('transitions/quickform');
+} else {
+	$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action">Contribuez</a>';
+}
 $content .= '</div>';
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';

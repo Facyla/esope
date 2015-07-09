@@ -7,7 +7,7 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 /* Generic styles */
 a { color: #223300; }
 img { max-width: 100%; }
-
+select { max-width: 98%; }
 
 .flexible-block { float:left; }
 
@@ -52,7 +52,7 @@ img { max-width: 100%; }
 }
 
 @media (max-width: 600px) {
-	.flexible-block { float:none; margin:0 auto; width:auto; }
+	.flexible-block { float:none !important; margin:0 auto; width:auto !important; }
 }
 
 

@@ -62,7 +62,9 @@ function transitions_init() {
 
 	// register actions
 	$action_path = elgg_get_plugins_path() . 'transitions/actions/transitions';
-	elgg_register_action('transitions/save', "$action_path/save.php");
+	// Quickform is a light contribution form that quickly creates a draft
+	elgg_register_action('transitions/quickform', "$action_path/save.php", 'public');
+	elgg_register_action('transitions/save', "$action_path/save.php", 'public');
 	elgg_register_action('transitions/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('transitions/delete', "$action_path/delete.php");
 
@@ -321,5 +323,36 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	}
 }
 
+
+function transitions_get_category_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = ''; }
+	$values = array('knowledge', 'experience', 'imaginary', 'tools', 'actor', 'project', 'event');
+	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
+	if (elgg_is_admin_logged_in()) { $list['editorial'] = elgg_echo('transitions:category:editorial'); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
+	return $list;
+}
+
+function transitions_get_actortype_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = ''; }
+	$values = array('individual', 'collective', 'association', 'enterprise', 'education', 'collectivity', 'administration', 'plurinational');
+	foreach($values as $val) { $list[$val] = elgg_echo('transitions:actortype:' . $val); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
+	return $list;
+}
+
+function transitions_get_lang_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = ''; }
+	$values = array('fr', 'en');
+	foreach($values as $val) { $list[$val] = elgg_echo($val); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo($value); }
+	return $list;
+}
 
 

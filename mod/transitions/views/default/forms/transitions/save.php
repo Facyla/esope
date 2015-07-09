@@ -18,10 +18,14 @@ $delete_link = '';
 $preview_button = '';
 
 // Set some default values
-if (!$transitions) {
-	$vars['lang'] = get_language();
-	$vars['resourcelang'] = get_language();
-}
+if (!empty($vars['lang'])) { $vars['lang'] = get_language(); }
+if (!empty($vars['resourcelang'])) { $vars['resourcelang'] = get_language(); }
+
+// Get select options
+$lang_opt = transitions_get_lang_opt($vars['lang'], true);
+$actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
+$category_opt = transitions_get_category_opt($vars['category'], true);
+
 
 if ($vars['guid']) {
 	// add a delete button if editing
@@ -67,7 +71,6 @@ $icon_input = "";
 $icon_remove_input = "";
 if($vars["guid"]){
 	$icon_label = elgg_echo("transitions:icon");
-	
 	if($transitions->icontime){
 		$icon_remove_input = "<br /><img src='" . $transitions->getIconURL('listing') . "' />";
 		$icon_remove_input .= "<br />";
@@ -82,6 +85,7 @@ if($vars["guid"]){
 }
 $icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
 $icon_input .= $icon_remove_input;
+$icon_details = elgg_echo('transitions:icon:details');
 
 $attachment_input = "";
 $attachment_remove_input = "";
@@ -98,6 +102,7 @@ if($vars["guid"]){
 }
 $attachment_input .= elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 $attachment_input .= $attachment_remove_input;
+$attachment_details = elgg_echo('transitions:attachment:details');
 
 
 $body_label = elgg_echo('transitions:body');
@@ -141,46 +146,32 @@ $url_input = elgg_view('input/url', array(
 	'id' => 'transitions_url',
 	'value' => $vars['url']
 ));
+$url_details = elgg_echo('transitions:url:details');
 
 $category_label = elgg_echo('transitions:category');
 $category_input = elgg_view('input/select', array(
 	'name' => 'category',
 	'id' => 'transitions_category',
 	'value' => $vars['category'],
-	'options_values' => array(
-			'' => '',
-			'knowledge' => elgg_echo('transitions:category:knowledge'), 
-			'experience' => elgg_echo('transitions:category:experience'), 
-			'imaginary' => elgg_echo('transitions:category:imaginary'), 
-			'tools' => elgg_echo('transitions:category:tools'), 
-			'actor' => elgg_echo('transitions:category:actor'), 
-			'project' => elgg_echo('transitions:category:project'), 
-			'editorial' => elgg_echo('transitions:category:editorial'), 
-			'event' => elgg_echo('transitions:category:event'), 
-		)
+	'options_values' => $category_opt,
+	'onchange' => 'transitions_toggle_fields();',
 ));
-
-$lang_opts = array(
-		'' => '',
-		'fr' => elgg_echo('fr'), 
-		'en' => elgg_echo('en'), 
-		'other' => elgg_echo('transitions:lang:other'), 
-	);
 
 $resourcelang_label = elgg_echo('transitions:resourcelang');
 $resourcelang_input = elgg_view('input/select', array(
 	'name' => 'resourcelang',
 	'id' => 'transitions_resourcelang',
 	'value' => $vars['resourcelang'],
-	'options_values' => $lang_opts,
+	'options_values' => $lang_opt,
 ));
+$resourcelang_details = elgg_echo('transitions:resourcelang:details');
 
 $lang_label = elgg_echo('transitions:lang');
 $lang_input = elgg_view('input/select', array(
 	'name' => 'lang',
 	'id' => 'transitions_lang',
 	'value' => $vars['lang'],
-	'options_values' => $lang_opts,
+	'options_values' => $lang_opt,
 ));
 
 $territory_label = elgg_echo('transitions:territory');
@@ -189,23 +180,14 @@ $territory_input = elgg_view('input/text', array(
 	'id' => 'transitions_territory',
 	'value' => $vars['territory'], 
 ));
+$territory_details = elgg_echo('transitions:territory:details');
 
 $actortype_label = elgg_echo('transitions:actortype');
 $actortype_input = elgg_view('input/select', array(
 	'name' => 'actor_type',
 	'id' => 'transitions_actortype',
 	'value' => $vars['actortype'],
-	'options_values' => array(
-			'' => elgg_echo('transitions:actortype:other'),
-			'individual' => elgg_echo('transitions:actortype:individual'), 
-			'collective' => elgg_echo('transitions:actortype:collective'), 
-			'association' => elgg_echo('transitions:actortype:association'), 
-			'enterprise' => elgg_echo('transitions:actortype:enterprise'), 
-			'education' => elgg_echo('transitions:actortype:education'), 
-			'collectivity' => elgg_echo('transitions:actortype:collectivity'), 
-			'administration' => elgg_echo('transitions:actortype:administration'), 
-			'plurinational' => elgg_echo('transitions:actortype:plurinational'),
-		),
+	'options_values' => $actortype_opt,
 ));
 
 $startdate_label = elgg_echo('transitions:startdate');
@@ -222,7 +204,6 @@ $enddate_input = elgg_view('input/date', array(
 	'value' => $vars['end_date'],
 ));
 
-
 $tags_label = elgg_echo('tags');
 $tags_input = elgg_view('input/tags', array(
 	'name' => 'tags',
@@ -230,7 +211,7 @@ $tags_input = elgg_view('input/tags', array(
 	'value' => $vars['tags']
 ));
 
-/* Access is always public
+/* Access is always public (admin can unpublish by other means : draft + disable)
 $access_label = elgg_echo('access');
 $access_input = elgg_view('input/access', array(
 	'name' => 'access_id',
@@ -249,6 +230,34 @@ $container_guid_input = elgg_view('input/hidden', array('name' => 'container_gui
 $guid_input = elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars['guid']));
 
 
+// Toggle disabled field control
+echo '<script>
+
+// Execute once on document ready
+$(document).ready( function() { transitions_toggle_fields(); } );
+
+function transitions_toggle_fields() {
+	var val = $("select[name=\'category\']").val();
+	if (val == "actor") {
+		$(".transitions-actortype").removeClass(\'hidden\');
+		$(".transitions-territory").removeClass(\'hidden\');
+	} else if (val == "project") {
+		$(".transitions-territory").removeClass(\'hidden\');
+		$(".transitions-startdate").removeClass(\'hidden\');
+	} else if (val == "event") {
+		$(".transitions-startdate").removeClass(\'hidden\');
+		$(".transitions-enddate").removeClass(\'hidden\');
+	} else {
+		$(".transitions-actortype").addClass(\'hidden\');
+		$(".transitions-territory").addClass(\'hidden\');
+		$(".transitions-startdate").addClass(\'hidden\');
+		$(".transitions-enddate").addClass(\'hidden\');
+	}
+	return true;
+}
+</script>';
+// , 'onchange' => 'uhb_annonces_toggle_typework();')
+
 echo <<<___HTML
 
 $draft_warning
@@ -258,14 +267,20 @@ $draft_warning
 	$title_input
 </div>
 
+<div class="flexible-block" style="width:48%; float:left;">
+	<label for="transitions_category">$category_label</label><br />
+	$category_input
+</div>
+
+<div class="flexible-block transitions-actortype" style="width:48%; float:right;">
+	<label for="transitions_actortype transitions-actortype">$actortype_label</label><br />
+	$actortype_input
+</div>
+<div class="clearfloat"></div>
+
 <div>
 	<label for="transitions_excerpt">$excerpt_label</label>
 	$excerpt_input
-</div>
-
-<div>
-	<label for="transitions_icon">$icon_label</label>
-	$icon_input
 </div>
 
 <div>
@@ -274,51 +289,59 @@ $draft_warning
 </div>
 
 <div>
-	<label for="transitions_attachment">$attachment_label</label>
-	$attachment_input
-</div>
-
-<div>
 	<label for="transitions_url">$url_label</label>
-	$url_input
+	$url_input<br />
+	<em>$url_details</em>
 </div>
 
-<div>
-	<label for="transitions_url">$category_label</label>
-	$category_input
+<div class="flexible-block" style="width:48%; float:left;">
+	<label for="transitions_icon">$icon_label</label><br />
+	$icon_input<br />
+	<em>$icon_details</em>
 </div>
 
-<div>
-	<label for="transitions_url">$resourcelang_label</label>
-	$resourcelang_input
+<div class="flexible-block" style="width:48%; float:right;">
+	<label for="transitions_attachment">$attachment_label</label><br />
+	$attachment_input<br />
+	<em>$attachment_details</em>
 </div>
+<div class="clearfloat"></div>
 
 <div>
-	<label for="transitions_url">$lang_label</label>
-	$lang_input
+	<label for="transitions_tags">$tags_label</label>
+	$tags_input
 </div>
 
-<div>
-	<label for="transitions_url">$territory_label</label>
-	$territory_input
+<div class="transitions-territory">
+	<label for="transitions_territory">$territory_label</label>
+	$territory_input<br />
+	<em>$territory_details</em>
 </div>
 
-<div>
-	<label for="transitions_url">$actortype_label</label>
-	$actortype_input
-</div>
-
-<div>
-	<label for="transitions_url">$startdate_label</label>
+<div class="flexible-block transitions-startdate" style="width:48%; float:left;">
+	<label for="transitions_startdate">$startdate_label</label>
 	$startdate_input
 </div>
 
-<div>
-	<label for="transitions_tags">$enddate_label</label>
+<div class="flexible-block transitions-enddate" style="width:48%; float:right;">
+	<label for="transitions_enddate">$enddate_label</label>
 	$enddate_input
 </div>
+<div class="clearfloat"></div>
 
 $categories_input
+
+<div class="flexible-block" style="width:48%; float:left;">
+	<label for="transitions_lang">$lang_label</label>
+	$lang_input
+</div>
+
+<div class="flexible-block transitions-resourcelang" style="width:48%; float:right;">
+	<label for="transitions_resourcelang">$resourcelang_label</label>
+	$resourcelang_input<br />
+	<em>$resourcelang_details</em>
+</div>
+<div class="clearfloat"></div>
 
 <div>
 	<label for="transitions_status">$status_label</label>

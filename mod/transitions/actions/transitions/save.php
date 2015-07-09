@@ -14,6 +14,13 @@
 // start a new sticky form session in case of failure
 elgg_make_sticky_form('transitions');
 
+/* Direct registration ?
+$register_first = !elgg_is_logged_in();
+if ($register_first) {
+	$
+}
+*/
+
 // save or preview
 $save = (bool)get_input('save');
 

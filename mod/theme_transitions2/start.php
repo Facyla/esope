@@ -13,6 +13,11 @@ function theme_transitions2_init() {
 
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
+	
+	// Register Font Awesome
+	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
+	elgg_load_css('font-awesome');
+	
 
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');
 
@@ -56,12 +61,15 @@ function theme_transitions2_init() {
  * @return bool Whether the page was sent.
  */
 function theme_transitions2_index() {
+	/*
 	if (elgg_is_logged_in()) {
 		if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index.php")) { return false; }
 	} else {
 		if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index_public.php")) { return false; }
 	}
-
+	*/
+	if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index.php")) { return false; }
+	
 	return true;
 }
 
