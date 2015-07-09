@@ -48,11 +48,17 @@ $body .= <<<__BODY
 			$navbar
 		</div>
 	</div>
+__BODY;
+/*
+$body .= <<<__BODY
 	<div class="elgg-page-header">
 		<div class="elgg-inner">
 			$header
 		</div>
 	</div>
+__BODY;
+*/
+$body .= <<<__BODY
 	<div class="elgg-page-body">
 		<div class="elgg-inner">
 			$content

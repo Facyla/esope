@@ -17,6 +17,12 @@ $action_buttons = '';
 $delete_link = '';
 $preview_button = '';
 
+// Set some default values
+if (!$transitions) {
+	$vars['lang'] = get_language();
+	$vars['resourcelang'] = get_language();
+}
+
 if ($vars['guid']) {
 	// add a delete button if editing
 	$delete_url = "action/transitions/delete?guid={$vars['guid']}";

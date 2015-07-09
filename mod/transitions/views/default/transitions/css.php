@@ -11,16 +11,24 @@
 .transitions-gallery-item:hover .transitions-gallery-hover { display:block; }
 
 
+
 /* Responsive gallery grid */
-@media screen and (max-width:1200px) {
+
+@media (max-width: 1030px) {
 	#transitions .elgg-gallery .elgg-item { width:33.3333333%; }
 }
 
-@media screen and (max-width:800px) {
+@media (max-width: 820px) {
 	#transitions .elgg-gallery .elgg-item { width:50%; }
 }
 
-@media screen and (max-width:500px) {
+@media (min-width: 767px) {
+}
+
+@media (max-width: 766px) {
+}
+
+@media (max-width: 600px) {
 	#transitions .elgg-gallery .elgg-item { width:100%; }
 }
 

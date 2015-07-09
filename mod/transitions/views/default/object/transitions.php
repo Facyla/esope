@@ -52,8 +52,8 @@ $transitions_icon = "";
 if(!empty($transitions->icontime)) {
 	$params = $vars;
 	if ($full) {
-		$params["size"] = 'master';
-		$params["align"] = 'left';
+		$params["size"] = 'large';
+		$params["align"] = 'right';
 	} else {
 		if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 			$params["size"] = 'listing';
