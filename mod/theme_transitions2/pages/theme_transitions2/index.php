@@ -38,7 +38,7 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 // RECHERCHE
-$search = elgg_view('transitions/search');
+$search = elgg_view('transitions/search_home');
 $content .= elgg_view_module('aside', elgg_echo('theme_transitions2:search'), $search);
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';

@@ -42,6 +42,7 @@ $content .= elgg_view_module('aside', 'Recherchez une ressource', $search);
 $content .= '<div class="clearfloat"></div>';
 
 $search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
+
 if (!empty($category)) {
 	$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
 }
@@ -49,14 +50,16 @@ if (!empty($actor_type)) {
 	$search_options['metadata_name_value_pairs'][] = array('name' => 'actor_type', 'value' => $actor_type);
 }
 if (!empty($query)) {
-	$search_options['wheres'][] = "(e.title LIKE '%$query%') OR (e.description LIKE '%$query%')";
+	$db_prefix = elgg_get_config('dbprefix');
+	$search_options['joins'][] = "JOIN {$db_prefix}objects_entity oe ON e.guid = oe.guid";
+	$search_options['wheres'][] = "(oe.title LIKE '%$query%') OR (oe.description LIKE '%$query%')";
 }
-
+echo print_r($search_options, true);
 if (isset($search_options['metadata_name_value_pairs'])) {
 	$count = elgg_get_entities_from_metadata($search_options);
 	$catalogue = elgg_list_entities_from_metadata($search_options);
 } else {
-	$count = elgg_get_entities_from_metadata($search_options);
+	$count = elgg_get_entities($search_options);
 	$catalogue = elgg_list_entities($search_options);
 }
 $content .= '<div id="transitions">';

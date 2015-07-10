@@ -9,5 +9,8 @@ return array(
 	
 	'theme_transitions2:register:optionalfields' => "Les champs suivants sont facultatifs. Si vous n'indiquez rien, ils seront automatiquement créés pour vous.",
 	
+	'theme_transitions2:search' => "Rechercher une contribution",
+	'settings' => "Paramètres",
+	
 );
 
