@@ -329,6 +329,8 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 					$url = elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 					return $url;
 				}
+			} else {
+				return elgg_get_site_url() . "mod/transitions/graphics/default_$size.png";
 			}
 		}
 	}
