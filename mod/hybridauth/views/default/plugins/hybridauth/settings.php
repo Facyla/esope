@@ -19,6 +19,12 @@ $no_yes_opt = array_reverse($yes_no_opt);
 	
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
 		<legend><?php echo elgg_echo('hybridauth:settings:providers'); ?></legend>
+		
+		<blockquote>
+		<p><a href="https://www.linkedin.com/developer/apps">LinkedIn API key</a></p>
+		<p><a href="https://apps.twitter.com/">Twitter API key</a></p>
+		</blockquote>
+		
 		<?php
 		// Liste des providers
 		foreach ($providers as $key => $name) {
