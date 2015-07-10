@@ -10,6 +10,10 @@ elgg_register_event_handler('init','system','theme_transitions2_init');
 function theme_transitions2_init() {
 
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
+	
+	// Rewrite register action
+	elgg_unregister_action('register');
+	elgg_register_action("register", dirname(__FILE__) . "/actions/register.php", "public");
 
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');

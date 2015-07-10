@@ -105,9 +105,9 @@ Voir et commenter cette contribution :
 	'transitions:category:knowledge' => "<i class=\"fa fa-lightbulb-o\"></i> Connaissance",
 	'transitions:category:experience' => "<i class=\"fa fa-book\"></i> Récit, expérience",
 	'transitions:category:imaginary' => "<i class=\"fa fa-magic\"></i> Imaginaire",
-	'transitions:category:tools' => "<i class=\"fa fa-cube\"></i> Outil et méthode",
+	'transitions:category:tools' => "<i class=\"fa fa-wrench\"></i> Outil ou méthode",
 	'transitions:category:actor' => "<i class=\"fa fa-user\"></i> Acteur",
-	'transitions:category:project' => "<i class=\"fa fa-users\"></i> Projet",
+	'transitions:category:project' => "<i class=\"fa fa-cube\"></i> Projet",
 	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
 	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Evénement",
 	

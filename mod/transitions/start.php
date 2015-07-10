@@ -170,10 +170,12 @@ function transitions_page_handler($page) {
 			return true;
 			break;
 		case 'all':
-			$params = transitions_get_page_content_list();
-			break;
+			//$params = transitions_get_page_content_list();
 		default:
-			return false;
+			if ($page[0] != 'all') { set_input("category",$page[0]); }
+			if (isset($page[1])) { set_input("q",$page[1]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/index.php");
+			return true;
 	}
 
 	if (isset($params['sidebar'])) {
@@ -336,12 +338,16 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 }
 
 
-function transitions_get_category_opt($value = '', $addempty = false) {
+/* Renvoie la liste des catégories
+ * $addempty : for select dropdowns
+ * $full : get all values (useful when not editing)
+*/
+function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
 	$list = array();
 	if ($addempty) { $list[''] = ''; }
-	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'knowledge', 'event');
+	$values = array('actor', 'project', 'experience', 'imaginary', 'event', 'tools', 'knowledge');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
-	if (elgg_is_admin_logged_in()) { $list['editorial'] = elgg_echo('transitions:category:editorial'); }
+	if (elgg_is_admin_logged_in() || $full) { $list['editorial'] = elgg_echo('transitions:category:editorial'); }
 	// Add current value
 	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
 	return $list;

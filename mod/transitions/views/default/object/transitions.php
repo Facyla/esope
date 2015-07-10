@@ -205,16 +205,18 @@ if ($full) {
 	// brief view
 	
 	if (elgg_in_context("listing") || ($list_type != 'gallery')) {
+			$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
 		$params = array(
 			'entity' => $transitions,
 			'metadata' => $metadata,
 			'subtitle' => $subtitle,
-			'content' => $excerpt,
+			'content' => $category . $excerpt,
 		);
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
 		
 		echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+		echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
 		
 	} else {
 		// do not show the metadata and controls in gallery view
@@ -245,11 +247,11 @@ if ($full) {
 						// @TODO : nb likes, commentaires, objets liés, personnes et projets liés...
 						echo '<div class="transitions-gallery-content">';
 							echo '<div class="elgg-content">' . $excerpt . '</div>';
-							echo '<div class="elgg-content">' . $stats . '</div>';
 						echo '</div>';
 					
 						// @TODO actions possibles : commenter, liker, ajouter une métadonnée/relation
 						echo '<div class="transitions-gallery-actions">';
+							echo $stats;
 							echo $actions;
 						echo '</div>';
 					echo '</div>';
