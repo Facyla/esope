@@ -21,7 +21,7 @@ if($transitions = get_entity($guid)) {
 }
 
 if (!$success) {
-	$contents = @file_get_contents(elgg_get_plugins_path(). "mod/transitions/graphics/default_{$size}.png");
+	$contents = @file_get_contents(elgg_get_plugins_path(). "_graphics/icons/default/{$size}.png");
 }
 
 header("Content-type: image/jpeg");

@@ -66,7 +66,6 @@ if(!empty($transitions->icontime)) {
 		}
 	}
 }
-// Set size to non-existing value to get default (eg "dummy")
 $transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
 
 $metadata = elgg_view_menu('entity', array(

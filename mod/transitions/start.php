@@ -326,11 +326,10 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
-					$url = elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
-					return $url;
+					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			} else {
-				return elgg_get_site_url() . "mod/transitions/graphics/default_$size.png";
+				if ($size == 'gallery') return elgg_get_site_url() . "mod/transitions/graphics/default_gallery.png";
 			}
 		}
 	}
