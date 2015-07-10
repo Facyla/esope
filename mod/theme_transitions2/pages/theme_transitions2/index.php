@@ -43,7 +43,7 @@ $content .= elgg_view_module('aside', elgg_echo('theme_transitions2:search'), $s
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
-
+$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 
 $count = elgg_get_entities_from_metadata($search_options);
 $catalogue = elgg_list_entities($search_options);
