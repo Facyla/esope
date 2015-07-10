@@ -63,10 +63,14 @@ function transitions_init() {
 	// register actions
 	$action_path = elgg_get_plugins_path() . 'transitions/actions/transitions';
 	// Quickform is a light contribution form that quickly creates a draft
-	elgg_register_action('transitions/quickform', "$action_path/save.php", 'public');
-	elgg_register_action('transitions/save', "$action_path/save.php", 'public');
+	elgg_register_action('transitions/save', "$action_path/save.php");
 	elgg_register_action('transitions/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('transitions/delete', "$action_path/delete.php");
+	
+	// Note : add , 'public' to allow onyone to use action
+	elgg_register_action('transitions/quickform', "$action_path/save.php");
+	elgg_register_action('transitions/addtag', "$action_path/addtag.php");
+	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
 
 	// entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'transitions_entity_menu_setup');

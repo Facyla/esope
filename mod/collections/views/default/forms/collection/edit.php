@@ -1,5 +1,6 @@
 <?php
 elgg_load_js('elgg.collections.edit');
+elgg_load_js("elgg.collections.embed");
 
 // Get current collection (if exists)
 $guid = get_input('guid', false);

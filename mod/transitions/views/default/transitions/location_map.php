@@ -60,27 +60,19 @@ if (!$lat || !$long) {
 if ($lat && $long) {
 	echo '<script type="text/javascript">
 	// Create a custom marker for users
-	var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
-	var onlineUsersMarkers = new L.MarkerClusterGroup();
+	//var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
+	//var onlineUsersMarkers = new L.MarkerClusterGroup();
 	';
 
 	$title = $user->title;
 	$title = json_encode($title);
 	
-	//$description = elgg_view_entity($entity, array('full_view' => false, 'view_type' => 'gallery'));
-	$description = '<strong><a href="' . $entity->getURL() . '"><img src="' . $entity->getIconURL('small') . '" /> ' . $entity->title . '</a></strong>';
-	$description = json_encode($description);
-	
 	echo "
-		marker = L.marker([$lat, $long], {icon: onlineUsersMarker, title: $title});
-		marker.bindPopup($description);
-		onlineUsersMarkers.addLayer(marker);
-		bounds.extend(marker.getLatLng());
+		var marker = L.marker([$lat, $long], {title: $title}).addTo(map);
 		";
 
-	echo 'map.addLayer(onlineUsersMarkers);
-	map.fitBounds(bounds, {padding: [20,20]});
-	map.setView(new L.LatLng(' . $lat . ', ' . $long . '),10);
+	echo '
+	map.setView(new L.LatLng(' . $lat . ', ' . $long . '),13);
 	</script>';
 }
 

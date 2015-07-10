@@ -44,7 +44,17 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
-$catalogue = elgg_list_entities(array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item'));
+$category = get_input('category', '');
+if ($category == 'all') $category = '';
+$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
+if (!empty($category)) {
+	$search_options['metadata_name_value_pairs'] = array('name' => 'category', 'value' => $category);
+	$count = elgg_get_entities_from_metadata($search_options);
+	$catalogue = elgg_list_entities_from_metadata($search_options);
+} else {
+	$count = elgg_get_entities_from_metadata($search_options);
+	$catalogue = elgg_list_entities($search_options);
+}
 $content .= '<div id="transitions">'.$catalogue . '</div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
@@ -55,12 +65,5 @@ $content .= elgg_view_module('info', "Nos choix", "<br /><br /><br /><br />");
 $content .= elgg_view_module('featured', "Les +...", "<br /><br /><br /><br />");
 */
 
-/*
-$content = elgg_view_layout('one_sidebar', array(
-	'content' => $content,
-	'title' => $title,
-	'sidebar' => $sidebar,
-));
-*/
 
 echo elgg_view_page($title, $content);

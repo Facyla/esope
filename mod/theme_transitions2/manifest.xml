@@ -50,6 +50,11 @@
 	
 	<requires>
 		<type>plugin</type>
+		<name>leaflet</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
 		<name>collections</name>
 	</requires>
 	

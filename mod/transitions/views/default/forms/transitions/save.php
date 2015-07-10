@@ -262,12 +262,6 @@ function transitions_toggle_fields() {
 echo <<<___HTML
 
 $draft_warning
-<div>
-	<blockquote class="$status_value">
-		<label for="transitions_status">$status_label</label>
-		$status_input
-	</blockquote>
-</div>
 
 <div>
 	<label for="transitions_title">$title_label</label>
@@ -350,6 +344,12 @@ $categories_input
 </div>
 <div class="clearfloat"></div>
 
+<div>
+	<blockquote class="$status_value">
+		<label for="transitions_status">$status_label</label>
+		$status_input
+	</blockquote>
+</div>
 
 <div class="elgg-foot">
 	<div class="elgg-subtext mbm">

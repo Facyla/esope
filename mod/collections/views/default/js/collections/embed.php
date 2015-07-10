@@ -9,7 +9,6 @@ elgg.collections.embed.init = function() {
 	
 	$("#collections-embed-list li").live("click", function(event) {
 		elgg.collections.embed.embed_format(this);
-
 		event.preventDefault();
 	});
 
@@ -20,7 +19,6 @@ elgg.collections.embed.init = function() {
 	});
 
 	$("#collections-embed-search").live("submit", function(event) {
-
 		event.preventDefault();
 
 		var query = $(this).serialize();
@@ -116,7 +114,7 @@ elgg.collections.embed.embed = function(content) {
 	<?php
 		// See the TinyMCE plugin for an example of this view
 		// @TODO
-		echo elgg_view('embed/custom_insert_js');
+		//echo elgg_view('embed/custom_insert_js');
 	?>
 
 	elgg.ui.lightbox.close();

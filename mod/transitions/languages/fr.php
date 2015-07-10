@@ -19,7 +19,7 @@ return array(
 	'transitions:add' => "Ajouter une contribution",
 	'transitions:edit' => "Modifier la contribution",
 	'transitions:excerpt' => "En 140 caractères...",
-	'transitions:body' => "Corps de la contribution",
+	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
 	
 	'transitions:revision' => "Révision",
@@ -86,18 +86,30 @@ Voir et commenter cette contribution :
 	'transitions:enddate' => "Date de fin",
 	'transitions:savedraft' => "Publier ma contribution",
 	
+	// Other forms
+	'transitions:contributed_tags' => "Tags des contributeurs",
+	'transitions:form:addtag' => "Ajouter un tag",
+	'transitions:addtag' => "Ajouter le tag",
+	'transitions:form:addlink' => "Ajouter un lien vers une autre ressource",
+	'transitions:addlink' => "Ajouter le lien",
+	'transitions:links_supports' => "Ressources en accord",
+	'transitions:relation:supports' => "en soutien",
+	'transitions:links_invalidates' => "Ressources en opposition",
+	'transitions:relation:invalidates' => "en opposition",
+	
+	
 	// Select values
 	'transitions:lang:other' => "Autre langue",
 	
 	'transitions:category:nofilter' => "Toutes",
-	'transitions:category:knowledge' => "Connaissance",
-	'transitions:category:experience' => "Récit, expérience",
-	'transitions:category:imaginary' => "Imaginaire",
-	'transitions:category:tools' => "Outil et méthode",
-	'transitions:category:actor' => "Acteur",
-	'transitions:category:project' => "Projet",
-	'transitions:category:editorial' => "Produit éditorial",
-	'transitions:category:event' => "Evénement",
+	'transitions:category:knowledge' => "<i class=\"fa fa-lightbulb-o\"></i> Connaissance",
+	'transitions:category:experience' => "<i class=\"fa fa-book\"></i> Récit, expérience",
+	'transitions:category:imaginary' => "<i class=\"fa fa-magic\"></i> Imaginaire",
+	'transitions:category:tools' => "<i class=\"fa fa-cube\"></i> Outil et méthode",
+	'transitions:category:actor' => "<i class=\"fa fa-user\"></i> Acteur",
+	'transitions:category:project' => "<i class=\"fa fa-users\"></i> Projet",
+	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
+	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Evénement",
 	
 	'transitions:actortype:individual' => "Individu",
 	'transitions:actortype:collective' => "Collectif",
