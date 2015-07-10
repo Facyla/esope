@@ -51,7 +51,7 @@ if ($transitions->comments_on != 'Off') {
 
 $transitions_icon = "";
 // show icon
-if(!empty($transitions->icontime)) {
+//if(!empty($transitions->icontime)) {
 	$params = $vars;
 	if ($full) {
 		$params["size"] = 'large';
@@ -65,7 +65,7 @@ if(!empty($transitions->icontime)) {
 			$params["align"] = 'none';
 		}
 	}
-}
+//}
 $transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
 
 $metadata = elgg_view_menu('entity', array(

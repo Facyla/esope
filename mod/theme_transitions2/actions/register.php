@@ -12,6 +12,7 @@ if (elgg_get_config('allow_registration')) {
 	// Get variables
 	// Require email
 	$email = get_input('email');
+	$send_email = false;
 
 	// Get or compute other fields
 	$username = get_input('username');
@@ -19,6 +20,7 @@ if (elgg_get_config('allow_registration')) {
 	if (strlen(trim($username) < 4)) {
 		system_message('theme_transitions2:register:usernametooshort');
 		$username = profile_manager_generate_username_from_email($email);
+		$send_email = true;
 	}
 	if (empty($name)) { $name = $username; }
 
@@ -26,13 +28,13 @@ if (elgg_get_config('allow_registration')) {
 	$password = get_input('password', null, false);
 	if (strlen(trim($password) < 8)) {
 		$password = generate_random_cleartext_password();
+		$send_email = true;
 	}
 
 	$friend_guid = (int) get_input('friend_guid', 0);
 	$invitecode = get_input('invitecode');
 	
 	try {
-
 		$guid = register_user($username, $password, $name, $email);
 
 		if ($guid) {
@@ -58,6 +60,11 @@ if (elgg_get_config('allow_registration')) {
 				// throw a RegistrationException, but that is very odd
 				// for the plugin hooks system.
 				throw new RegistrationException(elgg_echo('registerbad'));
+			}
+			
+			// @TODO Send password and other useful information
+			if ($send_email) {
+				
 			}
 
 			elgg_clear_sticky_form('register');

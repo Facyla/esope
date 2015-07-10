@@ -212,6 +212,11 @@ $tags_input = elgg_view('input/tags', array(
 	'value' => $vars['tags']
 ));
 
+
+// @TODO Admin only : contributed tags + links
+
+
+
 /* Access is always public (admin can unpublish by other means : draft + disable)
 $access_label = elgg_echo('access');
 $access_input = elgg_view('input/access', array(

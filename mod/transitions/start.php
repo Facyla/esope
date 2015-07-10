@@ -331,7 +331,7 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			} else {
-				if ($size == 'gallery') return elgg_get_site_url() . "mod/transitions/graphics/default_gallery.png";
+				if ($size == 'gallery') return elgg_get_site_url() . "mod/transitions/graphics/icons/gallery.png";
 			}
 		}
 	}
