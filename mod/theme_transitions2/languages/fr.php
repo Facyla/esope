@@ -3,7 +3,7 @@ return array(
 	'theme_transitions2' => 'Transitions²',
 	'theme_transitions2:transitions:count' => "%s contributions",
 	
-	'theme_transitions2:transitions:count' => "Recherchez une ressource",
+	'theme_transitions2:search' => "Recherchez une ressource",
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
 	

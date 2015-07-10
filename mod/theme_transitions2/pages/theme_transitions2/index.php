@@ -38,15 +38,18 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 // RECHERCHE
-$search = elgg_view('transitions/search_home');
-$content .= elgg_view_module('aside', elgg_echo('theme_transitions2:search'), $search);
+//$search = elgg_view('transitions/search_home');
+//$content .= elgg_view_module('aside', elgg_echo('theme_transitions2:search'), $search);
+$content .= '<br /><br />';
+$content .= elgg_view('transitions/search_home');
 $content .= '<div class="clearfloat"></div>';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 $search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
-
 $count = elgg_get_entities_from_metadata($search_options);
 $catalogue = elgg_list_entities($search_options);
+
+$content .= '<br /><br />';
 $content .= '<div id="transitions">';
 $content .= elgg_echo('theme_transitions2:transitions:count', array($count));
 $content .= $catalogue;

@@ -15,7 +15,10 @@
 .transitions-editorial { background-color:#AAA; padding:0.5ex 1ex; }
 
 /* Search form */
+.transitions-search-menu { text-align: center; }
 .transitions-search-menu .elgg-button { margin:2px 4px; }
+#transitions-search-home {  }
+#transitions-search-home input { font-size: 2em; padding: 0.5em 0.5em; }
 
 
 /* Full view */
