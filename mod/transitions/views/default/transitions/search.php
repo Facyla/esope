@@ -1,6 +1,7 @@
 <?php
 $category = get_input('category', '');
 $actor_type = get_input('actor_type', '');
+$query = get_input('q', '');
 
 $categories = transitions_get_category_opt(null, false);
 
@@ -18,12 +19,12 @@ foreach($categories as $name => $trans_name) {
 
 echo '<div class="clearfloat"></div><br />';
 
-echo '<form method="POST" action="' . elgg_get_site_url() . 'transitions/">';
+echo '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="transitions-search">';
 	echo '<label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 	echo ' &nbsp; ';
 	echo '<label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
-
-	echo elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;'));
+	echo '<br />';
+	echo elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
 	
 	echo elgg_view('input/submit', array('value' => "Rechercher"));
 echo '</form>';

@@ -252,6 +252,7 @@ if ($full) {
 						// @TODO actions possibles : commenter, liker, ajouter une métadonnée/relation
 						echo '<div class="transitions-gallery-actions">';
 							echo $stats;
+							echo '<br />';
 							echo $actions;
 						echo '</div>';
 					echo '</div>';

@@ -15,10 +15,13 @@
 .transitions-editorial { background-color:#AAA; padding:0.5ex 1ex; }
 
 /* Search form */
-.transitions-search-menu { text-align: center; }
+.transitions-search-menu { /* text-align: center; */ min-width:60%; }
 .transitions-search-menu .elgg-button { margin:2px 4px; }
 #transitions-search-home {  }
 #transitions-search-home input { font-size: 2em; padding: 0.5em 0.5em; }
+#transitions-search-home input[name=q] { max-width:80%; }
+#transitions-search{  }
+#transitions-search input{ max-width:20em; }
 
 
 /* Full view */

@@ -4,7 +4,6 @@ return array(
 	'transitions:transitions' => "Contributions",
 	'transitions:revisions' => "Révisions",
 	'transitions:archives' => "Archives",
-	'transitions:transitions' => "Contribution",
 	'item:object:transitions' => "Contributions",
 
 	'transitions:title:user_transitions' => "Contributions de %s",
@@ -96,6 +95,11 @@ Voir et commenter cette contribution :
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",
 	'transitions:relation:invalidates' => "en opposition",
+	'transitions:index' => "Catalogue des contributions",
+	'transitions:search:results' => "%s résultats",
+	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
+	'transitions:search:noresult' => "Aucun résultat ! &nbsp; Nous attendons votre contribution avec impatience ;-)",
+	
 	
 	
 	// Select values
