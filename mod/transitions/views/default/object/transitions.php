@@ -86,10 +86,14 @@ if (elgg_in_context('widgets')) {
 
 // @TODO add stats and actions blocks
 $stats = '';
-$stats .= '<i class="fa fa-heart"></i> ';
-$stats .= '<i class="fa fa-comments"></i> ';
-$stats .= '<i class="fa fa-user"></i> ';
-$stats .= '<i class="fa fa-tags"></i>';
+if (elgg_is_active_plugin('likes')) {
+	$num_of_likes = \Elgg\Likes\DataService::instance()->getNumLikes($transitions);
+	$stats .= '<i class="fa fa-heart"></i> ' . $num_of_likes . ' &nbsp; ';
+}
+$stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' &nbsp; ';
+$stats .= '<i class="fa fa-tags"></i> ' . count($transitions->contributed_tags) . ' &nbsp; ';
+$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
+$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
 $actions = '';
 if (elgg_is_admin_logged_in()) {
 	$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
