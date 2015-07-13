@@ -64,9 +64,16 @@ if (elgg_get_config('allow_registration')) {
 			
 			// @TODO Send password and other useful information
 			if ($send_email) {
-				
+				$subject = elgg_echo('theme_transitions2:register:subject', array(), $new_user->language);
+				$body = elgg_echo('theme_transitions2:register:body', array(
+					$name,
+					elgg_get_site_entity()->name,
+					elgg_get_site_entity()->url,
+					$username,
+					$password,
+				), $new_user->language);
+				notify_user($new_user->guid, elgg_get_site_entity()->guid, $subject, $body);
 			}
-
 			elgg_clear_sticky_form('register');
 
 			if ($new_user->enabled == "yes") {

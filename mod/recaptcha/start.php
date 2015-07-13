@@ -51,7 +51,9 @@ function recaptcha_verify($response = '', $secret = '') {
 	$json_response = file_get_contents($api_url);
 	$obj_response = json_decode($json_response);
 
-	if ($obj_response->sucess == '1') { return true; }
+	if ($obj_response->success == '1') {
+		return true;
+	}
 	
 	$error_codes = array(
 		'missing-input-secret' => "The secret parameter is missing.",
