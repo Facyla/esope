@@ -3,6 +3,9 @@ return array(
 	'theme_transitions2' => 'Transitions²',
 	'theme_transitions2:transitions:count' => "%s contributions",
 	
+	'theme_transitions2:usersettings:public_profile' => "Autoriser les moteurs de recherche à indexer ma page de profil",
+	'theme_transitions2:usersettings:block_messages' => "Interdire aux autres contributeurs de m'envoyer des messages",
+	
 	'theme_transitions2:search' => "Recherchez une ressource",
 	'theme_transitions2:search' => "Rechercher une contribution",
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
@@ -28,6 +31,16 @@ Mot de passe : %s
 	
 	// Main translations overrides
 	'settings' => "Paramètres",
+	'makeadmin' => "Nommer super-administrateur",
+	'removeadmin' => "Supprimer les droits super-administrateur",
+	'makeeditor' => "Nommer éditeur",
+	'removeeditor' => "Supprimer les droits d'éditeur",
+	'admin:user:removeeditor:yes' => "L'utilisateur n'est plus éditeur.",
+	'admin:user:removeeditor:no' => "Impossible de supprimer les droits d'éditeur de cet utilisateur.",
+	'admin:user:makeeditor:yes' => "L'utilisateur est éditeur.",
+	'admin:user:makeeditor:no' => "Impossible de nommer cet utilisateur éditeur.",
+	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
+	
 	
 );
 

@@ -57,7 +57,7 @@ if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'collections')) {
 	} else {
 	
 		$params = array(
-				'href' => elgg_get_site_url() . 'collections/add/',
+				'href' => elgg_get_site_url() . 'collection/add/',
 				'text' => '<i class="fa fa-plus-circle"></i> Ajouter dans une nouvelle collection',
 				'is_action' => true, 'is_trusted' => true,
 			);

@@ -14,7 +14,13 @@ function theme_transitions2_init() {
 	// Rewrite register action
 	elgg_unregister_action('register');
 	elgg_register_action("register", dirname(__FILE__) . "/actions/register.php", "public");
-
+	
+	// Add new actions to hover user menu
+	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
+		elgg_register_action('admin/user/makeeditor', dirname(__FILE__) . "/actions/makeeditor.php", 'admin');
+	elgg_register_action('admin/user/removeeditor', dirname(__FILE__) . "/actions/removeeditor.php", 'admin');
+	//elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
+	
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
 	
@@ -54,8 +60,6 @@ function theme_transitions2_init() {
 		'hres' => array('w' => 2200, 'h' => 1800, 'square' => false, 'upscale' => false),
 	);
 	elgg_set_config('icon_sizes', $icon_sizes);
-	/*
-	*/
 	
 }
 
@@ -132,5 +136,61 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 	return $data;
 }
 
+
+// Editor role
+function theme_transitions2_user_is_editor($user = false) {
+	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if ($user->is_editor == 'yes') return true;
+	return false;
+}
+
+
+function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
+	$user = $params['entity'];
+	
+	// Remove some unwanted entries
+	$remove_user_tools = array('file', 'add_friend', 'remove_friend', 'activity:owner');
+	// @TODO Supprimer lien message si refus d'être contacté
+	$block_messages = elgg_get_plugin_user_setting('block_messages', 'theme_transitions2');
+	if ($block_messages == 'yes') $remove_user_tools[] = 'send';
+	if ($return) foreach ($return as $key => $item) {
+		$name = $item->getName();
+		error_log("$key $name");
+		if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+	}
+	
+	
+	// Add some admin menus
+	if (elgg_is_admin_logged_in()) {
+		$actions = array();
+		if (theme_transitions2_user_is_editor($user)) {
+			$actions[] = 'removeeditor';
+		} else {
+			$actions[] = 'makeeditor';
+		}
+		
+		foreach ($actions as $action) {
+			$url = "action/admin/ustheme_transitions2_user_is_editor($userer/$action?guid={$user->guid}";
+			$url = elgg_add_action_tokens_to_url($url);
+			$item = new \ElggMenuItem($action, elgg_echo($action), $url);
+			$item->setSection('admin');
+			$item->setConfirmText(true);
+			$return[] = $item;
+		}
+	}
+	return $return;
+}
+
+
+function theme_transitions2_owner_block_menu($hook, $type, $return, $params) {
+	// Menu user
+	if (elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
+		$remove_user_tools = array('file');
+		if ($return) foreach ($return as $key => $item) {
+			$name = $item->getName();
+			if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+		}
+	}
+}
 
 
