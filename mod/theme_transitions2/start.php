@@ -9,6 +9,14 @@ elgg_register_event_handler('init','system','theme_transitions2_init');
 
 function theme_transitions2_init() {
 
+	// theme specific CSS
+	elgg_extend_view('css/elgg', 'theme_transitions2/css');
+	
+	// Custom user settings
+	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
+	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
+
+	
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
 	// Rewrite register action
@@ -19,10 +27,7 @@ function theme_transitions2_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
 		elgg_register_action('admin/user/makeeditor', dirname(__FILE__) . "/actions/makeeditor.php", 'admin');
 	elgg_register_action('admin/user/removeeditor', dirname(__FILE__) . "/actions/removeeditor.php", 'admin');
-	//elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
-	
-	// theme specific CSS
-	elgg_extend_view('css/elgg', 'theme_transitions2/css');
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
 	
 	// Register Font Awesome
 	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
@@ -149,16 +154,14 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	$user = $params['entity'];
 	
 	// Remove some unwanted entries
-	$remove_user_tools = array('file', 'add_friend', 'remove_friend', 'activity:owner');
+	$remove_user_menus = array('add_friend', 'remove_friend', 'activity:owner');
 	// @TODO Supprimer lien message si refus d'être contacté
 	$block_messages = elgg_get_plugin_user_setting('block_messages', 'theme_transitions2');
-	if ($block_messages == 'yes') $remove_user_tools[] = 'send';
+	if ($block_messages == 'yes') $remove_user_menus[] = 'send';
 	if ($return) foreach ($return as $key => $item) {
 		$name = $item->getName();
-		error_log("$key $name");
 		if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
 	}
-	
 	
 	// Add some admin menus
 	if (elgg_is_admin_logged_in()) {
@@ -184,13 +187,32 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 
 function theme_transitions2_owner_block_menu($hook, $type, $return, $params) {
 	// Menu user
-	if (elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
+	$user = $params['entity'];
+	if (elgg_instanceof($user, 'user')) {
 		$remove_user_tools = array('file');
 		if ($return) foreach ($return as $key => $item) {
 			$name = $item->getName();
 			if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
 		}
 	}
+	return $return;
+}
+
+function theme_transitions2_set_usersettings() {
+	$user_guid = get_input('guid');
+	$public_profile = get_input('public_profile');
+	$block_messages = get_input('block_messages');
+	if ($user_guid) {
+		$user = get_user($user_guid);
+	} else {
+		$user = elgg_get_logged_in_user_entity();
+	}
+	if ($user && ($public_profile || $block_messages)) {
+		if ($public_profile) $user->setPrivateSetting ('public_profile', $public_profile);
+		if ($block_messages) $user->setPrivateSetting ('block_messages', $block_messages);
+		return true;
+	}
+	return false;
 }
 
 

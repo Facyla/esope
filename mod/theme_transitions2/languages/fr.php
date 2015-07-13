@@ -4,7 +4,9 @@ return array(
 	'theme_transitions2:transitions:count' => "%s contributions",
 	
 	'theme_transitions2:usersettings:public_profile' => "Autoriser les moteurs de recherche à indexer ma page de profil",
+	'theme_transitions2:usersettings:public_profile:title' => "Profil public",
 	'theme_transitions2:usersettings:block_messages' => "Interdire aux autres contributeurs de m'envoyer des messages",
+	'theme_transitions2:usersettings:block_messages:title' => "Messages privés",
 	
 	'theme_transitions2:search' => "Recherchez une ressource",
 	'theme_transitions2:search' => "Rechercher une contribution",
