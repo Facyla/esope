@@ -20,9 +20,10 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 	// FOCUS ET PRESENTATION
 	$content .= '<div class="flexible-block" style="width:66%;">';
-		// @TODO use cmspage + custom slider or theme-specifc slider (with dynamic content) ?
+		// use cmspage + custom slider or theme-specifc slider (with dynamic content) ?
 		//$content .= elgg_view('theme_transitions2/slider');
 		$content .= elgg_view('cmspages/view', array('pagetype' => "homepage-slider"));
+		// @TODO 4 blocs avec titre, image, texte et possibilité de faire un lien
 		$content .= '<div class="clearfloat"></div>';
 		$content .= '<br /><br />';
 		
@@ -44,6 +45,9 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 	
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
+
+// @TODO Par défaut : celles sélectionnées par la rédaction
+// Filtres sur : les +commentées, les +tagguées, les +récentes, les +liées
 	$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 	$count = elgg_get_entities_from_metadata($list_options);
 	$catalogue = elgg_list_entities($list_options);

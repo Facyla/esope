@@ -43,6 +43,9 @@ return array(
 				<strong>Warning :</strong> URL page name only accepts <strong>alphanum chars, and no space nor other signs except : \"-\", \"_\" et \".\"</strong>
 			</li>
 		</ul>",
+	'cmspages:edit_mode' => "Edit mode",
+	'cmspages:edit_mode:basic' => "Simple",
+	'cmspages:edit_mode:full' => "Advanced",
 	
 	/* Status messages */
 	'cmspages:posted' => "Page was successfully updated.",

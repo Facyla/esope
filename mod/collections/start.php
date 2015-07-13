@@ -19,7 +19,7 @@ elgg_register_event_handler('pagesetup','system','collections_pagesetup');
 
 function collections_plugin_init() {
 	
-	// Note : CSS we will be output anyway directly into the view, so we can embed collectionss on other sites
+	// Note : CSS we will be output anyway directly into the view, so we can embed collections on other sites
 	elgg_extend_view('css','collections/css');
 	
 	//elgg_extend_view('shortcodes/embed/extend', 'collections/extend_shortcodes_embed');
@@ -27,6 +27,12 @@ function collections_plugin_init() {
 	
 	// Register main page handler
 	elgg_register_page_handler('collection', 'collections_page_handler');
+	
+	// Register a URL handler for collections
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'collections_url');
+	
+	// ENTITY MENU (add to collection)
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'collections_entity_menu_setup', 600);
 	
 	// Register actions
 	$actions_path = elgg_get_plugins_path() . 'collections/actions/collections/';
@@ -42,54 +48,8 @@ function collections_plugin_init() {
 	$js = elgg_get_simplecache_url('js', 'collections/embed');
 	elgg_register_js('elgg.collections.embed', $js);
 	
-	// Register a URL handler for collectionss
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'collections_url');
-	
 }
 
-
-/* Populates the ->getUrl() method for collections objects */
-function collections_url($hook, $type, $url, $params) {
-	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'collection')) {
-		return elgg_get_site_url() . 'collection/view/' . $entity->pagetype;
-	}
-}
-
-
-/* Gets a collection by its name, allowing theming on different instances
- * In case several collectionss are found, only first match is displayed with an alert
- */
-function collections_get_entity_by_name($name = '') {
-	if (!empty($name)) {
-		$collections = elgg_get_entities_from_metadata(array(
-				'types' => 'object', 'subtypes' => 'collection', 
-				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 
-			));
-		if ($collections) {
-			if (count($collections) == 1) {
-				return $collections[0];
-			} else {
-				register_error(elgg_echo('collections:error:multiple'));
-			}
-		}
-	}
-	return false;
-}
-
-/* Checks if a given name is already used by a collection */
-function collections_exists($name = '') {
-	$ia = elgg_set_ignore_access(true);
-	if (!empty($name)) {
-		$collections = collections_get_entity_by_name($name);
-		if (elgg_instanceof($collections, 'object', 'collection')) {
-			elgg_set_ignore_access($ia);
-			return true;
-		}
-	}
-	elgg_set_ignore_access($ia);
-	return false;
-}
 
 /* Main tool page handler */
 function collections_page_handler($page) {
@@ -129,11 +89,68 @@ function collections_page_handler($page) {
 }
 
 
+/* Populates the ->getUrl() method for collections objects */
+function collections_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'collection')) {
+		return elgg_get_site_url() . 'collection/view/' . $entity->pagetype;
+	}
+}
 
-// Foncitons à exécuter après le chargement de tous les plugins
+
+// Bouton de publication dans les blogs - Add externalblogs to entity menu at end of the menu
+function collections_entity_menu_setup($hook, $type, $return, $params) {
+	if (elgg_in_context('widgets')) { return $return; }
+	$entity = $params['entity'];
+	//if (elgg_instanceof($entity, 'object', 'collection')) {
+	if (elgg_instanceof($entity, 'object')) {
+		$options = array('name' => 'collections', 'href' => false, 'priority' => 900, 'text' => elgg_view('collections/button', array('entity' => $entity)));
+		$return[] = ElggMenuItem::factory($options);
+	}
+	return $return;
+}
+
+
+/* Gets a collection by its name, allowing theming on different instances
+ * In case several collections are found, only first match is displayed with an alert
+ */
+function collections_get_entity_by_name($name = '') {
+	if (!empty($name)) {
+		$collections = elgg_get_entities_from_metadata(array(
+				'types' => 'object', 'subtypes' => 'collection', 
+				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 
+			));
+		if ($collections) {
+			if (count($collections) == 1) {
+				return $collections[0];
+			} else {
+				register_error(elgg_echo('collections:error:multiple'));
+			}
+		}
+	}
+	return false;
+}
+
+/* Checks if a given name is already used by a collection */
+function collections_exists($name = '') {
+	$ia = elgg_set_ignore_access(true);
+	if (!empty($name)) {
+		$collections = collections_get_entity_by_name($name);
+		if (elgg_instanceof($collections, 'object', 'collection')) {
+			elgg_set_ignore_access($ia);
+			return true;
+		}
+	}
+	elgg_set_ignore_access($ia);
+	return false;
+}
+
+
+
+// Fonctions à exécuter après le chargement de tous les plugins
 function collections_pagesetup() {
 	
-	// Add collection shortcode for easier embedding of collectionss
+	// Add collection shortcode for easier embedding of collections
 	if (elgg_is_active_plugin('shortcodes')) {
 		elgg_load_library('elgg:shortcode');
 		/**
