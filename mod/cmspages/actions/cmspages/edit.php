@@ -62,26 +62,6 @@ $seo_description = get_input('seo_description');
 $seo_index = get_input('seo_index');
 $seo_follow = get_input('seo_follow');
 
-// Cache to the session - @todo handle by sticky form
-$_SESSION['cmspage_title'] = $cmspage_title;
-$_SESSION['cmspage_content'] = $description;
-$_SESSION['cmspage_pagetype'] = $pagetype;
-$_SESSION['cmspage_tags'] = $tags;
-$_SESSION['cmspage_access'] = $access;
-$_SESSION['cmspage_container_guid'] = $container_guid;
-$_SESSION['cmspage_parent_guid'] = $parent_guid;
-$_SESSION['cmspage_sibling_guid'] = $sibling_guid;
-$_SESSION['cmspage_categories'] = $categories;
-//$_SESSION['cmspage_featured_image'] = $featured_image;
-$_SESSION['cmspage_slurl'] = $slurl;
-$_SESSION['cmspage_content_type'] = $content_type;
-$_SESSION['cmspage_contexts'] = $contexts;
-$_SESSION['cmspage_module'] = $module;
-$_SESSION['cmspage_module_config'] = $module_config;
-$_SESSION['cmspage_display'] = $display;
-$_SESSION['cmspage_template'] = $template;
-$_SESSION['cmspage_page_css'] = $page_css;
-$_SESSION['cmspage_page_js'] = $page_js;
 
 // Facyla 20110214 : following bypass is necessary when using Private access level, which causes objects not to be saved correctly (+doubles), depending on author
 elgg_set_ignore_access(true);
@@ -200,7 +180,6 @@ if ($cmspage->save()) {
 	else add_to_river('river/cmspages/update','update',$_SESSION['user']->guid, $cmspages->guid); // add to river - not really useful here, but who knows..
 	*/
 	elgg_clear_sticky_form('cmspages'); // Remove the cache
-	unset($_SESSION['cmspage_content']); unset($_SESSION['cmspage_title']); unset($_SESSION['cmspage_pagetype']); unset($_SESSION['cmspage_tags']); unset($_SESSION['cmspage_access']); unset($_SESSION['cmspage_container_guid']); unset($_SESSION['cmspage_$parent_guid']); unset($_SESSION['cmspage_sibling_guid']); unset($_SESSION['cmspage_categories']); unset($_SESSION['cmspage_slurl']); unset($_SESSION['cmspage_featured_image']); unset($_SESSION['cmspage_content_type']); unset($_SESSION['cmspage_contexts']); unset($_SESSION['cmspage_module']); unset($_SESSION['cmspage_module_config']); unset($_SESSION['cmspage_display']); unset($_SESSION['cmspage_template']); unset($_SESSION['cmspage_page_css']); unset($_SESSION['cmspage_page_js']);
 } else {
 	register_error(elgg_echo("cmspages:error") . elgg_get_logged_in_user_guid() . '=> ' . elgg_get_plugin_setting('editors', 'cmspages'));
 	
@@ -208,6 +187,12 @@ if ($cmspage->save()) {
 
 elgg_set_ignore_access(false);
 
-// Forward back to the page
-forward("cmspages/edit/$pagetype");
+// Forward back to the edit page
+$forward = "cmspages/edit/$pagetype";
+$edit_mode = get_input('edit_mode', '');
+if (!empty($edit_mode) {
+	$forward .= 'edit_mode=' . $edit_mode;
+}
+
+forward($forward);
 

@@ -82,6 +82,8 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 // Param vars
 $content = '';
 if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
+$content .= elgg_view('input/hidden', array('name' => 'edit_mode', 'value' => "")) . '</p>';
+
 
 $content .= '<div style="width:48%; float:left;" class="slider-mode-full">';
 	$content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('slider:edit:title:details') . '</em></p>';

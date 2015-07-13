@@ -59,6 +59,7 @@ elgg.slider.edit.mode = function(mode) {
 		$(".slider-mode-full").removeClass('hidden');
 		$(".slider-mode-basic").addClass('hidden');
 	}
+	$("input[name=edit_mode]").val(mode);
 };
 
 elgg.register_hook_handler('init', 'system', elgg.slider.edit.init);

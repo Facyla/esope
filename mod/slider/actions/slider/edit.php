@@ -74,6 +74,13 @@ if ($slider->save()) {
 
 //elgg_set_ignore_access(false);
 
-// Forward back to the page
-forward('slider/edit/' . $slider->guid);
+// Forward back to the edit page
+$forward = 'slider/edit/' . $slider->guid;
+$edit_mode = get_input('edit_mode', '');
+if (!empty($edit_mode) {
+	$forward .= 'edit_mode=' . $edit_mode;
+}
+
+forward($forward);
+
 

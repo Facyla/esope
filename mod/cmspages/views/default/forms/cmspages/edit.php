@@ -174,6 +174,7 @@ function cmspages_edit_mode(mode) {
 		$(".cmspages-mode-full").removeClass(\'hidden\');
 		$(".cmspages-mode-basic").addClass(\'hidden\');
 	}
+	$("input[name=edit_mode]").val(mode);
 }
 ';
 if (!$advanced_mode) {
@@ -467,6 +468,7 @@ $sidebar .= $seo_content;
 
 $content .= $js_content;
 $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $cmspage_guid));
+$content .= elgg_view('input/hidden', array('name' => 'edit_mode', 'value' => "")) . '</p>';
 $content .= $edit_mode_toggle;
 $content .= '<span style="float:right;">' . $submit_button . '</span>';
 $content .= '<div class="clearfloat"></div>';
