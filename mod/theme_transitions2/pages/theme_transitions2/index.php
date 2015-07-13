@@ -23,7 +23,7 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 		// use cmspage + custom slider or theme-specifc slider (with dynamic content) ?
 		//$content .= elgg_view('theme_transitions2/slider');
 		//$content .= elgg_view('cmspages/view', array('pagetype' => "homepage-slider"));
-		$content .= elgg_view('cmspages/view', array('pagetype' => "homepage-slider"));
+		$content .= elgg_view('slider/view', array('guid' => "homepage-slider"));
 		if (elgg_is_admin_logged_in()) $content .= '<a href="' . elgg_get_site_url() . 'slider/edit/homepage-slider?edit_mode=basic">Modifier le diaporama</a>';
 		// @TODO 4 blocs avec titre, image, texte et possibilité de faire un lien
 		$content .= '<div class="clearfloat"></div>';
