@@ -182,6 +182,12 @@ if (!$advanced_mode) {
 			cmspages_edit_mode(\'basic\');
 		});
 		';
+} else {
+	$js_content .= '
+		$(document).ready(function() {
+			cmspages_edit_mode(\'full\');
+		});
+		';
 }
 $js_content .= '</script>';
 
