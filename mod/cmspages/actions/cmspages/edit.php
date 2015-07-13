@@ -190,7 +190,7 @@ elgg_set_ignore_access(false);
 // Forward back to the edit page
 $forward = "cmspages/edit/$pagetype";
 $edit_mode = get_input('edit_mode', '');
-if (!empty($edit_mode) {
+if (!empty($edit_mode)) {
 	$forward .= 'edit_mode=' . $edit_mode;
 }
 
