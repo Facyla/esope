@@ -51,6 +51,15 @@ elgg.slider.edit.addSortable = function() {
 	});
 };
 
+elgg.slider.edit.mode = function(mode) {
+	if (mode == 'basic') {
+		$(".slider-mode-full").addClass('hidden');
+		$(".slider-mode-basic").removeClass('hidden');
+	} else if (mode == 'full') {
+		$(".slider-mode-full").removeClass('hidden');
+		$(".slider-mode-basic").addClass('hidden');
+	}
+};
 
 elgg.register_hook_handler('init', 'system', elgg.slider.edit.init);
 

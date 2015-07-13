@@ -67,7 +67,7 @@ function slider_plugin_init() {
 function slider_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'slider')) {
-		return elgg_get_site_url() . 'slider/view/' . $entity->pagetype;
+		return elgg_get_site_url() . 'slider/view/' . $entity->guid;
 	}
 }
 

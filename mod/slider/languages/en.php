@@ -22,6 +22,10 @@ return array(
 	'slider:settings:slider_access:details' => "By default, the access to the slider editing tool is reserved to administrators. You can also allow site members to use it by choosing \"Yes\"",
 	'slider:option:yes' => "Yes",
 	'slider:option:no' => "No",
+	'slider:strapline' => 'Last update on %s by %s',
+	'slider:edit_mode' => "Edit mode",
+	'slider:edit_mode:basic' => "Simple",
+	'slider:edit_mode:full' => "Advanced",
 	
 	
 'slider:showinstructions' => "Display instructions",

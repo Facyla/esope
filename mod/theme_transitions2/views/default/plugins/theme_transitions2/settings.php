@@ -33,10 +33,12 @@ echo '<p><label>Footer menu ' . elgg_view('input/dropdown', array('name' => 'par
 //echo '<p><label>Text setting "setting_name2"</label> ' . elgg_view('input/text', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</p>';
 
 // Example text setting
+/*
 for ($i=1; $i<5; $i++) {
 	echo '<p><label>Accueil bloc ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_text_'.$i.']', 'value' => $vars['entity']->{'home_text_'.$i})) . '</p>';
 	echo '<p><label>Image ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_image_'.$i.']', 'value' => $vars['entity']->{'home_image_'.$i})) . '</p>';
 	echo '<p><label>Lien ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_link_'.$i.']', 'value' => $vars['entity']->{'home_link_'.$i})) . '</p>';
 }
+*/
 
 
