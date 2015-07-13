@@ -78,7 +78,7 @@ if ($slider->save()) {
 $forward = 'slider/edit/' . $slider->guid;
 $edit_mode = get_input('edit_mode', '');
 if (!empty($edit_mode)) {
-	$forward .= 'edit_mode=' . $edit_mode;
+	$forward .= '?edit_mode=' . $edit_mode;
 }
 
 forward($forward);
