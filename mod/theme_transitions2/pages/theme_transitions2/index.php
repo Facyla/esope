@@ -37,12 +37,15 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 	// SIDEBAR - CONTRIBUEZ !
 	$content .= '<div class="flexible-block" style="width:30%; float:right;">';
 		$content .= '<p>' . elgg_echo('theme_transitions2:newcontribution') . '</p>';
+		$content .= '<a href="javascript:void(0);" onClick="$(\'#transitions-contribute\').show(); $(this).hide();" class="elgg-button elgg-button-action elgg-button-transitions">Contribuez</a>';
+		$content .= '<div id="transitions-contribute" style="display:none;">';
 		if (elgg_is_logged_in()) {
 			// Quick contribution form
 			$content .= elgg_view_form('transitions/quickform');
 		} else {
 			$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action">Contribuez</a>';
 		}
+		$content .= '</div>';
 	$content .= '</div>';
 	
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';

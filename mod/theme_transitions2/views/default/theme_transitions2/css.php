@@ -37,7 +37,10 @@ select { max-width: 98%; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
 .elgg-button-nav:hover { background-color: #669900; }
 
+
+/* Homepage */
 .elgg-menu-item-logohome a { padding: 0 !important; }
+.elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }
 
 
 
