@@ -33,7 +33,7 @@ $collection = collection_get_entity($pagetype);
 
 
 // BREADCRUMBS - Add main collection breadcrumb
-elgg_push_breadcrumb(elgg_echo('collection'), 'collection');
+elgg_push_breadcrumb(elgg_echo('collections'), 'collection');
 
 // collection/read may render more content
 $collection = get_entity($guid);

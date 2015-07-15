@@ -8,6 +8,8 @@ elgg_require_js("collections/embed");
 
 echo '<a href="' . elgg_get_site_url() . 'collection/embed/' . $guid . '" class="elgg-longtext-control elgg-lightbox">' . elgg_echo("collections:select_entity") . '</a>';
 
+// @TODO autocomplete field ?
+
 echo elgg_view('input/text', array('name' => 'entities[]'));
 
 

@@ -11,8 +11,8 @@ $entity = elgg_extract('entity', $vars);
 if (elgg_instanceof($entity, 'object')) {
 
 	// Lang shoud be firstly set by views, because we might need multiple languages at the same time...
-	$lang = elgg_extract('locale', $vars, false);
-	if (!$lang) { $lang = get_input('lang'); } else { unset($vars['locale']); }
+	$lang = elgg_extract('lang', $vars, false);
+	if (!$lang) { $lang = get_input('lang'); } else { unset($vars['lang']); }
 	// Use prefered user language by default
 	if (empty($lang)) { $lang = get_current_language(); }
 	$main_lang = multilingual_get_main_language(); // Main site language
@@ -38,18 +38,18 @@ if (elgg_instanceof($entity, 'object')) {
 	if (($main_entity->guid != $entity->guid) && (full_url() == $entity->getURL())) {
 		$forward = $main_entity->getURL();
 		// Explicitely specify the wanted language if it not the default, or is user-specific
-		if (($lang != get_current_language()) || ($lang != $main_lang)) $forward .= '?locale=' . $entity->locale;
+		if (($lang != get_current_language()) || ($lang != $main_lang)) $forward .= '?lang=' . $entity->lang;
 		forward($forward);
 	}
 
 	// Select entity to be displayed
 	// Main entity if no language is set
 	// Or the chosen translation if it is not already the good one
-	if (empty($lang) || ($main_entity->locale == $lang)) {
+	if (empty($lang) || ($main_entity->lang == $lang)) {
 		$entity = $main_entity;
-	} else if ($entity->locale == $lang) {
+	} else if ($entity->lang == $lang) {
 		// Keep passed entity
-	} else if ($entity->locale != $lang) {
+	} else if ($entity->lang != $lang) {
 		$entity = multilingual_get_translation($main_entity, $lang);
 	}
 	// Default to main entity if the chosen lang does not return any valid entity

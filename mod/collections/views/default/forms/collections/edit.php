@@ -85,6 +85,8 @@ echo '<h2>' . elgg_echo('collections:edit') . '</h2>';
 // Display the form - Affichage du formulaire
 echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/collection/edit", 'body' => $content, 'id' => "collection-edit-form", 'enctype' => 'multipart/form-data'));
 
+echo '<div class="clearfloat"></div><br />';
+
 // Informations on embed and insert
 if ($collection) {
 	echo '<h3><i class="fa fa-info-circle"></i>' . elgg_echo('collections:embed:instructions') . '</h3>';

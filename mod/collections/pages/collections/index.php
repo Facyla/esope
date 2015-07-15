@@ -19,10 +19,10 @@ gatekeeper();
 $content = '';
 
 // Page title
-$title = elgg_echo('collection');
+$title = elgg_echo('collections');
 
 // Breadcrumbs
-elgg_push_breadcrumb(elgg_echo('collection'));
+elgg_push_breadcrumb(elgg_echo('collections'));
 
 // Count Total pages
 $collection_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'count' => true));
@@ -30,14 +30,14 @@ if ($collection_count > 0) $title .= " ($collection_count)";
 
 // MENU : collection selector
 $content .= '<div class="clearfloat"></div>';
-//$content .= elgg_echo('collection:pagescreated', array($collection_count));
+//$content .= elgg_echo('collections:pagescreated', array($collection_count));
 //$content .= elgg_view('collection/menu', array('pagetype' => $pagetype));
 $content .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">
-		<strong><a href="javascript:void(0);" class="inline_toggler" onclick="$(\'#collection_instructions\').toggle();">' . elgg_echo('collection:showinstructions') . '</a></strong>
-		<div id="collection_instructions" class="elgg-output hidden">' . elgg_echo('collection:instructions') . '</div>
+		<strong><a href="javascript:void(0);" class="inline_toggler" onclick="$(\'#collection_instructions\').toggle();">' . elgg_echo('collections:showinstructions') . '</a></strong>
+		<div id="collection_instructions" class="elgg-output hidden">' . elgg_echo('collections:instructions') . '</div>
 	</blockquote>';
 
-$content .= '<p><a href="' . elgg_get_site_url() . 'collection/edit" class="elgg-button elgg-button-action">' . elgg_echo('collection:add') . '</a></p>';
+$content .= '<p><a href="' . elgg_get_site_url() . 'collection/edit" class="elgg-button elgg-button-action">' . elgg_echo('collections:add') . '</a></p>';
 
 if ($collection_count > 0) {
 	$content .= elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 50));

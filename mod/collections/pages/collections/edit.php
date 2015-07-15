@@ -17,7 +17,7 @@ gatekeeper();
 $guid = get_input('guid', false);
 
 // BREADCRUMBS - Add main collection breadcrumb
-$page_title = elgg_echo('collection');
+$page_title = elgg_echo('collections');
 elgg_push_breadcrumb($page_title, 'collection');
 
 // collection/read may render more content
@@ -58,7 +58,8 @@ $item = ElggMenuItem::factory(array(
 elgg_register_menu_item('embed', $item);
 
 
-$content .= elgg_view('forms/collection/edit', array('entity' => $collection));
+$content .= elgg_view('forms/collections/edit', array('entity' => $collection));
+//$content .= elgg_view_form('collections/edit', array('entity' => $collection));
 
 
 // Wrap into default, full-page layout

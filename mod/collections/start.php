@@ -36,8 +36,8 @@ function collections_plugin_init() {
 	
 	// Register actions
 	$actions_path = elgg_get_plugins_path() . 'collections/actions/collections/';
-	elgg_register_action("collections/edit", $actions_path . 'edit.php');
-	elgg_register_action("collections/delete", $actions_path . 'delete.php');
+	elgg_register_action("collection/edit", $actions_path . 'edit.php');
+	elgg_register_action("collection/delete", $actions_path . 'delete.php');
 	
 		// register the JavaScript (autoloaded in 1.10)
 	elgg_register_simplecache_view('js/collections/edit');

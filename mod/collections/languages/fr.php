@@ -53,6 +53,8 @@ return array(
 	'collections:publishin' => "Publier dans",
 	'collections:removefromcollection' => "Retirer de",
 	'collections:addtocollection' => "Ajouter dans une nouvelle collection",
+	'collections:strapline' => 'Dernière mise à jour le %s par %s',
+	'collections:missingrequired' => "Il manque un champs requis",
 	
 	
 );

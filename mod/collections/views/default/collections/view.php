@@ -6,7 +6,7 @@ if (!$collection) {
 	$guid = elgg_extract('guid', $vars);
 	$collection = get_entity($guid);
 }
-if (!elgg_instanceof($collection, 'object', 'collection')) return;
+if (!elgg_instanceof($collection, 'object', 'collection')) { return; }
 
 foreach($collection->entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
