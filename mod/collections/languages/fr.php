@@ -48,7 +48,12 @@ return array(
 	'collections:edit:entities' => "Publication",
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",
+	
 	//'collections:' => "",
+	'collections:publishin' => "Publier dans",
+	'collections:removefromcollection' => "Retirer de",
+	'collections:addtocollection' => "Ajouter dans une nouvelle collection",
+	
 	
 );
 

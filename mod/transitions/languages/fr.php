@@ -99,6 +99,10 @@ Voir et commenter cette contribution :
 	'transitions:search:results' => "%s résultats",
 	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
 	'transitions:search:noresult' => "Aucun résultat ! &nbsp; Nous attendons votre contribution avec impatience ;-)",
+	'transitions:embed' => "Code d'embarquement",
+	'transitions:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'transitions:permalink' => "Permalien",
+	'transitions:permalink:details' => "Lien permanent pour cette contribution",
 	
 	
 	

@@ -97,8 +97,15 @@ $actions = '';
 if (elgg_is_admin_logged_in()) {
 	$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
 }
-$actions .= '<a href="' . $transitions->getURL() . '"><i class="fa fa-link"></i> Permalink</a> ';
-$actions .= '<a href=""><i class="fa fa-code">Embed</i></a>'; // @TODO open popup with embed code
+
+$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-link"></i>&nbsp;' . elgg_echo('transitions:permalink'), 'rel' => 'popup', 'href' => '#transitions-popup-link-' . $transitions->guid));
+$actions .= elgg_view_module('popup', elgg_echo('transitions:permalink'), '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly">' . $transitions->getURL() . '" style="width:320px; height:400px;"/&gt;</textarea>', array('id' => 'transitions-popup-link-' . $transitions->guid, 'class' => 'transitions-popup-link hidden clearfix'));
+
+//$actions .= '<a href="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true"><i class="fa fa-code">Embed</i></a>'; // @TODO open popup with embed code
+$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-code"></i>&nbsp;' . elgg_echo('transitions:embed'), 'rel' => 'popup', 'href' => '#transitions-popup-embed-' . $transitions->guid));
+$actions .= elgg_view_module('popup', elgg_echo('transitions:embed'), '<p>' . elgg_echo('transitions:embed:details') . '</p><textarea readonly="readonly">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:320px; height:400px;"/&gt;</textarea>', array('id' => 'transitions-popup-embed-' . $transitions->guid, 'class' => 'transitions-popup-embed hidden clearfix'));
+
+
 
 /*
 'url' => '',
@@ -216,7 +223,7 @@ if ($full) {
 		$list_body = elgg_view('object/elements/summary', $params);
 		
 		echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
-		echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
+		//echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
 		
 	} else {
 		// do not show the metadata and controls in gallery view
