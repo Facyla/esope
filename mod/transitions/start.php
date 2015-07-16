@@ -317,21 +317,22 @@ function transitions_run_upgrades($event, $type, $details) {
 	}
 }
 
+// Define object icon : custom or default
 function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
 		if(elgg_instanceof($entity, "object", "transitions")){
 			$size = $params["size"];
-			if ($icontime = $entity->icontime) {
-				$icontime = "{$icontime}";
+			if (!empty($entity->icontime) || ($size == 'gallery')) {
+				$icontime = "{$entity->icontime}";
 				$filehandler = new ElggFile();
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
 					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+				} else {
+					return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
 				}
-			} else {
-				if ($size == 'gallery') return elgg_get_site_url() . "mod/transitions/graphics/icons/gallery.png";
 			}
 		}
 	}
@@ -344,10 +345,13 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 */
 function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
 	$list = array();
-	if ($addempty) { $list[''] = ''; }
-	$values = array('actor', 'project', 'experience', 'imaginary', 'event', 'tools', 'knowledge');
+	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
+	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'knowledge'); // 'event'
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
-	if (elgg_is_admin_logged_in() || $full) { $list['editorial'] = elgg_echo('transitions:category:editorial'); }
+	if (elgg_is_admin_logged_in() || $full) {
+		$list['editorial'] = elgg_echo('transitions:category:editorial');
+		$list['challenge'] = elgg_echo('transitions:category:challenge');
+	}
 	// Add current value
 	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
 	return $list;

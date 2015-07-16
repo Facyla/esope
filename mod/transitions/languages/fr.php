@@ -73,6 +73,10 @@ Voir et commenter cette contribution :
 	'transitions:attachment:new' => "Joindre un fichier",
 	'transitions:attachment:remove' => "Supprimer le fichier joint",
 	'transitions:category' => "Catégorie",
+	'transitions:category:choose' => "Sélectionnez une catégorie",
+	'transitions:title' => "Titre de votre contribution",
+	'transitions:tags' => "Tags",
+	'transitions:excerpt' => "Votre contribution en 140 caractères",
 	'transitions:url' => "Lien web",
 	'transitions:url:details' => "Si votre contribution fait référence à une ressource en ligne, veuillez indiquer son adresse.",
 	'transitions:lang' => "Langue",
@@ -83,7 +87,11 @@ Voir et commenter cette contribution :
 	'transitions:actortype' => "Type d'acteur",
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
+	'transitions:rss_feed' => "Flux RSS",
 	'transitions:savedraft' => "Publier ma contribution",
+	'transitions:saveandedit' => "Poursuivre l'édition",
+	'transitions:preview' => "Sauvegarder",
+	'transitions:save' => "Publier",
 	
 	// Other forms
 	'transitions:contributed_tags' => "Tags des contributeurs",
@@ -104,6 +112,10 @@ Voir et commenter cette contribution :
 	'transitions:permalink' => "Permalien",
 	'transitions:permalink:details' => "Lien permanent pour cette contribution",
 	
+	// Bookmarklet
+	'transitions:bookmarklet:description' => "Le bookmarklet vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",
+	'transitions:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
+	'transitions:bookmarklet:description:conclusion' => "Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
 	
 	
 	// Select values
@@ -116,8 +128,9 @@ Voir et commenter cette contribution :
 	'transitions:category:tools' => "<i class=\"fa fa-wrench\"></i> Outil ou méthode",
 	'transitions:category:actor' => "<i class=\"fa fa-user\"></i> Acteur",
 	'transitions:category:project' => "<i class=\"fa fa-cube\"></i> Projet",
-	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
 	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Evénement",
+	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
+	'transitions:category:challenge' => "<i class=\"fa fa-trophy\"></i> Défi",
 	
 	'transitions:actortype:individual' => "Individu",
 	'transitions:actortype:collective' => "Collectif",

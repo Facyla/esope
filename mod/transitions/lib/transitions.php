@@ -274,6 +274,7 @@ function transitions_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 		$title = elgg_echo('transitions:add');
 		$content = elgg_view_form('transitions/save', $vars, $body_vars);
 	}
+	$sidebar .= elgg_view('transitions/sidebar/bookmarklet', $vars);
 
 	$return['title'] = $title;
 	$return['content'] = $content;

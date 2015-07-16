@@ -43,6 +43,12 @@ select { max-width: 98%; }
 .elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }
 
 
+/* Feedback */
+#feedbackWrapper { bottom: 48px; right: 48px; left:initial; top:initial; }
+#feedBackContentWrapper { left:0; }
+#feedBackTogglerLink { background: transparent; border: 0; box-shadow: none; }
+
+
 
 @media (max-width: 1030px) {
 }

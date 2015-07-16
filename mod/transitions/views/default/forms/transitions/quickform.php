@@ -9,7 +9,7 @@ $action_buttons = '';
 
 
 $save_button = elgg_view('input/submit', array(
-	'value' => elgg_echo('transitions:savedraft'),
+	'value' => elgg_echo('transitions:saveandedit'),
 	'name' => 'save',
 ));
 $action_buttons = $save_button;
@@ -19,6 +19,7 @@ $title_input = elgg_view('input/text', array(
 	'name' => 'title',
 	'id' => 'transitions_title',
 	'required' => 'required',
+	'placeholder' => elgg_echo('transitions:title'),
 ));
 
 $category_opt = transitions_get_category_opt($vars['category'], true);
@@ -50,40 +51,38 @@ $url_label = elgg_echo('transitions:url');
 $url_input = elgg_view('input/url', array(
 	'name' => 'url',
 	'id' => 'transitions_url',
+	'placeholder' => elgg_echo('transitions:url'),
 ));
 
-$attachment_label = elgg_echo("transitions:attachment:new");
-$attachment_input = elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
+//$attachment_label = elgg_echo("transitions:attachment:new");
+//$attachment_input = elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 
+//$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
 
 
 echo <<<___HTML
 
 <div>
-	<label for="transitions_title">$title_label</label>
+	<label for="transitions_title" class="hidden">$title_label</label>
 	$title_input
 </div>
 
 <div>
-	<label for="transitions_category">$category_label</label>
+	<label for="transitions_category" class="hidden">$category_label</label>
 	$category_input
 </div>
 
 <div>
-	<label for="transitions_description">$body_label</label>
+	<label for="transitions_description" class="hidden">$body_label</label>
 	$body_input
 </div>
 
 <div>
-	<label for="transitions_url">$url_label</label>
+	<label for="transitions_url" class="hidden">$url_label</label>
 	$url_input
 </div>
 
-<div>
-	<label for="transitions_attachment">$attachment_label</label>
-	$attachment_input
-</div>
-
+	$status_input
 	$action_buttons
 </div>
 

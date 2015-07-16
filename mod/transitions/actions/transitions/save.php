@@ -79,6 +79,8 @@ $values = array(
 	'start_date' => '',
 	// ssi category "event" : start_date, end_date, territory + geolocation
 	'end_date' => '',
+	// ssi challenge
+	'rss_feed' => '',
 );
 
 // fail if a required entity isn't set

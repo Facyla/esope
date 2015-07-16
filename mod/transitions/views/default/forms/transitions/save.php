@@ -26,6 +26,18 @@ $lang_opt = transitions_get_lang_opt($vars['lang'], true);
 $actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
 $category_opt = transitions_get_category_opt($vars['category'], true);
 
+// Set some values from URL, if set
+if (!$vars['guid']) {
+	$vars['title'] = get_input('title', $vars['title']);
+	$vars['url'] = get_input('url', $vars['url']);
+	$vars['rss_feed'] = get_input('rss_feed', $vars['rss_feed']);
+	$vars['category'] = get_input('category', $vars['category']);
+	$vars['lang'] = get_input('lang', $vars['lang']);
+	$vars['excerpt'] = get_input('excerpt', $vars['excerpt']);
+	$vars['description'] = get_input('description', $vars['description']);
+	if (!$vars['tags']) $vars['tags'] = explode(',', get_input('tags'));
+}
+
 
 if ($vars['guid']) {
 	// add a delete button if editing
@@ -41,14 +53,14 @@ if ($vars['guid']) {
 // published transitions do not get the preview button
 if (!$vars['guid'] || ($transitions && $transitions->status != 'published')) {
 	$preview_button = elgg_view('input/submit', array(
-		'value' => elgg_echo('preview'),
+		'value' => elgg_echo('transitions:preview'),
 		'name' => 'preview',
 		'class' => 'elgg-button-submit mls',
 	));
 }
 
 $save_button = elgg_view('input/submit', array(
-	'value' => elgg_echo('save'),
+	'value' => elgg_echo('transitions:save'),
 	'name' => 'save',
 ));
 $action_buttons = $save_button . $preview_button . $delete_link;
@@ -57,14 +69,16 @@ $title_label = elgg_echo('title');
 $title_input = elgg_view('input/text', array(
 	'name' => 'title',
 	'id' => 'transitions_title',
-	'value' => $vars['title']
+	'value' => $vars['title'],
+	'placeholder' => elgg_echo('transitions:title'),
 ));
 
 $excerpt_label = elgg_echo('transitions:excerpt');
 $excerpt_input = elgg_view('input/text', array(
 	'name' => 'excerpt',
 	'id' => 'transitions_excerpt',
-	'value' => _elgg_html_decode($vars['excerpt'])
+	'value' => _elgg_html_decode($vars['excerpt']),
+	'placeholder' => elgg_echo('transitions:excerpt'),
 ));
 
 $icon_input = "";
@@ -109,27 +123,31 @@ $body_label = elgg_echo('transitions:body');
 $body_input = elgg_view('input/longtext', array(
 	'name' => 'description',
 	'id' => 'transitions_description',
-	'value' => $vars['description']
+	'value' => $vars['description'],
 ));
 
 $save_status = elgg_echo('transitions:save_status');
-if ($vars['guid']) {
+if ($vars['guid'] && ($entity->time_created > 0)) {
 	$saved = date('F j, Y @ H:i', $entity->time_created);
 } else {
 	$saved = elgg_echo('never');
 }
 
-$status_label = elgg_echo('status');
-$status_value = $vars['status'];
-$status_input = elgg_view('input/select', array(
-	'name' => 'status',
-	'id' => 'transitions_status',
-	'value' => $vars['status'],
-	'options_values' => array(
-		'draft' => elgg_echo('status:draft'),
-		'published' => elgg_echo('status:published')
-	)
-));
+if (elgg_is_admin_logged_in()) {
+	$status_label = elgg_echo('status');
+	$status_value = $vars['status'];
+	$status_input = elgg_view('input/select', array(
+		'name' => 'status',
+		'id' => 'transitions_status',
+		'value' => $vars['status'],
+		'options_values' => array(
+			'draft' => elgg_echo('status:draft'),
+			'published' => elgg_echo('status:published')
+		)
+	));
+} else {
+	$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
+}
 
 /*
 $comments_label = elgg_echo('comments');
@@ -145,9 +163,19 @@ $url_label = elgg_echo('transitions:url');
 $url_input = elgg_view('input/url', array(
 	'name' => 'url',
 	'id' => 'transitions_url',
-	'value' => $vars['url']
+	'value' => $vars['url'],
+	'placeholder' => elgg_echo('transitions:url'),
 ));
 $url_details = elgg_echo('transitions:url:details');
+
+$rss_feed_label = elgg_echo('transitions:rss_feed');
+$rss_feed_input = elgg_view('input/url', array(
+	'name' => 'url',
+	'id' => 'transitions_url',
+	'value' => $vars['rss_feed'],
+	'placeholder' => elgg_echo('transitions:rss_feed'),
+));
+$rss_feed_details = elgg_echo('transitions:rss_feed:details');
 
 $category_label = elgg_echo('transitions:category');
 $category_input = elgg_view('input/select', array(
@@ -156,6 +184,14 @@ $category_input = elgg_view('input/select', array(
 	'value' => $vars['category'],
 	'options_values' => $category_opt,
 	'onchange' => 'transitions_toggle_fields();',
+));
+
+$lang_label = elgg_echo('transitions:lang');
+$lang_input = elgg_view('input/select', array(
+	'name' => 'lang',
+	'id' => 'transitions_lang',
+	'value' => $vars['lang'],
+	'options_values' => $lang_opt,
 ));
 
 $resourcelang_label = elgg_echo('transitions:resourcelang');
@@ -167,19 +203,12 @@ $resourcelang_input = elgg_view('input/select', array(
 ));
 $resourcelang_details = elgg_echo('transitions:resourcelang:details');
 
-$lang_label = elgg_echo('transitions:lang');
-$lang_input = elgg_view('input/select', array(
-	'name' => 'lang',
-	'id' => 'transitions_lang',
-	'value' => $vars['lang'],
-	'options_values' => $lang_opt,
-));
-
 $territory_label = elgg_echo('transitions:territory');
 $territory_input = elgg_view('input/text', array(
 	'name' => 'territory',
 	'id' => 'transitions_territory',
 	'value' => $vars['territory'], 
+	'placeholder' => elgg_echo('transitions:territory'),
 ));
 $territory_details = elgg_echo('transitions:territory:details');
 
@@ -196,6 +225,7 @@ $startdate_input = elgg_view('input/date', array(
 	'name' => 'startdate',
 	'id' => 'transitions_startdate',
 	'value' => $vars['start_date'],
+	'placeholder' => elgg_echo('transitions:startdate'),
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
@@ -203,13 +233,15 @@ $enddate_input = elgg_view('input/date', array(
 	'name' => 'enddate',
 	'id' => 'transitions_enddate',
 	'value' => $vars['end_date'],
+	'placeholder' => elgg_echo('transitions:enddate'),
 ));
 
 $tags_label = elgg_echo('tags');
 $tags_input = elgg_view('input/tags', array(
 	'name' => 'tags',
 	'id' => 'transitions_tags',
-	'value' => $vars['tags']
+	'value' => $vars['tags'],
+	'placeholder' => elgg_echo('transitions:tags'),
 ));
 
 
@@ -240,24 +272,33 @@ $guid_input = elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars
 echo '<script>
 
 // Execute once on document ready
-$(document).ready( function() { transitions_toggle_fields(); } );
+$(document).ready( function() {
+	transitions_toggle_fields();
+	$("option[value=\'\']").attr("disabled", "disabled");
+});
 
 function transitions_toggle_fields() {
 	var val = $("select[name=\'category\']").val();
+	// Reinit special fields
+	$(".transitions-actortype").addClass(\'hidden\');
+	$(".transitions-territory").addClass(\'hidden\');
+	$(".transitions-startdate").addClass(\'hidden\');
+	$(".transitions-enddate").addClass(\'hidden\');
+	$(".transitions-rss-feed").addClass(\'hidden\');
+	
+	//Now switch on wanted special fields
 	if (val == "actor") {
 		$(".transitions-actortype").removeClass(\'hidden\');
 		$(".transitions-territory").removeClass(\'hidden\');
 	} else if (val == "project") {
 		$(".transitions-territory").removeClass(\'hidden\');
 		$(".transitions-startdate").removeClass(\'hidden\');
+		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "event") {
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
-	} else {
-		$(".transitions-actortype").addClass(\'hidden\');
-		$(".transitions-territory").addClass(\'hidden\');
-		$(".transitions-startdate").addClass(\'hidden\');
-		$(".transitions-enddate").addClass(\'hidden\');
+	} else if (val == "challenge") {
+		$(".transitions-rss-feed").removeClass(\'hidden\');
 	}
 	return true;
 }
@@ -267,6 +308,23 @@ function transitions_toggle_fields() {
 echo <<<___HTML
 
 $draft_warning
+
+<div>
+	<label for="transitions_icon">$icon_label</label><br />
+	$icon_input<br />
+	<em>$icon_details</em>
+</div>
+
+<div>
+	<label for="transitions_excerpt">$excerpt_label</label>
+	$excerpt_input
+</div>
+
+<div>
+	<label for="transitions_tags">$tags_label</label>
+	$tags_input
+</div>
+
 
 <div>
 	<label for="transitions_title">$title_label</label>
@@ -285,11 +343,6 @@ $draft_warning
 <div class="clearfloat"></div>
 
 <div>
-	<label for="transitions_excerpt">$excerpt_label</label>
-	$excerpt_input
-</div>
-
-<div>
 	<label for="transitions_description">$body_label</label>
 	$body_input
 </div>
@@ -300,23 +353,18 @@ $draft_warning
 	<em>$url_details</em>
 </div>
 
-<div class="flexible-block" style="width:48%; float:left;">
-	<label for="transitions_icon">$icon_label</label><br />
-	$icon_input<br />
-	<em>$icon_details</em>
+<div class="transitions-rss-feed">
+	<label for="transitions_rss_feed">$rss_feed_label</label>
+	$rss_feed_input<br />
+	<em>$rss_feed_details</em>
 </div>
 
-<div class="flexible-block" style="width:48%; float:right;">
+<div>
 	<label for="transitions_attachment">$attachment_label</label><br />
 	$attachment_input<br />
 	<em>$attachment_details</em>
 </div>
 <div class="clearfloat"></div>
-
-<div>
-	<label for="transitions_tags">$tags_label</label>
-	$tags_input
-</div>
 
 <div class="transitions-territory">
 	<label for="transitions_territory">$territory_label</label>

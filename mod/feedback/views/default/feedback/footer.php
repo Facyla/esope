@@ -30,8 +30,6 @@ $feedback_url = elgg_get_site_url() . "action/feedback/submit_feedback"; //"?&__
 $feedback_url = elgg_add_action_tokens_to_url($feedback_url);
 
 $progress_img = '<img src="' . $imgurl . 'ajax-loader.gif" alt="'.elgg_echo('feedback:submit_msg').'" />';
-$open_img = '<img src="' . $imgurl . 'slide-button-open.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
-$close_img = '<img src="' . $imgurl . 'slide-button-close.png" alt="'.elgg_echo('feedback:label').'" title="'.elgg_echo('feedback:label').'" />';
 
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview == 'yes') $memberview = true; else $memberview = false;
@@ -41,8 +39,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 
 	<div id="feedBackToggler">
 		<a id="feedBackTogglerLink" href="javascript:void(0)" onclick="FeedBack_Toggle();this.blur();">
-			<?php echo $open_img ?>
-			<div style="display:none"><?php echo $close_img ?></div>
+			<?php echo elgg_view('feedback/toggle_button') ?>
 		</a>
 	</div>
 
@@ -157,23 +154,20 @@ if ( elgg_is_logged_in() ) {
 	echo "$('#feedback_id').attr ('disabled', 'disabled');";
 }
 ?>
-//$("#feedbackWrapper").width("50px");
 $('#feedbackClose').hide();
 var toggle_state = 0;
 
 function FeedBack_Toggle() {
-	if ( toggle_state ) {
+	if (toggle_state) {
 		toggle_state = 0;
-		//$("#feedbackWrapper").width("50px");
-		$("#feedBackTogglerLink").html('<?php echo $open_img?>');
+		$("#feedBackTogglerLink .feedback-toggle").toggle();
 		$('#feedBackFormInputs').show();
 		$("#feedBackFormStatus").html("");
 		$('#feedbackClose').hide();
 		document.forms["feedBackForm"].reset();
 	} else {
 		toggle_state = 1;
-		//$("#feedbackWrapper").width("100%");
-		$("#feedBackTogglerLink").html('<?php echo $close_img?>');
+		$("#feedBackTogglerLink .feedback-toggle").toggle();
 	}
 
 	$("#feedBackContentWrapper").toggle();

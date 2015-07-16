@@ -140,25 +140,33 @@ if ($full) {
 	$body .= '<div class="clearfloat"></div>';
 	
 	
+	//@TODO critères d'affichages selon le type de contribution
 	if (!empty($transitions->territory)) {
 		$body .= '<span style="float:right">' . elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '300px', 'height' => '150px;')) . '</span>';
 		$body .= '<p><i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory . '</p>';
 	}
 	
+	//@TODO critères d'affichages selon le type de contribution
 	// Dates
 	if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '<p>';
 	if (!empty($transitions->start_date)) $body .= '<i class="fa fa-calendar-o"></i> Depuis le ' . date('d M Y H:i:s', $transitions->start_date) . '</p>';
 	if (!empty($transitions->end_date)) $body .= '<p>Jusqu\'au ' . date('d M Y H:i:s', $transitions->end_date);
 	if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '</p>';
 	
+	// URL et PJ
 	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-bookmark"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
 	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
 	
+	// Meta
 	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) $body .= '<p>';
 	if (!empty($transitions->lang)) $body .= '<i class="fa fa-flag"></i> Langue : ' . elgg_echo($transitions->lang) . ' &nbsp; ';
 	if (!empty($transitions->resource_lang)) $body .= '<i class="fa fa-flag-o"></i> Langue de la ressource : ' . elgg_echo($transitions->resource_lang);
 	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) $body .= '</p>';
 	
+	// @TODO ssi challenge => afficher le flux RSS
+	if ($transitions->category == 'challenge') {
+		$body .= '<p>' . $transitions->rss_feed . '</p>';
+	}
 	
 	$body .= '<div class="clearfloat"></div><br />';
 	
