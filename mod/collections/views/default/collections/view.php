@@ -19,7 +19,7 @@ $metadata = elgg_view_menu('entity', array(
 
 
 $collection_content = '';
-foreach($collection->entities as $k => $entity_guid) {
+foreach((array) $collection->entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
 	$publication_comment = $collection->entities_comment[$k];
 	$collection_content .= '<li>';

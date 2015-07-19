@@ -31,8 +31,8 @@ if (!elgg_instanceof($collection, 'object', 'collection')) {
 
 // @TODO : handle case where entities input var is an array
 
-$entities = $collection->entities;
-$entities_comment = $collection->entities_comment;
+$entities = (array) $collection->entities;
+$entities_comment = (array) $collection->entities_comment;
 if ($action == 'add') {
 	if (!in_array($entity_guid, $entities)) {
 		$entities[] = $entity_guid;
