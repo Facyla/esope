@@ -71,6 +71,8 @@ function transitions_init() {
 	elgg_register_action('transitions/quickform', "$action_path/save.php");
 	elgg_register_action('transitions/addtag', "$action_path/addtag.php");
 	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
+	elgg_register_action('transitions/addactor', "$action_path/addactor.php");
+	elgg_register_action('transitions/addrelation', "$action_path/addrelation.php");
 
 	// entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'transitions_entity_menu_setup');
@@ -323,17 +325,16 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 		$entity = $params["entity"];
 		if(elgg_instanceof($entity, "object", "transitions")){
 			$size = $params["size"];
-			if (!empty($entity->icontime) || ($size == 'gallery')) {
+			if (!empty($entity->icontime)) {
 				$icontime = "{$entity->icontime}";
 				$filehandler = new ElggFile();
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
 					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
-				} else {
-					return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
 				}
 			}
+			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
 		}
 	}
 }
@@ -359,11 +360,11 @@ function transitions_get_category_opt($value = '', $addempty = false, $full = fa
 
 function transitions_get_actortype_opt($value = '', $addempty = false) {
 	$list = array();
-	if ($addempty) { $list[''] = ''; }
+	if ($addempty) { $list[''] = elgg_echo('transitions:actortype:choose'); }
 	$values = array('individual', 'collective', 'association', 'enterprise', 'education', 'collectivity', 'administration', 'plurinational');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:actortype:' . $val); }
 	// Add current value
-	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:actortype:' . $value); }
 	return $list;
 }
 

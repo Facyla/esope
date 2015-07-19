@@ -39,14 +39,12 @@ function collections_plugin_init() {
 	elgg_register_action("collection/edit", $actions_path . 'edit.php');
 	elgg_register_action("collection/delete", $actions_path . 'delete.php');
 	
-		// register the JavaScript (autoloaded in 1.10)
-	elgg_register_simplecache_view('js/collections/edit');
+	// register the JavaScript (autoloaded in 1.10)
 	$js = elgg_get_simplecache_url('js', 'collections/edit');
-	elgg_register_js('elgg.collections.edit', $js);
+	elgg_register_js('elgg.collections.edit', $js, 'footer');
 	
-	elgg_register_simplecache_view("js/collections/embed");
 	$js = elgg_get_simplecache_url('js', 'collections/embed');
-	elgg_register_js('elgg.collections.embed', $js);
+	elgg_register_js('elgg.collections.embed', $js, 'footer');
 	
 }
 

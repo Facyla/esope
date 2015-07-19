@@ -55,6 +55,9 @@ return array(
 	'collections:addtocollection' => "Ajouter dans une nouvelle collection",
 	'collections:strapline' => 'Dernière mise à jour le %s par %s',
 	'collections:missingrequired' => "Il manque un champs requis",
+	'collections:embed:search' => "Recherche",
+	'collections:embed:subtype' => "Type de publication",
+	'collections:embed:nofilter' => "Toutes (pas de filtre)",
 	
 	
 );

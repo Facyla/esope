@@ -16,7 +16,8 @@ return array(
 
 	// Editing
 	'transitions:add' => "Ajouter une contribution",
-	'transitions:edit' => "Modifier la contribution",
+	'transitions:edit' => "Valorisez votre contribution",
+	'transitions:edit:details' => "Vous y êtes presque !<br />Pour rendre plus lisible cette ressource dans le catalogue, n’hésitez pas à la préciser",
 	'transitions:excerpt' => "En 140 caractères...",
 	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
@@ -39,6 +40,8 @@ return array(
 	'transitions:error:cannot_edit_post' => "Cette contribution peut ne pas exister ou vous n\'avez pas les autorisations pour la modifier.",
 	'transitions:error:post_not_found' => "Impossible de trouver la contribution spécifiée.",
 	'transitions:error:revision_not_found' => "Impossible de trouver cette révision.",
+	'transitions:error:actor_not_found' => "Impossible de trouver cet acteur.",
+	'transitions:error:not_an_actor' => "Cette contribution n'est pas un acteur.",
 
 	// river
 	'river:create:object:transitions' => "%s a publié une contribution %s",
@@ -64,10 +67,10 @@ Voir et commenter cette contribution :
 	
 	
 	// NEW STRINGS
-	'transitions:icon' => "Vignette",
-	'transitions:icon:details' => "Vous pouvez charger une image qui sera utilisée pour illustrer votre contribution.",
-	'transitions:icon:new' => "Ajouter une vignette",
-	'transitions:icon:remove' => "Supprimer la vignette",
+	'transitions:icon' => "Image",
+	'transitions:icon:details' => "Choisissez une image pour illustrer votre contribution.",
+	'transitions:icon:new' => "Ajouter une image",
+	'transitions:icon:remove' => "Supprimer l'image'",
 	'transitions:attachment' => "Fichier joint",
 	'transitions:attachment:details' => "Vous pouvez joindre un fichier à votre contribution. Si vous souhaitez joindre plusieurs fichiers, veuillez en faire un ZIP.",
 	'transitions:attachment:new' => "Joindre un fichier",
@@ -75,7 +78,7 @@ Voir et commenter cette contribution :
 	'transitions:category' => "Catégorie",
 	'transitions:category:choose' => "Sélectionnez une catégorie",
 	'transitions:title' => "Titre de votre contribution",
-	'transitions:tags' => "Tags",
+	'transitions:tags' => "Ajoutez plusieurs tags séparés par des virgules",
 	'transitions:excerpt' => "Votre contribution en 140 caractères",
 	'transitions:url' => "Lien web",
 	'transitions:url:details' => "Si votre contribution fait référence à une ressource en ligne, veuillez indiquer son adresse.",
@@ -87,6 +90,10 @@ Voir et commenter cette contribution :
 	'transitions:actortype' => "Type d'acteur",
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
+	'transitions:dateformat' => "d M Y",
+	'transitions:dateformat:time' => "d M Y H:i:s",
+	'transitions:date:since' => "Depuis le",
+	'transitions:date:until' => "Jusqu'au",
 	'transitions:rss_feed' => "Flux RSS",
 	'transitions:savedraft' => "Publier ma contribution",
 	'transitions:saveandedit' => "Poursuivre l'édition",
@@ -103,6 +110,12 @@ Voir et commenter cette contribution :
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",
 	'transitions:relation:invalidates' => "en opposition",
+	'transitions:related_actors' => "Acteurs partenaires du projet",
+	'transitions:form:addactor' => "Ajouter un Acteur",
+	'transitions:addactor' => "Ajouter l'Acteur",
+	'transitions:related_content' => "Contenus liés à ce défi",
+	'transitions:form:addrelation' => "Ajouter une relation",
+	'transitions:addrelation' => "Ajouter une relation",
 	'transitions:index' => "Catalogue des contributions",
 	'transitions:search:results' => "%s résultats",
 	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
@@ -141,6 +154,7 @@ Voir et commenter cette contribution :
 	'transitions:actortype:administration' => "Administration publique",
 	'transitions:actortype:plurinational' => "Entité plurinationale",
 	'transitions:actortype:other' => "Autre",
+	'transitions:actortype:choose' => "Sélectionnez un type d'acteur",
 	
 	
 );

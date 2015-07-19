@@ -201,6 +201,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$latlong = $obj->results[0]->locations[0]->latLng;
 		$lat = $latlong->lat;
 		$long = $latlong->lng;
+		// @TODO : extract and save zoom level ?
 		//error_log("GEOCODING start : {$params['location']} => $lat,$long  using URL $address");
 		
 		// Return geocoded address if it is valid

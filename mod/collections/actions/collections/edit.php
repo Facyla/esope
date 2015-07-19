@@ -75,5 +75,7 @@ if ($collection->save()) {
 
 
 // Forward back to the page
-forward('collection/edit/' . $collection->guid);
+//forward('collection/edit/' . $collection->guid);
+forward($collection->getURL());
+
 

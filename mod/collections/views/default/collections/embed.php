@@ -1,7 +1,7 @@
 <?php
 // Selectors
 $allowed_subtypes = array(
-	'all' => elgg_echo('collection:embed:nofilter'),
+	'all' => elgg_echo('collections:embed:nofilter'),
 	'blog' => elgg_echo('blog'),
 	'page_top' => elgg_echo('page_top'),
 	'page' => elgg_echo('page'),

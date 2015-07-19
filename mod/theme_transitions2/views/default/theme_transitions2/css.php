@@ -8,6 +8,8 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 a { color: #223300; }
 img { max-width: 100%; }
 select { max-width: 98%; }
+input, textarea { max-width: 100%; }
+
 
 .flexible-block { float:left; }
 

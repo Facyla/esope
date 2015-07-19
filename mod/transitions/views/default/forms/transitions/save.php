@@ -8,6 +8,8 @@
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
 
+$edit_details = '<p><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
+
 $draft_warning = $vars['draft_warning'];
 if ($draft_warning) {
 	$draft_warning = '<span class="mbm elgg-text-help">' . $draft_warning . '</span>';
@@ -245,7 +247,43 @@ $tags_input = elgg_view('input/tags', array(
 ));
 
 
-// @TODO Admin only : contributed tags + links
+// @TODO Admin only : contributed tags + links + status
+$admin_fields = '';
+if (elgg_is_admin_logged_in()) {
+	$contributed_tags_label = elgg_echo('transitions:contributed_tags');
+	$contributed_tags_input = elgg_view('input/tags', array(
+		'name' => 'tags',
+		'id' => 'transitions_contributed_tags',
+		'value' => $vars['contributed_tags'],
+		'placeholder' => elgg_echo('transitions:contributed_tags'),
+	));
+
+	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
+	$links_invalidates_input = elgg_view('input/tags', array(
+		'name' => 'tags',
+		'id' => 'transitions_links_invalidates',
+		'value' => $vars['links_invalidates'],
+		'placeholder' => elgg_echo('transitions:links_invalidates'),
+	));
+
+	$links_supports_label = elgg_echo('transitions:links_supports');
+	$links_supports_input = elgg_view('input/tags', array(
+		'name' => 'tags',
+		'id' => 'transitions_links_supports',
+		'value' => $vars['links_supports'],
+		'placeholder' => elgg_echo('transitions:links_supports'),
+	));
+	
+	$admin_fields .= '<blockquote>';
+	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
+	$admin_fields .= '<p><label class="hidden" for="transitions_contributed_tags">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
+	$admin_fields .= '<p><label class="hidden" for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
+	$admin_fields .= '<p><label class="hidden" for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
+	$admin_fields .= '</blockquote>';
+	
+} else {
+	$admin_fields .= $status_input;
+}
 
 
 
@@ -307,78 +345,79 @@ function transitions_toggle_fields() {
 
 echo <<<___HTML
 
+$edit_details
+
 $draft_warning
 
 <div>
-	<label for="transitions_icon">$icon_label</label><br />
+	<label class="" for="transitions_icon">$icon_label</label><br />
 	$icon_input<br />
 	<em>$icon_details</em>
 </div>
 
 <div>
-	<label for="transitions_excerpt">$excerpt_label</label>
+	<label class="hidden" for="transitions_excerpt">$excerpt_label</label>
 	$excerpt_input
 </div>
 
 <div>
-	<label for="transitions_tags">$tags_label</label>
+	<label class="hidden" for="transitions_tags">$tags_label</label>
 	$tags_input
 </div>
 
-
 <div>
-	<label for="transitions_title">$title_label</label>
+	<label class="hidden" for="transitions_title">$title_label</label>
 	$title_input
 </div>
 
 <div class="flexible-block" style="width:48%; float:left;">
-	<label for="transitions_category">$category_label</label><br />
+	<label class="" for="transitions_category">$category_label</label><br />
 	$category_input
 </div>
 
 <div class="flexible-block transitions-actortype" style="width:48%; float:right;">
-	<label for="transitions_actortype transitions-actortype">$actortype_label</label><br />
+	<label class="" for="transitions_actortype transitions-actortype">$actortype_label</label><br />
 	$actortype_input
 </div>
 <div class="clearfloat"></div>
 
 <div>
-	<label for="transitions_description">$body_label</label>
+	<label class="" for="transitions_description">$body_label</label>
 	$body_input
 </div>
 
 <div>
-	<label for="transitions_url">$url_label</label>
+	<label class="hidden" for="transitions_url">$url_label</label>
 	$url_input<br />
 	<em>$url_details</em>
 </div>
 
 <div class="transitions-rss-feed">
-	<label for="transitions_rss_feed">$rss_feed_label</label>
+	<label class="hidden" for="transitions_rss_feed">$rss_feed_label</label>
 	$rss_feed_input<br />
 	<em>$rss_feed_details</em>
 </div>
 
 <div>
-	<label for="transitions_attachment">$attachment_label</label><br />
+	<label class="" for="transitions_attachment">$attachment_label</label><br />
 	$attachment_input<br />
 	<em>$attachment_details</em>
 </div>
 <div class="clearfloat"></div>
 
 <div class="transitions-territory">
-	<label for="transitions_territory">$territory_label</label>
+	<label class="hidden" for="transitions_territory">$territory_label</label>
 	$territory_input<br />
 	<em>$territory_details</em>
 </div>
 
 <div class="flexible-block transitions-startdate" style="width:48%; float:left;">
-	<label for="transitions_startdate">$startdate_label</label>
+	<label class="" for="transitions_startdate">$startdate_label</label>
 	$startdate_input
 </div>
 
 <div class="flexible-block transitions-enddate" style="width:48%; float:right;">
-	<label for="transitions_enddate">$enddate_label</label>
+	<label class="" for="transitions_enddate">$enddate_label</label>
 	$enddate_input
 </div>
 <div class="clearfloat"></div>
@@ -386,23 +425,18 @@ $draft_warning
 $categories_input
 
 <div class="flexible-block" style="width:48%; float:left;">
-	<label for="transitions_lang">$lang_label</label>
+	<label class="" for="transitions_lang">$lang_label</label>
 	$lang_input
 </div>
 
 <div class="flexible-block transitions-resourcelang" style="width:48%; float:right;">
-	<label for="transitions_resourcelang">$resourcelang_label</label>
+	<label class="" for="transitions_resourcelang">$resourcelang_label</label>
 	$resourcelang_input<br />
 	<em>$resourcelang_details</em>
 </div>
 <div class="clearfloat"></div>
 
-<div>
-	<blockquote class="$status_value">
-		<label for="transitions_status">$status_label</label>
-		$status_input
-	</blockquote>
-</div>
+$admin_fields
 
 <div class="elgg-foot">
 	<div class="elgg-subtext mbm">

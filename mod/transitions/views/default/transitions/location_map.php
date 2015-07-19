@@ -72,7 +72,7 @@ if ($lat && $long) {
 		";
 
 	echo '
-	map.setView(new L.LatLng(' . $lat . ', ' . $long . '),13);
+	map.setView(new L.LatLng(' . $lat . ', ' . $long . '),6);
 	</script>';
 }
 
