@@ -60,6 +60,8 @@ if ($embed) {
 } else {
 	
 	$body = '';
+	$body .= elgg_view('output/longtext', array('value' => $collection->description));
+	$body .= '<div class="clearfloat"></div><br />';
 	$body .= $slider_embed;
 	$body .= '<div class="clearfloat"></div><br />';
 
