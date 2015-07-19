@@ -4,7 +4,7 @@
 	<author>Florian DANIEL aka Facyla</author>
 	<version>0.8</version>
 	<blurb>Slider plugin : custom slides for any content</blurb>
-	<description>Activez ce plugin si vous souhaitez disposer de sliders configurables, pour les administrateurs, et éventuellement pour les membres. Ce slider permet d'utiliser tout type de contenu : images, mais aussi texte, HTML, vidéos, etc.</description>
+	<description>Activez ce plugin si vous souhaitez disposer de sliders configurables, pour les administrateurs, et éventuellement les membres. Ce slider permet d'utiliser tout type de contenu : images, mais aussi texte, HTML, vidéos, etc. 5 types de sliders fournis, certains avec thèmes : AnythingSlider, NivoSlider, FlexSlider, ResponsiveSlides et CoinSlider</description>
 	<website>http://formavia.fr/</website>
 	<copyright>Items International 2013-2015</copyright>
 	<license>GNU Public License version 2</license>
@@ -30,13 +30,17 @@
 	
 	<suggests>
 		<type>plugin</type>
-		<version>adf_public_platform</version>
+		<version>esope</version>
 	</suggests>
 	
 	<activate_on_install>false</activate_on_install>
 </plugin_manifest>
 
 <!--
+
+0.9 : 20150719
+  - Update to Elgg 1.11
+  - Specific rendering views for 5 different slider vendors
 
 0.8 : 20150522
   - unique identifier (allows to call a slider by its name)
