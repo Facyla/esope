@@ -1,6 +1,11 @@
 <?php
 elgg_load_js('elgg.collections.edit');
-elgg_load_js("elgg.collections.embed");
+//elgg_load_js("elgg.collections.embed");
+
+elgg_load_js('lightbox');
+elgg_load_css('lightbox');
+elgg_require_js('jquery.form');
+elgg_load_js('elgg.embed');
 
 // Get current collection (if exists)
 $guid = get_input('guid', false);
@@ -58,7 +63,7 @@ $content .= '<em>' . elgg_echo('collections:edit:content:details') . '</em></p>'
 // Collections entities (sortable)
 if (is_array($collection_entities)) {
 	foreach($collection_entities as $k => $entity_guid) {
-		$content .= elgg_view('collections/input/entity', array('entity_guid' => $entity_guid, 'entity_comment' => $collection_entities_comment[$k]));
+		$content .= elgg_view('collections/input/entity', array('guid' => $collection->guid, 'entity_guid' => $entity_guid, 'entity_comment' => $collection_entities_comment[$k], 'offset' => $k));
 	}
 } else {
 	$content .= elgg_view('collections/input/entity', array());

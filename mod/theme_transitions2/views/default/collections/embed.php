@@ -1,10 +1,7 @@
 <?php
 
 // Input data and parameters
-$collection = $vars["entity"];
-if (elgg_instanceof($collection, 'object', 'collection')) {
-	$collection_guid = $collection->guid;
-}
+$field_id = $vars["id"];
 
 $category_opt = transitions_get_category_opt(null, true, true);
 $actortype_opt = transitions_get_actortype_opt(null, true);
@@ -65,12 +62,17 @@ $form_data .= '<p><label>' . elgg_echo('collections:embed:search') . ' ' . elgg_
 $form_data .= '<p>';
 $form_data .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 $form_data .= ' &nbsp; ';
-$form_data .= '<label class="transitions-embed-search-actortype hidden">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+if ($category == 'actor') {
+	$form_data .= '<label class="transitions-embed-search-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+} else {
+	$form_data .= '<label class="transitions-embed-search-actortype hidden">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+}
 $form_data .= '</p>';
+$form_data .= elgg_view("input/hidden", array('name' => "field_id", 'value' => $field_id));
 $form_data .= elgg_view("input/hidden", array('name' => "display", 'value' => 'yes'));
 $form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
 
-echo elgg_view("input/form", array("action" => "collection/embed/" . $collection_guid, "id" => "collections-embed-search", "body" => $form_data));
+echo elgg_view("input/form", array("action" => "collection/embed/" . $field_id, "id" => "collections-embed-search", "body" => $form_data));
 echo '<div class="clearfloat"></div>';
 echo '<br />';
 
@@ -94,36 +96,28 @@ if ($display) {
 		echo "<ul id='collections-embed-list'>";
 	
 		// Build selection list
+		elgg_push_context('widgets');
 		foreach ($entities as $entity) {
 			// Define embed model here
 			$subtype = $entity->getSubtype();
-			$description = $entity->description;
-		
+			
 			// Use selected content template
 			$embed_content = '';
 			$embed_content .= $entity->guid;
-			$embed_content .= " <strong>" . $entity->title . "</strong><br />";
-			/*
-			if ($entity->icontime) {
-				$description = elgg_view("output/img", array("src" => $entity->getIconURL("small"), "alt" => $entity->title, "style" => "float: left; margin: 5px;")) . $description;
-			}
-			$embed_content .= elgg_view("output/longtext", array("value" => $description));
-			*/
-		
+			
 			// Build list item
 			echo '<li class="' . $subtype . '">';
-			echo '<div>';
-			// Add info on object subtype
-			echo '<strong>' . $entity->title . '</strong> ';
-			echo elgg_get_excerpt($entity);
+			echo '<div class="collections-embed-item-details">';
+			echo elgg_view('collections/embed/object/default', array('entity' => $entity));
 			echo '</div>';
-			echo '<div class="collections-embed-item-content">' . $embed_content . '<br style="clear:both;" /></div>';
+			echo '<div class="collections-embed-item-content embed-insert">' . $embed_content . '</div><br style="clear:both;" />';
 			echo '</li>';
 		}
+		elgg_pop_context();
 		echo '</ul>';
 
 		echo '<div id="collections-embed-pagination">';
-		$base_url = elgg_get_site_url() . 'collection/embed/' . $collection->guid . "?display=yes&query=$query&actor_type=$actor_type&category=$category";
+		$base_url = elgg_get_site_url() . 'collection/embed/' . $field_id . "?display=yes&query=$query&actor_type=$actor_type&category=$category";
 		echo elgg_view("navigation/pagination", array("offset" => $offset, "limit" => $limit, "count" => $count, 'base_url' => $base_url));
 		echo "</div>";
 	} else {

@@ -70,8 +70,9 @@ elgg.collections.edit.searchFields = function(event) {
 	var category = $("select[name='category']").val();
 	$(".transitions-embed-search-actortype").addClass('hidden');
 	if (category == 'actor') {
-		$(".transitions-embed-search-actortype]").removeClass('hidden');
+		$(".transitions-embed-search-actortype").removeClass('hidden');
 	}
+	$.colorbox.resize({'width':'80%'});
 }
 
 // Load search into lightbox
@@ -94,19 +95,19 @@ elgg.collections.edit.embedForward = function(event) {
 
 
 elgg.collections.edit.embedFormat = function(elem) {
-	var data = $(elem).find("> div").data();
-	if (!data) { return false; }
+	var guid = $(elem).find(".collections-embed-item-content").html();
+	var details = $(elem).find(".collections-embed-item-details").html();
+	var fieldId = $('#collections-embed-search').find("input[name=field_id]").val();
 	
-	$("#collections-embed-format-icon").parent().hide();
-	if (data.iconUrl) {
-		$("#collections-embed-format-icon").parent().show();
-	}
+	if (!guid) { return false; }
 	
-	$("#collections-embed-wrapper, #collections-embed-format").toggleClass("hidden");
+	$('#collections-embed-'+fieldId).val(guid);
+	$('#collections-embed-details-'+fieldId).html(details);
+	console.log('GUID : '+guid + ' / field_id = ' + fieldId);
 	
-	$("#collections-embed-format-preview").data(data);
-	
-	//elgg.collections.edit.embed_format_preview();
+	$.colorbox.resize();
+	elgg.ui.lightbox.close();
+	//event.preventDefault();
 };
 
 

@@ -65,6 +65,7 @@ return array(
 	'slider:editor:no' => "Non (activable sur demande)",
 	'slider:error:multiple' => "Plusieurs sliders correspondent au nom demandé, impossible de déterminer lequel afficher",
 	'slider:error:alreadyexists' => "Un slider portant ce nom existe déjà, veuillez choisir un autre nom.",
+	'slider:nocontent' => "Aucun contenu pour le moment.",
 	
 	'slider:shortcode:slider' => "Diaporama (déjà configuré)",
 	'slider:embed:instructions' => "Comment intégrer ce diaporama ?",

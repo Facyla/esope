@@ -38,13 +38,14 @@ function collections_plugin_init() {
 	$actions_path = elgg_get_plugins_path() . 'collections/actions/collections/';
 	elgg_register_action("collection/edit", $actions_path . 'edit.php');
 	elgg_register_action("collection/delete", $actions_path . 'delete.php');
+	elgg_register_action("collection/selectedit", $actions_path . 'selectedit.php');
 	
 	// register the JavaScript (autoloaded in 1.10)
 	$js = elgg_get_simplecache_url('js', 'collections/edit');
 	elgg_register_js('elgg.collections.edit', $js, 'footer');
 	
-	$js = elgg_get_simplecache_url('js', 'collections/embed');
-	elgg_register_js('elgg.collections.embed', $js, 'footer');
+	//$js = elgg_get_simplecache_url('js', 'collections/embed');
+	//elgg_register_js('elgg.collections.embed', $js, 'footer');
 	
 }
 
@@ -75,7 +76,7 @@ function collections_page_handler($page) {
 			break;
 			
 		case "embed":
-			set_input("guid", elgg_extract("1", $page));
+			set_input("id", elgg_extract("1", $page));
 			if (include($include_path . 'embed.php')) { return true; }
 			break;
 			
@@ -125,6 +126,8 @@ function collections_get_entity_by_name($name = '') {
 				register_error(elgg_echo('collections:error:multiple'));
 			}
 		}
+		// Failsafe on GUID
+		$collection = get_entity($name);
 	}
 	return false;
 }
@@ -147,6 +150,21 @@ function collections_exists($name = '') {
 
 // Fonctions à exécuter après le chargement de tous les plugins
 function collections_pagesetup() {
+	
+		// embed support
+	$item = ElggMenuItem::factory(array(
+		'name' => 'collections',
+		'text' => elgg_echo('collections'),
+		'priority' => 10,
+		'data' => array(
+			'options' => array(
+				'type' => 'object',
+				'subtype' => 'collection',
+			),
+		),
+	));
+	elgg_register_menu_item('embed', $item);
+	
 	
 	// Add collection shortcode for easier embedding of collections
 	if (elgg_is_active_plugin('shortcodes')) {

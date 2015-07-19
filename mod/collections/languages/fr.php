@@ -48,6 +48,7 @@ return array(
 	'collections:edit:entities' => "Publication",
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",
+	'collections:change_entity' => "Changer de publication",
 	
 	//'collections:' => "",
 	'collections:publishin' => "Publier dans",
@@ -59,6 +60,11 @@ return array(
 	'collections:embed:subtype' => "Type de publication",
 	'collections:embed:nofilter' => "Toutes (pas de filtre)",
 	
+	'collections:collectionthis' => "Ajouter à une collection",
+	'collections:embed' => "Code d'embarquement",
+	'collections:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'collections:permalink' => "Permalien",
+	'collections:permalink:details' => "Lien permanent pour cette collection",
 	
 );
 

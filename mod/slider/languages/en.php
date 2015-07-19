@@ -65,6 +65,7 @@ return array(
 	'slider:editor:no' => "No (can be enabled on-demand)",
 	'slider:error:multiple' => "Multiple sliders found for this name, cannot determine which to display.",
 	'slider:error:alreadyexists' => "A slider already exists with this name, please choose antoher one.",
+	'slider:nocontent' => "No content yet.",
 	
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
