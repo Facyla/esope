@@ -35,10 +35,11 @@ $collection = collection_get_entity($pagetype);
 // BREADCRUMBS - Add main collection breadcrumb
 elgg_push_breadcrumb(elgg_echo('collections'), 'collection');
 
-// collection/read may render more content
+// Get collection by GUID or name
 $collection = get_entity($guid);
+if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (elgg_instanceof($collection, 'object', 'collection')) {
-	$content = elgg_view('collection/view', array('entity' => $collection));
+	$content = elgg_view('collections/view', array('entity' => $collection));
 	$page_title = $collection->title;
 	elgg_push_breadcrumb($page_title);
 }

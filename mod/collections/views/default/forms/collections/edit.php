@@ -88,7 +88,7 @@ echo '<div class="clearfloat"></div><br />';
 
 // Informations on embed and insert
 if ($collection) {
-	echo '<h3><i class="fa fa-info-circle"></i>' . elgg_echo('collections:embed:instructions') . '</h3>';
+	echo '<h3><i class="fa fa-info-circle"></i> ' . elgg_echo('collections:embed:instructions') . '</h3>';
 	echo '<p><blockquote>';
 	echo elgg_echo('collections:iframe:instructions', array($collection->guid)) . '<br />';
 	if (elgg_is_active_plugin('shortcodes')) { echo elgg_echo('collections:shortcode:instructions', array($collection->guid)) . '<br />'; }
@@ -104,7 +104,7 @@ if ($collection) {
 	echo '<div class="clearfloat"></div><br /><br />';
 	echo '<a href="' . $collection->getURL() . '" style="float:right" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('collections:edit:view') . '</a>';
 	echo '<h2>' . elgg_echo('collections:edit:preview') . '</h2>';
-	echo elgg_view('collection/view', array('entity' => $collection));
+	echo elgg_view('collections/view', array('entity' => $collection));
 }
 
 

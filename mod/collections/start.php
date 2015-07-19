@@ -91,7 +91,7 @@ function collections_page_handler($page) {
 function collections_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'collection')) {
-		return elgg_get_site_url() . 'collection/view/' . $entity->pagetype;
+		return elgg_get_site_url() . 'collection/view/' . $entity->guid;
 	}
 }
 

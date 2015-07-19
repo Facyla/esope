@@ -12,8 +12,6 @@
 gatekeeper();
 global $CONFIG;
 
-gatekeeper();
-
 
 // Build the page content
 $content = '';

@@ -20,8 +20,9 @@ $guid = get_input('guid', false);
 $page_title = elgg_echo('collections');
 elgg_push_breadcrumb($page_title, 'collection');
 
-// collection/read may render more content
+// Get collection by GUID or name
 $collection = get_entity($guid);
+if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (elgg_instanceof($collection, 'object', 'collection')) {
 	$page_title = $collection->title;
 	elgg_push_breadcrumb($page_title);
