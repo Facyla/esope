@@ -28,10 +28,6 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 		// @TODO 4 blocs avec titre, image, texte et possibilité de faire un lien
 		$content .= '<div class="clearfloat"></div>';
 		$content .= '<br /><br />';
-		
-		// SEARCH
-		$content .= elgg_view('transitions/search_home');
-		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
 	
 	// SIDEBAR - CONTRIBUEZ !
@@ -51,8 +47,14 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
-// @TODO Par défaut : celles sélectionnées par la rédaction
-// Filtres sur : les +commentées, les +tagguées, les +récentes, les +liées
+
+	// SEARCH
+	$content .= '<br />';
+	$content .= elgg_view('transitions/search_home');
+	$content .= '<div class="clearfloat"></div>';
+
+	// @TODO Par défaut : celles sélectionnées par la rédaction
+	// Filtres sur : les +commentées, les +tagguées, les +récentes, les +liées
 	$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 	$count = elgg_get_entities_from_metadata($list_options);
 	$catalogue = elgg_list_entities($list_options);

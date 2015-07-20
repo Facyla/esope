@@ -75,5 +75,7 @@ return array(
 	'slider:cmspages:notice' => "IMPORTANT&nbsp;: seules les pages CMS de type \"Gabarit\" permettent d'afficher des diaporamas ! Il vous sera peut-être nécessaire de mettre à jour le type de page.",
 	'slider:iframe:instructions' => " - avec ce code d'embarquement, sur d'autres sites&nbsp;: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
+	'slider:deleted' => "Diaporama supprimé",
+	
 );
 
