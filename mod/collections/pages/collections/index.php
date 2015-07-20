@@ -36,11 +36,12 @@ $content .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">
 	</blockquote>';
 
 $content .= '<p><a href="' . elgg_get_site_url() . 'collection/edit" class="elgg-button elgg-button-action">' . elgg_echo('collections:add') . '</a></p>';
-
+elgg_push_context('listing');
 if ($collection_count > 0) {
 	$content .= elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 50));
 	//$content .= elgg_view('collection/listing');
 }
+elgg_pop_context();
 
 
 //$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));

@@ -11,6 +11,7 @@ $owner_guid = $entity->owner_guid;
 $owner = get_entity($owner_guid);
 //$container_guid = $entity->container_guid;
 
+// Listing view
 if (elgg_in_context('listing') || elgg_in_context('search') || elgg_in_context('widget')) {
 	if (!empty($description)) $description = elgg_view('output/longtext', array('value' => $description));
 

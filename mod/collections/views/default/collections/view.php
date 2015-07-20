@@ -19,9 +19,11 @@ $metadata = elgg_view_menu('entity', array(
 
 
 $collection_content = '';
-foreach((array) $collection->entities as $k => $entity_guid) {
+$entities = (array) $collection->entities;
+$entities_comment = (array) $collection->entities_comment;
+foreach($entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
-	$publication_comment = $collection->entities_comment[$k];
+	$publication_comment = $entities_comment[$k];
 	$collection_content .= '<li>';
 	//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
 	$collection_content .= '<table><tr><td>';
@@ -47,7 +49,7 @@ $slider_params = array(
 
 $slider_embed ='';
 $slider_embed .= '<div class="clearfloat"></div>';
-$slider_embed .= '<div style="height:' . $height . '; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
+$slider_embed .= '<div style="height:100%; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
 	' . elgg_view('slider/slider', $slider_params) . '
 </div>';
 
