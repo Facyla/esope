@@ -104,6 +104,7 @@ switch ($menus_action) {
 			$custom_menus_data = implode(',', $custom_menus);
 			elgg_set_plugin_setting('menus', $custom_menus_data, 'elgg_menus');
 			system_message(elgg_echo('elgg_menus:delete:message', array($menu_name)));
+			$menu_name = '';
 		} else {
 			register_error(elgg_echo('elgg_menus:delete:error:empty'));
 		}
