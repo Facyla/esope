@@ -66,6 +66,8 @@ return array(
 	'collections:permalink' => "Permalien",
 	'collections:permalink:details' => "Lien permanent pour cette collection",
 	
+	'collections:entities:count' => "%s diapositives",
+	
 	'collections:settings:subtypes' => "Subtypes",
 	'collections:settings:subtypes:details' => "Subtypes pour lesquels proposer d'ajouter à la playlist",
 	

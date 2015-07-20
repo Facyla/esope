@@ -63,7 +63,7 @@ if ($embed) {
 	
 	$body = '';
 	$body .= elgg_view('output/longtext', array('value' => $collection->description));
-	$body .= '<h3>' . count($entities) . ' ' . elgg_echo('collections:collections') . '</h3>';
+	$body .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
 	$body .= '<div class="clearfloat"></div><br />';
 	$body .= $slider_embed;
 	$body .= '<div class="clearfloat"></div><br />';
