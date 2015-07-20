@@ -49,9 +49,10 @@ input, textarea { max-width: 100%; }
 .profile-static-block { padding: 0 0.5em 0.5em 0.5em; }
 
 /* Feedback */
-#feedbackWrapper { bottom: 48px; right: 48px; left:initial; top:initial; }
+#feedbackWrapper { bottom: 46px; right: 46px; left:initial; top:initial; }
 #feedBackContentWrapper { left:0; }
-#feedBackTogglerLink { background: transparent; border: 0; box-shadow: none; }
+#feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+#feedBackTogglerLink img { margin: 0 10px 5px 0; }
 
 
 

@@ -1,5 +1,3 @@
-
-
 <?php
 /**
  * View for transitions objects
@@ -14,6 +12,11 @@ $transitions = elgg_extract('entity', $vars, FALSE);
 if (!$transitions) {
 	return TRUE;
 }
+
+elgg_load_js('lightbox');
+elgg_load_css('lightbox');
+elgg_require_js('jquery.form');
+elgg_load_js('elgg.embed');
 
 $owner = $transitions->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);

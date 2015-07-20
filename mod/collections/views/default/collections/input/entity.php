@@ -22,7 +22,7 @@ if ($entity_guid) {
 } else {
 	echo elgg_echo("collections:select_entity") . '</a>';
 }
-// @TODO autocomplete field ?
+// Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'entities[]', 'value' => $entity_guid, 'id' => 'collections-embed-' . $guid . '-' . $offset));
 echo '<div id="collections-embed-details-' . $guid . '-' . $offset . '">';
 if (elgg_instanceof($entity, 'object')) {

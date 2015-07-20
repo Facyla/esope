@@ -171,6 +171,12 @@ function transitions_page_handler($page) {
 			include(elgg_get_plugins_path() . "transitions/pages/transitions/attachment.php");
 			return true;
 			break;
+		case 'embed':
+			if (isset($page[1])) { set_input("embed_type",$page[1]); }
+			if (isset($page[2])) { set_input("id",$page[2]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/embed.php");
+			return true;
+			break;
 		case 'all':
 			//$params = transitions_get_page_content_list();
 		default:

@@ -160,7 +160,8 @@ function collections_exists($name = '') {
 // Fonctions à exécuter après le chargement de tous les plugins
 function collections_pagesetup() {
 	
-		// embed support
+	/*
+	// embed support
 	$item = ElggMenuItem::factory(array(
 		'name' => 'collections',
 		'text' => elgg_echo('collections'),
@@ -173,6 +174,7 @@ function collections_pagesetup() {
 		),
 	));
 	elgg_register_menu_item('embed', $item);
+	*/
 	
 	
 	// Add collection shortcode for easier embedding of collections
