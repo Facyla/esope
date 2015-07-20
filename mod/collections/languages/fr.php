@@ -60,11 +60,14 @@ return array(
 	'collections:embed:subtype' => "Type de publication",
 	'collections:embed:nofilter' => "Toutes (pas de filtre)",
 	
-	'collections:collectionthis' => "Ajouter à une collection",
+	'collections:collectionsthis' => "Ajouter à une collection",
 	'collections:embed' => "Code d'embarquement",
 	'collections:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
 	'collections:permalink' => "Permalien",
 	'collections:permalink:details' => "Lien permanent pour cette collection",
+	
+	'collections:settings:subtypes' => "Subtypes",
+	'collections:settings:subtypes:details' => "Subtypes pour lesquels proposer d'ajouter à la playlist",
 	
 );
 

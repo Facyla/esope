@@ -103,8 +103,17 @@ function collections_entity_menu_setup($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	//if (elgg_instanceof($entity, 'object', 'collection')) {
 	if (elgg_instanceof($entity, 'object')) {
-		$options = array('name' => 'collections', 'href' => false, 'priority' => 900, 'text' => elgg_view('collections/button', array('entity' => $entity)));
-		$return[] = ElggMenuItem::factory($options);
+		global $allowed_subtypes;
+		if (!isset($allowed_subtypes)) {
+			$allowed_subtypes = elgg_get_plugin_setting('subtypes', 'collections');
+			$allowed_subtypes = explode(',', $allowed_subtypes);
+			$allowed_subtypes = array_filter($allowed_subtypes);
+		}
+		$subtype = $entity->getSubtype();
+		if (in_array($subtype, $allowed_subtypes)) {
+			$options = array('name' => 'collections', 'href' => false, 'priority' => 900, 'text' => elgg_view('collections/button', array('entity' => $entity)));
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 	return $return;
 }

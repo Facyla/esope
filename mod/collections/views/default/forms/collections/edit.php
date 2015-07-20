@@ -14,6 +14,9 @@ $container_guid = get_input('container_guid', false);
 $container = get_entity($container_guid);
 $add_guid = get_input('add_guid', false);
 
+$entity_guid = get_input('entity_guid', false);
+$entity_guid = explode(',', $entity_guid);
+$entity_guid = array_filter($entity_guid);
 
 // Get collection vars
 if (elgg_instanceof($collection, 'object', 'collection')) {
@@ -31,6 +34,8 @@ if (elgg_instanceof($collection, 'object', 'collection')) {
 } else {
 	$collection_css = elgg_get_plugin_setting('css', 'collection'); // CSS
 	$collection_access = get_default_access(); // Default access level
+	$collection_entities = $entity_guid;
+	$collection_entities_comment = array();
 }
 
 

@@ -56,15 +56,15 @@ if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'collections')) {
 				$list .= elgg_view('output/url', $params) . '<br />';
 			}
 		}
-	} else {
-		
-		$params = array(
-				'href' => elgg_get_site_url() . 'collection/add/?entities=' . $collection->guid,
-				'text' => '<i class="fa fa-plus-circle"></i> ' . elgg_echo('collections:addtocollection'),
-				'is_action' => true, 'is_trusted' => true,
-			);
-		$list .= elgg_view('output/url', $params) . '<br />';
 	}
+	
+	// New playlist link
+	$params = array(
+			'href' => elgg_get_site_url() . 'collection/add/?entity_guid=' . $guid,
+			'text' => '<strong><i class="fa fa-plus-circle"></i> ' . elgg_echo('collections:addtocollection') . '</strong>',
+			'is_action' => true, 'is_trusted' => true,
+		);
+	$list .= elgg_view('output/url', $params) . '<br />';
 	
 	$list .= "</div>";
 	

@@ -10,7 +10,9 @@ if ($entity->icontime) {
 	echo elgg_view("output/img", array("src" => $entity->getIconURL("small"), "alt" => $entity->title, "style" => "float: left; margin: 5px;"));
 }
 echo '<h3>' . $entity->title . '</h3> ';
-echo '<span class="transitions-category-' . $entity->category . '">' . elgg_echo('transitions:category:'.$entity->category) . '</span> ';
+if (elgg_instanceof($entity, 'object', 'transitions')) {
+	echo '<span class="transitions-category-' . $entity->category . '">' . elgg_echo('transitions:category:'.$entity->category) . '</span> ';
+}
 if (!empty($entity->excerpt)) {
 	echo '<p><em>' . $entity->excerpt . '</em></p>';
 } else {
