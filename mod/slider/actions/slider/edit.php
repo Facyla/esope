@@ -36,7 +36,7 @@ $slider = get_entity($guid);
 
 // Check if slider name already exists (for another slider)
 $existing_slider = slider_get_entity_by_name($slider_name);
-if ($existing_slider && elgg_instanceof($slider, 'object', 'slider') && ($existing_slider->guid != $slider->guid)) {
+if ($existing_slider && elgg_instanceof($slider, 'object', 'slider') && elgg_instanceof($existing_slider, 'object', 'slider') && ($existing_slider->guid != $slider->guid)) {
 	register_error(elgg_echo('slider:error:alreadyexists'));
 	forward(REFERER);
 }
