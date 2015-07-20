@@ -45,6 +45,9 @@ input, textarea { max-width: 100%; }
 .elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }
 
 
+/* Profile */
+.profile-static-block { padding: 0 0.5em 0.5em 0.5em; }
+
 /* Feedback */
 #feedbackWrapper { bottom: 48px; right: 48px; left:initial; top:initial; }
 #feedBackContentWrapper { left:0; }

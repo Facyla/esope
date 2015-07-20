@@ -30,6 +30,9 @@ Mot de passe : %s
 
 ",
 	
+	'theme_transitions:contributions' => "Contributions",
+	'theme_transitions:collections' => "Collections",
+	'theme_transitions:comments' => "Commentaires",
 	
 	// Main translations overrides
 	'settings' => "Paramètres",
