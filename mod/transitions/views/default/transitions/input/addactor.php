@@ -4,10 +4,10 @@
 
 // @TODO autocomplete field ?
 
-echo '<a href="' . elgg_get_site_url() . 'transitions/embed/actor/' . $vars['guid'] . '" class="elgg-lightbox">Sélectionner</a>';
+echo '<a href="' . elgg_get_site_url() . 'transitions/embed/actor/actor-' . $vars['guid'] . '" class="elgg-lightbox">Sélectionner</a>';
 // Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'actor_guid', 'id' => 'transitions-embed-actor-' . $vars['guid']));
-echo '<div id="transitions-embed-actor-details' . $guid . '-' . $offset . '">';
+echo '<div id="transitions-embed-details-actor-' . $vars['guid'] . '"></div>';
 
 //echo elgg_view('input/text', array('name' => 'actor_guid', 'style' => "max-width:10em;"));
 

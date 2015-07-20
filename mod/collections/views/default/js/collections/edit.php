@@ -94,6 +94,7 @@ elgg.collections.edit.embedForward = function(event) {
 };
 
 
+// Embeds content into field
 elgg.collections.edit.embedFormat = function(elem) {
 	var guid = $(elem).find(".collections-embed-item-content").html();
 	var details = $(elem).find(".collections-embed-item-details").html();
@@ -103,7 +104,6 @@ elgg.collections.edit.embedFormat = function(elem) {
 	
 	$('#collections-embed-'+fieldId).val(guid);
 	$('#collections-embed-details-'+fieldId).html(details);
-	console.log('GUID : '+guid + ' / field_id = ' + fieldId);
 	
 	$.colorbox.resize();
 	elgg.ui.lightbox.close();

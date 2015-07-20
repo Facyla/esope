@@ -17,6 +17,7 @@ elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');
 elgg_load_js('elgg.embed');
+elgg_load_js('elgg.transitions.edit');
 
 $owner = $transitions->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);
