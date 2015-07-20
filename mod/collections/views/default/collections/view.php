@@ -49,7 +49,7 @@ $slider_params = array(
 
 $slider_embed ='';
 $slider_embed .= '<div class="clearfloat"></div>';
-$slider_embed .= '<div style="height:100%; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
+$slider_embed .= '<div style="height:' . $height . '; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
 	' . elgg_view('slider/slider', $slider_params) . '
 </div>';
 
@@ -63,6 +63,7 @@ if ($embed) {
 	
 	$body = '';
 	$body .= elgg_view('output/longtext', array('value' => $collection->description));
+	$body .= '<h3>' . count($entities) . ' ' . elgg_echo('collections:collections') . '</h3>';
 	$body .= '<div class="clearfloat"></div><br />';
 	$body .= $slider_embed;
 	$body .= '<div class="clearfloat"></div><br />';
