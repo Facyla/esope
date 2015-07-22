@@ -124,6 +124,8 @@ Voir et commenter cette contribution :
 	'transitions:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
 	'transitions:permalink' => "Permalien",
 	'transitions:permalink:details' => "Lien permanent pour cette contribution",
+	'transitions:embed:search' => "Sélectionnez une ressource",
+	'transitions:embed:search:actor' => "Sélectionnez un acteur",
 	
 	// Bookmarklet
 	'transitions:bookmarklet:description' => "Le bookmarklet vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",

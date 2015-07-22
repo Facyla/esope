@@ -4,6 +4,7 @@
 $embed_type = $vars["embed_type"];
 $field_id = $vars["id"];
 
+set_input('display', 'yes');
 if ($embed_type == 'actor') {
 	set_input('category', 'actor');
 } else if ($embed_type == 'transitions') {
@@ -64,10 +65,11 @@ if (!empty($query)) {
 // Search form - always display it as we allow some wider search thah default setting
 // Note : any new field/parameter should be added to the js/transitions/site view
 $form_data = '';
-$form_data .= '<p><label>' . elgg_echo('transitions:embed:search') . ' ' . elgg_view("input/text", array("name" => "q", "value" => $query)) . '</label></p>';
 if ($embed_type == 'actor') {
+	$form_data .= '<p><label>' . elgg_echo('transitions:embed:search:actor') . ' ' . elgg_view("input/text", array("name" => "q", "value" => $query)) . '</label></p>';
 	$form_data .= elgg_view('input/hidden', array('name' => 'category', 'value' => 'actor'));
 } else {
+	$form_data .= '<p><label>' . elgg_echo('transitions:embed:search') . ' ' . elgg_view("input/text", array("name" => "q", "value" => $query)) . '</label></p>';
 	$form_data .= '<p>';
 	$form_data .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 	$form_data .= ' &nbsp; ';

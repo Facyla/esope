@@ -66,7 +66,7 @@ $values = array(
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
-	// @TODO handle attachment
+	// File attachment
 	'attachment' => '',
 	'url' => '',
 	'category' => '',

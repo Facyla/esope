@@ -172,8 +172,8 @@ $url_details = elgg_echo('transitions:url:details');
 
 $rss_feed_label = elgg_echo('transitions:rss_feed');
 $rss_feed_input = elgg_view('input/url', array(
-	'name' => 'url',
-	'id' => 'transitions_url',
+	'name' => 'rss_feed',
+	'id' => 'transitions_rss_feed',
 	'value' => $vars['rss_feed'],
 	'placeholder' => elgg_echo('transitions:rss_feed'),
 ));
