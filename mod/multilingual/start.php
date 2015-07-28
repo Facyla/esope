@@ -210,10 +210,9 @@ function multilingual_get_main_language() {
 function multilingual_get_entity_language($entity) {
 	if (!empty($entity->lang)) { return $entity->lang; }
 	
+	// Set the default language if not set ; this accelerates further checks
 	$main_lang = multilingual_get_main_language();
-	// Should we also set the default language ? this accelerates further checks
 	$entity->lang = $main_lang;
-	
 	return $main_lang;
 }
 
@@ -266,8 +265,8 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 	//$entity_types = elgg_get_plugin_setting('types', 'multilingual');
 	//if (elgg_instanceof($entity)) {
 	// Limit to objects for the moment (groups and even more users require other special attentions)
-	$object_subtypes = multilingual_get_valid_subtypes();
 	if (elgg_instanceof($entity, 'object')) {
+		$object_subtypes = multilingual_get_valid_subtypes();
 		$subtype = $entity->getSubtype();
 		if (empty($object_subtypes) || in_array($subtype, $object_subtypes)) {
 			$main_lang = multilingual_get_main_language();
@@ -282,21 +281,21 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 			// Display current entity language
 			$class = 'elgg-menu-multilingual';
 			if ($entity->guid == $main_entity->guid) {
-				$title = elgg_echo('multilingual:menu:currentlang', array($languages[$main_lang]));
+				$title = elgg_echo('multilingual:menu:currentlang', array($languages[$current_lang]));
 				$href = false;
 				$class .= ' elgg-selected';
 			} else {
-				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$main_lang]));
+				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$current_lang]));
 				$href = $view_url;
 			}
-			$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $main_lang . '.gif" alt="' . $main_lang . '" title="' . $title . '" />';
+			$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $current_lang . '.gif" alt="' . $current_lang . '" title="' . $title . '" />';
 			$return[] = ElggMenuItem::factory(array(
 					'name' => 'multilingual-current', 
 					'text' => $text, 'href' => $href, 'title' => $title, 
 					'priority' => 118, 'item_class' => $class, 
 				));
 			// Remove from new translations array
-			unset($languages[$main_lang]);
+			unset($languages[$current_lang]);
 		
 			// Display existing translations
 			$translations = multilingual_get_translations($main_entity);

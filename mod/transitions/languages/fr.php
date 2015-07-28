@@ -91,7 +91,7 @@ Voir et commenter cette contribution :
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
 	'transitions:dateformat' => "d M Y",
-	'transitions:dateformat:time' => "d M Y H:i:s",
+	'transitions:dateformat:time' => "d M Y à H:i:s",
 	'transitions:date:since' => "Depuis le",
 	'transitions:date:until' => "Jusqu'au",
 	'transitions:rss_feed' => "Flux RSS",
@@ -101,7 +101,7 @@ Voir et commenter cette contribution :
 	'transitions:save' => "Publier",
 	
 	// Other forms
-	'transitions:contributed_tags' => "Tags des contributeurs",
+	'transitions:tags_contributed' => "Tags des contributeurs",
 	'transitions:form:addtag' => "Ajouter un tag",
 	'transitions:addtag' => "Ajouter le tag",
 	'transitions:form:addlink' => "Ajouter un lien vers une autre ressource",

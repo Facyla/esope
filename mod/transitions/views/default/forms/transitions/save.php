@@ -198,9 +198,9 @@ $lang_input = elgg_view('input/select', array(
 
 $resourcelang_label = elgg_echo('transitions:resourcelang');
 $resourcelang_input = elgg_view('input/select', array(
-	'name' => 'resourcelang',
+	'name' => 'resource_lang',
 	'id' => 'transitions_resourcelang',
-	'value' => $vars['resourcelang'],
+	'value' => $vars['resource_lang'],
 	'options_values' => $lang_opt,
 ));
 $resourcelang_details = elgg_echo('transitions:resourcelang:details');
@@ -224,18 +224,20 @@ $actortype_input = elgg_view('input/select', array(
 
 $startdate_label = elgg_echo('transitions:startdate');
 $startdate_input = elgg_view('input/date', array(
-	'name' => 'startdate',
+	'name' => 'start_date',
 	'id' => 'transitions_startdate',
 	'value' => $vars['start_date'],
 	'placeholder' => elgg_echo('transitions:startdate'),
+	'timestamp' => true,
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
 $enddate_input = elgg_view('input/date', array(
-	'name' => 'enddate',
+	'name' => 'end_date',
 	'id' => 'transitions_enddate',
 	'value' => $vars['end_date'],
 	'placeholder' => elgg_echo('transitions:enddate'),
+	'timestamp' => true,
 ));
 
 $tags_label = elgg_echo('tags');
@@ -252,31 +254,31 @@ $admin_fields = '';
 if (elgg_is_admin_logged_in()) {
 	$contributed_tags_label = elgg_echo('transitions:contributed_tags');
 	$contributed_tags_input = elgg_view('input/tags', array(
-		'name' => 'tags',
-		'id' => 'transitions_contributed_tags',
-		'value' => $vars['contributed_tags'],
-		'placeholder' => elgg_echo('transitions:contributed_tags'),
+		'name' => 'tags_contributed',
+		'id' => 'transitions_tags_contributed',
+		'value' => $transitions->tags_contributed,
+		'placeholder' => elgg_echo('transitions:tags_contributed'),
 	));
 
 	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
 	$links_invalidates_input = elgg_view('input/tags', array(
-		'name' => 'tags',
+		'name' => 'links_invalidates',
 		'id' => 'transitions_links_invalidates',
-		'value' => $vars['links_invalidates'],
+		'value' => $transitions->links_invalidates,
 		'placeholder' => elgg_echo('transitions:links_invalidates'),
 	));
 
 	$links_supports_label = elgg_echo('transitions:links_supports');
 	$links_supports_input = elgg_view('input/tags', array(
-		'name' => 'tags',
+		'name' => 'links_supports',
 		'id' => 'transitions_links_supports',
-		'value' => $vars['links_supports'],
+		'value' => $transitions->links_supports,
 		'placeholder' => elgg_echo('transitions:links_supports'),
 	));
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_contributed_tags">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
+	$admin_fields .= '<p><label class="hidden" for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	$admin_fields .= '<p><label class="hidden" for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	$admin_fields .= '<p><label class="hidden" for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
 	$admin_fields .= '</blockquote>';

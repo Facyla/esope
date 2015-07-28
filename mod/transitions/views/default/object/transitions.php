@@ -94,7 +94,7 @@ if (elgg_is_active_plugin('likes')) {
 	$stats .= '<i class="fa fa-heart"></i> ' . $num_of_likes . ' &nbsp; ';
 }
 $stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' &nbsp; ';
-$stats .= '<i class="fa fa-tags"></i> ' . count($transitions->contributed_tags) . ' &nbsp; ';
+$stats .= '<i class="fa fa-tags"></i> ' . count($transitions->tags_contributed) . ' &nbsp; ';
 $stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
 $stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
 $actions = '';
@@ -160,15 +160,15 @@ if ($full) {
 	
 	//@TODO critères d'affichages selon le type de contribution
 	// Dates
-	if (in_array($transitions->actor_type, array('project', 'event'))) {
-		if ($transitions->actor_type == 'project') {
+	if (in_array($transitions->category, array('project', 'event'))) {
+		if ($transitions->category == 'project') {
 			$date_format = elgg_echo('transitions:dateformat');
 		} else {
 			$date_format = elgg_echo('transitions:dateformat:time');
 		}
 		if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '<p>';
 		if (!empty($transitions->start_date)) $body .= '<i class="fa fa-calendar-o"></i> ' . elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date) . '</p>';
-		if (!empty($transitions->end_date)) $body .= '<p>' . elgg_echo('transitions:date:until') . ' ' . date($dateformat, $transitions->end_date);
+		if (!empty($transitions->end_date)) $body .= '<p>' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 		if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '</p>';
 	}
 	
@@ -190,11 +190,11 @@ if ($full) {
 	$body .= '<div class="clearfloat"></div><br />';
 	
 	
-	// Content enrichments 
+	// Content enrichments
 	// Contributed tags (anyone)
 	if ($transitions->tags_contributed) {
-		$contributed_tags = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
-		$body .= elgg_view_module('featured', elgg_echo('transitions:contributed_tags'), $contributed_tags);
+		$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
+		$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 	}
 	if ($transitions->links_supports) {
 		$links_supports = '';

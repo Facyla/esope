@@ -70,8 +70,8 @@ $values = array(
 	'attachment' => '',
 	'url' => '',
 	'category' => '',
-	'resource_lang' => '',
 	'lang' => '',
+	'resource_lang' => '',
 	// ssi category "actor" : territory + geolocation, actor_type
 	'territory' => '', // +geolocation
 	'actor_type' => '',
