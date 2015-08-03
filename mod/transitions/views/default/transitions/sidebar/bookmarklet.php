@@ -5,19 +5,24 @@
  * @package Bookmarks
  */
 
+$title = elgg_echo('transitions:bookmarklet');
 
 $url = elgg_get_site_url();
 $img = elgg_view('output/img', array(
 	'src' => 'mod/bookmarks/graphics/bookmarklet.gif',
 	'alt' => $title,
 ));
-$bookmarklet = "<a href=\"javascript:location.href='{$url}transitions/add?url='"
-	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&description='+encodeURIComponent(document.getSelection())\">"
-	. $img . "</a>";
+//$bookmarklet = "<a href=\"javascript:location.href='{$url}transitions/add?url='"
+//	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&description='+encodeURIComponent(document.getSelection())\">" . $img . "</a>";
+$bookmarklet = '<a href="javascript:(function(){window.open(\'' . $url . 'transitions/add?url=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection()), \'_newtab\');}());">' . $img . '</a>';
+// Nouvel onglet : javascript:(function(){window.open('http://www.example.com', '_newtab');}());
+// Même onglet, utilisez un code de ce type : javascript:location.href='http://www.example
 
-?>
-<p><?php echo elgg_echo("transitions:bookmarklet:description"); ?></p>
-<p><?php echo $bookmarklet; ?></p>
-<p><?php echo elgg_echo("transitions:bookmarklet:descriptionie"); ?></p>
-<p><?php echo elgg_echo("transitions:bookmarklet:description:conclusion"); ?></p>
+$content = '';
+$content .= '<p>' . elgg_echo("transitions:bookmarklet:description") . '</p>';
+$content .= '<p>' . $bookmarklet . '</p>';
+$content .= '<p>' . elgg_echo("transitions:bookmarklet:descriptionie") . '</p>';
+$content .= '<p>' . elgg_echo("transitions:bookmarklet:description:conclusion") . '</p>';
+
+echo elgg_view_module('aside', $title, $content);
 
