@@ -18,32 +18,20 @@ global $CONFIG;
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 
-/*
-if (!$pagetype) {
-	// $content = elgg_echo('collection:notset');
-	register_error(elgg_echo('collection:notset'));
-	forward();
-}
-*/
-
-/*
-// Get entity
-$collection = collection_get_entity($pagetype);
-*/
-
 
 // BREADCRUMBS - Add main collection breadcrumb
-elgg_push_breadcrumb(elgg_echo('collection'), 'collection');
+elgg_push_breadcrumb(elgg_echo('collections'), 'collection');
 
-// collection/read may render more content
+// Get collection by GUID or name
 $collection = get_entity($guid);
+if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (elgg_instanceof($collection, 'object', 'collection')) {
-	$content = elgg_view('collection/view', array('entity' => $collection));
-	$page_title = $collection->title;
-	elgg_push_breadcrumb($page_title);
+	$content = elgg_view('collections/view', array('entity' => $collection, 'embed' => $embed));
+	$title = $collection->title;
+	elgg_push_breadcrumb($title);
 }
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
-$CONFIG->title = $page_title;
+$CONFIG->title = $title;
 
 
 // EMBED MODE - Determine pageshell depending on optional embed type
@@ -60,7 +48,7 @@ if ($embed) {
 
 
 // Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('content' => $content));
+$content = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
 
 

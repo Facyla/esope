@@ -42,6 +42,9 @@ return array(
 				<strong>Attention :</strong> utilisez exclusivement des <strong>caractères alphanumériques en minuscule</strong> dans ce titre de page, <strong>sans espace ni accent ni signe de ponctuation</strong> (restent seuls autorisés : \"-\", \"_\" et \".\")</strong>
 			</li>
 		</ul>",
+	'cmspages:edit_mode' => "Mode d'édition",
+	'cmspages:edit_mode:basic' => "Simple",
+	'cmspages:edit_mode:full' => "Avancé",
 	
 	/* Status messages */
 	'cmspages:posted' => "La page CMS a bien été mise à jour.",

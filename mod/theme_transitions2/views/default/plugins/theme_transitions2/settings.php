@@ -11,11 +11,14 @@ $url = elgg_get_site_url();
 // Define Site menus replacement ?
 $menus_options = elgg_menus_menus_opts();
 
-echo "Choose custom site menus";
+//echo "Choose custom site menus";
+echo "Choisissez les menus du site";
 
+/*
 echo '<p><label>Topbar menu ' . elgg_view('input/dropdown', array('name' => 'params[menu_topbar]', 'options_values' => $menus_options, 'value' => $vars['entity']->menu_topbar)) . '</label></p>';
 
 echo '<p><label>Page menu ' . elgg_view('input/dropdown', array('name' => 'params[menu_page]', 'options_values' => $menus_options, 'value' => $vars['entity']->menu_page)) . '</label></p>';
+*/
 
 echo '<p><label>Site menu (main navigation) ' . elgg_view('input/dropdown', array('name' => 'params[menu_site]', 'options_values' => $menus_options, 'value' => $vars['entity']->menu_site)) . '</label></p>';
 
@@ -28,5 +31,14 @@ echo '<p><label>Footer menu ' . elgg_view('input/dropdown', array('name' => 'par
 
 // Example text setting
 //echo '<p><label>Text setting "setting_name2"</label> ' . elgg_view('input/text', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</p>';
+
+// Example text setting
+/*
+for ($i=1; $i<5; $i++) {
+	echo '<p><label>Accueil bloc ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_text_'.$i.']', 'value' => $vars['entity']->{'home_text_'.$i})) . '</p>';
+	echo '<p><label>Image ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_image_'.$i.']', 'value' => $vars['entity']->{'home_image_'.$i})) . '</p>';
+	echo '<p><label>Lien ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_link_'.$i.']', 'value' => $vars['entity']->{'home_link_'.$i})) . '</p>';
+}
+*/
 
 

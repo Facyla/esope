@@ -1,7 +1,7 @@
 <?php
 // Selectors
 $allowed_subtypes = array(
-	'all' => elgg_echo('collection:embed:nofilter'),
+	'all' => elgg_echo('collections:embed:nofilter'),
 	'blog' => elgg_echo('blog'),
 	'page_top' => elgg_echo('page_top'),
 	'page' => elgg_echo('page'),
@@ -25,9 +25,10 @@ if (elgg_instanceof($collection, 'object', 'collection')) {
 $offset = (int) max(get_input("offset", 0), 0);
 $limit = (int) max(get_input("limit", 10), 0);
 // Subtypes adjustments
-$subtype = get_input('subtype', 'all');
-if ($subtype == 'all') $subtype = array('blog', 'bookmarks', 'event_calendar', 'file', 'groupforumtopic', 'page', 'page_top');
-else if ($subtype == 'pages') $subtype = array('page', 'page_top');
+$subtype_value = get_input('subtype', 'all');
+$subtype = $subtype_value;
+if ($subtype_value == 'all') $subtype = array('blog', 'bookmarks', 'event_calendar', 'file', 'groupforumtopic', 'page', 'page_top');
+else if ($subtype_value == 'pages') $subtype = array('page', 'page_top');
 $display = get_input('display', false);
 // Search query
 $query = get_input("q", false);
@@ -59,7 +60,7 @@ if (!empty($query)) {
 // Note : any new field/parameter should be added to the js/collections/site view
 $form_data = '';
 $form_data .= '<p><label>' . elgg_echo('collections:embed:search') . ' ' . elgg_view("input/text", array("name" => "q", "value" => $query)) . '</label></p>';
-$form_data .= '<p><label>' . elgg_echo('collections:embed:subtype') . ' ' . elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype, 'options_values' => $allowed_subtypes)) . '</label></p>';
+$form_data .= '<p><label>' . elgg_echo('collections:embed:subtype') . ' ' . elgg_view("input/dropdown", array("name" => "subtype", "value" => $subtype_value, 'options_values' => $allowed_subtypes)) . '</label></p>';
 $form_data .= elgg_view("input/hidden", array('name' => "display", 'value' => 'yes'));
 $form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
 

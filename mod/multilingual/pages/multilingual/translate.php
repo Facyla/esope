@@ -5,7 +5,7 @@
  */
 
 $guid = get_input('guid');
-$lang = get_input('locale', 'en');
+$lang = get_input('lang', 'en');
 
 if (!empty($lang)) $lang_name = elgg_echo($lang);
 
@@ -40,13 +40,13 @@ if (elgg_instanceof($entity)) {
 	
 	if (elgg_instanceof($translation)) {
 		$content .= '<h3>' . elgg_echo('multilingual:translate:version', array($lang_name)) . '</h3>';
-		$content .= elgg_view_entity($translation, array('full_view' => true, 'locale' => $lang));
+		$content .= elgg_view_entity($translation, array('full_view' => true, 'lang' => $lang));
 		$content .= '<br />';
 	}
 	
 	
 	// SIDEBAR
-	$l_code = $ent->locale;
+	$l_code = $ent->lang;
 	if (empty($l_code)) { $l_code = get_current_language(); }
 	$l_name = $languages[$l_code];
 	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:original') . '</h3>';
@@ -59,12 +59,12 @@ if (elgg_instanceof($entity)) {
 	$translations = multilingual_get_translations($entity);
 	if ($translations) {
 		foreach ($translations as $ent) {
-			if (!empty($ent->locale)) $l_name = elgg_echo($ent->locale);
-			$sidebar .= '<p><a href="' . $base_url . $ent->locale . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->locale . '.gif" alt="' . $l_name . '" /> ' . $l_name . ' (' . $ent->locale . ') : ' . $ent->title . ' (' . $ent->guid . ')</a>';
-			if ($ent->locale == $lang) { $sidebar .= '<br /><em>' . elgg_echo('multilingual:translate:currentediting') . '</em>'; }
+			if (!empty($ent->lang)) $l_name = elgg_echo($ent->lang);
+			$sidebar .= '<p><a href="' . $base_url . $ent->lang . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->lang . '.gif" alt="' . $l_name . '" /> ' . $l_name . ' (' . $ent->lang . ') : ' . $ent->title . ' (' . $ent->guid . ')</a>';
+			if ($ent->lang == $lang) { $sidebar .= '<br /><em>' . elgg_echo('multilingual:translate:currentediting') . '</em>'; }
 			$sidebar .= '</p>';
 			// Remove from new translations array
-			unset($languages[$ent->locale]);
+			unset($languages[$ent->lang]);
 		}
 	} else {
 		$sidebar .= '<p>' . elgg_echo('multilingual:translate:nootherversion') . '</p>';

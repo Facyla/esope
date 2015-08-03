@@ -57,6 +57,23 @@ function slider_plugin_init() {
 	$js = elgg_get_simplecache_url('js', 'slider/edit');
 	elgg_register_js('elgg.slider.edit', $js);
 	
+	// AnythingSlider
+	slider_register_libraries();
+	/*
+	$vendor_url = elgg_get_site_url() . 'mod/slider/vendors/anythingslider/';
+	elgg_register_js('elgg.slider.anythingslider', $vendor_url . 'js/jquery.anythingslider.js');
+	elgg_register_js('elgg.slider.anythingslider.easing', $vendor_url . 'js/jquery.easing.1.2.js');
+	elgg_register_js('elgg.slider.anythingslider.swf', $vendor_url . 'js/swfobject.js');
+	elgg_register_js('elgg.slider.anythingslider.video', $vendor_url . 'js/jquery.anythingslider.video.js');
+	elgg_register_css('elgg.slider.anythingslider', $vendor_url . 'css/anythingslider.css');
+	elgg_register_css('elgg.slider.anythingslider.theme-construction', $vendor_url . 'css/theme-construction.css');
+	elgg_register_css('elgg.slider.anythingslider.theme-cs-portfolio', $vendor_url . 'css/theme-cs-portfolio.css');
+	elgg_register_css('elgg.slider.anythingslider.theme-metallic', $vendor_url . 'css/theme-metallic.css');
+	elgg_register_css('elgg.slider.anythingslider.theme-minimalist-round', $vendor_url . 'css/theme-minimalist-round.css');
+	elgg_register_css('elgg.slider.anythingslider.theme-minimalist-square', $vendor_url . 'css/theme-minimalist-square.css');
+	*/
+	
+	
 	// Register a URL handler for sliders
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'slider_url');
 	
@@ -67,7 +84,7 @@ function slider_plugin_init() {
 function slider_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'slider')) {
-		return elgg_get_site_url() . 'slider/view/' . $entity->pagetype;
+		return elgg_get_site_url() . 'slider/view/' . $entity->guid;
 	}
 }
 
@@ -171,5 +188,120 @@ function slider_pagesetup() {
 	}
 	
 }
+
+
+function slider_get_vendors_config() {
+	$vendors_url = elgg_get_site_url() . 'mod/slider/vendors/';
+	
+	return array(
+			
+			// AnythingSlider
+			'anythingslider' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'anythingslider/js/jquery.anythingslider.js', 'name' => 'elgg.slider.anythingslider'),
+					// OPTIONAL JS
+					array('type' => 'js', 'url' => $vendors_url . 'anythingslider/js/jquery.easing.1.2.js', 'name' => 'elgg.slider.anythingslider.easing'),
+					array('type' => 'js', 'url' => $vendors_url . 'anythingslider/js/swfobject.js', 'name' => 'elgg.slider.anythingslider.swf'),
+					array('type' => 'js', 'url' => $vendors_url . 'anythingslider/js/jquery.anythingslider.video.js', 'name' => 'elgg.slider.anythingslider.video'),
+					// CSS
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/anythingslider.css', 'name' => 'elgg.slider.anythingslider'),
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/animate.css', 'name' => 'elgg.slider.anythingslider.animate'),
+					// Themes
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/theme-construction.css', 'name' => 'elgg.slider.anythingslider.theme-construction'),
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/theme-cs-portfolio.css', 'name' => 'elgg.slider.anythingslider.theme-cs-portfolio'),
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/theme-metallic.css', 'name' => 'elgg.slider.anythingslider.theme-metallic'),
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/theme-minimalist-round.css', 'name' => 'elgg.slider.anythingslider.theme-minimalist-round'),
+					array('type' => 'css', 'url' => $vendors_url . 'anythingslider/css/theme-minimalist-square.css', 'name' => 'elgg.slider.anythingslider.theme-minimalist-square'),
+				), 
+			
+			// Coinslider
+			'coinslider' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'coinslider/coin-slider.min.js', 'name' => 'elgg.slider.coinslider'),
+					array('type' => 'css', 'url' => $vendors_url . 'flexslider/coin-slider-styles.css', 'name' => 'elgg.slider.coinslider'),
+				), 
+				
+				// FlexSlider
+			'flexslider' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'flexslider/jquery.flexslider-min.js', 'name' => 'elgg.slider.flexslider'),
+					array('type' => 'css', 'url' => $vendors_url . 'flexslider/flexslider.css', 'name' => 'elgg.slider.flexslider'),
+				), 
+				
+			// NivoSlider
+			'nivoslider' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'nivoslider/jquery.nivo.slider.pack.js', 'name' => 'elgg.slider.nivoslider'),
+					array('type' => 'css', 'url' => $vendors_url . 'nivoslider/nivo-slider.css', 'name' => 'elgg.slider.nivoslider'),
+				), 
+				
+			// ResponsiveSlides
+			'responsiveslides' => array(
+					array('type' => 'js', 'url' => $vendors_url . 'responsiveslides/responsiveslides.min.js', 'name' => 'elgg.slider.responsiveslides'),
+					array('type' => 'css', 'url' => $vendors_url . 'responsiveslides/responsiveslides.css', 'name' => 'elgg.slider.responsiveslides'),
+				), 
+		);
+}
+
+
+
+// Check enabled libraries and register the corresponding scripts and CSS
+function slider_register_libraries() {
+	// List available libraries
+	$libraries_config = slider_get_vendors_config();
+	
+	// @TODO enable only wanted plugins
+	
+	global $slider_registered_libs;
+	$slider_registered_libs = array();
+	
+	// Register JS scripts and CSS files
+	foreach ($libraries_config as $vendor => $lib_config) {
+		foreach ($lib_config as $config) {
+			switch($config['type']) {
+				case 'js':
+					$libname = $name;
+					if (isset($config['name'])) $libname = $config['name'];
+					$location = 'head';
+					if (isset($config['location'])) $libname = $config['location'];
+					elgg_register_js($libname, $config['url'], $location);
+					$slider_registered_libs[$vendor]['js'][] = $libname;
+					break;
+				case 'css':
+					$libname = $name;
+					if (isset($config['name'])) $libname = $config['name'];
+					elgg_register_css($libname, $config['url']);
+					$slider_registered_libs[$vendor]['css'][] = $libname;
+					break;
+			}
+		}
+	}
+}
+
+
+// Load registered JS and CSS libraries for a given vendor
+function slider_load_libraries($vendor = 'anythingslider') {
+	global $slider_registered_libs;
+	if (!isset($slider_registered_libs[$vendor])) { $vendor = 'anythingslider'; }
+	
+	// Load registered libs
+	foreach ($slider_registered_libs[$vendor] as $type => $libraries) {
+		switch($type) {
+			case 'js':
+				foreach ($libraries as $name) { elgg_load_js($name); }
+				break;
+			case 'css':
+				foreach ($libraries as $name) { elgg_load_css($name); }
+				break;
+		}
+	}
+}
+
+
+// Use unique ID to allow multiple sliders into a single page..
+function slider_unique_id($base = 'slider-uid-') {
+	global $sliderUniqueID;
+	if (!isset($sliderUniqueID)) { $sliderUniqueID = 0; }
+	$sliderUniqueID++;
+	return $base . $sliderUniqueID;
+}
+
+
 
 

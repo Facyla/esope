@@ -17,8 +17,8 @@ if (!empty($entity) && elgg_instanceof($entity, "object", "transitions")) {
 		"class" => elgg_extract("img_class", $vars, "")
 	);
 	
-	// does the transitions have an image
-	if ($entity->icontime) {
+	// does the transitions have an image + force default image for gallery
+	if ($entity->icontime || ($size == 'gallery')) {
 		// which view
 		if ($full_view) {
 			// full view of a transitions

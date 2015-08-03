@@ -1,3 +1,4 @@
+//<script>
 elgg.provide('elgg.collections.edit');
 
 
@@ -11,6 +12,18 @@ elgg.collections.edit.init = function() {
 	
 	// Add sortable feature
 	elgg.collections.edit.addSortable();
+	
+	// Load entity search inside lightbox
+	$("#collections-embed-search").live("submit", elgg.collections.edit.submitSearch);
+	
+	$("#collections-embed-pagination a").live("click", elgg.collections.edit.embedForward);
+	
+	$("#collections-embed-list li").live("click", function(event) {
+		elgg.collections.edit.embedFormat(this);
+		event.preventDefault();
+	});
+	
+	$("select[name=category]").live("change", elgg.collections.edit.searchFields);
 	
 };
 
@@ -50,6 +63,53 @@ elgg.collections.edit.addSortable = function() {
 		update: function(event, ui) {}
 	});
 };
+
+
+// @TODO
+elgg.collections.edit.searchFields = function(event) {
+	var category = $("select[name='category']").val();
+	$(".transitions-embed-search-actortype").addClass('hidden');
+	if (category == 'actor') {
+		$(".transitions-embed-search-actortype").removeClass('hidden');
+	}
+	$.colorbox.resize({'width':'80%'});
+}
+
+// Load search into lightbox
+elgg.collections.edit.submitSearch = function(event) {
+	event.preventDefault();
+	var query = $(this).serialize();
+	var url = $(this).attr("action");
+	//$(this).parent().parent().load(url, query, function() {
+	$(this).parent().load(url, query, function() {
+		$.colorbox.resize();
+	});
+};
+
+elgg.collections.edit.embedForward = function(event) {
+	var url = $(this).attr("href");
+	//url = elgg.embed.addContainerGUID(url);
+	$("#collections-embed-pagination").parent().load(url);
+	event.preventDefault();
+};
+
+
+// Embeds content into field
+elgg.collections.edit.embedFormat = function(elem) {
+	var guid = $(elem).find(".collections-embed-item-content").html();
+	var details = $(elem).find(".collections-embed-item-details").html();
+	var fieldId = $('#collections-embed-search').find("input[name=field_id]").val();
+	
+	if (!guid) { return false; }
+	
+	$('#collections-embed-'+fieldId).val(guid);
+	$('#collections-embed-details-'+fieldId).html(details);
+	
+	$.colorbox.resize();
+	elgg.ui.lightbox.close();
+	//event.preventDefault();
+};
+
 
 
 elgg.register_hook_handler('init', 'system', elgg.collections.edit.init);

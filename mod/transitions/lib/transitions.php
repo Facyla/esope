@@ -274,6 +274,7 @@ function transitions_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 		$title = elgg_echo('transitions:add');
 		$content = elgg_view_form('transitions/save', $vars, $body_vars);
 	}
+	$sidebar .= elgg_view('transitions/sidebar/bookmarklet', $vars);
 
 	$return['title'] = $title;
 	$return['content'] = $content;
@@ -385,6 +386,31 @@ function transitions_remove_icon(ElggTransitions $transitions){
 			}
 			
 			unset($transitions->icontime);
+			$result = true;
+		} else {
+			$result = true;
+		}
+	}
+	
+	return $result;
+}
+
+
+function transitions_remove_attachment(ElggTransitions $transitions, $name = 'attachment'){
+	$result = false;
+	
+	if(!empty($transitions) && elgg_instanceof($transitions, "object", "transitions", "ElggTransitions")){
+		if(!empty($transitions->{$name})){
+			if($icon_sizes = elgg_get_config('icon_sizes')){
+				$fh = new ElggFile();
+				$fh->owner_guid = $transitions->getOwnerGUID();
+				$prefix = "transitions/" . $transitions->getGUID();
+				// Remove original icon (if set)
+				$fh->setFilename($prefix . $transitions->{$name});
+				if($fh->exists()){ $fh->delete(); }
+			}
+			unset($transitions->{$name});
+			unset($transitions->{$name . '_name'});
 			$result = true;
 		} else {
 			$result = true;

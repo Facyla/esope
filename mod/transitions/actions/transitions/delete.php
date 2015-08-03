@@ -8,8 +8,9 @@
 $transitions_guid = get_input('guid');
 $transitions = get_entity($transitions_guid);
 
+elgg_load_library('elgg:transitions');	$container = get_entity($transitions->container_guid);
+
 if (elgg_instanceof($transitions, 'object', 'transitions') && $transitions->canEdit()) {
-	$container = get_entity($transitions->container_guid);
 	
 	// remove icon
 	transitions_remove_icon($transitions);

@@ -50,12 +50,22 @@
 	
 	<requires>
 		<type>plugin</type>
+		<name>leaflet</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
 		<name>collections</name>
 	</requires>
 	
 	<requires>
 		<type>plugin</type>
 		<name>disable_content</name>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>shorturls</name>
 	</requires>
 	
 	<activate_on_install>false</activate_on_install>

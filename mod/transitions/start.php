@@ -20,7 +20,10 @@ elgg_register_event_handler('init', 'system', 'transitions_init');
 function transitions_init() {
 
 	elgg_register_library('elgg:transitions', elgg_get_plugins_path() . 'transitions/lib/transitions.php');
-
+	
+	$js = elgg_get_simplecache_url('js', 'transitions/edit');
+	elgg_register_js('elgg.transitions.edit', $js, 'head');
+	
 	// add a site navigation item
 	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'transitions/all');
 	elgg_register_menu_item('site', $item);
@@ -62,9 +65,17 @@ function transitions_init() {
 
 	// register actions
 	$action_path = elgg_get_plugins_path() . 'transitions/actions/transitions';
+	// Quickform is a light contribution form that quickly creates a draft
 	elgg_register_action('transitions/save', "$action_path/save.php");
 	elgg_register_action('transitions/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('transitions/delete', "$action_path/delete.php");
+	
+	// Note : add , 'public' to allow onyone to use action
+	elgg_register_action('transitions/quickform', "$action_path/save.php");
+	elgg_register_action('transitions/addtag', "$action_path/addtag.php");
+	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
+	elgg_register_action('transitions/addactor', "$action_path/addactor.php");
+	elgg_register_action('transitions/addrelation', "$action_path/addrelation.php");
 
 	// entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'transitions_entity_menu_setup');
@@ -156,11 +167,26 @@ function transitions_page_handler($page) {
 			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");
 			return true;
 			break;
-		case 'all':
-			$params = transitions_get_page_content_list();
+		case 'download':
+			// The username should be the file we're getting
+			if (isset($page[1])) { set_input("guid",$page[1]); }
+			if (isset($page[2])) { set_input("name",$page[2]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/attachment.php");
+			return true;
 			break;
+		case 'embed':
+			if (isset($page[1])) { set_input("embed_type",$page[1]); }
+			if (isset($page[2])) { set_input("id",$page[2]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/embed.php");
+			return true;
+			break;
+		case 'all':
+			//$params = transitions_get_page_content_list();
 		default:
-			return false;
+			if ($page[0] != 'all') { set_input("category",$page[0]); }
+			if (isset($page[1])) { set_input("q",$page[1]); }
+			include(elgg_get_plugins_path() . "transitions/pages/transitions/index.php");
+			return true;
 	}
 
 	if (isset($params['sidebar'])) {
@@ -302,24 +328,63 @@ function transitions_run_upgrades($event, $type, $details) {
 	}
 }
 
+// Define object icon : custom or default
 function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
 		if(elgg_instanceof($entity, "object", "transitions")){
 			$size = $params["size"];
-			if ($icontime = $entity->icontime) {
-				$icontime = "{$icontime}";
+			if (!empty($entity->icontime)) {
+				$icontime = "{$entity->icontime}";
 				$filehandler = new ElggFile();
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
-					$url = elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
-					return $url;
+					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			}
+			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
 		}
 	}
 }
 
+
+/* Renvoie la liste des catégories
+ * $addempty : for select dropdowns
+ * $full : get all values (useful when not editing)
+*/
+function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
+	$list = array();
+	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
+	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'knowledge'); // 'event'
+	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
+	if (elgg_is_admin_logged_in() || $full) {
+		$list['editorial'] = elgg_echo('transitions:category:editorial');
+		$list['challenge'] = elgg_echo('transitions:category:challenge');
+	}
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
+	return $list;
+}
+
+function transitions_get_actortype_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = elgg_echo('transitions:actortype:choose'); }
+	$values = array('individual', 'collective', 'association', 'enterprise', 'education', 'collectivity', 'administration', 'plurinational');
+	foreach($values as $val) { $list[$val] = elgg_echo('transitions:actortype:' . $val); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:actortype:' . $value); }
+	return $list;
+}
+
+function transitions_get_lang_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = ''; }
+	$values = array('fr', 'en');
+	foreach($values as $val) { $list[$val] = elgg_echo($val); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo($value); }
+	return $list;
+}
 
 

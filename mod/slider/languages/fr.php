@@ -22,8 +22,10 @@ return array(
 	'slider:settings:slider_access:details' => "Par défaut, l'accès à l'édition des diaporamas est réservée aux administrateurs. Vous pouvez autoriser les membres du site à y accéder en choisissant \"Oui\"",
 	'slider:option:yes' => "Oui",
 	'slider:option:no' => "Non",
-	'slider:error:multiple' => "Plusieurs sliders correspondent au nom demandé, impossible de déterminer lequel afficher",
-	'slider:error:alreadyexists' => "Un slider portant ce nom existe déjà, veuillez choisir un autre nom.",
+	'slider:strapline' => 'Dernière mise à jour le %s par %s',
+	'slider:edit_mode' => "Mode d'édition",
+	'slider:edit_mode:basic' => "Simple",
+	'slider:edit_mode:full' => "Avancé",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",
@@ -61,6 +63,9 @@ return array(
 	'slider:edit:editor:details' => "L'éditeur visuel facilite l'édition, mais il filtre également le code HTML utilisé. Cette option permet de choisir si l'éditeur doit être activé par défaut lorsque vous éditez ce diaporama. Il est conseillé de le désactiver si vous utilisez directement du code HTML (vous pourrez toujours l'activer manuellement sur une diapositive en cas de besoin).",
 	'slider:editor:yes' => "Oui (filtre HTML)",
 	'slider:editor:no' => "Non (activable sur demande)",
+	'slider:error:multiple' => "Plusieurs sliders correspondent au nom demandé, impossible de déterminer lequel afficher",
+	'slider:error:alreadyexists' => "Un slider portant ce nom existe déjà, veuillez choisir un autre nom.",
+	'slider:nocontent' => "Aucun contenu pour le moment.",
 	
 	'slider:shortcode:slider' => "Diaporama (déjà configuré)",
 	'slider:embed:instructions' => "Comment intégrer ce diaporama ?",
@@ -69,6 +74,8 @@ return array(
 	'slider:cmspages:instructions:shortcode' => " - avec un shortcode spécifique, méthode alternative pour un gabarit créé avec CMSPages&nbsp;: <strong>{{[slider id=\"%s\"]}}</strong>",
 	'slider:cmspages:notice' => "IMPORTANT&nbsp;: seules les pages CMS de type \"Gabarit\" permettent d'afficher des diaporamas ! Il vous sera peut-être nécessaire de mettre à jour le type de page.",
 	'slider:iframe:instructions' => " - avec ce code d'embarquement, sur d'autres sites&nbsp;: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
+	
+	'slider:deleted' => "Diaporama supprimé",
 	
 );
 

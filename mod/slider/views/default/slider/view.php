@@ -1,4 +1,6 @@
 <?php
+// View slider entity
+
 // Get slider
 $slider = $vars['entity'];
 // Alternate method (more friendly with cmspages)
@@ -6,7 +8,8 @@ if (!$slider) {
 	$guid = $vars['guid'];
 	$slider = get_entity($guid);
 }
-if (!elgg_instanceof($slider, 'object', 'slider')) return;
+if (!$slider) $slider = slider_get_entity_by_name($guid);
+if (!elgg_instanceof($slider, 'object', 'slider')) { return; }
 
 $slider_content = '<li>' . implode('</li><li>', $slider->slides) . '</li>'; // Content without enclosing <ul> (we need id)
 $height = '100%';

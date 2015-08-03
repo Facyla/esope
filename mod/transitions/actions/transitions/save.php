@@ -14,6 +14,15 @@
 // start a new sticky form session in case of failure
 elgg_make_sticky_form('transitions');
 
+elgg_load_library('elgg:transitions');
+
+/* Direct registration ?
+$register_first = !elgg_is_logged_in();
+if ($register_first) {
+	$
+}
+*/
+
 // save or preview
 $save = (bool)get_input('save');
 
@@ -57,12 +66,12 @@ $values = array(
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
-	// @TODO handle attachment
+	// File attachment
 	'attachment' => '',
 	'url' => '',
 	'category' => '',
-	'resource_lang' => '',
 	'lang' => '',
+	'resource_lang' => '',
 	// ssi category "actor" : territory + geolocation, actor_type
 	'territory' => '', // +geolocation
 	'actor_type' => '',
@@ -70,10 +79,13 @@ $values = array(
 	'start_date' => '',
 	// ssi category "event" : start_date, end_date, territory + geolocation
 	'end_date' => '',
+	// ssi challenge
+	'rss_feed' => '',
 );
 
 // fail if a required entity isn't set
-$required = array('title', 'description');
+//$required = array('title', 'description');
+$required = array('title');
 
 // load from POST and do sanity and access checking
 foreach ($values as $name => $default) {
@@ -136,6 +148,16 @@ if ($values['status'] == 'draft') {
 	$values['access_id'] = ACCESS_PRIVATE;
 }
 
+// Geocode new location
+if (!empty($values['territory']) && ($values['territory'] != $transitions->territory)) {
+	$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $values['territory']), false);
+	$lat = (float)$geo_location['lat'];
+	$long = (float)$geo_location['long'];
+	if ($lat && $long) {
+		$transitions->setLatLong($lat, $long);
+	}
+}
+
 // assign values to the entity, stopping on error.
 if (!$error) {
 	foreach ($values as $name => $value) {
@@ -186,20 +208,22 @@ if (!$error) {
 			// remove existing icons
 			transitions_remove_attachment($transitions);
 		} else {
-			if ($attachment_file = get_uploaded_file('attachment')) {
-				$attachment_ext = ''; // @TODO determine filetype extension ?
-				// create icon
+			//if ($attachment_file = get_uploaded_file('attachment')) {
+			//if (($attachment_file = get_uploaded_file('attachment')) && ($_FILES['attachment']['size'] > 0)) {
+			if (($attachment_file = get_uploaded_file('attachment')) && isset($_FILES['attachment']['name']) && !empty($_FILES['attachment']['name'])) {
+				// create file
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
 				$fh->owner_guid = $transitions->getOwnerGUID();
-				$attachment_name = 'attachment_' . time() . $attachment_ext;
-				// Save original image ?  not for icon ?
-				$fh->setFilename($prefix . $attachment_name);
+				$attachment_url = 'attachment_' . time();
+				$attachment_name = htmlspecialchars($_FILES['attachment']['name'], ENT_QUOTES, 'UTF-8');
+				$fh->setFilename($prefix . $attachment_url);
 				if($fh->open("write")){
 					$fh->write($attachment_file);
 					$fh->close();
 				}
-				$transitions->attachment = $attachment_name;
+				$transitions->attachment = $attachment_url;
+				$transitions->attachment_name = $attachment_name;
 			}
 		}
 
