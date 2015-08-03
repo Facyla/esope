@@ -125,10 +125,10 @@ $actions .= elgg_view_module('popup', elgg_echo('transitions:embed'), $embed_cod
 'resource_lang' => '',
 'lang' => '',
 // ssi category "actor" : territory + geolocation, actor_type
-'territory' => '', // +geolocation
-'actor_type' => '',
+'actor_type' => '', // ssi actor
+'territory' => '', // ssi actor | project | event   +geolocation
 // ssi category "project" : territory + geolocation, start_date + relation to actors
-'start_date' => '',
+'start_date' => '', // ssi project | event
 // ssi category "event" : start_date, end_date, territory + geolocation
 'end_date' => '',
 */
@@ -166,10 +166,22 @@ if ($full) {
 		} else {
 			$date_format = elgg_echo('transitions:dateformat:time');
 		}
-		if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '<p>';
-		if (!empty($transitions->start_date)) $body .= '<i class="fa fa-calendar-o"></i> ' . elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date) . '</p>';
-		if (!empty($transitions->end_date)) $body .= '<p>' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
-		if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '</p>';
+		
+		if (($transitions->category == 'project') && !empty($transitions->start_date)) {
+			// Start date only
+			$body .= '<i class="fa fa-calendar-o"></i> ';
+			$body .= date($date_format, $transitions->start_date) . '</p>';
+		} else {
+			// Start and end date and time
+			if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '<p>';
+			if (!empty($transitions->start_date)) {
+				$body .= '<i class="fa fa-calendar-o"></i> ';
+				if (!empty($transitions->end_date)) { $body .= elgg_echo('transitions:date:since') . ' '; }
+				$body .= date($date_format, $transitions->start_date) . '</p>';
+			}
+			if (!empty($transitions->end_date)) $body .= '<p>' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+			if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '</p>';
+		}
 	}
 	
 	// URL et PJ

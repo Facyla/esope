@@ -45,6 +45,7 @@ Mot de passe : %s
 	'admin:user:makeeditor:yes' => "L'utilisateur est éditeur.",
 	'admin:user:makeeditor:no' => "Impossible de nommer cet utilisateur éditeur.",
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
+	'embed:media' => "Joindre un fichier ou une image",
 	
 	
 );

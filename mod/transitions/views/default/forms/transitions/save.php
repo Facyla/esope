@@ -21,7 +21,7 @@ $preview_button = '';
 
 // Set some default values
 if (empty($vars['lang'])) { $vars['lang'] = get_language(); }
-if (empty($vars['resourcelang'])) { $vars['resourcelang'] = get_language(); }
+if (empty($vars['resource_lang'])) { $vars['resource_lang'] = get_language(); }
 
 // Get select options
 $lang_opt = transitions_get_lang_opt($vars['lang'], true);

@@ -90,7 +90,7 @@ Voir et commenter cette contribution :
 	'transitions:actortype' => "Type d'acteur",
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
-	'transitions:dateformat' => "d M Y",
+	'transitions:dateformat' => "M Y",
 	'transitions:dateformat:time' => "d M Y à H:i:s",
 	'transitions:date:since' => "Depuis le",
 	'transitions:date:until' => "Jusqu'au",
