@@ -38,8 +38,8 @@ function theme_transitions2_init() {
 	
 	// Pour changer la manière de filtrer les tags HTMLawed
 	if (elgg_is_active_plugin('htmlawed')) {
-		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
-		elgg_register_plugin_hook_handler('validate', 'input', 'theme_transitions2_htmlawed_filter_tags', 1);
+		elgg_register_plugin_hook_handler('config', 'htmlawed', 'theme_transitions2_htmlawed_filter_tags');
+		elgg_register_plugin_hook_handler('allowed_styles', 'htmlawed', 'theme_transitions2_htmlawed_allowed_tags');
 	}
 	
 	// non-members do not get visible links to RSS feeds
@@ -227,21 +227,19 @@ function theme_transitions2_set_usersettings() {
 }
 
 
-function theme_transitions2_htmlawed_filter_tags($hook, $type, $result, $params = null) {
-	$var = $result;
 
-	elgg_load_library('htmlawed');
-
-	$htmlawed_config = array(
+function theme_transitions2_htmlawed_filter_tags($hook, $type, $return, $params) {
+		$htmlawed_config = array(
 		// seems to handle about everything we need.
-		//'safe' => true, // @TODO : allows most code
+		//'safe' => true,
 		'safe' => false, // @TODO : allows most code
+		//'elements' => 'iframe, embed', // Custom allowed elements
 
 		// remove comments/CDATA instead of converting to text
 		'comment' => 1,
 		'cdata' => 1,
 
-		//'deny_attribute' => 'class, on*',
+		//'deny_attribute' => 'class, htmlawedon*',
 		'deny_attribute' => 'on*',
 		'hook_tag' => 'htmlawed_tag_post_processor',
 
@@ -249,25 +247,24 @@ function theme_transitions2_htmlawed_filter_tags($hook, $type, $result, $params 
 		// apparent this doesn't work.
 		// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
 	);
-
-	// add nofollow to all links on output
-	if (!elgg_in_context('input')) {
-		$htmlawed_config['anti_link_spam'] = array('/./', '');
-	}
-
-	$htmlawed_config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $htmlawed_config);
-
-	if (!is_array($var)) {
-		$result = htmLawed($var, $htmlawed_config);
-	} else {
-		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
-		$result = $var;
-	}
-
-	return $result;
+	return $htmlawed_config;
 }
 
 
-
+function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params) {
+	// Filtered tag element
+	$tag = $params['tag'];
+	
+	// this list should be coordinated with the WYSIWYG editor used (tinymce, ckeditor, etc.)
+	$allowed_styles = array(
+		'color', 'cursor', 'text-align', 'vertical-align', 'font-size',
+		'font-weight', 'font-style', 'border', 'border-top', 'background-color',
+		'border-bottom', 'border-left', 'border-right',
+		'margin', 'margin-top', 'margin-bottom', 'margin-left',
+		'margin-right','padding', 'float', 'text-decoration',
+		'height', 'width', 
+	);
+	return $allowed_styles;
+}
 
 
