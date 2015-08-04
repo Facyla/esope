@@ -11,7 +11,8 @@ if (!$slider) {
 if (!$slider) $slider = slider_get_entity_by_name($guid);
 if (!elgg_instanceof($slider, 'object', 'slider')) { return; }
 
-$slider_content = '<li>' . implode('</li><li>', $slider->slides) . '</li>'; // Content without enclosing <ul> (we need id)
+$slides = (array)$slider->slides;
+$slider_content = '<li>' . implode('</li><li>', $slides) . '</li>'; // Content without enclosing <ul> (we need id)
 $height = '100%';
 $width = '100%';
 if (!empty($slider->height)) $height = $slider->height;

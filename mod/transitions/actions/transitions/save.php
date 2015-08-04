@@ -72,20 +72,38 @@ $values = array(
 	'category' => '',
 	'lang' => '',
 	'resource_lang' => '',
-	// ssi category "actor" : territory + geolocation, actor_type
-	'territory' => '', // +geolocation
-	'actor_type' => '',
-	// ssi category "project" : territory + geolocation, start_date + relation to actors
-	'start_date' => '',
-	// ssi category "event" : start_date, end_date, territory + geolocation
-	'end_date' => '',
-	// ssi challenge
-	'rss_feed' => '',
 );
+
+/* Conditional fields (based on category)
+ * ssi category "actor" : territory + geolocation, actor_type
+ * ssi category "project" : territory + geolocation, start_date + relation to actors
+ * ssi category "event" : start_date, end_date, territory + geolocation
+ */
+$category = get_input('category');
+if (!empty($category)) {
+	// Territory + geolocation
+	if (in_array($category, array('actor', 'project', 'event'))) {
+		$values[] = 'territory';
+	}
+	// Actor type
+	if (in_array($category, array('actor'))) {
+		$values[] = 'actor_type';
+	}
+	// Dates
+	if (in_array($category, array('project', 'event'))) {
+		$values[] = 'start_date';
+		$values[] = 'end_date';
+	}
+	// Challenge => news feed (to be displayed)
+	if (in_array($category, array('challenge'))) {
+		$values[] = 'rss_feed';
+	}
+}
+
 
 // fail if a required entity isn't set
 //$required = array('title', 'description');
-$required = array('title');
+$required = array('title', 'category');
 
 // load from POST and do sanity and access checking
 foreach ($values as $name => $default) {

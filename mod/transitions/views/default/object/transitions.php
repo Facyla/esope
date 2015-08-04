@@ -119,23 +119,7 @@ $actions .= elgg_view_module('popup', elgg_echo('transitions:embed'), $embed_cod
 
 
 
-/*
-'url' => '',
-'category' => '',
-'resource_lang' => '',
-'lang' => '',
-// ssi category "actor" : territory + geolocation, actor_type
-'actor_type' => '', // ssi actor
-'territory' => '', // ssi actor | project | event   +geolocation
-// ssi category "project" : territory + geolocation, start_date + relation to actors
-'start_date' => '', // ssi project | event
-// ssi category "event" : start_date, end_date, territory + geolocation
-'end_date' => '',
-*/
-
-
 if ($full) {
-
 	$body = '';
 	
 	$body .= '<span class="transitions-' . $transitions->category . '" style="float:left; margin-right:1em;">';
@@ -159,29 +143,36 @@ if ($full) {
 	}
 	
 	//@TODO critères d'affichages selon le type de contribution
-	// Dates
+	// Dates : projects and events only
 	if (in_array($transitions->category, array('project', 'event'))) {
-		if ($transitions->category == 'project') {
-			$date_format = elgg_echo('transitions:dateformat');
-		} else {
-			$date_format = elgg_echo('transitions:dateformat:time');
+		if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
+			$body .= '<p>';
+			$body .= '<i class="fa fa-calendar-o"></i> ';
 		}
 		
-		if (($transitions->category == 'project') && !empty($transitions->start_date)) {
-			// Start date only
-			$body .= '<i class="fa fa-calendar-o"></i> ';
-			$body .= date($date_format, $transitions->start_date) . '</p>';
-		} else {
-			// Start and end date and time
-			if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '<p>';
-			if (!empty($transitions->start_date)) {
-				$body .= '<i class="fa fa-calendar-o"></i> ';
-				if (!empty($transitions->end_date)) { $body .= elgg_echo('transitions:date:since') . ' '; }
-				$body .= date($date_format, $transitions->start_date) . '</p>';
+		if ($transitions->category == 'project') {
+			// Format : MM YYYY [- MM YYYY]
+			$date_format = elgg_echo('transitions:dateformat');
+			if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
+				$body .= date($date_format, $transitions->start_date) . ' - ' . date($date_format, $transitions->end_date);
+			} else if (!empty($transitions->start_date)) {
+				$body .= date($date_format, $transitions->start_date);
+			} else if (!empty($transitions->end_date)) {
+				$body .= date($date_format, $transitions->end_date);
 			}
-			if (!empty($transitions->end_date)) $body .= '<p>' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
-			if (!empty($transitions->start_date) || !empty($transitions->end_date)) $body .= '</p>';
+		} else {
+			$date_format = elgg_echo('transitions:dateformat:time');
+			// Format : from DD MM YYYY [until DD MM YYYY]
+			if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
+				$body .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+				$body .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+			} else if (!empty($transitions->start_date)) {
+				$body .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+			} else if (!empty($transitions->end_date)) {
+				$body .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+			}
 		}
+		if (!empty($transitions->start_date) || !empty($transitions->end_date)) { $body .= '</p>'; }
 	}
 	
 	// URL et PJ
@@ -209,18 +200,20 @@ if ($full) {
 		$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 	}
 	if ($transitions->links_supports) {
-		$links_supports = '';
+		$links_supports = '<ul>';
 		foreach((array)$transitions->links_supports as $link) {
-			$links_supports .= elgg_view('output/url', array('href' => $link, 'target' => "_blank"));
+			$links_supports .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
 		}
+		$links_supports .= '</ul>';
 		$body .= elgg_view_module('featured', elgg_echo('transitions:links_supports'), $links_supports);
 	}
 	// Contributed contradiction links
 	if ($transitions->links_invalidates) {
-		$links_invalidates = '';
+		$links_invalidates = '<ul>';
 		foreach((array)$transitions->links_invalidates as $link) {
-			$links_invalidates .= elgg_view('output/url', array('href' => $link, 'target' => "_blank"));
+			$links_invalidates .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
 		}
+		$links_invalidates .= '</ul>';
 		$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);
 	}
 	if ($transitions->category == 'project') {
