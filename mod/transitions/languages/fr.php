@@ -95,6 +95,7 @@ Voir et commenter cette contribution :
 	'transitions:date:since' => "Depuis le",
 	'transitions:date:until' => "Jusqu'au",
 	'transitions:rss_feed' => "Flux RSS",
+	'transitions:rss_feed:details' => "URL du fil d'actualité RSS associé à ce défi",
 	'transitions:savedraft' => "Publier ma contribution",
 	'transitions:saveandedit' => "Poursuivre l'édition",
 	'transitions:preview' => "Sauvegarder",

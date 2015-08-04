@@ -79,24 +79,24 @@ $values = array(
  * ssi category "project" : territory + geolocation, start_date + relation to actors
  * ssi category "event" : start_date, end_date, territory + geolocation
  */
-$category = get_input('category');
+$category = get_input('category', '');
 if (!empty($category)) {
 	// Territory + geolocation
 	if (in_array($category, array('actor', 'project', 'event'))) {
-		$values[] = 'territory';
+		$values['territory'] = '';
 	}
 	// Actor type
 	if (in_array($category, array('actor'))) {
-		$values[] = 'actor_type';
+		$values['actor_type'] = '';
 	}
 	// Dates
 	if (in_array($category, array('project', 'event'))) {
-		$values[] = 'start_date';
-		$values[] = 'end_date';
+		$values['start_date'] = '';
+		$values['end_date'] = '';
 	}
 	// Challenge => news feed (to be displayed)
 	if (in_array($category, array('challenge'))) {
-		$values[] = 'rss_feed';
+		$values['rss_feed'] = '';
 	}
 }
 
@@ -171,9 +171,7 @@ if (!empty($values['territory']) && ($values['territory'] != $transitions->terri
 	$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $values['territory']), false);
 	$lat = (float)$geo_location['lat'];
 	$long = (float)$geo_location['long'];
-	if ($lat && $long) {
-		$transitions->setLatLong($lat, $long);
-	}
+	if ($lat && $long) { $transitions->setLatLong($lat, $long); }
 }
 
 // assign values to the entity, stopping on error.
@@ -197,7 +195,7 @@ if (elgg_is_admin_logged_in()) {
 	}
 	
 	$links_invalidates = get_input('links_invalidates');
-	// Add new tag
+	// Add new contradictory link
 	if (!empty($links_invalidates)) {
 		$new_tags = string_to_tag_array($links_invalidates);
 		$links_invalidates = (array)$entity->links_invalidates;
@@ -208,7 +206,7 @@ if (elgg_is_admin_logged_in()) {
 	}
 	
 	$links_supports = get_input('links_supports');
-	// Add new tag
+	// Add new support link
 	if (!empty($links_supports)) {
 		$new_tags = string_to_tag_array($links_supports);
 		$links_supports = (array)$entity->links_supports;
@@ -218,7 +216,7 @@ if (elgg_is_admin_logged_in()) {
 	}
 	
 	$is_incremental = get_input('is_incremental');
-	// Add new tag
+	// Set incremental status
 	if (!empty($is_incremental)) {
 		if ($is_incremental == 'yes') {
 			$entity->is_incremental = 'yes';
@@ -228,7 +226,6 @@ if (elgg_is_admin_logged_in()) {
 	}
 	
 }
-
 
 // only try to save base entity if no errors
 if (!$error) {
@@ -247,14 +244,6 @@ if (!$error) {
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
 				$fh->owner_guid = $transitions->getOwnerGUID();
-				// Save original image ?  not for icon ?
-				/*
-				$fh->setFilename($prefix . 'original');
-				if($fh->open("write")){
-					$fh->write($icon_file);
-					$fh->close();
-				}
-				*/
 				foreach($icon_sizes as $icon_name => $icon_info){
 					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
 						$fh->setFilename($prefix . $icon_name . ".jpg");
@@ -275,7 +264,8 @@ if (!$error) {
 		} else {
 			//if ($attachment_file = get_uploaded_file('attachment')) {
 			//if (($attachment_file = get_uploaded_file('attachment')) && ($_FILES['attachment']['size'] > 0)) {
-			if (($attachment_file = get_uploaded_file('attachment')) && isset($_FILES['attachment']['name']) && !empty($_FILES['attachment']['name'])) {
+			// Empty file => Array ( [name] => [type] => [tmp_name] => [error] => 4 [size] => 0 )
+			if (isset($_FILES['attachment']['name']) && !empty($_FILES['attachment']['name']) && ($attachment_file = get_uploaded_file('attachment'))) {
 				// create file
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
@@ -333,6 +323,10 @@ if (!$error) {
 				'action_type' => 'create',
 			));
 		}
+
+echo elgg_view_entity($entity);
+exit;
+
 
 		if ($transitions->status == 'published' || $save == false) {
 			forward($transitions->getURL());

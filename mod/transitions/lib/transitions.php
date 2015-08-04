@@ -302,16 +302,19 @@ function transitions_prepare_form_vars($post = NULL, $revision = NULL) {
 		'container_guid' => NULL,
 		'guid' => NULL,
 		'draft_warning' => '',
+		
 		// Transitions² specific fields
 		'attachment' => '',
 		'url' => '',
 		'category' => '',
-		'resource_lang' => '',
 		'lang' => '',
+		'resource_lang' => '',
+		// Conditionnal fields
 		'territory' => '', // +geolocation
 		'actor_type' => '',
 		'start_date' => '',
 		'end_date' => '',
+		'rss_feed' => '',
 	);
 
 	if ($post) {

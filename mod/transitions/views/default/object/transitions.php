@@ -102,20 +102,23 @@ if (elgg_is_admin_logged_in()) {
 	$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
 }
 
-// Permalink
-$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-link"></i>&nbsp;' . elgg_echo('transitions:permalink'), 'rel' => 'popup', 'href' => '#transitions-popup-link-' . $transitions->guid));
-if (elgg_is_active_plugin('shorturls')) {
-	$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $transitions->guid . '</textarea>';
-} else {
-	$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $transitions->getURL() . '</textarea>';
-}
-$actions .= elgg_view_module('popup', elgg_echo('transitions:permalink'), $permalink, array('id' => 'transitions-popup-link-' . $transitions->guid, 'class' => 'transitions-popup-link hidden clearfix'));
 
-// Embed code
-//$actions .= '<a href="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true"><i class="fa fa-code">Embed</i></a>'; // @TODO open popup with embed code
-$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-code"></i>&nbsp;' . elgg_echo('transitions:embed'), 'rel' => 'popup', 'href' => '#transitions-popup-embed-' . $transitions->guid));
-$embed_code = '<p>' . elgg_echo('transitions:embed:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:320px; height:400px;" /&gt;</textarea>';
-$actions .= elgg_view_module('popup', elgg_echo('transitions:embed'), $embed_code, array('id' => 'transitions-popup-embed-' . $transitions->guid, 'class' => 'transitions-popup-embed hidden clearfix'));
+//if ($transitions->status != 'draft') {
+	// Permalink
+	$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-link"></i>&nbsp;' . elgg_echo('transitions:permalink'), 'rel' => 'popup', 'href' => '#transitions-popup-link-' . $transitions->guid));
+	if (elgg_is_active_plugin('shorturls')) {
+		$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $transitions->guid . '</textarea>';
+	} else {
+		$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $transitions->getURL() . '</textarea>';
+	}
+	$actions .= elgg_view_module('popup', elgg_echo('transitions:permalink'), $permalink, array('id' => 'transitions-popup-link-' . $transitions->guid, 'class' => 'transitions-popup-link hidden clearfix'));
+	
+	// Embed code
+	//$actions .= '<a href="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true"><i class="fa fa-code">Embed</i></a>'; // @TODO open popup with embed code
+	$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-code"></i>&nbsp;' . elgg_echo('transitions:embed'), 'rel' => 'popup', 'href' => '#transitions-popup-embed-' . $transitions->guid));
+	$embed_code = '<p>' . elgg_echo('transitions:embed:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:320px; height:400px;" /&gt;</textarea>';
+	$actions .= elgg_view_module('popup', elgg_echo('transitions:embed'), $embed_code, array('id' => 'transitions-popup-embed-' . $transitions->guid, 'class' => 'transitions-popup-embed hidden clearfix'));
+//}
 
 
 
@@ -136,20 +139,17 @@ if ($full) {
 	$body .= '<div class="clearfloat"></div>';
 	
 	
-	//@TODO critères d'affichages selon le type de contribution
-	if (!empty($transitions->territory)) {
+	// Territory : actor|project|event only
+	if (in_array($transitions->category, array('actor', 'project', 'event')) && !empty($transitions->territory)) {
 		$body .= '<span style="float:right">' . elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '300px', 'height' => '150px;')) . '</span>';
 		$body .= '<p><i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory . '</p>';
 	}
 	
-	//@TODO critères d'affichages selon le type de contribution
 	// Dates : projects and events only
 	if (in_array($transitions->category, array('project', 'event'))) {
 		if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
-			$body .= '<p>';
-			$body .= '<i class="fa fa-calendar-o"></i> ';
+			$body .= '<p><i class="fa fa-calendar-o"></i> ';
 		}
-		
 		if ($transitions->category == 'project') {
 			// Format : MM YYYY [- MM YYYY]
 			$date_format = elgg_echo('transitions:dateformat');
@@ -180,65 +180,73 @@ if ($full) {
 	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
 	
 	// Meta
-	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) $body .= '<p>';
-	if (!empty($transitions->lang)) $body .= '<i class="fa fa-flag"></i> Langue : ' . elgg_echo($transitions->lang) . ' &nbsp; ';
-	if (!empty($transitions->resource_lang)) $body .= '<i class="fa fa-flag-o"></i> Langue de la ressource : ' . elgg_echo($transitions->resource_lang);
-	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) $body .= '</p>';
+	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) {
+		$body .= '<p>';
+		if (!empty($transitions->lang)) {
+			$body .= '<i class="fa fa-flag"></i> ' . elgg_echo('transitions:lang'). ' : ' . elgg_echo($transitions->lang) . ' &nbsp; ';
+		}
+		if (!empty($transitions->resource_lang)) {
+			$body .= '<i class="fa fa-flag-o"></i> ' . elgg_echo('transitions:resourcelang'). ' : ' . elgg_echo($transitions->resource_lang);
+		}
+		$body .= '</p>';
+	}
 	
 	// @TODO ssi challenge => afficher le flux RSS
-	if ($transitions->category == 'challenge') {
-		$body .= '<p>' . $transitions->rss_feed . '</p>';
-	}
+	if ($transitions->category == 'challenge') { $body .= '<p>' . $transitions->rss_feed . '</p>'; }
 	
 	$body .= '<div class="clearfloat"></div><br />';
 	
 	
 	// Content enrichments
-	// Contributed tags (anyone)
-	if ($transitions->tags_contributed) {
-		$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
-		$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
-	}
-	if ($transitions->links_supports) {
-		$links_supports = '<ul>';
-		foreach((array)$transitions->links_supports as $link) {
-			$links_supports .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+	if ($transitions->status != 'draft') {
+		// Contributed tags (anyone)
+		if ($transitions->tags_contributed) {
+			$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
+			$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 		}
-		$links_supports .= '</ul>';
-		$body .= elgg_view_module('featured', elgg_echo('transitions:links_supports'), $links_supports);
-	}
-	// Contributed contradiction links
-	if ($transitions->links_invalidates) {
-		$links_invalidates = '<ul>';
-		foreach((array)$transitions->links_invalidates as $link) {
-			$links_invalidates .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+		if ($transitions->links_supports) {
+			$links_supports = '<ul>';
+			foreach((array)$transitions->links_supports as $link) {
+				$links_supports .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+			}
+			$links_supports .= '</ul>';
+			$body .= elgg_view_module('featured', elgg_echo('transitions:links_supports'), $links_supports);
 		}
-		$links_invalidates .= '</ul>';
-		$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);
-	}
-	if ($transitions->category == 'project') {
-		$related_actors = elgg_list_entities_from_relationship(array(
-				'relationship' => 'partner_of',
-				'relationship_guid' => $transitions->guid,
-				'inverse_relationship' => true,
-				'type' => 'object',
-				'limit' => 0,
-				'list_type' => 'gallery',
-				'gallery_class' => '',
-			));
-		$body .= elgg_view_module('featured', elgg_echo('transitions:related_actors'), $related_actors);
-	}
-	if ($transitions->category == 'challenge') {
-		$related_content = elgg_list_entities_from_relationship(array(
-				'relationship' => 'related_content',
-				'relationship_guid' => $transitions->guid,
-				'inverse_relationship' => true,
-				'type' => 'object',
-				'limit' => 0,
-				'list_type' => 'gallery',
-				'gallery_class' => '',
-			));
-		$body .= elgg_view_module('featured', elgg_echo('transitions:related_content'), $related_content);
+		// Contributed contradiction links
+		if ($transitions->links_invalidates) {
+			$links_invalidates = '<ul>';
+			foreach((array)$transitions->links_invalidates as $link) {
+				$links_invalidates .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+			}
+			$links_invalidates .= '</ul>';
+			$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);
+		}
+		if ($transitions->category == 'project') {
+			$related_actors = elgg_list_entities_from_relationship(array(
+					'relationship' => 'partner_of',
+					'relationship_guid' => $transitions->guid,
+					'inverse_relationship' => true,
+					'type' => 'object',
+					'limit' => 0,
+					'list_type' => 'gallery',
+					'gallery_class' => '',
+				));
+			$body .= elgg_view_module('featured', elgg_echo('transitions:related_actors'), $related_actors);
+		}
+		if ($transitions->category == 'challenge') {
+			$related_content = elgg_list_entities_from_relationship(array(
+					'relationship' => 'related_content',
+					'relationship_guid' => $transitions->guid,
+					'inverse_relationship' => true,
+					'type' => 'object',
+					'limit' => 0,
+					'list_type' => 'gallery',
+					'gallery_class' => '',
+				));
+			if (!empty($related_content)) {
+				$body .= elgg_view_module('featured', elgg_echo('transitions:related_content'), $related_content);
+			}
+		}
 	}
 	
 	

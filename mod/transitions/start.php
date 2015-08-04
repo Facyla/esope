@@ -143,6 +143,7 @@ function transitions_page_handler($page) {
 			break;
 		case 'add':
 			elgg_gatekeeper();
+			if (empty($page[1])) $page[1] = elgg_get_logged_in_user_guid();
 			$params = transitions_get_page_content_edit($page_type, $page[1]);
 			break;
 		case 'edit':
