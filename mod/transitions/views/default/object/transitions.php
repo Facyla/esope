@@ -73,6 +73,7 @@ $transitions_icon = "";
 	}
 //}
 $transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
+$transitions_icon = trim($transitions_icon);
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
@@ -316,7 +317,7 @@ if ($full) {
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
 		
-		if (!empty(trim($transitions_icon))) {
+		if (!empty($transitions_icon)) {
 			echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
 		} else {
 			echo elgg_view_image_block($owner_icon, $list_body);
