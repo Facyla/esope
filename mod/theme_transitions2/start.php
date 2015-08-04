@@ -33,9 +33,15 @@ function theme_transitions2_init() {
 	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
 	elgg_load_css('font-awesome');
 	
-
+	// Add viewport to head
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');
-
+	
+	// Pour changer la manière de filtrer les tags HTMLawed
+	if (elgg_is_active_plugin('htmlawed')) {
+		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
+		elgg_register_plugin_hook_handler('validate', 'input', 'theme_transitions2_htmlawed_filter_tags', 1);
+	}
+	
 	// non-members do not get visible links to RSS feeds
 	if (!elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
@@ -219,5 +225,49 @@ function theme_transitions2_set_usersettings() {
 	}
 	return false;
 }
+
+
+function theme_transitions2_htmlawed_filter_tags($hook, $type, $result, $params = null) {
+	$var = $result;
+
+	elgg_load_library('htmlawed');
+
+	$htmlawed_config = array(
+		// seems to handle about everything we need.
+		//'safe' => true, // @TODO : allows most code
+		'safe' => false, // @TODO : allows most code
+
+		// remove comments/CDATA instead of converting to text
+		'comment' => 1,
+		'cdata' => 1,
+
+		//'deny_attribute' => 'class, on*',
+		'deny_attribute' => 'on*',
+		'hook_tag' => 'htmlawed_tag_post_processor',
+
+		'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
+		// apparent this doesn't work.
+		// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
+	);
+
+	// add nofollow to all links on output
+	if (!elgg_in_context('input')) {
+		$htmlawed_config['anti_link_spam'] = array('/./', '');
+	}
+
+	$htmlawed_config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $htmlawed_config);
+
+	if (!is_array($var)) {
+		$result = htmLawed($var, $htmlawed_config);
+	} else {
+		array_walk_recursive($var, 'htmLawedArray', $htmlawed_config);
+		$result = $var;
+	}
+
+	return $result;
+}
+
+
+
 
 
