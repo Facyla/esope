@@ -70,7 +70,7 @@ Voir et commenter cette contribution :
 	'transitions:icon' => "Image",
 	'transitions:icon:details' => "Choisissez une image pour illustrer votre contribution.",
 	'transitions:icon:new' => "Ajouter une image",
-	'transitions:icon:remove' => "Supprimer l'image'",
+	'transitions:icon:remove' => "Supprimer l'image",
 	'transitions:attachment' => "Fichier joint",
 	'transitions:attachment:details' => "Vous pouvez joindre un fichier à votre contribution. Si vous souhaitez joindre plusieurs fichiers, veuillez en faire un ZIP.",
 	'transitions:attachment:new' => "Joindre un fichier",
@@ -99,6 +99,9 @@ Voir et commenter cette contribution :
 	'transitions:saveandedit' => "Poursuivre l'édition",
 	'transitions:preview' => "Sauvegarder",
 	'transitions:save' => "Publier",
+	'transitions:incremental' => "Contenu incrémental",
+	'transitions:incremental:no' => "Non (par défaut)",
+	'transitions:incremental:yes' => "Oui (mis au second plan)",
 	
 	// Other forms
 	'transitions:tags_contributed' => "Tags des contributeurs",
@@ -106,6 +109,7 @@ Voir et commenter cette contribution :
 	'transitions:addtag' => "Ajouter le tag",
 	'transitions:form:addlink' => "Ajouter un lien vers une autre ressource",
 	'transitions:addlink' => "Ajouter le lien",
+	'transitions:addlink:alreadyexists' => "Ce lien a déjà été ajouté",
 	'transitions:links_supports' => "Ressources en accord",
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",

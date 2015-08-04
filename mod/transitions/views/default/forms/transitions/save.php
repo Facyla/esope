@@ -147,6 +147,18 @@ if (elgg_is_admin_logged_in()) {
 			'published' => elgg_echo('status:published')
 		)
 	));
+	
+	$incremental_label = elgg_echo('transitions:incremental');
+	$incremental_value = $vars['is_incremental'];
+	$incremental_input = elgg_view('input/select', array(
+		'name' => 'is_incremental',
+		'id' => 'transitions_incremental',
+		'value' => $vars['is_incremental'],
+		'options_values' => array(
+			'no' => elgg_echo('transitions:incremental:no'),
+			'yes' => elgg_echo('transitions:incremental:yes'),
+		)
+	));
 } else {
 	$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
 }
@@ -252,7 +264,7 @@ $tags_input = elgg_view('input/tags', array(
 // @TODO Admin only : contributed tags + links + status
 $admin_fields = '';
 if (elgg_is_admin_logged_in()) {
-	$contributed_tags_label = elgg_echo('transitions:contributed_tags');
+	$contributed_tags_label = elgg_echo('transitions:tags_contributed');
 	$contributed_tags_input = elgg_view('input/tags', array(
 		'name' => 'tags_contributed',
 		'id' => 'transitions_tags_contributed',
@@ -278,6 +290,7 @@ if (elgg_is_admin_logged_in()) {
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
+	$admin_fields .= '<p class="' . $incremental_value . '"><label class="" for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
 	$admin_fields .= '<p><label class="hidden" for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	$admin_fields .= '<p><label class="hidden" for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	$admin_fields .= '<p><label class="hidden" for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';

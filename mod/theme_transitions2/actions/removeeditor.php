@@ -15,7 +15,8 @@ if ($guid == elgg_get_logged_in_user_guid()) {
 }
 
 if (($user instanceof ElggUser) && ($user->canEdit())) {
-	if ($user->removeAdmin()) {
+	//if ($user->removeAdmin() && ($user->is_editor = null)) {
+	if ($user->is_editor = null) {
 		system_message(elgg_echo('admin:user:removeeditor:yes'));
 	} else {
 		register_error(elgg_echo('admin:user:removeeditor:no'));

@@ -18,6 +18,7 @@ elgg_make_sticky_form('transitions');
 // edit or create a new entity
 $guid = get_input('guid');
 $link = get_input('url');
+$link = string_to_tag_array($link);
 $relation = get_input('relation');
 
 if ($guid) {
@@ -31,14 +32,27 @@ if ($guid) {
 // Add new link
 if (!empty($link)) {
 	if ($relation == 'invalidates') {
-		$links = (array)$entity->links_invalidates + (array)$link;
+		$links = (array)$entity->links_invalidates;
+		foreach($link as $url) {
+			if (in_array($url, $links)) { register_error('transitions:addlink:alreadyexists'); }
+			$links[] = $url;
+		}
 		$links = array_unique($links);
+		$links = array_filter($links);
 		$entity->links_invalidates = $links;
 	} else {
-		$links = (array)$entity->links_supports + (array)$link;
+		$links = (array)$entity->links_supports;
+		foreach($link as $url) {
+			if (in_array($url, $links)) { register_error('transitions:addlink:alreadyexists'); }
+			$links[] = $url;
+		}
 		$links = array_unique($links);
+		$links = array_filter($links);
 		$entity->links_supports = $links;
 	}
+	system_messages('transitions:addlink:success');
+} else {
+	system_messages('transitions:addlink:emptylink');
 }
 
 

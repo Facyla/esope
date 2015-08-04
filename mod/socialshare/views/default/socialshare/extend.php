@@ -2,16 +2,15 @@
 /* Social share sharing links 
  * All sharing links must be only links, no API, no iframe, no embed, no external cookie
  */
-global $CONFIG;
 
 $lang = get_current_language();
-$full_url = elgg_extract('shareurl', $vars, full_url());
+$full_url = elgg_extract('shareurl', $vars, current_page_url());
 $share_url = rawurlencode($full_url);
 $share_title = '';
 $share_description = '';
-$share_source = $CONFIG->site->name;
+$share_source = elgg_get_site_entity()->name;
 $share_image = '';
-$imgurl = $CONFIG->url . 'mod/socialshare/graphics/';
+$imgurl = elgg_get_site_url() . 'mod/socialshare/graphics/';
 
 $providers = array('email' => 'Email', 'twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' => 'Google', 'pinterest' => 'Pinterest', 'facebook' => 'Facebook');
 

@@ -165,6 +165,53 @@ if (!$error) {
 	}
 }
 
+// Handle admin-reserved fields
+if (elgg_is_admin_logged_in()) {
+	$tags_contributed = get_input('tags_contributed');
+	// Add new tag
+	if (!empty($tags_contributed)) {
+		$new_tags = string_to_tag_array($tags_contributed);
+		$tags_contributed = (array)$entity->tags_contributed;
+		foreach($new_tags as $tag) { $tags_contributed[] = $tag; }
+		$tags_contributed = array_unique($tags_contributed);
+		$tags_contributed = array_filter($tags_contributed);
+		$entity->tags_contributed = $tags_contributed;
+	}
+	
+	$links_invalidates = get_input('links_invalidates');
+	// Add new tag
+	if (!empty($links_invalidates)) {
+		$new_tags = string_to_tag_array($links_invalidates);
+		$links_invalidates = (array)$entity->links_invalidates;
+		foreach($new_tags as $tag) { $links_invalidates[] = $tag; }
+		$links_invalidates = array_unique($links_invalidates);
+		$links_invalidates = array_filter($links_invalidates);
+		$entity->links_invalidates = $links_invalidates;
+	}
+	
+	$links_supports = get_input('links_supports');
+	// Add new tag
+	if (!empty($links_supports)) {
+		$new_tags = string_to_tag_array($links_supports);
+		$links_supports = (array)$entity->links_supports;
+		foreach($new_tags as $tag) { $links_supports[] = $tag; }
+		$links_supports = array_filter($links_supports);
+		$entity->links_supports = $links_supports;
+	}
+	
+	$is_incremental = get_input('is_incremental');
+	// Add new tag
+	if (!empty($is_incremental)) {
+		if ($is_incremental == 'yes') {
+			$entity->is_incremental = 'yes';
+		} else {
+			$entity->is_incremental = null;
+		}
+	}
+	
+}
+
+
 // only try to save base entity if no errors
 if (!$error) {
 	if ($transitions->save()) {

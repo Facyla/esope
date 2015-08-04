@@ -15,7 +15,8 @@ $guid = get_input('guid');
 $user = get_entity($guid);
 
 if (($user instanceof ElggUser) && ($user->canEdit())) {
-	if ($user->makeAdmin()) {
+	//if ($user->makeAdmin() && ($user->is_editor = 'yes')) {
+	if ($user->is_editor = 'yes') {
 		system_message(elgg_echo('admin:user:makeeditor:yes'));
 	} else {
 		register_error(elgg_echo('admin:user:makeeditor:no'));

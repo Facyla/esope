@@ -29,6 +29,7 @@ if (!empty($tags)) {
 	$new_tags = string_to_tag_array($tags);
 	$tags = (array)$entity->tags_contributed;
 	foreach($new_tags as $tag) { $tags[] = $tag; }
+	$tags = array_unique($tags);
 	$tags = array_filter($tags);
 	$entity->tags_contributed = $tags;
 }

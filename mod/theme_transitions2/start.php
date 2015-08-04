@@ -25,7 +25,7 @@ function theme_transitions2_init() {
 	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
-		elgg_register_action('admin/user/makeeditor', dirname(__FILE__) . "/actions/makeeditor.php", 'admin');
+	elgg_register_action('admin/user/makeeditor', dirname(__FILE__) . "/actions/makeeditor.php", 'admin');
 	elgg_register_action('admin/user/removeeditor', dirname(__FILE__) . "/actions/removeeditor.php", 'admin');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
 	
@@ -149,18 +149,23 @@ function theme_transitions2_user_is_editor($user = false) {
 	return false;
 }
 
+function theme_transitions_get_editors() {
+	$options = array('types' => 'user', 'metadata_name_value_pairs' => array('name' => 'is_editor', 'value' => 'yes'));
+	return elgg_get_entities_from_metadata($options);
+}
+
 
 function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	$user = $params['entity'];
 	
 	// Remove some unwanted entries
-	$remove_user_menus = array('add_friend', 'remove_friend', 'activity:owner');
+	$remove_user_menus = array('add_friend', 'remove_friend', 'activity:owner', 'transitions');
 	// @TODO Supprimer lien message si refus d'être contacté
 	$block_messages = elgg_get_plugin_user_setting('block_messages', 'theme_transitions2');
 	if ($block_messages == 'yes') $remove_user_menus[] = 'send';
 	if ($return) foreach ($return as $key => $item) {
 		$name = $item->getName();
-		if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+		if (is_array($remove_user_tools) && in_array($name, $remove_user_tools)) { unset($return[$key]); }
 	}
 	
 	// Add some admin menus
@@ -173,7 +178,7 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 		}
 		
 		foreach ($actions as $action) {
-			$url = "action/admin/ustheme_transitions2_user_is_editor($userer/$action?guid={$user->guid}";
+			$url = "action/admin/user/$action?guid={$user->guid}";
 			$url = elgg_add_action_tokens_to_url($url);
 			$item = new \ElggMenuItem($action, elgg_echo($action), $url);
 			$item->setSection('admin');
