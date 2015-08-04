@@ -66,8 +66,7 @@ $values = array(
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
-	// File attachment
-	'attachment' => '',
+	// File attachment and icon : not a regular metadata (would be overridden when saving)
 	'url' => '',
 	'category' => '',
 	'lang' => '',
@@ -97,6 +96,7 @@ if (!empty($category)) {
 	// Challenge => news feed (to be displayed)
 	if (in_array($category, array('challenge'))) {
 		$values['rss_feed'] = '';
+		$values['challenge_elements'] = '';
 	}
 }
 
@@ -231,7 +231,7 @@ if (elgg_is_admin_logged_in()) {
 if (!$error) {
 	if ($transitions->save()) {
 		
-		// handle icon upload
+		// Icon upload
 		if(get_input("remove_icon") == "yes"){
 			// remove existing icons
 			transitions_remove_icon($transitions);
@@ -257,7 +257,7 @@ if (!$error) {
 			}
 		}
 
-		// handle icon upload
+		// Attachment upload
 		if(get_input("remove_attachment") == "yes"){
 			// remove existing icons
 			transitions_remove_attachment($transitions);
@@ -281,7 +281,7 @@ if (!$error) {
 				$transitions->attachment_name = $attachment_name;
 			}
 		}
-
+		
 		// remove sticky form entries
 		elgg_clear_sticky_form('transitions');
 

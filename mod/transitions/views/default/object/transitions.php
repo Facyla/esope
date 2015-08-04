@@ -19,6 +19,8 @@ elgg_require_js('jquery.form');
 elgg_load_js('elgg.embed');
 elgg_load_js('elgg.transitions.edit');
 
+$body = '';
+
 $owner = $transitions->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);
 $excerpt = $transitions->excerpt;
@@ -123,8 +125,6 @@ if (elgg_is_admin_logged_in()) {
 
 
 if ($full) {
-	$body = '';
-	
 	$body .= '<span class="transitions-' . $transitions->category . '" style="float:left; margin-right:1em;">';
 	if (!empty($transitions->category)) $body .= elgg_echo('transitions:category:' . $transitions->category);
 	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) $body .= '&nbsp;: ' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . '';
@@ -136,7 +136,7 @@ if ($full) {
 	
 	$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
 	
-	$body .= '<div class="clearfloat"></div>';
+	$body .= '<div class="clearfloat"></div><br />';
 	
 	
 	// Territory : actor|project|event only
@@ -231,7 +231,9 @@ if ($full) {
 					'list_type' => 'gallery',
 					'gallery_class' => '',
 				));
-			$body .= elgg_view_module('featured', elgg_echo('transitions:related_actors'), $related_actors);
+			if (!empty($related_actors)) {
+				$body .= elgg_view_module('featured', elgg_echo('transitions:related_actors'), $related_actors);
+			}
 		}
 		if ($transitions->category == 'challenge') {
 			$related_content = elgg_list_entities_from_relationship(array(
@@ -260,18 +262,19 @@ if ($full) {
 	$body .= '<div class="clearfloat"></div><br />';
 	
 	// Add relation to related actors (anyone)
-	// @TODO 
 	if ($transitions->category == 'project') {
 		$body .= elgg_view_form('transitions/addactor', array(), array('guid' => $transitions->guid));
 		$body .= '<div class="clearfloat"></div><br />';
 	}
 	
 	// Add relation to answer resources (anyone)
-	// @TODO 
+	// @TODO : réservé aux auteurs du défi...
+	/*
 	if ($transitions->category == 'challenge') {
-		$body .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'related_content'));
+		$body .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'challenge_element'));
 		$body .= '<div class="clearfloat"></div><br />';
 	}
+	*/
 	
 	// Permalink
 	$body .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink);
@@ -299,8 +302,11 @@ if ($full) {
 	// brief view
 	
 	if (elgg_in_context("listing") || ($list_type != 'gallery')) {
-			$category = '';
-			if (!empty($transitions->category)) $category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+		// Listing view
+		$category = '';
+		if (!empty($transitions->category)) {
+			$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+		}
 		$params = array(
 			'entity' => $transitions,
 			'metadata' => $metadata,
@@ -310,10 +316,15 @@ if ($full) {
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
 		
-		echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+		if (!empty(trim($transitions_icon))) {
+			echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+		} else {
+			echo elgg_view_image_block($owner_icon, $list_body);
+		}
 		//echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
 		
 	} else {
+		// Gallery view
 		// do not show the metadata and controls in gallery view
 		$metadata = '';
 		$params = array(

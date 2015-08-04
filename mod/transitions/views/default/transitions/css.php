@@ -4,6 +4,7 @@
 
 
 /* Content category types */
+.elgg-list .transitions-category { margin: 0 0.5ex 0.5ex 0; }
 .transitions-all { background-color:#000; padding:0.5ex 1ex; }
 .transitions-actor { background-color:#6299EB; padding:0.5ex 1ex; }
 .transitions-project { background-color:#A581DA; padding:0.5ex 1ex; }

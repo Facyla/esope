@@ -191,6 +191,13 @@ $rss_feed_input = elgg_view('input/url', array(
 ));
 $rss_feed_details = elgg_echo('transitions:rss_feed:details');
 
+// @TODO update to allow several elements (+ should be regular inputs)
+$challenge_elements_label = elgg_echo('transitions:challenge_element');
+$challenge_elements_input = elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid));
+$challenge_elements_input .= '<div class="clearfloat"></div><br />';
+$challenge_elements_details = elgg_echo('transitions:challenge_elements:details');
+
+
 $category_label = elgg_echo('transitions:category');
 $category_input = elgg_view('input/select', array(
 	'name' => 'category',

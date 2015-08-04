@@ -194,7 +194,7 @@ function theme_transitions2_owner_block_menu($hook, $type, $return, $params) {
 	// Menu user
 	$user = $params['entity'];
 	if (elgg_instanceof($user, 'user')) {
-		$remove_user_tools = array('file');
+		$remove_user_tools = array('file', 'transitions');
 		if ($return) foreach ($return as $key => $item) {
 			$name = $item->getName();
 			if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
