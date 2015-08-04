@@ -21,6 +21,11 @@ $yn_opts = array('yes' => elgg_echo('collection:option:yes'), 'no' => elgg_echo(
 </p>
 //-->
 
+<p><label><?php echo elgg_echo('collections:settings:subtypes'); ?>
+	<?php echo elgg_view('input/text', array( 'name' => 'params[subtypes]', 'value' => $vars['entity']->subtypes )); ?></label><br />
+	</em><?php echo elgg_echo('collections:settings:subtypes:details'); ?></em>
+</p>
+
 <br />
 
 

@@ -16,7 +16,8 @@ return array(
 
 	// Editing
 	'transitions:add' => "Ajouter une contribution",
-	'transitions:edit' => "Modifier la contribution",
+	'transitions:edit' => "Valorisez votre contribution",
+	'transitions:edit:details' => "Vous y êtes presque !<br />Pour rendre plus lisible cette ressource dans le catalogue, n’hésitez pas à la préciser",
 	'transitions:excerpt' => "En 140 caractères...",
 	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
@@ -39,6 +40,8 @@ return array(
 	'transitions:error:cannot_edit_post' => "Cette contribution peut ne pas exister ou vous n\'avez pas les autorisations pour la modifier.",
 	'transitions:error:post_not_found' => "Impossible de trouver la contribution spécifiée.",
 	'transitions:error:revision_not_found' => "Impossible de trouver cette révision.",
+	'transitions:error:actor_not_found' => "Impossible de trouver cet acteur.",
+	'transitions:error:not_an_actor' => "Cette contribution n'est pas un acteur.",
 
 	// river
 	'river:create:object:transitions' => "%s a publié une contribution %s",
@@ -64,15 +67,19 @@ Voir et commenter cette contribution :
 	
 	
 	// NEW STRINGS
-	'transitions:icon' => "Vignette",
-	'transitions:icon:details' => "Vous pouvez charger une image qui sera utilisée pour illustrer votre contribution.",
-	'transitions:icon:new' => "Ajouter une vignette",
-	'transitions:icon:remove' => "Supprimer la vignette",
+	'transitions:icon' => "Image",
+	'transitions:icon:details' => "Choisissez une image pour illustrer votre contribution.",
+	'transitions:icon:new' => "Ajouter une image",
+	'transitions:icon:remove' => "Supprimer l'image'",
 	'transitions:attachment' => "Fichier joint",
 	'transitions:attachment:details' => "Vous pouvez joindre un fichier à votre contribution. Si vous souhaitez joindre plusieurs fichiers, veuillez en faire un ZIP.",
 	'transitions:attachment:new' => "Joindre un fichier",
 	'transitions:attachment:remove' => "Supprimer le fichier joint",
 	'transitions:category' => "Catégorie",
+	'transitions:category:choose' => "Sélectionnez une catégorie",
+	'transitions:title' => "Titre de votre contribution",
+	'transitions:tags' => "Ajoutez plusieurs tags séparés par des virgules",
+	'transitions:excerpt' => "Votre contribution en 140 caractères",
 	'transitions:url' => "Lien web",
 	'transitions:url:details' => "Si votre contribution fait référence à une ressource en ligne, veuillez indiquer son adresse.",
 	'transitions:lang' => "Langue",
@@ -83,10 +90,18 @@ Voir et commenter cette contribution :
 	'transitions:actortype' => "Type d'acteur",
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
+	'transitions:dateformat' => "M Y",
+	'transitions:dateformat:time' => "d M Y à H:i:s",
+	'transitions:date:since' => "Depuis le",
+	'transitions:date:until' => "Jusqu'au",
+	'transitions:rss_feed' => "Flux RSS",
 	'transitions:savedraft' => "Publier ma contribution",
+	'transitions:saveandedit' => "Poursuivre l'édition",
+	'transitions:preview' => "Sauvegarder",
+	'transitions:save' => "Publier",
 	
 	// Other forms
-	'transitions:contributed_tags' => "Tags des contributeurs",
+	'transitions:tags_contributed' => "Tags des contributeurs",
 	'transitions:form:addtag' => "Ajouter un tag",
 	'transitions:addtag' => "Ajouter le tag",
 	'transitions:form:addlink' => "Ajouter un lien vers une autre ressource",
@@ -95,11 +110,28 @@ Voir et commenter cette contribution :
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",
 	'transitions:relation:invalidates' => "en opposition",
+	'transitions:related_actors' => "Acteurs partenaires du projet",
+	'transitions:form:addactor' => "Ajouter un Acteur",
+	'transitions:addactor' => "Ajouter l'Acteur",
+	'transitions:related_content' => "Contenus liés à ce défi",
+	'transitions:form:addrelation' => "Ajouter une relation",
+	'transitions:addrelation' => "Ajouter une relation",
 	'transitions:index' => "Catalogue des contributions",
 	'transitions:search:results' => "%s résultats",
 	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
 	'transitions:search:noresult' => "Aucun résultat ! &nbsp; Nous attendons votre contribution avec impatience ;-)",
+	'transitions:embed' => "Code d'embarquement",
+	'transitions:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'transitions:permalink' => "Permalien",
+	'transitions:permalink:details' => "Lien permanent pour cette contribution",
+	'transitions:embed:search' => "Sélectionnez une ressource",
+	'transitions:embed:search:actor' => "Sélectionnez un acteur",
 	
+	// Bookmarklet
+	'transitions:bookmarklet' => "Bookmarklet",
+	'transitions:bookmarklet:description' => "Le bookmarklet vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",
+	'transitions:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
+	'transitions:bookmarklet:description:conclusion' => "Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
 	
 	
 	// Select values
@@ -112,8 +144,9 @@ Voir et commenter cette contribution :
 	'transitions:category:tools' => "<i class=\"fa fa-wrench\"></i> Outil ou méthode",
 	'transitions:category:actor' => "<i class=\"fa fa-user\"></i> Acteur",
 	'transitions:category:project' => "<i class=\"fa fa-cube\"></i> Projet",
-	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
 	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Evénement",
+	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
+	'transitions:category:challenge' => "<i class=\"fa fa-trophy\"></i> Défi",
 	
 	'transitions:actortype:individual' => "Individu",
 	'transitions:actortype:collective' => "Collectif",
@@ -124,6 +157,7 @@ Voir et commenter cette contribution :
 	'transitions:actortype:administration' => "Administration publique",
 	'transitions:actortype:plurinational' => "Entité plurinationale",
 	'transitions:actortype:other' => "Autre",
+	'transitions:actortype:choose' => "Sélectionnez un type d'acteur",
 	
 	
 );

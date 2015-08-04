@@ -30,6 +30,9 @@ Mot de passe : %s
 
 ",
 	
+	'theme_transitions:contributions' => "Contributions",
+	'theme_transitions:collections' => "Collections",
+	'theme_transitions:comments' => "Commentaires",
 	
 	// Main translations overrides
 	'settings' => "Paramètres",
@@ -42,6 +45,7 @@ Mot de passe : %s
 	'admin:user:makeeditor:yes' => "L'utilisateur est éditeur.",
 	'admin:user:makeeditor:no' => "Impossible de nommer cet utilisateur éditeur.",
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
+	'embed:media' => "Joindre un fichier ou une image",
 	
 	
 );

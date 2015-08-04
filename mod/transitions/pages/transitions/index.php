@@ -52,9 +52,10 @@ $content .= '<div class="transitions-search-menu">';
 	}
 	$content .= '<div class="clearfloat"></div><br />';
 	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="transitions-search">';
-		$content .= '<label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
+		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 		$content .= ' &nbsp; ';
-		$content .= '<label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+		$content .= '<label>' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+		$content .= '<br />';
 		$content .= '<br />';
 		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
 		$content .= elgg_view('input/submit', array('value' => "Rechercher"));
@@ -65,7 +66,7 @@ $content .= '<div class="clearfloat"></div><br /><br />';
 
 
 // Search options
-$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 2, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
+$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 10, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 
 if (!empty($category)) {
 	$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);

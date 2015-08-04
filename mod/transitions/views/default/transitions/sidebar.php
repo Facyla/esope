@@ -24,3 +24,8 @@ if ($vars['page'] != 'friends') {
 		'container_guid' => elgg_get_page_owner_guid(),
 	));
 }
+
+if (elgg_is_logged_in()) {
+	echo elgg_view('transitions/sidebar/bookmarklet');
+}
+

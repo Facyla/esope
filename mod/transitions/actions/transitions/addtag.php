@@ -26,8 +26,10 @@ if ($guid) {
 
 // Add new tag
 if (!empty($tags)) {
-	$tags = string_to_tag_array($tags);
-	$tags = (array)$entity->tags_contributed + $tags;
+	$new_tags = string_to_tag_array($tags);
+	$tags = (array)$entity->tags_contributed;
+	foreach($new_tags as $tag) { $tags[] = $tag; }
+	$tags = array_filter($tags);
 	$entity->tags_contributed = $tags;
 }
 

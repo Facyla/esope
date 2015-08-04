@@ -105,7 +105,7 @@ function feedback_page_handler($page) {
  */
 function feedback_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'slider')) {
+	if (elgg_instanceof($entity, 'object', 'feedback')) {
 		return elgg_get_site_url() . 'feedback/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
 	}
 }

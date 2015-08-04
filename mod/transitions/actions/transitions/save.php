@@ -66,12 +66,12 @@ $values = array(
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
-	// @TODO handle attachment
+	// File attachment
 	'attachment' => '',
 	'url' => '',
 	'category' => '',
-	'resource_lang' => '',
 	'lang' => '',
+	'resource_lang' => '',
 	// ssi category "actor" : territory + geolocation, actor_type
 	'territory' => '', // +geolocation
 	'actor_type' => '',
@@ -79,10 +79,13 @@ $values = array(
 	'start_date' => '',
 	// ssi category "event" : start_date, end_date, territory + geolocation
 	'end_date' => '',
+	// ssi challenge
+	'rss_feed' => '',
 );
 
 // fail if a required entity isn't set
-$required = array('title', 'description');
+//$required = array('title', 'description');
+$required = array('title');
 
 // load from POST and do sanity and access checking
 foreach ($values as $name => $default) {

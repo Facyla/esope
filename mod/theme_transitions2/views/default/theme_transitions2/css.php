@@ -8,6 +8,8 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 a { color: #223300; }
 img { max-width: 100%; }
 select { max-width: 98%; }
+input, textarea { max-width: 100%; }
+
 
 .flexible-block { float:left; }
 
@@ -37,7 +39,20 @@ select { max-width: 98%; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
 .elgg-button-nav:hover { background-color: #669900; }
 
+
+/* Homepage */
 .elgg-menu-item-logohome a { padding: 0 !important; }
+.elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }
+
+
+/* Profile */
+.profile-static-block { padding: 0 0.5em 0.5em 0.5em; }
+
+/* Feedback */
+#feedbackWrapper { bottom: 46px; right: 46px; left:initial; top:initial; }
+#feedBackContentWrapper { left:0; }
+#feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+#feedBackTogglerLink img { margin: 0 10px 5px 0; }
 
 
 

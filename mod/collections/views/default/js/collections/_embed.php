@@ -1,7 +1,5 @@
-<?php ?>
 //<script>
-
-elgg.provide("elgg.collections.embed");
+elgg.provide('elgg.collections.embed');
 
 elgg.collections.embed.init = function() {
 	
@@ -139,5 +137,5 @@ elgg.collections.embed.hook = function(hook, type, params, value) {
 
 
 //register init hook
-elgg.register_hook_handler("init", "system", elgg.collections.embed.init);
+elgg.register_hook_handler('init', 'system', elgg.collections.embed.init);
 

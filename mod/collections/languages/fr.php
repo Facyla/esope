@@ -48,7 +48,28 @@ return array(
 	'collections:edit:entities' => "Publication",
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",
+	'collections:change_entity' => "Changer de publication",
+	
 	//'collections:' => "",
+	'collections:publishin' => "Publier dans",
+	'collections:removefromcollection' => "Retirer de",
+	'collections:addtocollection' => "Ajouter dans une nouvelle collection",
+	'collections:strapline' => 'Dernière mise à jour le %s par %s',
+	'collections:missingrequired' => "Il manque un champs requis",
+	'collections:embed:search' => "Recherche",
+	'collections:embed:subtype' => "Type de publication",
+	'collections:embed:nofilter' => "Toutes (pas de filtre)",
+	
+	'collections:collectionsthis' => "Ajouter à une collection",
+	'collections:embed' => "Code d'embarquement",
+	'collections:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'collections:permalink' => "Permalien",
+	'collections:permalink:details' => "Lien permanent pour cette collection",
+	
+	'collections:entities:count' => "%s diapositives",
+	
+	'collections:settings:subtypes' => "Subtypes",
+	'collections:settings:subtypes:details' => "Subtypes pour lesquels proposer d'ajouter à la playlist",
 	
 );
 

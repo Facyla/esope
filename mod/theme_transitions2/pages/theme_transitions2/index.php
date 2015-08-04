@@ -28,28 +28,33 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 		// @TODO 4 blocs avec titre, image, texte et possibilité de faire un lien
 		$content .= '<div class="clearfloat"></div>';
 		$content .= '<br /><br />';
-		
-		// SEARCH
-		$content .= elgg_view('transitions/search_home');
-		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
 	
 	// SIDEBAR - CONTRIBUEZ !
 	$content .= '<div class="flexible-block" style="width:30%; float:right;">';
 		$content .= '<p>' . elgg_echo('theme_transitions2:newcontribution') . '</p>';
+		$content .= '<a href="javascript:void(0);" onClick="$(\'#transitions-contribute\').show(); $(this).hide();" class="elgg-button elgg-button-action elgg-button-transitions">Contribuez</a>';
+		$content .= '<div id="transitions-contribute" style="display:none;">';
 		if (elgg_is_logged_in()) {
 			// Quick contribution form
 			$content .= elgg_view_form('transitions/quickform');
 		} else {
 			$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action">Contribuez</a>';
 		}
+		$content .= '</div>';
 	$content .= '</div>';
 	
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
-// @TODO Par défaut : celles sélectionnées par la rédaction
-// Filtres sur : les +commentées, les +tagguées, les +récentes, les +liées
+
+	// SEARCH
+	$content .= '<br />';
+	$content .= elgg_view('transitions/search_home');
+	$content .= '<div class="clearfloat"></div>';
+
+	// @TODO Par défaut : celles sélectionnées par la rédaction
+	// Filtres sur : les +commentées, les +tagguées, les +récentes, les +liées
 	$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 	$count = elgg_get_entities_from_metadata($list_options);
 	$catalogue = elgg_list_entities($list_options);

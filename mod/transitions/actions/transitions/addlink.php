@@ -32,9 +32,11 @@ if ($guid) {
 if (!empty($link)) {
 	if ($relation == 'invalidates') {
 		$links = (array)$entity->links_invalidates + (array)$link;
+		$links = array_unique($links);
 		$entity->links_invalidates = $links;
 	} else {
 		$links = (array)$entity->links_supports + (array)$link;
+		$links = array_unique($links);
 		$entity->links_supports = $links;
 	}
 }

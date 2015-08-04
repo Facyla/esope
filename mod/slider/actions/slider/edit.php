@@ -33,18 +33,18 @@ $slider_name = elgg_get_friendly_title($slider_name);
 // Get slider entity, if it exists
 $guid = get_input('guid', false);
 $slider = get_entity($guid);
+if (!$slider) $slider = slider_get_entity_by_name($guid);
 
 // Check if slider name already exists (for another slider)
 $existing_slider = slider_get_entity_by_name($slider_name);
-if ($existing_slider && elgg_instanceof($slider, 'object', 'slider') && ($existing_slider->guid != $slider->guid)) {
+if ($existing_slider && elgg_instanceof($slider, 'object', 'slider') && elgg_instanceof($existing_slider, 'object', 'slider') && ($existing_slider->guid != $slider->guid)) {
 	register_error(elgg_echo('slider:error:alreadyexists'));
 	forward(REFERER);
 }
 
 
 // Check existing object, or create a new one
-if (elgg_instanceof($slider, 'object', 'slider')) {
-} else {
+if (!elgg_instanceof($slider, 'object', 'slider')) {
 	$slider = new ElggSlider();
 	$slider->save();
 }
@@ -70,12 +70,13 @@ if ($slider->save()) {
 	elgg_clear_sticky_form('slider'); // Remove the cache
 } else {
 	register_error(elgg_echo("slider:error"));
+	forward(REFERER);
 }
 
 //elgg_set_ignore_access(false);
 
 // Forward back to the edit page
-$forward = 'slider/edit/' . $slider->guid;
+$forward = elgg_get_site_url() . 'slider/edit/' . $slider->guid;
 $edit_mode = get_input('edit_mode', '');
 if (!empty($edit_mode)) {
 	$forward .= '?edit_mode=' . $edit_mode;

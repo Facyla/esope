@@ -84,13 +84,14 @@ function leaflet_register_libraries() {
 	// List available libraries
 	$libraries_config = leaflet_get_libraries_config();
 	
-	// @TODO enable only wanted plugins
 	
 	global $leaflet_registered_libs;
 	$leaflet_registered_libs = array('js' => array(), 'css' => array());
 	
 	// Register JS scripts and CSS files
 	foreach ($libraries_config as $name => $lib_config) {
+		// @TODO enable only wanted plugins
+		// if (!in_array($name, $enabled_plugins)) { continue; }
 		foreach ($lib_config as $config) {
 			switch($config['type']) {
 				case 'js':
@@ -201,6 +202,7 @@ function leaflet_geocode($hook, $entity_type, $returnvalue, $params) {
 		$latlong = $obj->results[0]->locations[0]->latLng;
 		$lat = $latlong->lat;
 		$long = $latlong->lng;
+		// @TODO : extract and save zoom level ?
 		//error_log("GEOCODING start : {$params['location']} => $lat,$long  using URL $address");
 		
 		// Return geocoded address if it is valid
