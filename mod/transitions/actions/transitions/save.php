@@ -324,10 +324,6 @@ if (!$error) {
 			));
 		}
 
-echo elgg_view_entity($entity);
-exit;
-
-
 		if ($transitions->status == 'published' || $save == false) {
 			forward($transitions->getURL());
 		} else {
