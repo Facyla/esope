@@ -111,10 +111,9 @@ if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 	// Permalink
 	$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-link"></i>&nbsp;' . elgg_echo('transitions:permalink'), 'rel' => 'popup', 'href' => '#transitions-popup-link-' . $transitions->guid));
 	if (elgg_is_active_plugin('shorturls')) {
-		$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $transitions->guid . '</textarea>';
-	} else {
-		$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $transitions->getURL() . '</textarea>';
+		$short_link = '<p>' . elgg_echo('transitions:shortlink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $transitions->guid . '</textarea>';
 	}
+	$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $transitions->getURL() . '</textarea>';
 	$actions .= elgg_view_module('popup', elgg_echo('transitions:permalink'), $permalink, array('id' => 'transitions-popup-link-' . $transitions->guid, 'class' => 'transitions-popup-link hidden clearfix'));
 	
 	// Embed code
@@ -133,13 +132,6 @@ if ($full) {
 	$body .= '</span>';
 	
 	if (!empty($transitions->excerpt)) $body .= '<p><strong><em>' . $transitions->excerpt . '</em></strong></p>';
-	
-	$body .= $transitions_icon;
-	
-	$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
-	
-	$body .= '<div class="clearfloat"></div><br />';
-	
 	
 	// Territory : actor|project|event only
 	if (in_array($transitions->category, array('actor', 'project', 'event')) && !empty($transitions->territory)) {
@@ -178,20 +170,25 @@ if ($full) {
 	}
 	
 	// URL et PJ
-	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-bookmark"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
-	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-file"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
+	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-external-link"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
+	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-download"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
 	
-	// Meta
+	// Languages
 	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) {
 		$body .= '<p>';
 		if (!empty($transitions->lang)) {
-			$body .= '<i class="fa fa-flag"></i> ' . elgg_echo('transitions:lang'). ' : ' . elgg_echo($transitions->lang) . ' &nbsp; ';
+			$body .= '<i class="fa fa-flag"></i> ' . elgg_echo('transitions:lang'). '&nbsp;: ' . elgg_echo($transitions->lang) . ' &nbsp; ';
 		}
 		if (!empty($transitions->resource_lang)) {
-			$body .= '<i class="fa fa-flag-o"></i> ' . elgg_echo('transitions:resourcelang'). ' : ' . elgg_echo($transitions->resource_lang);
+			$body .= '<i class="fa fa-flag-o"></i> ' . elgg_echo('transitions:resourcelang'). '&nbsp;: ' . elgg_echo($transitions->resource_lang);
 		}
 		$body .= '</p>';
 	}
+	
+	$body .= '<div class="clearfloat"></div>';
+	
+	$body .= elgg_view('output/longtext', array('value' => $transitions_icon . $transitions->description, 'class' => 'transitions-post'));
+	$body .= '<div class="clearfloat"></div><br />';
 	
 	// @TODO ssi challenge => afficher le flux RSS
 	if ($transitions->category == 'challenge') { $body .= '<p>' . $transitions->rss_feed . '</p>'; }
@@ -257,56 +254,58 @@ if ($full) {
 	// Enrichment forms
 	// @TODO Sharing + contribution links
 	$params = array(
-		'tabs' => array(
-			array('title' => 'Partager', 'url' => "#transitions-{$transitions->guid}-share", 'selected' => true),
-			array('title' => 'Intégrer', 'url' => "#transitions-{$transitions->guid}-embed"),
-			array('title' => 'Tagguer', 'url' => "#transitions-{$transitions->guid}-addtag"),
-			array('title' => 'Relier', 'url' => "#transitions-{$transitions->guid}-addlink"),
-			array('title' => 'Ajouter un acteur', 'url' => "#transitions-{$transitions->guid}-addactor"),
-		),
+		'tabs' => array(),
 		'id' => "transitions-action-tabs",
 		'style' => "margin-bottom:0;",
 	);
-	$body .= elgg_view('navigation/tabs', $params);
-	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">'; // End tabs block
-	/*
-	$body .= '<div id="transitions-' . $transitions->guid . '-share">LIEN DE PARTAGE</div>';
-	$body .= '<div id="transitions-' . $transitions->guid . '-embed" class="hidden">CODE D\'INTEGRATION</div>';
-	$body .= '<div id="transitions-' . $transitions->guid . '-addtag" class="hidden">AJOUTER UN TAG</div>';
-	$body .= '<div id="transitions-' . $transitions->guid . '-addlink" class="hidden">AJOUTER UNE RESSOURCE</div>';
-	$body .= '<div id="transitions-' . $transitions->guid . '-addactor" class="hidden">AJOUTER UN ACTEUR</div>';
-	*/
+	$tab_content = '';
+	
 	// Contributed tags
-	$body .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-	//$body .= '<div class="clearfloat"></div><br />';
+	$params['tabs'][] = array('title' => elgg_echo('transitions:addtag'), 'url' => "#transitions-{$transitions->guid}-addtag", 'selected' => true);
+	$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
+	//$tab_content .= '<div class="clearfloat"></div><br />';
 	
 	// Contributed support links
-	$body .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-	//$body .= '<div class="clearfloat"></div><br />';
+	$params['tabs'][] = array('title' => elgg_echo('transitions:addlink'), 'url' => "#transitions-{$transitions->guid}-addlink");
+	$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	//$tab_content .= '<div class="clearfloat"></div><br />';
 	
 	// Add relation to related actors (anyone)
 	if ($transitions->category == 'project') {
-		$body .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-		//$body .= '<div class="clearfloat"></div><br />';
+		$params['tabs'][] = array('title' => elgg_echo('transitions:addactor'), 'url' => "#transitions-{$transitions->guid}-addactor");
+		$tab_content .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+		//$tab_content .= '<div class="clearfloat"></div><br />';
 	}
 	
 	// Add relation to answer resources (anyone)
 	// @TODO : réservé aux auteurs du défi...
 	/*
 	if ($transitions->category == 'challenge') {
-		$body .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'challenge_element'));
-		$body .= '<div class="clearfloat"></div><br />';
+		$tab_content .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'challenge_element'));
+		$tab_content .= '<div class="clearfloat"></div><br />';
 	}
 	*/
 	
-	// Permalink
-	$body .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
+	// Permalink and share links
+	$params['tabs'][] = array('title' => elgg_echo('transitions:share'), 'url' => "#transitions-{$transitions->guid}-share");
+	//$tab_content .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	$share_links = '';
+	if (elgg_is_active_plugin('socialshare')) {
+		$share_links .= '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
+		$share_links .= '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array('entity' => $transitions)) . '</div>';
+	}
+	$tab_content .= elgg_view_module('info', false, $share_links . $permalink . $short_link, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
 	
 	// Embed code
-	$body .= elgg_view_module('info', elgg_echo('transitions:embed'), $embed_code, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	$params['tabs'][] = array('title' => elgg_echo('transitions:embed'), 'url' => "#transitions-{$transitions->guid}-embed");
+	//$tab_content .= elgg_view_module('info', elgg_echo('transitions:embed'), $embed_code, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	$tab_content .= elgg_view_module('info', false, $embed_code, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
 	
-	
-	$body .= '</div>'; // End tabs block
+	// Render tabs block
+	$body .= elgg_view('navigation/tabs', $params);
+	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
+	$body .= $tab_content;
+	$body .= '</div>';
 	
 	
 	$params = array(

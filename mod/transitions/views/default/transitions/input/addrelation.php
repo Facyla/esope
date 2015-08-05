@@ -5,12 +5,11 @@
 $value = $vars['value'];
 $relation = $vars['relation'];
 
-// @TODO autocomplete field ?
-
-echo '<a href="' . elgg_get_site_url() . 'transitions/embed/entity/entity-' . $vars['guid'] . '" class="elgg-lightbox">Sélectionner</a>';
+// Lightbox with search
+echo '<a href="' . elgg_get_site_url() . 'transitions/embed/entity/entity-' . $vars['guid'] . '" class="elgg-lightbox">' . elgg_echo('transitions:addrelation:select') . '</a>';
 // Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'entity_guid', 'id' => 'transitions-embed-entity-' . $vars['guid']));
-echo '<div id="transitions-embed-details-entity-' . $vars['guid'] . '"></div>';
+echo '<blockquote id="transitions-embed-details-entity-' . $vars['guid'] . '">' . elgg_echo('transitions:addactor:noneselected') . '</blockquote>';
 
 //echo elgg_view('input/text', array('name' => 'entity_guid', 'style' => "max-width:10em;"));
 echo elgg_view('input/hidden', array('name' => 'relation', 'value' => $relation));

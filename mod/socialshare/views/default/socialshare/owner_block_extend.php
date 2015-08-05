@@ -1,7 +1,6 @@
 <?php
 /* Social share sharing links
  */
-global $CONFIG;
 
 // Add only if set up
 if (elgg_get_plugin_setting('extend_owner_block', 'socialshare') != 'yes') { return; }

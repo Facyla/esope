@@ -372,22 +372,6 @@ $edit_details
 $draft_warning
 
 <div>
-	<label class="hidden" for="transitions_title">$title_label</label>
-	$title_input
-</div>
-
-<div class="flexible-block" style="width:48%; float:left;">
-	<label class="" for="transitions_category">$category_label</label><br />
-	$category_input
-</div>
-
-<div class="flexible-block transitions-actortype" style="width:48%; float:right;">
-	<label class="" for="transitions_actortype transitions-actortype">$actortype_label</label><br />
-	$actortype_input
-</div>
-<div class="clearfloat"></div>
-
-<div>
 	<label class="" for="transitions_icon">$icon_label</label><br />
 	$icon_input<br />
 	<em>$icon_details</em>
@@ -404,9 +388,36 @@ $draft_warning
 </div>
 
 <div>
+	<label class="hidden" for="transitions_title">$title_label</label>
+	$title_input
+</div>
+
+<div class="flexible-block" style="width:48%; float:left;">
+	<label class="" for="transitions_category">$category_label</label><br />
+	$category_input
+</div>
+
+<div class="flexible-block transitions-actortype" style="width:48%; float:right;">
+	<label class="" for="transitions_actortype transitions-actortype">$actortype_label</label><br />
+	$actortype_input
+</div>
+<div class="clearfloat"></div>
+
+<div>
+	<label class="" for="transitions_description">$body_label</label>
+	$body_input
+</div>
+
+<div>
 	<label class="hidden" for="transitions_url">$url_label</label>
 	$url_input<br />
 	<em>$url_details</em>
+</div>
+
+<div class="transitions-rss-feed">
+	<label class="hidden" for="transitions_rss_feed">$rss_feed_label</label>
+	$rss_feed_input<br />
+	<em>$rss_feed_details</em>
 </div>
 
 <div>
@@ -415,12 +426,6 @@ $draft_warning
 	<em>$attachment_details</em>
 </div>
 <div class="clearfloat"></div>
-
-<div class="transitions-rss-feed">
-	<label class="hidden" for="transitions_rss_feed">$rss_feed_label</label>
-	$rss_feed_input<br />
-	<em>$rss_feed_details</em>
-</div>
 
 <div class="transitions-territory">
 	<label class="hidden" for="transitions_territory">$territory_label</label>
@@ -452,11 +457,6 @@ $categories_input
 	<em>$resourcelang_details</em>
 </div>
 <div class="clearfloat"></div>
-
-<div>
-	<label class="" for="transitions_description">$body_label</label>
-	$body_input
-</div>
 
 $admin_fields
 

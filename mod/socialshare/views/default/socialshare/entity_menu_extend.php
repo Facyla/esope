@@ -2,10 +2,10 @@
 /* Social share sharing links 
  * All sharing links must be only links, no API, no iframe, no embed, no external cookie
  */
-global $CONFIG;
+
+if (elgg_get_plugin_setting('extend_owner_block', 'socialshare') != 'yes') { return; }
 
 $guid = $vars['entity']->guid;
-
 $mode = elgg_extract('mode', $vars, '');
 
 if ($mode == 'lightbox') {
