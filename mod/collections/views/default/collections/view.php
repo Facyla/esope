@@ -23,13 +23,15 @@ $entities = (array) $collection->entities;
 $entities_comment = (array) $collection->entities_comment;
 foreach($entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
-	$publication_comment = $entities_comment[$k];
-	$collection_content .= '<li>';
-	//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
-	//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
-	$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'list'));
-	$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
-	$collection_content .= '</li>';
+	if (elgg_instanceof($publication, 'object')) {
+		$publication_comment = $entities_comment[$k];
+		$collection_content .= '<li>';
+		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
+		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
+		$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'list'));
+		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
+		$collection_content .= '</li>';
+	}
 }
 $collection_content .= '</ul>';
 
