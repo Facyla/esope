@@ -69,7 +69,12 @@ return array(
 	'collections:entities:count' => "%s diapositives",
 	
 	'collections:settings:subtypes' => "Subtypes",
-	'collections:settings:subtypes:details' => "Subtypes pour lesquels proposer d'ajouter à la playlist",
+	'collections:settings:subtypes:details' => "Subtypes pouvant être ajoutés aux collections",
+	
+	'collection:icon' => "Image",
+	'collection:icon:details' => "Choisissez une image pour illustrer votre collection.",
+	'collection:icon:new' => "Ajouter une image",
+	'collection:icon:remove' => "Supprimer l'image",
 	
 );
 

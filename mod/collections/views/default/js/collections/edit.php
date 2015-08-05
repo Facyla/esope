@@ -32,9 +32,18 @@ elgg.collections.edit.init = function() {
  * @param {Object} e The click event
  */
 elgg.collections.edit.addEntity = function(e) {
+	// Count entities (for input id)
+	var guid = $('#collection-edit-form input[name=guid]').val();
+	var count = $('.collection-edit-entity').length;
 	// Create a new entity element (without editor)
-	var new_entity = <?php echo json_encode(elgg_view('collections/input/entity', array($editor = 'plaintext'))); ?>;
+	var new_entity = <?php echo json_encode(elgg_view('collections/input/entity', array('editor' => 'plaintext'))); ?>;
 	$('.collection-edit-entities').append(new_entity);
+	// Set new id (input)
+	$('.collection-edit-entities div.collection-edit-entity:last-child input').attr('id', 'collections-embed-' + guid + '-' + count);
+	// Set new id (details)
+	$('.collection-edit-entities div.collection-edit-entity:last-child blockquote').attr('id', 'collections-embed-details-' + guid + '-' + count);
+	// Update embed link URL (set )
+	$('.collection-edit-entities div.collection-edit-entity:last-child a.elgg-lightbox').attr('href', '<?php echo elgg_get_site_url(); ?>collection/embed/' + guid + '-' + count);
 	// Refresh the sortable items to be able to sort into the new section
 	elgg.collections.edit.addSortable();
 	e.preventDefault();

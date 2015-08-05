@@ -4,7 +4,7 @@
 
 // @TODO autocomplete field ?
 
-echo '<a href="' . elgg_get_site_url() . 'transitions/embed/actor/actor-' . $vars['guid'] . '" class="elgg-lightbox">Sélectionner</a>';
+echo '<a href="' . elgg_get_site_url() . 'transitions/embed/actor/actor-' . $vars['guid'] . '" class="elgg-lightbox">' . elgg_echo('transitions:addactor:select') . '</a>';
 // Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'actor_guid', 'id' => 'transitions-embed-actor-' . $vars['guid']));
 echo '<div id="transitions-embed-details-actor-' . $vars['guid'] . '"></div>';

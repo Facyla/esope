@@ -19,7 +19,6 @@ elgg.transitions.edit.init = function() {
 };
 
 
-
 // Toggles optional 'actor_type' field
 elgg.transitions.edit.searchFields = function(event) {
 	var category = $("select[name='category']").val();
@@ -29,6 +28,7 @@ elgg.transitions.edit.searchFields = function(event) {
 	}
 	$.colorbox.resize({'width':'80%'});
 }
+
 
 // Load search into lightbox
 elgg.transitions.edit.submitSearch = function(event) {
@@ -41,6 +41,7 @@ elgg.transitions.edit.submitSearch = function(event) {
 	});
 };
 
+// Embed pagination
 elgg.transitions.edit.embedForward = function(event) {
 	var url = $(this).attr("href");
 	//url = elgg.embed.addContainerGUID(url);
@@ -49,7 +50,7 @@ elgg.transitions.edit.embedForward = function(event) {
 };
 
 
-// Embeds content into field
+// Embeds selected content into field
 elgg.transitions.edit.embedFormat = function(elem) {
 	var guid = $(elem).find(".transitions-embed-item-content").html();
 	var details = $(elem).find(".transitions-embed-item-details").html();

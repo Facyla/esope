@@ -1,6 +1,6 @@
 <?php
-
 $guid = $vars['guid'];
+if (empty($guid)) $guid = get_input('guid', '');
 $entity_guid = $vars['entity_guid'];
 $comment = $vars['entity_comment'];
 $offset = $vars['offset'];
@@ -24,11 +24,12 @@ if ($entity_guid) {
 }
 // Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'entities[]', 'value' => $entity_guid, 'id' => 'collections-embed-' . $guid . '-' . $offset));
-echo '<div id="collections-embed-details-' . $guid . '-' . $offset . '">';
+// Display entity content preview
+echo '<blockquote id="collections-embed-details-' . $guid . '-' . $offset . '">';
 if (elgg_instanceof($entity, 'object')) {
 	echo elgg_view('collections/embed/object/default', array('entity' => $entity));
 }
-echo '</div>';
+echo '</blockquote>';
 
 echo '<label>' . elgg_echo('collections:edit:entities_comment') . ' ' . elgg_view('input/plaintext', array('name' => 'entities_comment[]', 'value' => $comment)) . '</label>';
 

@@ -8,7 +8,7 @@ $actortype_opt = transitions_get_actortype_opt(null, true);
 
 $offset = (int) max(get_input("offset", 0), 0);
 $limit = (int) max(get_input("limit", 10), 0);
-$display = get_input('display', false);
+$display = get_input('display', true);
 // Search query
 $query = get_input("q", false);
 $query = sanitise_string($query);
@@ -110,7 +110,7 @@ if ($display) {
 			echo '<div class="collections-embed-item-details">';
 			echo elgg_view('collections/embed/object/default', array('entity' => $entity));
 			echo '</div>';
-			echo '<div class="collections-embed-item-content embed-insert">' . $embed_content . '</div><br style="clear:both;" />';
+			echo '<div class="collections-embed-item-content embed-insert hidden">' . $embed_content . '</div><br style="clear:both;" />';
 			echo '</li>';
 		}
 		elgg_pop_context();

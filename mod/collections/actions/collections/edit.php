@@ -20,7 +20,9 @@ $name = get_input('name');
 $description = get_input('description');
 $entities = get_input('entities', '', false); // We do *not want to filter HTML
 $entities_comment = get_input('entities_comment', '', false); // We do *not want to filter HTML
-$access = get_input('access_id');
+//$access = get_input('access_id');
+$access = 2; // Always public
+
 // Set collection name if not defined + normalize it
 // @TODO : ensure it remains unique ?
 if (empty($name)) { $name = $title; }
@@ -65,6 +67,33 @@ $collection->entities_comment = $entities_comment;
 
 // Save new/updated content
 if ($collection->save()) {
+	
+	// Icon upload
+	if(get_input("remove_icon") == "yes"){
+		// remove existing icons
+		collection_remove_icon($collection);
+	} else {
+		//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
+		// Autres dimensions, notamment recadrage pour les vignettes en format carré définies via le thème
+		$icon_sizes = elgg_get_config("icon_sizes");
+		if ($icon_file = get_resized_image_from_uploaded_file("icon", 100, 100)) {
+			// create icon
+			$prefix = "collection/" . $collection->getGUID();
+			$fh = new ElggFile();
+			$fh->owner_guid = $collection->getOwnerGUID();
+			foreach($icon_sizes as $icon_name => $icon_info){
+				if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
+					$fh->setFilename($prefix . $icon_name . ".jpg");
+					if($fh->open("write")){
+						$fh->write($icon_file);
+						$fh->close();
+					}
+				}
+			}
+			$collection->icontime = time();
+		}
+	}
+	
 	system_message(elgg_echo("collections:saved")); // Success message
 	elgg_clear_sticky_form('collections'); // Remove the cache
 } else {

@@ -18,7 +18,7 @@ $metadata = elgg_view_menu('entity', array(
 ));
 
 
-$collection_content = '<ul class="collections-listing">';
+$collection_content = '';
 $entities = (array) $collection->entities;
 $entities_comment = (array) $collection->entities_comment;
 foreach($entities as $k => $entity_guid) {
@@ -26,30 +26,45 @@ foreach($entities as $k => $entity_guid) {
 	$publication_comment = $entities_comment[$k];
 	$collection_content .= '<li>';
 	//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
+	$collection_content .= '<table><tr><td>';
 	//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
 	$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'list'));
-	$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
+	$collection_content .= '</td>';
+	$collection_content .= '</tr><tr>';
+	$collection_content .= '<td style="background:black; color:white;"><p>' . $publication_comment . '</p></td>';
+	$collection_content .= '</tr></table>';
 	$collection_content .= '</li>';
 }
-$collection_content .= '</ul>';
 
 
-$content_embed ='';
-$content_embed .= $collection_content;
+$height = '300px;';
+$width = '100%;';
+$slider_params = array(
+		'slidercontent' => $collection_content,
+		'height' => $height,
+		'width' => $width,
+		//'theme' => 'cs-portfolio',
+	);
+
+$slider_embed ='';
+$slider_embed .= '<div class="clearfloat"></div>';
+$slider_embed .= '<div style="height:' . $height . '; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
+	' . elgg_view('slider/slider', $slider_params) . '
+</div>';
 
 
 
 // Display embed code if not already embedded
 if ($embed) {
-	echo $content_embed;
+	echo $slider_embed;
 	return;
 } else {
 	$body = '';
-	$body .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
 	$body .= elgg_view_entity_icon($collection, 'large', array('size' => 'large', 'align' => 'left'));
 	$body .= elgg_view('output/longtext', array('value' => $collection->description));
+	$body .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
 	$body .= '<div class="clearfloat"></div><br />';
-	$body .= $content_embed;
+	$body .= $slider_embed;
 	$body .= '<div class="clearfloat"></div><br />';
 
 	// Permalink

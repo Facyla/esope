@@ -162,7 +162,6 @@ function transitions_page_handler($page) {
 			}
 			break;
 		case 'icon':
-			// The username should be the file we're getting
 			if (isset($page[1])) { set_input("guid",$page[1]); }
 			if (isset($page[2])) { set_input("size",$page[2]); }
 			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");

@@ -7,7 +7,7 @@ $french = array(
 	// Settings
 	'pin:settings' => "Les fonctionnalités de ce plugin sont désactivées par défaut : veuillez choisir celles que vous souhaitez activer ci-dessous.",
 	'pin:settings:extendfullonly' => "Intégrer seulement dans la vue complète (défaut : oui)",
-	'pin:settings:extendfullonly:help' => "Ce réglage permet de choisir s'il faut intégrer les icônes correspondant aux fonctionnalités du plugin seulement en mode 'fullview' (oui => vue complète d'un contenu), ou également dans la vue 'réduite' (non => tous types des vues).<br />Note 1 : certains types de contenus sont toujours affichés en mode 'full', y compris lorsqu'ils sont dans un listing..<br />Note 2 : Ce réglage ne concerne pas le compteur de vues, qui fonctionne exclusivement en mode 'fullview'.",
+	'pin:settings:extendfullonly:help' => "Ce réglage permet de choisir s'il faut intégrer les icônes correspondant aux fonctionnalités du plugin seulement en mode 'fullview' (oui => vue complète d'un contenu), ou également dans la vue 'réduite' (non => tous types des vues).<br />Note 1 : certains types de contenus sont toujours affichés en mode 'full', y compris lorsqu'ils sont dans un listing.",
 	'pin:settings:highlight' => "Activer les contenus mis en avant (défaut : non => désactivé)",
 	'pin:settings:validhighlight' => "Filtre des types d'entités concernées (liste de noms d'objets séparés par des virgules, ou vide = pas de filtre). Ex. de liste valide : ",
 	'pin:settings:memorize' => "Activer les contenus mémorisés (défaut : non => désactivé)",

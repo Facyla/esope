@@ -31,6 +31,9 @@ function collections_plugin_init() {
 	// Register a URL handler for collections
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'collections_url');
 	
+	// Override icons
+	elgg_register_plugin_hook_handler("entity:icon:url", "object", "collections_icon_hook");
+	
 	// ENTITY MENU (add to collection)
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'collections_entity_menu_setup', 600);
 	
@@ -80,6 +83,12 @@ function collections_page_handler($page) {
 			if (include($include_path . 'embed.php')) { return true; }
 			break;
 			
+		case "icon":
+			if (isset($page[1])) { set_input("guid",$page[1]); }
+			if (isset($page[2])) { set_input("size",$page[2]); }
+			if (include($include_path . 'icon.php')) { return true; }
+			break;
+			
 		case 'index':
 		default:
 			if (include($include_path . 'index.php')) { return true; }
@@ -97,7 +106,29 @@ function collections_url($hook, $type, $url, $params) {
 }
 
 
-// Bouton de publication dans les blogs - Add externalblogs to entity menu at end of the menu
+// Define object icon : custom or default
+function collections_icon_hook($hook, $entity_type, $returnvalue, $params) {
+	if (!empty($params) && is_array($params)) {
+		$entity = $params["entity"];
+		if(elgg_instanceof($entity, "object", "collection")){
+			$size = $params["size"];
+			if (!empty($entity->icontime)) {
+				$icontime = "{$entity->icontime}";
+				$filehandler = new ElggFile();
+				$filehandler->owner_guid = $entity->getOwnerGUID();
+				$filehandler->setFilename("collection/" . $entity->getGUID() . $size . ".jpg");
+				if ($filehandler->exists()) {
+					return elgg_get_site_url() . "collection/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+				}
+			}
+			//return elgg_get_site_url() . "mod/collection/graphics/icons/$size.png";
+			return false;
+		}
+	}
+}
+
+
+// Bouton de publication dans les collections
 function collections_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_in_context('widgets')) { return $return; }
 	$entity = $params['entity'];

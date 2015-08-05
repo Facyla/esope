@@ -123,6 +123,7 @@ Voir et commenter cette contribution :
 	'transitions:related_actors' => "Acteurs partenaires du projet",
 	'transitions:form:addactor' => "Ajouter un Acteur",
 	'transitions:addactor' => "Ajouter l'Acteur",
+	'transitions:addactor:select' => "Sélectionner l'acteur",
 	'transitions:related_content' => "Contenus liés à ce défi",
 	'transitions:form:addrelation' => "Ajouter une relation",
 	'transitions:addrelation' => "Ajouter une relation",
