@@ -197,9 +197,8 @@ if (elgg_is_admin_logged_in()) {
 	$links_invalidates = get_input('links_invalidates');
 	// Add new contradictory link
 	if (!empty($links_invalidates)) {
-		$new_tags = string_to_tag_array($links_invalidates);
-		$links_invalidates = (array)$entity->links_invalidates;
-		foreach($new_tags as $tag) { $links_invalidates[] = $tag; }
+		$links_invalidates = str_replace(array("\n", "\r"), ',', $links_invalidates);
+		$links_invalidates = string_to_tag_array($links_invalidates);
 		$links_invalidates = array_unique($links_invalidates);
 		$links_invalidates = array_filter($links_invalidates);
 		$entity->links_invalidates = $links_invalidates;
@@ -208,14 +207,14 @@ if (elgg_is_admin_logged_in()) {
 	$links_supports = get_input('links_supports');
 	// Add new support link
 	if (!empty($links_supports)) {
-		$new_tags = string_to_tag_array($links_supports);
-		$links_supports = (array)$entity->links_supports;
-		foreach($new_tags as $tag) { $links_supports[] = $tag; }
+		$links_supports = str_replace(array("\n", "\r"), ',', $links_supports);
+		$links_supports = string_to_tag_array($links_supports);
+		$links_supports = array_unique($links_supports);
 		$links_supports = array_filter($links_supports);
 		$entity->links_supports = $links_supports;
 	}
 	
-	$is_incremental = get_input('is_incremental');
+	$is_incremental = get_input('is_incremental', '');
 	// Set incremental status
 	if (!empty($is_incremental)) {
 		if ($is_incremental == 'yes') {

@@ -200,13 +200,19 @@ if ($full) {
 	if ($transitions->status != 'draft') {
 		// Contributed tags (anyone)
 		if ($transitions->tags_contributed) {
+			$tags_contributed = '';
 			$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
+			/*
+			foreach((array)$transitions->tags_contributed as $tag) {
+				$tags_contributed .= '<i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => elgg_get_site_url() . 'transitions/?q=' . $tag, 'target' => "_blank", 'text' => $tag)) . ' &nbsp; ';
+			}
+			*/
 			$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 		}
 		if ($transitions->links_supports) {
 			$links_supports = '<ul>';
 			foreach((array)$transitions->links_supports as $link) {
-				$links_supports .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+				$links_supports .= '<li><i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
 			}
 			$links_supports .= '</ul>';
 			$body .= elgg_view_module('featured', elgg_echo('transitions:links_supports'), $links_supports);
@@ -215,7 +221,7 @@ if ($full) {
 		if ($transitions->links_invalidates) {
 			$links_invalidates = '<ul>';
 			foreach((array)$transitions->links_invalidates as $link) {
-				$links_invalidates .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
+				$links_invalidates .= '<li><i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . '</li>';
 			}
 			$links_invalidates .= '</ul>';
 			$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);

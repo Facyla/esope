@@ -135,6 +135,7 @@ if ($vars['guid'] && ($entity->time_created > 0)) {
 	$saved = elgg_echo('never');
 }
 
+// Admin-only fields
 if (elgg_is_admin_logged_in()) {
 	$status_label = elgg_echo('status');
 	$status_value = $vars['status'];
@@ -153,12 +154,37 @@ if (elgg_is_admin_logged_in()) {
 	$incremental_input = elgg_view('input/select', array(
 		'name' => 'is_incremental',
 		'id' => 'transitions_incremental',
-		'value' => $vars['is_incremental'],
+		'value' => $transitions->is_incremental,
 		'options_values' => array(
 			'no' => elgg_echo('transitions:incremental:no'),
 			'yes' => elgg_echo('transitions:incremental:yes'),
 		)
 	));
+	
+	$contributed_tags_label = elgg_echo('transitions:tags_contributed');
+	$contributed_tags_input = elgg_view('input/tags', array(
+		'name' => 'tags_contributed',
+		'id' => 'transitions_tags_contributed',
+		'value' => $transitions->tags_contributed,
+		'placeholder' => elgg_echo('transitions:tags_contributed'),
+	));
+
+	$links_supports_label = elgg_echo('transitions:links_supports');
+	$links_supports_input = elgg_view('input/plaintext', array(
+		'name' => 'links_supports',
+		'id' => 'transitions_links_supports',
+		'value' => implode("\n", $transitions->links_supports),
+		'placeholder' => elgg_echo('transitions:links_supports'),
+	));
+	
+	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
+	$links_invalidates_input = elgg_view('input/plaintext', array(
+		'name' => 'links_invalidates',
+		'id' => 'transitions_links_invalidates',
+		'value' => implode("\n", $transitions->links_invalidates),
+		'placeholder' => elgg_echo('transitions:links_invalidates'),
+	));
+	
 } else {
 	$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
 }
@@ -271,36 +297,13 @@ $tags_input = elgg_view('input/tags', array(
 // @TODO Admin only : contributed tags + links + status
 $admin_fields = '';
 if (elgg_is_admin_logged_in()) {
-	$contributed_tags_label = elgg_echo('transitions:tags_contributed');
-	$contributed_tags_input = elgg_view('input/tags', array(
-		'name' => 'tags_contributed',
-		'id' => 'transitions_tags_contributed',
-		'value' => $transitions->tags_contributed,
-		'placeholder' => elgg_echo('transitions:tags_contributed'),
-	));
-
-	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
-	$links_invalidates_input = elgg_view('input/tags', array(
-		'name' => 'links_invalidates',
-		'id' => 'transitions_links_invalidates',
-		'value' => $transitions->links_invalidates,
-		'placeholder' => elgg_echo('transitions:links_invalidates'),
-	));
-
-	$links_supports_label = elgg_echo('transitions:links_supports');
-	$links_supports_input = elgg_view('input/tags', array(
-		'name' => 'links_supports',
-		'id' => 'transitions_links_supports',
-		'value' => $transitions->links_supports,
-		'placeholder' => elgg_echo('transitions:links_supports'),
-	));
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
 	$admin_fields .= '<p class="' . $incremental_value . '"><label class="" for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
 	$admin_fields .= '</blockquote>';
 	
 } else {
