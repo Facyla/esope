@@ -16,7 +16,7 @@ if (empty($vars['value']) && $vars['value'] !== 0 && $vars['value'] !== '0') {
 $query_params = array();
 
 $query_params["q"] = $vars['value'];
-$query_params["search_type"] = "tags";
+//$query_params["search_type"] = "tags"; // Unused here
 
 if (!empty($vars['type'])) {
 	$query_params["type"] = $vars['type'];
