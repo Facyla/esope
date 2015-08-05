@@ -17,7 +17,7 @@ elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');
 elgg_load_js('elgg.embed');
-elgg_load_js('elgg.transitions.edit');
+elgg_load_js('elgg.transitions');
 
 $body = '';
 
@@ -25,8 +25,10 @@ $owner = $transitions->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);
 $excerpt = $transitions->excerpt;
 if (!$excerpt) {
-	$excerpt = elgg_get_excerpt($transitions->description);
+	$excerpt = elgg_get_excerpt($transitions->description, 137);
 }
+// Limit to max chars
+if (strlen($excerpt) >= 140) { $excerpt = elgg_get_excerpt($excerpt, 137); }
 
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $owner_link = elgg_view('output/url', array(

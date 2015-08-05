@@ -157,6 +157,8 @@ Voir et commenter cette contribution :
 	'transitions:embed:search:actor' => "Sélectionnez un acteur",
 	'transitions:share' => "Partager",
 	'transitions:share:details' => "Vous pouvez partager cette ressource sur d'autres sites via les liens de partage suivants.",
+	'transitions:charleft' => "caractères restants (max. %s)",
+	'transitions:charleft:warning' => "Attention : les caractères excécentaires ne seront pas affichés !",
 	
 	// Bookmarklet
 	'transitions:bookmarklet' => "Bookmarklet",

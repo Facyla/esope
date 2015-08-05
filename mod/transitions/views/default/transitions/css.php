@@ -1,6 +1,8 @@
 
 /* Edit form */
 #transitions-post-edit select { max-width: 16em; }
+.transitions-characters-remaining-warning { color: red; }
+.transitions-characters-remaining-warning .hidden { display:block; }
 
 
 /* Content category types */

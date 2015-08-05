@@ -5,6 +5,8 @@
  * @package Transitions
  */
 
+elgg_load_js('elgg.transitions');
+
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
 
@@ -75,13 +77,19 @@ $title_input = elgg_view('input/text', array(
 	'placeholder' => elgg_echo('transitions:title'),
 ));
 
+$char_limit = 140;
+$excerpt = _elgg_html_decode($vars['excerpt']);
+$char_left = $char_limit - strlen($excerpt);
 $excerpt_label = elgg_echo('transitions:excerpt');
 $excerpt_input = elgg_view('input/text', array(
 	'name' => 'excerpt',
 	'id' => 'transitions_excerpt',
-	'value' => _elgg_html_decode($vars['excerpt']),
+	'value' => $excerpt,
 	'placeholder' => elgg_echo('transitions:excerpt'),
+	'data-max-length' => $char_limit,
+	//'rows' => 2,
 ));
+$excerpt_input .= '<div id="transitions-characters-remaining"><span>' . $char_left . '</span> ' . elgg_echo('transitions:charleft', array($char_limit)) . '<div class="hidden">' . elgg_echo('transitions:charleft:warning') . '</div></div>';
 
 $icon_input = "";
 $icon_remove_input = "";
@@ -173,7 +181,7 @@ if (elgg_is_admin_logged_in()) {
 	$links_supports_input = elgg_view('input/plaintext', array(
 		'name' => 'links_supports',
 		'id' => 'transitions_links_supports',
-		'value' => implode("\n", $transitions->links_supports),
+		'value' => implode("\n", (array) $transitions->links_supports),
 		'placeholder' => elgg_echo('transitions:links_supports'),
 	));
 	
@@ -181,7 +189,7 @@ if (elgg_is_admin_logged_in()) {
 	$links_invalidates_input = elgg_view('input/plaintext', array(
 		'name' => 'links_invalidates',
 		'id' => 'transitions_links_invalidates',
-		'value' => implode("\n", $transitions->links_invalidates),
+		'value' => implode("\n", (array) $transitions->links_invalidates),
 		'placeholder' => elgg_echo('transitions:links_invalidates'),
 	));
 	

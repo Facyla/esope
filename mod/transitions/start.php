@@ -21,8 +21,8 @@ function transitions_init() {
 
 	elgg_register_library('elgg:transitions', elgg_get_plugins_path() . 'transitions/lib/transitions.php');
 	
-	$js = elgg_get_simplecache_url('js', 'transitions/edit');
-	elgg_register_js('elgg.transitions.edit', $js, 'head');
+	$js = elgg_get_simplecache_url('js', 'transitions/transitions');
+	elgg_register_js('elgg.transitions', $js, 'head');
 	
 	// add a site navigation item
 	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'transitions/all');
