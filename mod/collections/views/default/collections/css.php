@@ -14,5 +14,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 
 .collection_image.float { margin: 0 1em 0.5em 0; }
 
+/* Rendu des collections */
 .collections-listing { list-style-type:none; }
+ul.collections-listing > li { box-shadow: 1px 1px 1px 1px black; padding: 1em; display: inline-block; margin: 0.5em; }
 
