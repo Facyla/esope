@@ -11,8 +11,8 @@ $externalblog_ts = get_input('externalblog_ts');
 // Let's see if we can get an entity with the specified GUID
 $object = get_entity($guid);
 if (!$object) {
-  register_error('Pas de publication valide !');
-  forward(REFERER);
+	register_error('Pas de publication valide !');
+	forward(REFERER);
 }
 
 $object->externalblog = $externalblog_param;
@@ -51,18 +51,20 @@ $user = elgg_get_logged_in_user_entity();
 
 // Changement d'action selon les paramètres passés : unselect
 if ($unselect) {
-  if (already_attached($externalblog->guid, $entity->guid)) {
-    remove_attachment($externalblog->guid, $entity->guid);
-  } else {
-    register_error(elgg_echo("externalblogs:notblogged")); forward(REFERER);
-  }
+	//if (already_attached($externalblog->guid, $entity->guid)) {
+	if (check_entity_relationship($externalblog->guid, "attached", $entity->guid)) {
+		remove_attachment($externalblog->guid, $entity->guid);
+	} else {
+		register_error(elgg_echo("externalblogs:notblogged")); forward(REFERER);
+	}
 } else {
-  if (!already_attached($externalblog->guid, $entity->guid)) {
-    $ok = make_attachment($externalblog->guid, $entity->guid);
-  } else {
-    register_error(elgg_echo("externalblogs:alreadyblogged")); forward(REFERER);
-  }
-  if (!$ok) { register_error(elgg_echo("externalblogs:failure")); forward(REFERER); }
+	//if (!already_attached($externalblog->guid, $entity->guid)) {
+	if (!check_entity_relationship($externalblog->guid, "attached", $entity->guid)) {
+		$ok = make_attachment($externalblog->guid, $entity->guid);
+	} else {
+		register_error(elgg_echo("externalblogs:alreadyblogged")); forward(REFERER);
+	}
+	if (!$ok) { register_error(elgg_echo("externalblogs:failure")); forward(REFERER); }
 }
 
 

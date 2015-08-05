@@ -26,56 +26,57 @@ if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'externalblog')) {
 	$text = elgg_view_icon('share');
 	if ($count > 0) $text .= ' <span style="font-weight:bold; padding:2px 3px; border-radius:5px; background:#CFCFCF;">' . $count . '</span>';
 	$params = array(
-		  'text' => $text, 'title' => elgg_echo('externalblogs:externalblogthis'),
-		  'rel' => 'popup', 'href' => "#externalblogs-$guid"
-	  );
+			'text' => $text, 'title' => elgg_echo('externalblogs:externalblogthis'),
+			'rel' => 'popup', 'href' => "#externalblogs-$guid"
+		);
 	$list = elgg_view('output/url', $params);
 	
 	// POPUP : affiché si possibilité d'édition seulement
-  $owner_externalblogs = elgg_get_entities(array(
-      'types' => 'object', 'subtypes' => 'externalblog',
-      'owner_guid' => elgg_get_logged_in_user_guid(), 'limit' => 99, 'sort' => 'time_created asc',
-    ));
-  // Ajout des auteurs à l'owner
-  $author_externalblogs = elgg_get_entities_from_metadata(array('metadata_name_value_pairs' => array('name' => 'authors_guid', 'value' => elgg_get_logged_in_user_guid()), 'limit' => 99));
-  $externalblogs = array_merge($owner_externalblogs, $author_externalblogs);
-  $list .= "<div class='elgg-module elgg-module-popup elgg-externalblogs hidden clearfix' id='externalblogs-$guid'>";
-  if (is_array($externalblogs)) {
-    foreach ($externalblogs as $externalblog) {
-	    if (isset($listed_externablog) && in_array($externalblog->guid, $listed_externablog)) { continue; } else { $listed_externablog[] = $externalblog->guid; }
-	    if (already_attached($externalblog->guid, $guid)) {
-	      // Déjà bloggé : on peut retirer de ce blog
-	      $text = '<span style="color:red;">Retirer de ' . $externalblog->title . ' (' . $externalblog->blogname . ')</span>';
-	      $params = array(
-		        'href' => $url . '&unselect=unselect&externalblog_guid=' . $externalblog->guid,
-		        //'text' => elgg_view_icon('delete') . ' Retirer de ' . $text,
-		        'text' => elgg_view_icon('star') . ' ' . $text,
-		        'title' => strip_tags($externalblog->description),
-		        'is_action' => true, 'is_trusted' => true,
-	        );
-      	$list .= elgg_view('output/url', $params) . '<br />';
-    	} else {
-	      // Pas blogué dans ce blog externe
-	      $text = $externalblog->title . ' (' . $externalblog->blogname . ')';
-	      $params = array(
-		        'href' => $url . '&externalblog_guid=' . $externalblog->guid,
-		        //'text' => elgg_view_icon('checkmark') . ' Publier dans ' . $text,
-		        'text' => elgg_view_icon('star-empty') . ' Publier dans ' . $text,
-		        'title' => $externalblog->description,
-		        'is_action' => true, 'is_trusted' => true,
-	        );
-      	$list .= elgg_view('output/url', $params) . '<br />';
-	    }
-    }
-  } else { $list .= 'Aucun blog de publication<br />'; }
-  $params = array(
-      'href' => elgg_get_site_url() . 'externalblog',
-      'text' => elgg_view_icon('share') . ' Accueil des blogs externes',
-      'title' => strip_tags($externalblog->description),
-      'is_action' => true, 'is_trusted' => true,
-    );
-  $list .= elgg_view('output/url', $params) . '<br />';
-  $list .= "</div>";
+	$owner_externalblogs = elgg_get_entities(array(
+			'types' => 'object', 'subtypes' => 'externalblog',
+			'owner_guid' => elgg_get_logged_in_user_guid(), 'limit' => 99, 'sort' => 'time_created asc',
+		));
+	// Ajout des auteurs à l'owner
+	$author_externalblogs = elgg_get_entities_from_metadata(array('metadata_name_value_pairs' => array('name' => 'authors_guid', 'value' => elgg_get_logged_in_user_guid()), 'limit' => 99));
+	$externalblogs = array_merge($owner_externalblogs, $author_externalblogs);
+	$list .= "<div class='elgg-module elgg-module-popup elgg-externalblogs hidden clearfix' id='externalblogs-$guid'>";
+	if (is_array($externalblogs)) {
+		foreach ($externalblogs as $externalblog) {
+			if (isset($listed_externablog) && in_array($externalblog->guid, $listed_externablog)) { continue; } else { $listed_externablog[] = $externalblog->guid; }
+			//if (already_attached($externalblog->guid, $guid)) {
+			if (check_entity_relationship($externalblog->guid, "attached", $guid)) {
+				// Déjà bloggé : on peut retirer de ce blog
+				$text = '<span style="color:red;">Retirer de ' . $externalblog->title . ' (' . $externalblog->blogname . ')</span>';
+				$params = array(
+						'href' => $url . '&unselect=unselect&externalblog_guid=' . $externalblog->guid,
+						//'text' => elgg_view_icon('delete') . ' Retirer de ' . $text,
+						'text' => elgg_view_icon('star') . ' ' . $text,
+						'title' => strip_tags($externalblog->description),
+						'is_action' => true, 'is_trusted' => true,
+					);
+				$list .= elgg_view('output/url', $params) . '<br />';
+			} else {
+				// Pas blogué dans ce blog externe
+				$text = $externalblog->title . ' (' . $externalblog->blogname . ')';
+				$params = array(
+						'href' => $url . '&externalblog_guid=' . $externalblog->guid,
+						//'text' => elgg_view_icon('checkmark') . ' Publier dans ' . $text,
+						'text' => elgg_view_icon('star-empty') . ' Publier dans ' . $text,
+						'title' => $externalblog->description,
+						'is_action' => true, 'is_trusted' => true,
+					);
+				$list .= elgg_view('output/url', $params) . '<br />';
+			}
+		}
+	} else { $list .= 'Aucun blog de publication<br />'; }
+	$params = array(
+			'href' => elgg_get_site_url() . 'externalblog',
+			'text' => elgg_view_icon('share') . ' Accueil des blogs externes',
+			'title' => strip_tags($externalblog->description),
+			'is_action' => true, 'is_trusted' => true,
+		);
+	$list .= elgg_view('output/url', $params) . '<br />';
+	$list .= "</div>";
 	
 	
 }

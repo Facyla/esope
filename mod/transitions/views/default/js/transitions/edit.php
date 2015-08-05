@@ -16,6 +16,8 @@ elgg.transitions.edit.init = function() {
 	
 	$("select[name=category]").live("change", elgg.transitions.edit.searchFields);
 	
+	$("#transitions-action-tabs a").live("click", elgg.transitions.edit.selectTab);
+	
 };
 
 
@@ -66,6 +68,16 @@ elgg.transitions.edit.embedFormat = function(elem) {
 	//event.preventDefault();
 };
 
+
+// Switch action tab
+elgg.transitions.edit.selectTab = function(event) {
+	var tabID = $(this).attr("href");
+	$('.transitions-tab-content').hide();
+	$('#transitions-action-tabs li').removeClass('elgg-state-selected');
+	$(this).parent().addClass('elgg-state-selected');
+	$(tabID).toggle();
+	event.preventDefault();
+};
 
 
 elgg.register_hook_handler('init', 'system', elgg.transitions.edit.init);

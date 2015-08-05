@@ -34,7 +34,7 @@ if (!empty($link)) {
 	if ($relation == 'invalidates') {
 		$links = (array)$entity->links_invalidates;
 		foreach($link as $url) {
-			if (in_array($url, $links)) { register_error('transitions:addlink:alreadyexists'); }
+			if (in_array($url, $links)) { register_error(elgg_echo('transitions:addlink:alreadyexists')); }
 			$links[] = $url;
 		}
 		$links = array_unique($links);
@@ -43,16 +43,16 @@ if (!empty($link)) {
 	} else {
 		$links = (array)$entity->links_supports;
 		foreach($link as $url) {
-			if (in_array($url, $links)) { register_error('transitions:addlink:alreadyexists'); }
+			if (in_array($url, $links)) { register_error(elgg_echo('transitions:addlink:alreadyexists')); }
 			$links[] = $url;
 		}
 		$links = array_unique($links);
 		$links = array_filter($links);
 		$entity->links_supports = $links;
 	}
-	system_messages('transitions:addlink:success');
+	system_messages(elgg_echo('transitions:addlink:success'));
 } else {
-	system_messages('transitions:addlink:emptylink');
+	register_error(elgg_echo('transitions:addlink:emptylink'));
 }
 
 

@@ -32,7 +32,8 @@ if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'collections')) {
 	if (is_array($collections)) {
 		foreach ($collections as $collection) {
 			if (isset($listed_collections) && in_array($collection->guid, $listed_collections)) { continue; } else { $listed_collections[] = $collection->guid; }
-			if (already_attached($collection->guid, $guid)) {
+			//if (already_attached($collection->guid, $guid)) {
+			if (check_entity_relationship($collection->guid, "attached", $guid)) {
 				// Déjà bloggé : on peut retirer de ce blog
 				$text = '<span style="color:red;">' . elgg_echo('collections:removefromcollection') . ' ' . $collection->title . '</span>';
 				$params = array(

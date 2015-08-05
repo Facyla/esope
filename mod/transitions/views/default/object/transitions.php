@@ -101,8 +101,9 @@ $stats .= '<i class="fa fa-tags"></i> ' . count($transitions->tags_contributed) 
 $stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
 $stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
 $actions = '';
-if (elgg_is_admin_logged_in()) {
-	$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
+if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
+	//$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
+	$actions .= elgg_view('pin/entity_menu', $vars);
 }
 
 
@@ -254,18 +255,39 @@ if ($full) {
 	
 	
 	// Enrichment forms
+	// @TODO Sharing + contribution links
+	$params = array(
+		'tabs' => array(
+			array('title' => 'Partager', 'url' => "#transitions-{$transitions->guid}-share", 'selected' => true),
+			array('title' => 'Intégrer', 'url' => "#transitions-{$transitions->guid}-embed"),
+			array('title' => 'Tagguer', 'url' => "#transitions-{$transitions->guid}-addtag"),
+			array('title' => 'Relier', 'url' => "#transitions-{$transitions->guid}-addlink"),
+			array('title' => 'Ajouter un acteur', 'url' => "#transitions-{$transitions->guid}-addactor"),
+		),
+		'id' => "transitions-action-tabs",
+		'style' => "margin-bottom:0;",
+	);
+	$body .= elgg_view('navigation/tabs', $params);
+	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">'; // End tabs block
+	/*
+	$body .= '<div id="transitions-' . $transitions->guid . '-share">LIEN DE PARTAGE</div>';
+	$body .= '<div id="transitions-' . $transitions->guid . '-embed" class="hidden">CODE D\'INTEGRATION</div>';
+	$body .= '<div id="transitions-' . $transitions->guid . '-addtag" class="hidden">AJOUTER UN TAG</div>';
+	$body .= '<div id="transitions-' . $transitions->guid . '-addlink" class="hidden">AJOUTER UNE RESSOURCE</div>';
+	$body .= '<div id="transitions-' . $transitions->guid . '-addactor" class="hidden">AJOUTER UN ACTEUR</div>';
+	*/
 	// Contributed tags
-	$body .= elgg_view_form('transitions/addtag', array(), array('guid' => $transitions->guid));
-	$body .= '<div class="clearfloat"></div><br />';
+	$body .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	//$body .= '<div class="clearfloat"></div><br />';
 	
 	// Contributed support links
-	$body .= elgg_view_form('transitions/addlink', array(), array('guid' => $transitions->guid));
-	$body .= '<div class="clearfloat"></div><br />';
+	$body .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	//$body .= '<div class="clearfloat"></div><br />';
 	
 	// Add relation to related actors (anyone)
 	if ($transitions->category == 'project') {
-		$body .= elgg_view_form('transitions/addactor', array(), array('guid' => $transitions->guid));
-		$body .= '<div class="clearfloat"></div><br />';
+		$body .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+		//$body .= '<div class="clearfloat"></div><br />';
 	}
 	
 	// Add relation to answer resources (anyone)
@@ -278,10 +300,13 @@ if ($full) {
 	*/
 	
 	// Permalink
-	$body .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink);
+	$body .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
 	
 	// Embed code
-	$body .= elgg_view_module('info', elgg_echo('transitions:embed'), $embed_code);
+	$body .= elgg_view_module('info', elgg_echo('transitions:embed'), $embed_code, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	
+	
+	$body .= '</div>'; // End tabs block
 	
 	
 	$params = array(

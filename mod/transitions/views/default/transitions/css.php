@@ -49,6 +49,7 @@
 .transitions-gallery-item .transitions-gallery-content .elgg-content { text-style:italic; font-size: 1.2em; }
 .transitions-gallery-item .transitions-gallery-content { /* position: absolute; bottom: 3em; left: 0; background: rgba(255,255,255,0.8); padding: 0 0.5em; */ }
 .transitions-gallery-item .transitions-gallery-actions { /* position: absolute; top: 0; left: 0; background: white; padding: 2px 4px; */ }
+.transitions-gallery-actions a { margin-right: 2em; }
 
 /* Popups */
 .transitions-popup-link, .transitions-popup-embed { max-width:30em; }

@@ -16,6 +16,8 @@ $french = array(
 	'pin:settings:validfootprint' => "Filtre des types d'entités concernées (liste de noms d'objets séparés par des virgules, ou vide = pas de filtre). Ex. de liste valide : ",
 	'pin:settings:position' => "Placer ces fonctionnalités après le contenu ? (défaut : non = au-dessus du contenu)",
 	
+	'pin:pin' => "Pin",
+	'pin:unpin' => "Un-pin",
 	'pin:pinmenu' => "Afficher le menu",
 	
 	// Highlight
