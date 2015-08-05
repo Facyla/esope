@@ -21,6 +21,7 @@ $metadata = elgg_view_menu('entity', array(
 $collection_content = '<ul class="collections-listing">';
 $entities = (array) $collection->entities;
 $entities_comment = (array) $collection->entities_comment;
+elgg_push_context('widgets');
 foreach($entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
 	if (elgg_instanceof($publication, 'object')) {
@@ -33,6 +34,7 @@ foreach($entities as $k => $entity_guid) {
 		$collection_content .= '</li>';
 	}
 }
+elgg_pop_context();
 $collection_content .= '</ul>';
 
 
