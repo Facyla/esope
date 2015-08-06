@@ -48,8 +48,11 @@ function theme_transitions2_init() {
 	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
 	
 	// Register admin rights plugin hooks
+	//elgg_register_plugin_hook_handler('access:collections:read', 'user', 'theme_transitions2_read_access_hook');
 	elgg_register_plugin_hook_handler('permissions_check', 'object', 'theme_transitions2_permissions_hook');
 	elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'theme_transitions2_container_permissions_hook');
+	// Override access rights for special user types
+	theme_transitions2_override_read_access();
 	
 	// Modify owner block menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
@@ -265,6 +268,20 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 }
 
 
+// Filters an array of access IDs that the user $params['user_id'] can see.
+/*
+function theme_transitions2_read_access_hook($hook, $entity_type, $returnvalue, $params) {
+	error_log("USER : " . $params['user_id'] . " => ENTITY : " . $params['entity']->guid . ' ' . $returnvalue);
+	return $returnvalue;
+}
+*/
+function theme_transitions2_override_read_access() {
+	if (!elgg_is_logged_in()) return;
+	if (theme_transitions2_user_is_content_admin()) {
+		elgg_set_ignore_access(true);
+	}
+}
+
 // Determines if a user can *edit* a given entity
 function theme_transitions2_permissions_hook($hook, $entity_type, $returnvalue, $params) {
 	return theme_transitions2_user_is_content_admin($params['user']);
@@ -274,7 +291,7 @@ function theme_transitions2_permissions_hook($hook, $entity_type, $returnvalue, 
 function theme_transitions2_container_permissions_hook($hook, $entity_type, $returnvalue, $params) {
 	//$user = $params['user'];
 	//$entity = $params['entity'];
-	error_log("USER : " . $params['user']->guid . ' ' . $params['user']->name . " => ENTITY : " . $params['entity']->guid . ' ' . $params['entity']->title);
+	//error_log("USER : " . $params['user']->guid . ' ' . $params['user']->name . " => ENTITY : " . $params['entity']->guid . ' ' . $params['entity']->title);
 	if (elgg_instanceof($params['container'], 'user')) {
 		return theme_transitions2_user_is_content_admin($params['user']);
 	}

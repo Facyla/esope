@@ -52,6 +52,7 @@ Mot de passe : %s
 	'admin:user:make_platform_admin:no' => "Impossible de nommer cet utilisateur administrateur plateforme.",
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
 	'embed:media' => "Joindre un fichier ou une image",
+	'status:draft' => "Non publié",
 	
 	
 );

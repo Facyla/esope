@@ -120,7 +120,7 @@ if (count($user_guids) > 0) {
 		// Failsafe backup if hook as returned empty content but not false (= stop)
 		if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 		// Notify user
-		notify_user($user_guid, $site->guid, $subject, $message, null, 'email');
+		notify_user($user_guid, $site->guid, $subject, $message, array(), 'email');
 	}
 }
 
