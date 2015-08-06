@@ -2,7 +2,7 @@
 
 $transitions = elgg_extract('entity', $vars);
 
-if (!elgg_instanceof($transitions, 'object', 'transitions') || !in_array($transitions->category, array('project', 'event'))) { return; }
+if (!elgg_instanceof($transitions, 'object', 'transitions') || ($transitions->category != 'event')) { return; }
 
 $description = $transitions->excerpt;
 if (empty($description)) {

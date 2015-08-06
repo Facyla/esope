@@ -5,7 +5,7 @@ define(function(require) {
 	return {
 		// Use / for row break, - for separator
 		toolbar: [
-				['Paste', 'PasteFromWord', 'RemoveFormat'], 
+				['RemoveFormat', 'Paste', 'PasteFromWord'], 
 				['Undo', 'Redo'], 
 				['Image', 'Table', 'Iframe', 'Flash'], 
 				['Scayt'], 

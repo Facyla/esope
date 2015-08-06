@@ -110,6 +110,7 @@ Voir et commenter cette contribution :
 	'transitions:incremental' => "Contenu incrémental",
 	'transitions:incremental:no' => "Non (par défaut)",
 	'transitions:incremental:yes' => "Oui (mis au second plan)",
+	'transitions:search:rss' => "Flux RSS pour cette recherche",
 	
 	// Other forms
 	'transitions:accountrequired' => "Veuillez vous connecter pour contribuer.<br />Si vous n'avez pas encore de compte,  c'est très rapide ! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Créer mon compte de contributeur Transitions²</a>",

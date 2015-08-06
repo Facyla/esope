@@ -350,7 +350,7 @@ if ($full) {
 		// Listing view
 		$category = '';
 		if (!empty($transitions->category)) {
-			$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+			$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span> ';
 		}
 		$params = array(
 			'entity' => $transitions,

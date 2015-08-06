@@ -1,5 +1,8 @@
 <?php
 $embed = elgg_extract('embed', $vars);
+$full_content = elgg_extract('full_content', $vars, false);
+if ($full_content !== false) $full_content = true;
+
 // Get collection
 $collection = elgg_extract('entity', $vars);
 // Alternate method (more friendly with cmspages)
@@ -10,15 +13,19 @@ if (!$collection) {
 if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (!elgg_instanceof($collection, 'object', 'collection')) { return; }
 
-$metadata = elgg_view_menu('entity', array(
-	'entity' => $collection,
-	'handler' => 'collection',
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-));
+$metadata = '';
+if (!elgg_in_context('widgets')) {
+	$metadata = elgg_view_menu('entity', array(
+		'entity' => $collection,
+		'handler' => 'collection',
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz',
+	));
+}
 
 
-$collection_content = '<ul class="collections-listing">';
+//$collection_content = '<ul class="collections-listing">';
+$collection_content = '<div class="collections-listing">';
 $entities = (array) $collection->entities;
 $entities_comment = (array) $collection->entities_comment;
 elgg_push_context('widgets');
@@ -26,16 +33,23 @@ foreach($entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
 	if (elgg_instanceof($publication, 'object')) {
 		$publication_comment = $entities_comment[$k];
-		$collection_content .= '<li>';
+		//$collection_content .= '<li>';
+		$collection_content .= '<div class="">';
+		$collection_content .= '<hr class="hidden" />';
+		
+		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
+		
 		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
 		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
-		$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'list'));
-		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
-		$collection_content .= '</li>';
+		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => 'list'));
+		
+		//$collection_content .= '</li>';
+		$collection_content .= '</div>';
 	}
 }
 elgg_pop_context();
-$collection_content .= '</ul>';
+//$collection_content .= '</ul>';
+$collection_content .= '</div>';
 
 
 $content_embed ='';

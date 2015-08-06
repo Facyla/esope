@@ -1,18 +1,26 @@
 <?php
-$entity = $vars['entity'];
+
+$full = elgg_extract('full_view', $vars, FALSE);
+$list_type = elgg_extract('list_type', $vars, FALSE);
+$entity = elgg_extract('entity', $vars);
+
 $tags = $entity->tags;
 $title = $entity->title;
 $description = $entity->description;
-
 $access = $entity->access_id;
 $time_updated = $entity->time_created;
-
 $owner_guid = $entity->owner_guid;
 $owner = get_entity($owner_guid);
 //$container_guid = $entity->container_guid;
 
-// Listing view
-if (elgg_in_context('listing') || elgg_in_context('search') || elgg_in_context('widgets')) {
+
+if ($full) {
+	// Full view
+	echo elgg_view('collections/view', $vars);
+	
+} else {
+	// Listing view
+	//if (elgg_in_context('listing') || elgg_in_context('search') || elgg_in_context('widgets')) {
 	
 	if (!elgg_in_context('widgets')) {
 		$metadata = elgg_view_menu('entity', array(
@@ -50,9 +58,6 @@ if (elgg_in_context('listing') || elgg_in_context('search') || elgg_in_context('
 	$info = elgg_view('object/elements/summary', $params);
 	
 	echo elgg_view_image_block($icon, $info);
-	return;
-} else {
-	echo elgg_view('collections/view', $vars);
 }
 
 
