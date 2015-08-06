@@ -1,5 +1,4 @@
 <?php
-global $CONFIG;
 
 // Events
 elgg_register_event_handler('init','system','pdf_export_init');
@@ -12,7 +11,6 @@ elgg_register_page_handler('pdfexport','pdf_export_page_handler');
 
 
 function pdf_export_init() {
-	
 	//elgg_extend_view('css', 'pdf_export/css');
 	
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'pdf_export_dropdown_registration', 9999);
@@ -20,10 +18,8 @@ function pdf_export_init() {
 }
 
 
-// page structure for exports <url>/pdf_export/<guid>
+// Page handler structure for exports <url>/pdf_export/<guid>
 function pdf_export_page_handler($page) {
-	global $CONFIG;
-	
 	// pdfexport/{format}/{guid} => pdfexport/pdf/1234
 	switch($page[0]) {
 		case 'pdf':
@@ -35,8 +31,8 @@ function pdf_export_page_handler($page) {
 }
 
 
+// PDF export entity menu
 function pdf_export_dropdown_registration($hook, $type, $return, $params) {
-	global $CONFIG;
 	// Add entity menu
 	if (elgg_instanceof($params['entity'], 'object')) {
 		// Settings
@@ -47,10 +43,10 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 		// Only add menu to valid chosen object subtypes
 		if (in_array($params['entity']->getSubtype(), $validsubtypes)) {
 			// Menu elements
-			$link_url = $CONFIG->url . 'pdfexport/pdf/' . $params['entity']->guid;
+			$link_url = elgg_get_site_url() . 'pdfexport/pdf/' . $params['entity']->guid;
 			//$text = '<i class="fa fa-file-pdf-o"></i> PDF';
-			$text = '<img src="' . $CONFIG->url . 'mod/pdf_export/graphics/pdf5_32.png" alt="' . elgg_echo('pdfexport:download:alt') . '" style="height:20px;"/>';
-			//$text = '<img src="' . $CONFIG->url . 'mod/pdf_export/graphics/pdf4_16.png" alt="' . elgg_echo('pdfexport:download:alt') . '" />';
+			$text = '<img src="' . elgg_get_site_url() . 'mod/pdf_export/graphics/pdf5_32.png" alt="' . elgg_echo('pdfexport:download:alt') . '" style="height:20px;"/>';
+			//$text = '<img src="' . elgg_get_site_url() . 'mod/pdf_export/graphics/pdf4_16.png" alt="' . elgg_echo('pdfexport:download:alt') . '" />';
 			$title = elgg_echo('pdfexport:download:title');
 			// Build the menu
 			$pdf_export_menu = new ElggMenuItem('pdf_export', $text, $link_url);
@@ -64,12 +60,11 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 }
 
 
-/* TCPDF config*/
+/* TCPDF config */
 function pdf_export_get_config($config = '') {
-	global $CONFIG;
 	if (!include_once(dirname(__FILE__) . '/assets/tcpdf/config/tcpdf_config.php')) { return false; }
-	$sitename = $CONFIG->site->name;
-	$siteurl = $CONFIG->site->url;
+	$sitename = elgg_get_site_entity()->name;
+	$siteurl = elgg_get_site_url();
 	// Force own settings
 	// document creator
 	define ('PDF_CREATOR', $sitename);
