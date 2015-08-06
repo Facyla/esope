@@ -10,6 +10,8 @@ elgg_load_js('elgg.transitions');
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
 
+$is_admin = theme_transitions2_user_is_content_admin();
+
 $edit_details = '<p><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
 $draft_warning = $vars['draft_warning'];
@@ -144,7 +146,7 @@ if ($vars['guid'] && ($entity->time_created > 0)) {
 }
 
 // Admin-only fields
-if (elgg_is_admin_logged_in()) {
+if ($is_admin) {
 	$status_label = elgg_echo('status');
 	$status_value = $vars['status'];
 	$status_input = elgg_view('input/select', array(
@@ -304,7 +306,7 @@ $tags_input = elgg_view('input/tags', array(
 
 // @TODO Admin only : contributed tags + links + status
 $admin_fields = '';
-if (elgg_is_admin_logged_in()) {
+if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';

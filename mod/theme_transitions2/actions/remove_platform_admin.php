@@ -11,7 +11,7 @@ if ($guid == elgg_get_logged_in_user_guid()) {
 	forward(REFERER);
 }
 
-if (($user instanceof ElggUser) && ($user->canEdit())) {
+if (elgg_instanceof($user, 'user') && elgg_is_admin_logged_in()) {
 	$user->is_platform_admin = '';
 	if (empty($user->is_platform_admin)) {
 		system_message(elgg_echo('admin:user:remove_platform_admin:yes'));

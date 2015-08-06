@@ -11,7 +11,7 @@ if ($guid == elgg_get_logged_in_user_guid()) {
 	forward(REFERER);
 }
 
-if (($user instanceof ElggUser) && ($user->canEdit())) {
+if (elgg_instanceof($user, 'user') && theme_transitions2_user_is_platform_admin()) {
 	$user->is_content_admin = '';
 	if (empty($user->is_content_admin)) {
 		system_message(elgg_echo('admin:user:remove_content_admin:yes'));

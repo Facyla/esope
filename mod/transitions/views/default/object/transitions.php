@@ -270,19 +270,31 @@ if ($full) {
 	
 	// Contributed tags
 	$params['tabs'][] = array('title' => elgg_echo('transitions:addtag'), 'url' => "#transitions-{$transitions->guid}-addtag", 'selected' => true);
-	$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
+	if (elgg_is_logged_in()) {
+		$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
+	} else {
+		$tab_content .= '<div id="transitions-'. $transitions->guid . '-addtag" class="transitions-tab-content">' . elgg_echo('transitions:accountrequired') . '</div>';
+	}
 	//$tab_content .= '<div class="clearfloat"></div><br />';
 	
 	// Contributed support links
 	$params['tabs'][] = array('title' => elgg_echo('transitions:addlink'), 'url' => "#transitions-{$transitions->guid}-addlink");
-	$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	if (elgg_is_logged_in()) {
+		$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
 	//$tab_content .= '<div class="clearfloat"></div><br />';
+	} else {
+		$tab_content .= '<div id="transitions-'. $transitions->guid . '-addlink" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
+	}
 	
 	// Add relation to related actors (anyone)
 	if ($transitions->category == 'project') {
 		$params['tabs'][] = array('title' => elgg_echo('transitions:addactor'), 'url' => "#transitions-{$transitions->guid}-addactor");
-		$tab_content .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-		//$tab_content .= '<div class="clearfloat"></div><br />';
+		if (elgg_is_logged_in()) {
+			$tab_content .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+			//$tab_content .= '<div class="clearfloat"></div><br />';
+		} else {
+			$tab_content .= '<div id="transitions-'. $transitions->guid . '-addactor" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
+		}
 	}
 	
 	// Add relation to answer resources (anyone)

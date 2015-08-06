@@ -1,4 +1,6 @@
 <?php
+$url = elgg_get_site_url();
+
 return array(
 	'transitions' => "Contributions",
 	'transitions:transitions' => "Contributions",
@@ -105,10 +107,11 @@ Voir et commenter cette contribution :
 	'transitions:incremental:yes' => "Oui (mis au second plan)",
 	
 	// Other forms
+	'transitions:accountrequired' => "Veuillez vous connecter pour contribuer.<br />Si vous n'avez pas encore de compte,  c'est très rapide ! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Créer mon compte de contributeur Transitions²</a>",
 	'transitions:tags_contributed' => "Tags des contributeurs",
 	'transitions:addtag' => "Tagguer",
 	'transitions:addtag:submit' => "Ajouter un tag",
-	'transitions:addtag:details' => "Vous pouvez ajouter un ou plusieurs tags pour mieux classer cette ressource.",
+	'transitions:addtag:details' => "Vous pouvez ajouter un ou plusieurs tags pour aider à mieux classer cette ressource.",
 	'transitions:addtag:success' => "Tag ajouté",
 	'transitions:addtag:emptytag' => "Pas de tag à ajouter",
 	'transitions:addtag:alreadyexists' => "Ce tag a déjà été ajouté",

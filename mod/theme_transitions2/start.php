@@ -16,6 +16,9 @@ function theme_transitions2_init() {
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
 	
+	// Public notice for comment
+	elgg_extend_view('forms/comment/save', 'theme_transitions2/public_comment', 100);
+	
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
 	// Rewrite RSS link in owner_block menu
@@ -39,8 +42,8 @@ function theme_transitions2_init() {
 	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
-	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'admin');
-	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'admin');
+	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'logged_in');
+	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'logged_in');
 	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/make_platform_admin.php", 'admin');
 	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
 	
@@ -192,6 +195,7 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 // Content admins (greater admin levels also have this role)
 function theme_transitions2_user_is_content_admin($user = false) {
 	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if (!$user) return false; // Not logged in
 	if ($user->is_content_admin == 'yes') return true;
 	if (theme_transitions2_user_is_platform_admin($user)) return true;
 	if ($user->isAdmin()) return true;
@@ -205,6 +209,7 @@ function theme_transitions_get_content_admins() {
 // Platform admins (greater admin level also have this role)
 function theme_transitions2_user_is_platform_admin($user = false) {
 	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if (!$user) return false; // Not logged in
 	if ($user->is_platform_admin == 'yes') return true;
 	if ($user->isAdmin()) return true;
 	return false;
@@ -230,28 +235,31 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	}
 	
 	// Add some admin menus
-	if (elgg_is_admin_logged_in()) {
-		$actions = array();
+	$actions = array();
+	// Platform admin can grant content admins
+	if (theme_transitions2_user_is_platform_admin()) {
 		if (theme_transitions2_user_is_content_admin($user)) {
 			$actions[] = 'remove_content_admin';
 		} else {
 			$actions[] = 'make_content_admin';
 		}
-		
+	}
+	// Global admin can grant platform admins
+	if (elgg_is_admin_logged_in()) {
 		if (theme_transitions2_user_is_platform_admin($user)) {
 			$actions[] = 'remove_platform_admin';
 		} else {
 			$actions[] = 'make_platform_admin';
 		}
-		
-		foreach ($actions as $action) {
-			$url = "action/admin/user/$action?guid={$user->guid}";
-			$url = elgg_add_action_tokens_to_url($url);
-			$item = new \ElggMenuItem($action, elgg_echo($action), $url);
-			$item->setSection('admin');
-			$item->setConfirmText(true);
-			$return[] = $item;
-		}
+	}
+	
+	foreach ($actions as $action) {
+		$url = "action/admin/user/$action?guid={$user->guid}";
+		$url = elgg_add_action_tokens_to_url($url);
+		$item = new \ElggMenuItem($action, elgg_echo($action), $url);
+		$item->setSection('admin');
+		$item->setConfirmText(true);
+		$return[] = $item;
 	}
 	return $return;
 }

@@ -6,8 +6,7 @@
 $guid = get_input('guid');
 $user = get_entity($guid);
 
-if (($user instanceof ElggUser) && ($user->canEdit())) {
-	//if ($user->makeAdmin() && ($user->is_content_admin = 'yes')) {
+if (elgg_instanceof($user, 'user') && theme_transitions2_user_is_platform_admin()) {
 	if ($user->is_content_admin = 'yes') {
 		system_message(elgg_echo('admin:user:make_content_admin:yes'));
 	} else {

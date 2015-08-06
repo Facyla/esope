@@ -16,6 +16,8 @@ elgg_make_sticky_form('transitions');
 
 elgg_load_library('elgg:transitions');
 
+$is_admin = theme_transitions2_user_is_content_admin();
+
 /* Direct registration ?
 $register_first = !elgg_is_logged_in();
 if ($register_first) {
@@ -182,7 +184,7 @@ if (!$error) {
 }
 
 // Handle admin-reserved fields
-if (elgg_is_admin_logged_in()) {
+if ($is_admin) {
 	$tags_contributed = get_input('tags_contributed');
 	// Add new tag
 	if (!empty($tags_contributed)) {
