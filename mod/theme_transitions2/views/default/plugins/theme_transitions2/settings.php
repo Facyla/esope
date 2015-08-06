@@ -26,11 +26,16 @@ echo '<a href="' . elgg_get_site_url() . 'admin/appearance/menus?menu_name=' . $
 echo '<p><label>Footer menu ' . elgg_view('input/dropdown', array('name' => 'params[menu_footer]', 'options_values' => $menus_options, 'value' => $vars['entity']->menu_footer)) . '</label> &nbsp; ';
 echo '<a href="' . elgg_get_site_url() . 'admin/appearance/menus?menu_name=' . $vars['entity']->menu_footer . '" target="_blank" class="elgg-button elgg-button-action">Editer le menu ' . $vars['entity']->menu_footer . '</a></p>';
 
-echo "<h3>Listes des administrateurs globaux</h3>";
+echo "<h3>Liste des administrateurs contenus</h3>";
+echo elgg_list_entities(array(), 'theme_transitions_get_content_admins');
+
+echo "<h3>Liste des administrateurs platforme</h3>";
+echo elgg_list_entities(array(), 'theme_transitions_get_content_admins');
+
+echo "<h3>Liste des administrateurs globaux</h3>";
 echo elgg_list_entities(array(), 'elgg_get_admins');
 
-echo "<h3>Listes des administrateurs de contenus</h3>";
-echo elgg_list_entities(array(), 'theme_transitions_get_editors');
+echo '<div class="clearfloat"></div>';
 
 // Example yes/no setting
 //echo '<p><label>Test select setting "setting_name"</label> ' . elgg_view('input/dropdown', array('name' => 'params[setting_name]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->setting_name)) . '</p>';

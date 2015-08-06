@@ -256,6 +256,10 @@ return array(
 	'cmspages:password:submit' => "Access",
 	'cmspages:password:form' => "Password-protected access",
 	
+	/* Settings */
+	'cmspages:settings:yes' => "Yes",
+	'cmspages:settings:no' => "No",
+	'cmspages:settings:register_object' => "Enable CMSPages search",
 	'cmspages:settings:cms_menu' => "Menu to be displayed",
 	'cmspages:settings:cms_menu:cmspages_categories' => "cmspages_categories (CMSPages categories)",
 	'cmspages:settings:cms_menu:default' => "[ Default ]",

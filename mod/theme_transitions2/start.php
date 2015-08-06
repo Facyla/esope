@@ -28,8 +28,12 @@ function theme_transitions2_init() {
 	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
-	elgg_register_action('admin/user/makeeditor', dirname(__FILE__) . "/actions/makeeditor.php", 'admin');
-	elgg_register_action('admin/user/removeeditor', dirname(__FILE__) . "/actions/removeeditor.php", 'admin');
+	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'admin');
+	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'admin');
+	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/make_platform_admin.php", 'admin');
+	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
+	
+	// Modify owner block menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
 	
 	// Register Font Awesome
@@ -170,15 +174,25 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 }
 
 
-// Editor role
-function theme_transitions2_user_is_editor($user = false) {
+// Content admins
+function theme_transitions2_user_is_content_admin($user = false) {
 	if (!$user) $user = elgg_get_logged_in_user_entity();
-	if ($user->is_editor == 'yes') return true;
+	if ($user->is_content_admin == 'yes') return true;
 	return false;
 }
+function theme_transitions_get_content_admins() {
+	$options = array('types' => 'user', 'metadata_name_value_pairs' => array('name' => 'is_content_admin', 'value' => 'yes'));
+	return elgg_get_entities_from_metadata($options);
+}
 
-function theme_transitions_get_editors() {
-	$options = array('types' => 'user', 'metadata_name_value_pairs' => array('name' => 'is_editor', 'value' => 'yes'));
+// Platform admins
+function theme_transitions2_user_is_platform_admin($user = false) {
+	if (!$user) $user = elgg_get_logged_in_user_entity();
+	if ($user->is_platform_admin == 'yes') return true;
+	return false;
+}
+function theme_transitions_get_platform_admins() {
+	$options = array('types' => 'user', 'metadata_name_value_pairs' => array('name' => 'is_platform_admin', 'value' => 'yes'));
 	return elgg_get_entities_from_metadata($options);
 }
 
@@ -199,10 +213,16 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	// Add some admin menus
 	if (elgg_is_admin_logged_in()) {
 		$actions = array();
-		if (theme_transitions2_user_is_editor($user)) {
-			$actions[] = 'removeeditor';
+		if (theme_transitions2_user_is_content_admin($user)) {
+			$actions[] = 'remove_content_admin';
 		} else {
-			$actions[] = 'makeeditor';
+			$actions[] = 'make_content_admin';
+		}
+		
+		if (theme_transitions2_user_is_platform_admin($user)) {
+			$actions[] = 'remove_platform_admin';
+		} else {
+			$actions[] = 'make_platform_admin';
 		}
 		
 		foreach ($actions as $action) {

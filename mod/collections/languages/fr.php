@@ -50,6 +50,7 @@ return array(
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",
 	'collections:change_entity' => "Changer de publication",
+	'collection:add' => "Créer une collection",
 	
 	//'collections:' => "",
 	'collections:publishin' => "Publier dans",

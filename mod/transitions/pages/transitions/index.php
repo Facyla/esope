@@ -15,7 +15,8 @@ $content = '';
 $title = elgg_echo('transitions:index');
 $sidebar = '';
 
-elgg_push_breadcrumb(elgg_echo('search'));
+//elgg_push_breadcrumb(elgg_echo('search'));
+elgg_register_title_button();
 
 $category = get_input('category', '');
 if ($category == 'all') $category = '';

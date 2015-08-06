@@ -22,8 +22,10 @@ function cmspages_init() {
 	elgg_extend_view('css/admin','cmspages/css');
 	if (!elgg_is_active_plugin('esope')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
 	
-	// Register entity type
-	elgg_register_entity_type('object', 'cmspage');
+	// Register entity type for search
+	if (elgg_get_plugin_setting('register_object') != 'no') {
+		elgg_register_entity_type('object', 'cmspage');
+	}
 	
 	// Register a URL handler for CMS pages
 	// override the default url to view a blog object

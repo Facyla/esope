@@ -21,6 +21,8 @@ $title = elgg_echo('collections');
 // Breadcrumbs
 elgg_push_breadcrumb(elgg_echo('collections'));
 
+elgg_register_title_button();
+
 elgg_push_context('listing');
 elgg_push_context('collections');
 
@@ -30,7 +32,7 @@ $collection_count = elgg_get_entities(array('types' => 'object', 'subtypes' => '
 if ($collection_count > 0) $title .= " ($collection_count)";
 
 if (elgg_is_logged_in()) {
-	$sidebar .= '<p><a href="' . elgg_get_site_url() . 'collection/edit" class="elgg-button elgg-button-action">' . elgg_echo('collections:add') . '</a></p>';
+	//$sidebar .= '<p><a href="' . elgg_get_site_url() . 'collection/edit" class="elgg-button elgg-button-action">' . elgg_echo('collections:add') . '</a></p>';
 
 	$sidebar .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">' . elgg_echo('collections:instructions') . '</blockquote>';
 }
