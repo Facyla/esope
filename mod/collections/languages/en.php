@@ -2,6 +2,7 @@
 
 return array(
 	'collections' => "Collections",
+	'item:object:collection' => "Collections",
 
 	/* Settings */
 	'collections:settings:description' => "Main collection settings",

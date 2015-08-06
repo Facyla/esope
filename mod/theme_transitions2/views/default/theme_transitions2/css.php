@@ -40,6 +40,10 @@ input, textarea { max-width: 100%; }
 .elgg-button-nav:hover { background-color: #669900; }
 
 
+/* Sidebar */
+.elgg-menu-extras { font-size: 1.5em; }
+.elgg-menu-extras li { margin-right: 0.4em; }
+
 /* Homepage */
 .elgg-menu-item-logohome a { padding: 0 !important; }
 .elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }

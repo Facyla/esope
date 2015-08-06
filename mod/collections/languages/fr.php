@@ -1,7 +1,8 @@
 <?php
 
 return array(
-	'collection' => "Collection",
+	'collection' => "Collections",
+	'item:object:collection' => "Collections",
 
 	/* Settings */
 	'collections:settings:description' => "Configuration des collections",

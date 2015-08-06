@@ -36,6 +36,9 @@ function transitions_init() {
 	// routing of urls
 	elgg_register_page_handler('transitions', 'transitions_page_handler');
 	
+	// Adds menu to page owner block
+	elgg_register_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
+	
 	// Override icons
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "transitions_icon_hook");
 
@@ -202,6 +205,23 @@ function transitions_page_handler($page) {
 }
 
 
+// Adds ICAL link to current page
+function transitions_add_ical_link() {
+	$context = elgg_get_context();
+	//echo $context; // debug : check eligible context
+	if (in_array($context, array('transitions', 'main', 'collections', 'search'))) {
+		$url = current_page_url();
+		if (substr_count($url, '?')) { $url .= "&view=ical"; } else { $url .= "?view=ical"; }
+		$url = elgg_format_url($url);
+		elgg_register_menu_item("extras", array(
+			"name" => "ical",
+			"href" => $url,
+			"text" => '<i class="fa fa-calendar-o"></i>',
+			'title' => elgg_echo('transitions:ical'),
+			"priority" => 500,
+		));
+	}
+}
 
 /**
  * Format and return the URL for transitions.

@@ -15,9 +15,12 @@ function theme_transitions2_init() {
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
-
 	
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
+	
+	// Rewrite RSS link in owner_block menu
+	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
+	elgg_register_plugin_hook_handler('output:before', 'layout', 'theme_transitions2_add_rss_link');
 	
 	// Rewrite register action
 	elgg_unregister_action('register');
@@ -40,11 +43,6 @@ function theme_transitions2_init() {
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_register_plugin_hook_handler('config', 'htmlawed', 'theme_transitions2_htmlawed_filter_tags');
 		elgg_register_plugin_hook_handler('allowed_styles', 'htmlawed', 'theme_transitions2_htmlawed_allowed_tags');
-	}
-	
-	// non-members do not get visible links to RSS feeds
-	if (!elgg_is_logged_in()) {
-		elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
 	}
 	
 	// Index page
@@ -121,9 +119,33 @@ function theme_transitions2_pagesetup() {
 			$item->setPriority(103);
 		}
 		*/
-
+		
+	// Replace QR code icon
+	elgg_unregister_menu_item('extras', 'qrcode-page');
+	$qrcode_title = elgg_echo('qrcode:page:title');
+	elgg_register_menu_item('extras', array(
+			'name' => 'qrcode-page', 'text' => '<i class="fa fa-qrcode"></i>', 'title' => $qrcode_title,
+			'href' => '#elgg-popup-qrcode-page', 'rel' => 'popup', 'priority' => 800,
+		));
+		
 	}
 }
+
+function theme_transitions2_add_rss_link() {
+	global $autofeed;
+	if (isset($autofeed) && $autofeed == true) {
+		$url = current_page_url();
+		if (substr_count($url, '?')) { $url .= "&view=rss"; } else { $url .= "?view=rss"; }
+		$url = elgg_format_url($url);
+		elgg_register_menu_item('extras', array(
+			'name' => 'rss',
+			'text' => '<i class="fa fa-rss"></i>',
+			'href' => $url,
+			'title' => elgg_echo('feed:rss'),
+		));
+	}
+}
+
 
 /**
  * Register items for the html head

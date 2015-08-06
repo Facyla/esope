@@ -24,12 +24,14 @@ function collections_plugin_init() {
 	
 	//elgg_extend_view('shortcodes/embed/extend', 'collections/extend_shortcodes_embed');
 	
-	
 	// Register main page handler
 	elgg_register_page_handler('collection', 'collections_page_handler');
 	
 	// Register a URL handler for collections
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'collections_url');
+	
+	// Register for search.
+	elgg_register_entity_type('object', 'collection');
 	
 	// Override icons
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "collections_icon_hook");
