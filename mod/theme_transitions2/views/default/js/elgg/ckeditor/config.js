@@ -3,7 +3,32 @@ define(function(require) {
 	var $ = require('jquery');
 
 	return {
-		toolbar: [['Bold', 'Italic', 'Underline', 'RemoveFormat'], ['Strike', 'NumberedList', 'BulletedList', 'Undo', 'Redo', 'Link', 'Unlink', 'Image', 'Blockquote', 'Paste', 'PasteFromWord', 'Maximize']],
+		// Use / for row break, - for separator
+		toolbar: [
+				['Paste', 'PasteFromWord', 'RemoveFormat'], 
+				['Undo', 'Redo'], 
+				['Image', 'Table', 'Iframe', 'Flash'], 
+				['Scayt'], 
+				['Source'], 
+				['Maximize'], 
+				'/', 
+				['Format'], 
+				['Bold', 'Italic', 'Underline', 'Strike'], 
+				['Link', 'Unlink', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'], 
+				// source, iframe, flash, table, styles
+				// templates
+			],
+		/*
+		toolbarGroups: [
+				{"name":"basicstyles","groups":["basicstyles"]},
+				{"name":"links","groups":["links"]},
+				{"name":"paragraph","groups":["list","blocks"]},
+				{"name":"document","groups":["mode"]},
+				{"name":"insert","groups":["insert"]},
+				{"name":"styles","groups":["styles"]},
+				{"name":"about","groups":["about"]}
+			],
+		*/
 		removeButtons: 'Subscript,Superscript', // To have Underline back
 		allowedContent: true,
 		baseHref: elgg.config.wwwroot,

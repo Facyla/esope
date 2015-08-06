@@ -216,6 +216,15 @@ if ($is_admin) {
 		$entity->links_supports = $links_supports;
 	}
 	
+	$owner_username = get_input('owner_username', '');
+	if (!empty($owner_username)) {
+		$new_owner = get_user_by_username($owner_username);
+		if (elgg_instanceof($new_owner, 'user')) {
+			$entity->owner_guid = $new_owner->guid;
+			$entity->container_guid = $new_owner->guid;
+		}
+	}
+	
 	$is_incremental = get_input('is_incremental', '');
 	// Set incremental status
 	if (!empty($is_incremental)) {

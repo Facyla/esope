@@ -69,6 +69,9 @@ Voir et commenter cette contribution :
 	
 	
 	// NEW STRINGS
+	'transitions:title:actor' => "Nom",
+	'transitions:title:project' => "Nom du projet",
+	'transitions:title:event' => "Nom de l\'événement", // Used in JS
 	'transitions:icon' => "Image",
 	'transitions:icon:details' => "Choisissez une image pour illustrer votre contribution.",
 	'transitions:icon:new' => "Ajouter une image",
@@ -81,7 +84,7 @@ Voir et commenter cette contribution :
 	'transitions:category:choose' => "Sélectionnez une catégorie",
 	'transitions:title' => "Titre de votre contribution",
 	'transitions:tags' => "Ajoutez plusieurs tags séparés par des virgules",
-	'transitions:excerpt' => "Votre contribution en 140 caractères",
+	'transitions:excerpt' => "Résumé de votre contribution",
 	'transitions:url' => "Lien web",
 	'transitions:url:details' => "Si votre contribution fait référence à une ressource en ligne, veuillez indiquer son adresse.",
 	'transitions:lang' => "Langue",
@@ -102,6 +105,8 @@ Voir et commenter cette contribution :
 	'transitions:saveandedit' => "Poursuivre l'édition",
 	'transitions:preview' => "Sauvegarder",
 	'transitions:save' => "Publier",
+	'transitions:owner_username' => "Propriétaire de la fiche",
+	'transitions:owner_username:details' => "Pour transférer la fiche à un autre membre, indiquez son nom d'utilisateur ci-dessus (saisissez quelques lettres de son nom pour que des choix vous soient proposés).",
 	'transitions:incremental' => "Contenu incrémental",
 	'transitions:incremental:no' => "Non (par défaut)",
 	'transitions:incremental:yes' => "Oui (mis au second plan)",

@@ -139,8 +139,8 @@ $body_input = elgg_view('input/longtext', array(
 ));
 
 $save_status = elgg_echo('transitions:save_status');
-if ($vars['guid'] && ($entity->time_created > 0)) {
-	$saved = date('F j, Y @ H:i', $entity->time_created);
+if ($vars['guid'] && ($transitions->time_created > 0)) {
+	$saved = date('F j, Y @ H:i', $transitions->time_created);
 } else {
 	$saved = elgg_echo('never');
 }
@@ -152,11 +152,20 @@ if ($is_admin) {
 	$status_input = elgg_view('input/select', array(
 		'name' => 'status',
 		'id' => 'transitions_status',
-		'value' => $vars['status'],
+		'value' => $status_value,
 		'options_values' => array(
 			'draft' => elgg_echo('status:draft'),
 			'published' => elgg_echo('status:published')
 		)
+	));
+	
+	$owner_username_label = elgg_echo('transitions:owner_username');
+	$owner_username = $transitions->getOwnerEntity()->username;
+	$owner_username_input = elgg_view('input/autocomplete', array(
+		'name' => 'owner_username',
+		'id' => 'transitions_owner_username',
+		'value' => '',
+		'match_on' => 'users',
 	));
 	
 	$incremental_label = elgg_echo('transitions:incremental');
@@ -310,7 +319,8 @@ if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
-	$admin_fields .= '<p class="' . $incremental_value . '"><label class="" for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
+	$admin_fields .= '<p><label for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
@@ -361,17 +371,22 @@ function transitions_toggle_fields() {
 	
 	//Now switch on wanted special fields
 	if (val == "actor") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:actor') . '\');
 		$(".transitions-actortype").removeClass(\'hidden\');
 		$(".transitions-territory").removeClass(\'hidden\');
 	} else if (val == "project") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:project') . '\');
 		$(".transitions-territory").removeClass(\'hidden\');
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "event") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:event') . '\');
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "challenge") {
 		$(".transitions-rss-feed").removeClass(\'hidden\');
+	} else {
+		$(".transitions-title label").html(\'' . elgg_echo('title') . '\');
 	}
 	return true;
 }
@@ -384,8 +399,8 @@ $edit_details
 
 $draft_warning
 
-<div>
-	<label class="hidden" for="transitions_title">$title_label</label>
+<div class="transitions-title">
+	<label class="" for="transitions_title">$title_label</label>
 	$title_input
 </div>
 
@@ -407,17 +422,17 @@ $draft_warning
 </div>
 
 <div>
-	<label class="hidden" for="transitions_excerpt">$excerpt_label</label>
+	<label class="" for="transitions_excerpt">$excerpt_label</label>
 	$excerpt_input
 </div>
 
 <div>
-	<label class="hidden" for="transitions_tags">$tags_label</label>
+	<label class="" for="transitions_tags">$tags_label</label>
 	$tags_input
 </div>
 
 <div>
-	<label class="hidden" for="transitions_url">$url_label</label>
+	<label class="" for="transitions_url">$url_label</label>
 	$url_input<br />
 	<em>$url_details</em>
 </div>
@@ -430,13 +445,13 @@ $draft_warning
 <div class="clearfloat"></div>
 
 <div class="transitions-rss-feed">
-	<label class="hidden" for="transitions_rss_feed">$rss_feed_label</label>
+	<label class="" for="transitions_rss_feed">$rss_feed_label</label>
 	$rss_feed_input<br />
 	<em>$rss_feed_details</em>
 </div>
 
 <div class="transitions-territory">
-	<label class="hidden" for="transitions_territory">$territory_label</label>
+	<label class="" for="transitions_territory">$territory_label</label>
 	$territory_input<br />
 	<em>$territory_details</em>
 </div>
