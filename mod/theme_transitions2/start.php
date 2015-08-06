@@ -26,12 +26,27 @@ function theme_transitions2_init() {
 	elgg_unregister_action('register');
 	elgg_register_action("register", dirname(__FILE__) . "/actions/register.php", "public");
 	
+	// Remove friendship functionnality
+	elgg_unregister_plugin_hook_handler('register', 'menu:user_hover', '_elgg_friends_setup_user_hover_menu');
+	elgg_unregister_page_handler('friends');
+	elgg_unregister_page_handler('friendsof');
+	elgg_unregister_page_handler('collections');
+	elgg_unregister_action('friends/add');
+	elgg_unregister_action('friends/remove');
+	elgg_unregister_action('friends/collections/add');
+	elgg_unregister_action('friends/collections/delete');
+	elgg_unregister_action('friends/collections/edit');
+	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
 	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'admin');
 	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'admin');
 	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/make_platform_admin.php", 'admin');
 	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
+	
+	// Register admin rights plugin hooks
+	elgg_register_plugin_hook_handler('permissions_check', 'object', 'theme_transitions2_permissions_hook');
+	elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'theme_transitions2_container_permissions_hook');
 	
 	// Modify owner block menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
@@ -174,10 +189,12 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 }
 
 
-// Content admins
+// Content admins (greater admin levels also have this role)
 function theme_transitions2_user_is_content_admin($user = false) {
 	if (!$user) $user = elgg_get_logged_in_user_entity();
 	if ($user->is_content_admin == 'yes') return true;
+	if (theme_transitions2_user_is_platform_admin($user)) return true;
+	if ($user->isAdmin()) return true;
 	return false;
 }
 function theme_transitions_get_content_admins() {
@@ -185,10 +202,11 @@ function theme_transitions_get_content_admins() {
 	return elgg_get_entities_from_metadata($options);
 }
 
-// Platform admins
+// Platform admins (greater admin level also have this role)
 function theme_transitions2_user_is_platform_admin($user = false) {
 	if (!$user) $user = elgg_get_logged_in_user_entity();
 	if ($user->is_platform_admin == 'yes') return true;
+	if ($user->isAdmin()) return true;
 	return false;
 }
 function theme_transitions_get_platform_admins() {
@@ -201,6 +219,7 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	$user = $params['entity'];
 	
 	// Remove some unwanted entries
+	// Note : easier to remove friends menu by unregistering the core hook
 	$remove_user_menus = array('add_friend', 'remove_friend', 'activity:owner', 'transitions');
 	// @TODO Supprimer lien message si refus d'être contacté
 	$block_messages = elgg_get_plugin_user_setting('block_messages', 'theme_transitions2');
@@ -235,6 +254,23 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 		}
 	}
 	return $return;
+}
+
+
+// Determines if a user can *edit* a given entity
+function theme_transitions2_permissions_hook($hook, $entity_type, $returnvalue, $params) {
+	return theme_transitions2_user_is_content_admin($params['user']);
+}
+
+// Determines if a user can can use the entity $params['container'] as a container for a given entity
+function theme_transitions2_container_permissions_hook($hook, $entity_type, $returnvalue, $params) {
+	//$user = $params['user'];
+	//$entity = $params['entity'];
+	error_log("USER : " . $params['user']->guid . ' ' . $params['user']->name . " => ENTITY : " . $params['entity']->guid . ' ' . $params['entity']->title);
+	if (elgg_instanceof($params['container'], 'user')) {
+		return theme_transitions2_user_is_content_admin($params['user']);
+	}
+	return $returnvalue;
 }
 
 
