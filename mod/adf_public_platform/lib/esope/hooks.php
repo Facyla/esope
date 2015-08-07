@@ -572,3 +572,44 @@ function esope_user_hover_menu($hook, $type, $return, $params) {
 }
 
 
+// Add the regular group search method to main search
+function esope_search_groups_hook($hook, $type, $value, $params) {
+	$q = sanitise_string($params['query']);
+	$dbprefix = elgg_get_config('dbprefix');
+	$limit = sanitise_int(get_input('limit', 10));
+	
+	$params = array(
+			'types' => 'group',
+			'joins' => array("JOIN {$dbprefix}groups_entity as ge ON e.guid = ge.guid"),
+			'wheres' => array("(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '% $q%')"),
+			'count' => true,
+		);
+	
+	$count = elgg_get_entities($params);
+	
+	// no need to continue if nothing here.
+	if (!$count) {
+		return array('entities' => array(), 'count' => $count);
+	}
+	
+	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'ge', $params['sort'], $params['order']);
+	$entities = elgg_get_entities($params);
+	
+	// add the volatile data for why these entities have been returned.
+	foreach ($entities as $entity) {
+		$name = search_get_highlighted_relevant_substrings($entity->name, $query);
+		$entity->setVolatileData('search_matched_title', $name);
+
+		$description = search_get_highlighted_relevant_substrings($entity->description, $query);
+		$entity->setVolatileData('search_matched_description', $description);
+	}
+	
+	return array(
+		'entities' => $entities,
+		'count' => $count,
+	);
+}
+
+
+

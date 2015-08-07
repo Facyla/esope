@@ -324,6 +324,10 @@ function esope_init() {
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');
+	// Enable finer group search (like %$query% on name and username)
+	if (elgg_is_active_plugin('search')) {
+		elgg_register_plugin_hook_handler('search', 'group', 'esope_search_groups_hook');
+	}
 	// Pour permettre à tout éditeur valable de la page d'y ajouter une sous-page
 	elgg_unregister_page_handler('pages', 'pages_page_handler');
 	elgg_register_page_handler('pages', 'adf_platform_pages_page_handler');
