@@ -1,6 +1,7 @@
 <?php
 $title = elgg_echo('elgg_cas:title');
 $content = '';
+$debug = false;
 
 $register = get_input('register');
 if ($register == 'yes') { $register = true; } else { $register = false; }
@@ -117,7 +118,7 @@ if (elgg_instanceof($user, 'user')) {
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
 	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
-	error_log("No Elgg account yet for CAS login : $elgg_username");
+	if ($debug) error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
