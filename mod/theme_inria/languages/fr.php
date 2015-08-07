@@ -394,7 +394,9 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'adf_platform:groups:allowregister' => "Forcer l'inscription dans le groupe",
 	
-	'esope:fulltextsearch' => "Recherche par nom ou prénom",
+	'esope:fulltextsearch' => "Recherche plein texte",
+	'esope:fulltextsearch:user' => "Recherche par nom ou prénom",
+	'esope:fulltextsearch:group' => "Recherche plein texte",
 	
 	'river:all' => "Ça bouge sur Iris ...",
 	'thewire:everyone' => "Vos actualités en 140 caractères",

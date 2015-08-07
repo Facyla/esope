@@ -395,7 +395,9 @@ Here is the new profile page : %s
 	
 	'adf_platform:groups:allowregister' => "Force group registration",
 	
-	'esope:fulltextsearch' => "Search by name or first name",
+	'esope:fulltextsearch' => "Full text search",
+	'esope:fulltextsearch:user' => "Search by name or first name",
+	'esope:fulltextsearch:group' => "Group search",
 	
 	'river:all' => "On the move in Iris ...",
 	'thewire:everyone' => "Your news in 140 characters",
