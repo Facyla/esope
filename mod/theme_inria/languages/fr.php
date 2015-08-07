@@ -11,7 +11,7 @@ $french = array(
 	'theme_inria:topbar:userfriends' => "Mes&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "Mes&nbsp;activités",
 	'theme_inria:topbar:profil' => "Mon profil",
-	'theme_inria:site:activity' => "Activités récentes",
+	'theme_inria:site:activity' => "Ça bouge sur Iris ...",
 	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
@@ -30,6 +30,13 @@ $french = array(
 	'theme_inria:home:edito' => "Edito",
 	'theme_inria:friends' => "Contacts",
 	'theme_inria:friends:collections' => "Listes de contacts",
+	'theme_inria:thewire:tooltip' => "Toute l'activité récente sur Iris",
+	'theme_inria:site:activity:tooltip' => "Tous les actualités publiées sur le Fil",
+	'theme_inria:groups:featured:tooltip' => "Tous les groupes mis en Une sur Iris",
+	'theme_inria:groups:newest' => "Nouveaux groupes",
+	'theme_inria:groups:newest:tooltip' => "Tous les nouveaux groupes sur Iris",
+	'theme_inria:members:online:tooltip' => "Tous les membres connectés en ce moment sur Iris",
+	'theme_inria:members:newest:tooltip' => "Tous les nouveaux membres inscrits sur Iris",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -139,8 +146,9 @@ $french = array(
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
-	'theme_inria:thewire:title' => "Le Fil d'actualités",
+	'theme_inria:thewire:title' => "Vos actualités en 140 caractères",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
+	'theme_inria:thewire:placeholder' => "140 caractères pour saisir votre message à tous",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
@@ -387,6 +395,9 @@ Voici l'adresse du nouveau compte créé : %s
 	'adf_platform:groups:allowregister' => "Forcer l'inscription dans le groupe",
 	
 	'esope:fulltextsearch' => "Recherche par nom ou prénom",
+	
+	'river:all' => "Ça bouge sur Iris ...",
+	'thewire:everyone' => "Vos actualités en 140 caractères",
 	
 	
 	// Blog override (blog => article)

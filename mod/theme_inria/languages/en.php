@@ -11,7 +11,7 @@ $english = array(
 	'theme_inria:topbar:userfriends' => "My&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "My&nbsp;activities",
 	'theme_inria:topbar:profil' => "My profile",
-	'theme_inria:site:activity' => "Latest activities",
+	'theme_inria:site:activity' => "On the move in Iris ...",
 	'theme_inria:topbar:explorer' => "Explore",
 	'theme_inria:topbar:all' => "All",
 	'theme_inria:topbar:home' => "Home",
@@ -30,6 +30,13 @@ $english = array(
 	'theme_inria:home:edito' => "Headline",
 	'theme_inria:friends' => "Friends",
 	'theme_inria:friends:collections' => "Friends collections",
+	'theme_inria:thewire:tooltip' => "All activities on Iris",
+	'theme_inria:site:activity:tooltip' => "All messages on the Wire",
+	'theme_inria:groups:featured:tooltip' => "All featured groups on Iris",
+	'theme_inria:groups:newest' => "New groups",
+	'theme_inria:groups:newest:tooltip' => "All recently created groups on Iris",
+	'theme_inria:members:online:tooltip' => "All online members on Iris right now",
+	'theme_inria:members:newest:tooltip' => "All new members registered on Iris recently",
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
@@ -139,8 +146,9 @@ $english = array(
 	'theme_inria:firststeps:show' => "Show",
 	'theme_inria:thewire:charleft' => "left",
 	'theme_inria:thewire:access' => "Access : ",
-	'theme_inria:thewire:title' => "Inria the Wire",
+	'theme_inria:thewire:title' => "Your news in 140 characters",
 	'theme_inria:thewire:details' => "Any message or information to share ?",
+	'theme_inria:thewire:placeholder' => "140 chars to write your message to everybody",
 	'theme_inria:widgets:add:home' => "Edit my dashboard",
 	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	
@@ -388,6 +396,9 @@ Here is the new profile page : %s
 	'adf_platform:groups:allowregister' => "Force group registration",
 	
 	'esope:fulltextsearch' => "Search by name or first name",
+	
+	'river:all' => "On the move in Iris ...",
+	'thewire:everyone' => "Your news in 140 characters",
 	
 );
 

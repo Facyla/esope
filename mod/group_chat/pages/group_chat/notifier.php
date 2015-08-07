@@ -3,12 +3,12 @@
 // This should be as quick as we can, so add shortcuts to avoid unecessary checks
 // file latest_site, latest_group, latest_user with latest timestamp
 
-$site_notifiation = get_input('site');
-$group_notifiation = get_input('group');
-$user_notifiation = get_input('user');
+$site_notification = get_input('site');
+$group_notification = get_input('group');
+$user_notification = get_input('user');
 
 
-global $CONFIG;
+$site = elgg_get_site_entity();
 $log = array();
 
 // Add some security
@@ -25,11 +25,11 @@ $own = elgg_get_logged_in_user_entity();
 // Site notifications
 // Compare site stored timestamp with user ts
 $unread_site_chat = '';
-if ($site_notifiation == 'yes') {
+if ($site_notification == 'yes') {
 	// Block notifications if older than history
 	$days = elgg_get_plugin_setting('site_chat_days', 'group_chat');
 	$days = ($days)?$days:2;
-	if (($CONFIG->site->group_chat_unread < ($time - $days * 24*3600)) && ($CONFIG->site->group_chat_unread > $own->group_chat_unread_site)) {
+	if (($site->group_chat_unread < ($time - $days * 24*3600)) && ($site->group_chat_unread > $own->group_chat_unread_site)) {
 		$url = elgg_get_site_url() . "chat/site";
 		$js_link = "window.open('$url', 'groupchat_site', 'menubar=no, status=no, scrollbars=no, location=no, copyhistory=no, width=400, height=500').focus(); return false;";
 		$unread_site_chat = '<a class="group-chat-notification group-chat-notification-site" href="' . elgg_get_site_url() . 'chat/user' . $chat_id . '" onClick="' . $js_link . '" title="' . elgg_echo('groupchat:site:openlink:ownwindow:theme') . '">' . elgg_echo('group_chat:notification:site') . '</a>';
@@ -45,13 +45,13 @@ $log['notification']['site'] = $unread_site_chat;
  * otherwise (<=), just re-send the (up-to-date) list
  */
 $unread_group_chat = '';
-if ($group_notifiation == 'yes') {
+if ($group_notification == 'yes') {
 	// Block notifications if older than history
 	$days = elgg_get_plugin_setting('group_chat_days', 'group_chat');
 	$days = ($days)?$days:2;
 	// Check if there are any update to any group (avoids checking all groups every time)
 	// Note : we are checking a few seconds after so we don't get messages we've just posted
-	if (($CONFIG->site->group_chat_unread < ($time - $days * 24*3600)) && (elgg_get_site_entity()->group_chat_unread_group > $own->group_chat_unread_group_ts)) {
+	if (($site->group_chat_unread < ($time - $days * 24*3600)) && (elgg_get_site_entity()->group_chat_unread_group > $own->group_chat_unread_group_ts)) {
 	//if (elgg_get_site_entity()->group_chat_unread_group > $own->group_chat_unread_group_ts) {
 		// Check groups chat to update messages
 		$own_groups = $own->getGroups('', 0);
@@ -89,7 +89,7 @@ $log['notification']['group'] = $unread_group_chat;
 // User notifications
 // Check list of unread user chats
 $unread_user_chat = '';
-if ($user_notifiation == 'yes') {
+if ($user_notification == 'yes') {
 	$unread = $own->group_chat_unread_user;
 	if ($unread) {
 		if (!empty($unread) && !is_array($unread)) $unread = array($unread);
