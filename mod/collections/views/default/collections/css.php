@@ -18,3 +18,5 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 .collections-listing { list-style-type:none; }
 ul.collections-listing > li, .collections-listing > div { box-shadow: 1px 1px 1px 1px black; padding: 1em; display: inline-block; margin: 0.5em; }
 
+.collections-socialshare { font-size:3em; padding-bottom:0.5em; }
+.collections-socialshare a { margin-right:0.3em; }

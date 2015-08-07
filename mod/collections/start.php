@@ -46,11 +46,8 @@ function collections_plugin_init() {
 	elgg_register_action("collection/selectedit", $actions_path . 'selectedit.php');
 	
 	// register the JavaScript (autoloaded in 1.10)
-	$js = elgg_get_simplecache_url('js', 'collections/edit');
-	elgg_register_js('elgg.collections.edit', $js, 'footer');
-	
-	//$js = elgg_get_simplecache_url('js', 'collections/embed');
-	//elgg_register_js('elgg.collections.embed', $js, 'footer');
+	$js = elgg_get_simplecache_url('js', 'collections/collections');
+	elgg_register_js('elgg.collections.collections', $js, 'footer');
 	
 }
 
@@ -103,7 +100,7 @@ function collections_page_handler($page) {
 function collections_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'collection')) {
-		return elgg_get_site_url() . 'collection/view/' . $entity->guid;
+		return elgg_get_site_url() . 'collection/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
 	}
 }
 

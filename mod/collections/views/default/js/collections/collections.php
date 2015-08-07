@@ -1,29 +1,32 @@
 //<script>
-elgg.provide('elgg.collections.edit');
+elgg.provide('elgg.collections.collections');
 
 
 /** Initialize the collection editing javascript */
-elgg.collections.edit.init = function() {
+elgg.collections.collections.init = function() {
 	// Add entity
-	$(document).on('click', '#collection-edit-add-entity', elgg.collections.edit.addEntity);
+	$(document).on('click', '#collection-edit-add-entity', elgg.collections.collections.addEntity);
 	
 	// Remove entity
-	$(document).on('click', '.collection-edit-delete-entity', elgg.collections.edit.deleteEntity);
+	$(document).on('click', '.collection-edit-delete-entity', elgg.collections.collections.deleteEntity);
 	
 	// Add sortable feature
-	elgg.collections.edit.addSortable();
+	elgg.collections.collections.addSortable();
 	
 	// Load entity search inside lightbox
-	$("#collections-embed-search").live("submit", elgg.collections.edit.submitSearch);
+	$("#collections-embed-search").live("submit", elgg.collections.collections.submitSearch);
 	
-	$("#collections-embed-pagination a").live("click", elgg.collections.edit.embedForward);
+	$("#collections-embed-pagination a").live("click", elgg.collections.collections.embedForward);
 	
 	$("#collections-embed-list li").live("click", function(event) {
-		elgg.collections.edit.embedFormat(this);
+		elgg.collections.collections.embedFormat(this);
 		event.preventDefault();
 	});
 	
-	$("select[name=category]").live("change", elgg.collections.edit.searchFields);
+	$("select[name=category]").live("change", elgg.collections.collections.searchFields);
+	
+	// Action tabs (permalink, embed, share...)
+	$("#collections-action-tabs a").live("click", elgg.collections.collections.selectTab);
 	
 };
 
@@ -31,7 +34,7 @@ elgg.collections.edit.init = function() {
 /** Add a new empty entity to the form
  * @param {Object} e The click event
  */
-elgg.collections.edit.addEntity = function(e) {
+elgg.collections.collections.addEntity = function(e) {
 	// Count entities (for input id)
 	var guid = $('#collection-edit-form input[name=guid]').val();
 	var count = $('.collection-edit-entity').length;
@@ -45,7 +48,7 @@ elgg.collections.edit.addEntity = function(e) {
 	// Update embed link URL (set )
 	$('.collection-edit-entities div.collection-edit-entity:last-child a.elgg-lightbox').attr('href', '<?php echo elgg_get_site_url(); ?>collection/embed/' + guid + '-' + count);
 	// Refresh the sortable items to be able to sort into the new section
-	elgg.collections.edit.addSortable();
+	elgg.collections.collections.addSortable();
 	e.preventDefault();
 };
 
@@ -53,7 +56,7 @@ elgg.collections.edit.addEntity = function(e) {
 /** Removes a entity
  * @param {Object} e The click event
  */
-elgg.collections.edit.deleteEntity = function(e) {
+elgg.collections.collections.deleteEntity = function(e) {
 	var entity = $(this).parent();
 	if (confirm(elgg.echo('collections:edit:deleteentity:confirm'))) { entity.remove(); }
 	e.preventDefault();
@@ -63,7 +66,7 @@ elgg.collections.edit.deleteEntity = function(e) {
 /* Sortable init function
  * @param {Object} e The click event
  */
-elgg.collections.edit.addSortable = function() {
+elgg.collections.collections.addSortable = function() {
 	// initialisation de Sortable sur le container parent
 	$(".collection-edit-entities").sortable({
 		placeholder: 'collection-edit-highlight', // classe du placeholder ajouté lors du déplacement
@@ -74,8 +77,8 @@ elgg.collections.edit.addSortable = function() {
 };
 
 
-// @TODO
-elgg.collections.edit.searchFields = function(event) {
+// Conditionnal field on embed search lightbox
+elgg.collections.collections.searchFields = function(event) {
 	var category = $("select[name='category']").val();
 	$(".transitions-embed-search-actortype").addClass('hidden');
 	if (category == 'actor') {
@@ -85,7 +88,7 @@ elgg.collections.edit.searchFields = function(event) {
 }
 
 // Load search into lightbox
-elgg.collections.edit.submitSearch = function(event) {
+elgg.collections.collections.submitSearch = function(event) {
 	event.preventDefault();
 	var query = $(this).serialize();
 	var url = $(this).attr("action");
@@ -95,7 +98,9 @@ elgg.collections.edit.submitSearch = function(event) {
 	});
 };
 
-elgg.collections.edit.embedForward = function(event) {
+
+// Load search content into lightbox
+elgg.collections.collections.embedForward = function(event) {
 	var url = $(this).attr("href");
 	//url = elgg.embed.addContainerGUID(url);
 	$("#collections-embed-pagination").parent().load(url);
@@ -104,7 +109,7 @@ elgg.collections.edit.embedForward = function(event) {
 
 
 // Embeds content into field
-elgg.collections.edit.embedFormat = function(elem) {
+elgg.collections.collections.embedFormat = function(elem) {
 	var guid = $(elem).find(".collections-embed-item-content").html();
 	var details = $(elem).find(".collections-embed-item-details").html();
 	var fieldId = $('#collections-embed-search').find("input[name=field_id]").val();
@@ -120,6 +125,16 @@ elgg.collections.edit.embedFormat = function(elem) {
 };
 
 
+// Switch action tab
+elgg.collections.collections.selectTab = function(event) {
+	var tabID = $(this).attr("href");
+	$('.collections-tab-content').hide();
+	$('#collections-action-tabs li').removeClass('elgg-state-selected');
+	$(this).parent().addClass('elgg-state-selected');
+	$(tabID).toggle();
+	event.preventDefault();
+};
 
-elgg.register_hook_handler('init', 'system', elgg.collections.edit.init);
+
+elgg.register_hook_handler('init', 'system', elgg.collections.collections.init);
 

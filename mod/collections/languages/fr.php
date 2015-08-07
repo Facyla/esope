@@ -23,8 +23,8 @@ return array(
 	'collections:edit:name:details' => "Identifiant unique, sans accent ni caractères spéciaux, en minuscule et tout attaché, par ex.: mon-article-non-acentue.",
 	'collections:edit:description' => "Description",
 	'collections:edit:description:details' => "Permet de décrire à quoi sert le diaporama. La description n'est pas affichée.",
-	'collections:edit:content' => "Diapositives",
-	'collections:edit:content:details' => "Ajoutez de nouvelles diapositives, et réorganisez-les à votre convenance. <br />Note&nbsp;: les nouvelles diapositives ne disposent pas d'éditeur visuel&nbsp;; pour pouvoir l'utiliser, enregistrez votre diaporama.",
+	'collections:edit:content' => "Eléments",
+	'collections:edit:content:details' => "Ajoutez de nouvelles publications à votre collections, et réorganisez-les à votre convenance en faisant un cliquer-déplacer. <br />Note&nbsp;: les commentaires des nouveaux éléments ne disposent pas d'éditeur visuel&nbsp;; pour pouvoir l'utiliser, enregistrez votre diaporama.",
 	'collections:edit:entity' => "Publication",
 	'collections:edit:addentity' => "Ajouter une publication",
 	'collections:edit:deleteentity' => "Retirer cette publication",
@@ -63,13 +63,15 @@ return array(
 	'collections:embed:nofilter' => "Toutes (pas de filtre)",
 	
 	'collections:collectionsthis' => "Ajouter à une collection",
-	'collections:embed' => "Code d'embarquement",
-	'collections:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'collections:share' => "Partager",
+	'collections:socialshare:details' => "Utilisez les liens de partage suivants pour publier cette collection sur les médias sociaux.",
 	'collections:permalink' => "Permalien",
-	'collections:permalink:details' => "Lien permanent pour cette collection",
-	
-	'collections:entities:count' => "%s diapositives",
-	
+	'collections:permalink:details' => "Utilisez le lien permanent suivant pour faire référence à cette collection.",
+	'collections:shortlink' => "Lien court",
+	'collections:shortlink:details' => "Utilisez le lien court suivant pour vos partages.",
+	'collections:embed' => "Intégrer",
+	'collections:embed:details' => "Copiez-collez le code HTML suivant pour intégrer cette publication sur un autre site. Vous pouvez modifier les dimensions du bloc en changeant les valeurs après \"width\" (largeur) et \"height\" (hauteur).",
+	'collections:entities:count' => "%s éléments",
 	'collections:settings:subtypes' => "Subtypes",
 	'collections:settings:subtypes:details' => "Subtypes pouvant être ajoutés aux collections",
 	

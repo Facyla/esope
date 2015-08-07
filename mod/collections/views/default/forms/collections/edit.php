@@ -1,6 +1,5 @@
 <?php
-elgg_load_js('elgg.collections.edit');
-//elgg_load_js("elgg.collections.embed");
+elgg_load_js('elgg.collections.collections');
 
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');

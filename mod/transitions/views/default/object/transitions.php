@@ -113,9 +113,9 @@ if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 	// Permalink
 	$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-link"></i>&nbsp;' . elgg_echo('transitions:permalink'), 'rel' => 'popup', 'href' => '#transitions-popup-link-' . $transitions->guid));
 	if (elgg_is_active_plugin('shorturls')) {
-		$short_link = '<p>' . elgg_echo('transitions:shortlink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $transitions->guid . '</textarea>';
+		$short_link = '<p>' . elgg_echo('transitions:shortlink:details') . '<br /><input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $transitions->guid . '"></p>';
 	}
-	$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $transitions->getURL() . '</textarea>';
+	$permalink = '<p>' . elgg_echo('transitions:permalink:details') . '<br /><input type="text" onClick="this.setSelectionRange(0, this.value.length);" value="' . $transitions->getURL() . '"></p>';
 	$actions .= elgg_view_module('popup', elgg_echo('transitions:permalink'), $permalink, array('id' => 'transitions-popup-link-' . $transitions->guid, 'class' => 'transitions-popup-link hidden clearfix'));
 	
 	// Embed code
@@ -308,7 +308,6 @@ if ($full) {
 	
 	// Permalink and share links
 	$params['tabs'][] = array('title' => elgg_echo('transitions:share'), 'url' => "#transitions-{$transitions->guid}-share");
-	//$tab_content .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
 	$share_links = '';
 	if (elgg_is_active_plugin('socialshare')) {
 		$share_links .= '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
