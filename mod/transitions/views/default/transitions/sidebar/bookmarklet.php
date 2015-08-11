@@ -10,7 +10,8 @@ $title = elgg_echo('transitions:bookmarklet:title');
 
 $url = elgg_get_site_url();
 $img = elgg_view('output/img', array(
-	'src' => 'mod/bookmarks/graphics/bookmarklet.gif',
+	//'src' => 'mod/bookmarks/graphics/bookmarklet.gif',
+	'src' => 'mod/transitions/graphics/bookmarklet-transitions.png',
 	'alt' => $title,
 ));
 //$bookmarklet = "<a href=\"javascript:location.href='{$url}transitions/add?url='"
