@@ -172,6 +172,7 @@ Voir et commenter cette contribution :
 	
 	// Bookmarklet
 	'transitions:bookmarklet' => "Bookmarklet",
+	'transitions:bookmarklet:title' => "Publier sur Transitions²",
 	'transitions:bookmarklet:description' => "Le bookmarklet vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",
 	'transitions:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
 	'transitions:bookmarklet:description:conclusion' => "Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",

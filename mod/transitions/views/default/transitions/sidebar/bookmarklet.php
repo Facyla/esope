@@ -5,7 +5,8 @@
  * @package Bookmarks
  */
 
-$title = elgg_echo('transitions:bookmarklet');
+//$title = elgg_echo('transitions:bookmarklet');
+$title = elgg_echo('transitions:bookmarklet:title');
 
 $url = elgg_get_site_url();
 $img = elgg_view('output/img', array(
