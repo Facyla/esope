@@ -137,6 +137,9 @@ return array(
 	'cmspages:shorturl' => "<i class=\"fa fa-external-link\"></i>URL courte", // link, compress, retweet, quote-left, external-link
 	'cmspages:featured_image' => "Image en Une",
 	'cmspages:featured_image:view' => "Afficher l'image en Une",
+	'cmspages:featured_image:remove' => "Supprimer l'image en Une",
+	'cmspages:downloadfailed:invalidentity' => "Page non valide",
+	'cmspages:downloadfailed:invalidmetadata' => "Nom de champ non valide",
 	'cmspages:notexist:create' => "Cette page n'existe pas. Vous avez pu faire une erreur dans l'URL (attention aux '_', remplacés par des '-'), sinon vous pouvez cliquer sur le lien ci-dessous pour créer une nouvelle page à cette adresse.",
 	'cmspages:edit' => "[&nbsp;Modifier %s&nbsp;]",
 	'cmspages:createnew' => "[&nbsp;Créer %s&nbsp;]",

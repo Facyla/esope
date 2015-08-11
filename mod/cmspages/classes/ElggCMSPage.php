@@ -2,11 +2,11 @@
 /**
  * Class that represents an object of subtype survey
  */
-class CMSPage extends ElggObject {
+class ElggCMSPage extends ElggObject {
 	const SUBTYPE = "cmspage";
 
 	/** @var array $responses Cache for number of responders for each question */
-	private $responses_by_question = array();
+	//private $responses_by_question = array();
 
 	/** Set subtype */
 	protected function initializeAttributes() {
@@ -29,6 +29,44 @@ class CMSPage extends ElggObject {
 			'limit' => 1
 		));
 		return $cmspages;
+	}
+	
+	/** Returns page featured image
+	 *
+	 * @param string $size
+	 * @return string image HTML
+	 */
+	public function getFeaturedImage($size = 'original') {
+		$url = $this->getFeaturedImageURL($size);
+		return '<img src="' . $url . '" />';
+	}
+	
+	/** Returns page featured image URL
+	 *
+	 * @param string $size
+	 * @return string image URL
+	 */
+	public function getFeaturedImageURL($size = 'original') {
+		$icon_sizes = elgg_get_config("icon_sizes");
+		if (!isset($icon_sizes[$size])) { $size = 'original'; }
+		if (!empty($this->featured_image)) {
+			$fh = new ElggFile();
+			$fh->owner_guid = $this->guid;
+			if ($size != 'original') {
+				$filename = "cmspages/" . $this->guid . $size . ".jpg";
+				$extension = '.jpg';
+			} else {
+				$filename = $this->featured_image;
+				$extension = pathinfo($this->featured_image, PATHINFO_EXTENSION);
+				if (!is_null($extension)) { $extension = ".$extension"; } else { $extension = ''; }
+			}
+			$fh->setFilename($filename);
+			if ($fh->exists()) {
+				return elgg_get_site_url() . "cmspages/file/{$this->guid}/featured_image/$size/{$this->pagetype}{$extension}";
+			}
+		}
+		if ($size == 'original') { $size = 'master'; }
+		return elgg_get_site_url() . "mod/cmspages/graphics/icons/$size.png";
 	}
 	
 	
