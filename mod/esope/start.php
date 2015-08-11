@@ -1846,7 +1846,7 @@ function esope_extract_first_image($html, $full_tag = true) {
 
 // @TODO : make this more robust and fail-safe
 // Add file to an entity (using a specific folder in datastore)
-function esope_add_file_to_entity($entity, $input_name = 'file') {
+function esope_add_file_to_entity($entity, $input_name = 'file', $plugin_prefix = 'knownledge_database') {
 	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
 		/*
 		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
@@ -1902,7 +1902,7 @@ function esope_add_file_to_entity($entity, $input_name = 'file') {
 			}
 
 			// Create new file
-			$prefix = "knowledge_database/{$input_name}/";
+			$prefix = "{$plugin_prefix}/{$input_name}/";
 			$filehandler = new ElggFile();
 			$filehandler->owner_guid = $entity->guid;
 			$filehandler->setFilename($prefix . $filename);
