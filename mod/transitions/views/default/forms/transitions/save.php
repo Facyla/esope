@@ -160,7 +160,9 @@ if ($is_admin) {
 	));
 	
 	$owner_username_label = elgg_echo('transitions:owner_username');
-	$owner_username = $transitions->getOwnerEntity()->username;
+	if (elgg_instanceof($transitions, 'object', 'transitions')) {
+		$owner_username = $transitions->getOwnerEntity()->username;
+	}
 	$owner_username_input = elgg_view('input/autocomplete', array(
 		'name' => 'owner_username',
 		'id' => 'transitions_owner_username',
