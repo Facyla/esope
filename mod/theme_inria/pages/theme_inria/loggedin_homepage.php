@@ -41,7 +41,15 @@ $thewire = '<h2><a href="' . $url . 'thewire/all" title="' . elgg_echo('theme_in
 //$thewire .= '<em style="float:right;">' . elgg_echo('theme_inria:thewire:details') . '</em>';
 $thewire .= elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
-$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 5, 'pagination' => false));
+// Exclusion des messages du Fil provenant des groupes
+$thewire_params = array(
+		'type' => 'object', 'subtype' => 'thewire', 
+		// This is for container filtering only, can be removed if no filtering
+		"joins" => array("INNER JOIN " . $dbprefix . "entities AS ce ON e.container_guid = ce.guid"),
+		"wheres" => array("ce.type != 'group'"), // avoid messages where container is a group
+		'limit' => 5, 'pagination' => false
+	);
+$thewire .= elgg_list_entities($thewire_params);
 //elgg_pop_context();
 
 // Tableau de bord

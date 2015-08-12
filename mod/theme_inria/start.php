@@ -27,6 +27,10 @@ function theme_inria_init(){
 	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
+	// Rewrite file upload action to avoid river entries for file images
+	elgg_unregister_action('file/upload');
+	elgg_register_action("file/upload", $action_url . "file/upload.php");
+	
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
