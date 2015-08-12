@@ -1,4 +1,9 @@
 <?php
+
+$whitelist_enable = elgg_get_plugin_setting('whitelist_enable', 'registration_filter');
+
+if ($whitelist_enable != 'yes') { return; }
+
 // Get and prepare valid domain config array from plugin settings
 $whitelist = elgg_get_plugin_setting('whitelist', 'registration_filter');
 // Add csv support - cut also on ";" and ","

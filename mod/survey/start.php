@@ -26,16 +26,13 @@ function survey_init() {
 	elgg_register_page_handler('survey','survey_page_handler');
 
 	// Register a URL handler for survey posts
-	elgg_register_entity_url_handler('object','survey','survey_url');
-	//elgg_register_plugin_hook_handler('entity:url', 'object', 'survey_url'); // Elgg 1.10
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'survey_url');
 
 	// notifications
 	$send_notification = elgg_get_plugin_setting('send_notification', 'survey');
 	if (!$send_notification || $send_notification != 'no') {
-		register_notification_object('object', 'survey', elgg_echo('survey:new'));
-		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'survey_prepare_notification');
-		//elgg_register_notification_event('object', 'survey'); // Elgg 1.10
-		//elgg_register_plugin_hook_handler('prepare', 'notification:create:object:survey', 'survey_prepare_notification'); // Elgg 1.10
+		elgg_register_notification_event('object', 'survey', array('create'));
+		elgg_register_plugin_hook_handler('prepare', 'notification:publish:object:survey', 'survey_prepare_notification');
 	}
 
 	// add link to owner block
@@ -170,23 +167,16 @@ function survey_page_handler($page) {
 /**
  * Return the url for survey objects
  */
-function survey_url($survey) {
-	$title = elgg_get_friendly_title($survey->title);
-	return  "survey/view/" . $survey->guid . "/" . $title;
-}
-/* Elgg 1.10
 function survey_url($hook, $type, $url, $params) {
 	$survey = $params['entity'];
-	if ($survey instanceof Survey) {
-		if (!$survey->getOwnerEntity()) {
-			// default to a standard view if no owner.
-			return false;
-		}
+	if (elgg_instanceof($entity, 'object', 'survey')) {
+		// default to a standard view if no owner.
+		if (!$survey->getOwnerEntity()) { return false; }
 		$title = elgg_get_friendly_title($survey->title);
 		return "survey/view/" . $survey->guid . "/" . $title;
 	}
 }
-*/
+
 
 /**
  * Add a menu item to an owner block
@@ -216,7 +206,6 @@ function survey_owner_block_menu($hook, $type, $return, $params) {
  * @param array                           $params       Hook parameters
  * @return Elgg_Notifications_Notification
  */
-/* Elgg 1.10
 function survey_prepare_notification($hook, $type, $notification, $params) {
 	$entity = $params['event']->getObject();
 	$owner = $params['event']->getActor();
@@ -234,20 +223,7 @@ function survey_prepare_notification($hook, $type, $notification, $params) {
 
 	return $notification;
 }
-*/
-function survey_prepare_notification($hook, $type, $notification, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
-	if (elgg_instanceof($entity, 'object', 'survey')) {
-		$user = elgg_get_logged_in_user_entity();
-		if (!$user) {
-			$user = $entity->getOwnerEntity();
-		}
-		return elgg_echo('survey:notify:body', array($user->name, $entity->title, $entity->getURL()));
-	}
-	return null;
-}
+
 
 function survey_widget_urls($hook_name, $entity_type, $return_value, $params){
 	$result = $return_value;

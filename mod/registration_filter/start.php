@@ -26,6 +26,9 @@ function registration_filter_init() {
 function registration_filter_validate_email_hook($hook_name, $entity_type, $return, $params) {
 	elgg_load_library('registration_filter');
 	
+	// Admin bypass
+	if (elgg_is_admin_logged_in()) { return $return; }
+	
 	// Block registration
 	if (!registration_filter($params['email'])) {
 		register_error(elgg_echo('RegistrationException:NotAllowedEmail'));

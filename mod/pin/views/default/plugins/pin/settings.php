@@ -8,8 +8,9 @@ $validentities = get_registered_entity_types('object');
 foreach($validentities as $type) { $validlist .= $type.','; }
 
 
-// Paramètres du plugin
-echo '<p><strong><em>' . elgg_echo('pin:settings') . '</em></strong>/p>';
+echo '<p><label>' . elgg_echo('pin:settings:highlight')
+	. elgg_view('input/pulldown', array( 'name' => 'params[highlight]', 'value' => $vars['entity']->highlight, 'options_values' => $yesno_opt ))
+	. '</label></p>';
 
 if (!isset($vars['entity']->extendfullonly)) $vars['entity']->extendfullonly = 'yes';
 echo '<p><label>' . elgg_echo('pin:settings:extendfullonly')
@@ -17,10 +18,6 @@ echo '<p><label>' . elgg_echo('pin:settings:extendfullonly')
 	. '</label><br />' . elgg_echo('pin:settings:extendfullonly:help')
 	. '</p>';
 
-
-echo '<p><label>' . elgg_echo('pin:settings:highlight')
-	. elgg_view('input/pulldown', array( 'name' => 'params[highlight]', 'value' => $vars['entity']->highlight, 'options_values' => $yesno_opt ))
-	. '</label></p>';
 
 echo '<p><label>' . elgg_echo('pin:settings:validhighlight') 
 	. elgg_view('input/text', array( 'name' => 'params[validhighlight]', 'value' => $vars['entity']->validhighlight ))

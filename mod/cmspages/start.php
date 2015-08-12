@@ -20,15 +20,19 @@ elgg_register_event_handler('pagesetup','system','cmspages_pagesetup');
 function cmspages_init() {
 	elgg_extend_view('css','cmspages/css');
 	elgg_extend_view('css/admin','cmspages/css');
-	if (!elgg_is_active_plugin('adf_public_platform')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
+	if (!elgg_is_active_plugin('esope')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
 	
-	// Register entity type
-	elgg_register_entity_type('object', 'cmspage');
+	// Register entity type for search
+	if (elgg_get_plugin_setting('register_object') != 'no') {
+		elgg_register_entity_type('object', 'cmspage');
+	}
 	
 	// Register a URL handler for CMS pages
 	// override the default url to view a blog object
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspage_set_url');
-
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'cmspages_url_handler');
+	
+	// Override icons
+	//elgg_register_plugin_hook_handler("entity:icon:url", "object", "cmspages_icon_hook");
 	
 	// Register main page handler
 	elgg_register_page_handler('cmspages', 'cmspages_page_handler');
@@ -49,6 +53,8 @@ function cmspages_init() {
 	$actions_path = elgg_get_plugins_path() . 'cmspages/actions/cmspages/';
 	elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
 	elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
+	
+	elgg_register_event_handler('upgrade', 'upgrade', 'cmspages_run_upgrades');
 	
 }
 
@@ -120,6 +126,14 @@ function cmspages_page_handler($page) {
 			if (!include($include_path . 'edit.php')) { return false; }
 			break;
 		
+		case 'file':
+			// file/{$entity->guid}/featured_image/$size/
+			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			if (!empty($page[2])) { set_input('metadata', $page[2]); }
+			if (!empty($page[3])) { set_input('size', $page[3]); }
+			if (!include($include_path . 'file.php')) { return false; }
+			break;
+		
 		case 'index':
 			if (!include($include_path . 'index.php')) { return false; }
 			break;
@@ -161,13 +175,42 @@ function cmspages_cms_tag_page_handler($page) {
  * @param array  $params
  * @return string URL of blog.
  */
-function cmspage_set_url($hook, $type, $url, $params) {
+function cmspages_url_handler($hook, $type, $url, $params) {
 	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'cmspage')) {
-		return elgg_get_site_url() . "p/" . $cmspage->pagetype;
-	}
+	
+	if (!elgg_instanceof($entity, 'object', 'cmspage')) { return; }
+	
+	return elgg_get_site_url() . "p/" . $entity->pagetype;
 }
 
+// Define object icon : custom or default
+// @TODO : should featured image be used as icon ?
+function cmspages_icon_hook($hook, $entity_type, $returnvalue, $params) {
+	$entity = $params["entity"];
+	$size = $params["size"];
+	if (elgg_instanceof($entity, "object", "cmspage")) {
+		$icon_sizes = elgg_get_config("icon_sizes");
+		if (!isset($icon_sizes[$size])) { $size = 'original'; }
+		if (!empty($entity->featured_image)) {
+			$fh = new ElggFile();
+			$fh->owner_guid = $entity->guid;
+			if ($size != 'original') {
+				$filename = "cmspages/" . $entity->guid . $size . ".jpg";
+				$extension = '.jpg';
+			} else {
+				$filename = $entity->featured_image;
+				$extension = pathinfo($entity->featured_image, PATHINFO_EXTENSION);
+				if (!is_null($extension)) { $extension = ".$extension"; } else { $extension = ''; }
+			}
+			$fh->setFilename($filename);
+			if ($fh->exists()) {
+				return elgg_get_site_url() . "cmspages/file/{$entity->guid}/featured_image/$size/{$entity->pagetype}{$extension}";
+			}
+		}
+		return elgg_get_site_url() . "mod/cmspages/graphics/icons/$size.png";
+	}
+	return $returnvale;
+}
 
 /* Page setup. Adds admin controls */
 function cmspages_pagesetup() {
@@ -1035,6 +1078,79 @@ function cmspages_history_list($cmspage, $metadata_name, $limit = false, $offset
 }
 
 
+// Adds a featured image (only if an image was actually sent)
+function cmspages_add_featured_image($cmspage, $input_name = 'featured_image') {
+	$result = false;
+	if (elgg_instanceof($cmspage, "object", "cmspage")) {
+		//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
+		// Autres dimensions, notamment recadrage pour les vignettes en format carré définies via le thème
+		// Check that there is a file, and that it is an image
+		$is_image = get_resized_image_from_uploaded_file($input_name, 100, 100);
+		if ($is_image) {
+			$prefix = "{$input_name}/" . $cmspage->guid;
+			$fh = new ElggFile();
+			$fh->owner_guid = $cmspage->guid;
+			// Save original image (using original extension)
+			$uploaded_file = get_uploaded_file($input_name);
+			$saved_filename = $prefix . 'original';
+			$extension = pathinfo($_FILES[$input_name]['name'], PATHINFO_EXTENSION);
+			if (!is_null($extension)) { $saved_filename .= ".$extension"; }
+			$fh->setFilename($saved_filename);
+			if($fh->open("write")){
+				$fh->write($uploaded_file);
+				$fh->close();
+			}
+			$path = $fh->getFilenameOnFilestore();
+			// Save different sizes
+			$icon_sizes = elgg_get_config("icon_sizes");
+			foreach($icon_sizes as $icon_name => $icon_info){
+				$icon_file = get_resized_image_from_uploaded_file($input_name, $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"]);
+				if ($icon_file) {
+					$fh->setFilename($prefix . $icon_name . ".jpg");
+					if ($fh->open("write")) {
+						$fh->write($icon_file);
+						$fh->close();
+					}
+				}
+			}
+			// Keep original file path (extension cannot be guessed)
+			$cmspage->{$input_name} = $saved_filename;
+			$result = true;
+		} else {
+			// Not an image
+		}
+	}
+	return $result;
+}
+
+// Removed featured image
+function cmspages_remove_featured_image(CMSPage $cmspage, $input_name = 'featured_image') {
+	$result = false;
+	if (elgg_instanceof($cmspage, "object", "cmspage")) {
+		if (!empty($cmspage->{$input_name})) {
+			$fh = new ElggFile();
+			$fh->owner_guid = $cmspage->guid;
+			$prefix = "{$input_name}/" . $cmspage->guid;
+			// Remove original image
+			$fh->setFilename($cmspage->{$input_name});
+			if ($fh->exists()) { $fh->delete(); }
+			// Remove custom sizes
+			$icon_sizes = elgg_get_config('icon_sizes');
+			foreach($icon_sizes as $name => $info){
+				$fh->setFilename($prefix . $name . ".jpg");
+				if ($fh->exists()) { $fh->delete(); }
+			}
+			unset($cmspage->{$input_name});
+			$result = true;
+		} else {
+			$result = true;
+		}
+	}
+	return $result;
+}
+
+
+// Avoid dependencies
 if (!elgg_is_active_plugin('esope')) {
 	function esope_get_input_array($input = false) {
 		if ($input) {
@@ -1052,3 +1168,17 @@ if (!elgg_is_active_plugin('esope')) {
 	}
 }
 
+
+function cmspages_run_upgrades($event, $type, $details) {
+	$cmspages_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'cmspages');
+
+	if (!$cmspages_upgrade_version != '1.11') {
+		 // When upgrading, check if the ElggCMSPage class has been registered as this
+		 // was added in Elgg 1.11
+		if (!update_subtype('object', 'cmspage', 'ElggCMSPage')) {
+			add_subtype('object', 'cmspage', 'ElggCMSPage');
+		}
+
+		elgg_set_plugin_setting('upgrade_version', '1.11', 'cmspages');
+	}
+}

@@ -43,6 +43,9 @@ return array(
 				<strong>Warning :</strong> URL page name only accepts <strong>alphanum chars, and no space nor other signs except : \"-\", \"_\" et \".\"</strong>
 			</li>
 		</ul>",
+	'cmspages:edit_mode' => "Edit mode",
+	'cmspages:edit_mode:basic' => "Simple",
+	'cmspages:edit_mode:full' => "Advanced",
 	
 	/* Status messages */
 	'cmspages:posted' => "Page was successfully updated.",
@@ -137,6 +140,9 @@ return array(
 	'cmspages:shorturl' => "Short URL",
 	'cmspages:featured_image' => "Featured image",
 	'cmspages:featured_image:view' => "Display Featured image",
+	'cmspages:featured_image:remove' => "Remove featured image",
+	'cmspages:downloadfailed:invalidentity' => "Invalid CMS Page",
+	'cmspages:downloadfailed:invalidmetadata' => "Invalid metadata name",
 	'cmspages:notexist:create' => "This page does not exist. You may have mistyped the URL (care to '_', which are replaced by '-'), or you can click on this link to create a new page.",
 	'cmspages:edit' => "[&nbsp;Edit %s&nbsp;]",
 	'cmspages:create' => "[&nbsp;Create %s&nbsp;]",
@@ -253,6 +259,10 @@ return array(
 	'cmspages:password:submit' => "Access",
 	'cmspages:password:form' => "Password-protected access",
 	
+	/* Settings */
+	'cmspages:settings:yes' => "Yes",
+	'cmspages:settings:no' => "No",
+	'cmspages:settings:register_object' => "Enable CMSPages search",
 	'cmspages:settings:cms_menu' => "Menu to be displayed",
 	'cmspages:settings:cms_menu:cmspages_categories' => "cmspages_categories (CMSPages categories)",
 	'cmspages:settings:cms_menu:default' => "[ Default ]",

@@ -58,8 +58,11 @@ function shorturls_page_handler($page) {
 	}
 	*/
 	
-	header("Status: 301 Moved Permanently", false, 301);
-	header("Location: {$url}");
+	if (!empty($url)) {
+		header("Status: 301 Moved Permanently", false, 301);
+		header("Location: {$url}");
+		return true;
+	}
 	//forward($url); // Not working in walled garden mode
 	return false;
 }

@@ -21,7 +21,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 	- @TODO : via mot de passe
 */
 
-global $CONFIG;
+$site = elgg_get_site_entity();
 
 $embedurl = get_input('embedurl', false);
 if (empty($embedurl)) {
@@ -37,25 +37,35 @@ $guid = get_input('guid', false);
 $types = get_input('types', false);
 $subtypes = get_input('subtypes', false);
 $full_view = get_input('full_view', false);
+$list_type = get_input('viewtype', 'list');
+$widget_view = get_input('widget', false);
 // Non utilisés pour le moment
 $params = get_input('params', false);
 $key = get_input('key', false);
 $code = get_input('code', false);
+
+// Remove link to main site (pure content)
+$nomainlink = get_input('nomainlink', false);
+
 
 $body = '';
 $style = '';
 
 // echo "Paramètres $embedtype $group_guid $limit";
 
+// @TODO add hook to extend embed types
+
+if ($widget_view) { elgg_push_context('widgets'); }
+
 switch ($embedtype) {
 	
 	// fil d'activité global
 	case 'site_activity':
-		$title = elgg_echo('export_embed:site_activity', array($CONFIG->site->name));
+		$title = elgg_echo('export_embed:site_activity', array($site->name));
 		$options = array('limit' => $limit, 'offset' => $offset, 'pagination' => true);
 		$body = elgg_list_river($options);
 		if (!$body) { $body = elgg_echo('river:none'); }
-		$body .= '<span class="elgg-widget-more"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('export_embed:site_activity:viewall') . '</a></span>';
+		$body .= '<span class="elgg-widget-more"><a href="' . elgg_get_site_url() . 'activity">' . elgg_echo('export_embed:site_activity:viewall') . '</a></span>';
 		break;
 	
 	// fil d'activité de ses contacts
@@ -66,7 +76,7 @@ switch ($embedtype) {
 		$options['relationship'] = 'friend';
 		$body = elgg_list_river($options);
 		if (!$body) { $body = elgg_echo('river:none'); }
-		$body .= '<span class="elgg-widget-more"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('export_embed:friends_activity:viewall') . '</a></span>';
+		$body .= '<span class="elgg-widget-more"><a href="' . elgg_get_site_url() . 'activity">' . elgg_echo('export_embed:friends_activity:viewall') . '</a></span>';
 		break;
 	
 	// fil d'activité personnel
@@ -76,7 +86,7 @@ switch ($embedtype) {
 		$options['subject_guid'] = elgg_get_logged_in_user_guid();
 		$body = elgg_list_river($options);
 		if (!$body) { $body = elgg_echo('river:none'); }
-		$body .= '<span class="elgg-widget-more"><a href="' . $CONFIG->url . 'activity">' . elgg_echo('export_embed:my_activity:viewall') . '</a></span>';
+		$body .= '<span class="elgg-widget-more"><a href="' . elgg_get_site_url() . 'activity">' . elgg_echo('export_embed:my_activity:viewall') . '</a></span>';
 		break;
 	
 	// Activité d'un groupe
@@ -88,7 +98,7 @@ switch ($embedtype) {
 		elgg_set_ignore_access($ignore_access);
 		// Test group activity
 		if ($group_guid && elgg_instanceof($group, 'group')) {
-			$title = elgg_echo('export_embed:group_activity', array($group->name, $CONFIG->site->name));
+			$title = elgg_echo('export_embed:group_activity', array($group->name, $site->name));
 			$body .= "<div class=\"embed embed-group-activity\"><h4>" . '<a href="' . $group->getURL() . '">' . elgg_echo('export_embed:group_activity:viewall', array($group->name)) . "</a></h4></div>";
 			$db_prefix = elgg_get_config('dbprefix');
 			$activity = '';
@@ -119,13 +129,13 @@ switch ($embedtype) {
 	
 	// liste des groupes (icône + titre)
 	case 'groups_list':
-		$title = elgg_echo('export_embed:group_activity', array($CONFIG->site->name));
+		$title = elgg_echo('export_embed:group_activity', array($site->name));
 		$body = elgg_list_entities(array('types' => 'group', 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view, 'reverse_order_by' => false));
 		break;
 	
 	// liste des groupes en Une (icône + titre)
 	case 'groups_featured':
-		$title = elgg_echo('export_embed:group_activity', array($CONFIG->site->name));
+		$title = elgg_echo('export_embed:group_activity', array($site->name));
 		$body = elgg_list_entities_from_metadata(array('metadata_name' => 'featured_group', 'metadata_value' => 'yes', 'type' => 'group', 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view));
 		break;
 	
@@ -141,7 +151,7 @@ switch ($embedtype) {
 	
 	// agenda du site
 	case 'agenda':
-		$title = elgg_echo('export_embed:agenda', array($CONFIG->site->name));
+		$title = elgg_echo('export_embed:agenda', array($site->name));
 		// Load event calendar model
 		elgg_load_library('elgg:event_calendar');
 		// Get the events
@@ -165,7 +175,8 @@ switch ($embedtype) {
 	
 	// listings configurables
 	case 'list':
-		$body = elgg_list_entities(array('types' => $types, 'subtypes' => $subtypes, 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view));
+		// @TODO add $list_type
+		$body = elgg_list_entities(array('types' => $types, 'subtypes' => $subtypes, 'limit' => $limit, 'offset' => $offset, 'full_view' => $full_view, 'list_type' => $list_type));
 		/*
 		if (elgg_instanceof($entity, 'object')) {
 			$body = elgg_view_entity($entity, array('full_view' => $full_view));
@@ -179,7 +190,7 @@ switch ($embedtype) {
 			$title = $entity->title;
 			if (empty($title)) $title = $entity->name;
 			$title = elgg_echo('export_embed:entity', array($title));
-			$body = elgg_view_entity($entity, array('full_view' => $full_view));
+			$body = elgg_view_entity($entity, array('full_view' => $full_view, 'list_type' => $list_type));
 		} else { $body = '<p>' . elgg_echo('export_embed:entity:noaccess') . '</p>'; }
 		break;
 	
@@ -196,12 +207,12 @@ switch ($embedtype) {
 		$body .= '<p>' . elgg_echo('export_embed:notconfigured') . '</p>';
 		/*
 				<ul>
-					<li>Adresse du site&nbsp;: <strong>" . $CONFIG->url . "</strong></li>
+					<li>Adresse du site&nbsp;: <strong>" . elgg_get_site_url() . "</strong></li>
 					<li>Types de widgets&nbsp;:
 						<ul>
 						</ul>
 					</li>
-					>> <strong>" . $CONFIG->url . "export_embed/site_activity</strong> pour l'activité générale du site</li>
+					>> <strong>" . elgg_get_site_url() . "export_embed/site_activity</strong> pour l'activité générale du site</li>
 					<li><strong>friends_activity</strong> pour l'activité de vos contacts</li>
 					<li><strong>my_activity</strong> pour votre activité</li>
 					<li><strong>group_activity&group_guid=<em>XXXXX</em></strong> pour l'activité d'un groupe en particulier : remplacer <strong><em>XXXXX</em></strong> par le numéro du groupe à afficher, que vous trouverez dans l'adresse de la page d'accueil du groupe : <em>groups/profile/<strong>XXXXX</strong>/nom-du-groupe</em></li>
@@ -219,10 +230,12 @@ if (empty($body)) {
 }
 
 // Alerte si non connecté
-if (!elgg_is_logged_in()) {
-	$body = '<div style="background:#FAA; border:1px dashed #A00; padding:3px 6px; margin:3px;">' . elgg_echo('export_embed:notconnected', array($CONFIG->site->name, $CONFIG->url)) . '</div>' . $body;
-} else {
-	$body = '<div style="background:#AFA; border:1px dashed #0A0; padding:3px 6px; margin:3px;"><a href="' . $CONFIG->url . '" target="_blank">' . elgg_echo('export_embed:openintab', array($CONFIG->sitename)) . '</a>.</div>' . $body;
+if (!$nomainlink) {
+	if (!elgg_is_logged_in()) {
+		$body = '<div style="background:#FAA; border:1px dashed #A00; padding:3px 6px; margin:3px;">' . elgg_echo('export_embed:notconnected', array($site->name, elgg_get_site_url())) . '</div>' . $body;
+	} else {
+		$body = '<div style="background:#AFA; border:1px dashed #0A0; padding:3px 6px; margin:3px;"><a href="' . elgg_get_site_url() . '" target="_blank">' . elgg_echo('export_embed:openintab', array($sitename)) . '</a>.</div>' . $body;
+	}
 }
 
 

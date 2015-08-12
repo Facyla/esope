@@ -4,18 +4,21 @@
 $content ='';
 $scope = $vars["scope"]; // default = all, member
 if (!elgg_instanceof($vars["entity"], 'group')) { $scope = 'all'; }
+$dbprefix = elgg_get_config('dbprefix');
 
 switch($scope) {
 	case 'member':
 		$group_options = array(
 			"type" => "group", "limit" => false,
-			"relationship" => "member", "relationship_guid" => $group->guid,
+			"relationship" => "member", "relationship_guid" => elgg_get_logged_in_user_guid(),
+			'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
+			'order_by' => 'ge.name ASC',
 		);
 		$groups = elgg_get_entities_from_relationship($group_options);
 		break;
 	case 'all':
 	default:
-		$groups = elgg_get_entities(array('types' => 'group', 'limit' => 0));
+		$groups = elgg_get_entities(array('types' => 'group', 'limit' => 0, 'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"), 'order_by' => 'ge.name ASC'));
 }
 
 // Allow to filter by metadata : array('name' => $metaname, 'value' => $metavalue)

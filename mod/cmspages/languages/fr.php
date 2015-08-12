@@ -42,6 +42,9 @@ return array(
 				<strong>Attention :</strong> utilisez exclusivement des <strong>caractères alphanumériques en minuscule</strong> dans ce titre de page, <strong>sans espace ni accent ni signe de ponctuation</strong> (restent seuls autorisés : \"-\", \"_\" et \".\")</strong>
 			</li>
 		</ul>",
+	'cmspages:edit_mode' => "Mode d'édition",
+	'cmspages:edit_mode:basic' => "Simple",
+	'cmspages:edit_mode:full' => "Avancé",
 	
 	/* Status messages */
 	'cmspages:posted' => "La page CMS a bien été mise à jour.",
@@ -57,6 +60,9 @@ return array(
 	'cmspages:pagescreated' => "%s pages créées",
 	
 	/* Settings */
+	'cmspages:settings:yes' => "Oui",
+	'cmspages:settings:no' => "Non",
+	'cmspages:settings:register_object' => "Afficher les pages CMS dans la recherche",
 	'cmspages:settings:layout' => "Choix de la mise en page par défaut",
 	'cmspages:settings:layout:help' => "Ce paramètre permet d'utiliser la configuration d'externalblog, si le plugin est activé. Si vous ne savez pas quoi choisir, laissez le choix par défaut.",
 	'cmspages:settings:layout:default' => "Par défaut",
@@ -131,6 +137,9 @@ return array(
 	'cmspages:shorturl' => "<i class=\"fa fa-external-link\"></i>URL courte", // link, compress, retweet, quote-left, external-link
 	'cmspages:featured_image' => "Image en Une",
 	'cmspages:featured_image:view' => "Afficher l'image en Une",
+	'cmspages:featured_image:remove' => "Supprimer l'image en Une",
+	'cmspages:downloadfailed:invalidentity' => "Page non valide",
+	'cmspages:downloadfailed:invalidmetadata' => "Nom de champ non valide",
 	'cmspages:notexist:create' => "Cette page n'existe pas. Vous avez pu faire une erreur dans l'URL (attention aux '_', remplacés par des '-'), sinon vous pouvez cliquer sur le lien ci-dessous pour créer une nouvelle page à cette adresse.",
 	'cmspages:edit' => "[&nbsp;Modifier %s&nbsp;]",
 	'cmspages:createnew' => "[&nbsp;Créer %s&nbsp;]",
