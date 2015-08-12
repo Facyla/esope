@@ -106,6 +106,11 @@ $font_sourcesanspro = $fonturl . 'SourceSansPro/';
 	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Black.otf') format("opentype");
 }
 
+/* Custom font classes, for use in special pages */
+.font-neris, .font-neris * { font-family:"neris", sans-serif; }
+.font-lettergothic, .font-lettergothic * { font-family:"LetterGothic", serif; }
+.font-sourcesanspro, .font-sourcesanspro * { font-family:"Source Sans Pro", sans-serif; }
+
 
 body { border-top: 1px solid #333333; }
 header { height:94px; }
