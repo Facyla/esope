@@ -90,7 +90,7 @@ $font_sourcesanspro = $fonturl . 'SourceSansPro/';
 
 /* SOURCE SANS PRO */
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: 'Source Sans Pro'; font-weight:normal;
 	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Regular.otf') format("opentype");
 }
 @font-face {
@@ -98,11 +98,11 @@ $font_sourcesanspro = $fonturl . 'SourceSansPro/';
 	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Bold.otf') format("opentype");
 }
 @font-face {
-	font-family: 'Source Sans Pro Light';
+	font-family: 'Source Sans Pro'; font-weight:300;
 	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Light.otf') format("opentype");
 }
 @font-face {
-	font-family: 'Source Sans Pro Black';
+	font-family: 'Source Sans Pro'; font-weight:900;
 	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Black.otf') format("opentype");
 }
 
