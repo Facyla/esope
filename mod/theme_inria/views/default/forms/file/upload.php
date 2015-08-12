@@ -41,7 +41,7 @@ if ($guid) {
 	<label><?php echo elgg_echo('tags'); ?></label>
 	<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
 </div>
-<?php 
+<?php
 if (elgg_is_active_plugin('file_tools')) {
 	if(file_tools_use_folder_structure()){
 		$parent_guid = 0;
@@ -54,11 +54,11 @@ if (elgg_is_active_plugin('file_tools')) {
 		<div>
 			<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
 			<?php
-				echo elgg_view("input/folder_select", array("name" => "folder_guid", "value" => $parent_guid));		
+				echo elgg_view("input/folder_select", array("name" => "folder_guid", "value" => $parent_guid));
 			?>
 			</label>
 		</div>
-	<?php 
+	<?php
 	}
 }
 
