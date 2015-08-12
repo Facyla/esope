@@ -35,10 +35,15 @@ if ($entity_guid) {
 		register_error(elgg_echo('transitions:error:post_not_found'));
 		forward(get_input('forward', REFERER));
 	}
+	// Add new relation
+	if (add_entity_relationship($linked_entity->guid, $relation, $entity->guid)) {
+		system_messages(elgg_echo('transitions:addrelation:success'));
+	} else {
+		register_error(elgg_echo('transitions:addrelation:error'));
+	}
+} else {
+	register_error(elgg_echo('transitions:addrelation:emptyactor'));
 }
-
-// Add new relation
-add_entity_relationship($linked_entity->guid, $relation, $entity->guid);
 
 
 forward($entity->getURL());

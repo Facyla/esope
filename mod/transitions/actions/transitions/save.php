@@ -16,6 +16,8 @@ elgg_make_sticky_form('transitions');
 
 elgg_load_library('elgg:transitions');
 
+$is_admin = theme_transitions2_user_is_content_admin();
+
 /* Direct registration ?
 $register_first = !elgg_is_logged_in();
 if ($register_first) {
@@ -66,26 +68,44 @@ $values = array(
 	'excerpt' => '',
 	'tags' => '',
 	'container_guid' => (int)get_input('container_guid'),
-	// File attachment
-	'attachment' => '',
+	// File attachment and icon : not a regular metadata (would be overridden when saving)
 	'url' => '',
 	'category' => '',
 	'lang' => '',
 	'resource_lang' => '',
-	// ssi category "actor" : territory + geolocation, actor_type
-	'territory' => '', // +geolocation
-	'actor_type' => '',
-	// ssi category "project" : territory + geolocation, start_date + relation to actors
-	'start_date' => '',
-	// ssi category "event" : start_date, end_date, territory + geolocation
-	'end_date' => '',
-	// ssi challenge
-	'rss_feed' => '',
 );
+
+/* Conditional fields (based on category)
+ * ssi category "actor" : territory + geolocation, actor_type
+ * ssi category "project" : territory + geolocation, start_date + relation to actors
+ * ssi category "event" : start_date, end_date, territory + geolocation
+ */
+$category = get_input('category', '');
+if (!empty($category)) {
+	// Territory + geolocation
+	if (in_array($category, array('actor', 'project', 'event'))) {
+		$values['territory'] = '';
+	}
+	// Actor type
+	if (in_array($category, array('actor'))) {
+		$values['actor_type'] = '';
+	}
+	// Dates
+	if (in_array($category, array('project', 'event'))) {
+		$values['start_date'] = '';
+		$values['end_date'] = '';
+	}
+	// Challenge => news feed (to be displayed)
+	if (in_array($category, array('challenge'))) {
+		$values['rss_feed'] = '';
+		$values['challenge_elements'] = '';
+	}
+}
+
 
 // fail if a required entity isn't set
 //$required = array('title', 'description');
-$required = array('title');
+$required = array('title', 'category');
 
 // load from POST and do sanity and access checking
 foreach ($values as $name => $default) {
@@ -153,9 +173,7 @@ if (!empty($values['territory']) && ($values['territory'] != $transitions->terri
 	$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $values['territory']), false);
 	$lat = (float)$geo_location['lat'];
 	$long = (float)$geo_location['long'];
-	if ($lat && $long) {
-		$transitions->setLatLong($lat, $long);
-	}
+	if ($lat && $long) { $transitions->setLatLong($lat, $long); }
 }
 
 // assign values to the entity, stopping on error.
@@ -165,11 +183,65 @@ if (!$error) {
 	}
 }
 
+// Handle admin-reserved fields
+if ($is_admin) {
+	$tags_contributed = get_input('tags_contributed');
+	// Add new tag
+	if (!empty($tags_contributed)) {
+		$new_tags = string_to_tag_array($tags_contributed);
+		$tags_contributed = (array)$entity->tags_contributed;
+		foreach($new_tags as $tag) { $tags_contributed[] = $tag; }
+		$tags_contributed = array_unique($tags_contributed);
+		$tags_contributed = array_filter($tags_contributed);
+		$entity->tags_contributed = $tags_contributed;
+	}
+	
+	$links_invalidates = get_input('links_invalidates');
+	// Add new contradictory link
+	if (!empty($links_invalidates)) {
+		$links_invalidates = str_replace(array("\n", "\r"), ',', $links_invalidates);
+		$links_invalidates = string_to_tag_array($links_invalidates);
+		$links_invalidates = array_unique($links_invalidates);
+		$links_invalidates = array_filter($links_invalidates);
+		$entity->links_invalidates = $links_invalidates;
+	}
+	
+	$links_supports = get_input('links_supports');
+	// Add new support link
+	if (!empty($links_supports)) {
+		$links_supports = str_replace(array("\n", "\r"), ',', $links_supports);
+		$links_supports = string_to_tag_array($links_supports);
+		$links_supports = array_unique($links_supports);
+		$links_supports = array_filter($links_supports);
+		$entity->links_supports = $links_supports;
+	}
+	
+	$owner_username = get_input('owner_username', '');
+	if (!empty($owner_username)) {
+		$new_owner = get_user_by_username($owner_username);
+		if (elgg_instanceof($new_owner, 'user')) {
+			$entity->owner_guid = $new_owner->guid;
+			$entity->container_guid = $new_owner->guid;
+		}
+	}
+	
+	$is_incremental = get_input('is_incremental', '');
+	// Set incremental status
+	if (!empty($is_incremental)) {
+		if ($is_incremental == 'yes') {
+			$entity->is_incremental = 'yes';
+		} else {
+			$entity->is_incremental = null;
+		}
+	}
+	
+}
+
 // only try to save base entity if no errors
 if (!$error) {
 	if ($transitions->save()) {
 		
-		// handle icon upload
+		// Icon upload
 		if(get_input("remove_icon") == "yes"){
 			// remove existing icons
 			transitions_remove_icon($transitions);
@@ -182,14 +254,6 @@ if (!$error) {
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
 				$fh->owner_guid = $transitions->getOwnerGUID();
-				// Save original image ?  not for icon ?
-				/*
-				$fh->setFilename($prefix . 'original');
-				if($fh->open("write")){
-					$fh->write($icon_file);
-					$fh->close();
-				}
-				*/
 				foreach($icon_sizes as $icon_name => $icon_info){
 					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
 						$fh->setFilename($prefix . $icon_name . ".jpg");
@@ -203,14 +267,15 @@ if (!$error) {
 			}
 		}
 
-		// handle icon upload
+		// Attachment upload
 		if(get_input("remove_attachment") == "yes"){
 			// remove existing icons
 			transitions_remove_attachment($transitions);
 		} else {
 			//if ($attachment_file = get_uploaded_file('attachment')) {
 			//if (($attachment_file = get_uploaded_file('attachment')) && ($_FILES['attachment']['size'] > 0)) {
-			if (($attachment_file = get_uploaded_file('attachment')) && isset($_FILES['attachment']['name']) && !empty($_FILES['attachment']['name'])) {
+			// Empty file => Array ( [name] => [type] => [tmp_name] => [error] => 4 [size] => 0 )
+			if (isset($_FILES['attachment']['name']) && !empty($_FILES['attachment']['name']) && ($attachment_file = get_uploaded_file('attachment'))) {
 				// create file
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
@@ -226,7 +291,7 @@ if (!$error) {
 				$transitions->attachment_name = $attachment_name;
 			}
 		}
-
+		
 		// remove sticky form entries
 		elgg_clear_sticky_form('transitions');
 

@@ -1,9 +1,12 @@
 
 /* Edit form */
 #transitions-post-edit select { max-width: 16em; }
+.transitions-characters-remaining-warning { color: red; }
+.transitions-characters-remaining-warning .hidden { display:block; }
 
 
 /* Content category types */
+.elgg-list .transitions-category { margin: 0 0.5ex 0.5ex 0; }
 .transitions-all { background-color:#000; padding:0.5ex 1ex; }
 .transitions-actor { background-color:#6299EB; padding:0.5ex 1ex; }
 .transitions-project { background-color:#A581DA; padding:0.5ex 1ex; }
@@ -48,6 +51,10 @@
 .transitions-gallery-item .transitions-gallery-content .elgg-content { text-style:italic; font-size: 1.2em; }
 .transitions-gallery-item .transitions-gallery-content { /* position: absolute; bottom: 3em; left: 0; background: rgba(255,255,255,0.8); padding: 0 0.5em; */ }
 .transitions-gallery-item .transitions-gallery-actions { /* position: absolute; top: 0; left: 0; background: white; padding: 2px 4px; */ }
+.transitions-gallery-actions a { margin-right: 2em; }
+.transitions-socialshare { font-size:3em; padding-bottom:0.5em; }
+.transitions-socialshare a { margin-right:0.3em; }
+
 
 /* Popups */
 .transitions-popup-link, .transitions-popup-embed { max-width:30em; }

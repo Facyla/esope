@@ -4,7 +4,7 @@
 $embed_type = $vars["embed_type"];
 $field_id = $vars["id"];
 
-set_input('display', 'yes');
+set_input('display', 'yes'); // Force search at first load
 if ($embed_type == 'actor') {
 	set_input('category', 'actor');
 } else if ($embed_type == 'transitions') {
@@ -122,7 +122,7 @@ if ($display) {
 			echo '<div class="transitions-embed-item-details">';
 			echo elgg_view('transitions/embed/object/default', array('entity' => $entity));
 			echo '</div>';
-			echo '<div class="transitions-embed-item-content embed-insert">' . $embed_content . '</div><br style="clear:both;" />';
+			echo '<div class="transitions-embed-item-content embed-insert hidden">' . $embed_content . '</div><br style="clear:both;" />';
 			echo '</li>';
 		}
 		elgg_pop_context();

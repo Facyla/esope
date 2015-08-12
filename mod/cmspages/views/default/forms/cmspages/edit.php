@@ -10,8 +10,7 @@
  *
 */
 
-
-$cmspage = $vars['entity']; // we can use directly the entity
+$cmspage = elgg_extract('entity', $vars); // we can use directly the entity
 // or get the page type - used as a user-friendly guid
 // @TODO : this concept could be extend to provide custom URL for any given GUID...
 $pagetype = elgg_get_friendly_title(get_input('pagetype'));
@@ -31,7 +30,8 @@ if (!empty($advanced_mode)) {
 	if ($advanced_mode == 'basic') $advanced_mode = false;
 	else $advanced_mode = true;
 } else {
-	$advanced_mode = elgg_is_admin_logged_in();
+	//$advanced_mode = elgg_is_admin_logged_in();
+	$advanced_mode = false;
 }
 
 
@@ -166,6 +166,7 @@ function cmspages_toggle_display(val) {
 	}
 }
 
+// Mode switch
 function cmspages_edit_mode(mode) {
 	if (mode == \'basic\') {
 		$(".cmspages-mode-full").addClass(\'hidden\');
@@ -284,18 +285,33 @@ $render_content .= '</fieldset>';
 // @TODO Images embeddding should work with site as owner (shared library) => that's another plugin ((shared_)image_gallery)
 // @TODO : create a site-wide image gallery ? or better : a wider access to published content + no-owner publication tool for admins
 $hidden = ($display == 'no') ? 'hidden' : '';
-$image_content = '<fieldset class="cmspages-featured-image ' . $hidden . ' cmspages-mode-full"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
+$image_content = '<fieldset class="cmspages-featured-image ' . $hidden . '"><legend>' . elgg_echo('cmspages:featured_image') . '</legend>';
 	// Featured image is linked to the cmspage entity
 	$image_content .= '<p>';
 	if (!empty($featured_image)) {
+		/*
+		elgg_load_js('lightbox');
+		elgg_load_css('lightbox');
 		$image_content .= elgg_view('output/url', array(
-				'text' => elgg_echo('cmspages:featured_image:view'), 'href' => '#cmspage-featured-image',
-				'class' => 'elgg-lightbox', 'style' => 'float:right;',
+				'text' => '<img src="' . elgg_get_site_url() . 'cmspages/file/' . $cmspage->guid . '/featured_image/medium" />', 
+				'title' => elgg_echo('cmspages:featured_image:view'), 
+				'href' => elgg_get_site_url() . 'cmspages/file/' . $cmspage->guid . '/featured_image/original',
+				//'rel' => '#cmspage-featured-image',
+				'class' => 'elgg-lightbox', 'style' => 'float:left; margin-right:1em;',
 			));
-		$image_content .= '<div class="hidden">' . elgg_view_module('aside', elgg_echo('cmspages:featured_image'), '<img src="' . elgg_get_site_url() . 'esope/download_entity_file/' . $cmspage->guid . '/featured_image" style="max-width:100%; max-height:100%; " />', array('id' => 'cmspage-featured-image')) . '</div>';
-		//$image_content .= '<img src="' . elgg_get_site_url() . 'esope/download_entity_file/' . $cmspage->guid . '/featured_image" style="float:right; max-width:30%; max-height:100px; " />';
+		*/
+		$image_content .= elgg_view('output/url', array(
+				'text' => '<img src="' . elgg_get_site_url() . 'cmspages/file/' . $cmspage->guid . '/featured_image/medium" />', 
+				'title' => elgg_echo('cmspages:featured_image:view'), 
+				'href' => elgg_get_site_url() . 'cmspages/file/' . $cmspage->guid . '/featured_image/original',
+				'style' => 'float:left; margin-right:1em;',
+				'target' => "_blank",
+			));
+		// Remove featured image
+		$image_content .= '<p>' . elgg_view("input/checkbox", array('name' => "remove_featured_image", 'value' => "yes")) . '</p>';
+		$image_content .= elgg_echo("cmspages:featured_image:remove");
 	}
-	$image_content .= elgg_view('input/file', array('name' => 'featured_image', 'value' => $featured_image, 'style' => 'width:auto;')) . '</p>';
+	$image_content .= elgg_view('input/file', array('name' => 'featured_image')) . '</p>';
 $image_content .= '</fieldset>';
 
 
@@ -476,7 +492,7 @@ $content .= $type_content;
 $content .= $help_content;
 
 // Titre de la page CMS
-$content .= '<p class="cmspages-mode-full"><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'style' => "width:500px;")) . '</label></p>';
+$content .= '<p class=""><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'style' => "width:500px;")) . '</label></p>';
 
 // Nom du permalien de la page : non éditable (= identifiant de la page)
 $content .= '<p class="cmspages-mode-full"><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label><br />' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';

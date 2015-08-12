@@ -2,10 +2,9 @@
 /**
  * French strings
  */
-global $CONFIG;
 
-$fr = array(
-	
+return array(
+	'socialshare' => "Liens de partage",
 	'socialshare:share' => "Partager",
 	
 	// Settings
@@ -13,6 +12,9 @@ $fr = array(
 	'socialshare:extendviews' => "Vues à étendre",
 	'socialshare:extendviews:help' => "Ajouter ci-dessous la liste des vues à étendre avec les liens de partage.",
 	'socialshare:extend_owner_block' => "Ajouter les liens de partage aux groupes publics",
+	'socialshare:extend_owner_block:details' => "Si activé, les icônes de partage seront ajoutées dans la barre latérale des groupes publics. Utile si vous souhaitez partager la page d'accueil des groupes.",
+	'socialshare:extend_entity' => "Ajouter dans le menu des publications",
+	'socialshare:extend_entity:details' => "Si activé, les icônes de partage seront ajoutées dans le menu des publications publiques. Utile si vous souhaitez partager les contenus du site.<br />Ce réglage est généralement activé, sauf si vous souhaitez avoir plus de contrôle sur l'emplacement des liens de partage : dans ce cas choisissez \"Non\" et insérer la vue <strong>socialshare/extend</strong> à l'emplacement souhaité (développeurs seulement).",
 	'socialshare:providers' => "Services de partage à activer",
 	
 	// Twitter
@@ -36,6 +38,4 @@ $fr = array(
 	%s",
 	
 );
-
-add_translation('fr', $fr);
 

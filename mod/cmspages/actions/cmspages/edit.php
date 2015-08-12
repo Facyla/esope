@@ -125,7 +125,7 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	
 	
 } else {
-	$cmspage = new CMSPage();
+	$cmspage = new ElggCMSPage();
 	$cmspage->owner_guid = $site_guid; // Set owner to the current site (nothing personal, hey !)
 	$cmspage->pagetype = $pagetype;
 	$cmspage->save();
@@ -161,16 +161,24 @@ $cmspage->parent_guid = $parent_guid;
 $cmspage->sibling_guid = $sibling_guid;
 //$categories = string_to_tag_array($categories);
 $cmspage->categories = $categories;
-// Function will add the filename if upload is OK
-if (elgg_is_active_plugin('esope') || function_exists('esope_add_file_to_entity')) {
-	if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
-}
 $cmspage->seo_title = $seo_title;
 $cmspage->seo_tags = $seo_tags;
 $cmspage->seo_description = $seo_description;
 $cmspage->seo_index = $seo_index;
 $cmspage->seo_follow = $seo_follow;
 
+// Featured image
+// Function will add the filename if upload is OK
+if (get_input("remove_featured_image") == "yes") {
+	cmspages_remove_featured_image($cmspage, 'featured_image');
+} else {
+	/*
+	if (function_exists('esope_add_file_to_entity')) {
+		if (esope_add_file_to_entity($cmspage, 'featured_image')) {} else {}
+	}
+	*/
+	cmspages_add_featured_image($cmspage, 'featured_image');
+}
 
 // Save new/updated content
 if ($cmspage->save()) {

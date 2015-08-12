@@ -2,7 +2,7 @@
 $plugin = $vars['entity'];
 
 // Set options
-$yn_opts = array('yes' => elgg_echo('survey:settings:yes'), 'no' => elgg_echo('survey:settings:no'));
+$yn_opts = array('yes' => elgg_echo('cmspages:settings:yes'), 'no' => elgg_echo('cmspages:settings:no'));
 $layout_opts = cmspages_layouts_opts(false);
 $pageshell_opts = cmspages_pageshells_opts(false);
 $header_opts = cmspages_headers_opts(false);
@@ -16,10 +16,16 @@ if (!isset($plugin->pageshell)) $plugin->pageshell = 'default';
 if (!isset($plugin->cms_menu)) $plugin->cms_menu = 'cmspages_categories';
 if (!isset($plugin->cms_header)) $plugin->cms_header = 'initial';
 if (!isset($plugin->cms_footer)) $plugin->cms_footer = 'initial';
+if (!isset($plugin->register_object)) $plugin->register_object = 'yes';
 
 
 
-echo '<p>' . elgg_echo('cmspages:editurl') . ' <a href="' . $vars['url'] . 'cmspages/" class="elgg-button elgg-button-action" target="_blank">' . $vars['url'] . 'cmspages/</a></p>';
+echo '<p><blockquote style="padding:1em;">' . elgg_echo('cmspages:editurl') . ' <a href="' . $vars['url'] . 'cmspages/" class="elgg-button elgg-button-action" target="_blank">' . $vars['url'] . 'cmspages/</a></blockquote></p>';
+
+echo '<p><label>' . elgg_echo('cmspages:settings:register_object') . ' ';
+echo elgg_view('input/dropdown', array('name' => 'params[register_object]', 'value' => $plugin->register_object, 'options_values' => $yn_opts)) . '</label>';
+echo '</p>';
+
 
 echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:access') . '</legend>';
 

@@ -18,7 +18,8 @@ input, textarea { max-width: 100%; }
 .elgg-page-navbar { padding: 0 0px; }
 .elgg-page-default .elgg-page-navbar > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner, 
-.elgg-page-default .elgg-page-footer > .elgg-inner { max-width:96%; }
+.elgg-page-default .elgg-page-footer > .elgg-inner { /* max-width:96%; */ max-width:990px; margin:0 auto; }
+.elgg-page-body > .elgg-inner { max-width:990px; margin:0 auto; }
 
 
 /* Header */
@@ -39,6 +40,10 @@ input, textarea { max-width: 100%; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
 .elgg-button-nav:hover { background-color: #669900; }
 
+
+/* Sidebar */
+.elgg-menu-extras { font-size: 1.5em; }
+.elgg-menu-extras li { margin-right: 0.4em; }
 
 /* Homepage */
 .elgg-menu-item-logohome a { padding: 0 !important; }

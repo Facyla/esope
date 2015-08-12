@@ -36,16 +36,23 @@ Mot de passe : %s
 	
 	// Main translations overrides
 	'settings' => "Paramètres",
-	'makeadmin' => "Nommer super-administrateur",
-	'removeadmin' => "Supprimer les droits super-administrateur",
-	'makeeditor' => "Nommer éditeur",
-	'removeeditor' => "Supprimer les droits d'éditeur",
-	'admin:user:removeeditor:yes' => "L'utilisateur n'est plus éditeur.",
-	'admin:user:removeeditor:no' => "Impossible de supprimer les droits d'éditeur de cet utilisateur.",
-	'admin:user:makeeditor:yes' => "L'utilisateur est éditeur.",
-	'admin:user:makeeditor:no' => "Impossible de nommer cet utilisateur éditeur.",
+	'makeadmin' => "Nommer admin. technique",
+	'removeadmin' => "Révoquer admin. technique",
+	'make_content_admin' => "Nommer admin. contenus",
+	'remove_content_admin' => "Révoquer admin. contenus",
+	'admin:user:remove_content_admin:yes' => "L'utilisateur n'est plus administrateur contenus.",
+	'admin:user:remove_content_admin:no' => "Impossible de supprimer les droits d'administrateur contenus de cet utilisateur.",
+	'admin:user:make_content_admin:yes' => "L'utilisateur est administrateur contenus.",
+	'admin:user:make_content_admin:no' => "Impossible de nommer cet utilisateur administrateur contenus.",
+	'make_platform_admin' => "Nommer admin. plateforme",
+	'remove_platform_admin' => "Révoquer admin. plateforme",
+	'admin:user:remove_platform_admin:yes' => "L'utilisateur n'est plus administrateur plateforme.",
+	'admin:user:remove_platform_admin:no' => "Impossible de supprimer les droits d'administrateur plateforme de cet utilisateur.",
+	'admin:user:make_platform_admin:yes' => "L'utilisateur est administrateur plateforme.",
+	'admin:user:make_platform_admin:no' => "Impossible de nommer cet utilisateur administrateur plateforme.",
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
 	'embed:media' => "Joindre un fichier ou une image",
+	'status:draft' => "Non publié",
 	
 	
 );

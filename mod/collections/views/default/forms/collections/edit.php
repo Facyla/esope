@@ -1,6 +1,5 @@
 <?php
-elgg_load_js('elgg.collections.edit');
-//elgg_load_js("elgg.collections.embed");
+elgg_load_js('elgg.collections.collections');
 
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
@@ -21,7 +20,7 @@ $entity_guid = array_filter($entity_guid);
 // Get collection vars
 if (elgg_instanceof($collection, 'object', 'collection')) {
 	$collection_title = $collection->title; // Collection title, for easier listing
-	$collection_name = $collection->name; // Collection title, for easier listing
+	$collection_name = $collection->name; // Collection name, for URL and embeds
 	if (empty($collection_name) && !empty($collection_title)) {
 		$collection_name = elgg_get_friendly_title($collection_title);
 	}
@@ -40,8 +39,9 @@ if (elgg_instanceof($collection, 'object', 'collection')) {
 
 
 // Edit form
-// Param vars
 $content = '';
+
+// Param vars
 if ($collection) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
 
 // Titre
@@ -50,8 +50,25 @@ $content .= '<p><label>' . elgg_echo('collections:edit:title') . ' ' . elgg_view
 // Identifiant (slurl)
 $content .= '<p><label>' . elgg_echo('collections:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $collection_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('collections:edit:name:details') . '</em></p>';
 
+// Illustration
+$content .= '<p><label for="collection_icon">';
+if ($collection) {
+	$content .= elgg_echo("collection:icon");
+} else {
+	$content .= elgg_echo("collection:icon:new");
+}
+$content .= '</label><br />';
+$content .= '<em>' . elgg_echo('collection:icon:details') . '</em><br />';
+$content .= elgg_view("input/file", array("name" => "icon", "id" => "collection_icon"));
+if ($collection && $collection->icontime) {
+	$content .= '<br /><img src="' . $collection->getIconURL('listing') . '" /><br />';
+	$content .= elgg_view("input/checkbox", array('name' => "remove_icon", 'value' => "yes"));
+	$content .= elgg_echo("collection:icon:remove");
+}
+$content .= '</p>';
+
 // Description
-$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/plaintext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
 
 // Access
 $content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';

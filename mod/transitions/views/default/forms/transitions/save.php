@@ -5,8 +5,12 @@
  * @package Transitions
  */
 
+elgg_load_js('elgg.transitions');
+
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
+
+$is_admin = theme_transitions2_user_is_content_admin();
 
 $edit_details = '<p><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
@@ -75,13 +79,19 @@ $title_input = elgg_view('input/text', array(
 	'placeholder' => elgg_echo('transitions:title'),
 ));
 
+$char_limit = 140;
+$excerpt = _elgg_html_decode($vars['excerpt']);
+$char_left = $char_limit - strlen($excerpt);
 $excerpt_label = elgg_echo('transitions:excerpt');
 $excerpt_input = elgg_view('input/text', array(
 	'name' => 'excerpt',
 	'id' => 'transitions_excerpt',
-	'value' => _elgg_html_decode($vars['excerpt']),
+	'value' => $excerpt,
 	'placeholder' => elgg_echo('transitions:excerpt'),
+	'data-max-length' => $char_limit,
+	//'rows' => 2,
 ));
+$excerpt_input .= '<div id="transitions-characters-remaining"><span>' . $char_left . '</span> ' . elgg_echo('transitions:charleft', array($char_limit)) . '<div class="hidden">' . elgg_echo('transitions:charleft:warning') . '</div></div>';
 
 $icon_input = "";
 $icon_remove_input = "";
@@ -129,24 +139,73 @@ $body_input = elgg_view('input/longtext', array(
 ));
 
 $save_status = elgg_echo('transitions:save_status');
-if ($vars['guid'] && ($entity->time_created > 0)) {
-	$saved = date('F j, Y @ H:i', $entity->time_created);
+if ($vars['guid'] && ($transitions->time_created > 0)) {
+	$saved = date('F j, Y @ H:i', $transitions->time_created);
 } else {
 	$saved = elgg_echo('never');
 }
 
-if (elgg_is_admin_logged_in()) {
+// Admin-only fields
+if ($is_admin) {
 	$status_label = elgg_echo('status');
 	$status_value = $vars['status'];
 	$status_input = elgg_view('input/select', array(
 		'name' => 'status',
 		'id' => 'transitions_status',
-		'value' => $vars['status'],
+		'value' => $status_value,
 		'options_values' => array(
 			'draft' => elgg_echo('status:draft'),
 			'published' => elgg_echo('status:published')
 		)
 	));
+	
+	$owner_username_label = elgg_echo('transitions:owner_username');
+	if (elgg_instanceof($transitions, 'object', 'transitions')) {
+		$owner_username = $transitions->getOwnerEntity()->username;
+	}
+	$owner_username_input = elgg_view('input/autocomplete', array(
+		'name' => 'owner_username',
+		'id' => 'transitions_owner_username',
+		'value' => '',
+		'match_on' => 'users',
+	));
+	
+	$incremental_label = elgg_echo('transitions:incremental');
+	$incremental_value = $vars['is_incremental'];
+	$incremental_input = elgg_view('input/select', array(
+		'name' => 'is_incremental',
+		'id' => 'transitions_incremental',
+		'value' => $transitions->is_incremental,
+		'options_values' => array(
+			'no' => elgg_echo('transitions:incremental:no'),
+			'yes' => elgg_echo('transitions:incremental:yes'),
+		)
+	));
+	
+	$contributed_tags_label = elgg_echo('transitions:tags_contributed');
+	$contributed_tags_input = elgg_view('input/tags', array(
+		'name' => 'tags_contributed',
+		'id' => 'transitions_tags_contributed',
+		'value' => $transitions->tags_contributed,
+		'placeholder' => elgg_echo('transitions:tags_contributed'),
+	));
+
+	$links_supports_label = elgg_echo('transitions:links_supports');
+	$links_supports_input = elgg_view('input/plaintext', array(
+		'name' => 'links_supports',
+		'id' => 'transitions_links_supports',
+		'value' => implode("\n", (array) $transitions->links_supports),
+		'placeholder' => elgg_echo('transitions:links_supports'),
+	));
+	
+	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
+	$links_invalidates_input = elgg_view('input/plaintext', array(
+		'name' => 'links_invalidates',
+		'id' => 'transitions_links_invalidates',
+		'value' => implode("\n", (array) $transitions->links_invalidates),
+		'placeholder' => elgg_echo('transitions:links_invalidates'),
+	));
+	
 } else {
 	$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
 }
@@ -178,6 +237,13 @@ $rss_feed_input = elgg_view('input/url', array(
 	'placeholder' => elgg_echo('transitions:rss_feed'),
 ));
 $rss_feed_details = elgg_echo('transitions:rss_feed:details');
+
+// @TODO update to allow several elements (+ should be regular inputs)
+$challenge_elements_label = elgg_echo('transitions:challenge_element');
+$challenge_elements_input = elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid));
+$challenge_elements_input .= '<div class="clearfloat"></div><br />';
+$challenge_elements_details = elgg_echo('transitions:challenge_elements:details');
+
 
 $category_label = elgg_echo('transitions:category');
 $category_input = elgg_view('input/select', array(
@@ -251,36 +317,15 @@ $tags_input = elgg_view('input/tags', array(
 
 // @TODO Admin only : contributed tags + links + status
 $admin_fields = '';
-if (elgg_is_admin_logged_in()) {
-	$contributed_tags_label = elgg_echo('transitions:contributed_tags');
-	$contributed_tags_input = elgg_view('input/tags', array(
-		'name' => 'tags_contributed',
-		'id' => 'transitions_tags_contributed',
-		'value' => $transitions->tags_contributed,
-		'placeholder' => elgg_echo('transitions:tags_contributed'),
-	));
-
-	$links_invalidates_label = elgg_echo('transitions:links_invalidates');
-	$links_invalidates_input = elgg_view('input/tags', array(
-		'name' => 'links_invalidates',
-		'id' => 'transitions_links_invalidates',
-		'value' => $transitions->links_invalidates,
-		'placeholder' => elgg_echo('transitions:links_invalidates'),
-	));
-
-	$links_supports_label = elgg_echo('transitions:links_supports');
-	$links_supports_input = elgg_view('input/tags', array(
-		'name' => 'links_supports',
-		'id' => 'transitions_links_supports',
-		'value' => $transitions->links_supports,
-		'placeholder' => elgg_echo('transitions:links_supports'),
-	));
+if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
-	$admin_fields .= '<p><label class="hidden" for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
+	$admin_fields .= '<p><label for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
 	$admin_fields .= '</blockquote>';
 	
 } else {
@@ -328,17 +373,22 @@ function transitions_toggle_fields() {
 	
 	//Now switch on wanted special fields
 	if (val == "actor") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:actor') . '\');
 		$(".transitions-actortype").removeClass(\'hidden\');
 		$(".transitions-territory").removeClass(\'hidden\');
 	} else if (val == "project") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:project') . '\');
 		$(".transitions-territory").removeClass(\'hidden\');
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "event") {
+		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:event') . '\');
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "challenge") {
 		$(".transitions-rss-feed").removeClass(\'hidden\');
+	} else {
+		$(".transitions-title label").html(\'' . elgg_echo('title') . '\');
 	}
 	return true;
 }
@@ -351,24 +401,8 @@ $edit_details
 
 $draft_warning
 
-<div>
-	<label class="" for="transitions_icon">$icon_label</label><br />
-	$icon_input<br />
-	<em>$icon_details</em>
-</div>
-
-<div>
-	<label class="hidden" for="transitions_excerpt">$excerpt_label</label>
-	$excerpt_input
-</div>
-
-<div>
-	<label class="hidden" for="transitions_tags">$tags_label</label>
-	$tags_input
-</div>
-
-<div>
-	<label class="hidden" for="transitions_title">$title_label</label>
+<div class="transitions-title">
+	<label class="" for="transitions_title">$title_label</label>
 	$title_input
 </div>
 
@@ -384,20 +418,25 @@ $draft_warning
 <div class="clearfloat"></div>
 
 <div>
-	<label class="" for="transitions_description">$body_label</label>
-	$body_input
+	<label class="" for="transitions_icon">$icon_label</label><br />
+	$icon_input<br />
+	<em>$icon_details</em>
 </div>
 
 <div>
-	<label class="hidden" for="transitions_url">$url_label</label>
-	$url_input<br />
-	<em>$url_details</em>
+	<label class="" for="transitions_excerpt">$excerpt_label</label>
+	$excerpt_input
 </div>
 
-<div class="transitions-rss-feed">
-	<label class="hidden" for="transitions_rss_feed">$rss_feed_label</label>
-	$rss_feed_input<br />
-	<em>$rss_feed_details</em>
+<div>
+	<label class="" for="transitions_tags">$tags_label</label>
+	$tags_input
+</div>
+
+<div>
+	<label class="" for="transitions_url">$url_label</label>
+	$url_input<br />
+	<em>$url_details</em>
 </div>
 
 <div>
@@ -407,8 +446,14 @@ $draft_warning
 </div>
 <div class="clearfloat"></div>
 
+<div class="transitions-rss-feed">
+	<label class="" for="transitions_rss_feed">$rss_feed_label</label>
+	$rss_feed_input<br />
+	<em>$rss_feed_details</em>
+</div>
+
 <div class="transitions-territory">
-	<label class="hidden" for="transitions_territory">$territory_label</label>
+	<label class="" for="transitions_territory">$territory_label</label>
 	$territory_input<br />
 	<em>$territory_details</em>
 </div>
@@ -437,6 +482,11 @@ $categories_input
 	<em>$resourcelang_details</em>
 </div>
 <div class="clearfloat"></div>
+
+<div>
+	<label class="" for="transitions_description">$body_label</label>
+	$body_input
+</div>
 
 $admin_fields
 

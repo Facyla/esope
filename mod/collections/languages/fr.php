@@ -1,7 +1,8 @@
 <?php
 
 return array(
-	'collection' => "Collection",
+	'collection' => "Collections",
+	'item:object:collection' => "Collections",
 
 	/* Settings */
 	'collections:settings:description' => "Configuration des collections",
@@ -18,12 +19,12 @@ return array(
 	'collections:edit' => "Edition de la collection",
 	'collections:edit:title' => "Titre",
 	'collections:edit:title:details' => "Permet d'identifier aisément la collection. Le titre n'est pas affiché.",
-	'collections:edit:name' => "Identifiant",
-	'collections:edit:name:details' => "Identifiant unique de la collection, permet de l'appeler sous une forme homogène (par ex. pour utilisation dans un thème).",
+	'collections:edit:name' => "Personnaliser l'URL de la collection",
+	'collections:edit:name:details' => "Identifiant unique, sans accent ni caractères spéciaux, en minuscule et tout attaché, par ex.: mon-article-non-acentue.",
 	'collections:edit:description' => "Description",
 	'collections:edit:description:details' => "Permet de décrire à quoi sert le diaporama. La description n'est pas affichée.",
-	'collections:edit:content' => "Diapositives",
-	'collections:edit:content:details' => "Ajoutez de nouvelles diapositives, et réorganisez-les à votre convenance. <br />Note&nbsp;: les nouvelles diapositives ne disposent pas d'éditeur visuel&nbsp;; pour pouvoir l'utiliser, enregistrez votre diaporama.",
+	'collections:edit:content' => "Eléments",
+	'collections:edit:content:details' => "Ajoutez de nouvelles publications à votre collections, et réorganisez-les à votre convenance en faisant un cliquer-déplacer. <br />Note&nbsp;: les commentaires des nouveaux éléments ne disposent pas d'éditeur visuel&nbsp;; pour pouvoir l'utiliser, enregistrez votre diaporama.",
 	'collections:edit:entity' => "Publication",
 	'collections:edit:addentity' => "Ajouter une publication",
 	'collections:edit:deleteentity' => "Retirer cette publication",
@@ -49,6 +50,7 @@ return array(
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",
 	'collections:change_entity' => "Changer de publication",
+	'collection:add' => "Créer une collection",
 	
 	//'collections:' => "",
 	'collections:publishin' => "Publier dans",
@@ -61,15 +63,22 @@ return array(
 	'collections:embed:nofilter' => "Toutes (pas de filtre)",
 	
 	'collections:collectionsthis' => "Ajouter à une collection",
-	'collections:embed' => "Code d'embarquement",
-	'collections:embed:details' => "Copiez-collez ce code pour l'insérer sur un autre site.",
+	'collections:share' => "Partager",
+	'collections:socialshare:details' => "Utilisez les liens de partage suivants pour publier cette collection sur les médias sociaux.",
 	'collections:permalink' => "Permalien",
-	'collections:permalink:details' => "Lien permanent pour cette collection",
-	
-	'collections:entities:count' => "%s diapositives",
-	
+	'collections:permalink:details' => "Utilisez le lien permanent suivant pour faire référence à cette collection.",
+	'collections:shortlink' => "Lien court",
+	'collections:shortlink:details' => "Utilisez le lien court suivant pour vos partages.",
+	'collections:embed' => "Intégrer",
+	'collections:embed:details' => "Copiez-collez le code HTML suivant pour intégrer cette publication sur un autre site. Vous pouvez modifier les dimensions du bloc en changeant les valeurs après \"width\" (largeur) et \"height\" (hauteur).",
+	'collections:entities:count' => "%s éléments",
 	'collections:settings:subtypes' => "Subtypes",
-	'collections:settings:subtypes:details' => "Subtypes pour lesquels proposer d'ajouter à la playlist",
+	'collections:settings:subtypes:details' => "Subtypes pouvant être ajoutés aux collections",
+	
+	'collection:icon' => "Image",
+	'collection:icon:details' => "Choisissez une image pour illustrer votre collection.",
+	'collection:icon:new' => "Ajouter une image",
+	'collection:icon:remove' => "Supprimer l'image",
 	
 );
 

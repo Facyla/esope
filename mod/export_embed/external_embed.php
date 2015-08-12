@@ -38,6 +38,7 @@ $types = get_input('types', false);
 $subtypes = get_input('subtypes', false);
 $full_view = get_input('full_view', false);
 $list_type = get_input('viewtype', 'list');
+$widget_view = get_input('widget', false);
 // Non utilisés pour le moment
 $params = get_input('params', false);
 $key = get_input('key', false);
@@ -53,6 +54,8 @@ $style = '';
 // echo "Paramètres $embedtype $group_guid $limit";
 
 // @TODO add hook to extend embed types
+
+if ($widget_view) { elgg_push_context('widgets'); }
 
 switch ($embedtype) {
 	
@@ -187,7 +190,6 @@ switch ($embedtype) {
 			$title = $entity->title;
 			if (empty($title)) $title = $entity->name;
 			$title = elgg_echo('export_embed:entity', array($title));
-			// @TODO add $list_type
 			$body = elgg_view_entity($entity, array('full_view' => $full_view, 'list_type' => $list_type));
 		} else { $body = '<p>' . elgg_echo('export_embed:entity:noaccess') . '</p>'; }
 		break;

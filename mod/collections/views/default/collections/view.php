@@ -1,5 +1,8 @@
 <?php
 $embed = elgg_extract('embed', $vars);
+$full_content = elgg_extract('full_content', $vars, false);
+if ($full_content !== false) $full_content = true;
+
 // Get collection
 $collection = elgg_extract('entity', $vars);
 // Alternate method (more friendly with cmspages)
@@ -10,76 +13,100 @@ if (!$collection) {
 if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (!elgg_instanceof($collection, 'object', 'collection')) { return; }
 
-$metadata = elgg_view_menu('entity', array(
-	'entity' => $collection,
-	'handler' => 'collection',
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-));
+elgg_load_js('elgg.collections.collections');
+elgg_load_js('lightbox');
+elgg_load_css('lightbox');
 
-
-$collection_content = '';
-$entities = (array) $collection->entities;
-$entities_comment = (array) $collection->entities_comment;
-foreach($entities as $k => $entity_guid) {
-	$publication = get_entity($entity_guid);
-	$publication_comment = $entities_comment[$k];
-	$collection_content .= '<li>';
-	//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
-	$collection_content .= '<table><tr><td>';
-	//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
-	$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'list'));
-	$collection_content .= '</td>';
-	$collection_content .= '</tr><tr>';
-	$collection_content .= '<td style="background:black; color:white;"><p>' . $publication_comment . '</p></td>';
-	$collection_content .= '</tr></table>';
-	$collection_content .= '</li>';
+$metadata = '';
+if (!elgg_in_context('widgets')) {
+	$metadata = elgg_view_menu('entity', array(
+		'entity' => $collection,
+		'handler' => 'collection',
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz',
+	));
 }
 
 
+//$collection_content = '<ul class="collections-listing">';
+$collection_content = '<div class="collections-listing">';
+$entities = (array) $collection->entities;
+$entities_comment = (array) $collection->entities_comment;
+elgg_push_context('widgets');
+foreach($entities as $k => $entity_guid) {
+	$publication = get_entity($entity_guid);
+	if (elgg_instanceof($publication, 'object')) {
+		$publication_comment = $entities_comment[$k];
+		//$collection_content .= '<li>';
+		$collection_content .= '<div class="">';
+		$collection_content .= '<hr class="hidden" />';
+		
+		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
+		
+		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
+		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
+		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => 'list'));
+		
+		//$collection_content .= '</li>';
+		$collection_content .= '</div>';
+	}
+}
+elgg_pop_context();
+//$collection_content .= '</ul>';
+$collection_content .= '</div>';
 
-$height = '300px;';
-$width = '100%;';
-$slider_params = array(
-		'slidercontent' => $collection_content,
-		'height' => $height,
-		'width' => $width,
-		//'theme' => 'cs-portfolio',
-	);
 
-$slider_embed ='';
-$slider_embed .= '<div class="clearfloat"></div>';
-$slider_embed .= '<div style="height:' . $height . '; width:' . $width . ';" id="collection-' . $collection->guid . '" class="collection-' . $collection->name . '">
-	' . elgg_view('slider/slider', $slider_params) . '
-</div>';
+$content_embed ='';
+$content_embed .= $collection_content;
 
 
 
 // Display embed code if not already embedded
 if ($embed) {
-	echo $slider_embed;
+	echo $content_embed;
 	return;
 } else {
-	
 	$body = '';
-	$body .= elgg_view('output/longtext', array('value' => $collection->description));
 	$body .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
+	$body .= elgg_view_entity_icon($collection, 'large', array('size' => 'large', 'align' => 'left'));
+	$body .= elgg_view('output/longtext', array('value' => $collection->description));
 	$body .= '<div class="clearfloat"></div><br />';
-	$body .= $slider_embed;
+	$body .= $content_embed;
 	$body .= '<div class="clearfloat"></div><br />';
-
-	// Permalink
-	if (elgg_is_active_plugin('shorturls')) {
-		$permalink = '<p>' . elgg_echo('collections:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . elgg_get_site_url() . 's/' . $collection->guid . '</textarea>';
-	} else {
-		$permalink = '<p>' . elgg_echo('collections:permalink:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">' . $collection->getURL() . '</textarea>';
+	
+	
+	
+	$params = array(
+		'tabs' => array(),
+		'id' => "collections-action-tabs",
+		'style' => "margin-bottom:0;",
+	);
+	$tab_content = '';
+	
+	// Permalink and share links
+	$params['tabs'][] = array('title' => elgg_echo('collections:share'), 'url' => "#collections-{$collection->guid}-share", 'selected' => true);
+	$share_links = '';
+	if (elgg_is_active_plugin('socialshare')) {
+		$share_links .= '<p>' . elgg_echo('collections:socialshare:details') . '</p>';
+		$share_links .= '<div class="collections-socialshare">' . elgg_view('socialshare/extend', array('entity' => $collection)) . '</div>';
 	}
-	$body .= elgg_view_module('info', elgg_echo('transitions:permalink'), $permalink);
-
+	$permalink = '<p>' . elgg_echo('collections:permalink:details') . '<br /><input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . $collection->getURL() . '"></p>';
+	if (elgg_is_active_plugin('shorturls')) {
+		$short_link = '<p>' . elgg_echo('collections:shortlink:details') . '<br /><input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $collection->guid . '"></p>';
+	}
+	$tab_content .= elgg_view_module('info', false, $share_links . $permalink . $short_link, array('id' => "collections-{$collection->guid}-share", 'class' => "collections-tab-content"), array('guid' => $collection->guid));
+	
 	// Embed code
+	$params['tabs'][] = array('title' => elgg_echo('collections:embed'), 'url' => "#collections-{$collection->guid}-embed");
 	$embed_code = '<p>' . elgg_echo('collections:embed:details') . '</p><textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . $collection->getURL() . '?embed=full" style="width:320px; height:400px;" /&gt;</textarea>';
 	// Embed code
-	$body .= elgg_view_module('info', elgg_echo('transitions:embed'), $embed_code);
+	$tab_content .= elgg_view_module('info', false, $embed_code, array('id' => "collections-{$collection->guid}-embed", 'class' => "collections-tab-content hidden"), array('guid' => $collection->guid));
+	
+	// Render tabs block
+	$body .= elgg_view('navigation/tabs', $params);
+	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
+	$body .= $tab_content;
+	$body .= '</div>';
 	
 	
 	$owner = $collection->getOwnerEntity();

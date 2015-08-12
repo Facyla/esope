@@ -2,7 +2,11 @@
 /* Display Leaflet base map */
 
 elgg_load_library('leaflet');
-leaflet_load_libraries();
+//leaflet_load_libraries();
+elgg_load_js('leaflet');
+elgg_load_js('leaflet.providers');
+elgg_load_css('leaflet');
+elgg_load_css('leaflet.providers');
 
 // TODO Add box size + separate markers from map
 

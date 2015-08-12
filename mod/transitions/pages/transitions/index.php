@@ -15,7 +15,8 @@ $content = '';
 $title = elgg_echo('transitions:index');
 $sidebar = '';
 
-elgg_push_breadcrumb(elgg_echo('search'));
+//elgg_push_breadcrumb(elgg_echo('search'));
+elgg_register_title_button();
 
 $category = get_input('category', '');
 if ($category == 'all') $category = '';
@@ -105,6 +106,20 @@ if (isset($search_options['metadata_name_value_pairs'])) {
 	$catalogue = elgg_list_entities($search_options);
 }
 
+// Search RSS feed
+$rss_url = current_page_url();
+if (substr_count($rss_url, '?')) { $rss_url .= "&view=rss"; } else { $rss_url .= "?view=rss"; }
+$rss_url = elgg_format_url($rss_url);
+$content .= '<span style="float:right;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . ' </span>';
+
+// Search ICAL feed
+if ($category == 'event') {
+	$ical_url = current_page_url();
+	if (substr_count($ical_url, '?')) { $ical_url .= "&view=ical"; } else { $ical_url .= "?view=ical"; }
+	$ical_url = elgg_format_url($ical_url);
+	$content .= '<span style="float:right;"> <a href="' . $ical_url . '"><i class="fa fa-ical"></i> ' . elgg_echo('transitions:search:ical') . ' </span>';
+}
+
 if ($count > 1) {
 	$content .= '<h3>' . elgg_echo('transitions:search:results', array($count)) . '</h3>';
 } else if ($count == 1) {
@@ -112,12 +127,17 @@ if ($count > 1) {
 } else {
 	$content .= '<h3>' . elgg_echo('transitions:search:noresult') . '</h3>';
 }
+
+
 $content .= '<div class="clearfloat"></div><br />';
 $content .= '<div id="transitions">';
 $content .= $quickform;
 $content .= $catalogue;
 $content .= '</div>';
 
+// Return only valid content for some view types
+if (elgg_get_viewtype() == 'rss') { $content = $catalogue; }
+else if (elgg_get_viewtype() == 'ical') { $content = $catalogue; }
 
 $content = elgg_view_layout('one_column', array('content' => $content, 'title' => $title));
 

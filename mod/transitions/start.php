@@ -21,8 +21,8 @@ function transitions_init() {
 
 	elgg_register_library('elgg:transitions', elgg_get_plugins_path() . 'transitions/lib/transitions.php');
 	
-	$js = elgg_get_simplecache_url('js', 'transitions/edit');
-	elgg_register_js('elgg.transitions.edit', $js, 'head');
+	$js = elgg_get_simplecache_url('js', 'transitions/transitions');
+	elgg_register_js('elgg.transitions', $js, 'head');
 	
 	// add a site navigation item
 	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'transitions/all');
@@ -35,6 +35,9 @@ function transitions_init() {
 
 	// routing of urls
 	elgg_register_page_handler('transitions', 'transitions_page_handler');
+	
+	// Adds menu to page owner block
+	elgg_register_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
 	
 	// Override icons
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "transitions_icon_hook");
@@ -143,6 +146,7 @@ function transitions_page_handler($page) {
 			break;
 		case 'add':
 			elgg_gatekeeper();
+			if (empty($page[1])) $page[1] = elgg_get_logged_in_user_guid();
 			$params = transitions_get_page_content_edit($page_type, $page[1]);
 			break;
 		case 'edit':
@@ -161,7 +165,6 @@ function transitions_page_handler($page) {
 			}
 			break;
 		case 'icon':
-			// The username should be the file we're getting
 			if (isset($page[1])) { set_input("guid",$page[1]); }
 			if (isset($page[2])) { set_input("size",$page[2]); }
 			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");
@@ -202,6 +205,23 @@ function transitions_page_handler($page) {
 }
 
 
+// Adds ICAL link to current page
+function transitions_add_ical_link() {
+	$context = elgg_get_context();
+	//echo $context; // debug : check eligible context
+	if (in_array($context, array('transitions', 'main', 'collections', 'search'))) {
+		$url = current_page_url();
+		if (substr_count($url, '?')) { $url .= "&view=ical"; } else { $url .= "?view=ical"; }
+		$url = elgg_format_url($url);
+		elgg_register_menu_item("extras", array(
+			"name" => "ical",
+			"href" => $url,
+			"text" => '<i class="fa fa-calendar-o"></i>',
+			'title' => elgg_echo('transitions:ical'),
+			"priority" => 500,
+		));
+	}
+}
 
 /**
  * Format and return the URL for transitions.

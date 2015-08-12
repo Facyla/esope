@@ -1,9 +1,9 @@
 <?php
-global $CONFIG;
 $ent = $vars['entity'];
 
 //if ($ent instanceof ElggObject) {
 if (elgg_instanceof($ent, 'object')) {
+	$url = elgg_get_site_url();
 
 	// Filter on chosen subtypes only
 	// Note : this is done in start hook
@@ -21,9 +21,9 @@ if (elgg_instanceof($ent, 'object')) {
 
 	$body = '';
 	$guid = $ent->guid;
-	$acturl = $CONFIG->url . 'mod/pin/actions/';
-	$imgurl = $CONFIG->url . 'mod/pin/graphics/';
-	$ownguid = $_SESSION['user']->guid;
+	$acturl = $url . 'mod/pin/actions/';
+	$imgurl = $url . 'mod/pin/graphics/';
+	$ownguid = elgg_get_logged_in_user_guid();
 	
 	// Use to get back to same page
 	$_SESSION['last_forward_from'] = current_page_url();
@@ -56,7 +56,7 @@ if (elgg_instanceof($ent, 'object')) {
 			$icon = '<img src="'.$imgurl.'pin_add.png" />';
 			$href = $url . '&action=highlight';
 			$title = elgg_echo('pin:highlight:true');
-			$text = 'Pin';
+			$text = elgg_echo('pin:pin');
 			$alt = 'highlight';
 		} else {
 			// Pinned somewhere

@@ -37,10 +37,15 @@ if ($actor_guid) {
 	if ($actor->category != 'actor') {
 		register_error(elgg_echo('transitions:error:not_an_actor'));
 	}
+	// Add new relation
+	if (add_entity_relationship($actor->guid, 'partner_of', $entity->guid)) {
+		system_messages(elgg_echo('transitions:addactor:success'));
+	} else {
+		register_error(elgg_echo('transitions:addactor:error'));
+	}
+} else {
+	register_error(elgg_echo('transitions:addactor:emptyactor'));
 }
-
-// Add new relation
-add_entity_relationship($actor->guid, 'partner_of', $entity->guid);
 
 
 forward($entity->getURL());
