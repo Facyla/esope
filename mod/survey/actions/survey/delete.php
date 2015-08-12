@@ -10,12 +10,11 @@ $guid = (int) get_input('guid');
 // Make sure we actually have permission to edit
 $survey = get_entity($guid);
 
-if ($survey instanceof Survey && $survey->canEdit()) {
-
+if (elgg_instanceof($survey, 'object', 'survey') && $survey->canEdit()) {
 	// Get container
 	$container = $survey->getContainerEntity();
 	// Delete the survey!
-	$survey->deleteChoices();
+	$survey->deleteQuestions();
 	if ($survey->delete()) {
 		// Success message
 		system_message(elgg_echo("survey:deleted"));
@@ -29,4 +28,6 @@ if ($survey instanceof Survey && $survey->canEdit()) {
 		forward("survey/owner/" . $container->username);
 	}
 }
+
+forward(REFERER);
 

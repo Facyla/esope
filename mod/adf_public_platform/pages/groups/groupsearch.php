@@ -4,7 +4,6 @@
  *
  */
 
-global $CONFIG;
 $title = elgg_echo('groups');
 
 $content = '';
@@ -17,7 +16,7 @@ elgg_register_title_button();
 $ts = time();
 $token = generate_action_token($ts);
 $action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
-$action_base = $CONFIG->url . 'action/esope/';
+$action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = $action_base . 'esearch' . $action_token;
 
 $content .= '<script>
@@ -69,7 +68,7 @@ $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value'
 $search_form .= '<fieldset>';
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="" /></label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:group') . '<input type="text" name="q" value="" /></label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 

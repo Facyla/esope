@@ -1,4 +1,5 @@
 <?php
+$debug = false;
 
 // Check if CAS web service is activated
 $enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
@@ -158,7 +159,7 @@ if (elgg_instanceof($user, 'user')) {
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
 	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
-	error_log("No Elgg account yet for CAS login : $elgg_username");
+	if ($debug) error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {

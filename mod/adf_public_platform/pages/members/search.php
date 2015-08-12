@@ -112,7 +112,7 @@ if (sizeof($profiletypes_opt) > 2) {
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="" /></label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:user') . '<input type="text" name="q" value="" /></label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 
