@@ -89,7 +89,7 @@ function theme_transitions2_init() {
 		// add uncropped small view for listing (no square)
 		'listing' => array('w' => 100, 'h' => 100, 'square' => false, 'upscale' => true),
 		// add gallery icon (has to be square)
-		'gallery' => array('w' => 300, 'h' => 300, 'square' => true, 'upscale' => true),
+		'gallery' => array('w' => 400, 'h' => 400, 'square' => true, 'upscale' => true),
 		// add high resolution format
 		'hres' => array('w' => 2200, 'h' => 1800, 'square' => false, 'upscale' => false),
 	);

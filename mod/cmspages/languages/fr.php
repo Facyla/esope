@@ -292,7 +292,8 @@ return array(
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
 	
-	'cmspages:nestedlevel' => "Edition de la page de niveau %s (le contenu est généralement au niveau 0).",
+	'cmspages:editlink' => "Cliquer pour modifier la page %s",
+	'cmspages:nestedlevel' => "Page de niveau %s (le contenu est généralement au niveau 0).",
 	
 	'cmspages:fieldset:editor' => "Contenu de la page",
 	'cmspages:history' => "Historique des versions précédentes",
