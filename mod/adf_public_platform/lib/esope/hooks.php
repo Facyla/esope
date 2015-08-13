@@ -581,10 +581,9 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 	$params = array(
 			'types' => 'group',
 			'joins' => array("JOIN {$dbprefix}groups_entity as ge ON e.guid = ge.guid"),
-			'wheres' => array("(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '% $q%')"),
+			'wheres' => array("(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '%$q%')"),
 			'count' => true,
 		);
-	
 	$count = elgg_get_entities($params);
 	
 	// no need to continue if nothing here.
@@ -598,10 +597,10 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 	
 	// add the volatile data for why these entities have been returned.
 	foreach ($entities as $entity) {
-		$name = search_get_highlighted_relevant_substrings($entity->name, $query);
+		$name = search_get_highlighted_relevant_substrings($entity->name, $q);
 		$entity->setVolatileData('search_matched_title', $name);
 
-		$description = search_get_highlighted_relevant_substrings($entity->description, $query);
+		$description = search_get_highlighted_relevant_substrings($entity->description, $q);
 		$entity->setVolatileData('search_matched_description', $description);
 	}
 	
