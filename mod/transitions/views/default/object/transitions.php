@@ -385,25 +385,29 @@ if ($full) {
 				echo '<div class="transitions-gallery-hover">';
 					
 					// Entête
-					if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
 					echo '<div class="transitions-gallery-head">';
-						if ($metadata) { echo $metadata; }
-						if ($title_link) { echo "<h3>$title_link</h3>"; }
-						echo '<div class="elgg-subtext">' . $subtitle . '</div>';
-						echo elgg_view('object/summary/extend', $vars);
-						echo elgg_view('output/tags', array('tags' => $transitions->tags));
-						//echo elgg_view_image_block($owner_icon, $list_body);
+						echo '<div class="transitions-gallery-inner">';
+							if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+							if ($metadata) { echo $metadata; }
+							if ($title_link) { echo "<h3>$title_link</h3>"; }
+							echo '<div class="elgg-subtext">' . $subtitle . '</div>';
+							echo elgg_view('object/summary/extend', $vars);
+							echo elgg_view('output/tags', array('tags' => $transitions->tags));
+							//echo elgg_view_image_block($owner_icon, $list_body);
 		
-						// @TODO : nb likes, commentaires, objets liés, personnes et projets liés...
-						echo '<div class="transitions-gallery-content">';
-							echo '<div class="elgg-content">' . $excerpt . '</div>';
+							// Contenu "texte"
+							echo '<div class="transitions-gallery-content">';
+								echo '<div class="elgg-content">' . $excerpt . '</div>';
+							echo '</div>';
 						echo '</div>';
 					
-						// @TODO actions possibles : commenter, liker, ajouter une métadonnée/relation
+						// Stats et actions possibles : commenter, liker, ajouter une métadonnée/relation
 						echo '<div class="transitions-gallery-actions">';
-							echo $stats;
-							echo '<br />';
-							echo $actions;
+							echo '<div class="transitions-gallery-inner">';
+								echo $stats;
+								echo '<br />';
+								echo $actions;
+							echo '</div>';
 						echo '</div>';
 					echo '</div>';
 					

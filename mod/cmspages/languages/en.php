@@ -262,6 +262,7 @@ return array(
 	/* Settings */
 	'cmspages:settings:yes' => "Yes",
 	'cmspages:settings:no' => "No",
+	'cmspages:settings:none' => "(none)",
 	'cmspages:settings:register_object' => "Enable CMSPages search",
 	'cmspages:settings:cms_menu' => "Menu to be displayed",
 	'cmspages:settings:cms_menu:cmspages_categories' => "cmspages_categories (CMSPages categories)",

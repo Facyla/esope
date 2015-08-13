@@ -376,7 +376,7 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
 	$list = array();
 	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
-	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'knowledge'); // 'event'
+	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'event', 'knowledge', 'challenge');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
 	if (elgg_is_admin_logged_in() || $full) {
 		$list['editorial'] = elgg_echo('transitions:category:editorial');

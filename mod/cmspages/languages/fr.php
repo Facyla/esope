@@ -62,6 +62,7 @@ return array(
 	/* Settings */
 	'cmspages:settings:yes' => "Oui",
 	'cmspages:settings:no' => "Non",
+	'cmspages:settings:none' => "(aucune)",
 	'cmspages:settings:register_object' => "Afficher les pages CMS dans la recherche",
 	'cmspages:settings:layout' => "Choix de la mise en page par défaut",
 	'cmspages:settings:layout:help' => "Ce paramètre permet d'utiliser la configuration d'externalblog, si le plugin est activé. Si vous ne savez pas quoi choisir, laissez le choix par défaut.",

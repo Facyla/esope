@@ -26,10 +26,15 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 	$content .= '<div class="clearfloat"></div>';
 	
 	// 4 articles en Une
-	// @TODO : sélecteur pour chacun des 4 blocs avec titre, image, texte et possibilité de faire un lien
+	$is_content_admin = theme_transitions2_user_is_platform_admin();
+	$article1 = elgg_get_plugin_setting('home-article1', 'theme_transitions2');
+	$article2 = elgg_get_plugin_setting('home-article2', 'theme_transitions2');
+	$article3 = elgg_get_plugin_setting('home-article3', 'theme_transitions2');
+	$article4 = elgg_get_plugin_setting('home-article4', 'theme_transitions2');
+	// Sélecteur pour chacun des 4 blocs avec titre, image, texte et possibilité de faire un lien
 	$content .= '<div class="flexible-block" style="width:48%;">';
-		$content .= '[ TODO : Sélecteur page à afficher ]';
-		$cmspage = cmspages_get_entity('accueil-article1');
+		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article1', 'value' => $article1));
+		$cmspage = cmspages_get_entity($article1);
 		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 			$content .= $cmspage->getFeaturedImage('original');
 			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
@@ -37,8 +42,8 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 		}
 	$content .= '</div>';
 	$content .= '<div class="flexible-block" style="width:48%; float:right;">';
-		$content .= '[ TODO : Sélecteur page à afficher ]';
-		$cmspage = cmspages_get_entity('accueil-article2');
+		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article2', 'value' => $article2));
+		$cmspage = cmspages_get_entity($article2);
 		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 			$content .= $cmspage->getFeaturedImage('original');
 			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
@@ -47,8 +52,8 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 	$content .= '</div>';
 	$content .= '<div class="clearfloat"></div>';
 	$content .= '<div class="flexible-block" style="width:48%;">';
-		$content .= '[ TODO : Sélecteur page à afficher ]';
-		$cmspage = cmspages_get_entity('accueil-article3');
+		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article3', 'value' => $article3));
+		$cmspage = cmspages_get_entity($article3);
 		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 			$content .= $cmspage->getFeaturedImage('original');
 			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
@@ -56,8 +61,8 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 		}
 	$content .= '</div>';
 	$content .= '<div class="flexible-block" style="width:48%; float:right;">';
-		$content .= '[ TODO : Sélecteur page à afficher ]';
-		$cmspage = cmspages_get_entity('accueil-article4');
+		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article4', 'value' => $article4));
+		$cmspage = cmspages_get_entity($article4);
 		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 			$content .= $cmspage->getFeaturedImage('original');
 			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';

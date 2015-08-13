@@ -51,6 +51,8 @@ if ($guid) {
 } else {
 	$transitions = new ElggTransitions();
 	$transitions->subtype = 'transitions';
+	$transitions->owner_guid = elgg_get_logged_in_user_guid();
+	$transitions->container_guid = elgg_get_logged_in_user_guid();
 	$new_post = TRUE;
 }
 

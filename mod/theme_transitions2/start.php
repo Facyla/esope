@@ -11,6 +11,7 @@ function theme_transitions2_init() {
 
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
+	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
@@ -21,9 +22,10 @@ function theme_transitions2_init() {
 	
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
-	// Rewrite RSS link in owner_block menu
+	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
-	elgg_register_plugin_hook_handler('output:before', 'layout', 'theme_transitions2_add_rss_link');
+	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
+	elgg_register_plugin_hook_handler('output:before', 'layout', 'theme_transitions2_add_tools_links');
 	
 	// Rewrite register action
 	elgg_unregister_action('register');
@@ -42,10 +44,14 @@ function theme_transitions2_init() {
 	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
-	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'logged_in');
-	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'logged_in');
-	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/make_platform_admin.php", 'admin');
-	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
+	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/theme_transitions2/make_content_admin.php", 'logged_in');
+	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/theme_transitions2/remove_content_admin.php", 'logged_in');
+	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/theme_transitions2/make_platform_admin.php", 'admin');
+	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/theme_transitions2/remove_platform_admin.php", 'admin');
+	
+	// Add home management actions
+	elgg_register_action('theme_transitions2/select_article', dirname(__FILE__) . "/actions/theme_transitions2/select_article.php", 'logged_in');
+	
 	
 	// Register admin rights plugin hooks
 	//elgg_register_plugin_hook_handler('access:collections:read', 'user', 'theme_transitions2_read_access_hook');
@@ -144,31 +150,60 @@ function theme_transitions2_pagesetup() {
 			$item->setPriority(103);
 		}
 		*/
-		
-	// Replace QR code icon
-	elgg_unregister_menu_item('extras', 'qrcode-page');
-	$qrcode_title = elgg_echo('qrcode:page:title');
-	elgg_register_menu_item('extras', array(
-			'name' => 'qrcode-page', 'text' => '<i class="fa fa-qrcode"></i>', 'title' => $qrcode_title,
-			'href' => '#elgg-popup-qrcode-page', 'rel' => 'popup', 'priority' => 800,
-		));
-		
 	}
+	
+	// Remove QR code icon (will be added to navigation)
+	elgg_unregister_menu_item('extras', 'qrcode-page');
+	
 }
 
-function theme_transitions2_add_rss_link() {
+// Add RSS, ICAL and QR code links to main navigation
+function theme_transitions2_add_tools_links() {
+	$theme_menu = elgg_get_plugin_setting('menu_site', 'theme_transitions2');
+	if (empty($theme_menu)) { $theme_menu = 'extras'; }
+	
+	// RSS
 	global $autofeed;
 	if (isset($autofeed) && $autofeed == true) {
 		$url = current_page_url();
 		if (substr_count($url, '?')) { $url .= "&view=rss"; } else { $url .= "?view=rss"; }
 		$url = elgg_format_url($url);
-		elgg_register_menu_item('extras', array(
+		elgg_register_menu_item($theme_menu, array(
 			'name' => 'rss',
 			'text' => '<i class="fa fa-rss"></i>',
 			'href' => $url,
 			'title' => elgg_echo('feed:rss'),
+			'item_class' => "float-alt", 
 		));
 	}
+	
+	// ICAL
+	$context = elgg_get_context();
+	//echo $context; // debug : check eligible context
+	if (in_array($context, array('transitions', 'main', 'collections', 'search'))) {
+		$url = current_page_url();
+		if (substr_count($url, '?')) { $url .= "&view=ical"; } else { $url .= "?view=ical"; }
+		$url = elgg_format_url($url);
+		elgg_register_menu_item($theme_menu, array(
+			"name" => "ical",
+			"href" => $url,
+			"text" => '<i class="fa fa-calendar-o"></i>',
+			'title' => elgg_echo('transitions:ical'),
+			'item_class' => "float-alt", 
+		));
+	}
+	
+	// QR code
+	$qrcode_title = elgg_echo('qrcode:page:title');
+	elgg_register_menu_item($theme_menu, array(
+			'name' => 'qrcode-page', 
+			'text' => '<i class="fa fa-qrcode"></i>', 
+			'title' => $qrcode_title,
+			'href' => '#elgg-popup-qrcode-page', 
+			'rel' => 'popup', 
+			'item_class' => "float-alt", 
+		));
+	
 }
 
 

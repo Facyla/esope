@@ -29,9 +29,9 @@ return array(
 
 	// messages
 	'transitions:message:saved' => "Contribution enregistrée.",
-	'transitions:error:cannot_save' => "Impossible d\'enregistrer la contribution.",
+	'transitions:error:cannot_save' => "Impossible d'enregistrer la contribution.",
 	'transitions:error:cannot_auto_save' => "Impossible de sauvegarder automatiquement la contribution. ",
-	'transitions:error:cannot_write_to_container' => "Droits d\'accès insuffisants pour enregistrer la contribution pour ce groupe.",
+	'transitions:error:cannot_write_to_container' => "Droits d'accès insuffisants pour enregistrer la contribution pour ce groupe.",
 	'transitions:messages:warning:draft' => "Il y a un brouillon non enregistré de cette contribution !",
 	'transitions:edit_revision_notice' => "(Ancienne version)",
 	'transitions:message:deleted_post' => "Contribution supprimée.",
@@ -103,6 +103,7 @@ Voir et commenter cette contribution :
 	'transitions:rss_feed:details' => "URL du fil d'actualité RSS associé à ce défi",
 	'transitions:savedraft' => "Publier ma contribution",
 	'transitions:saveandedit' => "Poursuivre l'édition",
+	'transitions:quickform:details' => "En cliquant sur le bouton \"Poursuivre l'édition\", votre contribution sera enregistrée en mode \"brouillon\" et vous pourrez la compléter avant de la publier.",
 	'transitions:preview' => "Sauvegarder",
 	'transitions:save' => "Publier",
 	'transitions:owner_username' => "Propriétaire de la fiche",
@@ -212,5 +213,7 @@ Voir et commenter cette contribution :
 	'transitions:actortype:other' => "Autre",
 	'transitions:actortype:choose' => "Sélectionnez un type d'acteur",
 	
+	
+	'transitions:error:missing:category' => "Vous devez spécifier la catégorie de votre contribution !",
 	
 );
