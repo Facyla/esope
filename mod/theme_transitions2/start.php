@@ -319,16 +319,18 @@ function theme_transitions2_override_read_access() {
 
 // Determines if a user can *edit* a given entity
 function theme_transitions2_permissions_hook($hook, $entity_type, $returnvalue, $params) {
-	return theme_transitions2_user_is_content_admin($params['user']);
+	if (theme_transitions2_user_is_content_admin($params['user'])) { return true; }
+	return $returnvalue;
 }
 
 // Determines if a user can can use the entity $params['container'] as a container for a given entity
+// This is necessary to 
 function theme_transitions2_container_permissions_hook($hook, $entity_type, $returnvalue, $params) {
 	//$user = $params['user'];
 	//$entity = $params['entity'];
 	//error_log("USER : " . $params['user']->guid . ' ' . $params['user']->name . " => ENTITY : " . $params['entity']->guid . ' ' . $params['entity']->title);
 	if (elgg_instanceof($params['container'], 'user')) {
-		return theme_transitions2_user_is_content_admin($params['user']);
+		if (theme_transitions2_user_is_content_admin($params['user'])) { return true; };
 	}
 	return $returnvalue;
 }
