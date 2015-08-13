@@ -77,6 +77,7 @@ $content .= '</div>';
 $content .= '<div class="flexible-block" style="width:30%; float:right;">';
 	if (elgg_is_logged_in()) {
 		// Quick contribution form
+		$content .= '<h3>' . elgg_echo('transitions:quickform:title') . '</h3>';
 		$content .= elgg_view_form('transitions/quickform');
 	} else {
 		$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action">Contribuez</a>';

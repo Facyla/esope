@@ -239,10 +239,19 @@ $rss_feed_input = elgg_view('input/url', array(
 $rss_feed_details = elgg_echo('transitions:rss_feed:details');
 
 // @TODO update to allow several elements (+ should be regular inputs)
-$challenge_elements_label = elgg_echo('transitions:challenge_element');
-$challenge_elements_input = elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid));
-$challenge_elements_input .= '<div class="clearfloat"></div><br />';
-$challenge_elements_details = elgg_echo('transitions:challenge_elements:details');
+$collection_label = elgg_echo('transitions:challenge:collection');
+// Note : admin can select 
+$collection_input = '';
+$collections_opt = array();
+$collections_opt[''] = '';
+$collections_params = array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 0);
+$collections = elgg_get_entities($collections_params);
+// Tri alphabétique des pages (sur la base du pagetype)
+usort($collections, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+foreach ($collections as $ent) { $collections_opt[$ent->guid] = $ent->title; }
+$collection_input .= elgg_view('input/select', array('name' => $name, 'options_values' => $collections_opt, 'value'=> $transitions->collection));
+$collection_input .= '<div class="clearfloat"></div><br />';
+$collection_details = elgg_echo('transitions:challenge:collection:details');
 
 
 $category_label = elgg_echo('transitions:category');
@@ -370,6 +379,7 @@ function transitions_toggle_fields() {
 	$(".transitions-startdate").addClass(\'hidden\');
 	$(".transitions-enddate").addClass(\'hidden\');
 	$(".transitions-rss-feed").addClass(\'hidden\');
+	$(".transitions-collection").addClass(\'hidden\');
 	
 	//Now switch on wanted special fields
 	if (val == "actor") {
@@ -387,6 +397,7 @@ function transitions_toggle_fields() {
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "challenge") {
 		$(".transitions-rss-feed").removeClass(\'hidden\');
+		$(".transitions-collection").removeClass(\'hidden\');
 	} else {
 		$(".transitions-title label").html(\'' . elgg_echo('title') . '\');
 	}
@@ -450,6 +461,12 @@ $draft_warning
 	<label class="" for="transitions_rss_feed">$rss_feed_label</label>
 	$rss_feed_input<br />
 	<em>$rss_feed_details</em>
+</div>
+
+<div class="transitions-collection">
+	<label class="" for="transitions_collection">$collection_label</label>
+	$collection_input<br />
+	<em>$collection_details</em>
 </div>
 
 <div class="transitions-territory">

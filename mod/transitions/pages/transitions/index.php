@@ -30,7 +30,8 @@ $actortype_opt = transitions_get_actortype_opt(null, true);
 $lang_opt = transitions_get_lang_opt(null, true);
 
 
-
+// Form de contribution rapide
+/*
 $quickform = '<div class="transitions-gallery-quickform">';
 $quickform .= '<div class="transitions-gallery-item">';
 $quickform .= '<p>Racontez-nous votre transition, partagez une ressource pour le catalogue !</p>';
@@ -42,6 +43,7 @@ if (elgg_is_logged_in()) {
 }
 $quickform .= '</div>';
 $quickform .= '</div>';
+*/
 
 
 // RECHERCHE

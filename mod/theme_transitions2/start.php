@@ -17,9 +17,14 @@ function theme_transitions2_init() {
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
 	
+	// Move QR code lightbox module to a view that is always available
+	elgg_unextend_view('page/elements/owner_block', 'qrcode/ownerblock_extend');
+	elgg_extend_view('page/elements/navbar', 'qrcode/ownerblock_extend');
+	
 	// Public notice for comment
 	elgg_extend_view('forms/comment/save', 'theme_transitions2/public_comment', 100);
 	
+	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
 	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
