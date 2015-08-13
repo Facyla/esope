@@ -27,6 +27,10 @@ function theme_inria_init(){
 	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
+	// Rewrite file upload action to avoid river entries for file images
+	elgg_unregister_action('file/upload');
+	elgg_register_action("file/upload", $action_url . "file/upload.php");
+	
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
@@ -169,7 +173,7 @@ function theme_inria_init(){
 	// @TODO attendre le GO de la DSI avant activation !
 	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'theme_inria');
 	if ($ldap_cron == 'yes') {
-		elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
+		elgg_register_plugin_hook_handler('cron', 'hourly', 'theme_inria_daily_cron');
 	}
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
@@ -236,7 +240,7 @@ function inria_page_handler($page){
 			break;
 		case 'admin_cron':
 			if (elgg_is_admin_logged_in()) {
-				theme_inria_daily_cron('cron', 'daily', '', '');
+				theme_inria_daily_cron('cron', 'daily', '', array('force' => 'yes'));
 			}
 			break;
 		default:

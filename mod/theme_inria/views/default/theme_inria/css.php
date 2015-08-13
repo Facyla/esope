@@ -216,6 +216,7 @@ footer.footer-inria {
 #thewire-textarea { font-size: 1.2em; }
 .home-wire #thewire-textarea { margin-top: 0; }
 .home-wire .thewire-form { padding: 0; }
+.home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
 
 .home-box { margin-bottom: 1em; background: <?php echo $module_bg_color; ?>; padding: 0.5em 0.5em; border-radius: 5px; }
 .home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }

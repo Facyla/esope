@@ -42,6 +42,25 @@ if ($guid) {
 	<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?>
 </div>
 <?php
+if (elgg_is_active_plugin('file_tools')) {
+	if(file_tools_use_folder_structure()){
+		$parent_guid = 0;
+		if($file = elgg_extract("entity", $vars)){
+			if($folders = $file->getEntitiesFromRelationship(FILE_TOOLS_RELATIONSHIP, true, 1)){
+				$parent_guid = $folders[0]->getGUID();
+			}
+		}
+		?>
+		<div>
+			<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
+			<?php
+				echo elgg_view("input/folder_select", array("name" => "folder_guid", "value" => $parent_guid));
+			?>
+			</label>
+		</div>
+	<?php
+	}
+}
 
 $categories = elgg_view('input/categories', $vars);
 if ($categories) {
@@ -61,7 +80,7 @@ echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $con
 if ($guid) {
 	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
 }
-
+// Set default to no notification
 if (!$vars['entity']) echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no'));
 
 echo elgg_view('input/submit', array('value' => $submit_label));
