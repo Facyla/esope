@@ -93,10 +93,10 @@ $modified_time_lower = get_input('modified_time_lower', null);
 $modified_time_upper = get_input('modified_time_upper', null);
 
 // Convert time to timestamp if needed
-if (strpos('-', $created_time_lower)) { $created_time_lower = strtotime($created_time_lower); }
-if (strpos('-', $created_time_upper)) { $created_time_upper = strtotime($created_time_upper); }
-if (strpos('-', $modified_time_lower)) { $modified_time_lower = strtotime($modified_time_lower); }
-if (strpos('-', $modified_time_lower)) { $modified_time_upper = strtotime($modified_time_upper); }
+if (!empty($created_time_lower) && strpos('-', $created_time_lower)) { $created_time_lower = strtotime($created_time_lower); }
+if (!empty($created_time_upper) && strpos('-', $created_time_upper)) { $created_time_upper = strtotime($created_time_upper); }
+if (!empty($modified_time_lower) && strpos('-', $modified_time_lower)) { $modified_time_lower = strtotime($modified_time_lower); }
+if (!empty($modified_time_upper) && strpos('-', $modified_time_upper)) { $modified_time_upper = strtotime($modified_time_upper); }
 
 
 // set up search params

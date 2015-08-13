@@ -14,7 +14,6 @@ elgg_register_event_handler('init', 'system', 'elgg_cas_init'); // Init
  * 
  */
 function elgg_cas_init() {
-	global $CONFIG;
 	
 	// CSS et JS
 	elgg_extend_view('css/elgg', 'elgg_cas/css');
@@ -87,32 +86,32 @@ function elgg_cas_page_handler_ws($page) {
 
 
 function elgg_cas_logout_handler($event, $object_type, $object) {
-	global $CONFIG;
 	$user = elgg_get_logged_in_user_entity();
 	if ($user->is_cas_logged) {
 		// Unset CAS login marker - we might use another way another time..
 		$user->is_cas_logged = false;
-		forward($CONFIG->url . 'cas_auth/?logout');
+		forward(elgg_get_site_url() . 'cas_auth/?logout');
 	} else return;
 }
 
 
 function elgg_cas_autologin() {
-	global $CONFIG;
 	// Limit to homepage ?
-	//if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
+	//if ((elgg_get_viewtype() == 'default') && (full_url() == elgg_get_site_url())) {
 	if (elgg_get_viewtype() == 'default') {
+		global $cas_client_loaded;
 		// CAS autologin
-		elgg_load_library('elgg:elgg_cas');
-		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
-		$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
-		$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
-		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
-	
-		if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
-			global $cas_client_loaded;
-			if (!$cas_client_loaded) {
+		
+		// Load libraries and client once
+		if (!$cas_client_loaded) {
+			elgg_load_library('elgg:elgg_cas');
+			//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+			$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
+			$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
+			$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
+			$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
+			
+			if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
 				phpCAS::setDebug();
 				phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 				$cas_client_loaded = true;
@@ -122,12 +121,16 @@ function elgg_cas_autologin() {
 					phpCAS::setNoCasServerValidation();
 				}
 			}
+		}
+		
+		if ($cas_client_loaded) {
 			if (phpCAS::checkAuthentication()) {
 				system_message(elgg_echo('elgg_cas:casdetected'));
 				$cas_login_included = true;
 				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 			}
 		}
+		
 	}
 }
 
