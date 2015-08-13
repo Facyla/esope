@@ -30,9 +30,11 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 	$content .= '<div class="flexible-block" style="width:48%;">';
 		$content .= '[ TODO : Sélecteur page à afficher ]';
 		$cmspage = cmspages_get_entity('accueil-article1');
-		$content .= $cmspage->getFeaturedImage('original');
-		$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
-		$content .= $cmspage->description;
+		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+			$content .= $cmspage->getFeaturedImage('original');
+			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
+			$content .= $cmspage->description;
+		}
 	$content .= '</div>';
 	$content .= '<div class="flexible-block" style="width:48%; float:right;">';
 		$content .= '[ TODO : Sélecteur page à afficher ]';
