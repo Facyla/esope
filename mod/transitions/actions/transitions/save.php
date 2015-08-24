@@ -51,6 +51,8 @@ if ($guid) {
 } else {
 	$transitions = new ElggTransitions();
 	$transitions->subtype = 'transitions';
+	$transitions->owner_guid = elgg_get_logged_in_user_guid();
+	$transitions->container_guid = elgg_get_logged_in_user_guid();
 	$new_post = TRUE;
 }
 
@@ -225,13 +227,15 @@ if ($is_admin) {
 		}
 	}
 	
-	$is_incremental = get_input('is_incremental', '');
+	$featured = get_input('featured', '');
 	// Set incremental status
-	if (!empty($is_incremental)) {
-		if ($is_incremental == 'yes') {
-			$entity->is_incremental = 'yes';
+	if (!empty($featured)) {
+		if ($featured == 'featured') {
+			$entity->featured = 'featured';
+		} else if ($featured == 'background') {
+			$entity->featured = 'background';
 		} else {
-			$entity->is_incremental = null;
+			$entity->featured = null;
 		}
 	}
 	

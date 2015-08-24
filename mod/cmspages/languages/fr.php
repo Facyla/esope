@@ -62,6 +62,7 @@ return array(
 	/* Settings */
 	'cmspages:settings:yes' => "Oui",
 	'cmspages:settings:no' => "Non",
+	'cmspages:settings:none' => "(aucune)",
 	'cmspages:settings:register_object' => "Afficher les pages CMS dans la recherche",
 	'cmspages:settings:layout' => "Choix de la mise en page par défaut",
 	'cmspages:settings:layout:help' => "Ce paramètre permet d'utiliser la configuration d'externalblog, si le plugin est activé. Si vous ne savez pas quoi choisir, laissez le choix par défaut.",
@@ -292,7 +293,8 @@ return array(
 	
 	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
 	
-	'cmspages:nestedlevel' => "Edition de la page de niveau %s (le contenu est généralement au niveau 0).",
+	'cmspages:editlink' => "Cliquer pour modifier la page %s",
+	'cmspages:nestedlevel' => "Page de niveau %s (le contenu est généralement au niveau 0).",
 	
 	'cmspages:fieldset:editor' => "Contenu de la page",
 	'cmspages:history' => "Historique des versions précédentes",

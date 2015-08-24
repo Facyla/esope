@@ -30,7 +30,8 @@ $actortype_opt = transitions_get_actortype_opt(null, true);
 $lang_opt = transitions_get_lang_opt(null, true);
 
 
-
+// Form de contribution rapide
+/*
 $quickform = '<div class="transitions-gallery-quickform">';
 $quickform .= '<div class="transitions-gallery-item">';
 $quickform .= '<p>Racontez-nous votre transition, partagez une ressource pour le catalogue !</p>';
@@ -42,6 +43,7 @@ if (elgg_is_logged_in()) {
 }
 $quickform .= '</div>';
 $quickform .= '</div>';
+*/
 
 
 // RECHERCHE
@@ -110,7 +112,7 @@ if (isset($search_options['metadata_name_value_pairs'])) {
 $rss_url = current_page_url();
 if (substr_count($rss_url, '?')) { $rss_url .= "&view=rss"; } else { $rss_url .= "?view=rss"; }
 $rss_url = elgg_format_url($rss_url);
-$content .= '<span style="float:right;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . ' </span>';
+$content .= '<span style="float:right;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . '</a></span>';
 
 // Search ICAL feed
 if ($category == 'event') {

@@ -218,16 +218,20 @@ function multilingual_get_entity_language($entity) {
 
 
 
-// Langues autorisées pour les traductions
-// Include main language or not in listing ?
-function multilingual_available_languages($include_main = true) {
-	$main_lang = multilingual_get_main_language();
-	
+function multilingual_get_available_languages() {
 	$languages = elgg_get_plugin_setting('langs', 'multilingual');
 	$languages = str_replace(array(' ', "\n", "\r", ','), ',', $languages);
 	$languages = explode(',', $languages);
 	$languages = array_unique($languages);
 	$languages = array_filter($languages);
+	return $languages;
+}
+
+// Langues autorisées pour les traductions
+// Include main language or not in listing ?
+function multilingual_available_languages($include_main = true) {
+	$main_lang = multilingual_get_main_language();
+	$languages = multilingual_get_available_languages();
 	
 	if (is_array($languages)) {
 		$available_languages = array();

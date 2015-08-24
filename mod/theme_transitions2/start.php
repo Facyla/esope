@@ -11,19 +11,26 @@ function theme_transitions2_init() {
 
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
+	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
 	
+	// Move QR code lightbox module to a view that is always available
+	elgg_unextend_view('page/elements/owner_block', 'qrcode/ownerblock_extend');
+	elgg_extend_view('page/elements/navbar', 'qrcode/ownerblock_extend');
+	
 	// Public notice for comment
 	elgg_extend_view('forms/comment/save', 'theme_transitions2/public_comment', 100);
 	
+	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
-	// Rewrite RSS link in owner_block menu
+	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
-	elgg_register_plugin_hook_handler('output:before', 'layout', 'theme_transitions2_add_rss_link');
+	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
+	elgg_register_plugin_hook_handler('output:before', 'layout', 'theme_transitions2_add_tools_links');
 	
 	// Rewrite register action
 	elgg_unregister_action('register');
@@ -42,10 +49,14 @@ function theme_transitions2_init() {
 	
 	// Add new actions to hover user menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_transitions2_user_hover_menu', 1000);
-	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/make_content_admin.php", 'logged_in');
-	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/remove_content_admin.php", 'logged_in');
-	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/make_platform_admin.php", 'admin');
-	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/remove_platform_admin.php", 'admin');
+	elgg_register_action('admin/user/make_content_admin', dirname(__FILE__) . "/actions/theme_transitions2/make_content_admin.php", 'logged_in');
+	elgg_register_action('admin/user/remove_content_admin', dirname(__FILE__) . "/actions/theme_transitions2/remove_content_admin.php", 'logged_in');
+	elgg_register_action('admin/user/make_platform_admin', dirname(__FILE__) . "/actions/theme_transitions2/make_platform_admin.php", 'admin');
+	elgg_register_action('admin/user/remove_platform_admin', dirname(__FILE__) . "/actions/theme_transitions2/remove_platform_admin.php", 'admin');
+	
+	// Add home management actions
+	elgg_register_action('theme_transitions2/select_article', dirname(__FILE__) . "/actions/theme_transitions2/select_article.php", 'logged_in');
+	
 	
 	// Register admin rights plugin hooks
 	//elgg_register_plugin_hook_handler('access:collections:read', 'user', 'theme_transitions2_read_access_hook');
@@ -89,7 +100,7 @@ function theme_transitions2_init() {
 		// add uncropped small view for listing (no square)
 		'listing' => array('w' => 100, 'h' => 100, 'square' => false, 'upscale' => true),
 		// add gallery icon (has to be square)
-		'gallery' => array('w' => 300, 'h' => 300, 'square' => true, 'upscale' => true),
+		'gallery' => array('w' => 400, 'h' => 400, 'square' => true, 'upscale' => true),
 		// add high resolution format
 		'hres' => array('w' => 2200, 'h' => 1800, 'square' => false, 'upscale' => false),
 	);
@@ -144,31 +155,60 @@ function theme_transitions2_pagesetup() {
 			$item->setPriority(103);
 		}
 		*/
-		
-	// Replace QR code icon
-	elgg_unregister_menu_item('extras', 'qrcode-page');
-	$qrcode_title = elgg_echo('qrcode:page:title');
-	elgg_register_menu_item('extras', array(
-			'name' => 'qrcode-page', 'text' => '<i class="fa fa-qrcode"></i>', 'title' => $qrcode_title,
-			'href' => '#elgg-popup-qrcode-page', 'rel' => 'popup', 'priority' => 800,
-		));
-		
 	}
+	
+	// Remove QR code icon (will be added to navigation)
+	elgg_unregister_menu_item('extras', 'qrcode-page');
+	
 }
 
-function theme_transitions2_add_rss_link() {
+// Add RSS, ICAL and QR code links to main navigation
+function theme_transitions2_add_tools_links() {
+	$theme_menu = elgg_get_plugin_setting('menu_site', 'theme_transitions2');
+	if (empty($theme_menu)) { $theme_menu = 'extras'; }
+	
+	// RSS
 	global $autofeed;
 	if (isset($autofeed) && $autofeed == true) {
 		$url = current_page_url();
 		if (substr_count($url, '?')) { $url .= "&view=rss"; } else { $url .= "?view=rss"; }
 		$url = elgg_format_url($url);
-		elgg_register_menu_item('extras', array(
+		elgg_register_menu_item($theme_menu, array(
 			'name' => 'rss',
 			'text' => '<i class="fa fa-rss"></i>',
 			'href' => $url,
 			'title' => elgg_echo('feed:rss'),
+			'item_class' => "float-alt", 
 		));
 	}
+	
+	// ICAL
+	$context = elgg_get_context();
+	//echo $context; // debug : check eligible context
+	if (in_array($context, array('transitions', 'main', 'collections', 'search'))) {
+		$url = current_page_url();
+		if (substr_count($url, '?')) { $url .= "&view=ical"; } else { $url .= "?view=ical"; }
+		$url = elgg_format_url($url);
+		elgg_register_menu_item($theme_menu, array(
+			"name" => "ical",
+			"href" => $url,
+			"text" => '<i class="fa fa-calendar-o"></i>',
+			'title' => elgg_echo('transitions:ical'),
+			'item_class' => "float-alt", 
+		));
+	}
+	
+	// QR code
+	$qrcode_title = elgg_echo('qrcode:page:title');
+	elgg_register_menu_item($theme_menu, array(
+			'name' => 'qrcode-page', 
+			'text' => '<i class="fa fa-qrcode"></i>', 
+			'title' => $qrcode_title,
+			'href' => '#elgg-popup-qrcode-page', 
+			'rel' => 'popup', 
+			'item_class' => "float-alt", 
+		));
+	
 }
 
 
@@ -284,16 +324,18 @@ function theme_transitions2_override_read_access() {
 
 // Determines if a user can *edit* a given entity
 function theme_transitions2_permissions_hook($hook, $entity_type, $returnvalue, $params) {
-	return theme_transitions2_user_is_content_admin($params['user']);
+	if (theme_transitions2_user_is_content_admin($params['user'])) { return true; }
+	return $returnvalue;
 }
 
 // Determines if a user can can use the entity $params['container'] as a container for a given entity
+// This is necessary to 
 function theme_transitions2_container_permissions_hook($hook, $entity_type, $returnvalue, $params) {
 	//$user = $params['user'];
 	//$entity = $params['entity'];
 	//error_log("USER : " . $params['user']->guid . ' ' . $params['user']->name . " => ENTITY : " . $params['entity']->guid . ' ' . $params['entity']->title);
 	if (elgg_instanceof($params['container'], 'user')) {
-		return theme_transitions2_user_is_content_admin($params['user']);
+		if (theme_transitions2_user_is_content_admin($params['user'])) { return true; };
 	}
 	return $returnvalue;
 }

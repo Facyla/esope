@@ -800,23 +800,26 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$edit_link = '';
 	if ($add_edit_link && $is_editor) {
 		$edit_level = count($params['recursion']);
-		$edit_link = '<i class="fa fa-edit"></i>';
+		$edit_icon = '<i class="fa fa-edit"></i>';
+		$edit_title = elgg_echo('cmspages:editlink', array($pagetype));
 		if ($edit_level > 0) {
-			$edit_link = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
-			$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
+			$edit_icon = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
+			$edit_title .= ' - ' . elgg_echo('cmspages:nestedlevel', array($edit_level));
 		}
 		if ($cmspage) {
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></span>';
 		} else {
-			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+			$edit_details = '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></span>';
 		}
+		$edit_link = '<a class="cmspages-admin-block cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"> ' . $edit_link . $edit_icon . '</a>' . $edit_details;
 	}
+	
 	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
 	if ($add_edit_link && $is_editor) {
-		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
+		$content = '<span class="cmspages-output cmspages-editable">' . $edit_link . $content . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
 	}

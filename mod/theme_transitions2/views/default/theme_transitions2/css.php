@@ -34,6 +34,8 @@ input, textarea { max-width: 100%; }
 .elgg-button-nav:hover { background-color: #669900; }
 */
 .elgg-page-navbar { background: white; }
+.elgg-menu-site { width:100%; }
+.elgg-menu-site > li.float-alt { float: right; }
 .elgg-menu-site > a, .elgg-menu-site > li > a, .elgg-button-dropdown { color: #669900; background-color:white; }
 .elgg-menu-site > .elgg-state-selected > a { color: #223300; background-color:white; }
 .elgg-menu-site > li:hover > a { color: white; background-color:#669900; }
@@ -48,7 +50,7 @@ input, textarea { max-width: 100%; }
 /* Homepage */
 .elgg-menu-item-logohome a { padding: 0 !important; }
 .elgg-button-transitions { font-size:3em; padding:1em; background-color:#9C9; margin:0 auto; }
-
+.elgg-form-theme-transitions2-select-article select { max-width: 10em; }
 
 /* Profile */
 .profile-static-block { padding: 0 0.5em 0.5em 0.5em; }
@@ -58,6 +60,7 @@ input, textarea { max-width: 100%; }
 #feedBackContentWrapper { left:0; }
 #feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
 #feedBackTogglerLink img { margin: 0 10px 5px 0; }
+
 
 
 

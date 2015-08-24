@@ -34,6 +34,10 @@ Mot de passe : %s
 	'theme_transitions:collections' => "Collections",
 	'theme_transitions:comments' => "Commentaires",
 	
+	// Gestion de la Une
+	'theme_transitions2:home_article:select' => "Enregistrer le choix",
+	
+	
 	// Main translations overrides
 	'settings' => "Paramètres",
 	'makeadmin' => "Nommer admin. technique",

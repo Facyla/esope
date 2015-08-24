@@ -41,7 +41,8 @@ $actortype_input = elgg_view('input/select', array(
 ));
 
 $body_label = elgg_echo('transitions:body');
-$body_input = elgg_view('input/longtext', array(
+//$body_input = elgg_view('input/longtext', array(
+$body_input = elgg_view('input/plaintext', array(
 	'name' => 'description',
 	'id' => 'transitions_description',
 	'required' => 'required',
@@ -57,28 +58,30 @@ $url_input = elgg_view('input/url', array(
 //$attachment_label = elgg_echo("transitions:attachment:new");
 //$attachment_input = elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 
-//$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
+$status_input = '';
+$status_input .= '<p>' . elgg_echo('transitions:quickform:details') . '</p>';
+//$status_input .= elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
 
 
 echo <<<___HTML
 
 <div>
-	<label for="transitions_title" class="hidden">$title_label</label>
+	<label for="transitions_title" class="">$title_label</label>
 	$title_input
 </div>
 
 <div>
-	<label for="transitions_category" class="hidden">$category_label</label>
+	<label for="transitions_category" class="">$category_label</label>
 	$category_input
 </div>
 
 <div>
-	<label for="transitions_description" class="hidden">$body_label</label>
+	<label for="transitions_description" class="">$body_label</label>
 	$body_input
 </div>
 
 <div>
-	<label for="transitions_url" class="hidden">$url_label</label>
+	<label for="transitions_url" class="">$url_label</label>
 	$url_input
 </div>
 
