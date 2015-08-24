@@ -101,12 +101,15 @@ $dbprefix = elgg_get_config('dbprefix');
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 $count = elgg_get_entities_from_metadata($list_options);
 
-// Exclude featured and background contributions
+// @TODO Exclude featured and background contributions
 $meta_featured_id = elgg_get_metastring_id('featured');
+$meta_background_id = elgg_get_metastring_id('background');
 //$list_options['joins'][] = "JOIN {$dbprefix}metadata md on e.guid = md.entity_guid";
 //$list_options['wheres'][] = "(md.name_id = $meta_featured_id AND md.value_id IS NULL)";
-$list_options['wheres'][] = "NOT EXISTS (SELECT 1 FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $meta_featured_id AND md.value_id = '')";
+//$list_options['wheres'][] = "e.guid NOT IN (SELECT entity_guid FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $meta_featured_id AND md.value_id = '')";
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => '');
+//$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => "($meta_featured_id, $meta_background_id)", 'operand' => 'NOT IN');
+//$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background', 'operand' => '<>');
 $catalogue = elgg_list_entities_from_metadata($list_options);
 $content .= '<br /><br />';
 $content .= '<div id="transitions">';
@@ -117,14 +120,14 @@ $content .= '</div>';
 // Featured content only
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
 $content .= '<div id="transitions">';
-$content .= '<h2>' . elgg_echo('transitions:featured:featured') . '</h2>';
+$content .= '<h2>' . elgg_echo('transitions:featured:title') . '</h2>';
 $content .= elgg_list_entities_from_metadata($list_options);
 $content .= '</div>';
 
 // Background content only
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'background'));
 $content .= '<div id="transitions">';
-$content .= '<h2>' . elgg_echo('transitions:featured:background') . '</h2>';
+$content .= '<h2>' . elgg_echo('transitions:background:title') . '</h2>';
 $content .= elgg_list_entities_from_metadata($list_options);
 $content .= '</div>';
 
