@@ -279,15 +279,22 @@ $english = array(
 	
 	'admin:cms' => "CMS",
 	'admin:cms:cmspages' => "CMS Pages",
-	'cmspages:configredirect' => "Pour gérer les pages CMS, vous pouvez utiliser directement la page " . elgg_get_site_url() . "cmspages",
+	'cmspages:configredirect' => "To manage CMS pages, you can use directly the page " . elgg_get_site_url() . "cmspages",
 	
-	'cmspages:fieldset:access' => "Gestion des rôles",
+	'cmspages:fieldset:access' => "Roles management",
 	'cmspages:fieldset:categories' => "Categories",
 	'cmspages:fieldset:categories:details' => "Categories",
-	'cmspages:fieldset:rendering' => "Les rubriques permettent de gérer la publication des pages CMS dans des catégories éditoriales plus structurées que les mots-clefs. Si la coquille HTML le permet, ces rubriques peuvent constituer un menu.",
-	'cmspages:fieldset:rendering:details' => "Ces options avancées permettent de contrôler plus finement le rendu de votre page. Certaines options ne s'appliquent que dans des contextes bien précis, et n'ont pas forcément d'effet dans tous les cas.",
+	'cmspages:fieldset:rendering' => "These categories enable to publish CMS pages into a more structured manner than tags. If the HTML pageshell enables it, they can be used as a menu.",
+	'cmspages:fieldset:rendering:details' => "These advanced options let you have finer control over the rendering of your page. These options apply only in specific contexts, and do not apply in all cases.",
 	
-	'cmspages:error:duplicate' => "Attention, plusieurs entrées portent le même nom : veuillez les modifier pour avoir des titres uniques.",
+	'cmspages:error:duplicate' => "Warning, several entries have the same name: please update them so there are only unique names.",
+	
+	'cmspages:editlink' => "Click to edit page",
+	'cmspages:nestedlevel' => "Page de niveau %s (le contenu est généralement au niveau 0).",
+	
+	'cmspages:fieldset:editor' => "Page content",
+	'cmspages:history' => "Previous versions history",
+	'cmspages:history:version' => "<i class=\"fa fa-history\"></i>Version saved by %s %s",
 	
 	'cmspages:none' => "No CMS Page found.",
 	'cmspages:created' => "created %s",

@@ -7,14 +7,12 @@
 
 // Theme inria logged in index page
 function theme_inria_index(){
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/loggedin_homepage.php');
 	return true;
 }
 
 // Theme inria public index page
 function theme_inria_public_index() {
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/public_homepage.php');
 	return true;
 }
@@ -76,8 +74,7 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 
 /* Modification des Boutons des widgets */
 function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
-	global $CONFIG;
-	$urlicon = $CONFIG->url . 'mod/theme_inria/graphics/';
+	$urlicon = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 	
 	$widget = $params['entity'];
 	$show_edit = elgg_extract('show_edit', $params, true);
