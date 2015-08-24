@@ -97,13 +97,35 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 // SELECTION ALEATOIRE PARMI ARTICLE SELECTIONNES DU CATALOGUE
 // @TODO Par défaut : celles sélectionnées par la rédaction
+$dbprefix = elgg_get_config('dbprefix');
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 $count = elgg_get_entities_from_metadata($list_options);
-$catalogue = elgg_list_entities($list_options);
+
+// Exclude featured and background contributions
+$meta_featured_id = elgg_get_metastring_id('featured');
+//$list_options['joins'][] = "JOIN {$dbprefix}metadata md on e.guid = md.entity_guid";
+//$list_options['wheres'][] = "(md.name_id = $meta_featured_id AND md.value_id IS NULL)";
+$list_options['wheres'][] = "NOT EXISTS (SELECT 1 FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $meta_featured_id AND md.value_id = '')";
+//$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => '');
+$catalogue = elgg_list_entities_from_metadata($list_options);
 $content .= '<br /><br />';
 $content .= '<div id="transitions">';
 $content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';
 $content .= $catalogue;
+$content .= '</div>';
+
+// Featured content only
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
+$content .= '<div id="transitions">';
+$content .= '<h2>' . elgg_echo('transitions:featured:featured') . '</h2>';
+$content .= elgg_list_entities_from_metadata($list_options);
+$content .= '</div>';
+
+// Background content only
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'background'));
+$content .= '<div id="transitions">';
+$content .= '<h2>' . elgg_echo('transitions:featured:background') . '</h2>';
+$content .= elgg_list_entities_from_metadata($list_options);
 $content .= '</div>';
 
 

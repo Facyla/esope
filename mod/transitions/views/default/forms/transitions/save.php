@@ -29,6 +29,7 @@ if (empty($vars['resource_lang'])) { $vars['resource_lang'] = get_language(); }
 
 // Get select options
 $lang_opt = transitions_get_lang_opt($vars['lang'], true);
+$full_lang_opt = transitions_get_lang_opt($vars['lang'], true, true);
 $actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
 $category_opt = transitions_get_category_opt($vars['category'], true);
 
@@ -162,6 +163,8 @@ if ($is_admin) {
 	$owner_username_label = elgg_echo('transitions:owner_username');
 	if (elgg_instanceof($transitions, 'object', 'transitions')) {
 		$owner_username = $transitions->getOwnerEntity()->username;
+	} else {
+		$owner_username = elgg_get_logged_in_user_entity()->username;
 	}
 	$owner_username_input = elgg_view('input/autocomplete', array(
 		'name' => 'owner_username',
@@ -170,15 +173,18 @@ if ($is_admin) {
 		'match_on' => 'users',
 	));
 	
-	$incremental_label = elgg_echo('transitions:incremental');
-	$incremental_value = $vars['is_incremental'];
-	$incremental_input = elgg_view('input/select', array(
-		'name' => 'is_incremental',
-		'id' => 'transitions_incremental',
-		'value' => $transitions->is_incremental,
+	$featured_label = elgg_echo('transitions:featured');
+	$featured_value = $vars['featured'];
+	$featured_input = elgg_view('input/select', array(
+		'name' => 'featured',
+		'id' => 'transitions_featured',
+		'value' => $transitions->featured,
 		'options_values' => array(
-			'no' => elgg_echo('transitions:incremental:no'),
-			'yes' => elgg_echo('transitions:incremental:yes'),
+			//'no' => elgg_echo('transitions:featured:no'),
+			//'yes' => elgg_echo('transitions:featured:yes'),
+			'default' => elgg_echo('transitions:featured:default'),
+			'featured' => elgg_echo('transitions:featured:featured'),
+			'background' => elgg_echo('transitions:featured:background'),
 		)
 	));
 	
@@ -276,7 +282,7 @@ $resourcelang_input = elgg_view('input/select', array(
 	'name' => 'resource_lang',
 	'id' => 'transitions_resourcelang',
 	'value' => $vars['resource_lang'],
-	'options_values' => $lang_opt,
+	'options_values' => $full_lang_opt,
 ));
 $resourcelang_details = elgg_echo('transitions:resourcelang:details');
 
@@ -324,14 +330,14 @@ $tags_input = elgg_view('input/tags', array(
 ));
 
 
-// @TODO Admin only : contributed tags + links + status
+// Admin only fields : contributed tags + links + status
 $admin_fields = '';
 if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
-	$admin_fields .= '<p><label for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
+	$admin_fields .= '<p><label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';

@@ -111,9 +111,14 @@ Voir et commenter cette contribution :
 	'transitions:save' => "Publier",
 	'transitions:owner_username' => "Propriétaire de la fiche",
 	'transitions:owner_username:details' => "Pour transférer la fiche à un autre membre, indiquez son nom d'utilisateur ci-dessus (saisissez quelques lettres de son nom pour que des choix vous soient proposés).",
-	'transitions:incremental' => "Contenu incrémental",
-	'transitions:incremental:no' => "Non (par défaut)",
-	'transitions:incremental:yes' => "Oui (mis au second plan)",
+	'transitions:featured:featured' => "Contributions choisies",
+	'transitions:featured:background' => "Contributions en retrait",
+	'transitions:featured' => "Mettre en avant / en retrait",
+	'transitions:featured:no' => "Non (par défaut)",
+	'transitions:featured:yes' => "Oui (mis au second plan)",
+	'transitions:featured:default' => "Standard (par défaut)",
+	'transitions:featured:featured' => "Mettre en avant (plus visible)",
+	'transitions:featured:background' => "Mettre en retrait (moins visible)",
 	'transitions:search:rss' => "Flux RSS pour cette recherche",
 	
 	// Other forms
