@@ -43,21 +43,19 @@ __BODY;
 $body .= elgg_view('page/elements/topbar_wrapper', $vars);
 
 $body .= <<<__BODY
-	<div class="elgg-page-navbar">
-		<div class="elgg-inner">
-			$navbar
-		</div>
-	</div>
-__BODY;
-/*
-$body .= <<<__BODY
 	<div class="elgg-page-header">
 		<div class="elgg-inner">
 			$header
 		</div>
 	</div>
 __BODY;
-*/
+$body .= <<<__BODY
+	<div class="elgg-page-navbar">
+		<div class="elgg-inner">
+			$navbar
+		</div>
+	</div>
+__BODY;
 $body .= <<<__BODY
 	<div class="elgg-page-body">
 		<div class="elgg-inner">
