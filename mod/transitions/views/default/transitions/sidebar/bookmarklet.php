@@ -5,14 +5,14 @@
  * @package Bookmarks
  */
 
-//$title = elgg_echo('transitions:bookmarklet');
-$title = elgg_echo('transitions:bookmarklet:title');
+$title = elgg_echo('transitions:bookmarklet');
+$bookmarklet_title = elgg_echo('transitions:bookmarklet:title');
 
 $url = elgg_get_site_url();
 $img = elgg_view('output/img', array(
 	//'src' => 'mod/bookmarks/graphics/bookmarklet.gif',
 	'src' => 'mod/transitions/graphics/bookmarklet-transitions.png',
-	'alt' => $title,
+	'alt' => $bookmarklet_title,
 ));
 //$bookmarklet = "<a href=\"javascript:location.href='{$url}transitions/add?url='"
 //	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&description='+encodeURIComponent(document.getSelection())\">" . $img . "</a>";

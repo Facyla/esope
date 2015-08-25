@@ -26,7 +26,6 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 	$content .= '<div class="clearfloat"></div>';
 	
 	// 4 articles en Une
-	/*
 	$is_content_admin = theme_transitions2_user_is_platform_admin();
 	$article1 = elgg_get_plugin_setting('home-article1', 'theme_transitions2');
 	$article2 = elgg_get_plugin_setting('home-article2', 'theme_transitions2');
@@ -71,11 +70,6 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 		}
 	$content .= '</div>';
 	$content .= '<div class="clearfloat"></div>';
-	*/
-	
-	
-	$content .= elgg_view('slider/view', array('guid' => "homepage-slider"));
-	if (elgg_is_admin_logged_in()) $content .= '<a href="' . elgg_get_site_url() . 'slider/edit/homepage-slider?edit_mode=basic">Modifier le diaporama</a>';
 	
 $content .= '</div>';
 

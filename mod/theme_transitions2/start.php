@@ -133,11 +133,12 @@ function theme_transitions2_index() {
  */
 function theme_transitions2_pagesetup() {
 
-	elgg_unregister_menu_item('footer', 'powered');
 	elgg_unregister_menu_item('topbar', 'friends');
+	elgg_unregister_menu_item('navbar', 'login-dropdown');
+	elgg_unregister_menu_item('navbar', 'register');
+	elgg_unregister_menu_item('footer', 'powered');
 	
 	if (elgg_is_logged_in()) {
-
 		elgg_register_menu_item('topbar', array(
 			'name' => 'account',
 			'text' => elgg_echo('account'),
@@ -146,7 +147,6 @@ function theme_transitions2_pagesetup() {
 			'section' => 'alt',
 			'link_class' => 'elgg-topbar-dropdown',
 		));
-
 		/*
 		$item = elgg_get_menu_item('topbar', 'usersettings');
 		if ($item) {
@@ -155,6 +155,25 @@ function theme_transitions2_pagesetup() {
 			$item->setPriority(103);
 		}
 		*/
+	} else {
+		elgg_register_menu_item('topbar', array(
+			'name' => 'register',
+			'text' => elgg_echo('register'),
+			'href' => "register",
+			'priority' => 100,
+			'section' => 'alt',
+			'link_class' => '',
+		));
+		elgg_register_menu_item('topbar', array(
+			'name' => 'login',
+			'text' => elgg_echo('login'),
+			'href' => 'login#login-dropdown-box',
+			'rel' => 'popup',
+			'class' => 'elgg-button elgg-button-dropdown',
+			'priority' => 100,
+			'section' => 'alt',
+			'link_class' => '',
+		));
 	}
 	
 	// Remove QR code icon (will be added to navigation)

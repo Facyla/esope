@@ -13,6 +13,7 @@ input, textarea { max-width: 100%; }
 
 .flexible-block { float:left; }
 
+body { background:#EBE7DF; }
 
 /* Main layout */
 .elgg-page-navbar { padding: 0 0px; }
@@ -23,8 +24,16 @@ input, textarea { max-width: 100%; }
 
 
 /* Header */
+/*
 .elgg-page-header { background: url(<?php echo $imgurl; ?>flickr/miuenski_miuenski_2311617707_33a63b3928_o.jpg) #223300 50% 50% no-repeat; background-size:cover; height:200px; }
 .elgg-page-header h1 img { max-width:100%; }
+*/
+.elgg-page-header { padding: 20px 0px; position: relative; background: white; }
+.elgg-page-default .elgg-page-header > .elgg-inner { min-height:auto; }
+.elgg-page-header h1 { line-height:1.8em; }
+.elgg-page-header h1 a, .elgg-page-header h1 a:hover { text-transform: uppercase; font-size: 12px; color: #297256; font-family:Lato, sans-serif; }
+.elgg-page-header h1 img { max-height:40px; float: left; margin-right: 20px; }
+
 
 /* Menu */
 /*
@@ -33,14 +42,14 @@ input, textarea { max-width: 100%; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; }
 .elgg-button-nav:hover { background-color: #669900; }
 */
-.elgg-page-navbar { background: white; }
+.elgg-page-navbar { background: #89BF4E; }
 .elgg-menu-site { width:100%; }
 .elgg-menu-site > li.float-alt { float: right; }
-.elgg-menu-site > a, .elgg-menu-site > li > a, .elgg-button-dropdown { color: #669900; background-color:white; }
-.elgg-menu-site > .elgg-state-selected > a { color: #223300; background-color:white; }
-.elgg-menu-site > li:hover > a { color: white; background-color:#669900; }
-.elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #669900; transition-duration:0.5s; }
-.elgg-button-nav:hover { background-color: #669900; }
+.elgg-menu-site > a, .elgg-menu-site > li > a, .elgg-button-dropdown { color: white; background-color:#89BF4E; }
+.elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { color: white; background-color:#4B8F74; }
+.elgg-menu-site > li:hover > a { color: white; background-color:#4B8F74; }
+.elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #4B8F74; transition-duration:0.5s; }
+.elgg-button-nav:hover { background-color: #4B8F74; }
 
 
 /* Sidebar */
