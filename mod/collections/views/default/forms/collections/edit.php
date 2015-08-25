@@ -68,7 +68,7 @@ if ($collection && $collection->icontime) {
 $content .= '</p>';
 
 // Description
-$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/text', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
 
 // Access
 $content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
