@@ -19,11 +19,13 @@ $sidebar = '';
 //$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 // BASELINE + UNE + CONTRIBUEZ
-$content .= '<div class="flexible-block" style="width:66%;">';
+$content .= '<div class="flexible-block transitions-home-slider">';
 	
 	// Baseline
+	/*
 	$content .= '<div style="background: url(' . elgg_get_site_url() . 'mod/theme_transitions2/graphics/flickr/miuenski_miuenski_2311617707_33a63b3928_o.jpg) #223300 50% 50% no-repeat; background-size:cover; min-height:140px;"><p style="text-transform: uppercase; font-size:2em; line-height:1.5; color:white; font-weight:bold; text-shadow:1px 1px 1px #99F; padding:1em; text-align:center;">' . "Relier transition ecologique et transition numerique" . '</p></div>';
 	$content .= '<div class="clearfloat"></div>';
+	*/
 	
 	// 4 articles en Une
 	/*
@@ -75,23 +77,28 @@ $content .= '<div class="flexible-block" style="width:66%;">';
 	
 	
 	$content .= elgg_view('slider/view', array('guid' => "homepage-slider"));
-	if (elgg_is_admin_logged_in()) $content .= '<a href="' . elgg_get_site_url() . 'slider/edit/homepage-slider?edit_mode=basic">Modifier le diaporama</a>';
+	if (elgg_is_admin_logged_in()) $content .= '<a href="' . elgg_get_site_url() . 'slider/edit/homepage-slider?edit_mode=basic" class="elgg-button elgg-button-admin"><i class="fa fa-wrench"></i> Modifier le diaporama</a>';
 	
 $content .= '</div>';
 
 // CONTRIBUEZ (FORM)
-$content .= '<div class="flexible-block" style="width:30%; float:right;">';
+$content .= '<div class="flexible-block transitions-home-contribute">';
+$content .= '<div style="padding: 40px 40px 20px; font-size:12px; font-weight:bold; color:white;">';
 	if (elgg_is_logged_in()) {
 		// Quick contribution form
-		$content .= '<h3>' . elgg_echo('transitions:quickform:title') . '</h3>';
-		$content .= elgg_view_form('transitions/quickform');
+		$content .= '<p>' . elgg_echo('theme_transitions:contribute') . '</p>';
+		$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action" style="width:100%; text-align:center; text-transform:uppercase;">' . elgg_echo('theme_transitions2:contribute:button') . '</a>';
+		//$content .= '<h3>' . elgg_echo('transitions:quickform:title') . '</h3>';
+		//$content .= elgg_view_form('transitions/quickform');
 	} else {
-		$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action">Contribuez</a>';
+		$content .= '<p>' . elgg_echo('theme_transitions:contribute') . '</p>';
+		$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action" style="width:100%; text-align:center; text-transform:uppercase;">' . elgg_echo('theme_transitions2:contribute:button') . '</a>';
 	}
+$content .= '</div>';
 $content .= '</div>';
 
 
-$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+$content .= '</div></div><div class="elgg-page-body elgg-page-body-search"><div class="elgg-inner">';
 
 // RECHERCHE ET RACCOURCIS VERS CATALOGUE
 $content .= '<br />';
@@ -107,7 +114,7 @@ $dbprefix = elgg_get_config('dbprefix');
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 $count = elgg_get_entities_from_metadata($list_options);
 
-// @TODO Exclude featured and background contributions
+// @TODO Exclude featured and background contributions ?
 $meta_featured_id = elgg_get_metastring_id('featured');
 $meta_background_id = elgg_get_metastring_id('background');
 //$list_options['joins'][] = "JOIN {$dbprefix}metadata md on e.guid = md.entity_guid";
@@ -116,26 +123,46 @@ $meta_background_id = elgg_get_metastring_id('background');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => '');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => "($meta_featured_id, $meta_background_id)", 'operand' => 'NOT IN');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background', 'operand' => '<>');
-$catalogue = elgg_list_entities_from_metadata($list_options);
-$content .= '<br /><br />';
-$content .= '<div id="transitions">';
-$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';
-$content .= $catalogue;
-$content .= '</div>';
+$catalogue = '';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-recent hidden">';
+$catalogue .= elgg_list_entities_from_metadata($list_options);
+$catalogue .= '</div>';
 
 // Featured content only
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
-$content .= '<div id="transitions">';
-$content .= '<h2>' . elgg_echo('transitions:featured:title') . '</h2>';
-$content .= elgg_list_entities_from_metadata($list_options);
-$content .= '</div>';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-featured">';
+$catalogue .= elgg_list_entities_from_metadata($list_options);
+$catalogue .= '</div>';
 
 // Background content only
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'background'));
-$content .= '<div id="transitions">';
-$content .= '<h2>' . elgg_echo('transitions:background:title') . '</h2>';
-$content .= elgg_list_entities_from_metadata($list_options);
-$content .= '</div>';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-background hidden">';
+$catalogue .= elgg_list_entities_from_metadata($list_options);
+$catalogue .= '</div>';
+
+// @TODO Most read
+$catalogue .= '<div class="transitions-gallery transitions-gallery-read hidden">';
+$catalogue .= '[ TODO : les plus lues ]';
+$catalogue .= '</div>';
+
+// @TODO Most commented
+$catalogue .= '<div class="transitions-gallery transitions-gallery-commented hidden">';
+$catalogue .= '[ TODO : les plus commentées ]';
+$catalogue .= '</div>';
+
+// @TODO Most contributed
+$catalogue .= '<div class="transitions-gallery transitions-gallery-contributed hidden">';
+$catalogue .= '[ TODO : les plus contribuées ]';
+$catalogue .= '</div>';
+
+
+// Switch filter (+ onChange)
+$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+
+$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:title') . '</h2>';
+//$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';
+$content .= $catalogue;
+
 
 
 $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';

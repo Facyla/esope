@@ -14,7 +14,7 @@ $imgurl = $site_url . 'mod/theme_transitions2/graphics/';
 <h1>
 	<a class="elgg-heading-site" href="<?php echo elgg_get_site_url(); ?>">
 		<img src="<?php echo elgg_get_site_url(); ?>mod/theme_transitions2/graphics/logo-transitions2.png" alt="<?php echo elgg_get_site_entity()->name; ?>" />
-		<span style="text-transform:uppercase;">Relier transition écologique et transition numérique</span>
+		Relier <span class="transitions-eco">transition écologique</span> et <span class="transitions-num">transition numérique</span>
 	</a>
 </h1>
 

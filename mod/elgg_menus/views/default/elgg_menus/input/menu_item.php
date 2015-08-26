@@ -39,6 +39,8 @@ if ($menu_item instanceof ElggMenuItem) {
 	$data = '';
 	$priority = $menu_item->getPriority();
 }
+// Convert bool values
+if ($selected) { $selected = 'yes'; } else { $selected = 'no'; }
 
 $content .= '<div class="menu-editor-item">';
 

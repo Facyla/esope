@@ -71,6 +71,9 @@ function theme_transitions2_init() {
 	// Register Font Awesome
 	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
 	elgg_load_css('font-awesome');
+	// Register Lato font
+	elgg_register_css('font-lato', 'http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext');
+	elgg_load_css('font-lato');
 	
 	// Add viewport to head
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');

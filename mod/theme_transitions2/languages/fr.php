@@ -12,6 +12,10 @@ return array(
 	'theme_transitions2:search' => "Rechercher une contribution",
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
+	'theme_transitions2:transitions:title' => "<span>Vos</span> contributions",
+	'theme_transitions2:partners:title' => "<span>Nos</span> partenaires",
+	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
+	'theme_transitions2:contribute:button' => "Contribuez",
 	
 	'theme_transitions2:register:optionalfields' => "Les champs suivants sont facultatifs. Si vous n'indiquez rien, ils seront automatiquement créés pour vous.",
 	
@@ -33,9 +37,11 @@ Mot de passe : %s
 	'theme_transitions:contributions' => "Contributions",
 	'theme_transitions:collections' => "Collections",
 	'theme_transitions:comments' => "Commentaires",
+	'theme_transitions:contribute' => "Partagez une référence de personne ou groupe, projet, outil, connaissance ou imaginaire, qui vous semble emblématique du lien entre transition numérique et transition écologique",
 	
 	// Gestion de la Une
 	'theme_transitions2:home_article:select' => "Enregistrer le choix",
+	
 	
 	
 	// Main translations overrides
@@ -57,6 +63,10 @@ Mot de passe : %s
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
 	'embed:media' => "Joindre un fichier ou une image",
 	'status:draft' => "Non publié",
+	
+	'transitions:index' => "<span>Catalogue</span> des contributions",
+	'transitions:search:go' => "&#xf002;",
+	'transitions:search:placeholder' => "&#xf002; Rechercher une contribution",
 	
 	
 );

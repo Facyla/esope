@@ -120,6 +120,12 @@ Voir et commenter cette contribution :
 	'transitions:featured:featured' => "Mettre en avant (plus visible)",
 	'transitions:featured:background' => "Mettre en retrait (moins visible)",
 	'transitions:search:rss' => "Flux RSS pour cette recherche",
+	'transitions:filter:featured' => "Choisies",
+	'transitions:filter:background' => "En retrait",
+	'transitions:filter:recent' => "Récentes",
+	'transitions:filter:read' => "Les + lues",
+	'transitions:filter:commented' => "Les + commentées",
+	'transitions:filter:enriched' => "Les + contribuées",
 	
 	// Other forms
 	'transitions:accountrequired' => "Veuillez vous connecter pour contribuer.<br />Si vous n'avez pas encore de compte,  c'est très rapide ! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Créer mon compte de contributeur Transitions²</a>",
@@ -159,6 +165,8 @@ Voir et commenter cette contribution :
 	'transitions:addrelation:emptyactor' => "Aucune ressource sélectionnée",
 	'transitions:addrelation:alreadyexists' => "Cette ressource a déjà été ajoutée",
 	'transitions:index' => "Catalogue des contributions",
+	'transitions:search:go' => "Go",
+	'transitions:search:placeholder' => "Rechercher une contribution",
 	'transitions:search:results' => "%s résultats",
 	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
 	'transitions:search:noresult' => "Aucun résultat ! &nbsp; Nous attendons votre contribution avec impatience ;-)",

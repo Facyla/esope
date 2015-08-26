@@ -48,7 +48,9 @@ if ($collection) { $content .= elgg_view('input/hidden', array('name' => 'guid',
 $content .= '<p><label>' . elgg_echo('collections:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $collection_title, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('collections:edit:title:details') . '</em></p>';
 
 // Identifiant (slurl)
+/*
 $content .= '<p><label>' . elgg_echo('collections:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $collection_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('collections:edit:name:details') . '</em></p>';
+*/
 
 // Illustration
 $content .= '<p><label for="collection_icon">';
@@ -68,10 +70,19 @@ if ($collection && $collection->icontime) {
 $content .= '</p>';
 
 // Description
-$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/text', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
 
 // Access
-$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+$access_opt = array('0' => elgg_echo('collections:access:draft'), '2' => elgg_echo('collections:access:published'));
+//$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+
+$content .= '<div class="clearfloat"></div>';
+
+// Open access to collection (users can add content)
+$write_access_opt = array('0' => elgg_echo('collections:write:closed'), '2' => elgg_echo('collections:write:open'));
+//$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:write_access') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $collection_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:write_access:details') . '</em></p>';
 
 $content .= '<div class="clearfloat"></div>';
 

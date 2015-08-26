@@ -7,16 +7,16 @@
 
 /* Content category types */
 .elgg-list .transitions-category { margin: 0 0.5ex 0.5ex 0; }
-.transitions-all { background-color:#000; padding:0.5ex 1ex; }
-.transitions-actor { background-color:#6299EB; padding:0.5ex 1ex; }
-.transitions-project { background-color:#A581DA; padding:0.5ex 1ex; }
-.transitions-experience { background-color:#E25C7C; padding:0.5ex 1ex; }
-.transitions-imaginary { background-color:#EB5656; padding:0.5ex 1ex; }
-.transitions-tools { background-color:#DFA615; padding:0.5ex 1ex; }
-.transitions-knowledge { background-color:#68C568; padding:0.5ex 1ex; }
-.transitions-event { background-color:#FD8400; padding:0.5ex 1ex; }
-.transitions-editorial { background-color:#AAA; padding:0.5ex 1ex; }
-.transitions-challenge { background-color:#000; padding:0.5ex 1ex; }
+.transitions-all { background-color:#000; padding: 1px 6px; }
+.transitions-actor { background-color:#6299EB; padding: 1px 6px; }
+.transitions-project { background-color:#A581DA; padding: 1px 6px; }
+.transitions-experience { background-color:#E25C7C; padding: 1px 6px; }
+.transitions-imaginary { background-color:#EB5656; padding: 1px 6px; }
+.transitions-tools { background-color:#DFA615; padding: 1px 6px; }
+.transitions-knowledge { background-color:#68C568; padding: 1px 6px; }
+.transitions-event { background-color:#FD8400; padding: 1px 6px; }
+.transitions-editorial { background-color:#AAA; padding: 1px 6px; }
+.transitions-challenge { background-color:#000; padding: 1px 6px; }
 
 /* Search form */
 .transitions-search-menu { /* text-align: center; */ min-width:60%; }
@@ -24,7 +24,7 @@
 #transitions-search-home {  }
 #transitions-search-home input { font-size: 2em; padding: 0.5em 0.5em; }
 #transitions-search-home input[name=q] { max-width:80%; }
-#transitions-search{  }
+#transitions-search {  }
 #transitions-search input{ max-width:20em; }
 
 
@@ -33,9 +33,10 @@
 
 
 /* Gallery view */
-#transitions .elgg-gallery .elgg-item { width:300px; }
+.transitions-gallery .elgg-gallery { margin-left:-32px; }
+.transitions-gallery .elgg-gallery .elgg-item { width:340.666666px; }
 .transitions-gallery-quickform { width:300px; float:left; }
-.transitions-gallery-item { border: 0;margin: 0 1.5ex 2ex 0; padding: 0.5ex 1ex; }
+.transitions-gallery-item { border: 0; margin: 0 0 32px 32px; padding: 0; }
 .transitions-gallery-item .transitions-gallery-box { position:relative; }
 .transitions-gallery-item .transitions_image { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions_image img { width: 100%; height:auto; border-radius:5px; }
