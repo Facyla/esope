@@ -87,7 +87,7 @@ $content .= '<div style="padding: 40px 40px 20px; font-size:12px; font-weight:bo
 	if (elgg_is_logged_in()) {
 		// Quick contribution form
 		$content .= '<p>' . elgg_echo('theme_transitions:contribute') . '</p>';
-		$content .= '<a href="' . elgg_get_site_url() . 'register" class="elgg-button elgg-button-action" style="width:100%; text-align:center; text-transform:uppercase;">' . elgg_echo('theme_transitions2:contribute:button') . '</a>';
+		$content .= '<a href="' . elgg_get_site_url() . 'transitions/add" class="elgg-button elgg-button-action" style="width:100%; text-align:center; text-transform:uppercase;">' . elgg_echo('theme_transitions2:contribute:button') . '</a>';
 		//$content .= '<h3>' . elgg_echo('transitions:quickform:title') . '</h3>';
 		//$content .= elgg_view_form('transitions/quickform');
 	} else {

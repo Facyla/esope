@@ -100,8 +100,9 @@ if (elgg_is_active_plugin('likes')) {
 }
 $stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' &nbsp; ';
 $stats .= '<i class="fa fa-tags"></i> ' . count($transitions->tags_contributed) . ' &nbsp; ';
-$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
-$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
+//$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
+//$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
+$stats .= '<i class="fa fa-link"></i> ' . count($transitions->links) . ' &nbsp; ';
 $actions = '';
 if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 	//$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
@@ -240,6 +241,7 @@ if ($full) {
 			*/
 			$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 		}
+		/*
 		if ($transitions->links_supports) {
 			$links_supports = '<ul>';
 			foreach((array)$transitions->links_supports as $link) {
@@ -257,6 +259,21 @@ if ($full) {
 			$links_invalidates .= '</ul>';
 			$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);
 		}
+		*/
+		// Contributed links
+		if ($transitions->links) {
+			$links = (array)$transitions->links;
+			$links_comment = (array)$transitions->links_comment;
+			$contributed_links = '<ul class="transitions-contributed-links">';
+			foreach($links as $i => $link) {
+				$contributed_links .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . ' &nbsp; <i class="fa fa-external-link"></i>';
+				$contributed_links .= '<br /><em>' . $links_comment[$i] . '</em>';
+				$contributed_links .= '</li>';
+			}
+			$links .= '</ul>';
+			$body .= elgg_view_module('featured', elgg_echo('transitions:links'), $contributed_links);
+		}
+		// Related actors
 		if ($transitions->category == 'project') {
 			$related_actors = elgg_list_entities_from_relationship(array(
 					'relationship' => 'partner_of',

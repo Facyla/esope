@@ -5,7 +5,9 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 
 
 /* Generic styles */
-a { color: #223300; }
+a { color: #023824; }
+a:hover, a:active, a:focus { color: #297256; }
+
 img { max-width: 100%; }
 select { max-width: 98%; }
 input, textarea { max-width: 100%; font-family: FontAwesome, Lato; }
@@ -90,6 +92,7 @@ body { background:#EBE7DF; font-family:Lato; }
 
 
 /* Menu */
+#login-dropdown-box { z-index:9001; top: 34px !important; }
 /*
 .elgg-page-navbar { background: #223300; }
 .elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { background-color: #669900; }

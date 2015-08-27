@@ -11,6 +11,9 @@
  * @package Transitions
  */
 
+// start a new sticky form session in case of failure
+elgg_make_sticky_form('transitions-addtag');
+
 
 // edit or create a new entity
 $guid = get_input('guid');
@@ -36,6 +39,7 @@ if (!empty($tags)) {
 	$tags = array_filter($tags);
 	$entity->tags_contributed = $tags;
 	system_messages(elgg_echo('transitions:addtag:success'));
+	elgg_clear_sticky_form('transitions-addtag');
 } else {
 	register_error(elgg_echo('transitions:addtag:emptytag'));
 }

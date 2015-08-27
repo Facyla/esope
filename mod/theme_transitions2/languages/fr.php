@@ -63,6 +63,7 @@ Mot de passe : %s
 	'admin:user:self:removeadmin:no' => "Vous ne pouvez pas supprimer vos propres privilèges.",
 	'embed:media' => "Joindre un fichier ou une image",
 	'status:draft' => "Non publié",
+	'generic_comments:add' => "Participer à la discussion",
 	
 	'transitions:index' => "<span>Catalogue</span> des contributions",
 	'transitions:search:go' => "&#xf002;",

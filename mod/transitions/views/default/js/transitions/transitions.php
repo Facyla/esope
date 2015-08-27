@@ -29,6 +29,13 @@ elgg.transitions.init = function() {
 		event.preventDefault();
 	});
 	
+	// Add sortable feature
+	elgg.transitions.addSortable();
+	// Add link
+	$('.transitions-edit-addlink').live('click', elgg.transitions.addLink);
+	// Remove link
+	$('.transitions-edit-removelink').live('click', elgg.transitions.deleteLink);
+	
 };
 
 
@@ -90,7 +97,7 @@ elgg.transitions.selectTab = function(event) {
 	event.preventDefault();
 };
 
-
+// Excerpt char counter limit
 elgg.transitions.textCounter = function(inputField, status, limit) {
 	var remaining_chars = limit - $(inputField).val().length;
 	status.html(remaining_chars);
@@ -105,6 +112,38 @@ elgg.transitions.textCounter = function(inputField, status, limit) {
 		//$("#transitions-post-edit input[name=save]").removeClass('elgg-state-disabled');
 	}
 };
+
+
+
+/* Sortable init function
+ * @param {Object} e The click event
+ */
+elgg.transitions.addSortable = function() {
+	// initialisation de Sortable sur le container parent
+	$(".transitions-edit-links").sortable({
+		placeholder: 'transitions-edit-addlink-highlight', // classe du placeholder ajouté lors du déplacement
+		connectWith: '.collection-edit-entities', 
+		// Custom callback function
+		update: function(event, ui) {}
+	});
+};
+
+// Add contributed link
+elgg.transitions.addLink = function(e) {
+	// Create a new entity element (without editor)
+	var new_entity = <?php echo json_encode(elgg_view('transitions/input/addlink')); ?>;
+	$('.transitions-edit-links').append(new_entity);
+	// Refresh the sortable items to be able to sort into the new section
+	elgg.transitions.addSortable();
+	e.preventDefault();
+};
+
+// Remove contributed link
+elgg.transitions.deleteLink = function(e) {
+	var entity = $(this).parent();
+	if (confirm(elgg.echo('transitions:addlink:remove:confirm'))) { entity.remove(); }
+	e.preventDefault();
+}
 
 
 elgg.register_hook_handler('init', 'system', elgg.transitions.init);

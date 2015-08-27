@@ -75,7 +75,6 @@ if ($embed) {
 	$body .= '<div class="clearfloat"></div><br />';
 	
 	
-	
 	$params = array(
 		'tabs' => array(),
 		'id' => "collections-action-tabs",
@@ -83,8 +82,25 @@ if ($embed) {
 	);
 	$tab_content = '';
 	
+	$first_tab = true;
+	// Add new contribution (any member, if allowed by author)
+	if (elgg_is_logged_in() && ($collection->write_access_id > 0)) {
+		$params['tabs'][] = array('title' => elgg_echo('collections:addentity'), 'url' => "#collections-{$collection->guid}-addentity");
+		if (elgg_is_logged_in()) {
+			$tab_content .= elgg_view_form('collection/addentity', array('id' => "collections-{$collection->guid}-addentity", 'class' => "collections-tab-content"), array('guid' => $collection->guid));
+			//$tab_content .= '<div class="clearfloat"></div><br />';
+		} else {
+			$tab_content .= '<div id="collections-'. $collection->guid . '-addentity" class="collections-tab-content">' . elgg_echo('collections:accountrequired') . '</div>';
+		}
+		$first_tab = false;
+	}
+	
 	// Permalink and share links
-	$params['tabs'][] = array('title' => elgg_echo('collections:share'), 'url' => "#collections-{$collection->guid}-share", 'selected' => true);
+	if ($first_tab) {
+		$params['tabs'][] = array('title' => elgg_echo('collections:share'), 'url' => "#collections-{$collection->guid}-share", 'selected' => true);
+	} else {
+		$params['tabs'][] = array('title' => elgg_echo('collections:share'), 'url' => "#collections-{$collection->guid}-share");
+	}
 	$share_links = '';
 	if (elgg_is_active_plugin('socialshare')) {
 		$share_links .= '<p>' . elgg_echo('collections:socialshare:details') . '</p>';
@@ -94,7 +110,11 @@ if ($embed) {
 	if (elgg_is_active_plugin('shorturls')) {
 		$short_link = '<p>' . elgg_echo('collections:shortlink:details') . '<br /><input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $collection->guid . '"></p>';
 	}
-	$tab_content .= elgg_view_module('info', false, $share_links . $permalink . $short_link, array('id' => "collections-{$collection->guid}-share", 'class' => "collections-tab-content"), array('guid' => $collection->guid));
+	if ($first_tab) {
+		$tab_content .= elgg_view_module('info', false, $share_links . $permalink . $short_link, array('id' => "collections-{$collection->guid}-share", 'class' => "collections-tab-content"), array('guid' => $collection->guid));
+	} else {
+		$tab_content .= elgg_view_module('info', false, $share_links . $permalink . $short_link, array('id' => "collections-{$collection->guid}-share", 'class' => "collections-tab-content hidden"), array('guid' => $collection->guid));
+	}
 	
 	// Embed code
 	$params['tabs'][] = array('title' => elgg_echo('collections:embed'), 'url' => "#collections-{$collection->guid}-embed");

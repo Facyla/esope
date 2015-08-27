@@ -3,6 +3,11 @@
 #transitions-post-edit select { max-width: 16em; }
 .transitions-characters-remaining-warning { color: red; }
 .transitions-characters-remaining-warning .hidden { display:block; }
+.elgg-form-transitions-save fieldset fieldset { border: 1px solid #023824; padding: 2px 6px; margin: 20px 0 20px 0; }
+.elgg-form-transitions-save legend { border: 1px solid #023824; padding: 0 3px; }
+.transitions-edit-addlink-highlight { margin-bottom: 1ex; border:1px dashed grey; padding:0.5ex 1ex; height:5ex; }
+.transitions-edit-contributed-link { margin-bottom: 1ex; border:1px solid grey; padding:0.5ex 1ex; }
+
 
 
 /* Content category types */
@@ -30,6 +35,8 @@
 
 /* Full view */
 .transitions_image.float { margin: 0 1em 0.5em 0; }
+.transitions-contributed-links {  }
+.transitions-contributed-links li { margin-bottom:10px; }
 
 
 /* Gallery view */

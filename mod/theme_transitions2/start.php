@@ -24,6 +24,11 @@ function theme_transitions2_init() {
 	// Public notice for comment
 	elgg_extend_view('forms/comment/save', 'theme_transitions2/public_comment', 100);
 	
+	// Add login with RSFing
+	// @TODO add some checks and plugin conf
+	elgg_extend_view('forms/login', 'theme_transitions2/fing_login');
+	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 100);
+	
 	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	

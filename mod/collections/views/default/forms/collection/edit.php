@@ -37,6 +37,10 @@ if (elgg_instanceof($collection, 'object', 'collection')) {
 	$collection_entities_comment = array();
 }
 
+// Options
+$access_opt = array('0' => elgg_echo('collections:access:draft'), '2' => elgg_echo('collections:access:published'));
+$write_access_opt = array('2' => elgg_echo('collections:write:open'), '0' => elgg_echo('collections:write:closed'));
+
 
 // Edit form
 $content = '';
@@ -45,7 +49,7 @@ $content = '';
 if ($collection) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
 
 // Titre
-$content .= '<p><label>' . elgg_echo('collections:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $collection_title, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('collections:edit:title:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('collections:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $collection_title)) . '</label><br /><em>' . elgg_echo('collections:edit:title:details') . '</em></p>';
 
 // Identifiant (slurl)
 /*
@@ -70,17 +74,15 @@ if ($collection && $collection->icontime) {
 $content .= '</p>';
 
 // Description
-$content .= '<p><label>' . elgg_echo('collections:edit:description') . ' ' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em></p>';
+$content .= '<label>' . elgg_echo('collections:edit:description') . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em>' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '';
 
 // Access
-$access_opt = array('0' => elgg_echo('collections:access:draft'), '2' => elgg_echo('collections:access:published'));
 //$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
 $content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
 
 $content .= '<div class="clearfloat"></div>';
 
 // Open access to collection (users can add content)
-$write_access_opt = array('0' => elgg_echo('collections:write:closed'), '2' => elgg_echo('collections:write:open'));
 //$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
 $content .= '<p><label>' . elgg_echo('collections:edit:write_access') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $collection_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:write_access:details') . '</em></p>';
 
@@ -102,6 +104,7 @@ if (is_array($collection_entities)) {
 	$content .= elgg_view('collections/input/entity', array());
 }
 $content .= '</div>';
+$content .= '<div class="clearfloat"></div>';
 // Add new entity
 $content .= elgg_view('input/button', array(
 		'id' => 'collection-edit-add-entity',
@@ -122,6 +125,8 @@ echo '<h2>' . elgg_echo('collections:edit') . '</h2>';
 // Display the form - Affichage du formulaire
 echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/collection/edit", 'body' => $content, 'id' => "collection-edit-form", 'enctype' => 'multipart/form-data'));
 
+
+/*
 echo '<div class="clearfloat"></div><br />';
 
 // Informations on embed and insert
@@ -136,13 +141,16 @@ if ($collection) {
 	}
 	echo '</blockquote></p>';
 }
+*/
 
 // Prévisualisation
+/*
 if ($collection) {
 	echo '<div class="clearfloat"></div><br /><br />';
 	echo '<a href="' . $collection->getURL() . '" style="float:right" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('collections:edit:view') . '</a>';
 	echo '<h2>' . elgg_echo('collections:edit:preview') . '</h2>';
 	echo elgg_view('collections/view', array('entity' => $collection));
 }
+*/
 
 

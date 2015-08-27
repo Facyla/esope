@@ -12,7 +12,7 @@
  */
 
 // start a new sticky form session in case of failure
-elgg_make_sticky_form('transitions');
+//elgg_make_sticky_form('transitions-addactor');
 
 
 // edit or create a new entity
@@ -36,17 +36,18 @@ if ($actor_guid) {
 	}
 	if ($actor->category != 'actor') {
 		register_error(elgg_echo('transitions:error:not_an_actor'));
-	}
-	// Add new relation
-	if (add_entity_relationship($actor->guid, 'partner_of', $entity->guid)) {
-		system_messages(elgg_echo('transitions:addactor:success'));
 	} else {
-		register_error(elgg_echo('transitions:addactor:error'));
+		// Add new relation
+		if (add_entity_relationship($actor->guid, 'partner_of', $entity->guid)) {
+			system_messages(elgg_echo('transitions:addactor:success'));
+		} else {
+			register_error(elgg_echo('transitions:addactor:error'));
+		}
 	}
+	//elgg_clear_sticky_form('transitions-addactor');
 } else {
 	register_error(elgg_echo('transitions:addactor:emptyactor'));
 }
-
 
 forward($entity->getURL());
 

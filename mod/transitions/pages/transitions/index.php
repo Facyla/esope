@@ -141,7 +141,14 @@ $content .= '</div>';
 if (elgg_get_viewtype() == 'rss') { $content = $catalogue; }
 else if (elgg_get_viewtype() == 'ical') { $content = $catalogue; }
 
-$content = elgg_view_layout('one_column', array('content' => $content, 'title' => $title));
+
+$sidebar = '';
+$sidebar .= elgg_view('transitions/sidebar/bookmarklet');
+$quickform = elgg_view_form('transitions/quickform');
+$sidebar .= elgg_view_module('featured', elgg_echo('transitions:quickform:title'), $quickform);
+
+
+$content = elgg_view_layout('one_sidebar', array('content' => $content, 'title' => $title, 'sidebar' => $sidebar));
 
 echo elgg_view_page($title, $content);
 
