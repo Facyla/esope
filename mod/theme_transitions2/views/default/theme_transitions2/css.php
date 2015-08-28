@@ -108,6 +108,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .transitions-home-slider { width:75%; height:260px; }
 .slider-homepage-slider { font-size: 18px; color: #555; }
 .slider-homepage-slider #slider-uid-1 { background: transparent; }
+#slider-uid-1 .transitions2-slide-image { max-width: 50% !important; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
 .transitions2-slide-image { float:left; margin-right:32px; max-width:50%; }
 .transitions2-slide-text { padding:32px 32px 20px 0px; }
