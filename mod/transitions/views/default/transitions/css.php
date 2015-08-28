@@ -67,10 +67,10 @@
 /* Gallery view */
 .transitions-gallery .elgg-gallery { margin-right:-32px; }
 .elgg-gallery .transitions-item { max-width:100%; }
-.transitions-gallery .elgg-gallery .elgg-item { width:389px; }
+.transitions-gallery .elgg-gallery .elgg-item { /* width:389px; */ }
 .transitions-gallery-quickform { width:300px; float:left; }
 .transitions-gallery-item { border: 0; margin: 0 32px 32px 0; padding: 0; }
-.transitions-gallery-item .transitions-gallery-box { position:relative; width: 357px; height: 260px; background-size:cover; max-width: 100%; }
+.transitions-gallery-item .transitions-gallery-box { position:relative; width: 308px; height: 240px; background-size:cover; max-width: 100%; }
 .transitions-gallery-item .transitions_image { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions_image img { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions-gallery-hover { position:absolute; top:0; left:0; width: 100%; height:100%; /* display:none; background:rgba(255,255,255,0.8); text-align:center; */ border-radius:5px; }

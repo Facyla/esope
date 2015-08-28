@@ -21,7 +21,7 @@ elgg_push_context('listing');
 echo '<div class="elgg-col-2of3 flexible-block">';
 echo '<div class="profile-static-block profile-collections">';
 echo '<h2>' . elgg_echo('theme_transitions:collections') . '</h2>';
-echo elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'limit' => 3, 'owner_guid' => elgg_get_page_owner_guid(), 'list_class' => "elgg-list-collections"));));
+echo elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'limit' => 3, 'owner_guid' => elgg_get_page_owner_guid(), 'list_class' => "elgg-list-collections"));
 echo '</div>';
 echo '</div>';
 

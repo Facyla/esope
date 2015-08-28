@@ -54,9 +54,9 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-page-default .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-navbar > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner, 
-.elgg-page-footer > .elgg-inner, 
-.elgg-page-footer-transitions2 > .elgg-inner { /* max-width:96%; */ max-width:1170px; margin:0 auto; }
-.elgg-page-body > .elgg-inner { max-width:1170px; margin:0 auto; }
+.elgg-page-default .elgg-page-footer > .elgg-inner, 
+.elgg-page-footer-transitions2 > .elgg-inner { /* max-width:96%; max-width:1170px; */ max-width:990px; margin:0 auto; }
+.elgg-page-body > .elgg-inner { /* max-width:1170px; */ max-width:990px; margin:0 auto; }
 
 
 
@@ -166,6 +166,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .profile { background: white; margin-bottom:40px; }
 .profile-static-block h2 { /* background: #F0F0F0; padding: 10px; */ text-transform: initial; }
 .profile-transitions { padding: 0 0 40px 40px; }
+.profile-transitions .transitions-gallery-item { margin-right: 0; }
 .profile-comments .elgg-list { background: #e2d8c3; }
 /*
 .elgg-module > .elgg-body { background: white; padding: 10px 20px 20px 20px; }

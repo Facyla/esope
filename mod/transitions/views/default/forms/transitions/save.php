@@ -582,6 +582,7 @@ $draft_warning
 $content</div>
 
 <div class="flexible-block" style="width:40%; float:right;">
+$action_buttons
 $sidebar
 </div>
 
@@ -603,7 +604,6 @@ $admin_fields
 	$guid_input
 	$container_guid_input
 
-	$action_buttons
 </div>
 
 ___HTML;

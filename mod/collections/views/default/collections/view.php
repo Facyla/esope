@@ -41,13 +41,13 @@ foreach($entities as $k => $entity_guid) {
 		$collection_content .= '<div class="collections-item-entity">';
 		$collection_content .= '<hr class="hidden" />';
 		
-		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
-		
 		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
 		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
 		$list_type = 'gallery';
 		if ($full_content) { $list_type = 'list'; }
 		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => $list_type));
+		
+		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
 		
 		//$collection_content .= '</li>';
 		$collection_content .= '</div>';

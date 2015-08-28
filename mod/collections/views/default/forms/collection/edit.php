@@ -17,6 +17,9 @@ $entity_guid = get_input('entity_guid', false);
 $entity_guid = explode(',', $entity_guid);
 $entity_guid = array_filter($entity_guid);
 
+$content = '';
+$sidebar = '';
+
 // Get collection vars
 if (elgg_instanceof($collection, 'object', 'collection')) {
 	$collection_title = $collection->title; // Collection title, for easier listing
@@ -56,37 +59,57 @@ $content .= '<p><label>' . elgg_echo('collections:edit:title') . ' ' . elgg_view
 $content .= '<p><label>' . elgg_echo('collections:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $collection_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('collections:edit:name:details') . '</em></p>';
 */
 
-// Illustration
-$content .= '<p><label for="collection_icon">';
-if ($collection) {
-	$content .= elgg_echo("collection:icon");
-} else {
-	$content .= elgg_echo("collection:icon:new");
-}
-$content .= '</label><br />';
-$content .= '<em>' . elgg_echo('collection:icon:details') . '</em><br />';
-$content .= elgg_view("input/file", array("name" => "icon", "id" => "collection_icon"));
-if ($collection && $collection->icontime) {
-	$content .= '<br /><img src="' . $collection->getIconURL('listing') . '" /><br />';
-	$content .= elgg_view("input/checkbox", array('name' => "remove_icon", 'value' => "yes"));
-	$content .= elgg_echo("collection:icon:remove");
-}
-$content .= '</p>';
-
 // Description
 $content .= '<label>' . elgg_echo('collections:edit:description') . '</label><br /><em>' . elgg_echo('collections:edit:description:details') . '</em>' . elgg_view('input/longtext', array('name' => 'description', 'value' => $collection_description, 'style' => 'height:15ex;')) . '';
 
+
+
+$sidebar .= '<p style="text-align:right;">' . elgg_view('input/submit', array('value' => elgg_echo('collections:edit:submit'), 'class' => "elgg-button elgg-button-action")) . '</p>';
+
+// Illustration
+$sidebar .= '<p><label for="collection_icon">';
+if ($collection) {
+	$sidebar .= elgg_echo("collection:icon");
+} else {
+	$sidebar .= elgg_echo("collection:icon:new");
+}
+$sidebar .= '</label><br />';
+$sidebar .= '<em>' . elgg_echo('collection:icon:details') . '</em><br />';
+$sidebar .= elgg_view("input/file", array("name" => "icon", "id" => "collection_icon"));
+if ($collection && $collection->icontime) {
+	$sidebar .= '<br /><img src="' . $collection->getIconURL('listing') . '" /><br />';
+	$sidebar .= elgg_view("input/checkbox", array('name' => "remove_icon", 'value' => "yes"));
+	$sidebar .= elgg_echo("collection:icon:remove");
+}
+$sidebar .= '</p>';
+
 // Access
 //$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
-$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
 
-$content .= '<div class="clearfloat"></div>';
+$sidebar .= '<div class="clearfloat"></div>';
 
 // Open access to collection (users can add content)
-//$content .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
-$content .= '<p><label>' . elgg_echo('collections:edit:write_access') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $collection_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:write_access:details') . '</em></p>';
+//$sidebar .= '<p><label>' . elgg_echo('collections:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $collection_access)) . '</label><br /><em>' . elgg_echo('collections:edit:access:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('collections:edit:write_access') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $collection_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('collections:edit:write_access:details') . '</em></p>';
 
-$content .= '<div class="clearfloat"></div>';
+$sidebar .= '<div class="clearfloat"></div>';
+
+
+// 2 columns layout
+$title = elgg_echo('collections:edit');
+$content = <<<___HTML
+<h2>$title</h2>
+
+<div class="flexible-block" style="width:56%;">
+$content
+</div>
+
+<div class="flexible-block" style="width:40%; float:right;">
+$sidebar
+</div>
+<div class="clearfloat"></div>
+___HTML;
 
 
 // ENTITIES
@@ -94,6 +117,7 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '<div class="collection-edit-entities">';
 $content .= '<p><strong>' . elgg_echo('collections:edit:content') . '</strong><br />';
 $content .= '<em>' . elgg_echo('collections:edit:content:details') . '</em></p>';
+
 
 // Collections entities (sortable)
 if (is_array($collection_entities)) {
@@ -104,26 +128,20 @@ if (is_array($collection_entities)) {
 	$content .= elgg_view('collections/input/entity', array());
 }
 $content .= '</div>';
-$content .= '<div class="clearfloat"></div>';
+
+//$content .= '<div class="clearfloat"></div>';
 // Add new entity
 $content .= elgg_view('input/button', array(
 		'id' => 'collection-edit-add-entity',
 		'value' => elgg_echo('collections:edit:addentity'),
-		'class' => 'elgg-button elgg-button-action',
+		'class' => 'elgg-button collection-edit-highlight',
 	));
 $content .= '<div class="clearfloat"></div><br />';
 
 
-$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('collections:edit:submit'))) . '</p>';
-
 
 
 /* AFFICHAGE DE LA PAGE D'ÉDITION */
-echo '<h2>' . elgg_echo('collections:edit') . '</h2>';
-
-// Affichage du formulaire
-// Display the form - Affichage du formulaire
-echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/collection/edit", 'body' => $content, 'id' => "collection-edit-form", 'enctype' => 'multipart/form-data'));
 
 
 /*
@@ -153,4 +171,8 @@ if ($collection) {
 }
 */
 
+
+// Affichage du formulaire
+// Display the form - Affichage du formulaire
+echo elgg_view('input/form', array('action' => elgg_get_site_url() . "action/collection/edit", 'body' => $content, 'id' => "collection-edit-form", 'enctype' => 'multipart/form-data'));
 
