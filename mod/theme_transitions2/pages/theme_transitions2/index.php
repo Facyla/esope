@@ -37,7 +37,7 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 		$slide_content = elgg_view('theme_transitions2/slider_homeslide', array('guid' => $article));
 		if (!empty($slide_content)) { $slides[] = $slide_content; }
 		if ($is_content_admin) {
-			$slides_admin .= '<div class="flexible-block" style="width:auto; margin-left:2em;">';
+			$slides_admin .= '<div class="flexible-block" style="width:auto; margin-right:1em;">';
 			$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
 			$slides_admin .= '</div>';
 		}
@@ -143,7 +143,7 @@ $content .= $catalogue;
 
 
 
-$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
+//$content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 
 
 echo elgg_view_page($title, $content);

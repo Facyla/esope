@@ -83,14 +83,14 @@
 /*
 .transitions-gallery-item .transitions-gallery-head { background: rgba(255,255,255,0.7); position: absolute; top: 30%; left: 0; right: 0; box-shadow: 0 0 4px 0 white; padding: 0.2em 0.5em; max-height: 60%; overflow: hidden; }
 */
-.transitions-gallery-item .transitions-gallery-head { position: absolute; top:0; bottom: 0; left: 0; right: 0; padding: 40px; max-height: 100%; overflow: hidden; color:white; /* text-shadow: 1px 1px black; */ font-size:14px; }
-.transitions-gallery-item .transitions-gallery-head h3 { text-transform: uppercase; font-size: 18px; line-height: 1.3; }
+.transitions-gallery-item .transitions-gallery-head { position: absolute; top:0; bottom: 0; left: 0; right: 0; padding: 32px; max-height: 100%; overflow: hidden; color:white; /* text-shadow: 1px 1px black; */ font-size:14px; }
+.transitions-gallery-item .transitions-gallery-head h3 { text-transform: uppercase; font-size: 16px; line-height: 1.3; }
 .transitions-gallery-item .transitions-gallery-inner { padding: 10px; }
 .transitions-gallery-item .transitions-gallery-head *, .transitions-gallery-item .transitions-gallery-head a, .transitions-gallery-item .transitions-gallery-head a:hover { color:white; }
 
 .transitions-gallery-item .transitions-gallery-content .elgg-content { text-style:italic; font-size: 1.2em; }
 .transitions-gallery-item .transitions-gallery-content { /* position: absolute; bottom: 3em; left: 0; background: rgba(255,255,255,0.8); padding: 0 0.5em; */ }
-.transitions-gallery-item .transitions-gallery-actions { /* position: absolute; top: 0; left: 0; background: white; padding: 2px 4px; background: black; */ position: absolute; bottom: 0; left:0; right:0; font-size: 2em; }
+.transitions-gallery-item .transitions-gallery-actions { /* position: absolute; top: 0; left: 0; background: white; padding: 2px 4px; background: black; */ position: absolute; bottom: 0; left:0; right:0; font-size: 1.5em; }
 .transitions-gallery-actions a { margin-left: 1em; }
 .transitions-socialshare { font-size:3em; padding-bottom:0.5em; }
 .transitions-socialshare a { margin-right:0.3em; }

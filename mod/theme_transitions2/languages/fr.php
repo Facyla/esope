@@ -13,7 +13,7 @@ return array(
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
 	'theme_transitions2:transitions:title' => "<span>Vos</span> contributions",
-	'theme_transitions2:partners:title' => "<span>Nos</span> partenaires",
+	'theme_transitions2:partners:title' => "<span>Démarche</span> impulsée par",
 	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
 	'theme_transitions2:contribute:button' => "Contribuez",
 	
