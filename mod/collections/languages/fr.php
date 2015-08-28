@@ -48,6 +48,7 @@ return array(
 	
 	
 	// NEW STRINGS
+	'collections:view' => "Voir les éléments",
 	'collections:edit:entities' => "Publication",
 	'collections:edit:entities_comment' => "Commentaire",
 	'collections:select_entity' => "Choisir une publication",

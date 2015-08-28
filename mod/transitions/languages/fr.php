@@ -161,6 +161,8 @@ Voir et commenter cette contribution :
 	'transitions:relation:invalidates' => "en opposition",
 	'transitions:links' => "Liens des contributeurs",
 	'transitions:links_comment' => "Commentaire des liens des contributeurs",
+	'transitions:links:placeholder' => "URL de la ressource",
+	'transitions:links_comment:placeholder' => "Explications en une ligne",
 	'transitions:related_actors' => "Acteurs partenaires du projet",
 	'transitions:addactor' => "Ajouter un Acteur",
 	'transitions:addactor:details' => "Vous pouvez associer un Acteur à ce projet. <br />Pour ajouter plusieurs acteurs, merci d'utiliser le formulaire plusieurs fois.",

@@ -38,14 +38,16 @@ foreach($entities as $k => $entity_guid) {
 	if (elgg_instanceof($publication, 'object')) {
 		$publication_comment = $entities_comment[$k];
 		//$collection_content .= '<li>';
-		$collection_content .= '<div class="">';
+		$collection_content .= '<div class="collections-item-entity">';
 		$collection_content .= '<hr class="hidden" />';
 		
 		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
 		
 		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
 		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
-		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => 'list'));
+		$list_type = 'gallery';
+		if ($full_content) { $list_type = 'list'; }
+		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => $list_type));
 		
 		//$collection_content .= '</li>';
 		$collection_content .= '</div>';
@@ -66,13 +68,15 @@ if ($embed) {
 	echo $content_embed;
 	return;
 } else {
-	$body = '';
+	$body = '<div style="padding:40px;">';
 	$body .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
 	$body .= elgg_view_entity_icon($collection, 'large', array('size' => 'large', 'align' => 'left'));
 	$body .= elgg_view('output/longtext', array('value' => $collection->description));
 	$body .= '<div class="clearfloat"></div><br />';
 	$body .= $content_embed;
 	$body .= '<div class="clearfloat"></div><br />';
+	$body .= '</div>';
+	
 	
 	
 	$params = array(
@@ -85,7 +89,7 @@ if ($embed) {
 	$first_tab = true;
 	// Add new contribution (any member, if allowed by author)
 	if (elgg_is_logged_in() && ($collection->write_access_id > 0)) {
-		$params['tabs'][] = array('title' => elgg_echo('collections:addentity'), 'url' => "#collections-{$collection->guid}-addentity");
+		$params['tabs'][] = array('title' => elgg_echo('collections:addentity'), 'url' => "#collections-{$collection->guid}-addentity", 'selected' => true);
 		if (elgg_is_logged_in()) {
 			$tab_content .= elgg_view_form('collection/addentity', array('id' => "collections-{$collection->guid}-addentity", 'class' => "collections-tab-content"), array('guid' => $collection->guid));
 			//$tab_content .= '<div class="clearfloat"></div><br />';
@@ -124,7 +128,7 @@ if ($embed) {
 	
 	// Render tabs block
 	$body .= elgg_view('navigation/tabs', $params);
-	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
+	$body .= '<div class="elgg-tabs-content">';
 	$body .= $tab_content;
 	$body .= '</div>';
 	

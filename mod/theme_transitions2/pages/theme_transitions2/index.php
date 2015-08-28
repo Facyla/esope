@@ -28,56 +28,32 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 	*/
 	
 	// 4 articles en Une
-	/*
+	// Sélecteur pour chacun des 4 blocs avec titre, image et texte riche
 	$is_content_admin = theme_transitions2_user_is_platform_admin();
-	$article1 = elgg_get_plugin_setting('home-article1', 'theme_transitions2');
-	$article2 = elgg_get_plugin_setting('home-article2', 'theme_transitions2');
-	$article3 = elgg_get_plugin_setting('home-article3', 'theme_transitions2');
-	$article4 = elgg_get_plugin_setting('home-article4', 'theme_transitions2');
-	// Sélecteur pour chacun des 4 blocs avec titre, image, texte et possibilité de faire un lien
-	$content .= '<div class="flexible-block" style="width:48%;">';
-		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article1', 'value' => $article1));
-		$cmspage = cmspages_get_entity($article1);
-		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-			$content .= $cmspage->getFeaturedImage('original');
-			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
-			$content .= $cmspage->description;
+	$slides = array();
+	$slides_admin = '<div class="clearfloat"></div>';
+	for ($i=1; $i<=4; $i++) {
+		$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
+		$slide_content = elgg_view('theme_transitions2/slider_homeslide', array('guid' => $article));
+		if (!empty($slide_content)) { $slides[] = $slide_content; }
+		if ($is_content_admin) {
+			$slides_admin .= '<div class="flexible-block" style="width:auto; margin-left:2em;">';
+			$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
+			$slides_admin .= '</div>';
 		}
-	$content .= '</div>';
-	$content .= '<div class="flexible-block" style="width:48%; float:right;">';
-		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article2', 'value' => $article2));
-		$cmspage = cmspages_get_entity($article2);
-		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-			$content .= $cmspage->getFeaturedImage('original');
-			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
-			$content .= $cmspage->description;
-		}
-	$content .= '</div>';
-	$content .= '<div class="clearfloat"></div>';
-	$content .= '<div class="flexible-block" style="width:48%;">';
-		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article3', 'value' => $article3));
-		$cmspage = cmspages_get_entity($article3);
-		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-			$content .= $cmspage->getFeaturedImage('original');
-			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
-			$content .= $cmspage->description;
-		}
-	$content .= '</div>';
-	$content .= '<div class="flexible-block" style="width:48%; float:right;">';
-		if ($is_content_admin) $content .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => 'home-article4', 'value' => $article4));
-		$cmspage = cmspages_get_entity($article4);
-		if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
-			$content .= $cmspage->getFeaturedImage('original');
-			$content .= '<h3>' . $cmspage->pagetitle . '</h3>';
-			$content .= $cmspage->description;
-		}
-	$content .= '</div>';
-	$content .= '<div class="clearfloat"></div>';
-	*/
+	}
+	if ($is_content_admin) { $slides_admin .= '<div class="clearfloat"></div>'; }
 	
-	
-	$content .= elgg_view('slider/view', array('guid' => "homepage-slider"));
-	if (elgg_is_admin_logged_in()) $content .= '<a href="' . elgg_get_site_url() . 'slider/edit/homepage-slider?edit_mode=basic" class="elgg-button elgg-button-admin"><i class="fa fa-wrench"></i> Modifier le diaporama</a>';
+	$content .= '<div style="height:260px; width:100%; overflow:hidden;" id="slider-homepage-slider" class="slider-homepage-slider">';
+	$content .= elgg_view('slider/slider', array(
+			'slides' => $slides,
+			'sliderparams' => "theme : 'cs-portfolio', autoPlay : true, mode : 'f', resizeContents : true, expand : true, buildNavigation : true, buildStartStop : false, toggleControls : true, toggleArrows : true, hashTags : false, delay : 4000, pauseOnHover: false, autoPlayLocked: true, allowRapidChange: true, resumeDelay: 3000",
+			'slidercss_main' => "",
+			'slidercss_textslide' => "",
+			'height' => '260px',
+			'width' => '100%',
+		));
+	$content .= '</div>';
 	
 $content .= '</div>';
 
@@ -97,11 +73,13 @@ $content .= '<div style="padding: 40px 40px 20px; font-size:12px; font-weight:bo
 $content .= '</div>';
 $content .= '</div>';
 
+// Admin slider
+$content .= $slides_admin;
+
 
 $content .= '</div></div><div class="elgg-page-body elgg-page-body-search"><div class="elgg-inner">';
 
 // RECHERCHE ET RACCOURCIS VERS CATALOGUE
-$content .= '<br />';
 $content .= elgg_view('transitions/search_home');
 $content .= '<div class="clearfloat"></div>';
 

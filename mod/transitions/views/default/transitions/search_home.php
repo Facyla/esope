@@ -16,7 +16,7 @@ echo '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="t
 	echo elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go')));
 echo '</form>';
 
-echo '<div class="clearfloat"></div><br />';
+echo '<div class="clearfloat"></div>';
 
 //echo '<a href="' . elgg_get_site_url() . 'transitions/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
 foreach($categories as $name => $trans_name) {

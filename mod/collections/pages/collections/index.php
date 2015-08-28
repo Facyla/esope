@@ -39,16 +39,19 @@ if (elgg_is_logged_in()) {
 
 // Display collections
 if ($collection_count > 0) {
-	$content .= elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 50));
+	$content .= elgg_list_entities(array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 10, 'list_class' => "elgg-list-collections"));
 	//$content .= elgg_view('collection/listing');
 }
 
 //$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
+/*
 if (elgg_is_logged_in()) {
 	$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 } else {
 	$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 }
+*/
+$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'class' => "collections-index"));
 
 echo elgg_view_page($title, $page);
 

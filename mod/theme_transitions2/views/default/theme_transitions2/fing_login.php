@@ -19,7 +19,7 @@ if ($obj->result) {
 	echo "Connexion OK";
 	
 } else {
-	echo '<blockquote>' . $obj->message . '</blockquote>';
+	echo '<blockquote>Echec : ' . $obj->message . '</blockquote>';
 }
 echo print_r($obj, true);
 echo '<hr />';
