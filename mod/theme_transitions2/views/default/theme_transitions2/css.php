@@ -71,7 +71,7 @@ body { background:#EBE7DF; font-family:Lato; }
 
 
 /* Contributions - Recherche homepage */
-.elgg-page-body-search { background:#E2D8C3; padding: 40px 0; text-align:center; }
+.elgg-page-body-search { background:#E2D8C3; padding: 30px 0; text-align:center; }
 #transitions-search-home input { font-size:20px; color: #666; border: 0; border-radius: 0; margin:0; }
 #transitions-search-home .elgg-button-submit { background-color: #89BF4E; color:white; padding: 0.5em 0.8em; }
 #transitions-search-home .elgg-button-submit:hover { background-color: #9bd759; color:#023824; }
@@ -109,8 +109,8 @@ body { background:#EBE7DF; font-family:Lato; }
 .slider-homepage-slider { font-size: 18px; color: #555; }
 .slider-homepage-slider #slider-uid-1 { background: transparent; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
-.transitions2-slide-image { float:left; margin-right:40px; max-width:50%; }
-.transitions2-slide-text { padding:40px 40px 20px 0px; }
+.transitions2-slide-image { float:left; margin-right:32px; max-width:50%; }
+.transitions2-slide-text { padding:32px 32px 20px 0px; }
 .transitions2-slide-text-inner { overflow: auto; max-height:200px; }
 .slider-homepage-slider h3 { font-size: 24px; color: #555; margin-bottom: 20px; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 40px; height: auto; width: 100%; background:transparent; }
