@@ -27,10 +27,10 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 
 /* View */
 .collections-view .elgg-content.clearfix { background: white; }
-.collections-view .elgg-tabs li { border:0; background: white; text-transform: uppercase; margin: 0 5px 0 0; }
-.collections-view .elgg-tabs a { padding: 10px 20px; }
-.collections-view .elgg-tabs .elgg-state-selected { border:0; }
-.collections-view .elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
+#collections-action-tabs.elgg-tabs li { border:0; background: white; text-transform: uppercase; margin: 0 5px 0 0; }
+#collections-action-tabs.elgg-tabs a { padding: 10px 20px; }
+#collections-action-tabs.elgg-tabs .elgg-state-selected { border:0; }
+#collections-action-tabs.elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
 .collections-view .elgg-tabs-content { border:0; padding:20px; background: #e2d8c3; }
 
 

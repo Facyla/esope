@@ -62,6 +62,12 @@
 .transitions_image.float { margin: 0 1em 0.5em 0; }
 .transitions-contributed-links {  }
 .transitions-contributed-links li { margin-bottom:10px; }
+.transitions-view .elgg-content.clearfix { background: white; }
+#transitions-action-tabs.elgg-tabs li { border:0; background: white; text-transform: uppercase; margin: 0 5px 0 0; }
+#transitions-action-tabs.elgg-tabs a { padding: 10px 20px; }
+#transitions-action-tabs.elgg-tabs .elgg-state-selected { border:0; }
+#transitions-action-tabs.elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
+.transitions-tab-content { border:0; padding:20px; background: #e2d8c3; margin: 0; }
 
 
 /* Gallery view */

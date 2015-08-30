@@ -78,6 +78,11 @@ body { background:#EBE7DF; font-family:Lato; }
 .transitions-search-menu .elgg-button { margin: 10px 10px 0 0; font-size: 12px; border-radius:0; }
 .transitions-search-menu a.elgg-button:hover, .transitions-search-menu a.elgg-button:focus, .transitions-search-menu a.elgg-button:active { color:white; }
 
+.elgg-comments .elgg-list { padding: 30px 30px 20px 30px; }
+.elgg-comments .elgg-list > li { border:0; border-bottom: 1px solid #e2d8c3; margin-bottom: 20px; padding: 0; }
+
+
+
 
 /* Collections */
 .collections-index .elgg-head { padding: 0; margin: 0; border: 0; }

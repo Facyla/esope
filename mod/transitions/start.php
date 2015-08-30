@@ -198,7 +198,8 @@ function transitions_page_handler($page) {
 		$params['sidebar'] = elgg_view('transitions/sidebar', array('page' => $page_type));
 	}
 
-	if (in_array($page_type, array('add', 'edit'))) {
+	$params['class'] = "transitions-$page_type";
+	if (in_array($page_type, array('add', 'edit', 'view'))) {
 		$body = elgg_view_layout('one_column', $params);
 	} else {
 		$body = elgg_view_layout('content', $params);
