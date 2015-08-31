@@ -65,7 +65,7 @@ function disable_content_entity_menu_setup($hook, $type, $return, $params) {
 			'name' => 'disable_content',
 			'text' => $wording,
 			'href' => $url,
-			'link_class' => 'elgg-button elgg-button-disable',
+			'link_class' => '',
 			'priority' => 800,
 			'is_action' => true,
 			'confirm' => elgg_echo('disable_content:confirm'),
