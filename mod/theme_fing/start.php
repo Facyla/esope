@@ -169,6 +169,9 @@ function fing_page_handler($page){
 			set_input('theme', $page[0]);
 			include(dirname(__FILE__) . '/pages/theme_fing/groups.php');
 			break;
+		case 'auth':
+			include(dirname(__FILE__) . '/pages/theme_fing/authentication.php');
+			break;
 		default:
 			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
