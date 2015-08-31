@@ -534,6 +534,7 @@ error_log("FING AUTH : $test");
 					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
 					return true;
 				} else {
+				error_log("LOGIN WITH FING ERROR : login with {$credentials['username'} / fing knows $username ($email) / local site knows {$user->username} ({$user->email})");
 					// Same email but different username => let admin handle that case (update username)
 					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'));
 				}
