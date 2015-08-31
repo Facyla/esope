@@ -519,7 +519,6 @@ error_log("FING AUTH : $test");
 			));
 		$result_json = json_decode($result);
 		if ($result_json->status == '0') {
-			system_message('login:ok');
 			$user_fields = unserialize($result_json->result);
 			$username = $user_fields['username'];
 			$email = $user_fields['email'];
@@ -532,13 +531,14 @@ error_log("FING AUTH : $test");
 				// If not, do not allow login
 				if ($user->username == $username) {
 					$user->email = $email;
+					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
 					return true;
 				} else {
 					// Same email but different username => let admin handle that case (update username)
-					register_error('theme_transitions:login:usernamedontmatch');
+					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'));
 				}
 			} else {
-				system_message('theme_transitions:login:newaccount');
+				system_message(elgg_echo('theme_transitions:login:newaccount'));
 				// Create and update new user
 				$user_guid = register_user($username, $credentials['password'], $name, $email, false);
 				$user = get_entity($user_guid);
