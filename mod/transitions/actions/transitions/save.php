@@ -198,6 +198,7 @@ if ($is_admin) {
 		$entity->tags_contributed = $tags_contributed;
 	}
 	
+	/*
 	$links_invalidates = get_input('links_invalidates');
 	// Add new contradictory link
 	if (!empty($links_invalidates)) {
@@ -207,7 +208,6 @@ if ($is_admin) {
 		$links_invalidates = array_filter($links_invalidates);
 		$entity->links_invalidates = $links_invalidates;
 	}
-	
 	$links_supports = get_input('links_supports');
 	// Add new support link
 	if (!empty($links_supports)) {
@@ -217,6 +217,24 @@ if ($is_admin) {
 		$links_supports = array_filter($links_supports);
 		$entity->links_supports = $links_supports;
 	}
+	*/
+	$links = (array) get_input('links');
+	$links_comment = (array) get_input('links_comment');
+	/*
+	// Dédoublonnage : pas besoin pour admins...
+	$contributed_links = array();
+	$contributed_links_comment = array();
+	if ($links) foreach ($links as $k => $link) {
+		if (!in_array($link, $contributed_links) || ($links_comment[$k] != $contributed_links_comment[$k])) {
+			$contributed_links[] = $link;
+			$contributed_links[] = $links_comment[$k];
+		}
+	}
+	$entity->links = $contributed_links;
+	$entity->links_comment = $contributed_links_comment;
+	*/
+	$entity->links = $links;
+	$entity->links_comment = $links_comment;
 	
 	$owner_username = get_input('owner_username', '');
 	if (!empty($owner_username)) {

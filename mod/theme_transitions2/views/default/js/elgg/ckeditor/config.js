@@ -7,7 +7,7 @@ define(function(require) {
 		toolbar: [
 				['RemoveFormat', 'Paste', 'PasteFromWord'], 
 				['Undo', 'Redo'], 
-				['Image', 'Table', 'Iframe', 'Flash'], 
+				['Image', 'Table', 'Iframe'], 
 				['Scayt'], 
 				['Source'], 
 				['Maximize'], 

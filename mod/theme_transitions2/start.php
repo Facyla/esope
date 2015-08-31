@@ -24,6 +24,11 @@ function theme_transitions2_init() {
 	// Public notice for comment
 	elgg_extend_view('forms/comment/save', 'theme_transitions2/public_comment', 100);
 	
+	// Add login with RSFing
+	// @TODO add some checks and plugin conf
+	elgg_extend_view('forms/login', 'theme_transitions2/fing_login');
+	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 100);
+	
 	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	
@@ -71,6 +76,9 @@ function theme_transitions2_init() {
 	// Register Font Awesome
 	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
 	elgg_load_css('font-awesome');
+	// Register Lato font
+	elgg_register_css('font-lato', 'http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext');
+	elgg_load_css('font-lato');
 	
 	// Add viewport to head
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');
@@ -134,6 +142,7 @@ function theme_transitions2_index() {
 function theme_transitions2_pagesetup() {
 
 	elgg_unregister_menu_item('topbar', 'friends');
+	elgg_unregister_menu_item('topbar', 'messages');
 	elgg_unregister_menu_item('navbar', 'login-dropdown');
 	elgg_unregister_menu_item('navbar', 'register');
 	elgg_unregister_menu_item('footer', 'powered');
@@ -147,14 +156,25 @@ function theme_transitions2_pagesetup() {
 			'section' => 'alt',
 			'link_class' => 'elgg-topbar-dropdown',
 		));
-		/*
-		$item = elgg_get_menu_item('topbar', 'usersettings');
-		if ($item) {
-			$item->setParentName('account');
-			$item->setText(elgg_echo('settings'));
-			$item->setPriority(103);
+		
+		// Messages
+		$text = elgg_echo('messages');
+		$tooltip = elgg_echo("messages");
+		// get unread messages
+		$num_messages = (int)messages_count_unread();
+		if ($num_messages != 0) {
+			$text .= "<span class=\"messages-new\">$num_messages</span>";
+			$tooltip .= " (" . elgg_echo("messages:unreadcount", array($num_messages)) . ")";
 		}
-		*/
+
+		elgg_register_menu_item('topbar', array(
+			'name' => 'messages',
+			'href' => 'messages/inbox/' . elgg_get_logged_in_user_entity()->username,
+			'text' => $text,
+			'priority' => 600,
+			'title' => $tooltip,
+		));
+		
 	} else {
 		elgg_register_menu_item('topbar', array(
 			'name' => 'register',
@@ -293,7 +313,7 @@ function theme_transitions2_user_hover_menu($hook, $type, $return, $params) {
 	if ($block_messages == 'yes') $remove_user_menus[] = 'send';
 	if ($return) foreach ($return as $key => $item) {
 		$name = $item->getName();
-		if (is_array($remove_user_tools) && in_array($name, $remove_user_tools)) { unset($return[$key]); }
+		if (is_array($remove_user_menus) && in_array($name, $remove_user_menus)) { unset($return[$key]); }
 	}
 	
 	// Add some admin menus
@@ -364,10 +384,10 @@ function theme_transitions2_owner_block_menu($hook, $type, $return, $params) {
 	// Menu user
 	$user = $params['entity'];
 	if (elgg_instanceof($user, 'user')) {
-		$remove_user_tools = array('file', 'transitions');
+		$remove_user_menus = array('file', 'transitions');
 		if ($return) foreach ($return as $key => $item) {
 			$name = $item->getName();
-			if (in_array($name, $remove_user_tools)) { unset($return[$key]); }
+			if (in_array($name, $remove_user_menus)) { unset($return[$key]); }
 		}
 	}
 	return $return;

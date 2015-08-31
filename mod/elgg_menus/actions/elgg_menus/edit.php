@@ -175,6 +175,8 @@ switch ($menus_action) {
 						$new_item_class[$i] = implode(' ', $new_item_class[$i]);
 					}
 					// Add/update item
+					// Convert to bool values
+					if ($new_selected[$i] == 'yes') { $new_selected[$i] = true; } else { $new_selected[$i] = null; }
 					$new_items[$new_name_clean] = array(
 							'name' => $new_name[$i],
 							'href' => $new_href[$i],

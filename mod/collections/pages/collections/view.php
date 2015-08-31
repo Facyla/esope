@@ -48,7 +48,7 @@ if ($embed) {
 
 
 // Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
+$content = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'class' => "collections-view"));
 
 
 

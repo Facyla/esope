@@ -76,6 +76,7 @@ $transitions_icon = "";
 //}
 $transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
 $transitions_icon = trim($transitions_icon);
+$transitions_icon_url = $transitions->getIconURL($params["size"]);
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
@@ -92,16 +93,17 @@ if (elgg_in_context('widgets')) {
 }
 
 
-// @TODO add stats and actions blocks
+// @TODO add stats and actions blocks : likes, contributions (links + comments)
 $stats = '';
 if (elgg_is_active_plugin('likes')) {
 	$num_of_likes = \Elgg\Likes\DataService::instance()->getNumLikes($transitions);
 	$stats .= '<i class="fa fa-heart"></i> ' . $num_of_likes . ' &nbsp; ';
 }
 $stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' &nbsp; ';
-$stats .= '<i class="fa fa-tags"></i> ' . count($transitions->tags_contributed) . ' &nbsp; ';
-$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
-$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
+//$stats .= '<i class="fa fa-tags"></i> ' . count($transitions->tags_contributed) . ' &nbsp; ';
+//$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
+//$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
+$stats .= '<i class="fa fa-link"></i> ' . count($transitions->links) . ' &nbsp; ';
 $actions = '';
 if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 	//$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
@@ -157,54 +159,81 @@ if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 
 
 if ($full) {
-	$body .= '<span class="transitions-' . $transitions->category . '" style="float:left; margin-right:1em;">';
-	if (!empty($transitions->category)) $body .= elgg_echo('transitions:category:' . $transitions->category);
-	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) $body .= '&nbsp;: ' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . '';
-	$body .= '</span>';
+	$sidebar = '';
 	
+	$body .= $transitions_icon;
+	
+	// Short excerpt (140 chars)
 	if (!empty($transitions->excerpt)) $body .= '<p><strong><em>' . $transitions->excerpt . '</em></strong></p>';
+	
+	$body .= '<div class="clearfloat"></div>';
+	
+	$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
+	$body .= '<div class="clearfloat"></div><br />';
+	
+	// Contribution category
+	$sidebar .= '<span class="transitions-' . $transitions->category . '">';
+	if (!empty($transitions->category)) {
+		$sidebar .= elgg_echo('transitions:category:' . $transitions->category);
+	}
+	if (($transitions->category == 'actor') && !empty($transitions->actor_type)) {
+		$sidebar .= '&nbsp;: ' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . '';
+	}
+	$sidebar .= '</span>';
 	
 	// Territory : actor|project|event only
 	if (in_array($transitions->category, array('actor', 'project', 'event')) && !empty($transitions->territory)) {
-		$body .= '<span style="float:right">' . elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '300px', 'height' => '150px;')) . '</span>';
-		$body .= '<p><i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory . '</p>';
+		$sidebar .= '<p><i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory . '</p>';
+		$sidebar .= '<span>' . elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '100%', 'height' => '150px;')) . '</span>';
 	}
 	
 	// Dates : projects and events only
 	if (in_array($transitions->category, array('project', 'event'))) {
 		if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
-			$body .= '<p><i class="fa fa-calendar-o"></i> ';
+			$sidebar .= '<p><i class="fa fa-calendar-o"></i> ';
 		}
 		if ($transitions->category == 'project') {
 			// Format : MM YYYY [- MM YYYY]
 			$date_format = elgg_echo('transitions:dateformat');
 			if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-				$body .= date($date_format, $transitions->start_date) . ' - ' . date($date_format, $transitions->end_date);
+				$sidebar .= date($date_format, $transitions->start_date) . ' - ' . date($date_format, $transitions->end_date);
 			} else if (!empty($transitions->start_date)) {
-				$body .= date($date_format, $transitions->start_date);
+				$sidebar .= date($date_format, $transitions->start_date);
 			} else if (!empty($transitions->end_date)) {
-				$body .= date($date_format, $transitions->end_date);
+				$sidebar .= date($date_format, $transitions->end_date);
 			}
 		} else {
 			$date_format = elgg_echo('transitions:dateformat:time');
 			// Format : from DD MM YYYY [until DD MM YYYY]
 			if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-				$body .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-				$body .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+				$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+				$sidebar .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 			} else if (!empty($transitions->start_date)) {
-				$body .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+				$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
 			} else if (!empty($transitions->end_date)) {
-				$body .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+				$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 			}
 		}
-		if (!empty($transitions->start_date) || !empty($transitions->end_date)) { $body .= '</p>'; }
+		if (!empty($transitions->start_date) || !empty($transitions->end_date)) { $sidebar .= '</p>'; }
 	}
 	
-	// URL et PJ
-	if (!empty($transitions->url)) $body .= '<p><i class="fa fa-external-link"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
-	if (!empty($transitions->attachment)) $body .= '<p><i class="fa fa-download"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
+	
+	// Ressources : langues puis ressources
+	if (!empty($transitions->url) || !empty($transitions->attachment)) {
+		if (!empty($transitions->resource_lang)) {
+			$body .= '<i class="fa fa-flag-o"></i> ' . elgg_echo('transitions:resourcelang'). '&nbsp;: ' . elgg_echo($transitions->resource_lang);
+		}
+		// URL et PJ
+		if (!empty($transitions->url)) {
+			$sidebar .= '<p><i class="fa fa-external-link"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>';
+		}
+		if (!empty($transitions->attachment)) {
+			$sidebar .= '<p><i class="fa fa-download"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a></p>';
+		}
+	}
 	
 	// Languages
+	/*
 	if (!empty($transitions->lang) || !empty($transitions->resource_lang)) {
 		$body .= '<p>';
 		if (!empty($transitions->lang)) {
@@ -215,14 +244,15 @@ if ($full) {
 		}
 		$body .= '</p>';
 	}
+	*/
 	
-	$body .= '<div class="clearfloat"></div>';
-	
-	$body .= elgg_view('output/longtext', array('value' => $transitions_icon . $transitions->description, 'class' => 'transitions-post'));
-	$body .= '<div class="clearfloat"></div><br />';
-	
-	// @TODO ssi challenge => afficher le flux RSS
-	if ($transitions->category == 'challenge') { $body .= '<p>' . $transitions->rss_feed . '</p>'; }
+	// @TODO ssi challenge => afficher la collection associée
+	if ($transitions->category == 'challenge') {
+		$collection = get_entity($transitions->collection);
+		if (elgg_instanceof($collection, 'object', 'collection')) {
+			$body .= '<div class="transitions-view-collection">' . elgg_view_entity($co-llection) . '</div>';
+		}
+	}
 	
 	$body .= '<div class="clearfloat"></div><br />';
 	
@@ -238,8 +268,9 @@ if ($full) {
 				$tags_contributed .= '<i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => elgg_get_site_url() . 'transitions/?q=' . $tag, 'target' => "_blank", 'text' => $tag)) . ' &nbsp; ';
 			}
 			*/
-			$body .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
+			$sidebar .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 		}
+		/*
 		if ($transitions->links_supports) {
 			$links_supports = '<ul>';
 			foreach((array)$transitions->links_supports as $link) {
@@ -257,6 +288,21 @@ if ($full) {
 			$links_invalidates .= '</ul>';
 			$body .= elgg_view_module('featured', elgg_echo('transitions:links_invalidates'), $links_invalidates);
 		}
+		*/
+		// Contributed links
+		if ($transitions->links) {
+			$links = (array)$transitions->links;
+			$links_comment = (array)$transitions->links_comment;
+			$contributed_links = '<ul class="transitions-contributed-links">';
+			foreach($links as $i => $link) {
+				$contributed_links .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . ' &nbsp; <i class="fa fa-external-link"></i>';
+				$contributed_links .= '<br /><em>' . $links_comment[$i] . '</em>';
+				$contributed_links .= '</li>';
+			}
+			$links .= '</ul>';
+			$body .= elgg_view_module('featured', elgg_echo('transitions:links'), $contributed_links);
+		}
+		// Related actors
 		if ($transitions->category == 'project') {
 			$related_actors = elgg_list_entities_from_relationship(array(
 					'relationship' => 'partner_of',
@@ -288,12 +334,14 @@ if ($full) {
 	}
 	
 	
+		// 2 columns layout
+	$body = '<div class="flexible-block float" style="width:56%;"><div class="" style="padding:30px;">' . $body . '</div></div><div class="flexible-block" style="width:40%; float:right;"><div class="" style="padding:30px;">' . $sidebar . '</div></div>';
+	
 	// Enrichment forms
-	// @TODO Sharing + contribution links
+	// Sharing + contribution links
 	$params = array(
 		'tabs' => array(),
 		'id' => "transitions-action-tabs",
-		'style' => "margin-bottom:0;",
 	);
 	$tab_content = '';
 	
@@ -351,9 +399,10 @@ if ($full) {
 	
 	// Render tabs block
 	$body .= elgg_view('navigation/tabs', $params);
-	$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
+	//$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
 	$body .= $tab_content;
-	$body .= '</div>';
+	//$body .= '</div>';
+	
 	
 	
 	$params = array(
@@ -364,13 +413,13 @@ if ($full) {
 	);
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
-
 	echo elgg_view('object/elements/full', array(
 		'summary' => $summary,
 		'icon' => $owner_icon,
 		'body' => $body,
 	));
-
+	
+	
 } else {
 	// brief view
 	
@@ -407,28 +456,25 @@ if ($full) {
 		);
 		$title_link = elgg_view('output/url', $params);
 		
-		echo '<div class="transitions-gallery-item">';
-			echo '<div class="transitions-gallery-box">';
+		$category_class = 'transitions-category-' . $transitions->category;
+		echo '<div class="transitions-gallery-item ' . $category_class . '">';
+			echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
 				
-				echo $transitions_icon;
+				//echo $transitions_icon;
 				echo '<div class="transitions-gallery-hover">';
 					
 					// Entête
 					echo '<div class="transitions-gallery-head">';
-						echo '<div class="transitions-gallery-inner">';
-							if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
-							if ($metadata) { echo $metadata; }
-							if ($title_link) { echo "<h3>$title_link</h3>"; }
-							echo '<div class="elgg-subtext">' . $subtitle . '</div>';
-							echo elgg_view('object/summary/extend', $vars);
-							echo elgg_view('output/tags', array('tags' => $transitions->tags));
-							//echo elgg_view_image_block($owner_icon, $list_body);
-		
-							// Contenu "texte"
-							echo '<div class="transitions-gallery-content">';
-								echo '<div class="elgg-content">' . $excerpt . '</div>';
-							echo '</div>';
-						echo '</div>';
+						//if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+						//if ($metadata) { echo $metadata; }
+						if ($title_link) { echo "<h3>$title_link</h3>"; }
+						//echo '<div class="elgg-subtext">' . $subtitle . '</div>';
+						//echo elgg_view('object/summary/extend', $vars);
+						//echo elgg_view('output/tags', array('tags' => $transitions->tags));
+						//echo elgg_view_image_block($owner_icon, $list_body);
+	
+						// Contenu "texte"
+						echo '<div class="elgg-content">' . $excerpt . '</div>';
 					
 						// Stats et actions possibles : commenter, liker, ajouter une métadonnée/relation
 						echo '<div class="transitions-gallery-actions">';

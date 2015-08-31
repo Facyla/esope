@@ -32,7 +32,7 @@ function transitions_init() {
 
 	// add to the main css
 	elgg_extend_view('css/elgg', 'transitions/css');
-
+	
 	// routing of urls
 	elgg_register_page_handler('transitions', 'transitions_page_handler');
 	
@@ -198,7 +198,12 @@ function transitions_page_handler($page) {
 		$params['sidebar'] = elgg_view('transitions/sidebar', array('page' => $page_type));
 	}
 
-	$body = elgg_view_layout('content', $params);
+	$params['class'] = "transitions-$page_type";
+	if (in_array($page_type, array('add', 'edit', 'view'))) {
+		$body = elgg_view_layout('one_column', $params);
+	} else {
+		$body = elgg_view_layout('content', $params);
+	}
 
 	echo elgg_view_page($params['title'], $body);
 	return true;
