@@ -526,12 +526,12 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 			if (elgg_instanceof($local_user, 'user')) {
 				// Update email only if it is the same user (same username and email)
 				// If not, do not allow login
-				if ($user->username == $username) {
-					$user->email = $email;
+				if ($local_user->username == $username) {
+					$local_user->email = $email;
 					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
 					return true;
 				} else {
-error_log("LOGIN WITH FING ERROR : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$user->username} ({$user->email})");
+error_log("LOGIN WITH FING ERROR : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$local_user->username} ({$local_user->email})");
 					// Same email but different username => let admin handle that case (update username)
 					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'));
 				}
