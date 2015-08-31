@@ -511,7 +511,7 @@ error_log("FING AUTH : $test");
 	$api_publickey = elgg_get_plugin_setting('fing_api_publickey', 'theme_transitions2');
 	//$api_privatekey = elgg_get_plugin_setting('fing_api_privatekey');
 	
-	if (is_array($credentials) && isset($credentials['username']) && !isset($credentials['password']) && $api_url && $api_publickey) {
+	if (is_array($credentials) && isset($credentials['username']) && isset($credentials['password']) && $api_url && $api_publickey) {
 		$result = theme_transitions2_call_api('POST', $api_url, array(
 				'username' => $credentials['username'], 
 				'password' => $credentials['password'], 
