@@ -387,7 +387,9 @@ function fing_external_auth($username, $password) {
 		if (elgg_instanceof($user, 'user')) {
 			$token = create_user_token($username);
 			$result = array(
+					'token' => $token,
 					'username' => $username,
+					'email' => $user->email,
 					'name' => $user->name,
 					'organisation' => $user->organisation,
 					'description' => $user->description,
