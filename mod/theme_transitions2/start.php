@@ -498,9 +498,6 @@ function theme_transitions2_call_api($method, $url, $data = false) {
  * @access private
  */
 function theme_transitions2_auth_handler_authenticate($credentials = array()) {
-$test = print_r($credentials, true);
-error_log("FING AUTH : $test");
-	
 	// Check that credentials are provided
 	if (!is_array($credentials) || !isset($credentials['username']) || !isset($credentials['password'])) {
 		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
@@ -534,7 +531,7 @@ error_log("FING AUTH : $test");
 					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
 					return true;
 				} else {
-				error_log("LOGIN WITH FING ERROR : login with {$credentials['username'} / fing knows $username ($email) / local site knows {$user->username} ({$user->email})");
+error_log("LOGIN WITH FING ERROR : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$user->username} ({$user->email})");
 					// Same email but different username => let admin handle that case (update username)
 					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'));
 				}
