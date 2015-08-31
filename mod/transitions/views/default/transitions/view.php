@@ -216,7 +216,7 @@ if (!empty($transitions->resource_lang)) {
 }
 // URL et PJ
 if (!empty($transitions->url)) {
-	$sidebar .= '<p><i class="fa fa-external-link"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank">' . $transitions->url . '</a>' . $resource_lang . '</p>';
+	$sidebar .= '<p><i class="fa fa-external-link"></i> ' . elgg_echo('transitions:url') . '&nbsp;: <a href="' . $transitions->url . '" target="_blank" title="' . $transitions->url . '">' . elgg_get_excerpt($transitions->url, 30) . '</a>' . $resource_lang . '</p>';
 }
 if (!empty($transitions->attachment)) {
 	$sidebar .= '<p><i class="fa fa-download"></i> ' . elgg_echo('transitions:attachment') . '&nbsp;: <a href="' . $transitions->getAttachmentURL() . '" target="_blank">' . $transitions->getAttachmentName() . '</a>' . $resource_lang . '</p>';
@@ -246,7 +246,7 @@ if ($transitions->tags_contributed) {
 		$tags_contributed .= '<i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => elgg_get_site_url() . 'transitions/?q=' . $tag, 'target' => "_blank", 'text' => $tag)) . ' &nbsp; ';
 	}
 	*/
-	$sidebar .= elgg_view_module('featured', elgg_echo('transitions:tags_contributed'), $tags_contributed);
+	$sidebar .= elgg_view_module('aside', elgg_echo('transitions:tags_contributed'), $tags_contributed);
 }
 
 // Contributed links
@@ -255,12 +255,13 @@ if ($transitions->links) {
 	$links_comment = (array)$transitions->links_comment;
 	$contributed_links = '<ul class="transitions-contributed-links">';
 	foreach($links as $i => $link) {
-		$contributed_links .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank")) . ' &nbsp; <i class="fa fa-external-link"></i>';
+		$displayed_link = elgg_get_excerpt($link, 40) . '&nbsp; <i class="fa fa-external-link"></i>';
+		$contributed_links .= '<li>' . elgg_view('output/url', array('href' => $link, 'target' => "_blank", 'text' => $displayed_link, 'title' => $link)) . '';
 		$contributed_links .= '<br /><em>' . $links_comment[$i] . '</em>';
 		$contributed_links .= '</li>';
 	}
 	$links .= '</ul>';
-	$sidebar .= elgg_view_module('featured', elgg_echo('transitions:links'), $contributed_links);
+	$sidebar .= elgg_view_module('aside', elgg_echo('transitions:links'), $contributed_links);
 }
 
 
@@ -299,7 +300,7 @@ if ($transitions->category == 'challenge') {
 			'gallery_class' => '',
 		));
 	if (!empty($related_content)) {
-		$body .= elgg_view_module('featured', elgg_echo('transitions:related_content'), $related_content);
+		$body .= elgg_view_module('aside', elgg_echo('transitions:related_content'), $related_content);
 	}
 }
 

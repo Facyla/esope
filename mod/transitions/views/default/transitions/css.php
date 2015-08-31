@@ -68,7 +68,7 @@
 .transitions-view-content { padding:0 30px 30px 30px; }
 .transitions-dates { background:#e2d8c3; padding:10px; display:inline-block; border-radius:5px; }
 .transitions-view-sidebar a { word-break: break-all; }
-.transitions-excerpt { font-size:16; font-weight:bold; }
+.transitions-excerpt { font-size:16px; font-weight:bold; }
 .transitions_image.float { margin: 0 1em 0.5em 0; }
 .transitions-contributed-links {  }
 .transitions-contributed-links li { margin-bottom:10px; }

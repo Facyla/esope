@@ -45,6 +45,12 @@ color: #297256;
 .elgg-state-error { background-color: #BF4E4E; }
 .elgg-state-notice { background-color: #ABD660; color: #023824; }
 
+/* Modules */
+.elgg-module-aside .elgg-head { border-bottom: 1px solid #e2d8c3; }
+.elgg-module-info > .elgg-head { background-color: #ebe7df; }
+.elgg-module-featured { border: 1px solid #e2d8c3; }
+.elgg-module-featured > .elgg-head { background-color: #ebe7df; border-bottom: 1px solid #e2d8c3; }
+
 
 /* Main layout */
 body { background:#EBE7DF; font-family:Lato; }

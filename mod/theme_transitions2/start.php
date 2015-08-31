@@ -28,6 +28,8 @@ function theme_transitions2_init() {
 	// @TODO add some checks and plugin conf
 	elgg_extend_view('forms/login', 'theme_transitions2/fing_login');
 	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 100);
+	// Register the authentication handler
+	register_pam_handler('theme_transitions2_auth_handler_authenticate', 'sufficient', 'user');
 	
 	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
@@ -452,5 +454,104 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 	);
 	return $allowed_styles;
 }
+
+
+/* REST function for remote API calls
+ * Method: POST, PUT, GET etc
+ * Data: array("param" => "value") ==> index.php?param=value
+ */
+function theme_transitions2_call_api($method, $url, $data = false) {
+	$curl = curl_init();
+	switch ($method) {
+		case "POST":
+			curl_setopt($curl, CURLOPT_POST, 1);
+			if ($data) curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			break;
+		case "PUT":
+			curl_setopt($curl, CURLOPT_PUT, 1);
+			break;
+		default:
+			if ($data) $url = sprintf("%s?%s", $url, http_build_query($data));
+	}
+
+	// Optional Authentication:
+	//curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	//curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+	$result = curl_exec($curl);
+	curl_close($curl);
+	return $result;
+}
+
+
+/** Hook into the PAM system which accepts a username and password 
+ * and attempts to authenticate it against a known user @ LDAP server.
+ *
+ * @param array $credentials Associated array of credentials passed to Elgg's PAM system. 
+ *   This function expects 'username' and 'password' (cleartext).
+ *
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function theme_transitions2_auth_handler_authenticate($credentials = array()) {
+$test = print_r($credentials, true);
+error_log("FING AUTH : $test");
+	
+	// Check that credentials are provided
+	if (!is_array($credentials) || !isset($credentials['username']) || !isset($credentials['password'])) {
+		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+	}
+	
+	// Get required fields
+	$api_url = elgg_get_plugin_setting('fing_api_auth_url', 'theme_transitions2');
+	$api_publickey = elgg_get_plugin_setting('fing_api_publickey', 'theme_transitions2');
+	//$api_privatekey = elgg_get_plugin_setting('fing_api_privatekey');
+	
+	if (is_array($credentials) && isset($credentials['username']) && !isset($credentials['password']) && $api_url && $api_publickey) {
+		$result = theme_transitions2_call_api('POST', $api_url, array(
+				'username' => $credentials['username'], 
+				'password' => $credentials['password'], 
+				'api_key' => $api_publickey
+			));
+		$result_json = json_decode($result);
+		if ($result_json->status == '0') {
+			system_message('login:ok');
+			$user_fields = unserialize($result_json->result);
+			$username = $user_fields['username'];
+			$email = $user_fields['email'];
+			$name = $user_fields['name'];
+			
+			// Update local data
+			$local_user = get_user_by_username($username);
+			if (elgg_instanceof($local_user, 'user')) {
+				// Update email only if it is the same user (same username and email)
+				// If not, do not allow login
+				if ($user->username == $username) {
+					$user->email = $email;
+					return true;
+				} else {
+					// Same email but different username => let admin handle that case (update username)
+					register_error('theme_transitions:login:usernamedontmatch');
+				}
+			} else {
+				system_message('theme_transitions:login:newaccount');
+				// Create and update new user
+				$user_guid = register_user($username, $credentials['password'], $name, $email, false);
+				$user = get_entity($user_guid);
+				$user->organisation = $user_fields['organisation'];
+				$user->description = $user_fields['description'];
+				$user->interests = $user_fields['interests'];
+				return true;
+			}
+		}
+	}
+	
+	// Return nothing means we skip this handler (non-blocking)
+}
+
 
 

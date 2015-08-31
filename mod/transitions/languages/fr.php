@@ -182,6 +182,7 @@ Voir et commenter cette contribution :
 	'transitions:addrelation:emptyactor' => "Aucune ressource sélectionnée",
 	'transitions:addrelation:alreadyexists' => "Cette ressource a déjà été ajoutée",
 	'transitions:index' => "Catalogue des contributions",
+	'transitions:search' => "Rechercher",
 	'transitions:search:go' => "Go",
 	'transitions:search:placeholder' => "Rechercher une contribution",
 	'transitions:search:results' => "%s résultats",
