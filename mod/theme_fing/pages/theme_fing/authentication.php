@@ -1,4 +1,6 @@
 <?php
+exit; // Disabled
+
 /**
  * Elgg external login action
  *
@@ -40,7 +42,7 @@ if (!$user) {
 try {
 	//login($user, $persistent);
 	// re-register at least the core language file for users with language other than site default
-	register_translations(dirname(dirname(__FILE__)) . "/languages/");
+	register_translations(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/languages/");
 } catch (LoginException $e) {
 	$message = $e->getMessage();
 	echo json_encode(array('result' => 0, 'message' => $message));
