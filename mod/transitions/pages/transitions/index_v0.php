@@ -30,10 +30,6 @@ $actortype_opt = transitions_get_actortype_opt(null, true);
 $lang_opt = transitions_get_lang_opt(null, true);
 
 
-// Bookmarklet
-$bookmarklet = elgg_view('transitions/sidebar/bookmarklet');
-$content .= $bookmarklet;
-
 // Form de contribution rapide
 /*
 $quickform = '<div class="transitions-gallery-quickform">';
@@ -61,13 +57,11 @@ $content .= '<div class="transitions-search-menu">';
 	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="transitions-search">';
 		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 		$content .= ' &nbsp; ';
-		// @TODO : conditionnel, ssi catégorie = actor
 		$content .= '<label>' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		$content .= '<br />';
-		$content .= '[ Sélecteur selon filtres (idem accueil) ]';
 		$content .= '<br />';
 		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
-		$content .= elgg_view('input/submit', array('value' => elgg_echo('transitions:search')));
+		$content .= elgg_view('input/submit', array('value' => "Rechercher"));
 	$content .= '</form>';
 $content .= '</div>';
 
@@ -75,7 +69,7 @@ $content .= '<div class="clearfloat"></div><br /><br />';
 
 
 // Search options
-$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 10, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 10, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
 
 if (!empty($category)) {
 	$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
@@ -148,9 +142,13 @@ if (elgg_get_viewtype() == 'rss') { $content = $catalogue; }
 else if (elgg_get_viewtype() == 'ical') { $content = $catalogue; }
 
 
+$sidebar = '';
+$sidebar .= elgg_view('transitions/sidebar/bookmarklet');
+$quickform = elgg_view_form('transitions/quickform');
+$sidebar .= elgg_view_module('featured', elgg_echo('transitions:quickform:title'), $quickform);
 
-//$content = elgg_view_layout('one_sidebar', array('content' => $content, 'title' => $title, 'sidebar' => $sidebar));
-$content = elgg_view_layout('one_column', array('content' => $content, 'title' => $title));
+
+$content = elgg_view_layout('one_sidebar', array('content' => $content, 'title' => $title, 'sidebar' => $sidebar));
 
 echo elgg_view_page($title, $content);
 

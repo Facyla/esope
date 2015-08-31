@@ -6,7 +6,7 @@ $imgurl = $url . 'mod/theme_transitions2/graphics/';
 
 /* Generic styles */
 a { color: #4b8f74; }
-a:hover, a:active, a:focus { color: #297256; }
+a:hover, a:active, a:focus { color: #297256; text-decoration:none; }
 .elgg-heading-basic { color: #003923; }
 .elgg-loud { color: #003923; }
 
@@ -18,6 +18,7 @@ h3 a { color:#003923; }
 img { max-width: 100%; }
 select { max-width: 98%; }
 input, textarea { max-width: 100%; font-family: FontAwesome, Lato; min-width:100px; }
+.elgg-button-submit { min-width:3em; }
 textarea { min-height:30px; }
 blockquote { background: #e2d8c3; color:#666; border:none; }
 
@@ -58,7 +59,9 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-page-footer-transitions2 > .elgg-inner { /* max-width:96%; max-width:1170px; */ max-width:990px; margin:0 auto; padding:0; border:0; }
 .elgg-page-body > .elgg-inner { /* max-width:1170px; */ max-width:990px; margin:0 auto; }
 
-
+/* Breadcrumb */
+.elgg-breadcrumbs { font-size: 80%; }
+.elgg-breadcrumbs > li > a:hover { text-decoration: none; color: #4b8f74; }
 
 /* Listes et pagination */
 .elgg-tabs { margin-bottom: 0; }
@@ -85,7 +88,6 @@ body { background:#EBE7DF; font-family:Lato; }
 
 
 /* Collections */
-.collections-index .elgg-head { padding: 0; margin: 0; border: 0; }
 
 
 /* Topbar */

@@ -13,9 +13,9 @@ return array(
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
 	'theme_transitions2:transitions:title' => "<span>Vos</span> contributions",
-	'theme_transitions2:partners:title' => "<span>Démarche</span> impulsée par",
+	'theme_transitions2:partners:title' => "<span>Impulsé</span> par",
 	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
-	'theme_transitions2:contribute:button' => "Contribuez",
+	'theme_transitions2:contribute:button' => "Partagez&nbsp;!",
 	
 	'theme_transitions2:register:optionalfields' => "Les champs suivants sont facultatifs. Si vous n'indiquez rien, ils seront automatiquement créés pour vous.",
 	
@@ -37,7 +37,7 @@ Mot de passe : %s
 	'theme_transitions:contributions' => "Contributions",
 	'theme_transitions:collections' => "Collections",
 	'theme_transitions:comments' => "Commentaires",
-	'theme_transitions:contribute' => "Partagez une référence de personne ou groupe, projet, outil, connaissance ou imaginaire, qui vous semble emblématique du lien entre transition numérique et transition écologique",
+	'theme_transitions:contribute' => "Une référence qui vous semble emblématique du lien entre transition numérique et transition écologique ?",
 	
 	// Gestion de la Une
 	'theme_transitions2:home_article:select' => "Enregistrer le choix",
@@ -69,6 +69,10 @@ Mot de passe : %s
 	'transitions:search:go' => "&#xf002;",
 	'transitions:search:placeholder' => "&#xf002; Rechercher une contribution",
 	
+	'profile:organisation' => "Organisation",
+	'profile:linkedin' => "URL du compte LinkedIn",
+	'profile:twitter' => "URL du compte Twitter",
+	'profile:facebook' => "URL du compte Facebook",
 	
 );
 

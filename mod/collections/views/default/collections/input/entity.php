@@ -33,7 +33,7 @@ if (elgg_instanceof($entity, 'object')) {
 }
 echo '</blockquote>';
 
-echo '<label>' . elgg_echo('collections:edit:entities_comment') . ' ' . elgg_view('input/text', array('name' => 'entities_comment[]', 'value' => $comment)) . '</label>';
+echo '<label>' . elgg_echo('collections:edit:entities_comment') . ' ' . elgg_view('input/plaintext', array('name' => 'entities_comment[]', 'value' => $comment, 'style' => "height:4em;")) . '</label>';
 
 
 echo '</div>';

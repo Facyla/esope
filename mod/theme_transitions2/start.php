@@ -99,7 +99,7 @@ function theme_transitions2_init() {
 		'topbar' => array('w' => 16, 'h' => 16, 'square' => true, 'upscale' => true),
 		'tiny' => array('w' => 25, 'h' => 25, 'square' => true, 'upscale' => true),
 		'small' => array('w' => 40, 'h' => 40, 'square' => true, 'upscale' => true),
-		'medium' => array('w' => 100, 'h' => 100, 'square' => true, 'upscale' => true),
+		'medium' => array('w' => 100, 'h' => 72, 'square' => true, 'upscale' => true),
 		'large' => array('w' => 300, 'h' => 300, 'square' => false, 'upscale' => false),
 		
 		// 800 is a reasonable minimum for main include into article
@@ -108,11 +108,13 @@ function theme_transitions2_init() {
 		// add uncropped small view for listing (no square)
 		'listing' => array('w' => 100, 'h' => 100, 'square' => false, 'upscale' => true),
 		// add gallery icon (has to be square)
-		'gallery' => array('w' => 400, 'h' => 400, 'square' => true, 'upscale' => true),
+		'gallery' => array('w' => 308, 'h' => 224, 'square' => true, 'upscale' => true),
+		//'gallery' => array('w' => 500, 'h' => 364, 'square' => true, 'upscale' => true),
 		// add high resolution format
 		'hres' => array('w' => 2200, 'h' => 1800, 'square' => false, 'upscale' => false),
 	);
 	elgg_set_config('icon_sizes', $icon_sizes);
+	// Ratio images : 308/224 => 1,375
 	
 }
 

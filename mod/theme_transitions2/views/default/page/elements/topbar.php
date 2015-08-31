@@ -8,7 +8,17 @@
 // Transitions² : use custom site menu
 $menu = elgg_get_plugin_setting('menu_topbar', 'theme_transitions2');
 if (empty($menu)) $menu = 'topbar';
+?>
+<a class="elgg-button-nav" rel="toggle" data-toggle-selector=".elgg-topbar-nav-collapse" href="#">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+</a>
+
+<div class="elgg-topbar-nav-collapse">
+<?php
 echo elgg_view_menu($menu, array('sort_by' => 'priority', array('elgg-menu-hz'), 'class' => "elgg-menu-topbar elgg-menu-topbar-default clearfix"));
+echo '</div>';
 
 // elgg tools menu
 // need to echo this empty view for backward compatibility.
