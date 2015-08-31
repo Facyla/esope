@@ -43,7 +43,7 @@ Mot de passe : %s
 	'theme_transitions2:home_article:select' => "Enregistrer le choix",
 	
 	// API
-	'theme_transitions:login:usernamedontmatch' => "Un compte existe déjà avec le même email mais un autre identifiant, veuillez contacter un administrateur pour demander de mettre à jour votre identifiant (doit être identique à celui du RS Fing).",
+	'theme_transitions:login:usernamedontmatch' => "Un compte existe déjà avec le même email mais un autre identifiant, veuillez contacter un administrateur pour demander de mettre à jour votre identifiant : %s doit devenir %s",
 	'theme_transitions:login:newaccount' => "Connexion avec votre compte RSFing réussie : un compte vous a bien été créé.",
 	'theme_transitions:loginwithfing' => "Pour vous connectez avec votre compte Réseau Fing : utilisez vos identifiants de connexion habituels pour vous connecter sur ce site.",
 	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",

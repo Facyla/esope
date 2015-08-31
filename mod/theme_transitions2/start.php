@@ -531,9 +531,9 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
 					return true;
 				} else {
-error_log("LOGIN WITH FING ERROR : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$local_user->username} ({$local_user->email})");
+					error_log("LOGIN WITH FING WARNING : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$local_user->username} ({$local_user->email})");
 					// Same email but different username => let admin handle that case (update username)
-					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'));
+					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'), array($local_user->username, $username));
 				}
 			} else {
 				system_message(elgg_echo('theme_transitions:login:newaccount'));
