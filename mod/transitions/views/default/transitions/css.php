@@ -2,7 +2,7 @@
 /* Edit form */
 #transitions-post-edit select { max-width: 16em; }
 .transitions-characters-remaining-warning { color: red; }
-.transitions-characters-remaining-warning .hidden { display:block; }
+.transitions-characters-remaining-warning .hidden { display:block; background: #BF4E4E; color: white; padding: 2px 10px; }
 .elgg-form-transitions-save fieldset fieldset { border: 1px solid #023824; padding: 2px 6px; margin: 20px 0 20px 0; }
 .elgg-form-transitions-save legend { border: 1px solid #023824; padding: 0 3px; }
 .transitions-edit-addlink-highlight { margin-bottom: 1ex; border:1px dashed grey; padding:0.5ex 1ex; height:5ex; }

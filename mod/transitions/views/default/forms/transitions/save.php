@@ -349,6 +349,7 @@ $startdate_input = elgg_view('input/date', array(
 	'value' => $vars['start_date'],
 	'placeholder' => elgg_echo('transitions:startdate'),
 	'timestamp' => true,
+	'style' => "width:12ex;",
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
@@ -358,6 +359,7 @@ $enddate_input = elgg_view('input/date', array(
 	'value' => $vars['end_date'],
 	'placeholder' => elgg_echo('transitions:enddate'),
 	'timestamp' => true,
+	'style' => "width:12ex;",
 ));
 
 $tags_label = elgg_echo('transitions:tags');
@@ -375,9 +377,9 @@ $admin_fields = '';
 if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
-	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
+	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . ' &nbsp; ';
+	$admin_fields .= '<label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
-	$admin_fields .= '<p><label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
@@ -489,23 +491,23 @@ $content = <<<___HTML
 	$title_input
 </p>
 
-<p>
+<p style="margin:20px 0;">
 	<label class="" for="transitions_excerpt">$excerpt_label</label>
 	$excerpt_input
 </p>
 
-<div>
+<div style="margin:20px 0;">
 	<label class="" for="transitions_description">$body_label</label>
 	$body_input
 </div>
 
-<p>
+<p style="margin:20px 0;">
 	<label class="" for="transitions_lang">$lang_label</label>
 	$lang_input<br />
 	<em>$lang_details</em>
 </p>
 
-<p>
+<p style="margin:20px 0;">
 	<label class="" for="transitions_tags">$tags_label</label>
 	$tags_input
 	<br /><em>$tags_details</em>
@@ -528,48 +530,50 @@ $sidebar = '';
 $sidebar .= <<<___HTML
 $edit_details
 
-<div>
+<div style="margin:20px 0;">
 	$icon_image
 	<label class="" for="transitions_icon">$icon_label</label><br />
 	$icon_input
 </div>
 
-<p class="transitions-territory">
+<p class="transitions-territory" style="margin:20px 0;">
 	<label class="" for="transitions_territory">$territory_label</label>
 	$territory_input<br />
 	<em>$territory_details</em>
 </p>
 
-<p class="transitions-startdate">
-	<label class="" for="transitions_startdate">$startdate_label</label>
-	$startdate_input
-</p>
+<div class="transitions-startdate transitions-enddate" style="margin:20px 0;">
+	<p class="transitions-startdate">
+		<label class="" for="transitions_startdate">$startdate_label</label>
+		$startdate_input
+	</p>
 
-<p class="transitions-enddate">
-	<label class="" for="transitions_enddate">$enddate_label</label>
-	$enddate_input
-</p>
+	<p class="transitions-enddate">
+		<label class="" for="transitions_enddate">$enddate_label</label>
+		$enddate_input
+	</p>
+</div>
 
-<fieldset>
-	<legend>$ressources_legend</legend>
-	<p>
+<blockquote style="padding:20px;">
+	<h3>$ressources_legend</h3>
+	<p style="margin:20px 0;">
 		<label class="" for="transitions_url">$url_label</label>
 		$url_input<br />
 		<em>$url_details</em>
 	</p>
 
-	<div>
+	<div style="margin:20px 0;">
 		$attachment_link
 		<label class="" for="transitions_attachment">$attachment_label</label><br />
 		$attachment_input
 	</div>
 	<div class="clearfloat"></div>
 
-	<p>
+	<p style="margin:20px 0;">
 		<label class="" for="transitions_resourcelang">$resourcelang_label</label>
 		$resourcelang_input
 	</p>
-</fieldset>
+</blockquote>
 
 ___HTML;
 
