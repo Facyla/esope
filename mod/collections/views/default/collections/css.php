@@ -38,9 +38,9 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 #collections-action-tabs.elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
 .collections-view .elgg-tabs-content { border:0; padding:20px; background: #e2d8c3; }
 .collections-view .elgg-image-block { padding: 0; }
-.collections-view .elgg-image-block .elgg-image { margin-right: 30px; }
+.collections-view .elgg-image-block .elgg-image { margin: 0 0 30px 0; }
 .collections-view .elgg-image-block .elgg-image-alt { margin: 30px; }
-.collections-view .elgg-image-block .elgg-body { padding: 30px 0 30px 0; }
+.collections-view .elgg-image-block .elgg-body { padding: 30px 0 30px 30px; }
 
 
 /* Rendu des collections */
