@@ -560,7 +560,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			//Extract multiple values
 			$fields_multiple = array('guids', 'owner_guids', 'container_guids');
 			foreach($fields_multiple as $field) {
-				if (strpos(',', $$field)) {
+				if (strpos($$field, ',')) {
 					$$field = explode(',', $$field);
 					$$field = array_filter($$field);
 					$$field = array_unique($$field);
