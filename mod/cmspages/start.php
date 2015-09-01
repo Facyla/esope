@@ -552,7 +552,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$full_view = $module_config['full_view'];
 			$type = $module_config['type'];
 			$subtype = $module_config['subtype'];
-			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
+			$limit = $module_config['limit']; if (!isset($limit)) $limit = 10;
 			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
 			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];

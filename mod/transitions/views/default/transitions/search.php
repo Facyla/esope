@@ -12,14 +12,14 @@ $category_opt = transitions_get_category_opt(null, true, true);
 
 echo '<div class="transitions-search-menu">';
 
-echo '<a href="' . elgg_get_site_url() . 'transitions/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
+echo '<a href="' . elgg_get_site_url() . 'catalogue/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
 foreach($categories as $name => $trans_name) {
-	echo '<a href="' . elgg_get_site_url() . 'transitions/' . $name . '" class="elgg-button transitions-' . $name . '">' . $trans_name . '</a>';
+	echo '<a href="' . elgg_get_site_url() . 'catalogue/' . $name . '" class="elgg-button transitions-' . $name . '">' . $trans_name . '</a>';
 }
 
 echo '<div class="clearfloat"></div><br />';
 
-echo '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="transitions-search">';
+echo '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
 	echo '<label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 	echo ' &nbsp; ';
 	echo '<label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
