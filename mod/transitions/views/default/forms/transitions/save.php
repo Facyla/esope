@@ -12,7 +12,7 @@ $vars['entity'] = $transitions;
 
 $is_admin = theme_transitions2_user_is_content_admin();
 
-if ($transitions) $edit_details = '<p><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
+if ($transitions) $edit_details = '<p style="margin:20px 0;"><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
 $draft_warning = $vars['draft_warning'];
 if ($draft_warning) {
@@ -70,7 +70,7 @@ $save_button = elgg_view('input/submit', array(
 	'value' => elgg_echo('transitions:save'),
 	'name' => 'save',
 ));
-$action_buttons = $save_button . $preview_button . $delete_link;
+$action_buttons = '<p>' . $save_button . $preview_button . $delete_link . '</p>';
 
 $title_label = elgg_echo('title');
 $title_input = elgg_view('input/text', array(

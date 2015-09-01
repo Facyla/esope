@@ -60,28 +60,62 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 			
 			<form id="feedBackForm" action="" method="post" onsubmit="FeedBack_Send();return false;">
 				
-				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
-						<label class="angry"><input type="radio" name="mood" value="angry"> <?php echo elgg_echo('feedback:mood:angry'); ?></label>
-						<label class="neutral"><input type="radio" name="mood" value="neutral" checked> <?php echo elgg_echo('feedback:mood:neutral'); ?></label>
-						<label class="happy"><input type="radio" name="mood" value="happy"> <?php echo elgg_echo('feedback:mood:happy'); ?></label>
+				<?php
+				$enable_mood = elgg_get_plugin_setting('enable_mood', 'feedback');
+				if ($enable_mood != 'no') {
+					?>
+					<div>
+						<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
+							<label class="angry"><input type="radio" name="mood" value="angry"> <?php echo elgg_echo('feedback:mood:angry'); ?></label>
+							<label class="neutral"><input type="radio" name="mood" value="neutral" checked> <?php echo elgg_echo('feedback:mood:neutral'); ?></label>
+							<label class="happy"><input type="radio" name="mood" value="happy"> <?php echo elgg_echo('feedback:mood:happy'); ?></label>
+						</div>
+						<div style="clear:both;"></div>
 					</div>
-					<div style="clear:both;"></div>
-				</div>
-				<br />
+					<br />
+					<?php
+				}
+				?>
 				
-				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
-						<label class="bug_report"><input type="radio" name="about" value="bug_report"> <?php echo elgg_echo('feedback:about:bug_report'); ?></label>
-						<label class="content"><input type="radio" name="about" value="content"> <?php echo elgg_echo('feedback:about:content'); ?></label>
-						<label class="suggestions"><input type="radio" name="about" value="suggestions" checked> <?php echo elgg_echo('feedback:about:suggestions'); ?></label>
-						<label class="compliment"><input type="radio" name="about" value="compliment"> <?php echo elgg_echo('feedback:about:compliment'); ?></label>
-						<label class="question"><input type="radio" name="about" value="question"> <?php echo elgg_echo('feedback:about:question'); ?></label>
-						<label class="other"><input type="radio" name="about" value="other"> <?php echo elgg_echo('feedback:about:other'); ?></label>
+				<?php
+				$enable_about = elgg_get_plugin_setting('enable_about', 'feedback');
+				$about_values = elgg_get_plugin_setting('about_values', 'feedback');
+				if (!empty($about_values)) {
+					$about_values = explode(',', $about_values);
+					$about_values = array_unique($about_values);
+					$about_values = array_filter($about_values, 'trim');
+					$about_values = array_filter($about_values);
+				} else {
+					$about_values = array('bug_report', 'content', 'suggestions', 'compliment', 'question', 'other');
+				}
+				// Add "other" value ?
+				//if (!in_array($about_values)) { $about_values[] = 'other'; }
+				if (($enable_about != 'no') && (sizeof($about_values) > 0)) {
+					?>
+					<div>
+						<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
+							<?php
+							foreach ($about_values as $about) {
+								echo '<label class="' . $about .'"><input type="radio" name="about" value="' . $about .'"> ' . elgg_echo("feedback:about:$about") . '</label>';
+							}
+							/*
+							?>
+							<label class="bug_report"><input type="radio" name="about" value="bug_report"> <?php echo elgg_echo('feedback:about:bug_report'); ?></label>
+							<label class="content"><input type="radio" name="about" value="content"> <?php echo elgg_echo('feedback:about:content'); ?></label>
+							<label class="suggestions"><input type="radio" name="about" value="suggestions" checked> <?php echo elgg_echo('feedback:about:suggestions'); ?></label>
+							<label class="compliment"><input type="radio" name="about" value="compliment"> <?php echo elgg_echo('feedback:about:compliment'); ?></label>
+							<label class="question"><input type="radio" name="about" value="question"> <?php echo elgg_echo('feedback:about:question'); ?></label>
+							<label class="other"><input type="radio" name="about" value="other"> <?php echo elgg_echo('feedback:about:other'); ?></label>
+							<?php
+							*/
+							?>
+						</div>
+						<div style="clear:both;"></div>
 					</div>
-					<div style="clear:both;"></div>
-				</div>
-				<br />
+					<br />
+					<?php
+				}
+				?>
 				
 				<?php
 				// Access dropdown only if member view is allowed and logged_in
@@ -105,11 +139,11 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					<input type="hidden" name="feedback_access_id" value="0" />
 				<?php } ?>
 				<div>
-					<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:id'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:id'); ?>';}" class="feedbackText" />
+					<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" placeholder="<?php echo elgg_echo('feedback:default:id'); ?>" class="feedbackText" />
 				</div>
 				
 				<div id="feedBackText">
-					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:txt'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:txt'); ?>';}" class="feedbackTextbox mceNoEditor"><?php echo elgg_echo('feedback:default:txt'); ?></textarea>
+					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"><?php echo elgg_echo('feedback:default:txt'); ?></textarea>
 				</div>
 				
 				<?php
@@ -150,7 +184,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 <script type="text/javascript">
 <?php
 // if user is logged in then disable the feedback ID
-if ( elgg_is_logged_in() ) {
+if (elgg_is_logged_in()) {
 	echo "$('#feedback_id').attr ('disabled', 'disabled');";
 }
 ?>

@@ -41,8 +41,8 @@ if (!elgg_is_logged_in()) {
 $feedback_txt = get_input('txt');
 $feedback_access_id = (int) get_input('access_id', 0); // Default access = private (admin only)
 $feedback_page = get_input('page');
-$feedback_mood = get_input('mood');
-$feedback_about = get_input('about');
+$feedback_mood = get_input('mood', '');
+$feedback_about = get_input('about', '');
 $feedback_sender = get_input('id');
 $feedback_status = get_input('status', 'open'); // Default status = open
 

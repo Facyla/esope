@@ -17,7 +17,7 @@ h2 span { color: #4B8F74; }
 h3 a { color:#003923; }
 img { max-width: 100%; }
 select { max-width: 98%; }
-input, textarea { max-width: 100%; font-family: FontAwesome, Lato; min-width:100px; }
+input, textarea { max-width: 100%; font-family: FontAwesome, Lato; min-width:20px; }
 .elgg-button-submit { min-width:3em; }
 textarea { min-height:30px; }
 blockquote { background: #e2d8c3; color:#666; border:none; }
@@ -111,7 +111,7 @@ body { background:#EBE7DF; font-family:Lato; }
 */
 .elgg-page-header { padding: 0 0 20px 0; position: relative; background: white; }
 .elgg-page-default .elgg-page-header > .elgg-inner { min-height:0; }
-.elgg-page-header a, .elgg-page-header a:hover, .elgg-page-header a:active, .elgg-page-header a:focus { line-height:40px; }
+.elgg-page-header a, .elgg-page-header a:hover, .eminlgg-page-header a:active, .elgg-page-header a:focus { line-height:40px; }
 .elgg-page-header h1, .elgg-page-header a h1, .elgg-page-header a:hover h1, .elgg-page-header a:active h1, .elgg-page-header a:focus h1 { text-transform: uppercase; color: #4B8F74; font-size: 14px; font-family:Lato, sans-serif; text-shadow:none; display:inline-block; width: 100%; }
 .elgg-page-header a h1 .transitions-eco { color:#89BF4E; }
 .elgg-page-header a h1 .transitions-num { color:#003923; }
