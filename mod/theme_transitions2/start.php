@@ -118,6 +118,13 @@ function theme_transitions2_init() {
 	elgg_set_config('icon_sizes', $icon_sizes);
 	// Ratio images : 308/224 => 1,375
 	
+	// Replace members page
+	elgg_unregister_page_handler('members');
+	elgg_register_page_handler('members', 'theme_transitions2_members_page_handler');
+	// Update members tabs list
+	elgg_register_plugin_hook_handler('members:config', 'tabs','theme_transitions2_members_tabs_config');
+	
+	
 }
 
 /**
@@ -549,6 +556,38 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 	}
 	
 	// Return nothing means we skip this handler (non-blocking)
+}
+
+
+/**
+ * Members page handler
+ *
+ * @param array $page url segments
+ * @return bool
+ */
+function theme_transitions2_members_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'members/pages/members';
+	$alt_base = elgg_get_plugins_path() . 'theme_transitions2/pages/members';
+
+	if (empty($page[0])) {
+		$page[0] = 'newest';
+	}
+
+	$vars = array();
+	$vars['page'] = $page[0];
+
+	if ($page[0] == 'search') {
+		require_once "$base/search.php";
+	} else {
+		require_once "$alt_base/index.php";
+	}
+	return true;
+}
+
+// @TODO : marche pas en l'état...
+function theme_transitions2_members_tabs_config($hook, $type, $return, $params) {
+	//$test = print_r($return, true);
+	//error_log("TEST");
 }
 
 
