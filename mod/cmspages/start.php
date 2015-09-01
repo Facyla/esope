@@ -554,6 +554,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$subtype = $module_config['subtype'];
 			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
 			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
+			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
 			// We need arrays as params
@@ -565,6 +566,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (!$subtype) $subtype = '';
 			//$ents = elgg_get_entities(array('type_subtype_pairs' => array($type => $subtype), 'limit' => $limit, 'order_by' => $sort));
 			$params = array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort);
+			if (sizeof($guids) > 0) $params['guids'] = $guids;
 			if (sizeof($owner_guids) > 0) $params['owner_guids'] = $owner_guids;
 			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
 			// Get the entities
