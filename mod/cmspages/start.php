@@ -557,6 +557,15 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
+			//Extract multiple values
+			$fields_multiple = array('guids', 'owner_guids', 'container_guids');
+			foreach($fields_multiple as $field) {
+				if (strpos(',', $$field)) {
+					$$field = explode(',', $$field);
+					$$field = array_filter($$field);
+					$$field = array_unique($$field);
+				}
+			}
 			// We need arrays as params
 			//$type = explode(',', $type);
 			//$subtype = explode(',', $subtype);
