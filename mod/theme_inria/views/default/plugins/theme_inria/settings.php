@@ -77,5 +77,7 @@ echo "<fieldset><legend>Activation du cron d'actualisation des données LDAP</le
 echo '</fieldset>';
 
 
-echo "</div>";
+echo "<p><label>GUID du slider à afficher sur l'accueil " . elgg_view('input/text', array('name' => 'home_slider', 'value' => $vars['entity']->home_slider)) . '</label></p>';
+
+
 
