@@ -576,6 +576,10 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (in_array($module_config['type'], array('group', 'user'))) {
 				if ($full_view == 'yes') {
 					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => true));
+				} else if ($full_view == 'list') {
+					elgg_push_context('widgets');
+					foreach ($ents as $ent ) $return .= elgg_view_entity($ent, array('full_view' => false));
+					elgg_pop_context();
 				} else {
 					foreach ($ents as $ent ) $return .= '<a href="' . $ent->getURL() . '">' . $ent->guid . ' : ' . $ent->name . '</a><br />';
 				}
