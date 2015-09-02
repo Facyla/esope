@@ -279,7 +279,13 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 
 	$data['links']['apple-touch-icon'] = array(
 		'rel' => 'apple-touch-icon',
-		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/homescreen.png'),
+		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/favicon.png'),
+	);
+
+	$data['links']['favicon'] = array(
+		'rel' => 'icon',
+		'type' => 'image/png',
+		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/favicon.png'),
 	);
 
 	return $data;

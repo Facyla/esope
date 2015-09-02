@@ -70,6 +70,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-breadcrumbs > li > a:hover { text-decoration: none; color: #4b8f74; }
 
 /* Listes et pagination */
+.elgg-menu-entity { max-width: 50%; min-width:100px; }
 .elgg-tabs, .elgg-menu-filter { margin-bottom: 0; }
 .elgg-list { margin-top: 0; background: white; padding: 20px 40px 40px 40px; }
 .elgg-pagination { margin: 20px 0 10px 0; }
