@@ -127,6 +127,7 @@ Voir et commenter cette contribution :
 	'transitions:featured:featured' => "Mettre en avant (plus visible)",
 	'transitions:featured:background' => "Mettre en retrait (moins visible)",
 	'transitions:search:rss' => "Flux RSS pour cette recherche",
+	'transitions:filter' => "Filtrer les contributions",
 	'transitions:filter:featured' => "Choisies",
 	'transitions:filter:background' => "En retrait",
 	'transitions:filter:recent' => "Récentes",

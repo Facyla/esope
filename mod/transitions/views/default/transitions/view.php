@@ -11,6 +11,14 @@ if (!$transitions) {
 	return TRUE;
 }
 
+// Add counter
+if (!isset($transitions->view_counter)) {
+	$transitions->view_count = 1;
+} else {
+	$transitions->view_count++;
+}
+
+echo $transitions->view_counter;
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');

@@ -82,6 +82,20 @@ function transitions_init() {
 	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
 	elgg_register_action('transitions/addactor', "$action_path/addactor.php");
 	elgg_register_action('transitions/addrelation', "$action_path/addrelation.php");
+	
+	// TEMPORARY HACK TO ALLOW USING BOTH URL
+	// Quickform is a light contribution form that quickly creates a draft
+	elgg_register_action('catalogue/save', "$action_path/save.php");
+	elgg_register_action('catalogue/auto_save_revision', "$action_path/auto_save_revision.php");
+	elgg_register_action('catalogue/delete', "$action_path/delete.php");
+	
+	// Note : add , 'public' to allow onyone to use action
+	elgg_register_action('catalogue/quickform', "$action_path/save.php");
+	elgg_register_action('catalogue/addtag', "$action_path/addtag.php");
+	elgg_register_action('catalogue/addlink', "$action_path/addlink.php");
+	elgg_register_action('catalogue/addactor', "$action_path/addactor.php");
+	elgg_register_action('catalogue/addrelation', "$action_path/addrelation.php");
+
 
 	// entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'transitions_entity_menu_setup');

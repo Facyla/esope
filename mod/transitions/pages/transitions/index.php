@@ -63,7 +63,8 @@ $content .= '<div class="transitions-index-search">';
 		$content .= '<br />';
 		
 		// Switch filter (+ onChange)
-		$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+		$content .= '<label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => 'featured')) . '</label>';
+		$content .= '<br />';
 		
 		$content .= '<br />';
 		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
