@@ -109,7 +109,7 @@ Voir et commenter cette contribution :
 	'transitions:rss_feed' => "Flux RSS",
 	'transitions:rss_feed:details' => "URL du fil d'actualité RSS associé à ce défi",
 	'transitions:challenge:collection' => "Collection associée au défi",
-	'transitions:challenge:collection:details' => "Une collection de ressources peut être associée au défi afin de le relier à d'autres projets, acteurs, éléments de réflexion, etc.",
+	'transitions:challenge:collection:details' => "Choisissez une collection de ressources associée au défi.",
 	'transitions:savedraft' => "Publier ma contribution",
 	'transitions:saveandedit' => "Poursuivre l'édition",
 	'transitions:quickform:title' => "Contribution rapide",
@@ -239,7 +239,7 @@ Voir et commenter cette contribution :
 	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
 	'transitions:category:editorial:details' => "Référencement d’articles, dossiers, ouvrages, etc. à propos du lien entre les deux transitions, appuyés ou non sur Transitions²",
 	'transitions:category:challenge' => "<i class=\"fa fa-trophy\"></i> Défi",
-	'transitions:category:challenge:details' => "",
+	'transitions:category:challenge:details' => "Un défi adressé aux lecteurs et contributeurs de Transitions².",
 	
 	'transitions:actortype:individual' => "Individu",
 	'transitions:actortype:collective' => "Collectif",

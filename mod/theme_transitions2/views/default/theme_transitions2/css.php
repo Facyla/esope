@@ -87,6 +87,14 @@ body { background:#EBE7DF; font-family:Lato; }
 .transitions-search-menu .elgg-button { margin: 10px 10px 0 0; font-size: 12px; border-radius:0; }
 .transitions-search-menu a.elgg-button:hover, .transitions-search-menu a.elgg-button:focus, .transitions-search-menu a.elgg-button:active { color:white; }
 
+#transitions-search {  }
+.transitions-index-search { padding-top: 20px; }
+.transitions-index-search .transitions-search-menu { margin: 20px; }
+#transitions-search input { font-size:20px; color: #666; border: 0; border-radius: 0; margin:0; }
+#transitions-search .elgg-button-submit { background-color: #89BF4E; color:white; padding: 0.5em 0.8em; }
+#transitions-search .elgg-button-submit:hover { background-color: #9bd759; color:#023824; }
+
+
 .elgg-comments .elgg-list { padding: 30px 30px 20px 30px; }
 .elgg-comments .elgg-list > li { border:0; border-bottom: 1px solid #e2d8c3; margin-bottom: 20px; padding: 0; }
 

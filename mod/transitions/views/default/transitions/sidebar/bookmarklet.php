@@ -19,7 +19,7 @@ $img = elgg_view('output/img', array(
 */
 //$bookmarklet = "<a href=\"javascript:location.href='{$url}catalogue/add?url='"
 //	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&description='+encodeURIComponent(document.getSelection())\">" . $img . "</a>";
-$bookmarklet = '<a href="javascript:(function(){window.open(\'' . $url . 'catalogue/add?url=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection()), \'_newtab\');}());" title="' . $bookmarklet_title . '" style="padding: 4px 10px 6px 10px; background: #4b8f74; color: white; float:right; font-size:12px; font-weight:bold;">' . $bookmarklet_link . '</a>';
+$bookmarklet = '<a href="javascript:(function(){window.open(\'' . $url . 'catalogue/add?url=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection()), \'_newtab\');}());" title="' . $bookmarklet_title . '" style="padding: 4px 10px; background: #4b8f74; color: white; margin-left:20px; font-size:12px; font-weight:bold;">' . $bookmarklet_link . '</a>';
 // Nouvel onglet : javascript:(function(){window.open('http://www.example.com', '_newtab');}());
 // Même onglet, utilisez un code de ce type : javascript:location.href='http://www.example
 

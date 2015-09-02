@@ -289,7 +289,6 @@ $collections = elgg_get_entities($collections_params);
 usort($collections, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
 foreach ($collections as $ent) { $collections_opt[$ent->guid] = $ent->title; }
 $collection_input .= elgg_view('input/select', array('name' => $name, 'options_values' => $collections_opt, 'value'=> $transitions->collection));
-$collection_input .= '<div class="clearfloat"></div><br />';
 $collection_details = elgg_echo('transitions:challenge:collection:details');
 
 

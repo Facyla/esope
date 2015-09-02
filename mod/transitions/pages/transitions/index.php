@@ -55,24 +55,43 @@ $quickform .= '</div>';
 // RECHERCHE ET RESULTATS
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
+	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category, 'onChange' => "transitions_toggle_search_fields(this.value);")) . '</label>';
+		$content .= ' &nbsp; ';
+		// @TODO : conditionnel, ssi catégorie = actor
+		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+		$content .= '<br />';
+		
+		// Switch filter (+ onChange)
+		$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+		
+		$content .= '<br />';
+		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
+		$content .= elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go')));
+	$content .= '</form>';
 	$content .= '<div class="transitions-search-menu">';
 		$content .= '<a href="' . elgg_get_site_url() . 'catalogue/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
 		foreach($categories as $name => $trans_name) {
 			$content .= '<a href="' . elgg_get_site_url() . 'catalogue/' . $name . '" class="elgg-button transitions-' . $name . '">' . $trans_name . '</a>';
 		}
-		$content .= '<div class="clearfloat"></div><br />';
-		$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
-			$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
-			$content .= ' &nbsp; ';
-			// @TODO : conditionnel, ssi catégorie = actor
-			$content .= '<label>' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
-			$content .= '<br />';
-			$content .= '[ Sélecteur selon filtres (idem accueil) ]';
-			$content .= '<br />';
-			$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
-			$content .= elgg_view('input/submit', array('value' => elgg_echo('transitions:search')));
-		$content .= '</form>';
+		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
+	
+	$content .= '<script>
+		$(document).ready( function() {
+			transitions_toggle_search_fields();
+			$("option[value=\'\']").attr("disabled", "disabled");
+		});
+		function transitions_toggle_search_fields(val) {
+			//var val = $("select[name=\'category\']").val();
+			// Reinit special fields
+			$(".transitions-actortype").addClass(\'hidden\');
+			if (val == "actor") {
+				$(".transitions-actortype").removeClass(\'hidden\');
+			}
+			return true;
+		}
+	</script>';
 
 	$content .= '<div class="clearfloat"></div>';
 
@@ -83,7 +102,7 @@ $content .= '<div class="transitions-index-search">';
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
 	}
-	if (!empty($actor_type)) {
+	if (($category == 'actor') && !empty($actor_type)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'actor_type', 'value' => $actor_type);
 	}
 	if (!empty($query)) {

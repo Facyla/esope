@@ -93,7 +93,7 @@ if (elgg_in_context('widgets')) {
 }
 
 
-// @TODO add stats and actions blocks : likes, contributions (links + comments)
+// Stats and actions blocks : likes, contributions (links + comments)
 $stats = '';
 if (elgg_is_active_plugin('likes')) {
 	$num_of_likes = \Elgg\Likes\DataService::instance()->getNumLikes($transitions);
@@ -192,7 +192,7 @@ if ($full) {
 		// do not show the metadata and controls in gallery view
 		$metadata = '';
 		$params = array(
-			'text' => elgg_get_excerpt($transitions->title, 100),
+			'text' => elgg_get_excerpt($transitions->title, 70),
 			'href' => $transitions->getURL(),
 			'is_trusted' => true,
 		);
