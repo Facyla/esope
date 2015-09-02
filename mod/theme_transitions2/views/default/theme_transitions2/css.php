@@ -235,6 +235,16 @@ body { background:#EBE7DF; font-family:Lato; }
 }
 
 @media (max-width: 766px) {
+	.elgg-page-topbar { padding: 0; }
+	.elgg-topbar-nav-collapse { display:none; }
+	.elgg-menu-topbar { width:100%; }
+	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
+	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
+	.elgg-menu-topbar li, .elgg-menu-topbar li { display: inline-block; width: 100%; }
+	.elgg-menu-site > li.float-alt { width: 100%; }
+	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
+	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
+	
 }
 
 @media (max-width: 600px) {

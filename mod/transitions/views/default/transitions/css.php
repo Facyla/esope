@@ -61,7 +61,7 @@
 .transitions-index-search-menu { margin-top: 40px; margin-bottom: 20px; }
 #transitions-search input { font-size: 2em; padding: 0.5em 0.5em; }
 #transitions-search input[name=q] { max-width:80%; }
-.transitions-index-search #transitions-search input[name=q] { width: 20em; margin-right: 30px; }
+.transitions-index-search #transitions-search input[name=q] { width: 20em; margin-right: 20px; }
 
 
 /* Full view */

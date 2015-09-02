@@ -33,6 +33,7 @@ function theme_transitions2_init() {
 	
 	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
+	elgg_register_plugin_hook_handler('register', 'menu:topbar', 'theme_transitions2_topbar_menu', 1000);
 	
 	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
@@ -153,6 +154,7 @@ function theme_transitions2_index() {
  */
 function theme_transitions2_pagesetup() {
 
+	//elgg_unregister_menu_item('topbar', 'account');
 	elgg_unregister_menu_item('topbar', 'friends');
 	elgg_unregister_menu_item('topbar', 'messages');
 	elgg_unregister_menu_item('navbar', 'login-dropdown');
@@ -168,6 +170,8 @@ function theme_transitions2_pagesetup() {
 			'section' => 'alt',
 			'link_class' => 'elgg-topbar-dropdown',
 		));
+		/*
+		*/
 		
 		// Messages
 		$text = elgg_echo('messages');
@@ -183,7 +187,7 @@ function theme_transitions2_pagesetup() {
 			'name' => 'messages',
 			'href' => 'messages/inbox/' . elgg_get_logged_in_user_entity()->username,
 			'text' => $text,
-			'priority' => 600,
+			'priority' => 100,
 			'title' => $tooltip,
 		));
 		
@@ -212,6 +216,20 @@ function theme_transitions2_pagesetup() {
 	elgg_unregister_menu_item('extras', 'qrcode-page');
 	
 }
+
+// Remove any dropdown subtree from topbar menu (not responsive)
+function theme_transitions2_topbar_menu($hook, $type, $return, $params) {
+	/*
+	if ($return) foreach ($return as $key => $item) {
+		if (in_array($key, array('account'))) { unset($return[$key]); }
+		$item->setParentName('');
+		$item->setSection('default');
+		$return[$key] = $item;
+	}
+	return $return;
+	*/
+}
+
 
 // Add RSS, ICAL and QR code links to main navigation
 function theme_transitions2_add_tools_links() {
