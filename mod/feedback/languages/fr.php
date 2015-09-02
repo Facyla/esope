@@ -55,6 +55,7 @@ $french = array(
 	'feedback:about:compliment' => 'Compliment',
 	'feedback:about:other' => 'Autre',
 	'feedback:about:feedback' => 'Non classé',
+	'feedback:about:undefined' => 'Non classé',
 
 	'feedback:list:mood' => 'Humeur',
 	'feedback:list:about' => 'A propos de',
