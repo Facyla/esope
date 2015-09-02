@@ -61,7 +61,7 @@
 .transitions-index-search-menu { margin-top: 40px; margin-bottom: 20px; }
 #transitions-search input { font-size: 2em; padding: 0.5em 0.5em; }
 #transitions-search input[name=q] { max-width:80%; }
-
+.transitions-index-search #transitions-search input[name=q] { width: 20em; margin-right: 30px; }
 
 
 /* Full view */
@@ -70,10 +70,13 @@
 .transitions-view-wrapper .elgg-menu-entity { margin: 5px 20px 0 0; }
 .transitions-view-wrapper .transitions-category { display: inline-block; padding: 5px 10px; }
 .transitions-view-main { padding:30px 30px 30px 30px; }
-.transitions-view-sidebar { padding:30px 30px 30px 0; }
+.transitions-view-main .transitions_image img { max-height: 300px; max-width: 500px; }
+.transitions-view-sidebar { padding: 0 0 30px 30px; }
+.transitions-view-sidebar .transitions-owner-block { float:right; margin: 0 0 10px 10px; max-width:100px; }
 .transitions-view-content { padding:0 30px 30px 30px; }
 .transitions-dates { background:#e2d8c3; padding:10px; display:inline-block; border-radius:5px; }
 .transitions-view-sidebar a { word-break: break-all; }
+.transitions-view-sidebar .transitions-owner-block a { word-break: break-word; }
 .transitions-excerpt { font-size:16px; font-weight:bold; }
 .transitions_image.float { margin: 0 1em 0.5em 0; }
 .transitions-contributed-links {  }
@@ -84,8 +87,8 @@
 #transitions-action-tabs.elgg-tabs .elgg-state-selected { border:0; }
 #transitions-action-tabs.elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
 .transitions-tab-content { border:0; padding:20px; background: #e2d8c3; margin: 0; }
-.transitions-view-main .transitions_image img { max-height: 400px; }
 .transitions-view-collection { border-top: 1px solid #E2D8C3; }
+.transitions-view-collection .elgg-image-alt { max-width: 100px; margin: 0 30px 0 30px; }
 
 
 /* Gallery view */

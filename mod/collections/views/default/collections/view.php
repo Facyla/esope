@@ -63,7 +63,7 @@ $icon = elgg_view_entity_icon($collection, 'large', array('size' => 'large', 'al
 $description = elgg_view('output/longtext', array('value' => $collection->description));
 
 $owner = $collection->getOwnerEntity();
-$owner_image = elgg_view_entity_icon($owner, 'medium');
+$owner_image = elgg_view_entity_icon($owner, 'medium', array('use_hover' => false, 'use_link' => false));
 $owner_link = elgg_view('output/url', array(
 	'href' => "transitions/owner/$owner->username",
 	'text' => $owner->name,
@@ -71,9 +71,10 @@ $owner_link = elgg_view('output/url', array(
 ));
 $author_text = elgg_echo('byline', array($owner_link));
 $date = elgg_view_friendly_time($collection->time_created);
-$owner_image .= '<p class="elgg-subtext">' . $author_text . '<br />' . $date . '</p>';
+$owner_image .= '<p class="elgg-subtext">' . $author_text . ' ' . $date . '</p>';
 
 
+// Embeddable content
 $embed_content = '';
 $embed_content .= elgg_view_image_block($icon, $description, array('image_alt' => $owner_image));
 
@@ -90,6 +91,7 @@ $embed_content .= '<div class="clearfloat"></div><br />';
 
 // Display embed code if not already embedded
 if ($embed) {
+	//echo '<h3><a href="' . $collection->getURL() . '" target="_blank">' . $collection->title . '</a></h3>';
 	echo $embed_content;
 	return;
 }

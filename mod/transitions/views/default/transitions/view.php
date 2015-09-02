@@ -38,7 +38,7 @@ if (!$excerpt) {
 // Limit to max chars
 if (strlen($excerpt) >= 140) { $excerpt = elgg_get_excerpt($excerpt, 137); }
 
-$owner_image = elgg_view_entity_icon($owner, 'medium');
+$owner_image = elgg_view_entity_icon($owner, 'medium', array('use_hover' => false, 'use_link' => false));
 $owner_link = elgg_view('output/url', array(
 	'href' => "transitions/owner/$owner->username",
 	'text' => $owner->name,
@@ -46,7 +46,7 @@ $owner_link = elgg_view('output/url', array(
 ));
 $author_text = elgg_echo('byline', array($owner_link));
 $date = elgg_view_friendly_time($transitions->time_created);
-$owner_image .= '<p class="elgg-subtext">' . $author_text . '<br />' . $date . '</p>';
+$owner_image .= '<p class="elgg-subtext">' . $author_text . ' ' . $date . '</p>';
 
 
 // The "on" status changes for comments, so best to check for !Off
@@ -180,7 +180,7 @@ $body .= '<div class="clearfloat"></div><br />';
 $sidebar = '';
 
 // Owner block
-$sidebar .= '<span style="float:right; margin: 0 0 10px 20px;">' . $owner_image . '</span>';
+$sidebar .= '<span class="transitions-owner-block">' . $owner_image . '</span>';
 
 // Dates : projects and events only
 if (in_array($transitions->category, array('project', 'event'))) {
@@ -226,7 +226,7 @@ if (!empty($transitions->attachment)) {
 }
 
 // Main tags
-$sidebar .= elgg_view('output/tags', array('tags' => $transitions->tags));
+$sidebar .= elgg_view('output/tags', array('tags' => $transitions->tags, 'base_url' => "catalogue"));
 
 
 $sidebar .= '<br /><div class="clearfloat"></div>';
@@ -243,7 +243,7 @@ if (in_array($transitions->category, array('actor', 'project', 'event')) && !emp
 // Contributed tags (anyone)
 if ($transitions->tags_contributed) {
 	$tags_contributed = '';
-	$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed));
+	$tags_contributed = elgg_view('output/tags', array('tags' => $transitions->tags_contributed, 'base_url' => "catalogue"));
 	/*
 	foreach((array)$transitions->tags_contributed as $tag) {
 		$tags_contributed .= '<i class="fa fa-external-link"></i> ' . elgg_view('output/url', array('href' => elgg_get_site_url() . 'transitions/?q=' . $tag, 'target' => "_blank", 'text' => $tag)) . ' &nbsp; ';
@@ -269,11 +269,19 @@ if ($transitions->links) {
 
 
 // 2 columns layout
+/*
 $body = '<div class="flexible-block float" style="width:60%;">
 		<div class="transitions-view-main">' . $body . '</div>
 	</div>
 	<div class="flexible-block" style="width:40%; float:right;">
 		<div class="transitions-view-sidebar">' . $sidebar . '</div>
+	</div>
+	<div class="clearfloat"></div>';
+*/
+$body = '<div class="transitions-view-main">
+		<div class="flexible-block" style="width:40%; float:right; background: white;">
+			<div class="transitions-view-sidebar">' . $sidebar . '</div>
+		</div>' . $body . '
 	</div>
 	<div class="clearfloat"></div>';
 

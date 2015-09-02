@@ -56,9 +56,15 @@ $quickform .= '</div>';
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
 	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+		
+		$content .= '<p>';
 		// Fulltext search
-		//$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
-		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
+		$content .= elgg_view('input/text', array('name' => "q", 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
+		//$content .= '<p>' . elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query)) . '</p>';
+		// Results filter
+		$content .= '<label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => $filter)) . '</label>';
+		$content .= '</p>';
+		
 		
 		// Category
 		$content .= '<p>';
@@ -67,9 +73,6 @@ $content .= '<div class="transitions-index-search">';
 		// conditionnel, ssi catégorie = actor
 		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		$content .= '</p>';
-		
-		// Switch filter (+ onChange)
-		$content .= '<p><label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => $filter)) . '</label></p>';
 		
 		//$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go'))) . '</p>';
 		$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search'))) . '</p>';
