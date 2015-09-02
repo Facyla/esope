@@ -60,7 +60,7 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	if (!isset($ent->status) || empty($ent->status) || ($ent->status == 'open')) {
 		$open++;
 		// Sort feedbacks in undefined vs specific about category
-		if (!$about_enabled || empty($ent->about) || in_array($ent->about, array('other', 'feedback'))) {
+		if (!$about_enabled || empty($ent->about) || in_array($ent->about, array('other', 'feedback', 'undefined'))) {
 			$other++;
 		} else {
 			if (isset(${"feedback_" . $ent->about})) {
@@ -104,7 +104,7 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
 
 	foreach ($about_values as $about) {
-		if (!in_array($about, array('other', 'feedback'))) {
+		if (!in_array($about, array('other', 'feedback', 'undefined'))) {
 			if ($about == $about_filter) {
 				$sidebar .= '<li class="elgg-state-selected">';
 			} else {
