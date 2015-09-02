@@ -70,7 +70,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-breadcrumbs > li > a:hover { text-decoration: none; color: #4b8f74; }
 
 /* Listes et pagination */
-.elgg-tabs { margin-bottom: 0; }
+.elgg-tabs, .elgg-menu-filter { margin-bottom: 0; }
 .elgg-list { margin-top: 0; background: white; padding: 20px 40px 40px 40px; }
 .elgg-pagination { margin: 20px 0 10px 0; }
 .elgg-pagination li a, .elgg-pagination li span { background: #E2D8C3; border: 0; margin: 0 5px; }
