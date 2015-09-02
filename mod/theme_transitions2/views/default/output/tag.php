@@ -29,7 +29,7 @@ if (!empty($vars['subtype'])) {
 }
 
 //$url = !empty($vars['base_url']) ? $vars['base_url'] : 'search';
-$url = !empty($vars['base_url']) ? $vars['base_url'] : 'transitions';
+$url = !empty($vars['base_url']) ? $vars['base_url'] : 'catalogue';
 unset($vars['base_url']);
 
 $url .= '?' . http_build_query($query_params);

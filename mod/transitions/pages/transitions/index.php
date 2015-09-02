@@ -53,12 +53,12 @@ $quickform .= '</div>';
 // RECHERCHE
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-search-menu">';
-	$content .= '<a href="' . elgg_get_site_url() . 'transitions/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
+	$content .= '<a href="' . elgg_get_site_url() . 'catalogue/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
 	foreach($categories as $name => $trans_name) {
-		$content .= '<a href="' . elgg_get_site_url() . 'transitions/' . $name . '" class="elgg-button transitions-' . $name . '">' . $trans_name . '</a>';
+		$content .= '<a href="' . elgg_get_site_url() . 'catalogue/' . $name . '" class="elgg-button transitions-' . $name . '">' . $trans_name . '</a>';
 	}
 	$content .= '<div class="clearfloat"></div><br />';
-	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'transitions/" id="transitions-search">';
+	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
 		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 		$content .= ' &nbsp; ';
 		// @TODO : conditionnel, ssi catégorie = actor
@@ -151,6 +151,6 @@ else if (elgg_get_viewtype() == 'ical') { $content = $catalogue; }
 
 //$content = elgg_view_layout('one_sidebar', array('content' => $content, 'title' => $title, 'sidebar' => $sidebar));
 $content = elgg_view_layout('one_column', array('content' => $content, 'title' => $title));
-
+$title = strip_tags($title);
 echo elgg_view_page($title, $content);
 

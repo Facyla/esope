@@ -18,9 +18,9 @@ if (elgg_instanceof($transitions, 'object', 'transitions') && $transitions->canE
 	if ($transitions->delete()) {
 		system_message(elgg_echo('transitions:message:deleted_post'));
 		if (elgg_instanceof($container, 'group')) {
-			forward("transitions/group/$container->guid/all");
+			forward("catalogue/group/$container->guid/all");
 		} else {
-			forward("transitions/owner/$container->username");
+			forward("catalogue/owner/$container->username");
 		}
 	} else {
 		register_error(elgg_echo('transitions:error:cannot_delete_post'));
