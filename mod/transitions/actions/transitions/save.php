@@ -75,6 +75,7 @@ $values = array(
 	'category' => '',
 	'lang' => '',
 	'resource_lang' => '',
+	'collection' => '',
 );
 
 /* Conditional fields (based on category)

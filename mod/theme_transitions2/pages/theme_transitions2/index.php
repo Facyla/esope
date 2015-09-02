@@ -47,7 +47,7 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 	$content .= '<div style="height:260px; width:100%; overflow:hidden;" id="slider-homepage-slider" class="slider-homepage-slider">';
 	$content .= elgg_view('slider/slider', array(
 			'slides' => $slides,
-			'sliderparams' => "theme : 'cs-portfolio', autoPlay : true, mode : 'f', resizeContents : true, expand : true, buildNavigation : true, buildStartStop : false, toggleControls : true, toggleArrows : true, hashTags : false, delay : 4000, pauseOnHover: false, autoPlayLocked: true, allowRapidChange: true, resumeDelay: 3000",
+			'sliderparams' => "theme : 'cs-portfolio', autoPlay : true, mode : 'f', resizeContents:true, expand:true, buildNavigation:true, buildStartStop:false, toggleControls:false, toggleArrows:true, hashTags:false, delay:5000, pauseOnHover:true, autoPlayLocked:true, allowRapidChange:true, resumeDelay: 3000",
 			'slidercss_main' => "",
 			'slidercss_textslide' => "",
 			'height' => '260px',

@@ -85,6 +85,7 @@
 #transitions-action-tabs.elgg-tabs .elgg-state-selected a { background: #e2d8c3; }
 .transitions-tab-content { border:0; padding:20px; background: #e2d8c3; margin: 0; }
 .transitions-view-main .transitions_image img { max-height: 400px; }
+.transitions-view-collection { border-top: 1px solid #E2D8C3; }
 
 
 /* Gallery view */

@@ -173,13 +173,6 @@ if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . 
 // Full description
 $body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
 
-// Challenge => afficher la collection associée
-if ($transitions->category == 'challenge') {
-	$collection = get_entity($transitions->collection);
-	if (elgg_instanceof($collection, 'object', 'collection')) {
-		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection) . '</div>';
-	}
-}
 $body .= '<div class="clearfloat"></div><br />';
 
 
@@ -283,6 +276,14 @@ $body = '<div class="flexible-block float" style="width:60%;">
 		<div class="transitions-view-sidebar">' . $sidebar . '</div>
 	</div>
 	<div class="clearfloat"></div>';
+
+// Challenge => afficher la collection associée
+if ($transitions->category == 'challenge') {
+	$collection = get_entity($transitions->collection);
+	if (elgg_instanceof($collection, 'object', 'collection')) {
+		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection, array('embed' => true)) . '</div>';
+	}
+}
 
 // Related actors => full-width
 if ($transitions->category == 'project') {
