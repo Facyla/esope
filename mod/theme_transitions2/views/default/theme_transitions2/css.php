@@ -197,10 +197,17 @@ body { background:#EBE7DF; font-family:Lato; }
 #feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
 #feedBackTogglerLink img { margin: 0 10px 5px 0; }
 */
-#feedbackWrapper { bottom: 60%; }
+#feedbackWrapper { top: initial; bottom: 60%; }
 #feedBackToggler { opacity: 0.7; }
 #feedBackTogglerLink { border: 0; border-radius: 0; box-shadow: none; background: transparent; }
 #feedBackToggler:hover, #feedBackToggler:active, #feedBackToggler:focus { opacity: 1; }
+#feedBackContent { color: #333; border-radius: 0; box-shadow: none; }
+#feedBackForm { padding: 0 10px; }
+#feedBackIntro, #feedBackFormStatus { padding: 0 10px 10px 10px; }
+#feedBackClose { padding: 10px 10px 0px 10px; }
+#feedBackContent .elgg-head { background: #4c8a71; padding:10px; }
+#feedBackContent h3 { color: white; text-transform: uppercase; }
+#feedbackSuccess { /* color: white; */ background-color: #ABD660; }
 
 
 /* Members */

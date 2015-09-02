@@ -57,6 +57,10 @@
 #transitions-search {  }
 #transitions-search input{ max-width:20em; }
 
+/* Index search form */
+.transitions-index-search-menu { margin-top: 40px; margin-bottom: 20px; }
+
+
 
 /* Full view */
 .transitions-view .elgg-head { margin-bottom:0; }

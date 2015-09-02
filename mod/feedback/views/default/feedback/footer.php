@@ -134,7 +134,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 				</div>
 				
 				<div id="feedBackText">
-					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"><?php echo elgg_echo('feedback:default:txt'); ?></textarea>
+					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"></textarea>
 				</div>
 				
 				<?php

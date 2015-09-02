@@ -81,17 +81,19 @@ if ($menu_name) {
 
 // MAIN FORMS : SELECT, ADD, EDIT, REMOVE
 
-// NEW MENU form
-$content .= '<form style="float:right;" id="menu-editor-form-new" method="GET">';
-$content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
-$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
-$content .= '</form>';
+$content .= '<fieldset>';
 
 // SELECT existing menu form
 $content .= '<form id="menu-editor-form-select" method="GET">';
 //$content .= '<a href="?new_menu=yes" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau menu</a>';
 $content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/pulldown', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:select'), 'style' => 'float:none;'));
+$content .= '</form>';
+
+// NEW MENU form
+$content .= '<form id="menu-editor-form-new" method="GET">';
+$content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
+$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
 $content .= '</form>';
 
 $content .= '<div class="clearfloat"></div><br />';
@@ -108,7 +110,7 @@ $content .= '<div id="elgg-menus-backups" class="hidden">';
 	$import_form .= '<form action="' . $action_url . '?menus_action=import" enctype="multipart/form-data" method="POST">';
 	$import_form .= elgg_view('input/securitytoken');
 	$import_form .= '<label>' . elgg_echo('elgg_menus:import:backup_file') . elgg_view('input/file', array('name' => 'backup_file')) . '</label>';
-	$import_form .= ' &nbsp; ';
+	$import_form .= '<br />';
 	$import_form .= '<label>' . elgg_echo('elgg_menus:import:filter') . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => 'width:20ex;')) . '</label><br /><em>' . elgg_echo('elgg_menus:import:filter:details') . '</em>';
 	$import_form .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => 'import'));
 	/// Display submit button
@@ -128,8 +130,10 @@ $content .= '<div id="elgg-menus-backups" class="hidden">';
 	}
 	$content .= '<div class="clearfloat"></div>';
 	
-$content .= '</div></fieldset>';
-$content .= '<hr />';
+$content .= '</div>';
+
+$content .= '</fieldset>';
+$content .= '<br /><hr />';
 
 
 
@@ -177,7 +181,7 @@ if ($menu_name) {
 	
 		$content .= '<div style="float:right; width:46%; margin:0;">';
 			// Sort by : use select + alternate text function
-			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:12ex;")) . ' ' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'style' => "max-width:12ex;", 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
+			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:20ex;")) . '<br />' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
 			// Show section header
 			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_show_section_headers')) . '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label></p>';
 		$content .= '</div>';

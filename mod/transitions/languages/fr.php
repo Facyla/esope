@@ -19,7 +19,9 @@ return array(
 	// Editing
 	'transitions:add' => "Ajouter une contribution",
 	'transitions:edit' => "Valorisez votre contribution",
-	'transitions:edit:details' => "Pour rendre plus lisible cette ressource dans le catalogue, n’hésitez pas à la préciser",
+	'catalogue:add' => "Ajoutez une contribution",
+	'catalogue:edit' => "Valorisez votre contribution",
+	'transitions:edit:details' => "Pour rendre plus lisible cette ressource dans le Catalogue, n’hésitez pas à compléter sa description :",
 	'transitions:excerpt' => "En 140 caractères...",
 	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
@@ -209,8 +211,9 @@ Voir et commenter cette contribution :
 	
 	// Bookmarklet
 	'transitions:bookmarklet' => "Bookmarklet",
-	'transitions:bookmarklet:title' => "+ Transitions²",
-	'transitions:bookmarklet:description' => "Le bookmarklet vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessous dans votre barre de liens de votre navigateur.",
+	'transitions:bookmarklet:link' => "+Transitions²",
+	'transitions:bookmarklet:title' => "Ajoutez ce lien à vos raccourcis pour publier directement sur Transitions²",
+	'transitions:bookmarklet:description' => "Le bookmarklet \"+Transitions²\" vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessus dans la barre de liens de votre navigateur. Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
 	'transitions:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
 	'transitions:bookmarklet:description:conclusion' => "Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
 	

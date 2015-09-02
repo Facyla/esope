@@ -557,7 +557,7 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 				if (empty($user->description)) $user->description = $user_fields['description'];
 				if (empty($user->interests)) $user->interests = $user_fields['interests'];
 				if (empty($user->icontime)) {
-					// Grab and update image
+					// @TODO Grab and update image
 				}
 				return true;
 			}

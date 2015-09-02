@@ -79,9 +79,9 @@ Mot de passe : %s
 	'profile:linkedin' => "URL du compte LinkedIn",
 	'profile:twitter' => "URL du compte Twitter",
 	'profile:facebook' => "URL du compte Facebook",
-	'members:title:newest' => 'Par date de création',
-	'members:title:online' => 'En ligne',
-	'members:title:alpha' => 'Alphabétique',
+	'members:title:newest' => 'Nouveaux contributeurs',
+	'members:title:online' => 'Contributeurs en ligne',
+	'members:title:alpha' => 'Contributeurs',
 	'members:alpha:notforletter' => "Aucun compte commençant par la lettre %s",
 	
 	

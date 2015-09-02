@@ -45,6 +45,7 @@
 	bottom: 0;
 	width: 100%;
 	background-color: rgba(0,0,0,0.8);
+	text-align: left;
 }
 
 #feedBackContent {

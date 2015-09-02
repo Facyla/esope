@@ -34,7 +34,10 @@ function transitions_init() {
 	elgg_extend_view('css/elgg', 'transitions/css');
 	
 	// routing of urls
-	elgg_register_page_handler('catalogue', 'transitions_page_handler');
+	elgg_register_page_handler('catalogue', 'catalogue_page_handler');
+	// Required for retro-compatibility with plugin name
+	// (and automatic links, eg. edit and delete)
+	elgg_register_page_handler('transitions', 'transitions_page_handler');
 	
 	// Adds menu to page owner block
 	elgg_register_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
@@ -87,6 +90,12 @@ function transitions_init() {
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'transitions_ecml_views_hook');
 }
 
+
+// Temporary redirect after page handler string change
+function transitions_page_handler($page) {
+	forward("catalogue/" . implode('/', $page));
+}
+
 /**
  * Dispatches transitions pages.
  * URLs take the form of
@@ -107,7 +116,7 @@ function transitions_init() {
  * @param array $page
  * @return bool
  */
-function transitions_page_handler($page) {
+function catalogue_page_handler($page) {
 
 	elgg_load_library('elgg:transitions');
 
@@ -274,7 +283,7 @@ function transitions_entity_menu_setup($hook, $type, $return, $params) {
 
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'transitions') {
+	if ($handler != 'catalogue') {
 		return $return;
 	}
 
@@ -357,7 +366,7 @@ function transitions_run_upgrades($event, $type, $details) {
 function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
-		if(elgg_instanceof($entity, "object", "transitions")){
+		if (elgg_instanceof($entity, "object", "transitions")) {
 			$size = $params["size"];
 			if (!empty($entity->icontime)) {
 				$icontime = "{$entity->icontime}";
@@ -368,7 +377,13 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 					return elgg_get_site_url() . "catalogue/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			}
-			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
+			// Use default image instead
+			if (!empty($entity->category)) {
+				$file_name = $entity->category . '.jpg';
+			} else {
+				$file_name = 'default.jpg';
+			}
+			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size/$file_name";
 		}
 	}
 }

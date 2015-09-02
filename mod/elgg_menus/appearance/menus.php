@@ -81,17 +81,17 @@ if ($menu_name) {
 
 // MAIN FORMS : SELECT, ADD, EDIT, REMOVE
 
-// NEW MENU form
-$content .= '<form style="float:right;" id="menu-editor-form-new" method="GET">';
-$content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
-$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
-$content .= '</form>';
-
 // SELECT existing menu form
 $content .= '<form id="menu-editor-form-select" method="GET">';
 //$content .= '<a href="?new_menu=yes" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau menu</a>';
 $content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/pulldown', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:select'), 'style' => 'float:none;'));
+$content .= '</form>';
+
+// NEW MENU form
+$content .= '<form id="menu-editor-form-new" method="GET">';
+$content .= 'ou <label>' . elgg_echo('elgg_menus:new') . elgg_view('input/text', array('name' => "menu_name", 'placeholder' => elgg_echo('elgg_menus:name'), 'style' => "width:12ex; margin-right:1ex;")) . '</label>';
+$content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:create')));
 $content .= '</form>';
 
 $content .= '<div class="clearfloat"></div><br />';
