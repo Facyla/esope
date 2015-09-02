@@ -197,10 +197,14 @@ body { background:#EBE7DF; font-family:Lato; }
 #feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
 #feedBackTogglerLink img { margin: 0 10px 5px 0; }
 */
+#feedbackWrapper { bottom: 60%; }
 #feedBackToggler { opacity: 0.7; }
-#feedBackTogglerLink { opacity: 0.7; background: #D4C8AF; }
+#feedBackTogglerLink { border: 0; border-radius: 0; box-shadow: none; background: transparent; }
 #feedBackToggler:hover, #feedBackToggler:active, #feedBackToggler:focus { opacity: 1; }
 
+
+/* Members */
+.esope-alpha-char { background: white; padding: 5px 10px; font-size: 1.2em; letter-spacing: 4px; }
 
 
 

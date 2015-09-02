@@ -122,7 +122,8 @@ function theme_transitions2_init() {
 	elgg_unregister_page_handler('members');
 	elgg_register_page_handler('members', 'theme_transitions2_members_page_handler');
 	// Update members tabs list
-	elgg_register_plugin_hook_handler('members:config', 'tabs','theme_transitions2_members_tabs_config');
+	elgg_register_plugin_hook_handler('members:config', 'tabs', 'theme_transitions2_members_tabs_config');
+	elgg_register_plugin_hook_handler('members:list', 'alpha', 'theme_transitions2_members_list_alpha');
 	
 	
 }
@@ -576,14 +577,9 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 function theme_transitions2_members_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'members/pages/members';
 	$alt_base = elgg_get_plugins_path() . 'theme_transitions2/pages/members';
-
-	if (empty($page[0])) {
-		$page[0] = 'newest';
-	}
-
+	if (empty($page[0])) { $page[0] = 'alpha'; }
 	$vars = array();
 	$vars['page'] = $page[0];
-
 	if ($page[0] == 'search') {
 		require_once "$base/search.php";
 	} else {
@@ -592,10 +588,57 @@ function theme_transitions2_members_page_handler($page) {
 	return true;
 }
 
-// @TODO : marche pas en l'état...
+// Modification des filtres de la page des membres
 function theme_transitions2_members_tabs_config($hook, $type, $return, $params) {
-	//$test = print_r($return, true);
-	//error_log("TEST");
+	$return = array(
+		'alpha' => array(
+			'title' => elgg_echo('members:title:alpha'),
+			'url' => 'members',
+		),
+		'newest' => array(
+			'title' => elgg_echo('members:title:newest'),
+			'url' => 'members/newest',
+		),
+	);
+	if (elgg_is_admin_logged_in()) {
+		$return['online'] = array(
+				'title' => elgg_echo('members:title:online'),
+				'url' => 'members/online',
+			);
+	}
+	return $return;
+}
+
+// Members alpha sort
+function theme_transitions2_members_list_alpha($hook, $type, $return, $params) {
+	if ($return !== null) { return; }
+	// Alphabetic sort
+	$db_prefix = elgg_get_config('dbprefix');
+	$firstletter = get_input('letter', false);
+	$options['joins'] = array("JOIN {$db_prefix}users_entity ue USING(guid)");
+	$options['order_by'] = 'ue.name ASC';
+	$options['wheres'] = "UPPER(ue.name) LIKE UPPER('$firstletter%')";
+	$content = '<div class="esope-alpha-char">';
+	$chararray = elgg_echo('friendspicker:chararray');
+	while (!empty($chararray)) {
+		$char = substr($chararray, 0, 1);
+		if ($firstletter == $char) {
+			$content .= '<a href="' . elgg_get_site_url() . 'members/?letter=' . $char . '" class="elgg-state-selected">' . $char . '</a> ';
+		} else {
+			$content .= '<a href="' . elgg_get_site_url() . 'members/?letter=' . $char . '">' . $char . '</a> ';
+		}
+		$chararray = substr($chararray, 1);
+	}
+	$content .= '</div>';
+	$results = elgg_list_entities($options);
+	if (!empty($results)) {
+		$content .= $results;
+	} else {
+		$content .= '<div class="elgg-list elgg-list-entity">';
+		$content .= '<p><em>' . elgg_echo('members:alpha:notforletter', array(strtoupper($firstletter))) . '</em></p>';
+		$content .= '</div>';
+	}
+	return $content;
 }
 
 

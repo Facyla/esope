@@ -14,9 +14,9 @@ $img = elgg_view('output/img', array(
 	'src' => 'mod/transitions/graphics/bookmarklet-transitions.png',
 	'alt' => $bookmarklet_title,
 ));
-//$bookmarklet = "<a href=\"javascript:location.href='{$url}transitions/add?url='"
+//$bookmarklet = "<a href=\"javascript:location.href='{$url}catalogue/add?url='"
 //	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&description='+encodeURIComponent(document.getSelection())\">" . $img . "</a>";
-$bookmarklet = '<a href="javascript:(function(){window.open(\'' . $url . 'transitions/add?url=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection()), \'_newtab\');}());">' . $img . '</a>';
+$bookmarklet = '<a href="javascript:(function(){window.open(\'' . $url . 'catalogue/add?url=\'+encodeURIComponent(location.href)+\'&title=\'+encodeURIComponent(document.title)+\'&description=\'+encodeURIComponent(document.getSelection()), \'_newtab\');}());">' . $img . '</a>';
 // Nouvel onglet : javascript:(function(){window.open('http://www.example.com', '_newtab');}());
 // Même onglet, utilisez un code de ce type : javascript:location.href='http://www.example
 

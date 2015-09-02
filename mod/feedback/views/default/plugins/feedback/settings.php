@@ -60,6 +60,11 @@ echo '<p><label>' . elgg_echo("feedback:settings:feedbackgroup") . elgg_view('in
 
 // @TODO : Mood : global enable + available moods
 echo '<p><label>' . elgg_echo("feedback:settings:enablemood") . elgg_view('input/dropdown', array('name' => 'params[enable_mood]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->enable_mood)) . '</label></p>';
+/*
+// Mood values
+echo '<p><label>' . elgg_echo("feedback:settings:mood_values") . elgg_view('input/text', array('name' => 'params[mood_values]', 'value' => $vars['entity']->mood_values)) . '</label>';
+echo '<br /><em>Default : happy, neutral, angry</em>';
+*/
 
 // @TODO : About : global enable
 echo '<p><label>' . elgg_echo("feedback:settings:enableabout") . elgg_view('input/dropdown', array('name' => 'params[enable_about]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->enable_about)) . '</label></p>';

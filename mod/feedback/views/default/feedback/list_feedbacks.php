@@ -1,5 +1,5 @@
 <?php
-$base_url = $vars['url'] . 'feedback/';
+$base_url = elgg_get_site_url() . 'feedback/';
 
 $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
@@ -27,9 +27,17 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 //$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count));
 $all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
 $feedbacks = array();
-$feedback_open = 0; $feedback_closed = 0;
-$feedback_content = 0; $feedback_bug = 0; $feedback_suggestion = 0; $feedback_question = 0;
-$feedback_feedback = 0; // Non défini
+$open = 0;
+$closed = 0;
+$other = 0; // Non défini
+$about_enabled = feedback_is_about_enabled();
+// Set filters counters
+/*
+if (feedback_is_about_enabled()) {
+	$about_values = feedback_about_values();
+	foreach($about_values as $about) { ${"feedback_$about"} = 0; }
+}
+*/
 
 foreach ($all_feedback as $ent) {
 	// Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
@@ -45,24 +53,35 @@ foreach ($all_feedback as $ent) {
 	*/
 	
 	// Stats
-	if (!isset($ent->status) || empty($ent->status) || ($ent->status == 'open')) {
-		$feedback_open++;
-		if (!isset($ent->about) || empty($ent->about) || ($ent->about == 'other')) { $feedback_feedback++; } 
-		else if ($ent->about == 'content') { $feedback_content++; }
-		else if ($ent->about == 'bug_report') { $feedback_bug++; } 
-		else if ($ent->about == 'suggestions') { $feedback_suggestion++; }
-		else if ($ent->about == 'compliment') { $feedback_compliment++; }
-		else if ($ent->about == 'question') { $feedback_question++; }
-	} else if ($ent->status == 'closed') { $feedback_closed++; }
+	if ($ent->status == 'closed') {
+		$closed++;
+	} else {
+	//} else if (!isset($ent->status) || empty($ent->status) || ($ent->status == 'open')) {
+		$open++;
+		/* Not used here
+		if (!$about_enabled || !isset($ent->about) || empty($ent->about) || ($ent->about == 'other') || ($ent->about == 'feedback')) { $other++; } 
+		// Sort feedbacks
+		if (feedback_is_about_enabled()) {
+			if (isset(${"feedback_$about"})) {
+				${"feedback_$about"}++;
+			} else {
+				${"feedback_$about"} = 1;
+			}
+		}
+		*/
+	}
+	
 	// Filter : if filter(s) set, add only corresponding feedbacks
-	if ( (!isset($ent->status) || !$status_filter || ($ent->status == $status_filter)) 
-		&& (!isset($ent->about) || !$about_filter || ($ent->about == $about_filter)) ) { $feedbacks[] = $ent; }
+	if (
+		(!isset($ent->status) || !$status_filter || ($ent->status == $status_filter)) 
+		&& (!isset($ent->about) || !$about_filter || ($ent->about == $about_filter))
+		) { $feedbacks[] = $ent; }
 }
-$feedbacks_count = count($feedbacks);
+$count = count($feedbacks);
 
 // Paginate feedbacks
 $displayed_feedbacks = array_slice($feedbacks, $offset, $limit);
-$content .= elgg_view_entity_list($displayed_feedbacks, array('count' => $feedbacks_count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+$content .= elgg_view_entity_list($displayed_feedbacks, array('count' => $count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
 $content .= '<div class="clearfloat"></div>';
 
 echo $content;

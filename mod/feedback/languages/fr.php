@@ -43,6 +43,7 @@ $french = array(
 	'feedback:delete:success' => 'Feedback supprimé.',
 
 	'feedback:mood:' => 'Aucun',
+	'feedback:mood:undefined' => 'Aucun',
 	'feedback:mood:angry' => ':-(',
 	'feedback:mood:neutral' => 'Neutre',
 	'feedback:mood:happy' => ':-)',
@@ -53,6 +54,7 @@ $french = array(
 	'feedback:about:suggestions' => 'Suggestions',
 	'feedback:about:compliment' => 'Compliment',
 	'feedback:about:other' => 'Autre',
+	'feedback:about:feedback' => 'Non classé',
 
 	'feedback:list:mood' => 'Humeur',
 	'feedback:list:about' => 'A propos de',
@@ -110,8 +112,8 @@ $french = array(
 	'feedback:menu:open' => "%s à traiter",
 	'feedback:menu:closed' => "%s résolus",
 	'feedback:menu:content' => "%s signalements",
-	'feedback:menu:bug' => "%s dysfonctionnements",
-	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:bug_report' => "%s dysfonctionnements",
+	'feedback:menu:suggestions' => "%s suggestions",
 	'feedback:menu:question' => "%s questions",
 	'feedback:menu:compliment' => "%s compliments",
 	'feedback:menu:other' => "%s autres / non classés",

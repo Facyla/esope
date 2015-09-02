@@ -80,7 +80,7 @@ $transitions_icon_url = $transitions->getIconURL($params["size"]);
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
-	'handler' => 'transitions',
+	'handler' => 'catalogue',
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-hz',
 ));

@@ -24,6 +24,8 @@ echo '<div class="elgg-footer-partners">';
 	//echo elgg_view('cmspages/view', array('pagetype' => "footer"));
 	echo '<div class="elgg-footer-partners-text"><h2>' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
 	// . elgg_echo('theme_transitions2:partners:text') . '</div>';
+	echo '<img src="' . $partners_url . 'logos-partenaires-transitions2.png" />';
+	/*
 	echo '<div class="elgg-footer-partners-logo">
 		<img src="' . $partners_url . 'fing.png" />
 		<img src="' . $partners_url . 'coalition-climat-21.png" />
@@ -34,6 +36,7 @@ echo '<div class="elgg-footer-partners">';
 		<img src="' . $partners_url . 'terraeco.png" />
 		</div>';
 	echo '<div class="clearfloat"></div>';
+	*/
 echo '</div>';
 
 

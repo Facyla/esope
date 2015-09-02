@@ -171,3 +171,49 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 }
 
 
+function feedback_is_mood_enabled() {
+	$enable_mood = elgg_get_plugin_setting('enable_mood', 'feedback');
+	if ($enable_mood != 'no') { return true; }
+	return false;
+}
+
+function feedback_mood_values() {
+	$mood_values = elgg_get_plugin_setting('mood_values', 'feedback');
+	if (!empty($mood_values)) {
+		$mood_values = explode(',', $mood_values);
+		$mood_values = array_map('trim', $mood_values);
+		$mood_values = array_unique($mood_values);
+		$mood_values = array_filter($mood_values, 'strlen');
+	}
+	// Set default
+	if (sizeof($mood_values) < 1) { $mood_values = array('happy', 'neutral', 'angry'); }
+	return $mood_values;
+}
+
+function feedback_is_about_enabled() {
+	$enable_about = elgg_get_plugin_setting('enable_about', 'feedback');
+	if ($enable_about != 'no') { return true; }
+	return false;
+}
+
+/* Values for feedback subtypes
+ * Note : if no value wanted, better to disable than set to empty,
+ * so we set a default array if empty config
+ */
+function feedback_about_values() {
+	$about_values = elgg_get_plugin_setting('about_values', 'feedback');
+	if (!empty($about_values)) {
+		$about_values = explode(',', $about_values);
+		$about_values = array_map('trim', $about_values);
+		$about_values = array_unique($about_values);
+		$about_values = array_filter($about_values, 'strlen');
+	}
+	// Set default
+	if (sizeof($about_values) < 1) {
+		$about_values = array('bug_report', 'content', 'question', 'suggestions', 'compliment', 'other');
+	}
+	return $about_values;
+}
+
+
+
