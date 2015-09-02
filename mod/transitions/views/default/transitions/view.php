@@ -11,14 +11,16 @@ if (!$transitions) {
 	return TRUE;
 }
 
-// Add counter
-if (!isset($transitions->view_counter)) {
-	$transitions->view_count = 1;
+// Add hit counter
+if (!isset($transitions->views_count)) {
+	$transitions->views_count = 1;
 } else {
-	$transitions->view_count++;
+	$transitions->views_count++;
 }
 
-echo $transitions->view_counter;
+//echo '<span class="hidden transitions-views-count">' . $transitions->views_count . '</div>';
+echo '<!-- Views count : ' . $transitions->views_count . ' //-->';
+
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');

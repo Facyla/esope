@@ -20,7 +20,7 @@ elgg_register_title_button();
 
 $query = get_input('q', '');
 $filter = get_input('filter', '');
-if (!in_array($filter, array('recent', 'featured', 'views', 'comments', 'contributions'))) { $filter = 'recent'; }
+if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }
 $category = get_input('category', '');
 if ($category == 'all') $category = '';
 $actor_type = get_input('actor_type', '');
@@ -56,20 +56,25 @@ $quickform .= '</div>';
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
 	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+		// Fulltext search
+		//$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
+		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
+		
+		// Category
+		$content .= '<p>';
 		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category, 'onChange' => "transitions_toggle_search_fields(this.value);")) . '</label>';
 		$content .= ' &nbsp; ';
-		// @TODO : conditionnel, ssi catégorie = actor
+		// conditionnel, ssi catégorie = actor
 		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
-		$content .= '<br />';
+		$content .= '</p>';
 		
 		// Switch filter (+ onChange)
-		$content .= '<label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => 'featured')) . '</label>';
-		$content .= '<br />';
+		$content .= '<p><label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => $filter)) . '</label></p>';
 		
-		$content .= '<br />';
-		$content .= elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query, 'placeholder' => elgg_echo('transitions:search:placeholder')));
-		$content .= elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go')));
+		//$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go'))) . '</p>';
+		$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search'))) . '</p>';
 	$content .= '</form>';
+	
 	$content .= '<div class="transitions-search-menu">';
 		$content .= '<a href="' . elgg_get_site_url() . 'catalogue/" class="elgg-button transitions-all">' . elgg_echo('transitions:category:nofilter') . '</a>';
 		foreach($categories as $name => $trans_name) {
@@ -126,7 +131,23 @@ $content .= '<div class="transitions-index-search">';
 	}
 
 	//echo '<pre>' . print_r($search_options, true) . '</pre>'; // debug
-
+	// Apply filters
+	switch($filter) {
+		case 'featured':
+			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'featured');
+			break;
+		case 'background':
+			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background');
+			break;
+		case 'read';
+			$search_options['metadata_name_value_pairs'][] = array('name' => 'views_count', 'value' => '0', 'operand' => '>');
+			$search_options['order_by_metadata'] = array('name' => 'views_count', 'direction' => 'DESC', 'as' => 'integer');
+			break;
+		case 'recent':
+		default:
+			$search_options['order_by'] = "time_created desc";
+	}
+	
 
 	// Perfom search
 	if (isset($search_options['metadata_name_value_pairs'])) {

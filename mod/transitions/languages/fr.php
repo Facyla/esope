@@ -189,7 +189,7 @@ Voir et commenter cette contribution :
 	'transitions:search:go' => "Go",
 	'transitions:search:placeholder' => "Rechercher une contribution",
 	'transitions:search:results' => "%s résultats",
-	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à autre chose, n'hésitez pas à en faire part ci-dessous.",
+	'transitions:search:result' => "1 seul résultat ! &nbsp; Si vous pensiez à quelque chose en particulier, n'hésitez pas à proposer votre contribution.",
 	'transitions:search:noresult' => "Aucun résultat ! &nbsp; Nous attendons votre contribution avec impatience ;-)",
 	'transitions:socialshare' => "Mail et réseaux sociaux",
 	'transitions:socialshare:details' => "Utilisez les liens de partage suivants pour publier cette contribution sur les médias sociaux.",

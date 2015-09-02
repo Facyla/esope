@@ -88,8 +88,6 @@ function transitions_init() {
 	elgg_register_action('catalogue/save', "$action_path/save.php");
 	elgg_register_action('catalogue/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('catalogue/delete', "$action_path/delete.php");
-	
-	// Note : add , 'public' to allow onyone to use action
 	elgg_register_action('catalogue/quickform', "$action_path/save.php");
 	elgg_register_action('catalogue/addtag', "$action_path/addtag.php");
 	elgg_register_action('catalogue/addlink', "$action_path/addlink.php");
