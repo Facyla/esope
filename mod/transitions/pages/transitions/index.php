@@ -118,7 +118,7 @@ $content .= '<div class="transitions-index-search">';
 		$db_prefix = elgg_get_config('dbprefix');
 	
 		// Add custom metadata search
-		$search_metadata = array('excerpt');
+		$search_metadata = array('title', 'excerpt', 'description', 'tags', 'tags_contributed');
 		$clauses = _elgg_entities_get_metastrings_options('metadata', array('metadata_names' => $search_metadata));
 		$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$query%')";
 		$search_options['joins'] = $clauses['joins'];
