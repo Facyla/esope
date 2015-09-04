@@ -97,6 +97,21 @@ function theme_fing_init(){
 
 	*/
 	
+	// Enable remote login + retrieve some profile fields
+	// API token mandatory (but not user token, as we authenticate directly through this API)
+	expose_function(
+		"fing.external.auth",
+		"fing_external_auth",
+		array(
+			'username' => array ('type' => 'string'),
+			'password' => array ('type' => 'string'),
+		),
+		elgg_echo('fing.external.auth'),
+		'POST',
+		true,
+		false
+	);
+	
 }
 
 
@@ -339,5 +354,52 @@ function theme_fing_htmlawed_filter_tags($hook, $type, $result, $params) {
 	return $result;
 }
 */
+
+
+
+/**
+ * The auth.gettoken API.
+ * This API call lets a user log in, returning an authentication token which can be used
+ * to authenticate a user for a period of time. It is passed in future calls as the parameter
+ * auth_token.
+ *
+ * @param string $username Username
+ * @param string $password Clear text password
+ *
+ * @return string Token string or exception
+ * @throws SecurityException
+ * @access private
+ */
+function fing_external_auth($username, $password) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+			
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	
+	// validate username and password
+	if (true === elgg_authenticate($username, $password)) {
+		$user = get_user_by_username($username);
+		if (elgg_instanceof($user, 'user')) {
+			$token = create_user_token($username);
+			$result = array(
+					'token' => $token,
+					'username' => $username,
+					'email' => $user->email,
+					'name' => $user->name,
+					'organisation' => $user->organisation,
+					'description' => $user->description,
+					'interests' => $user->interests,
+				);
+			return serialize($result);
+		}
+	}
+
+	throw new SecurityException(elgg_echo('SecurityException:authenticationfailed'));
+}
 
 

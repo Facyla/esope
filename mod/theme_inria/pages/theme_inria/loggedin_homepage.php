@@ -11,8 +11,13 @@ inria_check_and_update_user_status('login', 'user', $own);
 
 
 // Slider
+/*
 $slider_params = array('width' => '100%', 'height' => '300px');
 $slider = elgg_view('slider/slider', $slider_params);
+*/
+$slider_guid = elgg_get_plugin_setting('home_slider', 'theme_inria');
+$slider = elgg_view('slider/view', array('guid' => $slider_guid));
+
 
 
 // Activité du site

@@ -6,6 +6,8 @@ if (!$slider) {
 	$guid = $vars['guid'];
 	$slider = get_entity($guid);
 }
+// Alternate method #2 by slider name
+if (!elgg_instanceof($slider, 'object', 'slider')) { $slider = slider_get_entity_by_name($guid); }
 if (!elgg_instanceof($slider, 'object', 'slider')) return;
 
 $slider_content = '<li>' . implode('</li><li>', $slider->slides) . '</li>'; // Content without enclosing <ul> (we need id)
