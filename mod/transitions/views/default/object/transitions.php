@@ -206,7 +206,7 @@ if ($full) {
 					
 					// Entête
 					echo '<div class="transitions-gallery-head">';
-						//if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+						if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
 						//if ($metadata) { echo $metadata; }
 						if ($title_link) { echo "<h3>$title_link</h3>"; }
 						//echo '<div class="elgg-subtext">' . $subtitle . '</div>';

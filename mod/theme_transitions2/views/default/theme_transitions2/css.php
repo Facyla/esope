@@ -154,9 +154,9 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-logo img { height: 40px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }
-.elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:40px; float: left; margin-right: 20px; }
+.elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:70px; float: left; margin-right: 20px; }
 .elgg-page-footer-transitions2 .elgg-menu-footer { width: 600px; max-width: 100%; margin: 0 auto; float: none; }
-.elgg-page-footer-transitions2 .transitions-socialshare a { font-size:20px; margin:0 0 0 1em; }
+.elgg-page-footer-transitions2 .transitions-socialshare a { font-size:20px; margin:0 0 0 10px; }
 .elgg-menu-footer > li:after { content: ''; }
 
 

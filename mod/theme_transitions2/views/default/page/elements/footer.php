@@ -48,10 +48,15 @@ if (elgg_is_active_plugin('socialshare')) {
 	echo '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array()) . '</div>';
 	echo '</span>';
 }
-?>
+/*
 <a class="elgg-footer-logo" href="<?php echo elgg_get_site_url(); ?>">
-		<img src="<?php echo elgg_get_site_url(); ?>mod/theme_transitions2/graphics/logo-transitions2.png" alt="<?php echo elgg_get_site_entity()->name; ?>" />
 </a>
+*/
+?>
+<span class="elgg-footer-logo">
+	<img src="<?php echo elgg_get_site_url(); ?>mod/theme_transitions2/graphics/logo-transitions2-small.png" alt="<?php echo elgg_get_site_entity()->name; ?>" />
+	<img src="<?php echo elgg_get_site_url(); ?>mod/theme_transitions2/graphics/label-COP21-small.png" alt="Label COP 21" />
+</span>
 <?php
 echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-footer elgg-menu-footer-default clearfix elgg-menu-hz"));
 

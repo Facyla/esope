@@ -106,7 +106,7 @@
 /*
 .transitions-gallery-item .transitions-category { position: absolute; top: 0; right: 0; color: white; }
 */
-.transitions-gallery-item .transitions-category { float:right; margin: -6px -10px 2px 4px; color: white; }
+.transitions-gallery-item .transitions-category { float:right; margin: -32px -32px 0 0; color: white; }
 
 /*
 .transitions-gallery-item .transitions-gallery-head { background: rgba(255,255,255,0.7); position: absolute; top: 30%; left: 0; right: 0; box-shadow: 0 0 4px 0 white; padding: 0.2em 0.5em; max-height: 60%; overflow: hidden; }
