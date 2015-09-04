@@ -10,7 +10,7 @@ $title = elgg_echo('thewire:everyone');
 
 $content = '';
 
-$content .= '<p>' . elgg_echo('theme_inria:thewire:explanations') . '</p>';
+$content .= '<blockquote>' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
 
 if (elgg_is_logged_in()) {
 	$form_vars = array('class' => 'thewire-form');
