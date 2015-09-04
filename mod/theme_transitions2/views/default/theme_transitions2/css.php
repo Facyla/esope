@@ -17,7 +17,7 @@ h2 span { color: #4B8F74; }
 h3 a { color:#003923; }
 img { max-width: 100%; }
 select { max-width: 98%; }
-input, textarea { max-width: 100%; font-family: FontAwesome, Lato; min-width:100px; }
+input, textarea { max-width: 100%; font-family: FontAwesome, Lato; min-width:20px; }
 .elgg-button-submit { min-width:3em; }
 textarea { min-height:30px; }
 blockquote { background: #e2d8c3; color:#666; border:none; }
@@ -45,6 +45,12 @@ color: #297256;
 .elgg-state-error { background-color: #BF4E4E; }
 .elgg-state-notice { background-color: #ABD660; color: #023824; }
 
+/* Modules */
+.elgg-module-aside .elgg-head { border-bottom: 1px solid #e2d8c3; }
+.elgg-module-info > .elgg-head { background-color: #ebe7df; }
+.elgg-module-featured { border: 1px solid #e2d8c3; }
+.elgg-module-featured > .elgg-head { background-color: #ebe7df; border-bottom: 1px solid #e2d8c3; }
+
 
 /* Main layout */
 body { background:#EBE7DF; font-family:Lato; }
@@ -64,7 +70,8 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-breadcrumbs > li > a:hover { text-decoration: none; color: #4b8f74; }
 
 /* Listes et pagination */
-.elgg-tabs { margin-bottom: 0; }
+.elgg-menu-entity { max-width: 50%; min-width:100px; }
+.elgg-tabs, .elgg-menu-filter { margin-bottom: 0; }
 .elgg-list { margin-top: 0; background: white; padding: 20px 40px 40px 40px; }
 .elgg-pagination { margin: 20px 0 10px 0; }
 .elgg-pagination li a, .elgg-pagination li span { background: #E2D8C3; border: 0; margin: 0 5px; }
@@ -80,6 +87,14 @@ body { background:#EBE7DF; font-family:Lato; }
 #transitions-search-home .elgg-button-submit:hover { background-color: #9bd759; color:#023824; }
 .transitions-search-menu .elgg-button { margin: 10px 10px 0 0; font-size: 12px; border-radius:0; }
 .transitions-search-menu a.elgg-button:hover, .transitions-search-menu a.elgg-button:focus, .transitions-search-menu a.elgg-button:active { color:white; }
+
+#transitions-search {  }
+.transitions-index-search { padding-top: 20px; }
+.transitions-index-search .transitions-search-menu { margin: 20px; }
+#transitions-search input { font-size:20px; color: #666; border: 0; border-radius: 0; margin:0; }
+#transitions-search .elgg-button-submit { background-color: #89BF4E; color:white; padding: 0.5em 0.8em; }
+#transitions-search .elgg-button-submit:hover { background-color: #9bd759; color:#023824; }
+
 
 .elgg-comments .elgg-list { padding: 30px 30px 20px 30px; }
 .elgg-comments .elgg-list > li { border:0; border-bottom: 1px solid #e2d8c3; margin-bottom: 20px; padding: 0; }
@@ -105,7 +120,7 @@ body { background:#EBE7DF; font-family:Lato; }
 */
 .elgg-page-header { padding: 0 0 20px 0; position: relative; background: white; }
 .elgg-page-default .elgg-page-header > .elgg-inner { min-height:0; }
-.elgg-page-header a, .elgg-page-header a:hover, .elgg-page-header a:active, .elgg-page-header a:focus { line-height:40px; }
+.elgg-page-header a, .elgg-page-header a:hover, .eminlgg-page-header a:active, .elgg-page-header a:focus { line-height:40px; }
 .elgg-page-header h1, .elgg-page-header a h1, .elgg-page-header a:hover h1, .elgg-page-header a:active h1, .elgg-page-header a:focus h1 { text-transform: uppercase; color: #4B8F74; font-size: 14px; font-family:Lato, sans-serif; text-shadow:none; display:inline-block; width: 100%; }
 .elgg-page-header a h1 .transitions-eco { color:#89BF4E; }
 .elgg-page-header a h1 .transitions-num { color:#003923; }
@@ -139,9 +154,9 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-logo img { height: 40px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }
-.elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:40px; float: left; margin-right: 20px; }
+.elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:70px; float: left; margin-right: 20px; }
 .elgg-page-footer-transitions2 .elgg-menu-footer { width: 600px; max-width: 100%; margin: 0 auto; float: none; }
-.elgg-page-footer-transitions2 .transitions-socialshare a { font-size:20px; margin:0 0 0 1em; }
+.elgg-page-footer-transitions2 .transitions-socialshare a { font-size:20px; margin:0 0 0 10px; }
 .elgg-menu-footer > li:after { content: ''; }
 
 
@@ -191,10 +206,21 @@ body { background:#EBE7DF; font-family:Lato; }
 #feedBackTogglerLink { background: #7DF537; box-shadow: none; border: 3px solid black; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
 #feedBackTogglerLink img { margin: 0 10px 5px 0; }
 */
+#feedbackWrapper { top: initial; bottom: 60%; }
 #feedBackToggler { opacity: 0.7; }
-#feedBackTogglerLink { opacity: 0.7; background: #D4C8AF; }
+#feedBackTogglerLink { border: 0; border-radius: 0; box-shadow: none; background: transparent; }
 #feedBackToggler:hover, #feedBackToggler:active, #feedBackToggler:focus { opacity: 1; }
+#feedBackContent { color: #333; border-radius: 0; box-shadow: none; }
+#feedBackForm { padding: 0 10px; }
+#feedBackIntro, #feedBackFormStatus { padding: 0 10px 10px 10px; }
+#feedBackClose { padding: 10px 10px 0px 10px; }
+#feedBackContent .elgg-head { background: #4c8a71; padding:10px; }
+#feedBackContent h3 { color: white; text-transform: uppercase; }
+#feedbackSuccess { /* color: white; */ background-color: #ABD660; }
 
+
+/* Members */
+.esope-alpha-char { background: white; padding: 5px 10px; font-size: 1.2em; letter-spacing: 4px; }
 
 
 
@@ -209,6 +235,16 @@ body { background:#EBE7DF; font-family:Lato; }
 }
 
 @media (max-width: 766px) {
+	.elgg-page-topbar { padding: 0; }
+	.elgg-topbar-nav-collapse { display:none; }
+	.elgg-menu-topbar { width:100%; }
+	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
+	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
+	.elgg-menu-topbar li, .elgg-menu-topbar li { display: inline-block; width: 100%; }
+	.elgg-menu-site > li.float-alt { width: 100%; }
+	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
+	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
+	
 }
 
 @media (max-width: 600px) {

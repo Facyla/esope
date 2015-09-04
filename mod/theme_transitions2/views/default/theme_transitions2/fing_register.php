@@ -1,8 +1,6 @@
 <?php
 echo '<hr />';
-echo '<a href="http://reseau.fing.org/login">';
-echo 'Créer mon compte avec mon compte Réseau Fing';
-echo '</a>';
+echo '<p>' . elgg_echo('theme_transitions:registerwithfing') . '</p>';
 echo '<hr />';
 
 // Login sur RSFing

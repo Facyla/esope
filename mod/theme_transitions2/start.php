@@ -13,6 +13,14 @@ function theme_transitions2_init() {
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
+	// Remove a few object subtypes from search
+	if (!elgg_is_admin_logged_in()) {
+		elgg_unregister_entity_type('object', 'cmspage');
+		elgg_unregister_entity_type('object', 'feedback');
+		elgg_unregister_entity_type('object', 'file');
+		elgg_unregister_entity_type('object', 'newsletter');
+	}
+	
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');
@@ -28,9 +36,12 @@ function theme_transitions2_init() {
 	// @TODO add some checks and plugin conf
 	elgg_extend_view('forms/login', 'theme_transitions2/fing_login');
 	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 100);
+	// Register the authentication handler
+	register_pam_handler('theme_transitions2_auth_handler_authenticate', 'sufficient', 'user');
 	
 	// Some menus updates
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
+	elgg_register_plugin_hook_handler('register', 'menu:topbar', 'theme_transitions2_topbar_menu', 1000);
 	
 	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
@@ -80,7 +91,7 @@ function theme_transitions2_init() {
 	elgg_register_css('font-lato', 'http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext');
 	elgg_load_css('font-lato');
 	
-	// Add viewport to head
+	// Add viewport to head, set up favicon, etc.
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');
 	
 	// Pour changer la manière de filtrer les tags HTMLawed
@@ -116,6 +127,14 @@ function theme_transitions2_init() {
 	elgg_set_config('icon_sizes', $icon_sizes);
 	// Ratio images : 308/224 => 1,375
 	
+	// Replace members page
+	elgg_unregister_page_handler('members');
+	elgg_register_page_handler('members', 'theme_transitions2_members_page_handler');
+	// Update members tabs list
+	elgg_register_plugin_hook_handler('members:config', 'tabs', 'theme_transitions2_members_tabs_config');
+	elgg_register_plugin_hook_handler('members:list', 'alpha', 'theme_transitions2_members_list_alpha');
+	
+	
 }
 
 /**
@@ -143,6 +162,7 @@ function theme_transitions2_index() {
  */
 function theme_transitions2_pagesetup() {
 
+	//elgg_unregister_menu_item('topbar', 'account');
 	elgg_unregister_menu_item('topbar', 'friends');
 	elgg_unregister_menu_item('topbar', 'messages');
 	elgg_unregister_menu_item('navbar', 'login-dropdown');
@@ -158,6 +178,8 @@ function theme_transitions2_pagesetup() {
 			'section' => 'alt',
 			'link_class' => 'elgg-topbar-dropdown',
 		));
+		/*
+		*/
 		
 		// Messages
 		$text = elgg_echo('messages');
@@ -173,7 +195,7 @@ function theme_transitions2_pagesetup() {
 			'name' => 'messages',
 			'href' => 'messages/inbox/' . elgg_get_logged_in_user_entity()->username,
 			'text' => $text,
-			'priority' => 600,
+			'priority' => 100,
 			'title' => $tooltip,
 		));
 		
@@ -202,6 +224,20 @@ function theme_transitions2_pagesetup() {
 	elgg_unregister_menu_item('extras', 'qrcode-page');
 	
 }
+
+// Remove any dropdown subtree from topbar menu (not responsive)
+function theme_transitions2_topbar_menu($hook, $type, $return, $params) {
+	/*
+	if ($return) foreach ($return as $key => $item) {
+		if (in_array($key, array('account'))) { unset($return[$key]); }
+		$item->setParentName('');
+		$item->setSection('default');
+		$return[$key] = $item;
+	}
+	return $return;
+	*/
+}
+
 
 // Add RSS, ICAL and QR code links to main navigation
 function theme_transitions2_add_tools_links() {
@@ -262,6 +298,13 @@ function theme_transitions2_add_tools_links() {
  * @return array
  */
 function theme_transitions2_setup_head($hook, $type, $data) {
+	// Remove old favicons
+	foreach ($data['links'] as $name => $item) {
+		if (in_array($name, array('icon-ico', 'icon-vector', 'icon-16', 'icon-32', 'icon-64', 'icon-128'))) {
+			unset($data['links'][$name]);
+		}
+	}
+	
 	$data['metas']['viewport'] = array(
 		'name' => 'viewport',
 		'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
@@ -269,7 +312,14 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 
 	$data['links']['apple-touch-icon'] = array(
 		'rel' => 'apple-touch-icon',
-		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/homescreen.png'),
+		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/favicon.png'),
+	);
+
+	$data['links']['favicon'] = array(
+		'rel' => 'icon',
+		'type' => 'image/png',
+		'sizes' => '64x64',
+		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/favicon.png'),
 	);
 
 	return $data;
@@ -452,5 +502,184 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 	);
 	return $allowed_styles;
 }
+
+
+/* REST function for remote API calls
+ * Method: POST, PUT, GET etc
+ * Data: array("param" => "value") ==> index.php?param=value
+ */
+function theme_transitions2_call_api($method, $url, $data = false) {
+	$curl = curl_init();
+	switch ($method) {
+		case "POST":
+			curl_setopt($curl, CURLOPT_POST, 1);
+			if ($data) curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			break;
+		case "PUT":
+			curl_setopt($curl, CURLOPT_PUT, 1);
+			break;
+		default:
+			if ($data) $url = sprintf("%s?%s", $url, http_build_query($data));
+	}
+
+	// Optional Authentication:
+	//curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	//curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+	$result = curl_exec($curl);
+	curl_close($curl);
+	return $result;
+}
+
+
+/** Hook into the PAM system which accepts a username and password 
+ * and attempts to authenticate it against a known user @ LDAP server.
+ *
+ * @param array $credentials Associated array of credentials passed to Elgg's PAM system. 
+ *   This function expects 'username' and 'password' (cleartext).
+ *
+ * @return bool
+ * @throws LoginException
+ * @access private
+ */
+function theme_transitions2_auth_handler_authenticate($credentials = array()) {
+	// Check that credentials are provided
+	if (!is_array($credentials) || !isset($credentials['username']) || !isset($credentials['password'])) {
+		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+	}
+	
+	// Get required fields
+	$api_url = elgg_get_plugin_setting('fing_api_auth_url', 'theme_transitions2');
+	$api_publickey = elgg_get_plugin_setting('fing_api_publickey', 'theme_transitions2');
+	//$api_privatekey = elgg_get_plugin_setting('fing_api_privatekey');
+	
+	if (is_array($credentials) && isset($credentials['username']) && isset($credentials['password']) && $api_url && $api_publickey) {
+		$result = theme_transitions2_call_api('POST', $api_url, array(
+				'username' => $credentials['username'], 
+				'password' => $credentials['password'], 
+				'api_key' => $api_publickey
+			));
+		$result_json = json_decode($result);
+		if ($result_json->status == '0') {
+			$user_fields = unserialize($result_json->result);
+			$username = $user_fields['username'];
+			$email = $user_fields['email'];
+			$name = $user_fields['name'];
+			
+			// Update local data
+			$valid_login = false;
+			$user = get_user_by_username($username);
+			if (elgg_instanceof($user, 'user')) {
+				// Update email only if it is the same user (same username and email)
+				// If not, do not allow login
+				if ($user->username == $username) {
+					$valid_login = true;
+					system_message(elgg_echo('theme_transitions:login:loggedinwithfing'));
+				} else {
+					error_log("LOGIN WITH FING WARNING : login with {$credentials['username']} / fing knows $username ($email) / local site knows {$user->username} ({$user->email})");
+					// Same email but different username => let admin handle that case (update username)
+					register_error(elgg_echo('theme_transitions:login:usernamedontmatch'), array($user->username, $username));
+				}
+			} else {
+				$valid_login = true;
+				system_message(elgg_echo('theme_transitions:login:newaccount'));
+				// Create and update new user
+				$user_guid = register_user($username, $credentials['password'], $name, $email, false);
+				$user = get_entity($user_guid);
+			}
+			if ($valid_login) {
+				if ($user->email != $email) $user->email = $email;
+				if ($user->name != $name) $user->name = $name;
+				if (empty($user->organisation)) $user->organisation = $user_fields['organisation'];
+				if (empty($user->description)) $user->description = $user_fields['description'];
+				if (empty($user->interests)) $user->interests = $user_fields['interests'];
+				if (empty($user->icontime)) {
+					// @TODO Grab and update image
+				}
+				return true;
+			}
+		}
+	}
+	
+	// Return nothing means we skip this handler (non-blocking)
+}
+
+
+/**
+ * Members page handler
+ *
+ * @param array $page url segments
+ * @return bool
+ */
+function theme_transitions2_members_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'members/pages/members';
+	$alt_base = elgg_get_plugins_path() . 'theme_transitions2/pages/members';
+	if (empty($page[0])) { $page[0] = 'alpha'; }
+	$vars = array();
+	$vars['page'] = $page[0];
+	if ($page[0] == 'search') {
+		require_once "$base/search.php";
+	} else {
+		require_once "$alt_base/index.php";
+	}
+	return true;
+}
+
+// Modification des filtres de la page des membres
+function theme_transitions2_members_tabs_config($hook, $type, $return, $params) {
+	$return = array(
+		'alpha' => array(
+			'title' => elgg_echo('members:title:alpha'),
+			'url' => 'members',
+		),
+		'newest' => array(
+			'title' => elgg_echo('members:title:newest'),
+			'url' => 'members/newest',
+		),
+	);
+	if (elgg_is_admin_logged_in()) {
+		$return['online'] = array(
+				'title' => elgg_echo('members:title:online'),
+				'url' => 'members/online',
+			);
+	}
+	return $return;
+}
+
+// Members alpha sort
+function theme_transitions2_members_list_alpha($hook, $type, $return, $params) {
+	if ($return !== null) { return; }
+	// Alphabetic sort
+	$db_prefix = elgg_get_config('dbprefix');
+	$firstletter = get_input('letter', false);
+	$options['joins'] = array("JOIN {$db_prefix}users_entity ue USING(guid)");
+	$options['order_by'] = 'ue.name ASC';
+	$options['wheres'] = "UPPER(ue.name) LIKE UPPER('$firstletter%')";
+	$content = '<div class="esope-alpha-char">';
+	$chararray = elgg_echo('friendspicker:chararray');
+	while (!empty($chararray)) {
+		$char = substr($chararray, 0, 1);
+		if ($firstletter == $char) {
+			$content .= '<a href="' . elgg_get_site_url() . 'members/?letter=' . $char . '" class="elgg-state-selected">' . $char . '</a> ';
+		} else {
+			$content .= '<a href="' . elgg_get_site_url() . 'members/?letter=' . $char . '">' . $char . '</a> ';
+		}
+		$chararray = substr($chararray, 1);
+	}
+	$content .= '</div>';
+	$results = elgg_list_entities($options);
+	if (!empty($results)) {
+		$content .= $results;
+	} else {
+		$content .= '<div class="elgg-list elgg-list-entity">';
+		$content .= '<p><em>' . elgg_echo('members:alpha:notforletter', array(strtoupper($firstletter))) . '</em></p>';
+		$content .= '</div>';
+	}
+	return $content;
+}
+
 
 

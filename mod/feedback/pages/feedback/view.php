@@ -18,7 +18,7 @@ $title = $feedback->title;
 $feedback_url = $feedback->getURL();
 
 // Breadcrumbs
-elgg_push_breadcrumb(elgg_echo('feedback'), $CONFIG->url . 'feedback');
+elgg_push_breadcrumb(elgg_echo('feedback'), elgg_get_site_url() . 'feedback');
 elgg_push_breadcrumb($title);
 
 

@@ -75,6 +75,7 @@ $values = array(
 	'category' => '',
 	'lang' => '',
 	'resource_lang' => '',
+	'collection' => '',
 );
 
 /* Conditional fields (based on category)
@@ -359,7 +360,7 @@ if (!$error) {
 		if ($transitions->status == 'published' || $save == false) {
 			forward($transitions->getURL());
 		} else {
-			forward("transitions/edit/$transitions->guid");
+			forward("catalogue/edit/$transitions->guid");
 		}
 	} else {
 		register_error(elgg_echo('transitions:error:cannot_save'));

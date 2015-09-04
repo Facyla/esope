@@ -60,30 +60,55 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 			
 			<form id="feedBackForm" action="" method="post" onsubmit="FeedBack_Send();return false;">
 				
-				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
-						<label class="angry"><input type="radio" name="mood" value="angry"> <?php echo elgg_echo('feedback:mood:angry'); ?></label>
-						<label class="neutral"><input type="radio" name="mood" value="neutral" checked> <?php echo elgg_echo('feedback:mood:neutral'); ?></label>
-						<label class="happy"><input type="radio" name="mood" value="happy"> <?php echo elgg_echo('feedback:mood:happy'); ?></label>
-					</div>
-					<div style="clear:both;"></div>
-				</div>
-				<br />
+				<?php if (feedback_is_mood_enabled()) {
+					$mood_values = feedback_mood_values();
+					if (sizeof($mood_values) > 1) {
+						?>
+						<div>
+							<div style="float:left"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
+								<?php
+								foreach ($mood_values as $mood) {
+									echo '<label class="' . $mood .'"><input type="radio" name="mood" value="' . $mood .'"> ' . elgg_echo("feedback:mood:$mood") . '</label>';
+								}
+								?>
+							</div>
+							<div class="clearfloat"></div>
+						</div>
+						<br />
+						<?php
+					} else {
+						// We only have one value (not indexed)
+						$unique_value = implode('', $mood_values);
+						echo elgg_view('input/hidden', array('name' => 'mood', 'value' => $unique_value));
+					}
+				}
 				
-				<div>
-					<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
-						<label class="bug_report"><input type="radio" name="about" value="bug_report"> <?php echo elgg_echo('feedback:about:bug_report'); ?></label>
-						<label class="content"><input type="radio" name="about" value="content"> <?php echo elgg_echo('feedback:about:content'); ?></label>
-						<label class="suggestions"><input type="radio" name="about" value="suggestions" checked> <?php echo elgg_echo('feedback:about:suggestions'); ?></label>
-						<label class="compliment"><input type="radio" name="about" value="compliment"> <?php echo elgg_echo('feedback:about:compliment'); ?></label>
-						<label class="question"><input type="radio" name="about" value="question"> <?php echo elgg_echo('feedback:about:question'); ?></label>
-						<label class="other"><input type="radio" name="about" value="other"> <?php echo elgg_echo('feedback:about:other'); ?></label>
-					</div>
-					<div style="clear:both;"></div>
-				</div>
-				<br />
 				
-				<?php
+				if (feedback_is_about_enabled()) {
+					$about_values = feedback_about_values();
+					if (sizeof($about_values) > 1) {
+						?>
+						<div>
+							<div style="float:left"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
+								<?php
+								foreach ($about_values as $about) {
+									echo '<label class="' . $about .'"><input type="radio" name="about" value="' . $about .'"> ' . elgg_echo("feedback:about:$about") . '</label>';
+								}
+								?>
+							</div>
+							<div class="clearfloat"></div>
+						</div>
+						<br />
+						<?php
+					} else {
+						// We only have one value (not indexed)
+						$unique_value = implode('', $about_values);
+						echo elgg_view('input/hidden', array('name' => 'about', 'value' => $unique_value));
+					}
+				}
+				
+				
+				
 				// Access dropdown only if member view is allowed and logged_in
 				// (otherwise use private access_id)
 				if ($memberview && elgg_is_logged_in()) {
@@ -98,18 +123,18 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					}
 					?>
 					<div>
-					<label><?php echo elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)); ?></label>
+						<label><?php echo elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)); ?></label>
 					</div>
 					<br />
 				<?php } else { ?>
 					<input type="hidden" name="feedback_access_id" value="0" />
 				<?php } ?>
 				<div>
-					<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:id'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:id'); ?>';}" class="feedbackText" />
+					<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" placeholder="<?php echo elgg_echo('feedback:default:id'); ?>" class="feedbackText" />
 				</div>
 				
 				<div id="feedBackText">
-					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" onfocus="if (this.value == '<?php echo elgg_echo('feedback:default:txt'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php echo elgg_echo('feedback:default:txt'); ?>';}" class="feedbackTextbox mceNoEditor"><?php echo elgg_echo('feedback:default:txt'); ?></textarea>
+					<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"></textarea>
 				</div>
 				
 				<?php
@@ -128,7 +153,7 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					&nbsp;
 				</div>
 				
-				<?php if ($memberview) {
+				<?php if ($memberview || elgg_is_admin_logged_in()) {
 					// Additional message if tool is for members (= link to feedback page)
 					echo '<p id="feedbackDisplay"><a href="' . elgg_get_site_url() . 'feedback" target="_blank">' . elgg_echo('feedback:linktofeedbacks') . '</a></p>';
 				} ?>
@@ -143,14 +168,14 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 	</div>
 	</div>
 
-	<div style="clear:both;"></div>
+	<div class="clearfloat"></div>
 
 </div>
 
 <script type="text/javascript">
 <?php
 // if user is logged in then disable the feedback ID
-if ( elgg_is_logged_in() ) {
+if (elgg_is_logged_in()) {
 	echo "$('#feedback_id').attr ('disabled', 'disabled');";
 }
 ?>

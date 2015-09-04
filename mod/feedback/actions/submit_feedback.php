@@ -41,10 +41,15 @@ if (!elgg_is_logged_in()) {
 $feedback_txt = get_input('txt');
 $feedback_access_id = (int) get_input('access_id', 0); // Default access = private (admin only)
 $feedback_page = get_input('page');
-$feedback_mood = get_input('mood');
-$feedback_about = get_input('about');
+$feedback_mood = get_input('mood', 'neutral');
+$feedback_about = get_input('about', 'feedback');
 $feedback_sender = get_input('id');
 $feedback_status = get_input('status', 'open'); // Default status = open
+
+// Set defaults (some values may not be passed)
+if (empty($feedback_mood)) { $feedback_mood = 'neutral'; }
+if (empty($feedback_about)) { $feedback_about = 'feedback'; }
+if (empty($feedback_status)) { $feedback_status = 'open'; }
 
 // Refuse empty feedbacks
 if (empty($feedback_txt) || empty($feedback_sender)) {

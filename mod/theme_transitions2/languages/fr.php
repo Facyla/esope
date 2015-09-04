@@ -42,6 +42,12 @@ Mot de passe : %s
 	// Gestion de la Une
 	'theme_transitions2:home_article:select' => "Enregistrer le choix",
 	
+	// API
+	'theme_transitions:login:usernamedontmatch' => "Un compte existe déjà avec le même email mais un autre identifiant, veuillez contacter un administrateur pour demander de mettre à jour votre identifiant : %s doit devenir %s",
+	'theme_transitions:login:newaccount' => "Connexion avec votre compte RSFing réussie : un compte vous a bien été créé.",
+	'theme_transitions:loginwithfing' => "Pour vous connectez avec votre compte Réseau Fing : utilisez vos identifiants de connexion habituels pour vous connecter sur ce site.",
+	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",
+	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
 	
 	
 	// Main translations overrides
@@ -73,6 +79,19 @@ Mot de passe : %s
 	'profile:linkedin' => "URL du compte LinkedIn",
 	'profile:twitter' => "URL du compte Twitter",
 	'profile:facebook' => "URL du compte Facebook",
+	'members:title:alpha' => 'Contributeurs',
+	'members:alpha:notforletter' => "Aucun compte commençant par la lettre %s",
+	
+	'item:user' => 'Contributeurs',
+	'members:label:online' => 'En ligne',
+	'members:search' => 'Rechercher des contributeurs',
+	'members:title:search' => 'Recherche de contributeurs pour %s',
+	'members:total' => 'Nombre total de contributeurs: %s',
+	'members:title:newest' => 'Nouveaux contributeurs',
+	'members:title:popular' => 'Contributeurs les plus populaires',
+	'members:title:online' => 'Contributeurs en ligne',
+	'members:list:popular:none' => 'Aucun contributeur n\'a de contact.',
+	
 	
 );
 

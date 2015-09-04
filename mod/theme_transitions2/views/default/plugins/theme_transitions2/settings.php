@@ -7,6 +7,9 @@ $url = elgg_get_site_url();
 // Set default value
 //if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name = 'default'; }
 
+// Set defaults
+if (!isset($vars['entity']->fing_api_auth_url)) { $vars['entity']->fing_api_auth_url = 'http://reseau.fing.org/services/api/rest/json/?method=fing.external.auth'; }
+
 
 // Define Site menus replacement ?
 $menus_options = elgg_menus_menus_opts();
@@ -30,7 +33,7 @@ echo '</fieldset>';
 
 
 echo '<fieldset>';
-
+	echo '<legend>Administrateurs</legend>';
 	echo "<h3>Liste des administrateurs contenus</h3>";
 	echo "<p><em>Les administrateurs contenus disposent de tous les droits d'édition sur les contenus du site.</em></p>";
 	echo elgg_list_entities(array('list_type' => "gallery"), 'theme_transitions_get_content_admins');
@@ -49,20 +52,13 @@ echo '<fieldset>';
 echo '</fieldset>';
 
 
-// Example yes/no setting
-//echo '<p><label>Test select setting "setting_name"</label> ' . elgg_view('input/dropdown', array('name' => 'params[setting_name]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->setting_name)) . '</p>';
+// Auth API (from RSFing)
+echo '<fieldset>';
+	echo '<legend>Authentification via le réseau Fing</legend>';
+	echo '<p><label>URL d\'authentification ' . elgg_view('input/text', array('name' => 'params[fing_api_auth_url]', 'value' => $vars['entity']->fing_api_auth_url)) . '</label></p>';
+	echo '<p><label>Clef API publique ' . elgg_view('input/text', array('name' => 'params[fing_api_publickey]', 'value' => $vars['entity']->fing_api_publickey)) . '</label></p>';
+	echo '<p><label>Clef API privée ' . elgg_view('input/text', array('name' => 'params[fing_api_privatekey]', 'value' => $vars['entity']->fing_api_privatekey)) . '</label></p>';
+echo '</fieldset>';
 
-
-// Example text setting
-//echo '<p><label>Text setting "setting_name2"</label> ' . elgg_view('input/text', array('name' => 'params[setting_name2]', 'value' => $vars['entity']->setting_name2)) . '</p>';
-
-// Example text setting
-/*
-for ($i=1; $i<5; $i++) {
-	echo '<p><label>Accueil bloc ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_text_'.$i.']', 'value' => $vars['entity']->{'home_text_'.$i})) . '</p>';
-	echo '<p><label>Image ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_image_'.$i.']', 'value' => $vars['entity']->{'home_image_'.$i})) . '</p>';
-	echo '<p><label>Lien ' . $i . '</label> ' . elgg_view('input/text', array('name' => 'params[home_link_'.$i.']', 'value' => $vars['entity']->{'home_link_'.$i})) . '</p>';
-}
-*/
 
 

@@ -7,9 +7,13 @@ $groups_count = elgg_get_entities(array('type' => 'group', 'count' => true));
 $groups = elgg_get_entities(array('type' => 'group', 'limit' => $groups_count));
 foreach ($groups as $ent) { $feedbackgroup_opt[$ent->guid] = $ent->name; }
 
+// Set defaults
+if (!isset($vars['entity']->about_values)) { $vars['entity']->about_values = 'bug_report, content, suggestions, compliment, question, other'; }
+
+
 
 // Link to feedbacks page
-echo '<p><a href="' . $vars['url'] . 'feedback" target="_new" class="elgg-button">&raquo;&nbsp;' . elgg_echo('feedback:admin:title') . '</a></p>';
+echo '<p><a href="' . elgg_get_site_url() . 'feedback" target="_new" class="elgg-button">&raquo;&nbsp;' . elgg_echo('feedback:admin:title') . '</a></p>';
 
 // Publicly available?
 echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/dropdown', array('name' => 'params[publicAvailable_feedback]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->publicAvailable_feedback)) . '</label></p>';
@@ -50,5 +54,24 @@ echo '<p><label>' . elgg_echo("feedback:settings:comment") . elgg_view('input/dr
 
 // Associate a group to feedbacks ?
 echo '<p><label>' . elgg_echo("feedback:settings:feedbackgroup") . elgg_view('input/dropdown', array('name' => 'params[feedbackgroup]', 'options_values' => $feedbackgroup_opt, 'value' => $vars['entity']->feedbackgroup)) . '</label></p>';
+
+
+// Enable feedback types
+
+// @TODO : Mood : global enable + available moods
+echo '<p><label>' . elgg_echo("feedback:settings:enablemood") . elgg_view('input/dropdown', array('name' => 'params[enable_mood]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->enable_mood)) . '</label></p>';
+/*
+// Mood values
+echo '<p><label>' . elgg_echo("feedback:settings:mood_values") . elgg_view('input/text', array('name' => 'params[mood_values]', 'value' => $vars['entity']->mood_values)) . '</label>';
+echo '<br /><em>Default : happy, neutral, angry</em>';
+*/
+
+// @TODO : About : global enable
+echo '<p><label>' . elgg_echo("feedback:settings:enableabout") . elgg_view('input/dropdown', array('name' => 'params[enable_about]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->enable_about)) . '</label></p>';
+// About values
+echo '<p><label>' . elgg_echo("feedback:settings:about_values") . elgg_view('input/text', array('name' => 'params[about_values]', 'value' => $vars['entity']->about_values)) . '</label>';
+echo '<br /><em>Default : bug_report, content, suggestions, compliment, question, other</em>';
+echo '</p>';
+
 
 

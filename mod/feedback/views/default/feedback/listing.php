@@ -49,13 +49,13 @@ switch ($status) {
 		
 	default:
 		// Only admins can close feedbacks
-		if (elgg_is_admin_logged_in) {
+		if (elgg_is_admin_logged_in()) {
 			//$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
 			$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'text' => '<i class="fa fa-square-o"></i>'));
 		}
 }
 // Only admins can delete feedbacks
-if (elgg_is_admin_logged_in) {
+if (elgg_is_admin_logged_in()) {
 	//$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-trash'));
 	$controls .= elgg_view("output/confirmlink",array('href' => $vars['url'] . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'text' => '<i class="fa fa-trash-o"></i>'));
 }
@@ -70,8 +70,12 @@ if (!empty($feedback->page)) {
 
 
 // Render view
-$info .= "<div style='float:left;width:25%'><strong>".elgg_echo('feedback:list:mood').": </strong>" . $mood_mark . "</div>";
-$info .= "<div style='float:left;width:40%'><strong>".elgg_echo('feedback:list:about').": </strong>" . $about_mark . "</div>";
+if (feedback_is_mood_enabled()) {
+	$info .= "<div style='float:left;width:25%'><strong>".elgg_echo('feedback:list:mood').": </strong>" . $mood_mark . "</div>";
+}
+if (feedback_is_about_enabled()) {
+	$info .= "<div style='float:left;width:40%'><strong>".elgg_echo('feedback:list:about').": </strong>" . $about_mark . "</div>";
+}
 $info .= '<div class="controls">' . $controls . "</div>";
 $info .= '<div class="clearfloat"></div>';
 $info .= "<strong>".elgg_echo('feedback:list:from').": </strong>" . $feedback->id . '<span style="float:right;">' . elgg_view_friendly_time($feedback->time_created) . "</span><br />";
@@ -96,7 +100,7 @@ if ($comment == 'yes') {
 }
 
 
-// On n'affiche l'icône que si on n'a qqch de joli, inutile pour le moment
+// On n'affiche l'icône que si on a qqch de joli, inutile pour le moment
 //$icon = elgg_view('icon/default', array('entity' => $feedback, 'size' => 'small'));
 $icon = elgg_view('icon/default', array('entity' => $feedback->getOwnerEntity(), 'size' => 'small'));
 echo elgg_view('page/components/image_block', array('image' => $icon, 'body' => $info, 'class' => 'submitted-feedback ' . $class));

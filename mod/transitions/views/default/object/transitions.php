@@ -61,16 +61,14 @@ $transitions_icon = "";
 // show icon
 //if(!empty($transitions->icontime)) {
 	$params = $vars;
+	$params["align"] = 'none';
 	if ($full) {
 		$params["size"] = 'master';
-		$params["align"] = 'none';
 	} else {
+		$params["size"] = 'gallery';
 		if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 			$params["size"] = 'listing';
 			$params["align"] = 'right';
-		} else {
-			$params["size"] = 'gallery';
-			$params["align"] = 'none';
 		}
 	}
 //}
@@ -80,7 +78,7 @@ $transitions_icon_url = $transitions->getIconURL($params["size"]);
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
-	'handler' => 'transitions',
+	'handler' => 'catalogue',
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-hz',
 ));
@@ -93,7 +91,7 @@ if (elgg_in_context('widgets')) {
 }
 
 
-// @TODO add stats and actions blocks : likes, contributions (links + comments)
+// Stats and actions blocks : likes, contributions (links + comments)
 $stats = '';
 if (elgg_is_active_plugin('likes')) {
 	$num_of_likes = \Elgg\Likes\DataService::instance()->getNumLikes($transitions);
@@ -111,50 +109,49 @@ if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
 }
 
 
-//if ($transitions->status != 'draft') {
-	
-	// Social share
-	$socialshare = '';
-	if (elgg_is_active_plugin('socialshare')) {
-		//$socialshare = '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
-		$socialshare .= '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array('entity' => $transitions)) . '</div>';
-	}
-	
-	// Permalink
-	$permalink = '';
-	$permalink .= '<p>';
-	//$permalink .= elgg_echo('transitions:permalink:details') . '<br />';
-	$permalink .= '<input type="text" onClick="this.setSelectionRange(0, this.value.length);" value="' . $transitions->getURL() . '"></p>';
-	
-	// Short link
-	$shortlink = '';
-	if (elgg_is_active_plugin('shorturls')) {
-		$shortlink = '<p>';
-	//$shortlink .= elgg_echo('transitions:shortlink:details') . '<br />';
-	$shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $transitions->guid . '"></p>';
-	} else {
-		$shortlink = $permalink;
-	}
-	
-	// Embed code
-	//$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
-	$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:400px; height:400px;" /&gt;</textarea>';
-	
-	// Combined module : permalink + share links + embed
-	$share_content = '';
-	$share_content .= '<h3>' . elgg_echo('transitions:socialshare') . '</h3>';
-	$share_content .= $socialshare;
-	//$share_content .= '<h3>' . elgg_echo('transitions:permalink') . '</h3>';
-	//$share_content .= $permalink;
-	$share_content .= '<h3>' . elgg_echo('transitions:shortlink') . '</h3>';
-	$share_content .= $shortlink;
-	$share_content .= '<h3>' . elgg_echo('transitions:embed') . '</h3>';
-	$share_content .= $embedcode;
-	
-	//$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>&nbsp;' . elgg_echo('transitions:share'), 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid));
-	$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>', 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid, 'title' => elgg_echo('transitions:share')));
-	$actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_content, array('id' => 'transitions-popup-share-' . $transitions->guid, 'class' => 'transitions-popup-share hidden clearfix'));
-//}
+
+// Social share
+$socialshare = '';
+if (elgg_is_active_plugin('socialshare')) {
+	//$socialshare = '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
+	$socialshare .= '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array('entity' => $transitions)) . '</div>';
+}
+
+// Permalink
+$permalink = '';
+$permalink .= '<p>';
+//$permalink .= elgg_echo('transitions:permalink:details') . '<br />';
+$permalink .= '<input type="text" onClick="this.setSelectionRange(0, this.value.length);" value="' . $transitions->getURL() . '"></p>';
+
+// Short link
+$shortlink = '';
+if (elgg_is_active_plugin('shorturls')) {
+	$shortlink = '<p>';
+//$shortlink .= elgg_echo('transitions:shortlink:details') . '<br />';
+$shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $transitions->guid . '"></p>';
+} else {
+	$shortlink = $permalink;
+}
+
+// Embed code
+//$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
+$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:400px; height:400px;" /&gt;</textarea>';
+
+// Combined module : permalink + share links + embed
+$share_content = '';
+$share_content .= '<h3>' . elgg_echo('transitions:socialshare') . '</h3>';
+$share_content .= $socialshare;
+//$share_content .= '<h3>' . elgg_echo('transitions:permalink') . '</h3>';
+//$share_content .= $permalink;
+$share_content .= '<h3>' . elgg_echo('transitions:shortlink') . '</h3>';
+$share_content .= $shortlink;
+$share_content .= '<h3>' . elgg_echo('transitions:embed') . '</h3>';
+$share_content .= $embedcode;
+
+//$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>&nbsp;' . elgg_echo('transitions:share'), 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid));
+$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>', 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid, 'title' => elgg_echo('transitions:share')));
+$actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_content, array('id' => 'transitions-popup-share-' . $transitions->guid, 'class' => 'transitions-popup-share hidden clearfix'));
+
 
 
 
@@ -181,9 +178,11 @@ if ($full) {
 		$list_body = elgg_view('object/elements/summary', $params);
 		
 		if (!empty($transitions_icon)) {
-			echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+			//echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+			echo elgg_view_image_block($transitions_icon, $list_body);
 		} else {
-			echo elgg_view_image_block($owner_icon, $list_body);
+			//echo elgg_view_image_block($owner_icon, $list_body);
+			echo elgg_view_image_block('', $list_body);
 		}
 		//echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
 		
@@ -192,7 +191,7 @@ if ($full) {
 		// do not show the metadata and controls in gallery view
 		$metadata = '';
 		$params = array(
-			'text' => elgg_get_excerpt($transitions->title, 100),
+			'text' => elgg_get_excerpt($transitions->title, 70),
 			'href' => $transitions->getURL(),
 			'is_trusted' => true,
 		);
@@ -207,7 +206,7 @@ if ($full) {
 					
 					// Entête
 					echo '<div class="transitions-gallery-head">';
-						//if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+						if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
 						//if ($metadata) { echo $metadata; }
 						if ($title_link) { echo "<h3>$title_link</h3>"; }
 						//echo '<div class="elgg-subtext">' . $subtitle . '</div>';
