@@ -1,6 +1,7 @@
 
 /* Edit form */
 #transitions-post-edit select { max-width: 16em; }
+#transitions-post-edit input[name=start_date], #transitions-post-edit input[name=end_date] { min-width: 8em; }
 .transitions-characters-remaining-warning { color: red; }
 .transitions-characters-remaining-warning .hidden { display:block; background: #BF4E4E; color: white; padding: 2px 10px; }
 .elgg-form-transitions-save fieldset fieldset { border: 1px solid #023824; padding: 2px 6px; margin: 20px 0 20px 0; }
@@ -123,6 +124,8 @@
 .transitions-socialshare { font-size:3em; padding-bottom:0.5em; }
 .transitions-socialshare a { margin-right:0.3em; }
 
+/* News */
+.transitions-news .elgg-list > li { border:0; }
 
 /* Popups */
 .transitions-popup-link, .transitions-popup-embed { max-width:30em; }

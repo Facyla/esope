@@ -41,6 +41,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 .collections-view .elgg-image-block .elgg-image { margin: 0 0 30px 0; }
 .collections-view .elgg-image-block .elgg-image-alt { max-width: 100px; margin: 30px; }
 .collections-view .elgg-image-block .elgg-body { padding: 30px 0 30px 30px; }
+.collections-item-entity .transitions-gallery-item .transitions-category { margin: -24px -24px 0 0; }
 
 
 /* Rendu des collections */

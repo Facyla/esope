@@ -74,6 +74,8 @@ Voir et commenter cette contribution :
 	'transitions:title:actor' => "Nom",
 	'transitions:title:project' => "Nom du projet",
 	'transitions:title:event' => "Nom de l\'événement", // Used in JS
+	'transitions:news' => "Actus",
+	'transitions:news:title' => "Actus",
 	'transitions:icon' => "Illustration de votre contribution",
 	'transitions:icon:details' => "Sélectionnez une image pour illustrer votre contribution.",
 	'transitions:icon:new' => "Ajouter une illustration",

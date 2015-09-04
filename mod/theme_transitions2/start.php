@@ -134,6 +134,7 @@ function theme_transitions2_init() {
 	elgg_register_plugin_hook_handler('members:config', 'tabs', 'theme_transitions2_members_tabs_config');
 	elgg_register_plugin_hook_handler('members:list', 'alpha', 'theme_transitions2_members_list_alpha');
 	
+	elgg_register_page_handler('news', 'theme_transitions2_news_page_handler');
 	
 }
 
@@ -607,6 +608,13 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 	// Return nothing means we skip this handler (non-blocking)
 }
 
+
+// Page handler pour les news
+function theme_transitions2_news_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'theme_transitions2/pages/theme_transitions2';
+	require_once "$base/news.php";
+	return true;
+}
 
 /**
  * Members page handler
