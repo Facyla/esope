@@ -15,7 +15,7 @@ function theme_transitions2_init() {
 	
 	// Remove a few object subtypes from search
 	if (!elgg_is_admin_logged_in()) {
-		elgg_unregister_entity_type('object', 'cmspages');
+		elgg_unregister_entity_type('object', 'cmspage');
 		elgg_unregister_entity_type('object', 'feedback');
 		elgg_unregister_entity_type('object', 'file');
 		elgg_unregister_entity_type('object', 'newsletter');
