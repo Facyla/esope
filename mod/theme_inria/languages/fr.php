@@ -37,6 +37,10 @@ $french = array(
 	'theme_inria:groups:newest:tooltip' => "Cliquez sur ce lien pour voir tous les nouveaux groupes sur Iris",
 	'theme_inria:members:online:tooltip' => "Cliquez sur ce lien pour voir tous les membres connectés en ce moment sur Iris",
 	'theme_inria:members:newest:tooltip' => "Cliquez sur ce lien pour voir tous les nouveaux membres inscrits sur Iris",
+	'theme_inria:messages:tooltip' => "Messagerie interne Iris",
+	'theme_inria:usersettings:tooltip' => "Paramétrez vos notifications et votre langue",
+	'theme_inria:thewire:explanations' => "Vous trouverez ici les messages du fil <strong>destinés à tous</strong> ainsi que les messages du fil de <strong>vos groupes</strong>. Chaque membre d'Iris visualise ici des informations différentes qui dépendent de ses abonnements et droits d'accès",
+	'theme_inria:activity:explanations' => "Vous trouverez ici les dernières activités dans <strong>vos groupes</strong> et dans les groupes <strong>visibles de tous</strong>. Chaque membre d'Iris visualise ici des informations qui dépendent de ses abonnements et droits d'accès",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",

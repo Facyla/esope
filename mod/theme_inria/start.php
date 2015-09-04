@@ -133,6 +133,11 @@ function theme_inria_init(){
 	// Add a "ressources" page handler for groups
 	elgg_register_page_handler("ressources", "inria_ressources_page_handler");
 	
+	// Override thewire PH
+	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	// Override activity PH
+	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
+	
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	
@@ -266,6 +271,86 @@ function inria_ressources_page_handler($page) {
 	return true;
 }
 
+
+// Override pour ajouter une explication sur la page thewire/all
+function theme_inria_thewire_page_handler($page) {
+	$base_dir = elgg_get_plugins_path() . 'thewire/pages/thewire';
+	$alt_base_dir = elgg_get_plugins_path() . 'theme_inria/pages/thewire';
+
+	if (!isset($page[0])) {
+		$page = array('all');
+	}
+
+	switch ($page[0]) {
+		case "all":
+			include "$alt_base_dir/everyone.php";
+			break;
+
+		case "friends":
+			include "$base_dir/friends.php";
+			break;
+
+		case "owner":
+			include "$base_dir/owner.php";
+			break;
+
+		case "view":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/view.php";
+			break;
+
+		case "thread":
+			if (isset($page[1])) {
+				set_input('thread_id', $page[1]);
+			}
+			include "$base_dir/thread.php";
+			break;
+
+		case "reply":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/reply.php";
+			break;
+
+		case "tag":
+			if (isset($page[1])) {
+				set_input('tag', $page[1]);
+			}
+			include "$base_dir/tag.php";
+			break;
+
+		case "previous":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/previous.php";
+			break;
+
+		default:
+			return false;
+	}
+	return true;
+}
+
+function theme_inria_elgg_river_page_handler($page) {
+	global $CONFIG;
+
+	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+
+	// make a URL segment available in page handler script
+	$page_type = elgg_extract(0, $page, 'all');
+	$page_type = preg_replace('[\W]', '', $page_type);
+	if ($page_type == 'owner') {
+		$page_type = 'mine';
+	}
+	set_input('page_type', $page_type);
+
+	require_once("{$CONFIG->path}mod/theme_inria/pages/river.php");
+	return true;
+}
 
 
 // Returns Elgg fields coming from LDAP
