@@ -13,6 +13,11 @@ function theme_transitions2_init() {
 	elgg_extend_view('css/elgg', 'theme_transitions2/css');
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
+	// Remove a few object subtypes from search
+	elgg_unregister_entity_type('object', 'feedback');
+	elgg_unregister_entity_type('object', 'file');
+	elgg_unregister_entity_type('object', 'newsletter');
+	
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', 'theme_transitions2_set_usersettings');

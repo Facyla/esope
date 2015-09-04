@@ -84,6 +84,15 @@ Mot de passe : %s
 	'members:title:alpha' => 'Contributeurs',
 	'members:alpha:notforletter' => "Aucun compte commençant par la lettre %s",
 	
+	'members:label:online' => 'En ligne',
+	'members:search' => 'Rechercher des contributeurs',
+	'members:title:search' => 'Recherche de contributeurs pour %s',
+	'members:total' => 'Nombre total de contributeurs: %s',
+	'members:title:newest' => 'Nouveaux contributeurs',
+	'members:title:popular' => 'Contributeurs les plus populaires',
+	'members:title:online' => 'Contributeurs en ligne',
+	'members:list:popular:none' => 'Aucun contributeur n\'a de contact.',
+	
 	
 );
 
