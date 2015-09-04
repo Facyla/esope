@@ -88,7 +88,7 @@ function theme_transitions2_init() {
 	elgg_register_css('font-lato', 'http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext');
 	elgg_load_css('font-lato');
 	
-	// Add viewport to head
+	// Add viewport to head, set up favicon, etc.
 	elgg_register_plugin_hook_handler('head', 'page', 'theme_transitions2_setup_head');
 	
 	// Pour changer la manière de filtrer les tags HTMLawed
@@ -295,6 +295,13 @@ function theme_transitions2_add_tools_links() {
  * @return array
  */
 function theme_transitions2_setup_head($hook, $type, $data) {
+	// Remove old favicons
+	foreach ($data['links'] as $name => $item) {
+		if (in_array($name, array('icon-ico', 'icon-vector', 'icon-16', 'icon-32', 'icon-64', 'icon-128'))) {
+			unset($data['links'][$name]);
+		}
+	}
+	
 	$data['metas']['viewport'] = array(
 		'name' => 'viewport',
 		'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
@@ -308,6 +315,7 @@ function theme_transitions2_setup_head($hook, $type, $data) {
 	$data['links']['favicon'] = array(
 		'rel' => 'icon',
 		'type' => 'image/png',
+		'sizes' => '64x64',
 		'href' => elgg_normalize_url('mod/theme_transitions2/graphics/favicon.png'),
 	);
 
