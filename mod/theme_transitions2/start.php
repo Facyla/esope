@@ -14,9 +14,12 @@ function theme_transitions2_init() {
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
 	// Remove a few object subtypes from search
-	elgg_unregister_entity_type('object', 'feedback');
-	elgg_unregister_entity_type('object', 'file');
-	elgg_unregister_entity_type('object', 'newsletter');
+	if (!elgg_is_admin_logged_in()) {
+		elgg_unregister_entity_type('object', 'cmspages');
+		elgg_unregister_entity_type('object', 'feedback');
+		elgg_unregister_entity_type('object', 'file');
+		elgg_unregister_entity_type('object', 'newsletter');
+	}
 	
 	// Custom user settings
 	elgg_extend_view('forms/account/settings', 'theme_transitions2/usersettings', 200);
