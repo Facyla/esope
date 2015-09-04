@@ -52,7 +52,7 @@ $thewire_params = array(
 		// This is for container filtering only, can be removed if no filtering
 		"joins" => array("INNER JOIN " . $dbprefix . "entities AS ce ON e.container_guid = ce.guid"),
 		"wheres" => array("ce.type != 'group'"), // avoid messages where container is a group
-		'limit' => 8, 'pagination' => false
+		'limit' => 9, 'pagination' => false
 	);
 $thewire .= elgg_list_entities($thewire_params);
 //elgg_pop_context();
