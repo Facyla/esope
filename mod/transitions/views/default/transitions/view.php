@@ -6,6 +6,7 @@
  */
 
 $transitions = elgg_extract('entity', $vars, FALSE);
+$embed = elgg_extract('embed', $vars, FALSE);
 
 if (!$transitions) {
 	return TRUE;
@@ -325,6 +326,19 @@ if ($transitions->category == 'challenge') {
 }
 
 
+// RENDER EMBED CONTENT : no sharing/contribution tools + no metadata menu
+if ($embed) {
+	echo '<div class="transitions-view-wrapper">';
+	echo $category;
+	echo '<div class="clearfloat"></div>';
+	echo $body;
+	echo '</div>';
+	return;
+}
+
+
+
+
 // TABS BLOCK - Enrichment forms
 // Sharing + contribution links
 $params = array(
@@ -363,7 +377,6 @@ if ($transitions->category == 'project') {
 }
 
 // Add relation to answer resources (anyone)
-// @TODO : réservé aux auteurs du défi...
 /*
 if ($transitions->category == 'challenge') {
 	$tab_content .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'challenge_element'));
@@ -408,6 +421,7 @@ echo elgg_view('object/elements/full', array(
 	'body' => $body,
 ));
 */
+
 
 // RENDER CONTENT
 echo '<div class="transitions-view-wrapper">';
