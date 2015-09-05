@@ -86,7 +86,7 @@ if (elgg_is_logged_in()) {
 		$num_messages = (int)messages_count_unread();
 		if ($num_messages != 0) {
 			$text = "$num_messages";
-			$tooltip = elgg_echo("messages:unreadcount", array($num_messages));
+			$tooltip =  elgg_echo("messages:unreadcount", array($num_messages));
 			$messages = '<li class="invites"><a href="' . $url . 'messages/inbox/' . $ownusername . '" title="' .	$tooltip . '">' . $text . '</a></li>';
 		}
 	}
@@ -120,9 +120,9 @@ if (elgg_is_logged_in()) {
 								<ul>
 									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
 											<!--
 									<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
 											<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
