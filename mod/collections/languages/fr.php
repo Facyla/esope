@@ -38,7 +38,7 @@ return array(
 	'collections:edit:preview' => "Prévisualisation",
 	'collections:edit:view' => "Afficher la collection",
 
-	'collections:shortcode:collection' => "Collection (déjà configuré)",
+	'collections:shortcode:collection' => "Collection (déjà configurée)",
 	'collections:embed:instructions' => "Comment intégrer cette collection ?",
 	'collections:shortcode:instructions' => " - avec un shortcode, dans une publication (blog, page wiki, etc.)&nbsp;: <strong>[collection id=\"%s\"]</strong>",
 	'collections:cmspages:instructions' => " - avec un code spécifique, dans un gabarit créé avec CMSPages&nbsp;: <strong>{{:collection/view|guid=%s}}</strong>",
