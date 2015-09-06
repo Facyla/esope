@@ -48,6 +48,9 @@ Mot de passe : %s
 	'theme_transitions:loginwithfing' => "Pour vous connectez avec votre compte Réseau Fing : utilisez vos identifiants de connexion habituels pour vous connecter sur ce site.",
 	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",
 	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
+	'theme_transitions2:news:title' => "Actus"
+	'theme_transitions2:news' => "Actus",
+	'theme_transitions2:news:title' => "Actus",
 	
 	
 	// Main translations overrides
