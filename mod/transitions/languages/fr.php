@@ -26,8 +26,8 @@ return array(
 	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
 	
-	'transitions:revision' => "Révision",
-	'transitions:auto_saved_revision' => "Révision automatiquement enregistrée",
+	'transitions:revision' => "Version",
+	'transitions:auto_saved_revision' => "Versio automatiquement enregistrée",
 
 	// messages
 	'transitions:message:saved' => "Contribution enregistrée.",
@@ -91,10 +91,10 @@ Voir et commenter cette contribution :
 	'transitions:tags:details' => "Ajoutez plusieurs tags afin de mieux classer / retrouver votre contribution.<br />Par ex.: théorie, expérimentation, écologie",
 	'transitions:excerpt' => "Votre contribution en 140 caractères",
 	'transitions:resources' => "Ressources liées",
-	'transitions:url' => "Lien vers une page web",
+	'transitions:url' => "Lien vers une ressource en ligne",
 	'transitions:url:details' => "Si votre contribution fait référence à une ressource en ligne, veuillez indiquer son adresse.",
 	'transitions:lang' => "Langue de votre contribution",
-	'transitions:lang:details' => "Langue de votre contribution",
+	'transitions:lang:details' => "En quelle langue avez-vous rédigée cette contribution ?",
 	'transitions:resourcelang' => "Langue des ressources jointes",
 	'transitions:resourcelang:details' => "Indiquez la langue de la ressource jointe (URL ou fichier), si celle-ci est disponible dans une autre langue.",
 	'transitions:territory' => "Territoire",
@@ -103,7 +103,7 @@ Voir et commenter cette contribution :
 	'transitions:startdate' => "Date de début",
 	'transitions:enddate' => "Date de fin",
 	'transitions:dateformat' => "M Y",
-	'transitions:dateformat:time' => "d M Y à H:i:s",
+	'transitions:dateformat:time' => "d M Y à H:i",
 	'transitions:date:since' => "Depuis le",
 	'transitions:date:until' => "Jusqu'au",
 	'transitions:rss_feed' => "Flux RSS",
@@ -116,8 +116,8 @@ Voir et commenter cette contribution :
 	'transitions:quickform:details' => "En cliquant sur le bouton \"Poursuivre l'édition\", votre contribution sera enregistrée en mode \"brouillon\" et vous pourrez la compléter avant de la publier.",
 	'transitions:preview' => "Sauvegarder",
 	'transitions:save' => "Publier",
-	'transitions:owner_username' => "Propriétaire de la fiche",
-	'transitions:owner_username:details' => "Pour transférer la fiche à un autre membre, indiquez son nom d'utilisateur ci-dessus (saisissez quelques lettres de son nom pour que des choix vous soient proposés).",
+	'transitions:owner_username' => "Propriétaire de la contribution",
+	'transitions:owner_username:details' => "Pour transférer la contribution à un autre contributeur, indiquez son nom d'utilisateur ci-dessus (saisissez quelques lettres de son nom pour que des choix vous soient proposés).",
 	'transitions:featured:title' => "Contributions choisies",
 	'transitions:background:title' => "Contributions en retrait",
 	'transitions:featured' => "Mettre en avant / en retrait",
@@ -216,7 +216,7 @@ Voir et commenter cette contribution :
 	'transitions:bookmarklet:title' => "Ajoutez ce lien à vos raccourcis pour publier directement sur Transitions²",
 	'transitions:bookmarklet:description' => "Le bookmarklet \"+Transitions²\" vous permet de partager ce que vous trouvez sur le web. Pour l'utiliser, glissez simplement le bouton ci-dessus dans la barre de liens de votre navigateur. Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
 	'transitions:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
-	'transitions:bookmarklet:description:conclusion' => "Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
+	'transitions:bookmarklet:description:conclusion' => "Vous pouvez créer une contribution à partir de n'importe quelle page web en cliquant sur le bookmarklet.",
 	
 	
 	// Select values
@@ -236,7 +236,7 @@ Voir et commenter cette contribution :
 	'transitions:category:project' => "<i class=\"fa fa-cube\"></i> Projet",
 	'transitions:category:project:details' => "Réalisations, projets et initiatives ; passés, présents ou à venir ; réussis ou ratés...",
 	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Evénement",
-	'transitions:category:event:details' => "",
+	'transitions:category:event:details' => "Un temps fort, une date à retenir, un atelier, une rencontre, bref, tout type d'événement à noter dans un calendrier !",
 	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Produit éditorial",
 	'transitions:category:editorial:details' => "Référencement d’articles, dossiers, ouvrages, etc. à propos du lien entre les deux transitions, appuyés ou non sur Transitions²",
 	'transitions:category:challenge' => "<i class=\"fa fa-trophy\"></i> Défi",
