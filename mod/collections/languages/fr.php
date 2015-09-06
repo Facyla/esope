@@ -18,7 +18,7 @@ return array(
 	'collections:add' => "Créer une nouvelle collection",
 	'collections:edit' => "Edition de la collection",
 	'collections:edit:title' => "Titre",
-	'collections:edit:title:details' => "Le nom de votre collection.",
+	'collections:edit:title:details' => "Le titre de votre collection.",
 	'collections:edit:name' => "Personnaliser l'URL de la collection",
 	'collections:edit:name:details' => "Identifiant unique, sans accent ni caractères spéciaux, en minuscule et tout attaché, par ex.: mon-article-non-acentue.",
 	'collections:edit:description' => "Description",
