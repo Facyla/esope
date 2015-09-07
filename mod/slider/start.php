@@ -94,6 +94,9 @@ function slider_url($hook, $type, $url, $params) {
  */
 function slider_get_entity_by_name($name = '') {
 	if (!empty($name)) {
+		$slider = get_entity($name);
+		if elgg_instanceof($slider, 'object', 'slider') { return $slider; }
+		
 		$sliders = elgg_get_entities_from_metadata(array(
 				'types' => 'object', 'subtypes' => 'slider', 
 				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 

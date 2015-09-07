@@ -27,9 +27,8 @@ $page_title = elgg_echo('slider');
 elgg_push_breadcrumb($page_title, 'slider');
 
 // slider/read may render more content
-$slider = get_entity($guid);
 // Add support for unique identifiers
-if (!$slider) $slider = slider_get_entity_by_name($guid);
+$slider = slider_get_entity_by_name($guid);
 if (elgg_instanceof($slider, 'object', 'slider')) {
 	$page_title = $slider->title;
 	elgg_push_breadcrumb($page_title);

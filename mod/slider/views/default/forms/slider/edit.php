@@ -35,10 +35,12 @@ if ($advanced_mode) {
 $edit_mode_toggle .= '</script>';
 
 // Get current slider (if exists)
-$guid = get_input('guid', false);
-$slider = get_entity($guid);
-// Add support for unique identifiers
-if (!$slider) $slider = slider_get_entity_by_name($guid);
+$slider = elgg_extract('entity', $vars);
+if (elgg_instanceof($slider, 'object', 'slider')) {
+	$guid = get_input('guid', false);
+	// Add support for unique identifiers
+	$slider = slider_get_entity_by_name($guid);
+}
 
 
 $editor_opts = array('rawtext' => elgg_echo('slider:editor:no'), 'longtext' => elgg_echo('slider:editor:yes'));
