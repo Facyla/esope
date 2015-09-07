@@ -212,7 +212,9 @@ footer.footer-inria {
 .elgg-context-dashboard .elgg-form-thewire-add { width: 100%; }
 .elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; font-size: 1.2em; }
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
-#thewire-characters-remaining { font-weight: normal !important; color: #999 !important; }
+
+.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
+#thewire-characters-remaining span { margin: 3px 12px 0 0; float:none; }
 #thewire-textarea { font-size: 1.2em; }
 .home-wire #thewire-textarea { margin-top: 0; }
 .home-wire .thewire-form { padding: 0; }
@@ -230,6 +232,13 @@ footer.footer-inria {
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
+
+/* The Wire */
+.thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
+.elgg-form-thewire-group-add {  }
+.elgg-form-thewire-group-add #thewire-textarea { width: 80%; float: left; height: 3em; margin-top: 0; }
+.elgg-form-thewire-group-add #thewire-characters-remaining span { margin:0; }
+
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }

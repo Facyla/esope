@@ -156,21 +156,10 @@ if (elgg_is_logged_in()) {
 									</ul>
 								</li>
 								
-								
-								<!--
-								<li class="groups"><a href="<?php echo $url . 'groups/all'; ?>" <?php if (full_url() == $url . 'groups/all') { echo 'class="active elgg-state-selected"'; } ?> >Parcourir</a>
-									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>groups/search?tag=Libre+expression">Libre expression</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Missions+et+projets">Missions et projets</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Animation+et+conseils">Animation et conseils</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Institutionnel">Institutionnel</a></li>
-									</ul>
-								</li>
-								//-->
-								
 								<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
+										<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
 										<?php echo $groupinvites; ?>

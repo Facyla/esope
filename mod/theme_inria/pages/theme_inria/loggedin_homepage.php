@@ -16,7 +16,16 @@ $slider_params = array('width' => '100%', 'height' => '300px');
 $slider = elgg_view('slider/slider', $slider_params);
 */
 $slider_guid = elgg_get_plugin_setting('home_slider', 'theme_inria');
-$slider = elgg_view('slider/view', array('guid' => $slider_guid));
+$slider = '';
+if (elgg_is_admin_logged_in()) {
+	$slider .= '<p><i class="fa fa-cogs"></i> &nbsp; ';
+	$slider .= '<a href="' . $url . 'admin/plugin_settings/theme_inria" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:homeslider:select') . ' (' . $slider_guid . ')</a> &nbsp; ';
+	if (!empty($slider_guid)) {
+		$slider .= '<a href="' . $url . 'slider/edit/' . $slider_guid . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:homeslider:edit') . '</a>';
+	}
+	$slider .= '</p>';
+}
+$slider .= elgg_view('slider/view', array('guid' => $slider_guid));
 
 
 
