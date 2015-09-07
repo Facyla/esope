@@ -83,7 +83,7 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 // Edit form
 // Param vars
 $content = '';
-if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
+if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $slider->guid)) . '</p>'; }
 $content .= elgg_view('input/hidden', array('name' => 'edit_mode', 'value' => "")) . '</p>';
 
 
