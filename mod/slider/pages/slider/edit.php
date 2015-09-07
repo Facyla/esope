@@ -40,7 +40,10 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 $CONFIG->title = $page_title;
 
 // slider/read may render more content
-$content .= elgg_view('forms/slider/edit', array('entity' => $slider));
+if ($slider->canEdit()) {
+	$content .= elgg_view('forms/slider/edit', array('entity' => $slider));
+	$content .= elgg_view('forms/slider/clone', array('entity' => $slider));
+}
 
 
 // Wrap into default, full-page layout

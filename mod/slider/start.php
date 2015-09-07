@@ -51,6 +51,7 @@ function slider_plugin_init() {
 	// Register actions
 	$actions_path = elgg_get_plugins_path() . 'slider/actions/slider/';
 	elgg_register_action("slider/edit", $actions_path . 'edit.php');
+	elgg_register_action("slider/clone", $actions_path . 'clone.php');
 	elgg_register_action("slider/delete", $actions_path . 'delete.php');
 	
 		// register the JavaScript (autoloaded in 1.10)
