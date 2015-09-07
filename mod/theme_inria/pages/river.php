@@ -46,7 +46,7 @@ if (!$activity) {
 
 $content = '';
 if ($page_type != 'mine') {
-	$content .= '<blockquote>'.elgg_echo('theme_inria:activity:explanations').'</blockquote>';
+	$content .= '<blockquote class="river-inria-info">'.elgg_echo('theme_inria:activity:explanations').'</blockquote>';
 	//$content .= '<div class="clearfloat"></div>';
 }
 $content .= elgg_view('core/river/filter', array('selector' => $selector));
