@@ -238,6 +238,7 @@ footer.footer-inria {
 .elgg-form-thewire-group-add {  }
 .elgg-form-thewire-group-add #thewire-textarea { width: 80%; float: left; height: 3em; margin-top: 0; }
 .elgg-form-thewire-group-add #thewire-characters-remaining span { margin:0; }
+.elgg-form-thewire-group-add .elgg-foot { float: right; margin: 0; }
 
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
