@@ -8,7 +8,6 @@ return array(
 	'theme_transitions2:usersettings:block_messages' => "Interdire aux autres contributeurs de m'envoyer des messages",
 	'theme_transitions2:usersettings:block_messages:title' => "Messages privés",
 	
-	'theme_transitions2:search' => "Recherchez une ressource",
 	'theme_transitions2:search' => "Rechercher une contribution",
 	'theme_transitions2:newcontribution' => "Racontez-nous votre transition, partagez une ressource pour le catalogue !",
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
@@ -28,7 +27,7 @@ return array(
 Votre compte a bien été créé sur %s. Pour vous connecter, rendez-vous :
 %s
 
-Et connectez vous avec les identifiants suivant :
+Et connectez vous avec les identifiants suivants :
 Nom d'utilisateur : %s
 Mot de passe : %s
 
@@ -44,10 +43,12 @@ Mot de passe : %s
 	
 	// API
 	'theme_transitions:login:usernamedontmatch' => "Un compte existe déjà avec le même email mais un autre identifiant, veuillez contacter un administrateur pour demander de mettre à jour votre identifiant : %s doit devenir %s",
-	'theme_transitions:login:newaccount' => "Connexion avec votre compte RSFing réussie : un compte vous a bien été créé.",
+	'theme_transitions:login:newaccount' => "Connexion avec votre compte Réseau Fing réussie : un compte vous a bien été créé.",
 	'theme_transitions:loginwithfing' => "Pour vous connectez avec votre compte Réseau Fing : utilisez vos identifiants de connexion habituels pour vous connecter sur ce site.",
-	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",
+	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Réseau Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",
 	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
+	'theme_transitions2:news' => "Actus",
+	'theme_transitions2:news:title' => "Actus",
 	
 	
 	// Main translations overrides
@@ -76,9 +77,9 @@ Mot de passe : %s
 	'transitions:search:placeholder' => "&#xf002; Rechercher une contribution",
 	
 	'profile:organisation' => "Organisation",
-	'profile:linkedin' => "URL du compte LinkedIn",
-	'profile:twitter' => "URL du compte Twitter",
-	'profile:facebook' => "URL du compte Facebook",
+	'profile:linkedin' => "URL de votre profil LinkedIn",
+	'profile:twitter' => "URL de votre profil Twitter",
+	'profile:facebook' => "URL de votre profil Facebook",
 	'members:title:alpha' => 'Contributeurs',
 	'members:alpha:notforletter' => "Aucun compte commençant par la lettre %s",
 	
@@ -86,7 +87,7 @@ Mot de passe : %s
 	'members:label:online' => 'En ligne',
 	'members:search' => 'Rechercher des contributeurs',
 	'members:title:search' => 'Recherche de contributeurs pour %s',
-	'members:total' => 'Nombre total de contributeurs: %s',
+	'members:total' => 'Nombre total de contributeurs&nbsp;: %s',
 	'members:title:newest' => 'Nouveaux contributeurs',
 	'members:title:popular' => 'Contributeurs les plus populaires',
 	'members:title:online' => 'Contributeurs en ligne',

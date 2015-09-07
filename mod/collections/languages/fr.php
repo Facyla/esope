@@ -18,7 +18,7 @@ return array(
 	'collections:add' => "Créer une nouvelle collection",
 	'collections:edit' => "Edition de la collection",
 	'collections:edit:title' => "Titre",
-	'collections:edit:title:details' => "Le nom de votre collection.",
+	'collections:edit:title:details' => "Le titre de votre collection.",
 	'collections:edit:name' => "Personnaliser l'URL de la collection",
 	'collections:edit:name:details' => "Identifiant unique, sans accent ni caractères spéciaux, en minuscule et tout attaché, par ex.: mon-article-non-acentue.",
 	'collections:edit:description' => "Description",
@@ -38,7 +38,7 @@ return array(
 	'collections:edit:preview' => "Prévisualisation",
 	'collections:edit:view' => "Afficher la collection",
 
-	'collections:shortcode:collection' => "Collection (déjà configuré)",
+	'collections:shortcode:collection' => "Collection (déjà configurée)",
 	'collections:embed:instructions' => "Comment intégrer cette collection ?",
 	'collections:shortcode:instructions' => " - avec un shortcode, dans une publication (blog, page wiki, etc.)&nbsp;: <strong>[collection id=\"%s\"]</strong>",
 	'collections:cmspages:instructions' => " - avec un code spécifique, dans un gabarit créé avec CMSPages&nbsp;: <strong>{{:collection/view|guid=%s}}</strong>",
