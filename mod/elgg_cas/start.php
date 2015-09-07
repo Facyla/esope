@@ -98,6 +98,8 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 function elgg_cas_autologin() {
 	// Limit to homepage ?
 	//if ((elgg_get_viewtype() == 'default') && (full_url() == elgg_get_site_url())) {
+	if (elgg_in_context('cron')) { return; }
+	
 	if (elgg_get_viewtype() == 'default') {
 		global $cas_client_loaded;
 		// CAS autologin
