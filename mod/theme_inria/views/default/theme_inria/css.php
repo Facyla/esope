@@ -236,14 +236,17 @@ footer.footer-inria {
 /* The Wire */
 .thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 .elgg-form-thewire-group-add {  }
+/*
 .elgg-form-thewire-group-add #thewire-textarea { width: 80%; float: left; height: 3em; margin-top: 0; }
-.elgg-form-thewire-group-add #thewire-characters-remaining span { margin:0; }
+*/
+.elgg-form-thewire-group-add #thewire-textarea { height: 4em; padding: 1px 3px; }
+.elgg-form-thewire-group-add #thewire-characters-remaining span { margin: 0 12px 0 0; float:none; font-size: 1.2em; }
 .elgg-form-thewire-group-add .elgg-foot { float: right; margin: 0; }
 
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
-.river-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
+.river-inria-info { margin: 24px auto 12px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 
 
 

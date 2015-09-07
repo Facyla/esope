@@ -38,15 +38,15 @@ echo elgg_view('input/plaintext', array(
 ));
 ?>
 
-<div id="thewire-characters-remaining">
-	<span>140</span>
-</div>
 <div class="elgg-foot mts">
-<?php
-
-echo elgg_view('input/submit', array(
-	'value' => $text,
-	'id' => 'thewire-submit-button',
-));
-?>
+	<span style="float:right;">
+		<span id="thewire-characters-remaining"><span>140</span></span>
+		<?php
+		echo elgg_view('input/submit', array(
+			'value' => $text,
+			'id' => 'thewire-submit-button',
+		));
+		?>
+	</span>
 </div>
+
