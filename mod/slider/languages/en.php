@@ -22,10 +22,18 @@ return array(
 	'slider:settings:slider_access:details' => "By default, the access to the slider editing tool is reserved to administrators. You can also allow site members to use it by choosing \"Yes\"",
 	'slider:option:yes' => "Yes",
 	'slider:option:no' => "No",
+	'slider:settings:enable_cloning' => "Enable slider cloning",
+	'slider:settings:enable_cloning:details' => "If yes, allows any user who can edit a slider to duplicate it and create a new slider",
+	
 	'slider:strapline' => 'Last update on %s by %s',
 	'slider:edit_mode' => "Edit mode",
 	'slider:edit_mode:basic' => "Simple",
 	'slider:edit_mode:full' => "Advanced",
+	'slider:clone' => "Clone",
+	'slider:edit:clone' => "Duplicate this slider",
+	'slider:clone:details' => "You can create a new slider with the same content as this one.",
+	'slider:cloned' => "Slider duplicated",
+	'slider:clone:error' => "Error while duplicating the slider",
 	
 	
 'slider:showinstructions' => "Display instructions",
