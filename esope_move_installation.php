@@ -84,7 +84,7 @@ header('Content-Type: text/html; charset=utf-8');
 <body>
 <?php
 echo '<h2>Définition des paramètres de configuration</h2>';
-echo '<form>';
+echo '<form method="POST">';
 echo '<p>Serveur MySQL <label><input type="text" name="db_server" value="' . $db_server . '" required="required" /></label></p>';
 echo '<p>Nom de la base MySQL <label><input type="text" name="db_name" value="' . $db_name . '" required="required" /></label></p>';
 echo '<p>Utilisateur MySQL <label><input type="text" name="db_user" value="' . $db_user . '" required="required" /></label></p>';
