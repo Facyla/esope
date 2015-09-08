@@ -71,6 +71,7 @@ if ($use_hide_block == 'yes') {
 		$plus_textcontent = strip_tags($plus_content);
 		if (!empty($plus_textcontent)) {
 			$message = '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
+			//$message = '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><i class="fa fa-chevron-up" title="' . elgg_echo('adf_platform:expand') . '"></i></a><div class="plus">' . $plus_content . '</div>';
 		}
 	} else {
 		$message = $message . $attachments;
@@ -78,6 +79,7 @@ if ($use_hide_block == 'yes') {
 		$plus_textcontent = strip_tags($plus_content);
 		if (!empty($plus_textcontent)) {
 			$message .= '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('adf_platform:expand') . '" /></a><div class="plus">' . $plus_content . '</div>';
+			//$message .= '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('adf_platform:moreinfoon', array($object->title)) . '"><i class="fa fa-chevron-down" title="' . elgg_echo('adf_platform:expand') . '"></i></a><div class="plus">' . $plus_content . '</div>';
 		}
 	}
 } else {

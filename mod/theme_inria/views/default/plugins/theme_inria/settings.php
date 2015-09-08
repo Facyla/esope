@@ -13,6 +13,9 @@ $site_email = elgg_get_site_entity()->email;
 if (!isset($vars['entity']->home_slider)) { $vars['entity']->home_slider = 'home_slider'; }
 
 
+// Auto-corrections
+if (!empty($vars['entity']->home_slider)) { $vars['entity']->home_slider = elgg_get_friendly_title($vars['entity']->home_slider); }
+
 
 echo '<fieldset><legend>Gestion du menu "Aide"</legend>';
 	
@@ -84,7 +87,10 @@ echo '</fieldset>';
 
 
 //Homepage slider
-echo "<p><label>GUID ou identifiant du slider à afficher sur l'accueil " . elgg_view('input/text', array('name' => 'params[home_slider]', 'value' => $vars['entity']->home_slider)) . '</label></p>';
+echo "<p>
+	<label>GUID ou identifiant du slider à afficher sur l'accueil " . elgg_view('input/text', array('name' => 'params[home_slider]', 'value' => $vars['entity']->home_slider)) . '</label><br />
+	<a href="' . elgg_get_site_url() . 'slider" class="" target="_blank">Afficher la liste des sliders disponibles</a>
+	</p>';
 
 
 

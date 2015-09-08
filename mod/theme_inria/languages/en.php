@@ -141,6 +141,7 @@ $english = array(
 	'adf_platform:directory' => 'Members',
 	
 	'inria:mygroups' => "All my groups",
+	'theme_inria:groups:discover' => "Groups to be discovered",
 	'inria:mygroups:title' => "My groups",
 	'theme_inria:firststeps:hide' => "Don't show anymore",
 	'theme_inria:firststeps:show' => "Show",
@@ -149,6 +150,8 @@ $english = array(
 	'theme_inria:thewire:title' => "Your news in 140 characters",
 	'theme_inria:thewire:details' => "Any message or information to share ?",
 	'theme_inria:thewire:placeholder' => "140 chars to write your message to everybody",
+	'theme_inria:thewire:group:title' => "Your message to the group",
+	'theme_inria:thewire:group:placeholder' => "140 chars for your message",
 	'theme_inria:widgets:add:home' => "Edit my dashboard",
 	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	
@@ -401,6 +404,12 @@ Here is the new profile page : %s
 	
 	'river:all' => "On the move in Iris ...",
 	'thewire:everyone' => "Your news in 140 characters",
+	
+	'theme_inria:postbymail:nousersettings' => "Setting removed - Only Inria email addresses are allowed to post by email on the site.",
+	
+	'theme_inria:homeslider:select' => "Choose which slider to display",
+	'theme_inria:homeslider:edit' => "Edit this slider",
+	
 	
 );
 

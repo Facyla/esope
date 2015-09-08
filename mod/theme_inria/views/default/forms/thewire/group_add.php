@@ -28,22 +28,25 @@ if (elgg_instanceof($group, 'group')) {
 	echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 }
 
+echo '<h3>' . elgg_echo('theme_inria:thewire:group:title') . '</h3>';
+
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
 	'id' => 'thewire-textarea',
-	'placeholder' => elgg_echo('esope:thewire:group:placeholder'),
+	'placeholder' => elgg_echo('theme_inria:thewire:group:placeholder'),
 ));
 ?>
-<div id="thewire-characters-remaining">
-	<span>140</span> <?php echo elgg_echo('thewire:charleft'); ?>
-</div>
-<div class="elgg-foot mts">
-<?php
 
-echo elgg_view('input/submit', array(
-	'value' => $text,
-	'id' => 'thewire-submit-button',
-));
-?>
+<div class="elgg-foot mts">
+	<span style="float:right;">
+		<span id="thewire-characters-remaining"><span>140</span></span>
+		<?php
+		echo elgg_view('input/submit', array(
+			'value' => $text,
+			'id' => 'thewire-submit-button',
+		));
+		?>
+	</span>
 </div>
+

@@ -2,8 +2,11 @@
 elgg_load_js('elgg.slider.edit');
 
 // Get current slider (if exists)
-$guid = get_input('guid', false);
-$slider = get_entity($guid);
+$slider = elgg_extract('entity', $vars);
+if (!elgg_instanceof($slider, 'object', 'slider')) {
+	$guid = get_input('guid', false);
+	$slider = slider_get_entity_by_name($guid);
+}
 
 $editor_opts = array('rawtext' => elgg_echo('slider:editor:no'), 'longtext' => elgg_echo('slider:editor:yes'));
 
@@ -42,7 +45,7 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 // Edit form
 // Param vars
 $content = '';
-if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
+if ($slider) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $slider->guid)) . '</p>'; }
 
 $content .= '<div style="width:48%; float:left;">';
 	$content .= '<p><label>' . elgg_echo('slider:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $slider_title, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('slider:edit:title:details') . '</em></p>';

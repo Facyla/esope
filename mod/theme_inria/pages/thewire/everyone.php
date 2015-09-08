@@ -10,13 +10,14 @@ $title = elgg_echo('thewire:everyone');
 
 $content = '';
 
-$content .= '<blockquote>' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
-
 if (elgg_is_logged_in()) {
 	$form_vars = array('class' => 'thewire-form');
 	$content .= elgg_view_form('thewire/add', $form_vars);
 	$content .= elgg_view('input/urlshortener');
 }
+
+$content .= '<div class="clearfloat"></div>';
+$content .= '<blockquote class="thewire-inria-info">' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
 
 $content .= elgg_list_entities(array(
 	'type' => 'object',

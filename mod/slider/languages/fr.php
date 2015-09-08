@@ -24,6 +24,8 @@ $french = array(
 	'slider:option:no' => "Non",
 	'slider:error:multiple' => "Plusieurs sliders correspondent au nom demandé, impossible de déterminer lequel afficher",
 	'slider:error:alreadyexists' => "Un slider portant ce nom existe déjà, veuillez choisir un autre nom.",
+	'slider:settings:enable_cloning' => "Permettre de dupliquer les sliders",
+	'slider:settings:enable_cloning:details' => "Si oui, permet à toute personne pouvant éditer un slider de le dupliquer pour créer un nouveau slider",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",
@@ -61,6 +63,11 @@ $french = array(
 	'slider:edit:editor:details' => "L'éditeur visuel facilite l'édition, mais il filtre également le code HTML utilisé. Cette option permet de choisir si l'éditeur doit être activé par défaut lorsque vous éditez ce diaporama. Il est conseillé de le désactiver si vous utilisez directement du code HTML (vous pourrez toujours l'activer manuellement sur une diapositive en cas de besoin).",
 	'slider:editor:yes' => "Oui (filtre HTML)",
 	'slider:editor:no' => "Non (activable sur demande)",
+	'slider:clone' => "Clonage",
+	'slider:clone:details' => "Vous pouvez créer directement un nouveau slider reprenant les contenus de celui-ci.",
+	'slider:edit:clone' => "Dupliquer ce slider",
+	'slider:cloned' => "Slider dupliqué",
+	'slider:clone:error' => "Erreur lors de la duplication du slider",
 	
 	'slider:shortcode:slider' => "Diaporama (déjà configuré)",
 	'slider:embed:instructions' => "Comment intégrer ce diaporama ?",

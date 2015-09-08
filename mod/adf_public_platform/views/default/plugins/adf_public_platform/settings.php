@@ -549,7 +549,7 @@ $(function() {
 		}
 		
 		// Add limit links to navigation
-			echo '<p><label>' . elgg_echo('adf_platform:settings:river_hide_block') . ' ' . elgg_view('input/dropdown', array('name' => 'params[river_hide_blocks]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->river_hide_blocks)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:river_hide_block:details') . '</em></p>';
+			echo '<p><label>' . elgg_echo('adf_platform:settings:river_hide_block') . ' ' . elgg_view('input/dropdown', array('name' => 'params[river_hide_block]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->river_hide_block)) . '</label><br /><em>' . elgg_echo('adf_platform:settings:river_hide_block:details') . '</em></p>';
 		
 		// Add limit links to navigation
 			echo '<p><label>' . elgg_echo('adf_platform:settings:advanced_pagination') . ' ' . elgg_view('input/dropdown', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->advanced_pagination)) . '</label></p>';

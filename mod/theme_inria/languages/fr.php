@@ -145,6 +145,7 @@ $french = array(
 	'adf_platform:directory' => 'Membres',
 	
 	'inria:mygroups' => "Tous mes groupes",
+	'theme_inria:groups:discover' => "Groupes à découvrir",
 	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
@@ -153,6 +154,8 @@ $french = array(
 	'theme_inria:thewire:title' => "Vos actualités en 140 caractères",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
 	'theme_inria:thewire:placeholder' => "140 caractères pour saisir votre message à tous",
+	'theme_inria:thewire:group:title' => "Votre message pour le groupe",
+	'theme_inria:thewire:group:placeholder' => "140 caractères pour votre message",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
@@ -442,7 +445,10 @@ Afficher et commenter le nouvel article :
 
 %s",
 	
+	'theme_inria:postbymail:nousersettings' => "Réglage désactivé - Seules les adresses Inria sont autorisées à publier par email sur le site.",
 	
+	'theme_inria:homeslider:select' => "Choisir le slider à afficher",
+	'theme_inria:homeslider:edit' => "Editer ce slider",
 	
 	
 );
