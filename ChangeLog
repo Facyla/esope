@@ -1,4 +1,106 @@
+2015-09-06  Juho Jaakkola <juho@elgg.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.3
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, install/languages/ca.php,
+  mod/blog/languages/pt_BR.php, mod/custom_index/languages/pt_BR.php,
+  mod/embed/languages/it.php, mod/file/languages/it.php,
+  mod/garbagecollector/languages/it.php, mod/groups/languages/ru.php,
+  mod/invitefriends/languages/it.php, mod/legacy_urls/languages/it.php,
+  mod/likes/languages/pt_BR.php, mod/logbrowser/languages/it.php,
+  mod/members/languages/it.php, mod/members/languages/ro_RO.php,
+  mod/messageboard/languages/eu_ES.php, mod/messageboard/languages/it.php,
+  mod/messages/languages/it.php, mod/notifications/languages/it.php,
+  mod/pages/languages/it.php, mod/reportedcontent/languages/it.php,
+  mod/reportedcontent/languages/nl.php, mod/search/languages/it.php,
+  mod/search/languages/pt_BR.php, mod/site_notifications/languages/it.php,
+  mod/tagcloud/languages/it.php, mod/thewire/languages/it.php,
+  mod/twitter_api/languages/it.php, mod/uservalidationbyemail/languages/it.php:
+  chore(i18n): update translations
+
+2015-08-23  Juho Jaakkola <juho@elgg.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.2
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/index.mo,
+  docs/locale/es/LC_MESSAGES/design.mo, docs/locale/es/LC_MESSAGES/guides.mo,
+  docs/locale/es/LC_MESSAGES/intro.mo, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/index.mo, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.mo, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo, languages/ja.php,
+  mod/ckeditor/languages/el.php, mod/developers/languages/fi.php,
+  mod/externalpages/languages/it.php, mod/externalpages/languages/sr.php,
+  mod/groups/languages/el.php, mod/groups/languages/ja.php,
+  mod/notifications/languages/el.php, mod/profile/languages/el.php,
+  mod/site_notifications/languages/el.php, mod/tagcloud/languages/el.php,
+  mod/web_services/languages/ja.php: chore(i18n): update translations
+
+2015-08-14  Steve Clay <steve@mrclay.org>
+
+  	* .../classes/Elgg/Database/RelationshipsTable.php,
+  engine/lib/relationships.php: docs(entities): Better docs for fetching
+  relationships
+
+2015-08-05  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.1
+
+  	* docs/locale/eu_ES/LC_MESSAGES/about.mo, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, mod/bookmarks/languages/eu_ES.php,
+  mod/categories/languages/eu_ES.php, mod/ckeditor/languages/eu_ES.php,
+  mod/custom_index/languages/eu_ES.php, mod/developers/languages/eu_ES.php,
+  mod/diagnostics/languages/eu_ES.php, mod/embed/languages/eu_ES.php,
+  mod/externalpages/languages/eu_ES.php, mod/file/languages/eu_ES.php,
+  mod/garbagecollector/languages/eu_ES.php, mod/groups/languages/eu_ES.php,
+  mod/invitefriends/languages/eu_ES.php, mod/legacy_urls/languages/eu_ES.php,
+  mod/likes/languages/eu_ES.php, mod/logbrowser/languages/eu_ES.php,
+  mod/logrotate/languages/eu_ES.php, mod/members/languages/eu_ES.php,
+  mod/reportedcontent/languages/eu_ES.php, mod/search/languages/eu_ES.php,
+  mod/search/languages/zh-Hans.php, mod/site_notifications/languages/eu_ES.php,
+  mod/tagcloud/languages/eu_ES.php, mod/twitter_api/languages/eu_ES.php,
+  mod/uservalidationbyemail/languages/eu_ES.php,
+  mod/web_services/languages/eu_ES.php: chore(i18n): update translations
+
 2015-07-07  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.0
+
+  	* docs/locale/pot/about.pot, docs/locale/pot/admin.pot,
+  docs/locale/pot/appendix.pot, docs/locale/pot/contribute.pot,
+  docs/locale/pot/design.pot, docs/locale/pot/guides.pot,
+  docs/locale/pot/index.pot, docs/locale/pot/intro.pot,
+  docs/locale/pot/plugins.pot, docs/locale/pot/tutorials.pot: chore(i18n):
+  update translations
 
   	* CHANGELOG.md, composer.json: chore(release): v1.11.4
 
@@ -18,6 +120,33 @@
   mod/pages/languages/sr.php, mod/profile/languages/eu_ES.php,
   mod/thewire/languages/eu_ES.php, mod/thewire/languages/sr.php: chore(i18n):
   update translations
+
+2015-07-02  Steve Clay <steve@mrclay.org>
+
+  	* docs/guides/hooks-list.rst, engine/classes/ElggEntity.php,
+  engine/tests/ElggEntityTest.php: feature(annotations): Adds a more granular
+  permission hook for canAnnotate  ElggEntity::canAnnotate now first triggers
+  the hook “permissions_check:annotate:<name>” before the generic
+  “permissions_check:annotate” hook.
+
+  	* engine/classes/Elgg/Values.php,
+  engine/tests/phpunit/Elgg/EventsServiceTest.php,
+  .../tests/phpunit/Elgg/PluginHooksServiceTest.php: feature(events): Adds
+  static methods for returning common values  These functions are particularly
+  useful as handlers for events/hooks.
+
+2015-06-19  Evan Winslow <evan.b.winslow@gmail.com>
+
+  	* engine/lib/deprecated-1.12.php, engine/lib/views.php: deprecate(views):
+  elgg_get_view_location is going away in 2.0  It doesn't seem to have a valid
+  use-case and is making some views work more difficult than it needs to be. 
+  Refs #8527
+
+  	* docs/guides/views.rst, engine/lib/deprecated-1.11.php,
+  engine/lib/deprecated-1.12.php, engine/lib/views.php, engine/load.php:
+  deprecate(views): Support for custom template handlers will end soon  This
+  functionality was never really properly implemented anyways. Even the
+  docblock comments on the API functions says "experimental."  Refs #8440
 
 2015-06-16  Steve Clay <steve@mrclay.org>
 
@@ -61,6 +190,12 @@
   docs/locale/pot/tutorials.pot, mod/blog/languages/zh-Hans.php,
   mod/bookmarks/languages/zh-Hans.php: chore(i18n): update translations
 
+2015-06-09  Juho Jaakkola <juho@elgg.org>
+
+  	* .../classes/Elgg/Database/PrivateSettingsTable.php,
+  engine/classes/Elgg/Di/ServiceProvider.php, engine/lib/private_settings.php:
+  chore(core): adds service for private settings
+
 2015-06-05  Evan Winslow <evan.b.winslow@gmail.com>
 
   	* mod/aalborg_theme/composer.json, mod/blog/composer.json,
@@ -83,6 +218,22 @@
   mod/zaudio/composer.json: chore(composer): Add minimal composer.json to all
   bundled plugins  This allows us to push the plugin to a separate repo and
   have that repo be the source for a composer package.  Refs #7721
+
+2015-06-01  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/elgglib.php, engine/lib/pagehandler.php: feature(ajax):
+  elgg_ajax_gatekeeper for asserting resources as Ajax-only
+
+2015-05-21  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Amd/ViewFilter.php,
+  engine/tests/phpunit/Elgg/Amd/ViewFilterTest.php,
+  mod/developers/actions/developers/settings.php,
+  mod/developers/languages/en.php, mod/developers/start.php,
+  .../views/default/admin/developers/settings.php,
+  mod/developers/views/default/js/elgg/dev.js,
+  .../views/default/js/elgg/dev/amd_monitor.js: feature(developers): Devs can
+  show loaded AMD modules in console
 
 2015-05-22  Steve Clay <steve@mrclay.org>
 
@@ -133,6 +284,48 @@
   	* docs/guides/accessibility.rst, docs/guides/index.rst: docs(guides):
   Alpha-sort the developer guides to make them more scannable
 
+2015-05-22  Steve Clay <steve@mrclay.org>
+
+  	* mod/developers/actions/developers/settings.php,
+  .../classes/Elgg/DevelopersPlugin/Hooks.php, mod/developers/languages/en.php,
+  mod/developers/start.php, .../views/default/admin/developers/settings.php,
+  mod/developers/views/default/developers/css.php,
+  .../views/default/developers/gear_popup.php,
+  .../views/default/forms/developers/settings.php,
+  mod/developers/views/default/js/elgg/dev/gear.js: feature(developers): Adds a
+  quick access icon for some admin settings  When enabled, a gear icon appears
+  in the lower right of the viewport. Clicking it opens a popup with the entire
+  admin page menu and the developer settings form.  This also makes it clear
+  that caches are flushed.
+
+2015-04-29  Jeroen Dalsem <jdalsem@coldtrick.com>
+
+  	* actions/widgets/save.php, views/default/object/widget.php,
+  views/default/object/widget/elements/content.php: chore(views): refactored
+  widget content view  Both the action and the object/widget view did the same
+  content related checks. With this refactor the both use the same
+  object/widget/elements/content view to handle the logic for the content
+  output (no view logic in the actions). Reducing boilerplate.  Improved
+  readability of the object/widget view  A side effect is that it now is easier
+  to modify the generic content output of a widget instead of the full widget
+  view. Now it is also easier to extend.
+
+2015-04-10  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* docs/guides/events-list.rst, engine/classes/ElggMemcache.php:
+  chore(memcache): Reset Memcache when the caches are flushed in Elgg  fixes
+  #7286
+
+  	* actions/admin/plugins/activate.php,
+  actions/admin/plugins/activate_all.php, actions/admin/plugins/deactivate.php,
+  actions/admin/plugins/deactivate_all.php,
+  actions/admin/plugins/set_priority.php, actions/admin/site/flush_cache.php,
+  docs/guides/events-list.rst, engine/classes/Elgg/UpgradeService.php,
+  engine/lib/cache.php: feature(cache): introducing a generic function to reset
+  all caches  With the introduction of more cache types there was no way te
+  easily reset them all. This new function triggers an event so every cache can
+  reset as needed.
+
 2015-05-12  Steve Clay <steve@mrclay.org>
 
   	* engine/classes/Elgg/PersistentLoginService.php,
@@ -150,6 +343,19 @@
   fix(groups): terminate edit action early if group can not be saved  Captures
   false returns from ElggGroup::save() and terminates edit action early with an
   error message
+
+2015-04-21  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/lib/views.php, views/default/page/components/module.php:
+  chore(views): clean up module component view  Removes inline html and allows
+  class to be an array
+
+2015-05-06  Steve Clay <steve@mrclay.org>
+
+  	* docs/guides/ajax.rst, engine/lib/elgglib.php: feature(ajax): Allows
+  fetching form views wrapped by elgg_view_form()  This alters the ajax/view/
+  page handler to also accept ajax/form/<action> and this renders the view
+  wrapped with the form element and CSRF tokens.
 
 2015-05-05  Steve Clay <steve@mrclay.org>
 
@@ -210,6 +416,23 @@
   best not to display visible errors at all as they only give the impression
   that the site is broken even though this is not the case.
 
+2015-04-20  Steve Clay <steve@mrclay.org>
+
+  	* mod/groups/views/default/discussion/replies.php,
+  views/default/page/elements/comments.php: feature(comments): Paging through
+  comments/discussion replies jumps to content  Comment and discussion reply
+  listings now include URL fragments that push the user directly to the next
+  set of comments/replies on the new page.  Refs #5041
+
+  	* views/default/navigation/pagination.php,
+  views/default/page/components/list.php: feature(views): Users can jump
+  directly to content via prev/next links  This adds an option to add a URL
+  fragment to pagination links, jumping the user directly to the paginated
+  content on pages 2 and after. When returning to the first page, the fragment
+  is not included, assuming that the user may actually want to see the full
+  first page.  Should the base_url option contain a fragment, the url_fragment
+  value will not replace it.
+
 2015-04-14  Brett Profitt <brett.profitt@gmail.com>
 
   	* docs/admin/upgrading.rst, engine/classes/Elgg/Database/Annotations.php,
@@ -235,6 +458,23 @@
   docs/locale/pt_BR/LC_MESSAGES/about.mo,
   docs/locale/pt_BR/LC_MESSAGES/index.mo, mod/blog/languages/sr@latin.php:
   chore(i18n): update translations
+
+2015-02-11  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* mod/groups/start.php, .../default/group/format/invitationrequest.php,
+  .../views/default/groups/invitationrequests.php: chore(groups): use core
+  components for group invitations  Uses list component view for displaying
+  group invitations Adds menu for group invitation actions
+
+2015-03-16  Steve Clay <steve@mrclay.org>
+
+  	* docs/design/events.rst, engine/classes/Elgg/HooksRegistrationService.php,
+  engine/classes/Elgg/MethodMatcher.php, engine/lib/elgglib.php,
+  .../phpunit/Elgg/HooksRegistrationServiceTest.php,
+  engine/tests/phpunit/Elgg/MethodMatcherTest.php: feature(events): allows
+  dynamic method callbacks to be unregistered  This adds a class for matching
+  dynamic method callbacks using static method syntax and uses it to allow
+  unregistering dynamic method callbacks from events/hooks.  Fixes #7750
 
 2015-02-11  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
 

@@ -525,7 +525,7 @@ function elgg_register_event_handler($event, $object_type, $callback, $priority 
  *
  * @param string $event       The event type
  * @param string $object_type The object type
- * @param string $callback    The callback
+ * @param string $callback    The callback. Since 1.11, static method callbacks will match dynamic methods
  *
  * @return bool true if a handler was found and removed
  * @since 1.7
@@ -709,7 +709,8 @@ function elgg_register_plugin_hook_handler($hook, $type, $callback, $priority = 
  *
  * @param string   $hook        The name of the hook
  * @param string   $entity_type The name of the type of entity (eg "user", "object" etc)
- * @param callable $callback    The PHP callback to be removed
+ * @param callable $callback    The PHP callback to be removed. Since 1.11, static method
+ *                              callbacks will match dynamic methods
  *
  * @return void
  * @since 1.8.0
@@ -803,7 +804,6 @@ function _elgg_php_exception_handler($exception) {
 	// make sure the error isn't cached
 	header("Cache-Control: no-cache, must-revalidate", true);
 	header('Expires: Fri, 05 Feb 1982 00:00:00 -0500', true);
-	// @note Do not send a 500 header because it is not a server error
 
 	// we don't want the 'pagesetup', 'system' event to fire
 	global $CONFIG;
@@ -826,28 +826,28 @@ function _elgg_php_exception_handler($exception) {
 			}
 		}
 
-		elgg_set_viewtype('failsafe');
+		if (elgg_is_xhr()) {
+			elgg_set_viewtype('json');
+			$response = new \Symfony\Component\HttpFoundation\JsonResponse(null, 500);
+		} else {
+			elgg_set_viewtype('failsafe');
+			$response = new \Symfony\Component\HttpFoundation\Response('', 500);
+		}
 
 		if (elgg_is_admin_logged_in()) {
-			if (!elgg_view_exists("messages/exceptions/admin_exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/admin_exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		} else {
-			if (!elgg_view_exists("messages/exceptions/exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		}
-		echo elgg_view_page(elgg_echo('exception:title'), $body);
+
+		$response->setContent(elgg_view_page(elgg_echo('exception:title'), $body));
+		$response->send();
 	} catch (Exception $e) {
 		$timestamp = time();
 		$message = $e->getMessage();
@@ -1451,26 +1451,31 @@ function _elgg_js_page_handler($page) {
 /**
  * Serve individual views for Ajax.
  *
- * /ajax/view/<name of view>?<key/value params>
+ * /ajax/view/<view_name>?<key/value params>
+ * /ajax/form/<action_name>?<key/value params>
  *
- * @param array $page Array of URL segements
+ * @param string[] $segments URL segments (not including "ajax")
  * @return bool
  *
  * @see elgg_register_ajax_view()
  * @elgg_pagehandler ajax
  * @access private
  */
-function _elgg_ajax_page_handler($page) {
-	// the ajax page handler should only be called from an xhr
-	if (!elgg_is_xhr()) {
-		register_error(_elgg_services()->translator->translate('ajax:not_is_xhr'));
-		forward(null, '400');
+function _elgg_ajax_page_handler($segments) {
+	elgg_ajax_gatekeeper();
+
+	if (count($segments) < 2) {
+		return false;
 	}
-	
-	if (is_array($page) && sizeof($page)) {
-		// throw away 'view' and form the view name
-		unset($page[0]);
-		$view = implode('/', $page);
+
+	if ($segments[0] === 'view' || $segments[0] === 'form') {
+		if ($segments[0] === 'view') {
+			// ignore 'view/'
+			$view = implode('/', array_slice($segments, 1));
+		} else {
+			// form views start with "forms", not "form"
+			$view = 'forms/' . implode('/', array_slice($segments, 1));
+		}
 
 		$allowed_views = elgg_get_config('allowed_ajax_views');
 		if (!array_key_exists($view, $allowed_views)) {
@@ -1488,19 +1493,25 @@ function _elgg_ajax_page_handler($page) {
 			$vars['entity'] = get_entity($vars['guid']);
 		}
 
-		// Try to guess the mime-type
-		switch ($page[1]) {
-			case "js":
-				header("Content-Type: text/javascript");
-				break;
-			case "css":
-				header("Content-Type: text/css");
-				break;
-		}
+		if ($segments[0] === 'view') {
+			// Try to guess the mime-type
+			switch ($segments[1]) {
+				case "js":
+					header("Content-Type: text/javascript");
+					break;
+				case "css":
+					header("Content-Type: text/css");
+					break;
+			}
 
-		echo elgg_view($view, $vars);
+			echo elgg_view($view, $vars);
+		} else {
+			$action = implode('/', array_slice($segments, 1));
+			echo elgg_view_form($action, array(), $vars);
+		}
 		return true;
 	}
+
 	return false;
 }
 

@@ -1,3 +1,17 @@
+## Stash v0.13 Changelog
+
+### 0.13.1
+
+* Dropped support for PHP 5.3.
+
+* Updated dependencies.
+
+* Removed various PHP warnings (exceptions are still thrown where needed).
+
+* Various optimizations, such as reduced function calls during repeated operations.
+
+* Added "isPersistent" method to driver classes.
+
 
 ## Stash v0.12 Changelog
 
