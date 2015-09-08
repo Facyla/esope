@@ -154,8 +154,8 @@ $french = array(
 	'theme_inria:thewire:title' => "Vos actualités en 140 caractères",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
 	'theme_inria:thewire:placeholder' => "140 caractères pour saisir votre message à tous",
-	'theme_inria:thewire:group:title' => "Votre message pour le groupe",
-	'theme_inria:thewire:group:placeholder' => "140 caractères pour votre message",
+	'theme_inria:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages pour le groupe",
+	'theme_inria:thewire:group:placeholder' => "140 caractères pour votre message aux membres du groupe",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	

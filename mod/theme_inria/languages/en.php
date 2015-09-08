@@ -150,8 +150,8 @@ $english = array(
 	'theme_inria:thewire:title' => "Your news in 140 characters",
 	'theme_inria:thewire:details' => "Any message or information to share ?",
 	'theme_inria:thewire:placeholder' => "140 chars to write your message to everybody",
-	'theme_inria:thewire:group:title' => "Your message to the group",
-	'theme_inria:thewire:group:placeholder' => "140 chars for your message",
+	'theme_inria:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages to the group",
+	'theme_inria:thewire:group:placeholder' => "140 chars for your message to the group members",
 	'theme_inria:widgets:add:home' => "Edit my dashboard",
 	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	

@@ -133,10 +133,11 @@ function theme_inria_init(){
 	// Add a "ressources" page handler for groups
 	elgg_register_page_handler("ressources", "inria_ressources_page_handler");
 	
-	// Override thewire PH
-	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
 	// Override activity PH
 	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
+	// Override thewire PH
+	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
@@ -294,6 +295,11 @@ function theme_inria_thewire_page_handler($page) {
 			include "$base_dir/owner.php";
 			break;
 
+		case "group":
+			//if (isset($page[1])) { set_input('guid', $page[1]); }
+			include "$alt_base_dir/group.php";
+			break;
+
 		case "view":
 			if (isset($page[1])) {
 				set_input('guid', $page[1]);
@@ -334,6 +340,29 @@ function theme_inria_thewire_page_handler($page) {
 	}
 	return true;
 }
+
+// Add thewire menu in group tools
+function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
+	if (elgg_is_logged_in()) {
+		$page_owner = elgg_get_page_owner_entity();
+		if (elgg_instanceof($page_owner, 'group')) {
+			if ($page_owner->isMember()) {
+				$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+				switch ($add_wire) {
+					case 'yes': break; 
+					case 'groupoption':
+						if ($group->thewire_enable != 'yes') return;
+						break; 
+					default: return $return;
+				}
+				$title = elgg_echo('theme_inria:thewire:group:title');
+				$return[] = new ElggMenuItem('thewire', $title, 'thewire/group/' . $page_owner->getGUID());
+			}
+		}
+	}
+	return $return;
+}
+
 
 function theme_inria_elgg_river_page_handler($page) {
 	global $CONFIG;

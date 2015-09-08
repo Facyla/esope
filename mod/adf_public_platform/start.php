@@ -62,8 +62,11 @@ function esope_init() {
 	
 	// Add group Wire support (option)
 	// Note : also uses esope's event handler ("create", "object")
-	elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
 	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
+		if (elgg_is_logged_in()) {
+			//elgg_extend_view('groups/tool_latest', 'thewire/thewire_group_module');
+			elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+		}
 		$enable_thewire_group = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
 		if ($enable_thewire_group == 'groupoption') {
 			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);

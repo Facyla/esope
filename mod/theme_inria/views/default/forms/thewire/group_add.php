@@ -28,8 +28,6 @@ if (elgg_instanceof($group, 'group')) {
 	echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 }
 
-echo '<h3>' . elgg_echo('theme_inria:thewire:group:title') . '</h3>';
-
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
