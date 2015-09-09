@@ -688,6 +688,8 @@ $fr = array(
 	'adf_platform:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
 	'esope:groups:enablethewire' => "Activer le Fil (accès réservé aux membres du groupe)",
 	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages du Fil du groupe",
+	'esope:thewire:none' => "Aucun message pour le moment",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
