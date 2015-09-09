@@ -9,8 +9,17 @@ if (!$owner) {
 	forward('', '404');
 }
 
+// Display only if enabled and allowed...
 if (!elgg_instanceof($owner, 'group')) { forward(REFERER); }
 if (!($owner->isMember() || elgg_is_admin_logged_in())) { forward(REFERER); }
+$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+switch ($add_wire) {
+	case 'yes': break; 
+	case 'groupoption':
+		if ($owner->thewire_enable != 'yes') { forward(REFERER); }
+		break; 
+	default: forward(REFERER);
+}
 
 $title = elgg_echo('theme_inria:thewire:group:title', array($owner->name));
 

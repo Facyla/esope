@@ -350,7 +350,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 			switch ($add_wire) {
 				case 'yes': break; 
 				case 'groupoption':
-					if ($group->thewire_enable != 'yes') return;
+					if ($page_owner->thewire_enable != 'yes') { return $return; }
 					break; 
 				default: return $return;
 			}
