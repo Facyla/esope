@@ -355,7 +355,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 				default: return $return;
 			}
 			$title = elgg_echo('theme_inria:thewire:group:title');
-			$return[] = new ElggMenuItem('thewire', $title, 'thewire/group/' . $page_owner->getGUID());
+			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
 		}
 	}
 	return $return;
