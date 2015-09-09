@@ -2,6 +2,7 @@
 /* Adds a Wire to the group (access reserved to group members)
 */
 $group = elgg_get_page_owner_entity();
+if (!($group->isMember() || elgg_is_admin_logged_in())) { return; }
 
 $add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
 switch ($add_wire) {

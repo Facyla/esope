@@ -9,6 +9,9 @@ if (!$owner) {
 	forward('', '404');
 }
 
+if (!elgg_instanceof($owner, 'group')) { forward(REFERER); }
+if (!($owner->isMember() || elgg_is_admin_logged_in())) { forward(REFERER); }
+
 $title = elgg_echo('theme_inria:thewire:group:title', array($owner->name));
 
 elgg_push_breadcrumb(elgg_echo('thewire'), "thewire/all");
@@ -39,5 +42,6 @@ $body = elgg_view_layout('one_sidebar', array(
 	'sidebar' => elgg_view('thewire/sidebar'),
 ));
 
+$title = strip_tags($title);
 echo elgg_view_page($title, $body);
 
