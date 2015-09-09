@@ -346,7 +346,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 	if (elgg_is_logged_in()) {
 		$page_owner = elgg_get_page_owner_entity();
 		if (elgg_instanceof($page_owner, 'group')) {
-			if ($page_owner->isMember()) {
+			if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
 				$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
 				switch ($add_wire) {
 					case 'yes': break; 
@@ -363,7 +363,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 	return $return;
 }
 
-
+// Override river PH to add an info block
 function theme_inria_elgg_river_page_handler($page) {
 	global $CONFIG;
 

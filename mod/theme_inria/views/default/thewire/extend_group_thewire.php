@@ -12,9 +12,12 @@ switch ($add_wire) {
 	default: return;
 }
 
-echo '<h3><a href="' . elgg_get_site_url() . 'thewire/group/' . $group->guid . '">' . elgg_echo('theme_inria:thewire:group:title') . '</a></h3>';
-
-$action = elgg_get_site_url() . "action/thewire/add";
-echo elgg_view_form('thewire/group_add', array('class' => 'thewire-form', 'action' => $action));
-echo elgg_view('input/urlshortener');
+echo '<div class="theme_inria-thewire-group-add">';
+	echo '<h3><a href="' . elgg_get_site_url() . 'thewire/group/' . $group->guid . '">' . elgg_echo('theme_inria:thewire:group:title') . '</a></h3>';
+	
+	$action = elgg_get_site_url() . "action/thewire/add";
+	echo elgg_view_form('thewire/group_add', array('class' => 'thewire-form', 'action' => $action));
+	
+	echo elgg_view('input/urlshortener');
+echo '</div>';
 
