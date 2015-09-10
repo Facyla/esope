@@ -128,15 +128,15 @@ body { background:#EBE7DF; font-family:Lato; }
 
 /* Slider */
 .transitions-home-slider { width:75%; height:260px; }
-.slider-homepage-slider { font-size: 18px; color: #555; }
+.slider-homepage-slider { font-size: 14px; color: #555; }
 .slider-homepage-slider #slider-uid-1 { background: transparent; }
 #slider-uid-1 .transitions2-slide-image { max-width: 50% !important; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
 .transitions2-slide-image { float:left; margin-right:32px; max-width:50%; }
 .transitions2-slide-text { padding:32px 32px 20px 0px; }
 .transitions2-slide-text-inner { overflow: auto; max-height:200px; }
-.slider-homepage-slider h3 { font-size: 24px; color: #555; margin-bottom: 20px; }
-.slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 40px; height: auto; width: 100%; background:transparent; }
+.slider-homepage-slider h3 { font-size: 20px; color: #555; margin-bottom: 16px; }
+.slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 40px; height: auto; width: 100%; background:transparent; z-index: 10; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls ul.thumbNav { width: auto; padding:0; text-align: center; display: inline-block; }
 .slider-homepage-slider .anythingSlider .anythingControls ul a { background:#EBE7DF; height:15px; width:15px; border:3px solid #EBE7DF; margin: 0 5px; border-radius:10px; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls a.cur, .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls a:hover { background:#89BF4E; height:15px; width:15px; border:3px solid #EBE7DF; margin: 0 5px; }
