@@ -129,6 +129,7 @@ body { background:#EBE7DF; font-family:Lato; }
 /* Slider */
 .transitions-home-slider { width:75%; height:260px; }
 .slider-homepage-slider { font-size: 14px; color: #555; }
+.slider-homepage-slider a, .slider-homepage-slider a:hover, .slider-homepage-slider a:active, .slider-homepage-slider a:focus { color: #555; }
 .slider-homepage-slider #slider-uid-1 { background: transparent; }
 #slider-uid-1 .transitions2-slide-image { max-width: 50% !important; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
