@@ -19,6 +19,12 @@ elgg_require_js('jquery.form');
 elgg_load_js('elgg.embed');
 elgg_load_js('elgg.transitions');
 
+if (elgg_is_active_plugin('theme_transitions2')) {
+	$is_admin = theme_transitions2_user_is_content_admin();
+} else {
+	$is_admin = elgg_is_admin_logged_in();
+}
+
 $body = '';
 
 $owner = $transitions->getOwnerEntity();
@@ -103,7 +109,7 @@ $stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' 
 //$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
 $stats .= '<i class="fa fa-link"></i> ' . count($transitions->links) . ' &nbsp; ';
 $actions = '';
-if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
+if ($is_admin && elgg_is_active_plugin('pin')) {
 	//$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
 	$actions .= elgg_view('pin/entity_menu', $vars);
 }
@@ -224,6 +230,23 @@ if ($full) {
 								echo $stats;
 							echo '</div>';
 						echo '</div>';
+						// Admins only (all T² admins)
+						if ($is_admin) {
+							echo '<div class="transitions-gallery-admin">';
+								echo '<div class="transitions-gallery-inner">';
+									switch($transitions->featured) {
+										case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i> '; break;
+										case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i> '; break;
+										default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i> ';
+									}
+									switch($transitions->status) {
+										case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i> '; break;
+										case 'draft':
+										default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i> ';
+									}
+								echo '</div>';
+							echo '</div>';
+						}
 					echo '</div>';
 					
 				echo '</div>';

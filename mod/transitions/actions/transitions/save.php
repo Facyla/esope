@@ -16,7 +16,11 @@ elgg_make_sticky_form('transitions');
 
 elgg_load_library('elgg:transitions');
 
-$is_admin = theme_transitions2_user_is_content_admin();
+if (elgg_is_active_plugin('theme_transitions2')) {
+	$is_admin = theme_transitions2_user_is_content_admin();
+} else {
+	$is_admin = elgg_is_admin_logged_in();
+}
 
 /* Direct registration ?
 $register_first = !elgg_is_logged_in();

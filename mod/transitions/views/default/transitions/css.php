@@ -73,7 +73,7 @@
 .transitions-view-main { padding:30px 30px 30px 30px; }
 .transitions-view-main .transitions_image img { max-height: 300px; max-width: 500px; }
 .transitions-view-sidebar { padding: 0 0 30px 30px; }
-.transitions-view-sidebar .transitions-owner-block { float:right; margin: 0 0 10px 10px; max-width:100px; }
+.transitions-view-sidebar .transitions-owner-block { float:right; margin: 0 0 10px 10px; max-width:100px; background: white; }
 .transitions-view-content { padding:0 30px 30px 30px; }
 .transitions-dates { background:#e2d8c3; padding:10px; display:inline-block; border-radius:5px; }
 .transitions-view-sidebar a { word-break: break-all; }
@@ -120,6 +120,8 @@
 .transitions-gallery-item .transitions-gallery-content .elgg-content { text-style:italic; font-size: 1.2em; }
 .transitions-gallery-item .transitions-gallery-content { /* position: absolute; bottom: 3em; left: 0; background: rgba(255,255,255,0.8); padding: 0 0.5em; */ }
 .transitions-gallery-item .transitions-gallery-actions { /* position: absolute; top: 0; left: 0; background: white; padding: 2px 4px; background: black; */ position: absolute; bottom: 0; left:0; right:0; font-size: 1.5em; }
+.transitions-gallery-admin { position: absolute; top: 0; left: 0; }
+.transitions-gallery-admin .transitions-gallery-inner { padding: 2px 6px; }
 .transitions-gallery-actions a { margin-left: 1em; }
 .transitions-socialshare { font-size:3em; padding-bottom:0.5em; }
 .transitions-socialshare a { margin-right:0.3em; }
