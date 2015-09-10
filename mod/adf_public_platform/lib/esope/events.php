@@ -151,6 +151,7 @@ function esope_thewire_handler_event($event, $type, $object) {
 				$object->container_guid = $container_guid;
 				// Update entity (may be overriden if specific access is set)
 				update_entity($object->guid, $object->owner_guid, $container->group_acl, $container_guid);
+				// @TODO Notify to the group ?
 			}
 		}
 		
