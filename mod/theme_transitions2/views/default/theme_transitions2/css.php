@@ -135,7 +135,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
 .transitions2-slide-image { float:left; margin-right:32px; max-width:50%; }
 .transitions2-slide-text { padding:32px 32px 20px 0px; }
-.transitions2-slide-text-inner { overflow: auto; max-height:200px; }
+.transitions2-slide-text-inner { overflow: hidden; max-height:200px; }
 .slider-homepage-slider h3 { font-size: 20px; color: #555; margin-bottom: 16px; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 40px; height: auto; width: 100%; background:transparent; z-index: 10; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls ul.thumbNav { width: auto; padding:0; text-align: center; display: inline-block; }
