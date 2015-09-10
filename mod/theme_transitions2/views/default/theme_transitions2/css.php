@@ -134,10 +134,10 @@ body { background:#EBE7DF; font-family:Lato; }
 #slider-uid-1 .transitions2-slide-image { max-width: 50% !important; }
 .slider-homepage-slider .anythingSlider .panel { overflow:auto; background:white; }
 .transitions2-slide-image { float:left; margin-right:32px; max-width:50%; }
-.transitions2-slide-text { padding:32px 32px 20px 0px; }
+.transitions2-slide-text { padding:32px 32px 20px 0px; overflow: hidden; }
 .transitions2-slide-text-inner { overflow: hidden; max-height:200px; }
 .slider-homepage-slider h3 { font-size: 20px; color: #555; margin-bottom: 16px; }
-.slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 40px; height: auto; width: 100%; background:transparent; z-index: 10; }
+.slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls { text-align: center; bottom: 30px; height: auto; width: 100%; background:transparent; z-index: 10; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls ul.thumbNav { width: auto; padding:0; text-align: center; display: inline-block; }
 .slider-homepage-slider .anythingSlider .anythingControls ul a { background:#EBE7DF; height:15px; width:15px; border:3px solid #EBE7DF; margin: 0 5px; border-radius:10px; }
 .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls a.cur, .slider-homepage-slider .anythingSlider-cs-portfolio .anythingControls a:hover { background:#89BF4E; height:15px; width:15px; border:3px solid #EBE7DF; margin: 0 5px; }
