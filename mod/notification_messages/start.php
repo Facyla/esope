@@ -353,7 +353,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
-		error_log("No sender GUID $sender_guid => block ?");
+		error_log("No sender GUID, default to logged_in user $sender_guid => block ?");
 	}
 
 	// Initialise 2 new ElggObject
