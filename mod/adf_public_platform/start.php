@@ -145,7 +145,8 @@ function esope_init() {
 	elgg_register_event_handler('login','user','esope_login_user_action', 800);
 	
 	// Ajoute la possibilité de modifier accès et container pour TheWire
-	elgg_register_event_handler("create", "object", "esope_thewire_handler_event");
+	// Note : MUST be run very early so group notifications can happen
+	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);
 	
 	
 	// Modify message and add attachments to event notifications
