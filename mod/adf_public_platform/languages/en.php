@@ -746,6 +746,9 @@ $en = array(
 	
 	'readmore' => "Read more",
 	
+	'esope:pages:summary' => "Summary",
+	'esope:option:nofilter' => "(no filter)",
+	
 	// Subtypes
 	'esope:subtype:pages' => "wiki",
 	'esope:subtype:page' => "wiki page",

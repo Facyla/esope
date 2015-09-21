@@ -21,7 +21,7 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 	$content = "";
 	
 	// Sommaire
-	$summary = '<h3>' . elgg_echo('theme_inria:summary'). '</h3>';
+	$summary = '<h3>' . elgg_echo('esope:pages:summary'). '</h3>';
 	
 	if ($export_subpages) {
 		// Export des sous-pages, forcément avec sommaire

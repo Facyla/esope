@@ -19,7 +19,7 @@ if ($post) {
 		'name' => 'body',
 		'class' => 'mtm',
 		'id' => 'thewire-textarea',
-		'maxlength' => 140,
+		//'maxlength' => 140, // Do not block at 140, and use the warning
 		'placeholder' => elgg_echo('theme_inria:thewire:placeholder'),
 	));
 //echo '</div>';
