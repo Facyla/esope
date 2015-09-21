@@ -244,7 +244,7 @@ if ($full) {
 										case 'draft':
 										default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i> ';
 									}
-								echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pen" title="' . elgg_echo('edit') . '"></i></a> ';
+								echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a> ';
 								echo '</div>';
 							echo '</div>';
 						}
