@@ -89,7 +89,7 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 // SELECTION ALEATOIRE PARMI ARTICLE SELECTIONNES DU CATALOGUE
 // @TODO Par défaut : celles sélectionnées par la rédaction
 $dbprefix = elgg_get_config('dbprefix');
-$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true, 'pagination' => true);
 $count = elgg_get_entities_from_metadata($list_options);
 
 // @TODO Exclude featured and background contributions ?
@@ -107,7 +107,7 @@ $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
 
 // Featured content only
-$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'pagination' => true, 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
 $catalogue .= '<div class="transitions-gallery transitions-gallery-featured">';
 $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
