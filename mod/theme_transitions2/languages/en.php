@@ -50,6 +50,8 @@ Password: %s
 	'theme_transitions2:news' => "News",
 	'theme_transitions2:news:title' => "News",
 	
+	'theme_transitions:comment:add:challenge' => "React to this challenge",
+	
 	
 	// Main translations overrides
 	'settings' => "Settings",

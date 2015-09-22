@@ -235,15 +235,16 @@ if ($full) {
 							echo '<div class="transitions-gallery-admin">';
 								echo '<div class="transitions-gallery-inner">';
 									switch($transitions->featured) {
-										case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i> '; break;
-										case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i> '; break;
-										default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i> ';
+										case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i>&nbsp; '; break;
+										case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i>&nbsp; '; break;
+										default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i>&nbsp; ';
 									}
 									switch($transitions->status) {
-										case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i> '; break;
+										case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i>&nbsp; '; break;
 										case 'draft':
-										default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i> ';
+										default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i>&nbsp; ';
 									}
+								echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a>&nbsp; ';
 								echo '</div>';
 							echo '</div>';
 						}
