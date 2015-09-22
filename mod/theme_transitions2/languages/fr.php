@@ -50,6 +50,8 @@ Mot de passe : %s
 	'theme_transitions2:news' => "Actus",
 	'theme_transitions2:news:title' => "Actus",
 	
+	'theme_transitions:comment:add:challenge' => "Réagir à ce défi",
+	
 	
 	// Main translations overrides
 	'settings' => "Paramètres",
