@@ -16,7 +16,11 @@ elgg_make_sticky_form('transitions');
 
 elgg_load_library('elgg:transitions');
 
-$is_admin = theme_transitions2_user_is_content_admin();
+if (elgg_is_active_plugin('theme_transitions2')) {
+	$is_admin = theme_transitions2_user_is_content_admin();
+} else {
+	$is_admin = elgg_is_admin_logged_in();
+}
 
 /* Direct registration ?
 $register_first = !elgg_is_logged_in();
@@ -51,6 +55,8 @@ if ($guid) {
 } else {
 	$transitions = new ElggTransitions();
 	$transitions->subtype = 'transitions';
+	$transitions->owner_guid = elgg_get_logged_in_user_guid();
+	$transitions->container_guid = elgg_get_logged_in_user_guid();
 	$new_post = TRUE;
 }
 
@@ -73,6 +79,7 @@ $values = array(
 	'category' => '',
 	'lang' => '',
 	'resource_lang' => '',
+	'collection' => '',
 );
 
 /* Conditional fields (based on category)
@@ -196,6 +203,7 @@ if ($is_admin) {
 		$entity->tags_contributed = $tags_contributed;
 	}
 	
+	/*
 	$links_invalidates = get_input('links_invalidates');
 	// Add new contradictory link
 	if (!empty($links_invalidates)) {
@@ -205,7 +213,6 @@ if ($is_admin) {
 		$links_invalidates = array_filter($links_invalidates);
 		$entity->links_invalidates = $links_invalidates;
 	}
-	
 	$links_supports = get_input('links_supports');
 	// Add new support link
 	if (!empty($links_supports)) {
@@ -215,6 +222,24 @@ if ($is_admin) {
 		$links_supports = array_filter($links_supports);
 		$entity->links_supports = $links_supports;
 	}
+	*/
+	$links = (array) get_input('links');
+	$links_comment = (array) get_input('links_comment');
+	/*
+	// Dédoublonnage : pas besoin pour admins...
+	$contributed_links = array();
+	$contributed_links_comment = array();
+	if ($links) foreach ($links as $k => $link) {
+		if (!in_array($link, $contributed_links) || ($links_comment[$k] != $contributed_links_comment[$k])) {
+			$contributed_links[] = $link;
+			$contributed_links[] = $links_comment[$k];
+		}
+	}
+	$entity->links = $contributed_links;
+	$entity->links_comment = $contributed_links_comment;
+	*/
+	$entity->links = $links;
+	$entity->links_comment = $links_comment;
 	
 	$owner_username = get_input('owner_username', '');
 	if (!empty($owner_username)) {
@@ -225,13 +250,15 @@ if ($is_admin) {
 		}
 	}
 	
-	$is_incremental = get_input('is_incremental', '');
+	$featured = get_input('featured', '');
 	// Set incremental status
-	if (!empty($is_incremental)) {
-		if ($is_incremental == 'yes') {
-			$entity->is_incremental = 'yes';
+	if (!empty($featured)) {
+		if ($featured == 'featured') {
+			$entity->featured = 'featured';
+		} else if ($featured == 'background') {
+			$entity->featured = 'background';
 		} else {
-			$entity->is_incremental = null;
+			$entity->featured = null;
 		}
 	}
 	
@@ -337,7 +364,7 @@ if (!$error) {
 		if ($transitions->status == 'published' || $save == false) {
 			forward($transitions->getURL());
 		} else {
-			forward("transitions/edit/$transitions->guid");
+			forward("catalogue/edit/$transitions->guid");
 		}
 	} else {
 		register_error(elgg_echo('transitions:error:cannot_save'));

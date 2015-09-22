@@ -59,8 +59,8 @@ $item = ElggMenuItem::factory(array(
 elgg_register_menu_item('embed', $item);
 
 
-$content .= elgg_view('forms/collections/edit', array('entity' => $collection));
-//$content .= elgg_view_form('collections/edit', array('entity' => $collection));
+$content .= elgg_view('forms/collection/edit', array('entity' => $collection));
+//$content .= elgg_view_form('collection/edit', array('entity' => $collection));
 
 
 // Wrap into default, full-page layout

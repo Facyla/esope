@@ -51,7 +51,7 @@ function socialshare_pagesetup(){
 }
 
 
-// Add pin button to entity menu (close to end of the menu)
+// Add social share buttons to entity menu (close to end of the menu)
 function socialshare_entity_menu_setup($hook, $type, $return, $params) {
 	// Not in widgets, and for admin users only
 	if (elgg_in_context('widgets')) { return $return; }
@@ -59,8 +59,11 @@ function socialshare_entity_menu_setup($hook, $type, $return, $params) {
 	if ($entity->getType() == 'object') {
 		// Only allow to share public content
 		if ($entity->access_id == 2) {
-			$options = array('name' => 'socialshare', 'href' => false, 'priority' => 10000, 'text' => elgg_view('socialshare/entity_menu_extend', array('entity' => $entity)));
-			$return[] = ElggMenuItem::factory($options);
+			$menu_content = elgg_view('socialshare/entity_menu_extend', array('entity' => $entity));
+			if (!empty($menu_content)) {
+				$options = array('name' => 'socialshare', 'href' => false, 'priority' => 10000, 'text' => $menu_content);
+				$return[] = ElggMenuItem::factory($options);
+			}
 		}
 	}
 	return $return;

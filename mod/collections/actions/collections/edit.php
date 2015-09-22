@@ -20,8 +20,10 @@ $name = get_input('name');
 $description = get_input('description');
 $entities = get_input('entities', '', false); // We do *not want to filter HTML
 $entities_comment = get_input('entities_comment', '', false); // We do *not want to filter HTML
-//$access = get_input('access_id');
-$access = 2; // Always public
+$access = get_input('access_id');
+if (!in_array((string) $access, array('0', '2'))) { $access = 2; } // Always public if not defined
+$write_access = get_input('write_access_id');
+if (!in_array((string) $write_access, array('0', '2'))) { $write_access = 2; } // Allow contributions to anyone by default
 
 // Set collection name if not defined + normalize it
 // @TODO : ensure it remains unique ?
@@ -63,6 +65,7 @@ $collection->description = $description;
 $collection->access_id = $access;
 $collection->entities = $entities;
 $collection->entities_comment = $entities_comment;
+$collection->write_access_id = $write_access;
 
 
 // Save new/updated content

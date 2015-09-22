@@ -22,10 +22,18 @@ return array(
 	'slider:settings:slider_access:details' => "Par défaut, l'accès à l'édition des diaporamas est réservée aux administrateurs. Vous pouvez autoriser les membres du site à y accéder en choisissant \"Oui\"",
 	'slider:option:yes' => "Oui",
 	'slider:option:no' => "Non",
+	'slider:settings:enable_cloning' => "Permettre de dupliquer les sliders",
+	'slider:settings:enable_cloning:details' => "Si oui, permet à toute personne pouvant éditer un slider de le dupliquer pour créer un nouveau slider",
+	
 	'slider:strapline' => 'Dernière mise à jour le %s par %s',
 	'slider:edit_mode' => "Mode d'édition",
 	'slider:edit_mode:basic' => "Simple",
 	'slider:edit_mode:full' => "Avancé",
+	'slider:clone' => "Clonage",
+	'slider:clone:details' => "Vous pouvez créer directement un nouveau slider reprenant les contenus de celui-ci.",
+	'slider:edit:clone' => "Dupliquer ce slider",
+	'slider:cloned' => "Slider dupliqué",
+	'slider:clone:error' => "Erreur lors de la duplication du slider",
 	
 	
 	'slider:showinstructions' => "Afficher le mode d'emploi",

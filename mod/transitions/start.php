@@ -25,15 +25,18 @@ function transitions_init() {
 	elgg_register_js('elgg.transitions', $js, 'head');
 	
 	// add a site navigation item
-	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'transitions/all');
+	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'catalogue/all');
 	elgg_register_menu_item('site', $item);
 
 	elgg_register_event_handler('upgrade', 'upgrade', 'transitions_run_upgrades');
 
 	// add to the main css
 	elgg_extend_view('css/elgg', 'transitions/css');
-
+	
 	// routing of urls
+	elgg_register_page_handler('catalogue', 'catalogue_page_handler');
+	// Required for retro-compatibility with plugin name
+	// (and automatic links, eg. edit and delete)
 	elgg_register_page_handler('transitions', 'transitions_page_handler');
 	
 	// Adds menu to page owner block
@@ -79,6 +82,18 @@ function transitions_init() {
 	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
 	elgg_register_action('transitions/addactor', "$action_path/addactor.php");
 	elgg_register_action('transitions/addrelation', "$action_path/addrelation.php");
+	
+	// TEMPORARY HACK TO ALLOW USING BOTH URL
+	// Quickform is a light contribution form that quickly creates a draft
+	elgg_register_action('catalogue/save', "$action_path/save.php");
+	elgg_register_action('catalogue/auto_save_revision', "$action_path/auto_save_revision.php");
+	elgg_register_action('catalogue/delete', "$action_path/delete.php");
+	elgg_register_action('catalogue/quickform', "$action_path/save.php");
+	elgg_register_action('catalogue/addtag', "$action_path/addtag.php");
+	elgg_register_action('catalogue/addlink', "$action_path/addlink.php");
+	elgg_register_action('catalogue/addactor', "$action_path/addactor.php");
+	elgg_register_action('catalogue/addrelation', "$action_path/addrelation.php");
+
 
 	// entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'transitions_entity_menu_setup');
@@ -87,18 +102,24 @@ function transitions_init() {
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'transitions_ecml_views_hook');
 }
 
+
+// Temporary redirect after page handler string change
+function transitions_page_handler($page) {
+	forward("catalogue/" . implode('/', $page));
+}
+
 /**
  * Dispatches transitions pages.
  * URLs take the form of
- *  All transitions:       transitions/all
- *  User's transitions:    transitions/owner/<username>
- *  Friends' transitions:   transitions/friends/<username>
- *  User's archives: transitions/archives/<username>/<time_start>/<time_stop>
- *  Transitions post:       transitions/view/<guid>/<title>
- *  New post:        transitions/add/<guid>
- *  Edit post:       transitions/edit/<guid>/<revision>
- *  Preview post:    transitions/preview/<guid>
- *  Group transitions:      transitions/group/<guid>/all
+ *  All transitions:       catalogue/all
+ *  User's transitions:    catalogue/owner/<username>
+ *  Friends' transitions:   catalogue/friends/<username>
+ *  User's archives: catalogue/archives/<username>/<time_start>/<time_stop>
+ *  Transitions post:       catalogue/view/<guid>/<title>
+ *  New post:        catalogue/add/<guid>
+ *  Edit post:       catalogue/edit/<guid>/<revision>
+ *  Preview post:    catalogue/preview/<guid>
+ *  Group transitions:      catalogue/group/<guid>/all
  *
  * Title is ignored
  *
@@ -107,12 +128,12 @@ function transitions_init() {
  * @param array $page
  * @return bool
  */
-function transitions_page_handler($page) {
+function catalogue_page_handler($page) {
 
 	elgg_load_library('elgg:transitions');
 
 	// push all transitions breadcrumb
-	elgg_push_breadcrumb(elgg_echo('transitions:transitions'), "transitions/all");
+	elgg_push_breadcrumb(elgg_echo('transitions:transitions'), "catalogue/all");
 
 	if (!isset($page[0])) {
 		$page[0] = 'all';
@@ -198,7 +219,12 @@ function transitions_page_handler($page) {
 		$params['sidebar'] = elgg_view('transitions/sidebar', array('page' => $page_type));
 	}
 
-	$body = elgg_view_layout('content', $params);
+	$params['class'] = "transitions-$page_type";
+	if (in_array($page_type, array('add', 'edit', 'view'))) {
+		$body = elgg_view_layout('one_column', $params);
+	} else {
+		$body = elgg_view_layout('content', $params);
+	}
 
 	echo elgg_view_page($params['title'], $body);
 	return true;
@@ -236,7 +262,7 @@ function transitions_set_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'transitions')) {
 		$friendly_title = elgg_get_friendly_title($entity->title);
-		return "transitions/view/{$entity->guid}/$friendly_title";
+		return "catalogue/view/{$entity->guid}/$friendly_title";
 	}
 }
 
@@ -245,12 +271,12 @@ function transitions_set_url($hook, $type, $url, $params) {
  */
 function transitions_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'user')) {
-		$url = "transitions/owner/{$params['entity']->username}";
+		$url = "catalogue/owner/{$params['entity']->username}";
 		$item = new ElggMenuItem('transitions', elgg_echo('transitions'), $url);
 		$return[] = $item;
 	} else {
 		if ($params['entity']->transitions_enable != "no") {
-			$url = "transitions/group/{$params['entity']->guid}/all";
+			$url = "catalogue/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('transitions', elgg_echo('transitions:group'), $url);
 			$return[] = $item;
 		}
@@ -269,7 +295,7 @@ function transitions_entity_menu_setup($hook, $type, $return, $params) {
 
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'transitions') {
+	if ($handler != 'catalogue') {
 		return $return;
 	}
 
@@ -352,7 +378,7 @@ function transitions_run_upgrades($event, $type, $details) {
 function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
-		if(elgg_instanceof($entity, "object", "transitions")){
+		if (elgg_instanceof($entity, "object", "transitions")) {
 			$size = $params["size"];
 			if (!empty($entity->icontime)) {
 				$icontime = "{$entity->icontime}";
@@ -360,10 +386,16 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 				$filehandler->owner_guid = $entity->getOwnerGUID();
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
-					return elgg_get_site_url() . "transitions/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+					return elgg_get_site_url() . "catalogue/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			}
-			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size.png";
+			// Use default image instead
+			if (!empty($entity->category)) {
+				$file_name = $entity->category . '.jpg';
+			} else {
+				$file_name = 'default.jpg';
+			}
+			return elgg_get_site_url() . "mod/transitions/graphics/icons/$size/$file_name";
 		}
 	}
 }
@@ -376,11 +408,11 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
 	$list = array();
 	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
-	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'knowledge'); // 'event'
+	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'event', 'knowledge', 'challenge');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
 	if (elgg_is_admin_logged_in() || $full) {
 		$list['editorial'] = elgg_echo('transitions:category:editorial');
-		$list['challenge'] = elgg_echo('transitions:category:challenge');
+		//$list['challenge'] = elgg_echo('transitions:category:challenge');
 	}
 	// Add current value
 	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo('transitions:category:' . $value); }
@@ -397,10 +429,30 @@ function transitions_get_actortype_opt($value = '', $addempty = false) {
 	return $list;
 }
 
-function transitions_get_lang_opt($value = '', $addempty = false) {
+function transitions_get_lang_opt($value = '', $addempty = false, $full = false) {
 	$list = array();
 	if ($addempty) { $list[''] = ''; }
-	$values = array('fr', 'en');
+	
+	// Use multilingual available translation codes if set
+	if (elgg_is_active_plugin('multilingual')) { $values = multilingual_available_languages(); }
+	if (empty($languages)) { $values = array('fr', 'en'); }
+	
+	if ($full) {
+		// Language codes
+		$values = array('aa', 'ab', 'af', 'am', 'ar', 'as', 'ay', 'az', 'ba', 'be', 'bg', 'bh', 'bi', 'bn', 'bo', 'br', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'dz', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fj', 'fo', 'fr', 'fy', 'ga', 'gd', 'gl', 'gn', 'gu', 'he', 'ha', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'ie', 'ik', 'is', 'it', 'iu', 'iw', 'ja', 'ji', 'jw', 'ka', 'kk', 'kl', 'km', 'kn', 'ko', 'ks', 'ku', 'ky', 'la', 'ln', 'lo', 'lt', 'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mo', 'mr', 'ms', 'mt', 'my', 'na', 'ne', 'nl', 'no', 'oc', 'om', 'or', 'pa', 'pl', 'ps', 'pt', 'qu', 'rm', 'rn', 'ro', 'ru', 'rw', 'sa', 'sd', 'sg', 'sh', 'si', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta', 'te', 'tg', 'th', 'ti', 'tk', 'tl', 'tn', 'to', 'tr', 'ts', 'tt', 'tw', 'ug', 'uk', 'ur', 'uz', 'vi', 'vo', 'wo', 'xh', 'yi', 'yo', 'za', 'zh', 'zu');
+	}
+	foreach($values as $val) { $list[$val] = elgg_echo($val); }
+	// Add current value
+	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo($value); }
+	return $list;
+}
+
+
+function transitions_get_country_opt($value = '', $addempty = false) {
+	$list = array();
+	if ($addempty) { $list[''] = ''; }
+	// Country codes from http://www.textfixer.com/resources/country-dropdowns.php
+	$values = array('ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'an', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bm', 'bn', 'bo', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'fi', 'fj', 'fk', 'fm', 'fo', 'fr', 'ga', 'gb', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr', 'ls', 'lt', 'lu', 'lv', 'ly', 'ma', 'mc', 'md', 'me', 'mg', 'mh', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl', 'pm', 'pn', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'rs', 'ru', 'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sl', 'sm', 'sn', 'so', 'sr', 'st', 'sv', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'ye', 'yt', 'za', 'zm', 'zw');
 	foreach($values as $val) { $list[$val] = elgg_echo($val); }
 	// Add current value
 	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo($value); }

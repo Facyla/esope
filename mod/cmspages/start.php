@@ -552,10 +552,20 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$full_view = $module_config['full_view'];
 			$type = $module_config['type'];
 			$subtype = $module_config['subtype'];
-			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
+			$limit = $module_config['limit']; if (!isset($limit)) $limit = 10;
 			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
+			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
+			//Extract multiple values
+			$fields_multiple = array('guids', 'owner_guids', 'container_guids');
+			foreach($fields_multiple as $field) {
+				if (strpos($$field, ',')) {
+					$$field = explode(',', $$field);
+					$$field = array_filter($$field);
+					$$field = array_unique($$field);
+				}
+			}
 			// We need arrays as params
 			//$type = explode(',', $type);
 			//$subtype = explode(',', $subtype);
@@ -565,6 +575,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (!$subtype) $subtype = '';
 			//$ents = elgg_get_entities(array('type_subtype_pairs' => array($type => $subtype), 'limit' => $limit, 'order_by' => $sort));
 			$params = array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort);
+			if (sizeof($guids) > 0) $params['guids'] = $guids;
 			if (sizeof($owner_guids) > 0) $params['owner_guids'] = $owner_guids;
 			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
 			// Get the entities
@@ -800,23 +811,26 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$edit_link = '';
 	if ($add_edit_link && $is_editor) {
 		$edit_level = count($params['recursion']);
-		$edit_link = '<i class="fa fa-edit"></i>';
+		$edit_icon = '<i class="fa fa-edit"></i>';
+		$edit_title = elgg_echo('cmspages:editlink', array($pagetype));
 		if ($edit_level > 0) {
-			$edit_link = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
-			$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
+			$edit_icon = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
+			$edit_title .= ' - ' . elgg_echo('cmspages:nestedlevel', array($edit_level));
 		}
 		if ($cmspage) {
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></span>';
 		} else {
-			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+			$edit_details = '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></span>';
 		}
+		$edit_link = '<a class="cmspages-admin-block cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"> ' . $edit_link . $edit_icon . '</a>' . $edit_details;
 	}
+	
 	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
 	if ($add_edit_link && $is_editor) {
-		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
+		$content = '<span class="cmspages-output cmspages-editable">' . $edit_link . $content . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
 	}

@@ -12,7 +12,7 @@ $vars['entity'] = $transitions;
 
 $is_admin = theme_transitions2_user_is_content_admin();
 
-$edit_details = '<p><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
+if ($transitions) $edit_details = '<p style="margin:20px 0;"><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
 $draft_warning = $vars['draft_warning'];
 if ($draft_warning) {
@@ -29,6 +29,7 @@ if (empty($vars['resource_lang'])) { $vars['resource_lang'] = get_language(); }
 
 // Get select options
 $lang_opt = transitions_get_lang_opt($vars['lang'], true);
+$full_lang_opt = transitions_get_lang_opt($vars['lang'], true, true);
 $actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
 $category_opt = transitions_get_category_opt($vars['category'], true);
 
@@ -69,7 +70,7 @@ $save_button = elgg_view('input/submit', array(
 	'value' => elgg_echo('transitions:save'),
 	'name' => 'save',
 ));
-$action_buttons = $save_button . $preview_button . $delete_link;
+$action_buttons = '<p>' . $save_button . $preview_button . $delete_link . '</p>';
 
 $title_label = elgg_echo('title');
 $title_input = elgg_view('input/text', array(
@@ -91,44 +92,42 @@ $excerpt_input = elgg_view('input/text', array(
 	'data-max-length' => $char_limit,
 	//'rows' => 2,
 ));
-$excerpt_input .= '<div id="transitions-characters-remaining"><span>' . $char_left . '</span> ' . elgg_echo('transitions:charleft', array($char_limit)) . '<div class="hidden">' . elgg_echo('transitions:charleft:warning') . '</div></div>';
+$excerpt_input .= '<span id="transitions-characters-remaining"><span>' . $char_left . '</span> ' . elgg_echo('transitions:charleft') . '<strong class="hidden">' . elgg_echo('transitions:charleft:warning') . '</strong></span>';
 
 $icon_input = "";
 $icon_remove_input = "";
 if($vars["guid"]){
-	$icon_label = elgg_echo("transitions:icon");
+	$icon_label = elgg_echo("transitions:icon:change");
 	if($transitions->icontime){
-		$icon_remove_input = "<br /><img src='" . $transitions->getIconURL('listing') . "' />";
-		$icon_remove_input .= "<br />";
-		$icon_remove_input .= elgg_view("input/checkbox", array(
-			"name" => "remove_icon",
-			"value" => "yes"
-		));
+		$icon_image = '<img src="' . $transitions->getIconURL('listing') . '" style="float:right; margin-left:1em;" />';
+		$icon_remove_input .= elgg_view("input/checkbox", array("name" => "remove_icon", "value" => "yes"));
 		$icon_remove_input .= elgg_echo("transitions:icon:remove");
+		$icon_remove_input .= '<div class="clearfloat"></div>';
 	}
 } else {
 	$icon_label = elgg_echo("transitions:icon:new");
 }
-$icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
 $icon_input .= $icon_remove_input;
-$icon_details = elgg_echo('transitions:icon:details');
+$icon_input .= '<em>' . elgg_echo('transitions:icon:details') . '</em><br />';
+$icon_input .= elgg_view("input/file", array("name" => "icon", "id" => "transitions_icon"));
+
 
 $attachment_input = "";
 $attachment_remove_input = "";
 if($vars["guid"]){
 	$attachment_label = elgg_echo("transitions:attachment");
 	if($transitions->attachment){
-		$attachment_remove_input = '<br /><a href="' . $transitions->getAttachmentURL() . '" target="_new" />' . $transitions->getAttachmentName() . '</a>';
-		$attachment_remove_input .= "<br />";
+		$attachment_link = '<a href="' . $transitions->getAttachmentURL() . '" target="_new" style="float:right; margin-left:1em;" /><i class="fa fa-file"></i> ' . $transitions->getAttachmentName() . '</a>';
 		$attachment_remove_input .= elgg_view("input/checkbox", array("name" => "remove_attachment", "value" => "yes"));
 		$attachment_remove_input .= elgg_echo("transitions:attachment:remove");
+		$attachment_remove_input .= "<br />";
 	}
 } else {
 	$attachment_label = elgg_echo("transitions:attachment:new");
 }
-$attachment_input .= elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 $attachment_input .= $attachment_remove_input;
-$attachment_details = elgg_echo('transitions:attachment:details');
+$attachment_input .= '<em>' . elgg_echo('transitions:attachment:details') . '</em><br />';
+$attachment_input .= elgg_view("input/file", array("name" => "attachment", "id" => "transitions_attachment"));
 
 
 $body_label = elgg_echo('transitions:body');
@@ -144,6 +143,9 @@ if ($vars['guid'] && ($transitions->time_created > 0)) {
 } else {
 	$saved = elgg_echo('never');
 }
+
+$revisions = elgg_view('transitions/sidebar/revisions', $vars);
+
 
 // Admin-only fields
 if ($is_admin) {
@@ -162,6 +164,8 @@ if ($is_admin) {
 	$owner_username_label = elgg_echo('transitions:owner_username');
 	if (elgg_instanceof($transitions, 'object', 'transitions')) {
 		$owner_username = $transitions->getOwnerEntity()->username;
+	} else {
+		$owner_username = elgg_get_logged_in_user_entity()->username;
 	}
 	$owner_username_input = elgg_view('input/autocomplete', array(
 		'name' => 'owner_username',
@@ -170,15 +174,18 @@ if ($is_admin) {
 		'match_on' => 'users',
 	));
 	
-	$incremental_label = elgg_echo('transitions:incremental');
-	$incremental_value = $vars['is_incremental'];
-	$incremental_input = elgg_view('input/select', array(
-		'name' => 'is_incremental',
-		'id' => 'transitions_incremental',
-		'value' => $transitions->is_incremental,
+	$featured_label = elgg_echo('transitions:featured');
+	$featured_value = $vars['featured'];
+	$featured_input = elgg_view('input/select', array(
+		'name' => 'featured',
+		'id' => 'transitions_featured',
+		'value' => $transitions->featured,
 		'options_values' => array(
-			'no' => elgg_echo('transitions:incremental:no'),
-			'yes' => elgg_echo('transitions:incremental:yes'),
+			//'no' => elgg_echo('transitions:featured:no'),
+			//'yes' => elgg_echo('transitions:featured:yes'),
+			'default' => elgg_echo('transitions:featured:default'),
+			'featured' => elgg_echo('transitions:featured:featured'),
+			'background' => elgg_echo('transitions:featured:background'),
 		)
 	));
 	
@@ -190,6 +197,7 @@ if ($is_admin) {
 		'placeholder' => elgg_echo('transitions:tags_contributed'),
 	));
 
+	/*
 	$links_supports_label = elgg_echo('transitions:links_supports');
 	$links_supports_input = elgg_view('input/plaintext', array(
 		'name' => 'links_supports',
@@ -205,6 +213,35 @@ if ($is_admin) {
 		'value' => implode("\n", (array) $transitions->links_invalidates),
 		'placeholder' => elgg_echo('transitions:links_invalidates'),
 	));
+	*/
+	
+	/*
+	$links_label = elgg_echo('transitions:links');
+	$links_input = elgg_view('input/plaintext', array(
+		'name' => 'links',
+		'id' => 'transitions_links',
+		'value' => implode("\n", (array) $transitions->links),
+		'placeholder' => elgg_echo('transitions:links:placeholder'),
+	));
+	$links_comment_label = elgg_echo('transitions:links_comment');
+	$links_comment_input = elgg_view('input/plaintext', array(
+		'name' => 'links_comment',
+		'id' => 'transitions_links_comment',
+		'value' => implode("\n", (array) $transitions->links_comment),
+		'placeholder' => elgg_echo('transitions:links_comment:placeholder'),
+	));
+	*/
+	$links_label = elgg_echo('transitions:links');
+	$links = (array) $transitions->links;
+	$links_comment = (array) $transitions->links_comment;
+	$links_input = '<div class="transitions-edit-links">';
+	if ($links) {
+		foreach($links as $k => $link) {
+			$links_input .= elgg_view('transitions/input/addlink', array('address' => $link, 'comment' => $links_comment[$k]));
+		}
+	}
+	$links_input .= '</div>';
+	$links_input .= '<input type="button" class="transitions-edit-addlink" value="' . elgg_echo('transitions:addlink:add') . '" class="elgg-button elgg-button-action" />';
 	
 } else {
 	$status_input = elgg_view('input/hidden', array('name' => 'status', 'value' => 'published'));
@@ -229,6 +266,7 @@ $url_input = elgg_view('input/url', array(
 ));
 $url_details = elgg_echo('transitions:url:details');
 
+/*
 $rss_feed_label = elgg_echo('transitions:rss_feed');
 $rss_feed_input = elgg_view('input/url', array(
 	'name' => 'rss_feed',
@@ -237,12 +275,21 @@ $rss_feed_input = elgg_view('input/url', array(
 	'placeholder' => elgg_echo('transitions:rss_feed'),
 ));
 $rss_feed_details = elgg_echo('transitions:rss_feed:details');
+*/
 
 // @TODO update to allow several elements (+ should be regular inputs)
-$challenge_elements_label = elgg_echo('transitions:challenge_element');
-$challenge_elements_input = elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid));
-$challenge_elements_input .= '<div class="clearfloat"></div><br />';
-$challenge_elements_details = elgg_echo('transitions:challenge_elements:details');
+$collection_label = elgg_echo('transitions:challenge:collection');
+// Note : admin can select 
+$collection_input = '';
+$collections_opt = array();
+$collections_opt[''] = '';
+$collections_params = array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 0);
+$collections = elgg_get_entities($collections_params);
+// Tri alphabétique des pages (sur la base du pagetype)
+usort($collections, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+foreach ($collections as $ent) { $collections_opt[$ent->guid] = $ent->title; }
+$collection_input .= elgg_view('input/select', array('name' => 'collection', 'options_values' => $collections_opt, 'value'=> $transitions->collection));
+$collection_details = elgg_echo('transitions:challenge:collection:details');
 
 
 $category_label = elgg_echo('transitions:category');
@@ -254,6 +301,11 @@ $category_input = elgg_view('input/select', array(
 	'onchange' => 'transitions_toggle_fields();',
 ));
 
+$explanations = '';
+foreach ($category_opt as $cat => $cat_lang) {
+	$explanations .= '<blockquote class="transitions-explanations transitions-explanations-' . $cat . '">' . elgg_echo("transitions:category:$cat:details") . '</blockquote>';
+}
+
 $lang_label = elgg_echo('transitions:lang');
 $lang_input = elgg_view('input/select', array(
 	'name' => 'lang',
@@ -261,13 +313,14 @@ $lang_input = elgg_view('input/select', array(
 	'value' => $vars['lang'],
 	'options_values' => $lang_opt,
 ));
+$lang_details = elgg_echo('transitions:lang:details');
 
 $resourcelang_label = elgg_echo('transitions:resourcelang');
 $resourcelang_input = elgg_view('input/select', array(
 	'name' => 'resource_lang',
 	'id' => 'transitions_resourcelang',
 	'value' => $vars['resource_lang'],
-	'options_values' => $lang_opt,
+	'options_values' => $full_lang_opt,
 ));
 $resourcelang_details = elgg_echo('transitions:resourcelang:details');
 
@@ -295,6 +348,7 @@ $startdate_input = elgg_view('input/date', array(
 	'value' => $vars['start_date'],
 	'placeholder' => elgg_echo('transitions:startdate'),
 	'timestamp' => true,
+	'style' => "width:12ex;",
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
@@ -304,28 +358,32 @@ $enddate_input = elgg_view('input/date', array(
 	'value' => $vars['end_date'],
 	'placeholder' => elgg_echo('transitions:enddate'),
 	'timestamp' => true,
+	'style' => "width:12ex;",
 ));
 
-$tags_label = elgg_echo('tags');
+$tags_label = elgg_echo('transitions:tags');
 $tags_input = elgg_view('input/tags', array(
 	'name' => 'tags',
 	'id' => 'transitions_tags',
 	'value' => $vars['tags'],
-	'placeholder' => elgg_echo('transitions:tags'),
+	'placeholder' => elgg_echo('transitions:tags:placeholder'),
 ));
+$tags_details = elgg_echo('transitions:tags:details');
 
 
-// @TODO Admin only : contributed tags + links + status
+// Admin only fields : contributed tags + links + status
 $admin_fields = '';
 if ($is_admin) {
 	
 	$admin_fields .= '<blockquote>';
-	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . '</p>';
+	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . ' &nbsp; ';
+	$admin_fields .= '<label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
-	$admin_fields .= '<p><label for="transitions_incremental">' . $incremental_label . '</label> ' . $incremental_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
-	$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
-	$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
+	//$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
+	//$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
+'</p>';
+	$admin_fields .= '<p><label>' . $links_label . '</label>' . $links_input . '</p>';
 	$admin_fields .= '</blockquote>';
 	
 } else {
@@ -370,6 +428,10 @@ function transitions_toggle_fields() {
 	$(".transitions-startdate").addClass(\'hidden\');
 	$(".transitions-enddate").addClass(\'hidden\');
 	$(".transitions-rss-feed").addClass(\'hidden\');
+	$(".transitions-collection").addClass(\'hidden\');
+	
+	$(".transitions-explanations").addClass(\'hidden\');
+	if (val) $(".transitions-explanations-"+val).removeClass(\'hidden\');
 	
 	//Now switch on wanted special fields
 	if (val == "actor") {
@@ -387,6 +449,7 @@ function transitions_toggle_fields() {
 		$(".transitions-enddate").removeClass(\'hidden\');
 	} else if (val == "challenge") {
 		$(".transitions-rss-feed").removeClass(\'hidden\');
+		$(".transitions-collection").removeClass(\'hidden\');
 	} else {
 		$(".transitions-title label").html(\'' . elgg_echo('title') . '\');
 	}
@@ -395,16 +458,12 @@ function transitions_toggle_fields() {
 </script>';
 // , 'onchange' => 'uhb_annonces_toggle_typework();')
 
-echo <<<___HTML
 
-$edit_details
+$ressources_legend = elgg_echo('transitions:resources');
 
-$draft_warning
+// Form composition
 
-<div class="transitions-title">
-	<label class="" for="transitions_title">$title_label</label>
-	$title_input
-</div>
+$content = <<<___HTML
 
 <div class="flexible-block" style="width:48%; float:left;">
 	<label class="" for="transitions_category">$category_label</label><br />
@@ -415,90 +474,140 @@ $draft_warning
 	<label class="" for="transitions_actortype transitions-actortype">$actortype_label</label><br />
 	$actortype_input
 </div>
+<div class="flexible-block transitions-collection" style="width:48%; float:right;">
+	<label class="" for="transitions_collection">$collection_label</label>
+	$collection_input<br />
+	<em>$collection_details</em>
+</div>
 <div class="clearfloat"></div>
 
-<div>
-	<label class="" for="transitions_icon">$icon_label</label><br />
-	$icon_input<br />
-	<em>$icon_details</em>
-</div>
+<p>
+	$explanations
+</p>
 
-<div>
+<p class="transitions-title">
+	<label class="" for="transitions_title">$title_label</label>
+	$title_input
+</p>
+
+<p style="margin:20px 0;">
 	<label class="" for="transitions_excerpt">$excerpt_label</label>
 	$excerpt_input
+</p>
+
+<div style="margin:20px 0;">
+	<label class="" for="transitions_description">$body_label</label>
+	$body_input
 </div>
 
-<div>
+<p style="margin:20px 0;">
+	<label class="" for="transitions_lang">$lang_label</label>
+	$lang_input<br />
+	<em>$lang_details</em>
+</p>
+
+<p style="margin:20px 0;">
 	<label class="" for="transitions_tags">$tags_label</label>
 	$tags_input
-</div>
+	<br /><em>$tags_details</em>
+</p>
 
-<div>
-	<label class="" for="transitions_url">$url_label</label>
-	$url_input<br />
-	<em>$url_details</em>
-</div>
+$categories_input
 
-<div>
-	<label class="" for="transitions_attachment">$attachment_label</label><br />
-	$attachment_input<br />
-	<em>$attachment_details</em>
-</div>
-<div class="clearfloat"></div>
+___HTML;
 
+/*
 <div class="transitions-rss-feed">
 	<label class="" for="transitions_rss_feed">$rss_feed_label</label>
 	$rss_feed_input<br />
 	<em>$rss_feed_details</em>
 </div>
+*/
 
-<div class="transitions-territory">
+
+$sidebar = '';
+$sidebar .= <<<___HTML
+$edit_details
+
+<div style="margin:20px 0;">
+	$icon_image
+	<label class="" for="transitions_icon">$icon_label</label><br />
+	$icon_input
+</div>
+
+<p class="transitions-territory" style="margin:20px 0;">
 	<label class="" for="transitions_territory">$territory_label</label>
 	$territory_input<br />
 	<em>$territory_details</em>
+</p>
+
+<div class="transitions-startdate transitions-enddate" style="margin:20px 0;">
+	<p class="transitions-startdate">
+		<label class="" for="transitions_startdate">$startdate_label</label>
+		$startdate_input
+	</p>
+
+	<p class="transitions-enddate">
+		<label class="" for="transitions_enddate">$enddate_label</label>
+		$enddate_input
+	</p>
 </div>
 
-<div class="flexible-block transitions-startdate" style="width:48%; float:left;">
-	<label class="" for="transitions_startdate">$startdate_label</label>
-	$startdate_input
+<blockquote style="padding:20px;">
+	<h3>$ressources_legend</h3>
+	<p style="margin:20px 0;">
+		<label class="" for="transitions_url">$url_label</label>
+		$url_input<br />
+		<em>$url_details</em>
+	</p>
+
+	<div style="margin:20px 0;">
+		$attachment_link
+		<label class="" for="transitions_attachment">$attachment_label</label><br />
+		$attachment_input
+	</div>
+	<div class="clearfloat"></div>
+
+	<p style="margin:20px 0;">
+		<label class="" for="transitions_resourcelang">$resourcelang_label</label>
+		$resourcelang_input
+	</p>
+</blockquote>
+
+___HTML;
+
+
+
+echo <<<___HTML
+$draft_warning
+
+<div class="flexible-block" style="width:56%;">
+$content</div>
+
+<div class="flexible-block" style="width:40%; float:right;">
+$action_buttons
+$sidebar
 </div>
 
-<div class="flexible-block transitions-enddate" style="width:48%; float:right;">
-	<label class="" for="transitions_enddate">$enddate_label</label>
-	$enddate_input
-</div>
 <div class="clearfloat"></div>
-
-$categories_input
-
-<div class="flexible-block" style="width:48%; float:left;">
-	<label class="" for="transitions_lang">$lang_label</label>
-	$lang_input
-</div>
-
-<div class="flexible-block transitions-resourcelang" style="width:48%; float:right;">
-	<label class="" for="transitions_resourcelang">$resourcelang_label</label>
-	$resourcelang_input<br />
-	<em>$resourcelang_details</em>
-</div>
-<div class="clearfloat"></div>
-
-<div>
-	<label class="" for="transitions_description">$body_label</label>
-	$body_input
-</div>
 
 $admin_fields
+
+<div class="clearfloat"></div>
 
 <div class="elgg-foot">
 	<div class="elgg-subtext mbm">
 	$save_status <span class="transitions-save-status-time">$saved</span>
 	</div>
+	
+	<div class="elgg-subtext mbm">
+	$revisions
+	</div>
 
 	$guid_input
 	$container_guid_input
 
-	$action_buttons
 </div>
 
 ___HTML;
+

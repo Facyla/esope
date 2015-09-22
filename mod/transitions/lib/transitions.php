@@ -32,9 +32,9 @@ function transitions_get_page_content_read($guid = NULL) {
 	$container = $transitions->getContainerEntity();
 	$crumbs_title = $container->name;
 	if (elgg_instanceof($container, 'group')) {
-		elgg_push_breadcrumb($crumbs_title, "transitions/group/$container->guid/all");
+		elgg_push_breadcrumb($crumbs_title, "catalogue/group/$container->guid/all");
 	} else {
-		elgg_push_breadcrumb($crumbs_title, "transitions/owner/$container->username");
+		elgg_push_breadcrumb($crumbs_title, "catalogue/owner/$container->username");
 	}
 
 	elgg_push_breadcrumb($transitions->title);
@@ -117,7 +117,7 @@ function transitions_get_page_content_friends($user_guid) {
 
 	$user = get_user($user_guid);
 	if (!$user) {
-		forward('transitions/all');
+		forward('catalogue/all');
 	}
 
 	$return = array();
@@ -126,7 +126,7 @@ function transitions_get_page_content_friends($user_guid) {
 	$return['title'] = elgg_echo('transitions:title:friends');
 
 	$crumbs_title = $user->name;
-	elgg_push_breadcrumb($crumbs_title, "transitions/owner/{$user->username}");
+	elgg_push_breadcrumb($crumbs_title, "catalogue/owner/{$user->username}");
 	elgg_push_breadcrumb(elgg_echo('friends'));
 
 	elgg_register_title_button();
@@ -163,9 +163,9 @@ function transitions_get_page_content_archive($owner_guid, $lower = 0, $upper = 
 
 	$crumbs_title = $owner->name;
 	if (elgg_instanceof($owner, 'user')) {
-		$url = "transitions/owner/{$owner->username}";
+		$url = "catalogue/owner/{$owner->username}";
 	} else {
-		$url = "transitions/group/$owner->guid/all";
+		$url = "catalogue/group/$owner->guid/all";
 	}
 	elgg_push_breadcrumb($crumbs_title, $url);
 	elgg_push_breadcrumb(elgg_echo('transitions:archives'));

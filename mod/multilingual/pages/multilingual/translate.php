@@ -6,7 +6,6 @@
 
 $guid = get_input('guid');
 $lang = get_input('lang', 'en');
-
 if (!empty($lang)) $lang_name = elgg_echo($lang);
 
 $title = elgg_echo('multilingual:translate');
@@ -31,11 +30,13 @@ if (elgg_instanceof($entity)) {
 	} else {
 		$translation = multilingual_add_translation($entity, $lang);
 		//system_message(elgg_echo('multilingual:translate:newcreated'));
+		$content .= '<blockquote>';
 		if (elgg_instanceof($translation)) {
-			$content .= '<blockquote>' . elgg_echo('multilingual:translate:newcreated') . '</blockquote>';
+			$content .= elgg_echo('multilingual:translate:newcreated');
 		} else {
-			$content .= '<blockquote>' . elgg_echo('multilingual:error:cannottranslate') . '</blockquote>';
+			$content .= elgg_echo('multilingual:error:cannottranslate');
 		}
+		$content .= '</blockquote>';
 	}
 	
 	if (elgg_instanceof($translation)) {

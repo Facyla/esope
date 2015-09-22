@@ -1,5 +1,6 @@
 <?php
 /* Display Leaflet base map */
+if (!elgg_is_active_plugin('leaflet')) { return; }
 
 elgg_load_library('leaflet');
 //leaflet_load_libraries();

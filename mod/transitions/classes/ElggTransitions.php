@@ -57,7 +57,7 @@ class ElggTransitions extends ElggObject {
 	// Get attachment file URL
 	public function getAttachmentURL($name = 'attachment') {
 		if ($this->attachment) {
-			return elgg_get_site_url() . 'transitions/download/' . $this->guid . '/' . $name;
+			return elgg_get_site_url() . 'catalogue/download/' . $this->guid . '/' . $name;
 		} else {
 			return false;
 		}

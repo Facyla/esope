@@ -34,7 +34,7 @@ if ($full) {
 	if (!empty($description)) $description = elgg_view('output/longtext', array('value' => $description));
 
 	// show icon (if set)
-	$icon = elgg_view_entity_icon($entity, 'listing', array('size' => 'listing', 'align' => 'right'));
+	$icon = elgg_view_entity_icon($entity, 'gallery', array('size' => 'gallery', 'align' => 'right'));
 
 	$info = '';
 	/*
@@ -47,15 +47,17 @@ if ($full) {
 	$info .= elgg_echo("collections:strapline", array(elgg_view_friendly_time($time_updated), "<a href=\"" . $owner->getURL() . "\">" . $owner->name ."</a>" ));
 	$info .= "</p>";
 	//$info .= elgg_get_excerpt($description);
+	$view_button = '<p><a href="' . $entity->getURL() . '" class="elgg-button elgg-button-action float-alt">' . elgg_echo('collections:view') . '</a></p>';
 	
 	$params = array(
 			'entity' => $entity,
-			'metadata' => $metadata,
+			//'metadata' => $metadata,
 			'subtitle' => $info,
 			'content' => elgg_get_excerpt($description),
 		);
 	$params = $params + $vars;
 	$info = elgg_view('object/elements/summary', $params);
+	$info .= $view_button;
 	
 	echo elgg_view_image_block($icon, $info);
 }
