@@ -34,8 +34,8 @@ if (elgg_is_logged_in()) {
 		$mygroups = elgg_get_entities_from_relationship($options);
 		foreach ($mygroups as $group) {
 			// Exclude Pôles and Départements from the list
-			if (theme_afparh_is_pole($group)) { continue; }
-			if (theme_afparh_is_departement($group)) { continue; }
+			if (theme_propage_paca_is_pole($group)) { continue; }
+			if (theme_propage_paca_is_departement($group)) { continue; }
 			$selected = '';
 			if ($group->guid == $page_owner->guid) { $selected = 'class="active elgg-state-selected"'; }
 			$groups .= '<li><a href="' . $group->getURL() . '" class="' . $selected . '">' 
@@ -96,9 +96,9 @@ if (elgg_is_logged_in()) {
 	// Pôles
 	$poles_rh_selected = false;
 	$poles_rh = '';
-	$poles = theme_afparh_get_poles();
+	$poles = theme_propage_paca_get_poles();
 	// Also select Pôle menu if group is a Département
-	$dpt_pole = theme_afparh_is_departement($page_owner);
+	$dpt_pole = theme_propage_paca_is_departement($page_owner);
 	foreach ($poles as $pole_name => $pole) {
 		$pole_rh_selected = '';
 		if ((full_url() == $pole->getURL()) || ($page_owner->guid == $pole->guid) || ($dpt_pole && ($pole_name == $dpt_pole))) {
@@ -172,22 +172,22 @@ if (empty($header_content)) {
 						<nav>
 							<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
 							<ul id="menu-navigation">
-								<li class="home"><a href="<?php echo $url; ?>" <?php if ((full_url() == $url) || (full_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_afparh:home'); ?></a>
+								<li class="home"><a href="<?php echo $url; ?>" <?php if ((full_url() == $url) || (full_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_propage_paca:home'); ?></a>
 									<?php if (elgg_is_active_plugin('dashboard')) { ?>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('theme_afparh:home:title'); ?></a></li>
+											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('theme_propage_paca:home:title'); ?></a></li>
 											<li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
-											<li><a href="<?php echo $url; ?>p/a-propos" ><?php echo elgg_echo('theme_afparh:about'); ?></a></li>
-											<li><a href="<?php echo $url; ?>p/organigrammes" ><?php echo elgg_echo('theme_afparh:organisation'); ?></a></li>
+											<li><a href="<?php echo $url; ?>p/a-propos" ><?php echo elgg_echo('theme_propage_paca:about'); ?></a></li>
+											<li><a href="<?php echo $url; ?>p/organigrammes" ><?php echo elgg_echo('theme_propage_paca:organisation'); ?></a></li>
 										</ul>
 									<?php } ?>
 								</li>
 								
-								<li class="process-rh"><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_afparh:process'); ?></a>
+								<li class="process-rh"><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_propage_paca:process'); ?></a>
 									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_afparh:process:title'); ?></a></li>
+										<li><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_propage_paca:process:title'); ?></a></li>
 										<?php
-										$process_entries = elgg_get_plugin_setting('menu_process', 'theme_afparh');
+										$process_entries = elgg_get_plugin_setting('menu_process', 'theme_propage_paca');
 										$process_entries = explode("\n", $process_entries);
 										foreach ($process_entries as $entry) {
 											$entry = trim($entry);
@@ -203,9 +203,9 @@ if (empty($header_content)) {
 								<?php
 								if (elgg_in_context('poles-rh') || (full_url() == $url . 'poles-rh')) { $poles_rh_selected = true; }
 								?>
-								<li class="poles-rh groups"><a <?php if ($poles_rh_selected) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_afparh:poles'); ?></a>
+								<li class="poles-rh groups"><a <?php if ($poles_rh_selected) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_propage_paca:poles'); ?></a>
 									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_afparh:poles:title'); ?></a></li>
+										<li><a href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_propage_paca:poles:title'); ?></a></li>
 										<?php echo $poles_rh; ?>
 									</ul>
 								</li>
@@ -222,27 +222,27 @@ if (empty($header_content)) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('members')) { ?>
-									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('theme_afparh:members'); ?></a></li>
+									<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('theme_propage_paca:members'); ?></a></li>
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('theme_afparh:calendar'); ?></a></li>
+									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('theme_propage_paca:calendar'); ?></a></li>
 								<?php } ?>
 								
-								<li class="classes"><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_afparh:classes'); ?></a>
+								<li class="classes"><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes'); ?></a>
 									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_afparh:classes:title'); ?></a></li>
-										<li><a href="<?php echo $url; ?>p/classes-virtuelles-configuration" target="_blank"><?php echo elgg_echo('theme_afparh:classes:config'); ?></a></li>
-										<li><a href="http://sallevirtuelleafpa.classilio.com/espacerh" target="_blank"><?php echo elgg_echo('theme_afparh:classes:access'); ?></a></li>
+										<li><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:title'); ?></a></li>
+										<li><a href="<?php echo $url; ?>p/classes-virtuelles-configuration" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:config'); ?></a></li>
+										<li><a href="http://sallevirtuelleafpa.classilio.com/espacerh" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:access'); ?></a></li>
 									</ul>
 								</li>
 								
 								<?php if (elgg_is_active_plugin('groups')) { ?>
-									<li class="groups"><a <?php if (!$poles_rh_selected && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_afparh:groups'); ?></a>
+									<li class="groups"><a <?php if (!$poles_rh_selected && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_propage_paca:groups'); ?></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_afparh:groups:title'); ?></a></li>
+											<li><a href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_propage_paca:groups:title'); ?></a></li>
 											<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
-											<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_afparh:groups:new'); ?></a></li>
+											<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_propage_paca:groups:new'); ?></a></li>
 											<?php echo $groups; ?>
 										</ul>
 									</li>

@@ -18,11 +18,11 @@ if (elgg_is_logged_in()) {
 }
 
 // Define a custom group homepage for Pôle group (only)
-$pole = theme_afparh_is_pole($group);
+$pole = theme_propage_paca_is_pole($group);
 if ($pole) {
 	// Groupes du Pôle - Get pole workgroups and GUIDs
-	$workgroups = theme_afparh_get_pole_groups($pole, true); // Work groups only
-	$group_guids = theme_afparh_get_pole_groups_guids($pole); // Tous les groupes du Pôle (y compris Pôle et Départements)
+	$workgroups = theme_propage_paca_get_pole_groups($pole, true); // Work groups only
+	$group_guids = theme_propage_paca_get_pole_groups_guids($pole); // Tous les groupes du Pôle (y compris Pôle et Départements)
 	
 	// Tabs <=> rubrique dans l'accueil du groupe (publish|groups)
 	$rubrique = get_input('rubrique', false);
@@ -64,7 +64,7 @@ if ($pole) {
 			$content .= '</div>';
 			
 			// Dernières publications déposées dans le Pôle
-			$content .= '<h3>' . elgg_echo('theme_afparh:pole:publications') . '</h3>';
+			$content .= '<h3>' . elgg_echo('theme_propage_paca:pole:publications') . '</h3>';
 			elgg_push_context('widgets');
 			$content .= elgg_list_entities(array('type' => 'object', 'container_guids' => $group_guids, 'limit' => 10, 'pagination' => true, 'full_view' => false));
 			//$content .= elgg_list_entities(array('type' => 'object', 'container_guids' => $group->guid, 'limit' => 5, 'pagination' => true, 'full_view' => false));
@@ -74,9 +74,9 @@ if ($pole) {
 		case 'groups':
 			// Groupes du Pôle
 			$content .= elgg_view('cmspages/view', array('pagetype' => 'aide-creer-groupe-de-travail'));
-			$content .= '<p><a href="' . $url . 'groups/add/' . elgg_get_logged_in_user_guid() . '?poles_rh=' . $pole . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_afparh:groups:new') . '</a></p>';
+			$content .= '<p><a href="' . $url . 'groups/add/' . elgg_get_logged_in_user_guid() . '?poles_rh=' . $pole . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_propage_paca:groups:new') . '</a></p>';
 			$content .= '<br />';
-			$content .= '<h3>' . elgg_echo('theme_afparh:pole:groups') . '</h3>';
+			$content .= '<h3>' . elgg_echo('theme_propage_paca:pole:groups') . '</h3>';
 			$groups_params = $vars;
 			foreach ($workgroups as $ent) {
 				$groups_params['entity'] = $ent;
@@ -90,7 +90,7 @@ if ($pole) {
 		
 		default:
 			// Présentation et activité récente du Pôle
-			$content .= '<h3>' . elgg_echo('theme_afparh:pole:news') . '</h3>';
+			$content .= '<h3>' . elgg_echo('theme_propage_paca:pole:news') . '</h3>';
 			$db_prefix = elgg_get_config('dbprefix');
 			if ($group_guids) {
 				$pole_group_in = implode(',', $group_guids);
@@ -103,7 +103,7 @@ if ($pole) {
 			}
 			/*
 			// Dernières publications déposées dans le Pôle
-			$content .= '<h3>' . elgg_echo('theme_afparh:pole:publications') . '</h3>';
+			$content .= '<h3>' . elgg_echo('theme_propage_paca:pole:publications') . '</h3>';
 			elgg_push_context('widgets');
 			$content .= elgg_list_entities(array('type' => 'object', 'container_guids' => $group_guids, 'limit' => 10, 'pagination' => true, 'full_view' => false));
 			elgg_pop_context();

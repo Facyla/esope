@@ -26,8 +26,8 @@ $parent = au_subgroups_get_parent_group($entity);
 if ($parent) {
 	if ($class) { $class .= ' '; }
 	$class .= 'au_subgroup_icon';
-	if (theme_afparh_is_departement($entity)) {
-		$span = '<span class="au_subgroup au_subgroup_icon-' . $vars['size'] . '">' . elgg_echo('theme_afparh:subgroup:departement') . '</span>';
+	if (theme_propage_paca_is_departement($entity)) {
+		$span = '<span class="au_subgroup au_subgroup_icon-' . $vars['size'] . '">' . elgg_echo('theme_propage_paca:subgroup:departement') . '</span>';
 	} else {
 		$span = '<span class="au_subgroup au_subgroup_icon-' . $vars['size'] . '">' . elgg_echo('au_subgroups:subgroup') . '</span>';
 	}

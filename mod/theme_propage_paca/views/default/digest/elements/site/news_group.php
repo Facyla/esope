@@ -14,7 +14,7 @@ $dbprefix = get_config("dbprefix");
 $all_content = '';
 
 // Get KDB group
-$group_guid = elgg_get_plugin_setting('newsgroup_guid', 'theme_afparh');
+$group_guid = elgg_get_plugin_setting('newsgroup_guid', 'theme_propage_paca');
 $group = get_entity($group_guid);
 if (elgg_instanceof($group, 'group')) {
 	$offset = 0;

@@ -22,7 +22,7 @@ if (!$owner) {
 }
 
 // Do not display presentation except from Pôle home page (= empty $rubrique)
-$pole = theme_afparh_is_pole($group);
+$pole = theme_propage_paca_is_pole($group);
 if ($pole) {
 	// Pas de listing des sous-groupes dans les Pôles (car ce sont les Départements, déjà présents dans interface)
 	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
@@ -72,7 +72,7 @@ if ($pole) {
 <?php
 if ($pole) {
 	// Départements = Sous-groupes du Pôle
-	echo theme_afparh_list_pole_departements($group);
+	echo theme_propage_paca_list_pole_departements($group);
 	echo '<div class="clearfloat"></div><br />';
 }
 

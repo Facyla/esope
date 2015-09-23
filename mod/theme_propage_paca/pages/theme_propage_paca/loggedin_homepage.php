@@ -62,13 +62,13 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 // BLOC CENTRAL
 elgg_push_context('widgets');
 // Derniers articles de blog groupe Actualités
-$newsgroup_guid = elgg_get_plugin_setting('newsgroup_guid', 'theme_afparh');
+$newsgroup_guid = elgg_get_plugin_setting('newsgroup_guid', 'theme_propage_paca');
 $ia = elgg_set_ignore_access(true);
 $newsgroup = get_entity($newsgroup_guid);
 elgg_set_ignore_access($ia);
 if (elgg_instanceof($newsgroup, 'group')) {
 	$center_col .= '<div class="home-static afparh-news">';
-	$center_col .= '<h3><a href="' . $url . 'blog/group/' . $newsgroup_guid . '/all">' . elgg_echo('theme_afparh:news') . $viewall . '</a></h3>';
+	$center_col .= '<h3><a href="' . $url . 'blog/group/' . $newsgroup_guid . '/all">' . elgg_echo('theme_propage_paca:news') . $viewall . '</a></h3>';
 	$center_col .= elgg_list_entities(array('type' => 'object', 'subtype' => 'blog', 'limit' => 3, 'container_guid' => $newsgroup_guid, 'full_view' => false, 'pagination' => false));
 	/*
 	$news = elgg_get_entities(array('type' => 'object', 'subtype' => 'blog', 'limit' => 3, 'container_guid' => $newsgroup_guid));
@@ -100,19 +100,19 @@ elgg_pop_context('widgets');
 // BLOC DROITE
 // Mon profil + Edit link
 $right_col .= '<div class="home-static">';
-	$right_col .= '<h3><a href="' . elgg_get_site_url() . 'profile/' . $user->username . '">' . elgg_echo('theme_afparh:myprofile') . '</a></h3>';
+	$right_col .= '<h3><a href="' . elgg_get_site_url() . 'profile/' . $user->username . '">' . elgg_echo('theme_propage_paca:myprofile') . '</a></h3>';
 	$right_col .= elgg_view('profile_manager/profile_completeness');
-	$right_col .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $user->username . '/edit">' . elgg_echo('theme_afparh:profile:edit') . '</a>';
+	$right_col .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $user->username . '/edit">' . elgg_echo('theme_propage_paca:profile:edit') . '</a>';
 	$right_col .= '<div class="clearfloat"></div>';
 $right_col .= '</div>';
 // Prochains ateliers : Evénements
 $right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_afparh:ateliers:future') . $viewall . '</a></h3>';
-$right_col .= elgg_view('theme_afparh/ateliers');
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_propage_paca:ateliers:future') . $viewall . '</a></h3>';
+$right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
 // Ateliers : Page CMS
 $right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_afparh:ateliers') . '</a></h3>';
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_propage_paca:ateliers') . '</a></h3>';
 $right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-ateliers'));
 $right_col .= '</div>';
 // Groupes en Une et connectés

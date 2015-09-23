@@ -13,13 +13,13 @@ elgg_set_context('poles-rh');
 
 $pole = get_input('pole', false);
 if (!$pole || !in_array($pole, array('social', 'devpro', 'gestion'))) {
-	register_error(elgg_echo('theme_afparh:pole:inexistent'));
+	register_error(elgg_echo('theme_propage_paca:pole:inexistent'));
 	forward();
 }
-$title = elgg_echo("theme_afparh:pole:$pole");
+$title = elgg_echo("theme_propage_paca:pole:$pole");
 $content = '';
 
-elgg_push_breadcrumb(elgg_echo('theme_afparh:pole-rh'));
+elgg_push_breadcrumb(elgg_echo('theme_propage_paca:pole-rh'));
 elgg_push_breadcrumb($title);
 
 

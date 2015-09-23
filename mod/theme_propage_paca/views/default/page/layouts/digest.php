@@ -27,11 +27,11 @@ $language = get_current_language();
 			<div>
 				<div id="digest_afpa_header_header">
 					<div class="afpa-header-right">
-						<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_afparh/graphics/Logo_AFPA.gif" alt="Logo AFPA"><br />
+						<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/Logo_AFPA.gif" alt="Logo AFPA"><br />
 						<?php echo $site_url; ?>
 					</div>
 					<div class="afpa-header-left">
-						<img class="logo-dialogueplus" src="<?php echo elgg_get_site_url(); ?>mod/theme_afparh/graphics/logo_dialogue_plus.png" alt="Logo Dialogue+">
+						<img class="logo-dialogueplus" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/logo_dialogue_plus.png" alt="Logo Dialogue+">
 					</div>
 					<div class="clearfloat"></div>
 				</div>

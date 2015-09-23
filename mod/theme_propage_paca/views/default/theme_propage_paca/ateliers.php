@@ -23,7 +23,7 @@ if (elgg_is_active_plugin('event_calendar')) {
 	$ateliers .= '<div class="clearfloat"></div>';
 	elgg_pop_context();
 	if (elgg_is_admin_logged_in()) {
-		$ateliers .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/add?tags=atelier"><i class="fa fa-gears"></i>' . elgg_echo('theme_afparh:atelier:add') . '</a><br /><em>' . elgg_echo('theme_afparh:atelier:add:details') . '</em></p>';
+		$ateliers .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/add?tags=atelier"><i class="fa fa-gears"></i>' . elgg_echo('theme_propage_paca:atelier:add') . '</a><br /><em>' . elgg_echo('theme_propage_paca:atelier:add:details') . '</em></p>';
 	}
 	echo $ateliers;
 }

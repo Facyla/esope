@@ -9,7 +9,7 @@ if (elgg_instanceof($group, 'group')) {
 	
 	// Can be used to add a custom group tab menu
 	// Menu du Pôle
-	if (theme_afparh_is_pole($group)) {
+	if (theme_propage_paca_is_pole($group)) {
 		// Add pole context for navigation menu selection
 		elgg_push_context('poles-rh');
 		// Tabs <=> rubrique dans l'accueil du groupe
@@ -17,22 +17,22 @@ if (elgg_instanceof($group, 'group')) {
 		
 		// Consulter : accueil du Pôle
 		$tabs['consult'] = array(
-				'href' => "{$url}pages/group/{$group->guid}/all", 'text' => elgg_echo('theme_afparh:pole:consult'),
+				'href' => "{$url}pages/group/{$group->guid}/all", 'text' => elgg_echo('theme_propage_paca:pole:consult'),
 				'priority' => 100, 'selected' => (elgg_in_context('pages')),
 			);
 		// Diffuser : diffusion nouvel article, lien, fichier
 		$tabs['publish'] = array(
-				'href' => $group->getURL() . '?rubrique=publish', 'text' => elgg_echo('theme_afparh:pole:publish'),
+				'href' => $group->getURL() . '?rubrique=publish', 'text' => elgg_echo('theme_propage_paca:pole:publish'),
 				'priority' => 200, 'selected' => ($rubrique == 'publish'),
 			);
 		// Echanger : forum du Pôle
 		$tabs['forum'] = array(
-				'href' => "{$url}discussion/owner/{$group->guid}", 'text' => elgg_echo('theme_afparh:pole:forum'),
+				'href' => "{$url}discussion/owner/{$group->guid}", 'text' => elgg_echo('theme_propage_paca:pole:forum'),
 				'priority' => 300, 'selected' => (full_url() == "{$url}discussion/owner/{$group->guid}"),
 			);
 		// Produire : Liste des groupes de travail du Pôle
 		$tabs['produce'] = array(
-				'href' => $group->getURL() . '?rubrique=groups', 'text' => elgg_echo('theme_afparh:pole:produce'),
+				'href' => $group->getURL() . '?rubrique=groups', 'text' => elgg_echo('theme_propage_paca:pole:produce'),
 				'priority' => 400, 'selected' => ($rubrique == 'groups'),
 			);
 		
