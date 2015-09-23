@@ -1014,7 +1014,7 @@ function uhb_annonces_generate_keys($offer, $force_renew = false) {
 /* ESOPE functions used to facilitate fields manipulation */
 /**********************************************************/
 
-if (!function_exists('esope_get_users_from_setting')) {
+if (!elgg_is_active_plugin('esope') && !elgg_is_active_plugin('adf_public_platform')) {
 	/* Return a list of valid users from a string
 	 * Input string can be a GUID or username list
 	 */
@@ -1031,9 +1031,8 @@ if (!function_exists('esope_get_users_from_setting')) {
 		}
 		return $users;
 	}
-}
-
-if (!function_exists('esope_get_meta_values')) {
+	
+	
 	// Return distinct metadata values for a given metadata name
 	// @TODO : we could get it more quickly with a direct SQL query
 	function esope_get_meta_values($meta_name) {
@@ -1045,24 +1044,22 @@ if (!function_exists('esope_get_meta_values')) {
 		foreach ($rows as $row) { $results[] = $row->string; }
 		return $results;
 	}
-}
-
-if (!function_exists('esope_get_meta_max')) {
+	
+	
 	// Returns the max value for a given metadata
 	function esope_get_meta_max($name = '', $subtype = '', $type = 'object') {
 		if (!empty($name)) return elgg_get_metadata(array('types' => $type, 'subtypes' => $subtype, 'metadata_names' => $name, 'metadata_calculation' => "MAX"));
 		return false;
 	}
-}
-if (!function_exists('esope_get_meta_min')) {
+	
+	
 	// Returns the min value for a given metadata
 	function esope_get_meta_min($name = '', $subtype = '', $type = 'object') {
 		if (!empty($name)) return elgg_get_metadata(array('types' => $type, 'subtypes' => $subtype, 'metadata_names' => $name, 'metadata_calculation' => "MIN"));
 		return false;
 	}
-}
-
-if (!function_exists('esope_get_input_array')) {
+	
+	
 	/* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
 	 * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
 	 * Return : Tableau filtré, ou false
@@ -1081,9 +1078,8 @@ if (!function_exists('esope_get_input_array')) {
 		}
 		return $input;
 	}
-}
-
-if (!function_exists('esope_build_options')) {
+	
+	
 	/* Build options suitable array from settings
 	 * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
 	 * Accepts key::value and list of keys

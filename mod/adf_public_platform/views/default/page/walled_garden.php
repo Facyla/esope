@@ -20,13 +20,31 @@ $content = '';
 $user_guid = get_input('u', false);
 $code = get_input('c', false);
 if ($user_guid && $code) {
+
+
+// Display login, forgotten password & registration form if asked to
+$full_url = full_url();
+$url = elgg_get_site_url();
+if ($full_url == $url.'register') {
+	if (elgg_get_config('allow_registration')) {
+		$special_content = elgg_view_form('register', array(), array('friend_guid' => (int) get_input('friend_guid', 0), 'invitecode' => get_input('invitecode') ));
+	}
+} else if ($full_url == $url.'login') {
+	$special_content = elgg_view_form('login');
+} else if ($full_url == $url.'forgotpassword') {
+	$special_content = elgg_view_form('user/requestnewpassword');
+} else if ($user_guid && $code) {
 	$user = get_entity($user_guid);
 	if (!$user instanceof ElggUser) {
 		register_error(elgg_echo('user:passwordreset:unknown_user'));
 		forward();
 	}
 	$params = array('guid' => $user_guid, 'code' => $code);
-	
+	$special_content = elgg_view_form('user/passwordreset', array('class' => 'elgg-form-account'), $params);
+}
+
+// Display special page
+if (!empty($special_content)) {
 	$content .= '<header><div class="interne">';
 	$headertitle = elgg_get_plugin_setting('headertitle', 'adf_public_platform');
 	if (empty($headertitle)) $content .= '<h1 class="invisible">' . $CONFIG->site->name . '</h1>';
@@ -39,7 +57,7 @@ if ($user_guid && $code) {
 
 	$content .= '<div id="adf-homepage" class="interne">';
 	$content .= '<div id="adf-loginbox">';
-	$content .= elgg_view_form('user/passwordreset', array('class' => 'elgg-form-account'), $params);
+	$content .= $special_content;
 	$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
 	$content .= '</div>';
