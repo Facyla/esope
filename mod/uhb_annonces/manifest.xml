@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>UHB Annonces</name>
+	<author>Florian DANIEL aka Facyla - Conception François GILBERT</author>
+	<version>0.8</version>
+	<blurb>Offres de stages et d'emploi</blurb>
+<description>Gestion d'offres de stage et d'emploi, avec dépôt et suivi des annonces et des candidatures.</description>
+	<website>https://resonances.univ-rennes2.fr/</website>
+	<copyright>Université de Rennes 2</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<category>content</category>
+	<category>admin</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>file</name>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>html_email_handler</name>
+	</suggests>
+	
+</plugin_manifest>
+
+<!--
+COMMENTS - HISTORY
+
+
+0.8 : 20141110
+	- optimised SQL queries (last pass, after benchmark on circa 4k objects)
+
+0.7 : 20141110
+	- optimised SQL queries
+	- CSV export
+	- data preloading
+	- HTML emails
+	- views for listings (own, candidated, memorised, reported, reported_by)
+	- cron task functions
+
+0.6 : application form and logic + file attachments
+
+0.5 : advanced search fully implemented
+
+0.4 : 20141028 - almost functional
+	- search / listings
+
+0.3 : 20141027
+	- actions
+	- forms
+	- objects views
+	- access rights
+
+0.2 : 20141024
+	- main pages
+	- core functions
+	- roles (profile types)
+
+0.1 : 20141016 - plugin skeleton
+
+//-->
+
