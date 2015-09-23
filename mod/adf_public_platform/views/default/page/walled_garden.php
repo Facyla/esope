@@ -19,8 +19,6 @@ $content = '';
 // Display reset password form if asked to
 $user_guid = get_input('u', false);
 $code = get_input('c', false);
-if ($user_guid && $code) {
-
 
 // Display login, forgotten password & registration form if asked to
 $full_url = full_url();
