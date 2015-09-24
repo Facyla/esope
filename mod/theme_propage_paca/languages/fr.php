@@ -20,14 +20,14 @@ $language = array (
 	
 	'theme_propage_paca:news' => "Actualités",
 	'theme_propage_paca:edito' => "Edito",
-	'theme_propage_paca:ateliers' => "Ateliers",
+	'theme_propage_paca:ateliers' => "Inter-séquences",
 	'theme_propage_paca:atelier:add' => "Nouvel atelier",
 	'theme_propage_paca:atelier:add:details' => "Ajouter le mot-clef \"atelier\" à un événement pour le faire apparaître ici.",
-	'theme_propage_paca:ateliers:future' => "Prochains ateliers",
+	'theme_propage_paca:ateliers:future' => "Classes virtuelles programmées",
 	'theme_propage_paca:classes' => "<i class=\"fa fa-desktop fa-fw\"></i>Classe virtuelle",
 	'theme_propage_paca:classes:title' => "De quoi s'agit-il ?",
 	'theme_propage_paca:classes:config' => "Configurer son poste",
-	'theme_propage_paca:classes:access' => "Accéder à Classilio",
+	'theme_propage_paca:classes:access' => "Rejoindre la classe virtuelle",
 	'theme_propage_paca:departements' => "Départements",
 	
 	'groups:poles_rh' => "Pôle RH",
