@@ -13,6 +13,8 @@ if (isset($vars['entity']) && $vars['entity'] instanceof ElggEntity) {
 		if (!is_array($categories)) {
 			$categories = array($categories);
 		}
+		//sort($categories);
+		
 		foreach($categories as $category) {
 			$link = elgg_get_site_url() . 'categories/list?category=' . urlencode($category);
 			if (!empty($linkstr)) {

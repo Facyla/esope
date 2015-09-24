@@ -74,8 +74,17 @@ if (elgg_is_logged_in()) {
 		$categories = '';
 		$themes = $site->categories;
 		if ($themes) {
+			sort($themes); // Sort categories
 			foreach ($themes as $theme) {
-				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+				// Add tree categories support
+				$theme_label = $theme;
+				if (strpos($theme, '/') !== false) {
+					$theme_a = explode('/', $theme);
+					$theme_label = '';
+					for ($i = 1; $i < count($theme_a); $i++) { $theme_label .= "-"; }
+					$theme_label .= ' ' . end($theme_a);
+				}
+				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
 			}
 		}
 	}

@@ -10,8 +10,11 @@ $site = elgg_get_site_entity();
 $categories = $site->categories;
 
 //if (empty($categories)) { $categories = array(); }
-if (empty($categories)) { $categories = ''; }
+if (empty($categories)) { $categories = array(); }
+sort($categories);
 $categories = implode(",\n", $categories);
+
+// @TODO : automatically add parent categories if missing
 
 ?>
 <div>

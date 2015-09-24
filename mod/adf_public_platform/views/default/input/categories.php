@@ -22,10 +22,27 @@ if (!empty($categories)) {
 	if (!is_array($categories)) {
 		$categories = array($categories);
 	}
+	sort($categories);
 
 	// checkboxes want Label => value, so in our case we need category => category
 	$categories = array_flip($categories);
 	array_walk($categories, create_function('&$v, $k', '$v = $k;'));
+	
+	// Add tree categories support
+	// Note : not needed for input checkboxes (we might prefer to get the full value)
+	/*
+	foreach ($categories as $k => $category) {
+		if (strpos($category, '/') !== false) {
+			$category_a = explode('/', $category);
+			$category_label = '';
+			for ($i = 1; $i < count($category_a); $i++) { $category_label .= "-"; }
+			$category_label .= ' ' . end($category_a);
+			$categories[$k] = $category_label;
+		}
+	}
+	// Flip so we use labels as keys
+	$categories = array_flip($categories);
+	*/
 
 	?>
 
