@@ -7,14 +7,14 @@ if (elgg_is_active_plugin('event_calendar')) {
 	$end_ts = $start_ts + 366*24*3600; // End date D+1 year
 	$count_recent_events = event_calendar_get_events_between($start_ts,$end_ts,true,0,0,0,false);
 	$recent_events = event_calendar_get_events_between($start_ts,$end_ts,false,$count_recent_events,0,0,false);
-	// Tri des events "atelier" et du reste de l'agenda
+	// Tri des events "rencontre" et du reste de l'agenda
 	$atelier_events = array();
 	$agenda_events = array();
 	if ($recent_events) foreach ($recent_events as $ent) {
-		if (in_array('atelier', $ent->tags) || ($ent->tags == 'atelier')) { $atelier_events[] = $ent; } else $agenda_events[] = $ent;
+		if (in_array('rencontre', $ent->tags) || ($ent->tags == 'rencontre')) { $atelier_events[] = $ent; } else $agenda_events[] = $ent;
 	}
 	// Timeline = 5 derniers events taggués "atelier"
-	$atelier_events = array_slice($atelier_events, 0, 5);
+	$atelier_events = array_slice($atelier_events, 0, 3);
 	$ateliers .= '<div class="home-events-ateliers">';
 	foreach ($atelier_events as $ent) {
 		$ateliers .= elgg_view_entity($ent, array('full_view' => false));
@@ -22,9 +22,15 @@ if (elgg_is_active_plugin('event_calendar')) {
 	$ateliers .= '</div>';
 	$ateliers .= '<div class="clearfloat"></div>';
 	elgg_pop_context();
+	// @TODO : lien direct que pour admin ET référents des groupes (de formation)
+	/* 
+	$special_groups_guids = elgg_get_plugin_setting('special_groups');
+	$special_groups_guids = esope_get_input_array($special_groups_guids);
+	*/
 	if (elgg_is_admin_logged_in()) {
-		$ateliers .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/add?tags=atelier"><i class="fa fa-gears"></i>' . elgg_echo('theme_propage_paca:atelier:add') . '</a><br /><em>' . elgg_echo('theme_propage_paca:atelier:add:details') . '</em></p>';
+		$ateliers .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/add?tags=rencontre"><i class="fa fa-gears"></i>' . elgg_echo('theme_propage_paca:atelier:add') . '</a><br /><em>' . elgg_echo('theme_propage_paca:atelier:add:details') . '</em></p>';
 	}
 	echo $ateliers;
+	echo '<p><a href="' . elgg_get_site_url() . 'search?q=rencontre&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . '<span class="esope-more">' . elgg_echo('theme_propage_paca:view:more') . '</span>' . '</a></p>';
 }
 

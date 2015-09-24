@@ -105,15 +105,15 @@ $right_col .= '<div class="home-static">';
 	$right_col .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $user->username . '/edit">' . elgg_echo('theme_propage_paca:profile:edit') . '</a>';
 	$right_col .= '<div class="clearfloat"></div>';
 $right_col .= '</div>';
-// Prochains ateliers : Evénements
-$right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_propage_paca:ateliers:future') . $viewall . '</a></h3>';
-$right_col .= elgg_view('theme_propage_paca/ateliers');
-$right_col .= '</div>';
-// Ateliers : Page CMS
+// Inter-séquences : Page CMS
 $right_col .= '<div class="home-static">';
 $right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_propage_paca:ateliers') . '</a></h3>';
-$right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-ateliers'));
+$right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-rencontres'));
+$right_col .= '</div>';
+// Prochaines rencontres : Evénements
+$right_col .= '<div class="home-static">';
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '</a></h3>';
+$right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
 // Groupes en Une et connectés
 $index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');

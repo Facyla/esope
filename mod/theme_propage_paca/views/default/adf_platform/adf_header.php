@@ -32,19 +32,22 @@ if (elgg_is_logged_in()) {
 	
 		}
 		$mygroups = elgg_get_entities_from_relationship($options);
+		// Groupes de formation + groupe projet (configurables) => exclus de la liste (présentés en premier)
+		$special_groups_guids = elgg_get_plugin_setting('special_groups');
+		$special_groups_guids = esope_get_input_array($special_groups_guids);
 		foreach ($mygroups as $group) {
-			/*
-			// Exclude Pôles and Départements from the list
-			if (theme_propage_paca_is_pole($group)) { continue; }
-			if (theme_propage_paca_is_departement($group)) { continue; }
-			*/
 			$selected = '';
 			if ($group->guid == $page_owner->guid) { $selected = 'class="active elgg-state-selected"'; }
-			$groups .= '<li><a href="' . $group->getURL() . '" class="' . $selected . '">' 
+			$group_entry = '<li><a href="' . $group->getURL() . '" class="' . $selected . '">' 
 				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $group->name . '</a></li>';
 			// Si on liste les sous-groupes, on le fait ici si demandé
 			if (elgg_is_active_plugin('au_subgroups') && ($display_subgroups == 'yes')) {
-				$groups .= adf_platform_list_groups_submenu($group, 1, true, $own);
+				$group_entry .= adf_platform_list_groups_submenu($group, 1, true, $own);
+			}
+			if (in_array($group->guid, $special_groups_guids)) {
+				$special_groups .= $group_entry;
+			} else {
+				$groups .= $group_entry;
 			}
 		}
 	// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
@@ -66,11 +69,14 @@ if (elgg_is_logged_in()) {
 	}
 	
 	// Liste des catégories (thématiques du site)
+	// @TODO : arborescence et décalage
 	if (elgg_is_active_plugin('categories')) {
 		$categories = '';
 		$themes = $site->categories;
-		if ($themes) foreach ($themes as $theme) {
-			$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+		if ($themes) {
+			foreach ($themes as $theme) {
+				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+			}
 		}
 	}
 	
@@ -182,7 +188,7 @@ if (empty($header_content)) {
 											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('theme_propage_paca:home:title'); ?></a></li>
 											<li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
 											<li><a href="<?php echo $url; ?>p/a-propos" ><?php echo elgg_echo('theme_propage_paca:about'); ?></a></li>
-											<li><a href="<?php echo $url; ?>p/organigrammes" ><?php echo elgg_echo('theme_propage_paca:organisation'); ?></a></li>
+											<li><a href="<?php echo $url; ?>p/groupes-de-travail" ><?php echo elgg_echo('theme_propage_paca:groups:titleorganisation'); ?></a></li>
 										</ul>
 									<?php } ?>
 								</li>
@@ -190,7 +196,11 @@ if (empty($header_content)) {
 								<?php if (elgg_is_active_plugin('groups')) { ?>
 									<li class="groups"><a <?php if ((elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_propage_paca:groups'); ?></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>p/groupes-de-travail"><?php echo elgg_echo('theme_propage_paca:groups:title'); ?></a></li>
+											<?php
+											// @TODO Liste des groupes de travail et groupe projet en priorité : 
+											// pour cela conf pour les lister et les exclure de la liste principale
+											echo $special_groups;
+											?>
 											<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
 											<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_propage_paca:groups:new'); ?></a></li>
 											<?php echo $groups; ?>
@@ -235,9 +245,9 @@ if (empty($header_content)) {
 								<?php /* activity : Fil d'activité du site */ ?>
 								
 								<?php if (elgg_is_active_plugin('categories')) { ?>
-									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?></a>
+									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('theme_propage_paca:categories'); ?></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('adf_platform:categories:all'); ?></a></li>
+											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('theme_propage_paca:categories:all'); ?></a></li>
 											<?php echo $categories; ?>
 										</ul>
 									</li>
