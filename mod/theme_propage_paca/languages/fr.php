@@ -12,10 +12,10 @@ $language = array (
 	'theme_propage_paca:process:title' => "Présentation des process",
 	'theme_propage_paca:poles' => "<i class=\"fa fa-globe fa-fw\"></i>Pôles",
 	'theme_propage_paca:poles:title' => "Présentation des Pôles RH",
-	'theme_propage_paca:groups' => "<i class=\"fa fa-users fa-fw\"></i>G. de Travail",
+	'theme_propage_paca:groups' => "<i class=\"fa fa-users fa-fw\"></i>Produire ensemble",
 	'theme_propage_paca:groups:title' => "Présentation des groupes de travail",
 	'theme_propage_paca:members' => "<i class=\"fa fa-user fa-fw\"></i>Annuaire",
-	'theme_propage_paca:groups:new' => "<i class=\"fa fa-plus fa-fw\"></i>Créer un groupe de travail",
+	'theme_propage_paca:groups:new' => "<i class=\"fa fa-plus fa-fw\"></i>Ouvrir un groupe de travail",
 	'theme_propage_paca:calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>Agenda",
 	
 	'theme_propage_paca:news' => "Actualités",
