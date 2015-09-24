@@ -101,25 +101,6 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
-	/*
-	// Pôles
-	$poles_rh_selected = false;
-	$poles_rh = '';
-	$poles = theme_propage_paca_get_poles();
-	// Also select Pôle menu if group is a Département
-	$dpt_pole = theme_propage_paca_is_departement($page_owner);
-	foreach ($poles as $pole_name => $pole) {
-		$pole_rh_selected = '';
-		if ((full_url() == $pole->getURL()) || ($page_owner->guid == $pole->guid) || ($dpt_pole && ($pole_name == $dpt_pole))) {
-			// Mark current Pole as selected
-			$pole_rh_selected = 'class="elgg-state-selected"';
-			// Also select main Pole menu
-			$poles_rh_selected = true;
-		}
-		$poles_rh .= '<li '. $pole_rh_selected . '><a href="' . $pole->getURL() . '"><img src="' . $pole->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $pole->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . str_replace('"', "''", $pole->name) . '</a></li>';
-	}
-	*/
-	
 }
 
 // Header

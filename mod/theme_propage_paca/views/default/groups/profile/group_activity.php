@@ -9,7 +9,7 @@ $group = $vars['entity'];
 
 // Add group activity or group content
 // ESOPE : add activity if asked
-if ((theme_propage_paca_is_pole($group)) || elgg_get_plugin_setting('groups_add_activity', 'adf_public_platform') == 'yes') {
+if (elgg_get_plugin_setting('groups_add_activity', 'adf_public_platform') == 'yes') {
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
 	$activity = elgg_list_river(array(

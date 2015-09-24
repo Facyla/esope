@@ -21,16 +21,6 @@ if (!$owner) {
 	throw new InvalidParameterException($msg);
 }
 
-// Do not display presentation except from Pôle home page (= empty $rubrique)
-$pole = theme_propage_paca_is_pole($group);
-if ($pole) {
-	// Pas de listing des sous-groupes dans les Pôles (car ce sont les Départements, déjà présents dans interface)
-	elgg_unextend_view('groups/sidebar/members', 'au_subgroups/sidebar/subgroups');
-	
-	// Tabs <=> rubrique dans l'accueil du groupe (publish|groups)
-	$rubrique = get_input('rubrique', false);
-	if ($rubrique) { return; }
-}
 
 ?>
 <div class="groups-profile clearfix elgg-image-block">
