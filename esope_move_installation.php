@@ -85,17 +85,17 @@ header('Content-Type: text/html; charset=utf-8');
 <?php
 echo '<h2>Définition des paramètres de configuration</h2>';
 echo '<form method="POST">';
-echo '<p>Serveur MySQL <label><input type="text" name="db_server" value="' . $db_server . '" required="required" /></label></p>';
-echo '<p>Nom de la base MySQL <label><input type="text" name="db_name" value="' . $db_name . '" required="required" /></label></p>';
-echo '<p>Utilisateur MySQL <label><input type="text" name="db_user" value="' . $db_user . '" required="required" /></label></p>';
+echo '<p>Serveur MySQL <label><input type="text" name="db_server" value="' . $db_server . '" required="required" placeholder="localhost, mysql.domain.tld..." /></label></p>';
+echo '<p>Nom de la base MySQL <label><input type="text" name="db_name" value="' . $db_name . '" required="required" placeholder="DB name, eg. elggproject" /></label></p>';
+echo '<p>Utilisateur MySQL <label><input type="text" name="db_user" value="' . $db_user . '" required="required" placeholder="DB username, eg. elgguser" /></label></p>';
 echo '<p>Mot de passe MySQL <label><input type="text" name="db_pass" value="' . $db_pass . '" /></label></p>';
-echo '<p><label>Préfixe des tables (généralement "elgg_") <input type="text" name="prefix" value="' . $prefix . '" /></label></p>';
-echo '<p><label>Ancienne URL <input type="text" name="old_www" value="' . $old_www . '" required="required" /></label></p>';
-echo '<p><label>Nouvelle URL <input type="text" name="new_www" value="' . $new_www . '" required="required" /></label></p>';
-echo '<p><label>Ancien chemin sur le serveur <input type="text" name="old_path" value="' . $old_path . '" required="required" /></label></p>';
-echo '<p><label>Nouveau chemin sur le serveur <input type="text" name="new_path" value="' . $new_path . '" required="required" /></label></p>';
-echo '<p><label>Ancien chemin des données sur le serveur <input type="text" name="old_datapath" value="' . $old_datapath . '" required="required" /></label></p>';
-echo '<p><label>Nouveau chemin des données sur le serveur <input type="text" name="new_datapath" value="' . $new_datapath . '" required="required" /></label></p>';
+echo '<p><label>Préfixe des tables (généralement "elgg_") <input type="text" name="prefix" value="' . $prefix . '" placeholder="elgg_" /></label></p>';
+echo '<p><label>Ancienne URL (sans slash final) <input type="text" name="old_www" value="' . $old_www . '" required="required" placeholder="http://old_domain.tld/elgg" /></label></p>';
+echo '<p><label>Nouvelle URL (sans slash final) <input type="text" name="new_www" value="' . $new_www . '" required="required" placeholder="http://new_domain.tld" /></label></p>';
+echo '<p><label>Ancien chemin sur le serveur <input type="text" name="old_path" value="' . $old_path . '" required="required" placeholder="/var/www/old_domain.tld/" /></label></p>';
+echo '<p><label>Nouveau chemin sur le serveur <input type="text" name="new_path" value="' . $new_path . '" required="required" placeholder="/var/www/new_domain.tld/www/" /></label></p>';
+echo '<p><label>Ancien chemin des données sur le serveur <input type="text" name="old_datapath" value="' . $old_datapath . '" required="required" placeholder="/var/www/old_domain.tld-data/" /></label></p>';
+echo '<p><label>Nouveau chemin des données sur le serveur <input type="text" name="new_datapath" value="' . $new_datapath . '" required="required" placeholder="/var/www/new_domain.tld/data/" /></label></p>';
 echo '<p><label>Exécuter la mise à jour ? <select name="execute_query">';
 if ($execute_query == 'yes') {
 	echo '<option value="no">Non</option>';
