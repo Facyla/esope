@@ -145,7 +145,8 @@ function esope_init() {
 	elgg_register_event_handler('login','user','esope_login_user_action', 800);
 	
 	// Ajoute la possibilité de modifier accès et container pour TheWire
-	elgg_register_event_handler("create", "object", "esope_thewire_handler_event");
+	// Note : MUST be run very early so group notifications can happen
+	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);
 	
 	
 	// Modify message and add attachments to event notifications
@@ -1305,19 +1306,23 @@ function esope_get_subpages($parent) {
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
 	$subpages = esope_get_subpages($parent);
-	if ($subpages) foreach ($subpages as $subpage) {
-		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
-		else if ($internal_link == 'url') $href = $subpage->getURL();
-		else $href = false;
-		if ($full_view) {
-			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
-			echo elgg_view("output/longtext", array("value" => $subpage->description));
-			echo '<p style="page-break-after:always;"></p>';
-			echo esope_list_subpages($subpage, $internal_link, $full_view);
-		} else {
-			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
-			$content .= esope_list_subpages($subpage, $internal_link);
-			$content .= '</li>';
+	if ($subpages) {
+		// Alphabetic sort
+		usort($subpages, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+		foreach ($subpages as $subpage) {
+			if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
+			else if ($internal_link == 'url') $href = $subpage->getURL();
+			else $href = false;
+			if ($full_view) {
+				echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+				echo elgg_view("output/longtext", array("value" => $subpage->description));
+				echo '<p style="page-break-after:always;"></p>';
+				echo esope_list_subpages($subpage, $internal_link, $full_view);
+			} else {
+				$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
+				$content .= esope_list_subpages($subpage, $internal_link);
+				$content .= '</li>';
+			}
 		}
 	}
 	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';

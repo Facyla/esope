@@ -172,6 +172,7 @@ $fr = array(
 	'adf_platform:members:online' => "Membres connectés",
 	'adf_platform:members:newest' => "Derniers inscrits",
 	'adf_platform:groups:featured' => "Groupes à la Une",
+	'esope:categories:tree:explanation' => "Vous pouvez utiliser des sous-catégories : pour cela, indiquez le nom de la catégorie parente, puis \"/\" et le nom de votre catégorie, par ex.: Ressources/Supports de formation/Vidéos,",
 	
 	'accessibility:sidebar:title' => "Menu secondaire",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -746,6 +747,9 @@ $fr = array(
 	'esope:register:morejoingroups' => "Afficher plus de groupes",
 	
 	'readmore' => "Lire la suite",
+	
+	'esope:pages:summary' => "Sommaire",
+	'esope:option:nofilter' => "(aucun filtre)",
 	
 	// Subtypes
 	'esope:subtype:pages' => "wiki",

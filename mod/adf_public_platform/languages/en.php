@@ -172,6 +172,7 @@ $en = array(
 	'adf_platform:members:online' => "Online members",
 	'adf_platform:members:newest' => "Newest members",
 	'adf_platform:groups:featured' => "Featured groups",
+	'esope:categories:tree:explanation' => "You can use tree categories: prepend your category with the name of the parent category, separated by \"/\", eg.: Resources/Learning/Online videos,",
 	
 	
 	'accessibility:sidebar:title' => "Secondary menu",
@@ -745,6 +746,9 @@ $en = array(
 	'esope:register:morejoingroups' => "Display more groups",
 	
 	'readmore' => "Read more",
+	
+	'esope:pages:summary' => "Summary",
+	'esope:option:nofilter' => "(no filter)",
 	
 	// Subtypes
 	'esope:subtype:pages' => "wiki",

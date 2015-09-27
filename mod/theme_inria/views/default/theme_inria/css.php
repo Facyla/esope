@@ -214,8 +214,13 @@ footer.footer-inria {
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
 
 .thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
+.thewire-form #thewire-characters-remaining.thewire-characters-remaining-warning { font-weight: bold !important; color: #F00 !important; }
+/* Note : si on veut ajouter un message il faudra modifier le JS et la structure HTML...
+#thewire-characters-remaining .thewire-characters-remaining-message { display:none; }
+#thewire-characters-remaining.thewire-characters-remaining-warning .thewire-characters-remaining-message { display:inline; }
+*/
 #thewire-characters-remaining span { margin: 3px 12px 0 0; float:none; font-size: 1.2em; }
-#thewire-textarea { font-size: 1.2em; }
+#thewire-textarea { font-size: 1.2em; height:4em; }
 .home-wire #thewire-textarea { margin-top: 0; }
 .home-wire .thewire-form { padding: 0; }
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
@@ -241,6 +246,7 @@ footer.footer-inria {
 */
 .elgg-form-thewire-group-add #thewire-textarea { height: 4em; padding: 1px 3px; }
 .elgg-form-thewire-group-add #thewire-characters-remaining span { margin: 0 12px 0 0; float:none; font-size: 1.2em; }
+.thewire-remaining-message { color: red; }
 .elgg-form-thewire-group-add .elgg-button-submit { margin-top: 3px; }
 .theme_inria-thewire-group-add {}
 .theme_inria-thewire-group-add h3 { margin-top: 20px; }

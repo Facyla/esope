@@ -266,9 +266,11 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 		$object_subtype = '__BLANK__';
 	}
 
+	//error_log("NOTIFICATION MESSAGES : debug for event $event => object {$object->guid} ($object_type,$object_subtype) / CONTAINER = {$object->container_guid}"); // debug
 	if (isset($CONFIG->register_objects[$object_type][$object_subtype])) {
 		$subject = $CONFIG->register_objects[$object_type][$object_subtype];
 		$string = $subject . ": " . $object->getURL();
+		$notify_owner = notification_messages_notify_owner();
 
 		// Get users interested in content from this person and notify them
 		// (Person defined by container_guid so we can also subscribe to groups if we want)
@@ -286,10 +288,9 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 			if ($interested_users && is_array($interested_users)) {
 				foreach ($interested_users as $user) {
 					if ($user instanceof ElggUser && !$user->isBanned()) {
-						$notify_owner = notification_messages_notify_owner();
 						// Do not rely on logged in user but on object owner and current notified user
 						//if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
-						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
+						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && ($object->access_id != ACCESS_PRIVATE)) {
 							// Message content
 							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
 									'entity' => $object,
@@ -340,7 +341,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
  * @param bool $add_to_sent If true (default), will add a message to the sender's 'sent' tray
  * @return bool
  */
-// Note : change is avoid to strip tags in sent message when html_email_handler is used
+// Note : change is : avoid to strip tags in sent message when html_email_handler is used
 function notification_messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
 	// @todo remove globals
 	global $messagesendflag;
@@ -353,7 +354,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
-		error_log("No sender GUID, default to logged_in user $sender_guid => block ?");
+		error_log("NOTIFICATION MESSAGES : no sender GUID set, default to logged in user $sender_guid => block ?");
 	}
 
 	// Initialise 2 new ElggObject
@@ -820,5 +821,6 @@ function notification_messages_notify_owner() {
 	
 	return $notify;
 }
+
 
 
