@@ -310,6 +310,7 @@ return array(
 	'cmspages:none' => "No CMS Page found.",
 	'cmspages:created' => "created %s",
 	'cmspages:updated' => "updated %s",
+	'cmspages:readmore' => "Read more",
 	
 	
 );

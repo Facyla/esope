@@ -2000,6 +2000,47 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 }
 
 
+/* Determines if the user is a group administrator (=> has admin rights on any group)
+ * $user : the user to be checked
+ * $group : optional group
+ * $strict : if true and group_operators enabled, ensures the user is the group owner only 
+ *           (not a co-admin or even not an global admin)
+ */
+function esope_is_group_admin($user = false, $group = null, $strict = false) {
+	if (!elgg_instanceof($user, 'user')) {
+		if (!elgg_is_logged_in()) return false;
+		$user = elgg_get_logged_in_user_entity();
+	}
+	
+	// Checks only for a given group
+	if (elgg_instanceof($group, 'group')) {
+		if ($group->canEdit()) {
+			if (!$strict) { return true; }
+			if ($group->owner_guid == $user->guid) { return true; }
+		}
+		return false;
+	}
+	
+	// Owned group check : always validates this function test
+	$owned_groups = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user->guid));
+	if ($owned_groups) { return true; }
+	// Strict check : any other method is not valid, so leave now (even not global admin)
+	if ($strict) { return false; }
+	
+	// Admin bypass
+	if ($user->isAdmin()) { return true; }
+	
+	// Now also check group operators
+	if (elgg_is_active_plugin('group_operators')) {
+		$operator_of = elgg_get_entities_from_relationship(array('types'=>'group', 'relationship_guid'=>$user->guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
+		if ($operator_of) { return true; }
+	}
+	
+	// None passed : definitely not a group admin...
+	return false;
+}
+
+
 
 
 
