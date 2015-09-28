@@ -12,6 +12,7 @@
 /*
 $pagetype => the cmspage id
 $vars['rawcontent'] => no wrapper (no cmspage div around)
+$vars['read_more'] => false|nb_chars : if text length > nb_chars, cuts at nb_chars and adds a "Read more" button"
 
 $content .= $cmspage->guid; // who cares ?
 $content .= $cmspage->access_id;

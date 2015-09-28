@@ -138,7 +138,7 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 					<?php echo $site_url; ?>
 				</div>
 				<div class="afpa-header-left">
-					<img class="logo-dialogueplus" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/logo_dialogue_plus.png" alt="Logo Dialogue+">
+					<h1>PROPAGE PACA</h1>
 				</div>
 				<div class="clearfloat"></div>
 			</div>

@@ -100,19 +100,20 @@ elgg_pop_context('widgets');
 // BLOC DROITE
 // Mon profil + Edit link
 $right_col .= '<div class="home-static">';
-	$right_col .= '<h3><a href="' . elgg_get_site_url() . 'profile/' . $user->username . '">' . elgg_echo('theme_propage_paca:myprofile') . '</a></h3>';
+	$right_col .= '<h3><a href="' . elgg_get_site_url() . 'profile/' . $user->username . '">' . elgg_echo('theme_propage_paca:myprofile') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:display') . '</span></a></h3>';
 	$right_col .= elgg_view('profile_manager/profile_completeness');
 	$right_col .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $user->username . '/edit">' . elgg_echo('theme_propage_paca:profile:edit') . '</a>';
 	$right_col .= '<div class="clearfloat"></div>';
 $right_col .= '</div>';
 // Inter-séquences : Page CMS
 $right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . elgg_echo('theme_propage_paca:ateliers') . '</a></h3>';
-$right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-rencontres'));
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-rencontres">' . elgg_echo('theme_propage_paca:ateliers') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
+$right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-rencontres', 'read_more' => 300));
 $right_col .= '</div>';
 // Prochaines rencontres : Evénements
 $right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '</a></h3>';
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
+// search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities
 $right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
 // Groupes en Une et connectés
