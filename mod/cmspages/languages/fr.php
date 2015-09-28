@@ -303,6 +303,8 @@ return array(
 	'cmspages:none' => "Aucune page CMS trouvée.",
 	'cmspages:created' => "créée %s",
 	'cmspages:updated' => "MAJ %s",
+	'cmspages:readmore' => "Lire la suite",
+	
 	
 );
 

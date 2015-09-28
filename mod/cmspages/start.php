@@ -552,8 +552,10 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$full_view = $module_config['full_view'];
 			$type = $module_config['type'];
 			$subtype = $module_config['subtype'];
-			$limit = $module_config['limit']; if (!isset($limit)) $limit = 10;
-			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
+			$limit = $module_config['limit'];
+			if (!isset($limit)) $limit = 10;
+			$sort = $module_config['sort'];
+			if (!isset($sort)) $sort = "time_created desc";
 			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
@@ -652,7 +654,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  *        + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
  *   - 'embed' : can be passed to change some rendering elements based on read embed
  *   - 'add_edit_link' : allow non-defined pages rendering (and edit links)
- *        Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
+ *   - 'noedit' : Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
  * STEPS :
  * 1. Check validity, access, contexts (can we display that page ?)
  * 2. Render cmspage "own" content
@@ -680,6 +682,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	if ($params['noedit'] == 'true') $add_edit_link = false;
 	if (!empty($params['embed'])) $embed = $params['embed'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
+	$read_more = false;
+	if (isset($vars['read_more'])) $read_more = $vars['read_more'];
+
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
@@ -718,7 +723,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 			}
 			if ($exit) {
 				if ($mode != 'view') {
-					register_error('cmspages:wrongcontext');
+					register_error(elgg_echo('cmspages:wrongcontext'));
 					//forward(REFERER);
 				}
 				return;
@@ -824,6 +829,12 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></span>';
 		}
 		$edit_link = '<a class="cmspages-admin-block cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"> ' . $edit_link . $edit_icon . '</a>' . $edit_details;
+	}
+	
+	// If asked for "Read more" button, apply it to the whole content (but before the wrapper)
+	if ($read_more) {
+		$content = elgg_get_excerpt($content, $read_more);
+		$content .= '<p><a href="' . $cmspage->getURL() . '" class="elgg-button elgg-button-action elgg-button-esope">' . elgg_echo('cmspages:readmore') . '</a></p>';
 	}
 	
 	
