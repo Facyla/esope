@@ -43,7 +43,6 @@ if (!empty($categories)) {
 	// Flip so we use labels as keys
 	$categories = array_flip($categories);
 	*/
-
 	?>
 
 <div class="categories">

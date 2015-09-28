@@ -51,9 +51,8 @@ $language = array (
 	
 	'groups:contacts' => "Contacts",
 	
-	// Surcharge de traductions pour les Départements (attention : tous les sous-groupes ne sont pas des Départements...)
-	//'au_subgroups:add:subgroup' => 'Créer un Département',
-	//'au_subgroups:subgroup' => "Département",
+	// Overrides
+	'adf_platform:homewire:msg' => "Un message, une info à partager, une proposition de date",
 	
 	
 );
