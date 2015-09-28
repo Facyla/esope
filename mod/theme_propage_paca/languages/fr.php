@@ -6,12 +6,6 @@ $language = array (
 	'theme_propage_paca:home:title' => "Page d'accueil",
 	'theme_propage_paca:about' => "Qui sommes-nous ?",
 	//'theme_propage_paca:about' => "<i class=\"fa fa-info fa-fw\"></i>Qui sommes-nous ?",
-	'theme_propage_paca:organisation' => "Organigrammes",
-	//'theme_propage_paca:organisation' => "<i class=\"fa fa-institution fa-fw\"></i>Organigrammes",
-	'theme_propage_paca:process' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>Process",
-	'theme_propage_paca:process:title' => "Présentation des process",
-	'theme_propage_paca:poles' => "<i class=\"fa fa-globe fa-fw\"></i>Pôles",
-	'theme_propage_paca:poles:title' => "Présentation des Pôles RH",
 	'theme_propage_paca:groups' => "<i class=\"fa fa-users fa-fw\"></i>Produire ensemble",
 	'theme_propage_paca:groups:title' => "Présentation des groupes de travail",
 	'theme_propage_paca:members' => "<i class=\"fa fa-user fa-fw\"></i>Annuaire",
@@ -33,6 +27,8 @@ $language = array (
 	'theme_propage_paca:departements' => "Départements",
 	
 	'theme_propage_paca:view:more' => "Afficher plus de rencontres",
+	'theme_propage_paca:display' => "<i class=\"fa fa-eye\"></i>&nbsp;Afficher",
+	'theme_propage_paca:moreinfo' => "<i class=\"fa fa-info-circle\" title=\"Plus d'informations\"></i>",
 	
 	'theme_propage_paca:pole:consult' => "Consulter",
 	'theme_propage_paca:pole:publish' => "Diffuser",

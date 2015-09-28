@@ -20,17 +20,23 @@ if (elgg_is_active_plugin('event_calendar')) {
 		$ateliers .= elgg_view_entity($ent, array('full_view' => false));
 	}
 	$ateliers .= '</div>';
-	$ateliers .= '<div class="clearfloat"></div>';
 	elgg_pop_context();
 	// @TODO : lien direct que pour admin ET référents des groupes (de formation)
-	/* 
 	$special_groups_guids = elgg_get_plugin_setting('special_groups');
 	$special_groups_guids = esope_get_input_array($special_groups_guids);
-	*/
-	if (elgg_is_admin_logged_in()) {
+	$is_learning_group_admin = false;
+	foreach($special_groups_guids as $group_guid) {
+		if ($group = get_entity($group_guid)) {
+			if ($group->canEdit()) $is_learning_group_admin = true;
+		}
+	}
+	
+	if (elgg_is_admin_logged_in() || $is_learning_group_admin) {
 		$ateliers .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/add?tags=rencontre"><i class="fa fa-gears"></i>' . elgg_echo('theme_propage_paca:atelier:add') . '</a><br /><em>' . elgg_echo('theme_propage_paca:atelier:add:details') . '</em></p>';
 	}
 	echo $ateliers;
-	echo '<p><a href="' . elgg_get_site_url() . 'search?q=rencontre&entity_subtype=event_calendar&entity_type=object&search_type=entities">' . '<span class="esope-more">' . elgg_echo('theme_propage_paca:view:more') . '</span>' . '</a></p>';
+	echo '<p><a href="' . elgg_get_site_url() . 'search?q=rencontre&entity_subtype=event_calendar&entity_type=object&search_type=entities"><i class="fa fa-search-plus"></i>&nbsp;' . elgg_echo('theme_propage_paca:view:more') . '</a></p>';
+	echo '<div class="clearfloat"></div>';
 }
+
 
