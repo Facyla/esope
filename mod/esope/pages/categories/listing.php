@@ -44,19 +44,36 @@ $content .= $objects;
 
 // Liste des catégories (thématiques du site)
 $themes = $site->categories;
-$sidebar = '<h2>Thématiques</h2>';
+sort($themes);
+
+// We need category => category to implement label (can be different from full category name)
+$themes = array_flip($themes);
+array_walk($themes, create_function('&$v, $k', '$v = $k;'));
+
+// Add tree categories support
+foreach ($themes as $k => $theme) {
+	if (strpos($theme, '/') !== false) {
+		$theme_a = explode('/', $theme);
+		$theme_label = '';
+		for ($i = 1; $i < count($theme_a); $i++) { $theme_label .= "-"; }
+		$theme_label .= ' ' . end($theme_a);
+		$themes[$k] = $theme_label;
+	}
+}
+
+$sidebar = '<h2>' . elgg_echo('esope:categories') . '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
 if (empty($category)) {
   $sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
 } else {
   $sidebar .= '<li><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
 }
-foreach ($themes as $theme) {
+foreach ($themes as $theme => $theme_label) {
   //$is_current = str_replace(' ', '+', $theme);
   if ($theme == $category) {
-    $sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+		$sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
   } else {
-    $sidebar .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+		$sidebar .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
   }
 }
 $sidebar .= '</ul>';
