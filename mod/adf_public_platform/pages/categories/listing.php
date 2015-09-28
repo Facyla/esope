@@ -61,7 +61,7 @@ foreach ($themes as $k => $theme) {
 	}
 }
 
-$sidebar = '<h2>Thématiques</h2>';
+$sidebar = '<h2>' . elgg_echo('adf_platform:categories') . '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
 if (empty($category)) {
 	$sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories">' . elgg_echo('adf_platform:categories:all') . '</a></li>';
