@@ -86,7 +86,7 @@ if (elgg_instanceof($newsgroup, 'group')) {
 // The Wire
 $index_wire = elgg_get_plugin_setting('index_wire', 'adf_public_platform');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
-	$center_col .= '<div class="home-static">';
+	$center_col .= '<div class="home-static propage-home">';
 	// Show/hide version
 	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('adf_platform:thewire:togglelink') . '</a><a href="' . $url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
 	$center_col .= '<h3><a href="' . $url . 'thewire/all">' . elgg_echo('adf_platform:homewire:title', array($CONFIG->sitename)) . $viewall . '</a></h3>';
@@ -111,8 +111,8 @@ $right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-rencontres">' .
 $right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-rencontres', 'read_more' => 300));
 $right_col .= '</div>';
 // Prochaines rencontres : Evénements
-$right_col .= '<div class="home-static">';
-$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
+$right_col .= '<div class="home-static propage-home">';
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
 // search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities
 $right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
@@ -158,7 +158,7 @@ $body .= '<div class="home-static-container" style="width:74%; float:left;">';
 	$body .= '<div class="home-static" style="width:36%; float:left; margin-right:3%;">' . $left_col . '</div>';
 	$body .= '<div class="home-static-container" style="width:60%; float:left;">' . $center_col . '</div>';
 	$body .= '<div class="clearfloat"></div>';
-	$body .= '<div class="home-static">' . $activity . '</div>';
+	$body .= '<div class="home-static propage-home">' . $activity . '</div>';
 $body .= '</div>';
 $body .= '<div class="home-static-container" style="width:24%; float:right;">' . $right_col . '</div>';
 $body .= '<div class="clearfloat"></div>';
