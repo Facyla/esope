@@ -45,12 +45,14 @@ function elgg_menus_init() {
 	 *  @TODO hook sur prepare:menu avec poids 1000 pour pouvoir remplacer un menu système en dernier
 	 */
 	
-	// @TODO Enable menu replacement + translated menus
-	// Note : menu switch is easier in theme, right before elgg_view_menu
+	/* @TODO Enable menu replacement + translated menus
+	 * To use translated menus, create menus ending with language code (eg. "-en")
+	 * Note : menu switch is easier in theme, right before elgg_view_menu
+	 */
 	/*
 		// Get translated menu, only if exists
 		$lang = get_language();
-		$lang_menu = elgg_menus_get_menu_config($menu . '_' . $lang);
+		$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
 		if ($lang_menu) $menu = $menu . '_' . $lang;
 	*/
 	// @TODO Also support translated menus (using lang suffix ? or alternate language items ?)

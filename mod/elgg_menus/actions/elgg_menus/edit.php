@@ -169,10 +169,17 @@ switch ($menus_action) {
 					// Cleanup some inputs
 					if (!empty($new_section[$i])) $new_section[$i] = elgg_get_friendly_title($new_section[$i]);
 					if (!empty($new_parent_name[$i])) $new_parent_name[$i] = elgg_get_friendly_title($new_parent_name[$i]);
+					// Note : item_class "elgg-menu-item-{item_name}" will be automatically added when building the menu
+					// We don't bother to remove it here, but we will also remove duplicates in elgg_menus/input/menu_item view
 					if (!empty($new_item_class[$i])) {
-						$new_item_class[$i] = explode(' ', $new_item_class[$i]);
-						$new_item_class[$i] = array_unique($new_item_class[$i]);
-						$new_item_class[$i] = implode(' ', $new_item_class[$i]);
+						$new_item_class_a = explode(' ', $new_item_class[$i]);
+						$new_item_class_a = array_unique($new_item_class_a);
+						$new_item_class[$i] = implode(' ', $new_item_class_a);
+					}
+					if (!empty($new_link_class[$i])) {
+						$new_link_class_a = explode(' ', $new_link_class[$i]);
+						$new_link_class_a = array_unique($new_link_class_a);
+						$new_link_class[$i] = implode(' ', $new_link_class_a);
 					}
 					// Add/update item
 					// Convert to bool values

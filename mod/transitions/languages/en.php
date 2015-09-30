@@ -121,6 +121,7 @@ View and comment on the contribution:
 	'transitions:featured:title' => "Featured contributions",
 	'transitions:background:title' => "Background contributions",
 	'transitions:featured' => "Feature / put in background",
+	'transitions:featured:details' => "You can feature or put a publication in the background. This has an impact on the contribution visibility, by displaying it on the homepage, or removing it from default search results.",
 	'transitions:featured:no' => "No (default)",
 	'transitions:featured:yes' => "Yes (in background)",
 	'transitions:featured:default' => "Standard (default)",
