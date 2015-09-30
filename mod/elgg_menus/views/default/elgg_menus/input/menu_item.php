@@ -38,6 +38,19 @@ if ($menu_item instanceof ElggMenuItem) {
 	$confirm = $menu_item->getConfirmText();
 	$data = '';
 	$priority = $menu_item->getPriority();
+	// Remove duplicates from classes, as some classes are added automatically when building the menu 
+	// and can lead to a duplicated class)
+	// Note : item_class "elgg-menu-item-{item_name}" will be automatically added when building the menu
+	if (!empty($item_class)) {
+		$item_class = explode(' ', $item_class);
+		$item_class = array_unique($item_class);
+		$item_class = implode(' ', $item_class);
+	}
+	if (!empty($link_class)) {
+		$link_class = explode(' ', $link_class);
+		$link_class = array_unique($link_class);
+		$link_class = implode(' ', $link_class);
+	}
 }
 // Convert bool values
 if ($selected) { $selected = 'yes'; } else { $selected = 'no'; }
