@@ -126,7 +126,7 @@ if (empty($header_content)) {
 			<header>
 				<div class="nois-floatable">
 					<div class="interne">
-						<?php echo $header_content; ?>
+						<div class="header-content"><?php echo $header_content; ?></div>
 						<?php if (elgg_is_logged_in()) { ?>
 							<nav>
 								<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
