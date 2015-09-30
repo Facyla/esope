@@ -87,13 +87,16 @@ $french = array(
 	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
 	'feedback:enablefeedback' => "Activer le feedback dans ce groupe",
 	'feedback:page:unknown' => "URL inconnue",
-	'feedback:viewfull' => "Afficher la discusion en pleine page",
+	'feedback:viewfull' => "Afficher la discussion en pleine page",
 	'feedback:commentsreply' => "%s commentaire(s) &nbsp; &raquo;&nbsp;Répondre",
 	
 	// Settings
 	'feedback:settings:memberview' => "Les membres du site peuvent-ils consulter les feedbacks ?",
 	'feedback:settings:comment' => "Est-il possible de commenter et de répondre aux feedbacks ?",
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
+	'feedback:settings:enablemood' => "Activer les humeurs",
+	'feedback:settings:enableabout' => "Activer les catégories de feedback",
+	'feedback:settings:about_values' => "Catégories de feedback (si activées)",
 	
 	// Feedback status
 	'feedback:status' => "Statut des feedbacks",

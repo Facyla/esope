@@ -89,6 +89,9 @@ $english = array(
 	'feedback:settings:memberview' => "Are site members allowed to view feedbacks ?",
 	'feedback:settings:comment' => "Enable commenting on / replying to feedbacks ?",
 	'feedback:settings:feedbackgroup' => "Associate feedbacks to one or multiple groups ?",
+	'feedback:settings:enablemood' => "Enable mood in feedbacks",
+	'feedback:settings:enableabout' => "Enable feedback categories",
+	'feedback:settings:about_values' => "Feedback categories (if enabled)",
 	
 	// Feedback status
 	'feedback:status' => "Feedbacks status",
