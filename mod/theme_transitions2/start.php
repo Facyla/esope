@@ -715,7 +715,7 @@ function theme_transitions2_likes_entity_menu_setup($hook, $type, $return, $para
 		$return[] = ElggMenuItem::factory(array(
 			'name' => 'likes',
 			'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$entity->guid}"),
-			'text' => elgg_view_icon('thumbs-up'),
+			'text' => '<i class="fa fa-heart-o"></i>',
 			'title' => elgg_echo('likes:likethis'),
 			'item_class' => $hasLiked ? 'hidden' : '',
 			'priority' => 1000,
@@ -723,7 +723,7 @@ function theme_transitions2_likes_entity_menu_setup($hook, $type, $return, $para
 		$return[] = ElggMenuItem::factory(array(
 			'name' => 'unlike',
 			'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$entity->guid}"),
-			'text' => elgg_view_icon('thumbs-up-alt'),
+			'text' => '<i class="fa fa-heart"></i>',
 			'title' => elgg_echo('likes:remove'),
 			'item_class' => $hasLiked ? '' : 'hidden',
 			'priority' => 1000,
@@ -782,7 +782,7 @@ function theme_transitions2_likes_river_menu_setup($hook, $type, $return, $param
 	$return[] = ElggMenuItem::factory(array(
 		'name' => 'likes',
 		'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$object->guid}"),
-		'text' => elgg_view_icon('thumbs-up'),
+		'text' => '<i class="fa fa-heart-o"></i>',
 		'title' => elgg_echo('likes:likethis'),
 		'item_class' => $hasLiked ? 'hidden' : '',
 		'priority' => 100,
@@ -790,7 +790,7 @@ function theme_transitions2_likes_river_menu_setup($hook, $type, $return, $param
 	$return[] = ElggMenuItem::factory(array(
 		'name' => 'unlike',
 		'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$object->guid}"),
-		'text' => elgg_view_icon('thumbs-up-alt'),
+		'text' => '<i class="fa fa-heart"></i>',
 		'title' => elgg_echo('likes:remove'),
 		'item_class' => $hasLiked ? '' : 'hidden',
 		'priority' => 100,
