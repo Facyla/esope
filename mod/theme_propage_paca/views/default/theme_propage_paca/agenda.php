@@ -14,7 +14,7 @@ if (elgg_is_active_plugin('event_calendar')) {
 		if (in_array('rencontre', $ent->tags) || ($ent->tags == 'rencontre')) { $atelier_events[] = $ent; } else $agenda_events[] = $ent;
 	}
 	// Timeline = 5 derniers events taggués "atelier"
-	$atelier_events = array_slice($atelier_events, 0, 3);
+	$agenda_events = array_slice($agenda_events, 0, 3);
 	$ateliers .= '<div class="home-events-ateliers">';
 	foreach ($agenda_events as $ent) {
 		$ateliers .= elgg_view_entity($ent, array('full_view' => false));
