@@ -95,6 +95,23 @@ Mot de passe : %s
 	'members:title:online' => 'Contributeurs en ligne',
 	'members:list:popular:none' => 'Aucun contributeur n\'a de contact.',
 	
+	'likes:notifications:subject' => '%s apprécie votre contribution "%s"',
+	'likes:notifications:body' =>
+'Bonjour %1$s,
+
+%2$s apprécie votre contribution \'%3$s\' sur %4$s
+
+Voir votre contribution ici :
+
+%5$s
+
+ou voir le profil de %2$s ici :
+
+%6$s
+
+Merci,
+%4$s
+',
 	
 );
 
