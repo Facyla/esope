@@ -254,7 +254,7 @@ header('Content-Type: text/html; charset=utf-8');
 	<title><?php echo $title; ?></title>
 	<?php echo elgg_view('page/elements/head', $vars); ?>
 	<style>
-	html, body { background:#FFFFFF !important; }
+	html, body { background:#FFFFFF !important; margin: 0 !important; }
 	</style>
 </head>
 <body>
