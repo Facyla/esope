@@ -766,7 +766,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	}
 	
 	// If asked for "Read more" button, apply it to the whole content (but before the wrapper)
-	if ($read_more) {
+	if ($read_more && $cmspage) {
 		$content = elgg_get_excerpt($content, $read_more);
 		$content .= '<p><a href="' . $cmspage->getURL() . '" class="elgg-button elgg-button-action elgg-button-esope">' . elgg_echo('cmspages:readmore') . '</a></p>';
 	}

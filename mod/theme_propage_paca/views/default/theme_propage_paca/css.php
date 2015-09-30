@@ -41,6 +41,10 @@ section div.module.elgg-module-widget { background:transparent; }
 .elgg-module-widget div.elgg-body.activites { border-left:1px solid <?php echo $color2; ?>; border-right:1px solid <?php echo $color2; ?>; }
 */
 
+/* Set some homepage styles (colors) */
+.propage-home {}
+.propage-home h3 { background-color: #474f71; }
+
 
 
 /* Styles génériques */
@@ -48,8 +52,9 @@ input, textarea { border-color: <?php echo $color2; ?>; }
 input:hover, input:focus, input:active, textarea:hover, textarea:focus, textarea:active { border-color: <?php echo $linkcolor; ?>; background-color: #efe; }
 
 /* Bandeau et menus supérieurs */
-header { background:#FFFFFF; border-top:0; height:100px; }
-header h1 { margin-top:2ex; margin-bottom:0.5ex; width: 100%; color: #474F71; line-height: 60px; text-align: center; text-transform: capitalize; }
+header { background:#FFFFFF; border-top:0; height:auto; }
+header .header-content { margin-bottom:0.5ex; width: 100%; color: #474F71; text-align: center; }
+header h1 { margin-top:1em; margin-bottom:0; width: 100%; line-height: 60px; color: #474F71; text-transform: capitalize; }
 header h1 img { height: 60px; width:auto; }
 header .logo-afpa { float:right; }
 header .logo-dialogueplus { height: auto; padding: 10px 0 9px 0; float:left; }
