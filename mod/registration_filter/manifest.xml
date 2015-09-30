@@ -19,9 +19,9 @@
 	<category>filter</category>
 	
 	<requires>
-		<type>plugin</type>
-		<name>invitefriends</name>
+		<type>priority</type>
 		<priority>after</priority>
+		<plugin>invitefriends</plugin>
 	</requires>
 	
 	<activate_on_install>false</activate_on_install>
