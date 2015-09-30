@@ -2,9 +2,8 @@
 /**
  * French strings
  */
-global $CONFIG;
 
-$fr = array(
+return array(
 	'admin:appearance:menus' => "Gestion des menus",
 	
 	'elgg_menus:new' => "Nouveau menu",
@@ -121,6 +120,4 @@ $fr = array(
 	'elgg_menus:sortby:customcallback:placeholder' => "Fonction pour usort",
 	
 );
-
-add_translation('fr', $fr);
 

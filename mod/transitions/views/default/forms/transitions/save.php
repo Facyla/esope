@@ -57,8 +57,9 @@ if ($vars['guid']) {
 	));
 }
 
-// published transitions do not get the preview button
-if (!$vars['guid'] || ($transitions && $transitions->status != 'published')) {
+// Published transitions do not get the preview button
+// Admins also do not have it (as they can change manually the publication status)
+if (!$is_admin && (!elgg_instanceof($transitions, 'object') || ($transitions->status != 'published'))) {
 	$preview_button = elgg_view('input/submit', array(
 		'value' => elgg_echo('transitions:preview'),
 		'name' => 'preview',

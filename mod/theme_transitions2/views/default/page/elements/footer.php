@@ -14,8 +14,8 @@ if (empty($menu)) $menu = 'footer';
 
 // Get translated menu, only if exists
 $lang = get_language();
-$lang_menu = elgg_menus_get_menu_config($menu . '_' . $lang);
-if ($lang_menu) $menu = $menu . '_' . $lang;
+$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+if ($lang_menu) $menu = $menu . '-' . $lang;
 
 $partners_url = elgg_get_site_url() . 'mod/theme_transitions2/graphics/partenaires/';
 
