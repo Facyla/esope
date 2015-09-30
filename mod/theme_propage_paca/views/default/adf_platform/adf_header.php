@@ -248,7 +248,7 @@ if (empty($header_content)) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('theme_propage_paca:calendar'); ?></a></li>
+									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list/' . date('Y-m-d') . '/paged/all'; ?>"><?php echo elgg_echo('theme_propage_paca:calendar'); ?></a></li>
 								<?php } ?>
 								
 								<li class="classes"><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes'); ?></a>
