@@ -23,8 +23,8 @@
 	
 	// Get translated menu, only if exists
 	$lang = get_language();
-	$lang_menu = elgg_menus_get_menu_config($menu . '_' . $lang);
-	if ($lang_menu) $menu = $menu . '_' . $lang;
+	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+	if ($lang_menu) $menu = $menu . '-' . $lang;
 	
 	echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-site elgg-menu-site-default clearfix"));
 	?>

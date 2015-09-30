@@ -1,10 +1,9 @@
 <?php
 /**
- * French strings
+ * English strings
  */
-global $CONFIG;
 
-$en = array(
+return array(
 	'admin:appearance:menus' => "Custom Menus Editor",
 	
 	'elgg_menus:new' => "New menu",
@@ -111,6 +110,4 @@ $en = array(
 	'elgg_menus:edit:newsection:prompt' => "New section name",
 	
 );
-
-add_translation('en', $en);
 
