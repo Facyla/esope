@@ -93,7 +93,7 @@ if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	$center_col .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
 	$center_col .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 	$center_col .= '</div>';
-	$right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-video'));
+	$center_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-video'));
 }
 elgg_pop_context('widgets');
 
