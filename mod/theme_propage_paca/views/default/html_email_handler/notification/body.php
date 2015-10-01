@@ -55,15 +55,22 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 			}
 		
 			#notification_header {
-				text-align: right;
+				text-align: center;
 				padding: 0 0 10px;
+			}
+			#notification_header h1 {
+				margin: 0;
+				line-height: 60px;
+				font-weight: bold;
+				font-size: 24px;
+			}
+			#notification_header img {
+				height: 60px;
 			}
 			
 			#notification_header a {
 				text-decoration: none;
-				font-weight: bold;
 				color: <?php echo $titlecolor; ?>;
-				font-size: 18px;
 			}
 		
 			#notification_wrapper {
@@ -132,14 +139,15 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 		<div id="notification_container">
 			
 			<div id="notification_header">
-				
-				<div class="afpa-header-right">
-					<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/Logo_AFPA.gif" alt="Logo AFPA"><br />
-					<?php echo $site_url; ?>
-				</div>
-				<div class="afpa-header-left">
-					<h1>PROPAGE PACA</h1>
-				</div>
+				<a href="<?php echo elgg_get_site_url(); ?>">
+					<h1>
+						<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/Logo_AFPA.gif" alt="Logo AFPA" style="float:left;" />
+						PROPAGE PACA
+						<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/logo-conseil-regional-provence-alpes-cote-d-azur.jpg" alt="Logo Région Provence-Alpes-Côte d'Azur" style="float:right;" />
+					</h1>
+					<div class="clearfloat"></div>
+					<strong>P</strong>lateforme <strong>R</strong>égionale sur les <strong>O</strong>rganisations <strong>P</strong>édagogiques et <strong>A</strong>ppui au <strong>G</strong>roupement <strong>E</strong>xpérimental_Paca
+				</a>
 				<div class="clearfloat"></div>
 			</div>
 			
