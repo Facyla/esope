@@ -257,4 +257,6 @@ View and comment on the contribution:
 	
 	'transitions:error:missing:category' => "You have to specify a category for your contribution !",
 	
+	'transitions:news:comments' => "React / Display responses (%s)",
+	
 );

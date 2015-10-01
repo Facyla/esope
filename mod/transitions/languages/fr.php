@@ -257,4 +257,6 @@ Voir et commenter cette contribution :
 	
 	'transitions:error:missing:category' => "Vous devez spécifier la catégorie de votre contribution !",
 	
+	'transitions:news:comments' => "Réagir / Afficher les réactions (%s)",
+	
 );

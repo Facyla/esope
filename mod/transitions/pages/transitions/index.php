@@ -15,6 +15,9 @@ $content = '';
 $title = elgg_echo('transitions:index');
 $sidebar = '';
 
+$is_html_viewtype = true;
+if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_html_viewtype = false; }
+
 //elgg_push_breadcrumb(elgg_echo('search'));
 elgg_register_title_button();
 
@@ -193,7 +196,7 @@ $content .= '<div class="transitions-index-search">';
 $content .= '</div>';
 
 // Return only valid content for some view types
-if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $content = $catalogue; }
+if (!$is_html_viewtype) { $content = $catalogue; }
 
 
 

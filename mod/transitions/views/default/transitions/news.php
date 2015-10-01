@@ -39,16 +39,6 @@ if (!$excerpt) {
 // Limit to max chars
 if (strlen($excerpt) >= 140) { $excerpt = elgg_get_excerpt($excerpt, 137); }
 
-$owner_image = elgg_view_entity_icon($owner, 'medium', array('use_hover' => false, 'use_link' => false));
-$owner_link = elgg_view('output/url', array(
-	'href' => "transitions/owner/$owner->username",
-	'text' => $owner->name,
-	'is_trusted' => true,
-));
-$author_text = elgg_echo('byline', array($owner_link));
-$date = elgg_view_friendly_time($transitions->time_created);
-$owner_image .= '<p class="elgg-subtext">' . $author_text . ' ' . $date . '</p>';
-
 
 // The "on" status changes for comments, so best to check for !Off
 if ($transitions->comments_on != 'Off') {
@@ -90,16 +80,7 @@ $subtitle = "$author_text $date $comments_link $categories";
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
-// Contribution category
-$category = '<span class="transitions-category transitions-' . $transitions->category . '">';
-if (!empty($transitions->category)) {
-	$category .= elgg_echo('transitions:category:' . $transitions->category);
-}
-if (($transitions->category == 'actor') && !empty($transitions->actor_type)) {
-	$category .= '&nbsp;: ' . elgg_echo('transitions:actortype:' . $transitions->actor_type) . '';
-}
-$category .= '</span>';
-
+// Contribution category : not displayed for news
 
 
 // TABS BLOCK - Stats and actions blocks : likes, contributions (links + comments)
@@ -169,7 +150,7 @@ $actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_con
 // Main content column
 $body .= $transitions_icon;
 //$body .= '<div class="transitions_image transitions-image-master flexible-block" style="background: url(' . $transitions_icon_url . ') 50% 20%; background-size:cover; width: 558px; height: 300px; max-width: 60%;"></div>';
-$body .= '<div class="clearfloat"></div>';
+
 // Short excerpt (140 chars)
 if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . $transitions->excerpt . '</p>';
 // Full description
@@ -180,9 +161,6 @@ $body .= '<div class="clearfloat"></div><br />';
 
 // Sidebar : all meta information
 $sidebar = '';
-
-// Owner block
-$sidebar .= '<span class="transitions-owner-block">' . $owner_image . '</span>';
 
 // Dates : projects and events only
 if (in_array($transitions->category, array('project', 'event'))) {
@@ -204,14 +182,26 @@ if (in_array($transitions->category, array('project', 'event'))) {
 		// Format : from DD MM YYYY [until DD MM YYYY]
 		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
 			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-			$sidebar .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+			$sidebar .= '<br />' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 		} else if (!empty($transitions->start_date)) {
 			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
 		} else if (!empty($transitions->end_date)) {
 			$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 		}
 	}
-	if (!empty($transitions->start_date) || !empty($transitions->end_date)) { $sidebar .= '</p>'; }
+	if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
+		$sidebar .= '</p>';
+		$sidebar .= '<div class="clearfloat"></div><br />';
+	}
+}
+
+// Territory : actor|project|event only
+if (in_array($transitions->category, array('actor', 'project', 'event')) && !empty($transitions->territory)) {
+	$sidebar .= '<i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory;
+	if ($transitions->getLatitude()) {
+		$sidebar .= elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '100%', 'height' => '200px;'));
+	}
+	$sidebar .= '<div class="clearfloat"></div><br />';
 }
 
 // Ressources : langues puis ressources
@@ -232,15 +222,6 @@ $sidebar .= elgg_view('output/tags', array('tags' => $transitions->tags, 'base_u
 
 
 $sidebar .= '<br /><div class="clearfloat"></div>';
-
-// Territory : actor|project|event only
-if (in_array($transitions->category, array('actor', 'project', 'event')) && !empty($transitions->territory)) {
-	$sidebar .= '<i class="fa fa-map-marker"></i> ' . elgg_echo('transitions:territory') . '&nbsp;: ' . $transitions->territory;
-	if ($transitions->getLatitude()) {
-		$sidebar .= elgg_view('transitions/location_map', array('entity' => $transitions, 'width' => '100%', 'height' => '200px;'));
-	}
-	$sidebar .= '<div class="clearfloat"></div><br />';
-}
 
 // Contributed tags (anyone)
 if ($transitions->tags_contributed) {
@@ -329,8 +310,7 @@ if ($transitions->category == 'challenge') {
 // RENDER EMBED CONTENT : no sharing/contribution tools + no metadata menu
 if ($embed) {
 	echo '<div class="transitions-view-wrapper">';
-	echo $category;
-	echo '<div class="clearfloat"></div>';
+	echo '<a href="' . $transitions->getURL() . '">' . elgg_view_title($transitions->title) . '</a>';
 	echo $body;
 	echo '</div>';
 	return;
@@ -406,31 +386,21 @@ $body .= $tab_content;
 
 
 
-/*
-$params = array(
-	'entity' => $transitions,
-	'title' => false,
-	'metadata' => $metadata,
-	'subtitle' => $subtitle,
-);
-$params = $params + $vars;
-$summary = elgg_view('object/elements/summary', $params);
-echo elgg_view('object/elements/full', array(
-	'summary' => $summary,
-	'icon' => $owner_icon,
-	'body' => $body,
-));
-*/
 
+$num_comments = $transitions->countComments();
 
 // RENDER CONTENT
-echo '<div class="transitions-view-wrapper">';
+echo '<div class="transitions-view-wrapper transitions-view-news">';
+echo '<a href="' . $transitions->getURL() . '"><h3>' . $transitions->title . '</h3></a>';
 if (!empty($metadata)) {
-	echo $category . $metadata;
+	echo $metadata;
 	echo '<div class="clearfloat"></div>';
 }
 echo $body;
+echo '<p class="transitions-news-comments-toggle"><a href="#transitions-' . $transitions->guid . '-comments" rel="toggle" class="elgg-button elgg-button-action">' . elgg_echo('transitions:news:comments', array($num_comments)) . '</a></p>';
+echo '<div id="transitions-' . $transitions->guid . '-comments" class="hidden">';
+echo elgg_view_comments($transitions);
 echo '</div>';
-
+echo '</div>';
 
 
