@@ -118,7 +118,7 @@ $right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-renc
 $right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
 // Agenda
-$right_col .= '<div class="home-static propage-home">';
+$right_col .= '<div class="home-static">';
 $right_col .= '<h3><a href="' . elgg_get_site_url() . 'event_calendar/list/' . date('Y-m-d') . '/paged/all">' . elgg_echo('Agenda') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:display') . '</span></a></h3>';
 $right_col .= elgg_view('theme_propage_paca/agenda');
 $right_col .= '</div>';
