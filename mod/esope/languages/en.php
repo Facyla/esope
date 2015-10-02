@@ -168,6 +168,7 @@ $en = array(
 	'esope:menu:topbar' => "My profile",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
+	'esope:categories:tree:explanation' => "You can use tree categories: prepend your category with the name of the parent category, separated by \"/\", eg.: Resources/Learning/Online videos,",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => 'Bookmarks',

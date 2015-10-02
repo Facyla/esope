@@ -167,6 +167,7 @@ $fr = array(
 	'esope:menu:topbar' => "Mon profil",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
+	'esope:categories:tree:explanation' => "Vous pouvez utiliser des sous-catégories : pour cela, indiquez le nom de la catégorie parente, puis \"/\" et le nom de votre catégorie, par ex.: Ressources/Supports de formation/Vidéos,",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => '<i class="fa fa-link"></i> Liens web',
