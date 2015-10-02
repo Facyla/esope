@@ -176,7 +176,7 @@ if (elgg_is_logged_in()) {
 	
 	?>
 	<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
-		<li class="home"><a href="<?php echo $url; ?>" <?php if ((full_url() == $url) || (full_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
+		<li class="home"><a href="<?php echo $url; ?>" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
 			<?php if (elgg_is_active_plugin('dashboard')) { ?>
 				<ul class="hidden">
 					<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>

@@ -90,7 +90,7 @@ $font6 = elgg_get_plugin_setting('font6', 'esope');
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 /* h2 { color: #333; } */
-
+pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
 .elgg-river-comments-tab { color:#cd9928; }
 .elgg-input-rawtext { width:99%; }
@@ -106,7 +106,7 @@ th { font-weight:bold; background:#CCCCCC; }
 .minuscule { text-transform: lowercase; }
 img { border: 0 none; overflow:hidden; }
 #profil img { float: right; margin-left: 10px; }
-
+.esope-more { float: right; font-size: 70%; line-height: 1.6; }
 
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
@@ -132,6 +132,8 @@ img { border: 0 none; overflow:hidden; }
 	max-width: 990px;
 	margin: 0 auto;
 }
+
+.elgg-page-body { padding: 1em; }
 
 
 
@@ -375,6 +377,7 @@ img { border: 0 none; overflow:hidden; }
 }
 .elgg-form.thewire-form { background: transparent; }
 .home-static { background:white; box-shadow:3px 3px 5px 0px #666; padding: 0.2% 0.4%; }
+.home-static-container {}
 
 
 /* Sidebar */
@@ -456,13 +459,8 @@ img { border: 0 none; overflow:hidden; }
 	margin-top: 25px;
 	*/
 }
+.elgg-page-footer li { float: left; margin-right: 1em; }
 /*
-.elgg-page-footer ul { margin: auto; max-width: 50%; font-size: 0.75em; }
-.elgg-page-footer ul li {
-	float: left; padding-left: 13px; margin: 26px 7px 10px 0;
-	background: transparent url("<?php echo $urlicon; ?>puce-footer.png") left 7px no-repeat scroll;
-	color: #fff; font-size:12px;
-}
 .elgg-page-footer ul li:first-child { background: none; }
 */
 .elgg-page-footer ul li a { color: #fff; font-size:12px; }
@@ -483,7 +481,7 @@ img { border: 0 none; overflow:hidden; }
 	height: 10px;
 	position:absolute; left:0; right:0;
 }
-.elgg-page-footer .credits { clear:both; font-size: 0.85em; }
+.elgg-page-footer .credits { clear:both; font-size: 0.85em; margin-top: 2em; }
 .elgg-page-footer .credits p { float: left; margin: 4px 0 5px; color: #DEDEDE; }
 .elgg-page-footer .credits a { color: #DEDEDE; text-decoration:underline; }
 
@@ -619,7 +617,9 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #esope-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
 .profile_manager_register_input_container { display:inline-block; }
+#profile_manager_profile_edit_tabs { clear: both; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
+#widget_profile_completeness_progress_bar { background: #090; }
 
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
@@ -662,18 +662,17 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 .elgg-module-widget:focus,
 .elgg-module-widget:active { background-color: transparent; }
 .elgg-module-widget > .elgg-head { height:auto; }
+.elgg-module-widget h3 { padding:0.5em; }
 
 /* Widgets - à corriger pour utiliser les classes natives d'Elgg */
 .elgg-page-body div.elgg-module {
-	background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent;
-	width: 300px; /* Imposé par l'image de fond, mais bloque les mises en page fluides */
+	background: none; margin: 0 1em 2em 1em; padding: 0; width: auto; min-width: 300px;
 	float: left;
-	margin: 20px -1px 0;
+	margin: 0 0 20px 0;
 	border-radius: 10px 10px 0 0;
 	-moz-border-radius: 10px 10px 0 0;
 	-webkit-border-radius: 10px 10px 0 0;
 	-o-border-radius: 10px 10px 0 0;
-	padding: 0 14px;
 }
 .elgg-page-body div.elgg-module .elgg-head {
 	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
@@ -697,7 +696,10 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 	font-size: 1.25em;
 	text-transform: uppercase;
 	font-weight: normal;
+	max-width:none;
+	float:none;
 }
+
 /* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
 a.elgg-widget-collapse-button,
 a.elgg-widget-collapse-button:hover,
@@ -721,10 +723,11 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 
 /* Contenu des modules */
-.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 8px 10px 0 6px; }
+.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; }
+.elgg-page-body div.elgg-module ul li { padding-left: 0; float: none; right: initial; left: inherit; margin-left: 0em; }
 
 /* Boutons des widgets */
-.elgg-page-body div.elgg-module .elgg-head ul li a { float: left; margin-left: 6px; margin:0; right: auto; }
+.elgg-page-body div.elgg-module .elgg-head ul li a { float: none; margin:0; right: initial; }
 .elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
 
 
@@ -893,6 +896,9 @@ textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100% !importan
 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
+/* Sélecteur de visibilité des champs du profil */
+.elgg-input-field-access { margin-bottom: 1ex; margin-left: 0.5ex; display: inline-block; }
+form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 
 /* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
@@ -919,6 +925,12 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 .groups-members-count { float: right; }
 
+/* Anciens groupes */
+.group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
+.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 <?php // Keep this block just in case some clients prefer old way but we should use new icons by default (vector)
@@ -984,6 +996,7 @@ EOT;
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
 /* Accordion styles */
+.ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 #custom_fields_userdetails .ui-accordion-header { padding: 0.3em 0 0.3em 1.8em; }
 #custom_fields_userdetails .ui-accordion-header .ui-icon { margin-top:0.5em; top:0; }
 
@@ -991,11 +1004,6 @@ EOT;
 i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 
 /* Effets de survol */
-/*
-.elgg-module-widget, .elgg-module-group { opacity: 0.8; }
-.elgg-module-widget:hover, .elgg-module-widget:active, .elgg-module-widget:focus,
-.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus { opacity: 1; }
-*/
 .elgg-item { opacity: 0.75; }
 .elgg-item .elgg-item { opacity: 1; } /* Don't double the effect */
 .elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
@@ -1023,6 +1031,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #esope-search-form select { width: 7em; margin-left: 0.5em; }
 .esope-search-fulltext { width: 80%; float: left; }
 #esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.esope-search-metadata-select select { max-width: 100%; }
 .elgg-button-livesearch { float: right; }
 .esope-results-count { font-size: 0.8em; color: #808080; }
 
@@ -1071,16 +1080,28 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #group-tool-tabs .group-tool-tab .fa { font-size: 3em; }
 #group-tool-tabs .group-tool-tab.elgg-state-selected, #group-tool-tabs .group-tool-tab:hover { background-color:<?php echo $linkcolor; ?>; color:white; }
 
+#autorefresh-menu { margin: 0.5ex 0; padding: 1ex 3ex; border: 1px dotted; background: #efefef; }
+#loader { position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: 10000;
+	background: rgba(0,0,0,0.2); color: #FFF; text-shadow: 0px 1px 2px #000;
+	text-align: center; font-size: 10ex; padding-top:5ex;
+}
 
+/* Responsive menu */
+.menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:24px; }
+.menu-sidebar-toggle { text-align: right; }
 
 <?php if (!$fixedwidth) { ?>
 /* .elgg-page-body RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
-.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 0; padding:1.5%; }
+.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
+.elgg-sidebar-alt { width: 24%; min-width: 211px; margin:0 1% 0 0; padding:0; }
+.elgg-layout-two-sidebar .elgg-main { width: 48%; padding:13px 1%; }
+.elgg-layout-two-sidebar .elgg-sidebar {  }
+.elgg-layout-two-sidebar .elgg-sidebar_alt {  }
 /* Menus */
 .elgg-menu-navigation { width:auto; }
 /* Largeur de page standard */
@@ -1105,6 +1126,96 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.elgg-sidebar { min-width: 50px; width: 26%; margin:0 0 0 0; }
 	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }
 }
+
+
+
+@media (max-width:700px) {
+	
+	/* Top menu */
+	header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
+	header .interne { margin:0; }
+	header h1 { float:right; margin-top:0; }
+	header nav { float:none; width:100%; position:initial; display:inline-block; }
+	header .profile-link { display:inline-block; }
+	header .adf-profil { position:initial; }
+	.menu-topbar-toggle { display:inline-block; }
+	#menu-topbar { display:none; }
+	header nav ul#menu-topbar { padding-left:30px; font-size:initial; }
+	header nav ul li, header nav ul li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	header nav ul li a, header nav ul li li a,
+	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
+	header nav ul li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	header nav ul li.invites a { padding: 0; margin: 2px 0; }
+	.menu-enabled #menu-topbar { display:block; }
+	
+	
+	/* Navigation menu */
+	#transverse .interne { max-width:100%; margin:0; }
+	#transverse .interne nav { float:none; width:100%; display:inline-block; }
+	.menu-navigation-toggle { display:inline-block; }
+	#menu-navigation { display:none; }
+	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
+	#transverse nav ul li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
+	#transverse nav ul li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
+	#transverse nav ul li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
+	#transverse nav ul li li a { width:100%; padding-left:0; padding-right:0;  }
+	#transverse nav ul li ul { width: 100% !important; position:initial; top:0; left:0; }
+	.menu-enabled #menu-navigation { display:block; }
+	
+	/* Sidebar */
+	.menu-sidebar-toggle { display:inline-block; }
+	.elgg-sidebar { display:none; }
+	.elgg-sidebar * { min-width:0; }
+	.elgg-sidebar.sidebar-enabled { display:block; }
+	
+	/* Generic rules */
+	body { font-size:120%; }
+	.floating { position: initial !important; }
+	.elgg-page .elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; display: inline-block; top:0; left:0; }
+	.elgg-button { font-size: large; }
+	
+	/* Common tools */
+	#feedBackToggler { bottom: 0; transform: rotate(90deg); transform-origin: bottom right; }
+	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 1ex; border: 0; width:100%; }
+	.twitter-timeline { width: 100% !important; }
+	
+	/* Recherche */
+	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
+	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
+	#main-search #adf-search-submit-button { border-radius: 0; }
+	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
+	
+	/* Layout */
+	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; }
+	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	
+	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
+	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
+	
+	/* Groups */
+	.groups-profile-fields { width: 100%; }
+	ul#groups-tools > li { width: 100% !important; max-width: 100% !important; float: none; }
+	
+	/* Home */
+	.home-static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
+	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.timeline-event, .home-timeline .timeline-event { width: 100%; }
+	
+	/* Public Home */
+	#adf-homepage #adf-public-col1, #adf-homepage #adf-public-col2 { float: none; width: 100%; }
+	#adf-public-col2 { padding-top: 3ex; clear: both; }
+	#adf-homepage input[type='text'], #adf-homepage input[type='password'], #adf-homepage select { min-width: 0; }
+	
+	/* Footer */
+	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
+	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; padding-left:0; }
+	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
+	div.credits p { float:none !important; }
+	
+	
+}
+
 
 /*
 @media (max-width:600px) {

@@ -277,7 +277,7 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 			'name' => 'collapse',
 			'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '"><i class="fa fa-caret-square-o-down"></i></button>',
 			'href' => "#elgg-widget-content-$widget->guid",
-			'class' => 'masquer',
+			'link_class' => 'masquer',
 			'rel' => 'toggle',
 			'priority' => 900
 		);
@@ -289,7 +289,7 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 				'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '"><i class="fa fa-times"></i></button>',
 				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
 				'is_action' => true,
-				'class' => 'elgg-widget-delete-button suppr',
+				'link_class' => 'elgg-widget-delete-button suppr',
 				'id' => "elgg-widget-delete-button-$widget->guid",
 				'priority' => 900
 			);
@@ -300,7 +300,7 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 					'name' => 'settings',
 					'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '"><i class="fa fa-gear"></i></button>',
 					'href' => "#widget-edit-$widget->guid",
-					'class' => "elgg-widget-edit-button config",
+					'link_class' => "elgg-widget-edit-button config",
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
@@ -432,7 +432,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
  * Also select parent menus based on page handler : /members/popular will also select /members
  */
 function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
-	$base_url = explode('?', full_url());
+	$base_url = explode('?', current_page_url());
 	$base_url = $base_url[0];
 	if (!empty($base_url)) {
 		foreach($return as $menu_block) {
