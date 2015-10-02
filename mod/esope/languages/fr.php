@@ -164,6 +164,9 @@ $fr = array(
 	'esope:members:online' => "Membres connectés",
 	'esope:members:newest' => "Derniers inscrits",
 	'esope:groups:featured' => "Groupes à la Une",
+	'esope:menu:topbar' => "Mon profil",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => '<i class="fa fa-link"></i> Liens web',

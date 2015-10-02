@@ -59,12 +59,10 @@ function esope_init() {
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
-	/*
 	elgg_register_simplecache_view('js/esope_theme');
 	$theme_js = elgg_get_simplecache_url('js', 'esope_theme');
-	elgg_register_js('esope.fonction', $theme_js, 'head');
-	elgg_load_js('esope.fonction');
-	*/
+	elgg_register_js('esope.theme', $theme_js, 'head');
+	elgg_load_js('esope.theme');
 	
 	// Update jQuery UI to 1.11.2, with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme

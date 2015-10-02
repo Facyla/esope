@@ -165,6 +165,9 @@ $en = array(
 	'esope:members:online' => "Online members",
 	'esope:members:newest' => "Newest members",
 	'esope:groups:featured' => "Featured groups",
+	'esope:menu:topbar' => "My profile",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => 'Bookmarks',

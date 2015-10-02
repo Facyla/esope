@@ -120,10 +120,9 @@ if (elgg_is_logged_in()) {
 	// TOPBAR MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
 		?>
-		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-default">
+		<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
 			<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" id="esope-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
-		</ul>
-		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">
 			<li id="msg">
 				<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
 				<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
@@ -175,6 +174,7 @@ if (elgg_is_logged_in()) {
 	echo '	</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
 	
 	?>
+	<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
 	<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
 		<li class="home"><a href="<?php echo $url; ?>" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
 			<?php if (elgg_is_active_plugin('dashboard')) { ?>

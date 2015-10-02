@@ -146,11 +146,12 @@ img { border: 0 none; overflow:hidden; }
 	font-weight: bold;
 	margin-top:0.5ex;
 }
-.elgg-menu-topbar li { margin: 0 3ex 0 0; }
-.elgg-menu-topbar-alt li { margin: 0 0 0 3ex; }
+.elgg-menu-topbar li { margin: 0 2em 0 0; }
+.elgg-menu-topbar-alt li { margin: 0 0 0 2em; }
 .elgg-menu-topbar li a {
 	color: #fff;
 	text-shadow: 2px 2px 2px #333;
+	margin: 0;
 	padding:1px;
 	display:inline-block;
 }
@@ -216,7 +217,7 @@ img { border: 0 none; overflow:hidden; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
 .elgg-page-header .elgg-menu-topbar .fa { margin-right: 0.5em; }
-.elgg-page-header .elgg-menu-topbar ul li#msg a, .elgg-page-header .elgg-menu-topbar ul li#man a { background:transparent; padding:0; }
+.elgg-page-header .elgg-menu-topbar li#msg a, .elgg-page-header .elgg-menu-topbar li#man a { background:transparent; padding:0; }
 
 .elgg-page-header h1 {
 	font-family: <?php echo $font2; ?>;
@@ -666,7 +667,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 
 /* Widgets - à corriger pour utiliser les classes natives d'Elgg */
 .elgg-page-body div.elgg-module {
-	background: none; margin: 0 1em 2em 1em; padding: 0; width: auto; min-width: 300px;
+	background: none; margin: 0 1em 2em 1em; padding: 0; width: auto; min-width: 200px;
 	float: left;
 	margin: 0 0 20px 0;
 	border-radius: 10px 10px 0 0;
@@ -1088,7 +1089,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 /* Responsive menu */
 .menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:24px; }
-.menu-sidebar-toggle { text-align: right; }
+.menu-sidebar-toggle { text-align: left; }
 
 <?php if (!$fixedwidth) { ?>
 /* .elgg-page-body RESPONSIVE DESIGN */
@@ -1132,41 +1133,53 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 @media (max-width:700px) {
 	
 	/* Top menu */
+	.menu-topbar-toggle { display:inline-block; }
+	.elgg-menu-topbar { display:none; }
+	.elgg-menu-topbar * { min-width:0; }
+	.elgg-menu-topbar.menu-enabled { display:block; }
+	
 	header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
 	header .interne { margin:0; }
 	header h1 { float:right; margin-top:0; }
-	header nav { float:none; width:100%; position:initial; display:inline-block; }
+	header .elgg-menu-topbar { float:none; width:100%; position:initial; display:inline-block; }
 	header .profile-link { display:inline-block; }
 	header .adf-profil { position:initial; }
-	.menu-topbar-toggle { display:inline-block; }
-	#menu-topbar { display:none; }
-	header nav ul#menu-topbar { padding-left:30px; font-size:initial; }
-	header nav ul li, header nav ul li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
-	header nav ul li a, header nav ul li li a,
-	header nav #menu-topbar li a, header nav #menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
-	header nav ul li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
-	header nav ul li.invites a { padding: 0; margin: 2px 0; }
-	.menu-enabled #menu-topbar { display:block; }
+	header .elgg-menu-topbar.elgg-menu-topbar { padding-left:30px; font-size:initial; }
+	header .elgg-menu-topbar li, header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	header .elgg-menu-topbar li a, header nav ul li li a,
+	header .elgg-menu-topbar .elgg-menu-topbar li a, header .elgg-menu-topbar .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
+	header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	header .elgg-menu-topbar li.invites a { padding: 0; margin: 2px 0; }
 	
 	
 	/* Navigation menu */
-	#transverse .interne { max-width:100%; margin:0; }
-	#transverse .interne nav { float:none; width:100%; display:inline-block; }
+	/* Toggle menu */
 	.menu-navigation-toggle { display:inline-block; }
-	#menu-navigation { display:none; }
-	#transverse nav ul#menu-navigation { padding-left:30px; font-size:initial; }
-	#transverse nav ul li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
-	#transverse nav ul li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
-	#transverse nav ul li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
-	#transverse nav ul li li a { width:100%; padding-left:0; padding-right:0;  }
-	#transverse nav ul li ul { width: 100% !important; position:initial; top:0; left:0; }
-	.menu-enabled #menu-navigation { display:block; }
+	.elgg-menu-navigation { display:none; float: none; }
+	.elgg-menu-navigation * { min-width:0; }
+	.elgg-menu-navigation.menu-enabled { display:inline-block; }
+	
+	#transverse { width: 100%; }
+	#transverse form { width: 90%; float: none; margin: 0 auto; clear: both; margin-top: 0.5em; }
+	#transverse .interne { max-width:100%; margin:0; }
+	#transverse .interne .elgg-menu-navigation { float:none; width:100%; display:inline-block; }
+	#transverse .elgg-menu-navigation { width: auto; }
+	#transverse .elgg-menu-navigation  { padding-left:30px; font-size:initial; }
+	#transverse .elgg-menu-navigation li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
+	#transverse .elgg-menu-navigation li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
+	#transverse .elgg-menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
+	#transverse .elgg-menu-navigation li li a { width:100%; padding-left:0; padding-right:0;  }
+	#transverse .elgg-menu-navigation li ul { width: 100% !important; position:initial; top:0; left:0; }
+	
 	
 	/* Sidebar */
 	.menu-sidebar-toggle { display:inline-block; }
 	.elgg-sidebar { display:none; }
 	.elgg-sidebar * { min-width:0; }
-	.elgg-sidebar.sidebar-enabled { display:block; }
+	.elgg-sidebar.menu-enabled { display:block; }
+	
+	.elgg-page .elgg-layout .elgg-sidebar { background: none; box-shadow: none; }
+	
 	
 	/* Generic rules */
 	body { font-size:120%; }
