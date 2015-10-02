@@ -1,13 +1,13 @@
 <?php
 /**
  * ESOPE plugin settings
- * Ces réglages permettent d'ajuster le comportement et l'apprence de la plateforme et du thème.
+ * Ces réglages permettent d'ajuster le comportement et l'apparence de la plateforme et du thème.
  *
 */
-global $CONFIG;
+
 $url = elgg_get_site_url();
 $plugin = $vars['entity'];
-$settings_version = '1.9';
+$settings_version = '1.11';
 
 
 // Define dropdown options
@@ -16,6 +16,9 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 
 $no_yes_force_opt = $no_yes_opt;
 $no_yes_force_opt['force'] = elgg_echo('option:force');
+
+$no_yes_groupoption_opt = $no_yes_opt;
+$no_yes_groupoption_opt['groupoption'] = elgg_echo('option:groupoption');
 
 $replace_homepage_opt = $no_yes_opt;
 $replace_public_homepage_opt = array('default' => elgg_echo('esope:replacehome:default'), 'cmspages' => elgg_echo('esope:replacehome:cmspages'), 'no' => elgg_echo('esope:replacehome:no') );
@@ -46,6 +49,10 @@ $group_groupjoin_enablenotif_opt = array(
 		'no' => elgg_echo('option:notify:no'),
 	);
 
+$invite_picker_opt = array(
+		'friendspicker' => elgg_echo('adf_platform:invite_picker:friendspicker'),
+		'userpicker' => elgg_echo('adf_platform:invite_picker:userpicker'),
+	);
 
 
 
@@ -64,7 +71,7 @@ if (empty($plugin->settings_version)) {
 		$plugin->setSetting($setting, $value);
 	}
 	// Update marker
-	$plugin->settings_version = '1.9';
+	$plugin->settings_version = '1.11';
 	elgg_set_ignore_access($ia);
 	access_show_hidden_entities($ih);
 	echo "Import et mise à jour des paramètres réussie depuis la version précédente";
@@ -272,7 +279,7 @@ $(function() {
 			<?php
 		} else if ($plugin->replace_public_homepage == 'cmspages') {
 			if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('esope:cmspages:notactivated')); }
-			echo '<a href="' . $CONFIG->url . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('esope:homepage:cmspages:editlink') . '</a>';
+			echo '<a href="' . elgg_get_site_url() . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('esope:homepage:cmspages:editlink') . '</a>';
 		}
 		?>
 	</div>
@@ -303,7 +310,9 @@ $(function() {
 					echo elgg_view('input/select', array('name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_wire));
 			echo '</p>';
 			}
+			
 			// Colonne gauche
+			echo '<fieldset>';
 			if (elgg_is_active_plugin('groups')) {
 				echo '<p><label>' . elgg_echo('esope:index_groups') . '</label>'; ?>
 					<?php echo elgg_view('input/select', array('name' => 'params[index_groups]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_groups));
@@ -332,6 +341,7 @@ $(function() {
 					echo elgg_view('input/select', array('name' => 'params[homesite_index]', 'options_values' => $no_yes_opt, 'value' => $plugin->homesite_index));
 				echo '</p>';
 			}
+			echo '</fieldset>';
 			
 		} ?>
 	</div>
@@ -548,6 +558,11 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:pages_list_subpages') . '</label> ' . elgg_view('input/select', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $plugin->pages_list_subpages)) . '</p>';
 			echo '<p><label>' . elgg_echo('esope:settings:pages_reorder') . '</label> ' . elgg_view('input/select', array('name' => 'params[pages_reorder]', 'options_values' => $no_yes_opt, 'value' => $plugin->pages_reorder)) . '</p>';
 		}
+		
+		if (elgg_is_active_plugin('thewire')) {
+			echo '<p><label>' . elgg_echo('esope:settings:thewire_default_access') . ' ' . elgg_view('input/text', array('name' => 'params[thewire_default_access]', 'value' => $plugin->thewire_default_access)) . '</label><br /><em>' . elgg_echo('esope:settings:thewire_default_access:details') . '</em></p>';
+		}
+		
 		// Add limit links to navigation
 			echo '<p><label>' . elgg_echo('esope:settings:advanced_pagination') . '</label> ' . elgg_view('input/select', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $plugin->advanced_pagination)) . '</p>';
 		?>
@@ -596,6 +611,7 @@ $(function() {
 			
 			echo '<h4>' . elgg_echo('esope:config:groupinvites') . '</h4>';
 			echo '<p><label>' . elgg_echo('esope:settings:groups:inviteanyone') . '</label> ' . elgg_view('input/select', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $plugin->invite_anyone)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_picker') . ' ' . elgg_view('input/dropdown', array('name' => 'params[invite_picker]', 'options_values' => $invite_picker_opt, 'value' => $plugin->invite_picker)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_picker:details') . '</em></p>';
 			echo '<p><label>' . elgg_echo('esope:settings:groups:allowregister') . '</label> ' . elgg_view('input/select', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $plugin->allowregister)) . '</p>';
 			echo '<br />';
 			
@@ -610,12 +626,22 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:featured') . '</label> ' . elgg_view('input/select', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_featured)) . '</p>';
 			// Allow to add a new group tab search
 			echo '<p><label>' . elgg_echo('esope:settings:groups:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/select', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_searchtab)) . '</p>';
+		// Advanced group search tool (alpha version, structure changes may happen)
+		$esope_groupsearch_url = elgg_get_site_url() . 'groups/groupsearch';
+		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . '</label> ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '<a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
+
 			// Allow to add a new friends groups tab
 			echo '<p><label>' . elgg_echo('esope:settings:groups:friends') . '</label> ' . elgg_view('input/select', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_friendstab)) . '</p>';
 			// Add groups tags below search (or replaces search if search tab enabled)
 			echo '<p><label>' . elgg_echo('esope:settings:groups:tags') . ' (ALPHA)</label> ' . elgg_view('input/select', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_tags)) . '</p>';
 			// Allow to remove discussion OR add it at page bottom
 			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion') . '</label> ' . elgg_view('input/select', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $plugin->groups_discussion)) . '</p>';
+
+			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
+			
+		// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
+		echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</p>';
+		
 			?>
 		</div>
 	<?php } ?>
@@ -651,8 +677,7 @@ $(function() {
 			<?php echo elgg_view('input/select', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $plugin->custom_profile_layout)); ?>
 		</p>
 		<br />
-		<h4><?php echo elgg_echo('esope:config:memberssearch'); ?></h4>
-		<?php
+		<?php echo 'h4>' . elgg_echo('esope:config:memberssearch') . '</h4>';
 		if (elgg_is_active_plugin('members')) {
 			// Allow to add alpha sort
 			echo '<p><label>' . elgg_echo('esope:settings:members:alpha') . '</label> ' . elgg_view('input/select', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_alpha)) . '</p>';
@@ -666,6 +691,10 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:members:profiletypes') . '</label> ' . elgg_view('input/select', array('name' => 'params[members_profiletypes]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_profiletypes)) . '</p>';
 			// Allow to add a new tab search
 			echo '<p><label>' . elgg_echo('esope:settings:members:searchtab') . ' (ALPHA)</label> ' . elgg_view('input/select', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_searchtab)) . '</p>';
+		// Advanced search tool (alpha version, structure changes may happen)
+		$esope_membersearch_url = elgg_get_site_url() . 'members/search';
+		echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '</label> ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '<a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
+		
 			// Replace search by main search (more efficient)
 			echo '<p><label>' . elgg_echo('esope:settings:members:onesearch') . '</label> ' . elgg_view('input/select', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_onesearch)) . '</p>';
 			// Add online members
@@ -674,6 +703,20 @@ $(function() {
 		
 		echo '<p><label>' . elgg_echo('esope:settings:remove_collections') . '</label> ' . elgg_view('input/select', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_collections)) . '</p>';
 		
+		// Suppression des menus de l'utilisateur
+		echo '<p><label>' . elgg_echo('esope:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $plugin->remove_user_menutools)) . '</p>';
+		
+		// Suppression des outils personnels (lien de création) de l'utilisateur
+		echo '<p><label>' . elgg_echo('esope:settings:removeusertools') . '</label> ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $plugin->remove_user_tools)) . '<em>' . implode(',', $registered_objects) . '</em></p>';
+		// Note : la suppression de filtres dans les listings est un réglage général à part, 
+		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+		
+		// Suppression des niveaux d'accès pour les membres
+		echo '<p><label>' . elgg_echo('esope:settings:user_exclude_access') . '</label> ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $plugin->user_exclude_access)) . '</p>';
+		
+		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
+		echo '<p><label>' . elgg_echo('esope:settings:admin_exclude_access') . '</label> ' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $plugin->admin_exclude_access)) . '</p>';
+
 		?>
 	</div>
 
@@ -775,33 +818,9 @@ $(function() {
 	<div>
 		<?php
 		// Advanced search tool (alpha version, structure changes may happen)
-		$esope_search_url = $CONFIG->url . 'esearch';
+		$esope_search_url = elgg_get_site_url() . 'esearch';
 		echo '<p><label>' . elgg_echo('esope:search:setting:metadata') . '</label> ' . elgg_view('input/text', array('name' => 'params[metadata_search_fields]', 'value' => $plugin->metadata_search_fields)) . '<a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
 		
-		// Advanced search tool (alpha version, structure changes may happen)
-		$esope_membersearch_url = $CONFIG->url . 'members/search';
-		echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '</label> ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '<a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
-		
-		// Advanced group search tool (alpha version, structure changes may happen)
-		$esope_groupsearch_url = $CONFIG->url . 'groups/groupsearch';
-		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . '</label> ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '<a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
-		
-		// Suppression des menus de l'utilisateur
-		echo '<p><label>' . elgg_echo('esope:settings:removeusermenutools') . '</label> ' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $plugin->remove_user_menutools)) . '</p>';
-		
-		// Suppression des outils personnels (lien de création) de l'utilisateur
-		echo '<p><label>' . elgg_echo('esope:settings:removeusertools') . '</label> ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $plugin->remove_user_tools)) . '<em>' . implode(',', $registered_objects) . '</em></p>';
-		// Note : la suppression de filtres dans les listings est un réglage général à part, 
-		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
-		
-		// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
-		echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</p>';
-		
-		// Suppression des niveaux d'accès pour les membres
-		echo '<p><label>' . elgg_echo('esope:settings:user_exclude_access') . '</label> ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $plugin->user_exclude_access)) . '</p>';
-		
-		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
-		echo '<p><label>' . elgg_echo('esope:settings:admin_exclude_access') . '</label> ' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $plugin->admin_exclude_access)) . '</p>';
 		?>
 	</div>
 
@@ -817,6 +836,9 @@ $(function() {
 		// Saisie des données à restaurer
 		echo elgg_view('input/plaintext', array('name' => 'params[import_settings]', 'value' => $plugin->import_settings));
 		?>
+			</label>
+			<em><?php echo elgg_echo('adf_platform:config:import:details'); ?></em>
+		</p><br />
 
 		<h4><?php echo elgg_echo('esope:config:export'); ?></h4>
 		<p><?php echo elgg_echo('esope:config:export:details'); ?></p>
@@ -828,6 +850,7 @@ $(function() {
 		$plugin_settings = htmlentities($plugin_settings, ENT_QUOTES, 'UTF-8');
 		echo '<textarea readonly="readonly" onclick="this.select()">' . $plugin_settings . '</textarea>';
 		?>
+		</p><br />
 	</div>
 	<br />
 	<br />
