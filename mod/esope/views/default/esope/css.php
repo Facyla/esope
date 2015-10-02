@@ -1138,33 +1138,32 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.elgg-menu-topbar * { min-width:0; }
 	.elgg-menu-topbar.menu-enabled { display:block; }
 	
-	header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
-	header .interne { margin:0; }
-	header h1 { float:right; margin-top:0; }
-	header .elgg-menu-topbar { float:none; width:100%; position:initial; display:inline-block; }
-	header .profile-link { display:inline-block; }
-	header .adf-profil { position:initial; }
-	header .elgg-menu-topbar.elgg-menu-topbar { padding-left:30px; font-size:initial; }
-	header .elgg-menu-topbar li, header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
-	header .elgg-menu-topbar li a, header nav ul li li a,
-	header .elgg-menu-topbar .elgg-menu-topbar li a, header .elgg-menu-topbar .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
-	header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
-	header .elgg-menu-topbar li.invites a { padding: 0; margin: 2px 0; }
+	.elgg-page-header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
+	.elgg-page-header .interne { margin:0; }
+	.elgg-page-header h1 { float:right; margin-top:0; }
+	.elgg-page-header .elgg-menu-topbar { float:none; width:100%; position:initial; display:inline-block; }
+	.elgg-page-header .profile-link { display:inline-block; }
+	.elgg-page-header .adf-profil { position:initial; }
+	.elgg-page-header .elgg-menu-topbar.elgg-menu-topbar { padding-left:30px; font-size:initial; }
+	.elgg-page-header .elgg-menu-topbar li, .elgg-page-header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header  .elgg-menu-topbar li li a,
+	.elgg-page-header .elgg-menu-topbar .elgg-menu-topbar li a, .elgg-page-header .elgg-menu-topbar .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
+	.elgg-page-header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	.elgg-page-header .elgg-menu-topbar li.invites a { padding: 0; margin: 2px 0; }
 	
 	
 	/* Navigation menu */
 	/* Toggle menu */
 	.menu-navigation-toggle { display:inline-block; }
-	.elgg-menu-navigation { display:none; float: none; }
-	.elgg-menu-navigation * { min-width:0; }
-	.elgg-menu-navigation.menu-enabled { display:inline-block; }
+	#transverse .elgg-menu-navigation { display:none; float: none; }
+	#transverse .elgg-menu-navigation * { min-width:0; }
+	#transverse .elgg-menu-navigation.menu-enabled { display:inline-block; }
 	
 	#transverse { width: 100%; }
 	#transverse form { width: 90%; float: none; margin: 0 auto; clear: both; margin-top: 0.5em; }
 	#transverse .interne { max-width:100%; margin:0; }
 	#transverse .interne .elgg-menu-navigation { float:none; width:100%; display:inline-block; }
-	#transverse .elgg-menu-navigation { width: auto; }
-	#transverse .elgg-menu-navigation  { padding-left:30px; font-size:initial; }
+	#transverse .elgg-menu-navigation { width: auto; padding-left:30px; font-size:initial; }
 	#transverse .elgg-menu-navigation li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:100%; }
 	#transverse .elgg-menu-navigation li a { width:100%; padding-left:0; padding-right:0; background: transparent; }
 	#transverse .elgg-menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
