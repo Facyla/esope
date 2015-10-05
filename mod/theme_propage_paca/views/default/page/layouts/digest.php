@@ -26,13 +26,15 @@ $language = get_current_language();
 		<div id="digest_container">
 			<div>
 				<div id="digest_afpa_header_header">
-					<div class="afpa-header-right">
-						<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/Logo_AFPA.gif" alt="Logo AFPA"><br />
-						<?php echo $site_url; ?>
-					</div>
-					<div class="afpa-header-left">
-						<h1>PROPAGE PACA</h1>
-					</div>
+					<a href="<?php echo elgg_get_site_url(); ?>">
+						<h1>
+							<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/Logo_AFPA.gif" alt="Logo AFPA" style="float:left;" />
+							PROPAGE PACA
+							<img class="logo-afpa" src="<?php echo elgg_get_site_url(); ?>mod/theme_propage_paca/graphics/logo-conseil-regional-provence-alpes-cote-d-azur.jpg" alt="Logo Région Provence-Alpes-Côte d'Azur" style="float:right;" />
+						</h1>
+						<div class="clearfloat"></div>
+						<strong>P</strong>lateforme <strong>R</strong>égionale sur les <strong>O</strong>rganisations <strong>P</strong>édagogiques et <strong>A</strong>ppui au <strong>G</strong>roupement <strong>E</strong>xpérimental_Paca
+					</a>
 					<div class="clearfloat"></div>
 				</div>
 				

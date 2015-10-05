@@ -178,7 +178,6 @@ if (empty($header_content)) {
 											<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('theme_propage_paca:home:title'); ?></a></li>
 											<li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
 											<li><a href="<?php echo $url; ?>p/a-propos" ><?php echo elgg_echo('theme_propage_paca:about'); ?></a></li>
-											<li><a href="<?php echo $url; ?>p/groupes-de-travail" ><?php echo elgg_echo('theme_propage_paca:groups:titleorganisation'); ?></a></li>
 										</ul>
 									<?php } ?>
 								</li>
@@ -191,6 +190,7 @@ if (empty($header_content)) {
 											// pour cela conf pour les lister et les exclure de la liste principale
 											echo $special_groups;
 											?>
+											<li><a href="<?php echo $url; ?>p/groupes-de-travail" ><?php echo elgg_echo('theme_propage_paca:groups:title'); ?></a></li>
 											<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('adf_platform:joinagroup'); ?></a></li>
 											<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('theme_propage_paca:groups:new'); ?></a></li>
 											<?php echo $groups; ?>
@@ -198,39 +198,6 @@ if (empty($header_content)) {
 									</li>
 									<?php echo $invites; ?>
 								<?php } ?>
-								
-								<?php /* ?>
-								<li class="process-rh"><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_propage_paca:process'); ?></a>
-									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>p/process-rh" ><?php echo elgg_echo('theme_propage_paca:process:title'); ?></a></li>
-										<?php
-										$process_entries = elgg_get_plugin_setting('menu_process', 'theme_propage_paca');
-										$process_entries = explode("\n", $process_entries);
-										foreach ($process_entries as $entry) {
-											$entry = trim($entry);
-											$entry = explode('::', $entry);
-											if (!empty($entry[0]) && !empty($entry[1])) {
-												echo '<li><a href="' . $entry[0] . '" title="' . $entry[2] . '">' . $entry[1] . '</a></li>';
-											}
-										}
-										?>
-									</ul>
-								</li>
-								<?php */ ?>
-								
-								<?php
-								/*
-								if (elgg_in_context('poles-rh') || (full_url() == $url . 'poles-rh')) { $poles_rh_selected = true; }
-								?>
-								<li class="poles-rh groups"><a <?php if ($poles_rh_selected) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_propage_paca:poles'); ?></a>
-									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>p/poles-rh"><?php echo elgg_echo('theme_propage_paca:poles:title'); ?></a></li>
-										<?php echo $poles_rh; ?>
-									</ul>
-								</li>
-								<?php
-								*/
-								?>
 								
 								<?php /* activity : Fil d'activité du site */ ?>
 								
@@ -248,7 +215,12 @@ if (empty($header_content)) {
 								<?php } ?>
 								
 								<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('theme_propage_paca:calendar'); ?></a></li>
+									<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list/' . date('Y-m-d') . '/paged/all'; ?>"><?php echo elgg_echo('theme_propage_paca:calendar'); ?></a>
+										<ul class="hidden">
+											<li><a href="<?php echo $url . 'event_calendar/list/' . date('Y-m-d') . '/paged/all'; ?>" target="_blank"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>
+											<li><a href="<?php echo $url . 'event_calendar/list/' . date('Y-m-d') . '/paged/mine'; ?>" target="_blank"><?php echo elgg_echo('event_calendar:show_mine'); ?></a></li>
+										</ul>
+									</li>
 								<?php } ?>
 								
 								<li class="classes"><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes'); ?></a>

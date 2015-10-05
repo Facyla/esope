@@ -117,6 +117,11 @@ $right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-renc
 // search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities
 $right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
+// Agenda
+$right_col .= '<div class="home-static">';
+$right_col .= '<h3><a href="' . elgg_get_site_url() . 'event_calendar/list/' . date('Y-m-d') . '/paged/all">' . elgg_echo('Agenda') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:display') . '</span></a></h3>';
+$right_col .= elgg_view('theme_propage_paca/agenda');
+$right_col .= '</div>';
 // Groupes en Une et connectés
 $index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
 if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
