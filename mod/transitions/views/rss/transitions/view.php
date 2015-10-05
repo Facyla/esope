@@ -19,15 +19,6 @@ if (!isset($transitions->views_count)) {
 	$transitions->views_count++;
 }
 
-//echo '<span class="hidden transitions-views-count">' . $transitions->views_count . '</div>';
-echo '<!-- Views count : ' . $transitions->views_count . ' //-->';
-
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-elgg_require_js('jquery.form');
-elgg_load_js('elgg.embed');
-elgg_load_js('elgg.transitions');
-
 $body = '';
 
 $owner = $transitions->getOwnerEntity();
@@ -113,57 +104,6 @@ $stats .= '<i class="fa fa-comments"></i> ' . $transitions->countComments() . ' 
 //$stats .= '<i class="fa fa-thumbs-o-up"></i> ' . count($transitions->links_supports) . ' &nbsp; ';
 //$stats .= '<i class="fa fa-thumbs-o-down"></i> ' . count($transitions->links_invalidates) . ' &nbsp; ';
 $stats .= '<i class="fa fa-link"></i> ' . count($transitions->links) . ' &nbsp; ';
-$actions = '';
-if (elgg_is_admin_logged_in() && elgg_is_active_plugin('pin')) {
-	//$actions .= '<a href=""><i class="fa fa-thumb-tack"></i> Pin</a> ';
-	$actions .= elgg_view('pin/entity_menu', $vars);
-}
-
-
-// Social share
-$socialshare = '';
-if (elgg_is_active_plugin('socialshare')) {
-	//$socialshare = '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
-	$socialshare .= '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array('entity' => $transitions)) . '</div>';
-}
-
-// Permalink
-$permalink = '';
-$permalink .= '<p>';
-//$permalink .= elgg_echo('transitions:permalink:details') . '<br />';
-$permalink .= '<input type="text" onClick="this.setSelectionRange(0, this.value.length);" value="' . $transitions->getURL() . '"></p>';
-
-// Short link
-$shortlink = '';
-if (elgg_is_active_plugin('shorturls')) {
-	$shortlink = '<p>';
-//$shortlink .= elgg_echo('transitions:shortlink:details') . '<br />';
-$shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);" value="' . elgg_get_site_url() . 's/' . $transitions->guid . '"></p>';
-} else {
-	$shortlink = $permalink;
-}
-
-// Embed code
-//$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
-$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:400px; height:400px;" /&gt;</textarea>';
-
-// Combined module : permalink + share links + embed
-$share_content = '';
-$share_content .= '<h3>' . elgg_echo('transitions:socialshare') . '</h3>';
-$share_content .= $socialshare;
-//$share_content .= '<h3>' . elgg_echo('transitions:permalink') . '</h3>';
-//$share_content .= $permalink;
-$share_content .= '<h3>' . elgg_echo('transitions:shortlink') . '</h3>';
-$share_content .= $shortlink;
-$share_content .= '<h3>' . elgg_echo('transitions:embed') . '</h3>';
-$share_content .= $embedcode;
-
-//$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>&nbsp;' . elgg_echo('transitions:share'), 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid));
-$actions .= elgg_view('output/url', array('text' => '<i class="fa fa-send"></i>', 'rel' => 'popup', 'href' => '#transitions-popup-share-' . $transitions->guid, 'title' => elgg_echo('transitions:share')));
-$actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_content, array('id' => 'transitions-popup-share-' . $transitions->guid, 'class' => 'transitions-popup-share hidden clearfix'));
-
-
-
 
 
 // Main content column
@@ -327,110 +267,32 @@ if ($transitions->category == 'challenge') {
 
 
 // RENDER EMBED CONTENT : no sharing/contribution tools + no metadata menu
-if ($embed) {
-	echo '<div class="transitions-view-wrapper">';
-	echo $category;
-	echo '<div class="clearfloat"></div>';
-	echo $body;
-	echo '</div>';
-	return;
+$title = $vars['entity']->title;
+if (empty($title)) {
+	$title = strip_tags($vars['entity']->description);
+	$title = elgg_get_excerpt($title, 32);
 }
 
+$permalink = htmlspecialchars($vars['entity']->getURL(), ENT_NOQUOTES, 'UTF-8');
+$pubdate = date('r', $vars['entity']->getTimeCreated());
 
+$description = elgg_autop($category . '<div class="clearfloat"></div>' . $body);
 
+$creator = elgg_view('page/components/creator', $vars);
+$georss = elgg_view('page/components/georss', $vars);
+$extension = elgg_view('extensions/item', $vars);
 
-// TABS BLOCK - Enrichment forms
-// Sharing + contribution links
-$params = array(
-	'tabs' => array(),
-	'id' => "transitions-action-tabs",
-);
-$tab_content = '';
+$item = <<<__HTML
+<item>
+	<guid isPermaLink="true">$permalink</guid>
+	<pubDate>$pubdate</pubDate>
+	<link>$permalink</link>
+	<title><![CDATA[$title]]></title>
+	<description><![CDATA[$description]]></description>
+	$creator$georss$extension
+</item>
 
-// Contributed support links
-$params['tabs'][] = array('title' => elgg_echo('transitions:addlink'), 'url' => "#transitions-{$transitions->guid}-addlink", 'selected' => true);
-if (elgg_is_logged_in()) {
-	$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
-//$tab_content .= '<div class="clearfloat"></div><br />';
-} else {
-	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addlink" class="transitions-tab-content">' . elgg_echo('transitions:accountrequired') . '</div>';
-}
+__HTML;
 
-// Contributed tags
-$params['tabs'][] = array('title' => elgg_echo('transitions:addtag'), 'url' => "#transitions-{$transitions->guid}-addtag");
-if (elgg_is_logged_in()) {
-	$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-} else {
-	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addtag" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
-}
-//$tab_content .= '<div class="clearfloat"></div><br />';
-
-// Add relation to related actors (anyone)
-if ($transitions->category == 'project') {
-	$params['tabs'][] = array('title' => elgg_echo('transitions:addactor'), 'url' => "#transitions-{$transitions->guid}-addactor");
-	if (elgg_is_logged_in()) {
-		$tab_content .= elgg_view_form('transitions/addactor', array('id' => "transitions-{$transitions->guid}-addactor", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-		//$tab_content .= '<div class="clearfloat"></div><br />';
-	} else {
-		$tab_content .= '<div id="transitions-'. $transitions->guid . '-addactor" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
-	}
-}
-
-// Add relation to answer resources (anyone)
-/*
-if ($transitions->category == 'challenge') {
-	$tab_content .= elgg_view_form('transitions/addrelation', array(), array('guid' => $transitions->guid, 'relation' => 'challenge_element'));
-	$tab_content .= '<div class="clearfloat"></div><br />';
-}
-*/
-
-// Permalink and share links
-$params['tabs'][] = array('title' => elgg_echo('transitions:share'), 'url' => "#transitions-{$transitions->guid}-share");
-$share_links = '';
-if (elgg_is_active_plugin('socialshare')) {
-	$share_links .= '<p>' . elgg_echo('transitions:socialshare:details') . '</p>';
-	$share_links .= '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array('entity' => $transitions)) . '</div>';
-}
-$tab_content .= elgg_view_module('info', false, $share_links . $shortlink, array('id' => "transitions-{$transitions->guid}-share", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-
-// Embed code
-$params['tabs'][] = array('title' => elgg_echo('transitions:embed'), 'url' => "#transitions-{$transitions->guid}-embed");
-//$tab_content .= elgg_view_module('info', elgg_echo('transitions:embed'), $embedcode, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-$tab_content .= elgg_view_module('info', false, $embedcode, array('id' => "transitions-{$transitions->guid}-embed", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
-
-// Render tabs block
-$body .= elgg_view('navigation/tabs', $params);
-//$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
-$body .= $tab_content;
-//$body .= '</div>';
-
-
-
-/*
-$params = array(
-	'entity' => $transitions,
-	'title' => false,
-	'metadata' => $metadata,
-	'subtitle' => $subtitle,
-);
-$params = $params + $vars;
-$summary = elgg_view('object/elements/summary', $params);
-echo elgg_view('object/elements/full', array(
-	'summary' => $summary,
-	'icon' => $owner_icon,
-	'body' => $body,
-));
-*/
-
-
-// RENDER CONTENT
-echo '<div class="transitions-view-wrapper">';
-if (!empty($metadata)) {
-	echo $category . $metadata;
-	echo '<div class="clearfloat"></div>';
-}
-echo $body;
-echo '</div>';
-
-
+echo $item;
 

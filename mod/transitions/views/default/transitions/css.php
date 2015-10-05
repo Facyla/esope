@@ -91,6 +91,12 @@
 .transitions-view-collection { border-top: 1px solid #E2D8C3; }
 .transitions-view-collection .elgg-image-alt { max-width: 100px; margin: 0 30px 0 30px; }
 
+/* News view */
+.transitions-view-news { margin-bottom:60px; }
+.transitions-view-news h3 { font-size: 24px; }
+.transitions-view-news .transitions-view-main { padding: 10px 0px 0px 0px; }
+.transitions-news-comments-toggle { padding: 30px 0 10px 0; }
+
 
 /* Gallery view */
 .transitions-gallery .elgg-gallery { margin-right:-30px; }

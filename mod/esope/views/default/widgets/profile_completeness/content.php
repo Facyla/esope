@@ -20,7 +20,7 @@
 			$tips = elgg_echo("widgets:profile_completeness:view:complete");
 		}
 		// Edit link is for everyone, anytime
-		$tips .= '<br /><a class="elgg-button elgg-button-action" href="' . $vars['url'] . 'profile/' . $owner->username . '/edit">' . elgg_echo('profile:edit') . '</a>';
+		$tips .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $owner->username . '/edit">' . elgg_echo('profile:edit') . '</a>';
 	} else {
 		if($owner->profile_completeness_percentage){
 			$percentage_complete = $owner->profile_completeness_percentage;

@@ -104,3 +104,41 @@ function menu(leMenu) {
 $("#transverse .elgg-menu-navigation ul ul").hide(); // Plus rapide pour masquer les sous-menus
 
 
+/**
+ * Topbar menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var button = $('.menu-topbar-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	var menu = $('.elgg-menu-topbar');
+	if (!menu) { button.hide(); return; }
+	$('.menu-topbar-toggle').on('click', function() { menu.toggleClass('menu-enabled'); });
+});
+
+/**
+ * Navigation menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var button = $('.menu-navigation-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	var menu = $('.elgg-menu-navigation');
+	if (!menu) { button.hide(); return; }
+	$('.menu-navigation-toggle').on('click', function() { menu.toggleClass('menu-enabled'); });
+});
+
+/**
+ * Sidebar menu toggle for small screens.
+ */
+$(document).ready(function() {
+	var button = $('.menu-sidebar-toggle');
+	if (!button) return;
+	// Hide button if menu is missing or empty.
+	var menu = $('.elgg-sidebar');
+	if (!menu) { button.hide(); return; }
+	$('.menu-sidebar-toggle').on('click', function() { menu.toggleClass('menu-enabled'); });
+});
+
+
+

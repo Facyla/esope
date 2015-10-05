@@ -49,6 +49,9 @@ function esope_init() {
 	
 	// Suppression recherche du menu
 	elgg_unextend_view('page/elements/header', 'search/header');
+	// Suppression recherche de la sidebar
+	elgg_unextend_view('page/elements/sidebar', 'search/header');
+	
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -56,12 +59,10 @@ function esope_init() {
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
-	/*
 	elgg_register_simplecache_view('js/esope_theme');
 	$theme_js = elgg_get_simplecache_url('js', 'esope_theme');
-	elgg_register_js('esope.fonction', $theme_js, 'head');
-	elgg_load_js('esope.fonction');
-	*/
+	elgg_register_js('esope.theme', $theme_js, 'head');
+	elgg_load_js('esope.theme');
 	
 	// Update jQuery UI to 1.11.2, with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
@@ -226,7 +227,11 @@ function esope_init() {
 	// * requires to add the hook trigger to the email notification handler
 	// Wrap notification handler into custom function so we can intercept the sending process
 	global $NOTIFICATION_HANDLERS;
+	// @TODO : replace by elgg_register_notification_method()
 	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
+	//elgg_register_notification_method('email');
+	// Register for the 'send', 'notification:[method name]' plugin hook to handle sending a notification. A notification object is in the params array for the hook with the key 'notification'
+	
 	/* Usage note : block email by registering an early hook to email_block,system hook
 	 * any non null return will block email sending.
 	 * 1. add in start.php : elgg_register_plugin_hook_handler("email_block", "system", "esope_email_block_hook", 0);
