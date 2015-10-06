@@ -279,6 +279,8 @@ $fr = array(
 	'messages:widget:title' => "Messages non lus",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:answer' => "Répondre",
+	'messages:to' => "à",
 	
 	
 	// Layout settings

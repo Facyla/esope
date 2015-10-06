@@ -265,6 +265,8 @@ $en = array(
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
+	'messages:answer' => "Reply",
+	'messages:to' => "to",
 	
 	
 	// Layout settings
