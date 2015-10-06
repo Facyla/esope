@@ -97,7 +97,7 @@ $body .= $transitions_icon;
 if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . $transitions->excerpt . '</p>';
 // Full description
 //$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
-$description = parse_urls(tions->description);
+$description = parse_urls($transitions->description);
 $body .= '<div class="transitions-post">' . $description . '</div>';
 $body .= '<div class="clearfloat"></div><br />';
 
