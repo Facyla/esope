@@ -9,6 +9,10 @@ $full = elgg_extract('full_view', $vars, FALSE);
 $list_type = elgg_extract('list_type', $vars, FALSE);
 $transitions = elgg_extract('entity', $vars, FALSE);
 
+// Force full view for RSS viewtype
+if (elgg_get_viewtype() == 'rss') { $full = true; }
+
+
 if (!$transitions) {
 	return TRUE;
 }

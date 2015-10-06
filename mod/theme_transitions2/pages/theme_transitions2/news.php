@@ -20,7 +20,6 @@ elgg_push_context('transitions-news');
 
 $content .= '<h2>' . elgg_echo('theme_transitions2:news:title') . '</h2>';
 
-// SELECTION ALEATOIRE PARMI ARTICLE SELECTIONNES DU CATALOGUE
 // Event et Editorial sélectionnées par la rédaction
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'full_view' => true, 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array(array('name' => 'featured', 'value' => 'featured'), array('name' => 'category', 'value' => array('event', 'editorial'))));
 
