@@ -12,6 +12,8 @@
 // Load Elgg engine
 require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
 
+elgg_push_context('export_embed');
+
 /* Le principe est de donner accès à un contenu de manière à pouvoir l'embarquer sous forme d'iframe
  * Si le contenu est public, on doit pouvoir a minima bypasser le walledgarden
  * Si le contenu est privé, on devrait pouvoir y accéder 
@@ -258,7 +260,7 @@ header('Content-Type: text/html; charset=utf-8');
 	</style>
 </head>
 <body>
-	<div style="padding:0 4px;">
+	<div style="padding:0;">
 		<?php echo $body; ?>
 	</div>
 </body>

@@ -141,7 +141,7 @@ $shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelection
 
 // Embed code
 //$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
-$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:400px; height:400px;" /&gt;</textarea>';
+$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:310px; height:224px;" /&gt;</textarea>';
 
 // Combined module : permalink + share links + embed
 $share_content = '';
@@ -208,6 +208,8 @@ if ($full) {
 		$title_link = elgg_view('output/url', $params);
 		
 		$category_class = 'transitions-category-' . $transitions->category;
+		// Add specific class for iframe export embed
+		if (elgg_in_context('export_embed')) { $category_class .= " iframe"; } }
 		echo '<div class="transitions-gallery-item ' . $category_class . '">';
 			echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
 				

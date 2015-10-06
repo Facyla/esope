@@ -105,6 +105,7 @@
 .transitions-gallery .elgg-gallery .elgg-item { /* width:389px; */ }
 .transitions-gallery-quickform { width:300px; float:left; }
 .transitions-gallery-item { border: 0; margin: 0 30px 30px 0; padding: 0; }
+.transitions-gallery-item.iframe { margin: 0 0 0 0; }
 .transitions-gallery-item .transitions-gallery-box { position:relative; width: 310px; height: 224px; background-size:cover; max-width: 100%; }
 .transitions-gallery-item .transitions_image { width: 100%; height:auto; border-radius:5px; }
 .transitions-gallery-item .transitions_image img { width: 100%; height:auto; border-radius:5px; }
