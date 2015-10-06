@@ -426,25 +426,6 @@ img { border: 0 none; overflow:hidden; }
 	margin-right: 5px;
 	text-shadow: 0 2px 2px #999999;
 }
-.elgg-sidebar .elgg-module-aside h3 { color: #333333; font-size: 16px; margin: 0; }
-.elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
-.elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
-	float: left;
-	margin-right: 5px;
-	/*
-	height: 25px;
-	width: 25px;
-	*/
-}
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
-	float: left;
-	font-size: 0.75em;
-}
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:hover,
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:focus,
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:active {
-	color: #333333;
-}
 
 /* Pied de page - HTML spécifique */
 .elgg-page-footer {
@@ -657,121 +638,6 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 
 
 
-/* WIDGETS */
-.elgg-module-widget { background-color: transparent; }
-.elgg-module-widget:hover,
-.elgg-module-widget:focus,
-.elgg-module-widget:active { background-color: transparent; }
-.elgg-module-widget > .elgg-head { height:auto; }
-.elgg-module-widget h3 { padding:0.5em; }
-
-/* Widgets - à corriger pour utiliser les classes natives d'Elgg */
-.elgg-page-body div.elgg-module {
-	background: none; margin: 0 1em 2em 1em; padding: 0; width: auto; min-width: 200px;
-	float: left;
-	margin: 0 0 20px 0;
-	border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-o-border-radius: 10px 10px 0 0;
-}
-.elgg-page-body div.elgg-module .elgg-head {
-	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.55, <?php echo $color3; ?>));
-	background-color: <?php echo $color3; ?>;
-	border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-o-border-radius: 10px 10px 0 0;
-	border-top: 0 none;
-	min-height: 26px;
-}
-.elgg-page-body div.elgg-module .elgg-head .elgg-widget-title {
-	color: <?php echo $color14; ?>;
-	float: left;
-	font-family: <?php echo $font1; ?>;
-	font-size: 1.25em;
-	text-transform: uppercase;
-	font-weight: normal;
-	max-width:none;
-	float:none;
-}
-
-/* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
-a.elgg-widget-collapse-button,
-a.elgg-widget-collapse-button:hover,
-a.elgg-widget-collapse-button:focus,
-a.elgg-widget-collapse-button:active,
-a.elgg-widget-collapsed:hover,
-a.elgg-widget-collapsed:focus,
-a.elgg-widget-collapsed:active {
-	color: transparent;
-}
-a.elgg-widget-collapse-button:before { content: ""; }
-a.elgg-widget-collapsed:before { content: ""; }
-/*
-a.elgg-widget-edit-button { right: 12px; }
-*/
-
-div.elgg-widgets div.elgg-body { font-size: 0.90em; }
-.elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:14px; }
-.elgg-module .entity_title { font-size:16px; }
-.elgg-widget-instance-event_calendar p { font-size: 1.3em; }
-
-
-/* Contenu des modules */
-.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; }
-.elgg-page-body div.elgg-module ul li { padding-left: 0; float: none; right: initial; left: inherit; margin-left: 0em; }
-
-/* Boutons des widgets */
-.elgg-page-body div.elgg-module .elgg-head ul li a { float: none; margin:0; right: initial; }
-.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
-
-
-.elgg-page-body div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
-.elgg-page-body div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
-.elgg-page-body div.module div.activites ul li { padding-bottom: 1px; }
-.elgg-page-body div.module div.activites ul li img { margin: 0 5px 0 7px; }
-.elgg-page-body div.module div.activites ul li div span { color: #666; font-style: italic; }
-
-/* Widgets activité des groupes */
-.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites,
-.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites .elgg-widget-content { padding:0; }
-.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-	padding:0 14px;
-	background:<?php echo $color3; ?>;
-	/* margin-top:-8px; */
-}
-.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-	color:white;display:block;
-	font-family: <?php echo $font1; ?>;
-	font-size:14px;
-}
-.widget-group-content { padding: 0 10px 10px 10px; }
-
-.elgg-widget-more {
-	line-height:32px; color:<?php echo $linkcolor; ?>;
-	background: #F2F1EF;
-	display:block;
-	width: 100%;
-	/* float: left; */
-}
-.elgg-widget-more:before {
-	content: "+ ";
-	font-family: <?php echo $font2; ?>;
-	font-size: 24px;
-	font-weight: bold;
-	margin-left: 9px;
-	text-shadow: 0 2px 2px #999999;
-	vertical-align: bottom;
-}
-
-
-
 
 /* Thème ADF - Urbilog => Styles à classer et réorganiser */
 
@@ -934,56 +800,6 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
-<?php // Keep this block just in case some clients prefer old way but we should use new icons by default (vector)
-<<< EOT
-/* Group activity */
-.elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Event calendar */
-.elgg-menu-item-event-calendar a { padding-left:32px; background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-event-calendar a:hover, .elgg-menu-item-event-calendar a:focus, .elgg-menu-item-event-calendar a:active { background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Announcements */
-.elgg-menu-item-announcements a { padding-left:32px; background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-announcements a:hover, .elgg-menu-item-announcements a:focus, .elgg-menu-item-announcements a:active { background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
-/* Blog */
-.elgg-menu-item-blog a { padding-left:32px; background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Feedback */
-.elgg-menu-item-feedback a { padding-left:32px; background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-feedback a:hover, .elgg-menu-item-feedback a:focus, .elgg-menu-item-feedback a:active { background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
-/* File */
-.elgg-menu-item-file a { padding-left:32px; background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Folder */
-.elgg-menu-item-folder a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-folder a:hover, .elgg-menu-item-folder a:focus, .elgg-menu-item-folder a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Forum - discussion */
-.elgg-menu-owner-block .elgg-menu-item-discussion a { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-owner-block .elgg-menu-item-discussion a:hover, .elgg-menu-owner-block .elgg-menu-item-discussion a:focus, .elgg-menu-owner-block .elgg-menu-item-discussion a:active { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Brainstorm */
-.elgg-menu-item-brainstorm a { padding-left:32px; background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-brainstorm a:hover, .elgg-menu-item-brainstorm a:focus, .elgg-menu-item-brainstorm a:active { background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Bookmarks */
-.elgg-menu-item-bookmarks a { padding-left:32px; background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-bookmarks a:hover, .elgg-menu-item-bookmarks a:focus, .elgg-menu-item-bookmarks a:active { background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Pages */
-.elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-
-/* More group tools and info icons */
-/* Group membership */
-.elgg-menu-item-membership-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px 5px #FFFFFF !important; }
-.elgg-menu-item-membership-status a:hover, .elgg-menu-item-membership-status a:focus, .elgg-menu-item-membership-status a:active {
-background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important;
-}
-/* Group notifications */
-.elgg-menu-item-subscription-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px 5px #FFFFFF !important; }
-.elgg-menu-item-subscription-status a:hover { background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-
-/* Group listing menu */
-.elgg-menu-item-members { background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
-EOT;
-?>
 
 /* Note : this replaces the above with FA icons - update translations accordingly if needed
  */

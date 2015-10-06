@@ -13,6 +13,9 @@ $fr = array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	'option:none' => "(aucune sélection)",
+	'groups:yes' => "Activé",
+	'groups:no' => "Désactivé",
+	'group_operators:operators' => "Responsable(s)",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",

@@ -13,6 +13,9 @@ $en = array(
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
 	'option:none' => "(none selected)",
+	'groups:yes' => "Enabled",
+	'groups:no' => "Disabled",
+	'group_operators:operators' => "Operator(s)",
 	
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
