@@ -707,7 +707,9 @@ function theme_transitions2_likes_entity_menu_setup($hook, $type, $return, $para
 
 	$entity = $params['entity'];
 	/* @var ElggEntity $entity */
-
+	
+	if (!elgg_is_active_plugin('likes')) { return $return; }
+	
 	if ($entity->canAnnotate(0, 'likes')) {
 		$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($entity->guid);
 		
