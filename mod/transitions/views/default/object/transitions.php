@@ -209,7 +209,7 @@ if ($full) {
 		
 		$category_class = 'transitions-category-' . $transitions->category;
 		// Add specific class for iframe export embed
-		if (elgg_in_context('export_embed')) { $category_class .= " iframe"; } }
+		if (elgg_in_context('export_embed')) { $category_class .= " iframe"; }
 		echo '<div class="transitions-gallery-item ' . $category_class . '">';
 			echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
 				
