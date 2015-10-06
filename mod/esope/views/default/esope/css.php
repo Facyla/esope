@@ -128,6 +128,7 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header, .elgg-page-body .intro { color: <?php echo $textcolor; ?>; }
 
 
+/* Largeur de page standard */
 .elgg-page-default .elgg-page-sitemenu > .elgg-inner {
 	max-width: 990px;
 	margin: 0 auto;
@@ -231,10 +232,8 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header h1 a { color:#ffffff; }
 .elgg-page-header h1 a:hover,
 .elgg-page-header h1 a:focus,
-.elgg-page-header h1 a:active { color:#ffffff; }
-.elgg-page-header h1 span {
-	font-size: 1.4em;
-}
+.elgg-page-header h1 a:active { color:#ffffff; text-decoration:none; }
+.elgg-page-header h1 span { font-size: 1.4em; }
 
 
 /* ***************************************
@@ -561,15 +560,23 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #esope-public-col1 { float:left; width:50%; }
 #esope-public-col2 { float:right; width:44%; }
 
-#esope-homepage { margin-top:30px; }
+/* PAGE D'ACCUEIL PUBLIQUE */
+#esope-homepage {  }
+.home-intro { margin-bottom:3em; }
+.home-calendar { margin-bottom:3em; }
+.home-groups { margin-bottom:3em; }
+.home-group-item { float:left; clear:left; padding-bottom:16px; width:100%; }
+#esope-login { border:1px solid #CCCCCC; padding:1em; margin-bottom:3em; background:#F6F6F6; }
+#esope-register { margin-bottom:3em; }
 #esope-homepage p { font-size:14px; margin-top:0; margin-bottom:8px; }
-#esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
 #esope-homepage a, #esope-homepage a:visited { color:<?php echo $linkcolor; ?>; }
 #esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:red; }
 #esope-homepage .elgg-form { background:transparent; }
 #esope-homepage h2 { font-size:20px; font-weight:normal; }
+#esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
 
 #esope-homepage label { width:130px; float:left; margin:0 30px 16px 0; clear:both; text-align:right; }
+#esope-homepage .elgg-foot label { width:auto; float:none; clear:both; }
 #esope-homepage input[type='text'],
 #esope-homepage input[type='password'],
 #esope-homepage select { width:auto; min-width:200px; float:left; margin-bottom:16px; }
@@ -600,8 +607,11 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #profile_manager_register_left { width:100%; }
 .profile_manager_register_input_container { display:inline-block; }
 #profile_manager_profile_edit_tabs { clear: both; }
+.register-fullwidth { margin: 1em 0; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 #widget_profile_completeness_progress_bar { background: #090; }
+
+
 
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
@@ -921,8 +931,6 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-layout-two-sidebar .elgg-sidebar_alt {  }
 /* Menus */
 .elgg-menu-navigation { width:auto; }
-/* Largeur de page standard */
-.interne { min-width:200px; width:auto; max-width:80%; }
 /* Quand on utilise les widgets */
 .elgg-widgets { min-width:200px; }
 .elgg-page-body div.module { width: 94%; padding: 3%; background-size:100%; }
@@ -934,11 +942,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 @media (max-width:1225px) {
-	.interne { max-width:980px; }
 }
 
 @media (max-width:980px) {
-	.interne { max-width:98%; }
 	.elgg-page-default { min-width:200px; max-width:100%; }
 	.elgg-sidebar { min-width: 50px; width: 26%; margin:0 0 0 0; }
 	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }

@@ -246,6 +246,11 @@ $en = array(
 	'esope:homepage' => "Homepage",
 	'announcements' => "Announcements",
 	'event_calendar' => "Calendar",
+	'esope:homepage:calendar' => "Calendar",
+	'esope:homepage:calendar:none' => "No public event.<br />Login to access to members events.",
+	'esope:homepage:groups' => "Featured groups",
+	'esope:homepage:login' => "Login",
+	'esope:homepage:register' => "Registration",
 	
 	'esope:access:public' => "Public (accessible to non-loggedin visitors)",
 	

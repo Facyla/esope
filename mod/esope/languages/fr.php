@@ -260,6 +260,11 @@ $fr = array(
 	'esope:homepage' => "Accueil",
 	'announcements' => "Annonces",
 	'event_calendar' => "Agenda",
+	'esope:homepage:calendar' => "Agenda",
+	'esope:homepage:calendar:none' => "Aucun événement public pour le moment.<br />Connectez-vous pour accéder aux événements réservés aux membres.",
+	'esope:homepage:groups' => "Quelques groupes",
+	'esope:homepage:login' => "Connexion",
+	'esope:homepage:register' => "Inscription",
 	
 	'esope:access:public' => "Public (accessible hors connexion)",
 	
