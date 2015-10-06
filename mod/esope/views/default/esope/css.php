@@ -544,9 +544,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 
 .elgg-pagination a, .elgg-pagination span { display: inline-block; margin-bottom: 1px; }
 .elgg-pagination-limit { margin-top:0; }
-.elgg-pagination.elgg-pagination-limit li { margin-right:0; }
-.elgg-pagination.elgg-pagination-limit a { border-color:transparent; font-size:0.85em; padding:2px 4px 2px 0; }
-.elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { background-color:transparent; border-color:transparent; }
+.elgg-pagination.elgg-pagination-limit li, .elgg-pagination.elgg-pagination-limit li a, .elgg-pagination.elgg-pagination-limit li span { margin-right:2px; font-size: 0.9em; }
+.elgg-pagination.elgg-pagination-limit span { padding: 2px 4px; }
+.elgg-pagination.elgg-pagination-limit a { border-color:transparent; padding: 2px 4px; }
+.elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { border-color:transparent; }
 .elgg-pagination-limit .elgg-state-selected span { font-weight:bold; border-color:transparent; }
 
 
@@ -697,10 +698,10 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Messages are now conversations, let's style this a little */
 .message.unread a { color: <?php echo $linkcolor; ?>; font-weight:bold; }
-.messages-owner { width: 26%; margin-right: 2%; }
-.messages-subject { width: 55%; margin-right: 2%; }
-.messages-timestamp { width: 8%; margin-right: 2%; }
-.messages-delete { width: 5%; }
+.messages-owner { width: 25%; margin-right: 1%; }
+.messages-subject { width: 50%; margin-right: 1%; }
+.messages-timestamp { width: 18%; margin-right: 1%; font-size:0.8em; }
+.messages-delete { width: 4%; }
 .elgg-item.selected-message { opacity:1; }
 .message-item-toggle { text-align: center; padding: 4px; display: block; background: #eee; }
 .elgg-item-message .message-content { width: 96%; padding: 0 0.5%; display:none; padding-bottom: 16px; padding-top: 4px; }
@@ -708,6 +709,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .message-sent .message-content { opacity: 1; }
 .message-inbox .message-content {	}
 .message-sent .message-content { margin-left:3%; background: #EEE; }
+.elgg-image-block .elgg-image-block.message { padding: 0 0; }
 
 
 /* Mes paramètres */
