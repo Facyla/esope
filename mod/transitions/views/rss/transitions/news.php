@@ -96,8 +96,9 @@ $body .= $transitions_icon;
 // Short excerpt (140 chars)
 if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . $transitions->excerpt . '</p>';
 // Full description
-$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
-
+//$body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
+$description = parse_urls(tions->description);
+$body .= '<div class="transitions-post">' . $description . '</div>';
 $body .= '<div class="clearfloat"></div><br />';
 
 
@@ -259,7 +260,7 @@ if (empty($title)) {
 $permalink = htmlspecialchars($vars['entity']->getURL(), ENT_NOQUOTES, 'UTF-8');
 $pubdate = date('r', $vars['entity']->getTimeCreated());
 
-$description = elgg_autop($category . '<div class="clearfloat"></div>' . $body);
+$rss_description = $category . '<div class="clearfloat"></div>' . $body;
 
 $creator = elgg_view('page/components/creator', $vars);
 $georss = elgg_view('page/components/georss', $vars);
@@ -271,7 +272,7 @@ $item = <<<__HTML
 	<pubDate>$pubdate</pubDate>
 	<link>$permalink</link>
 	<title><![CDATA[$title]]></title>
-	<description><![CDATA[$description]]></description>
+	<description><![CDATA[$rss_description]]></description>
 	$creator$georss$extension
 </item>
 
