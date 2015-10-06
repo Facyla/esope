@@ -42,6 +42,27 @@ $font6 = $css['font6'];
 	padding-bottom: 5px;
 }
 
+.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 16px; padding: 0.4em 0.5em 0.0em 0.5em;; }
+.elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
+.elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
+	float: left;
+	margin-right: 5px;
+	/*
+	height: 25px;
+	width: 25px;
+	*/
+}
+.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
+	float: left;
+	font-size: 0.75em;
+}
+.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:hover,
+.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:focus,
+.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:active {
+	color: #333333;
+}
+
+
 #pages-navigation .elgg-body {
 	background: none repeat scroll 0 0 #FFFFFF;
 	font-size: 0.8em;
@@ -74,7 +95,8 @@ $font6 = $css['font6'];
 	min-height: 25px;
 	margin-bottom:0;
 }
-.elgg-module-info > .elgg-head * { color: #333; }
+.elgg-page-body div.elgg-module.elgg-owner-block .elgg-head { background: transparent; }
+.elgg-module-info > .elgg-head * { color: <?php echo $color14; ?>; }
 .elgg-module-info {
 	/* background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent; */
 	border-radius: 10px 10px 0 0;
@@ -95,7 +117,7 @@ $font6 = $css['font6'];
 	font-size: 1.1em;
 	text-transform: uppercase;
 	font-weight: normal;
-	padding: 4px 0 5px 30px;
+	padding: 4px 0 5px 0px;
 }
 .elgg-module-info > .elgg-body {
 	padding:7px 10px 0;
@@ -247,6 +269,7 @@ a.elgg-widget-collapsed:before {
 	overflow: hidden;
 	/* border-top: 2px solid #dedede; */
 }
+.elgg-module-widget > .elgg-body { overflow:visible; }
 .elgg-widget-edit {
 	display: none;
 	width: 96%;
@@ -261,6 +284,118 @@ a.elgg-widget-collapsed:before {
 	border: 2px dashed #dedede;
 	margin-bottom: 15px;
 }
+.elgg-module-widget { background-color: transparent; }
+.elgg-module-widget:hover,
+.elgg-module-widget:focus,
+.elgg-module-widget:active { background-color: transparent; }
+.elgg-module-widget > .elgg-head { height:auto; }
+.elgg-module-widget h3 { padding:0.5em; }
+.elgg-page-body div.elgg-module .elgg-head .elgg-widget-title {
+	color: <?php echo $color14; ?>;
+	float: left;
+	font-family: <?php echo $font1; ?>;
+	font-size: 1.25em;
+	text-transform: uppercase;
+	font-weight: normal;
+	max-width:none;
+	float:none;
+}
+
+/* Contenu des modules */
+.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; }
+.elgg-page-body div.elgg-module ul li { padding-left: 0; float: none; right: initial; left: inherit; margin-left: 0em; }
+
+.elgg-page-body div.elgg-module .elgg-head ul li a { float: none; margin:0; right: initial; }
+
+.elgg-page-body div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
+.elgg-page-body div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
+.elgg-page-body div.module div.activites ul li { padding-bottom: 1px; }
+.elgg-page-body div.module div.activites ul li img { margin: 0 5px 0 7px; }
+.elgg-page-body div.module div.activites ul li div span { color: #666; font-style: italic; }
+
+/* Widgets - à corriger pour utiliser les classes natives d'Elgg */
+.elgg-page-body div.elgg-module {
+	background: none; padding: 0; width: auto; min-width: 200px;
+	float: left;
+	margin: 0 0.5em 1em 0.5em;
+	border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	-webkit-border-radius: 10px 10px 0 0;
+	-o-border-radius: 10px 10px 0 0;
+}
+.elgg-page-body div.elgg-module .elgg-head {
+	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.55, <?php echo $color3; ?>));
+	background-color: <?php echo $color3; ?>;
+	border-radius: 10px 10px 0 0;
+	-moz-border-radius: 10px 10px 0 0;
+	-webkit-border-radius: 10px 10px 0 0;
+	-o-border-radius: 10px 10px 0 0;
+	border-top: 0 none;
+	min-height: 26px;
+}
+
+
+/* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
+a.elgg-widget-collapse-button,
+a.elgg-widget-collapse-button:hover,
+a.elgg-widget-collapse-button:focus,
+a.elgg-widget-collapse-button:active,
+a.elgg-widget-collapsed:hover,
+a.elgg-widget-collapsed:focus,
+a.elgg-widget-collapsed:active {
+	color: transparent;
+}
+a.elgg-widget-collapse-button:before { content: ""; }
+a.elgg-widget-collapsed:before { content: ""; }
+/*
+a.elgg-widget-edit-button { right: 12px; }
+*/
+
+div.elgg-widgets div.elgg-body { font-size: 0.90em; }
+.elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:14px; }
+.elgg-module .entity_title { font-size:16px; }
+.elgg-widget-instance-event_calendar p { font-size: 1.3em; }
+
+/* Boutons des widgets */
+.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
+
+/* Widgets activité des groupes */
+.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites,
+.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites .elgg-widget-content { padding:0; }
+.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
+	padding:0 14px;
+	background:<?php echo $color3; ?>;
+	/* margin-top:-8px; */
+}
+.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
+	color:white;display:block;
+	font-family: <?php echo $font1; ?>;
+	font-size:14px;
+}
+.widget-group-content { padding: 0 10px 10px 10px; }
+
+.elgg-widget-more {
+	line-height:32px; color:<?php echo $linkcolor; ?>;
+	background: #F2F1EF;
+	display:block;
+	width: 100%;
+	/* float: left; */
+}
+.elgg-widget-more:before {
+	content: "+ ";
+	font-family: <?php echo $font2; ?>;
+	font-size: 24px;
+	font-weight: bold;
+	margin-left: 9px;
+	text-shadow: 0 2px 2px #999999;
+	vertical-align: bottom;
+}
+
 
 .elgg-page-body div.elgg-module .elgg-widget-content .widget-title-details {
 	font-family: <?php echo $font1; ?>;
@@ -295,7 +430,6 @@ a.elgg-widget-collapsed:before {
 
 /* Widget et Module de groupe Agenda */
 .elgg-module-group-event-calendar > .elgg-body, 
-.elgg-module-widget > .elgg-body { overflow:visible; }
 .elgg-module-group-event-calendar .entity_title, 
 .elgg-widget-instance-event_calendar .entity_title { display:none; }
 .elgg-module-group-event-calendar .elgg-body h3, 
@@ -356,8 +490,10 @@ a.elgg-widget-collapsed:before {
 /* Icônes dans les entêtes des modules des groupes */
 .elgg-module-group .elgg-head h3 {
 	background-position: left 0px; background-color: transparent; background-repeat: no-repeat;
-	min-height: 20px; padding-left: 36px; margin: 5px 0 3px 5px;
+	min-height: 20px; /* padding-left: 36px; */
+	margin: 0.3em 0 0.2em 0.4em;
 }
+/*
 .elgg-module-group-activity .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>activity-module.png"); }
 .elgg-module-group-event-calendar .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>event_calendar-module.png"); }
 .elgg-module-group-announcements .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>announcements-module.png"); }
@@ -367,6 +503,7 @@ a.elgg-widget-collapsed:before {
 .elgg-module-group-brainstorm .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>brainstorm-module.png"); }
 .elgg-module-group-bookmarks .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>bookmarks-module.png"); }
 .elgg-module-group-pages .elgg-head h3 { background-image: url("<?php echo $urlicon; ?>pages-module.png"); }
+*/
 
 
 /* à vérifier pour effets sur diverses pages */
