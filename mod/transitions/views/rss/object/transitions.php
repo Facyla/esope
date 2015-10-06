@@ -6,8 +6,12 @@
  * @subpackage Core
  */
 
-$full = elgg_extract('full_view', $vars, TRUE);
-// Note : force to full view
+if (!$vars['entity']) {
+	return TRUE;
+}
+
+// Always use full view for RSS viewtype
+//$full = elgg_extract('full_view', $vars, TRUE);
 //if ($full) {
 		// Full view
 	if (elgg_in_context('transitions-news')) {
