@@ -229,7 +229,10 @@ function esope_init() {
 	global $NOTIFICATION_HANDLERS;
 	// @TODO : replace by elgg_register_notification_method()
 	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
-	//elgg_register_notification_method('email');
+	/* @TODO : http://learn.elgg.org/en/latest/guides/notifications.html#registering-a-new-notification-method
+	elgg_register_notification_method('email');
+	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_notification_handler');
+	*/
 	// Register for the 'send', 'notification:[method name]' plugin hook to handle sending a notification. A notification object is in the params array for the hook with the key 'notification'
 	
 	/* Usage note : block email by registering an early hook to email_block,system hook
@@ -2003,6 +2006,44 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
 	return $handler($from, $to, $subject, $body, $params);
 }
+// @TODO : Replace
+/**
+ * Send an email notification
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param bool   $result Has anyone sent a message yet?
+ * @param array  $params Hook parameters
+ * @return bool
+ * @access private
+ */
+/*
+function esope_notification_handler($hook, $type, $result, $params) {
+	// @var Elgg_Notifications_Notification $message
+	$message = $params['notification'];
+
+	$recipient = $message->getRecipient();
+
+	if (!$recipient || !$recipient->email) {
+		return false;
+	}
+
+	//return $sms->send($recipient->email, $message->body);
+	
+		// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
+	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
+	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
+	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
+	if ($result !== NULL) { return $result; }
+	
+	// If no blocking return received, get back to regular handler and process
+	global $NOTIFICATION_HANDLERS;
+	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
+	return $handler($from, $recipient->email, $subject, $message->body, $params);
+	
+}
+*/
+
 
 
 /* Determines if the user is a group administrator (=> has admin rights on any group)
