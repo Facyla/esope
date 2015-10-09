@@ -27,7 +27,7 @@ return array(
 	'transitions:save_status' => "Dernier enregistrement:",
 	
 	'transitions:revision' => "Version",
-	'transitions:auto_saved_revision' => "Versio automatiquement enregistrée",
+	'transitions:auto_saved_revision' => "Version automatiquement enregistrée",
 
 	// messages
 	'transitions:message:saved' => "Contribution enregistrée.",
