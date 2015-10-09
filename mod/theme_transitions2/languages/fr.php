@@ -113,5 +113,7 @@ Merci,
 %4$s
 ',
 	
+	'name' => "First and last name",
+	
 );
 

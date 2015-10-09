@@ -11,7 +11,6 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
  * Init adf_notification_messages plugin.
  */
 function notification_messages_init() {
-	global $CONFIG;
 	
 	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
 	if ($messages_send != 'no') {
@@ -41,7 +40,6 @@ function notification_messages_init() {
 	
 	
 	/* NOTIFICATION MESSAGE HOOKS */
-	// @TODO add setting
 	$blog_message = elgg_get_plugin_setting('object_blog_message', 'notification_messages');
 	if ($blog_message == 'allow') {
 		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'blog_notify_message');
@@ -52,10 +50,10 @@ function notification_messages_init() {
 	// GENERIC COMMENTS BEHAVIOUR
 	// Some advanced_notifications features are limiting flexibility, so unregister them first
 	if (elgg_is_active_plugin('advanced_notifications')) {
-		elgg_unregister_plugin_hook_handler("action", "comments/add", "advanced_notifications_comment_action_hook");
+		elgg_unregister_plugin_hook_handler("action", "comments/save", "advanced_notifications_comment_action_hook");
 	}
 	// Handle generic comments notifications actions and notification
-	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook", 1000);
+	elgg_register_plugin_hook_handler("action", "comments/save", "notification_messages_comment_action_hook", 1000);
 	
 	
 	/* ENABLE ATTACHMENTS */
@@ -201,7 +199,7 @@ function notification_messages_comment_action_hook($hooks, $type, $returnvalue, 
 	$generic_comment = elgg_get_plugin_setting('generic_comment', 'notification_messages');
 	switch ($generic_comment) {
 		case 'allow':
-			include(dirname(__FILE__) . "/actions/comments/add.php");
+			include(dirname(__FILE__) . "/actions/comments/save.php");
 			// Block process because we don't want to be notified twice
 			return false;
 			break;

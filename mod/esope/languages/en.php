@@ -246,6 +246,11 @@ $en = array(
 	'esope:homepage' => "Homepage",
 	'announcements' => "Announcements",
 	'event_calendar' => "Calendar",
+	'esope:homepage:calendar' => "Calendar",
+	'esope:homepage:calendar:none' => "No public event.<br />Login to access to members events.",
+	'esope:homepage:groups' => "Featured groups",
+	'esope:homepage:login' => "Login",
+	'esope:homepage:register' => "Registration",
 	
 	'esope:access:public' => "Public (accessible to non-loggedin visitors)",
 	
@@ -260,6 +265,8 @@ $en = array(
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
+	'messages:answer' => "Reply",
+	'messages:to' => "to",
 	
 	
 	// Layout settings

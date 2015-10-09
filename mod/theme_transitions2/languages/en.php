@@ -95,6 +95,8 @@ Password: %s
 	'members:title:online' => 'Online contributors',
 	'members:list:popular:none' => 'No contributor has a contact.',
 	
+	'name' => "Prénom et Nom",
+	
 	
 );
 

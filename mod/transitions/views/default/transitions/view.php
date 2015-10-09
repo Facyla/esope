@@ -204,7 +204,7 @@ if (in_array($transitions->category, array('project', 'event'))) {
 		// Format : from DD MM YYYY [until DD MM YYYY]
 		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
 			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-			$sidebar .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+			$sidebar .= '<br />' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 		} else if (!empty($transitions->start_date)) {
 			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
 		} else if (!empty($transitions->end_date)) {

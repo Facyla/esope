@@ -13,6 +13,18 @@ if (!$transitions) {
 	return TRUE;
 }
 
+// Use custom views for full view
+if ($full) {
+		// Full view
+	if (elgg_in_context('transitions-news')) {
+		echo elgg_view('transitions/news', $vars);
+	} else {
+		echo elgg_view('transitions/view', $vars);
+	}
+	return;
+}
+
+
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');
@@ -68,14 +80,10 @@ $transitions_icon = "";
 //if(!empty($transitions->icontime)) {
 	$params = $vars;
 	$params["align"] = 'none';
-	if ($full) {
-		$params["size"] = 'master';
-	} else {
-		$params["size"] = 'gallery';
-		if (elgg_in_context("listing") || ($list_type != 'gallery')) {
-			$params["size"] = 'listing';
-			$params["align"] = 'right';
-		}
+	$params["size"] = 'gallery';
+	if (elgg_in_context("listing") || ($list_type != 'gallery')) {
+		$params["size"] = 'listing';
+		$params["align"] = 'right';
 	}
 //}
 $transitions_icon = elgg_view_entity_icon($transitions, $params["size"], $params);
@@ -141,7 +149,7 @@ $shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelection
 
 // Embed code
 //$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
-$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:400px; height:400px;" /&gt;</textarea>';
+$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:310px; height:224px;" /&gt;</textarea>';
 
 // Combined module : permalink + share links + embed
 $share_content = '';
@@ -161,104 +169,97 @@ $actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_con
 
 
 
-if ($full) {
-		// Full view
-	if (elgg_in_context('transitions-news')) {
-		echo elgg_view('transitions/news', $vars);
-	} else {
-		echo elgg_view('transitions/view', $vars);
+// brief view
+
+if (elgg_in_context("listing") || ($list_type != 'gallery')) {
+	// Listing view
+	$category = '';
+	if (!empty($transitions->category)) {
+		$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span> ';
 	}
+	$params = array(
+		'entity' => $transitions,
+		'metadata' => $metadata,
+		'subtitle' => $subtitle,
+		'content' => $category . $excerpt,
+	);
+	$params = $params + $vars;
+	$list_body = elgg_view('object/elements/summary', $params);
+	
+	if (!empty($transitions_icon)) {
+		//echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
+		echo elgg_view_image_block($transitions_icon, $list_body);
+	} else {
+		//echo elgg_view_image_block($owner_icon, $list_body);
+		echo elgg_view_image_block('', $list_body);
+	}
+	//echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
 	
 } else {
-	// brief view
+	// Gallery view
+	// do not show the metadata and controls in gallery view
+	$metadata = '';
+	$params = array(
+		'text' => elgg_get_excerpt($transitions->title, 70),
+		'href' => $transitions->getURL(),
+		'is_trusted' => true,
+	);
+	$title_link = elgg_view('output/url', $params);
 	
-	if (elgg_in_context("listing") || ($list_type != 'gallery')) {
-		// Listing view
-		$category = '';
-		if (!empty($transitions->category)) {
-			$category = '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span> ';
-		}
-		$params = array(
-			'entity' => $transitions,
-			'metadata' => $metadata,
-			'subtitle' => $subtitle,
-			'content' => $category . $excerpt,
-		);
-		$params = $params + $vars;
-		$list_body = elgg_view('object/elements/summary', $params);
-		
-		if (!empty($transitions_icon)) {
-			//echo elgg_view_image_block($owner_icon, $list_body, array('image_alt' => $transitions_icon));
-			echo elgg_view_image_block($transitions_icon, $list_body);
-		} else {
-			//echo elgg_view_image_block($owner_icon, $list_body);
-			echo elgg_view_image_block('', $list_body);
-		}
-		//echo elgg_view_image_block($transitions_icon, $owner_icon . $list_body);
-		
-	} else {
-		// Gallery view
-		// do not show the metadata and controls in gallery view
-		$metadata = '';
-		$params = array(
-			'text' => elgg_get_excerpt($transitions->title, 70),
-			'href' => $transitions->getURL(),
-			'is_trusted' => true,
-		);
-		$title_link = elgg_view('output/url', $params);
-		
-		$category_class = 'transitions-category-' . $transitions->category;
-		echo '<div class="transitions-gallery-item ' . $category_class . '">';
-			echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
+	$category_class = 'transitions-category-' . $transitions->category;
+	// Add specific class for iframe export embed
+	if (elgg_in_context('export_embed')) { $category_class .= " iframe"; }
+	echo '<div class="transitions-gallery-item ' . $category_class . '">';
+		echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
+			
+			//echo $transitions_icon;
+			echo '<div class="transitions-gallery-hover">';
 				
-				//echo $transitions_icon;
-				echo '<div class="transitions-gallery-hover">';
-					
-					// Entête
-					echo '<div class="transitions-gallery-head">';
-						if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
-						//if ($metadata) { echo $metadata; }
-						if ($title_link) { echo "<h3>$title_link</h3>"; }
-						//echo '<div class="elgg-subtext">' . $subtitle . '</div>';
-						//echo elgg_view('object/summary/extend', $vars);
-						//echo elgg_view('output/tags', array('tags' => $transitions->tags));
-						//echo elgg_view_image_block($owner_icon, $list_body);
-	
-						// Contenu "texte"
-						echo '<div class="elgg-content">' . $excerpt . '</div>';
-					
-						// Stats et actions possibles : commenter, liker, ajouter une métadonnée/relation
-						echo '<div class="transitions-gallery-actions">';
+				// Entête
+				echo '<div class="transitions-gallery-head">';
+					if (!empty($transitions->category)) echo '<span class="transitions-category transitions-' . $transitions->category . '">' . elgg_echo('transitions:category:' . $transitions->category) . '</span>';
+					//if ($metadata) { echo $metadata; }
+					if ($title_link) { echo "<h3>$title_link</h3>"; }
+					//echo '<div class="elgg-subtext">' . $subtitle . '</div>';
+					//echo elgg_view('object/summary/extend', $vars);
+					//echo elgg_view('output/tags', array('tags' => $transitions->tags));
+					//echo elgg_view_image_block($owner_icon, $list_body);
+
+					// Contenu "texte"
+					echo '<div class="elgg-content">' . $excerpt . '</div>';
+				
+					// Stats et actions possibles : commenter, liker, ajouter une métadonnée/relation
+					echo '<div class="transitions-gallery-actions">';
+						echo '<div class="transitions-gallery-inner">';
+							echo '<span class="float-alt">' . $actions . '</span>';
+							echo $stats;
+						echo '</div>';
+					echo '</div>';
+					// Admins only (all T² admins)
+					if ($is_admin) {
+						echo '<div class="transitions-gallery-admin">';
 							echo '<div class="transitions-gallery-inner">';
-								echo '<span class="float-alt">' . $actions . '</span>';
-								echo $stats;
+								switch($transitions->featured) {
+									case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i>&nbsp; '; break;
+									case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i>&nbsp; '; break;
+									default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i>&nbsp; ';
+								}
+								switch($transitions->status) {
+									case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i>&nbsp; '; break;
+									case 'draft':
+									default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i>&nbsp; ';
+								}
+							echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a>&nbsp; ';
 							echo '</div>';
 						echo '</div>';
-						// Admins only (all T² admins)
-						if ($is_admin) {
-							echo '<div class="transitions-gallery-admin">';
-								echo '<div class="transitions-gallery-inner">';
-									switch($transitions->featured) {
-										case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i>&nbsp; '; break;
-										case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i>&nbsp; '; break;
-										default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i>&nbsp; ';
-									}
-									switch($transitions->status) {
-										case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i>&nbsp; '; break;
-										case 'draft':
-										default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i>&nbsp; ';
-									}
-								echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a>&nbsp; ';
-								echo '</div>';
-							echo '</div>';
-						}
-					echo '</div>';
-					
+					}
 				echo '</div>';
 				
-				echo '<div class="clearfloat"></div>';
 			echo '</div>';
+			
+			echo '<div class="clearfloat"></div>';
 		echo '</div>';
-	}
+	echo '</div>';
 }
+
 
