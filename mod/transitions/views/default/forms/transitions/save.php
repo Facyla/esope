@@ -10,7 +10,11 @@ elgg_load_js('elgg.transitions');
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
 
-$is_admin = theme_transitions2_user_is_content_admin();
+if (elgg_is_active_plugin('theme_transitions2')) {
+	$is_admin = theme_transitions2_user_is_content_admin();
+} else {
+	$is_admin = elgg_is_admin_logged_in();
+}
 
 if ($transitions) $edit_details = '<p style="margin:20px 0;"><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
@@ -349,7 +353,13 @@ $startdate_input = elgg_view('input/date', array(
 	'value' => $vars['start_date'],
 	'placeholder' => elgg_echo('transitions:startdate'),
 	'timestamp' => true,
-	'style' => "width:12ex;",
+	'style' => "width:13ex;",
+));
+$starttime_input = elgg_view('input/timepicker', array(
+	'name' => 'start_time',
+	'id' => 'transitions_starttime',
+	'value' => date('H:i', $vars['start_date']),
+	'placeholder' => elgg_echo('transitions:starttime'),
 ));
 
 $enddate_label = elgg_echo('transitions:enddate');
@@ -359,7 +369,13 @@ $enddate_input = elgg_view('input/date', array(
 	'value' => $vars['end_date'],
 	'placeholder' => elgg_echo('transitions:enddate'),
 	'timestamp' => true,
-	'style' => "width:12ex;",
+	'style' => "width:13ex;",
+));
+$endtime_input = elgg_view('input/timepicker', array(
+	'name' => 'end_time',
+	'id' => 'transitions_endtime',
+	'value' => date('H:i', $vars['end_date']),
+	'placeholder' => elgg_echo('transitions:endtime'),
 ));
 
 $tags_label = elgg_echo('transitions:tags');
@@ -430,6 +446,8 @@ function transitions_toggle_fields() {
 	$(".transitions-enddate").addClass(\'hidden\');
 	$(".transitions-rss-feed").addClass(\'hidden\');
 	$(".transitions-collection").addClass(\'hidden\');
+	$(".transitions-starttime").addClass(\'hidden\');
+	$(".transitions-endtime").addClass(\'hidden\');
 	
 	$(".transitions-explanations").addClass(\'hidden\');
 	if (val) $(".transitions-explanations-"+val).removeClass(\'hidden\');
@@ -448,6 +466,8 @@ function transitions_toggle_fields() {
 		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:event') . '\');
 		$(".transitions-startdate").removeClass(\'hidden\');
 		$(".transitions-enddate").removeClass(\'hidden\');
+		$(".transitions-starttime").removeClass(\'hidden\');
+		$(".transitions-endtime").removeClass(\'hidden\');
 	} else if (val == "challenge") {
 		$(".transitions-rss-feed").removeClass(\'hidden\');
 		$(".transitions-collection").removeClass(\'hidden\');
@@ -546,11 +566,13 @@ $edit_details
 	<p class="transitions-startdate">
 		<label class="" for="transitions_startdate">$startdate_label</label>
 		$startdate_input
+		<span class="transitions-starttime">$starttime_input</span>
 	</p>
 
 	<p class="transitions-enddate">
 		<label class="" for="transitions_enddate">$enddate_label</label>
 		$enddate_input
+		<span class="transitions-starttime">$endtime_input</span>
 	</p>
 </div>
 
