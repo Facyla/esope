@@ -268,7 +268,7 @@ $(function() {
 		// Note : les réglages s'appliquent sur la page d'accueil par défaut en mode walled garden, qui peut être gérée par cmspages
 		if (empty($plugin->replace_public_homepage) || ($plugin->replace_public_homepage == 'default')) { 
 			 echo '<p><label>' . elgg_echo('esope:homeintro');
-				echo elgg_view('input/longtext', array('name' => 'params[homeintro]', 'value' => $plugin->homeintro, 'class' => 'elgg-input-rawtext')) . '</label>'; . '</p>';
+				echo elgg_view('input/longtext', array('name' => 'params[homeintro]', 'value' => $plugin->homeintro, 'class' => 'elgg-input-rawtext')) . '</label></p>';
 		} else if ($plugin->replace_public_homepage == 'cmspages') {
 			if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('esope:cmspages:notactivated')); }
 			echo '<a href="' . elgg_get_site_url() . 'cmspages/?pagetype=homepage-public" target="_new">' . elgg_echo('esope:homepage:cmspages:editlink') . '</a>';

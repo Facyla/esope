@@ -87,6 +87,21 @@ $font5 = elgg_get_plugin_setting('font5', 'esope');
 $font6 = elgg_get_plugin_setting('font6', 'esope');
 ?>
 
+html { -webkit-font-smoothing: antialiased; }
+/* https://css-tricks.com/box-sizing/ */
+/* @TODO : use later, as it requires to rewrite most of the menus and main blocks
+html {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+}
+*, *:before, *:after {
+	-webkit-box-sizing: inherit;
+	-moz-box-sizing: inherit;
+	box-sizing: inherit;
+}
+*/
 
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
