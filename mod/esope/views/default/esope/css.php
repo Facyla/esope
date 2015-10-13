@@ -298,6 +298,7 @@ img { border: 0 none; overflow:hidden; }
 	border-bottom: 1px solid #fff;
 }
 
+/* Groups sublevels */
 #transverse .elgg-menu-navigation li.groups ul { width: 402px; }
 #transverse .elgg-menu-navigation li.groups ul li { width: 400px; }
 #transverse .elgg-menu-navigation li.groups ul li a { width: 381px; }
@@ -375,6 +376,11 @@ img { border: 0 none; overflow:hidden; }
 	-webkit-box-shadow: 1px 1px 2px #333333;
 	-o-box-shadow: 1px 1px 2px #333333;
 }
+
+#transverse .elgg-menu-navigation .elgg-menu-counter { border: 0 none; left: -20px; margin: 0; padding: 0; position: relative; }
+.elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 12px; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
+
+
 .elgg-form.thewire-form { background: transparent; }
 .home-static { background:white; box-shadow:3px 3px 5px 0px #666; padding: 0.2% 0.4%; }
 .home-static-container {}
