@@ -378,7 +378,7 @@ img { border: 0 none; overflow:hidden; }
 }
 
 #transverse .elgg-menu-navigation .elgg-menu-counter { border: 0 none; left: -20px; margin: 0; padding: 0; position: relative; }
-.elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 12px; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
+#transverse .elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 12px; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
 
 
 .elgg-form.thewire-form { background: transparent; }
