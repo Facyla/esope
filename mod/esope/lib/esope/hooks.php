@@ -323,7 +323,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($return['segments'][0] == 'subgroups') {
 			elgg_load_library('elgg:groups');
 			$group = get_entity($return['segments'][2]);
-			echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
+			//echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
 			//if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
 			if (!elgg_instanceof($group, 'group') || (($group->subgroups_enable == 'no') && ($return['segments'][1] != "delete"))) {
 				return $return;
