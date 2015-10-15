@@ -46,8 +46,15 @@ function profile_manager_profile_override($hook_name, $entity_type, $return_valu
 		$translations = array();
 		$context = elgg_get_context();
 		
-		// Make new result
+		// order fields
+		$ordered_entities = [];
 		foreach ($entities as $entity) {
+			$ordered_entities[$entity->order] = $entity;
+		}
+		ksort($ordered_entities);
+				
+		// Make new result
+		foreach ($ordered_entities as $entity) {
 			if ($entity->admin_only != "yes" || elgg_is_admin_logged_in()) {
 
 				$result[$entity->metadata_name] = $entity->metadata_type;
@@ -61,13 +68,20 @@ function profile_manager_profile_override($hook_name, $entity_type, $return_valu
 			$translations["profile:" . $entity->metadata_name] = $entity->getTitle();
 		}
 
-		add_translation(get_current_language(), $translations);
+		$languages = ['en'];
+		$languages[] = get_current_language();
+		$languages[] = elgg_get_config('language');
+		array_unique($languages);
+		
+		foreach ($languages as $lang) {
+			add_translation($lang, $translations);
+		}
 
 		if (count($result) > 0) {
 			$result["custom_profile_type"] = "non_editable";
 		}
 	}
-
+	
 	return $result;
 }
 
@@ -82,62 +96,69 @@ function profile_manager_profile_override($hook_name, $entity_type, $return_valu
  * @return array
  */
 function profile_manager_group_override($hook_name, $entity_type, $return_value, $parameters) {
-	$result = $return_value;
 
 	// get from cache
-	$site_guid = elgg_get_config("site_guid");
-	$entities = elgg_load_system_cache("profile_manager_group_fields_" . $site_guid);
+	$site_guid = elgg_get_config('site_guid');
+	$entities = elgg_load_system_cache('profile_manager_group_fields_' . $site_guid);
 	if ($entities === null) {
-		$options = array(
-				"type" => "object",
-				"subtype" => CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE,
-				"limit" => false,
-				"owner_guid" => elgg_get_config("site_guid")
-		);
+		$options = [
+			'type' => 'object',
+			'subtype' => CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE,
+			'limit' => false,
+			'owner_guid' => elgg_get_config('site_guid')
+		];
 		$entities = elgg_get_entities($options);
-		elgg_save_system_cache("profile_manager_group_fields_" . $site_guid, serialize($entities));
+		elgg_save_system_cache('profile_manager_group_fields_' . $site_guid, serialize($entities));
 	} else {
 		$entities = unserialize($entities);
 	}
 
-	if ($entities) {
-
-		$guids = array();
-		$translations = array();
-
-		foreach ($entities as $entity) {
-			$guids[] = $entity->getGUID();
-		}
-
-		_elgg_services()->metadataCache->populateFromEntities($guids);
-
-		$result = array();
-		$ordered = array();
-
-		// Order the group fields and filter some types out
-		foreach ($entities as $group_field) {
-			if ($group_field->admin_only != "yes" || elgg_is_admin_logged_in()) {
-				$ordered[$group_field->order] = $group_field;
-			}
-		}
-		ksort($ordered);
-
-		// build the correct list
-		$result["name"] = "text";
-		foreach ($ordered as $group_field) {
-			$result[$group_field->metadata_name] = $group_field->metadata_type;
-
-			// should it be handled as tags? Q: is this still needed? A: Yes it is, it handles presentation of these fields in listing mode
-			if (elgg_get_context() == "search" && ($group_field->output_as_tags == "yes" || $group_field->metadata_type == "multiselect")) {
-				$result[$group_field->metadata_name] = "tags";
-			}
-			
-			$translations["groups:" . $group_field->metadata_name] = $group_field->getTitle();
-		}
-		
-		add_translation(get_current_language(), $translations);
+	if (empty($entities)) {
+		return;
 	}
 
+	$guids = [];
+	$translations = [];
+
+	foreach ($entities as $entity) {
+		$guids[] = $entity->getGUID();
+	}
+
+	_elgg_services()->metadataCache->populateFromEntities($guids);
+
+	$result = [];
+	$ordered = [];
+
+	// Order the group fields and filter some types out
+	foreach ($entities as $group_field) {
+		if ($group_field->admin_only != 'yes' || elgg_is_admin_logged_in()) {
+			$ordered[$group_field->order] = $group_field;
+		}
+	}
+	ksort($ordered);
+
+	// build the correct list
+	$result['name'] = 'text';
+	foreach ($ordered as $group_field) {
+		$result[$group_field->metadata_name] = $group_field->metadata_type;
+
+		// should it be handled as tags? Q: is this still needed? A: Yes it is, it handles presentation of these fields in listing mode
+		if (elgg_get_context() == 'search' && ($group_field->output_as_tags == 'yes' || $group_field->metadata_type == 'multiselect')) {
+			$result[$group_field->metadata_name] = 'tags';
+		}
+		
+		$translations['groups:' . $group_field->metadata_name] = $group_field->getTitle();
+	}
+	
+	$languages = ['en'];
+	$languages[] = get_current_language();
+	$languages[] = elgg_get_config('language');
+	array_unique($languages);
+	
+	foreach ($languages as $lang) {
+		add_translation($lang, $translations);
+	}
+	
 	return $result;
 }
 
@@ -251,12 +272,19 @@ function profile_manager_action_register_hook($hook_name, $entity_type, $return_
 		}
 
 		foreach ($required_fields as $entity) {
-
-			$passed_value = trim($custom_profile_fields[$entity->metadata_name]);
-
-			if (strlen($passed_value) < 1) {
-				register_error(elgg_echo("profile_manager:register_pre_check:missing", array($entity->getTitle())));
-				forward(REFERER);
+			$passed_value = $custom_profile_fields[$entity->metadata_name];
+			if (is_array($passed_value)) {
+				if (!count($passed_value)) {
+					register_error(elgg_echo("profile_manager:register_pre_check:missing", array($entity->getTitle())));
+					forward(REFERER);
+				}
+			}
+			else {
+				$passed_value = trim($passed_value);
+				if (strlen($passed_value) < 1) {
+					register_error(elgg_echo("profile_manager:register_pre_check:missing", array($entity->getTitle())));
+					forward(REFERER);
+				}
 			}
 		}
 

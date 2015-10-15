@@ -1,6 +1,6 @@
 <?php
 
-$language = array (
+return array (
 		//'translation_editor' => "Translation Editor",
 	
 		// global
@@ -22,7 +22,7 @@ $language = array (
 		'translation_editor:plugin_list:total' => 'Total des Clés',
 		'translation_editor:plugin_list:exists' => 'Traduit',
 		'translation_editor:plugin_list:custom' => 'Personnalisation',
-		'translation_editor:plugin_list:percentage' => 'Pourcentage de complètement',
+		'translation_editor:plugin_list:percentage' => 'Pourcentage de complétion',
 
 		'translation_editor:plugin_list:merge' => 'Fusionner au fichier langage PHP',
 		'translation_editor:plugin_list:delete' => 'Effacer une traduction',
@@ -31,7 +31,7 @@ $language = array (
 		// search
 		'translation_editor:search' => 'Cherche des résultats',
 		'translation_editor:forms:search:default' => 'Trouver une traduction',
-		'translation_editor:search_results:no_results' => 'Aucune traduction trouvé',
+		'translation_editor:search_results:no_results' => 'Aucune traduction trouvée',
 	
 		// custom key
 		'translation_editor:custom_keys:title' => 'Ajout d\'une clé langage personnalisé',
@@ -74,5 +74,3 @@ $language = array (
 		'translation_editor:action:add_custom_key:key_numeric' => 'Une clé ne peut contenir que des chiffres',
 		'translation_editor:action:add_custom_key:missing_input' => 'Entrée invalide. Merci d\'entrer une clé (anglaise) et une traduction par défault',
 );
-add_translation("fr", $language);
-?>

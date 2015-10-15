@@ -1,6 +1,6 @@
 <?php
 
-$language = array (
+return array (
 	'admin:appearance:user_summary_control' => 'Contrôle de la vue sommaire des utilisateurs',
 	'admin:groups' => 'Groupes',
 	'admin:groups:export' => 'Exporter les groupes',
@@ -266,6 +266,4 @@ Divers types d\'actions liées à ces champs de profil.',
 	'profile_manager:register:hints:passwordagain' => "Veuillez écrire une nouvelle fois votre mot de passe pour le confirmer",
 	
 );
-
-add_translation("fr", $language);
 

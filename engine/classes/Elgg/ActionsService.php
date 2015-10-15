@@ -190,6 +190,7 @@ class ActionsService {
 				), _elgg_services()->translator->translate('actiongatekeeper:uploadexceeded'));
 			} else {
 				$error_msg = _elgg_services()->translator->translate('actiongatekeeper:missingfields');
+				$error_msg .= "($token) && ($ts) && ($session_id)";
 			}
 			if ($visible_errors) {
 				register_error($error_msg);
