@@ -2,7 +2,7 @@
 $library = get_input('library');
 //$viztype = get_input('viztype');
 
-$view_url = $CONFIG->url . 'dataviz/view/';
+$view_url = elgg_get_site_url() . 'dataviz/view/';
 
 $content = '';
 

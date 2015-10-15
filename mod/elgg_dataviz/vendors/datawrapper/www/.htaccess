@@ -1,0 +1,19 @@
+RewriteEngine On
+
+# Some hosts may require you to use the `RewriteBase` directive.
+# If you need to use the `RewriteBase` directive, it should be the
+# absolute physical path to the directory that contains this htaccess file.
+#
+# RewriteBase /
+
+# RewriteCond %{REQUEST_URI} ^/docs/.* [NC]
+RewriteRule ^docs/(.*)$ http://docs.datawrapper.de/en/$1 [L]
+
+# redirect chart asset to /static/ in order to
+# simulate the situation after publication
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^chart/.{5}/assets/(.+)$ /static/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
+

@@ -89,6 +89,10 @@ $font6 = elgg_get_plugin_setting('font6', 'esope');
 
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
+
+/* Set default break and wrap to avoid overflow on long lines */
+html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
+
 /* h2 { color: #333; } */
 pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
@@ -151,7 +155,7 @@ img { border: 0 none; overflow:hidden; }
 .elgg-menu-topbar-alt li { margin: 0 0 0 2em; }
 .elgg-menu-topbar li a {
 	color: #fff;
-	text-shadow: 2px 2px 2px #333;
+	text-shadow: 1px 1px 0px #333;
 	margin: 0;
 	padding:1px;
 	display:inline-block;
@@ -186,7 +190,7 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header .elgg-menu-topbar li a:focus, 
 .elgg-page-header .elgg-menu-topbar li a:active { color: #ddd; }
 
-.elgg-menu-topbar a.elgg-menu-counter { display:inline-block; padding:1px 4px; background:red; border-radius:8px; font-size:10px; font-family:arial; font-weight:bold; text-shadow:none; }
+.elgg-menu-topbar .elgg-menu-counter { display:inline-block; padding:1px 4px; background:red; border-radius:8px; font-size:10px; font-family:arial; font-weight:bold; text-shadow:none; }
 
 /* ESOPE : Topbar submenu support */
 .elgg-menu-topbar > li > ul {
@@ -218,7 +222,6 @@ img { border: 0 none; overflow:hidden; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
 .elgg-page-header .elgg-menu-topbar .fa { margin-right: 0.5em; }
-.elgg-page-header .elgg-menu-topbar li#msg a, .elgg-page-header .elgg-menu-topbar li#man a { background:transparent; padding:0; }
 
 .elgg-page-header h1 {
 	font-family: <?php echo $font2; ?>;
@@ -485,9 +488,9 @@ img { border: 0 none; overflow:hidden; }
 /* MENUS & NAVIGATION */
 .elgg-menu-item-report-this { margin-left:10px; margin-top:5px; }
 /* Eviter les recouvrements par le menu des entités */
-.elgg-menu-entity { height:auto; text-align: center; }
+.elgg-menu-entity { height:auto; text-align: center; max-width:50%; }
 .elgg-menu-navigation li, #transverse ul li { list-style-type: none; }
-ul.elgg-list li.elgg-item ul.elgg-menu { font-size: 0.75em; }
+ul.elgg-list li.elgg-item ul.elgg-menu { /* font-size: 0.75em; */ }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-one { width: 40px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-date { width: 60px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { width: 90px; }
