@@ -8,5 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Gaufrette' => array($vendorDir . '/knplabs/gaufrette/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
-    '' => array($baseDir . '/engine/classes', $baseDir . '/engine/tests/phpunit'),
+    '' => array($baseDir . '/engine/classes'),
 );

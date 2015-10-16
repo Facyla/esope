@@ -46,7 +46,7 @@ Cette version est en cours de développement et s'appuie sur Elgg 1.9.7.
 
 
 ### Conception et maintenance
-* Florian DANIEL aka Facyla / ITEMS International
+* Florian DANIEL aka Facyla
 
 
 ### Principaux contributeurs
@@ -85,6 +85,10 @@ Cette version est en cours de développement et s'appuie sur Elgg 1.9.7.
 6. Si vous souhaitez modifier l'apparence ou les foncitonnalité au-delà des possibilités proposées par ESOPE, créez un plugin de thème (par ex. theme_montheme) et placez-le en toute fin de liste, après "Acc'Essonne".
 
 Note : Si vous n'avez accès qu'à la racine web (par ex. sur un hébergement mutualisé), vous pouvez créer le dossier "data" dans ce répertoire et ajouter dans data/ un fichier .htaccess avec pour contenu : deny from all
+
+Note développeurs : ESOPE est packagé en utilisant Composer.
+- Plugins utilisant Composer : find ./mod/ -maxdepth 2 -name 'composer.json'
+- Commande utilisée : composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 
 ### Sécurisation
