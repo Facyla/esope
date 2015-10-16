@@ -53,6 +53,11 @@ if (elgg_is_logged_in()) {
 	// @TODO : autres indicateurs d'actions admin ?
 	
 }
+
+if (elgg_is_active_plugin('language_selector')) {
+	$language_selector = elgg_view('language_selector/default');
+}
+
 ?>
 
 <div class="is-not-floatable">
@@ -89,15 +94,22 @@ if (elgg_is_logged_in()) {
 			?>
 			<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 			<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
-			
+			<?php
+			if ($language_selector) {
+				echo '<li class="language-selector">' . $language_selector . '</li>';
+			}
+			?>
 		</ul>
 		<?php
 	} else {
-		/*
-		// drop-down login
-		echo elgg_view('core/account/login_dropdown');
-		*/
-		echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt"><li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('esope:loginregister') . '</a></li></ul>';
+		// @TODO use drop-down login without the button UI (or re-designed)
+		//echo elgg_view('core/account/login_dropdown');
+		echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
+			echo '<li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('esope:loginregister') . '</a></li>';
+			if ($language_selector) {
+				echo '<li class="language-selector">' . $language_selector . '</li>';
+			}
+		echo '</ul>';
 	}
 	?>
 	
