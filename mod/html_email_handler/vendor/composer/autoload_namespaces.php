@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Elgg_Sniffs_' => array($vendorDir . '/coldtrick/sniffs/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
 );
