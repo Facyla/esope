@@ -10,6 +10,7 @@ $content = '';
 $content .= '<h3>' . elgg_echo('elgg_dataviz:libraries') . '</h3>';
 
 $libraries = array(
+	'chartjs' => array(), 
 	'd3' => array(), 
 	'nvd3' => array('pie_chart', 'bar_chart', 'multibar_chart'), 
 	'vega' => array('bar_chart'), 

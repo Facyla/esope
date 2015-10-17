@@ -3,17 +3,16 @@
  * $data : should be a generic data structure, processed here to fit into the dataviz
 */
 
-$data = elgg_extract('data', $vars);
-$dataurl = elgg_extract('dataurl', $vars);
+$js_data = elgg_extract('jsdata', $vars, false); // Ready to use JS data
+$data = elgg_extract('data', $vars); // Normalized data structure
+$dataurl = elgg_extract('dataurl', $vars); // Data source
 $width = elgg_extract('width', $vars, "100%");
 $height = elgg_extract('height', $vars, "400px");
 
 $id = dataviz_id('dataviz_');
 
-
-$js_data = '';
 // $data = array('serie_key' => array(key1' => 'val1', 'key2' => 'val2'));
-if ($data) {
+if (empty($js_data) && $data) {
 	foreach ($data as $serie_key => $serie_data) {
 		$js_data_serie = array();
 		foreach ($serie_data as $key => $val) {
