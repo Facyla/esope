@@ -13,6 +13,7 @@ $id = dataviz_id('dataviz_');
 
 // $data = array('serie_key' => array(key1' => 'val1', 'key2' => 'val2'));
 if (empty($js_data) && $data) {
+	/* @TODO
 	foreach ($data as $serie_key => $serie_data) {
 		$js_data_serie = array();
 		foreach ($serie_data as $key => $val) {
@@ -24,14 +25,15 @@ if (empty($js_data) && $data) {
 			}';
 	}
 	$js_data = '[' . implode(', ', $js_data) . ']';
+	*/
 } else {
 	$js_data = '[
-			{value: 1, label: "One"},
-			{value: 2, label: "Two"},
-			{value: 3, label: "Three"},
-			{value: 4, label: "Four"},
-			{value: 5, label: "Five"}
-		]';
+		{value: 1, label: "One"},
+		{value: 2, label: "Two"},
+		{value: 3, label: "Three"},
+		{value: 4, label: "Four"},
+		{value: 5, label: "Five"}
+	]';
 }
 
 $content = '';

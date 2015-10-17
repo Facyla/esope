@@ -14,6 +14,7 @@ $id = dataviz_id('dataviz_');
 
 // $data = array('serie_key' => array(key1' => 'val1', 'key2' => 'val2'));
 if (empty($js_data) && $data) {
+	/*
 	foreach ($data as $serie_key => $serie_data) {
 		$js_data_serie = array();
 		foreach ($serie_data as $key => $val) {
@@ -25,22 +26,10 @@ if (empty($js_data) && $data) {
 			}';
 	}
 	$js_data = '[' . implode(', ', $js_data) . ']';
-}
-
-$content = '';
-$content .= '<canvas id="' . $dataviz_id . '" height="' . $height . '" width="' . $width . '"></canvas>';
-?>
-
-
-		<div style="width:30%">
-			<canvas id="canvas" height="450" width="450"></canvas>
-		</div>
-
-
-<script>
-var radarChartData = {
-	labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-	datasets: [
+	*/
+} else {
+	$js_label = '["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"]';
+	$js_data = '[
 		{
 			label: "My First dataset",
 			fillColor: "rgba(220,220,220,0.2)",
@@ -61,14 +50,29 @@ var radarChartData = {
 			pointHighlightStroke: "rgba(151,187,205,1)",
 			data: [28,48,40,19,96,27,100]
 		}
-	]
+	]';
+}
+
+$content = '';
+$content .= '<canvas id="' . $dataviz_id . '" height="' . $height . '" width="' . $width . '"></canvas>';
+/*
+		<div style="width:30%">
+			<canvas id="canvas" height="450" width="450"></canvas>
+		</div>
+*/
+?>
+
+
+<script>
+var radarChartData = {
+	labels: <?php echo $js_label; ?>,
+	datasets: <?php echo $js_data; ?>
 };
 
 window.onload = function(){
-	window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
+	window.myRadar = new Chart(document.getElementById("<?php echo $dataviz_id; ?>").getContext("2d")).Radar(radarChartData, {
 		responsive: true
 	});
 }
-
 </script>
 
