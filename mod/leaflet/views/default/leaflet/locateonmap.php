@@ -2,16 +2,6 @@
 /* Display & update user location on map */
 ?>
 <script type="text/javascript">
-// Location found alert
-var usermarker;
-var radius;
-var userradius;
-var centeredmap = 0;
-if (!username) var username = '';
-
-// Creates a red marker with the coffee icon
-var ownMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'crosshairs', markerColor: 'red' });
-
 function onLocationFound(e) {
 	$("#location-error").hide();
 	radius = e.accuracy / 2;
@@ -35,23 +25,28 @@ function onLocationError(e) {
 	$("#location-error").show();
 }
 
-// Actions on location detection/loss
-map.on('locationfound', onLocationFound);
-map.on('locationerror', onLocationError);
+var usermarker, ownMarker, radius, userradius, centeredmap, username;
+require(['leaflet', 'leaflet.awesomemarkers'], function(){
+	// Location found alert
+	centeredmap = 0;
+	if (!username) username = '';
 
-// Launch user location
-map.locate({setView: false, watch:true, enableHighAccuracy:true, maxZoom: Infinity, maximumAge: 1000});
-</script>
+	// Creates a red marker with the coffee icon
+	ownMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'crosshairs', markerColor: 'red' });
+	
+	// Actions on location detection/loss
+	map.on('locationfound', onLocationFound);
+	map.on('locationerror', onLocationError);
 
-<div id="location-error"><?php echo elgg_echo('leaflet:locationerror'); ?></div>
-<div id="centermap"><a href="#" class="centermap-toggle" title="<?php echo elgg_echo('leaflet:centermap'); ?>"><i class="fa fa-crosshairs"></i></a></div>
-
-
-<script type="text/javascript">
-jQuery(document).ready(function(e) {
+	// Launch user location
+	map.locate({setView: false, watch:true, enableHighAccuracy:true, maxZoom: Infinity, maximumAge: 1000});
+	
 	$(".centermap-toggle").click(function() {
 		map.fitBounds(bounds, {padding: [20,20]});
 	});
 });
 </script>
+
+<div id="location-error"><?php echo elgg_echo('leaflet:locationerror'); ?></div>
+<div id="centermap"><a href="#" class="centermap-toggle" title="<?php echo elgg_echo('leaflet:centermap'); ?>"><i class="fa fa-crosshairs"></i></a></div>
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Wrapper page : contains not much
+ * Wrapper page : contains basic sample map
  * 
  * @package ElggLeaflet
- * @author Facyla ~ Florian DANIEL
- * @copyright Datawyz 2014
- * @link http://datawyz.com/
+ * @author Florian DANIEL aka Facyla
+ * @copyright Florian DANIEL 2014-2015
+ * @link http://id.facyla.fr/
  */
 
 /* Notes :
@@ -33,6 +33,7 @@ $content .= elgg_view('leaflet/locateonmap');
 
 //$content .= elgg_view('leaflet/membersonmap');
 $all_members_map = leaflet_get_cached_data('all_members_map', 86400);
+//$all_members_map = false; // Debug : skip cache
 if (!$all_members_map) {
 	// @TODO display warning message with no map, and a message to reload in a few minutes ?
 	$all_members_map = elgg_view('leaflet/data/all_members_map');

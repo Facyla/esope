@@ -21,6 +21,7 @@
 */
 
 $title = elgg_echo('leaflet:world');
+$content = '';
 
 $guid = get_input('id', false);
 
@@ -28,12 +29,12 @@ $guid = get_input('id', false);
 // Add cache manifest without bothering dynamic pages
 //$body = '<iframe src="' . elgg_get_site_url() . 'appcache" style="width:0; height:0; position:absolute; left:-1000px;"></iframe>';
 
-$body .= '<div id="map"></div>
-	
+$content .= '
 	<script type="text/javascript">
-		
+	var map, cartodata, membersData;
+	require([\'leaflet\', \'leaflet.providers\', \'leaflet.awesomemarkers\'], function(){
 		// Base map
-		var map = L.map(\'map\');
+		map = L.map(\'map\');
 		
 		// Tile layer
 		L.tileLayer(\'http://{s}.tile.cloudmade.com/869bb03572004980b599159bd1195ef0/997/256/{z}/{x}/{y}.png\', {
@@ -86,6 +87,10 @@ $body .= '<div id="map"></div>
 		}
 		
 		// Add actual data
+		// @TODO Direct data
+		var cartodata = "";
+		// @TODO GeoJSON stream
+		var membersData = "";
 		/*
 		var cartoLayer = L.geoJson().addTo(map);
 		cartoLayer.addData(cartodata);
@@ -129,10 +134,16 @@ $body .= '<div id="map"></div>
 		}
 		map.on(\'click\', onMapClick);
 		
+	});
 	</script>
+	
+	<div id="map"></div>
 ';
 
 
-echo elgg_view('pageshell', array('head' => $head, 'body' => $body));
+//echo elgg_view('pageshell', array('head' => $head, 'body' => $body));
+$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
+// Compose page content
+echo elgg_view_page($title, $body);
 

@@ -302,7 +302,7 @@ a.elgg-widget-collapsed:before {
 }
 
 /* Contenu des modules */
-.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; position: absolute; top: 0; right: 0; }
+.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; /* position: absolute; top: 0; right: 0; */ }
 .elgg-page-body div.elgg-module ul li { padding-left: 0; float: none; right: initial; left: inherit; margin-left: 0em; }
 
 .elgg-page-body div.elgg-module .elgg-head ul li a { float: none; margin:0; right: initial; }
@@ -362,7 +362,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 .elgg-widget-instance-event_calendar p { font-size: 1.3em; }
 
 /* Boutons des widgets */
-.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
+.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin:0; padding:2px 4px; color: <?php echo $color14; ?>; }
 
 /* Widgets activité des groupes */
 .elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites,
