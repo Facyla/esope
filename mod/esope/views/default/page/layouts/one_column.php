@@ -20,7 +20,7 @@ if (isset($vars['class'])) {
 
 // ESOPE : Add context class, for page differenciation
 global $CONFIG;
-foreach ($CONFIG->context as $context) {
+if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 	$class .= ' elgg-context-' . $context;
 }
 ?>

@@ -3,7 +3,7 @@
 	<name>Webshim</name>
 	<id>webshim</id>
 	<author>ColdTrick IT Solutions</author>
-	<version>1.0</version>
+	<version>1.1</version>
 	<description>Reliably use HTML5 features across browsers, even if native support is lacking. </description>
 	<website>http://www.coldtrick.com/</website>
 	<repository>https://github.com/ColdTrick/webshim</repository>

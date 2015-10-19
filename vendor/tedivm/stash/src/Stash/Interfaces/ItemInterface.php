@@ -30,7 +30,7 @@ interface ItemInterface
      * @param array       $key
      * @param string|null $namespace
      */
-    public function setKey($key, $namespace = null);
+    public function setKey(array $key, $namespace = null);
 
     /**
      * This disables any IO operations by this object, effectively preventing
@@ -114,7 +114,7 @@ interface ItemInterface
     public function isDisabled();
 
     /**
-     * Return true if caching is disabled
+     * Sets a PSR\Logger style logging client to enable the tracking of errors.
      *
      * @param  \PSR\Log\LoggerInterface $logger
      * @return bool

@@ -2,9 +2,8 @@
 /**
  * French strings
  */
-global $CONFIG;
 
-$fr = array(
+return array(
 	'elgg_dataviz' => "Data-visualisation",
 	'elgg_dataviz:title' => "Data-visualisation",
 	'elgg_dataviz:index' => "Accueil des data-visualisations",
@@ -40,5 +39,4 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);
 

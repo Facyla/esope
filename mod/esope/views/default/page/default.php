@@ -45,28 +45,20 @@ $footer = elgg_view('page/elements/footer', $vars);
 
 $body = <<<__BODY
 <div class="elgg-page elgg-page-default">
+	
 	<div class="elgg-page-messages">
 		$messages
 	</div>
 __BODY;
 
-// ESOPE : display blocks only if they are defined / not empty
-if (elgg_is_logged_in()) {
-	$topbar = elgg_view('page/elements/topbar', $vars);
-	if (!empty($topbar)) {
-		$body .= <<<__BODY
-	<div class="elgg-page-topbar">
-		<div class="elgg-inner">
-			$topbar
-			</div>
-	</div>
-__BODY;
-	}
-}
-if (!empty($header)) {
+// ESOPE : the topbar is part of the header (and does not use its own wrapper)
+$topbar = elgg_view('page/elements/topbar', $vars);
+
+if (!empty($header) || !empty($topbar)) {
 $body .= <<<__BODY
 	<div class="elgg-page-header">
 		<div class="elgg-inner">
+			$topbar
 			$header
 		</div>
 	</div>
@@ -88,9 +80,10 @@ $body .= <<<__BODY
 			$footer
 		</div>
 	</div>
-</div>
 __BODY;
 }
+
+$body .= '</div>';
 
 $body .= elgg_view('page/elements/foot');
 

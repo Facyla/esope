@@ -592,8 +592,10 @@ $font6 = $css['font6'];
 	WIDGET MENU
 *************************************** */
 .elgg-menu-widget > li {
+	/*
 	position: absolute;
 	top: 4px;
+	*/
 	display: inline-block;
 	width: 18px;
 	height: 18px;

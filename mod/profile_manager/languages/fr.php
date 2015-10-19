@@ -1,6 +1,6 @@
 <?php
 
-$language = array (
+return array (
 	'admin:appearance:user_summary_control' => 'Contrôle de la vue sommaire des utilisateurs',
 	'admin:groups' => 'Groupes',
 	'admin:groups:export' => 'Exporter les groupes',
@@ -191,7 +191,7 @@ Divers types d\'actions liées à ces champs de profil.',
 	'profile_manager:datepicker:output:dateformat' => '%a %d %b %Y',
 	'profile_manager:datepicker:input:localisation' => '',
 	'profile_manager:datepicker:input:dateformat_js' => 'mm/dd/yy',
-	'profile_manager:simple_access_control' => 'Choisissez qui peut visiualiser les informations de votre profil',
+	'profile_manager:simple_access_control' => 'Choisissez qui peut visualiser les informations de votre profil',
 	'profile_manager:register_pre_check:missing' => 'Le champ suivant ne peut pas être vide : %s',
 	'profile_manager:register_pre_check:profile_icon:error' => 'Erreur lors de l\'envoi de votre icône de profil (probablement due à la taille du fichier envoyé)',
 	'profile_manager:register_pre_check:profile_icon:nosupportedimage' => 'L\'image de profil envoyée n\'est pas dans l\'un des formats reconnus par le site (jpg, gif, png)',
@@ -266,6 +266,4 @@ Divers types d\'actions liées à ces champs de profil.',
 	'profile_manager:register:hints:passwordagain' => "Veuillez écrire une nouvelle fois votre mot de passe pour le confirmer",
 	
 );
-
-add_translation("fr", $language);
 

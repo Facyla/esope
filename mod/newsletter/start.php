@@ -60,13 +60,16 @@ function newsletter_init() {
 	elgg_register_plugin_hook_handler("usersettings:save", "user", "newsletter_usersettings_save_handler");
 	elgg_register_plugin_hook_handler("register", "user", "newsletter_register_user_handler");
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "newsletter_icon_hook");
+	
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", "newsletter_widget_url_handler");
+	elgg_register_plugin_hook_handler("notification_type_subtype", "tag_tools", "newsletter_tag_tools_notifications");
 	
 	// extend public pages
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'newsletter_public_pages');
 	
 	// register event handlers
 	elgg_register_event_handler("upgrade", "system", "newsletter_upgrade_event_handler");
+	elgg_register_event_handler('upgrade', 'system', array('ColdTrick\Newsletter\Upgrade', 'urlPostfix'));
 	elgg_register_event_handler("create", "member_of_site", "newsletter_join_site_event_handler");
 	
 	// register actions
