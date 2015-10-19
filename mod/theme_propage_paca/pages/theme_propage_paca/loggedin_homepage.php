@@ -67,7 +67,7 @@ $ia = elgg_set_ignore_access(true);
 $newsgroup = get_entity($newsgroup_guid);
 elgg_set_ignore_access($ia);
 if (elgg_instanceof($newsgroup, 'group')) {
-	$center_col .= '<div class="home-static afparh-news">';
+	$center_col .= '<div class="home-static afparh-news propage-home-alt">';
 	$center_col .= '<h3><a href="' . $url . 'blog/group/' . $newsgroup_guid . '/all">' . elgg_echo('theme_propage_paca:news') . $viewall . '</a></h3>';
 	$center_col .= elgg_list_entities(array('type' => 'object', 'subtype' => 'blog', 'limit' => 3, 'container_guid' => $newsgroup_guid, 'full_view' => false, 'pagination' => false));
 	/*
@@ -100,32 +100,32 @@ elgg_pop_context('widgets');
 
 // BLOC DROITE
 // Mon profil + Edit link
-$right_col .= '<div class="home-static">';
+$right_col .= '<div class="home-static propage-home">';
 	$right_col .= '<h3><a href="' . elgg_get_site_url() . 'profile/' . $user->username . '">' . elgg_echo('theme_propage_paca:myprofile') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:display') . '</span></a></h3>';
 	$right_col .= elgg_view('profile_manager/profile_completeness');
 	$right_col .= '<br /><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'profile/' . $user->username . '/edit">' . elgg_echo('theme_propage_paca:profile:edit') . '</a>';
 	$right_col .= '<div class="clearfloat"></div>';
 $right_col .= '</div>';
 // Inter-séquences : Page CMS
-$right_col .= '<div class="home-static">';
+$right_col .= '<div class="home-static propage-home-alt">';
 $right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-rencontres">' . elgg_echo('theme_propage_paca:ateliers') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
 $right_col .= elgg_view('cmspages/view', array('pagetype' => 'accueil-rencontres', 'read_more' => 300));
 $right_col .= '</div>';
 // Prochaines rencontres : Evénements
-$right_col .= '<div class="home-static propage-home">';
+$right_col .= '<div class="home-static propage-home-alt">';
 $right_col .= '<h3><a href="' . elgg_get_site_url() . 'p/accueil-prochaines-rencontres">' . elgg_echo('theme_propage_paca:ateliers:future') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:moreinfo') . '</span></a></h3>';
 // search?q=atelier&entity_subtype=event_calendar&entity_type=object&search_type=entities
 $right_col .= elgg_view('theme_propage_paca/ateliers');
 $right_col .= '</div>';
 // Agenda
-$right_col .= '<div class="home-static">';
+$right_col .= '<div class="home-static propage-home">';
 $right_col .= '<h3><a href="' . elgg_get_site_url() . 'event_calendar/list/' . date('Y-m-d') . '/paged/all">' . elgg_echo('Agenda') . '<span class="esope-more">' . elgg_echo('theme_propage_paca:display') . '</span></a></h3>';
 $right_col .= elgg_view('theme_propage_paca/agenda');
 $right_col .= '</div>';
 // Groupes en Une et connectés
 $index_groups = elgg_get_plugin_setting('index_groups', 'adf_public_platform');
 if (elgg_is_active_plugin('groups') && ($index_groups == 'yes')) {
-	$right_col .= '<div class="home-static">' . elgg_view('adf_platform/sidebar_groups') . '</div>';
+	$right_col .= '<div class="home-static propage-home-alt">' . elgg_view('adf_platform/sidebar_groups') . '</div>';
 }
 // Membres connectés et nouveaux inscrits
 $index_members = elgg_get_plugin_setting('index_members', 'adf_public_platform');
@@ -133,11 +133,11 @@ $index_recent_members = elgg_get_plugin_setting('index_recent_members', 'adf_pub
 if (elgg_is_active_plugin('members')) {
 	if ($index_members == 'yes') {
 		if (!empty($right_col)) $right_col .= '<br />';
-		$right_col .= '<div class="home-static">' . elgg_view('adf_platform/users/online') . '</div>';
+		$right_col .= '<div class="home-static propage-home">' . elgg_view('adf_platform/users/online') . '</div>';
 	}
 	if ($index_recent_members == 'yes') {
 		if (!empty($right_col)) $right_col .= '<br />';
-		$right_col .= '<br /><div class="home-static">' . elgg_view('adf_platform/users/newest') . '</div>';
+		$right_col .= '<br /><div class="home-static propage-home">' . elgg_view('adf_platform/users/newest') . '</div>';
 	}
 }
 
@@ -161,7 +161,7 @@ if ($homesite_index == 'yes') {
 // Composition de la page
 $body .= '<div class="clearfloat"></div>';
 $body .= '<div class="home-static-container" style="width:74%; float:left;">';
-	$body .= '<div class="home-static" style="width:36%; float:left; margin-right:3%;">' . $left_col . '</div>';
+	$body .= '<div class="home-static propage-home-alt" style="width:36%; float:left; margin-right:3%;">' . $left_col . '</div>';
 	$body .= '<div class="home-static-container" style="width:60%; float:left;">' . $center_col . '</div>';
 	$body .= '<div class="clearfloat"></div>';
 	$body .= '<div class="home-static propage-home">' . $activity . '</div>';

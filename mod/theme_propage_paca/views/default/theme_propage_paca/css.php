@@ -43,7 +43,10 @@ section div.module.elgg-module-widget { background:transparent; }
 
 /* Set some homepage styles (colors) */
 .propage-home {}
+/*
 .propage-home h3 { background-color: #474f71; }
+*/
+.propage-home-alt h3 { background-color: #474f71; }
 
 
 
