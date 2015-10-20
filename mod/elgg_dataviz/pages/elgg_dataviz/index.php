@@ -9,8 +9,8 @@
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('dataviz'));
 */
-global $CONFIG;
-$view_url = $CONFIG->url . 'dataviz/view/';
+
+$view_url = elgg_get_site_url() . 'dataviz/view/';
 
 $title = elgg_echo('elgg_dataviz:index');
 
@@ -18,6 +18,7 @@ $content = '';
 
 $content .= '<h3>' . 'Bibliothèques de visualisation' . '</h3>';
 
+$content .= '<p><a href="' . $view_url . 'chartjs" class="elgg-button elgg-button-action">Chart.js</a> a few easy-to-use common charts</p>';
 $content .= '<p><a href="' . $view_url . 'd3" class="elgg-button elgg-button-action">D3</a> generic visualisation library</p>';
 $content .= '<p><a href="' . $view_url . 'nvd3" class="elgg-button elgg-button-action">NVD3</a> reusable charts based on D3. http://nvd3.org/</p>';
 $content .= '<p><a href="' . $view_url . 'vega" class="elgg-button elgg-button-action">Vega</a> visualisation grammar. "Vega provides a higher-level visualization specification language on top of D3". https://github.com/trifacta/vega/wiki/</p>';

@@ -313,6 +313,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 	/**
 	 * re/routes some urls that go through the groups handler
 	 */
+	// Note : checking for "delete" segment
 	function esope_subgroups_groups_router($hook, $type, $return, $params) {
 		AU\SubGroups\breadcrumb_override($return);
 		
@@ -320,7 +321,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($return['segments'][0] == 'subgroups') {
 			elgg_load_library('elgg:groups');
 			$group = get_entity($return['segments'][2]);
-			// ESOPE : also check for delete
+			// ESOPE : also check for delete segment
 			if (!elgg_instanceof($group, 'group') || (($group->subgroups_enable == 'no') && ($return['segments'][1] != "delete"))) {
 				return $return;
 			}
@@ -356,10 +357,16 @@ if (elgg_is_active_plugin('au_subgroups')) {
 					break;
 				
 				case 'list':
-					// ESOPE : rewrite list page
-					if (include(elgg_get_plugins_path() . 'esope/pages/au_subgroups/list.php')) {
-						return true;
-					}
+				$return = array(
+					'identifier' => 'au_subgroups',
+					'handler' => 'au_subgroups',
+					'segments' => array(
+						'list',
+						$group->guid
+					)
+				);
+				
+				return $return;
 				break;
 			}
 		}

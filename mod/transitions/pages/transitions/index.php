@@ -58,7 +58,7 @@ $quickform .= '</div>';
 // RECHERCHE ET RESULTATS
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
-	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+	$content .= '<form method="GET" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
 		
 		$content .= '<p>';
 		// Fulltext search

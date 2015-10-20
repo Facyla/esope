@@ -10,8 +10,8 @@ $content = '';
 $content .= '<h3>' . elgg_echo('elgg_dataviz:libraries') . '</h3>';
 
 $libraries = array(
-	'chartjs' => array(), 
-	'd3' => array(), 
+	'chartjs' => array('bar', 'doughnut', 'line', 'line-customTooltips', 'pie', 'pie-customTooltips', 'polar-area', 'radar'), 
+	'd3' => array('d3js_cfl', 'd3js_bubble', 'd3js_circle', 'd3js_scatter', 'd3js_line', 'd3js_sdg', 'd3js_radar', 'd3js_pie'), 
 	'nvd3' => array('pie_chart', 'bar_chart', 'multibar_chart'), 
 	'vega' => array('bar_chart'), 
 	'dygraphs' => array('line_chart'), 
