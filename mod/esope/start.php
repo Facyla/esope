@@ -708,7 +708,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
-		$children = au_subgroups_get_subgroups($group, 0);
+		$children = AU\SubGroups\get_subgroups($group, 0);
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
 			if ($member_only) {
