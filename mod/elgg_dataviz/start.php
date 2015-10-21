@@ -119,9 +119,15 @@ function elgg_dataviz_page_handler($page) {
  */
 function dataviz_id($prefix = 'dataviz_') {
 	if (function_exists('esope_unique_id')) {
-		$id = esope_unique_id('dataviz_');
+		$id = esope_unique_id($prefix);
 	} else {
-		$id = esope_unique_id('dataviz_nvd3');
+		global $dataviz_unique_id;
+		if (!isset($dataviz_unique_id)) {
+			$dataviz_unique_id = 1;
+		} else {
+			$dataviz_unique_id++;
+		}
+		$id = $prefix . $dataviz_unique_id;
 	}
 	$id = elgg_get_friendly_title($id);
 	// Ensure valid id for JS

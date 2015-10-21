@@ -11,7 +11,8 @@
 ?>
 <script type="text/javascript">
 var onlineUsersMarker, onlineUsersMarkers;
-require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+//require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
 
 	// Create a custom marker for users
 	onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });

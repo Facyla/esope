@@ -3,7 +3,8 @@
 ?>
 
 <script type="text/javascript">
-require(['leaflet'], function(){
+//require(['leaflet'], function(){
+require(['leaflet', 'leaflet_basemap'], function(){
 	// ACTIONS
 	// Click on map interception - popup version - display only if no active popup
 	var popupToggle = 0;

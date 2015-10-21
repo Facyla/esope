@@ -418,3 +418,25 @@ function leaflet_get_cached_data($key, $cache_validity = 3600) {
 }
 
 
+/* Generate a unique id to ensure JS unique functions
+ * Note that the id must contain valid id for both CSS and JS, ie. no '-'
+ */
+function leaflet_id($prefix = 'leaflet_') {
+	if (function_exists('esope_unique_id')) {
+		$id = esope_unique_id($prefix);
+	} else {
+		global $leaflet_unique_id;
+		if (!isset($leaflet_unique_id)) {
+			$leaflet_unique_id = 1;
+		} else {
+			$leaflet_unique_id++;
+		}
+		$id = $prefix . $leaflet_unique_id;
+	}
+	$id = elgg_get_friendly_title($id);
+	// Ensure valid id for JS
+	$id = str_replace('-', '_', $id);
+	return $id;
+}
+
+

@@ -26,7 +26,8 @@ function onLocationError(e) {
 }
 
 var usermarker, ownMarker, radius, userradius, centeredmap, username;
-require(['leaflet', 'leaflet.awesomemarkers'], function(){
+//require(['leaflet', 'leaflet.awesomemarkers'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers'], function(){
 	// Location found alert
 	centeredmap = 0;
 	if (!username) username = '';

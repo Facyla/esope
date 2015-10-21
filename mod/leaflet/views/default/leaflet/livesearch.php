@@ -27,7 +27,8 @@ if (elgg_is_logged_in()) {
 ?>
 <script type="text/javascript">
 var onlineUsersMarker, onlineUsersMarkers;
-require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+//require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
 	// Save own position
 	var lastupdate;
 	var timestamp = Math.round(new Date().getTime() / 1000);
