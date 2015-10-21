@@ -48,11 +48,6 @@ $content .= '<div style="width:50px; height:50px; margin-top: 50px; text-align: 
 ?>
 
 <style>
-#canvas-holder {
-	width: 100%;
-	margin-top: 50px;
-	text-align: center;
-}
 #<?php echo $id; ?>-tooltip {
 	opacity: 1;
 	position: absolute;
@@ -105,53 +100,52 @@ $content .= '<div style="width:50px; height:50px; margin-top: 50px; text-align: 
 }
 </style>
 
-
 <script>
-var chart_options_customTooltips = function(tooltip) {
-	// Tooltip Element
-	var tooltipEl = $('#<?php echo $id; ?>-tooltip');
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var chart_options_customTooltips = function(tooltip) {
+		// Tooltip Element
+		var tooltipEl = $('#<?php echo $id; ?>-tooltip');
 
-	// Hide if no tooltip
-	if (!tooltip) {
-		tooltipEl.css({opacity: 0});
-		return;
-	}
+		// Hide if no tooltip
+		if (!tooltip) {
+			tooltipEl.css({opacity: 0});
+			return;
+		}
 
-	// Set caret Position
-	tooltipEl.removeClass('above below');
-	tooltipEl.addClass(tooltip.yAlign);
+		// Set caret Position
+		tooltipEl.removeClass('above below');
+		tooltipEl.addClass(tooltip.yAlign);
 
-	// Set Text
-	tooltipEl.html(tooltip.text);
+		// Set Text
+		tooltipEl.html(tooltip.text);
 
-	// Find Y Location on page
-	var top;
-	if (tooltip.yAlign == 'above') {
-		top = tooltip.y - tooltip.caretHeight - tooltip.caretPadding;
-	} else {
-		top = tooltip.y + tooltip.caretHeight + tooltip.caretPadding;
-	}
+		// Find Y Location on page
+		var top;
+		if (tooltip.yAlign == 'above') {
+			top = tooltip.y - tooltip.caretHeight - tooltip.caretPadding;
+		} else {
+			top = tooltip.y + tooltip.caretHeight + tooltip.caretPadding;
+		}
 
-	// Display, position, and set styles for font
-	tooltipEl.css({
-		opacity: 1,
-		left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-		top: tooltip.chart.canvas.offsetTop + top + 'px',
-		fontFamily: tooltip.fontFamily,
-		fontSize: tooltip.fontSize,
-		fontStyle: tooltip.fontStyle,
-	});
-};
+		// Display, position, and set styles for font
+		tooltipEl.css({
+			opacity: 1,
+			left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+			top: tooltip.chart.canvas.offsetTop + top + 'px',
+			fontFamily: tooltip.fontFamily,
+			fontSize: tooltip.fontSize,
+			fontStyle: tooltip.fontStyle,
+		});
+	};
 
-var pieData = <?php echo $js_data; ?>;
+	var pieData = <?php echo $js_data; ?>;
 
-window.onload = function() {
 	var ctx1 = document.getElementById("<?php echo $id; ?>1").getContext("2d");
-	window.myPie = new Chart(ctx1).Pie(pieData, {customTooltips: chart_options_customTooltips});
+	new Chart(ctx1).Pie(pieData, {customTooltips: chart_options_customTooltips});
 
 	var ctx2 = document.getElementById("<?php echo $id; ?>2").getContext("2d");
-	window.myPie = new Chart(ctx2).Pie(pieData, {customTooltips: chart_options_customTooltips});
-};
+	new Chart(ctx2).Pie(pieData, {customTooltips: chart_options_customTooltips});
+});
 </script>
 
 <?php echo $content; ?>

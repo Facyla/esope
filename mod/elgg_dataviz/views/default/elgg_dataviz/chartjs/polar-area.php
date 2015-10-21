@@ -44,14 +44,14 @@ $content .= '<div style="width:' . $width . '; height="' . $height . ';">
 ?>
 
 <script>
-var polarData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var polarData = <?php echo $js_data; ?>;
 
-window.onload = function(){
 	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
-	window.myPolarArea = new Chart(ctx).PolarArea(polarData, {
+	new Chart(ctx).PolarArea(polarData, {
 		responsive:true
 	});
-};
+});
 </script>
 
 <?php echo $content; ?>

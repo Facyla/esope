@@ -60,12 +60,12 @@ $content .= '<div style="width:' . $width . '; height="' . $height . ';">
 ?>
 
 <script>
-var doughnutData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var doughnutData = <?php echo $js_data; ?>;
 
-window.onload = function(){
 	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
-	window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-};
+	new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+});
 </script>
 
 <?php echo $content; ?>

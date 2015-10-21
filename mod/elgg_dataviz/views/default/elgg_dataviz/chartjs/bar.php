@@ -84,17 +84,17 @@ $content .= '<div style="width:' . $width . '; height="' . $height . ';">
 ?>
 
 <script>
-// Used only for demo
-var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+require(["elgg.dataviz.chartjs"], function(d3) {
+	// Used only for demo
+	var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
 
-var barChartData = <?php echo $js_data; ?>;
+	var barChartData = <?php echo $js_data; ?>;
 
-window.onload = function(){
 	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
-	window.myBar = new Chart(ctx).Bar(barChartData, {
+	new Chart(ctx).Bar(barChartData, {
 		responsive : true
 	});
-}
+});
 </script>
 
 <?php echo $content; ?>

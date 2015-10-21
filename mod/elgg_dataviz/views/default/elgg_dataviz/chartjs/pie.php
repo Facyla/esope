@@ -44,12 +44,12 @@ $content .= '<div style="width:' . $width . '; height="' . $height . ';">
 ?>
 
 <script>
-var pieData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var pieData = <?php echo $js_data; ?>;
 
-window.onload = function(){
 	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
-	window.myPie = new Chart(ctx).Pie(pieData);
-};
+	new Chart(ctx).Pie(pieData);
+});
 </script>
 
 <?php echo $content; ?>

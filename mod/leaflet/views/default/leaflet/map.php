@@ -104,7 +104,7 @@ if ($lat && $long) {
 		$description = json_encode($description);
 	
 		echo "
-			marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
+			var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
 			marker.bindPopup($description);
 			mapMarkers.addLayer(marker);
 			bounds.extend(marker.getLatLng());

@@ -63,13 +63,13 @@ $content .= '<div style="width:' . $width . '; height="' . $height . ';">
 ?>
 
 <script>
-var radarChartData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var radarChartData = <?php echo $js_data; ?>;
 
-window.onload = function(){
-	window.myRadar = new Chart(document.getElementById("<?php echo $id; ?>").getContext("2d")).Radar(radarChartData, {
+	new Chart(document.getElementById("<?php echo $id; ?>").getContext("2d")).Radar(radarChartData, {
 		responsive: true
 	});
-}
+});
 </script>
 
 <?php echo $content; ?>

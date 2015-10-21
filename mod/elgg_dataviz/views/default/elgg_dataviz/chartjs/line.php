@@ -56,25 +56,23 @@ if (empty($js_data) && $data) {
 }
 
 $content = '';
-$content .= '
-	<div style="width:' . $width . '; height="' . $height . ';">
+$content .= '<div style="width:' . $width . '; height="' . $height . ';">
 		<canvas id="' . $id . '" style="width:' . $width . '; height="' . $height . ';"></canvas>
-	</div>
-	';
+	</div>';
 ?>
 
 <script>
-var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-var lineChartData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+	var lineChartData = <?php echo $js_data; ?>;
 
-window.onload = function(){
 	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
-	window.myLine = new Chart(ctx).Line(lineChartData, {
+	new Chart(ctx).Line(lineChartData, {
 		//showScale: false, // Hide axis
 		//pointDot : false, // Hide dots
 		responsive: true
 	});
-}
+});
 </script>
 
 <?php echo $content; ?>

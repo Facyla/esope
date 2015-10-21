@@ -56,15 +56,13 @@ if (empty($js_data) && $data) {
 }
 
 $content = '';
-$content .= '
-	<div style="width:' . $width . '; height:50px;">
+$content .= '<div style="width:' . $width . '; height:50px;">
 		<canvas id="' . $id . '1" style="width:' . $width . '; height:50px;" />
 	</div>
 	<div style="width:' . $width . '; height="' . $height . ';">
 		<canvas id="' . $id . '2" style="width:' . $width . '; height="' . $height . ';" />
 	</div>
-	<div id="' . $id . '-tooltip"></div>
-	';
+	<div id="' . $id . '-tooltip"></div>';
 ?>
 
 <style>
@@ -89,48 +87,48 @@ $content .= '
 </style>
 
 <script>
-var chart_options_pointHitDetectionRadius = 1;
-var chart_options_customTooltips = function(tooltip) {
-	var tooltipEl = $('#<?php echo $id; ?>-tooltip');
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var chart_options_pointHitDetectionRadius = 1;
+	var chart_options_customTooltips = function(tooltip) {
+		var tooltipEl = $('#<?php echo $id; ?>-tooltip');
 
-	if (!tooltip) {
-		tooltipEl.css({opacity: 0});
-		return;
-	}
+		if (!tooltip) {
+			tooltipEl.css({opacity: 0});
+			return;
+		}
 
-	tooltipEl.removeClass('above below');
-	tooltipEl.addClass(tooltip.yAlign);
+		tooltipEl.removeClass('above below');
+		tooltipEl.addClass(tooltip.yAlign);
 
-	var innerHtml = '';
-	for (var i = tooltip.labels.length - 1; i >= 0; i--) {
-		innerHtml += [
-			'<div class="<?php echo $id; ?>-tooltip-section">',
-			'	<span class="<?php echo $id; ?>-tooltip-key" style="background-color:' + tooltip.legendColors[i].fill + '"></span>',
-			'	<span class="<?php echo $id; ?>-tooltip-value">' + tooltip.labels[i] + '</span>',
-			'</div>'
-		].join('');
-	}
-	tooltipEl.html(innerHtml);
+		var innerHtml = '';
+		for (var i = tooltip.labels.length - 1; i >= 0; i--) {
+			innerHtml += [
+				'<div class="<?php echo $id; ?>-tooltip-section">',
+				'	<span class="<?php echo $id; ?>-tooltip-key" style="background-color:' + tooltip.legendColors[i].fill + '"></span>',
+				'	<span class="<?php echo $id; ?>-tooltip-value">' + tooltip.labels[i] + '</span>',
+				'</div>'
+			].join('');
+		}
+		tooltipEl.html(innerHtml);
 
-	tooltipEl.css({
-		opacity: 1,
-		left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-		top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
-		fontFamily: tooltip.fontFamily,
-		fontSize: tooltip.fontSize,
-		fontStyle: tooltip.fontStyle,
-	});
-};
+		tooltipEl.css({
+			opacity: 1,
+			left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+			top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
+			fontFamily: tooltip.fontFamily,
+			fontSize: tooltip.fontSize,
+			fontStyle: tooltip.fontStyle,
+		});
+	};
 
-var randomScalingFactor = function() {
-	return Math.round(Math.random() * 100);
-};
-var lineChartData = <?php echo $js_data; ?>;
+	var randomScalingFactor = function() {
+		return Math.round(Math.random() * 100);
+	};
+	var lineChartData = <?php echo $js_data; ?>;
 
-window.onload = function() {
 	// First graph : very small, no scale
 	var ctx1 = document.getElementById("<?php echo $id; ?>1").getContext("2d");
-	window.myLine = new Chart(ctx1).Line(lineChartData, {
+	new Chart(ctx1).Line(lineChartData, {
 		showScale: false,
 		pointDot : false,
 		responsive: true,
@@ -140,12 +138,12 @@ window.onload = function() {
 
 	// Second graph : regular size
 	var ctx2 = document.getElementById("<?php echo $id; ?>2").getContext("2d");
-	window.myLine = new Chart(ctx2).Line(lineChartData, {
+	new Chart(ctx2).Line(lineChartData, {
 		responsive: true,
 		pointHitDetectionRadius: chart_options_pointHitDetectionRadius,
 		customTooltips: chart_options_customTooltips
 	});
-};
+});
 </script>
 
 <?php echo $content; ?>
