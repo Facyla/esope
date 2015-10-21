@@ -597,9 +597,12 @@ $font6 = $css['font6'];
 	top: 4px;
 	*/
 	display: inline-block;
+	/*
 	width: 18px;
 	height: 18px;
 	padding: 2px 2px 0 0;
+	*/
+	padding: 0;
 }
 
 .elgg-menu-widget > .elgg-menu-item-collapse {
