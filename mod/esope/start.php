@@ -28,9 +28,11 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome
-	elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
-	elgg_load_css('fontawesome');
+	// Font Awesome - moved to external dependancy
+	if (!elgg_is_active_plugin('fontawesome')) {
+		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
+		elgg_load_css('fontawesome');
+	}
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');

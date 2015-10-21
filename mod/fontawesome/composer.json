@@ -1,0 +1,16 @@
+{
+	"name": "coldtrick/fontawesome",
+	"description": "Replaces the default Elgg icons with the Font Awesome icons",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "icon", "theme"],
+	"license": "GPL-2.0",
+	"homepage": "https://community.elgg.org/plugins/1894193",
+	"support": {
+		"source": "https://github.com/ColdTrick/fontawesome",
+		"issues": "https://github.com/ColdTrick/fontawesome/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8",
+		"FortAwesome/Font-Awesome": "^4.3"
+	}
+}

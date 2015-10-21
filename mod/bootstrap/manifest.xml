@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Twitter bootstrap</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.1</version>
+	<blurb>Adds Twitter Bootstrap to Elgg</blurb>
+	<description>Use this plugin if you want to use Twitter Bootstrap, but do not wish to install a specific theme. It is meant for theme developpers who wish to use some (or all) of Twitter Bootstrap elements, without messing with their own theme.</description>
+	<website>http://id.facyla.fr/</website>
+	<copyright>(C) Florian DANIEL 2015</copyright>
+	<license>GNU Public License version 2</license>
+
+	<requires>
+		<type>elgg_release</type>
+		<version>1.11.4</version>
+	</requires>
+	
+	<category>theme</category>
+	<category>library</category>
+	
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
+
+<!--
+HISTORY
+
+0.1 : 20151021 - Initial version
+	- based on Bootstrap 
+
+//-->
+
