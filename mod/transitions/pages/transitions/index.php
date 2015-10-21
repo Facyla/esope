@@ -55,6 +55,23 @@ $quickform .= '</div>';
 */
 
 
+/* ADMIN & DEV : use to update project transitions to new format
+$ents = elgg_get_entities(array('type' => 'object', 'subtype' => 'transitions', 'limit' => 0));
+foreach($ents as $ent) {
+	if ($ent->category == 'project') {
+		if (!empty($ent->start_date) && empty($ent->start)) {
+			$ent->start = date('m/Y', $ent->start_date);
+			$ent->start_date = null;
+		}
+		if (!empty($ent->end_date) && empty($ent->end)) {
+			$ent->end = date('m/Y', $ent->end_date);
+			$ent->end_date = null;
+		}
+	}
+}
+*/
+
+
 // RECHERCHE ET RESULTATS
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
@@ -155,7 +172,7 @@ $content .= '<div class="transitions-index-search">';
 	}
 	
 
-	// Perfom search
+	// Perform search
 	if (isset($search_options['metadata_name_value_pairs'])) {
 		$count = elgg_get_entities_from_metadata($search_options);
 		$catalogue = elgg_list_entities_from_metadata($search_options);

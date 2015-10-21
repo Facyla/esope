@@ -97,14 +97,16 @@ if (!empty($category)) {
 	if (in_array($category, array('actor'))) {
 		$values['actor_type'] = '';
 	}
-	// Dates
-	if (in_array($category, array('project', 'event'))) {
-		$values['start_date'] = '';
-		$values['end_date'] = '';
+	// Text dates
+	if (in_array($category, array('project'))) {
+		$values['start'] = '';
+		$values['end'] = '';
 	}
-	// Times
+	// Dates and Times
 	if (in_array($category, array('event'))) {
+		$values['start_date'] = '';
 		$values['start_time'] = '';
+		$values['end_date'] = '';
 		$values['end_time'] = '';
 	}
 	// Challenge => news feed (to be displayed)
@@ -190,39 +192,40 @@ if (!empty($values['territory']) && ($values['territory'] != $transitions->terri
 
 // Adjust dates and optional time
 // Note : mktime($hour, $minute, $second, $month, $day, $year);
-if (in_array($category, array('project', 'event'))) {
-	// Optional times : set to exact time
-	if (in_array($category, array('event'))) {
-		$year = date('Y', $values['start_date']);
-		$month = date('n', $values['start_date']);
-		$day = date('j', $values['start_date']);
-		$hour = floor($values['start_time']/60);
-		$minute = ($values['start_time'] - 60*$hour);
-		$values['start_date'] = mktime($hour, $minute, 0, $month, $day, $year);
-		//echo "{$values['start_date']} à {$values['start_time']} => $day/$month/$year à $hour:$minute<br />";
-		unset($values['start_time']);
-		
-		$year = date('Y', $values['end_date']);
-		$month = date('n', $values['end_date']);
-		$day = date('j', $values['end_date']);
-		$hour = floor($values['end_time']/60);
-		$minute = ($values['end_time'] - 60*$hour);
-		$values['end_date'] = mktime($hour, $minute, 0, $month, $day, $year);
-		//echo "{$values['end_date']} à {$values['end_time']} => $day/$month/$year à $hour:$minute<br />";
-		unset($values['end_time']);
-	} else {
-		// Dates : set full days from 00:00 to 23:59
-		$year = date('Y', $values['start_date']);
-		$month = date('n', $values['start_date']);
-		$day = date('j', $values['start_date']);
-		$values['start_date'] = mktime(0, 0, 0, $month, $day, $year);
-		
-		$year = date('Y', $values['end_date']);
-		$month = date('n', $values['end_date']);
-		$day = date('j', $values['end_date']);
-		$values['end_date'] = mktime(23, 59, 0, $month, $day, $year);
-	}
+// Optional times : set to exact time
+if (in_array($category, array('event'))) {
+	$year = date('Y', $values['start_date']);
+	$month = date('n', $values['start_date']);
+	$day = date('j', $values['start_date']);
+	$hour = floor($values['start_time']/60);
+	$minute = ($values['start_time'] - 60*$hour);
+	$values['start_date'] = mktime($hour, $minute, 0, $month, $day, $year);
+	//echo "{$values['start_date']} à {$values['start_time']} => $day/$month/$year à $hour:$minute<br />";
+	unset($values['start_time']);
+	
+	$year = date('Y', $values['end_date']);
+	$month = date('n', $values['end_date']);
+	$day = date('j', $values['end_date']);
+	$hour = floor($values['end_time']/60);
+	$minute = ($values['end_time'] - 60*$hour);
+	$values['end_date'] = mktime($hour, $minute, 0, $month, $day, $year);
+	//echo "{$values['end_date']} à {$values['end_time']} => $day/$month/$year à $hour:$minute<br />";
+	unset($values['end_time']);
 }
+/* Now we consider these dates as free text input, and changed to 'start' and 'end'
+if (in_array($category, array('project'))) {
+	// Dates : set full days from 00:00 to 23:59
+	$year = date('Y', $values['start_date']);
+	$month = date('n', $values['start_date']);
+	$day = date('j', $values['start_date']);
+	$values['start_date'] = mktime(0, 0, 0, $month, $day, $year);
+	
+	$year = date('Y', $values['end_date']);
+	$month = date('n', $values['end_date']);
+	$day = date('j', $values['end_date']);
+	$values['end_date'] = mktime(23, 59, 0, $month, $day, $year);
+}
+*/
 
 // assign values to the entity, stopping on error.
 if (!$error) {
