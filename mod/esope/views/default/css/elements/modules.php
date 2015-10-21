@@ -1,6 +1,5 @@
 <?php
 // ESOPE configurable styles
-global $CONFIG;
 
 // Get all needed vars
 $css = elgg_extract('theme-config-css', $vars);
@@ -317,7 +316,12 @@ a.elgg-widget-collapsed:before {
 .elgg-page-body div.elgg-module {
 	background: none; padding: 0; width: auto; min-width: 200px;
 	float: left;
+	/*
 	margin: 0 0.5em 1em 0.5em;
+	float: none;
+	*/
+	width: 96%;
+	margin: 0 auto 1em auto;
 	border-radius: 10px 10px 0 0;
 	-moz-border-radius: 10px 10px 0 0;
 	-webkit-border-radius: 10px 10px 0 0;

@@ -240,6 +240,7 @@ form input#esope-search-submit-button {
 	-webkit-border-radius: 0 7px 7px 0;
 	-o-border-radius: 0 7px 7px 0;
 	float: right;
+	height: 27px;
 	padding: 5px 7px 5px 8px;
 	width:auto;
 }
