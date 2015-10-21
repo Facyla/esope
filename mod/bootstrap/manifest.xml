@@ -4,7 +4,7 @@
 	<author>Florian DANIEL aka Facyla</author>
 	<version>0.1</version>
 	<blurb>Adds Twitter Bootstrap to Elgg</blurb>
-	<description>Use this plugin if you want to use Twitter Bootstrap, but do not wish to install a specific theme. It is meant for theme developpers who wish to use some (or all) of Twitter Bootstrap elements, without messing with their own theme.</description>
+	<description>Use this plugin if you want to use Twitter Bootstrap, but do not wish to install a specific theme. It is meant for theme developpers who wish to use some (or all) of Twitter Bootstrap elements, without messing with existing theme.</description>
 	<website>http://id.facyla.fr/</website>
 	<copyright>(C) Florian DANIEL 2015</copyright>
 	<license>GNU Public License version 2</license>
