@@ -16,7 +16,8 @@ $map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
 var map, bounds;
 var baseMap, baseLayers, overlays, layerControl;
 //require(['leaflet', 'leaflet.providers'], function(){
-// @TODO Note : base map must be unique, or we need to define a unique function id to enable multiple maps on same page
+// @TODO Note : base map must be unique on page, or we need to define a unique function id 
+// and pass it to the other scripts to enable multiple maps per page
 define('leaflet_basemap', ['leaflet', 'leaflet.providers'], function(){
 	// CREATE A MAP on chosen map id
 	map = L.map('<?php echo $id; ?>');
