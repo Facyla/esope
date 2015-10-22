@@ -49,6 +49,8 @@ Mot de passe : %s
 	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
 	'theme_transitions2:news' => "Actus",
 	'theme_transitions2:news:title' => "Actus",
+	'theme_transitions2:challenge' => "Défis",
+	'theme_transitions2:challenge:title' => "Défis",
 	
 	'theme_transitions:comment:add:challenge' => "Réagir à ce défi",
 	

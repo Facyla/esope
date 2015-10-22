@@ -24,7 +24,7 @@ if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_htm
 
 
 // Event et Editorial sélectionnées par la rédaction
-$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'full_view' => true, 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array(array('name' => 'featured', 'value' => 'featured'), array('name' => 'category', 'value' => 'challenge')));
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'full_view' => false, 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array(array('name' => 'featured', 'value' => 'featured'), array('name' => 'category', 'value' => 'challenge')));
 
 // HTML vs RSS/ICAL content
 if ($is_html_viewtype) {
