@@ -1,8 +1,7 @@
 <?php
 // Polar Area Chart
-elgg_load_js('elgg:dataviz:chartjs');
-// <script src="../Chart.js"></script>
 
+elgg_require_js('elgg.dataviz.chartjs');
 
 $js_data = elgg_extract('jsdata', $vars, false); // Ready to use JS data
 $data = elgg_extract('data', $vars); // Normalized data structure
@@ -28,6 +27,7 @@ if (empty($js_data) && $data) {
 	$js_data = '[' . implode(', ', $js_data) . ']';
 	*/
 } else {
+	// Demo data
 	$js_data = '[
 			{value: 300, color:"#F7464A", highlight: "#FF5A5E", label: "Red"},
 			{value: 50, color: "#46BFBD", highlight: "#5AD3D1", label: "Green"},
@@ -38,23 +38,21 @@ if (empty($js_data) && $data) {
 }
 
 $content = '';
-$content .= '<canvas id="' . $dataviz_id . '" height="' . $height . '" width="' . $width . '"></canvas>';
-
-/*
-		<div id="canvas-holder" style="width:30%">
-			<canvas id="chart-area" width="300" height="300"/>
-		</div>
-*/
+$content .= '<div style="width:' . $width . '; height="' . $height . ';">
+		<canvas id="' . $id . '" style="width:' . $width . '; height="' . $height . ';"></canvas>
+	</div>';
 ?>
 
 <script>
-var polarData = <?php echo $js_data; ?>;
-window.onload = function(){
-	var ctx = document.getElementById("<?php echo $dataviz_id; ?>").getContext("2d");
-	window.myPolarArea = new Chart(ctx).PolarArea(polarData, {
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var polarData = <?php echo $js_data; ?>;
+
+	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
+	new Chart(ctx).PolarArea(polarData, {
 		responsive:true
 	});
-};
+});
 </script>
 
+<?php echo $content; ?>
 

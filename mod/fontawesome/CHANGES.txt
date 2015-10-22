@@ -1,0 +1,24 @@
+Version history
+===============
+
+1.2 (2015-07-08):
+
+- added: input icon selector
+- fixed: the need for the fa !important flag
+
+1.1.1 (2015-02-03):
+
+- updated: travis github api key
+
+1.1 (2015-02-03):
+
+- added: composer support
+- updated: fontawesome v4.3.0
+
+1.0.1 (2014-11-17):
+
+- fix(views): replace array walk with a foreach loop #2
+
+1.0 (2014-09-25):
+
+- initial release

@@ -1,7 +1,9 @@
 <?php
 /* ESOPE topbar (override)
  * In ESOPE, the topbar is part of the header
- * The menus is defined and customized here
+ * See page/elements/header view for header and main navigation content
+ * 
+ * The topbar menu is defined and customized here
  */
 
 $url = elgg_get_site_url();

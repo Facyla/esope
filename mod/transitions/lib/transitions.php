@@ -314,6 +314,8 @@ function transitions_prepare_form_vars($post = NULL, $revision = NULL) {
 		'actor_type' => '',
 		'start_date' => '',
 		'end_date' => '',
+		'start' => '',
+		'end' => '',
 		'rss_feed' => '',
 	);
 

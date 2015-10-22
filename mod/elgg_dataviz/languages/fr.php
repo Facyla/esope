@@ -10,6 +10,8 @@ return array(
 	
 	// Libraries
 	'elgg_dataviz:libraries' => "Bibliothèques de visualisation",
+	'elgg_dataviz:library:chartjs' => "Chart.js",
+	'elgg_dataviz:library:chartjs:details' => "Bibliothèque proposant une série de graphiques simples d'emploi'",
 	'elgg_dataviz:library:d3' => "D3",
 	'elgg_dataviz:library:d3:details' => "Bibliothèque générique de construction de visualisations",
 	'elgg_dataviz:library:nvd3' => "NVD3",
@@ -25,7 +27,7 @@ return array(
 	
 	
 	// Visualisation types
-	'elgg_dataviz:viztype:pie_chart' => "Diagramme en secteur",
+	'elgg_dataviz:viztype:pie_chart' => "Diagramme en secteurs",
 	'elgg_dataviz:viztype:bar_chart' => "Histogramme",
 	'elgg_dataviz:viztype:multibar_chart' => "Histogramme multiple",
 	'elgg_dataviz:viztype:line_chart' => "Diagramme en ligne",
@@ -33,8 +35,27 @@ return array(
 	'elgg_dataviz:viztype:radar' => "Radar",
 	'elgg_dataviz:viztype:circle_packing' => "Regroupement par cercles",
 	'elgg_dataviz:viztype:bubble_chart' => "Regroupement par bulles",
-	'elgg_dataviz:viztype:sample' => "Demo",
-	'elgg_dataviz:viztype:sample_clock' => "Demo Horloge",
+	'elgg_dataviz:viztype:sample' => "Démo",
+	'elgg_dataviz:viztype:sample_clock' => "Démo Horloge",
+	
+	// @TODO : normalize these into more generic graph types
+	// Chart.js
+	'elgg_dataviz:viztype:bar' => "Histogramme",
+	'elgg_dataviz:viztype:doughnut' => "Diagramme en anneau",
+	'elgg_dataviz:viztype:line' => "Courbe",
+	'elgg_dataviz:viztype:line-customTooltips' => "Courbe (2)",
+	'elgg_dataviz:viztype:pie' => "Diagramme en secteurs",
+	'elgg_dataviz:viztype:pie-customTooltips' => "Diagramme en secteurs (2)",
+	'elgg_dataviz:viztype:polar-area' => "Diagramme en secteurs éclaté",
+	// D3
+	'elgg_dataviz:viztype:d3js_cfl' => "Collapsible force layout",
+	'elgg_dataviz:viztype:d3js_bubble' => "Bulles",
+	'elgg_dataviz:viztype:d3js_circle' => "Cercle",
+	'elgg_dataviz:viztype:d3js_scatter' => "Nuage de points",
+	'elgg_dataviz:viztype:d3js_line' => "Courbe",
+	'elgg_dataviz:viztype:d3js_sdg' => "Stack density graph",
+	'elgg_dataviz:viztype:d3js_radar' => "Radar",
+	'elgg_dataviz:viztype:d3js_pie' => "Diagramme en secteurs",
 	
 	
 );

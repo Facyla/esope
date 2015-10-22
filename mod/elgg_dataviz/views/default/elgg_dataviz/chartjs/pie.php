@@ -1,13 +1,13 @@
 <?php
-elgg_load_js('elgg:dataviz:chartjs');
-// <script src="../Chart.js"></script>
+// Pie chart
 
+elgg_require_js('elgg.dataviz.chartjs');
 
 $js_data = elgg_extract('jsdata', $vars, false); // Ready to use JS data
 $data = elgg_extract('data', $vars); // Normalized data structure
 $dataurl = elgg_extract('dataurl', $vars); // Data source
-$width = elgg_extract('width', $vars, "300px");
-$height = elgg_extract('height', $vars, "300px");
+$width = elgg_extract('width', $vars, "100%");
+$height = elgg_extract('height', $vars, "400px");
 
 $id = dataviz_id('dataviz_');
 
@@ -27,6 +27,7 @@ if (empty($js_data) && $data) {
 	$js_data = '[' . implode(', ', $js_data) . ']';
 	*/
 } else {
+	// Demo data
 	$js_data = '[
 		{value: 300, color:"#F7464A", highlight: "#FF5A5E", label: "Red"},
 		{value: 50, color: "#46BFBD", highlight: "#5AD3D1", label: "Green"},
@@ -37,22 +38,19 @@ if (empty($js_data) && $data) {
 }
 
 $content = '';
-$content .= '<canvas id="' . $dataviz_id . '" height="' . $height . '" width="' . $width . '"></canvas>';
-
-/*
-	<div id="canvas-holder">
-		<canvas id="chart-area" width="300" height="300"/>
-	</div>
-*/
+$content .= '<div style="width:' . $width . '; height="' . $height . ';">
+		<canvas id="' . $id . '" style="width:' . $width . '; height="' . $height . ';"></canvas>
+	</div>';
 ?>
 
 <script>
-var pieData = <?php echo $js_data; ?>;
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var pieData = <?php echo $js_data; ?>;
 
-	window.onload = function(){
-		var ctx = document.getElementById("<?php echo $dataviz_id; ?>").getContext("2d");
-		window.myPie = new Chart(ctx).Pie(pieData);
-	};
+	var ctx = document.getElementById("<?php echo $id; ?>").getContext("2d");
+	new Chart(ctx).Pie(pieData);
+});
 </script>
 
+<?php echo $content; ?>
 

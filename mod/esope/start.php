@@ -28,9 +28,11 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome
-	elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
-	elgg_load_css('fontawesome');
+	// Font Awesome - moved to external dependancy
+	if (!elgg_is_active_plugin('fontawesome')) {
+		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
+		elgg_load_css('fontawesome');
+	}
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
@@ -177,7 +179,7 @@ function esope_init() {
 	// Modification de la page de listing des sous-groupes
 	if (elgg_is_active_plugin('au_subgroups')) {
 		// route some urls that go through 'groups' handler
-		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
+		elgg_unregister_plugin_hook_handler('route', 'groups', 'AU\SubGroups\groups_router');
 		elgg_register_plugin_hook_handler('route', 'groups', 'esope_subgroups_groups_router', 499);
 		
 		/* au_subgroups prevents users from being invited to subgroups they can't join
@@ -186,7 +188,7 @@ function esope_init() {
 		 * AND handle the au_subgroup case by filtering the passed GUID to in the invite action
 		 *    which avoids breaking the whole process for some users (especially if we register them directly into the group)
 		 */
-		elgg_unregister_plugin_hook_handler('action', 'groups/invite', 'au_subgroups_group_invite');
+		elgg_unregister_plugin_hook_handler('action', 'groups/invite', 'AU\SubGroups\group_invite');
 		elgg_register_plugin_hook_handler('action', 'groups/invite', 'esope_au_subgroups_group_invite');
 	}
 	
@@ -708,7 +710,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
-		$children = au_subgroups_get_subgroups($group, 0);
+		$children = AU\SubGroups\get_subgroups($group, 0);
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
 			if ($member_only) {
@@ -1783,7 +1785,7 @@ function esope_login_user_action($event, $type, $user) {
 								// Handle subgroups cases
 								if (elgg_is_active_plugin('au_subgroups')) {
 									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
-									while ($parent = au_subgroups_get_parent_group($group)) {
+									while ($parent = AU\SubGroups\get_parent_group($group)) {
 										//  Join only if parent group is public membership or if we have a join pending
 										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
 											// Join group, or add to join list

@@ -26,15 +26,6 @@
 		<version>1.11.2</version>
 	</requires>
 
-	<conflicts>
-		<type>plugin</type>
-		<name>custom_index</name>
-	</conflicts>
-	<conflicts>
-		<type>plugin</type>
-		<name>autocomplete</name>
-	</conflicts>
-	
 	<requires>
 		<type>plugin</type>
 		<name>members</name>
@@ -51,14 +42,29 @@
 		<type>plugin</type>
 		<name>notifications</name>
 	</requires>
-	<suggests>
-		<type>plugin</type>
-		<name>tinymce</name>
-	</suggests>
 	<requires>
 		<type>plugin</type>
 		<name>htmlawed</name>
 	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>fontawesome</name>
+	</requires>
+	
+	<conflicts>
+		<type>plugin</type>
+		<name>custom_index</name>
+	</conflicts>
+	<conflicts>
+		<type>plugin</type>
+		<name>autocomplete</name>
+	</conflicts>
+	<!-- Plugin instable : ne permet pas de répondre dans un groupe - cf. patch correctif //-->
+	<conflicts>
+		<type>plugin</type>
+		<name>threads</name>
+	</conflicts>
+	
 	
 	<suggests>
 		<type>plugin</type>
@@ -95,12 +101,6 @@
 		<name>search</name>
 	</suggests>
 	
-	<!-- Plugin instable : ne permet pas de répondre dans un groupe - cf. patch correctif //-->
-	<conflicts>
-		<type>plugin</type>
-		<name>threads</name>
-	</conflicts>
-	
 	<suggests>
 		<type>plugin</type>
 		<name>file</name>
@@ -125,6 +125,13 @@
 		<type>plugin</type>
 		<name>event_calendar</name>
 	</suggests>
+	
+	<!-- To be deprecated //-->
+	<suggests>
+		<type>plugin</type>
+		<name>tinymce</name>
+	</suggests>
+	
 	
 </plugin_manifest>
 

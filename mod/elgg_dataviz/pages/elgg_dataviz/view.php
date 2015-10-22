@@ -3,13 +3,13 @@
  * View a dataviz
  *
  */
-global $CONFIG;
+
 $library = get_input('library');
 $viztype = get_input('viztype');
 
 // Set data root URLs
-$data_url = $CONFIG->url . 'mod/elgg_dataviz/data/';
-$dataurl = $CONFIG->url . 'dataviz/data/' . $viztype;
+$data_url = elgg_get_site_url() . "mod/elgg_dataviz/data/$library/";
+$dataurl = elgg_get_site_url() . "dataviz/data/$library/$viztype";
 
 elgg_push_breadcrumb(elgg_echo('elgg_dataviz'), '/dataviz');
 elgg_push_breadcrumb(elgg_echo("elgg_dataviz:library:$library"), "/dataviz/view/$library");
@@ -22,10 +22,24 @@ if (!empty($viztype)) {
 }
 
 
-
 switch($library) {
+	case 'chartjs':
+		elgg_require_js('elgg.dataviz.chartjs');
+		switch ($viztype) {
+			case 'bar': $content .= elgg_view('elgg_dataviz/chartjs/bar', array('')); break;
+			case 'doughnut': $content .= elgg_view('elgg_dataviz/chartjs/doughnut', array('')); break;
+			case 'line': $content .= elgg_view('elgg_dataviz/chartjs/line', array('')); break;
+			case 'line-customTooltips': $content .= elgg_view('elgg_dataviz/chartjs/line-customTooltips', array('')); break;
+			case 'pie': $content .= elgg_view('elgg_dataviz/chartjs/pie', array('')); break;
+			case 'pie-customTooltips': $content .= elgg_view('elgg_dataviz/chartjs/pie-customTooltips', array('')); break;
+			case 'polar-area': $content .= elgg_view('elgg_dataviz/chartjs/polar-area', array('')); break;
+			case 'radar': $content .= elgg_view('elgg_dataviz/chartjs/radar', array('')); break;
+			default: $content .= elgg_view('elgg_dataviz/chartjs/bar', array('')); break;
+		}
+		break;
+	
 	case 'dygraphs':
-		elgg_load_js('elgg:dataviz:dygraphs');
+		elgg_require_js('elgg.dataviz.dygraphs');
 		switch ($viztype) {
 			case 'line_chart':
 			default: $content .= elgg_view('elgg_dataviz/dygraphs/line_chart', array('')); break;
@@ -33,8 +47,8 @@ switch($library) {
 		break;
 	
 	case 'vega':
-		elgg_load_js('elgg:dataviz:d3'); // Vega requires D3
-		elgg_load_js('elgg:dataviz:vega');
+		//elgg_require_js('elgg.dataviz.d3'); // Vega requires D3
+		elgg_require_js('elgg.dataviz.vega');
 		switch ($viztype) {
 			case 'bar_chart':
 			default: $content .= elgg_view('elgg_dataviz/vega/bar_chart', array('')); break;
@@ -42,11 +56,11 @@ switch($library) {
 		break;
 	
 	case 'crossfilter':
-		elgg_load_js('elgg:dataviz:crossfilter');
+		elgg_require_js('elgg.dataviz.crossfilter');
 		break;
 	
 	case 'raphael':
-		elgg_load_js('elgg:dataviz:raphael');
+		elgg_require_js('elgg.dataviz.raphael');
 		switch ($viztype) {
 			case 'sample_clock': $content .= elgg_view('elgg_dataviz/raphael/sample_clock', array('')); break;
 			case 'sample':
@@ -55,9 +69,9 @@ switch($library) {
 		break;
 	
 	case 'nvd3':
-		elgg_load_js('elgg:dataviz:d3');
+		//elgg_require_js('elgg.dataviz.d3');
 		elgg_load_css('elgg:dataviz:nvd3');
-		elgg_load_js('elgg:dataviz:nvd3');
+		elgg_require_js('elgg.dataviz.nvd3');
 		switch ($viztype) {
 			case 'bar_chart': $content .= elgg_view('elgg_dataviz/nvd3/bar_chart', array('')); break;
 			case 'multibar_chart': $content .= elgg_view('elgg_dataviz/nvd3/multibar_chart', array('')); break;
@@ -67,42 +81,44 @@ switch($library) {
 		break;
 	
 	case 'd3':
-		elgg_load_js('elgg:dataviz:d3');
+		elgg_require_js('elgg.dataviz.d3');
 		// D3 samples
 		// Call a view corresponding to a visualisation
 			switch($viztype) {
 	
 				case 'd3js_cfl' :
-					$content = elgg_view('d3/collapsible_force_layout',array('dataurl' => $dataurl));
+					$content = elgg_view('elgg_dataviz/d3/collapsible_force_layout',array('dataurl' => $dataurl));
 					break;
 	
 				case 'd3js_bubble' :
-					$content = elgg_view('d3/bubble_chart',array('dataurl' => $dataurl));
+					$content = elgg_view('elgg_dataviz/d3/bubble_chart',array('dataurl' => $dataurl));
 					break;
 	
 				case 'd3js_circle' :
-					$content = elgg_view('d3/circle_packing',array('dataurl' => $dataurl));
+					$content = elgg_view('elgg_dataviz/d3/circle_packing',array('dataurl' => $dataurl));
 					break;
 	
 				case 'd3js_scatter' :
-					$data_url .= 'data.tsv';
-					$content = elgg_view('d3/scatter_plot',array('dataurl' => $data_url));
+					$data_url .= 'scatter_data.tsv';
+					$content = elgg_view('elgg_dataviz/d3/scatter_plot',array('dataurl' => $data_url));
 					break;
 	
 				case 'd3js_line' :
-					$data_url .= 'data2.tsv';
-					$content = elgg_view('d3/line_chart',array('dataurl' => $data_url));
+					$data_url .= 'line_chart_data.tsv';
+					$content = elgg_view('elgg_dataviz/d3/line_chart',array('dataurl' => $data_url));
 					break;
 	
 				case 'd3js_sdg' :
-					$data_url .= 'SDGdata.js';
-					$content = elgg_view('d3/stack_density_graph',array('dataurl' => $data_url));
+					$data_url .= 'sdg_data.js';
+					$content = elgg_view('elgg_dataviz/d3/stack_density_graph',array('dataurl' => $data_url));
 					break;
 	
 				case 'd3js_radar' :
-						$data = array();
+					// 1er exemple
+					$data = array();
+					$description = "Comparaison de devices";
 					/*
-					Name of the variable compared
+					Name of the compared variables
 					They need to have the same number of axes and the same axes's name
 					Variable's name order have to be the same of the declaration order of axes
 					*/
@@ -122,23 +138,21 @@ switch($library) {
 					$data[] = array(array("axis"=>"Email","value"=>0.48),array("axis"=>"Social Networks","value"=>0.41),array("axis"=>"Internet Banking","value"=>0.27),array("axis"=>"News Sportsites","value"=>0.28));
 					$data[] = array(array("axis"=>"Email","value"=>0.4),array("axis"=>"Social Networks","value"=>0.4),array("axis"=>"Internet Banking","value"=>0.2),array("axis"=>"News Sportsites","value"=>0.2));
 					$data = json_encode($data);
-		
+					$content = elgg_view('elgg_dataviz/d3/radar_chart', array('data' => $data,'objects' => $objects,'description' => $description, 'size' => 0.5));
+					
+					// 2e exemple
+					$data = array();
+					$description = "Radar générique multi-critères";
 					// New set of data
-					$objects2 = json_encode(array("Object 1","Object 2"));
-					$data2[] = array(array("axis"=>"Criteria A","value"=>0.28),array("axis"=>"Criteria B","value"=>0.51),array("axis"=>"Criteria C","value"=>0.37),array("axis"=>"Criteria D","value"=>0.7),array("axis"=>"Criteria E","value"=>0.62),array("axis"=>"Criteria F","value"=>0.3),array("axis"=>"Criteria G","value"=>0.42));
-					$data2[] = array(array("axis"=>"Criteria A","value"=>0.4),array("axis"=>"Criteria B","value"=>0.29),array("axis"=>"Criteria C","value"=>0.15),array("axis"=>"Criteria D","value"=>0.8),array("axis"=>"Criteria E","value"=>0.35),array("axis"=>"Criteria F","value"=>0.4),array("axis"=>"Criteria G","value"=>0.5));
-					$data2 = json_encode($data2);
-
-					//Legend
-					$description = "Nombre de membres par groupe :";
-					$content = elgg_view('elgg_dataviz/radar_chart', array('data' => $data,'objects' => $objects,'description' => $description, 'size' => 0.5));
-					$description2 = "Radar générique multi-critères :";
-					$content .= elgg_view('elgg_dataviz/radar_chart', array('data' => $data2,'objects' => $objects2,'description' => $description2, 'size' => 0.5));
+					$objects = json_encode(array("Object 1","Object 2"));
+					$data[] = array(array("axis"=>"Criteria A","value"=>0.28),array("axis"=>"Criteria B","value"=>0.51),array("axis"=>"Criteria C","value"=>0.37),array("axis"=>"Criteria D","value"=>0.7),array("axis"=>"Criteria E","value"=>0.62),array("axis"=>"Criteria F","value"=>0.3),array("axis"=>"Criteria G","value"=>0.42));
+					$data[] = array(array("axis"=>"Criteria A","value"=>0.4),array("axis"=>"Criteria B","value"=>0.29),array("axis"=>"Criteria C","value"=>0.15),array("axis"=>"Criteria D","value"=>0.8),array("axis"=>"Criteria E","value"=>0.35),array("axis"=>"Criteria F","value"=>0.4),array("axis"=>"Criteria G","value"=>0.5));
+					$data = json_encode($data);
+					$content .= elgg_view('elgg_dataviz/d3/radar_chart', array('data' => $data,'objects' => $objects,'description' => $description, 'size' => 0.5));
 					break;
-	
+				
 				case 'd3js_pie' :
-					$content = elgg_view('elgg_dataviz/pie_chart', array('dataurl' => $dataurl));
-					$content .= elgg_view('elgg_dataviz/pie_chart', array('dataurl' => $dataurl));
+					$content = elgg_view('elgg_dataviz/d3/pie_chart', array('dataurl' => $dataurl));
 					break;
 			}
 		break;

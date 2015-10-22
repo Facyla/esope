@@ -33,7 +33,7 @@ It uses these libraries to enable data visualisations as reusable Elgg views.
 - Use elgg_dataviz/[viz_lib]/[viz_name] views for library-specific views
 
 For new visualisations
-- call elgg_load_js('elgg:dataviz:vaz_lib') to include wanted JS lib
+- call elgg_require_js('elgg.dataviz.viz_lib') to include wanted JS lib
 
 
 

@@ -2,31 +2,32 @@
 /* Display & update user location on map */
 ?>
 <script type="text/javascript">
-function onLocationFound(e) {
-	$("#location-error").hide();
-	radius = e.accuracy / 2;
-	if (usermarker != undefined) map.removeLayer(usermarker);
-	if (userradius != undefined) map.removeLayer(userradius);
-	usermarker = L.marker(e.latlng, {icon: ownMarker, title: username}).addTo(map)
-		//.bindPopup("<?php echo elgg_echo('leaflet:popup:locationfound:popup'); ?>").openPopup(); // Ouverture auto
-		.bindPopup("<?php echo elgg_echo('leaflet:popup:locationfound:popup'); ?>");
-	userradius = L.circle(e.latlng, radius).addTo(map);
-	// Center only once, when location detected
-	if (centeredmap == 0) {
-		bounds.extend(usermarker.getLatLng());
-		bounds.extend(userradius.getLatLng());
-		map.fitBounds(bounds, {padding: [20,20]});
-		centeredmap = 1;
-	}
-}
-
-// Location error alert
-function onLocationError(e) {
-	$("#location-error").show();
-}
-
 var usermarker, ownMarker, radius, userradius, centeredmap, username;
-require(['leaflet', 'leaflet.awesomemarkers'], function(){
+//require(['leaflet', 'leaflet.awesomemarkers'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers'], function(){
+	function onLocationFound(e) {
+		$("#location-error").hide();
+		radius = e.accuracy / 2;
+		if (usermarker != undefined) map.removeLayer(usermarker);
+		if (userradius != undefined) map.removeLayer(userradius);
+		usermarker = L.marker(e.latlng, {icon: ownMarker, title: username}).addTo(map)
+			//.bindPopup("<?php echo elgg_echo('leaflet:popup:locationfound:popup'); ?>").openPopup(); // Ouverture auto
+			.bindPopup("<?php echo elgg_echo('leaflet:popup:locationfound:popup'); ?>");
+		userradius = L.circle(e.latlng, radius).addTo(map);
+		// Center only once, when location detected
+		if (centeredmap == 0) {
+			bounds.extend(usermarker.getLatLng());
+			bounds.extend(userradius.getLatLng());
+			map.fitBounds(bounds, {padding: [20,20]});
+			centeredmap = 1;
+		}
+	}
+
+	// Location error alert
+	function onLocationError(e) {
+		$("#location-error").show();
+	}
+
 	// Location found alert
 	centeredmap = 0;
 	if (!username) username = '';

@@ -19,7 +19,7 @@ foreach($categories as $name => $trans_name) {
 
 echo '<div class="clearfloat"></div><br />';
 
-echo '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+echo '<form method="GET" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
 	echo '<label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 	echo ' &nbsp; ';
 	echo '<label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';

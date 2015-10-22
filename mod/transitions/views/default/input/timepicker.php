@@ -7,7 +7,7 @@ if (is_numeric($value)) {
 	$minute = ($value -60*$hour);
 	$time = $hour*60+$minute;
 } else {
-	$time = '00:00';
+	$time = '0';
 }
 
 $dates = array();

@@ -1,18 +1,23 @@
 <?php
 /* Display Leaflet base map */
 
-elgg_load_library('leaflet');
 leaflet_load_libraries();
 
-//if (empty($vars['map_id'])) { $vars['map_id'] = 'leaflet-main-map'; }
-$id = elgg_extract('map_id', $vars, 'leaflet-main-map');
+$id = leaflet_id('leaflet_basemap_'); // Ensure unicity (required because can be displayed several times on same page)
+$map_id = elgg_extract('map_id', $vars, 'leaflet-main-map');
+$width = elgg_extract('width', $vars, '100%;');
+$height = elgg_extract('height', $vars, '400px;');
+$map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
 
 ?>
 
 <script type="text/javascript">
 var map, bounds;
 var baseMap, baseLayers, overlays, layerControl;
-require(['leaflet', 'leaflet.providers'], function(){
+//require(['leaflet', 'leaflet.providers'], function(){
+// @TODO Note : base map must be unique on page, or we need to define a unique function id 
+// and pass it to the other scripts to enable multiple maps per page
+define('leaflet_basemap', ['leaflet', 'leaflet.providers'], function(){
 	// CREATE A MAP on chosen map id
 	map = L.map('<?php echo $id; ?>');
 
@@ -42,5 +47,5 @@ require(['leaflet', 'leaflet.providers'], function(){
 });
 </script>
 
-<div id="<?php echo $id; ?>"></div>
+<div id="<?php echo $id; ?>" class="<?php echo $map_id; ?>" style="<?php echo $map_css; ?>"></div>
 

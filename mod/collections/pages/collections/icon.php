@@ -21,7 +21,7 @@ if($collection = get_entity($guid)) {
 }
 
 if (!$success) {
-	$contents = @file_get_contents(elgg_get_plugins_path(). "mod/collection/graphics/icons/{$size}.png");
+	$contents = @file_get_contents(elgg_get_plugins_path(). "mod/collection/graphics/icons/{$size}/collection.jpg");
 }
 
 header("Content-type: image/jpeg");

@@ -162,37 +162,37 @@ $body .= '<div class="clearfloat"></div><br />';
 // Sidebar : all meta information
 $sidebar = '';
 
-// Dates : projects and events only
-if (in_array($transitions->category, array('project', 'event'))) {
-	if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
-		$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
+// Exact dates : events only
+if (($transitions->category == 'event') && (!empty($transitions->start_date) || !empty($transitions->end_date))) {
+	$date_format = elgg_echo('transitions:dateformat:time');
+	// Format : from DD MM YYYY [until DD MM YYYY]
+	$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
+	if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
+		$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+		$sidebar .= '<br />' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+	} else if (!empty($transitions->start_date)) {
+		$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+	} else if (!empty($transitions->end_date)) {
+		$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 	}
+	$sidebar .= '</p>';
+	$sidebar .= '<div class="clearfloat"></div><br />';
+}
+// Text dates for projects
+if (($transitions->category == 'project') && (!empty($transitions->start) || !empty($transitions->end))) {
+	$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
 	if ($transitions->category == 'project') {
-		// Format : MM YYYY [- MM YYYY]
 		$date_format = elgg_echo('transitions:dateformat');
-		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-			$sidebar .= date($date_format, $transitions->start_date) . ' - ' . date($date_format, $transitions->end_date);
-		} else if (!empty($transitions->start_date)) {
-			$sidebar .= date($date_format, $transitions->start_date);
-		} else if (!empty($transitions->end_date)) {
-			$sidebar .= date($date_format, $transitions->end_date);
-		}
-	} else {
-		$date_format = elgg_echo('transitions:dateformat:time');
-		// Format : from DD MM YYYY [until DD MM YYYY]
-		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-			$sidebar .= '<br />' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
-		} else if (!empty($transitions->start_date)) {
-			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-		} else if (!empty($transitions->end_date)) {
-			$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+		if (!empty($transitions->start) && !empty($transitions->end)) {
+			$sidebar .= $transitions->start . ' - ' . $transitions->end;
+		} else if (!empty($transitions->start)) {
+			$sidebar .= $transitions->start;
+		} else if (!empty($transitions->end)) {
+			$sidebar .= $transitions->end;
 		}
 	}
-	if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
-		$sidebar .= '</p>';
-		$sidebar .= '<div class="clearfloat"></div><br />';
-	}
+	$sidebar .= '</p>';
+	$sidebar .= '<div class="clearfloat"></div><br />';
 }
 
 // Territory : actor|project|event only

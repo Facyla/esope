@@ -14,7 +14,7 @@ elgg_load_js("collections/edit");
 echo '<div class="collection-addentity">';
 
 
-echo '<a href="' . elgg_get_site_url() . 'collection/embed/' . $guid . '-' . $offset . '" class="elgg-lightbox elgg-button elgg-button-collection-select"><i class="fa fa-search"></i> ';
+echo '<a href="' . elgg_get_site_url() . 'collection/embed/' . $guid . '-' . $offset . '" class="elgg-lightbox elgg-button  elgg-button-action elgg-button-collection-select"><i class="fa fa-search"></i> ';
 if ($entity_guid) {
 	echo elgg_echo("collections:change_entity") . '</a>';
 } else {

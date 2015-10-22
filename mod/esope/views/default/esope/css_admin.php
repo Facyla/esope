@@ -13,6 +13,8 @@
 
 /* ESOPE THEME ADDITIONS */
 
+.elgg-button { display: inline-block; }
+
 /* Border on second level fieldset (1st level is added to every form) */
 .elgg-form fieldset fieldset { border:1px solid #999; padding:1ex; margin:2ex 0ex; }
 .elgg-form fieldset fieldset legend { padding:0 0.5ex; }

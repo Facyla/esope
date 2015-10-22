@@ -1,14 +1,13 @@
 <?php
 // Radar Chart
-elgg_load_js('elgg:dataviz:chartjs');
-// <script src="../Chart.js"></script>
 
+elgg_require_js('elgg.dataviz.chartjs');
 
 $js_data = elgg_extract('jsdata', $vars, false); // Ready to use JS data
 $data = elgg_extract('data', $vars); // Normalized data structure
 $dataurl = elgg_extract('dataurl', $vars); // Data source
-$width = elgg_extract('width', $vars, "450px");
-$height = elgg_extract('height', $vars, "450px");
+$width = elgg_extract('width', $vars, "100%");
+$height = elgg_extract('height', $vars, "400px");
 
 $id = dataviz_id('dataviz_');
 
@@ -28,51 +27,50 @@ if (empty($js_data) && $data) {
 	$js_data = '[' . implode(', ', $js_data) . ']';
 	*/
 } else {
-	$js_label = '["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"]';
-	$js_data = '[
-		{
-			label: "My First dataset",
-			fillColor: "rgba(220,220,220,0.2)",
-			strokeColor: "rgba(220,220,220,1)",
-			pointColor: "rgba(220,220,220,1)",
-			pointStrokeColor: "#fff",
-			pointHighlightFill: "#fff",
-			pointHighlightStroke: "rgba(220,220,220,1)",
-			data: [65,59,90,81,56,55,40]
-		},
-		{
-			label: "My Second dataset",
-			fillColor: "rgba(151,187,205,0.2)",
-			strokeColor: "rgba(151,187,205,1)",
-			pointColor: "rgba(151,187,205,1)",
-			pointStrokeColor: "#fff",
-			pointHighlightFill: "#fff",
-			pointHighlightStroke: "rgba(151,187,205,1)",
-			data: [28,48,40,19,96,27,100]
-		}
-	]';
+	// Demo data
+	$js_label = '';
+	$js_data = '{
+		labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+		datasets: [
+			{
+				label: "My First dataset",
+				fillColor: "rgba(220,220,220,0.2)",
+				strokeColor: "rgba(220,220,220,1)",
+				pointColor: "rgba(220,220,220,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(220,220,220,1)",
+				data: [65,59,90,81,56,55,40]
+			},
+			{
+				label: "My Second dataset",
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(151,187,205,1)",
+				data: [28,48,40,19,96,27,100]
+			}
+		]
+	}';
 }
 
 $content = '';
-$content .= '<canvas id="' . $dataviz_id . '" height="' . $height . '" width="' . $width . '"></canvas>';
-/*
-		<div style="width:30%">
-			<canvas id="canvas" height="450" width="450"></canvas>
-		</div>
-*/
+$content .= '<div style="width:' . $width . '; height="' . $height . ';">
+		<canvas id="' . $id . '" style="width:' . $width . '; height="' . $height . ';"></canvas>
+	</div>';
 ?>
 
-
 <script>
-var radarChartData = {
-	labels: <?php echo $js_label; ?>,
-	datasets: <?php echo $js_data; ?>
-};
+require(["elgg.dataviz.chartjs"], function(d3) {
+	var radarChartData = <?php echo $js_data; ?>;
 
-window.onload = function(){
-	window.myRadar = new Chart(document.getElementById("<?php echo $dataviz_id; ?>").getContext("2d")).Radar(radarChartData, {
+	new Chart(document.getElementById("<?php echo $id; ?>").getContext("2d")).Radar(radarChartData, {
 		responsive: true
 	});
-}
+});
 </script>
+
+<?php echo $content; ?>
 

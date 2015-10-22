@@ -6,7 +6,6 @@
 function esope_public_index() {
 	// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
 	// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
-	global $CONFIG;
 	$replace_public_home = elgg_get_plugin_setting('replace_public_home', 'esope');
 	switch($replace_public_home) {
 		case 'cmspages':
@@ -46,8 +45,7 @@ function esope_index() {
  * 
 */
 function esope_route($hook, $type, $return, $params) {
-	global $CONFIG;
-	$home = $CONFIG->url;
+	$home = elgg_get_site_url();
 	
 	// Page handler et segments de l'URL
 	// Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
@@ -265,8 +263,7 @@ function esope_owner_block_menu($hook, $type, $return, $params) {
 /* Boutons des widgets */
 // @TODO : make this a view, for easier theming..
 function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
-	global $CONFIG;
-	$urlicon = $CONFIG->url . 'mod/esope/img/theme/';
+	$urlicon = elgg_get_site_url() . 'mod/esope/img/theme/';
 	
 	$widget = $params['entity'];
 	$show_edit = elgg_extract('show_edit', $params, true);
@@ -316,15 +313,15 @@ if (elgg_is_active_plugin('au_subgroups')) {
 	/**
 	 * re/routes some urls that go through the groups handler
 	 */
+	// Note : checking for "delete" segment
 	function esope_subgroups_groups_router($hook, $type, $return, $params) {
-		au_subgroups_breadcrumb_override($return);
+		AU\SubGroups\breadcrumb_override($return);
 		
 		// subgroup options
 		if ($return['segments'][0] == 'subgroups') {
 			elgg_load_library('elgg:groups');
 			$group = get_entity($return['segments'][2]);
-			//echo "TEST 1 : " . $return['segments'][2] . " // " . $group->name;
-			//if (!elgg_instanceof($group, 'group') || ($group->subgroups_enable == 'no')) {
+			// ESOPE : also check for delete segment
 			if (!elgg_instanceof($group, 'group') || (($group->subgroups_enable == 'no') && ($return['segments'][1] != "delete"))) {
 				return $return;
 			}
@@ -334,23 +331,42 @@ if (elgg_is_active_plugin('au_subgroups')) {
 			
 			switch ($return['segments'][1]) {
 				case 'add':
-					set_input('au_subgroup', true);
-					set_input('au_subgroup_parent_guid', $group->guid);
-					if (include(elgg_get_plugins_path() . 'au_subgroups/pages/add.php')) {
-						return true;
-					}
+				$return = array(
+					'identifier' => 'au_subgroups',
+					'handler' => 'au_subgroups',
+					'segments' => array(
+						'add',
+						$group->guid
+					)
+				);
+				
+				return $return;
 					break;
 					
 				case 'delete':
-					if (include(elgg_get_plugins_path() . 'au_subgroups/pages/delete.php')) {
-						return true;
-					}
+				$return = array(
+					'identifier' => 'au_subgroups',
+					'handler' => 'au_subgroups',
+					'segments' => array(
+						'delete',
+						$group->guid
+					)
+				);
+				
+				return $return;
 					break;
 				
 				case 'list':
-				if (include(elgg_get_plugins_path() . 'esope/pages/au_subgroups/list.php')) {
-					return true;
-				}
+				$return = array(
+					'identifier' => 'au_subgroups',
+					'handler' => 'au_subgroups',
+					'segments' => array(
+						'list',
+						$group->guid
+					)
+				);
+				
+				return $return;
 				break;
 			}
 		}
@@ -365,8 +381,16 @@ if (elgg_is_active_plugin('au_subgroups')) {
 			}
 			
 			if(in_array($filter, array("open", "closed", "alpha"))){
-				au_subgroups_handle_openclosed_tabs();
-				return true;
+				$return = array(
+						'identifier' => 'au_subgroups',
+						'handler' => 'au_subgroups',
+						'segments' => array(
+							'openclosed',
+							$filter
+						)
+					);
+				
+				return $return;
 			}
 		}
 	}
@@ -383,12 +407,14 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		$group_guid = get_input('group_guid');
 		$group = get_entity($group_guid);
 	
-		$parent = au_subgroups_get_parent_group($group);
+		$parent = AU\SubGroups\get_parent_group($group);
 	
 		// if $parent, then this is a subgroup they're being invited to
 		// make sure they're a member of the parent
 		if ($parent) {
-			if (!is_array($user_guid)) { $user_guid = array($user_guid); }
+			if (!is_array($user_guid)) {
+				$user_guid = array($user_guid);
+			}
 		
 			/* Invite type check : probably bad idea to allow subgroup owners to register directly to the parent groups...
 			$allowregister = elgg_get_plugin_setting('allowregister', 'esope');
@@ -397,7 +423,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		
 			$invalid_users = array();
 			foreach($user_guid as $guid) {
-				// Use less intensive DB check with GUID and not entities...
+				// ESOPE : Use less intensive DB check with GUID and not entities...
 				if (is_group_member($parent->guid, $guid)) {
 					$valid_user_guid[] = $guid;
 				} else {
@@ -407,20 +433,21 @@ if (elgg_is_active_plugin('au_subgroups')) {
 			}
 		
 			if (count($invalid_users)) {
-				// Set new valid list
+				// ESOPE : Set new invite valid list
 				set_input('user_guid', $valid_user_guid);
 			
 				// Explain what went wrong with who..
 				$error_suffix = "<ul>";
-				foreach($invalid_users as $user) { $error_suffix .= "<li>{$user->name}</li>"; }
+				foreach($invalid_users as $user) {
+					$error_suffix .= "<li>{$user->name}</li>";
+				}
 				$error_suffix .= "</ul>";
+
 				register_error(elgg_echo('au_subgroups:error:invite') . $error_suffix);
-				// Do NOT break the invite process (for the valid ones)
+				// ESOPE : Do NOT break the invite process (for the valid ones)
 				//return false;
 			}
 		}
-		// No need to return anything
-		//return $return;
 	}
 	
 }

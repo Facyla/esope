@@ -6,7 +6,8 @@ if ($guid) $marker = 'marker'.$guid; else $marker = 'markerRV';
 ?>
 
 <script type="text/javascript">
-require(['leaflet', 'leaflet.routing'], function(){
+//require(['leaflet', 'leaflet.routing'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.routing'], function(){
 	var route;
 	var routeinited = 'no';
 	function onLocationFoundInitRouting(e) {

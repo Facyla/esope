@@ -91,33 +91,24 @@ function leaflet_init() {
  */
 function leaflet_get_libraries_config() {
 	$vendors_url = elgg_get_site_url() . 'mod/leaflet/vendors/';
-	// <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-	// <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 	
 	$libraries_config = array(
 			'leaflet' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'Leaflet/leaflet.js'),
 					array('type' => 'css', 'url' => $vendors_url . 'Leaflet/leaflet.css'),
 				),
 			'leaflet.awesomemarkers' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'Leaflet.awesome-markers/leaflet.awesome-markers.js'),
 					array('type' => 'css', 'url' => $vendors_url . 'Leaflet.awesome-markers/leaflet.awesome-markers.css'),
 				),
 			'leaflet.providers' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'leaflet-providers/leaflet-providers.js'),
 					array('type' => 'css', 'url' => $vendors_url . 'leaflet-providers/css/gh-fork-ribbon.css'),
 				),
 			'leaflet.geosearch' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'L.GeoSearch/src/js/l.control.geosearch.js'),
-					//array('type' => 'js', 'url' => $vendors_url . 'L.GeoSearch/src/js/l.geosearch.provider.openstreetmap.js', 'name' => 'leaflet.geosearch.openstreetmap'),
 					array('type' => 'css', 'url' => $vendors_url . 'L.GeoSearch/src/css/l.geosearch.css'),
 				),
 			'leaflet.routing' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'leaflet-routing-machine/leaflet-routing-machine.min.js'),
 					array('type' => 'css', 'url' => $vendors_url . 'leaflet-routing-machine/leaflet-routing-machine.css'),
 				),
 			'leaflet.markercluster' => array(
-					//array('type' => 'js', 'url' => $vendors_url . 'Leaflet.markercluster/leaflet.markercluster.js'),
 					array('type' => 'css', 'url' => $vendors_url . 'Leaflet.markercluster/MarkerCluster.css'),
 					array('type' => 'css', 'url' => $vendors_url . 'Leaflet.markercluster/MarkerCluster.Default.css', 'name' => 'leaflet.markercluster.default'),
 				),
@@ -156,7 +147,6 @@ function leaflet_register_libraries() {
 						'src' => '/mod/myplugin/vendors/underscore/underscore-min.js',
 					]);
 					*/
-					
 					/* Using traditional JS libraries as modules
 					// JavaScript libraries that define global resources can also be defined as AMD modules 
 					// if you shim them by setting exports and optionally deps:
@@ -183,8 +173,10 @@ function leaflet_register_libraries() {
 }
 
 
-// Load registered JS and CSS libraries
+// Load registered PHP, JS and CSS libraries
 function leaflet_load_libraries() {
+	
+	elgg_load_library('leaflet');
 	
 	// Load JS defined libs
 	elgg_require_js("leaflet");
@@ -200,7 +192,6 @@ function leaflet_load_libraries() {
 		switch($type) {
 			case 'js':
 				foreach ($libraries as $name) {
-					//elgg_load_js($name);
 					if ($name == 'leaflet') {
 						elgg_require_js("leaflet");
 					} else {
@@ -224,8 +215,8 @@ function leaflet_load_libraries() {
  */
 function leaflet_page_handler($page) {
 	// Load registered libraries
-	leaflet_load_libraries();
 	elgg_load_library('leaflet');
+	leaflet_load_libraries();
 	
 	$leaflet_root = dirname(__FILE__) . '/pages/leaflet/';
 	
@@ -426,6 +417,28 @@ function leaflet_get_cached_data($key, $cache_validity = 3600) {
 	// Could not find recently updated cache
 	error_log("LEAFLET : no recent cache found for $key < $cache_validity");
 	return false;
+}
+
+
+/* Generate a unique id to ensure JS unique functions
+ * Note that the id must contain valid id for both CSS and JS, ie. no '-'
+ */
+function leaflet_id($prefix = 'leaflet_') {
+	if (function_exists('esope_unique_id')) {
+		$id = esope_unique_id($prefix);
+	} else {
+		global $leaflet_unique_id;
+		if (!isset($leaflet_unique_id)) {
+			$leaflet_unique_id = 1;
+		} else {
+			$leaflet_unique_id++;
+		}
+		$id = $prefix . $leaflet_unique_id;
+	}
+	$id = elgg_get_friendly_title($id);
+	// Ensure valid id for JS
+	$id = str_replace('-', '_', $id);
+	return $id;
 }
 
 

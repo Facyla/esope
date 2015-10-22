@@ -11,7 +11,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 /* Main plugin styles (editor) */
 .collection-edit-entity, .collection-edit-highlight { margin-top: 0.5ex; min-height:2ex; border:1px solid #ccc; padding:0ex 1ex 1ex 1ex; border-radius: 6px; background: rgba(0,0,0,0.05); height: 17em; width: 20em; float: left; margin: 0 10px 20px 0; overflow: auto; }
 .collection-edit-highlight { border:1px dashed grey; color:#333; }
-.elgg-button-collection-select { background: #999; padding: 2px 6px; margin: 2px 6px 2px 0; }
+.elgg-button-collection-select { /* background: #999; */ padding: 2px 6px; margin: 2px 6px 2px 0; }
 .collection-edit-entity blockquote { padding: 5px; background-color: white; }
 
 

@@ -3,24 +3,24 @@
  * From an entity, or from custom lat/long or address, and description information
  */
 
-elgg_load_library('leaflet');
 leaflet_load_libraries();
 
 // TODO Add box size + separate markers from map
 
-//if (empty($vars['map_id'])) { $vars['map_id'] = 'leaflet-main-map'; }
-$id = elgg_extract('map_id', $vars, 'leaflet-main-map');
+$id = leaflet_id('leaflet_map_'); // Ensure unicity (required because can be displayed several times on same page)
+$map_id = elgg_extract('map_id', $vars, 'leaflet-main-map');
 $width = elgg_extract('width', $vars, '300px;');
 $height = elgg_extract('height', $vars, '200px;');
+$map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
 
-$mapstyle = "width:$width; height:$height;";
-echo '<div id="' . $id . '" style="' . $mapstyle . '"></div>';
+echo '<div id="' . $id . '" class="' . $map_id . '" style="' . $map_css . '"></div>';
 ?>
 
 <script type="text/javascript">
 // We need to define some vars globally to be able to use them in other scripts
 var map, bounds, baseMap;
-require(['leaflet', 'leaflet.providers'], function(){
+//require(['leaflet', 'leaflet.providers'], function(){
+define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 	// CREATE A MAP on chosen map id
 	map = L.map('<?php echo $id; ?>');
 
@@ -91,30 +91,27 @@ if (elgg_instanceof($entity)) {
 
 // Render JS marker code - only if we have valid lat/long
 if ($lat && $long) {
-	echo '<script type="text/javascript">
+	// Marker title and content
+	$title = json_encode($title);
+	$description = json_encode($description);
+	
+	echo "<script type=\"text/javascript\">
 	var mapMarker, mapMarkers
-	require([\'leaflet\', \'leaflet.awesomemarkers\', \'leaflet.markercluster\'], function(){
+	require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
 		// Create a custom marker for users
-		mapMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
+		mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
 		mapMarkers = new L.MarkerClusterGroup();
-		';
-	
-		// Marker title and content
-		$title = json_encode($title);
-		$description = json_encode($description);
-	
-		echo "
-			marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
-			marker.bindPopup($description);
-			mapMarkers.addLayer(marker);
-			bounds.extend(marker.getLatLng());
-			";
-
-		echo 'map.addLayer(mapMarkers);
+		
+		var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
+		marker.bindPopup($description);
+		mapMarkers.addLayer(marker);
+		bounds.extend(marker.getLatLng());
+		
+		map.addLayer(mapMarkers);
 		map.fitBounds(bounds, {padding: [20,20]});
-		map.setView(new L.LatLng(' . $lat . ', ' . $long . '),10);
+		map.setView(new L.LatLng($lat, $long),10);
 	});
-	</script>';
+	</script>";
 }
 
 echo '<div id="onlineUsers"></div>';

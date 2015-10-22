@@ -2,6 +2,7 @@
 
 $transitions = elgg_extract('entity', $vars);
 
+// iCAL is valid only for category "event"
 if (!elgg_instanceof($transitions, 'object', 'transitions') || ($transitions->category != 'event')) { return; }
 
 $description = $transitions->excerpt;

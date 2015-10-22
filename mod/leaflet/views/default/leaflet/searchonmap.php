@@ -6,7 +6,8 @@
 ?>
 
 <script type="text/javascript">
-require(['leaflet.geosearch', 'leaflet.geosearch.openstreetmap'], function(){
+//require(['leaflet.geosearch', 'leaflet.geosearch.openstreetmap'], function(){
+require(['leaflet_basemap', 'leaflet.geosearch', 'leaflet.geosearch.openstreetmap'], function(){
 	new L.Control.GeoSearch({
 		provider: new L.GeoSearch.Provider.OpenStreetMap(),
 		showMarker: false

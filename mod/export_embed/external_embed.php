@@ -258,6 +258,7 @@ header('Content-Type: text/html; charset=utf-8');
 	<style>
 	html, body { background:#FFFFFF !important; margin: 0 !important; }
 	</style>
+	<base target="_blank" />
 </head>
 <body>
 	<div style="padding:0;">

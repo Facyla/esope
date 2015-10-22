@@ -4,15 +4,16 @@
  */
 $debug = elgg_extract('debug', $vars, false);
 
-echo '<script type="text/javascript">
+echo "<script type=\"text/javascript\">
 var onlineUsersMarker, onlineUsersMarkers;
-require([\'leaflet\', \'leaflet.awesomemarkers\', \'leaflet.markercluster\'], function(){
+//require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
 	// Create a custom marker for users
-	onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
+	onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
 	onlineUsersMarkers = new L.MarkerClusterGroup();
 
 	// Process positions
-	';
+	";
 
 	// Geocoding batch
 	if ($debug) $debug_0 = microtime(TRUE);

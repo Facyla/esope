@@ -1,5 +1,9 @@
 <?php
 /* Esope replaces topbar + header by a single header
+ * See page/elements/topbar view for topbar content
+ *
+ * The main navigation menu is defined and customized here
+ *
  * Header can be broken in 2 separate blocks by breaking out the enclosing div, then re-opening a new one
  * 	<div class="elgg-page-header">
  * 		<div class="elgg-inner">
