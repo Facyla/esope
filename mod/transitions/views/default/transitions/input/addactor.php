@@ -4,7 +4,7 @@
 
 $actor_guid = elgg_extract('actor_guid', $vars);
 
-echo '<p><a href="' . elgg_get_site_url() . 'catalogue/embed/actor/actor-' . $vars['guid'] . '" class="elgg-lightbox elgg-button elgg-button-action">' . elgg_echo('transitions:addactor:select') . '</a></p>';
+echo '<p><a href="' . elgg_get_site_url() . 'catalogue/embed/actor/actor-' . $vars['guid'] . '" class="elgg-lightbox elgg-button elgg-button-action elgg-button-transitions-select"><i class="fa fa-search"></i> ' . elgg_echo('transitions:addactor:select') . '</a></p>';
 // Fill field with lightbox
 echo elgg_view('input/hidden', array('name' => 'actor_guid', 'value' => $actor_guid, 'id' => 'transitions-embed-actor-' . $vars['guid']));
 echo '<blockquote id="transitions-embed-details-actor-' . $vars['guid'] . '">' . elgg_echo('transitions:addactor:noneselected') . '</blockquote>';

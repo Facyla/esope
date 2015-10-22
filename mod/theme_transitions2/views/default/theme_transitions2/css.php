@@ -40,6 +40,9 @@ color: #023824;
 color: #297256;
 */
 
+.elgg-button-collection-select, .elgg-button-transitions-select { padding: 2px 6px; margin: 2px 6px 2px 0; }
+
+
 /* System messages */
 .elgg-state-success { background-color: #32A951; }
 .elgg-state-error { background-color: #BF4E4E; }
