@@ -121,8 +121,8 @@ function collections_icon_hook($hook, $entity_type, $returnvalue, $params) {
 					return elgg_get_site_url() . "collection/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			}
-			//return elgg_get_site_url() . "mod/collection/graphics/icons/$size.png";
-			return false;
+			return elgg_get_site_url() . "mod/collections/graphics/icons/$size/collection.jpg";
+			//return false;
 		}
 	}
 }

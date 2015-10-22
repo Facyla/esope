@@ -134,7 +134,10 @@ function theme_transitions2_init() {
 	elgg_register_plugin_hook_handler('members:config', 'tabs', 'theme_transitions2_members_tabs_config');
 	elgg_register_plugin_hook_handler('members:list', 'alpha', 'theme_transitions2_members_list_alpha');
 	
+	// Actus
 	elgg_register_page_handler('news', 'theme_transitions2_news_page_handler');
+	// Défis
+	elgg_register_page_handler('challenge', 'theme_transitions2_challenge_page_handler');
 	
 	// Replace likes buttons
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'likes_river_menu_setup');
@@ -620,6 +623,13 @@ function theme_transitions2_auth_handler_authenticate($credentials = array()) {
 function theme_transitions2_news_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'theme_transitions2/pages/theme_transitions2';
 	require_once "$base/news.php";
+	return true;
+}
+
+// Page handler pour les défis
+function theme_transitions2_challenge_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'theme_transitions2/pages/theme_transitions2';
+	require_once "$base/challenge.php";
 	return true;
 }
 
