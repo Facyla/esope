@@ -308,7 +308,9 @@ $category_input = elgg_view('input/select', array(
 
 $explanations = '';
 foreach ($category_opt as $cat => $cat_lang) {
-	$explanations .= '<blockquote class="transitions-explanations transitions-explanations-' . $cat . '">' . elgg_echo("transitions:category:$cat:details") . '</blockquote>';
+	if (!empty($cat)) {
+		$explanations .= '<blockquote class="transitions-explanations transitions-explanations-' . $cat . '">' . elgg_echo("transitions:category:$cat:details") . '</blockquote>';
+	}
 }
 
 $lang_label = elgg_echo('transitions:lang');
