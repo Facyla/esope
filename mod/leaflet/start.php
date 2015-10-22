@@ -173,8 +173,10 @@ function leaflet_register_libraries() {
 }
 
 
-// Load registered JS and CSS libraries
+// Load registered PHP, JS and CSS libraries
 function leaflet_load_libraries() {
+	
+	elgg_load_library('leaflet');
 	
 	// Load JS defined libs
 	elgg_require_js("leaflet");
@@ -213,8 +215,8 @@ function leaflet_load_libraries() {
  */
 function leaflet_page_handler($page) {
 	// Load registered libraries
-	leaflet_load_libraries();
 	elgg_load_library('leaflet');
+	leaflet_load_libraries();
 	
 	$leaflet_root = dirname(__FILE__) . '/pages/leaflet/';
 	

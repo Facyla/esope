@@ -11,9 +11,7 @@
 ?>
 <script type="text/javascript">
 var onlineUsersMarker, onlineUsersMarkers;
-//require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
 require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
-
 	// Create a custom marker for users
 	onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
 	onlineUsersMarkers = new L.MarkerClusterGroup();
@@ -27,7 +25,6 @@ require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.marker
 	$debug_1 = microtime(TRUE);
 	error_log("LEAFLET BATCH : Finished at " . date('Ymd H:i:s') . " => ran in " . round($debug_1-$debug_0, 4) . " seconds");
 	?>
-
 
 	map.addLayer(onlineUsersMarkers);
 	map.fitBounds(bounds, {padding: [20,20]});

@@ -1,7 +1,6 @@
 <?php
 /* Display Leaflet base map */
 
-elgg_load_library('leaflet');
 leaflet_load_libraries();
 
 $id = leaflet_id('leaflet_basemap_'); // Ensure unicity (required because can be displayed several times on same page)

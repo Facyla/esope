@@ -3,7 +3,6 @@
  * From an entity, or from custom lat/long or address, and description information
  */
 
-elgg_load_library('leaflet');
 leaflet_load_libraries();
 
 // TODO Add box size + separate markers from map

@@ -52,7 +52,7 @@ function elgg.leaflet.getUsersPosition() {
 		type: "GET",
 		url: "<?php echo $action_url; ?>",
 		data: {
-			'action': 'rendezvous/positionprocess',
+			'action': 'leaflet/positionprocess',
 			'function': 'readPositions',
 			'positionsId': positionsId,
 			'__elgg_ts':'<?php echo $ts;?>',
