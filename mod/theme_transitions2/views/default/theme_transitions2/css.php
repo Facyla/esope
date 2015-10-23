@@ -251,6 +251,8 @@ body { background:#EBE7DF; font-family:Lato; }
 	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
 	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
 	
+	.static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
+	
 }
 
 @media (max-width: 600px) {

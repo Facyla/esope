@@ -19,8 +19,8 @@ if ($lang_menu) $menu = $menu . '-' . $lang;
 
 $base_url = elgg_get_site_url() . 'mod/theme_transitions2/graphics/';
 
-// Logos des Partenaires
-echo '<div class="elgg-footer-partners">';
+echo '<div class="static-container elgg-footer-partners" style="float:left; width:48%;">';
+	// Logos des Partenaires
 	//echo elgg_view('cmspages/view', array('pagetype' => "footer"));
 	echo '<h2 class="elgg-footer-partners-text">' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
 	echo '<img src="' . $base_url . 'partenaires/logos-partenaires-transitions2.png" />';
@@ -38,13 +38,12 @@ echo '<div class="elgg-footer-partners">';
 	*/
 echo '</div>';
 
-echo '<div class="elgg-footer-supporters">';
+echo '<div class="static-container elgg-footer-supporters" style="float:right; width:48%;">';
 	echo '<h2 class="elgg-footer-supporters-text">' . elgg_echo('theme_transitions2:supporters:title') . '</h2>';
-	echo '<img src="' . $base_url . 'label-COP21-small.png" alt="Label COP 21" style="float:right" />';
 	echo '<img src="' . $base_url . 'soutiens/logos-soutiens-transitions2.png" />';
-
 echo '</div>';
 
+echo '<div class="clearfloat"></div>';
 
 // Pied de page
 echo '</div></div><div class="elgg-page-footer-transitions2"><div class="elgg-inner">';
@@ -54,12 +53,11 @@ if (elgg_is_active_plugin('socialshare')) {
 	echo '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array()) . '</div>';
 	echo '</span>';
 }
-?>
 
-<span class="elgg-footer-logo">
-	<img src="<?php echo $base_url; ?>logo-transitions2-small.png" alt="<?php echo elgg_get_site_entity()->name; ?>" />
-</span>
+echo '<span class="elgg-footer-logo">';
+	echo '<img src="' . $base_url . 'logo-transitions2-small.png" alt="' . elgg_get_site_entity()->name . '" />';
+	echo '<img src="' . $base_url . 'label-COP21-small.png" alt="Label COP 21" />';
+echo '</span>';
 
-<?php
 echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-footer elgg-menu-footer-default clearfix elgg-menu-hz"));
 
