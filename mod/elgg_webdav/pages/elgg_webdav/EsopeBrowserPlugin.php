@@ -487,7 +487,7 @@ class EsopePlugin extends DAV\Browser\Plugin {
 			}
 		}
 
-		list($ns, $localName) = DAV\XMLUtil::parseClarkNotation($name);
+		list($ns, $localName) = DAV\XML\Service::parseClarkNotation($name);
 
 		$realName = $name;
 		if (isset($this->server->xmlNamespaces[$ns])) {

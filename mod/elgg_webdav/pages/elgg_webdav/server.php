@@ -6,7 +6,7 @@
  */
 
 /* @TODO
- * Piste intéressante : proposer plusieurzs endpoint virtuels à partir de /server, 
+ * Piste intéressante : proposer plusieurs endpoint virtuels à partir de /server, 
  *   de manière à avoir des accès différenciés, sur filesystems réels ou virtuels
  * - mine : RW sur dossier personnel
  * - shared : RW sur dossiers partagés (groupe ?)
@@ -14,13 +14,12 @@
  */
 
 // Set up default paths
-global $CONFIG;
 $base_path = elgg_get_data_path() . 'webdav';
 $public_path = $base_path . '/public';
 $data_path = $base_path . '/data';
 $locks_path = $data_path . '/locks';
 // Full server URL, without domain
-$base_uri = parse_url($CONFIG->url . 'webdav/server');
+$base_uri = parse_url(elgg_get_site_url() . 'webdav/server');
 $base_uri = $base_uri['path'];
 if (!file_exists($base_path)) { mkdir($base_path, 0777); }
 if (!file_exists($public_path)) { mkdir($public_path, 0777); }
