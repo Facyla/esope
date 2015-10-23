@@ -154,9 +154,9 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-text { width:460px; max-width:100%; float:left; }
 .elgg-footer-partners-logo { width:460px; max-width:100%; float:right; text-align: right; }
 */
-.elgg-footer-partners img { height: 180px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-partners img { max-height: 180px; margin-bottom:20px; max-width:100%; }
 .elgg-footer-partners-logo { height: 80px; margin: 0 10px 10px 0; }
-.elgg-footer-supporters img { height: 80px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-supporters img { max-height: 180px; margin-bottom:20px; max-width:100%; }
 .elgg-footer-supporters-logo { height: 80px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }

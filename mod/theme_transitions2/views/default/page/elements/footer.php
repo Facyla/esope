@@ -19,7 +19,7 @@ if ($lang_menu) $menu = $menu . '-' . $lang;
 
 $base_url = elgg_get_site_url() . 'mod/theme_transitions2/graphics/';
 
-echo '<div class="static-container elgg-footer-partners" style="float:left; width:48%;">';
+echo '<div class="static-container elgg-footer-partners" style="float:left; width:55%;">';
 	// Logos des Partenaires
 	//echo elgg_view('cmspages/view', array('pagetype' => "footer"));
 	echo '<h2 class="elgg-footer-partners-text">' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
@@ -38,7 +38,7 @@ echo '<div class="static-container elgg-footer-partners" style="float:left; widt
 	*/
 echo '</div>';
 
-echo '<div class="static-container elgg-footer-supporters" style="float:right; width:48%;">';
+echo '<div class="static-container elgg-footer-supporters" style="float:right; width:35%;">';
 	echo '<h2 class="elgg-footer-supporters-text">' . elgg_echo('theme_transitions2:supporters:title') . '</h2>';
 	echo '<img src="' . $base_url . 'soutiens/logos-soutiens-transitions2.png" />';
 echo '</div>';
