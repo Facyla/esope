@@ -13,7 +13,7 @@ return array(
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
 	'theme_transitions2:transitions:title' => "<span>Your</span> contributions",
 	'theme_transitions2:partners:title' => "<span>Impulsed</span> by",
-	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
+	'theme_transitions2:supporters:title' => "<span>Supported</span> by",
 	'theme_transitions2:contribute:button' => "Share!",
 	
 	'theme_transitions2:register:optionalfields' => "The following fields are optional. If you do not fill them, they will be automaticcaly generated for you.",
