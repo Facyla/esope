@@ -22,7 +22,7 @@ $base_url = elgg_get_site_url() . 'mod/theme_transitions2/graphics/';
 // Logos des Partenaires
 echo '<div class="elgg-footer-partners">';
 	//echo elgg_view('cmspages/view', array('pagetype' => "footer"));
-	echo '<div class="elgg-footer-partners-text"><h2>' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
+	echo '<h2 class="elgg-footer-partners-text">' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
 	echo '<img src="' . $base_url . 'partenaires/logos-partenaires-transitions2.png" />';
 	/*
 	echo '<div class="elgg-footer-partners-logo">
@@ -39,7 +39,7 @@ echo '<div class="elgg-footer-partners">';
 echo '</div>';
 
 echo '<div class="elgg-footer-supporters">';
-	echo '<div class="elgg-footer-supporters-text"><h2>' . elgg_echo('theme_transitions2:supporters:title') . '</h2>';
+	echo '<h2 class="elgg-footer-supporters-text">' . elgg_echo('theme_transitions2:supporters:title') . '</h2>';
 	echo '<img src="' . $base_url . 'label-COP21-small.png" alt="Label COP 21" style="float:right" />';
 	echo '<img src="' . $base_url . 'soutiens/logos-soutiens-transitions2.png" />';
 
