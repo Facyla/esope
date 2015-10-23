@@ -154,10 +154,10 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-text { width:460px; max-width:100%; float:left; }
 .elgg-footer-partners-logo { width:460px; max-width:100%; float:right; text-align: right; }
 */
-.elgg-footer-partners-logo { margin-bottom:30px; }
-.elgg-footer-partners-logo img { height: 40px; margin: 0 10px 10px 0; }
-.elgg-footer-supporters-logo { margin-bottom:30px; }
-.elgg-footer-supporters-logo img { height: 40px; margin: 0 10px 10px 0; }
+.elgg-footer-partners img { height: 40px; margin-bottom:30px; max-width:100%; }
+.elgg-footer-partners-logo { height: 40px; margin: 0 10px 10px 0; }
+.elgg-footer-supporters img { height: 40px; margin-bottom:30px; max-width:100%; }
+.elgg-footer-supporters-logo { height: 40px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }
 .elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:70px; float: left; margin-right: 20px; }
