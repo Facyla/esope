@@ -46,5 +46,20 @@ return array(
 	'elgg_webdav:types:principal' => "Principal",
 	'elgg_webdav:types:collection' => "Collection",
 	
+	// SabreDAV Exceptions and errors
+	'elgg_webdav:error:file:create' => "An error occured when creating the file",
+	'elgg_webdav:error:file:permissiondenied' => "Permission denied to create file in this folder",
+	'elgg_webdav:error:file:notgroupmember' => "Only groups members can create new content",
+	'elgg_webdav:error:directory:notimplemented' => "Directory creation is not implemented yet in Elgg WebDAV",
+	'elgg_webdav:error:file:noaccess' => "Cannot access to this file",
+	'elgg_webdav:error:file:updatedata' => "Permission denied to change data",
+	'elgg_webdav:error:file:delete' => "Permission denied to delete node",
+	'elgg_webdav:error:file:rename' => "Permission denied to rename file",
+	'elgg_webdav:error:directory:readonly' => "This folder is read-only. Please add new files in your personal folder, or in a group folder",
+	'elgg_webdav:error:directory:usercreate' => "Cannot create new user from WebDAV",
+	'elgg_webdav:error:directory:groupcreate' => "Cannot create new group from WebDAV",
+	'' => "",
+	
+	
 );
 
