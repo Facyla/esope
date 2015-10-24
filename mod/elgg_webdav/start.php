@@ -9,7 +9,7 @@ elgg_register_event_handler('init','system','elgg_webdav');
 
 
 /* Initialise the theme */
-function elgg_webdav(){
+function elgg_webdav() {
 	
 	// CSS et JS
 	elgg_extend_view('css', 'elgg_webdav/css');
@@ -19,11 +19,14 @@ function elgg_webdav(){
 	
 	/*
 	// Enable server
-	if (elgg_get_plugin_setting('enable_webdav', 'elgg_webdav') == 'yes') 
+	if (elgg_get_plugin_setting('enable_webdav', 'elgg_webdav') == 'yes') {}
 	*/
 	
 	// WebDAV page handler
 	elgg_register_page_handler('webdav', 'elgg_webdav_page_handler');
+	
+	// Public pages - les pages auxquelles on peut accéder hors connexion
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'elgg_webdav_public_pages');
 	
 }
 
@@ -167,5 +170,14 @@ function elgg_webdav_create_file($name, $data, $options = array()) {
 		return false;
 	}
 }
+
+
+// Permet l'accès à WebDAV y compris en mode "walled garden"
+function elgg_webdav_public_pages($hook, $type, $return, $params) {
+	// Add very useful pages !
+	$return[] = 'webdav.*';
+	return $return;
+}
+
 
 
