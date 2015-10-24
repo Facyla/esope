@@ -24,13 +24,13 @@ $content .= '<h3>Utilisation</h3>
 	<p>Le serveur WebDAV peut être utilisé pour "monter" un dossier de fichiers, de manière à pouvoir y accéder directement depuis votre ordinateur. Ces fichiers peuvent être ceux gérés par Elgg, ou totalement indépendants.</p>
 	<p>Pour ajouter un partage réseau qui vous permet d\'accéder et d\'éditer les fichiers auxquels vous avez accès sur le site, utilisez les informations suivantes :</p>
 	<ul>
-		<li>Adresse du serveur : ' . $url . 'webdav/virtual' . '</li>
-		<li>Ou :
+		<li>Adresse du serveur : <a href="' . $webdav_url . '" target="_blank">' . $webdav_url . '</a></li>
+		<li>Ou pour configurer un partage réseau :
 			<ul>
 				<li>Type de partage : WebDAV (HTTP)</li>
 				<li>Port : 80 (ou 443 si HTTPS)</li>
-				<li>Serveur : ' . $webdav_url['host'] . '</li>
-		<li>Dossier : ' . $webdav_url['path'] . '</li>
+				<li>Serveur : ' . $webdav_url . '</li>
+				<li>Dossier : /</li>
 			</ul>
 		<li>Identifiant : votre identifiant sur le site (ou votre email)</li>
 		<li>Mot de passe : votre mot de passe sur le site</li>
@@ -40,36 +40,36 @@ $content .= '<h3>Autres types de partages disponibles :</h3>';
 $content .= '<p>Attention : ces types de partages ne sont pas liés aux publications du site et ne seront donc pas accessibles via le site web ! Ils ne pourront être utilisés <strong>que</strong> sous la forme de dossiers WebDAV</p>';
 $content .= '<ul>';
 
-	$content .= '<li>Dossier public du site : ' . $url . 'webdav/server</li>';
+	$content .= '<li>Dossier public du site : <a href="' . $url . 'webdav/server" target="_blank">' . $url . 'webdav/server</a></li>';
 
 	if (elgg_is_logged_in()) {
 		$own = elgg_get_logged_in_user_entity();
 		$ownguid = elgg_get_logged_in_user_guid();
-		$content .= "<li>Dossier personnel : <strong>" . $url . 'webdav/user/GUID</strong>';
-		$content .= "<ul>";
-		$content .= "<li>Votre dossier personnel : " . $url . 'webdav/user/' . $ownguid . "</li>";
-		$content .= "</ul>";
-		$content .= "</li>";
+		$content .= '<li>Dossier personnel : <strong><a href="' . $url . 'webdav/user/GUID" target="_blank">' . $url . 'webdav/user/GUID</a></strong>';
+		$content .= '<ul>';
+		$content .= '<li>Votre dossier personnel : <a href="' . $url . 'webdav/user/' . $ownguid . '" target="_blank">' . $url . 'webdav/user/' . $ownguid . '</a></li>';
+		$content .= '</ul>';
+		$content .= '</li>';
 	
-		$content .= "<li>Dossier de groupe : <strong>" . $url . 'webdav/group/GUID</strong>';
+		$content .= '<li>Dossier de groupe : <strong><a href="' . $url . 'webdav/group/GUID" target="_blank">' . $url . 'webdav/group/GUID</a></strong>';
 		$groups = $own->getGroups('', 0);
-		$content .= "<ul>";
+		$content .= '<ul>';
 		foreach ($groups as $group) {
-			$content .= '<li><a href="' . $group->getURL() . '" target="_blank">"' . $group->name . '</a> : ' . $url . 'webdav/group/' . $group->guid . '</li>';
+			$content .= '<li><a href="' . $group->getURL() . '" target="_blank">"' . $group->name . '</a> : <a href="' . $url . 'webdav/group/' . $group->guid . '" target="_blank">' . $url . 'webdav/group/' . $group->guid . '</a></li>';
 		}
-		$content .= "</ul>";
-		$content .= "</li>";
+		$content .= '</ul>';
+		$content .= '</li>';
 	
 	} else {
-		$content .= "<li>Dossier personnel : <strong>" . $url . "webdav/user/GUID</strong></li>";
-		$content .= "<li>Dossier de groupe : <strong>" . $url . "webdav/group/GUID</strong></li>";
+		$content .= '<li>Dossier personnel : <strong><a href="' . $url . 'webdav/user/GUID" target="_blank">' . $url . 'webdav/user/GUID</a></strong></li>';
+		$content .= '<li>Dossier de groupe : <strong><a href="' . $url . 'webdav/group/GUID" target="_blank">' . $url . 'webdav/group/GUID</a></strong></li>';
 	}
 
-	$content .= "<li>Dossier pour les membres du site : <strong>" . $url . "webdav/member</strong> (lecture seule)</li>";
+	$content .= '<li>Dossier pour les membres du site : <strong><a href="' . $url . 'webdav/member" target="_blank">' . $url . 'webdav/member</a></strong> (lecture seule)</li>';
 
-	$content .= "<li>Dossier public : <strong>" . $url . "webdav/public</strong> (sans authentification, lecture seule)</li>";
+	$content .= '<li>Dossier public : <strong><a href="' . $url . 'webdav/public" target="_blank">' . $url . 'webdav/public</a></strong> (sans authentification, lecture seule)</li>';
 
-$content .= "</ul>";
+$content .= '</ul>';
 
 $content .= '<br />';
 $content .= '<br />';

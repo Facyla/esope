@@ -425,6 +425,7 @@ $server->addPlugin($lockPlugin);
 // This ensures that we get a pretty index in the browser, but it is optional.
 //$server->addPlugin(new Sabre\DAV\Browser\Plugin());
 require_once('EsopeBrowserPlugin.php');
+// @TODO avoid listing properties ?
 $server->addPlugin(new Sabre\DAV\Browser\EsopePlugin());
 
 // WebDAV Sync
