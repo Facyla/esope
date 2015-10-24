@@ -17,6 +17,7 @@ $content = '';
 $content .= '<h3>' . $title . '</h3>';
 
 $url = elgg_get_site_url();
+$main_url = $url . 'webdav/virtual';
 $webdav_url = parse_url($url . 'webdav/virtual');
 $webdav_root = $webdav_url['path'];
 
@@ -24,12 +25,12 @@ $content .= '<h3>Utilisation</h3>
 	<p>Le serveur WebDAV peut être utilisé pour "monter" un dossier de fichiers, de manière à pouvoir y accéder directement depuis votre ordinateur. Ces fichiers peuvent être ceux gérés par Elgg, ou totalement indépendants.</p>
 	<p>Pour ajouter un partage réseau qui vous permet d\'accéder et d\'éditer les fichiers auxquels vous avez accès sur le site, utilisez les informations suivantes :</p>
 	<ul>
-		<li>Adresse du serveur : <a href="' . $webdav_url . '" target="_blank">' . $webdav_url . '</a></li>
+		<li>Adresse du serveur : <a href="' . $main_url . '" target="_blank">' . $main_url . '</a></li>
 		<li>Ou pour configurer un partage réseau :
 			<ul>
 				<li>Type de partage : WebDAV (HTTP)</li>
 				<li>Port : 80 (ou 443 si HTTPS)</li>
-				<li>Serveur : ' . $webdav_url . '</li>
+				<li>Serveur : ' . $main_url . '</li>
 				<li>Dossier : /</li>
 			</ul>
 		<li>Identifiant : votre identifiant sur le site (ou votre email)</li>
