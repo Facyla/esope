@@ -154,8 +154,10 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-text { width:460px; max-width:100%; float:left; }
 .elgg-footer-partners-logo { width:460px; max-width:100%; float:right; text-align: right; }
 */
-.elgg-footer-partners-logo { margin-bottom:30px; }
-.elgg-footer-partners-logo img { height: 40px; margin: 0 10px 10px 0; }
+.elgg-footer-partners img { max-height: 180px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-partners-logo { height: 80px; margin: 0 10px 10px 0; }
+.elgg-footer-supporters img { max-height: 180px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-supporters-logo { height: 80px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }
 .elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:70px; float: left; margin-right: 20px; }
@@ -248,6 +250,8 @@ body { background:#EBE7DF; font-family:Lato; }
 	.elgg-menu-site > li.float-alt { width: 100%; }
 	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
 	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
+	
+	.static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
 	
 }
 

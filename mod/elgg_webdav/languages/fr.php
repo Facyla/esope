@@ -2,13 +2,13 @@
 /**
  * French strings
  */
-global $CONFIG;
 
-$fr = array(
+return array(
 	'elgg_webdav' => "WebDAV",
 	'elgg_webdav:title' => "Serveur WebDAV",
 	'elgg_webdav:index' => "Utilisation du serveur WebDAV",
 	
+	'elgg_webdav:virtual' => "Point d'accès WebDAV",
 	'elgg_webdav:user' => "Dossier personnel de %s",
 	'elgg_webdav:group' => "Dossier du groupe %s",
 	'elgg_webdav:member' => "Membres du site",
@@ -47,6 +47,4 @@ $fr = array(
 	'elgg_webdav:types:collection' => "Collection",
 	
 );
-
-add_translation('fr', $fr);
 
