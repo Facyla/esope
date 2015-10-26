@@ -13,7 +13,7 @@
  * iionly@gmx.de
  */
 
-$english = array(
+return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Site Feedback',
 	'item:object:feedback' => 'Feedback',
@@ -108,14 +108,23 @@ $english = array(
 	
 	// Feedbacks menu
 	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:total:singular' => "%s feedback",
 	'feedback:menu:open' => "%s opened",
+	'feedback:menu:open:singular' => "%s opened",
 	'feedback:menu:closed' => "%s closed",
+	'feedback:menu:closed:singular' => "%s closed",
 	'feedback:menu:content' => "%s reports",
 	'feedback:menu:bug' => "%s bugs",
-	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:bug:singular' => "%s bug",
+	'feedback:menu:suggestions' => "%s suggestions",
+	'feedback:menu:suggestions:singular' => "%s suggestion",
 	'feedback:menu:question' => "%s questions",
+	'feedback:menu:content:singular' => "%s report",
+	'feedback:menu:question:singular' => "%s question",
 	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:compliment:singular' => "%s compliment",
 	'feedback:menu:other' => "%s other / unsorted",
+	'feedback:menu:other:singular' => "%s other / unsorted",
 	
 	// About - feedback types
 	'feedback:about' => "of type",
@@ -135,6 +144,4 @@ $english = array(
 	'feedback:linktofeedbacks' => "&raquo;&nbsp;View all previous feedbacks",
 	
 );
-
-add_translation("en", $english);
 
