@@ -101,9 +101,9 @@ $french = array(
 	// Feedback status
 	'feedback:status' => "Statut des feedbacks",
 	'feedback:list:status:open' => "Ouvert",
-	'feedback:status:open' => "Feedbacks ouverts",
+	'feedback:status:open' => "Ouverts",
 	'feedback:list:status:closed' => "Résolu",
-	'feedback:status:closed' => "Feedbacks résolus",
+	'feedback:status:closed' => "Résolus",
 	'feedback:closeconfirm' => "Marquer comme résolu ? Un feedback résolu est considéré comme traité et alimente la base de connaissances. Confirmer ?",
 	'feedback:close:success' => "Feedback marqué comme résolu / déjà traité.",
 	'feedback:close:error' => "Impossible de marquer ce feedback comme résolu",

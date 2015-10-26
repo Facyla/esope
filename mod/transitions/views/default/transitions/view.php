@@ -332,13 +332,13 @@ if ($transitions->category == 'challenge') {
 // RENDER EMBED CONTENT : no sharing/contribution tools + no metadata menu
 if ($embed) {
 	echo '<div class="transitions-view-wrapper">';
+	echo '<h2 class="elgg-heading-main"><a href="' . $transitions->getURL() . '" target="_blank">' . $transitions->title . '</a></h2>';
 	echo $category;
 	echo '<div class="clearfloat"></div>';
 	echo $body;
 	echo '</div>';
 	return;
 }
-
 
 
 
@@ -405,6 +405,7 @@ $tab_content .= elgg_view_module('info', false, $embedcode, array('id' => "trans
 $body .= elgg_view('navigation/tabs', $params);
 //$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
 $body .= $tab_content;
+$body .= '<div class="clearfloat"></div>';
 //$body .= '</div>';
 
 

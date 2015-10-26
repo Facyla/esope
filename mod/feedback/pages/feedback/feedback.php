@@ -144,7 +144,7 @@ $sidebar .= '</div>';
 // Titre de la page
 $title = '<i class="fa fa-bullhorn"></i> ' . elgg_echo('feedback:admin:title');
 if (!empty($status_filter)) {
-	$title .= ' ' . elgg_echo('feedback:status:'.$status_filter);
+	$title .= ' : ' . elgg_echo('feedback:status:'.$status_filter);
 }
 if (!empty($about_filter)) {
 	$title .= ' ' . elgg_echo('feedback:about') . ' &laquo;&nbsp;' . elgg_echo('feedback:about:'.$about_filter) . '&nbsp;&raquo;';
