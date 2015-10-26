@@ -12,13 +12,13 @@ $transitions = elgg_extract('entity', $vars, FALSE);
 if (!$transitions) {
 	return TRUE;
 }
-
 // Use custom views for full view
 if ($full) {
 		// Full view
 	if (elgg_in_context('transitions-news')) {
 		echo elgg_view('transitions/news', $vars);
 	} else {
+		if (elgg_in_context('export_embed')) { $vars['embed'] = true; }
 		echo elgg_view('transitions/view', $vars);
 	}
 	return;

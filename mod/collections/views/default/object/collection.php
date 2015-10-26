@@ -1,6 +1,9 @@
 <?php
+/* Collection view */
 
 $full = elgg_extract('full_view', $vars, FALSE);
+$full_content = elgg_extract('full_content', $vars, FALSE);
+//$embed = elgg_extract('embed', $vars, FALSE);
 $list_type = elgg_extract('list_type', $vars, FALSE);
 $entity = elgg_extract('entity', $vars);
 

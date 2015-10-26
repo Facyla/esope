@@ -13,7 +13,7 @@
  * iionly@gmx.de
  */
 
-$german = array(
+return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Feedback für die Community-Seite',
 	'item:object:feedback' => 'Feedback',
@@ -104,6 +104,4 @@ $german = array(
 	'feedback:access:group' => "Group members",
 
 );
-
-add_translation("de", $german);
 

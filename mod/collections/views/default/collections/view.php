@@ -1,7 +1,8 @@
 <?php
 $embed = elgg_extract('embed', $vars);
-$full_content = elgg_extract('full_content', $vars, false);
-if ($full_content !== false) $full_content = true;
+// Determines if collection elements should be displayed full_view or not
+$full_content = elgg_extract('full_content', $vars, true);
+//if ($full_content !== false) { $full_content = true; }
 
 // Get collection
 $collection = elgg_extract('entity', $vars);
@@ -28,6 +29,7 @@ if (!elgg_in_context('widgets')) {
 }
 
 
+// Collection elements
 //$collection_content = '<ul class="collections-listing">';
 $collection_content = '<div class="collections-listing">';
 $entities = (array) $collection->entities;
@@ -37,15 +39,19 @@ foreach($entities as $k => $entity_guid) {
 	$publication = get_entity($entity_guid);
 	if (elgg_instanceof($publication, 'object')) {
 		$publication_comment = $entities_comment[$k];
-		//$collection_content .= '<li>';
-		$collection_content .= '<div class="collections-item-entity">';
 		$collection_content .= '<hr class="hidden" />';
+		//$collection_content .= '<li>';
+		if ($full_content) {
+			$collection_content .= '<div class="collections-item-entity full">';
+		} else {
+			$collection_content .= '<div class="collections-item-entity">';
+		}
 		
 		//$collection_content .= $publication->title . '<br /><em>' . $publication_comment . '</em>';
 		//$collection_content .= elgg_view_entity($publication, array('full_view' => false, 'list_type' => 'gallery'));
 		$list_type = 'gallery';
 		if ($full_content) { $list_type = 'list'; }
-		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => $list_type));
+		$collection_content .= elgg_view_entity($publication, array('full_view' => $full_content, 'list_type' => $list_type, 'embed' => $full_content));
 		
 		$collection_content .= '<blockquote><p>' . $publication_comment . '</blockquote>';
 		
@@ -74,32 +80,29 @@ $date = elgg_view_friendly_time($collection->time_created);
 $owner_image .= '<p class="elgg-subtext">' . $author_text . ' ' . $date . '</p>';
 
 
+
 // Embeddable content
-$embed_content = '';
-$embed_content .= elgg_view_image_block($icon, $description, array('image_alt' => $owner_image));
-
+$content = '';
+$content .= elgg_view_image_block($icon, $description, array('image_alt' => $owner_image));
 /*
-$embed_content .= $icon;
-$embed_content .= $description;
-$embed_content .= '<div class="clearfloat"></div><br />';
+$content .= $icon;
+$content .= $description;
+$content .= '<div class="clearfloat"></div><br />';
 */
-//$embed_content .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
-$embed_content .= $collection_content;
-$embed_content .= '<div class="clearfloat"></div><br />';
-
-
+//$content .= '<h3>' . elgg_echo('collections:entities:count', array(count($entities))) . '</h3>';
+$content .= $collection_content;
+$content .= '<div class="clearfloat"></div><br />';
 
 // Display embed code if not already embedded
 if ($embed) {
 	//echo '<h3><a href="' . $collection->getURL() . '" target="_blank">' . $collection->title . '</a></h3>';
-	echo $embed_content;
+	echo '<h2 class="elgg-heading-main"><a href="' . $collection->getURL() . '" target="_blank">' . $collection->title . '</a></h2>';
+	echo $content;
 	return;
 }
 
 
-// Full page view
-$body .= $embed_content;
-
+// Full page view : add wrapping
 
 // TABS BLOCK
 $params = array(
@@ -150,10 +153,11 @@ $embed_code = '<p>' . elgg_echo('collections:embed:details') . '</p><textarea re
 $tab_content .= elgg_view_module('info', false, $embed_code, array('id' => "collections-{$collection->guid}-embed", 'class' => "collections-tab-content hidden"), array('guid' => $collection->guid));
 
 // Render tabs block
-$body .= elgg_view('navigation/tabs', $params);
-$body .= '<div class="elgg-tabs-content">';
-$body .= $tab_content;
-$body .= '</div>';
+$content .= elgg_view('navigation/tabs', $params);
+$content .= '<div class="elgg-tabs-content">';
+$content .= $tab_content;
+$content .= '<div class="clearfloat"></div>';
+$content .= '</div>';
 
 
 
@@ -163,7 +167,7 @@ if (!empty($metadata)) {
 	echo $metadata;
 	echo '<div class="clearfloat"></div>';
 }
-echo $body;
+echo $content;
 echo '</div>';
 
 
