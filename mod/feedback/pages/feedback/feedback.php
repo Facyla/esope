@@ -1,8 +1,8 @@
 <?php
-global $CONFIG;
 gatekeeper();
 
 $base_url = elgg_get_site_url() . 'feedback/';
+$site = elgg_get_site_entity();
 
 elgg_set_context('feedback');
 elgg_push_breadcrumb('feedback', $base_url);
@@ -29,7 +29,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 		elgg_set_page_owner_guid($feedbackgroup);
 		//$base_url .= 'group/' . $feedbackgroup;
 		if (!elgg_in_context('feedback')) $limit = get_input('limit', 3);
-	} else elgg_set_page_owner_guid($CONFIG->site->guid);
+	} else elgg_set_page_owner_guid($site->guid);
 }
 
 //$count_all = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));

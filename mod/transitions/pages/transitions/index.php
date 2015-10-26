@@ -126,7 +126,7 @@ $content .= '<div class="transitions-index-search">';
 
 
 	// Search options
-	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 10, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
 
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
