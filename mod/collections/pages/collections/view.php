@@ -18,7 +18,7 @@ global $CONFIG;
 $guid = get_input('guid', false);
 $embed = get_input('embed', false);
 $full_view = get_input('full_view', true);
-if (in_array($full_view, array('0', 'no', 'false'))) { $full_view = false; }
+$full_content = get_input('full_content', false);
 
 // BREADCRUMBS - Add main collection breadcrumb
 elgg_push_breadcrumb(elgg_echo('collections'), 'collection');
@@ -28,7 +28,7 @@ $collection = get_entity($guid);
 if (!elgg_instanceof($collection, 'object', 'collection')) { $collection = collections_get_entity_by_name($guid); }
 if (elgg_instanceof($collection, 'object', 'collection')) {
 	//$content = elgg_view('collections/view', array('entity' => $collection, 'embed' => $embed));
-	$content = elgg_view_entity($collection, array('embed' => $embed, 'full_view' => $full_view));
+	$content = elgg_view_entity($collection, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
 	$title = $collection->title;
 	elgg_push_breadcrumb($title);
 }

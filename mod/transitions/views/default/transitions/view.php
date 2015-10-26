@@ -7,6 +7,7 @@
 
 $transitions = elgg_extract('entity', $vars, FALSE);
 $embed = elgg_extract('embed', $vars, FALSE);
+$full_content = get_input('full_content', false);
 
 if (!$transitions) {
 	return TRUE;
@@ -294,7 +295,7 @@ $body = '<div class="transitions-view-main">
 if ($transitions->category == 'challenge') {
 	$collection = get_entity($transitions->collection);
 	if (elgg_instanceof($collection, 'object', 'collection')) {
-		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection, array('embed' => true)) . '</div>';
+		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection, array('embed' => true, 'full_content' => $full_content)) . '</div>';
 	}
 }
 

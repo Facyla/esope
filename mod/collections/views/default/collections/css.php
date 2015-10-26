@@ -47,6 +47,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 /* Rendu des collections */
 .collections-listing { list-style-type:none; margin-right: -30px; }
 .collections-item-entity { float: left; width: 310px; max-width:100%; height: 330px; overflow: hidden; }
+.collections-item-entity.full { float: none; width: auto; max-width:100%; height: auto; overflow: auto; }
 .collections-item-entity .transitions-gallery-item { margin:0 0 0 0; }
 .collections-item-entity .transitions-gallery-item .transitions-gallery-head { padding:24px; }
 .collections-listing .collections-item-entity { /* box-shadow: 1px 1px 1px 1px black; padding: 1em; margin: 0.5em; */ padding:0; margin: 0 30px 30px 0; display: inline-block; }
