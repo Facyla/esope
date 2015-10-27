@@ -132,6 +132,7 @@ Voir et commenter cette contribution :
 	'transitions:featured:featured' => "Mis en avant",
 	'transitions:featured:background' => "En retrait",
 	'transitions:search:rss' => "Flux RSS pour cette recherche",
+	'transitions:search:ical' => "Flux iCal",
 	'transitions:filter' => "Filtrer les contributions",
 	'transitions:filter:featured' => "Choisies",
 	'transitions:filter:background' => "En retrait",

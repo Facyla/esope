@@ -132,6 +132,7 @@ View and comment on the contribution:
 	'transitions:featured:featured' => "Feature (more visible)",
 	'transitions:featured:background' => "Background (less visible)",
 	'transitions:search:rss' => "RSS feed for this search",
+	'transitions:search:ical' => "iCal feed",
 	'transitions:filter' => "Filter the contributions",
 	'transitions:filter:featured' => "Featured",
 	'transitions:filter:background' => "In background",
