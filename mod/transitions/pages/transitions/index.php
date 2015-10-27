@@ -185,14 +185,14 @@ $content .= '<div class="transitions-index-search">';
 	$rss_url = current_page_url();
 	if (substr_count($rss_url, '?')) { $rss_url .= "&view=rss"; } else { $rss_url .= "?view=rss"; }
 	$rss_url = elgg_format_url($rss_url);
-	$content .= '<span style="float:right;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . '</a></span>';
+	$content .= '<span style="float:right; margin-left:0.5em;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . '</a></span>';
 
 	// Search ICAL feed
 	if ($category == 'event') {
 		$ical_url = current_page_url();
 		if (substr_count($ical_url, '?')) { $ical_url .= "&view=ical"; } else { $ical_url .= "?view=ical"; }
 		$ical_url = elgg_format_url($ical_url);
-		$content .= '<span style="float:right;"> <a href="' . $ical_url . '"><i class="fa fa-ical"></i> ' . elgg_echo('transitions:search:ical') . ' </span>';
+		$content .= '<span style="float:right; margin-left:0.5em;"> <a href="' . $ical_url . '"><i class="fa fa-calendar"></i> ' . elgg_echo('transitions:search:ical') . ' </span>';
 	}
 
 	if ($count > 1) {
