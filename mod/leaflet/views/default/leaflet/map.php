@@ -50,6 +50,60 @@ define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 
 <?php
 
+/* Multiple POI */
+$entities = elgg_extract('entities', $vars);
+if (is_array($entities)) {
+	echo "<script type=\"text/javascript\">
+		var mapMarker, mapMarkers
+		require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
+			// Create a custom marker for users
+			mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'home', markerColor: 'grey' });
+			mapMarkers = new L.MarkerClusterGroup();";
+	
+	foreach($entities as $entity) {
+		
+		// Use entity location information
+		$lat = $entity->getLatitude();
+		$long = $entity->getLongitude();
+	
+		// Geocode entity if needed
+		if (!$lat || !$long) {
+			$location = $entity->location;
+			if (empty($location)) { $location = $entity->address; }
+			$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
+			$lat = (float)$geo_location['lat'];
+			$long = (float)$geo_location['long'];
+			if ($lat && $long) { $entity->setLatLong($lat, $long); }
+		}
+		$title = $entity->title;
+		if (empty($title)) { $title = $entity->name; }
+		//$description = elgg_view_entity($entity, array('full_view' => false, 'view_type' => 'gallery'));
+		$description = '<strong><a href="' . $entity->getURL() . '"><img src="' . $entity->getIconURL('small') . '" /> ' . $entity->title . '</a></strong>';
+		
+		// Render JS marker code - only if we have valid lat/long
+		if ($lat && $long) {
+			// Marker title and content
+			$title = json_encode($title);
+			$description = json_encode($description);
+	
+			echo "
+				var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
+				marker.bindPopup($description);
+				mapMarkers.addLayer(marker);
+				bounds.extend(marker.getLatLng());";
+		}
+		
+	}
+	
+	echo "map.addLayer(mapMarkers);
+			map.fitBounds(bounds, {padding: [20,20]});
+			//map.setView(new L.LatLng($lat, $long),10);
+		});
+		</script>";
+	
+}
+
+/* Unique POI */
 // Get marker data
 $entity = elgg_extract('entity', $vars);
 if (elgg_instanceof($entity)) {
@@ -60,7 +114,6 @@ if (elgg_instanceof($entity)) {
 	// Geocode entity if needed
 	if (!$lat || !$long) {
 		$location = $entity->location;
-		if (empty($location)) { $location = $entity->address; }
 		if (empty($location)) { $location = $entity->address; }
 		$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $location), false);
 		$lat = (float)$geo_location['lat'];
@@ -88,7 +141,6 @@ if (elgg_instanceof($entity)) {
 	}
 }
 
-
 // Render JS marker code - only if we have valid lat/long
 if ($lat && $long) {
 	// Marker title and content
@@ -99,7 +151,7 @@ if ($lat && $long) {
 	var mapMarker, mapMarkers
 	require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
 		// Create a custom marker for users
-		mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
+		mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'home', markerColor: 'red' });
 		mapMarkers = new L.MarkerClusterGroup();
 		
 		var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
@@ -114,5 +166,4 @@ if ($lat && $long) {
 	</script>";
 }
 
-echo '<div id="onlineUsers"></div>';
 
