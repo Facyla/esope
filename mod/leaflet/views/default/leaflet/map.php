@@ -54,11 +54,11 @@ define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 $entities = elgg_extract('entities', $vars);
 if (is_array($entities)) {
 	echo "<script type=\"text/javascript\">
-		var mapMarker, mapMarkers
+		var mapMarker, mapMarkers_" . $id . ";
 		require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
 			// Create a custom marker for users
 			mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'home', markerColor: 'grey' });
-			mapMarkers = new L.MarkerClusterGroup();";
+			mapMarkers_" . $id . " = new L.MarkerClusterGroup();";
 	
 	foreach($entities as $entity) {
 		
@@ -78,7 +78,11 @@ if (is_array($entities)) {
 		$title = $entity->title;
 		if (empty($title)) { $title = $entity->name; }
 		//$description = elgg_view_entity($entity, array('full_view' => false, 'view_type' => 'gallery'));
-		$description = '<strong><a href="' . $entity->getURL() . '"><img src="' . $entity->getIconURL('small') . '" /> ' . $entity->title . '</a></strong>';
+		$icon = $entity->getIconURL('small');
+		if ($icon == elgg_get_site_url() . '_graphics/icons/default/small.png') { $icon = false; }
+		$description = '<strong><a href="' . $entity->getURL() . '">';
+		if ($icon) { $description .= '<img src="' . $icon . '" /> '; }
+		$description .= $entity->title . '</a></strong>';
 		
 		// Render JS marker code - only if we have valid lat/long
 		if ($lat && $long) {
@@ -89,13 +93,13 @@ if (is_array($entities)) {
 			echo "
 				var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
 				marker.bindPopup($description);
-				mapMarkers.addLayer(marker);
+				mapMarkers_" . $id . ".addLayer(marker);
 				bounds.extend(marker.getLatLng());";
 		}
 		
 	}
 	
-	echo "map.addLayer(mapMarkers);
+	echo "map.addLayer(mapMarkers_" . $id . ");
 			map.fitBounds(bounds, {padding: [20,20]});
 			//map.setView(new L.LatLng($lat, $long),10);
 		});
@@ -123,7 +127,11 @@ if (elgg_instanceof($entity)) {
 	$title = $entity->title;
 	if (empty($title)) { $title = $entity->name; }
 	//$description = elgg_view_entity($entity, array('full_view' => false, 'view_type' => 'gallery'));
-	$description = '<strong><a href="' . $entity->getURL() . '"><img src="' . $entity->getIconURL('small') . '" /> ' . $entity->title . '</a></strong>';
+	$icon = $entity->getIconURL('small');
+	if ($icon == elgg_get_site_url() . '_graphics/icons/default/small.png') { $icon = false; }
+	$description = '<strong><a href="' . $entity->getURL() . '">';
+	if ($icon) { $description .= '<img src="' . $icon . '" /> '; }
+	$description .= $entity->title . '</a></strong>';
 	
 } else {
 	// No entity
@@ -148,18 +156,18 @@ if ($lat && $long) {
 	$description = json_encode($description);
 	
 	echo "<script type=\"text/javascript\">
-	var mapMarker, mapMarkers
+	var mapMarker, mapMarkers_" . $id . ";
 	require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
 		// Create a custom marker for users
 		mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'home', markerColor: 'red' });
-		mapMarkers = new L.MarkerClusterGroup();
+		mapMarkers_" . $id . " = new L.MarkerClusterGroup();
 		
 		var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
 		marker.bindPopup($description);
-		mapMarkers.addLayer(marker);
+		mapMarkers_" . $id . ".addLayer(marker);
 		bounds.extend(marker.getLatLng());
 		
-		map.addLayer(mapMarkers);
+		map.addLayer(mapMarkers_" . $id . ");
 		map.fitBounds(bounds, {padding: [20,20]});
 		map.setView(new L.LatLng($lat, $long),10);
 	});
