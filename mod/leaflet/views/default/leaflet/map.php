@@ -18,11 +18,11 @@ echo '<div id="' . $id . '" class="' . $map_id . '" style="' . $map_css . '"></d
 
 <script type="text/javascript">
 // We need to define some vars globally to be able to use them in other scripts
-var map, bounds, baseMap;
+var map_<?php echo $id; ?>, bounds_<?php echo $id; ?>, baseMap;
 //require(['leaflet', 'leaflet.providers'], function(){
 define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 	// CREATE A MAP on chosen map id
-	map = L.map('<?php echo $id; ?>');
+	map_<?php echo $id; ?> = L.map('<?php echo $id; ?>');
 
 	// CHOOSE TILE LAYER
 	// Pure OSM
@@ -36,7 +36,7 @@ define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 	*/
 
 	// Leaflet providers plugin
-	baseMap = L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(map);
+	baseMap = L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(map_<?php echo $id; ?>);
 	// Add layer switch and overlays
 	/*
 	var baseLayers = ['OpenStreetMap.Mapnik'];
@@ -44,7 +44,7 @@ define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 	*/
 
 	// Init bounds to init map centering on markers
-	bounds = new L.LatLngBounds();
+	bounds_<?php echo $id; ?> = new L.LatLngBounds();
 });
 </script>
 
@@ -93,15 +93,15 @@ if (is_array($entities)) {
 			echo "
 				var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
 				marker.bindPopup($description);
-				mapMarkers_" . $id . ".addLayer(marker);
-				bounds.extend(marker.getLatLng());";
+				mapMarkers_$id.addLayer(marker);
+				bounds_$id.extend(marker.getLatLng());";
 		}
 		
 	}
 	
-	echo "map.addLayer(mapMarkers_" . $id . ");
-			map.fitBounds(bounds, {padding: [20,20]});
-			//map.setView(new L.LatLng($lat, $long),10);
+	echo "map_$id.addLayer(mapMarkers_$id);
+			map_$id.fitBounds(bounds_$id, {padding: [20,20]});
+			//map_$id.setView(new L.LatLng($lat, $long),10);
 		});
 		</script>";
 	
@@ -156,20 +156,20 @@ if ($lat && $long) {
 	$description = json_encode($description);
 	
 	echo "<script type=\"text/javascript\">
-	var mapMarker, mapMarkers_" . $id . ";
+	var mapMarker, mapMarkers_$id;
 	require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster', '$id'], function(){
 		// Create a custom marker for users
 		mapMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'home', markerColor: 'red' });
-		mapMarkers_" . $id . " = new L.MarkerClusterGroup();
+		mapMarkers_$id = new L.MarkerClusterGroup();
 		
 		var marker = L.marker([$lat, $long], {icon: mapMarker, title: $title});
 		marker.bindPopup($description);
-		mapMarkers_" . $id . ".addLayer(marker);
-		bounds.extend(marker.getLatLng());
+		mapMarkers_$id.addLayer(marker);
+		bounds_$id.extend(marker.getLatLng());
 		
-		map.addLayer(mapMarkers_" . $id . ");
-		map.fitBounds(bounds, {padding: [20,20]});
-		map.setView(new L.LatLng($lat, $long),10);
+		map_$id.addLayer(mapMarkers_$id);
+		map_$id.fitBounds(bounds_$id, {padding: [20,20]});
+		map_$id.setView(new L.LatLng($lat, $long),10);
 	});
 	</script>";
 }
