@@ -123,7 +123,9 @@ if (empty($content)) {
 		$content .= '</div>';
 		$content .= '<div class="clearfloat"></div>';
 
+		$content .= '<div class="elgg-page-footer"><div class="elgg-inner">';
 		$content .= elgg_view('page/elements/footer');
+		$content .= '</div></div>';
 	}
 
 }
