@@ -53,6 +53,7 @@ function theme_fing_init(){
 	// Page handlers
 	elgg_register_page_handler("fing", "fing_page_handler");
 	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
+	elgg_register_page_handler("futureduc", "futureduc_page_handler");
 	
 	
 	// Remplacement du modèle d'event_calendar
@@ -197,6 +198,11 @@ function fing_page_handler($page){
 function qntransitions_page_handler($page){
 	if (!empty($page[0])) set_input('pagetype', $page[0]);
 	include(dirname(__FILE__) . '/pages/theme_fing/qntransitions.php');
+	return true;
+}
+
+function futureduc_page_handler($page){
+	forward('groups/profile/162252/futureduc');
 	return true;
 }
 
