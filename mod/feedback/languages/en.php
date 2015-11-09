@@ -25,6 +25,7 @@ return array(
 	'feedback:numbertodisplay' => 'Number of feedback entries to display',
 
 	'feedback:message' => 'Love it? Hate it? Want to suggest new features or report a bug? We would love to hear from you.',
+	'feedback:message:adminonly' => "<p><strong>Warning: this is not a discussion tool, please use the forum to discuss with other members!</strong></p>",
 
 	'feedback:default:id' => 'Name and/or Email',
 	'feedback:default:txt' => 'Let us know what you think!',
@@ -41,6 +42,7 @@ return array(
 	'feedback:delete:success' => 'Feedback was deleted successfully.',
 
 	'feedback:mood:' => 'None',
+	'feedback:mood:undefined' => 'None',
 	'feedback:mood:angry' => 'Angry',
 	'feedback:mood:neutral' => 'Neutral',
 	'feedback:mood:happy' => 'Happy',
@@ -50,7 +52,9 @@ return array(
 	'feedback:about:content' => 'Content',
 	'feedback:about:suggestions' => 'Suggestions',
 	'feedback:about:compliment' => 'Compliment',
-	'feedback:about:other' => 'Other',
+	'feedback:about:other' => 'Other ',
+	'feedback:about:feedback' => 'Other',
+	'feedback:about:undefined' => 'Other',
 
 	'feedback:list:mood' => 'Mood',
 	'feedback:list:about' => 'About',
@@ -114,12 +118,12 @@ return array(
 	'feedback:menu:closed' => "%s closed",
 	'feedback:menu:closed:singular' => "%s closed",
 	'feedback:menu:content' => "%s reports",
+	'feedback:menu:content:singular' => "%s report",
 	'feedback:menu:bug' => "%s bugs",
 	'feedback:menu:bug:singular' => "%s bug",
 	'feedback:menu:suggestions' => "%s suggestions",
 	'feedback:menu:suggestions:singular' => "%s suggestion",
 	'feedback:menu:question' => "%s questions",
-	'feedback:menu:content:singular' => "%s report",
 	'feedback:menu:question:singular' => "%s question",
 	'feedback:menu:compliment' => "%s compliments",
 	'feedback:menu:compliment:singular' => "%s compliment",
@@ -127,7 +131,8 @@ return array(
 	'feedback:menu:other:singular' => "%s other / unsorted",
 	
 	// About - feedback types
-	'feedback:about' => "of type",
+	//'feedback:about' => "of type",
+	'feedback:about' => ":",
 	'feedback:about:question' => "Question",
 	'feedback:access:admin' => "Admin only",
 	'feedback:access:sitemembers' => "Site members",
