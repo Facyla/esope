@@ -13,7 +13,7 @@
  * iionly@gmx.de
  */
 
-$french = array(
+return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Feedbacks du site',
 	'item:object:feedback' => 'Feedback',
@@ -151,6 +151,4 @@ $french = array(
 	'feedback:linktofeedbacks' => "&raquo;&nbsp;Afficher les précédents feedbacks",
 	
 );
-
-add_translation("fr",$french);
 

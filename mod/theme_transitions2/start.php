@@ -43,6 +43,19 @@ function theme_transitions2_init() {
 	elgg_register_event_handler('pagesetup', 'system', 'theme_transitions2_pagesetup', 1000);
 	elgg_register_plugin_hook_handler('register', 'menu:topbar', 'theme_transitions2_topbar_menu', 1000);
 	
+	// Ajout au menu
+	if (elgg_is_active_plugin('language_selector')) {
+		$language_selector = elgg_view('theme_transitions2/language_selector');
+		elgg_register_menu_item('topbar', array(
+				'name' => 'language_selector',
+				'text' => $language_selector,
+				'href' => false,
+				'title' => '',
+				'rel' => 'nofollow',
+				'priority' => 800,
+			));
+	}
+	
 	// Rewrite RSS, ICAL and QR code links in owner_block menu (goes to navigation)
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
 	elgg_unregister_plugin_hook_handler('output:before', 'layout', 'transitions_add_ical_link');
