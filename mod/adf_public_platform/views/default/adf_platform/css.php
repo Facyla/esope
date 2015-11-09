@@ -98,6 +98,7 @@ html {
 }
 */
 
+html { -webkit-font-smoothing: antialiased; }
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 pre, code { word-break:break-all; }
