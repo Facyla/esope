@@ -1,3 +1,5 @@
+html { -webkit-font-smoothing: antialiased; }
+
 .elgg-page-admin header h2 { display:inline; }
 .elgg-page-admin header ul { display:inline; float:right; }
 .elgg-page-admin header ul li { margin-left:6px; }
