@@ -3,7 +3,7 @@
  * French strings
  */
 
-$fr = array(
+return array(
 	'multilingual' => "Support multilingue",
 	'multilingual:prefix:todo' => "[A TRADUIRE EN %s] ",
 	
@@ -43,8 +43,5 @@ $fr = array(
 	'multilingual:error:invalidsubtype' => "Ce type de publication ne peut pas être traduit.",
 	
 	
-	
 );
-
-add_translation('fr', $fr);
 

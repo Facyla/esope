@@ -256,6 +256,7 @@ if (empty($title)) {
 	$title = strip_tags($vars['entity']->description);
 	$title = elgg_get_excerpt($title, 32);
 }
+$title = htmlspecialchars_decode($title);
 
 $permalink = htmlspecialchars($vars['entity']->getURL(), ENT_NOQUOTES, 'UTF-8');
 $pubdate = date('r', $vars['entity']->getTimeCreated());
