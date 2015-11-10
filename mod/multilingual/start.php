@@ -446,6 +446,128 @@ function multilingual_get_main_entity($translation){
 }
 
 
+/* @TODO : has or count translation ? return number of translations if any
+ *  but get_translations almost offers that function...
+ * Case 1 : Is main entity : count translations from that entity
+ * Case 2 : is a translation => find original and count 
+ */
+function multilingual_count_translations($entity) {
+	// Get main entity
+	$main = multilingual_get_main_entity($entity);
+	// Count translations of main entity
+	$translations = multilingual_get_translations($main);
+	// Return total count (main + translations)
+	$guids = array();
+	$guids[$main->guid] = $main;
+	if ($translations) {
+		foreach($translations as $ent) {
+			$guids[$ent->guid] = $ent;
+		}
+	}
+	return count($guids);
+}
+
+
+/* Determines the best version to display
+ * Ensures it determines no less and no more than 1 version per translated content set.
+ * Top : same language (explicit lang or main entity)
+ * Then : same language as site default
+ : Finally : main entity
+ */
+function multilingual_select_best_version($entity) {
+	$lang = get_current_language();
+	$main_lang = multilingual_get_main_language();
+	$main = multilingual_get_main_entity($entity);
+	
+	// Same as current language
+	if ($entity->lang == $lang) { return $entity; }
+	// Also if current language is the same as main language, we can use main entity
+	if (($main_lang == $lang) && ($entity->guid == $main->guid)) { return $entity; }
+	// Any other translation in current language
+	$translations = multilingual_get_translations($entity);
+	foreach($translations as $ent) {
+		if ($ent->lang == $lang) { return $ent; }
+	}
+	
+	// Any other translation in main language
+	foreach($translations as $ent) {
+		if ($ent->lang == $min_lang) { return $ent; }
+	}
+	
+	// If we've got still nothing, content will be anyway in another language => main entity is best choice
+	return $main_entity;
+}
+
+// Determines if this entity is the best version to display
+function multilingual_is_best_version($entity) {
+	$best_version = multilingual_select_best_version($entity);
+	if ($entity->guid == $best_version->guid) { return true; }
+	return false;
+}
+
+
+// Callback function for get_entities - removes duplicates caused by translations
+// @TODO : this is not the good level, as this is applied after selecting the entities. 
+// We need to exclude translation duplicates before getting the entities (for list and getter functions, offset, etc.)
+function multilingual_entity_row_to_elggstar($row) {
+	if (!($row instanceof stdClass)) { return $row; }
+	if ((!isset($row->guid)) || (!isset($row->subtype))) { return $row; }
+	$new_entity = false;
+	
+	// Create a memcache cache if we can
+	static $newentity_cache;
+	if ((!$newentity_cache) && (is_memcache_available())) { $newentity_cache = new ElggMemcache('new_entity_cache'); }
+	if ($newentity_cache) { $new_entity = $newentity_cache->load($row->guid); }
+	if ($new_entity) { return $new_entity; }
+
+	// load class for entity if one is registered
+	$classname = get_subtype_class_from_id($row->subtype);
+	if ($classname != "") {
+		if (class_exists($classname)) {
+			$new_entity = new $classname($row);
+			if (!($new_entity instanceof ElggEntity)) {
+				$msg = $classname . " is not a " . 'ElggEntity' . ".";
+				throw new ClassException($msg);
+			}
+		} else {
+			error_log("Class '" . $classname . "' was not found, missing plugin?");
+		}
+	}
+
+	if (!$new_entity) {
+		//@todo Make this into a function
+		switch ($row->type) {
+			case 'object' :
+				$new_entity = new ElggObject($row);
+				break;
+			case 'user' :
+				$new_entity = new ElggUser($row);
+				break;
+			case 'group' :
+				$new_entity = new ElggGroup($row);
+				break;
+			case 'site' :
+				$new_entity = new ElggSite($row);
+				break;
+			default:
+				$msg = "Entity type " . $row->type . " is not supported.";
+				throw new InstallationException($msg);
+		}
+	}
+
+	// Cache entity if we have a cache available
+	if (($newentity_cache) && ($new_entity)) {
+		$newentity_cache->save($new_entity->guid, $new_entity);
+	}
+	
+	// Hide duplicate translations
+	$display = multilingual_is_best_version($new_entity);
+	if (!$display) return false;
+	
+	return $new_entity;
+}
+
+
 
 /* Add new translation to entity, or update existing translation
  */

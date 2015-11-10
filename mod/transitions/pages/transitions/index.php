@@ -23,6 +23,7 @@ elgg_register_title_button();
 
 $query = get_input('q', '');
 $filter = get_input('filter', '');
+$limit = get_input('limit', 12);
 if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }
 $category = get_input('category', '');
 if ($category == 'all') $category = '';
@@ -126,7 +127,7 @@ $content .= '<div class="transitions-index-search">';
 
 
 	// Search options
-	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
 
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
@@ -171,7 +172,18 @@ $content .= '<div class="transitions-index-search">';
 			$search_options['order_by'] = "time_created desc";
 	}
 	
-
+	/* @TODO : gérer les doublons liés aux traductions, si possible via une clause where spécifique
+	 * 
+	 * Si pas de traduction => affichage standard
+	 * Si traductions :
+	 *  - si dispo dans ma langue : en priorité
+	 *  - si dispo dans autre langue : langue originale en priorité
+	 */
+	//$search_options['wheres'][] = "";
+	//$search_options['relationship'] = ""; // has_translation / translation_of
+	//$search_options['callback'] = "multilingual_entity_row_to_elggstar"; // @TODO : should be applied before getting the entities
+	
+	
 	// Perform search
 	if (isset($search_options['metadata_name_value_pairs'])) {
 		$count = elgg_get_entities_from_metadata($search_options);
@@ -180,6 +192,10 @@ $content .= '<div class="transitions-index-search">';
 		$count = elgg_get_entities($search_options);
 		$catalogue = elgg_list_entities($search_options);
 	}
+	// @TODO use relations to filter duplicates at DB level ?
+	// Relationship function wraps also metadata and basic getters
+	//$count = elgg_get_entities_from_relationship($search_options);
+	//$catalogue = elgg_list_entities_from_relationship($search_options);
 
 	// Search RSS feed
 	$rss_url = current_page_url();
