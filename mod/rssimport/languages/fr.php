@@ -1,5 +1,4 @@
 <?php
-
 $french = array(
 	'rssimport:back:to:blog' => "Retour au Blog",
 	'rssimport:back:to:bookmarks' => "Retour aux Marque-pages",
@@ -33,9 +32,9 @@ $french = array(
 	'rssimport:cron:weekly' => "Hebdomadaire",
 	'rssimport:empty:copyright' => "Vous devez être pleinement conscient des implications en terme de copyright de l'import de contenus externes, et les accepter",
 	'rssimport:empty:field' => "Veuillez renseighner tous les champs",
-	'rssimport:enableblog' => "Import RSS : activer dans les blogs ?",
-	'rssimport:enablebookmarks' => "Import RSS : activer dans les liens web ?",
-	'rssimport:enablepages' => "Import RSS : activer dans les pages wiki ?",
+	'rssimport:enableblog' => "Activer l'import RSS dans les blogs ?",
+	'rssimport:enablebookmarks' => "Activer l'import RSS dans les marque-pages ?",
+	'rssimport:enablepages' => "Activer l'import RSS dans les pages wiki ?",
 	'rssimport:enable:blog' => "Permettre d'importer des flux RSS dans les blogs ?",
 	'rssimport:enable:bookmarks' => "Permettre d'importer des flux RSS dans les marque-pages ?",
 	'rssimport:enable:pages' => "Permettre d'importer des flux RSS dans les pages wiki",
@@ -60,8 +59,8 @@ $french = array(
 	'rssimport:import:selected' => "Importer les éléments sélectionnés",
 	'rssimport:import:title' => "Import dans %s sous forme de %s",
 	'rssimport:import:updated' => "Import mis à jour",
-	'rssimport:imported:on' => "Importé le",
-	'rssimport:imported' => "Les éléments ont été importés",
+	'rssimport:importé:on' => "Importé dans",
+	'rssimport:importé' => "Les éléments ont été importés",
 	'rssimport:into' => "Import dans",
 	'rssimport:invalid:content:type' => "Impossible d'importer dans les \"%s\" pour le moment",
 	'rssimport:invalid:id' => "Flux RSS invalide",
@@ -105,29 +104,24 @@ $french = array(
 	'rssimport:allow:cron:hourly' => "Horaire",
 	'rssimport:allow:cron:daily' => "Quotidien",
 	'rssimport:allow:cron:weekly' => "Hebdomadaire",
-	'rssimport:cron:frequency' => "Fréquences d'import automatiques",
-	'rssimport:cron:frequency:explanation' => "Ces paramètres n'affectent que les imports programmés automatiques. Si toutes les fréquences d'imports sont désactivées, il reste possible de faire des imports manuels.",
-	'rssimport:grouptools' => "Outils d'import",
-	'rssimport:setting:adminonly' => "Restreindre l'import de flux RSS aux administrateurs seulements",
+	'rssimport:cron:frequency' => "Fréquences d'import autorisées",
+	'rssimport:cron:frequency:explanation' => "Si toutes les fréquences d'imports sont désactivées, il est tout de même possible de faire des imports manuelles. Ces paramètres n'affectent que les imports programmées et automatiques.",
+	'rssimport:grouptools' => "Choix des outils autorisés pour l'import dans les groupes",
 	
-	/* common curl errors */
-	'rssimport:curl:error:default' => "Une erreur est survenue lors de la récupération du flux. Veuillez vérifier que les paramètres sont corrects.",
+	'rssimport:imported:on' => "Importé le ",
+	'rssimport:imported' => "Les éléments ont bien été importés",
+	'rssimport:settings:adminonly' => "Limiter l'import de flux RSS aux administrateurs seulement",
+	'rssimport:curl:error:default' => "Une erreur est survenue lors de la récupération de votre flux. Veuillez vérifier que les paramètres sont corrects.",
 	'rssimport:curl:error:6' => "Aucun flux valide trouvé à cette adresse. Veuillez vérifier l'adresse du flux.",
 	'rssimport:curl:error:7' => "Impossible de se connecter au réseau de destination. Vérifiez que l'emplacement que vous avez défini est correct. Si l'emplacement utilise un protocole non-standard (par ex. https) cela peut être dû aux restrictions du firewall de votre serveur.",
 	
 	// Fing additions
-	'rssimport:settings:access' => "Accès aux outils d'import",
-	'rssimport:settings:general' => "Auteur et notifications",
-	'rssimport:notifications' => "Emails de notification",
-	'rssimport:notifications:details' => "Par défaut les nouvelles publications génèrent des notifications ; vous pouvez désactiver ces envois de notifications pour les imports RSS.",
-	'rssimport:ownership' => "Auteur des publications (dans les groupes)",
-	'rssimport:ownership:explanation' => "Les publications peuvent être publiées au nom de la personne qui a configuré le flux, ou au nom du conteneur de la publication (c'est-à-dire le groupe dans lequel elles sont publiées).",
-	'rssimport:ownership:container' => "Groupe de l'import",
-	'rssimport:ownership:owner' => "Auteur de l'import",
-	'rssimport:group_role' => "Accès aux outils d'import dans les groupes",
-	'rssimport:group_role:explanation' => "Permet de choisir qui a accès à cet outil : tous, les responsables de groupes, ou les administrateurs",
-	'rssimport:user_role' => "Activer les outils d'import personnel",
-	'rssimport:user_role:explanation' => "Permet de choisir si les membres peuvent utiliser l'import de flux RSS",
+	'rssimport:ownership' => "Auteur des publications",
+	'rssimport:ownership:explanation' => "Les publications peuvent être publiées au nom de la personne qui a configuré le flux, ou au nom du conteneur de la publication, c'est-à-dire le groupe dans lequel elles sont publiées.",
+	'rssimport:ownership:container' => "Container : groupe ou portfolio personnel",
+	'rssimport:ownership:owner' => "Auteur du flux d'import",
+	'rssimport:roles' => "Accès aux outils d'import",
+	'rssimport:roles:explanation' => "Permet de choisir qui a accès à cet outil : tous, les responsables de groupes, ou les administrateurs",
 	'rssimport:role:user' => "Tous les membres",
 	'rssimport:role:groupadmin' => "Responsables de groupes",
 	'rssimport:role:admin' => "Administrateurs seulement",
@@ -136,6 +130,5 @@ $french = array(
 	'rssimport:date:format' => 'j/m/Y à H:i',
 	
 );
-
-add_translation("fr",$french);
+add_translation("fr",$french);4
 
