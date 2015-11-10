@@ -34,6 +34,13 @@ return array(
 	'multilingual:translate:otherlanguages' => "Other languages (not translated)",
 	'multilingual:translate:nomissinglanguage' => "A version already exists for all available languages.",
 	
+	// Entity menu
+	'multilingual:menu:translations' => "<i class=\"fa fa-language\"></i>Translations",
+	'multilingual:menu:availablelang' => "Available translations",
+	'multilingual:menu:dotranslate' => "<i class=\"fa fa-language\"></i>Translate !",
+	'multilingual:menu:notranslation' => "<i class=\"fa fa-language\"></i>(no translation yet) ", // Or: No translation yet
+	'multilingual:menu:original' => "original content",
+	
 	// Notices and errors
 	'multilingual:translate:missingentity' => "No entity to translate.",
 	'multilingual:translate:newcreated' => "A new version has just been created.",

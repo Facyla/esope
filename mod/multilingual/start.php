@@ -294,6 +294,7 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 			$class = 'elgg-menu-multilingual elgg-selected';
 			if ($entity->guid == $main_entity->guid) {
 				$title = elgg_echo('multilingual:menu:currentlang', array($languages[$current_lang]));
+				$title .= ' (' . elgg_echo('multilingual:menu:original') . ')';
 				$href = false;
 				$class .= ' multilingual-main';
 			} else {
@@ -316,8 +317,8 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 				$main_entity_lang = $main_entity->lang;
 				if (empty($main_entity_lang)) { $main_entity_lang = $main_lang; }
 				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$main_entity_lang]));
+				$title .= ' (' . elgg_echo('multilingual:menu:original') . ')';
 				$href = $main_entity->getURL();
-				$class .= ' multilingual-main';
 				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $main_entity_lang . '.gif" alt="' . $main_entity_lang . '" title="' . $title . '" />';
 				$return[] = ElggMenuItem::factory(array(
 						'name' => 'multilingual-version-' . $main_entity->lang, 

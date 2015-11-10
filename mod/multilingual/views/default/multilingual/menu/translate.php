@@ -9,7 +9,7 @@ $content = '';
 $languages = multilingual_available_languages(false);
 
 if ($languages) {
-	$text = '<i class="fa fa-language"></i>Translate !';
+	$text = elgg_echo('multilingual:menu:dotranslate');
 	$params = array(
 			'text' => $text, 'title' => elgg_echo('multilingual:menu:translate'),
 			'rel' => 'popup', 'href' => "#multilingual-menu-$guid"
@@ -24,7 +24,7 @@ if ($languages) {
 	$content .= '</div>';
 
 } else {
-	$content .= '<i class="fa fa-language"></i>(no translation yet)';
+	$content .= elgg_echo('multilingual:menu:notranslation');
 }
 
 echo $content;

@@ -17,7 +17,9 @@ $entity = get_entity($guid);
 if (elgg_instanceof($entity)) {
 	$base_url = $entity->getURL() . '?lang=';
 	$languages = multilingual_available_languages();
-	// Get translation, if is exists
+	// Get main entity
+	//$main_entity = multilingual_get_main_entity($entity);
+	// Get target language translation, if is exists
 	$translation = multilingual_get_translation($entity, $lang);
 	
 	$content .= '<br />';
@@ -47,7 +49,9 @@ if (elgg_instanceof($entity)) {
 	
 	
 	// SIDEBAR
-	$l_code = $ent->lang;
+	// Original version
+	$l_code = $entity->lang;
+	//$l_code = $main_entity->lang;
 	if (empty($l_code)) { $l_code = get_current_language(); }
 	$l_name = $languages[$l_code];
 	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:original') . '</h3>';
