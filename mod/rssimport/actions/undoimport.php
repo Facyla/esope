@@ -10,7 +10,7 @@ if (!is_object($history)) {
 	forward(REFERRER);	
 }
 
-if($history->owner_guid != elgg_get_logged_in_user_guid()){
+if($history->owner_guid != elgg_get_logged_in_user_guid() && !elgg_is_admin_logged_in()){
 	register_error(elgg_echo('rssimport:wrong:permissions'));
 	forward(REFERRER);
 }
@@ -18,8 +18,11 @@ if($history->owner_guid != elgg_get_logged_in_user_guid()){
 
 // so now we know we're the owner, we can go ahead and delete
 $ids = explode(',', $history->value);
-for ($i=0; $i<count($ids); $i++) {
-	delete_entity($ids[$i]);
+foreach ($ids as $guid) {
+	$entity = get_entity($guid);
+	if ($entity) {
+		$entity->delete();
+	}
 }
 
 // all imported entities deleted - now delete the history entry

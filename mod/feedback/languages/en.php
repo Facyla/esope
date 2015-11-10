@@ -119,8 +119,8 @@ return array(
 	'feedback:menu:closed:singular' => "%s closed",
 	'feedback:menu:content' => "%s reports",
 	'feedback:menu:content:singular' => "%s report",
-	'feedback:menu:bug' => "%s bugs",
-	'feedback:menu:bug:singular' => "%s bug",
+	'feedback:menu:bug_report' => "%s bugs",
+	'feedback:menu:bug_report:singular' => "%s bug",
 	'feedback:menu:suggestions' => "%s suggestions",
 	'feedback:menu:suggestions:singular' => "%s suggestion",
 	'feedback:menu:question' => "%s questions",
@@ -129,6 +129,7 @@ return array(
 	'feedback:menu:compliment:singular' => "%s compliment",
 	'feedback:menu:other' => "%s other / unsorted",
 	'feedback:menu:other:singular' => "%s other / unsorted",
+	
 	
 	// About - feedback types
 	//'feedback:about' => "of type",
