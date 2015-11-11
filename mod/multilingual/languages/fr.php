@@ -3,7 +3,7 @@
  * French strings
  */
 
-$fr = array(
+return array(
 	'multilingual' => "Support multilingue",
 	'multilingual:prefix:todo' => "[A TRADUIRE EN %s] ",
 	
@@ -34,6 +34,13 @@ $fr = array(
 	'multilingual:translate:otherlanguages' => "Autre langues (non traduites)",
 	'multilingual:translate:nomissinglanguage' => "Une version existe pour chacune des langues disponibles.",
 	
+	// Entity menu
+	'multilingual:menu:translations' => "<i class=\"fa fa-language\"></i>Traductions",
+	'multilingual:menu:availablelang' => "Traductions disponibles",
+	'multilingual:menu:dotranslate' => "<i class=\"fa fa-language\"></i>Traduire !",
+	'multilingual:menu:notranslation' => "<i class=\"fa fa-language\"></i>(aucune traduction pour le moment) ", // Or: Aucune traduction pour le moment
+	'multilingual:menu:original' => "contenu original",
+	
 	// Notices and errors
 	'multilingual:translate:missingentity' => "Aucune entité à traduire.",
 	'multilingual:translate:newcreated' => "Une nouvelle version vient d'être créée.",
@@ -43,8 +50,5 @@ $fr = array(
 	'multilingual:error:invalidsubtype' => "Ce type de publication ne peut pas être traduit.",
 	
 	
-	
 );
-
-add_translation('fr', $fr);
 
