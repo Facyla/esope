@@ -23,9 +23,9 @@ $sidebar = '';
 // Get directory vars
 if (elgg_instanceof($directory, 'object', 'directory')) {
 	$directory_title = $directory->title; // directory title, for easier listing
-	$directory_name = $directory->name; // directory name, for URL and embeds
-	if (empty($directory_name) && !empty($directory_title)) {
-		$directory_name = elgg_get_friendly_title($directory_title);
+	$slurl = $directory->name; // directory name, for URL and embeds
+	if (empty($slurl) && !empty($directory_title)) {
+		$slurl = elgg_get_friendly_title($directory_title);
 	}
 	$directory_description = $directory->description; // Clear description of what this directory is for
 	// Complete directory content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual entities
@@ -56,7 +56,7 @@ $content .= '<p><label>' . elgg_echo('directory:edit:title') . ' ' . elgg_view('
 
 // Identifiant (slurl)
 /*
-$content .= '<p><label>' . elgg_echo('directory:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $directory_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('directory:edit:name:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('directory:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $slurl, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('directory:edit:name:details') . '</em></p>';
 */
 
 // Description

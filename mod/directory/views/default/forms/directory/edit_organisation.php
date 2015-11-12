@@ -26,9 +26,9 @@ $sidebar = '';
 // Get directory vars
 if (elgg_instanceof($organisation, 'object', 'organisation')) {
 	$organisation_title = $organisation->title; // directory title, for easier listing
-	$organisation_name = $organisation->name; // directory name, for URL and embeds
-	if (empty($organisation_name) && !empty($organisation_title)) {
-		$organisation_name = elgg_get_friendly_title($organisation_title);
+	$slurl = $organisation->name; // directory name, for URL and embeds
+	if (empty($slurl) && !empty($organisation_title)) {
+		$slurl = elgg_get_friendly_title($organisation_title);
 	}
 	$organisation_description = $organisation->description; // Clear description of what this directory is for
 	// Complete directory content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual entities
@@ -54,12 +54,20 @@ $content = '';
 // Param vars
 if ($organisation) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid)) . '</p>'; }
 
+// @TODO : Enable quick configuration of data model
+$fields_config = directory_data_organisation();
+foreach($fields_config as $field => $input_type) {
+	$content .= '<p><label>' . elgg_echo("directory:edit:organisation:$field") . ' ' . elgg_view("input/$input_type", array('name' => $field, 'value' => $person->$field, 'placeholder' => elgg_echo("directory:edit:organisation:$field:placeholder"))) . '</label><br /><em>' . elgg_echo("directory:edit:organisation:$field:details") . '</em></p>';
+}
+
+
+
 // Titre
 $content .= '<p><label>' . elgg_echo('directory:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $organisation_title)) . '</label><br /><em>' . elgg_echo('directory:edit:title:details') . '</em></p>';
 
 // Identifiant (slurl)
 /*
-$content .= '<p><label>' . elgg_echo('directory:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $organisation_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('directory:edit:name:details') . '</em></p>';
+$content .= '<p><label>' . elgg_echo('directory:edit:slurl') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $slurl, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('directory:edit:slurl:details') . '</em></p>';
 */
 
 // Description

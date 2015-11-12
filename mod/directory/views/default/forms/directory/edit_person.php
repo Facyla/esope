@@ -20,11 +20,8 @@ $sidebar = '';
 
 // Get directory vars
 if (elgg_instanceof($person, 'object', 'person')) {
+	$person_name = $person->name;
 	$person_title = $person->title; // directory title, for easier listing
-	$person_name = $person->name; // directory name, for URL and embeds
-	if (empty($person_name) && !empty($person_title)) {
-		$person_name = elgg_get_friendly_title($person_title);
-	}
 	$person_description = $person->description; // Clear description of what this directory is for
 	// Complete directory content - except the first-level <ul> tag (we could use an array instead..) - Use several blocks si we can have an array of individual entities
 	$person_access = $person->access_id; // Default access level
@@ -49,22 +46,9 @@ if ($person) { $content .= elgg_view('input/hidden', array('name' => 'guid', 'va
 
 // @TODO : Enable quick configuration of data model
 $fields_config = directory_data_person();
-
 foreach($fields_config as $field => $input_type) {
-	$content .= '<p><label>' . elgg_echo("directory:edit:$field") . ' ' . elgg_view("input/$input_type", array('name' => $field, 'value' => $person->$field, 'placeholder' => elgg_echo("directory:edit:$field:placeholder"))) . '</label><br /><em>' . elgg_echo("directory:edit:$field:details") . '</em></p>';
+	$content .= '<p><label>' . elgg_echo("directory:edit:person:$field") . ' ' . elgg_view("input/$input_type", array('name' => $field, 'value' => $person->$field, 'placeholder' => elgg_echo("directory:edit:person:$field:placeholder"))) . '</label><br /><em>' . elgg_echo("directory:edit:person:$field:details") . '</em></p>';
 }
-
-// Titre
-$content .= '<p><label>' . elgg_echo('directory:edit:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $person_title)) . '</label><br /><em>' . elgg_echo('directory:edit:title:details') . '</em></p>';
-
-// Identifiant (slurl)
-/*
-$content .= '<p><label>' . elgg_echo('directory:edit:name') . ' ' . elgg_view('input/text', array('name' => 'name', 'value' => $person_name, 'style' => "width: 40ex; max-width: 80%;")) . '</label><br /><em>' . elgg_echo('directory:edit:name:details') . '</em></p>';
-*/
-
-// Description
-$content .= '<label>' . elgg_echo('directory:edit:description') . '</label><br /><em>' . elgg_echo('directory:edit:description:details') . '</em>' . elgg_view('input/longtext', array('name' => 'description', 'value' => $person_description, 'style' => 'height:15ex;')) . '';
-
 
 
 $sidebar .= '<p style="text-align:right;">' . elgg_view('input/submit', array('value' => elgg_echo('directory:edit:submit'), 'class' => "elgg-button elgg-button-action")) . '</p>';
@@ -89,12 +73,6 @@ $sidebar .= '</p>';
 // Access
 //$content .= '<p><label>' . elgg_echo('directory:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $person_access)) . '</label><br /><em>' . elgg_echo('directory:edit:access:details') . '</em></p>';
 $sidebar .= '<p><label>' . elgg_echo('directory:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $person_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('directory:edit:access:details') . '</em></p>';
-
-$sidebar .= '<div class="clearfloat"></div>';
-
-// Open access to directory (users can add content)
-//$sidebar .= '<p><label>' . elgg_echo('directory:edit:access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $person_access)) . '</label><br /><em>' . elgg_echo('directory:edit:access:details') . '</em></p>';
-$sidebar .= '<p><label>' . elgg_echo('directory:edit:write_access') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $person_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('directory:edit:write_access:details') . '</em></p>';
 
 $sidebar .= '<div class="clearfloat"></div>';
 
