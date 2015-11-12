@@ -6,6 +6,9 @@
 return array(
 	'directory' => "Répertoire",
 	
+	'directory:instructions' => "<p>Les Répertoires regroupent vos contacts et permettent de limiter les accès.</p><p>Vous pouvez organiser vos contacts, personnes et organisations, au sein d'un répertoire partagé.</p><p>Une personne peut être rattachée à une ou plusieurs organisations.</p><p>Chaque contact disposent d'un suivi : historique des versions et commentaires.</p>",
+	
+	// Directory
 	'directory:add' => "Créer un nouveau répertoire",
 	'directory:edit' => "Edition du répertoire",
 	'directory:edit:title' => "Titre",
@@ -39,7 +42,15 @@ return array(
 	'directory:view' => "Voir les contacts",
 	'directory:strapline' => 'Dernière mise à jour le %s par %s',
 	'directory:entities:count' => "%s contacts",
-
+	
+	// Person
+	
+	// Organisation
+	
+	// Buttons
+	'directory:add:directory' => "Nouveau répertoire",
+	'directory:add:person' => "Nouveau contact",
+	'directory:add:organisation' => "Nouvelle organisation",
 	
 );
 

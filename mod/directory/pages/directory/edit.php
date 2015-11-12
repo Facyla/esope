@@ -16,7 +16,7 @@ gatekeeper();
 
 $guid = get_input('guid', false);
 $subtype = get_input('subtype', false);
-if (!in_array($subtype, array('directory', 'person', 'organisation'))) {
+if (empty($subtype) && !in_array($subtype, array('directory', 'person', 'organisation'))) {
 	$subtype = 'directory';
 }
 
@@ -31,6 +31,8 @@ if (elgg_instanceof($object, 'object', $subtype)) {
 	elgg_push_breadcrumb($title);
 } else {
 	$title = elgg_echo('directory:add');
+	elgg_push_breadcrumb($title, 'directory');
+	$title = elgg_echo("directory:add:$subtype");
 	elgg_push_breadcrumb($title);
 }
 

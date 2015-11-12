@@ -8,9 +8,9 @@
 * @link http://id.facyla.fr/
 */
 
-$title = "Répertoire";
+$title = elgg_echo('directory');
 
-$content = "Accueil du répertoire";
+$content = '';
 
 $sidebar = "Sidebar";
 
@@ -24,8 +24,11 @@ $directory_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'd
 if ($directory_count > 0) $title .= " ($directory_count)";
 
 if (elgg_is_logged_in()) {
-
 	$sidebar .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">' . elgg_echo('directory:instructions') . '</blockquote>';
+	
+	$sidebar .= '<p><a href="' . elgg_get_site_url() . 'directory/add/directory" class="elgg-button elgg-button-action">' . elgg_echo('directory:add:directory') . '</a></p>';
+	$sidebar .= '<p><a href="' . elgg_get_site_url() . 'directory/add/person" class="elgg-button elgg-button-action">' . elgg_echo('directory:add:person') . '</a></p>';
+	$sidebar .= '<p><a href="' . elgg_get_site_url() . 'directory/add/organisation" class="elgg-button elgg-button-action">' . elgg_echo('directory:add:organisation') . '</a></p>';
 }
 
 // Display directory
@@ -39,7 +42,7 @@ if ($directory_count > 0) {
 
 
 // Render the page
-$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar, 'class' => "directory-index"));
+$body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar, 'class' => "directory-index"));
 echo elgg_view_page($title, $body);
 
 
