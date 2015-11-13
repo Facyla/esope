@@ -76,6 +76,7 @@ function directory_page_handler($page) {
 	switch ($page[0]) {
 		case 'icon':
 			set_input('guid', $page[1]);
+			set_input('size', $page[2]);
 			include "$base/icon.php";
 			break;
 		case 'embed':
@@ -94,7 +95,11 @@ function directory_page_handler($page) {
 			set_input('guid', $page[1]);
 			include "$base/view.php";
 			break;
+		case 'person':
+		case 'organisation':
+		case 'directory':
 		default:
+			set_input('subtype', $page[0]);
 			include "$base/index.php";
 	}
 	return true;
@@ -106,6 +111,10 @@ function directory_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object', 'directory')) {
 		return elgg_get_site_url() . 'directory/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
+	} else if (elgg_instanceof($entity, 'object', 'person')) {
+		return elgg_get_site_url() . 'directory/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
+	} else if (elgg_instanceof($entity, 'object', 'organisation')) {
+		return elgg_get_site_url() . 'directory/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
 	}
 }
 
@@ -114,18 +123,43 @@ function directory_url($hook, $type, $url, $params) {
 function directory_icon_hook($hook, $entity_type, $returnvalue, $params) {
 	if (!empty($params) && is_array($params)) {
 		$entity = $params["entity"];
+		$size = $params["size"];
 		if(elgg_instanceof($entity, "object", "directory")){
-			$size = $params["size"];
 			if (!empty($entity->icontime)) {
 				$icontime = "{$entity->icontime}";
 				$filehandler = new ElggFile();
 				$filehandler->owner_guid = $entity->getOwnerGUID();
-				$filehandler->setFilename("directory/" . $entity->getGUID() . $size . ".png");
+				$filehandler->setFilename("directory/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
-					return elgg_get_site_url() . "directory/icon/{$entity->getGUID()}/$size/$icontime.png";
+					//return elgg_get_site_url() . "directory/icon/{$entity->getGUID()}/$size/" . elgg_get_friendly_title($entity->title) . ".jpg";
+					return elgg_get_site_url() . "directory/icon/{$entity->getGUID()}/$size/$icontime.jpg";
 				}
 			}
-			return elgg_get_site_url() . "mod/directory/graphics/icons/$size/directory.png";
+			return elgg_get_site_url() . "mod/directory/graphics/directory.png";
+			//return false;
+		} else if (elgg_instanceof($entity, "object", "person")){
+			if (!empty($entity->icontime)) {
+				$icontime = "{$entity->icontime}";
+				$filehandler = new ElggFile();
+				$filehandler->owner_guid = $entity->getOwnerGUID();
+				$filehandler->setFilename("directory/" . $entity->getGUID() . $size . ".jpg");
+				if ($filehandler->exists()) {
+					return elgg_get_site_url() . "directory/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+				}
+			}
+			return elgg_get_site_url() . "mod/directory/graphics/person.png";
+			//return false;
+		} else if (elgg_instanceof($entity, "object", "organisation")){
+			if (!empty($entity->icontime)) {
+				$icontime = "{$entity->icontime}";
+				$filehandler = new ElggFile();
+				$filehandler->owner_guid = $entity->getOwnerGUID();
+				$filehandler->setFilename("directory/" . $entity->getGUID() . $size . ".jpg");
+				if ($filehandler->exists()) {
+					return elgg_get_site_url() . "directory/icon/{$entity->getGUID()}/$size/$icontime.jpg";
+				}
+			}
+			return elgg_get_site_url() . "mod/directory/graphics/organisation.png";
 			//return false;
 		}
 	}
@@ -144,9 +178,10 @@ function directory_data_person() {
 			'telephone' => 'text',
 			'mobile' => 'text',
 			'fax' => 'text',
+			'address' => 'text',
+			'postalcode' => 'text',
 			'city' => 'text',
 			'country' => 'text',
-			'address' => 'text',
 		);
 }
 
@@ -160,9 +195,10 @@ function directory_data_organisation() {
 			'telephone' => 'text',
 			'mobile' => 'text',
 			'fax' => 'text',
+			'address' => 'text',
+			'postalcode' => 'text',
 			'city' => 'text',
 			'country' => 'text',
-			'address' => 'text',
 		);
 }
 

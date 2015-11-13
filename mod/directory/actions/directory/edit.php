@@ -5,7 +5,7 @@
  * @package ElggDirectory
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Florian DANIEL aka Facyla
- * @copyright Facyla 2010-2015
+ * @copyright Facyla 2015
  * @link http://id.facyla.net/
  */
 
@@ -14,16 +14,18 @@ gatekeeper();
 // Cache to the session
 elgg_make_sticky_form('directory');
 
+// @TODO : édition directory, person, organisation : qqs champs communs (photo)
+$subtype = get_input('subtype', 'person');
+
+
 /* Get input data */
 $title = get_input('title');
 $name = get_input('name');
 $description = get_input('description');
-$entities = get_input('entities', '', false); // We do *not want to filter HTML
-$entities_comment = get_input('entities_comment', '', false); // We do *not want to filter HTML
 $access = get_input('access_id');
-if (!in_array((string) $access, array('0', '2'))) { $access = 2; } // Always public if not defined
+//if (!in_array((string) $access, array('0', '2'))) { $access = 2; } // Always public if not defined
 $write_access = get_input('write_access_id');
-if (!in_array((string) $write_access, array('0', '2'))) { $write_access = 2; } // Allow contributions to anyone by default
+//if (!in_array((string) $write_access, array('0', '2'))) { $write_access = 2; } // Allow contributions to anyone by default
 
 // Set directory name if not defined + normalize it
 // @TODO : ensure it remains unique ?
@@ -32,23 +34,44 @@ $name = elgg_get_friendly_title($name);
 
 // Get directory entity, if it exists
 $guid = get_input('guid', false);
-$directory = get_entity($guid);
+$object = get_entity($guid);
 
-// Check if directory name already exists (for another directory)
-if ($existing_directory && elgg_instanceof($directory, 'object', 'directory') && ($existing_directory->guid != $directory->guid)) {
-	register_error(elgg_echo('directory:error:alreadyexists'));
-	forward(REFERER);
+if (elgg_instanceof($object, 'object', 'directory')) {
+	// Cannot change afterwards
+	$subtype = $object->getSubtype();
+}
+
+switch($subtype) {
+	case 'directory':
+		// Check existing object, or create a new one
+		if (!elgg_instanceof($object, 'object')) {
+			$object = new ElggDirectory();
+			$object->save();
+		}
+		// @TODO Check if directory already exists (for another this container, etc.)
+		$fields_config = array();
+		$required = array('title');
+		break;
+	case 'organisation':
+		if (!elgg_instanceof($object, 'object')) {
+			$object = new ElggOrganisation();
+			$object->save();
+		}
+		$fields_config = directory_data_organisation();
+		$required = array('name');
+		break;
+	case 'person':
+	default:
+		if (!elgg_instanceof($object, 'object')) {
+			$object = new ElggPerson();
+			$object->save();
+		}
+		$fields_config = directory_data_person();
+		$required = array('name');
 }
 
 
-// Check existing object, or create a new one
-if (elgg_instanceof($directory, 'object', 'directory')) {
-} else {
-	$directory = new ElggDirectory();
-	$directory->save();
-}
-
-$required = array('title');
+// Check required fields
 foreach ($required as $field) {
 	if (empty($$field)) {
 		register_error(elgg_echo('directory:missingrequired'));
@@ -58,44 +81,57 @@ foreach ($required as $field) {
 
 
 // Edition de l'objet existant ou nouvellement créé
-$directory->title = $title;
-$directory->name = $name;
-$directory->description = $description;
-$directory->access_id = $access;
-$directory->entities = $entities;
-$directory->entities_comment = $entities_comment;
-$directory->write_access_id = $write_access;
+$object->title = $title;
+$object->name = $name;
+$object->description = $description;
+$object->access_id = $access;
+$object->write_access_id = $write_access;
+//$object->entities = $entities;
+//$object->entities_comment = $entities_comment;
 
+// @TODO : Enable quick configuration of data model
+foreach($fields_config as $field => $input_type) {
+	$val = get_input($field, '');
+	// @TODO : switch depending on input type
+	switch ($input_type) {
+		case 'tags':
+			$val = string_to_tag_array($val);
+			break;
+		case 'text':
+		default:
+	}
+	$object->$field = $val;
+}
 
 // Save new/updated content
-if ($directory->save()) {
+if ($object->save()) {
 	
 	// Icon upload
 	if(get_input("remove_icon") == "yes"){
 		// remove existing icons
-		directory_remove_icon($directory);
+		//@TODO directory_remove_icon($object);
 	} else {
 		//$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
 		// Autres dimensions, notamment recadrage pour les vignettes en format carré définies via le thème
 		$icon_sizes = elgg_get_config("icon_sizes");
 		if ($icon_file = get_resized_image_from_uploaded_file("icon", 100, 100)) {
 			// create icon
-			$prefix = "directory/" . $directory->getGUID();
+			$prefix = "directory/" . $object->getGUID();
 			$fh = new ElggFile();
-			$fh->owner_guid = $directory->getOwnerGUID();
-			foreach($icon_sizes as $icon_name => $icon_info){
+			$fh->owner_guid = $object->getOwnerGUID();
+			foreach($icon_sizes as $size => $icon_info){
 				if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
-					$fh->setFilename($prefix . $icon_name . ".jpg");
+					$fh->setFilename($prefix . $size . ".jpg");
 					if($fh->open("write")){
 						$fh->write($icon_file);
 						$fh->close();
 					}
 				}
 			}
-			$directory->icontime = time();
+			$object->icontime = time();
 		}
 	}
-	
+
 	system_message(elgg_echo("directory:saved")); // Success message
 	elgg_clear_sticky_form('directory'); // Remove the cache
 } else {
@@ -106,7 +142,7 @@ if ($directory->save()) {
 
 
 // Forward back to the page
-//forward('directory/edit/' . $directory->guid);
-forward($directory->getURL());
+//forward('directory/edit/' . $object->guid);
+forward($object->getURL());
 
 

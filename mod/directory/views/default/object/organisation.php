@@ -54,7 +54,13 @@ if ($full) {
 	$info .= $view_button;
 	
 	echo elgg_view_image_block($icon, $info);
-	echo elgg_view('output/longtext', array('value' => $description));
+	//echo elgg_view('output/longtext', array('value' => $description));
+
+	// Quick configuration of data model
+	$fields_config = directory_data_organisation();
+	foreach($fields_config as $field => $input_type) {
+		echo '<p><strong>' . elgg_echo("directory:edit:organisation:$field") . '&nbsp;:</strong> ' . $entity->$field . '</p>';
+	}
 	
 	
 	

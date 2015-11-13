@@ -5,7 +5,8 @@ $size = elgg_extract("size", $vars, false);
 $align = elgg_extract("align", $vars, false);
 
 // Display image only if set, and also force default image for gallery only (no image otherwise)
-if ($entity && elgg_instanceof($entity, "object", "directory") && ($entity->icontime || in_array($size, array('gallery', 'master', 'listing', 'large')))) {
+//if ($entity && elgg_instanceof($entity, "object", "directory") && ($entity->icontime || in_array($size, array('gallery', 'master', 'listing', 'large')))) {
+if (elgg_instanceof($entity, "object", "directory") || elgg_instanceof($entity, "object", "person") || elgg_instanceof($entity, "object", "organisation")) {
 	
 	$href = elgg_extract("href", $vars, $entity->getURL());
 	
@@ -30,7 +31,7 @@ if ($entity && elgg_instanceof($entity, "object", "directory") && ($entity->icon
 	} else {
 		// listing view of a directory
 		// set listing defaults
-		if (!$size) $size = "listing";
+		if (!$size) $size = "small";
 		if (!$align) $align = "right";
 		
 		$image_params["src"] = $entity->getIconURL($size);
@@ -56,8 +57,5 @@ if ($entity && elgg_instanceof($entity, "object", "directory") && ($entity->icon
 	}
 	
 	echo "</div>";
-} else {
-	// Send non-empty so the Elgg function does not switch to default view
-	echo ' ';
 }
 

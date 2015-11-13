@@ -14,6 +14,16 @@ class ElggDirectory extends ElggObject {
 		$this->attributes['subtype'] = $this::SUBTYPE;
 	}
 	
+	/* Get Contacts */
+	protected function getContacts() {
+		return $this->contacts;
+	}
+	
+	/* Get Organisations */
+	protected function getOrganisations() {
+		return $this->organisations;
+	}
+	
 	
 	
 }

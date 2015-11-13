@@ -11,6 +11,10 @@ class ElggOrganisation extends ElggObject {
 		$this->attributes['subtype'] = $this::SUBTYPE;
 	}
 	
+	/* Get Contacts */
+	protected function getContacts() {
+		return $this->contacts;
+	}
 	
 	
 }

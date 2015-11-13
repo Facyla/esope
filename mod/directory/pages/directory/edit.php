@@ -26,9 +26,10 @@ elgg_push_breadcrumb($title, 'directory');
 
 // Get directory by GUID or name
 $object = get_entity($guid);
-if (elgg_instanceof($object, 'object', $subtype)) {
+if (elgg_instanceof($object, 'object')) {
 	$title = $object->title;
 	elgg_push_breadcrumb($title);
+	$subtype = $object->getSubtype();
 } else {
 	$title = elgg_echo('directory:add');
 	elgg_push_breadcrumb($title, 'directory');

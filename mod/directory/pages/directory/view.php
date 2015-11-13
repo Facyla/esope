@@ -24,12 +24,18 @@ $full_content = get_input('full_content', false);
 elgg_push_breadcrumb(elgg_echo('directory'), 'directory');
 
 // Get directory by GUID or name
-$directory = get_entity($guid);
-if (elgg_instanceof($directory, 'object', 'directory')) {
-	//$content = elgg_view('directory/view', array('entity' => $directory, 'embed' => $embed));
-	$content = elgg_view_entity($directory, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
-	$title = $directory->title;
-	elgg_push_breadcrumb($title);
+$object = get_entity($guid);
+if (elgg_instanceof($object, 'object', 'directory') || elgg_instanceof($object, 'object', 'person') || elgg_instanceof($object, 'object', 'organisation')) {
+	//$content = elgg_view('directory/view', array('entity' => $object, 'embed' => $embed));
+	$content = elgg_view_entity($object, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
+	$title = $object->title;
+	$subtype = $object->getSubtype();
+	elgg_push_breadcrumb(elgg_echo("directory:$subtype"), "directory/$subtype");
+	if (!empty($object->name)) {
+		elgg_push_breadcrumb($object->name);
+	} else {
+		elgg_push_breadcrumb($object->title);
+	}
 }
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
 $CONFIG->title = $title;
