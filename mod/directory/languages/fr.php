@@ -10,6 +10,8 @@ return array(
 	
 	// Directory
 	'directory:directory' => "Répertoire",
+	'directory:add:directory' => "Créer un nouveau répertoire",
+	'directory:edit:directory' => "Edition du répertoire",
 	'directory:add' => "Créer un nouveau répertoire",
 	'directory:edit' => "Edition du répertoire",
 	'directory:edit:title' => "Titre",
@@ -51,6 +53,8 @@ return array(
 	
 	// Person
 	'directory:person' => "Personne",
+	'directory:add:person' => "Ajouter une nouvelle personne",
+	'directory:edit:person' => "Edition de la personne",
 	'directory:edit:person:name' => "Nom complet",
 	'directory:edit:person:name:placeholder' => "",
 	'directory:edit:person:name:details' => "",
@@ -87,6 +91,8 @@ return array(
 	
 	// Organisation
 	'directory:organisation' => "Organisation",
+	'directory:add:organisation' => "Ajouter une nouvelle organisation",
+	'directory:edit:organisation' => "Edition de l'organisation",
 	'directory:edit:organisation:name' => "Intitulé",
 	'directory:edit:organisation:name:placeholder' => "",
 	'directory:edit:organisation:name:details' => "",

@@ -48,7 +48,7 @@ if ($organisation) { $content .= elgg_view('input/hidden', array('name' => 'guid
 // @TODO : Enable quick configuration of data model
 $fields_config = directory_data_organisation();
 foreach($fields_config as $field => $input_type) {
-	$content .= '<p><label>' . elgg_echo("directory:edit:organisation:$field") . ' ' . elgg_view("input/$input_type", array('name' => $field, 'value' => $person->$field, 'placeholder' => elgg_echo("directory:edit:organisation:$field:placeholder"))) . '</label><br /><em>' . elgg_echo("directory:edit:organisation:$field:details") . '</em></p>';
+	$content .= '<p><label>' . elgg_echo("directory:edit:organisation:$field") . ' ' . elgg_view("input/$input_type", array('name' => $field, 'value' => $organisation->$field, 'placeholder' => elgg_echo("directory:edit:organisation:$field:placeholder"))) . '</label><br /><em>' . elgg_echo("directory:edit:organisation:$field:details") . '</em></p>';
 }
 
 
@@ -75,26 +75,23 @@ if ($organisation && $organisation->icontime) {
 $sidebar .= '</p>';
 
 // Read Access
-$sidebar .= '<p><label>' . elgg_echo('directory:access:read') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $organisation_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:read:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('directory:access:read') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $organisation->access_id, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:read:details') . '</em></p>';
 $sidebar .= '<div class="clearfloat"></div>';
 
 // Write access : who can edit this organisation
-$sidebar .= '<p><label>' . elgg_echo('directory:access:write') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $organisation_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:write:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('directory:access:write') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $organisation->write_access_id, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:write:details') . '</em></p>';
 
 $sidebar .= '<div class="clearfloat"></div>';
 
 
 // 2 columns layout
-$title = elgg_echo('directory:edit');
 $content = <<<___HTML
-<h2>$title</h2>
-
 <div class="flexible-block" style="width:56%; float:left;">
-$content
+	$content
 </div>
 
 <div class="flexible-block" style="width:40%; float:right;">
-$sidebar
+	$sidebar
 </div>
 <div class="clearfloat"></div>
 ___HTML;

@@ -28,8 +28,10 @@ elgg_push_breadcrumb($title, 'directory');
 $object = get_entity($guid);
 if (elgg_instanceof($object, 'object')) {
 	$title = $object->title;
-	elgg_push_breadcrumb($title);
+	elgg_push_breadcrumb($title, $object->getURL());
 	$subtype = $object->getSubtype();
+	$title = elgg_echo("directory:edit:$subtype");
+	elgg_push_breadcrumb($title);
 } else {
 	$title = elgg_echo('directory:add');
 	elgg_push_breadcrumb($title, 'directory');
@@ -70,7 +72,7 @@ $content .= elgg_view("forms/directory/edit_$subtype", array('entity' => $object
 
 
 // Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('content' => $content));
+$content = elgg_view_layout('one_column', array('content' => $content, 'title' => $title));
 
 
 // Display page (using default pageshell)

@@ -75,26 +75,23 @@ if ($person && $person->icontime) {
 $sidebar .= '</p>';
 
 // Read Access
-$sidebar .= '<p><label>' . elgg_echo('directory:access:read') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $organisation_access, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:read:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('directory:access:read') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $person->access_id, 'options_values' => $access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:read:details') . '</em></p>';
 $sidebar .= '<div class="clearfloat"></div>';
 
 // Write access : who can edit this contact
-$sidebar .= '<p><label>' . elgg_echo('directory:access:write') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $organisation_write_access, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:write:details') . '</em></p>';
+$sidebar .= '<p><label>' . elgg_echo('directory:access:write') . ' ' . elgg_view('input/access', array('name' => 'write_access_id', 'value' => $person->write_access_id, 'options_values' => $write_access_opt)) . '</label><br /><em>' . elgg_echo('directory:access:write:details') . '</em></p>';
 
 $sidebar .= '<div class="clearfloat"></div>';
 
 
 // 2 columns layout
-$title = elgg_echo('directory:edit');
 $content = <<<___HTML
-<h2>$title</h2>
-
 <div class="flexible-block" style="width:56%; float:left;">
-$content
+	$content
 </div>
 
 <div class="flexible-block" style="width:40%; float:right;">
-$sidebar
+	$sidebar
 </div>
 <div class="clearfloat"></div>
 ___HTML;

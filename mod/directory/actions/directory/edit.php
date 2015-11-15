@@ -22,9 +22,9 @@ $subtype = get_input('subtype', 'person');
 $title = get_input('title');
 $name = get_input('name');
 $description = get_input('description');
-$access = get_input('access_id');
+$access = get_input('access_id', 1);
 //if (!in_array((string) $access, array('0', '2'))) { $access = 2; } // Always public if not defined
-$write_access = get_input('write_access_id');
+$write_access = get_input('write_access_id', 0);
 //if (!in_array((string) $write_access, array('0', '2'))) { $write_access = 2; } // Allow contributions to anyone by default
 
 // Set directory name if not defined + normalize it
@@ -137,8 +137,6 @@ if ($object->save()) {
 } else {
 	register_error(elgg_echo("directory:error"));
 }
-
-//elgg_set_ignore_access(false);
 
 
 // Forward back to the page

@@ -95,16 +95,13 @@ $sidebar .= '<div class="clearfloat"></div>';
 
 
 // 2 columns layout
-$title = elgg_echo('directory:edit');
 $content = <<<___HTML
-<h2>$title</h2>
-
 <div class="flexible-block" style="width:56%; float:left;">
-$content
+	$content
 </div>
 
 <div class="flexible-block" style="width:40%; float:right;">
-$sidebar
+	$sidebar
 </div>
 <div class="clearfloat"></div>
 ___HTML;
