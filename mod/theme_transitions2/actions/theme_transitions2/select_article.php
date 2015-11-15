@@ -10,7 +10,9 @@ if (!theme_transitions2_user_is_platform_admin()) {
 
 $name = get_input('name', '');
 // Filter valid setting sthat content admin is allowed to update
-if (in_array($name, array('home-article1', 'home-article2', 'home-article3', 'home-article4'))) {
+$match_name = substr($name, 0, 12);
+//if (in_array($name, array('home-article1', 'home-article2', 'home-article3', 'home-article4'))) {
+if ($match_name == 'home-article') {
 	$value = get_input($name, '');
 	elgg_set_plugin_setting($name, $value, 'theme_transitions2');
 }
