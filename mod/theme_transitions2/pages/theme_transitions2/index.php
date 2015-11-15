@@ -33,12 +33,22 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 	$slides = array();
 	$slides_admin = '<div class="clearfloat"></div>';
 	for ($i=1; $i<=4; $i++) {
-		$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
+		// Try to use translated slider
+		$lang = get_language();
+		if ($lang == 'fr') {
+			$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
+		} else {
+			$article = elgg_get_plugin_setting("home-article$i_$lang", 'theme_transitions2');
+		}
 		$slide_content = elgg_view('theme_transitions2/slider_homeslide', array('guid' => $article));
 		if (!empty($slide_content)) { $slides[] = $slide_content; }
 		if ($is_content_admin) {
 			$slides_admin .= '<div class="flexible-block" style="width:auto; margin-right:1em;">';
-			$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
+			if ($lang == 'fr') {
+				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
+			} else {
+				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i_$lang", 'value' => $article));
+			}
 			$slides_admin .= '</div>';
 		}
 	}
