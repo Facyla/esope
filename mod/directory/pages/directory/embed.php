@@ -4,5 +4,5 @@ gatekeeper();
 
 $id = get_input("id");
 
-echo elgg_view("directory/embed", array('id' => $id));
+echo elgg_view("directory/embed", array('id' => $id, 'display' => true));
 

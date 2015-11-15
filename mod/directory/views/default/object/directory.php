@@ -83,11 +83,11 @@ if ($full) {
 	}
 	*/
 	$info .= "<p class=\"owner_timestamp\">";
-	$info .= elgg_echo('directory:entities:count', array(count((array) $entity->entities))) . '<br />';
+	//$info .= elgg_echo('directory:entities:count', array(count((array) $entity->entities))) . '<br />'; // Nb person
+	//$info .= elgg_echo('directory:entities:count', array(count((array) $entity->entities))) . '<br />'; // Nb organsiation
 	$info .= elgg_echo("directory:strapline", array(elgg_view_friendly_time($time_updated), "<a href=\"" . $owner->getURL() . "\">" . $owner->name ."</a>" ));
 	$info .= "</p>";
 	//$info .= elgg_get_excerpt($description);
-	$view_button = '<p><a href="' . $entity->getURL() . '" class="elgg-button elgg-button-action float-alt">' . elgg_echo('directory:view') . '</a></p>';
 	
 	$params = array(
 			'entity' => $entity,

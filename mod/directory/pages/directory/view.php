@@ -28,6 +28,16 @@ $object = get_entity($guid);
 if (elgg_instanceof($object, 'object', 'directory') || elgg_instanceof($object, 'object', 'person') || elgg_instanceof($object, 'object', 'organisation')) {
 	//$content = elgg_view('directory/view', array('entity' => $object, 'embed' => $embed));
 	$content = elgg_view_entity($object, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
+	if ($object->canEdit()) {
+		switch($subtype) {
+			case 'person':
+				break;
+			case 'directory':
+			case 'organisation':
+			default:
+				$content .= elgg_view_form('directory/add_entity', array(), array('entity' => $object));
+		}
+	}
 	$title = $object->title;
 	$subtype = $object->getSubtype();
 	elgg_push_breadcrumb(elgg_echo("directory:$subtype"), "directory/$subtype");

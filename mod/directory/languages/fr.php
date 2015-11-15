@@ -122,9 +122,18 @@ return array(
 	'directory:edit:organisation:address:details' => "",
 	
 	// Buttons
+	'directory:embed:search' => "Rechercher",
+	'directory:embed:subtype' => "Type de fiche",
+	'directory:embed:nofilter' => "Tous",
 	'directory:add:directory' => "Nouveau répertoire",
 	'directory:add:person' => "Nouveau contact",
 	'directory:add:organisation' => "Nouvelle organisation",
+	'directory:select_entity' => "Sélectionner une entité",
+	'directory:addentity:details' => "Choisissez l'élément à relier'",
+	'directory:addentity:submit' => "Enregistrer",
+	'directory:select:directory' => "Sélectionner un répertoire",
+	'directory:select:person' => "Sélectionner une personne",
+	'directory:select:organisation' => "Sélectionner une organisation",
 	
 );
 
