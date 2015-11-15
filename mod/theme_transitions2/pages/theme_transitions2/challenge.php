@@ -29,7 +29,13 @@ $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' 
 // HTML vs RSS/ICAL content
 if ($is_html_viewtype) {
 	$content .= '<h2>' . elgg_echo('theme_transitions2:challenge:title') . '</h2>';
-	$content .= elgg_view('cmspages/view', array('pagetype' => 'intro-challenge'));
+	$lang = get_language();
+	// Try to use translated slider
+	if ($lang == 'fr') {
+		$content .= elgg_view('cmspages/view', array('pagetype' => 'intro-challenge'));
+	} else {
+		$content .= elgg_view('cmspages/view', array('pagetype' => 'intro-challenge-' . $lang));
+	}
 	$content .= '<div class="transitions-challenge">';
 }
 $content .= elgg_list_entities_from_metadata($list_options);

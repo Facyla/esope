@@ -32,13 +32,13 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 	$is_content_admin = theme_transitions2_user_is_platform_admin();
 	$slides = array();
 	$slides_admin = '<div class="clearfloat"></div>';
+	$lang = get_language();
 	for ($i=1; $i<=4; $i++) {
 		// Try to use translated slider
-		$lang = get_language();
 		if ($lang == 'fr') {
 			$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
 		} else {
-			$article = elgg_get_plugin_setting("home-article$i_$lang", 'theme_transitions2');
+			$article = elgg_get_plugin_setting("home-article$i" . "_" . $lang, 'theme_transitions2');
 		}
 		$slide_content = elgg_view('theme_transitions2/slider_homeslide', array('guid' => $article));
 		if (!empty($slide_content)) { $slides[] = $slide_content; }
@@ -47,7 +47,7 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 			if ($lang == 'fr') {
 				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
 			} else {
-				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i_$lang", 'value' => $article));
+				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i" . "_" . $lang, 'value' => $article));
 			}
 			$slides_admin .= '</div>';
 		}
