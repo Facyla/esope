@@ -131,7 +131,7 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 			.afpa-header-right { float:right; max-width:50%; text-align:right; }
 			.afpa-header-left { float:left; max-width:50%; }
 			.logo-dialogueplus { float:left; margin-top:40px; height:40px; }
-			.logo-afpa { height: 60px; margin-bottom: 10px; }
+			.logo-afpa { height: 60px; max-height: 60px; margin-bottom: 10px; }
 			
 			</style>
 		<?php } ?>
