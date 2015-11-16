@@ -713,11 +713,10 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		$children = AU\SubGroups\get_subgroups($group, 0);
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
-			if ($member_only) {
-				if (!$child->isMember($user)) { continue; }
+			if ($child->isMember($user) || !$member_only) {
+				$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $child->name . '</a></li>';
+				$menuitem .= esope_list_groups_submenu($child, $level + 1, $member_only, $user);
 			}
-			$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $child->name . '</a></li>';
-			$menuitem .= esope_list_groups_submenu($child, $level + 1);
 		}
 		return $menuitem;
 	}

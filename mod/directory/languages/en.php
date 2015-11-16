@@ -4,7 +4,7 @@
  */
 
 return array(
-	'plugin_template' => "Plugin template",
+	'directory' => "Directory",
 	
 );
 

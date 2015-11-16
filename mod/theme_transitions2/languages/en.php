@@ -8,9 +8,9 @@ return array(
 	'theme_transitions2:usersettings:block_messages' => "Forbid other contributeurs to send me messages",
 	'theme_transitions2:usersettings:block_messages:title' => "Private messages",
 	
-	'theme_transitions2:search' => "Search a contribution",
+	'theme_transitions2:search' => "Search contributions",
 	'theme_transitions2:newcontribution' => "Tell us your transition, share a resource for the catalog!",
-	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
+	'theme_transitions2:home' => "Connecting the Digital and the Ecological Transitions",
 	'theme_transitions2:transitions:title' => "<span>Your</span> contributions",
 	'theme_transitions2:partners:title' => "<span>Impulsed</span> by",
 	'theme_transitions2:supporters:title' => "<span>Supported</span> by",
