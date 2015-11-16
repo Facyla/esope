@@ -80,6 +80,7 @@ Mot de passe : %s
 	'transitions:search:go' => "&#xf002;",
 	'transitions:search:placeholder' => "&#xf002; Rechercher une contribution",
 	
+	'profile:location' => "Ville",
 	'profile:organisation' => "Organisation",
 	'profile:linkedin' => "URL de votre profil LinkedIn",
 	'profile:twitter' => "URL de votre profil Twitter",

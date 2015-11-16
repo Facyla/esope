@@ -80,6 +80,7 @@ Password: %s
 	'transitions:search:go' => "&#xf002;",
 	'transitions:search:placeholder' => "&#xf002; Search a contribution",
 	
+	'profile:location' => "City",
 	'profile:organisation' => "Organisation",
 	'profile:linkedin' => "Your LinkedIn profile URL",
 	'profile:twitter' => "Your Twitter profile URL",
