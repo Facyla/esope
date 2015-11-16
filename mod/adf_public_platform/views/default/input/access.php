@@ -40,7 +40,9 @@ $vars = array_merge($defaults, $vars);
 
 // Facyla : custom access lists depending on context / settings
 $content_cases = array('access_id', 'write_access_id');
-$standard_cases = array('access_id', 'write_access_id', 'vis'); // vis = visibilité des groupes
+$standard_cases = array('access_id', 'write_access_id', 'vis', 'membership');
+// vis = visibilité du groupe, membership = adhésion au groupe
+$donotmodify_cases = array('vis', 'membership');
 /*
 // Supprime le niveau d'accès Public => Membres connectés
 if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
@@ -88,9 +90,9 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 // Liste d'exclusion des droits : permet de n'autoriser que certains niveaux aux membres, voire aux admins
 foreach ($vars['options_values'] as $key => $val) {
 	if (elgg_is_admin_logged_in()) {
-		if (is_array($admin_exclude_access) && in_array($key, $admin_exclude_access)) unset($vars['options_values'][$key]);
+		if (is_array($admin_exclude_access) && in_array($key, $admin_exclude_access) && !in_array($vars['name'], $donotmodify_cases)) unset($vars['options_values'][$key]);
 	} else {
-		if (is_array($user_exclude_access) && in_array($key, $user_exclude_access)) unset($vars['options_values'][$key]);
+		if (is_array($user_exclude_access) && in_array($key, $user_exclude_access) && !in_array($vars['name'], $donotmodify_cases)) unset($vars['options_values'][$key]);
 	}
 }
 
