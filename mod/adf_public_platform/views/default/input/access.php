@@ -40,9 +40,10 @@ $vars = array_merge($defaults, $vars);
 
 // Facyla : custom access lists depending on context / settings
 $content_cases = array('access_id', 'write_access_id');
-$standard_cases = array('access_id', 'write_access_id', 'vis', 'membership');
 // vis = visibilité du groupe, membership = adhésion au groupe
-$donotmodify_cases = array('vis', 'membership');
+$standard_cases = array('access_id', 'write_access_id', 'vis', 'membership');
+// Group membership is not a standard access level - rather access control
+$donotmodify_cases = array('membership');
 /*
 // Supprime le niveau d'accès Public => Membres connectés
 if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
