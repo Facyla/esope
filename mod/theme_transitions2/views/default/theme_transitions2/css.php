@@ -181,7 +181,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { color: white; background-color:#4B8F74; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #4B8F74; transition-duration:0.5s; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-nav:hover { background-color: #4B8F74; }
-.elgg-menu-item-language_selector { display:none; }
+.elgg-menu-item-language-selector { display:none; }
 .elgg-menu-topbar li.language-selector { float:left; width:auto; }
 
 
