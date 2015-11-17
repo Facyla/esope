@@ -104,7 +104,7 @@ th { font-weight:bold; background:#CCCCCC; }
 .elgg-access {}
 .elgg-access-group-closed {}
 .elgg-access-group-open {}
-.interne { width: 980px; position: relative; margin: auto; }
+.interne { width: 980px; max-width: 96%; position: relative; margin: 0 auto; }
 .invisible { position: absolute !important; left: -5000px !important; }
 .right { float: right !important; }
 .minuscule { text-transform: lowercase; }
