@@ -1045,7 +1045,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page-walledgarden { padding: 0; }
-	.elgg-page-walledgarden .elgg-body-walledgarden { margin: 0px auto 0px; }
+	.elgg-body-walledgarden { margin: 0px auto 0px auto !important; }
 	
 	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
 	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
