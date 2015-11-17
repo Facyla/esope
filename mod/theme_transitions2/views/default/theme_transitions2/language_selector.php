@@ -43,9 +43,9 @@ if (count($allowed) > 1) {
 		}
 		
 		if (!empty($action)) {
-			$result .= "<li><a href='" . $action . "' title='" . $lang_name . "'>" . $text . "</a></li>";
+			$result .= "<li class=\"language-selector\"><a href='" . $action . "' title='" . $lang_name . "'>" . $text . "</a></li>";
 		} else {
-			$result .= '<li>' . $text . '</li>';
+			$result .= '<li class=\"language-selector\">' . $text . '</li>';
 		}
 	}
 	
