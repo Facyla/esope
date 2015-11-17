@@ -49,15 +49,15 @@ echo '<div class="clearfloat"></div>';
 echo '</div></div><div class="elgg-page-footer-transitions2"><div class="elgg-inner">';
 
 if (elgg_is_active_plugin('socialshare')) {
-	echo '<span style="float:right;">';
+	echo '<span style="float:right;" class="static-container">';
 	echo '<div class="transitions-socialshare">' . elgg_view('socialshare/extend', array()) . '</div>';
 	echo '</span>';
 }
 
-echo '<span class="elgg-footer-logo">';
+echo '<span class="elgg-footer-logo static-container">';
 	echo '<img src="' . $base_url . 'logo-transitions2-small.png" alt="' . elgg_get_site_entity()->name . '" />';
 	echo '<img src="' . $base_url . 'label-COP21-small.png" alt="Label COP 21" />';
 echo '</span>';
 
-echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-footer elgg-menu-footer-default clearfix elgg-menu-hz"));
+echo elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => "elgg-menu-footer elgg-menu-footer-default clearfix elgg-menu-hz static-container"));
 
