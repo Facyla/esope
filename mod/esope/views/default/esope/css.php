@@ -1041,7 +1041,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
 	
 	/* Layout */
-	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; }
+	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; max-width: 100%; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	
