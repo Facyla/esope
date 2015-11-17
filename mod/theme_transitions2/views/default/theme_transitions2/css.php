@@ -244,7 +244,7 @@ body { background:#EBE7DF; font-family:Lato; }
 
 @media (max-width: 766px) {
 	.elgg-page-topbar { padding: 0; }
-	.elgg-topbar-nav-collapse { display:none; }
+	.elgg-topbar-nav-collapse { display:none; clear: both; width: 100%; }
 	.elgg-menu-topbar { width:100%; }
 	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
 	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
