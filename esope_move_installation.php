@@ -20,7 +20,7 @@
 
 // CONFIGURATION
 // Uncomment to use, comment again once done (always leave uncommented on live site !!)
-exit;
+//exit;
 // Set to true to fill fields with preset. Set to false to get empty form fields
 $example = false;
 
@@ -52,7 +52,6 @@ foreach($vars as $varname) {
 // Execute query ?
 $execute_query = get_input('execute_query', 'no');
 
-
 if ($example) {
 	// DB settings
 	$db_server = 'localhost';
@@ -60,7 +59,7 @@ if ($example) {
 	$db_user = 'root';
 	$db_pass = 'root';
 	// Custom Elgg DB config
-	$prefix = '{$prefix}';
+	$prefix = 'elgg_';
 	// Web URL without trailing slash
 	$old_www = 'http://localhost/public/esope_1.11';
 	$new_www = 'http://localhost/public/esope_1.12';
@@ -70,6 +69,26 @@ if ($example) {
 	// Server data paths (with trailing slash)
 	$old_datapath = '/var/www/esope_1.11-data/';
 	$new_datapath = '/var/www/esope_1.12-data/';
+}
+
+
+// @TODO : use DB config if available
+if (include_once(dirname(__FILE__) . '/engine/settings.php')) {
+	global $CONFIG;
+	if (empty($db_server)) { $db_server = $CONFIG->dbhost; }
+	if (empty($db_name)) { $db_name = $CONFIG->dbname; }
+	if (empty($db_user)) { $db_user = $CONFIG->dbuser; }
+	if (empty($db_pass)) { $db_pass = $CONFIG->dbpass; }
+
+	if (empty($old_www)) { $old_www = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];; }
+	if (empty($new_www)) { $new_www = $old_www; }
+
+	if (empty($old_path)) { $old_path = dirname(__FILE__); }
+	if (empty($new_path)) { $new_path = dirname(__FILE__); }
+	if (empty($old_datapath)) { $old_datapath = dirname(__FILE__) . '-data'; }
+	if (empty($new_datapath)) { $new_datapath = dirname(__FILE__) . '-data'; }
+
+	if (empty($prefix)) { $prefix = $CONFIG->dbprefix; }
 }
 
 header('Content-Type: text/html; charset=utf-8');
