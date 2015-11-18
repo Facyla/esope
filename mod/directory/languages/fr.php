@@ -25,7 +25,7 @@ return array(
 	'directory:edit:description:details' => "Permet de décrire et de contextualiser ce répertoire",
 	'directory:edit:content' => "Eléments",
 	'directory:edit:content:details' => "Ajoutez de nouveaux contacts à votre répertoire, et réorganisez-les à votre convenance en faisant un cliquer-déplacer.",
-	'directory:edit:entity:none' => "Aucun contact sélectionné",
+	'directory:edit:entity:none' => "Aucun élément sélectionné",
 	'directory:edit:entity' => "Contact",
 	'directory:edit:addentity' => "+ Ajouter un contact",
 	'directory:addentity:notallowed' => "Vous n'avez pas l'autorisation d'ajouter d'élément à ce répertoire.",
@@ -128,12 +128,22 @@ return array(
 	'directory:add:directory' => "Nouveau répertoire",
 	'directory:add:person' => "Nouveau contact",
 	'directory:add:organisation' => "Nouvelle organisation",
-	'directory:select_entity' => "Sélectionner une entité",
-	'directory:addentity:details' => "Choisissez l'élément à relier'",
-	'directory:addentity:submit' => "Enregistrer",
-	'directory:select:directory' => "Sélectionner un répertoire",
-	'directory:select:person' => "Sélectionner une personne",
-	'directory:select:organisation' => "Sélectionner une organisation",
+	'directory:select:all' => "Sélectionner une entité",
+	'directory:select:directory' => "Placer dans un répertoire",
+	'directory:select:person' => "Ajouter une personne",
+	'directory:select:organisation' => "Lier à une organisation",
+	'directory:change' => "Modifier la sélection",
+	
+
+	// Relations
+	'directory:addrelation:details' => "Choisissez l'élément à relier",
+	'directory:addrelation:submit' => "Enregistrer",
+	'directory:error:entity_not_found' => "Eléments non trouvés",
+	'directory:error:notallowed' => "Vous n'avez pas les droits pour effectuer cette action",
+	'directory:addrelation:success' => "Relation ajoutée",
+	'directory:addrelation:alreadyexists' => "Cette liaison existe déjà",
+	'directory:person:member_of' => "Organisations",
+	'directory:organisations:members' => "Membres / Personnes liées",
 	
 );
 

@@ -94,7 +94,7 @@ if (empty($content)) {
 		$content .= '<header><div class="interne">';
 		$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
 		if (empty($headertitle)) $content .= '<h1 class="invisible">' . $site->name . '</h1>';
-		else $content .= '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+		else $content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
 		$content .= '</div></header>';
 
 		$content .= '<div class="elgg-page-messages">';
@@ -103,7 +103,7 @@ if (empty($content)) {
 		$content .= '<div class="clearfloat"></div>';
 
 		$content .= '<div id="esope-homepage" class="interne">';
-			$content .= '<div id="esope-public-col1">';
+			$content .= '<div id="esope-public-col1" class="home-static-container">';
 				$intro = elgg_get_plugin_setting('homeintro', 'esope');
 				if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
 				$content .= '<div id="esope-loginbox">';
@@ -115,7 +115,7 @@ if (empty($content)) {
 				$content .= '</div>';
 			$content .= '</div>';
 
-			$content .= '<div id="esope-public-col2">';
+			$content .= '<div id="esope-public-col2" class="home-static-container">';
 				// Création nouveau compte
 				if (elgg_get_config('allow_registration')) { $content .= $register_form; }
 			$content .= '</div>';

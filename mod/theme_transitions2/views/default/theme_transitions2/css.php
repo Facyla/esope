@@ -181,6 +181,8 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { color: white; background-color:#4B8F74; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #4B8F74; transition-duration:0.5s; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-nav:hover { background-color: #4B8F74; }
+.elgg-menu-topbar li.elgg-menu-item-language-selector { display:none; }
+.elgg-menu-topbar li.language-selector { float:left; width:auto; }
 
 
 /* Sidebar */
@@ -242,14 +244,14 @@ body { background:#EBE7DF; font-family:Lato; }
 
 @media (max-width: 766px) {
 	.elgg-page-topbar { padding: 0; }
-	.elgg-topbar-nav-collapse { display:none; }
+	.elgg-topbar-nav-collapse { display:none; clear: both; width: 100%; }
 	.elgg-menu-topbar { width:100%; }
 	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
 	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
 	.elgg-menu-topbar li, .elgg-menu-topbar li { display: inline-block; width: 100%; }
 	.elgg-menu-site > li.float-alt { width: 100%; }
 	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
-	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
+	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar, .elgg-menu-topbar-default > li:first-child a { padding-top: 0; margin: 0 10px; }
 	
 	.static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
 	

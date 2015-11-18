@@ -474,11 +474,11 @@ function multilingual_count_translations($entity) {
  * Then : same language as site default
  : Finally : main entity
  */
-function multilingual_select_best_version($entity) {
-	$lang = get_current_language();
+function multilingual_select_best_version($entity, $lang = false) {
+	if (!$lang) { $lang = get_current_language(); }
 	$main_lang = multilingual_get_main_language();
 	$main = multilingual_get_main_entity($entity);
-	
+
 	// Same as current language
 	if ($entity->lang == $lang) { return $entity; }
 	// Also if current language is the same as main language, we can use main entity
@@ -491,11 +491,11 @@ function multilingual_select_best_version($entity) {
 	
 	// Any other translation in main language
 	foreach($translations as $ent) {
-		if ($ent->lang == $min_lang) { return $ent; }
+		if ($ent->lang == $main_lang) { return $ent; }
 	}
 	
 	// If we've got still nothing, content will be anyway in another language => main entity is best choice
-	return $main_entity;
+	return $main;
 }
 
 // Determines if this entity is the best version to display
@@ -583,6 +583,8 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 		if (in_array($subtype, $object_subtypes)) {
 			if ($entity->canEdit()) {
 				$translation = clone $entity;
+				$translation->time_created = time();
+				$translation->time_updated = time();
 		
 				// @TODO decide who is the owner..  it may be the original object (easy deletion + inheritance), or the original owner, or the current editor
 		

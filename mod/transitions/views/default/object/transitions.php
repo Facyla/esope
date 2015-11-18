@@ -25,6 +25,7 @@ if ($full) {
 }
 
 
+
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 elgg_require_js('jquery.form');
@@ -209,6 +210,13 @@ if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 	$category_class = 'transitions-category-' . $transitions->category;
 	// Add specific class for iframe export embed
 	if (elgg_in_context('export_embed')) { $category_class .= " iframe"; }
+
+	// If multilingual duplicate, display only link to main version ?
+	if (!multilingual_is_best_version($transitions)) {
+		$best_version = multilingual_select_best_version($transitions);
+		$category_class .= " multilingual-alternate";
+	}
+	
 	echo '<div class="transitions-gallery-item ' . $category_class . '">';
 		echo '<div class="transitions-gallery-box" style="background-image:url(' . $transitions_icon_url . ');">';
 			

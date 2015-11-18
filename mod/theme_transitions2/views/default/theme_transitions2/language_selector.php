@@ -34,7 +34,7 @@ if (count($allowed) > 1) {
 			$flag_file = "mod/language_selector/_graphics/flags/" . $lang_id . ".gif";
 			
 			if (file_exists(elgg_get_root_path() . $flag_file)) {
-				$text = "<img src='" . elgg_get_site_url() . $flag_file . "' alt='" . $lang_name . "' title='" . $lang_name . "'>";
+				$text = '<img src="' . elgg_get_site_url() . $flag_file . '" alt="' . $lang_name . '" title="' . $lang_name . '">';
 			}
 		}
 		
@@ -43,9 +43,9 @@ if (count($allowed) > 1) {
 		}
 		
 		if (!empty($action)) {
-			$result .= "<li><a href='" . $action . "' title='" . $lang_name . "'>" . $text . "</a></li>";
+			$result .= '<li class="language-selector"><a href="' . $action . '" title="' . $lang_name . '">' . $text . '</a></li>';
 		} else {
-			$result .= '<li>' . $text . '</li>';
+			$result .= '<li class="language-selector">' . $text . '</li>';
 		}
 	}
 	

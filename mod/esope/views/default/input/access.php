@@ -74,7 +74,7 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 		if (elgg_is_active_plugin('au_subgroups')) {
 			// Add parent group access id (all parent groups)
 			$group = $page_owner;
-			while($parent = au_subgroups_get_parent_group($group)) {
+			while($parent = AU\SubGroups\get_parent_group($group)) {
 				$vars['options_values'][$parent->group_acl] = $parent->name;
 				$group = $parent;
 			}

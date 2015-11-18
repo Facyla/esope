@@ -358,13 +358,15 @@ $startdate_input = elgg_view('input/date', array(
 	'timestamp' => true,
 	'style' => "width:8em;",
 ));
-$starttime_value = date('H', $vars['start_date'])*60 + date('i', $vars['start_date']);
+if (!empty($vars['start_date'])) {
+	$starttime_value = date('H', $vars['start_date'])*60 + date('i', $vars['start_date']);
+} else { $starttime_value = 0; }
 $starttime_input = elgg_view('input/timepicker', array(
 	'name' => 'start_time',
 	'id' => 'transitions_starttime',
 	'value' => $starttime_value,
 	'placeholder' => elgg_echo('transitions:starttime'),
-));
+)) . $vars['start_date'];
 
 $enddate_label = elgg_echo('transitions:enddate');
 $enddate_input = elgg_view('input/date', array(
@@ -375,7 +377,9 @@ $enddate_input = elgg_view('input/date', array(
 	'timestamp' => true,
 	'style' => "width:8em;",
 ));
-$endtime_value = date('H', $vars['end_date'])*60 + date('i', $vars['end_date']);
+if (!empty($vars['end_date'])) {
+	$endtime_value = date('H', $vars['end_date'])*60 + date('i', $vars['end_date']);
+} else { $endtime_value = 0; }
 $endtime_input = elgg_view('input/timepicker', array(
 	'name' => 'end_time',
 	'id' => 'transitions_endtime',
