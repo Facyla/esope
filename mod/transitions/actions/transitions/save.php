@@ -285,6 +285,29 @@ if ($is_admin) {
 	$entity->links = $links;
 	$entity->links_comment = $links_comment;
 	
+	// Manage contributed actors
+	$actor_guids = (array) get_input('actor_guid');
+	$contributed_actors_ent = elgg_get_entities_from_relationship(array(
+			'type' => 'object',
+			'subtype' => 'transitions',
+			'relationship' => 'partner_of',
+			'relationship_guid' => $entity->guid,
+			'inverse_relationship' => true,
+			'limit' => 0,
+		));
+	// Remove deleted relationships
+	if ($contributed_actors_ent) {
+		foreach($contributed_actors_ent as $ent) {
+			if (!in_array($ent->guid, $actor_guids)) {
+				remove_entity_relationship($ent->guid, 'partner_of', $entity->guid);
+			}
+		}
+	}
+	// Add missing relationship ()
+	foreach ($actor_guids as $actor_guid) {
+		add_entity_relationship($actor_guid, 'partner_of', $entity->guid);
+	}
+	
 	$owner_username = get_input('owner_username', '');
 	if (!empty($owner_username)) {
 		$new_owner = get_user_by_username($owner_username);

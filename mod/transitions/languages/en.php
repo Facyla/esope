@@ -144,6 +144,7 @@ View and comment on the contribution:
 	// Other forms
 	'transitions:accountrequired' => "Please login to contribute.<br />If you do not have an account yet, this is very quick! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Create my Transitions² contributor account</a>",
 	'transitions:tags_contributed' => "Contributors tags",
+	'transitions:actors_contributed' => "Actors associated to this project",
 	'transitions:addtag' => "Tag",
 	'transitions:addtag:submit' => "Add a tag",
 	'transitions:addtag:details' => "You can add one or several tags to help better categorisation of this resource.",
@@ -164,6 +165,9 @@ View and comment on the contribution:
 	'transitions:addlink:add' => "+ Add a link",
 	'transitions:addlink:remove' => "Remove this link",
 	'transitions:addlink:remove:confirm' => "Do you confirm you wish to remove this link? This cannot be undone.",
+	'transitions:addactor:add' => "+ Add an actor",
+	'transitions:addactor:remove' => "Remove this actor",
+	'transitions:addactor:remove:confirm' => "Do you confirm you wish to remove this actor? This cannot be undone.",
 	'transitions:links_supports' => "Support resources",
 	'transitions:relation:supports' => "support",
 	'transitions:links_invalidates' => "Opposition resources",

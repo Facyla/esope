@@ -144,6 +144,7 @@ Voir et commenter cette contribution :
 	// Other forms
 	'transitions:accountrequired' => "Veuillez vous connecter pour contribuer.<br />Si vous n'avez pas encore de compte,  c'est très rapide ! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Créer mon compte de contributeur Transitions²</a>",
 	'transitions:tags_contributed' => "Tags des contributeurs",
+	'transitions:actors_contributed' => "Acteurs associés au projet",
 	'transitions:addtag' => "Tagguer",
 	'transitions:addtag:submit' => "Ajouter un tag",
 	'transitions:addtag:details' => "Vous pouvez ajouter un ou plusieurs tags pour aider à mieux classer cette ressource.",
@@ -163,7 +164,10 @@ Voir et commenter cette contribution :
 	'transitions:addlink:comment:placeholder' => "Pourquoi un lien vers cette ressource ?",
 	'transitions:addlink:add' => "+ Ajouter un lien",
 	'transitions:addlink:remove' => "Supprimer ce lien",
+	'transitions:addactor:add' => "+ Ajouter un acteur",
 	'transitions:addlink:remove:confirm' => "Confirmez-vous vouloir supprimer ce lien ?",
+	'transitions:addactor:remove' => "Supprimer cet acteur",
+	'transitions:addactor:remove:confirm' => "Confirmez-vous vouloir supprimer cet acteur ?",
 	'transitions:links_supports' => "Ressources en accord",
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",

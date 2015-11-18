@@ -7,7 +7,9 @@
 .elgg-form-transitions-save fieldset fieldset { border: 1px solid #023824; padding: 2px 6px; margin: 20px 0 20px 0; }
 .elgg-form-transitions-save legend { border: 1px solid #023824; padding: 0 3px; }
 .transitions-edit-addlink-highlight { margin-bottom: 1ex; border:1px dashed grey; padding:0.5ex 1ex; height:5ex; }
-.transitions-edit-contributed-link { margin-bottom: 1ex; border:1px solid grey; padding:0.5ex 1ex; }
+.transitions-edit-contributed-link { margin-bottom: 1ex; border:1px solid grey; padding:0.5ex 1ex; border-radius: 3px; background-color: #f2e8d3; }
+.transitions-edit-contributed-link input { width:42%; margin-right:1%; min-width:300px; }
+.transitions-edit-contributed-actor { margin-bottom: 1ex; border:1px solid grey; padding:0.5ex 1ex; border-radius: 3px; background-color: #f2e8d3; }
 
 
 

@@ -201,6 +201,28 @@ if ($is_admin) {
 		'value' => $transitions->tags_contributed,
 		'placeholder' => elgg_echo('transitions:tags_contributed'),
 	));
+	
+	$contributed_actors_ent = elgg_get_entities_from_relationship(array(
+			'type' => 'object',
+			'subtype' => 'transitions',
+			'relationship' => 'partner_of',
+			'relationship_guid' => $transitions->guid,
+			'inverse_relationship' => true,
+			'limit' => 0,
+		));
+	$contributed_actors_label = elgg_echo('transitions:actors_contributed');
+	$contributed_actors_input = '<div class="transitions-edit-actors">';
+	foreach($contributed_actors_ent as $ent) {
+		$contributed_actors_input .= '<div class="transitions-edit-contributed-actor"><a href="javascript:void(0);" class="transitions-edit-removeactor" title="' . elgg_echo('transitions:addactor:remove') . '" style="float:right; margin-left:2ex;"><i class="fa fa-trash"></i></a>';
+		$contributed_actors_input .= elgg_view('transitions/embed/object/default', array('entity' => $ent));
+		$contributed_actors_input .= elgg_view('input/hidden', array('name' => 'actor_guid[]', 'value' => $ent->guid));
+		$contributed_actors_input .= '</div>';
+	}
+	$contributed_actors_input .= '</div>';
+	$contributed_actors_input .= elgg_view('transitions/input/addactor_edit', array('name' => 'actor_guid[]'));
+	//$contributed_actors_input .= '<input type="button" class="transitions-edit-addactor" value="' . elgg_echo('transitions:addactor:add') . '" class="elgg-button elgg-button-action" />';
+
+
 
 	/*
 	$links_supports_label = elgg_echo('transitions:links_supports');
@@ -423,10 +445,13 @@ if ($is_admin) {
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . ' &nbsp; ';
 	$admin_fields .= '<label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
+	// Contributed tags
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
-'</p>';
+	// Contributed actors
+	$admin_fields .= '<p class="transitions-actors"><label for="transitions_actors_contributed">' . $contributed_actors_label . '</label>' . $contributed_actors_input . '</p>';
+	// Contributed links
 	$admin_fields .= '<p><label>' . $links_label . '</label>' . $links_input . '</p>';
 	$admin_fields .= '</blockquote>';
 	
@@ -475,6 +500,7 @@ function transitions_toggle_fields() {
 	$(".transitions-end").addClass(\'hidden\');
 	$(".transitions-rss-feed").addClass(\'hidden\');
 	$(".transitions-collection").addClass(\'hidden\');
+	$(".transitions-actors").addClass(\'hidden\');
 	
 	$(".transitions-explanations").addClass(\'hidden\');
 	if (val) $(".transitions-explanations-"+val).removeClass(\'hidden\');
@@ -489,6 +515,7 @@ function transitions_toggle_fields() {
 		$(".transitions-territory").removeClass(\'hidden\');
 		$(".transitions-start").removeClass(\'hidden\');
 		$(".transitions-end").removeClass(\'hidden\');
+		$(".transitions-actors").removeClass(\'hidden\');
 	} else if (val == "event") {
 		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:event') . '\');
 		$(".transitions-startdate").removeClass(\'hidden\');
