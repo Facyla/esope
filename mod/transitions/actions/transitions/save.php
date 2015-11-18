@@ -303,9 +303,12 @@ if ($is_admin) {
 			}
 		}
 	}
-	// Add missing relationship ()
+	// Add missing relationship
 	foreach ($actor_guids as $actor_guid) {
-		add_entity_relationship($actor_guid, 'partner_of', $entity->guid);
+		$actor = get_entity($actor_guid);
+		if (elgg_instanceof($actor, 'object', 'transitions') && ($actor->category == 'actor')) {
+			add_entity_relationship($actor_guid, 'partner_of', $entity->guid);
+		}
 	}
 	
 	$owner_username = get_input('owner_username', '');
