@@ -358,6 +358,7 @@ $fr = array(
 	'esope:usersettings:public_profile:help' => "Ce réglage vous permet de rendre votre profil visible publiquement sur internet.<br /><br />Il est conseillé de rendre votre profil public si vous souhaitez présenter vos compétences ou partager certaines informations choisies sur internet.<br /><br />Veuillez noter que tous vos autres réglages de visibilité des champs et des widgets qui composent votre page du profil restent valables : par exemple si vous avez choisi que votre numéro de téléphone ou la liste de contacts sont réservés à vos contacts, rendre votre profil public ou non ne modifiera pas ce réglage, et cette information restera réservée à vos contacts.",
 	'esope:action:public_profile:error' => "Une erreur s'est lors de la modification de vos paramètres.",
 	'esope:action:public_profile:saved' => "La visibilité de votre profil a bien été modifiée.",
+	'esope:action:remove_user_email' => "Supprimer email du membre",
 	'esope:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
 	'esope:members:hide_directory' => "Masquer l'annuaire des membres aux non-membres (pas d'annuaire public)",
