@@ -62,6 +62,12 @@ if ($full) {
 		echo '<p><strong>' . elgg_echo("directory:edit:person:$field") . '&nbsp;:</strong> ' . $entity->$field . '</p>';
 	}
 
+	// List relationships
+	echo '<div class="clearfloat"></div><br />';
+	// Organisations
+	echo elgg_view_title(elgg_echo('directory:person:member_of'));
+	//$organisations = elgg_get_entities_from_relationship(array('type' => 'object', 'subtype' => 'organisation', 'relation' => 'member_of', 'relationship_guid' => $entity->guid));
+	echo elgg_list_entities_from_relationship(array('type' => 'object', 'subtype' => 'organisation', 'relationship' => 'member_of', 'relationship_guid' => $entity->guid, 'full_view' => false));
 	
 	
 } else {

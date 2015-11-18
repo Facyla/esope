@@ -6,4 +6,6 @@
 
 .elgg-menu-multilingual.elgg-selected img { box-shadow: 0px 0px 2px 1px rgba(255,00,00,1); }
 
+.multilingual-alternate { opacity: 0.2; }
+.multilingual-alternate:hover, .multilingual-alternate:active, .multilingual-alternate:focus { opacity: 1; }
 

@@ -182,15 +182,39 @@ $content .= '<div class="transitions-index-search">';
 	//$search_options['wheres'][] = "";
 	//$search_options['relationship'] = ""; // has_translation / translation_of
 	//$search_options['callback'] = "multilingual_entity_row_to_elggstar"; // @TODO : should be applied before getting the entities
-	
+
+	// Add language filter
+	// Note : filters content in current language only
+	/*
+	$lang = get_language();
+	$main_lang = multilingual_get_main_language();
+	if ($main_lang == $lang) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => array('', $lang), 'operand' => '=');
+	} else {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang, 'operand' => '=');
+	}
+	// @TODO et ajouter entités n'ayant pas de traduction dans la langue courante
+	//$search_options['wheres'][] = '(1=1) OR (1=1)';
+	*/
+
+	// @TODO handle multilingual duplicates and content available in single language (other than current)
+	// 
 	
 	// Perform search
 	if (isset($search_options['metadata_name_value_pairs'])) {
+		/*
 		$count = elgg_get_entities_from_metadata($search_options);
 		$catalogue = elgg_list_entities_from_metadata($search_options);
+		*/
+		$count = elgg_get_entities_from_relationship($search_options);
+		$catalogue = elgg_list_entities_from_relationship($search_options);
 	} else {
+		/*
 		$count = elgg_get_entities($search_options);
 		$catalogue = elgg_list_entities($search_options);
+		*/
+		$count = elgg_get_entities_from_relationship($search_options);
+		$catalogue = elgg_list_entities_from_relationship($search_options);
 	}
 	// @TODO use relations to filter duplicates at DB level ?
 	// Relationship function wraps also metadata and basic getters

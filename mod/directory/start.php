@@ -49,6 +49,7 @@ function directory_init() {
 	$actions_path = elgg_get_plugins_path() . 'directory/actions/directory/';
 	elgg_register_action("directory/edit", $actions_path . 'edit.php');
 	elgg_register_action("directory/delete", $actions_path . 'delete.php');
+	elgg_register_action("directory/add_relation", $actions_path . 'add_relation.php');
 	//elgg_register_action("directory/addentity", $actions_path . 'addentity.php');
 	
 	// Get a plugin setting
@@ -80,7 +81,9 @@ function directory_page_handler($page) {
 			include "$base/icon.php";
 			break;
 		case 'embed':
-			set_input('guid', $page[1]);
+			set_input('display', true);
+			set_input('id', $page[1]);
+			set_input('subtype', $page[2]);
 			include "$base/embed.php";
 			break;
 		case 'edit':

@@ -26,18 +26,6 @@ elgg_push_breadcrumb(elgg_echo('directory'), 'directory');
 // Get directory by GUID or name
 $object = get_entity($guid);
 if (elgg_instanceof($object, 'object', 'directory') || elgg_instanceof($object, 'object', 'person') || elgg_instanceof($object, 'object', 'organisation')) {
-	//$content = elgg_view('directory/view', array('entity' => $object, 'embed' => $embed));
-	$content = elgg_view_entity($object, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
-	if ($object->canEdit()) {
-		switch($subtype) {
-			case 'person':
-				break;
-			case 'directory':
-			case 'organisation':
-			default:
-				$content .= elgg_view_form('directory/add_entity', array(), array('entity' => $object));
-		}
-	}
 	$title = $object->title;
 	$subtype = $object->getSubtype();
 	elgg_push_breadcrumb(elgg_echo("directory:$subtype"), "directory/$subtype");
@@ -45,6 +33,23 @@ if (elgg_instanceof($object, 'object', 'directory') || elgg_instanceof($object, 
 		elgg_push_breadcrumb($object->name);
 	} else {
 		elgg_push_breadcrumb($object->title);
+	}
+	//$content = elgg_view('directory/view', array('entity' => $object, 'embed' => $embed));
+	$content = elgg_view_entity($object, array('embed' => $embed, 'full_view' => $full_view, 'full_content' => $full_content));
+	if ($object->canEdit()) {
+		switch($subtype) {
+			case 'person':
+				$content .= elgg_view_form('directory/add_relation', array(), array('entity' => $object, 'selected-subtype' => 'organisation'));
+				break;
+				break;
+			case 'organisation':
+				$content .= elgg_view_form('directory/add_relation', array(), array('entity' => $object, 'selected-subtype' => 'person'));
+				break;
+			case 'directory':
+			default:
+				//$content .= elgg_view_form('directory/add_relation', array(), array('entity' => $object, 'selected-subtype' => 'organisation'));
+				//$content .= elgg_view_form('directory/add_relation', array(), array('entity' => $object, 'selected-subtype' => 'person'));
+		}
 	}
 }
 // Note : some plugins (such as metatags) rely on a defined title, so we need to set it
