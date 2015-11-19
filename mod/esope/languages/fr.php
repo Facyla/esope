@@ -227,6 +227,9 @@ $fr = array(
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
 	'groups:join:success' => "Vous êtes désormais membre du groupe",
+	'reply:this' => "Répondre", // Mauvaise trad fr dans groups...
+	'groups:topicopen' => "Ouvert (commentaires acceptés)",
+	
 	// Notifications
 	'link:userprofile' => "Page de profil de %s",
 	

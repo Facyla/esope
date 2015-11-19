@@ -213,6 +213,7 @@ $en = array(
 	'save:groupnotifications' => "Save my notification settings for groups",
 	'save:widgetsettings' => "Save widget settings",
 	'groups:join:success' => "Successfully joined the group",
+	'groups:topicopen' => "Open (comments allowed)",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
 	
