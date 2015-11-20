@@ -45,8 +45,8 @@ $font6 = $css['font6'];
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
-	margin-right: 5px;
 	/*
+	margin-right: 5px;
 	height: 25px;
 	width: 25px;
 	*/

@@ -5,7 +5,7 @@
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
-$fr = array(
+return array(
 	
 	'option:notify:email' => "Activer par email (par défaut)",
 	'option:notify:site' => "Activer par le site (messages)",
@@ -467,6 +467,15 @@ $fr = array(
 	'esope:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'esope:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	
+	'esope:settings:thewire_default_access' => "Accès par défaut du Fil",
+	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglég de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
+	'esope:settings:groups:invite_picker' => "Type de sélecteur",
+	'esope:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
+	'esope:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
+	'esope:invite_picker:userpicker' => "Auto-complétion",
+	'esope:settings:groups:invite_metadata' => "Invitations par critères de recherche",
+	'esope:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
+	
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS ET COORDONNEES",
 	'esope:config:contacts:details' => "Certains thèmes utilisent ces coordonnées pour ajouter des liens vers les présences sociales de votre réseau, soit dans le bandeau supérieur, soit à un autre emplacement défini par le thème.",
@@ -819,4 +828,3 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);

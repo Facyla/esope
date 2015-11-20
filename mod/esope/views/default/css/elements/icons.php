@@ -47,10 +47,17 @@ h6 > .fa {
 .elgg-avatar > .elgg-icon-hover-menu {
 	display: none;
 	position: absolute;
-	right: -6px;
-	bottom: -2px;
+	right: 0;
+	bottom: 0;
 	margin: 0;
 	cursor: pointer;
+	text-shadow: 0px 1px 1px #000;
+	color: white;
+	font-size: 25px;
+	text-align: right;
+	height: auto;
+	height: 18px;
+	vertical-align: bottom;
 }
 
 .elgg-ajax-loader {

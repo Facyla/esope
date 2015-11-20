@@ -35,6 +35,7 @@ if (!$body || !$subject) {
 }
 
 // Otherwise, 'send' the message 
+// ESOPE : use custom function so we can tweak the message content
 //$result = messages_send($subject, $body, $user->guid, 0, $original_msg_guid);
 $result = notification_messages_send($subject, $body, $user->guid, 0, $original_msg_guid);
 

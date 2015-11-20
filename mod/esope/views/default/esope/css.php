@@ -113,6 +113,34 @@ img { border: 0 none; overflow:hidden; }
 .esope-more { float: right; font-size: 70%; line-height: 1.6; }
 
 
+/* ACCESSIBILITY */
+.invisible { position:absolute !important; left:-5000px !important; }
+.blockform > div { margin-bottom: 15px; }
+.blockform > div:last-child { margin-bottom: 0; }
+.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
+
+.entity_title {font-weight:bold; }
+
+/* Corrections des styles du core */
+:focus { outline: 1px dotted grey; }
+input:focus, textarea:focus { outline:0; }
+.ui-autocomplete-input:focus { outline:0; }
+.elgg-button-action:hover, .elgg-button-action:focus { outline:0; }
+.elgg-search input[type=text]:focus, .elgg-search input[type=text]:active { outline:0; }
+.elgg-page-header .elgg-search input[type=submit] { display: block !important; }
+
+/*
+// Tous les :hover à compléter par :focus et :active : cf. thème ADF
+// Tous les display:none des menus à modifier/remplacer par des left:-5000px puis remettre en place..
+
+=> fonctionne sans JS mais pas accessible au clavier
+=> modifier les display:none => left:-5000px;
+=> les afficher via left: valeur; ou right:valeur;
+
+=> remplacer par un masquage en JS
+*/
+
+
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
 
 /* ESOPE : bandeau */
@@ -825,7 +853,10 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 /* Note : this replaces the above with FA icons - update translations accordingly if needed
  */
 .elgg-menu-owner-block li a { padding-left: 1ex; }
-.elgg-sidebar li .fa { display: inline-block; min-width: 2.5ex; }
+/*
+.elgg-sidebar li .fa { display: inline-block; min-width: 1em; }
+*/
+li .fa { display: inline-block; /* min-width: 2.5ex; */ min-width: 1em; }
 
 
 

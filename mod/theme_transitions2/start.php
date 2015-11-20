@@ -504,7 +504,7 @@ function theme_transitions2_htmlawed_filter_tags($hook, $type, $return, $params)
 		'hook_tag' => 'htmlawed_tag_post_processor',
 
 		'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
-		// apparent this doesn't work.
+		// apparently this doesn't work.
 		// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
 	);
 	return $htmlawed_config;

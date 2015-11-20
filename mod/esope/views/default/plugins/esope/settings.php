@@ -50,8 +50,8 @@ $group_groupjoin_enablenotif_opt = array(
 	);
 
 $invite_picker_opt = array(
-		'friendspicker' => elgg_echo('adf_platform:invite_picker:friendspicker'),
-		'userpicker' => elgg_echo('adf_platform:invite_picker:userpicker'),
+		'friendspicker' => elgg_echo('esope:invite_picker:friendspicker'),
+		'userpicker' => elgg_echo('esope:invite_picker:userpicker'),
 	);
 
 
@@ -685,7 +685,7 @@ $(function() {
 			echo elgg_view('input/select', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $plugin->custom_profile_layout)); ?>
 		</p>
 		<br />
-		<?php echo 'h4>' . elgg_echo('esope:config:memberssearch') . '</h4>';
+		<?php echo '<h4>' . elgg_echo('esope:config:memberssearch') . '</h4>';
 		if (elgg_is_active_plugin('members')) {
 			// Allow to add alpha sort
 			echo '<p><label>' . elgg_echo('esope:settings:members:alpha') . '</label> ' . elgg_view('input/select', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_alpha)) . '</p>';
@@ -795,14 +795,14 @@ $(function() {
 <!-- CONTACTS //-->
 	<h3><i class="fa fa-phone"></i> <?php echo elgg_echo('esope:config:contacts'); ?></h3>
 	<div>
-		<p><em><?php echo elgg_echo('esope:config:contacts'); ?></em></p>
+		<p><em><?php echo elgg_echo('esope:config:contacts:details'); ?></em></p>
 		<?php
 		// Note : use view page/elements/social_presence for rendering
 		// Important : update tools list in view if updated here !
 		// @TODO : could also make this list a setting and let people update it live..
 		$tools = array('contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare');
 		foreach ($tools as $tool) {
-			echo '<p><label>' . elgg_echo("esope:settings:$tool:icon") . ' &nbsp; ' . elgg_echo("esope:settings:$tool") . '' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $plugin->$tool, 'style' => 'width:50%;')) . '</label><br />' . elgg_echo("esope:settings:$tool:help") . '</p>';
+			echo '<p><label>' . elgg_echo("esope:settings:$tool:icon") . ' &nbsp; ' . elgg_echo("esope:settings:$tool") . ' ' . elgg_view('input/text', array('name' => "params[$tool]", 'value' => $plugin->$tool, 'style' => 'width:50%;')) . '</label><br />' . elgg_echo("esope:settings:$tool:help") . '</p>';
 		}
 		?>
 	</div>
@@ -845,7 +845,7 @@ $(function() {
 		echo elgg_view('input/plaintext', array('name' => 'params[import_settings]', 'value' => $plugin->import_settings));
 		?>
 			</label>
-			<em><?php echo elgg_echo('adf_platform:config:import:details'); ?></em>
+			<em><?php echo elgg_echo('esope:config:import:details'); ?></em>
 		</p><br />
 
 		<?php echo '<h4>' . elgg_echo('esope:config:export') . '</h4>'; ?>

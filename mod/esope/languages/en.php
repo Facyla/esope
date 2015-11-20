@@ -5,7 +5,7 @@
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
-$en = array(
+return array(
 	
 	'option:notify:email' => "Enable email (default)",
 	'option:notify:site' => "Enable site (messages)",
@@ -452,6 +452,15 @@ $en = array(
 	'esope:settings:members:onesearch' => "Keep only general member search ? (default : No)",
 	'esope:settings:members:online' => "Display online members on sidebar (default : no)",
 	
+	'esope:settings:thewire_default_access' => "Default Wire access",
+	'esope:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
+	'esope:settings:groups:invite_picker' => "User picker type",
+	'esope:settings:groups:invite_picker:details' => "Note: above a fixed number of persons, the picker will automatically switch to Autocomplete (to avoid memrory overflow).",
+	'esope:invite_picker:friendspicker' => "Alphabetical picker",
+	'esope:invite_picker:userpicker' => "Autocomplete",
+	'esope:settings:groups:invite_metadata' => "Group invites by metadata search",
+	'esope:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
+	
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS & IDENTITIES",
 	'esope:config:contacts:details' => "Note : some themes use theses information to display links to social presence in top menu (or elswhere).",
@@ -546,7 +555,7 @@ $en = array(
 	'esope:settings:slideshare:icon' => '<i class="fa fa-slideshare"></i>',
 	'esope:settings:slideshare:title' => "Slideshare",
 	
-
+	
 	// DATES
 	'date:format:friendly' => 'm/d/Y H:i',
 	'date:time:on' => "on",
@@ -783,4 +792,3 @@ $en = array(
 	
 );
 
-add_translation('en', $en);
