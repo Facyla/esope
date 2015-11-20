@@ -7,6 +7,9 @@
 
 $group = $vars['entity'];
 
+// ESOPE : add publication tools if asked
+echo elgg_view('groups/profile/group_publish_tools', $vars);
+
 // tools widget area
 echo '<ul id="groups-tools" class="elgg-gallery elgg-gallery-fluid mtl clearfix">';
 
@@ -34,9 +37,6 @@ if ($right || $left) {
 
 echo "</ul>";
 
-
-// ESOPE : add publication tools if asked
-echo elgg_view('groups/profile/group_publish_tools', $vars);
 
 // ESOPE : add activity if asked
 echo elgg_view('groups/profile/group_activity', $vars);

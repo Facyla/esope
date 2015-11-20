@@ -213,6 +213,7 @@ $en = array(
 	'save:groupnotifications' => "Save my notification settings for groups",
 	'save:widgetsettings' => "Save widget settings",
 	'groups:join:success' => "Successfully joined the group",
+	'groups:topicopen' => "Open (comments allowed)",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
 	
@@ -344,6 +345,7 @@ $en = array(
 	'esope:usersettings:public_profile:help' => "This setting lets you define wether you want to make your profile visible from the internet or not.<br /><br />It is avised to set your profile as public if you wish to show your skills or share any information on the internet.<br /><br />Please note that all your other visibility settings on fields or widgets will also apply whatever you decide: if you have chosen that your phone number or contact list is restricted to your contacts only, making your profile public won't make these information public, and they still will be restricted to your contacts.",
 	'esope:action:public_profile:error' => "There was an error while changing your settings.",
 	'esope:action:public_profile:saved' => "Your profile visibility has been successfully modified.",
+	'esope:action:remove_user_email' => "Remove user email",
 	'esope:usersettings:public_profile:public' => "Your profile is now PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Your profile is now RESTRICTED TO MEMBERS.",
 	'esope:members:hide_directory' => "Hide members directory to non-members (no public directory)",

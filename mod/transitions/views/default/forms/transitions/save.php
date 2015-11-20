@@ -202,21 +202,24 @@ if ($is_admin) {
 		'placeholder' => elgg_echo('transitions:tags_contributed'),
 	));
 	
-	$contributed_actors_ent = elgg_get_entities_from_relationship(array(
-			'type' => 'object',
-			'subtype' => 'transitions',
-			'relationship' => 'partner_of',
-			'relationship_guid' => $transitions->guid,
-			'inverse_relationship' => true,
-			'limit' => 0,
-		));
 	$contributed_actors_label = elgg_echo('transitions:actors_contributed');
 	$contributed_actors_input = '<div class="transitions-edit-actors">';
-	foreach($contributed_actors_ent as $ent) {
-		$contributed_actors_input .= '<div class="transitions-edit-contributed-actor"><a href="javascript:void(0);" class="transitions-edit-removeactor" title="' . elgg_echo('transitions:addactor:remove') . '" style="float:right; margin-left:2ex;"><i class="fa fa-trash"></i></a>';
-		$contributed_actors_input .= elgg_view('transitions/embed/object/default', array('entity' => $ent));
-		$contributed_actors_input .= elgg_view('input/hidden', array('name' => 'actor_guid[]', 'value' => $ent->guid));
-		$contributed_actors_input .= '</div>';
+	// Note : we need to check only if we have a valid entity for the relation otherwise we would get weird results
+	if (elgg_instanceof($transitions, 'object', 'transitions')) {
+		$contributed_actors_ent = elgg_get_entities_from_relationship(array(
+				'type' => 'object',
+				'subtype' => 'transitions',
+				'relationship' => 'partner_of',
+				'relationship_guid' => $transitions->guid,
+				'inverse_relationship' => true,
+				'limit' => 0,
+			));
+		if (!empty($contributed_actors_ent)) foreach($contributed_actors_ent as $ent) {
+			$contributed_actors_input .= '<div class="transitions-edit-contributed-actor"><a href="javascript:void(0);" class="transitions-edit-removeactor" title="' . elgg_echo('transitions:addactor:remove') . '" style="float:right; margin-left:2ex;"><i class="fa fa-trash"></i></a>';
+			$contributed_actors_input .= elgg_view('transitions/embed/object/default', array('entity' => $ent));
+			$contributed_actors_input .= elgg_view('input/hidden', array('name' => 'actor_guid[]', 'value' => $ent->guid));
+			$contributed_actors_input .= '</div>';
+		}
 	}
 	$contributed_actors_input .= '</div>';
 	$contributed_actors_input .= elgg_view('transitions/input/addactor_edit', array('name' => 'actor_guid[]'));
