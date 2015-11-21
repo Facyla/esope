@@ -77,13 +77,13 @@ echo "<fieldset>";
 	echo '<p><label>' . elgg_echo("notification_messages:settings:notify_user");
 	if (elgg_is_active_plugin('comment_tracker')) {
 		// Synchronize setting with comment tracker's and block editing
-		$notify_user = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
-		$vars['entity']->notify_user = $notify_user;
-		echo '&nbsp;: ' . $noyes_options[$vars['entity']->notify_user] . '</label>';
+		$notify_owner = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
+		$vars['entity']->notify_owner = $notify_owner;
+		echo '&nbsp;: ' . $noyes_options[$vars['entity']->notify_owner] . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
-		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_user:comment_tracker") . "</strong></div>";
+		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_owner:comment_tracker") . "</strong></div>";
 	} else {
-		echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notify_user]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_user)) . '</label>';
+		echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notify_owner]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_owner)) . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
 	}
 	echo "</p>";
