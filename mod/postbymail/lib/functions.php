@@ -612,7 +612,6 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 									// Support group wire
 									$thewire->container_guid = $entity->container_guid;
 									$thewire->save();
-error_log("Container saved $thewire_guid : {$entity->container_guid} => {$thewire->container_guid}");
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
