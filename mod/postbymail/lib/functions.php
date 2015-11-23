@@ -608,6 +608,9 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
 								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
 								if ($thewire_guid) {
+									$thewire = get_entity($thewire_guid);
+									// Support group wire
+									$thewire->container_guid = $entity->container_guid;
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
@@ -1010,7 +1013,11 @@ function postbymail_checkeligible_reply($params) {
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
-		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		if (!empty($params['entity']->title)) {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		} else {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->name));
+		}
 		
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		
