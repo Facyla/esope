@@ -24,13 +24,11 @@ if (count($allowed) > 1) {
 			if (elgg_is_logged_in()) {
 				$action = elgg_add_action_tokens_to_url(elgg_get_site_url() . "action/language_selector/change?lang_id=" . $lang_id);
 			} else {
-				
-				$action = "javascript:setLanguage(\"" . $lang_id . "\");";
-			}				
+				$action = "javascript:setLanguage('" . $lang_id . "');";
+			}
 		} 
 		
 		if ($show_flags) {
-			
 			$flag_file = "mod/language_selector/_graphics/flags/" . $lang_id . ".gif";
 			
 			if (file_exists(elgg_get_root_path() . $flag_file)) {
@@ -55,15 +53,15 @@ if (count($allowed) > 1) {
 	if (!elgg_is_logged_in()) {
 		?>
 		<script type="text/javascript">
-			function setLanguage(lang_id) {
-				setCookie("client_language", lang_id, 30);
-				document.location.href = document.location.href;			
-			}
-			function setCookie(c_name,value,expiredays) {
-				var exdate = new Date();
-				exdate.setDate(exdate.getDate() + expiredays);
-				document.cookie = c_name + "=" + escape(value) + ";Path=/" + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
-			}
+		function setLanguage(lang_id) {
+			setCookie("client_language", lang_id, 30);
+			document.location.href = document.location.href;
+		}
+		function setCookie(c_name,value,expiredays) {
+			var exdate = new Date();
+			exdate.setDate(exdate.getDate() + expiredays);
+			document.cookie = c_name + "=" + escape(value) + ";Path=/" + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+		}
 		</script>
 		<?php
 	}
