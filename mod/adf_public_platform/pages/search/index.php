@@ -270,7 +270,10 @@ if ($query) {
 			} else {
 				$current_params['subtype'] = ELGG_ENTITIES_NO_VALUE;
 			}
-			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
+			// Do not return group search if searching inside a group
+			if (!elgg_instanceof($container, 'group')) {
+				$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
+			} else $results = false;
 			// someone is saying not to display these types in searches.
 			if ($results === FALSE) { continue; }
 			if (is_array($results['entities']) && $results['count']) {
