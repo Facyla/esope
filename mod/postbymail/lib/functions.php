@@ -606,11 +606,13 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							case 'thewire':
 								// River OK + Notification OK
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
-								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
+								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
 									$thewire = get_entity($thewire_guid);
 									// Support group wire
 									$thewire->container_guid = $entity->container_guid;
+									$thewire->save();
+error_log("Container saved $thewire_guid : {$entity->container_guid} => {$thewire->container_guid}")
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
