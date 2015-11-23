@@ -481,7 +481,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							$new_post = new ElggObject;
 							$new_post->subtype = "thewire";
 							$new_post->owner_guid = $post_owner->guid;
-							$new_post->container_guid = $post_owner->guid;
+							// Support group wire
+							if (elgg_instanceof($post_container, 'group') || elgg_instanceof($post_container, 'user')) {
+								$new_post->container_guid = $post_container->guid;
+							} else {
+								$new_post->container_guid = $post_owner->guid;
+							}
 							//$new_post->title = $message->headers['subject'];
 							// @TODO add reply to
 							//$new_post->wire_thread
