@@ -5,6 +5,9 @@
 
 return array(
 	'directory' => "Répertoire",
+	'item:object:directory' => "Répertoire",
+	'item:object:organisation' => "Organisation",
+	'item:object:person' => "Personne",
 	
 	'directory:instructions' => "<p>Les Répertoires regroupent vos contacts et permettent de limiter les accès.</p><p>Vous pouvez organiser vos contacts, personnes et organisations, au sein d'un répertoire partagé.</p><p>Une personne peut être rattachée à une ou plusieurs organisations.</p><p>Chaque contact disposent d'un suivi : historique des versions et commentaires.</p>",
 	
