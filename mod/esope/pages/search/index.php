@@ -230,6 +230,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	// if still NULL or '' or empty(array()) no results found. (== don't show??)
 	foreach ($types as $type => $subtypes) {
 		if (($search_type == 'entities') && ($entity_type != $type)) { continue; }
+		
 		if (is_array($subtypes) && count($subtypes)) {
 			foreach ($subtypes as $subtype) {
 				// no need to search if we're not interested in these results
@@ -261,22 +262,24 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	
 		// Add default type entities with NO subtypes if any subtype is set (eg. "none"), 
 		// or ANY subtype if no subtype filter specified
-		$current_params['type'] = $type;
-		$current_params['subtype'] = ELGG_ENTITIES_NO_VALUE;
-		if (empty($entity_subtype)) { $current_params['subtype'] = ELGG_ENTITIES_ANY_VALUE; }
-		$results = false;
-		// Do not return group search if searching inside a group
-		if (!elgg_instanceof($container, 'group') || ($type != 'group')) {
-			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
-		}
-		// someone is saying not to display these types in searches.
-		if ($results === FALSE) { continue; }
-
-		if (is_array($results['entities']) && $results['count']) {
-			if ($view = search_get_search_view($current_params, 'list')) {
-				$results_html .= elgg_view($view, array('results' => $results, 'params' => $current_params));
+		if (empty($entity_subtype) && ($type != 'object')) {
+			$current_params['type'] = $type;
+			$current_params['subtype'] = ELGG_ENTITIES_NO_VALUE;
+			if (empty($entity_subtype)) { $current_params['subtype'] = ELGG_ENTITIES_ANY_VALUE; }
+			$results = false;
+			// Do not search groups inside a group container
+			if (!(elgg_instanceof($container, 'group') && ($type == 'group'))) {
+				$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
+			}
+			// someone is saying not to display these types in searches.
+			if ($results === FALSE) { continue; }
+			if (is_array($results['entities']) && $results['count']) {
+				if ($view = search_get_search_view($current_params, 'list')) {
+					$results_html .= elgg_view($view, array('results' => $results, 'params' => $current_params));
+				}
 			}
 		}
+		
 	}
 }
 
