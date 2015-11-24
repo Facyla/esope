@@ -20,7 +20,7 @@ switch($scope) {
 		break;
 	case 'friends':
 		$members_options = array(
-			"type" => "user",	"limit" => false,
+			"type" => "user", "limit" => false,
 			"relationship" => "friend", "relationship_guid" => $user->guid,
 		);
 		$members = elgg_get_entities_from_relationship($members_options);
@@ -46,7 +46,7 @@ if ($vars["empty_value"] || !isset($vars["empty_value"])) {
 // Add self option
 if (!$noself) $content .= "<option value='" . $user->guid . "'>" . elgg_echo("members_select:myself") . " (" . $user->name .")" . "</option>\n";
 // Add groupowner option
-if ($vars["entity"] instanceof ElggGroup) {
+if (elgg_instanceof($vars["entity"], 'group')) {
 	$content .= "<optgroup label='" .elgg_echo("groups:owner"). "'>\n";
 	$content .= "<option value='" . $owner->guid . "'>" . $owner->name . "</option>\n";
 	$content .= "</optgroup>\n";
@@ -58,7 +58,7 @@ if (!empty($members)) {
 	// Construction du sélecteur
 	foreach ($members as $member) {
 		if ( ($user->guid != $member->guid)
-			&& (!($vars["entity"] instanceof ElggGroup) || ($group->getOwner() != $member->guid))
+			&& (!elgg_instanceof($vars["entity"], 'group') || ($group->getOwner() != $member->guid))
 		) {
 			//if (($scope == 'groupmembers') && ($group->getOwner() != $member->guid)) break;
 			$add_members = true;

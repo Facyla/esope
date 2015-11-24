@@ -31,6 +31,8 @@ $query = http_build_query(
 		'offset' => $vars['params']['offset'],
 		'search_type' => $vars['params']['search_type'],
 	//@todo include vars for sorting, order, and friend-only.
+		'owner_guid' => $vars['params']['owner_guid'],
+		'container_guid' => $vars['params']['container_guid'],
 	)
 );
 
@@ -78,7 +80,11 @@ if (array_key_exists('search_type', $vars['params'])
 // get any more links.
 $more_check = $vars['results']['count'] - ($vars['params']['offset'] + $vars['params']['limit']);
 $more = ($more_check > 0) ? $more_check : 0;
+// No need to add link to more results if we already have paginated results
+if ($vars['params']['pagination']) { $more = 0; }
+//$more_url = elgg_http_add_url_query_elements($more_url, array('offset' => $vars['params']['offset'] + $vars['params']['limit'])); // increment offset
 
+// Add link to see more results (and remove limit, that is why we do not increment the offset)
 if ($more) {
 	$title_key = ($more == 1) ? 'comment' : 'comments';
 	$more_str = elgg_echo('search:more', array($count, $type_str));

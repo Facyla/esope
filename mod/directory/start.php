@@ -41,6 +41,8 @@ function directory_init() {
 	
 	// Register for search.
 	elgg_register_entity_type('object', 'directory');
+	elgg_register_entity_type('object', 'organisation');
+	elgg_register_entity_type('object', 'person');
 	
 	// Override icons
 	elgg_register_plugin_hook_handler("entity:icon:url", "object", "directory_icon_hook");

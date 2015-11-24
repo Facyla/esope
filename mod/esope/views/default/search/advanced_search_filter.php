@@ -36,10 +36,10 @@ if ($vars['custom_types_list']) foreach ($vars['custom_types_list'] as $searchty
 
 
 // Convert time to timestamp if needed
-if (strpos('-', $vars['created_time_lower'])) { $vars['created_time_lower'] = strtotime($vars['created_time_lower']); }
-if (strpos('-', $vars['created_time_upper'])) { $vars['created_time_upper'] = strtotime($vars['created_time_upper']); }
-if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_lower'] = strtotime($vars['modified_time_lower']); }
-if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_upper'] = strtotime($vars['modified_time_upper']); }
+if (!empty($vars['created_time_lower']) && strpos('-', $vars['created_time_lower'])) { $vars['created_time_lower'] = strtotime($vars['created_time_lower']); }
+if (!empty($vars['created_time_upper']) && strpos('-', $vars['created_time_upper'])) { $vars['created_time_upper'] = strtotime($vars['created_time_upper']); }
+if (!empty($vars['modified_time_lower']) && strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_lower'] = strtotime($vars['modified_time_lower']); }
+if (!empty($vars['modified_time_upper']) && strpos('-', $vars['modified_time_upper'])) { $vars['modified_time_upper'] = strtotime($vars['modified_time_upper']); }
 
 
 /*
@@ -73,7 +73,7 @@ foreach($sort_options as $sort_opt => $sort_name) {
 echo '</div>';
 */
 
-
+//echo '<pre>' . print_r($vars, true) . '</pre>'; // debug
 
 // ADVANCED SEARCH FORM INTERFACE
 // @TODO build an advanced seearch interface through a GET form
@@ -96,9 +96,6 @@ if (!empty($vars['search_type'])) echo elgg_view('input/hidden', array('name' =>
 if (!empty($vars['type'])) echo elgg_view('input/hidden', array('name' => 'entity_type', 'value' => $vars['type']));
 if (!empty($vars['subtype'])) echo elgg_view('input/hidden', array('name' => 'entity_subtype', 'value' => $vars['subtype']));
 
-// Hidden fields - could be revealed if implemented in a usable way
-if (!empty($vars['owner_guid'])) echo elgg_view('input/hidden', array('name' => 'owner_guid', 'value' => $vars['owner_guid']));
-if (!empty($vars['container_guid'])) echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $vars['container_guid']));
 
 // Sort & order
 echo '<p><label>' . elgg_echo('search:field:sort') . ' ' . elgg_view('input/dropdown', array('name' => 'sort', 'options_values' => $sort_options, 'value' => $vars['sort'])) . '</label> &nbsp; &nbsp; ';
@@ -111,12 +108,35 @@ echo '<label>' . elgg_echo('search:field:createdtimeupper') . '&nbsp;: ' . elgg_
 echo '<p><label>' . elgg_echo('search:field:modifiedtimelower') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'], 'timestamp' => true)) . '</label> &nbsp; &nbsp; ';
 echo '<label>' . elgg_echo('search:field:modifiedtimeupper') . '&nbsp;: ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'], 'timestamp' => true)) . '</label></p>';
 */
-echo '<p><strong>' . elgg_echo('search:field:createdtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('input/date', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . ' </label> &nbsp; &nbsp; ';
-echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label>';
+echo '<p><strong>' . elgg_echo('search:field:createdtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('input/date', array('name' => 'created_time_lower', 'value' => $vars['created_time_lower'], 'timestamp' => true)) . ' ' . elgg_echo('search:field:date:lower') . ' </label> &nbsp; &nbsp; ';
+echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'created_time_upper', 'value' => $vars['created_time_upper'], 'timestamp' => true)) . ' ' . elgg_echo('search:field:date:upper') . '</label>';
 //echo ' &nbsp; &nbsp; ';
 echo '</p><p>';
-echo '<strong>' . elgg_echo('search:field:modifiedtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'])) . ' ' . elgg_echo('search:field:date:lower') . '</label> &nbsp; &nbsp; ';
-echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'])) . ' ' . elgg_echo('search:field:date:upper') . '</label></p>';
+echo '<strong>' . elgg_echo('search:field:modifiedtime') . '</strong> <label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_lower', 'value' => $vars['modified_time_lower'], 'timestamp' => true)) . ' ' . elgg_echo('search:field:date:lower') . '</label> &nbsp; &nbsp; ';
+echo '<label><i class="fa fa-calendar"></i> ' . elgg_view('event_calendar/input/date_local', array('name' => 'modified_time_upper', 'value' => $vars['modified_time_upper'], 'timestamp' => true)) . ' ' . elgg_echo('search:field:date:upper') . '</label></p>';
+
+
+// Extra fields, displayed only if not empty
+// @TODO : filtre avec sélecteur ? ou autocomplete ? ou valeur libre ?
+// Owner search : site, group, user
+if (!empty($vars['owner_guid'])) {
+	$owner = get_entity($vars['owner_guid']);
+	echo '<p><label>' . elgg_echo('search:field:owner_guid') . ' ' . elgg_view('input/dropdown', array('name' => 'owner_guid', 'value' => $vars['owner_guid'], 'options_values' => array('' => elgg_echo('option:none'), $vars['owner_guid'] => $owner->name))) . '</label>';
+} else {
+	//echo elgg_view('input/hidden', array('name' => 'owner_guid', 'value' => $vars['owner_guid']));
+}
+//echo '<p><label>' . elgg_echo('search:field:owner_guid') . ' ' . elgg_view('input/text', array('name' => 'owner_guid', 'value' => $vars['owner_guid'])) . '</label>';
+//echo elgg_view('input/autocomplete', array('name' => 'owner_username', 'match_on' => array('users')));
+// Container search : site, group, user
+if (!empty($vars['container_guid'])) {
+	$container = get_entity($vars['container_guid']);
+	echo '<p><label>' . elgg_echo('search:field:container_guid') . ' ' . elgg_view('input/dropdown', array('name' => 'container_guid', 'value' => $vars['container_guid'], 'options_values' => array('' => elgg_echo('option:none'), $vars['container_guid'] => $container->name))) . '</label>';
+} else {
+	//echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $vars['container_guid']));
+}
+//echo '<p><label>' . elgg_echo('search:field:container_guid') . ' ' . elgg_view('input/text', array('name' => 'container_guid', 'value' => $vars['container_guid'])) . '</label>';
+//echo elgg_view('input/autocomplete', array('name' => 'container_guid', 'match_on' => array('groups')));
+
 
 // Fulltext search
 echo '<p><label>' . elgg_echo('search:field:fulltext') . ' ' . elgg_view('input/text', array('name' => 'q', 'value' => $vars['query'])) . '</label>';
