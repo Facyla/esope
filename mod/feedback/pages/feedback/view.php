@@ -5,6 +5,7 @@
  * @package ElggFeedback
  */
 
+
 $feedback = get_entity(get_input('guid'));
 if (!$feedback) {
 	register_error(elgg_echo('noaccess'));
@@ -24,10 +25,10 @@ elgg_push_breadcrumb($title);
 
 $content = elgg_view_entity($feedback, array('full_view' => true));
 
-$body = elgg_view_layout('content', array(
+$body = elgg_view_layout('one_sidebar', array(
 	'content' => $content,
 	'title' => $title,
-	'filter' => '',
+	'sidebar' => elgg_view('feedback/sidebar'),
 ));
 
 echo elgg_view_page($title, $body);

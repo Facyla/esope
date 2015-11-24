@@ -36,6 +36,7 @@ $feedbacks = array();
 $status_values = array('open', 'closed', 'total');
 foreach ($status_values as $status) { $$status = 0; }
 $all_feedbacks = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
+//$all_feedbacks = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
 //$total = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
 $total = count($all_feedbacks);
 // Catégories de feedback
@@ -63,6 +64,7 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	*/
 	
 	// Stats
+	/*
 	if (!isset($ent->status) || empty($ent->status) || ($ent->status == 'open')) {
 		$open++;
 		// Sort feedbacks in undefined vs specific about category
@@ -78,6 +80,8 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 		}
 		
 	} else if ($ent->status == 'closed') { $closed++; }
+	*/
+	
 	// Filter : if filter(s) set, add only corresponding feedbacks
 	if (
 		(!isset($ent->status) || !$status_filter || ($ent->status == $status_filter)) 
@@ -94,6 +98,7 @@ $content .= '<div class="clearfloat"></div>';
 
 
 // Sidebar menu - Menu latéral
+/*
 $sidebar = '<div id="site-categories">';
 $sidebar .= '<h2>' . elgg_echo('feedback'). '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
@@ -138,7 +143,8 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	$sidebar .= '</a></li></ul>';
 }
 $sidebar .= '</div>';
-
+*/
+$sidebar = elgg_view('feedback/sidebar');
 
 
 // Titre de la page
