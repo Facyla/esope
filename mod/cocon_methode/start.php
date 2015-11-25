@@ -112,20 +112,24 @@ function cocon_methode_get_user_group($user_guid = false) {
 			break;
 		case "1":
 			// Equipe : simple membre
+			/*
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
 				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
 				system_message($msg);
 			}
+			*/
 			break;
 		case "2":
 		default:
 			// Autre : simple membre aussi ? ou rien du tout ?
+			/*
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
 				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
 				system_message($msg);
 			}
+			*/
 	}
 	
 	/*
