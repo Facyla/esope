@@ -95,7 +95,9 @@ if (elgg_is_active_plugin('pages')) {
 
 elgg_unregister_widget_type('profile_completeness');
 if (elgg_is_active_plugin('profile_manager')) {
-	if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "widget") {
+	if ((elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {
+		|| (elgg_get_plugin_setting("enable_profile_completeness", "profile_manager") == "widget")
+		) {
 		elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
 	}
 }
