@@ -145,7 +145,7 @@ $catalogue .= '</div>';
 
 
 // Switch filter (+ onChange)
-$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'recent'));
 
 $content .= '<h2>' . elgg_echo('theme_transitions2:transitions:title') . '</h2>';
 //$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';
