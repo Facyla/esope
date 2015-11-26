@@ -146,7 +146,7 @@ function getEnseignantsInfos($gid){
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
 	
-	$members = $group->getMembers();
+	$members = $group->getMembers(0);
 	$infos = array();
 	foreach($members as $ent) {
 		$infos[] = array(

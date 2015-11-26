@@ -55,6 +55,7 @@
 		die(json_encode($rep));
 	}
 	
+	error_log("Cocon / Methode / envoyerMessage : $cid - $gid - $type - $json")
 	/**
 		Envoi des emails d'invitation au questionnaire à TOUS les enseignants
 	*/
