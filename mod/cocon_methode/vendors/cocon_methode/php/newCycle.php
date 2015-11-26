@@ -2,10 +2,10 @@
 	/**
 		SCRIPT PHP POUR LA CREATION D'UN NOUVEAU CYCLE
 	*/
-	include "inc/config.inc.php";
-	include "inc/database.inc.php";
-	include "inc/utils.inc.php";
-	include "inc/cycle.inc.php";
+	include_once "inc/config.inc.php";
+	include_once "inc/database.inc.php";
+	include_once "inc/utils.inc.php";
+	include_once "inc/cycle.inc.php";
 
 	header('Content-type: application/json');	
 

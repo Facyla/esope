@@ -2,11 +2,11 @@
 	/**
 		SCRIPT PHP POUR L'ENVOI D'EMAIL
 	*/
-	include "inc/config.inc.php";
-	include "inc/database.inc.php";
-	include "inc/utils.inc.php";
-	include "inc/mail.inc.php";
-	include "inc/survey/pro/session.inc.php";
+	include_once "inc/config.inc.php";
+	include_once "inc/database.inc.php";
+	include_once "inc/utils.inc.php";
+	include_once "inc/mail.inc.php";
+	include_once "inc/survey/pro/session.inc.php";
 	
 	header('Content-type: application/json');
 	
