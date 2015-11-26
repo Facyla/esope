@@ -227,7 +227,7 @@ if (empty($header_content)) {
 									<ul class="hidden">
 										<li><a href="<?php echo $url; ?>p/classes-virtuelles" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:title'); ?></a></li>
 										<li><a href="<?php echo $url; ?>p/classes-virtuelles-configuration" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:config'); ?></a></li>
-										<li><a href="http://sallevirtuelleafpa.classilio.com/propagepaca" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:access'); ?></a></li>
+										<li><a href="http://sallevirtuelleafpa.classilio.com/espace-propage" target="_blank"><?php echo elgg_echo('theme_propage_paca:classes:access'); ?></a></li>
 									</ul>
 								</li>
 								
