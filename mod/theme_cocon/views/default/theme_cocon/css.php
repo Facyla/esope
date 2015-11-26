@@ -26,7 +26,7 @@ $sidecolor = "#00668c";
 
 /* Interface */
 html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-repeat; background-size: cover; background-attachment:fixed; border-top:0; }
-header { background: transparent; border-top:0; /* height:120px; */ height:auto; }
+header { background: transparent; border-top:0; /* height:120px; */ height:auto; min-height:30px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
 header nav { background: #00668c; top: 0; padding: 4px 4px 1px 4px; border-radius: 0 0 12px 12px; }
