@@ -13,7 +13,7 @@ foreach ($etablissements as $etablissement) {
 	$vars['options_values']["{$etablissement[2]}"] = "{$etablissement[0]} ({$etablissement[1]}, {$etablissement[3]})";
 }
 
-if (!empty($vars["name"])) $vars["name"] = 'cocon_etablissement';
+if (empty($vars["name"])) $vars["name"] = 'cocon_etablissement';
 
 if (is_array($vars['options_values']) && sizeof($vars['options_values']) > 0) {
 	echo elgg_view('input/dropdown', $vars);
