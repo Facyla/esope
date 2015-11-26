@@ -55,6 +55,9 @@ form input#adf-search-input, form input#adf-search-input:active, form input#adf-
 form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; padding: 0px 0px 0px 8px; height: 27px; }
 .elgg-form.elgg-form-groups-search #q { background:#e4ecf5; }
 
+.elgg-menu.elgg-breadcrumbs, .elgg-menu.elgg-breadcrumbs li a { color: #EEE; text-shadow: 0px 0px 1px #333; }
+.elgg-menu.elgg-breadcrumbs li a:hover, .elgg-menu.elgg-breadcrumbs li a:active, .elgg-menu.elgg-breadcrumbs li a:focus { color: #FFF; }
+
 /* Footer */
 footer.footer-cocon { height: 37px; background:#2a7d9f; }
 footer.footer-cocon ul { width:auto; }
