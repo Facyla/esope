@@ -40,7 +40,7 @@
 		$response['error'] = true;
 		die(json_encode($response));
 	}
-	
+	error_log("{$_SESSION['check_id']} / $gid / $cid");
 	$cid = createCycle($gid);
 	
 	if(!$cid){
