@@ -19,6 +19,7 @@
 			return false;
 		}
 		
+		error_log("Cocon Kit : $gid / $sql / $result");
 		if(mysql_num_rows($result) == 0){
 			return false;
 		}
