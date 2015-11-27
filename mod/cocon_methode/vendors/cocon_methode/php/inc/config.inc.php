@@ -129,7 +129,7 @@ function getConfiguration($gid){
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
 	// Update token
-	$_SESSION['check_id'] = md5($gid.'_'.$cid]);
+	$_SESSION['check_id'] = md5($gid.'_'.$cid);
 	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	
