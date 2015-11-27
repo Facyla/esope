@@ -22,14 +22,12 @@
 	$cid = '';
 	$gid = '';
 	
-	error_log("Cocon Kit : {$_SESSION['check_id']} / {$_POST['gid']} / {$_POST['cid']}"); // debug
 	if(isset($_POST['gid'])){
 		$gid = $_POST['gid'];
 	}else{
 		$response['error'] = true;
 		die(json_encode($response));
 	}
-error_log("Cocon Kit : gid OK"); // debug
 	
 	if(isset($_POST['cid'])){
 		$cid = $_POST['cid'];
@@ -37,8 +35,9 @@ error_log("Cocon Kit : gid OK"); // debug
 		$response['error'] = true;
 		die(json_encode($response));
 	}
-error_log("Cocon Kit : cid OK"); // debug
 
+$check_id = md5($gid.'_'.$cid);
+error_log("Cocon Kit : {$_POST['gid']} / {$_POST['cid']} => {$_SESSION['check_id']} / $check_id"); // debug
 	if($_SESSION['check_id'] != md5($gid.'_'.$cid)){
 		$response['error'] = true;
 		die(json_encode($response));
