@@ -37,7 +37,7 @@
 	}
 
 $check_id = md5($gid.'_'.$cid);
-error_log("Cocon Kit : {$_POST['gid']} / {$_POST['cid']} => {$_SESSION['check_id']} / $check_id"); // debug
+error_log("Cocon Kit : newCycle : {$_POST['gid']} / {$_POST['cid']} => {$_SESSION['check_id']} / $check_id"); // debug
 	if($_SESSION['check_id'] != md5($gid.'_'.$cid)){
 		$response['error'] = true;
 		die(json_encode($response));

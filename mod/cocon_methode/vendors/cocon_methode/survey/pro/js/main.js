@@ -317,7 +317,6 @@ function saveQuest(){
 		validateQuestion();
 		validateSurvey(1, function(_response){
 			showLoading(false);
-			console.log(_response);
 			survey = _response;
 			if(survey.error == true){
 				alert("Une erreur est survenue lors de l'enregistrement du questionnaire.\n-> " + survey.error_string);
@@ -673,8 +672,6 @@ function validateSurvey(_validate, _callback){
 */
 function saveSession(_callback){
 	showLoading(true);
-	console.log("TEST : ");
-	console.log(survey);
 	$.ajax({
 		url: "php/saveSession.php",
 		type: "POST",
