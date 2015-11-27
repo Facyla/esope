@@ -1,9 +1,9 @@
 <?php
-	include "../../php/inc/config.inc.php";
-	include "../../php/inc/database.inc.php";
-	include "../../php/inc/utils.inc.php";
-	include "../../php/inc/cycle.inc.php";
-	include "../../php/inc/fmap/fiche.inc.php";
+	include_once "../../php/inc/config.inc.php";
+	include_once "../../php/inc/database.inc.php";
+	include_once "../../php/inc/utils.inc.php";
+	include_once "../../php/inc/cycle.inc.php";
+	include_once "../../php/inc/fmap/fiche.inc.php";
 	/**
 		Type de retour : JSON / UTF-8
 	*/

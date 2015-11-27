@@ -2,7 +2,7 @@
 	/**
 		Test de restitution
 	*/
-	include "../../php/inc/bilan/report.inc.php";
+	include_once "../../php/inc/bilan/report.inc.php";
 	
 	$cid = 'dolto';
 	$gid = 'dolto';
