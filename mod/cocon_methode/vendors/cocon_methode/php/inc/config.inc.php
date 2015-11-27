@@ -82,6 +82,7 @@ function getConfiguration($gid){
 	$cocon_url = elgg_get_site_url();
 	$cocon_url = rtrim($cocon_url, '/');
 	$methode_url = $cocon_url . '/mod/cocon_methode/vendors/cocon_methode';
+	$user = elgg_get_logged_in_user_entity();
 	
 	$config = array(
 		"error" => false,
