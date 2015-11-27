@@ -145,7 +145,7 @@
 				if($session_state == 'false'){
 					$rep['error'] = true;
 					$rep['error_string'] = 'Erreur lors de l\'envoi d\'email.';
-					die(json_encode($rep));				
+					die(json_encode($rep));
 				}
 				
 				if($session_etat != 2){
@@ -163,11 +163,11 @@
 				){
 					$rep['error'] = true;
 					$rep['error_string'] = 'Erreur lors de l\'envoi d\'email.';
-					die(json_encode($rep));					
+					die(json_encode($rep));
 				}
 			}
 		}
-		die(json_encode($rep));					
+		die(json_encode($rep));
 	}
 	
 	/**
@@ -203,7 +203,7 @@
 						<body>'.$htmlEmail;
 		
 		for($i = 0; $i < count($enseignants); $i++){
-			$link = URL_BASE."/fmap/index.html?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
+			$link = URL_BASE."/fmap/index.php?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
 //			file_put_contents('fmap_'.$enseignants[$i]['user_id'].'.html', $htmlEmail.'<br><br>Lien vers les fiches de mise en pratique : <a href="'.$link.'" target="_new">'.$link.'</a>');
 
 			if(!sendMail(
@@ -214,11 +214,11 @@
 			){
 				$rep['error'] = true;
 				$rep['error_string'] = 'Erreur lors de l\'envoi d\'email.';
-				die(json_encode($rep));					
+				die(json_encode($rep));
 			}
 
 		}
-		die(json_encode($rep));					
+		die(json_encode($rep));
 	}
 	
 	/**
@@ -265,10 +265,10 @@
 			){
 				$rep['error'] = true;
 				$rep['error_string'] = 'Erreur lors de l\'envoi d\'email.';
-				die(json_encode($rep));					
+				die(json_encode($rep));
 			}
 
 		}
-		die(json_encode($rep));					
+		die(json_encode($rep));
 	}	
 ?>
