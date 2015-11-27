@@ -22,6 +22,7 @@
 	$cid = '';
 	$gid = '';
 	
+	error_log("{$_SESSION['check_id']} / {$_POST['gid']} / {$_POST['cid']}");
 	if(isset($_POST['gid'])){
 		$gid = $_POST['gid'];
 	}else{
@@ -40,7 +41,7 @@
 		$response['error'] = true;
 		die(json_encode($response));
 	}
-	error_log("{$_SESSION['check_id']} / $gid / $cid");
+	
 	$cid = createCycle($gid);
 	
 	if(!$cid){
