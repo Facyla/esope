@@ -67,7 +67,7 @@
 		$result = executeQuery($conn, $sql);
 		if(!$result){
 			return false;
-		}		
+		}
 		return $cid;
 	}
 
