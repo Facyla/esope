@@ -66,13 +66,13 @@
 		if(!$enseignants){
 			$rep['error'] = true;
 			$rep['error_string'] = 'Erreur lors de la récupération des enseignants.';
-			die(json_encode($rep));	
+			die(json_encode($rep));
 		}
 		
 		if(count($enseignants) == 0){
 			$rep['error'] = true;
 			$rep['error_string'] = 'Aucun enseignant trouvé.';
-			die(json_encode($rep));	
+			die(json_encode($rep));
 		}
 		
 		$htmlEmail = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"), "<br/>", $json->email);
@@ -88,7 +88,7 @@
 						<body>'.$htmlEmail;
 		
 		for($i = 0; $i < count($enseignants); $i++){
-			$link = URL_BASE."/survey/pro/index.html?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
+			$link = URL_BASE."/survey/pro/index.php?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
 			if(!sendMail(
 				$enseignants[$i]['user_email'],
 				'Invitation au questionnaire CoCon',
@@ -97,10 +97,10 @@
 			){
 				$rep['error'] = true;
 				$rep['error_string'] = 'Erreur lors de l\'envoi d\'email.';
-				die(json_encode($rep));					
+				die(json_encode($rep));
 			}
 		}
-		die(json_encode($rep));					
+		die(json_encode($rep));
 	}
 	
 	/**
@@ -154,7 +154,7 @@
 			}
 			
 			if($envoi){
-				$link = URL_BASE."/survey/pro/index.html?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
+				$link = URL_BASE."/survey/pro/index.php?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
 				if(!sendMail(
 					$enseignants[$i]['user_email'],
 					'Invitation au questionnaire CoCon',
@@ -254,7 +254,7 @@
 						<body>'.$htmlEmail;
 		
 		for($i = 0; $i < count($enseignants); $i++){
-			$link = URL_BASE."/survey/satisfaction/index.html?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
+			$link = URL_BASE."/survey/satisfaction/index.php?cid=".$cid."&gid=".$gid."&uid=".$enseignants[$i]['user_id'];
 //			file_put_contents('satisf_'.$enseignants[$i]['user_id'].'.html', $htmlEmail.'<br><br>Lien vers les fiches de mise en pratique : <a href="'.$link.'" target="_new">'.$link.'</a>');
 
 			if(!sendMail(
