@@ -77,7 +77,7 @@ if (!elgg_is_logged_in()) {
 	//-->
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta name="expires" content="tue, 01 Jun 2010 19:45:00 GMT" />
-	<link rel="stylesheet" media="all" href="css/styles_app.css" />
+	<link rel="stylesheet" media="all" type="text/css" href="css/styles_app.css" />
 	<script type="text/javascript" type="text/javascript" src="js/utils/utils.js"></script>
 	<script type="text/javascript" src="js/utils/querystring.js"></script>
 	<script type="text/javascript" src="js/utils/ajax_delegate.js"></script>

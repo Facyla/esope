@@ -6,8 +6,8 @@
 	<title>Coll&egrave;ges connect&eacute;s</title>
 	<meta http-equiv="pragma" content="no-cache" />
     <meta name="expires" content="tue, 01 Jun 2010 19:45:00 GMT" />
-	<link rel="stylesheet" media="all" href="css/global.css" />
-	<link rel="stylesheet" media="all" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" media="all" type="text/css" href="css/global.css" />
+	<link rel="stylesheet" media="all" type="text/css" href="css/font-awesome.min.css" />
 	<script type="text/javascript" src="js/jquery/jquery-1.7.2.js"></script>
 	<script type="text/javascript" type="text/javascript" src="js/utils/utils.js"></script>
 	<script type="text/javascript" src="js/utils/querystring.js"></script>
