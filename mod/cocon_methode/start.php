@@ -27,8 +27,8 @@ function cocon_methode_init(){
 	// Set secret for Methode app actionsMay be updated afterwards, if cycle of group changed
 		$gid = cocon_methode_get_user_group();
 		$cid = getCurrentCycleID($gid);
-		$_SESSION['check_id'] = md5($gid.'_'.$cid);
-		error_log("Cocon Kit start : Check ID : {$_SESSION['check_id']} = $gid - $cid => " . md5($gid.'_'.$cid)); // debug
+		error_log("Cocon Kit START : $gid / $cid => " . md5($gid.'_'.$cid)); // debug
+		if ($gid && $cid) $_SESSION['check_id'] = md5($gid.'_'.$cid);
 	}
 	
 }
