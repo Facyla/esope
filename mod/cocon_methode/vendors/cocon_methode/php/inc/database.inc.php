@@ -114,8 +114,8 @@ function securiseSQLString($conn, $value){
 	}
 	
 	if(TYPE_SGDB == 'MYSQL'){
-//		$value = mysql_escape_string($conn, $value);
-//		$value = addslashes($value);
+		$value = mysql_escape_string($conn, $value);
+		$value = addslashes($value);
 	}
 
 	if(TYPE_SGDB == 'PGSQL'){

@@ -21,9 +21,9 @@ exit;
 gatekeeper();
 // Verrouillage des accès à l'application : groupe valide doit exister
 $own = elgg_get_logged_in_user_entity();
-$user_role = cocon_methode_get_user_role();
+$user_role = cocon_methode_get_user_role($own);
 // Ensure group exists and user is member, or create it if conditions are valid
-$gid = cocon_methode_get_user_group();
+$gid = cocon_methode_get_user_group($own->guid);
 
 // If we do not have a valid group, exit
 $group = get_entity($gid);

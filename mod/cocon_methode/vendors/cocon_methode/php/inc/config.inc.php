@@ -120,10 +120,9 @@ function getConfiguration($gid){
 	$config['user_role'] = 0;
 	*/
 	// Intégration Cocon Méthode
-	$own = elgg_get_logged_in_user_entity();
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
-	if (!$group->isMember($own->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
+	if (!$group->isMember($user->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
 	$config['group_name'] = $group->name;
 	$config['user_id'] = $user->guid;
 	$config['user_name'] = $user->name;
