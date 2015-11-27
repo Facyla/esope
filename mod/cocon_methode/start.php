@@ -28,7 +28,7 @@ function cocon_methode_init(){
 		$gid = cocon_methode_get_user_group();
 		$cid = getCurrentCycleID($gid);
 		$_SESSION['check_id'] = md5($gid.'_'.$cid);
-		//error_log("Check ID : {$_SESSION['check_id']} = $gid - $cid => " . md5($gid.'_'.$cid));
+		error_log("Cocon Kit start : Check ID : {$_SESSION['check_id']} = $gid - $cid => " . md5($gid.'_'.$cid)); // debug
 	}
 	
 }

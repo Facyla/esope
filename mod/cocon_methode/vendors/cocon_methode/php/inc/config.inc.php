@@ -130,6 +130,8 @@ function getConfiguration($gid){
 	
 	// Update token
 	$_SESSION['check_id'] = md5($gid.'_'.$cid);
+error_log("Cocon Kit config.inc : Check ID : {$_SESSION['check_id']} = $gid - $cid"); // debug
+
 	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	
