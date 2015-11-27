@@ -19,7 +19,7 @@
 			return false;
 		}
 		
-		if (is_bool($result)) error_log("Cocon Kit : $result / $gid / $sql / ".print_r($result, true)); // debug
+		if (is_bool($result)) error_log("Cocon Kit : $result / $gid / $sql / ".mysql_num_rows($result)); // debug
 		if(mysql_num_rows($result) == 0){
 			return false;
 		}
