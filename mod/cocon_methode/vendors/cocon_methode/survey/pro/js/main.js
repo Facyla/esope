@@ -313,7 +313,7 @@ function prevPage(){
 	Enregistrement du questionnaire
 */
 function saveQuest(){
-	if(survey.etat != 2){
+	//if(survey.etat != 2){
 		validateQuestion();
 		validateSurvey(1, function(_response){
 			showLoading(false);
@@ -326,9 +326,11 @@ function saveQuest(){
 			alert("Vos réponses ont été enregistrées.");
 			return;
 		});
+	/*
 	}else{
 		return;
 	}
+	*/
 }
 
 /**
