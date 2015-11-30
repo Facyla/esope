@@ -233,6 +233,33 @@ function esope_groups_page_handler($page) {
 		case 'requests':
 			groups_handle_requests_page($page[1]);
 			break;
+		case 'subgroups':
+			switch ($page[1]) {
+				case 'add':
+					set_input('au_subgroup', true);
+					set_input('au_subgroup_parent_guid', $page[2]);
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/add');
+					return true;
+					break;
+		
+				case 'list':
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/list');
+					break;
+		
+				case 'delete':
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/delete');
+					break;
+		
+				case 'openclosed':
+					set_input('filter', $page[2]);
+					echo elgg_view('resources/au_subgroups/openclosed');
+					return true;
+					break;
+			}
+			break;
 		default:
 			return false;
 	}

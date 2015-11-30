@@ -300,7 +300,7 @@ function esope_init() {
 	elgg_unregister_page_handler('groups', 'groups_page_handler');
 	elgg_register_page_handler('groups', 'esope_groups_page_handler');
 	// Add own library (different function names)
-	elgg_register_library('elgg:esope:groups', elgg_get_plugins_path() . 'esope/lib/groups.php');
+	elgg_register_library('elgg:esope:groups', elgg_get_plugins_path() . 'esope/lib/esope/groups.php');
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'esope_search_page_handler');
