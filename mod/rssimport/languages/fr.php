@@ -1,5 +1,5 @@
 <?php
-$french = array(
+return array(
 	'rssimport:back:to:blog' => "Retour au Blog",
 	'rssimport:back:to:bookmarks' => "Retour aux Marque-pages",
 	'rssimport:back:to:file' => "Retour aux Fichiers",
@@ -130,5 +130,5 @@ $french = array(
 	'rssimport:date:format' => 'j/m/Y à H:i',
 	
 );
-add_translation("fr",$french);4
+
 

@@ -20,7 +20,7 @@
 
 // CONFIGURATION
 // Uncomment to use, comment again once done (always leave uncommented on live site !!)
-//exit;
+exit;
 // Set to true to fill fields with preset. Set to false to get empty form fields
 $example = false;
 
