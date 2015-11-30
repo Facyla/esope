@@ -13,7 +13,7 @@
  * iionly@gmx.de
  */
 
-$french = array(
+return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Feedbacks du site',
 	'item:object:feedback' => 'Feedback',
@@ -49,13 +49,13 @@ $french = array(
 	'feedback:mood:happy' => ':-)',
 
 	'feedback:about:' => 'Aucun',
-	'feedback:about:bug_report' => 'Bug',
-	'feedback:about:content' => 'Contenu',
+	'feedback:about:bug_report' => 'Bugs',
+	'feedback:about:content' => 'Contenus',
 	'feedback:about:suggestions' => 'Suggestions',
-	'feedback:about:compliment' => 'Compliment',
-	'feedback:about:other' => 'Autre',
-	'feedback:about:feedback' => 'Non classé',
-	'feedback:about:undefined' => 'Non classé',
+	'feedback:about:compliment' => 'Compliments',
+	'feedback:about:other' => 'Autres / non classés',
+	'feedback:about:feedback' => 'Non classés',
+	'feedback:about:undefined' => 'Non classés',
 
 	'feedback:list:mood' => 'Humeur',
 	'feedback:list:about' => 'A propos de',
@@ -87,20 +87,23 @@ $french = array(
 	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
 	'feedback:enablefeedback' => "Activer le feedback dans ce groupe",
 	'feedback:page:unknown' => "URL inconnue",
-	'feedback:viewfull' => "Afficher la discusion en pleine page",
+	'feedback:viewfull' => "Afficher la discussion en pleine page",
 	'feedback:commentsreply' => "%s commentaire(s) &nbsp; &raquo;&nbsp;Répondre",
 	
 	// Settings
 	'feedback:settings:memberview' => "Les membres du site peuvent-ils consulter les feedbacks ?",
 	'feedback:settings:comment' => "Est-il possible de commenter et de répondre aux feedbacks ?",
 	'feedback:settings:feedbackgroup' => "Associer les feedbacks à un ou des groupes ?",
+	'feedback:settings:enablemood' => "Activer les humeurs",
+	'feedback:settings:enableabout' => "Activer les catégories de feedback",
+	'feedback:settings:about_values' => "Catégories de feedback (si activées)",
 	
 	// Feedback status
 	'feedback:status' => "Statut des feedbacks",
 	'feedback:list:status:open' => "Ouvert",
-	'feedback:status:open' => "Feedbacks ouverts",
+	'feedback:status:open' => "Ouverts",
 	'feedback:list:status:closed' => "Résolu",
-	'feedback:status:closed' => "Feedbacks résolus",
+	'feedback:status:closed' => "Résolus",
 	'feedback:closeconfirm' => "Marquer comme résolu ? Un feedback résolu est considéré comme traité et alimente la base de connaissances. Confirmer ?",
 	'feedback:close:success' => "Feedback marqué comme résolu / déjà traité.",
 	'feedback:close:error' => "Impossible de marquer ce feedback comme résolu",
@@ -110,18 +113,28 @@ $french = array(
 	
 	// Feedbacks menu
 	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:total:singular' => "%s feedback",
 	'feedback:menu:open' => "%s à traiter",
+	'feedback:menu:open:singular' => "%s à traiter",
 	'feedback:menu:closed' => "%s résolus",
+	'feedback:menu:closed:singular' => "%s résolu",
 	'feedback:menu:content' => "%s signalements",
+	'feedback:menu:content:singular' => "%s signalement",
 	'feedback:menu:bug_report' => "%s dysfonctionnements",
+	'feedback:menu:bug_report:singular' => "%s dysfonctionnement",
 	'feedback:menu:suggestions' => "%s suggestions",
+	'feedback:menu:suggestions:singular' => "%s suggestion",
 	'feedback:menu:question' => "%s questions",
+	'feedback:menu:question:singular' => "%s question",
 	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:compliment:singular' => "%s compliment",
 	'feedback:menu:other' => "%s autres / non classés",
+	'feedback:menu:other:singular' => "%s autre / non classé",
 	
 	
 	// About - feedback types
-	'feedback:about' => "de type",
+	//'feedback:about' => "de type",
+	'feedback:about' => ":",
 	'feedback:about:question' => "Question",
 	'feedback:access:admin' => "Administrateur seulement",
 	'feedback:access:sitemembers' => "Membres du site",
@@ -138,6 +151,4 @@ $french = array(
 	'feedback:linktofeedbacks' => "&raquo;&nbsp;Afficher les précédents feedbacks",
 	
 );
-
-add_translation("fr",$french);
 

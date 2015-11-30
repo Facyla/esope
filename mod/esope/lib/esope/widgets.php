@@ -53,7 +53,7 @@ elgg_unregister_widget_type('file_tree');
 	if (elgg_is_active_plugin('file_tools')) {
 		// Réactive widget des dossiers si demandé (et Dossiers activés)
 		$is_folder_enabled = elgg_get_plugin_setting('user_folder_structure', 'file_tools');
-		if (($widget_file_folder != 'no') && ($is_folder_enabled == 'yes')) elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups", true);
+		if (($widget_file_folder != 'no') && ($is_folder_enabled == 'yes')) elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), array('dashboard', 'profile', 'groups'), true);
 	}
 
 
@@ -62,8 +62,8 @@ if ($widget_friends == 'no') elgg_unregister_widget_type('friends');
 if ($widget_river_widget == 'no') elgg_unregister_widget_type('river_widget');
 if ($widget_river_widget != 'no') {
 	elgg_unregister_widget_type('river_widget');
-	elgg_register_widget_type('river_widget', elgg_echo('esope:widget:site_activity:title'), elgg_echo('esope:widget:site_activity:description'), "dashboard");
-	elgg_register_widget_type('river_widget', elgg_echo('esope:widget:user_activity:title'), elgg_echo('esope:widget:user_activity:description'), "profile");
+	elgg_register_widget_type('river_widget', elgg_echo('esope:widget:site_activity:title'), elgg_echo('esope:widget:site_activity:description'), array('dashboard'));
+	elgg_register_widget_type('river_widget', elgg_echo('esope:widget:user_activity:title'), elgg_echo('esope:widget:user_activity:description'), array('profile'));
 }
 
 if (elgg_is_active_plugin('twitter')) {
@@ -96,7 +96,7 @@ if (elgg_is_active_plugin('pages')) {
 elgg_unregister_widget_type('profile_completeness');
 if (elgg_is_active_plugin('profile_manager')) {
 	if (elgg_get_plugin_setting("enable_profile_completeness_widget", "profile_manager") == "yes") {
-		elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), "profile,dashboard");
+		elgg_register_widget_type('profile_completeness', elgg_echo("widgets:profile_completeness:title"), elgg_echo("widgets:profile_completeness:description"), array('profile', 'dashboard'));
 	}
 }
 
@@ -108,17 +108,17 @@ if (elgg_is_active_plugin('export_embed')) {
 // Nouveaux widgets
 
 if (elgg_is_active_plugin('messages')) {
-	if ($widget_messages != 'no') elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), 'dashboard');
+	if ($widget_messages != 'no') elgg_register_widget_type('messages', elgg_echo('messages:widget:title'), elgg_echo('messages:widget:description'), array('dashboard'));
 }
 
 if (elgg_is_active_plugin('webprofiles')) {
-	if ($widget_webprofiles != 'no') elgg_register_widget_type('webprofiles', elgg_echo('webprofiles:widget:title'), elgg_echo('webprofiles:widget:description'), 'profile');
+	if ($widget_webprofiles != 'no') elgg_register_widget_type('webprofiles', elgg_echo('webprofiles:widget:title'), elgg_echo('webprofiles:widget:description'), array('profile'));
 }
 
 
 // Widgets intégrés
 
-if ($widget_freehtml != 'no') elgg_register_widget_type('freehtml', elgg_echo('esope:widget:freehtml'), elgg_echo('esope:widget:freehtml:description'), 'all', true);
+if ($widget_freehtml != 'no') elgg_register_widget_type('freehtml', elgg_echo('esope:widget:freehtml'), elgg_echo('esope:widget:freehtml:description'), array('all'), true);
 
-if ($widget_searchresults != 'no') elgg_register_widget_type('searchresults', elgg_echo('esope:widget:searchresults'), elgg_echo('esope:widget:searchresults:description'), 'all', true);
+if ($widget_searchresults != 'no') elgg_register_widget_type('searchresults', elgg_echo('esope:widget:searchresults'), elgg_echo('esope:widget:searchresults:description'), array('all'), true);
 

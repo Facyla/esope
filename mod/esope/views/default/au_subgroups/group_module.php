@@ -1,28 +1,33 @@
 <?php
+
+namespace AU\SubGroups;
+
 /**
  * Group blog module
  */
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->subgroups_enable == "no") {
+// ESOPE : require explicit enabling
+//if ($group->subgroups_enable == "no") {
+if ($group->subgroups_enable != "yes") {
 	return true;
 }
 
 $all_link = '';
 
-// Anyone should view all subgroups, if allowed - not only group admins
+// ESOPE : Anyone should be able to view existing subgroups, if allowed - not only group admins
 //if ($group->canEdit()) {
 	$all_link = elgg_view('output/url', array(
-		'href' => "groups/subgroups/list/{$group->guid}",
+		'href' => "groups/subgroups/{$group->guid}/all",
 		'text' => elgg_echo('link:view:all'),
 		'is_trusted' => true,
 	));
 //}
 
-// List subgroups : filtering by grouptype added
 elgg_push_context('widgets');
-//$content = au_subgroups_list_subgroups($group, 10);
+//$content = list_subgroups($group, 10);
+// ESOPE : List subgroups : filtering by grouptype added
 $content = '';
 $options = array(
 		'types' => array('group'), 'limit' => $limit, 'full_view' => false, 'limit' => false, 
@@ -50,13 +55,17 @@ if ($subgroups) {
 		}
 	}
 	$content .= '</div>';
-	elgg_pop_context();
-	
-} else {
+}
+elgg_pop_context();
+
+if (!$content) {
 	$content = '<p>' . elgg_echo('au_subgroups:nogroups') . '</p>';
 }
 
-if ($group->canEdit()) {
+//$any_member = ($group->subgroups_members_create_enable != 'no');
+// ESOPE : require explicit authorisation
+$any_member = ($group->subgroups_members_create_enable == 'yes');
+ if (($any_member && $group->isMember()) || $group->canEdit()) {
 	$new_link = elgg_view('output/url', array(
 		'href' => "groups/subgroups/add/$group->guid",
 		'text' => elgg_echo('au_subgroups:add:subgroup'),

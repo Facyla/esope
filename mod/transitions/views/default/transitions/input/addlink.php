@@ -11,5 +11,3 @@ echo '<div class="transitions-edit-contributed-link">';
 	echo elgg_view('input/text', array('name' => 'links[]', 'value' => $address, 'placeholder' => elgg_echo('transitions:links:placeholder')));
 	echo elgg_view('input/text', array('name' => 'links_comment[]', 'value' => $comment, 'placeholder' => elgg_echo('transitions:links_comment:placeholder')));
 echo '</div>';
-
-

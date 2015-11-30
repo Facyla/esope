@@ -1,4 +1,7 @@
 <?php
+
+namespace AU\RSSImport;
+
 /**
  * This view outputs the links in the sidebar of an rss feed
  * 
@@ -7,12 +10,20 @@
  */
 
 //get an array of our imports
+//@todo grab them all?  scalability?
 $options = array(
+	'type' => 'object',
+	'subtype' => 'rssimport',
+	'owner_guid' => elgg_get_logged_in_user_guid(),
     'container_guids' => array($vars['container_guid']),
-    'metadata_name_value_pairs' => array('name' => 'import_into', 'value' => $vars['import_into']),
+    'metadata_name_value_pairs' => array(
+		'name' => 'import_into',
+		'value' => $vars['import_into']
+	),
+	'limit' => false
 );
 
-$rssimports = get_user_rssimports(elgg_get_page_owner_entity(), $options);
+$rssimports = elgg_get_entities_from_metadata($options);
 
 // iterate through, creating a link for each import
 if ($rssimports) {
@@ -25,17 +36,15 @@ if ($rssimports) {
 		
       echo "<div class=\"rssimport_listitem clearfix\">";
       echo elgg_view('output/url', array('href' => $rssimport->getURL(), 'class' => 'rssimport_listing', 'text' => $rssimport->title));
-      echo elgg_view('output/confirmlink', array(
+      echo elgg_view('output/url', array(
           'href' => elgg_get_site_url() . "action/rssimport/delete?id=" . $rssimport->guid,
           'class' => 'rssimport_deletelisting',
           'text' => '<span class="elgg-icon elgg-icon-delete"></span>',
+		  'is_action' => true,
           'confirm' => elgg_echo('rssimport:delete:confirm')
       ));
       echo "</div>";
   }
   
-  $sidebar .= "</div>";
+  echo "</div>";
 }
-
-
-echo $sidebar;

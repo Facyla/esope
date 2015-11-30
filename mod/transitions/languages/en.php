@@ -100,8 +100,12 @@ View and comment on the contribution:
 	'transitions:territory' => "Territory",
 	'transitions:territory:details' => "If the resource refers to a specific territory, please specify which one. Please use an precise location that can be placed on a map, eg.: \"8 passage Brûlon, Paris, France\" or \"Drôme, France\" or \"Madagascar\".",
 	'transitions:actortype' => "Actor type",
-	'transitions:startdate' => "Start date",
-	'transitions:enddate' => "End date",
+	'transitions:startdate' => "Start date & time",
+	'transitions:enddate' => "End date & time",
+	'transitions:start' => "Start date",
+	'transitions:start:format' => "Eg. DD/MM/YYYY, MM/YYYY or YYYY",
+	'transitions:end' => "End date",
+	'transitions:end:format' => "Eg. DD/MM/YYYY, MM/YYYY or YYYY",
 	'transitions:dateformat' => "M Y",
 	'transitions:dateformat:time' => "d M Y at H:i",
 	'transitions:date:since' => "Since",
@@ -121,12 +125,14 @@ View and comment on the contribution:
 	'transitions:featured:title' => "Featured contributions",
 	'transitions:background:title' => "Background contributions",
 	'transitions:featured' => "Feature / put in background",
+	'transitions:featured:details' => "You can feature or put a publication in the background. This has an impact on the contribution visibility, by displaying it on the homepage, or removing it from default search results.",
 	'transitions:featured:no' => "No (default)",
 	'transitions:featured:yes' => "Yes (in background)",
 	'transitions:featured:default' => "Standard (default)",
 	'transitions:featured:featured' => "Feature (more visible)",
 	'transitions:featured:background' => "Background (less visible)",
 	'transitions:search:rss' => "RSS feed for this search",
+	'transitions:search:ical' => "iCal feed",
 	'transitions:filter' => "Filter the contributions",
 	'transitions:filter:featured' => "Featured",
 	'transitions:filter:background' => "In background",
@@ -138,6 +144,7 @@ View and comment on the contribution:
 	// Other forms
 	'transitions:accountrequired' => "Please login to contribute.<br />If you do not have an account yet, this is very quick! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Create my Transitions² contributor account</a>",
 	'transitions:tags_contributed' => "Contributors tags",
+	'transitions:actors_contributed' => "Actors associated to this project",
 	'transitions:addtag' => "Tag",
 	'transitions:addtag:submit' => "Add a tag",
 	'transitions:addtag:details' => "You can add one or several tags to help better categorisation of this resource.",
@@ -158,6 +165,9 @@ View and comment on the contribution:
 	'transitions:addlink:add' => "+ Add a link",
 	'transitions:addlink:remove' => "Remove this link",
 	'transitions:addlink:remove:confirm' => "Do you confirm you wish to remove this link? This cannot be undone.",
+	'transitions:addactor:add' => "+ Add an actor",
+	'transitions:addactor:remove' => "Remove this actor",
+	'transitions:addactor:remove:confirm' => "Do you confirm you wish to remove this actor? This cannot be undone.",
 	'transitions:links_supports' => "Support resources",
 	'transitions:relation:supports' => "support",
 	'transitions:links_invalidates' => "Opposition resources",
@@ -255,5 +265,7 @@ View and comment on the contribution:
 	
 	
 	'transitions:error:missing:category' => "You have to specify a category for your contribution !",
+	
+	'transitions:news:comments' => "React / Display responses (%s)",
 	
 );

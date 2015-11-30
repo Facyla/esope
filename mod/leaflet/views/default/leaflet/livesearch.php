@@ -7,10 +7,10 @@
  - user position timestamp
  - user position timeout
 */
-global $CONFIG;
+
 session_start();
 $positionsId = get_input('positionsId', 'leaflet');
-$action_url = $CONFIG->url . 'action/leaflet/';
+$action_url = elgg_get_site_url() . 'action/leaflet/';
 $ts = time();
 $token = generate_action_token($ts);
 
@@ -26,28 +26,33 @@ if (elgg_is_logged_in()) {
 
 ?>
 <script type="text/javascript">
-// Save own position
-var lastupdate;
-var timestamp = Math.round(new Date().getTime() / 1000);
-var username = '<?php echo $username; ?>';
-var timeout = 3600;
-var positionsId = '<?php echo $positionsId; ?>';
-var last_userlat;
-var last_userlng;
+var onlineUsersMarker, onlineUsersMarkers;
+//require(['leaflet', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+require(['leaflet', 'leaflet_basemap', 'leaflet.awesomemarkers', 'leaflet.markercluster'], function(){
+	// Save own position
+	var lastupdate;
+	var timestamp = Math.round(new Date().getTime() / 1000);
+	var username = '<?php echo $username; ?>';
+	var timeout = 3600;
+	var positionsId = '<?php echo $positionsId; ?>';
+	var last_userlat;
+	var last_userlng;
 
-// Creates a custom marker
-var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
-var onlineUsersMarkers = new L.MarkerClusterGroup();
+	// Creates a custom marker
+	onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: 'fa', icon: 'user', markerColor: 'grey' });
+	onlineUsersMarkers = new L.MarkerClusterGroup();
 
-// CALL URL : <?php echo $action_url . 'positionprocess?__elgg_ts=' . $ts . '&__elgg_token=' . $token; ?>
+	// CALL URL : <?php echo $action_url . 'positionprocess?__elgg_ts=' . $ts . '&__elgg_token=' . $token; ?>
+	elgg.leaflet.getUsersPosition();
+});
 
 // Save others positions
-function getUsersPosition() {
+function elgg.leaflet.getUsersPosition() {
 	$.ajax({
 		type: "GET",
 		url: "<?php echo $action_url; ?>",
 		data: {
-			'action': 'rendezvous/positionprocess',
+			'action': 'leaflet/positionprocess',
 			'function': 'readPositions',
 			'positionsId': positionsId,
 			'__elgg_ts':'<?php echo $ts;?>',
@@ -86,7 +91,6 @@ function getUsersPosition() {
 	});
 	setTimeout("getUsersPosition()",5000);
 }
-getUsersPosition();
 </script>
 
 <div id="onlineUsers"></div>

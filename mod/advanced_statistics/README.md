@@ -1,15 +1,15 @@
 Advanced Statistics
-===========
+===================
+
+[![Build Status](https://scrutinizer-ci.com/g/ColdTrick/advanced_statistics/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ColdTrick/advanced_statistics/build-status/master)
+[![Latest Stable Version](https://poser.pugx.org/coldtrick/advanced_statistics/v/stable.svg)](https://packagist.org/packages/coldtrick/advanced_statistics)
+[![License](https://poser.pugx.org/coldtrick/advanced_statistics/license.svg)](https://packagist.org/packages/coldtrick/advanced_statistics)
+
 Show more statistics about you Elgg installation
 
-Contents
------------
+Features
+--------
 
-1. Features
-2. ToDo
-
-1. Features
------------
 Shows the following statistics
 
 - Users
@@ -19,7 +19,4 @@ Shows the following statistics
 - Widgets
 - System
 
-2. ToDo
------------
-
-- More statistics!!!
+You can also add individual statistics to your admin dashboard

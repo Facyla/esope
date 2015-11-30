@@ -1,28 +1,17 @@
 <?php
 
-gatekeeper();
+namespace AU\RSSImport;
+
+elgg_gatekeeper();
 
 // get our feed object
 $rssimport_id = get_input('rssimport_guid');
 $rssimport = get_entity($rssimport_id);
 
 // make sure we're the owner if selecting a feed
-if (!elgg_instanceof($rssimport, 'object', 'rssimport')) {
-	register_error(elgg_echo('rssimport:invalid:history'));
+if (!($rssimport instanceof RSSImport) || !$rssimport->canEdit()) {
+	register_error(elgg_echo('rssimport:not:owner'));
 	forward(REFERRER);
-}
-
-// Block non-owners except admins, or group admins
-if (!elgg_is_admin_logged_in()) {
-	// Are we the owner ?
-	if (elgg_get_logged_in_user_guid() != $rssimport->owner_guid) {
-		// Then is it a group admin (admins rights on group container) ?
-		$container = $rssimport->getContainerEntity();
-		if (!(elgg_instanceof($container, 'group') && $container->canEdit())) {
-			register_error(elgg_echo('rssimport:not:owner'));
-			forward(REFERRER);
-		}
-	}
 }
 
 	/**
@@ -85,4 +74,3 @@ $body = elgg_view_layout('one_sidebar', array('content' => $rightarea, 'sidebar'
 
 // display the page
 echo elgg_view_page($title, $body);
-

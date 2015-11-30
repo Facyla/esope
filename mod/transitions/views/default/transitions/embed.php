@@ -84,7 +84,7 @@ $form_data .= elgg_view("input/hidden", array('name' => "field_id", 'value' => $
 $form_data .= elgg_view("input/hidden", array('name' => "display", 'value' => 'yes'));
 $form_data .= elgg_view("input/submit", array("value" => elgg_echo("search"), "class" => "elgg-button-action"));
 
-echo elgg_view("input/form", array("action" => "transitions/embed/" . $embed_type . '/' . $field_id, "id" => "transitions-embed-search", "body" => $form_data));
+echo elgg_view("input/form", array("action" => "catalogue/embed/" . $embed_type . '/' . $field_id, "id" => "transitions-embed-search", "body" => $form_data));
 echo '<div class="clearfloat"></div>';
 echo '<br />';
 
@@ -129,7 +129,7 @@ if ($display) {
 		echo '</ul>';
 
 		echo '<div id="transitions-embed-pagination">';
-		$base_url = elgg_get_site_url() . 'transitions/embed/' . $field_id . "?display=yes&query=$query&actor_type=$actor_type&category=$category";
+		$base_url = elgg_get_site_url() . 'catalogue/embed/' . $field_id . "?display=yes&query=$query&actor_type=$actor_type&category=$category";
 		echo elgg_view("navigation/pagination", array("offset" => $offset, "limit" => $limit, "count" => $count, 'base_url' => $base_url));
 		echo "</div>";
 	} else {

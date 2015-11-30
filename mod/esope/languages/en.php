@@ -5,7 +5,7 @@
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
-$en = array(
+return array(
 	
 	'option:notify:email' => "Enable email (default)",
 	'option:notify:site' => "Enable site (messages)",
@@ -13,6 +13,9 @@ $en = array(
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
 	'option:none' => "(none selected)",
+	'groups:yes' => "Enabled",
+	'groups:no' => "Disabled",
+	'group_operators:operators' => "Operator(s)",
 	
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
@@ -54,6 +57,12 @@ $en = array(
 	'search:field:modifiedtimelower' => "Modification date (min)",
 	'search:field:modifiedtimeupper' => "Modification date (max)",
 	'search:field:fulltext' => "Search",
+	'search:field:owner_guid' => "Owner",
+	'search:field:container_guid' => "Container",
+	'search:results:no_query' => "Search results",
+	'esope:search:tooshort' => "Query text too short (minimum %s characters)",
+	'esope:search:tooshort:details' => "Query words less than %s characters are ignored in search",
+	'item:object' => "Publications",
 	'esope:config:widgets' => "ENABLED WIDGETS",
 	'esope:settings:removeusermenutools' => "(expert) Remove user menu items.<br />Use link id, eg.: blog,liked_content,photos (NO spacing)",
 	'esope:settings:removeusertools' => "(expert) Remove user content creation button.<br />Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
@@ -81,6 +90,8 @@ $en = array(
 	'esope:settings:groups:tools_default:auto' => "Auto (depending on plugins)",
 	'groups:alpha' => "Alphabetic",
 	'groups:friends' => "Friends",
+	'groups:newest' => "By date",
+	'groups:popular' => "Popular",
 	'groups:onlinenow' => "Online group members",
 	'esope:config:memberssearch' => "MEMBERS SEARCH PAGE",
 	'esope:settings:members:alpha' => "Use alphabetic tab",
@@ -89,6 +100,8 @@ $en = array(
 	'esope:settings:members:onlinetab' => "Use online members tab",
 	'esope:settings:members:profiletypes' => "Add profile type tabs",
 	'members:label:alpha' => "Alphabetic",
+	'members:label:newest' => "By date",
+	'members:label:popular' => "Popular",
 	'esope:config:styles' => "COLORS & STYLE",
 	'esope:config:styles:headerfooter' => "Header and footer gradient",
 	'esope:config:styles:groupmodules' => "Widgets and group modules gradient",
@@ -155,11 +168,16 @@ $en = array(
 	'esope:event_calendar' => "Calendar",
 	'esope:search' => "Search",
 	'esope:search:defaulttext' => "Search all content...",
+	'search:label' => "Search",
 	'esope:groupicon' => "group icon",
 	'esope:categories:all' => "Categories news",
 	'esope:members:online' => "Online members",
 	'esope:members:newest' => "Newest members",
 	'esope:groups:featured' => "Featured groups",
+	'esope:menu:topbar' => "My profile",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	'esope:categories:tree:explanation' => "You can use tree categories: prepend your category with the name of the parent category, separated by \"/\", eg.: Resources/Learning/Online videos,",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => 'Bookmarks',
@@ -201,6 +219,7 @@ $en = array(
 	'save:groupnotifications' => "Save my notification settings for groups",
 	'save:widgetsettings' => "Save widget settings",
 	'groups:join:success' => "Successfully joined the group",
+	'groups:topicopen' => "Open (comments allowed)",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
 	
@@ -234,6 +253,11 @@ $en = array(
 	'esope:homepage' => "Homepage",
 	'announcements' => "Announcements",
 	'event_calendar' => "Calendar",
+	'esope:homepage:calendar' => "Calendar",
+	'esope:homepage:calendar:none' => "No public event.<br />Login to access to members events.",
+	'esope:homepage:groups' => "Featured groups",
+	'esope:homepage:login' => "Login",
+	'esope:homepage:register' => "Registration",
 	
 	'esope:access:public' => "Public (accessible to non-loggedin visitors)",
 	
@@ -248,6 +272,8 @@ $en = array(
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
+	'messages:answer' => "Reply",
+	'messages:to' => "to",
 	
 	
 	// Layout settings
@@ -325,6 +351,7 @@ $en = array(
 	'esope:usersettings:public_profile:help' => "This setting lets you define wether you want to make your profile visible from the internet or not.<br /><br />It is avised to set your profile as public if you wish to show your skills or share any information on the internet.<br /><br />Please note that all your other visibility settings on fields or widgets will also apply whatever you decide: if you have chosen that your phone number or contact list is restricted to your contacts only, making your profile public won't make these information public, and they still will be restricted to your contacts.",
 	'esope:action:public_profile:error' => "There was an error while changing your settings.",
 	'esope:action:public_profile:saved' => "Your profile visibility has been successfully modified.",
+	'esope:action:remove_user_email' => "Remove user email",
 	'esope:usersettings:public_profile:public' => "Your profile is now PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Your profile is now RESTRICTED TO MEMBERS.",
 	'esope:members:hide_directory' => "Hide members directory to non-members (no public directory)",
@@ -431,6 +458,15 @@ $en = array(
 	'esope:settings:members:onesearch' => "Keep only general member search ? (default : No)",
 	'esope:settings:members:online' => "Display online members on sidebar (default : no)",
 	
+	'esope:settings:thewire_default_access' => "Default Wire access",
+	'esope:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
+	'esope:settings:groups:invite_picker' => "User picker type",
+	'esope:settings:groups:invite_picker:details' => "Note: above a fixed number of persons, the picker will automatically switch to Autocomplete (to avoid memrory overflow).",
+	'esope:invite_picker:friendspicker' => "Alphabetical picker",
+	'esope:invite_picker:userpicker' => "Autocomplete",
+	'esope:settings:groups:invite_metadata' => "Group invites by metadata search",
+	'esope:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
+	
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS & IDENTITIES",
 	'esope:config:contacts:details' => "Note : some themes use theses information to display links to social presence in top menu (or elswhere).",
@@ -525,7 +561,7 @@ $en = array(
 	'esope:settings:slideshare:icon' => '<i class="fa fa-slideshare"></i>',
 	'esope:settings:slideshare:title' => "Slideshare",
 	
-
+	
 	// DATES
 	'date:format:friendly' => 'm/d/Y H:i',
 	'date:time:on' => "on",
@@ -762,4 +798,3 @@ $en = array(
 	
 );
 
-add_translation('en', $en);

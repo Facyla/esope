@@ -1,3 +1,221 @@
+2015-11-29  Juho Jaakkola <juho@elgg.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.5
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, install/languages/it.php,
+  languages/de.php, languages/es.php, languages/fi.php, languages/fr.php,
+  languages/gl.php, languages/it.php, languages/ja.php, languages/nl.php,
+  languages/pl.php, languages/pt_br.php, mod/blog/languages/it.php,
+  mod/bookmarks/languages/es.php, mod/bookmarks/languages/it.php,
+  mod/categories/languages/it.php, mod/ckeditor/languages/it.php,
+  mod/custom_index/languages/it.php, mod/developers/languages/de.php,
+  mod/developers/languages/fi.php, mod/developers/languages/gl.php,
+  mod/developers/languages/it.php, mod/developers/languages/nl.php,
+  mod/developers/languages/zh_hans.php, mod/diagnostics/languages/it.php,
+  mod/embed/languages/it.php, mod/externalpages/languages/fr.php,
+  mod/externalpages/languages/it.php, mod/file/languages/da.php,
+  mod/file/languages/it.php, mod/garbagecollector/languages/it.php,
+  mod/garbagecollector/languages/zh_hans.php, mod/groups/languages/da.php,
+  mod/groups/languages/de.php, mod/groups/languages/el.php,
+  mod/groups/languages/es.php, mod/groups/languages/eu_es.php,
+  mod/groups/languages/fi.php, mod/groups/languages/fr.php,
+  mod/groups/languages/gl.php, mod/groups/languages/it.php,
+  mod/groups/languages/ja.php, mod/groups/languages/nl.php,
+  mod/groups/languages/pl.php, mod/groups/languages/pt_br.php,
+  mod/groups/languages/ru.php, mod/groups/languages/sr.php,
+  mod/invitefriends/languages/it.php, mod/invitefriends/languages/zh_hans.php,
+  mod/legacy_urls/languages/it.php, mod/likes/languages/de.php,
+  mod/likes/languages/es.php, mod/likes/languages/it.php,
+  mod/logbrowser/languages/it.php, mod/logrotate/languages/it.php,
+  mod/members/languages/it.php, mod/messageboard/languages/it.php,
+  mod/messages/languages/it.php, mod/notifications/languages/it.php,
+  mod/pages/languages/it.php, mod/profile/languages/zh_hans.php,
+  mod/reportedcontent/languages/ca.php, mod/reportedcontent/languages/cmn.php,
+  mod/reportedcontent/languages/da.php, mod/reportedcontent/languages/it.php,
+  mod/reportedcontent/languages/ko.php, mod/search/languages/it.php,
+  mod/site_notifications/languages/it.php, mod/tagcloud/languages/it.php,
+  mod/thewire/languages/it.php, mod/twitter_api/languages/it.php,
+  mod/uservalidationbyemail/languages/it.php,
+  mod/web_services/languages/it.php: chore(i18n): update translations
+
+2015-11-27  Steve Clay <steve@mrclay.org>
+
+  	* mod/pages/views/default/forms/pages/edit.php,
+  mod/pages/views/default/input/write_access.php: fix(pages): removes
+  deprecated notices regarding input/write_access  Deprecation notices will
+  only occur if a dev has extended forms/pages/edit or input/write_access 
+  Fixes #8327
+
+2015-10-22  Steve Clay <steve@mrclay.org>
+
+  	* mod/groups/views/default/river/group/create.php,
+  mod/groups/views/default/river/relationship/member/create.php,
+  mod/thewire/views/default/river/object/thewire/create.php,
+  views/default/river/elements/responses.php,
+  views/default/river/object/comment/create.php,
+  views/default/river/relationship/friend/create.php,
+  views/default/river/user/default/profileiconupdate.php,
+  views/default/river/user/default/profileupdate.php: perf(river): no longer
+  needlessly render river responses  For river items that cannot receive
+  comments, we explicitly pass a `responses` option to the river layout, which
+  bypasses the bulk of river/elements/responses rendering. Notably a
+  `countComments()` query is no longer performed and an empty form is no longer
+  rendered for each of these items.  For BC, the `div.elgg-river-responses`
+  wrapper is still created, but contains only whitespace.  In the
+  river/elements/responses view, we also now correctly check for comments (and
+  their subclasses like ElggDiscussionReply) so we don't render these. The core
+  river views do not reach to this point due to changes in this PR, so this is
+  mainly for plugins that may have overridden those views.  Fixes #9046
+
+2015-10-10  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/classes/Elgg/Database/AccessCollections.php, engine/lib/access.php:
+  chore(docs): reduce ambiguity in use of variable names in reference to access
+  collections  Replaces variable names to reduce ambiguity. Uses collection_id
+  to refer to the collection ID (in stead of collection), and guids_only to
+  refer to member guids (in stead of idonly)
+
+2015-09-20  Juho Jaakkola <juho@elgg.org>
+
+  	* composer.json, docs/locale/pot/about.pot, docs/locale/pot/admin.pot,
+  docs/locale/pot/appendix.pot, docs/locale/pot/contribute.pot,
+  docs/locale/pot/design.pot, docs/locale/pot/guides.pot,
+  docs/locale/pot/index.pot, docs/locale/pot/intro.pot,
+  docs/locale/pot/plugins.pot, docs/locale/pot/tutorials.pot,
+  install/languages/pl.php, languages/it.php, languages/pt_BR.php,
+  languages/pt_br.php, languages/ru.php, mod/blog/languages/eu_ES.php,
+  mod/blog/languages/eu_es.php, mod/blog/languages/pt_BR.php,
+  mod/blog/languages/pt_br.php, mod/blog/languages/ro_RO.php,
+  mod/blog/languages/ro_ro.php, mod/blog/languages/sr@latin.php,
+  mod/blog/languages/sr_latin.php, mod/blog/languages/zh-Hans.php,
+  mod/blog/languages/zh_hans.php, mod/bookmarks/languages/eu_ES.php,
+  mod/bookmarks/languages/eu_es.php, mod/bookmarks/languages/pt_BR.php,
+  mod/bookmarks/languages/pt_br.php, mod/bookmarks/languages/ro_RO.php,
+  mod/bookmarks/languages/ro_ro.php, mod/bookmarks/languages/zh-Hans.php,
+  mod/bookmarks/languages/zh_hans.php, mod/categories/languages/eu_ES.php,
+  mod/categories/languages/eu_es.php, mod/categories/languages/pt_BR.php,
+  mod/categories/languages/pt_br.php, mod/categories/languages/ro_RO.php,
+  mod/categories/languages/ro_ro.php, mod/categories/languages/zh-Hans.php,
+  mod/categories/languages/zh_hans.php, mod/ckeditor/languages/eu_ES.php,
+  mod/ckeditor/languages/eu_es.php, mod/ckeditor/languages/pt_BR.php,
+  mod/ckeditor/languages/pt_br.php, mod/ckeditor/languages/ro_RO.php,
+  mod/ckeditor/languages/ro_ro.php, mod/ckeditor/languages/zh-Hans.php,
+  mod/ckeditor/languages/zh_hans.php, mod/custom_index/languages/eu_ES.php,
+  mod/custom_index/languages/eu_es.php, mod/custom_index/languages/pt_BR.php,
+  mod/custom_index/languages/pt_br.php, mod/custom_index/languages/ro_RO.php,
+  mod/custom_index/languages/ro_ro.php, mod/custom_index/languages/zh-Hans.php,
+  mod/custom_index/languages/zh_hans.php, mod/developers/languages/eu_ES.php,
+  mod/developers/languages/eu_es.php, mod/developers/languages/pt_BR.php,
+  mod/developers/languages/pt_br.php, mod/diagnostics/languages/eu_ES.php,
+  mod/diagnostics/languages/eu_es.php, mod/diagnostics/languages/pt_BR.php,
+  mod/diagnostics/languages/pt_br.php, mod/embed/languages/eu_ES.php,
+  mod/embed/languages/eu_es.php, mod/embed/languages/pt_BR.php,
+  mod/embed/languages/pt_br.php, mod/embed/languages/zh-Hans.php,
+  mod/embed/languages/zh_hans.php, mod/externalpages/languages/eu_ES.php,
+  mod/externalpages/languages/eu_es.php, mod/externalpages/languages/pt_BR.php,
+  mod/externalpages/languages/pt_br.php, mod/file/languages/eu_ES.php,
+  mod/file/languages/eu_es.php, mod/file/languages/pt_BR.php,
+  mod/file/languages/pt_br.php, mod/file/languages/zh-Hans.php,
+  mod/file/languages/zh_hans.php, mod/garbagecollector/languages/eu_ES.php,
+  mod/garbagecollector/languages/eu_es.php,
+  mod/garbagecollector/languages/pt_BR.php,
+  mod/garbagecollector/languages/pt_br.php, mod/groups/languages/eu_ES.php,
+  mod/groups/languages/eu_es.php, mod/groups/languages/it.php,
+  mod/groups/languages/pt_BR.php, mod/groups/languages/pt_br.php,
+  mod/invitefriends/languages/eu_ES.php, mod/invitefriends/languages/eu_es.php,
+  mod/invitefriends/languages/pt_BR.php, mod/invitefriends/languages/pt_br.php,
+  mod/legacy_urls/languages/eu_ES.php, mod/legacy_urls/languages/eu_es.php,
+  mod/legacy_urls/languages/pt_BR.php, mod/legacy_urls/languages/pt_br.php,
+  mod/likes/languages/eu_ES.php, mod/likes/languages/eu_es.php,
+  mod/likes/languages/pt_BR.php, mod/likes/languages/pt_br.php,
+  mod/likes/languages/zh-Hans.php, mod/likes/languages/zh_hans.php,
+  mod/logbrowser/languages/eu_ES.php, mod/logbrowser/languages/eu_es.php,
+  mod/logbrowser/languages/pt_BR.php, mod/logbrowser/languages/pt_br.php,
+  mod/logrotate/languages/eu_ES.php, mod/logrotate/languages/eu_es.php,
+  mod/logrotate/languages/pt_BR.php, mod/logrotate/languages/pt_br.php,
+  mod/members/languages/eu_ES.php, mod/members/languages/eu_es.php,
+  mod/members/languages/pt_BR.php, mod/members/languages/pt_br.php,
+  mod/members/languages/ro_RO.php, mod/members/languages/ro_ro.php,
+  mod/members/languages/zh-Hans.php, mod/members/languages/zh_hans.php,
+  mod/messageboard/languages/eu_ES.php, mod/messageboard/languages/eu_es.php,
+  mod/messageboard/languages/pt_BR.php, mod/messageboard/languages/pt_br.php,
+  mod/messages/languages/ca.php, mod/messages/languages/cmn.php,
+  mod/messages/languages/eu_ES.php, mod/messages/languages/eu_es.php,
+  mod/messages/languages/pt_BR.php, mod/messages/languages/pt_br.php,
+  mod/notifications/languages/eu_ES.php, mod/notifications/languages/eu_es.php,
+  mod/notifications/languages/pt_BR.php, mod/notifications/languages/pt_br.php,
+  mod/pages/languages/eu_ES.php, mod/pages/languages/eu_es.php,
+  mod/pages/languages/pt_BR.php, mod/pages/languages/pt_br.php,
+  mod/profile/languages/eu_ES.php, mod/profile/languages/eu_es.php,
+  mod/profile/languages/pt_BR.php, mod/profile/languages/pt_br.php,
+  mod/reportedcontent/languages/eu_ES.php,
+  mod/reportedcontent/languages/eu_es.php,
+  mod/reportedcontent/languages/pt_BR.php,
+  mod/reportedcontent/languages/pt_br.php, mod/search/languages/eu_ES.php,
+  mod/search/languages/eu_es.php, mod/search/languages/pt_BR.php,
+  mod/search/languages/pt_br.php, mod/search/languages/zh-Hans.php,
+  mod/search/languages/zh_hans.php, mod/site_notifications/languages/eu_ES.php,
+  mod/site_notifications/languages/eu_es.php,
+  mod/site_notifications/languages/pt_BR.php,
+  mod/site_notifications/languages/pt_br.php, mod/tagcloud/languages/eu_ES.php,
+  mod/tagcloud/languages/eu_es.php, mod/tagcloud/languages/pt_BR.php,
+  mod/tagcloud/languages/pt_br.php, mod/thewire/languages/eu_ES.php,
+  mod/thewire/languages/eu_es.php, mod/thewire/languages/pt_BR.php,
+  mod/thewire/languages/pt_br.php, mod/twitter_api/languages/eu_ES.php,
+  mod/twitter_api/languages/eu_es.php, mod/twitter_api/languages/pt_BR.php,
+  mod/twitter_api/languages/pt_br.php,
+  mod/uservalidationbyemail/languages/ca.php,
+  mod/uservalidationbyemail/languages/cmn.php,
+  mod/uservalidationbyemail/languages/eu_ES.php,
+  mod/uservalidationbyemail/languages/eu_es.php,
+  mod/uservalidationbyemail/languages/pt_BR.php,
+  mod/uservalidationbyemail/languages/pt_br.php,
+  mod/web_services/languages/eu_ES.php, mod/web_services/languages/eu_es.php,
+  mod/web_services/languages/pt_BR.php, mod/web_services/languages/pt_br.php:
+  chore(i18n): update translations
+
+2015-07-04  Steve Clay <steve@mrclay.org>
+
+  	* .scripts/release.php, .../classes/Elgg/I18n/InvalidLocaleException.php,
+  engine/classes/Elgg/I18n/Locale.php,
+  engine/classes/Elgg/I18n/ReleaseCleaner.php,
+  engine/classes/Elgg/I18n/Translator.php, engine/lib/languages.php,
+  languages/en.php: chore(i18n): Adds limited support for new languages on
+  Transifex  Updates release script to normalize language filenames and remove
+  unrecognized language files. Adds missing InvalidLocaleException.  Fixes
+  #7540
+
+2015-09-13  Matt Beckett <beck24@gmail.com>
+
+  	* docs/guides/events-list.rst,
+  .../classes/Elgg/Database/RelationshipsTable.php,
+  engine/lib/relationships.php, engine/tests/ElggRelationshipTest.php:
+  fix(relationships): can now prevent relationships using event handler  Passes
+  the relationship id into delete_relationship() instead of the event handler
+  return  Fixes #8927
+
 2015-09-06  Juho Jaakkola <juho@elgg.org>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.3
@@ -38,6 +256,12 @@
   mod/tagcloud/languages/it.php, mod/thewire/languages/it.php,
   mod/twitter_api/languages/it.php, mod/uservalidationbyemail/languages/it.php:
   chore(i18n): update translations
+
+2015-08-24  Steve Clay <steve@mrclay.org>
+
+  	* docs/design/database.rst, engine/classes/Elgg/Database/EntityTable.php,
+  engine/lib/entities.php, engine/lib/tags.php: docs(entities): Docs for
+  type/subtype and associated ege() options
 
 2015-08-23  Juho Jaakkola <juho@elgg.org>
 

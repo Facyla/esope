@@ -13,7 +13,7 @@ $translations = multilingual_get_translations($entity);
 $languages = multilingual_available_languages(false);
 
 
-$text = '<i class="fa fa-language"></i>Translations';
+$text = elgg_echo('multilingual:menu:translations');
 $params = array(
 		'text' => $text, 'title' => elgg_echo('multilingual:menu:versions'),
 		'rel' => 'popup', 'href' => "#multilingual-menu-$guid"
@@ -25,13 +25,13 @@ $content .= '<div class="elgg-module elgg-module-popup elgg-multilingual hidden 
 
 // Existing translations
 if ($translations) {
-	$content .= '<p>Available translations : ';
+	$content .= '<p>' . elgg_echo('multilingual:menu:availablelang') . '&nbsp;: ';
 	foreach ($translations as $ent) {
 		$content .= '<a href="' . $ent->getURL() . '?lang=' . $ent->lang . '"><img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->lang . '.gif" />&nbsp;' . $ent->lang . '</a> ';
 	}
 	$content .= '</p>';
 } else {
-	$content .= '<p>No translation yet</p>';
+	$content .= '<p>' . elgg_echo('multilingual:menu:notranslation') . '</p>';
 }
 
 // Add new translations

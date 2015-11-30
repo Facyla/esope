@@ -64,7 +64,7 @@ $authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($username, $pas
 	// Check authentication : much used so be as quick as possible
 	$authenticated = elgg_authenticate($username, $password);
 	if ($authenticated === true) {
-		if ($debug) error_log("WebDAV : $username authentication verified => loging in");
+		if ($debug) error_log("WebDAV : $username authentication verified => logging in");
 		$user = get_user_by_username($username);
 		login($user, true); // Keep authenticated to avoid checking every time
 		// re-register at least the core language file for users with language other than site default

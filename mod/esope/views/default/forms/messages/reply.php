@@ -5,16 +5,27 @@
  * @uses $vars['message']
  */
 
-// No more RE: - we use discussions now
+// No more RE: at all (as we use discussions now we need the same title)
 $reply_title = $vars['message']->title;
 $reply_title = str_replace('RE: ', '', $reply_title);
 
-$recipient_guid = $vars['message']->fromId;
+$username = '';
+$user = get_user($vars['message']->fromId);
 // Self-reply : keep sending to to same recipient if asked
-if ($vars['send_to_sender']) $recipient_guid = $vars['message']->toId;
+if ($vars['send_to_sender']) $user = $vars['message']->toId;
+if ($user) {
+	$username = $user->username;
+}
 
-echo elgg_view('input/hidden', array('name' => 'recipient_guid', 'value' => $recipient_guid));
-echo elgg_view('input/hidden', array('name' => 'reply', 'value' => $vars['message']->guid));
+echo elgg_view('input/hidden', array(
+	'name' => 'recipient_username',
+	'value' => $username,
+));
+
+echo elgg_view('input/hidden', array(
+	'name' => 'original_guid',
+	'value' => $vars['message']->guid,
+));
 
 /* Hide subject, and force conversations
 <div>
@@ -22,15 +33,20 @@ echo elgg_view('input/hidden', array('name' => 'reply', 'value' => $vars['messag
 	?>
 </div>
 */
-echo elgg_view('input/hidden', array('name' => 'subject', 'value' => $reply_title));
+echo elgg_view('input/hidden', array(
+	'name' => 'subject',
+	'value' => $reply_title,
+));
 ?>
 
 <div>
 	<label for="body"><?php echo elgg_echo("messages:message"); ?></label>
-	<?php echo elgg_view("input/longtext", array('name' => 'body', 'value' => ''));
+	<?php echo elgg_view("input/longtext", array(
+		'name' => 'body',
+		'value' => '',
+	));
 	?>
 </div>
 <div class="elgg-foot">
-	<?php echo elgg_view('input/submit', array('value' => elgg_echo('messages:send'))); ?>
+	<?php echo elgg_view('input/submit', array('value' => elgg_echo('send'))); ?>
 </div>
-

@@ -5,7 +5,7 @@
 
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
-$fr = array(
+return array(
 	
 	'option:notify:email' => "Activer par email (par défaut)",
 	'option:notify:site' => "Activer par le site (messages)",
@@ -13,6 +13,9 @@ $fr = array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	'option:none' => "(aucune sélection)",
+	'groups:yes' => "Activé",
+	'groups:no' => "Désactivé",
+	'group_operators:operators' => "Responsable(s)",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
@@ -54,6 +57,12 @@ $fr = array(
 	'search:field:modifiedtimelower' => "Date de modification (mini) ",
 	'search:field:modifiedtimeupper' => "Date de modification (maxi) ",
 	'search:field:fulltext' => "Rechercher",
+	'search:field:owner_guid' => "Auteur",
+	'search:field:container_guid' => "Emplacement",
+	'search:results:no_query' => "Résultats de la recherche",
+	'esope:search:tooshort' => "Texte à rechercher trop court (minimum %s caractères)",
+	'esope:search:tooshort:details' => "Les mots de moins de %s caractères sont ignorés lors de la recherche",
+	'item:object' => "Publications",
 	'esope:config:widgets' => "CHOIX DES WIDGETS",
 	'esope:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres.<br />Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
 	'esope:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)).<br />Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",
@@ -81,6 +90,8 @@ $fr = array(
 	'esope:settings:groups:tools_default:auto' => "Auto (selon les plugins)",
 	'groups:alpha' => "Alphabétique",
 	'groups:friends' => "Contacts",
+	'groups:newest' => "Par date",
+	'groups:popular' => "Nombre de membres",
 	'groups:onlinenow' => "Membres du groupe en ligne",
 	'esope:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
 	'esope:settings:members:alpha' => "Onglet tri alphabétique",
@@ -89,6 +100,8 @@ $fr = array(
 	'esope:settings:members:onlinetab' => "Onglet liste en ligne",
 	'esope:settings:members:profiletypes' => "Onglets des types de profils",
 	'members:label:alpha' => "Alphabétique",
+	'members:label:newest' => "Par date",
+	'members:label:popular' => "Nombre de contacts",
 	'esope:config:styles' => "COULEURS & STYLE",
 	'esope:config:styles:headerfooter' => "Dégradé du header et du pied de page",
 	'esope:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
@@ -154,11 +167,16 @@ $fr = array(
 	'esope:event_calendar' => "Agenda",
 	'esope:search' => "Rechercher",
 	'esope:search:defaulttext' => "Trouvez dans le site...",
+	'search:label' => "Rechercher",
 	'esope:groupicon' => "icône du groupe",
 	'esope:categories:all' => "Actualité des thématiques",
 	'esope:members:online' => "Membres connectés",
 	'esope:members:newest' => "Derniers inscrits",
 	'esope:groups:featured' => "Groupes à la Une",
+	'esope:menu:topbar' => "Mon profil",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	'esope:categories:tree:explanation' => "Vous pouvez utiliser des sous-catégories : pour cela, indiquez le nom de la catégorie parente, puis \"/\" et le nom de votre catégorie, par ex.: Ressources/Supports de formation/Vidéos,",
 	
 	// Widgets
 	'esope:widget:bookmark:title' => '<i class="fa fa-link"></i> Liens web',
@@ -215,6 +233,9 @@ $fr = array(
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
 	'groups:join:success' => "Vous êtes désormais membre du groupe",
+	'reply:this' => "Répondre", // Mauvaise trad fr dans groups...
+	'groups:topicopen' => "Ouvert (commentaires acceptés)",
+	
 	// Notifications
 	'link:userprofile' => "Page de profil de %s",
 	
@@ -248,6 +269,11 @@ $fr = array(
 	'esope:homepage' => "Accueil",
 	'announcements' => "Annonces",
 	'event_calendar' => "Agenda",
+	'esope:homepage:calendar' => "Agenda",
+	'esope:homepage:calendar:none' => "Aucun événement public pour le moment.<br />Connectez-vous pour accéder aux événements réservés aux membres.",
+	'esope:homepage:groups' => "Quelques groupes",
+	'esope:homepage:login' => "Connexion",
+	'esope:homepage:register' => "Inscription",
 	
 	'esope:access:public' => "Public (accessible hors connexion)",
 	
@@ -262,6 +288,8 @@ $fr = array(
 	'messages:widget:title' => "Messages non lus",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:answer' => "Répondre",
+	'messages:to' => "à",
 	
 	
 	// Layout settings
@@ -339,6 +367,7 @@ $fr = array(
 	'esope:usersettings:public_profile:help' => "Ce réglage vous permet de rendre votre profil visible publiquement sur internet.<br /><br />Il est conseillé de rendre votre profil public si vous souhaitez présenter vos compétences ou partager certaines informations choisies sur internet.<br /><br />Veuillez noter que tous vos autres réglages de visibilité des champs et des widgets qui composent votre page du profil restent valables : par exemple si vous avez choisi que votre numéro de téléphone ou la liste de contacts sont réservés à vos contacts, rendre votre profil public ou non ne modifiera pas ce réglage, et cette information restera réservée à vos contacts.",
 	'esope:action:public_profile:error' => "Une erreur s'est lors de la modification de vos paramètres.",
 	'esope:action:public_profile:saved' => "La visibilité de votre profil a bien été modifiée.",
+	'esope:action:remove_user_email' => "Supprimer email du membre",
 	'esope:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
 	'esope:members:hide_directory' => "Masquer l'annuaire des membres aux non-membres (pas d'annuaire public)",
@@ -443,6 +472,15 @@ $fr = array(
 	'esope:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'esope:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'esope:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
+	
+	'esope:settings:thewire_default_access' => "Accès par défaut du Fil",
+	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglég de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
+	'esope:settings:groups:invite_picker' => "Type de sélecteur",
+	'esope:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
+	'esope:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
+	'esope:invite_picker:userpicker' => "Auto-complétion",
+	'esope:settings:groups:invite_metadata' => "Invitations par critères de recherche",
+	'esope:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
 	
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS ET COORDONNEES",
@@ -796,4 +834,3 @@ $fr = array(
 	
 );
 
-add_translation('fr', $fr);

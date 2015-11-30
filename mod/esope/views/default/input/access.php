@@ -53,7 +53,11 @@ $vars = array_merge($defaults, $vars);
 
 // Facyla : custom access lists depending on context / settings
 $content_cases = array('access_id', 'write_access_id');
-$standard_cases = array('access_id', 'write_access_id', 'vis'); // vis = visibilité des groupes
+// vis = visibilité du groupe, membership = adhésion au groupe
+$standard_cases = array('access_id', 'write_access_id', 'vis', 'membership');
+// Group membership is not a standard access level - rather access control
+$donotmodify_cases = array('membership');
+
 /*
 // Supprime le niveau d'accès Public => Membres connectés
 if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
@@ -67,6 +71,14 @@ if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_case
 if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 	$page_owner = elgg_get_page_owner_entity();
 	if (elgg_instanceof($page_owner, 'group') && in_array($vars['name'], $content_cases)) {
+		if (elgg_is_active_plugin('au_subgroups')) {
+			// Add parent group access id (all parent groups)
+			$group = $page_owner;
+			while($parent = AU\SubGroups\get_parent_group($group)) {
+				$vars['options_values'][$parent->group_acl] = $parent->name;
+				$group = $parent;
+			}
+		}
 		// Default group access
 		if ($page_owner->membership == 2) {
 			$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
@@ -93,13 +105,13 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 if (elgg_is_admin_logged_in()) {
 	if (is_array($admin_exclude_access)) {
 		foreach ($vars['options_values'] as $key => $val) {
-			if (in_array($key, $admin_exclude_access)) { unset($vars['options_values'][$key]); }
+			if (in_array($key, $admin_exclude_access) && !in_array($vars['name'], $donotmodify_cases)) { unset($vars['options_values'][$key]); }
 		}
 	}
 } else {
 	if (is_array($user_exclude_access)) {
 		foreach ($vars['options_values'] as $key => $val) {
-			if (in_array($key, $user_exclude_access)) { unset($vars['options_values'][$key]); }
+			if (in_array($key, $user_exclude_access) && !in_array($vars['name'], $donotmodify_cases)) { unset($vars['options_values'][$key]); }
 		}
 	}
 }

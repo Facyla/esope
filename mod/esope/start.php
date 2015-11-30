@@ -28,9 +28,11 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome
-	elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
-	elgg_load_css('fontawesome');
+	// Font Awesome - moved to external dependancy
+	if (!elgg_is_active_plugin('fontawesome')) {
+		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
+		elgg_load_css('fontawesome');
+	}
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
@@ -49,6 +51,9 @@ function esope_init() {
 	
 	// Suppression recherche du menu
 	elgg_unextend_view('page/elements/header', 'search/header');
+	// Suppression recherche de la sidebar
+	elgg_unextend_view('page/elements/sidebar', 'search/header');
+	
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -56,12 +61,10 @@ function esope_init() {
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
-	/*
 	elgg_register_simplecache_view('js/esope_theme');
 	$theme_js = elgg_get_simplecache_url('js', 'esope_theme');
-	elgg_register_js('esope.fonction', $theme_js, 'head');
-	elgg_load_js('esope.fonction');
-	*/
+	elgg_register_js('esope.theme', $theme_js, 'head');
+	elgg_load_js('esope.theme');
 	
 	// Update jQuery UI to 1.11.2, with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
@@ -176,7 +179,7 @@ function esope_init() {
 	// Modification de la page de listing des sous-groupes
 	if (elgg_is_active_plugin('au_subgroups')) {
 		// route some urls that go through 'groups' handler
-		elgg_unregister_plugin_hook_handler('route', 'groups', 'au_subgroups_groups_router');
+		elgg_unregister_plugin_hook_handler('route', 'groups', 'AU\SubGroups\groups_router');
 		elgg_register_plugin_hook_handler('route', 'groups', 'esope_subgroups_groups_router', 499);
 		
 		/* au_subgroups prevents users from being invited to subgroups they can't join
@@ -185,7 +188,7 @@ function esope_init() {
 		 * AND handle the au_subgroup case by filtering the passed GUID to in the invite action
 		 *    which avoids breaking the whole process for some users (especially if we register them directly into the group)
 		 */
-		elgg_unregister_plugin_hook_handler('action', 'groups/invite', 'au_subgroups_group_invite');
+		elgg_unregister_plugin_hook_handler('action', 'groups/invite', 'AU\SubGroups\group_invite');
 		elgg_register_plugin_hook_handler('action', 'groups/invite', 'esope_au_subgroups_group_invite');
 	}
 	
@@ -226,7 +229,14 @@ function esope_init() {
 	// * requires to add the hook trigger to the email notification handler
 	// Wrap notification handler into custom function so we can intercept the sending process
 	global $NOTIFICATION_HANDLERS;
+	// @TODO : replace by elgg_register_notification_method()
 	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
+	/* @TODO : http://learn.elgg.org/en/latest/guides/notifications.html#registering-a-new-notification-method
+	elgg_register_notification_method('email');
+	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_notification_handler');
+	*/
+	// Register for the 'send', 'notification:[method name]' plugin hook to handle sending a notification. A notification object is in the params array for the hook with the key 'notification'
+	
 	/* Usage note : block email by registering an early hook to email_block,system hook
 	 * any non null return will block email sending.
 	 * 1. add in start.php : elgg_register_plugin_hook_handler("email_block", "system", "esope_email_block_hook", 0);
@@ -700,14 +710,13 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
-		$children = au_subgroups_get_subgroups($group, 0);
+		$children = AU\SubGroups\get_subgroups($group, 0);
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
-			if ($member_only) {
-				if (!$child->isMember($user)) { continue; }
+			if ($child->isMember($user) || !$member_only) {
+				$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $child->name . '</a></li>';
+				$menuitem .= esope_list_groups_submenu($child, $level + 1, $member_only, $user);
 			}
-			$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $child->name . '</a></li>';
-			$menuitem .= esope_list_groups_submenu($child, $level + 1);
 		}
 		return $menuitem;
 	}
@@ -1775,7 +1784,7 @@ function esope_login_user_action($event, $type, $user) {
 								// Handle subgroups cases
 								if (elgg_is_active_plugin('au_subgroups')) {
 									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
-									while ($parent = au_subgroups_get_parent_group($group)) {
+									while ($parent = AU\SubGroups\get_parent_group($group)) {
 										//  Join only if parent group is public membership or if we have a join pending
 										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
 											// Join group, or add to join list
@@ -1997,6 +2006,85 @@ function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $b
 	global $NOTIFICATION_HANDLERS;
 	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
 	return $handler($from, $to, $subject, $body, $params);
+}
+// @TODO : Replace
+/**
+ * Send an email notification
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param bool   $result Has anyone sent a message yet?
+ * @param array  $params Hook parameters
+ * @return bool
+ * @access private
+ */
+/*
+function esope_notification_handler($hook, $type, $result, $params) {
+	// @var Elgg_Notifications_Notification $message
+	$message = $params['notification'];
+
+	$recipient = $message->getRecipient();
+
+	if (!$recipient || !$recipient->email) {
+		return false;
+	}
+
+	//return $sms->send($recipient->email, $message->body);
+	
+		// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
+	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
+	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
+	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
+	if ($result !== NULL) { return $result; }
+	
+	// If no blocking return received, get back to regular handler and process
+	global $NOTIFICATION_HANDLERS;
+	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
+	return $handler($from, $recipient->email, $subject, $message->body, $params);
+	
+}
+*/
+
+
+
+/* Determines if the user is a group administrator (=> has admin rights on any group)
+ * $user : the user to be checked
+ * $group : optional group
+ * $strict : if true and group_operators enabled, ensures the user is the group owner only 
+ *           (not a co-admin or even not an global admin)
+ */
+function esope_is_group_admin($user = false, $group = null, $strict = false) {
+	if (!elgg_instanceof($user, 'user')) {
+		if (!elgg_is_logged_in()) return false;
+		$user = elgg_get_logged_in_user_entity();
+	}
+	
+	// Checks only for a given group
+	if (elgg_instanceof($group, 'group')) {
+		if ($group->canEdit()) {
+			if (!$strict) { return true; }
+			if ($group->owner_guid == $user->guid) { return true; }
+		}
+		return false;
+	}
+	
+	// Owned group check : always validates this function test
+	$owned_groups = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user->guid));
+	if ($owned_groups) { return true; }
+	// Strict check : any other method is not valid, so leave now (even not global admin)
+	if ($strict) { return false; }
+	
+	// Admin bypass
+	if ($user->isAdmin()) { return true; }
+	
+	// Now also check group operators
+	if (elgg_is_active_plugin('group_operators')) {
+		$operator_of = elgg_get_entities_from_relationship(array('types'=>'group', 'relationship_guid'=>$user->guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
+		if ($operator_of) { return true; }
+	}
+	
+	// None passed : definitely not a group admin...
+	return false;
 }
 
 

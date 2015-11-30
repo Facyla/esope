@@ -1,0 +1,17 @@
+{
+	"name": "coldtrick/webshim",
+	"description": "Reliably use HTML5 features across browsers, even if native support is lacking",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "shim"],
+	"license": "GPL-2.0",
+	"support": {
+		"source": "https://github.com/ColdTrick/webshim",
+		"issues": "https://github.com/ColdTrick/webshim/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8"
+	},
+	"require-dev": {
+		"coldtrick/sniffs": "dev-master"
+	}
+}

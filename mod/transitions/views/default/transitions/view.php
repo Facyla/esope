@@ -7,6 +7,7 @@
 
 $transitions = elgg_extract('entity', $vars, FALSE);
 $embed = elgg_extract('embed', $vars, FALSE);
+$full_content = get_input('full_content', false);
 
 if (!$transitions) {
 	return TRUE;
@@ -184,34 +185,37 @@ $sidebar = '';
 // Owner block
 $sidebar .= '<span class="transitions-owner-block">' . $owner_image . '</span>';
 
-// Dates : projects and events only
-if (in_array($transitions->category, array('project', 'event'))) {
-	if (!empty($transitions->start_date) || !empty($transitions->end_date)) {
-		$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
+// Exact dates : events only
+if (($transitions->category == 'event') && (!empty($transitions->start_date) || !empty($transitions->end_date))) {
+	$date_format = elgg_echo('transitions:dateformat:time');
+	// Format : from DD MM YYYY [until DD MM YYYY]
+	$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
+	if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
+		$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+		$sidebar .= '<br />' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+	} else if (!empty($transitions->start_date)) {
+		$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
+	} else if (!empty($transitions->end_date)) {
+		$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
 	}
+	$sidebar .= '</p>';
+	$sidebar .= '<div class="clearfloat"></div><br />';
+}
+// Text dates for projects
+if (($transitions->category == 'project') && (!empty($transitions->start) || !empty($transitions->end))) {
+	$sidebar .= '<p class="transitions-dates"><i class="fa fa-calendar-o"></i> ';
 	if ($transitions->category == 'project') {
-		// Format : MM YYYY [- MM YYYY]
 		$date_format = elgg_echo('transitions:dateformat');
-		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-			$sidebar .= date($date_format, $transitions->start_date) . ' - ' . date($date_format, $transitions->end_date);
-		} else if (!empty($transitions->start_date)) {
-			$sidebar .= date($date_format, $transitions->start_date);
-		} else if (!empty($transitions->end_date)) {
-			$sidebar .= date($date_format, $transitions->end_date);
-		}
-	} else {
-		$date_format = elgg_echo('transitions:dateformat:time');
-		// Format : from DD MM YYYY [until DD MM YYYY]
-		if (!empty($transitions->start_date) && !empty($transitions->end_date)) {
-			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-			$sidebar .= ' ' . elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
-		} else if (!empty($transitions->start_date)) {
-			$sidebar .= elgg_echo('transitions:date:since') . ' ' . date($date_format, $transitions->start_date);
-		} else if (!empty($transitions->end_date)) {
-			$sidebar .= elgg_echo('transitions:date:until') . ' ' . date($date_format, $transitions->end_date);
+		if (!empty($transitions->start) && !empty($transitions->end)) {
+			$sidebar .= $transitions->start . ' - ' . $transitions->end;
+		} else if (!empty($transitions->start)) {
+			$sidebar .= $transitions->start;
+		} else if (!empty($transitions->end)) {
+			$sidebar .= $transitions->end;
 		}
 	}
-	if (!empty($transitions->start_date) || !empty($transitions->end_date)) { $sidebar .= '</p>'; }
+	$sidebar .= '</p>';
+	$sidebar .= '<div class="clearfloat"></div><br />';
 }
 
 // Ressources : langues puis ressources
@@ -291,7 +295,7 @@ $body = '<div class="transitions-view-main">
 if ($transitions->category == 'challenge') {
 	$collection = get_entity($transitions->collection);
 	if (elgg_instanceof($collection, 'object', 'collection')) {
-		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection, array('embed' => true)) . '</div>';
+		$body .= '<div class="transitions-view-collection">' . elgg_view_entity($collection, array('embed' => true, 'full_content' => $full_content)) . '</div>';
 	}
 }
 
@@ -329,13 +333,13 @@ if ($transitions->category == 'challenge') {
 // RENDER EMBED CONTENT : no sharing/contribution tools + no metadata menu
 if ($embed) {
 	echo '<div class="transitions-view-wrapper">';
+	echo '<h2 class="elgg-heading-main"><a href="' . $transitions->getURL() . '" target="_blank">' . $transitions->title . '</a></h2>';
 	echo $category;
 	echo '<div class="clearfloat"></div>';
 	echo $body;
 	echo '</div>';
 	return;
 }
-
 
 
 
@@ -347,23 +351,23 @@ $params = array(
 );
 $tab_content = '';
 
-// Contributed tags
-$params['tabs'][] = array('title' => elgg_echo('transitions:addtag'), 'url' => "#transitions-{$transitions->guid}-addtag", 'selected' => true);
-if (elgg_is_logged_in()) {
-	$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
-} else {
-	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addtag" class="transitions-tab-content">' . elgg_echo('transitions:accountrequired') . '</div>';
-}
-//$tab_content .= '<div class="clearfloat"></div><br />';
-
 // Contributed support links
-$params['tabs'][] = array('title' => elgg_echo('transitions:addlink'), 'url' => "#transitions-{$transitions->guid}-addlink");
+$params['tabs'][] = array('title' => elgg_echo('transitions:addlink'), 'url' => "#transitions-{$transitions->guid}-addlink", 'selected' => true);
 if (elgg_is_logged_in()) {
-	$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+	$tab_content .= elgg_view_form('transitions/addlink', array('id' => "transitions-{$transitions->guid}-addlink", 'class' => "transitions-tab-content"), array('guid' => $transitions->guid));
 //$tab_content .= '<div class="clearfloat"></div><br />';
 } else {
-	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addlink" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
+	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addlink" class="transitions-tab-content">' . elgg_echo('transitions:accountrequired') . '</div>';
 }
+
+// Contributed tags
+$params['tabs'][] = array('title' => elgg_echo('transitions:addtag'), 'url' => "#transitions-{$transitions->guid}-addtag");
+if (elgg_is_logged_in()) {
+	$tab_content .= elgg_view_form('transitions/addtag', array('id' => "transitions-{$transitions->guid}-addtag", 'class' => "transitions-tab-content hidden"), array('guid' => $transitions->guid));
+} else {
+	$tab_content .= '<div id="transitions-'. $transitions->guid . '-addtag" class="transitions-tab-content hidden">' . elgg_echo('transitions:accountrequired') . '</div>';
+}
+//$tab_content .= '<div class="clearfloat"></div><br />';
 
 // Add relation to related actors (anyone)
 if ($transitions->category == 'project') {
@@ -402,6 +406,7 @@ $tab_content .= elgg_view_module('info', false, $embedcode, array('id' => "trans
 $body .= elgg_view('navigation/tabs', $params);
 //$body .= '<div style="border:1px solid #DCDCDC; border-top:0; padding:0.5em 1em;">';
 $body .= $tab_content;
+$body .= '<div class="clearfloat"></div>';
 //$body .= '</div>';
 
 

@@ -1,11 +1,11 @@
 <?php
 /** Elgg notification_messages plugin language
  * @author Florian DANIEL - Facyla
- * @copyright Florian DANIEL - Facyla 2014
+ * @copyright Florian DANIEL - Facyla 2015
  * @link http://id.facyla.net/
  */
 
-$french = array(
+return array(
 
 	'notification_messages' => "Message de notification",
 	
@@ -42,6 +42,20 @@ $french = array(
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(sans titre)",
+	'notification_messages:objects:body' => "%s a publié %s dans %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
+	'notification_messages:objects:body:nocontainer' => "%s a publié %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
 	// Messages
 	'notification_messages:email:subject' => "[%s] Message de %s : %s",
 	
@@ -55,5 +69,4 @@ $french = array(
 	
 );
 
-add_translation("fr", $french);
 

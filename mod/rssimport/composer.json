@@ -1,0 +1,21 @@
+{
+    "name": "au/rssimport",
+    "type": "elgg-plugin",
+    "description": "Import rss feed items into blogs, bookmarks, and pages",
+    "homepage": "https://github.com/AU-Landing-Project/rssimport",
+    "keywords": ["elgg", "plugin", "rss", "import", "rssimport", "AU"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Matt Beckett"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/AU-Landing-Project/rssimport/issues"
+    },
+    "require": {
+        "php": ">=5.4",
+        "composer/installers": ">=1.0.8",
+        "simplepie/simplepie": "1.3.1"
+    }
+}

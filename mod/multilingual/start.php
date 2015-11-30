@@ -207,6 +207,7 @@ function multilingual_get_main_language() {
 
 
 // Get entity lang
+// And also set it if empty
 function multilingual_get_entity_language($entity) {
 	if (!empty($entity->lang)) { return $entity->lang; }
 	
@@ -262,7 +263,12 @@ function multilingual_get_valid_subtypes($type = 'object') {
 
 
 
-// Bouton d'ajout de traduction
+/* Bouton d'ajout de traduction
+ * Affichage de la langue du contenu affiché
+ * + contenu principal
+ * + traductions existantes
+ * + traductions possibles (non créées)
+ */
 function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_in_context('widgets')) { return $return; }
 	$entity = $params['entity'];
@@ -270,42 +276,69 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 	//if (elgg_instanceof($entity)) {
 	// Limit to objects for the moment (groups and even more users require other special attentions)
 	if (elgg_instanceof($entity, 'object')) {
+		$displayed_guids = array();
+		
 		$object_subtypes = multilingual_get_valid_subtypes();
 		$subtype = $entity->getSubtype();
 		if (empty($object_subtypes) || in_array($subtype, $object_subtypes)) {
-			$main_lang = multilingual_get_main_language();
 			$languages = multilingual_available_languages();
+			$main_lang = multilingual_get_main_language();
+			$current_lang = multilingual_get_entity_language($entity);
 		
 			$main_entity = multilingual_get_main_entity($entity);
-			$current_lang = multilingual_get_entity_language($entity);
 		
 			$view_url = $main_entity->getURL();
 			$translate_url = elgg_get_site_url() . 'multilingual/translate/' . $main_entity->guid . '/';
 		
 			// Display current entity language
-			$class = 'elgg-menu-multilingual';
+			$class = 'elgg-menu-multilingual elgg-selected';
 			if ($entity->guid == $main_entity->guid) {
 				$title = elgg_echo('multilingual:menu:currentlang', array($languages[$current_lang]));
+				$title .= ' (' . elgg_echo('multilingual:menu:original') . ')';
 				$href = false;
-				$class .= ' elgg-selected';
+				$class .= ' multilingual-main';
 			} else {
 				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$current_lang]));
 				$href = $view_url;
 			}
 			$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $current_lang . '.gif" alt="' . $current_lang . '" title="' . $title . '" />';
 			$return[] = ElggMenuItem::factory(array(
-					'name' => 'multilingual-current', 
+					'name' => 'multilingual-version-' . $entity->lang, 
 					'text' => $text, 'href' => $href, 'title' => $title, 
 					'priority' => 118, 'item_class' => $class, 
 				));
-			// Remove from new translations array
+			// Remove from missing translations array
 			unset($languages[$current_lang]);
-		
+			$displayed_guids[] = $entity->guid;
+			
+			// Display main entity
+			if (!in_array($main_entity->guid, $displayed_guids)) {
+				$class = 'elgg-menu-multilingual multilingual-main';
+				$main_entity_lang = $main_entity->lang;
+				if (empty($main_entity_lang)) { $main_entity_lang = $main_lang; }
+				$title = elgg_echo('multilingual:menu:viewinto', array($languages[$main_entity_lang]));
+				$title .= ' (' . elgg_echo('multilingual:menu:original') . ')';
+				$href = $main_entity->getURL();
+				$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $main_entity_lang . '.gif" alt="' . $main_entity_lang . '" title="' . $title . '" />';
+				$return[] = ElggMenuItem::factory(array(
+						'name' => 'multilingual-version-' . $main_entity->lang, 
+						'text' => $text, 'href' => $href, 'title' => $title, 
+						'priority' => 118, 'item_class' => $class, 
+					));
+				// Remove from missing translations array
+				unset($languages[$main_entity_lang]);
+				$displayed_guids[] = $main_entity->guid;
+			}
+			
 			// Display existing translations
 			$translations = multilingual_get_translations($main_entity);
 			if ($translations) {
 				foreach ($translations as $ent) {
+					// Skip already displayed entities
+					if (in_array($ent->guid, $displayed_guids)) { continue; }
 					$class = 'elgg-menu-multilingual';
+					//if ($ent->guid == $main_entity->guid) { $class .= ' multilingual-main'; }
+					/*
 					if ($entity->guid == $ent->guid) {
 						$title = elgg_echo('multilingual:menu:currentlang', array($languages[$ent->lang]));
 						$href = false;
@@ -315,18 +348,24 @@ function multilingual_entity_menu_setup($hook, $type, $return, $params) {
 						//$href = $view_url . '?lang=' . $ent->lang;
 						$href = $ent->getURL();
 					}
+					*/
+					$title = elgg_echo('multilingual:menu:viewinto', array($languages[$ent->lang]));
+					//$href = $view_url . '?lang=' . $ent->lang;
+					$href = $ent->getURL();
 					$text = '<img src="' . elgg_get_site_url() . 'mod/multilingual/graphics/flags/' . $ent->lang . '.gif" alt="' . $ent->lang . '" title="' . $title . '" />';
 					$return[] = ElggMenuItem::factory(array(
 							'name' => 'multilingual-version-' . $ent->lang, 
 							'text' => $text, 'href' => $href, 'title' => $title, 
 							'priority' => 118, 'item_class' => $class, 
 						));
-					// Remove from new translations array
+					// Remove from missing translations array
 					unset($languages[$ent->lang]);
+					$displayed_guids[] = $ent->guid;
 				}
 			}
 		}
 		
+		// Display missing translations
 		// @TODO : use a different access rule for translations ?  then maybe a translator role could allow editing other languages versions (but alternative versions *only* - and not the main content)
 		if (elgg_instanceof($main_entity) && $main_entity->canEdit()) {
 			foreach ($languages as $lang_code => $lang_name) {
@@ -372,6 +411,8 @@ function multilingual_get_translations($entity){
 /* Return existing translation in a given language
  */
 function multilingual_get_translation($entity, $lang_code = 'en'){
+	// Is this already the wanted translation ?
+	if ($entity->lang == $lang_code) { return $entity; }
 	// Get existing translation
 	$translations = elgg_get_entities_from_relationship(array(
 			'relationship' => 'has_translation',
@@ -382,6 +423,8 @@ function multilingual_get_translation($entity, $lang_code = 'en'){
 			//'metadata_name_value_pairs' => array('name' => 'lang', 'value' => $lang_code . '%', 'operand' => 'LIKE'),
 		));
 	if ($translations) { return $translations[0]; }
+	// If no translation found and no language set for entity, use the entity
+	if (empty($entity->lang) && (multilingual_get_main_language() == $lang_code)) { return $entity; }
 	return false;
 }
 
@@ -403,6 +446,128 @@ function multilingual_get_main_entity($translation){
 }
 
 
+/* @TODO : has or count translation ? return number of translations if any
+ *  but get_translations almost offers that function...
+ * Case 1 : Is main entity : count translations from that entity
+ * Case 2 : is a translation => find original and count 
+ */
+function multilingual_count_translations($entity) {
+	// Get main entity
+	$main = multilingual_get_main_entity($entity);
+	// Count translations of main entity
+	$translations = multilingual_get_translations($main);
+	// Return total count (main + translations)
+	$guids = array();
+	$guids[$main->guid] = $main;
+	if ($translations) {
+		foreach($translations as $ent) {
+			$guids[$ent->guid] = $ent;
+		}
+	}
+	return count($guids);
+}
+
+
+/* Determines the best version to display
+ * Ensures it determines no less and no more than 1 version per translated content set.
+ * Top : same language (explicit lang or main entity)
+ * Then : same language as site default
+ : Finally : main entity
+ */
+function multilingual_select_best_version($entity, $lang = false) {
+	if (!$lang) { $lang = get_current_language(); }
+	$main_lang = multilingual_get_main_language();
+	$main = multilingual_get_main_entity($entity);
+
+	// Same as current language
+	if ($entity->lang == $lang) { return $entity; }
+	// Also if current language is the same as main language, we can use main entity
+	if (($main_lang == $lang) && ($entity->guid == $main->guid)) { return $entity; }
+	// Any other translation in current language
+	$translations = multilingual_get_translations($entity);
+	foreach($translations as $ent) {
+		if ($ent->lang == $lang) { return $ent; }
+	}
+	
+	// Any other translation in main language
+	foreach($translations as $ent) {
+		if ($ent->lang == $main_lang) { return $ent; }
+	}
+	
+	// If we've got still nothing, content will be anyway in another language => main entity is best choice
+	return $main;
+}
+
+// Determines if this entity is the best version to display
+function multilingual_is_best_version($entity) {
+	$best_version = multilingual_select_best_version($entity);
+	if ($entity->guid == $best_version->guid) { return true; }
+	return false;
+}
+
+
+// Callback function for get_entities - removes duplicates caused by translations
+// @TODO : this is not the good level, as this is applied after selecting the entities. 
+// We need to exclude translation duplicates before getting the entities (for list and getter functions, offset, etc.)
+function multilingual_entity_row_to_elggstar($row) {
+	if (!($row instanceof stdClass)) { return $row; }
+	if ((!isset($row->guid)) || (!isset($row->subtype))) { return $row; }
+	$new_entity = false;
+	
+	// Create a memcache cache if we can
+	static $newentity_cache;
+	if ((!$newentity_cache) && (is_memcache_available())) { $newentity_cache = new ElggMemcache('new_entity_cache'); }
+	if ($newentity_cache) { $new_entity = $newentity_cache->load($row->guid); }
+	if ($new_entity) { return $new_entity; }
+
+	// load class for entity if one is registered
+	$classname = get_subtype_class_from_id($row->subtype);
+	if ($classname != "") {
+		if (class_exists($classname)) {
+			$new_entity = new $classname($row);
+			if (!($new_entity instanceof ElggEntity)) {
+				$msg = $classname . " is not a " . 'ElggEntity' . ".";
+				throw new ClassException($msg);
+			}
+		} else {
+			error_log("Class '" . $classname . "' was not found, missing plugin?");
+		}
+	}
+
+	if (!$new_entity) {
+		//@todo Make this into a function
+		switch ($row->type) {
+			case 'object' :
+				$new_entity = new ElggObject($row);
+				break;
+			case 'user' :
+				$new_entity = new ElggUser($row);
+				break;
+			case 'group' :
+				$new_entity = new ElggGroup($row);
+				break;
+			case 'site' :
+				$new_entity = new ElggSite($row);
+				break;
+			default:
+				$msg = "Entity type " . $row->type . " is not supported.";
+				throw new InstallationException($msg);
+		}
+	}
+
+	// Cache entity if we have a cache available
+	if (($newentity_cache) && ($new_entity)) {
+		$newentity_cache->save($new_entity->guid, $new_entity);
+	}
+	
+	// Hide duplicate translations
+	$display = multilingual_is_best_version($new_entity);
+	if (!$display) return false;
+	
+	return $new_entity;
+}
+
+
 
 /* Add new translation to entity, or update existing translation
  */
@@ -418,6 +583,8 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 		if (in_array($subtype, $object_subtypes)) {
 			if ($entity->canEdit()) {
 				$translation = clone $entity;
+				$translation->time_created = time();
+				$translation->time_updated = time();
 		
 				// @TODO decide who is the owner..  it may be the original object (easy deletion + inheritance), or the original owner, or the current editor
 		

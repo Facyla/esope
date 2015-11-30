@@ -72,7 +72,7 @@ pre, code { word-break:break-all; }
 
 /* Edit link on editable block hover */
 .cmspages-admin-block { float:right; margin: 0 0 3px 6px; }
-.cmspages-editable { /* padding:5px; */ display:inline-block; }
+.cmspages-editable { /* padding:5px; */ display:inline-block; width: 100%; }
 .cmspages-editable:hover { /* border: 2px dashed; padding:3px; */ background: rgba(220,220,255,0.3); display: inline-block; }
 .cmspages-editable .fa.fa-edit { color: black; text-shadow: -1px 1px 0px white; }
 

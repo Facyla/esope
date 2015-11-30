@@ -80,7 +80,7 @@ $info .= '<div class="controls">' . $controls . "</div>";
 $info .= '<div class="clearfloat"></div>';
 $info .= "<strong>".elgg_echo('feedback:list:from').": </strong>" . $feedback->id . '<span style="float:right;">' . elgg_view_friendly_time($feedback->time_created) . "</span><br />";
 $info .= "<strong>".elgg_echo('feedback:list:page').": </strong>" . $page . "<br />";
-$info .= '<br /><blockquote>' . nl2br($feedback->txt) . '</blockquote>';
+$info .= '<br /><blockquote>' . parse_urls(nl2br($feedback->txt)) . '</blockquote>';
 
 // Commentaires
 $comment = elgg_get_plugin_setting("comment", "feedback");

@@ -6,7 +6,6 @@
 
 $guid = get_input('guid');
 $lang = get_input('lang', 'en');
-
 if (!empty($lang)) $lang_name = elgg_echo($lang);
 
 $title = elgg_echo('multilingual:translate');
@@ -18,7 +17,9 @@ $entity = get_entity($guid);
 if (elgg_instanceof($entity)) {
 	$base_url = $entity->getURL() . '?lang=';
 	$languages = multilingual_available_languages();
-	// Get translation, if is exists
+	// Get main entity
+	//$main_entity = multilingual_get_main_entity($entity);
+	// Get target language translation, if is exists
 	$translation = multilingual_get_translation($entity, $lang);
 	
 	$content .= '<br />';
@@ -31,11 +32,13 @@ if (elgg_instanceof($entity)) {
 	} else {
 		$translation = multilingual_add_translation($entity, $lang);
 		//system_message(elgg_echo('multilingual:translate:newcreated'));
+		$content .= '<blockquote>';
 		if (elgg_instanceof($translation)) {
-			$content .= '<blockquote>' . elgg_echo('multilingual:translate:newcreated') . '</blockquote>';
+			$content .= elgg_echo('multilingual:translate:newcreated');
 		} else {
-			$content .= '<blockquote>' . elgg_echo('multilingual:error:cannottranslate') . '</blockquote>';
+			$content .= elgg_echo('multilingual:error:cannottranslate');
 		}
+		$content .= '</blockquote>';
 	}
 	
 	if (elgg_instanceof($translation)) {
@@ -46,7 +49,9 @@ if (elgg_instanceof($entity)) {
 	
 	
 	// SIDEBAR
-	$l_code = $ent->lang;
+	// Original version
+	$l_code = $entity->lang;
+	//$l_code = $main_entity->lang;
 	if (empty($l_code)) { $l_code = get_current_language(); }
 	$l_name = $languages[$l_code];
 	$sidebar .= '<h3>' . elgg_echo('multilingual:translate:original') . '</h3>';

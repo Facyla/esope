@@ -6,7 +6,7 @@
 $widget_id = $vars['entity']->guid;
 
 // once autocomplete is working use that
-$groups = elgg_get_logged_in_user_entity()->getGroups("", 0);
+$groups = elgg_get_logged_in_user_entity()->getGroups(array('limit' => 0));
 $mygroups = array();
 if (!$vars['entity']->group_guid) {
 	$mygroups[0] = '';

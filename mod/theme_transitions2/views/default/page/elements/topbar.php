@@ -8,7 +8,25 @@
 // Transitions² : use custom site menu
 $menu = elgg_get_plugin_setting('menu_topbar', 'theme_transitions2');
 if (empty($menu)) $menu = 'topbar';
+
+// Ajout au menu
+/*
+if (elgg_is_active_plugin('language_selector')) {
+	$language_selector = elgg_view('language_selector/default');
+	if ($language_selector) {
+		echo '<li class="language-selector">' . $language_selector . '</li>';
+	}
+}
+elgg_register_menu_item('extras', array(
+	'name' => 'bookmark',
+	'text' => elgg_view_icon('push-pin-alt'),
+	'href' => "bookmarks/add/$user_guid?address=$address",
+	'title' => elgg_echo('bookmarks:this'),
+	'rel' => 'nofollow',
+));
+*/
 ?>
+
 <a class="elgg-button-nav" rel="toggle" data-toggle-selector=".elgg-topbar-nav-collapse" href="#">
 	<span class="icon-bar"></span>
 	<span class="icon-bar"></span>

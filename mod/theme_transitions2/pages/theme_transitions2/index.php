@@ -32,13 +32,23 @@ $content .= '<div class="flexible-block transitions-home-slider">';
 	$is_content_admin = theme_transitions2_user_is_platform_admin();
 	$slides = array();
 	$slides_admin = '<div class="clearfloat"></div>';
+	$lang = get_language();
 	for ($i=1; $i<=4; $i++) {
-		$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
+		// Try to use translated slider
+		if ($lang == 'fr') {
+			$article = elgg_get_plugin_setting("home-article$i", 'theme_transitions2');
+		} else {
+			$article = elgg_get_plugin_setting("home-article$i" . "_" . $lang, 'theme_transitions2');
+		}
 		$slide_content = elgg_view('theme_transitions2/slider_homeslide', array('guid' => $article));
 		if (!empty($slide_content)) { $slides[] = $slide_content; }
 		if ($is_content_admin) {
 			$slides_admin .= '<div class="flexible-block" style="width:auto; margin-right:1em;">';
-			$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
+			if ($lang == 'fr') {
+				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i", 'value' => $article));
+			} else {
+				$slides_admin .= elgg_view_form('theme_transitions2/select_article', array(), array('name' => "home-article$i" . "_" . $lang, 'value' => $article));
+			}
 			$slides_admin .= '</div>';
 		}
 	}
@@ -89,7 +99,7 @@ $content .= '</div></div><div class="elgg-page-body"><div class="elgg-inner">';
 // SELECTION ALEATOIRE PARMI ARTICLE SELECTIONNES DU CATALOGUE
 // @TODO Par défaut : celles sélectionnées par la rédaction
 $dbprefix = elgg_get_config('dbprefix');
-$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true);
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'count' => true, 'pagination' => true);
 $count = elgg_get_entities_from_metadata($list_options);
 
 // @TODO Exclude featured and background contributions ?
@@ -102,13 +112,13 @@ $meta_background_id = elgg_get_metastring_id('background');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => "($meta_featured_id, $meta_background_id)", 'operand' => 'NOT IN');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background', 'operand' => '<>');
 $catalogue = '';
-$catalogue .= '<div class="transitions-gallery transitions-gallery-recent hidden">';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-recent">';
 $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
 
 // Featured content only
-$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
-$catalogue .= '<div class="transitions-gallery transitions-gallery-featured">';
+$list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'pagination' => true, 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
+$catalogue .= '<div class="transitions-gallery transitions-gallery-featured hidden">';
 $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
 
@@ -135,7 +145,7 @@ $catalogue .= '</div>';
 
 
 // Switch filter (+ onChange)
-$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'recent'));
 
 $content .= '<h2>' . elgg_echo('theme_transitions2:transitions:title') . '</h2>';
 //$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';

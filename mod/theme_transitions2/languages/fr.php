@@ -13,7 +13,7 @@ return array(
 	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
 	'theme_transitions2:transitions:title' => "<span>Vos</span> contributions",
 	'theme_transitions2:partners:title' => "<span>Impulsé</span> par",
-	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
+	'theme_transitions2:supporters:title' => "<span>Soutenu</span> par",
 	'theme_transitions2:contribute:button' => "Partagez&nbsp;!",
 	
 	'theme_transitions2:register:optionalfields' => "Les champs suivants sont facultatifs. Si vous n'indiquez rien, ils seront automatiquement créés pour vous.",
@@ -49,6 +49,10 @@ Mot de passe : %s
 	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
 	'theme_transitions2:news' => "Actus",
 	'theme_transitions2:news:title' => "Actus",
+	'theme_transitions2:challenge' => "Défis",
+	'theme_transitions2:challenge:title' => "Défis",
+	
+	'theme_transitions:comment:add:challenge' => "Réagir à ce défi",
 	
 	
 	// Main translations overrides
@@ -76,6 +80,7 @@ Mot de passe : %s
 	'transitions:search:go' => "&#xf002;",
 	'transitions:search:placeholder' => "&#xf002; Rechercher une contribution",
 	
+	'profile:location' => "Ville",
 	'profile:organisation' => "Organisation",
 	'profile:linkedin' => "URL de votre profil LinkedIn",
 	'profile:twitter' => "URL de votre profil Twitter",
@@ -93,6 +98,25 @@ Mot de passe : %s
 	'members:title:online' => 'Contributeurs en ligne',
 	'members:list:popular:none' => 'Aucun contributeur n\'a de contact.',
 	
+	'likes:notifications:subject' => '%s apprécie votre contribution "%s"',
+	'likes:notifications:body' =>
+'Bonjour %1$s,
+
+%2$s apprécie votre contribution \'%3$s\' sur %4$s
+
+Voir votre contribution ici :
+
+%5$s
+
+ou voir le profil de %2$s ici :
+
+%6$s
+
+Merci,
+%4$s
+',
+	
+	'name' => "Prénom et Nom",
 	
 );
 

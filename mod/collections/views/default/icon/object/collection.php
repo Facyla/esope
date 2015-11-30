@@ -5,7 +5,7 @@ $size = elgg_extract("size", $vars, false);
 $align = elgg_extract("align", $vars, false);
 
 // Display image only if set, and also force default image for gallery only (no image otherwise)
-if ($entity && elgg_instanceof($entity, "object", "collection") && ($entity->icontime || ($size == 'gallery'))) {
+if ($entity && elgg_instanceof($entity, "object", "collection") && ($entity->icontime || in_array($size, array('gallery', 'master', 'listing', 'large')))) {
 	
 	$href = elgg_extract("href", $vars, $entity->getURL());
 	

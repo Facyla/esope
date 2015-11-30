@@ -27,7 +27,7 @@ return array(
 	'transitions:save_status' => "Dernier enregistrement:",
 	
 	'transitions:revision' => "Version",
-	'transitions:auto_saved_revision' => "Versio automatiquement enregistrée",
+	'transitions:auto_saved_revision' => "Version automatiquement enregistrée",
 
 	// messages
 	'transitions:message:saved' => "Contribution enregistrée.",
@@ -98,10 +98,14 @@ Voir et commenter cette contribution :
 	'transitions:resourcelang' => "Langue des ressources jointes",
 	'transitions:resourcelang:details' => "Indiquez la langue de la ressource jointe (URL ou fichier), si celle-ci est disponible dans une autre langue.",
 	'transitions:territory' => "Territoire",
-	'transitions:territory:details' => "Si la ressource concerne un territoire, veuillez indiquer lequel. Veuillez indiquer une adresse précise afin de pouvoir afficher la ressource sur une carte, par ex. \"8 passage Brûlon, Paris, France\" ou \"Drôme, France\" ou \"Madagascar\".",
+	'transitions:territory:details' => "Si la ressource concerne un territoire, veuillez indiquer lequel. Donnez une adresse précise afin de pouvoir afficher la ressource sur une carte, par ex. \"8 passage Brûlon, Paris, France\" ou \"Drôme, France\" ou \"Madagascar\".",
 	'transitions:actortype' => "Type d'acteur",
-	'transitions:startdate' => "Date de début",
-	'transitions:enddate' => "Date de fin",
+	'transitions:startdate' => "Date et heure de début",
+	'transitions:enddate' => "Date et heure de fin",
+	'transitions:start' => "Date de début",
+	'transitions:start:format' => "Ex. JJ/MM/AAAA, MM/AAAA ou AAAA",
+	'transitions:end' => "Date de fin",
+	'transitions:end:format' => "Ex. JJ/MM/AAAA, MM/AAAA ou AAAA",
 	'transitions:dateformat' => "M Y",
 	'transitions:dateformat:time' => "d M Y à H:i",
 	'transitions:date:since' => "Depuis le",
@@ -121,12 +125,14 @@ Voir et commenter cette contribution :
 	'transitions:featured:title' => "Contributions choisies",
 	'transitions:background:title' => "Contributions en retrait",
 	'transitions:featured' => "Mettre en avant / en retrait",
+	'transitions:featured:details' => "Permet de mettre plus en avant ou plus en retrait une publication. Ceci joue sur la visibilité de la contribution, en l'affichant en Une, ou en la retirant des résultats par défaut.",
 	'transitions:featured:no' => "Non (par défaut)",
 	'transitions:featured:yes' => "Oui (mis au second plan)",
-	'transitions:featured:default' => "Standard (par défaut)",
-	'transitions:featured:featured' => "Mettre en avant (plus visible)",
-	'transitions:featured:background' => "Mettre en retrait (moins visible)",
+	'transitions:featured:default' => "Standard",
+	'transitions:featured:featured' => "Mis en avant",
+	'transitions:featured:background' => "En retrait",
 	'transitions:search:rss' => "Flux RSS pour cette recherche",
+	'transitions:search:ical' => "Flux iCal",
 	'transitions:filter' => "Filtrer les contributions",
 	'transitions:filter:featured' => "Choisies",
 	'transitions:filter:background' => "En retrait",
@@ -138,6 +144,7 @@ Voir et commenter cette contribution :
 	// Other forms
 	'transitions:accountrequired' => "Veuillez vous connecter pour contribuer.<br />Si vous n'avez pas encore de compte,  c'est très rapide ! <a href=\"" . $url . "register\" target=\"_blank\" class=\"elgg-button elgg-button-action\">Créer mon compte de contributeur Transitions²</a>",
 	'transitions:tags_contributed' => "Tags des contributeurs",
+	'transitions:actors_contributed' => "Acteurs associés au projet",
 	'transitions:addtag' => "Tagguer",
 	'transitions:addtag:submit' => "Ajouter un tag",
 	'transitions:addtag:details' => "Vous pouvez ajouter un ou plusieurs tags pour aider à mieux classer cette ressource.",
@@ -157,7 +164,10 @@ Voir et commenter cette contribution :
 	'transitions:addlink:comment:placeholder' => "Pourquoi un lien vers cette ressource ?",
 	'transitions:addlink:add' => "+ Ajouter un lien",
 	'transitions:addlink:remove' => "Supprimer ce lien",
+	'transitions:addactor:add' => "+ Ajouter un acteur",
 	'transitions:addlink:remove:confirm' => "Confirmez-vous vouloir supprimer ce lien ?",
+	'transitions:addactor:remove' => "Supprimer cet acteur",
+	'transitions:addactor:remove:confirm' => "Confirmez-vous vouloir supprimer cet acteur ?",
 	'transitions:links_supports' => "Ressources en accord",
 	'transitions:relation:supports' => "en soutien",
 	'transitions:links_invalidates' => "Ressources en opposition",
@@ -255,5 +265,7 @@ Voir et commenter cette contribution :
 	
 	
 	'transitions:error:missing:category' => "Vous devez spécifier la catégorie de votre contribution !",
+	
+	'transitions:news:comments' => "Réagir / Afficher les réactions (%s)",
 	
 );
