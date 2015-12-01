@@ -95,15 +95,14 @@ $content .= '<div class="transitions-index-search">';
 		// Category
 		$content .= '<p>';
 		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category, 'onChange' => "transitions_toggle_search_fields(this.value);")) . '</label>';
-		$content .= ' &nbsp; ';
 		// conditionnel, ssi catégorie = actor
-		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+		$content .= '<label class="transitions-actortype"> &nbsp; ' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		// Langue
-		$content .= '<label class="transitions-lang">' . elgg_echo('multilingual:form:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
+		$content .= ' &nbsp; <label class="transitions-lang">' . elgg_echo('multilingual:form:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
 		// Status : published / draft
 		// @TODO
 		if (elgg_is_admin_logged_in()) {
-				$content .= '<label class="transitions-lang">' . elgg_echo('transitions:status') . ' ' . elgg_view('input/select', array('name' => 'status', 'options_values' => $status_opt, 'value' => $status)) . '</label>';
+				$content .= ' &nbsp; <label class="transitions-lang">' . elgg_echo('transitions:status') . ' ' . elgg_view('input/select', array('name' => 'status', 'options_values' => $status_opt, 'value' => $status)) . '</label>';
 		}
 		$content .= '</p>';
 
