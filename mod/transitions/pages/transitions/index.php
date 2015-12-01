@@ -37,8 +37,7 @@ $lang_opt = transitions_get_lang_opt(null, true);
 
 
 // Bookmarklet
-$bookmarklet = elgg_view('transitions/sidebar/bookmarklet');
-$content .= $bookmarklet;
+//$content .= elgg_view('transitions/sidebar/bookmarklet');
 
 // Form de contribution rapide
 /*

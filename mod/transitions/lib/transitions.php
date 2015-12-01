@@ -274,9 +274,12 @@ function transitions_get_page_content_edit($page, $guid = 0, $revision = NULL) {
 		$title = elgg_echo('transitions:add');
 		$content = elgg_view_form('transitions/save', $vars, $body_vars);
 	}
-
+	
+	// Bookmarklet helper
+	$bookmarklet = elgg_view('transitions/bookmarklet');
+	
 	$return['title'] = $title;
-	$return['content'] = $content;
+	$return['content'] = $bookmarklet . $content;
 	$return['sidebar'] = $sidebar;
 	return $return;
 }

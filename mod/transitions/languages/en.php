@@ -224,8 +224,8 @@ View and comment on the contribution:
 	'transitions:bookmarklet' => "Bookmarklet",
 	'transitions:bookmarklet:link' => "+Transitions²",
 	'transitions:bookmarklet:title' => "Add this link to your shortcuts to publish directly on Transitions²",
-	'transitions:bookmarklet:description' => "The bookmarklet \"+Transitions²\" facilitates the sharing of online resources on Transitions². To use it, drag the above button to the link bar of your browser. If you use Internet Explorer, right-clikc on the link and add it to faites un clic droit sur le bouton et ajoutez-leyour favorites, then in your links bar.",
-	'transitions:bookmarklet:descriptionie' => "If you use Internet Explorer, right-clikc on the link and add it to faites un clic droit sur le bouton et ajoutez-leyour favorites, then in your links bar.",
+	'transitions:bookmarklet:description' => "The bookmarklet \"+Transitions²\" facilitates the sharing of online resources on Transitions². To use it, drag the above button to the link bar of your browser. If you use Internet Explorer, right-click on the link and add it to your favorites, then in your links bar.",
+	'transitions:bookmarklet:descriptionie' => "If you use Internet Explorer, right-click on the link and add it to your favorites, then in your links bar.",
 	'transitions:bookmarklet:description:conclusion' => "You can create a new contribution from any web page by clicking on the bookmarklet.",
 	
 	
