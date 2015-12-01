@@ -51,5 +51,10 @@ function hybridauth_update_user_details($fields, $user) {
 }
 
 
+/* List of providers */
+function hybridauth_get_providers() {
+	return array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' => 'Google', 'facebook' => 'Facebook');
+}
+
 
 

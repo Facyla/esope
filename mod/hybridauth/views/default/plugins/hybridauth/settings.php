@@ -1,6 +1,5 @@
 <?php
-global $CONFIG;
-$providers = array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' => 'Google', 'facebook' => 'Facebook');
+$providers = hybridauth_get_providers();
 
 $yes_no_opt = array( 'yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no') );
 $no_yes_opt = array_reverse($yes_no_opt);

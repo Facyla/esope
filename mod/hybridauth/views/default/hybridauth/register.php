@@ -4,7 +4,7 @@ $content = '';
 
 // @TODO : list enabled identity providers
 
-$providers = array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' => 'Google', 'facebook' => 'Facebook');
+$providers = hybridauth_get_providers();
 
 if ($providers) {
 	if (!elgg_is_logged_in()) {
