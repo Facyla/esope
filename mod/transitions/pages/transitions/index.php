@@ -31,12 +31,15 @@ $actor_type = get_input('actor_type', '');
 if ($actor_type == 'all') $actor_type = '';
 $lang = get_input('lang', '');
 if ($lang == 'all') $lang = '';
+$status = get_input('status', '');
+if ($status == 'all') $status = '';
 
 $categories = transitions_get_category_opt(null, false);
 $category_opt = transitions_get_category_opt(null, true, true, true);
 $actortype_opt = transitions_get_actortype_opt(null, true, true);
 $lang_opt = transitions_get_lang_opt(null, true, false, true);
 $status_opt = array(
+		'' => '',
 		'all' => elgg_echo('transitions:status:all'),
 		'draft' => elgg_echo('status:draft'),
 		'published' => elgg_echo('status:published')
@@ -149,6 +152,9 @@ $content .= '<div class="transitions-index-search">';
 	}
 	if (!empty($lang)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang);
+	}
+	if (!empty($status)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'status', 'value' => $status);
 	}
 	if (!empty($query)) {
 		$db_prefix = elgg_get_config('dbprefix');
