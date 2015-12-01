@@ -17,13 +17,13 @@ function hybridauth_init() {
 	$root = elgg_get_plugins_path() . 'hybridauth/';
 	elgg_register_library('hybridauth', $root."vendors/hybridauth/hybridauth/Hybrid/Auth.php");
 	elgg_register_library('elgg:hybridauth', $root."lib/hybridauth/hybridauth.php");
-	elgg_load_library('hybridauth');
 	
 }
 
 
 // Gestion des URL
 function hybridauth_page_handler($page) {
+	elgg_load_library('hybridauth');
 	//require_once elgg_get_plugins_path() . "hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php";
 	
 	if (!isset($page[0])) { $page[0] = ''; }
@@ -62,6 +62,13 @@ function hybridauth_page_handler($page) {
 			include($path . "pages/hybridauth/index.php");
 	}
 	return true;
+}
+
+
+
+/* List of providers */
+function hybridauth_get_providers() {
+	return array('twitter' => 'Twitter', 'linkedin' => 'LinkedIn', 'google' => 'Google', 'facebook' => 'Facebook');
 }
 
 
