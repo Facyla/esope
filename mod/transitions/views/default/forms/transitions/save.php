@@ -34,7 +34,7 @@ if (empty($vars['resource_lang'])) { $vars['resource_lang'] = get_language(); }
 // Get select options
 $lang_opt = transitions_get_lang_opt($vars['lang'], true);
 $full_lang_opt = transitions_get_lang_opt($vars['lang'], true, true);
-$actortype_opt = transitions_get_actortype_opt($vars['actortype'], true);
+$actortype_opt = transitions_get_actortype_opt($vars['actor_ype'], true);
 $category_opt = transitions_get_category_opt($vars['category'], true);
 
 // Set some values from URL, if set
@@ -369,7 +369,7 @@ $actortype_label = elgg_echo('transitions:actortype');
 $actortype_input = elgg_view('input/select', array(
 	'name' => 'actor_type',
 	'id' => 'transitions_actortype',
-	'value' => $vars['actortype'],
+	'value' => $vars['actor_type'],
 	'options_values' => $actortype_opt,
 ));
 
