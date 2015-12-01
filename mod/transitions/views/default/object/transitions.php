@@ -247,18 +247,21 @@ if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 					if ($is_admin) {
 						echo '<div class="transitions-gallery-admin">';
 							echo '<div class="transitions-gallery-inner">';
-								switch($transitions->featured) {
-									case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i>&nbsp; '; break;
-									case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i>&nbsp; '; break;
-									default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i>&nbsp; ';
-								}
+								// Language
+								echo elgg_view('output/lang', array('entity' => $transitions)) . '&nbsp; ';
+								// Published / draft
 								switch($transitions->status) {
 									case 'published': echo '<i class="fa fa-eye" title="' . elgg_echo('status:published') . '"></i>&nbsp; '; break;
 									case 'draft':
 									default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i>&nbsp; ';
 								}
+								// Featured content
+								switch($transitions->featured) {
+									case 'featured': echo '<i class="fa fa-star" title="' . elgg_echo('transitions:featured:featured') . '"></i>&nbsp; '; break;
+									case 'background': echo '<i class="fa fa-star-o" title="' . elgg_echo('transitions:featured:background') . '"></i>&nbsp; '; break;
+									default: echo '<i class="fa fa-star-half-o" title="' . elgg_echo('transitions:featured:default') . '"></i>&nbsp; ';
+								}
 							echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a>&nbsp; ';
-							echo elgg_view('output/lang', array('entity' => $transitions)) . '&nbsp; ';
 							echo '</div>';
 						echo '</div>';
 					}
