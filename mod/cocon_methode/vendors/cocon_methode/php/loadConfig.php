@@ -29,7 +29,7 @@ $config = array(
 
 $config = getConfiguration($gid);
 $_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
-error_log("Cocon Kit : loadConfig : {$_SESSION['check_id']} = $gid - {$config['cycle_id']}"); // debug
+//error_log("Cocon Kit : loadConfig : {$_SESSION['check_id']} = $gid - {$config['cycle_id']}"); // debug
 
 die(json_encode($config));
 

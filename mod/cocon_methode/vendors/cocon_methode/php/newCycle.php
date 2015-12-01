@@ -36,16 +36,14 @@
 		die(json_encode($response));
 	}
 
-$check_id = md5($gid.'_'.$cid);
-error_log("Cocon Kit : newCycle : {$_POST['gid']} / {$_POST['cid']} => {$_SESSION['check_id']} / $check_id"); // debug
+	$check_id = md5($gid.'_'.$cid);
+	//error_log("Cocon Kit : newCycle : {$_POST['gid']} / {$_POST['cid']} => {$_SESSION['check_id']} / $check_id"); // debug
 	if($_SESSION['check_id'] != md5($gid.'_'.$cid)){
 		$response['error'] = true;
 		die(json_encode($response));
 	}
-error_log("Cocon Kit : check_id OK"); // debug
 	
 	$cid = createCycle($gid);
-error_log("Cocon Kit : NEW CID OK"); // debug
 	
 	if(!$cid){
 		die(mysql_error());
