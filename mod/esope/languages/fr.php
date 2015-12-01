@@ -606,6 +606,7 @@ return array(
 	'esope:welcome:msg' => "Bienvenue sur votre plateforme collaborative.<br />Administrateurs du site, pensez à éditer ce message !",
 	'esope:firststeps:linktitle' => "Premiers pas (cliquer pour afficher / masquer)",
 	'esope:site:activity' => "Activité récente",
+	'esope:group:activity' => "En direct de",
 	'esope:thewire:togglelink' => "Publier sur le Fil &#x25BC;",
 	'esope:homewire:title' => "Le Fil de %s",
 	'esope:thewire:charleft' => "max",

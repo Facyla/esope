@@ -19,7 +19,7 @@ $static = '<h2 class="invisible">' . $title . '</h2>';
 // Premiers pas (si configuré)
 $firststeps_guid = elgg_get_plugin_setting('firststeps_guid', 'esope');
 $firststeps_page = get_entity($firststeps_guid);
-if ($firststeps_page instanceof ElggObject) {
+if (elgg_instanceof($firststeps_page, 'object')) {
 	$firststeps = '<div class="firststeps">
 			<a href="javascript:void(0);" onClick="$(\'#firsteps_toggle\').toggle(); $(\'#firststeps_show\').toggle(); $(\'#firststeps_hide\').toggle();">' . elgg_echo('esope:firststeps:linktitle') . '
 				<span id="firststeps_show" style="float:right;">&#x25BC;</span>
@@ -68,8 +68,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 	//Affichage actus du groupe si demandé
 	if ($homegroup_index == 'yes') {
 		$left_side .= '<h3>';
-		//$left_side .= 'Activité récente dans ';
-		$left_side .= 'En direct de ';
+		$left_side .= elgg_echo('esope:group:activity');
 		$left_side .= '<a href="' . $homegroup->getURL() . '"><img src="' . $homegroup->getIconURL('tiny') . '" style="margin:-2px 0 3px 8px; float:right;" />' . $homegroup->name . '</a></h3>';
 		/* Forum..	bof car pas forcément activé..
 		$left_side .= elgg_list_entities(array(
@@ -91,7 +90,7 @@ if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = 
 //Affichage actus du site si demandé
 $homesite_index = elgg_get_plugin_setting('homesite_index', 'esope');
 if ($homesite_index == 'yes') {
-	$left_side .= '<h3><a href="' . $CONFIG->url . 'activity">' . elgg_echo('esope:site:activity') . '</a></h3>';
+	$left_side .= '<h3><a href="' . elgg_get_site_url() . 'activity">' . elgg_echo('esope:site:activity') . '</a></h3>';
 	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
@@ -103,8 +102,8 @@ if ($homesite_index == 'yes') {
 $index_wire = elgg_get_plugin_setting('index_wire', 'esope');
 if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	// Show/hide version
-	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('esope:thewire:togglelink') . '</a><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
-	$thewire .= '<h3><a href="' . $CONFIG->url . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
+	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('esope:thewire:togglelink') . '</a><a href="' . elgg_get_site_url() . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
+	$thewire .= '<h3><a href="' . elgg_get_site_url() . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
 	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
 	elgg_push_context('widgets');
 	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
@@ -135,16 +134,16 @@ $static = '';
 if ($thewire && $left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left; margin-right:3%;">' . $left_side . '</div>';
 	$static .= '<div class="home-static" style="width:40%; float:left;">' . $thewire . '</div>';
-	$static .= '<div style="width:20%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static-container" style="width:20%; float:right;">' . $right_side . '</div>';
 } else if ($thewire && $left_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left;">' . $left_side . '</div>';
 	$static .= '<div class="home-static" style="width:64%; float:right;">' . $thewire . '</div>';
 } else if ($thewire && $right_side) {
 	$static .= '<div class="home-static" style="width:70%; float:left;">' . $thewire . '</div>';
-	$static .= '<div style="width:24%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static-container" style="width:24%; float:right;">' . $right_side . '</div>';
 } else if ($left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:68%; float:left;">' . $left_side . '</div>';
-	$static .= '<div style="width:28%; float:right;">' . $right_side . '</div>';
+	$static .= '<div class="home-static-container" style="width:28%; float:right;">' . $right_side . '</div>';
 } else {
 	$static .=	$left_side . $thewire . $right_side;
 }

@@ -591,6 +591,7 @@ return array(
 	'esope:welcome:msg' => "Welcome on your social platform.<br />Site adminis, please edit this message through the theme configuration !",
 	'esope:firststeps:linktitle' => "First steps (click to show/hide)",
 	'esope:site:activity' => "Recent activity",
+	'esope:group:activity' => "News from",
 	'esope:thewire:togglelink' => "Publish on &#x25BC;'s wire",
 	'esope:homewire:title' => "%s's wire'",
 	'esope:thewire:charleft' => "left",
