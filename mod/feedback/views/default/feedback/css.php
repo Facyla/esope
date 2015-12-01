@@ -46,6 +46,7 @@
 	width: 100%;
 	background-color: rgba(0,0,0,0.8);
 	text-align: left;
+	z-index: 11;
 }
 
 #feedBackContent {
@@ -64,9 +65,9 @@
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
-	-webkit-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
-	-moz-box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
-	box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.8);
+	-webkit-box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
+	-moz-box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
+	box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
 	padding:0 0 6px 0;
 }
 
@@ -158,4 +159,10 @@
 .elgg-module-group-feedback .elgg-list li { border-bottom: 0; }
 
 
+
+@media (max-width:700px) {
+	#feedbackWrapper { position: initial; }
+	#feedBackToggler { position: initial; transform: rotate(90deg); transform-origin: bottom right; }
+
+}
 
