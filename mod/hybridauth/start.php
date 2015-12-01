@@ -14,10 +14,9 @@ function hybridauth_init() {
 	}
 	
 	
-	// Short code processing library (from Wordpress)
-	$root = elgg_get_plugins_path();
-	elgg_register_library('hybridauth', $root."hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php");
-	elgg_register_library('elgg:hybridauth', $root."hybridauth/lib/hybridauth/hybridauth.php");
+	$root = elgg_get_plugins_path() . 'hybridauth/';
+	elgg_register_library('hybridauth', $root."vendors/hybridauth/hybridauth/Hybrid/Auth.php");
+	elgg_register_library('elgg:hybridauth', $root."lib/hybridauth/hybridauth.php");
 	
 }
 
@@ -29,36 +28,38 @@ function hybridauth_page_handler($page) {
 	elgg_load_library('hybridauth');
 	//require_once elgg_get_plugins_path() . "hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php";
 	
+	$path = elgg_get_plugins_path() . 'hybridauth/';
+	
 	switch($page[0]) {
 		case 'endpoint':
-			include(dirname(__FILE__) . "/vendors/hybridauth/hybridauth/index.php");
+			include($path . "vendors/hybridauth/hybridauth/index.php");
 			break;
 			
 		case 'twitter':
 			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
-			include(dirname(__FILE__) . "/pages/hybridauth/twitter.php");
+			include($path . "pages/hybridauth/twitter.php");
 			break;
 			
 		case 'linkedin':
 			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
-			include(dirname(__FILE__) . "/pages/hybridauth/linkedin.php");
+			include($path . "pages/hybridauth/linkedin.php");
 			break;
 		case 'linkedin_profile_update':
-			include(dirname(__FILE__) . "/pages/hybridauth/linkedin_profile_update.php");
+			include($path . "pages/hybridauth/linkedin_profile_update.php");
 			break;
 			
 		case 'google':
 			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
-			include(dirname(__FILE__) . "/pages/hybridauth/google.php");
+			include($path . "pages/hybridauth/google.php");
 			break;
 			
 		case 'facebook':
 			if (elgg_get_plugin_setting($page[0].'_enable', 'hybridauth') == 'yes') 
-			include(dirname(__FILE__) . "/pages/hybridauth/facebook.php");
+			include($path . "pages/hybridauth/facebook.php");
 			break;
 			
 		default:
-			include(dirname(__FILE__) . "/pages/hybridauth/index.php");
+			include($path . "pages/hybridauth/index.php");
 	}
 	return true;
 }
