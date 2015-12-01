@@ -36,6 +36,11 @@ $categories = transitions_get_category_opt(null, false);
 $category_opt = transitions_get_category_opt(null, true, true, true);
 $actortype_opt = transitions_get_actortype_opt(null, true, true);
 $lang_opt = transitions_get_lang_opt(null, true, false, true);
+$status_opt = array(
+		'all' => elgg_echo('transitions:status:all'),
+		'draft' => elgg_echo('status:draft'),
+		'published' => elgg_echo('status:published')
+	);
 
 
 // Bookmarklet
@@ -95,6 +100,11 @@ $content .= '<div class="transitions-index-search">';
 		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		// Langue
 		$content .= '<label class="transitions-lang">' . elgg_echo('multilingual:form:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
+		// Status : published / draft
+		// @TODO
+		if (elgg_is_admin_logged_in()) {
+				$content .= '<label class="transitions-lang">' . elgg_echo('transitions:status') . ' ' . elgg_view('input/select', array('name' => 'status', 'options_values' => $status_opt, 'value' => $status)) . '</label>';
+		}
 		$content .= '</p>';
 
 		

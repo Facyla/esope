@@ -25,6 +25,8 @@ return array(
 	'transitions:excerpt' => "En 140 caractères...",
 	'transitions:body' => "Contenu de votre contribution",
 	'transitions:save_status' => "Dernier enregistrement:",
+	'transitions:status' => "Etat de publication",
+	'transitions:status:all' => "Toutes les contributions",
 	
 	'transitions:revision' => "Version",
 	'transitions:auto_saved_revision' => "Version automatiquement enregistrée",

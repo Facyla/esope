@@ -25,6 +25,8 @@ return array(
 	'transitions:excerpt' => 'Excerpt',
 	'transitions:body' => 'Body',
 	'transitions:save_status' => 'Last saved: ',
+	'transitions:status' => "Publication status",
+	'transitions:status:all' => "All contributions",
 	
 	'transitions:revision' => 'Version',
 	'transitions:auto_saved_revision' => 'Auto Saved version',
