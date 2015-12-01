@@ -13,20 +13,20 @@ function hybridauth_init() {
 		elgg_extend_view('forms/register', 'hybridauth/register', 100);
 	}
 	
-	
+	// Library
 	$root = elgg_get_plugins_path() . 'hybridauth/';
 	elgg_register_library('hybridauth', $root."vendors/hybridauth/hybridauth/Hybrid/Auth.php");
 	elgg_register_library('elgg:hybridauth', $root."lib/hybridauth/hybridauth.php");
+	elgg_load_library('hybridauth');
 	
 }
 
 
 // Gestion des URL
 function hybridauth_page_handler($page) {
-	if (!isset($page[0])) { $page[0] = ''; }
-	
-	elgg_load_library('hybridauth');
 	//require_once elgg_get_plugins_path() . "hybridauth/vendors/hybridauth/hybridauth/Hybrid/Auth.php";
+	
+	if (!isset($page[0])) { $page[0] = ''; }
 	
 	$path = elgg_get_plugins_path() . 'hybridauth/';
 	
