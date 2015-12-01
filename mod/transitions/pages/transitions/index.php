@@ -95,7 +95,7 @@ $content .= '<div class="transitions-index-search">';
 		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		$content .= '</p>';
 		
-		$content .= '<label class="transitions-lang">' . elgg_echo('transitions:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
+		$content .= '<label class="transitions-lang">' . elgg_echo('multilingual:form:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
 
 		
 		//$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go'))) . '</p>';

@@ -40,6 +40,7 @@ return array(
 	'multilingual:menu:dotranslate' => "<i class=\"fa fa-language\"></i>Translate !",
 	'multilingual:menu:notranslation' => "<i class=\"fa fa-language\"></i>(no translation yet) ", // Or: No translation yet
 	'multilingual:menu:original' => "original content",
+	'multilingual:form:lang' => "Language",
 	
 	// Notices and errors
 	'multilingual:translate:missingentity' => "No entity to translate.",
