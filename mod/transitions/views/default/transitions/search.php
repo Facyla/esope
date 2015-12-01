@@ -2,6 +2,7 @@
 $category = get_input('category', '');
 $actor_type = get_input('actor_type', '');
 $query = get_input('q', '');
+$lang = get_input('lang', '');
 
 $categories = transitions_get_category_opt(null, false);
 
@@ -23,6 +24,8 @@ echo '<form method="GET" action="' . elgg_get_site_url() . 'catalogue/" id="tran
 	echo '<label>' . elgg_echo('transitions:category') . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category)) . '</label>';
 	echo ' &nbsp; ';
 	echo '<label>' . elgg_echo('transitions:actortype') . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
+	echo '<br />';
+	echo '<label>' . elgg_echo('transitions:lang') . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
 	echo '<br />';
 	echo elgg_view('input/text', array('name' => "q", 'style' => 'width:20em;', 'value' => $query));
 	

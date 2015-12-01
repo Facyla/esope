@@ -404,10 +404,12 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 /* Renvoie la liste des catégories
  * $addempty : for select dropdowns
  * $full : get all values (useful when not editing)
+ * $faddall : gadds a 'all' value
 */
-function transitions_get_category_opt($value = '', $addempty = false, $full = false) {
+function transitions_get_category_opt($value = '', $addempty = false, $full = false, $addall = false) {
 	$list = array();
 	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
+	if ($addall) { $list['all'] = elgg_echo('transitions:category:all'); }
 	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'event', 'knowledge', 'challenge');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
 	if (elgg_is_admin_logged_in() || $full) {
@@ -419,9 +421,10 @@ function transitions_get_category_opt($value = '', $addempty = false, $full = fa
 	return $list;
 }
 
-function transitions_get_actortype_opt($value = '', $addempty = false) {
+function transitions_get_actortype_opt($value = '', $addempty = false, $addall = false) {
 	$list = array();
 	if ($addempty) { $list[''] = elgg_echo('transitions:actortype:choose'); }
+	if ($addall) { $list['all'] = elgg_echo('transitions:actortype:all'); }
 	$values = array('individual', 'collective', 'association', 'enterprise', 'education', 'collectivity', 'administration', 'plurinational');
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:actortype:' . $val); }
 	// Add current value
@@ -429,9 +432,10 @@ function transitions_get_actortype_opt($value = '', $addempty = false) {
 	return $list;
 }
 
-function transitions_get_lang_opt($value = '', $addempty = false, $full = false) {
+function transitions_get_lang_opt($value = '', $addempty = false, $full = false, $addall = false) {
 	$list = array();
 	if ($addempty) { $list[''] = ''; }
+	if ($addall) { $list['all'] = elgg_echo('transitions:lang:all'); }
 	
 	// Use multilingual available translation codes if set
 	if (elgg_is_active_plugin('multilingual')) { $values = multilingual_available_languages(); }

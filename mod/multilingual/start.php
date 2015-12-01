@@ -207,14 +207,14 @@ function multilingual_get_main_language() {
 
 
 // Get entity lang
-// And also set it if empty
-function multilingual_get_entity_language($entity) {
-	if (!empty($entity->lang)) { return $entity->lang; }
-	
+// And also set it to main language if empty
+function multilingual_get_entity_language($entity, $set_main = true) {
 	// Set the default language if not set ; this accelerates further checks
-	$main_lang = multilingual_get_main_language();
-	$entity->lang = $main_lang;
-	return $main_lang;
+	if ($set_main && empty($entity->lang)) {
+		$entity->lang = multilingual_get_main_language();
+	}
+	// Return entity language
+	return $entity->lang;
 }
 
 

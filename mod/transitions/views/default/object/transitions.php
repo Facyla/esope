@@ -258,6 +258,7 @@ if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 									default: echo '<i class="fa fa-eye-slash" title="' . elgg_echo('status:draft') . '"></i>&nbsp; ';
 								}
 							echo '<a href="' . elgg_get_site_url() . 'transitions/edit/' . $transitions->guid . '"><i class="fa fa-pencil" title="' . elgg_echo('edit') . '"></i></a>&nbsp; ';
+							echo elgg_view('output/lang', array('entity' => $transitions)) . '&nbsp; ';
 							echo '</div>';
 						echo '</div>';
 					}

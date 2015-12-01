@@ -85,6 +85,7 @@ View and comment on the contribution:
 	'transitions:attachment:remove' => "Remove attached file",
 	'transitions:category' => "Category",
 	'transitions:category:choose' => "Select a category",
+	'transitions:category:all' => "All categories",
 	'transitions:title' => "Title of your contribution",
 	'transitions:tags' => "Tags",
 	'transitions:tags:placeholder' => "Tags",
@@ -231,6 +232,7 @@ View and comment on the contribution:
 	
 	// Select values
 	'transitions:lang:other' => "Other language",
+	'transitions:lang:all' => "All languagees",
 	
 	'transitions:category:nofilter' => "All",
 	'transitions:category:knowledge' => "<i class=\"fa fa-lightbulb-o\"></i> Knowledge",
@@ -262,6 +264,7 @@ View and comment on the contribution:
 	'transitions:actortype:plurinational' => "Multinational entity",
 	'transitions:actortype:other' => "Other",
 	'transitions:actortype:choose' => "Select an actor type",
+	'transitions:actortype:all' => "All actor types",
 	
 	
 	'transitions:error:missing:category' => "You have to specify a category for your contribution !",

@@ -85,6 +85,7 @@ Voir et commenter cette contribution :
 	'transitions:attachment:remove' => "Supprimer le fichier joint",
 	'transitions:category' => "Catégorie",
 	'transitions:category:choose' => "Sélectionnez une catégorie",
+	'transitions:category:all' => "Toutes les catégories",
 	'transitions:title' => "Titre de votre contribution",
 	'transitions:tags' => "Tags",
 	'transitions:tags:placeholder' => "Tags",
@@ -231,6 +232,7 @@ Voir et commenter cette contribution :
 	
 	// Select values
 	'transitions:lang:other' => "Autre langue",
+	'transitions:lang:all' => "Toutes les langues",
 	
 	'transitions:category:nofilter' => "Toutes",
 	'transitions:category:knowledge' => "<i class=\"fa fa-lightbulb-o\"></i> Connaissance",
@@ -262,6 +264,7 @@ Voir et commenter cette contribution :
 	'transitions:actortype:plurinational' => "Entité plurinationale",
 	'transitions:actortype:other' => "Autre",
 	'transitions:actortype:choose' => "Sélectionnez un type d'acteur",
+	'transitions:actortype:all' => "Tous les types d'acteurs",
 	
 	
 	'transitions:error:missing:category' => "Vous devez spécifier la catégorie de votre contribution !",

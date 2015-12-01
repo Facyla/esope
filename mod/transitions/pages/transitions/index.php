@@ -29,11 +29,13 @@ $category = get_input('category', '');
 if ($category == 'all') $category = '';
 $actor_type = get_input('actor_type', '');
 if ($actor_type == 'all') $actor_type = '';
+$lang = get_input('lang', '');
+if ($lang == 'all') $lang = '';
 
 $categories = transitions_get_category_opt(null, false);
-$category_opt = transitions_get_category_opt(null, true, true);
-$actortype_opt = transitions_get_actortype_opt(null, true);
-$lang_opt = transitions_get_lang_opt(null, true);
+$category_opt = transitions_get_category_opt(null, true, true, true);
+$actortype_opt = transitions_get_actortype_opt(null, true, true);
+$lang_opt = transitions_get_lang_opt(null, true, false, true);
 
 
 // Bookmarklet
@@ -85,7 +87,6 @@ $content .= '<div class="transitions-index-search">';
 		$content .= '<label>' . elgg_echo('transitions:filter') . ' ' . elgg_view('forms/transitions/switch_filter', array('value' => $filter)) . '</label>';
 		$content .= '</p>';
 		
-		
 		// Category
 		$content .= '<p>';
 		$content .= '<label>' . elgg_echo('transitions:category') . ' ' . elgg_view('input/select', array('name' => 'category', 'options_values' => $category_opt, 'value' => $category, 'onChange' => "transitions_toggle_search_fields(this.value);")) . '</label>';
@@ -93,6 +94,9 @@ $content .= '<div class="transitions-index-search">';
 		// conditionnel, ssi catégorie = actor
 		$content .= '<label class="transitions-actortype">' . elgg_echo('transitions:actortype') . ' ' . elgg_view('input/select', array('name' => 'actor_type', 'options_values' => $actortype_opt, 'value' => $actor_type)) . '</label>';
 		$content .= '</p>';
+		
+		$content .= '<label class="transitions-lang">' . elgg_echo('transitions:lang') . ' ' . elgg_view('input/select', array('name' => 'lang', 'options_values' => $lang_opt, 'value' => $lang)) . '</label>';
+
 		
 		//$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search:go'))) . '</p>';
 		$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('transitions:search'))) . '</p>';
@@ -133,6 +137,9 @@ $content .= '<div class="transitions-index-search">';
 	}
 	if (($category == 'actor') && !empty($actor_type)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'actor_type', 'value' => $actor_type);
+	}
+	if (!empty($lang)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang);
 	}
 	if (!empty($query)) {
 		$db_prefix = elgg_get_config('dbprefix');
