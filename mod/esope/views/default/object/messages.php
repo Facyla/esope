@@ -66,6 +66,7 @@ $delete_link = elgg_view("output/url", array(
 						'text' => elgg_view_icon('delete', 'float-alt'),
 						'confirm' => elgg_echo('deleteconfirm'),
 						'encode_text' => false,
+						'is_action' => true,
 					));
 
 $body = <<<HTML

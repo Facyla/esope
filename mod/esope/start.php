@@ -435,7 +435,7 @@ function esope_pagesetup(){
 			elgg_register_menu_item('extras', array(
 					'name' => 'report_this', 'href' => $href, 'rel' => 'nofollow',
 					'title' => elgg_echo('reportedcontent:this:tooltip'),
-					'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">Signaler cette page</span></span>', 
+					'text' => '<span class="elgg-icon elgg-icon-report-this "><span class="invisible">' . elgg_echo('reportedcontent:this') . '</span></span>', 
 				));
 		}
 		
@@ -470,7 +470,7 @@ function esope_pagesetup(){
 			
 			// Insert page owner only if it's a user or group (not a site..), and it's not set by the context
 			$page_owner = elgg_get_page_owner_entity();
-			if ($page_owner instanceof ElggGroup) {
+			if (elgg_instanceof($page_owner, 'group')) {
 				
 				/*
 				$is_edit = false;
@@ -573,7 +573,6 @@ function esope_public_forward_login_hook($hook_name, $reason, $location, $parame
 
 // Vérification des URL de redirection : si redirection vers un REFERER HTTP externe, forward vers l'accueil
 function esope_forward_hook($hook_name, $reason, $location, $parameters) {
-	global $CONFIG;
 	$forward_url = $parameters['forward_url'];
 	if ($forward_url == $_SERVER['HTTP_REFERER']) {
 		if ((strpos($forward_url, 'http:') === 0) || (strpos($forward_url, 'https:') === 0)) {
@@ -588,7 +587,6 @@ function esope_forward_hook($hook_name, $reason, $location, $parameters) {
 
 /* Performs some actions after registration */
 function esope_register_handler($event, $object_type, $object) {
-	global $CONFIG;
 	// Groupe principal (à partir du GUID de ce groupe)
 	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'esope');
 	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'esope');
