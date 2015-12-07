@@ -29,6 +29,11 @@
 		<name>file</name>
 	</suggests>
 	
+	<suggests>
+		<type>plugin</type>
+		<name>elgg_webdav</name>
+	</suggests>
+	
 </plugin_manifest>
 
 <!--

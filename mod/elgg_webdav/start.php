@@ -74,6 +74,13 @@ function elgg_webdav_page_handler($page) {
 			if (include_once "$base/server_virtual.php") return true;
 			break;
 		
+		// Access distant WebDAV resource
+		case 'view':
+			// GUID is mandatory as it stores endpoint information
+			if (!empty($page[1])) set_input('guid', $page[1]);
+			if (include_once "$base/view.php") return true;
+			break;
+		
 		default:
 			if (include_once "$base/index.php") return true;
 	}

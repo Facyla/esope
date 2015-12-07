@@ -65,6 +65,38 @@ $content .= '</div>';
 $content .= '<p><pre>' . print_r($response_obj, true) . '</pre></p>';
 
 
+if (elgg_is_active_plugin('elgg_webdav')) {
+	elgg_load_library('elgg:webdav:sabreDAV');
+	$settings = array(
+		'baseUri' => $api_url . 'remote.php/webdav/',
+		'userName' => $oc_username,
+		'password' => $oc_password,
+		//'proxy' => 'locahost:8888',
+	);
+	/*
+	$client = new Sabre\DAV\Client($settings);
+	$features = $client->options();
+	$content .= '<p><pre>' . print_r($features, true) . '</pre></p>';
+	*/
+	
+	/*
+	// Will do a GET request on the base uri
+	$response = $client->request('GET'); 
+
+	// Will do a HEAD request relative to the base uri
+	$response = $client->request('HEAD', 'stuff');
+
+	// Will do a PUT request with a request body
+	$response = $client->request('PUT', 'file.txt', "New contents");
+
+	// Will do a DELETE request with a condition
+	$response = $client->request('DELETE', 'file.txt', null, array('If-Match' => '"12345765"'));
+	*/
+	
+}
+
+
+
 $sidebar = "Contenu de la sidebar";
 
 // Render the page
