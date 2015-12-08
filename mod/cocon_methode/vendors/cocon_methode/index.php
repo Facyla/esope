@@ -21,9 +21,9 @@ exit;
 gatekeeper();
 // Verrouillage des accès à l'application : groupe valide doit exister
 $own = elgg_get_logged_in_user_entity();
-$user_role = cocon_methode_get_user_role();
+$user_role = cocon_methode_get_user_role($own);
 // Ensure group exists and user is member, or create it if conditions are valid
-$gid = cocon_methode_get_user_group();
+$gid = cocon_methode_get_user_group($own->guid);
 
 // If we do not have a valid group, exit
 $group = get_entity($gid);
@@ -111,55 +111,55 @@ if (!elgg_is_logged_in()) {
 									<tr>
 										<td class="app_menu" style="width:100%;color:white;font-size:13px;height:38px;background-color:#444444">
 											Pilotage
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu selected" style="width:90%;font-size:11px;height: 50px;" id="temps_0" onclick="javascript:loadPage('presentation', 'temps_0');">
 											<img src="css/images/menu_icon_home.png" width="20" height="20" />&nbsp;<p>Présentation</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px" id="temps_4" onclick="javascript:loadPage('feuille_route', 'temps_4');">
 											<img src="css/images/menu_icon_orientation_pilotage.png" width="20" height="20"/>&nbsp;<p>Feuille de route</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px" id="faq" onclick="javascript:loadPage('faq','faq');">
 											<img src="css/images/faq.png" width="20" height="20" />&nbsp;<p>Foire aux questions</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px" id="bilan" onclick="javascript:loadPage('bilan', 'bilan');">
 											<img src="css/images/menu_icon_bilan.png" width="20" height="20" />&nbsp;<p>Bilan</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:100%;color:white;font-size:13px;height:38px;background-color:#444444">
 											Téléchargement
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px; height:50px;" onclick="javascript:loadPage('outils', 'outils');">
 											<img src="css/images/save_all.png" width="20" height="20" />&nbsp;<p>Ensemble d'outils</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px" onclick="javascript:loadPage('resultats', 'resultats');">
 											<img src="css/images/stats.png" width="20" height="20" />&nbsp;<p>Résultats</p>
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:100%;color:white;font-size:13px;height:38px;background-color:#444444">
 											Outils
-										</td>									
+										</td>
 									</tr>
 									<tr>
 										<td class="app_menu" style="width:90%;font-size:11px;height:50px;" onclick="javascript:loadPage('nouv_cycle', 'nouv_cycle');">
 											<img src="css/images/reset.png" width="20" height="20" />&nbsp;<p>Nouveau cycle</p>
-										</td>									
+										</td>
 									</tr>
 								</table>
-							<div>							
+							<div>
 						</td>
 						<td class="app_menu" width="30%" id="temps_1" onclick="javascript:loadPage('etats_des_lieux', 'temps_1');">
 							<img src="css/images/menu_icon_etat_des_lieux.png" />&nbsp;<p>Temps 1 - Etat des lieux</p>

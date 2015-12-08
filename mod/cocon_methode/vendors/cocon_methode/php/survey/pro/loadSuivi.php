@@ -1,11 +1,11 @@
 <?php
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))))) . '/engine/start.php';
 	
-	//include "../../inc/config.inc.php";
-	//include "../../inc/database.inc.php";
-	//include "../../../php/inc/utils.inc.php";
-	//include "../../../php/inc/cycle.inc.php";
-	include "../../../php/inc/survey/pro/session.inc.php";
+	//include_once "../../inc/config.inc.php";
+	//include_once "../../inc/database.inc.php";
+	//include_once "../../../php/inc/utils.inc.php";
+	//include_once "../../../php/inc/cycle.inc.php";
+	include_once "../../../php/inc/survey/pro/session.inc.php";
 
 	/**
 		Type de retour : JSON / UTF-8

@@ -19,6 +19,7 @@
 			return false;
 		}
 		
+		//if (is_bool($result)) error_log("Cocon Kit CYCLE INC : $result / $gid / $sql / ".print_r($conn, true)); // debug
 		if(mysql_num_rows($result) == 0){
 			return false;
 		}
@@ -66,7 +67,7 @@
 		$result = executeQuery($conn, $sql);
 		if(!$result){
 			return false;
-		}		
+		}
 		return $cid;
 	}
 

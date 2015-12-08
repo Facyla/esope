@@ -1,10 +1,10 @@
 <?php
-	include "../../../php/inc/config.inc.php";
-	include "../../../php/inc/database.inc.php";
-	include "../../../php/inc/utils.inc.php";
-	include "../../../php/inc/cycle.inc.php";
-	include "../../../php/inc/survey/satisfaction/session.inc.php";
-	include "../../../php/inc/survey/satisfaction/calcul.inc.php";
+	include_once "../../../php/inc/config.inc.php";
+	include_once "../../../php/inc/database.inc.php";
+	include_once "../../../php/inc/utils.inc.php";
+	include_once "../../../php/inc/cycle.inc.php";
+	include_once "../../../php/inc/survey/satisfaction/session.inc.php";
+	include_once "../../../php/inc/survey/satisfaction/calcul.inc.php";
 	
 	/**
 		Type de retour : JSON / UTF-8

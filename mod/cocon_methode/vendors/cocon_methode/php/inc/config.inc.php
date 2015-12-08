@@ -82,6 +82,7 @@ function getConfiguration($gid){
 	$cocon_url = elgg_get_site_url();
 	$cocon_url = rtrim($cocon_url, '/');
 	$methode_url = $cocon_url . '/mod/cocon_methode/vendors/cocon_methode';
+	$user = elgg_get_logged_in_user_entity();
 	
 	$config = array(
 		"error" => false,
@@ -119,17 +120,18 @@ function getConfiguration($gid){
 	$config['user_role'] = 0;
 	*/
 	// Intégration Cocon Méthode
-	$own = elgg_get_logged_in_user_entity();
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
-	if (!$group->isMember($own->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
+	if (!$group->isMember($user->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
 	$config['group_name'] = $group->name;
 	$config['user_id'] = $user->guid;
 	$config['user_name'] = $user->name;
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
 	// Update token
-	$_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
+	$_SESSION['check_id'] = md5($gid.'_'.$cid);
+	//error_log("Cocon Kit config.inc : Check ID : {$_SESSION['check_id']} = $gid - $cid"); // debug
+
 	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	
@@ -146,7 +148,7 @@ function getEnseignantsInfos($gid){
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
 	
-	$members = $group->getMembers();
+	$members = $group->getMembers(0);
 	$infos = array();
 	foreach($members as $ent) {
 		$infos[] = array(

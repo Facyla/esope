@@ -2,7 +2,7 @@
 	/**
 		Test de restitution
 	*/
-	include "../../php/inc/survey/pro/report.inc.php";
+	include_once "../../php/inc/survey/pro/report.inc.php";
 	
 	$cid = 'dolto';
 	$gid = 'dolto';

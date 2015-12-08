@@ -1,6 +1,6 @@
 <?php
-	include("../../inc/pchart/pData.class");  
-	include("../../inc/pchart/pChart.class");
+	include_once("../../inc/pchart/pData.class");  
+	include_once("../../inc/pchart/pChart.class");
 
 	/**
 		Création d'un graphique en forme de camembert

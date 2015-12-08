@@ -16,22 +16,8 @@
 	<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/png" href="css/images/favicon.png" />
 </head>
-
 <body>
 	<div id="content" class="content">
-		<header>
-			<div class="">
-				<div class="interne">
-					<h1>
-						<img src="css/images/header_ministere.jpg" class="ministere">
-						<a title="Aller sur la page d'accueil" href="http://cocon.eduscol.education.fr/"><img style="margin-left:14px;" src="css/images/header_cocon.png" class="cocon"></a>
-						<img src="css/images/cartouche_strategie_numerique.png" class="cartouche">
-					</h1>
-					<nav>
-					</nav>
-				</div>
-			</div>
-		</header>
 		<section>
 			<div class="interne interne-content">
 				<table class="app_table" style="background-color:#ffffff;width:100%">
@@ -43,7 +29,7 @@
 							<table width="100%">
 								<tr>
 									<td class="app_menu" width="33%" id="btnPrev" onclick="javascript:prevPage();">Précédent</td>
-									<td class="app_menu" width="33%" id="btnSave" onclick="javascript:saveQuest();">Enregistrer</td>
+									<td class="app_menu" width="33%" id="btnSave" onclick="javascript:enregistreBilan();">Enregistrer</td>
 									<td class="app_menu" width="33%" id="btnNext" onclick="javascript:nextPage();">Suivant</td>
 								</tr>
 							</table>
@@ -55,11 +41,5 @@
 				</div>
 			</div>
 		</section>
-		<footer class="footer-cocon">
-			<div class="interne">
-				<ul>
-				</ul>
-			</div>
-		</footer>		
 	</div>
 </body>

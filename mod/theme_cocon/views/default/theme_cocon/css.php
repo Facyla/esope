@@ -26,7 +26,7 @@ $sidecolor = "#00668c";
 
 /* Interface */
 html, body { background: url(<?php echo $imgurl; ?>background.jpg) top left no-repeat; background-size: cover; background-attachment:fixed; border-top:0; }
-header { background: transparent; border-top:0; /* height:120px; */ height:auto; }
+header { background: transparent; border-top:0; /* height:120px; */ height:auto; min-height:30px; }
 header h1 { margin-top: 17px; }
 header h1:hover { text-decoration:none; }
 header nav { background: #00668c; top: 0; padding: 4px 4px 1px 4px; border-radius: 0 0 12px 12px; }
@@ -54,6 +54,9 @@ header .interne nav ul li.invites a, header .interne nav ul li.group-invites a {
 form input#adf-search-input, form input#adf-search-input:active, form input#adf-search-input:focus { color:#2a7d9f; border-radius:0; background:#e4ecf5; }
 form input#adf-search-submit-button, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background:white !important; border:0 !important; padding: 0px 0px 0px 8px; height: 27px; }
 .elgg-form.elgg-form-groups-search #q { background:#e4ecf5; }
+
+.elgg-menu.elgg-breadcrumbs, .elgg-menu.elgg-breadcrumbs li a { color: #EEE; text-shadow: 0px 0px 1px #333; }
+.elgg-menu.elgg-breadcrumbs li a:hover, .elgg-menu.elgg-breadcrumbs li a:active, .elgg-menu.elgg-breadcrumbs li a:focus { color: #FFF; }
 
 /* Footer */
 footer.footer-cocon { height: 37px; background:#2a7d9f; }

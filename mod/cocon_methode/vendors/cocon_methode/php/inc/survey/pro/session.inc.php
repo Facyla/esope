@@ -33,7 +33,7 @@
 			"usag_2" => 0.0,
 			"usag_3" => 0.0,
 			"usag_4" => 0.0,
-			"usag_sum" => 0.0,			
+			"usag_sum" => 0.0,
 			"profil_theo" => 0,
 			"comment_1" => "",
 			"comment_2" => "",

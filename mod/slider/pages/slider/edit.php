@@ -27,7 +27,7 @@ $page_title = elgg_echo('slider');
 elgg_push_breadcrumb($page_title, 'slider');
 
 // slider/read may render more content
-$slider = slider_get_entity_by_name($guid);
+if ($guid) { $slider = slider_get_entity_by_name($guid); }
 if (elgg_instanceof($slider, 'object', 'slider')) {
 	$page_title = $slider->title;
 	elgg_push_breadcrumb($page_title);
@@ -40,7 +40,7 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 $CONFIG->title = $page_title;
 
 // slider/read may render more content
-if ($slider->canEdit()) {
+if (!elgg_instanceof($slider, 'object', 'slider') || $slider->canEdit()) {
 	$content .= elgg_view('forms/slider/edit', array('entity' => $slider));
 	$content .= elgg_view('forms/slider/clone', array('entity' => $slider));
 }
