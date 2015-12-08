@@ -73,10 +73,11 @@ if (elgg_is_active_plugin('elgg_webdav')) {
 		'password' => $oc_password,
 		//'proxy' => 'locahost:8888',
 	);
-	/*
 	$client = new Sabre\DAV\Client($settings);
-	$features = $client->options();
-	$content .= '<p><pre>' . print_r($features, true) . '</pre></p>';
+	$response = $client->options();
+	//$response = $client->request('GET');
+	$content .= '<p><pre>' . print_r($response, true) . '</pre></p>';
+	/*
 	*/
 	
 	/*
