@@ -27,9 +27,8 @@ $settings = array(
 	'baseUri' => 'http://example.org/dav/',
 	'userName' => 'user',
 	'password' => 'password',
-	'proxy' => 'locahost:8888',
+	//'proxy' => 'locahost:8888',
 );
-
 $client = new Sabre\DAV\Client($settings);
 
 
