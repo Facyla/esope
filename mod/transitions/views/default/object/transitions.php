@@ -240,7 +240,7 @@ if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 					echo '<div class="transitions-gallery-actions">';
 						echo '<div class="transitions-gallery-inner">';
 							echo '<span class="float-alt">' . $actions . '</span>';
-							echo $stats;
+							//echo $stats;
 						echo '</div>';
 					echo '</div>';
 					// Admins only (all T² admins)

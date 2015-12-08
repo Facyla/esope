@@ -112,13 +112,13 @@ $meta_background_id = elgg_get_metastring_id('background');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => "($meta_featured_id, $meta_background_id)", 'operand' => 'NOT IN');
 //$list_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background', 'operand' => '<>');
 $catalogue = '';
-$catalogue .= '<div class="transitions-gallery transitions-gallery-recent hidden">';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-recent">';
 $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
 
 // Featured content only
 $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 12, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'pagination' => true, 'metadata_name_value_pairs' => array('name' => 'featured', 'value' => 'featured'));
-$catalogue .= '<div class="transitions-gallery transitions-gallery-featured">';
+$catalogue .= '<div class="transitions-gallery transitions-gallery-featured hidden">';
 $catalogue .= elgg_list_entities_from_metadata($list_options);
 $catalogue .= '</div>';
 
@@ -145,7 +145,7 @@ $catalogue .= '</div>';
 
 
 // Switch filter (+ onChange)
-$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'featured'));
+$content .= elgg_view('forms/theme_transitions2/switch_filter', array('id' => 'transitions-form-switch-filter', 'value' => 'recent'));
 
 $content .= '<h2>' . elgg_echo('theme_transitions2:transitions:title') . '</h2>';
 //$content .= '<h2>' . elgg_echo('theme_transitions2:transitions:count', array($count)) . '</h2>';
