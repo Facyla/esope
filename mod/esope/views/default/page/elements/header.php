@@ -37,7 +37,7 @@ if (elgg_is_logged_in()) {
 			$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
 			$db_prefix = elgg_get_config('dbprefix');
 			// Don't list subgroups here (we want to list them under parents, if listed)
-			$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU_SUBGROUPS_RELATIONSHIP . "' )");
+			$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			if ($display_alphabetically != 'no') {
 				$options['joins'] = array("JOIN {$db_prefix}groups_entity ge ON e.guid = ge.guid");
 				$options['order_by'] = 'ge.name ASC';
