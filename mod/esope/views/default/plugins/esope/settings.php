@@ -71,7 +71,7 @@ if (empty($plugin->settings_version)) {
 		$plugin->setSetting($setting, $value);
 	}
 	// Update marker
-	$plugin->settings_version = '1.11';
+	$plugin->settings_version = '1.12';
 	elgg_set_ignore_access($ia);
 	access_show_hidden_entities($ih);
 	echo "Import et mise à jour des paramètres réussie depuis la version précédente";
@@ -164,6 +164,11 @@ if (empty($plugin->fixedwidth)) $plugin->fixedwidth = 'no';
 
 // Hide by default some profile fields that are known to be used for configuration but should not be displayed
 if (!isset($plugin->group_hide_profile_field)) { $plugin->group_hide_profile_field = 'customcss, cmisfolder, feed_url, customtab1, customtab2, customtab3, customtab4, customtab5, customtab6, customtab7, customtab8'; }
+
+//Set archive and old group marker
+if (empty($plugin->groups_archive)) $plugin->groups_archive = 'yes';
+if (empty($plugin->groups_old_display)) $plugin->groups_old_display = 'yes';
+if (empty($plugin->groups_old_timeframe)) $plugin->groups_old_timeframe = 15552000; // 3600 * 24 * 30 * 6 (about 6 months)
 
 
 // CORRECT BAD-FORMATTED VALUES
@@ -647,8 +652,15 @@ $(function() {
 
 			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
 			
-		// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
-		echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</p>';
+			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
+			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</p>';
+		
+			// Display "old group" banner
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_display') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
+			// Set "old group" timeframe (in seconds)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
+			// Enable group archive (using ->status == 'archive' metadata)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:archive') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
 		
 			?>
 		</div>
