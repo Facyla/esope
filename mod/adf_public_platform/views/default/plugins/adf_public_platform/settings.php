@@ -147,6 +147,12 @@ if (empty($vars['entity']->thewire_default_access)) { $vars['entity']->thewire_d
 // Hide by default some profile fields that are known to be used for configuration but should not be displayed
 if (!isset($vars['entity']->group_hide_profile_field)) { $vars['entity']->group_hide_profile_field = 'customcss, cmisfolder, feed_url, customtab1, customtab2, customtab3, customtab4, customtab5, customtab6, customtab7, customtab8'; }
 
+//Set archive and old group marker
+if (empty($vars['entity']->groups_archive)) $vars['entity']->groups_archive = 'yes';
+if (empty($vars['entity']->groups_old_display)) $vars['entity']->groups_old_display = 'yes';
+if (empty($vars['entity']->groups_old_timeframe)) $vars['entity']->groups_old_timeframe = 15552000; // 3600 * 24 * 30 * 6 (about 6 months)
+
+
 
 // CORRECT BAD-FORMATTED VALUES
 // Remove spaces
@@ -635,6 +641,13 @@ $(function() {
 			
 			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
 		echo '<p><label>' . elgg_echo('adf_platform:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $vars['entity']->group_hide_profile_field)) . '</label></p>';
+			
+			// Display "old group" banner
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_display') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
+			// Set "old group" timeframe (in seconds)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
+			// Enable group archive (using ->status == 'archive' metadata)
+			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:archive') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
 			
 			?>
 		</div>
