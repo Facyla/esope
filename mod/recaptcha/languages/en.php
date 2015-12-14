@@ -3,7 +3,7 @@
  * English strings
  */
 
-$en = array(
+return array(
 	'recaptcha' => "reCAPTCHA",
 	'recaptcha:settings:publickey' => "Public key",
 	'recaptcha:settings:publickey:details' => "Use this key in the HTML code that is provided to your users.",
@@ -12,6 +12,4 @@ $en = array(
 	'recaptcha:settings:createapikey' => "Create API key",
 	
 );
-
-add_translation('en', $en);
 

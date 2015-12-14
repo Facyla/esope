@@ -3,7 +3,7 @@
  * French strings
  */
 
-$fr = array(
+return array(
 	'recaptcha' => "reCAPTCHA",
 	'recaptcha:settings:publickey' => "Clé du site",
 	'recaptcha:settings:publickey:details' => "Utilisez cette clé dans le code HTML que vous proposez à vos utilisateurs.",
@@ -12,6 +12,4 @@ $fr = array(
 	'recaptcha:settings:createapikey' => "Créer une clé d'API",
 	
 );
-
-add_translation('fr', $fr);
 
