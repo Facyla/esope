@@ -22,6 +22,7 @@ if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_htm
 elgg_register_title_button();
 
 $query = get_input('q', '');
+$query = addslashes($query);
 $filter = get_input('filter', '');
 $limit = get_input('limit', 12);
 if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }

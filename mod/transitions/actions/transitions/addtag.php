@@ -32,6 +32,7 @@ if (!empty($tags)) {
 	$new_tags = string_to_tag_array($tags);
 	$tags = (array)$entity->tags_contributed;
 	foreach($new_tags as $tag) {
+		$tag = filter_tags($tag);
 		if (in_array($tag, $tags)) { register_error(elgg_echo('transitions:addtag:alreadyexists')); }
 		$tags[] = $tag;
 	}
