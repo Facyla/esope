@@ -22,7 +22,6 @@ if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_htm
 elgg_register_title_button();
 
 $query = get_input('q', '');
-$query = addslashes($query);
 $filter = get_input('filter', '');
 $limit = get_input('limit', 12);
 if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }
@@ -159,11 +158,11 @@ $content .= '<div class="transitions-index-search">';
 	}
 	if (!empty($query)) {
 		$db_prefix = elgg_get_config('dbprefix');
-	
+		$s_query = addslashes($query);
 		// Add custom metadata search
 		$search_metadata = array('title', 'excerpt', 'description', 'tags', 'tags_contributed');
 		$clauses = _elgg_entities_get_metastrings_options('metadata', array('metadata_names' => $search_metadata));
-		$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$query%')";
+		$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$s_query%')";
 		$search_options['joins'] = $clauses['joins'];
 	
 		// Add title and description search
@@ -172,7 +171,7 @@ $content .= '<div class="transitions-index-search">';
 		$search_options['joins'][] = "JOIN {$db_prefix}metadata md on e.guid = md.entity_guid";
 		$search_options['joins'][] = "JOIN {$db_prefix}metastrings msv ON n_table.value_id = msv.id";
 		
-		$search_options['wheres'][] = "((oe.title LIKE '%$query%') OR (oe.description LIKE '%$query%') OR $md_where)";
+		$search_options['wheres'][] = "((oe.title LIKE '%$s_query%') OR (oe.description LIKE '%$s_query%') OR $md_where)";
 	
 	}
 
