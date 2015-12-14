@@ -236,15 +236,15 @@ if (!$error) {
 
 // Handle admin-reserved fields
 if ($is_admin) {
-	$tags_contributed = get_input('tags_contributed', null);
+	$tags_contributed = get_input('tags_contributed');
 	$new_tags_contributed = array();
 	// Replace existing tags
 	if (!empty($tags_contributed)) {
 		$new_tags = string_to_tag_array($tags_contributed);
 		//$new_tags_contributed = (array)$entity->tags_contributed;
 		foreach($new_tags as $tag) { $new_tags_contributed[] = $tag; }
-		$new_tags_contributed = array_unique($tags_contributed);
-		$new_tags_contributed = array_filter($tags_contributed);
+		$new_tags_contributed = array_unique($new_tags_contributed);
+		$new_tags_contributed = array_filter($new_tags_contributed);
 	}
 	$entity->tags_contributed = $new_tags_contributed;
 	
