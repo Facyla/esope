@@ -237,10 +237,10 @@ if (!$error) {
 // Handle admin-reserved fields
 if ($is_admin) {
 	$tags_contributed = get_input('tags_contributed');
-	// Add new tag
+	// Replace existing tags
 	if (!empty($tags_contributed)) {
 		$new_tags = string_to_tag_array($tags_contributed);
-		$tags_contributed = (array)$entity->tags_contributed;
+		//$tags_contributed = (array)$entity->tags_contributed;
 		foreach($new_tags as $tag) { $tags_contributed[] = $tag; }
 		$tags_contributed = array_unique($tags_contributed);
 		$tags_contributed = array_filter($tags_contributed);
