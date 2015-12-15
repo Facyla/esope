@@ -39,6 +39,7 @@ $category_opt = transitions_get_category_opt($vars['category'], true);
 
 // Set some values from URL, if set
 if (!$vars['guid']) {
+	/*
 	$vars['title'] = get_input('title', $vars['title']);
 	$vars['url'] = get_input('url', $vars['url']);
 	$vars['rss_feed'] = get_input('rss_feed', $vars['rss_feed']);
@@ -46,7 +47,25 @@ if (!$vars['guid']) {
 	$vars['lang'] = get_input('lang', $vars['lang']);
 	$vars['excerpt'] = get_input('excerpt', $vars['excerpt']);
 	$vars['description'] = get_input('description', $vars['description']);
-	if (!$vars['tags']) $vars['tags'] = explode(',', get_input('tags'));
+	*/
+	$var_names = array('title', 'url', 'rss_feed', 'category', 'lang', 'excerpt', 'description');
+	foreach ($var_names as $var_name) {
+		// Get var value from direct var passing, with URL override if available
+		$vars[$var_name] = get_input($var_name, $vars[$var_name]);
+		// URL decoding should work without that, but this ensures that this will work even with browsers encoding twice the URL...
+		if (strpos($vars[$var_name], '%')) {
+			$vars[$var_name] = urldecode($vars[$var_name]);
+			echo "Decode $var_name<br />";
+		}
+	}
+	// Get tags, this is a bit differnt as we need an array
+	if (!$vars['tags']) {
+		$vars['tags'] = get_input('tags');
+		if (strpos($vars['tags'], '%')) {
+			$vars['tags'] = urldecode($vars['tags']);
+		}
+		$vars['tags'] = explode(',', $vars['tags']);
+	}
 }
 
 
