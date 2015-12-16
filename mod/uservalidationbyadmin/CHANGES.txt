@@ -1,0 +1,24 @@
+Version history
+===============
+
+3.0:
+
+- changes for Elgg 1.10
+
+2.0:
+
+- changes for Elgg 1.9
+
+1.1 (2014-08-27):
+
+- applied coding standards
+- added: options for admin to opt-out of notifications #1
+- fixed: confirmation email not sending
+- fixed: serious security issue with authentication
+- fixed: missing translation key
+- fixed: direct admin notification doesn't work
+- changed: README.txt to README.md for GitHub readability
+
+1.0 (2012-06-05):
+
+- initial release

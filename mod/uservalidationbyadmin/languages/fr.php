@@ -1,91 +1,88 @@
 <?php
-/**
- * Email user validation plugin language pack.
- *
- * @package Elgg.Core.Plugin
- * @subpackage Elgguservalidationbyadmin
- */
 
-$fr = array(
-	'admin:users:unvalidated' => 'Non validés',
+return array(
+	'uservalidationbyadmin' => "Validation des inscriptions par administrateur",
 	
-	'email:validate:subject' => "%s demande la validation de son compte pour %s !",
-	'email:validate:body' => "Bonjour,
-
-\"%1\$s\" vous demande la validation de son compte. 
-
-Les informations de l'utilisateur sont :
-Identifiant : %8\$s
-Email : %7\$s
-Adresse IP : %2\$s
-Emplacement probable : %3\$s
-
-Vous pouvez valider directement son compte en cliquant sur le lien ci-dessous :
-%4\$s
-
-Ou accéder à la liste des comptes non validés :
-%6\$sadmin/users/unvalidated
-
-Si vous ne pouvez pas cliquer sur le lien, veuillez le copier-coller dans votre navigateur.
-
-%5\$s
-%6\$s
-",
-
-	'user:validate:subject' => "Bonjour %s ! Votre compte est activé",
-	'user:validate:body' => "Bonjour %s,
-
-Votre compte sur %s a été activé par l'administrateur. 
-
-Vous pouvez vous connecter dès maintenant avec les accès suivants :
-
-Identifiant de connexion : %s
-Mot de passe : celui que vous avez indiqué lors de l'inscription
-
-%s
-%s
-",
-
-	'email:confirm:success' => "Ce compte utilisateur est maintenant validé",
-	'email:confirm:fail' => "Ce compte utilisateur n'a pas pu être validé...",
-
-	'uservalidationbyadmin:registerok' => "Vous recevrez un mail de confirmation dès que l'administrateur aura confirmé votre demande de création de compte",
-	'uservalidationbyadmin:login:fail' => "Votre compte n'est pas validé, c'est pourquoi vous n'avez pas pu vous identifier. Vous devez attendre qu'un administrateur valide votre compte.",
-
-	'uservalidationbyadmin:admin:no_unvalidated_users' => 'Aucun compte en attente de validation.',
-
-	'uservalidationbyadmin:admin:unvalidated' => 'Non validé',
-	'uservalidationbyadmin:admin:user_created' => "Demande d'inscription faite %s",
-	'uservalidationbyadmin:admin:resend_validation' => 'Renvoyer la validation validation',
-	'uservalidationbyadmin:admin:validate' => ' Valider ',
-	'uservalidationbyadmin:admin:delete' => ' Supprimer ',
-	'uservalidationbyadmin:confirm_validate_user' => 'Valider %s ?',
-	'uservalidationbyadmin:confirm_resend_validation' => 'Renvoyer un mail de validation à %s ?',
-	'uservalidationbyadmin:confirm_delete' => 'Supprimer %s ?',
-	'uservalidationbyadmin:confirm_validate_checked' => 'Valider les comptes utilisateurs sélectionnés ?',
-	'uservalidationbyadmin:confirm_resend_validation_checked' => 'Renovyer une validation aux comptes utilisateurs sélectionnés ?',
-	'uservalidationbyadmin:confirm_delete_checked' => 'Supprimer les comptes utilisateurs sélectionnés ?',
-	'uservalidationbyadmin:check_all' => 'Tout sélectionner',
-
-	'uservalidationbyadmin:errors:unknown_users' => 'Comptes utilisateurs inconnus',
-	'uservalidationbyadmin:errors:could_not_validate_user' => 'Impossible de valider ce compte utilisateur.',
-	'uservalidationbyadmin:errors:could_not_validate_users' => 'Impossible de valider tous les comptes utilisateurs sélectionnés.',
-	'uservalidationbyadmin:errors:could_not_delete_user' => 'Impossible de supprimer le compte utilisateur.',
-	'uservalidationbyadmin:errors:could_not_delete_users' => 'Impossible de supprimer tous les comptes utilisateurs sélectionnés.',
-	'uservalidationbyadmin:errors:could_not_resend_validation' => 'Impossible de renvoyer la demande de validation.',
-	'uservalidationbyadmin:errors:could_not_resend_validations' => 'Impossible de renvoyer toutes les demandes de validation aux comptes utilisateurs sélectionnés.',
-
-	'uservalidationbyadmin:messages:validated_user' => 'Compte utilisateur validé.',
-	'uservalidationbyadmin:messages:validated_users' => 'Tous les comptes utilisateurs sélectionnés ont été validés.',
-	'uservalidationbyadmin:messages:deleted_user' => 'Compte utilisateur supprimé.',
-	'uservalidationbyadmin:messages:deleted_users' => 'Tous les comptes utilisateurs sélectionnés ont été supprimés.',
-	'uservalidationbyadmin:messages:resent_validation' => 'Demande de validation envoyée à nouveau.',
-	'uservalidationbyadmin:messages:resent_validations' => 'Demandes de validation envoyées à nouveau à chacun des comptes utilisateurs sélectionnés.',
+	// general stuff
+	'uservalidationbyadmin:validate' => "Valider",
+	'uservalidationbyadmin:validate:confirm' => "Voulez-vous valider ce compte ?",
 	
-	'uservalidationbyadmin:settings:usernames' => "Nom d'utilisateur des membres à prévenir (doivent être admin)",
-	'uservalidationbyadmin:user' => "Nom d'utilisateur n°%s",
+	// plugin settings
+	'uservalidationbyadmin:settings:admin_notify' => "Quand souhaitez-vous que les administrateurs reçoivent des notifications à propos des demandes d'inscription à examiner",
+	'uservalidationbyadmin:settings:admin_notify:direct' => "A chaque fois qu'un utilisateur s'inscrit",
+	'uservalidationbyadmin:settings:admin_notify:daily' => "Quotidien",
+	'uservalidationbyadmin:settings:admin_notify:weekly' => "Hebdomadaire",
+	'uservalidationbyadmin:settings:admin_notify:none' => "Pas de notification",
+	
+	// user settings
+	'uservalidationbyadmin:usersettings:nonadmin' => "Seuls les administrateurs du site sont autorisés à valider les demandes.",
+	'uservalidationbyadmin:usersettings:notify' => "Je souhaite recevoir des notifications à propos des demandes d'inscription en attente",
+	
+	// login
+	'uservalidationbyadmin_pam_handler:failed' => "Votre demande d'inscription doit être validée manuellement, vous recevrez un message lorsque ce sera fait",
+	'uservalidationbyadmin:login:error' => "Votre demande d'inscription doit être validée manuellement, vous recevrez un message lorsque ce sera fait",
+	
+	// listing
+	'admin:users:pending_approval' => "Inscriptions en attente",
+	
+	'uservalidationbyadmin:pending_approval:description' => "Vous trouverez ci-dessous la liste des demandes d'inscription en attente. Ces comptes utilisateurs sont inactifs et nécessitent d'être validés pour que les personnes qui ont fait ces demandes puissent se connecter au site.",
+	'uservalidationbyadmin:pending_approval:title' => "Compte en attente d'approbation",
+	
+	'uservalidationbyadmin:bulk_action:select' => "Veuillez sélectionner au moins un utilisateur pour effectuer cete action",
+	
+	// notification
+	'uservalidationbyadmin:notify:validate:subject' => "Votre demande d'inscription sur %s a été validée",
+	'uservalidationbyadmin:notify:validate:message' => "Bonjour %s,
 
+Votre demande d'inscription sur %s a été validée, vous pouvez utiliser le site dès à présent.
+
+Veuillez vous rendre sur %s pour commencer.",
+
+		'uservalildationbyadmin:notify:admin:subject' => "Des demandes d'inscription nécessitent votre attention",
+		'uservalildationbyadmin:notify:admin:message' => "Bonjour %s,
+
+Il y a %s demandes d'inscription en attente sur %s.
+
+Veuillez vous connecter sur %s pour approuver/supprimer les demandes d'inscription.",
+	
+	// actions
+	// validate
+	'uservalidationbyadmin:actions:validate:error:save' => "Une erreur inconnue s'est produite lors de la validation de %s",
+	'uservalidationbyadmin:actions:validate:success' => "%s a été validé",
+	
+	// bulk action
+	'uservalidationbyadmin:actions:bulk_action:error:invalid_action' => "L'action choisie n'est pas valide",
+	'uservalidationbyadmin:actions:bulk_action:success:delete' => "Demande(s) d'inscription supprimée(s)",
+	'uservalidationbyadmin:actions:bulk_action:success:validate' => "Compte(s) utilisateur(s) validé(s)",
+	
+	
+	'uservalidationbyadmin:admin:listnotified' => "Liste des administrateurs et de leurs préférences de notification",
+	'uservalidationbyadmin:admin:usersettings' => "modifier les paramètres",
+	'uservalidationbyadmin:settings:emailvalidation' => "Permettre aux administrateurs de valider directement via un lien dans l'email",
+	'uservalidationbyadmin:settings:admin:additionalinfo' => "Ajouter des informations complémentaires pour l'admin dans l'email de validation",
+	'uservalidationbyadmin:settings:user:additionalinfo' => "Ajouter des informations complémentaires pour l'utilisateur dans l'email de confirmation après validation",
+	'uservalidationbyadmin:userinfo' => "Demande de %s : username %s, email %s",
+	'uservalidationbyadmin:userinfo:geo' => "Demande de %s : username %s, email %s, IP %s, Geo %s",
+	'uservalidationbyadmin:user_validation_link' => "Lien de confirmation immédiate du compte de %s : %s",
+	
+		'uservalidationbyadmin:notify:admin:message:alternate' => "Bonjour %s,
+
+Il y a %s demandes d'inscription en attente sur %s :
+%s
+
+Veuillez vous connecter sur %s pour approuver/supprimer les demandes d'inscription.",
+	
+	'uservalidationbyadmin:notify:validate:message:alternate' => "Bonjour %s,
+
+Votre demande d'inscription sur %s a été validée, vous pouvez utiliser le site dès à présent.
+
+Nom d'utilisateur : %s
+Email d'inscription : %s
+Mot de passe : celui que vous avez choisi lors de votre demande d'inscription
+
+Veuillez vous rendre sur %s pour commencer.",
+	
+	'uservalidationbyadmin:actions:validate:error:code' => "Code de validation incorrect",
+	
 );
-
-add_translation("fr", $fr);
 
