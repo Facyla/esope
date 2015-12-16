@@ -12,8 +12,9 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 
 // Image de fond configurable
 $headerimg = elgg_get_plugin_setting('headerimg', 'esope');
-$headerimg = elgg_get_plugin_setting('headerimg', 'esope');
-//if (empty($headerimg)) { $headerimg = $url . 'mod/esope/img/headimg.jpg'; }
+if (!empty($headerimg)) { $headerimg = $url . $headerimg; }
+$headbackground = elgg_get_plugin_setting('headbackground', 'esope');
+if (!empty($headerimg)) { $headerimg = $url . $headbackground; }
 /* Toutes les couleurs de l'interface
 #000000 // noir
 #2a2a2a // gris quasi-noir
