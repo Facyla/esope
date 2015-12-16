@@ -248,7 +248,7 @@ View and comment on the contribution:
 	'transitions:category:actor' => "<i class=\"fa fa-user\"></i> Actor",
 	'transitions:category:actor:details' => "Individuals, groups, organisations, institutions...",
 	'transitions:category:project' => "<i class=\"fa fa-cube\"></i> Project",
-	'transitions:category:project:details' => "Realisations, projects and initiatives ; passed, present or future; successful or failed...",
+	'transitions:category:project:details' => "Projects and initiatives - past, present & planned, successful or not",
 	'transitions:category:event' => "<i class=\"fa fa-calendar\"></i> Event",
 	'transitions:category:event:details' => "A highlight, a date to remember, a workshop, a meeting, brief any type of event that can be added to a calendar!",
 	'transitions:category:editorial' => "<i class=\"fa fa-newspaper-o\"></i> Editorial product",
