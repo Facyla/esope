@@ -145,7 +145,7 @@ input:focus, textarea:focus { outline:0; }
 
 /* ESOPE : bandeau */
 .elgg-page-header {
-<?php if (empty($headbackground)) { ?>
+<?php if (!empty($headbackground)) { ?>
 	background-image: url("<?php echo $headbackground; ?>"), linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
 	background-image: url("<?php echo $headbackground; ?>"), -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
 	background-image: url("<?php echo $headbackground; ?>"), -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
