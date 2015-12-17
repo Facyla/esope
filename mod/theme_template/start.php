@@ -12,7 +12,6 @@ elgg_register_event_handler('init', 'system', 'theme_template_init');
  * Init theme_template plugin.
  */
 function theme_template_init() {
-	global $CONFIG; // All site useful vars
 	
 	// Extend CSS with custom styles
 	elgg_extend_view('css', 'theme_template/css');
@@ -71,13 +70,13 @@ function theme_template_function() {
 }
 */
 
-// Theme inria logged in index page
+// Theme logged in index page
 function theme_template_index(){
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/loggedin_homepage.php');
 	return true;
 }
 
-// Theme inria public index page
+// Theme public index page
 function theme_template_public_index() {
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/public_homepage.php');
 	return true;

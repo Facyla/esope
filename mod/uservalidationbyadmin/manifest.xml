@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
-	<name>User Validation by Admin</name>
-	<author>Florian DANIEL aka Facyla, forked from Raez @ Team Webgalli</author>
-	<version>1.2</version>
-	<category>security</category>
-	<description>User account validation by admin plugin.</description>
-	<website>http://www.webgalli.com/</website>
+	<name>User validation by admin</name>
+	<author>ColdTrick IT Solutions</author>
+	<version>3.0</version>
+	<description>New user have to be validated by an administrator before they can use the site</description>
+	<id>uservalidationbyadmin</id>
+	<website>http://www.coldtrick.com/</website>
+	<repository>https://github.com/ColdTrick/uservalidationbyadmin</repository>
+	<bugtracker>https://github.com/ColdTrick/uservalidationbyadmin/issues</bugtracker>
+	<copyright>(C) ColdTrick IT Solutions 2012 - 2015</copyright>
 	<license>GNU General Public License version 2</license>
+	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.10</version>
 	</requires>
-	<conflicts>
+	
+	<suggests>
 		<type>plugin</type>
 		<name>uservalidationbyemail</name>
-	</conflicts>	
-	<activate_on_install>false</activate_on_install>
+	</suggests>
+	
+ 	<category>ColdTrick</category>
 </plugin_manifest>
-
-<!--
-
-1.2 20150203 : more details and links in sent mail
-1.1 - Esope : new version to allow multiple admins
-
-//-->
-

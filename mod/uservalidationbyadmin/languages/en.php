@@ -1,90 +1,86 @@
 <?php
-/**
- * Email user validation plugin language pack.
- *
- * @package Elgg.Core.Plugin
- * @subpackage Elgguservalidationbyadmin
- */
 
-$english = array(
-	'admin:users:unvalidated' => 'Unvalidated',
+return array(
+	'uservalidationbyadmin' => "User validation by admin",
 	
-	'email:validate:subject' => "%s is requesting validation of account for %s!",
-	'email:validate:body' => "Hello,
-
-\"%1\$s\" is requesting validation of their account 
-
-Account details and geolocation are:
-Username : %8\$s
-Email : %7\$s
-IP address: %2\$s
-Probable location: %3\$s
-
-You can validate their account by clicking on the link below: 
-%4\$s
-
-Or check the full list of un-validated accounts: 
-%6\$sadmin/users/unvalidated
-
-If you can't click on the link, copy and paste it to your browser manually.
-
-%5\$s
-%6\$s
-",
-
-	'user:validate:subject' => "Congrats %s! Your account is activated",
-	'user:validate:body' => "Hello %s,
-
-This is to notify that your account at %s is activated by the admin. 
-
-You can now login to the site with:
-
-Username : %s
-Password : the one you provided while registration
-
-%s
-%s
-",
-
-	'email:confirm:success' => "The user account is now validated",
-	'email:confirm:fail' => "The user account could not be validated...",
-
-	'uservalidationbyadmin:registerok' => "You will be notified once the admin approves your account",
-	'uservalidationbyadmin:login:fail' => "Your account is not validated so the log in attempt failed. You have to wait until an admin validates your account.",
-
-	'uservalidationbyadmin:admin:no_unvalidated_users' => 'No unvalidated users.',
-
-	'uservalidationbyadmin:admin:unvalidated' => 'Unvalidated',
-	'uservalidationbyadmin:admin:user_created' => 'Registered %s',
-	'uservalidationbyadmin:admin:resend_validation' => 'Resend validation',
-	'uservalidationbyadmin:admin:validate' => 'Validate',
-	'uservalidationbyadmin:admin:delete' => 'Delete',
-	'uservalidationbyadmin:confirm_validate_user' => 'Validate %s?',
-	'uservalidationbyadmin:confirm_resend_validation' => 'Resend validation email to %s?',
-	'uservalidationbyadmin:confirm_delete' => 'Delete %s?',
-	'uservalidationbyadmin:confirm_validate_checked' => 'Validate checked users?',
-	'uservalidationbyadmin:confirm_resend_validation_checked' => 'Resend validation to checked users?',
-	'uservalidationbyadmin:confirm_delete_checked' => 'Delete checked users?',
-	'uservalidationbyadmin:check_all' => 'All',
-
-	'uservalidationbyadmin:errors:unknown_users' => 'Unknown users',
-	'uservalidationbyadmin:errors:could_not_validate_user' => 'Could not validate user.',
-	'uservalidationbyadmin:errors:could_not_validate_users' => 'Could not validate all checked users.',
-	'uservalidationbyadmin:errors:could_not_delete_user' => 'Could not delete user.',
-	'uservalidationbyadmin:errors:could_not_delete_users' => 'Could not delete all checked users.',
-	'uservalidationbyadmin:errors:could_not_resend_validation' => 'Could not resend validation request.',
-	'uservalidationbyadmin:errors:could_not_resend_validations' => 'Could not resend all validation requests to checked users.',
-
-	'uservalidationbyadmin:messages:validated_user' => 'User validated.',
-	'uservalidationbyadmin:messages:validated_users' => 'All checked users validated.',
-	'uservalidationbyadmin:messages:deleted_user' => 'User deleted.',
-	'uservalidationbyadmin:messages:deleted_users' => 'All checked users deleted.',
-	'uservalidationbyadmin:messages:resent_validation' => 'Validation request resent.',
-	'uservalidationbyadmin:messages:resent_validations' => 'Validation requests resent to all checked users.',
+	// general stuff
+	'uservalidationbyadmin:validate' => "Validate",
+	'uservalidationbyadmin:validate:confirm' => "Are your sure you wish to validate this user?",
 	
-	'uservalidationbyadmin:settings:usernames' => "Usernames to be warned (must be admins)",
-	'uservalidationbyadmin:user' => "Username %s",
+	// plugin settings
+	'uservalidationbyadmin:settings:admin_notify' => "When do you wish to receive a notification about users needing validation",
+	'uservalidationbyadmin:settings:admin_notify:direct' => "When a user registers",
+	'uservalidationbyadmin:settings:admin_notify:daily' => "Daily",
+	'uservalidationbyadmin:settings:admin_notify:weekly' => "Weekly",
+	'uservalidationbyadmin:settings:admin_notify:none' => "No notification",
+	
+	// user settings
+	'uservalidationbyadmin:usersettings:nonadmin' => "Only site administrators have settings for this plugin.",
+	'uservalidationbyadmin:usersettings:notify' => "I want to receive notifications about pending approvals",
+	
+	// login
+	'uservalidationbyadmin_pam_handler:failed' => "Your account needs to be validated by an administrator, you'll be notified when this happens",
+	'uservalidationbyadmin:login:error' => "Your account needs to be validated by an administrator, you'll be notified when this happens",
+	
+	// listing
+	'admin:users:pending_approval' => "Pending approval",
+	
+	'uservalidationbyadmin:pending_approval:description' => "Below you can find a list of users who require your approval before they can use this community",
+	'uservalidationbyadmin:pending_approval:title' => "Users awaiting approval",
+	
+	'uservalidationbyadmin:bulk_action:select' => "Please select at least one user to perform this action",
+	
+	// notifiction
+	'uservalidationbyadmin:notify:validate:subject' => "Your account on %s has been approved",
+	'uservalidationbyadmin:notify:validate:message' => "Hi %s,
+
+Your account on %s has been validated, you can now start using the site.
+
+Go to: %s to start your experience.",
+
+		'uservalildationbyadmin:notify:admin:subject' => "Users are awaiting your approval",
+		'uservalildationbyadmin:notify:admin:message' => "Hi %s,
+
+%s users are awaiting your approval on %s.
+Please visit %s in order to approve/delete the users.",
+	
+	// actions
+	// validate
+	'uservalidationbyadmin:actions:validate:error:save' => "An unknown error occured while validating %s",
+	'uservalidationbyadmin:actions:validate:success' => "%s has been validated",
+	
+	// bulk action
+	'uservalidationbyadmin:actions:bulk_action:error:invalid_action' => "The selected action is invalid",
+	'uservalidationbyadmin:actions:bulk_action:success:delete' => "Successfully deleted the users",
+	'uservalidationbyadmin:actions:bulk_action:success:validate' => "Successfully validated the users",
+	
+	
+	'uservalidationbyadmin:admin:listnotified' => "List of administrators and their notification settings",
+	'uservalidationbyadmin:admin:usersettings' => "edit settings",
+	'uservalidationbyadmin:settings:emailvalidation' => "Allow admins to validate account through direct email validation link",
+	'uservalidationbyadmin:settings:admin:additionalinfo' => "Add additional information about user in notification email",
+	'uservalidationbyadmin:settings:user:additionalinfo' => "Add additional information for the user in confirmation email (after validation)",
+	'uservalidationbyadmin:userinfo' => "Pending approval for %s : username %s, email %s",
+	'uservalidationbyadmin:userinfo:geo' => "Pending approval for %s : username %s, email %s, IP %s, Geo %s",
+	'uservalidationbyadmin:user_validation_link' => "Immediate confirmation link for %s : %s",
+	
+		'uservalidationbyadmin:notify:admin:message:alternate' => "Hi %s,
+
+%s users are awaiting your approval on %s:
+%s
+
+Please visit %s in order to approve/delete the users.",
+	
+	'uservalidationbyadmin:notify:validate:message:alternate' => "Hi %s,
+
+Your account on %s has been validated, you can now start using the site.
+
+Username: %s
+Registration email: %s
+Password: the one you have chosen when you registered
+
+Go to: %s to start your experience.",
+	
+	'uservalidationbyadmin:actions:validate:error:code' => "Validation code is not valid",
 	
 );
-
-add_translation("en", $english);
