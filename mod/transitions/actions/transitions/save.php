@@ -114,8 +114,8 @@ if (!empty($category)) {
 		$values['rss_feed'] = '';
 		$values['challenge_elements'] = '';
 	}
+	
 }
-
 
 // fail if a required entity isn't set
 //$required = array('title', 'description');
@@ -159,6 +159,12 @@ foreach ($values as $name => $default) {
 			} else {
 				unset($values[$name]);
 			}
+			break;
+		
+		case 'collection':
+			// Enable removing an associated collection (we need to pass "none" because empty values are blocked by JS in edit form)
+			if ($value == 'none') { $value = ''; }
+			$values['collection'] = $value;
 			break;
 
 		default:

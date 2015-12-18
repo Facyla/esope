@@ -51,7 +51,7 @@ return array(
 	// NEW STRINGS
 	'collections:view' => "Voir les éléments",
 	'collections:edit:entities' => "Publication",
-	'collections:edit:entities_comment' => "Commentaire",
+	'collections:edit:entities_comment' => "Brève explication",
 	'collections:select_entity' => "Choisir une publication",
 	'collections:change_entity' => "Changer de publication",
 	'collection:add' => "Créer une collection",

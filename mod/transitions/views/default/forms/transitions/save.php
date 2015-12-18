@@ -331,7 +331,7 @@ $collection_label = elgg_echo('transitions:challenge:collection');
 // Note : admin can select 
 $collection_input = '';
 $collections_opt = array();
-$collections_opt[''] = '';
+$collections_opt['none'] = elgg_echo('transitions:challenge:collection:none');
 $collections_params = array('types' => 'object', 'subtypes' => 'collection', 'order_by' => 'time_created desc', 'limit' => 0);
 $collections = elgg_get_entities($collections_params);
 // Tri alphabétique des pages (sur la base du pagetype)

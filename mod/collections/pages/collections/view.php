@@ -48,6 +48,10 @@ if ($embed) {
 	exit;
 }
 
+// Add comments in full view only (not in embed))
+if (elgg_instanceof($collection, 'object', 'collection')) {
+	$content .= elgg_view_comments($collection);
+}
 
 // Wrap into default, full-page layout
 $content = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'class' => "collections-view"));

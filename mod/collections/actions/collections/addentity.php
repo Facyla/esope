@@ -29,7 +29,7 @@ if ($guid) {
 
 // Add new contribution (any member, if allowed by author)
 if (!elgg_is_logged_in() || ($entity->write_access_id <= 0)) {
-	register_error('collections:addentity:notallowed');
+	register_error(elgg_echo('collections:addentity:notallowed'));
 	forward(get_input('forward', REFERER));
 }
 

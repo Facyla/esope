@@ -13,5 +13,5 @@ echo '<p><em>' . elgg_echo('collections:addentity:details') . '</em></p>';
 echo elgg_view('collections/input/addentity', array());
 
 echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars['guid']));
-echo elgg_view('input/submit', array('value' => elgg_echo('collections:addentity:submit')));
+echo elgg_view('input/submit', array('value' => elgg_echo('collections:addentity:submit'), 'class' => 'hidden'));
 
