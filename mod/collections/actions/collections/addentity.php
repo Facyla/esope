@@ -14,12 +14,6 @@
 // start a new sticky form session in case of failure
 elgg_make_sticky_form('collections-addentity');
 
-// Add new contribution (any member, if allowed by author)
-if (!elgg_is_logged_in() || ($collection->write_access_id <= 0)) {
-	register_error('collections:addentity:notallowed');
-	forward(get_input('forward', REFERER));
-}
-
 // edit or create a new entity
 $guid = get_input('guid');
 $entity_guid = get_input('entity_guid');
@@ -33,6 +27,11 @@ if ($guid) {
 	}
 }
 
+// Add new contribution (any member, if allowed by author)
+if (!elgg_is_logged_in() || ($entity->write_access_id <= 0)) {
+	register_error('collections:addentity:notallowed');
+	forward(get_input('forward', REFERER));
+}
 
 // Check if entity exists
 if ($entity_guid) {
