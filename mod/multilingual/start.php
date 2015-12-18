@@ -485,12 +485,12 @@ function multilingual_select_best_version($entity, $lang = false) {
 	if (($main_lang == $lang) && ($entity->guid == $main->guid)) { return $entity; }
 	// Any other translation in current language
 	$translations = multilingual_get_translations($entity);
-	foreach($translations as $ent) {
+	if ($translations) foreach($translations as $ent) {
 		if ($ent->lang == $lang) { return $ent; }
 	}
 	
 	// Any other translation in main language
-	foreach($translations as $ent) {
+	if ($translations) foreach($translations as $ent) {
 		if ($ent->lang == $main_lang) { return $ent; }
 	}
 	
