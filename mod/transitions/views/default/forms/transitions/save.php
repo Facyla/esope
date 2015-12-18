@@ -76,6 +76,7 @@ if ($vars['guid']) {
 		'href' => $delete_url,
 		'text' => elgg_echo('delete'),
 		'class' => 'elgg-button elgg-button-delete float-alt',
+		'is_action' => true,
 		'confirm' => true,
 	));
 }

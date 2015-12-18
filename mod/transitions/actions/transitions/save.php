@@ -357,7 +357,8 @@ if (!$error) {
 				// create icon
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
-				$fh->owner_guid = $transitions->getOwnerGUID();
+				//$fh->owner_guid = $transitions->guid; // Entity-based folder
+				$fh->owner_guid = $transitions->getOwnerGUID(); // Owner-based folder
 				foreach($icon_sizes as $icon_name => $icon_info){
 					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
 						$fh->setFilename($prefix . $icon_name . ".jpg");

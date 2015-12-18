@@ -100,6 +100,11 @@ function transitions_init() {
 
 	// ecml
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'transitions_ecml_views_hook');
+	
+	// Intercept newly created translation and copy the images
+	// Note : event is triggered after multilingual hook has finished (so we can rely on the added metadata)
+	elgg_register_event_handler("translate:after", "object", "transitions_after_create_handler_event");
+	
 }
 
 
@@ -383,7 +388,8 @@ function transitions_icon_hook($hook, $entity_type, $returnvalue, $params) {
 			if (!empty($entity->icontime)) {
 				$icontime = "{$entity->icontime}";
 				$filehandler = new ElggFile();
-				$filehandler->owner_guid = $entity->getOwnerGUID();
+				//$filehandler->owner_guid = $entity->guid; // Entity-based folder
+				$filehandler->owner_guid = $entity->getOwnerGUID(); // Owner-based folder
 				$filehandler->setFilename("transitions/" . $entity->getGUID() . $size . ".jpg");
 				if ($filehandler->exists()) {
 					return elgg_get_site_url() . "catalogue/icon/{$entity->getGUID()}/$size/$icontime.jpg";
@@ -471,6 +477,55 @@ function transitions_get_country_opt($value = '', $addempty = false) {
 	// Add current value
 	if (!empty($value) && !isset($list[$value])) { $list[$value] = elgg_echo($value); }
 	return $list;
+}
+
+
+// Copy image when  metadata for multilingual support
+function transitions_after_create_handler_event($event, $type, $entity) {
+	if (elgg_instanceof($entity, 'object', 'transitions')) {
+			
+		// We need multilingual plugin enabled
+		if (!elgg_is_active_plugin('multilingual')) { return; }
+		
+		// Get source entity (assume it's main entity')
+		$main_entity = multilingual_get_main_entity($entity);
+		
+		// Same entity : no need to continue
+		if ($main_entity->guid == $entity->guid) { return; }
+		
+		// We also need an image to duplicate
+		if (!empty($main_entity->icontime)) { return; }
+		
+		// Set source image file handler
+		$fh_source = new ElggFile();
+		//$fh_source->owner_guid = $main_entity->guid; // Entity-based folder
+		$fh_source->owner_guid = $main_entity->getOwnerGUID(); // Owner-based folder
+		
+		// Set target image file handler
+		$prefix = "transitions/" . $entity->getGUID();
+		$fh = new ElggFile();
+		//$fh->owner_guid = $entity->guid; // Entity-based folder
+		$fh->owner_guid = $entity->getOwnerGUID(); // Owner-based folder
+		
+		// Autres dimensions, notamment recadrage pour les vignettes en format carré définies via le thème
+		$icon_sizes = elgg_get_config("icon_sizes");
+		
+		// Create icons
+		foreach($icon_sizes as $icon_name => $icon_info) {
+			$fh_source->setFilename("transitions/" . $main_entity->guid. $icon_name . ".jpg");
+			if ($fh_source->exists()) {
+				if ($source_image = $fh_source->grabFile()) {
+					// Copy image to target entity
+					$fh->setFilename($prefix . $icon_name . ".jpg");
+					if($fh->open("write")){
+						$fh->write($source_image);
+						$fh->close();
+					}
+				}
+			}
+		}
+		$entity->icontime = time();
+	}
 }
 
 
