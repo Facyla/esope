@@ -44,9 +44,12 @@ function theme_transitions2_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:topbar', 'theme_transitions2_topbar_menu', 1000);
 	
 	// Ajout au menu
+	// Ajout fait directement dans page/elements/topbar car doit apparaître sans clic dans vue mobile
+	/*
+	*/
 	if (elgg_is_active_plugin('language_selector')) {
 		$language_selector = elgg_view('theme_transitions2/language_selector');
-		elgg_register_menu_item('topbar', array(
+		elgg_register_menu_item('topbar-lang', array(
 				'name' => 'language_selector',
 				'text' => $language_selector,
 				'href' => false,

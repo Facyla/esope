@@ -3,16 +3,19 @@
 	<name>Transitions</name>
 	<id>transitions</id>
 	<author>Florian DANIEL aka Facyla - based on blog plugin</author>
-	<version>1.11</version>
-	<category>content</category>
-	<category>widget</category>
+	<version>1.12</version>
 	<description>Adds a multipurpose content to Elgg.</description>
 	<website>http://transitions2.net/</website>
-	<copyright>See COPYRIGHT.txt</copyright>
+	<copyright>FING 2015</copyright>
 	<license>GNU General Public License version 2</license>
+	
+	<category>content</category>
+	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.11</version>
+		<version>1.12</version>
 	</requires>
-	<activate_on_install>true</activate_on_install>
+	
+	<activate_on_install>false</activate_on_install>
+	
 </plugin_manifest>

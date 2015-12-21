@@ -3,7 +3,7 @@
 	<name>Transitions² Theme</name>
 	<id>theme_transitions2</id>
 	<author>Florian DANIEL - Facyla</author>
-	<version>1.11</version>
+	<version>1.12</version>
 	<category>theme</category>
 	<description>Responsive Elgg theme for Transitions²</description>
 	<website>http://items.fr</website>
@@ -12,7 +12,7 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.11</version>
+		<version>1.12</version>
 	</requires>
 	
 	<conflicts>

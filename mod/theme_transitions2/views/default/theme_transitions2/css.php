@@ -249,6 +249,7 @@ body { background:#EBE7DF; font-family:Lato; }
 	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
 	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
 	.elgg-menu-topbar li, .elgg-menu-topbar li { display: inline-block; width: 100%; }
+	.elgg-menu-topbar-lang { width: auto; padding-top: 10px; }
 	.elgg-menu-site > li.float-alt { width: 100%; }
 	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
 	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar, .elgg-menu-topbar-default > li:first-child a { padding-top: 0; margin: 0 10px; }

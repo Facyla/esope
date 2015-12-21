@@ -38,6 +38,9 @@ elgg_register_menu_item('extras', array(
 echo elgg_view_menu($menu, array('sort_by' => 'priority', array('elgg-menu-hz'), 'class' => "elgg-menu-topbar elgg-menu-topbar-default clearfix"));
 echo '</div>';
 
+// Language switch menu
+echo elgg_view_menu('topbar-lang', array('sort_by' => 'priority', array('elgg-menu-hz'), 'class' => "elgg-menu-topbar clearfix"));
+
 // elgg tools menu
 // need to echo this empty view for backward compatibility.
 echo elgg_view_deprecated("navigation/topbar_tools", array(), "Extend the topbar menus or the page/elements/topbar view directly", 1.8);
