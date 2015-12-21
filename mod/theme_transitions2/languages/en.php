@@ -8,12 +8,12 @@ return array(
 	'theme_transitions2:usersettings:block_messages' => "Forbid other contributeurs to send me messages",
 	'theme_transitions2:usersettings:block_messages:title' => "Private messages",
 	
-	'theme_transitions2:search' => "Search a contribution",
+	'theme_transitions2:search' => "Search contributions",
 	'theme_transitions2:newcontribution' => "Tell us your transition, share a resource for the catalog!",
-	'theme_transitions2:home' => "Transitions², à l’intersection du numérique et de l’écologie",
+	'theme_transitions2:home' => "Connecting the Digital and the Ecological Transitions",
 	'theme_transitions2:transitions:title' => "<span>Your</span> contributions",
 	'theme_transitions2:partners:title' => "<span>Impulsed</span> by",
-	'theme_transitions2:partners:text' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut nunc tempor, ullamcorper sapien ut, aliquam neque. Donec aliquam vel mauris et imperdiet. Fusce id orci ut nisi auctor facilisis. Vivamus feugiat posuere dui.",
+	'theme_transitions2:supporters:title' => "<span>Supported</span> by",
 	'theme_transitions2:contribute:button' => "Share!",
 	
 	'theme_transitions2:register:optionalfields' => "The following fields are optional. If you do not fill them, they will be automaticcaly generated for you.",
@@ -49,6 +49,8 @@ Password: %s
 	'theme_transitions:login:loggedinwithfing' => "Login successful with your Réseau Fing account.",
 	'theme_transitions2:news' => "News",
 	'theme_transitions2:news:title' => "News",
+	'theme_transitions2:challenge' => "Challenges",
+	'theme_transitions2:challenge:title' => "Challenges",
 	
 	'theme_transitions:comment:add:challenge' => "React to this challenge",
 	
@@ -78,6 +80,7 @@ Password: %s
 	'transitions:search:go' => "&#xf002;",
 	'transitions:search:placeholder' => "&#xf002; Search a contribution",
 	
+	'profile:location' => "City",
 	'profile:organisation' => "Organisation",
 	'profile:linkedin' => "Your LinkedIn profile URL",
 	'profile:twitter' => "Your Twitter profile URL",
@@ -94,6 +97,8 @@ Password: %s
 	'members:title:popular' => 'Popular contributors',
 	'members:title:online' => 'Online contributors',
 	'members:list:popular:none' => 'No contributor has a contact.',
+	
+	'name' => "First and last name",
 	
 	
 );

@@ -14,7 +14,6 @@ namespace Stash\Test;
 use Stash\Item;
 use Stash\Utilities;
 use Stash\Driver\Ephemeral;
-
 use Stash\Test\Stubs\PoolGetDriverStub;
 
 /**
@@ -153,8 +152,8 @@ abstract class AbstractItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Item requires keys as arrays.
+     * @expectedException PHPUnit_Framework_Error
+     * @expectedExceptionMessage Argument 1 passed to Stash\Item::setKey()
      */
     public function testGetItemInvalidKey()
     {
@@ -222,7 +221,7 @@ abstract class AbstractItemTest extends \PHPUnit_Framework_TestCase
         $sleepTime = ($end - $start) * 1000;
 
         $this->assertGreaterThan(500, $sleepTime, 'Sleep method sleeps for required time.');
-        $this->assertLessThan(510, $sleepTime, 'Sleep method does not oversleep.');
+        $this->assertLessThan(520, $sleepTime, 'Sleep method does not oversleep.');
 
         unset($sleepStash);
 

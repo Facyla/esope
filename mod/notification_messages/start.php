@@ -4,6 +4,14 @@
  *
  */
 
+// @DONE : direct messages
+// @DONE : subjects for objects (including discussions)
+// @TODO : notify owner
+// @TODO : handle comments
+// @TODO : handle file attachments
+// @TODO : other plugins (comment_tracker)
+
+
 elgg_register_event_handler('init', 'system', 'notification_messages_init'); // Init
 
 
@@ -11,8 +19,38 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
  * Init adf_notification_messages plugin.
  */
 function notification_messages_init() {
-	global $CONFIG;
 	
+	/* NOTIFICATION HOOKS */
+	
+	// Update subject + body + summary
+	// Handle new (registered) objects notification subjects
+	//elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
+	$subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
+	$subtypes = explode(',', $subtypes);
+	// Add discussion replies if discussion if=s in the list
+	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
+	if ($subtypes) {
+		foreach ($subtypes as $subtype) {
+			// Regular hook
+			// Note : we enable regular hook in all cases, because at worst it would be called twice and produce the same result, 
+			// but this will avoid having to maintain the list here in case some plugin change called hook
+			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
+			// Some subtypes use a specific hook
+			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
+				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
+			}
+		}
+	}
+	
+	// Add owner notification
+	$notify_owner = notification_messages_notify_owner();
+	if ($notify_owner) {
+		elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner');
+	}
+	
+	
+	
+	// Replace message action so we can use our custom message content
 	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
 	if ($messages_send != 'no') {
 		$action_path = elgg_get_plugins_path() . 'notification_messages/actions/messages';
@@ -21,11 +59,18 @@ function notification_messages_init() {
 	}
 	
 	
-	/* NOTIFICATION SUBJECTS HOOKS */
 	
-	// REGULAR OBJECTS
-	// Handle new (registered) objects notification subjects
-	elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
+
+
+
+	/* Except if other plugin breaks behaviour, this hook should not be useful anymore in 1.11+
+	// NOTIFICATION MESSAGE HOOKS
+	// Note : advanced_notifications should be able to act after this hook (can remove message content), so priority has to be < 999)
+	$blog_message = elgg_get_plugin_setting('object_blog_message', 'notification_messages');
+	if ($blog_message == 'allow') {
+		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'blog_notify_message');
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'notification_messages_notify_message_blog');
+	}
 	
 	// FORUM REPLIES
 	$groupforumtopic = elgg_get_plugin_setting('object_groupforumtopic', 'notification_messages');
@@ -38,17 +83,10 @@ function notification_messages_init() {
 		// Handle forum topic reply subject
 		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notification_messages_reply_subject_hook");
 	}
+	*/
 	
 	
-	/* NOTIFICATION MESSAGE HOOKS */
-	// @TODO add setting
-	$blog_message = elgg_get_plugin_setting('object_blog_message', 'notification_messages');
-	if ($blog_message == 'allow') {
-		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'blog_notify_message');
-		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'notification_messages_notify_message');
-	}
-	
-	
+	/*
 	// GENERIC COMMENTS BEHAVIOUR
 	// Some advanced_notifications features are limiting flexibility, so unregister them first
 	if (elgg_is_active_plugin('advanced_notifications')) {
@@ -56,16 +94,19 @@ function notification_messages_init() {
 	}
 	// Handle generic comments notifications actions and notification
 	elgg_register_plugin_hook_handler("action", "comments/add", "notification_messages_comment_action_hook", 1000);
+	*/
 	
 	
 	/* ENABLE ATTACHMENTS */
 	// register a hook to add a new hook that allows adding attachments and other params
 	// Note : enabled by default because it is required by notifications messages
+	/*
 	if (elgg_get_plugin_setting("object_notifications_hook", "notification_messages") != "no"){
 		elgg_register_plugin_hook_handler('object:notifications', 'all', 'notification_messages_object_notifications_hook');
 	}
+	*/
 	
-	
+	/*
 	// HANDLE CONFLICTS WITH OTHER PLUGINS
 	// Comment tracker : generates a duplicate message with a different subject and content 
 	// (because it does not use subject + message hooks)
@@ -73,6 +114,7 @@ function notification_messages_init() {
 		elgg_unregister_event_handler('create', 'annotation','comment_tracker_notifications');
 		elgg_register_event_handler('create', 'annotation','notification_messages_comment_tracker_notifications');
 	}
+	*/
 	
 }
 
@@ -88,52 +130,47 @@ function notification_messages_readable_subtype($subtype) {
 
 
 /**
-* Returns a more meaningful message for objects notifications
-* 
-* Notes :
-* Target mask is : [subtype container] Title
-* This provides best structure for handling discussions in most email clients
-* We don't really need to tell if it's a new publication or not, 
-*   as long as we can follow the activity on this particular topic
-* Also only handle notifications that are sent, so use a comprehensive approach to determine best subject
-* 
-* @param unknown_type $hook
-* @param unknown_type $entity_type
-* @param unknown_type $returnvalue
-* @param unknown_type $params
-*/
-function notification_messages_notify_subject($hook, $entity_type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
+ * Prepare a notification message about a new object
+ * 
+ * Notes :
+ * Target mask is : [subtype container] Title
+ * This provides best structure for handling discussions in most email clients
+ * We don't really need to tell if it's a new publication or not, 
+ *   as long as we can follow the activity on this particular topic
+ * Also only handle notifications that are sent, so use a comprehensive approach to determine best subject
+ *
+ * @param string                          $hook         Hook name
+ * @param string                          $type         Hook type
+ * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param array                           $params       Hook parameters
+ * @return Elgg_Notifications_Notification
+ */
+function notification_messages_prepare_notification($hook, $type, $notification, $params) {
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$recipient = $params['recipient'];
+	$language = $params['language'];
 	$method = $params['method'];
-
-	if (elgg_instanceof($entity, 'object')) {
-		$subtype = $entity->getSubtype();
-		
-		// Determine behaviour - default is not changing anything (can be already specific)
-		$setting = notification_messages_get_subtype_setting($subtype);
-		switch ($setting) {
-			case 'allow':
-				// Keep going => update subject
-				break;
-			case 'deny':
-				// Break notification process before sending
-				return true;
-				break;
-			case 'default':
-				return $returnvalue;
-		}
-		
-		// Build new subject
-		$returnvalue = notification_messages_build_subject($entity);
-		
-		// Encode in UTF-8 so we have best subject title support ? @TODO : check before enabling !
-		//$returnvalue = '=?UTF-8?B?'.base64_encode($returnvalue).'?=';
-	}
 	
-	// Return default or updated subject
-	return $returnvalue;
+	// Note : we do not use behaviour setting anymore (update subject and content but do not block sending)
+	// Determine behaviour - default is not changing anything (can be already specific)
+	// $setting = notification_messages_get_subtype_setting($subtype);
+	
+	// Notification subject
+	$subject = notification_messages_build_subject($entity, $params);
+	if (!empty($subject)) { $notification->subject = $subject; }
+	
+	// Notification message body
+	$body = notification_messages_build_body($entity, $params);
+	if (!empty($body)) { $notification->body = $body; }
+	
+	// Short summary about the notification
+	$summary = notification_messages_build_summary($entity, $params);
+	if (!empty($summary)) { $notification->summary = $summary; }
+	
+	return $notification;
 }
+
 
 
 /* Determine setting for this entity type */
@@ -148,14 +185,19 @@ function notification_messages_get_subtype_setting($subtype = '') {
  * Use new subject structure : [container | subtype] Title
  * or when no container : [subtype] Title
  */
-function notification_messages_build_subject($entity) {
+function notification_messages_build_subject($entity, $params) {
 	if (elgg_instanceof($entity)) {
+		$owner = $params['event']->getActor();
+		$recipient = $params['recipient'];
+		$language = $params['language'];
+		$method = $params['method'];
+		
 		// Get best readable subtype
 		$subtype = $entity->getSubtype();
 		$msg_subtype = notification_messages_readable_subtype($subtype);
 	
 		// Container should be a group or user, can also be a site
-		$msg_container = '';
+		$msg_container = false;
 		$container = $entity->getContainerEntity();
 		if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group") || elgg_instanceof($container, "site")) { $msg_container = $container->name; }
 	
@@ -169,20 +211,130 @@ function notification_messages_build_subject($entity) {
 		if (empty($msg_title)) { $msg_title = $entity->name; }
 		if (empty($msg_title)) { $msg_title = elgg_get_excerpt($entity->description, 25); }
 		// If still nothing, fail-safe to untitled
-		if (empty($msg_title)) { $msg_title = elgg_echo('notification_messages:untitled'); }
+		if (empty($msg_title)) { $msg_title = elgg_echo('notification_messages:untitled', $language); }
 		// Strip optional tags or spaces
 		$msg_title = trim(strip_tags($msg_title));
 		
-		if (empty($msg_container)) {
-			$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title));
-			return strip_tags($subject);
+		// Handle when using a specific container
+		if ($msg_container) {
+			$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title), $language);
 		} else {
-			$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title));
-			return strip_tags($subject);
+			$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title), $language);
 		}
+		
+		$subject = strip_tags($subject);
+		// Encode in UTF-8 so we have best subject title support ? @TODO : check before enabling !
+		//$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
+		return $subject;
 	}
 	return false;
 }
+
+// @TODO Notification summary
+function notification_messages_build_summary($entity, $params) {
+	if (elgg_instanceof($entity)) {
+		
+		
+	}
+	return false;
+}
+
+// @TODO Notification message content
+function notification_messages_build_body($entity, $params) {
+	if (elgg_instanceof($entity)) {
+		
+		$allowed_subtypes = array('blog'); // Backward compat : at least for blog
+		$subtype = $entity->getSubtype();
+		if (!in_array($subtype, $allowed_subtypes)) { return false; }
+		
+		$owner = $params['event']->getActor();
+		$recipient = $params['recipient'];
+		$language = $params['language'];
+		$method = $params['method'];
+		// Get best readable subtype
+		$msg_subtype = notification_messages_readable_subtype($subtype);
+		
+		// Filtered tags for email notifications (text mostly)
+		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
+		
+		switch($subtype) {
+			case 'blog':
+				$descr = '';
+				if (!empty($entity->excerpt)) $descr .= '<p><em>' . $entity->excerpt . '</em></p>';
+				$descr .= strip_tags($entity->description, $allowed_tags);
+				$title = '<strong>' . $entity->title . '</strong>';
+				$owner = $entity->getOwnerEntity();
+				$body = elgg_echo('blog:notify:body', array(
+						$owner->name,
+						$title,
+						$descr,
+						$entity->getURL()
+					));
+				break;
+			default:
+				$owner = $entity->getOwnerEntity();
+				$container = $entity->getContainerEntity();
+				if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group") || elgg_instanceof($container, "site")) { $msg_container = $container->name; }
+				
+				$descr = '';
+				if (!empty($entity->excerpt)) $descr .= '<p><em>' . $entity->excerpt . '</em></p>';
+				$descr .= strip_tags($entity->description, $allowed_tags);
+				$title = $entity->title;
+				if (empty($title)) { $title = $entity->name; }
+				$title = '<strong>' . $title . '</strong>';
+				if ($msg_container) {
+					$body = elgg_echo('notification_messages:objects:body', array(
+							$owner->name,
+							$title,
+							$msg_container, 
+							$descr,
+							$entity->getURL()
+						));
+				} else {
+					$body = elgg_echo('notification_messages:objects:body:nocontainer', array(
+							$owner->name,
+							$title,
+							$descr,
+							$entity->getURL()
+						));
+				}
+		}
+		
+		return $body;
+	}
+	return false;
+}
+
+/**
+ * Set the notification message body : add content (with some tags filtering)
+ * 
+ * @param string $hook    Hook name
+ * @param string $type    Hook type
+ * @param string $message The current message body
+ * @param array  $params  Parameters about the blog posted
+ * @return string
+ */
+/* SHould be useless in 1.11+
+function notification_messages_notify_message_blog($hook, $type, $message, $params) {
+	$entity = $params['entity'];
+	$to_entity = $params['to_entity'];
+	$method = $params['method'];
+	if (elgg_instanceof($entity, 'object', 'blog')) {
+		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
+		$descr = '<p><em>' . $entity->excerpt . '</em></p>';
+		$descr .= strip_tags($entity->description, $allowed_tags);
+		$title = '<strong>' . $entity->title . '</strong>';
+		$owner = $entity->getOwnerEntity();
+		return elgg_echo('blog:notification', array(
+				$owner->name,
+				$title,
+				$descr,
+				$entity->getURL()
+			));
+	}
+	return null;
+}
+*/
 
 
 // Handle group topic reply subject hook
@@ -201,7 +353,7 @@ function notification_messages_comment_action_hook($hooks, $type, $returnvalue, 
 	$generic_comment = elgg_get_plugin_setting('generic_comment', 'notification_messages');
 	switch ($generic_comment) {
 		case 'allow':
-			include(dirname(__FILE__) . "/actions/comments/add.php");
+			include(dirname(__FILE__) . "/actions/comments/save.php");
 			// Block process because we don't want to be notified twice
 			return false;
 			break;
@@ -350,7 +502,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
-		error_log("No sender GUID $sender_guid => block ?");
+		//error_log("No sender GUID $sender_guid => block ?");
 	}
 
 	// Initialise 2 new ElggObject
@@ -440,7 +592,9 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 			elgg_get_site_url() . "messages/inbox/" . $recipient->username,
 			$sender->name,
 			elgg_get_site_url() . "messages/compose?send_to=" . $sender_guid
-		));
+		),
+		$recipient->language
+	);
 		
 		// Trigger a hook to provide better integration with other plugins
 		$hook_subject = elgg_trigger_plugin_hook('notify:message:subject', 'message', array('entity' => $message_to, 'from_entity' => $sender, 'to_entity' => $recipient), $subject);
@@ -459,35 +613,6 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	return $success;
 }
 
-
-/**
- * Set the notification message body : add content (with some tags filtering)
- * 
- * @param string $hook    Hook name
- * @param string $type    Hook type
- * @param string $message The current message body
- * @param array  $params  Parameters about the blog posted
- * @return string
- */
-function notification_messages_notify_message($hook, $type, $message, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
-	if (elgg_instanceof($entity, 'object', 'blog')) {
-		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
-		$descr = '<p><em>' . $entity->excerpt . '</em></p>';
-		$descr .= strip_tags($entity->description, $allowed_tags);
-		$title = '<strong>' . $entity->title . '</strong>';
-		$owner = $entity->getOwnerEntity();
-		return elgg_echo('blog:notification', array(
-				$owner->name,
-				$title,
-				$descr,
-				$entity->getURL()
-			));
-	}
-	return null;
-}
 
 
 if (elgg_is_active_plugin('comment_tracker')) {
@@ -711,5 +836,26 @@ function notification_messages_notify_owner() {
 	
 	return $notify;
 }
+
+
+/**
+ * Add owner to subscribers
+ *
+ * @param string $hook          'get'
+ * @param string $type          'subscriptions'
+ * @param array  $subscriptions Array containing subscriptions in the form
+ *                       <user guid> => array('email', 'site', etc.)
+ * @param array  $params        Hook parameters
+ * @return array
+ */
+function notification_messages_get_subscriptions_addowner($hook, $type, $subscriptions, $params) {
+	$object = $params['event']->getObject();
+	if (!elgg_instanceof($object)) { return $subscriptions; }
+	
+	$owner = $object->getOwnerEntity();
+	if (!isset($subscriptions[$owner->guid]) || !in_array('email', $subscriptions[$owner->guid])) { $subscriptions[$owner->guid][] = 'email'; }
+	return $subscriptions;
+}
+
 
 

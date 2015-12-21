@@ -101,7 +101,7 @@ $title = elgg_echo('collections:edit');
 $content = <<<___HTML
 <h2>$title</h2>
 
-<div class="flexible-block" style="width:56%;">
+<div class="flexible-block" style="width:56%; float:left;">
 $content
 </div>
 

@@ -1,6 +1,6 @@
 <?php
 
-$language = array (
+return array (
 		//'translation_editor' => "Translation Editor",
 	
 		// global
@@ -49,7 +49,6 @@ $language = array (
 	
 		// actions
 		'translation_editor:action:translate:error:input' => 'Une entrée incorrecte revient à ajouter une traduction',
-		'translation_editor:action:translate:no_changed_values' => 'Aucune traduction n\'a besoin d\'être ajoutée',
 		'translation_editor:action:translate:error:write' => 'Erreur pendant l\'écriture des traductions',
 		'translation_editor:action:translate:error:not_authorized' => 'Vous n\'êtes pas autorisé à traduire',
 		'translation_editor:action:translate:success' => 'Les traduction ont été sauvegardée avec succès',
@@ -75,5 +74,3 @@ $language = array (
 		'translation_editor:action:add_custom_key:key_numeric' => 'Une clé ne peut contenir que des chiffres',
 		'translation_editor:action:add_custom_key:missing_input' => 'Entrée invalide. Merci d\'entrer une clé (anglaise) et une traduction par défault',
 );
-add_translation("fr", $language);
-?>

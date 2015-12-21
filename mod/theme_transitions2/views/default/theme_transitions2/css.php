@@ -40,6 +40,9 @@ color: #023824;
 color: #297256;
 */
 
+.elgg-button-collection-select, .elgg-button-transitions-select { padding: 2px 6px; margin: 2px 6px 2px 0; }
+
+
 /* System messages */
 .elgg-state-success { background-color: #32A951; }
 .elgg-state-error { background-color: #BF4E4E; }
@@ -151,8 +154,10 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-footer-partners-text { width:460px; max-width:100%; float:left; }
 .elgg-footer-partners-logo { width:460px; max-width:100%; float:right; text-align: right; }
 */
-.elgg-footer-partners-logo { margin-bottom:30px; }
-.elgg-footer-partners-logo img { height: 40px; margin: 0 10px 10px 0; }
+.elgg-footer-partners img { max-height: 180px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-partners-logo { height: 80px; margin: 0 10px 10px 0; }
+.elgg-footer-supporters img { max-height: 180px; margin-bottom:20px; max-width:100%; }
+.elgg-footer-supporters-logo { height: 80px; margin: 0 10px 10px 0; }
 .elgg-page-footer-transitions2 { padding: 30px 0; background:white; text-align:center; }
 .elgg-page-footer-transitions2, .elgg-page-footer-transitions2 a { font-size:12px; color:#909AAD; }
 .elgg-page-footer-transitions2 .elgg-footer-logo img { max-height:70px; float: left; margin-right: 20px; }
@@ -176,6 +181,8 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-menu-site > .elgg-state-selected > a, .elgg-menu-site > li:hover > a { color: white; background-color:#4B8F74; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-dropdown:hover, .elgg-button-dropdown:focus, .elgg-button-dropdown.elgg-state-active { background: #4B8F74; transition-duration:0.5s; border-bottom: 3px solid #297256; margin-bottom: -3px; }
 .elgg-button-nav:hover { background-color: #4B8F74; }
+.elgg-menu-topbar li.elgg-menu-item-language-selector { display:none; }
+.elgg-menu-topbar li.language-selector { float:left; width:auto; }
 
 
 /* Sidebar */
@@ -237,14 +244,16 @@ body { background:#EBE7DF; font-family:Lato; }
 
 @media (max-width: 766px) {
 	.elgg-page-topbar { padding: 0; }
-	.elgg-topbar-nav-collapse { display:none; }
+	.elgg-topbar-nav-collapse { display:none; clear: both; width: 100%; }
 	.elgg-menu-topbar { width:100%; }
 	.elgg-menu-topbar ul { display:block; position:initial; width:100%; margin:0; border:0; box-shadow:none; }
 	.elgg-menu-topbar > li { float:none; width: 100%; margin: 0; padding: 0; }
 	.elgg-menu-topbar li, .elgg-menu-topbar li { display: inline-block; width: 100%; }
 	.elgg-menu-site > li.float-alt { width: 100%; }
 	.elgg-menu-topbar > li > a.elgg-topbar-dropdown { display:none; }
-	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 0; margin: 0 10px; }
+	.elgg-menu-topbar > li > a, .elgg-menu-topbar li li > a, .elgg-menu-topbar > li > a.elgg-topbar-avatar, .elgg-menu-topbar-default > li:first-child a { padding-top: 0; margin: 0 10px; }
+	
+	.static-container { min-width: 100%; margin: 2ex 0 3ex 0 !important; padding: 0 !important; }
 	
 }
 

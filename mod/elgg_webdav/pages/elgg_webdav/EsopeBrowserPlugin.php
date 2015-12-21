@@ -266,6 +266,7 @@ class EsopePlugin extends DAV\Browser\Plugin {
 			$html.="</div>\n";
 		}
 		
+		// Show server properties to Elgg admin only
 		if (elgg_is_admin_logged_in()) {
 			$html.="<div class=\"properties\">\n";
 			//$html.='<h2>' . elgg_echo('elgg_webdav:browser:properties') . '</h2>';;
@@ -487,7 +488,7 @@ class EsopePlugin extends DAV\Browser\Plugin {
 			}
 		}
 
-		list($ns, $localName) = DAV\XMLUtil::parseClarkNotation($name);
+		list($ns, $localName) = DAV\XML\Service::parseClarkNotation($name);
 
 		$realName = $name;
 		if (isset($this->server->xmlNamespaces[$ns])) {

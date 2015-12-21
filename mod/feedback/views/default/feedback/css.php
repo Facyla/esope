@@ -19,7 +19,7 @@
 	top: 150px;
 	left: 0px;
 	max-width: 100%;
-	z-index:9999;
+	z-index:9990; /* CKeditor is 9999 in fullscreen */
 }
 
 #feedBackToggler {

@@ -15,11 +15,15 @@ $content = '';
 $title = elgg_echo('transitions:index');
 $sidebar = '';
 
+$is_html_viewtype = true;
+if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_html_viewtype = false; }
+
 //elgg_push_breadcrumb(elgg_echo('search'));
 elgg_register_title_button();
 
 $query = get_input('q', '');
 $filter = get_input('filter', '');
+$limit = get_input('limit', 12);
 if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }
 $category = get_input('category', '');
 if ($category == 'all') $category = '';
@@ -52,10 +56,27 @@ $quickform .= '</div>';
 */
 
 
+/* ADMIN & DEV : use to update project transitions to new format
+$ents = elgg_get_entities(array('type' => 'object', 'subtype' => 'transitions', 'limit' => 0));
+foreach($ents as $ent) {
+	if ($ent->category == 'project') {
+		if (!empty($ent->start_date) && empty($ent->start)) {
+			$ent->start = date('m/Y', $ent->start_date);
+			$ent->start_date = null;
+		}
+		if (!empty($ent->end_date) && empty($ent->end)) {
+			$ent->end = date('m/Y', $ent->end_date);
+			$ent->end_date = null;
+		}
+	}
+}
+*/
+
+
 // RECHERCHE ET RESULTATS
 //$content .= elgg_view('transitions/search');
 $content .= '<div class="transitions-index-search">';
-	$content .= '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
+	$content .= '<form method="GET" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search">';
 		
 		$content .= '<p>';
 		// Fulltext search
@@ -106,7 +127,7 @@ $content .= '<div class="transitions-index-search">';
 
 
 	// Search options
-	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => 10, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
 
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
@@ -151,28 +172,67 @@ $content .= '<div class="transitions-index-search">';
 			$search_options['order_by'] = "time_created desc";
 	}
 	
+	/* @TODO : gérer les doublons liés aux traductions, si possible via une clause where spécifique
+	 * 
+	 * Si pas de traduction => affichage standard
+	 * Si traductions :
+	 *  - si dispo dans ma langue : en priorité
+	 *  - si dispo dans autre langue : langue originale en priorité
+	 */
+	//$search_options['wheres'][] = "";
+	//$search_options['relationship'] = ""; // has_translation / translation_of
+	//$search_options['callback'] = "multilingual_entity_row_to_elggstar"; // @TODO : should be applied before getting the entities
 
-	// Perfom search
+	// Add language filter
+	// Note : filters content in current language only
+	/*
+	$lang = get_language();
+	$main_lang = multilingual_get_main_language();
+	if ($main_lang == $lang) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => array('', $lang), 'operand' => '=');
+	} else {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang, 'operand' => '=');
+	}
+	// @TODO et ajouter entités n'ayant pas de traduction dans la langue courante
+	//$search_options['wheres'][] = '(1=1) OR (1=1)';
+	*/
+
+	// @TODO handle multilingual duplicates and content available in single language (other than current)
+	// 
+	
+	// Perform search
 	if (isset($search_options['metadata_name_value_pairs'])) {
+		/*
 		$count = elgg_get_entities_from_metadata($search_options);
 		$catalogue = elgg_list_entities_from_metadata($search_options);
+		*/
+		$count = elgg_get_entities_from_relationship($search_options);
+		$catalogue = elgg_list_entities_from_relationship($search_options);
 	} else {
+		/*
 		$count = elgg_get_entities($search_options);
 		$catalogue = elgg_list_entities($search_options);
+		*/
+		$count = elgg_get_entities_from_relationship($search_options);
+		$catalogue = elgg_list_entities_from_relationship($search_options);
 	}
+	// @TODO use relations to filter duplicates at DB level ?
+	// Relationship function wraps also metadata and basic getters
+	//$count = elgg_get_entities_from_relationship($search_options);
+	//$catalogue = elgg_list_entities_from_relationship($search_options);
 
 	// Search RSS feed
 	$rss_url = current_page_url();
 	if (substr_count($rss_url, '?')) { $rss_url .= "&view=rss"; } else { $rss_url .= "?view=rss"; }
 	$rss_url = elgg_format_url($rss_url);
-	$content .= '<span style="float:right;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . '</a></span>';
+	$content .= '<span style="float:right; margin-left:0.5em;"> <a href="' . $rss_url . '"><i class="fa fa-rss"></i> ' . elgg_echo('transitions:search:rss') . '</a></span>';
 
 	// Search ICAL feed
 	if ($category == 'event') {
 		$ical_url = current_page_url();
 		if (substr_count($ical_url, '?')) { $ical_url .= "&view=ical"; } else { $ical_url .= "?view=ical"; }
 		$ical_url = elgg_format_url($ical_url);
-		$content .= '<span style="float:right;"> <a href="' . $ical_url . '"><i class="fa fa-ical"></i> ' . elgg_echo('transitions:search:ical') . ' </span>';
+		$content .= '<span style="float:right; margin-left:0.5em;"> <a href="' . $ical_url . '"><i class="fa fa-calendar"></i> ' . elgg_echo('transitions:search:ical') . ' </span>';
 	}
 
 	if ($count > 1) {
@@ -193,7 +253,7 @@ $content .= '<div class="transitions-index-search">';
 $content .= '</div>';
 
 // Return only valid content for some view types
-if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $content = $catalogue; }
+if (!$is_html_viewtype) { $content = $catalogue; }
 
 
 

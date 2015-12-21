@@ -9,7 +9,7 @@ $category_opt = transitions_get_category_opt(null, true, true);
 
 echo '<div class="transitions-search-menu">';
 
-echo '<form method="POST" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search-home">';
+echo '<form method="GET" action="' . elgg_get_site_url() . 'catalogue/" id="transitions-search-home">';
 	echo elgg_view('input/text', array('name' => "q", 'placeholder' => elgg_echo('transitions:search:placeholder')));
 	
 	//echo elgg_view('input/submit', array('value' => "Go"));

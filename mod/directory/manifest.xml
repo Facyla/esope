@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Directory</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.1</version>
+	<blurb>People and organisations directory</blurb>
+	<description>Enable if you wish to manage a directory, with people and organisations.</description>
+	<website>http://id.facyla.net/</website>
+	<copyright>Florian DANIEL aka Facyla 2015</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<screenshot>
+		<description>Screenshot title</description>
+		<path>graphics/screenshot.png</path>
+	</screenshot>
+
+	<category>social</category>
+	<category>database</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.11</version>
+	</requires>
+	
+	
+</plugin_manifest>
+
+<!--
+COMMENTS - HISTORY
+
+0.1 : 20151111 - Initial release
+ - plugin structure
+
+
+//-->
+

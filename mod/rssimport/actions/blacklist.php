@@ -8,13 +8,13 @@ $method = get_input('method');
 $items = explode(',', $itemidstring);
 
 if ($method == "delete") {
-  rssimport_add_to_blacklist($items, $rssimport);
+  $rssimport->addToBlacklist($items);
   system_message(elgg_echo('rssimport:blacklisted'));
   forward(REFERRER);
 }
 
 if ($method == "undelete") {
-  rssimport_remove_from_blacklist($items, $rssimport);
+  $rssimport->removeFromBlacklist($items);
   system_message(elgg_echo('rssimport:unblacklisted'));
   forward(REFERRER);
 }

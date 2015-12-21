@@ -1,11 +1,11 @@
 <?php
 /** Elgg notification_messages plugin language
  * @author Florian DANIEL - Facyla
- * @copyright Florian DANIEL - Facyla 2014
+ * @copyright Florian DANIEL - Facyla 2015
  * @link http://id.facyla.net/
  */
 
-$english = array(
+return array(
 
 	'notification_messages' => "Notification messages",
 	
@@ -42,8 +42,22 @@ $english = array(
 	'notification_messages:objects:subject' => "[%s | %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
 	'notification_messages:untitled' => "(untitled)",
+	'notification_messages:objects:body' => "%s has published %s in %s:
+
+%s
+
+Read and comment online:
+%s
+",
+	'notification_messages:objects:body:nocontainer' => "%s has published %s:
+
+%s
+
+Read and comment online:
+%s
+",
 	// Messages
-	'notification_messages:email:subject' => "[%s] Message from %s : %s",
+	'notification_messages:email:subject' => "[%s] Message from %s: %s",
 	
 	// Object:notifications hook control
 	'notification_messages:settings:object_notifications_hook' => "Enable the hook on object:notifications",
@@ -53,6 +67,4 @@ $english = array(
 	'notification_messages:settings:messages_send:subtext' => "By default, direct messages sent by the platform via email are using plain text. This setting doesn't strip HTML tags before sending direct messages by email",
 	
 );
-
-add_translation("en", $english);
 

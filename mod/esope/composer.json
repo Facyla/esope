@@ -1,0 +1,14 @@
+{
+    "name": "facyla/esope",
+    "description": "Main Elgg plugin for ESOPE distribution - handles theme base and improvements",
+    "type": "elgg-plugin",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Florian DANIEL aka Facyla",
+            "email": "i.daniel.florian@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

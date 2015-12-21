@@ -13,7 +13,7 @@
  * iionly@gmx.de
  */
 
-$english = array(
+return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Site Feedback',
 	'item:object:feedback' => 'Feedback',
@@ -25,6 +25,7 @@ $english = array(
 	'feedback:numbertodisplay' => 'Number of feedback entries to display',
 
 	'feedback:message' => 'Love it? Hate it? Want to suggest new features or report a bug? We would love to hear from you.',
+	'feedback:message:adminonly' => "<p><strong>Warning: this is not a discussion tool, please use the forum to discuss with other members!</strong></p>",
 
 	'feedback:default:id' => 'Name and/or Email',
 	'feedback:default:txt' => 'Let us know what you think!',
@@ -41,6 +42,7 @@ $english = array(
 	'feedback:delete:success' => 'Feedback was deleted successfully.',
 
 	'feedback:mood:' => 'None',
+	'feedback:mood:undefined' => 'None',
 	'feedback:mood:angry' => 'Angry',
 	'feedback:mood:neutral' => 'Neutral',
 	'feedback:mood:happy' => 'Happy',
@@ -50,7 +52,9 @@ $english = array(
 	'feedback:about:content' => 'Content',
 	'feedback:about:suggestions' => 'Suggestions',
 	'feedback:about:compliment' => 'Compliment',
-	'feedback:about:other' => 'Other',
+	'feedback:about:other' => 'Other ',
+	'feedback:about:feedback' => 'Other',
+	'feedback:about:undefined' => 'Other',
 
 	'feedback:list:mood' => 'Mood',
 	'feedback:list:about' => 'About',
@@ -108,17 +112,28 @@ $english = array(
 	
 	// Feedbacks menu
 	'feedback:menu:total' => "%s feedbacks",
+	'feedback:menu:total:singular' => "%s feedback",
 	'feedback:menu:open' => "%s opened",
+	'feedback:menu:open:singular' => "%s opened",
 	'feedback:menu:closed' => "%s closed",
+	'feedback:menu:closed:singular' => "%s closed",
 	'feedback:menu:content' => "%s reports",
-	'feedback:menu:bug' => "%s bugs",
-	'feedback:menu:suggestion' => "%s suggestions",
+	'feedback:menu:content:singular' => "%s report",
+	'feedback:menu:bug_report' => "%s bugs",
+	'feedback:menu:bug_report:singular' => "%s bug",
+	'feedback:menu:suggestions' => "%s suggestions",
+	'feedback:menu:suggestions:singular' => "%s suggestion",
 	'feedback:menu:question' => "%s questions",
+	'feedback:menu:question:singular' => "%s question",
 	'feedback:menu:compliment' => "%s compliments",
+	'feedback:menu:compliment:singular' => "%s compliment",
 	'feedback:menu:other' => "%s other / unsorted",
+	'feedback:menu:other:singular' => "%s other / unsorted",
+	
 	
 	// About - feedback types
-	'feedback:about' => "of type",
+	//'feedback:about' => "of type",
+	'feedback:about' => ":",
 	'feedback:about:question' => "Question",
 	'feedback:access:admin' => "Admin only",
 	'feedback:access:sitemembers' => "Site members",
@@ -135,6 +150,4 @@ $english = array(
 	'feedback:linktofeedbacks' => "&raquo;&nbsp;View all previous feedbacks",
 	
 );
-
-add_translation("en", $english);
 

@@ -97,10 +97,17 @@ if (!empty($category)) {
 	if (in_array($category, array('actor'))) {
 		$values['actor_type'] = '';
 	}
-	// Dates
-	if (in_array($category, array('project', 'event'))) {
+	// Text dates
+	if (in_array($category, array('project'))) {
+		$values['start'] = '';
+		$values['end'] = '';
+	}
+	// Dates and Times
+	if (in_array($category, array('event'))) {
 		$values['start_date'] = '';
+		$values['start_time'] = '';
 		$values['end_date'] = '';
+		$values['end_time'] = '';
 	}
 	// Challenge => news feed (to be displayed)
 	if (in_array($category, array('challenge'))) {
@@ -183,6 +190,43 @@ if (!empty($values['territory']) && ($values['territory'] != $transitions->terri
 	if ($lat && $long) { $transitions->setLatLong($lat, $long); }
 }
 
+// Adjust dates and optional time
+// Note : mktime($hour, $minute, $second, $month, $day, $year);
+// Optional times : set to exact time
+if (in_array($category, array('event'))) {
+	$year = date('Y', $values['start_date']);
+	$month = date('n', $values['start_date']);
+	$day = date('j', $values['start_date']);
+	$hour = floor($values['start_time']/60);
+	$minute = ($values['start_time'] - 60*$hour);
+	$values['start_date'] = mktime($hour, $minute, 0, $month, $day, $year);
+	//echo "{$values['start_date']} à {$values['start_time']} => $day/$month/$year à $hour:$minute<br />";
+	unset($values['start_time']);
+	
+	$year = date('Y', $values['end_date']);
+	$month = date('n', $values['end_date']);
+	$day = date('j', $values['end_date']);
+	$hour = floor($values['end_time']/60);
+	$minute = ($values['end_time'] - 60*$hour);
+	$values['end_date'] = mktime($hour, $minute, 0, $month, $day, $year);
+	//echo "{$values['end_date']} à {$values['end_time']} => $day/$month/$year à $hour:$minute<br />";
+	unset($values['end_time']);
+}
+/* Now we consider these dates as free text input, and changed to 'start' and 'end'
+if (in_array($category, array('project'))) {
+	// Dates : set full days from 00:00 to 23:59
+	$year = date('Y', $values['start_date']);
+	$month = date('n', $values['start_date']);
+	$day = date('j', $values['start_date']);
+	$values['start_date'] = mktime(0, 0, 0, $month, $day, $year);
+	
+	$year = date('Y', $values['end_date']);
+	$month = date('n', $values['end_date']);
+	$day = date('j', $values['end_date']);
+	$values['end_date'] = mktime(23, 59, 0, $month, $day, $year);
+}
+*/
+
 // assign values to the entity, stopping on error.
 if (!$error) {
 	foreach ($values as $name => $value) {
@@ -240,6 +284,32 @@ if ($is_admin) {
 	*/
 	$entity->links = $links;
 	$entity->links_comment = $links_comment;
+	
+	// Manage contributed actors
+	$actor_guids = (array) get_input('actor_guid');
+	$contributed_actors_ent = elgg_get_entities_from_relationship(array(
+			'type' => 'object',
+			'subtype' => 'transitions',
+			'relationship' => 'partner_of',
+			'relationship_guid' => $entity->guid,
+			'inverse_relationship' => true,
+			'limit' => 0,
+		));
+	// Remove deleted relationships
+	if ($contributed_actors_ent) {
+		foreach($contributed_actors_ent as $ent) {
+			if (!in_array($ent->guid, $actor_guids)) {
+				remove_entity_relationship($ent->guid, 'partner_of', $entity->guid);
+			}
+		}
+	}
+	// Add missing relationship
+	foreach ($actor_guids as $actor_guid) {
+		$actor = get_entity($actor_guid);
+		if (elgg_instanceof($actor, 'object', 'transitions') && ($actor->category == 'actor')) {
+			add_entity_relationship($actor_guid, 'partner_of', $entity->guid);
+		}
+	}
 	
 	$owner_username = get_input('owner_username', '');
 	if (!empty($owner_username)) {

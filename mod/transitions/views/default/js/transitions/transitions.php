@@ -35,6 +35,10 @@ elgg.transitions.init = function() {
 	$('.transitions-edit-addlink').live('click', elgg.transitions.addLink);
 	// Remove link
 	$('.transitions-edit-removelink').live('click', elgg.transitions.deleteLink);
+	// Add actor
+	$('.transitions-edit-addactor').live('click', elgg.transitions.addActor);
+	// Remove actor
+	$('.transitions-edit-removeactor').live('click', elgg.transitions.deleteActor);
 	
 };
 
@@ -53,12 +57,14 @@ elgg.transitions.searchFields = function(event) {
 // Load search into lightbox
 elgg.transitions.submitSearch = function(event) {
 	event.preventDefault();
+	spinner.start();
 	var query = $(this).serialize();
 	var url = $(this).attr("action");
 	//$(this).parent().parent().load(url, query, function() {
 	$(this).parent().load(url, query, function() {
 		$.colorbox.resize();
 	});
+	spinner.stop();
 };
 
 // Embed pagination
@@ -137,11 +143,28 @@ elgg.transitions.addLink = function(e) {
 	elgg.transitions.addSortable();
 	e.preventDefault();
 };
-
 // Remove contributed link
 elgg.transitions.deleteLink = function(e) {
 	var entity = $(this).parent();
 	if (confirm(elgg.echo('transitions:addlink:remove:confirm'))) { entity.remove(); }
+	e.preventDefault();
+}
+
+// Add contributed actor
+elgg.transitions.addActor = function(e) {
+	// Create a new entity element (without editor)
+	var new_entity = <?php echo json_encode(elgg_view('transitions/input/addactor_edit', array('name' => 'actor_guid[]'))); ?>;
+	$('.transitions-edit-actors').append(new_entity);
+	// Refresh the sortable items to be able to sort into the new section
+	elgg.transitions.addSortable();
+	// Remove Add actor once added
+	//$(this).hide();
+	e.preventDefault();
+};
+// Remove contributed actor
+elgg.transitions.deleteActor = function(e) {
+	var entity = $(this).parent();
+	if (confirm(elgg.echo('transitions:addactor:remove:confirm'))) { entity.remove(); }
 	e.preventDefault();
 }
 

@@ -17,6 +17,8 @@ echo elgg_view_module('aside', '', $body);
 */
 
 // regular search, with user results only
+// Note : useless as it uses the global search (already in main menu)
+/*
 $params = array(
 	'method' => 'get',
 	'action' => elgg_get_site_url() . 'search',
@@ -24,6 +26,7 @@ $params = array(
 );
 $body = elgg_view_form('members/regular_search', $params);
 echo elgg_view_module('aside', '', $body);
+*/
 
 // Name search gives better results than regular search for some names
 $members_onesearch = elgg_get_plugin_setting('members_onesearch', 'esope');

@@ -5,10 +5,6 @@
  * @package ElggWebDAV
  */
 
-
-
-global $CONFIG;
-
 elgg_push_breadcrumb(elgg_echo('elgg_webdav'), 'webdav');
 elgg_push_breadcrumb(elgg_echo('elgg_webdav:group'), 'webdav/group');
 
@@ -36,7 +32,7 @@ if (!file_exists($public_path)) { mkdir($public_path, 0770); }
 if (!file_exists($data_path)) { mkdir($data_path, 0770); }
 if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
 // Relative endpoint URL, without domain
-$base_uri = parse_url($CONFIG->url . 'webdav/group');
+$base_uri = parse_url(elgg_get_site_url() . 'webdav/group');
 $base_uri = $base_uri['path'];
 
 // Reset base path accordingly to logged in user settings

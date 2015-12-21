@@ -3,10 +3,8 @@
  * English strings
  */
 
-$en = array(
+return array(
 	'plugin_template' => "Plugin template",
 	
 );
-
-add_translation('en', $en);
 

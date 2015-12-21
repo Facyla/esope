@@ -8,10 +8,17 @@ elgg.advanced_statistics.init = function(){
 
 	// initialize the plots
 	$(".advanced-statistics-plot-container").each(function(){
+
 		var target = $(this).attr("id");
 		var parts = target.split("-");
 		var chart_id = new Array();
 
+		if (!$.jqplot) {
+			$("#"+ target).html(elgg.echo("advanced_statistics:widgets:advanced_statistics:content:no_jqplot"));
+			$("#"+ target).next().hide();
+			return;
+		}
+		
 		for(var i = 3; i < parts.length; i++){
 			chart_id.push(parts[i]);
 		}
@@ -39,7 +46,8 @@ elgg.advanced_statistics.init = function(){
 				if(options["axesDefaults"]){
 					options["axesDefaults"]["tickRenderer"] = eval(options["axesDefaults"]["tickRenderer"]);
 				}
-				if(result.data.length){
+				
+				if(result.data[0].length){
 					$.jqplot(target, result.data, options);
 				} else {
 					$("#"+ target).html(elgg.echo("notfound"));

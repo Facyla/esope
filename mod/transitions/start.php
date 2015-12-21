@@ -438,8 +438,18 @@ function transitions_get_lang_opt($value = '', $addempty = false, $full = false)
 	if (empty($languages)) { $values = array('fr', 'en'); }
 	
 	if ($full) {
-		// Language codes
-		$values = array('aa', 'ab', 'af', 'am', 'ar', 'as', 'ay', 'az', 'ba', 'be', 'bg', 'bh', 'bi', 'bn', 'bo', 'br', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'dz', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fj', 'fo', 'fr', 'fy', 'ga', 'gd', 'gl', 'gn', 'gu', 'he', 'ha', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'ie', 'ik', 'is', 'it', 'iu', 'iw', 'ja', 'ji', 'jw', 'ka', 'kk', 'kl', 'km', 'kn', 'ko', 'ks', 'ku', 'ky', 'la', 'ln', 'lo', 'lt', 'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mo', 'mr', 'ms', 'mt', 'my', 'na', 'ne', 'nl', 'no', 'oc', 'om', 'or', 'pa', 'pl', 'ps', 'pt', 'qu', 'rm', 'rn', 'ro', 'ru', 'rw', 'sa', 'sd', 'sg', 'sh', 'si', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta', 'te', 'tg', 'th', 'ti', 'tk', 'tl', 'tn', 'to', 'tr', 'ts', 'tt', 'tw', 'ug', 'uk', 'ur', 'uz', 'vi', 'vo', 'wo', 'xh', 'yi', 'yo', 'za', 'zh', 'zu');
+		$user_lang = get_language();
+		// Language codes : sort by alphabetic order of chosen language + FR and EN featured on top of the list
+		switch($user_lang) {
+			case 'fr':
+				$values = array('fr', 'en', 'ab', 'aa', 'af', 'sq', 'de', 'am', 'ar', 'hy', 'as', 'ay', 'az', 'ba', 'eu', 'bn', 'bi', 'be', 'bh', 'my', 'br', 'bg', 'ca', 'zh', 'si', 'ko', 'co', 'hr', 'da', 'dz', 'gd', 'es', 'eo', 'et', 'fo', 'fj', 'fi', 'fy', 'gl', 'cy', 'ka', 'el', 'gn', 'gu', 'ha', 'he', 'hi', 'hu', 'id', 'ia', 'iu', 'ik', 'ga', 'is', 'it', 'ja', 'jw', 'kl', 'kn', 'ks', 'kk', 'km', 'rw', 'ky', 'rn', 'ku', 'lo', 'la', 'lv', 'ln', 'lt', 'mk', 'ms', 'ml', 'mg', 'mt', 'mi', 'mr', 'mo', 'mn', 'na', 'nl', 'ne', 'no', 'ie', 'oc', 'or', 'om', 'ug', 'ur', 'uz', 'ps', 'pa', 'fa', 'pl', 'pt', 'qu', 'rm', 'ro', 'ru', 'sm', 'sg', 'sa', 'sr', 'sh', 'sn', 'sd', 'ss', 'sk', 'sl', 'so', 'st', 'su', 'sv', 'sw', 'tg', 'tl', 'ta', 'tt', 'cs', 'te', 'th', 'bo', 'ti', 'to', 'ts', 'tn', 'tr', 'tk', 'tw', 'uk', 'vi', 'vo', 'wo', 'xh', 'yi', 'yo', 'za', 'zu');
+				break;
+			case 'en':
+				$values = array('en', 'fr', 'ab', 'om', 'aa', 'af', 'sq', 'am', 'ar', 'hy', 'as', 'ay', 'az', 'ba', 'eu', 'bn', 'dz', 'bh', 'bi', 'br', 'bg', 'my', 'be', 'km', 'ca', 'zh', 'co', 'hr', 'cs', 'da', 'nl', 'eo', 'et', 'fo', 'fj', 'fi', 'fy', 'gl', 'ka', 'de', 'el', 'kl', 'gn', 'gu', 'ha', 'he', 'hi', 'hu', 'is', 'id', 'ia', 'ie', 'iu', 'ik', 'ga', 'it', 'ja', 'jw', 'kn', 'ks', 'kk', 'rw', 'ky', 'rn', 'ko', 'ku', 'lo', 'la', 'lv', 'ln', 'lt', 'mk', 'mg', 'ml', 'ms', 'mt', 'mi', 'mr', 'mo', 'mn', 'na', 'ne', 'no', 'oc', 'or', 'ps', 'fa', 'pl', 'pt', 'pa', 'qu', 'rm', 'ro', 'ru', 'sm', 'sg', 'sa', 'gd', 'sr', 'sh', 'st', 'tn', 'sn', 'sd', 'si', 'ss', 'sk', 'sl', 'so', 'es', 'su', 'sw', 'sv', 'tl', 'tg', 'ta', 'tt', 'te', 'th', 'bo', 'ti', 'to', 'ts', 'tr', 'tk', 'tw', 'ug', 'uk', 'ur', 'uz', 'vi', 'vo', 'cy', 'wo', 'xh', 'yi', 'yo', 'za', 'zu');
+				break;
+			default:
+				$values = array('fr', 'en', 'aa', 'ab', 'af', 'am', 'ar', 'as', 'ay', 'az', 'ba', 'be', 'bg', 'bh', 'bi', 'bn', 'bo', 'br', 'ca', 'co', 'cs', 'cy', 'da', 'de', 'dz', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fj', 'fo', 'fy', 'ga', 'gd', 'gl', 'gn', 'gu', 'he', 'ha', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'ie', 'ik', 'is', 'it', 'iu', 'ja', 'jw', 'ka', 'kk', 'kl', 'km', 'kn', 'ko', 'ks', 'ku', 'ky', 'la', 'ln', 'lo', 'lt', 'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mo', 'mr', 'ms', 'mt', 'my', 'na', 'ne', 'nl', 'no', 'oc', 'om', 'or', 'pa', 'pl', 'ps', 'pt', 'qu', 'rm', 'rn', 'ro', 'ru', 'rw', 'sa', 'sd', 'sg', 'sh', 'si', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta', 'te', 'tg', 'th', 'ti', 'tk', 'tl', 'tn', 'to', 'tr', 'ts', 'tt', 'tw', 'ug', 'uk', 'ur', 'uz', 'vi', 'vo', 'wo', 'xh', 'yi', 'yo', 'za', 'zh', 'zu');
+		}
 	}
 	foreach($values as $val) { $list[$val] = elgg_echo($val); }
 	// Add current value

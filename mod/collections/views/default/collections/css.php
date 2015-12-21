@@ -11,7 +11,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 /* Main plugin styles (editor) */
 .collection-edit-entity, .collection-edit-highlight { margin-top: 0.5ex; min-height:2ex; border:1px solid #ccc; padding:0ex 1ex 1ex 1ex; border-radius: 6px; background: rgba(0,0,0,0.05); height: 17em; width: 20em; float: left; margin: 0 10px 20px 0; overflow: auto; }
 .collection-edit-highlight { border:1px dashed grey; color:#333; }
-.elgg-button-collection-select { background: #999; padding: 2px 6px; margin: 2px 6px 2px 0; }
+.elgg-button-collection-select { /* background: #999; */ padding: 2px 6px; margin: 2px 6px 2px 0; }
 .collection-edit-entity blockquote { padding: 5px; background-color: white; }
 
 
@@ -47,6 +47,7 @@ $imgroot = elgg_get_site_url() . 'mod/collections/graphics/';
 /* Rendu des collections */
 .collections-listing { list-style-type:none; margin-right: -30px; }
 .collections-item-entity { float: left; width: 310px; max-width:100%; height: 330px; overflow: hidden; }
+.collections-item-entity.full { float: none; width: auto; max-width:100%; height: auto; overflow: auto; }
 .collections-item-entity .transitions-gallery-item { margin:0 0 0 0; }
 .collections-item-entity .transitions-gallery-item .transitions-gallery-head { padding:24px; }
 .collections-listing .collections-item-entity { /* box-shadow: 1px 1px 1px 1px black; padding: 1em; margin: 0.5em; */ padding:0; margin: 0 30px 30px 0; display: inline-block; }

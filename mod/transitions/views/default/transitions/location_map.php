@@ -2,26 +2,26 @@
 /* Display Leaflet base map */
 if (!elgg_is_active_plugin('leaflet')) { return; }
 
-elgg_load_library('leaflet');
-//leaflet_load_libraries();
-elgg_load_js('leaflet');
-elgg_load_js('leaflet.providers');
-elgg_load_css('leaflet');
-elgg_load_css('leaflet.providers');
+leaflet_load_libraries();
 
 // TODO Add box size + separate markers from map
 
-if (empty($vars['map_id'])) { $vars['map_id'] = 'leaflet-main-map'; }
+$id = leaflet_id('leaflet_map_'); // Ensure unicity (required because can be displayed several times on same page)
+$map_id = elgg_extract('map_id', $vars, 'leaflet-main-map');
 $width = elgg_extract('width', $vars, '300px;');
 $height = elgg_extract('height', $vars, '200px;');
+$map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
 
-$mapstyle = "width:$width; height:$height;";
-echo '<div id="' . $vars['map_id'] . '" style="' . $mapstyle . '"></div>';
+echo '<div id="' . $id . '" class="' . $map_id . '" style="' . $map_css . '"></div>';
 ?>
 
 <script type="text/javascript">
+// We need to define some vars globally to be able to use them in other scripts
+var map, bounds, baseMap;
+//require(['leaflet', 'leaflet.providers'], function(){
+define('<?php echo $id; ?>', ['leaflet', 'leaflet.providers'], function(){
 // CREATE A MAP on chosen map id
-var map = L.map('<?php echo $vars['map_id']; ?>');
+	map = L.map('<?php echo $id; ?>');
 
 // CHOOSE TILE LAYER
 // Pure OSM
@@ -35,7 +35,7 @@ map.addLayer(osm);
 */
 
 // Leaflet providers plugin
-var baseMap = L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(map);
+	baseMap = L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(map);
 // Add layer switch and overlays
 /*
 var baseLayers = ['OpenStreetMap.Mapnik'];
@@ -43,7 +43,8 @@ var layerControl = L.control.layers.provided(baseLayers).addTo(map);
 */
 
 // Init bounds to init map centering on markers
-var bounds = new L.LatLngBounds();
+	bounds = new L.LatLngBounds();
+});
 </script>
 
 <?php
@@ -54,6 +55,7 @@ $entity = elgg_extract('entity', $vars);
 $lat = $entity->getLatitude();
 $long = $entity->getLongitude();
 
+	// Geocode entity if needed
 if (!$lat || !$long) {
 	$geo_location = elgg_trigger_plugin_hook('geocode', 'location', array('location' => $entity->territory), false);
 	$lat = (float)$geo_location['lat'];
@@ -64,20 +66,23 @@ if (!$lat || !$long) {
 // Render JS marker code
 if ($lat && $long) {
 	echo '<script type="text/javascript">
-	// Create a custom marker for users
-	//var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
-	//var onlineUsersMarkers = new L.MarkerClusterGroup();
-	';
+	var mapMarker, mapMarkers
+	require(["leaflet", "leaflet.awesomemarkers", "leaflet.markercluster", "' . $id . '"], function(){
+		// Create a custom marker for users
+		//var onlineUsersMarker = L.AwesomeMarkers.icon({ prefix: \'fa\', icon: \'user\', markerColor: \'grey\' });
+		//var onlineUsersMarkers = new L.MarkerClusterGroup();
+		';
 
-	$title = $user->title;
-	$title = json_encode($title);
+		$title = $user->title;
+		$title = json_encode($title);
 	
-	echo "
-		var marker = L.marker([$lat, $long], {title: $title}).addTo(map);
-		";
+		echo "
+			var marker = L.marker([$lat, $long], {title: $title}).addTo(map);
+			";
 
-	echo '
-	map.setView(new L.LatLng(' . $lat . ', ' . $long . '),6);
+		echo '
+		map.setView(new L.LatLng(' . $lat . ', ' . $long . '),6);
+	});
 	</script>';
 }
 

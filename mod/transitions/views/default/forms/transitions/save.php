@@ -10,7 +10,11 @@ elgg_load_js('elgg.transitions');
 $transitions = get_entity($vars['guid']);
 $vars['entity'] = $transitions;
 
-$is_admin = theme_transitions2_user_is_content_admin();
+if (elgg_is_active_plugin('theme_transitions2')) {
+	$is_admin = theme_transitions2_user_is_content_admin();
+} else {
+	$is_admin = elgg_is_admin_logged_in();
+}
 
 if ($transitions) $edit_details = '<p style="margin:20px 0;"><em>' . elgg_echo('transitions:edit:details') . '</em></p>';
 
@@ -197,6 +201,31 @@ if ($is_admin) {
 		'value' => $transitions->tags_contributed,
 		'placeholder' => elgg_echo('transitions:tags_contributed'),
 	));
+	
+	$contributed_actors_label = elgg_echo('transitions:actors_contributed');
+	$contributed_actors_input = '<div class="transitions-edit-actors">';
+	// Note : we need to check only if we have a valid entity for the relation otherwise we would get weird results
+	if (elgg_instanceof($transitions, 'object', 'transitions')) {
+		$contributed_actors_ent = elgg_get_entities_from_relationship(array(
+				'type' => 'object',
+				'subtype' => 'transitions',
+				'relationship' => 'partner_of',
+				'relationship_guid' => $transitions->guid,
+				'inverse_relationship' => true,
+				'limit' => 0,
+			));
+		if (!empty($contributed_actors_ent)) foreach($contributed_actors_ent as $ent) {
+			$contributed_actors_input .= '<div class="transitions-edit-contributed-actor"><a href="javascript:void(0);" class="transitions-edit-removeactor" title="' . elgg_echo('transitions:addactor:remove') . '" style="float:right; margin-left:2ex;"><i class="fa fa-trash"></i></a>';
+			$contributed_actors_input .= elgg_view('transitions/embed/object/default', array('entity' => $ent));
+			$contributed_actors_input .= elgg_view('input/hidden', array('name' => 'actor_guid[]', 'value' => $ent->guid));
+			$contributed_actors_input .= '</div>';
+		}
+	}
+	$contributed_actors_input .= '</div>';
+	$contributed_actors_input .= elgg_view('transitions/input/addactor_edit', array('name' => 'actor_guid[]'));
+	//$contributed_actors_input .= '<input type="button" class="transitions-edit-addactor" value="' . elgg_echo('transitions:addactor:add') . '" class="elgg-button elgg-button-action" />';
+
+
 
 	/*
 	$links_supports_label = elgg_echo('transitions:links_supports');
@@ -304,7 +333,9 @@ $category_input = elgg_view('input/select', array(
 
 $explanations = '';
 foreach ($category_opt as $cat => $cat_lang) {
-	$explanations .= '<blockquote class="transitions-explanations transitions-explanations-' . $cat . '">' . elgg_echo("transitions:category:$cat:details") . '</blockquote>';
+	if (!empty($cat)) {
+		$explanations .= '<blockquote class="transitions-explanations transitions-explanations-' . $cat . '">' . elgg_echo("transitions:category:$cat:details") . '</blockquote>';
+	}
 }
 
 $lang_label = elgg_echo('transitions:lang');
@@ -342,6 +373,7 @@ $actortype_input = elgg_view('input/select', array(
 	'options_values' => $actortype_opt,
 ));
 
+// Exact dates and times
 $startdate_label = elgg_echo('transitions:startdate');
 $startdate_input = elgg_view('input/date', array(
 	'name' => 'start_date',
@@ -349,8 +381,17 @@ $startdate_input = elgg_view('input/date', array(
 	'value' => $vars['start_date'],
 	'placeholder' => elgg_echo('transitions:startdate'),
 	'timestamp' => true,
-	'style' => "width:12ex;",
+	'style' => "width:8em;",
 ));
+if (!empty($vars['start_date'])) {
+	$starttime_value = date('H', $vars['start_date'])*60 + date('i', $vars['start_date']);
+} else { $starttime_value = 0; }
+$starttime_input = elgg_view('input/timepicker', array(
+	'name' => 'start_time',
+	'id' => 'transitions_starttime',
+	'value' => $starttime_value,
+	'placeholder' => elgg_echo('transitions:starttime'),
+)) . $vars['start_date'];
 
 $enddate_label = elgg_echo('transitions:enddate');
 $enddate_input = elgg_view('input/date', array(
@@ -359,7 +400,34 @@ $enddate_input = elgg_view('input/date', array(
 	'value' => $vars['end_date'],
 	'placeholder' => elgg_echo('transitions:enddate'),
 	'timestamp' => true,
-	'style' => "width:12ex;",
+	'style' => "width:8em;",
+));
+if (!empty($vars['end_date'])) {
+	$endtime_value = date('H', $vars['end_date'])*60 + date('i', $vars['end_date']);
+} else { $endtime_value = 0; }
+$endtime_input = elgg_view('input/timepicker', array(
+	'name' => 'end_time',
+	'id' => 'transitions_endtime',
+	'value' => $endtime_value,
+	'placeholder' => elgg_echo('transitions:endtime'),
+));
+
+// Text dates
+$start_label = elgg_echo('transitions:start');
+$start_input = elgg_view('input/text', array(
+	'name' => 'start',
+	'id' => 'transitions_start',
+	'value' => $vars['start'],
+	'placeholder' => elgg_echo('transitions:start:format'),
+	//'style' => "width:7em;",
+));
+$end_label = elgg_echo('transitions:end');
+$end_input = elgg_view('input/text', array(
+	'name' => 'end',
+	'id' => 'transitions_end',
+	'value' => $vars['end'],
+	'placeholder' => elgg_echo('transitions:end:format'),
+	//'style' => "width:7em;",
 ));
 
 $tags_label = elgg_echo('transitions:tags');
@@ -380,10 +448,13 @@ if ($is_admin) {
 	$admin_fields .= '<p class="' . $status_value . '"><label class="" for="transitions_status">' . $status_label . '</label> ' . $status_input . ' &nbsp; ';
 	$admin_fields .= '<label for="transitions_featured">' . $featured_label . '</label> ' . $featured_input . '</p>';
 	$admin_fields .= '<p><label for="transitions_owner_username">' . $owner_username_label . ' (' . $owner_username . ')</label> ' . $owner_username_input . '<br />' . elgg_echo('transitions:owner_username:details') . '</p>';
+	// Contributed tags
 	$admin_fields .= '<p><label for="transitions_tags_contributed">' . $contributed_tags_label . '</label>' . $contributed_tags_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_supports">' . $links_supports_label . '</label>' . $links_supports_input . '</p>';
 	//$admin_fields .= '<p><label for="transitions_links_invalidates">' . $links_invalidates_label . '</label>' . $links_invalidates_input . '</p>';
-'</p>';
+	// Contributed actors
+	$admin_fields .= '<p class="transitions-actors"><label for="transitions_actors_contributed">' . $contributed_actors_label . '</label>' . $contributed_actors_input . '</p>';
+	// Contributed links
 	$admin_fields .= '<p><label>' . $links_label . '</label>' . $links_input . '</p>';
 	$admin_fields .= '</blockquote>';
 	
@@ -428,8 +499,11 @@ function transitions_toggle_fields() {
 	$(".transitions-territory").addClass(\'hidden\');
 	$(".transitions-startdate").addClass(\'hidden\');
 	$(".transitions-enddate").addClass(\'hidden\');
+	$(".transitions-start").addClass(\'hidden\');
+	$(".transitions-end").addClass(\'hidden\');
 	$(".transitions-rss-feed").addClass(\'hidden\');
 	$(".transitions-collection").addClass(\'hidden\');
+	$(".transitions-actors").addClass(\'hidden\');
 	
 	$(".transitions-explanations").addClass(\'hidden\');
 	if (val) $(".transitions-explanations-"+val).removeClass(\'hidden\');
@@ -442,8 +516,9 @@ function transitions_toggle_fields() {
 	} else if (val == "project") {
 		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:project') . '\');
 		$(".transitions-territory").removeClass(\'hidden\');
-		$(".transitions-startdate").removeClass(\'hidden\');
-		$(".transitions-enddate").removeClass(\'hidden\');
+		$(".transitions-start").removeClass(\'hidden\');
+		$(".transitions-end").removeClass(\'hidden\');
+		$(".transitions-actors").removeClass(\'hidden\');
 	} else if (val == "event") {
 		$(".transitions-title label").html(\'' . elgg_echo('transitions:title:event') . '\');
 		$(".transitions-startdate").removeClass(\'hidden\');
@@ -546,11 +621,22 @@ $edit_details
 	<p class="transitions-startdate">
 		<label class="" for="transitions_startdate">$startdate_label</label>
 		$startdate_input
+		<span class="transitions-starttime">$starttime_input</span>
 	</p>
 
 	<p class="transitions-enddate">
 		<label class="" for="transitions_enddate">$enddate_label</label>
 		$enddate_input
+		<span class="transitions-starttime">$endtime_input</span>
+	</p>
+</div>
+
+<div class="transitions-start transitions-end" style="margin:20px 0;">
+	<p class="transitions-start">
+		<label class="">$start_label $start_input</label>
+	</p>
+	<p class="transitions-end">
+		<label class="" for="transitions_end">$end_label $end_input</label>
 	</p>
 </div>
 

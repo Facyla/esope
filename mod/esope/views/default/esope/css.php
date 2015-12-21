@@ -89,8 +89,12 @@ $font6 = elgg_get_plugin_setting('font6', 'esope');
 
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
-/* h2 { color: #333; } */
 
+/* Set default break and wrap to avoid overflow on long lines */
+html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
+
+/* h2 { color: #333; } */
+pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
 .elgg-river-comments-tab { color:#cd9928; }
 .elgg-input-rawtext { width:99%; }
@@ -100,13 +104,41 @@ th { font-weight:bold; background:#CCCCCC; }
 .elgg-access {}
 .elgg-access-group-closed {}
 .elgg-access-group-open {}
-.interne { width: 980px; position: relative; margin: auto; }
+.interne { width: 980px; max-width: 96%; position: relative; margin: 0 auto; }
 .invisible { position: absolute !important; left: -5000px !important; }
 .right { float: right !important; }
 .minuscule { text-transform: lowercase; }
 img { border: 0 none; overflow:hidden; }
 #profil img { float: right; margin-left: 10px; }
+.esope-more { float: right; font-size: 70%; line-height: 1.6; }
 
+
+/* ACCESSIBILITY */
+.invisible { position:absolute !important; left:-5000px !important; }
+.blockform > div { margin-bottom: 15px; }
+.blockform > div:last-child { margin-bottom: 0; }
+.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
+
+.entity_title {font-weight:bold; }
+
+/* Corrections des styles du core */
+:focus { outline: 1px dotted grey; }
+input:focus, textarea:focus { outline:0; }
+.ui-autocomplete-input:focus { outline:0; }
+.elgg-button-action:hover, .elgg-button-action:focus { outline:0; }
+.elgg-search input[type=text]:focus, .elgg-search input[type=text]:active { outline:0; }
+.elgg-page-header .elgg-search input[type=submit] { display: block !important; }
+
+/*
+// Tous les :hover à compléter par :focus et :active : cf. thème ADF
+// Tous les display:none des menus à modifier/remplacer par des left:-5000px puis remettre en place..
+
+=> fonctionne sans JS mais pas accessible au clavier
+=> modifier les display:none => left:-5000px;
+=> les afficher via left: valeur; ou right:valeur;
+
+=> remplacer par un masquage en JS
+*/
 
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
@@ -128,10 +160,13 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header, .elgg-page-body .intro { color: <?php echo $textcolor; ?>; }
 
 
+/* Largeur de page standard */
 .elgg-page-default .elgg-page-sitemenu > .elgg-inner {
 	max-width: 990px;
 	margin: 0 auto;
 }
+
+.elgg-page-body { padding: 1em; }
 
 
 
@@ -144,11 +179,12 @@ img { border: 0 none; overflow:hidden; }
 	font-weight: bold;
 	margin-top:0.5ex;
 }
-.elgg-menu-topbar li { margin: 0 3ex 0 0; }
-.elgg-menu-topbar-alt li { margin: 0 0 0 3ex; }
+.elgg-menu-topbar li { margin: 0 2em 0 0; }
+.elgg-menu-topbar-alt li { margin: 0 0 0 2em; }
 .elgg-menu-topbar li a {
 	color: #fff;
-	text-shadow: 2px 2px 2px #333;
+	text-shadow: 1px 1px 0px #333;
+	margin: 0;
 	padding:1px;
 	display:inline-block;
 }
@@ -182,7 +218,7 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header .elgg-menu-topbar li a:focus, 
 .elgg-page-header .elgg-menu-topbar li a:active { color: #ddd; }
 
-.elgg-menu-topbar a.elgg-menu-counter { display:inline-block; padding:1px 4px; background:red; border-radius:8px; font-size:10px; font-family:arial; font-weight:bold; text-shadow:none; }
+.elgg-menu-topbar .elgg-menu-counter { display:inline-block; padding:1px 4px; background:red; border-radius:8px; font-size:10px; font-family:arial; font-weight:bold; text-shadow:none; }
 
 /* ESOPE : Topbar submenu support */
 .elgg-menu-topbar > li > ul {
@@ -214,7 +250,6 @@ img { border: 0 none; overflow:hidden; }
 
 /* Header nav icons (using semantic UI or awesome fonts) */
 .elgg-page-header .elgg-menu-topbar .fa { margin-right: 0.5em; }
-.elgg-page-header .elgg-menu-topbar ul li#msg a, .elgg-page-header .elgg-menu-topbar ul li#man a { background:transparent; padding:0; }
 
 .elgg-page-header h1 {
 	font-family: <?php echo $font2; ?>;
@@ -228,10 +263,8 @@ img { border: 0 none; overflow:hidden; }
 .elgg-page-header h1 a { color:#ffffff; }
 .elgg-page-header h1 a:hover,
 .elgg-page-header h1 a:focus,
-.elgg-page-header h1 a:active { color:#ffffff; }
-.elgg-page-header h1 span {
-	font-size: 1.4em;
-}
+.elgg-page-header h1 a:active { color:#ffffff; text-decoration:none; }
+.elgg-page-header h1 span { font-size: 1.4em; }
 
 
 /* ***************************************
@@ -296,6 +329,7 @@ img { border: 0 none; overflow:hidden; }
 	border-bottom: 1px solid #fff;
 }
 
+/* Groups sublevels */
 #transverse .elgg-menu-navigation li.groups ul { width: 402px; }
 #transverse .elgg-menu-navigation li.groups ul li { width: 400px; }
 #transverse .elgg-menu-navigation li.groups ul li a { width: 381px; }
@@ -373,8 +407,14 @@ img { border: 0 none; overflow:hidden; }
 	-webkit-box-shadow: 1px 1px 2px #333333;
 	-o-box-shadow: 1px 1px 2px #333333;
 }
+
+#transverse .elgg-menu-navigation .elgg-menu-counter { border: 0 none; left: -20px; margin: 0; padding: 0; position: relative; }
+#transverse .elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 12px; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
+
+
 .elgg-form.thewire-form { background: transparent; }
 .home-static { background:white; box-shadow:3px 3px 5px 0px #666; padding: 0.2% 0.4%; }
+.home-static-container {}
 
 
 /* Sidebar */
@@ -422,25 +462,6 @@ img { border: 0 none; overflow:hidden; }
 	margin-right: 5px;
 	text-shadow: 0 2px 2px #999999;
 }
-.elgg-sidebar .elgg-module-aside h3 { color: #333333; font-size: 16px; margin: 0; }
-.elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
-.elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
-	float: left;
-	margin-right: 5px;
-	/*
-	height: 25px;
-	width: 25px;
-	*/
-}
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a {
-	float: left;
-	font-size: 0.75em;
-}
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:hover,
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:focus,
-.elgg-sidebar .elgg-module-aside .elgg-body .entity_title a:active {
-	color: #333333;
-}
 
 /* Pied de page - HTML spécifique */
 .elgg-page-footer {
@@ -456,16 +477,11 @@ img { border: 0 none; overflow:hidden; }
 	margin-top: 25px;
 	*/
 }
+.elgg-page-footer li { float: left; margin-right: 1em; }
 /*
-.elgg-page-footer ul { margin: auto; max-width: 50%; font-size: 0.75em; }
-.elgg-page-footer ul li {
-	float: left; padding-left: 13px; margin: 26px 7px 10px 0;
-	background: transparent url("<?php echo $urlicon; ?>puce-footer.png") left 7px no-repeat scroll;
-	color: #fff; font-size:12px;
-}
 .elgg-page-footer ul li:first-child { background: none; }
 */
-.elgg-page-footer ul li a { color: #fff; font-size:12px; }
+.elgg-page-footer ul li a { color: #fff; font-size: 0.7em; }
 .elgg-page-footer ul li a:hover, .elgg-page-footer ul li a:focus, .elgg-page-footer ul li a:active { color: #ddd; }
 .elgg-page-footer img { float: right; }
 .elgg-page-default .elgg-page-footer > .elgg-inner { border:0; }
@@ -483,7 +499,7 @@ img { border: 0 none; overflow:hidden; }
 	height: 10px;
 	position:absolute; left:0; right:0;
 }
-.elgg-page-footer .credits { clear:both; font-size: 0.85em; }
+.elgg-page-footer .credits { clear:both; font-size: 0.7em; margin-top: 1.5em; }
 .elgg-page-footer .credits p { float: left; margin: 4px 0 5px; color: #DEDEDE; }
 .elgg-page-footer .credits a { color: #DEDEDE; text-decoration:underline; }
 
@@ -500,9 +516,9 @@ img { border: 0 none; overflow:hidden; }
 /* MENUS & NAVIGATION */
 .elgg-menu-item-report-this { margin-left:10px; margin-top:5px; }
 /* Eviter les recouvrements par le menu des entités */
-.elgg-menu-entity { height:auto; text-align: center; }
+.elgg-menu-entity { height:auto; text-align: center; max-width:50%; }
 .elgg-menu-navigation li, #transverse ul li { list-style-type: none; }
-ul.elgg-list li.elgg-item ul.elgg-menu { font-size: 0.75em; }
+ul.elgg-list li.elgg-item ul.elgg-menu { /* font-size: 0.75em; */ }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-one { width: 40px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-date { width: 60px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { width: 90px; }
@@ -565,9 +581,10 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 
 .elgg-pagination a, .elgg-pagination span { display: inline-block; margin-bottom: 1px; }
 .elgg-pagination-limit { margin-top:0; }
-.elgg-pagination.elgg-pagination-limit li { margin-right:0; }
-.elgg-pagination.elgg-pagination-limit a { border-color:transparent; font-size:0.85em; padding:2px 4px 2px 0; }
-.elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { background-color:transparent; border-color:transparent; }
+.elgg-pagination.elgg-pagination-limit li, .elgg-pagination.elgg-pagination-limit li a, .elgg-pagination.elgg-pagination-limit li span { margin-right:2px; font-size: 0.9em; }
+.elgg-pagination.elgg-pagination-limit span { padding: 2px 4px; }
+.elgg-pagination.elgg-pagination-limit a { border-color:transparent; padding: 2px 4px; }
+.elgg-pagination.elgg-pagination-limit a:hover, .elgg-pagination.elgg-pagination-limit a:focus, .elgg-pagination.elgg-pagination-limit a:active { border-color:transparent; }
 .elgg-pagination-limit .elgg-state-selected span { font-weight:bold; border-color:transparent; }
 
 
@@ -581,15 +598,23 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #esope-public-col1 { float:left; width:50%; }
 #esope-public-col2 { float:right; width:44%; }
 
-#esope-homepage { margin-top:30px; }
+/* PAGE D'ACCUEIL PUBLIQUE */
+#esope-homepage {  }
+.home-intro { margin-bottom:3em; }
+.home-calendar { margin-bottom:3em; }
+.home-groups { margin-bottom:3em; }
+.home-group-item { float:left; clear:left; padding-bottom:16px; width:100%; }
+#esope-login { border:1px solid #CCCCCC; padding:1em; margin-bottom:3em; background:#F6F6F6; }
+#esope-register { margin-bottom:3em; }
 #esope-homepage p { font-size:14px; margin-top:0; margin-bottom:8px; }
-#esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
 #esope-homepage a, #esope-homepage a:visited { color:<?php echo $linkcolor; ?>; }
 #esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:red; }
 #esope-homepage .elgg-form { background:transparent; }
 #esope-homepage h2 { font-size:20px; font-weight:normal; }
+#esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
 
 #esope-homepage label { width:130px; float:left; margin:0 30px 16px 0; clear:both; text-align:right; }
+#esope-homepage .elgg-foot label { width:auto; float:none; clear:both; }
 #esope-homepage input[type='text'],
 #esope-homepage input[type='password'],
 #esope-homepage select { width:auto; min-width:200px; float:left; margin-bottom:16px; }
@@ -619,7 +644,12 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #esope-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
 .profile_manager_register_input_container { display:inline-block; }
+#profile_manager_profile_edit_tabs { clear: both; }
+.register-fullwidth { margin: 1em 0; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
+#widget_profile_completeness_progress_bar { background: #090; }
+
+
 
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
@@ -653,118 +683,6 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 }
 
 .elgg-sidebar #site-categories ul li a { padding: 6px 10px 5px; }
-
-
-
-/* WIDGETS */
-.elgg-module-widget { background-color: transparent; }
-.elgg-module-widget:hover,
-.elgg-module-widget:focus,
-.elgg-module-widget:active { background-color: transparent; }
-.elgg-module-widget > .elgg-head { height:auto; }
-
-/* Widgets - à corriger pour utiliser les classes natives d'Elgg */
-.elgg-page-body div.elgg-module {
-	background: url("<?php echo $urlicon; ?>ombre-module.png") no-repeat scroll left 5px transparent;
-	width: 300px; /* Imposé par l'image de fond, mais bloque les mises en page fluides */
-	float: left;
-	margin: 20px -1px 0;
-	border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-o-border-radius: 10px 10px 0 0;
-	padding: 0 14px;
-}
-.elgg-page-body div.elgg-module .elgg-head {
-	background-image: linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -o-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -moz-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -webkit-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -ms-linear-gradient(top, <?php echo $color2; ?> 45%, <?php echo $color3; ?> 55%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.45, <?php echo $color2; ?>), color-stop(0.55, <?php echo $color3; ?>));
-	background-color: <?php echo $color3; ?>;
-	border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-o-border-radius: 10px 10px 0 0;
-	border-top: 0 none;
-	min-height: 26px;
-}
-.elgg-page-body div.elgg-module .elgg-head .elgg-widget-title {
-	color: <?php echo $color14; ?>;
-	float: left;
-	font-family: <?php echo $font1; ?>;
-	font-size: 1.25em;
-	text-transform: uppercase;
-	font-weight: normal;
-}
-/* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
-a.elgg-widget-collapse-button,
-a.elgg-widget-collapse-button:hover,
-a.elgg-widget-collapse-button:focus,
-a.elgg-widget-collapse-button:active,
-a.elgg-widget-collapsed:hover,
-a.elgg-widget-collapsed:focus,
-a.elgg-widget-collapsed:active {
-	color: transparent;
-}
-a.elgg-widget-collapse-button:before { content: ""; }
-a.elgg-widget-collapsed:before { content: ""; }
-/*
-a.elgg-widget-edit-button { right: 12px; }
-*/
-
-div.elgg-widgets div.elgg-body { font-size: 0.90em; }
-.elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:14px; }
-.elgg-module .entity_title { font-size:16px; }
-.elgg-widget-instance-event_calendar p { font-size: 1.3em; }
-
-
-/* Contenu des modules */
-.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 8px 10px 0 6px; }
-
-/* Boutons des widgets */
-.elgg-page-body div.elgg-module .elgg-head ul li a { float: left; margin-left: 6px; margin:0; right: auto; }
-.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin-left: 0.5ex; color: <?php echo $color14; ?>; }
-
-
-.elgg-page-body div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
-.elgg-page-body div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
-.elgg-page-body div.module div.activites ul li { padding-bottom: 1px; }
-.elgg-page-body div.module div.activites ul li img { margin: 0 5px 0 7px; }
-.elgg-page-body div.module div.activites ul li div span { color: #666; font-style: italic; }
-
-/* Widgets activité des groupes */
-.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites,
-.elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites .elgg-widget-content { padding:0; }
-.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-	padding:0 14px;
-	background:<?php echo $color3; ?>;
-	/* margin-top:-8px; */
-}
-.elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
-	color:white;display:block;
-	font-family: <?php echo $font1; ?>;
-	font-size:14px;
-}
-.widget-group-content { padding: 0 10px 10px 10px; }
-
-.elgg-widget-more {
-	line-height:32px; color:<?php echo $linkcolor; ?>;
-	background: #F2F1EF;
-	display:block;
-	width: 100%;
-	/* float: left; */
-}
-.elgg-widget-more:before {
-	content: "+ ";
-	font-family: <?php echo $font2; ?>;
-	font-size: 24px;
-	font-weight: bold;
-	margin-left: 9px;
-	text-shadow: 0 2px 2px #999999;
-	vertical-align: bottom;
-}
 
 
 
@@ -817,10 +735,10 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Messages are now conversations, let's style this a little */
 .message.unread a { color: <?php echo $linkcolor; ?>; font-weight:bold; }
-.messages-owner { width: 26%; margin-right: 2%; }
-.messages-subject { width: 55%; margin-right: 2%; }
-.messages-timestamp { width: 8%; margin-right: 2%; }
-.messages-delete { width: 5%; }
+.messages-owner { width: 25%; margin-right: 1%; }
+.messages-subject { width: 50%; margin-right: 1%; }
+.messages-timestamp { width: 18%; margin-right: 1%; font-size:0.8em; }
+.messages-delete { width: 4%; }
 .elgg-item.selected-message { opacity:1; }
 .message-item-toggle { text-align: center; padding: 4px; display: block; background: #eee; }
 .elgg-item-message .message-content { width: 96%; padding: 0 0.5%; display:none; padding-bottom: 16px; padding-top: 4px; }
@@ -828,6 +746,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .message-sent .message-content { opacity: 1; }
 .message-inbox .message-content {	}
 .message-sent .message-content { margin-left:3%; background: #EEE; }
+.elgg-image-block .elgg-image-block.message { padding: 0 0; }
 
 
 /* Mes paramètres */
@@ -893,6 +812,9 @@ textarea, iframe, .defaultSkin tbody, .defaultSkin * { max-width: 100% !importan
 
 /* Champs longtext avec éditeur désactivé par défaut */
 textarea, .elgg-input-rawtext { width:100%; }
+/* Sélecteur de visibilité des champs du profil */
+.elgg-input-field-access { margin-bottom: 1ex; margin-left: 0.5ex; display: inline-block; }
+form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 
 /* Pour intégration d'une vue complétion du profil sous l'ownerblock du profil */
@@ -919,63 +841,22 @@ textarea, .elgg-input-rawtext { width:100%; }
 
 .groups-members-count { float: right; }
 
+/* Anciens groupes */
+.group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
+.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
-<?php // Keep this block just in case some clients prefer old way but we should use new icons by default (vector)
-<<< EOT
-/* Group activity */
-.elgg-menu-item-activity a { padding-left:32px; background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-activity a:hover, .elgg-menu-item-activity a:focus, .elgg-menu-item-activity a:active { background: url("<?php echo $urlicon; ?>activity.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Event calendar */
-.elgg-menu-item-event-calendar a { padding-left:32px; background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-event-calendar a:hover, .elgg-menu-item-event-calendar a:focus, .elgg-menu-item-event-calendar a:active { background: url("<?php echo $urlicon; ?>event_calendar.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Announcements */
-.elgg-menu-item-announcements a { padding-left:32px; background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-announcements a:hover, .elgg-menu-item-announcements a:focus, .elgg-menu-item-announcements a:active { background: url("<?php echo $urlicon; ?>announcements.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
-/* Blog */
-.elgg-menu-item-blog a { padding-left:32px; background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-blog a:hover, .elgg-menu-item-blog a:focus, .elgg-menu-item-blog a:active { background: url("<?php echo $urlicon; ?>blog.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Feedback */
-.elgg-menu-item-feedback a { padding-left:32px; background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-feedback a:hover, .elgg-menu-item-feedback a:focus, .elgg-menu-item-feedback a:active { background: url("<?php echo $urlicon; ?>feedback.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?>; color: #fff; }
-/* File */
-.elgg-menu-item-file a { padding-left:32px; background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-file a:hover, .elgg-menu-item-file a:focus, .elgg-menu-item-file a:active { background: url("<?php echo $urlicon; ?>file.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Folder */
-.elgg-menu-item-folder a { padding-left:32px; background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-folder a:hover, .elgg-menu-item-folder a:focus, .elgg-menu-item-folder a:active { background: url("<?php echo $urlicon; ?>folder.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Forum - discussion */
-.elgg-menu-owner-block .elgg-menu-item-discussion a { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-owner-block .elgg-menu-item-discussion a:hover, .elgg-menu-owner-block .elgg-menu-item-discussion a:focus, .elgg-menu-owner-block .elgg-menu-item-discussion a:active { background: url("<?php echo $urlicon; ?>discussion.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Brainstorm */
-.elgg-menu-item-brainstorm a { padding-left:32px; background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-brainstorm a:hover, .elgg-menu-item-brainstorm a:focus, .elgg-menu-item-brainstorm a:active { background: url("<?php echo $urlicon; ?>brainstorm.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Bookmarks */
-.elgg-menu-item-bookmarks a { padding-left:32px; background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-bookmarks a:hover, .elgg-menu-item-bookmarks a:focus, .elgg-menu-item-bookmarks a:active { background: url("<?php echo $urlicon; ?>bookmarks.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-/* Pages */
-.elgg-menu-item-pages a { padding-left:32px; background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px 5px #FFFFFF; }
-.elgg-menu-item-pages a:hover, .elgg-menu-item-pages a:focus, .elgg-menu-item-pages a:active { background: url("<?php echo $urlicon; ?>pages.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-
-/* More group tools and info icons */
-/* Group membership */
-.elgg-menu-item-membership-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px 5px #FFFFFF !important; }
-.elgg-menu-item-membership-status a:hover, .elgg-menu-item-membership-status a:focus, .elgg-menu-item-membership-status a:active {
-background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important;
-}
-/* Group notifications */
-.elgg-menu-item-subscription-status a { padding-left: 32px !important; background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px 5px #FFFFFF !important; }
-.elgg-menu-item-subscription-status a:hover { background: url("<?php echo $urlicon; ?>notification.png") no-repeat scroll 9px -19px <?php echo $linkcolor; ?> !important; }
-
-/* Group listing menu */
-.elgg-menu-item-members { background: url("<?php echo $urlicon; ?>members.png") no-repeat scroll -2px -26px transparent; }
-EOT;
-?>
 
 /* Note : this replaces the above with FA icons - update translations accordingly if needed
  */
 .elgg-menu-owner-block li a { padding-left: 1ex; }
-.elgg-sidebar li .fa { display: inline-block; min-width: 2.5ex; }
+/*
+.elgg-sidebar li .fa { display: inline-block; min-width: 1em; }
+*/
+li .fa { display: inline-block; /* min-width: 2.5ex; */ min-width: 1em; }
 
 
 
@@ -984,6 +865,7 @@ EOT;
 .no-spaces { border: 0 none !important; margin: 0 !important; padding: 0 !important; }
 
 /* Accordion styles */
+.ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 #custom_fields_userdetails .ui-accordion-header { padding: 0.3em 0 0.3em 1.8em; }
 #custom_fields_userdetails .ui-accordion-header .ui-icon { margin-top:0.5em; top:0; }
 
@@ -991,11 +873,6 @@ EOT;
 i.icon, i.icon:hover, i.icon:focus, i.icon:active { text-decoration:none; }
 
 /* Effets de survol */
-/*
-.elgg-module-widget, .elgg-module-group { opacity: 0.8; }
-.elgg-module-widget:hover, .elgg-module-widget:active, .elgg-module-widget:focus,
-.elgg-module-group:hover, .elgg-module-group:active, .elgg-module-group:focus { opacity: 1; }
-*/
 .elgg-item { opacity: 0.75; }
 .elgg-item .elgg-item { opacity: 1; } /* Don't double the effect */
 .elgg-item:hover, .elgg-item:active, .elgg-item:focus { opacity: 1; }
@@ -1023,6 +900,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #esope-search-form select { width: 7em; margin-left: 0.5em; }
 .esope-search-fulltext { width: 80%; float: left; }
 #esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.esope-search-metadata-select select { max-width: 100%; }
 .elgg-button-livesearch { float: right; }
 .esope-results-count { font-size: 0.8em; color: #808080; }
 
@@ -1071,20 +949,30 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #group-tool-tabs .group-tool-tab .fa { font-size: 3em; }
 #group-tool-tabs .group-tool-tab.elgg-state-selected, #group-tool-tabs .group-tool-tab:hover { background-color:<?php echo $linkcolor; ?>; color:white; }
 
+#autorefresh-menu { margin: 0.5ex 0; padding: 1ex 3ex; border: 1px dotted; background: #efefef; }
+#loader { position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: 10000;
+	background: rgba(0,0,0,0.2); color: #FFF; text-shadow: 0px 1px 2px #000;
+	text-align: center; font-size: 10ex; padding-top:5ex;
+}
 
+/* Responsive menu */
+.menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:24px; }
+.menu-sidebar-toggle { text-align: left; }
 
 <?php if (!$fixedwidth) { ?>
 /* .elgg-page-body RESPONSIVE DESIGN */
 
 /* Pour la fluidité en général */
 .elgg-page-default { min-width:200px; max-width:100%; }
-.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-layout-one-sidebar .elgg-main { width: 70%; min-width: 0; padding:1.5%; }
+.elgg-sidebar { width: 24%; min-width: 211px; margin:0 0 0 1%; }
 .elgg-sidebar ul.elgg-menu-page, elgg-sidebar ul.elgg-menu-groups-my-status { width:100%; }
+.elgg-sidebar-alt { width: 24%; min-width: 211px; margin:0 1% 0 0; padding:0; }
+.elgg-layout-two-sidebar .elgg-main { width: 48%; padding:13px 1%; }
+.elgg-layout-two-sidebar .elgg-sidebar {  }
+.elgg-layout-two-sidebar .elgg-sidebar_alt {  }
 /* Menus */
 .elgg-menu-navigation { width:auto; }
-/* Largeur de page standard */
-.interne { min-width:200px; width:auto; max-width:80%; }
 /* Quand on utilise les widgets */
 .elgg-widgets { min-width:200px; }
 .elgg-page-body div.module { width: 94%; padding: 3%; background-size:100%; }
@@ -1096,15 +984,126 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 @media (max-width:1225px) {
-	.interne { max-width:980px; }
 }
 
 @media (max-width:980px) {
-	.interne { max-width:98%; }
 	.elgg-page-default { min-width:200px; max-width:100%; }
 	.elgg-sidebar { min-width: 50px; width: 26%; margin:0 0 0 0; }
 	.elgg-layout-one-sidebar .elgg-main { min-width: 140px; width: 70%; padding:1%; }
 }
+
+
+
+@media (max-width:700px) {
+	.elgg-inner { max-width:100%;; }
+	
+	/* Top menu */
+	.menu-topbar-toggle { display:inline-block; }
+	.elgg-menu-topbar { display:none; }
+	.elgg-menu-topbar * { min-width:0; }
+	.elgg-menu-topbar.menu-enabled { display:block; }
+	.elgg-page-header .elgg-menu-topbar { float:none; width:100%; position:initial; font-size:initial; padding: 0; margin: 0; }
+	.elgg-page-header .elgg-menu-topbar li a { padding: 0.5em; }
+	.elgg-page-header .elgg-menu-topbar li, .elgg-page-header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
+	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header  .elgg-menu-topbar li li a,
+	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
+	.elgg-page-header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	.elgg-page-header .elgg-menu-topbar li.invites a { padding: 0; margin: 2px 0; }
+	
+	.elgg-page-header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
+	.elgg-page-header .interne { margin:0; }
+	.elgg-page-header h1 { margin-top:0; }
+	.elgg-page-header .profile-link { display:inline-block; }
+	.elgg-page-header .adf-profil { position:initial; }
+	
+	
+	/* Navigation menu */
+	/* Toggle menu */
+	.menu-navigation-toggle { display:inline-block; }
+	#transverse .elgg-menu-navigation { display:none; float: none; width:100%; padding: 0; margin: 0; font-size:initial; }
+	#transverse .elgg-menu-navigation * { min-width:0; }
+	#transverse .elgg-menu-navigation.menu-enabled { display:inline-block; }
+	#transverse .elgg-menu-navigation li { width: 100%; display:inline-block; padding:0; border-left:0 !important; border-right:0 !important; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:initial; }
+	#transverse .elgg-menu-navigation li a { width:100%; padding: 0.5em 0; text-indent: 0.5em; background: transparent; }
+	#transverse .elgg-menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
+	#transverse .elgg-menu-navigation li li a { width:100%; padding-left:0; padding-right:0;  }
+	/* Always display submenu (with indent) */
+	#transverse .elgg-menu-navigation li ul { display:block; padding:0; width: 100% !important; position:initial; top:0; left:0; }
+	#transverse .elgg-menu-navigation li ul li { width: 100% !important; border:0; padding:0; text-indent:0; }
+	#transverse .elgg-menu-navigation li ul li a { width: 100% !important; border:0; padding:0; text-indent:2em; }
+	#transverse .elgg-menu-navigation li ul li img { float: none; margin-right: 0.3em; display: inline-block; line-height : 25px; }
+	
+	#transverse { width: 100%; }
+	#transverse form { width: 90%; float: none; margin: 0 auto; clear: both; margin-top: 0.5em; }
+	#transverse .interne { max-width:100%; margin:0; }
+	
+	
+	/* Main content */
+	.elgg-page-body { padding: 0 0.5em; }
+	
+	/* Sidebar */
+	.menu-sidebar-toggle { display:inline-block; }
+	.elgg-sidebar { display:none; }
+	.elgg-sidebar * { min-width:0; }
+	.elgg-sidebar.menu-enabled { display:block; }
+	
+	.elgg-page .elgg-layout .elgg-sidebar { background: none !important; box-shadow: none !important; }
+	
+	
+	/* Footer */
+	.elgg-page-footer { padding: 0 0.5em; }
+	.elgg-page-footer li { float: left; margin: 0; width: 100%; padding: 0.1em 0; }
+	
+	/* Generic rules */
+	body { font-size:120%; }
+	.floating { position: initial !important; }
+	.elgg-page .elgg-breadcrumbs { font-size: small; margin-bottom: 1ex; display: inline-block; top:0; left:0; }
+	.elgg-button { font-size: large; }
+	
+	/* Common tools */
+	#feedBackToggler { bottom: 0; /* transform: rotate(90deg); transform-origin: bottom right; */ }
+	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 1ex; border: 0; width:100%; }
+	.twitter-timeline { width: 100% !important; }
+	
+	/* Recherche */
+	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
+	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
+	#main-search #adf-search-submit-button { border-radius: 0; }
+	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
+	
+	/* Layout */
+	header, #transverse, section, footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; max-width: 100%; }
+	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.elgg-page-walledgarden { padding: 0; }
+	.elgg-body-walledgarden { margin: 0px auto 0px auto !important; }
+	
+	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
+	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
+	
+	/* Groups */
+	.groups-profile-fields { width: 100%; }
+	ul#groups-tools > li { width: 100% !important; max-width: 100% !important; float: none; }
+	
+	/* Home */
+	.home-static-container { min-width: 100%; margin: 1ex 0 3ex 0 !important; padding: 0 !important; }
+	.home-static { min-width: 100%; box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.timeline-event, .home-timeline .timeline-event { width: 100%; }
+	
+	/* Public Home */
+	#adf-homepage #adf-public-col1, #adf-homepage #adf-public-col2 { float: none; width: 100%; }
+	#adf-public-col2 { padding-top: 3ex; clear: both; }
+	#adf-homepage input[type='text'], #adf-homepage input[type='password'], #adf-homepage select { min-width: 0; }
+	
+	/* Footer */
+	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
+	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; padding-left:0; }
+	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
+	div.credits p { float:none !important; }
+	
+	
+}
+
 
 /*
 @media (max-width:600px) {

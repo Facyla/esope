@@ -3,39 +3,32 @@
  * Compose message form
  *
  * @package ElggMessages
- * @uses $vars['friends']
+ * @uses $vars['$recipient_username']
+ * @uses $vars['subject']
+ * @uses $vars['body']
  */
 
-$recipient_guid = elgg_extract('recipient_guid', $vars, 0);
+$recipient_username = elgg_extract('recipient_username', $vars, '');
 $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');
 
-$recipients_options = array();
-$recipients_options[] = ''; // Add empty recipient (default)
-// @TODO : use a user picker once we have one that gets only 1 single user at once
-// Override default limit (50)
-//$vars['friends'] = $page_owner->getFriends('', false);
-foreach ($vars['friends'] as $friend) {
-	$recipients_options[$friend->guid] = $friend->name;
-}
+// @TODO : setting to allow writing to anyone
+// match_on : string all or array(groups|users|friends)
+$match_on = array('friends');
+if (elgg_is_admin_logged_in()) { $match_on = array('users'); }
 
-if (!array_key_exists($recipient_guid, $recipients_options)) {
-	$recipient = get_entity($recipient_guid);
-	if (elgg_instanceof($recipient, 'user')) {
-		$recipients_options[$recipient_guid] = $recipient->name;
-	}
-}
-
-$recipient_drop_down = elgg_view('input/dropdown', array(
-	'name' => 'recipient_guid',
-	'value' => $recipient_guid,
-	'options_values' => $recipients_options,
+$recipient_autocomplete = elgg_view('input/autocomplete', array(
+	'name' => 'recipient_username',
+	'value' => $recipient_username,
+	'match_on' => $match_on,
 ));
 
 ?>
 <div>
-	<label for="recipient_guid"><?php echo elgg_echo("messages:to"); ?>: </label>
-	<?php echo $recipient_drop_down; ?>
+	<label for="recipient_username"><?php echo elgg_echo("email:to"); ?>: </label>
+	<?php echo $recipient_autocomplete; ?>
+		<span class="elgg-text-help"><?php echo elgg_echo("messages:to:help"); ?></span>
+	
 </div>
 <div>
 	<label for="subject"><?php echo elgg_echo("messages:title"); ?>: <br /></label>
@@ -54,5 +47,5 @@ $recipient_drop_down = elgg_view('input/dropdown', array(
 	?>
 </div>
 <div class="elgg-foot">
-	<?php echo elgg_view('input/submit', array('value' => elgg_echo('messages:send'))); ?>
+	<?php echo elgg_view('input/submit', array('value' => elgg_echo('send'))); ?>
 </div>

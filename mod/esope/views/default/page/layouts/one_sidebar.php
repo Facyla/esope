@@ -21,7 +21,7 @@ if (isset($vars['class'])) {
 
 // ESOPE : Add context class, for page differenciation
 global $CONFIG;
-foreach ($CONFIG->context as $context) {
+if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 	$class .= ' elgg-context-' . $context;
 }
 ?>
@@ -36,6 +36,7 @@ foreach ($CONFIG->context as $context) {
 	?>
 	
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
+	<div class="menu-sidebar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 	<div class="elgg-sidebar">
 		<?php
 			echo elgg_view('page/elements/sidebar', $vars);

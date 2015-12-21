@@ -42,7 +42,7 @@ function feedback_init() {
 		//group_gatekeeper();
 		// Add group menu option if no feedback group specified (default = disabled)
 		if ($feedbackgroup == 'grouptool') { add_group_tool_option('feedback', elgg_echo('feedback:enablefeedback'), false); }
-		elgg_extend_view('groups/profile/summary','feedback/grouplisting', 900);
+		elgg_extend_view('groups/tool_latest','feedback/grouplisting', 100);
 	}
 	
 	/* Note : these settings are used in views

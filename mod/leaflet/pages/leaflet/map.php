@@ -1,11 +1,11 @@
 <?php
 /**
- * Elgg mobile_apps global browser
+ * Elgg Leaflet map browser
  * 
- * @package Elggmobile_apps
- * @author Facyla ~ Florian DANIEL
- * @copyright Datawyz 2014
- * @link http://datawyz.com/
+ * @package ElggLeaflet
+ * @author Florian DANIEL aka Facyla
+ * @copyright Florian DANIEL 2014-2015
+ * @link http://id.facyla.fr/
  */
 
 /* Notes :
@@ -21,16 +21,18 @@
 */
 
 $title = elgg_echo('leaflet:map');
+$content = '';
 
 // BUILD MAP
-$body .= elgg_view('leaflet/basemap', array('map_id' => 'map'));
-$body .= elgg_view('leaflet/locateonmap');
-$body .= elgg_view('leaflet/clickonmap');
-$body .= elgg_view('leaflet/searchonmap');
-
+$content .= elgg_view('leaflet/basemap', array('map_id' => 'leaflet-main-map'));
+$content .= elgg_view('leaflet/locateonmap');
+$content .= elgg_view('leaflet/clickonmap');
+$content .= elgg_view('leaflet/searchonmap');
 
 
 // Compose page content
-echo elgg_view('pageshell', array('head' => $head, 'body' => $body, 'title' => $title));
+//echo elgg_view('pageshell', array('head' => $head, 'body' => $body, 'title' => $title));
+$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
+echo elgg_view_page($title, $body);
 
 

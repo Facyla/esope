@@ -14,16 +14,20 @@
 
 if (elgg_in_context('widget')) {
 	// widgets do not show pagination
-	return true;
+	return;
+}
+
+$count = (int) elgg_extract('count', $vars, 0);
+if (!$count) {
+	return;
 }
 
 $offset = abs((int) elgg_extract('offset', $vars, 0));
 // because you can say $vars['limit'] = 0
-if (!$limit = (int) elgg_extract('limit', $vars, 10)) {
+if (!$limit = (int) elgg_extract('limit', $vars, elgg_get_config('default_limit'))) {
 	$limit = 10;
 }
 
-$count = (int) elgg_extract('count', $vars, 0);
 $offset_key = elgg_extract('offset_key', $vars, 'offset');
 // some views pass an empty string for base_url
 if (isset($vars['base_url']) && $vars['base_url']) {
@@ -31,48 +35,43 @@ if (isset($vars['base_url']) && $vars['base_url']) {
 } else if (isset($vars['baseurl']) && $vars['baseurl']) {
 	elgg_deprecated_notice("Use 'base_url' instead of 'baseurl' for the navigation/pagination view", 1.8);
 	$base_url = $vars['baseurl'];
+} elseif (elgg_is_xhr() && !empty($_SERVER['HTTP_REFERER'])) {
+	$base_url = $_SERVER['HTTP_REFERER'];
 } else {
 	$base_url = current_page_url();
 }
 
 // ESOPE : improved navigation
 $advanced_pagination = elgg_get_plugin_setting('advanced_pagination', 'esope');
-if ($advanced_pagination != 'yes') $advanced_pagination = false;
+if ($advanced_pagination != 'yes') { $advanced_pagination = false; }
 
 $num_pages = elgg_extract('num_pages', $vars, 10);
 $delta = ceil($num_pages / 2);
 
 if ($count <= $limit && $offset == 0) {
 	// no need for pagination
-	return true;
+	return;
 }
 
-$total_pages = ceil($count / $limit);
-$current_page = ceil($offset / $limit) + 1;
+$total_pages = (int) ceil($count / $limit);
+$current_page = (int) ceil($offset / $limit) + 1;
 
-$pages = new stdClass();
-$pages->prev = array(
-//	'text' => '&laquo;&nbsp;' . elgg_echo('previous'),
-	'text' => elgg_echo('previous'),
-	'href' => '',
-	'is_trusted' => true,
-);
-$pages->next = array(
-//	'text' => elgg_echo('next') . '&nbsp;&raquo;',
-	'text' => elgg_echo('next'),
-	'href' => '',
-	'is_trusted' => true,
-);
-$pages->items = array();
+$pages = array();
 
-// Add pages before the current page
-if ($current_page > 1) {
+// determine starting page
+$start_page = max(min([$current_page - 2, $total_pages - 4]), 1);
+
+// add previous
 	$prev_offset = $offset - $limit;
-	if ($prev_offset < 0) {
-		$prev_offset = 0;
+if ($prev_offset < 1) {
+	// don't include offset=0
+	$prev_offset = null;
 	}
 
-	$pages->prev['href'] = elgg_http_add_url_query_elements($base_url, array($offset_key => $prev_offset));
+$pages['prev'] = [
+	'text' => elgg_echo('previous'),
+	'href' => elgg_http_add_url_query_elements($base_url, array($offset_key => $prev_offset))
+];
 
 	$first_page = $current_page - $delta;
 	if ($first_page < 1) {
@@ -161,8 +160,7 @@ if ($advanced_pagination) {
 	}
 }
 
-echo '</ul>';
-
+echo elgg_format_element('ul', ['class' => 'elgg-pagination'], $list);
 
 // Esope : limits selector
 if ($advanced_pagination) {

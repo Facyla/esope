@@ -47,14 +47,14 @@ if(elgg_view_exists("input/user_autocomplete")){
 	echo "<div>". elgg_echo("esope:widgets:searchresults:owner_guids") . "</div>";
 	
 	echo elgg_view("input/user_autocomplete", array("name" => "owner_guids", "value" => string_to_tag_array($widget->owner_guids), "include_self" => true));		
-	echo elgg_view("input/hidden", array("name" => "params[owner_guids]", "value" => $widget->owner_guids));		
+	echo elgg_view("input/hidden", array("name" => "params[owner_guids]", "value" => $widget->owner_guids));
 } else {
 	if($user = elgg_get_logged_in_user_entity()){
 		$options_values = array(
 						"" => elgg_echo("all"),
 						$user->getGUID() => $user->name
 					);
-		if($friends = $user->getFriends("", false)){
+		if($friends = $user->getFriends(array('limit' => 0))){
 			foreach($friends as $friend){
 				$options_values[$friend->guid] = $friend->name;
 			}
