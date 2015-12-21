@@ -51,7 +51,8 @@ if (strlen($excerpt) >= 140) { $excerpt = elgg_get_excerpt($excerpt, 137); }
 
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $owner_link = elgg_view('output/url', array(
-	'href' => "transitions/owner/$owner->username",
+	//'href' => "transitions/owner/$owner->username",
+	'href' => $owner->getURL(),
 	'text' => $owner->name,
 	'is_trusted' => true,
 ));

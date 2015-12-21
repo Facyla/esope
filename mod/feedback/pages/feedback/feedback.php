@@ -17,6 +17,7 @@ $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
 $status_filter = get_input('status', false); // Status filter
 $about_filter = get_input('about', false); // About/type filter
+if (!empty($about_filter)) { $status_filter = 'open'; }
 $mood_filter = get_input('mood', false); // Mood filter
 
 // Allow members to read feedbacks ?

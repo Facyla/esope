@@ -32,7 +32,7 @@ if (elgg_instanceof($entity, 'object')) {
 }
 echo '</blockquote>';
 
-echo '<label>' . elgg_echo('collections:edit:entities_comment') . ' ' . elgg_view('input/text', array('name' => 'comment', 'value' => $comment)) . '</label>';
+echo '<label class="entity_comment hidden">' . elgg_echo('collections:edit:entities_comment') . ' ' . elgg_view('input/text', array('name' => 'comment', 'value' => $comment)) . '</label>';
 
 echo '</div>';
 

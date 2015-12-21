@@ -1,17 +1,31 @@
 <?php
 // Selectors
-$allowed_subtypes = array(
-	'all' => elgg_echo('collections:embed:nofilter'),
-	'blog' => elgg_echo('blog'),
-	'page_top' => elgg_echo('page_top'),
-	'page' => elgg_echo('page'),
-	'pages' => elgg_echo('pages') . ' (' . elgg_echo('all') . ')',
-	'bookmarks' => elgg_echo('bookmarks'),
-	'groupforumtopic' => elgg_echo('groups:forum'),
-	'file' => elgg_echo('file'), 
-	'event_calendar' => elgg_echo('event_calendar'),
-);
 
+$subtypes = elgg_get_plugin_setting('subtypes', 'collections');
+if (!empty($subtypes)) {
+	$subtypes = explode(',', $subtypes);
+	$subtypes = array_filter($subtypes);
+	foreach ($subtypes as $subtype_name) {
+		if ($subtype_name == 'all') {
+			$allowed_subtypes[$subtype_name] = elgg_echo('collections:embed:nofilter');
+		} else {
+			$allowed_subtypes[$subtype_name] = elgg_echo($subtype_name);
+		}
+	}
+}
+if (empty($allowed_subtypes)) {
+	$allowed_subtypes = array(
+		'all' => elgg_echo('collections:embed:nofilter'),
+		'blog' => elgg_echo('blog'),
+		'page_top' => elgg_echo('page_top'),
+		'page' => elgg_echo('page'),
+		'pages' => elgg_echo('pages') . ' (' . elgg_echo('all') . ')',
+		'bookmarks' => elgg_echo('bookmarks'),
+		'groupforumtopic' => elgg_echo('groups:forum'),
+		'file' => elgg_echo('file'), 
+		'event_calendar' => elgg_echo('event_calendar'),
+	);
+}
 
 // Input data and parameters
 $collection = $vars["entity"];

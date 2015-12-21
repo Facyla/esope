@@ -30,7 +30,7 @@ elgg_load_js('elgg.transitions');
 
 $body = '';
 
-$owner = $transitions->getOwnerEntity();
+//$owner = $transitions->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);
 $excerpt = $transitions->excerpt;
 if (!$excerpt) {

@@ -432,7 +432,7 @@ function multilingual_get_translation($entity, $lang_code = 'en'){
 
 /* Return main entity for a given translation
  */
-function multilingual_get_main_entity($translation){
+function multilingual_get_main_entity($translation) {
 	// Get existing translated entity
 	$entities = elgg_get_entities_from_relationship(array(
 			'relationship' => 'translation_of',
@@ -485,12 +485,12 @@ function multilingual_select_best_version($entity, $lang = false) {
 	if (($main_lang == $lang) && ($entity->guid == $main->guid)) { return $entity; }
 	// Any other translation in current language
 	$translations = multilingual_get_translations($entity);
-	foreach($translations as $ent) {
+	if ($translations) foreach($translations as $ent) {
 		if ($ent->lang == $lang) { return $ent; }
 	}
 	
 	// Any other translation in main language
-	foreach($translations as $ent) {
+	if ($translations) foreach($translations as $ent) {
 		if ($ent->lang == $main_lang) { return $ent; }
 	}
 	
@@ -582,6 +582,9 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 		$subtype = $entity->getSubtype();
 		if (in_array($subtype, $object_subtypes)) {
 			if ($entity->canEdit()) {
+				
+				// @TODO : check that entity does not already exist in target language before translating it
+				
 				$translation = clone $entity;
 				$translation->time_created = time();
 				$translation->time_updated = time();
@@ -615,6 +618,11 @@ function multilingual_add_translation($entity, $lang_code = 'en'){
 		
 				$success_rel = $entity->addRelationship($translation->guid, 'has_translation');
 				$success_rel = $translation->addRelationship($entity->guid, 'translation_of');
+				
+				// Enable plugins to perform additional actions on newly created entity
+				// Note : register event on translate:after, object - so we can update some meta specifically - and use relations
+				elgg_trigger_after_event("translate", "object", $translation);
+				
 			} else {
 				register_error(elgg_echo('multilingual:error:cannotedit'));
 			}

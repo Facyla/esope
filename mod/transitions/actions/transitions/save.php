@@ -114,8 +114,8 @@ if (!empty($category)) {
 		$values['rss_feed'] = '';
 		$values['challenge_elements'] = '';
 	}
+	
 }
-
 
 // fail if a required entity isn't set
 //$required = array('title', 'description');
@@ -159,6 +159,12 @@ foreach ($values as $name => $default) {
 			} else {
 				unset($values[$name]);
 			}
+			break;
+		
+		case 'collection':
+			// Enable removing an associated collection (we need to pass "none" because empty values are blocked by JS in edit form)
+			if ($value == 'none') { $value = ''; }
+			$values['collection'] = $value;
 			break;
 
 		default:
@@ -351,7 +357,8 @@ if (!$error) {
 				// create icon
 				$prefix = "transitions/" . $transitions->getGUID();
 				$fh = new ElggFile();
-				$fh->owner_guid = $transitions->getOwnerGUID();
+				//$fh->owner_guid = $transitions->guid; // Entity-based folder
+				$fh->owner_guid = $transitions->getOwnerGUID(); // Owner-based folder
 				foreach($icon_sizes as $icon_name => $icon_info){
 					if($icon_file = get_resized_image_from_uploaded_file("icon", $icon_info["w"], $icon_info["h"], $icon_info["square"], $icon_info["upscale"])){
 						$fh->setFilename($prefix . $icon_name . ".jpg");

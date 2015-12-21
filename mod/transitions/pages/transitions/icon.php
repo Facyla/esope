@@ -9,10 +9,11 @@ if (!in_array($size,array("large","medium","small","tiny","master","topbar", 'em
 
 $success = false;
 
-if($transitions = get_entity($guid)) {
+if ($transitions = get_entity($guid)) {
 	
 	$filehandler = new ElggFile();
-	$filehandler->owner_guid = $transitions->getOwnerGUID();
+	//$filehandler->owner_guid = $transitions->guid; // Entity-based folder
+	$filehandler->owner_guid = $transitions->getOwnerGUID(); // Owner-based folder
 	$filehandler->setFilename("transitions/" . $transitions->getGUID(). $size . ".jpg");
 	
 	if ($filehandler->exists()) {

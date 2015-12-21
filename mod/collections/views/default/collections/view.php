@@ -71,7 +71,8 @@ $description = elgg_view('output/longtext', array('value' => $collection->descri
 $owner = $collection->getOwnerEntity();
 $owner_image = elgg_view_entity_icon($owner, 'medium', array('use_hover' => false, 'use_link' => false));
 $owner_link = elgg_view('output/url', array(
-	'href' => "transitions/owner/$owner->username",
+	//'href' => "transitions/owner/$owner->username",
+	'href' => $owner->getURL(),
 	'text' => $owner->name,
 	'is_trusted' => true,
 ));

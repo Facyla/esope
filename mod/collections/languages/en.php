@@ -50,7 +50,7 @@ return array(
 	// NEW STRINGS
 	'collections:view' => "See elements",
 	'collections:edit:entities' => "Publication",
-	'collections:edit:entities_comment' => "Comment",
+	'collections:edit:entities_comment' => "Short explanation",
 	'collections:select_entity' => "Choose a publication",
 	'collections:change_entity' => "Change publication",
 	'collection:add' => "Create a collection",

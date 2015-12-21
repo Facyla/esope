@@ -23,10 +23,14 @@ elgg.collections.collections.init = function() {
 		event.preventDefault();
 	});
 	
+	// Update available search fields based on selected category
 	$("select[name=category]").live("change", elgg.collections.collections.searchFields);
 	
 	// Action tabs (permalink, embed, share...)
 	$("#collections-action-tabs a").live("click", elgg.collections.collections.selectTab);
+	
+	// Enable explanation input and submit button after an entity has been selected to be added to a collection
+	//$(".collection-addentity input[name=entity_guid]").live("change", elgg.collections.collections.addEntityFields);
 	
 };
 
@@ -77,16 +81,6 @@ elgg.collections.collections.addSortable = function() {
 };
 
 
-// Conditionnal field on embed search lightbox
-elgg.collections.collections.searchFields = function(event) {
-	var category = $("select[name='category']").val();
-	$(".transitions-embed-search-actortype").addClass('hidden');
-	if (category == 'actor') {
-		$(".transitions-embed-search-actortype").removeClass('hidden');
-	}
-	$.colorbox.resize({'width':'80%'});
-}
-
 // Load search into lightbox
 elgg.collections.collections.submitSearch = function(event) {
 	event.preventDefault();
@@ -122,7 +116,23 @@ elgg.collections.collections.embedFormat = function(elem) {
 	$.colorbox.resize();
 	elgg.ui.lightbox.close();
 	//event.preventDefault();
+	
+	// Reveal hidden fields (when using addentity form)
+	$(".elgg-form-collection-addentity .entity_comment").removeClass('hidden');
+	$(".elgg-form-collection-addentity input[type=submit]").removeClass('hidden');
+	
 };
+
+
+// Conditionnal field on embed search lightbox
+elgg.collections.collections.searchFields = function(event) {
+	var category = $("select[name='category']").val();
+	$(".transitions-embed-search-actortype").addClass('hidden');
+	if (category == 'actor') {
+		$(".transitions-embed-search-actortype").removeClass('hidden');
+	}
+	$.colorbox.resize({'width':'80%'});
+}
 
 
 // Switch action tab
@@ -134,6 +144,18 @@ elgg.collections.collections.selectTab = function(event) {
 	$(tabID).toggle();
 	event.preventDefault();
 };
+
+
+// Conditionnal field on embed search lightbox
+/*
+elgg.collections.collections.addEntityFields = function(event) {
+	var guid = $(".collection-addentity input[name='entity_guid']").val();
+	if (guid != '') {
+		$(".collection-addentity .entity_comment").removeClass('hidden');
+		$(".collection-addentity input[type=submit]").removeClass('hidden');
+	}
+}
+*/
 
 
 elgg.register_hook_handler('init', 'system', elgg.collections.collections.init);

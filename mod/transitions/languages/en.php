@@ -116,6 +116,7 @@ View and comment on the contribution:
 	'transitions:rss_feed' => "RSS feed",
 	'transitions:rss_feed:details' => "RSS feed URL that is assoiated with this challenge",
 	'transitions:challenge:collection' => "Collection associated with the challenge",
+	'transitions:challenge:collection:none' => "(no collection)",
 	'transitions:challenge:collection:details' => "Choose a resources collection to associate with this challenge.",
 	'transitions:savedraft' => "Publish my contribution",
 	'transitions:saveandedit' => "Keep editing",

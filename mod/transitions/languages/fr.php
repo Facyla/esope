@@ -116,6 +116,7 @@ Voir et commenter cette contribution :
 	'transitions:rss_feed' => "Flux RSS",
 	'transitions:rss_feed:details' => "URL du fil d'actualité RSS associé à ce défi",
 	'transitions:challenge:collection' => "Collection associée au défi",
+	'transitions:challenge:collection:none' => "(aucune collection)",
 	'transitions:challenge:collection:details' => "Choisissez une collection de ressources associée au défi.",
 	'transitions:savedraft' => "Publier ma contribution",
 	'transitions:saveandedit' => "Poursuivre l'édition",
