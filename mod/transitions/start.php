@@ -417,8 +417,13 @@ function transitions_get_category_opt($value = '', $addempty = false, $full = fa
 	if ($addempty) { $list[''] = elgg_echo('transitions:category:choose'); }
 	if ($addall) { $list['all'] = elgg_echo('transitions:category:all'); }
 	$values = array('actor', 'project', 'experience', 'imaginary', 'tools', 'event', 'knowledge', 'challenge');
+	if (elgg_is_active_plugin('theme_transitions2')) {
+		$is_admin = theme_transitions2_user_is_content_admin();
+	} else {
+		$is_admin = elgg_is_admin_logged_in();
+	}
 	foreach($values as $val) { $list[$val] = elgg_echo('transitions:category:' . $val); }
-	if (elgg_is_admin_logged_in() || $full) {
+	if ($is_admin || $full) {
 		$list['editorial'] = elgg_echo('transitions:category:editorial');
 		//$list['challenge'] = elgg_echo('transitions:category:challenge');
 	}
