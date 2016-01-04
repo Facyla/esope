@@ -1,0 +1,80 @@
+Changelog
+==========
+
+1.10.4
+------
+
+* Verification that it works both on Elgg 1.10 - 1.12 and Elgg 2.0 (therefore should work on any 2.X releases, too),
+* composer.json added.
+
+1.10.3
+------
+
+* Fixing of deprecation issues for the plugin to work without warnings on Elgg 1.10.
+
+1.9.2
+-----
+
+* French translation updated (thank to emanwebdev).
+
+1.8.2
+-----
+
+* Some general code cleanup (as in 1.9.1),
+* French translation updated (thank to emanwebdev).
+
+1.9.1
+-----
+
+* Updated for Elgg 1.9,
+* including some general code cleanup.
+
+1.8.1
+-----
+
+* French translation added (thank to emanwebdev),
+* German translation added.
+
+1.8
+---
+
+* Updated for Elgg 1.8 (by iionly)
+
+1.6
+---
+
+* Added ability to run cron silently by passing false to function.
+* Added elgg_version to manifest.xml.
+* Upped limit while expiring entities to 99999 in case of many unexpired entities.
+
+1.5
+---
+
+* Corrected typo in 15 minute cron trigger.
+
+1.4
+---
+
+* Correctly overriding the permissions instead of logging in the admin user. (Thanks Kevin Jardine!)
+
+1.3
+---
+
+* Added a check for expired entities before trying a foreach.
+
+1.2
+---
+
+* Changes the plugin hooks to send an array instead of just an object.
+
+1.1
+---
+
+* Added plugin hook expirationdate:expire_entity.
+* Added plugin hook expirationdate:will_expire_entity.
+* Corrected initial empty settings problem.
+
+1.0
+---
+
+* Initial release.
