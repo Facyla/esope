@@ -748,6 +748,7 @@ return array(
 	'esope:digest:groupactivity' => "Recent activity in your groups",
 	
 	// Join groups at registration
+	'esope:settings:groups:autojoin' => "List of groups (GUIDS) to join automatically after registration",
 	'esope:settings:register:joingroups' => "Allow to join groups at registration",
 	'esope:register:joingroups' => "Join groups",
 	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",

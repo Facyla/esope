@@ -762,6 +762,7 @@ return array(
 	'esope:digest:groupactivity' => "Activité récente dans vos groupes",
 	
 	// Join groups at registration
+	'esope:settings:groups:autojoin' => "List de groupes (GUIDS) à rejoindre automatiquement après l'inscription",
 	'esope:settings:register:joingroups' => "Permettre de rejoindre des groupes dès l'inscription",
 	'esope:register:joingroups' => "Rejoindre des groupes",
 	'esope:register:joingroups:help' => "Vous pouvez choisir de rejoindre une sélection de groupes. Notez qu'il ne s'agit que de groupes publics et en libre accès : vous pourrez rejoindre davantage de groupes une fois votre inscription terminée.",

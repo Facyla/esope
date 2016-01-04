@@ -671,11 +671,11 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . '</label> ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</p>';
 		
 			// Display "old group" banner
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_display') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:settings:groups:old_display') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
 			// Set "old group" timeframe (in seconds)
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
 			// Enable group archive (using ->status == 'archive' metadata)
-			echo '<p><label>' . elgg_echo('adf_platform:settings:groups:archive') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:settings:groups:archive') . ' ' . elgg_view('input/dropdown', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
 		
 			?>
 		</div>
