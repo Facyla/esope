@@ -170,6 +170,11 @@ if (empty($plugin->groups_archive)) $plugin->groups_archive = 'yes';
 if (empty($plugin->groups_old_display)) $plugin->groups_old_display = 'yes';
 if (empty($plugin->groups_old_timeframe)) $plugin->groups_old_timeframe = 15552000; // 3600 * 24 * 30 * 6 (about 6 months)
 
+// Auto-join groups : init with alternate plugin config if exists
+if (!isset($plugin->groups_autojoin)) {
+	$plugin->groups_autojoin = elgg_get_plugin_setting('systemgroups', 'autosubscribegroup');
+}
+
 
 // CORRECT BAD-FORMATTED VALUES
 // Remove spaces
@@ -597,6 +602,16 @@ $(function() {
 	<?php if (elgg_is_active_plugin('groups')) {
 		echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('esope:config:groups') . '</h3>';
 		echo '<div>';
+			// Auto join groups at registration
+			// Note : this setting replaces autosubscribegroup plugin
+			echo '<p><label>' . elgg_echo('esope:settings:groups:autojoin') . '</label> ' . elgg_view('input/text', array('name' => 'params[groups_autojoin]', 'value' => $plugin->groups_autojoin)) . '</p>';
+			// display autojoin groups list
+			if (!empty($plugin->groups_autojoin)) {
+				$groups_autojoin_guids = esope_get_input_array($plugin->groups_autojoin);
+				if ($groups_autojoin_guids) {
+					echo elgg_view_entity_list(array('guids' => $groups_autojoin_guids));
+				}
+			}
 			// Join groups at registration
 			echo '<p><label>' . elgg_echo('esope:settings:register:joingroups') . '</label> ' . elgg_view('input/select', array('name' => 'params[register_joingroups]', 'options_values' => $no_yes_opt, 'value' => $plugin->register_joingroups)) . '</p>';
 			echo '<p><label>' . elgg_echo('esope:settings:groupjoin_enablenotif') . '</label> ' . elgg_view('input/select', array('name' => 'params[groupjoin_enablenotif]', 'options_values' => $group_groupjoin_enablenotif_opt, 'value' => $plugin->groupjoin_enablenotif)) . '</p>';

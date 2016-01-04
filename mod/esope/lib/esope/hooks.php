@@ -478,8 +478,8 @@ function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
 }
 
 
-// Perform some post-login actions (join groups, etc.)
-function esope_create_user_hook($hook, $type, $return, $params) {
+// Perform some post-registration actions (join groups, etc.)
+function esope_register_user_hook($hook, $type, $return, $params) {
 	if (is_array($params)) {
 		$user = elgg_extract("user", $params);
 		if (elgg_instanceof($user, "user")) {
@@ -497,6 +497,33 @@ function esope_create_user_hook($hook, $type, $return, $params) {
 	}
 	// We don't change anything to the process
 	return $return;
+}
+
+
+// Redirection après login
+function esope_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
+	if (!elgg_is_logged_in()) {
+		global $CONFIG;
+		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
+		// Si jamais la valeur de retour n'est pas définie, on le fait
+		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
+		return $CONFIG->url . 'login';
+	}
+	return null;
+}
+
+// Vérification des URL de redirection : si redirection vers un REFERER HTTP externe, forward vers l'accueil
+function esope_forward_hook($hook_name, $reason, $location, $parameters) {
+	$forward_url = $parameters['forward_url'];
+	if ($forward_url == $_SERVER['HTTP_REFERER']) {
+		if ((strpos($forward_url, 'http:') === 0) || (strpos($forward_url, 'https:') === 0)) {
+			$site_url = elgg_get_site_url();
+			if (strpos($forward_url, $site_url) !== 0) {
+				return $site_url;
+			}
+		}
+	}
+	return null;
 }
 
 
