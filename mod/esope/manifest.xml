@@ -2,10 +2,10 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>ESOPE - Thème configurable</name>
 	<id>esope</id>
-	<author>Florian DANIEL aka Facyla ~ Items International 2011-2015</author>
-	<version>1.11.7.0</version>
+	<author>Florian DANIEL aka Facyla 2015</author>
+	<version>1.12.5.0</version>
 	<blurb>ESOPE - Thème configurable ~ Environnement Social Opensource Public Elgg</blurb>
-	<description>Né d'une collaboration entre le Département de l'Essonne et l'Assemblée des Départements de France, ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit une base de thème accessible et offre de nombreuses options et possibilités de configuration. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. Les plugins de la distribution ESOPE peut être utilisés sans utiliser ce plugin.</description>
+	<description>Ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit une base de thème accessible et offre de nombreuses options et possibilités de configuration. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. La majorité des plugins de la distribution ESOPE peuvent être utilisés indépendament de ce plugin.</description>
 	<website>http://departements-en-reseaux.fr/</website>
 	<copyright>Florian DANIEL aka Facyla, Items International, Conseil Général de l'Essonne, Assemblée des Départements de France, Urbilog</copyright>
 	<license>GNU Public License version 2</license>
@@ -64,6 +64,11 @@
 		<type>plugin</type>
 		<name>threads</name>
 	</conflicts>
+	<!-- Plugin rendu obsolète par ESOPE //-->
+	<conflicts>
+		<type>plugin</type>
+		<name>autosubscribegroup</name>
+	</conflicts>
 	
 	
 	<suggests>
@@ -121,21 +126,20 @@
 		<type>plugin</type>
 		<name>pages</name>
 	</suggests>
-	<suggests>
-		<type>plugin</type>
-		<name>event_calendar</name>
-	</suggests>
 	
 	<!-- To be deprecated //-->
 	<suggests>
 		<type>plugin</type>
-		<name>tinymce</name>
+		<name>event_calendar</name>
 	</suggests>
 	
 	
 </plugin_manifest>
 
 <!--
+1.12.5.0 : 2016
+  - Migration sur la base du core Elgg 1.12.5
+
 1.11.7.0 : 2015
   - Migration sur la base du core Elgg 1.11.4
 

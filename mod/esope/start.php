@@ -128,9 +128,11 @@ function esope_init() {
 	elgg_register_event_handler('delete','member','esope_group_leave', 800);
 	
 	// Gestion des actions post-inscription
-	elgg_register_plugin_hook_handler('register', 'user', 'esope_create_user_hook');
+	elgg_register_plugin_hook_handler('register', 'user', 'esope_register_user_hook');
+	// Gestion des actions post-création de compte
+	elgg_register_event_handler('create', 'user', 'esope_create_user_event', 502);
 	// Gestion des actions post-login
-	elgg_register_event_handler('login','user','esope_login_user_action', 800);
+	elgg_register_event_handler('login','user','esope_login_user_event', 800);
 	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
@@ -362,9 +364,10 @@ function esope_init() {
 }
 
 
-// Include hooks & page_handlers functions (lightens this file)
+// Include page_handlers, hooks & events functions (lightens this file)
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
+require_once(dirname(__FILE__) . '/lib/esope/events.php');
 
 
 
@@ -559,31 +562,6 @@ function esope_login_handler($event, $object_type, $object) {
 	forward();
 }
 
-// Redirection après login
-function esope_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
-	if (!elgg_is_logged_in()) {
-		global $CONFIG;
-		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
-		// Si jamais la valeur de retour n'est pas définie, on le fait
-		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-		return $CONFIG->url . 'login';
-	}
-	return null;
-}
-
-// Vérification des URL de redirection : si redirection vers un REFERER HTTP externe, forward vers l'accueil
-function esope_forward_hook($hook_name, $reason, $location, $parameters) {
-	$forward_url = $parameters['forward_url'];
-	if ($forward_url == $_SERVER['HTTP_REFERER']) {
-		if ((strpos($forward_url, 'http:') === 0) || (strpos($forward_url, 'https:') === 0)) {
-			$site_url = elgg_get_site_url();
-			if (strpos($forward_url, $site_url) !== 0) {
-				return $site_url;
-			}
-		}
-	}
-	return null;
-}
 
 /* Performs some actions after registration */
 function esope_register_handler($event, $object_type, $object) {
@@ -1767,47 +1745,6 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	return $groups;
 }
 
-
-// Perform some post-login actions (join groups, etc.)
-function esope_login_user_action($event, $type, $user) {
-	if (elgg_instanceof($user, "user")) {
-		if (!$user->isBanned()) {
-			// Try to join groups asked at registration
-			if ($user->join_groups) {
-				foreach($user->join_groups as $group_guid) {
-					if ($group = get_entity($group_guid)) {
-						// Process only groups that haven't been joined yet
-						if (!$group->isMember($user)) {
-							if (!$group->join($user)) {
-								// Handle subgroups cases
-								if (elgg_is_active_plugin('au_subgroups')) {
-									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
-									while ($parent = AU\SubGroups\get_parent_group($group)) {
-										//  Join only if parent group is public membership or if we have a join pending
-										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
-											// Join group, or add to join list
-											if (!$parent->join($user)) { $join_children[] = $parent->guid; }
-										}
-									}
-									// Start joining from upper parents if needed
-									if ($join_children) {
-										$join_children = array_reverse($join_children);
-										foreach($join_children as $children) { $children->join($user); }
-									}
-									// Try to join group again
-									if ($group->join($user)) {}
-								}
-							}
-						}
-					}
-				}
-				// Update waiting list
-				$user->join_groups = null;
-			}
-		}
-	}
-	return null;
-}
 
 
 /* Returns an array with images extracted from a text field
