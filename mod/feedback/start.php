@@ -93,7 +93,7 @@ function feedback_page_handler($page) {
 		// Following all use default page
 		case 'group': set_input('group', $page[1]); break;
 		case 'status': set_input('status', $page[1]); break;
-		case 'about': set_input('about', $page[1]); break;
+		case 'about': set_input('about', $page[1]); set_input('status', $page[2], 'open'); break;
 		case 'mood': set_input('mood', $page[1]); break;
 	}
 	include(dirname(__FILE__) . "/pages/feedback/feedback.php");
