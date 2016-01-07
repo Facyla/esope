@@ -41,7 +41,7 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 $CONFIG->title = $page_title;
 
 // slider/read may render more content
-if (elgg_instanceof($slider, 'object', 'slider') && $slider->canEdit()) {
+if (!$slider || (elgg_instanceof($slider, 'object', 'slider') && $slider->canEdit())) {
 	$content .= elgg_view('forms/slider/edit', array('entity' => $slider));
 	$content .= elgg_view('forms/slider/clone', array('entity' => $slider));
 }
