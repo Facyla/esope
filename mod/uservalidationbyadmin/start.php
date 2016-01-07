@@ -85,6 +85,8 @@ function uservalidationbyadmin_page_handler($page) {
 					if (!$user->isEnabled()) {
 						$user->enable();
 					}
+					// Remove stored registration IP
+					$user->register_ip = null;
 					
 					if ($user->save()) {
 						// notify the user about the validation

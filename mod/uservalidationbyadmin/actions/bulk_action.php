@@ -20,6 +20,8 @@ if (!empty($user_guids)) {
 					if (!$user->isEnabled()) {
 						$user->enable();
 					}
+					// Remove stored registration IP
+					$user->register_ip = null;
 					
 					if ($user->save()) {
 						// notify the user about the validation

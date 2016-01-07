@@ -34,6 +34,9 @@ function uservalidationbyadmin_register_user_hook($hook, $type, $return_value, $
 	// this user needs validation
 	$user->admin_validated = false;
 	
+	// Store registration IP address (for further guessed geolocation detection)
+	$user->register_ip = $_SERVER['REMOTE_ADDR'];
+	
 	// check who to notify
 	$notify_admins = uservalidationbyadmin_get_admin_notification_setting();
 	if ($notify_admins == "direct") {

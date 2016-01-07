@@ -61,11 +61,13 @@ Veuillez vous connecter sur %s pour approuver/supprimer les demandes d'inscripti
 	'uservalidationbyadmin:settings:emailvalidation' => "Permettre aux administrateurs de valider directement via un lien dans l'email",
 	'uservalidationbyadmin:settings:admin:additionalinfo' => "Ajouter des informations complémentaires pour l'admin dans l'email de validation",
 	'uservalidationbyadmin:settings:user:additionalinfo' => "Ajouter des informations complémentaires pour l'utilisateur dans l'email de confirmation après validation",
-	'uservalidationbyadmin:userinfo' => "Demande de %s : username %s, email %s",
-	'uservalidationbyadmin:userinfo:geo' => "Demande de %s : username %s, email %s, IP %s, Geo %s",
+	'uservalidationbyadmin:noipinfo' => "pas d'information sur l'IP d'inscription",
+	'uservalidationbyadmin:geoinfo' => "IP %s, géolocalisation estimée&nbsp;: %s",
+	'uservalidationbyadmin:userinfo' => "Demande de %s&nbsp;: username %s, email %s",
+	'uservalidationbyadmin:userinfo:geo' => "Demande de %s&nbsp;: username %s, email %s, %s",
 	'uservalidationbyadmin:user_validation_link' => "Lien de confirmation immédiate du compte de %s : %s",
 	
-		'uservalidationbyadmin:notify:admin:message:alternate' => "Bonjour %s,
+	'uservalidationbyadmin:notify:admin:message:alternate' => "Bonjour %s,
 
 Il y a %s demandes d'inscription en attente sur %s :
 %s
