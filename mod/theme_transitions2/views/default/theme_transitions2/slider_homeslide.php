@@ -2,7 +2,7 @@
 $guid = elgg_extract('guid', $vars);
 $cmspage = cmspages_get_entity($guid);
 $slide_content = '';
-if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
+if (elgg_is_active_plugin('cmspages') && elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	$slide_content .= '<a href="' . $cmspage->getURL() . '">';
 	$slide_content .= '<img src="' . $cmspage->getFeaturedImageURL('original') . '" class="transitions2-slide-image" />';
 	$slide_content .= '<div class="transitions2-slide-text">';
