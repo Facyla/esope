@@ -41,6 +41,8 @@ function esope_groups_handle_all_page() {
 	// Page title
 	$title = elgg_echo('groups');
 	
+	$active_subgroups = elgg_is_active_plugin('au_subgroups');
+	
 	switch ($selected_tab) {
 		
 		case 'popular':
@@ -52,7 +54,7 @@ function esope_groups_handle_all_page() {
 				'no_results' => elgg_echo('groups:none'),
 				'limit' => $limit,
 			);
-			if ($display_subgroups != 'yes') {
+			if ($active_subgroups && ($display_subgroups != 'yes')) {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
 			$content = elgg_list_entities_from_relationship_count($options);
@@ -74,7 +76,7 @@ function esope_groups_handle_all_page() {
 				'preload_containers' => true,
 			);
 			
-			if ($display_subgroups != 'yes') {
+			if ($active_subgroups && ($display_subgroups != 'yes')) {
 			  $options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
 			$content = elgg_list_entities($options);
@@ -86,7 +88,7 @@ function esope_groups_handle_all_page() {
 			
 		case 'alpha':
 			$options = array('type' => 'group', 'full_view' => false, 'limit' => $limit);
-			if ($display_subgroups != 'yes') {
+			if ($active_subgroups && ($display_subgroups != 'yes')) {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
 			// Alphabetic sort
@@ -121,7 +123,7 @@ function esope_groups_handle_all_page() {
 				'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user_guid, 
 				'inverse_relationship' => false, 'full_view' => false, 'limit' => $limit,
 			);
-			if ($display_subgroups != 'yes') {
+			if ($active_subgroups && ($display_subgroups != 'yes')) {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
 			$content = elgg_list_entities_from_relationship_count($options);
@@ -148,7 +150,7 @@ function esope_groups_handle_all_page() {
 					$content = elgg_echo('friends:none:you');
 				} else {
 					$options = array('type' => 'group', 'full_view' => FALSE, 'limit' => $limit,);
-					if ($display_subgroups != 'yes') {
+					if ($active_subgroups && ($display_subgroups != 'yes')) {
 						$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 					}
 					foreach ($friends as $friend) { $options['container_guids'][] = $friend->getGUID(); }
@@ -172,7 +174,7 @@ function esope_groups_handle_all_page() {
 				'limit' => $limit,
 			);
 			
-			if ($display_subgroups != 'yes') {
+			if ($active_subgroups && ($display_subgroups != 'yes')) {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
 			$content = elgg_list_entities($options);

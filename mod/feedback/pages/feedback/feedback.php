@@ -13,13 +13,6 @@ elgg_push_breadcrumb('feedback', $base_url);
 // Note : the view is replaced by its content here, because we have the counters in it
 
 
-$limit = get_input('limit', 10);
-$offset = get_input('offset', 0);
-$status_filter = get_input('status', false); // Status filter
-$about_filter = get_input('about', false); // About/type filter
-if (!empty($about_filter)) { $status_filter = 'open'; }
-$mood_filter = get_input('mood', false); // Mood filter
-
 // Allow members to read feedbacks ?
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview != 'yes') { admin_gatekeeper(); }
@@ -33,6 +26,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 	} else elgg_set_page_owner_guid($site->guid);
 }
 
+// Useful vars
 $feedbacks = array();
 $status_values = array('open', 'closed', 'total');
 foreach ($status_values as $status) { $$status = 0; }
@@ -49,12 +43,19 @@ foreach ($about_values as $about) { ${"feedback_$about"} = 0; }
 $undefined_values = array('other', 'feedback', 'undefined');
 $other = 0;
 
+// Filters and params
+$limit = get_input('limit', 10);
+$offset = get_input('offset', 0);
+$status_filter = get_input('status', 'total'); // Status filter
+$about_filter = get_input('about', false); // About/type filter
+$mood_filter = get_input('mood', false); // Mood filter
+if (!in_array($status_filter, $status_values) && !empty($about_filter)) { $status_filter = 'open'; }
 
 
 if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
-	// Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
+	// TOOL : Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
 	//if (!empty($ent->state)) { $ent->status = $ent->state; $ent->state = null; }
-	// Uncomment to correct title bug retroactively - use once if needed, then comment again
+	// TOOL : Uncomment to correct title bug retroactively - use once if needed, then comment again
 	/*
 	global $is_admin; $ignore_admin = $is_admin; $is_admin = true;
 	if (!empty($ent->txt)) {
@@ -64,30 +65,15 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	$is_admin = $ignore_admin;
 	*/
 	
-	// Stats
-	/*
-	if (!isset($ent->status) || empty($ent->status) || ($ent->status == 'open')) {
-		$open++;
-		// Sort feedbacks in undefined vs specific about category
-		if (!$about_enabled || empty($ent->about) || in_array($ent->about, $undefined_values)) {
-			$other++;
-		} else {
-			if (isset(${"feedback_" . $ent->about})) {
-				${"feedback_" . $ent->about}++;
-			} else {
-				// May still happen, eg. if an "about" value was set before settings were updated to new values
-				${"feedback_" . $ent->about} = 1;
-			}
-		}
-		
-	} else if ($ent->status == 'closed') { $closed++; }
-	*/
 	
-	// Filter : if filter(s) set, add only corresponding feedbacks
+	// Filter : if filter(s) set, filter only corresponding feedbacks
 	if (
-		(!isset($ent->status) || !$status_filter || ($ent->status == $status_filter)) 
-		&& (!isset($ent->about) || !$about_filter || ($ent->about == $about_filter))
-		) { $feedbacks[] = $ent; }
+		(!$status_filter || ($ent->status == $status_filter)) 
+		&& (!$about_filter || ($ent->about == $about_filter) || (($about_filter == 'other') && (empty($ent->about) || in_array($ent->about, $undefined_values)))) 
+		&& (!$mood_filter || ($ent->mood == $mood_filter)) 
+		) {
+			$feedbacks[] = $ent;
+		}
 }
 $count = count($feedbacks);
 
@@ -99,59 +85,14 @@ $content .= '<div class="clearfloat"></div>';
 
 
 // Sidebar menu - Menu latéral
-/*
-$sidebar = '<div id="site-categories">';
-$sidebar .= '<h2>' . elgg_echo('feedback'). '</h2>';
-$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
-foreach ($status_values as $status) {
-	$selected = '';
-	if ((($status == 'total') && (full_url() == $base_url)) || (full_url() == $base_url . "status/$status")) {
-		$selected = ' class="elgg-state-selected"';
-	}
-	if ($$status > 1) {
-		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status", array($$status)) . '</a></li>';
-	} else {
-		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status:singular", array($$status)) . '</a></li>';
-	}
-}
-$sidebar .= '</ul>';
-
-// Add open filter only if there are about categories
-if ($about_enabled && (sizeof($about_values) > 1)) {
-	$sidebar .= '<h2>' . elgg_echo('feedback:status:open'). '</h2>';
-	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
-
-	foreach ($about_values as $about) {
-		if (!in_array($about, $undefined_values)) {
-			if ($about == $about_filter) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
-			$sidebar .= '<a href="'.$base_url . 'about/' . $about . '">';
-			if (${"feedback_$about"} > 1) {
-				$sidebar .= elgg_echo("feedback:menu:$about", array(${"feedback_$about"}));
-			} else {
-				$sidebar .= elgg_echo("feedback:menu:$about:singular", array(${"feedback_$about"}));
-			}
-			$sidebar .= '</a></li>';
-		}
-	}
-	// Always add "other" (undefined) feedbacks
-	if (!$about_filter || in_array($about_filter, $undefined_values)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
-	$sidebar .= '<a href="'.$base_url . 'about/other">';
-	if ($other > 1) {
-		$sidebar .= elgg_echo("feedback:menu:other", array($other));
-	} else {
-		$sidebar .= elgg_echo("feedback:menu:other:singular", array($other));
-	}
-	$sidebar .= '</a></li></ul>';
-}
-$sidebar .= '</div>';
-*/
 $sidebar = elgg_view('feedback/sidebar');
+
 
 
 // Titre de la page
 $title = '<i class="fa fa-bullhorn"></i> ' . elgg_echo('feedback:admin:title');
 if (!empty($status_filter)) {
-	$title .= ' : ' . elgg_echo('feedback:status:'.$status_filter);
+	$title .= ' ' . strtolower(elgg_echo('feedback:status:'.$status_filter));
 }
 if (!empty($about_filter)) {
 	$title .= ' ' . elgg_echo('feedback:about') . ' &laquo;&nbsp;' . elgg_echo('feedback:about:'.$about_filter) . '&nbsp;&raquo;';

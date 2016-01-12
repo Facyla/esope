@@ -233,14 +233,18 @@ function uservalidationbyadmin_notify_admins() {
 					foreach ($pending_users as $pending_user) {
 						if ($admin_notification_info == 'yes') {
 							// Note : use 'uservalidationbyadmin:userinfo:geo' to include also IP and guessed geolocation
-							//$geoloc = uservalidationbyadmin_detect_geoloc(); // @TODO : implement only for immediate validation - or store registration IP
+							// We are using stored registration IP because information can only be available at registration time - not in cron
+							if (!empty($pending_user->register_ip)) {
+								$geoloc = uservalidationbyadmin_detect_geoloc($pending_user->register_ip);
+							} else {
+								$geoloc = elgg_echo('uservalidationbyadmin:noipinfo');
+							}
 							// $ip_address = $_SERVER['REMOTE_ADDR'];
-							$user_list .= "\n" . elgg_echo('uservalidationbyadmin:userinfo', array(
+							$user_list .= "\n" . elgg_echo('uservalidationbyadmin:userinfo:geo', array(
 										$pending_user->name,
 										$pending_user->username,
 										$pending_user->email,
-										//$ip_address,
-										//$geoloc,
+										$geoloc,
 									)
 								);
 						}
@@ -315,17 +319,32 @@ function uservalidationbyadmin_generate_code($user_guid, $email_address) {
 
 // Returns guessed geolocation
 // Note : this works only for direct validation (as it depends on server global vars)
-function uservalidationbyadmin_detect_geoloc() {
+function uservalidationbyadmin_detect_geoloc($ip_address = false) {
 		// IP detection
-		$ip_address = $_SERVER['REMOTE_ADDR'];
-		$geoloc = "http://www.geobytes.com/IpLocator.htm?GetLocation&template=php3.txt&IpAddress=".$ip_address;
-		$geotags = get_meta_tags($geoloc);
-		$geocountry = $geotags['country'];
-		$georegion = $geotags['region'];
-		$geocity = $geotags['city'];
-		$geocertainty = $geotags['certainty'];
-		$geostring = $ip_address." ; ".$geocountry." ; ".$georegion." ; ".$geocity." ; ".$geocertainty;
-		return $geostring;
+		if (!$ip_address) {
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+		}
+		
+		// http://freegeoip.net/ => up to 10k requests per hour
+		$geo_api = 'http://freegeoip.net/json/' . $ip_address;
+		$geo_json = file_get_contents($geo_api);
+		$geoloc = json_decode($geo_json, true);
+		//echo '<pre>' . print_r($geoloc, true) . '</pre>'; // Test and dev
+		/* Response content format
+		[ip] => xxx.xxx.xxx.xxx
+		[country_code] => XX
+		[country_name] => Xxxxx
+		[region_code] => X
+		[region_name] => Xxxxxx
+		[city] => Xxxxx
+		[zip_code] => XXXXX
+		[time_zone] => Europe/Xxxx
+		[latitude] => xx.xx
+		[longitude] => xx.xx
+		[metro_code] => X
+		*/
+		$geostring = "{$geoloc['zip_code']} {$geoloc['city']}, {$geoloc['region_name']}, {$geoloc['country_name']} (TZ {$geoloc['time_zone']})";
+		return elgg_echo('uservalidationbyadmin:geoinfo', array($ip_address, $geostring));
 }
 
 
