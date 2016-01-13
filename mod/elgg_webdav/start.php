@@ -89,10 +89,10 @@ function elgg_webdav_page_handler($page) {
 
 
 // Useful function to create a new file from WebDAV
-function elgg_webdav_create_file($name, $data, $options = array(), $access_id = 0) {
+function elgg_webdav_create_file($name, $data, $options = array()) {
 	$defaults = array(
 			'title' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-			'access_id' => $access_id,
+			'access_id' => 0,
 			'description' => '',
 			'container_guid' => elgg_get_logged_in_user_guid(),
 			'owner_guid' => elgg_get_logged_in_user_guid(),

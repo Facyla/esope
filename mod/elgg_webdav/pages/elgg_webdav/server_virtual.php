@@ -237,7 +237,7 @@ class GroupCollection extends Sabre\DAV\Collection {
 		// Only group members can create new files
 		if (elgg_is_logged_in() && ($this->group->isMember($own) || $this->group->canEdit())) {
 			// Access is set to group members
-			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $own->guid, 'container_guid' => $this->group->guid, $this->group->group_acl));
+			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $own->guid, 'container_guid' => $this->group->guid, 'access_id' => $this->group->group_acl));
 			if (elgg_instanceof($file, 'object', 'file')) {
 				// After succesful creation of the file, you may choose to return the ETag of the new file here.
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
