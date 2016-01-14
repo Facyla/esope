@@ -277,7 +277,7 @@ class UserCollection extends Sabre\DAV\Collection {
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
 				return '"' . $file->time_updated . $file->guid . '"';
 			}
-			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:create'));
+			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:create') . " - Only file owner can delete it.");
 		}
 		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:readonly'));
 	}
