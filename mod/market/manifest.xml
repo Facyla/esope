@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Market</name>
+	<id>market</id>
+	<author>slyhne</author>
+	<version>1.10.2</version>
+	<category>content</category>
+	<description>Make a market place where your users can create classifieds.</description>
+	<website>http://zurf.dk/elgg</website>
+	<copyright>zurf.dk</copyright>
+	<license>GNU Public License version 2</license>
+	<requires>
+		<type>elgg_release</type>
+		<version>1.10</version>
+	</requires>
+	<activate_on_install>false</activate_on_install>
+</plugin_manifest>
+
