@@ -9,6 +9,10 @@
 .elgg-page-admin header ul { display:inline; float:right; }
 .elgg-page-admin header ul li { marginl-left:6px; }
 
+/* Breadcrumbs menu horizontal */
+.elgg-breadcrumbs li { float: left; width: auto; margin-right: 1em; }
+.elgg-breadcrumbs::after { clear: both; display: block; content: ""; }
+.elgg-main {  clear: both; }
 
 
 /* ESOPE THEME ADDITIONS */
