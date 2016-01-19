@@ -21,7 +21,7 @@ elgg_push_breadcrumb(elgg_echo('search'));
 $ts = time();
 $token = generate_action_token($ts);
 $action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
-$action_base = $CONFIG->url . 'action/esope/';
+$action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = $action_base . 'esearch' . $action_token;
 
 $content .= '<script>
@@ -35,6 +35,9 @@ function esope_search(){
 	});
 }
 </script>';
+
+// @TODO Handle and perform URL-preset query
+$q = get_input('q');
 
 
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
@@ -83,7 +86,7 @@ if (sizeof($profiletypes_opt > 2)) {
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="" /></label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 
