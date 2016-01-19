@@ -12,7 +12,6 @@
 /* Breadcrumbs menu horizontal */
 .elgg-breadcrumbs li { float: left; width: auto; margin-right: 1em; }
 .elgg-breadcrumbs::after { clear: both; display: block; content: ""; }
-.elgg-main {  clear: both; }
 
 
 /* ESOPE THEME ADDITIONS */

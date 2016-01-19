@@ -44,6 +44,8 @@ return array(
 	'actionnotfound' => "Le fichier d'action pour %s n'a pas été trouvé.",
 	'actionloggedout' => "Désolé, vous ne pouvez pas effectuer cette action sans être connecté(e).",
 	'actionunauthorized' => 'Vous n êtes pas autorisé(e) à effectuer cette action.',
+	'ajax:error' => 'Une erreur est survenue lors d\'un appel Ajax. Peut-être que la connexion avec le serveur est perdue.',
+	'ajax:not_is_xhr' => 'You cannot access AJAX views directly',
 
 	'PluginException:MisconfiguredPlugin' => "Le plugin %s (guid: %s) est mal configuré. Il a été désactivé. Veuillez rechercher dans le wiki d'aide les causes possibles (http://learn.elgg.org/).",
 	'PluginException:CannotStart' => '%s (guid : %s) ne peut pas démarrer. Raison: %s',
@@ -89,6 +91,9 @@ return array(
 	
 	'ElggPlugin:Dependencies:ActiveDependent' => 'Il existe d\'autres plugins répertoriant %s en tant que dépendance. Vous devez désactiver les plugins suivants avant de désactiver celui-ci: %s',
 
+	'ElggMenuBuilder:Trees:NoParents' => 'Une entrée de menu a été trouvée sans lien avec un parent',
+	'ElggMenuBuilder:Trees:OrphanedChild' => 'L\'entrée de menu [%s] a été trouvée avec un parent manquant [%s]',
+	'ElggMenuBuilder:Trees:DuplicateChild' => 'L\'entrée de menu [%s] est enregistrée plusieurs fois',
 
 	'RegistrationException:EmptyPassword' => 'Les champs du mot de passe ne peut pas être vide',
 	'RegistrationException:PasswordMismatch' => 'Les mots de passe doivent correspondre',
@@ -99,21 +104,25 @@ return array(
 	'LoginException:ChangePasswordFailure' => 'Echec vérification mot de passe courant.',
 	'LoginException:Unknown' => 'Nous ne pouvons pas vous connecter à cause d\'une erreur inconnue.',
 
-	'deprecatedfunction' => "Attention : ce script utilise une fonction obsolète \"%s\". Il n'est pas compatible avec cette version de Elgg.",
+	'deprecatedfunction' => "Attention : ce code source utilise une fonction obsolète \"%s\". Il n'est pas compatible avec cette version de Elgg.",
 
 	'pageownerunavailable' => "Attention : la page de l'utilisateur %d n'est pas accessible.",
 	'viewfailure' => 'Erreur interne dans la vue %s',
-	'view:missing_param' => "Le paramètre obligatoire '%s' est manquant dans la vue %s",
+	'view:missing_param' => "Le paramètre obligatoire '%s' manque dans la vue %s",
 	'changebookmark' => 'Veuillez mettre à jour votre favori pour cette page.',
 	'noaccess' => "Vous devez vous connecter pour accéder à cette page, ou celle-ci a été supprimée, ou vous n'avez pas la permission d'y accéder",
 	'error:missing_data' => 'Il manque des données dans votre requête',
 	'save:fail' => "Une erreur s'est produite lors de la sauvegarde de vos données. ",
-	'save:success' => 'Vos données ont été enregistrées',
+	'save:success' => 'Vos données ont été sauvegardéées',
 
-	'error:default:title' => 'Erreur...',
-	'error:default:content' => "Oups... une erreur s'est produite.",
+	'error:default:title' => 'Oups...',
+	'error:default:content' => 'Oups... quelque chose est allé de travers.',
+	'error:400:title' => 'Mauvaise requête',
+	'error:400:content' => 'Désolé. La requête est invalide ou incomplète.',
+	'error:403:title' => 'Interdit',
+	'error:403:content' => "Désolé. Vous n'avez pas l'autorisation d'accdéder à cette page.",
 	'error:404:title' => 'Page non trouvée',
-	'error:404:content' => "La page demandée n'a pas été trouvée.",
+	'error:404:content' => 'Désolé. Nous n\'arrivons pas à trouver la page que vous demandez.',
 
 	'upload:error:ini_size' => 'Le fichier que vous avez essayé de télécharger est trop grand.',
 	'upload:error:form_size' => 'Le fichier que vous avez essayé de télécharger est trop grand.',
@@ -122,6 +131,7 @@ return array(
 	'upload:error:no_tmp_dir' => "Impossible d'enregistrer le fichier téléchargé (répertoire temporaire).",
 	'upload:error:cant_write' => "Impossible d'enregistrer le fichier téléchargé (écriture impossible).",
 	'upload:error:extension' => "Impossible d'enregistrer le fichier téléchargé (extension)",
+	'upload:error:unknown' => 'Le téléchargement a échoué.',
 
 
 /**
@@ -152,6 +162,8 @@ return array(
 	'access:read' => "Accès en lecture",
 	'access:write' => "Accès en écriture",
 	'access:admin_only' => "Seulement pour les administrateurs",
+	'access:missing_name' => "Le nom du niveau d'accès est manquant",
+	'access:comments:change' => "Cette discussion a actuellement des droits d'accès limités. Faites attention lorsque vous la partagez.",
 
 /**
  * Dashboard and widgets
@@ -161,7 +173,7 @@ return array(
 	'dashboard:nowidgets' => "Votre tableau de bord vous permet de suivre l'activité et les contenus qui vous intéressent.",
 
 	'widgets:add' => 'Personnaliser cette page',
-	'widgets:add:description' => "Cliquez sur un widget ci-dessous pour l'ajouter à votre page. Vous pouvez ensuite le déplacer et le configurer selon vos souhaits.<br />Note : certains modules peuvent être ajoutés plusieurs fois.",
+	'widgets:add:description' => "Cliquez sur un widget ci-dessous pour l'ajouter à votre page. Vous pouvez ensuite le déplacer et le configurer selon vos souhaits.<br />Note : certains widgets peuvent être ajoutés plusieurs fois.",
 	'widgets:panel:close' => "Fermer le panneau des widgets",
 	'widgets:position:fixed' => '(la position de ce widget est fixe et ne peut pas être modifiée)',
 	'widget:unavailable' => 'Vous avez déjà ajouté ce widget',
@@ -173,7 +185,7 @@ return array(
 	'widgets' => "Widgets",
 	'widget' => "Widget",
 	'item:object:widget' => "Widgets",
-	'widgets:save:success' => "Le widget a été enregistré avec succès.",
+	'widgets:save:success' => "Le widget a été sauvegardé avec succès.",
 	'widgets:save:failure' => "Un problème est survenu lors de l'enregistrement de votre widget. Veuillez recommencer.",
 	'widgets:add:success' => "Le widget a bien été ajouté.",
 	'widgets:add:failure' => "Nous n'avons pas pu ajouter votre widget.",
@@ -224,7 +236,7 @@ return array(
 	'friends:collections' => "Groupement de contacts",
 	'collections:add' => "Nouveau groupement",
 	'friends:collections:add' => "Nouveau groupement de contacts",
-	'friends:addfriends' => "Sélectionner les contacts",
+	'friends:addfriends' => "Sélectionner des contacts",
 	'friends:collectionname' => "Nom du groupement",
 	'friends:collectionfriends' => "Contacts dans le groupement",
 	'friends:collectionedit' => "Modifier ce groupement",
@@ -235,19 +247,19 @@ return array(
 	'friends:nocollectionname' => "Vous devez donner un nom à votre groupement de contact.",
 	'friends:collections:members' => "Membres du groupement",
 	'friends:collections:edit' => "Modifier le groupement de contacts",
-	'friends:collections:edited' => "Groupement enregistré",
+	'friends:collections:edited' => "Groupement sauvegardé",
 	'friends:collection:edit_failed' => "Impossible d'enregistrer le groupement.",
 
 	'friendspicker:chararray' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
-	'avatar' => "Photo de profil",
+	'avatar' => "Photo du profil",
 	'avatar:noaccess' => "Vous n'êtes pas autorisé à modifier la photo de ce membre",
-	'avatar:create' => 'Créer ma photo de profil',
+	'avatar:create' => 'Créer ma photo du profil',
 	'avatar:edit' => 'Modifier ma photo',
 	'avatar:preview' => 'Prévisualisation',
-	'avatar:upload' => 'Envoyer une nouvelle photo de profil',
+	'avatar:upload' => 'Envoyer une nouvelle photo du profil',
 	'avatar:current' => 'Photo actuelle',
-	'avatar:remove' => 'Supprime votre photo de profil et restaure l\'icône par défaut',
+	'avatar:remove' => 'Supprime votre photo du profil et restaure l\'icône par défaut',
 	'avatar:crop:title' => 'Recadrage de la photo',
 	'avatar:upload:instructions' => "Votre photo est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés: GIF, JPG ou PNG)",
 	'avatar:create:instructions' => 'Cliquez et faites glisser le carré ci-dessous selon la façon dont vous voulez que votre photo soit recadrée. Un aperçu s\'affiche sur la droite. Lorsque le résultat vous convient, cliquez sur «&nbsp;Créer ma photo de profil&nbsp;». Cette version recadrée sera utilisée sur le site.',
@@ -283,7 +295,7 @@ return array(
 
 	'admin:appearance:profile_fields' => 'Modifier les champs du profil',
 	'profile:edit:default' => 'Modifier les champs du profil',
-	'profile:label' => "Intitulé du profil",
+	'profile:label' => "Etiquette du profil",
 	'profile:type' => "Type de profil",
 	'profile:editdefault:delete:fail' => 'Echec de la suppression du champ de profil',
 	'profile:editdefault:delete:success' => 'Le champ de profil par défaut est supprimé !',
@@ -292,8 +304,8 @@ return array(
 	'profile:resetdefault:confirm' => 'Etes-vous sûr(e) de vouloir effacer les champs de profil personnalisés ?',
 	'profile:explainchangefields' => "Vous pouvez remplacer les champs de profil existants avec les vôtres en utilisant le formulaire ci-dessous.\n\nDonner une étiquette pour le nouveau champ du profil, par exemple, 'équipe préférée', puis sélectionnez le type de champ (par exemple, texte, url, balises), et cliquez sur le bouton 'Ajouter'. Pour réordonner les champs faites glisser la poignée de l'étiquette du champ. Pour modifier un champ d'étiquette - cliquez sur le texte de l'étiquette pour le rendre modifiable. A tout moment vous pouvez revenir au profil par défaut, mais vous perdrez toutes les informations déjà entrées dans des champs personnalisés des pages de profil.",
 	'profile:editdefault:success' => 'Champ ajouté au profil par défaut',
-	'profile:editdefault:fail' => "Le profil par défaut n'a pas pu être enregistré",
-	'profile:field_too_long' => "Impossible d'enregistrer vos informations du profil car la section %s est trop longue.",
+	'profile:editdefault:fail' => "Le profil par défaut n'a pas pu être sauvegardé",
+	'profile:field_too_long' => "Impossible de sauvegarder vos informations du profil car la section %s est trop longue.",
 	'profile:noaccess' => "Vous n'avez pas la permission d'éditer ce profil.",
 	'profile:invalid_email' => '%s doit être une adresse e-mail valide.',
 
@@ -314,7 +326,7 @@ return array(
  */
 	'river' => "Flux",
 	'river:friend:user:default' => "%s est maintenant en contact avec %s",
-	'river:update:user:avatar' => '%s a une nouvelle photo de profil',
+	'river:update:user:avatar' => '%s a une nouvelle photo du profil',
 	'river:update:user:profile' => '%s ont mis à jour leur profils',
 	'river:noaccess' => 'Vous n\'avez pas la permission de voir cet élément.',
 	'river:posted:generic' => '%s envoyé',
@@ -339,9 +351,9 @@ return array(
  * Notifications
  */
 	'notifications:usersettings' => "Configuration des messages du site",
-	'notification:method:email' => 'Par e-mail',
+	'notification:method:email' => 'E-mail',
 
-	'notifications:usersettings:save:ok' => "La configuration des messages du site a bien été enregistrée.",
+	'notifications:usersettings:save:ok' => "La configuration des messages du site a bien été sauvegardée.",
 	'notifications:usersettings:save:fail' => "Il y a eu un problème lors de la sauvegarde des paramètres de configuration des messages du site.",
 
 	'notification:subject' => 'Notification à propos de %s',
@@ -384,15 +396,15 @@ return array(
 	'settings:edit' => 'Editer les paramètres',
 
 	'register' => "Créer un compte",
-	'registerok' => "Vous avez bien créé un compte sur %s.",
+	'registerok' => "Vous vous êtes enregistré avec succès sur %s.",
 	'registerbad' => "Votre création de compte n'a pas fonctionné pour une raison inconnue.",
 	'registerdisabled' => "La création de compte a été désactivée par l'administrateur du site.",
 	'register:fields' => 'Tous les champs sont requis',
 
-	'registration:notemail' => 'L\'adresse e-mail que vous avez renseignée ne semble pas valide.',
+	'registration:notemail' => 'L\'adresse e-mail que vous avez indiquée ne semble pas valide.',
 	'registration:userexists' => 'Cet identifiant existe déjà',
 	'registration:usernametooshort' => "L'identifiant doit comporter au minimum %u caractères.",
-	'registration:usernametoolong' => 'Votre identifiant est trop long. Il peut comporter au maximum %u caractères.',
+	'registration:usernametoolong' => 'Votre identifiant est trop long. Il doit comporter au maximum %u caractères.',
 	'registration:passwordtooshort' => 'Le mot de passe doit comporter un minimum de %u caractères.',
 	'registration:dupeemail' => 'Cette adresse e-mail est déjà utilisée.',
 	'registration:invalidchars' => 'Désolé, votre nom d\'utilisateur contient le caractère %s qui ne peut pas être utilisé. Les caractères suivants sont invalides : %s',
@@ -424,7 +436,7 @@ return array(
 	'user:set:language' => "Langue",
 	'user:language:label' => "Votre langue",
 	'user:language:success' => "Votre paramètre de langue a été mis à jour.",
-	'user:language:fail' => "Votre paramètre de langue n'a pas pu être enregistré.",
+	'user:language:fail' => "Votre paramètre de langue n'a pas pu être sauvegardé.",
 
 	'user:username:notfound' => 'Identifiant %s non trouvé.',
 
@@ -500,30 +512,32 @@ return array(
 	'admin:site:secret:intro' => 'Elgg utilise une clé pour sécuriser les tokens dans un certain nombre de cas.',
 	'admin:site:secret_regenerated' => "La clé secrète du site a été régénérée.",
 	'admin:site:secret:regenerate' => "Régénérer la clé secrète du site",
-	'admin:site:secret:regenerate:help' => "Note : régénérer votre clé peut poser problème à certains utilisateurs en invalidant les token utilisés dans les cookies de session, dans les e-mails de validation de compte, les codes d’invitation, etc.",
+	'admin:site:secret:regenerate:help' => "Note : régénérer votre clé peut poser problème à certains utilisateurs en invalidant les tokens utilisés dans les cookies de session, dans les e-mails de validation de compte, les codes d’invitation, etc.",
 	'site_secret:current_strength' => 'Complexité de la clé',
 	'site_secret:strength:weak' => "Faible",
 	'site_secret:strength_msg:weak' => "Nous vous conseillons fortement de régénérer la clé secrète de votre site.",
 	'site_secret:strength:moderate' => "Moyenne",
 	'site_secret:strength_msg:moderate' => "Nous vous conseillons de régénérer la clé secrète de votre site pour une meilleure sécurité.",
 	'site_secret:strength:strong' => "Forte",
-	'site_secret:strength_msg:strong' => "La clé secrète de votre site est suffisamment complexe. Il n'est pas utile de la régénérer.",
+	'site_secret:strength_msg:strong' => "La clé secrète de votre site est suffisamment complexe. Il est inutile de la régénérer.",
 
 	'admin:dashboard' => 'Tableau de bord',
 	'admin:widget:online_users' => 'Membres connectés',
-	'admin:widget:online_users:help' => 'Affiche la liste des membres actuellement sur le site',
+	'admin:widget:online_users:help' => 'Affiche la liste des membres actuellement connectés sur le site',
 	'admin:widget:new_users' => 'Nouveaux membres',
 	'admin:widget:new_users:help' => 'Affiche la liste des nouveaux membres',
 	'admin:widget:banned_users' => 'Utilisateurs bannis',
 	'admin:widget:banned_users:help' => 'Liste des utilisateurs bannis',
 	'admin:widget:content_stats' => 'Statistiques',
 	'admin:widget:content_stats:help' => 'Gardez une trace du contenu créé par vos utilisateurs',
+	'admin:widget:cron_status' => 'Statut du cron',
+	'admin:widget:cron_status:help' => 'Afficher les statuts du dernier cron terminé',
 	'widget:content_stats:type' => 'Type de contenu',
 	'widget:content_stats:number' => 'Nombre',
 
 	'admin:widget:admin_welcome' => 'Bienvenue',
 	'admin:widget:admin_welcome:help' => "Une courte introduction à la zone d'administration de Elgg",
-	'admin:widget:admin_welcome:intro' => 'Bienvenue sur Elgg ! Vous êts actuellement sur le tableau de bord de l\'administration. Il permet de suivre ce qui se passe sur le site.',
+	'admin:widget:admin_welcome:intro' => 'Bienvenue sur Elgg ! Vous êts actuellement sur le tableau de bord de l\'administration. Il vous permet de suivre ce qui se passe sur le site.',
 
 	'admin:widget:admin_welcome:admin_overview' => "La navigation dans l'administration se fait à l'aide du menu de droite. Il est organisé en 3 rubriques :
 	<dl>
@@ -552,7 +566,7 @@ return array(
 	'admin:plugins:category:inactive' => 'Plugins Inactifs',
 	'admin:plugins:category:admin' => 'Admin',
 	'admin:plugins:category:bundled' => 'Empaqueté',
-	'admin:plugins:category:nonbundled' => 'Non-empaqueté',
+	'admin:plugins:category:nonbundled' => 'Non-Empaqueté',
 	'admin:plugins:category:content' => 'Contenu',
 	'admin:plugins:category:development' => 'Développement',
 	'admin:plugins:category:enhancement' => 'Améliorations',
@@ -577,7 +591,7 @@ return array(
  * Plugins
  */
 
-	'plugins:disabled' => 'Les Plugins ne seront pas lus car un fichier nommé \'disabled\' (désactivée) est dans le répertoire mod.',
+	'plugins:disabled' => 'Les Plugins ne seront pas lus car un fichier nommé \'disabled\' (désactivé) est présent dans le répertoire mod.',
 	'plugins:settings:save:ok' => "Le paramétrage du plugin %s a été enregistré.",
 	'plugins:settings:save:fail' => "Il y a eu un problème lors de l'enregistrement des paramètres du plugin %s.",
 	'plugins:usersettings:save:ok' => "Le paramétrage du plugin a été enregistré avec succès.",
@@ -585,8 +599,8 @@ return array(
 	'item:object:plugin' => 'Administrer les plugins',
 
 	'admin:plugins' => "Administrer les plugins",
-	'admin:plugins:activate_all' => 'Tout activer',
-	'admin:plugins:deactivate_all' => 'Tout désactiver',
+	'admin:plugins:activate_all' => 'Tout Activer',
+	'admin:plugins:deactivate_all' => 'Tout Désactiver',
 	'admin:plugins:activate' => 'Activer',
 	'admin:plugins:deactivate' => 'Désactiver',
 	'admin:plugins:description' => "Ce menu vous permet de contrôler et de configurer les outils installés sur votre site.",
@@ -627,11 +641,11 @@ return array(
 	'admin:plugins:activate:no' => "Impossible d'activer %s.",
 	'admin:plugins:activate:no_with_msg' => "Impossible d'activer %s. Erreur : %s",
 	'admin:plugins:categories:all' => 'Toutes les catégories',
-	'admin:plugins:plugin_website' => 'Page du plugin',
+	'admin:plugins:plugin_website' => 'Site du plugin',
 	'admin:plugins:author' => '%s',
 	'admin:plugins:version' => 'Version %s',
 	'admin:plugin_settings' => 'Paramètres du plugin',
-	'admin:plugins:warning:unmet_dependencies_active' => 'Ce plugin est actif, mais a des dépendances non satisfaites. Cela peut poser des problèmes. Voir \'plus d\'info\' ci-dessous.',
+	'admin:plugins:warning:unmet_dependencies_active' => 'Ce plugin est actif, mais a des dépendances non satisfaites. Cela peut poser des problèmes. Voir \'plus d\'info\' ci-dessous pour plus de détails.',
 
 	'admin:plugins:dependencies:type' => 'Type',
 	'admin:plugins:dependencies:name' => 'Nom',
@@ -703,8 +717,9 @@ return array(
 	'admin:robots.txt:instructions' => "Editez le fichier robots.txt du site",
 	'admin:robots.txt:plugins' => "Les plugins ajoutent les lignes suivantes au fichier robots.txt ",
 	'admin:robots.txt:subdir' => "L'outil pour robots.txt ne fonctionnera peut-être pas car Elgg est installé dans un sous-répertoire",
+	'admin:robots.txt:physical' => "Le fichier robots.txt ne fonctionnera pas car un fichier robots.txt est physiquement présent",
 
-	'admin:maintenance_mode:default_message' => 'Le site est momentanément indisponible pour cause de maintenance. Veuillez réessayer plus tard.',
+	'admin:maintenance_mode:default_message' => 'Le site est indisponible pour cause de maintenance. Veuillez réessayer plus tard.',
 	'admin:maintenance_mode:instructions' => "Le mode maintenance devrait être utilisé pour les mises à jour et les autres changements importants sur le site. <br />Quand ce mode est activé, seuls les administrateurs peuvent s'identifier sur le site et l'utiliser.",
 	'admin:maintenance_mode:mode_label' => 'Mode maintenance',
 	'admin:maintenance_mode:message_label' => 'Message affiché aux utilisateurs lorsque le mode maintenance est activé',
@@ -749,9 +764,10 @@ return array(
 	'river:friends' => 'Activités des contacts',
 	'river:select' => 'Afficher %s',
 	'river:comments:more' => '+%u plus',
+	'river:comments:all' => 'Voir tous les %u commentaires',
 	'river:generic_comment' => 'commenté sur %s',
 
-	'friends:widget:description' => "Affiche certains de vos contacts.",
+	'friends:widget:description' => "Affiche une partie de vos contacts.",
 	'friends:num_display' => "Nombre de contacts à afficher",
 	'friends:icon_size' => "Taille des icônes",
 	'friends:tiny' => "minuscule",
@@ -869,7 +885,7 @@ return array(
 	'content:latest' => 'Dernière activité',
 	'content:latest:blurb' => 'Vous pouvez également cliquer ici pour voir les dernières modifications effectuées sur le site.',
 
-	'link:text' => 'afficher le lien',
+	'link:text' => 'voir le lien',
 	
 /**
  * Generic questions
@@ -944,12 +960,13 @@ return array(
 	'useradd:body' => '
 %s,
 
-Un compte vous a été créé sur %s. Pour vous connecter, rendez-vous sur :
+Un compte de membre vous a été créé sur %s. Pour vous connecter, rendez-vous sur :
 %s
 
 Et connectez-vous avec les identifiants suivants :
- - Identifiant : %s (vous pouvez également vous connecter avec votre e-mail)
+ - Identifiant : %s
  - Mot de passe : %s
+Vous pouvez également vous connecter avec votre e-mail au lieu de votre identifiant.
 
 Une fois que vous vous êtes connecté(e), nous vous conseillons de changer votre mot de passe.
 ',
@@ -1036,24 +1053,24 @@ Une fois que vous vous êtes connecté(e), nous vous conseillons de changer votr
 	'installation:debug:label' => "Niveau de journalisation :",
 	'installation:debug:none' => 'Désactivé (recommandé)',
 	'installation:debug:error' => 'Seulement les erreurs critiques',
-	'installation:debug:warning' => 'Erreurs et les avertissements',
-	'installation:debug:notice' => 'Toutes les erreurs, les avertissements et les avis',
+	'installation:debug:warning' => 'Erreurs et avertissements',
+	'installation:debug:notice' => 'Toutes les erreurs, avertissements et avis',
 	'installation:debug:info' => 'Enregistrer tout :',
 
 	// Walled Garden support
-	'installation:registration:description' => 'La création de compte est activée par défaut. Désactivez cette option si vous ne voulez pas que de nouvelles personnes soient en mesure de créer leur compte.',
+	'installation:registration:description' => "L'enregistrement d'un nouveau membre est activé par défaut. Désactivez cette option si vous ne voulez pas que de nouvelles personnes soient en mesure de s'inscrire par elles-mêmes.",
 	'installation:registration:label' => 'Permettre à de nouveaux membres de s\'inscrire eux-mêmes',
 	'installation:walled_garden:description' => 'Faire du site un réseau privé. Cela empêchera les visiteurs non connectés d\'afficher les pages du site autres que celles expressément spécifiées comme publiques.',
-	'installation:walled_garden:label' => 'Réserver aux membres connectés',
+	'installation:walled_garden:label' => "Réserver l'accès aux pages aux membres connectés",
 
 	'installation:httpslogin' => "Activer ceci afin que les utilisateurs puissent se connecter via le protocole HTTPS. Vous devez avoir HTTPS activé sur votre serveur afin que cela fonctionne.",
 	'installation:httpslogin:label' => "Activer les connexions HTTPS",
 	'installation:view' => "Entrer le nom de la vue qui sera utilisée automatiquement pour l'affichage du site (par exemple : 'mobile'), laissez par défaut en cas de doute :",
 
-	'installation:siteemail' => "L'adresse e-mail du site (utilisée lors d'envoi d'e-mails par le système)",
+	'installation:siteemail' => "L'adresse e-mail du site (utilisée lors de l'envoi d'e-mails par le système)",
 	'installation:default_limit' => "Nombre d'éléments par page par défaut",
 
-	'admin:site:access:warning' => "Changer les paramètres d'accès n'affectera que les permissions des nouveaux contenus.",
+	'admin:site:access:warning' => "Changer les paramètres d'accès n'affectera que les permissions des  contenus créées dans le futur.",
 	'installation:allow_user_default_access:description' => "Si coché, les membres pourront définir leur propre niveau d'accés par défaut, qui s'appliquera à la place de celui défini par défaut dans le système.",
 	'installation:allow_user_default_access:label' => "Autoriser un niveau d'accés par défaut pour les membres",
 
@@ -1070,10 +1087,11 @@ Une fois que vous vous êtes connecté(e), nous vous conseillons de changer votr
 	'installation:systemcache:description' => "Le cache système diminue le temps de chargement du moteur Elgg en mettant en cache les données dans des fichiers.",
 	'installation:systemcache:label' => "Utiliser le cache système (recommandé)",
 
+	'admin:legend:system' => 'Système',
 	'admin:legend:caching' => 'Mise en cache',
-	'admin:legend:content_access' => 'Accès par défaut des nouveaux contenus',
+	'admin:legend:content_access' => "Niveau d'accès par défaut (nouveaux contenus)",
 	'admin:legend:site_access' => 'Accès au site',
-	'admin:legend:debug' => 'Débogage',
+	'admin:legend:debug' => 'Débugger',
 
 	'upgrading' => 'Mise à jour en cours',
 	'upgrade:db' => 'Votre base de données a été mise à jour.',
@@ -1090,7 +1108,7 @@ Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="h
 	'update:twitter_api:deactivated' => 'Twitter API (précédemment Twitter Service) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
 	'update:oauth_api:deactivated' => 'OAuth API (précédemment OAuth Lib) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
 	'upgrade:site_secret_warning:moderate' => "Vous êtes invité à régénérer la clé de votre site afin d'améliorer sa sécurité. Voir dans Configuration / Paramètres avancés",
-	'upgrade:site_secret_warning:weak' => "Vous êtes fortement invité à régénérer la clé de votre site afin d'améliorer la sécurité de votre système. Voir dans Configuration / Paramètres avancés",
+	'upgrade:site_secret_warning:weak' => "Vous êtes fortement encouragé à régénérer la clé de votre site afin d'améliorer la sécurité de votre système. Voir dans Configuration / Paramètres avancés",
 
 	'deprecated:function' => '%s() est obsolète et a été remplacé par %s()',
 
@@ -1112,6 +1130,7 @@ Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="h
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'Mise à jour des commentaires',
 	'upgrade:comment:create_failed' => 'Impossible de convertir le commentaire id %s en une entité.',
+	'admin:upgrades:commentaccess' => 'Mise à jour des commentaires',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'Répertoire de données mis à jour',
@@ -1164,11 +1183,12 @@ Votre nouveau mot de passe est : %s",
 	'email:changereq:subject' => "Demander un nouveau mot de passe.",
 	'email:changereq:body' => "Bonjour %s,
 
-Quelqu'un (à partir de l'adresse IP %s) a demandé un changement de mot de passe pour votre compte.
+Quelqu'un (à partir de l'adresse IP %s) a demandé un changement de mot de passe pour votre compte.
 
-Si vous êtes à l'origine de cette demande, cliquez sur le lien ci-dessous. Sinon ignorez cet e-mail.
-
+Si vous êtes à l'origine de cette demande, cliquez sur le lien ci-dessous pour confirmer votre demande.
 %s
+
+Sinon ignorez cet e-mail.
 ",
 
 /**
@@ -1199,8 +1219,9 @@ Si vous êtes à l'origine de cette demande, cliquez sur le lien ci-dessous. Sin
 	'generic_comment:deleted' => "Votre commentaire a bien été supprimé.",
 	'generic_comment:blank' => "Désolé ; vous devez écrire un commentaire avant de pouvoir l'enregistrer.",
 	'generic_comment:notfound' => "Désolé ; l'élément recherché n'a pas été trouvé.",
+	'generic_comment:notfound_fallback' => "Désolé, le commentaire demandé n'a pas été trouvé. Vous avez été redirigé sur la page précédente.",
 	'generic_comment:notdeleted' => "Désolé; le commentaire n'a pu être supprimé.",
-	'generic_comment:failure' => "Une erreur inattendue a eu lieu pendant l'enregistrement du commentaire.",
+	'generic_comment:failure' => "Une erreur inattendue a eu lieu pendant la sauvegarde du commentaire.",
 	'generic_comment:none' => 'Pas de commentaire',
 	'generic_comment:title' => 'Commentaire de %s',
 	'generic_comment:on' => '%s sur %s',
@@ -1218,6 +1239,8 @@ Pour répondre ou voir le contenu de référence, suivez le lien :
 
 Pour voir le profil de %s, suivez ce lien :
 %s
+
+Merci de ne pas répondre à cet e-mail.
 ",
 
 /**
@@ -1228,8 +1251,10 @@ Pour voir le profil de %s, suivez ce lien :
 	'entity:default:strapline' => 'Créé le %s par %s',
 	'entity:default:missingsupport:popup' => 'Cette entité ne peut pas être affichée correctement. C\'est peut-être dû à un plugin qui a été supprimé.',
 
-	'entity:delete:success' => 'L\'entité %s a été supprimée',
-	'entity:delete:fail' => 'L\'entité %s n\'a pas pu être supprimée',
+	'entity:delete:success' => "L'entité %s a été supprimée",
+	'entity:delete:fail' => "L'entité %s n'a pas pu être supprimée",
+	
+	'entity:can_delete:invaliduser' => "Impossible de vérifier ->canDelete pour user_guid [%s] car l'utilisateur n'existe pas.",
 
 /**
  * Action gatekeeper
@@ -1246,7 +1271,7 @@ Pour voir le profil de %s, suivez ce lien :
  * Word blacklists
  */
 
-	// Note : these are actually stop words
+	// Note : these are stop words
 	'word:blacklist' => 'alors, au, aucuns, aussi, autre, avant, avec, avoir, bon, ça, car, ce, cela, ces, ceux, chaque, ci, comme, comment, dans, début, dedans, dehors, depuis, des, devrait, doit, donc, dos, du, elle, elles, en, encore, essai, est, et, étaient, état, été, étions, être, eu, fait, faites, fois, font, hors, ici, il, ils, je, juste, la, là, le, les, leur, ma, maintenant, mais, même, mes, mine, moins, mon, mot, ni, nommés, notre, nous, ou, où, par, parce, pas, peu, peut, plupart, pour, pourquoi, quand, que, quel, quelle, quelles, quels, qui, sa, sans, ses, seulement, si, sien, son, sont, sous, soyez, sujet, sur, ta, tandis, tellement, tels, tes, ton, tous, tout, très, trop, tu, voient, vont, votre, vous, vu',
 
 /**
@@ -1302,6 +1327,7 @@ Pour voir le profil de %s, suivez ce lien :
 	"es" => "Espagnol",
 	"et" => "Estonien",
 	"eu" => "Basque",
+	"eu_es" => "Basque (Espagne)",
 	"fa" => "Persan",
 	"fi" => "Finnois",
 	"fj" => "Fidjien",
@@ -1366,11 +1392,12 @@ Pour voir le profil de %s, suivez ce lien :
 	"pl" => "Polonais",
 	"ps" => "Pachto",
 	"pt" => "Portugais",
-	"pt_br" => 'Portugais Brésilien',
+	"pt_br" => 'Portugais (Brésil)',
 	"qu" => "Quechua",
 	"rm" => "Romanche",
 	"rn" => "Kirundi",
 	"ro" => "Roumain",
+	"ro_ro" => "Roumain (Roumanie)",
 	"ru" => "Russe",
 	"rw" => "Kinyarwanda",
 	"sa" => "Sanskrit",
@@ -1385,6 +1412,7 @@ Pour voir le profil de %s, suivez ce lien :
 	"so" => "Somalien",
 	"sq" => "Albanais",
 	"sr" => "Serbe",
+	"sr_latin" => "Serbe (Latin)",
 	"ss" => "Siswati",
 	"st" => "Sotho",
 	"su" => "Soundanais",
@@ -1416,5 +1444,6 @@ Pour voir le profil de %s, suivez ce lien :
 	"yo" => "Yoruba",
 	"za" => "Zhuang",
 	"zh" => "Chinois",
+	"zh_hans" => "Chinois simplifié",
 	"zu" => "Zoulou",
 );
