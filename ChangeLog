@@ -1,3 +1,121 @@
+2016-01-03  Juho Jaakkola <juho@elgg.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.7
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po: chore(i18n): update translations
+
+2015-12-25  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/lib/navigation.php, engine/tests/phpunit/ElggMenuItemTest.php:
+  fix(menus): stricter type validation in menu item registration functions 
+  elgg_register_menu_item() and elgg_unregister_menu_item() now conform with
+  the inline docs and ensure that arguments are of valid type.
+
+2015-12-18  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Logger.php, engine/lib/views.php,
+  mod/developers/start.php, views/default/css/elgg.php: chore(views): removes
+  core use of elgg_get_view_location()  With #9244 fixed, these deprecation
+  warning are no longer thrown away, so we instead use the private API version
+  to avoid them.
+
+  	* engine/lib/elgglib.php, engine/start.php: fix(session): Session is again
+  available in the shutdown event  Fixes #9243
+
+  	* engine/classes/Elgg/Logger.php, engine/lib/elgglib.php,
+  mod/developers/start.php, mod/developers/views/default/developers/log.php:
+  fix(logging): Log messages no longer discarded  Logged messages are no longer
+  thrown away during action and cache requests. Also the log-to-screen feature
+  of the developers plugin no longer throws away messages after the page
+  display has occurred.  In both cases, these errors likely end up in the
+  system error log.  Fixes #9244
+
+2015-12-14  Juho Jaakkola <juho.jaakkola@mediamaisteri.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.6
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, mod/thewire/languages/it.php:
+  chore(i18n): update translations
+
+2015-12-13  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.11.5
+
+  	* docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/it/LC_MESSAGES/about.mo, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(i18n): update translations
+
+2015-12-08  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/classes/ElggEntity.php, engine/tests/ElggEntityTest.php:
+  fix(entities): update attribute when assuming container_guid value 
+  ElggEntity::create() assumes that container_guid equals to owner_guid when
+  container_guid is set to 0, but does so in introduced variables without
+  propagating the changes in attributes array. This results in discrepancies
+  between ElggEntity::getContainerGUID() and the value written to the database 
+  Fixes #8981
+
+2015-11-30  Steve Clay <steve@mrclay.org>
+
+  	* mod/aalborg_theme/graphics/bars.png,
+  mod/aalborg_theme/views/default/aalborg_theme/css.php,
+  mod/aalborg_theme/views/default/page/elements/navbar.php: fix(a11y): display
+  aalborg mobile site menu toggle in more browsers  The 3 `span.icon-bar`
+  elements do not display in Firefox on Android. This replaces them with an
+  88x48 semi-transparent PNG image displayed at 22x12 for clean scaling.  Fixes
+  #9110  BREAKING CHANGE: Plugins that customized `.elgg-button-nav` (or the
+  spans inside) will need to be altered. The `.elgg-icon` CSS is left in place
+  but will be removed in Elgg 2.0.
+
 2015-11-29  Juho Jaakkola <juho@elgg.org>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.5

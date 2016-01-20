@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'CSSmin' => $vendorDir . '/mrclay/minify/min/lib/CSSmin.php',
     'CallException' => $baseDir . '/engine/classes/CallException.php',
+    'CallbackFilterIterator' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/CallbackFilterIterator.php',
     'ClassException' => $baseDir . '/engine/classes/ClassException.php',
     'ClassNotFoundException' => $baseDir . '/engine/classes/ClassNotFoundException.php',
     'Composer\\Installers\\AglInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AglInstaller.php',
@@ -329,9 +330,10 @@ return array(
     'ODDMetaData' => $baseDir . '/engine/classes/ODDMetaData.php',
     'ODDRelationship' => $baseDir . '/engine/classes/ODDRelationship.php',
     'PluginException' => $baseDir . '/engine/classes/PluginException.php',
+    'RecursiveCallbackFilterIterator' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
     'RegistrationException' => $baseDir . '/engine/classes/RegistrationException.php',
     'SecurityException' => $baseDir . '/engine/classes/SecurityException.php',
-    'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
+    'SessionHandlerInterface' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
     'Stash\\DriverList' => $vendorDir . '/tedivm/stash/src/Stash/DriverList.php',
     'Stash\\Driver\\AbstractDriver' => $vendorDir . '/tedivm/stash/src/Stash/Driver/AbstractDriver.php',
     'Stash\\Driver\\Apc' => $vendorDir . '/tedivm/stash/src/Stash/Driver/Apc.php',
@@ -427,5 +429,6 @@ return array(
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\Proxy\\SessionHandlerProxy' => $vendorDir . '/symfony/http-foundation/Session/Storage/Proxy/SessionHandlerProxy.php',
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\SessionStorageInterface' => $vendorDir . '/symfony/http-foundation/Session/Storage/SessionStorageInterface.php',
     'Symfony\\Component\\HttpFoundation\\StreamedResponse' => $vendorDir . '/symfony/http-foundation/StreamedResponse.php',
+    'Symfony\\Polyfill\\Php54\\Php54' => $vendorDir . '/symfony/polyfill-php54/Php54.php',
     'XmlElement' => $baseDir . '/engine/classes/XmlElement.php',
 );

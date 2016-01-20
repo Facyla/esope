@@ -82,7 +82,7 @@ $authPlugin = new Sabre\DAV\Auth\Plugin($authBackend, '');
  *  - but not Node helper class (lastModified, delete, setName) which are non-sense in that context
  */
 
-// Private (personal) folder : lists owner files (not those in groups !)
+// PRIVATE (personal) folder : lists owner files (not those in groups !)
 // @TODO list folders if enabled
 class PrivateCollection extends Sabre\DAV\Collection {
 	protected $user_guid;
@@ -116,7 +116,7 @@ class PrivateCollection extends Sabre\DAV\Collection {
 	}
 }
 
-// Public folder : list all accessible files, in read-only mode
+// PUBLIC folder : list all accessible files, in read-only mode
 class PublicCollection extends Sabre\DAV\Collection {
 	function getChildren() {
 		$result = [];
@@ -153,7 +153,7 @@ class PublicCollection extends Sabre\DAV\Collection {
 	}
 }
 
-// Groups folder
+// GROUPS folder
 class GroupsCollection extends Sabre\DAV\Collection {
 	protected $groups;
 	function __construct() {
@@ -184,7 +184,7 @@ class GroupsCollection extends Sabre\DAV\Collection {
 	}
 }
 
-// Users folder
+// USERS folder
 class UsersCollection extends Sabre\DAV\Collection {
 	protected $users;
 	function __construct() {
@@ -236,7 +236,8 @@ class GroupCollection extends Sabre\DAV\Collection {
 		$own = elgg_get_logged_in_user_entity();
 		// Only group members can create new files
 		if (elgg_is_logged_in() && ($this->group->isMember($own) || $this->group->canEdit())) {
-			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $own->guid, 'container_guid' => $this->group->guid));
+			// Access is set to group members
+			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $own->guid, 'container_guid' => $this->group->guid, 'access_id' => $this->group->group_acl));
 			if (elgg_instanceof($file, 'object', 'file')) {
 				// After succesful creation of the file, you may choose to return the ETag of the new file here.
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
@@ -276,7 +277,7 @@ class UserCollection extends Sabre\DAV\Collection {
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
 				return '"' . $file->time_updated . $file->guid . '"';
 			}
-			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:create'));
+			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:create') . " - Only file owner can delete it.");
 		}
 		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:readonly'));
 	}
@@ -316,7 +317,7 @@ class EsopeDAVFile extends Sabre\DAV\File {
 		//return filesize($this->entity->getFilenameOnFilestore());
 	}
 	
-	// @TODO
+	// Update file content
 	function put($data) {
 		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:updatedata'));
 		if ($this->entity->canEdit()) {
@@ -345,11 +346,15 @@ class EsopeDAVFile extends Sabre\DAV\File {
 	function getLastModified() {
 		return $this->entity->time_updated;
 	}
+	// @TODO : allow deletion or not, and whom ?
+	// @TODO : we could also disable the file, and remove it after a certain time (enable restoring files)
 	function delete() {
 		// Allow only owner to delete files, or anyone who has edit rights ?
+		//if (elgg_get_logged_in_user_guid()) {
 		//if ($this->entity->canEdit()) {
-		if (elgg_get_logged_in_user_guid()) {
+		if ($this->entity->owner_guid == elgg_get_logged_in_user_guid()) {
 			$this->entity->delete();
+			//$this->entity->disable();
 		} else {
 			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:delete'));
 		}

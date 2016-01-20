@@ -8,7 +8,7 @@ if (!is_array($groups_list)) { $groups_list = array($groups_list); }
 
 foreach($groups_list as $guid) {
 	$ent = get_entity($guid);
-	if (elgg_instanceof($ent, 'group') {
+	if (elgg_instanceof($ent, 'group')) {
 		$content .= '<span style="float:left; margin:0 6px 6px 0;">' . elgg_view_entity_icon($ent, 'tiny') . ' <span style="float:right;">' . $ent->name . "</span></span>";
 	}
 }

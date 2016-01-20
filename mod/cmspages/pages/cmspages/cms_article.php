@@ -25,7 +25,7 @@ if (!$pagetype) {
 $cmspage = cmspages_get_entity($pagetype);
 // Display only valid pages - except for editors
 if (!elgg_instanceof($cmspage, 'object', 'cmspage') && !cmspage_is_editor()) {
-	register_error('cmspages:notset');
+	register_error(elgg_echo('cmspages:notset'));
 	forward();
 }
 

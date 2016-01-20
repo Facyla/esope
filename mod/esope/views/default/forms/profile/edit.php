@@ -12,6 +12,7 @@
 	* @uses $vars['entity'] The user entity
 	* @uses $vars['profile'] Profile items from get_config('profile_fields'), defined in profile/start.php for now 
 	*/
+elgg_require_js("profile_manager/profile_edit");
 	
 echo elgg_view("profile/edit/name", $vars);
 	
@@ -24,8 +25,8 @@ echo elgg_view("profile/edit/name", $vars);
 	$edit_profile_mode = elgg_get_plugin_setting("edit_profile_mode", "profile_manager");
 	$simple_access_control = elgg_get_plugin_setting("simple_access_control","profile_manager");
 	
-$access_id = get_default_access($vars["entity"]);
-
+	$access_id = get_default_access($vars["entity"]);
+	
 	if(!empty($cats)){
 		
 		// Profile type selector
@@ -35,6 +36,7 @@ $access_id = get_default_access($vars["entity"]);
 			$setting = "user";
 		} 
 		
+		$profile_type = $vars['entity']->custom_profile_type;
 		// can user edit? or just admins
 		if($setting == "user" || elgg_is_admin_logged_in()){
 			// get profile types
@@ -67,6 +69,7 @@ $access_id = get_default_access($vars["entity"]);
 					}
 				}
 				
+				/*
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
@@ -74,7 +77,8 @@ $access_id = get_default_access($vars["entity"]);
 					});
 				</script>
 				<?php
-				 
+				*/
+				
 				echo "<div>";
 				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
 				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
@@ -88,18 +92,19 @@ $access_id = get_default_access($vars["entity"]);
 				echo $types_description;
 			}
 		} else {
-			$profile_type = $vars['entity']->custom_profile_type;
 			
 			if(!empty($profile_type)){
 				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
 			echo elgg_view("input/hidden", array("name" => "accesslevel[custom_profile_type]", "value" => ACCESS_PUBLIC));
+				/*
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
 						$('.custom_profile_type_<?php echo $profile_type; ?>').show();
 					});
 				</script>
-				<?php 		
+				<?php
+				*/
 			}
 		}
 		
@@ -131,11 +136,19 @@ $access_id = get_default_access($vars["entity"]);
 				
 				if($profile_types = elgg_get_entities_from_relationship($profile_type_options)){
 					
-					$class = "custom_fields_edit_profile_category";
+					$class .= " custom_fields_edit_profile_category";
 					
 					// add extra class so it can be toggle in the display
+					$hidden_category = true;
 					foreach($profile_types as $type){
 						$class .= " custom_profile_type_" . $type->getGUID(); 
+						if ($type->getGUID() === (int) $profile_type) {
+							$hidden_category = false;
+						}
+					}
+					
+					if ($hidden_category) {
+						$class .= " hidden";
 					}
 				}
 			}

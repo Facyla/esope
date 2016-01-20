@@ -44,7 +44,7 @@ $content = elgg_view('page/elements/body', $vars);
 $footer = elgg_view('page/elements/footer', $vars);
 
 $body = <<<__BODY
-<div class="elgg-page elgg-page-default">
+<div class="elgg-page elgg-page-default $class">
 	
 	<div class="elgg-page-messages">
 		$messages
@@ -92,7 +92,11 @@ $head = elgg_view('page/elements/head', $vars['head']);
 $params = array(
 	'head' => $head,
 	'body' => $body,
-	'class' => $class, // Esope : add loggedin class
+	/*
+	'body_attrs' => array(
+		'class' => $class, // Esope : add loggedin class
+	),
+	*/
 );
 
 if (isset($vars['body_attrs'])) {
