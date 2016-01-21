@@ -201,7 +201,6 @@ function qntransitions_page_handler($page){
 }
 
 function futureduc_page_handler($page){
-	$url = 
 	forward(elgg_get_site_url() . 'groups/profile/162252/futureduc');
 	return true;
 }
