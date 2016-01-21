@@ -119,13 +119,11 @@ function theme_fing_init(){
 
 // Theme Fing index
 function theme_fing_index(){
-	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_fing/loggedin_homepage.php');
 	return true;
 }
 
 function theme_fing_public_index() {
-	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_fing/public_homepage.php');
 	return true;
 }
@@ -203,11 +201,11 @@ function qntransitions_page_handler($page){
 }
 
 function futureduc_page_handler($page){
-	forward('groups/profile/162252/futureduc');
+	forward(elgg.get_site_url() . 'groups/profile/162252/futureduc');
 	return true;
 }
 function softplace_page_handler($page){
-	forward('groups/profile/161884/softplace');
+	forward(elgg.get_site_url() . 'groups/profile/161884/softplace');
 	return true;
 }
 
