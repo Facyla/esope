@@ -54,6 +54,7 @@ function theme_fing_init(){
 	elgg_register_page_handler("fing", "fing_page_handler");
 	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
 	elgg_register_page_handler("futureduc", "futureduc_page_handler");
+	elgg_register_page_handler("softplace", "softplace_page_handler");
 	
 	
 	// Remplacement du modèle d'event_calendar
@@ -205,6 +206,11 @@ function futureduc_page_handler($page){
 	forward('groups/profile/162252/futureduc');
 	return true;
 }
+function softplace_page_handler($page){
+	forward('groups/profile/161884/softplace');
+	return true;
+}
+
 
 
 /**
