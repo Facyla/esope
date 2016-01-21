@@ -200,6 +200,7 @@ function qntransitions_page_handler($page){
 	return true;
 }
 
+// Raccourcis éditoriaux
 function futureduc_page_handler($page){
 	$forward = elgg_get_site_url() . 'groups/profile/162252/futureduc';
 	header("Location: {$forward}");
