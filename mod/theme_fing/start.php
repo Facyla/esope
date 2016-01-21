@@ -201,11 +201,12 @@ function qntransitions_page_handler($page){
 }
 
 function futureduc_page_handler($page){
-	forward(elgg.get_site_url() . 'groups/profile/162252/futureduc');
+	$url = 
+	forward(elgg_get_site_url() . 'groups/profile/162252/futureduc');
 	return true;
 }
 function softplace_page_handler($page){
-	forward(elgg.get_site_url() . 'groups/profile/161884/softplace');
+	forward(elgg_get_site_url() . 'groups/profile/161884/softplace');
 	return true;
 }
 
