@@ -201,12 +201,14 @@ function qntransitions_page_handler($page){
 }
 
 function futureduc_page_handler($page){
-	forward(elgg_get_site_url() . 'groups/profile/162252/futureduc');
-	return true;
+	$forward = elgg_get_site_url() . 'groups/profile/162252/futureduc';
+	header("Location: {$forward}");
+	exit;
 }
 function softplace_page_handler($page){
-	forward(elgg_get_site_url() . 'groups/profile/161884/softplace');
-	return true;
+	$forward = elgg_get_site_url() . 'groups/profile/161884/softplace';
+	header("Location: {$forward}");
+	exit;
 }
 
 
