@@ -8,8 +8,6 @@ $list_style = $vars['list_style'];
 
 $recommendations = recommendations_get_users($user, 30, $limit);
 
-
-$content .= "<h3>Recommandations de contacts pour {$user->name}</h3>";
 if (count($recommendations > 0)) {
 	foreach ($recommendations as $person) {
 		//$mutuals = count($person['mutuals']);
