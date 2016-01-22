@@ -1,5 +1,7 @@
 <?php
 
+elgg_load_library('elgg:recommendations');
+
 $user = $vars['entity'];
 $limit = $vars['limit'];
 $list_style = $vars['list_style'];
