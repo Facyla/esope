@@ -12,11 +12,8 @@ $list_style = $vars['list_style'];
 // User groups (to be excluded)
 $user_groups = elgg_get_entities_from_relationship(array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid, 'inverse_relationship' => false, 'limit' => 0));
 $user_groups_guids = array();
-foreach($user_groups as $ent) {
-	$user_groups_guids[] = $ent->guid;
-}
+foreach($user_groups as $ent) { $user_groups_guids[] = $ent->guid; }
 if (!empty($user_groups_guids)) $exclude_usergroups = "e.guid NOT IN (" . implode(',', $user_groups_guids) . ")";
-echo $user_groups_guids;
 
 // Featured groups
 $featured_groups = elgg_get_entities_from_metadata(array('type' => 'group', 'limit' => 0, 'metadata_name_value_pairs' => array('name' => 'featured_group', 'value' => 'yes'), 'wheres' => array($exclude_usergroups)));
