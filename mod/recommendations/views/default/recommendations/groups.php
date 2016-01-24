@@ -34,7 +34,7 @@ if ($featured_groups) foreach($featured_groups as $ent) {
 	$info .= '<p>' . $ent->getMembers(null, null, true) . ' membres</p>';
 	$content .= elgg_view_listing($icon, $info);
 	*/
-	$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('small') . '" /></a>';
+	$content .= '<div class="elgg-avatar elgg-avatar-small"><a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('small') . '" /></a></div>';
 }
 if ($popular_groups) foreach($popular_groups as $ent) {
 	/*
@@ -43,7 +43,7 @@ if ($popular_groups) foreach($popular_groups as $ent) {
 	$info .= '<p>' . $ent->getMembers(null, null, true) . ' membres</p>';
 	$content .= elgg_view_listing($icon, $info);
 	*/
-	$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('small') . '" /></a>';
+	$content .= '<div class="elgg-avatar elgg-avatar-small"><a href="' . $ent->getURL() . '" class=""><img src="' . $ent->getIcon('small') . '" /></a></div>';
 }
 $content .= '<div class="clearfloat"></div>';
 
