@@ -15,7 +15,7 @@ $user_groups_guids = array();
 foreach($user_groups as $ent) {
 	$user_groups_guids[] = $ent->guid;
 }
-if (!empty($user_groups_guids)) $exclude_usergroups = "NOT IN (" . implode(',', $user_groups_guids) . ")";
+if (!empty($user_groups_guids)) $exclude_usergroups = "e.guid NOT IN (" . implode(',', $user_groups_guids) . ")";
 echo $user_groups_guids;
 
 // Featured groups
