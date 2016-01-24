@@ -619,7 +619,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #esope-register { margin-bottom:3em; }
 #esope-homepage p { font-size:14px; margin-top:0; margin-bottom:8px; }
 #esope-homepage a, #esope-homepage a:visited { color:<?php echo $linkcolor; ?>; }
-#esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:red; }
+#esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:<?php echo $linkhovercolor; ?>; }
 #esope-homepage .elgg-form { background:transparent; }
 #esope-homepage h2 { font-size:20px; font-weight:normal; }
 #esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
@@ -653,7 +653,9 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #esope-homepage .register-fullwidth { clear:both; }
 #esope-homepage .register-fullwidth label { width:auto; }
+/*
 #profile_manager_register_left { width:100%; }
+*/
 .profile_manager_register_input_container { display:inline-block; }
 #profile_manager_profile_edit_tabs { clear: both; }
 .register-fullwidth { margin: 1em 0; }

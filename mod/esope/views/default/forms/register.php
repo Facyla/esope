@@ -19,7 +19,12 @@ if (elgg_is_sticky_form('register')) {
 	elgg_clear_sticky_form('register');
 }
 
-echo "<div id='profile_manager_register_left'>";
+$extend_side = elgg_view("register/extend_side", array("field_location" => "beside"));
+if ($extend_side) {
+	echo '<div id="profile_manager_register_left" class="home-static-container">';
+} else {
+	echo '<div id="profile_manager_register_left" style="width:100%;">';
+}
 
 $show_hints = false;
 if (elgg_get_plugin_setting("show_account_hints", "profile_manager") == "yes") {
@@ -149,9 +154,8 @@ echo elgg_view('input/captcha');
 
 echo "</div>";
 
-$extend_side = elgg_view("register/extend_side", array("field_location" => "beside"));
 if ($extend_side) {
-	echo '<div id="profile_manager_register_right">' . $extend_side . '</div><hr class="esope-lightseparator" />';
+	echo echo '<div id="profile_manager_register_right" class="home-static-container">' . $extend_side . '</div><hr class="esope-lightseparator" />';
 } else {
 	echo '<hr class="esope-lightseparator" />';
 }
