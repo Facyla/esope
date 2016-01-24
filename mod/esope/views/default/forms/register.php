@@ -155,7 +155,7 @@ echo elgg_view('input/captcha');
 echo "</div>";
 
 if ($extend_side) {
-	echo echo '<div id="profile_manager_register_right" class="home-static-container">' . $extend_side . '</div><hr class="esope-lightseparator" />';
+	echo '<div id="profile_manager_register_right" class="home-static-container">' . $extend_side . '</div><hr class="esope-lightseparator" />';
 } else {
 	echo '<hr class="esope-lightseparator" />';
 }
