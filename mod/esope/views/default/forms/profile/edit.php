@@ -69,7 +69,7 @@ echo elgg_view("profile/edit/name", $vars);
 					}
 				}
 				
-				/*
+				/* Force profile categories update on load */
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
@@ -77,7 +77,6 @@ echo elgg_view("profile/edit/name", $vars);
 					});
 				</script>
 				<?php
-				*/
 				
 				echo "<div>";
 				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
@@ -96,7 +95,7 @@ echo elgg_view("profile/edit/name", $vars);
 			if(!empty($profile_type)){
 				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
 			echo elgg_view("input/hidden", array("name" => "accesslevel[custom_profile_type]", "value" => ACCESS_PUBLIC));
-				/*
+				/* Force profile categories update on load */
 				?>
 				<script type="text/javascript">
 					$(document).ready(function(){
@@ -104,7 +103,6 @@ echo elgg_view("profile/edit/name", $vars);
 					});
 				</script>
 				<?php
-				*/
 			}
 		}
 		
