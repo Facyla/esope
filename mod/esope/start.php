@@ -334,6 +334,7 @@ function esope_init() {
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
+	// @TODO page handlers for downloadable and SEO-friendly images/ and files/
 	
 	// Esope liked content
 	if (elgg_is_active_plugin('likes')) {
@@ -1291,7 +1292,7 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 function esope_is_external_link($url) {
 	global $CONFIG;
 	$elements = parse_url($url);
-	$base_elements = parse_url($CONFIG->url);
+	$base_elements = parse_url(elgg_get_site_url());
 	if ($elements['host'] != $base_elements['host']) return true;
 	return false;
 }
@@ -1308,7 +1309,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		$folder_description = '';
 		$files_content = '';
 		// Folder link
-		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+		$folder_title_link = '<a href="' . elgg_get_site_url() . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
 		// Folder description
 		if (!empty($folder['folder']->description)) $folder_description .= ' <em>' . $folder['folder']->description . '</em>';
 		
@@ -1981,6 +1982,11 @@ function esope_notification_handler($hook, $type, $result, $params) {
 */
 
 
+// Returns a list of admin tools (used in esope/tools)
+function esope_admin_tools_list() {
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
+	return $tools;
+}
 
 /* Determines if the user is a group administrator (=> has admin rights on any group)
  * $user : the user to be checked

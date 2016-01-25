@@ -24,7 +24,7 @@ $action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
 $action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = $action_base . 'esearch' . $action_token;
 
-$content .= '<script>
+$content .= '<script type="text/javascript">
 var formdata;
 function esope_search(){
 	//$("body").addClass("esope-search-wait");
@@ -93,6 +93,12 @@ $search_form .= '</fieldset></form><br />';
 $content .= $search_form;
 $content .= '<div id="esope-search-results"></div>';
 
+// If any parameters is passed, perform search on page load
+if (!empty($_GET)) {
+	$content .= '<script type="text/javascript">
+	esope_search();
+	</script>';
+}
 
 $params = array(
 	'content' => $content,

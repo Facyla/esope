@@ -21,11 +21,11 @@ $esope_search_url = $action_base . 'esearch' . $action_token;
 $content .= '<script>
 var formdata;
 function esope_search(){
-	//$("body").addClass("esope-search-wait");
+	$("#esope-search-ajax-loader").removeClass("hidden");
 	formdata = $("#esope-search-form").serialize();
 	$.post("' . $esope_search_url . '", formdata, function(data){
 		$("#esope-search-results").html(data);
-		//$("body").removeClass("esope-search-wait");
+		$("#esope-search-ajax-loader").addClass("hidden");
 	});
 }
 </script>';
@@ -87,6 +87,7 @@ $search_form = '<form id="esope-search-form" method="post" action="' . $search_a
 	</form><br />';
 
 $content .= $search_form;
+$content .= elgg_view('graphics/ajax_loader', array('id' => "esope-search-ajax-loader"));
 $content .= '<div id="esope-search-results"></div>';
 
 
