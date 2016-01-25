@@ -5,7 +5,7 @@
  * @uses $vars['entity'] ElggEntity object
  */
 
-$entity = $vars['entity'];
+$entity = elgg_extract('entity', $vars);
 
 $title = $entity->title;
 if (!$title) {
@@ -41,7 +41,7 @@ if (elgg_instanceof($entity, 'object', 'file') && (file_get_general_file_type($e
 } else {
 	$image = elgg_view_entity_icon($entity, 'tiny', array());
 	$filename = $entity->getFilenameOnFilestore();
-	$image .= '<span class="hidden"><span class="embed-insert"><p>' . elgg_view_entity_icon($entity, 'tiny', array()) . ' (<a target="_blank" href="' . $vars['url'] . 'file/download/' . $entity->guid . '">' . elgg_echo('esope:embed:file:download') . ' ' . $entity->originalfilename . ', ' . esope_human_filesize($filename) . ')</a></p></span></span>';
+	$image .= '<span class="hidden"><span class="embed-insert"><p>' . elgg_view_entity_icon($entity, 'tiny', array()) . ' (<a target="_blank" href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '">' . elgg_echo('esope:embed:file:download') . ' ' . $entity->originalfilename . ', ' . esope_human_filesize($filename) . ')</a></p></span></span>';
 }
 
 echo elgg_view_image_block($image, $body);

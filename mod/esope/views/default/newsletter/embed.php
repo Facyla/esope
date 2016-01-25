@@ -105,7 +105,7 @@ if ($display) {
 					if (!empty($description)) $embed_content .= elgg_view('output/longtext', array('value' => $description));
 					// DL link (files)
 					if ($subtype == 'file') {
-						$embed_content .= '<p><a href="' . $vars['url'] . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
+						$embed_content .= '<p><a href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
 					}
 					// Web URL (bookmarks)
 					if ($entity->address) {
@@ -143,7 +143,7 @@ if ($display) {
 					if (!empty($description)) $embed_content .= elgg_view('output/longtext', array('value' => $description));
 					// Download link (files)
 					if ($subtype == 'file') {
-						$embed_content .= '<p><a href="' . $vars['url'] . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
+						$embed_content .= '<p><a href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
 					}
 					// Web URL (bookmarks)
 					if ($entity->address) {

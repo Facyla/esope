@@ -1,6 +1,6 @@
 <?php
-$urlfonts = $vars['url'] . 'mod/esope/fonts/';
-$urlicon = $vars['url'] . 'mod/esope/img/theme/';
+$urlfonts = elgg_get_site_url() . 'mod/esope/fonts/';
+$urlicon = elgg_get_site_url() . 'mod/esope/img/theme/';
 // Dégradés
 // Couleur 1 : #0050BF - haut du dégradé header et pied de page
 $color1 = elgg_get_plugin_setting('color1', 'esope');

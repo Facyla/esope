@@ -6,6 +6,8 @@
  * @subpackage UI
  */
 
+$url = elgg_get_site_url();
+
 // ESOPE : configurable colors
 $css = elgg_extract('theme-config-css', $vars);
 $titlecolor = $css['titlecolor'];
@@ -14,8 +16,8 @@ $linkcolor = $css['linkcolor'];
 $backgroundcolor = $css['backgroundcolor'];
 $backgroundimg = $css['backgroundimg'];
 $linkhovercolor = $css['linkhovercolor'];
-$urlfonts = $vars['url'] . 'mod/esope/fonts/';
-$urlicon = $vars['url'] . 'mod/esope/img/theme/';
+$urlfonts = $url . 'mod/esope/fonts/';
+$urlicon = $url . 'mod/esope/img/theme/';
 $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333

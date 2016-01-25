@@ -63,7 +63,7 @@ if ($responses) {
 
 /*
 // Toutes ces infos habituellement affichées sont regroupées sous forme de bloc dépliable
-$urlicon = $vars['url'] . 'mod/esope/img/theme/';
+$urlicon = $elgg_get_site_url() . 'mod/esope/img/theme/';
 $object = get_entity($item->object_guid);
 if (elgg_in_context('widgets')) {
 	$plus_content = $message . $attachments . $responses;

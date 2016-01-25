@@ -77,7 +77,7 @@ echo '</div>';
 
 // ADVANCED SEARCH FORM INTERFACE
 // @TODO build an advanced seearch interface through a GET form
-echo '<form method="GET" action="' . $vars['url'] . 'search" id="advanced-search-form">';
+echo '<form method="GET" action="' . elgg_get_site_url() . 'search" id="advanced-search-form">';
 echo '<fieldset>';
 echo '<legend>' . elgg_echo('esope:advancedsearch'). '</legend>';
 echo elgg_view('input/securitytokens');

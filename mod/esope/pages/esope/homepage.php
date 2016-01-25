@@ -44,7 +44,7 @@ if (elgg_instanceof($firststeps_page, 'object')) {
 // Texte intro configurable
 $intro = elgg_get_plugin_setting('dashboardheader', 'esope');
 /*
-if (empty($intro) && elgg_is_admin_logged_in()) { $intro = '<a href="' . $vars['url'] . 'admin/plugin_settings/esope">' . elgg_echo('esope:welcome:msg') . '</a>'; }
+if (empty($intro) && elgg_is_admin_logged_in()) { $intro = '<a href="' . elgg_get_site_url() . 'admin/plugin_settings/esope">' . elgg_echo('esope:welcome:msg') . '</a>'; }
 */
 
 

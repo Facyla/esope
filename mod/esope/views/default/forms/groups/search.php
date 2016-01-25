@@ -25,5 +25,5 @@ echo elgg_view('input/hidden', array(
 ));
 
 //echo elgg_view('input/submit', array('value' => elgg_echo('search:go'),'class' => "groups-search-submit-button"));
-echo '<input type="image" class="groups-search-submit-button" src="' . $vars['url'] . 'mod/esope/img/theme/recherche.png" value="' . elgg_echo('search:go') . '" />';
+echo '<input type="image" class="groups-search-submit-button" src="' . elgg_get_site_url() . 'mod/esope/img/theme/recherche.png" value="' . elgg_echo('search:go') . '" />';
 
