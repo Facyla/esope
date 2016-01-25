@@ -43,6 +43,9 @@ elgg.profile_manager.profile_manager_username = function(event, elem) {
 };
 
 elgg.profile_manager.init_edit = function() {
+	// Esope : Init profile edit tabs properly (otherwise profile-type-specific tabs are not displayed)
+	elgg.profile_manager.change_profile_type();
+	
 	// tab switcher on edit form
 	$("#profile_manager_profile_edit_tabs a").click(function(event) {
 		var id = $(this).attr("href").replace("#", "");

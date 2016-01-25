@@ -237,7 +237,7 @@ echo elgg_view("profile/edit/name", $vars);
 		
 		$tab_content .= "</div>";
 			
-			$list_content .= "</fieldset>";
+		$list_content .= "</fieldset>";
 		$list_content .= "</div>";
 		$list_content .= "</div>";
 		}
@@ -256,7 +256,7 @@ echo elgg_view("profile/edit/name", $vars);
 		}
 	}
 
-	if($simple_access_control == "yes"){ 
+	if($simple_access_control == "yes"){
 		?>
 	<div class="profile-manager-simple-access-control">
 		<label for="simple_access_control"><?php echo elgg_echo("profile_manager:simple_access_control"); ?></label>
