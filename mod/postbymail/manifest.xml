@@ -9,21 +9,21 @@
 	<copyright>(C) Items International 2010-2015</copyright>
 	<license>GNU Public License version 2</license>
 	
-	<requires>
-		<type>elgg_version</type>
-		<version>1.8</version>
-	</requires>
-
-	<requires>
-		<type>plugin</type>
-		<name>html_email_handler</name>
-	</requires>
-
 	<category>email</category>
 	<category>publication</category>
 	<category>cron</category>
 	<category>content</category>
 	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>html_email_handler</name>
+	</requires>
+
 	<activate_on_install>false</activate_on_install>
 	
 </plugin_manifest>

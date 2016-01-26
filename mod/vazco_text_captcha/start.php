@@ -1,11 +1,16 @@
 <?php
-// As the original version is no longer licensed as GPL, this version is now maintained in ESOPE
+// Note : As the original version is no longer licensed as GPL, this version is now maintained in ESOPE
+// @TODO : should better extend input/captcha and hook than replacing the view itself !
+// @TODO : integrate into recaptcha plugin ? or registration_filter ?
+
+elgg_register_event_handler('init','system','vazco_text_captcha_init');
 
 
 function vazco_text_captcha_init() {
-	global $CONFIG;
 	
-	require_once(dirname(__FILE__)."/models/model.php");
+	
+	elgg_register_library('elgg:vazco_text_captcha', elgg_get_plugins_path() . "vazco_text_captcha/lib/vazco_text_captcha/functions.php");
+	elgg_load_library('elgg:vazco_text_captcha');
 	
 	// Register a function that provides some default override actions
 	elgg_register_plugin_hook_handler('actionlist', 'captcha', 'vazco_text_captcha_actionlist_hook');
@@ -21,17 +26,21 @@ function vazco_text_captcha_init() {
 	}
 	
 	elgg_register_event_handler('create', 'user', 'vazco_text_captcha_mark_register');
+	
 }
 
+
 function vazco_text_captcha_mark_register($event, $object_type, $object) {
-	if($object && $object instanceof ElggUser) {
-		if($_SESSION['vazco_text_captcha_verified']==1)
+	if (elgg_instanceof($object, 'user')) {
+		if ($_SESSION['vazco_text_captcha_verified']==1) {
 			$_SESSION['vazco_text_captcha_verified'] = "1";
-		else
+		} else {
 			$_SESSION['vazco_text_captcha_verified'] = "0";
+		}
 		return $object->setMetaData('vazco_text_captcha_verified', $_SESSION['vazco_text_captcha_verified']);
 	}
 }
+
 
 /**
  * Verify a vazco_text_captcha based on the input value entered by the user and the seed token passed.
@@ -57,6 +66,7 @@ function vazco_text_captcha_verify_captcha($input_value, $seed_token) {
 	forward($qs);
 	return false;
 }
+
 
 /**
  * Listen to the action plugin hook and check the vazco_text_captcha.
@@ -95,6 +105,7 @@ function vazco_text_captcha_verify_action_hook($hook, $entity_type, $returnvalue
 	return false;
 }
 
+
 /**
  * This function returns an array of actions the vazco_text_captcha will expect a vazco_text_captcha for, other plugins may
  * add their own to this list thereby extending the use.
@@ -113,7 +124,5 @@ function vazco_text_captcha_actionlist_hook($hook, $entity_type, $returnvalue, $
 		
 	return $returnvalue;
 }
-
-elgg_register_event_handler('init','system','vazco_text_captcha_init');
 
 
