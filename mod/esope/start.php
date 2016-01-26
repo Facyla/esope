@@ -235,36 +235,19 @@ function esope_init() {
 	 * or event 'get', 'subscriptions'  => modify the recipients of a notification dynamically
 		*/
 	
+	// Block sucessful sending by previous plugin
+	// Wrap notification handler into custom function so we can intercept the sending process
+	// Un-registers default handler, and register a new one that is aware of returned result (true => blocks)
+	elgg_unregister_plugin_hook_handler('send', 'notification:email', '_elgg_send_email_notification');
+	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_elgg_send_email_notification');
+	// @TODO : also process other methods ? at least site notificaitons ?
+	
+	// Block notifications for individual recipients
+	// @TODO replace blocking hook by recipients hook
 	// * triggers a blocking hook that enables email blocking based on any property from email sender or recipient
 	// * requires to add the hook trigger to the email notification handler
-	// Wrap notification handler into custom function so we can intercept the sending process
-	global $NOTIFICATION_HANDLERS;
-	// @TODO : replace by elgg_register_notification_method() ?
-	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
-	/* @TODO : http://learn.elgg.org/en/latest/guides/notifications.html#registering-a-new-notification-method
-	elgg_register_notification_method('email');
-	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_notification_handler');
-	*/
-	// Register for the 'send', 'notification:[method name]' plugin hook to handle sending a notification. A notification object is in the params array for the hook with the key 'notification'
+	// elgg_register_plugin_hook_handler('email', 'system', 'esope_block_email_recipients', 100);
 	
-	/* Usage note : block email by registering an early hook to email_block,system hook
-	 * any non null return will block email sending.
-	 * 1. add in start.php : elgg_register_plugin_hook_handler("email_block", "system", "esope_email_block_hook", 0);
-	 * 2. add to hook functions :
-			// Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
-			function esope_email_block_hook($hook, $type, $return, $params) {
-				$to = $params['to'];
-				// Note : check under which conditions email should not be sent
-				if (elgg_instanceof($to, 'user')) {
-					if (false) {
-						// Block email sending
-						return true;
-					}
-				}
-				// Do not change behaviour otherwise (= send email)
-				return $return;
-			}
-	*/
 	
 	
 	// NEW & REWRITTEN ACTIONS
@@ -371,6 +354,7 @@ function esope_init() {
 	elgg_extend_view('plugins/groups/settings', 'group_tools_priority/settings');
 	
 }
+
 
 
 // Include page_handlers, hooks & events functions (lightens this file)
@@ -1887,74 +1871,6 @@ function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
 } 
 */
 
-
-
-
-// Email blocking : triggers the email,system hook to enable email blocking based on any property from email sender or recipient
-function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $body, array $params = NULL) {
-	/*
-	error_log("ESOPE EMAIL : handler active");
-	echo '<pre>' . print_r($NOTIFICATION_HANDLERS['email'], true) . '</pre>';
-	
-	global $CONFIG;
-	echo '<pre>' . print_r($CONFIG->hooks['email']['system'], true) . '</pre>';
-	
-	
-	echo '<pre>' . print_r($handler, true) . '</pre>';
-	echo '<pre>' . print_r($from, true) . '</pre>';
-	echo '<pre>' . print_r($to, true) . '</pre>';
-	echo '<pre>' . print_r($subject, true) . '</pre>';
-	echo '<pre>' . print_r($body, true) . '</pre>';
-	echo '<pre>' . print_r($params, true) . '</pre>';
-	*/
-	// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
-	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
-	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
-	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
-	if ($result !== NULL) { return $result; }
-	
-	// If no blocking return received, get back to regular handler and process
-	global $NOTIFICATION_HANDLERS;
-	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
-	return $handler($from, $to, $subject, $body, $params);
-}
-// @TODO : Replace
-/**
- * Send an email notification
- *
- * @param string $hook   Hook name
- * @param string $type   Hook type
- * @param bool   $result Has anyone sent a message yet?
- * @param array  $params Hook parameters
- * @return bool
- * @access private
- */
-/*
-function esope_notification_handler($hook, $type, $result, $params) {
-	// @var Elgg_Notifications_Notification $message
-	$message = $params['notification'];
-
-	$recipient = $message->getRecipient();
-
-	if (!$recipient || !$recipient->email) {
-		return false;
-	}
-
-	//return $sms->send($recipient->email, $message->body);
-	
-		// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
-	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
-	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
-	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
-	if ($result !== NULL) { return $result; }
-	
-	// If no blocking return received, get back to regular handler and process
-	global $NOTIFICATION_HANDLERS;
-	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
-	return $handler($from, $recipient->email, $subject, $message->body, $params);
-	
-}
-*/
 
 
 // Returns a list of admin tools (used in esope/tools)

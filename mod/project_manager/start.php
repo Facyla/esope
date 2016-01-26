@@ -66,10 +66,8 @@ function project_manager_init() {
 	elgg_register_js('jquery-treeview', $js_url);
 	
 	// URL HANDLERS, so we can have nice URLs
-	elgg_register_entity_url_handler('object', 'project_manager', 'project_manager_url'); // Register a URL handler for project_managers
-	//elgg_register_entity_url_handler('object', 'time_tracker', 'time_tracker_url');
-	elgg_register_entity_url_handler('object', 'task_top', 'tasks_url');
-	elgg_register_entity_url_handler('object', 'task', 'tasks_url');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'project_manager_set_url');
+	// @TODO : replace annotation url handler by new method
 	elgg_register_annotation_url_handler('task', 'tasks_revision_url');
 	
 	// PAGE HANDLERS
@@ -79,6 +77,7 @@ function project_manager_init() {
 	
 	// NOTIFICATIONS
 	// Register granular notification for this type
+	// @TODO replace by new function
 	if (is_callable('register_notification_object')) { register_notification_object('object', 'project_manager', elgg_echo('project_manager:notification:title')); }
 	// Message content
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'project_manager_notify_message');
@@ -499,15 +498,41 @@ function tasks_page_handler($task) {
 
 
 
-/** Populates the ->getUrl() method for project_manager objects
- * @param ElggEntity $entity project_manager entity
- * @return string project_manager URL
- */
-function project_manager_url($entity) {
-	$title = elgg_get_friendly_title($entity->title);
-	//return elgg_get_site_url() . "project_manager/" . $entity->getOwnerEntity()->username . "/read/" . $entity->getGUID() . "/" . $title;
-	return elgg_get_site_url() . "project_manager/view/" . $entity->guid . "/" . $title;
+function project_manager_set_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object')) {
+		$title = elgg_get_friendly_title($entity->title);
+		
+		// Project
+		if (elgg_instanceof($entity, 'object', 'project_manager')) {
+			return elgg_get_site_url() . 'project_manager/view/'. $entity->getGUID() . "/" . $title;
+		}
+		
+		
+		// Task
+		if (elgg_instanceof($entity, 'object', 'task') || elgg_instanceof($entity, 'object', 'task_top')) {
+			return elgg_get_site_url() . 'tasks/view/'. $entity->getGUID() . "/" . $title;
+		}
+		
+		// Time tracker
+		if (elgg_instanceof($entity, 'object', 'time_tracker')) {
+			return elgg_get_site_url() . 'time_tracker/view/'. $entity->getGUID() . '/' . $title;
+		}
+		
+	}
 }
+
+/**
+ * Override the task annotation url
+ *
+ * @param ElggAnnotation $annotation
+ * @return string
+ */
+function tasks_revision_url($annotation) {
+	return "tasks/revision/$annotation->id";
+}
+
+
 
 function project_manager_save_site_project_manager($hook, $type, $value, $params) {
 	$params = get_input('params');
@@ -545,26 +570,6 @@ function project_manager_save_site_project_manager($hook, $type, $value, $params
 
 
 // TASKS PLUGIN
-/**
- * Override the task url
- * 
- * @param ElggObject $entity Page object
- * @return string
- */
-function tasks_url($entity) {
-	$title = elgg_get_friendly_title($entity->title);
-	return "tasks/view/$entity->guid/$title";
-}
-
-/**
- * Override the task annotation url
- *
- * @param ElggAnnotation $annotation
- * @return string
- */
-function tasks_revision_url($annotation) {
-	return "tasks/revision/$annotation->id";
-}
 
 /**
  * Override the default entity icon for tasks

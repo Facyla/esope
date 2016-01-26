@@ -654,3 +654,53 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 		'count' => $count,
 	);
 }
+
+
+
+
+// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending, and triggers a blocking hook
+function esope_elgg_send_email_notification($hook, $type, $result, $params) {
+	
+	// Do not notify again if email notification already sent
+	if ($result === true) {
+		return true;
+	}
+	
+	// Trigger blocking hook
+	// @TODO blocking hook should be global, otherwise we can use the recipients hook
+	
+	
+	return _elgg_send_email_notification($hook, $type, $result, $params);
+}
+
+
+// @TODO See http://reference.elgg.org/1.12/notification_8php_source.html#l00593 for $params
+/**
+ * Send an email notification
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param bool   $result Has anyone sent a message yet?
+ * @param array  $params Hook parameters
+ * @return bool
+ * @access private
+ */
+function esope_block_email_recipients($hook, $type, $result, $params) {
+	
+	/*
+	echo '<pre>' . print_r($handler, true) . '</pre>';
+	echo '<pre>' . print_r($from, true) . '</pre>';
+	echo '<pre>' . print_r($to, true) . '</pre>';
+	echo '<pre>' . print_r($subject, true) . '</pre>';
+	echo '<pre>' . print_r($body, true) . '</pre>';
+	echo '<pre>' . print_r($params, true) . '</pre>';
+	*/
+	// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
+	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
+	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
+
+	// @TODO : is the hook used by any plugin ? otherwise we can use recipients hook, or this one directly
+	//$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
+	return $result;
+}
+
