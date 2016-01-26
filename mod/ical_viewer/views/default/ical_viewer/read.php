@@ -1,5 +1,5 @@
 <?php
-require_once(elgg_get_plugins_path() . '/ical_viewer/vendors/iCalcreator.class.php');	// iCal class library
+elgg_load_library('elgg:ical_viewer');
 
 // @TODO : Mise en cache des fichiers iCal, au moins une heure ou une journée
 

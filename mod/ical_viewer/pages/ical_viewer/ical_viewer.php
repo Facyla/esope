@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(dirname(dirname(__FILE__))) . '/vendors/iCalcreator.class.php' );  // iCal class library
+require_once(dirname(dirname(dirname(__FILE__))) . '/vendors/iCalcreator.class.php' );	// iCal class library
 
 // Generic parameters
 
@@ -28,8 +28,8 @@ if (!isset($timeframe_after)) { $timeframe_after = 366; }
 
 
 
-$vcalendar = new vcalendar();  // create a new calendar instance
-$vcalendar->setConfig( 'unique_id', $SERVER['SERVER_NAME']);  // set Your unique id, required if any component UID is missing
+$vcalendar = new vcalendar();	// create a new calendar instance
+$vcalendar->setConfig( 'unique_id', $SERVER['SERVER_NAME']);	// set Your unique id, required if any component UID is missing
 
 /*
 // Properties required of some calendar software :
@@ -40,12 +40,12 @@ $vcalendar->setProperty( "X-WR-TIMEZONE", "Europe/Paris" );
 */
 
 // Set input files
-//  $vcalendarcalendar->setConfig( "filename", "file.ics" );  // Local filename
-//  $vcalendar->setConfig( 'url', 'http://fing.org/?page=ical' );  // Remote files
-$vcalendar->setConfig( 'url', $calendar );  // Remote file
+//	$vcalendarcalendar->setConfig( "filename", "file.ics" );	// Local filename
+//	$vcalendar->setConfig( 'url', 'http://fing.org/?page=ical' );	// Remote files
+$vcalendar->setConfig( 'url', $calendar );	// Remote file
 
 $vcalendar->parse();
-$vcalendar->sort();  // ensure start date order
+$vcalendar->sort();	// ensure start date order
 
 /*
 parse example 1
@@ -64,13 +64,13 @@ merge example
 $vcalendar = new vcalendar();
 $vcalendar->setConfig( "unique_id", "domain.com" );
 $vcalendar->setConfig( "directory", "import" );
-$vcalendar->setConfig( "filename",  "file1.ics" );
+$vcalendar->setConfig( "filename",	"file1.ics" );
 $vcalendar->parse();
-$vcalendar->setConfig( "filename",  "file2.ics" );
+$vcalendar->setConfig( "filename",	"file2.ics" );
 $vcalendar->parse();
 $vcalendar->sort();
 $vcalendar->setConfig( "directory", "export" );
-$vcalendar->setConfig( "filename",  "icalmerge.ics" );
+$vcalendar->setConfig( "filename",	"icalmerge.ics" );
 $vcalendar->saveCalendar(); 
 
 
@@ -92,17 +92,17 @@ Boucle d'affichage :
 $events_arr = $vcalendarcalendar->selectComponents( 2007,11,1,2007,11,30,'vevent'); // select events
 foreach( $events_arr as $year => $year_arr ) {
 foreach( $year_arr as $month => $month_arr ) {
-  foreach( $month_arr as $day => $day_arr ) {
-    foreach( $day_arr as $event ) {
-      $currddate = $event->getProperty( 'x-current-dtstart' );
-      // if member of a recurrence set,returns
-      // array('x-current-dtstart'
-      // , <(string) date("Y-m-d [H:i:s][timezone/UTC offset]")>)
-      $startdate = $event->getProperty( 'dtstart' );
-      $summary = $event->getProperty( 'summary' );
-      $description = $event->getProperty( 'description' )
-    }
-  }
+	foreach( $month_arr as $day => $day_arr ) {
+		foreach( $day_arr as $event ) {
+			$currddate = $event->getProperty( 'x-current-dtstart' );
+			// if member of a recurrence set,returns
+			// array('x-current-dtstart'
+			// , <(string) date("Y-m-d [H:i:s][timezone/UTC offset]")>)
+			$startdate = $event->getProperty( 'dtstart' );
+			$summary = $event->getProperty( 'summary' );
+			$description = $event->getProperty( 'description' )
+		}
+	}
 }
 }
 
@@ -110,12 +110,12 @@ foreach( $year_arr as $month => $month_arr ) {
 
 // SET : timeframe
 $day_ts = 24*3600;
-$startyear = date('Y', time()-7*$day_ts);  // current year - 1 week
-$startmonth = date('n', time()-7*$day_ts);  // current month - 1 week
-$startday = date('j', time()-7*$day_ts);  // current day - 1 week
-$endyear = date('Y', time()+366*$day_ts);  // current year + 1 full year
-$endmonth = date('n', time()+366*$day_ts);  // current month + 1 full year
-$endday = date('j', time()+366*$day_ts);  // current day + 1 full year
+$startyear = date('Y', time()-7*$day_ts);	// current year - 1 week
+$startmonth = date('n', time()-7*$day_ts);	// current month - 1 week
+$startday = date('j', time()-7*$day_ts);	// current day - 1 week
+$endyear = date('Y', time()+366*$day_ts);	// current year + 1 full year
+$endmonth = date('n', time()+366*$day_ts);	// current month + 1 full year
+$endday = date('j', time()+366*$day_ts);	// current day + 1 full year
 $event_type = "vevent";
 
 // Select events
@@ -124,33 +124,33 @@ $events_arr = $vcalendar->selectComponents($startyear,$startmonth,$startday,$end
 $content = "";
 // Generate content
 if ($events_arr) foreach( $events_arr as $year => $year_arr ) {
-  if ($year_arr) foreach( $year_arr as $month => $month_arr ) {
-    if ($month_arr) foreach( $month_arr as $day => $day_arr ) {
-      if ($day_arr) foreach( $day_arr as $event ) {
-//          $currddate = $event->getProperty('x-current-dtstart');
-        // if member of a recurrence set, returns array('x-current-dtstart', <(string) date("Y-m-d [H:i:s][timezone/UTC offset]")>)
-        $startdate = $event->getProperty('dtstart');
-//          if ($endate = $event->getProperty('dtend')) {} else { $endate = $startdate; }
-        $summary = $event->getProperty('summary');
-//          $description = $event->getProperty('description');
-        
-//          $body .= sprintf(elgg_echo('icalcreator:vevent:display'), $startdate, $endate, $summary, $description);
-//          $content .= '<p class="vevent">Date de début : ' . $startdate['day'] . " " . $startdate['month'] . "<!--" . $startdate['year'] . $startdate['hour'] . $startdate['min'] . "<br />date de fin : $endate<br />Résumé //--> : $summary<!--<br />Description : $description//--></p><br />";
-        
-        $month = $startdate['month'];
-        $num_months = array('/01/', '/02/', '/03/', '/04/', '/05/', '/06/', '/07/', '/08/', '/09/', '/10/', '/11/', '/12/');
-        $fr_months = array('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
-//          $en_months = array('/January/', '/February/', '/March/', '/April/', '/May/', '/June/', '/July/', '/August/', '/September/', '/October/', '/November/', '/December/');
-//          $en_days = array('/Monday/', '/Tuesday/', '/Wednesday/', '/Thursday/', '/Friday/', '/Saturday/', '/Sunday/');
-//          $fr_days = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi','Dimanche');
-        $month = preg_replace($num_months, $fr_months, $month);
-        
-        $summary = parse_urls($summary);
-        $content .= '<p class="vevent">' . $startdate['day'] . " " . $month . " : $summary</p><br />\n";
-        //$content .= print_r($event, true);
-      }
-    }
-  }
+	if ($year_arr) foreach( $year_arr as $month => $month_arr ) {
+		if ($month_arr) foreach( $month_arr as $day => $day_arr ) {
+			if ($day_arr) foreach( $day_arr as $event ) {
+//					$currddate = $event->getProperty('x-current-dtstart');
+				// if member of a recurrence set, returns array('x-current-dtstart', <(string) date("Y-m-d [H:i:s][timezone/UTC offset]")>)
+				$startdate = $event->getProperty('dtstart');
+//					if ($endate = $event->getProperty('dtend')) {} else { $endate = $startdate; }
+				$summary = $event->getProperty('summary');
+//					$description = $event->getProperty('description');
+				
+//					$body .= sprintf(elgg_echo('icalcreator:vevent:display'), $startdate, $endate, $summary, $description);
+//					$content .= '<p class="vevent">Date de début : ' . $startdate['day'] . " " . $startdate['month'] . "<!--" . $startdate['year'] . $startdate['hour'] . $startdate['min'] . "<br />date de fin : $endate<br />Résumé //--> : $summary<!--<br />Description : $description//--></p><br />";
+				
+				$month = $startdate['month'];
+				$num_months = array('/01/', '/02/', '/03/', '/04/', '/05/', '/06/', '/07/', '/08/', '/09/', '/10/', '/11/', '/12/');
+				$fr_months = array('Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
+//					$en_months = array('/January/', '/February/', '/March/', '/April/', '/May/', '/June/', '/July/', '/August/', '/September/', '/October/', '/November/', '/December/');
+//					$en_days = array('/Monday/', '/Tuesday/', '/Wednesday/', '/Thursday/', '/Friday/', '/Saturday/', '/Sunday/');
+//					$fr_days = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi','Dimanche');
+				$month = preg_replace($num_months, $fr_months, $month);
+				
+				$summary = parse_urls($summary);
+				$content .= '<p class="vevent">' . $startdate['day'] . " " . $month . " : $summary</p><br />\n";
+				//$content .= print_r($event, true);
+			}
+		}
+	}
 }
 
 

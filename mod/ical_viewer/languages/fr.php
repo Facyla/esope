@@ -1,6 +1,6 @@
 <?php
 
-$fr = array(
+return array(
 	'ical_viewer' => "Lecteur iCal",
 	'ical_viewer:title' => "Affichage d'un calendrier iCAL",
 
@@ -24,6 +24,4 @@ $fr = array(
 	'ical_viewer:widget:timeframe_after' => "Nombre de jours à prendre en compte à partir d'aujourd'hui (défaut = 366)",
 
 );
-
-add_translation("fr",$fr);
 

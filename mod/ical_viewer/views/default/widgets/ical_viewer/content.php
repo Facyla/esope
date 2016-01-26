@@ -10,3 +10,4 @@
 	echo elgg_view('ical_viewer/read', array('entity' => $entity, 'full_view' => true) );
 	?>
 </div>
+
