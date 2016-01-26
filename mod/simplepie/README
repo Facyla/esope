@@ -1,11 +1,31 @@
-Widget Title
----------------------------
-To change the widget title, edit the language file (en.php) and change the 
-string 'simplepie:widget' from 'RSS Feed' to whatever you desire.
+# Simplepie plugin
+This plugin wraps the Simplepie library and offers several features :
+ * RSS feed widget : easy to use
+ * group feed module : set $group->feed_url to use. Full syntax also allows to set feed title with: FEED URL::FEED TITLE
+ * reusable RSS feed views : for developpers and theme integrators
 
 
-Proxy Server
-----------------------------
+## Widget Title
+To change the widget title, add the following string in your theme plugin language file, and change the translation to whatever you desire :
+	'simplepie:widget' => "RSS Feed",
+
+
+## Group feed
+Group fields values are usually made available through profile_manager plugin. Any other mean to set this metadata actually works.
+The proposed group module can be displayed in the group by extending the chosen view with simplepie/group_simplepie_module
+An alternate view is specifically designed for inclusion into group sidebar: simplepie/sidebar_simplepie_module
+
+
+## Reusable views
+The generic RSS feed reader view is simplepie/feed_reader and is called with e.g.:
+	elgg_view('simplepie/feed_reader', array('feed_url' => $feed, 'excerpt' => false, 'num_items' => 5, 'post_date' => true));
+Direct parameters are :
+	excerpt : include item excerpt, default TRUE
+	post_date : include item post date, default TRUE
+	num_items : number of items to show, default 5
+
+
+## Proxy Server
 If your site is going through a proxy server to get to the feeds, you may 
 want to increase the timeout on the feeds (though this is unlikely as the 
 default timeout is 10 seconds). You can do this by editing 
@@ -13,16 +33,16 @@ simplepie/views/default/widgets/feed_reader/content.php. There you can just
 uncomment the line $feed->set_timeout(20);
 
 
-HTML tags in feeds
---------------------------
+## HTML tags in feeds
 The widget allows the following tags: `<a><p><br><b><i><em><del><pre><strong><ul><ol><li><img>`.
 Other tags are stripped to avoid problems with the display of your site.
 
 
-Library version and patches
---------------------------
+## IMPORTANT NOTICE : Library version and patches
 Plugin currently uses 1.3.1 Simplepie version.
-There is a bug that prevents curl from fetching some HTTPS feeds, so this version integrates a patch detailed in https://github.com/simplepie/simplepie/issues/236 : lines 4469-4470 :
-				// ESOPE patch : enables fetching SSL feeds - see https://github.com/simplepie/simplepie/issues/236
-				curl_setopt($fp, CURLOPT_SSL_VERIFYPEER, false);
+There is a bug in the library that prevents curl from fetching some HTTPS feeds, 
+This version integrates a patch detailed in https://github.com/simplepie/simplepie/issues/236
+Lines 4469-4470 :
+	// ESOPE patch : enables fetching SSL feeds - see https://github.com/simplepie/simplepie/issues/236
+	curl_setopt($fp, CURLOPT_SSL_VERIFYPEER, false);
 

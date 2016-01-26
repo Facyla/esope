@@ -1,5 +1,6 @@
 <?php
-$french = array(
+
+return array(
 	'simplepie:widget' => 'Flux RSS',
 	'simplepie:description' => 'Ajoute un flux RSS à votre profil',
 	'simplepie:notset' => 'URL du flux RSS non définie',
@@ -12,6 +13,4 @@ $french = array(
 	'simplepie:group:feed_url' => "URL du flux RSS",
 	
 );
-
-add_translation("fr", $french);
 
