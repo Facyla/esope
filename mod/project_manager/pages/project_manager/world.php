@@ -34,6 +34,9 @@ if ($tags != "") {
 
 // SIDEBAR
 $sidebar = elgg_view('project_manager/search');
+$sidebar .= '<br />';
+$sidebar .= '<p><a href="' . elgg_get_site_url() . 'project_manager/new" class="elgg-button elgg-button-action">' . elgg_echo('project_manager:new') . '</a></p>';
+
 
 
 // CONTENT

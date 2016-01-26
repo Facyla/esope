@@ -1,13 +1,14 @@
 <?php
 /** Simple project_manager search */
-global $CONFIG;
-$search = (isset($vars['search'])) ? $vars['search'] : "Rechercher un projet";
-?>
-<br />
-<div class="sidebarBox">
-  <form id="memberssearchform" action="<?php echo $CONFIG->url; ?>project_manager/references" method="get">
-    <label for="project_manager-search">Chercher un projet</label>
-    <input type="text" id="project_manager-search" name="search" onclick="if (this.value=='Rechercher un projet') { this.value='' }" class="search_input" value="<?php echo $search; ?>" />
-    <?php echo elgg_view('input/submit', array('value' => elgg_echo('Chercher un projet'))); ?>
-  </form>
-</div>
+
+$title = "Rechercher un projet";
+
+$content = '';
+$content .= '<form id="memberssearchform" action="' . elgg_get_site_url() . 'project_manager/references" method="get">';
+$content .= '<label for="project_manager-search" class="hidden">Chercher un projet</label>';
+$content .= '<input type="text" id="project_manager-search" name="search" placeholder="Rechercher un projet" class="search_input" value="' . $vars['search'] . '" />';
+$content .= elgg_view('input/submit', array('value' => elgg_echo('Chercher un projet')));
+$content .= '</form>';
+
+echo elgg_view_module('aside', $title, $content);
+

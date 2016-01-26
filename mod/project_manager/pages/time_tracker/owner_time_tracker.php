@@ -13,6 +13,8 @@ project_manager_gatekeeper();
 $content = '';
 elgg_set_context('time_tracker');
 
+$pm_meta = project_manager_get_user_metadata();
+
 $months = time_tracker_get_date_table('months');
 
 // Set required vars
@@ -379,13 +381,13 @@ if (($is_month_validated == 1) && !elgg_is_admin_logged_in()) {
 	
 	$content .= '<div class="infobox_encart" style="width:46%; float:right;">';
 	$content .= '<strong>Informations salariales</strong><br />';
-	$content .= "Statut : " . elgg_echo('project_manager:items_status:'.$member->items_status) . "<br />";
-	if ($member->items_status == 'salarie') {
+	$content .= "Statut : " . elgg_echo('project_manager:status_meta:'.$member->{$pm_meta}) . "<br />";
+	if ($member->{$pm_meta} == 'salarie') {
 		$content .= "Coût annuel brut : {$member->yearly_global_cost} €<br />";
 		$content .= "Coût mensuel moyen : " . round(($member->yearly_global_cost / 12),2) . " €<br />";
 		$content .= "Coût journalier moyen : " . round(($member->yearly_global_cost / 12 / 20),2) . " €<br />";
 		$content .= "Part variable annuelle : {$member->yearly_variable_part} €<br />";
-	} else if ($member->items_status == 'non-salarie') {
+	} else if ($member->{$pm_meta} == 'non-salarie') {
 		$content .= "Coût de journée : " . $member->daily_cost . " € / jour<br />";
 		// Note : varie selon les projets (et les profils ?)
 	} else {

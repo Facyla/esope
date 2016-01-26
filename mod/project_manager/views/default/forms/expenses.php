@@ -54,9 +54,9 @@ if (($status != 'validated') || $is_manager ) {
     $input_taux = round($taux, 4) .  elgg_view("input/hidden", array("name" => "expenses[$id][taux]", "value" => $taux));
     $input_frais = round($frais, 2) . elgg_view("input/hidden", array("name" => "expenses[$id][frais]", "value" => $frais));
     $input_deduc_tva = elgg_view("input/text", array("name" => "expenses[$id][deduc_tva]", "value" => $deduc_tva));
-    if (!$user) $select_user = elgg_view("input/members_select", array("name" => "expenses[$id][user_guid]", "value" => $user_guid, 'scope' => 'internal'));
+    if (!$user) $select_user = elgg_view("input/project_manager/members_select", array("name" => "expenses[$id][user_guid]", "value" => $user_guid, 'scope' => 'internal'));
     else $select_user = elgg_view("input/hidden", array("name" => "expenses[$id][user_guid]", "value" => $user_guid)) . $user->name;
-    $select_projet = elgg_view("input/projects_select", array("name" => "expenses[$id][project_guid]", "value" => $project_guid, 'entities' => $projects, 'empty_value' => false)) . elgg_view("input/hidden", array("name" => "expenses[$id][prev_project_guid]", "value" => $project_guid));
+    $select_projet = elgg_view("input/project_manager/projects_select", array("name" => "expenses[$id][project_guid]", "value" => $project_guid, 'entities' => $projects, 'empty_value' => false)) . elgg_view("input/hidden", array("name" => "expenses[$id][prev_project_guid]", "value" => $project_guid));
     $select_validated = elgg_view("input/dropdown", array("name" => "expenses[$id][status]", "value" => $status, 'options_values' => array('' => "Non validé = les saisies peuvent être modifiées", 'validated' => "Validé = aucune modification possible", 'delete' => "Supprimer cette note de frais")));
     
   } else {
@@ -68,9 +68,9 @@ if (($status != 'validated') || $is_manager ) {
     $input_taux = round($taux, 4) .  elgg_view("input/hidden", array("name" => "expenses[$id][taux]", "value" => $taux));
     $input_frais = round($frais, 2) . elgg_view("input/hidden", array("name" => "expenses[$id][frais]", "value" => $frais));
     $input_deduc_tva = elgg_view("input/text", array("name" => "expenses[$id][deduc_tva]", "value" => $deduc_tva));
-    if (!$user && $is_manager) $select_user = elgg_view("input/members_select", array("name" => "expenses[$id][user_guid]", "value" => $user_guid, 'scope' => 'internal'));
+    if (!$user && $is_manager) $select_user = elgg_view("input/project_manager/members_select", array("name" => "expenses[$id][user_guid]", "value" => $user_guid, 'scope' => 'internal'));
     else $select_user = elgg_view("input/hidden", array("name" => "expenses[$id][user_guid]", "value" => $user_guid)) . $user->name;
-    $select_projet = elgg_view("input/projects_select", array("name" => "expenses[$id][project_guid]", "value" => $project_guid, 'entities' => $projects, 'empty_value' => false)) . elgg_view("input/hidden", array("name" => "expenses[$id][prev_project_guid]", "value" => $project_guid));
+    $select_projet = elgg_view("input/project_manager/projects_select", array("name" => "expenses[$id][project_guid]", "value" => $project_guid, 'entities' => $projects, 'empty_value' => false)) . elgg_view("input/hidden", array("name" => "expenses[$id][prev_project_guid]", "value" => $project_guid));
     if ($action != 'create') $select_validated = elgg_view("input/dropdown", array("name" => "expenses[$id][status]", "value" => $status, 'options_values' => array('' => "Non validé = les saisies peuvent être modifiées", 'validated' => "Validé = aucune modification possible", 'delete' => "Supprimer cette note de frais")));
   }
 } else {

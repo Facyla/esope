@@ -14,6 +14,8 @@ project_manager_gatekeeper();
 // Accès réservé aux managers, et aux admins
 project_manager_manager_gatekeeper();
 
+$pm_meta = project_manager_get_user_metadata();
+
 // Give access to all users, data, etc.
 $ia = elgg_set_ignore_access(true);
 
@@ -503,11 +505,11 @@ if ((elgg_instanceof($container, 'group') || elgg_instanceof($container, 'user')
 		}
 		if (!is_array($postes)) $postes = array($postes);
 		// Ajout des autres membres impliqués dans le projet, selon leur statut, et s'ils ne l'ont pas déjà été..
-		if (($project_manager->items_status == $p_type) && !in_array($project_manager->guid, $postes)) { $postes[] = $project_manager->guid; }
-		if (($project_owner->items_status == $p_type) && !in_array($project_owner->guid, $postes)) { $postes[] = $project_owner->guid; }
+		if (($project_manager->{$pm_meta} == $p_type) && !in_array($project_manager->guid, $postes)) { $postes[] = $project_manager->guid; }
+		if (($project_owner->{$pm_meta} == $p_type) && !in_array($project_owner->guid, $postes)) { $postes[] = $project_owner->guid; }
 		// Ajout des membres ayant effectué des saisies sur ce projet
 		foreach($unlisted_consultants as $guid => $ent) {
-			if (($ent->items_status == $p_type) && !in_array($guid, $postes)) { $postes[] = $guid; }
+			if (($ent->{$pm_meta} == $p_type) && !in_array($guid, $postes)) { $postes[] = $guid; }
 		}
 		
 		$no_data_add_edit_link = elgg_echo('project_manager:novalue') . '. ' . elgg_echo('project_manager:report:othercacharges') . '<a href="' . $edit_url . $project->guid . '" target="_new">' . elgg_echo('project_manager:report:updateproject') . '</a>.';

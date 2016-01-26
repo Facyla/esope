@@ -15,10 +15,9 @@ elgg_register_event_handler('init','system','project_manager_init');
 
 /** project_manager plugin initialisation functions. */
 function project_manager_init() {
-	global $CONFIG; // Get config
 	
 	// ACTIONS
-	$action_path = dirname(__FILE__) . "/actions/";
+	$action_path = elgg_get_plugins_path() . "project_manager/actions/";
 	// Projects
 	elgg_register_action("project_manager/new", $action_path . "project_manager/edit.php");
 	elgg_register_action("project_manager/edit", $action_path . "project_manager/edit.php");
@@ -85,7 +84,10 @@ function project_manager_init() {
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'project_manager_notify_message');
 
 	// GROUP TOOLS OPTION
-	if (elgg_is_logged_in() && !empty($_SESSION['user']->items_status)) add_group_tool_option('project_manager',elgg_echo('project_manager:enableproject_manager'),false);
+	$pm_meta = project_manager_get_user_metadata();
+	if (elgg_is_logged_in() && !empty($_SESSION['user']->{$pm_status})) {
+		add_group_tool_option('project_manager',elgg_echo('project_manager:enableproject_manager'),false);
+	}
 	add_group_tool_option('tasks', elgg_echo('groups:enabletasks'), false);
 	elgg_extend_view('groups/tool_latest', 'tasks/group_module');
 	
@@ -136,20 +138,35 @@ function project_manager_init() {
 }
 
 
+
+// Define main metadata to use for access management
+function project_manager_get_user_metadata() {
+	$metadata_name = elgg_get_plugin_setting('user_metadata_name', 'project_manager');
+	if (empty($metadata_name)) { $metadata_name = 'project_manager_status'; }
+	return $metadata_name;
+}
+
+
+// Define some special statuses
+function project_manager_get_special_status() {
+	return array('salarie', 'non-salarie');
+}
+
+
 /* MENUS */
 
 /** Sets up menus for the project_manager system.	Triggered on pagesetup. */
 function project_manager_menu_setup() {
-	global $CONFIG;
 	$page_owner = elgg_get_page_owner_entity();
 	
 	// General submenu options
 	if (elgg_get_context() == "project_manager") {
-		//add_submenu_item(elgg_echo('project_manager:all'), $CONFIG->wwwroot . "mod/project_manager/world.php");
+		//add_submenu_item(elgg_echo('project_manager:all'), elgg_get_site_url() . "mod/project_manager/world.php");
 		elgg_register_menu_item('page', array(
 				'href' => 'project_manager', 'name' => 'project_manager',
 				'text' => elgg_echo('project_manager:all'),
 			));
+		/*
 		if (can_write_to_container($_SESSION['guid'], elgg_get_page_owner_guid()))
 			elgg_register_menu_item('page', array(
 					//'href' => 'project_manager/' . elgg_get_logged_in_user_entity()->username . '/new/', 
@@ -157,12 +174,13 @@ function project_manager_menu_setup() {
 					'name' => 'new_project_manager',
 					'text' => elgg_echo('project_manager:new'),
 				));
+		*/
 	}
 	
 	// Group menu
 	if (elgg_in_context('groups')) {
 		// Ajoute le menu dans un groupe
-		if (($page_owner instanceof ElggGroup) && ($page_owner->project_manager_enable == "yes")) {
+		if (elgg_instanceof($page_owner, 'group') && ($page_owner->project_manager_enable == "yes")) {
 			if (elgg_is_logged_in() && $page_owner->isMember() && project_manager_gatekeeper(false, true, false)) {
 				elgg_register_menu_item('page', array(
 						'name' => 'project_manager', 'text' => elgg_echo('project_manager:group'),
@@ -183,7 +201,8 @@ function project_manager_menu_setup() {
 	
 	// Set up menu for logged in users
 	/*
-	if (elgg_is_logged_in() && !empty($_SESSION['user']->items_status)) {
+	$pm_meta = project_manager_get_user_metadata();
+	if (elgg_is_logged_in() && !empty($_SESSION['user']->{$pm_meta})) {
 		$menu_item = ElggMenuItem::factory(array(
 				'name' => 'project_manager',
 				'text' => elgg_echo('project_manager'),
@@ -244,7 +263,6 @@ function tasks_entity_menu_setup($hook, $type, $return, $params) {
 
 /** Sets up menus for the time_tracker system.	Triggered on pagesetup. */
 function time_tracker_menu_setup() {
-	global $CONFIG;
 	$page_owner = elgg_get_page_owner_entity();
 	// Group menu
 	if (elgg_in_context('groups')) {
@@ -683,32 +701,32 @@ function project_manager_get_project_by_name($project_guid = 0, $container_guid 
 */
 
 
-
-/* TIME TRACKER */
-
 // GATEKEEPERS
 
-// Project_manager gatekeeper : deny access to extranet or non-salary people
+// Project_manager gatekeeper : deny access to unauthorised people
 // Seuls les salariés ont accès aux projets en lecture
+// Setting a $user_guid manually enables providing access under certain conditions, so do not block when not logged in
 function project_manager_gatekeeper($user_guid = false, $admin_bypass = true, $forward = true) {
-	$allowed = true;
+	$allowed = false;
+	$pm_meta = project_manager_get_user_metadata();
 	
-	// Any of the following tests blocks access
-	if (!$user_guid) $user_guid = elgg_get_logged_in_user_guid();
+	if (!$user_guid && elgg_is_logged_in()) { $user_guid = elgg_get_logged_in_user_guid(); }
 	$user = get_entity($user_guid);
-	if (!elgg_instanceof($user, 'user')) $allowed = false;
-	if (!elgg_is_logged_in()) $allowed = false;
-	if ($user->isexternal == 'yes') $allowed = false;
-	if (($user->items_status != 'salarie') && !($user->items_status != 'non-salarie')) $allowed = false;
 	
-	// Admin bypass
-	if ($admin_bypass && $user->isAdmin()) { $allowed = true; }
+	if (elgg_instanceof($user, 'user')) {
+		// Main access condition for non-admin : not empty role metadata
+		if (empty($user->{$pm_meta})) { $allowed = true; }
+		
+		// Admin bypass
+		if ($admin_bypass && $user->isAdmin()) { $allowed = true; }
+	}
 	
 	// Forward if no access
 	if ($forward && !$allowed) {
 		register_error(elgg_echo('project_manager:noaccess'));
 		forward();
 	}
+	
 	// Return result otherwise
 	return $allowed;
 }
@@ -717,40 +735,48 @@ function project_manager_gatekeeper($user_guid = false, $admin_bypass = true, $f
 // Seuls les auteurs/managers des projets ont accès à certaines données
 function project_manager_projectdata_gatekeeper($project, $user_guid = false, $admin_bypass = true, $forward = false) {
 	$allowed = false;
-	if (!$user_guid) $user_guid = elgg_get_logged_in_user_guid();
-	// Global managers
-	$managers = explode(',', elgg_get_plugin_setting('managers', 'project_manager'));
-	if (in_array($user_guid, $managers)) { $allowed = true; }
-	// Project owner
-	if ($user_guid == $project->owner_guid) { $allowed = true; }
-	// Project manager
-	if ($user_guid == $project->projectmanager) { $allowed = true; }
-	// Admin bypass
-	if ($admin_bypass && elgg_is_admin_logged_in()) { $allowed = true; }
-	// Return result if asked (instead of forwarding)
-	if (!$forward) { return $allowed; }
-	if (!$allowed) {
+	if (!$user_guid && elgg_is_logged_in()) { $user_guid = elgg_get_logged_in_user_guid(); }
+	$user = get_entity($user_guid);
+	
+	if (elgg_instanceof($user, 'user')) {
+		// Global managers
+		$managers = explode(',', elgg_get_plugin_setting('managers', 'project_manager'));
+		if (in_array($user_guid, $managers)) { $allowed = true; }
+		// Project owner
+		if ($user_guid == $project->owner_guid) { $allowed = true; }
+		// Project manager
+		if ($user_guid == $project->projectmanager) { $allowed = true; }
+		// Admin bypass
+		if ($admin_bypass && elgg_is_admin_logged_in()) { $allowed = true; }
+	}
+	
+	// Forward or return result
+	if ($forward && !$allowed) {
 		register_error(elgg_echo('project_manager:projectmanager:noaccess'));
 		forward();
 	}
-	return;
+	return $allowed;
 }
 
 // Manager gatekeeper : deny access to anyone except managers, and admins if bypass not unset
 function project_manager_manager_gatekeeper($user_guid = false, $admin_bypass = true, $forward = true) {
 	$allowed = false;
-	if (!$user_guid) $user_guid = elgg_get_logged_in_user_guid();
-	$managers = explode(',', elgg_get_plugin_setting('managers', 'project_manager'));
-	if (in_array($user_guid, $managers)) { $allowed = true; }
-	//error_log("DEBUG Time tracker : $user_guid = " . print_r($managers, true));
-	if ($admin_bypass && elgg_is_admin_logged_in()) { $allowed = true; }
-	// Return result if asked (instead of forwarding)
-	if (!$forward) { return $allowed; }
-	if (!$allowed) {
+	if (!$user_guid && elgg_is_logged_in()) { $user_guid = elgg_get_logged_in_user_guid(); }
+	$user = get_entity($user_guid);
+	
+	if (elgg_instanceof($user, 'user')) {
+		$managers = explode(',', elgg_get_plugin_setting('managers', 'project_manager'));
+		if (in_array($user_guid, $managers)) { $allowed = true; }
+		//error_log("DEBUG Time tracker : $user_guid = " . print_r($managers, true));
+		if ($admin_bypass && elgg_is_admin_logged_in()) { $allowed = true; }
+	}
+	
+	// Forward or return result
+	if ($forward && !$allowed) {
 		register_error(elgg_echo('project_manager:managers:noaccess'));
 		forward();
 	}
-	return;
+	return $allowed;
 }
 
 /* Flexible gatekeeper based on various metadata
@@ -839,8 +865,7 @@ function time_tracker_get_date_table($type, $short = false) {
 
 /* Renvoie un sélecteur d'année */
 function time_tracker_select_input_year($year, $base_url = 'time_tracker', $name = '?year=', $forward = true) {
-	global $CONFIG;
-	$base_url = $CONFIG->url . $base_url . $name;
+	$base_url = elgg_get_site_url() . $base_url . $name;
 	if ($forward) $content = '<label>Changer d\'année pour <select name="' . $name . '" onChange="javascript:document.location.href=this.value">';
 	else $content = '<label>Changer d\'année pour <select name="' . $name . '">';
 	for ($y = 2013; $y <= (date('Y')); $y++) {
@@ -856,8 +881,7 @@ function time_tracker_select_input_year($year, $base_url = 'time_tracker', $name
 
 /* Renvoie un sélecteur de mois */
 function time_tracker_select_input_month($year, $month, $base_url = 'time_tracker', $name = '?date_stamp=', $forward = true, $title = 'Changer de mois pour ') {
-	global $CONFIG;
-	$base_url = $CONFIG->url . $base_url . $name;
+	$base_url = elgg_get_site_url() . $base_url . $name;
 	$months = time_tracker_get_date_table('months');
 	if ($forward) $content = '<label>' . $title . '<select name="' . $name . '" onChange="javascript:document.location.href=this.value">';
 	else $content = '<label>' . $title . '<select name="' . $name . '">';
@@ -879,8 +903,7 @@ function time_tracker_select_input_month($year, $month, $base_url = 'time_tracke
 
 /* Renvoie un sélecteur de projet */
 function time_tracker_select_input_project($project_guid, $include_specials = true, $base_url = 'project_manager/production', $name = '/project/', $forward = true, $label = 'Changer de projet ') {
-	global $CONFIG;
-	$base_url = $CONFIG->url . $base_url . $name;
+	$base_url = elgg_get_site_url() . $base_url . $name;
 	$months = time_tracker_get_date_table('months');
 	if ($forward) $content = '<label>' . $label . '<select name="' . $name . '" onChange="javascript:document.location.href=this.value">';
 	else $content = '<label>' . $label . '<select name="' . $name . '">';
@@ -912,7 +935,6 @@ function time_tracker_select_input_project($project_guid, $include_specials = tr
 
 /* Renvoie un sélecteur de taux journalier (TJM) */
 function time_tracker_select_tjm($project, $profile = '', $name = 'profile', $select_disabled = true) {
-	global $CONFIG;
 	$select_disabled = '';
 	if ($select_disabled) $select_disabled = ' disabled="disabled"';
 	$content = '<select name="' . $name . '" style="max-width:10ex;">';
@@ -1167,6 +1189,8 @@ function project_manager_get_project_code($project) {
 function project_manager_get_consultants($project_guid = false, $guid_only = false, $alpha_sort = true) {
 	$members = array();
 	global $project_manager_consultants;
+	$pm_meta = project_manager_get_user_metadata();
+	$special_status = project_manager_get_special_status();
 	$ia = elgg_set_ignore_access(true);
 	// Principe : si pas de projet, on liste les consultants puis on filtre
 	if (!$project_guid) {
@@ -1174,7 +1198,7 @@ function project_manager_get_consultants($project_guid = false, $guid_only = fal
 		$all_members = elgg_get_entities(array('types' => 'user', 'limit' => false));
 		$count_all_members = count($all_members);
 		if ($all_members) foreach ($all_members as $ent) {
-			if (!empty($ent->items_status) && in_array($ent->items_status, array('salarie', 'non-salarie'))) $members[$ent->guid] = $ent;
+			if (!empty($ent->{$pm_meta}) && in_array($ent->{$pm_meta}, $special_status)) $members[$ent->guid] = $ent;
 		}
 		if ($alpha_sort) { usort($members, create_function('$a,$b', 'return strcmp($a->name,$b->name);')); }
 		$project_manager_consultants['all'] = $members;
@@ -1416,11 +1440,16 @@ function time_tracker_get_total_time_tracker($time_tracker = false) {
 // Calcule le coût total d'un consultant sur un mois donné, sur la base d'un taux journalier
 function time_tracker_monthly_cost($user_guid, $project = false) {
 	$user = get_entity($user_guid);
-	if ($ent->items_status == 'salarie') {
-		$rate = $user->daily_cost;
-	} else if ($ent->items_status == 'non-salarie') {
-		$rate = (($ent->yearly_global_cost / 12) * $coef_salarial) + ($ent->yearly_variable_part * $coef_pv / 12);
-	} else {
+	if (!elgg_instanceof($user, 'user')) { return false; }
+	$pm_meta = project_manager_get_user_metadata();
+	switch($ent->{$pm_meta}) {
+		case 'salarie':
+			$rate = $user->daily_cost;
+			break;
+		case 'non-salarie':
+			$rate = (($ent->yearly_global_cost / 12) * $coef_salarial) + ($ent->yearly_variable_part * $coef_pv / 12);
+			break;
+		default:
 	}
 	// @TODO : cette fonction utilise année et mois, pas l'user et le project !
 	//return time_tracker_monthly_time($user_guid, $project) * $rate;
@@ -1430,15 +1459,17 @@ function time_tracker_monthly_cost($user_guid, $project = false) {
 
 // Calcule le CJM d'un consultant salarié
 function time_tracker_get_user_daily_cost($user) {
-	if ($user->items_status == 'salarie') {
+	$pm_meta = project_manager_get_user_metadata();
+	if ($user->{$pm_meta} == 'salarie') {
 		$coef_salarial = elgg_get_plugin_setting('coefsalarie', 'project_manager');
 		$coef_pv = elgg_get_plugin_setting('coefpv', 'project_manager');
 		$days_per_month = elgg_get_plugin_setting('dayspermonth', 'project_manager');
 		$monthly_global_cost = $user->yearly_global_cost / 12;
 		$monthly_cost = ($monthly_global_cost * $coef_salarial) + ($user->yearly_variable_part * $coef_pv / 12);
 		$dailycost = round(($monthly_cost / $days_per_month), 3);
-	} else return false;
-	return $dailycost;
+		return $dailycost;
+	}
+	return false;
 }
 
 /* Liste les temps passés sur un projet donné, par tranche de temps et par personne
@@ -1446,7 +1477,7 @@ function time_tracker_get_user_daily_cost($user) {
  * $return_array : renvoyer le tableau de valeurs plutôt que le texte
 */
 function time_tracker_project_times($project_guid = false, $return_array = false) {
-	if (empty($project_guid)) return false;
+	if (empty($project_guid)) { return false; }
 	$content = '';
 	$months = time_tracker_get_date_table('months');
 	$options = array(
@@ -1463,6 +1494,7 @@ function time_tracker_project_times($project_guid = false, $return_array = false
 		$project_times[$ent->year][$ent->month][$ent->owner_guid] = time_tracker_get_total_time_tracker($ent);
 	}
 	if ($return_array) return $project_times;
+	
 	$total_project = 0;
 	if (is_array($project_times)) {
 		$content .= '<table class="project_manager" style="width:100%;">';
@@ -1503,8 +1535,9 @@ function time_tracker_project_times($project_guid = false, $return_array = false
 	} else {
 		$content .= '<p>' . elgg_echo('time_tracker:noinput') . '</p>';
 	}
+	
 	if (!empty($content)) return $content;
-	else return elgg_echo('time_tracker:noinput');
+	return elgg_echo('time_tracker:noinput');
 }
 
 /* Renvoie le temps total passé sur un projet
@@ -1610,12 +1643,12 @@ function time_tracker_jour_ouvrable($year, $month, $day, $weekend = true) {
 
 // CONVERSION DE DEVISES
 function project_manager_convert_toeuro($value = 0, $from_code = 'EUR', $invert = false) {
-	global $CONFIG;
+	$site = elgg_get_site_entity();
 	if ($from_code == 'EUR') return $value;
 	
 	// On récupère ou on met en cache quotidiennement ces infos
-	if ($CONFIG->site->project_manager_currencies_ts >= (time() - 3600*24)) {
-		$currency_array = unserialize($CONFIG->site->project_manager_currencies);
+	if ($site->project_manager_currencies_ts >= (time() - 3600*24)) {
+		$currency_array = unserialize($site->project_manager_currencies);
 		
 	// On récupére les taux de change stockés sur le site, ou on les met à jour si elles ont plus de X secondes (1 jour)
 	} else {
@@ -1635,10 +1668,10 @@ function project_manager_convert_toeuro($value = 0, $from_code = 'EUR', $invert 
 		// Si données valides => sauvegarde, sinon on récupère les anciennes
 		if (sizeof($currency_array) > 0) {
 error_log("CURENCIES : MAJ des taux de conversion des devises fait le " . date("d/m/Y à h", time()));
-			$CONFIG->site->project_manager_currencies_ts = time();
-			$CONFIG->site->project_manager_currencies = serialize($currency_array);
+			$site->project_manager_currencies_ts = time();
+			$site->project_manager_currencies = serialize($currency_array);
 		} else {
-			$currency_array = unserialize($CONFIG->site->project_manager_currencies);
+			$currency_array = unserialize($site->project_manager_currencies);
 		}
 	}
 	// Conversion

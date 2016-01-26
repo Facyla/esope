@@ -1,11 +1,11 @@
 <?php
-/** Elgg file plugin language pack
+/** Project manager language file
  * @author Facyla
- * @copyright Facyla 2010
+ * @copyright Facyla 2010-2016
  * @link http://id.facyla.net/
  */
 
-$french = array(
+return array(
 	'project_manager' => "Gestion de projet",
 	'project_manager:time_tracker' => "Rapports d'Activités",
 	'item:object:project_manager' => "Projet",
@@ -98,7 +98,13 @@ $french = array(
 		la TVA d'un 'hôtel",
 	
 	// Settings
-	'project_manager:settings:presentation' => "Cet outil de gestion de projet est réservé à certains membres, avec différents niveaux d'accès :<ul><li>Seuls les membres ayant une propriété ->items_status ont accès aux projets</li><li>Seuls les membres \"managers\" mentionnés ci-dessous ont accès à la partie d'édition des projets et aux outils de synthèse globaux</li><li>Les autres ont accès aux informations des projets, ainsi qu'aux outils de suivi du temps</li></ul>",
+	'project_manager:settings:user_metadata_name' => "Metadata des comptes utilisateurs utilisée pour la définition des rôles",
+	'project_manager:settings:presentation' => "Cet outil de gestion de projet est réservé à certains membres, avec différents niveaux d'accès :
+			<ul>
+				<li>Seuls les membres ayant une propriété ->%s non vide ont accès aux projets</li>
+				<li>Ces membres ont accès aux informations des projets, ainsi qu'aux outils de suivi du temps</li>
+				<li>Seuls les membres \"managers\" définis dans cette page ont accès à la partie d'édition des projets et aux outils de synthèse globaux</li>
+			</ul>",
 	'project_manager:settings:managers' => "Managers des projets",
 	'project_manager:settings:managers:help' => "Les Managers ont la possibilité de créer et modifier des projets et d'accéder aux outils de synthèse.",
 	'project_manager:settings:consultants:data' => "Données générales pour les calculs des indicateurs consultants",
@@ -107,10 +113,10 @@ $french = array(
 	'project_manager:settings:dayspermonth' => "Nombre moyen de jour par mois (calcul des indicateurs)",
 	
 	// User metadata
-	'project_manager:items_status:salarie' => "Salarié",
-	'project_manager:items_status:non-salarie' => "Non salarié",
-	'project_manager:items_status:extranet' => "NA (accès extranet seulement)",
-	'project_manager:items_status:' => "NA (non défini)",
+	'project_manager:status_meta:salarie' => "Salarié",
+	'project_manager:status_meta:non-salarie' => "Non salarié",
+	'project_manager:status_meta:extranet' => "NA (accès extranet seulement)",
+	'project_manager:status_meta:' => "NA (non défini)",
 	
 
 	'project_manager:references' => "Liste des projets",

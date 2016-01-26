@@ -226,12 +226,20 @@ function esope_init() {
 	elgg_register_plugin_hook_handler('forward', 'all', 'esope_forward_hook', 600);
 	
 	
-	// Email blocking interception system : works by replacing the registered hook, and use it after processing
+	// Email blocking interception system/
+	// Previously worked by replacing the registered hook, and use it after processing
+	/* @TODO : hook into the notification process to stop it if needed OR replace the default handler and use our own
+	 * Replace handler : unregister send,notification:email	500	_elgg_send_email_notification and use ESOPE function
+	 * send,notification, 'email',  => need to remove recipients to break process - see http://reference.elgg.org/1.12/notification_8php_source.html#l00197
+	 * or 'email', 'system' => return true instead of array to break process, or modify the array to remove/add recipients
+	 * or event 'get', 'subscriptions'  => modify the recipients of a notification dynamically
+		*/
+	
 	// * triggers a blocking hook that enables email blocking based on any property from email sender or recipient
 	// * requires to add the hook trigger to the email notification handler
 	// Wrap notification handler into custom function so we can intercept the sending process
 	global $NOTIFICATION_HANDLERS;
-	// @TODO : replace by elgg_register_notification_method()
+	// @TODO : replace by elgg_register_notification_method() ?
 	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
 	/* @TODO : http://learn.elgg.org/en/latest/guides/notifications.html#registering-a-new-notification-method
 	elgg_register_notification_method('email');

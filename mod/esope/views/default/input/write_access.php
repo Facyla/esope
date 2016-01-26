@@ -36,16 +36,16 @@ if ($vars['value'] == ACCESS_DEFAULT) { $vars['value'] = get_default_access(); }
 //if (!$vars['value'] || ($vars['value'] == ACCESS_DEFAULT)) { // Problème = modifie accès existants
 if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 	//$vars['value'] = get_default_access();
-  $page_owner = elgg_get_page_owner_entity();
-  if ($page_owner instanceof ElggGroup) {
-    $vars['value'] = $page_owner->group_acl;
-  } else {
-    $vars['value'] = get_default_access();
-  }
+	$page_owner = elgg_get_page_owner_entity();
+	if ($page_owner instanceof ElggGroup) {
+		$vars['value'] = $page_owner->group_acl;
+	} else {
+		$vars['value'] = get_default_access();
+	}
 }
 
 // No public  access for write access
-$vars['value'] = ($vars['value'] == ACCESS_PUBLIC) ? ACCESS_LOGGED_IN : $vars['value'];
+if ($vars['value'] == ACCESS_PUBLIC) { $vars['value'] = ACCESS_LOGGED_IN; }
 
 
 echo elgg_view('input/dropdown', $vars);

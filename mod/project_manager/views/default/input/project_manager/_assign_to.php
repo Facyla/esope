@@ -82,5 +82,3 @@
 	$result .= "</select>";
 	echo $result;
 		
-
-?>

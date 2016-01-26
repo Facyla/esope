@@ -8,7 +8,7 @@
  * @link http://elgg.com/
  */
 
-global $CONFIG;
+$pm_meta = project_manager_get_user_metadata();
 
 if (isset($vars['entity'])) {
 	$title = $vars['entity']->title;
@@ -190,8 +190,8 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 		$members_count = elgg_get_entities(array('types' => 'user', 'limit' => 10, 'count' => true));
 		$members = elgg_get_entities(array('types' => 'user', 'limit' => $members_count));
 		foreach ($members as $ent) {
-			if ($ent->items_status == 'salarie') $int_members[] = $ent;
-			else if ($ent->items_status == 'non-salarie') $ext_members[] = $ent;
+			if ($ent->{$pm_meta} == 'salarie') $int_members[] = $ent;
+			else if ($ent->{$pm_meta} == 'non-salarie') $ext_members[] = $ent;
 			else $extranet_members[] = $ent;
 		}
 		elgg_set_ignore_access($ia);
@@ -201,13 +201,13 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 		// Seuls les admins peuvent changer la propriété du projet
 		if (elgg_is_admin_logged_in()) {
 			echo '<label>' . elgg_echo('project_manager:owner') . ' ';
-			echo elgg_view("input/members_select", array('name' => "owner_guid", 'scope' => 'all', 'value' => $owner_guid)) . $user_icon;
+			echo elgg_view("input/project_manager/members_select", array('name' => "owner_guid", 'scope' => 'all', 'value' => $owner_guid)) . $user_icon;
 			echo '<br />' . elgg_view('output/members_list', array('value' => $owner_guid)) . '</label>';
 		}
 		// Chef de projet : possibilité de transférer parmi l'équipe du projet / ou de donner des rôles sur le projet
 		//echo elgg_view("input/userpicker", array('name' => "team", 'value' => $team)) . '<br />';
 		echo '<label>' . elgg_echo('project_manager:projectmanager') . ' ';
-		echo elgg_view("input/members_select", array('name' => "projectmanager", 'scope' => 'all', 'value' => $projectmanager)) . $user_icon;
+		echo elgg_view("input/project_manager/members_select", array('name' => "projectmanager", 'scope' => 'all', 'value' => $projectmanager)) . $user_icon;
 		echo '<br />' . elgg_view('output/members_list', array('value' => $projectmanager)) . '</label>';
 		// Equipe salariée ITEMS
 		echo '<strong>' . elgg_echo('project_manager:team') . '&nbsp;:</strong> ';
@@ -237,7 +237,7 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 		
 		// Container : owner or group
 		echo '<br /><h3>Intégration avec les outils collaboratifs</h3>';
-		echo '<br /><p><label>' . elgg_echo('project_manager:projectgroup') . ' ' . elgg_view('input/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'empty_value' => true, 'js' => 'style="max-width:30ex;"')) . '</label>';
+		echo '<br /><p><label>' . elgg_echo('project_manager:projectgroup') . ' ' . elgg_view('input/project_manager/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'empty_value' => true, 'js' => 'style="max-width:30ex;"')) . '</label>';
 		echo '<br /><em>' . elgg_echo('project_manager:projectgroup:details') . '</em>';
 		echo '</p>';
 		//echo "<input type=\"hidden\" name=\"container_guid\" value=\"{$container_guid}\" />";

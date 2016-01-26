@@ -5,6 +5,8 @@ $scope = $vars["scope"]; // default = all, internal, external, friends, groupmem
 //if (!($vars["entity"] instanceof ElggGroup)) { $scope = 'all'; }
 if (empty($scope)) { $scope = 'all'; }
 
+$pm_meta = project_manager_get_user_metadata();
+
 // Selon qui a modifié les statuts items, la metadata peut ne pas être accessible..
 $ia = elgg_set_ignore_access(true);
 
@@ -30,7 +32,7 @@ switch($scope) {
     $members_count = elgg_get_entities(array('types' => 'user', 'limit' => 10, 'count' => true));
     $members = elgg_get_entities(array('types' => 'user', 'limit' => $members_count));
     foreach ($members as $ent) {
-      if (!empty($ent->items_status)) $int_members[] = $ent;
+      if (!empty($ent->{$pm_meta})) $int_members[] = $ent;
       else $ext_members[] = $ent;
     }
 }

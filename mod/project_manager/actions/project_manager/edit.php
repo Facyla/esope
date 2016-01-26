@@ -8,10 +8,13 @@
  * @link http://items.fr/
  */
 
-global $CONFIG;
+
 gatekeeper();
 project_manager_gatekeeper();
 // Note : voir aussi protection de l'édition, ssi et une fois le projet connu
+
+// @TODO : add sticky form
+
 
 $project_guid = get_input("project_manager_guid");
 if (!$project_guid) { $action = "create"; }
@@ -146,7 +149,15 @@ if ($is_manager) {
 }
 
 
+// Forward to the proper page
+$forward = elgg_get_site_url() . 'project_manager';
 $container = get_entity($container_guid);
-if (elgg_instanceof($container, 'group')) forward($CONFIG->wwwroot . "project_manager/" . $container->username);
-else forward($CONFIG->wwwroot . "project_manager");
+if (elgg_instanceof($container, 'group')) {
+	$forward .= '/group/' . $container->gruid;
+} else if (elgg_instanceof($container, 'user')) {
+	$forward .= '/owner/' . $container->username;
+}
+
+forward($forward);
+
 

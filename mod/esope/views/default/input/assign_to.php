@@ -50,8 +50,10 @@ if(!empty($friends)){
 if($vars["entity"] instanceof ElggGroup){
 
 	$member_options = array(
-		"type" => "user", "relationship" => "member",
-		"relationship_guid" => $group->getGUID(), "inverse_relationship" => true,
+		"type" => "user",
+		"relationship" => "member",
+		"relationship_guid" => $group->getGUID(),
+		"inverse_relationship" => true,
 		"limit" => false,
 	);
 	$members = elgg_get_entities_from_relationship($member_options);
