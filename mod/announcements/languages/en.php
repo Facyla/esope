@@ -7,9 +7,9 @@
  * @author Evan Winslow
  */
 
-global $CONFIG;
+$url = elgg_get_site_url();
 
-$english = array(
+return array(
 	/**
 	 * New object subtype: announcement
 	 */
@@ -29,7 +29,7 @@ $english = array(
 	'announcements:add' => 'Add an announcement',
 	'announcements:date' => 'Published %s by %s.',
 	'announcements:error' => 'Error posting announcement.',
-	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'profile/%s">Profile</a>)',
+	'announcements:message' => '%s<br /><br />%s (<a href="' . $url . 'profile/%s">Profile</a>)',
 	'announcements:none' => "There is currently no announcement.",
 	'announcements:post' => 'Publish Announcement', 
 	'announcements:subject' => '%s Announcement: %s',
@@ -47,10 +47,25 @@ $english = array(
 
 	'river:object:announcement:create' => 'posted an announcement',
 	'river:commented:object:announcement' => 'an announcement',
+	
 	/**
 	 * API
 	 */
 	'announcements.get' => 'Retrieve announcements from the system based on several parameters',
+	
+	
+	// Notifications
+	'announcements:notify:subject' => "[%2\$s] %1\$s",
+	'announcements:notify:body' => "%s has made an announcement in group %s:
+	
+	<h3>%s</h3>
+	
+	%s
+	
+	
+	See online: %s
+	",
+	'announcements:notify:summary' => "New announcement: %s",
+	
 );
 
-add_translation("en", $english);
