@@ -69,6 +69,7 @@ function project_manager_init() {
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'project_manager_set_url');
 	// @TODO : replace annotation url handler by new method
 	elgg_register_annotation_url_handler('task', 'tasks_revision_url');
+	// @TODO : see extender:url,annotation	500	_elgg_set_comment_url 			pages_set_revision_url
 	
 	// PAGE HANDLERS
 	elgg_register_page_handler('project_manager','project_manager_page_handler'); // Register a page handler, so we can have nice URLs
