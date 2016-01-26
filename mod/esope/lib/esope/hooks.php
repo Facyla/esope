@@ -517,11 +517,10 @@ function esope_register_user_hook($hook, $type, $return, $params) {
 // Redirection après login
 function esope_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
 	if (!elgg_is_logged_in()) {
-		global $CONFIG;
 		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 		// Si jamais la valeur de retour n'est pas définie, on le fait
 		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-		return $CONFIG->url . 'login';
+		return elgg_get_site_url() . 'login';
 	}
 	return null;
 }

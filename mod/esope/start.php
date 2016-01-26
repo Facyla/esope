@@ -462,6 +462,7 @@ function esope_pagesetup(){
 	 */
 	if (elgg_get_viewtype() == 'default') {
 		global $CONFIG;
+		$url = elgg_get_site_url();
 		$context = elgg_get_context();
 		if (isset($CONFIG->breadcrumbs) && is_array($CONFIG->breadcrumbs)) {
 			
@@ -492,36 +493,36 @@ function esope_pagesetup(){
 				}
 			
 				if (!elgg_in_context('groups')) {
-					$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
+					$group_url = $url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
 					array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
 			} else if ($page_owner instanceof ElggUser) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
-				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
-				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $CONFIG->url . 'members') );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $url . 'profile/' . $page_owner->username) );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members') );
 			}
 			
 			// Insert home link in all cases
-			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:homepage'), 'link' => $CONFIG->url));
+			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:homepage'), 'link' => $url));
 			
 		} else {
-			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $CONFIG->url);
-			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:homepage'), 'link' => $CONFIG->url);
+			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $url);
+			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:homepage'), 'link' => $url);
 			
 			// Corrections selon le contexte
 			if (elgg_in_context('profile')) {
 				// Annuaire => Nom du membre
 				$page_owner = elgg_get_page_owner_entity();
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'), 'link' => $CONFIG->url . 'members');
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members');
 				$CONFIG->breadcrumbs[] = array('title' => $page_owner->name);
 			} else if (elgg_in_context('members')) {
 				// Membres => Annuaire
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'));
 			} else {
 				// Par défaut : contexte
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $CONFIG->url . $context);
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $url . $context);
 			}
 		}
 	}
@@ -542,40 +543,6 @@ function esope_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 		}
 }
 */
-
-
-/*
- * Forwards to internal referrer, if set
- * Otherwise redirects to home after login
-*/
-function esope_login_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Si on vient d'une page particulière, retour à cette page
-	$back_to_last = $_SESSION['last_forward_from'];
-	if(!empty($back_to_last)) {
-		//register_error("Redirection vers $back_to_last");
-		forward($back_to_last);
-	}
-	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
-	$loginredirect = elgg_get_plugin_setting('redirect', 'esope');
-	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
-	forward();
-}
-
-
-/* Performs some actions after registration */
-function esope_register_handler($event, $object_type, $object) {
-	// Groupe principal (à partir du GUID de ce groupe)
-	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'esope');
-	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'esope');
-	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
-		$user = elgg_get_logged_in_user_entity();
-		// Si pas déjà fait, on l'inscrit
-		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
-	}
-}
-
 
 
 // Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
