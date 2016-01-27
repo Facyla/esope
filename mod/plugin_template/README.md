@@ -1,17 +1,23 @@
-# Plugin template
+# plugin_template
 
-This plugin provides a basic template to start setting up a plugin
+This plugin provides a basic template to start developping a new plugin
 
-To get started, replace all "plugin_template" occurrences with your plugin name. You should do this both in file structure, and inside the theme plugin files content (so choose carefully, and avoid using the same name as another plugin).
+To get started :
+1. Copy this plugin.
+2. Choose carefully your plugin name (avoid using the same name as an existing plugin) and rename it
+3. Search and replace all "plugin_template" occurrences in folders with your plugin name
+4. Search and replace all "plugin_template" occurrences in script files content with your plugin name
+5. Customise the manifest.xml file
 
-Then customize the manifest file.
 
 Now you're done and can tweak your plugin !
 
 To do so, edit the main files :
+- start.php
 - views/default/theme_template/css.php for plugin CSS styles
+- pages/plugin_template/index.php for a displayed page
 
-- pages/plugin_template/example_page.php to set up a custom plugin homepage
+When possible, take a nice screenshot and copy it to graphics/screenshot.png
 
 
 
