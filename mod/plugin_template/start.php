@@ -87,7 +87,7 @@ function plugin_template_page_handler($page) {
 
 
 /* Other functions
- * always se plugin prefix : plugin_template_
+ * always use plugin prefix : plugin_template_
  * if many, put functions in lib/plugin_template/functions.php
 function plugin_template_function() {
 	
