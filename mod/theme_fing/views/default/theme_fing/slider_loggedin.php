@@ -39,7 +39,7 @@ if ($articles) foreach ($articles as $ent) {
 	// Excerpt
 	$text = $ent->excerpt;
 	if (empty($text)) $text = $ent->briefdescription;
-	$text .= $ent->description;
+	if (empty($text)) $text = elgg_get_excerpt($ent->description, 300);
 	$text =  htmlspecialchars(html_entity_decode(strip_tags($text)));
 	$excerpt = elgg_get_excerpt($text, 300);
 	// Compose slider element
