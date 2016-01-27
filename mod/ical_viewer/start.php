@@ -14,7 +14,7 @@ function ical_viewer_init() {
 	
 	elgg_register_page_handler('ical_viewer','ical_viewer_page_handler');
 	
-	elgg_register_widget_type('ical_viewer', elgg_echo('ical_viewer:widget:title'), elgg_echo('ical_viewer:widget:description'), 'all', true);
+	elgg_register_widget_type('ical_viewer', elgg_echo('ical_viewer:widget:title'), elgg_echo('ical_viewer:widget:description'), array('all'), true);
 	
 }
 
@@ -23,16 +23,16 @@ function ical_viewer_init() {
 function ical_viewer_page_handler($page) {
 	$root = elgg_get_plugins_path() . 'ical_viewer/pages/ical_viewer/';
 	
-	if (!isset($page[0])) { $page[0] = 'world'; }
+	if (!isset($page[0])) { $page[0] = 'index'; }
 	switch($page[0]) {
-		case 'view':
 		case 'read':
-			include($root . "ical_viewer.php");
+		case 'view':
+			include($root . "view.php");
 			break;
 		
-		case 'world':
+		case 'index':
 		default:
-			include($root . "world.php");
+			include($root . "index.php");
 	}
 	return true;
 }

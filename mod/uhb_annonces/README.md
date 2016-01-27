@@ -57,7 +57,7 @@ B - filtres en cascade : 3.3526
 C - filtres successifs : 0.1851
 
 
-### Recherche complexe (14 critère) mais ne produisant aucun résultat :
+### Recherche complexe (14 critères) mais ne produisant aucun résultat :
 A - filtres multiples : 0.8508
 B - filtres en cascade : 1.1996
 C - filtres successifs : 0.0084

@@ -12,7 +12,6 @@ elgg_register_event_handler('init', 'system', 'uhb_annonces_init');
  * Init uhb_annonces plugin.
  */
 function uhb_annonces_init() {
-	global $CONFIG; // All site useful vars
 	
 	elgg_extend_view('css', 'uhb_annonces/css');
 	elgg_extend_view('css/admin', 'uhb_annonces/css');
@@ -24,8 +23,9 @@ function uhb_annonces_init() {
 	// Register a page handler on "uhb_annonces/"
 	elgg_register_page_handler('annonces', 'uhb_annonces_page_handler');
 	
-	// Register a URL handler for bookmarks
-	elgg_register_entity_url_handler('object', 'uhb_offer', 'uhb_offer_url');
+	// Register a URL handler for uhb_offer
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'uhb_offer_set_url');
+	
 	
 	// Register entity type for search
 	elgg_register_entity_type('object', 'uhb_offer');
@@ -150,12 +150,14 @@ function uhb_annonces_page_handler($page) {
 	return true;
 }
 
+
 // The offer view URL
-function uhb_offer_url($entity) {
-	global $CONFIG;
-	$title = $entity->offerposition;
-	$title = elgg_get_friendly_title($title);
-	return $CONFIG->url . "annonces/view/" . $entity->guid . "/" . $title;
+function uhb_offer_set_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'uhb_offer')) {
+		$title = elgg_get_friendly_title($entity->offerposition);
+		return elgg_get_site_url() . 'annonces/view/'. $entity->getGUID() . "/" . $title;
+	}
 }
 
 
@@ -164,7 +166,7 @@ function uhb_offer_url($entity) {
  * Archive passed out offers
  */
 function uhb_annonces_cron($hook, $entity_type, $returnvalue, $params) {
-	global $CONFIG;
+	$site = elgg_get_site_entity();
 	
 	elgg_set_context('cron');
 	
@@ -174,8 +176,8 @@ function uhb_annonces_cron($hook, $entity_type, $returnvalue, $params) {
 	elgg_set_ignore_access(true);
 	
 	// Encode the name. If may content nos ASCII chars.
-	$from_name = "=?UTF-8?B?" . base64_encode($CONFIG->site->name) . "?=";
-	$from = $from_name . ' <' . $CONFIG->site->email . '>';
+	$from_name = "=?UTF-8?B?" . base64_encode($site->name) . "?=";
+	$from = $from_name . ' <' . $site->email . '>';
 	define('UHB_ANNONCES_EMAIL_FROM', $from);
 	
 	// Archive offers if followend < time()
@@ -222,9 +224,9 @@ function uhb_annonces_cron($hook, $entity_type, $returnvalue, $params) {
 			if (is_numeric($followvalidation)) { $followvalidation = date('d/m/Y', $followvalidation); }
 		} else { $followvalidation = elgg_echo('uhb_annonces:view:followvalidation:no'); }
 		$add_editkey = '?guid=' . $offer->guid . '&editkey=' . $offer->editkey;
-		$confirmurl = $CONFIG->url . 'annonces/action/confirm' . $add_editkey;
-		$reactivateurl = $CONFIG->url . 'annonces/action/reactivate' . $add_editkey;
-		$archiveurl = $CONFIG->url . 'annonces/action/archive' . $add_editkey;
+		$confirmurl = elgg_get_site_url() . 'annonces/action/confirm' . $add_editkey;
+		$reactivateurl = elgg_get_site_url() . 'annonces/action/reactivate' . $add_editkey;
+		$archiveurl = elgg_get_site_url() . 'annonces/action/archive' . $add_editkey;
 		
 		// Send end of publication email to manageremail
 		$subject = elgg_echo('uhb_annonces:notification:endofpublication:subject');
@@ -240,10 +242,11 @@ function uhb_annonces_cron($hook, $entity_type, $returnvalue, $params) {
 
 // CRON : Send reminder email for obsoletes offers
 function uhb_annonces_cron_reminder($offer, $getter, $options) {
-	global $CONFIG;
+	$site = elgg_get_site_entity();
+	
 	// Encode the name. If may content nos ASCII chars.
-	$from_name = "=?UTF-8?B?" . base64_encode($CONFIG->site->name) . "?=";
-	$from = $from_name . ' <' . $CONFIG->site->email . '>';
+	$from_name = "=?UTF-8?B?" . base64_encode($site->name) . "?=";
+	$from = $from_name . ' <' . $site->email . '>';
 	
 	// Encode the name. If may content nos ASCII chars.
 	$to_name = "=?UTF-8?B?" . base64_encode($offer->managername) . "?=";
@@ -257,9 +260,9 @@ function uhb_annonces_cron_reminder($offer, $getter, $options) {
 		if (is_numeric($followvalidation)) { $followvalidation = date('d/m/Y', $followvalidation); }
 	} else { $followvalidation = elgg_echo('uhb_annonces:view:followvalidation:no'); }
 	$add_editkey = '?guid=' . $offer->guid . '&editkey=' . $offer->editkey;
-	$confirmurl = $CONFIG->url . 'annonces/action/confirm' . $add_editkey;
-	$reactivateurl = $CONFIG->url . 'annonces/action/reactivate' . $add_editkey;
-	$archiveurl = $CONFIG->url . 'annonces/action/archive' . $add_editkey;
+	$confirmurl = elgg_get_site_url() . 'annonces/action/confirm' . $add_editkey;
+	$reactivateurl = elgg_get_site_url() . 'annonces/action/reactivate' . $add_editkey;
+	$archiveurl = elgg_get_site_url() . 'annonces/action/archive' . $add_editkey;
 	
 	// Send end of publication email to manageremail
 	$subject = elgg_echo('uhb_annonces:notification:endofpublication:subject');
@@ -810,7 +813,7 @@ function uhb_annonces_build_options($name, $addempty = true, $search = false, $p
 // When calling this function, new state should have been already set !
 function uhb_annonces_state_change($offer = false, $from_state = '') {
 	if (!elgg_instanceof($offer, 'object', 'uhb_offer')) return false;
-	global $CONFIG;
+	$site = elgg_get_site_entity();
 	$cron = false;
 	if (elgg_in_context('cron')) { $cron = true; }
 	
@@ -824,16 +827,16 @@ function uhb_annonces_state_change($offer = false, $from_state = '') {
 		$followvalidation = elgg_echo('uhb_annonces:view:followvalidation', array($followvalidation));
 	} else { $followvalidation = elgg_echo('uhb_annonces:view:followvalidation:no'); }
 	$add_editkey = '?guid=' . $offer->guid . '&editkey=' . $offer->editkey;
-	$viewurl = $CONFIG->url . 'annonces/view/' . $offer->guid . $add_editkey;
-	$editurl = $CONFIG->url . 'annonces/edit/' . $offer->guid . $add_editkey;
+	$viewurl = elgg_get_site_url() . 'annonces/view/' . $offer->guid . $add_editkey;
+	$editurl = elgg_get_site_url() . 'annonces/edit/' . $offer->guid . $add_editkey;
 	$team_email = elgg_get_plugin_setting('contact_email', 'uhb_annonces');
-	$confirmurl = $CONFIG->url . 'annonces/action/confirm' . $add_editkey;
-	$reactivateurl = $CONFIG->url . 'annonces/action/reactivate' . $add_editkey;
-	$archiveurl = $CONFIG->url . 'annonces/action/archive' . $add_editkey;
+	$confirmurl = elgg_get_site_url() . 'annonces/action/confirm' . $add_editkey;
+	$reactivateurl = elgg_get_site_url() . 'annonces/action/reactivate' . $add_editkey;
+	$archiveurl = elgg_get_site_url() . 'annonces/action/archive' . $add_editkey;
 	
 	// Encode the name. If may content nos ASCII chars.
-	$from_name = "=?UTF-8?B?" . base64_encode($CONFIG->site->name) . "?=";
-	$from = $from_name . ' <' . $CONFIG->site->email . '>';
+	$from_name = "=?UTF-8?B?" . base64_encode($site->name) . "?=";
+	$from = $from_name . ' <' . $site->email . '>';
 	// Encode the name. If may content nos ASCII chars.
 	$to_name = "=?UTF-8?B?" . base64_encode($offer->managername) . "?=";
 	$to = $to_name . ' <' . $offer->manageremail . '>';

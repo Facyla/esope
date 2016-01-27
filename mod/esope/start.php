@@ -157,7 +157,8 @@ function esope_init() {
 		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
-		//if (isset($CONFIG->site) && ($CONFIG->site instanceof ElggSite) && $CONFIG->site->checkWalledGarden()) {
+		//$site = elgg_get_site_entity();
+		//if (elgg_instanceof($site, 'site') && $site->checkWalledGarden()) {
 		if (elgg_get_config('walled_garden')) {
 			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
 		} else {
@@ -399,14 +400,14 @@ function esope_pagesetup(){
 			
 			// Ajoute lien vers l'annuaire
 			elgg_register_menu_item("page", array(
-					'name' => 'members', 'href' => $CONFIG->url . 'members', 
+					'name' => 'members', 'href' => elgg_get_site_url() . 'members', 
 					'text' => elgg_echo('esope:directory'), 
 					"section" => "directory",
 				));
 			
 			// Ajoute lien vers les contacts
 			elgg_register_menu_item("page", array(
-					'name' => 'friends', 'href' => $CONFIG->url . 'friends/' . $own->username, 
+					'name' => 'friends', 'href' => elgg_get_site_url() . 'friends/' . $own->username, 
 					'text' => elgg_echo('friends'), 
 					'contexts' => array('members'), 
 				));
@@ -414,7 +415,7 @@ function esope_pagesetup(){
 			// Ajoute lien vers les invitations
 			if (elgg_is_active_plugin('invitefriends')) {
 				$params = array(
-					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => $CONFIG->url . 'invite',
+					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => elgg_get_site_url() . 'invite',
 					'contexts' => array('members'), // Uniquement members pour ne pas overrider le comportement normal
 				);
 				elgg_register_menu_item('page', $params);
@@ -445,6 +446,7 @@ function esope_pagesetup(){
 		
 	}
 	
+	// @TODO : better way to handle this ?
 	/* Rewrite breadcrumbs : use a more user-friendly logic
 	 * Structure du Fil : Accueil (site) > Container (group/user page owner) > Subtype > Content > action
 	 * Default structure : Tool > Tool for page owner > Content > Subcontent	=> Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
@@ -707,14 +709,14 @@ function esope_sort_groups_by_grouptype($groups) {
  		- iframe (use elgg headers), 
  		- inner (no header), 
  		- regular = elgg regular way
- * $headers = extend header (CSS, JS, META, etc.)
+ * $headers = extend header (CSS, JS, META, etc.) - ONLY in iframe mode !
  */
 function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'iframe', $headers) {
-	global $CONFIG;
-	$lang = $CONFIG->language;
+	$lang = get_language();
 
 	// Set default title
-	if (empty($title)) $title = $CONFIG->sitename . ' (';
+	//if (empty($title)) $title = elgg_get_site_entity()->name . ' (';
+	if (empty($title)) $title = elgg_get_site_entity()->name;
 	$vars['title'] = $title;
 	
 	switch ($embed_mode) {
@@ -1160,26 +1162,26 @@ function esope_vernam_crypt($text, $key){
 
 // Récupération des pages de plus haut niveau (d'un groupe ou user)
 function esope_get_top_pages($container) {
-	global $CONFIG;
-	$top_pages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$dbprefix = elgg_get_config('dbprefix');
+	$top_pages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	return $top_pages;
 }
 
 // Récupération des sous-pages directes d'une page
 function esope_get_subpages($parent) {
-	global $CONFIG;
-	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$dbprefix = elgg_get_config('dbprefix');
+	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
 	// Limit searched entities range with "guids" => $guids
 	$md_name = get_metastring_id('parent_guid');
 	$md_value = get_metastring_id($parent->guid);
 	// Can't be empty or we'll get a bad error
 	if (!empty($md_name) && !empty($md_value)) {
-		$guids_row = get_data("SELECT entity_guid FROM {$CONFIG->dbprefix}metadata where name_id = $md_name and value_id = $md_value");
+		$guids_row = get_data("SELECT entity_guid FROM {$dbprefix}metadata where name_id = $md_name and value_id = $md_value");
 		foreach ($guids_row as $row) { $guids[] = $row->entity_guid; }
 	}
 	if ($guids) {
-		$subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc', 'guids' => $guids));
+		$subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc', 'guids' => $guids));
 		return $subpages;
 	}
 }
@@ -1249,10 +1251,9 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 // Determines wether a given link is internal or external
 // Note : based on domain, won't work for subdir install
 function esope_is_external_link($url) {
-	global $CONFIG;
 	$elements = parse_url($url);
 	$base_elements = parse_url(elgg_get_site_url());
-	if ($elements['host'] != $base_elements['host']) return true;
+	if ($elements['host'] != $base_elements['host']) { return true; }
 	return false;
 }
 
@@ -1262,7 +1263,6 @@ if (elgg_is_active_plugin('file_tools')) {
 	// Recursive function that lists folders and their content
 	// bool $view_files : display folder files
 	function esope_view_folder_content($folder, $view_files = true) {
-		global $CONFIG;
 		$content = '';
 		$folder_content = '';
 		$folder_description = '';
@@ -1308,10 +1308,11 @@ if (elgg_is_active_plugin('file_tools')) {
 
 	// List files in a specific folder
 	function esope_view_folder_files($container_guid, $folder = false) {
+		$dbprefix = elgg_get_config('dbprefix');
 		$sort_by = elgg_get_plugin_setting("sort", "file_tools");
 		$direction = elgg_get_plugin_setting("sort_direction", "file_tools");
 		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $container_guid, 'limit' => false);
-		$options['joins'] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid");
+		$options['joins'] = array("JOIN " . $dbprefix . "objects_entity oe ON oe.guid = e.guid");
 		if($sort_by == "simpletype") {
 			$options["order_by_metadata"] = array("name" => "mimetype", "direction" => $direction);
 		} else {
@@ -1326,7 +1327,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		} else {
 			// Display only files in main folder
 			$options['wheres'] = "NOT EXISTS (
-				SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r 
+				SELECT 1 FROM " . $dbprefix . "entity_relationships r 
 				WHERE r.guid_two = e.guid AND r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
 			$files = elgg_get_entities($options);
 		}
@@ -1407,7 +1408,6 @@ function esope_human_filesize($filepath, $decimals = 2) {
  * $source : can be an URL to the HTML template file, or cmspage, or object GUID
  */
 function esope_tinymce_prepare_templates($templates, $type = 'url') {
-	global $CONFIG;
 	$templates = preg_replace('/\r\n|\n|\r/', '\n', $templates);
 	$templates = explode('\n', $templates);
 	$js_templates = '';
@@ -1420,14 +1420,14 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			$description = trim($template[2]);
 			switch($type) {
 				case 'cmspage':
-					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
+					$source = elgg_get_site_url() . 'p/' . $source . '?embed=true';
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
 						// @TODO : provide a REST URL access to an entity description (with access rights)
 						// Best we can get now would be exported JSON
 						// Export description only : export/default/1073/attr/description/
-						$source = $CONFIG->url . 'export/default/' . $source . '/attr/description/';
+						$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
 						if (empty($title)) $title = $ent->title;
 						else if (empty($description)) $description = $ent->title;
 					} else $source = false;

@@ -498,7 +498,7 @@ function tasks_page_handler($task) {
 }
 
 
-
+// Populate the ->getURL() for plugin objects
 function project_manager_set_url($hook, $type, $url, $params) {
 	$entity = $params['entity'];
 	if (elgg_instanceof($entity, 'object')) {
