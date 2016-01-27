@@ -29,7 +29,12 @@ $font4 = $css['font4'];
 $font5 = $css['font5'];
 $font6 = $css['font6'];
 ?>
-/* Thème ESOPE Fonts */
+
+/********************/
+/* ESOPE Typography */
+/********************/
+
+/* ESOPE Fonts */
 
 /* Use free, open fonts
  * Gill Sans => Puritan ou Lato (Book 400) ou Cabin
@@ -161,6 +166,7 @@ pre, code {
 
 	white-space: pre-wrap;
 	word-wrap: break-word; /* IE 5.5-7 */
+	word-break:break-all;
 	
 }
 
@@ -198,6 +204,23 @@ h3 { font-size: 1.3em; padding-bottom:4px; }
 h4 { font-size: 1.1em; padding-bottom:3px; }
 h5 { font-size: 1.0em; padding-bottom:2px; }
 h6 { font-size: 0.9em; padding-bottom:1px; }
+
+/* Sub and sup CSS style - from https://gist.github.com/unruthless/413930 */
+sub, sup {
+	/* Specified in % so that the sup/sup is the right size relative to the surrounding text */
+	font-size: 75%;
+	/* Zero out the line-height so that it doesn't interfere with the positioning that follows */
+	line-height: 0;
+	/* Where the magic happens: makes all browsers position the sup/sup properly, relative to the surrounding text */
+	position: relative;
+	/* Note that if you're using Eric Meyer's reset.css, this is already set and you can remove this rule */
+	vertical-align: baseline;
+}
+/* Move the superscripted text up */
+sup { top: -0.5em; }
+/* Move the subscripted text down, but only half as far down as the superscript moved up */
+sub { bottom: -0.25em; }
+
 
 .elgg-heading-site, 
 .elgg-heading-site:hover, 

@@ -16,19 +16,19 @@ elgg_register_event_handler("pagesetup", "system", "esope_pagesetup"); // Menu
  * Init ESOPE plugin.
  */
 function esope_init() {
-	// CSS
+	// Base theme CSS
 	elgg_extend_view('css/elgg', 'esope/css_common');
 	elgg_extend_view('css/admin', 'esope/css_common');
+	elgg_extend_view('css/elgg/wysiwyg', 'esope/css_common');
 	elgg_extend_view('css/elgg', 'esope/css');
 	elgg_extend_view('css/admin', 'esope/css_admin');
-	// Nouveau thème : 
-	elgg_extend_view('css/elgg', 'esope/css/style');
+	// Other CSS additions
 	elgg_extend_view('css/ie', 'esope/css/ie');
 	elgg_extend_view('css/ie6', 'esope/css/ie6');
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome - moved to external dependancy
+	// Font Awesome - moved to external dependency
 	if (!elgg_is_active_plugin('fontawesome')) {
 		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
 		elgg_load_css('fontawesome');

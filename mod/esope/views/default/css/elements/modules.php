@@ -27,7 +27,7 @@ $font6 = $css['font6'];
 /* <style> /**/
 
 /* ***************************************
-	Modules
+	ESOPE Modules
 *************************************** */
 .elgg-module {
 	overflow: hidden;

@@ -30,7 +30,7 @@ $font6 = $css['font6'];
 /* <style> /**/
 
 /* ***************************************
-	PAGINATION
+	ESOPE PAGINATION
 *************************************** */
 .elgg-pagination {
 	margin: 10px 0;

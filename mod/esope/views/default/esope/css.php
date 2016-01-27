@@ -89,6 +89,10 @@ $font5 = elgg_get_plugin_setting('font5', 'esope');
 $font6 = elgg_get_plugin_setting('font6', 'esope');
 ?>
 
+/* ***************************************
+ * ESOPE MAIN CSS
+ ************************************** */
+
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 
@@ -96,7 +100,6 @@ $font6 = elgg_get_plugin_setting('font6', 'esope');
 html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
 
 /* h2 { color: #333; } */
-pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
 .elgg-river-comments-tab { color:#cd9928; }
 .elgg-input-rawtext { width:99%; }
