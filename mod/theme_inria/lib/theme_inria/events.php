@@ -167,6 +167,18 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		$external_profiletype_guid = esope_get_profiletype_guid('external');
 		
 		// MAJ du type de compte et de profil
+		// @TODO : use create_metadata to ensure profile type is readable by anyone
+		/* See http://reference.elgg.org/1.8/engine_2lib_2metadata_8php.html#ad896cf3bd1e5347f5ced1876e8311af2
+		create_metadata 	(
+		  	$entity_guid,
+		  	$name,
+		  	$value,
+		  	$value_type = '',
+		  	$owner_guid = 0,
+		  	$access_id = ACCESS_PRIVATE,
+		  	$allow_multiple = false 
+			)
+		*/
 		if ($is_inria) {
 			if ($user->membertype != 'inria') { $user->membertype = 'inria'; }
 			if ($profiletype_guid != $inria_profiletype_guid) { $user->custom_profile_type = $inria_profiletype_guid; }
