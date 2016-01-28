@@ -827,11 +827,13 @@ if (elgg_is_active_plugin('profile_manager')) {
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profile_type = false;
 		// Type de profil
+		$ia = elgg_get_ignore_access();
 		if ($profile_type_guid = $user->custom_profile_type) {
 			if (($type = get_entity($profile_type_guid)) && ($type instanceof ProfileManagerCustomProfileType)) {
 				$profile_type = strtolower($type->metadata_name);
 			}
 		}
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
