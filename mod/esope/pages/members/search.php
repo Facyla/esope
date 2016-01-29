@@ -1,10 +1,8 @@
 <?php
 /**
- * Members index
+ * Members search
  *
  */
-
-global $CONFIG;
 
 $hide_directory = elgg_get_plugin_setting('hide_directory', 'esope');
 if ($hide_directory == 'yes') gatekeeper();

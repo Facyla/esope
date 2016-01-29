@@ -4,8 +4,8 @@
 	<id>plugins_settings</id>
 	<author>Florian DANIEL aka Facyla</author>
 	<version>0.1</version>
-	<blurb>Save aand restore plugin settings</blurb>
-	<description>You can use this plugin to save and restore plugin settings</description>
+	<blurb>Save and restore plugin settings</blurb>
+	<description>Use this plugin to save and restore plugin settings, e.g. for transfering settings or restoring a saved configuration set</description>
 	<website>http://facyla.fr/</website>
 	<copyright>Florian DANIEL aka Facyla 2016</copyright>
 	<license>GNU Public License version 2</license>
@@ -19,7 +19,7 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.12</version>
+		<version>1.9</version>
 	</requires>
 	
 	<!--

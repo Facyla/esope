@@ -7,11 +7,16 @@ It can also be used as a mean to save a working set of settings, especially for 
 
 
 ROADMAP :
-	Export : Save active / inactive / all plugins settings
-	Export : Select plugins individually
-	Export : Select specific settings individually
-	Import : Select plugins individually
-	Import : Select specific settings individually
+	Settings :
+		Export : Save active / inactive / all plugins settings
+		Export : Select plugins individually
+		Export : Select specific settings individually
+		Import : Select plugins individually
+		Import : Select specific settings individually
+	Plugins :
+		Export : plugins list
+		Import : enable / disable plugins based on import list
+	
 
 
 

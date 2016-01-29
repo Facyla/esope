@@ -110,8 +110,8 @@ if ($mode == 'import') {
 				} else {
 						$content .= elgg_echo('plugins_settings:import:canimport');
 					// Process real import
-					if ($confirm = 'yes') {
-						//$plugin->setSetting($name, $value);
+					if ($confirm == 'yes') {
+						$plugin->setSetting($name, $value);
 						$content .= ' <strong style="color:red;">' . elgg_echo('plugins_settings:import:success') . '</strong>';
 					}
 				}

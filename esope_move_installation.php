@@ -64,11 +64,11 @@ if ($example) {
 	$old_www = 'http://localhost/public/esope_1.11';
 	$new_www = 'http://localhost/public/esope_1.12';
 	// Server paths (with trailing slash)
-	$old_path = '/var/www/esope_1.11/';
-	$new_path = '/var/www/esope_1.12/';
+	$old_path = '/var/www/esope_1.11/www/';
+	$new_path = '/var/www/esope_1.12/www/';
 	// Server data paths (with trailing slash)
-	$old_datapath = '/var/www/esope_1.11-data/';
-	$new_datapath = '/var/www/esope_1.12-data/';
+	$old_datapath = '/var/www/esope_1.11/data/';
+	$new_datapath = '/var/www/esope_1.12/data/';
 }
 
 
@@ -85,8 +85,8 @@ if (include_once(dirname(__FILE__) . '/engine/settings.php')) {
 
 	if (empty($old_path)) { $old_path = dirname(__FILE__); }
 	if (empty($new_path)) { $new_path = dirname(__FILE__); }
-	if (empty($old_datapath)) { $old_datapath = dirname(__FILE__) . '-data'; }
-	if (empty($new_datapath)) { $new_datapath = dirname(__FILE__) . '-data'; }
+	if (empty($old_datapath)) { $old_datapath = dirname(dirname(__FILE__)) . '/data'; }
+	if (empty($new_datapath)) { $new_datapath = dirname(dirname(__FILE__)) . '/data'; }
 
 	if (empty($prefix)) { $prefix = $CONFIG->dbprefix; }
 }

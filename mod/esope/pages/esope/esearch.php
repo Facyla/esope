@@ -3,7 +3,6 @@
  * Page de recherche ESOPE
  *
  */
-global $CONFIG;
 
 $title = elgg_echo('esope:search:title');
 $content = '';
@@ -11,11 +10,12 @@ $content = '';
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('search'));
 
+
 // Prepare JS script for forms
 $ts = time();
 $token = generate_action_token($ts);
 $action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
-$action_base = $CONFIG->url . 'action/esope/';
+$action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = $action_base . 'esearch' . $action_token;
 
 $content .= '<script>
@@ -89,6 +89,14 @@ $search_form = '<form id="esope-search-form" method="post" action="' . $search_a
 $content .= $search_form;
 $content .= elgg_view('graphics/ajax_loader', array('id' => "esope-search-ajax-loader"));
 $content .= '<div id="esope-search-results"></div>';
+
+
+// If any parameters is passed, perform search on page load
+if (!empty($_GET)) {
+	$content .= '<script type="text/javascript">
+	esope_search();
+	</script>';
+}
 
 
 $body = elgg_view_layout('one_column', array(
