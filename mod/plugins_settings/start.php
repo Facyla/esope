@@ -56,9 +56,29 @@ function plugins_settings_init() {
 	
 	*/
 	
+	// Register a page handler on "plugins_settings/"
+	elgg_register_page_handler('plugins_settings', 'plugins_settings_page_handler');
+	
 	
 }
 
+
+// Page handler
+// Loads pages located in plugins_settings/pages/plugins_settings/
+function plugins_settings_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'plugins_settings/pages/plugins_settings';
+	switch ($page[0]) {
+		/*
+		case 'view':
+			set_input('guid', $page[1]);
+			include "$base/view.php";
+			break;
+		*/
+		default:
+			include "$base/index.php";
+	}
+	return true;
+}
 
 
 /* Other functions
