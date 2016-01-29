@@ -23,7 +23,7 @@ return array(
 	'plugins_settings:import:confirm:placeholder' => "Saisissez yes pour confirmer",
 	'plugins_settings:import:confirm:instructions' => "Ecrivez \"yes\" pour confirmer l'import. Laissez vide pour simuler l'import et vérifier les paramètres qui seront importés<br /><strong>ATTENTION : L'IMPORT DE PARAMÈTRES DES PLUGINS NE PEUT PAS ÊTRE ANNULÉ. Si vous n'êtes pas certain(e)de vouloir le faire, vous pouvez sauvegarder les paramètres actuels avant d'importer de nouveaux paramètres</strong>",
 	'plugins_settings:import:proceed' => "Importer les paramètres des plugins",
-	'plugins_settings:import:settingdetails' => "<strong>$name&nbsp;:</strong> <pre>$old</pre> deviendra <pre>$value</pre>",
+	'plugins_settings:import:settingdetails' => "<strong>%s&nbsp;:</strong> <pre>%s</pre> deviendra <pre>%s</pre>",
 	'plugins_settings:import:nochange' => " => pas de modfication",
 	'plugins_settings:import:canimport' => " => sera importé",
 	'plugins_settings:import:success' => "=> fait",

@@ -23,7 +23,7 @@ return array(
 	'plugins_settings:import:confirm:placeholder' => "Type yes to confirm",
 	'plugins_settings:import:confirm:instructions' => "Type \"yes\" to confirm. Leave empty to simulate import and check imported plugins settings values.<br /><strong>WARNING : IMPORT CANNOT BE UNDONE. If you are not sure, please export the current settings first</strong>",
 	'plugins_settings:import:proceed' => "Import plugins settings",
-	'plugins_settings:import:settingdetails' => "<strong>$name&nbsp;:</strong> <pre>$old</pre> will become <pre>$value</pre>",
+	'plugins_settings:import:settingdetails' => "<strong>%s&nbsp;:</strong> <pre>%s</pre> will become <pre>%s</pre>",
 	'plugins_settings:import:nochange' => " => no change",
 	'plugins_settings:import:canimport' => " => will be imported",
 	'plugins_settings:import:success' => "=> done",
