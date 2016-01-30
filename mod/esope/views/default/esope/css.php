@@ -543,6 +543,8 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-item-members {}
 
 
+/* Profile */
+.profile.elgg-col-2of3 { float:left; }
 .profile-content-menu a { border-radius: 0; }
 /* Menus différenciés : navigation secondaire */
 .elgg-menu-page .elgg-menu-item-groups-all a,
