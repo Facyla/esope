@@ -544,7 +544,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 
 
 /* Profile */
-.profile.elgg-col-2of3 { float:left; }
+.profile.elgg-col-2of3 { float:left; margin-bottom: 2ex; }
 .profile-content-menu a { border-radius: 0; }
 /* Menus différenciés : navigation secondaire */
 .elgg-menu-page .elgg-menu-item-groups-all a,
