@@ -68,7 +68,7 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	
 	// Filter : if filter(s) set, filter only corresponding feedbacks
 	if (
-		(!$status_filter || ($status_filter != 'total') && ($ent->status == $status_filter))) 
+		(!$status_filter || ($status_filter != 'total') && ($ent->status == $status_filter)) 
 		&& (!$about_filter || ($ent->about == $about_filter) || (($about_filter == 'other') && (empty($ent->about) || in_array($ent->about, $undefined_values)))) 
 		&& (!$mood_filter || ($ent->mood == $mood_filter)) 
 		) {
