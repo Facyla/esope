@@ -46,11 +46,11 @@ $other = 0;
 // Filters and params
 $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
-$status_filter = get_input('status', 'total'); // Status filter
+$status_filter = get_input('status', ''); // Status filter
 $about_filter = get_input('about', false); // About/type filter
 $mood_filter = get_input('mood', false); // Mood filter
 if (!in_array($status_filter, $status_values) && !empty($about_filter)) { $status_filter = 'open'; }
-
+if ($status_filter == 'total') { $status_filter = ''; }
 
 if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	// TOOL : Uncomment to update 1.6 version to 1.8 version metadata - use once if needed, then comment again
