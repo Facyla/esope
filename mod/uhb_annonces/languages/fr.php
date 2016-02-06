@@ -1,7 +1,8 @@
 <?php
 
-$fr = array(
+return array(
 	'uhb_annonces' => "Emploi et Stage",
+	'item:object:uhb_offer' => "Offres d'Emploi et de Stage",
 	'uhb_annonces:home' => "Accueil",
 	'uhb_annonces:title' => "Offres de stage et d'emploi",
 	'uhb_annonces:admin:title' => "Administration des offres",
@@ -633,9 +634,6 @@ Vous retrouverez un lien vers les annonces pour lesquelles vous avez souhaité p
 Nous vous souhaitons la réussite dans vos projets,
 
 L'équipe RESONANCES",
-
-
+	
 );
-
-add_translation("fr", $fr);
 

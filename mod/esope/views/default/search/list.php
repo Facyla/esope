@@ -31,8 +31,9 @@ $query = http_build_query(
 		'offset' => $vars['params']['offset'],
 		'search_type' => $vars['params']['search_type'],
 		'container_guid' => $vars['params']['container_guid'],
-	//@todo include vars for sorting, order, and friend-only.
+		//@todo include vars for sorting, order, and friend-only.
 		'owner_guid' => $vars['params']['owner_guid'],
+		'friends' => $vars['params']['friends'],
 	)
 );
 

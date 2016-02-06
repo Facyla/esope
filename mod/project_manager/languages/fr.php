@@ -8,7 +8,8 @@
 return array(
 	'project_manager' => "Gestion de projet",
 	'project_manager:time_tracker' => "Rapports d'Activités",
-	'item:object:project_manager' => "Projet",
+	'item:object:project_manager' => "Projets",
+	'item:object:time_tracker' => "Feuilles de temps",
 	
 	'members:none' => "<em>(aucun membre sélectionné)</em>",
 	'river:comment:object' => "%s a commenté %s %s %s",
@@ -415,7 +416,7 @@ return array(
 	'tasks:navigation' => "Navigation",
 	'tasks:via' => "via les tâches",
 	'item:object:task_top' => 'Phases',
-	'item:object:task' => 'tasks',
+	'item:object:task' => 'Tâches',
 	'tasks:nogroup' => "Ce groupe n'a aucune tâche pour le moment",
 	'tasks:more' => 'Plus de tâches',
 	'tasks:none' => 'Aucune tâche créée pour le moment',

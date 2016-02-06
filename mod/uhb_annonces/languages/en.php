@@ -2,8 +2,9 @@
 // @TODO : translate into English if you wish to use it for real !
 // Note : you may want to use translation tools on dev server to facilitate translation
 
-$en = array(
+return array(
 	'uhb_annonces' => "Emploi et Stage",
+	'item:object:uhb_offer' => "Offres d'Emploi et de Stage",
 	'uhb_annonces:home' => "Accueil",
 	'uhb_annonces:title' => "Offres de stage et d'emploi",
 	'uhb_annonces:admin:title' => "Administration des offres",
@@ -608,8 +609,5 @@ Nous vous souhaitons la réussite dans vos projets,
 
 L'équipe RESONANCES",
 	
-	
 );
-
-add_translation("en", $en);
 
