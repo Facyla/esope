@@ -99,10 +99,11 @@ return array(
 	
 	// Feedback status
 	'feedback:status' => "Feedbacks status",
+	'feedback:status:open' => "Open",
+	'feedback:status:closed' => "Closed",
+	'feedback:status:total' => "",
 	'feedback:list:status:open' => "Open",
-	'feedback:status:open' => "Open feedbacks",
 	'feedback:list:status:closed' => "Closed",
-	'feedback:status:closed' => "Closed feedbacks",
 	'feedback:closeconfirm' => "A closed feedback is considered as solved, confirm closing feedback ?",
 	'feedback:close:success' => "Feedback marked as closed.",
 	'feedback:close:error' => "Unable to close this feedback",

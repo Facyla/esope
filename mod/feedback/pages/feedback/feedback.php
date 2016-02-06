@@ -30,7 +30,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 $feedbacks = array();
 $status_values = array('open', 'closed', 'total');
 foreach ($status_values as $status) { $$status = 0; }
-$all_feedbacks = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
+$all_feedbacks = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => 0));
 //$all_feedbacks = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
 //$total = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
 $total = count($all_feedbacks);
@@ -68,7 +68,7 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 	
 	// Filter : if filter(s) set, filter only corresponding feedbacks
 	if (
-		(!$status_filter || ($ent->status == $status_filter)) 
+		(!$status_filter || ($status_filter != 'total') && ($ent->status == $status_filter))) 
 		&& (!$about_filter || ($ent->about == $about_filter) || (($about_filter == 'other') && (empty($ent->about) || in_array($ent->about, $undefined_values)))) 
 		&& (!$mood_filter || ($ent->mood == $mood_filter)) 
 		) {
@@ -91,7 +91,7 @@ $sidebar = elgg_view('feedback/sidebar');
 
 // Titre de la page
 $title = '<i class="fa fa-bullhorn"></i> ' . elgg_echo('feedback:admin:title');
-if (!empty($status_filter)) {
+if (!empty($status_filter) && ($status_filter != 'total')) {
 	$title .= ' ' . strtolower(elgg_echo('feedback:status:'.$status_filter));
 }
 if (!empty($about_filter)) {
