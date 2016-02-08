@@ -1177,19 +1177,21 @@ function cmspages_remove_featured_image(CMSPage $cmspage, $input_name = 'feature
 
 // Avoid dependencies
 if (!elgg_is_active_plugin('esope')) {
-	function esope_get_input_array($input = false) {
-		if ($input) {
-			// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-			$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
-			$input = explode("\n", $input);
-			// Suppression des espaces
-			$input = array_map('trim', $input);
-			// Suppression des doublons
-			$input = array_unique($input);
-			// Supression valeurs vides
-			$input = array_filter($input);
+	if (!function_exists('esope_get_input_array')) {
+		function esope_get_input_array($input = false) {
+			if ($input) {
+				// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
+				$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+				$input = explode("\n", $input);
+				// Suppression des espaces
+				$input = array_map('trim', $input);
+				// Suppression des doublons
+				$input = array_unique($input);
+				// Supression valeurs vides
+				$input = array_filter($input);
+			}
+			return $input;
 		}
-		return $input;
 	}
 }
 

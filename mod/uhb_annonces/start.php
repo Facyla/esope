@@ -1067,19 +1067,21 @@ if (!elgg_is_active_plugin('esope') && !elgg_is_active_plugin('adf_public_platfo
 	 * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
 	 * Return : Tableau filtré, ou false
 	 */
-	function esope_get_input_array($input = false) {
-		if ($input) {
-			// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-			$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
-			$input = explode("\n", $input);
-			// Suppression des espaces
-			$input = array_map('trim', $input);
-			// Suppression des doublons
-			$input = array_unique($input);
-			// Supression valeurs vides
-			$input = array_filter($input);
+	if (!function_exists('esope_get_input_array')) {
+		function esope_get_input_array($input = false) {
+			if ($input) {
+				// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
+				$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+				$input = explode("\n", $input);
+				// Suppression des espaces
+				$input = array_map('trim', $input);
+				// Suppression des doublons
+				$input = array_unique($input);
+				// Supression valeurs vides
+				$input = array_filter($input);
+			}
+			return $input;
 		}
-		return $input;
 	}
 	
 	
