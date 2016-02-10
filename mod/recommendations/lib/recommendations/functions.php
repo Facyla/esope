@@ -85,6 +85,60 @@ function recommendations_get_users($user = false, $recommendations_limit = 30, $
 			}
 		}
 	}
+	
+	
+	// search by common interests
+	// Based on Ura Soul SuggestedFriendsExtended plugin
+	if (!empty($user->interests)) {
+		if (is_array($user->interests)) {
+			$user_interests = $user->interests;
+		} else {
+			$user_interests = explode(" ", $user->interests);
+			array_walk($user_interests, 'trim_value');
+		}
+		
+		// retrieve all non users friends with non empty interests
+		$options = array(
+			'type' => 'user',
+			'limit' => $recommendations_limit,
+			'wheres' => array("u.banned = 'no'", "e.guid NOT IN ($in)"),
+			'joins' => "INNER JOIN {$dbprefix}users_entity u USING (guid)",
+			'metadata_name_value_pairs' => array(array('name' => 'interests','value' => '', 'operand' => '<>')),
+		);
+		$get_users_by_interests = elgg_get_entities_from_metadata($options);
+		
+		$user_interests = array_values($user_interests);
+		foreach ($user_interests as $ui) {
+			foreach ($get_users_by_interests as $f) {
+				if (is_array($f->interests)) {
+					$f_interests = $f->interests;
+				} else {
+					$f_interests = explode(" ", $f->interests);
+					array_walk($f_interests, 'trim_value');
+				}
+				
+				if (in_array($ui, $f_interests)) {
+					if (isset($people[$f->guid])) {
+						// if the current person is present in $people, increase the priority and attach the common friend entity
+						$people[$f->guid]['interests'][] = $ui;
+						++$people[$f->guid]['priority'];
+						$people[$f->guid]['interest'] .= $ui.', ';
+					} else {
+						$people[$f->guid] = array(
+							'entity' => $f,
+							'interests' => array($friend),
+							'interest' => $ui.', ',
+							'mutuals' => array(),
+							'groups' => array(),
+							'priority' => 0
+						);
+					}
+				}
+				
+			}
+		}
+	}
+	
 	unset($friends);
 
 	/* search by groups */

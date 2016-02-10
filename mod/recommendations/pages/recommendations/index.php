@@ -27,20 +27,23 @@ if (!$user) {
 }
 
 
-$recommendations = recommendations_get_users($user, 30, 20);
 
+// Recommended contacts
+$recommendations = recommendations_get_users($user, 30, 20);
 
 $content .= "<h3>Recommandations de contacts pour {$user->name}</h3>";
 if (count($recommendations > 0)) {
 	foreach ($recommendations as $person) {
 		$mutuals = count($person['mutuals']);
 		$shared_groups = count($person['groups']);
+		$shared_interest = $person['interest'];
 		//$icon = '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('large') . '" /></a>';
 		$info = '<p><strong>' . $person['entity']->name . '</strong>';
 		if ($mutuals > 0) $info = ' &nbsp; ' . $mutuals . ' contacts comuns';
 		if ($shared_groups > 0) $info .= ' &nbsp; ' . $shared_groups . ' groupes partagés';
+		if (!empty($shared_interest)) $info .= ' &nbsp; centres d\'intérêt communs&nbsp;: ' . $shared_interest;
 		$info .= '</p>';
-		$content .= elgg_view_listing(elgg_view('profile/icon', array('entity' => $person['entity'], 'size' => 'small')), $info);
+		$content .= elgg_view_image_block(elgg_view_entity_icon($person['entity'], 'small'), $info);
 	}
 } else {
 	$content .= '<p>' . "Pas de recommandation de contact pour le moment.</p><p>Commencez par rejoindre des groupes et entrer en contact avec quelques personnes pour avoir des recommandations personnalisées" . '</p>';
@@ -58,7 +61,6 @@ foreach($user_groups as $ent) {
 	$user_groups_guids[] = $ent->guid;
 }
 if (!empty($user_groups_guids)) $exclude_usergroups = "e.guid NOT IN (" . implode(',', $user_groups_guids) . ")";
-echo $user_groups_guids;
 
 // Featured groups
 $featured_groups = elgg_get_entities_from_metadata(array('type' => 'group', 'limit' => 0, 'metadata_name_value_pairs' => array('name' => 'featured_group', 'value' => 'yes'), 'wheres' => array($exclude_usergroups)));
@@ -75,19 +77,21 @@ $content .= "<h3>Recommandations de groupes pour {$user->name}</h3>";
 
 $content .= '<h3>Groupes en Une</h3>';
 foreach($featured_groups as $ent) {
-	$icon = '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('small') . '" /></a>';
+	//$icon = '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL('small') . '" /></a>';
+	$icon = elgg_view_entity_icon($ent, 'small');
 	$info = '<p><strong>' . $ent->name . '</strong>';
-	$info .= '<p>' . $ent->getMembers(null, null, true) . ' membres</p>';
-	$content .= elgg_view_listing($icon, $info);
+	$info .= '<p>' . $ent->getMembers(array('count' => true)) . ' membres</p>';
+	$content .= elgg_view_image_block($icon, $info);
 }
 $content .= '<div class="clearfloat"></div><br /><br />';
 
 $content .= '<h3>Groupes populaires</h3>';
 foreach($popular_groups as $ent) {
-	$icon = '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIcon('small') . '" /></a>';
+	//$icon = '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL('small') . '" /></a>';
+	$icon = elgg_view_entity_icon($ent, 'small');
 	$info = '<p><strong>' . $ent->name . '</strong>';
-	$info .= '<p>' . $ent->getMembers(null, null, true) . ' membres</p>';
-	$content .= elgg_view_listing($icon, $info);
+	$info .= '<p>' . $ent->getMembers(array('count' => true)) . ' membres</p>';
+	$content .= elgg_view_image_block($icon, $info);
 }
 $content .= '<div class="clearfloat"></div><br />';
 
