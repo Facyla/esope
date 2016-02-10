@@ -21,6 +21,7 @@ $categories = implode(",\n", $categories);
 	<p><?php echo elgg_echo('esope:categories:tree:explanation'); ?></p>
 	<?php
 	//echo elgg_view('input/tags', array('value' => $categories, 'name' => 'categories'));
+	// Note : we use 'name' without 'params[]' because we're intercepting the value before saving it
 	echo elgg_view('input/plaintext', array('value' => $categories, 'name' => 'categories'));
 	// @TODO : automatically add commas before newlines, smthg like : yourString.split(",").join("\n")
 	?>

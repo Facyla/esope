@@ -1,5 +1,7 @@
 <?php
 
+namespace AU\ProfileIconAccess;
+
 $guid = (int) get_input('guid');
 $access = (int) get_input('access');
 $user = get_user($guid);
@@ -18,4 +20,4 @@ else {
   register_error(elgg_echo('profileiconaccess:error'));
 }
 
-forward();
+forward(REFERER);
