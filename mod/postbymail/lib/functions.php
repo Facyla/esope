@@ -25,7 +25,11 @@ if (!class_exists('Mail_mimeDecode')) {
  * $separator = elgg_echo('postbymail:default:separator');	 Séparateur du message (pour retirer la signature, les messages joints intégrés dans la réponse..)
 	*
 */
-function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
+function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = '', $username = false, $password = false, $markSeen = false, $bodyMaxLength = 65536, $separator = '', $mimeParams = array()) {
+	
+	// Stop process if missing required parameters for mailbox connection
+	if (empty($server) || empty($username) || empty($password)) { return false; }
+	
 	global $sender_reply;
 	global $admin_reply;
 	global $postbymail_guid;
