@@ -40,6 +40,7 @@ function group_operators_init() {
 	elgg_register_css('jquery-ui-theme', 'mod/group_operators/vendors/jquery/jquery.ui.theme.css');
 }
 
+
 /**
  * Dispatches group operators pages.
  * URLs take the form of
@@ -51,7 +52,6 @@ function group_operators_init() {
 function group_operators_page_handler($page) {
 	if (isset($page[0])) {
 		$file_dir = elgg_get_plugins_path() . 'group_operators/pages/group_operators';
-
 		$page_type = $page[0];
 		switch($page_type) {
 			case 'manage':
@@ -64,10 +64,8 @@ function group_operators_page_handler($page) {
 }
 
 function group_operators_setup_menu() {
-
 	// Get the page owner entity
 	$page_owner = elgg_get_page_owner_entity();
-
 	if (elgg_in_context('groups')) {
 		if (elgg_instanceof($page_owner, 'group')) {
 			if (elgg_is_logged_in() && $page_owner->canEdit()) {
@@ -91,8 +89,7 @@ function group_operators_container_permissions_hook($hook, $entity_type, $return
 	if ($params['user'] && $params['container']) {
 		$container_guid = $params['container']->getGUID();
 		$user_guid = $params['user']->getGUID();
-		if (check_entity_relationship($user_guid, 'operator', $container_guid))
-			return true;
+		if (check_entity_relationship($user_guid, 'operator', $container_guid)) return true;
 	}
 	return $returnvalue;
 }
@@ -101,52 +98,37 @@ function group_operators_container_permissions_hook($hook, $entity_type, $return
  * Add links/info to entity menu particular to group operator entities
  */
 function group_operators_entity_menu_setup($hook, $entity_type, $return, $params) {
-	
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
+	if (elgg_in_context('widgets')) { return $return; }
 
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'group_operators') {
-		return $return;
-	}
+	if ($handler != 'group_operators') { return $return; }
 
 	foreach ($return as $index => $item) {
-		if (in_array($item->getName(), array('access', 'likes', 'edit', 'delete'))) {
-			unset($return[$index]);
-		}
+		if (in_array($item->getName(), array('access', 'likes', 'edit', 'delete'))) { unset($return[$index]); }
 	}
 	
 	$group = elgg_get_page_owner_entity();
 
-	if($entity->guid != $group->owner_guid){
-		
+	if ($entity->guid != $group->owner_guid){
 		$options = array(
 			'name' => 'drop_privileges',
 			'text' => elgg_echo('group_operators:operators:drop'),
-			'href' => 'action/group_operators/remove?'.http_build_query(array(
-																			'mygroup' => $group->guid,
-																			'who' => $entity->guid,
-																		)),
+			'href' => 'action/group_operators/remove?'.http_build_query(array('mygroup' => $group->guid, 'who' => $entity->guid)),
 			'priority' => 300,
 			'is_action' => true
 		);
 		$return[] = ElggMenuItem::factory($options);
 		
-		if(elgg_get_logged_in_user_guid() == $group->owner_guid || elgg_is_admin_logged_in()){
+		if (elgg_get_logged_in_user_guid() == $group->owner_guid || elgg_is_admin_logged_in()){
 			$options = array(
 				'name' => 'change_owner',
 				'text' => elgg_echo('group_operators:owner:make'),
-				'href' => 'action/group_operators/mkowner?'.http_build_query(array(
-																				'mygroup' => $group->guid,
-																				'who' => $entity->guid,
-																			)),
+				'href' => 'action/group_operators/mkowner?'.http_build_query(array('mygroup' => $group->guid, 'who' => $entity->guid)),
 				'priority' => 300,
 				'is_action' => true
 			);
 			$return[] = ElggMenuItem::factory($options);
-			
 		}
 	} else {
 		$options = array(
@@ -154,7 +136,6 @@ function group_operators_entity_menu_setup($hook, $entity_type, $return, $params
 			'text' => elgg_echo('group_operators:owner'),
 			'href' => false,
 		);
-		
 		$return[] = ElggMenuItem::factory($options);
 	}
 
