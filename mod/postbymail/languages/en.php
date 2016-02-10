@@ -13,6 +13,9 @@ return array(
 	'postbymail' => "Post by email",
 	'postbymail:title' => "Post by email",
 	
+	// Date format
+	'postbymail:dateformat' => "m/d/Y at H:i:s",
+	
 	/* Settings */
 	'postbymail:settings:error:missingrequired' => "Missing required settings (server and port, username and/or password)",
 	'postbymail:settings:loadedfromfile' => "Settings loaded from configuration file (settings.php)",

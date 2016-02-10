@@ -13,6 +13,9 @@ return array(
 	'postbymail' => "Publication par mail",
 	'postbymail:title' => "Publication par mail",
 	
+	// Date format
+	'postbymail:dateformat' => "d/m/Y à H:i:s",
+	
 	/* Settings */
 	'postbymail:settings:error:missingrequired' => "Des paramètres de configuration requis sont manquants (serveur et port, nom d'utilisateur du compte de messagerie et/ou mot de passe)",
 	'postbymail:settings:loadedfromfile' => "Paramètres chargés depuis le fichier de configuration (settings.php)",
