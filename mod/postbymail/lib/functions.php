@@ -480,7 +480,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							$new_post = new ElggObject;
 							$new_post->subtype = "thewire";
 							$new_post->owner_guid = $post_owner->guid;
+							// Support group wire
+							if (elgg_instanceof($post_container, 'group') || elgg_instanceof($post_container, 'user')) {
+								$new_post->container_guid = $post_container->guid;
+							} else {
 							$new_post->container_guid = $post_owner->guid;
+							}
 							//$new_post->title = $message->headers['subject'];
 							// @TODO add reply to
 							//$new_post->wire_thread
@@ -600,8 +605,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							case 'thewire':
 								// River OK + Notification OK
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
-								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
+								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
+									$thewire = get_entity($thewire_guid);
+									// Support group wire
+									$thewire->container_guid = $entity->container_guid;
+									$thewire->save();
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
@@ -1004,7 +1013,11 @@ function postbymail_checkeligible_reply($params) {
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
+		if (!empty($params['entity']->title)) {
 		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		} else {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->name));
+		}
 		
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		

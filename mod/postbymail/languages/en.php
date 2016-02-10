@@ -8,7 +8,7 @@
 
 $site_url = elgg_get_site_url();
 
-$en = array(
+return array(
 	/* Main strings */
 	'postbymail' => "Post by email",
 	'postbymail:title' => "Post by email",
@@ -257,7 +257,9 @@ $en = array(
 	<b>%s</b><br />
 	Please check that your email contains only your reply (no signature, personnal information, former messages, etc.)",
 	
+	'postbymail:thewire:charlimitnotice' => "IMPORTANT NOTICE : when you reply to a Wire message, only the first 140 characters will be published!
+	
+	",
 );
 
-add_translation("en", $en);
 

@@ -75,18 +75,6 @@ if (!isset($separator)) $separator = elgg_get_plugin_setting('separator', 'postb
 // Force a default separator, just because we need it
 if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
 
-
-
-// Check settings
-if (empty($server) || empty($username) || empty($password)) {
-	$body .= '<p>' . elgg_echo('postbymail:settings:error:missingrequired') . '</p>';
-}
-
-$body .= '<p>' . elgg_echo('postbymail:settings:separator') . '&nbsp;: ' . $separator . '</p>';
-
-$body .= '<hr />';
-
-
 #################################
 # End of User-Editable Settings #
 #################################
@@ -112,30 +100,31 @@ $postbymail_vars['separator'] = $separator;
 $postbymail_vars['mimeParams'] = $mimeParams;
 */
 
-// Required for simulation purpose
+// Required for simulation purpose (can be called and displayed by an admin, and we need it to behave exactly the same as when launched by a cron task)
 elgg_set_context('cron');
 
-$body .= postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams);
 
-if (!elgg_is_admin_logged_in()) {
-/* On ne fait rien du tout : équivalent d'un appel cron donc traitement mais sans aucun affichage
-	//system_message("Traitement des mails en attente effectué.");
-	system_message("La page de contrôle de publication par mail est accessible seulement à un administrateur du site");
-	// Pas de problème pour accéder à la page (et traiter la file d'attente) mais on ne montre rien sauf aux admins
-	forward();
-	$body = "Fonctionnalité en cours de développement et de test ; page réservée à un administrateur du site.<br /><br /><br />";
-*/
+// Check settings
+if (empty($server) || empty($username) || empty($password)) {
+	$body .= '<p>' . elgg_echo('postbymail:settings:error:missingrequired') . '</p>';
+}
+$body .= '<p>' . elgg_echo('postbymail:settings:separator') . '&nbsp;: ' . $separator . '</p>';
+$body .= '<hr />';
+
+// Perform check only if we have the required parameters
+if (!empty($server) && !empty($username) && !empty($password)) {
+	$body .= postbymail_checkandpost($server, $protocol, $mailbox, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams);
 }
 
-// Affichage de la page de contrôle..
-$body = '<div class="contentWrapper">' . $body . '</div>';
-$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $body));
 
 
-// On n'affiche pas normalement sinon on se retrouve avec deux pages...
+// Par défaut on n'affiche rien sinon on se retrouve avec deux pages...
+
 // Exception si on veut une page de contrôle - à différencier
 $display = get_input('display', false);
 if (elgg_is_admin_logged_in() && ($display == "yes")) {
+	$body = elgg_view_layout('one_column', array('title' => $title, 'content' => '<div class="contentWrapper">' . $body . '</div>'));
 	echo elgg_view_page($title, $body);
 }
+
 
