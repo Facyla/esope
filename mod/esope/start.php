@@ -119,6 +119,9 @@ function esope_init() {
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS, et d'EVENTS
 	// Related functions are in lib/esope/hooks.php
 	
+	// Favicon
+	elgg_register_plugin_hook_handler('head', 'page','esope_page_head_hook');
+	
 	// Affichage des dates
 	elgg_register_plugin_hook_handler('format', 'friendly:time','esope_friendly_time_hook');
 	

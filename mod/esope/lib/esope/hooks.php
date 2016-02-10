@@ -492,6 +492,44 @@ function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
 }
 
 
+// Adds Favicon link in page head
+function esope_page_head_hook($hook, $type, $return, $params) {
+	// Displays the default shortcut icon
+	$favicon = elgg_get_plugin_setting('faviconurl', 'esope');
+	$url = elgg_get_site_url();
+	if (empty($favicon)) {
+		$favicon = $url . '_graphics/favicon.ico';
+	} else {
+		$favicon = $url . $favicon;
+	}
+	
+	// Set main favicon
+	$return['links']['icon-ico'] = array('rel' => 'icon', 'href' => $favicon);
+	// Set apple touch icon
+	$return['links']['apple-touch-icon'] = array('rel' => 'apple-touch-icon', 'href' => $favicon);
+	
+	/* @TODO : several enhancements :
+	 * - provide setting for each icon (and specify constraints on each)
+	 * - check type before adding 'type' property' (can also be GIF, PNG...)
+	 * - provide setting for each icon ?
+	 * Since then, disable default icons that cannot be controlled by admin
+	 *
+		$return['links']['icon-16'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '16x16', 'type' => 'image/png');
+		$return['links']['icon-32'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '32x32', 'type' => 'image/png');
+		$return['links']['icon-64'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '64x64', 'type' => 'image/png');
+		$return['links']['icon-128'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '128x128', 'type' => 'image/png');
+		$return['links']['icon-vector'] = array('rel' => 'apple-touch-icon', 'href' => $url . '_graphics/favicon.svg', 'sizes' => '16x16 32x32 48x48 64x64 128x128', 'type' => 'image/svg+xml');
+	 */
+	unset($return['links']['icon-16']);
+	unset($return['links']['icon-32']);
+	unset($return['links']['icon-64']);
+	unset($return['links']['icon-128']);
+	unset($return['links']['icon-vector']);
+	
+	return $return;
+}
+
+
 // Perform some post-registration actions (join groups, etc.)
 function esope_register_user_hook($hook, $type, $return, $params) {
 	if (is_array($params)) {
