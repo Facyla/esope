@@ -2,6 +2,15 @@
 
 x.x:
 
+2.1.1 (12/16/2015):
+ - send notifications for cron-created imports if plugin setting allows
+
+2.1.0 (12/10/2015):
+ - remove group options if not enabled globally
+ - added plugin setting for optional river entries on import
+ - added plugin setting for optional notifications on import
+These updates were funded by Social Business World
+
 2.0.2 (10/13/2015):
  - add action tokens to import delete link
 

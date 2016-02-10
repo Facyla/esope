@@ -1,4 +1,5 @@
 <?php
+
 return array(
 	'rssimport:back:to:blog' => "Retour au Blog",
 	'rssimport:back:to:bookmarks' => "Retour aux Marque-pages",
@@ -130,5 +131,4 @@ return array(
 	'rssimport:date:format' => 'j/m/Y à H:i',
 	
 );
-
 

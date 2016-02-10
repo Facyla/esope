@@ -13,9 +13,8 @@
  * @return array
  */
 function get_group_operators($group){
-	if($group instanceof ElggGroup){
-		$operators = elgg_get_entities_from_relationship(
-			array('types'=>'user', 'limit'=>0, 'relationship_guid'=>$group->guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
+	if (elgg_instanceof($group, 'group')){
+		$operators = elgg_get_entities_from_relationship(array('types'=>'user', 'limit'=>0, 'relationship_guid'=>$group->guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
 		$group_owner = get_entity($group->getOwnerGUID());
 
 		if(!in_array($group_owner, $operators)){
@@ -23,10 +22,9 @@ function get_group_operators($group){
 		}
 		return $operators;
 	}
-	else {
-		return null;
-	}
+	return null;
 }
+
 
 function elgg_view_group_operators_list($group){
 	$operators = get_group_operators($group);
@@ -43,6 +41,7 @@ function elgg_view_group_operators_list($group){
 	return $html;
 }
 
+
 /**
  * Prepare the manage form variables
  *
@@ -50,19 +49,17 @@ function elgg_view_group_operators_list($group){
  * @return array
  */
 function group_operators_prepare_form_vars($group) {
-
 	$members = $group->getMembers(0);
 	$operators = get_group_operators($group);
-	$no_operators = array_obj_diff($members, $operators);
-
+	$no_operators = group_operators_array_obj_diff($members, $operators);
 	// input names => defaults
 	$values = array(
 		'entity' => $group,
 		'candidates' => $no_operators
 	);
-
 	return $values;
 }
+
 
 /**
  * Prepare the manage form variables
@@ -78,25 +75,27 @@ function group_operators_prepare_combo_vars($candidates) {
 	return $values;
 }
 
+
 /**
  * array_diff doesn't work with arrays of objects because it compares the
- * string-represantation of the arguments (which is always "Object" for an object).
+ * string-representation of the arguments (which is always "Object" for an object).
  */
-function array_obj_diff ($array1, $array2) {
-   
-    foreach ($array1 as $key => $value) {
-        $array1[$key] = serialize ($value);
-    }
+function group_operators_array_obj_diff($array1, $array2) {
 
-    foreach ($array2 as $key => $value) {
-        $array2[$key] = serialize ($value);
-    }
-   
-    $array_diff = array_diff ($array1, $array2);
-   
-    foreach ($array_diff as $key => $value) {
-        $array_diff[$key] = unserialize ($value);
-    }
-   
-    return $array_diff;
+	foreach ($array1 as $key => $value) {
+		$array1[$key] = serialize ($value);
+	}
+
+	foreach ($array2 as $key => $value) {
+		$array2[$key] = serialize ($value);
+	}
+
+	$array_diff = array_diff ($array1, $array2);
+
+	foreach ($array_diff as $key => $value) {
+		$array_diff[$key] = unserialize ($value);
+	}
+
+	return $array_diff;
 }
+

@@ -99,6 +99,8 @@
 	'rssimport:cron:frequency:explanation' => 'If all import frequencies are disallowed imports can still be achieved manually. These settings only affect automatic scheduled imports.',
 	'rssimport:setting:adminonly' => "Restrict importing rss feeds to administrators only",
 	'rssimport:grouptools' => "Allowed import content types",
+    'rssimport:setting:add_river' => "Create river entries for imported content?",
+    'rssimport:setting:notify' => "Send notifications for imported content",
 	
 	/* common curl errors */
 	'rssimport:curl:error:default' => 'There was an issue getting your feed.  Please make sure all settings are correct.',

@@ -49,10 +49,8 @@ function group_operators_init() {
  * @return NULL
  */
 function group_operators_page_handler($page) {
-
 	if (isset($page[0])) {
-		$file_dir = elgg_get_plugins_path() .
-			'group_operators/pages/group_operators';
+		$file_dir = elgg_get_plugins_path() . 'group_operators/pages/group_operators';
 
 		$page_type = $page[0];
 		switch($page_type) {
@@ -71,7 +69,7 @@ function group_operators_setup_menu() {
 	$page_owner = elgg_get_page_owner_entity();
 
 	if (elgg_in_context('groups')) {
-		if ($page_owner instanceof ElggGroup) {
+		if (elgg_instanceof($page_owner, 'group')) {
 			if (elgg_is_logged_in() && $page_owner->canEdit()) {
 				$url = elgg_get_site_url() . "group_operators/manage/{$page_owner->getGUID()}";
 				elgg_register_menu_item('page', array(

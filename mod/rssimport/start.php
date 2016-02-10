@@ -45,7 +45,8 @@ function init() {
 	// add group configurations
 	$types = array('blog', 'bookmarks', 'pages');
 	foreach ($types as $type) {
-		if (elgg_is_active_plugin($type)) {
+        $enable = elgg_get_plugin_setting($type . '_enable', PLUGIN_ID);
+		if (elgg_is_active_plugin($type) && $enable != 'no') {
 			add_group_tool_option('rssimport_' . $type, elgg_echo('rssimport:enable' . $type), true);
 		}
 	}

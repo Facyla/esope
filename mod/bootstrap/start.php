@@ -1,6 +1,6 @@
 <?php
 /**
- * bootstrap plugin
+ * Twitter Bootstrap plugin
  *
  */
 

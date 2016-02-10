@@ -5,7 +5,7 @@
  * @package ElggGroupOperators
  */
 
-$spanish = array(
+return array(
 
 	/**
 	 * Titles
@@ -40,4 +40,4 @@ $spanish = array(
 
 );
 
-add_translation("es", $spanish);
+

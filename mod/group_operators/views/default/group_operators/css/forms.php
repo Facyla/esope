@@ -70,7 +70,7 @@
 }
 
 .ui-autocomplete-loading {
-	background: white url(<?php echo $vars['url']; ?>_graphics/indicator.gif) right center no-repeat;
+	background: white url(<?php echo elgg_get_site_url(); ?>_graphics/indicator.gif) right center no-repeat;
 }
 
 .ui-autocomplete li:nth-child(odd) {

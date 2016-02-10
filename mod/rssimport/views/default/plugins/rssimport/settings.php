@@ -45,5 +45,17 @@ $options['name'] = 'params[pages_enable]';
 $options['value'] = $vars['entity']->pages_enable ? $vars['entity']->pages_enable : 'yes';
 echo elgg_view('input/dropdown', $options) . " " . elgg_echo('rssimport:enablepages') . "<br />";
 
+echo '<div class="pvm">';
+$options['name'] = 'params[add_river]';
+$options['value'] = $vars['entity']->add_river ? $vars['entity']->add_river : 'no';
+echo elgg_view('input/dropdown', $options) . " " . elgg_echo('rssimport:setting:add_river') . '<br />';
+echo '</div>';
+
+echo '<div class="pvm">';
+$options['name'] = 'params[notify]';
+$options['value'] = $vars['entity']->notify ? $vars['entity']->notify : 'no';
+echo elgg_view('input/dropdown', $options) . " " . elgg_echo('rssimport:setting:notify') . '<br />';
+echo '</div>';
+
 echo "<br /><br />";
 

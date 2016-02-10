@@ -5,7 +5,7 @@
  * @package ElggGroupOperators
  */
 
-$catalan = array(
+return array(
 
 	/**
 	 * Titles
@@ -40,4 +40,3 @@ $catalan = array(
 
 );
 
-add_translation("ca", $catalan);
