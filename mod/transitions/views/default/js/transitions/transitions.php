@@ -57,14 +57,15 @@ elgg.transitions.searchFields = function(event) {
 // Load search into lightbox
 elgg.transitions.submitSearch = function(event) {
 	event.preventDefault();
-	spinner.start();
+	var spinner = require(['elgg/spinner']);
+	spinner.start;
 	var query = $(this).serialize();
 	var url = $(this).attr("action");
 	//$(this).parent().parent().load(url, query, function() {
 	$(this).parent().load(url, query, function() {
 		$.colorbox.resize();
 	});
-	spinner.stop();
+	spinner.stop;
 };
 
 // Embed pagination
