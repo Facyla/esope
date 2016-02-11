@@ -736,6 +736,7 @@ return array(
 	'esope:settings:groups:topmenu:help' => "This menu lets you add up to 8 custom tabs, by adding customtab1 to customtab8 to groups (easiest is to use profile_manager groups fields config).",
 	'esope:settings:groups:disable_widgets' => "Remove tools widgets on group home",
 	'esope:settings:groups:add_activity' => "Add group activity on group home",
+	'esope:group_activity:notloggedin' => "(unavailable - please login to read this)",
 	'esope:settings:groups:add_wire' => "Add Wire form on group home",
 	'esope:groups:enablethewire' => "Enable the Wire (access restricted to group members)",
 	'esope:thewire:group:placeholder' => "Votre message pour le groupe",

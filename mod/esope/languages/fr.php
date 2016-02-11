@@ -750,6 +750,7 @@ return array(
 	'esope:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'esope:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'esope:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
+	'esope:group_activity:notloggedin' => "(indisponible - veuillez vous connectez pour lire ceci)",
 	'esope:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
 	'esope:groups:enablethewire' => "Activer le Fil (accès réservé aux membres du groupe)",
 	'esope:thewire:group:placeholder' => "Votre message pour le groupe",

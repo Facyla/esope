@@ -26,7 +26,8 @@ $object = $item->getObjectEntity();
 $subject_allowed = esope_user_profile_gatekeeper($subject, false);
 $object_allowed = esope_user_profile_gatekeeper($object, false);
 if (!$subject_allowed || !$object_allowed) {
-	$summary = elgg_echo('InvalidParameterException:NoEntityFound');
+	//$summary = elgg_echo('InvalidParameterException:NoEntityFound');
+	$summary = elgg_echo('esope:group_activity:notloggedin');
 echo <<<RIVER
 $menu
 <div class="elgg-river-summary">$summary $group_string <span class="elgg-river-timestamp">$timestamp</span></div>
