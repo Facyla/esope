@@ -72,7 +72,7 @@ $content .= '<h4>' . elgg_echo('theme_inria:groupinvite:search:invite') . '</h4>
 if (!empty($query)) {
 	$max_results = 500;
 	$users = esope_esearch(array('returntype' => 'entities'), $max_results);
-		$return_count = count($users);
+	$return_count = count($users);
 	if ($users) {
 		$content .= "</div>";
 		$content .= '</form>';
@@ -110,6 +110,8 @@ if (!empty($query)) {
 	} else {
 		$content .= '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>';
 	}
+} else {
+	$content .= '<span class="esope-noresult">' . elgg_echo('esope:search:nosearch') . '</span>';
 }
 
 

@@ -20,7 +20,7 @@ if (!isset($timeframe_before)) { $timeframe_before = 7; }
 if (!isset($timeframe_after)) { $timeframe_after = 366; }
 if (!isset($num_items)) { $num_items = 3; }
 if (!is_int($num_items) || ($num_items < 1)) { $num_items = false; }
-$title = '<span style="float:right;"><a href="' . $calendar . '" class="ical" title="Télécharger le fichier ical"><img src="' . $CONFIG->url. 'mod/ical_viewer/graphics/ical16green.png" alt="ical" style="border:0; padding:0: margin:3px 0 3px 3px; background:transparent;"> iCal</a></span>';
+$title = '<span style="float:right;"><a href="' . $calendar . '" class="ical" title="Télécharger le fichier ical"><img src="' . elgg_get_site_url(). 'mod/ical_viewer/graphics/ical16green.png" alt="ical" style="border:0; padding:0: margin:3px 0 3px 3px; background:transparent;"> iCal</a></span>';
 
 // Gestion du décalage horaire en fonction de la timezone définie : O donne le décalage de timezone en heures, Z en secondes..
 // On ne garde que la partie qui nous intéresse, sans le +

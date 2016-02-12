@@ -23,7 +23,7 @@ function cmspages_init() {
 	if (!elgg_is_active_plugin('esope')) { elgg_extend_view('page/elements/head','cmspages/head_extend'); }
 	
 	// Register entity type for search
-	if (elgg_get_plugin_setting('register_object') != 'no') {
+	if (elgg_get_plugin_setting('register_object', 'cmspages') != 'no') {
 		elgg_register_entity_type('object', 'cmspage');
 	}
 	
@@ -1053,7 +1053,7 @@ function cmspages_get_pages_by_tag($tags) {
 /* Registers an Elgg menu from categories config */
 function cmspages_set_categories_menu() {
 	// List categories - For each entry, add parent if set
-	$tree_categories = elgg_get_plugin_setting('menu_categories');
+	$tree_categories = elgg_get_plugin_setting('menu_categories', 'cmspages');
 	$tree_categories = unserialize($tree_categories);
 	if (is_array($tree_categories)) foreach ($tree_categories as $cat) {
 		$item = new ElggMenuItem($cat['name'], $cat['title'], 'r/'.$cat['name']);

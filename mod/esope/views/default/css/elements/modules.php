@@ -181,7 +181,9 @@ $font6 = $css['font6'];
 	Widgets
 *************************************** */
 .elgg-widgets {
-	/* float: right; */
+	/*
+	*/
+	float: right;
 	min-height: 30px;
 }
 .elgg-widget-add-control {

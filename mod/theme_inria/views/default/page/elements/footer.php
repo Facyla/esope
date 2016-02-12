@@ -8,8 +8,8 @@
  *
  */
 
-$url = $vars['url'];
-$imgurl = $vars['url'] . 'mod/theme_inria/graphics/';
+$url = elgg_get_site_url();
+$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 
 echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 

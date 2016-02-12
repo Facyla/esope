@@ -5,13 +5,13 @@
 * @package theme_inria
 **/
 
-$french = array(
+return array(
 	'theme_inria:topbar:me' => "Moi",
 	'theme_inria:topbar:usergroups' => 'Mes&nbsp;groupes',
 	'theme_inria:topbar:userfriends' => "Mes&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "Mes&nbsp;activités",
 	'theme_inria:topbar:profil' => "Mon profil",
-	'theme_inria:site:activity' => "Activités récentes",
+	'theme_inria:site:activity' => "Ça bouge sur Iris ...",
 	'theme_inria:topbar:all' => "Tous",
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
@@ -30,6 +30,17 @@ $french = array(
 	'theme_inria:home:edito' => "Edito",
 	'theme_inria:friends' => "Contacts",
 	'theme_inria:friends:collections' => "Listes de contacts",
+	'theme_inria:thewire:tooltip' => "Cliquez sur ce lien pour voir toutes les actualités publiées sur le Fil",
+	'theme_inria:site:activity:tooltip' => "Cliquez sur ce lien pour voir toute l'activité récente sur Iris",
+	'theme_inria:groups:featured:tooltip' => "Cliquez sur ce lien pour voir tous les groupes mis en Une sur Iris",
+	'theme_inria:groups:newest' => "Nouveaux groupes",
+	'theme_inria:groups:newest:tooltip' => "Cliquez sur ce lien pour voir tous les nouveaux groupes sur Iris",
+	'theme_inria:members:online:tooltip' => "Cliquez sur ce lien pour voir tous les membres connectés en ce moment sur Iris",
+	'theme_inria:members:newest:tooltip' => "Cliquez sur ce lien pour voir tous les nouveaux membres inscrits sur Iris",
+	'theme_inria:messages:tooltip' => "Messagerie interne Iris",
+	'theme_inria:usersettings:tooltip' => "Paramétrez vos notifications et votre langue",
+	'theme_inria:thewire:explanations' => "Vous trouverez ici les messages du fil <strong>destinés à tous</strong> ainsi que les messages du fil de <strong>vos groupes</strong>. Chaque membre d'Iris visualise ici des informations différentes qui dépendent de ses abonnements et droits d'accès",
+	'theme_inria:activity:explanations' => "Vous trouverez ici les dernières activités dans <strong>vos groupes</strong> et dans les groupes <strong>visibles de tous</strong>. Chaque membre d'Iris visualise ici des informations qui dépendent de ses abonnements et droits d'accès",
 	
 	// Tools widgets
 	'theme_inria:topbar:collaborative' => "Mes outils",
@@ -134,13 +145,17 @@ $french = array(
 	'adf_platform:directory' => 'Membres',
 	
 	'inria:mygroups' => "Tous mes groupes",
+	'theme_inria:groups:discover' => "Groupes à découvrir",
 	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
 	'theme_inria:thewire:charleft' => "maxi",
 	'theme_inria:thewire:access' => "Accès : ",
-	'theme_inria:thewire:title' => "Le Fil d'actualités",
+	'theme_inria:thewire:title' => "Vos actualités en 140 caractères",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
+	'theme_inria:thewire:placeholder' => "140 caractères pour saisir votre message à tous",
+	'theme_inria:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages pour le groupe",
+	'theme_inria:thewire:group:placeholder' => "140 caractères pour votre message aux membres du groupe",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
@@ -376,12 +391,6 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
-	'theme_inria:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
-	'theme_inria:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
-	'theme_inria:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
-	'theme_inria:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
-	
-	
 	
 	
 	// Translation override
@@ -392,7 +401,12 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'adf_platform:groups:allowregister' => "Forcer l'inscription dans le groupe",
 	
-	'esope:fulltextsearch' => "Recherche par nom ou prénom",
+	'esope:fulltextsearch' => "Recherche plein texte",
+	'esope:fulltextsearch:user' => "Recherche par nom ou prénom",
+	'esope:fulltextsearch:group' => "Recherche plein texte",
+	
+	'river:all' => "Ça bouge sur Iris ...",
+	'thewire:everyone' => "Vos actualités en 140 caractères",
 	
 	
 	// Blog override (blog => article)
@@ -431,11 +445,11 @@ Afficher et commenter le nouvel article :
 
 %s",
 	
+	'theme_inria:postbymail:nousersettings' => "Réglage désactivé - Seules les adresses Inria sont autorisées à publier par email sur le site.",
 	
+	'theme_inria:homeslider:select' => "Choisir le slider à afficher",
+	'theme_inria:homeslider:edit' => "Editer ce slider",
 	
 	
 );
-
-add_translation("fr",$french);
-
 

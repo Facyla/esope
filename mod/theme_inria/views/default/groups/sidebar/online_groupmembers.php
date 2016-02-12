@@ -1,6 +1,5 @@
 <?php
-$count = find_active_users(600, 10, 0, true);
-$users = find_active_users(600, $count);
+$users = find_active_users(array('seconds' => 600, 'limit' => 10, 'count' => false));
 $group = elgg_get_page_owner_entity();
 if ($users) {
 	foreach ($users as $ent) {

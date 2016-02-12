@@ -85,17 +85,17 @@ echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' 
 echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
 if ($entity->canEdit()) {
-	echo '<a href="' . $vars['url'] . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
+	echo '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
 }
 ?>
 <div class="clearfloat"></div><br />
 <?php
-//echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
-$nb_members = $entity->getMembers(0, 0, TRUE);
+//echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
+$nb_members = $entity->getMembers(array('count' => true));
 if ($nb_members > 1) {
-	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
+	echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
 } else {
-	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
+	echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
 }
 ?>
 </div>
