@@ -11,8 +11,10 @@ $body .= '<div class="clearfloat"></div><br />';
 //$homehighlight .=	'<div class="clearfloat"></div>';
 
 //$body .= '<h3>' . elgg_echo('pin:highlighted:title') . '</h3>';
-$ents_count = get_entities_from_metadata('highlight', '', 'object', '', 0, $limit, 0, '', -1, true);
-$ents = get_entities_from_metadata('highlight', '', 'object', '', 0, $ents_count, 0, '', -1, false);
+$params = array('metadata_name' => 'highlight', 'types' => 'object', 'limit' => $limit, 'count' => true);
+$ents_count = elgg_get_entities_from_metadata($params);
+$params['count'] = false;
+$ents = elgg_get_entities_from_metadata($params);
 
 //$body .= elgg_view_entity_list($ents, $ents_count, $offset, $limit, false, false, true);
 
@@ -44,7 +46,7 @@ foreach ($ents as $ent) {
 	if ($i > $limit) { break; }
 }
 if (!$nolink) {
-	$body .= '<br /><h4><a href="' . $CONFIG->url . 'mod/pin/index.php">&raquo;&nbsp;Retrouver tous les articles choisis</a></h4>';
+	$body .= '<br /><h4><a href="' .elgg_get_site_url() . 'mod/pin/index.php">&raquo;&nbsp;Retrouver tous les articles choisis</a></h4>';
 }
 
 echo $body;

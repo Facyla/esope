@@ -1,5 +1,5 @@
 <?php
-$iconurl = $vars['url'] . 'mod/pin/graphics/';
+$iconurl = elgg_get_site_url() . 'mod/pin/graphics/';
 ?>
 
 .elgg-menu-item-pins { padding:3px 6px; background:transparent; font-size:14px; text-decoration:none; }

@@ -1,6 +1,6 @@
 <?php
-global $CONFIG;
-$acturl = $CONFIG->url . 'mod/pin/actions/';
+
+$acturl = elgg_get_site_url() . 'mod/pin/actions/';
 $ts = time();
 $token = generate_action_token(time());
 $tokens = '&__elgg_ts='.$ts.'&__elgg_token='.$token;
@@ -14,7 +14,7 @@ function pin_entity(tool, guid){
 	
 	jQuery.ajax({
 		url: "<?php echo $acturl; ?>" + tool + ".php",
-		data: "action=" + action + "&guid=" + guid + "<?php echo $tokens; ?>&userguid=<?php echo $_SESSION['user']->guid; ?>&callback=true",
+		data: "action=" + action + "&guid=" + guid + "<?php echo $tokens; ?>&userguid=<?php echo elgg_get_logged_in_user_guid(); ?>&callback=true",
 		error: function() {
 			alert("Une erreur s'est produite lors du changement de l'option");
 		},

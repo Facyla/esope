@@ -357,7 +357,6 @@ $font6 = $css['font6'];
 .elgg-menu-page a {
 	display: block;
 	border-radius: 0;
-	
 	/* background-color: white; */
 	margin: 0 0 3px;
 	padding: 4px 4px 4px 8px;
@@ -416,6 +415,8 @@ $font6 = $css['font6'];
 
 	min-width: 165px;
 	max-width: 250px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	border: solid 1px;
 	border-color: #E5E5E5 #999 #999 #E5E5E5;
 	background-color: #FFF;
@@ -527,11 +528,6 @@ $font6 = $css['font6'];
 	margin: 0;
 	padding: 4px 4px 4px 8px;
 }
-.elgg-menu-owner-block li a:hover, 
-.elgg-menu-owner-block li a:focus, 
-.elgg-menu-owner-block li a:active {
-}
-
 .elgg-menu-owner-block li a:hover,
 .elgg-menu-owner-block li a:focus,
 .elgg-menu-owner-block li a:active {

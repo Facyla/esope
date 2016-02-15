@@ -139,11 +139,8 @@ a:focus,
 a:active,
 a.selected { <?php //@todo remove .selected ?>
 	color: <?php echo $linkhovercolor; ?>;
-	/* text-decoration: underline; */
+	text-decoration: underline;
 }
-a:hover, 
-a:focus, 
-a:active { text-decoration: underline; }
 
 p {
 	margin-bottom: 15px;
@@ -235,6 +232,10 @@ sub { bottom: -0.25em; }
 	text-decoration: none;
 }
 
+.elgg-heading-site:hover,
+.elgg-heading-site:focus {
+	text-shadow: 1px 2px 8px #000;
+}
 
 .elgg-heading-main {
 	/*

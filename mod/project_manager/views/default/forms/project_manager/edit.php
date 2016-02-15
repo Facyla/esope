@@ -118,18 +118,18 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 	
 	
 	// Le formulaire proprement dit
-	echo '<form action="' . $vars['url'] . 'action/' . $action . '" enctype="multipart/form-data" method="post">';
+	echo '<form action="' . elgg_get_site_url() . 'action/' . $action . '" enctype="multipart/form-data" method="post">';
 		
 		// COLONNE GAUCHE
 		echo '<div style="width:56%; float:left;">';
 			// Titre
-			echo '<p><label>' . elgg_echo("project_manager:title") . ' ' . elgg_view("input/text", array("name" => "title", "value" => $title, 'js' => ' style="width:50ex;"')) . '</label></p>';
+			echo '<p><label>' . elgg_echo("project_manager:title") . ' ' . elgg_view("input/text", array("name" => "title", "value" => $title, 'style' => "width:50ex;")) . '</label></p>';
 			
 			// Année de début
-			echo '<p><label>' . elgg_echo("project_manager:startyear") . ' ' . elgg_view("input/text", array("name" => "startyear", "value" => $startyear, 'js' => ' style="width:8ex;"')) . '</label></p>';
+			echo '<p><label>' . elgg_echo("project_manager:startyear") . ' ' . elgg_view("input/text", array("name" => "startyear", "value" => $startyear, 'style' => "width:8ex;")) . '</label></p>';
 			
 			// Code projet
-			echo '<p><label>' . elgg_echo("project_manager:project_code") . ' ' . elgg_view("input/text", array("name" => "project_code", "value" => $project_code, 'js' => ' style="width:12ex;"')) . '</label></p>';
+			echo '<p><label>' . elgg_echo("project_manager:project_code") . ' ' . elgg_view("input/text", array("name" => "project_code", "value" => $project_code, 'style' => "width:12ex;")) . '</label></p>';
 			
 			// Statut
 			echo '<p><label>' . elgg_echo("project_manager:project_managertype") . ' ' . elgg_view("input/dropdown", array("name" => "project_managertype", "value" => $project_managertype, "options_values" => $project_managertype_values)) . '</label><br /><em>' . elgg_echo("project_manager:project_managertype:details") . '</em></p>';
@@ -147,12 +147,12 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 			*/
 			
 			// Dates
-			echo '<div style="float:left;"><label>' . elgg_echo('project_manager:date') . ' </span>' . elgg_view("input/date", array("name" => "date", "value" => $date, 'js' => ' style="width:12ex;"')) . '<span class="elgg-icon elgg-icon-calendar"></span> </label> </div>';
-			echo '<div style="float:left;"> <label>' . elgg_echo('project_manager:enddate') . ' </span>' . elgg_view("input/date", array("name" => "enddate", "value" => $enddate, 'js' => ' style="width:12ex;"')) . '<span class="elgg-icon elgg-icon-calendar"></span> </label></div>';
+			echo '<div style="float:left;"><label>' . elgg_echo('project_manager:date') . ' </span>' . elgg_view("input/date", array("name" => "date", "value" => $date, 'style' => "width:12ex;")) . '<span class="elgg-icon elgg-icon-calendar"></span> </label> </div>';
+			echo '<div style="float:left;"> <label>' . elgg_echo('project_manager:enddate') . ' </span>' . elgg_view("input/date", array("name" => "enddate", "value" => $enddate, 'style' => "width:12ex;")) . '<span class="elgg-icon elgg-icon-calendar"></span> </label></div>';
 			echo '<div class="clearfloat"></div><br />';
 			
 			// Tags
-			echo '<p><label>' . elgg_echo("project_manager:tags") . ' ' . elgg_view("input/tags", array("name" => "tags", "value" => $tags, 'js' => 'style="width:80%;"')) . '</label></p>';
+			echo '<p><label>' . elgg_echo("project_manager:tags") . ' ' . elgg_view("input/tags", array("name" => "tags", "value" => $tags, 'style' => "width:80%;")) . '</label></p>';
 			
 		echo '</div>';
 		
@@ -162,7 +162,7 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 			echo '<h3>' . elgg_echo('project_manager:client') . '</h3>';
 			
 			// Nom court du client
-			echo '<p><label>' . elgg_echo("project_manager:clientshort") . ' ' . elgg_view("input/text", array("name" => "clientshort", "value" => $clientshort, 'js' => ' style="width:12ex;"')) . '</label></p>';
+			echo '<p><label>' . elgg_echo("project_manager:clientshort") . ' ' . elgg_view("input/text", array("name" => "clientshort", "value" => $clientshort, 'style' => "width:12ex;")) . '</label></p>';
 			// Client : organisation
 			 echo '<p style="margin-top:10px;"><label>' . elgg_echo("project_manager:clients") . ' ' . elgg_view("input/tags", array("name" => "clients", "value" => $clients)) .'</label></p>';
 			// Client : coordonnées
@@ -222,22 +222,22 @@ echo '<style>' . elgg_view('project_manager/css') . '</style>';
 		echo '<div style="width:48%; float:left;">';
 		// Production : autres postes humains
 		echo '<label>' . elgg_echo('project_manager:otherhuman') . ' ';
-		echo elgg_view("input/plaintext", array('name' => "otherhuman", 'value' => $otherhuman, 'title' => elgg_echo("project_manager:otherhuman:details"), 'js' => 'style="height:50px;"')) . '</label><br /><br />';
+		echo elgg_view("input/plaintext", array('name' => "otherhuman", 'value' => $otherhuman, 'title' => elgg_echo("project_manager:otherhuman:details"), 'style' => "height:50px;")) . '</label><br /><br />';
 		echo '</div>';
 		echo '<div style="width:48%; float:right;">';
 		// Production : autres postes
 		echo '<label>' . elgg_echo('project_manager:other') . ' ';
-		echo elgg_view("input/plaintext", array('name' => "other", 'value' => $other, 'title' => elgg_echo("project_manager:other:details"), 'js' => 'style="height:50px;"')) . '</label><br /><br />';
+		echo elgg_view("input/plaintext", array('name' => "other", 'value' => $other, 'title' => elgg_echo("project_manager:other:details"), 'style' => "height:50px;")) . '</label><br /><br />';
 		echo '</div>';
 		
 		// Profils, nombre de jours et taux des consultants
 		echo '<strong>' . elgg_echo('project_manager:profilesrates') . '&nbsp;:</strong> ' . elgg_echo('project_manager:profilesrates:details');
-		echo elgg_view("input/plaintext", array('name' => "profiles", 'value' => $profiles, 'title' => elgg_echo("project_manager:profilesrates:details"), 'js' => 'style="height:70px;"')) . '<br /><br />';
+		echo elgg_view("input/plaintext", array('name' => "profiles", 'value' => $profiles, 'title' => elgg_echo("project_manager:profilesrates:details"), '' => "height:70px;")) . '<br /><br />';
 		
 		
 		// Container : owner or group
 		echo '<br /><h3>Intégration avec les outils collaboratifs</h3>';
-		echo '<br /><p><label>' . elgg_echo('project_manager:projectgroup') . ' ' . elgg_view('input/project_manager/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'empty_value' => true, 'js' => 'style="max-width:30ex;"')) . '</label>';
+		echo '<br /><p><label>' . elgg_echo('project_manager:projectgroup') . ' ' . elgg_view('input/project_manager/groups_select', array('name' => 'container_guid', 'value' => $container_guid, 'empty_value' => true, 'style' => "max-width:30ex;")) . '</label>';
 		echo '<br /><em>' . elgg_echo('project_manager:projectgroup:details') . '</em>';
 		echo '</p>';
 		//echo "<input type=\"hidden\" name=\"container_guid\" value=\"{$container_guid}\" />";

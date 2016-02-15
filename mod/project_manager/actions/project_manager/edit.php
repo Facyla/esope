@@ -153,7 +153,7 @@ if ($is_manager) {
 $forward = elgg_get_site_url() . 'project_manager';
 $container = get_entity($container_guid);
 if (elgg_instanceof($container, 'group')) {
-	$forward .= '/group/' . $container->gruid;
+	$forward .= '/group/' . $container->guid;
 } else if (elgg_instanceof($container, 'user')) {
 	$forward .= '/owner/' . $container->username;
 }

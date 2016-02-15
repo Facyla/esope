@@ -107,9 +107,9 @@ $is_manager = project_manager_manager_gatekeeper(false, true, false);
 if ($project->canEdit() || $is_manager) {
 	if (!in_array($projecttype, array('closed', 'rejected')) || elgg_is_admin_logged_in() || $is_manager) {
 		$edit_links .= '<div class="elgg-menu-entity">';
-		$edit_links .= '<span class="elgg-menu-item-edit"><a href="' . $vars['url'] . 'project_manager/edit/' . $project->getGUID() . '">' . elgg_echo('edit') . '</span></a>&nbsp; ';
+		$edit_links .= '<span class="elgg-menu-item-edit"><a href="' . elgg_get_site_url() . 'project_manager/edit/' . $project->getGUID() . '">' . elgg_echo('edit') . '</span></a>&nbsp; ';
 		$edit_links .= '<span class="elgg-menu-item-delete">' . elgg_view('output/confirmlink',array(
-				'href' => $vars['url'] . "action/project_manager/delete?project_manager=" . $project->getGUID(),
+				'href' => elgg_get_site_url() . "action/project_manager/delete?project_manager=" . $project->getGUID(),
 				'text' => elgg_echo("delete"), 
 				'confirm' => elgg_echo("project_manager:delete:confirm"),
 			)) . '</span>';
@@ -124,7 +124,7 @@ if ($project->canEdit() || $is_manager) {
 if (elgg_get_context() == "search") {
 
 	//if (get_input('search_viewtype') == "gallery") {} else {}
-		$icon = '<a href="' . $project->getURL() . '"><img src="' . $vars['url'] . 'mod/project_manager/graphics/mission_64.png" /></a>';
+		$icon = '<a href="' . $project->getURL() . '"><img src="' . elgg_get_site_url() . 'mod/project_manager/graphics/mission_64.png" /></a>';
 		$icon = '<div class="project_managertype_'.$projecttype.'">' . $icon . '</div>';
 		
 		$info = '';
@@ -138,15 +138,15 @@ if (elgg_get_context() == "search") {
 		$info .= '</span>';
 		
 		$info .= '<span class="entity_title"><a href="' . $project->getURL() . '">' . $title . ' (' . $project_code . ')</a></span><br />';
-		//$info .= "<p class=\"owner_timestamp\"><a href=\"{$vars['url']}pg/project_manager/{$owner->username}\">{$owner->name}</a>";
+		//$info .= "<p class=\"owner_timestamp\"><a href=\"{elgg_get_site_url()}pg/project_manager/{$owner->username}\">{$owner->name}</a>";
 		/*
 		$numcomments = $project->countComments();
 		if ($numcomments) $info .= ", <a href=\"{$project->getURL()}\">" . sprintf(elgg_echo("comments")) . " (" . $numcomments . ")</a>";
 		*/
 		if (elgg_instanceof($container, 'group')) { $info .= "<em>Groupe lié&nbsp;: <a href=\"{$container->getURL()}\">{$container->name}</a></em><br />"; }
 		if ($project->canEdit() || $is_manager) {
-			$info .= '<a href="' . $vars['url'] . 'project_manager/production/project/' . $project->getGUID() . '">&raquo;&nbsp;' . elgg_echo('project_manager:menu:production') . '</a><br />';
-			$info .= '<a href="' . $vars['url'] . 'time_tracker/project/' . $project->guid . '">&raquo;&nbsp;' . elgg_echo('project_manager:menu:project:time_tracker') . '</a>';
+			$info .= '<a href="' . elgg_get_site_url() . 'project_manager/production/project/' . $project->getGUID() . '">&raquo;&nbsp;' . elgg_echo('project_manager:menu:production') . '</a><br />';
+			$info .= '<a href="' . elgg_get_site_url() . 'time_tracker/project/' . $project->guid . '">&raquo;&nbsp;' . elgg_echo('project_manager:menu:project:time_tracker') . '</a>';
 		}
 		echo elgg_view_image_block($icon, $info);
 
@@ -230,12 +230,12 @@ if (elgg_get_context() == "search") {
 				?>
 				<div>
 					<h3><?php echo elgg_echo('project_manager:menu:group:production'); ?></h3>
-					<p><strong><a class="elgg-button elgg-button-action" href="<?php echo $vars['url'] . 'project_manager/production/project/' . $project->guid; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:production:edit'); ?></a></strong></p>
+					<p><strong><a class="elgg-button elgg-button-action" href="<?php echo elgg_get_site_url() . 'project_manager/production/project/' . $project->guid; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:production:edit'); ?></a></strong></p>
 					<br />
 					<h3><?php echo elgg_echo('time_tracker:group'); ?></h3>
-					<p><strong><a class="elgg-button elgg-button-action" href="<?php echo $vars['url'] . 'time_tracker'; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:time_tracker:edit'); ?></a></strong></p>
+					<p><strong><a class="elgg-button elgg-button-action" href="<?php echo elgg_get_site_url() . 'time_tracker'; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:time_tracker:edit'); ?></a></strong></p>
 					<?php echo time_tracker_project_times($project->guid); ?>
-					<p><strong><a href="<?php echo $vars['url'] . 'time_tracker/project/' . $project->guid; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:time_tracker'); ?></a></strong></p>
+					<p><strong><a href="<?php echo elgg_get_site_url() . 'time_tracker/project/' . $project->guid; ?>">&rarr;&nbsp;<?php echo elgg_echo('project_manager:menu:project:time_tracker'); ?></a></strong></p>
 				</div>
 				<br />
 				<br />
@@ -257,7 +257,7 @@ if (elgg_get_context() == "search") {
 					foreach($phases as $phase) {
 						echo elgg_view_entity($phase);
 					}
-					echo '<a target="_new" href="' . $vars['url'] . 'tasks/add/' . $container_guid . '">&raquo;&nbsp;Ajouter une autre phase</a>';
+					echo '<a target="_new" href="' . elgg_get_site_url() . 'tasks/add/' . $container_guid . '">&raquo;&nbsp;Ajouter une autre phase</a>';
 				}
 				
 				

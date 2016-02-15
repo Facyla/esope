@@ -698,12 +698,14 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 
 // Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending, and triggers a blocking hook
 function esope_elgg_send_email_notification($hook, $type, $result, $params) {
+error_log("ESOPE : block hook => $result");
 	
 	// Do not notify again if email notification already sent ?
 	if ($result === true) { return true; }
 	
 	// Trigger blocking hook
 	// @TODO blocking hook should be global, otherwise better use the recipients hook to update the list
+error_log("ESOPE : block hook => NOT BLOCKED");
 	
 	return _elgg_send_email_notification($hook, $type, $result, $params);
 }

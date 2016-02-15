@@ -14,8 +14,6 @@ elgg_register_event_handler('init', 'system', 'prevent_notifications_init'); // 
  * Init prevent_notifications plugin.
  */
 function prevent_notifications_init() {
-	global $CONFIG;
-	
 	elgg_extend_view('css', 'prevent_notifications/css');
 	
 	// Hook pour bloquer les notifications si on a demandé à les désactiver

@@ -76,13 +76,33 @@ function project_manager_init() {
 	elgg_register_page_handler('time_tracker','time_tracker_page_handler');
 	elgg_register_page_handler('tasks', 'tasks_page_handler');
 	
+	
 	// NOTIFICATIONS
-	// Register granular notification for this type
+	
+	// Register granular notification for project_manager, task and task_top objects
+	elgg_register_notification_event('object', 'project_manager', array('create'));
+	elgg_register_notification_event('object', 'task', array('create'));
+	elgg_register_notification_event('object', 'task_top', array('create'));
+	
+	// Prepare notification (subject, summary, content)
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:project_manager', 'project_manager_prepare_notification');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:task', 'project_manager_prepare_notification');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:task_top', 'project_manager_prepare_notification');
+	
+	/*
 	// @TODO replace by new function
 	if (is_callable('register_notification_object')) { register_notification_object('object', 'project_manager', elgg_echo('project_manager:notification:title')); }
 	// Message content
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'project_manager_notify_message');
-
+	
+	// NOTIFICATIONS - Register granular notification for 
+	register_notification_object('object', 'task', elgg_echo('tasks:new'));
+	register_notification_object('object', 'task_top', elgg_echo('tasks:new'));
+	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'task_notify_message');
+	*/
+	
+	
+	
 	// GROUP TOOLS OPTION
 	$pm_meta = project_manager_get_user_metadata();
 	if (elgg_is_logged_in() && !empty($_SESSION['user']->{$pm_status})) {
@@ -102,11 +122,6 @@ function project_manager_init() {
 	// register a library of helper functions
 	elgg_register_library('elgg:tasks', elgg_get_plugins_path() . 'project_manager/lib/tasks.php');
 	
-	// NOTIFICATIONS - Register granular notification for this type
-	register_notification_object('object', 'task', elgg_echo('tasks:new'));
-	register_notification_object('object', 'task_top', elgg_echo('tasks:new'));
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'task_notify_message');
-
 	// Language short codes must be of the form "tasks:key"
 	// where key is the array key below
 	elgg_set_config('tasks', array(
@@ -289,14 +304,45 @@ function time_tracker_owner_block_menu($hook, $type, $return, $params) {
 	return $return;
 }
 
+
+/* NOTIFICATIONS */
 /* Contenu du message de notification */
-function project_manager_notify_message($hook, $entity_type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	if (($entity instanceof ElggEntity) && ($entity->getSubtype() == 'project_manager')) {
-		$owner = $entity->getOwnerEntity();
-		return $owner->name . ' a créé un nouveau projet : ' . $entity->title . "\n\n" . $entity->description . "\n\n" . $entity->getURL();
+function project_manager_prepare_notification($hook, $type, $notification, $params) {
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$owner_name = $owner->name;
+	$language = $params['language'];
+	$method = $params['method'];
+
+	$title = $entity->title;
+	$descr = $entity->description;
+	$entity_url = $entity->getURL();
+	
+	switch($entity->getSubtype()) {
+		case 'project_manager':
+			$notification->subject = elgg_echo('project_manager:notify:subject', array($owner_name, $title), $language); 
+			$notification->summary = elgg_echo('project_manager:notify:summary', array($owner_name, $title), $language);
+			$notification->body = elgg_echo('project_manager:notify:body', array(
+				$owner_name,
+				$title,
+				$descr,
+				$entity_url
+			), $language);
+			break;
+		case 'task':
+		case 'task_top':
+			$notification->subject = elgg_echo('project_manager:task:notify:subject', array($owner_name, $title), $language); 
+			$notification->summary = elgg_echo('project_manager:task:notify:summary', array($owner_name, $title), $language);
+			$notification->body = elgg_echo('project_manager:task:notify:body', array(
+				$owner_name,
+				$title,
+				$descr,
+				$entity_url
+			), $language);
+			break;
 	}
-	return null;
+	
+	return $notification;
 }
 
 
@@ -593,28 +639,6 @@ function tasks_icon_url_override($hook, $type, $returnvalue, $params) {
 }
 
 
-/**
-* Returns a more meaningful message
-*
-* @param unknown_type $hook
-* @param unknown_type $entity_type
-* @param unknown_type $returnvalue
-* @param unknown_type $params
-*/
-function task_notify_message($hook, $entity_type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
-	if (($entity instanceof ElggEntity) && (($entity->getSubtype() == 'task_top') || ($entity->getSubtype() == 'task'))) {
-		$descr = $entity->description;
-		$title = $entity->title;
-		//@todo why?
-		$url = elgg_get_site_url() . "view/" . $entity->guid;
-		$owner = $entity->getOwnerEntity();
-		return $owner->name . ' ' . elgg_echo("tasks:via") . ': ' . $title . "\n\n" . $descr . "\n\n" . $entity->getURL();
-	}
-	return null;
-}
 
 /**
  * Extend permissions checking to extend can-edit for write users.

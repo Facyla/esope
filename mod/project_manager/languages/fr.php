@@ -53,7 +53,6 @@ return array(
 	'project_manager:managers:noaccess' => "Cette page est réservée aux managers. Si vous pensez devoir y avoir accès, veuillez demander l'accès à un administrateur.",
 	
 	'project_manager:new' => "Nouveau projet",
-	'project_manager:notification:title' => "Un nouveau projet a été créé",
 	'project_manager:edit' => "Mise à jour du projet",
 	'project_manager:edit:details' => "Mode d'emploi pour créer ou mettre à jour un nouveau projet&nbsp;:<br /><ol>
 		<li>Nom du projet : indiquez le titre de votre projet</li>
@@ -556,8 +555,26 @@ return array(
 	
 	'time_tracker:display_user_month' => "<i class=\"fa fa-external-link\"></i> afficher la feuille de temps",
 	
+	
+	// NOTIFICATIONS
+	'project_manager:notification:title' => "Un nouveau projet a été créé",
+	'project_manager:notify:subject' => "%s a créé un nouveau projet : %s",
+	'project_manager:notify:summary' => "%s a créé un nouveau projet : %s",
+	'project_manager:notify:body' => "%s a créé un nouveau projet : %s
 
+%s
+
+%s
+	",
+	
+	'project_manager:task:notify:subject' => "%s a créé une nouvelle tâche : %s",
+	'project_manager:task:notify:summary' => "%s a créé une nouvelle tâche : %s",
+	'project_manager:task:notify:body' => "%s a créé une nouvelle tâche : %s
+
+%s
+
+%s
+	",
+	
 );
-				
-add_translation("fr",$french);
 
