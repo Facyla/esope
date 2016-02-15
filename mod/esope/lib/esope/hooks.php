@@ -696,10 +696,9 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 
 
 
-// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending, and triggers a blocking hook
+// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending
+// Note : we could also provide a blocking hook, but other plugins can register to the same hook to block notifications, so why bother...
 function esope_elgg_send_email_notification($hook, $type, $result, $params) {
-if ($result === true) error_log("ESOPE : block hook => BLOCKING");
-else error_log("ESOPE : block hook => NOT BLOCKED");
 	
 	// Do not notify again if email notification already sent ?
 	if ($result === true) { return true; }

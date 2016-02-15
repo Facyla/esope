@@ -31,6 +31,8 @@
 <!--
 1.12.0 : 201602159 - operational Elgg 1.12 version
   - rewrite blocking method : use enqueue, notification hook
+  - add README.md file
+  - add default setting to "no" in embed context
 
 0.3 : 20160129 - ported to Elgg 1.12 (not functionnal)
 
