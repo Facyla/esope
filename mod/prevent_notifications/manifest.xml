@@ -3,9 +3,9 @@
 	<name>Prevent notifications</name>
 	<id>prevent_notifications</id>
 	<author>Florian DANIEL aka Facyla 2016 ~ Items International 2013</author>
-	<version>0.3</version>
+	<version>1.12.0</version>
 	<blurb>Prevent notifications - désactive ponctuellement les notifications</blurb>
-<description>Permet de désactiver les notifications lors de la création / MAJ de contenus, au choix de l'éditeur.</description>
+<description>Permet de désactiver l'envoi de notification lors de la création de contenus (ou de toute action générant une notification), au choix de l'éditeur.</description>
 	<website>https://devnet.inria.fr/</website>
 	<copyright>Items International (Facyla), Inria</copyright>
 	<license>GNU Public License version 2</license>
@@ -24,12 +24,15 @@
 		<priority>after</priority>
 	</requires>
 	
-	<activate_on_install>true</activate_on_install>
+	<activate_on_install>false</activate_on_install>
 	
 </plugin_manifest>
 
 <!--
-0.3 : 20160129 - ported to Elgg 1.12
+1.12.0 : 201602159 - operational Elgg 1.12 version
+  - rewrite blocking method : use enqueue, notification hook
+
+0.3 : 20160129 - ported to Elgg 1.12 (not functionnal)
 
 0.2 : 20150812
   - file tools support (folders)

@@ -1,6 +1,6 @@
 <?php
 /**
- * prevent_notificationss
+ * prevent_notifications
  *
  */
 
@@ -17,8 +17,10 @@ function prevent_notifications_init() {
 	
 	elgg_extend_view('css', 'prevent_notifications/css');
 	
-	// Hook pour bloquer les notifications si on a demandé à les désactiver
-	// Note : load at first, because we want to block the process early, if it needs to be blocked
+	/* Hook pour bloquer les notifications si on a demandé à les désactiver
+	 * - load at first, because we want to block the process early, if it needs to be blocked
+	 * - method: prevent enqueuing into notification queue, so we don't have to imagine complex tricks to block notification afterwards
+	 */
 	elgg_register_plugin_hook_handler('enqueue', 'notification', 'prevent_notifications_enqueue_notification');
 	
 	// Add new field to eligible forms
