@@ -4,7 +4,6 @@ elgg_register_event_handler('init','system','pin_init');
 
 
 function pin_init() {
-	global $CONFIG;
 	
 	elgg_extend_view('css/elgg','pin/css');
 	elgg_extend_view('js/elgg','pin/js');
@@ -38,7 +37,7 @@ function pin_init() {
 	}
 	*/
 	
-	elgg_register_action("pin/highlight",false,$CONFIG->pluginspath . "pin/actions/highlight.php");
+	elgg_register_action("pin/highlight",false,elgg_get_plugins_path() . "pin/actions/highlight.php");
 	
 	elgg_register_page_handler('pin', 'pin_page_handler');
 	

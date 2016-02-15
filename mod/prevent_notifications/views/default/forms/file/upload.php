@@ -46,7 +46,7 @@ if (elgg_is_active_plugin('file_tools')) {
 	if(file_tools_use_folder_structure()){
 		$parent_guid = 0;
 		if($file = elgg_extract("entity", $vars)){
-			if($folders = $file->getEntitiesFromRelationship(FILE_TOOLS_RELATIONSHIP, true, 1)){
+		if($folders = $file->getEntitiesFromRelationship(array('relationship'=>FILE_TOOLS_RELATIONSHIP, 'inverse_relationship'=>true, 'limit'=>1))){
 				$parent_guid = $folders[0]->getGUID();
 			}
 		}
@@ -81,7 +81,10 @@ if ($guid) {
 	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
 }
 
-if (!$vars['entity']) echo elgg_view('prevent_notifications/prevent_form_extend', array());
+// @TODO : preset to no notification in embed context
+if (!$vars['entity']) {
+	echo elgg_view('prevent_notifications/prevent_form_extend', array());
+}
 
 echo elgg_view('input/submit', array('value' => $submit_label));
 
