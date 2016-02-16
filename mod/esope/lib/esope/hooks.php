@@ -74,10 +74,10 @@ function esope_route($hook, $type, $return, $params) {
 	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
-	 * return $params; // Laisse le fonctionnement habituel se poursuivre
+	 * return $return; // Laisse le fonctionnement habituel se poursuivre
 	*/
 	// Par défaut on ne fait rien du tout
-	return $params;
+	return $return;
 }
 
 function esope_public_profile_hook($hook, $type, $return, $params){
@@ -494,6 +494,7 @@ function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
 
 // Adds Favicon link in page head
 function esope_page_head_hook($hook, $type, $return, $params) {
+	
 	// Displays the default shortcut icon
 	$favicon = elgg_get_plugin_setting('faviconurl', 'esope');
 	$url = elgg_get_site_url();

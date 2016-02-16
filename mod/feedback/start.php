@@ -66,10 +66,14 @@ function feedback_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
 	
 	// Interception des commentaires
+	// Set core notifications system to track the creation of new comments
+	elgg_register_notification_event('object', 'comment', array('create'));
 	//elgg_register_event_handler('create', 'annotation', 'feedback_create_annotation_event_handler');
 	elgg_register_plugin_hook_handler("get", "subscriptions", "feedback_comment_get_subscriptions_hook");
-		// Set core notifications system to track the creation of new comments
-	elgg_register_notification_event('object', 'comment', array('create'));
+	
+	// @TODO : override feedback message to use our own content
+	// Note : load late to avoid content being modifed by some other plugin
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:comment', 'feedback_prepare_comment_notification', 900);
 	
 	// Register actions
 	elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
@@ -131,6 +135,7 @@ function feedback_owner_block_menu($hook, $type, $return, $params) {
 }
 
 
+/* Old comment notification system
 function feedback_create_annotation_event_handler($event, $type, $annotation){
 	if(!empty($annotation) && ($annotation instanceof ElggAnnotation)){
 		// check if the entity isn't PRIVATE
@@ -172,13 +177,13 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 	}
 	return true;
 }
+*/
+
+
 // Ensure admins and comment owner are notified
 function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $params) {
 	$event = $params['event'];
 	$entity = $event->getObject();
-	
-	error_log("FEEDBACK : " . $entity->getSubtype());
-	error_log(print_r($subscriptions, true));
 	
 	// Process only comments
 	if (!elgg_instanceof($entity, 'object', 'comment')) { return $subscriptions; }
@@ -186,26 +191,67 @@ function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $
 	// Process only feedback comments
 	$feedback = $event->getObject()->getContainerEntity();
 	if (elgg_instanceof($feedback, 'object', 'feedback')) {
-	
+		
+		// @TODO : vérifier la bonne valeur à indiquer dans $mtthods
+		//$handlers = _elgg_services()->notifications->getMethods();
+		//error_log(print_r($handlers, true));
+		
 		// Add feedback owner
 		$owner = $feedback->getOwnerEntity();
-		$subscriptions[$owner->guid] = 'email';
+		$subscriptions[$owner->guid] = array('email');
 		
 		// Add configured admins
 		for ($i=1; $i<=5; $i++) {
 			$name = elgg_get_plugin_setting('user_'.$i, 'feedback');
 			if ( !empty($name) ) {
 				if ($user = get_user_by_username($name)) {
-					$subscriptions[$user->guid] = 'email';
+					$subscriptions[$user->guid] = array('email');
 				}
 			}
 		}
 		
 	}
-	error_log(print_r($subscriptions, true));
 	
 	return $subscriptions;
 }
+
+
+function feedback_prepare_comment_notification($hook, $type, $notification, $params) {
+	$event = $params['event'];
+	$entity = $event->getObject();
+	
+	// Process only comments
+	if (!elgg_instanceof($entity, 'object', 'comment')) { return $notification; }
+	
+	// Process only feedback comments
+	$feedback = $event->getObject()->getContainerEntity();
+	if (elgg_instanceof($feedback, 'object', 'feedback')) {
+		$actor = $event->getActor();
+		/*
+		$recipient = $params['recipient'];
+		$language = $params['language'];
+		$method = $params['method'];
+		*/
+		$feedback_title = $feedback->title;
+		$details = '';
+		if (feedback_is_about_enabled()) {
+			$details = $feedback->about;
+		}
+		if (feedback_is_mood_enabled()) {
+			if (!empty($details)) $details .= ', ';
+			$details .= $feedback->mood;
+		}
+		if (!empty($details)) { $feedback_title .= " ($details)"; }
+		$comment_sender = '<a href="' . $actor->getURL() . '">' . $actor->name . '</a>';
+		
+		$notification->subject = elgg_echo('feedback:email:reply:subject', array($feedback_title), $language);
+		$notification->summary = elgg_echo('feedback:email:reply:subject', array($comment_sender, $feedback_title), $language);
+		$notification->body = elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $feedback->value, $feedback->getURL()), $language);
+	}
+	
+	return $notification;
+}
+
 
 
 // Tells if mood options are enabled

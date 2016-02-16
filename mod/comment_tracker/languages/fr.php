@@ -44,16 +44,14 @@ return array(
 
 %4\$s
 
-Pour afficher la conversation : %5\$s
-
-
-%6\$s
+Pour afficher la conversation :
+%5\$s
 
 _________________________________________________________________________________
 Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.
 
 Pour modifier vos préférences de notification, veuillez cliquer sur : 
-%7\$s
+%6\$s
 
 Vous pouvez avoir besoin de vous connecter pour accéder à cette discussion.
 	",

@@ -141,6 +141,7 @@ return array(
 	'feedback:access:group' => "Group members",
 
 	'feedback:email:reply:subject' => '[Feedback] %s',
+	'feedback:email:reply:summary' => "%s has replied on \"%s\"",
 	'feedback:email:reply:body' => "%s has replied on \"%s\" :
 	
 	%s

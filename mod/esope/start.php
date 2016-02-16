@@ -36,7 +36,9 @@ function esope_init() {
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
+	
 	// Sécurité
+	// @TODO : use hook to extend head
 	// Important : Enable this only if you don't need to include iframes in other websites !!
 	$framekiller = elgg_get_plugin_setting('framekiller', 'esope');
 	if ($framekiller == 'yes') {
@@ -153,6 +155,7 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
 	// Page d'accueil
+	/*
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
 		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
@@ -170,6 +173,7 @@ function esope_init() {
 			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_public_index'); }
 		}
 	}
+	*/
 	
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
