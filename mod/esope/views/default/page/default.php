@@ -12,13 +12,6 @@
  * @uses $vars['sysmessages'] A 2d array of various message registers, passed from system_messages()
  */
 
-// Set the content type
-//header("Content-type: text/html; charset=UTF-8");
-
-// Allow external embed (hack)
-if (function_exists('header_remove')) { header_remove('X-Frame-Options'); } else { header('X-Frame-Options: GOFORIT'); }
-
-
 // backward compatability support for plugins that are not using the new approach
 // of routing through admin. See reportedcontent plugin for a simple example.
 if (elgg_get_context() == 'admin') {

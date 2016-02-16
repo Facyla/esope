@@ -301,6 +301,7 @@ function esope_categories_page_handler() {
 }
 
 
+// Handle file page handler
 function esope_file_page_handler($page) {
 
 	if (!isset($page[0])) {

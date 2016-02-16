@@ -1,5 +1,6 @@
 <?php
-global $CONFIG;
+
+$url = elgg_get_site_url();
 
 // Select values
 $no_yes_opt = array('no' => elgg_echo('postbymail:settings:disabled'), 'yes' => elgg_echo('postbymail:settings:enabled'));
@@ -101,7 +102,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// Admin users who should be notified
 	echo '<p><label>' . elgg_echo('postbymail:settings:notifylist');
 	echo elgg_view('input/text', array( 'name' 	=> 'params[notifylist]', 'value' 	=> $vars['entity']->notifylist, ));
-	echo '</label></p>';
+	echo '</label><br />' . elgg_echo('postbymail:settings:notifylist:details') . '</p>';
+	
+	echo '<p><label>' . elgg_echo('postbymail:settings:debug') . ' ';
+	echo elgg_view('input/dropdown', array('name' => 'params[debug]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debug));
+	echo '</label><br />' . elgg_echo('postbymail:settings:debug:details') . '</p>';
 	
 echo '</fieldset>';
 
@@ -164,8 +169,8 @@ echo '<br /><br />';
 */
 
 echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
-	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:url') . '&nbsp;:</strong> <a href="'.$CONFIG->url.'postbymail/check">'.$CONFIG->url.'postbymail/check</a></</p>';
-	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:test') . '&nbsp;:</strong> <a href="'.$CONFIG->url.'postbymail/check?display=yes">'.$CONFIG->url.'postbymail/check?display=yes</a></p>';
+	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:url') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check">'.$url.'postbymail/check</a></</p>';
+	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:test') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check?display=yes">'.$url.'postbymail/check?display=yes</a></p>';
 echo '</fieldset>';
 
 

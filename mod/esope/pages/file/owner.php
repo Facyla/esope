@@ -6,11 +6,11 @@
  */
 
 // access check for closed groups
-group_gatekeeper();
+elgg_group_gatekeeper();
 
 $owner = elgg_get_page_owner_entity();
 if (!$owner) {
-	forward('file/all');
+	forward('file/all', '404');
 }
 
 elgg_push_breadcrumb(elgg_echo('file'), "file/all");
@@ -38,20 +38,22 @@ $title = elgg_echo("file:user", array($owner->name));
 $options = array(
 	'type' => 'object',
 	'subtype' => 'file',
-	'limit' => 10,
-	'full_view' => FALSE,
+	'full_view' => false,
+	'no_results' => elgg_echo("file:none"),
+	'preload_owners' => true,
+	'distinct' => false,
 );
 $use_owner = elgg_get_plugin_setting('file_user_listall', 'esope');
-if (($use_owner == 'yes') && elgg_instanceof($owner, 'user')) $options['owner_guid'] = $owner->guid;
-else $options['container_guid'] = $owner->guid;
-
-$content = elgg_list_entities($options);
-if (!$content) {
-	$content = elgg_echo("file:none");
+if (($use_owner == 'yes') && elgg_instanceof($owner, 'user')) {
+	$options['owner_guid'] = $owner->guid;
+} else {
+	$options['container_guid'] = $owner->guid;
 }
 
+$content = elgg_list_entities($options);
+
 $sidebar = file_get_type_cloud(elgg_get_page_owner_guid());
-$sidebar = elgg_view('file/sidebar');
+$sidebar .= elgg_view('file/sidebar');
 
 $params['content'] = $content;
 $params['title'] = $title;

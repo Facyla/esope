@@ -1,15 +1,9 @@
 <?php
 /**
- * comment_tracker language extender
- * 
- * @package ElggCommentTracker
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @copyright Copyright (c) 2007-2011 Cubet Technologies. (http://cubettechnologies.com)
- * @version 1.0
- * @author Akhilesh @ Cubet Technologies
+ * French translations for the comment_tracker plugin
  */
 
-$french = array(
+return array(
 	'comments' => "Commentaires",
 	'comment:notification:settings' => "Notifications des commentaires",
 	'comment:notification:settings:description' => "Envoyer une notification lorsque des commentaires sont ajoutés aux publications auxquelles vous êtes abonné.",
@@ -17,6 +11,7 @@ $french = array(
 	'comment:notification:settings:linktext' => "Voir toutes les publications auxquelles vous êtes abonné",
 	'comment:subscriptions' => "Abonnements",
 	'comment:subscriptions:none' => "Aucun abonnement actuellement",
+	'comment_tracker:setting:notify_owner' => "Laisser comment tracker gérer les notifications des commentaires de l'auteur ?",
 	'comment:subscribe:tooltip' => "Abonnez-vous pour recevoir des notifications lorsque des commentaires sont faits sur cette publication",
 	'allow:comment:notification' => "Voulez-vous activer les notifications ? ",
 	'email:content:type' => "Voulez-vous activer les emails en HTML ? ",
@@ -36,45 +31,16 @@ $french = array(
 	'comment:unsubscribe:not:valid:url' => "Désolé, l'adresse de désabonnement pour cette publication n'est pas valable.",
 	'comment:unsubscribe:entity:not:access' => "Désolé, la publication n'a pas pu être trouvée.",
 	'comment_tracker:setting:show_button' => "Afficher le bouton d'abonnement/désabonnement au-dessus des commentaires ? ",
-	'comment_tracker:item' => "élément",
-'comment_tracker:setting:notify_owner' => "Laisser comment_tracker gérer également les notifications de l'auteur ?",
+	'comment_tracker:setting:show_entity_button' => "Afficher le bouton d'inscription/désinscription dans le menu des entités ?",
+	'comment_tracker:setting:show_river_button' => "Afficher le bouton d'inscription/désinscription dans les menus de la rivière ?",
+	'comment_tracker:item' => "item",
 	
-	'comment:notify:subject:groupforumtopic' => "%s a commenté %s dans le groupe %s",
-	'comment:notify:subject:comment' => "%s a commenté %s \"%s\"",
-	'comment:notify:subject:comment:group' => "%s a commenté %s \"%s\" dans le groupe %s",
-	
-	
-	/* Legacy stuff - @TODO - see what's safe to delete */
-	'comment:notify:subject' => "Nouveau commentaire sur %s",
-	'comment:notify:group:subject' => "Nouveau commentaire sur %s",
-	
-	'comment:notify:body:web' => "Bonjour %s,
-<br/>Un nouveau commentaire a été publié sur %s
-<br/>%s a écrit : %s
-<br/>%s
-<br/>
-<font color=\"#888888\" size=\"2\">
-Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.<br/>
-Pour modifier vos préférences de notification, veuillez cliquer sur :
-%s<br/>
-</font>
-	",
-	
-	'comment:notify:group:body:web' => "Bonjour %s,
-<br/>Une nouvelle réponse a été publiée sur %s
-<br/>%s a écrit : %s
-<br/>%s
-<br/>
-<font color=\"#888888\" size=\"2\">
-Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.<br/>
-Pour modifier vos préférences de notification, veuillez cliquer sur :
-%s<br/>
-</font>
-	",
-	
-	'comment:notify:body:email:text' => "Bonjour %1\$s,
+	'comment_tracker:notify:subject' => '%s a commenté %s "%s"',
+	'comment_tracker:notify:subject:group' => '%s a commenté %s "%s" dans le groupe %s',
 
-%3\$s a publié un nouveau commentaire sur \"%2\$s\" :
+	'comment_tracker:notify:body' => "Bonjour %1\$s,
+
+%3\$s a commenté \"%2\$s\" :
 
 %4\$s
 
@@ -84,74 +50,13 @@ Pour afficher la conversation : %5\$s
 %6\$s
 
 _________________________________________________________________________________
-<font color=\"#888888\" size=\"2\">
-Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.
-
 Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.
 
 Pour modifier vos préférences de notification, veuillez cliquer sur : 
 %7\$s
-</font>
+
+Vous pouvez avoir besoin de vous connecter pour accéder à cette discussion.
 	",
-	
-	'comment:notify:group:body:email:text' => "Bonjour %1\$s,
-
-%3\$s a répondu sur \"%2\$s\"
-
-%4\$s
-
-%5\$s
-
-
-%6\$s
-
-_________________________________________________________________________________
-<font color=\"#888888\" size=\"2\">
-Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.
-
-Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.
-
-Pour modifier vos préférences de notification, veuillez cliquer sur : 
-%7\$s
-</font>
-	",
-	
-	'comment:notify:body:email:html' => "
-		<div>
-		<div>Bonjour %1\$s,</div>
-		<div>%3\$s a publié un nouveau commentaire %2\$s</div>
-		<div>%4\$s</div>
-		<div>%5\$s</div>
-		<div>&nbsp;</div>
-		<div>&nbsp;</div></div>
-		<div>%6\$s</div>
-		<div>&nbsp;</div>
-		<div style=\"border-top:1px solid #CCCCCC;color:#888888;\">
-			<div>Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.</div>
-			<div>Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.</div>
-			<div>Pour modifier vos préférences de notification, veuillez cliquer sur : 
-			%7\$s</div>
-		</div>
-		</div>",
-		
-	'comment:notify:group:body:email:html' => "
-	<div>
-	<div>Bonjour %1\$s,</div>
-	<div>%3\$s a publié une nouvelle réponse sur %2\$s</div>
-	<div>%4\$s</div>
-	<div>%5\$s</div>
-	<div>&nbsp;</div>
-	<div>&nbsp;</div>
-	<div>%6\$s</div>
-	<div style=\"border-top:1px solid #CCCCCC;color:#888888;\">
-		<div>Veuillez noter que vous pouvez avoir besoin de vous connecter avant d'accéder à cette discussion.</div>
-		<div>Vous recevez cette notification parce que vous vous êtes abonné à cette discussion, ou y avez participé.</div>
-		<div>Pour modifier vos préférences de notification, veuillez cliquer sur : 
-		%7\$s</div>
-	</div>
-	</div>",
 
 );
-
-add_translation("fr",$french);
 

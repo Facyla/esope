@@ -30,7 +30,10 @@ return array(
 	'postbymail:settings:separator' => "Séparateur du message de réponse",
 	'postbymail:settings:separatordetails' => "Texte explicatif situé sous le séparateur, qui limite la publication des signatures et conversations complètes, ainsi que le risque de doublons.",
 	'postbymail:settings:scope' => "Types de réponses par mail autorisées", // forumonly, comments, allobjects
-	'postbymail:settings:notifylist' => "Liste des GUID ou username des membres à prévenir lors de la réussite ou de l'échec de nouvelles publications (note : l'admin est prévenu de tout nouveau message publié, ou échoué. L'auteur n'est prévenu qu'en cas d'erreur.", 
+	'postbymail:settings:notifylist' => "Comptes à notifier", 
+	'postbymail:settings:notifylist:details' => "Liste des GUID ou username des membres à prévenir lors de la réussite ou de l'échec de nouvelles publications (note : l'admin est prévenu de tout nouveau message publié, ou échoué. L'auteur n'est prévenu qu'en cas d'erreur.", 
+	'postbymail:settings:debug' => "Activer le mode debug", 
+	'postbymail:settings:debug:details' => "Ajoute plus d'informations dans les emails et les journaux d'erreurs", 
 	'postbymail:settings:replymode' => "Type de comportement pour la réponse par email",
 	'postbymail:settings:replymode:replybutton' => "Bouton de réponse (recommandé)",
 	'postbymail:settings:replymode:replyemail' => "Modification de l'email d'envoi",

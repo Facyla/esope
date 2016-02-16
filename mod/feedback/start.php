@@ -66,7 +66,10 @@ function feedback_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
 	
 	// Interception des commentaires
-	elgg_register_event_handler('create', 'annotation', 'feedback_create_annotation_event_handler');
+	//elgg_register_event_handler('create', 'annotation', 'feedback_create_annotation_event_handler');
+	elgg_register_plugin_hook_handler("get", "subscriptions", "feedback_comment_get_subscriptions_hook");
+		// Set core notifications system to track the creation of new comments
+	elgg_register_notification_event('object', 'comment', array('create'));
 	
 	// Register actions
 	elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
@@ -169,14 +172,49 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 	}
 	return true;
 }
+// Ensure admins and comment owner are notified
+function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $params) {
+	$event = $params['event'];
+	$entity = $event->getObject();
+	
+	error_log("FEEDBACK : " . $entity->getSubtype());
+	error_log(print_r($subscriptions, true));
+	
+	// Process only comments
+	if (!elgg_instanceof($entity, 'object', 'comment')) { return $subscriptions; }
+	
+	// Process only feedback comments
+	$feedback = $event->getObject()->getContainerEntity();
+	if (elgg_instanceof($feedback, 'object', 'feedback')) {
+	
+		// Add feedback owner
+		$owner = $feedback->getOwnerEntity();
+		$subscriptions[$owner->guid] = 'email';
+		
+		// Add configured admins
+		for ($i=1; $i<=5; $i++) {
+			$name = elgg_get_plugin_setting('user_'.$i, 'feedback');
+			if ( !empty($name) ) {
+				if ($user = get_user_by_username($name)) {
+					$subscriptions[$user->guid] = 'email';
+				}
+			}
+		}
+		
+	}
+	error_log(print_r($subscriptions, true));
+	
+	return $subscriptions;
+}
 
 
+// Tells if mood options are enabled
 function feedback_is_mood_enabled() {
 	$enable_mood = elgg_get_plugin_setting('enable_mood', 'feedback');
 	if ($enable_mood != 'no') { return true; }
 	return false;
 }
-
+// Return mood available values
 function feedback_mood_values() {
 	$mood_values = elgg_get_plugin_setting('mood_values', 'feedback');
 	if (!empty($mood_values)) {
@@ -190,13 +228,14 @@ function feedback_mood_values() {
 	return $mood_values;
 }
 
+// Tells if about categories are enabled
 function feedback_is_about_enabled() {
 	$enable_about = elgg_get_plugin_setting('enable_about', 'feedback');
 	if ($enable_about != 'no') { return true; }
 	return false;
 }
 
-/* Values for feedback subtypes
+/* Values for feedback categories
  * Note : if no value wanted, better to disable than set to empty,
  * so we set a default array if empty config
  */

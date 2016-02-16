@@ -31,10 +31,21 @@ if (!class_exists('Mail_mimeDecode')) {
  * $separator = elgg_echo('postbymail:default:separator');	 Séparateur du message (pour retirer la signature, les messages joints intégrés dans la réponse..)
  * 
  */
-function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = '', $username = false, $password = false, $markSeen = false, $bodyMaxLength = 65536, $separator = '', $mimeParams = array()) {
+//function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = '', $username = false, $password = false, $markSeen = false, $bodyMaxLength = 65536, $separator = '', $mimeParams = array()) {
+function postbymail_checkandpost($config = array()) {
+	// Extract config vars
+	$server = elgg_extract('server', $config, false);
+	$protocol = elgg_extract('protocol', $config, '');
+	$inbox_name = elgg_extract('mailbox', $config, '');
+	$username = elgg_extract('username', $config, false);
+	$password = elgg_extract('password', $config, false);
+	$markSeen = elgg_extract('markSeen', $config, false);
+	$bodyMaxLength = elgg_extract('bodyMaxLength', $config, 65536);
+	$separator = elgg_extract('separator', $config, '');
+	$mimeParams = elgg_extract('mimeParams', $config, array());
 	
 	// Stop process if missing required parameters for mailbox connection
-	if (empty($server) || empty($username) || empty($password)) {
+	if (!postbymail_check_required($config)) {
 		return elgg_echo('postbymail:settings:error:missingrequired');
 	}
 	
@@ -46,11 +57,18 @@ function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = 
 	$site_name = $site->name;
 	
 	$ia = elgg_set_ignore_access(true);
-	$debug = true;
+	
+	// Debug mode
+	$debug = elgg_get_plugin_setting('debug', 'postbymail');
+	if ($debug == 'no') { $debug = false; } else { $debug = true; }
+	
+	// Attachements : risky and not implemented
 	$use_attachments = false;
+	
 	// @TODO : vérifier si on doit faire un check has_access_to_entity => normalement plus besoin en 1.8
 	
-	$body = ''; $pub_counter = 0;
+	$body = '';
+	$pub_counter = 0;
 	
 	
 	// COLLECT BASE PARAMS AND VARS
@@ -313,7 +331,7 @@ function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = 
 				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
 				$sender_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
 				$sender_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				if ($use_attachments) { $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
 				//$sender_reply .= elgg_echo('postbymail:info:parameters', array($parameters));
 				if ($entity) {
 					$sender_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
@@ -329,7 +347,7 @@ function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = 
 				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
 				$admin_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
 				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				if ($use_attachments) { $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
 				$admin_reply .= $parameters;
 				if ($entity) {
 					$admin_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));

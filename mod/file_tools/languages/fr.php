@@ -9,6 +9,7 @@ return array(
 	'file_tools:list:sort:time_created' => "Date de création",
 	'file_tools:list:sort:asc' => "Ascendant",
 	'file_tools:list:sort:desc' => "Descendant",
+	'file_tools:show_more' => 'Afficher plus de fichiers',
 
 	// object name
 	'item:object:folder' => "Dossier de fichiers",
@@ -73,7 +74,7 @@ return array(
 	'file_tools:forms:edit:description' => "Description",
 	'file_tools:forms:edit:parent' => "Sélectionner le dossier parent",
 	'file_tools:forms:edit:change_children_access' => "Modifier le niveau d'accès sur tous les sous-dossiers",
-	'file_tools:forms:edit:change_files_access' => "Modifier le niveau d'accès sur tous fichiers de ce dossier (et tous les sous-dossiers si sélectionné)",
+	'file_tools:forms:edit:change_files_access' => "Modifier le niveau d'accès sur tous fichiers de ce dossier (et tous les sous-dossiers si sélectionnés)",
 	'file_tools:forms:browse' => "Ajouter un fichier",
 	'file_tools:forms:empty_queue' => "Vider la liste des fichiers à envoyer",
 
@@ -132,6 +133,8 @@ return array(
 	'file_tools:settings:allowed_extensions' => "Extensions autorisées (séparées par des virgules)",
 	'file_tools:settings:user_folder_structure' => "Utiliser les dossiers",
 	'file_tools:settings:sort:default' => "Tri par défaut dans les dossiers",
+	'file_tools:settings:list_length' => 'Nombre de fichiers affichés dans le listing',
+	'file_tools:settings:list_length:unlimited' => 'Illimité',
 
 	'file:type:application' => "Application",
 	'file:type:text' => "Texte",
@@ -158,7 +161,7 @@ return array(
 	'widgets:group_files:description' => "Afficher les fichiers récents du groupes",
 	
 	// index_file
-	'widgets:index_file:description' => "Afficher les fichiers récents à votre votre communauté (@TODO : traduction à confirmer)",
+	'widgets:index_file:description' => "Afficher les fichiers récents de votre communauté",
 	
 );
 

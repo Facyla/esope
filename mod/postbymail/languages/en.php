@@ -30,7 +30,10 @@ return array(
 	'postbymail:settings:separator' => "Reply message separator",
 	'postbymail:settings:separatordetails' => "Explanation text that appears right below the separator, and which limits the publicaiton of personnal or inappropriate content such as signatures and previous conversations threads, and also lowers the duplicates risk level.",
 	'postbymail:settings:scope' => "Replies by email enabled content types", // forumonly, comments, allobjects
-	'postbymail:settings:notifylist' => "List of GUIDs or usernames that should be warned when new publications succeed or fail (note: the admin is always warned of any new message, succeeded or failed. The author is warned only when an error occurs.", 
+	'postbymail:settings:notifylist' => "Notify users", 
+	'postbymail:settings:notifylist:details' => "List of GUIDs or usernames that should be warned when new publications succeed or fail (note: the admin is always warned of any new message, succeeded or failed. The author is warned only when an error occurs.", 
+	'postbymail:settings:debug' => "Enable debug mode", 
+	'postbymail:settings:debug:details' => "Adds more information into the error emails and error log", 
 	'postbymail:settings:replymode' => "Default reply by email behaviour",
 	'postbymail:settings:replymode:replybutton' => "Reply button (recommended)",
 	'postbymail:settings:replymode:replyemail' => "Email sender modification",

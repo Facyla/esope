@@ -146,18 +146,20 @@ if (!empty($group->cmisfolder)) {
 
 
 // Build action menu
+/*
 if (elgg_in_context('group_profile')) {
 	if (isset($CONFIG->menus['title'])) { $groupmenus = $CONFIG->menus['title']; } else { $menu = array(); }
 	$weight = 500;
 	if ($groupmenus) foreach ($groupmenus as $menu) {
-		$menu->class = null; // Clears remaining link classes (elgg-button-action...)
+		$menu->item_class = null; // Clears remaining link classes (elgg-button-action...)
 		$menu->setItemClass('grouptab-action');
 		$menu->setLinkClass('grouptab-action-link');
-		$menu->setWeight($weight);
+		$menu->setPriority($weight);
 		$weight--; // Keep ordering (would be inverted otherwise, as menus float right)
 		elgg_register_menu_item('group_filter', $menu);
 	}
 }
+*/
 
 
 foreach ($tabs as $name => $tab) {
@@ -166,9 +168,13 @@ foreach ($tabs as $name => $tab) {
 }
 
 // Group menu actions goes to the right
-//echo elgg_view_menu('title', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz elgg-menu-right'));
+if (elgg_in_context('group_profile')) {
+	echo elgg_view_menu('title', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz elgg-menu-group-filter-alt'));
+}
 // Group menu tabs go to the left
 echo elgg_view_menu('group_filter', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+
+echo '<div class="clearfloat"></div>';
 
 echo '</div>';
 

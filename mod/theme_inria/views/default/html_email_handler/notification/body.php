@@ -1,7 +1,20 @@
 <?php 
-	$title = $vars["title"];
-	$message = nl2br($vars["message"]);
-	$language = get_current_language();
+$subject = elgg_extract("subject", $vars);
+$message = nl2br(elgg_extract("body", $vars));
+$language = elgg_extract("language", $vars, get_current_language());
+$recipient = elgg_extract("recipient", $vars);
+
+// Integrate theme CSS (default wrapper), or use custom CSS => see CSS view
+
+
+$site = elgg_get_site_entity();
+$site_url = elgg_get_site_url();
+
+$settings_url = elgg_get_site_url() . "settings";
+if (elgg_is_active_plugin("notifications")) {
+	$settings_url = elgg_get_site_url() . "notifications/personal";
+}
+$notification_link = elgg_echo("html_email_handler:notification:footer:settings", array("<a href='" . $settings_url . "'>", "</a>"));
 	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -11,79 +24,29 @@
 		<base target="_blank" />
 		
 		<?php 
-			if(!empty($title)){ 
-				echo "<title>" . $title . "</title>\n";
+			if (!empty($subject)) {
+				echo "<title>" . $subject . "</title>";
 			}
 		?>
 	</head>
 	<body>
 		<style type="text/css">
-		body {
-				color: #333333;
-				font: 80%/1.4 "Lucida Grande",Verdana,sans-serif;
-		}
-		a {
-				color: #6D2D4F;
-		}
-		#notification_container {
-				margin: 0 auto;
-				padding: 20px 0;
-				width: 600px;
-		}
-		#notification_header {
-				padding: 0 0 10px;
-				text-align: right;
-		}
-		#notification_header a {
-				color: #6D2D4F;
-				font-size: 1.5em;
-				font-weight: bold;
-				text-decoration: none;
-		}
-		#notification_wrapper {
-				background: none repeat scroll 0 0 #FFFFFF;
-				padding: 10px;
-		}
-		#notification_wrapper h2 {
-				color: #6D2D4F;
-				font-size: 1.35em;
-				line-height: 1.2em;
-				margin: 5px 0 5px 10px;
-		}
-		#notification_content {
-				background: none repeat scroll 0 0 #FFFFFF;
-				padding: 10px;
-		}
-		#notification_footer {
-				background: none repeat scroll 0 0 #FFFFFF;
-				margin: 10px 0 0;
-				padding: 10px;
-				text-align: right;
-		}
-		#notification_footer_logo {
-				float: left;
-		}
-		#notification_footer_logo img {
-				border: medium none;
-		}
-		.clearfloat {
-				clear: both;
-				font-size: 1px;
-				height: 0;
-				line-height: 0;
-		}
+			<?php echo elgg_view("css/html_email_handler/notification"); ?>
 		</style>
 	
 		<div id="notification_container">
 			<div id="notification_header">
 				<?php 
-					$text = '<img src="' . $vars["config"]->site->url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $vars["config"]->site->name . '">';
-					$site_url = elgg_view("output/url", array("href" => $vars["config"]->site->url, "text" => $text));
-					echo $site_url;
+					$text = '<img src="' . $site_url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $site->name . '">';
+					echo elgg_view("output/url", array("href" => $site_url, "text" => $text));
 				?>
 			</div>
 			<div id="notification_wrapper">
-				<?php if(!empty($title)) echo elgg_view_title($title); ?>
+				<?php
+					if (!empty($subject)) {
+						echo elgg_view_title($subject);
+					}
+				?>
 			
 				<div id="notification_content">
 					<?php echo $message; ?>
@@ -93,10 +56,10 @@
 			<div id="notification_footer">
 				
 				<?php 
-					if(elgg_is_logged_in()){
-						$settings_url = $vars["url"] . "settings";
+					if (!empty($recipient) && ($recipient instanceof ElggUser)) {
+						$settings_url = $site_url . "settings/user/" . $recipient->username;
 						if(elgg_is_active_plugin("notifications")){
-							$settings_url = $vars["url"] . "notifications/personal";
+							$settings_url = $site_url . "notifications/personal/" . $recipient->username;
 						}
 						echo elgg_echo("html_email_handler:notification:footer:settings", array("<a href='" . $settings_url . "'>", "</a>"));
 					}

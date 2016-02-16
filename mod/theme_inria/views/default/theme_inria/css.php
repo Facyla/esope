@@ -322,21 +322,18 @@ section .interne div.module div.activites { background-color: <?php echo $module
 /* ***************************************
 	GROUP FILTER MENU
 *************************************** */
-.elgg-menu-group-filter { margin-bottom: 5px; border-bottom: 2px solid #ccc; display: table; width: 100%; }
+.group-top-menu { width: 100%; margin-bottom: 5px; border-bottom: 2px solid #CCC; }
+.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; }
+
+/* Left (filter) menu */
 .elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 0 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
 .elgg-menu-group-filter > li:hover, 
 .elgg-menu-group-filter > li:focus, 
 .elgg-menu-group-filter > li:active { background: transparent; }
 .elgg-menu-group-filter > li > a { text-decoration: none; display: block; padding: 3px 10px 0; text-align: center; height: 18px; color: #999; font-family: <?php echo $font2; ?>; font-size: 12px; }
-
-/*********	Change tab hover here	********/
-.elgg-menu-group-filter > li > a:hover, 
-.elgg-menu-group-filter > li > a:focus, 
-.elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
+.elgg-menu-group-filter > li > a:hover, .elgg-menu-group-filter > li > a:focus, .elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
 .elgg-menu-group-filter > .elgg-state-selected { border-color: #ccc; background: white; }
 .elgg-menu-group-filter > .elgg-state-selected > a { position: relative; top: 2px; background: white; }
-
-.group-top-menu .elgg-menu-group-filter { margin-bottom: 0; }
 .elgg-menu-group-filter > li.elgg-menu-item-pages a, .elgg-menu-group-filter > li.elgg-menu-item-pages a:hover, .elgg-menu-group-filter > li.elgg-menu-item-pages a:active, .elgg-menu-group-filter > li.elgg-menu-item-pages a:focus { background: transparent !important; }
 .elgg-menu-group-filter > li:first-child { margin-left: 0px; }
 
@@ -346,10 +343,12 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-menu-item-rss { display: none !important; }
 */
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this { display: none !important; }
-.elgg-menu-group-filter > li.grouptab-action { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; }
-.elgg-menu-group-filter > li.grouptab-action a { color: white; }
-.elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
-.elgg-menu-group-filter > li.grouptab-action > a:hover, .elgg-menu-group-filter > li.grouptab-action > a:focus, .elgg-menu-group-filter > li.grouptab-action > a:active { background: <?php echo $color8; ?>; }
+
+/* Modify title menu action buttons */
+.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; border-radius: 5px 5px 0 0; }
+.elgg-menu-group-filter-alt > li a.elgg-button.elgg-button-action { height:18px; color: white; background: initial; padding: 3px 10px 0; font-family: <?php echo $font2; ?>; font-size: 12px; border: 2px solid transparent; border-bottom: 0; }
+.elgg-menu-group-filter-alt > li:hover, .elgg-menu-group-filter-alt > li:focus, .elgg-menu-group-filter-alt > li:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
+.elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:hover, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:focus, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:active { background: <?php echo $color8; ?>; }
 
 
 /* PROFILE */

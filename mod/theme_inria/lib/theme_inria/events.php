@@ -12,7 +12,7 @@ function theme_inria_setup_menu() {
 	$page_owner = elgg_get_page_owner_entity();
 	
 	if (elgg_in_context('groups')) {
-		if ($page_owner instanceof ElggGroup) {
+		if (elgg_instanceof($page_owner, 'group')) {
 			if (elgg_is_logged_in() && $page_owner->canEdit()) {
 				$url = elgg_get_site_url() . "group_operators/manage/{$page_owner->getGUID()}";
 				elgg_unregister_menu_item('page', 'edit');
@@ -23,7 +23,14 @@ function theme_inria_setup_menu() {
 	// Add missing collections and invites menus in members page
 	if (elgg_in_context('members')) {
 		
-		collections_submenu_items();
+		if (elgg_is_logged_in()) {
+			elgg_register_menu_item('page', array(
+				'name' => 'friends:view:collections',
+				'text' => elgg_echo('friends:collections'),
+				'href' => "collections/owner/" .  elgg_get_logged_in_user_entity()->username,
+				'contexts' => array("friends", "friendsof", "collections", "members"),
+			));
+		}
 		
 		$menu_item = array(
 			"name" => "friend_request",
