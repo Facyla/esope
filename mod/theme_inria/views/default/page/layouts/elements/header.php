@@ -1,11 +1,11 @@
 <?php
 /**
- * Main content header
+ * Header for layouts
  *
  * Title and title menu
  *
- * @uses $vars['header_override'] HTML for overriding the default header (override)
- * @uses $vars['title']           Title text (override)
+ * @uses $vars['title']  Title
+ * @uses $vars['header'] Optional override for the header
  * @uses $vars['context']         Page context (override)
  */
 

@@ -69,11 +69,7 @@ h4 {
 	
 	background: <?php echo $color3; ?>;
 	
-	border-top: 1px solid #dbdbdb;
-	border-left: 1px solid #dbdbdb;
-	border-bottom: 1px solid #dbdbdb;
-	border-right: 1px solid #dbdbdb;
-	
+	border: 1px solid #dbdbdb;	
 	-webkit-border-radius: 5px 5px 0 0;
 	-moz-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0;

@@ -19,7 +19,7 @@ if (isset($vars['class'])) {
 	$class = "$class {$vars['class']}";
 }
 
-// Add context class, for page differenciation
+// ESOPE : Add context class, for page differenciation
 global $CONFIG;
 if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 	$class .= ' elgg-context-' . $context;
@@ -38,8 +38,11 @@ if (elgg_instanceof($owner, 'group')) {
 <div class="<?php echo $class; ?>">
 	
 	<?php
-	if ($topmenu) { echo $nav . '<br >'; }
-	echo $topmenu;
+	// Inria : shown nav and topmenu together here, and not above
+	if ($topmenu) {
+		echo $nav . '<br >';
+		echo $topmenu;
+	}
 	?>
 	
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
@@ -56,11 +59,6 @@ if (elgg_instanceof($owner, 'group')) {
 			
 			echo elgg_view('page/layouts/elements/header', $vars);
 			
-			/*
-			if (isset($vars['title'])) {
-				echo elgg_view_title($vars['title']);
-			}
-			*/
 			// @todo deprecated so remove in Elgg 2.0
 			if (isset($vars['area1'])) {
 				echo $vars['area1'];

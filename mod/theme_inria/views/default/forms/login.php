@@ -5,23 +5,22 @@
  * @package Elgg
  * @subpackage Core
  */
+$username = elgg_extract('username', $vars, get_input('u'));
 ?>
 
 <p class="invisible"><?php echo elgg_echo('accessibility:allfieldsmandatory'); ?></p>
 
 <?php
-global $CONFIG;
-
 // Hide form only on homepage
 $default_hide = '';
-//if ($CONFIG->url == current_page_url()) $default_hide = 'display:none;';
+//if (elgg_get_site_url() == current_page_url()) $default_hide = 'display:none;';
 $default_hide = 'display:none;'; // Toujours masqué par défaut
 
 echo '<p>' . elgg_echo('theme_inria:login:details') . '</p>';
 ?>
 
 <div class="inria-login">
-	<a href="<?php echo $CONFIG->url; ?>cas_auth" class="elgg-button elgg-button-action cas-login"><?php echo elgg_echo('theme_inria:caslogin'); ?></a>
+	<a href="<?php echo elgg_get_site_url(); ?>cas_auth" class="elgg-button elgg-button-action cas-login"><?php echo elgg_echo('theme_inria:caslogin'); ?></a>
 	<?php if (!empty($default_hide)) { ?>
 		<a href="javascript:void(0);" onclick="$('#inria-basiclogin').toggle();"  class="basic-login-toggle"><?php echo elgg_echo('theme_inria:basiclogin'); ?></a>
 	<?php } else { ?>
@@ -33,13 +32,23 @@ echo '<p>' . elgg_echo('theme_inria:login:details') . '</p>';
 <div id="inria-basiclogin" style="<?php echo $default_hide; ?>">
 	<div>
 		<label for="login_username"><?php echo elgg_echo('loginusername'); ?>*</label>
-		<?php echo elgg_view('input/text', array('name' => 'username', 'class' => 'elgg-autofocus', 'id' => "login_username", )); ?>
+	<?php echo elgg_view('input/text', array(
+			'name' => 'username',
+			'autofocus' => true,
+			'id' => "login_username", 
+			'value' => $username,
+			'required' => "required"
+		));
+	?>
 	</div>
 	<div>
 		<label for="login_password"><?php echo elgg_echo('password'); ?>*</label>
-		<?php
-		echo elgg_view('input/password', array('name' => 'password', 'id' => 'login_password'));
-	
+		<?php echo elgg_view('input/password', array(
+			'name' => 'password', 
+			'id' => 'login_password', 
+			'required' => "required"
+		));
+		
 		echo '<div class="clearfloat"></div>';
 		// Toogler may only exist on homepage (this view is in a form, so can't insert a toggler here)
 		//if ((current_page_url() == elgg_get_site_url()) || (current_page_url() == elgg_get_site_url() . 'forgotpassword') || (current_page_url() == elgg_get_site_url().'login')) {

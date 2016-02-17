@@ -1,5 +1,13 @@
 <?php
-global $CONFIG;
+// Integrate theme CSS - default wrapper
+$titlecolor = elgg_get_plugin_setting('titlecolor', 'esope');
+$textcolor = elgg_get_plugin_setting('textcolor', 'esope');
+$linkcolor = elgg_get_plugin_setting('linkcolor', 'esope');
+$linkhovercolor = elgg_get_plugin_setting('linkhovercolor', 'esope');
+$color2 = elgg_get_plugin_setting('color2', 'esope');
+$color3 = elgg_get_plugin_setting('color3', 'esope');
+$font2 = elgg_get_plugin_setting('font2', 'esope'); // Title font
+$font4 = elgg_get_plugin_setting('font4', 'esope'); // Main font
 ?>
 
 /* Iris Newsletter Style */
@@ -17,18 +25,21 @@ body {
 }
 
 a {
+	/* color: <?php echo $linkcolor; ?>; */
 	color: #6D2D4F;
 	text-decoration: none;
 }
 
 a:hover {
 	text-decoration: underline;
+	color: <?php echo $linkhovercolor; ?>;
 }
 
 img {
 	border: none;
 }
 h1, h2, h3, h4 {
+	/* olor: <?php echo $titlecolor; ?>; */
 	color: #6D2D4F;
 	margin: 0;
 }
@@ -62,9 +73,10 @@ h4 {
 }
 
 #newsletter_header {
-	background: #6D2D4F;
 	padding: 10px 30px;
 	min-height: 20px;
+	
+	background: #6D2D4F;
 	
 	border: 1px solid #6D2D4F;
 	-webkit-border-radius: 5px 5px 0 0;
@@ -101,6 +113,7 @@ h4 {
 
 #newsletter_unsubscribe {
 	font-size: 11px;
+	/* 	color: <?php echo $linkcolor; ?>; */
 	color: #999999;
 	padding: 20px;
 	text-align: center;

@@ -12,7 +12,9 @@
 	* @uses $vars['entity'] The user entity
 	* @uses $vars['profile'] Profile items from get_config('profile_fields'), defined in profile/start.php for now 
 	*/
+elgg_require_js("profile_manager/profile_edit");
 	
+//echo elgg_view("profile/edit/name", $vars);
 	// id profile_edit_form
 	
 	// Inria member name is updated through LDAP - can't be changed
@@ -37,6 +39,7 @@
 	$edit_profile_mode = elgg_get_plugin_setting("edit_profile_mode", "profile_manager");
 	$simple_access_control = elgg_get_plugin_setting("simple_access_control","profile_manager");
 	
+	$access_id = get_default_access($vars["entity"]);
 	if(!empty($cats)){
 		
 		// Profile type selector
@@ -46,6 +49,7 @@
 			$setting = "user";
 		} 
 		
+		$profile_type = $vars['entity']->custom_profile_type;
 		// can user edit? or just admins
 		if($setting == "user" || elgg_is_admin_logged_in()){
 			// get profile types
@@ -57,7 +61,9 @@
 				"owner_guid" => elgg_get_site_entity()->getGUID()
 			); 
 			
-			if($types = elgg_get_entities($options)){
+			$types = elgg_get_entities($options);
+			if ($types) {
+			$types_description = "";
 				
 				$dropdown_options = array();
 				$dropdown_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
@@ -146,8 +152,16 @@
 					$class = "custom_fields_edit_profile_category";
 					
 					// add extra class so it can be toggle in the display
+					$hidden_category = true;
 					foreach($profile_types as $type){
 						$class .= " custom_profile_type_" . $type->getGUID(); 
+						if ($type->getGUID() === (int) $profile_type) {
+							$hidden_category = false;
+						}
+					}
+					
+					if ($hidden_category) {
+						$class .= " hidden";
 					}
 				}
 			}
@@ -159,7 +173,7 @@
 				'class' => $class
 			);
 			
-			$tab_content .= "<div id='profile_manager_profile_edit_tab_content_" . $cat_guid . "' class='profile_manager_profile_edit_tab_content'>\n";
+			$tab_content .= "<div id='profile_manager_profile_edit_tab_content_" . $cat_guid . "' class='profile_manager_profile_edit_tab_content'>";
 				
 			$list_content .= "<div id='" . $cat_guid . "' class='" . $class . "'>";
 			if(count($cats) > 1){
@@ -169,6 +183,7 @@
 			
 			// display each field for currect category
 			$hide_non_editables = elgg_get_plugin_setting("hide_non_editables", "profile_manager");
+		$visible_fields = 0;
 			foreach($fields[$cat_guid] as $field){
 				$metadata_name = $field->metadata_name;
 				
@@ -204,6 +219,7 @@
 				if($hide_non_editables == "yes" && ($valtype == "non_editable")){
 					$field_result = "<div class='hidden_non_editable'>";
 				} else {
+				$visible_fields++;
 					$field_result = "<div>";
 				}	
 				
@@ -219,11 +235,18 @@
 					$field_result .= "<div>";
 				}
 				
-				$field_result .= elgg_view("input/" . $valtype, array(
+			$field_options = array(
 																'name' => $metadata_name,
 																'value' => $value,
 																'options' => $options
-																));
+			);
+
+			$field_placeholder = $field->getPlaceholder();
+			if (!empty($field_placeholder)) {
+				$field_options["placeholder"] = $field_placeholder;
+			}
+
+			$field_result .= elgg_view("input/" . $valtype, $field_options);
 				
 				if($valtype == "dropdown"){
 					$field_result .= "</div>";
@@ -236,10 +259,20 @@
 				$list_content .= $field_result;
 			}
 			
-			$tab_content .= "</div>\n";
+		if ($visible_fields) {
+			// only add tab if there are visible fields
+			$tabs[] = array(
+					'title' => $cat_title,
+					'url' => "#" . $cat_guid,
+					'id' => $cat_guid,
+					'class' => $class
+			);
+		}
+		
+		$tab_content .= "</div>";
 			
 			$list_content .= "</fieldset>";
-			$list_content .= "</div>\n";
+			$list_content .= "</div>";
 		}
 		
 		if(($edit_profile_mode == "tabbed") && (count($cats) > 1)){

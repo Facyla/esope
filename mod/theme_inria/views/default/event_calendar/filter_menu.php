@@ -8,28 +8,28 @@ if ($group_guid) {
 	$url_start = "event_calendar/list/{$vars['start_date']}/{$vars['mode']}";
 }
 
-$tabs = array(
-	'all' => array(
+$tabs['all'] = array(
 		'text' => elgg_echo('event_calendar:show_all'),
 		'href' => "$url_start/all",
 		'selected' => ($filter_context == 'all'),
 		'priority' => 200,
-	),
-	'mine' => array(
+);
+if (elgg_is_logged_in()) {
+	$tabs['mine'] = array(
 		'text' => elgg_echo('event_calendar:show_mine'),
 		'href' => "$url_start/mine",
 		'selected' => ($filter_context == 'mine'),
 		'priority' => 300,
-	),
+	);
 /* Non souhaité pour Iris
-	'friend' => array(
+	$tabs['friend'] = array(
 		'text' => elgg_echo('event_calendar:show_friends'),
 		'href' =>  "$url_start/friends",
 		'selected' => ($filter_context == 'friends'),
 		'priority' => 400,
-	),
+	);
 */
-);
+}
 
 $tab_rendered = array();
 
@@ -59,7 +59,9 @@ foreach ($tabs as $name => $tab) {
 //echo elgg_view_menu('filter', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 
 // Filtre inutile si ni mine ni friends
-//$text_bit = '<li class="event-calendar-filter-menu-show-only">'.elgg_echo('event_calendar:show_only').'</li>';
+// Menu is no use when not logged in (only 1 entry)
+if (elgg_is_logged_in()) {
+	$text_bit = '<li class="event-calendar-filter-menu-show-only">'.elgg_echo('event_calendar:show_only').'</li>';
 
 $menu = <<<__MENU
 <ul class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default">
@@ -72,6 +74,7 @@ $menu = <<<__MENU
 __MENU;
 
 echo $menu;
+}
 
 $event_calendar_region_display = elgg_get_plugin_setting('region_display', 'event_calendar');
 if ($event_calendar_region_display == 'yes') {

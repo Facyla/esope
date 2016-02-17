@@ -56,6 +56,7 @@ foreach ($tabs as $name => $tab) {
 
 //echo elgg_view_menu('filter', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 
+// Filtre inutile si ni mine ni friends
 // Menu is no use when not logged in (only 1 entry)
 if (elgg_is_logged_in()) {
 	$text_bit = '<li class="event-calendar-filter-menu-show-only">'.elgg_echo('event_calendar:show_only').'</li>';

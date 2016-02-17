@@ -5,6 +5,9 @@
 * @package ElggGroups
 */ 
 	
+$group = $vars['entity'];
+if (!$group) { return true; }
+
 // tools widget area
 echo '<ul id="groups-tools" class="elgg-gallery elgg-gallery-fluid mtl clearfix">';
 
@@ -30,9 +33,6 @@ if (elgg_is_active_plugin('simplepie')) {
 }
 
 // Add group activity
-$group = $vars['entity'];
-if (!$group) { return true; }
-
 $all_link = elgg_view('output/url', array('href' => "groups/activity/$group->guid", 'text' => elgg_echo('groups:activity'), 'is_trusted' => true));
 
 elgg_push_context('widgets');

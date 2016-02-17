@@ -3,12 +3,16 @@
  * Compose message form
  *
  * @package ElggMessages
- * @uses $vars['friends']
+ * @uses $vars['$recipient_username']
+ * @uses $vars['subject']
+ * @uses $vars['body']
  */
 
 $recipient_guid = elgg_extract('recipient_guid', $vars, 0);
+//$recipient_username = elgg_extract('recipient_username', $vars, '');
 $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');
+
 
 $recipients_options = array();
 $vars['friends'] = elgg_get_page_owner_entity()->getFriends('', false);
@@ -29,10 +33,27 @@ $recipient_drop_down = elgg_view('input/dropdown', array(
 	'options_values' => $recipients_options,
 ));
 
+/*
+// @TODO : setting to allow writing to anyone
+// match_on : string all or array(groups|users|friends)
+$match_on = array('friends');
+if (elgg_is_admin_logged_in()) { $match_on = array('users'); }
+
+$recipient_autocomplete = elgg_view('input/autocomplete', array(
+	'name' => 'recipient_username',
+	'value' => $recipient_username,
+	'match_on' => $match_on,
+));
+*/
 ?>
 <div>
 	<label for="recipient_guid"><?php echo elgg_echo("messages:to"); ?>: </label>
 	<?php echo $recipient_drop_down; ?>
+<?php /*
+	<label for="recipient_username"><?php echo elgg_echo("email:to"); ?>: </label>
+	<?php echo $recipient_autocomplete; ?>
+		<span class="elgg-text-help"><?php echo elgg_echo("messages:to:help"); ?></span>
+*/ ?>
 </div>
 <div>
 	<label for="subject"><?php echo elgg_echo("messages:title"); ?>: <br /></label>

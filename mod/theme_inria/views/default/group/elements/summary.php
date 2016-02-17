@@ -1,6 +1,6 @@
 <?php
 /**
- * Group summary
+ * Group summary : infos complémentaires => access, membership, group admins, num of members
  *
  * @uses $vars['entity']    ElggEntity
  * @uses $vars['title']     Title link (optional) false = no title, '' = default
@@ -64,9 +64,12 @@ if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
 if (!elgg_in_context('owner_block')) { return; }
 
 echo '<div style="font-size:80%">';
+
 echo '<p>';
+// Access
 echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $entity)) . '</span><br />';
 
+// Membership
 if ($entity->membership == ACCESS_PUBLIC) {
 	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:open:details") . '">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
 	echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: <span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
@@ -90,6 +93,7 @@ if ($entity->canEdit()) {
 ?>
 <div class="clearfloat"></div><br />
 <?php
+// Number of members
 //echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
 $nb_members = $entity->getMembers(array('count' => true));
 if ($nb_members > 1) {

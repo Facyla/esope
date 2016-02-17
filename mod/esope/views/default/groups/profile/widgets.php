@@ -6,6 +6,7 @@
 */ 
 
 $group = $vars['entity'];
+if (!$group) { return true; }
 
 // ESOPE : add publication tools if asked
 echo elgg_view('groups/profile/group_publish_tools', $vars);

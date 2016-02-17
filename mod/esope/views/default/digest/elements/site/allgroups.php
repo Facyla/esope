@@ -42,6 +42,7 @@ foreach ($groups as $group) {
 		);
 		$content .= '<h4>' . elgg_view("output/url", array("text" => $group->name, "href" => $group->getURL())) . '</h4>' . elgg_view("page/components/list", $options) . '<br /><br />';
 	}
+	unset($items);
 }
 
 if (!empty($content)) {

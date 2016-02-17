@@ -24,15 +24,24 @@ global $CONFIG;
 if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 	$class .= ' elgg-context-' . $context;
 }
+
+// navigation defaults to breadcrumbs
+$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+// Change layout for groups
+$owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($owner, 'group')) {
+	$topmenu = elgg_view('group/topmenu', array('entity' => $owner));
+}
 ?>
 
 <div class="<?php echo $class; ?>">
 	<?php
 	// ESOPE : nav is above main content (and group menu)
-	echo elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+	//	if ($topmenu) { echo $nav . '<br >'; }
+	echo $nav;
 	
 	// Add tab menu for groups (check view for setting))
-	echo elgg_view('group/top_menu', array('entity' => $owner));
+	if ($topmenu) { echo $topmenu; }
 	?>
 	
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
@@ -45,6 +54,7 @@ if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 
 	<div class="elgg-main elgg-body">
 		<?php
+			//if (!$topmenu) { echo $nav; }
 			echo elgg_view('page/layouts/elements/header', $vars);
 
 			// @todo deprecated so remove in Elgg 2.0

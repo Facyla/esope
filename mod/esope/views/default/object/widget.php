@@ -61,6 +61,10 @@ if ($additional_class) {
 	$widget_class = "$widget_class $additional_class";
 }
 
+/*
+// Niveau d'accès des widgets : seulement pour l'auteur
+if ($show_access && ($widget->owner_guid == elgg_get_logged_in_user_guid())) $access = '<span style="">' . elgg_view('output/access', array('entity' => $widget, 'hide_text' => true)) . '</span>';
+*/
 $widget_header = <<<HEADER
 	<div class="elgg-widget-handle clearfix">
 		$controls

@@ -15,7 +15,8 @@ $username = elgg_extract('username', $vars, get_input('u'));
 	<?php echo elgg_view('input/text', array(
 			'name' => 'username',
 			'autofocus' => true,
-			'id' => "login_username", 'value' => $username,
+			'id' => "login_username", 
+			'value' => $username,
 			'required' => "required"
 		));
 	?>

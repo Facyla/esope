@@ -17,6 +17,16 @@ if (elgg_in_context('members')) {
 
 $icon = elgg_view_entity_icon($entity, $size, $vars);
 
+// Don't display user as a result if public profile is disabled
+if (elgg_instanceof ($entity, 'user')) {
+	$allowed = esope_user_profile_gatekeeper($entity, false);
+	if (!$allowed) {
+		$body = elgg_echo('InvalidParameterException:NoEntityFound');
+		echo elgg_view_image_block($icon, $body);
+		return;
+	}
+}
+
 $title = elgg_extract('title', $vars);
 if (!$title) {
 	$link_params = array(

@@ -90,6 +90,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 	// Note : return true to avoid blocking access if we are not in the right context
 	if (!(($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user'))) { return true; }
 	
+	$ia = elgg_set_ignore_access(true);
 	$debug = false;
 	if ($debug) error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ($debug) error_log("Account update : before = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
@@ -211,6 +212,8 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			esope_set_user_profile_type($user, 'external');
 		}
 	}
+	
+	elgg_set_ignore_access($ia);
 	
 	// Block access for closed accounts
 	// Verrouillage à l'entrée si le compte est inactif (= archivé mais pas désactivé !!)

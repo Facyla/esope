@@ -115,13 +115,11 @@ $module_bg_color = '#F8F4F5';
 /* Header */
 body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
 section { background:white; }
-padding-top: 25px;
-background: white;
-header { background: #6F2D50 !important; border-top: 0; height:70px !important; }
-header .interne h1 { margin-top: 0; }
-header nav { top: 27px; }
-header nav #user img { float: left; margin-right: 6px; }
-header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
+.elgg-page-header { background: #6F2D50 !important; border-top: 0; height:70px !important; }
+.elgg-page-header .interne h1 { margin-top: 0; }
+.elgg-menu-topbar { top: 27px; }
+.elgg-menu-topbar #user img { float: left; margin-right: 6px; }
+.elgg-menu-topbar ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
 #adf-homepage .inria-login a, #adf-homepage .inria-login a:visited { color: white; }
 #adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
@@ -131,22 +129,22 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 .elgg-context-login .elgg-module-aside { float: right; width: 50%; }
 
 /* Main menu */
-#transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
-#transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
-#transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
-#transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
-#transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
-#transverse nav ul li ul li { background: <?php echo $module_bg_color; ?>; }
-#transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
+.elgg-page-header { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
+ul.elgg-menu-navigation li, ul.elgg-menu-navigation li:first-child { border:0; padding:0; }
+ul.elgg-menu-navigation li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
+ul.elgg-menu-navigation li a.active, ul.elgg-menu-navigation li a.elgg-state-selected, ul.elgg-menu-navigation li a:hover, ul.elgg-menu-navigation li a:focus, ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
+ul.elgg-menu-navigation li ul li a:hover, ul.elgg-menu-navigation li ul li a:focus, ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
+ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
+ul.elgg-menu-navigation li ul li { background: <?php echo $module_bg_color; ?>; }
+ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 
 /* Search */
 input:focus, textarea:focus { background: #FFFAF0; }
-#transverse form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
-form input#adf-search-input { height: 26px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
-form input#adf-search-input:active, form input#adf-search-input:focus { color: #EF783E; }
-form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
-form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
+.elgg-page-header form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
+form input#esope-search-input { height: 26px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
+form input#esope-search-input:active, form input#esope-search-input:focus { color: #EF783E; }
+form input#esope-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
+form input#esope-search-submit-button:hover, form input#esope-search-submit-button:active, form input#esope-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
 /* Members search */
 .esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
 /* Search filters */

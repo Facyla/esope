@@ -58,6 +58,8 @@
 			$cat_title = "";
 			$field_result = "";
 			$even_odd = "even";
+			// Skip some category fields
+			//if (($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'category_name')) { continue; }
 			
 			if($show_header){
 				// make nice title
