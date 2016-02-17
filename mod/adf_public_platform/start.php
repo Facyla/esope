@@ -885,7 +885,9 @@ if (elgg_is_active_plugin('profile_manager')) {
 		if (!empty($profiletype)) {
 			$profiletype_guid = esope_get_profiletype_guid($profiletype);
 		}
-		$user->custom_profile_type = $profiletype_guid;
+		// Manually set the profile type to control the access_id (must not be -1)
+		//$user->custom_profile_type = $profiletype_guid;
+		create_metadata($user->guid, 'custom_profile_type', $profiletype_guid, 'text', $user->guid, 2, false);
 		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
