@@ -822,7 +822,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 
 /* Editeur tinymce */
-.elgg-longtext-control { font-size: 11px; padding: 1px 5px; margin-left: 3px; border:1px solid transparent; border-radius: 3px; }
+.elgg-longtext-control { font-size: 0.7rem; padding: 1px 5px; margin-left: 3px; border:1px solid transparent; border-radius: 3px; }
 .elgg-longtext-control:hover, .elgg-longtext-control:active, .elgg-longtext-control:focus { text-decoration: none; background-color: #e5e7f5; border-color: <?php echo $linkcolor; ?>; }
 .mceEditor iframe { min-height: 250px; }
 .elgg-form-comments-add .mceEditor iframe { min-height: 100px; }
@@ -863,9 +863,9 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 /* Anciens groupes */
 .group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
 .group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
-.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
-.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
-.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 0.375rem; padding: 2px 0px; }
+.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 0.5rem; padding: 3px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.625rem; padding: 3px 1px; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 
@@ -933,7 +933,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 /* Trees and Folders */
 /* Arborescence : taille de plus en plus petite */
-.treeview { font-size:16px; }
+.treeview { font-size:1rem; }
 .treeview li { font-size:0.95em; }
 .treeview li.elgg-state-selected a.selected { color:white; background-color:<?php echo $linkcolor; ?>; font-weight: bold; padding: 2px 7px; }
 .elgg-page-body div.elgg-module ul.treeview li { padding: 3px 0pt 3px 16px; }
@@ -971,7 +971,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 }
 
 /* Responsive menu */
-.menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:24px; }
+.menu-topbar-toggle, .menu-navigation-toggle, .menu-sidebar-toggle { display:none; font-weight:bold; padding: 0 0 0.5ex 0; width:100%; font-size:1.5rem; }
 .menu-sidebar-toggle { text-align: left; }
 
 <?php if (!$fixedwidth) { ?>
@@ -1017,12 +1017,12 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.elgg-menu-topbar { display:none; }
 	.elgg-menu-topbar * { min-width:0; }
 	.elgg-menu-topbar.menu-enabled { display:block; }
-	.elgg-page-header .elgg-menu-topbar { float:none; width:100%; position:initial; font-size:initial; padding: 0; margin: 0; }
+	.elgg-page-header .elgg-menu-topbar { float:none; width:100%; position:initial; font-size:1rem; padding: 0; margin: 0; }
 	.elgg-page-header .elgg-menu-topbar li a { padding: 0.5em; }
 	.elgg-page-header .elgg-menu-topbar li, .elgg-page-header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
 	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header  .elgg-menu-topbar li li a,
-	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:initial;  }
-	.elgg-page-header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:initial; }
+	.elgg-page-header .elgg-menu-topbar li a, .elgg-page-header .elgg-menu-topbar li li a { width:100%; display:inline-block; padding-left:0; padding-right:0; font-size:1rem;  }
+	.elgg-page-header .elgg-menu-topbar li.invites { max-width: 5ex; position: absolute; right: 1ex; border: 0 !important; margin: 0 0 !important; text-align: center; display: inline; text-indent: 0; z-index:2; font-size:1rem; }
 	.elgg-page-header .elgg-menu-topbar li.invites a { padding: 0; margin: 2px 0; }
 	
 	.elgg-page-header { min-height:3ex; height:auto !important; background-color: <?php echo $color3; ?>; }
@@ -1035,12 +1035,12 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	/* Navigation menu */
 	/* Toggle menu */
 	.menu-navigation-toggle { display:inline-block; }
-	#transverse .elgg-menu-navigation { display:none; float: none; width:100%; padding: 0; margin: 0; font-size:initial; }
+	#transverse .elgg-menu-navigation { display:none; float: none; width:100%; padding: 0; margin: 0; font-size:1rem; }
 	#transverse .elgg-menu-navigation * { min-width:0; }
 	#transverse .elgg-menu-navigation.menu-enabled { display:inline-block; }
-	#transverse .elgg-menu-navigation li { width: 100%; display:inline-block; padding:0; border-left:0 !important; border-right:0 !important; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:initial; }
+	#transverse .elgg-menu-navigation li { width: 100%; display:inline-block; padding:0; border-left:0 !important; border-right:0 !important; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:1rem; }
 	#transverse .elgg-menu-navigation li a { width:100%; padding: 0.5em 0; text-indent: 0.5em; background: transparent; }
-	#transverse .elgg-menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:90%; text-indent: 3ex; }
+	#transverse .elgg-menu-navigation li li { width:100%; display:inline-block; border-left:0; border-right:0; border-top: 1px solid #FFF; border-bottom: 1px solid #ccc; font-size:0.9em; text-indent: 3ex; }
 	#transverse .elgg-menu-navigation li li a { width:100%; padding-left:0; padding-right:0;  }
 	/* Always display submenu (with indent) */
 	#transverse .elgg-menu-navigation li ul { display:block; padding:0; width: 100% !important; position:initial; top:0; left:0; }
@@ -1111,7 +1111,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
-	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: initial; padding-left:0; }
+	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: 1rem; padding-left:0; }
 	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
 	div.credits p { float:none !important; }
 	
