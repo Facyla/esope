@@ -117,7 +117,7 @@ html {
 	/* font-family: <?php echo $font4; ?>; */
 }
 body {
-	font-size: 90%;
+	font-size: 0.9rem;
 	font-family:  <?php echo $font4; ?>;
 	color: <?php echo $textcolor; ?>;
 /* Supprimé du thème ADF - ou à forcer avec d'autres valeurs
@@ -196,16 +196,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 { font-size: 1.8em; }
-h2 { font-size: 1.5em; line-height: 1.1em; padding-bottom:5px; }
-h3 { font-size: 1.3em; padding-bottom:4px; }
-h4 { font-size: 1.1em; padding-bottom:3px; }
-h5 { font-size: 1.0em; padding-bottom:2px; }
-h6 { font-size: 0.9em; padding-bottom:1px; }
+h2 { font-size: 1.35em; line-height: 1.1em; padding-bottom:5px; }
+h3 { font-size: 1.17em; padding-bottom:4px; }
+h4 { font-size: 0.99em; padding-bottom:3px; }
+h5 { font-size: 0.9em; padding-bottom:2px; }
+h6 { font-size: 0.81em; padding-bottom:1px; }
 
 /* Sub and sup CSS style - from https://gist.github.com/unruthless/413930 */
 sub, sup {
 	/* Specified in % so that the sup/sup is the right size relative to the surrounding text */
-	font-size: 75%;
+	font-size: 0.75em;
 	/* Zero out the line-height so that it doesn't interfere with the positioning that follows */
 	line-height: 0;
 	/* Where the magic happens: makes all browsers position the sup/sup properly, relative to the surrounding text */
@@ -252,7 +252,7 @@ sub { bottom: -0.25em; }
 
 .elgg-subtext {
 	color: #666666;
-	font-size: 85%;
+	font-size: 0.75rem;
 	line-height: 1.2em;
 	font-style: italic;
 }
@@ -304,3 +304,4 @@ sub { bottom: -0.25em; }
 	max-width: 100%;
 	height: auto;
 }
+

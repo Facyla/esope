@@ -720,7 +720,7 @@ a.ouvrir { float: right; padding: 0 4px 0 0; clear:both; }
 
 
 
-.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 1px solid #666; color: #666; font-size: 0.85em; clear:left; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 1px solid #666; color: #666; /* font-size: 0.85em; */ clear:left; }
 
 /* Rendu des listes */
 ul.elgg-list li.elgg-item div.elgg-image a img { margin-right: 5px; }

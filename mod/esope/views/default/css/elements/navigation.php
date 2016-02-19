@@ -48,7 +48,7 @@ $font6 = $css['font6'];
 	padding: 2px 6px;
 	color: <?php echo $linkcolor; ?>;
 	border: 1px solid <?php echo $linkcolor; ?>;
-	font-size: 12px;
+	font-size: 0.75rem;
 }
 .elgg-pagination a:hover,
 .elgg-pagination a:focus,
@@ -113,7 +113,7 @@ $font6 = $css['font6'];
 	BREADCRUMBS
 *************************************** */
 .elgg-breadcrumbs {
-	font-size: 80%;
+	font-size: 0.72rem;
 	font-weight: bold;
 	line-height: 1.2em;
 	color: #bababa;

@@ -38,7 +38,8 @@ if (!isset($digest_site_profile_body[$key])){
 		foreach ($newest_members as $key => $user) {
 			$content .= '<div class="table-item">';
 			//$content .= elgg_view_entity_icon($user, 'medium', array('use_hover' => false)) . "<br />";
-			$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $user->getURL() . '"><img src="' . $user->getIconUrl('medium') .  '" /></div><br />' . $user->name . '</a><br />';
+			$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $user->getURL() . '"><img src="' . $user->getIconUrl('medium') .  '" /></a></div><br />';
+			$content .= '<a href="' .  $user->getURL() . '">' . $user->name . '</a><br />';
 			$content .= $user->briefdescription;
 			$content .= "</div>";
 		}
