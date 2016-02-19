@@ -41,7 +41,8 @@ $font6 = $css['font6'];
 	padding-bottom: 5px;
 }
 
-.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em;; }
+.elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em; }
+.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;

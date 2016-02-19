@@ -97,62 +97,62 @@ if (elgg_is_logged_in()) {
 	
 	// Close enclosing divs and reopen new ones
 	//echo '	</div></div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-	echo '	</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
+	echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
 	
-	?>
-	<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
-	<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
-		<li class="home"><a href="<?php echo $url; ?>" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
-			<?php if (elgg_is_active_plugin('dashboard')) { ?>
-				<ul class="hidden">
-					<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
-					<li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
-				</ul>
+		?>
+		<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
+		<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
+			<li class="home"><a href="<?php echo $url; ?>" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
+				<?php if (elgg_is_active_plugin('dashboard')) { ?>
+					<ul class="hidden">
+						<li><a href="<?php echo $url; ?>" ><?php echo elgg_echo('dashboard'); ?></a></li>
+						<li><a href="<?php echo $url; ?>activity" ><?php echo elgg_echo('activity'); ?></a></li>
+					</ul>
+				<?php } ?>
+			</li>
+	
+			<?php /* activity : Fil d'activité du site */ ?>
+	
+			<?php if (elgg_is_active_plugin('groups')) { ?>
+				<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?></a>
+					<ul class="hidden">
+						<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('esope:joinagroup'); ?></a></li>
+						<?php echo $groups; ?>
+					</ul>
+				</li>
+				<?php echo $invites; ?>
 			<?php } ?>
-		</li>
-		
-		<?php /* activity : Fil d'activité du site */ ?>
-		
-		<?php if (elgg_is_active_plugin('groups')) { ?>
-			<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?></a>
-				<ul class="hidden">
-					<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('esope:joinagroup'); ?></a></li>
-					<?php echo $groups; ?>
-				</ul>
-			</li>
-			<?php echo $invites; ?>
-		<?php } ?>
-		
-		<?php if (elgg_is_active_plugin('categories')) { ?>
-			<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('esope:categories'); ?></a>
-				<ul class="hidden">
-					<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('esope:categories:all'); ?></a></li>
-					<?php echo $categories; ?>
-				</ul>
-			</li>
-		<?php } ?>
-		
-		<?php if (elgg_is_active_plugin('members')) { ?>
-			<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('esope:directory'); ?></a></li>
-		<?php } ?>
-		
-		<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-			<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('esope:event_calendar'); ?></a></li>
-		<?php } ?>
-		
-	</ul>
 	
-	<?php
-	if (elgg_is_active_plugin('search')) {
-		$search_text = elgg_echo('esope:search:defaulttext');
-		echo '<form action="' . $url . 'search" method="get">';
-			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
-			echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text));
-			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
-		echo '</form>';
-	}
-	?>
-	<div class="clearfloat"></div>
+			<?php if (elgg_is_active_plugin('categories')) { ?>
+				<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('esope:categories'); ?></a>
+					<ul class="hidden">
+						<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('esope:categories:all'); ?></a></li>
+						<?php echo $categories; ?>
+					</ul>
+				</li>
+			<?php } ?>
+	
+			<?php if (elgg_is_active_plugin('members')) { ?>
+				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('esope:directory'); ?></a></li>
+			<?php } ?>
+	
+			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
+				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('esope:event_calendar'); ?></a></li>
+			<?php } ?>
+	
+		</ul>
+	
+			<?php
+			if (elgg_is_active_plugin('search')) {
+				$search_text = elgg_echo('esope:search:defaulttext');
+				echo '<form action="' . $url . 'search" method="get">';
+					echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
+					echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text));
+					echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
+				echo '</form>';
+			}
+			?>
+			<div class="clearfloat"></div>
 	</div>
 	<?php
 }

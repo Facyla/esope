@@ -45,13 +45,15 @@ $title = "";
 if (!empty($startyear)) $title .= $startyear . ' - ';
 if (!empty($startyear)) $title .= $clientshort . ' - ';
 $title .= $project->title;
-$project_code = $project->project_code;
-if (empty($project_code)) {
-	register_error(elgg_echo('project_manager:error:noproject_code') . " : $title");
-	$project_code = elgg_echo('project_manager:empty:project_code');
-}
 $description = $project->description;
 $friendlytime = elgg_view_friendly_time($project->time_created);
+$project_code = $project->project_code;
+
+// Warn if missing project code
+if (empty($project_code)) {
+	//register_error(elgg_echo('project_manager:error:noproject_code') . " : $title");
+	$project_code = elgg_echo('project_manager:empty:project_code');
+}
 
 // Prepare dates and period
 $date = $project->date;

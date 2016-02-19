@@ -70,3 +70,4 @@ if (elgg_instanceof($owner, 'group')) {
 		?>
 	</div>
 </div>
+
