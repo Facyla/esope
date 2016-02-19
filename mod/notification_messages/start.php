@@ -27,12 +27,12 @@ function notification_messages_init() {
 	//elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
 	$subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
 	$subtypes = explode(',', $subtypes);
-	// Add discussion replies if discussion if=s in the list
+	// Add discussion replies if discussion is in the list
 	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
 	if ($subtypes) {
 		foreach ($subtypes as $subtype) {
+			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
 			// Regular hook
-			// Note : we enable regular hook in all cases, because at worst it would be called twice and produce the same result, 
 			// but this will avoid having to maintain the list here in case some plugin change called hook
 			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
 			// Some subtypes use a specific hook
@@ -60,9 +60,7 @@ function notification_messages_init() {
 	
 	
 	
-
-
-
+	
 	/* Except if other plugin breaks behaviour, this hook should not be useful anymore in 1.11+
 	// NOTIFICATION MESSAGE HOOKS
 	// Note : advanced_notifications should be able to act after this hook (can remove message content), so priority has to be < 999)
@@ -230,11 +228,10 @@ function notification_messages_build_subject($entity, $params) {
 	return false;
 }
 
-// @TODO Notification summary
+// @TODO Notification summary : add excerpt + URL
 function notification_messages_build_summary($entity, $params) {
 	if (elgg_instanceof($entity)) {
-		
-		
+		return notification_messages_build_subject($entity, $params);
 	}
 	return false;
 }
@@ -243,9 +240,11 @@ function notification_messages_build_summary($entity, $params) {
 function notification_messages_build_body($entity, $params) {
 	if (elgg_instanceof($entity)) {
 		
+		/*
 		$allowed_subtypes = array('blog'); // Backward compat : at least for blog
 		$subtype = $entity->getSubtype();
 		if (!in_array($subtype, $allowed_subtypes)) { return false; }
+		*/
 		
 		$owner = $params['event']->getActor();
 		$recipient = $params['recipient'];
@@ -271,6 +270,7 @@ function notification_messages_build_body($entity, $params) {
 						$entity->getURL()
 					));
 				break;
+				
 			default:
 				$owner = $entity->getOwnerEntity();
 				$container = $entity->getContainerEntity();

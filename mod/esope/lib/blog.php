@@ -5,6 +5,9 @@
  * @package Blog
  */
 
+// ESOPE changes :
+// - allow to list group blog in "mine" view
+// - do not hide draft blog in group listing
 
 /**
  * Get page components to view a blog post.
@@ -102,6 +105,7 @@ function blog_get_page_content_list($container_guid = NULL, $use_owner = false) 
 
 	// show all posts for admin or users looking at their own blogs
 	// show only published posts for other users.
+	/* ESOPE : do not hide draft - access remains private and is editable by author anyway
 	$show_only_published = true;
 	if ($current_user) {
 		if (($current_user->guid == $container_guid) || $current_user->isAdmin()) {
@@ -113,6 +117,7 @@ function blog_get_page_content_list($container_guid = NULL, $use_owner = false) 
 			array('name' => 'status', 'value' => 'published'),
 		);
 	}
+	*/
 
 	$list = elgg_list_entities_from_metadata($options);
 	if (!$list) {

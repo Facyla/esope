@@ -1,6 +1,6 @@
 <?php
 /**
- * bootstrap plugin
+ * Twitter Bootstrap plugin
  *
  */
 
@@ -24,7 +24,7 @@ function bootstrap_init() {
 	// ie: .hidden { display:none !important; }
 	// which breaks most jquery and Elgg toggles
 	//$vendors_url = '/mod/bootstrap/vendors/bootstrap-3.3.5/';
-	$vendors_url = '/mod/bootstrap/vendors/bootstrap-4.0.0/';
+	$vendors_url = '/mod/bootstrap/vendors/bootstrap-4.0.0-alpha2/';
 	// Main style
 	elgg_register_css('bootstrap', $vendors_url . 'css/bootstrap.min.css');
 	// Optional theme (not available on 4.0.0)

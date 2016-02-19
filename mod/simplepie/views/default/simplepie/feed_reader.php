@@ -79,3 +79,4 @@ HTML;
 		echo '<p>' . elgg_echo('simplepie:notset') . '</p>';
 	}
 }
+

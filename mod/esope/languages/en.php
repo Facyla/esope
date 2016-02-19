@@ -13,6 +13,7 @@ return array(
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
 	'option:none' => "(none selected)",
+	'option:groupoption' => "Group option",
 	'groups:yes' => "Enabled",
 	'groups:no' => "Disabled",
 	'group_operators:operators' => "Operator(s)",
@@ -129,6 +130,12 @@ return array(
 	'esope:config:framekiller' => "Add frame busting code (\"frame killer\")",
 	'esope:config:framekiller:details' => "<em>Note : setting this to Yes will be the prefered choice in most cases.</em><br />Warning : by activating this code, you will not be able to embed the site into another site through an iframe (depending on used layouts). If you need to embed the site or some parts of it in iframes, please test carefully before activating on a production site !",
 	
+	// Group invites
+	'esope:groupinvite:standard' => "Method 1: Personal invitations",
+	'esope:groupinvite:search' => "Method 2: Search members to invite",
+	'esope:groupinvite:search:select' => "Step 1: search using available criteria",
+	'esope:groupinvite:search:invite' => "Step 2: select the members to invite or register",
+	
 	
 	// Overrides plugins translations
 	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
@@ -156,7 +163,7 @@ return array(
 	
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
-'esope:groupinvite' => "pending group invite request",
+	'esope:groupinvite' => "pending group invite request",
  	'esope:groupinvites' => "pending groups invites requests",
 	'esope:friendinvite' => "pending friendship request",
 	'esope:friendinvites' => "pending friendship requests",
@@ -275,6 +282,10 @@ return array(
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
+	'messages:moremessages' => "Display all unread messages",
+	'messages:togglecontent' => "Show/hide content",
+	'messages:widget:unreadcount' => '%s unread messages',
+	'messages:widget:unreadcount:singular' => '1 unread message',
 	'messages:answer' => "Reply",
 	'messages:to' => "to",
 	
@@ -373,6 +384,8 @@ return array(
 	'esope:settings:replace_home' => "Replace default logged in homepage by a user dashboard",
 	'esope:settings:firststeps' => "Firsts steps page GUID",
 	'esope:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
+	'esope:settings:header' => "Header content",
+	'esope:settings:header:help' => "If defined, the header defined here replaces the site title. The header will display between the top menu and the navigation menu.",
 	'esope:settings:footer' => "Footer content",
 	'esope:settings:analytics' => "Analytics code",
 	'esope:settings:headerimg' => "Header image (default: 85px height)",
@@ -394,7 +407,11 @@ return array(
 	'esope:settings:pages_list_subpages:group' => "Groups only (not recommended)",
 	'esope:settings:pages_list_subpages:all' => "All",
 	'esope:settings:pages_reorder' => "Allow pages reordering",
+	'esope:settings:river_hide_block' => "Use show/hide block in river modules",
+	'esope:settings:river_hide_block:details' => "If yes, some information of the river (attachments and responses) will be displayed into a toggable block, when the river is displayed in a widget or on a group homepage. If not, this information will be always visible.",
 	'esope:settings:advanced_pagination' => "Advanced pagination (limits links)",
+	'esope:settings:thewire_default_access' => "Default Wire access",
+	'esope:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
 	'esope:advanced_pagination:perpage' => "per page",
 	'esope:advanced_pagination:last' => "%s (last)",
 	'river:select:all:nofilter' => "All (no activity filter)",
@@ -449,8 +466,15 @@ return array(
 	'webprofiles' => "Online profiles",
 	'webprofiles:description' => "Profiles on a bunch of big social networks, plus websites URLs and email addresses",
 	'webprofiles:widget:title' => "Online profiles",
-	'webprofiles:widget:description' => "Displays a block with links to your profiles, identities and online contacts : : video, facebook, linkedin, twitter, doyoubuzz, web sites and email addresses, etc.",
 	'webprofiles:widget:help' => "Set your profiles on various services to display the service icon with a link to your profile. You can also add websites email addresses and RSS feeds.",
+	'webprofiles:widget:description' => "Displays a block with links to your profiles, identities and online contacts : : video, facebook, linkedin, twitter, doyoubuzz, web sites and email addresses, etc.",
+	'esope:widget:user_activity:description' => 'Display the latest user activities',
+	'esope:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
+	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
+	'bookmarks:widget:description' => "Displays your bookmarks list.",
+	'pages:widget:description' => "Displays your pages.",
+	'event_calendar:widget:description' => "Displays your upcoming events.",
+	'messages:widget:description' => "Displays your latest unread messages.",
 	
 	'esope:settings:filters:friends' => "Remove \"Friends\" tab in listings ? (default : No)",
 	'esope:settings:filters:mine' => "Remove \"Mine\" tab in listings ? (default : No)",
@@ -615,6 +639,7 @@ return array(
 	'esope:settings:groups:searchtab' => "Multi-criteria search tab",
 	'esope:settings:groups:tags' => "Add tag cloud below search",
 	'esope:grouptools:priority' => "Group tools priority",
+	'esope:groupoptions:priority' => "Group tools options priority (group edit form)",
 	'esope:settings:members:searchtab' => "Multi-criteria search tab",
 	'esope:search:members:role' => 'Member status',
 	'esope:label:search' => "Search",
@@ -622,9 +647,12 @@ return array(
 	'esope:search:title' => "Advanced search",
 	'esope:search:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced search",
 	'esope:membersearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced members search",
+	'esope:membersearch:setting:metadata:details' => "Enter a comma-separated list of the metadata you wish to add to advanced members search<br />Optional parameters are also supported: add <b>:text</b> to force text input, or <b>:auto</b> to force automatic dropdown values. Note that \"auto\" parameter is not recommended if there too many different values set for a given metadata, eg. > 300, as it will search the database for these values first). If both parameters are set, \"text\" will take precedence over \"auto\".",
 	'esope:groupsearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced groups search",
 	'esope:search:details' => "Use multiple criteria to find what you're looking for",
 	'esope:fulltextsearch' => "Fulltext search",
+	'esope:fulltextsearch:user' => "User fulltext search",
+	'esope:fulltextsearch:group' => "Group fulltext search",
 	'esope:search:type' => "Search type",
 	'esope:search:subtype' => "Object subtype",
 	'esope:search:profile_type' => "Profile type",
@@ -632,6 +660,7 @@ return array(
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
+	'esope:search:nosearch' => "No search, please select filter(s) and hit Search.",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "View your profile as",
@@ -707,7 +736,14 @@ return array(
 	'esope:settings:groups:topmenu:help' => "This menu lets you add up to 8 custom tabs, by adding customtab1 to customtab8 to groups (easiest is to use profile_manager groups fields config).",
 	'esope:settings:groups:disable_widgets' => "Remove tools widgets on group home",
 	'esope:settings:groups:add_activity' => "Add group activity on group home",
+	'esope:group_activity:notloggedin' => "(unavailable - please login to read this)",
+	'esope:settings:groups:add_wire' => "Add Wire form on group home",
+	'esope:groups:enablethewire' => "Enable the Wire (access restricted to group members)",
+	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Group Wire messages",
+	'esope:thewire:none' => "No group message yet",
 	'esope:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
+	'esope:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",
 	'esope:groups:disable_widgets:loggedin' => "Only when logged in",
 	'groups:customtab1' => "Custom tab n°1 (URL::Tab title::Optional tooltip)",
@@ -726,6 +762,12 @@ return array(
 	'groups:hint:customtab7' => "Use following syntax (using a :: as separator): URL::Tab title",
 	'groups:customtab8' => "Custom tab n°8 (URL::Tab title::Optional tooltip)",
 	'groups:hint:customtab8' => "Use following syntax (using a :: as separator): URL::Tab title",
+	'esope:autorefresh' => "Automatic discussion refresh",
+	'esope:autorefresh:no' => "No",
+	'esope:autorefresh:yes' => "Yes",
+	'esope:autorefresh:sortby' => "sort by",
+	'esope:autorefresh:latest' => "Latest",
+	'esope:autorefresh:likes' => "Likes",
 	
 	'esope:bookmarks:container' => "Publish in...",
 	'esope:container:option:own' => "%s (own)",
@@ -739,8 +781,10 @@ return array(
 	'esope:html_email_handler:css' => "Notifications custom CSS",
 	'esope:html_email_handler:css:help' => "If set, this CSS will replace default CSS (in html_email_handler/notification/body).",
 	'esope:html_email_handler:wrapper:help' => "If you want to edit the notification wrapper, please copy and edit the default wrapper in your theme (html_email_handler/notification/body).",
+	'esope:digest:css' => "Digest CSS",
 	'esope:digest:css:help' => "If you want to edit the digest CSS, please copy and edit the default CSS in your theme (css/digest/*).",
 	'esope:digest:wrapper:help' => "If you want to edit the digest wrapper, please copy and edit the default wrapper in your theme (page/layouts/digest).<br />To edit the inner elements content and wrappers, please read the Digest documentation for more detailed instructions. The views are located in digest/elements/* but you'll need to register elements to add them to the digests.",
+	'esope:newsletter:css' => "Newsletter default CSS",
 	'esope:newsletter:css:help' => "If you want to edit the newsletter default CSS, please copy and edit the default CSS in your theme (newsletter/templates/[template_name]/css).",
 	'esope:newsletter:wrapper:help' => "If you want to edit the newsletter default templates, please copy and edit the default template in your theme (newsletter/templates/[template_name]/body).",
 	'esope:digest:groups' => "New groups",
@@ -756,6 +800,8 @@ return array(
 	
 	'readmore' => "Read more",
 	
+	'esope:pages:summary' => "Summary",
+	'esope:option:nofilter' => "(no filter)",
 	// Subtypes
 	'esope:subtype:pages' => "wiki",
 	'esope:subtype:page' => "wiki page",
@@ -765,7 +811,23 @@ return array(
 	'esope:subtype:file' => "file",
 	'esope:subtype:event_calendar' => "event",
 	
-	// Icons
+	'esope:likes' => "Liked content",
+	
+	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
+	'esope:access:userfield' => "Viewable by...",
+	
+	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
+	'esope:group:norecentactivity' => "There was no recent activity in this group.",
+	'esope:group:inactive' => "INACTIVE",
+	'esope:group:inactive:details' => "No activity since %s days",
+	'esope:group:archive' => "ARCHIVE",
+	'esope:group:inactive:details' => "This group was archived",
+	
+	
+	
+	/**********************/
+	/* Font Awesome ICONS */
+	/**********************/
 	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
@@ -775,31 +837,212 @@ return array(
 	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
+	/* Esope FA icons - generic usage */
+	// Tools
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o fa-fw\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o fa-fw\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
+	// Sprites icons
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down fa-fw\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
-	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
-	'esope:group:norecentactivity' => "There was no recent activity in this group.",
-	'esope:group:inactive' => "INACTIVE",
-	'esope:group:inactive:details' => "No activity since %s days",
+	// User tools FA icons *override* (owner block)
+	// Core tools
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activity",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	// Plugins tools
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
+	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
+	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Events",
+	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	//'albums' => "<span class=\"fa-stack fa-stack-half\"><i class=\"fa fa-folder-o fa-stack-2x fa-fw\"></i><i class=\"fa fa-camera fa-stack-1x fa-fw\"></i></span> Albums",
+	'poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> My Polls",
 	
-	'esope:likes' => "Liked content",
-	
-	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
-	
-	// Group tools FA icons *override* - please update CSS accordingly
-	/* @TODO
-	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Announcements",
-	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
-	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Bookmarks",
-	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Brainstorm",
-	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendar",
-	'file:group' => "<i class=\"fa fa-file-o\"></i> Files",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Folders",
-	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activity",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Newsletter",
-	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Pages",
+	/* Main objects and search menus */
+	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groups",
+	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Users",
+	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Objects",
+	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Comments",
+	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'esope:search:filtered' => " (%s)",
+	'esope:search:unfiltered' => " (all)",
+	//'all' => "",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
+	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Announcements',
+	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
+	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Discussion topics",
+	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Top-level pages",
+	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Events",
+	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
+	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'item:object:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinar",
+	/*
+	'item:object:faq' => "<i class=\"fa fa- fa-fw\"></i> FAQs",
+	'item:object:dossierdepreuve' => "<i class=\"fa fa- fa-fw\"></i> Proof file",
+	'item:object:cmspage' => "<i class=\"fa fa- fa-fw\"></i> Static page",
 	*/
 	
+	// Group tools : side menu entries and module titles - *override* - please update CSS accordingly
+	// Core tools
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Bookmarks",
+	'discussion:group' => "<i class=\"fa fa-comments-o fa-fw\"></i> Forum",
+	'file:group' => "<i class=\"fa fa-file-o fa-fw\"></i> Files",
+	'groups:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activity",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages",
+	// Plugins tools
+	'au_sets:group' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'announcements:group' => "<i class=\"fa fa-info-circle fa-fw\"></i> Announcements",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendar",
+	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Events",
+	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Liked content",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Newsletter",
+	'photos:group' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'photos:group_albums' => "<i class=\"fa fa-photo fa-fw\"></i> Photos Albums",
+	// Group actions and infos
+	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Manage group admins",
+	'groups:membershiprequests' => "<i class=\"fa fa-users fa-fw\"></i> Manage join requests",
+	'groups:membershiprequests:pending' => "<i class=\"fa fa-users fa-fw\"></i> Group invitations (%s)",
+	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Join group",
+	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Group owner",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Group member",
+	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
+	// Group modules
+	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sub-groups",
+	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Most recent photos",
+	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Most recent albums",
+	
+	// User actions and infos
+	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
+	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
+	
+	/* Widgets */
+	'esope:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Bookmarks',
+	'esope:widget:brainstorm:title' => '<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm ideas',
+	'brainstorm:widget:points_left:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Brainstorm votes left',
+	'esope:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Blog articles',
+	'esope:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Calendar',
+	'esope:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Files',
+	'esope:widget:file_folder:title' => '<i class="fa fa-folder-o fa-fw"></i> File Folders',
+	'esope:widget:group:title' => '<i class="fa fa-users fa-fw"></i> Groups',
+	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Pages',
+	'esope:widget:user_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Site activity",
+	'esope:widget:site_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Recent activity",
+	'dashboard:widget:group:title' => "<i class=\"fa fa-flash fa-fw\"></i> Group activity",
+	'messages:widget:title' => "<i class=\"fa fa-envelope-o mail outline icon\"></i> Unread messages",
+	'webprofiles:widget:title' => "<i class=\"fa fa-user fa-fw\"></i> Online profiles",
+	'export_embed:widget:title' => "<i class=\"fa fa-code fa-fw\"></i> Embeddable widgets",
+	'widgets:profile_completeness:title' => "<i class=\"fa fa-user fa-fw\"></i> My profile",
+	'widgets:file_tree:title' => "<i class=\"fa fa-folder-o fa-fw\"></i> Folders", // ou : sitemap ?
+	'simplepie:widget' => "<i class=\"fa fa-rss fa-fw\"></i> RSS feed",
+	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Map", // ou : globe ?
+	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Tag search",
+	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Free text (HTML)",
+	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
+	
+	
+	/* Other interface */
+	'select:all' => 'Select all',
+	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
+	
+	
+	
+	// Actions
+	'esope:action:remove_user_email' => "Remove user email",
+	'esope:removeemail:areyousure' => "Warning, removing an email address cannot be undone. It is only recommended for deprecated emails. Do you confirm you want to remove %s ?",
+	'esope:removeemail:ok' => "User email successfully removed",
+	'esope:removeemail:error' => "User email could not be removed",
+	'esope:action:archive_user' => "Archive account",
+	'esope:action:unarchive_user' => "Un-archive account",
+	'esope:archiveuser:ok' => "User successfully archived",
+	'esope:archiveuser:error' => "User could not be archived",
+	'esope:unarchiveuser:ok' => "User successfully un-archived",
+	'esope:unarchiveuser:error' => "User could not be un-archived",
+	
+	// ESOPE tools
+	'esope:tools:intro' => "These tools should be used only in some particular cases, or only once, and often require a combined code+administration action.",
+	'esope:tools:warning' => "Please read carefully the source code for each of these before enabling.<br /><strong>It is strongly advised to perform a full backup before using some of these tools (antispam, widgets, fields updates)</strong>",
+	'esope:tools:tool:group_admins' => "Group admins",
+	'esope:tools:tool:group_admins:details' => "Lists all group administrators, including operators.",
+	'esope:tools:tool:users_email_search' => "Search user by email",
+	'esope:tools:tool:users_email_search:details' => "Find users by registration email address",
+	'esope:tools:tool:group_newsletters_default' => "Group newsletters init",
+	'esope:tools:tool:group_newsletters_default:details' => "Sets the default group newsletters setting to 'no', when no setting has been set yet (usually when plugin was enabled afterwards)",
+	'esope:tools:tool:group_updates' => "groupmenu fields update",
+	'esope:tools:tool:group_updates:details' => "(1.6 => 1.8) Updates group fields ->groupmenu1 and ->groupmenu2 that were used in some Elgg 1.6 Esope themes to define the new ->customtab1 and ->customtab2 settings. Enable through code",
+	'esope:tools:tool:spam_users_list' => "Antispam (cleanup)",
+	'esope:tools:tool:spam_users_list:details' => "Very powerful, and even more dangerous batch tool to cleanup user accounts based on various criteria, mainly email structure. Enable and tweak behaviour through code. Backup is mandatory.",
+	'esope:tools:tool:test_mail_notifications' => "Test notification email",
+	'esope:tools:tool:test_mail_notifications:details' => "Sends a sample notification email at each page view. Useful to live test the notification design.",
+	'esope:tools:tool:threads_disable' => "Threads disable",
+	'esope:tools:tool:threads_disable:details' => "This tools allows administrators to convert 'threads' comments to regular comments, before disabling threads plugin",
+	'esope:tools:tool:user_updates' => "Remove dashboard widgets",
+	'esope:tools:tool:user_updates:details' => "Removes dashboard widgets for all users. Code modification required to enable.",
+	'esope:tools:tool:clear_cmis_credentials' => "Clear users CMIS credentials",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Removes all personnal settings that were set up for elgg_cmis plugin.",
+	'esope:tools:tool:users_stats' => "Users stats",
+	'esope:tools:tool:users_stats:details' => "Some stats about users. Not much currently besides groups count.",
+	'esope:tools:tool:group_publication_stats' => "Group publications stats",
+	'esope:tools:tool:group_publication_stats:details' => "Some stats about publications in a group, per member and per publication subtype.",
+	
+	// Menus
+	'esope:menu:topbar' => "My account",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	
+	
+	// Comment notifications
+	'generic_comment:email:body' => "A new comment was published on \"%s\" by %s:
+
+
+%s
+
+
+To view the complete discussion, click here:
+%s
+
+To view %s's profile, click here:
+%s
+
+This is an automated notification, please do not reply to this email.",
 	
 );
 

@@ -60,3 +60,4 @@ echo <<<HTML
 	$post_date_checkbox $post_date_label
 </div>
 HTML;
+

@@ -37,9 +37,7 @@ if (!$owner) {
 	</div>
 
 	<div class="groups-profile-fields elgg-body">
-		<?php
-			echo elgg_view('groups/profile/fields', $vars);
-		?>
+		<?php echo elgg_view('groups/profile/fields', $vars); ?>
 	</div>
 </div>
 <div class="clearfloat"></div>

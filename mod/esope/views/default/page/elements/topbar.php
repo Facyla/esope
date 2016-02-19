@@ -39,7 +39,7 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
-	// Login as menu link
+	// Login_as menu link
 	if (elgg_is_active_plugin('login_as')) {
 		$original_user_guid = isset($_SESSION['login_as_original_user_guid']) ? $_SESSION['login_as_original_user_guid'] : NULL;
 		if ($original_user_guid) {

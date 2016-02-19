@@ -19,11 +19,17 @@ foreach ($variables as $name => $type) {
 		continue;
 	}
 	
-	// don't show parent picker input for top or new pages.
+	/*
+	// Enable pages reordering at any time only when allowed by settings
+	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'esope');
+	if ($pages_reorder != 'yes') {
+	*/
+// don't show parent picker input for top or new pages.
 	// Inria : we actually want to be able to change parent at any time
 	if ($name == 'parent_guid' && (!$vars['parent_guid'] || !$vars['guid'])) {
 		//continue;
 	}
+	//}
 
 	if ($type == 'parent') {
 		$input_view = "pages/input/$type";
@@ -67,12 +73,15 @@ echo elgg_view('input/hidden', array(
 	'name' => 'container_guid',
 	'value' => $vars['container_guid'],
 ));
+// Default field only if no pages reordering allowed
+//if ($pages_reorder != 'yes') {
 if (!$vars['guid']) {
 	echo elgg_view('input/hidden', array(
 		'name' => 'parent_guid',
 		'value' => $vars['parent_guid'],
 	));
 }
+//}
 
 if ($vars['guid']) echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no'));
 else echo elgg_view('prevent_notifications/prevent_form_extend', array());

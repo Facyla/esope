@@ -1,16 +1,12 @@
 
-.profileiconaccess {
-  margin-top: 30px;
-  margin-bottom: 15px;
-}
-
 .profileiconaccess-throbber {
   display: inline-block;
-  width: 33px;
-  height: 33px;
+  padding-left: 10px;
+  width: 16px;
+  height: 16px;
 }
 
 .profileiconaccess-form {
   display: inline-block;
-  padding-left: 5px;
+  padding-right: 5px;
 }

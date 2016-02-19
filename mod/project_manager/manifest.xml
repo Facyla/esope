@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Gestion de projets</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.5</version>
+	<blurb>Gestion de projets</blurb>
+	<description>Gestion de projets et de tâches, avec suivi de l'avancement, du temps passé et facturable</description>
+	<website>http://www.items.fr/</website>
+	<copyright>(C) Items International 2013</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.12</version>
+	</requires>
+
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/screenshot.png</path>
+	</screenshot>
+
+	<category>projects</category>
+	<category>tasks</category>
+	<category>management</category>
+	<category>time tracking</category>
+	<category>other</category>
+	
+<!---
+	<on_enable>setup_function</on_enable>
+	<on_disable>teardown_function</on_disable>
+	<admin_interface>simple</admin_interface>
+
+	<requires>
+		<type>php_ini</type>
+		<name>short_open_tag</name>
+		<value>off</value>
+	</requires>
+
+	<requires>
+		<type>plugin</type>
+		<name>profile</name>
+		<version>1.0</version>
+	</requires>
+	
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>blog</plugin>
+	</requires>
+
+//-->
+	<provides>
+		<type>plugin</type>
+		<name>project</name>
+		<name>tasks</name>
+		<name>time tracking</name>
+		<name>management</name>
+		<version>0.3</version>
+	</provides>
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
+
+<!--
+
+Point d''étape : saisie par calendrier et non par projet
+Possibilité d'ajuster a posteriori les tarifs, jours , etc.
+Vue par projet
+
+0.5 : adaptation vers Elgg 1.12
+
+0.4 : 2013.01.22
+  - time_tracker, "rapports d'activité", pour suivre le temps passé
+  - time_tracker, synthèse par personne
+  - time_tracker, synthèse par projet
+  - time_tracker, intégration dans les groupes
+  - nombreuses fonctions de calcul, récupération des projets, consultants, données, gestion des accès, jours ouvrables, etc.
+  - page "consultants", gestion des profils et infos associées
+  - page "production", gestion mensuelle des données financières des projets
+  - draft de pages de synthèse de production annuelle
+
+0.3 : 
+  - début de développement de time_tracker, pour suivre le temps passé
+    * données chronoloiques associées à tous les utilisateurs
+    * stockage mensuel (1 annotation par mois)
+    * informations associées soit aux ElggUser, soit aux projets ?
+    * infos sur temps passé, projet associé, etc.
+  - vue input à finaliser : range_slider (curseur de saisie)
+
+0.2 : 
+  - début de développement de vue utiles (pour forme et rendu)
+  - intégration du plugin 'tasks' de Fx Nion
+
+0.1 : 1ère version, sur la base du plugin "mission"
+
+
+Credits for tasks plugin :
+	<name>Tasks Fx</name>
+	<author>Fx</author>
+	<version>2.0</version>
+	<category>bundled</category>
+	<category>content</category>
+	<category>widget</category>
+	<description>Elgg Tasks</description>
+	<website>http://www.elgg.org</website>
+	<license>GNU General Public License version 2</license>
+
+//-->
+

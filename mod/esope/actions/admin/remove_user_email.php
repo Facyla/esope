@@ -1,4 +1,5 @@
 <?php
+// Restrict action to admins
 admin_gatekeeper();
 
 // Get variables

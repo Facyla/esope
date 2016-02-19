@@ -20,7 +20,7 @@ $tabs['home'] = array(
 if ($group->blog_enable == 'yes') 
 $tabs['articles'] = array(
 	'text' => elgg_echo('theme_inria:groups:blog'),
-	'href' => $vars['url'] . 'blog/group/' . $group->guid . '/all',
+	'href' => elgg_get_site_url() . 'blog/group/' . $group->guid . '/all',
 	'selected' => (elgg_in_context('blog')),
 	'priority' => 300,
 );
@@ -29,7 +29,7 @@ $tabs['articles'] = array(
 if ($group->forum_enable == 'yes') 
 $tabs['discussion'] = array(
 	'text' => elgg_echo('theme_inria:groups:forum'),
-	'href' => $vars['url'] . 'discussion/owner/' . $group->guid,
+	'href' => elgg_get_site_url() . 'discussion/owner/' . $group->guid,
 	'selected' => (elgg_in_context('discussion')),
 	'priority' => 300,
 );
@@ -40,7 +40,7 @@ $tabs['discussion'] = array(
 //if (($group->bookmarks_enable == 'yes') || ($group->file_enable == 'yes')) 
 $tabs['ressources'] = array(
 	'text' => elgg_echo('theme_inria:groups:ressources'),
-	'href' => $vars['url'] . 'ressources/group/' . $group->guid . '/all',
+	'href' => elgg_get_site_url() . 'ressources/group/' . $group->guid . '/all',
 	'selected' => (elgg_in_context('ressources') || elgg_in_context('files') || elgg_in_context('bookmarks')),
 	'priority' => 300,
 );
@@ -50,7 +50,7 @@ $tabs['ressources'] = array(
 if ($group->pages_enable == 'yes') 
 $tabs['pages'] = array(
 	'text' => elgg_echo('theme_inria:groups:pages'),
-	'href' => $vars['url'] . 'pages/group/' . $group->guid . '/all',
+	'href' => elgg_get_site_url() . 'pages/group/' . $group->guid . '/all',
 	'selected' => (elgg_in_context('pages')),
 	'priority' => 300,
 );
@@ -65,7 +65,7 @@ if (!empty($group->customtab1)) {
 	$tabinfo = explode('::', $group->customtab1);
 	$tabs['customtab1'] = array(
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 	);
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab1']['target'] = '_blank';
 }
@@ -75,7 +75,7 @@ if (!empty($group->customtab2)) {
 	$tabinfo = explode('::', $group->customtab2);
 	$tabs['customtab2'] = array(
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 	);
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab2']['target'] = '_blank';
 }
@@ -85,7 +85,7 @@ if (!empty($group->customtab3)) {
 	$tabinfo = explode('::', $group->customtab3);
 	$tabs['customtab3'] = array(
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 	);
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab3']['target'] = '_blank';
 }
@@ -95,7 +95,7 @@ if (!empty($group->customtab4)) {
 	$tabinfo = explode('::', $group->customtab4);
 	$tabs['customtab4'] = array(
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 	);
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab4']['target'] = '_blank';
 }
@@ -105,7 +105,7 @@ if (!empty($group->customtab5)) {
 	$tabinfo = explode('::', $group->customtab4);
 	$tabs['customtab5'] = array(
 		'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-		'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+		'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 	);
 	if (esope_is_external_link($tabinfo[0])) $tabs['customtab5']['target'] = '_blank';
 }
@@ -121,7 +121,7 @@ if (!empty($group->cmisfolder)) {
 		if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('theme_inria:cmis_folder'); }
 		$tabs['cmisfolder'] = array(
 			'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
-			'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+			'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 		);
 		if (esope_is_external_link($tabinfo[0])) $tabs['cmisfolder']['target'] = '_blank';
 	}
@@ -136,7 +136,7 @@ if (!empty($group->cmisfolder)) {
 			if (!empty($tabinfo[1])) { $text = $tabinfo[1]; } else { $text = elgg_echo('theme_inria:cmis_folder'); }
 			$tabs['cmisfolder'] = array(
 				'href' => $tabinfo[0], 'text' => $text, 'title' => str_replace('"', "'", $tabinfo[2]),
-				'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+				'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 			);
 			if (esope_is_external_link($tabinfo[0])) $tabs['cmisfolder']['target'] = '_blank';
 		}
@@ -146,18 +146,20 @@ if (!empty($group->cmisfolder)) {
 
 
 // Build action menu
+/*
 if (elgg_in_context('group_profile')) {
 	if (isset($CONFIG->menus['title'])) { $groupmenus = $CONFIG->menus['title']; } else { $menu = array(); }
 	$weight = 500;
 	if ($groupmenus) foreach ($groupmenus as $menu) {
-		$menu->class = null; // Clears remaining link classes (elgg-button-action...)
+		$menu->item_class = null; // Clears remaining link classes (elgg-button-action...)
 		$menu->setItemClass('grouptab-action');
 		$menu->setLinkClass('grouptab-action-link');
-		$menu->setWeight($weight);
+		$menu->setPriority($weight);
 		$weight--; // Keep ordering (would be inverted otherwise, as menus float right)
 		elgg_register_menu_item('group_filter', $menu);
 	}
 }
+*/
 
 
 foreach ($tabs as $name => $tab) {
@@ -166,9 +168,13 @@ foreach ($tabs as $name => $tab) {
 }
 
 // Group menu actions goes to the right
-//echo elgg_view_menu('title', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz elgg-menu-right'));
+if (elgg_in_context('group_profile')) {
+	echo elgg_view_menu('title', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz elgg-menu-group-filter-alt'));
+}
 // Group menu tabs go to the left
 echo elgg_view_menu('group_filter', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+
+echo '<div class="clearfloat"></div>';
 
 echo '</div>';
 

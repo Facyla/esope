@@ -14,7 +14,8 @@ $group_options = array(
 	"created_time_upper" => $ts_upper
 );
 
-if($new_groups = elgg_get_entities($group_options)){
+$new_groups = elgg_get_entities($group_options);
+if (!empty($new_groups)) {
 	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:groups"), "href" => "groups/all"));
 	
 	$group_items = "<div class='digest-groups'>";
@@ -22,10 +23,14 @@ if($new_groups = elgg_get_entities($group_options)){
 	foreach($new_groups as $key => $group){
 		$group_items .= '<div class="table-item">';
 		$group_items .= elgg_view_entity_icon($group, "medium");
-		$group_items .= '<a href="' . $group->getURL() . '">' . $group->name . '</a>';
+		$group_items .= elgg_view("output/url", array(
+			"text" => $group->name,
+			"href" => $group->getURL(),
+			"is_trusted" => true
+		));
 		$group_items .= '</div>';
 	}
-		
+	
 	$group_items .= "</div>";
 	
 	echo elgg_view_module("digest", $title, $group_items);

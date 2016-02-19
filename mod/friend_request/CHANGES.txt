@@ -1,8 +1,20 @@
-= Version History =
+Version History
+===============
 
-x.x:
+4.1 (2015-12-17):
+
+- added: admin option to disable river item creation (fixes #5)
+- added: composer support
+- chore: refactoring for performance and coding style
+
+4.0 (2014-11-10):
+
+- changes for Elgg 1.9
+
+3.3.1 (2014-11-10):
 
 - changed: restored the default events, couldn't find the reason for the removal (fixes #4)
+- applied Elgg coding standards
 
 3.3 (2013-04-05):
 

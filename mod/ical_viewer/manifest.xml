@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>iCal viewer</name>
+	<id>ical_viewer</id>
 	<author>Facyla ~ Florian DANIEL</author>
-	<version>1.8.1</version>
-	<category>ical</category>
-	<category>calendar</category>
+	<version>1.12</version>
 	<description>Displays an external iCal calendar, eg. GCalendar or any other web-readable iCal file</description>
-	<website>http://id.facyla.net//</website>
-	<copyright>Facyla ~ Florian DANIEL 2013</copyright>
+	<website>http://facyla.fr//</website>
+	<copyright>Facyla ~ Florian DANIEL 2013-2016</copyright>
 	<license>GNU General Public License version 2</license>
+	
+	<category>calendar</category>
+	<category>ical</category>
+	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.12</version>
 	</requires>
+	
 	<activate_on_install>false</activate_on_install>
+	
 </plugin_manifest>
 
 

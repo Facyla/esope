@@ -7,14 +7,12 @@
 
 // Theme inria logged in index page
 function theme_inria_index(){
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/loggedin_homepage.php');
 	return true;
 }
 
 // Theme inria public index page
 function theme_inria_public_index() {
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/public_homepage.php');
 	return true;
 }
@@ -76,8 +74,7 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 
 /* Modification des Boutons des widgets */
 function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
-	global $CONFIG;
-	$urlicon = $CONFIG->url . 'mod/theme_inria/graphics/';
+	$urlicon = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 	
 	$widget = $params['entity'];
 	$show_edit = elgg_extract('show_edit', $params, true);
@@ -87,7 +84,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 			'name' => 'collapse',
 			'text' => '<img src="' . $urlicon . 'widget_hide.png" alt="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '" />',
 			'href' => "#elgg-widget-content-$widget->guid",
-			'class' => 'masquer',
+			'link_class' => 'masquer',
 			'rel' => 'toggle',
 			'priority' => 900
 		);
@@ -99,7 +96,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 				'text' => '<img src="' . $urlicon . 'widget_delete.png" alt="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '" />',
 				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
 				'is_action' => true,
-				'class' => 'elgg-widget-delete-button suppr',
+				'link_class' => 'elgg-widget-delete-button suppr',
 				'id' => "elgg-widget-delete-button-$widget->guid",
 				'priority' => 900
 			);
@@ -110,7 +107,7 @@ function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
 					'name' => 'settings',
 					'text' => '<img src="' . $urlicon . 'widget_config.png" alt="' . strip_tags(elgg_echo('widget:editmodule', array($widget_title))) . '" />',
 					'href' => "#widget-edit-$widget->guid",
-					'class' => "elgg-widget-edit-button config",
+					'link_class' => "elgg-widget-edit-button config",
 					'rel' => 'toggle',
 					'priority' => 800,
 				);
@@ -368,8 +365,9 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 		if (in_array($field, array('cn', 'sn', 'givenName', 'displayName', 'email'))) { continue; }
 		
 		// Almost each field is specific...
+		// Note : 201506 now handling multiple values as array, as it is used in selects and searches
 		switch($field) {
-			// Centre de rattachement : "ou", branche people uniquement
+			// Centre de rattachement : "ou", branche people uniquement - valeur unique
 			case 'inria_location_main':
 				if ($ldap_auth[0]['ou'][0]) {
 					$new = $ldap_auth[0]['ou'][0];
@@ -380,11 +378,11 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			
 			// Localisation
 			case 'inria_location':
-				// Process localisation : déduit des contacts tél et room
+				// Process localisation : déduit des contacts tél et room - peut être un array
 				if ($location) {
 					$location = array_unique($location);
 					$new = theme_inria_ldap_convert_locality($location);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				} else {
 					// Si pas d'info, renseigner avec la résidence administrative (champ ou de la branche people), en supprimant "UR-"
 					if ($ldap_auth[0]['ou'][0]) {
@@ -392,34 +390,38 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 						$new = str_replace('UR-', '', $new);
 					}
 				}
-				if ($user->inria_location != $new) $user->inria_location = $new;
+				//if ($user->inria_location != $new) 
+				$user->inria_location = $new;
 				break;
 			
-			// EPI ou service : "ou", branche contacts uniquement
+			// EPI ou service : "ou", branche contacts uniquement - peut être un array
 			case 'epi_ou_service':
 				if ($ldap_infos[0]['ou'][0]) {
 					$new = $ldap_infos[0]['ou'];
-					$new = implode(', ', $new);
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->epi_ou_service != $new) $user->epi_ou_service = $new;
+				//if ($user->epi_ou_service != $new) 
+				$user->epi_ou_service = $new;
 				break;
 			
-			// Bureau
+			// Bureau - peut être un array
 			case 'inria_room':
 				if ($rooms) {
 					$new = array_unique($rooms);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_room != $new) $user->inria_room = $new;
+				//if ($user->inria_room != $new) 
+				$user->inria_room = $new;
 				break;
 			
-			// Téléphone
+			// Téléphone - peut être un array
 			case 'inria_phone':
 				if ($phones) {
 					$new = array_unique($phones);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_phone != $new) $user->inria_phone = $new;
+				//if ($user->inria_phone != $new) 
+				$user->inria_phone = $new;
 				break;
 			
 			// Secrétariat
@@ -427,9 +429,10 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 			case 'inria_secretary':
 				if ($secretary) {
 					$new = array_unique($secretary);
-					$new = implode(', ', $new); // Note : we need a string to be able to compare changes
+					//$new = implode(', ', $new); // Note : we need a string to be able to compare changes
 				}
-				if ($user->inria_secretary != $new) $user->inria_secretary = $new;
+				//if ($user->inria_secretary != $new) 
+				$user->inria_secretary = $new;
 				break;
 			
 			default:
@@ -500,10 +503,17 @@ function theme_inria_object_notifications_block($hook, $entity_type, $returnvalu
 
 /* Cron (daily) tasks
  * Perfom some checks and cleanup
+ * Note : registered as hourly, but runs only at a specific hour (this is to avoid overlap with other cron)
  */
 function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 	elgg_set_context('cron');
 	
+	// Run only once per day, at 4 AM (in this hour at least)
+	// Also allow forced run (for admins)
+	// This avoids running at the same time as another cron, which would block it (if it doesn't have time limit settings, etc.)
+	$cron_hour = 4;
+	$current_hour = date('H');
+	if (($cron_hour == $current_hour) || ($params['force'] == 'yes')) {
 	// Avoid any time limit while processing
 	set_time_limit(0);
 	access_show_hidden_entities(true);
@@ -522,20 +532,27 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 	
 	elgg_set_ignore_access($ia);
 	echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
+	}
 }
 
 // CRON : LDAP user check
 function theme_inria_cron_ldap_check($user, $getter, $options) {
-	// Skip not-yet-enabled accounts
+	//$debug_0 = microtime(TRUE);
+	// Check LDAP data
+	inria_check_and_update_user_status('login', 'user', $user);
+	
+	// Process all and any users, BUT only clear some metadata when account is not Inria (valid LDAP)
+	if (!$user->isEnabled() || $user->isbanned() || ($user->memberstatus == 'closed')) {
+		// Clean up Inria fields for any non-active Inria accounts
+		foreach(inria_get_profile_ldap_fields() as $field) { $user->{$field} = null; }
+	}
+	// Skip not-enabled accounts
 	if (!$user->isEnabled()) return;
 	// Skip banned accounts
 	if ($user->isbanned()) return;
 	// Skip archived accounts
 	if ($user->memberstatus == 'closed') return;
 	
-	//$debug_0 = microtime(TRUE);
-	// Check LDAP data
-	inria_check_and_update_user_status('login', 'user', $user);
 	//$debug_1 = microtime(TRUE);
 	//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
 	

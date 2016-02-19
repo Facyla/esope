@@ -5,7 +5,6 @@
  * Used for the walled garden index page
  */
 
-global $CONFIG;
 
 $site = elgg_get_site_entity();
 $title = $site->name;

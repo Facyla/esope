@@ -13,6 +13,7 @@ return array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	'option:none' => "(aucune sélection)",
+	'option:groupoption' => "Option du groupe",
 	'groups:yes' => "Activé",
 	'groups:no' => "Désactivé",
 	'group_operators:operators' => "Responsable(s)",
@@ -129,6 +130,12 @@ return array(
 		</ul>",
 	'esope:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
 	'esope:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production, et utilisez le code de désactivation lorsque c'est nécessaire.",
+	
+	// Groups invites
+	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
+	'esope:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
+	'esope:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
+	'esope:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
 	
 	
 	// Overrides plugins translations
@@ -253,8 +260,8 @@ return array(
 	
 	// New group
 	// @TODO : Ce texte devrait être adapté à votre site !
-	// use $CONFIG->url for site install URL, $CONFIG->site->email for site email
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . $CONFIG->url . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
+	// use elgg_get_site_url() for site install URL, $CONFIG->site->email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . elgg_get_site_url() . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
 	'groups:search:regular' => "Recherche de groupe",
 	'groups:regularsearch' => "Nom ou mot-clef",
 	'search:group:go' => "Rechercher un groupe",
@@ -291,6 +298,10 @@ return array(
 	'messages:widget:title' => "Messages non lus",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:moremessages' => "Afficher tous les messages non lus",
+	'messages:togglecontent' => "Montrer/masquer le contenu",
+	'messages:widget:unreadcount' => '%s messages non lus',
+	'messages:widget:unreadcount:singular' => '1 message non lu',
 	'messages:answer' => "Répondre",
 	'messages:to' => "à",
 	
@@ -388,6 +399,8 @@ return array(
 	'esope:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
 	'esope:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
 	'esope:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
+	'esope:settings:header' => "Contenu de l'entête",
+	'esope:settings:header:help' => "Si défini, l'entête défini dans ce champs remplace le titre du site. L'entête s'affiche entre le menu supérieur et le menu de navigation.",
 	'esope:settings:footer' => "Contenu du pied de page",
 	'esope:settings:analytics' => "Code de suivi du trafic",
 	'esope:settings:headerimg' => "Image du bandeau supérieur (85px de haut par défaut)",
@@ -409,6 +422,10 @@ return array(
 	'esope:settings:pages_list_subpages:group' => "Groupes seulement (non recommandé)",
 	'esope:settings:pages_list_subpages:all' => "Toujours",
 	'esope:settings:pages_reorder' => "Permettre de réorganiser les pages",
+	'esope:settings:river_hide_block' => "Utiliser les blocs dépliables dans la rivière",
+	'esope:settings:river_hide_block:details' => "Si oui, les informations complémentaires de la rivière (pièces jointes et réponses) seront affichées dans un bloc dépliable, lorsque la rivière est affichée dans un widget et sur l'accueil des groupes. Si non, ces informations seront toujours visibles.",
+	'esope:settings:thewire_default_access' => "Accès par défaut du Fil",
+	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglé de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
 	'esope:settings:advanced_pagination' => "Pagination avancée (choix du nombre de résultats)",
 	'esope:advanced_pagination:perpage' => "par page",
 	'esope:advanced_pagination:last' => "%s&nbsp;(dernière)", // "%s (dernière)"
@@ -462,10 +479,17 @@ return array(
 	'esope:widgets:searchresults:entities' => "Types de contenus",
 	'esope:widgets:searchresults:highlight_first' => "Nombre de résultats mis en avant (mode réduit seulement)",
 	'webprofiles' => "Profils en ligne",
-	'webprofiles:description' => "Profils sur divers grands réseaux sociaux, sites web et adresses mail",
 	'webprofiles:widget:title' => "Profils en ligne",
-	'webprofiles:widget:description' => "Affiche un bloc avec des liens vers vos profils, identités et contacts en ligne : vidadeo, facebook, linkedin, twitter, doyoubuzz, sites web et adresses mails, etc.",
+	'webprofiles:description' => "Profils sur divers grands réseaux sociaux, sites web et adresses mail",
 	'webprofiles:widget:help' => "Renseignez vos identifiants sur divers sites pour afficher l'icône du service avec un lien vers votre profil. Vous pouvez également ajouter des sites web, adresses mail et fils RSS.",
+	'webprofiles:widget:description' => "Affiche un bloc avec des liens vers vos profils, identités et contacts en ligne : viadeo, facebook, linkedin, twitter, doyoubuzz, sites web et adresses mails, etc.",
+	'esope:widget:user_activity:description' => "Affiche vos dernières activités",
+	'esope:widget:site_activity:description' => "Affiche les dernières activités du site",
+	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
+	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
+	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	
 	'esope:settings:filters:friends' => "Supprimer l'onglet \"Contacts\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'esope:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
@@ -630,6 +654,7 @@ return array(
 	'esope:settings:groups:searchtab' => "Onglet de recherche multi-critère",
 	'esope:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
 	'esope:grouptools:priority' => "Ordre des outils dans les groupes",
+	'esope:groupoptions:priority' => "Ordre des options des outils des groupes (formulaire de configuration du groupe)",
 	'esope:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'esope:search:members:role' => 'Statut',
 	'members:label:search' => "Recherche",
@@ -637,9 +662,12 @@ return array(
 	'esope:search:title' => "Recherche avancée",
 	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
 	'esope:membersearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de membres (meta1, meta2, etc.)",
+	'esope:membersearch:setting:metadata:details' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de membres (meta1, meta2, etc.)<br />Paramètres optionnels : ajoutez <b>:text</b> pour forcer un champ texte, ou <b>:auto</b> pour forcer une liste déroulante avec les valeurs existantes. Notez que le paramètre \"auto\" n'est pas recommandé s'il y a trop de valeurs distinctes pour le champ, par ex. plus de 300, car cela va d'abord interroger la base de données pour déterminer la liste des valeurs. Si les 2 paramètres sont définis, \"text\" prendra le dessus sur \"auto\".",
 	'esope:groupsearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de groupes (meta1, meta2, etc.)",
 	'esope:search:details' => "Utiliser plusieurs critères pour affiner votre recherche",
-	'esope:fulltextsearch' => "Recherche libre",
+	'esope:fulltextsearch' => "Recherche plein texte",
+	'esope:fulltextsearch:user' => "Recherche plein texte",
+	'esope:fulltextsearch:group' => "Recherche plein texte",
 	'esope:search:type' => "Type de recherche",
 	'esope:search:subtype' => "Type de publication",
 	'esope:search:profile_type' => "Type de profil",
@@ -647,6 +675,7 @@ return array(
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
+	'esope:search:nosearch' => "Aucune recherche : veuillez choisir un(des) filtre(s) et cliquer sur Rechercher.",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
@@ -721,7 +750,14 @@ return array(
 	'esope:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'esope:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'esope:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
+	'esope:group_activity:notloggedin' => "(indisponible - veuillez vous connectez pour lire ceci)",
+	'esope:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
+	'esope:groups:enablethewire' => "Activer le Fil (accès réservé aux membres du groupe)",
+	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages du Fil du groupe",
+	'esope:thewire:none' => "Aucun message pour le moment",
 	'esope:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
+	'esope:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
 	'esope:groups:disable_widgets:loggedin' => "Seulement si connecté",
 	'groups:customtab1' => "Onglet configurable n°1 (URL::Titre onglet::Infobulle facultative)",
@@ -740,6 +776,12 @@ return array(
 	'groups:hint:customtab7' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab8' => "Onglet configurable n°8 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab8' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'esope:autorefresh' => "Rafraîchissement automatique",
+	'esope:autorefresh:no' => "Non",
+	'esope:autorefresh:yes' => "Oui",
+	'esope:autorefresh:sortby' => "tri par",
+	'esope:autorefresh:latest' => "Date",
+	'esope:autorefresh:likes' => "Likes",
 	
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
@@ -753,8 +795,10 @@ return array(
 	'esope:html_email_handler:css' => "CSS personnalisées des notifications",
 	'esope:html_email_handler:css:help' => "Si défini, cette feuille de style remplace celle par défaut définie dans la vue html_email_handler/notification/body.",
 	'esope:html_email_handler:wrapper:help' => "Si vous souhaitez éditer le modèle de page des notifications, veuillez copier et éditer la vue html_email_handler/notification/body dans votre plugin de thème.",
+	'esope:digest:css' => "Styles des résumés (digest)",
 	'esope:digest:css:help' => "Si vous souhaitez éditer les styles des résumés, veuillez copier et éditer les vues css/digest/* dans votre plugin de thème.",
 	'esope:digest:wrapper:help' => "Si vous souhaitez éditer le modèle de page des résumés, veuillez copier et éditer la vue page/layouts/digest dans votre plugin de thème.<br />Pour modifier les contenus et leur structure, veuillez consulter la documentation détaillée fournie avec le plugin Digest. Les vues utiles sont situées dans digest/elements/* mais vous devrez également définir les élements à intégrer aux résumés.",
+	'esope:newsletter:css' => "Styles des lettres d'information (newsletter)",
 	'esope:newsletter:css:help' => "Si vous souhaitez éditer les styles par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/css dans votre plugin de thème.",
 	'esope:newsletter:wrapper:help' => "Si vous souhaitez éditer les modèles de page par défaut des lettres d'informations (newsletters), veuillez copier et éditer les vues newsletter/templates/[template_name]/body dans votre plugin de thème.",
 	'esope:digest:groups' => "Nouveaux groupes",
@@ -770,6 +814,8 @@ return array(
 	
 	'readmore' => "Lire la suite",
 	
+	'esope:pages:summary' => "Sommaire",
+	'esope:option:nofilter' => "(aucun filtre)",
 	// Subtypes
 	'esope:subtype:pages' => "wiki",
 	'esope:subtype:page' => "page wiki",
@@ -779,7 +825,23 @@ return array(
 	'esope:subtype:file' => "fichier",
 	'esope:subtype:event_calendar' => "événement",
 	
-	// Icons
+	'esope:likes' => "Contenus appréciés",
+	
+	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
+	'esope:access:userfield' => "Visible par...",
+	
+	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
+	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
+	'esope:group:inactive' => "INACTIF",
+	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
+	'esope:group:archive' => "ARCHIVE",
+	'esope:group:inactive:details' => "Ce groupe a été archivé",
+	
+	
+	
+	/**********************/
+	/* Font Awesome ICONS */
+	/**********************/
 	'esope:subtype:page:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:page_top:icon' => '<i class="fa fa-edit"></i>',
 	'esope:subtype:bookmarks:icon' => '<i class="fa fa-link"></i>',
@@ -801,40 +863,207 @@ return array(
 	
 	/* Esope FA icons - generic usage */
 	// Tools
-	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn\"></i>",
-	'esope:icon:blog' => "<i class=\"fa fa-file-text-o\"></i>",
-	'esope:icon:bookmarks' => "<i class=\"fa fa-link\"></i>",
-	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o\"></i>",
-	'esope:icon:discussion' => "<i class=\"fa fa-comments-o\"></i>",
-	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o\"></i>",
-	'esope:icon:file' => "<i class=\"fa fa-file-o\"></i>",
-	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o\"></i>",
-	'esope:icon:group_activity' => "<i class=\"fa fa-flash\"></i>",
-	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o\"></i>",
-	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o\"></i>",
+	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
+	'esope:icon:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i>",
+	'esope:icon:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i>",
+	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:discussion' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:file' => "<i class=\"fa fa-file-o fa-fw\"></i>",
+	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o fa-fw\"></i>",
+	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
+	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
+	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
 	// Sprites icons
-	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up\"></i>",
-	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up\"></i>",
-	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down\"></i>",
-	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down\"></i>",
-	'esope:icon:lock' => "<i class=\"fa fa-lock\"></i>",
-	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt\"></i>",
+	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
+	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
+	'esope:icon:dislike' => "<i class=\"fa fa-thumbs-o-down fa-fw\"></i>",
+	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
+	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
+	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
 	
+	// User tools FA icons *override* (owner block)
+	// Core tools
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	// Plugins tools
+	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'webinar:webinars' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinars",
+	'announcements:user' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
+	'brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
+	'event_calendar:user' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
+	'event_manager:menu:user_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
+	'feedback:user' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:user' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
+	'liked_content:user:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
+	'newsletter:menu:owner_block:user' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'photos' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
+	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> Mes sondages",
 	
-	// Group tools FA icons *override* - please update CSS accordingly
-	/* @TODO
+	/* Main objects and search menus */
+	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groupes",
+	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Membres",
+	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Publications",
+	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Commentaires",
+	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'esope:search:filtered' => " (%s)",
+	'esope:search:unfiltered' => " (tout)",
+	//'all' => "",
+	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Annonces',
+	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
+	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Sujets de discussion",
+	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
+	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Idées",
+	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'item:object:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i> Webinar",
+	/*
+	'item:object:faq' => "<i class=\"fa fa- fa-fw\"></i> FAQs",
+	'item:object:dossierdepreuve' => "<i class=\"fa fa- fa-fw\"></i> Dossier de preuve",
+	'item:object:cmspage' => "<i class=\"fa fa- fa-fw\"></i> Page statique",
 	*/
-	'announcements:group' => "<i class=\"fa fa-bullhorn\"></i> Annonces",
-	'blog:group' => "<i class=\"fa fa-file-text-o\"></i> Blog",
-	'bookmarks:group' => "<i class=\"fa fa-link\"></i> Liens web",
-	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o\"></i> Boîte à idées",
-	'discussion:group' => "<i class=\"fa fa-comments-o\"></i> Forum",
-	'event_calendar:group' => "<i class=\"fa fa-calendar-o\"></i> Calendrier",
-	'file:group' => "<i class=\"fa fa-file-o\"></i> Fichiers",
-	'file_tools:menu:group' => "<i class=\"fa fa-folder-o\"></i> Dossiers",
-	'groups:activity' => "<i class=\"fa fa-flash\"></i> Activité",
-	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o\"></i> Lettre d'information",
-	'pages:group' => "<i class=\"fa fa-pencil-square-o\"></i> Wiki",
+	// Group tools FA icons *override* - please update CSS accordingly
+	// Core tools
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
+	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
+	'discussion:group' => "<i class=\"fa fa-comments-o fa-fw\"></i> Forum",
+	'file:group' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
+	'groups:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	// Plugins tools
+	'au_sets:group' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
+	'announcements:group' => "<i class=\"fa fa-info-circle fa-fw\"></i> Annonces",
+	'brainstorm:group' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Boîte à idées",
+	'event_calendar:group' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Calendrier",
+	'event_manager:menu:group_events' => "<i class=\"fa fa-calendar fa-fw\"></i> Evénements",
+	'feedback:group' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedbacks",
+	'file_tools:menu:group' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers",
+	'liked_content:group:liked_content' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i> Contenu apprécié",
+	'newsletter:menu:owner_block:group' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
+	'photos:group' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'photos:group_albums' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
+	// Group actions and infos
+	'group_operators:manage' => "<i class=\"fa fa-user fa-fw\"></i> Gérer les responsables du groupe",
+	'groups:membershiprequests' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les demandes d'adhésion",
+	'groups:membershiprequests:pending' => "<i class=\"fa fa-users fa-fw\"></i> Gérer les demandes d'adhésion (%s)",
+	'groups:join' => "<i class=\"fa fa-user fa-fw\"></i> Rejoindre le groupe",
+	'groups:my_status:group_owner' => "<i class=\"fa fa-user fa-fw\"></i> Propriétaire du groupe",
+	'groups:my_status:group_member' => "<i class=\"fa fa-user fa-fw\"></i> Membre du groupe",
+	'groups:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
+	'groups:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
+	// Group modules
+	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sous-groupes",
+	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Images récentes",
+	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Albums récents",
+	
+	// User actions and infos
+	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
+	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
+	
+	/* Widgets */
+	'esope:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Liens web',
+	'esope:widget:brainstorm:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Idées',
+	'brainstorm:widget:points_left:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Votes restants',
+	'esope:widget:blog:title' => '<i class="fa fa-file-text-o fa-fw"></i> Articles',
+	'esope:widget:event_calendar:title' => '<i class="fa fa-calendar-o fa-fw"></i> Agenda',
+	'esope:widget:file:title' => '<i class="fa fa-file-o fa-fw"></i> Fichiers',
+	'esope:widget:file_folder:title' => '<i class="fa fa-folder-o fa-fw"></i> Dossiers de fichiers',
+	'esope:widget:group:title' => '<i class="fa fa-users fa-fw"></i> Groupes',
+	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Wikis',
+	'esope:widget:user_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité du site",
+	'esope:widget:site_activity:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité récente",
+	'dashboard:widget:group:title' => "<i class=\"fa fa-flash fa-fw\"></i> Activité du groupe",
+	'messages:widget:title' => "<i class=\"fa fa-envelope-o mail outline icon\"></i> Messages non lus",
+	'webprofiles:widget:title' => "<i class=\"fa fa-user fa-fw\"></i> Profils en ligne",
+	'export_embed:widget:title' => "<i class=\"fa fa-code fa-fw\"></i> Widgets embarquables",
+	'widgets:profile_completeness:title' => "<i class=\"fa fa-user fa-fw\"></i> Mon profil",
+	'widgets:file_tree:title' => "<i class=\"fa fa-folder-o fa-fw\"></i> Dossiers", // ou : sitemap ?
+	'simplepie:widget' => "<i class=\"fa fa-rss fa-fw\"></i> Flux RSS",
+	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Carte", // ou : globe ?
+	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Recherche configurée",
+	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Texte libre",
+	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
+	
+	
+	/* Other interface */
+	'select:all' => 'Tout sélectionner',
+	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
+	
+	
+	// Actions
+	'esope:action:remove_user_email' => "Supprimer l'email",
+	'esope:removeemail:areyousure' => "Attention, cette suppression est irréversible, et recommandée uniquement pour une adresse invalide. Confirmez-vous vouloir supprimer %s ?",
+	'esope:removeemail:ok' => "Email du compte supprimé",
+	'esope:removeemail:error' => "L'email du compte n'a pas pu être supprimé",
+	'esope:action:archive_user' => "Archiver le compte",
+	'esope:action:unarchive_user' => "Dé-archiver le compte",
+	'esope:archiveuser:ok' => "Compte utilisateur archivé",
+	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
+	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
+	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
+	
+	// ESOPE tools
+	'esope:tools:intro' => "Ces outils ne sont à utiliser que dans des cas particuliers, et nécessitent souvent un double accès administrateur et au code source pour être utilisés, du fait de leurs effets potentiels.",
+	'esope:tools:warning' => "Veuillez consulter leur code source avant de les utiliser.<br /><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</strong>",
+	'esope:tools:tool:group_admins' => "Admin groupes",
+	'esope:tools:tool:group_admins:details' => "Liste les administrateurs des groupes, et surtout les co-admins.",
+	'esope:tools:tool:users_email_search' => "Recherche membres par email",
+	'esope:tools:tool:users_email_search:details' => "Permet de retrouver le compte associé à une adresse email connue",
+	'esope:tools:tool:group_newsletters_default' => "Initialisation newsletters",
+	'esope:tools:tool:group_newsletters_default:details' => "Définit le réglage des newsletters des groupes sur 'no', lorsque aucun réglage n'avait encore été défini (plugin activé a posteriori)",
+	'esope:tools:tool:group_updates' => "MAJ champs groupmenu",
+	'esope:tools:tool:group_updates:details' => "(1.6 => 1.8) Modifie les champs ->groupmenu1 et ->groupmenu2 utilisés dans certaines versions d'Elgg 1.6 pour définir de nouveaux champs ->customtab1 et ->customtab2. Passage nécessaire par le code source pour activation",
+	'esope:tools:tool:spam_users_list' => "Antispam (nettoyage)",
+	'esope:tools:tool:spam_users_list:details' => "Outil très puissant, mais encore plus dangereux, pour supprimer massivement des comptes de spam, sur la base de divers critères, notamment structure de l'email. Activation et réglages via le code. Backup préalable impératif.",
+	'esope:tools:tool:test_mail_notifications' => "Test email de notification",
+	'esope:tools:tool:test_mail_notifications:details' => "Envoie un mail de notification à chaque consultation de la page. Pratique pour tester le design des notifications en direct",
+	'esope:tools:tool:threads_disable' => "Désactivation Threads",
+	'esope:tools:tool:threads_disable:details' => "A utiliser avant désactivation du plugin threads, si l'on souhaite ne plus utiliser celui-ci (qui pose divers problèmes)",
+	'esope:tools:tool:user_updates' => "Suppression widgets dashboard",
+	'esope:tools:tool:user_updates:details' => "Suppression des widgets du dashboard pour tous les utilisateurs. Activation via le code",
+	'esope:tools:tool:clear_cmis_credentials' => "Suppression des paramètres CMIS personnels",
+	'esope:tools:tool:clear_cmis_credentials:details' => "Cet outil permet de supprimer les paramètres personnels associés au plugin elgg_cmis.",
+	'esope:tools:tool:entity_fields' => "Recherche d'entités",
+	'esope:tools:tool:entity_fields:details' => "Recherche d'entités de divers types/subtypes par propriété ou métadonnée",
+	'esope:tools:tool:users_stats' => "Statistiques sur les utilisateurs",
+	'esope:tools:tool:users_stats:details' => "Quelques statistiques sur les utilisateurs. Nombre de groupes pour le moment.",
+	'esope:tools:tool:group_publication_stats' => "Statistiques de publications dans les groupes",
+	'esope:tools:tool:group_publication_stats:details' => "Quelques statistiques sur les publications dans un groupe, par membre et par type de publication.",
+	
+	// Menus
+	'esope:menu:topbar' => "Mon compte",
+	'esope:menu:navigation' => "Navigation",
+	'esope:menu:sidebar' => "Menu",
+	
+	
+	// Comment notifications
+	'generic_comment:email:body' => "%2\$s a publié un nouveau commentaire sur \"%1\$s\" :
+
+%3\$s
+
+Pour afficher la conversation : %4\$s
+
+Pour voir le profil de %5\$s : %6\$s
+
+Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
+",
 	
 	
 );

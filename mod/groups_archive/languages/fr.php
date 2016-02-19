@@ -3,7 +3,7 @@
  * French strings
  */
 
-$fr = array(
+return array(
 	'groups_archive' => "Archivage des groupes",
 	'groups-archive' => "Archivage des groupes",
 	
@@ -45,6 +45,4 @@ $fr = array(
 	
 	
 );
-
-add_translation('fr', $fr);
 

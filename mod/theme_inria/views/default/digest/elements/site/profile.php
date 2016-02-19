@@ -50,6 +50,7 @@ if(isset($digest_site_profile_body[$key])){
 		
 		$content .= "</div>";
 	
+		// Set global var for later reuse
 		$digest_site_profile_body[$key] = $content;
 		echo elgg_view_module("digest", $title , $content);
 	} else {

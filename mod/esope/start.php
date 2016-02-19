@@ -16,19 +16,19 @@ elgg_register_event_handler("pagesetup", "system", "esope_pagesetup"); // Menu
  * Init ESOPE plugin.
  */
 function esope_init() {
-	// CSS
+	// Base theme CSS
 	elgg_extend_view('css/elgg', 'esope/css_common');
 	elgg_extend_view('css/admin', 'esope/css_common');
+	elgg_extend_view('css/elgg/wysiwyg', 'esope/css_common');
 	elgg_extend_view('css/elgg', 'esope/css');
 	elgg_extend_view('css/admin', 'esope/css_admin');
-	// Nouveau thème : 
-	elgg_extend_view('css/elgg', 'esope/css/style');
+	// Other CSS additions
 	elgg_extend_view('css/ie', 'esope/css/ie');
 	elgg_extend_view('css/ie6', 'esope/css/ie6');
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome - moved to external dependancy
+	// Font Awesome - moved to external dependency
 	if (!elgg_is_active_plugin('fontawesome')) {
 		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
 		elgg_load_css('fontawesome');
@@ -36,7 +36,9 @@ function esope_init() {
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
+	
 	// Sécurité
+	// @TODO : use hook to extend head
 	// Important : Enable this only if you don't need to include iframes in other websites !!
 	$framekiller = elgg_get_plugin_setting('framekiller', 'esope');
 	if ($framekiller == 'yes') {
@@ -119,6 +121,9 @@ function esope_init() {
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS, et d'EVENTS
 	// Related functions are in lib/esope/hooks.php
 	
+	// Favicon
+	elgg_register_plugin_hook_handler('head', 'page','esope_page_head_hook');
+	
 	// Affichage des dates
 	elgg_register_plugin_hook_handler('format', 'friendly:time','esope_friendly_time_hook');
 	
@@ -150,6 +155,7 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
 	// Page d'accueil
+	/*
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
 		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
@@ -157,7 +163,8 @@ function esope_init() {
 		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
-		//if (isset($CONFIG->site) && ($CONFIG->site instanceof ElggSite) && $CONFIG->site->checkWalledGarden()) {
+		//$site = elgg_get_site_entity();
+		//if (elgg_instanceof($site, 'site') && $site->checkWalledGarden()) {
 		if (elgg_get_config('walled_garden')) {
 			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
 		} else {
@@ -166,6 +173,7 @@ function esope_init() {
 			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_public_index'); }
 		}
 	}
+	*/
 	
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
@@ -226,37 +234,28 @@ function esope_init() {
 	elgg_register_plugin_hook_handler('forward', 'all', 'esope_forward_hook', 600);
 	
 	
-	// Email blocking interception system : works by replacing the registered hook, and use it after processing
+	// Email blocking interception system/
+	// Previously worked by replacing the registered hook, and use it after processing
+	/* @TODO : hook into the notification process to stop it if needed OR replace the default handler and use our own
+	 * Replace handler : unregister send,notification:email	500	_elgg_send_email_notification and use ESOPE function
+	 * send,notification, 'email',  => need to remove recipients to break process - see http://reference.elgg.org/1.12/notification_8php_source.html#l00197
+	 * or 'email', 'system' => return true instead of array to break process, or modify the array to remove/add recipients
+	 * or event 'get', 'subscriptions'  => modify the recipients of a notification dynamically
+		*/
+	
+	// Block sucessful sending by previous plugin
+	// Wrap notification handler into custom function so we can intercept the sending process
+	// Un-registers default handler, and register a new one that is aware of returned result (true => blocks)
+	elgg_unregister_plugin_hook_handler('send', 'notification:email', '_elgg_send_email_notification');
+	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_elgg_send_email_notification');
+	// @TODO : also process other methods ? at least site notificaitons ?
+	
+	// Block notifications for individual recipients
+	// @TODO replace blocking hook by recipients hook
 	// * triggers a blocking hook that enables email blocking based on any property from email sender or recipient
 	// * requires to add the hook trigger to the email notification handler
-	// Wrap notification handler into custom function so we can intercept the sending process
-	global $NOTIFICATION_HANDLERS;
-	// @TODO : replace by elgg_register_notification_method()
-	register_notification_handler("email", "esope_notification_handler", array('original_handler' => $NOTIFICATION_HANDLERS['email']->handler));
-	/* @TODO : http://learn.elgg.org/en/latest/guides/notifications.html#registering-a-new-notification-method
-	elgg_register_notification_method('email');
-	elgg_register_plugin_hook_handler('send', 'notification:email', 'esope_notification_handler');
-	*/
-	// Register for the 'send', 'notification:[method name]' plugin hook to handle sending a notification. A notification object is in the params array for the hook with the key 'notification'
+	// elgg_register_plugin_hook_handler('email', 'system', 'esope_block_email_recipients', 100);
 	
-	/* Usage note : block email by registering an early hook to email_block,system hook
-	 * any non null return will block email sending.
-	 * 1. add in start.php : elgg_register_plugin_hook_handler("email_block", "system", "esope_email_block_hook", 0);
-	 * 2. add to hook functions :
-			// Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
-			function esope_email_block_hook($hook, $type, $return, $params) {
-				$to = $params['to'];
-				// Note : check under which conditions email should not be sent
-				if (elgg_instanceof($to, 'user')) {
-					if (false) {
-						// Block email sending
-						return true;
-					}
-				}
-				// Do not change behaviour otherwise (= send email)
-				return $return;
-			}
-	*/
 	
 	
 	// NEW & REWRITTEN ACTIONS
@@ -334,6 +333,7 @@ function esope_init() {
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
+	// @TODO page handlers for downloadable and SEO-friendly images/ and files/
 	
 	// Esope liked content
 	if (elgg_is_active_plugin('likes')) {
@@ -362,6 +362,7 @@ function esope_init() {
 	elgg_extend_view('plugins/groups/settings', 'group_tools_priority/settings');
 	
 }
+
 
 
 // Include page_handlers, hooks & events functions (lightens this file)
@@ -406,14 +407,14 @@ function esope_pagesetup(){
 			
 			// Ajoute lien vers l'annuaire
 			elgg_register_menu_item("page", array(
-					'name' => 'members', 'href' => $CONFIG->url . 'members', 
+					'name' => 'members', 'href' => elgg_get_site_url() . 'members', 
 					'text' => elgg_echo('esope:directory'), 
 					"section" => "directory",
 				));
 			
 			// Ajoute lien vers les contacts
 			elgg_register_menu_item("page", array(
-					'name' => 'friends', 'href' => $CONFIG->url . 'friends/' . $own->username, 
+					'name' => 'friends', 'href' => elgg_get_site_url() . 'friends/' . $own->username, 
 					'text' => elgg_echo('friends'), 
 					'contexts' => array('members'), 
 				));
@@ -421,7 +422,7 @@ function esope_pagesetup(){
 			// Ajoute lien vers les invitations
 			if (elgg_is_active_plugin('invitefriends')) {
 				$params = array(
-					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => $CONFIG->url . 'invite',
+					'name' => 'invite', 'text' => elgg_echo('friends:invite'), 'href' => elgg_get_site_url() . 'invite',
 					'contexts' => array('members'), // Uniquement members pour ne pas overrider le comportement normal
 				);
 				elgg_register_menu_item('page', $params);
@@ -452,6 +453,7 @@ function esope_pagesetup(){
 		
 	}
 	
+	// @TODO : better way to handle this ?
 	/* Rewrite breadcrumbs : use a more user-friendly logic
 	 * Structure du Fil : Accueil (site) > Container (group/user page owner) > Subtype > Content > action
 	 * Default structure : Tool > Tool for page owner > Content > Subcontent	=> Home > Page owner (group or user) > Tool for page owner > Content > Subcontent
@@ -461,6 +463,7 @@ function esope_pagesetup(){
 	 */
 	if (elgg_get_viewtype() == 'default') {
 		global $CONFIG;
+		$url = elgg_get_site_url();
 		$context = elgg_get_context();
 		if (isset($CONFIG->breadcrumbs) && is_array($CONFIG->breadcrumbs)) {
 			
@@ -491,36 +494,36 @@ function esope_pagesetup(){
 				}
 			
 				if (!elgg_in_context('groups')) {
-					$group_url = $CONFIG->url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
+					$group_url = $url . 'groups/profile/' . $page_owner->guid . '/' . elgg_get_friendly_title($page_owner->name);
 					array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $group_url) );
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
 			} else if ($page_owner instanceof ElggUser) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
-				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $CONFIG->url . 'profile/' . $page_owner->username) );
-				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $CONFIG->url . 'members') );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $url . 'profile/' . $page_owner->username) );
+				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members') );
 			}
 			
 			// Insert home link in all cases
-			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:homepage'), 'link' => $CONFIG->url));
+			array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:homepage'), 'link' => $url));
 			
 		} else {
-			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $CONFIG->url);
-			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:homepage'), 'link' => $CONFIG->url);
+			//$CONFIG->breadcrumbs[] = array('title' => $CONFIG->sitename, 'link' => $url);
+			$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:homepage'), 'link' => $url);
 			
 			// Corrections selon le contexte
 			if (elgg_in_context('profile')) {
 				// Annuaire => Nom du membre
 				$page_owner = elgg_get_page_owner_entity();
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'), 'link' => $CONFIG->url . 'members');
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members');
 				$CONFIG->breadcrumbs[] = array('title' => $page_owner->name);
 			} else if (elgg_in_context('members')) {
 				// Membres => Annuaire
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo('esope:directory'));
 			} else {
 				// Par défaut : contexte
-				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $CONFIG->url . $context);
+				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $url . $context);
 			}
 		}
 	}
@@ -541,40 +544,6 @@ function esope_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 		}
 }
 */
-
-
-/*
- * Forwards to internal referrer, if set
- * Otherwise redirects to home after login
-*/
-function esope_login_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Si on vient d'une page particulière, retour à cette page
-	$back_to_last = $_SESSION['last_forward_from'];
-	if(!empty($back_to_last)) {
-		//register_error("Redirection vers $back_to_last");
-		forward($back_to_last);
-	}
-	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
-	$loginredirect = elgg_get_plugin_setting('redirect', 'esope');
-	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward($CONFIG->url . $loginredirect); }
-	forward();
-}
-
-
-/* Performs some actions after registration */
-function esope_register_handler($event, $object_type, $object) {
-	// Groupe principal (à partir du GUID de ce groupe)
-	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'esope');
-	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'esope');
-	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
-		$user = elgg_get_logged_in_user_entity();
-		// Si pas déjà fait, on l'inscrit
-		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
-	}
-}
-
 
 
 // Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
@@ -747,14 +716,14 @@ function esope_sort_groups_by_grouptype($groups) {
  		- iframe (use elgg headers), 
  		- inner (no header), 
  		- regular = elgg regular way
- * $headers = extend header (CSS, JS, META, etc.)
+ * $headers = extend header (CSS, JS, META, etc.) - ONLY in iframe mode !
  */
 function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'iframe', $headers) {
-	global $CONFIG;
-	$lang = $CONFIG->language;
+	$lang = get_language();
 
 	// Set default title
-	if (empty($title)) $title = $CONFIG->sitename . ' (';
+	//if (empty($title)) $title = elgg_get_site_entity()->name . ' (';
+	if (empty($title)) $title = elgg_get_site_entity()->name;
 	$vars['title'] = $title;
 	
 	switch ($embed_mode) {
@@ -862,6 +831,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 	/* Renvoie le nom du profil en clair, ou false si aucun trouvé/valide */
 	function esope_get_user_profile_type($user = false) {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profile_type = false;
 		// Type de profil
@@ -870,16 +840,21 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$profile_type = strtolower($type->metadata_name);
 			}
 		}
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
 	function esope_set_user_profile_type($user = false, $profiletype = '') {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profiletype_guid = null;
 		if (!empty($profiletype)) {
 			$profiletype_guid = esope_get_profiletype_guid($profiletype);
 		}
-		$user->custom_profile_type = $profiletype_guid;
+		// Manually set the profile type to control the access_id (must not be -1)
+		//$user->custom_profile_type = $profiletype_guid;
+		create_metadata($user->guid, 'custom_profile_type', $profiletype_guid, 'text', $user->guid, 2, false);
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
@@ -1200,26 +1175,26 @@ function esope_vernam_crypt($text, $key){
 
 // Récupération des pages de plus haut niveau (d'un groupe ou user)
 function esope_get_top_pages($container) {
-	global $CONFIG;
-	$top_pages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$dbprefix = elgg_get_config('dbprefix');
+	$top_pages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $container->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	return $top_pages;
 }
 
 // Récupération des sous-pages directes d'une page
 function esope_get_subpages($parent) {
-	global $CONFIG;
-	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$dbprefix = elgg_get_config('dbprefix');
+	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
 	// Limit searched entities range with "guids" => $guids
 	$md_name = get_metastring_id('parent_guid');
 	$md_value = get_metastring_id($parent->guid);
 	// Can't be empty or we'll get a bad error
 	if (!empty($md_name) && !empty($md_value)) {
-		$guids_row = get_data("SELECT entity_guid FROM {$CONFIG->dbprefix}metadata where name_id = $md_name and value_id = $md_value");
+		$guids_row = get_data("SELECT entity_guid FROM {$dbprefix}metadata where name_id = $md_name and value_id = $md_value");
 		foreach ($guids_row as $row) { $guids[] = $row->entity_guid; }
 	}
 	if ($guids) {
-		$subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc', 'guids' => $guids));
+		$subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc', 'guids' => $guids));
 		return $subpages;
 	}
 }
@@ -1289,10 +1264,9 @@ function esope_unique_id($prefix = 'esope_unique_id_') {
 // Determines wether a given link is internal or external
 // Note : based on domain, won't work for subdir install
 function esope_is_external_link($url) {
-	global $CONFIG;
 	$elements = parse_url($url);
-	$base_elements = parse_url($CONFIG->url);
-	if ($elements['host'] != $base_elements['host']) return true;
+	$base_elements = parse_url(elgg_get_site_url());
+	if ($elements['host'] != $base_elements['host']) { return true; }
 	return false;
 }
 
@@ -1302,13 +1276,12 @@ if (elgg_is_active_plugin('file_tools')) {
 	// Recursive function that lists folders and their content
 	// bool $view_files : display folder files
 	function esope_view_folder_content($folder, $view_files = true) {
-		global $CONFIG;
 		$content = '';
 		$folder_content = '';
 		$folder_description = '';
 		$files_content = '';
 		// Folder link
-		$folder_title_link = '<a href="' . $CONFIG->url . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
+		$folder_title_link = '<a href="' . elgg_get_site_url() . 'file/group/' . $folder['folder']->container_guid . '/all#' . $folder['folder']->guid . '">' . $folder['folder']->title . '</a>';
 		// Folder description
 		if (!empty($folder['folder']->description)) $folder_description .= ' <em>' . $folder['folder']->description . '</em>';
 		
@@ -1348,10 +1321,11 @@ if (elgg_is_active_plugin('file_tools')) {
 
 	// List files in a specific folder
 	function esope_view_folder_files($container_guid, $folder = false) {
+		$dbprefix = elgg_get_config('dbprefix');
 		$sort_by = elgg_get_plugin_setting("sort", "file_tools");
 		$direction = elgg_get_plugin_setting("sort_direction", "file_tools");
 		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $container_guid, 'limit' => false);
-		$options['joins'] = array("JOIN " . elgg_get_config("dbprefix") . "objects_entity oe ON oe.guid = e.guid");
+		$options['joins'] = array("JOIN " . $dbprefix . "objects_entity oe ON oe.guid = e.guid");
 		if($sort_by == "simpletype") {
 			$options["order_by_metadata"] = array("name" => "mimetype", "direction" => $direction);
 		} else {
@@ -1366,7 +1340,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		} else {
 			// Display only files in main folder
 			$options['wheres'] = "NOT EXISTS (
-				SELECT 1 FROM " . elgg_get_config("dbprefix") . "entity_relationships r 
+				SELECT 1 FROM " . $dbprefix . "entity_relationships r 
 				WHERE r.guid_two = e.guid AND r.relationship = '" . FILE_TOOLS_RELATIONSHIP . "')";
 			$files = elgg_get_entities($options);
 		}
@@ -1447,7 +1421,6 @@ function esope_human_filesize($filepath, $decimals = 2) {
  * $source : can be an URL to the HTML template file, or cmspage, or object GUID
  */
 function esope_tinymce_prepare_templates($templates, $type = 'url') {
-	global $CONFIG;
 	$templates = preg_replace('/\r\n|\n|\r/', '\n', $templates);
 	$templates = explode('\n', $templates);
 	$js_templates = '';
@@ -1460,14 +1433,14 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			$description = trim($template[2]);
 			switch($type) {
 				case 'cmspage':
-					$source = $CONFIG->url . 'cmspages/read/' . $source . '?embed=true';
+					$source = elgg_get_site_url() . 'p/' . $source . '?embed=true';
 					break;
 				case 'guid':
 					if ($ent = get_entity($source)) {
 						// @TODO : provide a REST URL access to an entity description (with access rights)
 						// Best we can get now would be exported JSON
 						// Export description only : export/default/1073/attr/description/
-						$source = $CONFIG->url . 'export/default/' . $source . '/attr/description/';
+						$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
 						if (empty($title)) $title = $ent->title;
 						else if (empty($description)) $description = $ent->title;
 					} else $source = false;
@@ -1722,8 +1695,7 @@ function esope_set_input_recursive_array($array, $separators = array("|", '::', 
 function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 	// Admin : on ne tient pas compte des accès
 	if ($bypass) {
-		$ia = elgg_get_ignore_access();
-		elgg_set_ignore_access(true);
+		$ia = elgg_set_ignore_access(true);
 	}
 	switch($mode) {
 		case 'featured':
@@ -1913,74 +1885,11 @@ function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
 
 
 
-
-// Email blocking : triggers the email,system hook to enable email blocking based on any property from email sender or recipient
-function esope_notification_handler(ElggEntity $from, ElggUser $to, $subject, $body, array $params = NULL) {
-	/*
-	error_log("ESOPE EMAIL : handler active");
-	echo '<pre>' . print_r($NOTIFICATION_HANDLERS['email'], true) . '</pre>';
-	
-	global $CONFIG;
-	echo '<pre>' . print_r($CONFIG->hooks['email']['system'], true) . '</pre>';
-	
-	
-	echo '<pre>' . print_r($handler, true) . '</pre>';
-	echo '<pre>' . print_r($from, true) . '</pre>';
-	echo '<pre>' . print_r($to, true) . '</pre>';
-	echo '<pre>' . print_r($subject, true) . '</pre>';
-	echo '<pre>' . print_r($body, true) . '</pre>';
-	echo '<pre>' . print_r($params, true) . '</pre>';
-	*/
-	// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
-	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
-	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
-	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
-	if ($result !== NULL) { return $result; }
-	
-	// If no blocking return received, get back to regular handler and process
-	global $NOTIFICATION_HANDLERS;
-	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
-	return $handler($from, $to, $subject, $body, $params);
+// Returns a list of admin tools (used in esope/tools)
+function esope_admin_tools_list() {
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
+	return $tools;
 }
-// @TODO : Replace
-/**
- * Send an email notification
- *
- * @param string $hook   Hook name
- * @param string $type   Hook type
- * @param bool   $result Has anyone sent a message yet?
- * @param array  $params Hook parameters
- * @return bool
- * @access private
- */
-/*
-function esope_notification_handler($hook, $type, $result, $params) {
-	// @var Elgg_Notifications_Notification $message
-	$message = $params['notification'];
-
-	$recipient = $message->getRecipient();
-
-	if (!$recipient || !$recipient->email) {
-		return false;
-	}
-
-	//return $sms->send($recipient->email, $message->body);
-	
-		// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
-	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
-	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
-	$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
-	if ($result !== NULL) { return $result; }
-	
-	// If no blocking return received, get back to regular handler and process
-	global $NOTIFICATION_HANDLERS;
-	$handler = $NOTIFICATION_HANDLERS['email']->original_handler;
-	return $handler($from, $recipient->email, $subject, $message->body, $params);
-	
-}
-*/
-
-
 
 /* Determines if the user is a group administrator (=> has admin rights on any group)
  * $user : the user to be checked

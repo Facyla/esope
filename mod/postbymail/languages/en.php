@@ -8,10 +8,13 @@
 
 $site_url = elgg_get_site_url();
 
-$en = array(
+return array(
 	/* Main strings */
 	'postbymail' => "Post by email",
 	'postbymail:title' => "Post by email",
+	
+	// Date format
+	'postbymail:dateformat' => "m/d/Y at H:i:s",
 	
 	/* Settings */
 	'postbymail:settings:error:missingrequired' => "Missing required settings (server and port, username and/or password)",
@@ -27,7 +30,10 @@ $en = array(
 	'postbymail:settings:separator' => "Reply message separator",
 	'postbymail:settings:separatordetails' => "Explanation text that appears right below the separator, and which limits the publicaiton of personnal or inappropriate content such as signatures and previous conversations threads, and also lowers the duplicates risk level.",
 	'postbymail:settings:scope' => "Replies by email enabled content types", // forumonly, comments, allobjects
-	'postbymail:settings:notifylist' => "List of GUIDs or usernames that should be warned when new publications succeed or fail (note: the admin is always warned of any new message, succeeded or failed. The author is warned only when an error occurs.", 
+	'postbymail:settings:notifylist' => "Notify users", 
+	'postbymail:settings:notifylist:details' => "List of GUIDs or usernames that should be warned when new publications succeed or fail (note: the admin is always warned of any new message, succeeded or failed. The author is warned only when an error occurs.", 
+	'postbymail:settings:debug' => "Enable debug mode", 
+	'postbymail:settings:debug:details' => "Adds more information into the error emails and error log", 
 	'postbymail:settings:replymode' => "Default reply by email behaviour",
 	'postbymail:settings:replymode:replybutton' => "Reply button (recommended)",
 	'postbymail:settings:replymode:replyemail' => "Email sender modification",
@@ -257,7 +263,9 @@ $en = array(
 	<b>%s</b><br />
 	Please check that your email contains only your reply (no signature, personnal information, former messages, etc.)",
 	
+	'postbymail:thewire:charlimitnotice' => "IMPORTANT NOTICE : when you reply to a Wire message, only the first 140 characters will be published!
+	
+	",
 );
 
-add_translation("en", $en);
 

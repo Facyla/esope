@@ -29,7 +29,7 @@ $params = array(
 );
 
 
-	$list_body = elgg_view('user/elements/summary', $params);
+$list_body = elgg_view('user/elements/summary', $params);
 
-	echo elgg_view_image_block($icon, $list_body);
+echo elgg_view_image_block($icon, $list_body);
 

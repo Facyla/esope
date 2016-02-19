@@ -16,4 +16,4 @@ if(!empty($candidates)){
 	$body .= '<div class="elgg-footer">'.elgg_view('input/hidden', array('name'=>'mygroup', 'value'=>$group_guid)).'</div>';
 	echo $body;
 }
-?>
+

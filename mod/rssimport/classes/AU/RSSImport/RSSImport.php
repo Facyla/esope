@@ -24,7 +24,7 @@ class RSSImport Extends \ElggObject {
 		}
 
 		// is this a cron call?
-		if (elgg_get_context() == 'cron') {
+		if (elgg_in_context('cron')) {
 			return true;
 		}
 
@@ -412,6 +412,17 @@ class RSSImport Extends \ElggObject {
 		);
 
 		$page = elgg_trigger_plugin_hook('rssimport', 'import:content', $params, $page);
+        
+        $add_river = $this->getAddRiverSetting();
+        
+        if ($add_river) {
+            elgg_create_river_item(array(
+				'view' => 'river/object/page/create',
+				'action_type' => 'create',
+				'subject_guid' => $page->owner_guid,
+				'object_guid' => $page->guid,
+			));
+        }
 
 		return $page->guid;
 	}
@@ -475,6 +486,17 @@ class RSSImport Extends \ElggObject {
 		);
 
 		$bookmark = elgg_trigger_plugin_hook('rssimport', 'import:content', $params, $bookmark);
+        
+        $add_river = $this->getAddRiverSetting();
+        
+        if ($add_river) {
+            elgg_create_river_item(array(
+				'view' => 'river/object/bookmarks/create',
+				'action_type' => 'create',
+				'subject_guid' => $bookmark->owner_guid,
+				'object_guid' => $bookmark->guid,
+			));
+        }
 
 		return $bookmark->guid;
 	}
@@ -547,8 +569,40 @@ class RSSImport Extends \ElggObject {
 		);
 
 		$blog = elgg_trigger_plugin_hook('rssimport', 'import:content', $params, $blog);
+        
+        $add_river = $this->getAddRiverSetting();
+        
+        if ($add_river) {
+            elgg_create_river_item(array(
+				'view' => 'river/object/blog/create',
+				'action_type' => 'create',
+				'subject_guid' => $blog->owner_guid,
+				'object_guid' => $blog->guid,
+			));
+        }
+        
+        elgg_trigger_event('publish', 'object', $blog);
 
 		return $blog->guid;
 	}
 
+    /**
+     * Determine if a river entry should be added for an import
+     * 
+     * @staticvar type $add_river
+     * @return bool
+     */
+    private function getAddRiverSetting() {
+        static $add_river;
+        
+        if (!is_null($add_river)) {
+            return $add_river;
+        }
+        
+        $setting = elgg_get_plugin_setting('add_river', PLUGIN_ID);
+        
+        $add_river = ($setting === 'yes');
+        
+        return $add_river;
+    }
 }

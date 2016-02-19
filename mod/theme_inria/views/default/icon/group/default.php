@@ -22,7 +22,7 @@ if (!in_array($vars['size'], $sizes)) {
 $class = elgg_extract('img_class', $vars, '');
 
 $span = '';
-$parent = au_subgroups_get_parent_group($entity);
+$parent = AU\SubGroups\get_parent_group($entity);
 if ($parent) {
   if ($class) {
     $class .= ' ';

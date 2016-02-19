@@ -116,6 +116,8 @@ for ($idx=1; $idx<=5; $idx++) {
 		}
 	}
 }
+
+// Notify admins
 if (count($user_guids) > 0) {
 	$subject = elgg_echo('feedback:email:subject', array($feedback_title));
 	foreach ($user_guids as $user_guid => $user) {

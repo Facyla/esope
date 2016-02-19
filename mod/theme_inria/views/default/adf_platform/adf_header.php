@@ -1,6 +1,6 @@
 <?php
 
-$url = $vars['url'];
+$url = elgg_get_site_url();
 $urlicon = $url . 'mod/adf_public_platform/img/theme/';
 $urlimg = $url . 'mod/theme_inria/graphics/';
 
@@ -36,7 +36,7 @@ if (elgg_is_logged_in()) {
 		$mygroups = elgg_get_entities_from_relationship($options);
 		foreach ($mygroups as $group) {
 			$groups .= '<li><a href="' . $group->getURL() . '">' 
-				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $group->name . '</a></li>';
+				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
 			// Si on liste les sous-groupes, on le fait ici si demandé
 			if (elgg_is_active_plugin('au_subgroups') && ($display_subgroups == 'yes')) {
 				$groups .= adf_platform_list_groups_submenu($group, 1, true, $own);
@@ -47,13 +47,13 @@ if (elgg_is_logged_in()) {
 		$invites_count = sizeof($group_invites);
 		$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . elgg_echo('theme_inria:groupinvites') . '</a></li>';
 		if ($invites_count == 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
+			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '">' . $invites_count . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
 		} else if ($invites_count > 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvites') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvites') . '</a></li>';
+			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '">' . $invites_count . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '</a></li>';
 		} else {
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('adf_platform:groupinvite') . '</a></li>';
+			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
 		}
 		
 		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
@@ -62,13 +62,13 @@ if (elgg_is_logged_in()) {
 		$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . elgg_echo('theme_inria:friendsinvites') . '</a></li>';
 
 		if ($friendrequests_count == 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvite') . '">' . $friendrequests_count . '</a></li>';
-			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvite') . '</a></li>';
+			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
+			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '</a></li>';
 		} else if ($friendrequests_count > 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvites') . '">' . $friendrequests_count . '</a></li>';
-			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvites') . '</a></li>';
+			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a></li>';
+			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '</a></li>';
 		} else {
-			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('adf_platform:friendinvites') . '</a></li>';
+			//$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '</a></li>';
 		}
 	}
 	
@@ -108,7 +108,7 @@ if (elgg_is_logged_in()) {
 			<header>
 				<div class="">
 					<div class="interne">
-						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('adf_platform:gotohomepage'); ?>">
+						<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('esope:gotohomepage'); ?>">
 						<img src="<?php echo $urlimg; ?>logo-iris.png" />
 						<img src="<?php echo $urlimg; ?>bulles-header.png" />
 						<?php
@@ -120,11 +120,11 @@ if (elgg_is_logged_in()) {
 								<ul>
 									<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
 									<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
+									<li id="msg"><a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a></li>
 									<?php if ($messages) { echo $messages; } ?>
-									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('adf_platform:usersettings'); ?></a></li>
+									<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
 											<!--
-									<li><?php echo elgg_echo('adf_platform:myprofile'); ?></a>
+									<li><?php echo elgg_echo('esope:myprofile'); ?></a>
 											<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
 											<li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
 									</li>
@@ -132,13 +132,13 @@ if (elgg_is_logged_in()) {
 									<?php if (elgg_is_admin_logged_in()) { ?>
 										<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
 									<?php } ?>
-									<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('adf_platform:help'); ?></a></li>
+									<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('esope:help'); ?></a></li>
 									<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off power-off icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
 								</ul>
 							</nav>
 						<?php } else {
 							// Bouton de connexion partout sauf sur la home
-							if (full_url() != $url) echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul></nav>';
+							if (current_page_url() != $url) echo '<nav><ul><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul></nav>';
 						} ?>
 					</div>
 				</div>
@@ -149,41 +149,30 @@ if (elgg_is_logged_in()) {
 					<div class="interne">
 						<nav>
 							<ul>
-								<li class="home"><a href="javascript:void(0);" <?php if (full_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
+								<li class="home"><a href="javascript:void(0);" <?php if (current_page_url() == $url) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('river:all'); ?></a></li>
 									<li><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('thewire:everyone'); ?></a></li>
 									</ul>
 								</li>
 								
-								
-								<!--
-								<li class="groups"><a href="<?php echo $url . 'groups/all'; ?>" <?php if (full_url() == $url . 'groups/all') { echo 'class="active elgg-state-selected"'; } ?> >Parcourir</a>
-									<ul class="hidden">
-										<li><a href="<?php echo $url; ?>groups/search?tag=Libre+expression">Libre expression</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Missions+et+projets">Missions et projets</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Animation+et+conseils">Animation et conseils</a></li>
-										<li><a href="<?php echo $url; ?>groups/search?tag=Institutionnel">Institutionnel</a></li>
-									</ul>
-								</li>
-								//-->
-								
-								<li class="groups"><a <?php if( (full_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
+								<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 									<ul class="hidden">
 										<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
+										<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
 										<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
 										<?php echo $groupinvites; ?>
-										<li><a href="<?php echo $vars['url'] . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
+										<li><a href="<?php echo elgg_get_site_url() . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
 										<?php //echo $groups; ?>
 									</ul>
 								</li>
 								<?php echo $invites; ?>
 								
 								<?php if (elgg_is_active_plugin('categories')) { ?>
-									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('adf_platform:categories'); ?></a>
+									<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('esope:categories'); ?></a>
 										<ul class="hidden">
-											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('adf_platform:categories:all'); ?></a></li>
+											<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('esope:categories:all'); ?></a></li>
 											<?php echo $categories; ?>
 										</ul>
 									</li>
@@ -249,8 +238,8 @@ if (elgg_is_logged_in()) {
 							 <!--
 							 <li class="inria_action"><a href="javascript:void(0);"><?php echo elgg_echo('theme_inria:topbar:action'); ?></a>
  <ul>
-										<li><a href="<?php echo $vars['url']; ?>thewire/all"><?php echo elgg_echo('theme_inria:topbar:thewire'); ?></a></li>
-										<li><a href="<?php echo $vars['url']; ?>invite"><?php echo elgg_echo("theme_inria:topbar:invite"); ?></a></li>
+										<li><a href="<?php echo elgg_get_site_url(); ?>thewire/all"><?php echo elgg_echo('theme_inria:topbar:thewire'); ?></a></li>
+										<li><a href="<?php echo elgg_get_site_url(); ?>invite"><?php echo elgg_echo("theme_inria:topbar:invite"); ?></a></li>
 								</ul>
 							 //-->
 
@@ -261,10 +250,10 @@ if (elgg_is_logged_in()) {
 						
 						<?php if (elgg_is_active_plugin('search')) { ?>
 							<form action="<?php echo $url . 'search'; ?>" method="get">
-								<?php $search_text = elgg_echo('adf_platform:search:defaulttext'); ?>
+								<?php $search_text = elgg_echo('esope:search:defaulttext'); ?>
 								<label for="adf-search-input" class="invisible"><?php echo $search_text; ?></label>
 								<?php echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'adf-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text)); ?>
-								<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('adf_platform:search'); ?>" />
+								<input type="image" id="adf-search-submit-button" src="<?php echo $urlicon; ?>recherche.png" value="<?php echo elgg_echo('esope:search'); ?>" />
 							</form>
 						<?php } ?>
 					</div>

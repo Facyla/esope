@@ -2,6 +2,10 @@
 /* CSS backoffice administration (ne s'applique pas au site public) */
 ?>
 
+/* ***************************************
+ * ESOPE ADMIN CSS
+ ************************************** */
+
 /* OVERRIDE SOME ELGG DEFAULT STYLES */
 .elgg-form-settings { max-width: none; }
 

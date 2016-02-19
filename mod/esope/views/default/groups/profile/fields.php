@@ -35,7 +35,9 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 		
 		$value = $group->$key;
 		if (!is_array($value)) $value = trim($value);
-		if (empty($value)) { continue; }
+		if (empty($value)) {
+			continue;
+		}
 
 		$options = array('value' => $group->$key);
 		if ($valtype == 'tags') {

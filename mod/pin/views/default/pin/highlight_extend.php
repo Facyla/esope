@@ -1,16 +1,16 @@
 <?php
-global $CONFIG;
+
 $ent = $vars['entity'];
 
 //if ($ent instanceof ElggObject) {
 if (elgg_instanceof($ent, 'object')) {
 	
-	$acturl = $CONFIG->url . 'mod/pin/actions/';
-	$imgurl = $CONFIG->url . 'mod/pin/graphics/';
+	$acturl = elgg_get_site_url() . 'mod/pin/actions/';
+	$imgurl = elgg_get_site_url() . 'mod/pin/graphics/';
 	$ts = time();
 	$token = generate_action_token(time());
 	$tokens = '&__elgg_ts='.$ts.'&__elgg_token='.$token;
-	$ownguid = $_SESSION['user']->guid;
+	$ownguid = elgg_get_logged_in_user_guid();
 	$body = '';
 	
 	// Use to get back to same page
@@ -53,7 +53,7 @@ if (elgg_instanceof($ent, 'object')) {
 					switch ($ent->highlight) {
 						case 'admin':
 						default:
-							$body .= '<a href="javascript:void(0);" id="highlight_'.$ent->guid.'" onclick="javascript:pin_entity(\'highlight\', '.$ent->guid.');"	class="tooltips-s icon-highlighted icon-unhighlight" alt="un-highlight" title="'.elgg_echo('pin:highlight:false').'" style="display:none;">&nbsp;</a>';
+							$body .= '<a href="javascript:void(0);" id="highlight_'.$ent->guid.'" onclick="javascript:pin_entity(\'highlight\', '.$ent->guid.');" class="tooltips-s icon-highlighted icon-unhighlight" alt="un-highlight" title="'.elgg_echo('pin:highlight:false').'" style="display:none;">&nbsp;</a>';
 							$body .= '<noscript><a href="'.$acturl.'highlight.php?guid='.$ent->guid.$tokens.'" class="tooltips-s icon-highlighted icon-unhighlight" alt="un-highlight" title="'.elgg_echo('pin:highlighted').' - '.elgg_echo('pin:highlight:false').'">&nbsp;</a></noscript>';
 						
 							

@@ -2,7 +2,7 @@
 /* Note Facyla : version sans les filtres pour usage générique */
 
 $content ='';
-$user	= elgg_get_logged_in_user_entity();
+$user = elgg_get_logged_in_user_entity();
 $scope = $vars["scope"]; // default = all, friends, groupmembers
 $noself = $vars["noself"]; // Remove self : default false
 $group = $vars["entity"];

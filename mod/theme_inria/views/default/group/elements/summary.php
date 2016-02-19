@@ -1,6 +1,6 @@
 <?php
 /**
- * Group summary
+ * Group summary : infos complémentaires => access, membership, group admins, num of members
  *
  * @uses $vars['entity']    ElggEntity
  * @uses $vars['title']     Title link (optional) false = no title, '' = default
@@ -64,9 +64,12 @@ if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
 if (!elgg_in_context('owner_block')) { return; }
 
 echo '<div style="font-size:80%">';
+
 echo '<p>';
+// Access
 echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $entity)) . '</span><br />';
 
+// Membership
 if ($entity->membership == ACCESS_PUBLIC) {
 	//echo '<span title="' . elgg_echo("theme_inria:groupmembership:open:details") . '">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
 	echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: <span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
@@ -85,17 +88,18 @@ echo elgg_list_entities_from_relationship(array('types'=>'user', 'relationship' 
 echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
 if ($entity->canEdit()) {
-	echo '<a href="' . $vars['url'] . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
+	echo '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
 }
 ?>
 <div class="clearfloat"></div><br />
 <?php
-//echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
-$nb_members = $entity->getMembers(0, 0, TRUE);
+// Number of members
+//echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
+$nb_members = $entity->getMembers(array('count' => true));
 if ($nb_members > 1) {
-	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
+	echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
 } else {
-	echo '<p><a href="' . $vars['url'] . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
+	echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:member') . '</a></p>';
 }
 ?>
 </div>

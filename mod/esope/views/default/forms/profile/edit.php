@@ -69,16 +69,6 @@ echo elgg_view("profile/edit/name", $vars);
 					}
 				}
 				
-				/*
-				?>
-				<script type="text/javascript">
-					$(document).ready(function(){
-						elgg.profile_manager.change_profile_type();
-					});
-				</script>
-				<?php
-				*/
-				
 				echo "<div>";
 				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
 				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
@@ -95,16 +85,7 @@ echo elgg_view("profile/edit/name", $vars);
 			
 			if(!empty($profile_type)){
 				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
-			echo elgg_view("input/hidden", array("name" => "accesslevel[custom_profile_type]", "value" => ACCESS_PUBLIC));
-				/*
-				?>
-				<script type="text/javascript">
-					$(document).ready(function(){
-						$('.custom_profile_type_<?php echo $profile_type; ?>').show();
-					});
-				</script>
-				<?php
-				*/
+				echo elgg_view("input/hidden", array("name" => "accesslevel[custom_profile_type]", "value" => ACCESS_PUBLIC));
 			}
 		}
 		
@@ -256,7 +237,7 @@ echo elgg_view("profile/edit/name", $vars);
 		
 		$tab_content .= "</div>";
 			
-			$list_content .= "</fieldset>";
+		$list_content .= "</fieldset>";
 		$list_content .= "</div>";
 		$list_content .= "</div>";
 		}
@@ -275,7 +256,7 @@ echo elgg_view("profile/edit/name", $vars);
 		}
 	}
 
-	if($simple_access_control == "yes"){ 
+	if($simple_access_control == "yes"){
 		?>
 	<div class="profile-manager-simple-access-control">
 		<label for="simple_access_control"><?php echo elgg_echo("profile_manager:simple_access_control"); ?></label>

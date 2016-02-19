@@ -4,6 +4,7 @@
 // Perform some post-creation actions (join groups, etc.)
 function esope_create_user_event($event, $type, $user) {
 	if (elgg_instanceof($user, 'user') && ($event == 'create') && ($type == 'user')) {
+		
 		// Auto-join groups : imported from autosubscribegroup plugin
 		//auto submit relationships between user & groups
 		//retrieve groups ids from plugin
@@ -26,6 +27,16 @@ function esope_create_user_event($event, $type, $user) {
 				}
 			}
 		}
+		
+		// Groupe principal (à partir du GUID de ce groupe)
+		$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'esope');
+		$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'esope');
+		if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
+			$user = elgg_get_logged_in_user_entity();
+			// Si pas déjà fait, on l'inscrit
+			if (!$homegroup->isMember($user)) { $homegroup->join($user); }
+		}
+		
 	}
 }
 
@@ -34,6 +45,7 @@ function esope_create_user_event($event, $type, $user) {
 function esope_login_user_event($event, $type, $user) {
 	if (elgg_instanceof($user, "user")) {
 		if (!$user->isBanned()) {
+			
 			// Try to join groups asked at registration
 			if ($user->join_groups) {
 				foreach($user->join_groups as $group_guid) {
@@ -66,6 +78,24 @@ function esope_login_user_event($event, $type, $user) {
 				// Update waiting list
 				$user->join_groups = null;
 			}
+			
+			/*
+			 * Forwards to internal referrer, if set
+			 * Otherwise redirects to home after login
+			// @TODO réintégrer ?
+			// Si on vient d'une page particulière, retour à cette page
+			$back_to_last = $_SESSION['last_forward_from'];
+			if(!empty($back_to_last)) {
+				//register_error("Redirection vers $back_to_last");
+				forward($back_to_last);
+			}
+			// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
+			$loginredirect = elgg_get_plugin_setting('redirect', 'esope');
+			// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
+			if (!empty($loginredirect)) { forward(elgg_get_site_url() . $loginredirect); }
+			forward();
+			*/
+			
 		}
 	}
 	return null;

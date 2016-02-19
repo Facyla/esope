@@ -94,9 +94,24 @@ function rssimport_url($hook, $type, $return, $params) {
  */
 function prevent_notifications($hook, $type, $return, $params) {
 	if ($params['object']->rssimport_id || elgg_get_context() == 'rssimport') {
-		// this is an rssimport entity, we don't want to notify
-		return false;
+        if (!notify_on_import()) {
+            // this is an rssimport entity, we don't want to notify
+            return false;
+        }
 	}
 	
 	return $return;
+}
+
+/**
+ * called on the forward plugin hook, prevents the forward
+ * 
+ * @param type $hook
+ * @param type $type
+ * @param type $return
+ * @param type $params
+ * @return boolean
+ */
+function prevent_forward($hook, $type, $return, $params) {
+    return false; // no forwarding
 }

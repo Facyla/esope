@@ -1,5 +1,6 @@
 <?php
-$french = array(
+
+return array(
 	
 	'pin' => "Contenus en Une",
 	'pin:title' => "Contenus mis en avant ou sélectionnés",
@@ -54,5 +55,4 @@ $french = array(
 	
 );
 
-add_translation('fr', $french);
 

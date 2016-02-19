@@ -7,9 +7,9 @@
  * @author Evan Winslow
  */
 
-global $CONFIG;
+$url = elgg_get_site_url();
 
-$french = array(
+return array(
 	/**
 	 * New object subtype: announcement
 	 */
@@ -29,7 +29,7 @@ $french = array(
 	'announcements:add' => 'Faire une annonce',
 	'announcements:date' => 'Publié %s par %s.',
 	'announcements:error' => "Erreur lors de la publication de l'annonce.",
-	'announcements:message' => '%s<br /><br />%s (<a href="' . $CONFIG->wwwroot . 'profile/%s">Profil</a>)',
+	'announcements:message' => '%s<br /><br />%s (<a href="' . $url . 'profile/%s">Profil</a>)',
 	'announcements:none' => "Aucune annonce pour le moment.",
 	'announcements:post' => "Publier l'annonce", 
 	'announcements:subject' => '%s Annonce : %s',
@@ -52,7 +52,19 @@ $french = array(
 	 * API
 	 */
 	'announcements.get' => 'Récupérer les annonces du système sur la base de divers critères',
+	
+	// Notifications
+	'announcements:notify:subject' => "[%2\$s] %1\$s",
+	'announcements:notify:body' => "%s a fait une annonce dans le groupe %s :
+	
+	<h3>%s</h3>
+	
+	%s
+	
+	
+	Voir en ligne : %s
+	",
+	'announcements:notify:summary' => "Nouvelle annonce : %s",
+	
 );
-
-add_translation("fr", $french);
 

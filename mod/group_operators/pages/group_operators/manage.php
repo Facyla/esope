@@ -8,8 +8,10 @@
 elgg_load_library('elgg:group_operators');
 
 $group_guid = (int) get_input('group_guid');
-$group = new ElggGroup($group_guid);
-if (!$group) {
+//$group = new ElggGroup($group_guid);
+$group = get_entity($group_guid);
+//if (!$group) {
+if (!elgg_instanceof($group, 'group')) {
 	forward();
 }
 if (!$group->canEdit()) {
@@ -25,7 +27,7 @@ elgg_push_breadcrumb(elgg_echo('group'), "groups/all");
 elgg_push_breadcrumb($group->name, $group->getURL());
 elgg_push_breadcrumb(elgg_echo("group_operators:operators"));
 
-$title = sprintf(elgg_echo("group_operators:title"), $group->name);
+$title = elgg_echo("group_operators:title", array($group->name));
 
 $content = elgg_view_group_operators_list($group);
 
@@ -41,3 +43,4 @@ $body = elgg_view_layout('content', array(
 ));
 
 echo elgg_view_page($title, $body);
+

@@ -28,6 +28,11 @@ $color12 = $css['color12']; // #DEDEDE
 ?>
 /* <style> /**/
 
+
+/****************/
+/* ESOPE Layout */
+/****************/
+
 /* ***************************************
 	PAGE LAYOUT
 *************************************** */
@@ -39,6 +44,7 @@ $color12 = $css['color12']; // #DEDEDE
 .elgg-page-default .elgg-page-header > .elgg-inner {
 	max-width: 990px;
 	margin: 0 auto;
+	/* height: 90px; */
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {
 	max-width: 990px;

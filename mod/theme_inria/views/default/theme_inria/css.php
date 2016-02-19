@@ -1,55 +1,55 @@
 <?php
-global $CONFIG;
-$fonturl = $CONFIG->url . 'mod/theme_inria/fonts/';
-$imgurl = $CONFIG->url . 'mod/theme_inria/graphics/';
+
+$fonturl = elgg_get_site_url() . 'mod/theme_inria/fonts/';
+$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 $tools_url = $imgurl . 'inria_widget/';
 
 // Configurable elements : pass theme as $vars['theme-config-css']
 // Image de fond du header
-$headerimg = elgg_get_plugin_setting('headerimg', 'adf_public_platform');
-if (!empty($headerimg)) $headerimg = $vars['url'] . $headerimg;
-$backgroundcolor = elgg_get_plugin_setting('backgroundcolor', 'adf_public_platform');
-$backgroundimg = elgg_get_plugin_setting('backgroundimg', 'adf_public_platform');
-if (!empty($backgroundimg)) $backgroundimg = $vars['url'] . $backgroundimg;
+$headerimg = elgg_get_plugin_setting('headerimg', 'esope');
+if (!empty($headerimg)) $headerimg = elgg_get_site_url() . $headerimg;
+$backgroundcolor = elgg_get_plugin_setting('backgroundcolor', 'esope');
+$backgroundimg = elgg_get_plugin_setting('backgroundimg', 'esope');
+if (!empty($backgroundimg)) $backgroundimg = elgg_get_site_url() . $backgroundimg;
 // Couleur des titres
-$titlecolor = elgg_get_plugin_setting('titlecolor', 'adf_public_platform');
-$textcolor = elgg_get_plugin_setting('textcolor', 'adf_public_platform');
+$titlecolor = elgg_get_plugin_setting('titlecolor', 'esope');
+$textcolor = elgg_get_plugin_setting('textcolor', 'esope');
 // Couleur des liens
-$linkcolor = elgg_get_plugin_setting('linkcolor', 'adf_public_platform');
-$linkhovercolor = elgg_get_plugin_setting('linkhovercolor', 'adf_public_platform');
+$linkcolor = elgg_get_plugin_setting('linkcolor', 'esope');
+$linkhovercolor = elgg_get_plugin_setting('linkhovercolor', 'esope');
 // Couleur 1 : Haut dégradé header
-$color1 = elgg_get_plugin_setting('color1', 'adf_public_platform');
+$color1 = elgg_get_plugin_setting('color1', 'esope');
 // Couleur 4 : Bas dégradé header
-$color4 = elgg_get_plugin_setting('color4', 'adf_public_platform');
+$color4 = elgg_get_plugin_setting('color4', 'esope');
 // Couleur 2 : Haut dégradé widgets/modules
-$color2 = elgg_get_plugin_setting('color2', 'adf_public_platform');
+$color2 = elgg_get_plugin_setting('color2', 'esope');
 // Couleur 3 : Bas dégradé widgets/modules
-$color3 = elgg_get_plugin_setting('color3', 'adf_public_platform');
+$color3 = elgg_get_plugin_setting('color3', 'esope');
 // Couleur 5-8 : Dégradés des boutons + dégradé hover
-$color5 = elgg_get_plugin_setting('color5', 'adf_public_platform');
-$color6 = elgg_get_plugin_setting('color6', 'adf_public_platform');
-$color7 = elgg_get_plugin_setting('color7', 'adf_public_platform');
-$color8 = elgg_get_plugin_setting('color8', 'adf_public_platform');
+$color5 = elgg_get_plugin_setting('color5', 'esope');
+$color6 = elgg_get_plugin_setting('color6', 'esope');
+$color7 = elgg_get_plugin_setting('color7', 'esope');
+$color8 = elgg_get_plugin_setting('color8', 'esope');
 // Divers tons de gris par défaut et éléments de l'interface
-$color9 = elgg_get_plugin_setting('color9', 'adf_public_platform'); // #CCCCCC
-$color10 = elgg_get_plugin_setting('color10', 'adf_public_platform'); // #999999
-$color11 = elgg_get_plugin_setting('color11', 'adf_public_platform'); // #333333
-$color12 = elgg_get_plugin_setting('color12', 'adf_public_platform'); // #DEDEDE
+$color9 = elgg_get_plugin_setting('color9', 'esope'); // #CCCCCC
+$color10 = elgg_get_plugin_setting('color10', 'esope'); // #999999
+$color11 = elgg_get_plugin_setting('color11', 'esope'); // #333333
+$color12 = elgg_get_plugin_setting('color12', 'esope'); // #DEDEDE
 // Couleur de fond du sous-menu déroulant
-$color13 = elgg_get_plugin_setting('color13', 'adf_public_platform');
+$color13 = elgg_get_plugin_setting('color13', 'esope');
 // Module title
-$color14 = elgg_get_plugin_setting('color14', 'adf_public_platform');
+$color14 = elgg_get_plugin_setting('color14', 'esope');
 // Button title
-$color15 = elgg_get_plugin_setting('color15', 'adf_public_platform');
+$color15 = elgg_get_plugin_setting('color15', 'esope');
 // Couleur de fond du footer configurable
-$footercolor = elgg_get_plugin_setting('footercolor', 'adf_public_platform');
+$footercolor = elgg_get_plugin_setting('footercolor', 'esope');
 // Fonts
-$font1 = elgg_get_plugin_setting('font1', 'adf_public_platform');
-$font2 = elgg_get_plugin_setting('font2', 'adf_public_platform');
-$font3 = elgg_get_plugin_setting('font3', 'adf_public_platform');
-$font4 = elgg_get_plugin_setting('font4', 'adf_public_platform');
-$font5 = elgg_get_plugin_setting('font5', 'adf_public_platform');
-$font6 = elgg_get_plugin_setting('font6', 'adf_public_platform');
+$font1 = elgg_get_plugin_setting('font1', 'esope');
+$font2 = elgg_get_plugin_setting('font2', 'esope');
+$font3 = elgg_get_plugin_setting('font3', 'esope');
+$font4 = elgg_get_plugin_setting('font4', 'esope');
+$font5 = elgg_get_plugin_setting('font5', 'esope');
+$font6 = elgg_get_plugin_setting('font6', 'esope');
 
 
 $module_title_color = $titlecolor;
@@ -94,7 +94,7 @@ $module_bg_color = '#F8F4F5';
 
 /* Slider */
 /* Limit slides content size */
-.iris-news { height: 200px; overflow:hidden; }
+.iris-news { height: 300px; overflow:hidden; }
 .iris-news #slider1 img { max-height: 200px !important; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
@@ -115,13 +115,11 @@ $module_bg_color = '#F8F4F5';
 /* Header */
 body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
 section { background:white; }
-padding-top: 25px;
-background: white;
-header { background: #6F2D50 !important; border-top: 0; height:70px !important; }
-header .interne h1 { margin-top: 0; }
-header nav { top: 27px; }
-header nav #user img { float: left; margin-right: 6px; }
-header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
+.elgg-page-header { background: #6F2D50 !important; border-top: 0; height:70px !important; }
+.elgg-page-header .interne h1 { margin-top: 0; }
+.elgg-menu-topbar { top: 27px; }
+.elgg-menu-topbar #user img { float: left; margin-right: 6px; }
+.elgg-menu-topbar ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
 #adf-homepage .inria-login a, #adf-homepage .inria-login a:visited { color: white; }
 #adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
@@ -131,22 +129,22 @@ header nav ul li a { font-size:12px; font-weight:normal; color: #fff; text-shado
 .elgg-context-login .elgg-module-aside { float: right; width: 50%; }
 
 /* Main menu */
-#transverse { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
-#transverse nav ul li, #transverse nav ul li:first-child { border:0; padding:0; }
-#transverse nav ul li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
-#transverse nav ul li a.active, #transverse nav ul li a.elgg-state-selected, #transverse nav ul li a:hover, #transverse nav ul li a:focus, #transverse nav ul li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
-#transverse nav ul li ul li a:hover, #transverse nav ul li ul li a:focus, #transverse nav ul li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#transverse nav ul li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
-#transverse nav ul li ul li { background: <?php echo $module_bg_color; ?>; }
-#transverse nav ul li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
+.elgg-page-header { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
+ul.elgg-menu-navigation li, ul.elgg-menu-navigation li:first-child { border:0; padding:0; }
+ul.elgg-menu-navigation li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
+ul.elgg-menu-navigation li a.active, ul.elgg-menu-navigation li a.elgg-state-selected, ul.elgg-menu-navigation li a:hover, ul.elgg-menu-navigation li a:focus, ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
+ul.elgg-menu-navigation li ul li a:hover, ul.elgg-menu-navigation li ul li a:focus, ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
+ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
+ul.elgg-menu-navigation li ul li { background: <?php echo $module_bg_color; ?>; }
+ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
 
 /* Search */
 input:focus, textarea:focus { background: #FFFAF0; }
-#transverse form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
-form input#adf-search-input { height: 26px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
-form input#adf-search-input:active, form input#adf-search-input:focus { color: #EF783E; }
-form input#adf-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
-form input#adf-search-submit-button:hover, form input#adf-search-submit-button:active, form input#adf-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
+.elgg-page-header form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
+form input#esope-search-input { height: 26px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
+form input#esope-search-input:active, form input#esope-search-input:focus { color: #EF783E; }
+form input#esope-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
+form input#esope-search-submit-button:hover, form input#esope-search-submit-button:active, form input#esope-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
 /* Members search */
 .esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
 /* Search filters */
@@ -211,9 +209,21 @@ footer.footer-inria {
 .home-news { /* background:#efefef; */ padding:0.5em 1em; margin-bottom:1em; }
 .elgg-context-dashboard .elgg-form-thewire-add { width: 100%; }
 .elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; }
-.elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 5%; text-align: center; margin: 0; }
+.elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
 
-.home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
+.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
+.thewire-form #thewire-characters-remaining.thewire-characters-remaining-warning { font-weight: bold !important; color: #F00 !important; }
+/* Note : si on veut ajouter un message il faudra modifier le JS et la structure HTML...
+#thewire-characters-remaining .thewire-characters-remaining-message { display:none; }
+#thewire-characters-remaining.thewire-characters-remaining-warning .thewire-characters-remaining-message { display:inline; }
+*/
+#thewire-characters-remaining span { margin: 3px 12px 0 0; float:none; font-size: 1.2em; }
+#thewire-textarea { font-size: 1.2em; height:4em; }
+.home-wire #thewire-textarea { margin-top: 0; }
+.home-wire .thewire-form { padding: 0; }
+.home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
+
+.home-box { margin-bottom: 1em; background: <?php echo $module_bg_color; ?>; padding: 0.5em 0.5em; border-radius: 5px; }
 .home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
@@ -225,9 +235,22 @@ footer.footer-inria {
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
+/* The Wire */
+.thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
+.elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }
+/*
+.elgg-form-thewire-group-add #thewire-textarea { width: 80%; float: left; height: 3em; margin-top: 0; }
+*/
+.elgg-form-thewire-group-add #thewire-textarea { height: 4em; padding: 1px 3px; }
+.elgg-form-thewire-group-add #thewire-characters-remaining span { margin: 0 12px 0 0; float:none; font-size: 1.2em; }
+.thewire-remaining-message { color: red; }
+.elgg-form-thewire-group-add .elgg-button-submit { margin-top: 3px; }
+.theme_inria-thewire-group-add {}
+.theme_inria-thewire-group-add h3 { margin-top: 20px; }
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
+.river-inria-info { margin: 24px auto 12px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 
 
 /* Widgets */
@@ -291,31 +314,24 @@ section .interne div.module div.activites { background-color: <?php echo $module
 
 .elgg-context-groups .elgg-module-aside li .elgg-image-block > .elgg-body { border-bottom: 1px dotted #CCCCCC; }
 
-/* Group invites */
-form#invite_to_group .elgg-foot { border-top: 0; border-bottom: 1px solid #CCC; }
-form#esope-search-form-invite-groups, form#esope-search-form-invite-results { margin: 0; }
-
 
 
 /* Group tabs */
 /* ***************************************
 	GROUP FILTER MENU
 *************************************** */
-.elgg-menu-group-filter { margin-bottom: 5px; border-bottom: 2px solid #ccc; display: table; width: 100%; }
+.group-top-menu { width: 100%; margin-bottom: 5px; border-bottom: 2px solid #CCC; }
+.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; }
+
+/* Left (filter) menu */
 .elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 0 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
 .elgg-menu-group-filter > li:hover, 
 .elgg-menu-group-filter > li:focus, 
 .elgg-menu-group-filter > li:active { background: transparent; }
 .elgg-menu-group-filter > li > a { text-decoration: none; display: block; padding: 3px 10px 0; text-align: center; height: 18px; color: #999; font-family: <?php echo $font2; ?>; font-size: 12px; }
-
-/*********	Change tab hover here	********/
-.elgg-menu-group-filter > li > a:hover, 
-.elgg-menu-group-filter > li > a:focus, 
-.elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
+.elgg-menu-group-filter > li > a:hover, .elgg-menu-group-filter > li > a:focus, .elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
 .elgg-menu-group-filter > .elgg-state-selected { border-color: #ccc; background: white; }
 .elgg-menu-group-filter > .elgg-state-selected > a { position: relative; top: 2px; background: white; }
-
-.group-top-menu .elgg-menu-group-filter { margin-bottom: 0; }
 .elgg-menu-group-filter > li.elgg-menu-item-pages a, .elgg-menu-group-filter > li.elgg-menu-item-pages a:hover, .elgg-menu-group-filter > li.elgg-menu-item-pages a:active, .elgg-menu-group-filter > li.elgg-menu-item-pages a:focus { background: transparent !important; }
 .elgg-menu-group-filter > li:first-child { margin-left: 0px; }
 
@@ -325,10 +341,12 @@ form#esope-search-form-invite-groups, form#esope-search-form-invite-results { ma
 .elgg-menu-item-rss { display: none !important; }
 */
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this { display: none !important; }
-.elgg-menu-group-filter > li.grouptab-action { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; }
-.elgg-menu-group-filter > li.grouptab-action a { color: white; }
-.elgg-menu-group-filter > li.grouptab-action:hover, .elgg-menu-group-filter > li.grouptab-action:focus, .elgg-menu-group-filter > li.grouptab-action:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
-.elgg-menu-group-filter > li.grouptab-action > a:hover, .elgg-menu-group-filter > li.grouptab-action > a:focus, .elgg-menu-group-filter > li.grouptab-action > a:active { background: <?php echo $color8; ?>; }
+
+/* Modify title menu action buttons */
+.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; border-radius: 5px 5px 0 0; }
+.elgg-menu-group-filter-alt > li a.elgg-button.elgg-button-action { height:18px; color: white; background: initial; padding: 3px 10px 0; font-family: <?php echo $font2; ?>; font-size: 12px; border: 2px solid transparent; border-bottom: 0; }
+.elgg-menu-group-filter-alt > li:hover, .elgg-menu-group-filter-alt > li:focus, .elgg-menu-group-filter-alt > li:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
+.elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:hover, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:focus, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:active { background: <?php echo $color8; ?>; }
 
 
 /* PROFILE */
@@ -344,7 +362,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
-.linkedin-link { background: url(<?php echo $CONFIG->url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+.linkedin-link { background: url(<?php echo elgg_get_site_url(); ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
 
 
 /* Profils différenciés */

@@ -3,7 +3,7 @@
  * English strings
  */
 
-$en = array(
+return array(
 	'groups_archive' => "Groups archive",
 	'groups-archive' => "Groups archive",
 	
@@ -45,6 +45,4 @@ $en = array(
 	
 	
 );
-
-add_translation('en', $en);
 

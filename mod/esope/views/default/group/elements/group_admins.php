@@ -23,7 +23,7 @@ echo '<div class="clearfloat"></div>';
 // Lien admin des responsables de groupes
 /*
 if ($entity->canEdit()) {
-	echo '<a href="' . $vars['url'] . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
+	echo '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $entity->guid . '">' . elgg_echo('group_operators:manage') . '</a>';
 }
 */
 ?>

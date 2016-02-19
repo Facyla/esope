@@ -11,10 +11,9 @@ $group = elgg_get_page_owner_entity();
 $feed = $group->feed_url;
 if (empty($feed)) { return true; }
 
-global $CONFIG;
-
 $feed = $group->feed_url;
 
+// Config syntax: FEED URL::FEED TITLE
 $needle = '::';
 // Separate pieces of data if set
 if (strrpos($feed, $needle) !== false) {
@@ -22,11 +21,18 @@ if (strrpos($feed, $needle) !== false) {
 	$feed = $feed_parts[0];
 	$title = $feed_parts[1];
 }
+// Use feed URL as title if no title set
+if (empty($title)) {
+	$title = $feed;
+}
 
-if (empty($title)) $title = $feed;
+
+// Content elements
+$content = '<div class="simplepie-group-feed">';
+$content .= elgg_view('simplepie/feed_reader', array('feed_url' => $feed, 'excerpt' => true, 'num_items' => 5, 'post_date' => true));
+$content .= '</div>';
+
 $all_link = '<a href="' . $feed . '" target="_blank">' . elgg_echo('simplepie:group:feed_url:open') . '</a>';
-
-$content = '<div style="padding:6px;">' . elgg_view('simplepie/feed_reader', array('feed_url' => $feed, 'excerpt' => true, 'num_items' => 5, 'post_date' => true)) . '</div>';
 
 
 // Group module

@@ -1,7 +1,7 @@
 <?php
 /*
-$urlfonts = $vars['url'] . 'mod/esope/fonts/';
-$urlicon = $vars['url'] . 'mod/esope/img/theme/';
+$urlfonts = elgg_get_site_url() . 'mod/esope/fonts/';
+$urlicon = elgg_get_site_url() . 'mod/esope/img/theme/';
 */
 ?>
 

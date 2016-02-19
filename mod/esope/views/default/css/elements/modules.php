@@ -27,7 +27,7 @@ $font6 = $css['font6'];
 /* <style> /**/
 
 /* ***************************************
-	Modules
+	ESOPE Modules
 *************************************** */
 .elgg-module {
 	overflow: hidden;
@@ -41,7 +41,7 @@ $font6 = $css['font6'];
 	padding-bottom: 5px;
 }
 
-.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 16px; padding: 0.4em 0.5em 0.0em 0.5em;; }
+.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em;; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
@@ -109,11 +109,10 @@ $font6 = $css['font6'];
 	color: <?php echo $color14; ?>;
 	/*
 	float: left;
-	font-size: 1.25em;
 	*/
 	margin: 7px 0 0 5px;
 	font-family: <?php echo $font1; ?>;
-	font-size: 1.1em;
+	font-size: 1rem;
 	text-transform: uppercase;
 	font-weight: normal;
 	padding: 4px 0 5px 0px;
@@ -181,12 +180,15 @@ $font6 = $css['font6'];
 	Widgets
 *************************************** */
 .elgg-widgets {
-	/* float: right; */
+	float: right;
 	min-height: 30px;
 }
 .elgg-widget-add-control {
 	text-align: right;
 	margin: 5px 5px 15px;
+}
+.elgg-widget-add-control .elgg-button {
+	display: inline;
 }
 .elgg-widgets-add-panel {
 	padding: 10px;
@@ -360,9 +362,9 @@ a.elgg-widget-collapsed:before { content: ""; }
 a.elgg-widget-edit-button { right: 12px; }
 */
 
-div.elgg-widgets div.elgg-body { font-size: 0.90em; }
-.elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:14px; }
-.elgg-module .entity_title { font-size:16px; }
+div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
+.elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:0.9rem; }
+.elgg-module .entity_title { font-size:1rem; }
 .elgg-widget-instance-event_calendar p { font-size: 1.3em; }
 
 /* Boutons des widgets */
@@ -379,7 +381,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 .elgg-page-body div.module div.activites .elgg-widget-content .widget-title-details.group-widget a {
 	color:white;display:block;
 	font-family: <?php echo $font1; ?>;
-	font-size:14px;
+	font-size:0.9rem;
 }
 .widget-group-content { padding: 0 10px 10px 10px; }
 
@@ -393,7 +395,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 .elgg-widget-more:before {
 	content: "+ ";
 	font-family: <?php echo $font2; ?>;
-	font-size: 24px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	margin-left: 9px;
 	text-shadow: 0 2px 2px #999999;
@@ -403,7 +405,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 .elgg-page-body div.elgg-module .elgg-widget-content .widget-title-details {
 	font-family: <?php echo $font1; ?>;
-	font-size: 1.10em;
+	font-size: 0.9rem;
 	text-transform: uppercase;
 	font-weight: normal;
 }
@@ -420,7 +422,7 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 	border-top: 1px solid #ccc;
 }
 .elgg-page-body div.elgg-module footer a {
-	font-size: 24px;
+	font-size: 1.5rem;
 	color: <?php echo $linkcolor; ?>;
 	font-family: <?php echo $font2; ?>;
 	text-shadow: 0 2px 2px #999;
@@ -510,9 +512,9 @@ div.elgg-widgets div.elgg-body { font-size: 0.90em; }
 
 
 /* à vérifier pour effets sur diverses pages */
-.elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.9em; }
+.elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.8rem; }
 .groups-widget-viewall { margin:10px 6px 0 0; }
-.elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 1em; }
+.elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 0.75rem; }
 .elgg-module-info > .elgg-body { padding: 7px 0 0; }
 .elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
 .elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }

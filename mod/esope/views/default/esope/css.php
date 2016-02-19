@@ -89,6 +89,10 @@ $font5 = elgg_get_plugin_setting('font5', 'esope');
 $font6 = elgg_get_plugin_setting('font6', 'esope');
 ?>
 
+/* ***************************************
+ * ESOPE MAIN CSS
+ ************************************** */
+
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 
@@ -96,7 +100,6 @@ $font6 = elgg_get_plugin_setting('font6', 'esope');
 html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
 
 /* h2 { color: #333; } */
-pre, code { word-break:break-all; }
 .mts { margin-right:10px; }
 .elgg-river-comments-tab { color:#cd9928; }
 .elgg-input-rawtext { width:99%; }
@@ -540,6 +543,8 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 .elgg-menu-item-members {}
 
 
+/* Profile */
+.profile.elgg-col-2of3 { float:left; margin-bottom: 2ex; }
 .profile-content-menu a { border-radius: 0; }
 /* Menus différenciés : navigation secondaire */
 .elgg-menu-page .elgg-menu-item-groups-all a,
@@ -619,7 +624,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 #esope-register { margin-bottom:3em; }
 #esope-homepage p { font-size:14px; margin-top:0; margin-bottom:8px; }
 #esope-homepage a, #esope-homepage a:visited { color:<?php echo $linkcolor; ?>; }
-#esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:red; }
+#esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:<?php echo $linkhovercolor; ?>; }
 #esope-homepage .elgg-form { background:transparent; }
 #esope-homepage h2 { font-size:20px; font-weight:normal; }
 #esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
@@ -653,12 +658,15 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50p
 select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #esope-homepage .register-fullwidth { clear:both; }
 #esope-homepage .register-fullwidth label { width:auto; }
+/*
 #profile_manager_register_left { width:100%; }
+*/
 .profile_manager_register_input_container { display:inline-block; }
 #profile_manager_profile_edit_tabs { clear: both; }
 .register-fullwidth { margin: 1em 0; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 #widget_profile_completeness_progress_bar { background: #090; }
+#profile_manager_profile_edit_tabs .elgg-module-info { min-width: auto; margin: 0 0 0px 3px; padding: 0; }
 
 
 
@@ -712,7 +720,7 @@ a.ouvrir { float: right; padding: 0 4px 0 0; clear:both; }
 
 
 
-.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 1px solid #666; color: #666; font-size: 0.85em; clear:left; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 1px solid #666; color: #666; /* font-size: 0.85em; */ clear:left; }
 
 /* Rendu des listes */
 ul.elgg-list li.elgg-item div.elgg-image a img { margin-right: 5px; }

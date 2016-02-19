@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Announcements</name>
-	<author>Evan Winslow</author>
-	<version>1.0</version>
-	<category>content</category>
-	<blurb>Post and comment on group announcements.</blurb>
+	<id>announcements</id>
+	<author>Florian DANIEL aka Facyla, based on original by Evan Winslow</author>
+	<version>1.1</version>
+	<blurb>Post and comment on group announcements</blurb>
 	<description>
-		Adds the ability for groups to post announcements to all their members.  
+		Adds the ability for groups admins to post announcements to all their members.  
 		Group members get the announcements in their inbox and can comment on the announcements.
 	</description>
 	<website>http://github.com/ewinslow/elgg-announcements</website>
 	<copyright>(C) Evan Winslow 2011</copyright>
 	<license>GNU Public License version 2</license>
+	
+	<category>content</category>
+	
 	<requires>
-		<type>elgg_version</type>
-		<version>2011030101</version>
+		<type>elgg_release</type>
+		<version>1.12</version>
 	</requires>
+	
 	<admin_interface>simple</admin_interface>
+	<activate_on_install>false</activate_on_install>
+	
 </plugin_manifest>
+

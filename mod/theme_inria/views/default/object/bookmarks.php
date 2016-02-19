@@ -109,10 +109,17 @@ HTML;
 		if ($excerpt) { $excerpt = " - $excerpt"; }
 		if (strlen($url) > 25) {
 			$bits = parse_url($url);
-			if (isset($bits['host'])) { $display_text = $bits['host']; } else { $display_text = elgg_get_excerpt($url, 100); }
+		if (isset($bits['host'])) {
+			$display_text = $bits['host'];
+		} else {
+			$display_text = elgg_get_excerpt($url, 100);
 		}
-		$link = elgg_view('output/url', array('href' => $bookmark->address, 'text' => $display_text, 'target' => '_blank'));
-		$content = elgg_view_icon('push-pin-alt') . "$link{$excerpt}";
+	$link = elgg_view('output/url', array(
+		'href' => $bookmark->address,
+		'text' => $display_text,
+	));
+
+	$content = elgg_view_icon('push-pin-alt') . "$link{$excerpt}";
 	}
 	
 	

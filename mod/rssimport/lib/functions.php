@@ -93,22 +93,60 @@ function cron_import($period) {
 		if (!RSSImport::groupGatekeeper($rssimport->getContainerEntity(), $rssimport->import_into, false)) {
 			continue;
 		}
+        
+        // need to log in as the rssimport owner in case notifications are enabled
+        $logged_in_user = elgg_get_logged_in_user_entity();
+        
+        // also need to prevent any login/logout forwards that can interrupt us
+        elgg_register_plugin_hook_handler('forward', 'all', __NAMESPACE__ . '\\prevent_forward');
+        
+        $owner = $rssimport->getOwnerEntity();
+        if ($owner) {
+            login($owner);
+        }
 
 		//get the feed
 		$feed = $rssimport->getFeed();
 		$history = array();
 		$items = $feed->get_items(0, 0);
 		if (is_array($items)) {
-		foreach ($items as $item) {
-			if (!$rssimport->isAlreadyImported($item) && !$rssimport->isBlacklisted($item)) {
-				$history[] = $rssimport->importItem($item);
-			}
-		}
+            foreach ($items as $item) {
+                if (!$rssimport->isAlreadyImported($item) && !$rssimport->isBlacklisted($item)) {
+                    $history[] = $rssimport->importItem($item);
+                }
+            }
 		}
 
 		$rssimport->addToHistory($history);
+        
+        if ($owner) {
+            logout();
+        }
+        
+        if ($logged_in_user) {
+            login($logged_in_user);
+        }
+        
+        elgg_unregister_plugin_hook_handler('forward', 'all', __NAMESPACE__ . '\\prevent_forward');
 	}
 
 	elgg_set_ignore_access(false);
 	elgg_pop_context();
+}
+
+/**
+ * determine whether to send notifications from imports
+ */
+function notify_on_import() {
+    static $notify;
+    
+    if (!is_null($notify)) {
+        return $notify;
+    }
+    
+    $setting = elgg_get_plugin_setting('notify', PLUGIN_ID);
+    
+    $notify = ($setting === 'yes');
+    
+    return $notify;
 }

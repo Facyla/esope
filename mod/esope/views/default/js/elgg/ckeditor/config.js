@@ -5,16 +5,20 @@ define(function(require) {
 	return {
 		// Use / for row break, - for separator
 		toolbar: [
-				['RemoveFormat', 'Paste', 'PasteFromWord'], 
+				['RemoveFormat'], 
+				['Paste', 'PasteFromWord'], 
 				['Undo', 'Redo'], 
+				['Blockquote'], 
+				['Link', 'Unlink'], 
 				['Image', 'Table', 'Iframe'], 
-				['Scayt'], 
 				['Source'], 
+				['Scayt'], 
 				['Maximize'], 
 				'/', 
 				['Format'], 
-				['Bold', 'Italic', 'Underline', 'Strike'], 
-				['Link', 'Unlink', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'], 
+				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
+				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
+				[ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
 				// source, iframe, flash, table, styles
 				// templates
 			],
@@ -29,10 +33,11 @@ define(function(require) {
 				{"name":"about","groups":["about"]}
 			],
 		*/
-		removeButtons: 'Subscript,Superscript', // To have Underline back
+		//removeButtons: 'Subscript,Superscript', // To have Underline back
 		allowedContent: true,
 		baseHref: elgg.config.wwwroot,
-		removePlugins: 'liststyle,contextmenu,tabletools,resize',
+		//removePlugins: 'liststyle,contextmenu,tabletools,resize',
+		removePlugins: '',
 		extraPlugins: 'blockimagepaste',
 		defaultLanguage: 'en',
 		language: elgg.get_language(),
@@ -41,7 +46,8 @@ define(function(require) {
 		contentsCss: elgg.get_simplecache_url('css', 'elgg/wysiwyg.css'),
 		disableNativeSpellChecker: false,
 		disableNativeTableHandles: false,
-		removeDialogTabs: 'image:advanced;image:Link;link:advanced;link:target',
+		//removeDialogTabs: 'image:advanced;image:Link;link:advanced;link:target',
+		removeDialogTabs: '',
 		autoGrow_maxHeight: $(window).height() - 100
 	};
 });

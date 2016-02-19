@@ -74,10 +74,10 @@ function esope_route($hook, $type, $return, $params) {
 	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
-	 * return $params; // Laisse le fonctionnement habituel se poursuivre
+	 * return $return; // Laisse le fonctionnement habituel se poursuivre
 	*/
 	// Par défaut on ne fait rien du tout
-	return $params;
+	return $return;
 }
 
 function esope_public_profile_hook($hook, $type, $return, $params){
@@ -196,8 +196,10 @@ function esope_public_pages($hook, $type, $return, $params) {
 	foreach ($publicpages as $publicpage) {
 		if (!empty($publicpage)) $return[] = $publicpage;
 	}
-	/* Les pages à rendre accessibles doivent correspondre	à l'URL complète
-	$return[] = '';
+	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
+	$return[] = 'page-publique';
+	$return[] = 'page-avec-params.*';
+	$return[] = 'rubrique-publique/.*';
 	*/
 	return $return;
 }
@@ -257,6 +259,16 @@ function esope_owner_block_menu($hook, $type, $return, $params) {
 		}
 	}
 	
+	// Tri alphabétique des entrées du menu
+	//usort($return, 'esope_menu_alpha_cmp'); 
+	return $return;
+}
+// Tri alphabétique des entrées du menu
+// Note : il n'y a normalement qu'un seul menu 'default'
+function esope_sort_menu_alpha($hook, $type, $return, $params) {
+	foreach ($return as $key => $menu) {
+		usort($return[$key], 'esope_menu_alpha_cmp');
+	}
 	return $return;
 }
 
@@ -448,6 +460,8 @@ if (elgg_is_active_plugin('au_subgroups')) {
 				//return false;
 			}
 		}
+		// No need to return anything
+		//return $return;
 	}
 	
 }
@@ -478,6 +492,45 @@ function esope_prepare_menu_page_hook($hook, $type, $return, $params) {
 }
 
 
+// Adds Favicon link in page head
+function esope_page_head_hook($hook, $type, $return, $params) {
+	
+	// Displays the default shortcut icon
+	$favicon = elgg_get_plugin_setting('faviconurl', 'esope');
+	$url = elgg_get_site_url();
+	if (empty($favicon)) {
+		$favicon = $url . '_graphics/favicon.ico';
+	} else {
+		$favicon = $url . $favicon;
+	}
+	
+	// Set main favicon
+	$return['links']['icon-ico'] = array('rel' => 'icon', 'href' => $favicon);
+	// Set apple touch icon
+	$return['links']['apple-touch-icon'] = array('rel' => 'apple-touch-icon', 'href' => $favicon);
+	
+	/* @TODO : several enhancements :
+	 * - provide setting for each icon (and specify constraints on each)
+	 * - check type before adding 'type' property' (can also be GIF, PNG...)
+	 * - provide setting for each icon ?
+	 * Since then, disable default icons that cannot be controlled by admin
+	 *
+		$return['links']['icon-16'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '16x16', 'type' => 'image/png');
+		$return['links']['icon-32'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '32x32', 'type' => 'image/png');
+		$return['links']['icon-64'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '64x64', 'type' => 'image/png');
+		$return['links']['icon-128'] = array('rel' => 'icon', 'href' => $favicon, 'sizes' => '128x128', 'type' => 'image/png');
+		$return['links']['icon-vector'] = array('rel' => 'apple-touch-icon', 'href' => $url . '_graphics/favicon.svg', 'sizes' => '16x16 32x32 48x48 64x64 128x128', 'type' => 'image/svg+xml');
+	 */
+	unset($return['links']['icon-16']);
+	unset($return['links']['icon-32']);
+	unset($return['links']['icon-64']);
+	unset($return['links']['icon-128']);
+	unset($return['links']['icon-vector']);
+	
+	return $return;
+}
+
+
 // Perform some post-registration actions (join groups, etc.)
 function esope_register_user_hook($hook, $type, $return, $params) {
 	if (is_array($params)) {
@@ -503,11 +556,10 @@ function esope_register_user_hook($hook, $type, $return, $params) {
 // Redirection après login
 function esope_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
 	if (!elgg_is_logged_in()) {
-		global $CONFIG;
 		//register_error("TEST : " . $_SESSION['last_forward_from'] . " // " . $parameters['current_url']);
 		// Si jamais la valeur de retour n'est pas définie, on le fait
 		if (empty($_SESSION['last_forward_from'])) $_SESSION['last_forward_from'] = $parameters['current_url'];
-		return $CONFIG->url . 'login';
+		return elgg_get_site_url() . 'login';
 	}
 	return null;
 }
@@ -603,4 +655,88 @@ function esope_user_hover_menu($hook, $type, $return, $params) {
 	}
 }
 
+
+// Add the regular group search method to main search
+function esope_search_groups_hook($hook, $type, $value, $params) {
+	$q = sanitise_string($params['query']);
+	$dbprefix = elgg_get_config('dbprefix');
+	$limit = sanitise_int(get_input('limit', 10));
+	
+	$params = array(
+			'types' => 'group',
+			'joins' => array("JOIN {$dbprefix}groups_entity as ge ON e.guid = ge.guid"),
+			'wheres' => array("(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '%$q%')"),
+			'count' => true,
+		);
+	$count = elgg_get_entities($params);
+	
+	// no need to continue if nothing here.
+	if (!$count) {
+		return array('entities' => array(), 'count' => $count);
+	}
+	
+	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'ge', $params['sort'], $params['order']);
+	$entities = elgg_get_entities($params);
+	
+	// add the volatile data for why these entities have been returned.
+	foreach ($entities as $entity) {
+		$name = search_get_highlighted_relevant_substrings($entity->name, $q);
+		$entity->setVolatileData('search_matched_title', $name);
+
+		$description = search_get_highlighted_relevant_substrings($entity->description, $q);
+		$entity->setVolatileData('search_matched_description', $description);
+	}
+	
+	return array(
+		'entities' => $entities,
+		'count' => $count,
+	);
+}
+
+
+
+
+// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending
+// Note : we could also provide a blocking hook, but other plugins can register to the same hook to block notifications, so why bother...
+function esope_elgg_send_email_notification($hook, $type, $result, $params) {
+	
+	// Do not notify again if email notification already sent ?
+	if ($result === true) { return true; }
+	
+	// Trigger blocking hook
+	// @TODO blocking hook should be global, otherwise better use the recipients hook to update the list
+	
+	return _elgg_send_email_notification($hook, $type, $result, $params);
+}
+
+
+// @TODO See http://reference.elgg.org/1.12/notification_8php_source.html#l00593 for $params
+/**
+ * Send an email notification
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param bool   $result Has anyone sent a message yet?
+ * @param array  $params Hook parameters
+ * @return bool
+ * @access private
+ */
+function esope_block_email_recipients($hook, $type, $result, $params) {
+	/*
+	echo '<pre>' . print_r($handler, true) . '</pre>';
+	echo '<pre>' . print_r($from, true) . '</pre>';
+	echo '<pre>' . print_r($to, true) . '</pre>';
+	echo '<pre>' . print_r($subject, true) . '</pre>';
+	echo '<pre>' . print_r($body, true) . '</pre>';
+	echo '<pre>' . print_r($params, true) . '</pre>';
+	*/
+	// Trigger hook to enable email blocking for plugins which handle email control through eg. roles or status
+	// Note : better avoid using the same hook because it requires to build the exact same params as in elgg_send_email, 
+	// but other plugins may have changed them before (other sender, etc.), so let's just use another one.
+
+	// @TODO : is the hook used by any plugin ? otherwise we can use recipients hook, or this one directly
+	//$result = elgg_trigger_plugin_hook('email_block', 'system', array('to' => $to, 'from' => $from, 'subject' => $subject, 'body' => $body, 'params' => $params), null);
+	return $result;
+}
 

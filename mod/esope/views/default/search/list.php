@@ -30,14 +30,16 @@ $query = http_build_query(
 		'limit' => $vars['params']['limit'],
 		'offset' => $vars['params']['offset'],
 		'search_type' => $vars['params']['search_type'],
-	//@todo include vars for sorting, order, and friend-only.
-		'owner_guid' => $vars['params']['owner_guid'],
 		'container_guid' => $vars['params']['container_guid'],
+		//@todo include vars for sorting, order, and friend-only.
+		'owner_guid' => $vars['params']['owner_guid'],
+		'friends' => $vars['params']['friends'],
 	)
 );
 
 $url = elgg_get_site_url() . "search?$query";
 
+$more_items = $vars['results']['count'] - ($vars['params']['offset'] + $vars['params']['limit']);
 // get pagination
 if (array_key_exists('pagination', $vars['params']) && $vars['params']['pagination']) {
 	$nav = elgg_view('navigation/pagination',array(
@@ -46,9 +48,14 @@ if (array_key_exists('pagination', $vars['params']) && $vars['params']['paginati
 		'count' => $vars['results']['count'],
 		'limit' => $vars['params']['limit'],
 	));
+	$show_more = false;
 } else {
+	// faceted search page so no pagination
 	$nav = '';
+	$show_more = $more_items > 0;
 }
+// No need to add link to more results if we already have paginated results
+if ($vars['params']['pagination']) { $more = 0; }
 
 // figure out what we're dealing with.
 $type_str = NULL;
@@ -77,16 +84,7 @@ if (array_key_exists('search_type', $vars['params'])
 	$type_str = $search_type_str;
 }
 
-// get any more links.
-$more_check = $vars['results']['count'] - ($vars['params']['offset'] + $vars['params']['limit']);
-$more = ($more_check > 0) ? $more_check : 0;
-// No need to add link to more results if we already have paginated results
-if ($vars['params']['pagination']) { $more = 0; }
-//$more_url = elgg_http_add_url_query_elements($more_url, array('offset' => $vars['params']['offset'] + $vars['params']['limit'])); // increment offset
-
-// Add link to see more results (and remove limit, that is why we do not increment the offset)
-if ($more) {
-	$title_key = ($more == 1) ? 'comment' : 'comments';
+if ($show_more) {
 	$more_str = elgg_echo('search:more', array($count, $type_str));
 	$more_url = elgg_http_remove_url_query_element($url, 'limit');
 	$more_link = "<li class='elgg-item'><a href=\"$more_url\">$more_str</a></li>";
@@ -94,22 +92,32 @@ if ($more) {
 	$more_link = '';
 }
 
-// @todo once elgg_view_title() supports passing a $vars array use it
-$body = '<h3 class="search-heading-category">' . $type_str . '</h3>';
+$body = elgg_view_title($type_str, array(
+	'class' => 'search-heading-category',
+));
 
-$view = search_get_search_view($vars['params'], 'entity');
-if ($view) {
-	$body .= '<ul class="elgg-list search-list">';
+$list_body = '';
+$view_params = $vars['params'];
 	foreach ($entities as $entity) {
+	$view_params['type'] = $entity->getType();
+	$view_params['subtype'] = $entity->getSubtype();
+	
+	$view = search_get_search_view($view_params, 'entity');
+	if (empty($view)) {
+		continue;
+	}
 		$id = "elgg-{$entity->getType()}-{$entity->getGUID()}";
-		$body .= "<li id=\"$id\" class=\"elgg-item\">";
-		$body .= elgg_view($view, array(
+	$list_body .= "<li id=\"$id\" class=\"elgg-item\">";
+	$list_body .= elgg_view($view, array(
 			'entity' => $entity,
-			'params' => $vars['params'],
+		'params' => $view_params,
 			'results' => $vars['results']
 		));
-		$body .= '</li>';
+	$list_body .= '</li>';
 	}
+if (!empty($list_body)) {
+	$body .= '<ul class="elgg-list search-list">';
+	$body .= $list_body;
 	$body .= $more_link;
 	$body .= '</ul>';
 }

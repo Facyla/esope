@@ -1,5 +1,7 @@
 <?php
 
+/* Post by mail functions */
+
 // require external libraries if needed
 if (!class_exists('DecodeMessage')) {
 	require_once(elgg_get_plugins_path() . 'postbymail/lib/mimeDecode.php');
@@ -8,9 +10,13 @@ if (!class_exists('Mail_mimeDecode')) {
 	require_once(elgg_get_plugins_path() . 'postbymail/lib/Mail_mimeDecode.php');
 }
 
-/* Post by mail functions */
 
-/* postbymail_checkandpost	 Vérifie la présence de nouveaux messages dans une boîte IMAP (ou POP, marche moins bien) et publie les messages s'ils sont valides (publiés par un auteur valide à un endroit où il en a le droit)
+/* Vérifie la présence de nouveaux messages dans une boîte mail et et publie les messages en attente
+ * 
+ * @return : String   Explications sur les actions effectuées (pas de code de retour signifiant)
+ * 
+ * Boîte email : IMAP (ou POP, marche moins bien)
+ * Messages publiés : doivent être valides = publiés par un auteur valide à un endroit où il en a le droit
  * 
  * $server = "localhost:143";	 POP3/IMAP/NNTP server to connect to, with optional port.
  * $protocol = "/notls";	 Protocol specification (optional)
@@ -19,13 +25,30 @@ if (!class_exists('Mail_mimeDecode')) {
  * $password = "********";	 Mailbox password.
  * $markSeen = false;	 Whether or not to mark retrieved messages as seen.
  * $bodyMaxLength = 65536; //$bodyMaxLength = 0; //$bodyMaxLength = 4096;	 If the message body is longer than this number of bytes, it will be trimmed.
-	- Set to 0 for no limit.
-	- 65536 is actually default MySQL configuration for Elgg's description fields
-	- set appropriate field to longtext in your database if you want to ovveride that limit
+   - Set to 0 for no limit.
+   - 65536 is actually default MySQL configuration for Elgg's description fields
+   - set appropriate field to longtext in your database if you want to ovveride that limit
  * $separator = elgg_echo('postbymail:default:separator');	 Séparateur du message (pour retirer la signature, les messages joints intégrés dans la réponse..)
-	*
-*/
-function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $password, $markSeen, $bodyMaxLength, $separator, $mimeParams) {
+ * 
+ */
+//function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = '', $username = false, $password = false, $markSeen = false, $bodyMaxLength = 65536, $separator = '', $mimeParams = array()) {
+function postbymail_checkandpost($config = array()) {
+	// Extract config vars
+	$server = elgg_extract('server', $config, false);
+	$protocol = elgg_extract('protocol', $config, '');
+	$inbox_name = elgg_extract('mailbox', $config, '');
+	$username = elgg_extract('username', $config, false);
+	$password = elgg_extract('password', $config, false);
+	$markSeen = elgg_extract('markSeen', $config, false);
+	$bodyMaxLength = elgg_extract('bodyMaxLength', $config, 65536);
+	$separator = elgg_extract('separator', $config, '');
+	$mimeParams = elgg_extract('mimeParams', $config, array());
+	
+	// Stop process if missing required parameters for mailbox connection
+	if (!postbymail_check_required($config)) {
+		return elgg_echo('postbymail:settings:error:missingrequired');
+	}
+	
 	global $sender_reply;
 	global $admin_reply;
 	global $postbymail_guid;
@@ -34,11 +57,18 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 	$site_name = $site->name;
 	
 	$ia = elgg_set_ignore_access(true);
-	$debug = true;
+	
+	// Debug mode
+	$debug = elgg_get_plugin_setting('debug', 'postbymail');
+	if ($debug == 'no') { $debug = false; } else { $debug = true; }
+	
+	// Attachements : risky and not implemented
 	$use_attachments = false;
+	
 	// @TODO : vérifier si on doit faire un check has_access_to_entity => normalement plus besoin en 1.8
 	
-	$body = ''; $pub_counter = 0;
+	$body = '';
+	$pub_counter = 0;
 	
 	
 	// COLLECT BASE PARAMS AND VARS
@@ -186,9 +216,9 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				/****************************/
 				// Extract the message body from email content, in html or text if not available
 				// Extraction function also ensures its encoded into UTF-8
-				$msgbody = mailparts_extract_body($message, true);
+				$msgbody = postbymail_extract_body($message, true);
 				// On utilise la version texte si la version html (par défaut) ne renvoie rien
-				if (empty($msgbody)) { $msgbody = mailparts_extract_body($message, false); }
+				if (empty($msgbody)) { $msgbody = postbymail_extract_body($message, false); }
 				
 				// Format the message to get the required data and content
 				if ($msgbody) {
@@ -223,7 +253,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				// Note : très discutable à cause des signatures et autres icônes embarquées..
 				if ($use_attachments) {
 					// Lecture de tout le message pour identification des pièces jointes
-					$content = mailparts_extract_content($message);
+					$content = postbymail_extract_content($message);
 					$full_msgbody = count($message->parts) . ' : ' . $content['body'];
 					$attachment = $content['attachment'];
 				}
@@ -299,9 +329,9 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
 				$sender_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
 				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
-				$sender_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$sender_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
 				$sender_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				if ($use_attachments) { $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
 				//$sender_reply .= elgg_echo('postbymail:info:parameters', array($parameters));
 				if ($entity) {
 					$sender_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
@@ -315,9 +345,9 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
 				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
 				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
-				$admin_reply .= elgg_echo('postbymail:info:maildate', array(dateToFrenchFormat($message->headers['date'])));
+				$admin_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
 				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment));
+				if ($use_attachments) { $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
 				$admin_reply .= $parameters;
 				if ($entity) {
 					$admin_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
@@ -480,7 +510,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							$new_post = new ElggObject;
 							$new_post->subtype = "thewire";
 							$new_post->owner_guid = $post_owner->guid;
+							// Support group wire
+							if (elgg_instanceof($post_container, 'group') || elgg_instanceof($post_container, 'user')) {
+								$new_post->container_guid = $post_container->guid;
+							} else {
 							$new_post->container_guid = $post_owner->guid;
+							}
 							//$new_post->title = $message->headers['subject'];
 							// @TODO add reply to
 							//$new_post->wire_thread
@@ -600,8 +635,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							case 'thewire':
 								// River OK + Notification OK
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
-								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
+								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
+									$thewire = get_entity($thewire_guid);
+									// Support group wire
+									$thewire->container_guid = $entity->container_guid;
+									$thewire->save();
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
@@ -1004,7 +1043,11 @@ function postbymail_checkeligible_reply($params) {
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
+		if (!empty($params['entity']->title)) {
 		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		} else {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->name));
+		}
 		
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		
@@ -1100,14 +1143,13 @@ function postbymail_checkeligible_reply($params) {
 }
 
 
-
 /*
  * Mail content extraction function : extracts message elements, in html or text format
  * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
  * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
  * returns : message value, or array with more details (attachements)
 */
-function mailparts_extract_content($mailparts, $html = true) {
+function postbymail_extract_content($mailparts, $html = true) {
 	$msgbody = '';
 	$attachment = '';
 	// Note : on peut tester parts->N°->headers->content-type (par ex. text/plain; charset=UTF-8)
@@ -1127,18 +1169,18 @@ function mailparts_extract_content($mailparts, $html = true) {
 					break;
 				case 'message':
 				case 'multipart':
-					$partcontent = mailparts_extract_content($mailpart, $html);
+					$partcontent = postbymail_extract_content($mailpart, $html);
 					$msgbody .= elgg_echo('postbymail:attachment:multipart', array($partcontent['body']));
 					$attachment .= $partcontent['attachment'];
 					break;
 				case 'image':
-					$attachment .= elgg_echo('postbymail:attachment:image', array(translateSize(mb_strlen($mailpart->body))));
+					$attachment .= elgg_echo('postbymail:attachment:image', array(postbymail_translateSize(mb_strlen($mailpart->body))));
 					break;
 				case 'audio':
 				case 'video':
 				case 'application':
 				default: // Other cases = audio, video, application
-					$attachment .= elgg_echo('postbymail:attachment:other', array(translateSize(mb_strlen($mailpart->body)))) . ' (' . $mailpart_ctype_primary . ')';
+					$attachment .= elgg_echo('postbymail:attachment:other', array(postbymail_translateSize(mb_strlen($mailpart->body)))) . ' (' . $mailpart_ctype_primary . ')';
 			}
 		}
 	} else {
@@ -1149,6 +1191,7 @@ function mailparts_extract_content($mailparts, $html = true) {
 	return array('body' => trim($msgbody), 'attachment' => $attachment);
 }
 
+
 /*
  * Mail body extraction function : extracts message content, in html or text format, and ensure it's encoded as UTF-8
  * Note : Encoding is explicit in headers, so should get it from there first, rather than using auto-detect
@@ -1156,7 +1199,7 @@ function mailparts_extract_content($mailparts, $html = true) {
  * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
  * returns : message body value, in UTF-8
 */
-function mailparts_extract_body($mailparts, $html = true) {
+function postbymail_extract_body($mailparts, $html = true) {
 	$charset = $mailparts->ctype_parameters['charset'];
 	$ctype_primary = strtolower($mailparts->ctype_primary);
 	switch($ctype_primary) {
@@ -1168,7 +1211,7 @@ function mailparts_extract_body($mailparts, $html = true) {
 			switch(strtolower($mailpart->ctype_primary)) {
 				case 'message':
 				case 'multipart':
-					$msgbody = mailparts_extract_body($mailpart, $html);
+					$msgbody = postbymail_extract_body($mailpart, $html);
 					break;
 				case 'text':
 					$msgbody = postbymail_convert_to_utf8($mailpart->body, $mailpart_charset);
@@ -1316,9 +1359,15 @@ function postbymail_find_sender($email_headers) {
 /* Render a readable date
  * $date	 timestamp
  */
-function dateToFrenchFormat($date) {
+function postbymail_dateToCustomFormat($date) {
 	$time = strtotime($date);
-	if ($time > 0) $date = date("d/m/Y à H:i:s", $time);
+	$format = elgg_echo('postbymail:dateformat');
+	if (empty($format)) {
+		$format = "d/m/Y à H:i:s";
+	}
+	if ($time > 0) {
+		$date = date($format, $time);
+	}
 	return $date;
 }
 
@@ -1326,7 +1375,7 @@ function dateToFrenchFormat($date) {
 /* Render a readable filesize
  * $size	 size in bits
  */
-function translateSize($size) {
+function postbymail_translateSize($size) {
 	$units = array("octets", "Ko", "Mo", "Go", "To");
 	for ($i = 0; $size >= 1024 && $i < count($units); $i++) $size /= 1024;
 	return round($size, 2)." {$units[$i]}";
@@ -1400,4 +1449,5 @@ function postbymail_service_notification_headers() {
 	
 	return $headers;
 }
+
 

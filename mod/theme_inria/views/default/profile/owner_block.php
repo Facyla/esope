@@ -46,12 +46,12 @@ $admin = elgg_extract('admin', $menu, array());
 // Add public setting profile link
 $public_profile_setting = '';
 if (elgg_is_logged_in() && ($user->guid == $_SESSION['user']->guid)) {
-	$public_profiles = elgg_get_plugin_setting('public_profiles', 'adf_public_platform');
+	$public_profiles = elgg_get_plugin_setting('public_profiles', 'esope');
 	if ($public_profiles == 'yes') {
 		$public_profile_setting = $user->public_profile;
 		// If no value, use default
 		if (empty($public_profile_setting)) {
-			$public_profile_setting = elgg_get_plugin_setting('public_profiles_default', 'adf_public_platform');
+			$public_profile_setting = elgg_get_plugin_setting('public_profiles_default', 'esope');
 			// No default means 'no' (not public)
 			if (empty($public_profiles_default)) { $public_profiles_default = 'no'; }
 		}

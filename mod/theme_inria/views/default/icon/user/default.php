@@ -17,20 +17,28 @@
 
 $user = elgg_extract('entity', $vars, elgg_get_logged_in_user_entity());
 $size = elgg_extract('size', $vars, 'medium');
-if (!in_array($size, array('topbar', 'tiny', 'small', 'medium', 'large', 'master'))) {
+$icon_sizes = elgg_get_config('icon_sizes');
+if (!array_key_exists($size, $icon_sizes)) {
 	$size = 'medium';
 }
 
+if (!($user instanceof ElggUser)) {
+	return;
+}
+
+$name = htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8', false);
+$username = $user->username;
 $class = "elgg-avatar elgg-avatar-$size";
 if (isset($vars['class'])) {
 	$class = "$class {$vars['class']}";
 }
+if ($user->isBanned()) {
+	$class .= ' elgg-state-banned';
+	$banned_text = elgg_echo('banned');
+	$name .= " ($banned_text)";
+}
 
 $use_link = elgg_extract('use_link', $vars, true);
-
-if (!($user instanceof ElggUser)) {
-	return true;
-}
 
 // Don't display user icon if public profile is disabled
 $allowed = esope_user_profile_gatekeeper($user, false);
@@ -46,9 +54,6 @@ if (!$allowed) {
 if (function_exists('esope_get_user_profile_type')) {
 	$class .= ' profile-type profile-type-' . esope_get_user_profile_type($user);
 }
-
-$name = htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8', false);
-$username = $user->username;
 
 $icontime = $user->icontime;
 if (!$icontime) {

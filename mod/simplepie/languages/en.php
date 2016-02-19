@@ -1,6 +1,6 @@
 <?php
 
-$english = array(
+return array(
 	'simplepie:widget' => 'RSS Feed',
 	'simplepie:description' => 'Add an external blog to your profile',
 	'simplepie:notset' => 'Feed url is not set',
@@ -13,6 +13,4 @@ $english = array(
 	'simplepie:group:feed_url' => "RSS Feed URL",
 	
 );
-
-add_translation("en", $english);
 

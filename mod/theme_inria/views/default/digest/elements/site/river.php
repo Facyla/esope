@@ -1,6 +1,6 @@
 <?php
 /**
- * Shows the activity of your friends in the Digest
+ * Shows the social activity of your friends in the Digest
  * 
  */
 
@@ -24,6 +24,7 @@ $river_options = array(
 	"wheres" => array("e.subtype != " . $subtype_id), // filter some subtypes
 );
 
+// Render river results
 if ($river_items = elgg_list_river($river_options)) {
 	$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:friends"), "href" => "activity/friends/" . $user->username));
 	

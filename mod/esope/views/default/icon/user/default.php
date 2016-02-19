@@ -41,6 +41,16 @@ if ($user->isBanned()) {
 
 $use_link = elgg_extract('use_link', $vars, true);
 
+// Don't display user icon if public profile is disabled
+$allowed = esope_user_profile_gatekeeper($user, false);
+if (!$allowed) {
+	$icon_url = elgg_get_site_url() . "_graphics/icons/default/$size.png";
+	$spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
+	$icon = '<div class="'.$class.'"><a>' . elgg_view('output/img', array('src' => $spacer_url, 'style' => "background: url($icon_url) no-repeat;")) . '</a></div>';
+	echo $icon;
+	return;
+}
+
 // Add profile-type marker
 if (function_exists('esope_get_user_profile_type')) {
 	$class .= ' profile-type profile-type-' . esope_get_user_profile_type($user);
@@ -97,12 +107,14 @@ if ($show_menu) {
 
 if ($use_link) {
 	$class = elgg_extract('link_class', $vars, '');
+	$target = elgg_extract('target', $vars, '');
 	$url = elgg_extract('href', $vars, $user->getURL());
 	echo elgg_view('output/url', array(
 		'href' => $url,
 		'text' => $icon,
 		'is_trusted' => true,
 		'class' => $class,
+		'target' => $target,
 	));
 } else {
 	echo "<a>$icon</a>";

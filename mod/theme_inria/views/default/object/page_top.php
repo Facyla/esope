@@ -27,16 +27,23 @@ if ($page->write_access_id == ACCESS_PUBLIC) {
 // Facyla : Export de la page courante
 elgg_register_menu_item('entity', array(
 		'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 'title' => elgg_echo('theme_inria:pages:pageexport:title'),
-		'href' => elgg_add_action_tokens_to_url($vars['url'] . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
+		'href' => elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
 	));
 
 
 if ($revision) {
 	$annotation = $revision;
 } else {
-	$annotation = $page->getAnnotations('page', 1, 0, 'desc');
+	$annotation = $page->getAnnotations(array(
+		'annotation_name' => 'page',
+		'limit' => 1,
+		'reverse_order_by' => true,
+	));
 	if ($annotation) {
 		$annotation = $annotation[0];
+	} else {
+		elgg_log("Failed to access annotation for page with GUID {$page->guid}", 'WARNING');
+		return;
 	}
 }
 
@@ -95,7 +102,7 @@ if ($full) {
 	// Export du wiki complet
 	elgg_register_menu_item('title', array(
 			'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:fullexport'), 'title' => elgg_echo('theme_inria:pages:fullexport:title'),
-			'href' => elgg_add_action_tokens_to_url($vars['url'] . 'action/pages/html_export?guid=' . $page->guid),
+			'href' => elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/pages/html_export?guid=' . $page->guid),
 			'link_class' => 'elgg-button elgg-button-action',
 		));
 	*/

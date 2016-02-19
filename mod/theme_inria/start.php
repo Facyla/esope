@@ -27,16 +27,14 @@ function theme_inria_init(){
 	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
+	// Rewrite file upload action to avoid river entries for file images
+	elgg_unregister_action('file/upload');
+	elgg_register_action("file/upload", $action_url . "file/upload.php");
 	
 	elgg_extend_view('css', 'theme_inria/css');
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
-	
-	// Extend group invite form
-	// Requires to be placed at the end of the form, because we will end the form and start a new one...
-	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite_before', 100);
-	elgg_extend_view('forms/groups/invite', 'forms/theme_inria/group_invite', 1000);
 	
 	// Extend user owner block
 	elgg_extend_view('page/elements/owner_block', 'theme_inria/extend_user_owner_block', 501);
@@ -84,24 +82,24 @@ function theme_inria_init(){
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
 	if (elgg_is_active_plugin('thewire')) {
-		$widget_thewire = elgg_get_plugin_setting('widget_thewire', 'adf_public_platform');
+		$widget_thewire = elgg_get_plugin_setting('widget_thewire', 'esope');
 		elgg_unregister_widget_type('thewire');
 		if ($widget_thewire != 'no') {
 			elgg_register_widget_type('thewire', elgg_echo('thewire'), elgg_echo("thewire:widgetesc"));
 		}
 	}
 	// Inria universe : liens vers d'autres 
-	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widgets:tools'), elgg_echo('theme_inria:widgets:tools:details'), 'dashboard', false);
+	elgg_register_widget_type('inria_universe', elgg_echo('theme_inria:widgets:tools'), elgg_echo('theme_inria:widgets:tools:details'), array('dashboard'), false);
 	//elgg_register_widget_type('inria_partage', "Partage", "Accès à Partage", 'dashboard');
 	
 	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
-		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
+		elgg_unregister_plugin_hook_handler('index','system','esope_index');
 		elgg_register_plugin_hook_handler('index','system','theme_inria_index');
 	} else {
 		if (!$CONFIG->walled_garden) {
-			elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
+			elgg_unregister_plugin_hook_handler('index','system','esope_public_index');
 			elgg_register_plugin_hook_handler('index','system','theme_inria_public_index');
 		}
 	}
@@ -111,11 +109,13 @@ function theme_inria_init(){
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	
 	
-	// Ajout niveau d'accès sur TheWire
+	// Ajout niveau d'accès sur TheWire : désormais intégré dans Esope (ainsi que possibilité de définir un container)
+	/*
 	if (elgg_is_active_plugin('thewire')) {
 		elgg_unregister_action('thewire/add');
 		elgg_register_action("thewire/add", elgg_get_plugins_path() . 'theme_inria/actions/thewire/add.php');
 	}
+	*/
 	
 	// Remplacement du modèle d'event_calendar
 	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
@@ -131,11 +131,16 @@ function theme_inria_init(){
 	// Add a "ressources" page handler for groups
 	elgg_register_page_handler("ressources", "inria_ressources_page_handler");
 	
+	// Override activity PH
+	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
+	// Override thewire PH
+	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	
 	// Modification des menus standards des widgets
-	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'adf_platform_elgg_widget_menu_setup');
+	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
 	// Add Etherpad (and iframes) embed
@@ -154,7 +159,7 @@ function theme_inria_init(){
 	
 	// Filtrage des contenus saisis
 	if (elgg_is_active_plugin('htmlawed')) {
-		elgg_unregister_plugin_hook_handler('validate', 'input', 'adf_platform_htmlawed_filter_tags');
+		elgg_unregister_plugin_hook_handler('validate', 'input', 'esope_htmlawed_filter_tags');
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_htmlawed_filter_tags', 1);
 	}
 	
@@ -171,7 +176,7 @@ function theme_inria_init(){
 	// @TODO attendre le GO de la DSI avant activation !
 	$ldap_cron = elgg_get_plugin_setting('ldap_cron', 'theme_inria');
 	if ($ldap_cron == 'yes') {
-		elgg_register_plugin_hook_handler('cron', 'daily', 'theme_inria_daily_cron');
+		elgg_register_plugin_hook_handler('cron', 'hourly', 'theme_inria_daily_cron');
 	}
 	
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
@@ -238,7 +243,7 @@ function inria_page_handler($page){
 			break;
 		case 'admin_cron':
 			if (elgg_is_admin_logged_in()) {
-				theme_inria_daily_cron('cron', 'daily', '', '');
+				theme_inria_daily_cron('cron', 'daily', '', array('force' => 'yes'));
 			}
 			break;
 		default:
@@ -264,6 +269,111 @@ function inria_ressources_page_handler($page) {
 	return true;
 }
 
+// Override pour ajouter une explication sur la page thewire/all
+function theme_inria_thewire_page_handler($page) {
+	$base_dir = elgg_get_plugins_path() . 'thewire/pages/thewire';
+	$alt_base_dir = elgg_get_plugins_path() . 'theme_inria/pages/thewire';
+
+	if (!isset($page[0])) {
+		$page = array('all');
+	}
+
+	switch ($page[0]) {
+		case "all":
+			include "$alt_base_dir/everyone.php";
+			break;
+
+		case "friends":
+			include "$base_dir/friends.php";
+			break;
+
+		case "owner":
+			include "$base_dir/owner.php";
+			break;
+
+		case "group":
+			//if (isset($page[1])) { set_input('guid', $page[1]); }
+			include "$alt_base_dir/group.php";
+			break;
+
+		case "view":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/view.php";
+			break;
+
+		case "thread":
+			if (isset($page[1])) {
+				set_input('thread_id', $page[1]);
+			}
+			include "$base_dir/thread.php";
+			break;
+
+		case "reply":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/reply.php";
+			break;
+
+		case "tag":
+			if (isset($page[1])) {
+				set_input('tag', $page[1]);
+			}
+			include "$base_dir/tag.php";
+			break;
+
+		case "previous":
+			if (isset($page[1])) {
+				set_input('guid', $page[1]);
+			}
+			include "$base_dir/previous.php";
+			break;
+
+		default:
+			return false;
+	}
+	return true;
+}
+
+// Add thewire menu in group tools
+function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_instanceof($page_owner, 'group')) {
+		if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
+			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+			switch ($add_wire) {
+				case 'yes': break; 
+				case 'groupoption':
+					if ($page_owner->thewire_enable != 'yes') { return $return; }
+					break; 
+				default: return $return;
+			}
+			$title = elgg_echo('theme_inria:thewire:group:title');
+			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
+		}
+	}
+	return $return;
+}
+
+// Override river PH to add an info block
+function theme_inria_elgg_river_page_handler($page) {
+	global $CONFIG;
+
+	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+
+	// make a URL segment available in page handler script
+	$page_type = elgg_extract(0, $page, 'all');
+	$page_type = preg_replace('[\W]', '', $page_type);
+	if ($page_type == 'owner') {
+		$page_type = 'mine';
+	}
+	set_input('page_type', $page_type);
+
+	require_once("{$CONFIG->path}mod/theme_inria/pages/river.php");
+	return true;
+}
 
 
 // Returns Elgg fields coming from LDAP

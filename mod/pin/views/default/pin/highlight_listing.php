@@ -10,7 +10,7 @@ $wrap1 = '	<div class="river_item">
 				<div class="river_highlight">
 					<div class="river_hightlight_new">';
 $wrap2 = '					</div>
-				</div>				
+				</div>
 			</div>
 		</div>
 	</div>';
@@ -32,7 +32,7 @@ foreach ($ents as $ent) {
 	if ($ent_for_icon = get_entity($ent->container_guid)) {} 
 	else if ($ent_for_icon = get_entity($ent->owner_guid)) {}
 	else if ($ent_for_icon = get_entity($ent->site_guid)) {}
-	if ($ent_for_icon instanceof ElggEntity) { $icon = $ent_for_icon->getIcon("tiny"); }
+	if (elgg_instanceof($ent_for_icon)) { $icon = $ent_for_icon->getIcon("tiny"); }
 	
 	$linktext = $ent->title;
 	if (empty($linktext)) $linktext = $ent->description;
@@ -53,7 +53,7 @@ foreach ($ents as $ent) {
 	if ($i > $limit) { break; }
 }
 if (!$nolink) {
-	$body .= '<br /><strong><a href="' . $CONFIG->url . 'mod/pin/index.php">&rarr;&nbsp;Retrouver tous les articles choisis</a></strong>';
+	$body .= '<br /><strong><a href="' . elgg_get_site_url() . 'mod/pin/index.php">&rarr;&nbsp;Retrouver tous les articles choisis</a></strong>';
 }
 $body .= '</div><br />';
 

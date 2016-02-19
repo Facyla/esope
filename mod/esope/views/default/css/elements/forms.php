@@ -17,8 +17,9 @@ $color12 = $css['color12']; // #DEDEDE
 /* <style> /**/
 
 /* ***************************************
-	Form Elements
+	ESOPE Form Elements
 *************************************** */
+
 fieldset > div {
 	margin-bottom: 15px;
 }
@@ -104,6 +105,7 @@ select {
 
 .elgg-form-login, .elgg-form-account {
 	max-width: 450px;
+	margin: 0 auto;
 }
 
 .elgg-form-account input[type="text"],
@@ -398,6 +400,7 @@ form input#esope-search-submit-button:focus {
 .ui-autocomplete {
 	position: absolute;
 	cursor: default;
+	z-index: 10000;
 }
 .elgg-autocomplete-item .elgg-body {
 	max-width: 600px;

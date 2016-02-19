@@ -6,13 +6,14 @@
  * 
  * This plugin allows users to reply by email to a forum thread, or to any publication in an Elgg site, or even post new content
  *
- * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionanally within code) for instructions
+ * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionnally within code) for instructions
  * 
 */
 
 elgg_register_event_handler('init','system','postbymail_init');
 
 function postbymail_init() {
+	
 	// Register and load postbymail libraries
 	elgg_register_library('elgg:postbymail', elgg_get_plugins_path() . 'postbymail/lib/functions.php');
 	elgg_load_library('elgg:postbymail');
@@ -25,15 +26,14 @@ function postbymail_init() {
 	if (!in_array($cron_freq, array('minute', 'fiveminute', 'fifteenmin', 'halfhour', 'hourly', 'daily', 'weekly'))) { $cron_freq = 'fiveminute'; }
 	elgg_register_plugin_hook_handler('cron', $cron_freq, 'postbymail_cron_handler');
 	
-	// Pass entity GUID
+	// Pass entity GUID (set it as global var)
 	// Pour déterminer et transmettre le GUID qui doit être passé en paramètre
 	elgg_register_plugin_hook_handler('object:notifications', 'all', 'postbymail_object_notifications_handler', 0);
 	elgg_register_event_handler('annotate', 'all', 'postbymail_annotate_event_notifications', 0);
 	
 	
 	// Add reply block to email
-	
-	elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
+	//elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
 	
 	// Ajout du bloc de réponse au contenu à tous les messages de notification
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'postbymail_add_to_notify_message_hook', 1000);
@@ -52,6 +52,7 @@ function postbymail_init() {
 	// Ajout pour les messages
 	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
+	
 	// Replace sender email by postbymail reply email - NOT RECOMMENDED !
 	/* @TODO : modifier le reply-to pour insérer +guid=XXXXX
 	 * Possible via le hooks sur les params de notification_messages ?
@@ -68,7 +69,89 @@ function postbymail_init() {
 }
 
 
+// Get postbymail config (from file or admin settings)
+function postbymail_get_config() {
+	
+	$settings_file = elgg_get_plugins_path() . 'postbymail/settings.php';
+	if (file_exists($settings_file)) { include_once($settings_file); }
+
+	// Use custom admin settings for settings that were not set in config file (no set = variable not defined, eg. can be empty)
+	
+	/* POP3/IMAP/NNTP server to connect to, with optional port. */
+	//$server = "localhost:143";
+	if (!isset($server)) { $server = elgg_get_plugin_setting('server', 'postbymail'); }
+
+	/* Protocol specification (optional) */
+	//$protocol = "/notls";
+	if (!isset($protocol)) { $protocol = elgg_get_plugin_setting('protocol', 'postbymail'); }
+
+	/* Name of the mailbox to open. */
+	// Boîte de réception = presque toujours INBOX mais on peut récupérer les messages d'un dossier particulier également..
+	if (!isset($mailbox)) { $mailbox = elgg_get_plugin_setting('inboxfolder', 'postbymail'); }
+
+	/* Mailbox username. */
+	if (!isset($username)) { $username = elgg_get_plugin_setting('username', 'postbymail'); }
+
+	/* Mailbox password. */
+	if (!isset($password)) { $password = elgg_get_plugin_setting('password', 'postbymail'); }
+	
+	/* Whether or not to mark retrieved messages as seen. */
+	if (!isset($markSeen)) { $markSeen = false; }
+	//if (empty($markSeen)) $markSeen = elgg_get_plugin_setting('markSeen', 'postbymail');
+
+	/* If the message body is longer than this number of bytes, it will be trimmed. Set to 0 for no limit. */
+	//$bodyMaxLength = 0; //$bodyMaxLength = 4096;
+	// This (65536) is actually default MySQL configuration for Elgg's description fields
+	// (set appropriate field to longtext in your database if you want to ovveride that limit)
+	if (!isset($bodyMaxLength)) { $bodyMaxLength = 65536; }
+	//if (empty($bodyMaxLength)) $bodyMaxLength = elgg_get_plugin_setting('bodymaxlength', 'postbymail');
+
+	// Séparateurs du message
+	if (!isset($separator)) { $separator = elgg_get_plugin_setting('separator', 'postbymail'); }
+	// Force a default separator, just because we need it
+	if (empty($separator)) { $separator = elgg_echo('postbymail:default:separator'); }
+	
+	// Set up the parameters for the MimeDecode object.
+	if (!isset($mimeParams)) {
+		$mimeParams = array(
+				'decode_headers' => true,
+				'crlf' => "\r\n",
+				'include_bodies' => true,
+				'decode_bodies' => true,
+			);
+	}
+	
+	// Return full config
+	return array(
+			'server' => $server,
+			'protocol' => $protocol,
+			'mailbox' => $mailbox,
+			'username' => $username,
+			'password' => $password,
+			'markSeen' => $markSeen,
+			'bodyMaxLength' => $bodyMaxLength,
+			'separator' => $separator,
+			'mimeParams' => $mimeParams,
+		);
+}
+
+
+// Check required parameters : returns true if OK, false is missing mandatory
+function postbymail_check_required($config = false) {
+	if (!$config) {
+		$config = postbymail_get_config();
+	}
+	// Stop process if missing required parameters for mailbox connection
+	if (empty($config['server']) || empty($config['username']) || empty($config['password'])) {
+		return false;
+	}
+	return true;
+}
+
+
 function postbymail_pagehandler($page) {
+	// Required for simulation purpose (can be called and displayed by an admin, and we need it to behave exactly the same as when launched by a cron task)
+	elgg_set_context('cron');
 	if (include elgg_get_plugins_path() . 'postbymail/pages/checkandpost.php') { return true; }
 	return false;
 }
@@ -141,7 +224,7 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 	$to_entity = $params['to_entity'];
 	$method = $params['method'];
 
-	if (($entity instanceof ElggEntity) && ($entity->getSubtype() == 'groupforumtopic')) {
+	if (elgg_instanceof($entity, 'groupforumtopic')) {
 		$descr = $entity->description;
 		$title = $entity->title;
 		$url = $entity->getURL();
@@ -189,18 +272,31 @@ function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnv
 // Ce hook ajoute le bloc de notification aux messages de tous types
 // Prend en charge : object, annotation
 function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
+	
+	// Skip if missing required parameters
+	if (!postbymail_check_required()) {
+		return $returnvalue;
+	}
+	
 	global $postbymail_guid;
 	$entity = $params['entity'];
 	$annotation = $params['annotation'];
 	//$to_entity = $params['to_entity'];
 	//$method = $params['method'];
 	//error_log("DEBUG POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
+
 	
+	// Add instructions to object notifications
 	if (elgg_instanceof($entity, 'object')) {
+		// The Wire specific notice : 140 chars limit
+		if (elgg_instanceof($entity, 'object', 'thewire')) {
+			$returnvalue = elgg_echo('postbymail:thewire:charlimitnotice') . $returnvalue;
+		}
 		// Note : all new content and comments use this, and also the messages
 		if (empty($postbymail_guid)) { $postbymail_guid = $entity->guid; }
 		$returnvalue = postbymail_add_to_message($returnvalue);
-		
+	
+	// Add instructions to annotations (forum replies)
 	} else if ($annotation instanceof ElggAnnotation) {
 		// Only forum replies should use this
 		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
@@ -210,7 +306,8 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 			$postbymail_guid = $annotation->entity_guid;
 		}
 		$returnvalue = postbymail_add_to_message($returnvalue);
-		
+	
+	// Other cases
 	} else {
 		// On ne peut ajouter le lien que si on a l'info sur l'entité concernée...
 		if (!empty($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }

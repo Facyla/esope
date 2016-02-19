@@ -71,7 +71,7 @@ $sidebar .= '<h2>' . elgg_echo('feedback'). '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
 foreach ($status_values as $status) {
 	$selected = '';
-	if ( (($status == 'total') && ((full_url() == $base_url) || ($status_filter == 'total'))) || (full_url() == $base_url . "status/$status") ) {
+	if ( (($status == 'total') && ((current_page_url() == $base_url) || ($status_filter == 'total'))) || (current_page_url() == $base_url . "status/$status") ) {
 		$selected = ' class="elgg-state-selected"';
 	}
 	if ($$status > 1) {

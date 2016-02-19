@@ -5,13 +5,13 @@
 * @package theme_inria
 **/
 
-$english = array(
+return array(
 	'theme_inria:topbar:me' => "Me",
 	'theme_inria:topbar:usergroups' => 'My&nbsp;groups',
 	'theme_inria:topbar:userfriends' => "My&nbsp;contacts",
 	'theme_inria:topbar:dashboard' => "My&nbsp;activities",
 	'theme_inria:topbar:profil' => "My profile",
-	'theme_inria:site:activity' => "Latest activities",
+	'theme_inria:site:activity' => "On the move in Iris ...",
 	'theme_inria:topbar:explorer' => "Explore",
 	'theme_inria:topbar:all' => "All",
 	'theme_inria:topbar:home' => "Home",
@@ -30,6 +30,13 @@ $english = array(
 	'theme_inria:home:edito' => "Headline",
 	'theme_inria:friends' => "Friends",
 	'theme_inria:friends:collections' => "Friends collections",
+	'theme_inria:thewire:tooltip' => "Click this link to see all messages on the Wire",
+	'theme_inria:site:activity:tooltip' => "Click this link to see all activities on Iris",
+	'theme_inria:groups:featured:tooltip' => "Click this link to see all featured groups on Iris",
+	'theme_inria:groups:newest' => "New groups",
+	'theme_inria:groups:newest:tooltip' => "Click this link to see all recently created groups on Iris",
+	'theme_inria:members:online:tooltip' => "Click this link to see all online members on Iris right now",
+	'theme_inria:members:newest:tooltip' => "Click this link to see all new members registered on Iris recently",
 	
 	// Tools widget
 	'theme_inria:topbar:collaborative' => "My tools",
@@ -134,13 +141,17 @@ $english = array(
 	'adf_platform:directory' => 'Members',
 	
 	'inria:mygroups' => "All my groups",
+	'theme_inria:groups:discover' => "Groups to be discovered",
 	'inria:mygroups:title' => "My groups",
 	'theme_inria:firststeps:hide' => "Don't show anymore",
 	'theme_inria:firststeps:show' => "Show",
 	'theme_inria:thewire:charleft' => "left",
 	'theme_inria:thewire:access' => "Access : ",
-	'theme_inria:thewire:title' => "Inria the Wire",
+	'theme_inria:thewire:title' => "Your news in 140 characters",
 	'theme_inria:thewire:details' => "Any message or information to share ?",
+	'theme_inria:thewire:placeholder' => "140 chars to write your message to everybody",
+	'theme_inria:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages to the group",
+	'theme_inria:thewire:group:placeholder' => "140 chars for your message to the group members",
 	'theme_inria:widgets:add:home' => "Edit my dashboard",
 	'theme_inria:widgets:add:profile' => "Edit my profile page",
 	
@@ -377,10 +388,6 @@ Here is the new profile page : %s
 	
 	// Groups invites
 	'userpicker:only_friends' => "Display friends only",
-	'theme_inria:groupinvite:standard' => "Method 1: Personal invitations",
-	'theme_inria:groupinvite:search' => "Method 2: Search members to invite",
-	'theme_inria:groupinvite:search:select' => "Step 1: search using available criteria",
-	'theme_inria:groupinvite:search:invite' => "Step 2: select the members to invite or register",
 	
 	
 	
@@ -393,9 +400,17 @@ Here is the new profile page : %s
 	
 	'adf_platform:groups:allowregister' => "Force group registration",
 	
-	'esope:fulltextsearch' => "Search by name or first name",
+	'esope:fulltextsearch' => "Full text search",
+	'esope:fulltextsearch:user' => "Search by name or first name",
+	'esope:fulltextsearch:group' => "Group search",
+	
+	'river:all' => "On the move in Iris ...",
+	'thewire:everyone' => "Your news in 140 characters",
+	
+	'theme_inria:postbymail:nousersettings' => "Setting removed - Only Inria email addresses are allowed to post by email on the site.",
+	
+	'theme_inria:homeslider:select' => "Choose which slider to display",
+	'theme_inria:homeslider:edit' => "Edit this slider",
 	
 );
-
-add_translation("en",$english);
 

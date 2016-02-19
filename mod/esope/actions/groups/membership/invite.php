@@ -8,6 +8,8 @@
 $logged_in_user = elgg_get_logged_in_user_entity();
 
 $user_guids = get_input('user_guid');
+// Note : use alternate input name, as the userpicker method only accepts 'members[]' (if view + JS not rewritten)
+if (empty($user_guids)) $user_guids = get_input('members');
 if (!is_array($user_guids)) {
 	$user_guids = array($user_guids);
 }
@@ -43,12 +45,14 @@ if (count($user_guids) > 0 && elgg_instanceof($group, 'group') && $group->canEdi
 
 			if (check_entity_relationship($user->guid, 'member', $group->guid)) {
 				// @todo add error message
+				register_error($user->name . ' - ' . elgg_echo("groups:alreadymember"));
 				continue;
 			}
 			
 			// Create relationship
 			add_entity_relationship($group->guid, 'invited', $user->guid);
 
+			// Send notification
 			$url = elgg_normalize_url("groups/invitations/$user->username");
 
 			$subject = elgg_echo('groups:invite:subject', array(

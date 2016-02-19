@@ -6,6 +6,8 @@
  * @subpackage UI
  */
 
+$url = elgg_get_site_url();
+
 // ESOPE : configurable colors
 $css = elgg_extract('theme-config-css', $vars);
 $titlecolor = $css['titlecolor'];
@@ -14,8 +16,8 @@ $linkcolor = $css['linkcolor'];
 $backgroundcolor = $css['backgroundcolor'];
 $backgroundimg = $css['backgroundimg'];
 $linkhovercolor = $css['linkhovercolor'];
-$urlfonts = $vars['url'] . 'mod/esope/fonts/';
-$urlicon = $vars['url'] . 'mod/esope/img/theme/';
+$urlfonts = $url . 'mod/esope/fonts/';
+$urlicon = $url . 'mod/esope/img/theme/';
 $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
@@ -27,7 +29,12 @@ $font4 = $css['font4'];
 $font5 = $css['font5'];
 $font6 = $css['font6'];
 ?>
-/* Thème ESOPE Fonts */
+
+/********************/
+/* ESOPE Typography */
+/********************/
+
+/* ESOPE Fonts */
 
 /* Use free, open fonts
  * Gill Sans => Puritan ou Lato (Book 400) ou Cabin
@@ -110,7 +117,7 @@ html {
 	/* font-family: <?php echo $font4; ?>; */
 }
 body {
-	font-size: 90%;
+	font-size: 0.9rem;
 	font-family:  <?php echo $font4; ?>;
 	color: <?php echo $textcolor; ?>;
 /* Supprimé du thème ADF - ou à forcer avec d'autres valeurs
@@ -132,11 +139,8 @@ a:focus,
 a:active,
 a.selected { <?php //@todo remove .selected ?>
 	color: <?php echo $linkhovercolor; ?>;
-	/* text-decoration: underline; */
+	text-decoration: underline;
 }
-a:hover, 
-a:focus, 
-a:active { text-decoration: underline; }
 
 p {
 	margin-bottom: 15px;
@@ -159,6 +163,7 @@ pre, code {
 
 	white-space: pre-wrap;
 	word-wrap: break-word; /* IE 5.5-7 */
+	word-break:break-all;
 	
 }
 
@@ -191,11 +196,28 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 { font-size: 1.8em; }
-h2 { font-size: 1.5em; line-height: 1.1em; padding-bottom:5px; }
-h3 { font-size: 1.3em; padding-bottom:4px; }
-h4 { font-size: 1.1em; padding-bottom:3px; }
-h5 { font-size: 1.0em; padding-bottom:2px; }
-h6 { font-size: 0.9em; padding-bottom:1px; }
+h2 { font-size: 1.35em; line-height: 1.1em; padding-bottom:5px; }
+h3 { font-size: 1.17em; padding-bottom:4px; }
+h4 { font-size: 0.99em; padding-bottom:3px; }
+h5 { font-size: 0.9em; padding-bottom:2px; }
+h6 { font-size: 0.81em; padding-bottom:1px; }
+
+/* Sub and sup CSS style - from https://gist.github.com/unruthless/413930 */
+sub, sup {
+	/* Specified in % so that the sup/sup is the right size relative to the surrounding text */
+	font-size: 0.75em;
+	/* Zero out the line-height so that it doesn't interfere with the positioning that follows */
+	line-height: 0;
+	/* Where the magic happens: makes all browsers position the sup/sup properly, relative to the surrounding text */
+	position: relative;
+	/* Note that if you're using Eric Meyer's reset.css, this is already set and you can remove this rule */
+	vertical-align: baseline;
+}
+/* Move the superscripted text up */
+sup { top: -0.5em; }
+/* Move the subscripted text down, but only half as far down as the superscript moved up */
+sub { bottom: -0.25em; }
+
 
 .elgg-heading-site, 
 .elgg-heading-site:hover, 
@@ -210,6 +232,10 @@ h6 { font-size: 0.9em; padding-bottom:1px; }
 	text-decoration: none;
 }
 
+.elgg-heading-site:hover,
+.elgg-heading-site:focus {
+	text-shadow: 1px 2px 8px #000;
+}
 
 .elgg-heading-main {
 	/*
@@ -226,7 +252,7 @@ h6 { font-size: 0.9em; padding-bottom:1px; }
 
 .elgg-subtext {
 	color: #666666;
-	font-size: 85%;
+	font-size: 0.75rem;
 	line-height: 1.2em;
 	font-style: italic;
 }
@@ -278,3 +304,4 @@ h6 { font-size: 0.9em; padding-bottom:1px; }
 	max-width: 100%;
 	height: auto;
 }
+

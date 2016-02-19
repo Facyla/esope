@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin_manifest>
-  <field key="author" value="Facyla" />
-  <field key="version" value="0.3.1 (1.8)" />
-  <field key="description" value="Export embed code" />
-  <field key="website" value="http://id.facyla.net/" />
-  <field key="copyright" value="(C) Facyla 2012-2013" />
-  <field key="licence" value="GNU Public License version 2" />
-  <field key="elgg_version" value="2009030702" />
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Export embed</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>1.12</version>
+	<blurb>Provides export API to embed content on external websites</blurb>
+	<description>Vous devriez activer ce plugin si vous avez besoin d'embarquer des éléments de contenus de votre site sur un autre site.</description>
+	<website>http://facyla.fr/</website>
+	<copyright>(c) Florian DANIEL aka Facyla 2012-2016</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.12</version>
+	</requires>
+	
+	<screenshot>
+		<description>An example screenshot</description>
+		<path>graphics/screenshot.png</path>
+	</screenshot>
+
+	<category>export</category>
+	<category>embed</category>
+	<category>content</category>
+	
+	<activate_on_install>false</activate_on_install>
+	
 </plugin_manifest>
+
 
 <!-- 
 ======================
