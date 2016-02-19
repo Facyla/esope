@@ -27,7 +27,8 @@ foreach ($articles as $ent) {
 	$image = '<img src="' . $image_url . '" style="height:250px; width:auto !important;" />';
 	$text = $ent->excerpt;
 	if (empty($text)) $text = $ent->briefdescription;
-	$text .= $ent->description;
+	if (empty($text)) $text = elgg_get_excerpt($ent->description, 200);
+	$text =  htmlspecialchars(html_entity_decode(strip_tags($text)));
 	$excerpt = elgg_get_excerpt($text, 200);
 	$slidercontent .= '<li>';
 	$slidercontent .= '<div class=""><table style="width: 100%;" style="border:0;"><tbody><tr>';

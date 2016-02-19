@@ -6,7 +6,7 @@
  * 
  * This plugin allows users to reply by email to a forum thread, or to any publication in an Elgg site, or even post new content
  *
- * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionanally within code) for instructions
+ * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionnally within code) for instructions
  * 
 */
 

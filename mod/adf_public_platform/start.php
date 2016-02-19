@@ -865,6 +865,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 	/* Renvoie le nom du profil en clair, ou false si aucun trouvé/valide */
 	function esope_get_user_profile_type($user = false) {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profile_type = false;
 		// Type de profil
@@ -873,16 +874,21 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$profile_type = strtolower($type->metadata_name);
 			}
 		}
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
 	function esope_set_user_profile_type($user = false, $profiletype = '') {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profiletype_guid = null;
 		if (!empty($profiletype)) {
 			$profiletype_guid = esope_get_profiletype_guid($profiletype);
 		}
-		$user->custom_profile_type = $profiletype_guid;
+		// Manually set the profile type to control the access_id (must not be -1)
+		//$user->custom_profile_type = $profiletype_guid;
+		create_metadata($user->guid, 'custom_profile_type', $profiletype_guid, 'text', $user->guid, 2, false);
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	

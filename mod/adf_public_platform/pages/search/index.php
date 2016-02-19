@@ -67,12 +67,13 @@ if (!$query) {
 
 // get limit and offset.  override if on search dashboard, where only 2
 // of each most recent entity types will be shown.
-$offset = get_input('offset', 0);
-if (($search_type == 'all') || (($search_type == 'entities') && empty($entity_subtype))) {
-	$limit = get_input('limit', 2);
+if ($search_type == 'all') {
+	$limit = 2;
+	$offset = 0;
 	$pagination = false;
 } else {
-	$limit = get_input('limit', 10);
+	$limit = get_input('limit',10);
+	$offset = get_input('offset', 0);
 	$pagination = true;
 }
 

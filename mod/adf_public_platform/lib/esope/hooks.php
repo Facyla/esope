@@ -76,10 +76,10 @@ function adf_platform_route($hook, $type, $return, $params) {
 	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
-	 * return $params; // Laisse le fonctionnement habituel se poursuivre
+	 * return $return; // Laisse le fonctionnement habituel se poursuivre
 	*/
 	// Par défaut on ne fait rien du tout
-	return $params;
+	return $return;
 }
 
 function adf_platform_public_profile_hook($hook, $type, $return, $params){
