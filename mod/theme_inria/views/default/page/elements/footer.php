@@ -31,11 +31,10 @@ if (empty($footer)) {
 ?>
 
 <div class="footer-inria">
-	<div class="interne">
-		<!--
-		<a class="print-page" href="javascript:window.print();"><i class="fa fa-print"></i> <?php echo elgg_echo('theme_inria:print'); ?></a>
-		//-->
-		<?php echo $footer; ?><img class="footer-logo-inria" src="<?php echo $imgurl; ?>logo-inria.png">
-	</div>
+	<!--
+	<a class="print-page" href="javascript:window.print();"><i class="fa fa-print"></i> <?php echo elgg_echo('theme_inria:print'); ?></a>
+	//-->
+	<?php echo $footer; ?>
+	<img class="footer-logo-inria" src="<?php echo $imgurl; ?>logo-inria.png">
 </div>
 

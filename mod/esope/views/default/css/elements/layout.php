@@ -25,6 +25,10 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+
+$fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
+if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+
 ?>
 /* <style> /**/
 
@@ -183,4 +187,27 @@ $color12 = $css['color12']; // #DEDEDE
 	color: #666;
 }
 
+
+
+
+<?php if (!$fixedwidth) { ?>
+
+
+@media (max-width:980px) {
+	
+	
+}
+
+
+@media (max-width:700px) {
+	
+	.elgg-page-default .elgg-page-header > .elgg-inner { padding: 0 0.5em; }
+	.elgg-page-default #transverse > .elgg-inner { padding: 0 0.5em; }
+	
+	.elgg-page #transverse { display:block; }
+	
+}
+
+
+<?php } ?>
 

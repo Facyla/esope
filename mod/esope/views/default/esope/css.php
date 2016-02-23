@@ -227,9 +227,10 @@ input:focus, textarea:focus { outline:0; }
 }
 .elgg-page-footer li { float: left; margin-right: 1em; }
 /*
+.elgg-page-footer ul li { background: transparent url("<?php echo $url; ?>mod/esope/img/theme/puce-footer.png") left 7px no-repeat scroll; }
 .elgg-page-footer ul li:first-child { background: none; }
 */
-.elgg-page-footer ul li a { color: #fff; font-size: 0.7em; }
+.elgg-page-footer ul li a { color: #fff; font-size: 0.8rem; }
 .elgg-page-footer ul li a:hover, .elgg-page-footer ul li a:focus, .elgg-page-footer ul li a:active { color: #ddd; }
 .elgg-page-footer img { float: right; }
 .elgg-page-default .elgg-page-footer > .elgg-inner { border:0; }
@@ -725,7 +726,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	
 	/* Footer */
 	.elgg-page-footer { padding: 0 0.5em; }
-	.elgg-page-footer li { float: left; margin: 0; width: 100%; padding: 0.1em 0; }
+	.elgg-page-footer img { float: none; }
 	
 	/* Generic rules */
 	body { font-size:120%; }
@@ -766,6 +767,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	#site-footer ul li { clear: both; width: 100%; margin: 0 !important; background: none; font-size: 1rem; padding-left:0; }
 	#site-footer ul li a { padding: 1ex 1ex; display: inline-block; font-size: 120%; }
 	div.credits p { float:none !important; }
+	
 	
 	
 }

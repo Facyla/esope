@@ -161,8 +161,10 @@
 
 
 @media (max-width:700px) {
-	#feedbackWrapper { position: initial; }
-	#feedBackToggler { position: initial; transform: rotate(90deg); transform-origin: bottom right; }
+	#feedbackWrapper { position: initial; margin-top: 12px; }
+	#feedBackToggler { position: initial; transform: rotate(90deg); margin-left: 70px; transform-origin: bottom right; height: 30px;  }
+	#feedBackContentWrapper { background: white; left:0; }
+	#feedBackContent { width: auto; max-width: 94%; margin-top: 1rem; }
 
 }
 

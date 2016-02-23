@@ -220,7 +220,7 @@ input.button {
 
 
 /* ESOPE : Formulaire de recherche principal */
-#transverse form, header form {
+.elgg-page-header form, #transverse form {
 	float: right;
 	border: 2px solid <?php echo $color1; ?>;
 	border-radius: 10px;
@@ -232,7 +232,7 @@ input.button {
 	-moz-box-shadow: 0 0 2px #999999 inset;
 	-webkit-box-shadow: 0 0 2px #999999 inset;
 	height: 27px;
-	margin-top: 6px;
+	margin: 6px 0;
 }
 form input#esope-search-input {
 	border: 0 none;

@@ -931,7 +931,7 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 	.elgg-menu-topbar * { min-width:0; }
 	.elgg-menu-topbar.menu-enabled { display:block; }
 	.elgg-page-header .elgg-menu-topbar { float:none; width:100%; position:initial; font-size:1rem; padding: 0; margin: 0; }
-	.elgg-page-header .elgg-menu-topbar li { padding: 0 0.3em; }
+	.elgg-page-header .elgg-menu-topbar li { padding: 0; float: none; }
 	.elgg-page-header .elgg-menu-topbar li a { padding: 0 0.5em; }
 	.elgg-page-header .elgg-menu-topbar li, .elgg-page-header .elgg-menu-topbar li li { width:100%; margin-left:0; font-size:100%; line-height: 2; border-right:0; border-top: 1px solid #FFF; border-top: 1px solid #ccc; }
 	#menu-topbar.elgg-menu-topbar #user img { float: none; margin-right: 0; }
@@ -963,11 +963,15 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 	.elgg-sidebar { display:none; }
 	.elgg-sidebar * { min-width:0; }
 	.elgg-sidebar.menu-enabled { display:block; }
-	
 	.elgg-page .elgg-layout .elgg-sidebar { background: none !important; box-shadow: none !important; }
-	
 	.menu-sidebar-toggle { display:inline-block; text-align: center; padding: 0.3em; }
-		
+	
+	/* Footer menu */
+	.elgg-page .elgg-page-footer ul { width: 100%; max-width: none; max-width: 100%; }
+	.elgg-page .elgg-page-footer ul li { margin: 0; padding: 0; float:none; width: 100%; }
+	.elgg-page .elgg-page-footer ul li a { margin: 0; padding: 0.5rem 0; display: inline-block; width: 100%; }
+	
+	
 }
 
 

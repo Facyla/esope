@@ -1001,6 +1001,8 @@ return array(
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
 	
+	'dashboard:widget:group:noselect' => "Aucun groupe sélectionné",
+	
 	
 	/* Other interface */
 	'select:all' => 'Tout sélectionner',

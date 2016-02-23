@@ -185,7 +185,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 
 
 /* Footer */
-footer.footer-inria {
+.elgg-page .elgg-page-footer {
 	background: #6d2d4f;
 	background: -moz-linear-gradient(top, #bf8279 0%, #6d2d4f 75%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bf8279), color-stop(75%,#6d2d4f));
@@ -195,7 +195,10 @@ footer.footer-inria {
 	background: linear-gradient(to bottom, #bf8279 0%,#6d2d4f 75%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8279', endColorstr='#6d2d4f',GradientType=0 );
 }
-.footer-logo-inria { margin-top: 12px; }
+.elgg-page .elgg-page-footer .elgg-inner { padding: 0; }
+.elgg-page-footer ul { margin: 0 auto; max-width: 500px; }
+.elgg-page-footer ul li { padding-left: 13px; margin: 26px 7px 10px 0; background: transparent url("<?php echo $url; ?>mod/esope/img/theme/puce-footer.png") left 7px no-repeat scroll; color: #fff; }
+.footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
 .elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 0.81rem; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
@@ -432,6 +435,12 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 #profile_manager_profile_edit_tabs { clear:left; }
 
+
+
+
+@media (max-width:700px) {
+	.footer-logo-inria { margin: 12px 0; }
+}
 
 
 
