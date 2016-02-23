@@ -67,7 +67,7 @@ if (elgg_is_active_plugin('language_selector')) {
 	// TOPBAR MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
 		?>
-		<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+		<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
 			<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" id="esope-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
 			<li id="msg">

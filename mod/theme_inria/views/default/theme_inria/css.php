@@ -140,7 +140,7 @@ section { background:white; }
 
 /* Search */
 input:focus, textarea:focus { background: #FFFAF0; }
-.elgg-page-header form, #transverse form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
+.elgg-page-header form, #transverse form { /* float: right; */ border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
 #transverse form input#esope-search-input { height: 27px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
 #transverse form input#esope-search-input:active, #transverse form input#esope-search-input:focus { color: #EF783E; }
 #transverse form input#esope-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
