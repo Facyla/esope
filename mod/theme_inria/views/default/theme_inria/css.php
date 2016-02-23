@@ -117,7 +117,7 @@ body { border-top:0; background:white; /* font-size:0.75rem; */ }
 section { background:white; }
 .elgg-page-header { background: #6F2D50 !important; border-top: 0; height:auto !important; }
 .elgg-page-header .elgg-inner h1 { margin: 0; padding:0; font-size:1rem; }
-.elgg-menu-topbar { position:absolute; top: 27px; right:5px; }
+.elgg-menu-topbar { position:absolute; top: 27px; right:5px; margin-left: 140px; }
 .elgg-menu-topbar #user img { float: left; margin-right: 6px; }
 .elgg-menu-topbar li a { font-size:0.75rem; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
@@ -325,10 +325,10 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 	GROUP FILTER MENU
 *************************************** */
 .group-top-menu { width: 100%; margin-bottom: 5px; border-bottom: 2px solid #CCC; }
-.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; }
+.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; min-width: 30%; }
 
 /* Left (filter) menu */
-.elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 0 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
+.elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 3px 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
 .elgg-menu-group-filter > li:hover, 
 .elgg-menu-group-filter > li:focus, 
 .elgg-menu-group-filter > li:active { background: transparent; }
@@ -347,7 +347,7 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this { display: none !important; }
 
 /* Modify title menu action buttons */
-.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 0.75rem; border-radius: 5px 5px 0 0; }
+.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 0.75rem; border-radius: 5px 5px 0 0; margin: 3px 0 0 4px; }
 .elgg-menu-group-filter-alt > li a.elgg-button.elgg-button-action { height:18px; color: white; background: initial; padding: 3px 10px 0; font-family: <?php echo $font2; ?>; font-size: 0.75rem; border: 2px solid transparent; border-bottom: 0; }
 .elgg-menu-group-filter-alt > li:hover, .elgg-menu-group-filter-alt > li:focus, .elgg-menu-group-filter-alt > li:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
 .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:hover, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:focus, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:active { background: <?php echo $color8; ?>; }
@@ -437,8 +437,14 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 
 
+@media (max-width:980px) {
+	.elgg-menu-topbar { position:absolute; top: 11px; right:5px; margin-left: 140px; }
+	.menu-topbar-toggle { color: white; }
+	
+}
 
 @media (max-width:700px) {
+	.elgg-menu-topbar { margin-left: 0; }
 	.footer-logo-inria { margin: 12px 0; }
 }
 
