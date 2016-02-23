@@ -219,7 +219,7 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 	.elgg-page #transverse { display:block; }
 	
 	/* Layout */
-	header, #transverse, section, .elgg-page-footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; display: inline-block; max-width: 100%; }
+	header, #transverse, section, .elgg-page-footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; /* display: inline-block; */ max-width: 100%; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
 	.elgg-page-walledgarden { padding: 0; }
