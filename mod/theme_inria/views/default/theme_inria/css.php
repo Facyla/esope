@@ -283,9 +283,9 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 /* Anciens groupes */
 .inria-group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex;; margin: 1ex 0; text-align:center; }
 .group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
-.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 0.375rem; padding: 2px 0px; }
-.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 0.5rem; padding: 3px 1px; }
-.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.625rem; padding: 3px 1px; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.375rem; margin:0; padding: 0px 0px; text-transform: lowercase; }
+.group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.625rem; padding: 2px 1px; }
 
 
 /* Messages */
