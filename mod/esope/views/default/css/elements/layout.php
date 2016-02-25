@@ -27,7 +27,11 @@ $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
 
 $fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
-if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+if ($fixedwidth != 'yes') { $fixedwidth = false; } else { $fixedwidth = true; }
+
+// Main width (on desktop screen)
+$main_width = "990px";
+$main_maxwidth = "990px";
 
 ?>
 /* <style> /**/
@@ -46,20 +50,33 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 	min-width: 800px;
 }
 .elgg-page-default .elgg-page-header > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	/* height: 90px; */
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 }
 .elgg-page-default .elgg-page-footer > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	padding: 5px 0;
 	border-top: 1px solid #DEDEDE;
 }
+
+/* BLOC DU CONTENU PRINCIPAL - MAIN CONTENT */
+#page_container {
+	width:<?php echo $main_width; ?>; margin:0px auto; background:#fff; min-height: 100%;
+	-moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
+}
+
+/* Largeur de page standard */
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+	max-width: <?php echo $main_maxwidth; ?>;
+	margin: 0 auto;
+}
+
 
 /***** TOPBAR ******/
 .elgg-page-topbar {

@@ -119,12 +119,12 @@ $font6 = $css['font6'];
 	padding: 4px 0 5px 0px;
 }
 .elgg-module-info > .elgg-body {
-	padding:7px 10px 0;
+	/* padding:7px 10px 0; */
+	padding:5px;
 	/* background: white url("<?php echo $urlicon; ?>bottom-module.png") 50% bottom no-repeat scroll; */
 	background:white; /* Pour masquer ombrage si largeur supérieure */
-	border-bottom: 1px solid #CCCCCC;
-	border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
+	border: 1px solid <?php echo $color3; ?>;
+	border-top: 0;
 }
 
 
@@ -174,7 +174,7 @@ $font6 = $css['font6'];
 	color: white;
 }
 .elgg-module-featured > .elgg-body {
-	padding: 10px;
+	padding: 5px;
 }
 
 /* ***************************************
@@ -516,7 +516,6 @@ div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
 .elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.8rem; }
 .groups-widget-viewall { margin:10px 6px 0 0; }
 .elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 0.75rem; }
-.elgg-module-info > .elgg-body { padding: 7px 0 0; }
 .elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
 .elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }
 .elgg-module-info .elgg-river { border-top: 0 none; }

@@ -57,7 +57,30 @@ $module_bg_color = $color2;
 // Force settings
 $module_title_color = '#6D2C4F';
 $module_bg_color = '#F8F4F5';
+
+// Main width (on desktop screen)
+$main_width = "80%";
+$main_maxwidth = "80%";
+
 ?>
+/* <style> /**/
+
+
+/* Main width */
+.elgg-page-default {
+	/* min-width: 800px; */
+}
+.elgg-page-default .elgg-page-header > .elgg-inner, 
+.elgg-page-default .elgg-page-body > .elgg-inner, 
+.elgg-page-default .elgg-page-footer > .elgg-inner, 
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+	max-width: <?php echo $main_maxwidth; ?>;
+}
+#page_container {
+	width:<?php echo $main_width; ?>;
+}
+
+
 
 /* Change Elgg sprites image */
 /*

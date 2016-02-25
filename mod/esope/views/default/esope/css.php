@@ -172,13 +172,6 @@ input:focus, textarea:focus { outline:0; }
 .elgg-page-header, .elgg-page-body .intro { color: <?php echo $textcolor; ?>; }
 
 
-/* Largeur de page standard */
-.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
-	max-width: 990px;
-	margin: 0 auto;
-}
-
-
 
 
 /* Pour tous les éléments du menu : .elgg-menu-owner-block .elgg-menu-item-NOM_SUBTYPE */
@@ -251,12 +244,6 @@ input:focus, textarea:focus { outline:0; }
 .elgg-page-footer .credits a { color: #DEDEDE; text-decoration:underline; }
 
 
-
-/* BLOC DU CONTENU PRINCIPAL - MAIN CONTENT */
-#page_container {
-	width:990px; margin:0px auto; background:#fff; min-height: 100%;
-	-moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
-}
 
 
 
@@ -425,8 +412,10 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 	padding: 6px 10px 4px;
 	text-transform: uppercase;
 }
-
 .elgg-sidebar #site-categories ul li a { padding: 6px 10px 5px; }
+
+#feedbackDisplay a { color: <?php echo $linkcolor; ?>; }
+#feedbackDisplay a:hover, #feedbackDisplay a:focus, #feedbackDisplay a:active { color: <?php echo $linkhovercolor; ?>; }
 
 
 
