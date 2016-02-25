@@ -139,8 +139,8 @@ return array(
 	
 	// Overrides plugins translations
 	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
-  'river:comment:object:announcement' => "%s has commented %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
+	'river:comment:object:announcement' => "%s has commented %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
 	
 	'widget:toggle' => "Show/hide %s module",
 	'widget:editmodule' => "Configure %s module",
@@ -1046,6 +1046,13 @@ To view %s's profile, click here:
 %s
 
 This is an automated notification, please do not reply to this email.",
+	
+	// Logbrowser
+	'logbrowser:user_guid' => "or user GUID",
+	'logbrowser:entity_type' => "Entity type",
+	'logbrowser:entity_subtype' => "Entity subtype",
+	'logbrowser:object_guid' => "Entity GUID",
+	'logbrowser:event' => "Event",
 	
 );
 

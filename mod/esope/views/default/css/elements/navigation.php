@@ -883,15 +883,15 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 }
 
 .elgg-menu-widget > .elgg-menu-item-collapse {
-	left: 5px;
+	/* left: 5px; */
 }
 .elgg-menu-widget > .elgg-menu-item-delete {
-	right: 8px;
+	/* right: 8px; */
 }
 .elgg-menu-widget > .elgg-menu-item-settings {
-	right: 28px;
+	/* right: 28px; */
 }
-
+.elgg-menu-widget { width: auto; float: right; }
 
 
 

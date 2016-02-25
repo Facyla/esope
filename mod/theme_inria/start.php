@@ -140,8 +140,9 @@ function theme_inria_init(){
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	
 	// Modification des menus standards des widgets
-	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
-	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
+	// Note : plus utile car on utilise FA d'emblée
+	//elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
+	//elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);

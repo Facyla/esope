@@ -39,14 +39,18 @@ if (!empty($timeframe) && is_int($timeframe)) {
 			$timeframe =  $time - (180 * 24 * 60 * 60); // 6 months
 	}
 }
-$latest_river = elgg_get_river(array(
-		'limit' => 1,
-		'joins' => array("JOIN {$dbprefix}entities e1 ON e1.guid = rv.object_guid"),
-		'wheres' => array(
-						"(e1.container_guid = {$group->guid})",
-				//"rv.posted <= $timeframe",
-			),
-	));
+
+// Note : besoin de vérifier car developpers utilise un ElggGroup non enregistré
+if ($group->guid) {
+	$latest_river = elgg_get_river(array(
+			'limit' => 1,
+			'joins' => array("JOIN {$dbprefix}entities e1 ON e1.guid = rv.object_guid"),
+			'wheres' => array(
+							"(e1.container_guid = {$group->guid})",
+					//"rv.posted <= $timeframe",
+				),
+		));
+}
 
 // Ssi le groupe a déjà un certain temps d'existence
 if ($group->time_created < $timeframe) {

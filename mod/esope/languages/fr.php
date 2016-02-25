@@ -1068,6 +1068,12 @@ Pour voir le profil de %5\$s : %6\$s
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
 	
+	// Logbrowser
+	'logbrowser:user_guid' => "ou GUID de l'utilisateur",
+	'logbrowser:entity_type' => "Type d'entité",
+	'logbrowser:entity_subtype' => "Subtype",
+	'logbrowser:object_guid' => "GUID de l'entité",
+	'logbrowser:event' => "Evénement",
 	
 );
 

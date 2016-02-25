@@ -60,7 +60,10 @@ $module_bg_color = '#F8F4F5';
 ?>
 
 /* Change Elgg sprites image */
+/*
 .elgg-icon { background-image: url(<?php echo $imgurl; ?>elgg_sprites-iris.png); }
+*/
+.elgg-icon { background-image: none; }
 
 /* Add some fonts */
 @font-face {
@@ -281,11 +284,11 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .inria-subpages-menu { }
 
 /* Anciens groupes */
-.inria-group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex;; margin: 1ex 0; text-align:center; }
+.inria-group-oldactivity { border:1px dotted black; background:yellow; padding:0.5rem 0;; margin: 0 0; text-align:center; font-size: 1rem; }
 .group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
-.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.375rem; margin:0; padding: 0px 0px; text-transform: lowercase; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.4rem; margin:0; padding: 0px 0px; text-transform: lowercase; line-height: 1; }
 .group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 1px; }
-.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.625rem; padding: 2px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 2px 1px; }
 
 
 /* Messages */

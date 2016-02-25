@@ -526,7 +526,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 /* Alertes et messages d'erreur */
 .elgg-system-messages { max-width: 500px; position: absolute; left: 20px; top: 24px; z-index: 2000; background:transparent; }
 .elgg-message { box-shadow: 1px 2px 5px #000000; font-size: 120%; padding: 3px 10px; /* background:white; */ }
-.elgg-state-success { background-color: #00FF00; }
+.elgg-state-success { background-color: #00FF00; color: black; }
 
 /* Navigation archives des blogs */
 .blog-archives li { clear: left; font-weight: bold; padding: 0 0 4px 0; }
@@ -572,6 +572,9 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 */
 .au-subgroups-result-col { width: auto; }
 .au-subgroups-search-results { float:none; width: auto; }
+.au_subgroups_group_icon.au_subgroups_group_icon-small span.au_subgroup { padding: 1px 0; font-size: 0.5rem; line-height: 1; }
+.au_subgroups_group_icon.au_subgroups_group_icon-medium span.au_subgroup { padding: 3px 0; font-size: 0.9rem; }
+.au_subgroups_group_icon.au_subgroups_group_icon-large span.au_subgroup { padding: 0.5rem 0; font-size: 1rem; }
 
 
 /* Agencement fluide des blocs dans les groupes */
@@ -586,10 +589,10 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .groups-members-count { float: right; }
 
 /* Anciens groupes */
-.group-oldactivity { background:yellow; padding:3px 0; margin: 1em 0; display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
-.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.375rem; padding: 1px 0px; margin:0; }
-.group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 1px; }
-.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.625rem; padding: 3px 1px; }
+.group-oldactivity { background:yellow; padding: 0.5rem 0; margin: 0 0; display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; font-size: 1rem; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.4rem; padding: 1px 0; margin:0; line-height: 1; }
+.group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 0; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 3px 0; }
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 
