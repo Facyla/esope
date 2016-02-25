@@ -248,7 +248,7 @@ $font6 = $css['font6'];
 	cursor: move;
 }
 a.elgg-widget-collapse-button {
-	color: #c5c5c5;
+	/* color: #c5c5c5; */
 }
 a.elgg-widget-collapse-button:hover,
 a.elgg-widget-collapse-button:focus,
@@ -256,7 +256,7 @@ a.elgg-widget-collapse-button:active,
 a.elgg-widget-collapsed:hover, 
 a.elgg-widget-collapsed:focus, 
 a.elgg-widget-collapsed:active {
-	color: #9d9d9d;
+	/* color: #9d9d9d; */
 	text-decoration: none;
 }
 a.elgg-widget-collapse-button:before {
@@ -347,7 +347,8 @@ a.elgg-widget-collapsed:before {
 }
 
 
-/* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
+/* Suppression des styles du core, qui géraient les flèches en carac spéciaux => rendu obsolète par FA */
+/*
 a.elgg-widget-collapse-button,
 a.elgg-widget-collapse-button:hover,
 a.elgg-widget-collapse-button:focus,
@@ -359,9 +360,8 @@ a.elgg-widget-collapsed:active {
 }
 a.elgg-widget-collapse-button:before { content: ""; }
 a.elgg-widget-collapsed:before { content: ""; }
-/*
-a.elgg-widget-edit-button { right: 12px; }
 */
+
 
 div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
 .elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:0.9rem; }

@@ -151,7 +151,7 @@
 .closed_button { float:right; width: auto; padding: 4px; margin:12px 0 0 8px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
 
 .submitted-feedback .controls { float:right; }
-.submitted-feedback .controls a { margin-right:8px; margin-top:2px; }
+.submitted-feedback .controls > a, .submitted-feedback .controls > span { margin-right:8px; margin-top:2px; }
 
 .elgg-module-group-feedback { margin-top: 10px; }
 .elgg-module-group-feedback .elgg-body { margin: 0; padding: 0; }

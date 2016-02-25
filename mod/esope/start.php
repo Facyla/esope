@@ -178,9 +178,11 @@ function esope_init() {
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
 	
-	// Modification des menus standards des widgets
+	// Modification des menus standards des widgets : obsolète avec l'intégration de FontAwesome
+	/*
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
+	*/
 	
 	// Modification des menus des groupes
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');

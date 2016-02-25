@@ -284,7 +284,8 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	$widget_title = $widget->getTitle();
 	$collapse = array(
 			'name' => 'collapse',
-			'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:toggle', array($widget_title))) . '"><i class="fa fa-caret-square-o-down"></i></button>',
+			'text' => '<i class="fa fa-caret-square-o-down"></i>',
+			'title' => strip_tags(elgg_echo('widget:toggle', array($widget_title))),
 			'href' => "#elgg-widget-content-$widget->guid",
 			'link_class' => 'elgg-widget-collapse-button masquer',
 			'rel' => 'toggle',
@@ -295,8 +296,8 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 	if ($widget->canEdit()) {
 		$delete = array(
 				'name' => 'delete',
-				'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:delete', array($widget_title))) . '"><i class="fa fa-times"></i></button>',
-				'title' => elgg_echo('widget:delete', array($widget->getTitle())),
+				'text' => '<i class="fa fa-times"></i>',
+				'title' => strip_tags(elgg_echo('widget:delete', array($widget_title))),
 				'href' => "action/widgets/delete?widget_guid=" . $widget->guid,
 				'is_action' => true,
 				'link_class' => 'elgg-widget-delete-button suppr',
@@ -309,8 +310,8 @@ function esope_elgg_widget_menu_setup($hook, $type, $return, $params) {
 		if ($show_edit) {
 			$edit = array(
 					'name' => 'settings',
-					'text' => '<button aria-label="' . strip_tags(elgg_echo('widget:edit', array($widget_title))) . '"><i class="fa fa-gear"></i></button>',
-					'title' => elgg_echo('widget:edit'),
+					'text' => '<i class="fa fa-gear"></i>',
+					'title' => strip_tags(elgg_echo('widget:edit', array($widget_title))),
 					'href' => "#widget-edit-$widget->guid",
 					'link_class' => "elgg-widget-edit-button config",
 					'rel' => 'toggle',
