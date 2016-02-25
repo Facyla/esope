@@ -75,7 +75,7 @@ if (elgg_is_active_plugin('language_selector')) {
 				<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
 			</li>
 			<li id="man">
-				<a href="<?php echo $url . 'friends/' . $ownusername; ?>"><i class="fa fa-users users icon"></i><?php echo elgg_echo('friends'); ?></a>
+				<a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a>
 				<?php echo $friendrequests; ?>
 			</li>
 			<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
