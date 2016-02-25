@@ -97,7 +97,7 @@ $module_bg_color = '#F8F4F5';
 
 /* Slider */
 /* Limit slides content size */
-.iris-news { height: 300px; overflow:hidden; }
+.iris-news { height: auto; overflow:hidden; }
 .iris-news #slider1 img { max-height: 200px !important; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
