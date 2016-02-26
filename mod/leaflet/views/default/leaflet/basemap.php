@@ -5,8 +5,8 @@ leaflet_load_libraries();
 
 $id = leaflet_id('leaflet_basemap_'); // Ensure unicity (required because can be displayed several times on same page)
 $map_id = elgg_extract('map_id', $vars, 'leaflet-main-map');
-$width = elgg_extract('width', $vars, '100%;');
-$height = elgg_extract('height', $vars, '400px;');
+$width = elgg_extract('width', $vars, '100%');
+$height = elgg_extract('height', $vars, '400px');
 $map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
 
 ?>

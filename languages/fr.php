@@ -539,7 +539,7 @@ return array(
 	'admin:widget:admin_welcome:help' => "Une courte introduction à la zone d'administration de Elgg",
 	'admin:widget:admin_welcome:intro' => 'Bienvenue sur Elgg ! Vous êts actuellement sur le tableau de bord de l\'administration. Il vous permet de suivre ce qui se passe sur le site.',
 
-	'admin:widget:admin_welcome:admin_overview' => "La navigation dans l'administration se fait à l'aide du menu de droite. Il est organisé en 3 rubriques :
+	'admin:widget:admin_welcome:admin_overview' => "La navigation dans l'administration se fait à l'aide du menu de droite. Il est organisé en 3 sections :
 	<dl>
 		<dt>Administration</dt><dd>Les tâches quotidiennes comme le suivi du contenu signalé, l'aperçu des utilisateurs en ligne, l'affichage des statistiques...</dd>
 		<dt>Configuration</dt><dd>Les tâches occasionnelles comme le paramétrage du nom du site ou l'activation d'un plugin.</dd>
@@ -964,8 +964,9 @@ Un compte de membre vous a été créé sur %s. Pour vous connecter, rendez-vous
 %s
 
 Et connectez-vous avec les identifiants suivants :
- - Identifiant : %s
- - Mot de passe : %s
+
+Identifiant : %s
+Mot de passe : %s
 Vous pouvez également vous connecter avec votre e-mail au lieu de votre identifiant.
 
 Une fois que vous vous êtes connecté(e), nous vous conseillons de changer votre mot de passe.
@@ -1187,6 +1188,7 @@ Quelqu'un (à partir de l'adresse IP %s) a demandé un changement de mot de pass
 
 Si vous êtes à l'origine de cette demande, cliquez sur le lien ci-dessous pour confirmer votre demande.
 %s
+
 Sinon ignorez cet e-mail.
 ",
 

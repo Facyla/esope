@@ -1,3 +1,43 @@
+2016-01-31  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json, mod/twitter_api/languages/nl.php:
+  chore(release): v1.12.8
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, install/languages/nl.php,
+  languages/fi.php, mod/groups/languages/pl.php,
+  mod/web_services/languages/nl.php: chore(i18n): update translations
+
+2016-01-07  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* engine/classes/Elgg/Cache/MetadataCache.php,
+  engine/classes/Elgg/Database/MetadataTable.php, engine/lib/metastrings.php:
+  fix(access): fixes guid column name in metadata queries  get_sql hook with
+  custom queries was resulting in WSOD due to incorrect guid column name in
+  metadata queries. This passes correct guid column name to
+  _elgg_get_access_where_sql(), when querying metadata table
+
 2016-01-03  Juho Jaakkola <juho@elgg.org>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.7
