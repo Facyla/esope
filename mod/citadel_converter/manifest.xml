@@ -47,9 +47,9 @@
 <!--
 COMMENTS - HISTORY
 
-0.1 : YYYYmmdd - Initial release
+0.1 : 20160227 - Initial release
  - plugin structure
- - feature A
+ - integrate Citadel Open Data PHP converter lib
 
 
 //-->

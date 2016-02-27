@@ -13,12 +13,12 @@ $versions = array();
 $vendors_path = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/vendors'; // Failsafe but depends on plugin structure
 $files = scandir($vendors_path);
 foreach ($files as $file) {
-	if (!in_array($file, array('.', '..')) && is_dir("$vendors_path/$file")) {
+	if (!in_array($file, array('.', '..')) && is_dir("$vendors_path/$file") && (strpos($file, 'bootstrap') !== false)) {
 		$versions_opt[$file] = $file;
 	}
 }
 // Set default to latest version
-if (empty($vars['entity']->bootstrap_version) || !in_array($vars['entity']->bootstrap_version, $versions_opt)) { $vars['entity']->bootstrap_version = end($versions_opt); }
+if ((empty($vars['entity']->bootstrap_version) || !in_array($vars['entity']->bootstrap_version, $versions_opt)) && is_array(($versions_opt)) { $vars['entity']->bootstrap_version = end($versions_opt); }
 // Select version
 echo '<p><label>' . elgg_echo('bootstrap:version:select') . ' ' . elgg_view('input/dropdown', array('name' => 'params[bootstrap_version]', 'options_values' => $versions_opt, 'value' => $vars['entity']->bootstrap_version)) . '</label><br /><em>' . elgg_echo('bootstrap:version:vendors', array($vendors_path)) . '</em></p>';
 
