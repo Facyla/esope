@@ -23,16 +23,16 @@ return array(
 				<li>template : a conversion template generator, that can be used to generate a new conversion template which can then be provided to the converting API.</li>
 			</ul>
 			<br />
-			<h2>Step 1: Prepare and publish your CSV file</h2>
+			<h2>Prerequisites: Prepare and publish your CSV file</h2>
 			<p>Preparing the CSV file is not part of that tool. The CSV file should contain at least the geographical coordinates (latitude and longitude) and a title. Publish the file anywhere it can be accessed by a web address (URL). Using a public datastore is recommended.</p>
 			<br /><br />
-			<h2>Step 2: Use the template generator</h2>
+			<h2>Step 1: Use the template generator</h2>
 			<p><a href=\"" . $url . "template\" target=\"_blank\">Open the template generator in a new window</a></p>
 			<p>The CSV fields needs to be mapped to Citadel JSON fields, which are designed to be easily displayed into a mobile application. The converter can be configured with a PHP array, but this tool make the process easier for non-developpers to prepare the fields mapping.</p>
 			<p>Besides preparing the data themselves, this is the most important part as it will define how your data will be displayed into the final mobile application.</p>
 			<p>Once done, you will get a rather un-readable text file (serialized PHP array), but don't worry and publish that file  anywhere it can be accessed by a web address (URL). This way you will be able to use it in the converter, and reuse it for any other CSV file that is formatted the same way.</p>
 			<br /><br />
-			<h2>Step 3: Generate the converter URL</h2>
+			<h2>Step 2: Generate the converter URL</h2>
 			<p>The following form will generate an URL that can be used to get the converted file, or directly into your application to provide it with a live data source.</p>",
 	'citadel_converter:download:file' => "Download generated Citadel-JSON file",
 	'citadel_converter:download:link' => "OR use this direct URL into your app: ",
