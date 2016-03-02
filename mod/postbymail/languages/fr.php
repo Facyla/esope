@@ -26,7 +26,7 @@ return array(
 	'postbymail:settings:postbymail' => "Publication par email (EXPERIMENTAL)",
 	'postbymail:settings:postbymail:details' => "Cette fonctionnalité permet de publier de nouveaux contenus par email. Pour cela, une clef de publication unique peut être générée pour le groupe ou le membre, et sera utilisée pour publier en son nom. Si l'auteur est connu, son nom est utilisé dans un groupe. Les email d'envoi inconnus permettent de publier, mais l'auteur sera le conteneur lui-même (groupe ou personne). Les accès sont ceux du groupe ou par défaut. Les réglages de cette fonctionnalité sont incomplets et la prise en charge des contenus autres que blog très partiellement implémentée. Si vous le souhaitez, vous pouvez contacter l'auteur pour financer cette fonctionnalité.",
 	'postbymail:settings:cron' => "Fréquence du cron",
-	'postbymail:settings:cron:help' => "Note : le cron doit être configuré sur le serveur, sinon il ne fonctionnera que par intermittence, en fonciton des appels manuels au cron, ou via le plugin crontrigger qui permet de le remplacer en partie.",
+	'postbymail:settings:cron:help' => "Note : le cron doit être configuré sur le serveur (ou via le plugin crontrigger qui permet de le remplacer en partie), sinon il ne fonctionnera que par intermittence, lors des appels manuels au cron ou à la page de vérification des emails.",
 	'postbymail:settings:separator' => "Séparateur du message de réponse",
 	'postbymail:settings:separatordetails' => "Texte explicatif situé sous le séparateur, qui limite la publication des signatures et conversations complètes, ainsi que le risque de doublons.",
 	'postbymail:settings:scope' => "Types de réponses par mail autorisées", // forumonly, comments, allobjects

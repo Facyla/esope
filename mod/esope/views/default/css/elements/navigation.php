@@ -655,8 +655,8 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 
 	min-width: 165px;
 	max-width: 250px;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
 	border: solid 1px;
 	border-color: #E5E5E5 #999 #999 #E5E5E5;
 	background-color: #FFF;

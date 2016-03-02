@@ -21,10 +21,11 @@ function postbymail_init() {
 	// Page handler
 	elgg_register_page_handler('postbymail', 'postbymail_pagehandler');
 	
-	// Register cron
+	// Register cron - no default - requires explicit setting
 	$cron_freq = elgg_get_plugin_setting('cron', 'postbymail');
-	if (!in_array($cron_freq, array('minute', 'fiveminute', 'fifteenmin', 'halfhour', 'hourly', 'daily', 'weekly'))) { $cron_freq = 'fiveminute'; }
-	elgg_register_plugin_hook_handler('cron', $cron_freq, 'postbymail_cron_handler');
+	if (in_array($cron_freq, array('minute', 'fiveminute', 'fifteenmin', 'halfhour', 'hourly', 'daily', 'weekly'))) {
+		elgg_register_plugin_hook_handler('cron', $cron_freq, 'postbymail_cron_handler');
+	}
 	
 	// Pass entity GUID (set it as global var)
 	// Pour déterminer et transmettre le GUID qui doit être passé en paramètre

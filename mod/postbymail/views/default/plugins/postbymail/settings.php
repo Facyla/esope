@@ -9,6 +9,7 @@ $yes_no_opt = array_reverse($no_yes_opt, true);
 $replymode_opt = array('replybutton' => elgg_echo('postbymail:settings:replymode:replybutton'), 'replyemail' => elgg_echo('postbymail:settings:replymode:replyemail'));
 
 $cron_options = array( 
+	'none' => elgg_echo('postbymail:settings:disabled'), 
 	'minute' => elgg_echo('postbymail:cron:minute'), 
 	'fiveminute' => elgg_echo('postbymail:cron:fiveminute'), 
 	'fifteenmin' => elgg_echo('postbymail:cron:fifteenmin'), 
@@ -43,6 +44,28 @@ if (!isset($vars['entity']->inboxfolder)) $vars['entity']->inboxfolder = 'INBOX'
 
 // Settings form
 
+// GLOBAL SETTINGS
+echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
+	echo '<legend>' . elgg_echo('postbymail:settings:admin') . '</legend>';
+	
+	// Fréquence du cron ?
+	echo '<p><label>' . elgg_echo('postbymail:settings:cron') . ' ';
+	echo elgg_view('input/dropdown', array('name' => 'params[cron]', 'options_values' => $cron_options, 'value' => $vars['entity']->cron));
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:cron:help') . '</em></p>';
+	
+	// Admin users who should be notified
+	echo '<p><label>' . elgg_echo('postbymail:settings:notifylist');
+	echo elgg_view('input/text', array( 'name' 	=> 'params[notifylist]', 'value' => $vars['entity']->notifylist, ));
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:notifylist:details') . '</em></p>';
+	
+	echo '<p><label>' . elgg_echo('postbymail:settings:debug') . ' ';
+	echo elgg_view('input/dropdown', array('name' => 'params[debug]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debug));
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:debug:details') . '</em></p>';
+	
+echo '</fieldset>';
+
+
+
 // EMAIL REPLIES
 echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<legend>' . elgg_echo('postbymail:settings:replybymail') . '</legend>';
@@ -58,11 +81,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// Alternative : Modification de l'email d'expédition (pour réponse directe), avec séparateur en début de mail
 	echo '<p><label>' . elgg_echo('postbymail:settings:replymode') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[replymode]', 'options_values' => $replymode_opt, 'value' => $vars['entity']->replymode));
-	echo '</label><br />' . elgg_echo('postbymail:settings:replymode:details') . '</p>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:replymode:details') . '</em></p>';
 	
 	echo '<p><label>' . elgg_echo('postbymail:settings:replybuttonaddtext') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[replybuttonaddtext]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->replybuttonaddtext));
-	echo '</label><br />' . elgg_echo('postbymail:settings:replybuttonaddtext:details') . '</p>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:replybuttonaddtext:details') . '</em></p>';
 	
 	// Séparateur message/signature
 	echo '<p><label>' . elgg_echo('postbymail:settings:separator');
@@ -89,26 +112,6 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 
 echo '</fieldset>';
 
-
-// GLOBAL SETTINGS
-echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
-	echo '<legend>' . elgg_echo('postbymail:settings:admin') . '</legend>';
-	
-	// Fréquence du cron ?
-	echo '<p><label>' . elgg_echo('postbymail:settings:cron') . ' ';
-	echo elgg_view('input/dropdown', array('name' => 'params[cron]', 'options_values' => $cron_options, 'value' => $vars['entity']->cron));
-	echo '</label><br />' . elgg_echo('postbymail:settings:cron:help') . '</p>';
-	
-	// Admin users who should be notified
-	echo '<p><label>' . elgg_echo('postbymail:settings:notifylist');
-	echo elgg_view('input/text', array( 'name' 	=> 'params[notifylist]', 'value' 	=> $vars['entity']->notifylist, ));
-	echo '</label><br />' . elgg_echo('postbymail:settings:notifylist:details') . '</p>';
-	
-	echo '<p><label>' . elgg_echo('postbymail:settings:debug') . ' ';
-	echo elgg_view('input/dropdown', array('name' => 'params[debug]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debug));
-	echo '</label><br />' . elgg_echo('postbymail:settings:debug:details') . '</p>';
-	
-echo '</fieldset>';
 
 
 // EMAIL SETTINGS
