@@ -10,18 +10,25 @@ admin_gatekeeper();
 elgg_set_context('admin');
 
 global $CONFIG;
+$site = elgg_get_site_entity();
 
 $title = elgg_echo('mailing:form:title'); // Le titre doit rester sans HTML (titre page avant tout)
 
-if ($subject = elgg_get_plugin_setting('subject', 'mailing') && !empty($subject)) $default_subject = $subject; else $default_subject = elgg_echo('mailing:form:default:subject');
+if ($subject = elgg_get_plugin_setting('subject', 'mailing') && !empty($subject)) {
+	$default_subject = $subject; else $default_subject = elgg_echo('mailing:form:default:subject');
+}
 $sender = elgg_get_plugin_setting('sender', 'mailing');
-if (empty($sender)) $sender = elgg_echo('mailing:form:default:sender');
+if (empty($sender)) { $sender = elgg_echo('mailing:form:default:sender'); }
 $sendername = elgg_get_plugin_setting('sendername', 'mailing');
-if ($message = elgg_get_plugin_setting('message', 'mailing') && !empty($message)) $default_message = $message; else elgg_echo('mailing:form:default:message');
+if ($message = elgg_get_plugin_setting('message', 'mailing') && !empty($message)) {
+	$default_message = $message;
+} else {
+	elgg_echo('mailing:form:default:message');
+}
 
 // Listes de mails auto
 $self_mail = $_SESSION['user']->email;
-$site_mails = $CONFIG->site->email . ',';
+$site_mails = $site->email . ',';
 $site_mails .= "$sender,";
 $all_mail = ""; $no_mail = "";
 
@@ -29,7 +36,12 @@ $all_mail = ""; $no_mail = "";
 //$members = get_entities("user","","","time_created",99999,0,false,0); // 8e param = site_guid
 $members = elgg_get_entities(array('types' => 'user', 'order_by' => 'time_created desc', 'limit' => false));
 foreach($members as $member) {
- if($member->email && ($member->banned === "no")) $all_mail .= $member->email.','; else $no_mail .= $member->username.',';
+	//if($member->email && ($member->banned === "no")) {
+	if($member->email && !$member->isBanned()) {
+		$all_mail .= $member->email.',';
+	} else {
+		$no_mail .= $member->username.',';
+	}
 }
 
 
@@ -44,11 +56,11 @@ if(isset($_SESSION['mailing'])) {
 
 // Valeurs des sélecteurs (from et reply-to) : at least site and loggedin user
 $email_options = array(
-		$CONFIG->site->email => $CONFIG->site->name . " (" . $CONFIG->site->email . ")",
+		$site->email => $site->name . " (" . $site->email . ")",
 		$self_mail => $_SESSION['user']->username . " (". $self_mail .")",
 		$sender => $sendername . " (". $sender .")",
 /*
-		$CONFIG->site->name . ' <' . $CONFIG->site->email . '>' => $CONFIG->site->name . " (" . $CONFIG->site->email . ")",
+		$site->name . ' <' . $site->email . '>' => $site->name . " (" . $site->email . ")",
 		$_SESSION['user']->username.' <'.$self_mail.'>' => $_SESSION['user']->username . " (". $self_mail .")",
 		$sendername . ' <'. $sender .'>' => $sendername . " (". $sender .")",
 */
@@ -92,7 +104,7 @@ $formbody .= '<a href="javascript:void()" onClick="javascript:document.getElemen
 	. elgg_view('input/submit', array('value' => elgg_echo('mailing:send'))) . '</div>';
 
 
-$body = elgg_view('input/form', array('action' => $CONFIG->url . 'action/mailing/send', 'body' => $formbody, 'method' => 'post') );
+$body = elgg_view('input/form', array('action' => elgg_get_site_url() . 'action/mailing/send', 'body' => $formbody, 'method' => 'post') );
 
 //$body = elgg_view_layout('one_column', '<div style="padding:10px;">' . $body . '</div>');
 $body = elgg_view_layout('admin', array(
