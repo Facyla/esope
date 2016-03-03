@@ -13,13 +13,13 @@ elgg_register_event_handler('init','system','mailing_init');
 
 function mailing_init() {
 	global $CONFIG;
-	elgg_register_action("mailing/send", $CONFIG->pluginspath . "mailing/actions/mailing/send.php", false);
+	elgg_register_action("mailing/send", elgg_get_plugins_path() . "mailing/actions/mailing/send.php", false);
 	
 	if (elgg_get_context() == 'admin' && elgg_is_admin_logged_in()) {
 		$menu_item = ElggMenuItem::factory(array(
 				'name' => 'mailing-mailing',
 				'text' => elgg_echo('mailing:menu:title'),
-				'href' => $CONFIG->url . "mod/mailing/mailing.php",
+				'href' => elgg_get_site_url() . "mod/mailing/mailing.php",
 			));
 			elgg_register_menu_item('page', $menu_item);
 	}
@@ -29,11 +29,11 @@ function mailing_init() {
 }
 
 function mailing_page_handler($page){
-	
+	$root = elgg_get_plugins_path() . 'mailing/pages/mailing/';
 	switch($page[0]){
 		case "mailing":
 		default:
-			include(dirname(__FILE__) . '/pages/mailing/mailing.php');
+			include($root . 'mailing.php');
 			break;
 	}
 	
