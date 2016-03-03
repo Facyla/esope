@@ -3,7 +3,7 @@
 	<name>Mailing</name>
 	<id>mailing</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>1.12.02013.12.13</version>
+	<version>1.12.0</version>
 	<blurb>HTML mailing tool</blurb>
 	<description>HTML mailing tool / Envoi de mails HTML (newsletter, mailings divers, etc.)</description>
 	<website>http://id.facyla.net/</website>
@@ -15,7 +15,7 @@
 	<category>admin</category>
 
 	<requires>
-		<type>elgg_version</type>
+		<type>elgg_release</type>
 		<version>1.12</version>
 	</requires>
 

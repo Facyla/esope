@@ -14,7 +14,7 @@
 	<category>admin</category>
 	
 	<requires>
-		<type>elgg_version</type>
+		<type>elgg_release</type>
 		<version>1.12</version>
 	</requires>
 	
