@@ -11,9 +11,9 @@
  * @link http://www.elgg.org
 */
 
-$english = array(
+return array(
 	'admin:administer_utilities:apiadmin' => 'API Key Admin',
-    'admin:statistics:apilog' => 'API Access Log',
+	'admin:statistics:apilog' => 'API Access Log',
 
 	'apiadmin:refrenamed' => 'API Reference changed',
 	'apiadmin:refnotrenamed' => 'API Reference could not be changed',
@@ -30,31 +30,31 @@ $english = array(
 	'apiadmin:rename_prompt' => 'Enter your new reference for the key:',
 	'apiadmin:revoke_prompt' => 'Are you sure you want to revoke these keys?',
 	'apiadmin:regenerate_prompt' => 'Are you sure you want to regenerate these keys?',
-    'apiadmin:log:all' => 'View access log for all keys',
-    'apiadmin:nokeys' => 'There are no registered api keys at the moment.',
+	'apiadmin:log:all' => 'View access log for all keys',
+	'apiadmin:nokeys' => 'There are no registered api keys at the moment.',
 	
 	'apiadmin:revoke' => 'Revoke keys',
 	'apiadmin:rename' => 'Change reference',
 	'apiadmin:regenerate' => 'Regenerate keys',
-    'apiadmin:log' => 'Access log',
+	'apiadmin:log' => 'Access log',
 
 	'apiadmin:public' => 'Public',
 	'apiadmin:private' => 'Private',
 
-    'apiadmin:settings:enable_stats' => 'Enable API Key stats collection',
-    'apiadmin:settings:keep_tables' => 'Do not drop stats DB tables when deactivating the plugin',
+	'apiadmin:settings:enable_stats' => 'Enable API Key stats collection',
+	'apiadmin:settings:keep_tables' => 'Do not drop stats DB tables when deactivating the plugin',
 
 	'item:object:api_key' => 'API Keys',
 
-    'apiadmin:record:date' => 'Date',
-    'apiadmin:record:key' => 'API Key',
-    'apiadmin:record:handler' => 'Handler',
-    'apiadmin:record:request' => 'Request',
-    'apiadmin:record:method' => 'HTTP Method',
-    'apiadmin:record:ip_address' => 'IP Address',
-    'apiadmin:record:user_agent' => 'User Agent',
+	'apiadmin:record:date' => 'Date',
+	'apiadmin:record:key' => 'API Key',
+	'apiadmin:record:handler' => 'Handler',
+	'apiadmin:record:request' => 'Request',
+	'apiadmin:record:method' => 'HTTP Method',
+	'apiadmin:record:ip_address' => 'IP Address',
+	'apiadmin:record:user_agent' => 'User Agent',
 
-    'apiadmin:no_result' => 'There are no API access log entries at the moment',
-    'apiadmin:no_version_check' => 'The Version Check plugin is either not installed or not active. You will not be able to receive notifications of new API Admin releases.',
+	'apiadmin:no_result' => 'There are no API access log entries at the moment',
+	'apiadmin:no_version_check' => 'The Version Check plugin is either not installed or not active. You will not be able to receive notifications of new API Admin releases.',
 );
-add_translation('en', $english);
+

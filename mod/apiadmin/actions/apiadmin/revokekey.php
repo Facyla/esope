@@ -17,8 +17,8 @@ $key = (int)get_input('keyid');
 
 $obj = get_entity($key);
 
-if ( $obj && ($obj instanceof ElggObject) && ($obj->subtype == get_subtype_id('object', 'api_key')) ) {
-	if ( $obj->delete() ) {
+if ($obj && elgg_instanceof($obj, 'object') && ($obj->subtype == get_subtype_id('object', 'api_key'))) {
+	if ($obj->delete()) {
 		system_message(elgg_echo('apiadmin:keyrevoked'));
 	} else {
 		register_error(elgg_echo('apiadmin:keynotrevoked'));

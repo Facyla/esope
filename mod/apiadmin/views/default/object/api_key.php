@@ -12,7 +12,7 @@
  * @link http://www.elgg.org
 */
 
-global $CONFIG;
+$site = elgg_get_site_entity();
 
 $entity = $vars['entity'];
 $ts = time();
@@ -22,19 +22,19 @@ $token = generate_action_token($ts);
 <script>
 	elgg.apiadmin_revoke<?php echo $entity->guid; ?> = function() {
 		if ( confirm(elgg.echo('apiadmin:revoke_prompt')) ) {
-			document.location.href = '<?php echo "{$CONFIG->url}action/apiadmin/revokekey?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
+			document.location.href = '<?php echo elgg_get_site_url() . "action/apiadmin/revokekey?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
 		}
 	}
 	elgg.apiadmin_rename<?php echo $entity->guid; ?> = function() {
 		var newRef = prompt(elgg.echo('apiadmin:rename_prompt'), '<?php echo $entity->title; ?>');
 		if ( newRef ) {
-			var url = '<?php echo "{$CONFIG->url}action/apiadmin/renamekey?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
+			var url = '<?php echo elgg_get_site_url() . "action/apiadmin/renamekey?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
 			document.location.href = url + '&newref=' + encodeURIComponent(newRef);
 		}
 	}
 	elgg.apiadmin_regen<?php echo $entity->guid; ?> = function() {
 		if ( confirm(elgg.echo('apiadmin:regenerate_prompt')) ) {
-			document.location.href = '<?php echo "{$CONFIG->url}action/apiadmin/regenerate?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
+			document.location.href = '<?php echo elgg_get_site_url() . "action/apiadmin/regenerate?keyid={$entity->guid}&__elgg_token=$token&__elgg_ts=$ts" ?>';
 		}
 	}
 </script>
@@ -58,13 +58,13 @@ $info .= "<p><b>{$entity->title}</b>";
 $info .= " &nbsp; [<a href=\"#\" onclick=\"elgg.apiadmin_revoke{$entity->guid}();\">$revoke_label</a>]";
 $info .= " &nbsp; [<a href=\"#\" onclick=\"elgg.apiadmin_rename{$entity->guid}();\">$rename_label</a>]";
 $info .= " &nbsp; [<a href=\"#\" onclick=\"elgg.apiadmin_regen{$entity->guid}();\">$regenerate_label</a>]";
-//$info .= " &nbsp; [<a href=\"{$CONFIG->url}admin/statistics/apilog?keyid={$entity->guid}\">$log_label</a>]";
+//$info .= " &nbsp; [<a href=\"" . elgg_get_site_url() . "admin/statistics/apilog?keyid={$entity->guid}\">$log_label</a>]";
 $info .= "</p></div>";
 $info .= "<div><p><b>$public_label:</b> {$entity->public}<br />";
 // Only show secret portion to admins
 if ( elgg_is_admin_logged_in() ) {
 	// Fetch key and show it
-	$keypair = get_api_user($CONFIG->site_id, $entity->public);
+	$keypair = get_api_user($site->id, $entity->public);
 	$info .= "<b>$private_label:</b> {$keypair->secret}";
 }
 $info .= "</p></div>";
