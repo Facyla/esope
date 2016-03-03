@@ -10,7 +10,6 @@
 	- au rechargement de la page, si get_input('delete_alternatemail') est renseigné et correspond à une adresse existante de $alternatemail_setting, on la retire du tableau
  *
  */
-global $CONFIG;
 
 // $yesno_opt = array('no' => elgg_echo('postbymail:settings:no'), 'yes' => elgg_echo('postbymail:settings:yes'));
 
@@ -41,8 +40,9 @@ if (!empty($new_email)) {
 		// (ce qui est normal car dans son cas on vérifie que l'auteur a bien accès à ce mail - ici non), 
 		// mais dans ce cas le mail du nouveau membre prendra le pas sur ce paramètre car on prend les emails légitimes en priorité
 		if (!$existing_user) {
+			$dbprefix = elgg_get_config('dbprefix');
 			// L'email ne doit pas être déjà enregistré dans la liste de *tous* les paramètres privés
-			if ($results = get_data("SELECT * from {$CONFIG->dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'")) {
+			if ($results = get_data("SELECT * from {$dbprefix}private_settings where name = 'plugin:user_setting:postbymail:alternatemail'")) {
 				foreach ($results as $r) {
 					$emails = $r->value;
 					if (!empty($emails)) {
@@ -85,7 +85,7 @@ if (!empty($new_email)) {
 		elgg_set_plugin_user_setting('alternatemail', $alternatemail_setting, $user_guid, 'postbymail');
 		elgg_set_plugin_user_setting('new_alternatemail', '', $user_guid, 'postbymail');
 		// On nettoie l'URL des variables passées..
-		forward($vars['url'] . 'settings/plugins/' . $_SESSION['user']->username);
+		forward(elgg_get_site_url() . 'settings/plugins/' . elgg_get_logged_in_user_entity()->username . '/postbymail');
 	} else {
 		register_error(elgg_echo('postbymail:usersettings:error:invalidemeail'));
 	}
@@ -111,7 +111,7 @@ if ($delete_email != 'false') {
 		elgg_set_plugin_user_setting('alternatemail', $alternatemail_setting, $user_guid, 'postbymail');
 		system_message(elgg_echo('postbymail:usersettings:success:emailremoved', array($delete_email)));
 		// On nettoie l'URL des variables passées..
-		forward($vars['url'] . 'settings/plugins/' . $_SESSION['user']->username);
+		forward(elgg_get_site_url() . 'settings/plugins/' . elgg_get_logged_in_user_entity()->username . '/postbymail');
 	}
 }
 

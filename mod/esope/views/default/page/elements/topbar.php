@@ -41,8 +41,26 @@ if (elgg_is_logged_in()) {
 	
 	// Login_as menu link
 	if (elgg_is_active_plugin('login_as')) {
-		$original_user_guid = isset($_SESSION['login_as_original_user_guid']) ? $_SESSION['login_as_original_user_guid'] : NULL;
+		$session = elgg_get_session();
+		$original_user_guid = $session->get('login_as_original_user_guid');
 		if ($original_user_guid) {
+			/*
+			$title = elgg_echo('login_as:return_to_user', array(
+				elgg_get_logged_in_user_entity()->username,
+				get_entity($original_user_guid)->username
+			));
+
+			$html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
+			elgg_register_menu_item('topbar', array(
+				'name' => 'login_as_return',
+				'text' => $html,
+				'href' => 'action/logout_as',
+				'is_action' => true,
+				'title' => $title,
+				'link_class' => 'login-as-topbar',
+				'priority' => 700,
+			));
+			*/
 			$original_user = get_entity($original_user_guid);
 			$loginas_title = elgg_echo('login_as:return_to_user', array($ownusername, $original_user->username));
 			$loginas_html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));

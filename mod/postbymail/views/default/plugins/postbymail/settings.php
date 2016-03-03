@@ -52,6 +52,10 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label>' . elgg_echo('postbymail:settings:cron') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[cron]', 'options_values' => $cron_options, 'value' => $vars['entity']->cron));
 	echo '</label><br /><em>' . elgg_echo('postbymail:settings:cron:help') . '</em></p>';
+	// CRON URL
+	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:url') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check">'.$url.'postbymail/check</a></</p>';
+	// CRON process information
+	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:test') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check?display=yes">'.$url.'postbymail/check?display=yes</a></p>';
 	
 	// Admin users who should be notified
 	echo '<p><label>' . elgg_echo('postbymail:settings:notifylist');
@@ -62,7 +66,7 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo elgg_view('input/dropdown', array('name' => 'params[debug]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debug));
 	echo '</label><br /><em>' . elgg_echo('postbymail:settings:debug:details') . '</em></p>';
 	
-echo '</fieldset>';
+echo '</fieldset><br />';
 
 
 
@@ -94,11 +98,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	
 	// Explication sous le séparateur
 	echo '<p><label>' . elgg_echo('postbymail:settings:separatordetails') . '</label>';
-	echo elgg_view('input/plaintext', array('name' => 'params[separatordetails]', 'value' => $vars['entity']->separatordetails, 'style' => "width:94%;"));
+	echo elgg_view('input/plaintext', array('name' => 'params[separatordetails]', 'value' => $vars['entity']->separatordetails, 'style' => "width:94%; height:5em;"));
 	//echo '<textarea id="params[header]" class="NoEditor NoRichText mceNoeditor" name="params[separatordetails]" >' . $vars['entity']->separatordetails . '</textarea>';
 	echo '</label></p>';
 
-echo '</fieldset>';
+echo '</fieldset><br />';
 
 
 // EMAIL PUBLICATION
@@ -110,24 +114,24 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><label>' . elgg_echo('postbymail:settings:mailpost') . ' ' . elgg_view('input/dropdown', array('name' => 'params[mailpost]', 'options_values' => $mailpost_options, 'value' => $vars['entity']->mailpost));
 	echo '</label></p>';
 
-echo '</fieldset>';
+echo '</fieldset><br />';
 
 
 
 // EMAIL SETTINGS
 echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<legend>' . elgg_echo('postbymail:settings:email:title') . '</legend>';
-	echo '<p><em>' . elgg_echo('postbymail:settings:email:details') . '<em></p>';
+	echo '<p><em>' . elgg_echo('postbymail:settings:email:title:details') . '<em></p>';
 
 	// server
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:server') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[server]', 'style' => 'width:94%;', 'value' => $vars['entity']->server));
-	echo '</label><p/>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:server:details') . '</em><p/>';
 
 	// protocol
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:protocol') . '';
 	echo elgg_view('input/text', array('name' => 'params[protocol]', 'style' => 'width:94%;', 'value' => $vars['entity']->protocol));
-	echo '</label><p/>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:protocol:details') . '</em><p/>';
 	
 	/*
 	// mailbox
@@ -139,11 +143,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// username
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:username') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[username]', 'style' => 'width:94%;', 'value' => $vars['entity']->username));
-	echo '</label><p/>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:username:details') . '</em><p/>';
 	// post by email address
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:email') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[email]', 'style' => 'width:94%;', 'value' => $vars['entity']->email));
-	echo '</label><p/>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:email:details') . '</em><p/>';
 
 	// password
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:password') . ' ';
@@ -153,11 +157,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	// password
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:inboxfolder') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[inboxfolder]', 'style' => 'width:94%;', 'value' => $vars['entity']->inboxfolder));
-	echo '</label><p/>';
+	echo '</label><br /><em>' . elgg_echo('postbymail:settings:inboxfolder:details') . '</em><p/>';
 	
 	// @TODO ? Notification scope error|success|groupadmin
 	
-echo '</fieldset>';
+echo '</fieldset><br />';
 
 /*
 // markSeen
@@ -170,11 +174,5 @@ echo '<label style="clear:left;">' . elgg_echo('postbymail:settings:bodymaxlengt
 echo elgg_view('input/text', array('name' => 'params[bodymaxlength]', 'style' => 'width:94%;', 'value' => $vars['entity']->bodymaxlength));
 echo '<br /><br />';
 */
-
-echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
-	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:url') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check">'.$url.'postbymail/check</a></</p>';
-	echo '<p><strong>' . elgg_echo('postbymail:settings:cron:test') . '&nbsp;:</strong> <a href="'.$url.'postbymail/check?display=yes">'.$url.'postbymail/check?display=yes</a></p>';
-echo '</fieldset>';
-
 
 
