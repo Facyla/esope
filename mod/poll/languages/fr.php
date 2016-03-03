@@ -1,6 +1,6 @@
 <?php
 
-$fr = array(
+return array(
 
 	/**
 	 * Menu items and titles
@@ -20,6 +20,8 @@ $fr = array(
 	'poll:question' => "Question du sondage",
 	'poll:description' => "Description (facultatif)",
 	'poll:responses' => "Options du vote",
+	'poll:note_responses' => "Note : la modification des choix d'un sondage existant (ajout/suppression de choix ou modification du texte d'un choix existant) va réinitliser les votes du sondage pour permettre aux membres de re-voter sur la base des nouveaux choix.",
+	'poll:result:label' => "%s (%s)",
 	'poll:show_results' => "Montrer les résultats",
 	'poll:show_poll' => "Afficher le sondage",
 	'poll:add_choice' => "Ajouter une option",
@@ -27,6 +29,9 @@ $fr = array(
 	'poll:close_date' => "Date de clôture du sondage (facultatif)",
 	'poll:voting_ended' => "Les votes pour ce sondage se terminent le %s.",
 	'poll:poll_closing_date' => "(Date de clôture du sondage : %s)",
+	'poll:poll_reset' => "Réinitialiser le sondage",
+	'poll:poll_reset_description' => "Avec cette option vous pouvez réinitialiser le sondage et supprimer tous les votes.",
+	'poll:poll_reset_confirmation' => "Confirmez-vous vouloir réinitialiser ce sondage et supprimer tous les votes ?",
 
 	'poll:convert:description' => "ATTENTION : %s sondages existant utilisent encore l'ancienne structure de données pour les choix des votes. Ces sondages ne vont plus fonctionner avec cette version du plugin \"poll\".",
 	'poll:convert' => 'Mettre à jour les sondages maintenant',
@@ -42,7 +47,9 @@ $fr = array(
 	'poll:settings:front_page:title' => "Les administrateurs peuvent-ils définir un sondage à la fois comme \"Sondage à la Une\" ? (le plugin Widget Manager est requis pour ajouter le widget correspondant sur la page d'accueil)",
 	'poll:settings:allow_close_date:title' => "Permettre de définir une date de fin pour les sondages ? (après cette date les résultats seront toujours visibles, mais les votes ne seront plus permis)",
 	'poll:settings:allow_open_poll:title' => "Activer les sondages ouverts ? (les sondages ouverts affichent les noms des membres qui ont voté pour chacun des choix du sondage ; si cette option est activée, les administrateurs peuvent voir qui a voté pour quel choix sur tous les sondages)",
+	'poll:settings:allow_poll_reset:title' => "Autoriser les auteurs des sondages à réinitiliser les votes sur leurs sondages ? (l'activation de cette option va ajouter un bouton de titre visible des auteurs de sondages et des administrateurs qui leur permet de réinitialiser tous les votes sur un sondage ; les administateurs auront touours la possibilité de réinitialiser les votes même si cette option est désactivée)",
 	'poll:none' => "Aucun sondage.",
+	'poll:not_found' => "Le sondage n'a pas été trouvé.",
 	'poll:permission_error' => "Vous n'avez pas la permission de modifier ce sondage.",
 	'poll:vote' => "Voter",
 	'poll:login' => "Veuillez vous connecter pour voter sur ce sondage.",
@@ -111,6 +118,7 @@ Afficher le sondage et voter :
 	'poll:settings:vote_in_river:title' => "Afficher les votes sur les sondages dans le fil d'activité ?",
 	'poll:settings:send_notification:title' => "Envoyer une notification lorsqu'un nouveau sondage est créé ? (les membres ne recevront de notification que s'ils sont en contact avec l'auteur du sondage, ou membre du groupe où le sondage a été publié. De plus, les notifications ne seront envoyées qu'aux membres dont les paramètres de notification permettent l'envoi de notifications)",
 	'river:create:object:poll' => '%s a créé le sondage %s',
+	'river:update:object:poll' => '%s a mis à jour le sondage %s',
 	'river:vote:object:poll' => '%s a voté sur le sondage %s',
 	'river:comment:object:poll' => '%s a commenté le sondage %s',
 
@@ -123,15 +131,15 @@ Afficher le sondage et voter :
 	'poll:deleted' => "Votre sondage a bien été supprimé.",
 	'poll:totalvotes' => "Nombre total de votes : ",
 	'poll:voted' => "Votre vote a bien été enregistré. Merci d'avoir voté sur ce sondage.",
+	'poll:poll_reset_success' => "Le sondage a bien été réinitialisé.",
 
 	/**
 	 * Error messages
 	 */
 	'poll:blank' => "Désolé : vous devez compléter à la fois la question, et ajouter au moins un choix pour le vote avant de pouvoir enregistrer votre sondage.",
+	'poll:alreadyvoted' => "Désolé : vous ne pouvez répondre qu'une seule fois.",
 	'poll:novote' => "Désolé : vous devez choisir une option pour voter dans ce sondage.",
 	'poll:notfound' => "Désolé : impossible de trouver le sondage correspondant.",
 	'poll:notdeleted' => "Désolé : impossible de supprimer ce sondage."
+	'poll:poll_reset_denied' => "Désolé : vous n'avez pas l'autorisation de réinitialiser ce sondage."
 );
-
-add_translation("fr",$fr);
-

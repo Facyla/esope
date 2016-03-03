@@ -360,8 +360,6 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 
 // Override river PH to add an info block
 function theme_inria_elgg_river_page_handler($page) {
-	global $CONFIG;
-
 	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 
 	// make a URL segment available in page handler script
@@ -372,7 +370,7 @@ function theme_inria_elgg_river_page_handler($page) {
 	}
 	set_input('page_type', $page_type);
 
-	require_once("{$CONFIG->path}mod/theme_inria/pages/river.php");
+	require_once(elgg_get_plugins_path() . "theme_inria/pages/river.php");
 	return true;
 }
 

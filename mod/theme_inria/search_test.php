@@ -4,8 +4,6 @@ require_once dirname(dirname(dirname(__FILE__))) . '/engine/start.php';
 // Limited to admin !
 admin_gatekeeper();
 
-global $CONFIG;
-
 $hide_directory = elgg_get_plugin_setting('hide_directory', 'adf_public_platform');
 if ($hide_directory == 'yes') gatekeeper();
 
@@ -21,7 +19,7 @@ elgg_push_breadcrumb(elgg_echo('search'));
 $ts = time();
 $token = generate_action_token($ts);
 $action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
-$action_base = $CONFIG->url . 'action/esope/';
+$action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = $action_base . 'esearch' . $action_token;
 
 $content .= '<script>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Group event calendar module
  */
@@ -13,9 +14,9 @@ elgg_push_context('widgets');
 $content = elgg_view('event_calendar/groupprofile_calendar');
 elgg_pop_context();
 
-if (!$content) {	
+if (!$content) {
 	if (elgg_get_plugin_setting('group_always_display', 'event_calendar') == 'yes') {
-    	$content = elgg_echo('event_calendar:no_events_found');
+    	$content = '<p>' . elgg_echo('event_calendar:no_events_found') . '</p>';
 	}
 }
 

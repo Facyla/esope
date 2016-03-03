@@ -6,8 +6,6 @@
  * 
  */
 
-global $CONFIG;
-
 $size = get_input('size', "small");
 $embed = get_input('embed', false);
 $debug = get_input('debug', false);
@@ -19,9 +17,9 @@ if ($size == 'help') {
 	echo "<p>Il est possible de renvoyer une page ne contenant que l'image en ajoutant un paramètre &embed=true</p>";
 	echo "<p>Attention : en cas d'image non disponible (ou non configurée par la personne), l'image par défaut de dimensions \"master\" renvoie une image vide (gif de 1x1)</p>";
 	echo "<p>Exemple d'URL valides :<br />";
-	echo ' - <a href="' . $CONFIG->url . 'inria/userimage">URL standard de la photo</a><br />';
-	echo ' - <a href="' . $CONFIG->url . 'inria/userimage?size=master">URL de la photo originale</a> (attention : dimensions variables)<br />';
-	echo ' - <a href="' . $CONFIG->url . 'inria/userimage?size=medium&embed=true">URL pour embedder une photo de taille moyenne</a><br />';
+	echo ' - <a href="' . elgg_get_site_url() . 'inria/userimage">URL standard de la photo</a><br />';
+	echo ' - <a href="' . elgg_get_site_url() . 'inria/userimage?size=master">URL de la photo originale</a> (attention : dimensions variables)<br />';
+	echo ' - <a href="' . elgg_get_site_url() . 'inria/userimage?size=medium&embed=true">URL pour embedder une photo de taille moyenne</a><br />';
 	echo "</p>";
 	exit;
 }
@@ -32,7 +30,7 @@ if (elgg_is_logged_in()) {
 	//$own = get_user_by_username('test2'); // Pour avoir l'image d'un autre membre
 	$imgurl = $own->getIconURL($size);
 } else {
-	$imgurl = $CONFIG->url . '_graphics/icons/user/default' . $size . '.gif';
+	$imgurl = elgg_get_site_url() . '_graphics/icons/user/default' . $size . '.gif';
 	// CAS autologin, if CAS detected
 	//if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
 	if ($debug) echo "Not logged in<br />";

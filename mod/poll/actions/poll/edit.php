@@ -15,15 +15,12 @@ $question = get_input('question');
 $description = get_input('description');
 $number_of_choices = (int) get_input('number_of_choices', 0);
 $front_page = get_input('front_page');
-$close_date = (int)get_input('close_date');
+$close_date = get_input('close_date');
 $open_poll = (int)get_input('open_poll');
 $tags = get_input('tags');
 $access_id = get_input('access_id');
 $container_guid = get_input('container_guid');
 $guid = get_input('guid');
-
-// Convert string of tags into a preformatted array
-$tagarray = string_to_tag_array($tags);
 
 //get response choices
 $count = 0;
@@ -38,143 +35,112 @@ if ($number_of_choices) {
 	}
 }
 
+// Make sure the question and the response options aren't empty
+if (empty($question) || ($count == 0)) {
+	register_error(elgg_echo("poll:blank"));
+	forward(REFERER);
+}
+
 $user = elgg_get_logged_in_user_entity();
 
-if ($guid) {
-	// editing an existing poll
-	$poll = get_entity($guid);
-	if (elgg_instanceof($poll, 'object', 'poll') && $poll->canEdit()) {
-		$container_guid = $poll->container_guid;
-		// Make sure the question / responses aren't blank
-		if (empty($question) || ($count == 0)) {
-			register_error(elgg_echo("poll:blank"));
-			forward("poll/edit/".$guid);
-			exit;
-		// Otherwise, save the poll
-		} else {
-			$poll->access_id = $access_id;
+// Check whether non-admins are allowed to create site-wide polls
+$poll_site_access = elgg_get_plugin_setting('site_access', 'poll');
+if ($poll_site_access == 'admins' && !$user->isAdmin()) {
+	$container = get_entity($container_guid);
 
-			if(!empty($description)) {
-				$poll->description = $description;
-			} else {
-				if (!empty($poll->description)) {
-					$poll->deleteMetadata('description');
-				}
-			}
-
-			$poll->question = $question;
-			$poll->title = $question;
-
-			if (!$poll->save()) {
-				register_error(elgg_echo("poll:error"));
-				if ($container_guid) {
-					forward("poll/add/".$container_guid);
-				} else {
-					forward("poll/add");
-				}
-				exit;
-			}
-
-			elgg_clear_sticky_form('poll');
-
-			poll_delete_choices($poll);
-			poll_add_choices($poll, $new_choices);
-			poll_manage_front_page($poll, $front_page);
-
-			if (is_array($tagarray)) {
-				$poll->tags = $tagarray;
-			}
-
-			if ($close_date) {
-				$poll->close_date = $close_date;
-			} else {
-				if (!empty($poll->close_date)) {
-					$poll->deleteMetadata('close_date');
-				}
-			}
-
-			$poll->open_poll = (!$open_poll) ? 0 : 1;
-
-			// Success message
-			system_message(elgg_echo("poll:edited"));
-		}
-	}
-} else {
-	if (!$container_guid) {
-		$poll_site_access = elgg_get_plugin_setting('site_access', 'poll');
-		$allowed = (elgg_is_logged_in() && ($poll_site_access != 'admins')) || elgg_is_admin_logged_in();
-		if (!$allowed) {
-			register_error(elgg_echo('poll:can_not_create'));
-			elgg_clear_sticky_form('poll');
-			forward('poll/all');
-			exit;
-		}
-	}
-	// Make sure the question / responses aren't blank
-	if (empty($question) || ($count == 0)) {
-		register_error(elgg_echo("poll:blank"));
-		if ($container_guid) {
-			forward("poll/add/".$container_guid);
-		} else {
-			forward("poll/add");
-		}
-	} else {
-		// Otherwise, save the poll
-	
-		// Initialise a new ElggObject
-		$poll = new ElggObject();
-
-		// Tell the system it's a poll
-		$poll->subtype = "poll";
-
-		// Set its owner to the current user
-		$poll->owner_guid = $user->guid;
-		$poll->container_guid = $container_guid;
-
-		$poll->access_id = $access_id;
-
-		$poll->question = $question;
-		$poll->title = $question;
-
-		if(!empty($description)) {
-			$poll->description = $description;
-		}
-
-		if ($close_date) {
-			$poll->close_date = $close_date;
-		}
-
-		$poll->open_poll = (!$open_poll) ? 0 : 1;
-
-		if (!$poll->save()) {
-			register_error(elgg_echo("poll:error"));
-			if ($container_guid) {
-				forward("poll/add/".$container_guid);
-			} else {
-				forward("poll/add");
-			}
-			exit;
-		}
+	// Regular users are allowed to create polls only inside groups
+	if (!$container instanceof ElggGroup) {
+		register_error(elgg_echo('poll:can_not_create'));
 
 		elgg_clear_sticky_form('poll');
 
-		poll_add_choices($poll, $new_choices);
-		poll_manage_front_page($poll, $front_page);
-	
-		if (is_array($tagarray)) {
-			$poll->tags = $tagarray;
-		}
-
-		$poll_create_in_river = elgg_get_plugin_setting('create_in_river', 'poll');
-		if ($poll_create_in_river != 'no') {
-			add_to_river('river/object/poll/create', 'create' , elgg_get_logged_in_user_guid(), $poll->guid);
-		}
-
-		// Success message
-		system_message(elgg_echo("poll:added"));
+		forward('poll/all');
 	}
 }
 
+if ($guid) {
+	$new = false;
+
+	// editing an existing poll
+	$poll = get_entity($guid);
+
+	if (!$poll instanceof Poll) {
+		register_error(elgg_echo('poll:notfound'));
+		forward(REFERER);
+	}
+
+	if (!$poll->canEdit()) {
+		register_error(elgg_echo('poll:permission_error'));
+		forward(REFERER);
+	}
+
+	// Success message
+	$message = elgg_echo("poll:edited");
+} else {
+	$new = true;
+
+	// Initialise a new Poll
+	$poll = new Poll();
+
+	// Set its owner to the current user
+	$poll->owner_guid = $user->guid;
+	$poll->container_guid = $container_guid;
+
+	// Success message
+	$message = elgg_echo("poll:added");
+}
+
+$poll->access_id = $access_id;
+$poll->question = $question;
+$poll->title = $question;
+$poll->description = $description;
+$poll->open_poll = $open_poll ? 1 : 0;
+$poll->close_date = empty($close_date) ? null : $close_date;
+$poll->tags = string_to_tag_array($tags);
+
+if (!$poll->save()) {
+	register_error(elgg_echo("poll:error"));
+	forward(REFERER);
+}
+
+if ($new) {
+	$poll->setChoices($new_choices);
+} else {
+	$poll->updateChoices($new_choices);
+}
+
+poll_manage_front_page($poll, $front_page);
+
+elgg_clear_sticky_form('poll');
+
+$poll_create_in_river = elgg_get_plugin_setting('create_in_river', 'poll');
+if ($poll_create_in_river != 'no') {
+	if ($new) {
+		elgg_create_river_item(array(
+			'view' => 'river/object/poll/create',
+			'action_type' => 'create',
+			'subject_guid' => $user->guid,
+			'object_guid' => $poll->guid,
+		));
+	} else {
+		// first remove any previous river entries referring to updating this poll to avoid duplicate entries
+		elgg_delete_river(array(
+			'view' => 'river/object/poll/update',
+			'action_type' => 'update',
+			'object_guid' => $poll->guid,
+		));
+		// let the river entry on updating a poll be made in the name of the poll owner in any case
+		$user = $poll->getOwnerEntity();
+		elgg_create_river_item(array(
+			'view' => 'river/object/poll/update',
+			'action_type' => 'update',
+			'subject_guid' => $user->guid,
+			'object_guid' => $poll->guid,
+		));
+	}
+}
+
+system_message($message);
+
 // Forward to the poll page
 forward($poll->getURL());
-exit;

@@ -5,8 +5,6 @@
  * @package ElggBookmarks
  */
 
-global $CONFIG;
-
 $owner = elgg_get_page_owner_entity();
 if (!$owner) { forward('', '404'); }
 
@@ -37,7 +35,7 @@ if (elgg_is_active_plugin('file')) {
 	));
 	if (!$files) { $files = '<p>' . elgg_echo('files:none') . '</p>'; }
 	
-	$files = '<h3><a href="' . $CONFIG->url . 'file/group/' . $owner->guid . '/all">' . elgg_echo("file:user", array($owner->name)) . '</a></h3>' . $files;
+	$files = '<h3><a href="' . elgg_get_site_url() . 'file/group/' . $owner->guid . '/all">' . elgg_echo("file:user", array($owner->name)) . '</a></h3>' . $files;
 	
 	// Add link
 	if ($owner->canWriteToContainer()) $files .= '<p class="elgg-widget-more">' . elgg_view('output/url', array(
@@ -60,7 +58,7 @@ if ($owner->bookmarks_enable == 'yes') {
 	if (!$bookmarks) { $bookmarks = '<p>' . elgg_echo('bookmarks:none') . '</p>'; }
 	
 	// Add link
-	$bookmarks = '<h3><a href="' . $CONFIG->url . 'bookmarks/group/' . $owner->guid . '/all">' . elgg_echo('bookmarks:owner', array($owner->name)) . '</a></h3>' . $bookmarks;
+	$bookmarks = '<h3><a href="' . elgg_get_site_url() . 'bookmarks/group/' . $owner->guid . '/all">' . elgg_echo('bookmarks:owner', array($owner->name)) . '</a></h3>' . $bookmarks;
 	if ($owner->canWriteToContainer()) $bookmarks .= '<p class="elgg-widget-more">' . elgg_view('output/url', array(
 		'href' => "bookmarks/add/$owner->guid",
 		'text' => elgg_echo('bookmarks:add'),

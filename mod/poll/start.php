@@ -25,13 +25,13 @@ function poll_init() {
 	elgg_register_page_handler('polls','polls_page_handler');
 
 	// Register a URL handler for poll posts
-	elgg_register_entity_url_handler('object','poll','poll_url');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'poll_url');
 
 	// notifications
 	$send_notification = elgg_get_plugin_setting('send_notification', 'poll');
 	if (!$send_notification || $send_notification != 'no') {
-		register_notification_object('object', 'poll', elgg_echo('poll:new'));
-		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'poll_prepare_notification');
+		elgg_register_notification_event('object', 'poll');
+		elgg_register_plugin_hook_handler('prepare', 'notification:create:object:poll', 'poll_prepare_notification');
 	}
 
 	// add link to owner block
@@ -39,11 +39,6 @@ function poll_init() {
 
 	// Register entity type
 	elgg_register_entity_type('object','poll');
-
-	// register the JavaScript
-	$js = elgg_get_simplecache_url('js', 'poll/js');
-	elgg_register_simplecache_view('js/poll/js');
-	elgg_register_js('elgg.poll', $js);
 
 	// add group widget
 	$group_poll = elgg_get_plugin_setting('group_poll', 'poll');
@@ -59,22 +54,22 @@ function poll_init() {
 
 	//add widgets
 	elgg_register_widget_type('poll', elgg_echo('poll:my_widget_title'), elgg_echo('poll:my_widget_description'));
-	elgg_register_widget_type('latestpoll', elgg_echo('poll:latest_widget_title'), elgg_echo('poll:latest_widget_description'), "dashboard");
+	elgg_register_widget_type('latestpoll', elgg_echo('poll:latest_widget_title'), elgg_echo('poll:latest_widget_description'), array("dashboard"));
 	$poll_front_page = elgg_get_plugin_setting('front_page','poll');
 	if($poll_front_page == 'yes') {
-		elgg_register_widget_type('poll_individual', elgg_echo('poll:individual'), elgg_echo('poll_individual:widget:description'), "dashboard");
+		elgg_register_widget_type('poll_individual', elgg_echo('poll:individual'), elgg_echo('poll_individual:widget:description'), array("dashboard"));
 	}
 	if (elgg_is_active_plugin('widget_manager')) {
-		elgg_register_widget_type('latestpoll_index', elgg_echo('poll:latest_widget_title'), elgg_echo('poll:latest_widget_description'), "index");
+		elgg_register_widget_type('latestpoll_index', elgg_echo('poll:latest_widget_title'), elgg_echo('poll:latest_widget_description'), array("index"));
 		if (!$group_poll || $group_poll != 'no') {
-			elgg_register_widget_type('latestgrouppoll', elgg_echo('poll:latestgroup_widget_title'), elgg_echo('poll:latestgroup_widget_description'), "groups");
+			elgg_register_widget_type('latestgrouppoll', elgg_echo('poll:latestgroup_widget_title'), elgg_echo('poll:latestgroup_widget_description'), array("groups"));
 		}
 		if($poll_front_page == 'yes') {
-			elgg_register_widget_type('poll_individual_index', elgg_echo('poll:individual'), elgg_echo('poll_individual:widget:description'), "index");
+			elgg_register_widget_type('poll_individual_index', elgg_echo('poll:individual'), elgg_echo('poll_individual:widget:description'), array("index"));
 		}
 
 		//register title urls for widgets
-		elgg_register_plugin_hook_handler('widget_url', 'widget_manager', "poll_widget_urls", 499);
+		elgg_register_plugin_hook_handler("entity:url", "object", "poll_widget_urls");
 	}
 
 	// Register actions
@@ -82,6 +77,7 @@ function poll_init() {
 	elgg_register_action("poll/edit","$action_path/edit.php");
 	elgg_register_action("poll/delete","$action_path/delete.php");
 	elgg_register_action("poll/vote","$action_path/vote.php");
+	elgg_register_action("poll/reset","$action_path/reset.php");
 	elgg_register_action("poll/convert","$action_path/convert.php", "admin");
 }
 
@@ -94,6 +90,8 @@ function poll_init() {
  */
 function poll_page_handler($page) {
 	elgg_load_library('elgg:poll');
+
+	elgg_push_breadcrumb(elgg_echo('item:object:poll'), "poll/all");
 
 	$page_type = $page[0];
 	switch($page_type) {
@@ -158,23 +156,27 @@ function polls_page_handler($page) {
 	return true;
 }
 
-
 /**
- * Populates the ->getUrl() method for poll objects
- *
- * @param ElggEntity $poll post poll post entity
- * @return string poll post URL
+ * Return the url for poll objects
  */
-function poll_url($poll) {
-	$title = elgg_get_friendly_title($poll->title);
-	return  "poll/view/" . $poll->guid . "/" . $title;
+function poll_url($hook, $type, $url, $params) {
+	$poll = $params['entity'];
+	if ($poll instanceof Poll) {
+		if (!$poll->getOwnerEntity()) {
+			// default to a standard view if no owner.
+			return false;
+		}
+
+		$title = elgg_get_friendly_title($poll->title);
+		return "poll/view/" . $poll->guid . "/" . $title;
+	}
 }
 
 /**
  * Add a menu item to an owner block
  */
 function poll_owner_block_menu($hook, $type, $return, $params) {
-	if (elgg_instanceof($params['entity'], 'user')) {
+	if ($params['entity'] instanceof ElggUser) {
 		$url = "poll/owner/{$params['entity']->username}";
 		$item = new ElggMenuItem('poll', elgg_echo('poll'), $url);
 		$return[] = $item;
@@ -191,30 +193,30 @@ function poll_owner_block_menu($hook, $type, $return, $params) {
 }
 
 /**
- *
  * Prepare a notification message about a created poll
  *
  * @param string                          $hook         Hook name
  * @param string                          $type         Hook type
  * @param Elgg_Notifications_Notification $notification The notification to prepare
  * @param array                           $params       Hook parameters
- * @return mixed
+ * @return Elgg_Notifications_Notification
  */
 function poll_prepare_notification($hook, $type, $notification, $params) {
-
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$recipient = $params['recipient'];
+	$language = $params['language'];
 	$method = $params['method'];
 
-	if (elgg_instanceof($entity, 'object', 'poll')) {
-		$user = elgg_get_logged_in_user_entity();
-		if (!$user) {
-			$user = $entity->getOwnerEntity();
-		}
-		return elgg_echo('poll:notify:body', array($user->name, $entity->title, $entity->getURL()));
+	$notification->subject = elgg_echo('poll:notify:subject', array($entity->title), $language);
+	$notification->body = elgg_echo('poll:notify:body', array(
+		$owner->name,
+		$entity->title,
+		$entity->getURL()
+	), $language);
+	$notification->summary = elgg_echo('poll:notify:summary', array($entity->title), $language);
 
-	}
-	return null;
+	return $notification;
 }
 
 function poll_widget_urls($hook_name, $entity_type, $return_value, $params){

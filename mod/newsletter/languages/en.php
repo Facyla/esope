@@ -15,6 +15,8 @@ return array(
 	'newsletter:status:scheduled' => "Scheduled",
 	'newsletter:status:sent' => "Sent",
 	
+	'newsletter:cli:error:secret' => "Invalid secret for use in CLI",
+	
 	// CSV upload
 	'newsletter:csv:no_email' => "No e-mail column could be found in the first 2 rows of the CSV-file",
 	'newsletter:csv:added' => "Added %s e-mail addresses from the CSV-file",
@@ -308,6 +310,4 @@ To view the newsletter click here:
 	'newsletter:action:unsubscribe:error:entity' => "An error occured while unsubscribing you from the %s newsletter, please try again",
 	'newsletter:action:unsubscribe:success:all' => "You've been unsubscribed from all newsletters",
 	'newsletter:action:unsubscribe:success:entity' => "You've been unsubscribed from the %s newsletter",
-	
-	'' => "",
 );

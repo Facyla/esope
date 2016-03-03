@@ -30,7 +30,7 @@ return array(
 	// Email
 	'socialshare:email:title' => "Share via email",
 	'socialshare:email:subject' => "I invite you to watch this page %s",
-	'socialshare:email:params' => "Hi,
+	'socialshare:email:body' => "Hi,
 	
 	I think this page can interest you : %s
 	%s

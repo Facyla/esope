@@ -3,8 +3,6 @@
  * Inria base page
  */
 
-global $CONFIG;
-
 gatekeeper();
 
 register_error("Adresse invalide, veuillez la compléter pour accéder à la page souhaitée.");

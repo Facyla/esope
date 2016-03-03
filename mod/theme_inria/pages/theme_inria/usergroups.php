@@ -6,8 +6,6 @@
  * 
  */
 
-global $CONFIG;
-
 $help = get_input('help', false);
 //$size = get_input('size', "small");
 //$embed = get_input('embed', false);
@@ -101,7 +99,7 @@ if (elgg_instanceof($user, 'user')) {
 				$content .= '<br />';
 				elgg_pop_context();
 
-				$content .= '<p><a href="' . $CONFIG->url . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus-circle"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
+				$content .= '<p><a href="' . elgg_get_site_url() . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus-circle"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
 			}
 			
 		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
@@ -117,9 +115,9 @@ $content .= '<div class="clearfloat"></div><br />';
 
 /*
 if (elgg_is_logged_in()) {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
 } else {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
 }
 */
 

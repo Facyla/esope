@@ -1,6 +1,6 @@
 <?php
 
-$english = array(
+return array(
 
 	/**
 	 * Menu items and titles
@@ -20,6 +20,8 @@ $english = array(
 	'poll:question' => "Poll question",
 	'poll:description' => "Description (optional)",
 	'poll:responses' => "Vote choices",
+	'poll:note_responses' => "Note: modifying the poll choices of an existing poll (adding / deleting choices or changing the text of an existing choice) will result in a reset of the votes for the poll to allow all members to re-vote based on the new set of choices.",
+	'poll:result:label' => "%s (%s)",
 	'poll:show_results' => "Show results",
 	'poll:show_poll' => "Show poll",
 	'poll:add_choice' => "Add vote choice",
@@ -27,6 +29,9 @@ $english = array(
 	'poll:close_date' => "Poll closing date (optional)",
 	'poll:voting_ended' => "Voting for this poll ended on %s.",
 	'poll:poll_closing_date' => "(Poll closing date: %s)",
+	'poll:poll_reset' => "Reset poll",
+	'poll:poll_reset_description' => "With this option you can reset the poll and delete all votes.",
+	'poll:poll_reset_confirmation' => "Are you sure that you want to reset this poll and delete all votes?",
 
 	'poll:convert:description' => 'ATTENTION: there were %s existing polls found that still have the old vote choices data structure. These polls won\'t work correctly on this version of the poll plugin.',
 	'poll:convert' => 'Update existing polls now',
@@ -42,7 +47,9 @@ $english = array(
 	'poll:settings:front_page:title' => "Admins can make a single poll at a time the site's \"Poll of the day\"? (Widget Manager plugin required for adding the corresponding widget to the index page)",
 	'poll:settings:allow_close_date:title' => "Allow setting a closing date for polls? (afterwards the results can still be viewed but voting is no longer permitted)",
 	'poll:settings:allow_open_poll:title' => "Allow open polls? (open polls show which user voted for which poll choice; if this option is enabled, admins can see who voted what on any polls)",
+	'poll:settings:allow_poll_reset:title' => "Allow poll owners resetting of votes on their polls? (enabling this option will add a title section button visible to poll owners and admins that will allow to reset all votes of a poll; with this option disabled admins will still be able to reset the votes)",
 	'poll:none' => "No polls found.",
+	'poll:not_found' => "The poll was not found.",
 	'poll:permission_error' => "You do not have permission to edit this poll.",
 	'poll:vote' => "Vote",
 	'poll:login' => "Please login if you would like to vote in this poll.",
@@ -112,6 +119,7 @@ View and vote on the poll:
 	'poll:settings:vote_in_river:title' => "Show poll voting in activity river?",
 	'poll:settings:send_notification:title' => "Send notification when a poll is created? (Members will only receive notifications if their are friend with the creator of the poll or a member of the group the poll was added to. Additionally, notifications will only be sent to members who configured Elgg's notification settings accordingly)",
 	'river:create:object:poll' => '%s created a poll %s',
+	'river:update:object:poll' => '%s updated a poll %s',
 	'river:vote:object:poll' => '%s voted on the poll %s',
 	'river:comment:object:poll' => '%s commented on the poll %s',
 
@@ -122,15 +130,17 @@ View and vote on the poll:
 	'poll:edited' => "Your poll was saved.",
 	'poll:responded' => "Thank you for responding, your vote was recorded.",
 	'poll:deleted' => "Your poll was successfully deleted.",
-	'poll:totalvotes' => "Total number of votes: ",
+	'poll:totalvotes' => "Total number of votes: %s",
 	'poll:voted' => "Your vote has been cast for this poll. Thank you for voting on this poll.",
+	'poll:poll_reset_success' => "The poll was reset successfully.",
 
 	/**
 	 * Error messages
 	 */
 	'poll:blank' => "Sorry: you need to fill in both the question and add at least one vote choice before you can create the poll.",
 	'poll:novote' => "Sorry: you need to choose an option to vote in this poll.",
+	'poll:alreadyvoted' => "Sorry: you can vote only once.",
 	'poll:notfound' => "Sorry: we could not find the specified poll.",
-	'poll:notdeleted' => "Sorry: we could not delete this poll."
+	'poll:notdeleted' => "Sorry: we could not delete this poll.",
+	'poll:poll_reset_denied' => "Sorry: you have no sufficient permission for resetting this poll."
 );
-add_translation("en",$english);

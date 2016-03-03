@@ -1,6 +1,6 @@
 <?php
 
-$fr = array(
+return array(
 	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
 	
 	/**
@@ -46,6 +46,7 @@ $fr = array(
 	'survey:settings:allow_open_survey:title' => "Permettre de créer des sondages ouverts ?",
 	'survey:settings:allow_open_survey:details' => "Les sondages ouverts montrent les réponses de chacun des membres ; si cette option est activée, les administrateurs peuvent voir qui a voté quoi sur tous les sondages.",
 	'survey:none' => "Aucun sondage.",
+	'survey:not_found' => "Le sondage n'a pas été trouvé.",
 	'survey:permission_error' => "Vous n'avez pas la permission de modifier ce sondage.",
 	'survey:respond' => "Répondre",
 	'survey:login' => "Veuillez vous connecter pour répondre à ce sondage.",
@@ -63,7 +64,7 @@ $fr = array(
 	'survey:settings:show_active_only' => "Masquer le bloc des sondages de groupe si aucun sondage actif",
 
 	/**
-	 * Poll widget
+	 * Survey widget
 	 **/
 	'survey:latest_widget_title' => "Sondages récents",
 	'survey:latest_widget_description' => "Affiche les derniers sondages créés.",
@@ -238,6 +239,4 @@ Afficher le sondage et y répondre :
 	
 	
 );
-
-add_translation("fr",$fr);
 

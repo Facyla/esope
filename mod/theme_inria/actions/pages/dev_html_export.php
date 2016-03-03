@@ -1,5 +1,7 @@
 <?php
-global $CONFIG;
+
+$dbprefix = elgg_get_config('dbprefix');
+$site = elgg_get_site_entity();
 $guid = get_input("guid");
 $export_subpages = get_input("subpages", 'yes');
 if ($export_subpages != 'yes') $export_subpages = false;
@@ -65,7 +67,7 @@ function esope_display_pages_tree($parent, $internal_link = false, $full_view = 
 if ($alternative) {
 	$parent = get_entity($guid);
 	
-	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$CONFIG->dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
+	$all_subpages = elgg_get_entities(array('type' => 'object', 'subtype' => 'page', 'container_guid' => $parent->container_guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	$tree = esope_parent_to_tree($all_subpages, $parent);
 	/*
 	echo '<pre>' . esope_display_pages_tree($tree, 'internal', false) . '</pre>';
@@ -100,7 +102,7 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 			$toppages[] = $page;
 		}
 		// ..et on change le nom en rapport
-		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
 		
 		// Envoi du fichier - dès que possible
 		header("Content-type: text/html; charset=utf-8");  
@@ -152,7 +154,7 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 		
 	} else {
 		// Sinon export de la page courante seulement
-		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
 		$content .= '<h3>' . elgg_view("output/url", array("text" => $page->title, "href" => false, "name" => "page_" . $page->guid)) . '</h3>' . elgg_view("output/longtext", array("value" => $page->description)) . '<p style="page-break-after:always;"></p>';
 		
 		// Envoi du fichier

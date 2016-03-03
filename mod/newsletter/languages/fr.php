@@ -1,6 +1,6 @@
 <?php
 
-$french = array(
+return array(
 	// general
 	'item:object:newsletter' => "Lettre d'information",
 	'item:object:newsletter_template' => "Gabarit de lettre d'information",
@@ -44,7 +44,7 @@ $french = array(
 	'newsletter:menu:steps:schedule' => "Programmation de l'envoi",
 		
 	// long text menu
-	'newsletter:menu:longtext:embed_blog' => "Intégrer une publication",
+	'newsletter:menu:longtext:embed_content' => "Intégrer une publication",
 	
 	'newsletter:breadcrumb:site' => "Lettres d'information",
 	'newsletter:breadcrumb:log' => "Journal d'envoi",
@@ -58,8 +58,28 @@ $french = array(
 	'newsletter:received:title' => "Lettres d'information reçues par %s",
 	'newsletter:received:title:mine' => "Mes lettres d'information reçues",
 	
+	// embed
+	'newsletter:embed:show_all' => "Afficher tout le contenu, pas seulement le contenu du groupe",
+	'newsletter:embed:format:description:title' => "Afficher la description",
+	'newsletter:embed:format:description:option:full' => "Complet",
+	'newsletter:embed:format:description:option:excerpt' => "Extrait",
+	'newsletter:embed:format:description:option:no' => "Non",
+
+	'newsletter:embed:format:icon:title' => "Afficher l'icône",
+	'newsletter:embed:format:icon:option:left' => "Aligné à gauche",
+	'newsletter:embed:format:icon:option:right' => "Aligné à droite",
+	'newsletter:embed:format:icon:option:none' => "Ne pas afficher l'icône",
+	
+	'newsletter:embed:format:add_to_newsletter' => "Ajouter à la newsletter",
+	'newsletter:embed:format:preview:title' => "Prévisualiser",
+	
+	'newsletter:embed:read_more' => "Lire la suite",
+	
 	// edit
 	'newsletter:edit:subject' => "Sujet d'email personnalisé (optionnel)",
+	'newsletter:edit:from' => "Adresse email d'expédition personnalisée (optionnel)",
+	'newsletter:edit:from:description' => "Par défaut la lettre d'information sera envoyée depuis %s. Vous pouvez définir une adresse d'expédition personnalisée ici. Vous recevrez les notifications ne non-delivérabilité sur cette adresse email.",
+	'newsletter:edit:description:description' => "Cette description est utilisée dans la liste des lettres d'information et ne fait pas partie par défaut du contenu de la lettre d'information.",
 	
 	// placeholders
 	'newsletter:placeholders:info' => "Vous pouvez utiliser les éléments suivants dans votre texte. Ils seront remplacés par des textes du système, ou par des informations sur la lettre d'information. Si vous les survolez, vous aurez plus de détails sur chacun d'entre eux.",
@@ -105,11 +125,16 @@ $french = array(
 	'newsletter:schedule:time' => "Heure programmée",
 	'newsletter:schedule:status_notification' => "Adresse email pour la notification d'envoi (optionnel)",
 	'newsletter:schedule:status_notification:description' => "Lorsque la lettre d'information sera envoyée, une notification sera envoyée à cette adresse email.",
+	'newsletter:schedule:status_notification:me' => "M'envoyer une notification de statut",
+	'newsletter:schedule:status_notification:toggle' => "ou saisir une adresse email personnalisée",
 	'newsletter:schedule:show_in_archive' => "Montrer la lettre d'information dans l'archive",
-	'newsletter:schedule:send' => "Envoyer maintenant",
+	'newsletter:schedule:send' => "Enregistrer et envoyer maintenant",
+	'newsletter:schedule:save' => "Enregistrer et programmer l'envoi ultérieur",
+	'newsletter:schedule:no_recipients' => "Vous n'avez sélectionné aucun destinataire, confirmez-vous vouloir poursuivre cette action ?",
 
 	// recipients
 	'newsletter:recipients:title' => "Sélectionner les destinataires",
+	'newsletter:recipients:tooltip' => "Cocher tous les membres ? Dans ce cas vous envoyez la lettre d'information à tous les membres du groupe (sauf ceux qui ont indiqué qu'ils ne souhaitent pas recevoir la lettre d'information). Par Tous les abonnés on entend tous les abonnés à la lettre d'information qui ne sont pas nécessairement membres de votre groupe mais qui ont un abonnement à la lettre d'information. Si le nombre derrière les abonnés est un (0), alors cette lettre d'information n'a aucun abonné.",
 	'newsletter:recipients:description' => "Vous pouvez choisir ci-dessous les destinataires de cette lettre d'information.",
 	'newsletter:recipients:csv' => "Envoyer un fichier CSV avec les adresses email de destinataires",
 	'newsletter:recipients:csv:description' => "Vous pouvez envoyer un fichier contenant les adresses email des destinataires. Le délimiteur de texte doit être \" (guillemet double), et le délimiteur de colonnes doit être un ; (point-virgule). Le système détectera automatiquement la colonne des adresses email en recherchant parmi les 2 premières colonnes.",
@@ -127,6 +152,16 @@ $french = array(
 	'newsletter:settings:allow_groups:description' => "Les responsables de groupes peuvent créer des lettres d'information pour les membres de leur groupe.",
 	'newsletter:settings:include_existing_users' => "Inclure les membres sans paramètre d'abonnement",
 	'newsletter:settings:include_existing_users:description' => "Lorsque ce réglage est positionné sur 'Non', tous les membres sans paramètre d'abonnement ne recevront plus de lettre d'information.",
+	'newsletter:settings:custom_from' => "Permettre aux lettres d'information d'être envoyées depuis une adresse email personnalisée",
+	'newsletter:settings:custom_from:description' => "Quand ce réglage est sur 'oui', les membres sont autorisés à saisir une adresse email personnalisée qui sera utilisée comme adresse d'expédition de la lettre d'information. Veuillez garder à l'esprit que ceci peut mener à des abus et peuvent augmenter les risques que les lettres d'information soient classées comme spam plus fréquemment.",
+	'newsletter:settings:custom_from:domains' => "Limiter les adresses email personnalisées aux domaines suivants",
+	'newsletter:settings:custom_from:domains:description' => "Saisissez une liste de domaines spéarés par des virgules pour limiter les adresses email personnalisées. Par exemple : example.com, ceci autorisera user@example.com mais pas user@example2.com ni user2@sub.example.com",
+	
+	'newsletter:settings:url_postfix' => "Paramètres d'URL postfix",
+	'newsletter:settings:url_postfix:description' => "Vous pouvez configurer un ou plusieurs couple no/valeur pour postfix, qui seront placées dans tous les liens (internes) de la lettre d'information. Vous pouvez configurer un couple nom/valeur par ligne dans le format 'nom=valeur' (par ex.: source=newsletter). Ceci permettra aux systèmes de suivi d'identifier que les visiteurs provenaient de la lettre d'information.",
+	'newsletter:settings:url_postfix:upgrade' => "Vous devez exécuter upgrade.php pour convertir quelques vieux paramètres du plugin vers les nouvelles valeurs.",
+	'newsletter:settings:url_postfix:setting' => "Paramètres Postfix",
+	'newsletter:settings:url_postfix:setting:description' => "Il y a certain placeholders que vous pouvez utiliser dans vos valeurs postfix : %s",
 	
 	// entity view
 	'newsletter:entity:scheduled' => "Programmé",
@@ -219,6 +254,7 @@ Pour afficher cette lettre d'information, cliquez sur :
 	// actions
 	// edit
 	'newsletter:action:edit:error:title' => "Veuillez donner un titre à la lettre d'information",
+	'newsletter:action:edit:error:from' => "L'adresse email indiquée n'est pas autorisée à envoyer de lettre d'information",
 	'newsletter:action:edit:error:save' => "Une erreur inconnue s'est produite lors de la sauvegarde de la lettre d'information, veuillez ré-essayer",
 	'newsletter:action:edit:success' => "La lettre d'information a été sauvegardée",
 	
@@ -277,6 +313,4 @@ Pour afficher cette lettre d'information, cliquez sur :
 	'newsletter:action:unsubscribe:success:entity' => "Vous avez été désabonné de la lettre d'information %s",
 	
 );
-
-add_translation("fr", $french);
 

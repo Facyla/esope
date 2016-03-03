@@ -1,5 +1,4 @@
 <?php
-global $CONFIG;
 
 gatekeeper();
 
