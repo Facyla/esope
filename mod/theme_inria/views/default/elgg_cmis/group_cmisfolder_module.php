@@ -17,8 +17,6 @@ if (!elgg_in_context('group_profile')) { return; }
 $folder = $group->cmisfolder;
 if (empty($folder)) { return true; }
 
-global $CONFIG;
-
 $folder = $group->cmisfolder;
 //$contenttype = $group->contenttype;
 //$recursive = $group->recursive;
@@ -35,7 +33,7 @@ if (strrpos($folder, $needle) !== false) {
 	$folder = end($folder_parts);
 	
 	if (!empty($folder)) {
-		$embed_url = $CONFIG->url . 'cmis/repo/list/'.$contenttype.'/folder/' . $folder . '?embed=iframe&recursive='.$recursive;
+		$embed_url = elgg_get_site_url() . 'cmis/repo/list/'.$contenttype.'/folder/' . $folder . '?embed=iframe&recursive='.$recursive;
 		$content = '<div class="elgg-cmis-module elgg-cmis-groupmodule-folder"><iframe src="' . $embed_url .'">' . elgg_echo('elgg_cmis:loading') . '</iframe></div>';
 		
 	// Nouveau contenu : apparemment pas de lien direct pour uploader...

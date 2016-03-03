@@ -1,7 +1,6 @@
 <?php
-global $CONFIG;
-$fonturl = $CONFIG->url . 'mod/theme_inria/fonts/';
-$imgurl = $CONFIG->url . 'mod/theme_inria/graphics/';
+$fonturl = elgg_get_site_url() . 'mod/theme_inria/fonts/';
+$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 $tools_url = $imgurl . 'inria_widget/';
 ?>
 
