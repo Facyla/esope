@@ -3,8 +3,10 @@
 // Note : you may want to use translation tools on dev server to facilitate translation
 
 return array(
-	'uhb_annonces' => "Emploi et Stage",
-	'item:object:uhb_offer' => "Offres d'Emploi et de Stage",
+	'uhb_annonces' => "Job and Training",
+	'item:object:uhb_offer' => "Job and Training Offers",
+
+	/* @TODO : translate into English !
 	'uhb_annonces:home' => "Accueil",
 	'uhb_annonces:title' => "Offres de stage et d'emploi",
 	'uhb_annonces:admin:title' => "Administration des offres",
@@ -17,13 +19,14 @@ return array(
 	'uhb_annonces:list' => "Liste",
 	'uhb_annonces:add' => "Déposer une offre",
 	'uhb_annonces:edit' => "Modification de l'offre",
-	'uhb_annonces:view' => "Offre %s : %s",
-	'uhb_annonces:view:emploi' => "Offre d'emploi (%s) : %s",
-	'uhb_annonces:view:emploi:notype' => "Offre d'emploi : %s",
-	'uhb_annonces:view:stage' => "Offre de stage : %s",
+	'uhb_annonces:view' => "Offre n°%s %s : %s",
+	'uhb_annonces:view:emploi' => "Offre d'emploi n° %s (%s) : %s",
+	'uhb_annonces:view:emploi:notype' => "Offre d'emploi n°%s : %s",
+	'uhb_annonces:view:stage' => "Offre de stage n°%s : %s",
 	'uhb_annonces:apply' => "Candidature - %s",
 	'uhb_annonces:save:success' => "Votre offre a bien été enregistrée.",
-	'uhb_annonces:error:missingrequired' => "Attention, des champs requis n'ont pas été renseignés ou contiennent des données incorrectes.<br />Veuillez vérifier et compléter les champs manquants avant de valider votre annonce.",
+	'uhb_annonces:error:missingrequired' => "Attention, des champs requis n'ont pas été renseignés ou contiennent des données incorrectes.<br />Veuillez vérifier et compléter les champs suivants avant de valider votre annonce :",
+	'uhb_annonces:error:invalidemail' => "L'adresse email indiquée n'est pas une adresse email valide.",
 	'uhb_annonces:error:emailmatch' => "Les adresses emails fournies ne correspondent pas, veuillez vérifier que vous avez bien saisi les mêmes adresses email.",
 	'uhb_annonces:mustrevalidate' => "L'adresse email de contact a été modifiée, vous devez confirmer de nouveau votre adresse email.",
 	'uhb_annonces:updated:mustconfirm' => "L'annonce a été modifiée, elle doit être de nouveau examinée avant d'être publiée.",
@@ -44,31 +47,34 @@ return array(
 	
 	
 	// Accueil
-	'uhb_annonces:basicstat' => "Actuellement : %s postes d'emploi ou de stage en cours de recrutement et %s annonces pourvues ou archivées.",
+	'uhb_annonces:basicstat' => "Actuellement : %s offre(s) d'emploi ou de stage en cours de recrutement et %s annonce(s) pourvue(s) ou archivée(s).",
 	'uhb_annonces:admin:title' => "Administration des annonces",
 	'uhb_annonces:role:admin:details' => "Vous êtes un administrateur du système d'annonce.",
 	'uhb_annonces:role:title' => "Votre rôle : %s",
 	'uhb_annonces:role:admin' => "Administrateur des annonces",
-	'uhb_annonces:role:staff' => "Staff",
-	'uhb_annonces:role:faculty' => "Personnel de l’université",
-	'uhb_annonces:role:student' => "Etudiant",
-	'uhb_annonces:role:doctorat' => "Doctorant.",
-	'uhb_annonces:role:pro' => "Professionnel",
+	'uhb_annonces:role:staff' => "Personnels de l'université",
+	'uhb_annonces:role:student' => "Etudiant(e)",
+	'uhb_annonces:role:doctorat' => "Doctorant(e) à Rennes 2",
+	'uhb_annonces:role:pro' => "Professionnel(le)",
 	'uhb_annonces:role:member' => "Membre du site",
 	'uhb_annonces:role:public' => "Visiteur non connecté",
+	'uhb_annonces:role:user' => "Membre non qualifié",
+	'uhb_annonces:role:other' => "Autre",
 	'uhb_annonces:offre:create' => "Employeur : %s",
 	'uhb_annonces:offre:create:link' => "déposez une annonce",
 	'uhb_annonces:offre:searchorreply' => "Candidats : %s aux annonces",
 	'uhb_annonces:offre:searchorreply:link' => "cherchez et postulez",
-	'uhb_annonces:disclaimer' => "L'accès au catalogue des offres est réservé aux étudiants et anciens étudiants de l'université Rennes 2. Pour postuler il vous sera nécessaire d'avoir un compte dans ce réseau social RESONANCES.",
+	'uhb_annonces:disclaimer' => "L'accès au catalogue des offres est réservé aux étudiants et anciens étudiants de l'université Rennes 2, avec un compte dans le réseau social RESONANCES.",
+	'uhb_annonces:unpublished:link' => "%s annonce(s) à valider pour publication",
 	'uhb_annonces:unpublished' => "Vous avez %s.",
-	'uhb_annonces:unpublished:link' => "%s annonces à valider pour publication",
+	'uhb_annonces:unpublished:warning:link' => "%s annonce(s)",
+	'uhb_annonces:unpublished:warning' => "%s sont restée(s) sans relecture et devrai(en)t être revue(s) en priorité.",
 	'uhb_annonces:stats:title' => "Pour information il y a %s offres au total, dont :",
-	'uhb_annonces:stats:initial' => "%s annonces dans l'état \"initial\".",
-	'uhb_annonces:stats:obsolete' => "%s annonces obsolètes en cours de relance.",
-	'uhb_annonces:stats:reportfilled' => "%s annonces signalées comme étant pourvues par les membres du réseau.",
-	'uhb_annonces:stats:filled' => "%s annonces pourvues.",
-	'uhb_annonces:stats:archive' => "%s annonces archivées.",
+	'uhb_annonces:stats:initial' => "%s annonce(s) dans l'état \"initial\".",
+	'uhb_annonces:stats:obsolete' => "%s annonce(s) obsolète(s) en cours de relance.",
+	'uhb_annonces:stats:reportfilled' => "%s annonce(s) signalée(s) comme étant pourvue(s) par les membres du réseau.",
+	'uhb_annonces:stats:filled' => "%s annonce(s) pourvue(s).",
+	'uhb_annonces:stats:archive' => "%s annonce(s) archivée(s).",
 	
 	
 	// Sidebar / widgets
@@ -97,22 +103,22 @@ return array(
 	'uhb_annonces:sidebar:offer:report' => "Signaler comme étant pourvue",
 	'uhb_annonces:sidebar:offer:unreport' => "Ne plus signaler comme étant pourvue",
 	'uhb_annonces:report:error:account' => "Pour signaler une offre comme pourvue, vous devez disposer d'un compte.",
-	'uhb_annonces:sidebar:offer:memorised' => "%s membres ont retenu cette annonce",
-	'uhb_annonces:sidebar:offer:candidated' => "%s membres ont postulé",
+	'uhb_annonces:sidebar:offer:memorised' => "%s membre(s) ont retenu cette annonce",
+	'uhb_annonces:sidebar:offer:candidated' => "%s membre(s) ont postulé",
 	// Widget statistiques (admin)
 	'uhb_annonces:sidebar:stats:title' => "Statistiques globales",
-	'uhb_annonces:sidebar:stats:memorised' => "%s annonces retenues",
-	'uhb_annonces:sidebar:stats:candidated' => "%s candidatures envoyées",
-	'uhb_annonces:sidebar:stats:reported' => "%s annonces signalées comme pourvues.",
+	'uhb_annonces:sidebar:stats:memorised' => "%s annonce(s) retenue(s)",
+	'uhb_annonces:sidebar:stats:candidated' => "%s candidature(s) envoyée(s)",
+	'uhb_annonces:sidebar:stats:reported' => "%s annonce(s) signalée(s) comme pourvue(s).",
 	// Widget admin
 	'uhb_annonces:sidebar:admin:title' => "Administration",
 	'uhb_annonces:sidebar:resendconfirm' => "Renvoyer la confirmation d'email",
 	'uhb_annonces:sidebar:validate' => "Forcer la validation d'email",
 	'uhb_annonces:sidebar:publish' => "PUBLIER cette annonce",
 	'uhb_annonces:sidebar:removereport' => "Effacer tous les signalements \"pourvue\"",
-	'uhb_annonces:sidebar:archive' => "ARCHIVER cette annonce",
+	'uhb_annonces:sidebar:archive' => "Déclarer l'annonce OBSOLETE",
 	'uhb_annonces:sidebar:archive:details' => "Cette action retire une annonce obsolète ou devenue sans objet du catalogue. Attention, cette action est irréversible.",
-	'uhb_annonces:sidebar:markfilled' => "RETIRER ANNONCE POURVUE",
+	'uhb_annonces:sidebar:markfilled' => "Déclarer l'annonce POURVUE",
 	'uhb_annonces:sidebar:markfilled:details' => "Cette action retire une annonce qui a été pourvue du catalogue. Attention, cette action est irréversible.",
 	
 	
@@ -135,11 +141,19 @@ return array(
 	'uhb_annonces:settings:searchfieldsvalues:help' => "Ces champs peuvent être les mêmes que pour l'édition, mais ils permettent aussi d'être différenciés et d'utiliser comme critère de recherche des valeurs qui ne sont plus disponibles pour la création de nouvelles annonces.",
 	'uhb_annonces:settings:contact_email' => "Adresse email de contact",
 	'uhb_annonces:settings:contact_email:help' => "Cette adresse est utilisée dans certaines notifications adressées aux annonceurs, et leur permet de contacter l'équipe d'administration des annonces par email.",
+	'uhb_annonces:settings:debugmode' => "Mode debug",
+	'uhb_annonces:settings:debugmode:details' => "Affiche diverses informations à l'écran (et quelques unes dans les logs) sur les temps d'exécution des éléments de la recherche, aux requêtes SQL utilisées ainsi qu'à la mémoire consommée.<br />NE PAS ACTIVER EN PRODUCTION !",
+	'uhb_annonces:settings:memorylimit' => "Définition manuelle de memory_limit",
+	'uhb_annonces:settings:memorylimit:details' => "Permet de définir le paramètre memory_limit du serveur. Laisser vide pour utiliser les paramètres par défaut, ou indiquer une valeur acceptable par ini_get, par ex. 256M, ou 2G. Value recommandée : vide, ou 256M si la mémoire n'est pas suffisante pour certaines recherches.<br />A n'utiliser que si ce paramètre ne peut pas être défini défini globalement via .htaccess.",
 	
 	
 	// Recherche
-	'uhb_annonces:search:count' => "La recherche a trouvé %s résultats.",
-	'uhb_annonces:search:morethanmax' => "ATTENTION : l'affichage est limité aux %s premiers sont affichés. Veuillez affiner vos critères de recherche.",
+	'uhb_annonces:search:emptytitle' => "(choisir) ",
+	'uhb_annonces:search:count' => "La recherche a trouvé %s résultat(s).",
+	'uhb_annonces:search:morethanmax' => "ATTENTION : D'autres annonces correspondent à votre recherche. L'affichage est limité à %s annonces : précisez d'autres critères pour votre recherche.",
+	'uhb_annonces:search:structureprofile' => "Structure et profil",
+	'uhb_annonces:search:timefilters' => "Filtrer par dates",
+	'uhb_annonces:search:stats' => "Statistiques",
 	'uhb_annonces:search:typeoffer' => "Type d'offre",
 	'uhb_annonces:owner:anonymous' => "N'afficher que les annonces créées sans compte de membre",
 	'uhb_annonces:search:offerposition' => "Intitulé",
@@ -151,7 +165,7 @@ return array(
 	'uhb_annonces:search:managervalidated' => "Mail validé",
 	'uhb_annonces:search:followcreation' => "Création",
 	'uhb_annonces:search:followvalidation' => "Publication",
-	'uhb_annonces:search:followend' => "Obsolète",
+	'uhb_annonces:search:followend' => "Obsolète le",
 	//'uhb_annonces:search:followend' => "Date de fin de publication",
 	'uhb_annonces:search:followstate' => "Etat",
 	'uhb_annonces:search:followinterested' => "Membres intéressés",
@@ -170,7 +184,7 @@ return array(
 	'uhb_annonces:search:worklength:0to3' => "Moins de 3 mois",
 	'uhb_annonces:search:worklength:3to6' => "De 3 à 6 mois",
 	'uhb_annonces:search:worklength:6more' => "Plus de 6 mois",
-	'uhb_annonces:search:workstart' => "A partir du",
+	'uhb_annonces:search:workstart' => "Début",
 	'uhb_annonces:search:worklength' => "Durée",
 	'uhb_annonces:search:worklength:unit' => "mois",
 	'uhb_annonces:search:worklength:result' => "%s mois",
@@ -202,6 +216,7 @@ return array(
 	'uhb_annonces:object:offertask' => "Descriptif de la mission et tâches",
 	'uhb_annonces:object:offerpay' => "Rémunération / gratification",
 
+	'uhb_annonces:object:group:offer' => "Description de l'offre",
 	'uhb_annonces:object:group:work' => "Période, lieu, durée",
 	'uhb_annonces:object:workstart' => "Début de mission",
 	'uhb_annonces:object:worklength' => "Durée en mois",
@@ -212,7 +227,8 @@ return array(
 	'uhb_annonces:object:group:profile' => "Profil recherché",
 	'uhb_annonces:object:profileformation' => "Formation du candidat",
 	'uhb_annonces:object:profilelevel' => "Niveau d'études",
-	'uhb_annonces:object:profilecomment' => "Observations sur le profil recherché",
+	'uhb_annonces:object:profilelevel:details' => "Si vous acceptez plusieurs niveaux, indiquez le niveau minimum et ajoutez l’information dans les observations.",
+	'uhb_annonces:object:profilecomment' => "Observations sur le profil recherché (intitulé précis de la formation, compétences particulières, etc.)",
 
 	'uhb_annonces:object:group:manager' => "Responsable de l'offre (personne à contacter)",
 	'uhb_annonces:object:managergender' => "Genre",
@@ -220,7 +236,8 @@ return array(
 	'uhb_annonces:object:manageremail' => "Email",
 	'uhb_annonces:object:manageremail:confirm' => "Email (confirmation)",
 	'uhb_annonces:object:managerphone' => "Téléphone",
-	'uhb_annonces:object:managervalidated' => "Email validé",
+	'uhb_annonces:object:managervalidated' => "Email confirmé",
+	'uhb_annonces:object:search:managervalidated' => "Email confirmé",
 
 	'uhb_annonces:object:group:follow' => "Suivi de l'offre",
 	'uhb_annonces:object:followcreation' => "Date de création",
@@ -235,25 +252,28 @@ return array(
 	
 	// Fields dropdown values
 	'uhb_annonces:option:' => "",
-	'uhb_annonces:option:yes' => "Oui",
-	'uhb_annonces:option:no' => "Non",
-	'uhb_annonces:undefined' => "(non défini)",
+	'uhb_annonces:option:yes' => "Yes",
+	'uhb_annonces:option:no' => "No",
+	'uhb_annonces:undefined' => "(undefined)",
 	
 	'uhb_annonces:typeoffer:values' => "stage, emploi, apprentissage, professionalisation",
-	'uhb_annonces:typeoffer:stage' => "Stage",
-	'uhb_annonces:typeoffer:emploi' => "Emploi",
-	'uhb_annonces:typeoffer:apprentissage' => "Contrat d'apprentissage",
-	'uhb_annonces:typeoffer:professionalisation' => "Contrat de professionnalisation",
+	'uhb_annonces:typeoffer:stage' => "Training",
+	'uhb_annonces:typeoffer:emploi' => "Job",
+	'uhb_annonces:typeoffer:apprentissage' => "Contrat d'apprentissage", // non utilisé
+	'uhb_annonces:typeoffer:professionalisation' => "Contrat de professionnalisation", // non utilisé
+	'uhb_annonces:typeoffer:contrat_en_alternance' => 'Contrat en alternance',
+	'uhb_annonces:typeoffer:service_civique' => 'Service civique',
+	'uhb_annonces:typeoffer:job_etudiant' => 'Job étudiant',
 	
 	'uhb_annonces:typework:values' => "cdd, cdi, other",
 	'uhb_annonces:typework:' => "",
 	'uhb_annonces:typework:cdd' => "CDD",
 	'uhb_annonces:typework:cdi' => "CDI",
-	'uhb_annonces:typework:other' => "Autre",
+	'uhb_annonces:typework:other' => "Other",
 	
 	'uhb_annonces:structurelegalstatus:values' => "privateenterprise, publicenterprise, publicadmin, territadmin, hospadmin, association, other",
-	'uhb_annonces:structurelegalstatus:privateenterprise' => "Entreprise privée",
-	'uhb_annonces:structurelegalstatus:publicenterprise' => "Entreprise publique",
+	'uhb_annonces:structurelegalstatus:privateenterprise' => "Private Enterprise",
+	'uhb_annonces:structurelegalstatus:publicenterprise' => "Public Enterprise",
 	'uhb_annonces:structurelegalstatus:publicadmin' => "Administration publique d’État",
 	'uhb_annonces:structurelegalstatus:territadmin' => "Administration territoriale",
 	'uhb_annonces:structurelegalstatus:hospadmin' => "Administration hospitalière",
@@ -261,49 +281,51 @@ return array(
 	'uhb_annonces:structurelegalstatus:other' => "Autre (profession libérale, ONG...)",
 	
 	'uhb_annonces:structureworkforce:values' => "1to9, 10to49, 50to199, 200to499, 500more",
-	'uhb_annonces:structureworkforce:1to9' => "1 à 9",
-	'uhb_annonces:structureworkforce:10to49' => "10 à 49",
+	'uhb_annonces:structureworkforce:1to9' => "1 to 9",
+	'uhb_annonces:structureworkforce:10to49' => "10 to 49",
 	'uhb_annonces:structureworkforce:50to199' => "50-199",
 	'uhb_annonces:structureworkforce:200to499' => "200 à 499",
-	'uhb_annonces:structureworkforce:500more' => "500 et plus",
+	'uhb_annonces:structureworkforce:500more' => "500 and more",
 	
 	'uhb_annonces:worklength:values' => "0to3, 3to6, 6more",
-	'uhb_annonces:worklength:0to3' => "moins de 3 mois",
-	'uhb_annonces:worklength:3to6' => "de 3 à 6 mois",
-	'uhb_annonces:worklength:6more' => "plus de 6 mois",
+	'uhb_annonces:worklength:0to3' => "less than 3 months",
+	'uhb_annonces:worklength:3to6' => "from 3 to 6 months",
+	'uhb_annonces:worklength:6more' => "more than 6 months",
 	
 	'uhb_annonces:worktime:values' => "fulltime, partial",
-	'uhb_annonces:worktime:fulltime' => "Temps plein",
-	'uhb_annonces:worktime:partial' => "Temps partiel (précisez dans les commentaires)",
+	'uhb_annonces:worktime:fulltime' => "Full time",
+	'uhb_annonces:worktime:partial' => "Partial time (use comments for details)",
 	
 	'uhb_annonces:worktrip:values' => "no, yes",
-	'uhb_annonces:worktrip:no' => "Non",
-	'uhb_annonces:worktrip:yes' => "Oui",
+	'uhb_annonces:worktrip:no' => "No",
+	'uhb_annonces:worktrip:yes' => "Yes",
 	
 	'uhb_annonces:managergender:values' => "mr, mrs",
 	'uhb_annonces:managergender:mr' => "Monsieur",
 	'uhb_annonces:managergender:mrs' => "Madame",
 	
-	'uhb_annonces:managervalidated:yes' => "Oui",
-	'uhb_annonces:managervalidated:no' => "Non",
+	'uhb_annonces:managervalidated:yes' => "Yes",
+	'uhb_annonces:managervalidated:no' => "No",
 	
-	'uhb_annonces:profileformation:values' => "administration, urbanism, artculture, trade, economy, documentation, learning, research, communication, journalism, languages, multimedia, socialinclusion, humanressources, healthcare, sport",
-	'uhb_annonces:profileformation:administration' => "Administration publique",
-	'uhb_annonces:profileformation:urbanism' => "Aménagement / Urbanisme / Environnement",
+	'uhb_annonces:profileformation:values' => "urbanism, artculture, documentation, communication, learning, research, enterprise, languages, healthcare, sport",
+	'uhb_annonces:profileformation:urbanism' => "Aménagement / Environnement / Urbanisme",
 	'uhb_annonces:profileformation:artculture' => "Art / Culture / Patrimoine",
-	'uhb_annonces:profileformation:trade' => "Commerce / Marketing",
-	'uhb_annonces:profileformation:economy' => "Economie / Gestion / Statistiques",
-	'uhb_annonces:profileformation:documentation' => "Edition / Documentation",
+	'uhb_annonces:profileformation:documentation' => "Bibliothèques / Documentation / Edition",
+	'uhb_annonces:profileformation:communication' => "Communication / Multimédia",
 	'uhb_annonces:profileformation:learning' => "Education / Formation",
 	'uhb_annonces:profileformation:research' => "Etudes / Recherche / Innovation",
-	'uhb_annonces:profileformation:communication' => "Information / Communication / TIC",
-	'uhb_annonces:profileformation:journalism' => "Journalisme / Lettres",
-	'uhb_annonces:profileformation:languages' => "Langues / Linguistique",
-	'uhb_annonces:profileformation:multimedia' => "Multimédia / Audiovisuel",
-	'uhb_annonces:profileformation:socialinclusion' => "Prévention / Insertion / Intervention",
-	'uhb_annonces:profileformation:humanressources' => "Ressources Humaines / Management",
+	'uhb_annonces:profileformation:enterprise' => "Gestion / Marketing / Ressources Humaines",
+	'uhb_annonces:profileformation:languages' => "Linguistique / Traduction",
 	'uhb_annonces:profileformation:healthcare' => "Santé / Social",
-	'uhb_annonces:profileformation:sport' => "Sport",
+	'uhb_annonces:profileformation:sport' => "Sport / Tourisme / Loisirs",
+	// OUT - old keys should stay for compatibility. These were not in production
+	//'uhb_annonces:profileformation:administration' => "Administration publique",
+	//'uhb_annonces:profileformation:trade' => "Commerce / Marketing / International",
+	//'uhb_annonces:profileformation:economy' => "Economie / Gestion / Statistiques",
+	//'uhb_annonces:profileformation:communication' => "Information / Communication / TIC",
+	//'uhb_annonces:profileformation:journalism' => "Journalisme / Lettres",
+	//'uhb_annonces:profileformation:socialinclusion' => "Prévention / Insertion / Intervention",
+	//'uhb_annonces:profileformation:humanressources' => "Ressources Humaines / Management",
 	
 	//'uhb_annonces:profilelevel:values' => "all, licence, master1, master2, doctorat",
 	// Note : it is essential to have numerical values because of search greater than X
@@ -330,9 +352,10 @@ return array(
 	'uhb_annonces:followstate:archive' => "Archivée",
 	
 	'uhb_annonces:followreport:values' => "no, yes",
-	'uhb_annonces:followreport:no' => "Non",
-	'uhb_annonces:followreport:yes' => "Oui (signalée comme pourvue)",
+	'uhb_annonces:followreport:no' => "No",
+	'uhb_annonces:followreport:yes' => "Yes (report as filled)",
 	
+	'uhb_annonces:addcomment' => "Add a comment",
 	
 	
 	// Formulaire
@@ -362,15 +385,14 @@ return array(
 	'uhb_annonces:form:action:exportcsv:details' => "Note : lors d'un export au format CSV, le fichier exporté comprend l'ensemble des offres correspondant à vos critères de recherche, et toutes les informations associées aux offres.<br />Attention : l'export CSV intégrant l'ensemble des informations associées à chacune des offres, l'export d'un nombre important d'offre peut prendre un temps significatif, de l'ordre de plusieurs minutes par millier d'offres. Veuillez également noter que le fichier exporté peut être lourd (environ 1 Mo par millier d'offres).",
 	'uhb_annonces:form:action:candidate' => "Envoyer ma candidature",
 	'uhb_annonces:form:candidate:attachment' => "CV et lettre de motivation",
-	'uhb_annonces:form:candidate:profilelink' => "Profil professionel",
+	'uhb_annonces:form:candidate:profilelink' => "Profil professionnel",
 	// Explications
-	'uhb_annonces:form:manager:details' => "<p>Vos coordonnées de contact ne sont pas affichées dans RESONANCES.</p>
+	'uhb_annonces:form:manager:details' => "<p>Vos coordonnées de contact ne sont pas affichées dans RESONANCES. Le site vous transmettra automatiquement par email les demandes de candidature d'étudiants ou de diplômés pour cette offre.</p>
 	<p>Vous pouvez vérifier votre saisie en revenant sur les étapes précédentes avec la navigation en haut de page. Une fois votre offre validée, vous recevrez un email de vérification avec un lien à activer.</p>
-	<p>Votre offre sera relue par un chargé de mission qui sera votre correspondant éventuel avant la publication dans RESONANCES.</p>
-	<p>RESONANCES vous transmettra automatiquement par email les demandes de candidature d'étudiants ou de diplômés pour cette offre.</p>",
+	<p>Votre offre sera relue par un chargé de mission qui sera votre correspondant éventuel avant la publication dans RESONANCES.</p>",
 	
 	
-	/* Candidatures */
+	// Candidatures
 	'uhb_annonces:apply:attachfiles' => "Je joins mon CV et ma lettre de candidature",
 	'uhb_annonces:apply:file1' => "Fichier joint n°1 (obligatoire)",
 	'uhb_annonces:apply:file2' => "Fichier joint n°2 (optionnel)",
@@ -382,43 +404,43 @@ return array(
 	'uhb_annonces:error:attachmentsupport' => "L'envoi de pièces jointes par email n'est pas pris en charge, veuillez contacter un administrateur du site.",
 	
 	
-	/* Listing */
+	// Listing
 	'uhb_annonces:count' => "%s offres",
 	
-	'uhb_annonces:list:new' => "Nouvelles offres",
-	'uhb_annonces:list:confirmed' => "Offres confirmées",
-	'uhb_annonces:list:published' => "Offres publiées",
-	'uhb_annonces:list:filled' => "Offres pourvues",
-	'uhb_annonces:list:archive' => "Offres archivées",
-	'uhb_annonces:list:all' => "Toutes les offres",
+	'uhb_annonces:list:new' => "New offers",
+	'uhb_annonces:list:confirmed' => "Confirmed offers",
+	'uhb_annonces:list:published' => "Published offers",
+	'uhb_annonces:list:filled' => "Filled offers",
+	'uhb_annonces:list:archive' => "Archived offers",
+	'uhb_annonces:list:all' => "All offers",
 	'uhb_annonces:list:anonymous' => "Offres sans compte de membre",
 	'uhb_annonces:list:reported' => "Offres signalées comme pourvues",
 	'uhb_annonces:list:reportedby' => "Membres auteurs des signalements",
 	'uhb_annonces:list:memorised' => "Offres mémorisées",
 	'uhb_annonces:list:candidated' => "Offres ayant reçu une candidature",
-	'uhb_annonces:list:mine' => "Mes offres",
-	'uhb_annonces:list:mine:memorised' => "Mes offres mémorisées",
+	'uhb_annonces:list:mine' => "My offers",
+	'uhb_annonces:list:mine:memorised' => "My saved offers",
 	'uhb_annonces:list:mine:candidated' => "Offres auxquelles j'ai candidaté",
-	'uhb_annonces:list:mine:mine' => "Mes offres",
+	'uhb_annonces:list:mine:mine' => "My offers",
 	
-	'uhb_annonces:tab:new' => "Nouvelles",
-	'uhb_annonces:tab:confirmed' => "Confirmées",
-	'uhb_annonces:tab:published' => "Publiées",
-	'uhb_annonces:tab:filled' => "Pourvues",
-	'uhb_annonces:tab:archive' => "Archivées",
-	'uhb_annonces:tab:reported' => "Signalées",
-	'uhb_annonces:tab:memorised' => "Mémorisées",
+	'uhb_annonces:tab:new' => "New",
+	'uhb_annonces:tab:confirmed' => "Confirmed",
+	'uhb_annonces:tab:published' => "Published",
+	'uhb_annonces:tab:filled' => "Filled",
+	'uhb_annonces:tab:archive' => "Archived",
+	'uhb_annonces:tab:reported' => "Reported",
+	'uhb_annonces:tab:memorised' => "Saved",
 	'uhb_annonces:tab:candidated' => "Candidatées",
-	'uhb_annonces:tab:all' => "Toutes",
-	'uhb_annonces:tab:anonymous' => "Non-membres",
-	'uhb_annonces:tab:mine' => "Mes offres",
+	'uhb_annonces:tab:all' => "All",
+	'uhb_annonces:tab:anonymous' => "Non-members",
+	'uhb_annonces:tab:mine' => "My offers",
 	
 	'uhb_annonces:view:menu:structure' => "Structure",
-	'uhb_annonces:view:title' => "Offre de %s",
+	'uhb_annonces:view:title' => "Offer from %s",
 	'uhb_annonces:view:structure' => "Structure : ",
 	'uhb_annonces:view:structurelegalstatus' => "Statut juridique : ",
-	'uhb_annonces:view:structureaddress' => "Adresse : ",
-	'uhb_annonces:view:structurewebsite' => "Site internet : ",
+	'uhb_annonces:view:structureaddress' => "Address: ",
+	'uhb_annonces:view:structurewebsite' => "Web site: ",
 	'uhb_annonces:view:structuresiret' => "SIRET : ",
 	'uhb_annonces:view:structurenaf2008' => "NAF 2008 : ",
 	'uhb_annonces:view:structureworkforce' => "Effectifs : %s personnes",
@@ -440,8 +462,9 @@ return array(
 	'uhb_annonces:view:profilecomment' => "Observations sur le profil recherché : ",
 	
 	'uhb_annonces:view:menu:candidate' => "Je candidate",
-	'uhb_annonces:view:menu:candidate:done' => "Candidature envoyée",
-		'uhb_annonces:candidate:done:details' => "Vous avez déjà postulé à cette offre.<br />Les fichiers que vous avez joints vous ont également été envoyés par email au moment de votre candidature.",
+	// Note : attention, c'est un entête de menu !
+	'uhb_annonces:view:menu:candidate:done' => "Candidature déjà envoyée",
+	'uhb_annonces:candidate:done:details' => "Vous avez déjà postulé à cette offre. Le contact de cet annonce vous répondra personnellement.<br /><br />Les fichiers que vous avez joints vous ont également été envoyés par email au moment de votre candidature.",
 	
 	'uhb_annonces:view:menu:contact' => "Contact",
 	'uhb_annonces:view:manageremail' => "Email du responsable : %s",
@@ -451,54 +474,63 @@ return array(
 	
 	'uhb_annonces:view:menu:admin' => "Admin",
 	'uhb_annonces:view:followstate' => "Etat : %s",
-	'uhb_annonces:view:followcreation' => "Créée le %s",
-	'uhb_annonces:view:createdby' => "par %s",
-	'uhb_annonces:view:createdby:nomember' => "(non-membre)",
-	'uhb_annonces:view:followcreation:no' => "Pas de date de création",
-	'uhb_annonces:view:followvalidation' => "Validée le %s",
-	'uhb_annonces:view:followvalidation:no' => "Non validée",
+	'uhb_annonces:view:followcreation' => "Created on %s",
+	'uhb_annonces:view:createdby' => "by %s",
+	'uhb_annonces:view:createdby:nomember' => "(non-member)",
+	'uhb_annonces:view:followcreation:no' => "No creation date",
+	'uhb_annonces:view:followvalidation' => "Published on %s",
+	'uhb_annonces:view:followvalidation:no' => "Not published",
 	'uhb_annonces:view:followend' => "Fin de publication le %s",
 	'uhb_annonces:view:followend:no' => "Pas de date de fin de publication ",
-	'uhb_annonces:view:interested' => "%s membres intéressés",
-	'uhb_annonces:view:candidated' => "%s candidatures",
-	'uhb_annonces:view:reported' => "%s signalements comme pourvue",
-	'uhb_annonces:view:followcomments' => "Remarques",
+	'uhb_annonces:view:interested' => "%s membre(s) intéressé(s)",
+	'uhb_annonces:view:candidated' => "%s candidature(s)",
+	'uhb_annonces:view:reported' => "%s signalement(s) comme pourvue",
+	'uhb_annonces:view:followcomments' => "Comments",
 	
 	
-	/* Messages */
+	// Messages
 	'uhb_annonces:message:reactivate' => "Votre annonce a été réactivée pour un nouveau cycle de publication. Merci de votre confiance.",
 	'uhb_annonces:message:archive' => "Votre annonce a été archivée. Un email de confirmation vient de vous être envoyé. Merci de votre confiance.",
+*/
 	
 	
 	/* NOTIFICATIONS */
+/* @TODO : translate !
 	// Public actions
-	'uhb_annonces:action:confirm:success' => "Adresse email confirmée",
+	'uhb_annonces:action:confirm:success' => "L'adresse email est confirmée. Les instructions pour la suite vous ont été envoyées.",
 	'uhb_annonces:action:confirm:success:message' => "Votre adresse email a bien été confirmée. ",
-	'uhb_annonces:action:reactivate:success' => "Annonce ré-activée",
+	'uhb_annonces:action:confirmed:success' => "L'adresse email était déjà confirmée.",
+	'uhb_annonces:action:confirmed:success:message' => "Votre adresse email était déjà confirmée.",
+	'uhb_annonces:action:reactivate:success' => "L'annonce est ré-activée",
 	'uhb_annonces:action:reactivate:success:message' => "Votre annonce a bien été ré-activée.",
-	'uhb_annonces:action:archive:success' => "Annonce désactivée",
+	'uhb_annonces:action:archive:success' => "L'annonce est désactivée",
 	'uhb_annonces:action:archive:success:title' => "Annonce désactivée",
-	'uhb_annonces:action:archive:success:message' => "Votre annonce a bien été désactivée.",
+	'uhb_annonces:action:archive:success:message' => "Votre annonce a été désactivée.",
 	'uhb_annonces:action:archive:alreadydone' => "Votre annonce a déjà été archivée",
+	'uhb_annonces:action:filled:success' => "L'annonce est désactivée car pourvue",
+	'uhb_annonces:action:filled:success:title' => "Annonce pourvue",
+	'uhb_annonces:action:filled:success:message' => "Votre annonce a été désactivée car pourvue.",
+	'uhb_annonces:image_captcha:verify:fail' => "Votre annonce n'a pas pu être enregistrée, veuillez vérifier le captcha",
 	
 	// Member actions
-	'uhb_annonces:action:memorise:success' => "Annonce mémorisée",
-	'uhb_annonces:action:removememorise:success' => "Cette annonce n'est plus mémorisée",
-	'uhb_annonces:action:candidate:success' => "Candidature envoyée",
-	'uhb_annonces:action:candidate:error' => "Erreur lors de l'envoi de votre candidature, veuillez réessayer.",
-	'uhb_annonces:action:report:success' => "Signalement effectué",
-	'uhb_annonces:action:unreport:success' => "Signalement supprimé",
+	'uhb_annonces:action:memorise:success' => "L'annonce est mémorisée : vous la retrouverez dans votre suivi d'annonces.",
+	'uhb_annonces:action:removememorise:success' => "Cette offre n'est plus mémorisée dans votre suivi d'annonces.",
+	'uhb_annonces:action:candidate:waitwhilesending' => "Candidature en cours. L'envoi des pièces jointes peut prendre un peu de temps, veuillez patienter sans fermer cette page.",
+	'uhb_annonces:action:candidate:success' => "Votre candidature a été envoyée. Vous la retrouverez dans votre suivi d'annonces.",
+	'uhb_annonces:action:candidate:error' => "Il y a eu une erreur lors de l'envoi de votre candidature, veuillez réessayer.",
+	'uhb_annonces:action:report:success' => "Signalement effectué : nous vérifierons cette annonce.",
+	'uhb_annonces:action:unreport:success' => "Votre signalement a été supprimé.",
 	// Admin actions
-	'uhb_annonces:action:publish:success' => "Annonce publiée",
-	'uhb_annonces:action:resendconfirm:success' => "Email de confirmation renvoyé",
-	'uhb_annonces:action:validate:success' => "Email validé",
+	'uhb_annonces:action:publish:success' => "L'annonce est publiée",
+	'uhb_annonces:action:resendconfirm:success' => "Un nouvel email de confirmation a été renvoyé.",
+	'uhb_annonces:action:validate:success' => "L'adresse email est validée",
 	'uhb_annonces:action:removereport:success' => "Signalements \"annonce pourvue\" supprimés",
 	
 	
 	'uhb_annonces:notification:mail:success' => "Un email de confirmation a été envoyé.",
 	'uhb_annonces:notification:mail:error' => "Une erreur s'est produite lors de l'envoi du mail.",
 	
-	/* Emails de notification vers l'annonceur */
+	// Emails de notification vers l'annonceur
 	// Email de confirmation n°1
 	'uhb_annonces:notification:confirm1:subject' => "Votre annonce dans RESONANCES",
 	'uhb_annonces:notification:confirm1:body' => "%1\$s %2\$s,
@@ -510,13 +542,13 @@ Nous vous remercions d'avoir utilisé RESONANCES pour déposer votre offre %3\$s
 Après cette vérification, votre annonce sera prise en charge par un chargé de mission pour sa diffusion auprès des étudiants et diplômés. Vous recevrez un lien à conserver qui vous permettra de la modifier ou de la supprimer, de suivre les candidatures.",
 	
 	// Email de confirmation n°2
-	'uhb_annonces:notification:confirm2:subject' => "Vos informations pour gérer votre annonces dans RESONANCES",
-	'uhb_annonces:notification:confirm2:validate' => "Votre adresse email est bien confirmée.",
-	'uhb_annonces:notification:confirm2:edit' => "Votre annonce a bien été modifiée.",
+	'uhb_annonces:notification:confirm2:subject' => "Vos informations pour gérer votre annonce dans RESONANCES",
+	'uhb_annonces:notification:confirm2:validate' => "Votre adresse email est confirmée.",
+	'uhb_annonces:notification:confirm2:edit' => "Votre annonce a été modifiée.",
 	'uhb_annonces:notification:confirm2:body' => "%1\$s %2\$s,
 
 %3\$s
-Votre annonce va maintenant être validée par un chargé de mission de l'université avant sa publication. Celui-ci reviendra vers vous si votre annonce nécessite des précisions ou modifications. Cette étape est généralement très rapide, de l'ordre d'un jour ouvré dans 9 cas sur 10.
+Votre annonce va maintenant être validée par un chargé de mission de l'université avant sa publication. Celui-ci reviendra vers vous si votre annonce nécessite des précisions ou modifications. Cette étape est généralement très rapide, de l'ordre d'un jour ouvré.
 
 Nous vous remercions de votre confiance et de votre intérêt pour les étudiants et diplômés de notre université.
 
@@ -530,7 +562,7 @@ Votre annonce pour un %3\$s intitulé \"%4\$s\" vient d'être validée et publi�
 
 Vos coordonnées n'étant pas publiques, ces candidatures vous seront transmises via le site RESONANCES, ce qui permet de suivre les candidatures et l'actualité de votre recrutement.
 
-Avec le lien de gestion suivant, vous accédez à la page de votre annonce dans laquelle figure le nombre de personnes qui ont été intéressé par votre annonce, et la liste des candidatures à jour.
+Avec le lien de gestion suivant, vous accédez à la page de votre annonce dans laquelle figure le nombre de personnes qui ont été intéressées par votre annonce, et la liste des candidatures à jour.
 
 %5\$s
 
@@ -556,7 +588,7 @@ Si elle est obsolète ou si vous ne souhaitez pas la remettre en affichage, cliq
 
 Sans action de votre part, l'annonce sera automatiquement archivée d'ici 7 jours.
 
-Nous vous remercions de la confiance que vous avez témoignée envers les étudiants et diplômés de l'université Rennes 2. Nous espérons que vous utilisez à nouveau nos services pour vos futurs recrutements.
+Nous vous remercions de la confiance que vous avez témoignée envers les étudiants et diplômés de l'université Rennes 2. Nous espérons que vous utiliserez à nouveau nos services pour vos futurs recrutements.
 
 Recevez, %1\$s %2\$s, nos sincères salutations.
 
@@ -568,7 +600,7 @@ L'équipe RESONANCES",
 
 Votre annonce pour un %3\$s intitulé %4\$s vient d'être désactivée. Elle n'est plus visible pour les membres du réseau social RESONANCES de l'université Rennes 2.
 
-Nous vous remercions de la confiance que vous avez témoignée envers les étudiants et diplômés de l'université Rennes 2. Nous espérons que vous utilisez à nouveau nos services pour vos futurs recrutements.
+Nous vous remercions de la confiance que vous avez témoignée envers les étudiants et diplômés de l'université Rennes 2. Nous espérons que vous utiliserez à nouveau nos services pour vos futurs recrutements.
 
 Recevez, %1\$s %2\$s, nos sincères salutations.
 L'équipe RESONANCES",
@@ -595,7 +627,7 @@ L'équipe RESONANCES",
 De plus %1\$s vous invite à consulter son profil numérique professionnel dans RESONANCES à cette adresse : %2\$s
 ",
 	
-	/* Email de notification vers le candidat */
+	// Email de notification vers le candidat
 	// Email à destination du membre candidat
 	'uhb_annonces:notification:application:subject' => "Votre candidature à une annonce dans RESONANCES",
 	'uhb_annonces:notification:application:body' => "Bonjour %1\$s,
@@ -608,6 +640,7 @@ Vous retrouverez un lien vers les annonces pour lesquelles vous avez souhaité p
 Nous vous souhaitons la réussite dans vos projets,
 
 L'équipe RESONANCES",
+*/
 	
 );
 

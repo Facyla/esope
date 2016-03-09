@@ -110,12 +110,22 @@ return array(
 	'esope:config:styles:headerfooter' => "Header and footer gradient",
 	'esope:config:styles:groupmodules' => "Widgets and group modules gradient",
 	'esope:config:styles:buttons' => "Buttons gradient (normal then :hover)",
+	
+	// Import / export
 	'esope:config:saverestore' => "IMPORT / EXPORT - <i>BETA</i>",
 	'esope:config:saverestore:details' => "This functionnality lets you save/export the current theme configuration, and restore previous configurations, or import them into another site. You can use it as a config backup, to test various configuration settings, or as a deployment tool to transfer a theme configuration from a site to another.<br />Warning : this only include THIS plugin configuration.",
 	'esope:config:import' => "Import / Restore",
 	'esope:config:import:details' => "To import settings from another site, or restore a previous backup, paste the text data below, then save the plugin settings.<br />WARNING : all current settings will be replaced by those in the backup ! It is advised to keep a copy of the current settings before proceding....<br />Important note : only the settings that are defined in the backup will be replaced ; if new fields were added meanwhile, or were not part of the backup, the current settings will be kept..",
 	'esope:config:export' => "Export / Save",
-	'esope:config:export:details' => "Copy-paste the content of the area below and keep it in a text file or in a mail. To select all text, click in text zone, or use Ctrl-C (ou Apple-C) to copy the text.",
+	'esope:config:export:details' => "Copy-paste the content of the area below and keep it in a text file or in a mail. To select all text, click in text zone, or use Ctrl-C (or Apple-C) to copy the text.",
+	'esope:restore:title' => "Settings restoration",
+	'esope:restore:readok' => "Reading restore data...OK",
+	'esope:restore:settingvalue' => "<strong>%s&nbsp;: Restoring provided settings</strong><br />%s &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; %s<hr />",
+	'esope:restore:report' => "Settings restore completed! %s settings read, %s settings updated, and %s settings left identical.<br />",
+	'esope:restore:error' => "Error while restoring settings: invalid restore data.",
+	'esope:restore:previousversion:success' => "Successfully imported and updated settings from previous version",
+	
+	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITY",
 	'esope:config:security:notice' => "<p>Part of security features rely on server configuration. Some improvements can also be set through .htaccess. Remaining settings can be set here.</p>

@@ -110,12 +110,22 @@ return array(
 	'esope:config:styles:headerfooter' => "Dégradé du header et du pied de page",
 	'esope:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
 	'esope:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
+	
+	// Import / export
 	'esope:config:saverestore' => "SAUVEGARDE ET RESTAURATION - <i>BETA</i>",
 	'esope:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.<br />Attention : seule la configuration de CE plugin est concernée !",
 	'esope:config:import' => "Import / restauration",
 	'esope:config:import:details' => "Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.",
 	'esope:config:export' => "Export / sauvegarde",
 	'esope:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
+	'esope:restore:title' => "Restauration des paramètres",
+	'esope:restore:readok' => "Lecture des données de restauration...OK",
+	'esope:restore:settingvalue' => "<strong>%s&nbsp;: Restauration des paramètres fournis</strong><br />%s &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; %s<hr />",
+	'esope:restore:report' => "Restauration de vos paramètres terminée ! %s paramètres lus, %s paramètres modifiés, et %s paramètres identiques.<br />",
+	'esope:restore:error' => "Erreur lors de la restauration des paramètres : données importées invalides.",
+	'esope:restore:previousversion:success' => "Import et mise à jour des paramètres réussie depuis la version précédente",
+	
+	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITÉ",
 	'esope:config:security:notice' => "<p>Une partie de la sécurisation du site dépend du serveur. Certaines améliorations peuvent être mises en place via .htaccess. Les réglages restants peuvent être modifiés ci-dessous.</p>
