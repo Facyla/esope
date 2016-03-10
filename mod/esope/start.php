@@ -28,7 +28,7 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome - moved to external dependency
+	// Font Awesome - is now available as an independant plugin - declared as required dependency
 	if (!elgg_is_active_plugin('fontawesome')) {
 		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
 		elgg_load_css('fontawesome');
@@ -37,6 +37,13 @@ function esope_init() {
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
+	// Tweak Digest content : unextend sections to be removed + extend with wanted sections (and chosen priority)
+	// See mod/digest/README.txt for details
+	// Add all groups excerpt to digest
+	//elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+		elgg_extend_view('digest/elements/site', 'digest/elements/site/market', 200);
+
 	// Sécurité
 	// @TODO : use hook to extend head
 	// Important : Enable this only if you don't need to include iframes in other websites !!

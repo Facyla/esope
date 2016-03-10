@@ -16,11 +16,11 @@ $group_options = array(
 
 $new_groups = elgg_get_entities($group_options);
 if (!empty($new_groups)) {
-	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:groups"), "href" => "groups/all"));
+	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:groups"), "href" => "groups/all", "is_trusted" => true));
 	
 	$group_items = "<div class='digest-groups'>";
 	
-	foreach($new_groups as $key => $group){
+	foreach($new_groups as $index => $group){
 		$group_items .= '<div class="table-item">';
 		$group_items .= elgg_view_entity_icon($group, "medium");
 		$group_items .= elgg_view("output/url", array(
