@@ -47,8 +47,8 @@ if (!empty($offers)) {
 		$offer_url = $offer->getURL();
 		$owner = $offer->getOwnerEntity();
 		$container = $offer->getContainerEntity();
-		$category = "<p><b>" . elgg_echo('market:category') . "&nbsp;:</b> " . elgg_echo("market:category:{$offer->marketcategory}") . '<p>';
-		$type = "<p><b>" . elgg_echo('market:type') . "&nbsp;:</b> " . elgg_echo("market:type:{$offer->market_type}") . '<p>';
+		$category = "<b>" . elgg_echo('market:category') . "&nbsp;:</b> " . elgg_echo("market:category:{$offer->marketcategory}") . '<br />';
+		$type = "<b>" . elgg_echo('market:type') . "&nbsp;:</b> " . elgg_echo("market:type:{$offer->market_type}") . '<br />';
 		$excerpt = elgg_get_excerpt($offer->description);
 		
 		
