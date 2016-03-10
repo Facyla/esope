@@ -9,3 +9,4 @@
 .market-list-block { margin-top: 1em; }
 .market-list-block .elgg-image { float: left; margin-right: 1em; }
 
+
