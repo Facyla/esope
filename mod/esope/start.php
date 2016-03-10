@@ -42,7 +42,6 @@ function esope_init() {
 	// Add all groups excerpt to digest
 	//elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
-		elgg_extend_view('digest/elements/site', 'digest/elements/site/market', 200);
 
 	// Sécurité
 	// @TODO : use hook to extend head
