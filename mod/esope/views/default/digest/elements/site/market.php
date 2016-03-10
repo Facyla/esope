@@ -16,7 +16,7 @@ $dbprefix = elgg_get_config("dbprefix");
 $offer_options = array(
 	"type" => "object",
 	"subtype" => "market",
-	"limit" => 3,
+	"limit" => 2,
 	/*
 	"created_time_lower" => $ts_lower,
 	"created_time_upper" => $ts_upper,

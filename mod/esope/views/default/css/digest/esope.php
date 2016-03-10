@@ -6,7 +6,7 @@
 
 
 /* Market offers */
-.market-list-block { margin-top: 1em; }
+.market-list-block { margin-top: 1em; clear: both; display: inline-block; }
 .market-list-block .elgg-image { float: left; margin-right: 1em; }
 
 
