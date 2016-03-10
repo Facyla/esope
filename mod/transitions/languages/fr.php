@@ -234,6 +234,8 @@ Voir et commenter cette contribution :
 	
 	
 	// Select values
+	'transitions:option:none' => "(aucune)",
+	
 	'transitions:lang:other' => "Autre langue",
 	'transitions:lang:all' => "Toutes les langues",
 	

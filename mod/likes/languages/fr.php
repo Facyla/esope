@@ -11,25 +11,23 @@ return array(
 	'likes:notfound' => 'L\'élément que vous essayez d\'apprécier ne peut être trouvé',
 	'likes:likethis' => 'Aime',
 	'likes:userlikedthis' => '%s aime',
-	'likes:userslikedthis' => '%s aime',
+	'likes:userslikedthis' => '%s aiment',
 	'likes:river:annotate' => 'aime',
 	'likes:delete:confirm' => 'Confirmez-vous vouloir supprimer cette appréciation ?',
 
 	'river:likes' => 'aime %s %s',
 
 	// notifications. yikes.
-	'likes:notifications:subject' => '%s aime votre message "%s"',
+	'likes:notifications:subject' => '%s aime votre publication "%s"',
 	'likes:notifications:body' =>
 'Bonjour %1$s,
 
 %2$s aime votre publication "%3$s" sur %4$s
 
-Afficher votre publication :
-
+Pour afficher votre publication :
 %5$s
 
 ou voir le profil de %2$s :
-
 %6$s
 
 Merci,

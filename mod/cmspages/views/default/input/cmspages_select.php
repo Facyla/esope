@@ -12,6 +12,7 @@ $name = elgg_extract('name', $vars, 'cmspages');
 $value = elgg_extract('value', $vars, false);
 $label = elgg_extract('label', $vars, '');
 $use_guid = elgg_extract('use_guid', $vars, false); // Defaults to pagetype
+$onChange = elgg_extract('onChange', $vars, '');
 
 // Filters
 $content_type = elgg_extract('content_type', $vars, '');
@@ -35,8 +36,8 @@ if (!empty($content_type)) {
 }
 
 // Get cmspages
-if (!empty($options['metadata_name_value_pairs'])) $cmspages = elgg_get_entities_from_metadata($options);
-else $cmspages = elgg_get_entities($options);
+if (!empty($options['metadata_name_value_pairs'])) { $cmspages = elgg_get_entities_from_metadata($options); }
+else { $cmspages = elgg_get_entities($options); }
 
 if ($cmspages) {
 	// Tri des pages : dernières, alpha
@@ -64,10 +65,11 @@ foreach ($cmspages as $ent) {
 }
 
 // Render select input
+$select = elgg_view('input/select', array('name' => $name, 'options_values' => $cmspages_opt, 'value'=> $value, 'class' => "cmspages-select", 'onChange' => $onChange));
 if (!empty($label)) {
-	echo '<label>' . $label . ' ' . elgg_view('input/select', array('name' => $name, 'options_values' => $cmspages_opt, 'value'=> $value)) . '</label>';
+	echo '<label>' . $label . ' ' . $select . '</label>';
 } else {
-	echo elgg_view('input/select', array('name' => $name, 'options_values' => $cmspages_opt, 'value'=> $value));
+	echo $select;
 }
 
 
