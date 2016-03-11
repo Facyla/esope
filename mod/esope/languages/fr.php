@@ -252,7 +252,7 @@ return array(
 	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
-	'groups:join:success' => "Vous êtes désormais membre du groupe",
+	'groups:join:success' => "%s est désormais membre du groupe",
 	'reply:this' => "Répondre", // Mauvaise trad fr dans groups...
 	'groups:topicopen' => "Ouvert (commentaires acceptés)",
 	
