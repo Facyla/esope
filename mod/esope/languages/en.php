@@ -501,6 +501,7 @@ return array(
 	'esope:settings:groups:invite_picker:details' => "Note: above a fixed number of persons, the picker will automatically switch to Autocomplete (to avoid memrory overflow).",
 	'esope:invite_picker:friendspicker' => "Alphabetical picker",
 	'esope:invite_picker:userpicker' => "Autocomplete",
+	'esope:invitegroups:help' => "Please input at least 3 letters of the searched person's name.",
 	'esope:settings:groups:invite_metadata' => "Group invites by metadata search",
 	'esope:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
 	

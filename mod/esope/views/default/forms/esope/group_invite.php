@@ -6,6 +6,10 @@
  * @package ElggGroups
  */
 
+$invite_metadata = elgg_get_plugin_setting('groups_invite_metadata', 'esope');
+if (empty($invite_metadata)) { return; }
+$metadata_search_fields = esope_get_input_array($invite_metadata);
+
 $group = $vars['entity'];
 $owner = $group->getOwnerEntity();
 $forward_url = $group->getURL();
@@ -14,7 +18,8 @@ $own = elgg_get_logged_in_user_entity();
 $ownguid = elgg_get_logged_in_user_guid();
 
 // Get input fields
-$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service');
+//$metadata_search_fields = array('inria_location', 'inria_location_main', 'epi_ou_service');
+$query = '';
 $meta_fields = get_input("metadata");
 foreach ($metadata_search_fields as $field) {
 	$$field = $meta_fields["$field"];
@@ -22,21 +27,24 @@ foreach ($metadata_search_fields as $field) {
 	//if (!empty($$field)) $content .= "FIELD $field = " . $$field . "<br />";
 }
 
+
+// FORM CONTENT
 $content = '';
 
 // End normal invite form
-$content .= "</div>";
+//$content .= "</div>";
 $content .= "</form>";
 
 
-
+// Start search form based on members' metadata
 $content .= '<form id="esope-search-form-invite-groups" method="POST" class="elgg-form elgg-form-groups-invite-search">';
-$content .= '<div class="blockform">';
-$content .= '<h3>' . elgg_echo('theme_inria:groupinvite:search') . '</h3>';
+//$content .= '<div class="blockform">';
+$content .= '<h3>' . elgg_echo('esope:groupinvite:search') . '</h3>';
 
 
 // Step 1. Search form using LDAP fields
-$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:search:select') . '</h4>';
+$content .= '<h4>' . elgg_echo('esope:groupinvite:search:select') . '</h4>';
+$content .= '<br />';
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 $metadata_search = '';
@@ -67,17 +75,18 @@ $content .= '<input type="submit" class="elgg-button elgg-button-submit" value="
 // Step 2. Handle search form and display results in the invite form
 // Formulaire d'invitation
 $content .= '<div class="clearfloat"></div><br />';
-$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:search:invite') . '</h4>';
+$content .= '<h4>' . elgg_echo('esope:groupinvite:search:invite') . '</h4>';
 // @TODO add selected results to .elgg-user-picker-list ? as : <input type="hidden" name="members[]" value="XXX">
 if (!empty($query)) {
 	$max_results = 500;
 	$users = esope_esearch(array('returntype' => 'entities'), $max_results);
 	$return_count = count($users);
 	if ($users) {
-		$content .= "</div>";
+		//$content .= "</div>";
+		// Close search form and open a new form to invite found users
 		$content .= '</form>';
 		$content .= '<form id="esope-search-form-invite-results" method="POST" class="elgg-form elgg-form-alt mtm elgg-form-groups-invite-results" action="' . elgg_get_site_url() . 'action/groups/invite">';
-		$content .= '<div class="blockform">';
+		//$content .= '<div class="blockform">';
 		$content .= elgg_view('input/securitytoken');
 		$content .= "<script>
 		$(document).ready(function() {
@@ -106,7 +115,7 @@ if (!empty($query)) {
 		$content .= elgg_view('input/hidden', array('name' => 'forward_url', 'value' => $forward_url));
 		$content .= elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $group->guid));
 		$content .= elgg_view('input/submit', array('value' => elgg_echo('invite')));
-		$content .= '</div>';
+		//$content .= '</div>';
 	} else {
 		$content .= '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>';
 	}
@@ -114,6 +123,7 @@ if (!empty($query)) {
 	$content .= '<span class="esope-noresult">' . elgg_echo('esope:search:nosearch') . '</span>';
 }
 
+// Note : closing </form> is rendered by forms/groups/invite view (inner extend)
 
 $content .= '<div class="clearfloat"></div>';
 

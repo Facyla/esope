@@ -516,6 +516,7 @@ return array(
 	'esope:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
 	'esope:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
 	'esope:invite_picker:userpicker' => "Auto-complétion",
+	'esope:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'esope:settings:groups:invite_metadata' => "Invitations par critères de recherche",
 	'esope:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
 	

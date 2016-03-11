@@ -118,7 +118,8 @@ function theme_inria_init(){
 	*/
 	
 	// Remplacement du modèle d'event_calendar
-	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
+	// @TODO : inutile avec version pour Elgg 1.12 ?
+	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
 	
 	// Check access validity and update meta fields (inria/external, active/closed)
 	elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);

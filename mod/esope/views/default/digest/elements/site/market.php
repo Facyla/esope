@@ -33,7 +33,7 @@ $offer_options = array(
 );
 
 $offers = elgg_get_entities($offer_options);
-if (!empty($offers)) {
+if ($offers) {
 	$title = elgg_view("output/url", array(
 		"text" => elgg_echo("market:title"),
 		"href" => "market/all",
@@ -102,3 +102,4 @@ if (!empty($offers)) {
 	
 	echo elgg_view_module("digest", $title, $content);
 }
+

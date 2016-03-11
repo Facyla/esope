@@ -578,7 +578,7 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .groups-members-count { float: right; }
 
 /* Anciens groupes */
-.group-oldactivity { background:yellow; padding: 0.5rem 0; margin: 0 0; display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; font-size: 1rem; }
+.group-oldactivity { background: rgba(255,255,0,0.8); padding: 0.5rem 0; margin: 0 0; display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; font-size: 1rem; }
 .group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.4rem; padding: 1px 0; margin:0; line-height: 1; }
 .group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 0; }
 .group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 3px 0; }

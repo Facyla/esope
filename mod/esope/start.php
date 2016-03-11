@@ -62,6 +62,30 @@ function esope_init() {
 	// Suppression recherche de la sidebar
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
+	// Autorefresh des discussions
+// @TODO : changements dans les discussions
+	$forum_autorefresh = elgg_get_plugin_setting('discussion_autorefresh', 'esope');
+	if ($forum_autorefresh == 'yes') {
+		elgg_extend_view('object/groupforumtopic', 'esope/forum_autorefresh');
+	}
+	
+	// Extend group invite form
+	// Requires to be placed at the end of the form, because we will end the form and start a new one...
+	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
+	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
+	
+	// Add group Wire support (option)
+	// Note : also uses esope's event handler ("create", "object")
+	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
+		if (elgg_is_logged_in()) {
+			//elgg_extend_view('groups/tool_latest', 'thewire/thewire_group_module');
+			elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+		}
+		$enable_thewire_group = elgg_get_plugin_setting('groups_add_wire', 'esope');
+		if ($enable_thewire_group == 'groupoption') {
+			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
+		}
+	}
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -507,7 +531,7 @@ function esope_pagesetup(){
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
-			} else if ($page_owner instanceof ElggUser) {
+			} else if (elgg_instanceof($page_owner, 'user')) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
 				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $url . 'profile/' . $page_owner->username) );
 				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members') );
@@ -1014,7 +1038,6 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
    - integrate (if search plugin active) search_highlight_words($words, $string)
  */
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
-	global $CONFIG;
 	$debug = esope_extract('debug', $params, false);
 	
 	// Set defaults
@@ -1027,7 +1050,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		'metadata_name_value_pairs_operator' => 'AND',
 		'count' => false,
 	);
-	$defaults = array_merge($esearch_defaults, $defaults);
+	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
 	$q = esope_extract('q', $params, '');
 	// Note : we use entity_type and entity_subtype for consistency with regular search
