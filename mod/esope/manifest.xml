@@ -23,7 +23,7 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.11.4</version>
+		<version>1.12</version>
 	</requires>
 
 	<requires>

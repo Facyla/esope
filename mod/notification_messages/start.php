@@ -438,7 +438,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 						$notify_owner = notification_messages_notify_owner();
 						// Do not rely on logged in user but on object owner and current notified user
 						//if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
-						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
+						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && ($object->access_id != ACCESS_PRIVATE)) {
 							// Message content
 							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
 									'entity' => $object,

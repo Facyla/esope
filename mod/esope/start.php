@@ -651,7 +651,7 @@ if (!function_exists('messages_get_unread')) {
 		$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
 		$map = array();
 		foreach ($strings as $string) {
-			$id = get_metastring_id($string);
+			$id = elgg_get_metastring_id($string);
 			$map[$string] = $id;
 		}
 
@@ -1222,8 +1222,8 @@ function esope_get_subpages($parent) {
 	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
 	// Limit searched entities range with "guids" => $guids
-	$md_name = get_metastring_id('parent_guid');
-	$md_value = get_metastring_id($parent->guid);
+	$md_name = elgg_get_metastring_id('parent_guid');
+	$md_value = elgg_get_metastring_id($parent->guid);
 	// Can't be empty or we'll get a bad error
 	if (!empty($md_name) && !empty($md_value)) {
 		$guids_row = get_data("SELECT entity_guid FROM {$dbprefix}metadata where name_id = $md_name and value_id = $md_value");

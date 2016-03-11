@@ -81,7 +81,7 @@ echo "<fieldset>";
 		$vars['entity']->notify_owner = $notify_owner;
 		echo '&nbsp;: ' . $noyes_options[$vars['entity']->notify_owner] . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
-		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_owner:comment_tracker") . "</strong></div>";
+		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_user:comment_tracker") . "</strong></div>";
 	} else {
 		echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notify_owner]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_owner)) . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
