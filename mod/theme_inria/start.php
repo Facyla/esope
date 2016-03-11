@@ -19,7 +19,7 @@ function theme_inria_init(){
 	elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
 	
 	// Modified to make pages top_level / sub-pages
-	elgg_register_action("pages/edit", $action_url . "pages/edit.php");
+	//elgg_register_action("pages/edit", $action_url . "pages/edit.php");
 	
 	// Rewrite friends and friends request to remove river entries
 	elgg_unregister_action('friends/add');
