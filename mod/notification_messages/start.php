@@ -36,6 +36,7 @@ function notification_messages_init() {
 			// but this will avoid having to maintain the list here in case some plugin change called hook
 			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
 			// Some subtypes use a specific hook
+			// @TODO : always register both hooks, just in case ?
 			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
 				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
 			}

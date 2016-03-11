@@ -5,8 +5,11 @@
  * @uses $vars['entity'] ElggGroup
  */
 
-if ($vars['entity']) $container_guid = $vars['entity']->getGUID();
-else $container_guid = elgg_get_page_owner_guid();
+if ($vars['entity']) {
+	$container_guid = $vars['entity']->getGUID();
+} else {
+	$container_guid = elgg_get_page_owner_guid();
+}
 
 $tag_string = get_input('q', '');
 
