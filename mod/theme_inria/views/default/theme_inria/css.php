@@ -173,7 +173,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 #transverse form input#esope-search-submit-button:hover, #transverse form input#esope-search-submit-button:active, #transverse form input#esope-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
 
 /* Members search */
-.esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
+.esope-search-metadata { width: 30%; height:auto; min-height: 3rem; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; margin-right: 2%; margin-bottom: 0.5rem; }
 /* Search filters */
 .search-filter-menu { padding:6px; margin:4px 0; border:1px dotted #CCC; }
 .search-filter-menu a { padding:2px 4px; margin: 0 10px 6px 0; background: #F8F4F5; display: inline-block; }

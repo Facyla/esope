@@ -33,11 +33,11 @@ $content = '';
 
 // End normal invite form
 //$content .= "</div>";
-$content .= "</form>";
+$content .= "</fieldset></form>";
 
 
 // Start search form based on members' metadata
-$content .= '<form id="esope-search-form-invite-groups" method="POST" class="elgg-form elgg-form-groups-invite-search">';
+$content .= '<form id="esope-search-form-invite-groups" method="POST" class="elgg-form elgg-form-groups-invite-search"><fieldset>';
 //$content .= '<div class="blockform">';
 $content .= '<h3>' . elgg_echo('esope:groupinvite:search') . '</h3>';
 
@@ -55,20 +55,31 @@ if (elgg_is_active_plugin('profile_manager')) {
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
 		$meta_title = elgg_echo($metadata);
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'auto-options' => true, 'value' => $$metadata)) . '</label></div>';
+		// Allow search on any meta that is set, even if not defined in profile manager
+		$meta_input = esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'auto-options' => true, 'value' => $$metadata));
+		if (!$meta_input) {
+			/* Alert admin ?
+			if (elgg_is_admin_logged_in()) {
+				register_error('Metadata not set: ' . $metadata . ' (' . $meta_title . ')<br />Using raw text input instead');
+			}
+			*/
+			// Use text input replacement so we can search meta even if not defined by profile_manager (other plugin, etc.)
+			$meta_input = elgg_view('input/text', array('name' => $name, 'value' => $$metadata));
+		}
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . $meta_input . '</label></div>';
 	}
 } else {
 	// We'll rely on text inputs then
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
 		$meta_title = elgg_echo($metadata);
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst($meta_title) . '<input type="text" name="' . $name . '" /></label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst($meta_title) . elgg_view('input/text', array('name' => $name, 'value' => $$metadata)) . '</label></div>';
 	}
 }
 $content .= elgg_view('input/securitytoken');
 $content .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
 $content .= $metadata_search . '<div class="clearfloat"></div>';
-$content .= '<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search:go') . '" />';
+$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('search:go'))) . '</p>';
 
 
 
@@ -84,8 +95,8 @@ if (!empty($query)) {
 	if ($users) {
 		//$content .= "</div>";
 		// Close search form and open a new form to invite found users
-		$content .= '</form>';
-		$content .= '<form id="esope-search-form-invite-results" method="POST" class="elgg-form elgg-form-alt mtm elgg-form-groups-invite-results" action="' . elgg_get_site_url() . 'action/groups/invite">';
+		$content .= '</fieldset></form>';
+		$content .= '<form id="esope-search-form-invite-results" method="POST" class="elgg-form elgg-form-alt mtm elgg-form-groups-invite-results" action="' . elgg_get_site_url() . 'action/groups/invite"><fieldset>';
 		//$content .= '<div class="blockform">';
 		$content .= elgg_view('input/securitytoken');
 		$content .= "<script>
@@ -99,11 +110,19 @@ if (!empty($query)) {
 			});
 		});
 		</script>";
+		// Display results
 		if ($return_count > $max_results) { $content .= '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>'; }
-		$content .= elgg_echo('esope:search:nbresults', array($return_count));
-		foreach ($users as $ent) {
-			$content .= '<p><label><input type="checkbox" name="user_guid[]" value="' . $ent->guid . '" class="group-invite-user" /> <img src="' . $ent->getIcon('topbar') . '" /> ' . $ent->name . '</label></p>';
+		$content .= '<p>';
+		if ($return_count > 1) {
+			$content .= elgg_echo('esope:search:nbresults', array($return_count));
+		} else {
+			$content .= elgg_echo('esope:search:nbresult', array($return_count));
 		}
+		$content .= '<ul>';
+		foreach ($users as $ent) {
+			$content .= '<li><label><input type="checkbox" name="user_guid[]" value="' . $ent->guid . '" class="group-invite-user" /> <img src="' . $ent->getIcon('topbar') . '" /> ' . $ent->name . '</label></li>';
+		}
+		$content .= '</ul></p>';
 		$content .= "<p><label><input type=\"checkbox\" id=\"group-invite-user-selectall\"> " . elgg_echo('select:all') . "</label></p>";
 
 		// Invitation ou inscription ?

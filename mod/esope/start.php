@@ -1171,8 +1171,13 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		elgg_push_context('widgets');
 		$return = '';
 		if ($params['add_count']) {
-			if ($return_count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
-			else $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			if ($return_count > 1) {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
+			} else if ($return_count > 0) {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
+			} else {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			}
 		}
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
 		if ($alert) $return .= $alert;

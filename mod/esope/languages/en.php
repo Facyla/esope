@@ -668,6 +668,7 @@ return array(
 	'esope:search:subtype' => "Object subtype",
 	'esope:search:profile_type' => "Profile type",
 	'esope:search:nbresults' => '%s results',
+	'esope:search:nbresult' => '%s result',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",

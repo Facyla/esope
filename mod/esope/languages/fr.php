@@ -683,6 +683,7 @@ return array(
 	'esope:search:subtype' => "Type de publication",
 	'esope:search:profile_type' => "Type de profil",
 	'esope:search:nbresults' => '%s résultats',
+	'esope:search:nbresult' => '%s résultat',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
