@@ -495,16 +495,12 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 .elgg-menu-navigation li ul { z-index: 100; }
 .elgg-menu-navigation li.group-invites, .elgg-menu-navigation li.group-invites,
 .elgg-menu-navigation li.invites, .elgg-menu-navigation li.invites { margin:-6px 0 0 4px; }
-.elgg-menu-navigation li.group-invites,
-.elgg-menu-navigation li.invites { margin:-8px 0 0 -22px; border:0; }
-.elgg-menu-navigation li.group-invites a, #transverse ul li.group-invites a:hover, #transverse ul li.group-invites a:focus, #transverse ul li.group-invites a:active,
-.elgg-menu-navigation li.group-invites a, .elgg-menu-navigation li.group-invites a:hover, .elgg-menu-navigation li.group-invites a:focus, .elgg-menu-navigation li.group-invites a:active,
-.elgg-menu-navigation li.invites a, #transverse ul li.invites a:hover, #transverse ul li.invites a:focus, #transverse ul li.invites a:active,
-.elgg-menu-navigation li.invites a, .elgg-menu-navigation li.invites a:hover, .elgg-menu-navigation li.invites a:focus, .elgg-menu-navigation li.invites a:active {
+.elgg-menu-navigation li.group-invites, .elgg-menu-navigation li.invites { margin:-8px 0 0 -22px; border:0; }
+#transverse .elgg-menu-navigation li.group-invites a, #transverse ul li.group-invites a:hover, #transverse ul li.group-invites a:focus, #transverse ul li.group-invites a:active, #transverse .elgg-menu-navigation li.invites a, #transverse ul li.invites a:hover, #transverse ul li.invites a:focus, #transverse ul li.invites a:active {
 	float: right;
 	background: #CD190A;
 	color: #fff;
-	font-size:12px;
+	font-size: 0.75rem;
 	font-weight: bold;
 	padding: 2px 5px 2px 6px;
 	border-radius: 4px;
@@ -520,7 +516,7 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 .elgg-menu-navigation li, #transverse ul li { list-style-type: none; }
 
 #transverse .elgg-menu-navigation .elgg-menu-counter { border: 0 none; left: -20px; margin: 0; padding: 0; position: relative; }
-#transverse .elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 12px; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
+#transverse .elgg-menu-navigation li.elgg-menu-counter a { background: red; border-radius: 8px; color: white; font-family: arial; font-size: 0.75rem; font-weight: bold; margin: 2px; padding: 1px 4px; text-shadow: none; }
 
 
 
@@ -852,6 +848,7 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 }
 .elgg-sidebar .elgg-menu-page li:first-child, .elgg-sidebar .elgg-menu-page li:last-child, .elgg-sidebar .elgg-menu-groups-my-status li:first-child, .elgg-sidebar .elgg-menu-groups-my-status li:last-child { border-bottom: 0 none; }
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a { color: #333333; font-weight: normal; }
+/*
 .elgg-sidebar .elgg-menu-page li.elgg-menu-item-groups-user-invites a span {
 	color: #002e6f;
 	float: left;
@@ -862,6 +859,7 @@ if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
 	margin-right: 5px;
 	text-shadow: 0 2px 2px #999999;
 }
+*/
 
 
 

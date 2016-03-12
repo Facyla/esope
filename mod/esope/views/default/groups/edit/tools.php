@@ -8,6 +8,8 @@
  * @package ElggGroups
  */
 
+// ESOPE : enable admin-controlled tools sorting + default settings
+
 $tools = elgg_get_config("group_tool_options");
 if ($tools) {
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
@@ -26,20 +28,20 @@ if ($tools) {
 	foreach ($group_options as $group_option) {
 		$group_option_toggle_name = $group_option->name . "_enable";
 		//$value = elgg_extract($group_option_toggle_name, $vars);
-		// Set all tools to some default value
+		// Set tools to global default, or custom value
 		$group_default_tools = elgg_get_plugin_setting('group_tools_default', 'esope');
 		if (empty($group_default_tools) || ($group_default_tools == 'no')) {
 			$group_option_default_value = 'no';
 		} else if ($group_default_tools == 'yes') {
 			$group_option_default_value = 'yes';
 		} else {
-			// Let the plugins decide by themselves
+			// Let the plugin decide by itself
 			if ($group_option->default_on) { $group_option_default_value = 'yes'; } 
 			else { $group_option_default_value = 'no'; }
 		}
-		$value = $vars['entity']->$group_option_toggle_name ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
+		$value = ($vars['entity']->$group_option_toggle_name) ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
 		
-		echo elgg_format_element('div', null, elgg_view('input/checkbox', array(
+		echo elgg_format_element('div', array(), elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,
 			'value' => 'yes',
 			'default' => 'no',
