@@ -5,24 +5,18 @@
  * @package ElggFile
  */
 
+// Adds prevent_notification form field
+// Add tags and category support
+
 $page_owner = elgg_get_page_owner_entity();
 $container_guid = $page_owner->getGUID();
 $site_url = elgg_get_site_url();
-
-if (elgg_instanceof($page_owner, "group", null, "ElggGroup")){
-	$return_url = elgg_get_site_url() . "file/group/" . $page_owner->getGUID() . "/all";
-} else {
-	$return_url = elgg_get_site_url() . "file/owner/" . $page_owner->username;
-}
 
 // load CSS and JS
 elgg_load_css("jquery.uploadify");
 elgg_require_js("jquery.uploadify");
 elgg_require_js('file_tools/uploadify');
 ?>
-<script type="text/javascript">
-	var file_tools_uploadify_return_url = "<?php echo $return_url; ?>";
-</script>
 
 <fieldset>
 	<div>
@@ -44,6 +38,7 @@ elgg_require_js('file_tools/uploadify');
 		<label><?php echo elgg_echo('tags'); ?></label>
 		<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => ' ')); ?>
 	</div>
+	
 	<?php if(file_tools_use_folder_structure()){ ?>
 	<div>
 		<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
@@ -53,7 +48,8 @@ elgg_require_js('file_tools/uploadify');
 		</label>
 	</div>
 	<?php }
-	
+
+	// Add categories support
 	$categories = elgg_view('input/categories', $vars);
 	if ($categories) {
 		echo $categories;
@@ -68,7 +64,7 @@ elgg_require_js('file_tools/uploadify');
 	</div>
 	
 	<?php
-	// Prevent multiple notifications
+	// Prevent multiple notifications => setting pre-set to no
 	echo elgg_view('prevent_notifications/prevent_form_extend', array('value' => 'no'));
 	?>
 	

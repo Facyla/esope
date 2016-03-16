@@ -1,5 +1,7 @@
 <?php
 
+// Adds prevent_notification form field
+
 $event = $vars['event'];
 $fd = $vars['form_data'];
 
@@ -249,6 +251,7 @@ if ($event_calendar_region_display == 'yes' || $event_calendar_type_display == '
 	$body .= '</div>';
 }
 
+// Prevent notification
 if (!$event) { $body .= elgg_view('prevent_notifications/prevent_form_extend', array()); }
 
 $body .= '<div class="mtm">'.elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('event_calendar:submit'))).'</div>';
