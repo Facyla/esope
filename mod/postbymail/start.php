@@ -18,6 +18,10 @@ function postbymail_init() {
 	elgg_register_library('elgg:postbymail', elgg_get_plugins_path() . 'postbymail/lib/functions.php');
 	elgg_load_library('elgg:postbymail');
 	
+	// Include other required functions
+	require_once(elgg_get_plugins_path() . 'postbymail/lib/hooks.php');
+	
+	
 	// Page handler
 	elgg_register_page_handler('postbymail', 'postbymail_pagehandler');
 	
@@ -29,7 +33,8 @@ function postbymail_init() {
 	
 	// Pass entity GUID (set it as global var)
 	// Pour déterminer et transmettre le GUID qui doit être passé en paramètre
-	elgg_register_plugin_hook_handler('object:notifications', 'all', 'postbymail_object_notifications_handler', 0);
+	// @TODO : vérifier fonctionnement !!
+	elgg_register_plugin_hook_handler('object:notifications', 'all', 'postbymail_object_notifications_hook', 0);
 	elgg_register_event_handler('annotate', 'all', 'postbymail_annotate_event_notifications', 0);
 	
 	
@@ -37,6 +42,45 @@ function postbymail_init() {
 	//elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
 	
 	// Ajout du bloc de réponse au contenu à tous les messages de notification
+	// Update notification body for new content
+	$subtypes = elgg_get_plugin_setting('reply_object_subtypes', 'postbymail');
+	$subtypes = explode(',', $subtypes);
+	// Add discussion replies if discussion is in the list
+	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
+	if ($subtypes) {
+		foreach ($subtypes as $subtype) {
+			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'postbymail_prepare_notification', 1000);
+			// Some subtypes use a specific hook
+			// @TODO : always register both hooks, just in case ?
+			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
+				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'postbymail_prepare_notification', 1000);
+			}
+		}
+	}
+	
+	
+	
+	
+	/*
+	$subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
+	$subtypes = explode(',', $subtypes);
+	// Add discussion replies if discussion is in the list
+	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
+	if ($subtypes) {
+		foreach ($subtypes as $subtype) {
+			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
+			// Regular hook
+			// but this will avoid having to maintain the list here in case some plugin change called hook
+			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
+			// Some subtypes use a specific hook
+			// @TODO : always register both hooks, just in case ?
+			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
+				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
+			}
+		}
+	}
+	*/
+	
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'postbymail_add_to_notify_message_hook', 1000);
 	elgg_register_plugin_hook_handler('notify:entity:message', 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
 	// Ajout du lien ajouté pour les réponses dans forum
@@ -158,29 +202,6 @@ function postbymail_pagehandler($page) {
 }
 
 
-// Postbymail CRON : check mails and publish...
-function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
-	//error_log("MARQUEUR DU CRON DU START.PHP DE POSTBYMAIL");
-	// require libraries
-	elgg_load_library('elgg:postbymail');
-	
-	require_once(elgg_get_plugins_path() . 'postbymail/pages/checkandpost.php');
-	$resulttext = elgg_echo("postbymail:mailprocessed");
-	return $returnvalue . $resulttext;
-}
-
-
-// Ce hook (sensible) se contente ici de passer le GUID de l'objet commenté
-function postbymail_object_notifications_handler($hook, $entity_type, $returnvalue, $params) {
-	if (elgg_instanceof($params['object'], 'object')) {
-		global $postbymail_guid;
-		if (!$postbymail_guid || empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
-	}
-	// pas de modification du comportement (défini par ailleurs)
-	return $returnvalue;
-}
-
-
 // Permet de définir le GUID de l'objet commenté s'il ne l'a pas déjà été
 // Nécessaire car object_notifications n'est pas appelé ou pas à temps dans certains cas
 function postbymail_annotate_event_notifications($event, $object_type, $object) {
@@ -218,120 +239,27 @@ register_plugin_hook('notify:entity:message', 'object', 'bookmarks_notify_messag
 
 
 
-// Permet de notifier le contenu du commentaire au lieu du sujet commenté
-// @todo : si pls réponses en //, seul l'un des contenus est bon :-(
-function postbymail_groupforumtopic_notify_message($hook, $entity_type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
-
-	if (elgg_instanceof($entity, 'groupforumtopic')) {
-		$descr = $entity->description;
-		$title = $entity->title;
-		$url = $entity->getURL();
-		$owner = $entity->getOwnerEntity();
-		$group = $entity->getContainerEntity();
-		$reply = get_input('group_topic_post'); // Note : vide si via cron et import mail..
-		if (empty($reply)) {
-			// Note : si pls messages publiés en même temps on n'aura que le dernier
-			global $postbymail_content;
-			$reply = $postbymail_content;
-		}
-		/*
-		error_log("POSTBYMAIL start : via le site = " . $reply);
-		error_log("POSTBYMAIL start : via postbymail = " . $postbymail_content);
-		*/
-		// Selon les cas, on notifie avec le sujet initial ou la réponse
-		if (!empty($reply)) {
-			// Réponse à un sujet de forum
-			// @TODO notifie avec l'auteur du post initial et non celui qui publie !
-			// cf. http://reference.elgg.org/1.8/annotations_8php_source.html#l00065
-			$member_name = elgg_echo('postbymail:someone');
-			return elgg_echo('groups:notification:reply', array(
-				$member_name,
-				$group->name,
-				$entity->title,
-				$reply,
-				$entity->getURL()
-			));
-		} else {
-			// Nouveau sujet de forum
-			return elgg_echo('groups:notification', array(
-				$owner->name,
-				$group->name,
-				$entity->title,
-				$entity->description,
-				$entity->getURL()
-			));
-		}
-	}
-	
-	return null;
-}
-
-
-// Ce hook ajoute le bloc de notification aux messages de tous types
-// Prend en charge : object, annotation
-function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue, $params) {
-	
-	// Skip if missing required parameters
-	if (!postbymail_check_required()) {
-		return $returnvalue;
-	}
-	
-	global $postbymail_guid;
-	$entity = $params['entity'];
-	$annotation = $params['annotation'];
-	//$to_entity = $params['to_entity'];
-	//$method = $params['method'];
-	//error_log("DEBUG POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
-
-	
-	// Add instructions to object notifications
-	if (elgg_instanceof($entity, 'object')) {
-		// The Wire specific notice : 140 chars limit
-		if (elgg_instanceof($entity, 'object', 'thewire')) {
-			$returnvalue = elgg_echo('postbymail:thewire:charlimitnotice') . $returnvalue;
-		}
-		// Note : all new content and comments use this, and also the messages
-		if (empty($postbymail_guid)) { $postbymail_guid = $entity->guid; }
-		$returnvalue = postbymail_add_to_message($returnvalue);
-	
-	// Add instructions to annotations (forum replies)
-	} else if ($annotation instanceof ElggAnnotation) {
-		// Only forum replies should use this
-		// Dans ce cas le mode d'envoi peut demander de déterminer l'entité concernée
-		global $postbymail_guid;
-		// Note : always get commented entity from annotation ?
-		if (empty($postbymail_guid)) {
-			$postbymail_guid = $annotation->entity_guid;
-		}
-		$returnvalue = postbymail_add_to_message($returnvalue);
-	
-	// Other cases
-	} else {
-		// On ne peut ajouter le lien que si on a l'info sur l'entité concernée...
-		if (!empty($postbymail_guid)) { $returnvalue = postbymail_add_to_message($returnvalue); }
-	}
-	
-	return $returnvalue;
-}
 
 
 /* Adds the reply block to the message
  * Ajoute le séparateur pour réponse au message
  */
-function postbymail_add_to_message($message) {
-	global $postbymail_guid;
+function postbymail_add_to_message($message, $postbymail_guid = false, $language = false) {
+	if (!$postbymail_guid) {
+		global $postbymail_guid;
+		error_log("POSTBYMAIL : GUID not passed");
+	}
+	
+	// @TODO : use recipient language
+	if (!$language) { $language = get_language(); }
 	
 	//if (empty($postbymail_guid)) { error_log("Cannot determine valid reply GUID"); }
 	
 	$separator = elgg_get_plugin_setting('separator', 'postbymail');
-	if (empty($separator)) $separator = elgg_echo('postbymail:default:separator');
+	if (empty($separator)) { $separator = elgg_echo('postbymail:default:separator'); }
 	$separatordetails = elgg_get_plugin_setting('separatordetails', 'postbymail');
-	if (empty($separatordetails)) $separatordetails = elgg_echo('postbymail:default:separatordetails');
+	if (empty($separatordetails)) { $separatordetails = elgg_echo('postbymail:default:separatordetails'); }
 	$replybuttonaddtext = elgg_get_plugin_setting('replybuttonaddtext', 'postbymail');
-	if ($replybuttonaddtext == 'no') { $replybuttonaddtext = false; } else { $replybuttonaddtext = true; }
 	
 	// Prepare reply url
 	$url_param = '+guid=' . $postbymail_guid;
@@ -361,20 +289,24 @@ function postbymail_add_to_message($message) {
 		//$reply_subject = elgg_echo('postbymail:replybutton:basicsubject');
 		$reply_subject = elgg_echo('postbymail:replybutton:subject', array($postbymail_guid));
 		
-		// Build reply button
-		// Add timestamp to avoid content being hidden by some email (GMail)
-		// Note : éviter de revenir à la ligne car la conversion html risque d'ajouter des <br /> à chaque fois !
-		/* Le lien de réponse doit être défini ici car délicat à construire (à cause des % et autres..)
+		/* Build reply button
+		 * Add timestamp to avoid content being hidden by some email (GMail)
+		 * Note : éviter de revenir à la ligne car la conversion html risque d'ajouter des <br /> à chaque fois !
+		 * Le lien de réponse doit être défini ici car délicat à construire (à cause des % et autres..)
 		 * mieux vaut le faire direct dans le code...
 		 * Basic helper: #: %23, <: %3C, <: %3E, saut de ligne: %0D%0A
 		*/
 		$reply_block = '<div style="' . $wrapper_style . '">';
 		$reply_block .= '<p class="postbymail-reply-button"><a href="mailto:' . $reply_email . '?subject=' . $reply_subject . '&body=%0D%0A%0D%0A%0D%0A' . $separator . '%0D%0A' . $separatordetails . '" style="' . $button_style . '">' . $button_title . '<span style="color:transparent; font-size:0px;">' . date("Y-m-d G:i ") . microtime(true) . '</span></a></p>';
+		
 		// Add failsafe block with clear email address, for text emails
-		if ($replybuttonaddtext) {
+		if ($replybuttonaddtext == 'yes') {
 			$reply_block .= '<p><em>' . elgg_echo('postbymail:replybutton:failsafe', array($reply_email_link)) . '</em></p>';
 		}
+		
 		$reply_block .= '</div>';
+		
+		// Add original message content
 		$reply_block .= $message;
 	}
 	
@@ -430,10 +362,12 @@ if (elgg_is_active_plugin('html_email_handler')) {
 			$msg_from_name = false;
 		}
 		
+		global $postbymail_guid;
+		
 		// generate HTML mail body
 		$html_message = html_email_handler_make_html_body($subject, $message);
 		// Ajout du séparateur de réponse
-		$html_message = postbymail_add_to_message($html_message);
+		$html_message = postbymail_add_to_message($html_message, $postbymail_guid);
 		
 		// Adresse email d'expédition ou de réponse - à affiner selon le contexte d'utilisation
 		$postbymail_email = postbymail_reply_email_address();
@@ -441,7 +375,6 @@ if (elgg_is_active_plugin('html_email_handler')) {
 		// mais on garde le nom d'expéditeur
 		if (!empty($postbymail_email) && is_email_address($postbymail_email)) {
 			$postbymail_email = explode('@', $postbymail_email);
-			global $postbymail_guid;
 			$postbymailparam = '+guid=' . $postbymail_guid;
 			$postbymail_replyaddress = $postbymail_email[0] . $postbymailparam . '@'. $postbymail_email[1];
 			//$msg_from = $postbymail_replyaddress;
@@ -497,20 +430,21 @@ if (elgg_is_active_plugin('html_email_handler')) {
 			$params['from_name'] = $site->name;
 		}
 		
+		global $postbymail_guid;
+		
 		// Adresse email d'expédition et/ou de réponse - à déterminer
 		$postbymail_email = postbymail_reply_email_address();
 		// Si l'adresse existe (configurée), on l'utilise à la place de l'adresse définie plus tôt, 
 		// mais on garde le nom d'expéditeur
 		if (!empty($postbymail_email) && is_email_address($postbymail_email)) {
 			$postbymail_email = explode('@', $postbymail_email);
-			global $postbymail_guid;
 			$postbymailparam = '+guid=' . $postbymail_guid;
 			$postbymail_replyaddress = $postbymail_email[0] . $postbymailparam . '@'. $postbymail_email[1];
 			$params['from'] = $postbymail_replyaddress;
 		}
 		
 		// Ajout du séparateur de réponse
-		$message = postbymail_add_to_message($message);
+		$message = postbymail_add_to_message($message, $postbymail_guid);
 		
 		$params['to'] = $to->email;
 		$params['to_name']= $to->name;
@@ -535,5 +469,17 @@ function postbymail_reply_email_address() {
 	}
 	return $email;
 }
+
+
+// Guess best subtype title depending on defined translation strings
+function postbymail_readable_subtype($subtype) {
+	$msg_subtype = elgg_echo("item:object:$subtype");
+	if ($msg_subtype == "item:object:$subtype") {
+		$msg_subtype = elgg_echo($subtype);
+	}
+	return strip_tags($msg_subtype);
+}
+
+
 
 

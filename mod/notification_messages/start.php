@@ -31,6 +31,7 @@ function notification_messages_init() {
 	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
 	if ($subtypes) {
 		foreach ($subtypes as $subtype) {
+			// @TODO : also handle update and delete events ?
 			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
 			// Regular hook
 			// but this will avoid having to maintain the list here in case some plugin change called hook
@@ -43,10 +44,16 @@ function notification_messages_init() {
 		}
 	}
 	
+	// @TODO Handle properly comment subjects
+	// Remove system default comment subject handler (because it is loaded right before email sending hook)
+	elgg_unregister_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
+	// And register to same hook and update (has to run before htmlt_email_handler hook, which is default priority)
+	//elgg_register_plugin_hook_handler('email', 'system', 'notification_messages_comments_notification_email_subject', 400);
+	
+	
 	// Add owner to notification subscribers
 	// note: setting is checked in hook
-	elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner');
-	
+	elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner', 900);
 	
 	
 	// Replace message action so we can use our custom message content
@@ -56,8 +63,6 @@ function notification_messages_init() {
 		elgg_unregister_action("messages/send");
 		elgg_register_action("messages/send", "$action_path/send.php");
 	}
-	
-	
 	
 	
 	/* Except if other plugin breaks behaviour, this hook should not be useful anymore in 1.11+
@@ -95,6 +100,7 @@ function notification_messages_init() {
 	
 	
 	/* ENABLE ATTACHMENTS */
+	// Note : attachments are now handled by html_email_handler
 	// register a hook to add a new hook that allows adding attachments and other params
 	// Note : enabled by default because it is required by notifications messages
 	/*
@@ -127,7 +133,7 @@ function notification_messages_readable_subtype($subtype) {
 
 
 /**
- * Prepare a notification message about a new object
+ * Prepare a notification message about a new object (or comment)
  * 
  * Notes :
  * Target mask is : [subtype container] Title
@@ -153,14 +159,17 @@ function notification_messages_prepare_notification($hook, $type, $notification,
 	// Determine behaviour - default is not changing anything (can be already specific)
 	// $setting = notification_messages_get_subtype_setting($subtype);
 	
+	// Handle comments a bit differently (subject and summary should be based on original object)
+	// This has to be handled in all 3 functions (because we need the acting entity too)
+	
 	// Notification subject
 	$subject = notification_messages_build_subject($entity, $params);
 	if (!empty($subject)) { $notification->subject = $subject; }
-	
+
 	// Notification message body
 	$body = notification_messages_build_body($entity, $params);
 	if (!empty($body)) { $notification->body = $body; }
-	
+
 	// Short summary about the notification
 	$summary = notification_messages_build_summary($entity, $params);
 	if (!empty($summary)) { $notification->summary = $summary; }
@@ -173,7 +182,7 @@ function notification_messages_prepare_notification($hook, $type, $notification,
 /* Determine setting for this entity type */
 function notification_messages_get_subtype_setting($subtype = '') {
 	$setting = elgg_get_plugin_setting('object_' . $subtype, 'notification_messages');
-	if (empty($setting)) $setting == 'default';
+	if (empty($setting)) { $setting == 'default'; }
 	return $setting;
 }
 
@@ -192,7 +201,16 @@ function notification_messages_build_subject($entity, $params) {
 		// Get best readable subtype
 		$subtype = $entity->getSubtype();
 		$msg_subtype = notification_messages_readable_subtype($subtype);
-	
+		
+		// Use commented object instead, if comment
+		if (elgg_instanceof($entity, 'object', 'comment')) {
+			$entity = get_entity($entity->container_guid);
+			// Update subtype text to "Comment on X"
+			$subtype = $entity->getSubtype();
+			$msg_subtype = notification_messages_readable_subtype($subtype);
+			$msg_subtype = elgg_echo('notification_messages:comment:subtype', array($msg_subtype));
+		}
+		
 		// Container should be a group or user, can also be a site
 		$msg_container = false;
 		$container = $entity->getContainerEntity();
@@ -865,6 +883,31 @@ function notification_messages_get_subscriptions_addowner($hook, $type, $subscri
 	
 	return $subscriptions;
 }
+
+
+
+// Override system default comment email subject (forces full subject instead of adding Re:)
+function notification_messages_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
+	/** @var Elgg\Notifications\Notification */
+	$notification = elgg_extract('notification', $returnvalue['params']);
+
+	if ($notification instanceof Elgg\Notifications\Notification) {
+		$object = elgg_extract('object', $notification->params);
+
+		if ($object instanceof ElggComment) {
+			$container = $object->getContainerEntity();
+			$new_subject = notification_messages_build_subject($object);
+			if (!empty($new_subject)) {
+				$returnvalue['subject'] = $new_subject;
+			} else {
+				$returnvalue['subject'] = 'Re: ' . $container->getDisplayName();
+			}
+		}
+	}
+	return $returnvalue;
+}
+
+
 
 
 

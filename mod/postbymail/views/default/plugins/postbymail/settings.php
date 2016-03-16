@@ -75,10 +75,32 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<legend>' . elgg_echo('postbymail:settings:replybymail') . '</legend>';
 	echo '<p><em>' . elgg_echo('postbymail:settings:replybymail:details') . '</em></p>';
 	
-	// Forums seulement ou tous types de commentaires ?
+	// Forums seulement ou tous types de commentaires ? @TODO replaced by per-subtype setting
 	echo '<p><label>' . elgg_echo('postbymail:settings:scope') . ' ';
 	echo elgg_view('input/dropdown', array('name' => 'params[scope]', 'options_values' => $scope_options, 'value' => $vars['entity']->scope));
 	echo '</label></p>';
+	
+	// Choose enabled subtypes
+	$registered_objects = get_registered_entity_types('object');
+	$reply_subtypes = array();
+	foreach($registered_objects as $subtype) {
+		if (!in_array($subtype, $reply_subtypes)) {
+			$param = 'reply_object_' . $subtype;
+			if ($vars['entity']->$param == 'yes') { $reply_subtypes[] = $subtype; }
+			$options = array(
+				'name' => "params[{$param}]",
+				'value' => $vars['entity']->$param ? $vars['entity']->$param : 'yes',
+				'options_values' => $no_yes_opt,
+			);
+			$msg_subtype = postbymail_readable_subtype($subtype);
+			echo '<p><label>' . $msg_subtype . '&nbsp;: ' . elgg_view('input/select', $options) . '</label>';
+			echo '</p>';
+		}
+	}
+	// Save all enabled replies subtypes in a single field (for easier processing)
+	$reply_subtypes = implode(',',$reply_subtypes);
+	elgg_set_plugin_setting('reply_object_subtypes', $reply_subtypes, 'postbymail');
+	
 	
 	// Reply mode
 	// Default : Ajout bouton de réponse par email

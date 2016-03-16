@@ -6,18 +6,17 @@
 	<version>1.12.5.0</version>
 	<blurb>ESOPE - Thème configurable ~ Environnement Social Opensource Public Elgg</blurb>
 	<description>Ce plugin constitue l'épine dorsale de la distribution ESOPE (Environnement Social Opensource Elgg). Il fournit une base de thème accessible et offre de nombreuses options et possibilités de configuration. La distribution ESOPE intègre un ensemble cohérent de plugins qui facilitent le déploiement de plateformes collaboratives et/ou sociales au sein d'une organisation. La majorité des plugins de la distribution ESOPE peuvent être utilisés indépendament de ce plugin.</description>
-	<website>http://departements-en-reseaux.fr/</website>
+	<website>https://github.com/Facyla/esope</website>
 	<copyright>Florian DANIEL aka Facyla, Items International, Conseil Général de l'Essonne, Assemblée des Départements de France, Urbilog</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<screenshot>
-		<description>An example screenshot</description>
-		<path>graphics/plugin_ss1.png</path>
+		<description>ESOPE theme settings</description>
+		<path>img/screenshot_admin_theme.png</path>
 	</screenshot>
 
 	<category>admin</category>
 	<category>theme</category>
-	<category>functional adaptations</category>
 	
 	<activate_on_install>true</activate_on_install>
 	
@@ -94,6 +93,11 @@
 	
 	<suggests>
 		<type>plugin</type>
+		<name>html_email_handler</name>
+	</suggests>
+	
+	<suggests>
+		<type>plugin</type>
 		<name>groups</name>
 	</suggests>
 	<suggests>
@@ -127,7 +131,7 @@
 		<name>pages</name>
 	</suggests>
 	
-	<!-- To be deprecated //-->
+	<!-- To be deprecated ? //-->
 	<suggests>
 		<type>plugin</type>
 		<name>event_calendar</name>

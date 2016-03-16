@@ -65,5 +65,8 @@ Read and comment online:
 	'notification_messages:settings:messages_send' => "Use HTML in direct messages",
 	'notification_messages:settings:messages_send:subtext' => "By default, direct messages sent by the platform via email are using plain text. This setting doesn't strip HTML tags before sending direct messages by email",
 	
+	'notification_messages:comment:subtype' => "Comment on %s",
+	
+	
 );
 

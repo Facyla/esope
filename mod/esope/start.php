@@ -167,7 +167,7 @@ function esope_init() {
 	// Gestion des actions post-création de compte
 	elgg_register_event_handler('create', 'user', 'esope_create_user_event', 502);
 	// Gestion des actions post-login
-	elgg_register_event_handler('login','user','esope_login_user_event', 800);
+	elgg_register_event_handler('login:after','user','esope_login_user_event', 800);
 	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {

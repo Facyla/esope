@@ -5,7 +5,7 @@ gatekeeper();
 $url = elgg_get_site_url();
 $dbprefix = elgg_get_config('dbprefix');
 $own = elgg_get_logged_in_user_entity();
-inria_check_and_update_user_status('login', 'user', $own);
+inria_check_and_update_user_status('login:before', 'user', $own);
 
 
 // Slider

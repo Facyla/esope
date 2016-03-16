@@ -671,6 +671,12 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 }
 
 
+/* Developers gear */
+.developers-gear { background: rgba(0,0,0,0.7); border-radius: 1rem 0 0 0; }
+.developers-gear:hover { background: rgba(0,0,0,1); }
+.developers-gear .elgg-icon-settings-alt::before { content: 'DEV'; color: white; }
+
+
 
 
 <?php if (!$fixedwidth) { ?>

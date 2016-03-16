@@ -539,7 +539,7 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 function theme_inria_cron_ldap_check($user, $getter, $options) {
 	//$debug_0 = microtime(TRUE);
 	// Check LDAP data
-	inria_check_and_update_user_status('login', 'user', $user);
+	inria_check_and_update_user_status('login:before', 'user', $user);
 	
 	// Process all and any users, BUT only clear some metadata when account is not Inria (valid LDAP)
 	if (!$user->isEnabled() || $user->isbanned() || ($user->memberstatus == 'closed')) {
