@@ -12,7 +12,6 @@
 		 
 	<category>admin</category>
 	<category>theme</category>
-	<category>functional adaptations</category>
 		 
 	<requires>
 		<type>elgg_release</type>

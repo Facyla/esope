@@ -10,9 +10,13 @@
 	<copyright>Items International (Facyla), Inria</copyright>
 	<license>GNU Public License version 2</license>
 	
+	<screenshot>
+		<description>New setting in content create form</description>
+		<path>graphics/screenshot.png</path>
+	</screenshot>
+	
 	<category>admin</category>
 	<category>notifications</category>
-	<category>functional adaptations</category>
 	
 	<requires>
 		<type>elgg_release</type>
@@ -32,7 +36,11 @@
 <!--
 
 TODO :
- - hide notification setting field if notification is not available ? (eg. update event)  or enable handling for any event + add hook to handle them ?
+ - hide notification setting field if notification is not available ? (eg. update event)
+ - or enable handling for any event + add hook to handle them ?
+
+
+HISTORY :
 
 1.12.0 : 201602159 - operational Elgg 1.12 version
   - rewrite blocking method : use enqueue, notification hook

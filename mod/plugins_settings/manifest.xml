@@ -11,10 +11,14 @@
 	<license>GNU Public License version 2</license>
 	
 	<screenshot>
-		<description>Screenshot</description>
-		<path>graphics/screenshot.png</path>
+		<description>Export all plugins settings</description>
+		<path>graphics/export_settings.png</path>
 	</screenshot>
-
+	<screenshot>
+		<description>Import all plugins settings</description>
+		<path>graphics/import_settings.png</path>
+	</screenshot>
+	
 	<category>admin</category>
 	
 	<requires>
