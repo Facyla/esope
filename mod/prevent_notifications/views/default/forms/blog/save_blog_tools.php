@@ -7,11 +7,6 @@
 
 /* Integrates prevent_notification form */
 
-// Use alternate form to support blog_tools (and integrate prevent_notification field)
-if (elgg_is_active_plugin('blog_tools')) {
-	return elgg_view('forms/blog/save_blog_tools', $vars);
-}
-
 $blog = get_entity($vars['guid']);
 $vars['entity'] = $blog;
 

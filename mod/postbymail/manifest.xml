@@ -20,6 +20,11 @@
 	</requires>
 	
 	<requires>
+		<type>php_extension</type>
+		<name>imap</name>
+	</requires>
+	
+	<requires>
 		<type>plugin</type>
 		<name>html_email_handler</name>
 	</requires>

@@ -79,6 +79,10 @@ $main_maxwidth = "80%";
 #page_container {
 	width:<?php echo $main_width; ?>;
 }
+/*
+.elgg-layout-one-sidebar .elgg-main { width: 70%; }
+.elgg-sidebar { width: 24%; }
+*/
 
 
 

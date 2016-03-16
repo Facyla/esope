@@ -43,11 +43,9 @@ function notification_messages_init() {
 		}
 	}
 	
-	// Add owner notification
-	$notify_owner = notification_messages_notify_owner();
-	if ($notify_owner) {
-		elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner');
-	}
+	// Add owner to notification subscribers
+	// note: setting is checked in hook
+	elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner');
 	
 	
 	
@@ -853,8 +851,18 @@ function notification_messages_get_subscriptions_addowner($hook, $type, $subscri
 	$object = $params['event']->getObject();
 	if (!elgg_instanceof($object)) { return $subscriptions; }
 	
-	$owner = $object->getOwnerEntity();
-	if (!isset($subscriptions[$owner->guid]) || !in_array('email', $subscriptions[$owner->guid])) { $subscriptions[$owner->guid][] = 'email'; }
+	// Check plugin setting
+	$notify_owner = notification_messages_notify_owner();
+	if ($notify_owner) {
+		$owner_guid = $object->getOwnerGUID();
+		if (!isset($subscriptions[$owner_guid])) {
+			$subscriptions[$owner_guid];
+		}
+		if (!in_array('email', $subscriptions[$owner_guid])) {
+			$subscriptions[$owner_guid][] = 'email';
+		}
+	}
+	
 	return $subscriptions;
 }
 
