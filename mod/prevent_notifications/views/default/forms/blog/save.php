@@ -117,6 +117,7 @@ $access_input = elgg_view('input/access', array(
 
 $categories_input = elgg_view('input/categories', $vars);
 
+// Prevent notifications form
 if (!$vars['guid'] || ($blog && $blog->status != 'published')) {
 	$notification_prevent = elgg_view('prevent_notifications/prevent_form_extend', array());
 }
