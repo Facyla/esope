@@ -17,7 +17,7 @@ if ($event->description) {
 } else {
 	$description = '';
 }
-// Timezone info
+// Timezone info => should not be used if UTC https://github.com/icalendar/icalendar/issues/109 ? => is saved time UTC ?
 $tzid = ";TZID=" . date('e');
 
 ?>
