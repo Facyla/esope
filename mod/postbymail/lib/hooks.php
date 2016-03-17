@@ -14,10 +14,12 @@ function postbymail_cron_handler($hook, $entity_type, $returnvalue, $params) {
 
 
 // Ce hook (sensible) se contente ici de passer le GUID de l'objet commenté
-function postbymail_object_notifications_hook($hook, $entity_type, $returnvalue, $params) {
-	if (elgg_instanceof($params['object'], 'object')) {
+// @TODO : devenu inutile avec Elgg 1.12
+function postbymail_send_before_notifications_hook($hook, $entity_type, $returnvalue, $params) {
+	$object = $params['event']->getObject();
+	if (elgg_instanceof($object, 'object')) {
 		global $postbymail_guid;
-		if (!$postbymail_guid || empty($postbymail_guid)) { $postbymail_guid = $params['object']->guid; }
+		if (!$postbymail_guid || empty($postbymail_guid)) { $postbymail_guid = $object->guid; }
 	}
 	// pas de modification du comportement (défini par ailleurs)
 	return $returnvalue;

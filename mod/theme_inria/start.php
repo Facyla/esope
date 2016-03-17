@@ -184,13 +184,14 @@ function theme_inria_init(){
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
 	// The hook is triggered when using default elgg email handler, 
 	// and is added and triggered by ESOPE when using plugins that replace it
-	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
+	// Priority is set so it intercepts notification right before html_email_handler, and after notification_messages
+	elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 499);
 	
 	// Hook pour bloquer les notifications dans certains groups si on a demandé à les désactiver
 	// 1) Blocage pour les nouveaux objets
 	// Note : load at first, because we want to block the process early, if it needs to be blocked
 	// if a plugin hook send mails before and returns "true" this would be too late
-	elgg_register_plugin_hook_handler('object:notifications', 'all', 'theme_inria_object_notifications_block', 1);
+	elgg_register_plugin_hook_handler('send:before', 'notifications', 'theme_inria_send_before_notifications_block', 1);
 	/* 2) Blocage pour les réponses (annotations)
 	 * Process : 
 	 		action discussion/replies/save exécute un ->annotate('group_topic_post',...)

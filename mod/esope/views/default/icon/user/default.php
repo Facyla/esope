@@ -88,6 +88,12 @@ $icon = elgg_view('output/img', array(
 	'title' => $name,
 	'class' => $img_class,
 ));
+// Add archive banner, if account is closed
+/*
+if (in_array($user->memberstatus, array('closed', 'archive'))) {
+	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
+}
+*/
 
 $show_menu = $use_hover && (elgg_is_admin_logged_in() || !$user->isBanned());
 

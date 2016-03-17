@@ -68,7 +68,23 @@ Voir et commenter en ligne :
 	'notification_messages:settings:messages_send' => "Envoyer les messages directs en HTML",
 	'notification_messages:settings:messages_send:subtext' => "Par défaut, les messages direct envoyés par la messagerie interne sont envoyés par email en texte seulement. Ce réglage permet de conserver la mise en forme HTML de ces messages.",
 	
-	'notification_messages:comment:subtype' => "Commentaire sur %s",
+	'notification_messages:subject:comment' => "%s | Commentaire",
+	'notification_messages:subject:discussion_reply' => "%s | Réponse",
+	'notification_messages:subject:reply' => "Re: %s",
+	
+	'notification_messages:summary:wrapper' => "%s
+
+%s
+
+%s",
+	
+	'notification_messages:body:inreplyto' => "%s
+
+
+En réponse à :
+<blockquote>
+%s
+</blockquote>",
 	
 	
 );

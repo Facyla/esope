@@ -4,7 +4,7 @@
 	<author>Florian DANIEL</author>
 	<version>1.12.0-dev</version>
 	<blurb>Replaces default notifications subjects by meaningful email subjects</blurb>
-	<description>This plugins provides useful subjects for email messages, when new content is created, and replies or comments are made. It uses html_email_handler with object:notifications hook activated, and/or advanced_notifications plugin enabled.</description>
+	<description>Enable this plugin to provide meaningful subjects for email notifications, when new content is created, and when replies or comments are made. It uses html_email_handler, and advanced_notifications plugin enabled.</description>
 	<website>http://datawyz.fr/</website>
 	<copyright>(C) Florian DANIEL 2014-2016</copyright>
 	<license>GNU Public License version 2</license>
@@ -16,16 +16,21 @@
 		<type>elgg_release</type>
 		<version>1.12</version>
 	</requires>
-	
-	<suggests>
-		<type>plugin</type>
-		<name>html_email_handler</name>
-	</suggests>
+	<requires>
+		<type>priority</type>
+		<plugin>comment_tracker</plugin>
+		<priority>after</priority>
+	</requires>
 	
 	<conflicts>
 		<type>plugin</type>
 		<name>notification_subjects</name>
 	</conflicts>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>html_email_handler</name>
+	</suggests>
 	
 	<activate_on_install>false</activate_on_install>
 	

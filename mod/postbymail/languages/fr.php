@@ -88,6 +88,9 @@ return array(
 	'postbymail:settings:notify_scope:all' => "Toutes : erreurs et publications réussies (pour modération)",
 	'postbymail:settings:notify_scope:erroronly' => "Seulement les erreurs (par défaut)",
 	'postbymail:settings:notify_scope:error_and_groupadmin' => "Erreurs seulement pour les admins, et le responsable du groupe est prévenu des nouvelles publications",
+	'postbymail:settings:notify_scope:error' => "En cas d'erreur (par défaut)",
+	'postbymail:settings:notify_scope:success' => "En cas de réussite",
+	'postbymail:settings:notify_scope:groupadmin' => "Notifier également l'admin du groupe",
 	// Autres types de publications (non implémentées)
 	'postbymail:settings:allowcreation' => "Permettre la création de nouveaux contenus par mail (sans effet - non implémenté)",
 	'postbymail:settings:allowusermail' => "Offrir une adresse de publication personnalisée pour chacun des membres (sans effet - non implémenté)",

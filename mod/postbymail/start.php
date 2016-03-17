@@ -34,7 +34,7 @@ function postbymail_init() {
 	// Pass entity GUID (set it as global var)
 	// Pour déterminer et transmettre le GUID qui doit être passé en paramètre
 	// @TODO : vérifier fonctionnement !!
-	elgg_register_plugin_hook_handler('object:notifications', 'all', 'postbymail_object_notifications_hook', 0);
+	elgg_register_plugin_hook_handler('send:before', 'notifications', 'postbymail_send_before_notifications_hook', 0);
 	elgg_register_event_handler('annotate', 'all', 'postbymail_annotate_event_notifications', 0);
 	
 	

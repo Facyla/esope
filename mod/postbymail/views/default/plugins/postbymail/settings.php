@@ -66,6 +66,23 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo elgg_view('input/dropdown', array('name' => 'params[debug]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debug));
 	echo '</label><br /><em>' . elgg_echo('postbymail:settings:debug:details') . '</em></p>';
 	
+	// @TODO ? Notification scope for admins : error|success|groupadmin
+	echo '<p><strong>' . elgg_echo('postbymail:settings:notify_scope') . '</strong>';
+	echo '<br /><label>' . elgg_echo('postbymail:settings:notify_scope:error') . ' ' . elgg_view('input/select', array('name' => 'params[notify_scope_error]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->notify_scope_error)) . '</label>';
+	echo '<br /><label>' . elgg_echo('postbymail:settings:notify_scope:success') . ' ' . elgg_view('input/select', array('name' => 'params[notify_scope_success]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->notify_scope_success)) . '</label>';
+	echo '<br /><label>' . elgg_echo('postbymail:settings:notify_scope:groupadmin') . ' ' . elgg_view('input/select', array('name' => 'params[notify_scope_groupadmin]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->notify_scope_groupadmin)) . '</label>';
+	echo '</p>';
+	
+	
+	$notify_scope_options = array(
+		'error' => elgg_echo('postbymail:settings:notify_scope:error'),
+		'success' => elgg_echo('postbymail:settings:notify_scope:success'),
+		'groupadmin' => elgg_echo('postbymail:settings:notify_scope:groupadmin'),
+	);
+
+
+	
+	
 echo '</fieldset><br />';
 
 
@@ -76,9 +93,11 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<p><em>' . elgg_echo('postbymail:settings:replybymail:details') . '</em></p>';
 	
 	// Forums seulement ou tous types de commentaires ? @TODO replaced by per-subtype setting
+	/*
 	echo '<p><label>' . elgg_echo('postbymail:settings:scope') . ' ';
-	echo elgg_view('input/dropdown', array('name' => 'params[scope]', 'options_values' => $scope_options, 'value' => $vars['entity']->scope));
+	echo elgg_view('input/select', array('name' => 'params[scope]', 'options_values' => $scope_options, 'value' => $vars['entity']->scope));
 	echo '</label></p>';
+	*/
 	
 	// Choose enabled subtypes
 	$registered_objects = get_registered_entity_types('object');
@@ -176,12 +195,10 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo elgg_view('input/text', array('name' => 'params[password]', 'style' => 'width:94%;', 'value' => $vars['entity']->password));
 	echo '</label><p/>';
 
-	// password
+	// inbox
 	echo '<p><label style="clear:left;">' . elgg_echo('postbymail:settings:inboxfolder') . ' ';
 	echo elgg_view('input/text', array('name' => 'params[inboxfolder]', 'style' => 'width:94%;', 'value' => $vars['entity']->inboxfolder));
 	echo '</label><br /><em>' . elgg_echo('postbymail:settings:inboxfolder:details') . '</em><p/>';
-	
-	// @TODO ? Notification scope error|success|groupadmin
 	
 echo '</fieldset><br />';
 
