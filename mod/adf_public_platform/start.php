@@ -1594,6 +1594,28 @@ function esope_get_users_from_setting($setting) {
 }
 
 
+// Return distinct log values for a specific column
+// This is used for log browser filtering dropdowns
+function esope_get_log_distinct_values($column) {
+	//$log_columns = array('object_id', 'object_class', 'object_type', 'object_subtype', 'event', 'performed_by_guid', 'owner_guid', 'access_id', 'enabled', 'ip_address');
+	// Limit distinct values search to columns where values are in limited number
+	$log_columns = array('object_class', 'object_type', 'object_subtype', 'event', 'access_id', 'enabled');
+	if (empty($column) || !in_array($column, $log_columns)) { return false; }
+	// Always add an empty value (no filter)
+	$results = array('' => elgg_echo('esope:option:nofilter'));
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT $column FROM `" . $dbprefix . "system_log`;";
+	$rows = get_data($query);
+	foreach ($rows as $row) {
+		// Ensure unique values
+		if (!empty($row->$column) && !isset($results[$row->$column])) {
+			$results[$row->$column] = $row->$column;
+		}
+	}
+	return $results;
+}
+
+
 /* Return distinct metadata values for a given metadata name
  * Quickest method uses a direct SQL query
  * Also default sort alphabetically

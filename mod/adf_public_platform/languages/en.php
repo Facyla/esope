@@ -1000,6 +1000,14 @@ To view %s's profile, click here:
 
 This is an automated notification, please do not reply to this email.",
 	
+	// Logbrowser
+	'logbrowser:user_guid' => "or user GUID",
+	'logbrowser:entity_type' => "Entity type",
+	'logbrowser:entity_subtype' => "Entity subtype",
+	'logbrowser:object_guid' => "Entity GUID",
+	'logbrowser:event' => "Event",
+	
 );
 
 add_translation('en', $en);
+

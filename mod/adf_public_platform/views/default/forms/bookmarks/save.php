@@ -78,7 +78,9 @@ if ($categories) {
 
 <div class="elgg-foot">
   <?php
+if (elgg_is_active_plugin('prevent_notifications')) {
   if (!$vars['entity']) echo elgg_view('prevent_notifications/prevent_form_extend', array());
+}
 
 	if ($guid) {
 		echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
