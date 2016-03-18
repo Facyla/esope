@@ -1,0 +1,195 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2014-07-18T00:55:02Z",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "node/282911639",
+      "properties": {
+        "@id": "node/282911639",
+        "amenity": "drinking_water"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.283913,
+          48.7558385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/1805270679",
+      "properties": {
+        "@id": "node/1805270679",
+        "amenity": "drinking_water",
+        "source": "Samsung Wave's GPS receiver (not very accurate)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2995282,
+          48.7633112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/1805270684",
+      "properties": {
+        "@id": "node/1805270684",
+        "amenity": "drinking_water",
+        "source": "Samsung Wave's GPS receiver (not very accurate)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.3041352,
+          48.7635675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/1805270696",
+      "properties": {
+        "@id": "node/1805270696",
+        "amenity": "drinking_water",
+        "source": "Samsung Wave's GPS receiver (not very accurate)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.3020703,
+          48.7694503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/1830693114",
+      "properties": {
+        "@id": "node/1830693114",
+        "amenity": "drinking_water",
+        "source": "GPS (cell phone)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2914938,
+          48.766946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2113108256",
+      "properties": {
+        "@id": "node/2113108256",
+        "amenity": "drinking_water",
+        "name": "Cimetière"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2769805,
+          48.734004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2113108257",
+      "properties": {
+        "@id": "node/2113108257",
+        "amenity": "drinking_water",
+        "name": "Cimetière"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2775307,
+          48.7342082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2113113371",
+      "properties": {
+        "@id": "node/2113113371",
+        "amenity": "drinking_water",
+        "name": "skate park"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2693329,
+          48.7343602
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2328594755",
+      "properties": {
+        "@id": "node/2328594755",
+        "amenity": "drinking_water"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.3227291,
+          48.7544115
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2426821369",
+      "properties": {
+        "@id": "node/2426821369",
+        "amenity": "drinking_water"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2949724,
+          48.7620184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2445082717",
+      "properties": {
+        "@id": "node/2445082717",
+        "amenity": "drinking_water"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2936737,
+          48.7477468
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/2447637034",
+      "properties": {
+        "@id": "node/2447637034",
+        "amenity": "drinking_water"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.263343,
+          48.7476463
+        ]
+      }
+    }
+  ]
+}

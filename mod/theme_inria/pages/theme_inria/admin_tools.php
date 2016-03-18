@@ -5,8 +5,6 @@
  * Used for the walled garden index page
  */
 
-global $CONFIG;
-
 gatekeeper();
 
 // Liste manuelle.. ou metadata spécifique ?
@@ -24,21 +22,21 @@ $content .= "Cette page répertorie les principales actions d'un animateur et pr
 
 
 // Accès autorisés pour tous
-$sidebar .= '<p><a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'feedback">Afficher les feedbacks</a>' . "</p>";
+$sidebar .= '<p><a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'feedback">Afficher les feedbacks</a>' . "</p>";
 
 // Accès autorisés pour certaines personnes choisies
-$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'cmspages">Gérer les pages CMS</a>';
+$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'cmspages">Gérer les pages CMS</a>';
 if (elgg_is_admin_logged_in()) {
-	$sidebar .= ' et <a href="' . $CONFIG->url . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés</a>' . "</p>";
+	$sidebar .= ' et <a href="' . elgg_get_site_url() . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés</a>' . "</p>";
 }
 
 // Accès admin seulement
 if (elgg_is_admin_logged_in()) {
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'event_calendar/list">Gérer les événements du site</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'groups/all">Gérer les groupes à la Une</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'event_calendar/list">Gérer les événements du site</a>' . "</p>";
 	$sidebar .= '<span class="anim-stats">' . elgg_view('admin/statistics/overview') . '</span>';
 }
 

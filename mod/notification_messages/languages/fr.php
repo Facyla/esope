@@ -5,8 +5,9 @@
  * @link http://id.facyla.net/
  */
 
-return array(
+$url = elgg_get_site_url();
 
+return array(
 	'notification_messages' => "Message de notification",
 	
 	// Actions
@@ -31,7 +32,7 @@ return array(
 	'notification_messages:settings:generic_comment' => "Activer pour les commentaires génériques",
 	'notification_messages:settings:notify_user' => "Notifier également l'auteur des commentaires ?",
 	'notification_messages:settings:notify_user:details' => "Par défaut l'auteur d'un commentaire n'est pas notifié. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
-	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la configuration de comment_tracker.",
+	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">configuration de comment_tracker</a>.",
 	'notification_messages:settings:expert' => "Expert",
 	
 	// Notification message content
@@ -66,6 +67,25 @@ Voir et commenter en ligne :
 	
 	'notification_messages:settings:messages_send' => "Envoyer les messages directs en HTML",
 	'notification_messages:settings:messages_send:subtext' => "Par défaut, les messages direct envoyés par la messagerie interne sont envoyés par email en texte seulement. Ce réglage permet de conserver la mise en forme HTML de ces messages.",
+	
+	'notification_messages:subject:comment' => "%s | Commentaire",
+	'notification_messages:subject:discussion_reply' => "%s | Réponse",
+	'notification_messages:subject:reply' => "Re: %s",
+	
+	'notification_messages:summary:wrapper' => "%s
+
+%s
+
+%s",
+	
+	'notification_messages:body:inreplyto' => "%s
+
+
+En réponse à :
+<blockquote>
+%s
+</blockquote>",
+	
 	
 );
 

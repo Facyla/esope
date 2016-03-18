@@ -151,7 +151,7 @@
 .closed_button { float:right; width: auto; padding: 4px; margin:12px 0 0 8px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
 
 .submitted-feedback .controls { float:right; }
-.submitted-feedback .controls a { margin-right:8px; margin-top:2px; }
+.submitted-feedback .controls > a, .submitted-feedback .controls > span { margin-right:8px; margin-top:2px; }
 
 .elgg-module-group-feedback { margin-top: 10px; }
 .elgg-module-group-feedback .elgg-body { margin: 0; padding: 0; }
@@ -161,8 +161,10 @@
 
 
 @media (max-width:700px) {
-	#feedbackWrapper { position: initial; }
-	#feedBackToggler { position: initial; transform: rotate(90deg); transform-origin: bottom right; }
+	#feedbackWrapper { position: initial; margin-top: 12px; }
+	#feedBackToggler { position: initial; transform: rotate(90deg); margin-left: 70px; transform-origin: bottom right; height: 30px;  }
+	#feedBackContentWrapper { background: white; left:0; }
+	#feedBackContent { width: auto; max-width: 94%; margin-top: 1rem; }
 
 }
 

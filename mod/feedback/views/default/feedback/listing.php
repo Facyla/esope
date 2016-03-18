@@ -32,11 +32,14 @@ if ($vars['full'] === true) { $full = true; }
 $status_mark = elgg_echo ( "feedback:status:" . $status );
 $mood_mark = elgg_echo ( "feedback:mood:" . $mood );
 $about_mark = elgg_echo ( "feedback:about:" . $about );
-if ($full) $access_mark = elgg_view('output/access', array('entity' => $feedback));
-
+if ($full) {
+	$access_mark = elgg_view('output/access', array('entity' => $feedback));
+} else {
+	$access_mark = elgg_view('output/access', array('entity' => $feedback, 'hide_text' => true));
+}
 
 $controls = '';
-if ($full) $controls .= $access_mark;
+$controls .= $access_mark;
 switch ($status) {
 	case 'closed':
 		// Only admins can reopen feedbacks

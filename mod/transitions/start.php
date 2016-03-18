@@ -144,6 +144,7 @@ function catalogue_page_handler($page) {
 		$page[0] = 'all';
 	}
 
+	$path = elgg_get_plugins_path() . 'transitions/pages/transitions/';
 	$page_type = $page[0];
 	switch ($page_type) {
 		case 'owner':
@@ -193,20 +194,20 @@ function catalogue_page_handler($page) {
 		case 'icon':
 			if (isset($page[1])) { set_input("guid",$page[1]); }
 			if (isset($page[2])) { set_input("size",$page[2]); }
-			include(elgg_get_plugins_path() . "transitions/pages/transitions/icon.php");
+			include($path . 'icon.php');
 			return true;
 			break;
 		case 'download':
 			// The username should be the file we're getting
 			if (isset($page[1])) { set_input("guid",$page[1]); }
 			if (isset($page[2])) { set_input("name",$page[2]); }
-			include(elgg_get_plugins_path() . "transitions/pages/transitions/attachment.php");
+			include($path . 'attachment.php');
 			return true;
 			break;
 		case 'embed':
 			if (isset($page[1])) { set_input("embed_type",$page[1]); }
 			if (isset($page[2])) { set_input("id",$page[2]); }
-			include(elgg_get_plugins_path() . "transitions/pages/transitions/embed.php");
+			include($path . 'embed.php');
 			return true;
 			break;
 		case 'all':
@@ -214,7 +215,7 @@ function catalogue_page_handler($page) {
 		default:
 			if ($page[0] != 'all') { set_input("category",$page[0]); }
 			if (isset($page[1])) { set_input("q",$page[1]); }
-			include(elgg_get_plugins_path() . "transitions/pages/transitions/index.php");
+			include($path . 'index.php');
 			return true;
 	}
 

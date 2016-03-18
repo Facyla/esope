@@ -41,7 +41,8 @@ $font6 = $css['font6'];
 	padding-bottom: 5px;
 }
 
-.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em;; }
+.elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em; }
+.elgg-sidebar .elgg-module-aside h3 { color:<?php echo $color14; ?>; font-size: 1rem; padding: 0.4em 0.5em 0.0em 0.5em; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li { float: left; width: auto; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul li a img {
 	float: left;
@@ -118,12 +119,12 @@ $font6 = $css['font6'];
 	padding: 4px 0 5px 0px;
 }
 .elgg-module-info > .elgg-body {
-	padding:7px 10px 0;
+	/* padding:7px 10px 0; */
+	padding:5px;
 	/* background: white url("<?php echo $urlicon; ?>bottom-module.png") 50% bottom no-repeat scroll; */
 	background:white; /* Pour masquer ombrage si largeur supérieure */
-	border-bottom: 1px solid #CCCCCC;
-	border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
+	border: 1px solid <?php echo $color3; ?>;
+	border-top: 0;
 }
 
 
@@ -173,7 +174,7 @@ $font6 = $css['font6'];
 	color: white;
 }
 .elgg-module-featured > .elgg-body {
-	padding: 10px;
+	padding: 5px;
 }
 
 /* ***************************************
@@ -247,7 +248,7 @@ $font6 = $css['font6'];
 	cursor: move;
 }
 a.elgg-widget-collapse-button {
-	color: #c5c5c5;
+	/* color: #c5c5c5; */
 }
 a.elgg-widget-collapse-button:hover,
 a.elgg-widget-collapse-button:focus,
@@ -255,7 +256,7 @@ a.elgg-widget-collapse-button:active,
 a.elgg-widget-collapsed:hover, 
 a.elgg-widget-collapsed:focus, 
 a.elgg-widget-collapsed:active {
-	color: #9d9d9d;
+	/* color: #9d9d9d; */
 	text-decoration: none;
 }
 a.elgg-widget-collapse-button:before {
@@ -346,7 +347,8 @@ a.elgg-widget-collapsed:before {
 }
 
 
-/* Suppression des styles du core, qui géraient les flèches en carac spéciaux */
+/* Suppression des styles du core, qui géraient les flèches en carac spéciaux => rendu obsolète par FA */
+/*
 a.elgg-widget-collapse-button,
 a.elgg-widget-collapse-button:hover,
 a.elgg-widget-collapse-button:focus,
@@ -358,9 +360,8 @@ a.elgg-widget-collapsed:active {
 }
 a.elgg-widget-collapse-button:before { content: ""; }
 a.elgg-widget-collapsed:before { content: ""; }
-/*
-a.elgg-widget-edit-button { right: 12px; }
 */
+
 
 div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
 .elgg-module .elgg-body, .elgg-module .elgg-content, .elgg-module .elgg-river-summary { font-size:0.9rem; }
@@ -515,7 +516,6 @@ div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
 .elgg-module .elgg-body .mts { float: left; clear: left; font-size: 0.8rem; }
 .groups-widget-viewall { margin:10px 6px 0 0; }
 .elgg-module span.groups-widget-viewall a { color: <?php echo $color14; ?>; font-size: 0.75rem; }
-.elgg-module-info > .elgg-body { padding: 7px 0 0; }
 .elgg-module-info .elgg-image-block .elgg-body .elgg-river-summary { float: left; width: 200px; }
 .elgg-module-info .elgg-image-block .elgg-body a.ouvrir { clear: none; padding: 20px 10px; }
 .elgg-module-info .elgg-river { border-top: 0 none; }

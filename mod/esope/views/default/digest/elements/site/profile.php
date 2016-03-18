@@ -15,13 +15,21 @@ if (!isset($digest_site_profile_body)){
 	$digest_site_profile_body = array();
 }
 
-if (!isset($digest_site_profile_body[$key])){
-	// Set default, then override it if there are results
-	$digest_site_profile_body[$key] = false;
-	
+
+if (isset($digest_site_profile_body[$key])) {
+	// return from memory
+	if (!empty($digest_site_profile_body[$key])) {
+		$title = elgg_view("output/url", array(
+			"text" => elgg_echo("esope:digest:members"),
+			"href" => "members"
+		));
+		
+		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
+	}
+} else {
 	$ts_lower = (int) elgg_extract("ts_lower", $vars);
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
-	
+
 	$member_options = array(
 			"type" => "user",
 			"limit" => 6,
@@ -32,28 +40,30 @@ if (!isset($digest_site_profile_body[$key])){
 			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")")
 	);
 	
-	if ($newest_members = elgg_get_entities_from_relationship($member_options)){
+	$newest_members = elgg_get_entities_from_relationship($member_options);
+	if (!empty($newest_members)) {
+		$title = elgg_view("output/url", array(
+			"text" => elgg_echo("esope:digest:members"),
+			"href" => "members",
+			"is_trusted" => true
+		));
+
 		$content = "<div class='digest-profile'>";
-		
-		foreach ($newest_members as $key => $user) {
-			$content .= '<div class="table-item">';
-			//$content .= elgg_view_entity_icon($user, 'medium', array('use_hover' => false)) . "<br />";
-			$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $user->getURL() . '"><img src="' . $user->getIconUrl('medium') .  '" /></a></div><br />';
-			$content .= '<a href="' .  $user->getURL() . '">' . $user->name . '</a><br />';
-			$content .= $user->briefdescription;
-			$content .= "</div>";
-		}
-		
+			foreach ($newest_members as $index => $mem) {
+				$content .= '<div class="table-item">';
+				//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
+				$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></a></div><br />';
+				$content .= '<a href="' .  $mem->getURL() . '">' . $mem->name . '</a><br />';
+				$content .= $mem->briefdescription;
+				$content .= "</div>";
+			}
 		$content .= "</div>";
-		
+	
 		// Set global var for later reuse
 		$digest_site_profile_body[$key] = $content;
+		// View module if not empty
+		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
+	} else {
+		$digest_site_profile_body[$key] = false;
 	}
 }
-
-// View module if not empty
-if (!empty($digest_site_profile_body[$key])) {
-	$title = elgg_view("output/url", array("text" => elgg_echo("esope:digest:members"), "href" => "members"));
-	echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
-}
-

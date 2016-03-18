@@ -12,6 +12,7 @@ $map_id = elgg_extract('map_id', $vars, 'leaflet-main-map');
 $width = elgg_extract('width', $vars, '300px;');
 $height = elgg_extract('height', $vars, '200px;');
 $map_css = elgg_extract('css', $vars, "width:$width; height:$height;");
+$zoomlevel = elgg_extract('zoomlevel', $vars, '10');
 
 echo '<div id="' . $id . '" class="' . $map_id . '" style="' . $map_css . '"></div>';
 ?>
@@ -101,7 +102,7 @@ if (is_array($entities)) {
 	
 	echo "map_$id.addLayer(mapMarkers_$id);
 			map_$id.fitBounds(bounds_$id, {padding: [20,20]});
-			//map_$id.setView(new L.LatLng($lat, $long),10);
+			//map_$id.setView(new L.LatLng($lat, $long),$zoomlevel);
 		});
 		</script>";
 	
@@ -169,7 +170,7 @@ if ($lat && $long) {
 		
 		map_$id.addLayer(mapMarkers_$id);
 		map_$id.fitBounds(bounds_$id, {padding: [20,20]});
-		map_$id.setView(new L.LatLng($lat, $long),10);
+		map_$id.setView(new L.LatLng($lat, $long),$zoomlevel);
 	});
 	</script>";
 }

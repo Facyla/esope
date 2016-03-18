@@ -4,7 +4,7 @@
 admin_gatekeeper();
 elgg_set_context('admin');
 
-global $CONFIG;
+$site = elgg_get_site_entity();
 $t1 = microtime(true);
 
 $subject = get_input('emailsubject', null);
@@ -81,15 +81,15 @@ $headers .= "Content-Transfer-Encoding: 8bit".$eol;
   // CONFIG DU MAIL
   //-----------------------------------------------
   $recipient = implode(',', $valid_emails);
-  $email_reply = $CONFIG->site->email;
+  $email_reply = $site->email;
   // Si mail du site non renseigné, l'envoi est fait par le premier admin du site (GUID 2)
   if (empty($email_reply)) $email_reply = get_entity(2)->email;
   if (!empty($editor)) {
-    $sender = sprintf(elgg_echo('notification_messages:sendermail:fullwrapper'), $CONFIG->site->name, $email_reply, $editor);
+    $sender = sprintf(elgg_echo('notification_messages:sendermail:fullwrapper'), $site->name, $email_reply, $editor);
   } else {
-    $sender = sprintf(elgg_echo('notification_messages:sendermail:wrapper'), $CONFIG->site->name, $email_reply);
+    $sender = sprintf(elgg_echo('notification_messages:sendermail:wrapper'), $site->name, $email_reply);
   }
-  //$replyto = "Contact " . $CONFIG->site->name . " <$email_reply>";
+  //$replyto = "Contact " . $site->name . " <$email_reply>";
   $replyto = sprintf(elgg_echo('notification_messages:replytomail:wrapper'), $email_reply);
   // Si une adresse de réponse par mail est fournie, on l'utilise
   // Très risqué car on peut trop facilement diffuser des infos persos comme ça
@@ -130,9 +130,9 @@ $headers .= "Content-Transfer-Encoding: 8bit".$eol;
   // Si on a les infos pour construire un ID, on le fait : ça permettra aux messageries de suivre la conversation
   if ($object_guid) {
     // ID pour la conversation : doit être unique et donc construit à partir du premier sujet (GUID de l'entité actuelle)
-    $first_mail_msg_id = $object_guid . '@' . $CONFIG->site->url;
+    $first_mail_msg_id = $object_guid . '@' . $site->url;
     // Ssi réponse : construit à partir du premier sujet ()ou précédent sujet si possible)
-    $site_domain = str_replace('http://', '', $CONFIG->site->url);
+    $site_domain = str_replace('http://', '', $site->url);
     $site_domain = str_replace('https://', '', $site_domain);
     $this_mail_msg_id = time() . '.' . $object_guid . '@' . $site_domain;
     if (($event = 'create') || ($event = 'update')) {

@@ -1,4 +1,18 @@
 <?php
+
+/* Niveaux d'accès :
+	Logique : 
+	- ouvert + noir ssi totalement ouvert/public
+	- fermé et couleur si restreint de quelque manière que ce soit
+		* tous les membres du site : vert
+		* groupes : bleu
+		* contacts : orange
+		* liste de contacts : jaune
+		* privé/brouillon : rouge
+	- par défaut : grisé
+*/
+
+
 $urlicon = elgg_get_site_url() . 'mod/access_icons/graphics/';
 //$padding_left = '18px';
 $padding_left = '0';
@@ -10,7 +24,7 @@ $padding_left = '0';
 .elgg-access { display: inline-block; }
 .elgg-access a { display: inline-block; margin-left: -<?php echo $padding_left; ?>; padding-left: <?php echo $padding_left; ?>; min-height: 16px; min-width:16px; text-decoration:none; }
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
-.access-icons { float:right; font-size:12px; margin-left: 15px; margin-top: 6px; }
+.access-icons { float:right; font-size:0.75rem; margin-left: 15px; margin-top: 6px; }
 
 /* Hack : can't easily insert access info into listings, so this class lets us "insert" it it the listing item */
 .access-icons.access-icons-listing { /* margin-bottom: -21px; */ margin-top: 2px; }
@@ -30,16 +44,6 @@ $padding_left = '0';
 .shared_collection {  }
 
 
-/* Niveaux d'accès :
-	Logique : 
-	- ouvert + noir ssi totalement ouvert/public
-	- fermé et couleur si restreint de quelque manière que ce soit
-		* tous les membres du site : vert
-		* groupes : bleu
-		* contacts : orange
-		* liste de contacts : jaune
-		* privé/brouillon : rouge
-*/
 /* Défaut : grisé */
 .elgg-access.elgg-access-default { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-default.png) no-repeat top left; }
 /* Public : noir et ouvert */

@@ -91,6 +91,11 @@ $icon = elgg_view('output/img', array(
 	'style' => "background: url($icon_url) no-repeat;",
 ));
 
+// Add archive banner, if account is closed
+if ($user->memberstatus == 'closed') {
+	$icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
+}
+
 $show_menu = $use_hover && (elgg_is_admin_logged_in() || !$user->isBanned());
 
 ?>

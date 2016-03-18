@@ -1,10 +1,12 @@
 <?php
-//$background_colour = '#EBF1EB';
-//$highlight_colour = '#478787';
 
 $background_colour = '#F5F5F5';
 $highlight_colour = '#3874B7';
 ?>
+
+.elgg-menu-site {
+	z-index: 50;
+}
 
 #calendarmenucontainer {
 	position:relative;
@@ -49,14 +51,8 @@ td.ui-datepicker-unselectable {
 	background: <?php echo $highlight_colour; ?>;
 }
 
-.river_object_event_calendar_create {
-	background: url(<?php echo $vars['url']; ?>mod/event_calendar/images/river_icon_event.gif) no-repeat left -1px;
-}
-.river_object_event_calendar_update {
-	background: url(<?php echo $vars['url']; ?>mod/event_calendar/images/river_icon_event.gif) no-repeat left -1px;
-}
 #event_list {
-	width:510px;
+	max-width:485px;
 	margin:0;
 	float:left;
 	padding:5px 0 0 0;
@@ -146,15 +142,6 @@ table.event_calendar_paged_table th {
 	padding:3px 3px 3px 3px;
 }
 
-.event_calendar_strapline {
-	font-size: 85%;
-}
-
-.event-calendar-personal-calendar-toggle-wrapper {
-	width: 100%;
-	margin-bottom: 30px;
-}
-
 .event-calendar-personal-calendar-toggle {
 	float: right;
 }
@@ -171,8 +158,109 @@ li.event-calendar-filter-menu-show-only {
 	margin-right: 10px;
 }
 
-.event-calendar-date-time-setter label {
-	float: left;
-	width: 50px;
+.event-calendar-edit-form-other-block .mceLayout,
+.event-calendar-edit-form-other-block .mce-tinymce  {
+	float:none;
+	clear:both;
+	width: 100% !important;
+}
+
+.event-calendar-edit-form-share label {
+	float:none;
+	clear:both;
+	width: 100% !important;
+}
+
+.event-calendar-edit-form {
+	background-color: #FFFFFF;
+}
+
+.event-calendar-edit-form-block {
+	width: 98%;
+	border-bottom: 1px solid #CCC;
+	padding: 5px;
+	margin-bottom: 10px;
+	clear: both;
+}
+
+.event-calendar-repeating-wrapper {
+	padding: 0;
 	margin-top: 5px;
+}
+.event-calendar-repeating-unselected {
+	font-size: 16px;
+	font-weight: bold;
+	color: #DDDDDD;
+	background-color: #AAAAAA;
+	border: 1px solid #444444;
+	padding: 5px;
+	width: 25px;
+	text-align: center;
+	display: inline-block;
+	margin: 0;
+}
+
+.event-calendar-repeating-unselected:hover {
+	text-decoration: none;
+}
+
+.event-calendar-repeating-selected {
+	font-size: 16px;
+	font-weight: bold;
+	color: #000000;
+	background-color: #FFFFFF;
+	border: 1px solid #000000;
+	padding: 5px;
+	width: 25px;
+	text-align: center;
+	display: inline-block;
+	margin: 0;
+}
+
+.event-calendar-repeating-selected:hover {
+	text-decoration: none;
+	color: #CCCCCC;
+}
+
+.event-calendar-edit-form-block ul.elgg-vertical li label {
+	font-weight: normal;
+	width: 500px;
+}
+
+.event-calendar-edit-form-block h2 {
+	font-size: 18px;
+	color: #000000;
+}
+
+.event-calendar-edit-date-wrapper, .event-calendar-edit-all-day-date-wrapper {
+	clear: both;
+	margin-left: 20px;
+	display: none;
+}
+
+.event-calendar-edit-reminder-wrapper {
+	margin-top: 10px;
+	display: none;
+}
+
+.event-calendar-edit-form-membership-block, .event-calendar-edit-form-share-block {
+	display: none;
+}
+
+.event-calendar-description {
+	display: none;
+}
+
+.event-calendar-edit-bottom {
+	clear: both;
+	margin-bottom: 5px;
+}
+
+.event-calendar-date-selected {
+	background-color: #DDDDFF;
+}
+
+.event-calendar-repeat-section {
+	padding-top: 15px;
+	clear: both;
 }

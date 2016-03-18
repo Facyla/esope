@@ -1,8 +1,7 @@
 <?php
-global $CONFIG;
-$site_email = $CONFIG->site->email;
+$site_email = elgg_get_site_entity()->email;
 
-$en = array(
+return array(
 	
 	// Form elements
 	'mailing:menu:title' => "Send an HTML mailing",
@@ -45,6 +44,4 @@ $en = array(
 	'mailing:send:error:sender' => "Missing sender",
 	
 );
-		
-add_translation("en",$en);
 

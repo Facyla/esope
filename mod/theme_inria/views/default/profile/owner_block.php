@@ -12,7 +12,7 @@ if (!$user) {
 }
 
 // Check and update user data from LDAP on the fly
-//inria_check_and_update_user_status('login', 'user', $user);
+//inria_check_and_update_user_status('login:before', 'user', $user);
 
 $icon = elgg_view_entity_icon($user, 'large', array(
 	'use_hover' => false,
@@ -57,7 +57,7 @@ if (elgg_is_logged_in() && ($user->guid == $_SESSION['user']->guid)) {
 		}
 	}
 	// Compose final message
-	$public_profile_setting = elgg_echo('theme_inria:publicprofile:title') . '&nbsp;: <a href="' . $CONFIG->url . 'settings/user/' . $user->username . '">' . elgg_echo('theme_inria:publicprofile:'.$public_profile_setting) . '</a>';
+	$public_profile_setting = elgg_echo('theme_inria:publicprofile:title') . '&nbsp;: <a href="' . elgg_get_site_url() . 'settings/user/' . $user->username . '">' . elgg_echo('theme_inria:publicprofile:'.$public_profile_setting) . '</a>';
 }
 
 $profile_actions = '';

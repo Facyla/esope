@@ -14,20 +14,20 @@
 
 // Display default footer if no specific footer set in theme settings
 $footer = elgg_get_plugin_setting('footer', 'esope');
-if (!empty($footer)) {
-	echo $footer;
-} else {
+if (empty($footer)) {
 	// Esope : custom, multilingual menu
 	$menu = elgg_get_plugin_setting('menu_footer', 'esope');
-	if (empty($menu)) $menu = 'footer';
+	if (empty($menu)) { $menu = 'footer'; }
 
 	// Get translated menu, only if exists
 	$lang = get_language();
 	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
 	if ($lang_menu) $menu = $menu . '-' . $lang;
 
-	echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+	$footer = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 }
+
+echo $footer;
 ?>
 
 <div class="clearfloat"></div>

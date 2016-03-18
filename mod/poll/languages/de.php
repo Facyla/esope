@@ -1,6 +1,6 @@
 <?php
 
-$german = array(
+return array(
 
 	/**
 	 * Menu items and titles
@@ -20,6 +20,8 @@ $german = array(
 	'poll:question' => "Frage",
 	'poll:description' => "Beschreibung (optional)",
 	'poll:responses' => "Auswahlmöglichkeiten",
+	'poll:note_responses' => "Anmerkung: bei Änderung der Auswahlmöglichkeiten einer existierenden Umfrage (Hinzufügen / Löschen von Auswahlmöglichkeiten oder einer Änderung des Textes einer bestehenden Auswahlmöglichkeit) werden die bereits abgegebenen Stimmen vollständig zurückgesetzt, damit alle Mitglieder die Möglichkeit haben, ihre Stimme basierend auf den aktualisierten Auswahlmöglichkeiten der Umfrage abzugeben.",
+	'poll:result:label' => "%s (%s)",
 	'poll:show_results' => "Zeige die Ergebnisse",
 	'poll:show_poll' => "Zeige die Umfrage",
 	'poll:add_choice' => "Auswahlmöglichkeit hinzufügen",
@@ -27,6 +29,9 @@ $german = array(
 	'poll:close_date' => "Schlusstag für diese Umfrage (optional)",
 	'poll:voting_ended' => "Die Abstimmung in dieser Umfrage endete am %s.",
 	'poll:poll_closing_date' => "(Schlusstag der Umfrage: %s)",
+	'poll:poll_reset' => "Umfrage zurücksetzen",
+	'poll:poll_reset_description' => "Diese Option ermöglicht ein vollständiges Zurücksetzen dieser Umfrage und das Löschen aller bereits abgegebener Stimmen.",
+	'poll:poll_reset_confirmation' => "Bist Du sicher, dass Du diese Umfrage zurücksetzen willst und alle abgegebenen Stimmen löschen willst?",
 
 	'poll:convert:description' => 'ACHTUNG: es sind %s existierende Umfragen vorhanden, die noch die alten Datenstruktur für die Auswahlmöglichkeiten verwenden. Diese Umfragen werden mit dieser Version des Umfrage-Plugins nicht korrekt funktionieren.',
 	'poll:convert' => 'Vorhandene Umfragen jetzt aktualisieren',
@@ -42,7 +47,9 @@ $german = array(
 	'poll:settings:front_page:title' => "Admins ermöglichen, eine einzelne Umfrage zur aktuellen \"Umfrage der Stunde\" der Community-Seite zu machen? (das Widget Manager-Plugin ist notwendig, damit das dazugehörige Widget zur Indexseite hinzugefügt werden kann)",
 	'poll:settings:allow_close_date:title' => "Befristete Umfragen erlauben? (nach Ablauf der Frist sind die Ergebnisse der Umfrage weiterhin sichtbar aber eine Stimmabgabe ist nicht mehr möglich)",
 	'poll:settings:allow_open_poll:title' => "Offene Umfragen erlauben? (Bei offenen Umfragen ist sichtbar, welche Mitglieder welche Antwort gewählt haben; wenn diese Option aktiviert ist, können Admins bei allen Umfragen sehen, wer wie gewählt hat)",
+	'poll:settings:allow_poll_reset:title' => "Erstellern von Umfragen erlauben, die abgegebenen Stimmen zurückzusetzen? (wenn diese Option aktiviert ist, können die Ersteller einer Umfrage und Admins über einen Knopf im Titelbereich einer Umfrage die abgegebenen Stimmen zurücksetzen; wenn die Option deaktiviert ist, ist dies nur Admins möglich)",
 	'poll:none' => "Keine Umfragen gefunden.",
+	'poll:not_found' => "Diese Umfrage konnte nicht gefunden werden.",
 	'poll:permission_error' => "Du hast keine ausreichende Berechtigung, um diese Umfrage zu bearbeiten.",
 	'poll:vote' => "Abstimmen",
 	'poll:login' => "Bitte melde Dich auf der Community-Seite an, wenn Du in dieser Umfrage Deine Stimme abgeben willst.",
@@ -112,6 +119,7 @@ Schau Dir die Umfrage an und gib Deine Stimme ab:
 	'poll:settings:vote_in_river:title' => "Einen Eintrag im Aktivitäten-River erzeugen, wenn ein Mitglied seine Stimme in einer Umfrage abgegeben hat?",
 	'poll:settings:send_notification:title' => "Beim Hinzufügen einer Umfrage Benachrichtigungen versenden? (Mitglieder erhalten nur Benachrichtigungen, wenn sie entweder mit dem Mitglied befreundet sind, der die Umfrage gestartet hat oder Mitglied der Gruppe sind, zu der die Umfrage hinzugefügt wurde. Darüber hinaus müssen sie die Benachrichtigungseinstellungen von Elgg entsprechend konfiguriert haben)",
 	'river:create:object:poll' => '%s hat die Umfrage %s gestartet',
+	'river:update:object:poll' => '%s hat die Umfrage %s aktualisiert',
 	'river:vote:object:poll' => '%s hat in der Umfrage %s abgestimmt',
 	'river:comment:object:poll' => '%s schrieb einen Kommentar zur Umfrage %s',
 
@@ -122,15 +130,17 @@ Schau Dir die Umfrage an und gib Deine Stimme ab:
 	'poll:edited' => "Deine Änderungen wurden gespeichert.",
 	'poll:responded' => "Danke fürs Abstimmen. Deine Stimme wurde erfasst.",
 	'poll:deleted' => "Die Umfrage wurde gelöscht.",
-	'poll:totalvotes' => "Gesamtzahl der abgegebenen Stimmen: ",
+	'poll:totalvotes' => "Gesamtzahl der abgegebenen Stimmen: %s",
 	'poll:voted' => "Deine Stimme wurde erfasst. Danke für die Beteiligung in dieser Umfrage.",
+	'poll:poll_reset_success' => "Die Umfrage wurde zurückgesetzt.",
 
 	/**
 	 * Error messages
 	 */
 	'poll:blank' => "Entschuldigung: Du mußt sowohl im Frage-Eingabefeld etwas eintragen und auch mindestens eine Auswahlmöglichkeit für die Umfrage hinzufügen.",
 	'poll:novote' => "Entschuldigung: Du mußt eine der angebotenen Auswahlmöglichkeiten selektieren, wenn Du in dieser Umfrage Deine Stimme abgeben willst.",
+	'poll:alreadyvoted' => "Entschuldigung: Du kannst nur einmal abstimmen.",
 	'poll:notfound' => "Entschuldigung: die gewünschte Umfrage konnte nicht gefunden werden.",
-	'poll:notdeleted' => "Entschuldigung: beim Löschen der Umfrage ist ein Fehler aufgetreten."
+	'poll:notdeleted' => "Entschuldigung: beim Löschen der Umfrage ist ein Fehler aufgetreten.",
+	'poll:poll_reset_denied' => "Entschuldigung: Du hast keine ausreichende Berechtigung zum Zurücksetzen dieser Umfrage."
 );
-add_translation("de",$german);

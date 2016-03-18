@@ -51,12 +51,14 @@ if (isset($vars['entity'])) {
 	
 
 	// Alertes en cas de données manquantes : code projet, taux...
+	/*
 	if (empty($project_code)) register_error('Le code projet devrait être renseigné : renseignez-vous auprès de la compta pour connaître le code projet -ou le définir ensemble.');
 	if (empty($budget)) register_error('Le budget devrait être renseigné.');
 	//if (empty($totaldays)) register_error('Le nombre de jours devrait être renseigné.');
 	if (empty($project_managertype)) register_error('Le statut du projet devrait être renseigné.');
 	if (empty($date) || empty($enddate)) register_error('Les dates du projet devraient être renseignées.');
 	if (empty($profiles)) register_error('Les profils ne doivent pas être vides pour permettre de calculer les indicateurs du projet.');
+	*/
 	
 } else {
 	$pagetitle = elgg_echo("project_manager:new");

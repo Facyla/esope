@@ -57,10 +57,40 @@ $module_bg_color = $color2;
 // Force settings
 $module_title_color = '#6D2C4F';
 $module_bg_color = '#F8F4F5';
+
+// Main width (on desktop screen)
+$main_width = "80%";
+$main_maxwidth = "80%";
+
 ?>
+/* <style> /**/
+
+
+/* Main width */
+.elgg-page-default {
+	/* min-width: 800px; */
+}
+.elgg-page-default .elgg-page-header > .elgg-inner, 
+.elgg-page-default .elgg-page-body > .elgg-inner, 
+.elgg-page-default .elgg-page-footer > .elgg-inner, 
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+	max-width: <?php echo $main_maxwidth; ?>;
+}
+#page_container {
+	width:<?php echo $main_width; ?>;
+}
+/*
+.elgg-layout-one-sidebar .elgg-main { width: 70%; }
+.elgg-sidebar { width: 24%; }
+*/
+
+
 
 /* Change Elgg sprites image */
+/*
 .elgg-icon { background-image: url(<?php echo $imgurl; ?>elgg_sprites-iris.png); }
+*/
+.elgg-icon { background-image: none; }
 
 /* Add some fonts */
 @font-face {
@@ -94,7 +124,7 @@ $module_bg_color = '#F8F4F5';
 
 /* Slider */
 /* Limit slides content size */
-.iris-news { height: 300px; overflow:hidden; }
+.iris-news { height: auto; overflow:hidden; }
 .iris-news #slider1 img { max-height: 200px !important; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
@@ -113,13 +143,13 @@ $module_bg_color = '#F8F4F5';
 
 
 /* Header */
-body { border-top:0; background:white; /* font-size:12px; font-size:75%; */ }
+body { border-top:0; background:white; /* font-size:0.75rem; */ }
 section { background:white; }
-.elgg-page-header { background: #6F2D50 !important; border-top: 0; height:70px !important; }
-.elgg-page-header .interne h1 { margin-top: 0; }
-.elgg-menu-topbar { top: 27px; }
+.elgg-page-header { background: #6F2D50 !important; border-top: 0; height:auto !important; }
+.elgg-page-header .elgg-inner h1 { margin: 0; padding:0; font-size:1rem; }
+.elgg-menu-topbar { position:absolute; top: 27px; right:5px; margin-left: 140px; }
 .elgg-menu-topbar #user img { float: left; margin-right: 6px; }
-.elgg-menu-topbar ul li a { font-size:12px; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
+.elgg-menu-topbar li a { font-size:0.75rem; font-weight:normal; color: #fff; text-shadow: none; font-family: Arial, Helvetica, sans-serif; }
 
 #adf-homepage .inria-login a, #adf-homepage .inria-login a:visited { color: white; }
 #adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
@@ -130,23 +160,24 @@ section { background:white; }
 
 /* Main menu */
 .elgg-page-header { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }
-ul.elgg-menu-navigation li, ul.elgg-menu-navigation li:first-child { border:0; padding:0; }
-ul.elgg-menu-navigation li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 14px; font-weight: bold; }
-ul.elgg-menu-navigation li a.active, ul.elgg-menu-navigation li a.elgg-state-selected, ul.elgg-menu-navigation li a:hover, ul.elgg-menu-navigation li a:focus, ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
-ul.elgg-menu-navigation li ul li a:hover, ul.elgg-menu-navigation li ul li a:focus, ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
-ul.elgg-menu-navigation li ul li { background: <?php echo $module_bg_color; ?>; }
-ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 14px; padding: 0.5em 0.75em; }
+#transverse ul.elgg-menu-navigation li, #transverse ul.elgg-menu-navigation li:first-child { border:0; padding:0; }
+#transverse ul.elgg-menu-navigation li a { text-transform:uppercase; color: #EF783E; font-family: <?php echo $font2; ?>; font-size: 0.875rem; font-weight: bold; }
+#transverse ul.elgg-menu-navigation li a.active, #transverse ul.elgg-menu-navigation li a.elgg-state-selected, #transverse ul.elgg-menu-navigation li a:hover, #transverse ul.elgg-menu-navigation li a:focus, #transverse ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
+#transverse ul.elgg-menu-navigation li ul li a:hover, #transverse ul.elgg-menu-navigation li ul li a:focus, #transverse ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
+#transverse ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
+#transverse ul.elgg-menu-navigation li ul li { background: <?php echo $module_bg_color; ?>; }
+#transverse ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; }
 
 /* Search */
 input:focus, textarea:focus { background: #FFFAF0; }
-.elgg-page-header form, header form { float: right; border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
-form input#esope-search-input { height: 26px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
-form input#esope-search-input:active, form input#esope-search-input:focus { color: #EF783E; }
-form input#esope-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
-form input#esope-search-submit-button:hover, form input#esope-search-submit-button:active, form input#esope-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
+.elgg-page-header form, #transverse form { /* float: right; */ border: 0; border-radius: 0; box-shadow: none; margin-top: 5px; }
+#transverse form input#esope-search-input { height: 27px; border: 1px solid #EF783E; border-radius: 0; color: #EF783E; font-weight:bold; }
+#transverse form input#esope-search-input:active, #transverse form input#esope-search-input:focus { color: #EF783E; }
+#transverse form input#esope-search-submit-button { background: #EF783E; border-color: #EF783E; border-radius: 0; }
+#transverse form input#esope-search-submit-button:hover, #transverse form input#esope-search-submit-button:active, #transverse form input#esope-search-submit-button:focus { background-color: #6D2C4F; border: 1px solid #6D2C4F; }
+
 /* Members search */
-.esope-search-metadata { width: 30%; height: 3em; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; }
+.esope-search-metadata { width: 30%; height:auto; min-height: 3rem; border-left: 1px solid #ccc; padding: 0.5%; background: #f0f0f0; margin-right: 2%; margin-bottom: 0.5rem; }
 /* Search filters */
 .search-filter-menu { padding:6px; margin:4px 0; border:1px dotted #CCC; }
 .search-filter-menu a { padding:2px 4px; margin: 0 10px 6px 0; background: #F8F4F5; display: inline-block; }
@@ -157,19 +188,19 @@ form input#esope-search-submit-button:hover, form input#esope-search-submit-butt
 /* Sidebar */
 .elgg-sidebar { border-left: 0px dotted #CCC; }
 .elgg-context-groups .elgg-sidebar { border-left: 1px dotted #CCC; padding-top:1%; }
-.elgg-sidebar .elgg-module-aside h3 { font-size:14px; }
+.elgg-sidebar .elgg-module-aside h3 { font-size:0.875rem; }
 
 /* Titre objets dans les widgets notamment */
-.elgg-module .entity_title { font-size: 14px; }
+.elgg-module .entity_title { font-size: 0.875rem; }
 
 /* Titre listing des groupes */
 .groups-profile-icon .au_subgroups_group_icon-large { height: auto; width: auto; }
 .groups-profile-icon .au_subgroups_group_icon-large img { height: auto; width: auto; max-height: 100px; max-width: 200px; }
-.elgg-context-groups .elgg-list-entity h3 { font-size: 16px; }
+.elgg-context-groups .elgg-list-entity h3 { font-size: 1rem; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 .au_subgroups_group_icon span.au_subgroup { display: none; }
-.au_subgroup.au_subgroup_icon-tiny { font-size:4px; padding:3px 0px; }
+.au_subgroup.au_subgroup_icon-tiny { font-size:0.25rem; padding:3px 0px; }
 
 /* Flux RSS des groupes */
 .elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }
@@ -184,7 +215,7 @@ form input#esope-search-submit-button:hover, form input#esope-search-submit-butt
 
 
 /* Footer */
-footer.footer-inria {
+.elgg-page .elgg-page-footer {
 	background: #6d2d4f;
 	background: -moz-linear-gradient(top, #bf8279 0%, #6d2d4f 75%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bf8279), color-stop(75%,#6d2d4f));
@@ -194,12 +225,15 @@ footer.footer-inria {
 	background: linear-gradient(to bottom, #bf8279 0%,#6d2d4f 75%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8279', endColorstr='#6d2d4f',GradientType=0 );
 }
-.footer-logo-inria { margin-top: 12px; }
+.elgg-page .elgg-page-footer .elgg-inner { padding: 0; }
+.elgg-page-footer ul { margin: 0 auto; max-width: 500px; }
+.elgg-page-footer ul li { padding-left: 13px; margin: 26px 7px 10px 0; background: transparent url("<?php echo $url; ?>mod/esope/img/theme/puce-footer.png") left 7px no-repeat scroll; color: #fff; }
+.footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
+.elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 0.81rem; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
-.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 13px; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
+.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 0.81rem; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; }
 
@@ -224,9 +258,9 @@ footer.footer-inria {
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
 
 .home-box { margin-bottom: 1em; background: <?php echo $module_bg_color; ?>; padding: 0.5em 0.5em; border-radius: 5px; }
-.home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
+.home-box h3:first-child, .home-box h3:first-child a { font-size:0.875rem; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; padding:0; }
-.home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
+.home-wire h2 a, .home-activity h2 a { font-size:1.375rem; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
 .home-wire #thewire-textarea { height: 4em; padding: 1px 3px; }
 .home-wire .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
@@ -255,10 +289,10 @@ footer.footer-inria {
 
 /* Widgets */
 .elgg-widget-add-control { clear: both; padding-top: 20px; }
-section .interne .elgg-layout-one-column div.module { border: 0; background: <?php echo $module_bg_color; ?>; }
-section .interne div.module header { background: <?php echo $module_bg_color; ?>; }
-section .interne div.module header h2 { color:<?php echo $module_title_color; ?>; font-size:14px; text-transform:initial; font-weight: bold; }
-section .interne div.module div.activites { background-color: <?php echo $module_bg_color; ?>; }
+section .elgg-inner .elgg-layout-one-column div.module { border: 0; background: <?php echo $module_bg_color; ?>; }
+section .elgg-inner div.module header { background: <?php echo $module_bg_color; ?>; }
+section .elgg-inner div.module header h2 { color:<?php echo $module_title_color; ?>; font-size:0.875rem; text-transform:initial; font-weight: bold; }
+section .elgg-inner div.module div.activites { background-color: <?php echo $module_bg_color; ?>; }
 .elgg-widget-more { background-color: <?php echo $module_bg_color; ?>; }
 
 .elgg-widget-handle { cursor: move; }
@@ -277,11 +311,11 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .inria-subpages-menu { }
 
 /* Anciens groupes */
-.inria-group-oldactivity { border:1px dotted black; background:yellow; padding:1ex 3ex;; margin: 1ex 0; text-align:center; }
+.inria-group-oldactivity { border:1px dotted black; background:yellow; padding:0.5rem 0;; margin: 0 0; text-align:center; font-size: 1rem; }
 .group-oldactivity { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; }
-.group-oldactivity-tiny { background: rgba(255,255,0,0.6); font-size: 6px; padding: 2px 0px; }
-.group-oldactivity-small { background: rgba(255,255,0,0.8); font-size: 8px; padding: 3px 1px; }
-.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 10px; padding: 3px 1px; }
+.group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.4rem; margin:0; padding: 0px 0px; text-transform: lowercase; line-height: 1; }
+.group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 1px; }
+.group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 2px 1px; }
 
 
 /* Messages */
@@ -289,11 +323,11 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-state-success { background-color: #6d2d4f; }
 
 /* Tabs et filtres */
-.elgg-menu-filter { font-size: 12px; }
+.elgg-menu-filter { font-size: 0.75rem; }
 .elgg-menu-filter > li { margin: 0 0 0 4px; }
 .elgg-menu-filter > li > a { height: 18px; }
 
-.elgg-tabs { font-size: 12px; }
+.elgg-tabs { font-size: 0.75rem; }
 .elgg-tabs > li { margin: 0 0 0 4px; }
 .elgg-tabs > li > a { height: 18px; }
 
@@ -304,7 +338,7 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-menu-owner-block li a { background-color: #F8F4F5; }
 */
 .elgg-form.elgg-form-au-subgroups-transfer.elgg-form-alt.elgg-form-groups-edit + div { padding-top:20px; }
-.elgg-form-au-subgroups-transfer .au-subgroups-parentable h3, .elgg-form-au-subgroups-transfer .au-subgroups-non-parentable h3 { font-size: 14px; }
+.elgg-form-au-subgroups-transfer .au-subgroups-parentable h3, .elgg-form-au-subgroups-transfer .au-subgroups-non-parentable h3 { font-size: 0.875rem; }
 .elgg-form-au-subgroups-transfer .au-subgroups-result-col { width: 100%; float: none; }
 .elgg-form-au-subgroups-transfer .elgg-image-block .elgg-image { float: right; }
 .elgg-form-groups-search .blockform { border: 1px solid #ccc; }
@@ -321,14 +355,14 @@ section .interne div.module div.activites { background-color: <?php echo $module
 	GROUP FILTER MENU
 *************************************** */
 .group-top-menu { width: 100%; margin-bottom: 5px; border-bottom: 2px solid #CCC; }
-.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; }
+.elgg-menu-group-filter, .elgg-menu-group-filter-alt { border-bottom: 0px solid #ccc; display: table; margin-bottom: 0; min-width: 30%; }
 
 /* Left (filter) menu */
-.elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 0 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
+.elgg-menu-group-filter > li { float: left; border: 2px solid #ccc; border-bottom: 0; background: #eee; margin: 3px 0 0 4px; -webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; }
 .elgg-menu-group-filter > li:hover, 
 .elgg-menu-group-filter > li:focus, 
 .elgg-menu-group-filter > li:active { background: transparent; }
-.elgg-menu-group-filter > li > a { text-decoration: none; display: block; padding: 3px 10px 0; text-align: center; height: 18px; color: #999; font-family: <?php echo $font2; ?>; font-size: 12px; }
+.elgg-menu-group-filter > li > a { text-decoration: none; display: block; padding: 3px 10px 0; text-align: center; height: 18px; color: #999; font-family: <?php echo $font2; ?>; font-size: 0.75rem; }
 .elgg-menu-group-filter > li > a:hover, .elgg-menu-group-filter > li > a:focus, .elgg-menu-group-filter > li > a:active { background: white; color: #000; border-radius: 3px; }
 .elgg-menu-group-filter > .elgg-state-selected { border-color: #ccc; background: white; }
 .elgg-menu-group-filter > .elgg-state-selected > a { position: relative; top: 2px; background: white; }
@@ -343,8 +377,8 @@ section .interne div.module div.activites { background-color: <?php echo $module
 .elgg-menu-item-bookmark, .elgg-menu-item-report-this { display: none !important; }
 
 /* Modify title menu action buttons */
-.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 12px; border-radius: 5px 5px 0 0; }
-.elgg-menu-group-filter-alt > li a.elgg-button.elgg-button-action { height:18px; color: white; background: initial; padding: 3px 10px 0; font-family: <?php echo $font2; ?>; font-size: 12px; border: 2px solid transparent; border-bottom: 0; }
+.elgg-menu-group-filter-alt > li { float: right; background: <?php echo $color6; ?>; border-color: <?php echo $color6; ?>; font-family: <?php echo $font2; ?>; font-size: 0.75rem; border-radius: 5px 5px 0 0; margin: 3px 0 0 4px; }
+.elgg-menu-group-filter-alt > li a.elgg-button.elgg-button-action { height:18px; color: white; background: initial; padding: 3px 10px 0; font-family: <?php echo $font2; ?>; font-size: 0.75rem; border: 2px solid transparent; border-bottom: 0; }
 .elgg-menu-group-filter-alt > li:hover, .elgg-menu-group-filter-alt > li:focus, .elgg-menu-group-filter-alt > li:active { background: <?php echo $color8; ?>; border-color: <?php echo $color8; ?>; }
 .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:hover, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:focus, .elgg-menu-group-filter-alt > li > a.elgg-button.elgg-button-action:active { background: <?php echo $color8; ?>; }
 
@@ -379,7 +413,16 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 /* Bannière spéciale compte archivé */
 .profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
-.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 20px; font-weight: bold; text-transform: uppercase; color: white; }
+.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+/* Medium */
+.elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-medium .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+/* Small */
+.elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+/* Tiny */
+.elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.6rem; font-weight: normal; text-transform: initial; color: white; }
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
 
@@ -421,9 +464,9 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 
 /* Impression */
 .elgg-print-message { display:none; }
-.footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 12px; }
+.footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 0.75rem; }
 
-pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; font-size: 14px; }
+pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; font-size: 0.875rem; }
 
 
 /* Folders (masquer réglage) */
@@ -431,6 +474,18 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 #profile_manager_profile_edit_tabs { clear:left; }
 
+
+
+@media (max-width:980px) {
+	.elgg-menu-topbar { position:absolute; top: 11px; right:5px; margin-left: 140px; }
+	.menu-topbar-toggle { color: white; }
+	
+}
+
+@media (max-width:700px) {
+	.elgg-menu-topbar { margin-left: 0; }
+	.footer-logo-inria { margin: 12px 0; }
+}
 
 
 

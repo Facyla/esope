@@ -12,6 +12,12 @@
 	* @uses $vars['entity'] The user entity
 	* @uses $vars['profile'] Profile items from get_config('profile_fields'), defined in profile/start.php for now 
 	*/
+
+/* Inria notes :
+ * Inria member name is updated through LDAP - cannot be changed here
+ * Don't display Inria category and fields (they are displayed in owner block)
+ */
+
 elgg_require_js("profile_manager/profile_edit");
 	
 //echo elgg_view("profile/edit/name", $vars);
@@ -77,20 +83,12 @@ elgg_require_js("profile_manager/profile_edit");
 					
 					if(!empty($description)){
 						$types_description = "<div id='custom_profile_type_description_" . $type->getGUID() . "' class='custom_profile_type_description'>";
-						$types_description .= "<h3 class='settings'>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:description") . "</h3>";
+					$types_description .= "<h3>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:description") . "</h3>";
 						$types_description .= $description;
 						$types_description .= "</div>";
 					}
 				}
 				
-				?>
-				<script type="text/javascript">
-					$(document).ready(function(){
-						elgg.profile_manager.change_profile_type();
-					});
-				</script>
-				<?php
-				 
 				echo "<div>";
 				echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
 				echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
@@ -104,17 +102,10 @@ elgg_require_js("profile_manager/profile_edit");
 				echo $types_description;
 			}
 		} else {
-			$profile_type = $vars['entity']->custom_profile_type;
 			
 			if(!empty($profile_type)){
 				echo elgg_view("input/hidden", array("name" => "custom_profile_type", "value" => $profile_type));
-				?>
-				<script type="text/javascript">
-					$(document).ready(function(){
-						$('.custom_profile_type_<?php echo $profile_type; ?>').show();
-					});
-				</script>
-				<?php 		
+				echo elgg_view("input/hidden", array("name" => "accesslevel[custom_profile_type]", "value" => ACCESS_PUBLIC));
 			}
 		}
 		
@@ -125,15 +116,15 @@ elgg_require_js("profile_manager/profile_edit");
 		foreach($cats as $cat_guid => $cat){
 			// make nice title for category		
 			if(empty($cat_guid) || !($cat instanceof ProfileManagerCustomFieldCategory)) {
-				$title = elgg_echo("profile_manager:categories:list:default");
+			$cat_title = elgg_echo("profile_manager:categories:list:default");
 			} else {
-				$title = $cat->getTitle();
+			$cat_title = $cat->getTitle();
 			}
 			
-			// Don't display inria category
+			// Don't display Inria category and fields
 			if (!empty($cat_guid) && ($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) { continue; }
-			
-			$class = "";
+
+			$class = "elgg-module elgg-module-info";
 			if(!empty($cat_guid) && ($cat instanceof ProfileManagerCustomFieldCategory)){
 				
 				$profile_type_options = array(
@@ -149,7 +140,7 @@ elgg_require_js("profile_manager/profile_edit");
 				
 				if($profile_types = elgg_get_entities_from_relationship($profile_type_options)){
 					
-					$class = "custom_fields_edit_profile_category";
+					$class .= " custom_fields_edit_profile_category";
 					
 					// add extra class so it can be toggle in the display
 					$hidden_category = true;
@@ -165,20 +156,16 @@ elgg_require_js("profile_manager/profile_edit");
 					}
 				}
 			}
-		
-			$tabs[] = array(
-				'title' => $title,
-				'url' => "#" . $cat_guid,
-				'id' => $cat_guid,
-				'class' => $class
-			);
 			
 			$tab_content .= "<div id='profile_manager_profile_edit_tab_content_" . $cat_guid . "' class='profile_manager_profile_edit_tab_content'>";
 				
 			$list_content .= "<div id='" . $cat_guid . "' class='" . $class . "'>";
 			if(count($cats) > 1){
-				$list_content .= "<h3 class='settings'>" . $title . "</h3>";
+				$list_content .= "<div class='elgg-head'>";
+				$list_content .= "<h3>" . $cat_title . "</h3>";
+				$list_content .= "</div>";
 			}
+		$list_content .= "<div class='elgg-body'>";
 			$list_content .= "<fieldset>";
 			
 			// display each field for currect category
@@ -217,7 +204,7 @@ elgg_require_js("profile_manager/profile_edit");
 				}
 	
 				if($hide_non_editables == "yes" && ($valtype == "non_editable")){
-					$field_result = "<div class='hidden_non_editable'>";
+				$field_result = "<div class='hidden'>";
 				} else {
 				$visible_fields++;
 					$field_result = "<div>";
@@ -227,7 +214,7 @@ elgg_require_js("profile_manager/profile_edit");
 				
 				if($hint = $field->getHint()){ 
 					$field_result .= "<span class='custom_fields_more_info' id='more_info_". $metadata_name . "'></span>";		
-					$field_result .= "<span class='custom_fields_more_info_text' id='text_more_info_" . $metadata_name . "'>" . $hint . "</span>";
+				$field_result .= "<span class='hidden' id='text_more_info_" . $metadata_name . "'>" . $hint . "</span>";
 				}
 				
 				if($valtype == "dropdown"){
@@ -272,6 +259,7 @@ elgg_require_js("profile_manager/profile_edit");
 		$tab_content .= "</div>";
 			
 			$list_content .= "</fieldset>";
+		$list_content .= "</div>";
 			$list_content .= "</div>";
 		}
 		
@@ -291,24 +279,10 @@ elgg_require_js("profile_manager/profile_edit");
 
 	if($simple_access_control == "yes"){ 
 		?>
-		<div>
+	<div class="profile-manager-simple-access-control">
 			<label for="simple_access_control"><?php echo elgg_echo("profile_manager:simple_access_control"); ?></label>
-			<?php echo elgg_view('input/access',array('name' => 'simple_access_control', 'value' => $access_id, 'class' => 'simple_access_control', 'js' => 'onchange="set_access_control(this.value)"')); ?>
+		<?php echo elgg_view('input/access',array('name' => 'simple_access_control', 'value' => $access_id, 'class' => 'simple_access_control', 'onchange' => 'set_access_control(this.value)')); ?>
 		</div>
-		<?php 
-	} 
-	?>
-	
-	<div class="elgg-foot">
-	<?php
-		echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars['entity']->guid));
-		echo elgg_view('input/submit', array('value' => elgg_echo('save')));
-	?>
-	</div>
-
-<?php 
-	if($simple_access_control == "yes"){ 
-		?>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$(".simple_access_control").val($(".elgg-input-access:first").val()).trigger("change");
@@ -328,3 +302,11 @@ elgg_require_js("profile_manager/profile_edit");
 		</style>
 		<?php 
 	}
+?>
+
+<div class="elgg-foot">
+<?php
+	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars['entity']->guid));
+	echo elgg_view('input/submit', array('value' => elgg_echo('save')));
+?>
+</div>

@@ -33,8 +33,10 @@ is not needed to install packages with these frameworks:
 
 | Framework    | Types
 | ---------    | -----
-| Asgard      | `asgard-module`<br>`asgard-theme`
+| Aimeos       | `aimeos-extension`
+| Asgard       | `asgard-module`<br>`asgard-theme`
 | AGL          | `agl-module`
+| Bonefish     | `bonefish-package`
 | AnnotateCms  | `annotatecms-module`<br>`annotatecms-component`<br>`annotatecms-service`
 | Bitrix       | `bitrix-module`<br>`bitrix-component`<br>`bitrix-theme`
 | CakePHP 2+   | **`cakephp-plugin`**
@@ -54,6 +56,7 @@ is not needed to install packages with these frameworks:
 | Hurad        | `hurad-plugin`<br>`hurad-theme`
 | Joomla       | `joomla-component`<br>`joomla-module`<br>`joomla-template`<br>`joomla-plugin`<br>`joomla-library`
 | Kirby        | **`kirby-plugin`**
+| KodiCMS      | `kodicms-plugin`<br>`kodicms-media`
 | Kohana       | **`kohana-module`**
 | Laravel      | `laravel-library`
 | Lithium      | **`lithium-library`<br>`lithium-source`**
@@ -83,6 +86,7 @@ is not needed to install packages with these frameworks:
 | WordPress    | <b>`wordpress-plugin`<br>`wordpress-theme`</b><br>`wordpress-muplugin`
 | Zend         | `zend-library`<br>`zend-extra`<br>`zend-module`
 | Zikula       | `zikula-module`<br>`zikula-theme`
+| Prestashop   | `prestashop-module`<br>`prestashop-theme`
 
 ## Example `composer.json` File
 
@@ -164,8 +168,8 @@ not be inflected.
 ## Contribute!
 
 * [Fork and clone](https://help.github.com/articles/fork-a-repo).
-* Run the command `php composer.phar install --dev` to install the dev
-  dependencies. See [Composer](https://github.com/composer/composer#installation--usage).
+* Run the command `php composer.phar install` to install the dependencies. 
+  This will also install the dev dependencies. See [Composer](https://getcomposer.org/doc/03-cli.md#install).
 * Use the command `phpunit` to run the tests. See [PHPUnit](http://phpunit.de).
 * Create a branch, commit, push and send us a
   [pull request](https://help.github.com/articles/using-pull-requests).

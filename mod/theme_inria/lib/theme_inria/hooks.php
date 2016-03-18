@@ -465,12 +465,15 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 // Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
 function theme_inria_block_email($hook, $type, $return, $params) {
-	$to = $params['to'];
+	$recipient = get_user_by_email($params['to']);
+	if (is_array($recipient)) { $recipient = $recipient[0]; }
 	// Closed accounts should not receive email at all
-	if (elgg_instanceof($to, 'user')) {
-		if ($to->memberstatus == 'closed') {
+	if (elgg_instanceof($recipient, 'user')) {
+		if ($recipient->memberstatus == 'closed') {
 			// Block email sending
-			return true;
+			// Note : html_email_handler réécrit le 'to' à partir des paramètres passés (donc impossible d'overrider $to)
+			// et le blocage ne peut pas être fait en "vidant" le destinataire, le titre ou le contenu ($return['to'] = '';) car ceux-ci sont redéfinis par la suite
+			return false;
 		}
 	}
 	// Do not change behaviour otherwise (= send email)
@@ -481,18 +484,19 @@ function theme_inria_block_email($hook, $type, $return, $params) {
 // Block sending notification in some groups' discussions (new topic object only)
 // Return true to block sending
 // See also event function theme_inria_annotation_notifications_event_block
-function theme_inria_object_notifications_block($hook, $entity_type, $returnvalue, $params) {
-	$subtype = $params['object']->getSubtype();
-	$block_o = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
-	$block_r = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
-	//error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$params['object']->container_guid}");
-	if ($subtype == 'groupforumtopic') {
+function theme_inria_send_before_notifications_block($hook, $entity_type, $returnvalue, $params) {
+	$object = $params['event']->getObject();
+	$subtype = $object->getSubtype();
+	if (in_array($subtype, array('groupforumtopic', 'discussion_reply'))) {
+		//$block_o = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
+		//$block_r = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
 		$block = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
+		//error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$object->container_guid}");
 		if ($block == 'yes') {
 			// Get blocked groups setting
 			$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
 			$blocked_guids = esope_get_input_array($blocked_guids);
-			$group_guid = $params['object']->getContainerGUID();
+			$group_guid = $object->getContainerGUID();
 			if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { return true; }
 		}
 	}
@@ -539,7 +543,7 @@ function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 function theme_inria_cron_ldap_check($user, $getter, $options) {
 	//$debug_0 = microtime(TRUE);
 	// Check LDAP data
-	inria_check_and_update_user_status('login', 'user', $user);
+	inria_check_and_update_user_status('login:before', 'user', $user);
 	
 	// Process all and any users, BUT only clear some metadata when account is not Inria (valid LDAP)
 	if (!$user->isEnabled() || $user->isbanned() || ($user->memberstatus == 'closed')) {

@@ -6,8 +6,6 @@
  * 
  */
 
-global $CONFIG;
-
 $help = get_input('help', false);
 //$size = get_input('size', "small");
 //$embed = get_input('embed', false);
@@ -148,9 +146,9 @@ $content .= '<div class="clearfloat"></div><br />';
 
 /*
 if (elgg_is_logged_in()) {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . '">' . elgg_echo('theme_inria:userprofile:irisopen') . '</a>';
 } else {
-	$content .= '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
+	$content .= '<a class="elgg-button elgg-button-action" href="' . elgg_get_site_url() . 'login">' . elgg_echo('theme_inria:userprofile:irislogin') . '</a>';
 }
 */
 

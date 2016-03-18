@@ -8,7 +8,7 @@
  * @uses $vars['body']
  */
 
-/ $recipient_guid = elgg_extract('recipient_guid', $vars, 0);
+$recipient_guid = elgg_extract('recipient_guid', $vars, 0);
 $recipient_username = elgg_extract('recipient_username', $vars, '');
 $subject = elgg_extract('subject', $vars, '');
 $body = elgg_extract('body', $vars, '');

@@ -168,7 +168,7 @@ return array(
 	'project_manager:fullteam' => "Non-salariés",
 	'project_manager:profiles' => "Profils, taux et temps associés",
 	'project_manager:profilesrates' => "Profils et taux (1 profil par ligne)",
-	'project_manager:profilesrates:details' => "Nom du profil : taux € HT : nb jours<br /><em>Exemple pour un profil manager avec 6,5 jours valorisés à 1000 € HT&nbsp;: CMN (consultant manager) : 1000 : 6.5",
+	'project_manager:profilesrates:details' => "Nom du profil : taux € HT : nb jours<br /><em>Exemple pour un profil manager avec 6,5 jours valorisés à 1000 € HT&nbsp;: CMN (consultant manager) : 1000 : 6.5</em>",
 	'project_manager:otherhuman' => "Autres coûts/CA humains (1 poste par ligne)",
 	'project_manager:otherhuman:details' => "Indiquez au autre intitulé de poste de coût ou de CA par ligne : ils seront intégrés dans le suivi de la production",
 	'project_manager:other' => "Autres postes de coûts/CA (1 poste par ligne)",

@@ -50,6 +50,6 @@ if ($page_owner === false || is_null($page_owner)) {
 	}
 }
 
-$body = elgg_view_layout('two_column_left_sidebar', array('content' => $area2, 'sidebar' => '', 'title' => $title));
+$body = elgg_view_layout('one_sidebar', array('content' => $area2, 'sidebar' => '', 'title' => $title));
 echo elgg_view_page($title, $body);
 

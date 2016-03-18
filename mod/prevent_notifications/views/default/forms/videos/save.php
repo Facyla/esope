@@ -11,6 +11,9 @@
  *	Licence : GNU2
  *	Copyright : Team Webgalli 2011-2015
  */
+
+// Adds prevent_notification form field
+
 // once elgg_view stops throwing all sorts of junk into $vars, we can use extract()
 $title = elgg_extract('title', $vars, '');
 $desc = elgg_extract('description', $vars, '');
@@ -53,6 +56,7 @@ if ($categories) {
 	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?>
 </div>
 
+// Prevent_notification
 <?php if (!$guid) echo elgg_view('prevent_notifications/prevent_form_extend', array()); ?>
 
 <div>

@@ -4,16 +4,17 @@ return array (
 		//'translation_editor' => "Translation Editor",
 	
 		// global
-  'translation_editor:language' => 'Langage',
+  'translation_editor:language' => 'Langue',
+	'translation_editor:gatekeeper' => "Vous n'êtes pas autorisé à éditer les traductions",
 	
 		// menu
   'translation_editor:menu:title' => 'Editeur de traduction',
 	
 		// views
 		// language selector
-		'translation_editor:language_selector:title' => 'Sélectionner le langage que vous souhaitez édité',
-		'translation_editor:language_selector:add_language' => 'Ajout d\'un nouveau langage',
-		'translation_editor:language_selector:remove_language:confirm' => 'Etes-vous sûr de vouloir enlever ce langage ? Vous pouvez toujours l\'ajouter à nouveau !',
+		'translation_editor:language_selector:title' => 'Sélectionner la langue que vous souhaitez édité',
+		'translation_editor:language_selector:add_language' => 'Ajout d\'une nouvelle langue',
+		'translation_editor:language_selector:remove_language:confirm' => 'Etes-vous sûr de vouloir enlever cette langue ? Vous pouvez toujours l\'ajouter à nouveau !',
 		'translation_editor:language_selector:site_language' => 'Langage du site',
 	
 		// plugins list

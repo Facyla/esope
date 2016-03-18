@@ -110,12 +110,22 @@ return array(
 	'esope:config:styles:headerfooter' => "Header and footer gradient",
 	'esope:config:styles:groupmodules' => "Widgets and group modules gradient",
 	'esope:config:styles:buttons' => "Buttons gradient (normal then :hover)",
+	
+	// Import / export
 	'esope:config:saverestore' => "IMPORT / EXPORT - <i>BETA</i>",
 	'esope:config:saverestore:details' => "This functionnality lets you save/export the current theme configuration, and restore previous configurations, or import them into another site. You can use it as a config backup, to test various configuration settings, or as a deployment tool to transfer a theme configuration from a site to another.<br />Warning : this only include THIS plugin configuration.",
 	'esope:config:import' => "Import / Restore",
 	'esope:config:import:details' => "To import settings from another site, or restore a previous backup, paste the text data below, then save the plugin settings.<br />WARNING : all current settings will be replaced by those in the backup ! It is advised to keep a copy of the current settings before proceding....<br />Important note : only the settings that are defined in the backup will be replaced ; if new fields were added meanwhile, or were not part of the backup, the current settings will be kept..",
 	'esope:config:export' => "Export / Save",
-	'esope:config:export:details' => "Copy-paste the content of the area below and keep it in a text file or in a mail. To select all text, click in text zone, or use Ctrl-C (ou Apple-C) to copy the text.",
+	'esope:config:export:details' => "Copy-paste the content of the area below and keep it in a text file or in a mail. To select all text, click in text zone, or use Ctrl-C (or Apple-C) to copy the text.",
+	'esope:restore:title' => "Settings restoration",
+	'esope:restore:readok' => "Reading restore data...OK",
+	'esope:restore:settingvalue' => "<strong>%s&nbsp;: Restoring provided settings</strong><br />%s &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; %s<hr />",
+	'esope:restore:report' => "Settings restore completed! %s settings read, %s settings updated, and %s settings left identical.<br />",
+	'esope:restore:error' => "Error while restoring settings: invalid restore data.",
+	'esope:restore:previousversion:success' => "Successfully imported and updated settings from previous version",
+	
+	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITY",
 	'esope:config:security:notice' => "<p>Part of security features rely on server configuration. Some improvements can also be set through .htaccess. Remaining settings can be set here.</p>
@@ -139,8 +149,8 @@ return array(
 	
 	// Overrides plugins translations
 	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
-  'river:comment:object:announcement' => "%s has commented %s",
-  'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
+	'river:comment:object:announcement' => "%s has commented %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
 	
 	'widget:toggle' => "Show/hide %s module",
 	'widget:editmodule' => "Configure %s module",
@@ -491,6 +501,7 @@ return array(
 	'esope:settings:groups:invite_picker:details' => "Note: above a fixed number of persons, the picker will automatically switch to Autocomplete (to avoid memrory overflow).",
 	'esope:invite_picker:friendspicker' => "Alphabetical picker",
 	'esope:invite_picker:userpicker' => "Autocomplete",
+	'esope:invitegroups:help' => "Please input at least 3 letters of the searched person's name.",
 	'esope:settings:groups:invite_metadata' => "Group invites by metadata search",
 	'esope:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
 	
@@ -657,6 +668,7 @@ return array(
 	'esope:search:subtype' => "Object subtype",
 	'esope:search:profile_type' => "Profile type",
 	'esope:search:nbresults' => '%s results',
+	'esope:search:nbresult' => '%s result',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
@@ -820,6 +832,7 @@ return array(
 	'esope:group:norecentactivity' => "There was no recent activity in this group.",
 	'esope:group:inactive' => "INACTIVE",
 	'esope:group:inactive:details' => "No activity since %s days",
+	'esope:group:inactive:details:never' => "No activity since the group has been created",
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "This group was archived",
 	
@@ -978,6 +991,8 @@ return array(
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
 	
+	'dashboard:widget:group:noselect' => "No group selected",
+	
 	
 	/* Other interface */
 	'select:all' => 'Select all',
@@ -1043,6 +1058,13 @@ To view %s's profile, click here:
 %s
 
 This is an automated notification, please do not reply to this email.",
+	
+	// Logbrowser
+	'logbrowser:user_guid' => "or user GUID",
+	'logbrowser:entity_type' => "Entity type",
+	'logbrowser:entity_subtype' => "Entity subtype",
+	'logbrowser:object_guid' => "Entity GUID",
+	'logbrowser:event' => "Event",
 	
 );
 

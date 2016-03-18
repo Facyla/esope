@@ -11,8 +11,6 @@ $group = elgg_get_page_owner_entity();
 $feed = $group->feed_url;
 if (empty($feed)) { return true; }
 
-global $CONFIG;
-
 $feed = $group->feed_url;
 
 $needle = '::';

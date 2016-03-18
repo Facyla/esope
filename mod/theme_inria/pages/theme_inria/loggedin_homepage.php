@@ -1,12 +1,11 @@
 <?php
-global $CONFIG;
 
 gatekeeper();
 
 $url = elgg_get_site_url();
 $dbprefix = elgg_get_config('dbprefix');
 $own = elgg_get_logged_in_user_entity();
-inria_check_and_update_user_status('login', 'user', $own);
+inria_check_and_update_user_status('login:before', 'user', $own);
 
 
 // Slider
@@ -76,7 +75,7 @@ $widget_body = elgg_view_layout('widgets', $params);
 // Composition de la page
 // Slider et barre latérale droite : groupes et membres
 $body = '
-	<div style="width:76%; float:left;">
+	<div style="width:76%; float:left;" class="home-static-container">
 		<div style="padding: 0 26px 26px 13px;">
 		
 			<div style="width:100%;" class="iris-news">'
@@ -87,7 +86,7 @@ $body = '
 		</div>
 	</div>
 	
-	<div style="width:22%; float:right;">
+	<div style="width:22%; float:right;" class="home-static-container">
 		<h2 class="hidden">' . elgg_echo('theme_inria:home:information') . '</h2>
 		<div class="clearfloat"></div>
 		<div class="home-box">' . elgg_view('theme_inria/featured_groups') . '</div>
@@ -101,10 +100,10 @@ $body = '
 	<div class="clearfloat"></div>';
 	
 // Activité et Fil
-$body .= '<div style="width:40%; float:left;">
+$body .= '<div style="width:40%; float:left;" class="home-static-container">
 		<div class="home-box home-activity">' . $site_activity . '</div>
 	</div>
-	<div style="width:57%; float:right;">
+	<div style="width:57%; float:right;" class="home-static-container">
 		<div class="home-box home-wire">' . $thewire . '</div>
 	</div>
 	<div class="clearfloat"></div>';

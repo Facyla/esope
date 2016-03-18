@@ -58,8 +58,6 @@ return array(
 	'elgg_webdav:error:directory:readonly' => "This folder is read-only. Please add new files in your personal folder, or in a group folder",
 	'elgg_webdav:error:directory:usercreate' => "Cannot create new user from WebDAV",
 	'elgg_webdav:error:directory:groupcreate' => "Cannot create new group from WebDAV",
-	'' => "",
-	
 	
 );
 

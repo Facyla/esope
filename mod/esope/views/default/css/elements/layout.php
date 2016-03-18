@@ -25,6 +25,24 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+
+$fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
+if ($fixedwidth != 'yes') { $fixedwidth = false; } else { $fixedwidth = true; }
+
+// Main width (on desktop screen)
+$main_width = "990px";
+$main_maxwidth = "990px";
+
+if ($fixedwidth) {
+	$content_width = "width:717px;";
+	$sidebar_width = "width:210px;";
+	$sidebar_alt_width = "width:160px;";
+} else {
+	$content_width = "width:70%; min-width:717px;";
+	$sidebar_width = "width:24%; min-width:210px; padding:1.5%; margin:0;";
+	$sidebar_alt_width = "width:18%; min-width:160px; padding:1.5%; margin:0;";;
+}
+
 ?>
 /* <style> /**/
 
@@ -42,20 +60,33 @@ $color12 = $css['color12']; // #DEDEDE
 	min-width: 800px;
 }
 .elgg-page-default .elgg-page-header > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	/* height: 90px; */
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 }
 .elgg-page-default .elgg-page-footer > .elgg-inner {
-	max-width: 990px;
+	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	padding: 5px 0;
 	border-top: 1px solid #DEDEDE;
 }
+
+/* BLOC DU CONTENU PRINCIPAL - MAIN CONTENT */
+#page_container {
+	width:<?php echo $main_width; ?>; margin:0px auto; background:#fff; min-height: 100%;
+	-moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
+}
+
+/* Largeur de page standard */
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+	max-width: <?php echo $main_maxwidth; ?>;
+	margin: 0 auto;
+}
+
 
 /***** TOPBAR ******/
 .elgg-page-topbar {
@@ -99,7 +130,7 @@ $color12 = $css['color12']; // #DEDEDE
 
 /***** PAGE BODY LAYOUT ******/
 .elgg-page-body {
-	padding: 0 10px;
+	padding: 0 1em;
 }
 
 .elgg-layout {
@@ -118,18 +149,18 @@ $color12 = $css['color12']; // #DEDEDE
 	position: relative;
 	padding: 20px 10px;
 	float: right;
-	width: 210px;
 	margin: 0 0 0 10px;
 	background:transparent;
+	<?php echo $sidebar_width; ?>
 	padding:0;
-	
 }
 .elgg-sidebar-alt {
 	position: relative;
 	padding: 20px 10px;
 	float: left;
-	width: 160px;
 	margin: 0 10px 0 0;
+	<?php echo $sidebar_alt_width; ?>
+	padding:0;
 }
 
 .elgg-menu-extras {
@@ -158,7 +189,7 @@ $color12 = $css['color12']; // #DEDEDE
 	height:auto;
 }
 .elgg-layout-one-sidebar .elgg-main {
-	width: 717px;
+	<?php echo $content_width; ?>
 }
 
 .elgg-main > .elgg-head {
@@ -183,4 +214,54 @@ $color12 = $css['color12']; // #DEDEDE
 	color: #666;
 }
 
+
+
+
+<?php if (!$fixedwidth) { ?>
+
+@media (max-width:1225px) {
+	
+}
+
+@media (max-width:1020px) {
+	.elgg-page-default .elgg-page-header > .elgg-inner { margin: 0 1em; }
+	.elgg-page-default .elgg-page-header #transverse > .elgg-inner { margin: 0 1em; }
+	
+	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
+	
+	<?php if ($fixedwidth) { ?>
+		.elgg-layout-one-sidebar .elgg-main { min-width:initial;  }
+		.elgg-sidebar { min-width:initial; }
+		.elgg-sidebar-alt { min-width:initial; }
+	<?php } ?>
+}
+
+
+@media (max-width:980px) {
+	
+}
+
+@media (max-width:700px) {
+	
+	.elgg-page-default .elgg-page-header > .elgg-inner { padding: 0 0.5em; }
+	.elgg-page-default #transverse > .elgg-inner { padding: 0 0.5em; }
+	
+	
+	.elgg-page #transverse { display:block; }
+	
+	/* Layout */
+	header, #transverse, section, .elgg-page-footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; /* display: inline-block; */ max-width: 100%; }
+	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
+	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
+	.elgg-page-walledgarden { padding: 0; }
+	.elgg-body-walledgarden { margin: 0px auto 0px auto !important; }
+	
+	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
+	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
+	
+}
+
+
+<?php } ?>
 

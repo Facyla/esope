@@ -74,7 +74,7 @@ if (empty($plugin->settings_version)) {
 	$plugin->settings_version = '1.12';
 	elgg_set_ignore_access($ia);
 	access_show_hidden_entities($ih);
-	echo "Import et mise à jour des paramètres réussie depuis la version précédente";
+	echo elgg_echo('esope:restore:previousversion:success');
 }
 
 // Further updates (since 1.9)
@@ -159,16 +159,16 @@ if (!isset($plugin->footer) || ($plugin->footer == 'RAZ')) {
 
 if (empty($plugin->opengroups_defaultaccess)) { $plugin->opengroups_defaultaccess = 'groupvis'; }
 if (empty($plugin->closedgroups_defaultaccess)) { $plugin->closedgroups_defaultaccess = 'group'; }
-if (empty($plugin->awesomefont)) $plugin->awesomefont = 'yes';
-if (empty($plugin->fixedwidth)) $plugin->fixedwidth = 'no';
+if (empty($plugin->awesomefont)) { $plugin->awesomefont = 'yes'; }
+if (empty($plugin->fixedwidth)) { $plugin->fixedwidth = 'no'; }
 
 // Hide by default some profile fields that are known to be used for configuration but should not be displayed
 if (!isset($plugin->group_hide_profile_field)) { $plugin->group_hide_profile_field = 'customcss, cmisfolder, feed_url, customtab1, customtab2, customtab3, customtab4, customtab5, customtab6, customtab7, customtab8'; }
 
 //Set archive and old group marker
-if (empty($plugin->groups_archive)) $plugin->groups_archive = 'yes';
-if (empty($plugin->groups_old_display)) $plugin->groups_old_display = 'yes';
-if (empty($plugin->groups_old_timeframe)) $plugin->groups_old_timeframe = 15552000; // 3600 * 24 * 30 * 6 (about 6 months)
+if (empty($plugin->groups_archive)) { $plugin->groups_archive = 'yes'; }
+if (empty($plugin->groups_old_display)) { $plugin->groups_old_display = 'yes'; }
+if (empty($plugin->groups_old_timeframe)) { $plugin->groups_old_timeframe = 15552000; } // 3600 * 24 * 30 * 6 (about 6 months)
 
 // Auto-join groups : init with alternate plugin config if exists
 if (!isset($plugin->groups_autojoin)) {
@@ -185,18 +185,19 @@ if (!empty($plugin->remove_user_tools) && (strpos($plugin->remove_user_tools, ' 
 // Restauration d'une sauvegarde précédente :
 if (!empty($plugin->import_settings)) {
 	$import_settings = $plugin->import_settings;
-	echo "<h3>Restauration des paramètres</h3>";
+	echo '<h3>' . elgg_echo('esope:restore:title') . '</h3>';
 	/*
 	$import_settings = mb_encode_numericentity($import_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
 	$import_settings = htmlentities($import_settings, ENT_QUOTES, 'UTF-8');
 	*/
 	$import_settings = html_entity_decode($import_settings, ENT_QUOTES, 'UTF-8');
 	$import_settings = str_replace('-',';&#',$import_settings);
+	$import_settings = str_replace('&amp;','&',$import_settings);
 	$import_settings = mb_decode_numericentity($import_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
 	//$import_settings = convert_uudecode($import_settings);
 	if ($import_settings = unserialize($import_settings)) {
-		echo "Lecture des données de restauration...OK<br />";
-		// Pas besoin de tout supprimer : on peut se contenter de mettre à jour ce qui est spéifié, et uniquement ça (évite de virer de nouveaux champs par exemple)
+		echo elgg_echo('esope:restore:readok') . '<br />';
+		// Pas besoin de tout supprimer : on peut se contenter de mettre à jour ce qui est spécifié, et uniquement ça (évite de virer de nouveaux champs par exemple)
 		//$plugin->unsetAllSettings();
 		//echo "Suppression anciens paramètres...OK<br />";
 		$restore_count = 0;
@@ -204,24 +205,24 @@ if (!empty($plugin->import_settings)) {
 		$restore_updated = 0;
 		foreach ($import_settings as $name => $value) {
 			$restore_count++;
-			if ($name == 'import_settings') continue;
+			if ($name == 'import_settings') { continue; }
 			$old = htmlentities($plugin->$name, ENT_QUOTES, 'UTF-8');
 			$new = htmlentities($value, ENT_QUOTES, 'UTF-8');
 			if ($old == $new) {
 				//echo "<strong>$name : <strong>non modifié</strong> => $new";
 				$restore_same++;
 			} else {
-				echo "<strong>$name : Restauration des paramètres fournis</strong><br />$old &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; $new<hr />";
+				echo elgg_echo('esope:restore:settingvalue', array($name, $old, $new));
 				$plugin->setSetting($name, $value);
 				$restore_updated++;
 			}
 		}
 		$plugin->import_settings = '';
-		$restore_report = "Restauration de vos paramètres terminée !  $restore_count paramètres lus, et $restore_updated modifiés ($restore_same identiques).<br />";
+		$restore_report = elgg_echo('esope:restore:report', array($restore_count, $restore_updated, $restore_same));
 		system_message($restore_report);
 		echo $restore_report;
 	} else {
-		register_error("Erreur lors de la restauration des paramètres : données invalides. IMPORTANT : si vous chargez des données depuis Elgg 1.8, veuillez rempacler \";&#\" par \"-\" dans le texte de sauvegarde avant de l'importer.");
+		register_error(elgg_echo('esope:restore:error:invalidata'));
 	}
 }
 

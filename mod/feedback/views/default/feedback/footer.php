@@ -16,7 +16,7 @@
 
 $imgurl = elgg_get_site_url() . 'mod/feedback/_graphics/';
 
-$user_ip = $_SERVER[REMOTE_ADDR];
+$user_ip = $_SERVER['REMOTE_ADDR'];
 
 $user_id = elgg_echo('feedback:default:id');
 if (elgg_is_logged_in()) {

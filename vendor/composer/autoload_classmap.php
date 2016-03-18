@@ -430,5 +430,7 @@ return array(
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\SessionStorageInterface' => $vendorDir . '/symfony/http-foundation/Session/Storage/SessionStorageInterface.php',
     'Symfony\\Component\\HttpFoundation\\StreamedResponse' => $vendorDir . '/symfony/http-foundation/StreamedResponse.php',
     'Symfony\\Polyfill\\Php54\\Php54' => $vendorDir . '/symfony/polyfill-php54/Php54.php',
+    'Symfony\\Polyfill\\Php55\\Php55' => $vendorDir . '/symfony/polyfill-php55/Php55.php',
+    'Symfony\\Polyfill\\Php55\\Php55ArrayColumn' => $vendorDir . '/symfony/polyfill-php55/Php55ArrayColumn.php',
     'XmlElement' => $baseDir . '/engine/classes/XmlElement.php',
 );

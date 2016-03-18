@@ -1,5 +1,5 @@
 <?php
-global $CONFIG;
+$site = elgg_get_site_entity();
 ?>
 
 <p>Pour certains serveurs : changer le séparateur d'headers (EOL)
@@ -10,25 +10,31 @@ global $CONFIG;
 	<?php echo elgg_view('input/text', array( 'name' 	=> 'params[sender]', 'value' 	=> $vars['entity']->sender )); ?>
 </p>
 
-<p>Nom de l'adresse d'expédition et/ou de réponse supplémentaire correspondant à l'adresse (par ex.: <?php echo $CONFIG->sitename; ?>)
+<p>Nom de l'adresse d'expédition et/ou de réponse supplémentaire correspondant à l'adresse (par ex.: <?php echo $site->name; ?>)
 	<?php echo elgg_view('input/text', array( 'name' 	=> 'params[sendername]', 'value' 	=> $vars['entity']->sendername )); ?>
 </p>
 
 <p>Titre par défaut du mailing (peut être modifié avant envoi).<br /><em>Vider le contenu et enregistrer pour retrouver la valeur par défaut initiale.</em>
 	<?php
-	if (empty($vars['entity']->subject)) echo elgg_view('input/text', array( 'name' 	=> 'params[subject]', 'value' 	=> elgg_echo('mailing:form:default:subject') ));
-	else echo elgg_view('input/text', array( 'name' 	=> 'params[subject]', 'value' 	=> $vars['entity']->subject ));
+	if (empty($vars['entity']->subject)) {
+		echo elgg_view('input/text', array( 'name' 	=> 'params[subject]', 'value' 	=> elgg_echo('mailing:form:default:subject') ));
+	} else {
+		echo elgg_view('input/text', array( 'name' 	=> 'params[subject]', 'value' 	=> $vars['entity']->subject ));
+	}
 	?>
 </p>
 
 <p>Contenu par défaut du mailing (peut être modifié avant envoi), en HTML seulement.<br /><em>Vider le contenu et enregistrer pour retrouver la valeur par défaut initiale.</em>
 	<?php
-	if (empty($vars['entity']->message)) echo elgg_view('input/longtext', array( 'name' 	=> 'params[message]', 'value' 	=> elgg_echo('mailing:form:default:message') ));
-	else echo elgg_view('input/longtext', array( 'name' 	=> 'params[message]', 'value' 	=> $vars['entity']->message ));
+	if (empty($vars['entity']->message)) {
+		echo elgg_view('input/longtext', array( 'name' 	=> 'params[message]', 'value' 	=> elgg_echo('mailing:form:default:message') ));
+	} else {
+		echo elgg_view('input/longtext', array( 'name' 	=> 'params[message]', 'value' 	=> $vars['entity']->message ));
+	}
 	?>
 </p>
 
 <p>
-	<a href="<?php echo $CONFIG->url . 'mod/mailing/mailing.php'; ?>">Envoyer un mailing</a>
+	<a href="<?php echo elgg_get_site_url() . 'mod/mailing/mailing.php'; ?>">Envoyer un mailing</a>
 </p>
 

@@ -12,7 +12,7 @@
  * @translation French by Florain DANIEL - Facyla
 */
 
-$french = array(
+return array(
 	'admin:administer_utilities:apiadmin' => "API Key Admin",
 	'admin:statistics:apilog' => "Journal d'accès à l'API",
 
@@ -58,4 +58,4 @@ $french = array(
 	'apiadmin:no_result' => "Il n'y a actuellement aucune entrée dans le journal d'accès de l'API",
 	'apiadmin:no_version_check' => "Le plugin Version Check n'est pas installé ou inactif. Vous ne recevrez pas de notification lors de la publication de nouvelles versions d'API Admin.",
 );
-add_translation('fr', $french);
+

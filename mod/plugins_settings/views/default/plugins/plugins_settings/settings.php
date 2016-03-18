@@ -5,6 +5,9 @@ $url = elgg_get_site_url();
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 
 
+echo '<p>Pour exporter la configuration de tous les plugins, utilisez la page suivante :</p>';
+echo '<p><a href="' . elgg_get_site_url() . 'plugins_settings">' . elgg_get_site_url() . 'plugins_settings</a></p>';
+
 // Set default value
 //if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name = 'default'; }
 

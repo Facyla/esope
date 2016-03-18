@@ -110,12 +110,22 @@ return array(
 	'esope:config:styles:headerfooter' => "Dégradé du header et du pied de page",
 	'esope:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
 	'esope:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
+	
+	// Import / export
 	'esope:config:saverestore' => "SAUVEGARDE ET RESTAURATION - <i>BETA</i>",
 	'esope:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.<br />Attention : seule la configuration de CE plugin est concernée !",
 	'esope:config:import' => "Import / restauration",
 	'esope:config:import:details' => "Pour importer les paramètres depuis un autre site ou restaurer une sauvegarde précédente, collez-ci-dessous les données, puis enregistrez les paramètres.<br />ATTENTION : les paramètres existants seront remplacés par ceux de la sauvegarde ! Il est vivement conseillé de sauvegarder les anciens paramètres du plugin au préalable...<br />Note importante : seuls les paramètres définis dans la sauvegarde sont remplacés ; si de nouveaux champs ont été ajoutés, ou si certains réglages ne font pas partie de la sauvegarde, les paramètres actuels seront conservés.",
 	'esope:config:export' => "Export / sauvegarde",
 	'esope:config:export:details' => "Copiez-collez le contenu du bloc ci-dessous et conservez-le dans un fichier texte ou dans un mail. Pour tout sélectionner, cliquez dans la zone texte, puis Ctrl-C (ou Pomme-C) pour copier le texte.",
+	'esope:restore:title' => "Restauration des paramètres",
+	'esope:restore:readok' => "Lecture des données de restauration...OK",
+	'esope:restore:settingvalue' => "<strong>%s&nbsp;: Restauration des paramètres fournis</strong><br />%s &nbsp; <strong style=\"color:red\"> => </strong> &nbsp; %s<hr />",
+	'esope:restore:report' => "Restauration de vos paramètres terminée ! %s paramètres lus, %s paramètres modifiés, et %s paramètres identiques.<br />",
+	'esope:restore:error' => "Erreur lors de la restauration des paramètres : données importées invalides.",
+	'esope:restore:previousversion:success' => "Import et mise à jour des paramètres réussie depuis la version précédente",
+	
+	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITÉ",
 	'esope:config:security:notice' => "<p>Une partie de la sécurisation du site dépend du serveur. Certaines améliorations peuvent être mises en place via .htaccess. Les réglages restants peuvent être modifiés ci-dessous.</p>
@@ -242,7 +252,7 @@ return array(
 	'save:usernotifications' => "Enregistrer mes paramètres de notification pour les membres",
 	'save:groupnotifications' => "Enregistrer mes paramètres de notification pour les groupes",
 	'save:widgetsettings' => "Enregistrer les réglages du module",
-	'groups:join:success' => "Vous êtes désormais membre du groupe",
+	'groups:join:success' => "%s est désormais membre du groupe",
 	'reply:this' => "Répondre", // Mauvaise trad fr dans groups...
 	'groups:topicopen' => "Ouvert (commentaires acceptés)",
 	
@@ -506,6 +516,7 @@ return array(
 	'esope:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
 	'esope:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
 	'esope:invite_picker:userpicker' => "Auto-complétion",
+	'esope:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'esope:settings:groups:invite_metadata' => "Invitations par critères de recherche",
 	'esope:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
 	
@@ -672,6 +683,7 @@ return array(
 	'esope:search:subtype' => "Type de publication",
 	'esope:search:profile_type' => "Type de profil",
 	'esope:search:nbresults' => '%s résultats',
+	'esope:search:nbresult' => '%s résultat',
 	'object' => "Publication",
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
@@ -834,6 +846,7 @@ return array(
 	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
 	'esope:group:inactive' => "INACTIF",
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
+	'esope:group:inactive:details:never' => "Aucune activité depuis la création du groupe",
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "Ce groupe a été archivé",
 	
@@ -1001,6 +1014,8 @@ return array(
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
 	
+	'dashboard:widget:group:noselect' => "Aucun groupe sélectionné",
+	
 	
 	/* Other interface */
 	'select:all' => 'Tout sélectionner',
@@ -1065,6 +1080,12 @@ Pour voir le profil de %5\$s : %6\$s
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
 	
+	// Logbrowser
+	'logbrowser:user_guid' => "ou GUID de l'utilisateur",
+	'logbrowser:entity_type' => "Type d'entité",
+	'logbrowser:entity_subtype' => "Subtype",
+	'logbrowser:object_guid' => "GUID de l'entité",
+	'logbrowser:event' => "Evénement",
 	
 );
 

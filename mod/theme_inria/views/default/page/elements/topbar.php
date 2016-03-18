@@ -34,8 +34,26 @@ if (elgg_is_logged_in()) {
 	
 	// Login_as menu link
 	if (elgg_is_active_plugin('login_as')) {
-		$original_user_guid = isset($_SESSION['login_as_original_user_guid']) ? $_SESSION['login_as_original_user_guid'] : NULL;
+		$session = elgg_get_session();
+		$original_user_guid = $session->get('login_as_original_user_guid');
 		if ($original_user_guid) {
+			/*
+			$title = elgg_echo('login_as:return_to_user', array(
+				elgg_get_logged_in_user_entity()->username,
+				get_entity($original_user_guid)->username
+			));
+
+			$html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
+			elgg_register_menu_item('topbar', array(
+				'name' => 'login_as_return',
+				'text' => $html,
+				'href' => 'action/logout_as',
+				'is_action' => true,
+				'title' => $title,
+				'link_class' => 'login-as-topbar',
+				'priority' => 700,
+			));
+			*/
 			$original_user = get_entity($original_user_guid);
 			$loginas_title = elgg_echo('login_as:return_to_user', array($ownusername, $original_user->username));
 			$loginas_html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
@@ -52,41 +70,47 @@ if (elgg_is_active_plugin('language_selector')) {
 }
 ?>
 
-	<div class="interne">
-		<h1><a href="<?php echo $url; ?>" title="<?php echo elgg_echo('esope:gotohomepage'); ?>">
-		<img src="<?php echo $urlimg; ?>logo-iris.png" />
-		<img src="<?php echo $urlimg; ?>bulles-header.png" />
-		</a></h1>
+<div class="is-not-floatable">
+	<h1>
+		<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('esope:gotohomepage'); ?>">
+			<img src="<?php echo $urlimg; ?>logo-iris.png" alt="Réseau Iris" />
+		</a>
+	</h1>
+	<img src="<?php echo $urlimg; ?>bulles-header.png" />
+	<?php
+	// TOPBAR MENU : personal tools and administration
+	if (elgg_is_logged_in()) {
+		?>
+		<div class="menu-topbar-toggle"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
+				<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
+				<?php if ($loginas_logout) { echo $loginas_logout; } ?>
+				<li id="msg">
+					<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
+					<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
+				</li>
+				<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
+				<?php if (elgg_is_admin_logged_in()) { ?>
+					<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
+				<?php } ?>
+				<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('esope:help'); ?></a></li>
+				<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off power-off icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+			</ul>
 		<?php
-		// TOPBAR MENU : personal tools and administration
-		if (elgg_is_logged_in()) {
-			?>
-			<div class="menu-topbar-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
-			<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
-					<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
-					<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-					<li id="msg">
-						<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
-						<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
-					</li>
-					<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
-							<!--
-					<li><?php echo elgg_echo('esope:myprofile'); ?></a>
-							<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
-							<li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
-					</li>
-							//-->
-					<?php if (elgg_is_admin_logged_in()) { ?>
-						<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
-					<?php } ?>
-					<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('esope:help'); ?></a></li>
-					<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off power-off icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
-				</ul>
-			</nav>
-		<?php } else {
-			// Bouton de connexion partout sauf sur la home
-			if (current_page_url() != $url) echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt"><li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li></ul>';
-		} ?>
-	</div>
+	} else {
+		// Bouton de connexion partout sauf sur la home
+		if (current_page_url() != $url) {
+			echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
+				echo '<li><i class="fa fa-sign-in sign in icon"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li>';
+				if ($language_selector) {
+					echo '<li class="language-selector">' . $language_selector . '</li>';
+				}
+			echo '</ul>';
+		}
+	}
+	?>
+	
+	<div class="clearfloat"></div>
+
 </div>
 

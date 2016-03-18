@@ -1,37 +1,43 @@
 <?php
+
+// Adds prevent_notification form field
+
 $event = $vars['event'];
 $fd = $vars['form_data'];
 
-$personal_manage_options = array(
-	elgg_echo('event_calendar:personal_manage:open') => 'open',
-	elgg_echo('event_calendar:personal_manage:closed') => 'closed',
-	elgg_echo('event_calendar:personal_manage:private') => 'private',
+$schedule_options = array(
+	elgg_echo('event_calendar:all_day_label') => 'all_day',
+	elgg_echo('event_calendar:schedule_type:fixed') => 'fixed',
 );
 
-$event_calendar_times = elgg_get_plugin_setting('times', 'event_calendar');
+if (elgg_is_active_plugin('event_poll')) {
+	$schedule_options = array_merge(array(elgg_echo('event_calendar:schedule_type:poll') => 'poll'), $schedule_options);
+}
+
+$event_calendar_fewer_fields = elgg_get_plugin_setting('fewer_fields', 'event_calendar');
+$event_calendar_repeating_events = elgg_get_plugin_setting('repeating_events', 'event_calendar');
+
 $event_calendar_region_display = elgg_get_plugin_setting('region_display', 'event_calendar');
 $event_calendar_type_display = elgg_get_plugin_setting('type_display', 'event_calendar');
 $event_calendar_spots_display = elgg_get_plugin_setting('spots_display', 'event_calendar');
-//$event_calendar_add_users = elgg_get_plugin_setting('add_users', 'event_calendar');
-$event_calendar_hide_access = elgg_get_plugin_setting('hide_access', 'event_calendar');
-$event_calendar_hide_end = elgg_get_plugin_setting('hide_end', 'event_calendar');
+
 $event_calendar_more_required = elgg_get_plugin_setting('more_required', 'event_calendar');
-$event_calendar_personal_manage = elgg_get_plugin_setting('personal_manage', 'event_calendar');
+$event_calendar_bbb_server_url = elgg_get_plugin_setting('bbb_server_url', 'event_calendar');
 
 if ($event_calendar_more_required == 'yes') {
-	$required_fields = array('title','venue','start_date','start_time',
-		'brief_description','region','event_type','fees','contact','organiser',
-		'event_tags','spots');
+	$required_fields = array('title', 'venue', 'start_date', 'start_time',
+		'brief_description', 'region', 'event_type', 'fees', 'contact','organiser',
+		'event_tags', 'spots');
 } else {
-	$required_fields = array('title','venue','start_date');
+	$required_fields = array('title', 'venue', 'start_date');
 }
-$all_fields = array('title','venue','start_time','start_date','end_time','end_date',
-	'brief_description','region','event_type','fees','contact','organiser','event_tags',
-	'long_description','spots','personal_manage');
+$all_fields = array('title', 'venue', 'start_time', 'start_date', 'end_time', 'end_date',
+	'brief_description', 'region', 'event_type', 'fees', 'contact', 'organiser', 'event_tags',
+	'long_description', 'spots', 'personal_manage');
 
 $prefix = array();
 foreach ($all_fields as $fn) {
-	if (in_array($fn,$required_fields)) {
+	if (in_array($fn, $required_fields)) {
 		$prefix[$fn] = elgg_echo('event_calendar:required').' ';
 	} else {
 		$prefix[$fn] = elgg_echo('event_calendar:optional').' ';
@@ -39,239 +45,217 @@ foreach ($all_fields as $fn) {
 }
 
 if ($event) {
-	$title = $event->title;
-	$brief_description = $event->description;
-	$venue = $event->venue;
-	// this is a form redisplay, so take the values as submitted
-	$start_date = $event->start_date;
-	$end_date = $event->end_date;
-	
-	if ($event_calendar_region_display) {
-		$region = $event->region;
-		if (!$region) {
-			$region = '-';
-		}
-	}
-	
-	if ($event_calendar_spots_display) {
-		$spots = trim($event->spots);
-	}
-	if ($event_calendar_type_display) {
-		$event_type = $event->event_type;
-		if (!$event_type) {
-			$event_type = '-';
-		}
-	}
-	$fees = $event->fees;
-	$contact = $event->contact;
-	$organiser = $event->organiser;
-	$event_tags = $event->event_tags;
-	$long_description = $event->long_description;
-	$access = $event->access_id;
-	if ($event_calendar_times != 'no') {
-		$start_time = $event->start_time;
-		$end_time = $event->end_time;
-	}
-	if ($event_calendar_personal_manage == 'by_event') {
-		$personal_manage = $event->personal_manage;
-		if (!$personal_manage) {
-			$personal_manage = 'open';
-		}
-	}
 	$event_action = 'manage_event';
 	$event_guid = $event->guid;
 } else {
-	$title = $fd['title'];
-	$brief_description = $fd['description'];
-	$venue = $fd['venue'];
-	$start_date = $fd['start_date'];
-	$end_date = $fd['end_date'];
-	$fees = $fd['fees'];
-	if ($event_calendar_spots_display) {
-		$spots = $fd['spots'];
-	}
-	if ($event_calendar_region_display) {
-		$region = $fd['region'];
-	}
-	if ($event_calendar_type_display) {
-		$event_type = $fd['event_type'];
-	}
-	$contact = $fd['contact'];
-	$organiser = $fd['organiser'];
-	$event_tags = $fd['event_tags'];
-	$long_description = $fd['long_description'];
-	$access = $fd['access_id'];
-	if ($event_calendar_times != 'no') {
-		$start_time = $fd['start_time'];
-		$end_time = $fd['end_time'];
-	}
-	if ($event_calendar_personal_manage == 'by_event') {
-		$personal_manage = $fd['personal_manage'];
-	}
 	$event_action = 'add_event';
 	$event_guid = 0;
 }
-$body = '';
 
-$body .= elgg_view('input/hidden',array('name'=>'event_action', 'value'=>$event_action));
-$body .= elgg_view('input/hidden',array('name'=>'event_guid', 'value'=>$event_guid));
-$body .= elgg_view('input/hidden',array('name'=>'group_guid', 'value'=>$vars['group_guid']));
+$title = $fd['title'];
+$brief_description = $fd['description'];
+$venue = $fd['venue'];
 
-$body .= '<p><label>'.elgg_echo("event_calendar:title_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'title','value'=>$title));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['title'].elgg_echo('event_calendar:title_description').'</p>';
+$fees = $fd['fees'];
+if ($event_calendar_spots_display) {
+	$spots = $fd['spots'];
+}
+if ($event_calendar_region_display) {
+	$region = $fd['region'];
+}
+if ($event_calendar_type_display) {
+	$event_type = $fd['event_type'];
+}
+$contact = $fd['contact'];
+$organiser = $fd['organiser'];
+$event_tags = $fd['tags'];
+$all_day = $fd['all_day'];
+$schedule_type = $fd['schedule_type'];
+$long_description = $fd['long_description'];
 
-$body .= '<p><label>'.elgg_echo("event_calendar:venue_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'venue','value'=>$venue));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['venue'].elgg_echo('event_calendar:venue_description').'</p>';
+$body = '<div class="event-calendar-edit-form">';
 
-if ($event_calendar_times != 'no') {
-	$body .= '<div class="event-calendar-date-time-setter">';
-	if ($event_calendar_hide_end != 'yes') {
-		$body .= '<p><label>'.elgg_echo('event_calendar:from_label').'</label>';
-	}
-	$body .= elgg_view("event_calendar/input/date_local",array('timestamp'=>TRUE, 'autocomplete'=>'off','class'=>'event-calendar-compressed-date','name' => 'start_date','value'=>$start_date));
-	$body .= elgg_view("input/timepicker",array('name' => 'start_time','value'=>$start_time));
-	if ($event_calendar_hide_end != 'yes') {
-		$body .= '</p><p><label>'.elgg_echo('event_calendar:to_label').'</label>';
-		$body .= elgg_view("event_calendar/input/date_local",array('timestamp'=>TRUE,'autocomplete'=>'off','class'=>'event-calendar-compressed-date','name' => 'end_date','value'=>$end_date));
-		$body .= elgg_view("input/timepicker",array('name' => 'end_time','value'=>$end_time));
-	}
-	$body .= '</p>';
+$body .= elgg_view('input/hidden', array('name' => 'event_action', 'value' => $event_action));
+$body .= elgg_view('input/hidden', array('name' => 'event_guid', 'value' => $event_guid));
+
+$body .= '<div class="event-calendar-edit-form-block">';
+
+$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:title_label").'</label>';
+$body .= elgg_view("input/text", array('name' => 'title', 'value' => $title));
+$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['title'].elgg_echo('event_calendar:title_description').'</div>';
+$body .= '</div>';
+
+$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:venue_label").'</label>';
+$body .= elgg_view("input/text", array('name' => 'venue', 'value' => $venue));
+$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['venue'].elgg_echo('event_calendar:venue_description').'</div>';
+$body .= '</div>';
+
+$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:brief_description_label").'</label>';
+$body .= elgg_view("input/text", array('name' => 'description', 'value' => $brief_description));
+$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['brief_description'].elgg_echo('event_calendar:brief_description_description').'</div>';
+$body .= '</div>';
+
+$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:event_tags_label").'</label>';
+$body .= elgg_view("input/tags", array('name' => 'tags', 'value' => $event_tags));
+$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['event_tags'].elgg_echo('event_calendar:event_tags_description').'</div>';
+$body .= '</div>';
+
+if ($event || !$vars['group_guid']) {
+	$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:calendar_label").' '.'</label>';
+	$body .= elgg_view('event_calendar/container', array('container_guid' => $vars['group_guid']));
+	$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['calendar'].elgg_echo('event_calendar:calendar_description').'</div>';
 	$body .= '</div>';
 } else {
-
-	$body .= '<p><label>'.elgg_echo("event_calendar:start_date_label").'<br />';
-	$body .= elgg_view("event_calendar/input/date_local",array('timestamp'=>TRUE, 'autocomplete'=>'off','name' => 'start_date','value'=>$start_date));
-	$body .= '</label></p>';
-	$body .= '<p class="description">'.$prefix['start_date'].elgg_echo('event_calendar:start_date_description').'</p>';
-	
-	if ($event_calendar_hide_end != 'yes') {		
-		$body .= '<p><label>'.elgg_echo("event_calendar:end_date_label").'<br />';
-		$body .= elgg_view("event_calendar/input/date_local",array('timestamp'=>TRUE,'autocomplete'=>'off','name' => 'end_date','value'=>$end_date));
-		$body .= '</label></p>';
-		$body .= '<p class="description">'.$prefix['end_date'].elgg_echo('event_calendar:end_date_description').'</p>';
-	}
+	$body .= elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $vars['group_guid']));
 }
+
+if($event_calendar_bbb_server_url) {
+	$body .= '<div class="mbm>';
+	if ($fd['web_conference']) {
+		$body .= elgg_view('input/checkbox', array('name' => 'web_conference', 'value' => 1, 'checked' => 'checked'));
+	} else {
+		$body .= elgg_view('input/checkbox', array('name' => 'web_conference', 'value' => 1));
+	}
+	$body .= ' ' . elgg_echo('event_calendar:web_conference_label');
+	$body .= '</div>';
+}
+
+$body .= '</div>';
+
+$body .= '<div class="event-calendar-edit-form-block">';
+$body .= '<div class="mbs"><h2>'.elgg_echo('event_calendar:schedule:header').'</h2></div>';
+$body .= '<ul class="elgg-input-radios elgg-vertical event-calendar-edit-schedule-type">';
+foreach($schedule_options as $label => $key) {
+  if ($key == $schedule_type) {
+    $checked = "checked \"checked\"";
+  } else {
+    $checked = '';
+  }
+  $body .= '<li class="mbm"><label><input type="radio" name="schedule_type" class="elgg-input-radio" value="'.$key.'" '.$checked.' />';
+  $body .= ' ' . $label . '</label></li>';
+  if ($key == 'all_day') {
+    $body .= '<div class="event-calendar-edit-all-day-date-wrapper mbm">';
+    $body .= elgg_view("event_calendar/input/date_local", array(
+		'autocomplete' => 'off',
+		'class' => 'event-calendar-compressed-date',
+		'name' => 'start_date_for_all_day',
+		'value' => $fd['start_date']));
+    $body .= '</div>';
+  }
+}
+$body .= '</ul>';
+
+$vars['prefix'] = $prefix;
+
+$body .= elgg_view('event_calendar/schedule_section', $vars);
 
 if ($event_calendar_spots_display == 'yes') {
-	$body .= '<p><label>'.elgg_echo("event_calendar:spots_label").'<br />';
-	$body .= elgg_view("input/text",array('name' => 'spots','value'=>$spots));
-	$body .= '</label></p>';
-	$body .= '<p class="description">'.$prefix['spots'].elgg_echo('event_calendar:spots_description').'</p>';
+	$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:spots_label").'</label>';
+	$body .= elgg_view("input/text", array('name' => 'spots', 'value' => $spots));
+	$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['spots'].elgg_echo('event_calendar:spots_description').'</div>';
+	$body .= '</div>';
 }
 
-// the following feature has been superceded by the manage subscribers feature
+$body .= '<div class="event-calendar-edit-bottom"></div>';
+$body .= '</div>';
 
-/*if ($event_calendar_add_users == 'yes') {
-	$body .= '<p><label>'.elgg_echo("event_calendar:add_user_label").'<br />';
-	$body .= elgg_view("input/adduser",array('name' => 'adduser','internalid' => 'do_adduser','width'=> 200, 'minChars'=>2));
-	$body .= '</label></p><br /><br />';
-	$body .= '<p class="description">'.elgg_echo('event_calendar:add_user_description').'</p>';
-}*/
+$body .= elgg_view('event_calendar/personal_manage_section', $vars);
 
-$body .= '<p><label>'.elgg_echo("event_calendar:brief_description_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'description','value'=>$brief_description));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['brief_description'].elgg_echo('event_calendar:brief_description_description').'</p>';
+$body .= elgg_view('event_calendar/share_section', $vars);
 
-if ($event_calendar_region_display == 'yes') {
-	$region_list = trim(elgg_get_plugin_setting('region_list', 'event_calendar'));
-	$region_list_handles = elgg_get_plugin_setting('region_list_handles', 'event_calendar');
-	// make sure that we are using Unix line endings
-	$region_list = str_replace("\r\n","\n",$region_list);
-	$region_list = str_replace("\r","\n",$region_list);
-	if ($region_list) {
-		$options = array();
-		$options[] = '-';
-		foreach(explode("\n",$region_list) as $region_item) {
-			$region_item = trim($region_item);
-			if ($region_list_handles == 'yes') {
-				$options[$region_item] = elgg_echo('event_calendar:region:'.$region_item);
-			} else {
-				$options[$region_item] = $region_item;
+if ($event_calendar_region_display == 'yes' || $event_calendar_type_display == 'yes' || $event_calendar_fewer_fields != 'yes') {
+	$body .= '<div class="event-calendar-edit-form-block event-calendar-edit-form-other-block mbm">';
+
+	if ($event_calendar_region_display == 'yes') {
+		$region_list = trim(elgg_get_plugin_setting('region_list', 'event_calendar'));
+		$region_list_handles = elgg_get_plugin_setting('region_list_handles', 'event_calendar');
+		// make sure that we are using Unix line endings
+		$region_list = str_replace("\r\n","\n", $region_list);
+		$region_list = str_replace("\r","\n", $region_list);
+		if ($region_list) {
+			$options = array();
+			$options[] = '-';
+			foreach(explode("\n", $region_list) as $region_item) {
+				$region_item = trim($region_item);
+				if ($region_list_handles == 'yes') {
+					$options[$region_item] = elgg_echo('event_calendar:region:'.$region_item);
+				} else {
+					$options[$region_item] = $region_item;
+				}
 			}
+			$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:region_label").' '.'</label>';
+			$body .= elgg_view("input/select", array('name' => 'region', 'value' => $region, 'options_values' => $options));
+			$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['region'].elgg_echo('event_calendar:region_description').'</div>';
+			$body .= '</div>';
 		}
-		$body .= '<p><label>'.elgg_echo("event_calendar:region_label").'<br />';
-		$body .= elgg_view("input/dropdown",array('name' => 'region','value'=>$region,'options_values'=>$options));
-		$body .= '</label></p>';
-		$body .= '<p class="description">'.$prefix['region'].elgg_echo('event_calendar:region_description').'</p>';
 	}
-}
 
-if ($event_calendar_type_display == 'yes') {
-	$type_list = trim(elgg_get_plugin_setting('type_list', 'event_calendar'));
-	$type_list_handles = elgg_get_plugin_setting('type_list_handles', 'event_calendar');
-	// make sure that we are using Unix line endings
-	$type_list = str_replace("\r\n","\n",$type_list);
-	$type_list = str_replace("\r","\n",$type_list);
-	if ($type_list) {
-		$options = array();
-		$options[] = '-';
-		foreach(explode("\n",$type_list) as $type_item) {
-			$type_item = trim($type_item);
-			if ($type_list_handles == 'yes') {
-				$options[$type_item] = elgg_echo('event_calendar:type:'.$type_item);
-			} else {
-				$options[$type_item] = $type_item;
-			}			
+	if ($event_calendar_type_display == 'yes') {
+		$type_list = trim(elgg_get_plugin_setting('type_list', 'event_calendar'));
+		$type_list_handles = elgg_get_plugin_setting('type_list_handles', 'event_calendar');
+
+		// make sure that we are using Unix line endings
+		$type_list = str_replace("\r\n", "\n", $type_list);
+		$type_list = str_replace("\r", "\n", $type_list);
+
+		if ($type_list) {
+			$options = array();
+			$options[] = '-';
+
+			foreach (explode("\n", $type_list) as $type_item) {
+				$type_item = explode('|', $type_item);
+				$type_name = trim($type_item[0]);
+
+				if ($type_list_handles == 'yes') {
+					// Use translation system to resolve the type names
+					$options[$type_name] = elgg_echo("event_calendar:type:$type_name");
+				} else {
+					$options[$type_name] = $type_name;
+				}
+			}
+
+			$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:type_label").' '.'</label>';
+			$body .= elgg_view("input/select", array(
+				'name' => 'event_type',
+				'value' => $event_type,
+				'options_values' => $options
+			));
+			$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['event_type'].elgg_echo('event_calendar:type_description').'</div>';
+			$body .= '</div>';
 		}
-		$body .= '<p><label>'.elgg_echo("event_calendar:type_label").'<br />';
-		$body .= elgg_view("input/dropdown",array('name' => 'event_type','value'=>$event_type,'options_values'=>$options));
-		$body .= '</label></p>';
-		$body .= '<p class="description">'.$prefix['event_type'].elgg_echo('event_calendar:type_description').'</p>';
 	}
-}
 
-$body .= '<p><label>'.elgg_echo("event_calendar:fees_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'fees','value'=>$fees));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['fees'].elgg_echo('event_calendar:fees_description').'</p>';
+	if ($event_calendar_fewer_fields != 'yes') {
 
-$body .= '<p><label>'.elgg_echo("event_calendar:contact_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'contact','value'=>$contact));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['contact'].elgg_echo('event_calendar:contact_description').'</p>';
+		$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:fees_label").'</label>';
+		$body .= elgg_view("input/text", array('name' => 'fees', 'value' => $fees));
+		$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['fees'].elgg_echo('event_calendar:fees_description').'</div>';
+		$body .= '</div>';
 
-$body .= '<p><label>'.elgg_echo("event_calendar:organiser_label").'<br />';
-$body .= elgg_view("input/text",array('name' => 'organiser','value'=>$organiser));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['organiser'].elgg_echo('event_calendar:organiser_description').'</p>';
+		$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:contact_label").'</label>';
+		$body .= elgg_view("input/text", array('name' => 'contact','class' => 'event-calendar-medium-text', 'value' => $contact));
+		$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['contact'].elgg_echo('event_calendar:contact_description').'</div>';
+		$body .= '</div>';
 
-if ($event_calendar_personal_manage == 'by_event') {
-	$body .= '<p><label>'.elgg_echo('event_calendar:personal_manage:label').'<br />';
-	$body .= elgg_view("input/radio",array('name' => 'personal_manage','value'=>$personal_manage,'options'=>$personal_manage_options));
-	$body .= '</label></p>';
-	$body .= '<p class="description">'.$prefix['personal_manage'].elgg_echo('event_calendar:personal_manage:description').'</p>';
-}
+		$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:organiser_label").'</label>';
+		$body .= elgg_view("input/text", array('name' => 'organiser', 'value' => $organiser));
+		$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['organiser'].elgg_echo('event_calendar:organiser_description').'</div>';
+		$body .= '</div>';
 
-$body .= '<p><label>'.elgg_echo("event_calendar:event_tags_label").'<br />';
-$body .= elgg_view("input/tags",array('name' => 'tags','value'=>$event_tags));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['event_tags'].elgg_echo('event_calendar:event_tags_description').'</p>';
-
-$body .= '<p><label>'.elgg_echo("event_calendar:long_description_label").'<br />';
-$body .= elgg_view("input/longtext",array('name' => 'long_description','value'=>$long_description));
-$body .= '</label></p>';
-$body .= '<p class="description">'.$prefix['long_description'].elgg_echo('event_calendar:long_description_description').'</p>';
-
-if($event_calendar_hide_access == 'yes') {
-	$event_calendar_default_access = elgg_get_plugin_setting('default_access', 'event_calendar');
-	if($event_calendar_default_access) {
-		$body .= elgg_view("input/hidden",array('name' => 'access_id','value'=>$event_calendar_default_access));
-	} else {
-		$body .= elgg_view("input/hidden",array('name' => 'access_id','value'=>ACCESS_PRIVATE));
+		$body .= '<div class="mbm"><label>'.elgg_echo("event_calendar:long_description_label").'</label>';
+		$body .= elgg_view("input/longtext", array('name' => 'long_description', 'value' => $long_description));
+		$body .= '<div class="event-calendar-description elgg-subtext">'.$prefix['long_description'].elgg_echo('event_calendar:long_description_description').'</div>';
+		$body .= '</div>';
 	}
-} else {
-	$body .= '<p><label>'.elgg_echo("access").'<br />';
-	$body .= elgg_view("input/access",array('name' => 'access_id','value'=>$access));
-	$body .= '</label></p>';
+
+	$body .= '</div>';
 }
 
-if (!$event) $body .= elgg_view('prevent_notifications/prevent_form_extend', array());
+// Prevent notification
+if (!$event) { $body .= elgg_view('prevent_notifications/prevent_form_extend', array()); }
 
-$body .= elgg_view('input/submit', array('name'=>'submit','value'=>elgg_echo('event_calendar:submit')));
+$body .= '<div class="mtm">'.elgg_view('input/submit', array('name' => 'submit', 'value' => elgg_echo('event_calendar:submit'))).'</div>';
+
+$body .= '</div>';
 
 echo $body;

@@ -5,19 +5,24 @@
 	<author>Florian DANIEL aka Facyla 2016 ~ Items International 2013</author>
 	<version>1.12.0</version>
 	<blurb>Prevent notifications - désactive ponctuellement les notifications</blurb>
-<description>Permet de désactiver l'envoi de notification lors de la création de contenus (ou de toute action générant une notification), au choix de l'éditeur.</description>
-	<website>https://devnet.inria.fr/</website>
+	<description>Permet de désactiver l'envoi de notification lors de la création de contenus (ou de toute action générant une notification), au choix de l'éditeur.</description>
+	<website>https://reseau-iris.inria.fr/</website>
 	<copyright>Items International (Facyla), Inria</copyright>
 	<license>GNU Public License version 2</license>
 	
+	<screenshot>
+		<description>New setting in content create form</description>
+		<path>graphics/screenshot.png</path>
+	</screenshot>
+	
 	<category>admin</category>
 	<category>notifications</category>
-	<category>functional adaptations</category>
 	
 	<requires>
 		<type>elgg_release</type>
 		<version>1.12</version>
 	</requires>
+	
 	<requires>
 		<type>priority</type>
 		<plugin>file_tools</plugin>
@@ -29,6 +34,14 @@
 </plugin_manifest>
 
 <!--
+
+TODO :
+ - hide notification setting field if notification is not available ? (eg. update event)
+ - or enable handling for any event + add hook to handle them ?
+
+
+HISTORY :
+
 1.12.0 : 201602159 - operational Elgg 1.12 version
   - rewrite blocking method : use enqueue, notification hook
   - add README.md file

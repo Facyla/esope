@@ -19,14 +19,12 @@ $old_polls_count = elgg_get_entities_from_metadata(array(
 $body = '';
 
 if ($old_polls_count > 0) {
-	$ts = time ();
-	$token = generate_action_token ( $ts );
-
 	$body .= elgg_echo('poll:convert:description', array($old_polls_count))."<br><br>";
-	$body .= elgg_view("output/confirmlink", array(
-		'href' => elgg_get_site_url() . "action/poll/convert?__elgg_token=$token&__elgg_ts=$ts",
+	$body .= elgg_view("output/url", array(
+		'href' => elgg_get_site_url() . "action/poll/convert",
 		'text' => elgg_echo('poll:convert'),
 		'confirm' => elgg_echo('poll:convert:confirm'),
+		'is_action' => true,
 		'class' => 'elgg-button elgg-button-action'
 	));
 	$body .= "<br><br>";
@@ -125,6 +123,16 @@ if (!$allow_open_poll) {
 $body .= elgg_echo('poll:settings:allow_open_poll:title');
 $body .= '<br />';
 $body .= elgg_view('input/radio', array('name' => 'params[allow_open_poll]', 'value' => $allow_open_poll, 'options' => $yn_options));
+$body .= '<br />';
+
+
+$allow_poll_reset = elgg_get_plugin_setting('allow_poll_reset', 'poll');
+if (!$allow_poll_reset) {
+	$allow_poll_reset = 'no';
+}
+$body .= elgg_echo('poll:settings:allow_poll_reset:title');
+$body .= '<br />';
+$body .= elgg_view('input/radio', array('name' => 'params[allow_poll_reset]', 'value' => $allow_poll_reset, 'options' => $yn_options));
 $body .= '<br />';
 
 

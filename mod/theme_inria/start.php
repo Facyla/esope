@@ -19,7 +19,7 @@ function theme_inria_init(){
 	elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
 	
 	// Modified to make pages top_level / sub-pages
-	elgg_register_action("pages/edit", $action_url . "pages/edit.php");
+	//elgg_register_action("pages/edit", $action_url . "pages/edit.php");
 	
 	// Rewrite friends and friends request to remove river entries
 	elgg_unregister_action('friends/add');
@@ -118,10 +118,11 @@ function theme_inria_init(){
 	*/
 	
 	// Remplacement du modèle d'event_calendar
-	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
+	// @TODO : inutile avec version pour Elgg 1.12 ?
+	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
 	
 	// Check access validity and update meta fields (inria/external, active/closed)
-	elgg_register_event_handler('login','user', 'inria_check_and_update_user_status', 900);
+	elgg_register_event_handler('login:before','user', 'inria_check_and_update_user_status', 900);
 	
 	// Remove unwanted widgets
 	//elgg_unregister_widget_type('river_widget');
@@ -140,8 +141,9 @@ function theme_inria_init(){
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
 	
 	// Modification des menus standards des widgets
-	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
-	elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
+	// Note : plus utile car on utilise FA d'emblée
+	//elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
+	//elgg_register_plugin_hook_handler('register', 'menu:widget', 'theme_inria_widget_menu_setup');
 	
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
@@ -182,13 +184,14 @@ function theme_inria_init(){
 	// Allow to intercept and block email sending under some conditions (disabled account mainly)
 	// The hook is triggered when using default elgg email handler, 
 	// and is added and triggered by ESOPE when using plugins that replace it
-	elgg_register_plugin_hook_handler('email_block', 'system', 'theme_inria_block_email', 0);
+	// Priority is set so it intercepts notification right before html_email_handler, and after notification_messages
+	elgg_register_plugin_hook_handler('email', 'system', 'theme_inria_block_email', 499);
 	
 	// Hook pour bloquer les notifications dans certains groups si on a demandé à les désactiver
 	// 1) Blocage pour les nouveaux objets
 	// Note : load at first, because we want to block the process early, if it needs to be blocked
 	// if a plugin hook send mails before and returns "true" this would be too late
-	elgg_register_plugin_hook_handler('object:notifications', 'all', 'theme_inria_object_notifications_block', 1);
+	elgg_register_plugin_hook_handler('send:before', 'notifications', 'theme_inria_send_before_notifications_block', 1);
 	/* 2) Blocage pour les réponses (annotations)
 	 * Process : 
 	 		action discussion/replies/save exécute un ->annotate('group_topic_post',...)
@@ -359,8 +362,6 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 
 // Override river PH to add an info block
 function theme_inria_elgg_river_page_handler($page) {
-	global $CONFIG;
-
 	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 
 	// make a URL segment available in page handler script
@@ -371,7 +372,7 @@ function theme_inria_elgg_river_page_handler($page) {
 	}
 	set_input('page_type', $page_type);
 
-	require_once("{$CONFIG->path}mod/theme_inria/pages/river.php");
+	require_once(elgg_get_plugins_path() . "theme_inria/pages/river.php");
 	return true;
 }
 

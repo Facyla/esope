@@ -6,12 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ColdTrick\\Newsletter\\Upgrade' => $baseDir . '/classes/ColdTrick/Newsletter/Upgrade.php',
     'Composer\\Installers\\AglInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AglInstaller.php',
+    'Composer\\Installers\\AimeosInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
     'Composer\\Installers\\AnnotateCmsInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
     'Composer\\Installers\\AsgardInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AsgardInstaller.php',
     'Composer\\Installers\\BaseInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/BaseInstaller.php',
     'Composer\\Installers\\BitrixInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/BitrixInstaller.php',
+    'Composer\\Installers\\BonefishInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/BonefishInstaller.php',
     'Composer\\Installers\\CakePHPInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/CakePHPInstaller.php',
     'Composer\\Installers\\ChefInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ChefInstaller.php',
     'Composer\\Installers\\ClanCatsFrameworkInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ClanCatsFrameworkInstaller.php',
@@ -30,6 +31,7 @@ return array(
     'Composer\\Installers\\Installer' => $vendorDir . '/composer/installers/src/Composer/Installers/Installer.php',
     'Composer\\Installers\\JoomlaInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/JoomlaInstaller.php',
     'Composer\\Installers\\KirbyInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/KirbyInstaller.php',
+    'Composer\\Installers\\KodiCMSInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/KodiCMSInstaller.php',
     'Composer\\Installers\\KohanaInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/KohanaInstaller.php',
     'Composer\\Installers\\LaravelInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/LaravelInstaller.php',
     'Composer\\Installers\\LithiumInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/LithiumInstaller.php',
@@ -46,6 +48,8 @@ return array(
     'Composer\\Installers\\PhpBBInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/PhpBBInstaller.php',
     'Composer\\Installers\\PimcoreInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/PimcoreInstaller.php',
     'Composer\\Installers\\PiwikInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/PiwikInstaller.php',
+    'Composer\\Installers\\Plugin' => $vendorDir . '/composer/installers/src/Composer/Installers/Plugin.php',
+    'Composer\\Installers\\PrestashopInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/PrestashopInstaller.php',
     'Composer\\Installers\\PuppetInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/PuppetInstaller.php',
     'Composer\\Installers\\RedaxoInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/RedaxoInstaller.php',
     'Composer\\Installers\\RoundcubeInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/RoundcubeInstaller.php',
@@ -62,6 +66,4 @@ return array(
     'Composer\\Installers\\WordPressInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/WordPressInstaller.php',
     'Composer\\Installers\\ZendInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
     'Composer\\Installers\\ZikulaInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
-    'Newsletter' => $baseDir . '/classes/Newsletter.php',
-    'NewsletterSubscription' => $baseDir . '/classes/NewsletterSubscription.php',
 );

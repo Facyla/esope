@@ -13,6 +13,10 @@ $color9 = $css['color9']; // #CCCCCC
 $color10 = $css['color10']; // #999999
 $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
+
+$fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
+if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+
 ?>
 /* <style> /**/
 
@@ -154,6 +158,17 @@ form.elgg-form-groups-find input {
 	height: 30px;
 	margin: 0 10px 0 0;
 }
+
+/* ESOPE group search */
+.elgg-form-groups-find input[type='text'] { width:250px; }
+.elgg-form-groups-find input.elgg-button-submit { vertical-align:20%; margin:0; }
+/* New integrated in-group search */
+.elgg-sidebar .elgg-form.elgg-form-groups-search { border: 0; background: white; padding: 0; margin-bottom: 20px; width:100%; }
+.elgg-form.elgg-form-groups-search #q { height:24px; width:84%; border:0; margin:0; }
+.groups-search-submit-button { height:24px; width:auto; border:1px solid grey; vertical-align: top; border:0; background-color:#ccc; padding:5px 7px 5px 8px; }
+.groups-search-submit-button:hover, .groups-search-submit-button:active, .groups-search-submit-button:focus { background-color:#999; }
+
+
 .elgg-sidebar form.elgg-form {
   border: 1px solid #d6d6d6;
 	width: auto;
@@ -203,8 +218,9 @@ input.button {
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.35, #014FBC), color-stop(0.8, #033074));
 }
 
-/* Formulaire de recherche principale */
-#transverse form, header form {
+
+/* ESOPE : Formulaire de recherche principal */
+.elgg-page-header form, #transverse form {
 	float: right;
 	border: 2px solid <?php echo $color1; ?>;
 	border-radius: 10px;
@@ -216,7 +232,7 @@ input.button {
 	-moz-box-shadow: 0 0 2px #999999 inset;
 	-webkit-box-shadow: 0 0 2px #999999 inset;
 	height: 27px;
-	margin-top: 6px;
+	margin: 6px 0;
 }
 form input#esope-search-input {
 	border: 0 none;
@@ -241,7 +257,8 @@ form input#esope-search-submit-button {
 	-moz-border-radius: 0 7px 7px 0;
 	-webkit-border-radius: 0 7px 7px 0;
 	-o-border-radius: 0 7px 7px 0;
-	float: right;
+	/* float: right; */
+	float:none;
 	height: 27px;
 	padding: 5px 7px 5px 8px;
 	width:auto;
@@ -252,6 +269,26 @@ form input#esope-search-submit-button:focus {
   background-color: #999;
   border:1px solid #999;
 }
+.elgg-search input[type=text]:focus, .elgg-search input[type=text]:active { outline:0; }
+.elgg-page-header .elgg-search input[type=submit] { display: inline-block !important; }
+
+/* ESOPE search */
+#esope-search-form { padding: 15px 0px; }
+.esope-search-metadata { float: left; margin-right: 1em; }
+#esope-search-form select { width: 7em; margin-left: 0.5em; }
+.esope-search-fulltext { width: 80%; float: left; }
+#esope-search-form input[type="text"] { max-width: 70%; margin-left: 1em; }
+.esope-search-metadata-select select { max-width: 100%; }
+.elgg-button-livesearch { float: right; }
+.esope-results-count { font-size: 0.8em; color: #808080; }
+
+/* Main search - advanced */
+#advanced-search-form { border: 1px dotted #CCC; padding: 6px; margin: 6px 0; background: #FAFAFA; }
+#advanced-search-form legend { font-weight: bold; margin-bottom:6px; }
+#advanced-search-form input { width:50ex; max-width: 70%; }
+#advanced-search-form input.elgg-button-submit { max-width: 20ex; }
+#advanced-search-form input.elgg-input-date { max-width: 12ex; }
+
 
 
 
@@ -526,3 +563,23 @@ form input#esope-search-submit-button:focus {
     color: #0054A7;
 	background: #E4ECF5;
 }
+
+
+
+
+<?php if (!$fixedwidth) { ?>
+
+@media (max-width:700px) {
+	/* Recherche */
+	form#main-search { float: none; display: inline-block; margin: 1ex 0; width:100%; background:white; border-radius: 0; box-shadow: none; }
+	form#main-search #adf-search-input { width: 94%; border-radius: 0; }
+	#main-search #adf-search-submit-button { border-radius: 0; }
+	#main-search button#adf-search-submit-button { width: 6%; border-radius: 0; }
+	
+	.elgg-page-header form, #transverse form { width: 90%; float: none; margin: 0 auto; clear: both; padding: 0.3em 1em; display: block; width: 260px; }
+	
+}
+
+<?php } ?>
+
+

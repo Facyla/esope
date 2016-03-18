@@ -1,6 +1,6 @@
 <?php
 
-$fr = array(
+return array(
 	'au_subgroups' => "Sous-groupes",
 	'au_subgroups:subgroup' => "Sous-groupe",
 	'au_subgroups:subgroups' => "Sous-groupes",
@@ -22,6 +22,7 @@ $fr = array(
 	'au_subgroups:error:invite' => "Les membres suivants ne sont pas membres du groupe parent et ne peuvent pas être invités/ajoutés.",
 	'au_subgroups:option:parent:members' => "Membres du groupe parent",
 	'au_subgroups:subgroups:more' => "Afficher tous les sous-groupes",
+	'subgroups:parent:need_join' => "Inscrire dans le groupe parent",
 	
 	// group options
 	'au_subgroups:group:enable' => "Sous-groupes : permettre la création de sous-groupes dans ce groupe ?",
@@ -58,6 +59,3 @@ Cliquez ci-dessous pour afficher vos invitations :
 %s",
 
 );
-
-add_translation("fr",$fr);
-

@@ -28,7 +28,7 @@ function esope_init() {
 	elgg_extend_view('css/digest/core', 'css/digest/esope');
 	// Accessibilité
 	elgg_extend_view('css','accessibility/css');
-	// Font Awesome - moved to external dependency
+	// Font Awesome - is now available as an independant plugin - declared as required dependency
 	if (!elgg_is_active_plugin('fontawesome')) {
 		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
 		elgg_load_css('fontawesome');
@@ -37,6 +37,12 @@ function esope_init() {
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
+	// Tweak Digest content : unextend sections to be removed + extend with wanted sections (and chosen priority)
+	// See mod/digest/README.txt for details
+	// Add all groups excerpt to digest
+	//elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+
 	// Sécurité
 	// @TODO : use hook to extend head
 	// Important : Enable this only if you don't need to include iframes in other websites !!
@@ -56,6 +62,30 @@ function esope_init() {
 	// Suppression recherche de la sidebar
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
+	// Autorefresh des discussions
+// @TODO : changements dans les discussions
+	$forum_autorefresh = elgg_get_plugin_setting('discussion_autorefresh', 'esope');
+	if ($forum_autorefresh == 'yes') {
+		elgg_extend_view('object/groupforumtopic', 'esope/forum_autorefresh');
+	}
+	
+	// Extend group invite form
+	// Requires to be placed at the end of the form, because we will end the form and start a new one...
+	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
+	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
+	
+	// Add group Wire support (option)
+	// Note : also uses esope's event handler ("create", "object")
+	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
+		if (elgg_is_logged_in()) {
+			//elgg_extend_view('groups/tool_latest', 'thewire/thewire_group_module');
+			elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+		}
+		$enable_thewire_group = elgg_get_plugin_setting('groups_add_wire', 'esope');
+		if ($enable_thewire_group == 'groupoption') {
+			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
+		}
+	}
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -137,7 +167,7 @@ function esope_init() {
 	// Gestion des actions post-création de compte
 	elgg_register_event_handler('create', 'user', 'esope_create_user_event', 502);
 	// Gestion des actions post-login
-	elgg_register_event_handler('login','user','esope_login_user_event', 800);
+	elgg_register_event_handler('login:after','user','esope_login_user_event', 800);
 	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
@@ -178,9 +208,11 @@ function esope_init() {
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
 	
-	// Modification des menus standards des widgets
+	// Modification des menus standards des widgets : obsolète avec l'intégration de FontAwesome
+	/*
 	elgg_unregister_plugin_hook_handler('register', 'menu:widget', 'elgg_widget_menu_setup');
 	elgg_register_plugin_hook_handler('register', 'menu:widget', 'esope_elgg_widget_menu_setup');
+	*/
 	
 	// Modification des menus des groupes
 	//elgg_unregister_plugin_hook_handler('register', 'menu:owner_block', 'event_calendar_owner_block_menu');
@@ -499,7 +531,7 @@ function esope_pagesetup(){
 					array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('groups'), 'link' => 'groups/all') );
 				}
 				
-			} else if ($page_owner instanceof ElggUser) {
+			} else if (elgg_instanceof($page_owner, 'user')) {
 				// Adds Directory > Member if page owner is a user // doesn't really makes the breadcrumb clearer
 				//array_unshift($CONFIG->breadcrumbs, array('title' => $page_owner->name, 'link' => $url . 'profile/' . $page_owner->username) );
 				//array_unshift($CONFIG->breadcrumbs, array('title' => elgg_echo('esope:directory'), 'link' => $url . 'members') );
@@ -619,7 +651,7 @@ if (!function_exists('messages_get_unread')) {
 		$strings = array('toId', $user_guid, 'readYet', 0, 'msg', 1);
 		$map = array();
 		foreach ($strings as $string) {
-			$id = get_metastring_id($string);
+			$id = elgg_get_metastring_id($string);
 			$map[$string] = $id;
 		}
 
@@ -956,7 +988,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 			// Multiple option become select or radio
 			if ($options) {
 				$valtype = 'dropdown';
-				if ($empty) $options['empty option'] = '';
+				if ($empty) { $options['empty option'] = ''; }
 				$options = array_reverse($options);
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
@@ -1006,7 +1038,6 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
    - integrate (if search plugin active) search_highlight_words($words, $string)
  */
 function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
-	global $CONFIG;
 	$debug = esope_extract('debug', $params, false);
 	
 	// Set defaults
@@ -1019,7 +1050,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		'metadata_name_value_pairs_operator' => 'AND',
 		'count' => false,
 	);
-	$defaults = array_merge($esearch_defaults, $defaults);
+	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
 	$q = esope_extract('q', $params, '');
 	// Note : we use entity_type and entity_subtype for consistency with regular search
@@ -1140,8 +1171,13 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		elgg_push_context('widgets');
 		$return = '';
 		if ($params['add_count']) {
-			if ($return_count) $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
-			else $return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			if ($return_count > 1) {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
+			} else if ($return_count > 0) {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
+			} else {
+				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			}
 		}
 		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
 		if ($alert) $return .= $alert;
@@ -1186,8 +1222,8 @@ function esope_get_subpages($parent) {
 	//$subpages = elgg_get_entities_from_metadata(array('type' => 'object', 'subtype' => 'page', 'metadata_name' => 'parent_guid', 'metadata_value' => $parent->guid, 'limit' => 0, 'joins' => "INNER JOIN {$dbprefix}objects_entity as oe", 'order_by' => 'oe.title asc'));
 	// Metadata search is way too long, filtering is much quicker alternative
 	// Limit searched entities range with "guids" => $guids
-	$md_name = get_metastring_id('parent_guid');
-	$md_value = get_metastring_id($parent->guid);
+	$md_name = elgg_get_metastring_id('parent_guid');
+	$md_value = elgg_get_metastring_id($parent->guid);
 	// Can't be empty or we'll get a bad error
 	if (!empty($md_name) && !empty($md_value)) {
 		$guids_row = get_data("SELECT entity_guid FROM {$dbprefix}metadata where name_id = $md_name and value_id = $md_value");
@@ -1476,6 +1512,28 @@ function esope_get_users_from_setting($setting) {
 		}
 	}
 	return $users;
+}
+
+
+// Return distinct log values for a specific column
+// This is used for log browser filtering dropdowns
+function esope_get_log_distinct_values($column) {
+	//$log_columns = array('object_id', 'object_class', 'object_type', 'object_subtype', 'event', 'performed_by_guid', 'owner_guid', 'access_id', 'enabled', 'ip_address');
+	// Limit distinct values search to columns where values are in limited number
+	$log_columns = array('object_class', 'object_type', 'object_subtype', 'event', 'access_id', 'enabled');
+	if (empty($column) || !in_array($column, $log_columns)) { return false; }
+	// Always add an empty value (no filter)
+	$results = array('' => elgg_echo('esope:option:nofilter'));
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT $column FROM `" . $dbprefix . "system_log`;";
+	$rows = get_data($query);
+	foreach ($rows as $row) {
+		// Ensure unique values
+		if (!empty($row->$column) && !isset($results[$row->$column])) {
+			$results[$row->$column] = $row->$column;
+		}
+	}
+	return $results;
 }
 
 

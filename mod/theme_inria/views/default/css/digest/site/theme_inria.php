@@ -1,6 +1,3 @@
-<?php
-global $CONFIG;
-?>
 
 body {
 	background: none repeat scroll 0 0 #6D2D4F;
@@ -157,7 +154,7 @@ h4 {
 	width: 200px;
 }
 .elgg-icon {
-	background: url("<?php echo $CONFIG->url; ?>_graphics/elgg_sprites.png") no-repeat scroll left center transparent;
+	background: url("<?php echo elgg_get_site_url(); ?>_graphics/elgg_sprites.png") no-repeat scroll left center transparent;
 	height: 16px;
 	margin: 0 2px;
 	width: 16px;

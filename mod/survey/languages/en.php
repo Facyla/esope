@@ -1,6 +1,6 @@
 <?php
 
-$en = array(
+return array(
 	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Surveys",
 	
 	/**
@@ -241,6 +241,4 @@ View and respond to the survey:
 	
 	
 );
-
-add_translation("en",$en);
 

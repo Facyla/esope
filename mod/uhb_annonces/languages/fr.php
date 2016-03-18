@@ -388,7 +388,7 @@ return array(
 	<p>Votre offre sera relue par un chargé de mission qui sera votre correspondant éventuel avant la publication dans RESONANCES.</p>",
 
 
-	/* Candidatures */
+	// Candidatures
 	'uhb_annonces:apply:attachfiles' => "Je joins mon CV et ma lettre de candidature",
 	'uhb_annonces:apply:file1' => "Fichier joint n°1 (obligatoire)",
 	'uhb_annonces:apply:file2' => "Fichier joint n°2 (optionnel)",
@@ -400,7 +400,7 @@ return array(
 	'uhb_annonces:error:attachmentsupport' => "L'envoi de pièces jointes par email n'est pas pris en charge, veuillez contacter un administrateur du site.",
 
 
-	/* Listing */
+	// Listing
 	'uhb_annonces:count' => "%s offres",
 
 	'uhb_annonces:list:new' => "Nouvelles offres",
@@ -484,7 +484,7 @@ return array(
 	'uhb_annonces:view:followcomments' => "Remarques",
 
 
-	/* Messages */
+	// Messages
 	'uhb_annonces:message:reactivate' => "Votre annonce a été réactivée pour un nouveau cycle de publication. Merci de votre confiance.",
 	'uhb_annonces:message:archive' => "Votre annonce a été archivée. Un email de confirmation vient de vous être envoyé. Merci de votre confiance.",
 
@@ -524,7 +524,7 @@ return array(
 	'uhb_annonces:notification:mail:success' => "Un email de confirmation a été envoyé.",
 	'uhb_annonces:notification:mail:error' => "Une erreur s'est produite lors de l'envoi du mail.",
 
-	/* Emails de notification vers l'annonceur */
+	// Emails de notification vers l'annonceur
 	// Email de confirmation n°1
 	'uhb_annonces:notification:confirm1:subject' => "Votre annonce dans RESONANCES",
 	'uhb_annonces:notification:confirm1:body' => "%1\$s %2\$s,
@@ -621,7 +621,7 @@ L'équipe RESONANCES",
 De plus %1\$s vous invite à consulter son profil numérique professionnel dans RESONANCES à cette adresse : %2\$s
 ",
 
-	/* Email de notification vers le candidat */
+	// Email de notification vers le candidat
 	// Email à destination du membre candidat
 	'uhb_annonces:notification:application:subject' => "Votre candidature à une annonce dans RESONANCES",
 	'uhb_annonces:notification:application:body' => "Bonjour %1\$s,

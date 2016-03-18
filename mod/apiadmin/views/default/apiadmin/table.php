@@ -12,9 +12,9 @@ use phpbrowscap\Browscap;
 
 // Create a new Browscap object (loads or creates the cache)
 try {
-    $bc = new Browscap(elgg_get_data_path() . 'phpbrowscap');
+	$bc = new Browscap(elgg_get_data_path() . 'phpbrowscap');
 } catch (\phpbrowscap\Exception $e) {
-    $bc = null;
+	$bc = null;
 }
 
 $log_entries = $vars['log_entries'];
@@ -82,14 +82,14 @@ $log_entries = $vars['log_entries'];
 			<?php echo $entry->api_key; ?>
 		</td>
 		<td class="apiadmin-entry-user-agent">
-            <?php
-            if ( $bc ) {
-                $browser = $bc->getBrowser($entry->user_agent, true);
-                echo "$browser[Parent] ($browser[Platform])";
-            } else {
-                echo substr($entry->user_agent, 0, 32);
-            }
-            ?>
+			<?php
+			if ( $bc ) {
+				$browser = $bc->getBrowser($entry->user_agent, true);
+				echo "$browser[Parent] ($browser[Platform])";
+			} else {
+				echo substr($entry->user_agent, 0, 32);
+			}
+			?>
 		</td>
 	</tr>
 <?php

@@ -1,8 +1,7 @@
 <?php
-global $CONFIG;
-$site_email = $CONFIG->site->email;
+$site_email = elgg_get_site_entity()->email;
 
-$french = array(
+return array(
 	
 	// Form elements
 	'mailing:menu:title' => "Envoyer un mailing HTML",
@@ -45,6 +44,5 @@ $french = array(
 	'mailing:send:error:sender' => "Pas d'expéditeur",
 	
 );
-		
-add_translation("fr",$french);
+
 
