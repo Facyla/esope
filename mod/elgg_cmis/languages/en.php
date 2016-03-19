@@ -2,9 +2,8 @@
 /**
  * English strings
  */
-global $CONFIG;
 
-$en = array(
+return array(
 	'elgg_cmis:title' => "CMIS Interface",
 	
 	'elgg_cmis:cmis_url' => "Alfresco CMIS base URL (ending with alfresco/)",
@@ -72,5 +71,4 @@ Your password will be encrypted.",
 	
 );
 
-add_translation('en', $en);
 

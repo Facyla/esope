@@ -2,8 +2,6 @@
 // Displays the group chat in standalone page
 // Note : chat access control should be done in the view
 
-global $CONFIG;
-
 gatekeeper();
 $chat_id = get_input('group_guid', false);
 $group = get_entity($chat_id);

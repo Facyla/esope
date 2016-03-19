@@ -2,15 +2,15 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>LDAP Auth</name>
 	<author>Florian DANIEL, Simon Bouland</author>
-	<version>1.8</version>
+	<version>1.12.0</version>
 	<description>LDAP Authentication pam handler</description>
 	<website>http://www.elgg.org/</website>
-	<copyright>(C) Inria 2012-2015</copyright>
+	<copyright>(C) Inria 2012-2016</copyright>
 	<license>GNU General Public License version 2</license>
 
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.12</version>
 	</requires>
 
 	<category>authentication</category>
@@ -21,8 +21,9 @@
 
 History
 
-This plugin has evolved since its first releases to become more extendable
+1.12.0 : 20160319 - Updated to Elgg 1.12
 
+0.3 : This plugin has evolved since its first releases to become more extendable
 
 
 //-->

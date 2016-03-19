@@ -21,11 +21,11 @@ if (empty($vars['entity']->generic_register_email)) $vars['entity']->generic_reg
 <fieldset style="border: 1px solid; padding: 1ex; margin: 1ex 0 3ex 0;">
 	<legend><?php echo elgg_echo('ldap_auth:settings:main');?></legend>
 	
-	<p><label><?php echo elgg_echo('ldap_auth:settings:allow_registration') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[allow_registration]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->allow_registration)); ?></label></p>
+	<p><label><?php echo elgg_echo('ldap_auth:settings:allow_registration') . ' ' . elgg_view('input/select', array( 'name' => 'params[allow_registration]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->allow_registration)); ?></label></p>
 	
-	<p><label><?php echo elgg_echo('ldap_auth:settings:updateprofile') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[updateprofile]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->updateprofile)); ?></label></p>
+	<p><label><?php echo elgg_echo('ldap_auth:settings:updateprofile') . ' ' . elgg_view('input/select', array( 'name' => 'params[updateprofile]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->updateprofile)); ?></label></p>
 	
-	<p><label><?php echo elgg_echo('ldap_auth:settings:updatename') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[updatename]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->updatename)); ?></label></p>
+	<p><label><?php echo elgg_echo('ldap_auth:settings:updatename') . ' ' . elgg_view('input/select', array( 'name' => 'params[updatename]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->updatename)); ?></label></p>
 	
 </fieldset>
 

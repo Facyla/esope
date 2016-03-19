@@ -4,7 +4,7 @@
  *
  */
 
-$english = array(
+return array(
 	'group_chat' => 'Group Chat',
 	'group_chat:site_chat' => "Site chat",
 	'group_chat:group_chat' => "Group chat",
@@ -58,5 +58,4 @@ $english = array(
 	
 );
 
-add_translation('en', $english);
 

@@ -9,7 +9,7 @@
 	 * @link http://elgg.com
 	 */
 
-$en = array(
+return array(
 	'ldap_auth' => "LDAP authentication",
 	
 	'ldap_auth:missingsettings' => "Please configure ldap_auth plugin first by creating a settings.php file in plugin main directory. See settings_dist.php template file.",
@@ -62,5 +62,4 @@ $en = array(
 	
 );
 
-add_translation('en', $en);
 

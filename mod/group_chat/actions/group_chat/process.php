@@ -8,7 +8,7 @@ $own = elgg_get_logged_in_user_entity();
 // Determine automatically some input data
 //$profilePic = get_input('profilePic');
 $profilePic = $own->getIconURL('tiny');
-if(!strstr($profilePic, 'defaulttiny.gif')) $profilePic .= '.jpg';
+if(!strstr($profilePic, 'defaulttiny.gif')) { $profilePic .= '.jpg'; }
 //$profileUrl = $CONFIG->url.'profile/'.$nickname;
 $profileUrl = $own->getURL();
 //$nickname = htmlentities(strip_tags(get_input('nickname')));

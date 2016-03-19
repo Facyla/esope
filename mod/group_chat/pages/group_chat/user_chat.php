@@ -2,7 +2,6 @@
 // Displays the user chat in standalone page
 // Note : chat access control should be done in the view
 
-global $CONFIG;
 gatekeeper();
 $own = elgg_get_logged_in_user_entity();
 elgg_set_page_owner_guid($own->guid);

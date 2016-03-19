@@ -14,7 +14,6 @@ elgg_register_event_handler('init', 'system', 'elgg_cas_init'); // Init
  * 
  */
 function elgg_cas_init() {
-	global $CONFIG;
 	
 	// CSS et JS
 	elgg_extend_view('css/elgg', 'elgg_cas/css');
@@ -87,19 +86,17 @@ function elgg_cas_page_handler_ws($page) {
 
 
 function elgg_cas_logout_handler($event, $object_type, $object) {
-	global $CONFIG;
 	$user = elgg_get_logged_in_user_entity();
 	if ($user->is_cas_logged) {
 		// Unset CAS login marker - we might use another way another time..
 		$user->is_cas_logged = false;
-		forward($CONFIG->url . 'cas_auth/?logout');
+		forward(elgg_get_site_url() . 'cas_auth/?logout');
 	} else return;
 }
 
 
 function elgg_cas_autologin() {
-	global $CONFIG;
-	if ((elgg_get_viewtype() == 'default') && (full_url() == $CONFIG->url)) {
+	if ((elgg_get_viewtype() == 'default') && (current_page_url() == elgg_get_site_url())) {
 		// CAS autologin
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';

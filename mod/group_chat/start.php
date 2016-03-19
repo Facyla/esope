@@ -54,17 +54,17 @@ function group_chat_init() {
 	// Site chat
 	$site_chat = elgg_get_plugin_setting('site_chat', 'group_chat');
 	if ($site_chat == 'yes') {
-		elgg_extend_view('adf_platform/adf_header', 'group_chat/sitechat_extend', 1000);
+		elgg_extend_view('page/elements/header', 'group_chat/sitechat_extend', 1000);
 	}
 	
 	// User chat
 	$user_chat = elgg_get_plugin_setting('user_chat', 'group_chat');
 	if ($user_chat == 'yes') {
-		elgg_extend_view('adf_platform/adf_header', 'group_chat/userchat_extend', 1000);
+		elgg_extend_view('page/elements/header', 'group_chat/userchat_extend', 1000);
 	}
 	
 	// Chat notifications
-	elgg_extend_view('adf_platform/adf_header', 'group_chat/js_notifications', 1000);
+	elgg_extend_view('page/elements/header', 'group_chat/js_notifications', 1000);
 	
 	// Register action
 	$action_base = elgg_get_plugins_path() . 'group_chat/actions/group_chat';

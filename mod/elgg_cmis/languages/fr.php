@@ -2,9 +2,8 @@
 /**
  * French strings
  */
-global $CONFIG;
 
-$fr = array(
+return array(
 	'elgg_cmis:title' => "Interface CMIS",
 	
 	'elgg_cmis:cmis_url' => "Base de l'URL CMIS Alfresco (se terminant par alfresco/)",
@@ -73,5 +72,4 @@ Votre mot de passe sera crypté.",
 	
 );
 
-add_translation('fr', $fr);
 

@@ -2,9 +2,10 @@
 /**
  * English strings
  */
-global $CONFIG;
 
-$en = array(
+$url = elgg_get_site_url();
+
+return array(
 	'elgg_cas:title' => "Login with CAS",
 	
 	'elgg_cas:loginbutton' => "CAS login",
@@ -33,12 +34,9 @@ $en = array(
 	'elgg_cas:loginfailed' => "Login failed",
 	'elgg_cas:logged:nocas' => "You're now logged in without CAS.",
 	'elgg_cas:logged:cas' => "You're now logged in with CAS account <b>%s</b>.",
-	'elgg_cas:confirmcaslogin' => 'You are logged in on this site with <b>%1$s</b> (%2$s). <br />To login with your CAS account, please <a href="' . $CONFIG->url . 'action/logout">logout first</a>, then connect again with CAS.',
-	'elgg_cas:confirmchangecaslogin' => 'You are logged in on this site with <b>%1$s</b> (%2$s). <br />To login with an other CAS account, please <a href="' . $CONFIG->url . 'action/logout">logout first</a>, then connect again with CAS.',
-	'elgg_cas:alreadylogged' => 'You are logged in on this site with <b>%3$s</b> (%4$s), and trying to login with CAS account <b>%1$s</b> (%2$s). <br />To login with your CAS account <b>%1$s</b>, please <a href="' . $CONFIG->url . 'action/logout">logout first</a>.',
-
+	'elgg_cas:confirmcaslogin' => 'You are logged in on this site with <b>%1$s</b> (%2$s). <br />To login with your CAS account, please <a href="' . $url . 'action/logout">logout first</a>, then connect again with CAS.',
+	'elgg_cas:confirmchangecaslogin' => 'You are logged in on this site with <b>%1$s</b> (%2$s). <br />To login with an other CAS account, please <a href="' . $url . 'action/logout">logout first</a>, then connect again with CAS.',
+	'elgg_cas:alreadylogged' => 'You are logged in on this site with <b>%3$s</b> (%4$s), and trying to login with CAS account <b>%1$s</b> (%2$s). <br />To login with your CAS account <b>%1$s</b>, please <a href="' . $url . 'action/logout">logout first</a>.',
 	
 );
-
-add_translation('en', $en);
 
