@@ -114,6 +114,7 @@ HTML;
 		} else {
 			$display_text = elgg_get_excerpt($url, 100);
 		}
+	}
 	$link = elgg_view('output/url', array(
 		'href' => $bookmark->address,
 		'text' => $display_text,

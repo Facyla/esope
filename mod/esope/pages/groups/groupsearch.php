@@ -4,7 +4,6 @@
  *
  */
 
-global $CONFIG;
 $title = elgg_echo('groups');
 
 $content = '';
@@ -14,11 +13,8 @@ elgg_pop_breadcrumb();
 elgg_register_title_button();
 
 // Prepare JS script for forms
-$ts = time();
-$token = generate_action_token($ts);
-$action_token = '?__elgg_token=' . $token . '&__elgg_ts=' . $ts;
-$action_base = $CONFIG->url . 'action/esope/';
-$esope_search_url = $action_base . 'esearch' . $action_token;
+$action_base = elgg_get_site_url() . 'action/esope/';
+$esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
 
 $content .= '<script>
 var formdata;

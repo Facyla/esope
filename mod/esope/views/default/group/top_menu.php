@@ -16,7 +16,7 @@ if (elgg_instanceof($group, 'group')) {
 		$tabs['home'] = array(
 			'text' => elgg_echo('esope:groups:home'),
 			'href' => $group->getURL(),
-			'selected' => (($context == 'group_home') || (full_url() == $group->getURL())),
+			'selected' => (($context == 'group_home') || (current_page_url() == $group->getURL())),
 			'priority' => 100,
 		);
 
@@ -29,7 +29,7 @@ if (elgg_instanceof($group, 'group')) {
 				$tabinfo = explode('::', $group->{"customtab$i"});
 				$tabs["customtab$i"] = array(
 					'href' => $tabinfo[0], 'text' => $tabinfo[1], 'title' => str_replace('"', "'", $tabinfo[2]),
-					'selected' => (full_url() == $tabinfo[0]), 'priority' => 300,
+					'selected' => (current_page_url() == $tabinfo[0]), 'priority' => 300,
 				);
 				if (esope_is_external_link($tabinfo[0])) $tabs["customtab$i"]['target'] = '_blank';
 			}

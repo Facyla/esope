@@ -62,7 +62,14 @@ foreach ($members as $member) {
 }
 
 // river entry created
-add_to_river('river/group/create', 'create', $user->guid, $group->guid, $group->access_id);
+//add_to_river('river/group/create', 'create', $user->guid, $group->guid, $group->access_id);
+elgg_create_river_item(array(
+		'view' => 'river/group/create',
+		'action_type' => 'create',
+		'subject_guid' => $user->guid,
+		'object_guid' => $group->guid,
+		'access_id' => $group->access_id,
+	));
 system_message(elgg_echo("groups:saved"));
 
 forward("groups/edit/{$group->guid}");

@@ -153,7 +153,9 @@ function blog_get_page_content_friends($user_guid) {
 
 	elgg_register_title_button();
 
-	if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+	//if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+	$friends = $user->getFriends(array('limit' => 0));
+	if (!$friends) {
 		$return['content'] .= elgg_echo('friends:none:you');
 		return $return;
 	} else {

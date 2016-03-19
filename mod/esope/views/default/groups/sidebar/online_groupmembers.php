@@ -8,7 +8,8 @@ if ($users) {
 		if ($group->isMember($ent)) $online_groupmembers[] = $ent;
 	}
 	$count = sizeof($online_groupmembers);
-	$body = elgg_view_entity_list($online_groupmembers, array('count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
+	//$body = elgg_view_entity_list($online_groupmembers, array('count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
+	$body = elgg_list_entities(array('entities' => $online_groupmembers, 'count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
 }
 
 echo elgg_view_module('aside', elgg_echo('groups:onlinenow'), $body);

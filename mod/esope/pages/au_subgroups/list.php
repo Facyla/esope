@@ -37,7 +37,8 @@ if ($subgroups) {
 				$content .= '<h3>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h3>';
 			}
 			elgg_push_context('widgets');
-			$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			//$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
 			elgg_pop_context();
 		}
 	}

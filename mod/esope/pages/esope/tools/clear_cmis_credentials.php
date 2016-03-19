@@ -25,7 +25,7 @@ if (elgg_is_active_plugin('elgg_cmis')) {
 		$batch = new ElggBatch('elgg_get_entities', $users_options, 'esope_clear_elgg_cmis_usersettings', 10);
 		$content .= '<p>Suppression des paramètres personnels CMIS terminée.</p>';
 	} else {
-		$content .= '<a class="elgg-button elgg-button-action" href="' . full_url() . '?clear_cmis_credentials=yes">Supprimer tous les paramètres personnels associés au plugin elgg_cmis</a><br />Attention, cette action est irréversible.';
+		$content .= '<a class="elgg-button elgg-button-action" href="' . current_page_url() . '?clear_cmis_credentials=yes">Supprimer tous les paramètres personnels associés au plugin elgg_cmis</a><br />Attention, cette action est irréversible.';
 	}
 }
 

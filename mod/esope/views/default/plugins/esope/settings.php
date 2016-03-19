@@ -59,10 +59,8 @@ $invite_picker_opt = array(
 // Restore previous values from Elgg 1.8 adf_public_platform plugin
 // 1.8 => 1.9 : always apply if settings_version is not set
 if (empty($plugin->settings_version)) {
-	$ia = elgg_get_ignore_access();
-	$ih = access_get_show_hidden_status();
-	elgg_set_ignore_access(true);
-	access_show_hidden_entities(true);
+	$ia = elgg_set_ignore_access(true);
+	$ih = access_show_hidden_entities(true);
 	
 	$restore_18_settings = array('add_profile_activity', 'admin_exclude_access', 'advanced_pagination', 'advancedsearch', 'allowregister', 'analytics', 'awesomefont', 'backgroundcolor', 'backgroundimg', 'blog_user_listall', 'bookmarks_user_listall', 'brainstorm_user_listall', 'closedgroups_defaultaccess', 'color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10', 'color11', 'color12', 'color13', 'color14', 'color15', 'css', 'custom_profile_layout', 'dashboardheader', 'disable_all', 'disable_friends', 'disable_mine', 'faviconurl', 'file_user_listall', 'firststeps_guid', 'fixedwidth', 'font1', 'font2', 'font3', 'font4', 'font5', 'font6', 'footer', 'framekiller', 'group_hide_profile_field', 'groupjoin_enablenotif', 'groups_add_activity', 'groups_add_publish_tools', 'groups_alpha', 'groups_disable_widgets', 'groups_disclaimer', 'groups_discussion', 'groups_featured', 'groups_friendstab', 'groups_newest', 'groups_popular', 'groups_searchtab', 'groups_tags', 'groups_topmenu', 'group_tools_default', 'headerimg', 'headertitle', 'helplink', 'hide_directory', 'homegroup_autojoin', 'homegroup_guid', 'homegroup_index', 'homeintro', 'homesite_index', 'import_settings', 'index_groups', 'index_members', 'index_recent_members', 'index_wire', 'invite_anyone', 'linkcolor', 'linkhovercolor', 'members_alpha', 'members_newest', 'members_onesearch', 'members_online', 'members_onlinetab', 'members_popular', 'members_profiletypes', 'members_searchtab', 'metadata_groupsearch_fields', 'metadata_membersearch_fields', 'metadata_search_fields', 'notification_css', 'opengroups_defaultaccess', 'pages_list_subpages', 'pages_reorder', 'pages_user_listall', 'publicpages', 'public_profiles', 'public_profiles_default', 'redirect', 'register_joingroups', 'remove_collections', 'remove_profile_widgets', 'remove_user_menutools', 'remove_user_tools', 'replace_home', 'replace_public_homepage', 'semanticui', 'textcolor', 'titlecolor', 'contactemail', 'rss', 'twitter', 'facebook', 'googleplus', 'linkedin', 'netvibes', 'flickr', 'youtube', 'vimeo', 'dailymotion', 'vine', 'instagram', 'github', 'delicious', 'pinterest', 'tumblr', 'slideshare', 'user_exclude_access', 'widget_blog', 'widget_bookmarks', 'widget_brainstorm', 'widget_event_calendar', 'widget_export_embed', 'widget_file', 'widget_file_folder', 'widget_freehtml', 'widget_friends', 'widget_group_activity', 'widget_groups', 'widget_messages', 'widget_pages', 'widget_river_widget', 'widget_searchresults', 'widget_tagcloud', 'widget_thewire', 'widget_twitter', 'widget_videos', 'widget_webprofiles');
 	foreach ($restore_18_settings as $setting) {
@@ -610,7 +608,8 @@ $(function() {
 			if (!empty($plugin->groups_autojoin)) {
 				$groups_autojoin_guids = esope_get_input_array($plugin->groups_autojoin);
 				if ($groups_autojoin_guids) {
-					echo elgg_view_entity_list(array('guids' => $groups_autojoin_guids));
+					//echo elgg_view_entity_list(array('guids' => $groups_autojoin_guids));
+					echo elgg_list_entities(array('guids' => $groups_autojoin_guids));
 				}
 			}
 			// Join groups at registration

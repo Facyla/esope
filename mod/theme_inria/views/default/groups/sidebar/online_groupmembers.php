@@ -6,11 +6,11 @@ if ($users) {
 		if ($group->isMember($ent)) $online_groupmembers[] = $ent;
 	}
 	$count = sizeof($online_groupmembers);
-	$body = elgg_view_entity_list($online_groupmembers, array('count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
+	$body = elgg_list_entities(array('entities' => $online_groupmembers, 'count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
 }
 
 if (elgg_is_active_plugin('group_chat')) {
-	elgg_unextend_view('adf_platform/adf_header', 'group_chat/groupchat_extend');
+	elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	$body .= '<div class="clearfloat"></div><p>' . elgg_view('group_chat/groupchat_linkextend', $vars) . '</p>';
 }
 

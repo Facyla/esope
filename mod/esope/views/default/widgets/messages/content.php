@@ -18,7 +18,8 @@ $options = array(
 $content = elgg_list_entities($options);
 */
 
-$content = elgg_view_entity_list('', array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+//$content = elgg_view_entity_list('', array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+$content = elgg_list_entities(array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
 
 echo $content;
 
@@ -31,7 +32,7 @@ $new_message_link = elgg_view('output/url', array(
 if ($content) {
 	$messages_url = "messages/inbox/" . elgg_get_page_owner_entity()->username;
 	$more_link = elgg_view('output/url', array(
-		'href' => $messages_url,
+		'href' => $messages_url . '?unread=true',
 		'text' => elgg_echo('messages:moremessages'),
 		'is_trusted' => true,
 	));

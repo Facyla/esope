@@ -631,15 +631,8 @@ function esope_comments_disable_site() {
 */
 
 
+/* Now useless as exists in mod/messages since 1.9
 if (!function_exists('messages_get_unread')) {
-	/**
-	 * Returns the unread messages in a user's inbox
-	 *
-	 * @param int $user_guid GUID of user whose inbox we're counting (0 for logged in user)
-	 * @param int $limit Number of unread messages to return (default = 10)
-	 *
-	 * @return array
-	 */
 	function messages_get_unread($user_guid = 0, $limit = 10, $count = false) {
 		if (!$user_guid) {
 			$user_guid = elgg_get_logged_in_user_guid();
@@ -680,6 +673,7 @@ if (!function_exists('messages_get_unread')) {
 		return elgg_get_entities_from_metadata($options);
 	}
 }
+*/
 
 
 if (elgg_is_active_plugin('au_subgroups')) {
@@ -1179,13 +1173,17 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
 			}
 		}
-		$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
-		if ($alert) $return .= $alert;
+		//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
+		$search_params['entities'] = $entities;
+		$search_params['limit'] = $max_results;
+		$search_params['offset'] = $offset;
+		$return .= elgg_list_entities($search_params);
+		if ($alert) { $return .= $alert; }
 		elgg_pop_context('widgets');
 		elgg_pop_context('search');
 	}
 	
-	if (empty($return)) $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>';
+	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
 	
 	return $return;
 }

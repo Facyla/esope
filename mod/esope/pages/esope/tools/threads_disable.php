@@ -29,7 +29,7 @@ if (elgg_is_active_plugin('threads')) {
 	if ($threads_replies) {
 		$content .= " Si vous ne comptez pas activer le plugin, vous devriez convertir les commentaires.<br />";
 	} else $content .= " Il n'y a aucun commentaire à convertir : inutile de changer quoi que ce soit.<br />";
-	$content .= '<br /><a class="elgg-button elgg-button-action" href="' . full_url() . '?action=convert_threads">Convertir les commentaires !</a><br />';
+	$content .= '<br /><a class="elgg-button elgg-button-action" href="' . current_page_url() . '?action=convert_threads">Convertir les commentaires !</a><br />';
 }
 $content .= '<br />';
 
@@ -41,7 +41,7 @@ if ($do_convert == 'convert_threads') {
 	$content .= "<p>Conversion des commentaires demandée :</p>";
 	if ($threads_replies) {
 		// name : 4272 = l'id de la metastring pour group_topic_post
-		$name_id = get_metastring_id('group_topic_post');
+		$name_id = elgg_get_metastring_id('group_topic_post');
 		// Type de valeur
 		$value_type = "text";
 	
@@ -69,7 +69,7 @@ if ($do_convert == 'convert_threads') {
 			// entity_guid : celle qui a été commentée (relation "top")
 			$entity_guid = $top;
 			// value : l'id de la valeur du contenu
-			$value_id = add_metastring($ent->description);
+			$value_id = elgg_get_metastring_id($ent->description);
 			// owner_guid : auteur du commentaire
 			$owner_guid = $ent->owner_guid;
 			// time : celui de dernière mise à jour

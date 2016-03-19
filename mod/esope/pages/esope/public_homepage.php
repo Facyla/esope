@@ -76,7 +76,8 @@ $content .= '<div style="width:44%; float:left;" class="home-static-container">'
 			$events_count = event_calendar_get_events_between($start_ts,$end_ts,true,3,0);
 			$events = event_calendar_get_events_between($start_ts,$end_ts,false,3,0);
 			if ($events) {
-				$content .= elgg_view_entity_list($events, $events_count, 0, 3, false, false);
+				//$content .= elgg_view_entity_list($events, $events_count, 0, 3, false, false);
+				$content .= elgg_list_entities(array('entities' => $events, 'limit' => 3));
 			} else {
 				$content .= '<p>' .elgg_echo('esope:homepage:calendar:none') . '</p>';
 			}

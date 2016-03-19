@@ -35,7 +35,8 @@ $params = array(
 $body = elgg_view('object/elements/summary', $params);
 
 // This lets editors add images in a reasonnable size, and uncroped
-if (elgg_instanceof($entity, 'object', 'file') && (file_get_general_file_type($entity->mimetype) == 'image')) {
+// @TODO : add setting so admins can set embedded image size ?
+if (elgg_instanceof($entity, 'object', 'file') && (elgg_get_file_simple_type($entity->mimetype) == 'image')) {
 	$image = elgg_view_entity_icon($entity, 'small', array('link_class' => ''));
 	$image .= '<span class="hidden">' . elgg_view_entity_icon($entity, 'large', array('link_class' => 'embed-insert')) . '</span>';
 } else {

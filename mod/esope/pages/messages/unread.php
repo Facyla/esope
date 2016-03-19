@@ -25,7 +25,9 @@ elgg_register_title_button();
 $title = elgg_echo('messages:user', array($page_owner->name));
 
 
-$list = elgg_view_entity_list(messages_get_unread($page_owner->guid), array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false));
+//$list = elgg_view_entity_list(messages_get_unread($page_owner->guid), array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false));
+$unread = messages_get_unread($page_owner->guid);
+$list = elgg_list_entities(array('entities' => $unread, 'list_type_toggle' => false, 'pagination' => true, 'full_view' => false));
 
 $body_vars = array(
 	'folder' => 'inbox',

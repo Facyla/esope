@@ -27,7 +27,7 @@ if ($container_guid) { $options['annotation_owner_guids'] = $container_guid; }
 
 if ($sortby == 'popular') {
 	$dbprefix = elgg_get_config('dbprefix');
-	$likes_metastring = get_metastring_id('likes');
+	$likes_metastring = elgg_get_metastring_id('likes');
 	$options['selects'] = array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes");
 	$options['order_by'] = 'likes DESC';
 	if ($order == 'DESC') $options['order_by'] = 'likes ASC';

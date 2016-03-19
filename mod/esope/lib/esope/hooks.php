@@ -440,7 +440,8 @@ if (elgg_is_active_plugin('au_subgroups')) {
 			$invalid_users = array();
 			foreach($user_guid as $guid) {
 				// ESOPE : Use less intensive DB check with GUID and not entities...
-				if (is_group_member($parent->guid, $guid)) {
+				//if (is_group_member($parent->guid, $guid)) {
+				if (check_entity_relationship($guid, 'member', $parent->guid)) {
 					$valid_user_guid[] = $guid;
 				} else {
 					// We'll need the entity here for proper error display

@@ -45,7 +45,9 @@ function group_chat_init() {
 			// Old version : integrated into window
 			//elgg_extend_view('group/default', 'group_chat/chat_extend');
 			// New version : own window
-			elgg_extend_view('adf_platform/adf_header', 'group_chat/groupchat_extend', 1000);
+			elgg_extend_view('page/elements/header', 'group_chat/groupchat_extend', 1000);
+			// @TODO : update to 1.12
+			//elgg_register_plugin_hook_handler('head', 'page','group_chat_page_head_hook');
 		}
 	}
 	
@@ -469,5 +471,14 @@ if (!elgg_is_active_plugin('esope') && !elgg_is_active_plugin('adf_public_platfo
 		}
 	}
 }
+
+
+// @TODO Adds scripts to head
+function group_chat_page_head_hook($hook, $type, $return, $params) {
+	
+	
+	return $return;
+}
+
 
 

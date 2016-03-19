@@ -76,7 +76,7 @@ switch($action) {
 
 
 // Form
-$content .= '<form action="' . full_url() . '" method="POST">';
+$content .= '<form action="' . current_page_url() . '" method="POST">';
 $content .= '<p><label>ACTION : ' . elgg_view('input/text', array('name' => 'action', 'value' => $action)) . '</label></p>';
 $content .= '<p><em>delete_by_guid, delete_by_email_match</em></p>';
 

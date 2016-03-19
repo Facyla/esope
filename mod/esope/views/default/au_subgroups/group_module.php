@@ -51,7 +51,8 @@ if ($subgroups) {
 	foreach ($subgroups as $grouptype => $groups) {
 		if (count($groups) > 0) {
 			$content .= '<h4>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h4>';
-			$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			//$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
 		}
 	}
 	$content .= '</div>';

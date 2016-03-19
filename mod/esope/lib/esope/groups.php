@@ -37,6 +37,7 @@ function esope_groups_handle_all_page() {
 	$selected_tab = get_input('filter', 'popular');
 	if ($groups_alpha == 'yes') $selected_tab = get_input('filter', 'alpha');
 	$user_guid = get_input('user_guid', elgg_get_logged_in_user_guid());
+	$user = get_entity($user_guid);
 	
 	// Page title
 	$title = elgg_echo('groups');
@@ -136,8 +137,9 @@ function esope_groups_handle_all_page() {
 			
 		case "owner":
 			$groups = esope_get_owned_groups($user_guid, 'all');
-			$options = array('full_view' => false);
-			$content = elgg_view_entity_list($groups, $options);
+			$options = array('full_view' => false, 'entities' => $groups);
+			//$content = elgg_view_entity_list($groups, $options);
+			$content = elgg_list_entities($options);
 			// Add title + count
 			$count = sizeof($groups);
 			$title = elgg_echo("groups") . " ($count)";
@@ -146,7 +148,9 @@ function esope_groups_handle_all_page() {
 			
 		case 'friends':
 			if (elgg_is_logged_in()) {
-				if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+				//if (!$friends = get_user_friends($user_guid, ELGG_ENTITIES_ANY_VALUE, 0)) {
+				$friends = $user->getFriends(array('limit' => 0));
+				if (!$friends) {
 					$content = elgg_echo('friends:none:you');
 				} else {
 					$options = array('type' => 'group', 'full_view' => FALSE, 'limit' => $limit,);
@@ -239,8 +243,9 @@ function esope_groups_handle_owned_page() {
 
 	
 	$groups = esope_get_owned_groups($page_owner->guid, 'all');
-	$options = array('full_view' => false);
-	$content = elgg_view_entity_list($groups, $options);
+	$options = array('full_view' => false, 'entities' => $groups);
+	//$content = elgg_view_entity_list($groups, $options);
+	$content = elgg_list_entities($options);
 	if (!$content) {
 		$content = elgg_echo('groups:none');
 	}
