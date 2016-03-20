@@ -11,6 +11,7 @@
 	
 	<category>visualisation</category>
 	<category>data</category>
+	<category>content</category>
 	<category>developer</category>
 	
 	<activate_on_install>false</activate_on_install>

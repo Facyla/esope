@@ -42,7 +42,7 @@ Password: %s
 	'theme_transitions2:home_article:select' => "Save the choice",
 	
 	// API
-	'theme_transitions:login:usernamedontmatch' => "An account already exists with the same email but another username, please contact an administrator to ask to update your username: %s dshould become %s",
+	'theme_transitions:login:usernamedontmatch' => "An account already exists with the same email but another username, please contact an administrator to ask to update your username: %s should become %s",
 	'theme_transitions:login:newaccount' => "Login with your Réseau Fing account successful: an account has been successfully created.",
 	'theme_transitions:loginwithfing' => "To login with you Réseau Fing account: use the same credentials to login on this site.",
 	'theme_transitions:registerwithfing' => "To create a new account from your Réseau Fing account, login here with your Réseau Fing credentials.",

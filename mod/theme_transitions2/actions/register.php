@@ -17,7 +17,7 @@ if (elgg_get_config('allow_registration')) {
 	// Get or compute other fields
 	$username = get_input('username');
 	$name = get_input('name');
-	if (strlen(trim($username) < 4)) {
+	if (strlen(trim($username)) < 4) {
 		system_message('theme_transitions2:register:usernametooshort');
 		$username = profile_manager_generate_username_from_email($email);
 		$send_email = true;
