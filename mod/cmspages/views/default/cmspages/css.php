@@ -58,7 +58,7 @@ pre, code { word-break:break-all; }
 .cmspages-published { font-weight:bold; color:#0A0; }
 #cmspages-edit-form .cmspages-categories ul, .cmspages-categories ul { list-style-type: none; margin-left: 0; }
 #cmspages-edit-form .cmspages-categories ul ul, .cmspages-categories ul ul { margin-left: 3ex; }
-.cmspages-delete { float: right; }
+.cmspages-delete .elgg-button-delete { float: right; }
 
 /* Password protection */
 .cmspage-password-form { display:inline-block; background:transparent; }
