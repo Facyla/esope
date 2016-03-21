@@ -461,7 +461,7 @@ if ($cmspage) {
 	// Delete link
 	$delete_button = '<span class="cmspages-mode-full .cmspages-delete">' . elgg_view('output/confirmlink', array(
 			'href' => elgg_get_site_url() . 'action/cmspages/delete?guid=' . $cmspage->guid,
-			'text' => '<i class="fa fa-trash"></i>' . elgg_echo('cmspages:delete'),
+			'text' => '<i class="fa fa-trash"></i>&nbsp;' . elgg_echo('cmspages:delete'),
 			//'title' => elgg_echo('cmspages:delete:details'),
 			'class' => 'elgg-button elgg-button-action elgg-button-delete',
 			'title' => '',
