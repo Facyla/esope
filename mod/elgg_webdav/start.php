@@ -38,51 +38,51 @@ function elgg_webdav_page_handler($page) {
 	switch($page[0]) {
 		case 'endpoint':
 		case 'server':
-			if (include_once "$base/server.php") return true;
+			if (include_once "$base/server.php") { return true; }
 			break;
 		
 		case 'public':
 			//forward('webdav/virtual/public');
 			// Read-only filesystem
-			if (include_once "$base/server_public.php") return true;
+			if (include_once "$base/server_public.php") { return true; }
 			break;
 		
 		case 'member':
 			//forward('webdav/virtual/users');
-			if (include_once "$base/server_member.php") return true;
+			if (include_once "$base/server_member.php") { return true; }
 			break;
 		
 		case 'user':
 			//forward('webdav/virtual/private');
 			// GUID is mandatory to provide better security and RESTful URI
-			if (!empty($page[1])) set_input($guid, $page[1]);
-			if (include_once "$base/server_user.php") return true;
+			if (!empty($page[1])) { set_input($guid, $page[1]); }
+			if (include_once "$base/server_user.php") { return true; }
 			break;
 		
 		case 'group':
 			//forward('webdav/virtual/groups');
 			// GUID is mandatory to provide better security and RESTful URI
-			if (!empty($page[1])) set_input($guid, $page[1]);
-			if (include_once "$base/server_group.php") return true;
+			if (!empty($page[1])) { set_input($guid, $page[1]); }
+			if (include_once "$base/server_group.php") { return true; }
 			break;
 		
 		// NEW Main entry point
 		case 'virtual':
 			// GUID is mandatory to provide better security and RESTful URI
-			if (!empty($page[1])) set_input('type', $page[1]);
-			if (!empty($page[2])) set_input('guid', $page[2]);
-			if (include_once "$base/server_virtual.php") return true;
+			if (!empty($page[1])) { set_input('type', $page[1]); }
+			if (!empty($page[2])) { set_input('guid', $page[2]); }
+			if (include_once "$base/server_virtual.php") { return true; }
 			break;
 		
 		// Access distant WebDAV resource
 		case 'view':
 			// GUID is mandatory as it stores endpoint information
-			if (!empty($page[1])) set_input('guid', $page[1]);
-			if (include_once "$base/view.php") return true;
+			if (!empty($page[1])) { set_input('guid', $page[1]); }
+			if (include_once "$base/view.php") { return true; }
 			break;
 		
 		default:
-			if (include_once "$base/index.php") return true;
+			if (include_once "$base/index.php") { return true; }
 	}
 	return false;
 }
@@ -105,7 +105,7 @@ function elgg_webdav_create_file($name, $data, $options = array()) {
 	$file->subtype = "file";
 	$file->title = $options['title'];
 	$file->description = $options['description'];
-	$file->access_id = $options['access_id']; // private
+	$file->access_id = $options['access_id']; // private by default, group level if in group ?
 	$file->container_guid = $options['container_guid'];
 	$file->owner_guid = $options['owner_guid'];
 	$file->tags = $options['tags'];
@@ -134,7 +134,7 @@ function elgg_webdav_create_file($name, $data, $options = array()) {
 
 
 	// if image, we need to create thumbnails (this should be moved into a function)
-	if ($guid && $file->simpletype == "image") {
+	if ($guid && ($file->simpletype == "image")) {
 		$file->icontime = time();
 
 		$thumbnail = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), 60, 60, true);

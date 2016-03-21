@@ -11,6 +11,8 @@
 session_start();
 $positionsId = get_input('positionsId', 'leaflet');
 $action_url = elgg_get_site_url() . 'action/leaflet/';
+// @TODO : check it is working with tokenized URL
+$action_url = elgg_add_action_tokens_to_url($action_url);
 $ts = time();
 $token = generate_action_token($ts);
 

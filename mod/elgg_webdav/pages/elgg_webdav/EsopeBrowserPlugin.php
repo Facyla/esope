@@ -120,12 +120,11 @@ class EsopePlugin extends DAV\Browser\Plugin {
 
 				// @codeCoverageIgnoreStart
 				case 'put' :
-					if ($_FILES) $file = current($_FILES);
+					if ($_FILES) { $file = current($_FILES); }
 					else break;
 
 					list(, $newName) = URLUtil::splitPath(trim($file['name']));
-					if (isset($postVars['name']) && trim($postVars['name']))
-						$newName = trim($postVars['name']);
+					if (isset($postVars['name']) && trim($postVars['name'])) { $newName = trim($postVars['name']); }
 
 					// Making sure we only have a 'basename' component
 					list(, $newName) = URLUtil::splitPath($newName);
@@ -164,8 +163,8 @@ class EsopePlugin extends DAV\Browser\Plugin {
 		//if (DAV\Server::$exposeVersion) { $version = DAV\Version::VERSION; }
 
 		$vars = [
-			'path'		=> $this->escapeHTML($path),
-			'baseUrl'	 => $this->server->getBaseUri(),
+			'path' => $this->escapeHTML($path),
+			'baseUrl' => $this->server->getBaseUri(),
 		];
 
 		// Title should be root "/" if empty, but have both starting and trailing slash otherwise
@@ -338,7 +337,7 @@ class EsopePlugin extends DAV\Browser\Plugin {
 		<div class="clearfloat"></div>
 		';
 
-		$output.=ob_get_clean();
+		$output .= ob_get_clean();
 	}
 
 
@@ -560,9 +559,9 @@ class EsopePlugin extends DAV\Browser\Plugin {
 				echo '<em>unknown</em>';
 				break;
 		}
-
+		
 		return ob_get_clean();
 	}
-
+	
 }
 

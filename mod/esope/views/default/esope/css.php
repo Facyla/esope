@@ -561,13 +561,13 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 */
 .au-subgroups-result-col { width: auto; }
 .au-subgroups-search-results { float:none; width: auto; }
-.au_subgroups_group_icon.au_subgroups_group_icon-small span.au_subgroup { padding: 1px 0; font-size: 0.5rem; line-height: 1; }
+.groups-profile-icon .au_subgroup_icon-tiny { font-size: 0.6rem; line-height: 1; padding: 1px 0; top: 0;  }
+.groups-profile-icon .au_subgroups_group_icon-large { height: auto; }
+.au_subgroups_group_icon.au_subgroups_group_icon-small span.au_subgroup { padding: 1px 0; font-size: 0.7rem; line-height: 1; }
 .au_subgroups_group_icon.au_subgroups_group_icon-medium span.au_subgroup { padding: 3px 0; font-size: 0.9rem; }
 .au_subgroups_group_icon.au_subgroups_group_icon-large span.au_subgroup { padding: 0.5rem 0; font-size: 1rem; }
 
-
 /* Agencement fluide des blocs dans les groupes */
-.groups-profile-icon .au_subgroups_group_icon-large { height: auto; }
 .elgg-gallery-fluid > li { float: right; }
 #groups-tools > li.odd { float: left; }
 #groups-tools > li { margin-bottom: 20px; min-height: 100px; width: 50%; min-width: 300px; display:inline-block; }

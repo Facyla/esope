@@ -479,12 +479,14 @@ if ($cmspage) {
 $content = '';
 $sidebar = '';
 
+// Menu latéral
 $sidebar .= $pub_content;
 $sidebar .= $cat_content;
 $sidebar .= $render_content;
 $sidebar .= $image_content;
 $sidebar .= $seo_content;
 
+// Colonne principale
 $content .= $js_content;
 $content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $cmspage_guid));
 $content .= elgg_view('input/hidden', array('name' => 'edit_mode', 'value' => "")) . '</p>';
@@ -493,13 +495,10 @@ $content .= '<span style="float:right;">' . $submit_button . '</span>';
 $content .= '<div class="clearfloat"></div>';
 $content .= $type_content;
 $content .= $help_content;
-
 // Titre de la page CMS
 $content .= '<p class=""><label>' . elgg_echo('title') . ' ' . elgg_view('input/text', array('name' => 'cmspage_title', 'value' => $title, 'style' => "width:500px;")) . '</label></p>';
-
 // Nom du permalien de la page : non éditable (= identifiant de la page)
 $content .= '<p class="cmspages-mode-full"><label for="pagetype">' . elgg_echo('cmspages:pagetype') . '</label><br />' . elgg_get_site_url() . 'p/' . elgg_view('input/text', array('name' => 'pagetype', 'value' => $pagetype, 'style' => "width:40ex;")) . '</p>';
-
 $content .= $editor_content;
 $content .= $module_content;
 $content .= $jscss_content;

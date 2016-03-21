@@ -101,7 +101,7 @@ class PrivateCollection extends Sabre\DAV\Collection {
 	// Edit functions
 	function createFile($name, $data = null) {
 		if (elgg_is_logged_in()) {
-			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $this->user_guid, 'container_guid' => $this->user_guid));
+			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $this->user_guid, 'container_guid' => $this->user_guid, 'access_id' => 0));
 			if (elgg_instanceof($file, 'object', 'file')) {
 				// After succesful creation of the file, you may choose to return the ETag of the new file here.
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
@@ -271,7 +271,7 @@ class UserCollection extends Sabre\DAV\Collection {
 	function createFile($name, $data = null) {
 		// Only owner can edit its own files
 		if (elgg_is_logged_in() && ($this->user->guid == elgg_get_logged_in_user_guid())) {
-			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $this->user_guid, 'container_guid' => $this->user_guid));
+			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $this->user_guid, 'container_guid' => $this->user_guid, 'access_id' => 0));
 			if (elgg_instanceof($file, 'object', 'file')) {
 				// After succesful creation of the file, you may choose to return the ETag of the new file here.
 				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
