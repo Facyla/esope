@@ -23,12 +23,13 @@ $footer_left = elgg_get_plugin_setting('footer_left');
 $footer_right = elgg_get_plugin_setting('footer_right');
 
 echo '<div class="static-container elgg-footer-partners" style="float:left; width:55%;">';
+	echo '<h2 class="elgg-footer-partners-text">' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
+	
 	if (!empty($footer_left)) {
 		echo $footer_left;
 	} else {
 		// Logos des Partenaires
 		//echo elgg_view('cmspages/view', array('pagetype' => "footer"));
-		echo '<h2 class="elgg-footer-partners-text">' . elgg_echo('theme_transitions2:partners:title') . '</h2>';
 		echo '<img src="' . $base_url . 'partenaires/logos-partenaires-transitions2.png" />';
 		/*
 		echo '<div class="elgg-footer-partners-logo">
@@ -43,15 +44,18 @@ echo '<div class="static-container elgg-footer-partners" style="float:left; widt
 		echo '<div class="clearfloat"></div>';
 		*/
 	}
+	
 echo '</div>';
 
 echo '<div class="static-container elgg-footer-supporters" style="float:right; width:35%;">';
 	echo '<h2 class="elgg-footer-supporters-text">' . elgg_echo('theme_transitions2:supporters:title') . '</h2>';
+	
 	if (!empty($footer_right)) {
 		echo $footer_right;
 	} else {
 		echo '<img src="' . $base_url . 'soutiens/logos-soutiens-transitions2.png" />';
 	}
+	
 echo '</div>';
 
 echo '<div class="clearfloat"></div>';

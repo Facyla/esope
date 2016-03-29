@@ -39,7 +39,7 @@ echo '<fieldset>';
 	echo elgg_list_entities(array('list_type' => "gallery"), 'theme_transitions_get_content_admins');
 	echo '<div class="clearfloat"></div>';
 
-	echo "<h3>Liste des administrateurs platforme</h3>";
+	echo "<h3>Liste des administrateurs plateforme</h3>";
 	echo "<p><em>Les administrateurs plateforme disposent de tous les droits des administrateurs contenus, plus divers droits notamment la gestion des utilisateurs, de la Une et de la newsletter.</em></p>";
 	echo elgg_list_entities(array('list_type' => "gallery"), 'theme_transitions_get_content_admins');
 	echo '<div class="clearfloat"></div>';
